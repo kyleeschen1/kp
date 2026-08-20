@@ -1828,6 +1828,10 @@ test("target glyph paint follows the full scene without a late size snap", async
           entries: readonly {
             id: string;
             materialOwnerId: string;
+            paintRealization:
+              | "preserve-source-glyph"
+              | "realize-target-glyph"
+              | "preserve-structural-paint";
           }[];
         };
         styleFrame: {
@@ -1918,6 +1922,7 @@ test("target glyph paint follows the full scene without a late size snap", async
         const fontSize = getComputedStyle(visual).fontSize;
         return {
           entity,
+          paintRealization: entry.paintRealization,
           visualRevision:
             owner.dataset["kpEquationMaterialVisualRevision"] ?? "",
           fontSize,
@@ -1938,8 +1943,10 @@ test("target glyph paint follows the full scene without a late size snap", async
       frame.entities.find((candidate) => candidate.entity === entity)![key]
     );
   expect(evidence.every((frame) =>
-    frame.entities.every(({ visualRevision }) =>
-      visualRevision.startsWith("target:")
+    frame.entities.every(({ paintRealization, visualRevision }) =>
+      visualRevision.startsWith(
+        paintRealization === "preserve-source-glyph" ? "source:" : "target:"
+      )
     )
   )).toBe(true);
   expect(evidence.every((frame) =>

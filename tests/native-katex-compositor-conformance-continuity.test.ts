@@ -106,7 +106,7 @@ test("classifies translation, scale, and paint-ownership discontinuities", () =>
 
 test("keeps law thresholds explicit and aligned with the compositor seam", () => {
   assert.deepEqual(kpNativeKatexCompositorContinuityTolerance, {
-    maximumSeamTranslationPx: 2,
+    maximumSeamTranslationPx: 0.25,
     maximumSeamScaleRatio: 1.1,
     minimumActiveOwnerOpacity: 0.99,
     maximumInactiveOwnerOpacity: 0.01

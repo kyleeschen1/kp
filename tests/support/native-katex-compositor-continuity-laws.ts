@@ -5,7 +5,7 @@ import type {
 } from "./native-katex-compositor-seam-trace.ts";
 
 export const kpNativeKatexCompositorContinuityTolerance = Object.freeze({
-  maximumSeamTranslationPx: 2,
+  maximumSeamTranslationPx: 0.25,
   maximumSeamScaleRatio: 1.1,
   minimumActiveOwnerOpacity: 0.99,
   maximumInactiveOwnerOpacity: 0.01

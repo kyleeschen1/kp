@@ -164,6 +164,41 @@
       "scope": "ncc19",
       "checkedAt": "2026-08-20T03:17:53.111Z",
       "notes": "Compact ten-frame 2/x overlay contact sheet generated from one reused page; architecture gates, full production build, test-only closure exclusion, and 1,035-node workspace validation pass. Awaiting the mandatory human visual decision before ncc20."
+    },
+    {
+      "command": "npm run test:browser:native-katex-compositor-conformance",
+      "status": "passed",
+      "scope": "ncc19",
+      "checkedAt": "2026-08-20T04:19:33.390Z",
+      "notes": "Both canonical 2 and italic x pass five realized-paint checkpoints with a 0.25px seam-translation ceiling after exact same-size glyph lineage preserves one material clone."
+    },
+    {
+      "command": "npm run visual:carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "ncc19",
+      "checkedAt": "2026-08-20T04:19:34.728Z",
+      "notes": "All five carrier browser scenarios pass, including direct seek, reverse, resize, reduced motion, and add-zero ownership."
+    },
+    {
+      "command": "npm run visual:native-katex-compositor-conformance",
+      "status": "passed",
+      "scope": "ncc19",
+      "checkedAt": "2026-08-20T04:19:35.729Z",
+      "notes": "Regenerated the compact ten-frame 2/x review sheet for the mandatory human checkpoint."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "ncc19",
+      "checkedAt": "2026-08-20T04:19:36.859Z",
+      "notes": "Full typecheck and production bundle pass after typed paint-realization authority reached source, tests, and the performance harness."
+    },
+    {
+      "command": "npm run visual:animation-development-url-state",
+      "status": "passed",
+      "scope": "interstitial-url-policy",
+      "checkedAt": "2026-08-20T04:19:38.710Z",
+      "notes": "Browser history restores exact same-document playhead state while frame-rate seeks emit only bounded coarse URL projections."
     }
   ],
   "expectedLearning": [

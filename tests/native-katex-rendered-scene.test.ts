@@ -22,6 +22,7 @@ import {
   createKpNativeKatexRendererSession,
   decideKpNativeKatexRendererDisposition,
   evaluateKpNativeKatexTypographyHandoffLaw,
+  selectKpNativeKatexGlyphPaintRealization,
   selectKpNativeKatexTypographyRealizationDisposition,
   sampleKpNativeKatexEndpointDwellProgress,
   sampleKpNativeKatexSceneTracks,
@@ -706,6 +707,7 @@ test("selected style plan is immutable measured renderer-session state", () => {
     atomLifecycle: "persist",
     targetPaintAtomId: "paint.pair.transform",
     paintKind: "glyph",
+    paintRealization: "realize-target-glyph",
     model: "target-style-reverse-flip",
     targetRect: { left: 23.96, top: 20, width: 11.98, height: 23.96 },
     inverseTranslateX: 0.03999999999999915,
@@ -852,6 +854,7 @@ test("realization disposition preserves every structural paint kind", () => {
     atomLifecycle: "persist" as const,
     targetPaintAtomId: "target.paint",
     paintKind: "glyph" as const,
+    paintRealization: "realize-target-glyph" as const,
     model: "target-style-reverse-flip" as const,
     targetRect: { left: 10, top: 20, width: 12, height: 24 },
     inverseTranslateX: 0,
@@ -862,10 +865,17 @@ test("realization disposition preserves every structural paint kind", () => {
   };
   assert.deepEqual(
     (["glyph", "rule", "path", "delimiter", "accent"] as const).map(
-      (paintKind) => selectKpNativeKatexTypographyRealizationDisposition({
-        ...base,
-        paintKind
-      })
+      (paintKind) => paintKind === "glyph"
+        ? selectKpNativeKatexTypographyRealizationDisposition({
+          ...base,
+          paintKind,
+          paintRealization: "realize-target-glyph"
+        })
+        : selectKpNativeKatexTypographyRealizationDisposition({
+          ...base,
+          paintKind,
+          paintRealization: "preserve-structural-paint"
+        })
     ),
     [
       "html-clone",
@@ -878,10 +888,52 @@ test("realization disposition preserves every structural paint kind", () => {
   assert.equal(
     selectKpNativeKatexTypographyRealizationDisposition({
       ...base,
+      paintRealization: "preserve-source-glyph"
+    }),
+    "preserve-source-glyph"
+  );
+  assert.equal(
+    selectKpNativeKatexTypographyRealizationDisposition({
+      ...base,
       model: "native-checkpoint-settlement"
     }),
     "native-checkpoint"
   );
+});
+
+test("exact glyph lineage preserves one material clone through transit", () => {
+  const source = handoffObservation({
+    id: "pair.x.source",
+    side: "native-source",
+    paintAtomId: "source.x",
+    semanticEntityId: "entity.x",
+    rect: { left: 10, top: 20, width: 12, height: 24 }
+  });
+  const target = handoffObservation({
+    id: "pair.x.native",
+    side: "native-target",
+    paintAtomId: "target.x",
+    semanticEntityId: "entity.x",
+    rect: { left: 30, top: 20, width: 12, height: 24 }
+  });
+  assert.equal(
+    selectKpNativeKatexGlyphPaintRealization({
+      source,
+      target,
+      sourceInkScale: 1
+    }),
+    "preserve-source-glyph"
+  );
+  assert.equal(selectKpNativeKatexGlyphPaintRealization({
+    source,
+    target: { ...target, styleFingerprint: "font-family:KaTeX_Main" },
+    sourceInkScale: 1
+  }), "realize-target-glyph");
+  assert.equal(selectKpNativeKatexGlyphPaintRealization({
+    source,
+    target,
+    sourceInkScale: 1.4
+  }), "realize-target-glyph");
 });
 
 test("style sampling is finite, reversible, and settles with zero velocity", () => {
@@ -896,6 +948,7 @@ test("style sampling is finite, reversible, and settles with zero velocity", () 
       atomLifecycle: "persist" as const,
       targetPaintAtomId: "target.paint",
       paintKind: "glyph" as const,
+      paintRealization: "realize-target-glyph" as const,
       model: "target-style-reverse-flip" as const,
       targetRect: { left: 11, top: 19, width: 10, height: 20 },
       inverseTranslateX: -1,
@@ -958,6 +1011,7 @@ test("style sampling can follow the whole generic scene transit", () => {
       atomLifecycle: "persist" as const,
       targetPaintAtomId: "target.paint",
       paintKind: "glyph" as const,
+      paintRealization: "realize-target-glyph" as const,
       model: "target-style-reverse-flip" as const,
       targetRect: { left: 11, top: 19, width: 10, height: 20 },
       inverseTranslateX: -1,
@@ -1016,6 +1070,7 @@ test("glyph paint frames preserve contact with uniform font scaling", () => {
       atomLifecycle: "persist" as const,
       targetPaintAtomId: "target.paint",
       paintKind: "glyph" as const,
+      paintRealization: "realize-target-glyph" as const,
       model: "target-style-reverse-flip" as const,
       targetRect: { left: 30, top: 10, width: 6, height: 12 },
       glyphPaintFrame: {

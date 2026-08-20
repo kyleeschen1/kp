@@ -106,8 +106,8 @@ test("captures two deterministic actual-paint seam traces on one reusable page",
   expect(twoReport?.failures).toEqual([]);
   const xReport = reports.find(({ shapeId }) => shapeId === "shape.italic-x");
   expect(xReport).toBeDefined();
-  expect(xReport?.status).toBe("passed");
   expect(xReport?.failures).toEqual([]);
+  expect(xReport?.status).toBe("passed");
   expect(JSON.parse(JSON.stringify(reports))).toEqual(reports);
   expect(pageErrors).toEqual([]);
 });

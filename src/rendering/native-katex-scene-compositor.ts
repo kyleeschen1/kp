@@ -1,6 +1,7 @@
 import {
   createKpNativeKatexHandoffTelemetry,
   measureKpStageRelativeRectDelta as rectDelta,
+  type KpNativeKatexHandoffPaintObservation,
   type KpNativeKatexHandoffTelemetry,
   type KpNativeKatexPaintAtomObservation,
   type KpNativeKatexRenderedEndpointHandle,
@@ -243,32 +244,49 @@ export interface KpNativeKatexTypographyHandoffSelection {
   readonly law: KpNativeKatexTypographyHandoffLaw;
 }
 
-export interface KpNativeKatexTypographyStylePlanEntry {
+interface KpNativeKatexTypographyStylePlanEntryBase {
   readonly id: string;
   readonly materialOwnerId: string;
   readonly componentId: string;
   readonly atomLifecycle: KpNativeKatexAtomLifecycle;
   readonly targetPaintAtomId: string;
-  readonly paintKind: KpNativeKatexPaintAtomObservation["paintKind"];
   readonly model:
     | "target-style-reverse-flip"
     | "native-checkpoint-settlement";
   readonly targetRect: KpStageRelativeRect;
-  readonly glyphPaintFrame?: {
-    readonly sourceLeft: number;
-    readonly sourceTop: number;
-    readonly sourceInsetX: number;
-    readonly sourceInsetY: number;
-    readonly targetInsetX: number;
-    readonly targetInsetY: number;
-    readonly sourceScale: number;
-  } | undefined;
   readonly inverseTranslateX: number;
   readonly inverseTranslateY: number;
   readonly inverseScaleX: number;
   readonly inverseScaleY: number;
   readonly targetStyleFingerprint: string;
 }
+
+export type KpNativeKatexTypographyStylePlanEntry =
+  KpNativeKatexTypographyStylePlanEntryBase & (
+    | {
+      readonly paintKind: "glyph";
+      readonly paintRealization:
+        | "preserve-source-glyph"
+        | "realize-target-glyph";
+      readonly glyphPaintFrame?: {
+        readonly sourceLeft: number;
+        readonly sourceTop: number;
+        readonly sourceInsetX: number;
+        readonly sourceInsetY: number;
+        readonly targetInsetX: number;
+        readonly targetInsetY: number;
+        readonly sourceScale: number;
+      } | undefined;
+    }
+    | {
+      readonly paintKind: Exclude<
+        KpNativeKatexPaintAtomObservation["paintKind"],
+        "glyph"
+      >;
+      readonly paintRealization: "preserve-structural-paint";
+      readonly glyphPaintFrame?: undefined;
+    }
+  );
 
 export interface KpNativeKatexTypographyStylePlan {
   readonly kind: "native-katex-typography-style-plan";
@@ -301,6 +319,7 @@ export interface KpNativeKatexTypographyRealization {
   readonly deferred: readonly {
     readonly id: string;
     readonly disposition:
+      | "preserve-source-glyph"
       | "preserve-structural-paint"
       | "native-checkpoint";
   }[];
@@ -743,24 +762,14 @@ export function compileKpNativeKatexTypographyStylePlan(input: {
             : [source, material, native]
         }
       }).selectedModel;
-      return freezeTypographyStylePlanEntry({
+      const shared = {
         id,
         materialOwnerId: correlation.materialOwnerId,
         componentId: correlation.componentId,
         atomLifecycle: correlation.atomLifecycle,
         targetPaintAtomId: correlation.targetAtomId,
-        paintKind: native.paintKind,
         model,
         targetRect: native.rect,
-        ...(source === undefined || native.paintKind !== "glyph"
-          ? {}
-          : {
-            glyphPaintFrame: createGlyphPaintFrame(
-              input.telemetry.stage,
-              source,
-              native
-            )
-          }),
         inverseTranslateX: model === "native-checkpoint-settlement"
           ? 0
           : material.rect.left - native.rect.left,
@@ -776,6 +785,29 @@ export function compileKpNativeKatexTypographyStylePlan(input: {
           ? 1
           : safeScale(material.rect.height, native.rect.height),
         targetStyleFingerprint: native.styleFingerprint
+      } as const;
+      if (native.paintKind !== "glyph") {
+        return freezeTypographyStylePlanEntry({
+          ...shared,
+          paintKind: native.paintKind,
+          paintRealization: "preserve-structural-paint"
+        });
+      }
+      const glyphPaintFrame = source === undefined
+        ? undefined
+        : createGlyphPaintFrame(input.telemetry.stage, source, native);
+      const paintRealization = selectKpNativeKatexGlyphPaintRealization({
+        source,
+        target: native,
+        sourceInkScale: glyphPaintFrame?.sourceScale
+      });
+      return freezeTypographyStylePlanEntry({
+        ...shared,
+        paintKind: "glyph",
+        paintRealization,
+        ...(glyphPaintFrame === undefined
+          ? {}
+          : { glyphPaintFrame })
       });
     }
   );
@@ -790,6 +822,29 @@ export function compileKpNativeKatexTypographyStylePlan(input: {
     model: planModel,
     entries: Object.freeze(entries)
   });
+}
+
+export function selectKpNativeKatexGlyphPaintRealization(input: {
+  readonly source?: KpNativeKatexHandoffPaintObservation | undefined;
+  readonly target: KpNativeKatexHandoffPaintObservation;
+  readonly sourceInkScale?: number | undefined;
+}): "preserve-source-glyph" | "realize-target-glyph" {
+  // Equal CSS fingerprints do not prove equal paint when a KaTeX wrapper
+  // contributes scale. Preserve one clone only for measured same-size ink.
+  const maximumSameSizeScaleRatio = 1.001;
+  const source = input.source;
+  return source !== undefined &&
+      source.paintKind === "glyph" &&
+      input.target.paintKind === "glyph" &&
+      input.sourceInkScale !== undefined &&
+      symmetricScaleRatio(input.sourceInkScale) <=
+        maximumSameSizeScaleRatio &&
+      source.paintFingerprint === input.target.paintFingerprint &&
+      source.styleFingerprint === input.target.styleFingerprint &&
+      source.fontRevision === input.target.fontRevision &&
+      source.clipPath === input.target.clipPath
+    ? "preserve-source-glyph"
+    : "realize-target-glyph";
 }
 
 export function sampleKpNativeKatexTypographyStylePlan(
@@ -1008,14 +1063,15 @@ export function selectKpNativeKatexTypographyRealizationDisposition(
   entry: KpNativeKatexTypographyStylePlanEntry
 ):
   | "html-clone"
+  | "preserve-source-glyph"
   | "preserve-structural-paint"
   | "native-checkpoint" {
   if (entry.model === "native-checkpoint-settlement") {
     return "native-checkpoint";
   }
-  return entry.paintKind === "glyph"
+  return entry.paintRealization === "realize-target-glyph"
     ? "html-clone"
-    : "preserve-structural-paint";
+    : entry.paintRealization;
 }
 
 export function traceKpNativeKatexHandoffOwnership(input: {
@@ -2198,6 +2254,12 @@ function symmetricScaleRatio(scale: number): number {
 function freezeTypographyStylePlanEntry(
   entry: KpNativeKatexTypographyStylePlanEntry
 ): KpNativeKatexTypographyStylePlanEntry {
+  if (entry.paintKind !== "glyph") {
+    return Object.freeze({
+      ...entry,
+      targetRect: Object.freeze({ ...entry.targetRect })
+    });
+  }
   return Object.freeze({
     ...entry,
     targetRect: Object.freeze({ ...entry.targetRect }),

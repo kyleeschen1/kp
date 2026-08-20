@@ -96,21 +96,33 @@ const stylePlan: KpNativeKatexTypographyStylePlan = {
   kind: "native-katex-typography-style-plan",
   lifecycle: "renderer-session",
   model: "target-style-reverse-flip",
-  entries: sceneTracks.map((track, index) => ({
-    id: `style.${track.id}`,
-    materialOwnerId: `native-scene-owner.${track.id}`,
-    componentId: track.componentId,
-    atomLifecycle: track.lifecycle,
-    targetPaintAtomId: track.targetAtomId!,
-    paintKind: track.paintKind,
-    model: "target-style-reverse-flip",
-    targetRect: track.endRect,
-    inverseTranslateX: index % 3 - 1,
-    inverseTranslateY: index % 5 / 2,
-    inverseScaleX: 1 + index % 4 / 100,
-    inverseScaleY: 1 + index % 4 / 100,
-    targetStyleFingerprint: `style.${index}`
-  }))
+  entries: sceneTracks.map((track, index) => {
+    const shared = {
+      id: `style.${track.id}`,
+      materialOwnerId: `native-scene-owner.${track.id}`,
+      componentId: track.componentId,
+      atomLifecycle: track.lifecycle,
+      targetPaintAtomId: track.targetAtomId!,
+      model: "target-style-reverse-flip" as const,
+      targetRect: track.endRect,
+      inverseTranslateX: index % 3 - 1,
+      inverseTranslateY: index % 5 / 2,
+      inverseScaleX: 1 + index % 4 / 100,
+      inverseScaleY: 1 + index % 4 / 100,
+      targetStyleFingerprint: `style.${index}`
+    };
+    return track.paintKind === "glyph"
+      ? {
+        ...shared,
+        paintKind: track.paintKind,
+        paintRealization: "realize-target-glyph" as const
+      }
+      : {
+        ...shared,
+        paintKind: track.paintKind,
+        paintRealization: "preserve-structural-paint" as const
+      };
+  })
 };
 const styleSampleStart = performance.now();
 for (let index = 0; index < 1_000; index += 1) {

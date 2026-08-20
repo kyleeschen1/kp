@@ -22,6 +22,7 @@ test("carries authoritative expected paint into target-style normalization", () 
       atomLifecycle: "persist",
       targetPaintAtomId: "target.carrier",
       paintKind: "glyph",
+      paintRealization: "realize-target-glyph",
       model: "target-style-reverse-flip",
       targetRect: { left: 30, top: 20, width: 8, height: 12 },
       glyphPaintFrame: {
