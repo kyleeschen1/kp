@@ -32,7 +32,7 @@ import {
 } from "../animation/homomorphic-application-handoff-taxonomy.ts";
 
 export interface KpExponentialHomomorphismTransitProfile {
-  readonly id: "timing.exponential-homomorphism.product.v6";
+  readonly id: "timing.exponential-homomorphism.crossover.v1";
   readonly baseHandoff: Readonly<{
     topology: "native-scale-carrier-fission";
     sourceExit: "retain-native-carrier";
@@ -40,7 +40,7 @@ export interface KpExponentialHomomorphismTransitProfile {
   }>;
   readonly homomorphicResolution: Readonly<{
     topology: "carrier-fission-with-connector-release";
-    path: "direct-horizontal";
+    path: "measured-topology-direct";
     anchorOrdinal: 0;
     anchorSettlement: Readonly<{ start: number; end: number }>;
     outwardTransit: Readonly<{ start: number; end: number }>;
@@ -54,7 +54,7 @@ export interface KpExponentialHomomorphismTransitProfile {
 }
 
 export const kpExponentialHomomorphismTransitProfile = Object.freeze({
-  id: "timing.exponential-homomorphism.product.v6" as const,
+  id: "timing.exponential-homomorphism.crossover.v1" as const,
   baseHandoff: Object.freeze({
     topology: "native-scale-carrier-fission" as const,
     sourceExit: "retain-native-carrier" as const,
@@ -62,7 +62,7 @@ export const kpExponentialHomomorphismTransitProfile = Object.freeze({
   }),
   homomorphicResolution: Object.freeze({
     topology: "carrier-fission-with-connector-release" as const,
-    path: "direct-horizontal" as const,
+    path: "measured-topology-direct" as const,
     anchorOrdinal: 0 as const,
     anchorSettlement: Object.freeze({ start: 0.16, end: 0.22 }),
     outwardTransit: Object.freeze({ start: 0.16, end: 0.3 }),

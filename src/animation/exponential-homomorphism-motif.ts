@@ -15,6 +15,14 @@ export const kpExponentialHomomorphismEquationVocabulary = Object.freeze({
   operation: createKpOperationKind(
     "operation.equation.exponential-sum-to-product.v1"
   ),
+  operations: Object.freeze({
+    product: createKpOperationKind(
+      "operation.equation.exponential-sum-to-product.v1"
+    ),
+    quotient: createKpOperationKind(
+      "operation.equation.exponential-difference-to-quotient.v1"
+    )
+  }),
   recipe: createKpRecipeId(
     "recipe.equation.exponential-homomorphism.v1"
   ),
@@ -29,7 +37,10 @@ const vocabulary = kpExponentialHomomorphismEquationVocabulary;
 export const kpExponentialHomomorphismMotifSchema = defineKpMotifSchema({
   id: vocabulary.motif,
   familyId: vocabulary.family,
-  operationKinds: [vocabulary.operation],
+  operationKinds: [
+    vocabulary.operations.product,
+    vocabulary.operations.quotient
+  ],
   roles: [
     role("source-power-application", "exactly-one", "syntax"),
     role("source-base", "exactly-one", "continuant"),

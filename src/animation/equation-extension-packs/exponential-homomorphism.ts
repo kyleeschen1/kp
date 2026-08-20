@@ -11,8 +11,10 @@ import {
 } from "../../domain-ir/equation-extension-registry.ts";
 import { kpCanonicalHomomorphicCausalPhaseGrammar } from
   "../../domain-ir/homomorphic-causal-phases.ts";
-import { KP_EXPONENTIAL_SUM_TO_PRODUCT_LAW_ID } from
-  "../../semantic/exponential-homomorphism-law.ts";
+import {
+  KP_EXPONENTIAL_DIFFERENCE_TO_QUOTIENT_LAW_ID,
+  KP_EXPONENTIAL_SUM_TO_PRODUCT_LAW_ID
+} from "../../semantic/exponential-homomorphism-law.ts";
 import {
   kpExponentialHomomorphismEquationVocabulary,
   kpExponentialHomomorphismMotifSchema
@@ -24,7 +26,7 @@ export const kpExponentialHomomorphismEquationExtensionPackId =
   "equation-pack.exponential-homomorphism.v1";
 
 export const kpExponentialSumToProductOperationRegistration = Object.freeze({
-  id: vocabulary.operation,
+  id: vocabulary.operations.product,
   familyId: vocabulary.family,
   recipeIds: Object.freeze([vocabulary.recipe]),
   semanticAuthorityIds: Object.freeze([
@@ -34,10 +36,25 @@ export const kpExponentialSumToProductOperationRegistration = Object.freeze({
     "Distribute one power application over an additive exponent into an ordered product of successor powers."
 } as const satisfies KpEquationOperationRegistration);
 
+export const kpExponentialDifferenceToQuotientOperationRegistration =
+  Object.freeze({
+    id: vocabulary.operations.quotient,
+    familyId: vocabulary.family,
+    recipeIds: Object.freeze([vocabulary.recipe]),
+    semanticAuthorityIds: Object.freeze([
+      KP_EXPONENTIAL_DIFFERENCE_TO_QUOTIENT_LAW_ID
+    ]),
+    plannerSummary:
+      "Distribute one power application over a subtractive exponent into numerator and denominator successor powers."
+  } as const satisfies KpEquationOperationRegistration);
+
 export const kpExponentialHomomorphismRecipeRegistration = Object.freeze({
   id: vocabulary.recipe,
   familyId: vocabulary.family,
-  operationKinds: Object.freeze([vocabulary.operation]),
+  operationKinds: Object.freeze([
+    vocabulary.operations.product,
+    vocabulary.operations.quotient
+  ]),
   motifUses: Object.freeze([Object.freeze({
     id: "exponential-power-crossover",
     motifId: vocabulary.motif,
@@ -67,7 +84,8 @@ export function createKpExponentialHomomorphismEquationExtensionPack() {
   return composeKpEquationExtensionPack({
     id: kpExponentialHomomorphismEquationExtensionPackId,
     operations: createKpEquationOperationRegistry([
-      kpExponentialSumToProductOperationRegistration
+      kpExponentialSumToProductOperationRegistration,
+      kpExponentialDifferenceToQuotientOperationRegistration
     ]),
     recipes: createKpEquationRecipeRegistry([
       kpExponentialHomomorphismRecipeRegistration
@@ -81,7 +99,10 @@ export function createKpExponentialHomomorphismEquationExtensionPack() {
     families: createKpEquationFamilyRegistry([{
       id: vocabulary.family,
       disposition: "active",
-      operationKindIds: [vocabulary.operation],
+      operationKindIds: [
+        vocabulary.operations.product,
+        vocabulary.operations.quotient
+      ],
       recipeIds: [vocabulary.recipe],
       motifIds: [vocabulary.motif],
       rendererCapabilityIds: [vocabulary.rendererCapability]

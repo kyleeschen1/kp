@@ -5,7 +5,8 @@ const kpEquationOperationLoaders: Readonly<Record<string, KpGeneratedLoader>> = 
   "operation.wrap-function.v1": () => import("../animation/equation-extension-packs/function-wrap.ts").then((module) => module.kpFunctionWrapOperationRegistration),
   "operation.equation.log-product-decomposition.v1": () => import("../animation/equation-extension-packs/homomorphic-crossover.ts").then((module) => module.kpLogProductHomomorphicOperationRegistration),
   "operation.equation.log-quotient-fusion.v1": () => import("../animation/equation-extension-packs/homomorphic-crossover.ts").then((module) => module.kpLogQuotientHomomorphicOperationRegistration),
-  "operation.equation.exponential-sum-to-product.v1": () => import("../animation/equation-extension-packs/exponential-homomorphism.ts").then((module) => module.kpExponentialSumToProductOperationRegistration)
+  "operation.equation.exponential-sum-to-product.v1": () => import("../animation/equation-extension-packs/exponential-homomorphism.ts").then((module) => module.kpExponentialSumToProductOperationRegistration),
+  "operation.equation.exponential-difference-to-quotient.v1": () => import("../animation/equation-extension-packs/exponential-homomorphism.ts").then((module) => module.kpExponentialDifferenceToQuotientOperationRegistration)
 });
 
 const kpEquationRecipeLoaders: Readonly<Record<string, KpGeneratedLoader>> = Object.freeze({
@@ -33,7 +34,7 @@ const kpEquationLazyPackLoaders: Readonly<Record<string, KpGeneratedLoader>> = O
 });
 
 export const kpGeneratedEquationDispatchIds = Object.freeze({
-  "operation": Object.freeze(["operation.wrap-function.v1", "operation.equation.log-product-decomposition.v1", "operation.equation.log-quotient-fusion.v1", "operation.equation.exponential-sum-to-product.v1"]),
+  "operation": Object.freeze(["operation.wrap-function.v1", "operation.equation.log-product-decomposition.v1", "operation.equation.log-quotient-fusion.v1", "operation.equation.exponential-sum-to-product.v1", "operation.equation.exponential-difference-to-quotient.v1"]),
   "recipe": Object.freeze(["recipe.equation.function-application.v1", "recipe.equation.homomorphic-decomposition.v1", "recipe.equation.exponential-homomorphism.v1"]),
   "motif": Object.freeze(["motif.function-wrap.v1", "motif.homomorphic-crossover.v1", "motif.exponential-power-crossover.v1"]),
   "renderer-capability": Object.freeze(["renderer-capability.equation.native-katex.v1", "renderer-capability.equation.homomorphic-crossover.v1", "renderer-capability.equation.exponential-power-crossover.v1"]),

@@ -11,7 +11,7 @@ import { validateKpEquationExtensionPack } from
 import { kpCanonicalHomomorphicCausalPhaseGrammar } from
   "../src/domain-ir/homomorphic-causal-phases.ts";
 
-test("exponential pack binds one law to one nominal power recipe", () => {
+test("exponential pack binds dual laws to one nominal power recipe", () => {
   const result = validateKpEquationExtensionPack(
     createKpExponentialHomomorphismEquationExtensionPack()
   );
@@ -19,10 +19,14 @@ test("exponential pack binds one law to one nominal power recipe", () => {
   if (result.status !== "valid") return;
   const pack = result.validatedPack.pack;
   assert.deepEqual(pack.operations.ids, [
-    "operation.equation.exponential-sum-to-product.v1"
+    "operation.equation.exponential-sum-to-product.v1",
+    "operation.equation.exponential-difference-to-quotient.v1"
   ]);
-  assert.deepEqual(pack.operations.entries[0]?.semanticAuthorityIds, [
-    "law.exponential.sum-to-product"
+  assert.deepEqual(pack.operations.entries.map(({ semanticAuthorityIds }) =>
+    semanticAuthorityIds
+  ), [
+    ["law.exponential.sum-to-product"],
+    ["law.exponential.difference-to-quotient"]
   ]);
   assert.deepEqual(pack.recipes.ids, [
     "recipe.equation.exponential-homomorphism.v1"

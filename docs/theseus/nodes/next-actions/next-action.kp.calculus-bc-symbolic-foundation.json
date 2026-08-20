@@ -610,6 +610,30 @@
       "status": "passed",
       "scope": "r05 generated display freshness",
       "checkedAt": "2026-08-20T23:34:35.790Z"
+    },
+    {
+      "command": "npm run test:exponential-extension-pack",
+      "status": "passed",
+      "scope": "r06 dual-operation registry and bounded crossover gate",
+      "checkedAt": "2026-08-20T23:39:21.130Z"
+    },
+    {
+      "command": "npm run test:exponential-transit-session",
+      "status": "passed",
+      "scope": "r06 approved product preservation under shared profile",
+      "checkedAt": "2026-08-20T23:39:22.722Z"
+    },
+    {
+      "command": "npm run test:exponential-quotient-pressure",
+      "status": "passed",
+      "scope": "r06 quotient topology remains local",
+      "checkedAt": "2026-08-20T23:39:23.815Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "r06 shared extension boundary",
+      "checkedAt": "2026-08-20T23:39:25.000Z"
     }
   ],
   "progress": {

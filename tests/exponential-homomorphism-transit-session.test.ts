@@ -68,7 +68,7 @@ test("one compositor plan stages persistent carrier fission", () => {
     kpExponentialHomomorphismTransitProfile.homomorphicResolution,
     {
       topology: "carrier-fission-with-connector-release",
-      path: "direct-horizontal",
+      path: "measured-topology-direct",
       anchorOrdinal: 0,
       anchorSettlement: { start: 0.16, end: 0.22 },
       outwardTransit: { start: 0.16, end: 0.3 },

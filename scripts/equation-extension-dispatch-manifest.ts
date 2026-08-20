@@ -69,6 +69,12 @@ function exponentialHomomorphismDispatchPack() {
         "kpExponentialSumToProductOperationRegistration"
       ),
       declaration(
+        "operation",
+        "operation.equation.exponential-difference-to-quotient.v1",
+        "../animation/equation-extension-packs/exponential-homomorphism.ts",
+        "kpExponentialDifferenceToQuotientOperationRegistration"
+      ),
+      declaration(
         "recipe",
         "recipe.equation.exponential-homomorphism.v1",
         "../animation/equation-extension-packs/exponential-homomorphism.ts",

@@ -80,7 +80,8 @@
     {
       "id": "r06",
       "title": "exponential-crossover-gate",
-      "status": "planned"
+      "summary": "The extension registry now exposes sum-to-product and difference-to-quotient as two typed operations using one exponential homomorphism recipe, motif-role schema, causal phase grammar, and tunable crossover profile. Product juxtaposition and quotient fraction-rule ownership remain topology-specific.",
+      "status": "complete"
     },
     {
       "id": "r07",
