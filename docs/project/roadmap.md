@@ -215,10 +215,11 @@ Only this repository sequence is active:
 29. **Exponential/logarithmic duality:** active at its first visual repair.
    The semantic law, exact endpoints, deterministic transit, catalogue asset,
    and checkpoint exist, but human review rejected an opaque collision backing
-   plate. Revise `b^(x + y) → b^x b^y` through compressed-ink base fission and
-   unobstructed payload redistribution; after approval, retire opaque symbolic
-   occlusion plates generally, then pressure difference-to-quotient before
-   narrow promotion.
+   plate. Revise `b^(x + y) → b^x b^y` through a target-local matched
+   dissolve: source structure collapses in place, only persistent payloads
+   travel, and derived bases expand at their native destinations. After
+   approval, retire opaque symbolic occlusion plates generally, then pressure
+   difference-to-quotient before narrow promotion.
 30. **Accepted subsequent family packets:** root inversion with explicit branch
    and domain truth; existing TypeScript/Python refactors through domain-owned
    frontends; finite summation/product binder infrastructure; one bounded

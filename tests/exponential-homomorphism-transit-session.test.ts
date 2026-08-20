@@ -54,8 +54,16 @@ test("transit projects only payload continuants and base fission into paint", ()
   ), false);
 });
 
-test("one compositor plan stages compressed-ink fission without foreground occlusion", () => {
+test("one compositor plan stages a target-local matched dissolve", () => {
   const plan = compilePlan();
+  assert.deepEqual(
+    kpExponentialHomomorphismTransitProfile.baseHandoff,
+    {
+      topology: "matched-dissolve-to-derived-successors",
+      sourceExit: "collapse-to-point",
+      targetEntry: "expand-from-point"
+    }
+  );
   assert.equal(plan.copyFanOut, false);
   assert.equal(
     plan.endpointDwellFraction,
@@ -65,22 +73,22 @@ test("one compositor plan stages compressed-ink fission without foreground occlu
   assert.equal(plan.tracks.length, 5);
 
   const connector = trackFor(plan.tracks, "eliminate");
-  const beforeRelease = frameFor(plan.tracks, connector.id, 0.04);
-  const duringRelease = frameFor(plan.tracks, connector.id, 0.18);
-  const afterRelease = frameFor(plan.tracks, connector.id, 0.28);
+  const beforeRelease = frameFor(plan.tracks, connector.id, 0.1);
+  const duringRelease = frameFor(plan.tracks, connector.id, 0.26);
+  const afterRelease = frameFor(plan.tracks, connector.id, 0.34);
   assert.equal(beforeRelease.opacity, 1);
   assert.ok(duringRelease.opacity > 0 && duringRelease.opacity < 1);
   assert.equal(afterRelease.opacity, 0);
   assert.equal(beforeRelease.materialScale, 1);
   assert.ok(
     duringRelease.materialScale! >
-      kpExponentialHomomorphismTransitProfile.compressedInkScale &&
+      kpExponentialHomomorphismTransitProfile.pointScale &&
     duringRelease.materialScale! < 1
   );
-  assert.equal(
-    afterRelease.materialScale,
-    kpExponentialHomomorphismTransitProfile.compressedInkScale
-  );
+  assert.ok(near(
+    afterRelease.materialScale!,
+    kpExponentialHomomorphismTransitProfile.pointScale
+  ));
   assert.deepEqual(beforeRelease.rect, afterRelease.rect);
 
   const payloads = plan.tracks.filter(({ lifecycle }) =>
@@ -97,24 +105,57 @@ test("one compositor plan stages compressed-ink fission without foreground occlu
 
   const bases = plan.tracks.filter(({ lifecycle }) => lifecycle === "split");
   assert.equal(bases.length, 2);
-  assert.equal(new Set(bases.map(({ intentionalContactGroupId }) =>
-    intentionalContactGroupId
-  )).size, 1);
   assert.ok(bases.every(({ motionAxisConstraint }) =>
     motionAxisConstraint === "horizontal"
   ));
   assert.ok(bases.every(({ sampleMaterialScale }) =>
     sampleMaterialScale !== undefined
   ));
-  assert.equal(
-    bases[0]!.sampleMaterialScale!(0.34),
-    kpExponentialHomomorphismTransitProfile.compressedInkScale
+  assert.ok(near(
+    bases[0]!.sampleMaterialScale!(0.4),
+    kpExponentialHomomorphismTransitProfile.pointScale
+  ));
+  const sourceBaseFrames = bases.map(({ id }) =>
+    frameFor(plan.tracks, id, 0.1)
   );
-  assert.ok(
-    bases[0]!.sampleMaterialScale!(0.72) >
-      kpExponentialHomomorphismTransitProfile.compressedInkScale
+  assert.deepEqual(
+    sourceBaseFrames.map(({ opacity }) => opacity).sort(),
+    [0, 1]
   );
-  assert.equal(bases[0]!.sampleMaterialScale!(0.8), 1);
+  const collapsingBaseFrames = bases.map(({ id }) =>
+    frameFor(plan.tracks, id, 0.26)
+  ).filter(({ opacity }) => opacity > 0);
+  assert.equal(collapsingBaseFrames.length, 1);
+  assert.ok(near(collapsingBaseFrames[0]!.opacity, duringRelease.opacity));
+  assert.ok(near(
+    collapsingBaseFrames[0]!.materialScale!,
+    duringRelease.materialScale!
+  ));
+  const vacancyFrames = bases.map(({ id }) =>
+    frameFor(plan.tracks, id, 0.48)
+  );
+  assert.ok(vacancyFrames.every(({ opacity }) => opacity === 0));
+  const targetCenterFrames = bases.map(({ id }) =>
+    frameFor(plan.tracks, id, 0.54)
+  );
+  assert.ok(targetCenterFrames.every((frame, index) =>
+    frame.opacity === 0 && sameRect(frame.rect, bases[index]!.endRect)
+  ));
+  const receivingFrames = bases.map(({ id }) =>
+    frameFor(plan.tracks, id, 0.6)
+  );
+  assert.ok(receivingFrames.every(({ opacity, materialScale }) =>
+    opacity > 0 && opacity < 1 && materialScale! >
+      kpExponentialHomomorphismTransitProfile.pointScale &&
+      materialScale! < 1
+  ));
+  const settledFrames = bases.map(({ id }) =>
+    frameFor(plan.tracks, id, 0.64)
+  );
+  assert.ok(settledFrames.every(({ opacity, materialScale }, index) =>
+    opacity === 1 && materialScale === 1 &&
+      sameRect(settledFrames[index]!.rect, bases[index]!.endRect)
+  ));
   assert.equal(plan.tracks.some(({ intentionalForegroundOcclusion }) =>
     intentionalForegroundOcclusion !== undefined
   ), false);
@@ -124,8 +165,12 @@ test("compressed paint geometry, rather than its native box, owns collision trut
   const bases = compilePlan().tracks.filter(({ lifecycle }) =>
     lifecycle === "split"
   );
-  const frame = frameFor(bases, bases[1]!.id, 0.5);
-  const nativePaint = bases[1]!.startPaintRect;
+  const visibleSource = bases.find((base) =>
+    frameFor(bases, base.id, 0.23).opacity > 0
+  );
+  assert.ok(visibleSource !== undefined);
+  const frame = frameFor(bases, visibleSource.id, 0.23);
+  const nativePaint = visibleSource.startPaintRect;
   assert.ok(frame.materialScale! < 1);
   assert.ok(frame.expectedPaintRect.width < nativePaint.width);
   assert.ok(frame.expectedPaintRect.height < nativePaint.height);
@@ -324,4 +369,8 @@ function sameRect(
 ) {
   return left.left === right.left && left.top === right.top &&
     left.width === right.width && left.height === right.height;
+}
+
+function near(left: number, right: number): boolean {
+  return Math.abs(left - right) < Number.EPSILON;
 }

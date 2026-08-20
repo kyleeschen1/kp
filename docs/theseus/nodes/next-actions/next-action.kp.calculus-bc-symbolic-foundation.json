@@ -485,11 +485,46 @@
       "scope": "r01 durable continuation state",
       "checkedAt": "2026-08-20T20:39:38.762Z",
       "notes": "Continuation contract, superseded history, context receipt, and checkpoint evidence validate at 1042 nodes and 23968 events."
+    },
+    {
+      "command": "npm run test:exponential-transit-session",
+      "status": "passed",
+      "scope": "r01 matched-dissolve refinement",
+      "checkedAt": "2026-08-20T21:15:13.231Z",
+      "notes": "Six focused contracts pass: typed matched-dissolve topology, synchronized source collapse, carrier vacancy, target-local expansion, scaled collision geometry, deterministic seek and exact endpoints."
+    },
+    {
+      "command": "npm run visual:exponential-homomorphism",
+      "status": "passed",
+      "scope": "r01 revised visual checkpoint",
+      "checkedAt": "2026-08-20T21:15:14.938Z",
+      "notes": "Stable contact sheet now exposes source collapse at 26 percent, payload-only transit, carrier vacancy, target-local reception, settlement, seek, rewind, and narrow endpoints."
+    },
+    {
+      "command": "npm run test:browser:exponential-homomorphism",
+      "status": "passed",
+      "scope": "r01 revised browser lifecycle",
+      "checkedAt": "2026-08-20T21:15:17.834Z",
+      "notes": "Two Chromium checks pass for endpoints, seek, rewind, resize, and reduced motion."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "r01 typed matched-dissolve profile",
+      "checkedAt": "2026-08-20T21:15:20.380Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "r01 repaired checkpoint state",
+      "checkedAt": "2026-08-20T21:16:25.792Z",
+      "notes": "Durable graph validates at 1042 nodes and 23978 events before commit."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Continuation r01 is complete and verified. HUMAN_CHECKPOINT: review compressed-ink exponential sum-to-product before r02 retires opaque Native KaTeX backing plates generally."
+    "summary": "Continuation r01 is complete after matched-dissolve repair. HUMAN_CHECKPOINT: approve source-center collapse, payload-only transit, and target-center base reception before r02 removes opaque backing plates generally."
   },
   "expectedLearning": [
     "Whether the shared homomorphism law supports power applications without copying log choreography.",

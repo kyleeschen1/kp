@@ -5,12 +5,12 @@ Last Updated: 2026-08-20
 Current Next Action: revise the reviewed exponential-duality exemplar
 `b^(x + y) → b^x b^y` without changing its accepted semantic or runtime
 authority. Replace the accidental base/payload crossing and opaque backing
-plate with compressed-ink base fission: the source base compresses while the
-plus withdraws separately, persistent exponent operands redistribute on their
-existing plane, and two derived bases expand to the exact native target. Stop
-for visual review. After approval, remove opaque Native KaTeX foreground
-backing plates generally while retaining collision audits and reviewed z-order,
-then continue to the difference-to-quotient pressure caller.
+plate with the log-cadence matched dissolve: the source base and plus collapse
+at their own ink centers, persistent exponent operands alone redistribute on
+their existing plane, and two derived bases expand at their exact native
+target centers. Stop for visual review. After approval, remove opaque Native
+KaTeX foreground backing plates generally while retaining collision audits and
+reviewed z-order, then continue to the difference-to-quotient pressure caller.
 
 The accepted breadth cadence is two loops per family: one reversible exemplar
 and checkpoint, then one structurally different caller plus narrow promotion.
