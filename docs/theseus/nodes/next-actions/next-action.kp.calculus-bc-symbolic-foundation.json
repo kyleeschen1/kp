@@ -110,11 +110,39 @@
       "scope": "slice s02 calculus bc taxonomy",
       "checkedAt": "2026-08-20T18:29:39.962Z",
       "notes": "No whitespace errors in the slice diff."
+    },
+    {
+      "command": "npm run test:equation-syntax-hazards",
+      "status": "passed",
+      "scope": "slice s03 syntax hazard corpus",
+      "checkedAt": "2026-08-20T18:33:45.053Z",
+      "notes": "8 parser and normalizer tests pass across safe forms, typed gaps, and inverse-versus-reciprocal hazards."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "slice s03 syntax hazard corpus",
+      "checkedAt": "2026-08-20T18:33:46.037Z",
+      "notes": "11 existing semantic, endpoint, clock, renderer, and inventory preservation checks pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s03 syntax hazard corpus",
+      "checkedAt": "2026-08-20T18:33:46.966Z",
+      "notes": "TypeScript, Svelte, and domain typechecks pass for the typed corpus."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s03 syntax hazard corpus",
+      "checkedAt": "2026-08-20T18:33:47.901Z",
+      "notes": "No whitespace errors in the slice diff."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s02 added nine ordered Calculus BC curriculum groups that reference the canonical ledger and nine explicit Missing capability families, growing live equation coverage from 19 to 28 rows without duplicating status authority."
+    "summary": "s03 established a 13-case Calc BC syntax-hazard corpus: only structurally safe existing grammar normalizes, while ambiguous inverse, binder, calculus, piecewise, and indexed-root forms remain typed gaps."
   },
   "expectedLearning": [
     "Whether the shared homomorphism law supports power applications without copying log choreography.",

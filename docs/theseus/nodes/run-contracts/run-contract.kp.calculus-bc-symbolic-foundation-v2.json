@@ -63,7 +63,8 @@
     {
       "id": "s03",
       "title": "syntax-hazard-corpus",
-      "status": "planned"
+      "summary": "Syntax hazards now fail closed; no inverse/reciprocal or binder meaning is guessed from surface spelling.",
+      "status": "complete"
     },
     {
       "id": "s04",
