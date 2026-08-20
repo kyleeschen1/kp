@@ -334,11 +334,46 @@
       "scope": "standard",
       "checkedAt": "2026-08-20T19:10:50.808Z",
       "notes": "Dependency, framework-neutrality, semantic animation, presentation, and compiler authority gates passed."
+    },
+    {
+      "command": "npm run test:exponential-transit-session",
+      "status": "passed",
+      "scope": "slice s10 exponential transit",
+      "checkedAt": "2026-08-20T19:21:11.230Z",
+      "notes": "Five relation, sampled timing, direct-seek, reverse, terminal settlement, compositor, and fail-closed tests passed."
+    },
+    {
+      "command": "npm run verify:equation:inner",
+      "status": "passed",
+      "scope": "slice s10 equation preservation",
+      "checkedAt": "2026-08-20T19:21:12.276Z",
+      "notes": "Existing equation surface and generated dispatch preservation checks passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s10 standard",
+      "checkedAt": "2026-08-20T19:21:13.269Z",
+      "notes": "TypeScript, Svelte, and domain type checks passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s10 standard",
+      "checkedAt": "2026-08-20T19:21:14.219Z",
+      "notes": "All architecture and compiler authority ratchets passed."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s10 standard",
+      "checkedAt": "2026-08-20T19:21:15.377Z",
+      "notes": "No whitespace errors."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s09 complete: native KaTeX power endpoints and renderer-session ink certificates are implemented without synthetic target typography."
+    "summary": "Slice s10 complete: exponential sum-to-product has one deterministic sampled compositor session with reversible authority and no new scheduler or paint owner."
   },
   "expectedLearning": [
     "Whether the shared homomorphism law supports power applications without copying log choreography.",
