@@ -37,6 +37,7 @@ export interface KpExponentialNativeEndpoint {
   readonly authorityId: string;
   readonly accessibleText: string;
   readonly rawLatex: string;
+  readonly targetCombinationKind: "product" | "quotient";
   readonly annotatedLatex: string;
   readonly nativeHtmlAndMathml: string;
   readonly rootPresentationGroupId: string;
@@ -109,9 +110,13 @@ export function bindKpExponentialNativeEndpointOwnership(input: {
     input.endpoint.rootPresentationGroupId;
   for (const node of input.endpoint.nodes) {
     if (node.motionId === undefined) continue;
-    const elements = input.root.querySelectorAll<HTMLElement>(
-      `[data-kp-motion-id="${CSS.escape(node.motionId)}"]`
-    );
+    const elements = node.role === "combination-connector" &&
+      input.endpoint.endpoint === "target" &&
+      input.endpoint.targetCombinationKind === "quotient"
+      ? input.root.querySelectorAll<HTMLElement>(".frac-line")
+      : input.root.querySelectorAll<HTMLElement>(
+          `[data-kp-motion-id="${CSS.escape(node.motionId)}"]`
+        );
     if (elements.length !== 1) {
       throw new Error(
         `Exponential ${input.endpoint.endpoint} endpoint expected one native ` +
@@ -211,7 +216,13 @@ function createSourceEndpoint(
     nativeNode(nodes, "exponent-payload", index, latex)
   );
   const connectors = operands.slice(1).map((_latex, index) =>
-    nativeNode(nodes, "combination-connector", index, "+")
+    nativeNode(
+      nodes,
+      "combination-connector",
+      index,
+      authority.source.superscriptRegion.combination.connectors[index]
+        ?.operator ?? "+"
+    )
   );
   const combinationLatex = interleave(payloads, connectors);
   const combination = nativeNode(
@@ -258,6 +269,24 @@ function createTargetEndpoint(
       `${base}^{${superscript}}`
     );
   });
+  if (authority.targetCombinationKind === "quotient") {
+    if (powers.length !== 2) {
+      throw new Error(
+        "Exponential quotient endpoints require exactly two ordered powers."
+      );
+    }
+    findNode(nodes, "combination-connector", 0);
+    const quotient = `\\frac{${powers[0]}}{${powers[1]}}`;
+    const annotatedLatex = nativeNode(
+      nodes,
+      "combination-root",
+      0,
+      quotient
+    );
+    const rawLatex = `\\frac{${baseLatex}^{${operands[0]}}}` +
+      `{${baseLatex}^{${operands[1]}}}`;
+    return endpoint(authority, "target", rawLatex, annotatedLatex, nodes);
+  }
   const annotatedLatex = nativeNode(
     nodes,
     "combination-root",
@@ -290,6 +319,7 @@ function endpoint(
       output: "htmlAndMathml",
       trust: true
     }),
+    targetCombinationKind: authority.targetCombinationKind,
     rootPresentationGroupId,
     nodes
   });
@@ -309,8 +339,8 @@ function endpointNodes(
       ordinal: occurrence.ordinal,
       presentationGroupId:
         `${root}.node.${occurrence.role}.${occurrence.ordinal}`,
-      measurement: measurementKind(occurrence),
-      ...(measurementKind(occurrence) === "derived-adjacency"
+      measurement: measurementKind(authority, occurrence),
+      ...(measurementKind(authority, occurrence) === "derived-adjacency"
         ? {}
         : { motionId: `exponential.${authority.id}.${side}.` +
           `${occurrence.role}.${occurrence.ordinal}` })
@@ -318,11 +348,13 @@ function endpointNodes(
 }
 
 function measurementKind(
+  authority: KpExponentialHomomorphismCorrespondenceAuthority,
   occurrence: KpExponentialSemanticOccurrence
 ): KpExponentialEndpointMeasurementKind {
   if (
     occurrence.endpoint === "target" &&
-    occurrence.role === "combination-connector"
+    occurrence.role === "combination-connector" &&
+    authority.targetCombinationKind === "product"
   ) return "derived-adjacency";
   if (
     occurrence.role === "power-application" ||

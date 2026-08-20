@@ -27,7 +27,8 @@ import {
 } from "../semantic/exponential-homomorphism-correspondence.ts";
 import {
   classifyKpNormalizedPowerApplicationSurface,
-  resolveKpHomomorphicApplicationHandoff
+  resolveKpHomomorphicApplicationHandoff,
+  type KpHomomorphicTargetTopology
 } from "../animation/homomorphic-application-handoff-taxonomy.ts";
 
 export interface KpExponentialHomomorphismTransitProfile {
@@ -85,16 +86,22 @@ export interface KpExponentialHomomorphismTransitSession {
 }
 
 export function projectKpExponentialHomomorphismNativePaintRelations(
-  authority: KpExponentialHomomorphismCorrespondenceAuthority
+  authority: KpExponentialHomomorphismCorrespondenceAuthority,
+  targetTopology: KpHomomorphicTargetTopology = "lateral-product"
 ): readonly KpNativeKatexSemanticPaintRelation[] {
   assertAuthority(authority);
   const sourcePayloadIds = ids(authority, "source", "exponent-payload");
   const targetPayloadIds = ids(authority, "target", "exponent-payload");
   const sourceBaseIds = ids(authority, "source", "base");
   const targetBaseIds = ids(authority, "target", "base");
+  const targetConnectorIds = ids(
+    authority,
+    "target",
+    "combination-connector"
+  );
   const groups: Array<{
     readonly id: string;
-    readonly kind: "one-to-one" | "one-to-many";
+    readonly kind: "one-to-one" | "one-to-many" | "introduction";
     readonly sourceEntityIds: readonly string[];
     readonly targetEntityIds: readonly string[];
   }> = [];
@@ -125,7 +132,19 @@ export function projectKpExponentialHomomorphismNativePaintRelations(
       });
     }
   }
-  if (groups.length !== sourcePayloadIds.size + 1) {
+  if (targetTopology === "vertical-quotient") {
+    for (const targetConnectorId of targetConnectorIds) {
+      groups.push({
+        id: `paint.${authority.id}.target-quotient-connector`,
+        kind: "introduction",
+        sourceEntityIds: [],
+        targetEntityIds: [targetConnectorId]
+      });
+    }
+  }
+  const expectedRelationCount = sourcePayloadIds.size + 1 +
+    (targetTopology === "vertical-quotient" ? targetConnectorIds.size : 0);
+  if (groups.length !== expectedRelationCount) {
     throw new Error(
       "Exponential transit requires every payload continuant and one base fission."
     );
@@ -139,13 +158,15 @@ export function compileKpExponentialHomomorphismTransitPlan(input: {
   readonly targetEndpoint: KpExponentialNativeEndpoint;
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
+  readonly targetTopology?: KpHomomorphicTargetTopology | undefined;
 }) {
   assertTransitInput(input);
+  const targetTopology = input.targetTopology ?? "lateral-product";
   const handoff = resolveKpHomomorphicApplicationHandoff({
     surface: classifyKpNormalizedPowerApplicationSurface(
       input.authority.source
     ),
-    targetTopology: "lateral-product"
+    targetTopology
   });
   if (handoff.visualHandoff !== "carrier-fission") {
     throw new Error(
@@ -156,13 +177,15 @@ export function compileKpExponentialHomomorphismTransitPlan(input: {
     source: input.source,
     target: input.target,
     relations: projectKpExponentialHomomorphismNativePaintRelations(
-      input.authority
+      input.authority,
+      targetTopology
     ),
     copyFanOutRouting: false,
     endpointDwellFraction:
       kpExponentialHomomorphismTransitProfile.terminalSettlementFraction,
     trackProjection: createKpExponentialHomomorphismTrackProjection(
-      input.authority
+      input.authority,
+      targetTopology
     )
   });
 }
@@ -173,6 +196,7 @@ export function createKpExponentialHomomorphismTransitSession(input: {
   readonly targetEndpoint: KpExponentialNativeEndpoint;
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
+  readonly targetTopology?: KpHomomorphicTargetTopology | undefined;
 }): KpExponentialHomomorphismTransitSession {
   const canonical = createKpCanonicalNativeKatexSceneSession(
     compileKpExponentialHomomorphismTransitPlan(input)
@@ -205,7 +229,8 @@ export function createKpExponentialHomomorphismTransitSession(input: {
 }
 
 function createKpExponentialHomomorphismTrackProjection(
-  authority: KpExponentialHomomorphismCorrespondenceAuthority
+  authority: KpExponentialHomomorphismCorrespondenceAuthority,
+  targetTopology: KpHomomorphicTargetTopology
 ) {
   const sourcePayloadIds = ids(authority, "source", "exponent-payload");
   const targetPayloadIds = ids(authority, "target", "exponent-payload");
@@ -214,6 +239,11 @@ function createKpExponentialHomomorphismTrackProjection(
   const sourceConnectorIds = ids(
     authority,
     "source",
+    "combination-connector"
+  );
+  const targetConnectorIds = ids(
+    authority,
+    "target",
     "combination-connector"
   );
   const anchorPayloadTargetId = authority.occurrences.find((occurrence) =>
@@ -271,7 +301,9 @@ function createKpExponentialHomomorphismTrackProjection(
             ...track,
             timingGroupId: homomorphicResolutionTimingGroupId,
             semanticMotionUnitId: homomorphicResolutionMotionUnitId,
-            motionAxisConstraint: "horizontal" as const,
+            ...(targetTopology === "lateral-product"
+              ? { motionAxisConstraint: "horizontal" as const }
+              : {}),
             // Same-plane continuants take the shortest direct path. The first
             // operand settles quickly so a few pixels never become a slow crawl.
             sampleProgress: sampleWindow(transitWindow),
@@ -291,7 +323,9 @@ function createKpExponentialHomomorphismTrackProjection(
             semanticMotionUnitId: homomorphicResolutionMotionUnitId,
             routingCohortId: `route.${authority.id}.base-fission`,
             routingMemberId: targetEntityId,
-            motionAxisConstraint: "horizontal" as const,
+            ...(targetTopology === "lateral-product"
+              ? { motionAxisConstraint: "horizontal" as const }
+              : {}),
             sampleProgress: sampleWindow(
               kpExponentialHomomorphismTransitProfile.homomorphicResolution
                 .carrierFission
@@ -322,6 +356,28 @@ function createKpExponentialHomomorphismTrackProjection(
             homomorphicResolutionTimingGroupId,
             homomorphicResolutionMotionUnitId
           );
+        }
+        if (
+          track.lifecycle === "introduce" &&
+          targetEntityId !== undefined &&
+          targetConnectorIds.has(targetEntityId)
+        ) {
+          const reveal = sampleWindow(
+            kpExponentialHomomorphismTransitProfile.homomorphicResolution
+              .connectorRelease
+          );
+          return Object.freeze({
+            ...track,
+            timingGroupId: homomorphicResolutionTimingGroupId,
+            semanticMotionUnitId: homomorphicResolutionMotionUnitId,
+            sampleProgress: reveal,
+            sampleOpacityProgress: reveal,
+            sampleMaterialScale: (progress: number) =>
+              kpExponentialHomomorphismTransitProfile.connectorPointScale +
+              (1 - kpExponentialHomomorphismTransitProfile.connectorPointScale) *
+                reveal(progress),
+            opacityScheduleAuthority: "semantic-choreography" as const
+          });
         }
         return track;
       }));
@@ -395,7 +451,9 @@ function assertPaintOccurrenceCoverage(
 ): void {
   const requiredRoles = scene.endpoint === "source"
     ? ["base", "exponent-payload", "combination-connector"] as const
-    : ["base", "exponent-payload"] as const;
+    : authority.targetCombinationKind === "quotient"
+      ? ["base", "exponent-payload", "combination-connector"] as const
+      : ["base", "exponent-payload"] as const;
   const required = authority.occurrences.filter((occurrence) =>
     occurrence.endpoint === scene.endpoint &&
     requiredRoles.includes(occurrence.role as never)

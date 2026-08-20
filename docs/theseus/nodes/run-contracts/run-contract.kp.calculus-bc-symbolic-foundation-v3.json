@@ -68,7 +68,8 @@
     {
       "id": "r04",
       "title": "quotient-realization-pressure",
-      "status": "planned"
+      "summary": "Extended the Native KaTeX exponential endpoint/compiler seam to vertical quotients: the source minus is native, the target fraction rule has exact ownership, payloads and bases share one measured compositor cohort, quotient geometry remains caller-local, and the approved product caller is unchanged.",
+      "status": "complete"
     },
     {
       "id": "r05",

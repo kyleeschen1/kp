@@ -562,6 +562,30 @@
       "status": "passed",
       "scope": "r03 semantic authority boundary",
       "checkedAt": "2026-08-20T23:13:02.677Z"
+    },
+    {
+      "command": "npm run test:exponential-quotient-pressure",
+      "status": "passed",
+      "scope": "r04 Native KaTeX quotient realization pressure",
+      "checkedAt": "2026-08-20T23:22:47.798Z"
+    },
+    {
+      "command": "npm run test:exponential-native-endpoints",
+      "status": "passed",
+      "scope": "r04 approved product endpoint preservation",
+      "checkedAt": "2026-08-20T23:22:49.905Z"
+    },
+    {
+      "command": "npm run test:exponential-transit-session",
+      "status": "passed",
+      "scope": "r04 approved product choreography preservation",
+      "checkedAt": "2026-08-20T23:22:52.983Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "r04 quotient realization boundary",
+      "checkedAt": "2026-08-20T23:22:54.882Z"
     }
   ],
   "progress": {

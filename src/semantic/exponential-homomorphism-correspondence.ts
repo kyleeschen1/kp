@@ -56,6 +56,7 @@ export interface KpExponentialHomomorphismCorrespondenceAuthority {
   readonly endpointNormalizerId:
     typeof KP_POWER_APPLICATION_ENDPOINT_NORMALIZER;
   readonly source: KpNormalizedPowerApplicationEndpoint;
+  readonly targetCombinationKind: "product" | "quotient";
   readonly occurrences: readonly KpExponentialSemanticOccurrence[];
   readonly sourceOccurrenceIds: readonly string[];
   readonly targetOccurrenceIds: readonly string[];
@@ -173,6 +174,7 @@ export function compileKpExponentialHomomorphismCorrespondence(input: {
     lawId: law.id,
     endpointNormalizerId: KP_POWER_APPLICATION_ENDPOINT_NORMALIZER,
     source: input.source,
+    targetCombinationKind: law.targetCombination.kind,
     occurrences: [...source.all, ...target.all],
     sourceOccurrenceIds,
     targetOccurrenceIds,
