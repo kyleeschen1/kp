@@ -41,9 +41,6 @@ import {
   kpEditorSelectedSurfaceCapabilityHost,
   type KpEditorSelectedSurfaceCapabilityHost
 } from "./selected-surface-capability-host.ts";
-import {
-  prepareKpAnimationCatalogueChromeFonts
-} from "./animation-catalogue-font-reservation.ts";
 type GeneratedLinearSolveReaderClient = typeof import(
   "./verified-generated-linear-solve-reader.ts"
 );
@@ -151,13 +148,10 @@ export function createKpAnimationCatalogueSelectionPreparationService(input: {
         prepareBoundary(
           "capability-load-failed",
           selection.entry.animationId,
-          () => Promise.all([
-          prepareKpAnimationCatalogueChromeFonts(),
-          capabilityHost.loadSelected({
+          () => capabilityHost.loadSelected({
             animationId: selection.entry.animationId,
             slotKinds: dispatchKpEditorAnimationSurface(descriptor).slotKinds
           })
-          ])
         ),
         prepareBoundary(
           "parameterization-failed",

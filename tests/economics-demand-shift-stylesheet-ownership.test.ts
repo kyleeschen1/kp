@@ -168,7 +168,7 @@ test("tutorial foundation contains only framework-neutral document primitives", 
   );
 });
 
-test("lesson prose restores Source Serif 4 without overriding KaTeX", () => {
+test("system application chrome and lesson prose keep separate font owners", () => {
   const global = readFileSync(
     new URL("../src/styles.css", import.meta.url),
     "utf8"
@@ -176,20 +176,10 @@ test("lesson prose restores Source Serif 4 without overriding KaTeX", () => {
   const theme = read("economics-demand-shift-theme.css");
   const graph = readGraphCascade();
 
-  assert.equal(
-    [
-      ...global.matchAll(
-        /font-family: "Kinetic Press New Computer Modern Mono";/g
-      )
-    ].length,
-    3
-  );
-  assert.match(global, /font-weight: 300 400;[\s\S]*?mono-regular\.woff/);
-  assert.match(global, /font-weight: 500;[\s\S]*?mono-book\.woff/);
-  assert.match(global, /font-weight: 600 900;[\s\S]*?mono-bold\.woff/);
+  assert.doesNotMatch(global, /@font-face|Kinetic Press New Computer Modern/);
   assert.match(
     global,
-    /--kp-font-family-non-katex:[\s\S]*"Kinetic Press New Computer Modern Mono"/
+    /--kp-font-family-non-katex:[\s\S]*ui-sans-serif,[\s\S]*system-ui,[\s\S]*-apple-system,[\s\S]*BlinkMacSystemFont,[\s\S]*"Segoe UI"/
   );
   assert.equal((theme.match(/@font-face/g) ?? []).length, 1);
   assert.match(

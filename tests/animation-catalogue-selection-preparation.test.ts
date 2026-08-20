@@ -212,6 +212,10 @@ test("catalogue and legacy editor consume one browser-neutral preparation API", 
     serviceSource,
     /window\.|document\.|HTMLElement|from "svelte|new Map/
   );
+  assert.doesNotMatch(
+    serviceSource + catalogueSource,
+    /font-reservation|document\.fonts\.load/
+  );
   assert.match(
     serviceSource,
     /loadKpAnimationAsset,\s*\n\s*type KpLoadedAnimationAsset/

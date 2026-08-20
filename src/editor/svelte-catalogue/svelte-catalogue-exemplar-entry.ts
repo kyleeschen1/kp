@@ -19,9 +19,6 @@ import {
 import {
   createKpAnimationCatalogueSelectionPreparationService
 } from "../animation-catalogue-selection-preparation.ts";
-import {
-  prepareKpAnimationCatalogueChromeFonts
-} from "../animation-catalogue-font-reservation.ts";
 import { createKpEditorAnimationLibrary } from "../animation-library.ts";
 import KpSvelteCatalogueExemplar from "./KpSvelteCatalogueExemplar.svelte";
 import type {
@@ -60,7 +57,6 @@ export async function mountKpSvelteCatalogueExemplar(input: {
       animationId: selection.requestedArtifactId
     });
   }
-  await prepareKpAnimationCatalogueChromeFonts();
   let component: ReturnType<typeof mount> | undefined;
   component = mount(KpSvelteCatalogueExemplar, {
     target: input.root,

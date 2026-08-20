@@ -56,11 +56,12 @@ Mono-style face, with Menlo as a nearby fallback. The exact appearance is also
 substantially shaped by the dark `#0d0e1c` surface, warm `#ede8d0` foreground,
 syntax palette, regular weight, and generous line height.
 
-This is distinct from the repository's custom `Kinetic Press New Computer
-Modern Mono` family, which is the root non-KaTeX font in the main application.
-Economics prose currently uses Source Serif 4, while other reader and tutorial
-surfaces still contain system sans and serif stacks. Typography is therefore
-not yet one coherent public-product policy.
+This is distinct from the proportional system sans stack now used by Internal
+Studio and Animation Catalogue chrome. The formerly bundled `Kinetic Press New
+Computer Modern Mono` root face is retained only as unreferenced rollback
+material. Economics prose continues to use Source Serif 4, while code retains
+the system monospace stack; these are intentionally separate typography roles
+rather than one universal face.
 
 ## Explanation-Font Recommendation
 

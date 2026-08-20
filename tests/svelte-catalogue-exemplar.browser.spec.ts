@@ -33,6 +33,11 @@ test("canonical Svelte catalogue mounts through the shared selected-host model",
     "data-kp-animation-catalogue-state",
     "selected"
   );
+  const applicationFont = await root.evaluate((element) =>
+    getComputedStyle(element).fontFamily
+  );
+  expect(applicationFont).toContain("system-ui");
+  expect(applicationFont).not.toContain("Kinetic Press New Computer Modern");
   await expect(exemplar.locator(
     "[data-kp-animation-catalogue-region]"
   )).toHaveCount(3);
@@ -155,6 +160,9 @@ test("canonical Svelte catalogue mounts through the shared selected-host model",
     "true"
   );
   assertRequestedEntry(requestedUrls);
+  expect(requestedUrls.some((url) =>
+    url.includes("kp-new-computer-modern-mono")
+  )).toBe(false);
   expect(pageErrors).toEqual([]);
 });
 

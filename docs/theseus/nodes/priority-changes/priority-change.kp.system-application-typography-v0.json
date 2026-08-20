@@ -1,0 +1,79 @@
+{
+  "id": "priority-change.kp.system-application-typography-v0",
+  "kind": "priority-change",
+  "title": "Use system typography for application chrome",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "Internal Studio and Animation Catalogue chrome now use the native system sans stack; custom Computer Modern font declarations and chrome font-settlement waits are removed while KaTeX, economics Source Serif, and code typography remain separately owned.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "User approved replacing the bundled New Computer Modern Mono application face with the native system sans stack while preserving KaTeX, lesson-specific Source Serif, code typography, animation geometry, and the active carrier contract.",
+      "occurredAt": "2026-08-20T15:35:39.344Z",
+      "summary": "Priority change disposition: checkpoint."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-20-kp-system-application-typography.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v22"
+    ],
+    "preferred": [
+      "run-contract.kp.carrier-preserving-simplification-v4"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v22",
+    "run-contract.kp.carrier-preserving-simplification-v4"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:economics-demand-shift-css",
+      "status": "passed",
+      "scope": "font ownership preservation",
+      "checkedAt": "2026-08-20T15:42:18.591Z",
+      "notes": "21 checks passed; application system typography remains separate from economics Source Serif and KaTeX."
+    },
+    {
+      "command": "npm run test:browser:svelte-catalogue-exemplar -- --grep canonical Svelte catalogue mounts through the shared selected-host model",
+      "status": "passed",
+      "scope": "computed catalogue typography and resource closure",
+      "checkedAt": "2026-08-20T15:42:19.864Z",
+      "notes": "Chromium computed system-ui application chrome, requested no New Computer Modern font, and preserved the selected host."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "Internal Studio production font closure",
+      "checkedAt": "2026-08-20T15:42:20.991Z",
+      "notes": "Production build and all bundle ceilings passed; no custom application chrome font was emitted."
+    },
+    {
+      "command": "npm run visual:animation-library-display",
+      "status": "failed",
+      "scope": "broad historical review matrix diagnostic",
+      "checkedAt": "2026-08-20T15:42:34.567Z",
+      "notes": "2/10 passed; failures reproduce unrelated stale foldable-distribution endpoint closure, scroll-stop, and review-placement problems. The focused Svelte Catalogue typography browser proof passes and no failure involved font computation or resource loading."
+    }
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v22",
+    "rationale": "User approved replacing the bundled New Computer Modern Mono application face with the native system sans stack while preserving KaTeX, lesson-specific Source Serif, code typography, animation geometry, and the active carrier contract.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [
+      "run-contract.kp.carrier-preserving-simplification-v4"
+    ],
+    "changes": [
+      {
+        "subject": "application-typography",
+        "to": "system-sans-before-cps22"
+      }
+    ],
+    "effectiveAt": "2026-08-20T15:35:39.344Z",
+    "requestedBy": "user"
+  }
+}

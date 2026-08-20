@@ -1,5 +1,9 @@
 # Kinetic Press New Computer Modern Mono web subsets
 
+Status: retained as unreferenced rollback material. Internal Studio and the
+Animation Catalogue use the platform system sans stack and do not ship these
+files in their production closure.
+
 These files are derived from New Computer Modern 8.1.1 by Antonis
 Tsolomitis, downloaded from the official CTAN distribution:
 

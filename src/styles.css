@@ -1,53 +1,8 @@
-/* KP ships renamed, Latin-focused web subsets; provenance and license terms live beside the font assets. */
-@font-face {
-  font-family: "Kinetic Press New Computer Modern Mono";
-  font-style: normal;
-  font-display: swap;
-  /* Regular is the reading face: keep the default 400 request from silently
-     selecting the visibly denser Book cut. */
-  font-weight: 300 400;
-  src:
-    url("./assets/fonts/kp-new-computer-modern-mono-regular.woff")
-    format("woff");
-  unicode-range:
-    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-    U+02DC, U+0300-036F, U+2000-206F, U+20AC, U+2122, U+2190-21FF,
-    U+2200-22FF, U+25A0-25FF, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: "Kinetic Press New Computer Modern Mono";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 500;
-  src:
-    url("./assets/fonts/kp-new-computer-modern-mono-book.woff")
-    format("woff");
-  unicode-range:
-    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-    U+02DC, U+0300-036F, U+2000-206F, U+20AC, U+2122, U+2190-21FF,
-    U+2200-22FF, U+25A0-25FF, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: "Kinetic Press New Computer Modern Mono";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 600 900;
-  src:
-    url("./assets/fonts/kp-new-computer-modern-mono-bold.woff")
-    format("woff");
-  unicode-range:
-    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-    U+02DC, U+0300-036F, U+2000-206F, U+20AC, U+2122, U+2190-21FF,
-    U+2200-22FF, U+25A0-25FF, U+FEFF, U+FFFD;
-}
-
 :root {
   --kp-katex-operator-scale: 0.85em;
   --kp-font-family-non-katex:
-    "Kinetic Press New Computer Modern Mono", ui-monospace, SFMono-Regular,
-    Menlo, Monaco, Consolas, monospace;
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
 
   color: #171923;
   background: #f8fafc;

@@ -201,8 +201,8 @@ test("accepted choreography survives multi-glyph base and argument paint", async
     layer.dataset["kpEditorEquationMaterialLayer"] = "true";
     stage.append(layer);
     document.body.append(stage);
-    // This synthetic caller bypasses the catalogue's font reservation. Load
-    // the exact native math faces before granting measurement authority.
+    // Native math measurement requires KaTeX readiness even though catalogue
+    // chrome now uses an immediately available system font.
     await Promise.all([
       document.fonts.load("40px KaTeX_Main", "100"),
       document.fonts.load("40px KaTeX_Math", "x")

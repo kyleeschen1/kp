@@ -561,7 +561,20 @@ changing lesson prose.
 
 Gill Sans has been explicitly discarded and should not appear in the implementation plan or visual specification.
 
-## 8.4 Typography remains an open validation area
+## 8.4 Internal application chrome
+
+Internal Studio, the Animation Catalogue, and general application chrome use
+the platform system sans stack:
+
+```css
+ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif
+```
+
+Do not hardcode the macOS-resolved face or wait for a downloadable chrome font.
+This removes font transfer and settlement from the application shell while
+leaving lesson-specific prose and KaTeX under their existing owners.
+
+## 8.5 Typography remains an open validation area
 
 Test:
 
@@ -1241,6 +1254,8 @@ These should compile into state transactions rather than renderer-specific comma
 - Transparency is reserved for presence, ghosts, x-ray views, and disappearance.
 - Source Serif 4 Regular is the lesson-prose default; KaTeX retains its native
   faces and technical UI may choose its own companion font.
+- Internal application chrome uses the native system sans stack and ships no
+  custom Computer Modern Mono font by default.
 - Gill Sans is discarded.
 - Strict minimalism is discarded as a defining constraint.
 
