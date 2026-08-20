@@ -97,6 +97,37 @@ test("homomorphic crossover authorities remain independently lazy-loadable", asy
   assert.equal(typeof packFactory, "function");
 });
 
+test("exponential homomorphism authorities are lazy declaration entries", async () => {
+  const [operation, recipe, motif, capability, packFactory] =
+    await Promise.all([
+      loadKpEquationOperation(
+        "operation.equation.exponential-sum-to-product.v1"
+      ),
+      loadKpEquationRecipe(
+        "recipe.equation.exponential-homomorphism.v1"
+      ),
+      loadKpEquationMotif("motif.exponential-power-crossover.v1"),
+      loadKpEquationRendererCapability(
+        "renderer-capability.equation.exponential-power-crossover.v1"
+      ),
+      loadKpEquationExtensionPack(
+        "equation-pack.exponential-homomorphism.v1"
+      )
+    ]);
+  assert.deepEqual([
+    (operation as { id: string }).id,
+    (recipe as { id: string }).id,
+    (motif as { id: string }).id,
+    (capability as { id: string }).id
+  ], [
+    "operation.equation.exponential-sum-to-product.v1",
+    "recipe.equation.exponential-homomorphism.v1",
+    "motif.exponential-power-crossover.v1",
+    "renderer-capability.equation.exponential-power-crossover.v1"
+  ]);
+  assert.equal(typeof packFactory, "function");
+});
+
 test("unknown ids fail explicitly without a fallback import", async () => {
   await assert.rejects(
     loadKpEquationMotif("motif.unknown.v1"),

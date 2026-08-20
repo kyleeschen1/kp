@@ -93,7 +93,8 @@
     {
       "id": "s08",
       "title": "canonical-recipe-binding",
-      "status": "planned"
+      "summary": "Exponential recipe binding is data-driven, lazy-loadable, registry-validated, and free of caller-authored presentation controls.",
+      "status": "complete"
     },
     {
       "id": "s09",

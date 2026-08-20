@@ -2,6 +2,10 @@ import {
   createKpFunctionWrapEquationExtensionPack
 } from "../src/animation/equation-extension-packs/function-wrap.ts";
 import {
+  createKpExponentialHomomorphismEquationExtensionPack
+} from
+  "../src/animation/equation-extension-packs/exponential-homomorphism.ts";
+import {
   createKpHomomorphicCrossoverEquationExtensionPack
 } from "../src/animation/equation-extension-packs/homomorphic-crossover.ts";
 import {
@@ -26,7 +30,8 @@ export function createKpEquationExtensionDispatchManifest():
 readonly KpEquationDispatchDeclaration[] {
   const packs = [
     functionWrapDispatchPack(),
-    homomorphicCrossoverDispatchPack()
+    homomorphicCrossoverDispatchPack(),
+    exponentialHomomorphismDispatchPack()
   ];
   return Object.freeze(packs.flatMap(({ createPack, declarations }) => {
     const validation = validateKpEquationExtensionPack(createPack());
@@ -51,6 +56,44 @@ readonly KpEquationDispatchDeclaration[] {
     }
     return declarations;
   }));
+}
+
+function exponentialHomomorphismDispatchPack() {
+  return Object.freeze({
+    createPack: createKpExponentialHomomorphismEquationExtensionPack,
+    declarations: Object.freeze([
+      declaration(
+        "operation",
+        "operation.equation.exponential-sum-to-product.v1",
+        "../animation/equation-extension-packs/exponential-homomorphism.ts",
+        "kpExponentialSumToProductOperationRegistration"
+      ),
+      declaration(
+        "recipe",
+        "recipe.equation.exponential-homomorphism.v1",
+        "../animation/equation-extension-packs/exponential-homomorphism.ts",
+        "kpExponentialHomomorphismRecipeRegistration"
+      ),
+      declaration(
+        "motif",
+        "motif.exponential-power-crossover.v1",
+        "../animation/exponential-homomorphism-motif.ts",
+        "kpExponentialHomomorphismMotifDefinition"
+      ),
+      declaration(
+        "renderer-capability",
+        "renderer-capability.equation.exponential-power-crossover.v1",
+        "../animation/exponential-homomorphism-motif.ts",
+        "kpExponentialPowerCrossoverRendererCapabilityDefinition"
+      ),
+      declaration(
+        "lazy-pack",
+        "equation-pack.exponential-homomorphism.v1",
+        "../animation/equation-extension-packs/exponential-homomorphism.ts",
+        "createKpExponentialHomomorphismEquationExtensionPack"
+      )
+    ])
+  });
 }
 
 function functionWrapDispatchPack() {

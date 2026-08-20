@@ -278,11 +278,46 @@
       "scope": "slice s07 correspondence successor authority",
       "checkedAt": "2026-08-20T18:55:26.157Z",
       "notes": "No whitespace errors in the slice diff."
+    },
+    {
+      "command": "npm run test:exponential-extension-pack",
+      "status": "passed",
+      "scope": "slice s08 canonical recipe binding",
+      "checkedAt": "2026-08-20T19:00:56.094Z",
+      "notes": "8 pack validation, role schema, generated dispatch, lazy loading, and fallback-rejection tests pass."
+    },
+    {
+      "command": "npm run check:equation-extension-dispatch",
+      "status": "passed",
+      "scope": "slice s08 canonical recipe binding",
+      "checkedAt": "2026-08-20T19:00:57.104Z",
+      "notes": "Generated literal dispatch is current."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s08 canonical recipe binding",
+      "checkedAt": "2026-08-20T19:00:58.040Z",
+      "notes": "All TypeScript, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s08 canonical recipe binding",
+      "checkedAt": "2026-08-20T19:00:58.990Z",
+      "notes": "All extension, dependency, framework-neutral, and equation boundaries pass."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s08 canonical recipe binding",
+      "checkedAt": "2026-08-20T19:00:59.952Z",
+      "notes": "No whitespace errors in the slice diff."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s07 established exact payload continuity, derived base/application/superscript occurrences, connector succession, forbidden glyph identities, and total endpoint coverage."
+    "summary": "s08 bound exponential semantic authority to a power-specific nominal recipe and motif through generated lazy dispatch while reusing the canonical homomorphism phase grammar."
   },
   "expectedLearning": [
     "Whether the shared homomorphism law supports power applications without copying log choreography.",
