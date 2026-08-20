@@ -1,6 +1,6 @@
 ---
 name: kp-visual-salience
-description: Design, implement, or review semantic attention choreography across Kinetic Press prose, KaTeX, SVG, Canvas, and WebGL. Use for salience, focus, highlighting, dimming, ghosting, reveal/withdraw transitions, cross-view attention, renderer adapters, theme response, or promotion of a visual motif from an exemplar into shared infrastructure.
+description: Design, implement, or review semantic attention choreography across Kinetic Press prose, KaTeX, SVG, Canvas, and WebGL. Use for salience, focus, highlighting, dimming, ghosting, reveal/withdraw transitions, cross-view attention, KaTeX paint continuity, renderer adapters, theme response, or promotion of a visual motif from an exemplar into shared infrastructure.
 ---
 
 # KP Visual Salience
@@ -97,3 +97,7 @@ Let the scene resolver decide what remains normal or becomes context, and let th
 - Do not animate font weight or other layout-affecting properties for emphasis.
 - Do not canonize exact fonts, palette values, line-width ratios, or response curves while the source handoff marks them open or a current exemplar is still being tuned.
 - Do not claim renderer-wide support from one successful exemplar.
+- For Native KaTeX support or promotion claims, require an executable
+  feature-class representative through the canonical compositor; registry,
+  parser, and coverage-manifest evidence alone are not certification. Follow
+  [verification-and-promotion.md](references/verification-and-promotion.md).

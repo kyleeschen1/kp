@@ -88,6 +88,31 @@ canonical human checkpoint.
   sampling, complete browser matrices, and broad product regression for
   promotion and release boundaries.
 
+## Mechanism-first Native KaTeX conformance
+
+- Treat a shape registry, successful KaTeX parse, risk-tag inventory, pairwise
+  coverage manifest, or synthetic continuity-law test as planning evidence,
+  not executed compositor certification.
+- Certify reusable mechanisms rather than individual glyph spellings. The
+  certification unit is a materially distinct combination of paint class,
+  ownership topology, context mutation, and lifecycle action.
+- A Native KaTeX mechanism is `certified` only when a representative traverses
+  the real canonical source-native to material to target-native compositor
+  path and passes realized-paint continuity and exclusive-ownership laws.
+- Ordinary callers may reuse evidence for an already certified mechanism, but
+  must declare or derive their coverage signature. A new paint mechanism,
+  ownership topology, or unrepresented risk interaction requires one bounded
+  executable representative before promotion.
+- Pairwise and explicit higher-order risk plans must drive the executable
+  runtime harness; a manifest that is never executed cannot justify
+  `supported`, `promoted`, or `certified` language.
+- When a new failure appears, repair the shared measurement, ownership, or
+  lifecycle seam and add a feature-class representative. Do not accumulate
+  glyph-, equation-, or caller-specific offsets or browser tests.
+- Keep the cadence bounded: cheap declaration/law checks routinely, one
+  reusable-page Chromium canary for compositor changes, and a representative
+  supported-browser cohort only at promotion or release boundaries.
+
 ## Semantic visual salience
 
 Use `.agents/skills/kp-visual-salience/SKILL.md` for salience, focus,

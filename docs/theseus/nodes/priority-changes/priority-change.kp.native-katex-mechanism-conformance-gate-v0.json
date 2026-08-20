@@ -1,0 +1,65 @@
+{
+  "id": "priority-change.kp.native-katex-mechanism-conformance-gate-v0",
+  "kind": "priority-change",
+  "title": "Execute Native KaTeX mechanism conformance before shape expansion",
+  "status": "active",
+  "domain": "kp",
+  "summary": "User accepted mechanism-first amortization: complete the current carrier contract, then make descriptor and pairwise plans drive real compositor traces before another notation family can claim support.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "User accepted mechanism-first amortization: complete the current carrier contract, then make descriptor and pairwise plans drive real compositor traces before another notation family can claim support.",
+      "occurredAt": "2026-08-20T14:55:33.874Z",
+      "summary": "Priority change disposition: checkpoint."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-20-native-katex-mechanism-conformance-gate.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v22"
+    ],
+    "preferred": [
+      "run-contract.kp.carrier-preserving-simplification-v4"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v22",
+    "run-contract.kp.carrier-preserving-simplification-v4"
+  ],
+  "verificationRecords": [
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "durable mechanism-conformance policy",
+      "checkedAt": "2026-08-20T14:57:53.082Z",
+      "notes": "Validated 1,036 nodes and 23,793 events; the active carrier contract remains at cps22 with six slices remaining."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "policy and project-memory patch formatting",
+      "checkedAt": "2026-08-20T14:57:55.556Z",
+      "notes": "No whitespace errors in the durable policy, skill, roadmap, decision, or compiler-thread changes."
+    }
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v22",
+    "rationale": "User accepted mechanism-first amortization: complete the current carrier contract, then make descriptor and pairwise plans drive real compositor traces before another notation family can claim support.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [
+      "run-contract.kp.carrier-preserving-simplification-v4"
+    ],
+    "changes": [
+      {
+        "subject": "native-katex-mechanism-conformance",
+        "to": "after-carrier"
+      }
+    ],
+    "effectiveAt": "2026-08-20T14:55:33.874Z",
+    "requestedBy": "user"
+  }
+}

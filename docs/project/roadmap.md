@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-08-19
+Last Updated: 2026-08-20
 Status: active
 Active Thread: `threads/generative-animation-compiler.md`
 Supporting Threads:
@@ -188,11 +188,22 @@ Only this repository sequence is active:
    required evidence, and support state, then let natural-language and
    ordered-LaTeX requests select contributor fusion or carrier preservation
    from verified semantics—or enter a typed clarification/repair exchange.
-26. **Remaining evaluation presentation families:** punctuated substitution,
+26. **Executable Native KaTeX mechanism conformance:** immediately after the
+   carrier/discoverability contract and before another notation shape family.
+   Convert the existing descriptor, risk-tag, pairwise, and actual-paint
+   infrastructure into one data-driven runtime harness. Certify one real
+   canonical-compositor representative per materially distinct paint class,
+   ownership topology, context mutation, and lifecycle interaction; ordinary
+   glyph spellings and callers reuse the resulting coverage signature. The
+   current 24-shape registry is bounded inventory, while only the canonical
+   `2` and italic `x` carriers have complete browser-realized seam evidence.
+   The accepted gate is recorded in
+   `decisions/2026-08-20-native-katex-mechanism-conformance-gate.md`.
+27. **Remaining evaluation presentation families:** punctuated substitution,
    result reception, operator aperture, and expanded calculation remain
    separate future instructional choices. Do not promote scaling-to-zero or
    simultaneous readable pre/post glyphs as a default.
-27. **Fraction promotion and arithmetic:** deferred while KP broadens its
+28. **Fraction promotion and arithmetic:** deferred while KP broadens its
    evaluation topology. Return to like-denominator combination after the
    contrasting-family proof rather than completing fractions for category
    coverage alone.
@@ -207,7 +218,7 @@ The catalogue backlog and selection rationale are recorded in
 | Area | State | Direction |
 | --- | --- | --- |
 | Semantic/runtime spine | Strong and governed | Preserve; simplify callers around it. |
-| Equation animation | Balanced operations and alternative logarithm bases are Direct; Review placement and sequence-level Native KaTeX ownership are complete; contributor fusion is promoted | Prove carrier-preserving simplification on `2 × 1 → 2`, pressure it on the existing add-zero caller, then test mixed-family governed generation before returning to fraction arithmetic. |
+| Equation animation | Balanced operations and alternative logarithm bases are Direct; Review placement and sequence-level Native KaTeX ownership are complete; contributor fusion is promoted; `2` and italic `x` have executable cross-browser paint-seam certification while the wider 24-shape registry remains inventory/planning evidence | Complete carrier-preserving simplification and mixed-family governed generation, then make the descriptor-driven conformance plans executable before returning to fractions or another notation shape family. |
 | Graph2D | Promoted through economics and physics | Extract only general tokens, lifecycle, and renderer contracts. |
 | Program animation | TypeScript, Python, and Scheme are approved governed callers; bounded paint, projection, settlement, and ownership seams are proven | Preserve the portfolio for product convergence; defer another language or transformation topology. |
 | Graph3D | Honest internal capability, not public parity | Keep internal until a product proof requires it. |

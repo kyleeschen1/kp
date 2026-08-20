@@ -1,12 +1,17 @@
 # Generative Animation Compiler Thread
 
 Status: active
-Last Updated: 2026-08-19
+Last Updated: 2026-08-20
 Current Next Action: propose the carrier-preserving simplification family on
 `2 × 1 → 2`, then pressure the approved visual language on the existing
 `x + 0 = 4 → x = 4` caller. Review placement and the sequence-level Native
 KaTeX ownership repair are already complete; do not repeat them or continue
 fraction arithmetic merely for category coverage.
+
+After the current carrier/discoverability contract closes, build the bounded
+descriptor-driven Native KaTeX conformance runner before expanding into
+another notation shape family. Do not interrupt the six remaining carrier
+slices: their two real callers already have executable `2`/`x` seam evidence.
 
 Execution authority: the user-approved proposal at
 `docs/project/reviews/2026-08-19-carrier-preserving-simplification-long-loop-proposal.md`
@@ -133,6 +138,27 @@ incompatible.
   Infix catalyst ordering is semantic across engines, while native geometry
   still supplies the contributor axis. Other evaluation families and sequence
   embedding remain explicitly outside the promotion.
+- Native KaTeX conformance now distinguishes inventory from execution. The
+  24-shape registry, risk tags, context mutations, matrices, compound fixtures,
+  and pairwise manifests are bounded planning evidence. Only the canonical
+  digit `2` and italic `x` carriers currently traverse the real compositor in
+  the supported-browser actual-paint suite. No future loop may describe the
+  wider families as certified until their coverage plans drive executable
+  source-native to material to target-native representatives.
+
+## Native KaTeX Promotion Gate
+
+The unit of certification is a reusable mechanism, not an individual glyph or
+animation: paint class × ownership topology × context mutation × lifecycle
+action. An ordinary new caller may reuse a certified coverage signature. A new
+mechanism or unrepresented risk interaction must add one bounded executable
+representative to the data-driven compositor harness before promotion.
+
+Registry membership, KaTeX parsing, risk classification, synthetic law tests,
+and unexecuted pairwise manifests cannot independently establish `certified`,
+`supported`, or `promoted` state. When a representative fails, repair the
+shared renderer seam and extend the risk model; never add glyph-, equation-,
+or caller-specific offsets.
 
 ## Capability Vocabulary
 
@@ -214,6 +240,8 @@ responsive placement change.
   authority.
 - Natural-language fixtures are presented as live-model reliability evidence.
 - Coverage status cannot be derived from named evidence.
+- A Native KaTeX family is called certified or promoted from registry, parser,
+  or coverage-manifest evidence without a real compositor representative.
 - The minimal dashboard grows into another ontology or project-management UI.
 - The exponent/log repair changes its semantic endpoints, stable identities,
   mathematical operation order, or any approved product/quotient choreography
@@ -221,6 +249,7 @@ responsive placement change.
 
 ## Links
 
+- `../decisions/2026-08-20-native-katex-mechanism-conformance-gate.md`
 - `../decisions/2026-08-17-kp-governed-cross-domain-animation-generation-priority.md`
 - `../decisions/2026-08-19-kp-paint-ownership-and-evaluation-presentation-direction.md`
 - `../reviews/2026-08-17-governed-animation-generation-foundation-long-loop-proposal.md`

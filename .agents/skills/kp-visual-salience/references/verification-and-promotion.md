@@ -49,6 +49,37 @@ Keep tuners available internally when they help review, but do not expose them a
 5. Measure scripting, style recalculation, layout, paint, and GPU work on a representative page with multiple blocks.
 6. Propose catalogue-wide adoption as a separate, reviewable change.
 
+## Native KaTeX mechanism certification
+
+Amortize paint-continuity debugging across mechanisms, not glyph spellings or
+individual animations.
+
+- Define the certification unit by paint class, ownership topology, context
+  mutation, and lifecycle action.
+- Require a representative to traverse the real canonical source-native,
+  material, and target-native compositor owners while observing realized
+  paint and exclusive ownership.
+- Let ordinary callers reuse an already certified coverage signature. Add one
+  executable representative when a caller introduces a new mechanism or an
+  unrepresented risk interaction.
+- Make pairwise and named higher-order risk plans feed the runtime harness.
+  Registry membership, KaTeX parsing, and an unexecuted coverage manifest are
+  inventory evidence only.
+- Record failures by feature class and repair the shared renderer seam. Reject
+  glyph-, equation-, fixture-, and caller-specific offsets.
+- Run cheap declaration and law checks routinely, a bounded reusable-page
+  Chromium canary for compositor changes, and the representative supported-
+  browser cohort only at promotion or release boundaries.
+
+Use support terms precisely:
+
+- `registered`: typed descriptor and parse/inventory evidence exist;
+- `planned`: a bounded coverage scenario exists but has not executed;
+- `certified`: a real compositor representative passes continuity and
+  ownership laws;
+- `promoted`: the certified mechanism also satisfies its semantic, caller,
+  and human-review promotion criteria.
+
 ## Promotion failures
 
 Do not promote when:
