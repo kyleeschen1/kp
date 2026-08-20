@@ -31,51 +31,45 @@ import {
 } from "../animation/homomorphic-application-handoff-taxonomy.ts";
 
 export interface KpExponentialHomomorphismTransitProfile {
-  readonly id: "timing.exponential-homomorphism.product.v5";
+  readonly id: "timing.exponential-homomorphism.product.v6";
   readonly baseHandoff: Readonly<{
     topology: "native-scale-carrier-fission";
     sourceExit: "retain-native-carrier";
     targetEntry: "full-size-follower-peel";
   }>;
-  readonly operandSeparation: Readonly<{
-    topology: "anchor-and-outward-separation";
+  readonly homomorphicResolution: Readonly<{
+    topology: "carrier-fission-with-connector-release";
     path: "direct-horizontal";
     anchorOrdinal: 0;
     anchorSettlement: Readonly<{ start: number; end: number }>;
     outwardTransit: Readonly<{ start: number; end: number }>;
     connectorContraction: Readonly<{ start: number; end: number }>;
     connectorRelease: Readonly<{ start: number; end: number }>;
-  }>;
-  readonly carrierFission: Readonly<{
-    start: number;
-    end: number;
-  }>;
-  readonly carrierFollowerReveal: Readonly<{
-    start: number;
-    end: number;
+    carrierFission: Readonly<{ start: number; end: number }>;
+    carrierFollowerReveal: Readonly<{ start: number; end: number }>;
   }>;
   readonly connectorPointScale: number;
   readonly terminalSettlementFraction: number;
 }
 
 export const kpExponentialHomomorphismTransitProfile = Object.freeze({
-  id: "timing.exponential-homomorphism.product.v5" as const,
+  id: "timing.exponential-homomorphism.product.v6" as const,
   baseHandoff: Object.freeze({
     topology: "native-scale-carrier-fission" as const,
     sourceExit: "retain-native-carrier" as const,
     targetEntry: "full-size-follower-peel" as const
   }),
-  operandSeparation: Object.freeze({
-    topology: "anchor-and-outward-separation" as const,
+  homomorphicResolution: Object.freeze({
+    topology: "carrier-fission-with-connector-release" as const,
     path: "direct-horizontal" as const,
     anchorOrdinal: 0 as const,
     anchorSettlement: Object.freeze({ start: 0.16, end: 0.22 }),
     outwardTransit: Object.freeze({ start: 0.16, end: 0.3 }),
     connectorContraction: Object.freeze({ start: 0.16, end: 0.24 }),
-    connectorRelease: Object.freeze({ start: 0.16, end: 0.3 })
+    connectorRelease: Object.freeze({ start: 0.16, end: 0.3 }),
+    carrierFission: Object.freeze({ start: 0.16, end: 0.3 }),
+    carrierFollowerReveal: Object.freeze({ start: 0.16, end: 0.22 })
   }),
-  carrierFission: Object.freeze({ start: 0.42, end: 0.62 }),
-  carrierFollowerReveal: Object.freeze({ start: 0.36, end: 0.42 }),
   connectorPointScale: 0.1,
   terminalSettlementFraction: 0.04
 } satisfies KpExponentialHomomorphismTransitProfile);
@@ -226,7 +220,8 @@ function createKpExponentialHomomorphismTrackProjection(
     occurrence.endpoint === "target" &&
     occurrence.role === "exponent-payload" &&
     occurrence.ordinal ===
-      kpExponentialHomomorphismTransitProfile.operandSeparation.anchorOrdinal
+      kpExponentialHomomorphismTransitProfile.homomorphicResolution
+        .anchorOrdinal
   )?.id;
   const persistentCarrierTargetId = authority.occurrences.find((occurrence) =>
     occurrence.endpoint === "target" && occurrence.role === "base" &&
@@ -242,10 +237,10 @@ function createKpExponentialHomomorphismTrackProjection(
       "Exponential carrier fission requires one ordered payload anchor."
     );
   }
-  const operandSeparationTimingGroupId =
-    `timing.${authority.id}.operand-separation`;
-  const operandSeparationMotionUnitId =
-    `motion-unit.${authority.id}.operand-separation`;
+  const homomorphicResolutionTimingGroupId =
+    `timing.${authority.id}.homomorphic-resolution`;
+  const homomorphicResolutionMotionUnitId =
+    `motion-unit.${authority.id}.homomorphic-resolution`;
   return createKpNativeKatexTrackProjection({
     id: `track-projection.${authority.id}.power-crossover`,
     project({ tracks, source, target }) {
@@ -268,14 +263,14 @@ function createKpExponentialHomomorphismTrackProjection(
           targetPayloadIds.has(targetEntityId)
         ) {
           const transitWindow = targetEntityId === anchorPayloadTargetId
-            ? kpExponentialHomomorphismTransitProfile.operandSeparation
+            ? kpExponentialHomomorphismTransitProfile.homomorphicResolution
               .anchorSettlement
-            : kpExponentialHomomorphismTransitProfile.operandSeparation
+            : kpExponentialHomomorphismTransitProfile.homomorphicResolution
               .outwardTransit;
           return Object.freeze({
             ...track,
-            timingGroupId: operandSeparationTimingGroupId,
-            semanticMotionUnitId: operandSeparationMotionUnitId,
+            timingGroupId: homomorphicResolutionTimingGroupId,
+            semanticMotionUnitId: homomorphicResolutionMotionUnitId,
             motionAxisConstraint: "horizontal" as const,
             // Same-plane continuants take the shortest direct path. The first
             // operand settles quickly so a few pixels never become a slow crawl.
@@ -292,19 +287,21 @@ function createKpExponentialHomomorphismTrackProjection(
         ) {
           return Object.freeze({
             ...track,
-            timingGroupId: `timing.${authority.id}.base-fission`,
-            semanticMotionUnitId: `motion-unit.${authority.id}.base-fission`,
+            timingGroupId: homomorphicResolutionTimingGroupId,
+            semanticMotionUnitId: homomorphicResolutionMotionUnitId,
             routingCohortId: `route.${authority.id}.base-fission`,
             routingMemberId: targetEntityId,
             motionAxisConstraint: "horizontal" as const,
             sampleProgress: sampleWindow(
-              kpExponentialHomomorphismTransitProfile.carrierFission
+              kpExponentialHomomorphismTransitProfile.homomorphicResolution
+                .carrierFission
             ),
             samplePaintPresence:
               targetEntityId === persistentCarrierTargetId
                 ? samplePersistentCarrierPresence
                 : sampleWindow(
                     kpExponentialHomomorphismTransitProfile
+                      .homomorphicResolution
                       .carrierFollowerReveal
                   ),
             opacityScheduleAuthority: "semantic-choreography" as const,
@@ -318,12 +315,12 @@ function createKpExponentialHomomorphismTrackProjection(
         ) {
           return stationaryCompressedRelease(
             track,
-            kpExponentialHomomorphismTransitProfile.operandSeparation
+            kpExponentialHomomorphismTransitProfile.homomorphicResolution
               .connectorContraction,
-            kpExponentialHomomorphismTransitProfile.operandSeparation
+            kpExponentialHomomorphismTransitProfile.homomorphicResolution
               .connectorRelease,
-            operandSeparationTimingGroupId,
-            operandSeparationMotionUnitId
+            homomorphicResolutionTimingGroupId,
+            homomorphicResolutionMotionUnitId
           );
         }
         return track;
@@ -354,8 +351,8 @@ function stationaryCompressedRelease(
     endRect: Object.freeze({ ...track.startRect }),
     startPaintRect: Object.freeze({ ...track.startPaintRect }),
     endPaintRect: Object.freeze({ ...track.startPaintRect }),
-    // Connector retirement and operand separation are one semantic event:
-    // the additive relationship yields as its operands become independent.
+    // Connector retirement, payload separation, and carrier fission are one
+    // semantic event: the homomorphism resolves into two complete branches.
     timingGroupId,
     semanticMotionUnitId,
     sampleProgress: sampleRelease,

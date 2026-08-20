@@ -65,15 +65,17 @@ test("one compositor plan stages persistent carrier fission", () => {
     }
   );
   assert.deepEqual(
-    kpExponentialHomomorphismTransitProfile.operandSeparation,
+    kpExponentialHomomorphismTransitProfile.homomorphicResolution,
     {
-      topology: "anchor-and-outward-separation",
+      topology: "carrier-fission-with-connector-release",
       path: "direct-horizontal",
       anchorOrdinal: 0,
       anchorSettlement: { start: 0.16, end: 0.22 },
       outwardTransit: { start: 0.16, end: 0.3 },
       connectorContraction: { start: 0.16, end: 0.24 },
-      connectorRelease: { start: 0.16, end: 0.3 }
+      connectorRelease: { start: 0.16, end: 0.3 },
+      carrierFission: { start: 0.16, end: 0.3 },
+      carrierFollowerReveal: { start: 0.16, end: 0.22 }
     }
   );
   assert.equal(plan.copyFanOut, false);
@@ -112,19 +114,19 @@ test("one compositor plan stages persistent carrier fission", () => {
   ));
   assert.ok(payloads.every(({ semanticMotionUnitId }) =>
     semanticMotionUnitId ===
-      `motion-unit.${authority.id}.operand-separation`
+      `motion-unit.${authority.id}.homomorphic-resolution`
   ));
   assert.ok(payloads.every(({ motionPath }) => motionPath === undefined));
   assert.ok(payloads.every(({ timingGroupId }) =>
-    timingGroupId === `timing.${authority.id}.operand-separation`
+    timingGroupId === `timing.${authority.id}.homomorphic-resolution`
   ));
   assert.equal(
     connector.timingGroupId,
-    `timing.${authority.id}.operand-separation`
+    `timing.${authority.id}.homomorphic-resolution`
   );
   assert.equal(
     connector.semanticMotionUnitId,
-    `motion-unit.${authority.id}.operand-separation`
+    `motion-unit.${authority.id}.homomorphic-resolution`
   );
 
   const anchor = trackForSourceAtom(
@@ -151,6 +153,13 @@ test("one compositor plan stages persistent carrier fission", () => {
   assert.ok(bases.every(({ sampleMaterialScale }) =>
     sampleMaterialScale === undefined
   ));
+  assert.ok(bases.every(({ timingGroupId }) =>
+    timingGroupId === `timing.${authority.id}.homomorphic-resolution`
+  ));
+  assert.ok(bases.every(({ semanticMotionUnitId }) =>
+    semanticMotionUnitId ===
+      `motion-unit.${authority.id}.homomorphic-resolution`
+  ));
   const sourceBaseFrames = bases.map(({ id }) =>
     frameFor(plan.tracks, id, 0.1)
   );
@@ -158,42 +167,38 @@ test("one compositor plan stages persistent carrier fission", () => {
     sourceBaseFrames.map(({ opacity }) => opacity).sort(),
     [0, 1]
   );
-  const nativeCarrierFrames = bases.map(({ id }) =>
+  const resolvingFrames = bases.map(({ id }) =>
     frameFor(plan.tracks, id, 0.22)
-  ).filter(({ opacity }) => opacity > 0);
-  assert.equal(nativeCarrierFrames.length, 1);
-  assert.equal(nativeCarrierFrames[0]!.opacity, 1);
-  assert.equal(nativeCarrierFrames[0]!.materialScale, undefined);
-  const branchStartFrames = bases.map(({ id }) =>
-    frameFor(plan.tracks, id, 0.36)
   );
-  assert.deepEqual(
-    branchStartFrames.map(({ opacity }) => opacity).sort(),
-    [0, 1]
+  assert.ok(resolvingFrames.every(({ opacity, materialScale }) =>
+    opacity === 1 && materialScale === undefined
+  ));
+  assert.equal(
+    sameRect(resolvingFrames[0]!.rect, resolvingFrames[1]!.rect),
+    false
   );
-  assert.ok(sameRect(branchStartFrames[0]!.rect, branchStartFrames[1]!.rect));
   const branchFrames = bases.map(({ id }) =>
-    frameFor(plan.tracks, id, 0.52)
+    frameFor(plan.tracks, id, 0.27)
   );
   assert.ok(branchFrames.every(({ opacity, materialScale }) =>
     opacity === 1 && materialScale === undefined
   ));
   assert.equal(sameRect(branchFrames[0]!.rect, branchFrames[1]!.rect), false);
   const targetCenterFrames = bases.map(({ id }) =>
-    frameFor(plan.tracks, id, 0.62)
+    frameFor(plan.tracks, id, 0.3)
   );
   assert.ok(targetCenterFrames.every((frame, index) =>
     frame.opacity === 1 && frame.materialScale === undefined &&
       sameRect(frame.rect, bases[index]!.endRect)
   ));
   const settledFrames = bases.map(({ id }) =>
-    frameFor(plan.tracks, id, 0.66)
+    frameFor(plan.tracks, id, 0.34)
   );
   assert.ok(settledFrames.every(({ opacity, materialScale }, index) =>
     opacity === 1 && materialScale === undefined &&
       sameRect(settledFrames[index]!.rect, bases[index]!.endRect)
   ));
-  for (const progress of [0, 0.2, 0.36, 0.42, 0.52, 0.62, 0.7]) {
+  for (const progress of [0, 0.18, 0.22, 0.27, 0.3, 0.7]) {
     assert.ok(bases.some(({ id }) =>
       frameFor(plan.tracks, id, progress).opacity > 0
     ));
@@ -207,7 +212,7 @@ test("carrier fission keeps measured base paint at native scale", () => {
   const bases = compilePlan().tracks.filter(({ lifecycle }) =>
     lifecycle === "split"
   );
-  for (const progress of [0, 0.22, 0.4, 0.52, 0.62, 1]) {
+  for (const progress of [0, 0.18, 0.22, 0.27, 0.3, 1]) {
     for (const base of bases) {
       const frame = frameFor(bases, base.id, progress);
       assert.equal(frame.materialScale, undefined);

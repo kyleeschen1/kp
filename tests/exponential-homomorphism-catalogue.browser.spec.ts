@@ -123,7 +123,7 @@ test("connector contracts at its ink center while carrier fission stays native-s
     "occurrence.exponential.sum-to-product.ab.target.base.1"
   ] as const;
   const baseSamples = [];
-  for (const progress of [0.42, 0.52, 0.62]) {
+  for (const progress of [0.18, 0.23, 0.3]) {
     await seek.fill(String(progress));
     await expect(stage).toHaveAttribute(
       "data-kp-exponential-homomorphism-progress",

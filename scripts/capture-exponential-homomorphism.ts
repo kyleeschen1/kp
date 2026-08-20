@@ -29,13 +29,10 @@ interface Checkpoint {
 
 const desktopCheckpoints = Object.freeze([
   { id: "forward-000", label: "forward · source", phase: "forward", progress: 0 },
-  { id: "forward-019", label: "forward · operands begin separating", phase: "forward", progress: 0.19 },
+  { id: "forward-019", label: "forward · homomorphism begins resolving", phase: "forward", progress: 0.19 },
   { id: "forward-022", label: "forward · anchor settles", phase: "forward", progress: 0.22 },
-  { id: "forward-027", label: "forward · connector yields", phase: "forward", progress: 0.27 },
-  { id: "forward-030", label: "forward · operands separated", phase: "forward", progress: 0.3 },
-  { id: "forward-036", label: "forward · follower appears", phase: "forward", progress: 0.36 },
-  { id: "forward-052", label: "forward · carrier fission", phase: "forward", progress: 0.52 },
-  { id: "forward-062", label: "forward · target settlement", phase: "forward", progress: 0.62 },
+  { id: "forward-027", label: "forward · carrier fission and connector release", phase: "forward", progress: 0.27 },
+  { id: "forward-030", label: "forward · branches resolved", phase: "forward", progress: 0.3 },
   { id: "forward-100", label: "forward · target", phase: "forward", progress: 1 },
   { id: "seek-073", label: "direct seek · 73%", phase: "direct-seek", progress: 0.73 },
   { id: "seek-027", label: "direct seek · 27%", phase: "direct-seek", progress: 0.27 },
