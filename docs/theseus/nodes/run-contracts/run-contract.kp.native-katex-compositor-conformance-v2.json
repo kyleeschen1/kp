@@ -179,7 +179,8 @@
     {
       "id": "ncc23",
       "title": "Add-context-mutations",
-      "status": "planned"
+      "summary": "Added typed shorter, longer, taller, grouping, and display-to-script context mutations. The data-driven pairwise manifest covers all mutation interactions plus one explicit three-way risk in 23 scenarios, with validation and production exclusion.",
+      "status": "complete"
     },
     {
       "id": "ncc24",

@@ -24,4 +24,9 @@ test("keeps conformance schemas out of production source and bundles", () => {
     message:
       "Production artifact dist/assets/leak.js contains test-only native-katex-compositor-seam-trace."
   }]);
+
+  assert.equal(checkKpNativeKatexConformanceProductionArtifacts([{
+    path: "src/leak.ts",
+    source: "native-katex-conformance-context-mutation-registry"
+  }])[0]?.marker, "native-katex-conformance-context-mutation-registry");
 });

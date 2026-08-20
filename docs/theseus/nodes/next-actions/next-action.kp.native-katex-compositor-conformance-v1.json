@@ -241,6 +241,20 @@
       "scope": "ncc22",
       "checkedAt": "2026-08-20T04:37:41.171Z",
       "notes": "Structured descriptors and their tests remain development-only and absent from production closure."
+    },
+    {
+      "command": "npm run test:native-katex-compositor-conformance",
+      "status": "passed",
+      "scope": "ncc23",
+      "checkedAt": "2026-08-20T04:42:17.331Z",
+      "notes": "Forty-one checks pass; five typed context mutations preserve one carrier and a generic five-factor pairwise canary covers every pair plus the explicit script/math-style/compound risk in 23 scenarios, within the 24-scenario ceiling."
+    },
+    {
+      "command": "npm run check:native-katex-compositor-conformance-production",
+      "status": "passed",
+      "scope": "ncc23",
+      "checkedAt": "2026-08-20T04:42:18.414Z",
+      "notes": "The production closure now rejects the context-mutation registry marker; source and emitted artifacts remain clean across six forbidden conformance markers."
     }
   ],
   "expectedLearning": [
