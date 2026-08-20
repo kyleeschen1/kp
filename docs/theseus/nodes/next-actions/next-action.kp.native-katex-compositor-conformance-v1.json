@@ -2,7 +2,7 @@
   "id": "next-action.kp.native-katex-compositor-conformance-v1",
   "kind": "next-action",
   "title": "Build bounded Native KaTeX compositor conformance",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
   "sourceRefs": [
     {
@@ -297,6 +297,69 @@
       "scope": "ncc26",
       "checkedAt": "2026-08-20T05:14:08.715Z",
       "notes": "Forty-nine deterministic checks pass; the release profile freezes supported engines, lifecycle actions, ten scenarios per engine, one page, one worker, zero routine screenshots, and structured diagnostics."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "ncc27 broad closeout",
+      "checkedAt": "2026-08-20T05:22:03.520Z",
+      "notes": "80 compositor, ownership, endpoint, and settlement tests passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "ncc27 broad closeout",
+      "checkedAt": "2026-08-20T05:22:05.248Z",
+      "notes": "Dependency direction, framework neutrality, semantic boundaries, and equation compiler authority passed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "ncc27 broad closeout",
+      "checkedAt": "2026-08-20T05:22:06.599Z",
+      "notes": "Full typecheck, Svelte validation, domain checks, and production build passed; only the established Vite chunk-size warning remains."
+    },
+    {
+      "command": "npm run check:native-katex-compositor-conformance-production",
+      "status": "passed",
+      "scope": "ncc27 production closure",
+      "checkedAt": "2026-08-20T05:22:07.964Z",
+      "notes": "All 9 development-only conformance markers are absent from production closures."
+    },
+    {
+      "command": "npm run check:bundle-experiences",
+      "status": "failed",
+      "scope": "ncc27 classified global bundle baseline",
+      "checkedAt": "2026-08-20T05:22:09.712Z",
+      "notes": "Strict global gate reports only bundle-experience.catalogue.empty style at 24101 gzip bytes versus 16500. The conformance run changed no CSS, introduced no production owner violation, and its approved baseline already classifies this catalogue style overage outside the compositor contract."
+    },
+    {
+      "command": "npm run measure:bundle-experiences",
+      "status": "passed",
+      "scope": "ncc27 production attribution",
+      "checkedAt": "2026-08-20T05:22:12.545Z",
+      "notes": "Measurement manifest 1bf3ce9fd63206a3c0bfa774be5432186dad2f0242d249b059ed9d1bb1b164c3 reports zero owner violations; the sole budget violation is the classified pre-existing empty-catalogue style ceiling."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "ncc27 pre-closeout control plane",
+      "checkedAt": "2026-08-20T05:22:51.007Z",
+      "notes": "Validated 1,035 nodes and 23,783 events before final slice closure."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "ncc27 pre-closeout diff",
+      "checkedAt": "2026-08-20T05:22:52.603Z",
+      "notes": "Loop-owned control records have no whitespace errors; protected economics and unrelated untracked files remain untouched."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "ncc27 completed handoff",
+      "checkedAt": "2026-08-20T05:23:55.101Z",
+      "notes": "Validated 1,035 nodes and 23,790 events after conformance resolution and explicit carrier reactivation at cps22."
     }
   ],
   "expectedLearning": [

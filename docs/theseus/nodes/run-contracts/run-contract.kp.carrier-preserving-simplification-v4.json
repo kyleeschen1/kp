@@ -2,9 +2,9 @@
   "id": "run-contract.kp.carrier-preserving-simplification-v4",
   "kind": "run-contract",
   "title": "Carrier-preserving simplification and discoverable authoring",
-  "status": "deferred",
+  "status": "ready",
   "domain": "kp",
-  "summary": "Carrier promotion waits at cps22 while the approved Native KaTeX compositor conformance v2 contract repairs and certifies the realized-paint seam.",
+  "summary": "Native KaTeX compositor conformance v2 completed all 27 slices and explicitly returned execution to carrier promotion. Resume at cps22 with the approved carrier semantics and choreography preserved.",
   "sourceRefs": [
     {
       "kind": "file",

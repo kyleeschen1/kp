@@ -2,9 +2,9 @@
   "id": "next-action.kp.carrier-preserving-simplification-v4",
   "kind": "next-action",
   "title": "Build and promote carrier-preserving simplification",
-  "status": "deferred",
+  "status": "ready",
   "domain": "kp",
-  "summary": "Broad carrier action is intentionally paused after its rejected second checkpoint; no more evidence may accumulate until compositor conformance v2 closes.",
+  "summary": "Reactivated after Native KaTeX compositor conformance v2 closed cleanly. Continue the approved carrier run at cps22; no checkpoint semantics or prior choreography are reopened.",
   "sourceRefs": [
     {
       "kind": "file",

@@ -2,7 +2,8 @@
   "id": "run-contract.kp.native-katex-compositor-conformance-v2",
   "kind": "run-contract",
   "title": "Native KaTeX compositor conformance",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -203,7 +204,8 @@
     {
       "id": "ncc27",
       "title": "Close-and-reactivate-carrier",
-      "status": "planned"
+      "summary": "Closed the bounded Native KaTeX conformance run: 24 fast shapes, typed context and compound pressure, actual-paint continuity laws, shared italic-carrier repair, deterministic lifecycle invalidation, and Chromium/Firefox/WebKit release coverage pass within hard budgets. Production closure is clean; the sole global bundle failure remains the classified pre-existing empty-catalogue stylesheet ceiling. Return carrier promotion to cps22.",
+      "status": "complete"
     }
   ]
 }
