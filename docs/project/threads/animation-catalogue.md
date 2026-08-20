@@ -2,13 +2,15 @@
 
 Status: active
 Last Updated: 2026-08-20
-Current Next Action: the family order is accepted. Propose one
-exponential-duality exemplar,
-`b^(x + y) → b^x b^y`, using the shared homomorphism law and a Native KaTeX
-power-application realization. Preserve exponent operands and semantic roles;
-keep base/wrapper successors, connector transformation, geometry, and timing
-out of authoring authority. Stop for visual review before the
-difference-to-quotient pressure caller.
+Current Next Action: revise the reviewed exponential-duality exemplar
+`b^(x + y) → b^x b^y` without changing its accepted semantic or runtime
+authority. Replace the accidental base/payload crossing and opaque backing
+plate with compressed-ink base fission: the source base compresses while the
+plus withdraws separately, persistent exponent operands redistribute on their
+existing plane, and two derived bases expand to the exact native target. Stop
+for visual review. After approval, remove opaque Native KaTeX foreground
+backing plates generally while retaining collision audits and reviewed z-order,
+then continue to the difference-to-quotient pressure caller.
 
 The accepted breadth cadence is two loops per family: one reversible exemplar
 and checkpoint, then one structurally different caller plus narrow promotion.

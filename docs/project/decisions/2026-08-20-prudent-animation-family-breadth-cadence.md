@@ -17,6 +17,22 @@ families at a prudent **two-loop cadence**:
 Do not place multiple unreviewed families in one autonomous run. Do not require
 every historical catalogue animation to migrate before new breadth begins.
 
+### Visual-first refinement
+
+For each new motif, the exemplar loop reaches a stable visual contact sheet
+immediately after semantic identity, exact endpoints, and the smallest
+reversible transit exist. Catalogue rollout, generated-authority integration,
+broad lifecycle certification, and pressure callers follow human acceptance;
+they do not precede the first useful visual judgment.
+
+An overlap failure is evidence about choreography before it is permission for
+a paint workaround. Accidental collisions must be removed by phase ordering or
+routing. Native KaTeX may retain explicit foreground ordering for a reviewed,
+meaningful crossing, but no symbolic motif should receive an opaque rectangular
+backing plate as a generic collision repair. This operational sequence is kept
+in `.agents/skills/kp-visual-salience/references/verification-and-promotion.md`
+so visual implementation sessions load it without expanding `AGENTS.md`.
+
 ## Accepted Family Order
 
 The user accepted this order on 2026-08-20. A mathematical family advances

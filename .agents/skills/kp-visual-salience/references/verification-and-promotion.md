@@ -12,6 +12,26 @@ Record:
 - **Rollback unit:** the smallest commit or independently removable adapter/treatment.
 - **Promotion criterion:** what human approval and second-caller evidence would justify sharing.
 
+## Visual proof before integration
+
+For a new subjective motif, make the first visual judgment cheap and early:
+
+1. establish only the semantic law, identity/correspondence truth, and exact
+   native endpoints needed to make the candidate honest;
+2. build the smallest independently reversible transit through the existing
+   clock and paint owner;
+3. run one stable, scoped contact sheet immediately;
+4. stop for human judgment of topology, cadence, occlusion, and legibility;
+5. only after approval add catalogue rollout, generated-authority churn,
+   pressure callers, broad lifecycle certification, and promotion evidence.
+
+Do not respond to an accidental trajectory collision by adding an opaque
+glyph-sized backing plate merely because doing so satisfies overlap checks.
+Keep collision detection fail-closed, but redesign phase order or routing when
+the crossing is not itself instructional. Explicit foreground ordering may
+remain for a reviewed meaningful crossing; it must not synthesize a visible
+rectangular surface behind the moving glyph.
+
 ## Discovery checks
 
 Run the smallest checks that protect durable truth:

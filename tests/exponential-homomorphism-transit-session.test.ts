@@ -54,7 +54,7 @@ test("transit projects only payload continuants and base fission into paint", ()
   ), false);
 });
 
-test("one compositor plan stages connector release and direct horizontal transit", () => {
+test("one compositor plan stages compressed-ink fission without foreground occlusion", () => {
   const plan = compilePlan();
   assert.equal(plan.copyFanOut, false);
   assert.equal(
@@ -66,9 +66,21 @@ test("one compositor plan stages connector release and direct horizontal transit
 
   const connector = trackFor(plan.tracks, "eliminate");
   const beforeRelease = frameFor(plan.tracks, connector.id, 0.04);
-  const afterRelease = frameFor(plan.tracks, connector.id, 0.2);
+  const duringRelease = frameFor(plan.tracks, connector.id, 0.18);
+  const afterRelease = frameFor(plan.tracks, connector.id, 0.28);
   assert.equal(beforeRelease.opacity, 1);
+  assert.ok(duringRelease.opacity > 0 && duringRelease.opacity < 1);
   assert.equal(afterRelease.opacity, 0);
+  assert.equal(beforeRelease.materialScale, 1);
+  assert.ok(
+    duringRelease.materialScale! >
+      kpExponentialHomomorphismTransitProfile.compressedInkScale &&
+    duringRelease.materialScale! < 1
+  );
+  assert.equal(
+    afterRelease.materialScale,
+    kpExponentialHomomorphismTransitProfile.compressedInkScale
+  );
   assert.deepEqual(beforeRelease.rect, afterRelease.rect);
 
   const payloads = plan.tracks.filter(({ lifecycle }) =>
@@ -91,20 +103,40 @@ test("one compositor plan stages connector release and direct horizontal transit
   assert.ok(bases.every(({ motionAxisConstraint }) =>
     motionAxisConstraint === "horizontal"
   ));
-  const foregroundPair = plan.tracks.filter(
-    ({ intentionalForegroundOcclusion }) =>
-      intentionalForegroundOcclusion !== undefined
+  assert.ok(bases.every(({ sampleMaterialScale }) =>
+    sampleMaterialScale !== undefined
+  ));
+  assert.equal(
+    bases[0]!.sampleMaterialScale!(0.34),
+    kpExponentialHomomorphismTransitProfile.compressedInkScale
   );
-  assert.equal(foregroundPair.length, 2);
-  assert.deepEqual(
-    new Set(foregroundPair.map(({ intentionalForegroundOcclusion }) =>
-      intentionalForegroundOcclusion?.role)),
-    new Set(["occluder", "occluded"])
+  assert.ok(
+    bases[0]!.sampleMaterialScale!(0.72) >
+      kpExponentialHomomorphismTransitProfile.compressedInkScale
   );
-  assert.equal(foregroundPair.every(({ intentionalForegroundOcclusion }) =>
-    intentionalForegroundOcclusion?.progressWindow ===
-      kpExponentialHomomorphismTransitProfile.basePayloadForegroundCrossing
-  ), true);
+  assert.equal(bases[0]!.sampleMaterialScale!(0.8), 1);
+  assert.equal(plan.tracks.some(({ intentionalForegroundOcclusion }) =>
+    intentionalForegroundOcclusion !== undefined
+  ), false);
+});
+
+test("compressed paint geometry, rather than its native box, owns collision truth", () => {
+  const bases = compilePlan().tracks.filter(({ lifecycle }) =>
+    lifecycle === "split"
+  );
+  const frame = frameFor(bases, bases[1]!.id, 0.5);
+  const nativePaint = bases[1]!.startPaintRect;
+  assert.ok(frame.materialScale! < 1);
+  assert.ok(frame.expectedPaintRect.width < nativePaint.width);
+  assert.ok(frame.expectedPaintRect.height < nativePaint.height);
+  assert.ok(Math.abs(
+    frame.expectedPaintRect.left + frame.expectedPaintRect.width / 2 -
+      (frame.rect.left + frame.rect.width / 2)
+  ) < Number.EPSILON * 32);
+  assert.ok(Math.abs(
+    frame.expectedPaintRect.top + frame.expectedPaintRect.height / 2 -
+      (frame.rect.top + frame.rect.height / 2)
+  ) < Number.EPSILON * 32);
 });
 
 test("sampled motion is deterministic under direct seek and rewind", () => {

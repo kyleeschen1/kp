@@ -212,10 +212,13 @@ Only this repository sequence is active:
    different caller and narrow promotion. Historical catalogue migration is
    not a prerequisite. See
    `decisions/2026-08-20-prudent-animation-family-breadth-cadence.md`.
-29. **Exponential/logarithmic duality:** accepted next family. Build one
-   `b^(x + y) → b^x b^y` exemplar through a shared
-   homomorphism law and a Native KaTeX power-application realization; then
-   pressure it with difference-to-quotient before narrow promotion.
+29. **Exponential/logarithmic duality:** active at its first visual repair.
+   The semantic law, exact endpoints, deterministic transit, catalogue asset,
+   and checkpoint exist, but human review rejected an opaque collision backing
+   plate. Revise `b^(x + y) → b^x b^y` through compressed-ink base fission and
+   unobstructed payload redistribution; after approval, retire opaque symbolic
+   occlusion plates generally, then pressure difference-to-quotient before
+   narrow promotion.
 30. **Accepted subsequent family packets:** root inversion with explicit branch
    and domain truth; existing TypeScript/Python refactors through domain-owned
    frontends; finite summation/product binder infrastructure; one bounded

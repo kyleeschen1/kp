@@ -1,0 +1,147 @@
+{
+  "id": "run-contract.kp.calculus-bc-symbolic-foundation-v3",
+  "kind": "run-contract",
+  "title": "Calculus BC symbolic foundation continuation",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.calculus-bc-symbolic-foundation.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-20-calculus-bc-symbolic-foundation-long-loop-proposal.md",
+      "summary": "Approved proposal plus visual-checkpoint amendment and remaining slice order."
+    }
+  ],
+  "verification": [
+    "npm run verify:equation:inner",
+    "npm run verify:equation:boundary",
+    "npm run verify:equation:promotion",
+    "npm run verify:equation:release",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "The remaining approved equation-domain work from contract v2 plus the user-approved exponential choreography repair and opaque Native KaTeX backing-plate retirement.",
+    "Project-memory and visual-salience guidance needed to make the visual-first motif cadence durable."
+  ],
+  "disallowedWork": [
+    "Code, Graph2D, Graph3D, matrix, large-operator, differentiation, or integration implementation.",
+    "A CAS, theorem prover, universal expression language, new clock, scheduler, paint owner, layout system, public lesson, or curriculum UI.",
+    "Promotion past a human visual checkpoint without approval, caller-authored geometry or timing, and removal of collision auditing or independently reviewed foreground ordering."
+  ],
+  "goal": "Repair and approve exponential duality, retire opaque symbolic occlusion plates, then continue quotient pressure, root inversion, and persistent equivalence through human gates.",
+  "target": "next-action.kp.calculus-bc-symbolic-foundation",
+  "runMode": "run",
+  "maxSlices": 19,
+  "commitCadence": "Commit after every independently verified slice with its Theseus evidence.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop for explicit human visual approval after slices r01, r07, r14, and r19.",
+    "Stop when source or target mathematics, branch or domain evidence, or canonical ownership is ambiguous.",
+    "Stop if work requires a new clock, scheduler, paint owner, universal renderer, CAS, or another domain.",
+    "Stop on an unexplained perceptible change to an approved existing caller.",
+    "Stop when unrelated user-owned work cannot be preserved or the approved continuation envelope is exhausted."
+  ],
+  "slices": [
+    {
+      "id": "r01",
+      "title": "exponential-choreography-revision",
+      "summary": "Replaced the accidental base/payload foreground crossing with compressed-ink base fission, synchronized separate connector contraction, unobstructed same-plane payload transit, delayed derived-base expansion, exact native settlement, and scaled visible-ink collision truth. Stable contact sheet is ready for mandatory human review.",
+      "status": "complete"
+    },
+    {
+      "id": "r02",
+      "title": "opaque-occlusion-backing-retirement",
+      "status": "planned"
+    },
+    {
+      "id": "r03",
+      "title": "difference-to-quotient-operation-pressure",
+      "status": "planned"
+    },
+    {
+      "id": "r04",
+      "title": "quotient-realization-pressure",
+      "status": "planned"
+    },
+    {
+      "id": "r05",
+      "title": "pressure-asset-seeking",
+      "status": "planned"
+    },
+    {
+      "id": "r06",
+      "title": "exponential-crossover-gate",
+      "status": "planned"
+    },
+    {
+      "id": "r07",
+      "title": "pressure-visual-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "r08",
+      "title": "exponential-narrow-promotion",
+      "status": "planned"
+    },
+    {
+      "id": "r09",
+      "title": "root-endpoint-normalization",
+      "status": "planned"
+    },
+    {
+      "id": "r10",
+      "title": "inverse-power-semantic-operation",
+      "status": "planned"
+    },
+    {
+      "id": "r11",
+      "title": "even-root-exemplar-semantics",
+      "status": "planned"
+    },
+    {
+      "id": "r12",
+      "title": "radical-role-transfer-realization",
+      "status": "planned"
+    },
+    {
+      "id": "r13",
+      "title": "root-catalogue-integration",
+      "status": "planned"
+    },
+    {
+      "id": "r14",
+      "title": "root-visual-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "r15",
+      "title": "odd-root-pressure-caller",
+      "status": "planned"
+    },
+    {
+      "id": "r16",
+      "title": "root-narrow-promotion",
+      "status": "planned"
+    },
+    {
+      "id": "r17",
+      "title": "state-retention-projection-contract",
+      "status": "planned"
+    },
+    {
+      "id": "r18",
+      "title": "log-equivalence-frame-exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "r19",
+      "title": "persistent-state-visual-checkpoint-closeout",
+      "status": "planned"
+    }
+  ]
+}

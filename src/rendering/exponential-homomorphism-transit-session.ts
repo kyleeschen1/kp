@@ -27,13 +27,20 @@ import {
 } from "../semantic/exponential-homomorphism-correspondence.ts";
 
 export const kpExponentialHomomorphismTransitProfile = Object.freeze({
-  id: "timing.exponential-homomorphism.product.v1" as const,
-  sourceConnectorRelease: Object.freeze({ start: 0.06, end: 0.18 }),
-  payloadTransit: Object.freeze({ start: 0.18, end: 0.66 }),
-  baseFission: Object.freeze({ start: 0.28, end: 0.7 }),
-  basePayloadForegroundCrossing: Object.freeze({ start: 0.3, end: 0.62 }),
+  id: "timing.exponential-homomorphism.product.v2" as const,
+  structureCompression: Object.freeze({ start: 0.1, end: 0.26 }),
+  payloadTransit: Object.freeze({ start: 0.24, end: 0.52 }),
+  baseFission: Object.freeze({ start: 0.46, end: 0.72 }),
+  baseExpansion: Object.freeze({ start: 0.67, end: 0.77 }),
+  compressedInkScale: 0.14,
   terminalSettlementFraction: 0.04
 });
+const sampleStructureCompression = sampleWindow(
+  kpExponentialHomomorphismTransitProfile.structureCompression
+);
+const sampleBaseExpansion = sampleWindow(
+  kpExponentialHomomorphismTransitProfile.baseExpansion
+);
 
 export interface KpExponentialHomomorphismTransitSession {
   readonly kind: "kp-exponential-homomorphism-transit-session";
@@ -179,12 +186,6 @@ function createKpExponentialHomomorphismTrackProjection(
         atom.id,
         atom.semanticEntityId
       ]));
-      const crossing = findBinaryBasePayloadCrossing({
-        authority,
-        tracks,
-        sourceEntities,
-        targetEntities
-      });
       return Object.freeze(tracks.map((track) => {
         const sourceEntityId = sourceEntities.get(track.sourceAtomId ?? "");
         const targetEntityId = targetEntities.get(track.targetAtomId ?? "");
@@ -195,7 +196,7 @@ function createKpExponentialHomomorphismTrackProjection(
           sourcePayloadIds.has(sourceEntityId) &&
           targetPayloadIds.has(targetEntityId)
         ) {
-          return withBinaryForegroundCrossing(Object.freeze({
+          return Object.freeze({
             ...track,
             timingGroupId: `timing.${authority.id}.payload-transit`,
             semanticMotionUnitId: `motion-unit.${authority.id}.payloads`,
@@ -204,7 +205,7 @@ function createKpExponentialHomomorphismTrackProjection(
               kpExponentialHomomorphismTransitProfile.payloadTransit
             ),
             motionMetrics: true as const
-          }), crossing);
+          });
         }
         if (
           track.lifecycle === "split" &&
@@ -213,7 +214,7 @@ function createKpExponentialHomomorphismTrackProjection(
           sourceBaseIds.has(sourceEntityId) &&
           targetBaseIds.has(targetEntityId)
         ) {
-          return withBinaryForegroundCrossing(Object.freeze({
+          return Object.freeze({
             ...track,
             timingGroupId: `timing.${authority.id}.base-fission`,
             semanticMotionUnitId: `motion-unit.${authority.id}.base-fission`,
@@ -224,8 +225,9 @@ function createKpExponentialHomomorphismTrackProjection(
             sampleProgress: sampleWindow(
               kpExponentialHomomorphismTransitProfile.baseFission
             ),
+            sampleMaterialScale: sampleCompressedInkFissionScale,
             motionMetrics: true as const
-          }), crossing);
+          });
         }
         if (
           track.lifecycle === "eliminate" &&
@@ -234,73 +236,12 @@ function createKpExponentialHomomorphismTrackProjection(
         ) {
           return stationaryRelease(
             track,
-            kpExponentialHomomorphismTransitProfile.sourceConnectorRelease
+            kpExponentialHomomorphismTransitProfile.structureCompression
           );
         }
         return track;
       }));
     }
-  });
-}
-
-function findBinaryBasePayloadCrossing(input: {
-  readonly authority: KpExponentialHomomorphismCorrespondenceAuthority;
-  readonly tracks: readonly KpNativeKatexPaintMeasuredSceneTrack[];
-  readonly sourceEntities: ReadonlyMap<string, string>;
-  readonly targetEntities: ReadonlyMap<string, string>;
-}) {
-  const sourcePayload = input.authority.occurrences.find((occurrence) =>
-    occurrence.endpoint === "source" &&
-    occurrence.role === "exponent-payload" &&
-    occurrence.ordinal === 0
-  );
-  const secondTargetBase = input.authority.occurrences.find((occurrence) =>
-    occurrence.endpoint === "target" &&
-    occurrence.role === "base" &&
-    occurrence.ordinal === 1
-  );
-  const payloadTrack = input.tracks.find((track) =>
-    input.sourceEntities.get(track.sourceAtomId ?? "") === sourcePayload?.id
-  );
-  const baseTrack = input.tracks.find((track) =>
-    input.targetEntities.get(track.targetAtomId ?? "") === secondTargetBase?.id
-  );
-  if (payloadTrack === undefined || baseTrack === undefined) {
-    throw new Error(
-      "Binary exponential transit requires its base/payload foreground crossing pair."
-    );
-  }
-  return Object.freeze({
-    id: `foreground-occlusion.${input.authority.id}.base-under-payload`,
-    payloadTrackId: payloadTrack.id,
-    baseTrackId: baseTrack.id
-  });
-}
-
-function withBinaryForegroundCrossing(
-  track: KpNativeKatexPaintMeasuredSceneTrack,
-  crossing: Readonly<{
-    id: string;
-    payloadTrackId: string;
-    baseTrackId: string;
-  }>
-): KpNativeKatexPaintMeasuredSceneTrack {
-  if (
-    track.id !== crossing.payloadTrackId &&
-    track.id !== crossing.baseTrackId
-  ) return track;
-  const payloadIsForeground = track.id === crossing.payloadTrackId;
-  return Object.freeze({
-    ...track,
-    intentionalForegroundOcclusion: Object.freeze({
-      id: crossing.id,
-      role: payloadIsForeground ? "occluder" as const : "occluded" as const,
-      counterpartTrackId: payloadIsForeground
-        ? crossing.baseTrackId
-        : crossing.payloadTrackId,
-      progressWindow:
-        kpExponentialHomomorphismTransitProfile.basePayloadForegroundCrossing
-    })
   });
 }
 
@@ -321,8 +262,22 @@ function stationaryRelease(
     timingGroupId: "timing.exponential-homomorphism.connector-release",
     sampleProgress: sample,
     sampleOpacityProgress: sample,
+    sampleMaterialScale: (progress: number) =>
+      1 - (1 - kpExponentialHomomorphismTransitProfile.compressedInkScale) *
+        sample(progress),
     opacityScheduleAuthority: "semantic-choreography" as const
   });
+}
+
+function sampleCompressedInkFissionScale(progress: number): number {
+  const compressed = 1 -
+    (1 - kpExponentialHomomorphismTransitProfile.compressedInkScale) *
+    sampleStructureCompression(progress);
+  const expansion = sampleBaseExpansion(progress);
+  // Compression and expansion are separate phases: the base remains a small
+  // memory kernel while the payloads redistribute, then its two successors
+  // regain native ink as they settle into their target applications.
+  return compressed + (1 - compressed) * expansion;
 }
 
 function assertTransitInput(input: {

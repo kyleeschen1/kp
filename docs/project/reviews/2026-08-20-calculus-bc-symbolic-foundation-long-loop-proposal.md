@@ -4,7 +4,26 @@ Status: approved; executing through mandatory human checkpoints
 Reviewed: 2026-08-20
 Decision: `../decisions/2026-08-20-symbolic-mathematics-through-calculus-bc-target.md`
 Primary target: `next-action.kp.calculus-bc-symbolic-foundation`
-Run contract: `run-contract.kp.calculus-bc-symbolic-foundation-v2`
+Run contract: `run-contract.kp.calculus-bc-symbolic-foundation-v3`
+
+## Approved Checkpoint Amendment
+
+Human review rejected slice 13's opaque foreground backing plate while
+preserving the semantic law, correspondence, endpoints, host, and deterministic
+runtime work. Contract v2 therefore stops as useful completed history after
+13 slices. Its approved continuation inserts two units before the former slice
+14 order:
+
+1. revise only the exponential exemplar through compressed-ink base fission,
+   synchronous but semantically separate connector withdrawal, unobstructed
+   payload redistribution, and exact native settlement; then stop for another
+   human visual checkpoint; and
+2. after that approval, retire opaque Native KaTeX foreground backing plates
+   generally while retaining fail-closed collision audits and explicit
+   foreground ordering for independently approved meaningful crossings.
+
+The remaining slice 14–30 order is unchanged. The continuation contract owns
+live status; this proposal records rationale and approved scope only.
 
 ## Why This Loop Is Current
 

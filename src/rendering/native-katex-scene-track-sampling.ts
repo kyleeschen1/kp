@@ -50,6 +50,13 @@ export function sampleKpNativeKatexSceneTrackFrames(
     ) {
       throw new Error("Native KaTeX material scale must be finite and positive.");
     }
+    const expectedPaintRect = hasMeasuredPaint
+      ? projectKpEquationMotionTrackPaintRect(
+          sceneTrack,
+          rect,
+          paintProgress
+        )
+      : undefined;
     return Object.freeze({
       trackId: sceneTrack.id,
       componentId: sceneTrack.componentId,
@@ -60,17 +67,16 @@ export function sampleKpNativeKatexSceneTrackFrames(
       rect,
       ...(sceneTrack.motionMetrics ? { metricProgress: paintProgress } : {}),
       ...(materialScale === undefined ? {} : { materialScale }),
-      ...(hasMeasuredPaint
-        ? {
-            expectedPaintRect: Object.freeze(
-              projectKpEquationMotionTrackPaintRect(
-                sceneTrack,
-                rect,
-                paintProgress
-              )
-            )
-          }
-        : {}),
+      ...(expectedPaintRect === undefined
+        ? {}
+        : {
+            // The compositor scales paint around the owner center. Collision
+            // certification must inspect that same visible ink, not the
+            // unscaled native box that the material no longer occupies.
+            expectedPaintRect: Object.freeze(materialScale === undefined
+              ? expectedPaintRect
+              : scaleRectAroundCenter(expectedPaintRect, materialScale))
+          }),
       ...(sceneTrack.intentionalContactGroupId === undefined
         ? {}
         : {
@@ -107,6 +113,20 @@ export function sampleKpNativeKatexSceneTrackFrames(
         )) * (sceneTrack.samplePaintPresence?.(bounded) ?? 1)
     });
   }));
+}
+
+function scaleRectAroundCenter(
+  rect: Readonly<{ left: number; top: number; width: number; height: number }>,
+  scale: number
+) {
+  const width = rect.width * scale;
+  const height = rect.height * scale;
+  return {
+    left: rect.left + (rect.width - width) / 2,
+    top: rect.top + (rect.height - height) / 2,
+    width,
+    height
+  };
 }
 
 function smoothstep(value: number): number {

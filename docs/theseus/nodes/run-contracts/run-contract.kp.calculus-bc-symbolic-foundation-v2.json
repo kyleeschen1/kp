@@ -2,7 +2,8 @@
   "id": "run-contract.kp.calculus-bc-symbolic-foundation-v2",
   "kind": "run-contract",
   "title": "Calculus BC symbolic foundation",
-  "status": "ready",
+  "status": "superseded",
+  "summary": "Superseded at the completed slice-13 human checkpoint by the user-approved v3 continuation, which preserves all completed evidence, inserts an exemplar-local compressed-ink repair and a separate opaque-backing retirement before the unchanged pressure/root/persistence order.",
   "sourceRefs": [
     {
       "kind": "file",

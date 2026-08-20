@@ -450,11 +450,46 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-08-20T20:03:03.185Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "r01 shared visible-ink sampling seam",
+      "checkedAt": "2026-08-20T20:38:25.085Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run test:exponential-transit-session",
+      "status": "passed",
+      "scope": "r01 compressed-ink exponential transit",
+      "checkedAt": "2026-08-20T20:38:25.562Z",
+      "notes": "Six focused contracts pass, including scaled visible-ink collision geometry, deterministic seek and rewind, exact endpoints, and no foreground occlusion contract."
+    },
+    {
+      "command": "npm run visual:exponential-homomorphism",
+      "status": "passed",
+      "scope": "r01 visual checkpoint",
+      "checkedAt": "2026-08-20T20:38:25.978Z",
+      "notes": "Stable sixteen-frame contact sheet generated without an opaque backing plate at tmp/codex/exponential-homomorphism-checkpoint/contact-sheet.png."
+    },
+    {
+      "command": "npm run test:browser:exponential-homomorphism",
+      "status": "passed",
+      "scope": "r01 browser lifecycle",
+      "checkedAt": "2026-08-20T20:38:26.388Z",
+      "notes": "Chromium endpoint, direct seek, rewind, resize, and reduced-motion checks pass."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "r01 durable continuation state",
+      "checkedAt": "2026-08-20T20:39:38.762Z",
+      "notes": "Continuation contract, superseded history, context receipt, and checkpoint evidence validate at 1042 nodes and 23968 events."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Reached the mandatory exponential visual checkpoint with a deterministic forward, direct-seek, rewind, endpoint, and narrow-viewport contact sheet. Promotion remains gated on human review."
+    "summary": "Continuation r01 is complete and verified. HUMAN_CHECKPOINT: review compressed-ink exponential sum-to-product before r02 retires opaque Native KaTeX backing plates generally."
   },
   "expectedLearning": [
     "Whether the shared homomorphism law supports power applications without copying log choreography.",
