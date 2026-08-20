@@ -199,16 +199,18 @@ Only this repository sequence is active:
    24-shape registry remains bounded inventory rather than a claim that every
    spelling is browser-certified. The accepted gate is recorded in
    `decisions/2026-08-20-native-katex-mechanism-conformance-gate.md`.
-27. **Next family:** punctuated substitution is the recommended conservative
-   exemplar at a stable native anchor. Stop for human visual review before a
-   second caller or promotion. Result reception, operator aperture, and
-   expanded calculation remain separate future instructional choices. Do not
-   promote scaling-to-zero or simultaneous readable pre/post glyphs as a
-   default.
-28. **Fraction promotion and arithmetic:** deferred while KP broadens its
-   evaluation topology. Return to like-denominator combination after the
-   contrasting-family proof rather than completing fractions for category
-   coverage alone.
+27. **Canonical evaluation selection:** complete. Human review selected the
+   approved ink-knot contributor-fusion treatment as canonical for supported
+   contributor-combining evaluation. Punctuated substitution and result
+   reception remain non-authoritative comparison evidence rather than active
+   promotion candidates. Carrier-preserving simplification remains canonical
+   when nominal evidence proves that one identity carrier survives. See
+   `decisions/2026-08-20-ink-knot-canonical-contributor-evaluation.md`.
+28. **Fraction structural pressure:** next. Revisit the deferred
+   `1/3 + 1/6` sequence using canonical contributor fusion for its visible
+   local product evaluation while preserving the approved
+   fraction-equivalence choreography and repaired paint-ownership seam. Stop
+   for human review before fraction promotion or arithmetic continuation.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.
@@ -220,7 +222,7 @@ The catalogue backlog and selection rationale are recorded in
 | Area | State | Direction |
 | --- | --- | --- |
 | Semantic/runtime spine | Strong and governed | Preserve; simplify callers around it. |
-| Equation animation | Balanced operations and alternative logarithm bases are Direct; Review placement and sequence-level Native KaTeX ownership are complete; contributor fusion and carrier-preserving simplification are narrowly promoted; mixed-family governed discovery and bounded planning are green; the conformance harness separates executable representatives from the wider planning registry | Prototype punctuated substitution on one stable-anchor exemplar and stop for human visual review before promotion or another notation family. |
+| Equation animation | Balanced operations and alternative logarithm bases are Direct; Review placement and sequence-level Native KaTeX ownership are complete; ink-knot contributor fusion is canonical for supported contributor-combining evaluation; carrier-preserving simplification remains canonical for verified identity carriers; mixed-family governed discovery and bounded planning are green; the conformance harness separates executable representatives from the wider planning registry | Revisit the deferred fraction pressure sequence with canonical ink-knot evaluation and stop for human review before promotion or continued arithmetic. |
 | Graph2D | Promoted through economics and physics | Extract only general tokens, lifecycle, and renderer contracts. |
 | Program animation | TypeScript, Python, and Scheme are approved governed callers; bounded paint, projection, settlement, and ownership seams are proven | Preserve the portfolio for product convergence; defer another language or transformation topology. |
 | Graph3D | Honest internal capability, not public parity | Keep internal until a product proof requires it. |

@@ -100,10 +100,11 @@ parser, semantic model, or renderer.
 
 ## Recommended Next Family
 
-Prototype **punctuated substitution** next on one stable-anchor exemplar. It is
-the most conservative remaining evaluation language: hold the expression,
-mark the evaluated subexpression, and replace it at its native anchor without
-implying material fusion or semantic identity. Stop for human visual review
-before promoting it, then pressure it with one structurally different operator
-shape. Result reception, operator aperture, expanded calculation, and resumed
-fraction arithmetic remain behind that checkpoint.
+Post-closeout decision: **ink-knot contributor fusion remains canonical** for
+supported contributor-combining evaluation. Punctuated substitution already
+has a provisional `2 × 3 → 6` comparison candidate, but the user preferred the
+approved ink-knot treatment and declined punctuated substitution as the next
+promotion family. The comparison remains evidence; it is not an active default
+or work item. Carrier-preserving simplification remains distinct for verified
+identity carriers. The next pressure returns to the deferred fraction sequence
+without reopening either approved choreography.

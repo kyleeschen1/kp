@@ -1,0 +1,95 @@
+{
+  "id": "conversation.kp.ink-knot-canonical.20260820",
+  "kind": "conversation",
+  "title": "Select ink-knot as canonical contributor evaluation",
+  "status": "resolved",
+  "domain": "equation-animation",
+  "summary": "The project owner selected the approved ink-knot contributor-fusion treatment over punctuated substitution as KP's canonical default for supported contributor-combining arithmetic evaluation, while preserving carrier-specific identity simplification.",
+  "sourceRefs": [
+    {
+      "kind": "transcript",
+      "provider": "codex",
+      "localPath": "docs/project/decisions/2026-08-20-ink-knot-canonical-contributor-evaluation.md",
+      "turnRange": "Ink-knot canonical selection and scope reconciliation",
+      "digest": "sha256:2bfa40f29758ec31a122435e6d0856bcac248ca5507954af9285491497367b19",
+      "summary": "The project owner selected the approved ink-knot contributor-fusion treatment over punctuated substitution as KP's canonical default for supported contributor-combining arithmetic evaluation, while preserving carrier-specific identity simplification."
+    }
+  ],
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:operation-evaluation-family-exemplar",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-20T17:14:22.428Z",
+      "notes": "13 tests confirm contributor fusion is the promoted default for constant product, quotient, and sum; carrier preservation remains separate; provisional alternatives stay non-promoted."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Conversation captured with authority, trust, privacy, and transcript provenance."
+  },
+  "conversation": {
+    "schemaVersion": "theseus.conversation.v1",
+    "occurredAt": "2026-08-20T17:13:13Z",
+    "participants": [
+      {
+        "id": "project-owner",
+        "role": "human",
+        "displayName": "Project owner"
+      },
+      {
+        "id": "codex",
+        "role": "llm",
+        "provider": "codex"
+      }
+    ],
+    "transcriptRanges": [
+      {
+        "provider": "codex",
+        "localPath": "docs/project/decisions/2026-08-20-ink-knot-canonical-contributor-evaluation.md",
+        "turnRange": "Ink-knot canonical selection and scope reconciliation",
+        "digest": "sha256:2bfa40f29758ec31a122435e6d0856bcac248ca5507954af9285491497367b19"
+      }
+    ],
+    "summary": "The project owner selected the approved ink-knot contributor-fusion treatment over punctuated substitution as KP's canonical default for supported contributor-combining arithmetic evaluation, while preserving carrier-specific identity simplification.",
+    "proposals": [
+      {
+        "id": "select-ink-knot-canonical",
+        "statement": "Use ink-knot as the canonical default for supported contributor-combining arithmetic evaluation without making it a universal treatment for identity or unsupported operations.",
+        "proposedBy": "project-owner",
+        "status": "accepted",
+        "linkedEntityIds": [
+          "workflow.kp.delivery"
+        ]
+      }
+    ],
+    "objections": [],
+    "decisions": [
+      {
+        "id": "approve-ink-knot-canonical",
+        "statement": "Keep the promoted ink-knot contributor-fusion profile canonical for constant product, quotient, and sum; retain carrier-preserving simplification for verified identity carriers; remove punctuated substitution from the active promotion queue.",
+        "proposalId": "select-ink-knot-canonical",
+        "decidedAt": "2026-08-20T17:13:13Z",
+        "authority": {
+          "kind": "user",
+          "actorId": "project-owner"
+        }
+      }
+    ],
+    "trust": {
+      "level": "self-reported",
+      "rationale": "The durable decision summarizes the project owner's explicit selection in the active Codex thread."
+    },
+    "privacy": {
+      "classification": "project",
+      "containsSensitiveData": false,
+      "retention": "Retain with project history."
+    },
+    "linkedEntityIds": [
+      "workflow.kp.delivery"
+    ]
+  }
+}

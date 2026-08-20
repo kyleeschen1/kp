@@ -2,11 +2,12 @@
 
 Status: active
 Last Updated: 2026-08-20
-Current Next Action: propose one punctuated-substitution exemplar at a stable
-native anchor, then stop for human visual review before any promotion or second
-caller. Carrier-preserving simplification and contributor fusion are already
-narrowly promoted and discoverable; do not reopen their approved choreography
-or continue fraction arithmetic merely for category coverage.
+Current Next Action: revisit the deferred `1/3 + 1/6` pressure sequence using
+the canonical ink-knot contributor-fusion treatment for its visible local
+product evaluation. Preserve the approved fraction-equivalence choreography,
+the repaired sequence-level paint-ownership seam, and carrier-preserving
+identity behavior. Stop for human review before fraction promotion or further
+arithmetic.
 
 The completed carrier/discoverability run is recorded in
 `docs/project/reviews/2026-08-20-carrier-preserving-simplification-closeout.md`.
@@ -145,6 +146,13 @@ incompatible.
   expose the family without granting models evidence, geometry, timing, or
   renderer authority. The mixed benchmark distinguishes carrier preservation
   from contributor fusion and keeps ambiguous `2 × 1` intent explicit.
+- Punctuated substitution is already executable as provisional review evidence
+  in the operation-evaluation comparison: its `2 × 3 → 6` candidate displays a
+  measured punctuation cue and then uses a discrete cut. Human preference now
+  keeps it as non-authoritative comparison evidence rather than an active
+  promotion candidate. Ink-knot contributor fusion is the canonical default
+  for its supported contributor-combining operations; see
+  `../decisions/2026-08-20-ink-knot-canonical-contributor-evaluation.md`.
 
 ## Native KaTeX Promotion Gate
 
