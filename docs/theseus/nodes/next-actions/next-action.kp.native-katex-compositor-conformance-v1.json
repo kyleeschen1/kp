@@ -213,6 +213,20 @@
       "scope": "ncc20",
       "checkedAt": "2026-08-20T04:27:33.527Z",
       "notes": "The new atomic registry remains test-only and absent from production source and emitted artifacts."
+    },
+    {
+      "command": "npm run test:native-katex-compositor-conformance",
+      "status": "passed",
+      "scope": "ncc21",
+      "checkedAt": "2026-08-20T04:30:43.717Z",
+      "notes": "Thirty-four checks pass; two script-position and four explicit font-style representatives extend the shared registry to 13 shapes while preserving atomic identities and remaining below the 24-scenario canary ceiling."
+    },
+    {
+      "command": "npm run check:native-katex-compositor-conformance-production",
+      "status": "passed",
+      "scope": "ncc21",
+      "checkedAt": "2026-08-20T04:30:44.835Z",
+      "notes": "Script and style descriptors remain development-only and absent from production closure."
     }
   ],
   "expectedLearning": [

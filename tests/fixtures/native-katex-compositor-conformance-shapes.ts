@@ -84,6 +84,69 @@ const atomicShapeDefinitions = Object.freeze([
   }
 ] as const satisfies readonly ShapeDefinition[]);
 
+const scriptStyleShapeDefinitions = Object.freeze([
+  {
+    id: "shape.script.superscript-two",
+    label: "superscript digit two",
+    representativeLatex: "x^{2}",
+    shapeClass: "script",
+    paintClass: "atomic-text",
+    ownershipGrain: "leaf",
+    baseline: "required",
+    riskTags: ["glyph", "script"]
+  },
+  {
+    id: "shape.script.subscript-i",
+    label: "subscript italic i",
+    representativeLatex: "x_{i}",
+    shapeClass: "script",
+    paintClass: "atomic-text",
+    ownershipGrain: "leaf",
+    baseline: "required",
+    riskTags: ["glyph", "script"]
+  },
+  {
+    id: "shape.style.roman-x",
+    label: "roman variable x",
+    representativeLatex: "\\mathrm{x}",
+    shapeClass: "atomic-glyph",
+    paintClass: "atomic-text",
+    ownershipGrain: "leaf",
+    baseline: "required",
+    riskTags: ["glyph", "font-style"]
+  },
+  {
+    id: "shape.style.bold-x",
+    label: "bold variable x",
+    representativeLatex: "\\mathbf{x}",
+    shapeClass: "atomic-glyph",
+    paintClass: "atomic-text",
+    ownershipGrain: "leaf",
+    baseline: "required",
+    riskTags: ["glyph", "font-style"]
+  },
+  {
+    id: "shape.style.calligraphic-f",
+    label: "calligraphic F",
+    representativeLatex: "\\mathcal{F}",
+    shapeClass: "atomic-glyph",
+    paintClass: "atomic-text",
+    ownershipGrain: "leaf",
+    baseline: "required",
+    riskTags: ["glyph", "font-style"]
+  },
+  {
+    id: "shape.style.monospace-x",
+    label: "monospace variable x",
+    representativeLatex: "\\mathtt{x}",
+    shapeClass: "atomic-glyph",
+    paintClass: "atomic-text",
+    ownershipGrain: "leaf",
+    baseline: "required",
+    riskTags: ["glyph", "font-style"]
+  }
+] as const satisfies readonly ShapeDefinition[]);
+
 export const kpNativeKatexAtomicConformanceShapes = Object.freeze(
   atomicShapeDefinitions.map((definition) =>
     createKpNativeKatexConformanceShapeDescriptor(definition))
@@ -94,3 +157,13 @@ export const kpNativeKatexAtomicConformanceRegistry =
     kpNativeKatexAtomicConformanceShapes
   );
 
+export const kpNativeKatexScriptStyleConformanceShapes = Object.freeze(
+  scriptStyleShapeDefinitions.map((definition) =>
+    createKpNativeKatexConformanceShapeDescriptor(definition))
+);
+
+export const kpNativeKatexConformanceShapeRegistry =
+  createKpNativeKatexConformanceShapeRegistry([
+    ...kpNativeKatexAtomicConformanceShapes,
+    ...kpNativeKatexScriptStyleConformanceShapes
+  ]);

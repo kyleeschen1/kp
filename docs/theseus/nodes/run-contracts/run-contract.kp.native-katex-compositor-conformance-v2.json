@@ -167,7 +167,8 @@
     {
       "id": "ncc21",
       "title": "Add-script-style-shapes",
-      "status": "planned"
+      "summary": "Added superscript and subscript glyph risks plus roman, bold, calligraphic, and monospace font-style representatives. The 13-shape combined registry preserves prior descriptor identity, parses in KaTeX, fits the canary budget, and remains production-excluded.",
+      "status": "complete"
     },
     {
       "id": "ncc22",
