@@ -195,7 +195,8 @@
     {
       "id": "cps24",
       "title": "Expose-tool-neutral-discovery-api",
-      "status": "planned"
+      "summary": "Added a framework-neutral discovery API over generated plain data: list/search, inspect, friendly alias normalization, and deterministic ordered-LaTeX candidate narrowing. Data-driven rules cover both carrier identities and the contributor-fusion product contrast; no-match and invalid inputs stay typed, carrier lineage is never inferred, and custom rules extend without core switches. Eight focused tests, architecture gates, and TypeScript pass.",
+      "status": "complete"
     },
     {
       "id": "cps25",
