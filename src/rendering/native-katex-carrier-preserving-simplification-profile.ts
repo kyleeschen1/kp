@@ -3,7 +3,7 @@ export interface KpNativeKatexCarrierPreservingSimplificationOpticalProfile {
     "kp.native-katex-carrier-preserving-simplification-optical-profile.v1";
   readonly id:
     "kp.rendering.native-katex.carrier-preserving-simplification.candidate-v1";
-  readonly status: "provisional-human-checkpoint";
+  readonly status: "approved-canonical-exemplar";
   readonly treatment: "identity-withdrawal";
   readonly removedSyntaxWithdrawal: {
     readonly start: number;
@@ -49,9 +49,9 @@ export const kpNativeKatexCarrierPreservingSimplificationOpticalProfile =
       "kp.native-katex-carrier-preserving-simplification-optical-profile.v1" as const,
     id:
       "kp.rendering.native-katex.carrier-preserving-simplification.candidate-v1" as const,
-    // The prior recognition treatment was superseded after visual review.
-    // This reversible candidate must pass the canonical checkpoint again.
-    status: "provisional-human-checkpoint" as const,
+    // Human approval freezes fade-only withdrawal for the canonical exemplar;
+    // family promotion still requires the structurally different caller.
+    status: "approved-canonical-exemplar" as const,
     treatment: "identity-withdrawal" as const,
     removedSyntaxWithdrawal: {
       start: 0.16,

@@ -1,7 +1,7 @@
 # Carrier-Preserving Simplification Human Checkpoint
 
 Date: 2026-08-19  
-Status: pending renewed human review
+Status: approved
 Run: `run-contract.kp.carrier-preserving-simplification-v4`  
 Slices: `cps15` prior checkpoint superseded; `cps17` is the renewed checkpoint
 
@@ -22,9 +22,9 @@ recognition** candidates remain independently recoverable at commits
 `1d6009b7` and `d11e0de0`.
 
 Decision history: identity recognition was approved on 2026-08-20, then
-superseded before add-zero pressure testing. The renewed checkpoint asks for
-approval of literal fade-only withdrawal. No second caller or family promotion
-is authorized until this treatment passes.
+superseded before add-zero pressure testing. Literal fade-only withdrawal was
+subsequently approved on 2026-08-20. This authorizes second-caller pressure,
+but not family promotion before that caller's mandatory checkpoint.
 
 The Catalogue's development toolbar and Review launcher remain available on
 the live route. Review notes therefore retain the exact artifact URL and
@@ -48,7 +48,7 @@ Please inspect natural playback, direct scrubbing, reverse, and phone width:
    `2 \times 3 \to 6`.
 5. The treatment should remain legible in dark/light themes and at phone width.
 
-Approval will freeze only the shared candidate optical profile. Rejection rolls
+Approval freezes only the shared candidate optical profile. Rejection rolls
 back or retunes the Native KaTeX realization while preserving the semantic
 carrier evidence, recipe, hosted URL, and approved contributor-fusion family.
 

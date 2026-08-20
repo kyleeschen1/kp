@@ -449,11 +449,25 @@
       "scope": "cps17 fade-only checkpoint commit boundary",
       "checkedAt": "2026-08-20T00:32:20.262Z",
       "notes": "Exact staged fade-only implementation and evidence have no whitespace errors; unrelated user files remain unstaged."
+    },
+    {
+      "command": "npm run test:carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "cps17 approved fade-only profile freeze",
+      "checkedAt": "2026-08-20T00:34:53.987Z",
+      "notes": "20/20 focused contracts passed with literal identity withdrawal marked approved-canonical-exemplar and promotion still withheld."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "cps17 approved fade-only closeout",
+      "checkedAt": "2026-08-20T00:35:20.877Z",
+      "notes": "Validated 1030 nodes and 23622 events; cps18 is now the active continuation."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: recognition is superseded by literal identity withdrawal. The ×1 cohort now fades in place without motion or scale while the carrier stays opaque; add-zero pressure remains paused."
+    "summary": "Human approved literal fade-only identity withdrawal for 2 × 1 → 2; second-caller pressure is authorized while family promotion remains gated by cps21."
   },
   "expectedLearning": [
     "Determine whether persistent-carrier transfer can be expressed as a renderer-neutral, typed operation family with native KaTeX endpoints and no overlapping ownership."
