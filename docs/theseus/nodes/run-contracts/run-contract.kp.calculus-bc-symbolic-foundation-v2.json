@@ -75,7 +75,8 @@
     {
       "id": "s05",
       "title": "exponential-semantic-law",
-      "status": "planned"
+      "summary": "Exponential sum-to-product semantic law is explicit, typed, immutable, and independent of notation or rendering.",
+      "status": "complete"
     },
     {
       "id": "s06",

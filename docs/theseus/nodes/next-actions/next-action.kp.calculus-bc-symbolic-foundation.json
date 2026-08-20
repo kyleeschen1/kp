@@ -173,11 +173,39 @@
       "scope": "slice s04 generated atlas projection",
       "checkedAt": "2026-08-20T18:39:02.726Z",
       "notes": "No whitespace errors in the slice diff."
+    },
+    {
+      "command": "npm run test:exponential-homomorphism-law",
+      "status": "passed",
+      "scope": "slice s05 exponential semantic law",
+      "checkedAt": "2026-08-20T18:43:11.513Z",
+      "notes": "4 positive, negative-law, domain, and renderer-independence tests pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s05 exponential semantic law",
+      "checkedAt": "2026-08-20T18:43:12.507Z",
+      "notes": "All TypeScript, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s05 exponential semantic law",
+      "checkedAt": "2026-08-20T18:43:13.444Z",
+      "notes": "All framework-neutral and semantic animation boundaries pass."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s05 exponential semantic law",
+      "checkedAt": "2026-08-20T18:43:14.377Z",
+      "notes": "No whitespace errors in the slice diff."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s04 made the existing Transformation Coverage route a generated Calculus BC atlas while preserving one static data import and one evidence authority."
+    "summary": "s05 established renderer-neutral semantic authority for b^(x+y) to b^x b^y, with exact roles, domain assumptions, and false-direction rejection."
   },
   "expectedLearning": [
     "Whether the shared homomorphism law supports power applications without copying log choreography.",
