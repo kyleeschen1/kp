@@ -161,7 +161,8 @@
     {
       "id": "ncc20",
       "title": "Add-atomic-shapes",
-      "status": "planned"
+      "summary": "Added a seven-shape atomic promotion cohort covering digit, italic, descender, Greek, operator, relation, and punctuation. Every representative parses in KaTeX, remains leaf-owned atomic text with baseline authority, fits the canary budget, and stays outside production closure.",
+      "status": "complete"
     },
     {
       "id": "ncc21",

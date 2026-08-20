@@ -199,6 +199,20 @@
       "scope": "interstitial-url-policy",
       "checkedAt": "2026-08-20T04:19:38.710Z",
       "notes": "Browser history restores exact same-document playhead state while frame-rate seeks emit only bounded coarse URL projections."
+    },
+    {
+      "command": "npm run test:native-katex-compositor-conformance",
+      "status": "passed",
+      "scope": "ncc20",
+      "checkedAt": "2026-08-20T04:27:32.320Z",
+      "notes": "Thirty deterministic checks pass; the atomic cohort names seven renderable representatives for digit, italic, descender, Greek, operator, relation, and punctuation while remaining below the 24-scenario canary ceiling."
+    },
+    {
+      "command": "npm run check:native-katex-compositor-conformance-production",
+      "status": "passed",
+      "scope": "ncc20",
+      "checkedAt": "2026-08-20T04:27:33.527Z",
+      "notes": "The new atomic registry remains test-only and absent from production source and emitted artifacts."
     }
   ],
   "expectedLearning": [
