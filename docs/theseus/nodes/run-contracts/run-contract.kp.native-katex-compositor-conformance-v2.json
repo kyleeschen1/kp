@@ -101,22 +101,26 @@
     {
       "id": "ncc10",
       "title": "Build-visible-ink-observer",
-      "status": "planned"
+      "summary": "Built a test-only observer over the existing text-ink, subtree-paint, and baseline measurement seam; it reports only browser-realized stage-relative paint and rejects missing or invalid metrics.",
+      "status": "complete"
     },
     {
       "id": "ncc11",
       "title": "Define-seam-traces",
-      "status": "planned"
+      "summary": "Defined a strict five-sample realized-paint seam trace that preserves semantic and shape identity while ownership advances native-source to material to native-target.",
+      "status": "complete"
     },
     {
       "id": "ncc12",
       "title": "Encode-continuity-laws",
-      "status": "planned"
+      "summary": "Encoded actual-paint continuity laws for translation, baseline/top anchoring, scale, and exclusive paint ownership at both native/material seams, with explicit shared tolerances.",
+      "status": "complete"
     },
     {
       "id": "ncc13",
       "title": "Add-diagnostic-reporter",
-      "status": "planned"
+      "summary": "Added deterministic JSON diagnostics that correlate environment revisions, five actual-paint samples, failure classifications, and exact seam metrics without routine screenshots.",
+      "status": "complete"
     },
     {
       "id": "ncc14",

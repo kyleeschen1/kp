@@ -94,6 +94,34 @@
       "scope": "ncc09",
       "checkedAt": "2026-08-20T02:43:00.299Z",
       "notes": "Stable JSON-safe coverage manifest explains every selected scenario, its first-covered pairs, and any explicit three-way risk override; 16 tests pass."
+    },
+    {
+      "command": "npm run test:native-katex-compositor-conformance",
+      "status": "passed",
+      "scope": "ncc10",
+      "checkedAt": "2026-08-20T02:45:47.851Z",
+      "notes": "Nineteen checks pass; the test-only observer routes atomic text to measured ink, rules and compounds to subtree paint, measures baseline and effective opacity, names stage-layout coordinates, and fails closed without realized paint."
+    },
+    {
+      "command": "npm run test:native-katex-compositor-conformance",
+      "status": "passed",
+      "scope": "ncc11",
+      "checkedAt": "2026-08-20T02:47:17.980Z",
+      "notes": "Twenty-one checks pass; a strict five-slot seam trace now preserves one semantic shape through native-source, material, and native-target owners with monotonically ordered stage-realized observations and lifecycle/font revisions."
+    },
+    {
+      "command": "npm run test:native-katex-compositor-conformance",
+      "status": "passed",
+      "scope": "ncc12",
+      "checkedAt": "2026-08-20T02:49:34.095Z",
+      "notes": "Twenty-four checks pass; continuity laws compare actual ink translation, baseline or top anchors, symmetric scale, active-owner visibility, and inactive-owner suppression at both handoff seams using explicit shared thresholds."
+    },
+    {
+      "command": "npm run test:native-katex-compositor-conformance",
+      "status": "passed",
+      "scope": "ncc13",
+      "checkedAt": "2026-08-20T02:51:03.585Z",
+      "notes": "Twenty-six checks pass; deterministic JSON diagnostics report environment revisions, five realized samples, seam failure classes, and exact translation/scale metrics without screenshots."
     }
   ],
   "expectedLearning": [
