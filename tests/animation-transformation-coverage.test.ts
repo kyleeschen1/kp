@@ -20,6 +20,15 @@ test("generated coverage is a fresh deterministic plan projection", () => {
   const coverage = createKpAnimationTransformationCoverage();
   assert.deepEqual(generatedCoverage, coverage);
   assert.equal(coverage.summary.total, kpAnimationCapabilityPlan.entries.length);
+  assert.equal(coverage.symbolicMathematics.groups.length, 9);
+  assert.equal(coverage.symbolicMathematics.maturityDimensions.length, 6);
+  assert.deepEqual(
+    coverage.symbolicMathematics.groups.flatMap(({ capabilityIds }) =>
+      capabilityIds
+    ).sort(),
+    coverage.entries.filter(({ domain }) => domain === "equation")
+      .map(({ capabilityId }) => capabilityId).sort()
+  );
   assert.deepEqual(coverage.entries.map(({ capabilityId, order }) => ({
     capabilityId,
     order

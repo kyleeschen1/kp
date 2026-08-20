@@ -48,6 +48,80 @@
   border-block: 1px solid var(--kp-coverage-border);
 }
 
+.kp-transformation-coverage__curriculum {
+  max-width: 58rem;
+  margin: 0 0 3rem;
+  padding-block: 1.25rem;
+  border-block: 1px solid var(--kp-coverage-border);
+}
+
+.kp-transformation-coverage__curriculum h3,
+.kp-transformation-coverage__curriculum p,
+.kp-transformation-coverage__curriculum ol,
+.kp-transformation-coverage__curriculum dl {
+  margin: 0;
+}
+
+.kp-transformation-coverage__curriculum > p {
+  margin-top: 0.45rem;
+  color: var(--kp-coverage-copy);
+  font-size: 0.86rem;
+  line-height: 1.65;
+}
+
+.kp-transformation-coverage__curriculum ol {
+  display: grid;
+  margin-top: 1rem;
+  padding: 0;
+  border-bottom: 1px solid var(--kp-coverage-border);
+  list-style: none;
+}
+
+.kp-transformation-coverage__curriculum li {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(12rem, 1fr) minmax(18rem, 1.25fr);
+  gap: 1rem;
+  padding-block: 0.65rem;
+  border-top: 1px solid var(--kp-coverage-border);
+}
+
+.kp-transformation-coverage__curriculum li > span,
+.kp-transformation-coverage__curriculum small {
+  color: var(--kp-coverage-muted);
+}
+
+.kp-transformation-coverage__curriculum strong {
+  font-size: 0.84rem;
+  font-weight: 500;
+}
+
+.kp-transformation-coverage__curriculum small {
+  font-size: 0.74rem;
+}
+
+.kp-transformation-coverage__curriculum details {
+  margin-top: 1rem;
+  color: var(--kp-coverage-copy);
+  font-size: 0.78rem;
+}
+
+.kp-transformation-coverage__curriculum details dl {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 0.8rem;
+}
+
+.kp-transformation-coverage__curriculum details div {
+  display: grid;
+  grid-template-columns: 11rem minmax(0, 1fr);
+  gap: 0.8rem;
+}
+
+.kp-transformation-coverage__curriculum dd {
+  margin: 0;
+  color: var(--kp-coverage-muted);
+}
+
 .kp-transformation-coverage__operation-discovery h3,
 .kp-transformation-coverage__operation-discovery p,
 .kp-transformation-coverage__operation-discovery dl,
@@ -268,6 +342,16 @@
 }
 
 @media (max-width: 760px) {
+  .kp-transformation-coverage__curriculum li,
+  .kp-transformation-coverage__curriculum details div {
+    grid-template-columns: 2rem minmax(0, 1fr);
+  }
+
+  .kp-transformation-coverage__curriculum li small,
+  .kp-transformation-coverage__curriculum details dd {
+    grid-column: 2;
+  }
+
   .kp-transformation-coverage__row {
     grid-template-columns: 2rem minmax(0, 1fr) auto;
   }

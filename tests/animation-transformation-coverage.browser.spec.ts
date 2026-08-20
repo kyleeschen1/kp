@@ -12,7 +12,9 @@ test("coverage route renders one compact ordered capability list", async ({
     name: "Transformation coverage"
   })).toBeVisible();
   await expect(main.locator("[data-kp-transformation-coverage-row]"))
-    .toHaveCount(28);
+    .toHaveCount(37);
+  await expect(main.locator("[data-kp-symbolic-mathematics-group]"))
+    .toHaveCount(9);
   await expect(main.locator(
     '[data-kp-transformation-coverage-row="capability.equation.function-wrapping"]'
   )).toContainText("Direct");

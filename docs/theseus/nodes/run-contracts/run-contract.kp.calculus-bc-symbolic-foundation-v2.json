@@ -69,7 +69,8 @@
     {
       "id": "s04",
       "title": "generated-atlas-projection",
-      "status": "planned"
+      "summary": "The existing coverage route now shows derived curriculum groups and maturity dimensions without status duplication or eager capability loading.",
+      "status": "complete"
     },
     {
       "id": "s05",

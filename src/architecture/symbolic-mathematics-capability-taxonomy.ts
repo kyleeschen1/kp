@@ -55,7 +55,9 @@ export const kpCalculusBcSymbolicMathematicsTaxonomy = defineTaxonomy({
       "capability.equation.power-and-exponent-transformations",
       "capability.equation.radical-inversion",
       "capability.equation.substitution-collection-factoring",
-      "capability.equation.branching-and-domain-conditions"
+      "capability.equation.branching-and-domain-conditions",
+      "capability.equation.transform-series",
+      "capability.equation.multiline-derivation-continuity"
     ]),
     group("trigonometric-syntax", 2, "Trigonometric syntax", [
       "capability.equation.trigonometric-transformations"

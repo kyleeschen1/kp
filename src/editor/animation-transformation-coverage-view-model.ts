@@ -27,6 +27,8 @@ export interface KpAnimationTransformationCoverageViewModel {
     count: number;
   }>[];
   readonly rows: readonly KpAnimationTransformationCoverageViewRow[];
+  readonly symbolicMathematics:
+    KpAnimationTransformationCoverage["symbolicMathematics"];
   readonly operationDiscovery: Readonly<{
     total: number;
     entries: readonly KpAnimationTransformationOperationDiscoveryRow[];
@@ -85,6 +87,7 @@ KpAnimationTransformationCoverageViewModel {
         ({ authorityId }) => authorityId
       ))
     }))),
+    symbolicMathematics: coverage.symbolicMathematics,
     operationDiscovery: Object.freeze({
       total: operationEntries.length,
       entries: Object.freeze(operationEntries.map((entry) => {

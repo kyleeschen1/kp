@@ -18,6 +18,189 @@
       "Missing": 17
     }
   },
+  "symbolicMathematics": {
+    "taxonomyId": "taxonomy.symbolic-mathematics.calculus-bc.v1",
+    "taxonomySchemaVersion": "kp.symbolic-mathematics-capability-taxonomy.v1",
+    "maturityDimensions": [
+      {
+        "id": "notation-paintable",
+        "label": "Notation paintable",
+        "claim": "The selected renderer can paint the notation without asserting its meaning."
+      },
+      {
+        "id": "semantic-representable",
+        "label": "Semantic shape representable",
+        "claim": "Typed roles, grouping, scope, identity, domain, and branch evidence can represent the source and target."
+      },
+      {
+        "id": "operation-authoritative",
+        "label": "Operation authoritative",
+        "claim": "A registered semantic operation validates the transformation or returns an exact typed gap."
+      },
+      {
+        "id": "exemplar-executable",
+        "label": "Exemplar executable",
+        "claim": "One deterministic, seekable, reversible caller exercises the operation through a real renderer."
+      },
+      {
+        "id": "family-promoted",
+        "label": "Family promoted",
+        "claim": "A reviewed exemplar and structurally different caller prove a bounded shared recipe."
+      },
+      {
+        "id": "generation-governed",
+        "label": "Generation governed",
+        "claim": "Natural-language or ordered-source authoring resolves only through registered evidence and typed repair."
+      }
+    ],
+    "groups": [
+      {
+        "id": "algebra-functions",
+        "order": 1,
+        "title": "Algebra and functions",
+        "capabilityIds": [
+          "capability.equation.function-wrapping",
+          "capability.equation.distribution",
+          "capability.equation.additive-cancellation",
+          "capability.equation.log-homomorphic-decomposition",
+          "capability.equation.balanced-operations",
+          "capability.equation.alternative-logarithm-bases",
+          "capability.equation.fraction-equivalence",
+          "capability.equation.common-denominator-construction",
+          "capability.equation.fraction-arithmetic",
+          "capability.equation.fraction-factor-cancellation",
+          "capability.equation.nested-fraction-normalization",
+          "capability.equation.power-and-exponent-transformations",
+          "capability.equation.radical-inversion",
+          "capability.equation.substitution-collection-factoring",
+          "capability.equation.branching-and-domain-conditions",
+          "capability.equation.transform-series",
+          "capability.equation.multiline-derivation-continuity"
+        ],
+        "byStatus": {
+          "Direct": 6,
+          "Registered": 4,
+          "Exemplar": 2,
+          "Missing": 5
+        }
+      },
+      {
+        "id": "trigonometric-syntax",
+        "order": 2,
+        "title": "Trigonometric syntax",
+        "capabilityIds": [
+          "capability.equation.trigonometric-transformations"
+        ],
+        "byStatus": {
+          "Direct": 0,
+          "Registered": 0,
+          "Exemplar": 0,
+          "Missing": 1
+        }
+      },
+      {
+        "id": "inequalities-piecewise",
+        "order": 3,
+        "title": "Inequalities and piecewise forms",
+        "capabilityIds": [
+          "capability.equation.inequality-transformations",
+          "capability.equation.piecewise-transformations"
+        ],
+        "byStatus": {
+          "Direct": 0,
+          "Registered": 0,
+          "Exemplar": 0,
+          "Missing": 2
+        }
+      },
+      {
+        "id": "sequences-series",
+        "order": 4,
+        "title": "Sequences and series",
+        "capabilityIds": [
+          "capability.equation.sequence-series-transformations"
+        ],
+        "byStatus": {
+          "Direct": 0,
+          "Registered": 0,
+          "Exemplar": 0,
+          "Missing": 1
+        }
+      },
+      {
+        "id": "limits",
+        "order": 5,
+        "title": "Limits",
+        "capabilityIds": [
+          "capability.equation.limit-transformations"
+        ],
+        "byStatus": {
+          "Direct": 0,
+          "Registered": 0,
+          "Exemplar": 0,
+          "Missing": 1
+        }
+      },
+      {
+        "id": "calculus-operators",
+        "order": 6,
+        "title": "Calculus operators",
+        "capabilityIds": [
+          "capability.equation.binders-and-calculus-operators",
+          "capability.equation.differentiation-transformations",
+          "capability.equation.integration-transformations"
+        ],
+        "byStatus": {
+          "Direct": 0,
+          "Registered": 0,
+          "Exemplar": 0,
+          "Missing": 3
+        }
+      },
+      {
+        "id": "polar-parametric",
+        "order": 7,
+        "title": "Polar and parametric forms",
+        "capabilityIds": [
+          "capability.equation.polar-parametric-transformations"
+        ],
+        "byStatus": {
+          "Direct": 0,
+          "Registered": 0,
+          "Exemplar": 0,
+          "Missing": 1
+        }
+      },
+      {
+        "id": "differential-equations",
+        "order": 8,
+        "title": "Differential equations",
+        "capabilityIds": [
+          "capability.equation.differential-equation-transformations"
+        ],
+        "byStatus": {
+          "Direct": 0,
+          "Registered": 0,
+          "Exemplar": 0,
+          "Missing": 1
+        }
+      },
+      {
+        "id": "taylor-series",
+        "order": 9,
+        "title": "Taylor polynomials and series",
+        "capabilityIds": [
+          "capability.equation.taylor-series-transformations"
+        ],
+        "byStatus": {
+          "Direct": 0,
+          "Registered": 0,
+          "Exemplar": 0,
+          "Missing": 1
+        }
+      }
+    ]
+  },
   "entries": [
     {
       "capabilityId": "capability.equation.function-wrapping",

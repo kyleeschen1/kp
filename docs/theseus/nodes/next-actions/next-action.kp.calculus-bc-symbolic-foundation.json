@@ -138,11 +138,46 @@
       "scope": "slice s03 syntax hazard corpus",
       "checkedAt": "2026-08-20T18:33:47.901Z",
       "notes": "No whitespace errors in the slice diff."
+    },
+    {
+      "command": "npm run test:animation-transformation-coverage-view",
+      "status": "passed",
+      "scope": "slice s04 generated atlas projection",
+      "checkedAt": "2026-08-20T18:38:58.870Z",
+      "notes": "16 coverage, route, generated projection, and static-closure tests pass."
+    },
+    {
+      "command": "npm run check:animation-transformation-coverage",
+      "status": "passed",
+      "scope": "slice s04 generated atlas projection",
+      "checkedAt": "2026-08-20T18:38:59.862Z",
+      "notes": "The single generated coverage artifact is current."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s04 generated atlas projection",
+      "checkedAt": "2026-08-20T18:39:00.835Z",
+      "notes": "TypeScript, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s04 generated atlas projection",
+      "checkedAt": "2026-08-20T18:39:01.777Z",
+      "notes": "All dependency and equation architecture ratchets pass."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice s04 generated atlas projection",
+      "checkedAt": "2026-08-20T18:39:02.726Z",
+      "notes": "No whitespace errors in the slice diff."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s03 established a 13-case Calc BC syntax-hazard corpus: only structurally safe existing grammar normalizes, while ambiguous inverse, binder, calculus, piecewise, and indexed-root forms remain typed gaps."
+    "summary": "s04 made the existing Transformation Coverage route a generated Calculus BC atlas while preserving one static data import and one evidence authority."
   },
   "expectedLearning": [
     "Whether the shared homomorphism law supports power applications without copying log choreography.",

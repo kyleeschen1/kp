@@ -26,6 +26,10 @@ import {
 } from "./animation-domain-frontend-evidence.ts";
 import { kpAnimationCapabilityPlan } from
   "./cross-domain-animation-capability-plan.ts";
+import { kpCalculusBcSymbolicMathematicsTaxonomy } from
+  "./symbolic-mathematics-capability-taxonomy.ts";
+import { kpSymbolicCoverageMaturityDimensions } from
+  "./symbolic-mathematics-maturity.ts";
 
 export const KP_ANIMATION_TRANSFORMATION_COVERAGE_SCHEMA =
   "kp.animation-transformation-coverage.v1" as const;
@@ -46,7 +50,25 @@ export interface KpAnimationTransformationCoverage {
     total: number;
     byStatus: Readonly<Record<KpAnimationCapabilityReadinessStatus, number>>;
   }>;
+  readonly symbolicMathematics: KpSymbolicMathematicsCoverageProjection;
   readonly entries: readonly KpAnimationTransformationCoverageEntry[];
+}
+
+export interface KpSymbolicMathematicsCoverageProjection {
+  readonly taxonomyId: string;
+  readonly taxonomySchemaVersion: string;
+  readonly maturityDimensions: readonly Readonly<{
+    id: string;
+    label: string;
+    claim: string;
+  }>[];
+  readonly groups: readonly Readonly<{
+    id: string;
+    order: number;
+    title: string;
+    capabilityIds: readonly string[];
+    byStatus: Readonly<Record<KpAnimationCapabilityReadinessStatus, number>>;
+  }>[];
 }
 
 export interface KpAnimationTransformationCoverageEntry {
@@ -157,6 +179,7 @@ export function compileKpAnimationTransformationCoverage(input: {
     Missing: 0
   };
   entries.forEach(({ status }) => { byStatus[status] += 1; });
+  const symbolicMathematics = projectSymbolicMathematicsCoverage(entries);
   return Object.freeze({
     schemaVersion: KP_ANIMATION_TRANSFORMATION_COVERAGE_SCHEMA,
     kind: "animation-transformation-coverage" as const,
@@ -172,6 +195,7 @@ export function compileKpAnimationTransformationCoverage(input: {
       total: entries.length,
       byStatus: Object.freeze(byStatus)
     }),
+    symbolicMathematics,
     entries
   });
 }
@@ -287,4 +311,48 @@ function tensions(
   return Object.freeze([
     "planned-capability-without-exact-asset" as const
   ]);
+}
+
+function projectSymbolicMathematicsCoverage(
+  entries: readonly KpAnimationTransformationCoverageEntry[]
+): KpSymbolicMathematicsCoverageProjection {
+  const entriesById = new Map(entries.map((entry) => [
+    entry.capabilityId,
+    entry
+  ]));
+  const groups = kpCalculusBcSymbolicMathematicsTaxonomy.groups.map((group) => {
+    const byStatus: Record<KpAnimationCapabilityReadinessStatus, number> = {
+      Direct: 0,
+      Registered: 0,
+      Exemplar: 0,
+      Missing: 0
+    };
+    for (const capabilityId of group.capabilityIds) {
+      const entry = entriesById.get(capabilityId);
+      if (entry === undefined) {
+        throw new Error(
+          `Taxonomy group ${group.id} references absent coverage ${capabilityId}.`
+        );
+      }
+      byStatus[entry.status] += 1;
+    }
+    return Object.freeze({
+      id: group.id,
+      order: group.order,
+      title: group.title,
+      capabilityIds: Object.freeze([...group.capabilityIds]),
+      byStatus: Object.freeze(byStatus)
+    });
+  });
+  return Object.freeze({
+    taxonomyId: kpCalculusBcSymbolicMathematicsTaxonomy.id,
+    taxonomySchemaVersion:
+      kpCalculusBcSymbolicMathematicsTaxonomy.schemaVersion,
+    maturityDimensions: Object.freeze(
+      kpSymbolicCoverageMaturityDimensions.map((dimension) =>
+        Object.freeze({ ...dimension })
+      )
+    ),
+    groups: Object.freeze(groups)
+  });
 }

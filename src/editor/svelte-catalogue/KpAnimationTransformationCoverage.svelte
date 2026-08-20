@@ -76,6 +76,40 @@
   </header>
 
   <section
+    class="kp-transformation-coverage__curriculum"
+    aria-labelledby="kp-symbolic-mathematics-title"
+  >
+    <h3 id="kp-symbolic-mathematics-title">Symbolic mathematics horizon</h3>
+    <p>
+      Curriculum groups organize the same evidence ledger. They do not grant
+      readiness: each count below is derived from canonical capability rows.
+    </p>
+    <ol>
+      {#each view.symbolicMathematics.groups as group (group.id)}
+        <li data-kp-symbolic-mathematics-group={group.id}>
+          <span>{String(group.order).padStart(2, "0")}</span>
+          <strong>{group.title}</strong>
+          <small>
+            {group.byStatus.Direct} direct · {group.byStatus.Registered} registered ·
+            {group.byStatus.Exemplar} exemplar · {group.byStatus.Missing} missing
+          </small>
+        </li>
+      {/each}
+    </ol>
+    <details>
+      <summary>What the maturity dimensions mean</summary>
+      <dl>
+        {#each view.symbolicMathematics.maturityDimensions as dimension (dimension.id)}
+          <div data-kp-symbolic-mathematics-maturity={dimension.id}>
+            <dt>{dimension.label}</dt>
+            <dd>{dimension.claim}</dd>
+          </div>
+        {/each}
+      </dl>
+    </details>
+  </section>
+
+  <section
     class="kp-transformation-coverage__operation-discovery"
     aria-labelledby="kp-operation-discovery-title"
   >
