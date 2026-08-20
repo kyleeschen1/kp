@@ -5,6 +5,10 @@ import {
   isKpVerifiedVectorDotProjectionReleaseApproval,
   kpVerifiedVectorDotProjectionReleaseApproval
 } from "../architecture/vector-dot-projection-release-approval.ts";
+import {
+  isKpVerifiedCarrierPreservingSimplificationReleaseApproval,
+  kpVerifiedCarrierPreservingSimplificationReleaseApproval
+} from "../architecture/carrier-preserving-simplification-release-approval.ts";
 import type {
   KpAnimationCatalogPackId
 } from "../animation/catalog-loader.ts";
@@ -108,13 +112,20 @@ export function createKpAnimationCatalogueProjection(input: {
       displayByAnimationId.get(loadableEntry.animationId)
     );
     const humanDisposition =
-      loadableEntry.animationId ===
+      kpVerifiedCarrierPreservingSimplificationReleaseApproval.animationIds
+        .some((animationId) => animationId === loadableEntry.animationId) &&
+      isKpVerifiedCarrierPreservingSimplificationReleaseApproval(
+        kpVerifiedCarrierPreservingSimplificationReleaseApproval
+      )
+        ? kpVerifiedCarrierPreservingSimplificationReleaseApproval
+          .catalogueDisposition
+        : loadableEntry.animationId ===
         kpVerifiedVectorDotProjectionReleaseApproval.animationId &&
       isKpVerifiedVectorDotProjectionReleaseApproval(
         kpVerifiedVectorDotProjectionReleaseApproval
       )
-        ? kpVerifiedVectorDotProjectionReleaseApproval.catalogueDisposition
-        : "unreviewed" as const;
+          ? kpVerifiedVectorDotProjectionReleaseApproval.catalogueDisposition
+          : "unreviewed" as const;
 
     return Object.freeze({
       schemaVersion: "kp.animation-catalogue-entry.v1" as const,

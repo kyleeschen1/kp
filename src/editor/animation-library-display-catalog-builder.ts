@@ -57,6 +57,12 @@ import {
   kpVerifiedContributorFusionReleaseApproval,
   type KpVerifiedContributorFusionReleaseApproval
 } from "../architecture/contributor-fusion-release-approval.ts";
+import {
+  isKpVerifiedCarrierPreservingSimplificationReleaseApproval,
+  kpCarrierPreservingSimplificationReleasedAnimationIds,
+  kpVerifiedCarrierPreservingSimplificationReleaseApproval,
+  type KpVerifiedCarrierPreservingSimplificationReleaseApproval
+} from "../architecture/carrier-preserving-simplification-release-approval.ts";
 
 export type KpAnimationLibraryDisplayRepresentationKind =
   | "reader"
@@ -137,6 +143,11 @@ export interface KpCanonicalFormatPromotionEvidence {
         readonly kind: "contributor-fusion-release";
         readonly approval?:
           KpVerifiedContributorFusionReleaseApproval | undefined;
+      }
+    | {
+        readonly kind: "carrier-preserving-simplification-release";
+        readonly approval?:
+          KpVerifiedCarrierPreservingSimplificationReleaseApproval | undefined;
       };
   readonly exclusiveCanonicalPaint: boolean;
   readonly requiredMotifParity: boolean;
@@ -185,6 +196,15 @@ const canonicalFormatPromotionEvidenceByAnimationId = new Map<string,
       approval: kpVerifiedContributorFusionReleaseApproval
     })
   ] as const),
+  ...kpCarrierPreservingSimplificationReleasedAnimationIds.map(
+    (animationId) => [
+      animationId,
+      completeCarrierPreservingSimplificationCanonicalFormatEvidence({
+        animationId,
+        approval: kpVerifiedCarrierPreservingSimplificationReleaseApproval
+      })
+    ] as const
+  ),
   [
     "animation.exact-fraction-quantity.third-plus-sixth",
     completeExactFractionQuantityCanonicalFormatEvidence(
@@ -730,7 +750,40 @@ function hasKpCanonicalFormatExecutionAuthority(
         approval.confirmationKind === "sum"
       );
     }
+    case "carrier-preserving-simplification-release": {
+      const approval = evidence.executionAuthority.approval;
+      return (
+        isKpVerifiedCarrierPreservingSimplificationReleaseApproval(approval) &&
+        approval.releaseDecision === "passed" &&
+        approval.animationIds.includes(
+          evidence.animationId as typeof approval.animationIds[number]
+        ) &&
+        approval.approvedTransformationKinds.length === 2
+      );
+    }
   }
+}
+
+function completeCarrierPreservingSimplificationCanonicalFormatEvidence(input: {
+  readonly animationId:
+    KpVerifiedCarrierPreservingSimplificationReleaseApproval["animationIds"][number];
+  readonly approval: KpVerifiedCarrierPreservingSimplificationReleaseApproval;
+}): KpCanonicalFormatPromotionEvidence {
+  return Object.freeze({
+    animationId: input.animationId,
+    executionAuthority: Object.freeze({
+      kind: "carrier-preserving-simplification-release" as const,
+      approval: input.approval
+    }),
+    exclusiveCanonicalPaint: true,
+    requiredMotifParity: true,
+    responsiveRuntimeGates: true,
+    humanReviewApproved: true,
+    compatibilityPaintRetired: true,
+    releaseGatePassed: input.approval.releaseDecision === "passed",
+    presentationCoverage: "verified-animated",
+    evidenceSourceIds: input.approval.evidenceSourceIds
+  });
 }
 
 function completeContributorFusionCanonicalFormatEvidence(input: {

@@ -2,8 +2,8 @@ export interface KpNativeKatexCarrierPreservingSimplificationOpticalProfile {
   readonly schemaVersion:
     "kp.native-katex-carrier-preserving-simplification-optical-profile.v1";
   readonly id:
-    "kp.rendering.native-katex.carrier-preserving-simplification.candidate-v1";
-  readonly status: "approved-canonical-exemplar";
+    "kp.rendering.native-katex.carrier-preserving-simplification.v1";
+  readonly status: "promoted";
   readonly treatment: "identity-withdrawal";
   readonly removedSyntaxWithdrawal: {
     readonly start: number;
@@ -48,10 +48,8 @@ export const kpNativeKatexCarrierPreservingSimplificationOpticalProfile =
     schemaVersion:
       "kp.native-katex-carrier-preserving-simplification-optical-profile.v1" as const,
     id:
-      "kp.rendering.native-katex.carrier-preserving-simplification.candidate-v1" as const,
-    // Human approval freezes fade-only withdrawal for the canonical exemplar;
-    // family promotion still requires the structurally different caller.
-    status: "approved-canonical-exemplar" as const,
+      "kp.rendering.native-katex.carrier-preserving-simplification.v1" as const,
+    status: "promoted" as const,
     treatment: "identity-withdrawal" as const,
     removedSyntaxWithdrawal: {
       start: 0.16,

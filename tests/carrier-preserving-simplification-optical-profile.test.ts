@@ -9,9 +9,9 @@ import {
   kpNativeKatexContributorFusionOpticalProfile
 } from "../src/rendering/native-katex-operation-evaluation-contributor-fusion.ts";
 
-test("the candidate profile is one deeply frozen Native KaTeX tuning surface", () => {
+test("the promoted profile is one deeply frozen Native KaTeX tuning surface", () => {
   const profile = kpNativeKatexCarrierPreservingSimplificationOpticalProfile;
-  assert.equal(profile.status, "approved-canonical-exemplar");
+  assert.equal(profile.status, "promoted");
   assert.equal(profile.treatment, "identity-withdrawal");
   assert.equal(Object.isFrozen(profile), true);
   assert.equal(Object.isFrozen(profile.removedSyntaxWithdrawal), true);

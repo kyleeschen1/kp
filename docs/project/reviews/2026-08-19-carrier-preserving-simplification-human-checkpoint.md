@@ -1,7 +1,7 @@
 # Carrier-Preserving Simplification Human Checkpoint
 
 Date: 2026-08-19  
-Status: approved
+Status: approved and promoted for the demonstrated two-caller cohort
 Run: `run-contract.kp.carrier-preserving-simplification-v4`  
 Slices: `cps15` prior checkpoint superseded; `cps17` is the renewed checkpoint
 
@@ -86,6 +86,8 @@ of causality, pacing, or visual quality.
   endpoint-ownership checks passed.
 - `npx tsc --project tsconfig.test.json --noEmit` — passed.
 
-No cross-browser aesthetic certification or family promotion has run. Those
-remain correctly downstream of explicit approval here and at the add-zero
-second-caller checkpoint.
+The later add-zero checkpoint exposed an italic-ink ownership seam. The
+bounded Native KaTeX compositor-conformance run repaired that shared seam and
+the user approved both the digit and italic carrier handoffs. Slice `cps22`
+therefore promotes only the reviewed two-times-one and add-zero cohort; other
+identity operations remain outside the release.

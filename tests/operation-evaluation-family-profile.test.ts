@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
-  kpCarrierPreservingSimplificationCandidateProfile,
+  kpCarrierPreservingSimplificationEvaluationFamilyProfile,
   kpContributorFusionEvaluationFamilyProfile,
   resolveKpDefaultOperationEvaluationFamilyProfile,
   resolveKpOperationEvaluationFamilyCandidate,
@@ -40,16 +40,17 @@ test("unsupported and incompatible family requests remain typed gaps", () => {
     family: "contributor-fusion",
     handoff: "discrete-cut"
   }).status, "incompatible-handoff");
-  assert.equal(resolveKpOperationEvaluationFamilyProfile({
+  const carrier = resolveKpOperationEvaluationFamilyProfile({
     family: "carrier-preserving-simplification",
     handoff: "persistent-carrier-transfer"
-  }).status, "unsupported-family");
+  });
+  assert.equal(carrier.status, "resolved");
   assert.equal(
-    kpCarrierPreservingSimplificationCandidateProfile.status,
-    "semantic-candidate"
+    kpCarrierPreservingSimplificationEvaluationFamilyProfile.status,
+    "promoted"
   );
   assert.deepEqual(
-    kpCarrierPreservingSimplificationCandidateProfile
+    kpCarrierPreservingSimplificationEvaluationFamilyProfile
       .supportedTransformationKinds,
     ["simplifyMultiplicativeIdentity", "simplify-additive-identity"]
   );

@@ -368,7 +368,7 @@ async function prepareSurface(
       session.stage.dataset["kpCarrierPreservingSimplificationRecipeId"] =
         session.definition.recipe.id;
       session.stage.dataset["kpCarrierPreservingSimplificationProfileId"] =
-        session.definition.recipe.candidateProfileId;
+        session.definition.recipe.profileId;
       session.stage.dataset["kpCarrierPreservingSimplificationTreatment"] =
         kpNativeKatexCarrierPreservingSimplificationOpticalProfile.treatment;
       session.stage.dataset["kpCarrierPreservingSimplificationCarrierTrackId"] =

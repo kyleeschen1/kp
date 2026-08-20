@@ -1,5 +1,5 @@
 import {
-  kpCarrierPreservingSimplificationCandidateProfile,
+  kpCarrierPreservingSimplificationEvaluationFamilyProfile,
   kpContributorFusionEvaluationFamilyProfile,
   type KpOperationEvaluationFamilyId
 } from "./operation-evaluation-family-profile.ts";
@@ -48,8 +48,8 @@ export type KpOperationEvaluationFamilyRecipe =
   | (KpOperationEvaluationFamilyRecipeBase & {
       readonly family: "carrier-preserving-simplification";
       readonly handoff: "persistent-carrier-transfer";
-      readonly candidateProfileId:
-        "kp.evaluation-family.carrier-preserving-simplification.candidate-v1";
+      readonly profileId:
+        "kp.evaluation-family.carrier-preserving-simplification.v1";
       readonly requiredEvidenceSchemaVersion:
         "kp.carrier-preserving-simplification-evidence.v1";
     });
@@ -104,17 +104,17 @@ readonly KpOperationEvaluationFamilyRecipe[] = Object.freeze([
   }),
   Object.freeze({
     kind: "operation-evaluation-family-exemplar-recipe" as const,
-    status: "semantic-candidate" as const,
-    id: "kp.evaluation-recipe.carrier-preserving-simplification.candidate-v1",
-    family: kpCarrierPreservingSimplificationCandidateProfile.family,
-    handoff: kpCarrierPreservingSimplificationCandidateProfile.handoff,
+    status: "promoted" as const,
+    id: "kp.evaluation-recipe.carrier-preserving-simplification.promoted-v1",
+    family: kpCarrierPreservingSimplificationEvaluationFamilyProfile.family,
+    handoff: kpCarrierPreservingSimplificationEvaluationFamilyProfile.handoff,
     label: "Carrier-preserving simplification",
     summary:
       "Keep one semantically justified input continuously meaningful while " +
       "its identity syntax yields and the carrier settles into native result ink.",
-    candidateProfileId: kpCarrierPreservingSimplificationCandidateProfile.id,
+    profileId: kpCarrierPreservingSimplificationEvaluationFamilyProfile.id,
     requiredEvidenceSchemaVersion:
-      kpCarrierPreservingSimplificationCandidateProfile
+      kpCarrierPreservingSimplificationEvaluationFamilyProfile
         .requiredEvidenceSchemaVersion
   })
 ]);

@@ -47,7 +47,7 @@ test("the provisional comparison closes each family to one honest handoff", () =
     kpOperationEvaluationFamilyExemplarRecipes.find(
       ({ family }) => family === "carrier-preserving-simplification"
     )?.status,
-    "semantic-candidate"
+    "promoted"
   );
   for (const family of kpOperationEvaluationFamilyIds) {
     assert.equal(
@@ -71,6 +71,10 @@ test("the provisional comparison closes each family to one honest handoff", () =
   assert.equal(carrier.handoff, "persistent-carrier-transfer");
   if (carrier.family === "carrier-preserving-simplification") {
     assert.equal(
+      carrier.profileId,
+      "kp.evaluation-family.carrier-preserving-simplification.v1"
+    );
+    assert.equal(
       carrier.requiredEvidenceSchemaVersion,
       "kp.carrier-preserving-simplification-evidence.v1"
     );
@@ -83,7 +87,7 @@ test("the provisional comparison closes each family to one honest handoff", () =
     isKpOperationEvaluationFamilyReviewSelectable(
       "carrier-preserving-simplification"
     ),
-    false
+    true
   );
 });
 

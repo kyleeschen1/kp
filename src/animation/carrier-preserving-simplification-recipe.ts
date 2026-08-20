@@ -6,11 +6,11 @@ export interface KpCarrierPreservingSimplificationRecipe {
   readonly schemaVersion: "kp.carrier-preserving-simplification-recipe.v1";
   readonly kind: "carrier-preserving-simplification-recipe";
   readonly id: string;
-  readonly status: "candidate";
+  readonly status: "promoted";
   readonly family: "carrier-preserving-simplification";
   readonly handoff: "persistent-carrier-transfer";
-  readonly candidateProfileId:
-    "kp.evaluation-family.carrier-preserving-simplification.candidate-v1";
+  readonly profileId:
+    "kp.evaluation-family.carrier-preserving-simplification.v1";
   readonly transformationId: string;
   readonly endpointRefs: {
     readonly sourceObjectId: string;
@@ -81,10 +81,10 @@ export function compileKpCarrierPreservingSimplificationRecipe(
     schemaVersion: "kp.carrier-preserving-simplification-recipe.v1" as const,
     kind: "carrier-preserving-simplification-recipe" as const,
     id: `recipe.${evidence.id}`,
-    status: "candidate" as const,
+    status: "promoted" as const,
     family: profile.family,
     handoff: profile.handoff,
-    candidateProfileId: profile.id,
+    profileId: profile.id,
     transformationId: evidence.transformationId,
     endpointRefs: Object.freeze({ ...evidence.endpoints }),
     carrier: Object.freeze({

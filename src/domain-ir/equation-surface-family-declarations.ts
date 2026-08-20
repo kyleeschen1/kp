@@ -460,7 +460,7 @@ readonly KpWaveCEquationDispositionDeclaration[] = Object.freeze([
       "src/editor/carrier-preserving-simplification-surface-adapter.ts",
     genericLayerTransition: "forbidden",
     rationale:
-      "The carrier-preserving simplification exemplar has a dedicated Native KaTeX adapter and remains a reversible candidate until two human checkpoints approve promotion."
+      "The carrier-preserving simplification family is released only for the reviewed two-times-one and add-zero cohort through its dedicated Native KaTeX adapter."
   }),
   waveC({
     animationId:

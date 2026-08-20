@@ -335,7 +335,7 @@
       "presentation-compiler"
     ],
     "availability": "playable",
-    "canonicalFormat": "legacy",
+    "canonicalFormat": "ported",
     "featured": false,
     "primaryRepresentationId": "editor-animation.animation.operation-evaluation.two-times-one-carrier",
     "representations": [
@@ -1320,7 +1320,7 @@
       "llm-authored"
     ],
     "availability": "playable",
-    "canonicalFormat": "legacy",
+    "canonicalFormat": "ported",
     "featured": false,
     "primaryRepresentationId": "editor-animation.animation.generated.add-zero",
     "representations": [

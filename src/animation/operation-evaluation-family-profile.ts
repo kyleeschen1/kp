@@ -22,12 +22,14 @@ export type KpOperationEvaluationHandoffKind =
   | "compressed-ink-handoff"
   | "persistent-carrier-transfer";
 
-export interface KpCarrierPreservingSimplificationCandidateProfile {
-  readonly schemaVersion: "kp.operation-evaluation-family-candidate.v1";
-  readonly id: "kp.evaluation-family.carrier-preserving-simplification.candidate-v1";
-  readonly status: "semantic-candidate";
+export interface KpCarrierPreservingSimplificationEvaluationFamilyProfile {
+  readonly schemaVersion: "kp.operation-evaluation-family-profile.v1";
+  readonly id: "kp.evaluation-family.carrier-preserving-simplification.v1";
+  readonly status: "promoted";
   readonly family: "carrier-preserving-simplification";
   readonly handoff: "persistent-carrier-transfer";
+  readonly rendererProfileId:
+    "kp.rendering.native-katex.carrier-preserving-simplification.v1";
   readonly requiredEvidenceSchemaVersion:
     "kp.carrier-preserving-simplification-evidence.v1";
   readonly supportedTransformationKinds:
@@ -51,7 +53,8 @@ export interface KpContributorFusionEvaluationFamilyProfile {
 }
 
 export type KpOperationEvaluationFamilyProfile =
-  KpContributorFusionEvaluationFamilyProfile;
+  | KpContributorFusionEvaluationFamilyProfile
+  | KpCarrierPreservingSimplificationEvaluationFamilyProfile;
 
 export type KpOperationEvaluationFamilyProfileResolution =
   | {
@@ -68,7 +71,7 @@ export type KpOperationEvaluationFamilyProfileResolution =
 export type KpOperationEvaluationFamilyCandidateResolution =
   | {
       readonly status: "candidate-resolved";
-      readonly profile: KpCarrierPreservingSimplificationCandidateProfile;
+      readonly profile: KpCarrierPreservingSimplificationEvaluationFamilyProfile;
       readonly evidence: KpVerifiedCarrierPreservingSimplificationEvidence;
     }
   | {
@@ -99,32 +102,35 @@ export const kpContributorFusionEvaluationFamilyProfile = Object.freeze({
   ] as const)
 } satisfies KpContributorFusionEvaluationFamilyProfile);
 
-/**
- * Candidate vocabulary is visible to typed planning but intentionally absent
- * from promoted profile resolution until two callers pass human review.
- */
-export const kpCarrierPreservingSimplificationCandidateProfile = Object.freeze({
-  schemaVersion: "kp.operation-evaluation-family-candidate.v1" as const,
+export const kpCarrierPreservingSimplificationEvaluationFamilyProfile =
+Object.freeze({
+  schemaVersion: "kp.operation-evaluation-family-profile.v1" as const,
   id:
-    "kp.evaluation-family.carrier-preserving-simplification.candidate-v1" as const,
-  status: "semantic-candidate" as const,
+    "kp.evaluation-family.carrier-preserving-simplification.v1" as const,
+  status: "promoted" as const,
   family: "carrier-preserving-simplification" as const,
   handoff: "persistent-carrier-transfer" as const,
+  rendererProfileId:
+    "kp.rendering.native-katex.carrier-preserving-simplification.v1" as const,
   requiredEvidenceSchemaVersion:
     "kp.carrier-preserving-simplification-evidence.v1" as const,
   supportedTransformationKinds: Object.freeze([
     "simplifyMultiplicativeIdentity",
     "simplify-additive-identity"
   ] as const)
-} satisfies KpCarrierPreservingSimplificationCandidateProfile);
+} satisfies KpCarrierPreservingSimplificationEvaluationFamilyProfile);
 
 export const kpOperationEvaluationFamilyCandidateProfiles:
-readonly KpCarrierPreservingSimplificationCandidateProfile[] = Object.freeze([
-  kpCarrierPreservingSimplificationCandidateProfile
+readonly KpCarrierPreservingSimplificationEvaluationFamilyProfile[] =
+Object.freeze([
+  kpCarrierPreservingSimplificationEvaluationFamilyProfile
 ]);
 
 const promotedProfiles: readonly KpOperationEvaluationFamilyProfile[] =
-  Object.freeze([kpContributorFusionEvaluationFamilyProfile]);
+  Object.freeze([
+    kpContributorFusionEvaluationFamilyProfile,
+    kpCarrierPreservingSimplificationEvaluationFamilyProfile
+  ]);
 
 /**
  * Family and paint handoff are independent authoring choices. Resolution

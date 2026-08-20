@@ -126,7 +126,7 @@ test("the carrier exemplar restores from its semantic artifact URL", () => {
   assert.equal(selection.entry.packId, "operation-evaluation");
 });
 
-test("the candidate route names its exact adapter without claiming promotion", () => {
+test("the promoted route retains its exact specialized adapter", () => {
   const family = projectKpEquationSurfaceFamily(
     kpTwoTimesOneCarrierAnimationId
   );
