@@ -173,7 +173,8 @@
     {
       "id": "ncc22",
       "title": "Add-structured-shapes",
-      "status": "planned"
+      "summary": "Added six typed, renderable structured representatives for fractions, roots, standalone rules, accents, and fixed/stretchy delimiters. The 19-shape registry preserves earlier identities, stays below the canary ceiling, and remains production-excluded.",
+      "status": "complete"
     },
     {
       "id": "ncc23",

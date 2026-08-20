@@ -147,6 +147,71 @@ const scriptStyleShapeDefinitions = Object.freeze([
   }
 ] as const satisfies readonly ShapeDefinition[]);
 
+// Structured representatives name the paint/ownership seam that actually
+// needs pressure; their internal glyph spellings are not separate scenarios.
+const structuredShapeDefinitions = Object.freeze([
+  {
+    id: "shape.structure.fraction",
+    label: "stacked fraction",
+    representativeLatex: "\\frac{1}{2}",
+    shapeClass: "vertical-list",
+    paintClass: "subtree",
+    ownershipGrain: "compound",
+    baseline: "required",
+    riskTags: ["rule", "vertical-list"]
+  },
+  {
+    id: "shape.structure.root",
+    label: "square root",
+    representativeLatex: "\\sqrt{x}",
+    shapeClass: "vertical-list",
+    paintClass: "subtree",
+    ownershipGrain: "compound",
+    baseline: "required",
+    riskTags: ["rule", "vertical-list"]
+  },
+  {
+    id: "shape.structure.rule",
+    label: "standalone rule",
+    representativeLatex: "\\rule{1em}{0.04em}",
+    shapeClass: "rule",
+    paintClass: "rule",
+    ownershipGrain: "leaf",
+    baseline: "not-applicable",
+    riskTags: ["rule"]
+  },
+  {
+    id: "shape.structure.accent",
+    label: "accented variable",
+    representativeLatex: "\\hat{x}",
+    shapeClass: "accent",
+    paintClass: "subtree",
+    ownershipGrain: "compound",
+    baseline: "required",
+    riskTags: ["glyph"]
+  },
+  {
+    id: "shape.structure.fixed-delimiter",
+    label: "fixed parenthesis pair",
+    representativeLatex: "(x)",
+    shapeClass: "delimiter",
+    paintClass: "atomic-text",
+    ownershipGrain: "leaf",
+    baseline: "required",
+    riskTags: ["delimiter"]
+  },
+  {
+    id: "shape.structure.stretchy-delimiter",
+    label: "stretchy parenthesis pair",
+    representativeLatex: "\\left(\\frac{1}{2}\\right)",
+    shapeClass: "delimiter",
+    paintClass: "subtree",
+    ownershipGrain: "compound",
+    baseline: "required",
+    riskTags: ["rule", "vertical-list", "delimiter"]
+  }
+] as const satisfies readonly ShapeDefinition[]);
+
 export const kpNativeKatexAtomicConformanceShapes = Object.freeze(
   atomicShapeDefinitions.map((definition) =>
     createKpNativeKatexConformanceShapeDescriptor(definition))
@@ -162,8 +227,14 @@ export const kpNativeKatexScriptStyleConformanceShapes = Object.freeze(
     createKpNativeKatexConformanceShapeDescriptor(definition))
 );
 
+export const kpNativeKatexStructuredConformanceShapes = Object.freeze(
+  structuredShapeDefinitions.map((definition) =>
+    createKpNativeKatexConformanceShapeDescriptor(definition))
+);
+
 export const kpNativeKatexConformanceShapeRegistry =
   createKpNativeKatexConformanceShapeRegistry([
     ...kpNativeKatexAtomicConformanceShapes,
-    ...kpNativeKatexScriptStyleConformanceShapes
+    ...kpNativeKatexScriptStyleConformanceShapes,
+    ...kpNativeKatexStructuredConformanceShapes
   ]);
