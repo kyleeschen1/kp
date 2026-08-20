@@ -123,7 +123,8 @@
     {
       "id": "s13",
       "title": "exponential-visual-checkpoint",
-      "status": "planned"
+      "summary": "Generated and inspected the deterministic exponential visual checkpoint across forward, direct-seek, rewind, endpoint, and narrow-viewport states; stopped before promotion for required human judgment.",
+      "status": "complete"
     },
     {
       "id": "s14",

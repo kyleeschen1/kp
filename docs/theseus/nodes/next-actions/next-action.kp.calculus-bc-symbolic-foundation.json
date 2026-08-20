@@ -432,11 +432,29 @@
       "scope": "slice s12 durable state",
       "checkedAt": "2026-08-20T19:57:04.374Z",
       "notes": "Workspace validated at 1041 nodes and 23942 events before final slice records."
+    },
+    {
+      "command": "npm run visual:exponential-homomorphism",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-20T20:02:37.142Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-20T20:02:38.754Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-20T20:03:03.185Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s10 complete: exponential sum-to-product has one deterministic sampled compositor session with reversible authority and no new scheduler or paint owner."
+    "summary": "Reached the mandatory exponential visual checkpoint with a deterministic forward, direct-seek, rewind, endpoint, and narrow-viewport contact sheet. Promotion remains gated on human review."
   },
   "expectedLearning": [
     "Whether the shared homomorphism law supports power applications without copying log choreography.",
