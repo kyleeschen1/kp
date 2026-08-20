@@ -413,10 +413,10 @@
     {
       "id": "sampler.identity-absorption",
       "category": "direct-sampler",
-      "authority": "local",
+      "authority": "compatibility",
       "sourcePath": "src/animation/identity-absorption-choreography.ts",
       "sourceNeedle": "export function sampleKpIdentityAbsorptionChoreography",
-      "summary": "Identity absorption enters a local sampler."
+      "summary": "The generated add-zero surface retains this sampler until its carrier-preserving replacement passes the second-caller checkpoint."
     },
     {
       "id": "sampler.inequality-pivot",

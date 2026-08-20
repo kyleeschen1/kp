@@ -56,6 +56,26 @@ test("every authority node reaches its named source declaration", async () => {
   }));
 });
 
+test("identity absorption remains compatibility-only for its one live caller", () => {
+  const graph = createKpEquationSurfaceAuthorityGraph();
+  const sampler = graph.nodes.find(
+    ({ id }) => id === "sampler.identity-absorption"
+  );
+  const liveCallers = graph.rows.filter(({ directSamplerNodeIds }) =>
+    directSamplerNodeIds.includes("sampler.identity-absorption")
+  );
+
+  assert.equal(sampler?.authority, "compatibility");
+  assert.deepEqual(
+    liveCallers.map(({ animationId }) => animationId),
+    ["animation.generated.add-zero"]
+  );
+  assert.deepEqual(
+    liveCallers[0]?.transformationTypes,
+    ["simplify-additive-identity"]
+  );
+});
+
 test("authority graph rejects missing and duplicate production owners", () => {
   const inventory = createKpEquationSurfaceInventory();
   const assets = createKpAnimationAssets();

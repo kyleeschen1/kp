@@ -161,7 +161,8 @@
     {
       "id": "cps19",
       "title": "Decide-legacy-sampler-disposition",
-      "status": "planned"
+      "summary": "Classified the legacy identity-absorption sampler as compatibility authority, proved add-zero is its sole live catalogue caller, and retained it until the second-caller checkpoint rather than deleting a live path.",
+      "status": "complete"
     },
     {
       "id": "cps20",

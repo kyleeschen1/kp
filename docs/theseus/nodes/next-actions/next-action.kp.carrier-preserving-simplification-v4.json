@@ -491,11 +491,53 @@
       "scope": "cps18 add-zero carrier closeout",
       "checkedAt": "2026-08-20T00:44:03.197Z",
       "notes": "Validated 1030 nodes and 23631 events; legacy sampler disposition is next."
+    },
+    {
+      "command": "npm run test:equation-surface-authority",
+      "status": "passed",
+      "scope": "cps19 exact legacy sampler reachability",
+      "checkedAt": "2026-08-20T00:50:22.684Z",
+      "notes": "7/7 authority and inventory tests passed; identity absorption is explicitly compatibility authority and has exactly one live catalogue caller, animation.generated.add-zero."
+    },
+    {
+      "command": "npm run test:equation-surface-inventory",
+      "status": "passed",
+      "scope": "cps19 catalogue and display preservation",
+      "checkedAt": "2026-08-20T00:50:23.985Z",
+      "notes": "5/5 inventory/display tests passed; display metadata remains generated and does not import renderer implementation graphs."
+    },
+    {
+      "command": "npm run check:bundle:algebra-pack-split",
+      "status": "passed",
+      "scope": "cps19 bundle attribution",
+      "checkedAt": "2026-08-20T00:50:25.039Z",
+      "notes": "Algebra pack remains lazily split, saving 27201 gzip bytes (32.4%) with one shared runtime chunk."
+    },
+    {
+      "command": "npx tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "cps19 compatibility disposition TypeScript graph",
+      "checkedAt": "2026-08-20T00:50:26.000Z",
+      "notes": "Authority disposition and reachability assertions typecheck."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "cps19 compatibility disposition closeout",
+      "checkedAt": "2026-08-20T00:51:38.007Z",
+      "notes": "Validated 1030 nodes and 23643 events with both context receipts closed and cps20 next."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "cps19 compatibility disposition diff",
+      "checkedAt": "2026-08-20T00:51:39.241Z",
+      "notes": "Exact implementation, generated authority graph, tests, and Theseus records have no whitespace errors; unrelated user files remain untouched."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The existing generated add-zero semantics now compile through the shared carrier recipe with x continuous, +0 withdrawn as one cohort, and =4 stationary; next is evidence-backed legacy sampler disposition."
+    "summary": "Exact reachability retains identity absorption as compatibility-only for its sole live caller, generated add-zero; catalogue and lazy algebra-pack boundaries remain unchanged."
   },
   "expectedLearning": [
     "Determine whether persistent-carrier transfer can be expressed as a renderer-neutral, typed operation family with native KaTeX endpoints and no overlapping ownership."
