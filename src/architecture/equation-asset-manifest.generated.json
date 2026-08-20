@@ -4,6 +4,86 @@
   "entries": [
     {
       "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.algebra.exponential-homomorphism.difference-to-quotient",
+      "title": "Turn an exponential difference into a quotient",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.algebra.exponential-homomorphism.difference-to-quotient",
+        "transformationIds": [
+          "transformation.exponential.difference-to-quotient.ab"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "A typed Native KaTeX pressure caller for exponential quotient duality.",
+        "tags": [
+          "algebra",
+          "animation",
+          "editor",
+          "equation",
+          "exponential",
+          "katex",
+          "pressure",
+          "quotient"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "exponential-homomorphism",
+        "familyId": "exponent-radical",
+        "disposition": "unsupported",
+        "migrationWave": "wave-c-generated-bespoke-diagnostic-static"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "exponential-homomorphism",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/exponential-homomorphism.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.algebra.exponential-homomorphism.difference-to-quotient",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-fd0b5d0e",
+          "fnv1a32-295714c0",
+          "fnv1a32-4819b3ab"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.exponential-homomorphism.canonical-native-katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.animation.algebra.exponential-homomorphism.difference-to-quotient",
+        "representations": [
+          {
+            "id": "editor-animation.animation.algebra.exponential-homomorphism.difference-to-quotient",
+            "label": "Turn an exponential difference into a quotient",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.algebra.exponential-homomorphism.difference-to-quotient",
+            "role": "canonical-host"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
       "assetId": "animation.algebra.exponential-homomorphism.sum-to-product",
       "title": "Turn an exponential sum into a product",
       "semanticSource": {

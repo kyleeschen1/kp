@@ -41,6 +41,9 @@ import {
 import {
   createKpExponentialHomomorphismAnimationAsset
 } from "./exponential-homomorphism-adapter.ts";
+import {
+  createKpExponentialQuotientPressureAnimationAsset
+} from "./exponential-quotient-pressure-adapter.ts";
 import { createLinearSolveAnimationAsset } from "./linear-solve-adapter.ts";
 import { createProgrammingAnimationAssets } from "./programming-adapter.ts";
 import {
@@ -128,7 +131,8 @@ export function createGeneratedAlgebraAnimationAssets():
     ...createKpFractionEquivalenceExemplarAssets(),
     createKpCommonDenominatorPressureAnimationAsset(),
     ...createKpLogProductAnimationAssets(),
-    createKpExponentialHomomorphismAnimationAsset()
+    createKpExponentialHomomorphismAnimationAsset(),
+    createKpExponentialQuotientPressureAnimationAsset()
   ];
 }
 

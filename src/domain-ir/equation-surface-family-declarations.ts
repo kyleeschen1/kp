@@ -264,7 +264,7 @@ readonly KpEquationSurfaceFamilyDeclaration[] = Object.freeze([
   declaration({
     id: "family.equation.exponential-homomorphism",
     matches: (id) =>
-      id === "animation.algebra.exponential-homomorphism.sum-to-product",
+      id.startsWith("animation.algebra.exponential-homomorphism."),
     selectedCapabilityIds: ["exponential-homomorphism"],
     primaryCapabilityId: "exponential-homomorphism",
     rendererAdapterId:

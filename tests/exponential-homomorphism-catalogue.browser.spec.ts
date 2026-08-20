@@ -6,6 +6,57 @@ import {
 
 const animationId =
   "animation.algebra.exponential-homomorphism.sum-to-product";
+const quotientAnimationId =
+  "animation.algebra.exponential-homomorphism.difference-to-quotient";
+
+test("exponential quotient pressure preserves exact seek rewind resize and endpoints", async ({
+  page
+}) => {
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+  await page.goto(`/?artifact=${quotientAnimationId}`);
+  const player = page.locator(
+    `[data-kp-animation-catalogue-stage] ` +
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${quotientAnimationId}"]`
+  );
+  const stage = player.locator("[data-kp-exponential-homomorphism-stage]");
+  const seek = player.locator('[data-action="seek-editor-animation"]');
+  await expectReady(stage);
+  await expect(stage).toHaveAttribute(
+    "data-kp-exponential-homomorphism-animation-id",
+    quotientAnimationId
+  );
+
+  await seek.fill("0");
+  expect(await accessibleEndpointText(stage)).toBe("e^{a-b}");
+  await seek.fill("0.23");
+  const middle = await movingPaintSnapshot(stage);
+  expect(middle.length).toBeGreaterThan(0);
+  const trackSummary = JSON.parse(await stage.getAttribute(
+    "data-kp-exponential-homomorphism-track-summary"
+  ) ?? "[]") as Array<{ lifecycle?: string }>;
+  expect(trackSummary.some(({ lifecycle }) => lifecycle === "introduce"))
+    .toBe(true);
+  await seek.fill("1");
+  expect(await accessibleEndpointText(stage)).toBe("\\frac{e^{a}}{e^{b}}");
+  await seek.fill("0.23");
+  expect(await movingPaintSnapshot(stage)).toEqual(middle);
+  await seek.fill("0");
+  expect(await accessibleEndpointText(stage)).toBe("e^{a-b}");
+
+  const initialRevision = Number(await stage.getAttribute(
+    "data-kp-exponential-homomorphism-measurement-revision"
+  ));
+  await page.setViewportSize({ width: 390, height: 760 });
+  await expect.poll(async () => Number(await stage.getAttribute(
+    "data-kp-exponential-homomorphism-measurement-revision"
+  ))).toBeGreaterThan(initialRevision);
+  await expectReady(stage);
+  await seek.fill("1");
+  expect(await accessibleEndpointText(stage)).toBe("\\frac{e^{a}}{e^{b}}");
+  expect(pageErrors).toEqual([]);
+});
 
 test("exponential homomorphism preserves endpoints, seek, rewind, and resize", async ({
   page

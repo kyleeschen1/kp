@@ -4,8 +4,19 @@ import {
   kpExponentialHomomorphismAnimationId
 } from "../animation/exponential-homomorphism-adapter.ts";
 import {
+  kpExponentialQuotientPressureAnimationId
+} from "../animation/exponential-quotient-pressure-adapter.ts";
+import {
   kpCanonicalExponentialHomomorphismAuthority
 } from "../semantic/exponential-homomorphism-exemplar.ts";
+import {
+  kpExponentialQuotientPressureAuthority
+} from "../semantic/exponential-quotient-pressure.ts";
+import type {
+  KpExponentialHomomorphismCorrespondenceAuthority
+} from "../semantic/exponential-homomorphism-correspondence.ts";
+import type { KpHomomorphicTargetTopology } from
+  "../animation/homomorphic-application-handoff-taxonomy.ts";
 import {
   createKpEquationFontReadiness
 } from "../rendering/equation-font-readiness.ts";
@@ -36,6 +47,7 @@ import type {
 } from "./animation-surface-adapter-registry.ts";
 
 interface KpExponentialHomomorphismSurfaceSession {
+  readonly definition: KpExponentialHomomorphismSurfaceDefinition;
   readonly player: HTMLElement;
   readonly stage: HTMLElement;
   readonly endpointRoots: readonly [HTMLElement, HTMLElement];
@@ -53,13 +65,46 @@ interface KpExponentialHomomorphismSurfaceSession {
   disposed: boolean;
 }
 
+interface KpExponentialHomomorphismSurfaceDefinition {
+  readonly animationId:
+    | typeof kpExponentialHomomorphismAnimationId
+    | typeof kpExponentialQuotientPressureAnimationId;
+  readonly authority: KpExponentialHomomorphismCorrespondenceAuthority;
+  readonly endpoints: ReturnType<
+    typeof createKpExponentialHomomorphismNativeEndpoints
+  >;
+  readonly targetTopology: KpHomomorphicTargetTopology;
+  readonly ariaLabel: string;
+  readonly sourceStatus: string;
+  readonly transitStatus: string;
+  readonly targetStatus: string;
+}
+
 const sessions = new WeakMap<HTMLElement,
   KpExponentialHomomorphismSurfaceSession>();
 
-const kpCanonicalExponentialHomomorphismNativeEndpoints =
-  createKpExponentialHomomorphismNativeEndpoints(
-    kpCanonicalExponentialHomomorphismAuthority
-  );
+const definitions = Object.freeze([
+  definition({
+    animationId: kpExponentialHomomorphismAnimationId,
+    authority: kpCanonicalExponentialHomomorphismAuthority,
+    targetTopology: "lateral-product",
+    ariaLabel: "Turn an exponential sum into a product",
+    sourceStatus: "Power with an additive exponent ready.",
+    transitStatus:
+      "The exponent payloads persist while the base derives two powers.",
+    targetStatus: "The additive exponent is now a product of powers."
+  }),
+  definition({
+    animationId: kpExponentialQuotientPressureAnimationId,
+    authority: kpExponentialQuotientPressureAuthority,
+    targetTopology: "vertical-quotient",
+    ariaLabel: "Turn an exponential difference into a quotient",
+    sourceStatus: "Power with a subtractive exponent ready.",
+    transitStatus:
+      "The payloads persist while numerator and denominator powers form.",
+    targetStatus: "The subtractive exponent is now a quotient of powers."
+  })
+]);
 
 export const kpEditorExponentialHomomorphismSurfaceAdapter = Object.freeze({
   id:
@@ -67,16 +112,26 @@ export const kpEditorExponentialHomomorphismSurfaceAdapter = Object.freeze({
   slotKind: "equation" as const,
   priority: 133,
   supports(state) {
-    return state.animationId === kpExponentialHomomorphismAnimationId;
+    return findDefinition(state.animationId) !== undefined;
   },
   render({ player, slot, state }) {
+    const definitionValue = findDefinition(state.animationId);
+    if (definitionValue === undefined) return;
     let session = sessions.get(player);
+    if (
+      session !== undefined &&
+      session.definition.animationId !== definitionValue.animationId
+    ) {
+      disposeSurface(player, session);
+      session = undefined;
+    }
     if (session === undefined) {
-      session = mountSurface(player, slot, state);
+      session = mountSurface(player, slot, state, definitionValue);
       sessions.set(player, session);
+      const mountedSession = session;
       player.addEventListener(
         KP_EDITOR_ANIMATION_DISPOSE_EVENT,
-        () => disposeSurface(player, session!),
+        () => disposeSurface(player, mountedSession),
         { once: true }
       );
       const generation = ++session.generation;
@@ -90,21 +145,22 @@ export const kpEditorExponentialHomomorphismSurfaceAdapter = Object.freeze({
 function mountSurface(
   player: HTMLElement,
   slot: HTMLElement,
-  state: KpEditorAnimationPlayerState
+  state: KpEditorAnimationPlayerState,
+  definitionValue: KpExponentialHomomorphismSurfaceDefinition
 ): KpExponentialHomomorphismSurfaceSession {
   const document = player.ownerDocument;
   const stage = document.createElement("section");
   stage.className = "kp-exponential-homomorphism-stage";
   stage.dataset["kpExponentialHomomorphismStage"] = "preparing";
   stage.dataset["kpExponentialHomomorphismAnimationId"] =
-    kpExponentialHomomorphismAnimationId;
-  stage.setAttribute("aria-label", "Turn an exponential sum into a product");
+    definitionValue.animationId;
+  stage.setAttribute("aria-label", definitionValue.ariaLabel);
 
   const roots: [HTMLElement, HTMLElement] = [
     createEndpointRoot(document,
-      kpCanonicalExponentialHomomorphismNativeEndpoints.source, true),
+      definitionValue.endpoints.source, true),
     createEndpointRoot(document,
-      kpCanonicalExponentialHomomorphismNativeEndpoints.target, false)
+      definitionValue.endpoints.target, false)
   ];
   const materialLayer = document.createElement("div");
   materialLayer.className =
@@ -115,10 +171,11 @@ function mountSurface(
   status.className = "kp-exponential-homomorphism-stage__status";
   status.dataset["kpExponentialHomomorphismStatus"] = "true";
   status.setAttribute("aria-live", "polite");
-  status.textContent = "Power with an additive exponent ready.";
+  status.textContent = definitionValue.sourceStatus;
   stage.append(...roots, materialLayer, status);
   slot.replaceChildren(stage);
   return {
+    definition: definitionValue,
     player,
     stage,
     endpointRoots: Object.freeze(roots) as readonly [HTMLElement, HTMLElement],
@@ -141,26 +198,25 @@ async function prepareSurface(
     const source = await settleAndObserveKpExponentialNativeEndpoint({
       stage: session.stage,
       root: session.endpointRoots[0],
-      endpoint: kpCanonicalExponentialHomomorphismNativeEndpoints.source,
+      endpoint: session.definition.endpoints.source,
       fontReadiness: session.fontReadiness,
       observe: nativeKatex.observe.settleAndObserve
     });
     const target = await settleAndObserveKpExponentialNativeEndpoint({
       stage: session.stage,
       root: session.endpointRoots[1],
-      endpoint: kpCanonicalExponentialHomomorphismNativeEndpoints.target,
+      endpoint: session.definition.endpoints.target,
       fontReadiness: session.fontReadiness,
       observe: nativeKatex.observe.settleAndObserve
     });
     if (session.disposed || session.generation !== generation) return;
     session.transit = createKpExponentialHomomorphismTransitSession({
-      authority: kpCanonicalExponentialHomomorphismAuthority,
-      sourceEndpoint:
-        kpCanonicalExponentialHomomorphismNativeEndpoints.source,
-      targetEndpoint:
-        kpCanonicalExponentialHomomorphismNativeEndpoints.target,
+      authority: session.definition.authority,
+      sourceEndpoint: session.definition.endpoints.source,
+      targetEndpoint: session.definition.endpoints.target,
       source,
-      target
+      target,
+      targetTopology: session.definition.targetTopology
     });
     session.preparedFontRevision = session.fontReadiness.revision;
     session.preparedViewportFingerprint = viewportFingerprint(session.stage);
@@ -272,11 +328,27 @@ function applyFrame(
   );
   if (status !== null) {
     status.textContent = progress === 0
-      ? "Power with an additive exponent ready."
+      ? session.definition.sourceStatus
       : progress === 1
-        ? "The additive exponent is now a product of powers."
-        : "The exponent payloads persist while the base derives two powers.";
+        ? session.definition.targetStatus
+        : session.definition.transitStatus;
   }
+}
+
+function definition(input: Omit<KpExponentialHomomorphismSurfaceDefinition,
+"endpoints">): KpExponentialHomomorphismSurfaceDefinition {
+  return Object.freeze({
+    ...input,
+    endpoints: createKpExponentialHomomorphismNativeEndpoints(input.authority)
+  });
+}
+
+function findDefinition(
+  animationId: string
+): KpExponentialHomomorphismSurfaceDefinition | undefined {
+  return definitions.find((candidate) =>
+    candidate.animationId === animationId
+  );
 }
 
 function createEndpointRoot(

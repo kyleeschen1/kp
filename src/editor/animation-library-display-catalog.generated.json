@@ -1887,6 +1887,34 @@
     ]
   },
   {
+    "animationId": "animation.algebra.exponential-homomorphism.difference-to-quotient",
+    "title": "Turn an exponential difference into a quotient",
+    "summary": "A typed Native KaTeX pressure caller for exponential quotient duality.",
+    "tags": [
+      "algebra",
+      "animation",
+      "editor",
+      "equation",
+      "exponential",
+      "katex",
+      "pressure",
+      "quotient"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.algebra.exponential-homomorphism.difference-to-quotient",
+    "representations": [
+      {
+        "id": "editor-animation.animation.algebra.exponential-homomorphism.difference-to-quotient",
+        "label": "Turn an exponential difference into a quotient",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.algebra.exponential-homomorphism.difference-to-quotient",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
     "animationId": "animation.algebra.exponential-homomorphism.sum-to-product",
     "title": "Turn an exponential sum into a product",
     "summary": "A typed Native KaTeX exemplar for exponential homomorphism.",

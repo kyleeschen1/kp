@@ -101,7 +101,9 @@ export const kpAnimationCatalogPackDeclarations: readonly KpAnimationCatalogPack
       (id) => id.startsWith("animation.algebra.log-product."),
       async () => dataOnlyPack((await import("./catalog-packs/log-product.ts")).createKpLogProductAnimationPack())),
     pack("exponential-homomorphism", "src/animation/catalog-packs/exponential-homomorphism.ts",
-      (id) => id === "animation.algebra.exponential-homomorphism.sum-to-product",
+      (id) => id.startsWith(
+        "animation.algebra.exponential-homomorphism."
+      ),
       async () => dataOnlyPack((await import("./catalog-packs/exponential-homomorphism.ts")).createKpExponentialHomomorphismAnimationPack())),
     // The public algebra identity remains stable while solve-x avoids loading
     // unrelated symbolic families; both variants import one shared runtime.
