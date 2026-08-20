@@ -148,8 +148,9 @@
     },
     {
       "id": "cps17",
-      "title": "Adapt-existing-add-zero-caller",
-      "status": "planned"
+      "title": "Reopen-canonical-fade-treatment",
+      "summary": "HUMAN_CHECKPOINT: fade-only 2 × 1 → 2 candidate is verified and ready for review; no second-caller rollout has occurred.",
+      "status": "in-progress"
     },
     {
       "id": "cps18",

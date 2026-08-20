@@ -16,9 +16,6 @@ import {
   compileKpNativeKatexCarrierPreservingSimplificationMotion
 } from "../src/rendering/native-katex-carrier-preserving-simplification-motion.ts";
 import {
-  kpNativeKatexCarrierPreservingSimplificationOpticalProfile
-} from "../src/rendering/native-katex-carrier-preserving-simplification-profile.ts";
-import {
   assertKpNativeKatexCarrierEndpointRevisions,
   certifyKpNativeKatexCarrierSettlement
 } from "../src/rendering/native-katex-carrier-preserving-simplification-settlement.ts";
@@ -177,52 +174,16 @@ test("motion has one opaque carrier and one synchronized removal cohort", () => 
     )).size,
     1
   );
-  assert.ok(removed[0]?.intentionalContactGroupId);
+  assert.equal(removed[0]?.intentionalContactGroupId, undefined);
   assert.equal(carrier?.intentionalContactGroupId, undefined);
   assert.equal(removed[0]?.verifiedOperationCohortId, undefined);
-  const scale =
-    kpNativeKatexCarrierPreservingSimplificationOpticalProfile
-      .removedSyntaxRecognition.minimumScale;
-  const recognitionCenters = removed.map(({ endRect, endPaintRect }) => {
-    const ownerCenter = {
-      x: endRect.left + endRect.width / 2,
-      y: endRect.top + endRect.height / 2
-    };
-    return {
-      x: ownerCenter.x + scale * (
-        endPaintRect.left + endPaintRect.width / 2 - ownerCenter.x
-      ),
-      y: ownerCenter.y + scale * (
-        endPaintRect.top + endPaintRect.height / 2 - ownerCenter.y
-      )
-    };
-  });
-  assert.ok(recognitionCenters[0]!.x < recognitionCenters[1]!.x);
-  const sourceCohortLeft = Math.min(...binding.removedSyntaxCohort.map(
-    ({ rect }) => rect.left
-  ));
-  const sourceCohortRight = Math.max(...binding.removedSyntaxCohort.map(
-    ({ rect }) => rect.left + rect.width
-  ));
-  const recognitionCenterX = (
-    recognitionCenters[0]!.x + recognitionCenters[1]!.x
-  ) / 2;
-  assert.ok(
-    Math.abs(
-      recognitionCenterX - (sourceCohortLeft + sourceCohortRight) / 2
-    ) < 1e-9
-  );
-  removed.forEach((track, index) => {
-    const sourceOwner = binding.removedSyntaxCohort[index]!;
-    const endOwnerCenterY = track.endRect.top + track.endRect.height / 2;
-    const translatedBaseline = sourceOwner.baselineY +
-      track.endRect.top - track.startRect.top;
-    const scaledBaseline = endOwnerCenterY +
-      scale * (translatedBaseline - endOwnerCenterY);
-    assert.equal(scaledBaseline, binding.carrier.source.baselineY);
+  removed.forEach((track) => {
+    assert.deepEqual(track.endRect, track.startRect);
+    assert.deepEqual(track.endPaintRect, track.startPaintRect);
+    assert.equal(track.sampleMaterialScale, undefined);
   });
   const middle = sampleKpNativeKatexSceneTrackFrames(tracks, 0.36, false);
-  const early = sampleKpNativeKatexSceneTrackFrames(tracks, 0.2, false);
+  const early = sampleKpNativeKatexSceneTrackFrames(tracks, 0.1, false);
   const carrierFrame = middle.find(({ trackId }) =>
     trackId === motion.carrierTrackId
   );
@@ -233,7 +194,10 @@ test("motion has one opaque carrier and one synchronized removal cohort", () => 
   assert.equal(carrierFrame?.materialScale, undefined);
   assert.equal(removedFrames.length, 2);
   assert.equal(removedFrames[0]?.opacity, removedFrames[1]?.opacity);
-  assert.equal(removedFrames[0]?.materialScale, removedFrames[1]?.materialScale);
+  assert.deepEqual(removedFrames.map(({ materialScale }) => materialScale), [
+    undefined,
+    undefined
+  ]);
   assert.deepEqual(early.filter(({ trackId }) =>
     motion.removedSyntaxTrackIds.includes(trackId)
   ).map(({ opacity }) => opacity), [1, 1]);

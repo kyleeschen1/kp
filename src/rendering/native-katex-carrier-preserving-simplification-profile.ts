@@ -3,15 +3,11 @@ export interface KpNativeKatexCarrierPreservingSimplificationOpticalProfile {
     "kp.native-katex-carrier-preserving-simplification-optical-profile.v1";
   readonly id:
     "kp.rendering.native-katex.carrier-preserving-simplification.candidate-v1";
-  readonly status: "approved-canonical-exemplar";
-  readonly treatment: "identity-recognition";
-  readonly removedSyntaxRecognition: {
+  readonly status: "provisional-human-checkpoint";
+  readonly treatment: "identity-withdrawal";
+  readonly removedSyntaxWithdrawal: {
     readonly start: number;
     readonly end: number;
-    readonly disappearanceStart: number;
-    readonly disappearanceEnd: number;
-    readonly minimumScale: number;
-    readonly kernelSpanInCarrierInkHeights: number;
   };
   readonly carrierTransit: {
     readonly start: number;
@@ -27,7 +23,7 @@ export interface KpNativeKatexCarrierPreservingSimplificationOpticalSample {
   readonly progress: number;
   readonly phase:
     | "source"
-    | "identity-recognition"
+    | "identity-withdrawal"
     | "carrier-transit"
     | "native-settlement"
     | "target";
@@ -37,10 +33,8 @@ export interface KpNativeKatexCarrierPreservingSimplificationOpticalSample {
     readonly nativeSettlementProgress: number;
   };
   readonly removedSyntaxCohort: {
-    readonly recognitionProgress: number;
-    readonly disappearanceProgress: number;
+    readonly withdrawalProgress: number;
     readonly paintPresence: number;
-    readonly scale: number;
   };
 }
 
@@ -55,17 +49,13 @@ export const kpNativeKatexCarrierPreservingSimplificationOpticalProfile =
       "kp.native-katex-carrier-preserving-simplification-optical-profile.v1" as const,
     id:
       "kp.rendering.native-katex.carrier-preserving-simplification.candidate-v1" as const,
-    // Visual approval freezes this Native KaTeX treatment, while the semantic
-    // family remains a candidate until the structurally different caller passes.
-    status: "approved-canonical-exemplar" as const,
-    treatment: "identity-recognition" as const,
-    removedSyntaxRecognition: {
-      start: 0.12,
-      end: 0.44,
-      disappearanceStart: 0.28,
-      disappearanceEnd: 0.44,
-      minimumScale: 0.36,
-      kernelSpanInCarrierInkHeights: 0.18
+    // The prior recognition treatment was superseded after visual review.
+    // This reversible candidate must pass the canonical checkpoint again.
+    status: "provisional-human-checkpoint" as const,
+    treatment: "identity-withdrawal" as const,
+    removedSyntaxWithdrawal: {
+      start: 0.16,
+      end: 0.44
     },
     carrierTransit: {
       start: 0.44,
@@ -91,15 +81,10 @@ export function sampleKpNativeKatexCarrierPreservingSimplificationOptics(
   }
   assertValidProfile(profile);
   const bounded = clamp01(progress);
-  const recognitionProgress = sampleInterval(
+  const withdrawalProgress = sampleInterval(
     bounded,
-    profile.removedSyntaxRecognition.start,
-    profile.removedSyntaxRecognition.end
-  );
-  const disappearanceProgress = sampleInterval(
-    bounded,
-    profile.removedSyntaxRecognition.disappearanceStart,
-    profile.removedSyntaxRecognition.disappearanceEnd
+    profile.removedSyntaxWithdrawal.start,
+    profile.removedSyntaxWithdrawal.end
   );
   const transitProgress = sampleInterval(
     bounded,
@@ -111,12 +96,6 @@ export function sampleKpNativeKatexCarrierPreservingSimplificationOptics(
     profile.nativeSettlement.start,
     profile.nativeSettlement.end
   );
-  const recognitionScale = lerp(
-    1,
-    profile.removedSyntaxRecognition.minimumScale,
-    recognitionProgress
-  );
-
   return deepFreeze({
     progress: bounded,
     phase: phaseAt(bounded, profile),
@@ -126,10 +105,8 @@ export function sampleKpNativeKatexCarrierPreservingSimplificationOptics(
       nativeSettlementProgress
     },
     removedSyntaxCohort: {
-      recognitionProgress,
-      disappearanceProgress,
-      paintPresence: 1 - disappearanceProgress,
-      scale: recognitionScale
+      withdrawalProgress,
+      paintPresence: 1 - withdrawalProgress
     }
   });
 }
@@ -139,7 +116,7 @@ function phaseAt(
   profile: KpNativeKatexCarrierPreservingSimplificationOpticalProfile
 ): KpNativeKatexCarrierPreservingSimplificationOpticalSample["phase"] {
   if (progress <= 0) return "source";
-  if (progress < profile.carrierTransit.start) return "identity-recognition";
+  if (progress < profile.carrierTransit.start) return "identity-withdrawal";
   if (progress < profile.nativeSettlement.start) return "carrier-transit";
   if (progress < 1) return "native-settlement";
   return "target";
@@ -148,9 +125,9 @@ function phaseAt(
 function assertValidProfile(
   profile: KpNativeKatexCarrierPreservingSimplificationOpticalProfile
 ): void {
-  const { removedSyntaxRecognition, carrierTransit, nativeSettlement } = profile;
+  const { removedSyntaxWithdrawal, carrierTransit, nativeSettlement } = profile;
   for (const [label, interval] of [
-    ["removed syntax recognition", removedSyntaxRecognition],
+    ["removed syntax withdrawal", removedSyntaxWithdrawal],
     ["carrier transit", carrierTransit],
     ["native settlement", nativeSettlement]
   ] as const) {
@@ -164,27 +141,9 @@ function assertValidProfile(
       throw new Error(`${label} must be a non-empty interval within [0, 1].`);
     }
   }
-  if (
-    removedSyntaxRecognition.minimumScale <= 0 ||
-    removedSyntaxRecognition.minimumScale > 1 ||
-    !Number.isFinite(
-      removedSyntaxRecognition.kernelSpanInCarrierInkHeights
-    ) ||
-    removedSyntaxRecognition.kernelSpanInCarrierInkHeights <= 0 ||
-    removedSyntaxRecognition.kernelSpanInCarrierInkHeights > 0.75
-  ) {
-    throw new Error("Identity-recognition geometry must remain bounded and positive.");
-  }
-  if (
-    removedSyntaxRecognition.disappearanceStart <
-      removedSyntaxRecognition.start ||
-    removedSyntaxRecognition.disappearanceEnd <=
-      removedSyntaxRecognition.disappearanceStart ||
-    removedSyntaxRecognition.disappearanceEnd > carrierTransit.end ||
-    removedSyntaxRecognition.end !== carrierTransit.start
-  ) {
+  if (removedSyntaxWithdrawal.end !== carrierTransit.start) {
     throw new Error(
-      "Identity recognition must gather before and yield during carrier transit."
+      "Identity withdrawal must complete before carrier transit begins."
     );
   }
   if (
@@ -204,10 +163,6 @@ function sampleInterval(progress: number, start: number, end: number): number {
 
 function clamp01(value: number): number {
   return Math.max(0, Math.min(1, value));
-}
-
-function lerp(start: number, end: number, progress: number): number {
-  return start + (end - start) * progress;
 }
 
 function deepFreeze<T>(value: T): Readonly<T> {

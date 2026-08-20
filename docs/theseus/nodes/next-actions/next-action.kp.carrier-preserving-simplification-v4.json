@@ -400,11 +400,60 @@
       "scope": "cps16 frozen profile lifecycle",
       "checkedAt": "2026-08-20T00:10:29.623Z",
       "notes": "3/3 Chromium lifecycle scenarios passed without retuning the approved choreography."
+    },
+    {
+      "command": "npm run test:carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "cps17 fade-only semantic, optical, ownership, and catalogue contracts",
+      "checkedAt": "2026-08-20T00:30:49.038Z",
+      "notes": "20/20 focused tests passed; the removal cohort holds its native measured pose, shares one opacity schedule, and has no contact or scaling authority."
+    },
+    {
+      "command": "npx tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "cps17 fade-only TypeScript graph",
+      "checkedAt": "2026-08-20T00:30:50.458Z",
+      "notes": "Identity-withdrawal profile, track projection, capture schema, and focused tests typecheck."
+    },
+    {
+      "command": "npm run visual:carrier-preserving-simplification:checkpoint",
+      "status": "passed",
+      "scope": "cps17 fade-only review packet",
+      "checkedAt": "2026-08-20T00:30:51.490Z",
+      "notes": "Generated 36 deterministic wide/phone, dark/light, normal/reduced states with literal withdrawal diagnostics."
+    },
+    {
+      "command": "npm run visual:carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "cps17 fade-only Chromium lifecycle",
+      "checkedAt": "2026-08-20T00:30:52.500Z",
+      "notes": "3/3 direct seek, reverse, interruption, resize, and reduced-motion scenarios passed."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "cps17 fade-only human checkpoint",
+      "checkedAt": "2026-08-20T00:31:23.595Z",
+      "notes": "Validated 1030 nodes and 23614 events with add-zero pressure and promotion still paused."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "cps17 fade-only checkpoint diff",
+      "checkedAt": "2026-08-20T00:31:24.685Z",
+      "notes": "Candidate implementation, focused evidence, review record, and generated control records have no whitespace errors."
+    },
+    {
+      "command": "git diff --cached --check",
+      "status": "passed",
+      "scope": "cps17 fade-only checkpoint commit boundary",
+      "checkedAt": "2026-08-20T00:32:20.262Z",
+      "notes": "Exact staged fade-only implementation and evidence have no whitespace errors; unrelated user files remain unstaged."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Approved recognition profile is frozen; next is adapting the unchanged generated add-zero semantic caller."
+    "summary": "HUMAN_CHECKPOINT: recognition is superseded by literal identity withdrawal. The ×1 cohort now fades in place without motion or scale while the carrier stays opaque; add-zero pressure remains paused."
   },
   "expectedLearning": [
     "Determine whether persistent-carrier transfer can be expressed as a renderer-neutral, typed operation family with native KaTeX endpoints and no overlapping ownership."
