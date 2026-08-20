@@ -80,6 +80,20 @@
       "scope": "ncc07",
       "checkedAt": "2026-08-20T02:35:49.489Z",
       "notes": "Ten checks pass; structural risk tags are exhaustive, required by shape class, unique, immutable, and canonically ordered, with italic x represented as glyph plus font-style risk rather than a special-case shape."
+    },
+    {
+      "command": "npm run test:native-katex-compositor-conformance",
+      "status": "passed",
+      "scope": "ncc08",
+      "checkedAt": "2026-08-20T02:39:45.783Z",
+      "notes": "Fourteen checks pass in 0.63 seconds; generic data-driven pairwise selection covers all five-factor pairs, includes the named three-way override, is deterministic, and fails closed when the scenario cap is insufficient."
+    },
+    {
+      "command": "npm run test:native-katex-compositor-conformance",
+      "status": "passed",
+      "scope": "ncc09",
+      "checkedAt": "2026-08-20T02:43:00.299Z",
+      "notes": "Stable JSON-safe coverage manifest explains every selected scenario, its first-covered pairs, and any explicit three-way risk override; 16 tests pass."
     }
   ],
   "expectedLearning": [

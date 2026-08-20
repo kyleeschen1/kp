@@ -89,12 +89,14 @@
     {
       "id": "ncc08",
       "title": "Build-pairwise-planner",
-      "status": "planned"
+      "summary": "Added a generic deterministic greedy pairwise planner. Factors and three-way overrides are data, not switches; every pair has proof, override cases are mandatory and named, IDs are stable, malformed inputs fail, candidate products are safety-bounded, and an insufficient approved scenario budget fails closed.",
+      "status": "complete"
     },
     {
       "id": "ncc09",
       "title": "Generate-coverage-manifest",
-      "status": "planned"
+      "summary": "Added a stable JSON-safe coverage manifest with per-scenario inclusion rationale, assignments, first-covered pair requirements, and explicit risk-override provenance.",
+      "status": "complete"
     },
     {
       "id": "ncc10",
