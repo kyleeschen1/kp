@@ -77,12 +77,14 @@
     {
       "id": "ncc06",
       "title": "Add-shape-schema",
-      "status": "planned"
+      "summary": "Added an immutable test-only shape descriptor and registry. It names representative LaTeX, structural class, paint metric, ownership grain, and baseline capability; rejects contradictory atomic/rule/multirow measurement contracts, blanks, duplicates, and empty registries; and contains no timing or pedagogy fields.",
+      "status": "complete"
     },
     {
       "id": "ncc07",
       "title": "Add-risk-tags",
-      "status": "planned"
+      "summary": "Added glyph, rule, script, vertical-list, delimiter, multirow, and font-style risk tags. Shape constructors require the relevant structural tag, reject duplicates, and store canonical order; italic x is described compositionally as glyph plus font-style risk, not as a caller branch.",
+      "status": "complete"
     },
     {
       "id": "ncc08",

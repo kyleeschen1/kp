@@ -66,6 +66,20 @@
       "scope": "ncc05",
       "checkedAt": "2026-08-20T02:31:17.800Z",
       "notes": "Six checks freeze baseline evidence plus hard canary/promotion/browser, five-sample, one-page, one-worker, zero-routine-screenshot, and zero-unseeded-fuzz budgets in 0.43 seconds."
+    },
+    {
+      "command": "npm run test:native-katex-compositor-conformance",
+      "status": "passed",
+      "scope": "ncc06",
+      "checkedAt": "2026-08-20T02:34:07.452Z",
+      "notes": "Nine checks pass in 0.44 seconds; the test-only descriptor enforces shape/paint/ownership/baseline consistency, immutability, non-empty fixtures, and unique registry IDs."
+    },
+    {
+      "command": "npm run test:native-katex-compositor-conformance",
+      "status": "passed",
+      "scope": "ncc07",
+      "checkedAt": "2026-08-20T02:35:49.489Z",
+      "notes": "Ten checks pass; structural risk tags are exhaustive, required by shape class, unique, immutable, and canonically ordered, with italic x represented as glyph plus font-style risk rather than a special-case shape."
     }
   ],
   "expectedLearning": [
