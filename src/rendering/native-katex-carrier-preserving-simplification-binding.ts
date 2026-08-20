@@ -14,6 +14,9 @@ import type {
 import {
   measureKpNativeKatexPaintAtomRect
 } from "./native-katex-paint-geometry.ts";
+import {
+  kpEquationSettlementTolerancePx
+} from "../animation/equation-shared-presentation-policy.ts";
 
 export interface KpNativeKatexMeasuredSelectorOwner {
   readonly selectorRef: string;
@@ -104,6 +107,9 @@ export function bindKpNativeKatexCarrierPreservingSimplification(input: {
       )
     }))
   );
+  stationaryContext.forEach(({ source, target }) =>
+    assertStationaryContextOwners(source, target)
+  );
 
   return Object.freeze({
     kind: "native-katex-carrier-preserving-simplification-binding" as const,
@@ -120,6 +126,25 @@ export function bindKpNativeKatexCarrierPreservingSimplification(input: {
       );
     }
   });
+}
+
+function assertStationaryContextOwners(
+  source: KpNativeKatexMeasuredSelectorOwner,
+  target: KpNativeKatexMeasuredSelectorOwner
+): void {
+  const delta = Math.max(
+    Math.abs(source.rect.left - target.rect.left),
+    Math.abs(source.rect.top - target.rect.top),
+    Math.abs(source.rect.width - target.rect.width),
+    Math.abs(source.rect.height - target.rect.height),
+    Math.abs(source.baselineY - target.baselineY)
+  );
+  if (delta > kpEquationSettlementTolerancePx) {
+    throw new Error(
+      `Native stationary context ${source.selectorRef} and ` +
+      `${target.selectorRef} drift by ${delta}px.`
+    );
+  }
 }
 
 export function projectKpNativeKatexCarrierPose(input: {

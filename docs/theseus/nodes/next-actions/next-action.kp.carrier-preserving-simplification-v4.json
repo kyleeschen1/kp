@@ -533,11 +533,95 @@
       "scope": "cps19 compatibility disposition diff",
       "checkedAt": "2026-08-20T00:51:39.241Z",
       "notes": "Exact implementation, generated authority graph, tests, and Theseus records have no whitespace errors; unrelated user files remain untouched."
+    },
+    {
+      "command": "npm run test:carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-20T01:18:27.561Z",
+      "notes": "26 assertions cover both callers, endpoints, semantic motion, shared profile, compiler, registry, and capability selection."
+    },
+    {
+      "command": "npm run test:operation-evaluation-family-exemplar",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-20T01:18:29.099Z",
+      "notes": "13 canonical operation-evaluation checks remain green."
+    },
+    {
+      "command": "npm run test:equation-surface-authority",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-08-20T01:18:31.627Z",
+      "notes": "7 authority checks confirm both callers route through the specialized carrier path and identity absorption is no longer selected."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-20T01:18:33.938Z",
+      "notes": "11 preservation checks remain green."
+    },
+    {
+      "command": "npm run test:equation-asset-manifest",
+      "status": "passed",
+      "scope": "manifest",
+      "checkedAt": "2026-08-20T01:18:36.301Z",
+      "notes": "6 manifest checks remain green."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-08-20T01:18:37.718Z",
+      "notes": "All 1,692-file architecture ratchets pass."
+    },
+    {
+      "command": "npx tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "types",
+      "checkedAt": "2026-08-20T01:18:40.339Z",
+      "notes": "TypeScript test-project compile passes."
+    },
+    {
+      "command": "npm run visual:carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "runtime",
+      "checkedAt": "2026-08-20T01:18:42.896Z",
+      "notes": "Five Chromium scenarios pass for canonical and add-zero callers, including interruption, reverse, invalidation, viewport, DPR, reduced motion, light mode, and accessibility."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-08-20T01:18:45.733Z",
+      "notes": "Production build passes; carrier capability remains a distinct lazy chunk."
+    },
+    {
+      "command": "npm run check:bundle:algebra-pack-split",
+      "status": "passed",
+      "scope": "bundle",
+      "checkedAt": "2026-08-20T01:18:48.052Z",
+      "notes": "Split saves 27,204 gzip bytes (32.4%) with one shared runtime chunk."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "cps20 closeout",
+      "checkedAt": "2026-08-20T01:19:29.897Z",
+      "notes": "Validated 1,030 nodes and 23,660 events with the context receipt closed and cps21 next."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "cps20 diff",
+      "checkedAt": "2026-08-20T01:19:32.289Z",
+      "notes": "Exact implementation and Theseus records have no whitespace errors; unrelated user files remain untouched."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Exact reachability retains identity absorption as compatibility-only for its sole live caller, generated add-zero; catalogue and lazy algebra-pack boundaries remain unchanged."
+    "summary": "Pressure-tested add-zero as the second carrier-preserving simplification caller. It now selects the same shared adapter, recipe compiler, motif profile, clock, compositor, native endpoint binding, and lazy carrier capability as the approved 2x1 exemplar while preserving its own semantic source and evidence."
   },
   "expectedLearning": [
     "Determine whether persistent-carrier transfer can be expressed as a renderer-neutral, typed operation family with native KaTeX endpoints and no overlapping ownership."

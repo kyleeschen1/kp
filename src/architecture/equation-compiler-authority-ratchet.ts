@@ -108,6 +108,9 @@ const directSamplerPaths = paths([
   "src/rendering/exact-fraction-quantity-runtime.ts",
   "src/rendering/exact-fraction-quantity-synchronized-projection.ts",
   "src/rendering/native-katex-copy-fan-out-motion.ts",
+  // Carrier simplification exposes one pure profile sampler; the selected
+  // capability still delegates all paint and clock authority to the compositor.
+  "src/rendering/native-katex-carrier-preserving-simplification-profile.ts",
   "src/rendering/native-katex-factoring-choreography.ts",
   "src/rendering/native-katex-scene-compositor.ts",
   "src/rendering/native-katex-scene-track-sampling.ts",

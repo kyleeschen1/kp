@@ -56,7 +56,7 @@ test("every authority node reaches its named source declaration", async () => {
   }));
 });
 
-test("identity absorption remains compatibility-only for its one live caller", () => {
+test("identity absorption is no longer a selected authority path", () => {
   const graph = createKpEquationSurfaceAuthorityGraph();
   const sampler = graph.nodes.find(
     ({ id }) => id === "sampler.identity-absorption"
@@ -65,14 +65,10 @@ test("identity absorption remains compatibility-only for its one live caller", (
     directSamplerNodeIds.includes("sampler.identity-absorption")
   );
 
-  assert.equal(sampler?.authority, "compatibility");
+  assert.equal(sampler, undefined);
   assert.deepEqual(
     liveCallers.map(({ animationId }) => animationId),
-    ["animation.generated.add-zero"]
-  );
-  assert.deepEqual(
-    liveCallers[0]?.transformationTypes,
-    ["simplify-additive-identity"]
+    []
   );
 });
 

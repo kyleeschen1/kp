@@ -19,6 +19,7 @@ export type KpEquationSurfaceAuthorityCategory =
   | "renderer-inference";
 
 export type KpEquationSurfaceAuthorityPathClass =
+  | "carrier-preserving-simplification-specialized"
   | "generic-semantic-equation"
   | "log-exponent-specialized"
   | "logarithm-change-of-base-specialized"
@@ -98,6 +99,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/reader/renderers/equation-render-plan.ts",
     "export function projectKpReaderEquationRenderPlan",
     "Operation evaluation compiles through the branded reader render plan."),
+  node("compiler.carrier-preserving-recipe", "compiler", "canonical",
+    "src/animation/carrier-preserving-simplification-recipe.ts",
+    "export function compileKpCarrierPreservingSimplificationRecipe",
+    "Verified identity-law evidence compiles into the renderer-neutral carrier recipe."),
   node("compiler.log-exponent-operations", "compiler", "local",
     "src/semantic/log-exponent-transformation-compiler.ts",
     "export function compileKpApplyNaturalLogBothSides",
@@ -122,6 +127,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/reader/renderers/equation-material-plan.ts",
     "export function compileKpReaderEquationMaterialPlan",
     "Operation evaluation derives one role-complete material plan."),
+  node("motif.carrier-preserving-native", "motif", "canonical",
+    "src/rendering/native-katex-carrier-preserving-simplification-motion.ts",
+    "export function compileKpNativeKatexCarrierPreservingSimplificationMotion",
+    "The shared Native KaTeX projection preserves one carrier and withdraws one syntax cohort."),
   node("motif.log-exponent-symbol-motion", "motif", "local",
     "src/animation/log-exponent-symbol-motion.ts",
     "export function compileKpLogExponentSymbolMotionPlans",
@@ -146,6 +155,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/rendering/native-katex-scene-compositor.ts",
     "export function sampleKpNativeKatexEndpointDwellProgress",
     "The native compositor currently owns operation endpoint dwell."),
+  node("timing.carrier-preserving-optical-profile", "local-timing", "canonical",
+    "src/rendering/native-katex-carrier-preserving-simplification-profile.ts",
+    "export function sampleKpNativeKatexCarrierPreservingSimplificationOptics",
+    "One approved optical profile samples both carrier-preserving callers."),
   node("timing.log-exponent-sequence", "local-timing", "local",
     "src/animation/log-exponent-timeline.ts",
     "export function sampleKpLogExponentSequenceFrame",
@@ -174,6 +187,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/reader/renderers/equation-scene-compositor-adapter.ts",
     "export function createKpReaderEquationSceneCompositorSession",
     "Operation evaluation executes through the measured native compositor."),
+  node("renderer.carrier-preserving-native", "renderer-inference", "canonical",
+    "src/editor/carrier-preserving-simplification-surface-adapter.ts",
+    "export const kpEditorCarrierPreservingSimplificationSurfaceAdapter",
+    "The lazy carrier capability binds measured endpoints and delegates paint to the canonical compositor."),
   node("renderer.log-exponent-transit", "renderer-inference", "local",
     "src/rendering/log-exponent-transit-session.ts",
     "export function createKpLogExponentTransitSession",
@@ -198,6 +215,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/editor/operation-evaluation-surface-adapter.ts",
     "} catch (error) {",
     "Operation preparation fails closed instead of inventing a motif."),
+  node("fallback.carrier-preserving-source", "fallback", "canonical",
+    "src/editor/carrier-preserving-simplification-surface-adapter.ts",
+    "function showEndpoint(",
+    "Carrier preparation failures retain the readable source endpoint without generic motion fallback."),
   node("fallback.log-exponent-failed-stage", "fallback", "canonical",
     "src/editor/log-exponent-surface-adapter.ts",
     "session.stage.dataset[\"kpLogExponentStage\"] = \"failed\"",
@@ -222,6 +243,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/rendering/native-katex-scene-compositor.ts",
     "export function sampleKpNativeKatexSceneTracks(",
     "The operation compositor samples its compiled native scene tracks."),
+  node("sampler.carrier-preserving-optics", "direct-sampler", "canonical",
+    "src/rendering/native-katex-carrier-preserving-simplification-profile.ts",
+    "export function sampleKpNativeKatexCarrierPreservingSimplificationOptics",
+    "Both demonstrated callers share one history-free carrier optical sampler."),
   node("sampler.log-exponent-sequence", "direct-sampler", "local",
     "src/animation/log-exponent-timeline.ts",
     "export function sampleKpLogExponentSequenceFrame",
@@ -278,10 +303,6 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/animation/exponent-law-choreography.ts",
     "export function sampleKpExponentLawChoreography",
     "Exponent-law changes enter a local sampler."),
-  node("sampler.identity-absorption", "direct-sampler", "compatibility",
-    "src/animation/identity-absorption-choreography.ts",
-    "export function sampleKpIdentityAbsorptionChoreography",
-    "The generated add-zero surface retains this sampler until its carrier-preserving replacement passes the second-caller checkpoint."),
   node("sampler.inequality-pivot", "direct-sampler", "local",
     "src/animation/inequality-pivot-choreography.ts",
     "export function sampleKpInequalityPivotChoreography",
@@ -376,6 +397,19 @@ KpEquationSurfaceAuthorityRow {
   const transformationTypes = Object.freeze([
     ...new Set(asset.transformations.map(({ transformType }) => transformType))
   ]);
+  if (pathClass === "carrier-preserving-simplification-specialized") {
+    return row(asset.id, pathClass, transformationTypes, {
+      semantic: asset.transformations.length,
+      nonSemantic: 0
+    }, {
+      compiler: ["compiler.carrier-preserving-recipe"],
+      motif: ["motif.carrier-preserving-native"],
+      timing: ["timing.carrier-preserving-optical-profile"],
+      renderer: ["renderer.carrier-preserving-native"],
+      fallback: ["fallback.carrier-preserving-source"],
+      samplers: ["sampler.carrier-preserving-optics"]
+    });
+  }
   if (pathClass === "operation-evaluation-specialized") {
     return row(asset.id, pathClass, transformationTypes, {
       semantic: asset.transformations.length,
@@ -543,6 +577,12 @@ function row(
 function authorityPathClass(
   animationId: string
 ): KpEquationSurfaceAuthorityPathClass {
+  if (
+    animationId === "animation.operation-evaluation.two-times-one-carrier" ||
+    animationId === "animation.generated.add-zero"
+  ) {
+    return "carrier-preserving-simplification-specialized";
+  }
   if (animationId.startsWith("animation.operation-evaluation.")) {
     return "operation-evaluation-specialized";
   }

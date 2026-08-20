@@ -1,4 +1,5 @@
 export type KpEquationSelectedSurfaceCapability =
+  | "carrier-preserving-simplification"
   | "equation-katex"
   | "fraction-equivalence"
   | "log-exponent"
@@ -10,6 +11,7 @@ export type KpEquationSelectedSurfaceCapability =
   | "place-value-addition";
 
 export type KpEquationPrimarySurfaceCapability =
+  | "carrier-preserving-simplification"
   | "equation-katex"
   | "fraction-equivalence"
   | "log-exponent"
@@ -41,6 +43,7 @@ export type KpEquationPresentationRoute =
   | "unsupported-static-hold";
 
 export type KpEquationOperationPlanRecipeId =
+  | "recipe.operation-plan.carrier-preserving-simplification.v1"
   | "recipe.operation-plan.identity-absorption.v1"
   | "recipe.operation-plan.inverse-cancellation.v1"
   | "recipe.operation-plan.distribution.v1"
@@ -161,10 +164,11 @@ export const kpEquationSurfaceFamilyDeclarations:
 readonly KpEquationSurfaceFamilyDeclaration[] = Object.freeze([
   declaration({
     id: "family.equation.carrier-preserving-simplification",
-    matches: (id) => id ===
-      "animation.operation-evaluation.two-times-one-carrier",
-    selectedCapabilityIds: ["operation-evaluation", "equation-katex"],
-    primaryCapabilityId: "operation-evaluation",
+    matches: (id) =>
+      id === "animation.operation-evaluation.two-times-one-carrier" ||
+      id === "animation.generated.add-zero",
+    selectedCapabilityIds: ["carrier-preserving-simplification"],
+    primaryCapabilityId: "carrier-preserving-simplification",
     rendererAdapterId:
       "editor-animation-surface.operation-evaluation.carrier-preserving-simplification",
     rendererSourcePath:
@@ -268,10 +272,13 @@ export const kpWaveAEquationOperationPlanDeclarations:
 readonly KpWaveAEquationOperationPlanDeclaration[] = Object.freeze([
   operationPlan({
     animationId: "animation.generated.add-zero",
-    recipeIds: ["recipe.operation-plan.identity-absorption.v1"],
+    recipeIds: [
+      "recipe.operation-plan.carrier-preserving-simplification.v1"
+    ],
     authority: "semantic-correspondence-recipe",
     recipeOwnerPaths: [
-      "src/animation/identity-absorption-choreography.ts"
+      "src/animation/carrier-preserving-simplification-recipe.ts",
+      "src/semantic/generated-add-zero-carrier-preserving-simplification.ts"
     ]
   }),
   operationPlan({
@@ -578,7 +585,9 @@ export function projectKpEquationSurfaceFamily(
     disposition,
     migrationWave,
     presentationRoute: operationPlanDeclaration !== undefined
-      ? "declared-operation-plan" as const
+      ? family.primaryCapabilityId === "carrier-preserving-simplification"
+        ? "specialized-native-adapter" as const
+        : "declared-operation-plan" as const
       : structuralDeclaration !== undefined
         ? "declared-structural-recipe" as const
         : waveCDeclaration?.presentationRoute ??
@@ -588,7 +597,9 @@ export function projectKpEquationSurfaceFamily(
       : { waveCClassification: waveCDeclaration.classification }),
     genericLayerTransition: operationPlanDeclaration !== undefined ||
       structuralDeclaration !== undefined
-      ? "legacy" as const
+      ? family.primaryCapabilityId === "carrier-preserving-simplification"
+        ? "forbidden" as const
+        : "legacy" as const
       : waveCDeclaration?.genericLayerTransition ?? "forbidden" as const,
     operationPlanRecipeIds:
       operationPlanDeclaration?.recipeIds ?? Object.freeze([]),

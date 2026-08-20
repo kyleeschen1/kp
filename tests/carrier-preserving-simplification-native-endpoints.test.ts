@@ -23,8 +23,12 @@ import {
   sampleKpNativeKatexSceneTrackFrames
 } from "../src/rendering/native-katex-scene-track-sampling.ts";
 import {
-  kpCanonicalCarrierPreservingSimplificationNativeEndpoints
+  kpCanonicalCarrierPreservingSimplificationNativeEndpoints,
+  kpGeneratedAddZeroCarrierPreservingSimplificationNativeEndpoints
 } from "../src/rendering/carrier-preserving-simplification-native-endpoints.ts";
+import {
+  planKpNativeKatexStationaryContextAlignment
+} from "../src/rendering/native-katex-carrier-preserving-simplification-alignment.ts";
 import {
   createKpNativeKatexRenderedEndpointHandle,
   createKpNativeKatexRenderedSceneObservation,
@@ -67,6 +71,54 @@ test("canonical semantic states compile to annotated Native KaTeX endpoints", ()
   }]);
   assert.match(source.nativeHtmlAndMathml, /class="katex-html"/u);
   assert.match(target.nativeHtmlAndMathml, /class="katex-mathml"/u);
+});
+
+test("add-zero endpoints expose carrier, removal, and stationary roles", () => {
+  const [source, target] =
+    kpGeneratedAddZeroCarrierPreservingSimplificationNativeEndpoints;
+  assert.equal(source.annotated.rawLatex, "x + 0 = 4");
+  assert.equal(target.annotated.rawLatex, "x = 4");
+  assert.deepEqual(source.nodes.map(({ selectorId, role }) => ({
+    selectorId,
+    role
+  })), [
+    { selectorId: kpGeneratedAddZeroCarrierSelectorIds.sourceCarrier,
+      role: "carrier" },
+    { selectorId: kpGeneratedAddZeroCarrierSelectorIds.sourceOperator,
+      role: "removed-operator" },
+    { selectorId: kpGeneratedAddZeroCarrierSelectorIds.sourceIdentityWitness,
+      role: "identity-witness" },
+    { selectorId: kpGeneratedAddZeroCarrierSelectorIds.sourceEquals,
+      role: "stationary-context" },
+    { selectorId: kpGeneratedAddZeroCarrierSelectorIds.sourceFour,
+      role: "stationary-context" }
+  ]);
+});
+
+test("stationary context plans one semantic target translation", () => {
+  const recipe = addZeroRecipe();
+  const ids = kpGeneratedAddZeroCarrierSelectorIds;
+  const source = observation("source", recipe, [
+    owner(ids.sourceEquals, { left: 56, top: 20, width: 10, height: 24 }, 39),
+    owner(ids.sourceFour, { left: 70, top: 20, width: 10, height: 24 }, 39)
+  ]);
+  const target = observation("target", recipe, [
+    owner(ids.targetEquals, { left: 30, top: 20, width: 10, height: 24 }, 39),
+    owner(ids.targetFour, { left: 44, top: 20, width: 10, height: 24 }, 39)
+  ]);
+  assert.deepEqual(planKpNativeKatexStationaryContextAlignment({
+    recipe,
+    source,
+    target
+  }), {
+    kind: "native-katex-stationary-context-alignment",
+    translateX: 26,
+    translateY: 0,
+    correspondenceRecordIds: [
+      "relation.generated.add-zero.equals",
+      "relation.generated.add-zero.four"
+    ]
+  });
 });
 
 test("measured endpoint binding projects exact carrier ink without DOM reads", () => {
@@ -342,15 +394,24 @@ function handle(
   recipe: KpCarrierPreservingSimplificationRecipe,
   owners: readonly OwnerFixture[]
 ) {
+  return createKpNativeKatexRenderedEndpointHandle({
+    observation: observation(side, recipe, owners)
+  });
+}
+
+function observation(
+  side: "source" | "target",
+  recipe: KpCarrierPreservingSimplificationRecipe,
+  owners: readonly OwnerFixture[]
+) {
   const endpointId = side === "source"
     ? recipe.endpointRefs.sourceObjectId
     : recipe.endpointRefs.targetObjectId;
   const endpointGroupId = `group.${endpointId}`;
   const atoms = owners.map((entry, index) => atom(side, entry, index));
   const sourceElement = unreadableElement();
-  return createKpNativeKatexRenderedEndpointHandle({
-    observation: createKpNativeKatexRenderedSceneObservation({
-      endpoint: side,
+  return createKpNativeKatexRenderedSceneObservation({
+    endpoint: side,
       stage,
       root,
       atoms,
@@ -373,8 +434,7 @@ function handle(
         baselineY: entry.baselineY
       }))],
       fontRevision: 3,
-      viewportKey: `${side}:wide:font-3`
-    })
+    viewportKey: `${side}:wide:font-3`
   });
 }
 

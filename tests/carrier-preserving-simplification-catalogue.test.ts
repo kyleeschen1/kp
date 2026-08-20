@@ -33,6 +33,10 @@ import {
 import {
   kpEditorSelectedSurfaceCapabilityDeclarationSet
 } from "../src/editor/selected-surface-capability-declarations.ts";
+import {
+  createKpGeneratedAddZeroCarrierSource,
+  kpGeneratedAddZeroAnimationId
+} from "../src/semantic/generated-add-zero-carrier-preserving-simplification.ts";
 
 test("the carrier exemplar is one stable lazy catalogue asset", async () => {
   const animation = createKpTwoTimesOneCarrierAnimationAsset();
@@ -67,13 +71,37 @@ test("the carrier exemplar is one stable lazy catalogue asset", async () => {
   );
   assert.deepEqual(
     kpEditorSelectedSurfaceCapabilityDeclarationSet.find(
-      "operation-evaluation"
+      "carrier-preserving-simplification"
     ).adapterIds,
-    [
-      "editor-animation-surface.operation-evaluation.canonical-native-katex",
-      kpEditorCarrierPreservingSimplificationSurfaceAdapter.id
-    ]
+    [kpEditorCarrierPreservingSimplificationSurfaceAdapter.id]
   );
+});
+
+test("generated add-zero selects the same lazy carrier surface", () => {
+  const source = createKpGeneratedAddZeroCarrierSource();
+  const descriptor = createKpEditorAnimationLibrary().find(
+    ({ animationId }) => animationId === kpGeneratedAddZeroAnimationId
+  );
+  assert.ok(descriptor);
+  const state = createKpEditorAnimationPlayerState({
+    descriptor,
+    animation: source.animation,
+    catalog: []
+  });
+  assert.equal(
+    kpEditorCarrierPreservingSimplificationSurfaceAdapter.supports(state),
+    true
+  );
+  const family = projectKpEquationSurfaceFamily(kpGeneratedAddZeroAnimationId);
+  assert.deepEqual(family.selectedCapabilityIds,
+    ["carrier-preserving-simplification"]);
+  assert.equal(family.rendererAdapterId,
+    kpEditorCarrierPreservingSimplificationSurfaceAdapter.id);
+  assert.equal(family.presentationRoute, "specialized-native-adapter");
+  assert.equal(family.genericLayerTransition, "forbidden");
+  assert.deepEqual(family.operationPlanRecipeIds, [
+    "recipe.operation-plan.carrier-preserving-simplification.v1"
+  ]);
 });
 
 test("the carrier exemplar restores from its semantic artifact URL", () => {

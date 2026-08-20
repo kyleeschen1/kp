@@ -19,7 +19,8 @@ import {
   type KpAnimationLibraryDisplayRepresentation
 } from "../editor/animation-library-display-catalog.ts";
 import {
-  projectKpEquationSurfaceFamily
+  projectKpEquationSurfaceFamily,
+  type KpEquationPrimarySurfaceCapability
 } from "../domain-ir/equation-surface-family-declarations.ts";
 
 export const kpHistoricalEquationSurfaceBaseline = Object.freeze({
@@ -77,14 +78,7 @@ export interface KpEquationSurfaceInventoryEntry {
   readonly catalogueSurface: {
     readonly kind: "equation" | "composite";
     readonly slotKind: "equation";
-    readonly selectedCapabilityId:
-      | "equation-katex"
-      | "fraction-equivalence"
-      | "log-exponent"
-      | "logarithm-change-of-base"
-      | "log-quotient"
-      | "log-product"
-      | "operation-evaluation";
+    readonly selectedCapabilityId: KpEquationPrimarySurfaceCapability;
     readonly rendererAdapterId: string;
     readonly rendererSourcePath: string;
   };

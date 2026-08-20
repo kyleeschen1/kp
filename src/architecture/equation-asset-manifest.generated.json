@@ -853,7 +853,7 @@
         "renderTargetKinds": [
           "equation"
         ],
-        "selectedCapabilityId": "equation-katex",
+        "selectedCapabilityId": "carrier-preserving-simplification",
         "familyId": "substitution",
         "disposition": "adapter-backed",
         "migrationWave": "wave-a-operation-plan"
@@ -877,7 +877,7 @@
         ],
         "nativeSettlement": {
           "slotKind": "equation",
-          "adapterId": "editor-animation-surface.equation.katex",
+          "adapterId": "editor-animation-surface.operation-evaluation.carrier-preserving-simplification",
           "adapterStatus": "ready",
           "endpointAuthority": "labelled-semantic-stage"
         }
@@ -2868,7 +2868,7 @@
         "renderTargetKinds": [
           "equation"
         ],
-        "selectedCapabilityId": "operation-evaluation",
+        "selectedCapabilityId": "carrier-preserving-simplification",
         "familyId": "operation-evaluation",
         "disposition": "adapter-backed",
         "migrationWave": "wave-c-generated-bespoke-diagnostic-static"

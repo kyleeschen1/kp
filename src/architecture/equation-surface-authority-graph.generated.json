@@ -51,6 +51,14 @@
       "summary": "Operation evaluation compiles through the branded reader render plan."
     },
     {
+      "id": "compiler.carrier-preserving-recipe",
+      "category": "compiler",
+      "authority": "canonical",
+      "sourcePath": "src/animation/carrier-preserving-simplification-recipe.ts",
+      "sourceNeedle": "export function compileKpCarrierPreservingSimplificationRecipe",
+      "summary": "Verified identity-law evidence compiles into the renderer-neutral carrier recipe."
+    },
+    {
       "id": "compiler.log-exponent-operations",
       "category": "compiler",
       "authority": "local",
@@ -99,6 +107,14 @@
       "summary": "Operation evaluation derives one role-complete material plan."
     },
     {
+      "id": "motif.carrier-preserving-native",
+      "category": "motif",
+      "authority": "canonical",
+      "sourcePath": "src/rendering/native-katex-carrier-preserving-simplification-motion.ts",
+      "sourceNeedle": "export function compileKpNativeKatexCarrierPreservingSimplificationMotion",
+      "summary": "The shared Native KaTeX projection preserves one carrier and withdraws one syntax cohort."
+    },
+    {
       "id": "motif.log-exponent-symbol-motion",
       "category": "motif",
       "authority": "local",
@@ -145,6 +161,14 @@
       "sourcePath": "src/rendering/native-katex-scene-compositor.ts",
       "sourceNeedle": "export function sampleKpNativeKatexEndpointDwellProgress",
       "summary": "The native compositor currently owns operation endpoint dwell."
+    },
+    {
+      "id": "timing.carrier-preserving-optical-profile",
+      "category": "local-timing",
+      "authority": "canonical",
+      "sourcePath": "src/rendering/native-katex-carrier-preserving-simplification-profile.ts",
+      "sourceNeedle": "export function sampleKpNativeKatexCarrierPreservingSimplificationOptics",
+      "summary": "One approved optical profile samples both carrier-preserving callers."
     },
     {
       "id": "timing.log-exponent-sequence",
@@ -203,6 +227,14 @@
       "summary": "Operation evaluation executes through the measured native compositor."
     },
     {
+      "id": "renderer.carrier-preserving-native",
+      "category": "renderer-inference",
+      "authority": "canonical",
+      "sourcePath": "src/editor/carrier-preserving-simplification-surface-adapter.ts",
+      "sourceNeedle": "export const kpEditorCarrierPreservingSimplificationSurfaceAdapter",
+      "summary": "The lazy carrier capability binds measured endpoints and delegates paint to the canonical compositor."
+    },
+    {
       "id": "renderer.log-exponent-transit",
       "category": "renderer-inference",
       "authority": "local",
@@ -251,6 +283,14 @@
       "summary": "Operation preparation fails closed instead of inventing a motif."
     },
     {
+      "id": "fallback.carrier-preserving-source",
+      "category": "fallback",
+      "authority": "canonical",
+      "sourcePath": "src/editor/carrier-preserving-simplification-surface-adapter.ts",
+      "sourceNeedle": "function showEndpoint(",
+      "summary": "Carrier preparation failures retain the readable source endpoint without generic motion fallback."
+    },
+    {
       "id": "fallback.log-exponent-failed-stage",
       "category": "fallback",
       "authority": "canonical",
@@ -297,6 +337,14 @@
       "sourcePath": "src/rendering/native-katex-scene-compositor.ts",
       "sourceNeedle": "export function sampleKpNativeKatexSceneTracks(",
       "summary": "The operation compositor samples its compiled native scene tracks."
+    },
+    {
+      "id": "sampler.carrier-preserving-optics",
+      "category": "direct-sampler",
+      "authority": "canonical",
+      "sourcePath": "src/rendering/native-katex-carrier-preserving-simplification-profile.ts",
+      "sourceNeedle": "export function sampleKpNativeKatexCarrierPreservingSimplificationOptics",
+      "summary": "Both demonstrated callers share one history-free carrier optical sampler."
     },
     {
       "id": "sampler.log-exponent-sequence",
@@ -409,14 +457,6 @@
       "sourcePath": "src/animation/exponent-law-choreography.ts",
       "sourceNeedle": "export function sampleKpExponentLawChoreography",
       "summary": "Exponent-law changes enter a local sampler."
-    },
-    {
-      "id": "sampler.identity-absorption",
-      "category": "direct-sampler",
-      "authority": "compatibility",
-      "sourcePath": "src/animation/identity-absorption-choreography.ts",
-      "sourceNeedle": "export function sampleKpIdentityAbsorptionChoreography",
-      "summary": "The generated add-zero surface retains this sampler until its carrier-preserving replacement passes the second-caller checkpoint."
     },
     {
       "id": "sampler.inequality-pivot",
@@ -814,7 +854,7 @@
     {
       "schemaVersion": "kp.equation-surface-authority-row.v1",
       "animationId": "animation.generated.add-zero",
-      "pathClass": "generic-semantic-equation",
+      "pathClass": "carrier-preserving-simplification-specialized",
       "transformationTypes": [
         "simplify-additive-identity"
       ],
@@ -823,30 +863,29 @@
         "nonSemantic": 0
       },
       "compilerNodeIds": [
-        "compiler.generic-semantic-transition"
+        "compiler.carrier-preserving-recipe"
       ],
       "registryNodeIds": [
         "registry.selected-capability",
         "registry.priority-resolution"
       ],
       "motifNodeIds": [
-        "motif.generic-transition"
+        "motif.carrier-preserving-native"
       ],
       "localTimingNodeIds": [
-        "timing.generic-phase-easing"
+        "timing.carrier-preserving-optical-profile"
       ],
       "rendererInferenceNodeIds": [
-        "renderer.generic-dom-measurement"
+        "renderer.carrier-preserving-native"
       ],
       "sharedClockNodeId": "clock.shared-editor-player",
       "privateClockAuthority": "none",
       "cssAnimationAuthority": "none",
       "fallbackNodeIds": [
-        "fallback.generic-whole-equation"
+        "fallback.carrier-preserving-source"
       ],
       "directSamplerNodeIds": [
-        "sampler.generic-semantic-token",
-        "sampler.identity-absorption"
+        "sampler.carrier-preserving-optics"
       ]
     },
     {
@@ -1666,7 +1705,7 @@
     {
       "schemaVersion": "kp.equation-surface-authority-row.v1",
       "animationId": "animation.operation-evaluation.two-times-one-carrier",
-      "pathClass": "operation-evaluation-specialized",
+      "pathClass": "carrier-preserving-simplification-specialized",
       "transformationTypes": [
         "simplifyMultiplicativeIdentity"
       ],
@@ -1675,29 +1714,29 @@
         "nonSemantic": 0
       },
       "compilerNodeIds": [
-        "compiler.operation-evaluation-render-plan"
+        "compiler.carrier-preserving-recipe"
       ],
       "registryNodeIds": [
         "registry.selected-capability",
         "registry.priority-resolution"
       ],
       "motifNodeIds": [
-        "motif.operation-evaluation-material"
+        "motif.carrier-preserving-native"
       ],
       "localTimingNodeIds": [
-        "timing.operation-endpoint-dwell"
+        "timing.carrier-preserving-optical-profile"
       ],
       "rendererInferenceNodeIds": [
-        "renderer.operation-measured-compositor"
+        "renderer.carrier-preserving-native"
       ],
       "sharedClockNodeId": "clock.shared-editor-player",
       "privateClockAuthority": "none",
       "cssAnimationAuthority": "none",
       "fallbackNodeIds": [
-        "fallback.operation-failed-stage"
+        "fallback.carrier-preserving-source"
       ],
       "directSamplerNodeIds": [
-        "sampler.operation-native-scene"
+        "sampler.carrier-preserving-optics"
       ]
     },
     {

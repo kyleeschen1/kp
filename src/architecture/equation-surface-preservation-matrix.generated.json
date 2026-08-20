@@ -1695,7 +1695,7 @@
       "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.generated.add-zero",
       "familyId": "substitution",
-      "pathClass": "generic-semantic-equation",
+      "pathClass": "carrier-preserving-simplification-specialized",
       "semanticEndpoints": [
         {
           "transformationId": "transform.generated.add-zero.remove",
@@ -1740,7 +1740,7 @@
       },
       "nativeSettlement": {
         "slotKind": "equation",
-        "adapterId": "editor-animation-surface.equation.katex",
+        "adapterId": "editor-animation-surface.operation-evaluation.carrier-preserving-simplification",
         "adapterStatus": "ready",
         "endpointAuthority": "labelled-semantic-stage"
       },
@@ -1760,9 +1760,9 @@
           "authority": "labelled-semantic-stage"
         },
         "renderer": {
-          "selectedCapabilityId": "equation-katex",
-          "adapterId": "editor-animation-surface.equation.katex",
-          "sourcePath": "src/editor/equation-surface-adapter.ts"
+          "selectedCapabilityId": "carrier-preserving-simplification",
+          "adapterId": "editor-animation-surface.operation-evaluation.carrier-preserving-simplification",
+          "sourcePath": "src/editor/carrier-preserving-simplification-surface-adapter.ts"
         },
         "clock": {
           "ownerId": "editor-animation-player",
@@ -1773,8 +1773,7 @@
         },
         "sampledFrames": {
           "samplerNodeIds": [
-            "sampler.generic-semantic-token",
-            "sampler.identity-absorption"
+            "sampler.carrier-preserving-optics"
           ],
           "checkpoints": [
             0,
@@ -5050,7 +5049,7 @@
       "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.operation-evaluation.two-times-one-carrier",
       "familyId": "operation-evaluation",
-      "pathClass": "operation-evaluation-specialized",
+      "pathClass": "carrier-preserving-simplification-specialized",
       "semanticEndpoints": [
         {
           "transformationId": "transform.operation-evaluation.two-times-one-carrier.simplify-identity",
@@ -5115,7 +5114,7 @@
           "authority": "labelled-semantic-stage"
         },
         "renderer": {
-          "selectedCapabilityId": "operation-evaluation",
+          "selectedCapabilityId": "carrier-preserving-simplification",
           "adapterId": "editor-animation-surface.operation-evaluation.carrier-preserving-simplification",
           "sourcePath": "src/editor/carrier-preserving-simplification-surface-adapter.ts"
         },
@@ -5128,7 +5127,7 @@
         },
         "sampledFrames": {
           "samplerNodeIds": [
-            "sampler.operation-native-scene"
+            "sampler.carrier-preserving-optics"
           ],
           "checkpoints": [
             0,

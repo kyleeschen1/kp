@@ -23,6 +23,14 @@ test("selected surface capabilities keep rich renderers explicit", () => {
     slotKinds: ["equation"]
   }), ["operation-evaluation", "equation-katex"]);
   assert.deepEqual(deriveKpEditorSelectedSurfaceCapabilities({
+    animationId: "animation.operation-evaluation.two-times-one-carrier",
+    slotKinds: ["equation"]
+  }), ["carrier-preserving-simplification"]);
+  assert.deepEqual(deriveKpEditorSelectedSurfaceCapabilities({
+    animationId: "animation.generated.add-zero",
+    slotKinds: ["equation"]
+  }), ["carrier-preserving-simplification"]);
+  assert.deepEqual(deriveKpEditorSelectedSurfaceCapabilities({
     animationId: "animation.place-value-addition.278-plus-156",
     slotKinds: ["diagram"]
   }), ["place-value-addition"]);
@@ -110,6 +118,7 @@ test("specialized surface capabilities register explicitly and idempotently", as
   const host = createKpEditorSelectedSurfaceCapabilityHost({ registry });
 
   await host.loadAll([
+    "carrier-preserving-simplification",
     "exact-fraction-quantity",
     "operation-evaluation",
     "place-value-addition",
@@ -119,6 +128,7 @@ test("specialized surface capabilities register explicitly and idempotently", as
   assert.deepEqual(registry.list().map(({ id }) => id).sort(), [
     "editor-animation-surface.exact-fraction-quantity.synchronized",
     "editor-animation-surface.operation-evaluation.canonical-native-katex",
+    "editor-animation-surface.operation-evaluation.carrier-preserving-simplification",
     "editor-animation-surface.place-value-addition.synchronized"
   ]);
 });

@@ -38,6 +38,7 @@ export type KpEditorSelectedSurfaceCapability =
   | "graph-webgl-3d";
 
 export const kpEditorSelectedSurfaceCapabilityValues = Object.freeze([
+  "carrier-preserving-simplification",
   "equation-katex",
   "fraction-equivalence",
   "log-exponent",

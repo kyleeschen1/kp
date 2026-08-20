@@ -12,12 +12,20 @@ import {
   createKpTwoTimesOneCarrierExemplar,
   kpTwoTimesOneCarrierSelectorIds
 } from "../semantic/carrier-preserving-simplification-exemplar.ts";
+import {
+  createKpGeneratedAddZeroCarrierSource,
+  kpGeneratedAddZeroCarrierSelectorIds
+} from "../semantic/generated-add-zero-carrier-preserving-simplification.ts";
 
 export interface KpCarrierPreservingSimplificationNativeEndpointNode {
   readonly selectorId: string;
   readonly motionId: string;
   readonly presentationGroupId: string;
-  readonly role: "carrier" | "removed-operator" | "identity-witness";
+  readonly role:
+    | "carrier"
+    | "removed-operator"
+    | "identity-witness"
+    | "stationary-context";
 }
 
 export interface KpCarrierPreservingSimplificationNativeEndpoint {
@@ -41,7 +49,7 @@ if (sourceObject === undefined || targetObject === undefined) {
 
 export const kpCanonicalCarrierPreservingSimplificationNativeEndpoints =
   Object.freeze([
-    createEndpoint({
+    createKpCarrierPreservingSimplificationNativeEndpoint({
       side: "source",
       stateId: sourceObject.id,
       expectedLatex: latexValue(sourceObject.value),
@@ -67,7 +75,7 @@ export const kpCanonicalCarrierPreservingSimplificationNativeEndpoints =
         }
       ]
     }),
-    createEndpoint({
+    createKpCarrierPreservingSimplificationNativeEndpoint({
       side: "target",
       stateId: targetObject.id,
       expectedLatex: latexValue(targetObject.value),
@@ -77,6 +85,87 @@ export const kpCanonicalCarrierPreservingSimplificationNativeEndpoints =
         latex: "2",
         role: "carrier"
       }]
+    })
+  ] as const);
+
+const generatedAddZero = createKpGeneratedAddZeroCarrierSource();
+const generatedAddZeroObjects = new Map(
+  generatedAddZero.animation.bundle.objects.map((object) => [object.id, object])
+);
+const generatedAddZeroSource = generatedAddZeroObjects.get(
+  generatedAddZero.transformation.sourceObjectIds[0] ?? ""
+);
+const generatedAddZeroTarget = generatedAddZeroObjects.get(
+  generatedAddZero.transformation.targetObjectIds[0] ?? ""
+);
+if (generatedAddZeroSource === undefined || generatedAddZeroTarget === undefined) {
+  throw new Error("Generated add-zero Native endpoints require both semantic states.");
+}
+
+export const kpGeneratedAddZeroCarrierPreservingSimplificationNativeEndpoints =
+  Object.freeze([
+    createKpCarrierPreservingSimplificationNativeEndpoint({
+      side: "source",
+      stateId: generatedAddZeroSource.id,
+      expectedLatex: latexValue(generatedAddZeroSource.value),
+      accessibleText: "x plus zero equals four",
+      parts: [
+        {
+          selectorId: kpGeneratedAddZeroCarrierSelectorIds.sourceCarrier,
+          latex: "x",
+          role: "carrier"
+        },
+        { latex: " " },
+        {
+          selectorId: kpGeneratedAddZeroCarrierSelectorIds.sourceOperator,
+          latex: "+",
+          role: "removed-operator"
+        },
+        { latex: " " },
+        {
+          selectorId:
+            kpGeneratedAddZeroCarrierSelectorIds.sourceIdentityWitness,
+          latex: "0",
+          role: "identity-witness"
+        },
+        { latex: " " },
+        {
+          selectorId: kpGeneratedAddZeroCarrierSelectorIds.sourceEquals,
+          latex: "=",
+          role: "stationary-context"
+        },
+        { latex: " " },
+        {
+          selectorId: kpGeneratedAddZeroCarrierSelectorIds.sourceFour,
+          latex: "4",
+          role: "stationary-context"
+        }
+      ]
+    }),
+    createKpCarrierPreservingSimplificationNativeEndpoint({
+      side: "target",
+      stateId: generatedAddZeroTarget.id,
+      expectedLatex: latexValue(generatedAddZeroTarget.value),
+      accessibleText: "x equals four",
+      parts: [
+        {
+          selectorId: kpGeneratedAddZeroCarrierSelectorIds.targetCarrier,
+          latex: "x",
+          role: "carrier"
+        },
+        { latex: " " },
+        {
+          selectorId: kpGeneratedAddZeroCarrierSelectorIds.targetEquals,
+          latex: "=",
+          role: "stationary-context"
+        },
+        { latex: " " },
+        {
+          selectorId: kpGeneratedAddZeroCarrierSelectorIds.targetFour,
+          latex: "4",
+          role: "stationary-context"
+        }
+      ]
     })
   ] as const);
 
@@ -126,7 +215,7 @@ export async function settleAndObserveKpCarrierPreservingSimplificationEndpoint(
   });
 }
 
-type EndpointPart =
+export type KpCarrierPreservingSimplificationNativeEndpointPart =
   | { readonly latex: string }
   | {
       readonly selectorId: string;
@@ -135,14 +224,16 @@ type EndpointPart =
         KpCarrierPreservingSimplificationNativeEndpointNode["role"];
     };
 
-function createEndpoint(input: {
+export function createKpCarrierPreservingSimplificationNativeEndpoint(input: {
   readonly side: "source" | "target";
   readonly stateId: string;
   readonly expectedLatex: string;
   readonly accessibleText: string;
-  readonly parts: readonly EndpointPart[];
+  readonly parts:
+    readonly KpCarrierPreservingSimplificationNativeEndpointPart[];
 }): KpCarrierPreservingSimplificationNativeEndpoint {
-  const id = `carrier-preserving-simplification.${input.side}`;
+  const id =
+    `carrier-preserving-simplification.${input.stateId}.${input.side}`;
   const expectedSelectorIds = input.parts.flatMap((part) =>
     "selectorId" in part ? [part.selectorId] : []
   );

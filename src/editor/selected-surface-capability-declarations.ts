@@ -66,6 +66,28 @@ export class KpEditorSelectedSurfaceCapabilityDeclarationError extends Error {
 // extended without converting chunk ownership into a computed module lookup.
 export const kpEditorSelectedSurfaceCapabilityDeclarations = Object.freeze([
   declaration({
+    capabilityId: "carrier-preserving-simplification",
+    domain: "equation",
+    adapterIds: [
+      "editor-animation-surface.operation-evaluation.carrier-preserving-simplification"
+    ],
+    registrationOwner: "provided-registry",
+    async loadAndRegister(registry, registrationGuardAdapterId) {
+      const [client] = await Promise.all([
+        import("./carrier-preserving-simplification-surface-capability.ts"),
+        ...(typeof document === "undefined" ? [] : [
+          import("katex/dist/katex.min.css"),
+          import("./carrier-preserving-simplification-surface.css")
+        ])
+      ]);
+      await registerOnce(registry, registrationGuardAdapterId,
+        () => client
+          .registerKpEditorCarrierPreservingSimplificationSurfaceCapability(
+            registry
+          ));
+    }
+  }),
+  declaration({
     capabilityId: "equation-katex",
     domain: "equation",
     adapterIds: ["editor-animation-surface.equation.katex"],
@@ -171,8 +193,7 @@ export const kpEditorSelectedSurfaceCapabilityDeclarations = Object.freeze([
     capabilityId: "operation-evaluation",
     domain: "equation",
     adapterIds: [
-      "editor-animation-surface.operation-evaluation.canonical-native-katex",
-      "editor-animation-surface.operation-evaluation.carrier-preserving-simplification"
+      "editor-animation-surface.operation-evaluation.canonical-native-katex"
     ],
     registrationOwner: "provided-registry",
     async loadAndRegister(registry, registrationGuardAdapterId) {

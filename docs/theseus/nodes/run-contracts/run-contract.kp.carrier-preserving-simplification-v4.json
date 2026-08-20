@@ -167,7 +167,8 @@
     {
       "id": "cps20",
       "title": "Pressure-second-caller",
-      "status": "planned"
+      "summary": "Second caller passes typed, architecture, preservation, browser, release-build, and split-bundle pressure. Semantic stationary-context alignment prevents terminal snaps without glyph inference or per-frame correction.",
+      "status": "complete"
     },
     {
       "id": "cps21",

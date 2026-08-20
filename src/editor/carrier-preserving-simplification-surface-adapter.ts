@@ -26,8 +26,13 @@ import {
 import {
   bindKpCarrierPreservingSimplificationNativeEndpoint,
   kpCanonicalCarrierPreservingSimplificationNativeEndpoints,
+  kpGeneratedAddZeroCarrierPreservingSimplificationNativeEndpoints,
+  type KpCarrierPreservingSimplificationNativeEndpoint,
   settleAndObserveKpCarrierPreservingSimplificationEndpoint
 } from "../rendering/carrier-preserving-simplification-native-endpoints.ts";
+import {
+  planKpNativeKatexStationaryContextAlignment
+} from "../rendering/native-katex-carrier-preserving-simplification-alignment.ts";
 import {
   createKpEquationFontReadiness
 } from "../rendering/equation-font-readiness.ts";
@@ -43,8 +48,16 @@ import {
   createKpTwoTimesOneCarrierExemplar
 } from "../semantic/carrier-preserving-simplification-exemplar.ts";
 import {
-  verifyKpCarrierPreservingSimplificationEvidence
+  createKpGeneratedAddZeroCarrierSource,
+  kpGeneratedAddZeroAnimationId
+} from "../semantic/generated-add-zero-carrier-preserving-simplification.ts";
+import {
+  verifyKpCarrierPreservingSimplificationEvidence,
+  type KpCarrierPreservingSimplificationEvidenceCandidate
 } from "../semantic/carrier-preserving-simplification-evidence.ts";
+import type { KpAssetBundle } from "../semantic/asset.ts";
+import type { KpSemanticTransformation } from
+  "../semantic/asset-transformation.ts";
 import {
   KP_EDITOR_ANIMATION_DISPOSE_EVENT
 } from "./animation-player-controller.ts";
@@ -56,10 +69,25 @@ import type {
 } from "./animation-surface-adapter-registry.ts";
 
 type EndpointRoots = readonly [HTMLElement, HTMLElement];
+type NativeEndpoints = readonly [
+  KpCarrierPreservingSimplificationNativeEndpoint,
+  KpCarrierPreservingSimplificationNativeEndpoint
+];
+
+interface KpCarrierPreservingSimplificationSurfaceDefinition {
+  readonly animationId: string;
+  readonly recipe: KpCarrierPreservingSimplificationRecipe;
+  readonly endpoints: NativeEndpoints;
+  readonly ariaLabel: string;
+  readonly readyStatus: string;
+  readonly completeStatus: string;
+  readonly activeStatus: string;
+}
 
 interface KpCarrierPreservingSimplificationSurfaceSession {
   readonly player: HTMLElement;
   readonly stage: HTMLElement;
+  readonly definition: KpCarrierPreservingSimplificationSurfaceDefinition;
   readonly endpointRoots: EndpointRoots;
   readonly fontReadiness: ReturnType<typeof createKpEquationFontReadiness>;
   generation: number;
@@ -83,7 +111,7 @@ interface KpCarrierPreservingSimplificationSurfaceSession {
 
 const sessions = new WeakMap<HTMLElement,
   KpCarrierPreservingSimplificationSurfaceSession>();
-const canonicalRecipe = compileCanonicalRecipe();
+const surfaceDefinitions = createSurfaceDefinitions();
 
 export const kpEditorCarrierPreservingSimplificationSurfaceAdapter =
   Object.freeze({
@@ -92,12 +120,19 @@ export const kpEditorCarrierPreservingSimplificationSurfaceAdapter =
     slotKind: "equation" as const,
     priority: 142,
     supports(state) {
-      return state.animationId === kpTwoTimesOneCarrierAnimationId;
+      return surfaceDefinitions.some(
+        ({ animationId }) => animationId === state.animationId
+      );
     },
     render({ player, slot, state }) {
       let session = sessions.get(player);
       if (session === undefined) {
-        session = mountSurface(player, slot, state);
+        session = mountSurface(
+          player,
+          slot,
+          state,
+          requiredSurfaceDefinition(state.animationId)
+        );
         sessions.set(player, session);
         player.addEventListener(
           KP_EDITOR_ANIMATION_DISPOSE_EVENT,
@@ -112,20 +147,65 @@ export const kpEditorCarrierPreservingSimplificationSurfaceAdapter =
     }
   } satisfies KpEditorAnimationSurfaceAdapter);
 
-function compileCanonicalRecipe(): KpCarrierPreservingSimplificationRecipe {
+function createSurfaceDefinitions():
+readonly KpCarrierPreservingSimplificationSurfaceDefinition[] {
   const exemplar = createKpTwoTimesOneCarrierExemplar();
+  const generatedAddZero = createKpGeneratedAddZeroCarrierSource();
+  return Object.freeze([
+    Object.freeze({
+      animationId: kpTwoTimesOneCarrierAnimationId,
+      recipe: compileRecipe({
+        candidate: createKpTwoTimesOneCarrierEvidenceCandidate(),
+        bundle: exemplar.bundle,
+        transformation: exemplar.transformation
+      }),
+      endpoints:
+        kpCanonicalCarrierPreservingSimplificationNativeEndpoints,
+      ariaLabel:
+        "Two times one simplifies to two while preserving the first two.",
+      readyStatus: "Two times one ready.",
+      completeStatus: "Two remains.",
+      activeStatus:
+        "The multiplication sign and identity witness fade away while two stays present."
+    }),
+    Object.freeze({
+      animationId: kpGeneratedAddZeroAnimationId,
+      recipe: compileRecipe({
+        candidate: generatedAddZero.evidenceCandidate,
+        bundle: generatedAddZero.animation.bundle,
+        transformation: generatedAddZero.transformation
+      }),
+      endpoints:
+        kpGeneratedAddZeroCarrierPreservingSimplificationNativeEndpoints,
+      ariaLabel:
+        "x plus zero equals four simplifies to x equals four while preserving x, equality, and four.",
+      readyStatus: "x plus zero equals four ready.",
+      completeStatus: "x equals four remains.",
+      activeStatus:
+        "The plus sign and zero fade away while x, equality, and four stay present."
+    })
+  ]);
+}
+
+function compileRecipe(input: {
+  readonly candidate: KpCarrierPreservingSimplificationEvidenceCandidate;
+  readonly bundle: KpAssetBundle;
+  readonly transformation: KpSemanticTransformation;
+}): KpCarrierPreservingSimplificationRecipe {
   const verified = verifyKpCarrierPreservingSimplificationEvidence({
-    candidate: createKpTwoTimesOneCarrierEvidenceCandidate(),
-    bundle: exemplar.bundle,
-    transformation: exemplar.transformation
+    candidate: input.candidate,
+    bundle: input.bundle,
+    transformation: input.transformation
   });
   if (verified.status !== "verified") {
-    throw new Error("The carrier exemplar does not have verified evidence.");
+    throw new Error(
+      `Carrier surface ${input.transformation.id} lacks verified evidence.`
+    );
   }
   const resolution = resolveKpOperationEvaluationFamilyCandidate({
     family: "carrier-preserving-simplification",
     handoff: "persistent-carrier-transfer",
-    transformationKind: exemplar.transformation.transformType,
+    transformationKind: input.transformation.transformType,
     evidence: verified.evidence
   });
   const compiled = compileKpCarrierPreservingSimplificationRecipe(resolution);
@@ -135,10 +215,23 @@ function compileCanonicalRecipe(): KpCarrierPreservingSimplificationRecipe {
   return compiled.recipe;
 }
 
+function requiredSurfaceDefinition(
+  animationId: string
+): KpCarrierPreservingSimplificationSurfaceDefinition {
+  const definition = surfaceDefinitions.find((candidate) =>
+    candidate.animationId === animationId
+  );
+  if (definition === undefined) {
+    throw new Error(`Unsupported carrier surface ${animationId}.`);
+  }
+  return definition;
+}
+
 function mountSurface(
   player: HTMLElement,
   slot: HTMLElement,
-  state: KpEditorAnimationPlayerState
+  state: KpEditorAnimationPlayerState,
+  definition: KpCarrierPreservingSimplificationSurfaceDefinition
 ): KpCarrierPreservingSimplificationSurfaceSession {
   const document = player.ownerDocument;
   const stage = document.createElement("section");
@@ -146,10 +239,10 @@ function mountSurface(
   stage.dataset["kpCarrierPreservingSimplificationStage"] = "preparing";
   stage.setAttribute(
     "aria-label",
-    "Two times one simplifies to two while preserving the first two."
+    definition.ariaLabel
   );
   const createRoot = (
-    endpoint: typeof kpCanonicalCarrierPreservingSimplificationNativeEndpoints[number],
+    endpoint: KpCarrierPreservingSimplificationNativeEndpoint,
     active: boolean
   ): HTMLElement => {
       const root = document.createElement("div");
@@ -164,14 +257,8 @@ function mountSurface(
       return root;
     };
   const roots: [HTMLElement, HTMLElement] = [
-    createRoot(
-      kpCanonicalCarrierPreservingSimplificationNativeEndpoints[0],
-      true
-    ),
-    createRoot(
-      kpCanonicalCarrierPreservingSimplificationNativeEndpoints[1],
-      false
-    )
+    createRoot(definition.endpoints[0], true),
+    createRoot(definition.endpoints[1], false)
   ];
   const materialLayer = document.createElement("div");
   materialLayer.className =
@@ -183,12 +270,13 @@ function mountSurface(
     "kp-carrier-preserving-simplification-stage__status";
   status.dataset["kpCarrierPreservingSimplificationStatus"] = "true";
   status.setAttribute("aria-live", "polite");
-  status.textContent = "Two times one ready.";
+  status.textContent = definition.readyStatus;
   stage.append(...roots, materialLayer, status);
   slot.replaceChildren(stage);
   return {
     player,
     stage,
+    definition,
     endpointRoots: Object.freeze(roots) as EndpointRoots,
     fontReadiness: createKpEquationFontReadiness(document),
     generation: 0,
@@ -206,22 +294,45 @@ async function prepareSurface(
   generation: number
 ): Promise<void> {
   try {
-    const [sourceObservation, targetObservation] = await Promise.all([
+    const [sourceEndpoint, targetEndpoint] = session.definition.endpoints;
+    const targetRoot = session.endpointRoots[1];
+    targetRoot.style.transform = "none";
+    delete targetRoot.dataset["kpStationaryContextAlignment"];
+    const [sourceObservation, initialTargetObservation] = await Promise.all([
       settleAndObserveKpCarrierPreservingSimplificationEndpoint({
         stage: session.stage,
         root: session.endpointRoots[0],
-        endpoint: kpCanonicalCarrierPreservingSimplificationNativeEndpoints[0],
+        endpoint: sourceEndpoint,
         fontReadiness: session.fontReadiness,
         viewportRevision: session.measurementRevision
       }),
       settleAndObserveKpCarrierPreservingSimplificationEndpoint({
         stage: session.stage,
-        root: session.endpointRoots[1],
-        endpoint: kpCanonicalCarrierPreservingSimplificationNativeEndpoints[1],
+        root: targetRoot,
+        endpoint: targetEndpoint,
         fontReadiness: session.fontReadiness,
         viewportRevision: session.measurementRevision
       })
     ]);
+    if (session.disposed || session.generation !== generation) return;
+    const alignment = planKpNativeKatexStationaryContextAlignment({
+      recipe: session.definition.recipe,
+      source: sourceObservation,
+      target: initialTargetObservation
+    });
+    targetRoot.style.transform =
+      `translate(${alignment.translateX}px, ${alignment.translateY}px)`;
+    targetRoot.dataset["kpStationaryContextAlignment"] =
+      `${alignment.translateX},${alignment.translateY}`;
+    const targetObservation = alignment.correspondenceRecordIds.length === 0
+      ? initialTargetObservation
+      : await settleAndObserveKpCarrierPreservingSimplificationEndpoint({
+          stage: session.stage,
+          root: targetRoot,
+          endpoint: targetEndpoint,
+          fontReadiness: session.fontReadiness,
+          viewportRevision: session.measurementRevision
+        });
     if (session.disposed || session.generation !== generation) return;
     const sourceHandle = createKpNativeKatexRenderedEndpointHandle({
       observation: sourceObservation
@@ -230,7 +341,7 @@ async function prepareSurface(
       observation: targetObservation
     });
     const binding = bindKpNativeKatexCarrierPreservingSimplification({
-      recipe: canonicalRecipe,
+      recipe: session.definition.recipe,
       sourceHandle,
       targetHandle
     });
@@ -255,9 +366,9 @@ async function prepareSurface(
     session.stage.dataset["kpCarrierPreservingSimplificationStage"] = "ready";
     if (import.meta.env.DEV) {
       session.stage.dataset["kpCarrierPreservingSimplificationRecipeId"] =
-        canonicalRecipe.id;
+        session.definition.recipe.id;
       session.stage.dataset["kpCarrierPreservingSimplificationProfileId"] =
-        canonicalRecipe.candidateProfileId;
+        session.definition.recipe.candidateProfileId;
       session.stage.dataset["kpCarrierPreservingSimplificationTreatment"] =
         kpNativeKatexCarrierPreservingSimplificationOpticalProfile.treatment;
       session.stage.dataset["kpCarrierPreservingSimplificationCarrierTrackId"] =
@@ -277,6 +388,9 @@ async function prepareSurface(
       session.stage.dataset[
         "kpCarrierPreservingSimplificationViewportKey"
       ] = sourceHandle.revision.viewportKey;
+      session.stage.dataset[
+        "kpCarrierPreservingSimplificationStationaryContextCount"
+      ] = String(session.definition.recipe.stationaryContext.length);
     }
     installInvalidationLifecycle(session);
     applyFrame(session, session.pendingState);
@@ -325,10 +439,10 @@ function applyFrame(
   );
   if (status !== null) {
     status.textContent = progress === 0
-      ? "Two times one ready."
+      ? session.definition.readyStatus
       : progress === 1
-        ? "Two remains."
-        : "The multiplication sign and identity witness fade away while two stays present.";
+        ? session.definition.completeStatus
+        : session.definition.activeStatus;
   }
 }
 
@@ -399,6 +513,7 @@ function scheduleMeasurementReplacement(
     session.playback?.retire("measurement-invalidated");
     session.playback = undefined;
     syncKpEquationMaterialLayer({ stage: session.stage, owners: [] });
+    showEndpoint(session, "source");
     session.measurementRevision += 1;
     session.stage.dataset["kpCarrierPreservingSimplificationStage"] =
       "preparing";

@@ -430,9 +430,9 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
-        "selectedCapabilityId": "equation-katex",
-        "rendererAdapterId": "editor-animation-surface.equation.katex",
-        "rendererSourcePath": "src/editor/equation-surface-adapter.ts"
+        "selectedCapabilityId": "carrier-preserving-simplification",
+        "rendererAdapterId": "editor-animation-surface.operation-evaluation.carrier-preserving-simplification",
+        "rendererSourcePath": "src/editor/carrier-preserving-simplification-surface-adapter.ts"
       },
       "clockAuthority": {
         "ownerId": "editor-animation-player",
@@ -1289,7 +1289,7 @@
       "catalogueSurface": {
         "kind": "equation",
         "slotKind": "equation",
-        "selectedCapabilityId": "operation-evaluation",
+        "selectedCapabilityId": "carrier-preserving-simplification",
         "rendererAdapterId": "editor-animation-surface.operation-evaluation.carrier-preserving-simplification",
         "rendererSourcePath": "src/editor/carrier-preserving-simplification-surface-adapter.ts"
       },

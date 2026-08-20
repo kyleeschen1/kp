@@ -763,18 +763,18 @@
           "fnv1a32-bec0c126"
         ],
         "route": "/?artifact=animation.generated.add-zero",
-        "adapterId": "editor-animation-surface.equation.katex",
+        "adapterId": "editor-animation-surface.operation-evaluation.carrier-preserving-simplification",
         "accessibilityMode": "semantic-stage-aria-label",
         "visualVerificationCommand": "npm run visual:equation-surface-preservation"
       },
       "rollbackUnit": {
         "id": "rollback.equation-surface.animation.generated.add-zero",
         "scope": "single-equation-surface-authority-path",
-        "restorePathClass": "generic-semantic-equation",
+        "restorePathClass": "carrier-preserving-simplification-specialized",
         "restoreSourcePaths": [
           "src/animation/catalog-packs/generated-drafts.ts",
           "src/animation/catalog.ts",
-          "src/editor/equation-surface-adapter.ts"
+          "src/editor/carrier-preserving-simplification-surface-adapter.ts"
         ],
         "verificationCommands": [
           "npm run test:operation-presentation-plans",
@@ -798,7 +798,7 @@
           {
             "id": "route.animation.generated.add-zero",
             "kind": "presentation-route",
-            "sourcePath": "src/editor/equation-surface-adapter.ts"
+            "sourcePath": "src/editor/carrier-preserving-simplification-surface-adapter.ts"
           }
         ],
         "conformanceCallers": [
@@ -2383,7 +2383,7 @@
       "rollbackUnit": {
         "id": "rollback.equation-surface.animation.operation-evaluation.two-times-one-carrier",
         "scope": "single-equation-surface-authority-path",
-        "restorePathClass": "operation-evaluation-specialized",
+        "restorePathClass": "carrier-preserving-simplification-specialized",
         "restoreSourcePaths": [
           "src/animation/catalog-packs/operation-evaluation.ts",
           "src/animation/catalog.ts",

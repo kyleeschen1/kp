@@ -9,6 +9,9 @@ import type {
 import {
   createKpAnimationCatalogueProjection
 } from "../editor/animation-catalogue-projection.ts";
+import type {
+  KpEquationPrimarySurfaceCapability
+} from "../domain-ir/equation-surface-family-declarations.ts";
 import {
   createKpAnimationLibraryDisplayCatalog as
     createKpSourceAnimationLibraryDisplayCatalog,
@@ -57,14 +60,7 @@ export interface KpEquationAssetManifestEntry {
   };
   readonly capabilities: {
     readonly renderTargetKinds: readonly KpAnimationAssetRenderTargetKind[];
-    readonly selectedCapabilityId:
-      | "equation-katex"
-      | "fraction-equivalence"
-      | "log-exponent"
-      | "logarithm-change-of-base"
-      | "log-quotient"
-      | "log-product"
-      | "operation-evaluation";
+    readonly selectedCapabilityId: KpEquationPrimarySurfaceCapability;
     readonly familyId: KpEquationSurfaceFamilyId;
     readonly disposition: KpEquationSurfaceDisposition;
     readonly migrationWave: KpEquationSurfaceMigrationWave;

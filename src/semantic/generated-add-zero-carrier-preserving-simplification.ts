@@ -11,7 +11,8 @@ import type {
   KpCarrierPreservingSimplificationEvidenceCandidate
 } from "./carrier-preserving-simplification-evidence.ts";
 
-const ANIMATION_ID = "animation.generated.add-zero";
+export const kpGeneratedAddZeroAnimationId =
+  "animation.generated.add-zero" as const;
 const TRANSFORMATION_ID = "transform.generated.add-zero.remove";
 const SOURCE_ID = "equation.generated.add-zero.before";
 const TARGET_ID = "equation.generated.add-zero.after";
@@ -119,7 +120,7 @@ KpCarrierPreservingSimplificationEvidenceCandidate {
 function requiredTransformation(
   animation: KpAnimationAsset
 ): KpSemanticTransformation {
-  if (animation.id !== ANIMATION_ID) {
+  if (animation.id !== kpGeneratedAddZeroAnimationId) {
     throw new Error("Add-zero certification received the wrong animation.");
   }
   const transformations = animation.transformations.filter(
