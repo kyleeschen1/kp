@@ -43,7 +43,7 @@ test("exponential homomorphism is one independently lazy catalogue asset", async
   assert.equal(loaded.packId, "exponential-homomorphism");
   assert.equal(loaded.catalog.length, 1);
   assert.equal(loaded.animation.id, kpExponentialHomomorphismAnimationId);
-  assert.equal(loaded.animation.metadata?.["fallbackEndpoint"], "b^{x+y}");
+  assert.equal(loaded.animation.metadata?.["fallbackEndpoint"], "e^{a+b}");
   assert.equal(descriptor?.durationMs, 4_800);
   assert.equal(descriptor?.beatCount, 96);
   assert.equal(entry?.primaryDescriptorId, descriptorId);

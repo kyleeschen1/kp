@@ -25,59 +25,60 @@ import {
   isKpExponentialHomomorphismCorrespondenceAuthority,
   type KpExponentialHomomorphismCorrespondenceAuthority
 } from "../semantic/exponential-homomorphism-correspondence.ts";
+import {
+  classifyKpNormalizedPowerApplicationSurface,
+  resolveKpHomomorphicApplicationHandoff
+} from "../animation/homomorphic-application-handoff-taxonomy.ts";
 
 export interface KpExponentialHomomorphismTransitProfile {
-  readonly id: "timing.exponential-homomorphism.product.v3";
+  readonly id: "timing.exponential-homomorphism.product.v5";
   readonly baseHandoff: Readonly<{
-    topology: "matched-dissolve-to-derived-successors";
-    sourceExit: "collapse-to-point";
-    targetEntry: "expand-from-point";
+    topology: "native-scale-carrier-fission";
+    sourceExit: "retain-native-carrier";
+    targetEntry: "full-size-follower-peel";
   }>;
-  readonly sourceStructureContraction: Readonly<{
+  readonly operandSeparation: Readonly<{
+    topology: "anchor-and-outward-separation";
+    path: "direct-horizontal";
+    anchorOrdinal: 0;
+    anchorSettlement: Readonly<{ start: number; end: number }>;
+    outwardTransit: Readonly<{ start: number; end: number }>;
+    connectorContraction: Readonly<{ start: number; end: number }>;
+    connectorRelease: Readonly<{ start: number; end: number }>;
+  }>;
+  readonly carrierFission: Readonly<{
     start: number;
     end: number;
   }>;
-  readonly sourceStructureRelease: Readonly<{ start: number; end: number }>;
-  readonly payloadTransit: Readonly<{ start: number; end: number }>;
-  readonly hiddenSuccessorRelocation: Readonly<{
+  readonly carrierFollowerReveal: Readonly<{
     start: number;
     end: number;
   }>;
-  readonly targetBasePresence: Readonly<{ start: number; end: number }>;
-  readonly targetBaseExpansion: Readonly<{ start: number; end: number }>;
-  readonly pointScale: number;
+  readonly connectorPointScale: number;
   readonly terminalSettlementFraction: number;
 }
 
 export const kpExponentialHomomorphismTransitProfile = Object.freeze({
-  id: "timing.exponential-homomorphism.product.v3" as const,
+  id: "timing.exponential-homomorphism.product.v5" as const,
   baseHandoff: Object.freeze({
-    topology: "matched-dissolve-to-derived-successors" as const,
-    sourceExit: "collapse-to-point" as const,
-    targetEntry: "expand-from-point" as const
+    topology: "native-scale-carrier-fission" as const,
+    sourceExit: "retain-native-carrier" as const,
+    targetEntry: "full-size-follower-peel" as const
   }),
-  sourceStructureContraction: Object.freeze({ start: 0.18, end: 0.28 }),
-  sourceStructureRelease: Object.freeze({ start: 0.24, end: 0.32 }),
-  payloadTransit: Object.freeze({ start: 0.2, end: 0.44 }),
-  hiddenSuccessorRelocation: Object.freeze({ start: 0.32, end: 0.48 }),
-  targetBasePresence: Object.freeze({ start: 0.54, end: 0.62 }),
-  targetBaseExpansion: Object.freeze({ start: 0.55, end: 0.64 }),
-  pointScale: 0.04,
+  operandSeparation: Object.freeze({
+    topology: "anchor-and-outward-separation" as const,
+    path: "direct-horizontal" as const,
+    anchorOrdinal: 0 as const,
+    anchorSettlement: Object.freeze({ start: 0.16, end: 0.22 }),
+    outwardTransit: Object.freeze({ start: 0.16, end: 0.3 }),
+    connectorContraction: Object.freeze({ start: 0.16, end: 0.24 }),
+    connectorRelease: Object.freeze({ start: 0.16, end: 0.3 })
+  }),
+  carrierFission: Object.freeze({ start: 0.42, end: 0.62 }),
+  carrierFollowerReveal: Object.freeze({ start: 0.36, end: 0.42 }),
+  connectorPointScale: 0.1,
   terminalSettlementFraction: 0.04
 } satisfies KpExponentialHomomorphismTransitProfile);
-const sampleSourceStructureContraction = sampleWindow(
-  kpExponentialHomomorphismTransitProfile.sourceStructureContraction
-);
-const sampleSourceStructureRelease = sampleWindow(
-  kpExponentialHomomorphismTransitProfile.sourceStructureRelease
-);
-const sampleTargetBasePresence = sampleWindow(
-  kpExponentialHomomorphismTransitProfile.targetBasePresence
-);
-const sampleTargetBaseExpansion = sampleWindow(
-  kpExponentialHomomorphismTransitProfile.targetBaseExpansion
-);
-
 export interface KpExponentialHomomorphismTransitSession {
   readonly kind: "kp-exponential-homomorphism-transit-session";
   readonly lifecycle: "renderer-session";
@@ -146,6 +147,17 @@ export function compileKpExponentialHomomorphismTransitPlan(input: {
   readonly target: KpNativeKatexRenderedSceneObservation;
 }) {
   assertTransitInput(input);
+  const handoff = resolveKpHomomorphicApplicationHandoff({
+    surface: classifyKpNormalizedPowerApplicationSurface(
+      input.authority.source
+    ),
+    targetTopology: "lateral-product"
+  });
+  if (handoff.visualHandoff !== "carrier-fission") {
+    throw new Error(
+      "A normalized shared-base power must select carrier fission."
+    );
+  }
   return compileKpCanonicalNativeKatexScenePlan({
     source: input.source,
     target: input.target,
@@ -210,15 +222,30 @@ function createKpExponentialHomomorphismTrackProjection(
     "source",
     "combination-connector"
   );
-  const sourceCarrierTargetId = authority.occurrences.find((occurrence) =>
+  const anchorPayloadTargetId = authority.occurrences.find((occurrence) =>
+    occurrence.endpoint === "target" &&
+    occurrence.role === "exponent-payload" &&
+    occurrence.ordinal ===
+      kpExponentialHomomorphismTransitProfile.operandSeparation.anchorOrdinal
+  )?.id;
+  const persistentCarrierTargetId = authority.occurrences.find((occurrence) =>
     occurrence.endpoint === "target" && occurrence.role === "base" &&
     occurrence.ordinal === 0
   )?.id;
-  if (sourceCarrierTargetId === undefined) {
+  if (persistentCarrierTargetId === undefined) {
     throw new Error(
-      "Exponential matched dissolve requires an ordered target base carrier."
+      "Exponential carrier fission requires one ordered persistent branch."
     );
   }
+  if (anchorPayloadTargetId === undefined) {
+    throw new Error(
+      "Exponential carrier fission requires one ordered payload anchor."
+    );
+  }
+  const operandSeparationTimingGroupId =
+    `timing.${authority.id}.operand-separation`;
+  const operandSeparationMotionUnitId =
+    `motion-unit.${authority.id}.operand-separation`;
   return createKpNativeKatexTrackProjection({
     id: `track-projection.${authority.id}.power-crossover`,
     project({ tracks, source, target }) {
@@ -240,14 +267,19 @@ function createKpExponentialHomomorphismTrackProjection(
           sourcePayloadIds.has(sourceEntityId) &&
           targetPayloadIds.has(targetEntityId)
         ) {
+          const transitWindow = targetEntityId === anchorPayloadTargetId
+            ? kpExponentialHomomorphismTransitProfile.operandSeparation
+              .anchorSettlement
+            : kpExponentialHomomorphismTransitProfile.operandSeparation
+              .outwardTransit;
           return Object.freeze({
             ...track,
-            timingGroupId: `timing.${authority.id}.payload-transit`,
-            semanticMotionUnitId: `motion-unit.${authority.id}.payloads`,
+            timingGroupId: operandSeparationTimingGroupId,
+            semanticMotionUnitId: operandSeparationMotionUnitId,
             motionAxisConstraint: "horizontal" as const,
-            sampleProgress: sampleWindow(
-              kpExponentialHomomorphismTransitProfile.payloadTransit
-            ),
+            // Same-plane continuants take the shortest direct path. The first
+            // operand settles quickly so a few pixels never become a slow crawl.
+            sampleProgress: sampleWindow(transitWindow),
             motionMetrics: true as const
           });
         }
@@ -266,15 +298,16 @@ function createKpExponentialHomomorphismTrackProjection(
             routingMemberId: targetEntityId,
             motionAxisConstraint: "horizontal" as const,
             sampleProgress: sampleWindow(
-              kpExponentialHomomorphismTransitProfile
-                .hiddenSuccessorRelocation
+              kpExponentialHomomorphismTransitProfile.carrierFission
             ),
-            // Only one material owner depicts the source occurrence. Both
-            // derived successors reappear at their own measured target centers.
-            samplePaintPresence: targetEntityId === sourceCarrierTargetId
-              ? sampleSourceCarrierPresence
-              : sampleTargetBasePresence,
-            sampleMaterialScale: sampleDerivedBaseMatchedDissolveScale,
+            samplePaintPresence:
+              targetEntityId === persistentCarrierTargetId
+                ? samplePersistentCarrierPresence
+                : sampleWindow(
+                    kpExponentialHomomorphismTransitProfile
+                      .carrierFollowerReveal
+                  ),
+            opacityScheduleAuthority: "semantic-choreography" as const,
             motionMetrics: true as const
           });
         }
@@ -283,11 +316,14 @@ function createKpExponentialHomomorphismTrackProjection(
           sourceEntityId !== undefined &&
           sourceConnectorIds.has(sourceEntityId)
         ) {
-          return stationaryMatchedRelease(
+          return stationaryCompressedRelease(
             track,
-            kpExponentialHomomorphismTransitProfile
-              .sourceStructureContraction,
-            kpExponentialHomomorphismTransitProfile.sourceStructureRelease
+            kpExponentialHomomorphismTransitProfile.operandSeparation
+              .connectorContraction,
+            kpExponentialHomomorphismTransitProfile.operandSeparation
+              .connectorRelease,
+            operandSeparationTimingGroupId,
+            operandSeparationMotionUnitId
           );
         }
         return track;
@@ -296,12 +332,18 @@ function createKpExponentialHomomorphismTrackProjection(
   });
 }
 
-function stationaryMatchedRelease(
+function samplePersistentCarrierPresence(_progress: number): number {
+  return 1;
+}
+
+function stationaryCompressedRelease(
   track: Extract<KpNativeKatexPaintMeasuredSceneTrack, {
     readonly lifecycle: "eliminate";
   }>,
   contractionWindow: Readonly<{ start: number; end: number }>,
-  releaseWindow: Readonly<{ start: number; end: number }>
+  releaseWindow: Readonly<{ start: number; end: number }>,
+  timingGroupId: string,
+  semanticMotionUnitId: string
 ): KpNativeKatexPaintMeasuredSceneTrack {
   const fixed = invalidateKpNativeKatexMotionPath(track);
   const sampleContraction = sampleWindow(contractionWindow);
@@ -312,34 +354,17 @@ function stationaryMatchedRelease(
     endRect: Object.freeze({ ...track.startRect }),
     startPaintRect: Object.freeze({ ...track.startPaintRect }),
     endPaintRect: Object.freeze({ ...track.startPaintRect }),
-    timingGroupId: "timing.exponential-homomorphism.connector-release",
+    // Connector retirement and operand separation are one semantic event:
+    // the additive relationship yields as its operands become independent.
+    timingGroupId,
+    semanticMotionUnitId,
     sampleProgress: sampleRelease,
     sampleOpacityProgress: sampleRelease,
     sampleMaterialScale: (progress: number) =>
-      1 - (1 - kpExponentialHomomorphismTransitProfile.pointScale) *
+      1 - (1 - kpExponentialHomomorphismTransitProfile.connectorPointScale) *
         sampleContraction(progress),
     opacityScheduleAuthority: "semantic-choreography" as const
   });
-}
-
-function sampleSourceCarrierPresence(progress: number): number {
-  return Math.max(
-    1 - sampleSourceStructureRelease(progress),
-    sampleTargetBasePresence(progress)
-  );
-}
-
-function sampleDerivedBaseMatchedDissolveScale(progress: number): number {
-  const contracted = 1 -
-    (1 - kpExponentialHomomorphismTransitProfile.pointScale) *
-    sampleSourceStructureContraction(progress);
-  const expanded = kpExponentialHomomorphismTransitProfile.pointScale +
-    (1 - kpExponentialHomomorphismTransitProfile.pointScale) *
-    sampleTargetBaseExpansion(progress);
-  return progress <
-      kpExponentialHomomorphismTransitProfile.targetBaseExpansion.start
-    ? contracted
-    : expanded;
 }
 
 function assertTransitInput(input: {

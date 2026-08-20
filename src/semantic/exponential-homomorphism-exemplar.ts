@@ -5,8 +5,8 @@ import { normalizeKpPowerApplicationEndpoint } from
   "./power-application-endpoint-normalizer.ts";
 
 export const kpCanonicalExponentialHomomorphismLatex = Object.freeze({
-  source: "b^{x+y}",
-  target: "b^{x}b^{y}"
+  source: "e^{a+b}",
+  target: "e^{a}e^{b}"
 });
 
 const normalizedSource = normalizeKpPowerApplicationEndpoint(
@@ -18,11 +18,11 @@ if (normalizedSource.status !== "normalized") {
 
 export const kpCanonicalExponentialHomomorphismAuthority =
   compileKpExponentialHomomorphismCorrespondence({
-    id: "exponential.sum-to-product.xy",
+    id: "exponential.sum-to-product.ab",
     source: normalizedSource.endpoint,
-    baseReferentId: "semantic.exponential.base.b",
+    baseReferentId: "semantic.exponential.base.e",
     operandReferentIds: [
-      "semantic.exponential.operand.x",
-      "semantic.exponential.operand.y"
+      "semantic.exponential.operand.a",
+      "semantic.exponential.operand.b"
     ]
   });

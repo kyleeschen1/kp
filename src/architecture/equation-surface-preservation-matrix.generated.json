@@ -9,15 +9,15 @@
       "pathClass": "exponential-homomorphism-specialized",
       "semanticEndpoints": [
         {
-          "transformationId": "transformation.exponential.sum-to-product.xy",
+          "transformationId": "transformation.exponential.sum-to-product.ab",
           "transformationType": "operation.equation.exponential-sum-to-product.v1",
-          "transformationFingerprint": "fnv1a32-4a9f8058",
+          "transformationFingerprint": "fnv1a32-457aa781",
           "source": [
             {
               "objectId": "state.exponential.sum-to-product.source",
               "objectType": "equation",
               "title": "Power with an additive exponent",
-              "semanticFingerprint": "fnv1a32-470e8c2f"
+              "semanticFingerprint": "fnv1a32-c7fe0c6a"
             }
           ],
           "target": [
@@ -25,7 +25,7 @@
               "objectId": "state.exponential.sum-to-product.target",
               "objectType": "equation",
               "title": "Product of powers",
-              "semanticFingerprint": "fnv1a32-27bfeada"
+              "semanticFingerprint": "fnv1a32-d28bae82"
             }
           ]
         }
@@ -57,17 +57,17 @@
       },
       "migrationObligations": {
         "semantic": {
-          "assetFingerprint": "fnv1a32-528e3ba5",
+          "assetFingerprint": "fnv1a32-ef83f3a7",
           "objectIds": [
             "state.exponential.sum-to-product.source",
             "state.exponential.sum-to-product.target"
           ],
           "transformationIds": [
-            "transformation.exponential.sum-to-product.xy"
+            "transformation.exponential.sum-to-product.ab"
           ]
         },
         "endpoints": {
-          "fingerprint": "fnv1a32-246563f1",
+          "fingerprint": "fnv1a32-bdc16010",
           "authority": "labelled-semantic-stage"
         },
         "renderer": {
@@ -97,39 +97,39 @@
               "progress": 0,
               "phaseId": "animation.algebra.exponential-homomorphism.sum-to-product.forward.0",
               "activeTransformationIds": [
-                "transformation.exponential.sum-to-product.xy"
+                "transformation.exponential.sum-to-product.ab"
               ],
               "activeSemanticObjectIds": [
                 "state.exponential.sum-to-product.source",
                 "state.exponential.sum-to-product.target"
               ],
-              "envelopeFingerprint": "fnv1a32-c548a0da"
+              "envelopeFingerprint": "fnv1a32-a52f5122"
             },
             {
               "direction": "forward",
               "progress": 0.5,
               "phaseId": "animation.algebra.exponential-homomorphism.sum-to-product.forward.0",
               "activeTransformationIds": [
-                "transformation.exponential.sum-to-product.xy"
+                "transformation.exponential.sum-to-product.ab"
               ],
               "activeSemanticObjectIds": [
                 "state.exponential.sum-to-product.source",
                 "state.exponential.sum-to-product.target"
               ],
-              "envelopeFingerprint": "fnv1a32-460bca52"
+              "envelopeFingerprint": "fnv1a32-61c346b2"
             },
             {
               "direction": "forward",
               "progress": 1,
               "phaseId": "animation.algebra.exponential-homomorphism.sum-to-product.forward.0",
               "activeTransformationIds": [
-                "transformation.exponential.sum-to-product.xy"
+                "transformation.exponential.sum-to-product.ab"
               ],
               "activeSemanticObjectIds": [
                 "state.exponential.sum-to-product.source",
                 "state.exponential.sum-to-product.target"
               ],
-              "envelopeFingerprint": "fnv1a32-a64efdfd"
+              "envelopeFingerprint": "fnv1a32-743d4d2d"
             }
           ]
         }

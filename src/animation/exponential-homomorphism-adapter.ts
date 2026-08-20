@@ -42,7 +42,7 @@ KpAnimationAsset {
       authority.targetOccurrenceIds)
   ];
   const transformation = createKpSemanticTransformation({
-    id: "transformation.exponential.sum-to-product.xy",
+    id: "transformation.exponential.sum-to-product.ab",
     transformType: "operation.equation.exponential-sum-to-product.v1",
     title: "Distribute a power over an additive exponent",
     sourceObjectIds: [sourceObjectId],
@@ -52,7 +52,7 @@ KpAnimationAsset {
     lawRefs: [{
       id: authority.lawId,
       level: "strict",
-      summary: "b^(x+y) equals b^x b^y for the declared real domain."
+      summary: "e^(a+b) equals e^a e^b for the declared real domain."
     }]
   });
   const root = createSemanticTransformationLeaf(
@@ -72,7 +72,7 @@ KpAnimationAsset {
     id: kpExponentialHomomorphismAnimationId,
     title: "Turn an exponential sum into a product",
     bundle: createKpAssetBundle({
-      id: "asset.exponential.sum-to-product.xy",
+      id: "asset.exponential.sum-to-product.ab",
       title: "Exponential sum-to-product law",
       objects
     }),
@@ -98,7 +98,7 @@ KpAnimationAsset {
       transformationIds: [transformation.id],
       timelineId,
       summary:
-        "Preserve x and y while one base derives two power applications."
+        "Preserve a and b while one base derives two power applications."
     }],
     checks: [{
       id: "check.exponential.sum-to-product.reference-closure",

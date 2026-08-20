@@ -11,7 +11,7 @@
         "sourcePath": "src/animation/catalog.ts",
         "primaryDescriptorId": "editor-animation.animation.algebra.exponential-homomorphism.sum-to-product",
         "transformationIds": [
-          "transformation.exponential.sum-to-product.xy"
+          "transformation.exponential.sum-to-product.ab"
         ]
       },
       "pedagogicalIntent": {
@@ -47,9 +47,9 @@
           "selectionParameter": "artifact"
         },
         "semanticEndpointFingerprints": [
-          "fnv1a32-4a9f8058",
-          "fnv1a32-470e8c2f",
-          "fnv1a32-27bfeada"
+          "fnv1a32-457aa781",
+          "fnv1a32-c7fe0c6a",
+          "fnv1a32-d28bae82"
         ],
         "nativeSettlement": {
           "slotKind": "equation",

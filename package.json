@@ -178,7 +178,7 @@
     "test:exponential-correspondence": "node --disable-warning=ExperimentalWarning --test tests/exponential-homomorphism-correspondence.test.ts",
     "test:exponential-extension-pack": "node --disable-warning=ExperimentalWarning --test tests/exponential-homomorphism-extension-pack.test.ts tests/equation-extension-dispatch.test.ts",
     "test:exponential-native-endpoints": "node --disable-warning=ExperimentalWarning --test tests/exponential-homomorphism-native-endpoints.test.ts",
-    "test:exponential-transit-session": "node --disable-warning=ExperimentalWarning --test tests/exponential-homomorphism-transit-session.test.ts",
+    "test:exponential-transit-session": "node --disable-warning=ExperimentalWarning --test tests/exponential-homomorphism-transit-session.test.ts tests/homomorphic-application-handoff-taxonomy.test.ts",
     "test:exponential-catalogue": "node --disable-warning=ExperimentalWarning --test tests/exponential-homomorphism-catalogue-integration.test.ts tests/selected-surface-capability.test.ts",
     "test:browser:exponential-homomorphism": "playwright test tests/exponential-homomorphism-catalogue.browser.spec.ts --project=chromium --workers=1",
     "visual:animation-transformation-coverage": "playwright test tests/animation-transformation-coverage.browser.spec.ts --project=chromium --workers=1",

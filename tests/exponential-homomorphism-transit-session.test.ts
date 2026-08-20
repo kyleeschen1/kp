@@ -54,14 +54,26 @@ test("transit projects only payload continuants and base fission into paint", ()
   ), false);
 });
 
-test("one compositor plan stages a target-local matched dissolve", () => {
+test("one compositor plan stages persistent carrier fission", () => {
   const plan = compilePlan();
   assert.deepEqual(
     kpExponentialHomomorphismTransitProfile.baseHandoff,
     {
-      topology: "matched-dissolve-to-derived-successors",
-      sourceExit: "collapse-to-point",
-      targetEntry: "expand-from-point"
+      topology: "native-scale-carrier-fission",
+      sourceExit: "retain-native-carrier",
+      targetEntry: "full-size-follower-peel"
+    }
+  );
+  assert.deepEqual(
+    kpExponentialHomomorphismTransitProfile.operandSeparation,
+    {
+      topology: "anchor-and-outward-separation",
+      path: "direct-horizontal",
+      anchorOrdinal: 0,
+      anchorSettlement: { start: 0.16, end: 0.22 },
+      outwardTransit: { start: 0.16, end: 0.3 },
+      connectorContraction: { start: 0.16, end: 0.24 },
+      connectorRelease: { start: 0.16, end: 0.3 }
     }
   );
   assert.equal(plan.copyFanOut, false);
@@ -74,7 +86,7 @@ test("one compositor plan stages a target-local matched dissolve", () => {
 
   const connector = trackFor(plan.tracks, "eliminate");
   const beforeRelease = frameFor(plan.tracks, connector.id, 0.1);
-  const duringRelease = frameFor(plan.tracks, connector.id, 0.26);
+  const duringRelease = frameFor(plan.tracks, connector.id, 0.21);
   const afterRelease = frameFor(plan.tracks, connector.id, 0.34);
   assert.equal(beforeRelease.opacity, 1);
   assert.ok(duringRelease.opacity > 0 && duringRelease.opacity < 1);
@@ -82,12 +94,12 @@ test("one compositor plan stages a target-local matched dissolve", () => {
   assert.equal(beforeRelease.materialScale, 1);
   assert.ok(
     duringRelease.materialScale! >
-      kpExponentialHomomorphismTransitProfile.pointScale &&
+      kpExponentialHomomorphismTransitProfile.connectorPointScale &&
     duringRelease.materialScale! < 1
   );
   assert.ok(near(
     afterRelease.materialScale!,
-    kpExponentialHomomorphismTransitProfile.pointScale
+    kpExponentialHomomorphismTransitProfile.connectorPointScale
   ));
   assert.deepEqual(beforeRelease.rect, afterRelease.rect);
 
@@ -100,8 +112,36 @@ test("one compositor plan stages a target-local matched dissolve", () => {
   ));
   assert.ok(payloads.every(({ semanticMotionUnitId }) =>
     semanticMotionUnitId ===
-      `motion-unit.${authority.id}.payloads`
+      `motion-unit.${authority.id}.operand-separation`
   ));
+  assert.ok(payloads.every(({ motionPath }) => motionPath === undefined));
+  assert.ok(payloads.every(({ timingGroupId }) =>
+    timingGroupId === `timing.${authority.id}.operand-separation`
+  ));
+  assert.equal(
+    connector.timingGroupId,
+    `timing.${authority.id}.operand-separation`
+  );
+  assert.equal(
+    connector.semanticMotionUnitId,
+    `motion-unit.${authority.id}.operand-separation`
+  );
+
+  const anchor = trackForSourceAtom(
+    payloads,
+    "source.paint.exponent-payload.0"
+  );
+  const outward = trackForSourceAtom(
+    payloads,
+    "source.paint.exponent-payload.1"
+  );
+  assert.deepEqual(frameFor(payloads, anchor.id, 0.16).rect, anchor.startRect);
+  assert.deepEqual(frameFor(payloads, anchor.id, 0.22).rect, anchor.endRect);
+  assert.equal(
+    sameRect(frameFor(payloads, outward.id, 0.22).rect, outward.endRect),
+    false
+  );
+  assert.deepEqual(frameFor(payloads, outward.id, 0.3).rect, outward.endRect);
 
   const bases = plan.tracks.filter(({ lifecycle }) => lifecycle === "split");
   assert.equal(bases.length, 2);
@@ -109,11 +149,7 @@ test("one compositor plan stages a target-local matched dissolve", () => {
     motionAxisConstraint === "horizontal"
   ));
   assert.ok(bases.every(({ sampleMaterialScale }) =>
-    sampleMaterialScale !== undefined
-  ));
-  assert.ok(near(
-    bases[0]!.sampleMaterialScale!(0.4),
-    kpExponentialHomomorphismTransitProfile.pointScale
+    sampleMaterialScale === undefined
   ));
   const sourceBaseFrames = bases.map(({ id }) =>
     frameFor(plan.tracks, id, 0.1)
@@ -122,76 +158,62 @@ test("one compositor plan stages a target-local matched dissolve", () => {
     sourceBaseFrames.map(({ opacity }) => opacity).sort(),
     [0, 1]
   );
-  const collapsingBaseFrames = bases.map(({ id }) =>
-    frameFor(plan.tracks, id, 0.26)
+  const nativeCarrierFrames = bases.map(({ id }) =>
+    frameFor(plan.tracks, id, 0.22)
   ).filter(({ opacity }) => opacity > 0);
-  assert.equal(collapsingBaseFrames.length, 1);
-  assert.ok(near(collapsingBaseFrames[0]!.opacity, duringRelease.opacity));
-  assert.ok(near(
-    collapsingBaseFrames[0]!.materialScale!,
-    duringRelease.materialScale!
-  ));
-  const vacancyFrames = bases.map(({ id }) =>
-    frameFor(plan.tracks, id, 0.48)
+  assert.equal(nativeCarrierFrames.length, 1);
+  assert.equal(nativeCarrierFrames[0]!.opacity, 1);
+  assert.equal(nativeCarrierFrames[0]!.materialScale, undefined);
+  const branchStartFrames = bases.map(({ id }) =>
+    frameFor(plan.tracks, id, 0.36)
   );
-  assert.ok(vacancyFrames.every(({ opacity }) => opacity === 0));
+  assert.deepEqual(
+    branchStartFrames.map(({ opacity }) => opacity).sort(),
+    [0, 1]
+  );
+  assert.ok(sameRect(branchStartFrames[0]!.rect, branchStartFrames[1]!.rect));
+  const branchFrames = bases.map(({ id }) =>
+    frameFor(plan.tracks, id, 0.52)
+  );
+  assert.ok(branchFrames.every(({ opacity, materialScale }) =>
+    opacity === 1 && materialScale === undefined
+  ));
+  assert.equal(sameRect(branchFrames[0]!.rect, branchFrames[1]!.rect), false);
   const targetCenterFrames = bases.map(({ id }) =>
-    frameFor(plan.tracks, id, 0.54)
+    frameFor(plan.tracks, id, 0.62)
   );
   assert.ok(targetCenterFrames.every((frame, index) =>
-    frame.opacity === 0 && sameRect(frame.rect, bases[index]!.endRect)
-  ));
-  const receivingFrames = bases.map(({ id }) =>
-    frameFor(plan.tracks, id, 0.6)
-  );
-  assert.ok(receivingFrames.every(({ opacity, materialScale }) =>
-    opacity > 0 && opacity < 1 && materialScale! >
-      kpExponentialHomomorphismTransitProfile.pointScale &&
-      materialScale! < 1
+    frame.opacity === 1 && frame.materialScale === undefined &&
+      sameRect(frame.rect, bases[index]!.endRect)
   ));
   const settledFrames = bases.map(({ id }) =>
-    frameFor(plan.tracks, id, 0.64)
+    frameFor(plan.tracks, id, 0.66)
   );
   assert.ok(settledFrames.every(({ opacity, materialScale }, index) =>
-    opacity === 1 && materialScale === 1 &&
+    opacity === 1 && materialScale === undefined &&
       sameRect(settledFrames[index]!.rect, bases[index]!.endRect)
   ));
+  for (const progress of [0, 0.2, 0.36, 0.42, 0.52, 0.62, 0.7]) {
+    assert.ok(bases.some(({ id }) =>
+      frameFor(plan.tracks, id, progress).opacity > 0
+    ));
+  }
   assert.equal(plan.tracks.some(({ intentionalForegroundOcclusion }) =>
     intentionalForegroundOcclusion !== undefined
   ), false);
 });
 
-test("compressed paint geometry, rather than its native box, owns collision truth", () => {
+test("carrier fission keeps measured base paint at native scale", () => {
   const bases = compilePlan().tracks.filter(({ lifecycle }) =>
     lifecycle === "split"
   );
-  const visibleSource = bases.find((base) =>
-    frameFor(bases, base.id, 0.23).opacity > 0
-  );
-  assert.ok(visibleSource !== undefined);
-  const frame = frameFor(bases, visibleSource.id, 0.23);
-  const nativePaint = visibleSource.startPaintRect;
-  assert.ok(frame.materialScale! < 1);
-  assert.equal(frame.paintAlignmentRect.width, nativePaint.width);
-  assert.equal(frame.paintAlignmentRect.height, nativePaint.height);
-  assert.ok(frame.expectedPaintRect.width < nativePaint.width);
-  assert.ok(frame.expectedPaintRect.height < nativePaint.height);
-  assert.ok(Math.abs(
-    frame.expectedPaintRect.left + frame.expectedPaintRect.width / 2 -
-      (frame.paintAlignmentRect.left + frame.paintAlignmentRect.width / 2)
-  ) < Number.EPSILON * 32);
-  assert.ok(Math.abs(
-    frame.paintAlignmentRect.left + frame.paintAlignmentRect.width / 2 -
-      (frame.rect.left + frame.rect.width / 2)
-  ) < Number.EPSILON * 32);
-  assert.ok(Math.abs(
-    frame.expectedPaintRect.top + frame.expectedPaintRect.height / 2 -
-      (frame.paintAlignmentRect.top + frame.paintAlignmentRect.height / 2)
-  ) < Number.EPSILON * 32);
-  assert.ok(Math.abs(
-    frame.paintAlignmentRect.top + frame.paintAlignmentRect.height / 2 -
-      (frame.rect.top + frame.rect.height / 2)
-  ) < Number.EPSILON * 32);
+  for (const progress of [0, 0.22, 0.4, 0.52, 0.62, 1]) {
+    for (const base of bases) {
+      const frame = frameFor(bases, base.id, progress);
+      assert.equal(frame.materialScale, undefined);
+      assert.deepEqual(frame.expectedPaintRect, frame.paintAlignmentRect);
+    }
+  }
 });
 
 test("sampled motion is deterministic under direct seek and rewind", () => {
@@ -359,6 +381,17 @@ function trackFor(
 ) {
   const track = tracks.find((candidate) => candidate.lifecycle === lifecycle);
   if (track === undefined) throw new Error(`Missing ${lifecycle} track.`);
+  return track;
+}
+
+function trackForSourceAtom(
+  tracks: ReturnType<typeof compilePlan>["tracks"],
+  sourceAtomId: string
+) {
+  const track = tracks.find((candidate) =>
+    candidate.sourceAtomId === sourceAtomId
+  );
+  if (track === undefined) throw new Error(`Missing track for ${sourceAtomId}.`);
   return track;
 }
 
