@@ -137,8 +137,8 @@
     {
       "id": "cps15",
       "title": "Canonical-human-checkpoint",
-      "summary": "HUMAN_CHECKPOINT: identity recognition candidate ready for visual review; absorption remains the prior comparator.",
-      "status": "in-progress"
+      "summary": "Human approved identity recognition for 2 × 1 → 2; absorption remains historical rollback evidence at 1d6009b7.",
+      "status": "complete"
     },
     {
       "id": "cps16",

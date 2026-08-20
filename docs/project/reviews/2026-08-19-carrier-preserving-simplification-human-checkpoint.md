@@ -1,7 +1,7 @@
 # Carrier-Preserving Simplification Human Checkpoint
 
 Date: 2026-08-19  
-Status: pending human review  
+Status: approved
 Run: `run-contract.kp.carrier-preserving-simplification-v4`  
 Slices: `cps14` evidence complete; `cps15` is the mandatory checkpoint
 
@@ -19,6 +19,11 @@ the verified removal cohort (`\times 1`) contracts toward its own
 renderer-measured center and disappears there; the carrier remains full-size
 and opaque throughout. The prior **identity absorption** candidate remains an
 independently recoverable comparator at commit `1d6009b7`.
+
+Decision: identity recognition was explicitly approved on 2026-08-20. This
+approval authorizes freezing the canonical profile and pressure-testing the
+existing add-zero caller; it does not authorize family promotion before the
+second mandatory human checkpoint.
 
 The Catalogue's development toolbar and Review launcher remain available on
 the live route. Review notes therefore retain the exact artifact URL and
