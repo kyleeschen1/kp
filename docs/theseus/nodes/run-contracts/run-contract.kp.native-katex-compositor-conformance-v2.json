@@ -59,17 +59,20 @@
     {
       "id": "ncc03",
       "title": "Inventory-existing-seams",
-      "status": "planned"
+      "summary": "Recorded the existing authority chain from semantic recipe through native paint, endpoint handles, ownership, track sampling, material cloning, settlement, lifecycle invalidation, and browser harness. The only missing proof is a correlated actual-material-paint trace; no second renderer, clock, endpoint model, or measurement algorithm is needed.",
+      "status": "complete"
     },
     {
       "id": "ncc04",
       "title": "Define-terminology",
-      "status": "planned"
+      "summary": "Defined semantic object, shape and paint classes, context mutation, ownership topology, lifecycle action, ownership seam, planned geometry, realized paint, seam trace, supported transition, and the three explicit coordinate spaces. The principle also separates certifiable continuity laws from human motion aesthetics.",
+      "status": "complete"
     },
     {
       "id": "ncc05",
       "title": "Freeze-cost-budgets",
-      "status": "planned"
+      "summary": "Added executable test-only budgets: 24-scenario canary, 96-scenario promotion, 12 scenarios per browser engine, five semantic samples, one page and worker, no routine screenshots, no unseeded fuzz, reusable server/browser/page, structured diagnostics, and advisory wall-time ceilings.",
+      "status": "complete"
     },
     {
       "id": "ncc06",

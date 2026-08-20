@@ -52,6 +52,20 @@
       "scope": "ncc02",
       "checkedAt": "2026-08-20T02:23:06.141Z",
       "notes": "Application, Node, test, Svelte, and domain TypeScript projects accept the test-only baseline fixture and command."
+    },
+    {
+      "command": "npm run test:native-katex-compositor-conformance",
+      "status": "passed",
+      "scope": "ncc03",
+      "checkedAt": "2026-08-20T02:27:17.873Z",
+      "notes": "Inventory confirms the baseline command remains green and identifies the sole missing proof seam: browser-realized material ink correlated with existing native endpoint paint authority."
+    },
+    {
+      "command": "npm run test:native-katex-compositor-conformance",
+      "status": "passed",
+      "scope": "ncc05",
+      "checkedAt": "2026-08-20T02:31:17.800Z",
+      "notes": "Six checks freeze baseline evidence plus hard canary/promotion/browser, five-sample, one-page, one-worker, zero-routine-screenshot, and zero-unseeded-fuzz budgets in 0.43 seconds."
     }
   ],
   "expectedLearning": [
