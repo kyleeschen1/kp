@@ -173,7 +173,8 @@
     {
       "id": "cps21",
       "title": "Second-human-checkpoint",
-      "status": "planned"
+      "summary": "Stable two-caller checkpoint evidence is generated and inspected. Awaiting explicit human approval before cps21 can complete or cps22 promotion can begin.",
+      "status": "in-progress"
     },
     {
       "id": "cps22",

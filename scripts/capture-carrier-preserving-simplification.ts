@@ -9,13 +9,39 @@ import {
 } from "./capture-visual-contact-sheet.ts";
 import { createKpVisualReviewHarness } from "./visual-review-harness.ts";
 
-const animationId =
-  "animation.operation-evaluation.two-times-one-carrier";
+const animations = Object.freeze([
+  {
+    id: "animation.operation-evaluation.two-times-one-carrier",
+    slug: "two-times-one",
+    label: "canonical · 2 × 1 → 2",
+    stationaryContextCount: 0
+  },
+  {
+    id: "animation.generated.add-zero",
+    slug: "add-zero",
+    label: "second caller · x + 0 = 4 → x = 4",
+    stationaryContextCount: 2
+  }
+] as const);
 const outputRoot = path.resolve(
   "tmp/codex/carrier-preserving-simplification-checkpoint"
 );
-const normalSamples = [0, 0.2, 0.3, 0.4, 0.65, 0.9, 1] as const;
-const reducedSamples = [0.2, 0.8] as const;
+const normalSamples = Object.freeze([
+  { id: "forward-0", label: "forward 0%", progress: 0 },
+  { id: "forward-20", label: "forward 20%", progress: 0.2 },
+  { id: "forward-30", label: "forward 30%", progress: 0.3 },
+  { id: "forward-40", label: "forward 40%", progress: 0.4 },
+  { id: "forward-65", label: "forward 65%", progress: 0.65 },
+  { id: "forward-90", label: "forward 90%", progress: 0.9 },
+  { id: "forward-100", label: "forward 100%", progress: 1 },
+  { id: "rewind-40", label: "rewind to 40%", progress: 0.4 },
+  { id: "rewind-0", label: "rewind to 0%", progress: 0 }
+] as const);
+const reducedSamples = Object.freeze([
+  { id: "forward-20", label: "forward request 20%", progress: 0.2 },
+  { id: "forward-80", label: "forward request 80%", progress: 0.8 },
+  { id: "rewind-20", label: "rewind request 20%", progress: 0.2 }
+] as const);
 const profiles = Object.freeze([
   {
     id: "wide-dark-normal",
@@ -85,6 +111,8 @@ const profiles = Object.freeze([
 
 interface CaptureEvidence {
   readonly id: string;
+  readonly animationId: typeof animations[number]["id"];
+  readonly sampleId: string;
   readonly profileId: typeof profiles[number]["id"];
   readonly requestedProgress: number;
   readonly sampledProgress: number;
@@ -92,6 +120,7 @@ interface CaptureEvidence {
   readonly treatment: string;
   readonly carrierTrackId: string;
   readonly removedTrackCount: number;
+  readonly stationaryContextCount: number;
   readonly activeEndpointCount: number;
   readonly visibleMaterialOwnerCount: number;
   readonly carrierOpacity: number;
@@ -109,63 +138,70 @@ async function capture(): Promise<void> {
 
   try {
     for (const profile of profiles) {
-      const page = await harness.page({
-        viewport: profile.viewport,
-        colorScheme: profile.theme,
-        reducedMotion: profile.motion === "reduced"
-          ? "reduce"
-          : "no-preference"
-      });
-      const url = new URL("/", harness.baseUrl);
-      url.searchParams.set("artifact", animationId);
-      url.searchParams.set("theme", profile.theme);
-      await page.goto(url.toString(), { waitUntil: "domcontentloaded" });
-      const player = page.locator(
-        `[data-kp-editor-animation-player]` +
-        `[data-kp-editor-animation-id="${animationId}"]`
-      );
-      const stage = player.locator(
-        "[data-kp-carrier-preserving-simplification-stage]"
-      );
-      const seek = player.locator('[data-action="seek-editor-animation"]');
-      await waitForReady(stage);
-      await page.locator("body").waitFor({ state: "attached" });
-      if (profile.motion === "reduced") {
-        await player.evaluate((element) => {
-          element.dataset["kpEditorAnimationAccessibilityMode"] =
-            "reduced-motion";
-        });
-      }
-
-      for (const requestedProgress of profile.samples) {
-        const captured = await captureSample({
-          page,
-          stage,
-          seek,
-          profile,
-          requestedProgress
-        });
-        evidence.push(captured);
-        const image = await readFile(path.resolve(captured.file));
-        items.push({
-          id: captured.id,
-          label:
-            `${profile.label} · requested ${Math.round(requestedProgress * 100)}%` +
-            ` · sampled ${Math.round(captured.sampledProgress * 100)}%` +
-            ` · ${captured.visualOwner}`,
-          progress: captured.sampledProgress,
+      const runtimes = await Promise.all(animations.map(async (animation) => {
+        const page = await harness.page({
           viewport: profile.viewport,
-          file: captured.file,
-          dataUrl: `data:image/png;base64,${image.toString("base64")}`
+          colorScheme: profile.theme,
+          reducedMotion: profile.motion === "reduced"
+            ? "reduce"
+            : "no-preference"
         });
+        const url = new URL("/", harness.baseUrl);
+        url.searchParams.set("artifact", animation.id);
+        url.searchParams.set("theme", profile.theme);
+        await page.goto(url.toString(), { waitUntil: "domcontentloaded" });
+        const player = page.locator(
+          `[data-kp-editor-animation-player]` +
+          `[data-kp-editor-animation-id="${animation.id}"]`
+        );
+        const stage = player.locator(
+          "[data-kp-carrier-preserving-simplification-stage]"
+        );
+        const seek = player.locator('[data-action="seek-editor-animation"]');
+        await waitForReady(stage);
+        await page.locator("body").waitFor({ state: "attached" });
+        if (profile.motion === "reduced") {
+          await player.evaluate((element) => {
+            element.dataset["kpEditorAnimationAccessibilityMode"] =
+              "reduced-motion";
+          });
+        }
+        return { animation, page, stage, seek };
+      }));
+
+      // Keep both callers adjacent at every state so human review compares the
+      // shared treatment rather than two independent contact-sheet regions.
+      for (const sample of profile.samples) {
+        for (const runtime of runtimes) {
+          const captured = await captureSample({
+            ...runtime,
+            profile,
+            sample
+          });
+          evidence.push(captured);
+          const image = await readFile(path.resolve(captured.file));
+          items.push({
+            id: captured.id,
+            label:
+              `${runtime.animation.label} · ${profile.label}` +
+              ` · ${sample.label}` +
+              ` · sampled ${Math.round(captured.sampledProgress * 100)}%` +
+              ` · ${captured.visualOwner}`,
+            progress: captured.sampledProgress,
+            viewport: profile.viewport,
+            file: captured.file,
+            dataUrl: `data:image/png;base64,${image.toString("base64")}`
+          });
+        }
       }
+      await Promise.all(runtimes.map(({ page }) => page.close()));
     }
 
     const htmlSource = buildKpVisualContactSheetHtml(items, {
-      title: "Carrier-preserving simplification · canonical checkpoint",
+      title: "Carrier-preserving simplification · two-caller checkpoint",
       columns: 2,
       imageFit: "contain",
-      imageHeightPx: 330
+      imageHeightPx: 260
     });
     const sheetPage = await harness.page({
       viewport: { width: 1_440, height: 1_000 },
@@ -184,8 +220,10 @@ async function capture(): Promise<void> {
     await writeFile(manifest, `${JSON.stringify({
       schemaVersion:
         "kp.carrier-preserving-simplification-visual-checkpoint.v1",
-      animationId,
-      livePath: `/?artifact=${animationId}`,
+      animations: animations.map((animation) => ({
+        ...animation,
+        livePath: `/?artifact=${animation.id}`
+      })),
       profiles: profiles.map(({ samples, ...profile }) => ({
         ...profile,
         samples: [...samples]
@@ -205,16 +243,17 @@ async function capture(): Promise<void> {
 }
 
 async function captureSample(input: {
+  readonly animation: typeof animations[number];
   readonly page: Page;
   readonly stage: Locator;
   readonly seek: Locator;
   readonly profile: typeof profiles[number];
-  readonly requestedProgress: number;
+  readonly sample: typeof normalSamples[number] | typeof reducedSamples[number];
 }): Promise<CaptureEvidence> {
-  await input.seek.fill(String(input.requestedProgress));
+  await input.seek.fill(String(input.sample.progress));
   const expectedProgress = input.profile.motion === "reduced"
-    ? input.requestedProgress < 0.5 ? 0 : 1
-    : input.requestedProgress;
+    ? input.sample.progress < 0.5 ? 0 : 1
+    : input.sample.progress;
   await input.page.waitForFunction(({ expected }) => {
     const stage = document.querySelector<HTMLElement>(
       "[data-kp-carrier-preserving-simplification-stage]"
@@ -230,17 +269,18 @@ async function captureSample(input: {
     ));
   });
 
-  const id = `${input.profile.id}-${String(input.requestedProgress).replace(".", "-")}`;
+  const id = `${input.animation.slug}-${input.profile.id}-${input.sample.id}`;
   const file = path.join(outputRoot, `${id}.png`);
   await input.stage.screenshot({ path: file, animations: "disabled" });
   const state = await input.stage.evaluate((root) => {
     const materialOwners = [...root.querySelectorAll<HTMLElement>(
       "[data-kp-equation-material-owner-id]"
     )];
+    const carrierTrackId =
+      root.dataset["kpCarrierPreservingSimplificationCarrierTrackId"] ?? "";
     const carrier = materialOwners.find((owner) =>
-      owner.dataset["kpEquationMaterialSemanticEntityId"]?.endsWith(
-        ".source.carrier"
-      )
+      owner.dataset["kpEquationMaterialOwnerId"] ===
+        `native-scene-owner.${carrierTrackId}`
     );
     const rect = root.getBoundingClientRect();
     const doc = root.ownerDocument;
@@ -254,9 +294,14 @@ async function captureSample(input: {
       treatment:
         root.dataset["kpCarrierPreservingSimplificationTreatment"] ?? "",
       carrierTrackId:
-        root.dataset["kpCarrierPreservingSimplificationCarrierTrackId"] ?? "",
+        carrierTrackId,
       removedTrackCount: Number(
         root.dataset["kpCarrierPreservingSimplificationRemovedTrackCount"]
+      ),
+      stationaryContextCount: Number(
+        root.dataset[
+          "kpCarrierPreservingSimplificationStationaryContextCount"
+        ]
       ),
       activeEndpointCount: [...root.querySelectorAll<HTMLElement>(
         ".kp-carrier-preserving-simplification-stage__endpoint"
@@ -290,6 +335,11 @@ async function captureSample(input: {
   ) {
     throw new Error(`${id} is missing canonical carrier/owner diagnostics.`);
   }
+  if (
+    state.stationaryContextCount !== input.animation.stationaryContextCount
+  ) {
+    throw new Error(`${id} has the wrong stationary-context contract.`);
+  }
   if (!state.reviewAvailable) {
     throw new Error(`${id} must expose the live Review launcher.`);
   }
@@ -309,8 +359,10 @@ async function captureSample(input: {
   const { fitsViewport: _fitsViewport, ...evidence } = state;
   return {
     id,
+    animationId: input.animation.id,
+    sampleId: input.sample.id,
     profileId: input.profile.id,
-    requestedProgress: input.requestedProgress,
+    requestedProgress: input.sample.progress,
     ...evidence,
     file: path.relative(process.cwd(), file)
   };

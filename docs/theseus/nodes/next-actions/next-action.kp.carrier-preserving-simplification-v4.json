@@ -617,11 +617,39 @@
       "scope": "cps20 diff",
       "checkedAt": "2026-08-20T01:19:32.289Z",
       "notes": "Exact implementation and Theseus records have no whitespace errors; unrelated user files remain untouched."
+    },
+    {
+      "command": "npx tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "cps21 checkpoint harness",
+      "checkedAt": "2026-08-20T01:29:22.637Z",
+      "notes": "The two-caller checkpoint harness typechecks."
+    },
+    {
+      "command": "npm run visual:carrier-preserving-simplification:checkpoint",
+      "status": "passed",
+      "scope": "cps21 responsive evidence",
+      "checkedAt": "2026-08-20T01:29:23.790Z",
+      "notes": "Generated and inspected 96 adjacent canonical/add-zero samples across wide/phone, dark/light, normal/reduced motion, forward seeks, and reverse seeks; all expose Review, fit their viewport, preserve one accessible endpoint, and satisfy carrier/stationary-context diagnostics."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "cps21 checkpoint",
+      "checkedAt": "2026-08-20T01:29:51.590Z",
+      "notes": "Validated 1,030 nodes and 23,669 events with the checkpoint receipt closed."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "cps21 checkpoint diff",
+      "checkedAt": "2026-08-20T01:29:52.702Z",
+      "notes": "Checkpoint harness and Theseus evidence have no whitespace errors."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Pressure-tested add-zero as the second carrier-preserving simplification caller. It now selects the same shared adapter, recipe compiler, motif profile, clock, compositor, native endpoint binding, and lazy carrier capability as the approved 2x1 exemplar while preserving its own semantic source and evidence."
+    "summary": "Second-caller evidence is ready for human review. The stable checkpoint places canonical 2x1 and add-zero side by side at each state; no promotion metadata or compatibility retirement has been applied."
   },
   "expectedLearning": [
     "Determine whether persistent-carrier transfer can be expressed as a renderer-neutral, typed operation family with native KaTeX endpoints and no overlapping ownership."
