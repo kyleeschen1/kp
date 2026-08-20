@@ -189,7 +189,8 @@
     {
       "id": "cps23",
       "title": "Add-discoverability-metadata",
-      "status": "planned"
+      "summary": "Added canonical derived discoverability metadata for every equation-series declaration: friendly names, normalized aliases, meanings, positive and negative examples, required evidence, and support state. A single generated catalog rejects alias ambiguity and stale output; the carrier pair has concrete examples and counterexamples. Focused 23-test planner/registry cohort, generated-output check, and TypeScript pass.",
+      "status": "complete"
     },
     {
       "id": "cps24",

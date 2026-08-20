@@ -90,7 +90,12 @@ test("extension operations preserve family recipe and semantic authority", () =>
   });
   assert.equal(result.status, "resolved");
   if (result.status !== "resolved") return;
-  assert.deepEqual(result.plans[0]?.declaration, {
+  const declaration = result.plans[0]?.declaration;
+  assert.ok(declaration);
+  assert.equal(declaration.discoverability.supportState, "alias");
+  const { discoverability: _discoverability, ...semanticDeclaration } =
+    declaration;
+  assert.deepEqual(semanticDeclaration, {
     operationId,
     plannerOperationId: "kp.semantic-motion.log-product",
     plannerExposure: {

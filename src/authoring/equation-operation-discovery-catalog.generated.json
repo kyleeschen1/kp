@@ -1,0 +1,1351 @@
+{
+  "schemaVersion": "kp.equation-operation-discovery-catalog.v1",
+  "kind": "equation-operation-discovery-catalog",
+  "entries": [
+    {
+      "operationId": "kp.core.persist",
+      "familyId": "kp.core",
+      "friendlyName": "Persist",
+      "aliases": [
+        "kp.core.persist"
+      ],
+      "meaning": "Preserve one semantic entity across a state boundary.",
+      "positiveExamples": [
+        "Ask to persist using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "kp.core.persist",
+        "law.kp.core.persist",
+        "kp.core"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.core.introduce",
+      "familyId": "kp.core",
+      "friendlyName": "Introduce",
+      "aliases": [
+        "kp.core.introduce"
+      ],
+      "meaning": "Create a semantic entity or structural artifact with an explicit reason.",
+      "positiveExamples": [
+        "Ask to introduce using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "kp.core.introduce",
+        "law.kp.core.introduce",
+        "kp.core"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.core.eliminate",
+      "familyId": "kp.core",
+      "friendlyName": "Eliminate",
+      "aliases": [
+        "kp.core.eliminate"
+      ],
+      "meaning": "Remove a semantic entity or structural artifact with an explicit reason.",
+      "positiveExamples": [
+        "Ask to eliminate using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "kp.core.eliminate",
+        "law.kp.core.eliminate",
+        "kp.core"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.core.substitute",
+      "familyId": "kp.core",
+      "friendlyName": "Substitute",
+      "aliases": [
+        "kp.core.substitute"
+      ],
+      "meaning": "Transmit a value into a destination while replacing the prior occupant.",
+      "positiveExamples": [
+        "Ask to substitute using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "kp.core.substitute",
+        "law.kp.core.substitute",
+        "kp.core"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.core.copy",
+      "familyId": "kp.core",
+      "friendlyName": "Copy",
+      "aliases": [
+        "kp.core.copy"
+      ],
+      "meaning": "Preserve a source while deriving one lineage-bearing copy.",
+      "positiveExamples": [
+        "Ask to copy using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "kp.core.copy",
+        "law.kp.core.copy",
+        "kp.core"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.core.fan-out",
+      "familyId": "kp.core",
+      "friendlyName": "Fan out",
+      "aliases": [
+        "kp.core.fan-out"
+      ],
+      "meaning": "Derive multiple lineage-bearing destinations from one source.",
+      "positiveExamples": [
+        "Ask to fan out using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "kp.core.fan-out",
+        "law.kp.core.fan-out",
+        "kp.core"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.core.merge",
+      "familyId": "kp.core",
+      "friendlyName": "Merge",
+      "aliases": [
+        "kp.core.merge"
+      ],
+      "meaning": "Combine multiple sources into one derived result.",
+      "positiveExamples": [
+        "Ask to merge using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "kp.core.merge",
+        "law.kp.core.merge",
+        "kp.core"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.core.reorder",
+      "familyId": "kp.core",
+      "friendlyName": "Reorder",
+      "aliases": [
+        "kp.core.reorder"
+      ],
+      "meaning": "Preserve a collection of entities while changing their presentation order.",
+      "positiveExamples": [
+        "Ask to reorder using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "kp.core.reorder",
+        "law.kp.core.reorder",
+        "kp.core"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.core.wrap",
+      "familyId": "kp.core",
+      "friendlyName": "Wrap",
+      "aliases": [
+        "kp.core.wrap"
+      ],
+      "meaning": "Preserve content while introducing an enclosing semantic or structural context.",
+      "positiveExamples": [
+        "Ask to wrap using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "kp.core.wrap",
+        "law.kp.core.wrap",
+        "kp.core"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.core.unwrap",
+      "familyId": "kp.core",
+      "friendlyName": "Unwrap",
+      "aliases": [
+        "kp.core.unwrap"
+      ],
+      "meaning": "Preserve content while removing an enclosing semantic or structural context.",
+      "positiveExamples": [
+        "Ask to unwrap using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "kp.core.unwrap",
+        "law.kp.core.unwrap",
+        "kp.core"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.core.group",
+      "familyId": "kp.core",
+      "friendlyName": "Group",
+      "aliases": [
+        "kp.core.group"
+      ],
+      "meaning": "Preserve members while introducing a meaningful enclosing group.",
+      "positiveExamples": [
+        "Ask to group using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "kp.core.group",
+        "law.kp.core.group",
+        "kp.core"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.core.ungroup",
+      "familyId": "kp.core",
+      "friendlyName": "Ungroup",
+      "aliases": [
+        "kp.core.ungroup"
+      ],
+      "meaning": "Preserve members while removing a meaningful enclosing group.",
+      "positiveExamples": [
+        "Ask to ungroup using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "kp.core.ungroup",
+        "law.kp.core.ungroup",
+        "kp.core"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.core.focus",
+      "familyId": "kp.core",
+      "friendlyName": "Focus",
+      "aliases": [
+        "kp.core.focus"
+      ],
+      "meaning": "Preserve an entity while changing explanatory attention or annotation.",
+      "positiveExamples": [
+        "Ask to focus using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "kp.core.focus",
+        "law.kp.core.focus",
+        "kp.core"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.subtract-both-sides",
+      "familyId": "kp.both-sides",
+      "friendlyName": "Subtract both sides",
+      "aliases": [
+        "kp.algebra.subtract-both-sides"
+      ],
+      "meaning": "Subtract the same value from both sides",
+      "positiveExamples": [
+        "Ask to subtract both sides using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "assumption.equality.subtraction-closed"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.add-both-sides",
+      "familyId": "kp.both-sides",
+      "friendlyName": "Add both sides",
+      "aliases": [
+        "kp.algebra.add-both-sides"
+      ],
+      "meaning": "Add the same value to both sides",
+      "positiveExamples": [
+        "Ask to add both sides using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "assumption.equality.addition-closed"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.cancel-additive-inverses",
+      "familyId": "kp.algebra",
+      "friendlyName": "Cancel additive inverses",
+      "aliases": [
+        "kp.algebra.cancel-additive-inverses"
+      ],
+      "meaning": "Cancel additive inverses",
+      "positiveExamples": [
+        "Ask to cancel additive inverses using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "definition.generated.linear-solve.cancel-additive-inverses",
+        "law.algebra.additive-inverse",
+        "kp.algebra"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.simplify-constant-difference",
+      "familyId": "kp.algebra",
+      "friendlyName": "Simplify constant difference",
+      "aliases": [
+        "kp.algebra.simplify-constant-difference"
+      ],
+      "meaning": "Simplify the constant difference",
+      "positiveExamples": [
+        "Ask to simplify constant difference using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "definition.generated.linear-solve.simplify-constant-difference",
+        "law.arithmetic.constant-difference",
+        "kp.algebra"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.simplify-constant-sum",
+      "familyId": "kp.algebra",
+      "friendlyName": "Simplify constant sum",
+      "aliases": [
+        "kp.algebra.simplify-constant-sum"
+      ],
+      "meaning": "Simplify the constant sum",
+      "positiveExamples": [
+        "Ask to simplify constant sum using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "definition.generated.linear-solve.simplify-constant-sum",
+        "law.arithmetic.constant-sum",
+        "kp.algebra"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.divide-both-sides",
+      "familyId": "kp.both-sides",
+      "friendlyName": "Divide both sides",
+      "aliases": [
+        "kp.algebra.divide-both-sides"
+      ],
+      "meaning": "Divide both sides by the coefficient",
+      "positiveExamples": [
+        "Ask to divide both sides using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "assumption.equality.divide-operand-nonzero"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.cancel-multiplicative-inverses",
+      "familyId": "kp.algebra",
+      "friendlyName": "Cancel multiplicative inverses",
+      "aliases": [
+        "kp.algebra.cancel-multiplicative-inverses"
+      ],
+      "meaning": "Cancel multiplicative inverses",
+      "positiveExamples": [
+        "Ask to cancel multiplicative inverses using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "definition.generated.linear-solve.cancel-multiplicative-inverses",
+        "law.algebra.multiplicative-inverse",
+        "kp.algebra"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.simplify-constant-quotient",
+      "familyId": "kp.algebra",
+      "friendlyName": "Simplify constant quotient",
+      "aliases": [
+        "kp.algebra.simplify-constant-quotient"
+      ],
+      "meaning": "Simplify the constant quotient",
+      "positiveExamples": [
+        "Ask to simplify constant quotient using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "definition.generated.linear-solve.simplify-constant-quotient",
+        "law.arithmetic.constant-quotient",
+        "kp.algebra"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.split-fraction-factors",
+      "familyId": "kp.algebra",
+      "friendlyName": "Split fraction factors",
+      "aliases": [
+        "kp.algebra.split-fraction-factors"
+      ],
+      "meaning": "Split numerator and denominator into common factors",
+      "positiveExamples": [
+        "Ask to split fraction factors using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "definition.generated.fraction-expression.split-fraction-factors",
+        "law.arithmetic.factor-fraction",
+        "kp.algebra"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.merge-fraction-common-factor",
+      "familyId": "kp.algebra",
+      "friendlyName": "Merge fraction common factor",
+      "aliases": [
+        "kp.algebra.merge-fraction-common-factor"
+      ],
+      "meaning": "Separate the common fraction factor",
+      "positiveExamples": [
+        "Ask to merge fraction common factor using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "definition.generated.fraction-expression.merge-common-factor",
+        "law.arithmetic.fraction-factorization",
+        "kp.algebra"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.simplify-unit-fraction-factor",
+      "familyId": "kp.algebra",
+      "friendlyName": "Simplify unit fraction factor",
+      "aliases": [
+        "kp.algebra.simplify-unit-fraction-factor"
+      ],
+      "meaning": "Simplify the unit fraction factor",
+      "positiveExamples": [
+        "Ask to simplify unit fraction factor using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "definition.generated.fraction-expression.simplify-unit-factor",
+        "law.arithmetic.unit-fraction-factor",
+        "kp.algebra"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.lower-exponent",
+      "familyId": "kp.algebra",
+      "friendlyName": "Lower exponent",
+      "aliases": [
+        "kp.algebra.lower-exponent"
+      ],
+      "meaning": "Lower the exponent by one factor",
+      "positiveExamples": [
+        "Ask to lower exponent using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "definition.generated.exponent.lower-exponent",
+        "law.arithmetic.exponent-lowering",
+        "kp.algebra"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.unwrap-unit-exponent",
+      "familyId": "kp.algebra",
+      "friendlyName": "Unwrap unit exponent",
+      "aliases": [
+        "kp.algebra.unwrap-unit-exponent"
+      ],
+      "meaning": "Unwrap the unit exponent",
+      "positiveExamples": [
+        "Ask to unwrap unit exponent using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "definition.generated.exponent.unwrap-unit-exponent",
+        "law.arithmetic.unit-exponent",
+        "kp.algebra"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.rewrite-power-as-root",
+      "familyId": "kp.algebra",
+      "friendlyName": "Rewrite power as root",
+      "aliases": [
+        "kp.algebra.rewrite-power-as-root"
+      ],
+      "meaning": "Rewrite the rational exponent as a radical",
+      "positiveExamples": [
+        "Ask to rewrite power as root using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "definition.generated.radical.rewrite-power-as-root",
+        "law.arithmetic.rational-exponent-as-root",
+        "kp.algebra"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.wrap-function",
+      "familyId": "kp.algebra",
+      "friendlyName": "Wrap function",
+      "aliases": [
+        "kp.algebra.wrap-function"
+      ],
+      "meaning": "Wrap the expression in a function application",
+      "positiveExamples": [
+        "Ask to wrap function using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "definition.generated.function-wrap.wrap-function",
+        "law.notation.function-application",
+        "kp.algebra"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.distribute-multiplication",
+      "familyId": "kp.algebra",
+      "friendlyName": "Distribute multiplication",
+      "aliases": [
+        "kp.algebra.distribute-multiplication"
+      ],
+      "meaning": "Distribute multiplication over addition",
+      "positiveExamples": [
+        "Ask to distribute multiplication using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "kp.algebra.distribute-multiplication.v1",
+        "law.algebra.distributive-property",
+        "kp.algebra"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.factor-common-term",
+      "familyId": "kp.algebra",
+      "friendlyName": "Factor common term",
+      "aliases": [
+        "kp.algebra.factor-common-term"
+      ],
+      "meaning": "Factor the common term",
+      "positiveExamples": [
+        "Ask to factor common term using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "definition.generated.distribution.factor-common-term",
+        "law.algebra.distributive-property",
+        "kp.algebra"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.semantic-motion.substitute-value",
+      "familyId": "kp.semantic-motion",
+      "friendlyName": "Substitute value",
+      "aliases": [
+        "kp.semantic-motion.substitute-value"
+      ],
+      "meaning": "Transmit a persistent value into a replaced semantic position.",
+      "positiveExamples": [
+        "Ask to substitute value using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "transform-type.substituteValue",
+        "law.substituteValue",
+        "kp.semantic-motion"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.semantic-motion.absorb-additive-identity",
+      "familyId": "kp.semantic-motion",
+      "friendlyName": "Remove additive identity",
+      "aliases": [
+        "kp.semantic-motion.absorb-additive-identity",
+        "remove additive zero",
+        "simplify plus zero",
+        "drop + 0"
+      ],
+      "meaning": "Preserve an explicitly identified operand while additive identity syntax yields.",
+      "positiveExamples": [
+        "Transform x + 0 = 4 into x = 4 while x, =, and 4 persist.",
+        "Transform a + 0 into a when correspondence proves that a is the carrier."
+      ],
+      "counterexamples": [
+        "Do not use for 2 + 3 → 5; both addends contribute to a new result.",
+        "Do not use when the surviving glyph merely looks equal but lacks carrier evidence."
+      ],
+      "requiredEvidenceIds": [
+        "transform-type.simplify-additive-identity",
+        "law.simplify-additive-identity",
+        "kp.semantic-motion"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.semantic-motion.absorb-multiplicative-identity",
+      "familyId": "kp.semantic-motion",
+      "friendlyName": "Remove multiplicative identity",
+      "aliases": [
+        "kp.semantic-motion.absorb-multiplicative-identity",
+        "remove times one",
+        "simplify multiply by one",
+        "drop × 1"
+      ],
+      "meaning": "Preserve an explicitly identified factor while multiplicative identity syntax yields.",
+      "positiveExamples": [
+        "Transform 2 × 1 into 2 while the original 2 remains the carrier.",
+        "Transform x · 1 into x when correspondence proves that x persists."
+      ],
+      "counterexamples": [
+        "Do not use for 2 × 3 → 6; both factors contribute to a new result.",
+        "Do not use for 0 × x → 0; annihilation is not identity removal."
+      ],
+      "requiredEvidenceIds": [
+        "transform-type.simplify-multiplicative-identity",
+        "law.simplify-multiplicative-identity",
+        "kp.semantic-motion"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.semantic-motion.multiply-negative-inequality",
+      "familyId": "kp.semantic-motion",
+      "friendlyName": "Multiply negative inequality",
+      "aliases": [
+        "kp.semantic-motion.multiply-negative-inequality"
+      ],
+      "meaning": "Preserve both sides while the relation reverses under negative scaling.",
+      "positiveExamples": [
+        "Ask to multiply negative inequality using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "transform-type.multiplyNegativeBothSidesInequality",
+        "law.multiplyNegativeBothSidesInequality",
+        "kp.semantic-motion"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.semantic-motion.derivative-power-rule",
+      "familyId": "kp.semantic-motion",
+      "friendlyName": "Derivative power rule",
+      "aliases": [
+        "kp.semantic-motion.derivative-power-rule"
+      ],
+      "meaning": "Branch the exponent into coefficient and predecessor roles while the base persists.",
+      "positiveExamples": [
+        "Ask to derivative power rule using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "transform-type.applyDerivativePowerRule",
+        "law.applyDerivativePowerRule",
+        "kp.semantic-motion"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.semantic-motion.derivative-sum-rule",
+      "familyId": "kp.semantic-motion",
+      "friendlyName": "Derivative sum rule",
+      "aliases": [
+        "kp.semantic-motion.derivative-sum-rule"
+      ],
+      "meaning": "Fan one derivative operator out across persistent addends.",
+      "positiveExamples": [
+        "Ask to derivative sum rule using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "transform-type.applyDerivativeSumRule",
+        "law.applyDerivativeSumRule",
+        "kp.semantic-motion"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.semantic-motion.resolve-derivative-terms",
+      "familyId": "kp.semantic-motion",
+      "friendlyName": "Resolve derivative terms",
+      "aliases": [
+        "kp.semantic-motion.resolve-derivative-terms"
+      ],
+      "meaning": "Resolve local derivative operators into their corresponding term results.",
+      "positiveExamples": [
+        "Ask to resolve derivative terms using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "transform-type.applyDerivativePowerRulesToTerms",
+        "law.applyDerivativePowerRulesToTerms",
+        "kp.semantic-motion"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.semantic-motion.antiderivative-power-rule",
+      "familyId": "kp.semantic-motion",
+      "friendlyName": "Antiderivative power rule",
+      "aliases": [
+        "kp.semantic-motion.antiderivative-power-rule"
+      ],
+      "meaning": "Branch the source exponent into successor exponent and quotient roles.",
+      "positiveExamples": [
+        "Ask to antiderivative power rule using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "transform-type.applyAntiderivativePowerRule",
+        "law.applyAntiderivativePowerRule",
+        "kp.semantic-motion"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.semantic-motion.resolve-antiderivative",
+      "familyId": "kp.semantic-motion",
+      "friendlyName": "Resolve antiderivative",
+      "aliases": [
+        "kp.semantic-motion.resolve-antiderivative"
+      ],
+      "meaning": "Merge the power-rule construction and introduce the integration constant.",
+      "positiveExamples": [
+        "Ask to resolve antiderivative using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "transform-type.simplifyAntiderivativePowerRule",
+        "law.simplifyAntiderivativePowerRule",
+        "kp.semantic-motion"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.semantic-motion.dot-product",
+      "familyId": "kp.semantic-motion",
+      "friendlyName": "Dot product",
+      "aliases": [
+        "kp.semantic-motion.dot-product"
+      ],
+      "meaning": "Pair components by semantic index, preserve products, and accumulate partial sums.",
+      "positiveExamples": [
+        "Ask to dot product using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "transform-type.computeDotProduct",
+        "law.computeDotProduct",
+        "kp.semantic-motion"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.semantic-motion.matrix-vector",
+      "familyId": "kp.semantic-motion",
+      "friendlyName": "Matrix vector",
+      "aliases": [
+        "kp.semantic-motion.matrix-vector"
+      ],
+      "meaning": "Traverse matrix rows against a shared vector and persist each result entry.",
+      "positiveExamples": [
+        "Ask to matrix vector using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "transform-type.multiplyMatrixVector",
+        "law.multiplyMatrixVector",
+        "kp.semantic-motion"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.semantic-motion.matrix-matrix",
+      "familyId": "kp.semantic-motion",
+      "friendlyName": "Matrix matrix",
+      "aliases": [
+        "kp.semantic-motion.matrix-matrix"
+      ],
+      "meaning": "Traverse left rows against right columns and persist each result cell.",
+      "positiveExamples": [
+        "Ask to matrix matrix using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "transform-type.multiplyMatrices",
+        "law.multiplyMatrices",
+        "kp.semantic-motion"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.semantic-motion.log-product",
+      "familyId": "equation-pack.homomorphic-crossover",
+      "friendlyName": "Log product",
+      "aliases": [
+        "kp.semantic-motion.log-product"
+      ],
+      "meaning": "Decompose one logarithm of an ordered product into one logarithm application per persistent factor.",
+      "positiveExamples": [
+        "Ask to log product using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "law.logarithm.product",
+        "equation-pack.homomorphic-crossover",
+        "recipe.equation.homomorphic-decomposition.v1"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.semantic-motion.quotient",
+      "familyId": "equation-pack.homomorphic-crossover",
+      "friendlyName": "Quotient",
+      "aliases": [
+        "kp.semantic-motion.quotient"
+      ],
+      "meaning": "Fuse two logarithm applications into one logarithm whose persistent arguments take numerator and denominator roles.",
+      "positiveExamples": [
+        "Ask to quotient using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "law.logarithm.quotient",
+        "equation-pack.homomorphic-crossover",
+        "recipe.equation.homomorphic-decomposition.v1"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.multiply-both-sides",
+      "familyId": "kp.both-sides",
+      "friendlyName": "Multiply both sides",
+      "aliases": [
+        "kp.algebra.multiply-both-sides"
+      ],
+      "meaning": "Multiply both sides of an equation by the same nonzero quantity.",
+      "positiveExamples": [
+        "Ask to multiply both sides using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "assumption.equality.multiply-operand-nonzero"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.apply-natural-log-both-sides",
+      "familyId": "kp.both-sides",
+      "friendlyName": "Apply natural log both sides",
+      "aliases": [
+        "kp.algebra.apply-natural-log-both-sides"
+      ],
+      "meaning": "Apply the natural logarithm to both positive sides of an equation.",
+      "positiveExamples": [
+        "Ask to apply natural log both sides using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "assumption.log-exponent.power-positive",
+        "assumption.log-exponent.right-positive",
+        "assumption.log-exponent.log-injective"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.divide-both-sides-by-log-base",
+      "familyId": "kp.both-sides",
+      "friendlyName": "Divide both sides by log base",
+      "aliases": [
+        "kp.algebra.divide-both-sides-by-log-base"
+      ],
+      "meaning": "Divide both sides by the same verified nonzero logarithm of the base.",
+      "positiveExamples": [
+        "Ask to divide both sides by log base using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "assumption.log-exponent.log-base-nonzero"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.change-logarithm-base",
+      "familyId": "family.equation.logarithm-base.v1",
+      "friendlyName": "Change logarithm base",
+      "aliases": [
+        "kp.algebra.change-logarithm-base"
+      ],
+      "meaning": "Rewrite a logarithm in a verified alternative base as a quotient of natural logarithms.",
+      "positiveExamples": [
+        "Ask to change logarithm base using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "sourceBasePositiveEvidenceId",
+        "sourceBaseNotOneEvidenceId",
+        "sourceArgumentPositiveEvidenceId",
+        "naturalLogarithmTargetEvidenceId"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.scale-fraction-equivalently",
+      "familyId": "family.equation.fraction-equivalence.v1",
+      "friendlyName": "Scale fraction equivalently",
+      "aliases": [
+        "kp.algebra.scale-fraction-equivalently"
+      ],
+      "meaning": "Create an equivalent fraction by scaling its numerator and denominator by the same verified nonzero factor.",
+      "positiveExamples": [
+        "Ask to scale fraction equivalently using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "sourceDenominatorNonzeroEvidenceId",
+        "scaleFactorNonzeroEvidenceId"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.align-common-denominator",
+      "familyId": "family.equation.common-denominator-alignment.v1",
+      "friendlyName": "Align common denominator",
+      "aliases": [
+        "kp.algebra.align-common-denominator"
+      ],
+      "meaning": "Align two numeric fractions to one caller-supplied common denominator while preserving each addend and the addition operator.",
+      "positiveExamples": [
+        "Ask to align common denominator using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "authoring.equation.common-denominator-alignment.v1",
+        "operation.equation.common-denominator-alignment.v1",
+        "law.fraction.equivalent-common-denominator",
+        "family.equation.common-denominator-alignment.v1"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.combine-like-denominator-fractions",
+      "familyId": "family.equation.like-denominator-combination.v1",
+      "friendlyName": "Combine like denominator fractions",
+      "aliases": [
+        "kp.algebra.combine-like-denominator-fractions"
+      ],
+      "meaning": "Combine two fractions with an already-shared denominator into one raw, unreduced result fraction.",
+      "positiveExamples": [
+        "Ask to combine like denominator fractions using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "authoring.equation.like-denominator-combination.v1",
+        "operation.equation.like-denominator-combination.v1",
+        "law.fraction.combine-like-denominators",
+        "family.equation.like-denominator-combination.v1"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.simplify-constant-product",
+      "familyId": "family.equation.operation-evaluation.v1",
+      "friendlyName": "Simplify constant product",
+      "aliases": [
+        "kp.algebra.simplify-constant-product"
+      ],
+      "meaning": "Evaluate an authored constant product while preserving its surrounding expression.",
+      "positiveExamples": [
+        "Ask to simplify constant product using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "kp.algebra.simplify-constant-product",
+        "kp.arithmetic.multiply",
+        "family.equation.operation-evaluation.v1",
+        "kp.presentation.operation-evaluation.product"
+      ],
+      "supportState": "available"
+    }
+  ],
+  "aliases": [
+    {
+      "alias": "definition.symbolic.algebra.create-common-denominator",
+      "operationId": "kp.algebra.align-common-denominator"
+    },
+    {
+      "alias": "drop + 0",
+      "operationId": "kp.semantic-motion.absorb-additive-identity"
+    },
+    {
+      "alias": "drop times 1",
+      "operationId": "kp.semantic-motion.absorb-multiplicative-identity"
+    },
+    {
+      "alias": "kp.algebra.add-both-sides",
+      "operationId": "kp.algebra.add-both-sides"
+    },
+    {
+      "alias": "kp.algebra.align-common-denominator",
+      "operationId": "kp.algebra.align-common-denominator"
+    },
+    {
+      "alias": "kp.algebra.apply-natural-log-both-sides",
+      "operationId": "kp.algebra.apply-natural-log-both-sides"
+    },
+    {
+      "alias": "kp.algebra.cancel-additive-inverses",
+      "operationId": "kp.algebra.cancel-additive-inverses"
+    },
+    {
+      "alias": "kp.algebra.cancel-multiplicative-inverses",
+      "operationId": "kp.algebra.cancel-multiplicative-inverses"
+    },
+    {
+      "alias": "kp.algebra.change-logarithm-base",
+      "operationId": "kp.algebra.change-logarithm-base"
+    },
+    {
+      "alias": "kp.algebra.combine-like-denominator-fractions",
+      "operationId": "kp.algebra.combine-like-denominator-fractions"
+    },
+    {
+      "alias": "kp.algebra.distribute-multiplication",
+      "operationId": "kp.algebra.distribute-multiplication"
+    },
+    {
+      "alias": "kp.algebra.divide-both-sides",
+      "operationId": "kp.algebra.divide-both-sides"
+    },
+    {
+      "alias": "kp.algebra.divide-both-sides-by-log-base",
+      "operationId": "kp.algebra.divide-both-sides-by-log-base"
+    },
+    {
+      "alias": "kp.algebra.factor-common-term",
+      "operationId": "kp.algebra.factor-common-term"
+    },
+    {
+      "alias": "kp.algebra.lower-exponent",
+      "operationId": "kp.algebra.lower-exponent"
+    },
+    {
+      "alias": "kp.algebra.merge-fraction-common-factor",
+      "operationId": "kp.algebra.merge-fraction-common-factor"
+    },
+    {
+      "alias": "kp.algebra.multiply-both-sides",
+      "operationId": "kp.algebra.multiply-both-sides"
+    },
+    {
+      "alias": "kp.algebra.rewrite-power-as-root",
+      "operationId": "kp.algebra.rewrite-power-as-root"
+    },
+    {
+      "alias": "kp.algebra.scale-fraction-equivalently",
+      "operationId": "kp.algebra.scale-fraction-equivalently"
+    },
+    {
+      "alias": "kp.algebra.simplify-constant-difference",
+      "operationId": "kp.algebra.simplify-constant-difference"
+    },
+    {
+      "alias": "kp.algebra.simplify-constant-product",
+      "operationId": "kp.algebra.simplify-constant-product"
+    },
+    {
+      "alias": "kp.algebra.simplify-constant-quotient",
+      "operationId": "kp.algebra.simplify-constant-quotient"
+    },
+    {
+      "alias": "kp.algebra.simplify-constant-sum",
+      "operationId": "kp.algebra.simplify-constant-sum"
+    },
+    {
+      "alias": "kp.algebra.simplify-unit-fraction-factor",
+      "operationId": "kp.algebra.simplify-unit-fraction-factor"
+    },
+    {
+      "alias": "kp.algebra.split-fraction-factors",
+      "operationId": "kp.algebra.split-fraction-factors"
+    },
+    {
+      "alias": "kp.algebra.subtract-both-sides",
+      "operationId": "kp.algebra.subtract-both-sides"
+    },
+    {
+      "alias": "kp.algebra.unwrap-unit-exponent",
+      "operationId": "kp.algebra.unwrap-unit-exponent"
+    },
+    {
+      "alias": "kp.algebra.wrap-function",
+      "operationId": "kp.algebra.wrap-function"
+    },
+    {
+      "alias": "kp.core.copy",
+      "operationId": "kp.core.copy"
+    },
+    {
+      "alias": "kp.core.eliminate",
+      "operationId": "kp.core.eliminate"
+    },
+    {
+      "alias": "kp.core.fan-out",
+      "operationId": "kp.core.fan-out"
+    },
+    {
+      "alias": "kp.core.focus",
+      "operationId": "kp.core.focus"
+    },
+    {
+      "alias": "kp.core.group",
+      "operationId": "kp.core.group"
+    },
+    {
+      "alias": "kp.core.introduce",
+      "operationId": "kp.core.introduce"
+    },
+    {
+      "alias": "kp.core.merge",
+      "operationId": "kp.core.merge"
+    },
+    {
+      "alias": "kp.core.persist",
+      "operationId": "kp.core.persist"
+    },
+    {
+      "alias": "kp.core.reorder",
+      "operationId": "kp.core.reorder"
+    },
+    {
+      "alias": "kp.core.substitute",
+      "operationId": "kp.core.substitute"
+    },
+    {
+      "alias": "kp.core.ungroup",
+      "operationId": "kp.core.ungroup"
+    },
+    {
+      "alias": "kp.core.unwrap",
+      "operationId": "kp.core.unwrap"
+    },
+    {
+      "alias": "kp.core.wrap",
+      "operationId": "kp.core.wrap"
+    },
+    {
+      "alias": "kp.semantic-motion.absorb-additive-identity",
+      "operationId": "kp.semantic-motion.absorb-additive-identity"
+    },
+    {
+      "alias": "kp.semantic-motion.absorb-multiplicative-identity",
+      "operationId": "kp.semantic-motion.absorb-multiplicative-identity"
+    },
+    {
+      "alias": "kp.semantic-motion.antiderivative-power-rule",
+      "operationId": "kp.semantic-motion.antiderivative-power-rule"
+    },
+    {
+      "alias": "kp.semantic-motion.derivative-power-rule",
+      "operationId": "kp.semantic-motion.derivative-power-rule"
+    },
+    {
+      "alias": "kp.semantic-motion.derivative-sum-rule",
+      "operationId": "kp.semantic-motion.derivative-sum-rule"
+    },
+    {
+      "alias": "kp.semantic-motion.dot-product",
+      "operationId": "kp.semantic-motion.dot-product"
+    },
+    {
+      "alias": "kp.semantic-motion.log-product",
+      "operationId": "kp.semantic-motion.log-product"
+    },
+    {
+      "alias": "kp.semantic-motion.matrix-matrix",
+      "operationId": "kp.semantic-motion.matrix-matrix"
+    },
+    {
+      "alias": "kp.semantic-motion.matrix-vector",
+      "operationId": "kp.semantic-motion.matrix-vector"
+    },
+    {
+      "alias": "kp.semantic-motion.multiply-negative-inequality",
+      "operationId": "kp.semantic-motion.multiply-negative-inequality"
+    },
+    {
+      "alias": "kp.semantic-motion.quotient",
+      "operationId": "kp.semantic-motion.quotient"
+    },
+    {
+      "alias": "kp.semantic-motion.resolve-antiderivative",
+      "operationId": "kp.semantic-motion.resolve-antiderivative"
+    },
+    {
+      "alias": "kp.semantic-motion.resolve-derivative-terms",
+      "operationId": "kp.semantic-motion.resolve-derivative-terms"
+    },
+    {
+      "alias": "kp.semantic-motion.substitute-value",
+      "operationId": "kp.semantic-motion.substitute-value"
+    },
+    {
+      "alias": "operation.equation.log-product-decomposition.v1",
+      "operationId": "kp.semantic-motion.log-product"
+    },
+    {
+      "alias": "operation.equation.log-quotient-fusion.v1",
+      "operationId": "kp.semantic-motion.quotient"
+    },
+    {
+      "alias": "operation.wrap-function.v1",
+      "operationId": "kp.algebra.wrap-function"
+    },
+    {
+      "alias": "remove additive zero",
+      "operationId": "kp.semantic-motion.absorb-additive-identity"
+    },
+    {
+      "alias": "remove times one",
+      "operationId": "kp.semantic-motion.absorb-multiplicative-identity"
+    },
+    {
+      "alias": "simplify multiply by one",
+      "operationId": "kp.semantic-motion.absorb-multiplicative-identity"
+    },
+    {
+      "alias": "simplify plus zero",
+      "operationId": "kp.semantic-motion.absorb-additive-identity"
+    }
+  ]
+}

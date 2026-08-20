@@ -36,6 +36,10 @@ import {
 import {
   resolveKpOperationEvaluationAuthority
 } from "../semantic/operation-evaluation-authority.ts";
+import {
+  compileKpEquationOperationDiscoverability,
+  type KpEquationOperationDiscoverability
+} from "./equation-operation-discoverability.ts";
 
 export interface KpEquationSeriesGovernedRequirements {
   readonly authoringAuthorityId: string;
@@ -67,6 +71,7 @@ export interface KpEquationSeriesOperationDeclaration {
   readonly authorityRefIds: readonly string[];
   readonly roleIds: readonly string[];
   readonly canonicalComposition: readonly string[];
+  readonly discoverability: KpEquationOperationDiscoverability;
   readonly bothSides?:
     KpEquationSeriesBothSidesAuthoringDeclaration | undefined;
   readonly governed?: KpEquationSeriesGovernedRequirements | undefined;
@@ -84,7 +89,10 @@ export interface KpEquationSeriesOperationRegistry {
 }
 
 export type KpEquationSeriesOperationDeclarationInput =
-  Omit<KpEquationSeriesOperationDeclaration, "plannerOperationId"> &
+  Omit<
+    KpEquationSeriesOperationDeclaration,
+    "plannerOperationId" | "discoverability"
+  > &
   Readonly<{ readonly plannerOperationId?: string | undefined }>;
 
 const extensionOperationRegistrations = Object.freeze([
@@ -458,13 +466,25 @@ KpEquationSeriesOperationDeclaration {
 function declaration(
   input: KpEquationSeriesOperationDeclarationInput
 ): KpEquationSeriesOperationDeclaration {
+  const plannerOperationId = input.plannerOperationId ?? input.operationId;
   return Object.freeze({
     ...input,
-    plannerOperationId: input.plannerOperationId ?? input.operationId,
+    plannerOperationId,
     recipeIds: Object.freeze([...input.recipeIds]),
     authorityRefIds: Object.freeze([...input.authorityRefIds]),
     roleIds: Object.freeze([...input.roleIds]),
     canonicalComposition: Object.freeze([...input.canonicalComposition]),
+    discoverability: compileKpEquationOperationDiscoverability({
+      operationId: input.operationId,
+      plannerOperationId,
+      plannerExposure: input.plannerExposure,
+      authorityRefIds: unique([
+        ...input.authorityRefIds,
+        input.familyId,
+        ...input.recipeIds
+      ]),
+      governedRequiredEvidenceIds: input.governed?.requiredEvidenceIds
+    }),
     ...(input.governed === undefined ? {} : {
       governed: deepFreeze({
         ...input.governed,

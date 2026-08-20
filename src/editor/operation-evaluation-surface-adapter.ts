@@ -412,16 +412,17 @@ async function prepareOperationEvaluationSurface(input: {
       resolveKpDefaultOperationEvaluationFamilyProfile(
         transition.transformType
       );
-    const promotedPlayback = defaultFamilyProfile === undefined
+    const promotedPlayback =
+      defaultFamilyProfile?.family !== "contributor-fusion"
       ? undefined
       : createKpNativeKatexContributorFusionPlayback({
           stage,
           base: canonicalPlayback,
           familyProfile: defaultFamilyProfile
         });
-    // The development comparison owns explicit candidate selection. Outside
-    // that review surface, semantic transformation kind selects the promoted
-    // profile without an animation-id or DOM branch.
+    // This generic adapter realizes contributor fusion only. The selected
+    // carrier capability claims its exact reviewed callers first, so a newly
+    // promoted family must not be coerced into contributor-fusion paint here.
     const playback = familyPlayback ?? promotedPlayback ?? canonicalPlayback;
     if (
       familyReviewModule !== undefined &&
