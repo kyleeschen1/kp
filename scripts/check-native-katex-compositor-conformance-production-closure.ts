@@ -19,6 +19,7 @@ const testOnlyMarkers = Object.freeze([
   "native-katex-compositor-continuity-assessment",
   "native-katex-compositor-diagnostic-report",
   "native-katex-compositor-seam-trace",
+  "native-katex-conformance-compound-risk-fixture",
   "native-katex-conformance-context-mutation-registry",
   "native-katex-conformance-matrix-fixture",
   "native-katex-conformance-shape-registry"

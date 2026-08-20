@@ -244,6 +244,47 @@ const matrixShapeDefinitions = Object.freeze([
   }
 ] as const satisfies readonly ShapeDefinition[]);
 
+const compoundShapeDefinitions = Object.freeze([
+  {
+    id: "shape.compound.large-operator",
+    label: "large operator with limits",
+    representativeLatex: "\\sum_{i=1}^{n}x_i",
+    shapeClass: "vertical-list",
+    paintClass: "subtree",
+    ownershipGrain: "compound",
+    baseline: "required",
+    riskTags: ["glyph", "script", "vertical-list", "font-style"]
+  },
+  {
+    id: "shape.compound.cases",
+    label: "two-row cases expression",
+    representativeLatex:
+      "\\begin{cases}x,&x>0\\\\-x,&x\\leq0\\end{cases}",
+    shapeClass: "multirow-compound",
+    paintClass: "subtree",
+    ownershipGrain: "compound",
+    baseline: "required",
+    riskTags: [
+      "glyph",
+      "vertical-list",
+      "delimiter",
+      "multirow",
+      "font-style"
+    ]
+  },
+  {
+    id: "shape.compound.aligned",
+    label: "two-row aligned expression",
+    representativeLatex:
+      "\\begin{aligned}x&=1\\\\y&=2\\end{aligned}",
+    shapeClass: "multirow-compound",
+    paintClass: "subtree",
+    ownershipGrain: "compound",
+    baseline: "required",
+    riskTags: ["glyph", "vertical-list", "multirow", "font-style"]
+  }
+] as const satisfies readonly ShapeDefinition[]);
+
 export const kpNativeKatexAtomicConformanceShapes = Object.freeze(
   atomicShapeDefinitions.map((definition) =>
     createKpNativeKatexConformanceShapeDescriptor(definition))
@@ -269,10 +310,16 @@ export const kpNativeKatexMatrixConformanceShapes = Object.freeze(
     createKpNativeKatexConformanceShapeDescriptor(definition))
 );
 
+export const kpNativeKatexCompoundConformanceShapes = Object.freeze(
+  compoundShapeDefinitions.map((definition) =>
+    createKpNativeKatexConformanceShapeDescriptor(definition))
+);
+
 export const kpNativeKatexConformanceShapeRegistry =
   createKpNativeKatexConformanceShapeRegistry([
     ...kpNativeKatexAtomicConformanceShapes,
     ...kpNativeKatexScriptStyleConformanceShapes,
     ...kpNativeKatexStructuredConformanceShapes,
-    ...kpNativeKatexMatrixConformanceShapes
+    ...kpNativeKatexMatrixConformanceShapes,
+    ...kpNativeKatexCompoundConformanceShapes
   ]);

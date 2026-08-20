@@ -191,7 +191,8 @@
     {
       "id": "ncc25",
       "title": "Add-compound-risk-fixtures",
-      "status": "planned"
+      "summary": "Added large-operator, cases, and alignment compounds to fill the 24-shape canary registry. Added one nested three-way structural-risk fixture to a 20-scenario promotion plan, with no choreography fields or production closure.",
+      "status": "complete"
     },
     {
       "id": "ncc26",

@@ -33,4 +33,8 @@ test("keeps conformance schemas out of production source and bundles", () => {
     path: "dist/matrix.js",
     source: "native-katex-conformance-matrix-fixture"
   }])[0]?.marker, "native-katex-conformance-matrix-fixture");
+  assert.equal(checkKpNativeKatexConformanceProductionArtifacts([{
+    path: "dist/compound.js",
+    source: "native-katex-conformance-compound-risk-fixture"
+  }])[0]?.marker, "native-katex-conformance-compound-risk-fixture");
 });

@@ -269,6 +269,20 @@
       "scope": "ncc24",
       "checkedAt": "2026-08-20T04:46:01.593Z",
       "notes": "The production closure rejects the matrix-fixture marker; source and emitted artifacts remain clean across seven forbidden conformance markers."
+    },
+    {
+      "command": "npm run test:native-katex-compositor-conformance",
+      "status": "passed",
+      "scope": "ncc25",
+      "checkedAt": "2026-08-20T04:50:04.376Z",
+      "notes": "Forty-seven checks pass; large-operator, cases, and alignment representatives fill the fast registry at exactly 24 shapes, while one nested vertical-list/delimiter/multirow risk fixture is covered by a deterministic 20-scenario promotion plan below the 96-scenario ceiling."
+    },
+    {
+      "command": "npm run check:native-katex-compositor-conformance-production",
+      "status": "passed",
+      "scope": "ncc25",
+      "checkedAt": "2026-08-20T04:50:05.504Z",
+      "notes": "The production closure rejects the compound-risk fixture marker; source and emitted artifacts remain clean across eight forbidden conformance markers."
     }
   ],
   "expectedLearning": [
