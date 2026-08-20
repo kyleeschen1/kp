@@ -2,9 +2,9 @@
   "id": "next-action.kp.carrier-preserving-simplification-v4",
   "kind": "next-action",
   "title": "Build and promote carrier-preserving simplification",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Reactivated after Native KaTeX compositor conformance v2 closed cleanly. Continue the approved carrier run at cps22; no checkpoint semantics or prior choreography are reopened.",
+  "summary": "Carrier preservation is promoted for two reviewed callers. Human and tool discovery, bounded model selection, mixed-family benchmark, typography amendment, release gates, and closeout are complete.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -645,11 +645,39 @@
       "scope": "cps21 checkpoint diff",
       "checkedAt": "2026-08-20T01:29:52.702Z",
       "notes": "Checkpoint harness and Theseus evidence have no whitespace errors."
+    },
+    {
+      "command": "npm run test:bounded-equation-operation-benchmark",
+      "status": "passed",
+      "scope": "cps27",
+      "checkedAt": "2026-08-20T16:41:18.978Z",
+      "notes": "Two mixed-family benchmark cases passed, covering three valid selections and one out-of-shortlist repair with last-valid preservation."
+    },
+    {
+      "command": "npm run verify:equation:promotion",
+      "status": "passed",
+      "scope": "cps27",
+      "checkedAt": "2026-08-20T16:41:21.879Z",
+      "notes": "Equation preservation, extension dispatch, motion protocols, typecheck, architecture, five Chromium capability cases, and all four bundle ceilings passed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "cps27",
+      "checkedAt": "2026-08-20T16:41:24.012Z",
+      "notes": "Production typecheck and 1453-module Vite build passed. Only the documented large-chunk warnings remain."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "cps27",
+      "checkedAt": "2026-08-20T16:42:28.484Z",
+      "notes": "Validated 1037 nodes and 23822 events after resolving all 27 slices, the target, and the context receipt."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "Second-caller evidence is ready for human review. The stable checkpoint places canonical 2x1 and add-zero side by side at each state; no promotion metadata or compatibility retirement has been applied."
+    "state": "complete",
+    "summary": "All 27 approved slices, required checkpoints, promotion evidence, discoverability, bounded model selection, mixed benchmark, typography amendment, and release gates are complete."
   },
   "revisitWhen": [
     "run-contract.kp.native-katex-compositor-conformance-v2 completes ncc27 and returns to carrier slice cps22"

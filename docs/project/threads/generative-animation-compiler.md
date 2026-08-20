@@ -2,21 +2,17 @@
 
 Status: active
 Last Updated: 2026-08-20
-Current Next Action: propose the carrier-preserving simplification family on
-`2 × 1 → 2`, then pressure the approved visual language on the existing
-`x + 0 = 4 → x = 4` caller. Review placement and the sequence-level Native
-KaTeX ownership repair are already complete; do not repeat them or continue
-fraction arithmetic merely for category coverage.
+Current Next Action: propose one punctuated-substitution exemplar at a stable
+native anchor, then stop for human visual review before any promotion or second
+caller. Carrier-preserving simplification and contributor fusion are already
+narrowly promoted and discoverable; do not reopen their approved choreography
+or continue fraction arithmetic merely for category coverage.
 
-After the current carrier/discoverability contract closes, build the bounded
-descriptor-driven Native KaTeX conformance runner before expanding into
-another notation shape family. Do not interrupt the six remaining carrier
-slices: their two real callers already have executable `2`/`x` seam evidence.
-
-Execution authority: the user-approved proposal at
-`docs/project/reviews/2026-08-19-carrier-preserving-simplification-long-loop-proposal.md`
-and `run-contract.kp.carrier-preserving-simplification-v4`. Earlier `v1`–`v3`
-records are superseded setup attempts, not resumable plans.
+The completed carrier/discoverability run is recorded in
+`docs/project/reviews/2026-08-20-carrier-preserving-simplification-closeout.md`.
+The descriptor-driven Native KaTeX conformance runner also completed before
+carrier promotion resumed. Earlier carrier `v1`–`v3` records are superseded
+setup attempts, not resumable plans.
 
 ## Goal
 
@@ -55,7 +51,7 @@ incompatible.
   foreground crossing avoids glyph occlusion, and clean-load/remount playback
   passed cross-browser pressure. The transparent crossing treatment is not a
   globally promoted salience motif.
-- Thirty-five equation surfaces exist, but asset count is not capability
+- Thirty-six equation surfaces exist, but asset count is not capability
   coverage. The generated inventory remains the authority for each surface's
   current presentation and migration status.
 - The canonical compositor ownership gate is green with explicit planning and
@@ -139,12 +135,16 @@ incompatible.
   still supplies the contributor axis. Other evaluation families and sequence
   embedding remain explicitly outside the promotion.
 - Native KaTeX conformance now distinguishes inventory from execution. The
-  24-shape registry, risk tags, context mutations, matrices, compound fixtures,
-  and pairwise manifests are bounded planning evidence. Only the canonical
-  digit `2` and italic `x` carriers currently traverse the real compositor in
-  the supported-browser actual-paint suite. No future loop may describe the
-  wider families as certified until their coverage plans drive executable
-  source-native to material to target-native representatives.
+  completed run covers 24 fast shapes, typed context and compound pressure,
+  actual-paint continuity laws, deterministic lifecycle invalidation, and a
+  ten-scenario-per-engine Chromium/Firefox/WebKit release cohort. The registry
+  remains diagnostic coverage, not aesthetic approval of every future motif.
+- Carrier-preserving simplification is narrowly promoted for the reviewed
+  `2 × 1 → 2` and `x + 0 = 4 → x = 4` callers. One generated discovery catalog,
+  tool-neutral API, compact Coverage lookup, CLI, and bounded model exchange
+  expose the family without granting models evidence, geometry, timing, or
+  renderer authority. The mixed benchmark distinguishes carrier preservation
+  from contributor fusion and keeps ambiguous `2 × 1` intent explicit.
 
 ## Native KaTeX Promotion Gate
 

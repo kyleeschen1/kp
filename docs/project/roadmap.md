@@ -176,33 +176,35 @@ Only this repository sequence is active:
    settlement repaired the `2/2` handoff without caller timing masks. The
    completed run contract and subsequent human confirmation supersede the
    stale instruction to implement this work next.
-24. **Carrier-preserving simplification:** next contrasting family. Hold
-   `2 × 1 → 2` as the canonical same-operator contrast with contributor fusion,
-   then pressure the accepted `x + 0 = 4 → x = 4` caller. Preserve the proven
-   carrier by semantic identity; callers and model planners may not author
-   geometry, timing, opacity, or renderer nodes.
-25. **Mixed-family governed generation:** after two reviewed carrier callers.
-   Promote only the demonstrated family/handoff boundary. Derive one
+24. **Carrier-preserving simplification:** complete and narrowly promoted.
+   The reviewed `2 × 1 → 2` and `x + 0 = 4 → x = 4` callers share one proved
+   family, persistent-carrier handoff, and Native KaTeX profile. Carrier
+   identity comes only from nominal semantic evidence; callers and model
+   planners cannot author geometry, timing, opacity, or renderer nodes.
+25. **Mixed-family governed generation:** complete. One
    machine-readable and human-readable capability catalogue from canonical
-   declarations, expose friendly names, aliases, examples, counterexamples,
-   required evidence, and support state, then let natural-language and
+   declarations exposes friendly names, aliases, examples, counterexamples,
+   required evidence, and support state. Natural-language and
    ordered-LaTeX requests select contributor fusion or carrier preservation
-   from verified semantics—or enter a typed clarification/repair exchange.
-26. **Executable Native KaTeX mechanism conformance:** immediately after the
-   carrier/discoverability contract and before another notation shape family.
-   Convert the existing descriptor, risk-tag, pairwise, and actual-paint
-   infrastructure into one data-driven runtime harness. Certify one real
-   canonical-compositor representative per materially distinct paint class,
-   ownership topology, context mutation, and lifecycle interaction; ordinary
-   glyph spellings and callers reuse the resulting coverage signature. The
-   current 24-shape registry is bounded inventory, while only the canonical
-   `2` and italic `x` carriers have complete browser-realized seam evidence.
-   The accepted gate is recorded in
+   from verified semantics or enter a typed clarification exchange. A mixed
+   benchmark proves the model sees only eligible candidates and KP binds all
+   evidence and authority.
+26. **Executable Native KaTeX mechanism conformance:** complete before carrier
+   promotion resumed. The existing descriptor, risk-tag, pairwise, and
+   actual-paint infrastructure now drives one data-driven runtime harness with
+   real canonical-compositor representatives across materially distinct paint
+   classes, ownership topologies, context mutations, and lifecycle
+   interactions. Ordinary glyph spellings and callers reuse the resulting
+   coverage signature. The
+   24-shape registry remains bounded inventory rather than a claim that every
+   spelling is browser-certified. The accepted gate is recorded in
    `decisions/2026-08-20-native-katex-mechanism-conformance-gate.md`.
-27. **Remaining evaluation presentation families:** punctuated substitution,
-   result reception, operator aperture, and expanded calculation remain
-   separate future instructional choices. Do not promote scaling-to-zero or
-   simultaneous readable pre/post glyphs as a default.
+27. **Next family:** punctuated substitution is the recommended conservative
+   exemplar at a stable native anchor. Stop for human visual review before a
+   second caller or promotion. Result reception, operator aperture, and
+   expanded calculation remain separate future instructional choices. Do not
+   promote scaling-to-zero or simultaneous readable pre/post glyphs as a
+   default.
 28. **Fraction promotion and arithmetic:** deferred while KP broadens its
    evaluation topology. Return to like-denominator combination after the
    contrasting-family proof rather than completing fractions for category
@@ -218,7 +220,7 @@ The catalogue backlog and selection rationale are recorded in
 | Area | State | Direction |
 | --- | --- | --- |
 | Semantic/runtime spine | Strong and governed | Preserve; simplify callers around it. |
-| Equation animation | Balanced operations and alternative logarithm bases are Direct; Review placement and sequence-level Native KaTeX ownership are complete; contributor fusion is promoted; `2` and italic `x` have executable cross-browser paint-seam certification while the wider 24-shape registry remains inventory/planning evidence | Complete carrier-preserving simplification and mixed-family governed generation, then make the descriptor-driven conformance plans executable before returning to fractions or another notation shape family. |
+| Equation animation | Balanced operations and alternative logarithm bases are Direct; Review placement and sequence-level Native KaTeX ownership are complete; contributor fusion and carrier-preserving simplification are narrowly promoted; mixed-family governed discovery and bounded planning are green; the conformance harness separates executable representatives from the wider planning registry | Prototype punctuated substitution on one stable-anchor exemplar and stop for human visual review before promotion or another notation family. |
 | Graph2D | Promoted through economics and physics | Extract only general tokens, lifecycle, and renderer contracts. |
 | Program animation | TypeScript, Python, and Scheme are approved governed callers; bounded paint, projection, settlement, and ownership seams are proven | Preserve the portfolio for product convergence; defer another language or transformation topology. |
 | Graph3D | Honest internal capability, not public parity | Keep internal until a product proof requires it. |
@@ -227,7 +229,7 @@ The catalogue backlog and selection rationale are recorded in
 | Catalogue | One persistent lazy host spans equation, graph, code, and internal 3D capabilities without iframes | Preserve as the pressure lab while capability loading becomes declaration-driven. |
 | Layout | Many useful experiments; the refined eigenvector surface is better but remains a mixed proof | Freeze layout development until observed educator use identifies a concrete failure worth fixing. |
 | Public product | Engine and routes are research-ready; educator demand is unvalidated | Continue educator discovery outside the active repository lane; do not infer validation from catalogue growth. |
-| LLM generation | One canonical planner vocabulary, deterministic verified-source binders, typed recovery, governed common-denominator alignment and like-denominator combination, and a pinned three-repeat six-case benchmark are stable-green | Preserve the narrow planner boundary; after visual approval, promote only the proven fraction contracts and rerun a mixed-series benchmark. |
+| LLM generation | One canonical planner vocabulary, deterministic verified-source binders, typed recovery, governed fraction operations, a pinned live-model corpus, and the new mixed carrier/fusion bounded benchmark are stable-green | Preserve deterministic narrowing and code-owned evidence; extend discovery one reviewed family at a time rather than giving the model presentation authority. |
 
 ## Active Tightening Phase
 

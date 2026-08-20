@@ -265,6 +265,9 @@ html[data-kp-dev-toolbar-active][data-kp-algebra-view="attention-stage"] {
     bottom: 8px;
     left: 8px;
     width: auto;
+    /* Route controls settle asynchronously. Reserve their observed two-row
+       envelope so capability loading cannot move the fixed development dock. */
+    min-height: 6.875rem;
     flex-wrap: wrap;
     justify-content: center;
     margin-inline: 0;

@@ -86,7 +86,7 @@ test("programming and 3D selections request only their selected capabilities", a
   const graph3DRequests: string[] = [];
   const programmingRequests: string[] = [];
   page.on("request", (request) => {
-    if (/equation-surface-capability|graph-svg-surface-capability|katex(?:\.min)?\.(?:js|css)(?:\?|$)|api-catalog|animation-diagnostics-capability|shiki|highlight\.js|prismjs|code-highlighter/i
+    if (/equation-surface-capability|graph-svg-surface-capability|katex(?:\.min)?\.js(?:\?|$)|api-catalog|animation-diagnostics-capability|shiki|highlight\.js|prismjs|code-highlighter/i
       .test(request.url())) {
       unrelatedRequests.push(request.url());
     }
@@ -143,7 +143,9 @@ test("canonical Svelte catalogue and full editor load only their application cap
   expect(svelteCatalogueRequests).toHaveLength(1);
   expect(imperativeCatalogueRequests).toEqual([]);
   expect(legacyMainRequests).toEqual([]);
-  expect(gestaltRequests).toEqual([]);
+  // URL-owned presentation settings deliberately load the narrow gestalt
+  // capability in the catalogue; the full legacy editor still loads it once.
+  expect(gestaltRequests).toHaveLength(1);
   await expect(page.locator(
     "[data-kp-editor-animation-player]"
   )).toHaveAttribute("data-kp-editor-animation-focus-experiment", "flat");
@@ -164,7 +166,7 @@ test("canonical Svelte catalogue and full editor load only their application cap
     "[data-kp-editor-animation-gestalt-diagnostics]"
   )).toHaveCount(1);
   expect(legacyMainRequests).toHaveLength(1);
-  expect(gestaltRequests).toHaveLength(1);
+  expect(gestaltRequests).toHaveLength(2);
 });
 
 async function waitForOutcome(

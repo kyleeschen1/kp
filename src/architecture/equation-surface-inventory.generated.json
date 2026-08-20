@@ -446,7 +446,7 @@
         "packSourcePath": "src/animation/catalog-packs/generated-drafts.ts"
       },
       "currentPresentationAuthority": {
-        "canonicalFormat": "legacy",
+        "canonicalFormat": "ported",
         "representationId": "editor-animation.animation.generated.add-zero",
         "representationKind": "editor",
         "href": "/?animation=editor-animation.animation.generated.add-zero&view=editor",
@@ -1305,7 +1305,7 @@
         "packSourcePath": "src/animation/catalog-packs/operation-evaluation.ts"
       },
       "currentPresentationAuthority": {
-        "canonicalFormat": "legacy",
+        "canonicalFormat": "ported",
         "representationId": "editor-animation.animation.operation-evaluation.two-times-one-carrier",
         "representationKind": "editor",
         "href": "/?animation=editor-animation.animation.operation-evaluation.two-times-one-carrier&view=editor",

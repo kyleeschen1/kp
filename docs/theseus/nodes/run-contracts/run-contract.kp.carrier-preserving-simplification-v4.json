@@ -2,9 +2,9 @@
   "id": "run-contract.kp.carrier-preserving-simplification-v4",
   "kind": "run-contract",
   "title": "Carrier-preserving simplification and discoverable authoring",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Native KaTeX compositor conformance v2 completed all 27 slices and explicitly returned execution to carrier promotion. Resume at cps22 with the approved carrier semantics and choreography preserved.",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -213,7 +213,8 @@
     {
       "id": "cps27",
       "title": "Run-mixed-benchmark-and-closeout",
-      "status": "planned"
+      "summary": "Mixed carrier-preservation and contributor-fusion generation passed with code-owned evidence and typed repair. Equation promotion, browser capability, bundle ceilings, production build, and durable closeout pass. Punctuated substitution is recommended as the next separately reviewed family.",
+      "status": "complete"
     }
   ]
 }
