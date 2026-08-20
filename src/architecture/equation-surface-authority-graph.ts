@@ -25,6 +25,7 @@ export type KpEquationSurfaceAuthorityPathClass =
   | "logarithm-change-of-base-specialized"
   | "log-quotient-specialized"
   | "log-product-specialized"
+  | "exponential-homomorphism-specialized"
   | "operation-evaluation-specialized";
 
 export interface KpEquationSurfaceAuthorityNode {
@@ -119,6 +120,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/semantic/log-product-transformation-compiler.ts",
     "export function compileKpLogProductOperation",
     "Log product uses its dedicated typed semantic compiler."),
+  node("compiler.exponential-homomorphism-correspondence", "compiler", "local",
+    "src/semantic/exponential-homomorphism-correspondence.ts",
+    "export function compileKpExponentialHomomorphismCorrespondence",
+    "Exponential homomorphism mints occurrence identity from normalized power syntax."),
   node("motif.generic-transition", "motif", "compatibility",
     "src/editor/equation-transition-motifs.ts",
     "export function createKpEditorEquationTransitionMotifFrame",
@@ -147,6 +152,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/rendering/native-katex-semantic-motion-track-projection.ts",
     "export function createKpNativeKatexSemanticMotionTrackProjection",
     "Log product projects compiled semantic tracks without a family switch."),
+  node("motif.exponential-power-crossover", "motif", "local",
+    "src/animation/exponential-homomorphism-motif.ts",
+    "export const kpExponentialHomomorphismMotifSchema",
+    "The pressure exemplar declares payload continuity and base succession without glyph inference."),
   node("timing.generic-phase-easing", "local-timing", "local",
     "src/editor/equation-stage-frame.ts",
     "const easedProgress = localProgress * localProgress",
@@ -179,6 +188,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/domain-ir/semantic-motion-choreography-compiler.ts",
     "function schedulePolicy(",
     "The compiler lowers semantic precedence into recipe-owned nominal windows."),
+  node("timing.exponential-homomorphism-transit", "local-timing", "local",
+    "src/rendering/exponential-homomorphism-transit-session.ts",
+    "export const kpExponentialHomomorphismTransitProfile",
+    "The unpromoted pressure exemplar owns one deterministic transit profile."),
   node("renderer.generic-dom-measurement", "renderer-inference", "compatibility",
     "src/editor/equation-surface-adapter.ts",
     "measureKpEquationTransitionGeometry({",
@@ -207,6 +220,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/rendering/log-product-transit-session.ts",
     "export function createKpLogProductTransitSession",
     "Log product owns a dedicated native endpoint transit session."),
+  node("renderer.exponential-homomorphism-transit", "renderer-inference", "local",
+    "src/rendering/exponential-homomorphism-transit-session.ts",
+    "export function createKpExponentialHomomorphismTransitSession",
+    "The exponential pressure exemplar composes the canonical Native KaTeX scene session."),
   node("fallback.generic-whole-equation", "fallback", "compatibility",
     "src/editor/equation-surface-adapter.ts",
     "function applyLayerMotion(",
@@ -235,6 +252,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/editor/log-product-surface-adapter.ts",
     "session.stage.dataset[\"kpLogProductStage\"] = \"failed\"",
     "Log-product preparation records an explicit failed stage."),
+  node("fallback.exponential-homomorphism-source", "fallback", "canonical",
+    "src/editor/exponential-homomorphism-surface-adapter.ts",
+    "function showEndpoint(",
+    "Exponential preparation failures retain the readable source endpoint."),
   node("sampler.generic-semantic-token", "direct-sampler", "compatibility",
     "src/editor/semantic-equation-player-adapter.ts",
     "export function createKpEditorSemanticEquationTokenFrame",
@@ -481,6 +502,19 @@ KpEquationSurfaceAuthorityRow {
       samplers: ["sampler.semantic-motion-choreography"]
     });
   }
+  if (pathClass === "exponential-homomorphism-specialized") {
+    return row(asset.id, pathClass, transformationTypes, {
+      semantic: asset.transformations.length,
+      nonSemantic: 0
+    }, {
+      compiler: ["compiler.exponential-homomorphism-correspondence"],
+      motif: ["motif.exponential-power-crossover"],
+      timing: ["timing.exponential-homomorphism-transit"],
+      renderer: ["renderer.exponential-homomorphism-transit"],
+      fallback: ["fallback.exponential-homomorphism-source"],
+      samplers: ["sampler.operation-native-scene"]
+    });
+  }
 
   let semantic = 0;
   for (const transformation of asset.transformations) {
@@ -599,6 +633,10 @@ function authorityPathClass(
   if (animationId.startsWith("animation.algebra.log-product.")) {
     return "log-product-specialized";
   }
+  if (
+    animationId ===
+      "animation.algebra.exponential-homomorphism.sum-to-product"
+  ) return "exponential-homomorphism-specialized";
   return "generic-semantic-equation";
 }
 

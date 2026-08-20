@@ -6,6 +6,7 @@ export type KpEquationSelectedSurfaceCapability =
   | "logarithm-change-of-base"
   | "log-quotient"
   | "log-product"
+  | "exponential-homomorphism"
   | "exact-fraction-quantity"
   | "operation-evaluation"
   | "place-value-addition";
@@ -18,6 +19,7 @@ export type KpEquationPrimarySurfaceCapability =
   | "logarithm-change-of-base"
   | "log-quotient"
   | "log-product"
+  | "exponential-homomorphism"
   | "operation-evaluation";
 
 export type KpDeclaredEquationSurfaceDisposition =
@@ -62,7 +64,8 @@ export type KpEquationStructuralRecipeId =
   | "recipe.equation.dot-product-traversal.v1"
   | "recipe.equation.matrix-matrix-composition.v1"
   | "recipe.equation.matrix-vector-composition.v1"
-  | "recipe.equation.radical-succession.v1";
+  | "recipe.equation.radical-succession.v1"
+  | "recipe.equation.exponential-homomorphism.v1";
 
 export type KpEquationRuntimeBindingId =
   | "runtime-binding.semantic-motion.inverse-cancellation.v1"
@@ -259,6 +262,17 @@ readonly KpEquationSurfaceFamilyDeclaration[] = Object.freeze([
     rendererSourcePath: "src/editor/log-product-surface-adapter.ts"
   }),
   declaration({
+    id: "family.equation.exponential-homomorphism",
+    matches: (id) =>
+      id === "animation.algebra.exponential-homomorphism.sum-to-product",
+    selectedCapabilityIds: ["exponential-homomorphism"],
+    primaryCapabilityId: "exponential-homomorphism",
+    rendererAdapterId:
+      "editor-animation-surface.exponential-homomorphism.canonical-native-katex",
+    rendererSourcePath:
+      "src/editor/exponential-homomorphism-surface-adapter.ts"
+  }),
+  declaration({
     id: "family.equation.generic-katex",
     matches: () => true,
     selectedCapabilityIds: ["equation-katex"],
@@ -363,6 +377,15 @@ const waveAOperationPlanByAnimationId = Object.freeze(Object.fromEntries(
 )) as Readonly<Record<string, KpWaveAEquationOperationPlanDeclaration>>;
 export const kpWaveBEquationStructuralDeclarations:
 readonly KpWaveBEquationStructuralDeclaration[] = Object.freeze([
+  structural({
+    animationId:
+      "animation.algebra.exponential-homomorphism.sum-to-product",
+    recipeIds: ["recipe.equation.exponential-homomorphism.v1"],
+    recipeOwnerPaths: [
+      "src/animation/equation-extension-packs/exponential-homomorphism.ts",
+      "src/rendering/exponential-homomorphism-transit-session.ts"
+    ]
+  }),
   structural({
     animationId: "animation.algebra.log-exponent.solve-two-power-x",
     recipeIds: ["recipe.equation.log-exponent.v1"],

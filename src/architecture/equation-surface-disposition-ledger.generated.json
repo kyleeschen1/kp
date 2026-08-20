@@ -4,6 +4,78 @@
   "entries": [
     {
       "schemaVersion": "kp.equation-surface-disposition-entry.v1",
+      "animationId": "animation.algebra.exponential-homomorphism.sum-to-product",
+      "familyId": "exponent-radical",
+      "disposition": "adapter-backed",
+      "migrationWave": "wave-b-structural-native-math",
+      "rationale": "The row has valid semantic endpoints but still relies on a local or generic compatibility presentation path that must be adapted into the canonical compiler.",
+      "preservationBoundary": {
+        "semanticEndpointFingerprints": [
+          "fnv1a32-4a9f8058",
+          "fnv1a32-470e8c2f",
+          "fnv1a32-27bfeada"
+        ],
+        "route": "/?artifact=animation.algebra.exponential-homomorphism.sum-to-product",
+        "adapterId": "editor-animation-surface.exponential-homomorphism.canonical-native-katex",
+        "accessibilityMode": "semantic-stage-aria-label",
+        "visualVerificationCommand": "npm run visual:equation-surface-preservation"
+      },
+      "rollbackUnit": {
+        "id": "rollback.equation-surface.animation.algebra.exponential-homomorphism.sum-to-product",
+        "scope": "single-equation-surface-authority-path",
+        "restorePathClass": "exponential-homomorphism-specialized",
+        "restoreSourcePaths": [
+          "src/animation/catalog-packs/exponential-homomorphism.ts",
+          "src/animation/catalog.ts",
+          "src/editor/exponential-homomorphism-surface-adapter.ts"
+        ],
+        "verificationCommands": [
+          "npm run test:semantic-animation-convergence",
+          "npm run visual:equation-surface-preservation",
+          "npm run test:browser:equation-surface-preservation"
+        ]
+      },
+      "retirementEvidence": {
+        "status": "blocked-active-callers",
+        "productionCallers": [
+          {
+            "id": "catalogue.animation.algebra.exponential-homomorphism.sum-to-product",
+            "kind": "catalogue-owner",
+            "sourcePath": "src/animation/catalog.ts"
+          },
+          {
+            "id": "pack.animation.algebra.exponential-homomorphism.sum-to-product",
+            "kind": "lazy-pack",
+            "sourcePath": "src/animation/catalog-packs/exponential-homomorphism.ts"
+          },
+          {
+            "id": "route.animation.algebra.exponential-homomorphism.sum-to-product",
+            "kind": "presentation-route",
+            "sourcePath": "src/editor/exponential-homomorphism-surface-adapter.ts"
+          }
+        ],
+        "conformanceCallers": [
+          {
+            "id": "preservation.animation.algebra.exponential-homomorphism.sum-to-product",
+            "kind": "preservation-contract",
+            "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json"
+          },
+          {
+            "id": "browser.animation.algebra.exponential-homomorphism.sum-to-product",
+            "kind": "browser-conformance",
+            "sourcePath": "tests/equation-surface-preservation.browser.spec.ts"
+          },
+          {
+            "id": "family.exponent-radical",
+            "kind": "family-verification",
+            "command": "npm run test:semantic-animation-convergence"
+          }
+        ],
+        "retirementCondition": "zero-production-and-conformance-callers-after-replacement"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-disposition-entry.v1",
       "animationId": "animation.algebra.log-exponent.solve-two-power-x",
       "familyId": "logarithm",
       "disposition": "adapter-backed",

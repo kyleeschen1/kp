@@ -91,6 +91,14 @@
       "summary": "Log product uses its dedicated typed semantic compiler."
     },
     {
+      "id": "compiler.exponential-homomorphism-correspondence",
+      "category": "compiler",
+      "authority": "local",
+      "sourcePath": "src/semantic/exponential-homomorphism-correspondence.ts",
+      "sourceNeedle": "export function compileKpExponentialHomomorphismCorrespondence",
+      "summary": "Exponential homomorphism mints occurrence identity from normalized power syntax."
+    },
+    {
       "id": "motif.generic-transition",
       "category": "motif",
       "authority": "compatibility",
@@ -145,6 +153,14 @@
       "sourcePath": "src/rendering/native-katex-semantic-motion-track-projection.ts",
       "sourceNeedle": "export function createKpNativeKatexSemanticMotionTrackProjection",
       "summary": "Log product projects compiled semantic tracks without a family switch."
+    },
+    {
+      "id": "motif.exponential-power-crossover",
+      "category": "motif",
+      "authority": "local",
+      "sourcePath": "src/animation/exponential-homomorphism-motif.ts",
+      "sourceNeedle": "export const kpExponentialHomomorphismMotifSchema",
+      "summary": "The pressure exemplar declares payload continuity and base succession without glyph inference."
     },
     {
       "id": "timing.generic-phase-easing",
@@ -211,6 +227,14 @@
       "summary": "The compiler lowers semantic precedence into recipe-owned nominal windows."
     },
     {
+      "id": "timing.exponential-homomorphism-transit",
+      "category": "local-timing",
+      "authority": "local",
+      "sourcePath": "src/rendering/exponential-homomorphism-transit-session.ts",
+      "sourceNeedle": "export const kpExponentialHomomorphismTransitProfile",
+      "summary": "The unpromoted pressure exemplar owns one deterministic transit profile."
+    },
+    {
       "id": "renderer.generic-dom-measurement",
       "category": "renderer-inference",
       "authority": "compatibility",
@@ -267,6 +291,14 @@
       "summary": "Log product owns a dedicated native endpoint transit session."
     },
     {
+      "id": "renderer.exponential-homomorphism-transit",
+      "category": "renderer-inference",
+      "authority": "local",
+      "sourcePath": "src/rendering/exponential-homomorphism-transit-session.ts",
+      "sourceNeedle": "export function createKpExponentialHomomorphismTransitSession",
+      "summary": "The exponential pressure exemplar composes the canonical Native KaTeX scene session."
+    },
+    {
       "id": "fallback.generic-whole-equation",
       "category": "fallback",
       "authority": "compatibility",
@@ -321,6 +353,14 @@
       "sourcePath": "src/editor/log-product-surface-adapter.ts",
       "sourceNeedle": "session.stage.dataset[\"kpLogProductStage\"] = \"failed\"",
       "summary": "Log-product preparation records an explicit failed stage."
+    },
+    {
+      "id": "fallback.exponential-homomorphism-source",
+      "category": "fallback",
+      "authority": "canonical",
+      "sourcePath": "src/editor/exponential-homomorphism-surface-adapter.ts",
+      "sourceNeedle": "function showEndpoint(",
+      "summary": "Exponential preparation failures retain the readable source endpoint."
     },
     {
       "id": "sampler.generic-semantic-token",
@@ -468,6 +508,43 @@
     }
   ],
   "rows": [
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.algebra.exponential-homomorphism.sum-to-product",
+      "pathClass": "exponential-homomorphism-specialized",
+      "transformationTypes": [
+        "operation.equation.exponential-sum-to-product.v1"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 1,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.exponential-homomorphism-correspondence"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.exponential-power-crossover"
+      ],
+      "localTimingNodeIds": [
+        "timing.exponential-homomorphism-transit"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.exponential-homomorphism-transit"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.exponential-homomorphism-source"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.operation-native-scene"
+      ]
+    },
     {
       "schemaVersion": "kp.equation-surface-authority-row.v1",
       "animationId": "animation.algebra.log-exponent.solve-two-power-x",

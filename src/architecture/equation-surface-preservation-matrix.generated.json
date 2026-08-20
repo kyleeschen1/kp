@@ -4,6 +4,139 @@
   "entries": [
     {
       "schemaVersion": "kp.equation-surface-preservation-row.v2",
+      "animationId": "animation.algebra.exponential-homomorphism.sum-to-product",
+      "familyId": "exponent-radical",
+      "pathClass": "exponential-homomorphism-specialized",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transformation.exponential.sum-to-product.xy",
+          "transformationType": "operation.equation.exponential-sum-to-product.v1",
+          "transformationFingerprint": "fnv1a32-4a9f8058",
+          "source": [
+            {
+              "objectId": "state.exponential.sum-to-product.source",
+              "objectType": "equation",
+              "title": "Power with an additive exponent",
+              "semanticFingerprint": "fnv1a32-470e8c2f"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "state.exponential.sum-to-product.target",
+              "objectType": "equation",
+              "title": "Product of powers",
+              "semanticFingerprint": "fnv1a32-27bfeada"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.algebra.exponential-homomorphism.sum-to-product",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.exponential-homomorphism.canonical-native-katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-528e3ba5",
+          "objectIds": [
+            "state.exponential.sum-to-product.source",
+            "state.exponential.sum-to-product.target"
+          ],
+          "transformationIds": [
+            "transformation.exponential.sum-to-product.xy"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-246563f1",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "exponential-homomorphism",
+          "adapterId": "editor-animation-surface.exponential-homomorphism.canonical-native-katex",
+          "sourcePath": "src/editor/exponential-homomorphism-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.operation-native-scene"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.algebra.exponential-homomorphism.sum-to-product.forward.0",
+              "activeTransformationIds": [
+                "transformation.exponential.sum-to-product.xy"
+              ],
+              "activeSemanticObjectIds": [
+                "state.exponential.sum-to-product.source",
+                "state.exponential.sum-to-product.target"
+              ],
+              "envelopeFingerprint": "fnv1a32-c548a0da"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.algebra.exponential-homomorphism.sum-to-product.forward.0",
+              "activeTransformationIds": [
+                "transformation.exponential.sum-to-product.xy"
+              ],
+              "activeSemanticObjectIds": [
+                "state.exponential.sum-to-product.source",
+                "state.exponential.sum-to-product.target"
+              ],
+              "envelopeFingerprint": "fnv1a32-460bca52"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.algebra.exponential-homomorphism.sum-to-product.forward.0",
+              "activeTransformationIds": [
+                "transformation.exponential.sum-to-product.xy"
+              ],
+              "activeSemanticObjectIds": [
+                "state.exponential.sum-to-product.source",
+                "state.exponential.sum-to-product.target"
+              ],
+              "envelopeFingerprint": "fnv1a32-a64efdfd"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.algebra.log-exponent.solve-two-power-x",
       "familyId": "logarithm",
       "pathClass": "log-exponent-specialized",
@@ -5741,10 +5874,11 @@
     {
       "familyId": "exponent-radical",
       "animationIds": [
+        "animation.algebra.exponential-homomorphism.sum-to-product",
         "animation.generated.exponent.square-as-product",
         "animation.generated.radical.square-root-as-power"
       ],
-      "representativeAnimationId": "animation.generated.exponent.square-as-product",
+      "representativeAnimationId": "animation.algebra.exponential-homomorphism.sum-to-product",
       "semanticVerificationCommand": "npm run test:semantic-animation-convergence",
       "visualVerificationCommand": "npm run visual:equation-surface-preservation",
       "uniformBrowserVerificationCommand": "npm run test:browser:equation-surface-preservation",

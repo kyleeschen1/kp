@@ -38,6 +38,9 @@ import {
 import {
   createKpLogProductAnimationAssets
 } from "./log-product-adapter.ts";
+import {
+  createKpExponentialHomomorphismAnimationAsset
+} from "./exponential-homomorphism-adapter.ts";
 import { createLinearSolveAnimationAsset } from "./linear-solve-adapter.ts";
 import { createProgrammingAnimationAssets } from "./programming-adapter.ts";
 import {
@@ -124,7 +127,8 @@ export function createGeneratedAlgebraAnimationAssets():
     createKpLogarithmChangeOfBaseExemplarAsset(),
     ...createKpFractionEquivalenceExemplarAssets(),
     createKpCommonDenominatorPressureAnimationAsset(),
-    ...createKpLogProductAnimationAssets()
+    ...createKpLogProductAnimationAssets(),
+    createKpExponentialHomomorphismAnimationAsset()
   ];
 }
 

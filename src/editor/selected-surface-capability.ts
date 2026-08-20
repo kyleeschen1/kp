@@ -45,6 +45,7 @@ export const kpEditorSelectedSurfaceCapabilityValues = Object.freeze([
   "logarithm-change-of-base",
   "log-quotient",
   "log-product",
+  "exponential-homomorphism",
   "exact-fraction-quantity",
   "operation-evaluation",
   "place-value-addition",

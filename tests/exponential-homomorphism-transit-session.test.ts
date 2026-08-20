@@ -123,7 +123,7 @@ test("payload and base tracks complete without terminal geometry changes", () =>
 
 test("transit rejects endpoint paint outside correspondence authority", () => {
   const foreignSource = createKpNativeKatexRenderedSceneObservation({
-    ...sceneInput(endpoints.source, "source"),
+    ...sceneInput("source"),
     atoms: measured.source.atoms.map((atom, index) => index === 0
       ? { ...atom, semanticEntityId: "foreign.base" }
       : atom)
@@ -195,7 +195,6 @@ function measuredEndpoints() {
 }
 
 function sceneInput(
-  endpoint: KpExponentialNativeEndpoint,
   side: "source" | "target"
 ) {
   const selected = side === "source" ? measured.source : measured.target;

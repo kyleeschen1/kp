@@ -173,6 +173,23 @@ export const kpEditorSelectedSurfaceCapabilityDeclarations = Object.freeze([
     }
   }),
   declaration({
+    capabilityId: "exponential-homomorphism",
+    domain: "equation",
+    adapterIds: [
+      "editor-animation-surface.exponential-homomorphism.canonical-native-katex"
+    ],
+    registrationOwner: "provided-registry",
+    async loadAndRegister(registry, registrationGuardAdapterId) {
+      const client = await import(
+        "./exponential-homomorphism-surface-capability.ts"
+      );
+      await registerOnce(registry, registrationGuardAdapterId,
+        () => client.registerKpEditorExponentialHomomorphismSurfaceCapability(
+          registry
+        ));
+    }
+  }),
+  declaration({
     capabilityId: "exact-fraction-quantity",
     domain: "equation",
     adapterIds: [

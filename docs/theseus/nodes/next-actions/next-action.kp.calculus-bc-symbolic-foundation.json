@@ -369,6 +369,34 @@
       "scope": "slice s10 standard",
       "checkedAt": "2026-08-20T19:21:15.377Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "npm run test:exponential-catalogue",
+      "status": "passed",
+      "scope": "slice-s11 catalogue identity and lazy capability",
+      "checkedAt": "2026-08-20T19:39:13.933Z",
+      "notes": "Seven focused assertions passed."
+    },
+    {
+      "command": "npm run test:equation-asset-manifest",
+      "status": "passed",
+      "scope": "slice-s11 manifest closure",
+      "checkedAt": "2026-08-20T19:39:16.615Z",
+      "notes": "Six manifest and generated display assertions passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-s11 dependency and renderer boundaries",
+      "checkedAt": "2026-08-20T19:39:19.186Z",
+      "notes": "All architecture ratchets passed after moving semantic authority upstream."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s11 TypeScript and Svelte",
+      "checkedAt": "2026-08-20T19:39:20.628Z",
+      "notes": "All configured typechecks passed."
     }
   ],
   "progress": {

@@ -10,6 +10,7 @@ export type KpAnimationCatalogPackId =
   | "operation-evaluation"
   | "algebra"
   | "log-product"
+  | "exponential-homomorphism"
   | "generated-drafts"
   | "generated-problems"
   | "graph"
@@ -25,6 +26,7 @@ export type KpAnimationCatalogPackSourcePath =
   | "src/animation/catalog-packs/operation-evaluation.ts"
   | "src/animation/catalog-packs/algebra.ts"
   | "src/animation/catalog-packs/log-product.ts"
+  | "src/animation/catalog-packs/exponential-homomorphism.ts"
   | "src/animation/catalog-packs/generated-drafts.ts"
   | "src/animation/catalog-packs/generated.ts"
   | "src/animation/catalog-packs/graph.ts"
@@ -98,6 +100,9 @@ export const kpAnimationCatalogPackDeclarations: readonly KpAnimationCatalogPack
     pack("log-product", "src/animation/catalog-packs/log-product.ts",
       (id) => id.startsWith("animation.algebra.log-product."),
       async () => dataOnlyPack((await import("./catalog-packs/log-product.ts")).createKpLogProductAnimationPack())),
+    pack("exponential-homomorphism", "src/animation/catalog-packs/exponential-homomorphism.ts",
+      (id) => id === "animation.algebra.exponential-homomorphism.sum-to-product",
+      async () => dataOnlyPack((await import("./catalog-packs/exponential-homomorphism.ts")).createKpExponentialHomomorphismAnimationPack())),
     // The public algebra identity remains stable while solve-x avoids loading
     // unrelated symbolic families; both variants import one shared runtime.
     splitPack("algebra", "src/animation/catalog-packs/algebra.ts",

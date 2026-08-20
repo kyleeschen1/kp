@@ -1885,5 +1885,31 @@
         "role": "projection"
       }
     ]
+  },
+  {
+    "animationId": "animation.algebra.exponential-homomorphism.sum-to-product",
+    "title": "Turn an exponential sum into a product",
+    "summary": "A typed Native KaTeX exemplar for exponential homomorphism.",
+    "tags": [
+      "algebra",
+      "animation",
+      "editor",
+      "equation",
+      "exponential",
+      "katex"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.algebra.exponential-homomorphism.sum-to-product",
+    "representations": [
+      {
+        "id": "editor-animation.animation.algebra.exponential-homomorphism.sum-to-product",
+        "label": "Turn an exponential sum into a product",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.algebra.exponential-homomorphism.sum-to-product",
+        "role": "canonical-host"
+      }
+    ]
   }
 ]
