@@ -5,6 +5,7 @@ import {
   type SelectorCorrespondenceRecord
 } from "./correspondence.ts";
 import {
+  kpExponentialDifferenceToQuotientLaw,
   kpExponentialSumToProductLaw
 } from "./exponential-homomorphism-law.ts";
 import {
@@ -14,6 +15,13 @@ import {
 
 export type KpExponentialSumToProductLaw =
   typeof kpExponentialSumToProductLaw;
+
+export type KpExponentialDifferenceToQuotientLaw =
+  typeof kpExponentialDifferenceToQuotientLaw;
+
+export type KpExponentialHomomorphismLaw =
+  | KpExponentialSumToProductLaw
+  | KpExponentialDifferenceToQuotientLaw;
 
 export type KpExponentialOccurrenceRole =
   | "base"
@@ -44,7 +52,7 @@ export interface KpExponentialHomomorphismCorrespondenceAuthority {
     "kp.exponential-homomorphism-correspondence-authority.v1";
   readonly kind: "exponential-homomorphism-correspondence-authority";
   readonly id: string;
-  readonly lawId: "law.exponential.sum-to-product";
+  readonly lawId: KpExponentialHomomorphismLaw["id"];
   readonly endpointNormalizerId:
     typeof KP_POWER_APPLICATION_ENDPOINT_NORMALIZER;
   readonly source: KpNormalizedPowerApplicationEndpoint;
@@ -69,7 +77,7 @@ const authorities = new WeakSet<object>();
  */
 export function compileKpExponentialHomomorphismCorrespondence(input: {
   readonly id: string;
-  readonly law?: KpExponentialSumToProductLaw | undefined;
+  readonly law?: KpExponentialHomomorphismLaw | undefined;
   readonly source: KpNormalizedPowerApplicationEndpoint;
   readonly baseReferentId: string;
   readonly operandReferentIds: readonly [string, string, ...string[]];
@@ -77,14 +85,12 @@ export function compileKpExponentialHomomorphismCorrespondence(input: {
   const law = input.law ?? kpExponentialSumToProductLaw;
   const combination = input.source.superscriptRegion.combination;
   if (
-    law.id !== kpExponentialSumToProductLaw.id ||
-    law.sourceCombination.kind !== "sum" ||
-    law.targetCombination.kind !== "product" ||
+    !isRegisteredExponentialLaw(law) ||
     input.source.authority !== KP_POWER_APPLICATION_ENDPOINT_NORMALIZER ||
-    combination.kind !== "sum"
+    combination.kind !== law.sourceCombination.kind
   ) {
     throw new Error(
-      "Exponential correspondence requires the authoritative additive power source and sum-to-product law."
+      "Exponential correspondence requires a registered power law whose source combination matches the normalized endpoint."
     );
   }
   if (input.operandReferentIds.length !== combination.operands.length) {
@@ -97,8 +103,8 @@ export function compileKpExponentialHomomorphismCorrespondence(input: {
     ...input.operandReferentIds
   ]);
 
-  const source = createSourceOccurrences(input);
-  const target = createTargetOccurrences(input);
+  const source = createSourceOccurrences(input, law.sourceCombination.kind);
+  const target = createTargetOccurrences(input, law.targetCombination.kind);
   const records: SelectorCorrespondenceRecord[] = [
     ...roleChanges("payload", source.payloads, target.payloads),
     fanOut("base", source.base, target.bases),
@@ -137,12 +143,12 @@ export function compileKpExponentialHomomorphismCorrespondence(input: {
     successor("superscript-regions", [source.superscript], target.superscripts,
       "The combined superscript derives one target superscript per payload."),
     successor("combination", [source.combination], [target.combination],
-      "Additive exponent structure derives multiplicative target structure."),
+      `${law.sourceCombination.kind} exponent structure derives ${law.targetCombination.kind} target structure.`),
     ...source.connectors.map((occurrence, index) => successor(
       `connector-${index}`,
       [occurrence],
       [target.connectors[index]!],
-      "An additive connector licenses a multiplicative successor without glyph identity."
+      `A ${law.sourceCombination.kind} connector licenses a ${law.targetCombination.kind} successor without glyph identity.`
     ))
   ]);
   const forbiddenIdentityPairs = Object.freeze([
@@ -150,13 +156,13 @@ export function compileKpExponentialHomomorphismCorrespondence(input: {
       sourceOccurrenceId: source.combination.id,
       targetOccurrenceId: target.combination.id,
       reason:
-        "The sum structure licenses the target product but is not the same occurrence."
+        `The ${law.sourceCombination.kind} structure licenses the target ${law.targetCombination.kind} but is not the same occurrence.`
     }),
     ...source.connectors.map((occurrence, index) => Object.freeze({
       sourceOccurrenceId: occurrence.id,
       targetOccurrenceId: target.connectors[index]!.id,
       reason:
-        "A plus connector derives multiplication but never becomes a multiplication glyph."
+        `A ${law.sourceCombination.kind} connector derives ${law.targetCombination.kind} structure but never becomes its target glyph.`
     }))
   ]);
   const authority = deepFreeze({
@@ -188,7 +194,7 @@ function createSourceOccurrences(input: {
   readonly id: string;
   readonly baseReferentId: string;
   readonly operandReferentIds: readonly [string, string, ...string[]];
-}) {
+}, combinationKind: "sum" | "difference") {
   const base = occurrence(input.id, "source", "base", 0, input.baseReferentId);
   const payloads = input.operandReferentIds.map((referentId, index) =>
     occurrence(input.id, "source", "exponent-payload", index, referentId)
@@ -198,10 +204,10 @@ function createSourceOccurrences(input: {
   const superscript = occurrence(input.id, "source", "superscript-region", 0,
     `referent.${input.id}.source-superscript-region`);
   const combination = occurrence(input.id, "source", "combination-root", 0,
-    `referent.${input.id}.source-sum`);
+    `referent.${input.id}.source-${combinationKind}`);
   const connectors = input.operandReferentIds.slice(1).map((_id, index) =>
     occurrence(input.id, "source", "combination-connector", index,
-      `referent.${input.id}.source-plus.${index}`)
+      `referent.${input.id}.source-${combinationKind === "sum" ? "plus" : "minus"}.${index}`)
   );
   return {
     base,
@@ -218,7 +224,7 @@ function createTargetOccurrences(input: {
   readonly id: string;
   readonly baseReferentId: string;
   readonly operandReferentIds: readonly [string, string, ...string[]];
-}) {
+}, combinationKind: "product" | "quotient") {
   const bases = input.operandReferentIds.map((_id, index) =>
     occurrence(input.id, "target", "base", index, input.baseReferentId)
   );
@@ -234,10 +240,10 @@ function createTargetOccurrences(input: {
       `referent.${input.id}.target-superscript-region.${index}`)
   );
   const combination = occurrence(input.id, "target", "combination-root", 0,
-    `referent.${input.id}.target-product`);
+    `referent.${input.id}.target-${combinationKind}`);
   const connectors = input.operandReferentIds.slice(1).map((_id, index) =>
     occurrence(input.id, "target", "combination-connector", index,
-      `referent.${input.id}.target-multiply.${index}`)
+      `referent.${input.id}.target-${combinationKind === "product" ? "multiply" : "quotient-bar"}.${index}`)
   );
   return {
     bases,
@@ -255,6 +261,13 @@ function createTargetOccurrences(input: {
       ...connectors
     ]
   };
+}
+
+function isRegisteredExponentialLaw(
+  law: KpExponentialHomomorphismLaw
+): boolean {
+  return law === kpExponentialSumToProductLaw ||
+    law === kpExponentialDifferenceToQuotientLaw;
 }
 
 function occurrence(

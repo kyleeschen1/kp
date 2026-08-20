@@ -176,7 +176,7 @@
     "test:equation-syntax-hazards": "node --disable-warning=ExperimentalWarning --test tests/equation-syntax-hazard-corpus.test.ts tests/equation-latex-endpoint-normalizer.test.ts",
     "test:exponential-homomorphism-law": "node --disable-warning=ExperimentalWarning --test tests/exponential-homomorphism-law.test.ts",
     "test:power-application-normalizer": "node --disable-warning=ExperimentalWarning --test tests/power-application-endpoint-normalizer.test.ts",
-    "test:exponential-correspondence": "node --disable-warning=ExperimentalWarning --test tests/exponential-homomorphism-correspondence.test.ts",
+    "test:exponential-correspondence": "node --disable-warning=ExperimentalWarning --test tests/exponential-homomorphism-correspondence.test.ts tests/exponential-homomorphism-difference-pressure.test.ts",
     "test:exponential-extension-pack": "node --disable-warning=ExperimentalWarning --test tests/exponential-homomorphism-extension-pack.test.ts tests/equation-extension-dispatch.test.ts",
     "test:exponential-native-endpoints": "node --disable-warning=ExperimentalWarning --test tests/exponential-homomorphism-native-endpoints.test.ts",
     "test:native-katex-foreground-ordering": "node --disable-warning=ExperimentalWarning --test tests/native-katex-foreground-ordering-style.test.ts",

@@ -122,5 +122,5 @@ test("illegal or inferred authoring cannot mint correspondence authority", () =>
     source: sourceResult.endpoint,
     baseReferentId: "semantic.b",
     operandReferentIds: ["semantic.x", "semantic.y"]
-  }), /authoritative additive power source/u);
+  }), /registered power law/u);
 });

@@ -62,7 +62,8 @@
     {
       "id": "r03",
       "title": "difference-to-quotient-operation-pressure",
-      "status": "planned"
+      "summary": "Added a typed exponential difference-to-quotient law and pressure authority. Payload identity, derived carrier applications, and minus-to-quotient lineage are explicit while geometry and timing remain absent from semantics.",
+      "status": "complete"
     },
     {
       "id": "r04",

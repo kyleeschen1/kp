@@ -550,6 +550,18 @@
       "status": "passed",
       "scope": "r02 scoped three-browser foreground-ordering canary",
       "checkedAt": "2026-08-20T23:06:28.913Z"
+    },
+    {
+      "command": "npm run test:exponential-correspondence",
+      "status": "passed",
+      "scope": "r03 difference-to-quotient semantic pressure",
+      "checkedAt": "2026-08-20T23:12:47.627Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "r03 semantic authority boundary",
+      "checkedAt": "2026-08-20T23:13:02.677Z"
     }
   ],
   "progress": {
