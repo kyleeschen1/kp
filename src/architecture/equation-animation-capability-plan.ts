@@ -209,9 +209,11 @@ const equationCapabilityDrafts = Object.freeze([
     [
       requirement("requirement.equation.radical-inversion.normalizer", "endpoint-normalizer", "normalizer.equation.radical.v1", "Root indices, radicands, and power equivalents normalize without losing grouping."),
       requirement("requirement.equation.radical-inversion.operation", "semantic-operation", "operation.equation.apply-inverse-power.v1", "A typed balanced-equation operation applies an inverse positive-integer power under explicit parity, domain, branch, and candidate-audit evidence."),
+      requirement("requirement.equation.radical-inversion.rewrite-plan", "semantic-operation", "compiler.equation.root-rewrite-plan.v1", "A nominal root-rewrite compiler assigns persistent, consumed, introduced, fused, and retained-enclosure roles from exact evidence."),
       requirement("requirement.equation.radical-inversion.recipe", "canonical-recipe", "recipe.equation.radical-inversion.v1", "A recipe owns exponent-to-index lineage and radical enclosure construction."),
-      requirement("requirement.equation.radical-inversion.exemplar", "canonical-exemplar", "exemplar.equation.radical-succession.v1", "A reviewed exemplar establishes the visual grammar before broad promotion."),
-      requirement("requirement.equation.radical-inversion.corpus", "generation-corpus", "corpus.equation.radical-inversion.v1", "Fixtures cover square, odd, symbolic, nested, and principal-root cases.")
+      requirement("requirement.equation.radical-inversion.exemplar", "canonical-exemplar", "animation.algebra.radical.compound-carrier-normalization", "The reviewed compound-carrier exemplar proves subtree persistence and native endpoint settlement."),
+      requirement("requirement.equation.radical-inversion.authoring", "authoring-surface", "authoring.equation.radical-inversion.v1", "Governed authoring supplies an exact root class and evidence; unsupported laws remain typed repairs."),
+      requirement("requirement.equation.radical-inversion.corpus", "generation-corpus", "corpus.equation.radical-inversion.v1", "Fixtures pressure the verified root vocabulary, including blocked distribution and sequence-only composed derivations.")
     ]
   ),
   capability(

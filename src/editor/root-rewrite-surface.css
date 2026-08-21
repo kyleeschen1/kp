@@ -1,4 +1,5 @@
-.kp-even-root-stage {
+/* Capability-scoped shell: imported only when the lazy root pack is selected. */
+:where(.kp-root-rewrite-stage, .kp-even-root-stage) {
   position: relative;
   display: grid;
   width: 100%;
@@ -11,8 +12,9 @@
   text-transform: none;
 }
 
-.kp-even-root-stage__endpoint,
-.kp-even-root-stage__material-layer {
+:where(.kp-root-rewrite-stage__endpoint, .kp-even-root-stage__endpoint),
+:where(.kp-root-rewrite-stage__material-layer,
+  .kp-even-root-stage__material-layer) {
   position: absolute;
   inset: 0;
   display: grid;
@@ -20,15 +22,17 @@
   font-size: clamp(2.25rem, 5vw, 4rem);
 }
 
-.kp-even-root-stage__endpoint .katex-display {
+:where(.kp-root-rewrite-stage__endpoint,
+  .kp-even-root-stage__endpoint) .katex-display {
   margin: 0;
 }
 
-.kp-even-root-stage__material-layer {
+:where(.kp-root-rewrite-stage__material-layer,
+  .kp-even-root-stage__material-layer) {
   pointer-events: none;
 }
 
-.kp-even-root-stage__status {
+:where(.kp-root-rewrite-stage__status, .kp-even-root-stage__status) {
   position: absolute;
   width: 1px;
   height: 1px;

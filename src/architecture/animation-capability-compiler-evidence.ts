@@ -8,6 +8,10 @@ import {
   KP_FRACTION_DENOMINATOR_GENERATION_CORPUS_AUTHORITY
 } from "../authoring/fraction-denominator-generation-corpus.ts";
 import {
+  KP_ROOT_REWRITE_GENERATION_CORPUS_AUTHORITY,
+  KP_ROOT_REWRITE_RECIPE_AUTHORITY
+} from "../authoring/root-rewrite-authoring-corpus.ts";
+import {
   KP_EQUATION_LOGARITHM_BASE_SYNTAX_NORMALIZER
 } from "../authoring/equation-latex-endpoint-normalizer.ts";
 import {
@@ -48,6 +52,8 @@ import {
 import {
   KP_INVERSE_POWER_OPERATION_AUTHORITY
 } from "../semantic/inverse-power-operation.ts";
+import { KP_ROOT_REWRITE_PLAN_AUTHORITY } from
+  "../semantic/root-rewrite-plan.ts";
 import {
   KP_RADICAL_ENDPOINT_NORMALIZER
 } from "../semantic/radical-endpoint-normalizer.ts";
@@ -264,6 +270,15 @@ readonly KpAnimationCapabilityCompilerAuthority[] {
     verified(KP_INVERSE_POWER_OPERATION_AUTHORITY,
       "semantic-operation",
       "src/semantic/inverse-power-operation.ts"),
+    verified(KP_ROOT_REWRITE_PLAN_AUTHORITY,
+      "semantic-operation",
+      "src/semantic/root-rewrite-plan.ts"),
+    verified(KP_ROOT_REWRITE_RECIPE_AUTHORITY,
+      "canonical-recipe",
+      "src/authoring/root-rewrite-authoring-corpus.ts"),
+    verified(KP_ROOT_REWRITE_GENERATION_CORPUS_AUTHORITY,
+      "generation-corpus",
+      "src/authoring/root-rewrite-authoring-corpus.ts"),
     verified(KP_LOGARITHM_CHANGE_OF_BASE_OPERATION_AUTHORITY,
       "semantic-operation", "src/semantic/logarithm-change-of-base.ts"),
     verified(KP_LOGARITHM_CHANGE_OF_BASE_RECIPE_AUTHORITY,

@@ -12,8 +12,8 @@
   "summary": {
     "total": 38,
     "byStatus": {
-      "Direct": 7,
-      "Registered": 5,
+      "Direct": 8,
+      "Registered": 4,
       "Exemplar": 9,
       "Missing": 17
     }
@@ -79,8 +79,8 @@
           "capability.equation.multiline-derivation-continuity"
         ],
         "byStatus": {
-          "Direct": 7,
-          "Registered": 4,
+          "Direct": 8,
+          "Registered": 3,
           "Exemplar": 2,
           "Missing": 5
         }
@@ -1257,7 +1257,7 @@
         "kind": "transformation-family",
         "authorityId": "family.equation.radical-inversion.v1"
       },
-      "status": "Registered",
+      "status": "Direct",
       "requirements": [
         {
           "id": "requirement.equation.radical-inversion.normalizer",
@@ -1280,39 +1280,67 @@
           ]
         },
         {
+          "id": "requirement.equation.radical-inversion.rewrite-plan",
+          "kind": "semantic-operation",
+          "authorityId": "compiler.equation.root-rewrite-plan.v1",
+          "summary": "A nominal root-rewrite compiler assigns persistent, consumed, introduced, fused, and retained-enclosure roles from exact evidence.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "compiler.equation.root-rewrite-plan.v1"
+          ]
+        },
+        {
           "id": "requirement.equation.radical-inversion.recipe",
           "kind": "canonical-recipe",
           "authorityId": "recipe.equation.radical-inversion.v1",
           "summary": "A recipe owns exponent-to-index lineage and radical enclosure construction.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "recipe.equation.radical-inversion.v1"
+          ]
         },
         {
           "id": "requirement.equation.radical-inversion.exemplar",
           "kind": "canonical-exemplar",
-          "authorityId": "exemplar.equation.radical-succession.v1",
-          "summary": "A reviewed exemplar establishes the visual grammar before broad promotion.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "authorityId": "animation.algebra.radical.compound-carrier-normalization",
+          "summary": "The reviewed compound-carrier exemplar proves subtree persistence and native endpoint settlement.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "animation.algebra.radical.compound-carrier-normalization"
+          ]
+        },
+        {
+          "id": "requirement.equation.radical-inversion.authoring",
+          "kind": "authoring-surface",
+          "authorityId": "authoring.equation.radical-inversion.v1",
+          "summary": "Governed authoring supplies an exact root class and evidence; unsupported laws remain typed repairs.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "src/authoring/root-rewrite-authoring-corpus.ts"
+          ]
         },
         {
           "id": "requirement.equation.radical-inversion.corpus",
           "kind": "generation-corpus",
           "authorityId": "corpus.equation.radical-inversion.v1",
-          "summary": "Fixtures cover square, odd, symbolic, nested, and principal-root cases.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "summary": "Fixtures pressure the verified root vocabulary, including blocked distribution and sequence-only composed derivations.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "corpus.equation.radical-inversion.v1"
+          ]
         }
       ],
       "gaps": [],
-      "remainingRequirementIds": [
-        "requirement.equation.radical-inversion.recipe",
-        "requirement.equation.radical-inversion.exemplar",
-        "requirement.equation.radical-inversion.corpus"
+      "remainingRequirementIds": [],
+      "exemplarLinks": [
+        {
+          "assetId": "animation.algebra.radical.compound-carrier-normalization",
+          "title": "Preserve x + 1 through an even root",
+          "href": "/?artifact=animation.algebra.radical.compound-carrier-normalization"
+        }
       ],
-      "exemplarLinks": [],
       "evidenceTensions": [
-        "registered-without-direct-generation"
+        "direct-deterministic-not-live-model-evidence"
       ]
     },
     {

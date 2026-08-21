@@ -165,6 +165,23 @@ test("radical inversion operation includes strict typed semantic authority", () 
     sourcePath === "src/semantic/inverse-power-operation.ts"));
 });
 
+test("root promotion has exact plan recipe and corpus authorities", () => {
+  const projection = createKpAnimationCapabilityCompilerEvidence();
+  for (const [requirementId, authorityId] of [
+    ["requirement.equation.radical-inversion.rewrite-plan",
+      "compiler.equation.root-rewrite-plan.v1"],
+    ["requirement.equation.radical-inversion.recipe",
+      "recipe.equation.radical-inversion.v1"],
+    ["requirement.equation.radical-inversion.corpus",
+      "corpus.equation.radical-inversion.v1"]
+  ] as const) {
+    const requirement = projection.requirements.find((candidate) =>
+      candidate.requirementId === requirementId);
+    assert.equal(requirement?.status, "matched", requirementId);
+    assert.equal(requirement?.authorityId, authorityId);
+  }
+});
+
 test("compiler evidence rejects duplicate source registrations", () => {
   const duplicate: KpAnimationCapabilityCompilerAuthority = {
     authorityId: "operation.wrap-function.v1",

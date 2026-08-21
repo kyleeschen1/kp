@@ -21,6 +21,10 @@ import { evaluateKpLogarithmBaseAuthoringEvidence } from
 import { kpExponentialHomomorphismAuthoringCorpus } from
   "../authoring/exponential-homomorphism-authoring-corpus.ts";
 import {
+  evaluateKpRootRewriteAuthoringCorpus,
+  kpRootRewritePromotionAuthorities
+} from "../authoring/root-rewrite-authoring-corpus.ts";
+import {
   KP_BOTH_SIDES_CAUSAL_RECIPE_AUTHORITY
 } from "../animation/both-sides-causal-recipe.ts";
 import {
@@ -56,12 +60,14 @@ export interface KpAnimationCapabilityDirectIntentEvidence {
   readonly authoringAuthorityId: string;
   readonly planKind:
     | KpCompiledEquationIntentPlan["kind"]
-    | "equation-transform-series-runtime";
+    | "equation-transform-series-runtime"
+    | "root-rewrite-plan";
   readonly resolvedAuthorityIds: readonly string[];
   readonly generationCorpusAuthorityIds: readonly string[];
   readonly sourcePath:
     | "src/authoring/compile-equation-intent.ts"
-    | "src/authoring/compile-equation-transform-series.ts";
+    | "src/authoring/compile-equation-transform-series.ts"
+    | "src/authoring/root-rewrite-authoring-corpus.ts";
 }
 
 export interface KpAnimationCapabilityReadiness {
@@ -278,11 +284,35 @@ readonly KpAnimationCapabilityDirectIntentEvidence[] {
   );
   const balancedEvidence = createBalancedOperationDirectEvidence();
   const logarithmBaseEvidence = createLogarithmBaseDirectEvidence();
+  const rootRewriteEvidence = createRootRewriteDirectEvidence();
   return Object.freeze([
     ...intentEvidence,
     ...(balancedEvidence === undefined ? [] : [balancedEvidence]),
-    ...(logarithmBaseEvidence === undefined ? [] : [logarithmBaseEvidence])
+    ...(logarithmBaseEvidence === undefined ? [] : [logarithmBaseEvidence]),
+    ...(rootRewriteEvidence === undefined ? [] : [rootRewriteEvidence])
   ]);
+}
+
+function createRootRewriteDirectEvidence():
+KpAnimationCapabilityDirectIntentEvidence | undefined {
+  const result = evaluateKpRootRewriteAuthoringCorpus();
+  if (result.status !== "passed" || result.acceptedCount < 3 ||
+      result.repairCount < 1) return undefined;
+  return Object.freeze({
+    animationId: kpRootRewritePromotionAuthorities.exemplarAnimationId,
+    operationId: kpRootRewritePromotionAuthorities.operationAuthorityId,
+    authoringAuthorityId:
+      kpRootRewritePromotionAuthorities.authoringAuthorityId,
+    planKind: "root-rewrite-plan" as const,
+    resolvedAuthorityIds: Object.freeze([
+      kpRootRewritePromotionAuthorities.operationAuthorityId,
+      kpRootRewritePromotionAuthorities.recipeAuthorityId
+    ]),
+    generationCorpusAuthorityIds: Object.freeze([
+      kpRootRewritePromotionAuthorities.corpusAuthorityId
+    ]),
+    sourcePath: "src/authoring/root-rewrite-authoring-corpus.ts" as const
+  });
 }
 
 function createBalancedOperationDirectEvidence():

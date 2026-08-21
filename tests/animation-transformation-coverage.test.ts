@@ -58,8 +58,8 @@ test("Calc BC planning starts from an exact equation coverage baseline", () => {
       kpEquationCoverageBaseline20260820.equationCapabilityCount
   );
   assert.deepEqual(live.byStatus, {
-    Direct: 7,
-    Registered: 4,
+    Direct: 8,
+    Registered: 3,
     Exemplar: 2,
     Missing: 16
   });
@@ -88,7 +88,7 @@ test("direct rows have exact authoring corpus compiler and exemplar evidence", (
   const direct = createKpAnimationTransformationCoverage().entries.filter(
     ({ status }) => status === "Direct"
   );
-  assert.equal(direct.length, 7);
+  assert.equal(direct.length, 8);
   for (const capabilityId of [
     "capability.equation.function-wrapping",
     "capability.equation.distribution",
@@ -123,6 +123,12 @@ test("direct rows have exact authoring corpus compiler and exemplar evidence", (
   ]);
   assert.deepEqual(exponential?.evidenceTensions, [
     "direct-deterministic-not-live-model-evidence"
+  ]);
+  const roots = direct.find(({ capabilityId }) => capabilityId ===
+    "capability.equation.radical-inversion");
+  assert.deepEqual(roots?.remainingRequirementIds, []);
+  assert.deepEqual(roots?.exemplarLinks.map(({ assetId }) => assetId), [
+    "animation.algebra.radical.compound-carrier-normalization"
   ]);
 });
 

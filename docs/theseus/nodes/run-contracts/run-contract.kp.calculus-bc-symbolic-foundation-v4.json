@@ -211,6 +211,41 @@
       "scope": "rv11 completed control state",
       "checkedAt": "2026-08-21T17:29:04.883Z",
       "notes": "Validated 1043 nodes and 24164 events after closing blocked, nested, and composed root pressure."
+    },
+    {
+      "command": "npm run verify:equation:promotion",
+      "status": "failed",
+      "scope": "rv12 initial promotion audit",
+      "checkedAt": "2026-08-21T17:43:55.482Z",
+      "notes": "The gate found stale generated equation-surface authorities plus the previously recorded compositor-union and root-observer type debt. No root semantic or visual regression was reported."
+    },
+    {
+      "command": "npm run test:root-promotion",
+      "status": "passed",
+      "scope": "rv12 governed root promotion evidence",
+      "checkedAt": "2026-08-21T17:43:57.296Z",
+      "notes": "All 36 exact compiler-authority, corpus, typed-repair, readiness, coverage, and capability-plan checks pass."
+    },
+    {
+      "command": "npm run verify:equation:promotion",
+      "status": "passed",
+      "scope": "rv12 broad promotion gate",
+      "checkedAt": "2026-08-21T17:43:58.392Z",
+      "notes": "Equation preservation, extension dispatch, motion protocol, repository typecheck, architecture, five Chromium capability cases, production build, and catalogue bundle budgets all pass."
+    },
+    {
+      "command": "npm run test:compound-root-carrier; npm run visual:compound-root-carrier",
+      "status": "passed",
+      "scope": "rv12 approved exemplar preservation",
+      "checkedAt": "2026-08-21T17:43:59.474Z",
+      "notes": "All 11 focused semantic/runtime checks and three Chromium seek, native-settlement, resize, rewind, and reduced-motion cases pass through the renamed lazy root CSS shell."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "rv12 completed control state",
+      "checkedAt": "2026-08-21T17:44:19.684Z",
+      "notes": "Validated 1043 nodes and 24171 events after narrow root promotion."
     }
   ],
   "allowedWork": [
@@ -304,7 +339,8 @@
     {
       "id": "rv12",
       "title": "root-narrow-promotion-and-css-shell",
-      "status": "planned"
+      "summary": "Promoted only the pressure-proved root seam. Exact compiler evidence now joins radical normalization, inverse-power authority, nominal root-rewrite plans, the shared recipe, governed authoring, the typed pressure corpus, and the human-approved compound-carrier asset. Blocked laws remain repairs and composed derivations remain sequence-only. Shared root presentation CSS is capability-scoped and lazy; approved visuals are unchanged. The broad promotion gate, repository typecheck, bundle budgets, and focused Chromium preservation all pass. Stale generated equation inventories were refreshed, and the pre-existing compositor/observer type debt was repaired without changing runtime behavior.",
+      "status": "complete"
     },
     {
       "id": "rv13",

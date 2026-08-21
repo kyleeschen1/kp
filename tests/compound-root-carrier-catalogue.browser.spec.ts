@@ -143,7 +143,7 @@ async function persistentLeafInk(stage: Locator) {
         `[data-kp-semantic-entity-id="${targetEntityId}"]`
       );
       const material = owner?.firstElementChild;
-      if (owner === undefined || material === null || target === null) {
+      if (owner === undefined || material == null || target === null) {
         const availableOwners = [...root.querySelectorAll<HTMLElement>(
           "[data-kp-equation-material-owner-id]"
         )].map((candidate) => ({
@@ -152,7 +152,7 @@ async function persistentLeafInk(stage: Locator) {
         }));
         throw new Error(
           `Missing persistent leaf paint for ${targetEntityId}; ` +
-          `owner=${owner !== undefined}, material=${material !== null}, ` +
+          `owner=${owner !== undefined}, material=${material != null}, ` +
           `target=${target !== null}, available=${JSON.stringify(availableOwners)}.`
         );
       }

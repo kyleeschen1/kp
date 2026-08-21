@@ -305,6 +305,9 @@ export async function settleAndObserveKpNativeKatexRenderedScene(input: {
   throw new Error(lastFailure);
 }
 
+export type KpSettleAndObserveNativeKatexScene =
+  typeof settleAndObserveKpNativeKatexRenderedScene;
+
 function renderedSceneSettlementFailure(
   previous: KpNativeKatexRenderedSceneObservation,
   current: KpNativeKatexRenderedSceneObservation,

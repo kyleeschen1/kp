@@ -303,6 +303,7 @@ export type KpNativeKatexTypographyStylePlanEntry =
       readonly paintKind: KpNativeKatexPaintAtomObservation["paintKind"];
       readonly paintRealization: "preserve-structural-paint";
       readonly glyphPaintFrame?: undefined;
+      readonly targetGlyphPaintFrame?: undefined;
     }
   );
 
@@ -952,9 +953,10 @@ export function sampleKpNativeKatexTypographyStylePlan(
         : safeScale(rect.height, entry.targetRect.height);
       const scaleX = baseScaleX * materialScale;
       const scaleY = baseScaleY * materialScale;
-      const targetPaint = entry.paintKind === "glyph"
-        ? entry.targetGlyphPaintFrame
-        : undefined;
+      const targetPaint = entry.paintRealization ===
+          "preserve-structural-paint"
+        ? undefined
+        : entry.targetGlyphPaintFrame;
       if (
         materialScale !== 1 &&
         entry.paintKind === "glyph" &&
@@ -2375,7 +2377,7 @@ function symmetricScaleRatio(scale: number): number {
 function freezeTypographyStylePlanEntry(
   entry: KpNativeKatexTypographyStylePlanEntry
 ): KpNativeKatexTypographyStylePlanEntry {
-  if (entry.paintKind !== "glyph") {
+  if (entry.paintRealization === "preserve-structural-paint") {
     return Object.freeze({
       ...entry,
       targetRect: Object.freeze({ ...entry.targetRect })

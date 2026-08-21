@@ -85,7 +85,7 @@ function mountSurface(
 ): KpCompoundRootCarrierSurfaceSession {
   const document = player.ownerDocument;
   const stage = document.createElement("section");
-  stage.className = "kp-even-root-stage";
+  stage.className = "kp-root-rewrite-stage kp-even-root-stage";
   stage.dataset["kpCompoundRootCarrierStage"] = "preparing";
   stage.dataset["kpCompoundRootCarrierAnimationId"] =
     kpCompoundRootCarrierAnimationId;
@@ -98,11 +98,13 @@ function mountSurface(
     endpointRoot(document, kpCompoundRootCarrierNativeEndpoints.target, false)
   ] as const;
   const materialLayer = document.createElement("div");
-  materialLayer.className = "kp-even-root-stage__material-layer";
+  materialLayer.className =
+    "kp-root-rewrite-stage__material-layer kp-even-root-stage__material-layer";
   materialLayer.dataset["kpEditorEquationMaterialLayer"] = "true";
   materialLayer.setAttribute("aria-hidden", "true");
   const status = document.createElement("output");
-  status.className = "kp-even-root-stage__status";
+  status.className =
+    "kp-root-rewrite-stage__status kp-even-root-stage__status";
   status.dataset["kpCompoundRootCarrierStatus"] = "true";
   status.setAttribute("aria-live", "polite");
   status.textContent = "The compound perfect square is ready.";
@@ -212,7 +214,8 @@ function endpointRoot(
   active: boolean
 ): HTMLElement {
   const root = document.createElement("div");
-  root.className = "kp-even-root-stage__endpoint";
+  root.className =
+    "kp-root-rewrite-stage__endpoint kp-even-root-stage__endpoint";
   root.dataset["kpCompoundRootCarrierEndpoint"] = endpoint.stateId;
   root.dataset["kpCompoundRootCarrierEndpointSide"] = endpoint.endpoint;
   root.dataset["kpCompoundRootCarrierLatex"] = endpoint.annotated.rawLatex;

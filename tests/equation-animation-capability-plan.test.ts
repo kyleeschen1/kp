@@ -86,6 +86,23 @@ test("one exemplar never stands in for general family capability", () => {
   }
 });
 
+test("root capability advertises only the governed narrow seam", () => {
+  const capability = kpEquationAnimationCapabilityPlan.entries.find(
+    ({ id }) => id === "capability.equation.radical-inversion");
+  assert.ok(capability);
+  assert.deepEqual(new Set(capability.requirements.map(({ kind }) => kind)),
+    new Set([
+      "endpoint-normalizer",
+      "semantic-operation",
+      "canonical-recipe",
+      "canonical-exemplar",
+      "authoring-surface",
+      "generation-corpus"
+    ]));
+  assert.match(capability.requirements.find(({ kind }) =>
+    kind === "generation-corpus")?.summary ?? "", /blocked distribution/u);
+});
+
 test("detailed fraction root branch binder and derivation gaps remain visible", () => {
   const ids = new Set(kpEquationAnimationCapabilityPlan.entries.map(({ id }) => id));
   for (const id of [

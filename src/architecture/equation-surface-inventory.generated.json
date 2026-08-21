@@ -19,10 +19,11 @@
       "animation.algebra.exponential-homomorphism.sum-to-product",
       "animation.algebra.exponential-homomorphism.difference-to-quotient",
       "animation.algebra.radical.solve-x-squared-nine",
+      "animation.algebra.radical.compound-carrier-normalization",
       "animation.operation-evaluation.two-times-one-carrier",
       "animation.operation-evaluation.two-times-three"
     ],
-    "currentCount": 39,
+    "currentCount": 40,
     "reconciled": true
   },
   "entries": [
@@ -257,6 +258,45 @@
         "representationId": "editor-animation.animation.algebra.log-quotient.difference-to-quotient",
         "representationKind": "editor",
         "href": "/?animation=editor-animation.animation.algebra.log-quotient.difference-to-quotient&view=editor",
+        "sourcePath": "src/editor/animation-library-display-catalog-builder.ts"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-inventory-entry.v1",
+      "animationId": "animation.algebra.radical.compound-carrier-normalization",
+      "title": "Preserve x + 1 through an even root",
+      "semanticOwner": {
+        "kind": "catalog-animation-asset",
+        "assetId": "animation.algebra.radical.compound-carrier-normalization",
+        "primaryDescriptorId": "editor-animation.animation.algebra.radical.compound-carrier-normalization",
+        "sourcePath": "src/animation/catalog.ts"
+      },
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "catalogueSurface": {
+        "kind": "equation",
+        "slotKind": "equation",
+        "selectedCapabilityId": "even-root",
+        "rendererAdapterId": "editor-animation-surface.root.compound-carrier.canonical-native-katex",
+        "rendererSourcePath": "src/editor/compound-root-carrier-surface-adapter.ts"
+      },
+      "clockAuthority": {
+        "ownerId": "editor-animation-player",
+        "sourcePath": "src/editor/animation-player-controller.ts",
+        "durationMs": 4800,
+        "beatCount": 96
+      },
+      "lazyCapability": {
+        "packId": "algebra",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/algebra.ts"
+      },
+      "currentPresentationAuthority": {
+        "canonicalFormat": "legacy",
+        "representationId": "editor-animation.animation.algebra.radical.compound-carrier-normalization",
+        "representationKind": "editor",
+        "href": "/?animation=editor-animation.animation.algebra.radical.compound-carrier-normalization&view=editor",
         "sourcePath": "src/editor/animation-library-display-catalog-builder.ts"
       }
     },

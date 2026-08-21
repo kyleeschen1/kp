@@ -1,5 +1,5 @@
 import "katex/dist/katex.min.css";
-import "./even-root-surface.css";
+import "./root-rewrite-surface.css";
 
 import {
   kpEditorEvenRootSurfaceAdapter

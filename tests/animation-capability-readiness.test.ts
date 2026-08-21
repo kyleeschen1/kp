@@ -13,7 +13,7 @@ import {
 import { kpAnimationCapabilityPlan } from
   "../src/architecture/cross-domain-animation-capability-plan.ts";
 
-test("readiness derives the six exact direct generation capabilities", () => {
+test("readiness derives the eight exact direct generation capabilities", () => {
   const readiness = createKpAnimationCapabilityReadiness();
   const direct = readiness.entries.filter(({ status }) => status === "Direct");
   assert.deepEqual(direct.map(({ capabilityId }) => capabilityId), [
@@ -22,7 +22,9 @@ test("readiness derives the six exact direct generation capabilities", () => {
     "capability.equation.additive-cancellation",
     "capability.equation.log-homomorphic-decomposition",
     "capability.equation.balanced-operations",
-    "capability.equation.alternative-logarithm-bases"
+    "capability.equation.alternative-logarithm-bases",
+    "capability.equation.exponential-homomorphism",
+    "capability.equation.radical-inversion"
   ]);
   assert.ok(direct.every(({ evidence }) =>
     evidence.gate === "direct-intent-and-registered-authority"));
@@ -97,6 +99,28 @@ test("alternative bases require corpus-backed transform-series authoring", () =>
       "corpus.equation.logarithm-base.v1"
     ],
     sourcePath: "src/authoring/compile-equation-transform-series.ts"
+  });
+});
+
+test("root inversion is direct only through the exact pressure corpus", () => {
+  const direct = createKpAnimationCapabilityDirectIntentEvidence().find(
+    ({ operationId }) => operationId ===
+      "compiler.equation.root-rewrite-plan.v1"
+  );
+  assert.deepEqual(direct, {
+    animationId:
+      "animation.algebra.radical.compound-carrier-normalization",
+    operationId: "compiler.equation.root-rewrite-plan.v1",
+    authoringAuthorityId: "authoring.equation.radical-inversion.v1",
+    planKind: "root-rewrite-plan",
+    resolvedAuthorityIds: [
+      "compiler.equation.root-rewrite-plan.v1",
+      "recipe.equation.radical-inversion.v1"
+    ],
+    generationCorpusAuthorityIds: [
+      "corpus.equation.radical-inversion.v1"
+    ],
+    sourcePath: "src/authoring/root-rewrite-authoring-corpus.ts"
   });
 });
 

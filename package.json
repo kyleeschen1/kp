@@ -109,6 +109,7 @@
     "test:rational-exponent-pressure": "node --disable-warning=ExperimentalWarning --test tests/rational-exponent-composition-pressure.test.ts tests/root-rewrite-plan.test.ts tests/odd-root-pressure.test.ts",
     "test:root-extraction-pressure": "node --disable-warning=ExperimentalWarning --test tests/root-extraction-pressure-corpus.test.ts tests/root-rewrite-plan.test.ts tests/root-rewrite-native-endpoint.test.ts",
     "test:root-composition-pressure": "node --disable-warning=ExperimentalWarning --test tests/root-composition-pressure-corpus.test.ts tests/root-rewrite-plan.test.ts tests/root-rewrite-vocabulary.test.ts",
+    "test:root-promotion": "node --disable-warning=ExperimentalWarning --test tests/root-rewrite-authoring-promotion.test.ts tests/animation-capability-readiness.test.ts tests/animation-capability-compiler-evidence.test.ts tests/animation-transformation-coverage.test.ts tests/equation-animation-capability-plan.test.ts",
     "visual:compound-root-carrier": "playwright test tests/compound-root-carrier-catalogue.browser.spec.ts --project=chromium --workers=1",
     "visual:distribution-pressure": "node --disable-warning=ExperimentalWarning scripts/capture-distribution-pressure.ts",
     "visual:cancellation-pressure": "node --disable-warning=ExperimentalWarning scripts/capture-cancellation-pressure.ts",
