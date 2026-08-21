@@ -23,6 +23,10 @@ test("compound carrier seeks continuously, rewinds, and survives resize", async 
   expect(Number(await stage.getAttribute(
     "data-kp-compound-root-carrier-dynamic-track-count"
   ))).toBeGreaterThan(0);
+  await expect(stage).toHaveAttribute(
+    "data-kp-compound-root-carrier-subtree-motion",
+    /^(rigid|translation-with-local-residuals)$/u
+  );
 
   await seek.fill("0");
   expect(await activeMath(stage)).toBe("\\sqrt{(x+1)^{2}}");
@@ -57,6 +61,37 @@ test("compound carrier seeks continuously, rewinds, and survives resize", async 
   expect(pageErrors).toEqual([]);
 });
 
+test("compound leaves settle at native target ink before handoff", async ({
+  page
+}) => {
+  await page.goto(`/?artifact=${animationId}`);
+  const player = page.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  const stage = player.locator("[data-kp-compound-root-carrier-stage]");
+  const seek = player.locator('[data-action="seek-editor-animation"]');
+  await expect(stage).toHaveAttribute(
+    "data-kp-compound-root-carrier-stage",
+    "ready",
+    { timeout: 10_000 }
+  );
+
+  await seek.fill("0.95");
+  const before = await persistentLeafInk(stage);
+  for (const leaf of before) {
+    expect(Math.abs(leaf.material.centerX - leaf.target.centerX),
+      `${leaf.entityId} horizontal handoff residual`).toBeLessThanOrEqual(0.5);
+    expect(Math.abs(leaf.material.centerY - leaf.target.centerY),
+      `${leaf.entityId} vertical handoff residual`).toBeLessThanOrEqual(0.5);
+  }
+  await seek.fill("0.35");
+  await seek.fill("0.95");
+  expect(await persistentLeafInk(stage)).toEqual(before);
+  await seek.fill("1");
+  expect(await activeMath(stage)).toBe("\\lvertx+1\\rvert");
+});
+
 test("reduced motion retains exact semantic endpoints", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto(`/?artifact=${animationId}&playhead=1`);
@@ -82,4 +117,50 @@ async function visibleMaterialOwnerCount(stage: Locator): Promise<number> {
       return style.visibility !== "hidden" && Number(style.opacity) > 0;
     }).length
   );
+}
+
+async function persistentLeafInk(stage: Locator) {
+  return stage.evaluate((root) => {
+    const bounds = (element: Element) => {
+      const range = element.ownerDocument.createRange();
+      range.selectNodeContents(element);
+      const rect = range.getBoundingClientRect();
+      return {
+        centerX: rect.left + rect.width / 2,
+        centerY: rect.top + rect.height / 2
+      };
+    };
+    return ["x", "plus", "one"].map((leaf) => {
+      const sourceEntityId = `source.${leaf}`;
+      const targetEntityId = `target.${leaf}`;
+      const owner = [...root.querySelectorAll<HTMLElement>(
+        "[data-kp-equation-material-owner-id]"
+      )].find((candidate) =>
+        candidate.dataset["kpEquationMaterialSemanticEntityId"] ===
+          sourceEntityId
+      );
+      const target = root.querySelector<HTMLElement>(
+        `[data-kp-semantic-entity-id="${targetEntityId}"]`
+      );
+      const material = owner?.firstElementChild;
+      if (owner === undefined || material === null || target === null) {
+        const availableOwners = [...root.querySelectorAll<HTMLElement>(
+          "[data-kp-equation-material-owner-id]"
+        )].map((candidate) => ({
+          entity: candidate.dataset["kpEquationMaterialSemanticEntityId"],
+          child: candidate.firstElementChild?.textContent
+        }));
+        throw new Error(
+          `Missing persistent leaf paint for ${targetEntityId}; ` +
+          `owner=${owner !== undefined}, material=${material !== null}, ` +
+          `target=${target !== null}, available=${JSON.stringify(availableOwners)}.`
+        );
+      }
+      return {
+        entityId: targetEntityId,
+        material: bounds(material),
+        target: bounds(target)
+      };
+    });
+  });
 }

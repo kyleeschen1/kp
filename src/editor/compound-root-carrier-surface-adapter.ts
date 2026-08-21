@@ -160,6 +160,8 @@ async function prepareSurface(
     session.stage.dataset["kpCompoundRootCarrierDynamicTrackCount"] = String(
       session.transit.canonical.executableMotion.dynamicTrackIds.length
     );
+    session.stage.dataset["kpCompoundRootCarrierSubtreeMotion"] =
+      session.transit.motion.subtreeMotion.motionMode;
     session.stage.dataset["kpCompoundRootCarrierMeasurementRevision"] =
       String(generation);
     session.stage.dataset["kpCompoundRootCarrierStage"] = "ready";

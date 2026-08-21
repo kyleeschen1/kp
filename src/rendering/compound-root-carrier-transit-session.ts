@@ -6,7 +6,6 @@ import {
   type KpVerifiedCompoundRootCarrierExemplar
 } from "../semantic/compound-root-carrier-exemplar.ts";
 import {
-  projectKpNativeKatexSemanticPaintRelations,
   type KpNativeKatexRendererReadyScenePlan
 } from "./native-katex-base-scene-plan.ts";
 import type { KpNativeKatexFunctionWrapAdaptationCertificate } from
@@ -15,12 +14,13 @@ import {
   adaptKpNativeKatexFunctionWrapReception
 } from "./native-katex-function-wrap-reception.ts";
 import {
-  createKpNativeKatexEndpointOwnershipView
-} from "./native-katex-endpoint-ownership.ts";
-import {
   createKpNativeKatexRenderedEndpointHandle,
   type KpNativeKatexRenderedSceneObservation
 } from "./native-katex-rendered-scene.ts";
+import {
+  bindKpNativeKatexPersistentSubtreeMotion,
+  type KpNativeKatexPersistentSubtreeMotionBinding
+} from "./native-katex-persistent-subtree-motion.ts";
 import {
   compileKpCanonicalNativeKatexScenePlan,
   createKpCanonicalNativeKatexSceneSession,
@@ -46,7 +46,8 @@ export interface KpCompoundRootCarrierMotionPlan {
   readonly lifecycle: "renderer-session-ephemeral";
   readonly exemplar: KpVerifiedCompoundRootCarrierExemplar;
   readonly rendererPlan: KpNativeKatexRendererReadyScenePlan;
-  readonly carrierTrackId: string;
+  readonly carrierTrackIds: readonly [string, ...string[]];
+  readonly subtreeMotion: KpNativeKatexPersistentSubtreeMotionBinding;
   readonly removedSyntaxTrackIds: readonly string[];
   readonly enclosureTrackIds: readonly string[];
   readonly functionWrapCertificate:
@@ -72,30 +73,17 @@ export function compileKpCompoundRootCarrierMotion(input: {
   readonly target: KpNativeKatexRenderedSceneObservation;
 }): KpCompoundRootCarrierMotionPlan {
   assertInput(input);
-  const [sourceState, targetState] = input.exemplar.states;
+  const [, targetState] = input.exemplar.states;
   const sourceHandle = createKpNativeKatexRenderedEndpointHandle({
     observation: input.source
   });
   const targetHandle = createKpNativeKatexRenderedEndpointHandle({
     observation: input.target
   });
-  const sourceCarrierGroupId = groupIdFor(
-    input.endpoints.source,
-    sourceState.carrier.occurrence.entityId
-  );
-  const targetCarrierGroupId = groupIdFor(
-    input.endpoints.target,
-    targetState.carrier.occurrence.entityId
-  );
-  const source = createKpNativeKatexEndpointOwnershipView({
-    handle: sourceHandle,
-    endpoint: "source",
-    collapsedGroupIds: [sourceCarrierGroupId]
-  });
-  const target = createKpNativeKatexEndpointOwnershipView({
-    handle: targetHandle,
-    endpoint: "target",
-    collapsedGroupIds: [targetCarrierGroupId]
+  const subtreeMotion = bindKpNativeKatexPersistentSubtreeMotion({
+    certificate: input.exemplar.subtreeCertificate,
+    source: input.source,
+    target: input.target
   });
   const wrapPlan = createKpFunctionWrapReceptionPlan({
     id: `reception.${input.exemplar.id}.absolute-value`,
@@ -113,7 +101,7 @@ export function compileKpCompoundRootCarrierMotion(input: {
       }]
     }]
   });
-  let carrierTrackId: string | undefined;
+  const carrierTrackIds: string[] = [];
   let removedSyntaxTrackIds: readonly string[] | undefined;
   let enclosureTrackIds: readonly string[] | undefined;
   let functionWrapCertificate:
@@ -121,26 +109,21 @@ export function compileKpCompoundRootCarrierMotion(input: {
   const trackProjection = createKpNativeKatexTrackProjection({
     id: `track-projection.${input.exemplar.id}`,
     project(projectionInput) {
-      const sourceEntityByAtom = new Map(projectionInput.source.atoms.map(
-        ({ id, semanticEntityId }) => [id, semanticEntityId]
-      ));
       const targetEntityByAtom = new Map(projectionInput.target.atoms.map(
         ({ id, semanticEntityId }) => [id, semanticEntityId]
       ));
       const removedIds: string[] = [];
       const initial = projectionInput.tracks.map((track) => {
-        const sourceEntity = track.sourceAtomId === undefined
-          ? undefined
-          : sourceEntityByAtom.get(track.sourceAtomId);
-        const targetEntity = track.targetAtomId === undefined
-          ? undefined
-          : targetEntityByAtom.get(track.targetAtomId);
-        if (track.lifecycle === "persist" &&
-          sourceEntity === sourceState.carrier.occurrence.entityId &&
-          targetEntity === targetState.carrier.occurrence.entityId) {
-          carrierTrackId = track.id;
+        const persistentMember = subtreeMotion.members.find((member) =>
+          member.sourceAtomId === track.sourceAtomId &&
+          member.targetAtomId === track.targetAtomId
+        );
+        if (track.lifecycle === "persist" && persistentMember !== undefined) {
+          carrierTrackIds.push(track.id);
           return Object.freeze({
             ...track,
+            semanticMotionUnitId:
+              `motion-unit.${input.exemplar.id}.persistent-subtree`,
             timingGroupId: `timing.${input.exemplar.id}.carrier-transit`,
             sampleProgress: sampleWindow(
               kpCompoundRootCarrierTreatment.carrierTransit.start,
@@ -197,21 +180,14 @@ export function compileKpCompoundRootCarrierMotion(input: {
     }
   });
   const rendererPlan = compileKpCanonicalNativeKatexScenePlan({
-    source,
-    target,
-    relations: projectKpNativeKatexSemanticPaintRelations({
-      groups: [{
-        id: `relation.${input.exemplar.id}.carrier`,
-        kind: "one-to-one",
-        sourceEntityIds: [sourceState.carrier.occurrence.entityId],
-        targetEntityIds: [targetState.carrier.occurrence.entityId]
-      }]
-    }),
+    source: sourceHandle,
+    target: targetHandle,
+    relations: subtreeMotion.relations,
     trackProjection,
     fanInRouting: false,
     copyFanOutRouting: false
   });
-  if (carrierTrackId === undefined ||
+  if (carrierTrackIds.length !== subtreeMotion.members.length ||
     removedSyntaxTrackIds === undefined || removedSyntaxTrackIds.length === 0 ||
     enclosureTrackIds === undefined || enclosureTrackIds.length !== 2 ||
     functionWrapCertificate === undefined) {
@@ -224,7 +200,11 @@ export function compileKpCompoundRootCarrierMotion(input: {
     lifecycle: "renderer-session-ephemeral" as const,
     exemplar: input.exemplar,
     rendererPlan,
-    carrierTrackId,
+    carrierTrackIds: Object.freeze(carrierTrackIds) as readonly [
+      string,
+      ...string[]
+    ],
+    subtreeMotion,
     removedSyntaxTrackIds,
     enclosureTrackIds,
     functionWrapCertificate,
@@ -287,18 +267,6 @@ function assertInput(input: {
     input.source.root === input.target.root) {
     throw new Error("Compound-root realization crossed endpoint ownership.");
   }
-}
-
-function groupIdFor(
-  endpoint: KpCompoundRootCarrierNativeEndpointSet["source"],
-  entityId: string
-): string {
-  const nodes = endpoint.nodes.filter(({ occurrence }) =>
-    occurrence.entityId === entityId);
-  if (nodes.length !== 1) {
-    throw new Error(`Compound-root endpoint lacks unique entity ${entityId}.`);
-  }
-  return nodes[0]!.presentationGroupId;
 }
 
 function sampleWindow(start: number, end: number): (progress: number) => number {

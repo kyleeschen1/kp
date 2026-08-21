@@ -36,7 +36,7 @@ test("semantic exemplar projects exact recursive native endpoints", () => {
   }]);
 });
 
-test("motion preserves one opaque compound carrier and wraps it horizontally", () => {
+test("motion preserves every compound leaf and wraps it horizontally", () => {
   const source = observation(kpCompoundRootCarrierNativeEndpoints.source,
     sourcePaint());
   const target = observation(kpCompoundRootCarrierNativeEndpoints.target,
@@ -48,13 +48,22 @@ test("motion preserves one opaque compound carrier and wraps it horizontally", (
     target
   });
   const tracks = motion.rendererPlan.tracks;
-  const carrier = tracks.find(({ id }) => id === motion.carrierTrackId);
+  const carriers = tracks.filter(({ id }) =>
+    motion.carrierTrackIds.includes(id));
   const removed = tracks.filter(({ id }) =>
     motion.removedSyntaxTrackIds.includes(id));
   const enclosures = tracks.filter(({ id }) =>
     motion.enclosureTrackIds.includes(id));
-  assert.equal(carrier?.lifecycle, "persist");
-  assert.equal(carrier?.sampleMaterialScale, undefined);
+  assert.equal(carriers.length, 3);
+  assert.ok(carriers.every(({ lifecycle, sampleMaterialScale }) =>
+    lifecycle === "persist" && sampleMaterialScale === undefined));
+  assert.equal(new Set(carriers.map(({ semanticMotionUnitId }) =>
+    semanticMotionUnitId)).size, 1);
+  assert.equal(new Set(carriers.map(({ timingGroupId }) =>
+    timingGroupId)).size, 1);
+  assert.equal(motion.subtreeMotion.members.length, 3);
+  assert.equal(motion.subtreeMotion.motionMode,
+    "translation-with-local-residuals");
   assert.ok(removed.length >= 3);
   assert.ok(removed.every(({ lifecycle, sampleMaterialScale }) =>
     lifecycle === "eliminate" && sampleMaterialScale === undefined));
@@ -100,10 +109,22 @@ test("sampled timeline has exact endpoints and deterministic direct seek", () =>
     false);
   const end = sampleKpNativeKatexSceneTrackFrames(tracks, 1, false);
   assert.deepEqual(middle, repeatedMiddle);
-  assert.equal(start.find(({ trackId }) => trackId === motion.carrierTrackId)
-    ?.opacity, 1);
-  assert.equal(middle.find(({ trackId }) => trackId === motion.carrierTrackId)
-    ?.opacity, 1);
+  assert.ok(start.filter(({ trackId }) =>
+    motion.carrierTrackIds.includes(trackId)).every(({ opacity }) =>
+      opacity === 1));
+  assert.ok(middle.filter(({ trackId }) =>
+    motion.carrierTrackIds.includes(trackId)).every(({ opacity }) =>
+      opacity === 1));
+  const targetByAtomId = new Map(
+    motion.rendererPlan.reconciliation.target.atoms.map((atom) =>
+      [atom.id, atom] as const)
+  );
+  motion.carrierTrackIds.forEach((trackId) => {
+    const track = tracks.find(({ id }) => id === trackId);
+    const frame = end.find(({ trackId: id }) => id === trackId);
+    assert.ok(track?.targetAtomId !== undefined);
+    assert.deepEqual(frame?.rect, targetByAtomId.get(track.targetAtomId)?.rect);
+  });
   assert.ok(middle.filter(({ trackId }) =>
     motion.removedSyntaxTrackIds.includes(trackId)
   ).every(({ opacity }) => opacity === 0));
@@ -115,6 +136,26 @@ test("sampled timeline has exact endpoints and deterministic direct seek", () =>
   ).every(({ opacity, rect }, index) => opacity === 1 &&
     rect.left === tracks.find(({ id }) =>
       id === motion.enclosureTrackIds[index])?.endRect.left));
+});
+
+test("persistent subtree binding rejects incomplete descendant paint", () => {
+  const target = observation(kpCompoundRootCarrierNativeEndpoints.target,
+    targetPaint());
+  const missingTargetOne = Object.freeze({
+    ...target,
+    atoms: Object.freeze(target.atoms.map((atom) =>
+      atom.semanticEntityId === "target.one"
+        ? Object.freeze({ ...atom, semanticEntityId: "target.foreign" })
+        : atom
+    ))
+  });
+  assert.throws(() => compileKpCompoundRootCarrierMotion({
+    exemplar: kpCompoundRootCarrierExemplar,
+    endpoints: kpCompoundRootCarrierNativeEndpoints,
+    source: observation(kpCompoundRootCarrierNativeEndpoints.source,
+      sourcePaint()),
+    target: missingTargetOne
+  }), /changes native paint topology/u);
 });
 
 interface PaintFixture {
@@ -148,9 +189,9 @@ function targetPaint(): readonly PaintFixture[] {
     paint("target.absolute-value.leading", 22, 14, 4, 28,
       "delimiter", "delimiter:left"),
     paint("target.x", 31, 18, 9, 20, "glyph", "glyph:x"),
-    paint("target.plus", 44, 18, 9, 20, "glyph", "glyph:+"),
-    paint("target.one", 57, 18, 8, 20, "glyph", "glyph:1"),
-    paint("target.absolute-value.trailing", 70, 14, 4, 28,
+    paint("target.plus", 45, 17, 9, 20, "glyph", "glyph:+"),
+    paint("target.one", 59, 18, 8, 20, "glyph", "glyph:1"),
+    paint("target.absolute-value.trailing", 72, 14, 4, 28,
       "delimiter", "delimiter:right")
   ];
 }
