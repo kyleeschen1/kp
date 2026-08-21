@@ -125,6 +125,20 @@
       "scope": "cf05",
       "checkedAt": "2026-08-21T20:45:20.332Z",
       "notes": "Dependency, framework-neutral, semantic, and equation authority gates remain green."
+    },
+    {
+      "command": "npm run test:typescript-extract-helper-roles",
+      "status": "passed",
+      "scope": "cf06",
+      "checkedAt": "2026-08-21T20:51:09.653Z",
+      "notes": "Four tests recognize compiler-backed TypeScript source, duplicate contributors, helper, and calls across renamed fixtures without minting semantic IDs or legality."
+    },
+    {
+      "command": "npm run typecheck and npm run check:architecture",
+      "status": "passed",
+      "scope": "cf06",
+      "checkedAt": "2026-08-21T20:51:13.371Z",
+      "notes": "Role recognition preserves all type and architecture boundaries."
     }
   ],
   "allowedWork": [
@@ -183,7 +197,8 @@
     {
       "id": "cf06",
       "title": "TypeScript-role-recognition",
-      "status": "planned"
+      "summary": "Added TypeScript-owned, compiler-record-backed extract-helper role recognition that remains observational and independent of canonical semantic identity or legality.",
+      "status": "complete"
     },
     {
       "id": "cf07",
