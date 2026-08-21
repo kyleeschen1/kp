@@ -261,11 +261,25 @@
       "scope": "bf12 Native KaTeX settlement and geometry preservation",
       "checkedAt": "2026-08-21T23:35:10.078Z",
       "notes": "82 compositor tests pass across immutable handles, ink geometry, ownership, settlement, and terminal handoff laws."
+    },
+    {
+      "command": "npm run test:finite-binder-expansion",
+      "status": "passed",
+      "scope": "bf13 local sum presentation plan",
+      "checkedAt": "2026-08-21T23:39:01.930Z",
+      "notes": "62 focused tests pass over ordered body fan-out, substituted-reference reception, connector causality, single-clock authority, and cardinality refusal."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "bf13 presentation-plan types",
+      "checkedAt": "2026-08-21T23:39:03.621Z",
+      "notes": "All TypeScript, Svelte, and domain typechecks pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Established immutable renderer-session paint authority for both sum endpoints; only the matching body glyph fans out, while changed syntax remains honest elimination or introduction."
+    "summary": "Authored a reversible three-term sum choreography hypothesis: source scope withdraws, body ink fans out in order, indices receive near settlement, connectors wait for adjacent terms, and the target holds."
   },
   "expectedLearning": [
     "Whether finite sum expansion can make bound scope, ordered instantiation, and one-to-many lineage perceptually clear without false persistence.",

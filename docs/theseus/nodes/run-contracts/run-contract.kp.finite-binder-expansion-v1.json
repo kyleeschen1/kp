@@ -138,7 +138,8 @@
     {
       "id": "bf13",
       "title": "Author sum presentation plan",
-      "status": "planned"
+      "summary": "The canonical sum now has a typed candidate-local presentation plan with explicit causal timing and no shared-policy change.",
+      "status": "complete"
     },
     {
       "id": "bf14",
