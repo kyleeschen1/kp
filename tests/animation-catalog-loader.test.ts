@@ -81,6 +81,7 @@ test("all declared pack boundaries are exercised by editor metadata", () => {
     "place-value",
     "algebra",
     "log-product",
+    "exponential-homomorphism",
     "generated-drafts",
     "generated-problems",
     "graph",

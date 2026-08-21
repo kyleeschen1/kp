@@ -235,6 +235,7 @@ function applyFrame(
     root.setAttribute("inert", "");
   });
   if (ownership.visualOwner === "target-native") {
+    session.endpointRoots[1].style.opacity = "1";
     session.endpointRoots[1].setAttribute("aria-hidden", "false");
     session.endpointRoots[1].removeAttribute("inert");
   }

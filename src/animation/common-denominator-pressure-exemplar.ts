@@ -3,6 +3,9 @@ import {
   type KpAnimationAsset
 } from "./asset.ts";
 import {
+  createKpCanonicalBalancedSolveEquationPresentationProfileV1
+} from "./equation-presentation-profile.ts";
+import {
   kpCanonicalCommonDenominatorPressurePresentationPlan
 } from "./common-denominator-pressure-presentation-plan.ts";
 import {
@@ -196,6 +199,8 @@ KpAnimationAsset {
         plan.equivalence.focus.presentation.recipeId
       ]
     },
+    presentationProfile:
+      createKpCanonicalBalancedSolveEquationPresentationProfileV1(),
     metadata: {
       sourceFamilyId: "family.algebra.fraction-common-denominator",
       presentationPlanId: plan.id,

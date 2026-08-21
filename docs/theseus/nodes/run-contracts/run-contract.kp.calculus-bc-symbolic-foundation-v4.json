@@ -342,6 +342,34 @@
       "scope": "rv14 completed control state",
       "checkedAt": "2026-08-21T18:08:04.307Z",
       "notes": "Validated 1043 nodes and 24189 events after closing the log-product equivalence-frame exemplar."
+    },
+    {
+      "command": "npm run visual:log-product-equivalence-frame",
+      "status": "passed",
+      "scope": "rv15 terminal target paint and checkpoint behavior",
+      "checkedAt": "2026-08-21T18:21:05.908Z",
+      "notes": "Three Chromium checks pass: retained source, canonical transit, terminal target native paint, direct URL seek, rewind, reduced motion, page-error cleanliness, and narrow fit."
+    },
+    {
+      "command": "npm run verify:equation:promotion",
+      "status": "passed",
+      "scope": "rv15 bounded promotion closure",
+      "checkedAt": "2026-08-21T18:21:07.481Z",
+      "notes": "Equation preservation, extension dispatch, motion protocol, full typecheck, architecture, five Chromium capability cases, production build, and catalogue bundle ceilings pass."
+    },
+    {
+      "command": "npm run verify:equation:release",
+      "status": "failed",
+      "scope": "rv15 repository-wide release baseline",
+      "checkedAt": "2026-08-21T18:21:08.501Z",
+      "notes": "The first pass exposed and repaired stale pack/profile and catalogue-count assertions. Release remains blocked before broad unit execution by the pre-existing inference ceiling: 93156 types exceeds 55000 and 150277 instantiations exceeds 75000. No threshold was raised."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "rv15 human-checkpoint control state",
+      "checkedAt": "2026-08-21T18:21:32.482Z",
+      "notes": "Validated 1043 nodes and 24194 events with rv15 intentionally in progress pending the required visual decision."
     }
   ],
   "allowedWork": [
@@ -453,7 +481,8 @@
     {
       "id": "rv15",
       "title": "persistent-state-visual-checkpoint-closeout",
-      "status": "planned"
+      "summary": "Close the persistent-state visual checkpoint without broad promotion. Compare the unchanged replacement caller against the new equivalence-frame projection at exact source, transit, and settled states; verify direct URL seek, rewind, reduced motion, narrow fit, lazy bundle closure, and release gates; then stop for human review with both exact catalogue URLs.",
+      "status": "in-progress"
     }
   ]
 }

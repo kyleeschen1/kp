@@ -63,6 +63,9 @@ test("equivalence frame retains context around the canonical log transition",
       "data-kp-log-product-equivalence-visual-owner", "target-native"
     );
     await expect(relation).toBeVisible();
+    await expect(stage.locator(
+      ".kp-log-product-equivalence-stage__measurement--target"
+    )).toBeVisible();
     expect(await source.textContent()).toBe(sourceText);
 
     await seek.fill("0");
@@ -71,6 +74,31 @@ test("equivalence frame retains context around the canonical log transition",
     );
     await expect(relation).toBeHidden();
     expect(pageErrors).toEqual([]);
+  });
+
+test("direct seek and reduced motion retain the complete equivalence frame",
+  async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto(`/?artifact=${animationId}&playhead=1`);
+    const stage = page.locator(
+      `[data-kp-editor-animation-id="${animationId}"] ` +
+      "[data-kp-log-product-equivalence-stage]"
+    );
+    await expect(stage).toHaveAttribute(
+      "data-kp-log-product-equivalence-stage", "ready", { timeout: 15_000 }
+    );
+    await expect(stage).toHaveAttribute(
+      "data-kp-log-product-equivalence-progress", "1"
+    );
+    await expect(stage.locator(
+      ".kp-log-product-equivalence-stage__frozen-source"
+    )).toBeVisible();
+    await expect(stage.locator(
+      ".kp-log-product-equivalence-stage__relation"
+    )).toBeVisible();
+    await expect(stage.locator(
+      ".kp-log-product-equivalence-stage__measurement--target"
+    )).toBeVisible();
   });
 
 test("equivalence frame keeps both expressions within a narrow viewport",
