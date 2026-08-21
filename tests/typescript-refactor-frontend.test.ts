@@ -36,6 +36,14 @@ test("the build-time frontend emits deterministic serializable syntax", () => {
     first.syntax.filter(({ text }) => text === "total >= 50").length,
     2
   );
+  assert.deepEqual(
+    first.syntax.filter(({ kindName }) => kindName === "FunctionDeclaration")
+      .map(({ facts }) => facts),
+    [
+      { declaredName: "shippingCost", parameterNames: ["total"] },
+      { declaredName: "shippingMessage", parameterNames: ["total"] }
+    ]
+  );
 });
 
 test("the frontend preserves exact positions and parent closure", () => {
@@ -56,6 +64,7 @@ test("the frontend preserves exact positions and parent closure", () => {
   assert.deepEqual(helper.start, { line: 1, column: 1 });
   assert.deepEqual(helper.end, { line: 3, column: 2 });
   assert.ok(helperRule);
+  assert.deepEqual(helperRule.facts?.referencedNames, ["total"]);
   assert.equal(helperRule.text, contract.after.source.slice(
     helperRule.startOffset,
     helperRule.endOffset

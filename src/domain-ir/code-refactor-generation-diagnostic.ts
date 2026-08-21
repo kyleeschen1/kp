@@ -73,9 +73,12 @@ export interface KpCodeRefactorGenerationDiagnostic {
 }
 
 export type KpCodeRefactorGenerationRepairResult =
-  KpCodeRefactorGenerationResult<
-    never,
-    KpCodeRefactorGenerationDiagnostic
+  Extract<
+    KpCodeRefactorGenerationResult<
+      never,
+      KpCodeRefactorGenerationDiagnostic
+    >,
+    Readonly<{ status: "repair-required" }>
   >;
 
 export function createKpCodeRefactorGenerationDiagnostic<

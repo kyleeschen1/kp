@@ -99,9 +99,9 @@ function resolveSyntaxRecord(
     return one(frontend.syntax.filter(({ kindName }) => kindName === "SourceFile"));
   }
   if (entity.kind === "function") {
-    return one(frontend.syntax.filter(({ kindName, text }) =>
+    return one(frontend.syntax.filter(({ kindName, facts }) =>
       kindName === "FunctionDeclaration" &&
-      declaredFunctionName(text) === entity.label
+      facts?.declaredName === entity.label
     ));
   }
   const ownerName = relationLabel(entity.ownerEntityId, byEntityId);
@@ -145,11 +145,6 @@ function bySyntaxId(
   syntaxRecordId: string
 ): KpTypeScriptSyntaxRecord | undefined {
   return frontend.syntax.find(({ id }) => id === syntaxRecordId);
-}
-
-function declaredFunctionName(text: string): string | undefined {
-  return /(?:export\s+)?(?:async\s+)?function\s+([A-Za-z_$][\w$]*)\s*\(/u
-    .exec(text)?.[1];
 }
 
 function one<T>(values: readonly T[]): T | undefined {

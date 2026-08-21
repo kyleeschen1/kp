@@ -18,6 +18,13 @@ export interface KpTypeScriptSyntaxRecord {
   readonly start: { readonly line: number; readonly column: number };
   readonly end: { readonly line: number; readonly column: number };
   readonly text: string;
+  readonly facts?: Readonly<{
+    declaredName?: string | undefined;
+    parameterNames?: readonly string[] | undefined;
+    calledName?: string | undefined;
+    argumentTexts?: readonly string[] | undefined;
+    referencedNames?: readonly string[] | undefined;
+  }> | undefined;
 }
 
 export interface KpTypeScriptFrontendResult {
@@ -137,10 +144,50 @@ function collectSyntax(
     endOffset,
     start: { line: start.line + 1, column: start.character + 1 },
     end: { line: end.line + 1, column: end.character + 1 },
-    text: inputSlice(sourceFile.text, startOffset, endOffset)
+    text: inputSlice(sourceFile.text, startOffset, endOffset),
+    ...syntaxFacts(node, sourceFile)
   });
 
   node.forEachChild((child) => collectSyntax(child, sourceFile, id, output));
+}
+
+function syntaxFacts(
+  node: ts.Node,
+  sourceFile: ts.SourceFile
+): Pick<KpTypeScriptSyntaxRecord, "facts"> {
+  if (ts.isFunctionDeclaration(node)) {
+    return {
+      facts: {
+        ...(node.name === undefined ? {} : { declaredName: node.name.text }),
+        parameterNames: node.parameters.flatMap(({ name }) =>
+          ts.isIdentifier(name) ? [name.text] : []
+        )
+      }
+    };
+  }
+  if (ts.isCallExpression(node)) {
+    return {
+      facts: {
+        ...(ts.isIdentifier(node.expression)
+          ? { calledName: node.expression.text }
+          : {}),
+        argumentTexts: node.arguments.map((argument) =>
+          inputSlice(sourceFile.text, argument.getStart(sourceFile), argument.getEnd())
+        )
+      }
+    };
+  }
+  if (ts.isBinaryExpression(node)) {
+    const referencedNames: string[] = [];
+    collectIdentifierNames(node, referencedNames);
+    return { facts: { referencedNames: [...new Set(referencedNames)] } };
+  }
+  return {};
+}
+
+function collectIdentifierNames(node: ts.Node, output: string[]): void {
+  if (ts.isIdentifier(node)) output.push(node.text);
+  node.forEachChild((child) => collectIdentifierNames(child, output));
 }
 
 function syntaxRecordId(

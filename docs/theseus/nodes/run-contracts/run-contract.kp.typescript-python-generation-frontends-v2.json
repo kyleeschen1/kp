@@ -167,6 +167,20 @@
       "scope": "cf08",
       "checkedAt": "2026-08-21T20:58:16.549Z",
       "notes": "Explicit contract ownership leaves the generated semantic artifact byte-current and existing identity behavior unchanged."
+    },
+    {
+      "command": "npm run test:typescript-refactor",
+      "status": "passed",
+      "scope": "cf09",
+      "checkedAt": "2026-08-21T21:04:36.406Z",
+      "notes": "All 82 TypeScript tests pass, including compiler-fact recognition, legality, binding, governed adapter acceptance/repair, unchanged motion, operations, rendering, and public closure."
+    },
+    {
+      "command": "npm run typecheck, npm run check:architecture, and npm run check:typescript-refactor-semantics",
+      "status": "passed",
+      "scope": "cf09",
+      "checkedAt": "2026-08-21T21:04:37.821Z",
+      "notes": "Broad type, architecture, and generated-semantic gates pass after replacing regex name decoding with serialized TypeScript AST facts."
     }
   ],
   "allowedWork": [
@@ -243,7 +257,8 @@
     {
       "id": "cf09",
       "title": "TypeScript-generation-frontend",
-      "status": "planned"
+      "summary": "Implemented the TypeScript governed-request frontend through compiler facts, role recognition, legality, and causal operations; typed repairs are explicit and compiler objects do not cross the build-time boundary.",
+      "status": "complete"
     },
     {
       "id": "cf10",

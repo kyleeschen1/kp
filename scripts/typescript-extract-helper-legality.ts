@@ -96,8 +96,8 @@ export function proveKpTypeScriptExtractHelperLegality(
     functionParameterNames(target, helper.declarationSyntaxRecordId),
     requiredBindings
   );
-  const callsPreserveBindings = roles.targetCalls.every(({ argumentText }) =>
-    sameSequence(argumentNames(argumentText), requiredBindings)
+  const callsPreserveBindings = roles.targetCalls.every(({ argumentTexts }) =>
+    sameSequence(argumentTexts, requiredBindings)
   );
   if (
     !contributorsPreserveBindings ||
@@ -169,9 +169,7 @@ function referencedIdentifiers(
   expressionSyntaxRecordId: string
 ): readonly string[] {
   const expression = byId(frontend, expressionSyntaxRecordId);
-  return [...new Set(descendants(frontend, expression)
-    .filter(({ kindName }) => kindName === "Identifier")
-    .map(({ text }) => text.trim()))];
+  return expression.facts?.referencedNames ?? [];
 }
 
 function functionParameterNames(
@@ -179,33 +177,7 @@ function functionParameterNames(
   functionSyntaxRecordId: string
 ): readonly string[] {
   const declaration = byId(frontend, functionSyntaxRecordId);
-  return descendants(frontend, declaration)
-    .filter(({ kindName }) => kindName === "Parameter")
-    .map(({ text }) => /^([A-Za-z_$][\w$]*)/u.exec(text.trim())?.[1])
-    .filter((name): name is string => name !== undefined);
-}
-
-function argumentNames(text: string): readonly string[] {
-  return text.split(",").map((part) => part.trim()).filter(Boolean);
-}
-
-function descendants(
-  frontend: KpTypeScriptFrontendResult,
-  root: KpTypeScriptSyntaxRecord
-): readonly KpTypeScriptSyntaxRecord[] {
-  const recordsById = new Map(frontend.syntax.map((record) => [record.id, record]));
-  return frontend.syntax.filter((candidate) => {
-    let current = candidate.parentId === undefined
-      ? undefined
-      : recordsById.get(candidate.parentId);
-    while (current !== undefined) {
-      if (current.id === root.id) return true;
-      current = current.parentId === undefined
-        ? undefined
-        : recordsById.get(current.parentId);
-    }
-    return false;
-  });
+  return declaration.facts?.parameterNames ?? [];
 }
 
 function byId(

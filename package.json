@@ -92,6 +92,7 @@
     "test:typescript-extract-helper-roles": "node --disable-warning=ExperimentalWarning --test tests/typescript-extract-helper-role-recognizer.test.ts",
     "test:typescript-extract-helper-legality": "node --disable-warning=ExperimentalWarning --test tests/typescript-extract-helper-legality.test.ts",
     "test:typescript-extract-helper-binding": "node --disable-warning=ExperimentalWarning --test tests/typescript-extract-helper-semantic-binder.test.ts",
+    "test:typescript-code-generation-frontend": "node --disable-warning=ExperimentalWarning --test tests/typescript-code-generation-frontend.test.ts",
     "test:scheme-factorial": "node --disable-warning=ExperimentalWarning --test tests/scheme-factorial-*.test.ts",
     "visual:scheme-factorial": "playwright test tests/scheme-factorial.browser.spec.ts tests/scheme-factorial-catalogue.browser.spec.ts --project=chromium --workers=1",
     "test:browser:legacy-root-routes": "playwright test tests/legacy-root-route.browser.spec.ts --project=chromium --workers=1",

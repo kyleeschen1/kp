@@ -25,7 +25,7 @@ export interface KpTypeScriptCallRoleCandidate {
   readonly ownerFunctionSyntaxRecordId: string;
   readonly ownerFunctionName: string;
   readonly calleeName: string;
-  readonly argumentText: string;
+  readonly argumentTexts: readonly string[];
 }
 
 export interface KpTypeScriptExtractHelperRoleCandidates {
@@ -133,14 +133,19 @@ function findCallCandidates(
     .filter(({ kindName }) => kindName === "CallExpression")
     .flatMap((call) => {
       const owner = ancestor(frontend, call, "FunctionDeclaration");
-      const parsed = parseCall(call.text);
-      if (owner === undefined || parsed === undefined) return [];
+      const calleeName = call.facts?.calledName;
+      const argumentTexts = call.facts?.argumentTexts;
+      if (
+        owner === undefined ||
+        calleeName === undefined ||
+        argumentTexts === undefined
+      ) return [];
       return [{
         callSyntaxRecordId: call.id,
         ownerFunctionSyntaxRecordId: owner.id,
         ownerFunctionName: declaredFunctionName(owner),
-        calleeName: parsed.calleeName,
-        argumentText: normalizeSource(parsed.argumentText)
+        calleeName,
+        argumentTexts: argumentTexts.map(normalizeSource)
       }];
     });
 }
@@ -190,21 +195,11 @@ function descendants(
 }
 
 function declaredFunctionName(record: KpTypeScriptSyntaxRecord): string {
-  const name = /(?:export\s+)?(?:async\s+)?function\s+([A-Za-z_$][\w$]*)\s*\(/u
-    .exec(record.text)?.[1];
+  const name = record.facts?.declaredName;
   if (name === undefined) {
     throw new Error(`Function syntax ${record.id} has no named declaration.`);
   }
   return name;
-}
-
-function parseCall(
-  text: string
-): { readonly calleeName: string; readonly argumentText: string } | undefined {
-  const match = /^([A-Za-z_$][\w$]*)\s*\((.*)\)$/su.exec(text.trim());
-  return match === null || match[1] === undefined || match[2] === undefined
-    ? undefined
-    : { calleeName: match[1], argumentText: match[2] };
 }
 
 function normalizeSource(source: string): string {
