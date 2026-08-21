@@ -2,12 +2,13 @@
 
 Status: active
 Last Updated: 2026-08-21
-Current Next Action: choose the next accepted family packet from the generated
-coverage gaps. Before any new symbolic family becomes Direct, derive its case
-ledger from a typed vocabulary or corpus and expose remaining exemplar and
-generation gaps. Root is the first tracked family; existing Direct families
-are explicit migration debt rather than an immediate blocking migration. See
-`../decisions/2026-08-21-kp-symbolic-case-coverage-ledger.md`.
+Current Next Action: after explicit approval of the proposed 24-slice contract,
+close TypeScript and Python extract-helper generation through language-owned
+frontends while preserving both approved animations. See
+`../reviews/2026-08-21-typescript-python-generation-frontends-long-loop-proposal.md`.
+The subsequent durable order is binder exemplar, binder pressure/promotion,
+bounded Graph3D, differentiation, and integration; see
+`../decisions/2026-08-21-kp-post-root-capability-sequence.md`.
 
 The accepted breadth cadence is two loops per family: one reversible exemplar
 and checkpoint, then one structurally different caller plus narrow promotion.

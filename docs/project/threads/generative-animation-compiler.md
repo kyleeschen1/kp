@@ -1,18 +1,19 @@
 # Generative Animation Compiler Thread
 
 Status: supporting
-Last Updated: 2026-08-20
-Current Next Action: support the accepted Catalogue order: exponential
-homomorphism duality and root branching, then close TypeScript/Python generation
-frontends, binders/large operators, one bounded Graph3D frontend, and distinct
-differentiation/integration operator coverage. Keep semantic operations, motif
-recipes, and state-retention projections separate. A persistent
-equivalence/derivation projection tranche is accepted after root pressure.
-Treat common symbolic transformations through Calculus BC as the coverage
-horizon, but derive every maturity claim and retain typed gaps. Graph2D
-function translation and fraction structural pressure are deferred. Models
-retain semantic-choice authority only; geometry, timing, and renderer policy
-remain code-owned.
+Last Updated: 2026-08-21
+Current Next Action: exponential duality, narrow root promotion, and the bounded
+persistent-equivalence projection are complete. After explicit contract
+approval, close the existing TypeScript/Python extract-helper exemplars through
+language-owned generation frontends without changing choreography. Then proceed
+through binder exemplar, binder pressure/promotion with a case ledger, bounded
+Graph3D, differentiation, and integration. Treat common symbolic
+transformations through Calculus BC as the coverage horizon, derive every
+maturity claim, and retain typed gaps. Graph2D function translation and
+fraction structural pressure remain deferred. Models retain semantic-choice
+authority only; geometry, timing, and renderer policy remain code-owned. See
+`../decisions/2026-08-21-kp-post-root-capability-sequence.md` and
+`../reviews/2026-08-21-typescript-python-generation-frontends-long-loop-proposal.md`.
 
 The completed carrier/discoverability run is recorded in
 `docs/project/reviews/2026-08-20-carrier-preserving-simplification-closeout.md`.

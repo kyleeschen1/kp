@@ -223,11 +223,15 @@ Only this repository sequence is active:
    the generated case ledger now keeps remaining per-case exemplar and
    generation gaps visible rather than hiding them behind the Direct label. See
    `decisions/2026-08-21-kp-root-rewrite-vocabulary.md`.
-31. **Accepted subsequent family packets:** existing TypeScript/Python refactors through domain-owned
-   frontends; finite summation/product binder infrastructure; one bounded
-   Graph3D semantic transformation; then distinct differentiation and
-   integration operator coverage. Graph2D function translation and fraction
-   structural pressure are deferred and no longer block foundational breadth.
+31. **Accepted post-root capability sequence:** TypeScript/Python refactors
+   through domain-owned generation frontends are selected next. Then build one
+   finite sum/product binder exemplar and stop for review; pressure binders
+   with a structurally different caller and case ledger before promotion;
+   build one bounded Graph3D semantic transformation; then establish distinct
+   differentiation and integration families. Graph2D function translation,
+   fraction structural pressure, and legacy Direct case-ledger migration do
+   not block this sequence. See
+   `decisions/2026-08-21-kp-post-root-capability-sequence.md`.
 32. **Persistent equivalence and derivation projection:** bounded proof
    complete. The state-retention compiler supports replacement,
    equivalence-frame, and derivation-trail policies, and the approved
@@ -260,7 +264,7 @@ The catalogue backlog and selection rationale are recorded in
 | Semantic/runtime spine | Strong and governed | Preserve; simplify callers around it. |
 | Equation animation | The generated ledger has 29 equation capabilities: 8 Direct, 3 Registered, 2 Exemplar, and 16 Missing. Exponential duality and radical inversion are Direct; root is the first family with ten generated case-level maturity rows | Preserve the converged vocabulary; require case enumeration before new Direct promotions; migrate legacy Direct ledgers when they are touched; select the next accepted family packet from explicit gaps rather than prose memory. |
 | Graph2D | Economics and physics model callers are promoted; function transformations remain genuinely missing | Defer function translation: it proves symbolic/geometry continuity but not a missing host or runtime seam. |
-| Program animation | TypeScript, Python, and Scheme have approved exemplars and bounded renderer evidence, but the coverage ledger still lacks domain frontends, operation authority, recipes, and corpora | Close TypeScript and Python generation frontends after the exponent/root packets without changing approved choreography. |
+| Program animation | TypeScript, Python, and Scheme have approved exemplars and bounded renderer evidence, but the coverage ledger still lacks domain frontends, operation authority, recipes, and corpora | TypeScript/Python frontend closure is the selected next tranche. Preserve approved choreography and keep compilers build-time-only. |
 | Graph3D | One internal mesh-to-donut exemplar proves bounded hosting, not semantic scene generation | After binder infrastructure, build one bounded rotation/projection proof for camera/model separation, semantic identity, resource leases, fallback parity, and deterministic seek; calculus operator coverage follows as a distinct packet. |
 | Article and publication | `kp.article.v1` frozen; economics and algebra are real callers | Do not reopen grammar without demonstrated friction. |
 | Authoring | Whole-file CodeMirror/Vim editing and no-reload saving work | Defer advanced tooling until a real session exposes a need. |
