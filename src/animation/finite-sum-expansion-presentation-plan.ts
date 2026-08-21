@@ -28,6 +28,7 @@ export interface KpFiniteSumInstancePresentation {
 export interface KpFiniteSumExpansionPresentationPlan {
   readonly schemaVersion: "kp.finite-sum-expansion-presentation-plan.v1";
   readonly kind: "finite-sum-expansion-presentation-plan";
+  readonly id: "presentation.finite-sum-expansion.canonical.v1";
   readonly maturity: "candidate-local-exemplar";
   readonly operationId: typeof KP_FINITE_BINDER_EXPAND_OPERATION;
   readonly direction: "forward";
@@ -136,6 +137,7 @@ export function compileKpFiniteSumExpansionPresentationPlan(
   const plan = Object.freeze({
     schemaVersion: "kp.finite-sum-expansion-presentation-plan.v1" as const,
     kind: "finite-sum-expansion-presentation-plan" as const,
+    id: "presentation.finite-sum-expansion.canonical.v1" as const,
     maturity: "candidate-local-exemplar" as const,
     operationId: operation.operation,
     direction: "forward" as const,

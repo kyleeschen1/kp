@@ -14,7 +14,9 @@ import type { KpFiniteBinderSemanticId } from
   "../domain-ir/finite-binder-vocabulary.ts";
 import {
   KP_CANONICAL_FINITE_SUM_SOURCE_LATEX,
+  KP_CANONICAL_FINITE_SUM_SOURCE_STATE_ID,
   KP_CANONICAL_FINITE_SUM_TARGET_LATEX,
+  KP_CANONICAL_FINITE_SUM_TARGET_STATE_ID,
   kpCanonicalFiniteSumExpansionOperation
 } from "../semantic/canonical-finite-sum-expansion.ts";
 
@@ -198,7 +200,9 @@ function createTargetEndpoint(): KpFiniteSumNativeEndpoint {
 }
 
 function createBuilder(endpoint: "source" | "target"): EndpointBuilder {
-  const stateId = `finite-sum.${endpoint}`;
+  const stateId = endpoint === "source"
+    ? KP_CANONICAL_FINITE_SUM_SOURCE_STATE_ID
+    : KP_CANONICAL_FINITE_SUM_TARGET_STATE_ID;
   return {
     endpoint,
     stateId,

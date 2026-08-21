@@ -289,11 +289,46 @@
       "scope": "bf14 motion frame types",
       "checkedAt": "2026-08-21T23:42:51.747Z",
       "notes": "All TypeScript, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run test:finite-binder-expansion",
+      "status": "passed",
+      "scope": "bf15 packaged semantic asset, deterministic sampler, and narrow adapter; 70 tests passed.",
+      "checkedAt": "2026-08-21T23:54:09.495Z",
+      "notes": "Focused finite-binder verification."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "bf15 packaged asset and surface adapter.",
+      "checkedAt": "2026-08-21T23:54:10.589Z",
+      "notes": "TypeScript passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "bf15 semantic-to-rendering dependency boundary.",
+      "checkedAt": "2026-08-21T23:54:12.022Z",
+      "notes": "All architecture gates passed."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "bf15 animation library bundle boundary.",
+      "checkedAt": "2026-08-21T23:54:13.033Z",
+      "notes": "All measured chunks remained below limits."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "bf15 compositor ownership and settlement.",
+      "checkedAt": "2026-08-21T23:54:14.051Z",
+      "notes": "82 tests passed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Added a pure normalized-clock sum sampler with exact endpoints, deterministic arbitrary seek and rewind, ordered semantic windows, reduced depth, and static fallback."
+    "summary": "Packaged a framework-neutral finite-sum semantic asset, pure externally clocked motion, immutable Native KaTeX transit session, and lazy-capability-ready surface adapter without registering product presentation yet."
   },
   "expectedLearning": [
     "Whether finite sum expansion can make bound scope, ordered instantiation, and one-to-many lineage perceptually clear without false persistence.",

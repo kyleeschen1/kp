@@ -55,7 +55,9 @@ export function sampleKpFiniteSumExpansionMotion(
       ordinal: instance.ordinal,
       bodyTransitProgress,
       // Lineage-backed body paint arrives through motion, never a fade.
-      bodyPresence: bodyTransitProgress === 0 ? 0 : 1,
+      bodyPresence: bodyTransitProgress === 0
+        ? instance.ordinal === 0 && boundedProgress > 0 ? 1 : 0
+        : 1,
       referencePresence: sampleWindow(
         instance.referenceReceptionWindow,
         boundedProgress

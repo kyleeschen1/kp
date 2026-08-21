@@ -150,7 +150,8 @@
     {
       "id": "bf15",
       "title": "Package sum asset",
-      "status": "planned"
+      "summary": "Packaged the finite-sum semantic asset, externally clocked transit session, and narrow lazy-capability-ready Native KaTeX adapter; focused, compositor, type, architecture, and bundle gates pass.",
+      "status": "complete"
     },
     {
       "id": "bf16",
