@@ -163,11 +163,32 @@
       "scope": "bf07 operation boundary",
       "checkedAt": "2026-08-21T23:10:22.917Z",
       "notes": "All TypeScript, Svelte, and domain type checks pass."
+    },
+    {
+      "command": "npm run test:finite-binder-expansion",
+      "status": "passed",
+      "scope": "bf08 causal recipe",
+      "checkedAt": "2026-08-21T23:14:05.696Z",
+      "notes": "39 focused tests pass over ordered instances, adjacent connector dependencies, endpoint completion, and presentation delegation."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "bf08 recipe types",
+      "checkedAt": "2026-08-21T23:14:06.991Z",
+      "notes": "All TypeScript, Svelte, and domain type checks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "bf08 domain boundary",
+      "checkedAt": "2026-08-21T23:14:08.311Z",
+      "notes": "Dependency, framework-neutral, semantic, and compiler authority gates pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "bf07 compiles exact sum expansion semantics: each range value produces a distinct body/reference occurrence, + connectors derive from the sum operator, and every source occurrence is consumed rather than falsely persisted."
+    "summary": "bf08 compiles renderer-neutral causal dependencies from verified operations: context precedes ordered instances, connectors require adjacent instances, and exact target completion depends on every derived role."
   },
   "expectedLearning": [
     "Whether finite sum expansion can make bound scope, ordered instantiation, and one-to-many lineage perceptually clear without false persistence.",

@@ -108,7 +108,8 @@
     {
       "id": "bf08",
       "title": "Define binder causal recipe",
-      "status": "planned"
+      "summary": "Defined the finite-binder causal recipe while keeping presentation caller-owned.",
+      "status": "complete"
     },
     {
       "id": "bf09",

@@ -5,6 +5,7 @@ export * from "./equation-motion-vocabulary.ts";
 export * from "./equation-motif-invocation.ts";
 export * from "./equation-recipe-composition.ts";
 export * from "./finite-binder-vocabulary.ts";
+export * from "./finite-binder-causal-recipe.ts";
 export * from "./homomorphic-causal-phases.ts";
 export * from "./homomorphic-semantic-law.ts";
 export * from "./semantic-equation-transition-compiler.ts";
