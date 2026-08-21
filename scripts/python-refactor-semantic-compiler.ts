@@ -11,9 +11,18 @@ import { createKpPythonSourceTokens } from
   "../src/semantic/python-source-tokens.ts";
 import {
   compileKpPythonFrontend,
-  type KpPythonFrontendResult,
-  type KpPythonSyntaxRecord
+  type KpPythonFrontendResult
 } from "./python-refactor-frontend.ts";
+import {
+  proveKpPythonExtractHelperLegality
+} from "./python-extract-helper-legality.ts";
+import {
+  recognizeKpPythonExtractHelperRoles
+} from "./python-extract-helper-role-recognizer.ts";
+import {
+  bindKpPythonExtractHelperSemantics,
+  type KpPythonSemanticSyntaxBinding
+} from "./python-extract-helper-semantic-binder.ts";
 
 export function compileKpPythonRefactorSemantics():
   KpPythonRefactorSemanticArtifactV1 {
@@ -28,20 +37,36 @@ export function compileKpPythonRefactorSemantics():
     revisionId: contract.after.revisionId,
     sourceText: contract.after.source
   });
+  const roles = recognizeKpPythonExtractHelperRoles(before, after);
+  const legality = proveKpPythonExtractHelperLegality(before, after, roles);
+  if (legality.status !== "accepted") {
+    throw new Error(`Canonical Python refactor is not legal: ${JSON.stringify(legality.diagnostics)}`);
+  }
+  const binding = bindKpPythonExtractHelperSemantics({
+    entities: contract.entities,
+    source: before,
+    target: after,
+    roles,
+    legality
+  });
+  if (binding.status !== "accepted") {
+    throw new Error(`Canonical Python refactor does not bind: ${JSON.stringify(binding.diagnostics)}`);
+  }
 
   return defineKpPythonRefactorSemanticArtifact({
     schemaVersion: "kp.python-refactor-semantics.v1",
     contractId: contract.id,
     revisions: [
-      compileRevision("before", before),
-      compileRevision("after", after)
+      compileRevision("before", before, binding.bindings),
+      compileRevision("after", after, binding.bindings)
     ]
   });
 }
 
 function compileRevision(
   revision: "before" | "after",
-  frontend: KpPythonFrontendResult
+  frontend: KpPythonFrontendResult,
+  bindings: readonly KpPythonSemanticSyntaxBinding[]
 ): KpPythonRefactorSemanticArtifactV1["revisions"][number] {
   if (frontend.status !== "accepted") {
     throw new Error(
@@ -58,27 +83,30 @@ function compileRevision(
     sourceText: frontend.sourceText,
     tokens: createKpPythonSourceTokens(frontend.tokens),
     entities: specifications.map((specification) =>
-      compileEntity(frontend, specification)
+      compileEntity(frontend, specification, bindings)
     )
   };
 }
 
 function compileEntity(
   frontend: KpPythonFrontendResult,
-  specification: KpPythonRefactorEntityContract
+  specification: KpPythonRefactorEntityContract,
+  bindings: readonly KpPythonSemanticSyntaxBinding[]
 ): KpPythonSemanticEntity {
-  const record = resolveRecord(frontend, specification);
-  const enclosingFunction = specification.kind === "source-file"
+  const binding = one(bindings.filter(({ semanticEntityId, revision }) =>
+    semanticEntityId === specification.id && revision === specification.revision
+  ), specification.id);
+  const record = one(frontend.syntax.filter(({ id }) =>
+    id === binding.syntaxRecordId
+  ), specification.id);
+  const owner = specification.ownerEntityId === undefined
     ? undefined
-    : findAncestor(frontend, record, "FunctionDef");
-  const scopeId = enclosingFunction === undefined
+    : kpPythonFreeShippingRefactorContract.entities.find(({ id }) =>
+      id === specification.ownerEntityId
+    );
+  const scopeId = owner === undefined
     ? `scope.${specification.revision}.module`
-    : `scope.${specification.revision}.${functionName(enclosingFunction)}`;
-  const declarationId = specification.kind === "call-site"
-    ? "function.qualifies.after"
-    : specification.kind === "expression" && enclosingFunction !== undefined
-      ? functionEntityId(specification.revision, functionName(enclosingFunction))
-      : undefined;
+    : `scope.${specification.revision}.${owner.label}`;
 
   return {
     id: specification.id,
@@ -87,7 +115,9 @@ function compileEntity(
     label: specification.label,
     syntaxRecordId: record.id,
     scopeId,
-    ...(declarationId === undefined ? {} : { declarationId }),
+    ...(binding.declarationEntityId === undefined
+      ? {}
+      : { declarationId: binding.declarationEntityId }),
     sourceRange: {
       path: frontend.path,
       revisionId: frontend.revisionId,
@@ -99,70 +129,10 @@ function compileEntity(
   };
 }
 
-function resolveRecord(
-  frontend: KpPythonFrontendResult,
-  specification: KpPythonRefactorEntityContract
-): KpPythonSyntaxRecord {
-  if (specification.kind === "source-file") {
-    return one(frontend.syntax.filter(({ kindName }) => kindName === "Module"), specification.id);
-  }
-  if (specification.kind === "function") {
-    return one(frontend.syntax.filter(({ kindName, text }) =>
-      kindName === "FunctionDef" && functionNameFromText(text) === specification.label
-    ), specification.id);
-  }
-  const owner = ownerFunctionName(specification.id);
-  const kindName = specification.kind === "expression" ? "Compare" : "Call";
-  return one(frontend.syntax.filter(({ kindName: candidateKind, text }) =>
-    candidateKind === kindName && text === specification.label
-  ).filter((record) => {
-    const ancestor = findAncestor(frontend, record, "FunctionDef");
-    return ancestor !== undefined && functionName(ancestor) === owner;
-  }), specification.id);
-}
-
-function findAncestor(
-  frontend: KpPythonFrontendResult,
-  record: KpPythonSyntaxRecord,
-  kindName: string
-): KpPythonSyntaxRecord | undefined {
-  const byId = new Map(frontend.syntax.map((candidate) => [candidate.id, candidate]));
-  let current = record.parentId === undefined ? undefined : byId.get(record.parentId);
-  while (current !== undefined) {
-    if (current.kindName === kindName) return current;
-    current = current.parentId === undefined ? undefined : byId.get(current.parentId);
-  }
-  return undefined;
-}
-
-function functionName(record: KpPythonSyntaxRecord): string {
-  const name = functionNameFromText(record.text);
-  if (name === undefined) throw new Error(`Function syntax ${record.id} has no name.`);
-  return name;
-}
-
-function functionNameFromText(text: string): string | undefined {
-  return /^def\s+([A-Za-z_]\w*)\s*\(/.exec(text)?.[1];
-}
-
-function ownerFunctionName(entityId: string): string {
-  if (entityId.includes("shipping-cost")) return "shipping_cost";
-  if (entityId.includes("shipping-message")) return "shipping_message";
-  if (entityId.includes("qualifies")) return "qualifies_for_free_shipping";
-  throw new Error(`No declared Python owner function for ${entityId}.`);
-}
-
-function functionEntityId(revision: "before" | "after", name: string): string {
-  if (name === "shipping_cost") return `function.shipping-cost.${revision}`;
-  if (name === "shipping_message") return `function.shipping-message.${revision}`;
-  if (name === "qualifies_for_free_shipping") return "function.qualifies.after";
-  throw new Error(`No Python semantic function id for ${name}.`);
-}
-
-function one(
-  records: readonly KpPythonSyntaxRecord[],
+function one<T>(
+  records: readonly T[],
   semanticId: string
-): KpPythonSyntaxRecord {
+): T {
   if (records.length !== 1) {
     throw new Error(
       `Python semantic entity ${semanticId} requires exactly one syntax record; received ${records.length}.`

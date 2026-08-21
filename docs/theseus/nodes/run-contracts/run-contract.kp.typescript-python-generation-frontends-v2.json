@@ -265,6 +265,27 @@
       "scope": "cf14",
       "checkedAt": "2026-08-21T21:27:11.731Z",
       "notes": "Python legality is type-safe and keeps all dependency and compiler-authority boundaries green."
+    },
+    {
+      "command": "npm run test:python-extract-helper-binding",
+      "status": "passed",
+      "scope": "cf15",
+      "checkedAt": "2026-08-21T21:31:16.660Z",
+      "notes": "Four tests prove total semantic binding, distinct lexical/callee ownership, typed missing-owner repair, and absence of exemplar-name switches."
+    },
+    {
+      "command": "Python semantic compiler regression suite and npm run check:python-refactor-semantics",
+      "status": "passed",
+      "scope": "cf15",
+      "checkedAt": "2026-08-21T21:31:18.292Z",
+      "notes": "Fifteen role, legality, and compiler tests pass; the generated semantic artifact remains exactly fresh after binder integration."
+    },
+    {
+      "command": "tsc focused Python binding project",
+      "status": "passed",
+      "scope": "cf15",
+      "checkedAt": "2026-08-21T21:31:19.381Z",
+      "notes": "The binder and migrated semantic compiler typecheck at the build-time boundary."
     }
   ],
   "allowedWork": [
@@ -377,7 +398,8 @@
     {
       "id": "cf15",
       "title": "Python-semantic-binding",
-      "status": "planned"
+      "summary": "Declared Python owner and declaration relations, added a data-driven AST-role binder, and migrated semantic compilation away from regex and exemplar-specific switches with unchanged IDs and output.",
+      "status": "complete"
     },
     {
       "id": "cf16",
