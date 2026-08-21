@@ -66,6 +66,11 @@ test("equivalence frame retains context around the canonical log transition",
     await expect(stage.locator(
       ".kp-log-product-equivalence-stage__measurement--target"
     )).toBeVisible();
+    const gaps = await equivalenceGaps(stage);
+    expect(gaps.beforeEquals).toBeGreaterThanOrEqual(0);
+    expect(gaps.afterEquals).toBeGreaterThanOrEqual(0);
+    expect(gaps.beforeEquals).toBeLessThanOrEqual(gaps.fontSize * 0.5);
+    expect(gaps.afterEquals).toBeLessThanOrEqual(gaps.fontSize * 0.5);
     expect(await source.textContent()).toBe(sourceText);
 
     await seek.fill("0");
@@ -132,4 +137,33 @@ async function visibleMaterialOwnerCount(stage: Locator): Promise<number> {
       return style.visibility !== "hidden" && Number(style.opacity) > 0;
     }).length
   );
+}
+
+async function equivalenceGaps(stage: Locator): Promise<{
+  readonly beforeEquals: number;
+  readonly afterEquals: number;
+  readonly fontSize: number;
+}> {
+  return stage.evaluate((root) => {
+    const source = root.querySelector<HTMLElement>(
+      ".kp-log-product-equivalence-stage__frozen-source"
+    );
+    const relation = root.querySelector<HTMLElement>(
+      ".kp-log-product-equivalence-stage__relation"
+    );
+    const target = root.querySelector<HTMLElement>(
+      ".kp-log-product-equivalence-stage__measurement--target"
+    );
+    if (source === null || relation === null || target === null) {
+      throw new Error("Incomplete equivalence-frame geometry.");
+    }
+    const sourceRect = source.getBoundingClientRect();
+    const relationRect = relation.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+    return {
+      beforeEquals: relationRect.left - sourceRect.right,
+      afterEquals: targetRect.left - relationRect.right,
+      fontSize: Number.parseFloat(getComputedStyle(relation).fontSize)
+    };
+  });
 }

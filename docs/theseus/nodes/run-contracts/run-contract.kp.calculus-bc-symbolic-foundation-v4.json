@@ -370,6 +370,20 @@
       "scope": "rv15 human-checkpoint control state",
       "checkedAt": "2026-08-21T18:21:32.482Z",
       "notes": "Validated 1043 nodes and 24194 events with rv15 intentionally in progress pending the required visual decision."
+    },
+    {
+      "command": "npm run visual:log-product-equivalence-frame",
+      "status": "passed",
+      "scope": "rv15 compact equivalence relation spacing",
+      "checkedAt": "2026-08-21T18:47:53.968Z",
+      "notes": "Compact intrinsic equation layout preserves native endpoint widths; Chromium verifies relation gaps, direct seek and reduced motion, and narrow viewport containment."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "rv15 compact equivalence spacing control state",
+      "checkedAt": "2026-08-21T18:48:17.232Z",
+      "notes": "Validated 1043 nodes and 24196 events with rv15 intentionally left in progress for human visual approval."
     }
   ],
   "allowedWork": [

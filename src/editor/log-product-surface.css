@@ -41,9 +41,10 @@
   position: absolute;
   inset: 0;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-columns: max-content max-content max-content;
   align-items: center;
-  gap: clamp(0.75rem, 2.5vw, 2.25rem);
+  justify-content: center;
+  gap: clamp(0.4rem, 0.8vw, 0.75rem);
   padding-inline: clamp(1rem, 4vw, 4rem);
 }
 
@@ -53,6 +54,10 @@
   min-width: 0;
   min-height: clamp(8rem, 20vh, 12rem);
   place-items: center;
+}
+
+.kp-log-product-equivalence-stage__cell > * {
+  grid-area: 1 / 1;
 }
 
 .kp-log-product-equivalence-stage__frozen-source,
@@ -70,8 +75,10 @@
 }
 
 .kp-log-product-equivalence-stage__measurement {
-  position: absolute;
-  inset: 0;
+  /* Native endpoints stay in-flow invisibly so the compact frame reserves
+     their exact widths instead of stretching both sides around equality. */
+  position: relative;
+  inset: auto;
   font-size: clamp(1.75rem, 3.5vw, 3rem);
 }
 
@@ -82,7 +89,7 @@
 
 @media (max-width: 42rem) {
   .kp-log-product-equivalence-stage__frame {
-    gap: 0.45rem;
+    gap: 0.3rem;
     padding-inline: 0.5rem;
   }
 
