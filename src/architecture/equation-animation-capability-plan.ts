@@ -208,7 +208,7 @@ const equationCapabilityDrafts = Object.freeze([
     "family.equation.radical-inversion.v1",
     [
       requirement("requirement.equation.radical-inversion.normalizer", "endpoint-normalizer", "normalizer.equation.radical.v1", "Root indices, radicands, and power equivalents normalize without losing grouping."),
-      requirement("requirement.equation.radical-inversion.operation", "semantic-operation", "kp.algebra.rewrite-power-as-root", "A typed operation relates powers and roots under explicit parity and domain conditions."),
+      requirement("requirement.equation.radical-inversion.operation", "semantic-operation", "operation.equation.apply-inverse-power.v1", "A typed balanced-equation operation applies an inverse positive-integer power under explicit parity, domain, branch, and candidate-audit evidence."),
       requirement("requirement.equation.radical-inversion.recipe", "canonical-recipe", "recipe.equation.radical-inversion.v1", "A recipe owns exponent-to-index lineage and radical enclosure construction."),
       requirement("requirement.equation.radical-inversion.exemplar", "canonical-exemplar", "exemplar.equation.radical-succession.v1", "A reviewed exemplar establishes the visual grammar before broad promotion."),
       requirement("requirement.equation.radical-inversion.corpus", "generation-corpus", "corpus.equation.radical-inversion.v1", "Fixtures cover square, odd, symbolic, nested, and principal-root cases.")

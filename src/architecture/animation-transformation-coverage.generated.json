@@ -1272,11 +1272,11 @@
         {
           "id": "requirement.equation.radical-inversion.operation",
           "kind": "semantic-operation",
-          "authorityId": "kp.algebra.rewrite-power-as-root",
-          "summary": "A typed operation relates powers and roots under explicit parity and domain conditions.",
+          "authorityId": "operation.equation.apply-inverse-power.v1",
+          "summary": "A typed balanced-equation operation applies an inverse positive-integer power under explicit parity, domain, branch, and candidate-audit evidence.",
           "status": "satisfied",
           "evidenceSourceIds": [
-            "kp.algebra@0.1.0"
+            "operation.equation.apply-inverse-power.v1"
           ]
         },
         {

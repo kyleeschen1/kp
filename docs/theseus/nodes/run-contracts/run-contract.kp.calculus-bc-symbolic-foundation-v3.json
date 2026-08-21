@@ -104,7 +104,8 @@
     {
       "id": "r10",
       "title": "inverse-power-semantic-operation",
-      "status": "planned"
+      "summary": "Added a distinct typed balanced inverse-power authority. Real-domain parity and radicand sign determine exhaustive branch tuples; no-real-root cases require rejected-candidate evidence; endpoint index, correspondence, and candidate audits are verified; visual fields and symbolic parity inference are rejected.",
+      "status": "complete"
     },
     {
       "id": "r11",

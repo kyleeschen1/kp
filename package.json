@@ -178,6 +178,7 @@
     "test:exponential-homomorphism-law": "node --disable-warning=ExperimentalWarning --test tests/exponential-homomorphism-law.test.ts",
     "test:power-application-normalizer": "node --disable-warning=ExperimentalWarning --test tests/power-application-endpoint-normalizer.test.ts",
     "test:radical-endpoint-normalizer": "node --disable-warning=ExperimentalWarning --test tests/radical-endpoint-normalizer.test.ts",
+    "test:inverse-power-operation": "node --disable-warning=ExperimentalWarning --test tests/inverse-power-operation.test.ts",
     "test:exponential-correspondence": "node --disable-warning=ExperimentalWarning --test tests/exponential-homomorphism-correspondence.test.ts tests/exponential-homomorphism-difference-pressure.test.ts",
     "test:exponential-extension-pack": "node --disable-warning=ExperimentalWarning --test tests/exponential-homomorphism-extension-pack.test.ts tests/exponential-homomorphism-authoring.test.ts tests/exponential-crossover-gate.test.ts tests/equation-extension-dispatch.test.ts",
     "test:exponential-promotion": "node --disable-warning=ExperimentalWarning --test tests/exponential-homomorphism-promotion-certificate.test.ts tests/animation-transformation-coverage.test.ts",

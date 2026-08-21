@@ -151,6 +151,20 @@ test("radical endpoint normalization is exact typed compiler authority", () => {
   }]);
 });
 
+test("radical inversion operation includes strict typed semantic authority", () => {
+  const projection = createKpAnimationCapabilityCompilerEvidence();
+  const requirement = projection.requirements.find(({ requirementId }) =>
+    requirementId === "requirement.equation.radical-inversion.operation"
+  );
+  assert.equal(requirement?.status, "matched");
+  assert.equal(requirement?.authorityId,
+    "operation.equation.apply-inverse-power.v1");
+  if (requirement?.status !== "matched") return;
+  assert.ok(requirement.evidence.some(({ source, sourcePath }) =>
+    source === "verified-capability-authority" &&
+    sourcePath === "src/semantic/inverse-power-operation.ts"));
+});
+
 test("compiler evidence rejects duplicate source registrations", () => {
   const duplicate: KpAnimationCapabilityCompilerAuthority = {
     authorityId: "operation.wrap-function.v1",
