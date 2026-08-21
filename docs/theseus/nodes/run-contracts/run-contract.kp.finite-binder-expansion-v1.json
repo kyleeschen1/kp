@@ -120,7 +120,8 @@
     {
       "id": "bf10",
       "title": "Build semantic corpus",
-      "status": "planned"
+      "summary": "Added positive and negative finite-binder corpus compilation with typed repairs.",
+      "status": "complete"
     },
     {
       "id": "bf11",

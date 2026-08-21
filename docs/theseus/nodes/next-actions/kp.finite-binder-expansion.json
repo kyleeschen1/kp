@@ -205,11 +205,25 @@
       "scope": "bf09 ledger types",
       "checkedAt": "2026-08-21T23:19:09.282Z",
       "notes": "All TypeScript, Svelte, and domain type checks pass."
+    },
+    {
+      "command": "npm run test:finite-binder-expansion",
+      "status": "passed",
+      "scope": "bf10 semantic corpus",
+      "checkedAt": "2026-08-21T23:22:57.706Z",
+      "notes": "49 focused tests pass; three direct sums compile and eight unsupported cases return typed layer-specific repairs."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "bf10 corpus types",
+      "checkedAt": "2026-08-21T23:22:58.804Z",
+      "notes": "All TypeScript, Svelte, and domain type checks pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "bf09 adds an 11-case ledger: three semantically authoritative sums, one explicitly unproved product pressure caller, and seven typed gaps covering unbounded, symbolic, descending, captured, compound, oversized, and nested shapes."
+    "summary": "bf10 turns the entire 11-case ledger into executable corpus evidence: three sums compile through normalization, scope, range, operation, and recipe; eight unsupported cases stop with exact repair diagnostics and no fallback."
   },
   "expectedLearning": [
     "Whether finite sum expansion can make bound scope, ordered instantiation, and one-to-many lineage perceptually clear without false persistence.",
