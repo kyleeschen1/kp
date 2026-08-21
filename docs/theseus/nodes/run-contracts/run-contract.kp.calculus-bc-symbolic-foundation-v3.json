@@ -128,7 +128,8 @@
     {
       "id": "r14",
       "title": "root-visual-checkpoint",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: captured the canonical even-root exemplar at deterministic desktop, rewind, and narrow checkpoints. Typed executable-motion evidence, exact-route browser contracts, and responsive remeasurement pass; odd-root promotion remains unstarted pending visual approval.",
+      "status": "complete"
     },
     {
       "id": "r15",

@@ -823,11 +823,39 @@
       "scope": "r13",
       "checkedAt": "2026-08-21T02:53:07.618Z",
       "notes": "Generated display and equation manifest cover the new lazy root asset without runtime renderer leakage."
+    },
+    {
+      "command": "npm run visual:even-root",
+      "status": "passed",
+      "scope": "r14-human-checkpoint",
+      "checkedAt": "2026-08-21T03:00:39.846Z",
+      "notes": "Captured deterministic desktop, rewind, and narrow checkpoints; both transitions reported non-empty executable motion evidence and no page errors."
+    },
+    {
+      "command": "npm run test:browser:even-root-catalogue",
+      "status": "passed",
+      "scope": "r14-browser-contract",
+      "checkedAt": "2026-08-21T03:00:41.186Z",
+      "notes": "Exact route, native semantic endpoints, direct seek/rewind, reduced motion, and responsive remeasurement passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "r14-typed-contract",
+      "checkedAt": "2026-08-21T03:00:42.441Z",
+      "notes": "Executable-motion evidence and visual checkpoint entrypoint compile across application, Svelte, domain, and test projects."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "r14-durable-human-checkpoint",
+      "checkedAt": "2026-08-21T03:02:14.575Z",
+      "notes": "Graph validates at 1042 nodes and 24081 events with r14 complete and r15 gated on explicit visual approval."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT after repaired r07 delivery: the exact live Firefox quotient now animates through a collision-safe vertical sequence and completes. Review the newly opened Firefox tab before approving r08 narrow promotion."
+    "summary": "HUMAN_CHECKPOINT at r14: the canonical even-root sequence is registered, directly seekable, responsive, and captured for review. Executable sessions now require typed non-static measured-track evidence, while a live Firefox painted-frame probe covers runtime failures outside the type system. Await approval before odd-root pressure."
   },
   "expectedLearning": [
     "Whether the shared homomorphism law supports power applications without copying log choreography.",
