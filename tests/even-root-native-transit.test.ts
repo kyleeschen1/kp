@@ -45,7 +45,7 @@ test("even-root endpoints preserve native syntax without fabricating index ink",
   );
 });
 
-test("inverse power transfers visible exponent toward implicit index role", () => {
+test("inverse power carries the exponent across equality into root reception", () => {
   const measured = measuredPair(endpoints.inversePower, [
     ["subject", 10, 28, 14, 22],
     ["exponent", 24, 12, 8, 12],
@@ -69,18 +69,50 @@ test("inverse power transfers visible exponent toward implicit index role", () =
   assert.ok(exponent);
   assert.equal(exponent.lifecycle, "eliminate");
   assert.ok(exponent.endRect.left > exponent.startRect.left);
-  assert.ok((exponent.sampleMaterialScale?.(0.44) ?? 1) < 0.3);
+  assert.equal(exponent.motionPath?.variant, "arc-above");
+  assert.equal(
+    exponent.motionPathSampling,
+    "foreground-diagonal-role-transfer"
+  );
+  assert.equal(exponent.sampleMaterialScale?.(0.3), 1);
+  assert.ok((exponent.sampleMaterialScale?.(0.54) ?? 1) < 0.3);
+  const crossing = sampleKpNativeKatexSceneTracks(
+    plan.tracks,
+    0.3,
+    false
+  );
+  const exponentCrossing = crossing.find(({ trackId }) =>
+    trackId === exponent.id
+  );
+  const relation = plan.tracks.find(({ sourceAtomId }) =>
+    sourceAtomId === "source.relation"
+  );
+  assert.ok(exponentCrossing);
+  assert.ok(relation);
+  const relationCrossing = crossing.find(({ trackId }) =>
+    trackId === relation.id
+  );
+  assert.ok(relationCrossing);
+  assert.ok(
+    center(exponentCrossing.rect).x > center(relationCrossing.rect).x,
+    "the still-readable exponent must cross the moving equality relation"
+  );
+  assert.ok(exponentCrossing.opacity > 0.99);
   const radical = plan.tracks.find(({ targetAtomId }) =>
     targetAtomId === "target.radical-operator"
   );
   assert.ok(radical);
   assert.equal(radical.lifecycle, "introduce");
   assert.equal(radical.sampleOpacityProgress?.(0.2), 0);
-  assert.equal(radical.sampleOpacityProgress?.(0.56), 1);
+  assert.equal(radical.sampleOpacityProgress?.(0.62), 1);
+  assert.equal(
+    radical.intentionalContactGroupId,
+    exponent.intentionalContactGroupId
+  );
   assert.ok(plan.tracks.some(({ lifecycle }) => lifecycle === "persist"));
 });
 
-test("root evaluation extracts an ink-knot body from a yielding enclosure", () => {
+test("root evaluation compresses enclosure and radicand into one ink knot", () => {
   const measured = measuredPair(endpoints.evaluation, [
     ["subject", 5, 28, 14, 22],
     ["relation", 27, 28, 14, 22],
@@ -104,6 +136,14 @@ test("root evaluation extracts an ink-knot body from a yielding enclosure", () =
   assert.ok(body);
   assert.ok((body.sampleMaterialScale?.(0.5) ?? 1) >= 0.24);
   assert.ok((body.sampleMaterialScale?.(0.5) ?? 1) <= 0.52);
+  const radical = plan.tracks.find(({ sourceAtomId }) =>
+    sourceAtomId === "source.radical-operator"
+  );
+  assert.ok(radical);
+  assert.ok((radical.sampleMaterialScale?.(0.5) ?? 1) >= 0.24);
+  assert.ok((radical.sampleMaterialScale?.(0.5) ?? 1) <= 0.52);
+  assert.equal(radical.timingGroupId, body.timingGroupId);
+  assert.equal(radical.intentionalContactGroupId, body.intentionalContactGroupId);
   const result = plan.tracks.find(({ targetAtomId }) =>
     targetAtomId === "target.value"
   );
@@ -112,16 +152,9 @@ test("root evaluation extracts an ink-knot body from a yielding enclosure", () =
   assert.ok((result.sampleMaterialScale?.(0.52) ?? 1) >= 0.24);
   assert.ok((result.sampleMaterialScale?.(0.52) ?? 1) <= 0.52);
   assert.equal(center(body.endRect).x, center(result.endRect).x);
+  assert.equal(center(radical.endRect).x, center(result.endRect).x);
   assert.equal(center(body.endRect).y, center(result.endRect).y);
-
-  const radical = plan.tracks.find(({ sourceAtomId }) =>
-    sourceAtomId === "source.radical-operator"
-  );
-  assert.ok(radical);
-  assert.deepEqual(radical.endRect, radical.startRect);
-  assert.equal(radical.sampleMaterialScale, undefined);
-  assert.equal(radical.sampleOpacityProgress?.(0.24), 0);
-  assert.equal(radical.sampleOpacityProgress?.(0.52), 1);
+  assert.equal(center(radical.endRect).y, center(result.endRect).y);
   const earlyExtraction = sampleKpNativeKatexSceneTracks(
     plan.tracks,
     0.19,
@@ -130,7 +163,28 @@ test("root evaluation extracts an ink-knot body from a yielding enclosure", () =
   assert.ok(
     (earlyExtraction.find(({ trackId }) =>
       trackId === radical.id)?.opacity ?? 0) > 0.99,
-    "the radical enclosure must remain visible as extraction begins"
+    "the complete root expression must remain visible as gathering begins"
+  );
+  assert.ok(
+    (earlyExtraction.find(({ trackId }) =>
+      trackId === body.id)?.opacity ?? 0) > 0.99,
+    "the radicand must remain visible as gathering begins"
+  );
+  const knotFrame = sampleKpNativeKatexSceneTracks(plan.tracks, 0.5, false);
+  const radicalKnotPaint = knotFrame.find(({ trackId }) =>
+    trackId === radical.id
+  )?.expectedPaintRect;
+  const bodyKnotPaint = knotFrame.find(({ trackId }) =>
+    trackId === body.id
+  )?.expectedPaintRect;
+  assert.ok(radicalKnotPaint);
+  assert.ok(bodyKnotPaint);
+  assert.ok(
+    Math.hypot(
+      center(radicalKnotPaint).x - center(bodyKnotPaint).x,
+      center(radicalKnotPaint).y - center(bodyKnotPaint).y
+    ) < 0.5,
+    "the realized enclosure and radicand paint must share one knot locus"
   );
 
   const plusMinus = plan.tracks.find(({ sourceAtomId }) =>

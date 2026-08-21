@@ -16,12 +16,15 @@ const narrowViewport = { width: 390, height: 760 } as const;
 
 const checkpoints = Object.freeze([
   point("source", "source · powered equation", 0, desktopViewport),
-  point("inverse-early", "inverse power · transfer begins", 0.12, desktopViewport),
-  point("inverse-mid", "inverse power · exponent travels", 0.3, desktopViewport),
+  point("inverse-depart", "inverse power · exponent departs", 0.08, desktopViewport),
+  point("inverse-crossing-entry", "inverse power · approaches equality", 0.16, desktopViewport),
+  point("inverse-crossing", "inverse power · crosses equality", 0.22, desktopViewport),
+  point("inverse-reception", "inverse power · root receives exponent", 0.26, desktopViewport),
+  point("inverse-assembly", "inverse power · root assembles", 0.3, desktopViewport),
   point("inverse-late", "inverse power · root forms", 0.48, desktopViewport),
   point("radical", "semantic seam · both real branches", 0.58, desktopViewport),
   point("evaluate-early", "root evaluation · compression begins", 0.66, desktopViewport),
-  point("evaluate-knot", "root evaluation · ink knot", 0.79, desktopViewport),
+  point("evaluate-knot", "root evaluation · whole-root ink knot", 0.79, desktopViewport),
   point("evaluate-late", "root evaluation · result expands", 0.91, desktopViewport),
   point("target", "target · two real solutions", 1, desktopViewport),
   point("rewind-radical", "rewind · radical state", 0.58, desktopViewport),

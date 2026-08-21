@@ -907,11 +907,67 @@
       "scope": "r14-shared-knot-checkpoint",
       "checkedAt": "2026-08-21T03:39:21.904Z",
       "notes": "Graph validates at 1042 nodes and 24098 events after shared ink-knot geometry adoption and the r16 CSS follow-up registration."
+    },
+    {
+      "command": "npm run test:even-root-native-transit",
+      "status": "passed",
+      "scope": "r14-whole-root-knot-and-role-transfer",
+      "checkedAt": "2026-08-21T04:13:54.652Z",
+      "notes": "The visible exponent follows one measured foreground-diagonal transfer across the moving equality relation while remaining readable until reception; radical path and complete radicand paint now compress to the same measured knot locus, and deterministic resampling passes."
+    },
+    {
+      "command": "npm run visual:even-root",
+      "status": "passed",
+      "scope": "r14-revised-painted-checkpoint",
+      "checkedAt": "2026-08-21T04:14:03.727Z",
+      "notes": "The deterministic contact sheet captures exponent departure, equality crossing, root reception, whole-root compression, result expansion, rewind, and narrow endpoints without page errors."
+    },
+    {
+      "command": "npm run test:browser:even-root-catalogue",
+      "status": "passed",
+      "scope": "r14-revised-browser-lifecycle",
+      "checkedAt": "2026-08-21T04:14:12.367Z",
+      "notes": "Exact route, endpoint seek, rewind, reduced motion, and responsive remeasurement remain preserved after the two choreography revisions."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "r14-revised-typed-contract",
+      "checkedAt": "2026-08-21T04:14:20.018Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks pass with measured-ink relocation and typed path sampling."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "r14-revised-architecture-boundary",
+      "checkedAt": "2026-08-21T04:14:27.409Z",
+      "notes": "Dependency direction, framework neutrality, semantic animation, operation-evaluation, and equation compiler authority ratchets pass."
+    },
+    {
+      "command": "npm run test:operation-evaluation-family-exemplar",
+      "status": "passed",
+      "scope": "r14-shared-evaluation-preservation",
+      "checkedAt": "2026-08-21T04:14:36.966Z",
+      "notes": "All thirteen promoted contributor-fusion family, recipe, handoff, and typed-gap checks remain unchanged while the root exemplar consumes the shared ink-knot optical profile."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "r14-revised-checkpoint",
+      "checkedAt": "2026-08-21T04:14:56.348Z",
+      "notes": "No whitespace errors in the scoped renderer, focused proof, checkpoint script, or durable evidence diff."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "r14-final-human-checkpoint",
+      "checkedAt": "2026-08-21T04:15:55.003Z",
+      "notes": "Workspace validates at 1042 nodes and 24112 events with r14 complete and r15 still gated on explicit visual approval."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT at revised r14: the root-value evaluation now uses root extraction with a persistent surrounding equation, native enclosure withdrawal, area-aware multi-atom radicand compression, and result expansion from one measured knot. The lazy shared Native KaTeX stage-CSS extraction is scheduled in r16 after odd-root pressure; await visual approval before r15."
+    "summary": "HUMAN_CHECKPOINT at r14: the canonical even-root exemplar now visibly transfers the exponent across equality into root reception and evaluates the entire radical expression through one measured-ink knot. Focused, browser, architecture, type, and shared evaluation preservation checks pass. Await explicit visual approval before r15 odd-root pressure; r16 still owns post-pressure CSS-shell consolidation."
   },
   "expectedLearning": [
     "Whether the shared homomorphism law supports power applications without copying log choreography.",

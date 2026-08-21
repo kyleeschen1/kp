@@ -20,6 +20,9 @@ import {
 import {
   invalidateKpNativeKatexMotionPath
 } from "./native-katex-paint-geometry.ts";
+import {
+  planKpEquationMotionPathBetweenPoints
+} from "./equation-motion-path-planner.ts";
 import type { KpNativeKatexRenderedSceneObservation } from
   "./native-katex-rendered-scene.ts";
 import type { KpEvenRootNativeEndpointSet } from
@@ -32,10 +35,19 @@ const kpEvenRootExtractionTreatment = Object.freeze({
   bodyGatherWindow: Object.freeze({ start: 0.14, end: 0.5 }),
   bodyCompressionWindow: Object.freeze({ start: 0.28, end: 0.5 }),
   bodyHandoffWindow: Object.freeze({ start: 0.48, end: 0.54 }),
-  radicalWithdrawalWindow: Object.freeze({ start: 0.24, end: 0.52 }),
   resultRevealWindow: Object.freeze({ start: 0.52, end: 0.6 }),
   resultExpansionWindow: Object.freeze({ start: 0.52, end: 0.72 }),
   contextSettlementWindow: Object.freeze({ start: 0.1, end: 0.72 })
+});
+
+const kpEvenRootInversePowerTreatment = Object.freeze({
+  roleTransferWindow: Object.freeze({ start: 0.08, end: 0.52 }),
+  roleTransferWithdrawalWindow: Object.freeze({ start: 0.42, end: 0.54 }),
+  roleTransferCompressionWindow: Object.freeze({ start: 0.38, end: 0.54 }),
+  receiverIntroductionWindow: Object.freeze({ start: 0.42, end: 0.62 }),
+  contextSettlementWindow: Object.freeze({ start: 0.14, end: 0.62 }),
+  exponentReceiverScale: 0.22,
+  departureClearanceInLocalInkHeights: 0.55
 });
 
 export interface KpEvenRootVisibleToImplicitRoleTransfer {
@@ -180,24 +192,68 @@ function inversePowerTrackProjection(
       if (radicalAtom === undefined) {
         throw new Error("Even-root transit requires measured native radical ink.");
       }
+      const receptionContactGroupId =
+        `contact.${exemplar.id}.inverse-power-reception`;
       return Object.freeze(tracks.map((track) => {
         const from = sourceEntity.get(track.sourceAtomId ?? "");
         const to = targetEntity.get(track.targetAtomId ?? "");
         if (from === sourceState.exponentEntityId) {
-          const endRect = Object.freeze({
-            ...track.endRect,
-            left: radicalAtom.rect.left - track.endRect.width * 0.18,
-            top: radicalAtom.rect.top - track.endRect.height * 0.12
+          const receiverCenter = Object.freeze({
+            x: radicalAtom.rect.left + track.startPaintRect.width * 0.32,
+            y: radicalAtom.rect.top + track.startPaintRect.height * 0.38
           });
-          return invalidateKpNativeKatexMotionPath(Object.freeze({
+          const { endRect, endPaintRect } = relocateSourcePaintToCenter(
+            track,
+            receiverCenter
+          );
+          const localInkHeight = Math.max(
+            track.startPaintRect.height,
+            endPaintRect.height,
+            1
+          );
+          const motionPath = planKpEquationMotionPathBetweenPoints({
+            id: `operation-path.${exemplar.id}.exponent-to-root-reception`,
+            relationRecordId: roleTransferRelationId(exemplar.id),
+            start: rectCenter(track.startPaintRect),
+            end: rectCenter(endPaintRect),
+            variants: ["arc-above"],
+            clearance: localInkHeight *
+              kpEvenRootInversePowerTreatment
+                .departureClearanceInLocalInkHeights
+          }).selected;
+          return Object.freeze({
             ...track,
             endRect,
+            endPaintRect,
+            motionPath,
+            motionPathSampling: "foreground-diagonal-role-transfer" as const,
             timingGroupId: `timing.${exemplar.id}.role-transfer`,
-            sampleProgress: sampleWindow(0.12, 0.44),
-            sampleOpacityProgress: sampleWindow(0.16, 0.44),
+            semanticMotionUnitId: `motion.${exemplar.id}.inverse-power-role-transfer`,
+            intentionalContactGroupId: receptionContactGroupId,
+            opacityScheduleAuthority: "semantic-choreography" as const,
+            sampleProgress: sampleWindow(
+              kpEvenRootInversePowerTreatment.roleTransferWindow.start,
+              kpEvenRootInversePowerTreatment.roleTransferWindow.end
+            ),
+            sampleOpacityProgress: sampleWindow(
+              kpEvenRootInversePowerTreatment
+                .roleTransferWithdrawalWindow.start,
+              kpEvenRootInversePowerTreatment
+                .roleTransferWithdrawalWindow.end
+            ),
             sampleMaterialScale: (progress: number) =>
-              lerp(1, 0.22, smoothstep(0.16, 0.44, progress))
-          }));
+              lerp(
+                1,
+                kpEvenRootInversePowerTreatment.exponentReceiverScale,
+                smoothstep(
+                  kpEvenRootInversePowerTreatment
+                    .roleTransferCompressionWindow.start,
+                  kpEvenRootInversePowerTreatment
+                    .roleTransferCompressionWindow.end,
+                  progress
+                )
+              )
+          });
         }
         if (
           to === radicalState.radicalOperatorEntityId ||
@@ -207,15 +263,30 @@ function inversePowerTrackProjection(
             ...track,
             startRect: track.endRect,
             timingGroupId: `timing.${exemplar.id}.branch-introduction`,
+            semanticMotionUnitId: `motion.${exemplar.id}.inverse-power-reception`,
+            intentionalContactGroupId: receptionContactGroupId,
+            opacityScheduleAuthority: "semantic-choreography" as const,
             sampleProgress: () => 1,
-            sampleOpacityProgress: sampleWindow(0.34, 0.56),
+            sampleOpacityProgress: sampleWindow(
+              kpEvenRootInversePowerTreatment.receiverIntroductionWindow.start,
+              kpEvenRootInversePowerTreatment.receiverIntroductionWindow.end
+            ),
             sampleMaterialScale: (progress: number) =>
-              lerp(0.2, 1, smoothstep(0.34, 0.56, progress))
+              lerp(0.2, 1, smoothstep(
+                kpEvenRootInversePowerTreatment
+                  .receiverIntroductionWindow.start,
+                kpEvenRootInversePowerTreatment
+                  .receiverIntroductionWindow.end,
+                progress
+              ))
           }));
         }
         return Object.freeze({
           ...track,
-          sampleProgress: sampleWindow(0.14, 0.62)
+          sampleProgress: sampleWindow(
+            kpEvenRootInversePowerTreatment.contextSettlementWindow.start,
+            kpEvenRootInversePowerTreatment.contextSettlementWindow.end
+          )
         });
       }));
     }
@@ -242,20 +313,24 @@ function evaluationTrackProjection(
         x: resultAtom.rect.left + resultAtom.rect.width / 2,
         y: resultAtom.rect.top + resultAtom.rect.height / 2
       };
-      const rootBodyEntityIds = new Set(
+      const rootExpressionEntityIds = new Set(
         endpoints.source.nodes
-          .filter(({ role }) => role === "radicand")
+          .filter(({ role }) =>
+            role === "radical-operator" || role === "radicand"
+          )
           .map(({ entityId }) => entityId)
       );
-      const bodyTracks = tracks.filter((track) => {
+      const rootExpressionTracks = tracks.filter((track) => {
         const from = sourceEntity.get(track.sourceAtomId ?? "");
-        return from !== undefined && rootBodyEntityIds.has(from);
+        return from !== undefined && rootExpressionEntityIds.has(from);
       });
-      if (bodyTracks.length === 0) {
-        throw new Error("Root extraction requires measured radicand body ink.");
+      if (rootExpressionTracks.length < 2) {
+        throw new Error(
+          "Root extraction requires measured enclosure and radicand ink."
+        );
       }
       const knot = compileRootBodyKnot({
-        tracks: bodyTracks,
+        tracks: rootExpressionTracks,
         resultRect: resultAtom.rect,
         resultCenter
       });
@@ -264,19 +339,19 @@ function evaluationTrackProjection(
       return Object.freeze(tracks.map((track) => {
         const from = sourceEntity.get(track.sourceAtomId ?? "");
         const to = targetEntity.get(track.targetAtomId ?? "");
-        if (from !== undefined && rootBodyEntityIds.has(from)) {
+        if (from !== undefined && rootExpressionEntityIds.has(from)) {
           const bodyPose = knot.bodyPoseByTrackId.get(track.id);
           if (bodyPose === undefined) {
             throw new Error(`Root body track ${track.id} lacks a knot pose.`);
           }
-          const endRect = Object.freeze({
-            ...track.startRect,
-            left: bodyPose.center.x - track.startRect.width / 2,
-            top: bodyPose.center.y - track.startRect.height / 2
-          });
+          const { endRect, endPaintRect } = relocateSourcePaintToCenter(
+            track,
+            bodyPose.center
+          );
           return invalidateKpNativeKatexMotionPath(Object.freeze({
             ...track,
             endRect,
+            endPaintRect,
             timingGroupId: `timing.${exemplar.id}.root-body-knot`,
             semanticMotionUnitId: `motion.${exemplar.id}.root-body`,
             intentionalContactGroupId: extractionContactGroupId,
@@ -295,24 +370,6 @@ function evaluationTrackProjection(
                 kpEvenRootExtractionTreatment.bodyCompressionWindow.end,
                 progress
               ))
-          }));
-        }
-        if (from === radicalState.radicalOperatorEntityId) {
-          // The enclosure yields while its contents become the result. Keeping
-          // it at its native pose avoids teaching that radical ink is itself
-          // one of the arithmetic contributors.
-          return invalidateKpNativeKatexMotionPath(Object.freeze({
-            ...track,
-            endRect: track.startRect,
-            timingGroupId: `timing.${exemplar.id}.radical-withdrawal`,
-            semanticMotionUnitId: `motion.${exemplar.id}.radical-enclosure`,
-            intentionalContactGroupId: extractionContactGroupId,
-            opacityScheduleAuthority: "semantic-choreography" as const,
-            sampleProgress: () => 0,
-            sampleOpacityProgress: sampleWindow(
-              kpEvenRootExtractionTreatment.radicalWithdrawalWindow.start,
-              kpEvenRootExtractionTreatment.radicalWithdrawalWindow.end
-            )
           }));
         }
         if (to === evaluatedState.valueEntityId) {
@@ -361,6 +418,31 @@ function evaluationTrackProjection(
   });
 }
 
+function roleTransferRelationId(exemplarId: string): string {
+  return `correspondence.${exemplarId}.visible-exponent-to-implicit-root-index`;
+}
+
+function relocateSourcePaintToCenter(
+  track: KpNativeKatexPaintMeasuredSceneTrack,
+  center: Readonly<{ x: number; y: number }>
+) {
+  const paintOffsetX = track.startPaintRect.left - track.startRect.left;
+  const paintOffsetY = track.startPaintRect.top - track.startRect.top;
+  const endPaintRect = Object.freeze({
+    ...track.startPaintRect,
+    left: center.x - track.startPaintRect.width / 2,
+    top: center.y - track.startPaintRect.height / 2
+  });
+  return Object.freeze({
+    endPaintRect,
+    endRect: Object.freeze({
+      ...track.startRect,
+      left: endPaintRect.left - paintOffsetX,
+      top: endPaintRect.top - paintOffsetY
+    })
+  });
+}
+
 function compileRootBodyKnot(input: {
   readonly tracks: readonly KpNativeKatexPaintMeasuredSceneTrack[];
   readonly resultRect: Readonly<{
@@ -378,24 +460,12 @@ function compileRootBodyKnot(input: {
     sourceArea,
     targetArea
   });
-  const dominantAxis = rectCenterSpread(sourceRects, "y") >
-      rectCenterSpread(sourceRects, "x")
-    ? "y" as const
-    : "x" as const;
-  const ordered = [...input.tracks].sort((left, right) =>
-    rectCenter(left.startRect)[dominantAxis] -
-      rectCenter(right.startRect)[dominantAxis] ||
-    left.id.localeCompare(right.id)
-  );
-  const bodyPoseByTrackId = new Map(ordered.map((track, rank) => {
-    const offset = ordered.length === 1
-      ? 0
-      : (rank / (ordered.length - 1) - 0.5) * knotMetrics.kernelSpan;
+  const bodyPoseByTrackId = new Map(input.tracks.map((track) => {
+    // Root evaluation consumes the enclosure and contents as one expression,
+    // so their compressed paint shares one exact locus rather than retaining
+    // enough spacing to remain readable as separate miniature glyphs.
     return [track.id, Object.freeze({
-      center: Object.freeze({
-        x: input.resultCenter.x + (dominantAxis === "x" ? offset : 0),
-        y: input.resultCenter.y + (dominantAxis === "y" ? offset : 0)
-      })
+      center: input.resultCenter
     })] as const;
   }));
   return Object.freeze({
@@ -425,19 +495,6 @@ function rectCenter(rect: Readonly<{
     x: rect.left + rect.width / 2,
     y: rect.top + rect.height / 2
   });
-}
-
-function rectCenterSpread(
-  rects: readonly Readonly<{
-    left: number;
-    top: number;
-    width: number;
-    height: number;
-  }>[],
-  axis: "x" | "y"
-): number {
-  const coordinates = rects.map((rect) => rectCenter(rect)[axis]);
-  return Math.max(...coordinates) - Math.min(...coordinates);
 }
 
 function session(
