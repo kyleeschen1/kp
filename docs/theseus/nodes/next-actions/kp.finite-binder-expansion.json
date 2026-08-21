@@ -184,11 +184,32 @@
       "scope": "bf08 domain boundary",
       "checkedAt": "2026-08-21T23:14:08.311Z",
       "notes": "Dependency, framework-neutral, semantic, and compiler authority gates pass."
+    },
+    {
+      "command": "npm run test:finite-binder-expansion",
+      "status": "passed",
+      "scope": "bf09 case ledger",
+      "checkedAt": "2026-08-21T23:19:07.014Z",
+      "notes": "45 focused tests pass over exhaustive finite-binder cases and maturity boundaries."
+    },
+    {
+      "command": "npm run test:animation-transformation-coverage",
+      "status": "passed",
+      "scope": "bf09 coverage projection",
+      "checkedAt": "2026-08-21T23:19:08.131Z",
+      "notes": "17 capability, taxonomy, and case-coverage tests pass against regenerated deterministic coverage."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "bf09 ledger types",
+      "checkedAt": "2026-08-21T23:19:09.282Z",
+      "notes": "All TypeScript, Svelte, and domain type checks pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "bf08 compiles renderer-neutral causal dependencies from verified operations: context precedes ordered instances, connectors require adjacent instances, and exact target completion depends on every derived role."
+    "summary": "bf09 adds an 11-case ledger: three semantically authoritative sums, one explicitly unproved product pressure caller, and seven typed gaps covering unbounded, symbolic, descending, captured, compound, oversized, and nested shapes."
   },
   "expectedLearning": [
     "Whether finite sum expansion can make bound scope, ordered instantiation, and one-to-many lineage perceptually clear without false persistence.",

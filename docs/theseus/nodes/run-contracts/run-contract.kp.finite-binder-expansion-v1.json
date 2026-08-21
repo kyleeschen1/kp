@@ -114,7 +114,8 @@
     {
       "id": "bf09",
       "title": "Create binder case ledger",
-      "status": "planned"
+      "summary": "Added exhaustive finite-binder case coverage and regenerated its deterministic projection.",
+      "status": "complete"
     },
     {
       "id": "bf10",

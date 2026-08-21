@@ -2791,8 +2791,533 @@
         "planned-capability-without-exact-asset"
       ],
       "caseCoverage": {
-        "status": "not-declared",
-        "promotionGate": "required-before-direct"
+        "status": "tracked",
+        "authorityId": "coverage.equation.finite-binder-expansion-cases.v1",
+        "caseCount": 11,
+        "cases": [
+          {
+            "id": "finite-binder.canonical-sum",
+            "operationClass": "canonical-sum",
+            "title": "Expand a canonical finite sum",
+            "sourceLatex": "\\sum_{i=1}^{3} a_i",
+            "targetLatex": "a_1+a_2+a_3",
+            "outcome": "animated-transition",
+            "requiredEvidenceIds": [
+              "explicit-integer-bounds",
+              "local-reference",
+              "ordered-target"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "normalizer.equation.finite-binder-expansion.v1",
+                  "shape.compound.large-operator"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "vocabulary.equation.finite-binder-expansion.v1",
+                  "proof.equation.finite-binder-scope.v1",
+                  "range.equation.finite-binder-expansion.v1"
+                ]
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "operation.equation.finite-binder-expand.v1"
+                ]
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "missing",
+                "evidenceSourceIds": []
+              }
+            ]
+          },
+          {
+            "id": "finite-binder.singleton-sum",
+            "operationClass": "singleton-sum",
+            "title": "Expand a singleton finite sum",
+            "sourceLatex": "\\sum_{i=2}^{2} a_i",
+            "targetLatex": "a_2",
+            "outcome": "animated-transition",
+            "requiredEvidenceIds": [
+              "explicit-integer-bounds",
+              "singleton-range",
+              "local-reference"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "normalizer.equation.finite-binder-expansion.v1",
+                  "shape.compound.large-operator"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "vocabulary.equation.finite-binder-expansion.v1",
+                  "proof.equation.finite-binder-scope.v1",
+                  "range.equation.finite-binder-expansion.v1"
+                ]
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "operation.equation.finite-binder-expand.v1"
+                ]
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "missing",
+                "evidenceSourceIds": []
+              }
+            ]
+          },
+          {
+            "id": "finite-binder.negative-bound-sum",
+            "operationClass": "negative-bound-sum",
+            "title": "Expand across negative integer bounds",
+            "sourceLatex": "\\sum_{i=-2}^{1} a_i",
+            "targetLatex": "a_{-2}+a_{-1}+a_0+a_1",
+            "outcome": "animated-transition",
+            "requiredEvidenceIds": [
+              "explicit-integer-bounds",
+              "ascending-inclusive-range",
+              "local-reference"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "normalizer.equation.finite-binder-expansion.v1",
+                  "shape.compound.large-operator"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "vocabulary.equation.finite-binder-expansion.v1",
+                  "proof.equation.finite-binder-scope.v1",
+                  "range.equation.finite-binder-expansion.v1"
+                ]
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "operation.equation.finite-binder-expand.v1"
+                ]
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "missing",
+                "evidenceSourceIds": []
+              }
+            ]
+          },
+          {
+            "id": "finite-binder.finite-product-pressure",
+            "operationClass": "finite-product-pressure",
+            "title": "Expand a canonical finite product",
+            "sourceLatex": "\\prod_{k=0}^{2} x_k",
+            "targetLatex": "x_0x_1x_2",
+            "outcome": "animated-transition",
+            "requiredEvidenceIds": [
+              "explicit-integer-bounds",
+              "local-reference",
+              "product-owned-connectors"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "shape.compound.large-operator"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "pressure",
+                "evidenceSourceIds": [
+                  "vocabulary.equation.finite-binder-expansion.v1",
+                  "proof.equation.finite-binder-scope.v1",
+                  "range.equation.finite-binder-expansion.v1"
+                ]
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "missing",
+                "evidenceSourceIds": []
+              }
+            ]
+          },
+          {
+            "id": "finite-binder.unbounded-binder",
+            "operationClass": "unbounded-binder",
+            "title": "Refuse an unbounded sum",
+            "sourceLatex": "\\sum_i a_i",
+            "outcome": "typed-gap",
+            "requiredEvidenceIds": [
+              "explicit-integer-bounds"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "shape.compound.large-operator"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "missing",
+                "evidenceSourceIds": []
+              }
+            ]
+          },
+          {
+            "id": "finite-binder.symbolic-upper-bound",
+            "operationClass": "symbolic-upper-bound",
+            "title": "Refuse a symbolic upper bound",
+            "sourceLatex": "\\sum_{i=1}^{n} a_i",
+            "outcome": "typed-gap",
+            "requiredEvidenceIds": [
+              "closed-integer-upper-bound"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "shape.compound.large-operator"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "missing",
+                "evidenceSourceIds": []
+              }
+            ]
+          },
+          {
+            "id": "finite-binder.descending-range",
+            "operationClass": "descending-range",
+            "title": "Refuse descending bounds",
+            "sourceLatex": "\\sum_{i=3}^{1} a_i",
+            "outcome": "typed-gap",
+            "requiredEvidenceIds": [
+              "ascending-inclusive-range"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "shape.compound.large-operator"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "missing",
+                "evidenceSourceIds": []
+              }
+            ]
+          },
+          {
+            "id": "finite-binder.mismatched-body-reference",
+            "operationClass": "mismatched-body-reference",
+            "title": "Refuse an unowned body reference",
+            "sourceLatex": "\\sum_{i=1}^{3} a_j",
+            "outcome": "typed-gap",
+            "requiredEvidenceIds": [
+              "local-reference"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "shape.compound.large-operator"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "missing",
+                "evidenceSourceIds": []
+              }
+            ]
+          },
+          {
+            "id": "finite-binder.compound-body-template",
+            "operationClass": "compound-body-template",
+            "title": "Defer compound body substitution",
+            "sourceLatex": "\\sum_{i=1}^{3} a_{2i}",
+            "outcome": "typed-gap",
+            "requiredEvidenceIds": [
+              "compound-template-normalizer"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "shape.compound.large-operator"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "missing",
+                "evidenceSourceIds": []
+              }
+            ]
+          },
+          {
+            "id": "finite-binder.oversized-expansion",
+            "operationClass": "oversized-expansion",
+            "title": "Refuse oversized explicit output",
+            "sourceLatex": "\\sum_{i=1}^{1000} a_i",
+            "outcome": "typed-gap",
+            "requiredEvidenceIds": [
+              "explicit-expansion-budget"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "shape.compound.large-operator"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "missing",
+                "evidenceSourceIds": []
+              }
+            ]
+          },
+          {
+            "id": "finite-binder.nested-binder",
+            "operationClass": "nested-binder",
+            "title": "Defer nested binder scope",
+            "sourceLatex": "\\sum_{i=1}^{3}\\sum_{j=1}^{i} a_{ij}",
+            "outcome": "typed-gap",
+            "requiredEvidenceIds": [
+              "nested-scope-normalizer",
+              "dependent-bound-proof"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "shape.compound.large-operator"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "missing",
+                "evidenceSourceIds": []
+              }
+            ]
+          }
+        ]
       }
     },
     {

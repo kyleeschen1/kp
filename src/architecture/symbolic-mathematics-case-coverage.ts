@@ -2,6 +2,9 @@ import {
   kpRootRewriteVocabulary,
   type KpRootRewriteClass
 } from "../semantic/root-rewrite-vocabulary.ts";
+import {
+  kpFiniteBinderCaseLedger
+} from "../semantic/finite-binder-case-ledger.ts";
 
 export const KP_SYMBOLIC_CASE_COVERAGE_SCHEMA =
   "kp.symbolic-case-coverage.v1" as const;
@@ -205,7 +208,7 @@ export const kpSymbolicCaseCoverageRegistry =
   defineKpSymbolicCaseCoverageRegistry({
     schemaVersion: KP_SYMBOLIC_CASE_COVERAGE_SCHEMA,
     kind: "symbolic-case-coverage-registry",
-    families: [rootFamily()]
+    families: [rootFamily(), finiteBinderFamily()]
   });
 
 export function defineKpSymbolicCaseCoverageRegistry(
@@ -319,6 +322,79 @@ function rootFamily(): KpSymbolicCaseCoverageFamily {
       });
     }))
   });
+}
+
+function finiteBinderFamily(): KpSymbolicCaseCoverageFamily {
+  return Object.freeze({
+    schemaVersion: KP_SYMBOLIC_CASE_COVERAGE_SCHEMA,
+    kind: "symbolic-case-coverage-family" as const,
+    capabilityId: "capability.equation.finite-binder-expansion",
+    authorityId: kpFiniteBinderCaseLedger.authority,
+    cases: Object.freeze(kpFiniteBinderCaseLedger.cases.map((entry) => ({
+      id: entry.id,
+      operationClass: entry.operationClass,
+      title: entry.title,
+      sourceLatex: entry.sourceLatex,
+      ...(entry.targetLatex === undefined ? {} : {
+        targetLatex: entry.targetLatex
+      }),
+      outcome: entry.disposition === "typed-gap"
+        ? "typed-gap" as const
+        : "animated-transition" as const,
+      requiredEvidenceIds: entry.requiredEvidenceIds,
+      maturity: finiteBinderMaturity(entry.disposition)
+    })))
+  });
+}
+
+function finiteBinderMaturity(
+  disposition: typeof kpFiniteBinderCaseLedger.cases[number]["disposition"]
+): readonly KpSymbolicCaseMaturityEvidence[] {
+  if (disposition === "verified-direct-expansion") {
+    return Object.freeze([
+      maturity("notation-paintable", "satisfied", [
+        "normalizer.equation.finite-binder-expansion.v1",
+        "shape.compound.large-operator"
+      ]),
+      maturity("semantic-representable", "satisfied", [
+        "vocabulary.equation.finite-binder-expansion.v1",
+        "proof.equation.finite-binder-scope.v1",
+        "range.equation.finite-binder-expansion.v1"
+      ]),
+      maturity("operation-authoritative", "satisfied", [
+        "operation.equation.finite-binder-expand.v1"
+      ]),
+      maturity("exemplar-executable", "missing", []),
+      maturity("family-promoted", "missing", []),
+      maturity("generation-governed", "missing", [])
+    ]);
+  }
+  if (disposition === "pressure-required") {
+    return Object.freeze([
+      maturity("notation-paintable", "satisfied", [
+        "shape.compound.large-operator"
+      ]),
+      maturity("semantic-representable", "pressure", [
+        "vocabulary.equation.finite-binder-expansion.v1",
+        "proof.equation.finite-binder-scope.v1",
+        "range.equation.finite-binder-expansion.v1"
+      ]),
+      maturity("operation-authoritative", "missing", []),
+      maturity("exemplar-executable", "missing", []),
+      maturity("family-promoted", "missing", []),
+      maturity("generation-governed", "missing", [])
+    ]);
+  }
+  return Object.freeze([
+    maturity("notation-paintable", "satisfied", [
+      "shape.compound.large-operator"
+    ]),
+    maturity("semantic-representable", "missing", []),
+    maturity("operation-authoritative", "not-applicable", []),
+    maturity("exemplar-executable", "not-applicable", []),
+    maturity("family-promoted", "missing", []),
+    maturity("generation-governed", "missing", [])
+  ]);
 }
 
 function assertMaturity(entry: KpSymbolicCaseCoverageCase): void {

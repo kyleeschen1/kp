@@ -2,7 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
-  createKpFiniteBinderCausalRecipe
+  createKpFiniteBinderCausalRecipe,
+  type KpFiniteBinderCausalStep
 } from "../src/domain-ir/finite-binder-causal-recipe.ts";
 import {
   defineKpFiniteBinderExpansionOperation,
@@ -44,9 +45,7 @@ function canonicalOperation(): KpVerifiedFiniteBinderExpansionOperation {
 
 test("causal recipe establishes context then ordered instances", () => {
   const recipe = createKpFiniteBinderCausalRecipe(canonicalOperation());
-  const instanceSteps = recipe.steps.filter(({ kind }) =>
-    kind === "instantiate-body"
-  );
+  const instanceSteps = recipe.steps.filter(isInstanceStep);
   assert.deepEqual(instanceSteps.map(({ ordinal, indexValue, dependsOn }) => ({
     ordinal,
     indexValue,
@@ -72,9 +71,7 @@ test("causal recipe establishes context then ordered instances", () => {
 
 test("each connector causally requires both adjacent instances", () => {
   const recipe = createKpFiniteBinderCausalRecipe(canonicalOperation());
-  const connectorSteps = recipe.steps.filter(({ kind }) =>
-    kind === "derive-connector"
-  );
+  const connectorSteps = recipe.steps.filter(isConnectorStep);
   assert.deepEqual(connectorSteps.map(({ ordinal, dependsOn }) => ({
     ordinal,
     dependsOn
@@ -118,3 +115,15 @@ test("recipe owns causality but delegates every presentation decision", () => {
     /duration|timingWindow|geometry|coordinates|motionPath|opacity|scale|renderer/u
   );
 });
+
+function isInstanceStep(
+  step: KpFiniteBinderCausalStep
+): step is Extract<KpFiniteBinderCausalStep, { kind: "instantiate-body" }> {
+  return step.kind === "instantiate-body";
+}
+
+function isConnectorStep(
+  step: KpFiniteBinderCausalStep
+): step is Extract<KpFiniteBinderCausalStep, { kind: "derive-connector" }> {
+  return step.kind === "derive-connector";
+}
