@@ -286,6 +286,27 @@
       "scope": "cf15",
       "checkedAt": "2026-08-21T21:31:19.381Z",
       "notes": "The binder and migrated semantic compiler typecheck at the build-time boundary."
+    },
+    {
+      "command": "npm run test:python-code-generation-frontend",
+      "status": "passed",
+      "scope": "cf16",
+      "checkedAt": "2026-08-21T21:33:59.076Z",
+      "notes": "Five adapter tests prove accepted causal operations, exact parse and legality repairs, language routing, and presentation-free build-time closure."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/python-*.test.ts",
+      "status": "passed",
+      "scope": "cf16",
+      "checkedAt": "2026-08-21T21:34:00.817Z",
+      "notes": "All 74 Python frontend, semantic, operation, projection, render, and product preservation tests pass."
+    },
+    {
+      "command": "tsc focused Python adapter and npm run check:architecture",
+      "status": "passed",
+      "scope": "cf16",
+      "checkedAt": "2026-08-21T21:34:03.549Z",
+      "notes": "The adapter is type-safe and preserves dependency, framework-neutral, semantic, and compiler-authority boundaries."
     }
   ],
   "allowedWork": [
@@ -404,7 +425,8 @@
     {
       "id": "cf16",
       "title": "Python-generation-frontend",
-      "status": "planned"
+      "summary": "Implemented the Python governed-request adapter through stdlib AST evidence, language-owned recognition and legality, and shared causal operations with explicit typed repairs.",
+      "status": "complete"
     },
     {
       "id": "cf17",
