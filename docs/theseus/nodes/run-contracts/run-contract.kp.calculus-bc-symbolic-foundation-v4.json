@@ -66,7 +66,8 @@
     {
       "id": "rv03",
       "title": "recursive-root-endpoint-roles",
-      "status": "planned"
+      "summary": "Added a bounded root-specific recursive Native KaTeX endpoint protocol for token, sequence, grouping, power, radical, and absolute-value nodes. Every semantic occurrence receives one nested selector and presentation group with explicit parent identity; compound carriers preserve child identities, unsafe/repeated nodes fail closed, and the existing even-root path remains green. Thirteen focused endpoint/plan/transit tests and full typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "rv04",
