@@ -190,6 +190,19 @@ export const kpEditorSelectedSurfaceCapabilityDeclarations = Object.freeze([
     }
   }),
   declaration({
+    capabilityId: "even-root",
+    domain: "equation",
+    adapterIds: [
+      "editor-animation-surface.even-root.canonical-native-katex"
+    ],
+    registrationOwner: "provided-registry",
+    async loadAndRegister(registry, registrationGuardAdapterId) {
+      const client = await import("./even-root-surface-capability.ts");
+      await registerOnce(registry, registrationGuardAdapterId,
+        () => client.registerKpEditorEvenRootSurfaceCapability(registry));
+    }
+  }),
+  declaration({
     capabilityId: "exact-fraction-quantity",
     domain: "equation",
     adapterIds: [

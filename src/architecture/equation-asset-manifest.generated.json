@@ -484,6 +484,89 @@
     },
     {
       "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.algebra.radical.solve-x-squared-nine",
+      "title": "Solve x² = 9 over the reals",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.algebra.radical.solve-x-squared-nine",
+        "transformationIds": [
+          "operation.even-root.apply-inverse-square",
+          "operation.even-root.evaluate-square-root-nine"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "A verified even-root sequence with explicit real branches and separate arithmetic evaluation.",
+        "tags": [
+          "algebra",
+          "animation",
+          "branch",
+          "editor",
+          "equation",
+          "katex",
+          "radical",
+          "root"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "even-root",
+        "familyId": "exponent-radical",
+        "disposition": "unsupported",
+        "migrationWave": "wave-c-generated-bespoke-diagnostic-static"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "algebra",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/algebra.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.algebra.radical.solve-x-squared-nine",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-69fea672",
+          "fnv1a32-abd3a26c",
+          "fnv1a32-fb9b2762",
+          "fnv1a32-b43a3bfd",
+          "fnv1a32-1b40ae9e"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.even-root.canonical-native-katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.animation.algebra.radical.solve-x-squared-nine",
+        "representations": [
+          {
+            "id": "editor-animation.animation.algebra.radical.solve-x-squared-nine",
+            "label": "Solve x² = 9 over the reals",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.algebra.radical.solve-x-squared-nine",
+            "role": "canonical-host"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
       "assetId": "animation.comparison.jacobian-hessian",
       "title": "Jacobian and Hessian comparison",
       "semanticSource": {

@@ -31,6 +31,9 @@ import {
   createKpCanonicalCancellationPressureAnimationAsset
 } from "../cancellation-pressure-animation.ts";
 import {
+  createKpEvenRootSolveAnimationAsset
+} from "../even-root-solve-adapter.ts";
+import {
   kpAlgebraChoreographyCapabilities
 } from "../algebra-choreography-capabilities.ts";
 import type {
@@ -46,6 +49,7 @@ export function createKpAlgebraAnimationPack(): KpAlgebraAnimationPack {
   return Object.freeze({
     catalog: Object.freeze([
       createKpCanonicalCancellationPressureAnimationAsset(),
+      createKpEvenRootSolveAnimationAsset(),
       createFractionSimplificationAnimationAsset(),
       createExponentExpansionAnimationAsset(),
       createExponentRadicalRewriteAnimationAsset(),

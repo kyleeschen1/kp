@@ -781,6 +781,48 @@
       "scope": "r07 Firefox quotient human checkpoint",
       "checkedAt": "2026-08-21T01:00:19.773Z",
       "notes": "Graph validates at 1042 nodes and 24043 events; r08 remains gated on visual approval."
+    },
+    {
+      "command": "npm run test:even-root-native-transit",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-21T02:34:06.735Z",
+      "notes": "Native endpoint ownership, visible-to-implicit role transfer, separate evaluation transition, and deterministic seek passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "r12",
+      "checkedAt": "2026-08-21T02:34:15.712Z",
+      "notes": "Native KaTeX executable-session evidence and even-root endpoints remain fully typed; Svelte and domain checks pass."
+    },
+    {
+      "command": "npm run check:live-exponential-quotient-playback:firefox",
+      "status": "passed",
+      "scope": "r12-runtime-preservation",
+      "checkedAt": "2026-08-21T02:34:24.824Z",
+      "notes": "The approved quotient still advances through distinct painted frames and completes after executable-session certification."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "r12",
+      "checkedAt": "2026-08-21T02:34:35.632Z",
+      "notes": "Framework-neutral, semantic-animation, and equation compiler boundaries pass."
+    },
+    {
+      "command": "npm run test:browser:even-root-catalogue",
+      "status": "passed",
+      "scope": "r13",
+      "checkedAt": "2026-08-21T02:52:53.544Z",
+      "notes": "Exact URL, all three native endpoints, direct seek, rewind, reduced motion, and responsive remeasurement pass in Chromium."
+    },
+    {
+      "command": "npm run test:equation-asset-manifest",
+      "status": "passed",
+      "scope": "r13",
+      "checkedAt": "2026-08-21T02:53:07.618Z",
+      "notes": "Generated display and equation manifest cover the new lazy root asset without runtime renderer leakage."
     }
   ],
   "progress": {

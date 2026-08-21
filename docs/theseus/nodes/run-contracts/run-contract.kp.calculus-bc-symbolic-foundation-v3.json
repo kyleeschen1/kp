@@ -122,7 +122,8 @@
     {
       "id": "r13",
       "title": "root-catalogue-integration",
-      "status": "planned"
+      "summary": "Registered the verified three-state even-root sequence as a searchable lazy algebra asset with two operation markers, exact artifact URL, dedicated Native KaTeX capability, generic static fallback, accessible endpoint states, reduced-motion checkpoints, direct seek and rewind, responsive remeasurement, and current generated display, manifest, and surface inventory authorities.",
+      "status": "complete"
     },
     {
       "id": "r14",

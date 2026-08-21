@@ -1853,6 +1853,34 @@
     ]
   },
   {
+    "animationId": "animation.algebra.radical.solve-x-squared-nine",
+    "title": "Solve x² = 9 over the reals",
+    "summary": "A verified even-root sequence with explicit real branches and separate arithmetic evaluation.",
+    "tags": [
+      "algebra",
+      "animation",
+      "branch",
+      "editor",
+      "equation",
+      "katex",
+      "radical",
+      "root"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.algebra.radical.solve-x-squared-nine",
+    "representations": [
+      {
+        "id": "editor-animation.animation.algebra.radical.solve-x-squared-nine",
+        "label": "Solve x² = 9 over the reals",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.algebra.radical.solve-x-squared-nine",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
     "animationId": "animation.economics.supply-demand-equilibrium-shift",
     "title": "Supply and demand equilibrium shift",
     "summary": "Shifts demand on an exact supply-demand graph and follows the resulting market equilibrium.",

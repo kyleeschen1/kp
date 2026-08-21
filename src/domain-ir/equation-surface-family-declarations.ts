@@ -7,6 +7,7 @@ export type KpEquationSelectedSurfaceCapability =
   | "log-quotient"
   | "log-product"
   | "exponential-homomorphism"
+  | "even-root"
   | "exact-fraction-quantity"
   | "operation-evaluation"
   | "place-value-addition";
@@ -20,6 +21,7 @@ export type KpEquationPrimarySurfaceCapability =
   | "log-quotient"
   | "log-product"
   | "exponential-homomorphism"
+  | "even-root"
   | "operation-evaluation";
 
 export type KpDeclaredEquationSurfaceDisposition =
@@ -271,6 +273,16 @@ readonly KpEquationSurfaceFamilyDeclaration[] = Object.freeze([
       "editor-animation-surface.exponential-homomorphism.canonical-native-katex",
     rendererSourcePath:
       "src/editor/exponential-homomorphism-surface-adapter.ts"
+  }),
+  declaration({
+    id: "family.equation.even-root",
+    matches: (id) => id ===
+      "animation.algebra.radical.solve-x-squared-nine",
+    selectedCapabilityIds: ["even-root", "equation-katex"],
+    primaryCapabilityId: "even-root",
+    rendererAdapterId:
+      "editor-animation-surface.even-root.canonical-native-katex",
+    rendererSourcePath: "src/editor/even-root-surface-adapter.ts"
   }),
   declaration({
     id: "family.equation.generic-katex",

@@ -160,6 +160,39 @@
     }
   },
   {
+    "id": "editor-animation.animation.algebra.radical.solve-x-squared-nine",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.algebra.radical.solve-x-squared-nine",
+    "title": "Solve x² = 9 over the reals",
+    "summary": "A verified even-root sequence with explicit real branches and separate arithmetic evaluation.",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 6400,
+    "beatCount": 128,
+    "tags": [
+      "algebra",
+      "animation",
+      "branch",
+      "equation",
+      "katex",
+      "radical",
+      "root"
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
+  },
+  {
     "id": "editor-animation.animation.generated.fraction-expression.two-fourths",
     "kind": "editor-animation-descriptor",
     "animationId": "animation.generated.fraction-expression.two-fourths",

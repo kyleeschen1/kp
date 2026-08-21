@@ -18,10 +18,11 @@
       "animation.algebra.log-product.three-factors-to-sum",
       "animation.algebra.exponential-homomorphism.sum-to-product",
       "animation.algebra.exponential-homomorphism.difference-to-quotient",
+      "animation.algebra.radical.solve-x-squared-nine",
       "animation.operation-evaluation.two-times-one-carrier",
       "animation.operation-evaluation.two-times-three"
     ],
-    "currentCount": 38,
+    "currentCount": 39,
     "reconciled": true
   },
   "entries": [
@@ -256,6 +257,45 @@
         "representationId": "editor-animation.animation.algebra.log-quotient.difference-to-quotient",
         "representationKind": "editor",
         "href": "/?animation=editor-animation.animation.algebra.log-quotient.difference-to-quotient&view=editor",
+        "sourcePath": "src/editor/animation-library-display-catalog-builder.ts"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-inventory-entry.v1",
+      "animationId": "animation.algebra.radical.solve-x-squared-nine",
+      "title": "Solve x² = 9 over the reals",
+      "semanticOwner": {
+        "kind": "catalog-animation-asset",
+        "assetId": "animation.algebra.radical.solve-x-squared-nine",
+        "primaryDescriptorId": "editor-animation.animation.algebra.radical.solve-x-squared-nine",
+        "sourcePath": "src/animation/catalog.ts"
+      },
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "catalogueSurface": {
+        "kind": "equation",
+        "slotKind": "equation",
+        "selectedCapabilityId": "even-root",
+        "rendererAdapterId": "editor-animation-surface.even-root.canonical-native-katex",
+        "rendererSourcePath": "src/editor/even-root-surface-adapter.ts"
+      },
+      "clockAuthority": {
+        "ownerId": "editor-animation-player",
+        "sourcePath": "src/editor/animation-player-controller.ts",
+        "durationMs": 6400,
+        "beatCount": 128
+      },
+      "lazyCapability": {
+        "packId": "algebra",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/algebra.ts"
+      },
+      "currentPresentationAuthority": {
+        "canonicalFormat": "legacy",
+        "representationId": "editor-animation.animation.algebra.radical.solve-x-squared-nine",
+        "representationKind": "editor",
+        "href": "/?animation=editor-animation.animation.algebra.radical.solve-x-squared-nine&view=editor",
         "sourcePath": "src/editor/animation-library-display-catalog-builder.ts"
       }
     },

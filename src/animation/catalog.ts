@@ -85,6 +85,9 @@ import {
 import {
   createKpCanonicalCancellationPressureAnimationAsset
 } from "./cancellation-pressure-animation.ts";
+import {
+  createKpEvenRootSolveAnimationAsset
+} from "./even-root-solve-adapter.ts";
 import { enrichKpMatrixLinearMapAsset } from
   "./matrix-linear-map-asset-enrichment.ts";
 
@@ -118,6 +121,7 @@ export function createGeneratedAlgebraAnimationAssets():
     createLinearSolveAnimationAsset(),
     createKpVerifiedGeneratedLinearSolveRuntimeAsset(),
     createKpCanonicalCancellationPressureAnimationAsset(),
+    createKpEvenRootSolveAnimationAsset(),
     createFractionSimplificationAnimationAsset(),
     createExponentExpansionAnimationAsset(),
     createExponentRadicalRewriteAnimationAsset(),

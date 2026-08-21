@@ -181,6 +181,8 @@
     "test:inverse-power-operation": "node --disable-warning=ExperimentalWarning --test tests/inverse-power-operation.test.ts",
     "test:even-root-solve-exemplar": "node --disable-warning=ExperimentalWarning --test tests/even-root-solve-exemplar.test.ts",
     "test:even-root-native-transit": "node --disable-warning=ExperimentalWarning --test tests/even-root-native-transit.test.ts",
+    "test:even-root-catalogue": "node --disable-warning=ExperimentalWarning --test tests/even-root-catalogue-integration.test.ts",
+    "test:browser:even-root-catalogue": "playwright test tests/even-root-catalogue.browser.spec.ts --project=chromium --workers=1",
     "test:exponential-correspondence": "node --disable-warning=ExperimentalWarning --test tests/exponential-homomorphism-correspondence.test.ts tests/exponential-homomorphism-difference-pressure.test.ts",
     "test:exponential-extension-pack": "node --disable-warning=ExperimentalWarning --test tests/exponential-homomorphism-extension-pack.test.ts tests/exponential-homomorphism-authoring.test.ts tests/exponential-crossover-gate.test.ts tests/equation-extension-dispatch.test.ts",
     "test:exponential-promotion": "node --disable-warning=ExperimentalWarning --test tests/exponential-homomorphism-promotion-certificate.test.ts tests/animation-transformation-coverage.test.ts",
