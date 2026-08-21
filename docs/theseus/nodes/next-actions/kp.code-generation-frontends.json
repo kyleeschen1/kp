@@ -1,0 +1,61 @@
+{
+  "id": "kp.code-generation-frontends",
+  "kind": "next-action",
+  "title": "Close TypeScript and Python generation frontends",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-21-typescript-python-generation-frontends-long-loop-proposal.md",
+      "summary": "User-approved scope, ordering, preservation boundary, and acceptance criteria."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.governed-animation-generation.s23"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:typescript-refactor",
+    "npm run check:typescript-refactor-semantics",
+    "npm run check:python-refactor-semantics",
+    "npm run test:animation-domain-frontends",
+    "npm run test:animation-transformation-coverage",
+    "npm run check:animation-library-bundle-boundary",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether bounded TypeScript and Python extract-helper generation can become Direct without shipping compiler runtimes or changing approved presentation.",
+    "Which request, diagnostic, recipe, and evidence seams are genuinely language-neutral after two independent language frontends."
+  ],
+  "allowedWork": [
+    "Close only the approved bounded TypeScript and Python extract-helper generation frontends and their exact evidence."
+  ],
+  "disallowedWork": [
+    "Do not alter approved choreography, timing, CSS, renderer, layout, semantic IDs, motion plans, routes, or unrelated domains."
+  ],
+  "criteria": [
+    {
+      "id": "typescript-direct-evidence",
+      "weight": "high"
+    },
+    {
+      "id": "python-direct-evidence",
+      "weight": "high"
+    },
+    {
+      "id": "unsupported-inputs-fail-typed",
+      "weight": "high"
+    },
+    {
+      "id": "browser-bundle-remains-compiler-free",
+      "weight": "high"
+    }
+  ]
+}

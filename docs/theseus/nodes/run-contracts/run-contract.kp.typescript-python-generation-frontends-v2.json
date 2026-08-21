@@ -1,0 +1,212 @@
+{
+  "id": "run-contract.kp.typescript-python-generation-frontends-v2",
+  "kind": "run-contract",
+  "title": "TypeScript and Python generation frontends",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/kp.code-generation-frontends.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-21-typescript-python-generation-frontends-long-loop-proposal.md",
+      "summary": "User-approved 24-slice plan, preservation boundary, stop conditions, verification tiers, and exact sequence."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-21-kp-post-root-capability-sequence.md",
+      "summary": "Accepted post-root capability ordering and cross-domain rationale."
+    }
+  ],
+  "verification": [
+    "npm run test:typescript-refactor",
+    "npm run check:typescript-refactor-semantics",
+    "npm run check:python-refactor-semantics",
+    "npm run test:animation-domain-frontends",
+    "npm run test:animation-transformation-coverage",
+    "npm run visual:typescript-refactor",
+    "npm run visual:python-refactor",
+    "npm run check:animation-library-bundle-boundary",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "cf01",
+      "checkedAt": "2026-08-21T20:17:04.503Z",
+      "notes": "TypeScript, Svelte, and domain boundaries accept the preflight fixture and tests."
+    },
+    {
+      "command": "npm run check:typescript-refactor-semantics and npm run check:python-refactor-semantics",
+      "status": "passed",
+      "scope": "cf01",
+      "checkedAt": "2026-08-21T20:17:05.503Z",
+      "notes": "Both checked-in semantic artifacts are fresh against their language-owned build-time compilers."
+    },
+    {
+      "command": "npm run test:code-generation-preflight",
+      "status": "passed",
+      "scope": "cf01",
+      "checkedAt": "2026-08-21T20:17:06.058Z",
+      "notes": "Four preflight assertions pin canonical contracts, semantic IDs, operation IDs, capability gaps, routes, and build-time parser ownership."
+    },
+    {
+      "command": "npm run test:animation-transformation-coverage",
+      "status": "passed",
+      "scope": "cf01",
+      "checkedAt": "2026-08-21T20:17:06.614Z",
+      "notes": "Seventeen coverage tests retain both code capabilities as honest Exemplar rows with frontend-required gaps."
+    }
+  ],
+  "allowedWork": [
+    "Framework-neutral code-generation request and result protocols.",
+    "TypeScript-owned and Python-owned build-time frontend adapters, legality proofs, semantic binding, operations, recipe binding, corpora, and generated artifacts.",
+    "Tool-neutral discovery and compilation entrypoints, exact evidence, readiness, Transformation Coverage, scoped CLI, tests, bundle checks, and durable project records."
+  ],
+  "disallowedWork": [
+    "Animation choreography, timing, CSS, renderer, layout, semantic IDs, motion plans, or canonical route changes.",
+    "Arbitrary refactoring or execution of untrusted source; universal AST or cross-language syntax semantics; Scheme, CodeMirror, binder, Graph3D, differentiation, integration, fraction, economics, public-layout, or live-model work.",
+    "Browser shipment of the TypeScript compiler or Python runtime; generic fades, inferred glyph correspondence, or silent fallback."
+  ],
+  "goal": "Close the bounded extract-helper TypeScript and Python capabilities through language-owned build-time frontends, typed semantic legality, governed authoring, exact evidence, and unchanged canonical assets.",
+  "target": "kp.code-generation-frontends",
+  "runMode": "run",
+  "maxSlices": 24,
+  "commitCadence": "Commit each independently reversible verified slice with exact path staging and its completed Theseus evidence; never stage protected economics files or unrelated user documents.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if closing either frontend requires changing approved choreography, timing, CSS, renderer output, semantic IDs, motion plans, layout geometry, or canonical routes.",
+    "Stop if the TypeScript compiler or Python runtime becomes browser reachable, if arbitrary source execution is required, or if unsupported input cannot fail with a typed diagnostic.",
+    "Stop on unresolved semantic, identity, exact-seek, rewind, accessibility, visual, bundle-boundary, architecture, or generated-artifact drift.",
+    "Stop if a shared seam would erase language-owned syntax or legality, or if the exact extract-helper capability cannot be proven without expanding into deferred domains."
+  ],
+  "slices": [
+    {
+      "id": "cf01",
+      "title": "Freeze-current-baseline",
+      "summary": "Added a machine-readable two-language preflight fixture and focused test command pinning canonical contract, semantic, operation, lineage, route, Exemplar-gap, and build-time parser ownership. Both semantic artifacts, coverage, and type boundaries remain green; no presentation code changed.",
+      "status": "complete"
+    },
+    {
+      "id": "cf02",
+      "title": "Code-refactor-request-protocol",
+      "status": "planned"
+    },
+    {
+      "id": "cf03",
+      "title": "Typed-repair-diagnostics",
+      "status": "planned"
+    },
+    {
+      "id": "cf04",
+      "title": "Candidate-frontend-authorities",
+      "status": "planned"
+    },
+    {
+      "id": "cf05",
+      "title": "Extract-helper-causal-contract",
+      "status": "planned"
+    },
+    {
+      "id": "cf06",
+      "title": "TypeScript-role-recognition",
+      "status": "planned"
+    },
+    {
+      "id": "cf07",
+      "title": "TypeScript-legality-proof",
+      "status": "planned"
+    },
+    {
+      "id": "cf08",
+      "title": "TypeScript-semantic-binding",
+      "status": "planned"
+    },
+    {
+      "id": "cf09",
+      "title": "TypeScript-generation-frontend",
+      "status": "planned"
+    },
+    {
+      "id": "cf10",
+      "title": "TypeScript-adversarial-corpus",
+      "status": "planned"
+    },
+    {
+      "id": "cf11",
+      "title": "TypeScript-authoring-entrance",
+      "status": "planned"
+    },
+    {
+      "id": "cf12",
+      "title": "TypeScript-runtime-isolation",
+      "status": "planned"
+    },
+    {
+      "id": "cf13",
+      "title": "Python-role-recognition",
+      "status": "planned"
+    },
+    {
+      "id": "cf14",
+      "title": "Python-legality-proof",
+      "status": "planned"
+    },
+    {
+      "id": "cf15",
+      "title": "Python-semantic-binding",
+      "status": "planned"
+    },
+    {
+      "id": "cf16",
+      "title": "Python-generation-frontend",
+      "status": "planned"
+    },
+    {
+      "id": "cf17",
+      "title": "Python-adversarial-corpus",
+      "status": "planned"
+    },
+    {
+      "id": "cf18",
+      "title": "Python-authoring-entrance",
+      "status": "planned"
+    },
+    {
+      "id": "cf19",
+      "title": "Cross-language-recipe-promotion",
+      "status": "planned"
+    },
+    {
+      "id": "cf20",
+      "title": "Code-operation-discovery",
+      "status": "planned"
+    },
+    {
+      "id": "cf21",
+      "title": "Generation-envelope-orchestration",
+      "status": "planned"
+    },
+    {
+      "id": "cf22",
+      "title": "Evidence-readiness-and-coverage",
+      "status": "planned"
+    },
+    {
+      "id": "cf23",
+      "title": "Runtime-and-bundle-pressure",
+      "status": "planned"
+    },
+    {
+      "id": "cf24",
+      "title": "Release-and-closeout",
+      "status": "planned"
+    }
+  ]
+}

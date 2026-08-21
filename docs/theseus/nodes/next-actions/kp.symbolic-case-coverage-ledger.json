@@ -5,6 +5,13 @@
   "status": "resolved",
   "domain": "kp",
   "summary": "The root-first case ledger and generated promotion gate are implemented and verified; future symbolic family selection can proceed from explicit case maturity.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-21-kp-symbolic-case-coverage-ledger.md",
+      "summary": "Implemented root-first symbolic case ledger, evidence gate, and coverage projection."
+    }
+  ],
   "verificationRecords": [
     {
       "command": "npm run test:animation-transformation-coverage",
