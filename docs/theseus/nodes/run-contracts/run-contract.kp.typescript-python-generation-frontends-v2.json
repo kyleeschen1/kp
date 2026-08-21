@@ -426,6 +426,34 @@
       "scope": "cf22",
       "checkedAt": "2026-08-21T22:10:04.481Z",
       "notes": "Evidence, readiness, generated coverage, and runtime-isolation additions preserve type and architecture boundaries."
+    },
+    {
+      "command": "npm run visual:typescript-refactor and npm run visual:python-refactor",
+      "status": "passed",
+      "scope": "cf23",
+      "checkedAt": "2026-08-21T22:15:07.820Z",
+      "notes": "Both Chromium checkpoints pass unchanged canonical assets across exact URLs, Review capture, direct seek and rewind, reduced motion, accessibility, deterministic checkpoints, and lifecycle ownership."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "cf23",
+      "checkedAt": "2026-08-21T22:15:09.229Z",
+      "notes": "Production internal-studio build passes: outer 3466/50000 gzip bytes, main host 199255/490000, measured Catalogue route 132852/190000, and place-value incremental 51102/75000; no forbidden outer files or compiler/process leakage."
+    },
+    {
+      "command": "npm run test:typescript-refactor and npm run test:python-refactor",
+      "status": "passed",
+      "scope": "cf23",
+      "checkedAt": "2026-08-21T22:15:10.318Z",
+      "notes": "The full scoped TypeScript suite and all 94 Python tests pass, including deterministic seek, rewind, reduced motion, source identity, native paint ownership, authoring, corpus, and runtime isolation."
+    },
+    {
+      "command": "npm run check:typescript-refactor-semantics and npm run check:python-refactor-semantics and npm run check:code-operation-discovery-catalog",
+      "status": "passed",
+      "scope": "cf23",
+      "checkedAt": "2026-08-21T22:15:11.517Z",
+      "notes": "Both generated semantic artifacts and the generated discovery catalogue are byte-current."
     }
   ],
   "allowedWork": [
@@ -586,7 +614,8 @@
     {
       "id": "cf23",
       "title": "Runtime-and-bundle-pressure",
-      "status": "planned"
+      "summary": "Release pressure passed for both unchanged canonical assets, generated semantics, browser lifecycles, runtime isolation, and bundle ceilings; added a stable symmetric Python release-suite command.",
+      "status": "complete"
     },
     {
       "id": "cf24",
