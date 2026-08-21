@@ -1,0 +1,77 @@
+{
+  "id": "kp.finite-binder-expansion",
+  "kind": "next-action",
+  "title": "Establish finite binder expansion",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Build and human-review one finite-sum expansion, then pressure only the approved binder seam with a finite product before narrow governed promotion.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-21-finite-binder-expansion-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-21-kp-post-root-capability-sequence.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-20-prudent-animation-family-breadth-cadence.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "kp.code-generation-frontends"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:finite-binder-expansion",
+    "npm run visual:finite-binder-sum",
+    "npm run visual:finite-binder-product",
+    "npm run test:animation-transformation-coverage",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run check:animation-library-bundle-boundary",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether finite sum expansion can make bound scope, ordered instantiation, and one-to-many lineage perceptually clear without false persistence.",
+    "Whether a finite product proves a narrow shared binder seam while keeping arithmetic and choreography operator-owned."
+  ],
+  "allowedWork": [
+    "Narrow the capability ledger to finite binder expansion and build one sum exemplar before checkpointed product pressure.",
+    "Add exact semantic, paint, authoring, discovery, readiness, and release evidence inside the approved proposal."
+  ],
+  "disallowedWork": [
+    "Do not implement infinite sums, calculus operators, sequences, generic binders, existing-asset changes, or unreviewed product presentation."
+  ],
+  "criteria": [
+    {
+      "id": "sum-semantic-correctness",
+      "weight": "high"
+    },
+    {
+      "id": "sum-visual-clarity",
+      "weight": "high"
+    },
+    {
+      "id": "deterministic-native-paint",
+      "weight": "high"
+    },
+    {
+      "id": "product-cross-caller-proof",
+      "weight": "high"
+    },
+    {
+      "id": "governed-authoring-evidence",
+      "weight": "medium"
+    },
+    {
+      "id": "browser-bundle-isolation",
+      "weight": "medium"
+    }
+  ]
+}

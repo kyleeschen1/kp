@@ -1,0 +1,187 @@
+{
+  "id": "run-contract.kp.finite-binder-expansion-v1",
+  "kind": "run-contract",
+  "title": "Finite binder expansion",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Approved 24-slice binder tranche with a mandatory human checkpoint after the reversible finite-sum exemplar.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/kp.finite-binder-expansion.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-21-finite-binder-expansion-long-loop-proposal.md",
+      "summary": "User-approved 24-slice plan, preservation boundary, visual checkpoint, promotion criteria, and exact stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-21-kp-post-root-capability-sequence.md",
+      "summary": "Accepted post-root capability order."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-20-prudent-animation-family-breadth-cadence.md",
+      "summary": "Canonical sum exemplar, product pressure, and binder sharing boundary."
+    }
+  ],
+  "verification": [
+    "npm run test:finite-binder-expansion",
+    "npm run visual:finite-binder-sum",
+    "npm run visual:finite-binder-product",
+    "npm run test:animation-transformation-coverage",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run check:animation-library-bundle-boundary",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Narrow the planned capability to finite binder expansion without claiming calculus coverage.",
+    "Add typed finite sum and product roles, range and scope legality, expansion lineage, diagnostics, case coverage, and corpora.",
+    "Build one reversible Native KaTeX finite-sum exemplar and stop for human visual review before product pressure.",
+    "After explicit visual approval, add one finite-product pressure caller and promote only caller-proven shared infrastructure.",
+    "Add governed discovery, authoring, readiness, exact browser evidence, and bundle evidence for the narrow family."
+  ],
+  "disallowedWork": [
+    "No infinite sums, sequences, recurrence evaluation, integrals, differentiation, Taylor series, arbitrary substitution, or arithmetic evaluation.",
+    "No universal binder AST, generic calculus family, inferred semantic truth, or generic visual fallback.",
+    "No changes to existing choreography, public lessons, reader layouts, graph families, code frontends, or live-model behavior.",
+    "No product presentation generalization before explicit approval of the finite-sum visual checkpoint."
+  ],
+  "goal": "Establish one human-approved finite-sum expansion, pressure its binder semantics with a finite product, and promote only proved scope, iteration, lineage, authoring, and evidence seams.",
+  "target": "kp.finite-binder-expansion",
+  "runMode": "run",
+  "maxSlices": 24,
+  "commitCadence": "One independently reversible commit per completed slice.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop on ambiguous scope truth, accidental capture, false identity persistence, or unsupported semantic inference.",
+    "Stop on duplicate paint, terminal snapping, a second clock, CSS-owned animation, or any required change to existing approved choreography.",
+    "Stop after bf16 for explicit human visual approval before bf17 through bf24.",
+    "Stop if narrow Direct readiness cannot be derived from exact evidence or if bundle, architecture, lifecycle, or accessibility gates fail."
+  ],
+  "slices": [
+    {
+      "id": "bf01",
+      "title": "Freeze binder baseline",
+      "status": "planned"
+    },
+    {
+      "id": "bf02",
+      "title": "Narrow capability ledger",
+      "status": "planned"
+    },
+    {
+      "id": "bf03",
+      "title": "Define binder vocabulary",
+      "status": "planned"
+    },
+    {
+      "id": "bf04",
+      "title": "Normalize bounded sum endpoints",
+      "status": "planned"
+    },
+    {
+      "id": "bf05",
+      "title": "Prove binder scope legality",
+      "status": "planned"
+    },
+    {
+      "id": "bf06",
+      "title": "Define finite range semantics",
+      "status": "planned"
+    },
+    {
+      "id": "bf07",
+      "title": "Define expansion lineage",
+      "status": "planned"
+    },
+    {
+      "id": "bf08",
+      "title": "Define binder causal recipe",
+      "status": "planned"
+    },
+    {
+      "id": "bf09",
+      "title": "Create binder case ledger",
+      "status": "planned"
+    },
+    {
+      "id": "bf10",
+      "title": "Build semantic corpus",
+      "status": "planned"
+    },
+    {
+      "id": "bf11",
+      "title": "Bind Native KaTeX roles",
+      "status": "planned"
+    },
+    {
+      "id": "bf12",
+      "title": "Establish endpoint paint ownership",
+      "status": "planned"
+    },
+    {
+      "id": "bf13",
+      "title": "Author sum presentation plan",
+      "status": "planned"
+    },
+    {
+      "id": "bf14",
+      "title": "Sample deterministic sum motion",
+      "status": "planned"
+    },
+    {
+      "id": "bf15",
+      "title": "Package sum asset",
+      "status": "planned"
+    },
+    {
+      "id": "bf16",
+      "title": "Human sum checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "bf17",
+      "title": "Resolve visual checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "bf18",
+      "title": "Build product pressure semantics",
+      "status": "planned"
+    },
+    {
+      "id": "bf19",
+      "title": "Implement product presentation",
+      "status": "planned"
+    },
+    {
+      "id": "bf20",
+      "title": "Pressure cross-caller laws",
+      "status": "planned"
+    },
+    {
+      "id": "bf21",
+      "title": "Promote finite binder recipe",
+      "status": "planned"
+    },
+    {
+      "id": "bf22",
+      "title": "Add governed binder authoring",
+      "status": "planned"
+    },
+    {
+      "id": "bf23",
+      "title": "Promote readiness and release evidence",
+      "status": "planned"
+    },
+    {
+      "id": "bf24",
+      "title": "Release and closeout",
+      "status": "planned"
+    }
+  ]
+}
