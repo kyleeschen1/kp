@@ -110,7 +110,8 @@
     {
       "id": "r11",
       "title": "even-root-exemplar-semantics",
-      "status": "planned"
+      "summary": "Compiled x squared equals nine through distinct source, branched radical, and evaluated branch states. A separate verified real-root evaluation owns arithmetic, plus and minus branch IDs persist, direct restoration returns immutable snapshots without replay, and false arithmetic or aliased branches fail closed.",
+      "status": "complete"
     },
     {
       "id": "r12",
