@@ -352,14 +352,14 @@ const equationCapabilityDrafts = Object.freeze([
     ]
   ),
   capability(
-    "capability.equation.binders-and-calculus-operators",
-    "Binders, large operators, and calculus operators",
-    "family.equation.binders-calculus.v1",
+    "capability.equation.finite-binder-expansion",
+    "Finite sum and product expansion",
+    "family.equation.finite-binder-expansion.v1",
     [
-      requirement("requirement.equation.binders-calculus.normalizer", "endpoint-normalizer", "normalizer.equation.binders-calculus.v1", "Bound variables, limits, bodies, differentials, and evaluation bounds retain semantic roles."),
-      requirement("requirement.equation.binders-calculus.operation", "semantic-operation", "operation.equation.binders-calculus.v1", "Typed operations own scope-preserving substitution and operator laws."),
-      requirement("requirement.equation.binders-calculus.recipe", "canonical-recipe", "recipe.equation.binders-calculus.v1", "Recipes preserve binding scope and prevent accidental variable capture."),
-      requirement("requirement.equation.binders-calculus.corpus", "generation-corpus", "corpus.equation.binders-calculus.v1", "Fixtures cover sums, products, limits, derivatives, integrals, and nested binders.")
+      requirement("requirement.equation.finite-binder-expansion.normalizer", "endpoint-normalizer", "normalizer.equation.finite-binder-expansion.v1", "A finite sum or product retains explicit operator, bound-variable, integer-limit, body-template, and instantiated-occurrence roles."),
+      requirement("requirement.equation.finite-binder-expansion.operation", "semantic-operation", "operation.equation.finite-binder-expand.v1", "A typed operation proves inclusive finite iteration, capture-free body instantiation, and ordered one-to-many lineage."),
+      requirement("requirement.equation.finite-binder-expansion.recipe", "canonical-recipe", "recipe.equation.finite-binder-expansion.v1", "A canonical recipe preserves binder scope and ordered instantiation while leaving sum and product presentation operator-owned."),
+      requirement("requirement.equation.finite-binder-expansion.corpus", "generation-corpus", "corpus.equation.finite-binder-expansion.v1", "Fixtures cover bounded sums and products, shifted integer bounds, compound bodies, shadowing, capture hazards, and unsupported symbolic or infinite ranges.")
     ]
   ),
   capability(

@@ -1,14 +1,14 @@
 export const finiteBinderExpansionPreflight = Object.freeze({
   schemaVersion: "kp.finite-binder-expansion-preflight.v1",
-  currentCapabilityId:
+  retiredBroadCapabilityId:
     "capability.equation.binders-and-calculus-operators",
-  plannedCapabilityId: "capability.equation.finite-binder-expansion",
-  currentStatus: "Missing",
-  currentRequirementIds: Object.freeze([
-    "requirement.equation.binders-calculus.normalizer",
-    "requirement.equation.binders-calculus.operation",
-    "requirement.equation.binders-calculus.recipe",
-    "requirement.equation.binders-calculus.corpus"
+  capabilityId: "capability.equation.finite-binder-expansion",
+  statusBeforeEvidence: "Missing",
+  requirementIds: Object.freeze([
+    "requirement.equation.finite-binder-expansion.normalizer",
+    "requirement.equation.finite-binder-expansion.operation",
+    "requirement.equation.finite-binder-expansion.recipe",
+    "requirement.equation.finite-binder-expansion.corpus"
   ]),
   canonicalSum: Object.freeze({
     sourceLatex: "\\sum_{i=1}^{3} a_i",

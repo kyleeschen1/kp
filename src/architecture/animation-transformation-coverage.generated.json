@@ -120,13 +120,14 @@
         "order": 4,
         "title": "Sequences and series",
         "capabilityIds": [
-          "capability.equation.sequence-series-transformations"
+          "capability.equation.sequence-series-transformations",
+          "capability.equation.finite-binder-expansion"
         ],
         "byStatus": {
           "Direct": 0,
           "Registered": 0,
           "Exemplar": 0,
-          "Missing": 1
+          "Missing": 2
         }
       },
       {
@@ -148,7 +149,6 @@
         "order": 6,
         "title": "Calculus operators",
         "capabilityIds": [
-          "capability.equation.binders-and-calculus-operators",
           "capability.equation.differentiation-transformations",
           "capability.equation.integration-transformations"
         ],
@@ -156,7 +156,7 @@
           "Direct": 0,
           "Registered": 0,
           "Exemplar": 0,
-          "Missing": 3
+          "Missing": 2
         }
       },
       {
@@ -2736,55 +2736,55 @@
       }
     },
     {
-      "capabilityId": "capability.equation.binders-and-calculus-operators",
+      "capabilityId": "capability.equation.finite-binder-expansion",
       "order": 28,
       "domain": "equation",
-      "title": "Binders, large operators, and calculus operators",
+      "title": "Finite sum and product expansion",
       "scope": {
         "kind": "transformation-family",
-        "authorityId": "family.equation.binders-calculus.v1"
+        "authorityId": "family.equation.finite-binder-expansion.v1"
       },
       "status": "Missing",
       "requirements": [
         {
-          "id": "requirement.equation.binders-calculus.normalizer",
+          "id": "requirement.equation.finite-binder-expansion.normalizer",
           "kind": "endpoint-normalizer",
-          "authorityId": "normalizer.equation.binders-calculus.v1",
-          "summary": "Bound variables, limits, bodies, differentials, and evaluation bounds retain semantic roles.",
+          "authorityId": "normalizer.equation.finite-binder-expansion.v1",
+          "summary": "A finite sum or product retains explicit operator, bound-variable, integer-limit, body-template, and instantiated-occurrence roles.",
           "status": "missing",
           "evidenceSourceIds": []
         },
         {
-          "id": "requirement.equation.binders-calculus.operation",
+          "id": "requirement.equation.finite-binder-expansion.operation",
           "kind": "semantic-operation",
-          "authorityId": "operation.equation.binders-calculus.v1",
-          "summary": "Typed operations own scope-preserving substitution and operator laws.",
+          "authorityId": "operation.equation.finite-binder-expand.v1",
+          "summary": "A typed operation proves inclusive finite iteration, capture-free body instantiation, and ordered one-to-many lineage.",
           "status": "missing",
           "evidenceSourceIds": []
         },
         {
-          "id": "requirement.equation.binders-calculus.recipe",
+          "id": "requirement.equation.finite-binder-expansion.recipe",
           "kind": "canonical-recipe",
-          "authorityId": "recipe.equation.binders-calculus.v1",
-          "summary": "Recipes preserve binding scope and prevent accidental variable capture.",
+          "authorityId": "recipe.equation.finite-binder-expansion.v1",
+          "summary": "A canonical recipe preserves binder scope and ordered instantiation while leaving sum and product presentation operator-owned.",
           "status": "missing",
           "evidenceSourceIds": []
         },
         {
-          "id": "requirement.equation.binders-calculus.corpus",
+          "id": "requirement.equation.finite-binder-expansion.corpus",
           "kind": "generation-corpus",
-          "authorityId": "corpus.equation.binders-calculus.v1",
-          "summary": "Fixtures cover sums, products, limits, derivatives, integrals, and nested binders.",
+          "authorityId": "corpus.equation.finite-binder-expansion.v1",
+          "summary": "Fixtures cover bounded sums and products, shifted integer bounds, compound bodies, shadowing, capture hazards, and unsupported symbolic or infinite ranges.",
           "status": "missing",
           "evidenceSourceIds": []
         }
       ],
       "gaps": [],
       "remainingRequirementIds": [
-        "requirement.equation.binders-calculus.normalizer",
-        "requirement.equation.binders-calculus.operation",
-        "requirement.equation.binders-calculus.recipe",
-        "requirement.equation.binders-calculus.corpus"
+        "requirement.equation.finite-binder-expansion.normalizer",
+        "requirement.equation.finite-binder-expansion.operation",
+        "requirement.equation.finite-binder-expansion.recipe",
+        "requirement.equation.finite-binder-expansion.corpus"
       ],
       "exemplarLinks": [],
       "evidenceTensions": [

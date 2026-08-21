@@ -72,7 +72,8 @@
     {
       "id": "bf02",
       "title": "Narrow capability ledger",
-      "status": "planned"
+      "summary": "Narrowed the missing capability and four authorities to finite binder expansion, moved it beside sequence work, regenerated Coverage, and proved no calculus maturity was implied.",
+      "status": "complete"
     },
     {
       "id": "bf03",

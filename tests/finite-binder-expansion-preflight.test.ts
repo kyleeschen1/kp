@@ -16,18 +16,22 @@ import { kpNativeKatexCompoundConformanceShapes } from
 import { finiteBinderExpansionPreflight } from
   "./fixtures/finite-binder-expansion-preflight.ts";
 
-test("preflight freezes the currently missing broad binder capability", () => {
+test("preflight narrows the missing umbrella to finite binder expansion", () => {
   const capability = generatedCoverage.entries.find(({ capabilityId }) =>
-    capabilityId === finiteBinderExpansionPreflight.currentCapabilityId
+    capabilityId === finiteBinderExpansionPreflight.capabilityId
   );
 
   assert.ok(capability);
-  assert.equal(capability.status, finiteBinderExpansionPreflight.currentStatus);
+  assert.equal(capability.status,
+    finiteBinderExpansionPreflight.statusBeforeEvidence);
   assert.deepEqual(
     capability.remainingRequirementIds,
-    finiteBinderExpansionPreflight.currentRequirementIds
+    finiteBinderExpansionPreflight.requirementIds
   );
   assert.deepEqual(capability.exemplarLinks, []);
+  assert.equal(generatedCoverage.entries.some(({ capabilityId }) =>
+    capabilityId === finiteBinderExpansionPreflight.retiredBroadCapabilityId
+  ), false);
 });
 
 test("preflight pins one sum exemplar and one product pressure caller", () => {

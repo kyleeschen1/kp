@@ -68,13 +68,13 @@ export const kpCalculusBcSymbolicMathematicsTaxonomy = defineTaxonomy({
       "capability.equation.piecewise-transformations"
     ]),
     group("sequences-series", 4, "Sequences and series", [
-      "capability.equation.sequence-series-transformations"
+      "capability.equation.sequence-series-transformations",
+      "capability.equation.finite-binder-expansion"
     ]),
     group("limits", 5, "Limits", [
       "capability.equation.limit-transformations"
     ]),
     group("calculus-operators", 6, "Calculus operators", [
-      "capability.equation.binders-and-calculus-operators",
       "capability.equation.differentiation-transformations",
       "capability.equation.integration-transformations"
     ]),

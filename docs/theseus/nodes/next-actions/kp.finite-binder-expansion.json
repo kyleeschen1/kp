@@ -72,11 +72,32 @@
       "scope": "bf01",
       "checkedAt": "2026-08-21T22:44:57.581Z",
       "notes": "Baseline bundle gate remains at 3466 outer, 199255 main host, 132852 Catalogue route, and 51102 place-value incremental gzip bytes."
+    },
+    {
+      "command": "npm run test:finite-binder-expansion",
+      "status": "passed",
+      "scope": "bf02",
+      "checkedAt": "2026-08-21T22:49:29.136Z",
+      "notes": "Seven tests prove the narrow capability authority, separation from calculus, exact missing requirements, and preserved preflight facts."
+    },
+    {
+      "command": "npm run test:animation-transformation-coverage",
+      "status": "passed",
+      "scope": "bf02",
+      "checkedAt": "2026-08-21T22:49:32.980Z",
+      "notes": "Generated Coverage and symbolic taxonomy remain exact after replacing the unimplemented umbrella row."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "bf02",
+      "checkedAt": "2026-08-21T22:49:36.248Z",
+      "notes": "All TypeScript, Svelte, and domain typechecks pass after capability narrowing."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "bf01 froze the honest Missing capability state, canonical sum/product endpoints, existing diagnostic paint evidence, absent animation assets, visual checkpoint order, and stable focused verification command."
+    "summary": "bf02 replaced the unimplemented binder-calculus umbrella with a finite sum/product expansion capability in Sequences and series; differentiation and integration remain separate planned families."
   },
   "expectedLearning": [
     "Whether finite sum expansion can make bound scope, ordered instantiation, and one-to-many lineage perceptually clear without false persistence.",
