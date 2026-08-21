@@ -17,6 +17,8 @@ export interface KpTypeScriptRefactorEntityContract {
   readonly revision: "before" | "after";
   readonly kind: "source-file" | "function" | "expression" | "call-site";
   readonly label: string;
+  readonly ownerEntityId?: string | undefined;
+  readonly declarationEntityId?: string | undefined;
 }
 
 export interface KpTypeScriptFreeShippingRefactorContractV1 {
@@ -105,16 +107,31 @@ export const kpTypeScriptFreeShippingRefactorContract = Object.freeze({
   entities: Object.freeze([
     entity("program.before", "before", "source-file", "duplicated program"),
     entity("function.shipping-cost.before", "before", "function", "shippingCost"),
-    entity("rule.shipping-cost.before", "before", "expression", "total >= 50"),
+    entity("rule.shipping-cost.before", "before", "expression", "total >= 50", {
+      ownerEntityId: "function.shipping-cost.before",
+      declarationEntityId: "function.shipping-cost.before"
+    }),
     entity("function.shipping-message.before", "before", "function", "shippingMessage"),
-    entity("rule.shipping-message.before", "before", "expression", "total >= 50"),
+    entity("rule.shipping-message.before", "before", "expression", "total >= 50", {
+      ownerEntityId: "function.shipping-message.before",
+      declarationEntityId: "function.shipping-message.before"
+    }),
     entity("program.after", "after", "source-file", "refactored program"),
     entity("function.qualifies.after", "after", "function", "qualifiesForFreeShipping"),
-    entity("rule.qualifies.after", "after", "expression", "total >= 50"),
+    entity("rule.qualifies.after", "after", "expression", "total >= 50", {
+      ownerEntityId: "function.qualifies.after",
+      declarationEntityId: "function.qualifies.after"
+    }),
     entity("function.shipping-cost.after", "after", "function", "shippingCost"),
-    entity("call.shipping-cost.after", "after", "call-site", "qualifiesForFreeShipping(total)"),
+    entity("call.shipping-cost.after", "after", "call-site", "qualifiesForFreeShipping(total)", {
+      ownerEntityId: "function.shipping-cost.after",
+      declarationEntityId: "function.qualifies.after"
+    }),
     entity("function.shipping-message.after", "after", "function", "shippingMessage"),
-    entity("call.shipping-message.after", "after", "call-site", "qualifiesForFreeShipping(total)")
+    entity("call.shipping-message.after", "after", "call-site", "qualifiesForFreeShipping(total)", {
+      ownerEntityId: "function.shipping-message.after",
+      declarationEntityId: "function.qualifies.after"
+    })
   ]),
   stages: Object.freeze([
     stage(
@@ -202,9 +219,13 @@ function entity(
   id: string,
   revision: KpTypeScriptRefactorEntityContract["revision"],
   kind: KpTypeScriptRefactorEntityContract["kind"],
-  label: string
+  label: string,
+  relations: Readonly<{
+    ownerEntityId?: string;
+    declarationEntityId?: string;
+  }> = {}
 ): KpTypeScriptRefactorEntityContract {
-  return Object.freeze({ id, revision, kind, label });
+  return Object.freeze({ id, revision, kind, label, ...relations });
 }
 
 function stage(

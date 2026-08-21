@@ -153,6 +153,20 @@
       "scope": "cf07",
       "checkedAt": "2026-08-21T20:54:59.540Z",
       "notes": "Build-time legality code is type-safe and preserves architecture boundaries."
+    },
+    {
+      "command": "npm run test:typescript-extract-helper-binding",
+      "status": "passed",
+      "scope": "cf08",
+      "checkedAt": "2026-08-21T20:58:15.063Z",
+      "notes": "Every authored TypeScript entity binds once, call owner and callee remain distinct, missing ownership repairs are typed, and no exemplar-name switch remains."
+    },
+    {
+      "command": "npm run check:typescript-refactor-semantics and tsc node project and semantic compiler regression",
+      "status": "passed",
+      "scope": "cf08",
+      "checkedAt": "2026-08-21T20:58:16.549Z",
+      "notes": "Explicit contract ownership leaves the generated semantic artifact byte-current and existing identity behavior unchanged."
     }
   ],
   "allowedWork": [
@@ -223,7 +237,8 @@
     {
       "id": "cf08",
       "title": "TypeScript-semantic-binding",
-      "status": "planned"
+      "summary": "Made TypeScript semantic ownership explicit and added a data-driven binder from legal recognized roles to every canonical semantic ID without changing generated output.",
+      "status": "complete"
     },
     {
       "id": "cf09",
