@@ -106,6 +106,34 @@
       "scope": "rv06 repository-wide baseline after recursive settlement",
       "checkedAt": "2026-08-21T16:43:10.470Z",
       "notes": "The focused repair introduced no reported TypeScript errors, but the repository-wide app project currently fails in pre-existing unstaged files: native-katex-scene-compositor typography-union narrowing and root-rewrite-native-endpoint stale settle-observer type import. These files were not changed in this repair."
+    },
+    {
+      "command": "npm run test:closed-root-evaluation",
+      "status": "passed",
+      "scope": "rv07 closed multi-glyph root evaluation pressure and approved neighboring callers",
+      "checkedAt": "2026-08-21T17:02:11.435Z",
+      "notes": "All 12 semantic authority, recursive endpoint, multi-glyph ink-knot, deterministic seek, exact settlement, incomplete-paint, approved even-root, and compound-carrier checks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "rv07 semantic renderer and equation compiler boundaries",
+      "checkedAt": "2026-08-21T17:02:12.896Z",
+      "notes": "Dependency direction, framework-neutral entrypoints, semantic animation, presentation, and equation compiler authority gates pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "rv07 repository-wide baseline",
+      "checkedAt": "2026-08-21T17:02:13.931Z",
+      "notes": "No rv07 file reports a TypeScript error. The app project remains blocked by the previously recorded native-katex-scene-compositor typography union errors and root-rewrite-native-endpoint stale observer type import."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "rv07 completed control state",
+      "checkedAt": "2026-08-21T17:02:47.918Z",
+      "notes": "Validated 1043 nodes and 24145 events after closing the closed-root pressure slice."
     }
   ],
   "allowedWork": [
@@ -169,7 +197,8 @@
     {
       "id": "rv07",
       "title": "closed-multiglyph-evaluation-pressure",
-      "status": "planned"
+      "summary": "Added a verified sqrt(144) to 12 pressure exemplar with strict arithmetic evidence, recursive Native KaTeX endpoints, and a shared closed-evaluation fusion projection extracted from the approved even-root ink-knot grammar. Four measured source ink owners contract to one target-derived knot, two result glyphs expand and settle at native endpoints, incomplete recursive paint fails closed, direct seek is deterministic, and approved even-root and compound-root callers remain green. Repository typecheck still reports only the separately recorded compositor union and stale observer-type baseline errors.",
+      "status": "complete"
     },
     {
       "id": "rv08",

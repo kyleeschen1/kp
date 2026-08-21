@@ -28,17 +28,8 @@ import type { KpNativeKatexRenderedSceneObservation } from
 import type { KpEvenRootNativeEndpointSet } from
   "./even-root-native-endpoints.ts";
 import {
-  compileKpNativeKatexInkKnotMetrics
-} from "./native-katex-ink-knot-geometry.ts";
-
-const kpEvenRootExtractionTreatment = Object.freeze({
-  bodyGatherWindow: Object.freeze({ start: 0.14, end: 0.5 }),
-  bodyCompressionWindow: Object.freeze({ start: 0.28, end: 0.5 }),
-  bodyHandoffWindow: Object.freeze({ start: 0.48, end: 0.54 }),
-  resultRevealWindow: Object.freeze({ start: 0.52, end: 0.6 }),
-  resultExpansionWindow: Object.freeze({ start: 0.52, end: 0.72 }),
-  contextSettlementWindow: Object.freeze({ start: 0.1, end: 0.72 })
-});
+  createKpNativeKatexClosedEvaluationFusion
+} from "./native-katex-closed-evaluation-fusion.ts";
 
 const kpEvenRootInversePowerTreatment = Object.freeze({
   roleTransferWindow: Object.freeze({ start: 0.08, end: 0.52 }),
@@ -298,121 +289,35 @@ function evaluationTrackProjection(
   endpoints: KpEvenRootNativeEndpointSet["evaluation"]
 ) {
   const [, radicalState, evaluatedState] = exemplar.states;
+  const sourceEntityIds = endpoints.source.nodes
+    .filter(({ role }) => role === "radical-operator" || role === "radicand")
+    .map(({ entityId }) => entityId);
+  if (sourceEntityIds.length < 2) {
+    throw new Error(
+      "Root extraction requires measured enclosure and radicand authority."
+    );
+  }
+  const fusion = createKpNativeKatexClosedEvaluationFusion({
+    id: `${exemplar.id}.root-evaluation`,
+    sourceEntityIds: sourceEntityIds as [string, ...string[]],
+    targetEntityId: evaluatedState.valueEntityId
+  });
   return createKpNativeKatexTrackProjection({
-    id: `track-projection.${exemplar.id}.root-evaluation`,
-    project({ tracks, source, target }) {
-      const sourceEntity = entityByAtom(source);
-      const targetEntity = entityByAtom(target);
-      const resultAtom = target.atoms.find((atom) =>
-        atom.semanticEntityId === evaluatedState.valueEntityId
-      );
-      if (resultAtom === undefined) {
-        throw new Error("Root evaluation requires measured result ink.");
-      }
-      const resultCenter = {
-        x: resultAtom.rect.left + resultAtom.rect.width / 2,
-        y: resultAtom.rect.top + resultAtom.rect.height / 2
-      };
-      const rootExpressionEntityIds = new Set(
-        endpoints.source.nodes
-          .filter(({ role }) =>
-            role === "radical-operator" || role === "radicand"
-          )
-          .map(({ entityId }) => entityId)
-      );
-      const rootExpressionTracks = tracks.filter((track) => {
-        const from = sourceEntity.get(track.sourceAtomId ?? "");
-        return from !== undefined && rootExpressionEntityIds.has(from);
-      });
-      if (rootExpressionTracks.length < 2) {
-        throw new Error(
-          "Root extraction requires measured enclosure and radicand ink."
-        );
-      }
-      const knot = compileRootBodyKnot({
-        tracks: rootExpressionTracks,
-        resultRect: resultAtom.rect,
-        resultCenter
-      });
-      const extractionContactGroupId =
-        `contact.${exemplar.id}.root-extraction-assembly`;
+    id: `track-projection.${exemplar.id}.root-evaluation-context`,
+    project(projectionInput) {
+      const tracks = fusion.projection.project(projectionInput);
+      const sourceEntity = entityByAtom(projectionInput.source);
+      const targetEntity = entityByAtom(projectionInput.target);
       return Object.freeze(tracks.map((track) => {
         const from = sourceEntity.get(track.sourceAtomId ?? "");
         const to = targetEntity.get(track.targetAtomId ?? "");
-        if (from !== undefined && rootExpressionEntityIds.has(from)) {
-          const bodyPose = knot.bodyPoseByTrackId.get(track.id);
-          if (bodyPose === undefined) {
-            throw new Error(`Root body track ${track.id} lacks a knot pose.`);
-          }
-          const { endRect, endPaintRect } = relocateSourcePaintToCenter(
-            track,
-            bodyPose.center
-          );
-          return invalidateKpNativeKatexMotionPath(Object.freeze({
-            ...track,
-            endRect,
-            endPaintRect,
-            timingGroupId: `timing.${exemplar.id}.root-body-knot`,
-            semanticMotionUnitId: `motion.${exemplar.id}.root-body`,
-            intentionalContactGroupId: extractionContactGroupId,
-            opacityScheduleAuthority: "semantic-choreography" as const,
-            sampleProgress: sampleWindow(
-              kpEvenRootExtractionTreatment.bodyGatherWindow.start,
-              kpEvenRootExtractionTreatment.bodyGatherWindow.end
-            ),
-            sampleOpacityProgress: sampleWindow(
-              kpEvenRootExtractionTreatment.bodyHandoffWindow.start,
-              kpEvenRootExtractionTreatment.bodyHandoffWindow.end
-            ),
-            sampleMaterialScale: (progress: number) =>
-              lerp(1, knot.bodyKernelScale, smoothstep(
-                kpEvenRootExtractionTreatment.bodyCompressionWindow.start,
-                kpEvenRootExtractionTreatment.bodyCompressionWindow.end,
-                progress
-              ))
-          }));
-        }
-        if (to === evaluatedState.valueEntityId) {
-          return invalidateKpNativeKatexMotionPath(Object.freeze({
-            ...track,
-            startRect: track.endRect,
-            timingGroupId: `timing.${exemplar.id}.root-body-knot`,
-            semanticMotionUnitId: `motion.${exemplar.id}.root-result`,
-            intentionalContactGroupId: extractionContactGroupId,
-            opacityScheduleAuthority: "semantic-choreography" as const,
-            sampleProgress: () => 1,
-            sampleOpacityProgress: sampleWindow(
-              kpEvenRootExtractionTreatment.resultRevealWindow.start,
-              kpEvenRootExtractionTreatment.resultRevealWindow.end
-            ),
-            sampleMaterialScale: (progress: number) =>
-              lerp(knot.resultKernelScale, 1, smoothstep(
-                kpEvenRootExtractionTreatment.resultExpansionWindow.start,
-                kpEvenRootExtractionTreatment.resultExpansionWindow.end,
-                progress
-              ))
-          }));
-        }
-        if (
-          from === radicalState.plusMinusEntityId &&
+        return from === radicalState.plusMinusEntityId &&
           to === evaluatedState.plusMinusEntityId
-        ) {
-          return Object.freeze({
-            ...track,
-            intentionalContactGroupId: extractionContactGroupId,
-            sampleProgress: sampleWindow(
-              kpEvenRootExtractionTreatment.contextSettlementWindow.start,
-              kpEvenRootExtractionTreatment.contextSettlementWindow.end
-            )
-          });
-        }
-        return Object.freeze({
-          ...track,
-          sampleProgress: sampleWindow(
-            kpEvenRootExtractionTreatment.contextSettlementWindow.start,
-            kpEvenRootExtractionTreatment.contextSettlementWindow.end
-          )
-        });
+          ? Object.freeze({
+              ...track,
+              intentionalContactGroupId: fusion.intentionalContactGroupId
+            })
+          : track;
       }));
     }
   });
@@ -441,48 +346,6 @@ function relocateSourcePaintToCenter(
       top: endPaintRect.top - paintOffsetY
     })
   });
-}
-
-function compileRootBodyKnot(input: {
-  readonly tracks: readonly KpNativeKatexPaintMeasuredSceneTrack[];
-  readonly resultRect: Readonly<{
-    left: number;
-    top: number;
-    width: number;
-    height: number;
-  }>;
-  readonly resultCenter: Readonly<{ x: number; y: number }>;
-}) {
-  const sourceRects = input.tracks.map(({ startRect }) => startRect);
-  const sourceArea = summedRectArea(sourceRects);
-  const targetArea = summedRectArea([input.resultRect]);
-  const knotMetrics = compileKpNativeKatexInkKnotMetrics({
-    sourceArea,
-    targetArea
-  });
-  const bodyPoseByTrackId = new Map(input.tracks.map((track) => {
-    // Root evaluation consumes the enclosure and contents as one expression,
-    // so their compressed paint shares one exact locus rather than retaining
-    // enough spacing to remain readable as separate miniature glyphs.
-    return [track.id, Object.freeze({
-      center: input.resultCenter
-    })] as const;
-  }));
-  return Object.freeze({
-    bodyPoseByTrackId,
-    bodyKernelScale: knotMetrics.sourceKernelScale,
-    resultKernelScale: knotMetrics.targetKernelScale
-  });
-}
-
-function summedRectArea(rects: readonly Readonly<{
-  width: number;
-  height: number;
-}>[]): number {
-  return Math.max(1, rects.reduce(
-    (area, rect) => area + Math.max(0, rect.width * rect.height),
-    0
-  ));
 }
 
 function rectCenter(rect: Readonly<{
