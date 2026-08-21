@@ -67,6 +67,14 @@ export const kpPythonCodeAuthoringDescriptor = deepFreeze({
     "unsafe binding or annotation changes",
     "variadic or keyword-call extraction",
     "malformed source"
+  ] as const,
+  positiveExamples: [
+    "Two Python functions repeat total >= 50; extract qualifies_for_free_shipping(total).",
+    "Two annotated functions repeat total >= 50 and active with exact indentation preserved."
+  ] as const,
+  counterexamples: [
+    "The two functions use total >= 50 and total > 50, so the predicates are not equivalent.",
+    "The helper changes total: int to total: str or callers pass the wrong binding."
   ] as const
 });
 

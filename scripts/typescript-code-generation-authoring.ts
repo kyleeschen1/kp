@@ -65,6 +65,14 @@ export const kpTypeScriptCodeAuthoringDescriptor = deepFreeze({
     "ambiguous helper ownership",
     "unsafe binding capture",
     "malformed or ill-typed source"
+  ] as const,
+  positiveExamples: [
+    "Two TypeScript functions repeat total >= 50; extract qualifiesForFreeShipping(total).",
+    "Two typed functions repeat total >= 50 && active; extract a two-parameter predicate."
+  ] as const,
+  counterexamples: [
+    "The two functions use total >= 50 and total > 50, so the predicates are not equivalent.",
+    "A replacement call passes other instead of the repeated predicate's total binding."
   ] as const
 });
 

@@ -356,6 +356,27 @@
       "scope": "cf19",
       "checkedAt": "2026-08-21T21:44:05.480Z",
       "notes": "The promoted recipe is framework-neutral, type-safe, and preserves all architecture boundaries."
+    },
+    {
+      "command": "npm run test:code-operation-discovery and npm run check:code-operation-discovery-catalog",
+      "status": "passed",
+      "scope": "cf20",
+      "checkedAt": "2026-08-21T21:51:13.467Z",
+      "notes": "Four discovery tests prove exact generated data, language-scoped aliases, bounded support, examples and counterexamples, query behavior, and absence of compiler or presentation authority; freshness passes."
+    },
+    {
+      "command": "npm run test:typescript-code-generation-authoring and npm run test:python-code-generation-authoring",
+      "status": "passed",
+      "scope": "cf20",
+      "checkedAt": "2026-08-21T21:51:14.859Z",
+      "notes": "Both language-owned authoring descriptors remain valid and now provide bounded positive examples and counterexamples."
+    },
+    {
+      "command": "npm run typecheck and npm run check:architecture",
+      "status": "passed",
+      "scope": "cf20",
+      "checkedAt": "2026-08-21T21:51:16.097Z",
+      "notes": "The generated catalogue and framework-neutral query API are type-safe and preserve dependency, runtime, and compiler-authority boundaries."
     }
   ],
   "allowedWork": [
@@ -498,7 +519,8 @@
     {
       "id": "cf20",
       "title": "Code-operation-discovery",
-      "status": "planned"
+      "summary": "Generated one human and LLM discovery catalogue with language-scoped aliases, examples, counterexamples, support limits, and proof obligations while excluding compiler and presentation authority.",
+      "status": "complete"
     },
     {
       "id": "cf21",
