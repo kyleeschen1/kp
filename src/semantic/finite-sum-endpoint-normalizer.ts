@@ -83,6 +83,9 @@ export function normalizeKpFiniteSumSourceEndpoint(
   }
   const lower = Number(lowerText);
   const upper = Number(upperText);
+  if (!Number.isSafeInteger(lower) || !Number.isSafeInteger(upper)) {
+    return unsupported(latex, "Finite sum bounds must be safe integers.");
+  }
   const namespace = `sum.${bodySymbol.toLowerCase()}_${binderSymbol.toLowerCase()}`;
   const binderId = createKpFiniteBinderSemanticId(
     `${namespace}.binder.${binderSymbol.toLowerCase()}`

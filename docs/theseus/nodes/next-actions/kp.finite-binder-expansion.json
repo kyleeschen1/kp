@@ -135,11 +135,25 @@
       "scope": "bf05 legality boundary",
       "checkedAt": "2026-08-21T23:03:08.754Z",
       "notes": "All TypeScript, Svelte, and domain type checks pass."
+    },
+    {
+      "command": "npm run test:finite-binder-expansion",
+      "status": "passed",
+      "scope": "bf06 finite range",
+      "checkedAt": "2026-08-21T23:06:30.077Z",
+      "notes": "29 focused tests pass over inclusive order, singleton and negative ranges, mismatched proof, descending gap, and allocation guard."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "bf06 range boundary",
+      "checkedAt": "2026-08-21T23:06:34.114Z",
+      "notes": "All TypeScript, Svelte, and domain type checks pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "bf05 proves every body reference resolves to the local declaration, records lexical shadowing, and derives capture avoidance from closed-integer substitution while retaining free body symbols."
+    "summary": "bf06 defines immutable closed ascending integer ranges, rejects descending/unsafe/oversized requests, and does not evaluate arithmetic identities."
   },
   "expectedLearning": [
     "Whether finite sum expansion can make bound scope, ordered instantiation, and one-to-many lineage perceptually clear without false persistence.",

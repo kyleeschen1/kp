@@ -96,7 +96,8 @@
     {
       "id": "bf06",
       "title": "Define finite range semantics",
-      "status": "planned"
+      "summary": "Defined deterministic inclusive finite-range semantics and allocation safeguards.",
+      "status": "complete"
     },
     {
       "id": "bf07",

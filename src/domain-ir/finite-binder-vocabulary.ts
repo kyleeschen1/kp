@@ -106,9 +106,9 @@ export function defineKpFiniteBinderSource(
   if (new Set(occurrences).size !== occurrences.length) {
     throw new Error("Finite-binder source occurrence ids must be unique.");
   }
-  if (!Number.isInteger(value.lowerBound.value) ||
-      !Number.isInteger(value.upperBound.value)) {
-    throw new Error("Finite-binder limits must be explicit integers.");
+  if (!Number.isSafeInteger(value.lowerBound.value) ||
+      !Number.isSafeInteger(value.upperBound.value)) {
+    throw new Error("Finite-binder limits must be explicit safe integers.");
   }
   if (value.binder.symbol.trim().length === 0) {
     throw new Error("Finite-binder declaration requires a symbol.");

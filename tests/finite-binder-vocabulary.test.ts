@@ -114,7 +114,7 @@ test("source validation refuses symbolic limits and binder-free bodies", () => {
   assert.throws(() => defineKpFiniteBinderSource({
     ...valid,
     upperBound: { ...valid.upperBound, value: 2.5 }
-  }), /explicit integers/u);
+  }), /explicit safe integers/u);
   assert.throws(() => defineKpFiniteBinderSource({
     ...valid,
     body: { ...valid.body, references: [] }
