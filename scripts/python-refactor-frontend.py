@@ -209,11 +209,17 @@ def syntax_facts(
         }
     if isinstance(node, (ast.Compare, ast.BoolOp)):
         referenced_names: list[str] = []
-        for child in ast.walk(node):
+        names = sorted(
+            (
+                child
+                for child in ast.walk(node)
+                if isinstance(child, ast.Name) and isinstance(child.ctx, ast.Load)
+            ),
+            key=lambda child: (child.lineno, child.col_offset),
+        )
+        for child in names:
             if (
-                isinstance(child, ast.Name)
-                and isinstance(child.ctx, ast.Load)
-                and child.id not in referenced_names
+                child.id not in referenced_names
             ):
                 referenced_names.append(child.id)
         return {"referencedNames": referenced_names}

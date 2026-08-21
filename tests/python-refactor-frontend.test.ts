@@ -85,6 +85,17 @@ test("Python frontend uses JavaScript-compatible UTF-16 offsets", () => {
   assert.equal(string.start.column, 12);
 });
 
+test("Python expression facts preserve lexical binding order", () => {
+  const result = compileKpPythonFrontend({
+    path: "bindings.py",
+    revisionId: "bindings.v1",
+    sourceText: "def check(total: int, active: bool):\n    return total >= 50 and active"
+  });
+  const expression = result.syntax.find(({ kindName }) => kindName === "BoolOp");
+
+  assert.deepEqual(expression?.facts?.referencedNames, ["total", "active"]);
+});
+
 test("Python frontend rejects malformed source with bounded diagnostics", () => {
   const result = compileKpPythonFrontend({
     path: "broken.py",

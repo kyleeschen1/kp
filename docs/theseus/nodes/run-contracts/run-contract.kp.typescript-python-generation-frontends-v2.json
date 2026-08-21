@@ -307,6 +307,20 @@
       "scope": "cf16",
       "checkedAt": "2026-08-21T21:34:03.549Z",
       "notes": "The adapter is type-safe and preserves dependency, framework-neutral, semantic, and compiler-authority boundaries."
+    },
+    {
+      "command": "npm run test:python-code-generation-corpus",
+      "status": "passed",
+      "scope": "cf17",
+      "checkedAt": "2026-08-21T21:37:39.756Z",
+      "notes": "Ten assertions cover all eight approved Python categories, deterministic results, exact repairs, and indentation preservation."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/python-refactor-frontend.test.ts and npm run check:python-refactor-semantics",
+      "status": "passed",
+      "scope": "cf17",
+      "checkedAt": "2026-08-21T21:37:41.124Z",
+      "notes": "Six frontend tests prove lexical binding order and source preservation; canonical generated semantics remain fresh."
     }
   ],
   "allowedWork": [
@@ -431,7 +445,8 @@
     {
       "id": "cf17",
       "title": "Python-adversarial-corpus",
-      "status": "planned"
+      "summary": "Added the eight-category Python adversarial corpus and corrected AST binding facts to lexical source order, preserving exact indentation and deterministic typed outcomes.",
+      "status": "complete"
     },
     {
       "id": "cf18",
