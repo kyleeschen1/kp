@@ -18,6 +18,8 @@ import {
 } from "../authoring/equation-series-both-sides-authoring.ts";
 import { evaluateKpLogarithmBaseAuthoringEvidence } from
   "../authoring/logarithm-base-authoring-evidence.ts";
+import { kpExponentialHomomorphismAuthoringCorpus } from
+  "../authoring/exponential-homomorphism-authoring-corpus.ts";
 import {
   KP_BOTH_SIDES_CAUSAL_RECIPE_AUTHORITY
 } from "../animation/both-sides-causal-recipe.ts";
@@ -252,8 +254,8 @@ readonly KpAnimationCapabilityDirectIntentEvidence[] {
         authoringAuthorityId: vocabulary.authoringAuthorityId,
         planKind: result.plan.kind,
         resolvedAuthorityIds: authorityIdsForPlan(result.plan),
-        generationCorpusAuthorityIds: Object.freeze(
-          kpEquationGenerationPressureFixtures
+        generationCorpusAuthorityIds: Object.freeze([
+          ...kpEquationGenerationPressureFixtures
             .filter(({ request }) =>
               request.animationId === vocabulary.animationId &&
               request.operation.operationId === vocabulary.operationId)
@@ -262,8 +264,14 @@ readonly KpAnimationCapabilityDirectIntentEvidence[] {
               ...kpEquationGenerationPressureCorpora
                 .filter(({ fixtureIds }) => fixtureIds.includes(id))
                 .map(({ id: corpusId }) => corpusId)
-            ])
-        ),
+            ]),
+          ...kpExponentialHomomorphismAuthoringCorpus.cases
+            .filter((fixture) =>
+              fixture.expectedStatus === "accepted" &&
+              fixture.request.animationId === vocabulary.animationId &&
+              fixture.request.operation.operationId === vocabulary.operationId)
+            .map(() => kpExponentialHomomorphismAuthoringCorpus.id)
+        ]),
         sourcePath: "src/authoring/compile-equation-intent.ts" as const
       });
     }
@@ -343,6 +351,15 @@ function authorityIdsForPlan(
         plan.inverseOperationId
       ]);
     case "homomorphic-crossover-semantic-motion-plan":
+      return Object.freeze([
+        plan.operationId,
+        plan.extensionPackId,
+        plan.operationKind,
+        plan.recipeId,
+        plan.semanticAuthorityId,
+        plan.callerRegistrationId
+      ]);
+    case "exponential-homomorphism-correspondence-plan":
       return Object.freeze([
         plan.operationId,
         plan.extensionPackId,

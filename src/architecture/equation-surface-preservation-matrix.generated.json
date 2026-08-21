@@ -4,6 +4,139 @@
   "entries": [
     {
       "schemaVersion": "kp.equation-surface-preservation-row.v2",
+      "animationId": "animation.algebra.exponential-homomorphism.difference-to-quotient",
+      "familyId": "exponent-radical",
+      "pathClass": "generic-semantic-equation",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transformation.exponential.difference-to-quotient.ab",
+          "transformationType": "operation.equation.exponential-difference-to-quotient.v1",
+          "transformationFingerprint": "fnv1a32-fd0b5d0e",
+          "source": [
+            {
+              "objectId": "state.exponential.difference-to-quotient.source",
+              "objectType": "equation",
+              "title": "Power with a subtractive exponent",
+              "semanticFingerprint": "fnv1a32-295714c0"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "state.exponential.difference-to-quotient.target",
+              "objectType": "equation",
+              "title": "Quotient of powers",
+              "semanticFingerprint": "fnv1a32-4819b3ab"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.algebra.exponential-homomorphism.difference-to-quotient",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.exponential-homomorphism.canonical-native-katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-c6fae055",
+          "objectIds": [
+            "state.exponential.difference-to-quotient.source",
+            "state.exponential.difference-to-quotient.target"
+          ],
+          "transformationIds": [
+            "transformation.exponential.difference-to-quotient.ab"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-42a4a67c",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "exponential-homomorphism",
+          "adapterId": "editor-animation-surface.exponential-homomorphism.canonical-native-katex",
+          "sourcePath": "src/editor/exponential-homomorphism-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.generic-semantic-token"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.algebra.exponential-homomorphism.difference-to-quotient.forward.0",
+              "activeTransformationIds": [
+                "transformation.exponential.difference-to-quotient.ab"
+              ],
+              "activeSemanticObjectIds": [
+                "state.exponential.difference-to-quotient.source",
+                "state.exponential.difference-to-quotient.target"
+              ],
+              "envelopeFingerprint": "fnv1a32-4a1962b2"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.algebra.exponential-homomorphism.difference-to-quotient.forward.0",
+              "activeTransformationIds": [
+                "transformation.exponential.difference-to-quotient.ab"
+              ],
+              "activeSemanticObjectIds": [
+                "state.exponential.difference-to-quotient.source",
+                "state.exponential.difference-to-quotient.target"
+              ],
+              "envelopeFingerprint": "fnv1a32-b5efa6e6"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.algebra.exponential-homomorphism.difference-to-quotient.forward.0",
+              "activeTransformationIds": [
+                "transformation.exponential.difference-to-quotient.ab"
+              ],
+              "activeSemanticObjectIds": [
+                "state.exponential.difference-to-quotient.source",
+                "state.exponential.difference-to-quotient.target"
+              ],
+              "envelopeFingerprint": "fnv1a32-c2cb0b01"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.algebra.exponential-homomorphism.sum-to-product",
       "familyId": "exponent-radical",
       "pathClass": "exponential-homomorphism-specialized",
@@ -5874,11 +6007,12 @@
     {
       "familyId": "exponent-radical",
       "animationIds": [
+        "animation.algebra.exponential-homomorphism.difference-to-quotient",
         "animation.algebra.exponential-homomorphism.sum-to-product",
         "animation.generated.exponent.square-as-product",
         "animation.generated.radical.square-root-as-power"
       ],
-      "representativeAnimationId": "animation.algebra.exponential-homomorphism.sum-to-product",
+      "representativeAnimationId": "animation.algebra.exponential-homomorphism.difference-to-quotient",
       "semanticVerificationCommand": "npm run test:semantic-animation-convergence",
       "visualVerificationCommand": "npm run visual:equation-surface-preservation",
       "uniformBrowserVerificationCommand": "npm run test:browser:equation-surface-preservation",

@@ -70,16 +70,31 @@ test("one compositor plan stages persistent carrier fission", () => {
       topology: "carrier-fission-with-connector-release",
       path: "measured-topology-direct",
       anchorOrdinal: 0,
-      anchorSettlement: { start: 0.16, end: 0.22 },
-      outwardTransit: { start: 0.16, end: 0.3 },
-      connectorContraction: { start: 0.16, end: 0.24 },
-      connectorRelease: { start: 0.16, end: 0.3 },
-      carrierFission: { start: 0.16, end: 0.3 },
-      carrierFollowerReveal: { start: 0.16, end: 0.22 },
-      verticalQuotient: {
-        sourceConnectorContraction: { start: 0.08, end: 0.14 },
-        sourceConnectorRelease: { start: 0.1, end: 0.16 },
-        targetConnectorEntry: { start: 0.3, end: 0.36 }
+      topologyPolicies: {
+        "lateral-product": {
+          topology: "lateral-product",
+          causalOrder: "connector-retires-with-branch-transit",
+          motionAxisConstraint: "horizontal",
+          anchorSettlement: { start: 0.16, end: 0.22 },
+          outwardTransit: { start: 0.16, end: 0.3 },
+          carrierFission: { start: 0.16, end: 0.3 },
+          carrierFollowerReveal: { start: 0.16, end: 0.22 },
+          sourceConnectorContraction: { start: 0.16, end: 0.24 },
+          sourceConnectorRelease: { start: 0.16, end: 0.3 },
+          targetConnectorEntry: "native-juxtaposition"
+        },
+        "vertical-quotient": {
+          topology: "vertical-quotient",
+          causalOrder: "source-clear-then-transit-then-target-entry",
+          motionAxisConstraint: "measured-direct",
+          anchorSettlement: { start: 0.16, end: 0.22 },
+          outwardTransit: { start: 0.16, end: 0.3 },
+          carrierFission: { start: 0.16, end: 0.3 },
+          carrierFollowerReveal: { start: 0.16, end: 0.22 },
+          sourceConnectorContraction: { start: 0.08, end: 0.14 },
+          sourceConnectorRelease: { start: 0.1, end: 0.16 },
+          targetConnectorEntry: { start: 0.3, end: 0.36 }
+        }
       }
     }
   );

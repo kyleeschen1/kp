@@ -52,6 +52,7 @@ export const kpCalculusBcSymbolicMathematicsTaxonomy = defineTaxonomy({
       "capability.equation.fraction-arithmetic",
       "capability.equation.fraction-factor-cancellation",
       "capability.equation.nested-fraction-normalization",
+      "capability.equation.exponential-homomorphism",
       "capability.equation.power-and-exponent-transformations",
       "capability.equation.radical-inversion",
       "capability.equation.substitution-collection-factoring",

@@ -6,6 +6,10 @@ import { kpHomomorphicCrossoverCallerDeclarations } from
   "../animation/homomorphic-crossover-caller-declarations.ts";
 import { createKpHomomorphicCrossoverAuthoringOperations } from
   "./homomorphic-crossover-authoring.ts";
+import { kpExponentialHomomorphismCallerDeclarations } from
+  "../animation/exponential-homomorphism-caller-declarations.ts";
+import { createKpExponentialHomomorphismAuthoringOperations } from
+  "./exponential-homomorphism-authoring.ts";
 import {
   kpWaveAEquationOperationPlanDeclarations,
   kpWaveBEquationStructuralDeclarations,
@@ -217,7 +221,8 @@ KpEquationLlmAuthoringCatalogue {
   const surfaces = createSurfaceDefinitions();
   const operations = Object.freeze([
     ...operationCatalogue.operations,
-    ...createKpHomomorphicCrossoverAuthoringOperations()
+    ...createKpHomomorphicCrossoverAuthoringOperations(),
+    ...createKpExponentialHomomorphismAuthoringOperations()
   ]);
   assertUniqueIds(operations.map(({ operationId }) => operationId), "operation");
   return Object.freeze({
@@ -424,13 +429,16 @@ function createSurfaceDefinitions(): readonly KpEquationLlmSurfaceDefinition[] {
         exampleSourcePaths: [entry.authoritySourcePath]
       });
     })
-  ].map(promoteRegisteredHomomorphicCaller));
+  ].map(promoteRegisteredCrossoverCaller));
 }
 
-function promoteRegisteredHomomorphicCaller(
+function promoteRegisteredCrossoverCaller(
   candidate: KpEquationLlmSurfaceDefinition
 ): KpEquationLlmSurfaceDefinition {
-  const declaration = kpHomomorphicCrossoverCallerDeclarations.find(
+  const declaration = [
+    ...kpHomomorphicCrossoverCallerDeclarations,
+    ...kpExponentialHomomorphismCallerDeclarations
+  ].find(
     ({ callerId }) => callerId === candidate.animationId
   );
   if (declaration === undefined) return candidate;

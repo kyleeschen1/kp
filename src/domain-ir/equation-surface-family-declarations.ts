@@ -387,6 +387,15 @@ readonly KpWaveBEquationStructuralDeclaration[] = Object.freeze([
     ]
   }),
   structural({
+    animationId:
+      "animation.algebra.exponential-homomorphism.difference-to-quotient",
+    recipeIds: ["recipe.equation.exponential-homomorphism.v1"],
+    recipeOwnerPaths: [
+      "src/animation/equation-extension-packs/exponential-homomorphism.ts",
+      "src/rendering/exponential-homomorphism-transit-session.ts"
+    ]
+  }),
+  structural({
     animationId: "animation.algebra.log-exponent.solve-two-power-x",
     recipeIds: ["recipe.equation.log-exponent.v1"],
     recipeOwnerPaths: ["src/editor/log-exponent-surface-adapter.ts"]

@@ -30,6 +30,11 @@ import {
   resolveKpHomomorphicApplicationHandoff,
   type KpHomomorphicTargetTopology
 } from "../animation/homomorphic-application-handoff-taxonomy.ts";
+import {
+  kpExponentialHomomorphismTopologyPhasePolicies,
+  requireKpExponentialHomomorphismTopologyPhasePolicy,
+  type KpExponentialHomomorphismTopologyPhasePolicy
+} from "./exponential-homomorphism-topology-phase-policy.ts";
 
 export interface KpExponentialHomomorphismTransitProfile {
   readonly id: "timing.exponential-homomorphism.crossover.v1";
@@ -42,17 +47,10 @@ export interface KpExponentialHomomorphismTransitProfile {
     topology: "carrier-fission-with-connector-release";
     path: "measured-topology-direct";
     anchorOrdinal: 0;
-    anchorSettlement: Readonly<{ start: number; end: number }>;
-    outwardTransit: Readonly<{ start: number; end: number }>;
-    connectorContraction: Readonly<{ start: number; end: number }>;
-    connectorRelease: Readonly<{ start: number; end: number }>;
-    carrierFission: Readonly<{ start: number; end: number }>;
-    carrierFollowerReveal: Readonly<{ start: number; end: number }>;
-    verticalQuotient: Readonly<{
-      sourceConnectorContraction: Readonly<{ start: number; end: number }>;
-      sourceConnectorRelease: Readonly<{ start: number; end: number }>;
-      targetConnectorEntry: Readonly<{ start: number; end: number }>;
-    }>;
+    topologyPolicies: Readonly<Record<
+      KpHomomorphicTargetTopology,
+      KpExponentialHomomorphismTopologyPhasePolicy
+    >>;
   }>;
   readonly connectorPointScale: number;
   readonly terminalSettlementFraction: number;
@@ -69,19 +67,7 @@ export const kpExponentialHomomorphismTransitProfile = Object.freeze({
     topology: "carrier-fission-with-connector-release" as const,
     path: "measured-topology-direct" as const,
     anchorOrdinal: 0 as const,
-    anchorSettlement: Object.freeze({ start: 0.16, end: 0.22 }),
-    outwardTransit: Object.freeze({ start: 0.16, end: 0.3 }),
-    connectorContraction: Object.freeze({ start: 0.16, end: 0.24 }),
-    connectorRelease: Object.freeze({ start: 0.16, end: 0.3 }),
-    carrierFission: Object.freeze({ start: 0.16, end: 0.3 }),
-    carrierFollowerReveal: Object.freeze({ start: 0.16, end: 0.22 }),
-    verticalQuotient: Object.freeze({
-      sourceConnectorContraction: Object.freeze({ start: 0.08, end: 0.14 }),
-      sourceConnectorRelease: Object.freeze({ start: 0.1, end: 0.16 }),
-      // A vertical separator is structural paint, not the source connector's
-      // visual continuant. It enters only after moving branches clear its band.
-      targetConnectorEntry: Object.freeze({ start: 0.3, end: 0.36 })
-    })
+    topologyPolicies: kpExponentialHomomorphismTopologyPhasePolicies
   }),
   connectorPointScale: 0.1,
   terminalSettlementFraction: 0.04
@@ -244,6 +230,8 @@ function createKpExponentialHomomorphismTrackProjection(
   authority: KpExponentialHomomorphismCorrespondenceAuthority,
   targetTopology: KpHomomorphicTargetTopology
 ) {
+  const topologyPolicy =
+    requireKpExponentialHomomorphismTopologyPhasePolicy(targetTopology);
   const sourcePayloadIds = ids(authority, "source", "exponent-payload");
   const targetPayloadIds = ids(authority, "target", "exponent-payload");
   const sourceBaseIds = ids(authority, "source", "base");
@@ -305,16 +293,14 @@ function createKpExponentialHomomorphismTrackProjection(
           targetPayloadIds.has(targetEntityId)
         ) {
           const transitWindow = targetEntityId === anchorPayloadTargetId
-            ? kpExponentialHomomorphismTransitProfile.homomorphicResolution
-              .anchorSettlement
-            : kpExponentialHomomorphismTransitProfile.homomorphicResolution
-              .outwardTransit;
+            ? topologyPolicy.anchorSettlement
+            : topologyPolicy.outwardTransit;
           return Object.freeze({
             ...track,
             timingGroupId: homomorphicResolutionTimingGroupId,
             semanticMotionUnitId: homomorphicResolutionMotionUnitId,
-            ...(targetTopology === "lateral-product"
-              ? { motionAxisConstraint: "horizontal" as const }
+            ...(topologyPolicy.motionAxisConstraint === "horizontal"
+              ? { motionAxisConstraint: topologyPolicy.motionAxisConstraint }
               : {}),
             // Same-plane continuants take the shortest direct path. The first
             // operand settles quickly so a few pixels never become a slow crawl.
@@ -335,20 +321,17 @@ function createKpExponentialHomomorphismTrackProjection(
             semanticMotionUnitId: homomorphicResolutionMotionUnitId,
             routingCohortId: `route.${authority.id}.base-fission`,
             routingMemberId: targetEntityId,
-            ...(targetTopology === "lateral-product"
-              ? { motionAxisConstraint: "horizontal" as const }
+            ...(topologyPolicy.motionAxisConstraint === "horizontal"
+              ? { motionAxisConstraint: topologyPolicy.motionAxisConstraint }
               : {}),
             sampleProgress: sampleWindow(
-              kpExponentialHomomorphismTransitProfile.homomorphicResolution
-                .carrierFission
+              topologyPolicy.carrierFission
             ),
             samplePaintPresence:
               targetEntityId === persistentCarrierTargetId
                 ? samplePersistentCarrierPresence
                 : sampleWindow(
-                    kpExponentialHomomorphismTransitProfile
-                      .homomorphicResolution
-                      .carrierFollowerReveal
+                    topologyPolicy.carrierFollowerReveal
                   ),
             opacityScheduleAuthority: "semantic-choreography" as const,
             motionMetrics: true as const
@@ -361,18 +344,8 @@ function createKpExponentialHomomorphismTrackProjection(
         ) {
           return stationaryCompressedRelease(
             track,
-            targetTopology === "vertical-quotient"
-              ? kpExponentialHomomorphismTransitProfile
-                .homomorphicResolution.verticalQuotient
-                .sourceConnectorContraction
-              : kpExponentialHomomorphismTransitProfile
-                .homomorphicResolution.connectorContraction,
-            targetTopology === "vertical-quotient"
-              ? kpExponentialHomomorphismTransitProfile
-                .homomorphicResolution.verticalQuotient
-                .sourceConnectorRelease
-              : kpExponentialHomomorphismTransitProfile
-                .homomorphicResolution.connectorRelease,
+            topologyPolicy.sourceConnectorContraction,
+            topologyPolicy.sourceConnectorRelease,
             homomorphicResolutionTimingGroupId,
             homomorphicResolutionMotionUnitId
           );
@@ -382,9 +355,13 @@ function createKpExponentialHomomorphismTrackProjection(
           targetEntityId !== undefined &&
           targetConnectorIds.has(targetEntityId)
         ) {
+          if (topologyPolicy.targetConnectorEntry === "native-juxtaposition") {
+            throw new Error(
+              "Lateral-product topology cannot introduce painted target connectors."
+            );
+          }
           const reveal = sampleWindow(
-            kpExponentialHomomorphismTransitProfile.homomorphicResolution
-              .verticalQuotient.targetConnectorEntry
+            topologyPolicy.targetConnectorEntry
           );
           return Object.freeze({
             ...track,

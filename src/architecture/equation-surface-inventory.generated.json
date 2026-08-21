@@ -17,13 +17,53 @@
       "animation.algebra.log-product.product-to-sum",
       "animation.algebra.log-product.three-factors-to-sum",
       "animation.algebra.exponential-homomorphism.sum-to-product",
+      "animation.algebra.exponential-homomorphism.difference-to-quotient",
       "animation.operation-evaluation.two-times-one-carrier",
       "animation.operation-evaluation.two-times-three"
     ],
-    "currentCount": 37,
+    "currentCount": 38,
     "reconciled": true
   },
   "entries": [
+    {
+      "schemaVersion": "kp.equation-surface-inventory-entry.v1",
+      "animationId": "animation.algebra.exponential-homomorphism.difference-to-quotient",
+      "title": "Turn an exponential difference into a quotient",
+      "semanticOwner": {
+        "kind": "catalog-animation-asset",
+        "assetId": "animation.algebra.exponential-homomorphism.difference-to-quotient",
+        "primaryDescriptorId": "editor-animation.animation.algebra.exponential-homomorphism.difference-to-quotient",
+        "sourcePath": "src/animation/catalog.ts"
+      },
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "catalogueSurface": {
+        "kind": "equation",
+        "slotKind": "equation",
+        "selectedCapabilityId": "exponential-homomorphism",
+        "rendererAdapterId": "editor-animation-surface.exponential-homomorphism.canonical-native-katex",
+        "rendererSourcePath": "src/editor/exponential-homomorphism-surface-adapter.ts"
+      },
+      "clockAuthority": {
+        "ownerId": "editor-animation-player",
+        "sourcePath": "src/editor/animation-player-controller.ts",
+        "durationMs": 4800,
+        "beatCount": 96
+      },
+      "lazyCapability": {
+        "packId": "exponential-homomorphism",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/exponential-homomorphism.ts"
+      },
+      "currentPresentationAuthority": {
+        "canonicalFormat": "legacy",
+        "representationId": "editor-animation.animation.algebra.exponential-homomorphism.difference-to-quotient",
+        "representationKind": "editor",
+        "href": "/?animation=editor-animation.animation.algebra.exponential-homomorphism.difference-to-quotient&view=editor",
+        "sourcePath": "src/editor/animation-library-display-catalog-builder.ts"
+      }
+    },
     {
       "schemaVersion": "kp.equation-surface-inventory-entry.v1",
       "animationId": "animation.algebra.exponential-homomorphism.sum-to-product",

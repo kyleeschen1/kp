@@ -510,6 +510,43 @@
   "rows": [
     {
       "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.algebra.exponential-homomorphism.difference-to-quotient",
+      "pathClass": "generic-semantic-equation",
+      "transformationTypes": [
+        "operation.equation.exponential-difference-to-quotient.v1"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 1,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.generic-semantic-transition"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.generic-transition"
+      ],
+      "localTimingNodeIds": [
+        "timing.generic-phase-easing"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.generic-dom-measurement"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.generic-whole-equation"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.generic-semantic-token"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
       "animationId": "animation.algebra.exponential-homomorphism.sum-to-product",
       "pathClass": "exponential-homomorphism-specialized",
       "transformationTypes": [

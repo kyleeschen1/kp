@@ -48,6 +48,16 @@ import { kpHomomorphicCrossoverEquationExtensionPackId } from
   "../animation/equation-extension-packs/homomorphic-crossover.ts";
 import { kpHomomorphicCrossoverAuthoringAuthorityId } from
   "./homomorphic-crossover-authoring.ts";
+import { kpExponentialHomomorphismCallerDeclarations } from
+  "../animation/exponential-homomorphism-caller-declarations.ts";
+import {
+  createKpExponentialHomomorphismRoleBindings,
+  kpExponentialHomomorphismAuthoringAuthorityId
+} from "./exponential-homomorphism-authoring.ts";
+import type { KpExponentialHomomorphismCorrespondenceAuthority } from
+  "../semantic/exponential-homomorphism-correspondence.ts";
+import type { KpHomomorphicTargetTopology } from
+  "../animation/homomorphic-application-handoff-taxonomy.ts";
 
 export type KpEquationIntentRepairCode =
   | "equation-intent.surface.unsupported"
@@ -108,6 +118,18 @@ export type KpCompiledEquationIntentPlan =
         | "law.logarithm.quotient";
       callerRegistrationId: string;
       plan: KpCompiledSemanticMotionChoreography;
+    }>
+  | Readonly<{
+      kind: "exponential-homomorphism-correspondence-plan";
+      animationId: string;
+      operationId: string;
+      extensionPackId: "equation-pack.exponential-homomorphism.v1";
+      operationKind: string;
+      recipeId: "recipe.equation.exponential-homomorphism.v1";
+      semanticAuthorityId: string;
+      callerRegistrationId: string;
+      targetTopology: KpHomomorphicTargetTopology;
+      plan: KpExponentialHomomorphismCorrespondenceAuthority;
     }>;
 
 export type KpCompileEquationIntentResult =
@@ -152,7 +174,8 @@ const surfaceHandlers = Object.freeze([
     describe: describeDistribution,
     compile: compileDistribution
   }),
-  ...createHomomorphicSurfaceHandlers()
+  ...createHomomorphicSurfaceHandlers(),
+  ...createExponentialHomomorphismSurfaceHandlers()
 ] as const satisfies readonly KpEquationIntentSurfaceHandler[]);
 
 export function listKpEquationIntentSurfaceVocabularies():
@@ -334,6 +357,43 @@ readonly KpEquationIntentSurfaceHandler[] {
       choreography: kpCanonicalCompiledLogQuotientSemanticMotion
     })
   ]);
+}
+
+function createExponentialHomomorphismSurfaceHandlers():
+readonly KpEquationIntentSurfaceHandler[] {
+  return Object.freeze(kpExponentialHomomorphismCallerDeclarations.map(
+    (declaration) => {
+      const bindings = createKpExponentialHomomorphismRoleBindings(
+        declaration.correspondenceAuthority
+      );
+      return Object.freeze({
+        animationId: declaration.callerId,
+        operationId: declaration.operationKind,
+        describe: () => vocabulary({
+          animationId: declaration.callerId,
+          operationId: declaration.operationKind,
+          authoringAuthorityId:
+            kpExponentialHomomorphismAuthoringAuthorityId,
+          availableSemanticEntityIds:
+            declaration.correspondenceAuthority.occurrences.map(({ id }) => id),
+          canonicalRoleBindings: bindings
+        }),
+        compile: () => Object.freeze({
+          kind: "exponential-homomorphism-correspondence-plan" as const,
+          animationId: declaration.callerId,
+          operationId: declaration.operationKind,
+          extensionPackId:
+            "equation-pack.exponential-homomorphism.v1" as const,
+          operationKind: declaration.operationKind,
+          recipeId: declaration.recipeId,
+          semanticAuthorityId: declaration.semanticAuthorityId,
+          callerRegistrationId: declaration.callerRegistrationId,
+          targetTopology: declaration.targetTopology,
+          plan: declaration.correspondenceAuthority
+        })
+      });
+    }
+  ));
 }
 
 function homomorphicHandler(input: {

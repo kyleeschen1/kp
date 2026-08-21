@@ -1,6 +1,5 @@
-import {
-  kpExponentialHomomorphismTransitProfile
-} from "../rendering/exponential-homomorphism-transit-session.ts";
+import { requireKpExponentialHomomorphismTopologyPhasePolicy } from
+  "../rendering/exponential-homomorphism-topology-phase-policy.ts";
 
 export interface KpExponentialHomomorphismTimingRoute {
   readonly enabled: boolean;
@@ -16,8 +15,9 @@ export function readKpExponentialHomomorphismTimingRoute(
   search: string
 ): KpExponentialHomomorphismTimingRoute {
   const params = new URLSearchParams(search);
-  const defaults = kpExponentialHomomorphismTransitProfile
-    .homomorphicResolution.outwardTransit;
+  const defaults = requireKpExponentialHomomorphismTopologyPhasePolicy(
+    "lateral-product"
+  ).outwardTransit;
   const resolutionStart = finiteParam(params.get(START_PARAM), defaults.start);
   const resolutionEnd = finiteParam(params.get(END_PARAM), defaults.end);
   const valid = isValidWindow(resolutionStart, resolutionEnd);
@@ -55,8 +55,9 @@ export function projectKpExponentialHomomorphismPresentationProgress(
 ): number {
   const bounded = Math.max(0, Math.min(1, progress));
   if (!route.enabled) return bounded;
-  const canonical = kpExponentialHomomorphismTransitProfile
-    .homomorphicResolution.outwardTransit;
+  const canonical = requireKpExponentialHomomorphismTopologyPhasePolicy(
+    "lateral-product"
+  ).outwardTransit;
   // Presentation tuning time-warps the reviewed collision-safe choreography;
   // it must not rewrite the semantic tracks or their paint-safety schedule.
   if (bounded <= route.resolutionStart) {

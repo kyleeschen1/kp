@@ -58,7 +58,7 @@ test("Calc BC planning starts from an exact equation coverage baseline", () => {
       kpEquationCoverageBaseline20260820.equationCapabilityCount
   );
   assert.deepEqual(live.byStatus, {
-    Direct: 6,
+    Direct: 7,
     Registered: 4,
     Exemplar: 2,
     Missing: 16
@@ -88,7 +88,7 @@ test("direct rows have exact authoring corpus compiler and exemplar evidence", (
   const direct = createKpAnimationTransformationCoverage().entries.filter(
     ({ status }) => status === "Direct"
   );
-  assert.equal(direct.length, 6);
+  assert.equal(direct.length, 7);
   for (const capabilityId of [
     "capability.equation.function-wrapping",
     "capability.equation.distribution",
@@ -112,6 +112,16 @@ test("direct rows have exact authoring corpus compiler and exemplar evidence", (
     "requirement.equation.log-homomorphism.product-exemplar"
   ]);
   assert.deepEqual(homomorphism?.evidenceTensions, [
+    "direct-deterministic-not-live-model-evidence"
+  ]);
+  const exponential = direct.find(({ capabilityId }) => capabilityId ===
+    "capability.equation.exponential-homomorphism");
+  assert.deepEqual(exponential?.remainingRequirementIds, []);
+  assert.deepEqual(exponential?.exemplarLinks.map(({ assetId }) => assetId), [
+    "animation.algebra.exponential-homomorphism.sum-to-product",
+    "animation.algebra.exponential-homomorphism.difference-to-quotient"
+  ]);
+  assert.deepEqual(exponential?.evidenceTensions, [
     "direct-deterministic-not-live-model-evidence"
   ]);
 });

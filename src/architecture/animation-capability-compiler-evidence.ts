@@ -23,6 +23,10 @@ import {
 import {
   createKpHomomorphicCrossoverEquationExtensionPack
 } from "../animation/equation-extension-packs/homomorphic-crossover.ts";
+import { createKpExponentialHomomorphismEquationExtensionPack } from
+  "../animation/equation-extension-packs/exponential-homomorphism.ts";
+import { KP_EXPONENTIAL_HOMOMORPHISM_AUTHORING_CORPUS } from
+  "../authoring/exponential-homomorphism-authoring-corpus.ts";
 import {
   createKpLlmSemanticMotionOperationCatalog
 } from "../animation/llm-semantic-motion-operation-authoring.ts";
@@ -225,6 +229,10 @@ readonly KpAnimationCapabilityCompilerAuthority[] {
     pack: createKpHomomorphicCrossoverEquationExtensionPack(),
     sourcePath:
       "src/animation/equation-extension-packs/homomorphic-crossover.ts"
+  }, {
+    pack: createKpExponentialHomomorphismEquationExtensionPack(),
+    sourcePath:
+      "src/animation/equation-extension-packs/exponential-homomorphism.ts"
   }]);
   const verified = (
     authorityId: string,
@@ -238,6 +246,9 @@ readonly KpAnimationCapabilityCompilerAuthority[] {
     sourcePath
   });
   return Object.freeze([
+    verified(KP_EXPONENTIAL_HOMOMORPHISM_AUTHORING_CORPUS,
+      "generation-corpus",
+      "src/authoring/exponential-homomorphism-authoring-corpus.ts"),
     verified(KP_EQUATION_LOGARITHM_BASE_SYNTAX_NORMALIZER,
       "endpoint-normalizer",
       "src/authoring/equation-latex-endpoint-normalizer.ts"),

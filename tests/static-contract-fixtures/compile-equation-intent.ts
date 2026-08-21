@@ -23,6 +23,7 @@ if (result.status === "accepted") {
     case "cancellation-semantic-motion-plan":
     case "distribution-operation-plan":
     case "homomorphic-crossover-semantic-motion-plan":
+    case "exponential-homomorphism-correspondence-plan":
       break;
     default: {
       const exhaustive: never = plan;

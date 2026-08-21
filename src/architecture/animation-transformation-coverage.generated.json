@@ -10,9 +10,9 @@
     "readinessSchemaVersion": "kp.animation-capability-readiness.v1"
   },
   "summary": {
-    "total": 37,
+    "total": 38,
     "byStatus": {
-      "Direct": 6,
+      "Direct": 7,
       "Registered": 5,
       "Exemplar": 9,
       "Missing": 17
@@ -70,6 +70,7 @@
           "capability.equation.fraction-arithmetic",
           "capability.equation.fraction-factor-cancellation",
           "capability.equation.nested-fraction-normalization",
+          "capability.equation.exponential-homomorphism",
           "capability.equation.power-and-exponent-transformations",
           "capability.equation.radical-inversion",
           "capability.equation.substitution-collection-factoring",
@@ -78,7 +79,7 @@
           "capability.equation.multiline-derivation-continuity"
         ],
         "byStatus": {
-          "Direct": 6,
+          "Direct": 7,
           "Registered": 4,
           "Exemplar": 2,
           "Missing": 5
@@ -1046,8 +1047,129 @@
       ]
     },
     {
-      "capabilityId": "capability.equation.power-and-exponent-transformations",
+      "capabilityId": "capability.equation.exponential-homomorphism",
       "order": 13,
+      "domain": "equation",
+      "title": "Exponential sum/product and difference/quotient duality",
+      "scope": {
+        "kind": "transformation-family",
+        "authorityId": "family.equation.exponential-homomorphism.v1"
+      },
+      "status": "Direct",
+      "requirements": [
+        {
+          "id": "requirement.equation.exponential-homomorphism.product-operation",
+          "kind": "semantic-operation",
+          "authorityId": "operation.equation.exponential-sum-to-product.v1",
+          "summary": "The sum law licenses one power application to derive an ordered product of successor applications.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "equation-pack.exponential-homomorphism.v1"
+          ]
+        },
+        {
+          "id": "requirement.equation.exponential-homomorphism.quotient-operation",
+          "kind": "semantic-operation",
+          "authorityId": "operation.equation.exponential-difference-to-quotient.v1",
+          "summary": "The difference law licenses numerator and denominator successor applications without connector glyph identity.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "equation-pack.exponential-homomorphism.v1"
+          ]
+        },
+        {
+          "id": "requirement.equation.exponential-homomorphism.recipe",
+          "kind": "canonical-recipe",
+          "authorityId": "recipe.equation.exponential-homomorphism.v1",
+          "summary": "One causal recipe owns the shared homomorphic phases while topology policies own safe paint order.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "recipe.equation.exponential-homomorphism.v1",
+            "equation-pack.exponential-homomorphism.v1"
+          ]
+        },
+        {
+          "id": "requirement.equation.exponential-homomorphism.motif",
+          "kind": "motion-motif",
+          "authorityId": "motif.exponential-power-crossover.v1",
+          "summary": "The power crossover motif preserves payload identity and derives base successors.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "equation-pack.exponential-homomorphism.v1"
+          ]
+        },
+        {
+          "id": "requirement.equation.exponential-homomorphism.renderer",
+          "kind": "renderer-capability",
+          "authorityId": "renderer-capability.equation.exponential-power-crossover.v1",
+          "summary": "Native KaTeX endpoints and measured compositor tracks realize both reviewed topologies.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "equation-pack.exponential-homomorphism.v1"
+          ]
+        },
+        {
+          "id": "requirement.equation.exponential-homomorphism.product-exemplar",
+          "kind": "canonical-exemplar",
+          "authorityId": "animation.algebra.exponential-homomorphism.sum-to-product",
+          "summary": "The approved product exemplar proves lateral carrier fission.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "animation.algebra.exponential-homomorphism.sum-to-product"
+          ]
+        },
+        {
+          "id": "requirement.equation.exponential-homomorphism.quotient-exemplar",
+          "kind": "canonical-exemplar",
+          "authorityId": "animation.algebra.exponential-homomorphism.difference-to-quotient",
+          "summary": "The approved quotient exemplar proves collision-safe vertical construction.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "animation.algebra.exponential-homomorphism.difference-to-quotient"
+          ]
+        },
+        {
+          "id": "requirement.equation.exponential-homomorphism.authoring",
+          "kind": "authoring-surface",
+          "authorityId": "authoring.equation.exponential-homomorphism.v1",
+          "summary": "Governed authoring selects one exact law and never accepts presentation geometry.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "src/authoring/compile-equation-intent.ts"
+          ]
+        },
+        {
+          "id": "requirement.equation.exponential-homomorphism.corpus",
+          "kind": "generation-corpus",
+          "authorityId": "corpus.equation.exponential-homomorphism.v1",
+          "summary": "Natural-language and LaTeX fixtures accept the two reviewed laws while scalar transport and inverse cancellation remain typed gaps.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "corpus.equation.exponential-homomorphism.v1"
+          ]
+        }
+      ],
+      "gaps": [],
+      "remainingRequirementIds": [],
+      "exemplarLinks": [
+        {
+          "assetId": "animation.algebra.exponential-homomorphism.sum-to-product",
+          "title": "Turn an exponential sum into a product",
+          "href": "/?artifact=animation.algebra.exponential-homomorphism.sum-to-product"
+        },
+        {
+          "assetId": "animation.algebra.exponential-homomorphism.difference-to-quotient",
+          "title": "Turn an exponential difference into a quotient",
+          "href": "/?artifact=animation.algebra.exponential-homomorphism.difference-to-quotient"
+        }
+      ],
+      "evidenceTensions": [
+        "direct-deterministic-not-live-model-evidence"
+      ]
+    },
+    {
+      "capabilityId": "capability.equation.power-and-exponent-transformations",
+      "order": 14,
       "domain": "equation",
       "title": "Power and exponent transformations",
       "scope": {
@@ -1128,7 +1250,7 @@
     },
     {
       "capabilityId": "capability.equation.radical-inversion",
-      "order": 14,
+      "order": 15,
       "domain": "equation",
       "title": "Root and radical inversion",
       "scope": {
@@ -1194,7 +1316,7 @@
     },
     {
       "capabilityId": "capability.equation.substitution-collection-factoring",
-      "order": 15,
+      "order": 16,
       "domain": "equation",
       "title": "Substitution, collection, and factoring",
       "scope": {
@@ -1257,7 +1379,7 @@
     },
     {
       "capabilityId": "capability.equation.branching-and-domain-conditions",
-      "order": 16,
+      "order": 17,
       "domain": "equation",
       "title": "Branching, domain conditions, and rejected solutions",
       "scope": {
@@ -1313,7 +1435,7 @@
     },
     {
       "capabilityId": "capability.equation.inequality-transformations",
-      "order": 17,
+      "order": 18,
       "domain": "equation",
       "title": "Inequality and absolute-value transformations",
       "scope": {
@@ -1369,7 +1491,7 @@
     },
     {
       "capabilityId": "capability.equation.trigonometric-transformations",
-      "order": 18,
+      "order": 19,
       "domain": "equation",
       "title": "Trigonometric notation and transformations",
       "scope": {
@@ -1434,7 +1556,7 @@
     },
     {
       "capabilityId": "capability.equation.piecewise-transformations",
-      "order": 19,
+      "order": 20,
       "domain": "equation",
       "title": "Piecewise definitions and case transformations",
       "scope": {
@@ -1490,7 +1612,7 @@
     },
     {
       "capabilityId": "capability.equation.sequence-series-transformations",
-      "order": 20,
+      "order": 21,
       "domain": "equation",
       "title": "Sequence and series transformations",
       "scope": {
@@ -1546,7 +1668,7 @@
     },
     {
       "capabilityId": "capability.equation.limit-transformations",
-      "order": 21,
+      "order": 22,
       "domain": "equation",
       "title": "Limit notation and transformations",
       "scope": {
@@ -1602,7 +1724,7 @@
     },
     {
       "capabilityId": "capability.equation.differentiation-transformations",
-      "order": 22,
+      "order": 23,
       "domain": "equation",
       "title": "Differentiation transformations",
       "scope": {
@@ -1667,7 +1789,7 @@
     },
     {
       "capabilityId": "capability.equation.integration-transformations",
-      "order": 23,
+      "order": 24,
       "domain": "equation",
       "title": "Integration transformations",
       "scope": {
@@ -1732,7 +1854,7 @@
     },
     {
       "capabilityId": "capability.equation.polar-parametric-transformations",
-      "order": 24,
+      "order": 25,
       "domain": "equation",
       "title": "Polar and parametric transformations",
       "scope": {
@@ -1788,7 +1910,7 @@
     },
     {
       "capabilityId": "capability.equation.differential-equation-transformations",
-      "order": 25,
+      "order": 26,
       "domain": "equation",
       "title": "Differential-equation transformations",
       "scope": {
@@ -1844,7 +1966,7 @@
     },
     {
       "capabilityId": "capability.equation.taylor-series-transformations",
-      "order": 26,
+      "order": 27,
       "domain": "equation",
       "title": "Taylor polynomial and series transformations",
       "scope": {
@@ -1900,7 +2022,7 @@
     },
     {
       "capabilityId": "capability.equation.binders-and-calculus-operators",
-      "order": 27,
+      "order": 28,
       "domain": "equation",
       "title": "Binders, large operators, and calculus operators",
       "scope": {
@@ -1956,7 +2078,7 @@
     },
     {
       "capabilityId": "capability.equation.multiline-derivation-continuity",
-      "order": 28,
+      "order": 29,
       "domain": "equation",
       "title": "Multi-line derivation continuity",
       "scope": {
@@ -2012,7 +2134,7 @@
     },
     {
       "capabilityId": "capability.matrix.vector-composition",
-      "order": 29,
+      "order": 30,
       "domain": "matrix",
       "title": "Matrix-vector composition",
       "scope": {
@@ -2093,7 +2215,7 @@
     },
     {
       "capabilityId": "capability.matrix.matrix-composition",
-      "order": 30,
+      "order": 31,
       "domain": "matrix",
       "title": "Matrix-matrix composition",
       "scope": {
@@ -2172,7 +2294,7 @@
     },
     {
       "capabilityId": "capability.matrix.linear-map-geometry",
-      "order": 31,
+      "order": 32,
       "domain": "matrix",
       "title": "Matrix and linear-map geometry",
       "scope": {
@@ -2251,7 +2373,7 @@
     },
     {
       "capabilityId": "capability.code.typescript-refactoring",
-      "order": 32,
+      "order": 33,
       "domain": "code",
       "title": "TypeScript refactoring",
       "scope": {
@@ -2330,7 +2452,7 @@
     },
     {
       "capabilityId": "capability.code.python-refactoring",
-      "order": 33,
+      "order": 34,
       "domain": "code",
       "title": "Python refactoring",
       "scope": {
@@ -2409,7 +2531,7 @@
     },
     {
       "capabilityId": "capability.code.scheme-structural-evaluation",
-      "order": 34,
+      "order": 35,
       "domain": "code",
       "title": "Scheme structural evaluation",
       "scope": {
@@ -2488,7 +2610,7 @@
     },
     {
       "capabilityId": "capability.graph-2d.function-transformations",
-      "order": 35,
+      "order": 36,
       "domain": "graph-2d",
       "title": "Graph2D function transformations",
       "scope": {
@@ -2560,7 +2682,7 @@
     },
     {
       "capabilityId": "capability.graph-2d.model-transformations",
-      "order": 36,
+      "order": 37,
       "domain": "graph-2d",
       "title": "Graph2D model transformations",
       "scope": {
@@ -2639,7 +2761,7 @@
     },
     {
       "capabilityId": "capability.graph-3d.scene-transformations",
-      "order": 37,
+      "order": 38,
       "domain": "graph-3d",
       "title": "Graph3D scene transformations",
       "scope": {

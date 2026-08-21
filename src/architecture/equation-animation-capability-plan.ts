@@ -174,6 +174,22 @@ const equationCapabilityDrafts = Object.freeze([
     ]
   ),
   capability(
+    "capability.equation.exponential-homomorphism",
+    "Exponential sum/product and difference/quotient duality",
+    "family.equation.exponential-homomorphism.v1",
+    [
+      requirement("requirement.equation.exponential-homomorphism.product-operation", "semantic-operation", "operation.equation.exponential-sum-to-product.v1", "The sum law licenses one power application to derive an ordered product of successor applications."),
+      requirement("requirement.equation.exponential-homomorphism.quotient-operation", "semantic-operation", "operation.equation.exponential-difference-to-quotient.v1", "The difference law licenses numerator and denominator successor applications without connector glyph identity."),
+      requirement("requirement.equation.exponential-homomorphism.recipe", "canonical-recipe", "recipe.equation.exponential-homomorphism.v1", "One causal recipe owns the shared homomorphic phases while topology policies own safe paint order."),
+      requirement("requirement.equation.exponential-homomorphism.motif", "motion-motif", "motif.exponential-power-crossover.v1", "The power crossover motif preserves payload identity and derives base successors."),
+      requirement("requirement.equation.exponential-homomorphism.renderer", "renderer-capability", "renderer-capability.equation.exponential-power-crossover.v1", "Native KaTeX endpoints and measured compositor tracks realize both reviewed topologies."),
+      requirement("requirement.equation.exponential-homomorphism.product-exemplar", "canonical-exemplar", "animation.algebra.exponential-homomorphism.sum-to-product", "The approved product exemplar proves lateral carrier fission."),
+      requirement("requirement.equation.exponential-homomorphism.quotient-exemplar", "canonical-exemplar", "animation.algebra.exponential-homomorphism.difference-to-quotient", "The approved quotient exemplar proves collision-safe vertical construction."),
+      requirement("requirement.equation.exponential-homomorphism.authoring", "authoring-surface", "authoring.equation.exponential-homomorphism.v1", "Governed authoring selects one exact law and never accepts presentation geometry."),
+      requirement("requirement.equation.exponential-homomorphism.corpus", "generation-corpus", "corpus.equation.exponential-homomorphism.v1", "Natural-language and LaTeX fixtures accept the two reviewed laws while scalar transport and inverse cancellation remain typed gaps.")
+    ]
+  ),
+  capability(
     "capability.equation.power-and-exponent-transformations",
     "Power and exponent transformations",
     "family.equation.power-exponent.v1",

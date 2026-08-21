@@ -165,6 +165,19 @@ function summarizePlan(plan: KpCompiledEquationIntentPlan): Readonly<
         callerRegistrationId: plan.callerRegistrationId,
         choreographyId: plan.plan.id
       });
+    case "exponential-homomorphism-correspondence-plan":
+      return Object.freeze({
+        kind: plan.kind,
+        animationId: plan.animationId,
+        operationId: plan.operationId,
+        extensionPackId: plan.extensionPackId,
+        operationKind: plan.operationKind,
+        recipeId: plan.recipeId,
+        semanticAuthorityId: plan.semanticAuthorityId,
+        callerRegistrationId: plan.callerRegistrationId,
+        correspondenceAuthorityId: plan.plan.id,
+        targetTopology: plan.targetTopology
+      });
   }
 }
 

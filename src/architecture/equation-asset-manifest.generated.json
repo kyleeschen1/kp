@@ -33,8 +33,8 @@
         ],
         "selectedCapabilityId": "exponential-homomorphism",
         "familyId": "exponent-radical",
-        "disposition": "unsupported",
-        "migrationWave": "wave-c-generated-bespoke-diagnostic-static"
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-b-structural-native-math"
       },
       "lazyLoader": {
         "kind": "catalog-pack",
