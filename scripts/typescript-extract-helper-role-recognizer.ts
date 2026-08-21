@@ -35,6 +35,7 @@ export interface KpTypeScriptExtractHelperRoleCandidates {
   readonly targetRevisionId: string;
   readonly sourceProgramSyntaxRecordId: string;
   readonly targetProgramSyntaxRecordId: string;
+  readonly duplicateGroupCount: number;
   readonly duplicateExpressionText: string | undefined;
   readonly sourceContributors: readonly KpTypeScriptOwnedExpressionRole[];
   readonly introducedHelpers: readonly KpTypeScriptHelperRoleCandidate[];
@@ -74,6 +75,7 @@ export function recognizeKpTypeScriptExtractHelperRoles(
     targetRevisionId: target.revisionId,
     sourceProgramSyntaxRecordId: sourceRecord(source).id,
     targetProgramSyntaxRecordId: sourceRecord(target).id,
+    duplicateGroupCount: duplicateGroups.length,
     duplicateExpressionText,
     sourceContributors: selectedGroup,
     introducedHelpers,

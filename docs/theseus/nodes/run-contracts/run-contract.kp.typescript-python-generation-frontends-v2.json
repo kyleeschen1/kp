@@ -139,6 +139,20 @@
       "scope": "cf06",
       "checkedAt": "2026-08-21T20:51:13.371Z",
       "notes": "Role recognition preserves all type and architecture boundaries."
+    },
+    {
+      "command": "npm run test:typescript-extract-helper-legality and npm run test:typescript-extract-helper-roles",
+      "status": "passed",
+      "scope": "cf07",
+      "checkedAt": "2026-08-21T20:54:58.012Z",
+      "notes": "Legality accepts the canonical shape and returns exact unsupported-shape, ambiguous-ownership, and unsafe-capture repairs while recognition remains stable."
+    },
+    {
+      "command": "tsc node project and npm run check:architecture",
+      "status": "passed",
+      "scope": "cf07",
+      "checkedAt": "2026-08-21T20:54:59.540Z",
+      "notes": "Build-time legality code is type-safe and preserves architecture boundaries."
     }
   ],
   "allowedWork": [
@@ -203,7 +217,8 @@
     {
       "id": "cf07",
       "title": "TypeScript-legality-proof",
-      "status": "planned"
+      "summary": "Added a bounded TypeScript legality proof for distinct contributors, one helper, binding preservation, and complete replacement calls, with typed repair outcomes.",
+      "status": "complete"
     },
     {
       "id": "cf08",
