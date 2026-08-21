@@ -20,6 +20,20 @@ export interface KpPythonSyntaxRecord {
   readonly start: { readonly line: number; readonly column: number };
   readonly end: { readonly line: number; readonly column: number };
   readonly text: string;
+  readonly facts?: Readonly<{
+    declaredName?: string | undefined;
+    parameterNames?: readonly string[] | undefined;
+    parameterAnnotations?: readonly Readonly<{
+      name: string;
+      annotation?: string | undefined;
+    }>[] | undefined;
+    returnAnnotation?: string | undefined;
+    hasVariadicParameters?: boolean | undefined;
+    calledName?: string | undefined;
+    argumentTexts?: readonly string[] | undefined;
+    hasKeywordArguments?: boolean | undefined;
+    referencedNames?: readonly string[] | undefined;
+  }> | undefined;
 }
 
 export interface KpPythonLexicalRecord {

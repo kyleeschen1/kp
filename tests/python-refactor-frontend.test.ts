@@ -25,6 +25,24 @@ test("Python stdlib frontend accepts both frozen revisions without execution", (
     assert.ok(result.tokens.some(({ kindName, text }) =>
       kindName === "NAME" && text === "total"
     ));
+    const shippingCost = result.syntax.find(({ kindName, facts }) =>
+      kindName === "FunctionDef" && facts?.declaredName === "shipping_cost"
+    );
+    assert.deepEqual(shippingCost?.facts, {
+      declaredName: "shipping_cost",
+      parameterNames: ["total"],
+      parameterAnnotations: [{ name: "total", annotation: "int" }],
+      returnAnnotation: "int",
+      hasVariadicParameters: false
+    });
+    const comparison = result.syntax.find(({ kindName }) => kindName === "Compare");
+    assert.deepEqual(comparison?.facts?.referencedNames, ["total"]);
+    const call = result.syntax.find(({ kindName }) => kindName === "Call");
+    if (revision.revisionId === "free-shipping.after.v1") {
+      assert.equal(call?.facts?.calledName, "qualifies_for_free_shipping");
+      assert.deepEqual(call?.facts?.argumentTexts, ["total"]);
+      assert.equal(call?.facts?.hasKeywordArguments, false);
+    }
     for (const record of [...result.syntax, ...result.tokens]) {
       assert.equal(
         result.sourceText.slice(record.startOffset, record.endOffset),

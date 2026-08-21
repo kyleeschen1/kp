@@ -140,6 +140,7 @@ def collect_syntax(
         }
 
     record_id = f"syntax.{kind_name}.{start_offset}.{end_offset}"
+    facts = syntax_facts(node, positions)
     output.append({
         "id": record_id,
         "kindName": kind_name,
@@ -149,9 +150,84 @@ def collect_syntax(
         "start": start,
         "end": end,
         "text": positions.source[start_character:end_character],
+        **({} if facts is None else {"facts": facts}),
     })
     for child in ast.iter_child_nodes(node):
         collect_syntax(child, record_id, positions, output)
+
+
+def syntax_facts(
+    node: ast.AST,
+    positions: SourcePositions,
+) -> dict[str, Any] | None:
+    if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+        parameters = [
+            *node.args.posonlyargs,
+            *node.args.args,
+            *node.args.kwonlyargs,
+        ]
+        return {
+            "declaredName": node.name,
+            "parameterNames": [parameter.arg for parameter in parameters],
+            "parameterAnnotations": [
+                {
+                    "name": parameter.arg,
+                    **(
+                        {}
+                        if parameter.annotation is None
+                        else {
+                            "annotation": source_text_for_node(
+                                parameter.annotation,
+                                positions,
+                            )
+                        }
+                    ),
+                }
+                for parameter in parameters
+            ],
+            **(
+                {}
+                if node.returns is None
+                else {"returnAnnotation": source_text_for_node(node.returns, positions)}
+            ),
+            "hasVariadicParameters": (
+                node.args.vararg is not None or node.args.kwarg is not None
+            ),
+        }
+    if isinstance(node, ast.Call):
+        return {
+            **(
+                {"calledName": node.func.id}
+                if isinstance(node.func, ast.Name)
+                else {}
+            ),
+            "argumentTexts": [
+                source_text_for_node(argument, positions)
+                for argument in node.args
+            ],
+            "hasKeywordArguments": bool(node.keywords),
+        }
+    if isinstance(node, (ast.Compare, ast.BoolOp)):
+        referenced_names: list[str] = []
+        for child in ast.walk(node):
+            if (
+                isinstance(child, ast.Name)
+                and isinstance(child.ctx, ast.Load)
+                and child.id not in referenced_names
+            ):
+                referenced_names.append(child.id)
+        return {"referencedNames": referenced_names}
+    return None
+
+
+def source_text_for_node(node: ast.AST, positions: SourcePositions) -> str:
+    start_line = require_position(node, "lineno")
+    start_column = require_position(node, "col_offset")
+    end_line = require_position(node, "end_lineno")
+    end_column = require_position(node, "end_col_offset")
+    start_character, _ = positions.ast_position(start_line, start_column)
+    end_character, _ = positions.ast_position(end_line, end_column)
+    return positions.source[start_character:end_character]
 
 
 def collect_tokens(source: str, positions: SourcePositions) -> list[dict[str, Any]]:

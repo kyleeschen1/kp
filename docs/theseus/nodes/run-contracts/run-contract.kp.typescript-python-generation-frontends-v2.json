@@ -223,6 +223,34 @@
       "scope": "cf12",
       "checkedAt": "2026-08-21T21:15:21.028Z",
       "notes": "The dedicated public build transforms 37 modules, ships 14,218 gzip bytes of startup code and CSS, has no forbidden closure, and preserves architecture."
+    },
+    {
+      "command": "npm run test:python-extract-helper-roles",
+      "status": "passed",
+      "scope": "cf13",
+      "checkedAt": "2026-08-21T21:22:47.360Z",
+      "notes": "Five role-recognition cases pass: canonical, renamed, maximal nested Boolean, empty candidates, and rejected syntax."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/python-refactor-frontend.test.ts tests/python-refactor-semantic-compiler.test.ts",
+      "status": "passed",
+      "scope": "cf13",
+      "checkedAt": "2026-08-21T21:22:48.759Z",
+      "notes": "Nine Python frontend and existing compiler preservation tests pass."
+    },
+    {
+      "command": "npm run check:python-refactor-semantics",
+      "status": "passed",
+      "scope": "cf13",
+      "checkedAt": "2026-08-21T21:22:49.814Z",
+      "notes": "Existing checked-in Python semantics remain fresh after AST fact enrichment."
+    },
+    {
+      "command": "npx tsc --ignoreConfig --noEmit --skipLibCheck --allowImportingTsExtensions --module nodenext --moduleResolution nodenext --target es2022 --types node scripts/python-refactor-frontend.ts scripts/python-extract-helper-role-recognizer.ts tests/python-refactor-frontend.test.ts tests/python-extract-helper-role-recognizer.test.ts",
+      "status": "passed",
+      "scope": "cf13",
+      "checkedAt": "2026-08-21T21:22:50.853Z",
+      "notes": "Focused Python frontend and recognizer typecheck passes."
     }
   ],
   "allowedWork": [
@@ -323,7 +351,8 @@
     {
       "id": "cf13",
       "title": "Python-role-recognition",
-      "status": "planned"
+      "summary": "Python stdlib AST now emits bounded declaration, annotation, call, and reference facts; Python-owned recognition derives extract-helper candidates without regex or semantic IDs.",
+      "status": "complete"
     },
     {
       "id": "cf14",
