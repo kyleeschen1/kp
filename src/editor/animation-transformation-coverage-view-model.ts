@@ -7,6 +7,9 @@ import type {
   KpAnimationTransformationCoverageRequirement
 } from "../architecture/animation-transformation-coverage.ts";
 import type {
+  KpSymbolicCaseCoverageProjection
+} from "../architecture/symbolic-mathematics-case-coverage.ts";
+import type {
   KpAnimationCapabilityReadinessStatus
 } from "../architecture/animation-capability-readiness.ts";
 import {
@@ -59,6 +62,7 @@ export interface KpAnimationTransformationCoverageViewRow {
     href?: string | undefined;
   }>[];
   readonly frontendAuthorities: readonly string[];
+  readonly caseCoverage?: KpSymbolicCaseCoverageProjection | undefined;
 }
 
 export function createKpAnimationTransformationCoverageViewModel():
@@ -85,7 +89,10 @@ KpAnimationTransformationCoverageViewModel {
       exemplarLinks: Object.freeze([...entry.exemplarLinks]),
       frontendAuthorities: Object.freeze(entry.gaps.map(
         ({ authorityId }) => authorityId
-      ))
+      )),
+      ...(entry.caseCoverage === undefined
+        ? {}
+        : { caseCoverage: entry.caseCoverage })
     }))),
     symbolicMathematics: coverage.symbolicMathematics,
     operationDiscovery: Object.freeze({

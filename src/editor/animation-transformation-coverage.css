@@ -328,6 +328,43 @@
   color: var(--kp-coverage-frontend);
 }
 
+.kp-transformation-coverage__cases,
+.kp-transformation-coverage__case-debt {
+  margin-top: 0.65rem !important;
+}
+
+.kp-transformation-coverage__cases summary {
+  cursor: pointer;
+  color: var(--kp-coverage-ink);
+}
+
+.kp-transformation-coverage__cases ol {
+  display: grid;
+  gap: 0;
+  margin: 0.6rem 0 0;
+  padding: 0;
+  border-bottom: 1px solid var(--kp-coverage-border);
+  list-style: none;
+}
+
+.kp-transformation-coverage__cases li {
+  display: grid;
+  gap: 0.2rem;
+  padding-block: 0.5rem;
+  border-top: 1px solid var(--kp-coverage-border);
+}
+
+.kp-transformation-coverage__cases strong {
+  font-weight: 500;
+}
+
+.kp-transformation-coverage__cases code,
+.kp-transformation-coverage__cases small,
+.kp-transformation-coverage__case-debt {
+  color: var(--kp-coverage-muted);
+  font-size: 0.72rem;
+}
+
 .kp-transformation-coverage nav {
   grid-column: 4;
   display: flex;

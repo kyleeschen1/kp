@@ -1,0 +1,44 @@
+{
+  "id": "kp.symbolic-case-coverage-ledger",
+  "kind": "next-action",
+  "title": "Generate symbolic case coverage ledger",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "The root-first case ledger and generated promotion gate are implemented and verified; future symbolic family selection can proceed from explicit case maturity.",
+  "verificationRecords": [
+    {
+      "command": "npm run test:animation-transformation-coverage",
+      "status": "passed",
+      "scope": "root case enumeration and Direct promotion gate",
+      "checkedAt": "2026-08-21T19:35:23.544Z"
+    },
+    {
+      "command": "npm run test:animation-transformation-coverage-view",
+      "status": "passed",
+      "scope": "static view-model projection",
+      "checkedAt": "2026-08-21T19:35:24.475Z"
+    },
+    {
+      "command": "npm run visual:animation-transformation-coverage",
+      "status": "passed",
+      "scope": "collapsed ten-case root ledger in Chromium",
+      "checkedAt": "2026-08-21T19:35:25.376Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript and Svelte boundaries",
+      "checkedAt": "2026-08-21T19:35:26.289Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "dependency and compiler authority gates",
+      "checkedAt": "2026-08-21T19:35:27.216Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Generated the first typed symbolic case-coverage ledger from all ten root rewrite classes; Direct promotion now fails without a ledger or explicit legacy exemption; the static Transformation Coverage view discloses per-case exemplar and generation maturity; roadmap, strategy, and catalogue thread now point to generated evidence rather than prose memory."
+  }
+}

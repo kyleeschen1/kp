@@ -27,16 +27,16 @@ test("coverage route is explicit and preserves unrelated query state", () => {
 
 test("coverage view is one ordered evidence-derived list", () => {
   const view = createKpAnimationTransformationCoverageViewModel();
-  assert.equal(view.total, 37);
+  assert.equal(view.total, 38);
   assert.deepEqual(view.statusCounts, [
-    { status: "Direct", count: 6 },
-    { status: "Registered", count: 5 },
+    { status: "Direct", count: 8 },
+    { status: "Registered", count: 4 },
     { status: "Exemplar", count: 9 },
     { status: "Missing", count: 17 }
   ]);
   assert.deepEqual(
     view.rows.map(({ order }) => order),
-    Array.from({ length: 37 }, (_value, index) => index + 1)
+    Array.from({ length: 38 }, (_value, index) => index + 1)
   );
   assert.ok(view.rows.every(({ remaining }) =>
     remaining.every(({ status }) => status === "missing")
@@ -50,6 +50,13 @@ test("coverage view is one ordered evidence-derived list", () => {
     "capability.equation.alternative-logarithm-bases");
   assert.equal(logarithmBases?.status, "Direct");
   assert.deepEqual(logarithmBases?.remaining, []);
+  const roots = view.rows.find(({ capabilityId }) => capabilityId ===
+    "capability.equation.radical-inversion");
+  assert.equal(roots?.caseCoverage?.status, "tracked");
+  if (roots?.caseCoverage?.status !== "tracked") {
+    assert.fail("Root case coverage must remain visible in the view model.");
+  }
+  assert.equal(roots.caseCoverage.caseCount, 10);
   assert.ok(view.operationDiscovery.total > 10);
   const additive = view.operationDiscovery.entries.find(({ operationId }) =>
     operationId === "kp.semantic-motion.absorb-additive-identity"

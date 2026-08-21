@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "kp.animation-transformation-coverage.v1",
+  "schemaVersion": "kp.animation-transformation-coverage.v2",
   "kind": "animation-transformation-coverage",
   "generatedFrom": {
     "planId": "plan.kp.animation-capabilities.v1",
@@ -7,7 +7,8 @@
     "assetEvidenceSchemaVersion": "kp.animation-capability-asset-evidence.v1",
     "compilerEvidenceSchemaVersion": "kp.animation-capability-compiler-evidence.v1",
     "frontendEvidenceSchemaVersion": "kp.animation-domain-frontend-evidence.v1",
-    "readinessSchemaVersion": "kp.animation-capability-readiness.v1"
+    "readinessSchemaVersion": "kp.animation-capability-readiness.v1",
+    "caseCoverageSchemaVersion": "kp.symbolic-case-coverage.v1"
   },
   "summary": {
     "total": 38,
@@ -287,7 +288,11 @@
       ],
       "evidenceTensions": [
         "direct-deterministic-not-live-model-evidence"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "legacy-untracked",
+        "promotionGate": "explicit-migration-exemption"
+      }
     },
     {
       "capabilityId": "capability.equation.distribution",
@@ -362,7 +367,11 @@
       ],
       "evidenceTensions": [
         "direct-deterministic-not-live-model-evidence"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "legacy-untracked",
+        "promotionGate": "explicit-migration-exemption"
+      }
     },
     {
       "capabilityId": "capability.equation.additive-cancellation",
@@ -437,7 +446,11 @@
       ],
       "evidenceTensions": [
         "direct-deterministic-not-live-model-evidence"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "legacy-untracked",
+        "promotionGate": "explicit-migration-exemption"
+      }
     },
     {
       "capabilityId": "capability.equation.log-homomorphic-decomposition",
@@ -533,7 +546,11 @@
       ],
       "evidenceTensions": [
         "direct-deterministic-not-live-model-evidence"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "legacy-untracked",
+        "promotionGate": "explicit-migration-exemption"
+      }
     },
     {
       "capabilityId": "capability.equation.transform-series",
@@ -589,7 +606,11 @@
       "exemplarLinks": [],
       "evidenceTensions": [
         "planned-capability-without-exact-asset"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "not-declared",
+        "promotionGate": "required-before-direct"
+      }
     },
     {
       "capabilityId": "capability.equation.balanced-operations",
@@ -664,7 +685,11 @@
       ],
       "evidenceTensions": [
         "direct-deterministic-not-live-model-evidence"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "legacy-untracked",
+        "promotionGate": "explicit-migration-exemption"
+      }
     },
     {
       "capabilityId": "capability.equation.alternative-logarithm-bases",
@@ -759,7 +784,11 @@
       ],
       "evidenceTensions": [
         "direct-deterministic-not-live-model-evidence"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "legacy-untracked",
+        "promotionGate": "explicit-migration-exemption"
+      }
     },
     {
       "capabilityId": "capability.equation.fraction-equivalence",
@@ -815,7 +844,11 @@
       "exemplarLinks": [],
       "evidenceTensions": [
         "planned-capability-without-exact-asset"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "not-declared",
+        "promotionGate": "required-before-direct"
+      }
     },
     {
       "capabilityId": "capability.equation.common-denominator-construction",
@@ -873,7 +906,11 @@
       "exemplarLinks": [],
       "evidenceTensions": [
         "registered-without-direct-generation"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "not-declared",
+        "promotionGate": "required-before-direct"
+      }
     },
     {
       "capabilityId": "capability.equation.fraction-arithmetic",
@@ -931,7 +968,11 @@
       "exemplarLinks": [],
       "evidenceTensions": [
         "registered-without-direct-generation"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "not-declared",
+        "promotionGate": "required-before-direct"
+      }
     },
     {
       "capabilityId": "capability.equation.fraction-factor-cancellation",
@@ -988,7 +1029,11 @@
       "exemplarLinks": [],
       "evidenceTensions": [
         "registered-without-direct-generation"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "not-declared",
+        "promotionGate": "required-before-direct"
+      }
     },
     {
       "capabilityId": "capability.equation.nested-fraction-normalization",
@@ -1044,7 +1089,11 @@
       "exemplarLinks": [],
       "evidenceTensions": [
         "planned-capability-without-exact-asset"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "not-declared",
+        "promotionGate": "required-before-direct"
+      }
     },
     {
       "capabilityId": "capability.equation.exponential-homomorphism",
@@ -1165,7 +1214,11 @@
       ],
       "evidenceTensions": [
         "direct-deterministic-not-live-model-evidence"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "legacy-untracked",
+        "promotionGate": "explicit-migration-exemption"
+      }
     },
     {
       "capabilityId": "capability.equation.power-and-exponent-transformations",
@@ -1246,7 +1299,11 @@
       ],
       "evidenceTensions": [
         "playable-exemplar-without-general-generation"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "not-declared",
+        "promotionGate": "required-before-direct"
+      }
     },
     {
       "capabilityId": "capability.equation.radical-inversion",
@@ -1341,7 +1398,588 @@
       ],
       "evidenceTensions": [
         "direct-deterministic-not-live-model-evidence"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "tracked",
+        "authorityId": "coverage.equation.root-rewrite-cases.v1",
+        "caseCount": 10,
+        "cases": [
+          {
+            "id": "root-rewrite.closed-evaluation",
+            "operationClass": "closed-evaluation",
+            "title": "Evaluate a closed radical",
+            "sourceLatex": "\\sqrt{144}",
+            "targetLatex": "12",
+            "outcome": "animated-transition",
+            "requiredEvidenceIds": [
+              "closed-value",
+              "exact-root"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "normalizer.equation.radical.v1",
+                  "shape.structure.root"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "vocabulary.equation.root-rewrite.v1",
+                  "compiler.equation.root-rewrite-plan.v1"
+                ]
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "compiler.equation.root-rewrite-plan.v1"
+                ]
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "pressure",
+                "evidenceSourceIds": [
+                  "src/semantic/closed-root-evaluation-exemplar.ts",
+                  "src/rendering/closed-root-evaluation-transit-session.ts"
+                ]
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "recipe.equation.radical-inversion.v1"
+                ]
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "pressure",
+                "evidenceSourceIds": [
+                  "compiler.equation.root-rewrite-plan.v1"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "root-rewrite.inverse-normalization",
+            "operationClass": "inverse-normalization",
+            "title": "Normalize an inverse even power",
+            "sourceLatex": "\\sqrt{x^2}",
+            "targetLatex": "\\lvert x \\rvert",
+            "outcome": "animated-transition",
+            "requiredEvidenceIds": [
+              "even-positive-integer-power",
+              "real-valued-carrier"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "normalizer.equation.radical.v1",
+                  "shape.structure.root"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "vocabulary.equation.root-rewrite.v1",
+                  "compiler.equation.root-rewrite-plan.v1"
+                ]
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "compiler.equation.root-rewrite-plan.v1"
+                ]
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "recipe.equation.radical-inversion.v1"
+                ]
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "pressure",
+                "evidenceSourceIds": [
+                  "compiler.equation.root-rewrite-plan.v1"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "root-rewrite.compound-carrier-normalization",
+            "operationClass": "compound-carrier-normalization",
+            "title": "Preserve a compound carrier",
+            "sourceLatex": "\\sqrt{(x+1)^2}",
+            "targetLatex": "\\lvert x+1 \\rvert",
+            "outcome": "animated-transition",
+            "requiredEvidenceIds": [
+              "even-positive-integer-power",
+              "real-valued-carrier"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "normalizer.equation.radical.v1",
+                  "shape.structure.root"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "vocabulary.equation.root-rewrite.v1",
+                  "compiler.equation.root-rewrite-plan.v1"
+                ]
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "compiler.equation.root-rewrite-plan.v1"
+                ]
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "animation.algebra.radical.compound-carrier-normalization"
+                ]
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "recipe.equation.radical-inversion.v1"
+                ]
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "authoring.equation.radical-inversion.v1",
+                  "root-authoring.compound-carrier"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "root-rewrite.assumption-qualified-cancellation",
+            "operationClass": "assumption-qualified-cancellation",
+            "title": "Cancel under a domain assumption",
+            "sourceLatex": "\\sqrt{x^2}",
+            "targetLatex": "x",
+            "outcome": "animated-transition",
+            "requiredEvidenceIds": [
+              "even-positive-integer-power",
+              "nonnegative-domain"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "normalizer.equation.radical.v1",
+                  "shape.structure.root"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "vocabulary.equation.root-rewrite.v1",
+                  "compiler.equation.root-rewrite-plan.v1"
+                ]
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "compiler.equation.root-rewrite-plan.v1"
+                ]
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "recipe.equation.radical-inversion.v1"
+                ]
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "pressure",
+                "evidenceSourceIds": [
+                  "compiler.equation.root-rewrite-plan.v1"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "root-rewrite.exponent-index-composition",
+            "operationClass": "exponent-index-composition",
+            "title": "Compose exponent and root index",
+            "sourceLatex": "\\sqrt[3]{x^2}",
+            "targetLatex": "x^{2/3}",
+            "outcome": "animated-transition",
+            "requiredEvidenceIds": [
+              "positive-integer-root-index"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "normalizer.equation.radical.v1",
+                  "shape.structure.root"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "vocabulary.equation.root-rewrite.v1",
+                  "compiler.equation.root-rewrite-plan.v1"
+                ]
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "compiler.equation.root-rewrite-plan.v1"
+                ]
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "pressure",
+                "evidenceSourceIds": [
+                  "src/semantic/rational-exponent-composition-exemplar.ts",
+                  "src/rendering/rational-exponent-composition-transit-session.ts"
+                ]
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "recipe.equation.radical-inversion.v1"
+                ]
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "pressure",
+                "evidenceSourceIds": [
+                  "compiler.equation.root-rewrite-plan.v1"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "root-rewrite.mixed-evaluation",
+            "operationClass": "mixed-evaluation",
+            "title": "Evaluate and preserve independent cohorts",
+            "sourceLatex": "\\sqrt{4x^2}",
+            "targetLatex": "2\\lvert x \\rvert",
+            "outcome": "animated-transition",
+            "requiredEvidenceIds": [
+              "closed-value",
+              "exact-root",
+              "even-positive-integer-power",
+              "real-valued-carrier"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "normalizer.equation.radical.v1",
+                  "shape.structure.root"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "vocabulary.equation.root-rewrite.v1",
+                  "compiler.equation.root-rewrite-plan.v1"
+                ]
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "compiler.equation.root-rewrite-plan.v1"
+                ]
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "pressure",
+                "evidenceSourceIds": [
+                  "pressure.root.mixed-evaluation",
+                  "src/rendering/root-extraction-pressure-native-endpoints.ts"
+                ]
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "recipe.equation.radical-inversion.v1"
+                ]
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "pressure",
+                "evidenceSourceIds": [
+                  "compiler.equation.root-rewrite-plan.v1"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "root-rewrite.partial-extraction",
+            "operationClass": "partial-extraction",
+            "title": "Extract a proved perfect-power factor",
+            "sourceLatex": "\\sqrt{x^2y}",
+            "targetLatex": "\\lvert x \\rvert\\sqrt{y}",
+            "outcome": "animated-transition",
+            "requiredEvidenceIds": [
+              "perfect-power-factor",
+              "residual-radicand",
+              "real-valued-carrier"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "normalizer.equation.radical.v1",
+                  "shape.structure.root"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "vocabulary.equation.root-rewrite.v1",
+                  "compiler.equation.root-rewrite-plan.v1"
+                ]
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "compiler.equation.root-rewrite-plan.v1"
+                ]
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "pressure",
+                "evidenceSourceIds": [
+                  "pressure.root.partial-extraction",
+                  "src/rendering/root-extraction-pressure-native-endpoints.ts"
+                ]
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "recipe.equation.radical-inversion.v1"
+                ]
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "pressure",
+                "evidenceSourceIds": [
+                  "compiler.equation.root-rewrite-plan.v1"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "root-rewrite.nested-root-composition",
+            "operationClass": "nested-root-composition",
+            "title": "Compose nested root operators",
+            "sourceLatex": "\\sqrt{\\sqrt{x}}",
+            "targetLatex": "\\sqrt[4]{x}",
+            "outcome": "animated-transition",
+            "requiredEvidenceIds": [
+              "nested-index-product"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "normalizer.equation.radical.v1",
+                  "shape.structure.root"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "vocabulary.equation.root-rewrite.v1",
+                  "compiler.equation.root-rewrite-plan.v1"
+                ]
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "compiler.equation.root-rewrite-plan.v1"
+                ]
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "recipe.equation.radical-inversion.v1"
+                ]
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "authoring.equation.radical-inversion.v1",
+                  "root-authoring.nested-index-composition"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "root-rewrite.blocked-rewrite",
+            "operationClass": "blocked-rewrite",
+            "title": "Refuse invalid distribution over a sum",
+            "sourceLatex": "\\sqrt{x^2+y^2}",
+            "outcome": "typed-gap",
+            "requiredEvidenceIds": [
+              "no-valid-root-law"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "normalizer.equation.radical.v1",
+                  "shape.structure.root"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "vocabulary.equation.root-rewrite.v1",
+                  "compiler.equation.root-rewrite-plan.v1"
+                ]
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "compiler.equation.root-rewrite-plan.v1"
+                ]
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "authoring.equation.radical-inversion.v1",
+                  "root-authoring.blocked-distribution"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "root-rewrite.composed-derivation",
+            "operationClass": "composed-derivation",
+            "title": "Require factoring before normalization",
+            "sourceLatex": "\\sqrt{x^2+2x+1}",
+            "targetLatex": "\\lvert x+1 \\rvert",
+            "outcome": "ordered-sequence",
+            "requiredEvidenceIds": [
+              "prior-factoring-state",
+              "even-positive-integer-power",
+              "real-valued-carrier"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "normalizer.equation.radical.v1",
+                  "shape.structure.root"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "vocabulary.equation.root-rewrite.v1",
+                  "compiler.equation.root-rewrite-plan.v1"
+                ]
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "compiler.equation.root-rewrite-plan.v1"
+                ]
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "authoring.equation.radical-inversion.v1",
+                  "root-authoring.factoring-first"
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "capabilityId": "capability.equation.substitution-collection-factoring",
@@ -1404,7 +2042,11 @@
       ],
       "evidenceTensions": [
         "playable-exemplar-without-general-generation"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "not-declared",
+        "promotionGate": "required-before-direct"
+      }
     },
     {
       "capabilityId": "capability.equation.branching-and-domain-conditions",
@@ -1460,7 +2102,11 @@
       "exemplarLinks": [],
       "evidenceTensions": [
         "planned-capability-without-exact-asset"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "not-declared",
+        "promotionGate": "required-before-direct"
+      }
     },
     {
       "capabilityId": "capability.equation.inequality-transformations",
@@ -1516,7 +2162,11 @@
       "exemplarLinks": [],
       "evidenceTensions": [
         "planned-capability-without-exact-asset"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "not-declared",
+        "promotionGate": "required-before-direct"
+      }
     },
     {
       "capabilityId": "capability.equation.trigonometric-transformations",
@@ -1581,7 +2231,11 @@
       "exemplarLinks": [],
       "evidenceTensions": [
         "planned-capability-without-exact-asset"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "not-declared",
+        "promotionGate": "required-before-direct"
+      }
     },
     {
       "capabilityId": "capability.equation.piecewise-transformations",
@@ -1637,7 +2291,11 @@
       "exemplarLinks": [],
       "evidenceTensions": [
         "planned-capability-without-exact-asset"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "not-declared",
+        "promotionGate": "required-before-direct"
+      }
     },
     {
       "capabilityId": "capability.equation.sequence-series-transformations",
@@ -1693,7 +2351,11 @@
       "exemplarLinks": [],
       "evidenceTensions": [
         "planned-capability-without-exact-asset"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "not-declared",
+        "promotionGate": "required-before-direct"
+      }
     },
     {
       "capabilityId": "capability.equation.limit-transformations",
@@ -1749,7 +2411,11 @@
       "exemplarLinks": [],
       "evidenceTensions": [
         "planned-capability-without-exact-asset"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "not-declared",
+        "promotionGate": "required-before-direct"
+      }
     },
     {
       "capabilityId": "capability.equation.differentiation-transformations",
@@ -1814,7 +2480,11 @@
       "exemplarLinks": [],
       "evidenceTensions": [
         "planned-capability-without-exact-asset"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "not-declared",
+        "promotionGate": "required-before-direct"
+      }
     },
     {
       "capabilityId": "capability.equation.integration-transformations",
@@ -1879,7 +2549,11 @@
       "exemplarLinks": [],
       "evidenceTensions": [
         "planned-capability-without-exact-asset"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "not-declared",
+        "promotionGate": "required-before-direct"
+      }
     },
     {
       "capabilityId": "capability.equation.polar-parametric-transformations",
@@ -1935,7 +2609,11 @@
       "exemplarLinks": [],
       "evidenceTensions": [
         "planned-capability-without-exact-asset"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "not-declared",
+        "promotionGate": "required-before-direct"
+      }
     },
     {
       "capabilityId": "capability.equation.differential-equation-transformations",
@@ -1991,7 +2669,11 @@
       "exemplarLinks": [],
       "evidenceTensions": [
         "planned-capability-without-exact-asset"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "not-declared",
+        "promotionGate": "required-before-direct"
+      }
     },
     {
       "capabilityId": "capability.equation.taylor-series-transformations",
@@ -2047,7 +2729,11 @@
       "exemplarLinks": [],
       "evidenceTensions": [
         "planned-capability-without-exact-asset"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "not-declared",
+        "promotionGate": "required-before-direct"
+      }
     },
     {
       "capabilityId": "capability.equation.binders-and-calculus-operators",
@@ -2103,7 +2789,11 @@
       "exemplarLinks": [],
       "evidenceTensions": [
         "planned-capability-without-exact-asset"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "not-declared",
+        "promotionGate": "required-before-direct"
+      }
     },
     {
       "capabilityId": "capability.equation.multiline-derivation-continuity",
@@ -2159,7 +2849,11 @@
       "exemplarLinks": [],
       "evidenceTensions": [
         "planned-capability-without-exact-asset"
-      ]
+      ],
+      "caseCoverage": {
+        "status": "not-declared",
+        "promotionGate": "required-before-direct"
+      }
     },
     {
       "capabilityId": "capability.matrix.vector-composition",

@@ -185,6 +185,38 @@
               Domain frontend required: {row.frontendAuthorities.join(", ")}
             </p>
           {/if}
+          {#if row.caseCoverage?.status === "tracked"}
+            <details
+              class="kp-transformation-coverage__cases"
+              data-kp-symbolic-case-coverage={row.capabilityId}
+            >
+              <summary>{row.caseCoverage.caseCount} edge cases tracked</summary>
+              <ol>
+                {#each row.caseCoverage.cases as coverageCase (coverageCase.id)}
+                  <li data-kp-symbolic-case={coverageCase.operationClass}>
+                    <strong>{coverageCase.title}</strong>
+                    <code>
+                      {coverageCase.sourceLatex}{coverageCase.targetLatex === undefined ? "" : ` → ${coverageCase.targetLatex}`}
+                    </code>
+                    <small>
+                      {coverageCase.outcome} · exemplar
+                      {coverageCase.maturity.find(({ dimensionId }) => dimensionId === "exemplar-executable")?.status}
+                      · generation
+                      {coverageCase.maturity.find(({ dimensionId }) => dimensionId === "generation-governed")?.status}
+                    </small>
+                  </li>
+                {/each}
+              </ol>
+            </details>
+          {:else if row.caseCoverage?.status === "legacy-untracked"}
+            <p class="kp-transformation-coverage__case-debt">
+              Case ledger migration pending.
+            </p>
+          {:else if row.caseCoverage?.status === "not-declared"}
+            <p class="kp-transformation-coverage__case-debt">
+              Case ledger required before Direct promotion.
+            </p>
+          {/if}
         </div>
         {#if row.exemplarLinks.length > 0}
           <nav aria-label={`${row.title} exemplars`}>

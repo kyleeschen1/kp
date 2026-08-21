@@ -12,7 +12,7 @@ test("coverage route renders one compact ordered capability list", async ({
     name: "Transformation coverage"
   })).toBeVisible();
   await expect(main.locator("[data-kp-transformation-coverage-row]"))
-    .toHaveCount(37);
+    .toHaveCount(38);
   await expect(main.locator("[data-kp-symbolic-mathematics-group]"))
     .toHaveCount(9);
   await expect(main.locator(
@@ -26,6 +26,14 @@ test("coverage route renders one compact ordered capability list", async ({
       "href",
       "/?artifact=animation.generated.function-wrap.apply-f"
     );
+  const rootCases = main.locator(
+    '[data-kp-symbolic-case-coverage="capability.equation.radical-inversion"]'
+  );
+  await expect(rootCases).toContainText("10 edge cases tracked");
+  await rootCases.locator("summary").click();
+  await expect(rootCases.locator("[data-kp-symbolic-case]"))
+    .toHaveCount(10);
+  await expect(rootCases).toContainText("Refuse invalid distribution over a sum");
   const search = main.getByRole("searchbox", {
     name: "Operation name, alias, or meaning"
   });

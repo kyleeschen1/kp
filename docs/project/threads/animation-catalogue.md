@@ -2,13 +2,12 @@
 
 Status: active
 Last Updated: 2026-08-21
-Current Next Action: execute the accepted root-rewrite vocabulary before
-narrow root promotion. Preserve the approved even-root equation exemplar;
-define compiler-owned recursive subtree dispositions, extend root endpoints
-for compound carriers, and build `sqrt((x+1)^2) -> abs(x+1)` as one reversible
-visual exemplar. Stop at that checkpoint before pressure callers or shared
-presentation promotion. See
-`../decisions/2026-08-21-kp-root-rewrite-vocabulary.md`.
+Current Next Action: choose the next accepted family packet from the generated
+coverage gaps. Before any new symbolic family becomes Direct, derive its case
+ledger from a typed vocabulary or corpus and expose remaining exemplar and
+generation gaps. Root is the first tracked family; existing Direct families
+are explicit migration debt rather than an immediate blocking migration. See
+`../decisions/2026-08-21-kp-symbolic-case-coverage-ledger.md`.
 
 The accepted breadth cadence is two loops per family: one reversible exemplar
 and checkpoint, then one structurally different caller plus narrow promotion.
@@ -22,6 +21,13 @@ or typed gaps rather than a claim of universal animation support. Graph2D
 function translation remains valuable but no longer leads the foundational
 sequence. See
 `../decisions/2026-08-20-prudent-animation-family-breadth-cadence.md`.
+
+The exponential, narrow root, and bounded persistent-equivalence packets are
+now complete. Root's ten semantic cases are projected into the static
+Transformation Coverage page with separate notation, meaning, authority,
+exemplar, promotion, and generation maturity. This is the durable source for
+edge-case status; prose lists may explain the taxonomy but must not become a
+second checklist.
 
 ## Goal
 

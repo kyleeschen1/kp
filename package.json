@@ -184,7 +184,7 @@
     "test:animation-capability-readiness": "node --disable-warning=ExperimentalWarning --test tests/animation-capability-readiness.test.ts",
     "generate:animation-transformation-coverage": "node --disable-warning=ExperimentalWarning scripts/generate-animation-transformation-coverage.ts",
     "check:animation-transformation-coverage": "node --disable-warning=ExperimentalWarning scripts/generate-animation-transformation-coverage.ts --check",
-    "test:animation-transformation-coverage": "node --disable-warning=ExperimentalWarning --test tests/animation-transformation-coverage.test.ts tests/symbolic-mathematics-capability-taxonomy.test.ts",
+    "test:animation-transformation-coverage": "node --disable-warning=ExperimentalWarning --test tests/animation-transformation-coverage.test.ts tests/symbolic-mathematics-capability-taxonomy.test.ts tests/symbolic-mathematics-case-coverage.test.ts",
     "test:animation-transformation-coverage-view": "node --disable-warning=ExperimentalWarning --test tests/animation-transformation-coverage.test.ts tests/animation-transformation-coverage-view.test.ts tests/legacy-root-route.test.ts",
     "test:equation-syntax-hazards": "node --disable-warning=ExperimentalWarning --test tests/equation-syntax-hazard-corpus.test.ts tests/equation-latex-endpoint-normalizer.test.ts",
     "test:exponential-homomorphism-law": "node --disable-warning=ExperimentalWarning --test tests/exponential-homomorphism-law.test.ts",

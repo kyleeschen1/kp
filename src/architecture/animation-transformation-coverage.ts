@@ -30,9 +30,16 @@ import { kpCalculusBcSymbolicMathematicsTaxonomy } from
   "./symbolic-mathematics-capability-taxonomy.ts";
 import { kpSymbolicCoverageMaturityDimensions } from
   "./symbolic-mathematics-maturity.ts";
+import {
+  kpLegacyDirectCaseCoverageExemptionCapabilityIds,
+  kpSymbolicCaseCoverageRegistry,
+  projectKpSymbolicCaseCoverage,
+  type KpSymbolicCaseCoverageProjection,
+  type KpSymbolicCaseCoverageRegistry
+} from "./symbolic-mathematics-case-coverage.ts";
 
 export const KP_ANIMATION_TRANSFORMATION_COVERAGE_SCHEMA =
-  "kp.animation-transformation-coverage.v1" as const;
+  "kp.animation-transformation-coverage.v2" as const;
 
 export interface KpAnimationTransformationCoverage {
   readonly schemaVersion:
@@ -45,6 +52,7 @@ export interface KpAnimationTransformationCoverage {
     compilerEvidenceSchemaVersion: string;
     frontendEvidenceSchemaVersion: string;
     readinessSchemaVersion: string;
+    caseCoverageSchemaVersion: string;
   }>;
   readonly summary: Readonly<{
     total: number;
@@ -88,6 +96,7 @@ export interface KpAnimationTransformationCoverageEntry {
     href?: string | undefined;
   }>[];
   readonly evidenceTensions: readonly KpAnimationCoverageEvidenceTension[];
+  readonly caseCoverage?: KpSymbolicCaseCoverageProjection | undefined;
 }
 
 export type KpAnimationTransformationCoverageRequirement = Readonly<{
@@ -122,6 +131,8 @@ export function compileKpAnimationTransformationCoverage(input: {
   readonly compilerEvidence: KpAnimationCapabilityCompilerEvidence;
   readonly frontendEvidence: KpAnimationDomainFrontendEvidence;
   readonly readiness: KpAnimationCapabilityReadiness;
+  readonly caseCoverage: KpSymbolicCaseCoverageRegistry;
+  readonly legacyDirectCaseCoverageExemptionCapabilityIds: readonly string[];
 }): KpAnimationTransformationCoverage {
   const entries = Object.freeze(input.plan.entries.map((capability) => {
     const readiness = requiredReadiness(capability.id, input.readiness);
@@ -156,6 +167,15 @@ export function compileKpAnimationTransformationCoverage(input: {
         title: asset.title,
         ...(asset.href === undefined ? {} : { href: asset.href })
       })));
+    const caseCoverage = capability.domain === "equation"
+      ? projectKpSymbolicCaseCoverage({
+          capabilityId: capability.id,
+          isDirect: readiness.status === "Direct",
+          registry: input.caseCoverage,
+          legacyExemptionCapabilityIds:
+            input.legacyDirectCaseCoverageExemptionCapabilityIds
+        })
+      : undefined;
     return Object.freeze({
       capabilityId: capability.id,
       order: capability.order,
@@ -169,7 +189,8 @@ export function compileKpAnimationTransformationCoverage(input: {
         .filter(({ status }) => status === "missing")
         .map(({ id }) => id)),
       exemplarLinks,
-      evidenceTensions: tensions(readiness.status, exemplarLinks.length)
+      evidenceTensions: tensions(readiness.status, exemplarLinks.length),
+      ...(caseCoverage === undefined ? {} : { caseCoverage })
     });
   }));
   const byStatus: Record<KpAnimationCapabilityReadinessStatus, number> = {
@@ -189,7 +210,8 @@ export function compileKpAnimationTransformationCoverage(input: {
       assetEvidenceSchemaVersion: input.assetEvidence.schemaVersion,
       compilerEvidenceSchemaVersion: input.compilerEvidence.schemaVersion,
       frontendEvidenceSchemaVersion: input.frontendEvidence.schemaVersion,
-      readinessSchemaVersion: input.readiness.schemaVersion
+      readinessSchemaVersion: input.readiness.schemaVersion,
+      caseCoverageSchemaVersion: input.caseCoverage.schemaVersion
     }),
     summary: Object.freeze({
       total: entries.length,
@@ -207,7 +229,10 @@ KpAnimationTransformationCoverage {
     assetEvidence: createKpAnimationCapabilityAssetEvidence(),
     compilerEvidence: createKpAnimationCapabilityCompilerEvidence(),
     frontendEvidence: createKpAnimationDomainFrontendEvidence(),
-    readiness: createKpAnimationCapabilityReadiness()
+    readiness: createKpAnimationCapabilityReadiness(),
+    caseCoverage: kpSymbolicCaseCoverageRegistry,
+    legacyDirectCaseCoverageExemptionCapabilityIds:
+      kpLegacyDirectCaseCoverageExemptionCapabilityIds
   });
 }
 

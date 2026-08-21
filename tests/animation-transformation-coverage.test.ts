@@ -19,6 +19,10 @@ import {
 test("generated coverage is a fresh deterministic plan projection", () => {
   const coverage = createKpAnimationTransformationCoverage();
   assert.deepEqual(generatedCoverage, coverage);
+  assert.equal(
+    coverage.generatedFrom.caseCoverageSchemaVersion,
+    "kp.symbolic-case-coverage.v1"
+  );
   assert.equal(coverage.summary.total, kpAnimationCapabilityPlan.entries.length);
   assert.equal(coverage.symbolicMathematics.groups.length, 9);
   assert.equal(coverage.symbolicMathematics.maturityDimensions.length, 6);
@@ -130,6 +134,37 @@ test("direct rows have exact authoring corpus compiler and exemplar evidence", (
   assert.deepEqual(roots?.exemplarLinks.map(({ assetId }) => assetId), [
     "animation.algebra.radical.compound-carrier-normalization"
   ]);
+  assert.equal(roots?.caseCoverage?.status, "tracked");
+  if (roots?.caseCoverage?.status !== "tracked") {
+    assert.fail("Root coverage must project the typed case ledger.");
+  }
+  assert.equal(roots.caseCoverage.caseCount, 10);
+  assert.deepEqual(roots.caseCoverage.cases.map(({ operationClass }) =>
+    operationClass), [
+    "closed-evaluation",
+    "inverse-normalization",
+    "compound-carrier-normalization",
+    "assumption-qualified-cancellation",
+    "exponent-index-composition",
+    "mixed-evaluation",
+    "partial-extraction",
+    "nested-root-composition",
+    "blocked-rewrite",
+    "composed-derivation"
+  ]);
+  assert.equal(roots.caseCoverage.cases.find(({ operationClass }) =>
+    operationClass === "blocked-rewrite")?.outcome, "typed-gap");
+});
+
+test("every equation capability exposes its case-ledger promotion state", () => {
+  const equationEntries = createKpAnimationTransformationCoverage().entries
+    .filter(({ domain }) => domain === "equation");
+  assert.ok(equationEntries.every(({ caseCoverage }) =>
+    caseCoverage !== undefined));
+  assert.ok(equationEntries.filter(({ status }) => status === "Direct")
+    .every(({ caseCoverage }) =>
+      caseCoverage?.status === "tracked" ||
+      caseCoverage?.status === "legacy-untracked"));
 });
 
 test("balanced operation coverage promotes only the proved six-operation path", () => {

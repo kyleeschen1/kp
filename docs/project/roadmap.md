@@ -212,32 +212,28 @@ Only this repository sequence is active:
    different caller and narrow promotion. Historical catalogue migration is
    not a prerequisite. See
    `decisions/2026-08-20-prudent-animation-family-breadth-cadence.md`.
-29. **Exponential/logarithmic duality:** active at its first visual repair.
-   The semantic law, exact endpoints, deterministic transit, catalogue asset,
-   and checkpoint exist, but human review rejected an opaque collision backing
-   plate. Revise `b^(x + y) → b^x b^y` through a target-local matched
-   dissolve: source structure collapses in place, only persistent payloads
-   travel, and derived bases expand at their native destinations. After
-   approval, retire opaque symbolic occlusion plates generally, then pressure
-   difference-to-quotient before narrow promotion.
-30. **Root rewrite vocabulary:** active after the approved even-root equation
-   checkpoint. Root work now distinguishes closed evaluation, persistent
-   symbolic and compound carriers, assumption-qualified cancellation,
-   exponent/index composition, mixed evaluation, partial extraction, nested
-   roots, blocked rewrites, and explicitly composed derivations. The next
-   visual gate is `sqrt((x+1)^2) -> abs(x+1)`; promotion waits for the accepted
-   pressure suite. See
+29. **Exponential/logarithmic duality:** complete and Direct. Sum-to-product and
+   difference-to-quotient share the promoted homomorphic fission machinery,
+   exact native endpoints, governed authoring, and generation evidence.
+30. **Root rewrite vocabulary:** complete at narrow family promotion. Root
+   work distinguishes closed evaluation, persistent symbolic and compound
+   carriers, assumption-qualified cancellation, exponent/index composition,
+   mixed evaluation, partial extraction, nested roots, blocked rewrites, and
+   explicitly composed derivations. The compound-carrier exemplar is approved;
+   the generated case ledger now keeps remaining per-case exemplar and
+   generation gaps visible rather than hiding them behind the Direct label. See
    `decisions/2026-08-21-kp-root-rewrite-vocabulary.md`.
 31. **Accepted subsequent family packets:** existing TypeScript/Python refactors through domain-owned
    frontends; finite summation/product binder infrastructure; one bounded
    Graph3D semantic transformation; then distinct differentiation and
    integration operator coverage. Graph2D function translation and fraction
    structural pressure are deferred and no longer block foundational breadth.
-32. **Persistent equivalence and derivation projection:** accepted
-   cross-family tranche after exponential/root pressure. Project the same
-   verified transitions as replacement,
-   side-by-side equivalence, or bounded derivation history; do not fork
-   semantic operations, motif recipes, or paint-carrier identity.
+32. **Persistent equivalence and derivation projection:** bounded proof
+   complete. The state-retention compiler supports replacement,
+   equivalence-frame, and derivation-trail policies, and the approved
+   log-product equivalence frame reuses the canonical operation and motion
+   while retaining a distinct frozen source occurrence. Broad cross-family
+   promotion remains evidence-driven.
 33. **Symbolic mathematics through Calculus BC:** accepted near-term coverage
    horizon. Extend the generated capability atlas so common algebra,
    precalculus, trigonometric, sequence/series, limit, differentiation,
@@ -245,6 +241,12 @@ Only this repository sequence is active:
    either governed and animatable or return an exact typed gap. This is not a
    CAS or a claim that all families are visually canonical. See
    `decisions/2026-08-20-symbolic-mathematics-through-calculus-bc-target.md`.
+34. **Generated symbolic case coverage:** complete for the first tracked
+   family. The root ledger derives ten cases from the typed rewrite vocabulary,
+   separates six maturity claims per case, exposes typed gaps and ordered
+   sequences, and prevents any new Direct symbolic family from bypassing case
+   enumeration. Existing Direct families carry explicit migration debt. See
+   `decisions/2026-08-21-kp-symbolic-case-coverage-ledger.md`.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.
@@ -256,7 +258,7 @@ The catalogue backlog and selection rationale are recorded in
 | Area | State | Direction |
 | --- | --- | --- |
 | Semantic/runtime spine | Strong and governed | Preserve; simplify callers around it. |
-| Equation animation | The reconciled generated ledger has 19 equation capabilities: 6 Direct, 4 Registered, 2 Exemplar, and 7 Missing. Balanced operations and alternative logarithm bases are Direct; the shared runtime, compositor, governed discovery, and repair envelope are strong | Preserve the converged vocabulary; prove exponential duality, then root branching and the accepted persistent-state projection; make Calculus BC breadth explicit without overstating maturity. |
+| Equation animation | The generated ledger has 29 equation capabilities: 8 Direct, 3 Registered, 2 Exemplar, and 16 Missing. Exponential duality and radical inversion are Direct; root is the first family with ten generated case-level maturity rows | Preserve the converged vocabulary; require case enumeration before new Direct promotions; migrate legacy Direct ledgers when they are touched; select the next accepted family packet from explicit gaps rather than prose memory. |
 | Graph2D | Economics and physics model callers are promoted; function transformations remain genuinely missing | Defer function translation: it proves symbolic/geometry continuity but not a missing host or runtime seam. |
 | Program animation | TypeScript, Python, and Scheme have approved exemplars and bounded renderer evidence, but the coverage ledger still lacks domain frontends, operation authority, recipes, and corpora | Close TypeScript and Python generation frontends after the exponent/root packets without changing approved choreography. |
 | Graph3D | One internal mesh-to-donut exemplar proves bounded hosting, not semantic scene generation | After binder infrastructure, build one bounded rotation/projection proof for camera/model separation, semantic identity, resource leases, fallback parity, and deterministic seek; calculus operator coverage follows as a distinct packet. |

@@ -1,6 +1,6 @@
 # KP Strategy
 
-Last Updated: 2026-08-19
+Last Updated: 2026-08-21
 
 ## North Star
 
@@ -89,9 +89,12 @@ one canonical model-facing ID represents each semantic act, compiler-owned
 binders attach exact verified evidence, and typed recovery preserves the last
 valid candidate. A pinned three-repeat live corpus passed all 18 case-runs with
 zero authority attempts, compiled mismatches, or silent fallbacks. Exponential
-duality is the accepted next bounded family, followed by root branching and
-the accepted persistent equivalence/derivation projection. Additional motif
-families and domain frontends remain explicit ordered gaps.
+duality and radical inversion are Direct, and the approved persistent
+equivalence frame proves state retention without forking the canonical
+transition. Root is the first family whose generated coverage is derived case
+by case from its typed vocabulary. Every new Direct symbolic family must now
+enumerate cases and maturity; older Direct families remain explicit migration
+debt. Additional motif families and domain frontends remain ordered gaps.
 Learner-facing layout, curriculum, SRS, broad tutoring, and public-site
 expansion remain paused.
 
@@ -109,12 +112,12 @@ send a KP artifact because its inspectable, manipulable, directly retrievable
 semantic state preserves conceptual machinery better than their ordinary
 explanation, video link, diagram, or worksheet.
 
-The immediate repository question is whether the shared homomorphism law can
-support a power-application realization without copying log-specific
-choreography. The bounded sequence then pressures root branching and a
-persistent equivalence projection. Human visual review remains the promotion
-gate. This is equation-domain breadth, not a universal graph, code, diagram,
-3D, or curriculum compiler.
+The immediate repository question is which accepted family packet offers the
+strongest new semantic pressure. Capability readiness and case maturity now
+come from generated evidence rather than narrative memory; future Direct
+promotion must include a typed case ledger. Human visual review remains the
+promotion gate for subjective choreography. This is equation-domain breadth,
+not a universal graph, code, diagram, 3D, or curriculum compiler.
 
 The convergence phase should reduce historical representations, implicit
 registration, compatibility paths, terminology drift, and model retrieval
