@@ -219,11 +219,32 @@
       "scope": "bf10 corpus types",
       "checkedAt": "2026-08-21T23:22:58.804Z",
       "notes": "All TypeScript, Svelte, and domain type checks pass."
+    },
+    {
+      "command": "npm run test:finite-binder-expansion",
+      "status": "passed",
+      "scope": "bf11 finite-sum Native KaTeX endpoint roles",
+      "checkedAt": "2026-08-21T23:29:36.137Z",
+      "notes": "53 focused tests pass, including exact source and target notation, complete role ownership, and distinct one-to-many identity."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "bf11 TypeScript and Svelte boundaries",
+      "checkedAt": "2026-08-21T23:29:37.125Z",
+      "notes": "All application, node, test, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "bf11 native real-paint compositor preservation",
+      "checkedAt": "2026-08-21T23:29:38.198Z",
+      "notes": "82 real-KaTeX compositor tests pass; existing ownership and settlement behavior is preserved."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "bf10 turns the entire 11-case ledger into executable corpus evidence: three sums compile through normalization, scope, range, operation, and recipe; eight unsupported cases stop with exact repair diagnostics and no fallback."
+    "summary": "Bound canonical finite-sum operator, declaration, bounds, body template, substituted instances, references, and connectors to unique native KaTeX paint owners without claiming choreography."
   },
   "expectedLearning": [
     "Whether finite sum expansion can make bound scope, ordered instantiation, and one-to-many lineage perceptually clear without false persistence.",

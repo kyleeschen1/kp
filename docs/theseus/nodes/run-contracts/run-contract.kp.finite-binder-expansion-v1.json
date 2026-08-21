@@ -126,7 +126,8 @@
     {
       "id": "bf11",
       "title": "Bind Native KaTeX roles",
-      "status": "planned"
+      "summary": "Canonical sum endpoints now expose exact native KaTeX and total stable semantic role ownership.",
+      "status": "complete"
     },
     {
       "id": "bf12",
