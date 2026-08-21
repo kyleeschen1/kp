@@ -704,11 +704,53 @@
       "scope": "r07 stale-server delivery repair",
       "checkedAt": "2026-08-21T00:16:02.441Z",
       "notes": "Graph validates at 1042 nodes and 24028 events; r08 remains gated."
+    },
+    {
+      "command": "npm run check:live-exponential-quotient-playback",
+      "status": "passed",
+      "scope": "r07 live port-8000 playback lifecycle repair",
+      "checkedAt": "2026-08-21T00:34:17.218Z",
+      "notes": "One click advances the exact live quotient past the former 20% race and completes at progress 1 with no page errors."
+    },
+    {
+      "command": "npm run test:browser:exponential-quotient-playback",
+      "status": "passed",
+      "scope": "r07 quotient playback lifecycle repair",
+      "checkedAt": "2026-08-21T00:34:18.400Z",
+      "notes": "Chromium requires one Play click to remain active past 40% and reach the native endpoint."
+    },
+    {
+      "command": "playwright WebKit exponential quotient playback check",
+      "status": "passed",
+      "scope": "r07 quotient playback lifecycle repair",
+      "checkedAt": "2026-08-21T00:34:19.461Z",
+      "notes": "The strengthened completion regression passes in WebKit."
+    },
+    {
+      "command": "node focused playback resample clock test",
+      "status": "passed",
+      "scope": "r07 shared playback lifecycle repair",
+      "checkedAt": "2026-08-21T00:34:20.522Z",
+      "notes": "Presentation resampling preserves the active clock and advances on the next tick."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "r07 shared playback lifecycle repair",
+      "checkedAt": "2026-08-21T00:34:21.563Z",
+      "notes": "TypeScript, Svelte, and domain checks pass."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "r07 repaired lifecycle checkpoint",
+      "checkedAt": "2026-08-21T00:34:56.391Z",
+      "notes": "Graph validates at 1042 nodes and 24036 events; r08 remains gated on human visual approval."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT after repaired r07 delivery: the stale port-8000 listener was replaced and true Play-control quotient motion is now regression-tested. Reload the quotient URL and review 19, 22, and 27 percent before r08 promotion."
+    "summary": "HUMAN_CHECKPOINT after repaired r07 delivery: exact port-8000 quotient playback now survives asynchronous presentation projection, advances continuously, and completes from one Play click. Review the quotient before approving r08 narrow promotion."
   },
   "expectedLearning": [
     "Whether the shared homomorphism law supports power applications without copying log choreography.",

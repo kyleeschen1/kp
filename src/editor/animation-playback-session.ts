@@ -156,7 +156,10 @@ export function reduceKpEditorAnimationPlaybackSession(
     case "resample":
       return resampleSession(session, {
         playbackStatus: session.player.playbackStatus,
-        progress: session.player.progress
+        progress: session.player.progress,
+        // Presentation-only resampling must not detach a playing session from
+        // its clock; otherwise the next tick can never advance it again.
+        lastTickMs: session.lastTickMs
       });
     case "seek-semantic-checkpoint":
       return resampleSession(session, {

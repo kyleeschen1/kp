@@ -16,6 +16,7 @@ import {
 import type {
   KpEditorAnimationPlaybackSession
 } from "./animation-playback-session.ts";
+import { kpGestaltStyleKey } from "../animation/gestalt-base-styles.ts";
 
 export type KpEditorAnimationGestaltTuningKind =
   | "gestalt-style"
@@ -53,21 +54,24 @@ export function applyKpEditorAnimationGestaltTuning(input: {
   readonly player: HTMLElement;
   readonly kind: KpEditorAnimationGestaltTuningKind;
   readonly value: string;
-}): void {
+}): boolean {
   if (input.kind === "gestalt-style") {
-    gestaltStyles.set(
-      input.player,
-      parseKpEditorGestaltStyleRef(input.value)
-    );
+    const current = gestaltStyles.get(input.player);
+    const next = parseKpEditorGestaltStyleRef(input.value);
+    if (current !== undefined &&
+      kpGestaltStyleKey(current) === kpGestaltStyleKey(next)) return false;
+    gestaltStyles.set(input.player, next);
   } else {
     const mode: KpFocusExperimentMode =
       input.value === "elevated" || input.value === "no-depth"
         ? input.value
         : "flat";
+    if (focusExperimentModes.get(input.player) === mode) return false;
     focusExperimentModes.set(input.player, mode);
     input.player.dataset["kpEditorAnimationFocusExperiment"] = mode;
   }
   invalidateKpEditorAnimationGestaltDiagnostics(input.player);
+  return true;
 }
 
 export function invalidateKpEditorAnimationGestaltDiagnostics(

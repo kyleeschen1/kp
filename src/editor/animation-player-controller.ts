@@ -227,7 +227,12 @@ export function applyKpEditorAnimationPresentationTuning(
 ): void {
   void loadAnimationPlayerGestaltCapability().then((client) => {
     if (!player.isConnected) return;
-    client.applyKpEditorAnimationGestaltTuning({ player, kind, value });
+    const changed = client.applyKpEditorAnimationGestaltTuning({
+      player,
+      kind,
+      value
+    });
+    if (!changed) return;
     resampleAfterPresentationTuning(player);
   });
 }
@@ -543,19 +548,17 @@ function handlePlayerInput(event: Event): void {
 function resampleAfterPresentationTuning(player: HTMLElement): void {
   const session = sessions.get(player);
   if (session === undefined) return;
-  const paused = session.player.playbackStatus === "playing"
-    ? reduceKpEditorAnimationPlaybackSession(session, {
-        type: "pause",
-        nowMs: performance.now()
-      })
-    : session;
-  const resampled = reduceKpEditorAnimationPlaybackSession(paused, {
-    type: "seek",
-    progress: paused.player.progress
+  // Tuning changes presentation, not playback intent. Resample the current
+  // semantic frame without turning an asynchronously loaded option into an
+  // implicit Pause command.
+  const resampled = reduceKpEditorAnimationPlaybackSession(session, {
+    type: "resample"
   });
   sessions.set(player, resampled);
-  cancelPlayerFrame(player);
   syncPlayerDom(player, resampled);
+  if (resampled.player.playbackStatus === "playing") {
+    schedulePlayerFrame(player);
+  }
 }
 
 function handlePlayerKeydown(event: KeyboardEvent): void {

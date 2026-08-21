@@ -30,16 +30,29 @@ test("visible play control drives continuous exponential quotient motion", async
   await expect.poll(async () => Number(await stage.getAttribute(
     "data-kp-exponential-homomorphism-progress"
   ))).toBeGreaterThan(0.08);
-  const firstProgress = Number(await stage.getAttribute(
-    "data-kp-exponential-homomorphism-progress"
-  ));
   const firstPaint = await movingPaintSnapshot(stage);
   expect(firstPaint.length).toBeGreaterThan(0);
 
   await expect.poll(async () => Number(await stage.getAttribute(
     "data-kp-exponential-homomorphism-progress"
-  ))).toBeGreaterThan(firstProgress + 0.05);
+  ))).toBeGreaterThan(0.4);
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-status",
+    "playing"
+  );
   expect(await movingPaintSnapshot(stage)).not.toEqual(firstPaint);
+
+  // The former race paused the live player near 20% when lazy presentation
+  // defaults resolved. Require the same click to reach its native endpoint.
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-status",
+    "complete",
+    { timeout: 7_000 }
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-exponential-homomorphism-progress",
+    "1"
+  );
 });
 
 test("shared crossover tuner updates coarse URL timing without remounting endpoints", async ({

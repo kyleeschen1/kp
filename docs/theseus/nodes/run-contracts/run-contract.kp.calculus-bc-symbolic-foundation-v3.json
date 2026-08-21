@@ -86,7 +86,7 @@
     {
       "id": "r07",
       "title": "pressure-visual-checkpoint",
-      "summary": "Produced the product/quotient visual checkpoint and shared presentation tuner. After a stale port-8000 server hid quotient motion, added a real Play-control regression proving progress advances through distinct material frames; corrected the contact-sheet viewport type. Fresh current server is now running, and r08 remains gated on human approval.",
+      "summary": "Repaired the actual quotient Play lifecycle race: asynchronously projected presentation defaults now no-op when unchanged and resample without pausing or detaching the shared clock when changed. The exact port-8000 page and strengthened Chromium/WebKit regressions advance past the former 20 percent freeze and complete from one click; r08 remains human-gated.",
       "status": "complete"
     },
     {

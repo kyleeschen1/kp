@@ -63,6 +63,24 @@ test("editor playback session advances, pauses, seeks, and steps on the runtime 
   assert.equal(stepped.player.runtimeFrame.clock.progress, stepped.player.progress);
 });
 
+test("presentation resampling preserves a playing session's clock", () => {
+  const playing = reduceKpEditorAnimationPlaybackSession(
+    createSolveXSession(),
+    { type: "play", nowMs: 1_000 }
+  );
+  const resampled = reduceKpEditorAnimationPlaybackSession(playing, {
+    type: "resample"
+  });
+  const advanced = reduceKpEditorAnimationPlaybackSession(resampled, {
+    type: "tick",
+    nowMs: 1_600
+  });
+
+  assert.equal(resampled.player.playbackStatus, "playing");
+  assert.equal(resampled.lastTickMs, 1_000);
+  assert.equal(advanced.player.progress, 0.25);
+});
+
 test("editor playback session mirrors position before advancing rewind", () => {
   const sought = reduceKpEditorAnimationPlaybackSession(createSolveXSession(), {
     type: "seek",
