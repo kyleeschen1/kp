@@ -107,11 +107,25 @@
       "scope": "bf03 type boundary",
       "checkedAt": "2026-08-21T22:55:50.999Z",
       "notes": "Application, Node, test, Svelte, and domain type checks pass."
+    },
+    {
+      "command": "npm run test:finite-binder-expansion",
+      "status": "passed",
+      "scope": "bf04 endpoint normalization",
+      "checkedAt": "2026-08-21T22:59:52.254Z",
+      "notes": "17 focused tests pass, including canonical source and target roles plus negative endpoint cases."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "bf04 normalization boundary",
+      "checkedAt": "2026-08-21T22:59:53.180Z",
+      "notes": "All TypeScript, Svelte, and domain type checks pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "bf03 defines immutable renderer-neutral operator, declaration, integer-limit, body-template, reference, and distinct derived-instance vocabulary without parsing, range, lineage, motion, or paint authority."
+    "summary": "bf04 adds exact fail-closed normalization for one explicit integer-bounded sum and its direct indexed additive target without inferring scope proof, range legality, lineage, or presentation."
   },
   "expectedLearning": [
     "Whether finite sum expansion can make bound scope, ordered instantiation, and one-to-many lineage perceptually clear without false persistence.",

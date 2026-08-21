@@ -84,7 +84,8 @@
     {
       "id": "bf04",
       "title": "Normalize bounded sum endpoints",
-      "status": "planned"
+      "summary": "Normalized canonical bounded-sum source and expanded target endpoint shapes with typed unsupported diagnostics.",
+      "status": "complete"
     },
     {
       "id": "bf05",
