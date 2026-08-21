@@ -9,6 +9,39 @@ const animationId =
 const quotientAnimationId =
   "animation.algebra.exponential-homomorphism.difference-to-quotient";
 
+test("visible play control drives continuous exponential quotient motion", async ({
+  page
+}) => {
+  await page.goto(`/?artifact=${quotientAnimationId}`);
+  const player = page.locator(
+    `[data-kp-animation-catalogue-stage] ` +
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${quotientAnimationId}"]`
+  );
+  const stage = player.locator("[data-kp-exponential-homomorphism-stage]");
+  const play = player.getByRole("button", { name: "Play animation" });
+  await expectReady(stage);
+
+  await play.click();
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-status",
+    "playing"
+  );
+  await expect.poll(async () => Number(await stage.getAttribute(
+    "data-kp-exponential-homomorphism-progress"
+  ))).toBeGreaterThan(0.08);
+  const firstProgress = Number(await stage.getAttribute(
+    "data-kp-exponential-homomorphism-progress"
+  ));
+  const firstPaint = await movingPaintSnapshot(stage);
+  expect(firstPaint.length).toBeGreaterThan(0);
+
+  await expect.poll(async () => Number(await stage.getAttribute(
+    "data-kp-exponential-homomorphism-progress"
+  ))).toBeGreaterThan(firstProgress + 0.05);
+  expect(await movingPaintSnapshot(stage)).not.toEqual(firstPaint);
+});
+
 test("shared crossover tuner updates coarse URL timing without remounting endpoints", async ({
   page
 }) => {

@@ -59,7 +59,8 @@ async function capture(): Promise<void> {
       await page.setViewportSize(desktopViewport);
       await openCaller(page, harness.baseUrl, caller.animationId);
       await waitForReady(stageFor(page, caller.animationId));
-      let activeViewport = desktopViewport;
+      let activeViewport:
+        typeof desktopViewport | typeof narrowViewport = desktopViewport;
       for (const [checkpointIndex, checkpoint] of checkpoints.entries()) {
         if (checkpoint.viewport !== activeViewport) {
           activeViewport = checkpoint.viewport;

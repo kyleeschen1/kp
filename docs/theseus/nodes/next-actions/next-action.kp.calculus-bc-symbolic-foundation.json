@@ -683,11 +683,32 @@
       "scope": "r07 durable human-checkpoint state",
       "checkedAt": "2026-08-21T00:05:22.658Z",
       "notes": "The graph validates at 1042 nodes and 24023 events with r07 complete and r08 gated on explicit approval."
+    },
+    {
+      "command": "npm run test:browser:exponential-quotient-playback",
+      "status": "passed",
+      "scope": "r07 live-playback regression",
+      "checkedAt": "2026-08-21T00:14:49.075Z",
+      "notes": "The actual Play control advances quotient progress through distinct material frames; endpoint-only seek evidence is no longer sufficient."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "r07 playback-test and contact-sheet repair",
+      "checkedAt": "2026-08-21T00:14:50.742Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks pass after widening the contact-sheet viewport variable."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "r07 stale-server delivery repair",
+      "checkedAt": "2026-08-21T00:16:02.441Z",
+      "notes": "Graph validates at 1042 nodes and 24028 events; r08 remains gated."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT after r07: compare product and quotient at 19, 22, and 27 percent for carrier identity, connector timing, fraction-bar emergence, pacing, and occlusion. Do not begin r08 narrow promotion without explicit approval."
+    "summary": "HUMAN_CHECKPOINT after repaired r07 delivery: the stale port-8000 listener was replaced and true Play-control quotient motion is now regression-tested. Reload the quotient URL and review 19, 22, and 27 percent before r08 promotion."
   },
   "expectedLearning": [
     "Whether the shared homomorphism law supports power applications without copying log choreography.",
