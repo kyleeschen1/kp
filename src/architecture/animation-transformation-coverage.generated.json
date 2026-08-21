@@ -1264,8 +1264,10 @@
           "kind": "endpoint-normalizer",
           "authorityId": "normalizer.equation.radical.v1",
           "summary": "Root indices, radicands, and power equivalents normalize without losing grouping.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "normalizer.equation.radical.v1"
+          ]
         },
         {
           "id": "requirement.equation.radical-inversion.operation",
@@ -1304,7 +1306,6 @@
       ],
       "gaps": [],
       "remainingRequirementIds": [
-        "requirement.equation.radical-inversion.normalizer",
         "requirement.equation.radical-inversion.recipe",
         "requirement.equation.radical-inversion.exemplar",
         "requirement.equation.radical-inversion.corpus"

@@ -134,6 +134,23 @@ test("reviewed alternative-base authorities are exact registrations", () => {
   }
 });
 
+test("radical endpoint normalization is exact typed compiler authority", () => {
+  const projection = createKpAnimationCapabilityCompilerEvidence();
+  const requirement = projection.requirements.find(({ requirementId }) =>
+    requirementId === "requirement.equation.radical-inversion.normalizer"
+  );
+  assert.equal(requirement?.status, "matched");
+  assert.equal(requirement?.authorityId, "normalizer.equation.radical.v1");
+  if (requirement?.status !== "matched") return;
+  assert.deepEqual(requirement.evidence.map(({ source, sourcePath }) => ({
+    source,
+    sourcePath
+  })), [{
+    source: "verified-capability-authority",
+    sourcePath: "src/semantic/radical-endpoint-normalizer.ts"
+  }]);
+});
+
 test("compiler evidence rejects duplicate source registrations", () => {
   const duplicate: KpAnimationCapabilityCompilerAuthority = {
     authorityId: "operation.wrap-function.v1",

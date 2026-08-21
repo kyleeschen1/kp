@@ -98,7 +98,8 @@
     {
       "id": "r09",
       "title": "root-endpoint-normalization",
-      "status": "planned"
+      "summary": "Added a typed power and radical endpoint normalizer with source provenance, parity classification, branch and domain inference boundaries, exact compiler evidence, and focused fixtures.",
+      "status": "complete"
     },
     {
       "id": "r10",

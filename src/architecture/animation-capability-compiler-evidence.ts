@@ -45,6 +45,9 @@ import {
 import {
   KP_LIKE_DENOMINATOR_COMBINATION_OPERATION_AUTHORITY
 } from "../semantic/fraction-like-denominator-combination.ts";
+import {
+  KP_RADICAL_ENDPOINT_NORMALIZER
+} from "../semantic/radical-endpoint-normalizer.ts";
 import type {
   KpAnimationCapabilityPlan,
   KpAnimationCapabilityRequirementKind
@@ -252,6 +255,9 @@ readonly KpAnimationCapabilityCompilerAuthority[] {
     verified(KP_EQUATION_LOGARITHM_BASE_SYNTAX_NORMALIZER,
       "endpoint-normalizer",
       "src/authoring/equation-latex-endpoint-normalizer.ts"),
+    verified(KP_RADICAL_ENDPOINT_NORMALIZER,
+      "endpoint-normalizer",
+      "src/semantic/radical-endpoint-normalizer.ts"),
     verified(KP_LOGARITHM_CHANGE_OF_BASE_OPERATION_AUTHORITY,
       "semantic-operation", "src/semantic/logarithm-change-of-base.ts"),
     verified(KP_LOGARITHM_CHANGE_OF_BASE_RECIPE_AUTHORITY,
