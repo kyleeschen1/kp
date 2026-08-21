@@ -60,7 +60,8 @@
     {
       "id": "rv02",
       "title": "verified-root-rewrite-plans",
-      "status": "planned"
+      "summary": "Added a nominal data-driven root plan compiler. Per-class declarations own exact roles, proof obligations, prior-operation requirements, and derived persist/consume/introduce/fuse/retain-enclosure dispositions; blocked laws return typed gaps, composed derivations remain sequence-only, carrier identity mismatches fail closed, and presentation fields are rejected. Twenty-three focused root/inverse tests and full typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "rv03",
