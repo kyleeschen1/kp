@@ -102,6 +102,8 @@
     "test:python-extract-helper-binding": "node --disable-warning=ExperimentalWarning --test tests/python-extract-helper-semantic-binder.test.ts",
     "test:python-code-generation-frontend": "node --disable-warning=ExperimentalWarning --test tests/python-code-generation-frontend.test.ts",
     "test:python-code-generation-corpus": "node --disable-warning=ExperimentalWarning --test tests/python-extract-helper-generation-corpus.test.ts",
+    "test:python-code-generation-authoring": "node --disable-warning=ExperimentalWarning --test tests/python-code-generation-authoring.test.ts",
+    "compile:python-code-generation": "node --disable-warning=ExperimentalWarning scripts/compile-python-code-generation.ts",
     "test:scheme-factorial": "node --disable-warning=ExperimentalWarning --test tests/scheme-factorial-*.test.ts",
     "visual:scheme-factorial": "playwright test tests/scheme-factorial.browser.spec.ts tests/scheme-factorial-catalogue.browser.spec.ts --project=chromium --workers=1",
     "test:browser:legacy-root-routes": "playwright test tests/legacy-root-route.browser.spec.ts --project=chromium --workers=1",

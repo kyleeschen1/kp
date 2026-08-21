@@ -321,6 +321,27 @@
       "scope": "cf17",
       "checkedAt": "2026-08-21T21:37:41.124Z",
       "notes": "Six frontend tests prove lexical binding order and source preservation; canonical generated semantics remain fresh."
+    },
+    {
+      "command": "npm run test:python-code-generation-authoring",
+      "status": "passed",
+      "scope": "cf18",
+      "checkedAt": "2026-08-21T21:40:11.957Z",
+      "notes": "Five tests prove discovery, validation, immutable last-valid retention, repair semantics, and CLI exit/output behavior."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/python-*.test.ts",
+      "status": "passed",
+      "scope": "cf18",
+      "checkedAt": "2026-08-21T21:40:13.309Z",
+      "notes": "All 90 Python tests pass after adding the authoring entrance."
+    },
+    {
+      "command": "tsc focused Python authoring project",
+      "status": "passed",
+      "scope": "cf18",
+      "checkedAt": "2026-08-21T21:40:14.372Z",
+      "notes": "Authoring API and CLI are build-time type-safe."
     }
   ],
   "allowedWork": [
@@ -451,7 +472,8 @@
     {
       "id": "cf18",
       "title": "Python-authoring-entrance",
-      "status": "planned"
+      "summary": "Added discoverable Python extract-helper authoring, validated tool-neutral compilation, immutable last-valid repair retention, and a machine-readable JSON CLI.",
+      "status": "complete"
     },
     {
       "id": "cf19",
