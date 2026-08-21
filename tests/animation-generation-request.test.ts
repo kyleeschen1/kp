@@ -46,7 +46,7 @@ const domainExamples: readonly Readonly<{
   capabilityId: "capability.graph-3d.scene-transformations"
 }]);
 
-test("one envelope accepts opaque requests while unbuilt frontends stay gaps", () => {
+test("one envelope accepts opaque requests while only proved frontends close", () => {
   for (const example of domainExamples) {
     const input = request(example);
     const result = validateKpAnimationGenerationRequest(input);
@@ -56,7 +56,7 @@ test("one envelope accepts opaque requests while unbuilt frontends stay gaps", (
       validateKpAnimationGenerationCapabilityPins(result.request).map(
         ({ code }) => code
       ),
-      example.domain === "equation"
+      example.domain === "equation" || example.domain === "code"
         ? []
         : ["animation-generation.frontend.required"]
     );

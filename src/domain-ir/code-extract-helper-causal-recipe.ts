@@ -6,6 +6,8 @@ import type {
   KpExtractHelperCausalContract,
   KpExtractHelperCausalRelationKind
 } from "./extract-helper-causal-contract.ts";
+import { KP_CODE_EXTRACT_HELPER_RECIPE_AUTHORITY } from
+  "./code-extract-helper-authorities.ts";
 
 export const KP_CODE_EXTRACT_HELPER_CAUSAL_RECIPE_SCHEMA =
   "kp.code-extract-helper-causal-recipe.v1" as const;
@@ -18,7 +20,7 @@ export interface KpCodeExtractHelperRecipeCandidate {
 
 export interface KpCodeExtractHelperCausalRecipe {
   readonly schemaVersion: typeof KP_CODE_EXTRACT_HELPER_CAUSAL_RECIPE_SCHEMA;
-  readonly recipeId: "recipe.code.extract-helper.v1";
+  readonly recipeId: typeof KP_CODE_EXTRACT_HELPER_RECIPE_AUTHORITY;
   readonly operation: "extract-helper";
   readonly provedLanguages: readonly ["typescript", "python"];
   readonly contributorCardinality: Readonly<{
@@ -109,7 +111,7 @@ export function promoteKpCodeExtractHelperCausalRecipe(
   }
   return deepFreeze({
     schemaVersion: KP_CODE_EXTRACT_HELPER_CAUSAL_RECIPE_SCHEMA,
-    recipeId: "recipe.code.extract-helper.v1" as const,
+    recipeId: KP_CODE_EXTRACT_HELPER_RECIPE_AUTHORITY,
     operation: "extract-helper" as const,
     provedLanguages: ["typescript", "python"] as const,
     contributorCardinality: {

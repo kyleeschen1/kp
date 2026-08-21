@@ -104,6 +104,7 @@
     "test:python-code-generation-corpus": "node --disable-warning=ExperimentalWarning --test tests/python-extract-helper-generation-corpus.test.ts",
     "test:python-code-generation-authoring": "node --disable-warning=ExperimentalWarning --test tests/python-code-generation-authoring.test.ts",
     "compile:python-code-generation": "node --disable-warning=ExperimentalWarning scripts/compile-python-code-generation.ts",
+    "test:python-code-generation-isolation": "node --disable-warning=ExperimentalWarning --test tests/python-code-generation-runtime-isolation.test.ts",
     "test:code-extract-helper-recipe": "node --disable-warning=ExperimentalWarning --test tests/code-extract-helper-causal-recipe.test.ts",
     "generate:code-operation-discovery-catalog": "node --disable-warning=ExperimentalWarning scripts/generate-code-operation-discovery-catalog.ts",
     "check:code-operation-discovery-catalog": "node --disable-warning=ExperimentalWarning scripts/generate-code-operation-discovery-catalog.ts --check",

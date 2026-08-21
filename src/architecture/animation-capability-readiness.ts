@@ -30,6 +30,15 @@ import {
 import {
   KP_BOTH_SIDES_OPERATION_FAMILY_AUTHORITY
 } from "../semantic/both-sides-operation-family.ts";
+import {
+  KP_CODE_EXTRACT_HELPER_RECIPE_AUTHORITY,
+  KP_PYTHON_EXTRACT_HELPER_AUTHORING_AUTHORITY,
+  KP_PYTHON_EXTRACT_HELPER_CORPUS_AUTHORITY,
+  KP_PYTHON_EXTRACT_HELPER_OPERATION_AUTHORITY,
+  KP_TYPESCRIPT_EXTRACT_HELPER_AUTHORING_AUTHORITY,
+  KP_TYPESCRIPT_EXTRACT_HELPER_CORPUS_AUTHORITY,
+  KP_TYPESCRIPT_EXTRACT_HELPER_OPERATION_AUTHORITY
+} from "../domain-ir/code-extract-helper-authorities.ts";
 import type { KpAnimationCapabilityPlan } from
   "./animation-capability-plan.ts";
 import {
@@ -42,6 +51,11 @@ import {
   type KpAnimationCapabilityCompilerEvidence,
   type KpAnimationCapabilityCompilerRequirementEvidence
 } from "./animation-capability-compiler-evidence.ts";
+import {
+  createKpAnimationDomainFrontendEvidence,
+  type KpAnimationDomainFrontendEvidence,
+  type KpAnimationDomainFrontendRequirementEvidence
+} from "./animation-domain-frontend-evidence.ts";
 import { kpAnimationCapabilityPlan } from
   "./cross-domain-animation-capability-plan.ts";
 
@@ -61,13 +75,17 @@ export interface KpAnimationCapabilityDirectIntentEvidence {
   readonly planKind:
     | KpCompiledEquationIntentPlan["kind"]
     | "equation-transform-series-runtime"
-    | "root-rewrite-plan";
+    | "root-rewrite-plan"
+    | "code-refactor-semantic-plan";
   readonly resolvedAuthorityIds: readonly string[];
   readonly generationCorpusAuthorityIds: readonly string[];
+  readonly requiredCompilerAuthorityIds?: readonly string[];
+  readonly requiredFrontendAuthorityIds?: readonly string[];
   readonly sourcePath:
     | "src/authoring/compile-equation-intent.ts"
     | "src/authoring/compile-equation-transform-series.ts"
-    | "src/authoring/root-rewrite-authoring-corpus.ts";
+    | "src/authoring/root-rewrite-authoring-corpus.ts"
+    | "src/authoring/code-operation-discovery-api.ts";
 }
 
 export interface KpAnimationCapabilityReadiness {
@@ -129,6 +147,7 @@ export function compileKpAnimationCapabilityReadiness(input: {
   readonly plan: KpAnimationCapabilityPlan;
   readonly assetEvidence: KpAnimationCapabilityAssetEvidence;
   readonly compilerEvidence: KpAnimationCapabilityCompilerEvidence;
+  readonly frontendEvidence: KpAnimationDomainFrontendEvidence;
   readonly directIntentEvidence:
     readonly KpAnimationCapabilityDirectIntentEvidence[];
 }): KpAnimationCapabilityReadiness {
@@ -141,11 +160,16 @@ export function compileKpAnimationCapabilityReadiness(input: {
       capability.id,
       input.assetEvidence.requirements
     );
+    const frontendMatches = matchedFrontendRequirements(
+      capability.id,
+      input.frontendEvidence.requirements
+    );
     const directIntent = directIntentForCapability(
       capability.requirements
         .filter(({ kind }) => kind === "canonical-exemplar")
         .map(({ authorityId }) => authorityId),
       compilerMatches,
+      frontendMatches,
       input.directIntentEvidence
     );
     if (directIntent !== undefined) {
@@ -215,7 +239,17 @@ export function compileKpAnimationCapabilityReadiness(input: {
         ]),
         generationCorpusAuthorityIds: Object.freeze([
           ...evidence.generationCorpusAuthorityIds
-        ])
+        ]),
+        ...(evidence.requiredCompilerAuthorityIds === undefined ? {} : {
+          requiredCompilerAuthorityIds: Object.freeze([
+            ...evidence.requiredCompilerAuthorityIds
+          ])
+        }),
+        ...(evidence.requiredFrontendAuthorityIds === undefined ? {} : {
+          requiredFrontendAuthorityIds: Object.freeze([
+            ...evidence.requiredFrontendAuthorityIds
+          ])
+        })
       })
     )),
     entries
@@ -228,6 +262,7 @@ KpAnimationCapabilityReadiness {
     plan: kpAnimationCapabilityPlan,
     assetEvidence: createKpAnimationCapabilityAssetEvidence(),
     compilerEvidence: createKpAnimationCapabilityCompilerEvidence(),
+    frontendEvidence: createKpAnimationDomainFrontendEvidence(),
     directIntentEvidence: createDirectIntentEvidence()
   });
 }
@@ -285,12 +320,62 @@ readonly KpAnimationCapabilityDirectIntentEvidence[] {
   const balancedEvidence = createBalancedOperationDirectEvidence();
   const logarithmBaseEvidence = createLogarithmBaseDirectEvidence();
   const rootRewriteEvidence = createRootRewriteDirectEvidence();
+  const codeEvidence = createCodeRefactorDirectEvidence();
   return Object.freeze([
     ...intentEvidence,
     ...(balancedEvidence === undefined ? [] : [balancedEvidence]),
     ...(logarithmBaseEvidence === undefined ? [] : [logarithmBaseEvidence]),
-    ...(rootRewriteEvidence === undefined ? [] : [rootRewriteEvidence])
+    ...(rootRewriteEvidence === undefined ? [] : [rootRewriteEvidence]),
+    ...codeEvidence
   ]);
+}
+
+function createCodeRefactorDirectEvidence():
+readonly KpAnimationCapabilityDirectIntentEvidence[] {
+  return Object.freeze([Object.freeze({
+    animationId: "animation.programming.typescript-free-shipping-refactor",
+    operationId: KP_TYPESCRIPT_EXTRACT_HELPER_OPERATION_AUTHORITY,
+    authoringAuthorityId:
+      KP_TYPESCRIPT_EXTRACT_HELPER_AUTHORING_AUTHORITY,
+    planKind: "code-refactor-semantic-plan" as const,
+    resolvedAuthorityIds: Object.freeze([
+      KP_TYPESCRIPT_EXTRACT_HELPER_OPERATION_AUTHORITY,
+      KP_CODE_EXTRACT_HELPER_RECIPE_AUTHORITY
+    ]),
+    generationCorpusAuthorityIds: Object.freeze([
+      KP_TYPESCRIPT_EXTRACT_HELPER_CORPUS_AUTHORITY
+    ]),
+    requiredCompilerAuthorityIds: Object.freeze([
+      KP_TYPESCRIPT_EXTRACT_HELPER_OPERATION_AUTHORITY,
+      KP_CODE_EXTRACT_HELPER_RECIPE_AUTHORITY,
+      KP_TYPESCRIPT_EXTRACT_HELPER_CORPUS_AUTHORITY
+    ]),
+    requiredFrontendAuthorityIds: Object.freeze([
+      "frontend.code.typescript-compiler.v1"
+    ]),
+    sourcePath: "src/authoring/code-operation-discovery-api.ts" as const
+  }), Object.freeze({
+    animationId: "animation.programming.python-free-shipping-refactor",
+    operationId: KP_PYTHON_EXTRACT_HELPER_OPERATION_AUTHORITY,
+    authoringAuthorityId: KP_PYTHON_EXTRACT_HELPER_AUTHORING_AUTHORITY,
+    planKind: "code-refactor-semantic-plan" as const,
+    resolvedAuthorityIds: Object.freeze([
+      KP_PYTHON_EXTRACT_HELPER_OPERATION_AUTHORITY,
+      KP_CODE_EXTRACT_HELPER_RECIPE_AUTHORITY
+    ]),
+    generationCorpusAuthorityIds: Object.freeze([
+      KP_PYTHON_EXTRACT_HELPER_CORPUS_AUTHORITY
+    ]),
+    requiredCompilerAuthorityIds: Object.freeze([
+      KP_PYTHON_EXTRACT_HELPER_OPERATION_AUTHORITY,
+      KP_CODE_EXTRACT_HELPER_RECIPE_AUTHORITY,
+      KP_PYTHON_EXTRACT_HELPER_CORPUS_AUTHORITY
+    ]),
+    requiredFrontendAuthorityIds: Object.freeze([
+      "frontend.code.python-ast.v1"
+    ]),
+    sourcePath: "src/authoring/code-operation-discovery-api.ts" as const
+  })]);
 }
 
 function createRootRewriteDirectEvidence():
@@ -430,10 +515,29 @@ function matchedAssetRequirements(
     requirement.status === "matched");
 }
 
+function matchedFrontendRequirements(
+  capabilityId: string,
+  requirements:
+    readonly KpAnimationDomainFrontendRequirementEvidence[]
+): readonly Extract<
+  KpAnimationDomainFrontendRequirementEvidence,
+  { readonly status: "matched" }
+>[] {
+  return requirements.filter((requirement): requirement is Extract<
+    KpAnimationDomainFrontendRequirementEvidence,
+    { readonly status: "matched" }
+  > => requirement.capabilityId === capabilityId &&
+    requirement.status === "matched");
+}
+
 function directIntentForCapability(
   exemplarIds: readonly string[],
   compilerMatches: readonly Extract<
     KpAnimationCapabilityCompilerRequirementEvidence,
+    { readonly status: "matched" }
+  >[],
+  frontendMatches: readonly Extract<
+    KpAnimationDomainFrontendRequirementEvidence,
     { readonly status: "matched" }
   >[],
   directIntents: readonly KpAnimationCapabilityDirectIntentEvidence[]
@@ -441,10 +545,18 @@ function directIntentForCapability(
   const compilerAuthorityIds = new Set(compilerMatches.flatMap((match) =>
     match.evidence.map(({ authorityId }) => authorityId)
   ));
+  const frontendAuthorityIds = new Set(frontendMatches.map((match) =>
+    match.authorityId
+  ));
   return directIntents.find((intent) =>
     exemplarIds.includes(intent.animationId) &&
-    intent.resolvedAuthorityIds.some((authorityId) =>
-      compilerAuthorityIds.has(authorityId)
-    )
+    (intent.requiredCompilerAuthorityIds === undefined
+      ? intent.resolvedAuthorityIds.some((authorityId) =>
+          compilerAuthorityIds.has(authorityId))
+      : intent.requiredCompilerAuthorityIds.every((authorityId) =>
+          compilerAuthorityIds.has(authorityId))) &&
+    (intent.requiredFrontendAuthorityIds === undefined ||
+      intent.requiredFrontendAuthorityIds.every((authorityId) =>
+        frontendAuthorityIds.has(authorityId)))
   );
 }

@@ -4,6 +4,10 @@ import type {
 } from "./animation-capability-plan.ts";
 import { kpAnimationCapabilityPlan } from
   "./cross-domain-animation-capability-plan.ts";
+import {
+  kpCodeFrontendProofObligations,
+  type KpCodeFrontendProofObligation
+} from "./animation-domain-frontend-candidates.ts";
 
 export const KP_ANIMATION_DOMAIN_FRONTEND_EVIDENCE_SCHEMA =
   "kp.animation-domain-frontend-evidence.v1" as const;
@@ -12,6 +16,10 @@ export interface KpAnimationDomainFrontendAuthority {
   readonly authorityId: string;
   readonly domain: Exclude<KpAnimationCapabilityDomain, "equation">;
   readonly sourcePath: string;
+  readonly proof?: readonly Readonly<{
+    obligation: KpCodeFrontendProofObligation;
+    evidenceSourceIds: readonly string[];
+  }>[];
 }
 
 export type KpAnimationDomainFrontendRequirementEvidence =
@@ -44,7 +52,8 @@ export interface KpAnimationDomainFrontendEvidence {
 export interface KpAnimationDomainFrontendEvidenceDiagnostic {
   readonly code:
     | "frontend-evidence.duplicate-authority"
-    | "frontend-evidence.domain-mismatch";
+    | "frontend-evidence.domain-mismatch"
+    | "frontend-evidence.proof-incomplete";
   readonly authorityId: string;
   readonly message: string;
 }
@@ -73,7 +82,15 @@ export function compileKpAnimationDomainFrontendEvidence(input: {
 }): KpAnimationDomainFrontendEvidence {
   const diagnostics: KpAnimationDomainFrontendEvidenceDiagnostic[] = [];
   const authorities = Object.freeze(input.authorities.map((candidate) =>
-    Object.freeze({ ...candidate })
+    Object.freeze({
+      ...candidate,
+      ...(candidate.proof === undefined ? {} : {
+        proof: Object.freeze(candidate.proof.map((entry) => Object.freeze({
+          ...entry,
+          evidenceSourceIds: Object.freeze([...entry.evidenceSourceIds])
+        })))
+      })
+    })
   ));
   const authorityById = new Map<string, KpAnimationDomainFrontendAuthority>();
   for (const authority of authorities) {
@@ -84,6 +101,19 @@ export function compileKpAnimationDomainFrontendEvidence(input: {
         `Duplicate frontend authority ${authority.authorityId}.`
       ));
     } else authorityById.set(authority.authorityId, authority);
+    const plannedCodeAuthority = input.plan.entries.some((capability) =>
+      capability.domain === "code" && capability.requirements.some(
+        ({ kind, authorityId }) => kind === "domain-frontend" &&
+          authorityId === authority.authorityId
+      )
+    );
+    if (plannedCodeAuthority && !completeCodeProof(authority.proof)) {
+      diagnostics.push(issue(
+        "frontend-evidence.proof-incomplete",
+        authority.authorityId,
+        `${authority.authorityId} must prove every code frontend obligation with exact sources.`
+      ));
+    }
   }
 
   const requirements = Object.freeze(input.plan.entries.flatMap((capability) =>
@@ -140,8 +170,80 @@ export function createKpAnimationDomainFrontendEvidence():
 KpAnimationDomainFrontendEvidence {
   return compileKpAnimationDomainFrontendEvidence({
     plan: kpAnimationCapabilityPlan,
-    // No cross-domain generation frontend has yet earned this exact contract.
-    authorities: Object.freeze([])
+    authorities: Object.freeze([
+      codeAuthority(
+        "frontend.code.typescript-compiler.v1",
+        "scripts/typescript-code-generation-frontend.ts",
+        {
+          "parse-source": "scripts/typescript-refactor-frontend.ts",
+          "recognize-extract-helper-roles":
+            "scripts/typescript-extract-helper-role-recognizer.ts",
+          "prove-refactor-legality":
+            "scripts/typescript-extract-helper-legality.ts",
+          "bind-semantic-identity":
+            "scripts/typescript-extract-helper-semantic-binder.ts",
+          "compile-operation":
+            "scripts/typescript-code-generation-frontend.ts",
+          "bind-causal-recipe":
+            "tests/code-extract-helper-causal-recipe.test.ts",
+          "pass-generation-corpus":
+            "tests/typescript-extract-helper-generation-corpus.test.ts",
+          "prove-runtime-isolation":
+            "tests/typescript-code-generation-runtime-isolation.test.ts"
+        }
+      ),
+      codeAuthority(
+        "frontend.code.python-ast.v1",
+        "scripts/python-code-generation-frontend.ts",
+        {
+          "parse-source": "scripts/python-refactor-frontend.py",
+          "recognize-extract-helper-roles":
+            "scripts/python-extract-helper-role-recognizer.ts",
+          "prove-refactor-legality":
+            "scripts/python-extract-helper-legality.ts",
+          "bind-semantic-identity":
+            "scripts/python-extract-helper-semantic-binder.ts",
+          "compile-operation": "scripts/python-code-generation-frontend.ts",
+          "bind-causal-recipe":
+            "tests/code-extract-helper-causal-recipe.test.ts",
+          "pass-generation-corpus":
+            "tests/python-extract-helper-generation-corpus.test.ts",
+          "prove-runtime-isolation":
+            "tests/python-code-generation-runtime-isolation.test.ts"
+        }
+      )
+    ])
+  });
+}
+
+function codeAuthority(
+  authorityId: string,
+  sourcePath: string,
+  evidence: Readonly<Record<KpCodeFrontendProofObligation, string>>
+): KpAnimationDomainFrontendAuthority {
+  return Object.freeze({
+    authorityId,
+    domain: "code" as const,
+    sourcePath,
+    proof: Object.freeze(kpCodeFrontendProofObligations.map((obligation) =>
+      Object.freeze({
+        obligation,
+        evidenceSourceIds: Object.freeze([evidence[obligation]])
+      })
+    ))
+  });
+}
+
+function completeCodeProof(
+  proof: KpAnimationDomainFrontendAuthority["proof"]
+): boolean {
+  if (proof === undefined || proof.length !==
+      kpCodeFrontendProofObligations.length) return false;
+  return kpCodeFrontendProofObligations.every((obligation) => {
+    const matches = proof.filter((entry) => entry.obligation === obligation);
+    return matches.length === 1 &&
+      matches[0]!.evidenceSourceIds.length > 0 &&
+      matches[0]!.evidenceSourceIds.every((sourceId) => sourceId.length > 0);
   });
 }
 

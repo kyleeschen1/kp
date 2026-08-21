@@ -53,7 +53,7 @@ test("preflight freezes canonical contracts, semantics, and operation identity",
   });
 });
 
-test("preflight freezes honest Exemplar and missing-frontend gaps", () => {
+test("preflight freezes exact Direct readiness and matched frontends", () => {
   const readiness = createKpAnimationCapabilityReadiness();
   const frontendEvidence = createKpAnimationDomainFrontendEvidence();
 

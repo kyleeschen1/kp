@@ -44,10 +44,14 @@ test("TypeScript and Python are exact build-time candidates with full obligation
   });
 });
 
-test("candidate registration grants neither evidence nor readiness", () => {
-  createKpAnimationDomainFrontendCandidates();
+test("candidate declarations remain distinct from separately proved readiness", () => {
+  const candidates = createKpAnimationDomainFrontendCandidates();
   const evidence = createKpAnimationDomainFrontendEvidence();
   const readiness = createKpAnimationCapabilityReadiness();
+
+  assert.ok(candidates.candidates.every((candidate) =>
+    !("evidence" in candidate) && candidate.status === "candidate"
+  ));
 
   for (const capabilityId of [
     "capability.code.typescript-refactoring",
@@ -57,13 +61,13 @@ test("candidate registration grants neither evidence nor readiness", () => {
       evidence.requirements.find((entry) =>
         entry.capabilityId === capabilityId
       )?.status,
-      "missing"
+      "matched"
     );
     assert.equal(
       readiness.entries.find((entry) =>
         entry.capabilityId === capabilityId
       )?.status,
-      "Exemplar"
+      "Direct"
     );
   }
 });
@@ -108,4 +112,3 @@ function diagnostics(error: unknown): readonly string[] {
     ? error.diagnostics.map((diagnostic: any) => diagnostic.code)
     : [];
 }
-

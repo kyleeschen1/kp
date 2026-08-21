@@ -398,6 +398,34 @@
       "scope": "cf21",
       "checkedAt": "2026-08-21T21:58:21.663Z",
       "notes": "The orchestration seam is type-safe and preserves framework-neutral, semantic, dependency, compiler-authority, and runtime boundaries."
+    },
+    {
+      "command": "npm run test:animation-domain-frontends and npm run test:animation-capability-compiler-evidence",
+      "status": "passed",
+      "scope": "cf22",
+      "checkedAt": "2026-08-21T22:09:59.023Z",
+      "notes": "Exact frontend proofs close only TypeScript and Python; operation, recipe, and corpus authorities match exact plan IDs; incomplete code proof fails closed."
+    },
+    {
+      "command": "npm run test:animation-capability-readiness and npm run test:animation-transformation-coverage-view",
+      "status": "passed",
+      "scope": "cf22",
+      "checkedAt": "2026-08-21T22:10:01.701Z",
+      "notes": "Both code capabilities derive narrowly as Direct, all five planned requirements are satisfied, generated coverage is fresh, and the evidence-derived view reports ten Direct capabilities."
+    },
+    {
+      "command": "npm run test:python-code-generation-isolation and npm run visual:animation-transformation-coverage",
+      "status": "passed",
+      "scope": "cf22",
+      "checkedAt": "2026-08-21T22:10:03.404Z",
+      "notes": "Python runtime closures exclude process and generation authority; the regenerated coverage route renders successfully in Chromium."
+    },
+    {
+      "command": "npm run typecheck and npm run check:architecture",
+      "status": "passed",
+      "scope": "cf22",
+      "checkedAt": "2026-08-21T22:10:04.481Z",
+      "notes": "Evidence, readiness, generated coverage, and runtime-isolation additions preserve type and architecture boundaries."
     }
   ],
   "allowedWork": [
@@ -552,7 +580,8 @@
     {
       "id": "cf22",
       "title": "Evidence-readiness-and-coverage",
-      "status": "planned"
+      "summary": "Granted complete eight-obligation frontend proofs plus exact operation, shared-recipe, corpus, authoring, exemplar, and runtime evidence; both code capabilities now derive as narrowly Direct in regenerated Transformation Coverage.",
+      "status": "complete"
     },
     {
       "id": "cf23",

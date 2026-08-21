@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 
 import {
@@ -10,11 +10,23 @@ import {
 import { kpAnimationCapabilityPlan } from
   "../src/architecture/cross-domain-animation-capability-plan.ts";
 
-test("every planned cross-domain frontend remains an exact typed gap", () => {
+test("only the two fully proved code frontends close their exact gaps", () => {
   const evidence = createKpAnimationDomainFrontendEvidence();
-  assert.equal(evidence.authorities.length, 0);
+  assert.equal(evidence.authorities.length, 2);
   assert.equal(evidence.requirements.length, 9);
-  assert.ok(evidence.requirements.every((requirement) =>
+  const matched = evidence.requirements.filter(({ status }) =>
+    status === "matched"
+  );
+  assert.deepEqual(matched.map(({ capabilityId }) => capabilityId), [
+    "capability.code.typescript-refactoring",
+    "capability.code.python-refactoring"
+  ]);
+  assert.ok(matched.every((requirement) =>
+    requirement.status === "matched" &&
+    requirement.evidence.proof?.length === 8
+  ));
+  assert.ok(evidence.requirements.filter(({ status }) => status === "missing")
+    .every((requirement) =>
     requirement.status === "missing" &&
     requirement.reason === "frontend-required"
   ));
@@ -22,6 +34,35 @@ test("every planned cross-domain frontend remains an exact typed gap", () => {
     [...new Set(evidence.requirements.map(({ domain }) => domain))],
     ["matrix", "code", "graph-2d", "graph-3d"]
   );
+});
+
+test("a planned code authority cannot match without complete proof", () => {
+  assert.throws(() => compileKpAnimationDomainFrontendEvidence({
+    plan: kpAnimationCapabilityPlan,
+    authorities: [{
+      authorityId: "frontend.code.typescript-compiler.v1",
+      domain: "code",
+      sourcePath: "scripts/typescript-code-generation-frontend.ts",
+      proof: []
+    }]
+  }), (error: unknown) => {
+    assert.ok(error instanceof KpAnimationDomainFrontendEvidenceError);
+    assert.deepEqual(error.diagnostics.map(({ code }) => code), [
+      "frontend-evidence.proof-incomplete"
+    ]);
+    return true;
+  });
+});
+
+test("every granted code obligation points to durable evidence", () => {
+  const evidence = createKpAnimationDomainFrontendEvidence();
+  for (const authority of evidence.authorities) {
+    assert.equal(Object.isFrozen(authority.proof), true);
+    for (const proof of authority.proof ?? []) {
+      assert.equal(Object.isFrozen(proof.evidenceSourceIds), true);
+      assert.ok(proof.evidenceSourceIds.every(existsSync), proof.obligation);
+    }
+  }
 });
 
 test("one exact domain authority closes only its declared requirements", () => {

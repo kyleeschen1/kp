@@ -100,9 +100,8 @@ export const codeRefactorGenerationPreflight = Object.freeze({
       ])
     })
   ]),
-  expectedReadiness: "Exemplar",
-  expectedFrontendStatus: "missing",
+  expectedReadiness: "Direct",
+  expectedFrontendStatus: "matched",
   stableRoute: Object.freeze({ playhead: 0.68 }),
   browserClosureGate: "npm run check:animation-library-bundle-boundary"
 } as const);
-

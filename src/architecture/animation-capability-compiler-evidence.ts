@@ -12,6 +12,13 @@ import {
   KP_ROOT_REWRITE_RECIPE_AUTHORITY
 } from "../authoring/root-rewrite-authoring-corpus.ts";
 import {
+  KP_CODE_EXTRACT_HELPER_RECIPE_AUTHORITY,
+  KP_PYTHON_EXTRACT_HELPER_CORPUS_AUTHORITY,
+  KP_PYTHON_EXTRACT_HELPER_OPERATION_AUTHORITY,
+  KP_TYPESCRIPT_EXTRACT_HELPER_CORPUS_AUTHORITY,
+  KP_TYPESCRIPT_EXTRACT_HELPER_OPERATION_AUTHORITY
+} from "../domain-ir/code-extract-helper-authorities.ts";
+import {
   KP_EQUATION_LOGARITHM_BASE_SYNTAX_NORMALIZER
 } from "../authoring/equation-latex-endpoint-normalizer.ts";
 import {
@@ -258,6 +265,21 @@ readonly KpAnimationCapabilityCompilerAuthority[] {
     sourcePath
   });
   return Object.freeze([
+    verified(KP_TYPESCRIPT_EXTRACT_HELPER_OPERATION_AUTHORITY,
+      "semantic-operation",
+      "scripts/typescript-code-generation-frontend.ts"),
+    verified(KP_PYTHON_EXTRACT_HELPER_OPERATION_AUTHORITY,
+      "semantic-operation",
+      "scripts/python-code-generation-frontend.ts"),
+    verified(KP_CODE_EXTRACT_HELPER_RECIPE_AUTHORITY,
+      "canonical-recipe",
+      "src/domain-ir/code-extract-helper-causal-recipe.ts"),
+    verified(KP_TYPESCRIPT_EXTRACT_HELPER_CORPUS_AUTHORITY,
+      "generation-corpus",
+      "tests/typescript-extract-helper-generation-corpus.test.ts"),
+    verified(KP_PYTHON_EXTRACT_HELPER_CORPUS_AUTHORITY,
+      "generation-corpus",
+      "tests/python-extract-helper-generation-corpus.test.ts"),
     verified(KP_EXPONENTIAL_HOMOMORPHISM_AUTHORING_CORPUS,
       "generation-corpus",
       "src/authoring/exponential-homomorphism-authoring-corpus.ts"),

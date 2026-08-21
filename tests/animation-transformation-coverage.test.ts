@@ -92,7 +92,7 @@ test("direct rows have exact authoring corpus compiler and exemplar evidence", (
   const direct = createKpAnimationTransformationCoverage().entries.filter(
     ({ status }) => status === "Direct"
   );
-  assert.equal(direct.length, 8);
+  assert.equal(direct.length, 10);
   for (const capabilityId of [
     "capability.equation.function-wrapping",
     "capability.equation.distribution",
@@ -207,13 +207,16 @@ test("direct homomorphic generation retains only the unreviewed product exemplar
   ]);
 });
 
-test("cross-domain rows expose exact frontend-required gaps", () => {
+test("cross-domain rows expose only unproved frontend-required gaps", () => {
   const coverage = createKpAnimationTransformationCoverage();
   const crossDomain = coverage.entries.filter(({ domain }) =>
     domain !== "equation"
   );
   assert.equal(crossDomain.length, 9);
-  for (const entry of crossDomain) {
+  for (const entry of crossDomain.filter(({ capabilityId }) =>
+    capabilityId !== "capability.code.typescript-refactoring" &&
+    capabilityId !== "capability.code.python-refactoring"
+  )) {
     assert.deepEqual(entry.gaps.filter(({ kind }) =>
       kind === "frontend-required"
     ), [{
@@ -226,6 +229,17 @@ test("cross-domain rows expose exact frontend-required gaps", () => {
       )?.authorityId,
       repair: "Provide exact evidence from the declared domain-owned frontend."
     }]);
+  }
+  for (const capabilityId of [
+    "capability.code.typescript-refactoring",
+    "capability.code.python-refactoring"
+  ]) {
+    const entry = crossDomain.find((candidate) =>
+      candidate.capabilityId === capabilityId
+    );
+    assert.equal(entry?.status, "Direct");
+    assert.deepEqual(entry?.gaps, []);
+    assert.deepEqual(entry?.remainingRequirementIds, []);
   }
   assert.ok(coverage.entries.filter(({ domain }) => domain === "equation")
     .every(({ gaps }) => gaps.length === 0));

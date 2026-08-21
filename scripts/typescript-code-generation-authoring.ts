@@ -5,6 +5,8 @@ import {
   validateKpCodeRefactorGenerationRequest,
   type KpCodeRefactorGenerationRequestDiagnostic
 } from "../src/domain-ir/code-refactor-generation-request.ts";
+import { KP_TYPESCRIPT_EXTRACT_HELPER_AUTHORING_AUTHORITY } from
+  "../src/domain-ir/code-extract-helper-authorities.ts";
 import {
   compileKpTypeScriptCodeGeneration,
   type KpTypeScriptCodeGenerationResult
@@ -43,6 +45,7 @@ export type KpTypeScriptCodeAuthoringResult =
 
 export const kpTypeScriptCodeAuthoringDescriptor = deepFreeze({
   schemaVersion: "kp.code-generation-operation-descriptor.v1" as const,
+  authoringAuthorityId: KP_TYPESCRIPT_EXTRACT_HELPER_AUTHORING_AUTHORITY,
   operationId: "code.typescript.extract-helper" as const,
   language: "typescript" as const,
   intent: "extract-helper" as const,

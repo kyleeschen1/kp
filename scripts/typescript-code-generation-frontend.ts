@@ -11,6 +11,8 @@ import {
   compileKpExtractHelperCausalContract,
   type KpExtractHelperCausalContract
 } from "../src/domain-ir/extract-helper-causal-contract.ts";
+import { KP_TYPESCRIPT_EXTRACT_HELPER_OPERATION_AUTHORITY } from
+  "../src/domain-ir/code-extract-helper-authorities.ts";
 import {
   proveKpTypeScriptExtractHelperLegality,
   type KpTypeScriptExtractHelperLegalityProof
@@ -34,6 +36,8 @@ export interface KpTypeScriptCodeGenerationRoleEvidence {
 export interface KpTypeScriptCodeGenerationSemanticPlan {
   readonly schemaVersion: typeof KP_TYPESCRIPT_CODE_GENERATION_PLAN_SCHEMA;
   readonly operation: "extract-helper";
+  readonly operationAuthorityId:
+    typeof KP_TYPESCRIPT_EXTRACT_HELPER_OPERATION_AUTHORITY;
   readonly language: "typescript";
   readonly legality: KpTypeScriptExtractHelperLegalityProof;
   readonly causalContract: KpExtractHelperCausalContract;
@@ -119,6 +123,7 @@ export function compileKpTypeScriptCodeGeneration(
     semanticPlan: {
       schemaVersion: KP_TYPESCRIPT_CODE_GENERATION_PLAN_SCHEMA,
       operation: "extract-helper" as const,
+      operationAuthorityId: KP_TYPESCRIPT_EXTRACT_HELPER_OPERATION_AUTHORITY,
       language: "typescript" as const,
       legality,
       causalContract,

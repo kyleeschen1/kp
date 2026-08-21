@@ -13,9 +13,9 @@
   "summary": {
     "total": 38,
     "byStatus": {
-      "Direct": 8,
+      "Direct": 10,
       "Registered": 4,
-      "Exemplar": 9,
+      "Exemplar": 7,
       "Missing": 17
     }
   },
@@ -3103,31 +3103,37 @@
         "kind": "transformation-family",
         "authorityId": "family.code.typescript-refactoring.v1"
       },
-      "status": "Exemplar",
+      "status": "Direct",
       "requirements": [
         {
           "id": "requirement.code.domain-frontend.typescript-refactoring",
           "kind": "domain-frontend",
           "authorityId": "frontend.code.typescript-compiler.v1",
           "summary": "TypeScript refactoring must be normalized and verified by its domain-owned frontend.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "scripts/typescript-code-generation-frontend.ts"
+          ]
         },
         {
           "id": "requirement.code.typescript-refactoring.operation",
           "kind": "semantic-operation",
           "authorityId": "operation.code.extract-typescript-helper.v1",
           "summary": "The TypeScript frontend owns syntax, bindings, source ranges, and refactor legality.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "operation.code.extract-typescript-helper.v1"
+          ]
         },
         {
           "id": "requirement.code.typescript-refactoring.recipe",
           "kind": "canonical-recipe",
           "authorityId": "recipe.code.extract-helper.v1",
           "summary": "A code recipe moves stable semantic entities rather than raw colored glyphs.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "recipe.code.extract-helper.v1"
+          ]
         },
         {
           "id": "requirement.code.typescript-refactoring.exemplar",
@@ -3144,24 +3150,14 @@
           "kind": "generation-corpus",
           "authorityId": "corpus.code.typescript-refactoring.v1",
           "summary": "Fixtures pressure renaming, extraction, duplicated expressions, types, and compiler rejection.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "corpus.code.typescript-refactoring.v1"
+          ]
         }
       ],
-      "gaps": [
-        {
-          "kind": "frontend-required",
-          "requirementId": "requirement.code.domain-frontend.typescript-refactoring",
-          "authorityId": "frontend.code.typescript-compiler.v1",
-          "repair": "Provide exact evidence from the declared domain-owned frontend."
-        }
-      ],
-      "remainingRequirementIds": [
-        "requirement.code.domain-frontend.typescript-refactoring",
-        "requirement.code.typescript-refactoring.operation",
-        "requirement.code.typescript-refactoring.recipe",
-        "requirement.code.typescript-refactoring.corpus"
-      ],
+      "gaps": [],
+      "remainingRequirementIds": [],
       "exemplarLinks": [
         {
           "assetId": "animation.programming.typescript-free-shipping-refactor",
@@ -3170,7 +3166,7 @@
         }
       ],
       "evidenceTensions": [
-        "playable-exemplar-without-general-generation"
+        "direct-deterministic-not-live-model-evidence"
       ]
     },
     {
@@ -3182,31 +3178,37 @@
         "kind": "transformation-family",
         "authorityId": "family.code.python-refactoring.v1"
       },
-      "status": "Exemplar",
+      "status": "Direct",
       "requirements": [
         {
           "id": "requirement.code.domain-frontend.python-refactoring",
           "kind": "domain-frontend",
           "authorityId": "frontend.code.python-ast.v1",
           "summary": "Python refactoring must be normalized and verified by its domain-owned frontend.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "scripts/python-code-generation-frontend.ts"
+          ]
         },
         {
           "id": "requirement.code.python-refactoring.operation",
           "kind": "semantic-operation",
           "authorityId": "operation.code.extract-python-helper.v1",
           "summary": "The Python frontend owns syntax nodes, bindings, source ranges, and refactor legality.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "operation.code.extract-python-helper.v1"
+          ]
         },
         {
           "id": "requirement.code.python-refactoring.recipe",
           "kind": "canonical-recipe",
           "authorityId": "recipe.code.extract-helper.v1",
           "summary": "The shared causal recipe may be reused only after Python supplies authoritative entities and correspondence.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "recipe.code.extract-helper.v1"
+          ]
         },
         {
           "id": "requirement.code.python-refactoring.exemplar",
@@ -3223,24 +3225,14 @@
           "kind": "generation-corpus",
           "authorityId": "corpus.code.python-refactoring.v1",
           "summary": "Fixtures pressure indentation, scopes, expressions, annotations, and invalid extraction.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "corpus.code.python-refactoring.v1"
+          ]
         }
       ],
-      "gaps": [
-        {
-          "kind": "frontend-required",
-          "requirementId": "requirement.code.domain-frontend.python-refactoring",
-          "authorityId": "frontend.code.python-ast.v1",
-          "repair": "Provide exact evidence from the declared domain-owned frontend."
-        }
-      ],
-      "remainingRequirementIds": [
-        "requirement.code.domain-frontend.python-refactoring",
-        "requirement.code.python-refactoring.operation",
-        "requirement.code.python-refactoring.recipe",
-        "requirement.code.python-refactoring.corpus"
-      ],
+      "gaps": [],
+      "remainingRequirementIds": [],
       "exemplarLinks": [
         {
           "assetId": "animation.programming.python-free-shipping-refactor",
@@ -3249,7 +3241,7 @@
         }
       ],
       "evidenceTensions": [
-        "playable-exemplar-without-general-generation"
+        "direct-deterministic-not-live-model-evidence"
       ]
     },
     {

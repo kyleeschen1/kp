@@ -12,8 +12,10 @@ import {
 } from "../src/architecture/animation-capability-readiness.ts";
 import { kpAnimationCapabilityPlan } from
   "../src/architecture/cross-domain-animation-capability-plan.ts";
+import { createKpAnimationDomainFrontendEvidence } from
+  "../src/architecture/animation-domain-frontend-evidence.ts";
 
-test("readiness derives the eight exact direct generation capabilities", () => {
+test("readiness derives the ten exact direct generation capabilities", () => {
   const readiness = createKpAnimationCapabilityReadiness();
   const direct = readiness.entries.filter(({ status }) => status === "Direct");
   assert.deepEqual(direct.map(({ capabilityId }) => capabilityId), [
@@ -24,7 +26,9 @@ test("readiness derives the eight exact direct generation capabilities", () => {
     "capability.equation.balanced-operations",
     "capability.equation.alternative-logarithm-bases",
     "capability.equation.exponential-homomorphism",
-    "capability.equation.radical-inversion"
+    "capability.equation.radical-inversion",
+    "capability.code.typescript-refactoring",
+    "capability.code.python-refactoring"
   ]);
   assert.ok(direct.every(({ evidence }) =>
     evidence.gate === "direct-intent-and-registered-authority"));
@@ -135,10 +139,12 @@ test("direct exposure cannot silently upgrade without exact authority overlap", 
     plan: kpAnimationCapabilityPlan,
     assetEvidence: createKpAnimationCapabilityAssetEvidence(),
     compilerEvidence: createKpAnimationCapabilityCompilerEvidence(),
+    frontendEvidence: createKpAnimationDomainFrontendEvidence(),
     directIntentEvidence: direct
   });
-  assert.equal(readiness.entries.some(({ status: value }) =>
-    value === "Direct"), false);
+  assert.equal(readiness.entries.some(({ capabilityId, status: value }) =>
+    capabilityId.startsWith("capability.equation.") && value === "Direct"),
+  false);
   assert.equal(status(readiness,
     "capability.equation.function-wrapping"), "Registered");
 });
@@ -163,6 +169,7 @@ test("a concrete asset alone never upgrades beyond exemplar", () => {
           : requirement
       )
     },
+    frontendEvidence: createKpAnimationDomainFrontendEvidence(),
     directIntentEvidence: createKpAnimationCapabilityDirectIntentEvidence()
   });
   assert.equal(status(readiness,

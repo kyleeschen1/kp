@@ -1,6 +1,8 @@
 import type {
   KpCodeRefactorGenerationDiagnosticCode
 } from "../../src/domain-ir/code-refactor-generation-diagnostic.ts";
+export { KP_TYPESCRIPT_EXTRACT_HELPER_CORPUS_AUTHORITY } from
+  "../../src/domain-ir/code-extract-helper-authorities.ts";
 
 export interface KpTypeScriptExtractHelperCorpusCase {
   readonly id: string;

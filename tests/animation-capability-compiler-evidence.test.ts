@@ -182,6 +182,27 @@ test("root promotion has exact plan recipe and corpus authorities", () => {
   }
 });
 
+test("code frontends expose exact operation recipe and corpus authorities", () => {
+  const projection = createKpAnimationCapabilityCompilerEvidence();
+  for (const requirementId of [
+    "requirement.code.typescript-refactoring.operation",
+    "requirement.code.typescript-refactoring.recipe",
+    "requirement.code.typescript-refactoring.corpus",
+    "requirement.code.python-refactoring.operation",
+    "requirement.code.python-refactoring.recipe",
+    "requirement.code.python-refactoring.corpus"
+  ]) {
+    const requirement = projection.requirements.find((candidate) =>
+      candidate.requirementId === requirementId
+    );
+    assert.equal(requirement?.status, "matched", requirementId);
+    if (requirement?.status !== "matched") continue;
+    assert.ok(requirement.evidence.every(({ sourcePath }) =>
+      sourcePath.includes("code-") || sourcePath.includes("extract-helper")
+    ));
+  }
+});
+
 test("compiler evidence rejects duplicate source registrations", () => {
   const duplicate: KpAnimationCapabilityCompilerAuthority = {
     authorityId: "operation.wrap-function.v1",

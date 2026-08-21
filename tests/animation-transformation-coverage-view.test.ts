@@ -29,9 +29,9 @@ test("coverage view is one ordered evidence-derived list", () => {
   const view = createKpAnimationTransformationCoverageViewModel();
   assert.equal(view.total, 38);
   assert.deepEqual(view.statusCounts, [
-    { status: "Direct", count: 8 },
+    { status: "Direct", count: 10 },
     { status: "Registered", count: 4 },
-    { status: "Exemplar", count: 9 },
+    { status: "Exemplar", count: 7 },
     { status: "Missing", count: 17 }
   ]);
   assert.deepEqual(
