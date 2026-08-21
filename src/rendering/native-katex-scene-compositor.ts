@@ -300,10 +300,7 @@ export type KpNativeKatexTypographyStylePlanEntry =
         KpNativeKatexTargetGlyphPaintFrame | undefined;
     }
     | {
-      readonly paintKind: Exclude<
-        KpNativeKatexPaintAtomObservation["paintKind"],
-        "glyph"
-      >;
+      readonly paintKind: KpNativeKatexPaintAtomObservation["paintKind"];
       readonly paintRealization: "preserve-structural-paint";
       readonly glyphPaintFrame?: undefined;
     }
@@ -807,7 +804,10 @@ export function compileKpNativeKatexTypographyStylePlan(input: {
           : safeScale(material.rect.height, native.rect.height),
         targetStyleFingerprint: native.styleFingerprint
       } as const;
-      if (native.paintKind !== "glyph") {
+      if (
+        native.paintKind !== "glyph" ||
+        native.paintMeasurement === "subtree"
+      ) {
         return freezeTypographyStylePlanEntry({
           ...shared,
           paintKind: native.paintKind,
@@ -2016,6 +2016,7 @@ function observeCorrelatedHandoffPaint(input: {
     semanticEntityId: input.atom.semanticEntityId,
     presentationGroupId: input.atom.presentationGroupId,
     paintKind: input.atom.paintKind,
+    paintMeasurement: input.atom.paintMeasurement,
     element: input.element,
     rect,
     baselineY: isGlyph

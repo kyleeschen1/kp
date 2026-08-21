@@ -923,6 +923,14 @@ test("realization disposition preserves every structural paint kind", () => {
   assert.equal(
     selectKpNativeKatexTypographyRealizationDisposition({
       ...base,
+      // A semantic subtree can contain glyph paint without being one glyph.
+      paintRealization: "preserve-structural-paint"
+    }),
+    "preserve-structural-paint"
+  );
+  assert.equal(
+    selectKpNativeKatexTypographyRealizationDisposition({
+      ...base,
       model: "native-checkpoint-settlement"
     }),
     "native-checkpoint"

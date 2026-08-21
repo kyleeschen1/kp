@@ -4,7 +4,7 @@ import type { KpEquationFontReadiness } from
   "./equation-font-readiness.ts";
 import { renderLatexToHtml } from "./katex-adapter.ts";
 import {
-  settleAndObserveKpNativeKatexRenderedScene,
+  type KpSettleAndObserveNativeKatexScene,
   type KpNativeKatexRenderedSceneObservation
 } from "./native-katex-rendered-scene.ts";
 import type {
@@ -239,9 +239,10 @@ export async function settleAndObserveKpRootRewriteNativeEndpoint(input: {
   readonly root: HTMLElement;
   readonly endpoint: KpRootRewriteNativeEndpoint;
   readonly fontReadiness: KpEquationFontReadiness;
+  readonly observe: KpSettleAndObserveNativeKatexScene;
 }): Promise<KpNativeKatexRenderedSceneObservation> {
   bindKpRootRewriteNativeEndpointOwnership(input);
-  return settleAndObserveKpNativeKatexRenderedScene({
+  return input.observe({
     endpoint: input.endpoint.endpoint,
     stage: input.stage,
     root: input.root,

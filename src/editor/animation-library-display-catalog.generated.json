@@ -1684,6 +1684,34 @@
     ]
   },
   {
+    "animationId": "animation.algebra.radical.compound-carrier-normalization",
+    "title": "Preserve x + 1 through an even root",
+    "summary": "A compound-carrier checkpoint for sqrt((x+1)^2) to |x+1|.",
+    "tags": [
+      "absolute-value",
+      "algebra",
+      "animation",
+      "compound",
+      "editor",
+      "katex",
+      "radical",
+      "root"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.algebra.radical.compound-carrier-normalization",
+    "representations": [
+      {
+        "id": "editor-animation.animation.algebra.radical.compound-carrier-normalization",
+        "label": "Preserve x + 1 through an even root",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.algebra.radical.compound-carrier-normalization",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
     "animationId": "animation.generated.substitute-three.provisional-incorrect",
     "title": "Provisional learner step: substitute 3 for x and 2",
     "summary": "Provisional learner step: substitute 3 for x and 2",

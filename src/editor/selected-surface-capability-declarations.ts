@@ -193,7 +193,8 @@ export const kpEditorSelectedSurfaceCapabilityDeclarations = Object.freeze([
     capabilityId: "even-root",
     domain: "equation",
     adapterIds: [
-      "editor-animation-surface.even-root.canonical-native-katex"
+      "editor-animation-surface.even-root.canonical-native-katex",
+      "editor-animation-surface.root.compound-carrier.canonical-native-katex"
     ],
     registrationOwner: "provided-registry",
     async loadAndRegister(registry, registrationGuardAdapterId) {

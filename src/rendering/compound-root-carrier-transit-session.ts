@@ -34,7 +34,7 @@ import type { KpCompoundRootCarrierNativeEndpointSet } from
   "./compound-root-carrier-native-endpoints.ts";
 
 const kpCompoundRootCarrierTreatment = Object.freeze({
-  sourceWithdrawal: Object.freeze({ start: 0.08, end: 0.34 }),
+  sourceWithdrawal: Object.freeze({ start: 0.04, end: 0.18 }),
   carrierTransit: Object.freeze({ start: 0.2, end: 0.6 }),
   enclosurePresence: Object.freeze({ start: 0.42, end: 0.5 }),
   enclosureReception: Object.freeze({ start: 0.5, end: 0.74 }),

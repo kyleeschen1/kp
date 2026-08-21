@@ -275,6 +275,17 @@ readonly KpEquationSurfaceFamilyDeclaration[] = Object.freeze([
       "src/editor/exponential-homomorphism-surface-adapter.ts"
   }),
   declaration({
+    id: "family.equation.compound-root-carrier",
+    matches: (id) => id ===
+      "animation.algebra.radical.compound-carrier-normalization",
+    selectedCapabilityIds: ["even-root", "equation-katex"],
+    primaryCapabilityId: "even-root",
+    rendererAdapterId:
+      "editor-animation-surface.root.compound-carrier.canonical-native-katex",
+    rendererSourcePath:
+      "src/editor/compound-root-carrier-surface-adapter.ts"
+  }),
+  declaration({
     id: "family.equation.even-root",
     matches: (id) => id ===
       "animation.algebra.radical.solve-x-squared-nine",

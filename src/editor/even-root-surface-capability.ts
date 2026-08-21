@@ -4,11 +4,18 @@ import "./even-root-surface.css";
 import {
   kpEditorEvenRootSurfaceAdapter
 } from "./even-root-surface-adapter.ts";
+import {
+  kpEditorCompoundRootCarrierSurfaceAdapter
+} from "./compound-root-carrier-surface-adapter.ts";
 import type { KpEditorAnimationSurfaceAdapterRegistry } from
   "./animation-surface-adapter-registry.ts";
 
 export function registerKpEditorEvenRootSurfaceCapability(
   registry: KpEditorAnimationSurfaceAdapterRegistry
 ): () => void {
-  return registry.register(kpEditorEvenRootSurfaceAdapter);
+  const unregister = [
+    registry.register(kpEditorEvenRootSurfaceAdapter),
+    registry.register(kpEditorCompoundRootCarrierSurfaceAdapter)
+  ];
+  return () => unregister.reverse().forEach((dispose) => dispose());
 }

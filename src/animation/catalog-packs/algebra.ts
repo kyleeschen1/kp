@@ -34,6 +34,9 @@ import {
   createKpEvenRootSolveAnimationAsset
 } from "../even-root-solve-adapter.ts";
 import {
+  createKpCompoundRootCarrierAnimationAsset
+} from "../compound-root-carrier-adapter.ts";
+import {
   kpAlgebraChoreographyCapabilities
 } from "../algebra-choreography-capabilities.ts";
 import type {
@@ -50,6 +53,7 @@ export function createKpAlgebraAnimationPack(): KpAlgebraAnimationPack {
     catalog: Object.freeze([
       createKpCanonicalCancellationPressureAnimationAsset(),
       createKpEvenRootSolveAnimationAsset(),
+      createKpCompoundRootCarrierAnimationAsset(),
       createFractionSimplificationAnimationAsset(),
       createExponentExpansionAnimationAsset(),
       createExponentRadicalRewriteAnimationAsset(),

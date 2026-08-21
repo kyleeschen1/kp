@@ -88,6 +88,9 @@ import {
 import {
   createKpEvenRootSolveAnimationAsset
 } from "./even-root-solve-adapter.ts";
+import {
+  createKpCompoundRootCarrierAnimationAsset
+} from "./compound-root-carrier-adapter.ts";
 import { enrichKpMatrixLinearMapAsset } from
   "./matrix-linear-map-asset-enrichment.ts";
 
@@ -122,6 +125,7 @@ export function createGeneratedAlgebraAnimationAssets():
     createKpVerifiedGeneratedLinearSolveRuntimeAsset(),
     createKpCanonicalCancellationPressureAnimationAsset(),
     createKpEvenRootSolveAnimationAsset(),
+    createKpCompoundRootCarrierAnimationAsset(),
     createFractionSimplificationAnimationAsset(),
     createExponentExpansionAnimationAsset(),
     createExponentRadicalRewriteAnimationAsset(),

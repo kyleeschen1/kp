@@ -50,6 +50,41 @@
       "scope": "rv05 compound carrier native realization",
       "checkedAt": "2026-08-21T15:48:22.076Z",
       "notes": "All 14 recursive endpoint, carrier identity, function-wrap reception, deterministic seek, and neighboring even-root checks pass."
+    },
+    {
+      "command": "npm run test:compound-root-carrier",
+      "status": "passed",
+      "scope": "rv06 semantic asset native realization and lazy catalogue integration",
+      "checkedAt": "2026-08-21T16:09:28.631Z",
+      "notes": "All 10 exemplar, recursive carrier, deterministic motion, asset validation, pack ownership, and root capability-selection checks pass."
+    },
+    {
+      "command": "npm run visual:compound-root-carrier",
+      "status": "passed",
+      "scope": "rv06 Chromium wide narrow seek rewind and reduced-motion checkpoint",
+      "checkedAt": "2026-08-21T16:09:39.211Z",
+      "notes": "Both focused browser cases pass. Exact source and target LaTeX, live midpoint material ownership, viewport remeasurement, rewind, reduced motion, and page-error absence are verified."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "rv06 catalogue host compound subtree paint typing",
+      "checkedAt": "2026-08-21T16:09:50.490Z",
+      "notes": "All TypeScript and Svelte projects pass after adding the lazy root surface and structural-paint handoff distinction."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "rv06 lazy capability renderer and compiler boundaries",
+      "checkedAt": "2026-08-21T16:09:59.453Z",
+      "notes": "Dependency direction, framework-neutral entrypoints, semantic animation, operation presentation, and equation compiler authority gates pass."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "rv06 pre-checkpoint durable control state",
+      "checkedAt": "2026-08-21T16:10:20.808Z",
+      "notes": "Validated 1043 nodes and 24132 events with rv06 intentionally in progress pending human approval."
     }
   ],
   "allowedWork": [
@@ -107,7 +142,8 @@
     {
       "id": "rv06",
       "title": "compound-carrier-visual-checkpoint",
-      "status": "planned"
+      "summary": "Expose the single verified sqrt((x+1)^2) to abs(x+1) compound-carrier runtime through the existing lazy Animation Library shell, add a stable focused visual command, verify exact seek/rewind and responsive containment, then stop for human review before any family-wide generalization.",
+      "status": "in-progress"
     },
     {
       "id": "rv07",

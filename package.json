@@ -103,6 +103,8 @@
     "visual:exponential-homomorphism": "node --disable-warning=ExperimentalWarning scripts/capture-exponential-homomorphism.ts",
     "visual:exponential-crossover-pressure": "node --disable-warning=ExperimentalWarning scripts/capture-exponential-crossover-pressure.ts",
     "visual:even-root": "node --disable-warning=ExperimentalWarning scripts/capture-even-root-checkpoint.ts",
+    "test:compound-root-carrier": "node --disable-warning=ExperimentalWarning --test tests/compound-root-carrier-exemplar.test.ts tests/compound-root-carrier-native-realization.test.ts tests/compound-root-carrier-catalogue-integration.test.ts",
+    "visual:compound-root-carrier": "playwright test tests/compound-root-carrier-catalogue.browser.spec.ts --project=chromium --workers=1",
     "visual:distribution-pressure": "node --disable-warning=ExperimentalWarning scripts/capture-distribution-pressure.ts",
     "visual:cancellation-pressure": "node --disable-warning=ExperimentalWarning scripts/capture-cancellation-pressure.ts",
     "test:log-quotient": "node --disable-warning=ExperimentalWarning --test tests/log-quotient-*.test.ts tests/selected-surface-capability.test.ts",

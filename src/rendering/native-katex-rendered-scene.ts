@@ -163,6 +163,7 @@ export interface KpNativeKatexHandoffPaintObservation {
   readonly semanticEntityId: string;
   readonly presentationGroupId: string;
   readonly paintKind: KpNativeKatexPaintKind;
+  readonly paintMeasurement?: "atomic-text" | "subtree" | undefined;
   readonly element: HTMLElement;
   readonly rect: KpStageRelativeRect;
   readonly baselineY: number | null;
