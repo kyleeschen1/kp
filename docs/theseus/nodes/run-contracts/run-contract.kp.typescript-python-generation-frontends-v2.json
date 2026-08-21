@@ -377,6 +377,27 @@
       "scope": "cf20",
       "checkedAt": "2026-08-21T21:51:16.097Z",
       "notes": "The generated catalogue and framework-neutral query API are type-safe and preserve dependency, runtime, and compiler-authority boundaries."
+    },
+    {
+      "command": "npm run test:code-generation-orchestration and npm run test:code-generation-request",
+      "status": "passed",
+      "scope": "cf21",
+      "checkedAt": "2026-08-21T21:58:14.967Z",
+      "notes": "Orchestration tests prove canonical artifact and timeline reuse, deterministic direct seek and rewind, semantic-plan-only variants, typed unavailable-artifact repair, exact route selection, and immutable outputs."
+    },
+    {
+      "command": "npm run test:typescript-code-generation-isolation",
+      "status": "passed",
+      "scope": "cf21",
+      "checkedAt": "2026-08-21T21:58:18.967Z",
+      "notes": "The selected browser closures remain free of generation scripts and the TypeScript compiler after orchestration."
+    },
+    {
+      "command": "npm run typecheck and npm run check:architecture",
+      "status": "passed",
+      "scope": "cf21",
+      "checkedAt": "2026-08-21T21:58:21.663Z",
+      "notes": "The orchestration seam is type-safe and preserves framework-neutral, semantic, dependency, compiler-authority, and runtime boundaries."
     }
   ],
   "allowedWork": [
@@ -525,7 +546,8 @@
     {
       "id": "cf21",
       "title": "Generation-envelope-orchestration",
-      "status": "planned"
+      "summary": "Connected shared generation envelopes to language-owned semantic frontends and existing canonical artifact/timeline handles; variants remain semantic-plan-only and no clock, paint, or runtime authority was duplicated.",
+      "status": "complete"
     },
     {
       "id": "cf22",

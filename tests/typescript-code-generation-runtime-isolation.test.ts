@@ -45,15 +45,16 @@ test("runtime closure source never imports the TypeScript compiler", async () =>
   ))];
   const sources = await Promise.all(closure.map((path) => readFile(path, "utf8")));
   sources.forEach((source, index) => {
+    const sourcePath = closure[index]!;
     assert.doesNotMatch(
       source,
       /(?:from|import\s*\()\s*["']typescript["']/u,
-      closure[index]
+      sourcePath
     );
     assert.doesNotMatch(
       source,
       /scripts\/(?:typescript-code-generation|typescript-extract-helper|typescript-refactor-frontend)/u,
-      closure[index]
+      sourcePath
     );
   });
 });
