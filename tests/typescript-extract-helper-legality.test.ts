@@ -64,8 +64,8 @@ test("rejects a source without a bounded extract-helper shape", () => {
 
 test("rejects ambiguous repeated-decision ownership", () => {
   const result = prove(
-    `function a(x: number) { return x > 1 && x < 8; }\nfunction b(x: number) { return x > 1 && x < 8; }`,
-    `function gt(x: number) { return x > 1; }\nfunction lt(x: number) { return x < 8; }\nfunction a(x: number) { return gt(x) && lt(x); }\nfunction b(x: number) { return gt(x) && lt(x); }`
+    `function a(x: number) { const low = x > 1; return low ? x < 8 : false; }\nfunction b(x: number) { const low = x > 1; return low ? x < 8 : false; }`,
+    `function gt(x: number) { return x > 1; }\nfunction lt(x: number) { return x < 8; }\nfunction a(x: number) { const low = gt(x); return low ? lt(x) : false; }\nfunction b(x: number) { const low = gt(x); return low ? lt(x) : false; }`
   );
 
   assert.equal(result.status, "repair-required");

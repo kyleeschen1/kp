@@ -35,6 +35,7 @@ export interface KpTypeScriptExtractHelperRoleCandidates {
   readonly targetRevisionId: string;
   readonly sourceProgramSyntaxRecordId: string;
   readonly targetProgramSyntaxRecordId: string;
+  readonly sourceExpressionOwnerCount: number;
   readonly duplicateGroupCount: number;
   readonly duplicateExpressionText: string | undefined;
   readonly sourceContributors: readonly KpTypeScriptOwnedExpressionRole[];
@@ -54,10 +55,23 @@ export function recognizeKpTypeScriptExtractHelperRoles(
   assertAccepted(source, "source");
   assertAccepted(target, "target");
 
-  const duplicateGroups = groupOwnedExpressions(source)
+  const expressionGroups = groupOwnedExpressions(source);
+  const duplicateGroups = expressionGroups
     .filter((group) => new Set(group.map(({ ownerFunctionName }) =>
       ownerFunctionName
     )).size >= 2)
+    .filter((group, _, groups) => !groups.some((outer) =>
+      outer !== group && group.every((candidate) => {
+        const outerCandidate = outer.find(({ ownerFunctionName }) =>
+          ownerFunctionName === candidate.ownerFunctionName
+        );
+        return outerCandidate !== undefined && hasAncestorSyntaxRecord(
+          source,
+          candidate.syntaxRecordId,
+          outerCandidate.syntaxRecordId
+        );
+      })
+    ))
     .sort(compareExpressionGroups);
   const selectedGroup = duplicateGroups[0] ?? [];
   const duplicateExpressionText = selectedGroup[0]?.expressionText;
@@ -75,6 +89,9 @@ export function recognizeKpTypeScriptExtractHelperRoles(
     targetRevisionId: target.revisionId,
     sourceProgramSyntaxRecordId: sourceRecord(source).id,
     targetProgramSyntaxRecordId: sourceRecord(target).id,
+    sourceExpressionOwnerCount: new Set(expressionGroups.flatMap((group) =>
+      group.map(({ ownerFunctionName }) => ownerFunctionName)
+    )).size,
     duplicateGroupCount: duplicateGroups.length,
     duplicateExpressionText,
     sourceContributors: selectedGroup,
@@ -83,6 +100,20 @@ export function recognizeKpTypeScriptExtractHelperRoles(
       helperNames.has(calleeName)
     )
   });
+}
+
+function hasAncestorSyntaxRecord(
+  frontend: KpTypeScriptFrontendResult,
+  descendantId: string,
+  ancestorId: string
+): boolean {
+  const byRecordId = new Map(frontend.syntax.map((record) => [record.id, record]));
+  let current = byRecordId.get(descendantId);
+  while (current?.parentId !== undefined) {
+    if (current.parentId === ancestorId) return true;
+    current = byRecordId.get(current.parentId);
+  }
+  return false;
 }
 
 function groupOwnedExpressions(

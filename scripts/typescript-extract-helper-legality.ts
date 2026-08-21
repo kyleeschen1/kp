@@ -53,6 +53,13 @@ export function proveKpTypeScriptExtractHelperLegality(
     roles.duplicateExpressionText === undefined ||
     roles.introducedHelpers.length === 0
   ) {
+    if (
+      roles.duplicateGroupCount === 0 &&
+      roles.sourceExpressionOwnerCount >= 2
+    ) return repair("non-equivalent-duplicates", revisionIds, [],
+      "The candidate source functions do not contain one equivalent repeated decision.",
+      "Make the intended contributor expressions structurally equivalent before extraction."
+    );
     return repair("unsupported-source-shape", revisionIds, [],
       "The revisions must contain one repeated decision and an extracted helper.",
       "Use two equivalent expressions in distinct functions and extract one named helper."
@@ -129,7 +136,11 @@ export function proveKpTypeScriptExtractHelperLegality(
 }
 
 function repair(
-  code: "unsupported-source-shape" | "ambiguous-ownership" | "unsafe-capture",
+  code:
+    | "unsupported-source-shape"
+    | "non-equivalent-duplicates"
+    | "ambiguous-ownership"
+    | "unsafe-capture",
   revisionIds: readonly string[],
   roleIds: readonly string[],
   message: string,

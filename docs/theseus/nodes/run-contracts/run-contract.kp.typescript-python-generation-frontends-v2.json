@@ -181,6 +181,20 @@
       "scope": "cf09",
       "checkedAt": "2026-08-21T21:04:37.821Z",
       "notes": "Broad type, architecture, and generated-semantic gates pass after replacing regex name decoding with serialized TypeScript AST facts."
+    },
+    {
+      "command": "npm run test:typescript-code-generation-corpus and npm run test:typescript-refactor",
+      "status": "passed",
+      "scope": "cf10",
+      "checkedAt": "2026-08-21T21:08:39.304Z",
+      "notes": "Seven deterministic corpus categories and all 90 TypeScript tests pass; maximal nested predicates are accepted while parse, unequal, ambiguous, and capture failures remain typed."
+    },
+    {
+      "command": "tsc node project",
+      "status": "passed",
+      "scope": "cf10",
+      "checkedAt": "2026-08-21T21:08:40.629Z",
+      "notes": "Corpus and recognition refinements are build-time type-safe."
     }
   ],
   "allowedWork": [
@@ -263,7 +277,8 @@
     {
       "id": "cf10",
       "title": "TypeScript-adversarial-corpus",
-      "status": "planned"
+      "summary": "Added the deterministic TypeScript adversarial corpus and maximal nested-expression recognition, proving supported variants and exact repairs without broadening beyond extract-helper.",
+      "status": "complete"
     },
     {
       "id": "cf11",
