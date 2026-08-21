@@ -86,7 +86,7 @@
     {
       "id": "r07",
       "title": "pressure-visual-checkpoint",
-      "summary": "Repaired the actual quotient Play lifecycle race: asynchronously projected presentation defaults now no-op when unchanged and resample without pausing or detaching the shared clock when changed. The exact port-8000 page and strengthened Chromium/WebKit regressions advance past the former 20 percent freeze and complete from one click; r08 remains human-gated.",
+      "summary": "Repaired two independent delivery failures at the visual checkpoint. Lazy presentation projection now preserves the shared clock, and the Firefox-specific Native KaTeX collision is resolved by a typed vertical-quotient causal order: minus retirement, branch transit, then fraction-rule entry. The exact port-8000 Firefox page now remains ready, paints intermediate frames, and completes; product choreography, endpoints, direct seek, and rewind remain preserved. r08 stays human-gated.",
       "status": "complete"
     },
     {

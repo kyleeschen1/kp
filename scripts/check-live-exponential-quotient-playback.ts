@@ -1,11 +1,19 @@
-import { chromium, type Locator } from "playwright";
+import { chromium, firefox, webkit, type Locator } from "playwright";
 
 const animationId =
   "animation.algebra.exponential-homomorphism.difference-to-quotient";
 const url = new URL("http://127.0.0.1:8000/");
 url.searchParams.set("artifact", animationId);
+const requestedBrowser = process.argv.find((argument) =>
+  argument.startsWith("--browser=")
+)?.slice("--browser=".length) ?? "chromium";
+const browserType = requestedBrowser === "firefox"
+  ? firefox
+  : requestedBrowser === "webkit"
+    ? webkit
+    : chromium;
 
-const browser = await chromium.launch({ headless: true });
+const browser = await browserType.launch({ headless: true });
 try {
   const context = await browser.newContext({ reducedMotion: "no-preference" });
   const page = await context.newPage();
@@ -42,6 +50,7 @@ try {
   const completed = await sample(player, stage);
 
   const report = Object.freeze({
+    browser: requestedBrowser,
     url: url.toString(),
     responseStatus: response.status(),
     before,

@@ -746,11 +746,46 @@
       "scope": "r07 repaired lifecycle checkpoint",
       "checkedAt": "2026-08-21T00:34:56.391Z",
       "notes": "Graph validates at 1042 nodes and 24036 events; r08 remains gated on human visual approval."
+    },
+    {
+      "command": "npm run test:exponential-transit-session",
+      "status": "passed",
+      "scope": "r07 product preservation under quotient phase split",
+      "checkedAt": "2026-08-21T00:59:29.012Z",
+      "notes": "Ten shared carrier-fission and topology tests pass; the approved lateral-product rhythm is unchanged."
+    },
+    {
+      "command": "npm run test:exponential-quotient-pressure",
+      "status": "passed",
+      "scope": "r07 vertical quotient causal ordering",
+      "checkedAt": "2026-08-21T00:59:30.170Z",
+      "notes": "Three endpoint, compositor-cohort, and seek-rewind tests pass with minus retirement before transit and fraction-rule entry after clearance."
+    },
+    {
+      "command": "npm run check:live-exponential-quotient-playback:firefox",
+      "status": "passed",
+      "scope": "r07 exact Firefox delivery regression",
+      "checkedAt": "2026-08-21T00:59:31.581Z",
+      "notes": "The full-stack port-8000 quotient stays ready, paints distinct frames, and completes from one Play click in Firefox."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "r07 Firefox quotient repair boundary",
+      "checkedAt": "2026-08-21T00:59:32.566Z",
+      "notes": "TypeScript, Svelte, and domain checks pass."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "r07 Firefox quotient human checkpoint",
+      "checkedAt": "2026-08-21T01:00:19.773Z",
+      "notes": "Graph validates at 1042 nodes and 24043 events; r08 remains gated on visual approval."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT after repaired r07 delivery: exact port-8000 quotient playback now survives asynchronous presentation projection, advances continuously, and completes from one Play click. Review the quotient before approving r08 narrow promotion."
+    "summary": "HUMAN_CHECKPOINT after repaired r07 delivery: the exact live Firefox quotient now animates through a collision-safe vertical sequence and completes. Review the newly opened Firefox tab before approving r08 narrow promotion."
   },
   "expectedLearning": [
     "Whether the shared homomorphism law supports power applications without copying log choreography.",

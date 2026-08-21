@@ -48,6 +48,11 @@ export interface KpExponentialHomomorphismTransitProfile {
     connectorRelease: Readonly<{ start: number; end: number }>;
     carrierFission: Readonly<{ start: number; end: number }>;
     carrierFollowerReveal: Readonly<{ start: number; end: number }>;
+    verticalQuotient: Readonly<{
+      sourceConnectorContraction: Readonly<{ start: number; end: number }>;
+      sourceConnectorRelease: Readonly<{ start: number; end: number }>;
+      targetConnectorEntry: Readonly<{ start: number; end: number }>;
+    }>;
   }>;
   readonly connectorPointScale: number;
   readonly terminalSettlementFraction: number;
@@ -69,7 +74,14 @@ export const kpExponentialHomomorphismTransitProfile = Object.freeze({
     connectorContraction: Object.freeze({ start: 0.16, end: 0.24 }),
     connectorRelease: Object.freeze({ start: 0.16, end: 0.3 }),
     carrierFission: Object.freeze({ start: 0.16, end: 0.3 }),
-    carrierFollowerReveal: Object.freeze({ start: 0.16, end: 0.22 })
+    carrierFollowerReveal: Object.freeze({ start: 0.16, end: 0.22 }),
+    verticalQuotient: Object.freeze({
+      sourceConnectorContraction: Object.freeze({ start: 0.08, end: 0.14 }),
+      sourceConnectorRelease: Object.freeze({ start: 0.1, end: 0.16 }),
+      // A vertical separator is structural paint, not the source connector's
+      // visual continuant. It enters only after moving branches clear its band.
+      targetConnectorEntry: Object.freeze({ start: 0.3, end: 0.36 })
+    })
   }),
   connectorPointScale: 0.1,
   terminalSettlementFraction: 0.04
@@ -349,10 +361,18 @@ function createKpExponentialHomomorphismTrackProjection(
         ) {
           return stationaryCompressedRelease(
             track,
-            kpExponentialHomomorphismTransitProfile.homomorphicResolution
-              .connectorContraction,
-            kpExponentialHomomorphismTransitProfile.homomorphicResolution
-              .connectorRelease,
+            targetTopology === "vertical-quotient"
+              ? kpExponentialHomomorphismTransitProfile
+                .homomorphicResolution.verticalQuotient
+                .sourceConnectorContraction
+              : kpExponentialHomomorphismTransitProfile
+                .homomorphicResolution.connectorContraction,
+            targetTopology === "vertical-quotient"
+              ? kpExponentialHomomorphismTransitProfile
+                .homomorphicResolution.verticalQuotient
+                .sourceConnectorRelease
+              : kpExponentialHomomorphismTransitProfile
+                .homomorphicResolution.connectorRelease,
             homomorphicResolutionTimingGroupId,
             homomorphicResolutionMotionUnitId
           );
@@ -364,7 +384,7 @@ function createKpExponentialHomomorphismTrackProjection(
         ) {
           const reveal = sampleWindow(
             kpExponentialHomomorphismTransitProfile.homomorphicResolution
-              .connectorRelease
+              .verticalQuotient.targetConnectorEntry
           );
           return Object.freeze({
             ...track,

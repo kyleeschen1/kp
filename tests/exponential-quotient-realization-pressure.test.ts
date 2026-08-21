@@ -54,7 +54,9 @@ test("quotient pressure uses one measured compositor cohort", () => {
   );
   assert.ok(barTrack);
   assert.equal(barTrack?.sampleMaterialScale?.(0.1), 0.1);
-  assert.equal(barTrack?.sampleMaterialScale?.(0.34), 1);
+  assert.equal(barTrack?.sampleOpacityProgress?.(0.23), 0);
+  assert.equal(barTrack?.sampleMaterialScale?.(0.23), 0.1);
+  assert.equal(barTrack?.sampleMaterialScale?.(0.36), 1);
 });
 
 test("vertical pressure seeks and rewinds without terminal corrections", () => {

@@ -75,7 +75,12 @@ test("one compositor plan stages persistent carrier fission", () => {
       connectorContraction: { start: 0.16, end: 0.24 },
       connectorRelease: { start: 0.16, end: 0.3 },
       carrierFission: { start: 0.16, end: 0.3 },
-      carrierFollowerReveal: { start: 0.16, end: 0.22 }
+      carrierFollowerReveal: { start: 0.16, end: 0.22 },
+      verticalQuotient: {
+        sourceConnectorContraction: { start: 0.08, end: 0.14 },
+        sourceConnectorRelease: { start: 0.1, end: 0.16 },
+        targetConnectorEntry: { start: 0.3, end: 0.36 }
+      }
     }
   );
   assert.equal(plan.copyFanOut, false);
