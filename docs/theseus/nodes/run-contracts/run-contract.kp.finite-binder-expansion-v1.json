@@ -66,7 +66,8 @@
     {
       "id": "bf01",
       "title": "Freeze binder baseline",
-      "status": "planned"
+      "summary": "Added an immutable finite-binder preflight contract and five focused tests over exact capability, endpoint, paint-fixture, Catalogue, and checkpoint facts; type, coverage, compositor, and bundle baselines remain green.",
+      "status": "complete"
     },
     {
       "id": "bf02",

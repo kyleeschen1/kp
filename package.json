@@ -110,6 +110,8 @@
     "check:code-operation-discovery-catalog": "node --disable-warning=ExperimentalWarning scripts/generate-code-operation-discovery-catalog.ts --check",
     "test:code-operation-discovery": "node --disable-warning=ExperimentalWarning --test tests/code-operation-discovery.test.ts",
     "test:code-generation-orchestration": "node --disable-warning=ExperimentalWarning --test tests/code-generation-orchestrator.test.ts",
+    "test:finite-binder-expansion-preflight": "node --disable-warning=ExperimentalWarning --test tests/finite-binder-expansion-preflight.test.ts",
+    "test:finite-binder-expansion": "node --disable-warning=ExperimentalWarning --test tests/finite-binder-*.test.ts",
     "test:scheme-factorial": "node --disable-warning=ExperimentalWarning --test tests/scheme-factorial-*.test.ts",
     "visual:scheme-factorial": "playwright test tests/scheme-factorial.browser.spec.ts tests/scheme-factorial-catalogue.browser.spec.ts --project=chromium --workers=1",
     "test:browser:legacy-root-routes": "playwright test tests/legacy-root-route.browser.spec.ts --project=chromium --workers=1",

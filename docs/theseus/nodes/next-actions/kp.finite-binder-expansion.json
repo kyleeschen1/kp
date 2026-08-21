@@ -37,6 +37,47 @@
     "npm run check:animation-library-bundle-boundary",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:finite-binder-expansion",
+      "status": "passed",
+      "scope": "bf01",
+      "checkedAt": "2026-08-21T22:44:39.926Z",
+      "notes": "Five preflight tests pin the missing broad capability, canonical sum and product endpoints, existing large-operator syntax and paint evidence, absent assets, and checkpoint order."
+    },
+    {
+      "command": "npm run test:animation-transformation-coverage",
+      "status": "passed",
+      "scope": "bf01",
+      "checkedAt": "2026-08-21T22:44:42.183Z",
+      "notes": "Seventeen coverage and case-ledger tests pass at the frozen pre-binder baseline."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "bf01",
+      "checkedAt": "2026-08-21T22:44:47.741Z",
+      "notes": "Eighty-two Native KaTeX compositor and ownership tests pass, including the existing large-operator compound paint class."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "bf01",
+      "checkedAt": "2026-08-21T22:44:53.391Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks pass with the preflight contract."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "bf01",
+      "checkedAt": "2026-08-21T22:44:57.581Z",
+      "notes": "Baseline bundle gate remains at 3466 outer, 199255 main host, 132852 Catalogue route, and 51102 place-value incremental gzip bytes."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "bf01 froze the honest Missing capability state, canonical sum/product endpoints, existing diagnostic paint evidence, absent animation assets, visual checkpoint order, and stable focused verification command."
+  },
   "expectedLearning": [
     "Whether finite sum expansion can make bound scope, ordered instantiation, and one-to-many lineage perceptually clear without false persistence.",
     "Whether a finite product proves a narrow shared binder seam while keeping arithmetic and choreography operator-owned."
