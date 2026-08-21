@@ -455,6 +455,144 @@
     },
     {
       "schemaVersion": "kp.equation-surface-preservation-row.v2",
+      "animationId": "animation.algebra.log-product.equivalence-frame",
+      "familyId": "logarithm",
+      "pathClass": "log-product-specialized",
+      "semanticEndpoints": [
+        {
+          "transformationId": "transformation.log-product.xy-to-sum",
+          "transformationType": "expandLogProductAsSum",
+          "transformationFingerprint": "fnv1a32-8a21d2c3",
+          "source": [
+            {
+              "objectId": "log-product.state.product",
+              "objectType": "equation",
+              "title": "Frozen logarithm of a product",
+              "semanticFingerprint": "fnv1a32-fde9de09"
+            }
+          ],
+          "target": [
+            {
+              "objectId": "log-product.state.sum",
+              "objectType": "equation",
+              "title": "Live sum of logarithms",
+              "semanticFingerprint": "fnv1a32-7c792762"
+            }
+          ]
+        }
+      ],
+      "route": {
+        "href": "/?artifact=animation.algebra.log-product.equivalence-frame",
+        "selectionParameter": "artifact"
+      },
+      "directSeek": {
+        "controlSelector": "[data-action=\"seek-editor-animation\"]",
+        "progressAttribute": "data-kp-editor-animation-progress",
+        "checkpoints": [
+          0,
+          1
+        ],
+        "interpolationAuthority": "editor-animation-player"
+      },
+      "accessibility": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "nativeSettlement": {
+        "slotKind": "equation",
+        "adapterId": "editor-animation-surface.log-product.equivalence-frame.native-katex",
+        "adapterStatus": "ready",
+        "endpointAuthority": "labelled-semantic-stage"
+      },
+      "migrationObligations": {
+        "semantic": {
+          "assetFingerprint": "fnv1a32-7397e5ee",
+          "objectIds": [
+            "log-product.state.product",
+            "log-product.state.sum",
+            "state.log-product-equivalence.relation",
+            "projection.log-product.equivalence-frame"
+          ],
+          "transformationIds": [
+            "transformation.log-product.xy-to-sum"
+          ]
+        },
+        "endpoints": {
+          "fingerprint": "fnv1a32-3f5ad9aa",
+          "authority": "labelled-semantic-stage"
+        },
+        "renderer": {
+          "selectedCapabilityId": "log-product",
+          "adapterId": "editor-animation-surface.log-product.equivalence-frame.native-katex",
+          "sourcePath": "src/editor/log-product-equivalence-frame-surface-adapter.ts"
+        },
+        "clock": {
+          "ownerId": "editor-animation-player",
+          "sourcePath": "src/editor/animation-player-controller.ts",
+          "authorityNodeId": "clock.shared-editor-player",
+          "privateClockAuthority": "none",
+          "cssAnimationAuthority": "none"
+        },
+        "sampledFrames": {
+          "samplerNodeIds": [
+            "sampler.semantic-motion-choreography"
+          ],
+          "checkpoints": [
+            0,
+            0.5,
+            1
+          ],
+          "frames": [
+            {
+              "direction": "forward",
+              "progress": 0,
+              "phaseId": "animation.algebra.log-product.equivalence-frame.forward.0",
+              "activeTransformationIds": [
+                "transformation.log-product.xy-to-sum"
+              ],
+              "activeSemanticObjectIds": [
+                "log-product.state.product",
+                "log-product.state.sum",
+                "state.log-product-equivalence.relation"
+              ],
+              "envelopeFingerprint": "fnv1a32-0df56292"
+            },
+            {
+              "direction": "forward",
+              "progress": 0.5,
+              "phaseId": "animation.algebra.log-product.equivalence-frame.forward.0",
+              "activeTransformationIds": [
+                "transformation.log-product.xy-to-sum"
+              ],
+              "activeSemanticObjectIds": [
+                "log-product.state.product",
+                "log-product.state.sum",
+                "state.log-product-equivalence.relation"
+              ],
+              "envelopeFingerprint": "fnv1a32-0a08a9a2"
+            },
+            {
+              "direction": "forward",
+              "progress": 1,
+              "phaseId": "animation.algebra.log-product.equivalence-frame.forward.0",
+              "activeTransformationIds": [
+                "transformation.log-product.xy-to-sum"
+              ],
+              "activeSemanticObjectIds": [
+                "log-product.state.product",
+                "log-product.state.sum",
+                "state.log-product-equivalence.relation"
+              ],
+              "envelopeFingerprint": "fnv1a32-c1c1e155"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-preservation-row.v2",
       "animationId": "animation.algebra.log-product.product-to-sum",
       "familyId": "logarithm",
       "pathClass": "log-product-specialized",
@@ -6377,6 +6515,7 @@
       "familyId": "logarithm",
       "animationIds": [
         "animation.algebra.log-exponent.solve-two-power-x",
+        "animation.algebra.log-product.equivalence-frame",
         "animation.algebra.log-product.product-to-sum",
         "animation.algebra.log-product.three-factors-to-sum",
         "animation.algebra.log-quotient.difference-to-quotient",

@@ -163,7 +163,8 @@ export const kpEditorSelectedSurfaceCapabilityDeclarations = Object.freeze([
     capabilityId: "log-product",
     domain: "equation",
     adapterIds: [
-      "editor-animation-surface.log-product.canonical-native-katex"
+      "editor-animation-surface.log-product.canonical-native-katex",
+      "editor-animation-surface.log-product.equivalence-frame.native-katex"
     ],
     registrationOwner: "provided-registry",
     async loadAndRegister(registry, registrationGuardAdapterId) {

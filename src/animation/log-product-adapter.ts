@@ -25,6 +25,8 @@ import {
   kpLogProductCompiledOperations,
   type KpCompiledLogProductOperation
 } from "../semantic/log-product-transformation-compiler.ts";
+import { createKpLogProductEquivalenceFrameAnimationAsset } from
+  "./log-product-equivalence-frame-adapter.ts";
 export {
   kpLogProductAnimationId,
   kpLogProductAnimationIds,
@@ -157,7 +159,8 @@ export function createKpLogProductAnimationAsset(
 }
 
 export function createKpLogProductAnimationAssets(): readonly KpAnimationAsset[] {
-  return Object.freeze(kpLogProductCompiledOperations.map(
-    createKpLogProductAnimationAsset
-  ));
+  return Object.freeze([
+    ...kpLogProductCompiledOperations.map(createKpLogProductAnimationAsset),
+    createKpLogProductEquivalenceFrameAnimationAsset()
+  ]);
 }

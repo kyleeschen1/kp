@@ -935,6 +935,39 @@
     }
   },
   {
+    "id": "editor-animation.animation.algebra.log-product.equivalence-frame",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.algebra.log-product.equivalence-frame",
+    "title": "Keep the logarithm product law as an equivalence",
+    "summary": "The approved log-product operation projected as a persistent equivalence frame.",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 4800,
+    "beatCount": 96,
+    "tags": [
+      "algebra",
+      "animation",
+      "equation",
+      "equivalence",
+      "katex",
+      "logarithm",
+      "persistent-state"
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
+  },
+  {
     "id": "editor-animation.animation.algebra.exponential-homomorphism.sum-to-product",
     "kind": "editor-animation-descriptor",
     "animationId": "animation.algebra.exponential-homomorphism.sum-to-product",

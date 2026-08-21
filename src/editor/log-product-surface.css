@@ -36,3 +36,61 @@
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+.kp-log-product-equivalence-stage__frame {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(0.75rem, 2.5vw, 2.25rem);
+  padding-inline: clamp(1rem, 4vw, 4rem);
+}
+
+.kp-log-product-equivalence-stage__cell {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  min-height: clamp(8rem, 20vh, 12rem);
+  place-items: center;
+}
+
+.kp-log-product-equivalence-stage__frozen-source,
+.kp-log-product-equivalence-stage__relation {
+  font-size: clamp(1.75rem, 3.5vw, 3rem);
+}
+
+.kp-log-product-equivalence-stage__frozen-source .katex-display,
+.kp-log-product-equivalence-stage__relation .katex-display {
+  margin: 0;
+}
+
+.kp-log-product-equivalence-stage__relation {
+  transform-origin: center;
+}
+
+.kp-log-product-equivalence-stage__measurement {
+  position: absolute;
+  inset: 0;
+  font-size: clamp(1.75rem, 3.5vw, 3rem);
+}
+
+.kp-log-product-equivalence-stage >
+  .kp-log-product-stage__material-layer {
+  font-size: clamp(1.75rem, 3.5vw, 3rem);
+}
+
+@media (max-width: 42rem) {
+  .kp-log-product-equivalence-stage__frame {
+    gap: 0.45rem;
+    padding-inline: 0.5rem;
+  }
+
+  .kp-log-product-equivalence-stage__frozen-source,
+  .kp-log-product-equivalence-stage__relation,
+  .kp-log-product-equivalence-stage__measurement,
+  .kp-log-product-equivalence-stage >
+    .kp-log-product-stage__material-layer {
+    font-size: clamp(1.25rem, 6vw, 2rem);
+  }
+}

@@ -255,6 +255,17 @@ readonly KpEquationSurfaceFamilyDeclaration[] = Object.freeze([
     rendererSourcePath: "src/editor/log-quotient-surface-adapter.ts"
   }),
   declaration({
+    id: "family.equation.log-product-equivalence-frame",
+    matches: (id) =>
+      id === "animation.algebra.log-product.equivalence-frame",
+    selectedCapabilityIds: ["log-product"],
+    primaryCapabilityId: "log-product",
+    rendererAdapterId:
+      "editor-animation-surface.log-product.equivalence-frame.native-katex",
+    rendererSourcePath:
+      "src/editor/log-product-equivalence-frame-surface-adapter.ts"
+  }),
+  declaration({
     id: "family.equation.log-product",
     matches: (id) => id.startsWith("animation.algebra.log-product."),
     selectedCapabilityIds: ["log-product"],
@@ -549,6 +560,17 @@ readonly KpWaveCEquationDispositionDeclaration[] = Object.freeze([
     genericLayerTransition: "forbidden",
     rationale:
       "The three-factor pressure caller uses the dedicated log-product adapter without promoting its pending visual policy."
+  }),
+  waveC({
+    animationId: "animation.algebra.log-product.equivalence-frame",
+    classification: "generated-bespoke",
+    disposition: "adapter-backed",
+    presentationRoute: "specialized-native-adapter",
+    authoritySourcePath:
+      "src/editor/log-product-equivalence-frame-surface-adapter.ts",
+    genericLayerTransition: "forbidden",
+    rationale:
+      "The persistent equivalence exemplar changes representation topology while reusing the approved binary log-product operation and transit machinery."
   }),
   ...[
     "animation.comparison.jacobian-hessian",

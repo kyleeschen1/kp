@@ -1524,6 +1524,34 @@
     ]
   },
   {
+    "animationId": "animation.algebra.log-product.equivalence-frame",
+    "title": "Keep the logarithm product law as an equivalence",
+    "summary": "The approved log-product operation projected as a persistent equivalence frame.",
+    "tags": [
+      "algebra",
+      "animation",
+      "editor",
+      "equation",
+      "equivalence",
+      "katex",
+      "logarithm",
+      "persistent-state"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.algebra.log-product.equivalence-frame",
+    "representations": [
+      {
+        "id": "editor-animation.animation.algebra.log-product.equivalence-frame",
+        "label": "Keep the logarithm product law as an equivalence",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.algebra.log-product.equivalence-frame",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
     "animationId": "animation.comparison.linear-solve-programming",
     "title": "Linear solve and programming trace comparison",
     "summary": "Linear solve and programming trace comparison",

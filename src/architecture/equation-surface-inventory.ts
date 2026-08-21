@@ -44,6 +44,7 @@ export const kpPostBaselineEquationSurfaceIds = Object.freeze([
   "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
   "animation.algebra.log-product.product-to-sum",
   "animation.algebra.log-product.three-factors-to-sum",
+  "animation.algebra.log-product.equivalence-frame",
   "animation.algebra.exponential-homomorphism.sum-to-product",
   "animation.algebra.exponential-homomorphism.difference-to-quotient",
   "animation.algebra.radical.solve-x-squared-nine",

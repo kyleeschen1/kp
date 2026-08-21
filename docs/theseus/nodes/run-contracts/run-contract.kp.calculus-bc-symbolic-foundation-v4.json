@@ -274,6 +274,74 @@
       "scope": "rv13 completed control state",
       "checkedAt": "2026-08-21T17:51:55.164Z",
       "notes": "Validated 1043 nodes and 24177 events after closing the state-retention projection contract."
+    },
+    {
+      "command": "npm",
+      "status": "passed",
+      "scope": "rv14",
+      "checkedAt": "2026-08-21T18:06:17.730Z",
+      "notes": "All"
+    },
+    {
+      "command": "npm",
+      "status": "passed",
+      "scope": "rv14",
+      "checkedAt": "2026-08-21T18:06:19.019Z",
+      "notes": "Two"
+    },
+    {
+      "command": "npm",
+      "status": "passed",
+      "scope": "rv14",
+      "checkedAt": "2026-08-21T18:06:20.031Z",
+      "notes": "All"
+    },
+    {
+      "command": "npm",
+      "status": "passed",
+      "checkedAt": "2026-08-21T18:06:21.065Z"
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "rv14 equivalence-frame semantic asset and canonical operation reuse",
+      "checkedAt": "2026-08-21T18:07:09.281Z",
+      "notes": "All 19 log-product semantic, endpoint, transit, lazy-pack, and equivalence projection checks pass."
+    },
+    {
+      "command": "npm run visual:log-product-equivalence-frame",
+      "status": "passed",
+      "scope": "rv14 retained-context browser exemplar",
+      "checkedAt": "2026-08-21T18:07:10.742Z",
+      "notes": "Two Chromium checks pass: source retention through transit, relation introduction, direct seek, rewind, page-error cleanliness, and narrow-viewport fit."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "rv14 generated inventory and presentation authority",
+      "checkedAt": "2026-08-21T18:07:11.769Z",
+      "notes": "All 11 inventory, authority graph, preservation matrix, endpoint, and browser-evidence checks pass for 41 equation surfaces."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "rv14 typed projection and adapter boundary",
+      "checkedAt": "2026-08-21T18:07:12.793Z",
+      "notes": "All application, node, test, Svelte, and domain TypeScript projects pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "rv14 renderer and compiler boundaries",
+      "checkedAt": "2026-08-21T18:07:13.815Z",
+      "notes": "All dependency, framework-neutral, semantic-animation, presentation, and compiler-authority gates pass."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "rv14 completed control state",
+      "checkedAt": "2026-08-21T18:08:04.307Z",
+      "notes": "Validated 1043 nodes and 24189 events after closing the log-product equivalence-frame exemplar."
     }
   ],
   "allowedWork": [
@@ -379,7 +447,8 @@
     {
       "id": "rv14",
       "title": "log-equivalence-frame-exemplar",
-      "status": "planned"
+      "summary": "Added a verified persistent equivalence-frame projection of the binary log-product law. A distinct frozen source occurrence and equals relation surround a separately owned live target occurrence, while the target reuses the exact canonical semantic operation, Native KaTeX endpoints, transit session, function-wrap choreography, and player clock. The asset remains in the lazy log-product pack with a dedicated topology adapter and generated presentation authority. Focused semantic, browser, inventory, type, and architecture gates pass at wide and narrow viewports; the original replacement callers remain unchanged.",
+      "status": "complete"
     },
     {
       "id": "rv15",
