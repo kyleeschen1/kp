@@ -93,11 +93,25 @@
       "scope": "bf02",
       "checkedAt": "2026-08-21T22:49:36.248Z",
       "notes": "All TypeScript, Svelte, and domain typechecks pass after capability narrowing."
+    },
+    {
+      "command": "npm run test:finite-binder-expansion",
+      "status": "passed",
+      "scope": "bf03 finite-binder vocabulary",
+      "checkedAt": "2026-08-21T22:55:49.741Z",
+      "notes": "12 focused semantic and baseline tests pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "bf03 type boundary",
+      "checkedAt": "2026-08-21T22:55:50.999Z",
+      "notes": "Application, Node, test, Svelte, and domain type checks pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "bf02 replaced the unimplemented binder-calculus umbrella with a finite sum/product expansion capability in Sequences and series; differentiation and integration remain separate planned families."
+    "summary": "bf03 defines immutable renderer-neutral operator, declaration, integer-limit, body-template, reference, and distinct derived-instance vocabulary without parsing, range, lineage, motion, or paint authority."
   },
   "expectedLearning": [
     "Whether finite sum expansion can make bound scope, ordered instantiation, and one-to-many lineage perceptually clear without false persistence.",

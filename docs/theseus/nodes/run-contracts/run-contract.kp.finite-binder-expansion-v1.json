@@ -78,7 +78,8 @@
     {
       "id": "bf03",
       "title": "Define binder vocabulary",
-      "status": "planned"
+      "summary": "Defined and verified the finite-binder semantic vocabulary and occurrence-identity boundary.",
+      "status": "complete"
     },
     {
       "id": "bf04",
