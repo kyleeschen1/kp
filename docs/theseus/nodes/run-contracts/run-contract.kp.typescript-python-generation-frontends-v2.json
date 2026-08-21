@@ -76,6 +76,20 @@
       "scope": "cf02",
       "checkedAt": "2026-08-21T20:24:54.747Z",
       "notes": "All TypeScript/Svelte/domain checks and dependency, framework-neutral, semantic, and compiler-authority gates pass."
+    },
+    {
+      "command": "npm run test:code-generation-diagnostics",
+      "status": "passed",
+      "scope": "cf03",
+      "checkedAt": "2026-08-21T20:29:40.177Z",
+      "notes": "Four tests prove the closed six-code vocabulary, canonical phases and repair kinds, JSON/freeze behavior, semantic evidence IDs, and rejection of empty, duplicate, or cross-language repairs."
+    },
+    {
+      "command": "npm run typecheck and npm run check:architecture",
+      "status": "passed",
+      "scope": "cf03",
+      "checkedAt": "2026-08-21T20:29:47.516Z",
+      "notes": "Type, domain, dependency, framework-neutral, semantic, and compiler-authority gates remain green."
     }
   ],
   "allowedWork": [
@@ -116,7 +130,8 @@
     {
       "id": "cf03",
       "title": "Typed-repair-diagnostics",
-      "status": "planned"
+      "summary": "Added a closed data-driven six-code semantic repair vocabulary with canonical phases and repair actions. Diagnostics carry stable revision/role evidence, serialize and freeze deterministically, reject duplicates and cross-language mixing, and provide no generic fallback category.",
+      "status": "complete"
     },
     {
       "id": "cf04",
