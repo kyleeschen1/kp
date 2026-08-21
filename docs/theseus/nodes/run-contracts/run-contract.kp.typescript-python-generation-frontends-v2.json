@@ -251,6 +251,20 @@
       "scope": "cf13",
       "checkedAt": "2026-08-21T21:22:50.853Z",
       "notes": "Focused Python frontend and recognizer typecheck passes."
+    },
+    {
+      "command": "npm run test:python-extract-helper-legality and npm run test:python-extract-helper-roles",
+      "status": "passed",
+      "scope": "cf14",
+      "checkedAt": "2026-08-21T21:27:10.377Z",
+      "notes": "Six positive/negative Python legality tests and five role tests pass, covering equivalence, ambiguity, binding, annotations, variadics, keyword calls, and AST rejection."
+    },
+    {
+      "command": "tsc focused Python legality project and npm run check:architecture",
+      "status": "passed",
+      "scope": "cf14",
+      "checkedAt": "2026-08-21T21:27:11.731Z",
+      "notes": "Python legality is type-safe and keeps all dependency and compiler-authority boundaries green."
     }
   ],
   "allowedWork": [
@@ -357,7 +371,8 @@
     {
       "id": "cf14",
       "title": "Python-legality-proof",
-      "status": "planned"
+      "summary": "Added a no-execution Python legality proof for one unambiguous helper, exact contributor coverage, positional binding preservation, annotation continuity, and typed unsupported-shape repairs.",
+      "status": "complete"
     },
     {
       "id": "cf15",
