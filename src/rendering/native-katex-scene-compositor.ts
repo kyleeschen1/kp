@@ -93,6 +93,16 @@ export interface KpNativeKatexRendererSession extends
     KpNativeKatexSceneTrack, KpNativeKatexSceneTrackFrame,
     KpNativeKatexSceneOwnershipFrame> {}
 
+const kpExecutableNativeKatexSceneSessionBrand: unique symbol = Symbol(
+  "kp.executable-native-katex-scene-session"
+);
+
+export interface KpNativeKatexExecutableMotionEvidence {
+  readonly kind: "native-katex-executable-motion-evidence";
+  readonly sampledProgresses: readonly [0, 0.25, 0.5, 0.75, 1];
+  readonly dynamicTrackIds: readonly [string, ...string[]];
+}
+
 export interface KpCanonicalNativeKatexSceneSession {
   readonly kind: "canonical-native-katex-scene-session";
   readonly lifecycle: "renderer-session";
@@ -100,6 +110,8 @@ export interface KpCanonicalNativeKatexSceneSession {
   readonly hierarchy: KpNativeKatexHierarchicalScenePlan;
   readonly protectedTransit: KpEquationProtectedTransitCertificate;
   readonly session: KpNativeKatexRendererSession;
+  readonly executableMotion: KpNativeKatexExecutableMotionEvidence;
+  readonly [kpExecutableNativeKatexSceneSessionBrand]: true;
 }
 
 export interface KpCanonicalNativeKatexPureScenePlan {
@@ -1590,13 +1602,52 @@ export function createKpCanonicalNativeKatexSceneSession(
     }
   });
   if (plan.structuralSuccession !== undefined) session.apply(0);
+  const executableMotion = certifyKpNativeKatexExecutableMotion(playback);
   return Object.freeze({
     kind: "canonical-native-katex-scene-session",
     lifecycle: "renderer-session",
     reconciliation,
     hierarchy,
     protectedTransit: plan.protectedTransit,
-    session
+    session,
+    executableMotion,
+    [kpExecutableNativeKatexSceneSessionBrand]: true as const
+  });
+}
+
+function certifyKpNativeKatexExecutableMotion(
+  playback: KpNativeKatexRendererSession
+): KpNativeKatexExecutableMotionEvidence {
+  const sampledProgresses = [0, 0.25, 0.5, 0.75, 1] as const;
+  const signaturesByTrack = new Map<string, Set<string>>();
+  for (const progress of sampledProgresses) {
+    for (const frame of playback.sample(progress)) {
+      const signatures = signaturesByTrack.get(frame.trackId) ?? new Set<string>();
+      signatures.add(JSON.stringify({
+        rect: frame.rect,
+        opacity: frame.opacity,
+        metricProgress: frame.metricProgress,
+        materialScale: frame.materialScale
+      }));
+      signaturesByTrack.set(frame.trackId, signatures);
+    }
+  }
+  const dynamicTrackIds = [...signaturesByTrack]
+    .filter(([, signatures]) => signatures.size > 1)
+    .map(([trackId]) => trackId);
+  if (dynamicTrackIds.length === 0) {
+    throw new Error(
+      "Canonical Native KaTeX motion must produce at least one non-static " +
+      "measured track before a surface can publish itself as ready."
+    );
+  }
+  return Object.freeze({
+    kind: "native-katex-executable-motion-evidence" as const,
+    sampledProgresses,
+    dynamicTrackIds: Object.freeze(dynamicTrackIds) as readonly [
+      string,
+      ...string[]
+    ]
   });
 }
 

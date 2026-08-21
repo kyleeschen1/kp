@@ -116,7 +116,8 @@
     {
       "id": "r12",
       "title": "radical-role-transfer-realization",
-      "status": "planned"
+      "summary": "Realized the verified even-root exemplar with native KaTeX endpoint ownership, typed visible-exponent to implicit-index role transfer, persistent x/equality/radicand identity, explicit plus-minus and radical introduction, and a separate deterministic root-evaluation ink-knot transition. Canonical renderer sessions now carry non-forgeable executable-motion evidence and fail before ready when measured tracks are static; the live Firefox painted-frame probe preserves end-to-end scheduling coverage.",
+      "status": "complete"
     },
     {
       "id": "r13",
