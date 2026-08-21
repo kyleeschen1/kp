@@ -62,6 +62,20 @@
       "scope": "cf01",
       "checkedAt": "2026-08-21T20:17:06.614Z",
       "notes": "Seventeen coverage tests retain both code capabilities as honest Exemplar rows with frontend-required gaps."
+    },
+    {
+      "command": "npm run test:code-generation-request",
+      "status": "passed",
+      "scope": "cf02",
+      "checkedAt": "2026-08-21T20:24:45.460Z",
+      "notes": "Five tests prove immutable ordered revisions, bounded extract-helper intent, cross-domain envelope composition, typed protocol repair, and no parser/presentation imports."
+    },
+    {
+      "command": "npm run typecheck and npm run check:architecture",
+      "status": "passed",
+      "scope": "cf02",
+      "checkedAt": "2026-08-21T20:24:54.747Z",
+      "notes": "All TypeScript/Svelte/domain checks and dependency, framework-neutral, semantic, and compiler-authority gates pass."
     }
   ],
   "allowedWork": [
@@ -96,7 +110,8 @@
     {
       "id": "cf02",
       "title": "Code-refactor-request-protocol",
-      "status": "planned"
+      "summary": "Added an immutable framework-neutral code-refactor request/result protocol for exactly ordered before/after revisions and extract-helper intent. It composes opaquely under the cross-domain generation envelope, rejects syntax shortcuts and presentation policy, and imports no parser, semantic-model, editor, renderer, or framework authority.",
+      "status": "complete"
     },
     {
       "id": "cf03",
