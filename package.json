@@ -88,6 +88,7 @@
     "test:code-generation-preflight": "node --disable-warning=ExperimentalWarning --test tests/code-refactor-generation-preflight.test.ts",
     "test:code-generation-request": "node --disable-warning=ExperimentalWarning --test tests/code-refactor-generation-request.test.ts",
     "test:code-generation-diagnostics": "node --disable-warning=ExperimentalWarning --test tests/code-refactor-generation-diagnostic.test.ts",
+    "test:extract-helper-causal-contract": "node --disable-warning=ExperimentalWarning --test tests/extract-helper-causal-contract.test.ts",
     "test:scheme-factorial": "node --disable-warning=ExperimentalWarning --test tests/scheme-factorial-*.test.ts",
     "visual:scheme-factorial": "playwright test tests/scheme-factorial.browser.spec.ts tests/scheme-factorial-catalogue.browser.spec.ts --project=chromium --workers=1",
     "test:browser:legacy-root-routes": "playwright test tests/legacy-root-route.browser.spec.ts --project=chromium --workers=1",

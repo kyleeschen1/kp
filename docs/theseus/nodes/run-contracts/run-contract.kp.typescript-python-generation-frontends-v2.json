@@ -104,6 +104,27 @@
       "scope": "cf04",
       "checkedAt": "2026-08-21T20:34:11.250Z",
       "notes": "Candidate registration preserves all type, dependency, framework-neutral, semantic, and compiler-authority boundaries."
+    },
+    {
+      "command": "npm run test:extract-helper-causal-contract",
+      "status": "passed",
+      "scope": "cf05",
+      "checkedAt": "2026-08-21T20:45:17.615Z",
+      "notes": "Four focused assertions prove shared causal relations, one-to-one contributor role changes, typed rejection, and no language or presentation authority."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "cf05",
+      "checkedAt": "2026-08-21T20:45:19.248Z",
+      "notes": "TypeScript, Svelte, and domain type boundaries accept the causal contract."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "cf05",
+      "checkedAt": "2026-08-21T20:45:20.332Z",
+      "notes": "Dependency, framework-neutral, semantic, and equation authority gates remain green."
     }
   ],
   "allowedWork": [
@@ -156,7 +177,8 @@
     {
       "id": "cf05",
       "title": "Extract-helper-causal-contract",
-      "status": "planned"
+      "summary": "Defined a language-neutral extract-helper causal relation contract shared by TypeScript-like and Python-like callers without importing syntax or presentation authority.",
+      "status": "complete"
     },
     {
       "id": "cf06",
