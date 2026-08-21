@@ -155,6 +155,20 @@
       "scope": "rv08 completed control state",
       "checkedAt": "2026-08-21T17:12:34.804Z",
       "notes": "Validated 1043 nodes and 24150 events after closing odd-root pressure."
+    },
+    {
+      "command": "npm run test:rational-exponent-pressure",
+      "status": "passed",
+      "scope": "rv09 exponent-index composition semantics endpoints and motion",
+      "checkedAt": "2026-08-21T17:18:54.513Z",
+      "notes": "All 14 root-plan, leaf-identity, recursive endpoint, rational-exponent assembly, deterministic seek, odd-root preservation, and negative-plan checks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "rv09 rational exponent composition boundaries",
+      "checkedAt": "2026-08-21T17:18:55.832Z",
+      "notes": "All dependency, framework-neutral, semantic animation, presentation, and compiler-authority gates pass."
     }
   ],
   "allowedWork": [
@@ -230,7 +244,8 @@
     {
       "id": "rv09",
       "title": "rational-exponent-composition-pressure",
-      "status": "planned"
+      "summary": "Added the verified cube-root of x-squared to x-to-the-two-thirds composition pressure caller. The compiler-owned root plan persists x, fuses the source index and exponent into one target exponent, and consumes the radical; leaf correspondence independently preserves 2 as numerator and 3 as denominator while introducing only the division glyph. Recursive endpoints, compositor-owned routing, exact settlement, deterministic reverse/direct seek, focused root tests, and architecture gates pass without a new fraction renderer or caller geometry.",
+      "status": "complete"
     },
     {
       "id": "rv10",

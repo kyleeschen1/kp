@@ -106,6 +106,7 @@
     "test:compound-root-carrier": "node --disable-warning=ExperimentalWarning --test tests/compound-root-carrier-exemplar.test.ts tests/compound-root-carrier-native-realization.test.ts tests/compound-root-carrier-catalogue-integration.test.ts",
     "test:closed-root-evaluation": "node --disable-warning=ExperimentalWarning --test tests/closed-root-evaluation-pressure.test.ts tests/even-root-native-transit.test.ts tests/compound-root-carrier-native-realization.test.ts",
     "test:odd-root-pressure": "node --disable-warning=ExperimentalWarning --test tests/odd-root-pressure.test.ts tests/inverse-power-operation.test.ts tests/even-root-native-transit.test.ts tests/closed-root-evaluation-pressure.test.ts",
+    "test:rational-exponent-pressure": "node --disable-warning=ExperimentalWarning --test tests/rational-exponent-composition-pressure.test.ts tests/root-rewrite-plan.test.ts tests/odd-root-pressure.test.ts",
     "visual:compound-root-carrier": "playwright test tests/compound-root-carrier-catalogue.browser.spec.ts --project=chromium --workers=1",
     "visual:distribution-pressure": "node --disable-warning=ExperimentalWarning scripts/capture-distribution-pressure.ts",
     "visual:cancellation-pressure": "node --disable-warning=ExperimentalWarning scripts/capture-cancellation-pressure.ts",
