@@ -851,11 +851,67 @@
       "scope": "r14-durable-human-checkpoint",
       "checkedAt": "2026-08-21T03:02:14.575Z",
       "notes": "Graph validates at 1042 nodes and 24081 events with r14 complete and r15 gated on explicit visual approval."
+    },
+    {
+      "command": "npm run test:even-root-native-transit",
+      "status": "passed",
+      "scope": "r14-root-extraction-revision",
+      "checkedAt": "2026-08-21T03:34:16.947Z",
+      "notes": "The radicand body forms an area-aware ink knot at the measured result locus, the radical yields in place without becoming an arithmetic contributor, surrounding branch ink persists, and deterministic resampling passes."
+    },
+    {
+      "command": "npm run visual:even-root",
+      "status": "passed",
+      "scope": "r14-revised-human-checkpoint",
+      "checkedAt": "2026-08-21T03:34:17.959Z",
+      "notes": "Deterministic desktop, rewind, and narrow captures show the root-extraction candidate; runtime material evidence confirms the radical remains present at extraction entry and the radicand/result share the knot locus."
+    },
+    {
+      "command": "npm run test:browser:even-root-catalogue",
+      "status": "passed",
+      "scope": "r14-revised-browser-contract",
+      "checkedAt": "2026-08-21T03:34:18.986Z",
+      "notes": "Exact route, endpoints, seek, rewind, reduced motion, and responsive replacement remain preserved after the root-extraction revision."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "r14-root-extraction-types",
+      "checkedAt": "2026-08-21T03:34:19.944Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "r14-root-extraction-boundary",
+      "checkedAt": "2026-08-21T03:34:20.901Z",
+      "notes": "All dependency, framework-neutral, semantic animation, operation-evaluation, and equation compiler authority ratchets pass."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "r14-revised-durable-checkpoint",
+      "checkedAt": "2026-08-21T03:35:08.266Z",
+      "notes": "Graph validates at 1042 nodes and 24093 events; r14 is complete and r15 remains human-gated."
+    },
+    {
+      "command": "npm run test:operation-evaluation-family-exemplar",
+      "status": "passed",
+      "scope": "r14-shared-ink-knot-preservation",
+      "checkedAt": "2026-08-21T03:38:50.528Z",
+      "notes": "Thirteen promoted contributor-fusion family, recipe, handoff, and typed-gap checks pass after root extraction adopted the shared ink-knot optical law."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "r14-shared-knot-checkpoint",
+      "checkedAt": "2026-08-21T03:39:21.904Z",
+      "notes": "Graph validates at 1042 nodes and 24098 events after shared ink-knot geometry adoption and the r16 CSS follow-up registration."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT at r14: the canonical even-root sequence is registered, directly seekable, responsive, and captured for review. Executable sessions now require typed non-static measured-track evidence, while a live Firefox painted-frame probe covers runtime failures outside the type system. Await approval before odd-root pressure."
+    "summary": "HUMAN_CHECKPOINT at revised r14: the root-value evaluation now uses root extraction with a persistent surrounding equation, native enclosure withdrawal, area-aware multi-atom radicand compression, and result expansion from one measured knot. The lazy shared Native KaTeX stage-CSS extraction is scheduled in r16 after odd-root pressure; await visual approval before r15."
   },
   "expectedLearning": [
     "Whether the shared homomorphism law supports power applications without copying log choreography.",

@@ -5,6 +5,10 @@ import {
 import type {
   KpNativeKatexPaintPreservingRetirement
 } from "./native-katex-scene-track-contract.ts";
+import {
+  compileKpNativeKatexInkKnotMetrics,
+  kpNativeKatexInkKnotOpticalProfile
+} from "./native-katex-ink-knot-geometry.ts";
 
 interface KpContributorFusionPlaybackPort<Sample, Frame> {
   sample(progress: number): Sample;
@@ -42,7 +46,7 @@ export const kpNativeKatexContributorFusionOpticalProfile = Object.freeze({
   ownershipHandoffAt: 0.52,
   targetLegibilityStartsAt: 0.58,
   targetExpansionEndsAt: 0.7,
-  kernelAreaRatio: 0.1
+  kernelAreaRatio: kpNativeKatexInkKnotOpticalProfile.kernelAreaRatio
 } satisfies KpNativeKatexContributorFusionOpticalProfile);
 
 export function createKpNativeKatexContributorFusionPlayback<
@@ -96,15 +100,15 @@ export function applyKpNativeKatexContributorFusion(input: {
   const targetArea = summedArea(targetRects);
   // Endpoint ink boxes are the stable optical proxy. Exact raster sampling
   // would couple the motif to browser paint internals and make seeks brittle.
-  const kernelArea = input.opticalProfile.kernelAreaRatio *
-    Math.sqrt(sourceArea * targetArea);
-  const kernelSpan = Math.sqrt(kernelArea);
-  const sourceKernelScale = boundedKernelScale(
-    Math.sqrt(kernelArea / sourceArea)
-  );
-  const targetKernelScale = boundedKernelScale(
-    Math.sqrt(kernelArea / targetArea)
-  );
+  const {
+    kernelSpan,
+    sourceKernelScale,
+    targetKernelScale
+  } = compileKpNativeKatexInkKnotMetrics({
+    sourceArea,
+    targetArea,
+    profile: kpNativeKatexInkKnotOpticalProfile
+  });
   const gatherProgress = smoothstep(
     input.opticalProfile.gatherStartsAt,
     input.opticalProfile.sourceKernelStartsAt,
@@ -309,10 +313,6 @@ function centeredOffsetsByNativeGeometry(
 
 function coordinateSpread(coordinates: readonly number[]): number {
   return Math.max(...coordinates) - Math.min(...coordinates);
-}
-
-function boundedKernelScale(scale: number): number {
-  return Math.max(0.24, Math.min(0.52, scale));
 }
 
 function ownerTransform(input: {

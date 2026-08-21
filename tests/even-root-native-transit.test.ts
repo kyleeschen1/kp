@@ -80,7 +80,7 @@ test("inverse power transfers visible exponent toward implicit index role", () =
   assert.ok(plan.tracks.some(({ lifecycle }) => lifecycle === "persist"));
 });
 
-test("root evaluation is a separate deterministic ink-knot transition", () => {
+test("root evaluation extracts an ink-knot body from a yielding enclosure", () => {
   const measured = measuredPair(endpoints.evaluation, [
     ["subject", 5, 28, 14, 22],
     ["relation", 27, 28, 14, 22],
@@ -98,20 +98,47 @@ test("root evaluation is a separate deterministic ink-knot transition", () => {
     endpoints: endpoints.evaluation,
     ...measured
   });
-  const sourceContributors = plan.tracks.filter(({ sourceAtomId }) =>
-    sourceAtomId === "source.radical-operator" ||
+  const body = plan.tracks.find(({ sourceAtomId }) =>
     sourceAtomId === "source.radicand"
   );
-  assert.equal(sourceContributors.length, 2);
-  assert.ok(sourceContributors.every(({ sampleMaterialScale }) =>
-    (sampleMaterialScale?.(0.5) ?? 1) <= 0.161
-  ));
+  assert.ok(body);
+  assert.ok((body.sampleMaterialScale?.(0.5) ?? 1) >= 0.24);
+  assert.ok((body.sampleMaterialScale?.(0.5) ?? 1) <= 0.52);
   const result = plan.tracks.find(({ targetAtomId }) =>
     targetAtomId === "target.value"
   );
   assert.ok(result);
   assert.equal(result.lifecycle, "introduce");
-  assert.ok((result.sampleMaterialScale?.(0.5) ?? 1) <= 0.161);
+  assert.ok((result.sampleMaterialScale?.(0.52) ?? 1) >= 0.24);
+  assert.ok((result.sampleMaterialScale?.(0.52) ?? 1) <= 0.52);
+  assert.equal(center(body.endRect).x, center(result.endRect).x);
+  assert.equal(center(body.endRect).y, center(result.endRect).y);
+
+  const radical = plan.tracks.find(({ sourceAtomId }) =>
+    sourceAtomId === "source.radical-operator"
+  );
+  assert.ok(radical);
+  assert.deepEqual(radical.endRect, radical.startRect);
+  assert.equal(radical.sampleMaterialScale, undefined);
+  assert.equal(radical.sampleOpacityProgress?.(0.24), 0);
+  assert.equal(radical.sampleOpacityProgress?.(0.52), 1);
+  const earlyExtraction = sampleKpNativeKatexSceneTracks(
+    plan.tracks,
+    0.19,
+    false
+  );
+  assert.ok(
+    (earlyExtraction.find(({ trackId }) =>
+      trackId === radical.id)?.opacity ?? 0) > 0.99,
+    "the radical enclosure must remain visible as extraction begins"
+  );
+
+  const plusMinus = plan.tracks.find(({ sourceAtomId }) =>
+    sourceAtomId === "source.plus-minus"
+  );
+  assert.ok(plusMinus);
+  assert.equal(plusMinus.lifecycle, "persist");
+  assert.equal(plusMinus.sampleMaterialScale, undefined);
 
   const first = sampleKpNativeKatexSceneTracks(plan.tracks, 0.47, false);
   sampleKpNativeKatexSceneTracks(plan.tracks, 0.9, false);
@@ -120,6 +147,18 @@ test("root evaluation is a separate deterministic ink-knot transition", () => {
     first
   );
 });
+
+function center(rect: Readonly<{
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+}>) {
+  return {
+    x: rect.left + rect.width / 2,
+    y: rect.top + rect.height / 2
+  };
+}
 
 type MeasuredTuple = readonly [
   KpEvenRootNativeEndpoint["nodes"][number]["role"],

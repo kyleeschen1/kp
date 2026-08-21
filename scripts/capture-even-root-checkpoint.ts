@@ -229,6 +229,17 @@ async function readCheckpointState(stage: Locator): Promise<object> {
         root.dataset["kpEvenRootTransitionProgress"]
       ),
       activeLatex: active?.dataset["kpEvenRootLatex"] ?? null,
+      materialOwners: [...root.querySelectorAll<HTMLElement>(
+        "[data-kp-equation-material-owner-id]"
+      )].map((owner) => ({
+        semanticEntityId:
+          owner.dataset["kpEquationMaterialSemanticEntityId"] ?? null,
+        fragmentRole: owner.dataset["kpEquationMaterialFragmentRole"] ?? null,
+        opacity: Number(getComputedStyle(owner).opacity),
+        visibility: getComputedStyle(owner).visibility,
+        svgCount: owner.querySelectorAll("svg").length,
+        text: owner.textContent?.trim() ?? ""
+      })),
       dynamicTrackCounts: JSON.parse(
         root.dataset["kpEvenRootDynamicTrackCounts"] ?? "[]"
       ) as number[]

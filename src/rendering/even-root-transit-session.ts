@@ -5,6 +5,7 @@ import {
 } from "../semantic/even-root-solve-exemplar.ts";
 import {
   projectKpNativeKatexSemanticPaintRelations,
+  type KpNativeKatexPaintMeasuredSceneTrack,
   type KpNativeKatexSemanticPaintRelation
 } from "./native-katex-base-scene-plan.ts";
 import {
@@ -23,6 +24,19 @@ import type { KpNativeKatexRenderedSceneObservation } from
   "./native-katex-rendered-scene.ts";
 import type { KpEvenRootNativeEndpointSet } from
   "./even-root-native-endpoints.ts";
+import {
+  compileKpNativeKatexInkKnotMetrics
+} from "./native-katex-ink-knot-geometry.ts";
+
+const kpEvenRootExtractionTreatment = Object.freeze({
+  bodyGatherWindow: Object.freeze({ start: 0.14, end: 0.5 }),
+  bodyCompressionWindow: Object.freeze({ start: 0.28, end: 0.5 }),
+  bodyHandoffWindow: Object.freeze({ start: 0.48, end: 0.54 }),
+  radicalWithdrawalWindow: Object.freeze({ start: 0.24, end: 0.52 }),
+  resultRevealWindow: Object.freeze({ start: 0.52, end: 0.6 }),
+  resultExpansionWindow: Object.freeze({ start: 0.52, end: 0.72 }),
+  contextSettlementWindow: Object.freeze({ start: 0.1, end: 0.72 })
+});
 
 export interface KpEvenRootVisibleToImplicitRoleTransfer {
   readonly kind: "visible-exponent-to-implicit-root-index";
@@ -109,7 +123,7 @@ export function compileKpEvenRootEvaluationTransitPlan(input: {
     target: input.target,
     relations: evaluationPaintRelations(input.exemplar),
     copyFanOutRouting: false,
-    trackProjection: evaluationTrackProjection(input.exemplar)
+    trackProjection: evaluationTrackProjection(input.exemplar, input.endpoints)
   });
 }
 
@@ -209,7 +223,8 @@ function inversePowerTrackProjection(
 }
 
 function evaluationTrackProjection(
-  exemplar: KpVerifiedEvenRootSolveExemplar
+  exemplar: KpVerifiedEvenRootSolveExemplar,
+  endpoints: KpEvenRootNativeEndpointSet["evaluation"]
 ) {
   const [, radicalState, evaluatedState] = exemplar.states;
   return createKpNativeKatexTrackProjection({
@@ -227,46 +242,202 @@ function evaluationTrackProjection(
         x: resultAtom.rect.left + resultAtom.rect.width / 2,
         y: resultAtom.rect.top + resultAtom.rect.height / 2
       };
+      const rootBodyEntityIds = new Set(
+        endpoints.source.nodes
+          .filter(({ role }) => role === "radicand")
+          .map(({ entityId }) => entityId)
+      );
+      const bodyTracks = tracks.filter((track) => {
+        const from = sourceEntity.get(track.sourceAtomId ?? "");
+        return from !== undefined && rootBodyEntityIds.has(from);
+      });
+      if (bodyTracks.length === 0) {
+        throw new Error("Root extraction requires measured radicand body ink.");
+      }
+      const knot = compileRootBodyKnot({
+        tracks: bodyTracks,
+        resultRect: resultAtom.rect,
+        resultCenter
+      });
+      const extractionContactGroupId =
+        `contact.${exemplar.id}.root-extraction-assembly`;
       return Object.freeze(tracks.map((track) => {
         const from = sourceEntity.get(track.sourceAtomId ?? "");
         const to = targetEntity.get(track.targetAtomId ?? "");
-        if (
-          from === radicalState.radicalOperatorEntityId ||
-          from === radicalState.radicandEntityId
-        ) {
+        if (from !== undefined && rootBodyEntityIds.has(from)) {
+          const bodyPose = knot.bodyPoseByTrackId.get(track.id);
+          if (bodyPose === undefined) {
+            throw new Error(`Root body track ${track.id} lacks a knot pose.`);
+          }
           const endRect = Object.freeze({
-            ...track.endRect,
-            left: resultCenter.x - track.endRect.width / 2,
-            top: resultCenter.y - track.endRect.height / 2
+            ...track.startRect,
+            left: bodyPose.center.x - track.startRect.width / 2,
+            top: bodyPose.center.y - track.startRect.height / 2
           });
           return invalidateKpNativeKatexMotionPath(Object.freeze({
             ...track,
             endRect,
-            timingGroupId: `timing.${exemplar.id}.evaluation-knot`,
-            sampleProgress: sampleWindow(0.18, 0.5),
-            sampleOpacityProgress: sampleWindow(0.46, 0.52),
+            timingGroupId: `timing.${exemplar.id}.root-body-knot`,
+            semanticMotionUnitId: `motion.${exemplar.id}.root-body`,
+            intentionalContactGroupId: extractionContactGroupId,
+            opacityScheduleAuthority: "semantic-choreography" as const,
+            sampleProgress: sampleWindow(
+              kpEvenRootExtractionTreatment.bodyGatherWindow.start,
+              kpEvenRootExtractionTreatment.bodyGatherWindow.end
+            ),
+            sampleOpacityProgress: sampleWindow(
+              kpEvenRootExtractionTreatment.bodyHandoffWindow.start,
+              kpEvenRootExtractionTreatment.bodyHandoffWindow.end
+            ),
             sampleMaterialScale: (progress: number) =>
-              lerp(1, 0.16, smoothstep(0.28, 0.5, progress))
+              lerp(1, knot.bodyKernelScale, smoothstep(
+                kpEvenRootExtractionTreatment.bodyCompressionWindow.start,
+                kpEvenRootExtractionTreatment.bodyCompressionWindow.end,
+                progress
+              ))
+          }));
+        }
+        if (from === radicalState.radicalOperatorEntityId) {
+          // The enclosure yields while its contents become the result. Keeping
+          // it at its native pose avoids teaching that radical ink is itself
+          // one of the arithmetic contributors.
+          return invalidateKpNativeKatexMotionPath(Object.freeze({
+            ...track,
+            endRect: track.startRect,
+            timingGroupId: `timing.${exemplar.id}.radical-withdrawal`,
+            semanticMotionUnitId: `motion.${exemplar.id}.radical-enclosure`,
+            intentionalContactGroupId: extractionContactGroupId,
+            opacityScheduleAuthority: "semantic-choreography" as const,
+            sampleProgress: () => 0,
+            sampleOpacityProgress: sampleWindow(
+              kpEvenRootExtractionTreatment.radicalWithdrawalWindow.start,
+              kpEvenRootExtractionTreatment.radicalWithdrawalWindow.end
+            )
           }));
         }
         if (to === evaluatedState.valueEntityId) {
           return invalidateKpNativeKatexMotionPath(Object.freeze({
             ...track,
             startRect: track.endRect,
-            timingGroupId: `timing.${exemplar.id}.evaluation-knot`,
+            timingGroupId: `timing.${exemplar.id}.root-body-knot`,
+            semanticMotionUnitId: `motion.${exemplar.id}.root-result`,
+            intentionalContactGroupId: extractionContactGroupId,
+            opacityScheduleAuthority: "semantic-choreography" as const,
             sampleProgress: () => 1,
-            sampleOpacityProgress: sampleWindow(0.5, 0.58),
+            sampleOpacityProgress: sampleWindow(
+              kpEvenRootExtractionTreatment.resultRevealWindow.start,
+              kpEvenRootExtractionTreatment.resultRevealWindow.end
+            ),
             sampleMaterialScale: (progress: number) =>
-              lerp(0.16, 1, smoothstep(0.5, 0.72, progress))
+              lerp(knot.resultKernelScale, 1, smoothstep(
+                kpEvenRootExtractionTreatment.resultExpansionWindow.start,
+                kpEvenRootExtractionTreatment.resultExpansionWindow.end,
+                progress
+              ))
           }));
+        }
+        if (
+          from === radicalState.plusMinusEntityId &&
+          to === evaluatedState.plusMinusEntityId
+        ) {
+          return Object.freeze({
+            ...track,
+            intentionalContactGroupId: extractionContactGroupId,
+            sampleProgress: sampleWindow(
+              kpEvenRootExtractionTreatment.contextSettlementWindow.start,
+              kpEvenRootExtractionTreatment.contextSettlementWindow.end
+            )
+          });
         }
         return Object.freeze({
           ...track,
-          sampleProgress: sampleWindow(0.12, 0.72)
+          sampleProgress: sampleWindow(
+            kpEvenRootExtractionTreatment.contextSettlementWindow.start,
+            kpEvenRootExtractionTreatment.contextSettlementWindow.end
+          )
         });
       }));
     }
   });
+}
+
+function compileRootBodyKnot(input: {
+  readonly tracks: readonly KpNativeKatexPaintMeasuredSceneTrack[];
+  readonly resultRect: Readonly<{
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+  }>;
+  readonly resultCenter: Readonly<{ x: number; y: number }>;
+}) {
+  const sourceRects = input.tracks.map(({ startRect }) => startRect);
+  const sourceArea = summedRectArea(sourceRects);
+  const targetArea = summedRectArea([input.resultRect]);
+  const knotMetrics = compileKpNativeKatexInkKnotMetrics({
+    sourceArea,
+    targetArea
+  });
+  const dominantAxis = rectCenterSpread(sourceRects, "y") >
+      rectCenterSpread(sourceRects, "x")
+    ? "y" as const
+    : "x" as const;
+  const ordered = [...input.tracks].sort((left, right) =>
+    rectCenter(left.startRect)[dominantAxis] -
+      rectCenter(right.startRect)[dominantAxis] ||
+    left.id.localeCompare(right.id)
+  );
+  const bodyPoseByTrackId = new Map(ordered.map((track, rank) => {
+    const offset = ordered.length === 1
+      ? 0
+      : (rank / (ordered.length - 1) - 0.5) * knotMetrics.kernelSpan;
+    return [track.id, Object.freeze({
+      center: Object.freeze({
+        x: input.resultCenter.x + (dominantAxis === "x" ? offset : 0),
+        y: input.resultCenter.y + (dominantAxis === "y" ? offset : 0)
+      })
+    })] as const;
+  }));
+  return Object.freeze({
+    bodyPoseByTrackId,
+    bodyKernelScale: knotMetrics.sourceKernelScale,
+    resultKernelScale: knotMetrics.targetKernelScale
+  });
+}
+
+function summedRectArea(rects: readonly Readonly<{
+  width: number;
+  height: number;
+}>[]): number {
+  return Math.max(1, rects.reduce(
+    (area, rect) => area + Math.max(0, rect.width * rect.height),
+    0
+  ));
+}
+
+function rectCenter(rect: Readonly<{
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+}>) {
+  return Object.freeze({
+    x: rect.left + rect.width / 2,
+    y: rect.top + rect.height / 2
+  });
+}
+
+function rectCenterSpread(
+  rects: readonly Readonly<{
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+  }>[],
+  axis: "x" | "y"
+): number {
+  const coordinates = rects.map((rect) => rectCenter(rect)[axis]);
+  return Math.max(...coordinates) - Math.min(...coordinates);
 }
 
 function session(
