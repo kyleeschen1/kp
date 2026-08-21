@@ -10,6 +10,34 @@ export const KP_EXPONENTIAL_SUM_TO_PRODUCT_LAW_ID =
 export const KP_EXPONENTIAL_DIFFERENCE_TO_QUOTIENT_LAW_ID =
   "law.exponential.difference-to-quotient" as const;
 
+type KpTypedExponentialHomomorphismLaw<
+  Id extends string,
+  SourceKind extends "sum" | "difference",
+  TargetKind extends "product" | "quotient"
+> = KpHomomorphicSemanticLaw & Readonly<{
+  id: Id;
+  direction: "distribute-application";
+  sourceCombination:
+    KpHomomorphicSemanticLaw["sourceCombination"] &
+    Readonly<{ kind: SourceKind }>;
+  targetCombination:
+    KpHomomorphicSemanticLaw["targetCombination"] &
+    Readonly<{ kind: TargetKind }>;
+}>;
+
+type KpExponentialSumToProductLaw = KpTypedExponentialHomomorphismLaw<
+  typeof KP_EXPONENTIAL_SUM_TO_PRODUCT_LAW_ID,
+  "sum",
+  "product"
+>;
+
+type KpExponentialDifferenceToQuotientLaw =
+  KpTypedExponentialHomomorphismLaw<
+    typeof KP_EXPONENTIAL_DIFFERENCE_TO_QUOTIENT_LAW_ID,
+    "difference",
+    "quotient"
+  >;
+
 export const kpExponentialSumToProductLaw =
   defineKpExponentialSumToProductLaw({
     schemaVersion: KP_HOMOMORPHIC_SEMANTIC_LAW_SCHEMA,
@@ -76,10 +104,7 @@ export const kpExponentialDifferenceToQuotientLaw =
 
 export function defineKpExponentialSumToProductLaw(
   input: KpHomomorphicSemanticLaw
-): KpHomomorphicSemanticLaw & Readonly<{
-  id: typeof KP_EXPONENTIAL_SUM_TO_PRODUCT_LAW_ID;
-  direction: "distribute-application";
-}> {
+): KpExponentialSumToProductLaw {
   if (
     input.id !== KP_EXPONENTIAL_SUM_TO_PRODUCT_LAW_ID ||
     input.direction !== "distribute-application" ||
@@ -101,18 +126,12 @@ export function defineKpExponentialSumToProductLaw(
     );
   }
   return defineKpHomomorphicSemanticLaw(input) as
-    KpHomomorphicSemanticLaw & Readonly<{
-      id: typeof KP_EXPONENTIAL_SUM_TO_PRODUCT_LAW_ID;
-      direction: "distribute-application";
-    }>;
+    KpExponentialSumToProductLaw;
 }
 
 export function defineKpExponentialDifferenceToQuotientLaw(
   input: KpHomomorphicSemanticLaw
-): KpHomomorphicSemanticLaw & Readonly<{
-  id: typeof KP_EXPONENTIAL_DIFFERENCE_TO_QUOTIENT_LAW_ID;
-  direction: "distribute-application";
-}> {
+): KpExponentialDifferenceToQuotientLaw {
   if (
     input.id !== KP_EXPONENTIAL_DIFFERENCE_TO_QUOTIENT_LAW_ID ||
     input.direction !== "distribute-application" ||
@@ -134,8 +153,5 @@ export function defineKpExponentialDifferenceToQuotientLaw(
     );
   }
   return defineKpHomomorphicSemanticLaw(input) as
-    KpHomomorphicSemanticLaw & Readonly<{
-      id: typeof KP_EXPONENTIAL_DIFFERENCE_TO_QUOTIENT_LAW_ID;
-      direction: "distribute-application";
-    }>;
+    KpExponentialDifferenceToQuotientLaw;
 }

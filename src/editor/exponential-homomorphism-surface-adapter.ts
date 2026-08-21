@@ -45,6 +45,12 @@ import type {
 import type {
   KpEditorAnimationSurfaceAdapter
 } from "./animation-surface-adapter-registry.ts";
+import {
+  projectKpExponentialHomomorphismPresentationProgress,
+  readKpExponentialHomomorphismTimingRoute,
+  writeKpExponentialHomomorphismTimingRoute,
+  type KpExponentialHomomorphismTimingRoute
+} from "./exponential-homomorphism-timing-route.ts";
 
 interface KpExponentialHomomorphismSurfaceSession {
   readonly definition: KpExponentialHomomorphismSurfaceDefinition;
@@ -52,6 +58,7 @@ interface KpExponentialHomomorphismSurfaceSession {
   readonly stage: HTMLElement;
   readonly endpointRoots: readonly [HTMLElement, HTMLElement];
   readonly fontReadiness: ReturnType<typeof createKpEquationFontReadiness>;
+  timingRoute: KpExponentialHomomorphismTimingRoute;
   generation: number;
   pendingState: KpEditorAnimationPlayerState;
   transit?: KpExponentialHomomorphismTransitSession | undefined;
@@ -174,18 +181,25 @@ function mountSurface(
   status.textContent = definitionValue.sourceStatus;
   stage.append(...roots, materialLayer, status);
   slot.replaceChildren(stage);
-  return {
+  const session: KpExponentialHomomorphismSurfaceSession = {
     definition: definitionValue,
     player,
     stage,
     endpointRoots: Object.freeze(roots) as readonly [HTMLElement, HTMLElement],
     fontReadiness: createKpEquationFontReadiness(document),
+    timingRoute: readKpExponentialHomomorphismTimingRoute(
+      document.defaultView?.location.search ?? ""
+    ),
     generation: 0,
     pendingState: state,
     invalidationQueued: false,
     replacementPreparing: false,
     disposed: false
   };
+  if (session.timingRoute.enabled) {
+    stage.append(createTimingTuner(document, session));
+  }
+  return session;
 }
 
 async function prepareSurface(
@@ -222,13 +236,7 @@ async function prepareSurface(
     session.preparedViewportFingerprint = viewportFingerprint(session.stage);
     session.replacementPreparing = false;
     installInvalidationLifecycle(session);
-    session.stage.dataset["kpExponentialHomomorphismTrackSummary"] =
-      JSON.stringify(session.transit.canonical.session.tracks.map((track) => ({
-        id: track.id,
-        lifecycle: track.lifecycle,
-        timingGroupId: track.timingGroupId,
-        motionAxisConstraint: track.motionAxisConstraint
-      })));
+    publishTrackSummary(session);
     session.stage.dataset["kpExponentialHomomorphismMeasurementRevision"] =
       String(generation);
     session.stage.dataset["kpExponentialHomomorphismStage"] = "ready";
@@ -241,6 +249,81 @@ async function prepareSurface(
     session.replacementPreparing = false;
     showEndpoint(session, 0);
   }
+}
+
+function createTimingTuner(
+  document: Document,
+  session: KpExponentialHomomorphismSurfaceSession
+): HTMLElement {
+  const tuner = document.createElement("aside");
+  tuner.className = "kp-exponential-homomorphism-stage__timing-tuner";
+  tuner.dataset["kpExponentialHomomorphismTimingTuner"] = "true";
+  tuner.setAttribute("aria-label", "Exponential crossover timing tuner");
+  const title = document.createElement("strong");
+  title.textContent = "Crossover window";
+  const start = timingInput(document, "start",
+    session.timingRoute.resolutionStart);
+  const end = timingInput(document, "end",
+    session.timingRoute.resolutionEnd);
+  const update = (): void => {
+    const resolutionStart = Number(start.input.value);
+    const resolutionEnd = Number(end.input.value);
+    if (resolutionEnd - resolutionStart < 0.04) return;
+    const view = document.defaultView;
+    const search = writeKpExponentialHomomorphismTimingRoute(
+      view?.location.search ?? "",
+      { enabled: true, resolutionStart, resolutionEnd }
+    );
+    session.timingRoute = readKpExponentialHomomorphismTimingRoute(search);
+    tuner.dataset["kpExponentialHomomorphismTimingTunerState"] = "accepted";
+    start.output.value = session.timingRoute.resolutionStart.toFixed(2);
+    end.output.value = session.timingRoute.resolutionEnd.toFixed(2);
+    if (view !== null) {
+      view.history.replaceState(view.history.state, "", search);
+    }
+    applyFrame(session, session.pendingState);
+  };
+  start.input.addEventListener("input", update);
+  end.input.addEventListener("input", update);
+  tuner.append(title, start.label, end.label);
+  return tuner;
+}
+
+function timingInput(
+  document: Document,
+  name: "start" | "end",
+  value: number
+): Readonly<{
+  label: HTMLLabelElement;
+  input: HTMLInputElement;
+  output: HTMLOutputElement;
+}> {
+  const label = document.createElement("label");
+  label.textContent = `${name} `;
+  const input = document.createElement("input");
+  input.type = "range";
+  input.min = name === "start" ? "0" : "0.08";
+  input.max = name === "start" ? "0.7" : "0.9";
+  input.step = "0.01";
+  input.value = value.toFixed(2);
+  input.dataset["kpExponentialHomomorphismTimingInput"] = name;
+  const output = document.createElement("output");
+  output.value = value.toFixed(2);
+  label.append(input, output);
+  return Object.freeze({ label, input, output });
+}
+
+function publishTrackSummary(
+  session: KpExponentialHomomorphismSurfaceSession
+): void {
+  if (session.transit === undefined) return;
+  session.stage.dataset["kpExponentialHomomorphismTrackSummary"] =
+    JSON.stringify(session.transit.canonical.session.tracks.map((track) => ({
+      id: track.id,
+      lifecycle: track.lifecycle,
+      timingGroupId: track.timingGroupId,
+      motionAxisConstraint: track.motionAxisConstraint
+    })));
 }
 
 function installInvalidationLifecycle(
@@ -315,7 +398,12 @@ function applyFrame(
   const reduced = accessibilityMode === "reduced-motion" ||
     accessibilityMode === "static";
   const progress = reduced ? (state.progress < 0.5 ? 0 : 1) : state.progress;
-  const ownership = session.transit.apply(progress);
+  const ownership = session.transit.apply(
+    projectKpExponentialHomomorphismPresentationProgress(
+      progress,
+      session.timingRoute
+    )
+  );
   setAccessibleEndpoint(
     session.endpointRoots[ownership.visualOwner === "source-native" ? 0 : 1],
     true

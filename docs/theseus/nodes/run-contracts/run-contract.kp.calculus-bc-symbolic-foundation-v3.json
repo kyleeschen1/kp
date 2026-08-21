@@ -86,7 +86,8 @@
     {
       "id": "r07",
       "title": "pressure-visual-checkpoint",
-      "status": "planned"
+      "summary": "Produced a phase-aligned product/quotient checkpoint, exact internal timing-tuner URLs, and a shared presentation time-warp that adjusts pacing without recompiling collision-safe semantic tracks or remeasuring endpoints. Typed law constructors now preserve exact sum/product and difference/quotient kinds. Human approval is required before narrow promotion.",
+      "status": "complete"
     },
     {
       "id": "r08",

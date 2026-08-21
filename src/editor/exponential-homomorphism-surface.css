@@ -36,3 +36,29 @@
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+.kp-exponential-homomorphism-stage__timing-tuner {
+  position: absolute;
+  z-index: 4;
+  right: 0.75rem;
+  bottom: 0.6rem;
+  display: grid;
+  gap: 0.3rem;
+  width: min(18rem, calc(100% - 1.5rem));
+  padding: 0.55rem 0.7rem;
+  border: 1px solid color-mix(in srgb, currentColor 28%, transparent);
+  background: color-mix(in srgb, Canvas 92%, transparent);
+  color: CanvasText;
+  font: 0.72rem/1.25 system-ui, sans-serif;
+}
+
+.kp-exponential-homomorphism-stage__timing-tuner label {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr 2.25rem;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.kp-exponential-homomorphism-stage__timing-tuner input {
+  min-width: 0;
+}

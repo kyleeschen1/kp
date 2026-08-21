@@ -9,6 +9,42 @@ const animationId =
 const quotientAnimationId =
   "animation.algebra.exponential-homomorphism.difference-to-quotient";
 
+test("shared crossover tuner updates coarse URL timing without remounting endpoints", async ({
+  page
+}) => {
+  await page.goto(
+    `/?artifact=${quotientAnimationId}` +
+    "&tuneCrossover=1&crossoverStart=0.16&crossoverEnd=0.30"
+  );
+  const player = page.locator(
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${quotientAnimationId}"]`
+  );
+  const stage = player.locator("[data-kp-exponential-homomorphism-stage]");
+  await expectReady(stage);
+  const tuner = stage.locator(
+    "[data-kp-exponential-homomorphism-timing-tuner]"
+  );
+  await expect(tuner).toBeVisible();
+  const revision = await stage.getAttribute(
+    "data-kp-exponential-homomorphism-measurement-revision"
+  );
+  await tuner.locator(
+    '[data-kp-exponential-homomorphism-timing-input="start"]'
+  ).fill("0.17");
+  await expect(page).toHaveURL(/crossoverStart=0\.17/u);
+  await expect(stage).toHaveAttribute(
+    "data-kp-exponential-homomorphism-measurement-revision",
+    revision ?? "1"
+  );
+  await player.locator('[data-action="seek-editor-animation"]').fill("0.2");
+  await expect(stage).toHaveAttribute(
+    "data-kp-exponential-homomorphism-progress",
+    "0.2"
+  );
+  expect((await movingPaintSnapshot(stage)).length).toBeGreaterThan(0);
+});
+
 test("exponential quotient pressure preserves exact seek rewind resize and endpoints", async ({
   page
 }) => {

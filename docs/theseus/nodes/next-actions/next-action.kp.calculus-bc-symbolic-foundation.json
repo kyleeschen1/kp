@@ -634,11 +634,60 @@
       "status": "passed",
       "scope": "r06 shared extension boundary",
       "checkedAt": "2026-08-20T23:39:25.000Z"
+    },
+    {
+      "command": "npm run test:exponential-timing-route",
+      "status": "passed",
+      "scope": "r07 shared presentation time-warp URL",
+      "checkedAt": "2026-08-21T00:04:13.920Z"
+    },
+    {
+      "command": "npm run test:exponential-transit-session",
+      "status": "passed",
+      "scope": "r07 collision-safe canonical choreography preservation",
+      "checkedAt": "2026-08-21T00:04:18.958Z"
+    },
+    {
+      "command": "npm run test:exponential-correspondence",
+      "status": "passed",
+      "scope": "r07 typed product and quotient law narrowing",
+      "checkedAt": "2026-08-21T00:04:20.910Z"
+    },
+    {
+      "command": "npm run test:browser:exponential-crossover-tuner",
+      "status": "passed",
+      "scope": "r07 shared tuner lifecycle and no endpoint remeasurement",
+      "checkedAt": "2026-08-21T00:04:22.096Z"
+    },
+    {
+      "command": "npm run test:browser:exponential-quotient-pressure",
+      "status": "passed",
+      "scope": "r07 quotient seek rewind resize and endpoints",
+      "checkedAt": "2026-08-21T00:04:23.467Z"
+    },
+    {
+      "command": "npm run visual:exponential-crossover-pressure",
+      "status": "passed",
+      "scope": "r07 phase-aligned product quotient human checkpoint",
+      "checkedAt": "2026-08-21T00:04:25.241Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "r07 application Node test Svelte and domain boundary",
+      "checkedAt": "2026-08-21T00:04:26.533Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "r07 durable human-checkpoint state",
+      "checkedAt": "2026-08-21T00:05:22.658Z",
+      "notes": "The graph validates at 1042 nodes and 24023 events with r07 complete and r08 gated on explicit approval."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Continuation r01 is complete after matched-dissolve repair. HUMAN_CHECKPOINT: approve source-center collapse, payload-only transit, and target-center base reception before r02 removes opaque backing plates generally."
+    "summary": "HUMAN_CHECKPOINT after r07: compare product and quotient at 19, 22, and 27 percent for carrier identity, connector timing, fraction-bar emergence, pacing, and occlusion. Do not begin r08 narrow promotion without explicit approval."
   },
   "expectedLearning": [
     "Whether the shared homomorphism law supports power applications without copying log choreography.",
