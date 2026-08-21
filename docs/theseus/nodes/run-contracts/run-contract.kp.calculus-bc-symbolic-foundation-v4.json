@@ -72,7 +72,8 @@
     {
       "id": "rv04",
       "title": "compound-carrier-semantics",
-      "status": "planned"
+      "summary": "Built the verified sqrt((x+1)^2) to abs(x+1) semantic exemplar. Principal-root normalization now requires explicit real-valued-carrier evidence. A nominal deep-subtree certificate proves ordered identity for the carrier, x, plus, and one while keeping source/target representation entities distinct; the absolute-value enclosure is introduced, not falsely persisted. Fifteen focused tests and full typecheck pass; no rendering or timing changed.",
+      "status": "complete"
     },
     {
       "id": "rv05",

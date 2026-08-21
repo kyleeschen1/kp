@@ -17,6 +17,7 @@ export type KpRootRewriteEvidenceKind =
   | "closed-value"
   | "exact-root"
   | "even-positive-integer-power"
+  | "real-valued-carrier"
   | "nonnegative-domain"
   | "positive-integer-root-index"
   | "perfect-power-factor"
@@ -59,12 +60,14 @@ const cases = [
     "consume-closed-body", "pressure",
     "A closed radical may evaluate as one cohort; no symbolic carrier survives."),
   rootCase("inverse-normalization", "\\sqrt{x^2}", "\\lvert x \\rvert",
-    "verified-plan-required", ["even-positive-integer-power"],
+    "verified-plan-required",
+    ["even-positive-integer-power", "real-valued-carrier"],
     "preserve-largest-shared-subtree", "fixture",
     "The variable survives while the inverse exponent and radical are consumed."),
   rootCase("compound-carrier-normalization", "\\sqrt{(x+1)^2}",
     "\\lvert x+1 \\rvert", "verified-plan-required",
-    ["even-positive-integer-power"], "preserve-largest-shared-subtree",
+    ["even-positive-integer-power", "real-valued-carrier"],
+    "preserve-largest-shared-subtree",
     "visual-exemplar",
     "The complete x+1 expression is one persistent semantic carrier."),
   rootCase("assumption-qualified-cancellation", "\\sqrt{x^2}", "x",
@@ -78,12 +81,13 @@ const cases = [
     "The base survives while exponent and root index compose with exact lineage."),
   rootCase("mixed-evaluation", "\\sqrt{4x^2}",
     "2\\lvert x \\rvert", "verified-plan-required",
-    ["closed-value", "exact-root", "even-positive-integer-power"],
+    ["closed-value", "exact-root", "even-positive-integer-power",
+      "real-valued-carrier"],
     "preserve-largest-shared-subtree", "pressure",
     "The coefficient evaluates independently of the persistent symbolic carrier."),
   rootCase("partial-extraction", "\\sqrt{x^2y}",
     "\\lvert x \\rvert\\sqrt{y}", "verified-plan-required",
-    ["perfect-power-factor", "residual-radicand"],
+    ["perfect-power-factor", "residual-radicand", "real-valued-carrier"],
     "retain-residual-enclosure", "pressure",
     "Only the proved perfect-power factor exits; the residual radicand stays enclosed."),
   rootCase("nested-root-composition", "\\sqrt{\\sqrt{x}}",
@@ -95,7 +99,8 @@ const cases = [
     "A radical does not distribute across a sum and no termwise cancellation is licensed."),
   rootCase("composed-derivation", "\\sqrt{x^2+2x+1}",
     "\\lvert x+1 \\rvert", "ordered-composition-required",
-    ["prior-factoring-state", "even-positive-integer-power"],
+    ["prior-factoring-state", "even-positive-integer-power",
+      "real-valued-carrier"],
     "preserve-largest-shared-subtree", "fixture",
     "Factoring must be represented as a prior semantic state before root normalization.")
 ] as const;
@@ -173,4 +178,3 @@ function deepFreeze<T>(value: T): T {
   }
   return value;
 }
-

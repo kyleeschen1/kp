@@ -71,24 +71,24 @@ const rootRewritePlanDeclarationSeed = {
   "inverse-normalization": declaration("atomic",
     ["source-radical", "source-exponent", "source-carrier"],
     ["target-carrier", "target-absolute-value-enclosure"],
-    ["even-positive-integer-power"], [], [
+    ["even-positive-integer-power", "real-valued-carrier"], [], [
       disposition("persist", ["source-carrier"], ["target-carrier"],
-        ["even-positive-integer-power"]),
+        ["even-positive-integer-power", "real-valued-carrier"]),
       disposition("consume", ["source-radical", "source-exponent"], [],
         ["even-positive-integer-power"]),
       disposition("introduce", [], ["target-absolute-value-enclosure"],
-        ["even-positive-integer-power"])
+        ["even-positive-integer-power", "real-valued-carrier"])
     ]),
   "compound-carrier-normalization": declaration("atomic",
     ["source-radical", "source-exponent", "source-carrier"],
     ["target-carrier", "target-absolute-value-enclosure"],
-    ["even-positive-integer-power"], [], [
+    ["even-positive-integer-power", "real-valued-carrier"], [], [
       disposition("persist", ["source-carrier"], ["target-carrier"],
-        ["even-positive-integer-power"]),
+        ["even-positive-integer-power", "real-valued-carrier"]),
       disposition("consume", ["source-radical", "source-exponent"], [],
         ["even-positive-integer-power"]),
       disposition("introduce", [], ["target-absolute-value-enclosure"],
-        ["even-positive-integer-power"])
+        ["even-positive-integer-power", "real-valued-carrier"])
     ]),
   "assumption-qualified-cancellation": declaration("atomic",
     ["source-radical", "source-exponent", "source-carrier"],
@@ -115,25 +115,27 @@ const rootRewritePlanDeclarationSeed = {
       "source-carrier"],
     ["target-coefficient", "target-carrier",
       "target-absolute-value-enclosure"],
-    ["closed-value", "exact-root", "even-positive-integer-power"],
+    ["closed-value", "exact-root", "even-positive-integer-power",
+      "real-valued-carrier"],
     ["operation.root.extract-perfect-power-factor"], [
       disposition("persist", ["source-carrier"], ["target-carrier"],
-        ["even-positive-integer-power"]),
+        ["even-positive-integer-power", "real-valued-carrier"]),
       disposition("fuse", ["source-coefficient"], ["target-coefficient"],
         ["closed-value", "exact-root"]),
       disposition("consume", ["source-radical", "source-exponent"], [],
         ["even-positive-integer-power"]),
       disposition("introduce", [], ["target-absolute-value-enclosure"],
-        ["even-positive-integer-power"])
+        ["even-positive-integer-power", "real-valued-carrier"])
     ]),
   "partial-extraction": declaration("atomic",
     ["source-radical", "source-exponent", "source-carrier",
       "source-residual"],
     ["target-carrier", "target-residual", "target-radical",
       "target-absolute-value-enclosure"],
-    ["perfect-power-factor", "residual-radicand"], [], [
+    ["perfect-power-factor", "residual-radicand", "real-valued-carrier"],
+    [], [
       disposition("persist", ["source-carrier"], ["target-carrier"],
-        ["perfect-power-factor"]),
+        ["perfect-power-factor", "real-valued-carrier"]),
       disposition("persist", ["source-residual"], ["target-residual"],
         ["residual-radicand"]),
       disposition("consume", ["source-exponent"], [],
@@ -141,7 +143,7 @@ const rootRewritePlanDeclarationSeed = {
       disposition("retain-enclosure", ["source-radical"],
         ["target-radical"], ["residual-radicand"]),
       disposition("introduce", [], ["target-absolute-value-enclosure"],
-        ["perfect-power-factor"])
+        ["perfect-power-factor", "real-valued-carrier"])
     ]),
   "nested-root-composition": declaration("atomic",
     ["source-outer-radical", "source-inner-radical", "source-carrier"],
@@ -155,7 +157,8 @@ const rootRewritePlanDeclarationSeed = {
     ["no-valid-root-law"], [], []),
   "composed-derivation": declaration("composite", ["source-expression"],
     ["target-carrier", "target-absolute-value-enclosure"],
-    ["prior-factoring-state", "even-positive-integer-power"],
+    ["prior-factoring-state", "even-positive-integer-power",
+      "real-valued-carrier"],
     ["operation.equation.factor-perfect-square"], [])
 } as const satisfies Record<KpRootRewriteClass,
   KpRootRewritePlanDeclaration>;

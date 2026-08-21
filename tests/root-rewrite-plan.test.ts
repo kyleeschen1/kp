@@ -24,7 +24,7 @@ test("compound normalization derives carrier policy from the declaration", () =>
     kind: "persist",
     sourceEntityIds: ["source.carrier"],
     targetEntityIds: ["target.carrier"],
-    evidenceIds: ["evidence.perfect-square"]
+    evidenceIds: ["evidence.perfect-square", "evidence.real-carrier"]
   });
   assert.equal(Object.isFrozen(result.plan), true);
   assert.doesNotMatch(JSON.stringify(result.plan),
@@ -113,7 +113,8 @@ test("composed derivation remains sequence-only and requires factoring", () => {
     },
     evidence: {
       "prior-factoring-state": "evidence.factored-state",
-      "even-positive-integer-power": "evidence.even-power"
+      "even-positive-integer-power": "evidence.even-power",
+      "real-valued-carrier": "evidence.real-carrier"
     },
     priorOperationIds: ["operation.equation.factor-perfect-square"]
   };
@@ -156,7 +157,8 @@ function compoundDraft(): KpRootRewritePlanDraft<
     targetStateId: "state.compound.target",
     roleBindings: normalizationRoles(true),
     evidence: {
-      "even-positive-integer-power": "evidence.perfect-square"
+      "even-positive-integer-power": "evidence.perfect-square",
+      "real-valued-carrier": "evidence.real-carrier"
     },
     priorOperationIds: []
   };
@@ -200,4 +202,3 @@ function occurrence(
 ): KpRootRewriteOccurrence {
   return { entityId, semanticId, subtreeId, subtreeKind };
 }
-

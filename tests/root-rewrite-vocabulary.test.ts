@@ -69,7 +69,7 @@ test("assumption and residual-enclosure cases retain distinct proof obligations"
   assert.deepEqual(byClass.get("assumption-qualified-cancellation")
     ?.requiredEvidence, ["even-positive-integer-power", "nonnegative-domain"]);
   assert.deepEqual(byClass.get("partial-extraction")?.requiredEvidence,
-    ["perfect-power-factor", "residual-radicand"]);
+    ["perfect-power-factor", "residual-radicand", "real-valued-carrier"]);
   assert.equal(byClass.get("partial-extraction")?.carrierPolicy,
     "retain-residual-enclosure");
   assert.equal(byClass.get("blocked-rewrite")?.targetLatex, undefined);
@@ -94,4 +94,3 @@ test("declaration rejects duplicate classes and motion-authorizing gaps", () => 
     assert.throws(() => defineKpRootRewriteVocabulary(invalid));
   }
 });
-

@@ -22,8 +22,8 @@ from spelling, paint equality, or geometry.
 | Operation class | Representative | Required semantic behavior |
 | --- | --- | --- |
 | Closed evaluation | `sqrt(144) -> 12` | Consume the closed radicand and radical as one evaluation cohort; introduce the result. |
-| Inverse normalization | `sqrt(x^2) -> abs(x)` | Persist `x`; consume only the radical and inverse exponent; introduce absolute-value structure. |
-| Compound-carrier normalization | `sqrt((x+1)^2) -> abs(x+1)` | Persist the complete `x+1` subtree and its internal identities; never collapse it into an anonymous result. |
+| Inverse normalization | `sqrt(x^2) -> abs(x)` | Require a real-valued carrier; persist `x`; consume only the radical and inverse exponent; introduce absolute-value structure. |
+| Compound-carrier normalization | `sqrt((x+1)^2) -> abs(x+1)` | Require a real-valued carrier; persist the complete `x+1` subtree and its internal identities; never collapse it into an anonymous result. |
 | Assumption-qualified cancellation | `sqrt(x^2) -> x`, given `x >= 0` | Require explicit domain evidence before omitting absolute-value structure. |
 | Exponent/index composition | `cuberoot(x^2) -> x^(2/3)` | Persist `x`; transfer exponent and root-index roles into one rational exponent with exact lineage. |
 | Mixed evaluation | `sqrt(4x^2) -> 2 abs(x)` | Evaluate the closed coefficient cohort while independently preserving the symbolic carrier. |
@@ -88,4 +88,3 @@ The existing even-root equation exemplar, approved logarithm and exponential
 callers, compositor, clock, catalogue, and governed authoring contracts are the
 preservation boundary. The smallest rollback unit is one semantic slice or the
 single compound-carrier visual exemplar; promotion remains a later unit.
-
