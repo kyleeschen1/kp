@@ -342,6 +342,20 @@
       "scope": "cf18",
       "checkedAt": "2026-08-21T21:40:14.372Z",
       "notes": "Authoring API and CLI are build-time type-safe."
+    },
+    {
+      "command": "npm run test:code-extract-helper-recipe",
+      "status": "passed",
+      "scope": "cf19",
+      "checkedAt": "2026-08-21T21:44:03.994Z",
+      "notes": "Four conformance tests prove two independent callers, exact evidence coverage, relation-law shape, and exclusion of syntax, identity, and presentation data."
+    },
+    {
+      "command": "tsc focused causal recipe and npm run check:architecture",
+      "status": "passed",
+      "scope": "cf19",
+      "checkedAt": "2026-08-21T21:44:05.480Z",
+      "notes": "The promoted recipe is framework-neutral, type-safe, and preserves all architecture boundaries."
     }
   ],
   "allowedWork": [
@@ -478,7 +492,8 @@
     {
       "id": "cf19",
       "title": "Cross-language-recipe-promotion",
-      "status": "planned"
+      "summary": "Promoted recipe.code.extract-helper.v1 from independent TypeScript and Python proofs, sharing only causal relation laws while delegating syntax, legality, score, motion, and rendering.",
+      "status": "complete"
     },
     {
       "id": "cf20",
