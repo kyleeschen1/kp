@@ -21,7 +21,7 @@ export const KP_COMPOUND_ROOT_CARRIER_EXEMPLAR_ID =
 export interface KpCompoundRootCarrierSourceState {
   readonly id: "state.root.compound-carrier.source";
   readonly kind: "radical-perfect-square";
-  readonly latex: "\\sqrt{(x+1)^2}";
+  readonly latex: "\\sqrt{(x+1)^{2}}";
   readonly accessibleText: string;
   readonly radical: KpRootRewriteOccurrence;
   readonly radicand: KpRootRewriteOccurrence;
@@ -34,9 +34,11 @@ export interface KpCompoundRootCarrierSourceState {
 export interface KpCompoundRootCarrierTargetState {
   readonly id: "state.root.compound-carrier.target";
   readonly kind: "absolute-value";
-  readonly latex: "\\lvert x+1 \\rvert";
+  readonly latex: "\\lvertx+1\\rvert";
   readonly accessibleText: string;
   readonly absoluteValue: KpRootRewriteOccurrence;
+  readonly leadingDelimiter: KpRootRewriteOccurrence;
+  readonly trailingDelimiter: KpRootRewriteOccurrence;
   readonly carrier: KpRootSemanticSubtreeNode;
 }
 
@@ -136,7 +138,7 @@ function sourceState(): KpCompoundRootCarrierSourceState {
   return deepFreeze({
     id: "state.root.compound-carrier.source" as const,
     kind: "radical-perfect-square" as const,
-    latex: "\\sqrt{(x+1)^2}" as const,
+    latex: "\\sqrt{(x+1)^{2}}" as const,
     accessibleText: "the square root of the square of x plus one",
     radical: occurrence("source.radical", "semantic.operator.square-root",
       "subtree.source.radical", "operator"),
@@ -156,10 +158,16 @@ function targetState(): KpCompoundRootCarrierTargetState {
   return deepFreeze({
     id: "state.root.compound-carrier.target" as const,
     kind: "absolute-value" as const,
-    latex: "\\lvert x+1 \\rvert" as const,
+    latex: "\\lvertx+1\\rvert" as const,
     accessibleText: "the absolute value of x plus one",
     absoluteValue: occurrence("target.absolute-value",
       "semantic.operator.absolute-value", "subtree.target.absolute-value",
+      "enclosure"),
+    leadingDelimiter: occurrence("target.absolute-value.leading",
+      "semantic.operator.absolute-value", "subtree.target.absolute-value.leading",
+      "enclosure"),
+    trailingDelimiter: occurrence("target.absolute-value.trailing",
+      "semantic.operator.absolute-value", "subtree.target.absolute-value.trailing",
       "enclosure"),
     carrier: carrierSubtree("target")
   });
@@ -207,4 +215,3 @@ function deepFreeze<T>(value: T): T {
   }
   return value;
 }
-

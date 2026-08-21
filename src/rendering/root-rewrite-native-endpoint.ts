@@ -20,6 +20,8 @@ export type KpRootRewriteEndpointRole =
   | "carrier"
   | "operator"
   | "enclosure"
+  | "enclosure-leading"
+  | "enclosure-trailing"
   | "value"
   | "coefficient"
   | "residual"
@@ -383,4 +385,3 @@ function assertSafeAuthoredLatex(latex: string, entityId: string): void {
     );
   }
 }
-

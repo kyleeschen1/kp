@@ -29,6 +29,29 @@
     "npm run check:architecture",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "rv05 recursive endpoint and renderer-session closure",
+      "checkedAt": "2026-08-21T15:48:07.286Z",
+      "notes": "All application, node, test, Svelte, and domain TypeScript projects pass."
+    },
+    {
+      "command": "node focused compound root and neighboring root tests",
+      "status": "passed",
+      "scope": "rv05 compound carrier native realization",
+      "checkedAt": "2026-08-21T15:48:07.957Z",
+      "notes": "All 14 recursive endpoint, carrier identity, function-wrap reception, deterministic seek, and neighboring even-root checks pass."
+    },
+    {
+      "command": "node focused compound root and neighboring root tests",
+      "status": "passed",
+      "scope": "rv05 compound carrier native realization",
+      "checkedAt": "2026-08-21T15:48:22.076Z",
+      "notes": "All 14 recursive endpoint, carrier identity, function-wrap reception, deterministic seek, and neighboring even-root checks pass."
+    }
+  ],
   "allowedWork": [
     "Verified equation-domain root rewrite semantics, recursive subtree dispositions, normalizers, Native KaTeX endpoint roles and realization, catalogue callers, governed discovery, focused tests, exact URLs, visual evidence, and the already approved persistent-state projection tranche.",
     "Project-memory and visual-salience records needed to preserve the accepted root vocabulary and exemplar-first gate."
@@ -78,7 +101,8 @@
     {
       "id": "rv05",
       "title": "compound-carrier-native-realization",
-      "status": "planned"
+      "summary": "Compiled the verified compound-carrier root rewrite into one canonical Native KaTeX compositor session. The complete x+1 subtree persists as one opaque carrier without material scaling; radical, grouping, and exponent syntax withdraw in place; separately owned absolute-value delimiters enter through canonical horizontal function-wrap reception. Deterministic direct seek, exact endpoints, recursive ownership, and full typecheck pass without a new clock, renderer, or caller-authored geometry.",
+      "status": "complete"
     },
     {
       "id": "rv06",

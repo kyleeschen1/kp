@@ -13,8 +13,8 @@ import {
 test("compound root exemplar proves real principal-root normalization", () => {
   const exemplar = kpCompoundRootCarrierExemplar;
   assert.equal(isKpVerifiedCompoundRootCarrierExemplar(exemplar), true);
-  assert.equal(exemplar.states[0].latex, "\\sqrt{(x+1)^2}");
-  assert.equal(exemplar.states[1].latex, "\\lvert x+1 \\rvert");
+  assert.equal(exemplar.states[0].latex, "\\sqrt{(x+1)^{2}}");
+  assert.equal(exemplar.states[1].latex, "\\lvertx+1\\rvert");
   assert.deepEqual(exemplar.domainEvidence, {
     carrierDomain: "real",
     carrierRealEvidenceId: "evidence.root.x-plus-one.real"
@@ -70,4 +70,3 @@ test("deep certification rejects one changed child despite matching root IDs", (
   }), (error) => error instanceof KpRootPersistentSubtreeError &&
     error.code === "root-subtree.identity-mismatch");
 });
-
