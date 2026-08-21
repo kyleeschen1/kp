@@ -2,12 +2,11 @@
 
 Status: supporting
 Last Updated: 2026-08-21
-Current Next Action: exponential duality, narrow root promotion, and the bounded
-persistent-equivalence projection are complete. After explicit contract
-approval, close the existing TypeScript/Python extract-helper exemplars through
-language-owned generation frontends without changing choreography. Then proceed
-through binder exemplar, binder pressure/promotion with a case ledger, bounded
-Graph3D, differentiation, and integration. Treat common symbolic
+Current Next Action: exponential duality, narrow root promotion, bounded
+persistent-equivalence projection, and TypeScript/Python extract-helper
+frontend closure are complete. Proceed through one reversible binder exemplar,
+binder pressure/promotion with a case ledger, bounded Graph3D, differentiation,
+and integration. Treat common symbolic
 transformations through Calculus BC as the coverage horizon, derive every
 maturity claim, and retain typed gaps. Graph2D function translation and
 fraction structural pressure remain deferred. Models retain semantic-choice
@@ -69,8 +68,18 @@ incompatible.
   approved exemplar, corpus, structurally different caller, and governed
   transform-series authoring all have exact evidence.
 - Matrix, code, Graph2D, and Graph3D are real governed callers with different
-  semantic frontends. Their exact capability gaps are visible, and none is
-  presented as generally generatable yet.
+  semantic frontends. Their exact capability gaps are visible. Code now makes
+  only the TypeScript and Python bounded extract-helper operations `Direct`;
+  matrix, Graph2D, Graph3D, Scheme generation, and arbitrary code refactors
+  remain explicitly narrower or missing.
+- TypeScript and Python source revisions enter one tool-neutral request
+  envelope, then route to language-owned build-time parsing, role recognition,
+  legality, and semantic identity binding. Both bind one shared causal recipe
+  without sharing syntax or execution semantics.
+- Exact approved revisions reuse the existing artifact, timeline, clock, and
+  paint authorities. Other valid revisions return semantic plans only; asking
+  for an animation artifact fails with a typed diagnostic until a separately
+  governed artifact compiler exists.
 - Coverage state, development navigation, theme/settings, exact links, and
   Review capture now restore from one URL-backed source of truth.
 - The live model selected the intended semantic families, preserved adjacency

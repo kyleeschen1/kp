@@ -2,12 +2,12 @@
 
 Status: active
 Last Updated: 2026-08-21
-Current Next Action: after explicit approval of the proposed 24-slice contract,
-close TypeScript and Python extract-helper generation through language-owned
-frontends while preserving both approved animations. See
-`../reviews/2026-08-21-typescript-python-generation-frontends-long-loop-proposal.md`.
-The subsequent durable order is binder exemplar, binder pressure/promotion,
-bounded Graph3D, differentiation, and integration; see
+Current Next Action: propose one reversible finite sum/product binder exemplar
+and stop for human visual review before pressure or promotion. The completed
+TypeScript/Python extract-helper frontend tranche is recorded in
+`../reviews/2026-08-21-typescript-python-generation-frontends-closeout.md`.
+The durable order remains binder exemplar, binder pressure/promotion, bounded
+Graph3D, differentiation, and integration; see
 `../decisions/2026-08-21-kp-post-root-capability-sequence.md`.
 
 The accepted breadth cadence is two loops per family: one reversible exemplar
@@ -29,6 +29,14 @@ Transformation Coverage page with separate notation, meaning, authority,
 exemplar, promotion, and generation maturity. This is the durable source for
 edge-case status; prose lists may explain the taxonomy but must not become a
 second checklist.
+
+The bounded TypeScript and Python extract-helper operations are now `Direct`.
+Their language-owned build-time frontends prove parsing, role recognition,
+legality, identity binding, causal recipe binding, corpus coverage, and runtime
+isolation. The shared orchestrator reuses existing canonical artifacts only for
+the exact approved revisions; valid variants return semantic plans, and an
+animation request for such a variant fails with a typed artifact-unavailable
+diagnostic rather than fabricating motion.
 
 ## Goal
 

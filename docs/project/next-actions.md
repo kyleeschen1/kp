@@ -1,27 +1,28 @@
 # KP Next Actions
 
-Last Updated: 2026-08-16
+Last Updated: 2026-08-21
 
 These are human-readable candidates. Theseus stores the executable versions
 with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
 
-The ownership and bundle/application-isolation tranches are complete. There is
-one active next action:
+The bounded TypeScript and Python extract-helper generation tranche is
+complete. There is one active next action:
 
-1. Return to the bounded binary log-product exemplar already waiting at its
-   human review boundary. Review canonical function wrap/unwrap timing and the
-   dissolve-direct-wrap treatment before changing or promoting any visual
-   policy. A pass may authorize one separately scoped three-factor and quotient
-   pressure proposal; a mixed result stays local.
+1. Propose one reversible finite sum/product binder exemplar. Keep scope,
+   bound-variable identity, index motion, and large-operator paint local to the
+   exemplar, then stop for human visual review before adding a second caller or
+   promoting a shared binder family.
 
 Everything else is frozen reference or parked horizon:
 
 - the catalogue remains an internal laboratory and inventory;
 - the eigenvector attentional-surface work remains a mixed, paused experiment;
-- TypeScript, Python, Scheme, algebra, and fraction composition are approved
-  evidence rather than active expansion;
+- TypeScript and Python expose only the bounded extract-helper operation;
+  arbitrary refactors, runtime execution, and variant artifact synthesis remain
+  typed gaps. Scheme, algebra, and fraction composition are approved evidence
+  rather than active expansion;
 - economics variants and the normal-matrix route are preserved experiments;
 - layout comparison, Graph3D, broader linear algebra/SICP, advanced CodeMirror,
   LLM tutoring, SRS, Public Web, Public Editor, accounts, and curriculum work

@@ -2,8 +2,9 @@
   "id": "run-contract.kp.typescript-python-generation-frontends-v2",
   "kind": "run-contract",
   "title": "TypeScript and Python generation frontends",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -620,7 +621,8 @@
     {
       "id": "cf24",
       "title": "Release-and-closeout",
-      "status": "planned"
+      "summary": "Closed the tranche with current semantic, discovery, and Coverage projections; sequential focused release suites; green architecture and bundle gates; exact limitations; and durable handoff to the binder exemplar.",
+      "status": "complete"
     }
   ]
 }

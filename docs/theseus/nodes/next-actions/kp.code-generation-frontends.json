@@ -2,8 +2,9 @@
   "id": "kp.code-generation-frontends",
   "kind": "next-action",
   "title": "Close TypeScript and Python generation frontends",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Bounded TypeScript and Python extract-helper generation is Direct through language-owned build-time frontends, exact evidence, governed authoring, typed repair, and unchanged canonical artifacts. Next accepted work is a separately proposed finite binder exemplar.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -29,6 +30,106 @@
     "npm run typecheck",
     "npm run check:architecture",
     "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:typescript-refactor",
+      "status": "passed",
+      "scope": "cf24",
+      "checkedAt": "2026-08-21T22:23:50.228Z",
+      "notes": "TypeScript focused release suite passed 99 tests, including frontend, legality, binding, authoring, runtime isolation, canonical asset, seek, and rewind."
+    },
+    {
+      "command": "npm run test:python-refactor",
+      "status": "passed",
+      "scope": "cf24",
+      "checkedAt": "2026-08-21T22:23:51.390Z",
+      "notes": "Python focused release suite passed 94 tests, including frontend, legality, binding, authoring, runtime isolation, canonical asset, seek, and rewind."
+    },
+    {
+      "command": "npm run test:code-generation-orchestration",
+      "status": "passed",
+      "scope": "cf24",
+      "checkedAt": "2026-08-21T22:23:52.850Z",
+      "notes": "Shared orchestration passed canonical artifact reuse, deterministic clock sampling, semantic-plan-only variants, and typed artifact-unavailable repair."
+    },
+    {
+      "command": "npm run test:code-operation-discovery",
+      "status": "passed",
+      "scope": "cf24",
+      "checkedAt": "2026-08-21T22:23:53.840Z",
+      "notes": "Generated human and LLM discovery remained bounded, immutable, compiler-free, and authority-free."
+    },
+    {
+      "command": "npm run test:animation-domain-frontends",
+      "status": "passed",
+      "scope": "cf24",
+      "checkedAt": "2026-08-21T22:23:54.772Z",
+      "notes": "Both code frontends closed exact requirements only through complete eight-obligation evidence."
+    },
+    {
+      "command": "npm run test:animation-transformation-coverage",
+      "status": "passed",
+      "scope": "cf24",
+      "checkedAt": "2026-08-21T22:23:55.740Z",
+      "notes": "Coverage projection remained fresh and derived with 10 Direct, 4 Registered, 7 Exemplar, and 17 Missing capabilities."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "cf24",
+      "checkedAt": "2026-08-21T22:23:56.956Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "cf24",
+      "checkedAt": "2026-08-21T22:23:58.100Z",
+      "notes": "Dependency direction and all scoped architecture authority gates passed."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "cf24",
+      "checkedAt": "2026-08-21T22:23:59.215Z",
+      "notes": "Bundle gate passed at 3466 outer, 199255 main host, 132852 Catalogue route, and 51102 place-value incremental gzip bytes with no forbidden outer files."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "cf24",
+      "checkedAt": "2026-08-21T22:24:00.436Z",
+      "notes": "Theseus workspace validated before final closeout records."
+    },
+    {
+      "command": "npm run check:typescript-refactor-semantics",
+      "status": "passed",
+      "scope": "cf24",
+      "checkedAt": "2026-08-21T22:24:16.196Z",
+      "notes": "Checked-in TypeScript semantic authority exactly matches deterministic build-time compilation."
+    },
+    {
+      "command": "npm run check:python-refactor-semantics",
+      "status": "passed",
+      "scope": "cf24",
+      "checkedAt": "2026-08-21T22:24:18.743Z",
+      "notes": "Checked-in Python semantic authority exactly matches deterministic build-time compilation."
+    },
+    {
+      "command": "npm run check:code-operation-discovery-catalog",
+      "status": "passed",
+      "scope": "cf24",
+      "checkedAt": "2026-08-21T22:24:19.936Z",
+      "notes": "Generated code operation discovery catalogue is current."
+    },
+    {
+      "command": "npm run check:animation-transformation-coverage",
+      "status": "passed",
+      "scope": "cf24",
+      "checkedAt": "2026-08-21T22:24:21.072Z",
+      "notes": "Generated Transformation Coverage ledger is current."
+    }
   ],
   "expectedLearning": [
     "Whether bounded TypeScript and Python extract-helper generation can become Direct without shipping compiler runtimes or changing approved presentation.",
