@@ -149,11 +149,25 @@
       "scope": "bf06 range boundary",
       "checkedAt": "2026-08-21T23:06:34.114Z",
       "notes": "All TypeScript, Svelte, and domain type checks pass."
+    },
+    {
+      "command": "npm run test:finite-binder-expansion",
+      "status": "passed",
+      "scope": "bf07 expansion lineage",
+      "checkedAt": "2026-08-21T23:10:19.944Z",
+      "notes": "35 focused tests pass over distinct instances, one-to-many template/reference lineage, connector derivation, and mismatch diagnostics."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "bf07 operation boundary",
+      "checkedAt": "2026-08-21T23:10:22.917Z",
+      "notes": "All TypeScript, Svelte, and domain type checks pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "bf06 defines immutable closed ascending integer ranges, rejects descending/unsafe/oversized requests, and does not evaluate arithmetic identities."
+    "summary": "bf07 compiles exact sum expansion semantics: each range value produces a distinct body/reference occurrence, + connectors derive from the sum operator, and every source occurrence is consumed rather than falsely persisted."
   },
   "expectedLearning": [
     "Whether finite sum expansion can make bound scope, ordered instantiation, and one-to-many lineage perceptually clear without false persistence.",
