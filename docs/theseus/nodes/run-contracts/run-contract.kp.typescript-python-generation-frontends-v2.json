@@ -195,6 +195,20 @@
       "scope": "cf10",
       "checkedAt": "2026-08-21T21:08:40.629Z",
       "notes": "Corpus and recognition refinements are build-time type-safe."
+    },
+    {
+      "command": "npm run test:typescript-code-generation-authoring and npm run test:typescript-refactor",
+      "status": "passed",
+      "scope": "cf11",
+      "checkedAt": "2026-08-21T21:11:47.179Z",
+      "notes": "Discovery, validation, immutable last-valid retention, repair semantics, CLI exit codes, and all 95 TypeScript tests pass."
+    },
+    {
+      "command": "tsc node project",
+      "status": "passed",
+      "scope": "cf11",
+      "checkedAt": "2026-08-21T21:11:48.590Z",
+      "notes": "The build-time authoring and CLI entrance is type-safe."
     }
   ],
   "allowedWork": [
@@ -283,7 +297,8 @@
     {
       "id": "cf11",
       "title": "TypeScript-authoring-entrance",
-      "status": "planned"
+      "summary": "Added a tool-neutral TypeScript discovery/compiler API and JSON CLI with explicit immutable last-valid retention and typed repair behavior.",
+      "status": "complete"
     },
     {
       "id": "cf12",
