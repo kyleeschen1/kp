@@ -134,6 +134,27 @@
       "scope": "rv07 completed control state",
       "checkedAt": "2026-08-21T17:02:47.918Z",
       "notes": "Validated 1043 nodes and 24145 events after closing the closed-root pressure slice."
+    },
+    {
+      "command": "npm run test:odd-root-pressure",
+      "status": "passed",
+      "scope": "rv08 odd inverse-power semantic and Native KaTeX pressure",
+      "checkedAt": "2026-08-21T17:12:03.366Z",
+      "notes": "All 19 branch-cardinality, explicit-index, protected exponent transfer, deterministic seek, endpoint settlement, closed evaluation, and neighboring even-root checks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "rv08 odd-root semantic renderer boundary",
+      "checkedAt": "2026-08-21T17:12:04.621Z",
+      "notes": "Dependency direction, framework neutrality, semantic animation, presentation, and equation compiler authority gates pass with the new pressure caller."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "rv08 completed control state",
+      "checkedAt": "2026-08-21T17:12:34.804Z",
+      "notes": "Validated 1043 nodes and 24150 events after closing odd-root pressure."
     }
   ],
   "allowedWork": [
@@ -203,7 +224,8 @@
     {
       "id": "rv08",
       "title": "odd-root-pressure-caller",
-      "status": "planned"
+      "summary": "Added the verified x cubed equals eight to x equals cube-root eight pressure caller. The existing inverse-power verifier proves odd parity, one unique real branch, complete candidate audit, and no plus-minus. Recursive endpoints give the visible root index its own owner; the source exponent crosses equality on a protected arc and settles as that native index, while radical reception shares an explicit contact group with the index and radicand. Nineteen focused checks and architecture gates pass, with deterministic seek and no changes to approved callers.",
+      "status": "complete"
     },
     {
       "id": "rv09",

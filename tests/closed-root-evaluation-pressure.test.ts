@@ -8,21 +8,17 @@ import {
   compileKpClosedRootEvaluationMotion
 } from "../src/rendering/closed-root-evaluation-transit-session.ts";
 import {
-  createKpNativeKatexRenderedSceneObservation,
-  type KpNativeKatexPaintAtomObservation
-} from "../src/rendering/native-katex-rendered-scene.ts";
-import {
   sampleKpNativeKatexSceneTrackFrames
 } from "../src/rendering/native-katex-scene-track-sampling.ts";
-import type {
-  KpRootRewriteNativeEndpoint
-} from "../src/rendering/root-rewrite-native-endpoint.ts";
 import {
   kpClosedRootEvaluationExemplar
 } from "../src/semantic/closed-root-evaluation-exemplar.ts";
-
-const ownerDocument = { defaultView: null };
-const stage = { ownerDocument } as HTMLElement;
+import {
+  createRootRewriteSceneObservation,
+  rootRewritePaint,
+  type KpRootRewriteFixtureRect,
+  type KpRootRewritePaintFixture
+} from "./helpers/root-rewrite-native-scene-fixture.ts";
 
 test("closed multi-glyph root evaluation carries exact semantic authority", () => {
   const exemplar = kpClosedRootEvaluationExemplar;
@@ -165,19 +161,9 @@ function motionPlan() {
   });
 }
 
-interface PaintFixture {
-  readonly entityId: string;
-  readonly rect: Rect;
-  readonly paintKind: "glyph" | "path";
-  readonly visualKey: string;
-}
-
-interface Rect {
-  readonly left: number;
-  readonly top: number;
-  readonly width: number;
-  readonly height: number;
-}
+type PaintFixture = KpRootRewritePaintFixture;
+type Rect = KpRootRewriteFixtureRect;
+const paint = rootRewritePaint;
 
 function sourcePaint(): readonly PaintFixture[] {
   return [
@@ -199,133 +185,11 @@ function targetPaint(): readonly PaintFixture[] {
   ];
 }
 
-function paint(
-  entityId: string,
-  left: number,
-  top: number,
-  width: number,
-  height: number,
-  paintKind: PaintFixture["paintKind"],
-  visualKey: string
-): PaintFixture {
-  return { entityId, rect: { left, top, width, height }, paintKind, visualKey };
-}
-
 function observation(
-  endpoint: KpRootRewriteNativeEndpoint,
+  endpoint: typeof kpClosedRootEvaluationNativeEndpoints.source,
   fixtures: readonly PaintFixture[]
 ) {
-  const root = { ownerDocument } as HTMLElement;
-  const nodes = new Map(endpoint.nodes.map((node) =>
-    [node.occurrence.entityId, node] as const
-  ));
-  const atoms = fixtures.map((fixture, index) => {
-    const node = nodes.get(fixture.entityId);
-    if (node === undefined) {
-      throw new Error(`Missing endpoint node ${fixture.entityId}.`);
-    }
-    return atom(endpoint.endpoint, fixture, node.presentationGroupId, index,
-      root);
-  });
-  const atomIdsByEntity = new Map<string, string[]>();
-  fixtures.forEach((fixture, index) => {
-    const ids = atomIdsByEntity.get(fixture.entityId) ?? [];
-    ids.push(atoms[index]!.id);
-    atomIdsByEntity.set(fixture.entityId, ids);
-  });
-  const descendants = (entityId: string): readonly string[] => [
-    ...(atomIdsByEntity.get(entityId) ?? []),
-    ...endpoint.nodes.filter(({ parentEntityId }) =>
-      parentEntityId === entityId
-    ).flatMap(({ occurrence }) => descendants(occurrence.entityId))
-  ];
-  const atomById = new Map(atoms.map((entry) => [entry.id, entry] as const));
-  const groups = endpoint.nodes.map((node) => {
-    const atomIds = descendants(node.occurrence.entityId);
-    const rect = union(atomIds.map((id) => atomById.get(id)!.rect));
-    const parentGroupId = node.parentEntityId === undefined
-      ? endpoint.rootPresentationGroupId
-      : nodes.get(node.parentEntityId)!.presentationGroupId;
-    return {
-      id: node.presentationGroupId,
-      semanticEntityId: node.occurrence.entityId,
-      parentGroupId,
-      atomIds,
-      rect,
-      sourceElement: unreadableElement(root),
-      styleFingerprint: "font-family:KaTeX_Main",
-      baselineY: rect.top + rect.height * 0.8
-    };
-  });
-  groups.unshift({
-    id: endpoint.rootPresentationGroupId,
-    semanticEntityId: endpoint.stateId,
-    parentGroupId: undefined as unknown as string,
-    atomIds: atoms.map(({ id }) => id),
-    rect: union(atoms.map(({ rect }) => rect)),
-    sourceElement: unreadableElement(root),
-    styleFingerprint: "font-family:KaTeX_Main",
-    baselineY: 36
-  });
-  return createKpNativeKatexRenderedSceneObservation({
-    endpoint: endpoint.endpoint,
-    stage,
-    root,
-    atoms,
-    groups: groups.map((group) => group.parentGroupId === undefined
-      ? (({ parentGroupId: _ignored, ...rest }) => rest)(group)
-      : group),
-    fontRevision: 2,
-    viewportKey: `${endpoint.endpoint}:closed-root:font-2`
-  });
-}
-
-function atom(
-  side: "source" | "target",
-  fixture: PaintFixture,
-  presentationGroupId: string,
-  index: number,
-  root: HTMLElement
-): KpNativeKatexPaintAtomObservation {
-  return {
-    kind: "native-katex-paint-atom-observation",
-    lifecycle: "renderer-session",
-    id: `${side}.paint.${index}`,
-    endpoint: side,
-    semanticEntityId: fixture.entityId,
-    presentationGroupId,
-    paintKind: fixture.paintKind,
-    paintMeasurement: fixture.paintKind === "glyph"
-      ? "atomic-text"
-      : "subtree",
-    visualKey: fixture.visualKey,
-    sourceElement: unreadableElement(root),
-    rect: fixture.rect,
-    baselineY: fixture.rect.top + fixture.rect.height * 0.8,
-    styleFingerprint: "font-family:KaTeX_Main",
-    zOrder: index,
-    fontRevision: 2
-  };
-}
-
-function unreadableElement(root: HTMLElement): HTMLElement {
-  return {
-    ownerDocument,
-    parentElement: null,
-    contains: (value: unknown) => value === root,
-    getBoundingClientRect(): never {
-      throw new Error("closed-root fixture attempted DOM remeasurement");
-    }
-  } as unknown as HTMLElement;
-}
-
-function union(rects: readonly Rect[]): Rect {
-  assert.ok(rects.length > 0, "fixture group must own at least one paint atom");
-  const left = Math.min(...rects.map((rect) => rect.left));
-  const top = Math.min(...rects.map((rect) => rect.top));
-  const right = Math.max(...rects.map((rect) => rect.left + rect.width));
-  const bottom = Math.max(...rects.map((rect) => rect.top + rect.height));
-  return { left, top, width: right - left, height: bottom - top };
+  return createRootRewriteSceneObservation(endpoint, fixtures, "closed-root");
 }
 
 function center(rect: Rect) {
