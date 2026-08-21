@@ -144,7 +144,8 @@
     {
       "id": "bf14",
       "title": "Sample deterministic sum motion",
-      "status": "planned"
+      "summary": "Finite-sum motion is now deterministic, reversible, externally clocked, reduced-motion aware, and densely verified.",
+      "status": "complete"
     },
     {
       "id": "bf15",
