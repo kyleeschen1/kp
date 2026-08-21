@@ -90,6 +90,20 @@
       "scope": "cf03",
       "checkedAt": "2026-08-21T20:29:47.516Z",
       "notes": "Type, domain, dependency, framework-neutral, semantic, and compiler-authority gates remain green."
+    },
+    {
+      "command": "npm run test:animation-domain-frontends",
+      "status": "passed",
+      "scope": "cf04",
+      "checkedAt": "2026-08-21T20:34:03.435Z",
+      "notes": "Twenty-two tests prove exact candidate declarations and obligations while both frontend evidence rows stay missing and both readiness rows stay Exemplar."
+    },
+    {
+      "command": "npm run typecheck and npm run check:architecture",
+      "status": "passed",
+      "scope": "cf04",
+      "checkedAt": "2026-08-21T20:34:11.250Z",
+      "notes": "Candidate registration preserves all type, dependency, framework-neutral, semantic, and compiler-authority boundaries."
     }
   ],
   "allowedWork": [
@@ -136,7 +150,8 @@
     {
       "id": "cf04",
       "title": "Candidate-frontend-authorities",
-      "status": "planned"
+      "summary": "Registered exact TypeScript and Python code-frontend candidates, build-time entrypoints, generated-data runtime boundary, and eight proof obligations. Candidate compilation fails on duplicate, mismatched, or incomplete declarations; evidence remains missing and readiness remains Exemplar.",
+      "status": "complete"
     },
     {
       "id": "cf05",
