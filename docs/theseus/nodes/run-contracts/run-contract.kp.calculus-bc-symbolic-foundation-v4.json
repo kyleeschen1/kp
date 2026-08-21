@@ -85,6 +85,27 @@
       "scope": "rv06 pre-checkpoint durable control state",
       "checkedAt": "2026-08-21T16:10:20.808Z",
       "notes": "Validated 1043 nodes and 24132 events with rv06 intentionally in progress pending human approval."
+    },
+    {
+      "command": "npm run test:compound-root-carrier",
+      "status": "passed",
+      "scope": "rv06 recursive subtree settlement plan",
+      "checkedAt": "2026-08-21T16:42:40.232Z",
+      "notes": "All 11 semantic, endpoint, non-rigid descendant, exact-endpoint, fail-closed topology, and lazy catalogue checks pass after replacing the opaque compound clone with synchronized certified leaf tracks."
+    },
+    {
+      "command": "npm run visual:compound-root-carrier",
+      "status": "passed",
+      "scope": "rv06 terminal paint handoff and visual checkpoint",
+      "checkedAt": "2026-08-21T16:42:42.884Z",
+      "notes": "All 3 focused Chromium cases pass. Each persistent x,+,1 ink center is within 0.5 px of native target before handoff; reverse/direct seek is identical; resize, reduced motion, exact endpoints, and page-error absence remain verified."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "rv06 repository-wide baseline after recursive settlement",
+      "checkedAt": "2026-08-21T16:43:10.470Z",
+      "notes": "The focused repair introduced no reported TypeScript errors, but the repository-wide app project currently fails in pre-existing unstaged files: native-katex-scene-compositor typography-union narrowing and root-rewrite-native-endpoint stale settle-observer type import. These files were not changed in this repair."
     }
   ],
   "allowedWork": [
