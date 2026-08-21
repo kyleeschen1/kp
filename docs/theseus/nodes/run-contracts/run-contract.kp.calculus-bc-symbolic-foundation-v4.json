@@ -2,7 +2,8 @@
   "id": "run-contract.kp.calculus-bc-symbolic-foundation-v4",
   "kind": "run-contract",
   "title": "Calculus BC symbolic foundation root vocabulary continuation",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -495,8 +496,8 @@
     {
       "id": "rv15",
       "title": "persistent-state-visual-checkpoint-closeout",
-      "summary": "Close the persistent-state visual checkpoint without broad promotion. Compare the unchanged replacement caller against the new equivalence-frame projection at exact source, transit, and settled states; verify direct URL seek, rewind, reduced motion, narrow fit, lazy bundle closure, and release gates; then stop for human review with both exact catalogue URLs.",
-      "status": "in-progress"
+      "summary": "Human approved the compact persistent log-product equivalence frame after the relation-spacing repair. The canonical replacement caller remains unchanged; retained-source identity, live target choreography, direct seek, reduced motion, narrow fit, lazy closure, and durable validation are accepted. No broad persistent-state promotion was added.",
+      "status": "complete"
     }
   ]
 }
