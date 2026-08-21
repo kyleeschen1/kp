@@ -163,8 +163,8 @@
     {
       "id": "rv06",
       "title": "compound-carrier-visual-checkpoint",
-      "summary": "Revised visual-checkpoint candidate: replaced the opaque x+1 compound clone with a certified recursive paint binding. The three descendant leaves share one semantic motion unit and clock, absorb measured local-layout residuals, and reach exact native target ink before handoff. Focused semantic and Chromium checks pass; awaiting explicit human visual approval before rv07.",
-      "status": "in-progress"
+      "summary": "Human approved the revised compound-carrier checkpoint. The certified x+1 descendants share one semantic motion unit and clock, resolve measured local-layout residuals, and settle at exact native target ink before ownership handoff. Focused semantic and Chromium geometry checks pass; promotion may proceed to the bounded root pressure callers.",
+      "status": "complete"
     },
     {
       "id": "rv07",
