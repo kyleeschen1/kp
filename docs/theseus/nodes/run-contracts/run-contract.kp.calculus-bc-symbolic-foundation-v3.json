@@ -2,7 +2,8 @@
   "id": "run-contract.kp.calculus-bc-symbolic-foundation-v3",
   "kind": "run-contract",
   "title": "Calculus BC symbolic foundation continuation",
-  "status": "ready",
+  "status": "superseded",
+  "summary": "Superseded after 14 completed slices by v4 because the user approved a broader root rewrite vocabulary and compound-carrier checkpoint before the former odd-root and promotion slices. Completed v3 evidence remains authoritative; no completed slice is rewritten.",
   "sourceRefs": [
     {
       "kind": "file",

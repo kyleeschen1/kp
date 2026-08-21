@@ -6,6 +6,38 @@ Decision: `../decisions/2026-08-20-symbolic-mathematics-through-calculus-bc-targ
 Primary target: `next-action.kp.calculus-bc-symbolic-foundation`
 Run contract: `run-contract.kp.calculus-bc-symbolic-foundation-v3`
 
+## Approved Root-Vocabulary Amendment
+
+Human review approved a broader root vocabulary on 2026-08-21 before the
+former odd-root pressure slice. The accepted decision is
+`../decisions/2026-08-21-kp-root-rewrite-vocabulary.md`.
+
+The earlier even-root equation exemplar remains approved and unchanged, but it
+is no longer sufficient evidence for root-family promotion. The continuation
+must first distinguish closed evaluation, carrier-preserving inverse
+normalization, compound carriers, assumption-qualified cancellation,
+exponent/index composition, mixed evaluation, partial extraction, nested-root
+composition, blocked rewrites, and explicitly composed derivations.
+
+The live contract is amended by inserting these independently reversible
+units before the former root promotion slice:
+
+1. record and test the root-rewrite vocabulary and negative corpus;
+2. define nominal verified plans and recursive compiler-owned dispositions;
+3. extend Native KaTeX endpoint roles from a flat radicand to hierarchical
+   semantic subtrees without changing the approved even-root caller;
+4. build `sqrt((x+1)^2) -> abs(x+1)` as the single compound-carrier exemplar;
+5. stop for human visual review;
+6. after approval, pressure the family with closed multi-glyph evaluation,
+   odd-root solving, rational-exponent composition, mixed evaluation, partial
+   extraction, blocked rewrites, nested roots, and factoring-first derivation;
+7. only then perform narrow root-family promotion.
+
+The compound-carrier checkpoint is the new next human gate. Presentation
+generalization and the persistent-state tranche remain downstream. The
+continuation contract owns live slice status; this amendment records the
+approved rationale, preservation boundary, and ordering.
+
 ## Approved Checkpoint Amendment
 
 Human review rejected slice 13's opaque foreground backing plate while
@@ -109,8 +141,8 @@ promptly. The first mandatory stop is slice 13.
 | 23 | **Radical role-transfer realization.** Implement exponent-to-index lineage, radicand enclosure, relation persistence, branch introduction, and native radical settlement through existing clock/compositor seams. | KaTeX radical geometry, duplicate glyphs, or last-frame snaps. | Standard: ink measurement, compositor ownership, deterministic tracks, reverse/seek. | Commit local recipe/renderer. Stop if a new paint owner or caller timing mask is needed. |
 | 24 | **Root catalogue integration.** Register the lazy exemplar, exact state URLs, review identity, accessibility, and semantic fallback. | Existing radical diagnostic and canonical asset ownership diverge. | Standard: asset manifest, catalogue host, URL/review tests, typecheck. | Commit asset integration. Stop if the canonical radical owner is ambiguous. |
 | 25 | **Root visual checkpoint.** Capture branch creation, exponent/index handoff, radical settlement, evaluation boundary, rewind, and narrow fit. | Semantically correct branching remains visually confusing. | Manual/runtime: scoped contact sheet and exact URL. | Commit checkpoint evidence, then **HUMAN_CHECKPOINT**. Do not add odd-root pressure without approval. |
-| 26 | **Odd-root pressure caller.** After approval, compile `x^3=8 → x=cuberoot(8) → x=2` with a unique real branch and no copied even-root `±` policy. | Overfitting root inversion to the square-root exemplar. | Standard: operation, branch, runtime, endpoint, and catalogue tests. | Commit second caller. Stop if it requires a caller-authored motion table. |
-| 27 | **Root narrow promotion.** Extract only proved inverse-power roles; add governed corpus and discovery for even/odd cases while leaving symbolic-domain and complex cases typed gaps. | Claiming general root solving from two real-domain callers. | Broad: equation promotion, corpus, discovery, coverage, architecture, Theseus validation. | Commit promotion/evidence. Stop if the derived status overstates domain support. |
+| 26 | **Root vocabulary and compound-carrier amendment.** Execute the inserted live-contract slices described above and stop at the compound-carrier visual checkpoint. | Treating all radicals as closed numerical evaluation or flattening a multi-glyph carrier. | Focused semantic/endpoint checks, then one scoped visual checkpoint. | One commit per inserted slice. Do not generalize presentation before approval. |
+| 27 | **Root pressure and narrow promotion.** After approval, run the odd, rational-exponent, mixed, partial, blocked, nested, and composed-derivation pressure cases, then extract only proved roles. | Claiming general root support from one equation solve or one normalization shape. | Broad: semantic corpus, runtime/endpoint checks where painted, discovery, coverage, architecture, Theseus validation. | Commit pressure cases separately, then promotion. Stop if support status exceeds exact evidence. |
 | 28 | **State-retention projection contract.** Add typed `replacement`, `equivalence-frame`, and `derivation-trail` policies over existing semantic states, with separate semantic referents, representation occurrences, historical snapshots, and live paint ownership. | Duplicating a single paint carrier or forking semantic operations. | Standard: immutable occurrence identity, serialization, selection, ownership, and architecture tests. | Commit projection contract only. Stop if it changes an existing replacement caller. |
 | 29 | **Log equivalence-frame exemplar.** Project the approved `ln(xy) → ln(x)+ln(y)` transition as `ln(xy) = ln(x)+ln(y)`: retain a frozen source occurrence, introduce the relation, and construct the live target through the existing recipe. | Split attention, clutter, or a second handwritten log animation. | Standard: projection reuse, paint ownership, seek/reverse, accessibility, exact URL. | Commit one reversible presentation exemplar. Stop if operation or motif code is duplicated. |
 | 30 | **Persistent-state visual checkpoint and closeout.** Capture replacement versus equivalence-frame behavior, measure selected closure, run the broad equation/release gate, update generated coverage and durable evidence, and leave derivation-trail root pressure queued for the next approved loop. | Structural completion is mistaken for approved pedagogy. | Broad plus manual: `npm run verify:equation:release`, scoped visual command, build/closure as impact requires, Theseus validation. | Commit closeout evidence, then **HUMAN_CHECKPOINT**. Completion requires explicit visual acceptance. |
@@ -134,7 +166,7 @@ promptly. The first mandatory stop is slice 13.
 
 Stop with the named outcome when:
 
-- slices 13, 18, 25, or 30 require human visual judgment (`HUMAN_CHECKPOINT`);
+- slices 13, 18, 25, the inserted compound-carrier checkpoint, or 30 require human visual judgment (`HUMAN_CHECKPOINT`);
 - source/target mathematics, branch/domain evidence, or canonical ownership is
   ambiguous (`STOP_CONDITION`);
 - work requires a new clock, scheduler, paint owner, universal renderer, CAS,

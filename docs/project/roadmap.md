@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-08-20
+Last Updated: 2026-08-21
 Status: active
 Active Thread: `threads/animation-catalogue.md`
 Supporting Threads:
@@ -220,18 +220,25 @@ Only this repository sequence is active:
    travel, and derived bases expand at their native destinations. After
    approval, retire opaque symbolic occlusion plates generally, then pressure
    difference-to-quotient before narrow promotion.
-30. **Accepted subsequent family packets:** root inversion with explicit branch
-   and domain truth; existing TypeScript/Python refactors through domain-owned
+30. **Root rewrite vocabulary:** active after the approved even-root equation
+   checkpoint. Root work now distinguishes closed evaluation, persistent
+   symbolic and compound carriers, assumption-qualified cancellation,
+   exponent/index composition, mixed evaluation, partial extraction, nested
+   roots, blocked rewrites, and explicitly composed derivations. The next
+   visual gate is `sqrt((x+1)^2) -> abs(x+1)`; promotion waits for the accepted
+   pressure suite. See
+   `decisions/2026-08-21-kp-root-rewrite-vocabulary.md`.
+31. **Accepted subsequent family packets:** existing TypeScript/Python refactors through domain-owned
    frontends; finite summation/product binder infrastructure; one bounded
    Graph3D semantic transformation; then distinct differentiation and
    integration operator coverage. Graph2D function translation and fraction
    structural pressure are deferred and no longer block foundational breadth.
-31. **Persistent equivalence and derivation projection:** accepted
+32. **Persistent equivalence and derivation projection:** accepted
    cross-family tranche after exponential/root pressure. Project the same
    verified transitions as replacement,
    side-by-side equivalence, or bounded derivation history; do not fork
    semantic operations, motif recipes, or paint-carrier identity.
-32. **Symbolic mathematics through Calculus BC:** accepted near-term coverage
+33. **Symbolic mathematics through Calculus BC:** accepted near-term coverage
    horizon. Extend the generated capability atlas so common algebra,
    precalculus, trigonometric, sequence/series, limit, differentiation,
    integration, polar/parametric, and related symbolic transformations are

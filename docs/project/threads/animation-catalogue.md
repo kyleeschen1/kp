@@ -1,16 +1,14 @@
 # Animation Catalogue Thread
 
 Status: active
-Last Updated: 2026-08-20
-Current Next Action: revise the reviewed exponential-duality exemplar
-`b^(x + y) → b^x b^y` without changing its accepted semantic or runtime
-authority. Replace the accidental base/payload crossing and opaque backing
-plate with the log-cadence matched dissolve: the source base and plus collapse
-at their own ink centers, persistent exponent operands alone redistribute on
-their existing plane, and two derived bases expand at their exact native
-target centers. Stop for visual review. After approval, remove opaque Native
-KaTeX foreground backing plates generally while retaining collision audits and
-reviewed z-order, then continue to the difference-to-quotient pressure caller.
+Last Updated: 2026-08-21
+Current Next Action: execute the accepted root-rewrite vocabulary before
+narrow root promotion. Preserve the approved even-root equation exemplar;
+define compiler-owned recursive subtree dispositions, extend root endpoints
+for compound carriers, and build `sqrt((x+1)^2) -> abs(x+1)` as one reversible
+visual exemplar. Stop at that checkpoint before pressure callers or shared
+presentation promotion. See
+`../decisions/2026-08-21-kp-root-rewrite-vocabulary.md`.
 
 The accepted breadth cadence is two loops per family: one reversible exemplar
 and checkpoint, then one structurally different caller plus narrow promotion.
