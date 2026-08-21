@@ -121,11 +121,25 @@
       "scope": "bf04 normalization boundary",
       "checkedAt": "2026-08-21T22:59:53.180Z",
       "notes": "All TypeScript, Svelte, and domain type checks pass."
+    },
+    {
+      "command": "npm run test:finite-binder-expansion",
+      "status": "passed",
+      "scope": "bf05 scope legality",
+      "checkedAt": "2026-08-21T23:03:03.149Z",
+      "notes": "22 focused tests pass, including local ownership, lexical shadowing, capture avoidance, and adversarial identity failures."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "bf05 legality boundary",
+      "checkedAt": "2026-08-21T23:03:08.754Z",
+      "notes": "All TypeScript, Svelte, and domain type checks pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "bf04 adds exact fail-closed normalization for one explicit integer-bounded sum and its direct indexed additive target without inferring scope proof, range legality, lineage, or presentation."
+    "summary": "bf05 proves every body reference resolves to the local declaration, records lexical shadowing, and derives capture avoidance from closed-integer substitution while retaining free body symbols."
   },
   "expectedLearning": [
     "Whether finite sum expansion can make bound scope, ordered instantiation, and one-to-many lineage perceptually clear without false persistence.",

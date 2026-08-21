@@ -28,6 +28,7 @@ function sumSource(
       id: id("sum.body.a_i"),
       role: "body-template",
       sourceLatex: "a_i",
+      freeSymbols: ["a"],
       references: [{
         id: id("sum.body.reference.i"),
         role: "bound-reference",
@@ -48,6 +49,7 @@ test("finite binder vocabulary keeps source roles renderer-neutral", () => {
     lower: source.lowerBound.value,
     upper: source.upperBound.value,
     body: source.body.sourceLatex,
+    freeSymbols: source.body.freeSymbols,
     referenceOwner: source.body.references[0]?.bindsTo
   }, {
     operator: "sum",
@@ -55,6 +57,7 @@ test("finite binder vocabulary keeps source roles renderer-neutral", () => {
     lower: 1,
     upper: 3,
     body: "a_i",
+    freeSymbols: ["a"],
     referenceOwner: source.binder.id
   });
   assert.equal(Object.isFrozen(source), true);

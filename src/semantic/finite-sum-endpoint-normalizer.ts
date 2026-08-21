@@ -118,6 +118,7 @@ export function normalizeKpFiniteSumSourceEndpoint(
       sourceLatex: latex.slice(match.index, match.index + match[0].length)
         .replace(/^\s*\\sum_\{[^}]+\}\^\{[^}]+\}\s*/u, "")
         .trim(),
+      freeSymbols: [bodySymbol],
       references: [{
         id: createKpFiniteBinderSemanticId(`${namespace}.body.reference`),
         role: "bound-reference",

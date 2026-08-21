@@ -38,6 +38,7 @@ export interface KpFiniteBinderBodyTemplate {
   readonly id: KpFiniteBinderSemanticId;
   readonly role: "body-template";
   readonly sourceLatex: string;
+  readonly freeSymbols: readonly string[];
   readonly references: readonly KpFiniteBinderReferenceOccurrence[];
 }
 
@@ -115,6 +116,10 @@ export function defineKpFiniteBinderSource(
   if (value.body.sourceLatex.trim().length === 0) {
     throw new Error("Finite-binder body template requires source LaTeX.");
   }
+  if (value.body.freeSymbols.some((symbol) => symbol.trim().length === 0) ||
+      new Set(value.body.freeSymbols).size !== value.body.freeSymbols.length) {
+    throw new Error("Finite-binder body free symbols must be nonempty and unique.");
+  }
   if (value.body.references.length === 0) {
     throw new Error("Finite-binder body must reference its declared binder.");
   }
@@ -134,6 +139,7 @@ export function defineKpFiniteBinderSource(
     upperBound: { ...value.upperBound },
     body: {
       ...value.body,
+      freeSymbols: [...value.body.freeSymbols],
       references: value.body.references.map((reference) => ({ ...reference }))
     }
   });

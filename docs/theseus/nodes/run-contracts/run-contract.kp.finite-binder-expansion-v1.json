@@ -90,7 +90,8 @@
     {
       "id": "bf05",
       "title": "Prove binder scope legality",
-      "status": "planned"
+      "summary": "Added immutable finite-binder scope proof with explicit shadowing and capture-avoidance diagnostics.",
+      "status": "complete"
     },
     {
       "id": "bf06",
