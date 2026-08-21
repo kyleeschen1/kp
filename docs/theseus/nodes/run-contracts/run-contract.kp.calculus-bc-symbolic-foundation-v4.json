@@ -246,6 +246,34 @@
       "scope": "rv12 completed control state",
       "checkedAt": "2026-08-21T17:44:19.684Z",
       "notes": "Validated 1043 nodes and 24171 events after narrow root promotion."
+    },
+    {
+      "command": "npm run test:state-retention-projection",
+      "status": "passed",
+      "scope": "rv13 projection topology and lifecycle ownership",
+      "checkedAt": "2026-08-21T17:51:33.088Z",
+      "notes": "All 9 replacement, equivalence-frame, derivation-trail, immutable history, serialization, selection, exclusive paint, and neighboring lifecycle checks pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "rv13 projection discriminants and public API",
+      "checkedAt": "2026-08-21T17:51:34.626Z",
+      "notes": "All application, node, test, Svelte, and domain TypeScript projects pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "rv13 renderer-neutral projection boundary",
+      "checkedAt": "2026-08-21T17:51:35.720Z",
+      "notes": "All dependency, framework-neutral, semantic-animation, presentation, and compiler-authority gates pass."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "rv13 completed control state",
+      "checkedAt": "2026-08-21T17:51:55.164Z",
+      "notes": "Validated 1043 nodes and 24177 events after closing the state-retention projection contract."
     }
   ],
   "allowedWork": [
@@ -345,7 +373,8 @@
     {
       "id": "rv13",
       "title": "state-retention-projection-contract",
-      "status": "planned"
+      "summary": "Added a nominal renderer-neutral state-retention projection compiler for replacement, equivalence-frame, and derivation-trail. Semantic referents are distinct from source, target, relation, historical, and generated transit representation occurrences. The compiler mints immutable snapshots, settled selection, and phase-local exclusive paint claims; an equivalence frame may show distinct occurrences of one referent without cloning a paint occurrence. Unknown referents, duplicate identities, incomplete history, invalid selection, presentation fields, and ownership conflicts fail closed. Existing replacement callers were not modified. Focused lifecycle tests, full typecheck, and architecture gates pass.",
+      "status": "complete"
     },
     {
       "id": "rv14",
