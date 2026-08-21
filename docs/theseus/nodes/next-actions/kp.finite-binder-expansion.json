@@ -240,11 +240,32 @@
       "scope": "bf11 native real-paint compositor preservation",
       "checkedAt": "2026-08-21T23:29:38.198Z",
       "notes": "82 real-KaTeX compositor tests pass; existing ownership and settlement behavior is preserved."
+    },
+    {
+      "command": "npm run test:finite-binder-expansion",
+      "status": "passed",
+      "scope": "bf12 exact finite-sum paint ownership",
+      "checkedAt": "2026-08-21T23:35:08.164Z",
+      "notes": "57 focused tests pass, including total role ink, honest body-only fan-out, stale-font rejection, and cached-geometry compilation."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "bf12 renderer-session ownership types",
+      "checkedAt": "2026-08-21T23:35:09.120Z",
+      "notes": "All TypeScript, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "bf12 Native KaTeX settlement and geometry preservation",
+      "checkedAt": "2026-08-21T23:35:10.078Z",
+      "notes": "82 compositor tests pass across immutable handles, ink geometry, ownership, settlement, and terminal handoff laws."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Bound canonical finite-sum operator, declaration, bounds, body template, substituted instances, references, and connectors to unique native KaTeX paint owners without claiming choreography."
+    "summary": "Established immutable renderer-session paint authority for both sum endpoints; only the matching body glyph fans out, while changed syntax remains honest elimination or introduction."
   },
   "expectedLearning": [
     "Whether finite sum expansion can make bound scope, ordered instantiation, and one-to-many lineage perceptually clear without false persistence.",

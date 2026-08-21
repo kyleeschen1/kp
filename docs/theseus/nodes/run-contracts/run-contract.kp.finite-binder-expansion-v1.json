@@ -132,7 +132,8 @@
     {
       "id": "bf12",
       "title": "Establish endpoint paint ownership",
-      "status": "planned"
+      "summary": "Finite-sum endpoints now require total settled ink, exact semantic owners, one font revision, and cached immutable geometry.",
+      "status": "complete"
     },
     {
       "id": "bf13",
