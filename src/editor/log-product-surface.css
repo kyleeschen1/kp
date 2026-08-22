@@ -1,4 +1,8 @@
 .kp-log-product-stage {
+  --kp-log-product-display-font-size: clamp(2.25rem, 5vw, 4rem);
+  --kp-log-product-inline-font-size: 1em;
+  --kp-log-product-equation-font-size:
+    var(--kp-log-product-display-font-size);
   position: relative;
   display: grid;
   width: 100%;
@@ -17,7 +21,14 @@
   inset: 0;
   display: grid;
   place-items: center;
-  font-size: clamp(2.25rem, 5vw, 4rem);
+  font-size: var(--kp-log-product-equation-font-size);
+}
+
+/* The inline treatment is an inert exemplar seam until the surface explicitly
+   selects it; the approved flat presentation continues to use display scale. */
+.kp-log-product-stage[data-kp-log-product-typography="inline"] {
+  --kp-log-product-equation-font-size:
+    var(--kp-log-product-inline-font-size);
 }
 
 .kp-log-product-stage__endpoint .katex-display {

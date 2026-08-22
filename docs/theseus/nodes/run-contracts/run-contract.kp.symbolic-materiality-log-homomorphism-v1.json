@@ -51,6 +51,34 @@
       "scope": "md03 impact inspection",
       "checkedAt": "2026-08-22T23:15:35.907Z",
       "notes": "Impact inspection identifies the new unmatched test as promotion-risk; broad type, test, and bundle gates remain deferred to the final checkpoint per visual-discovery cadence."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "md04 initial standard boundary",
+      "checkedAt": "2026-08-22T23:20:00.443Z",
+      "notes": "Initial typecheck exposed a recursive inference edge in the new test variable; no production error. Added an explicit SelectorCorrespondenceRecord annotation."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "md04 inert inline typography contract",
+      "checkedAt": "2026-08-22T23:20:01.745Z",
+      "notes": "All 23 focused log-product tests pass; the inline token is local and inactive by default."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "md04 corrected standard boundary",
+      "checkedAt": "2026-08-22T23:20:02.797Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks pass after the explicit test annotation."
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "passed",
+      "scope": "md04 unchanged flat comparator after typography tokenization",
+      "checkedAt": "2026-08-22T23:20:03.880Z",
+      "notes": "Stable flat contact sheet regenerated successfully with the default display-size token path."
     }
   ],
   "allowedWork": [
@@ -100,7 +128,8 @@
     {
       "id": "md04",
       "title": "Define local inline-scale KaTeX experiment",
-      "status": "planned"
+      "summary": "Log-product typography now has explicit display and 1em inline tokens behind an inert local selector; flat mode remains display scale and all focused visual, type, and semantic checks pass.",
+      "status": "complete"
     },
     {
       "id": "md05",

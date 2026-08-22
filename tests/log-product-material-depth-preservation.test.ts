@@ -1,9 +1,13 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import {
   sampleKpSemanticMotionChoreography
 } from "../src/domain-ir/public-api.ts";
+import type {
+  SelectorCorrespondenceRecord
+} from "../src/semantic/correspondence.ts";
 import {
   readKpAnimationDevelopmentUrlState
 } from "../src/editor/animation-development-url-state.ts";
@@ -48,7 +52,8 @@ test("material-depth discovery preserves the approved binary semantic lineage", 
   }]);
 
   for (const factor of family.factors) {
-    const continuity = records.find(({ id }) =>
+    const continuity: SelectorCorrespondenceRecord | undefined = records.find(
+      ({ id }) =>
       id === `correspondence.log-product.${factor.name}-argument-continuity`
     );
     assert.equal(continuity?.relation, "role-change");
@@ -120,4 +125,25 @@ test("material depth remains an opt-in presentation over the flat URL", () => {
   assert.equal(noDepth.display.focus, "no-depth");
   assert.equal(flat.artifactId, elevated.artifactId);
   assert.equal(flat.artifactId, noDepth.artifactId);
+});
+
+test("inline typography is local and inert until the exemplar selects it", () => {
+  const css = readFileSync(new URL(
+    "../src/editor/log-product-surface.css",
+    import.meta.url
+  ), "utf8");
+
+  assert.match(
+    css,
+    /--kp-log-product-display-font-size:\s*clamp\(2\.25rem, 5vw, 4rem\)/u
+  );
+  assert.match(css, /--kp-log-product-inline-font-size:\s*1em/u);
+  assert.match(
+    css,
+    /--kp-log-product-equation-font-size:\s*var\(--kp-log-product-display-font-size\)/u
+  );
+  assert.match(
+    css,
+    /\[data-kp-log-product-typography="inline"\][\s\S]*?--kp-log-product-equation-font-size:\s*var\(--kp-log-product-inline-font-size\)/u
+  );
 });
