@@ -192,7 +192,8 @@
     {
       "id": "bf22",
       "title": "Add governed binder authoring",
-      "status": "planned"
+      "summary": "Added a public data-driven finite-binder authoring and discovery API for sum and product. Requests compile through verified semantic authorities, return layer-specific typed repairs, reject caller-owned authority and presentation fields, brand fresh accepted artifacts, and distinguish reviewed canonical assets from semantic-only variants.",
+      "status": "complete"
     },
     {
       "id": "bf23",

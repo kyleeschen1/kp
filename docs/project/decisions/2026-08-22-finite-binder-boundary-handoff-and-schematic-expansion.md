@@ -315,3 +315,22 @@ adds its connective topology. The kernel has no connector or adjacency type,
 no arithmetic policy, no endpoint or KaTeX dependency, and no paint, geometry,
 timing, animation, or renderer vocabulary. This is the promoted binder seam;
 presentation implementations remain deliberately separate.
+
+## Governed Authoring And Discovery
+
+The canonical authoring API exposes a small, data-driven registry for finite
+sum and finite product expansion. Authors provide an operation choice and
+explicit source and target strings. The compiler—not the request—normalizes
+the endpoints, proves scope and range legality, derives instances through the
+shared kernel, and applies operator-owned connective rules.
+
+Requests accept no authority, geometry, timing, renderer, style, accessibility,
+or extension fields. Unsupported source, target, scope, range, and expansion
+shapes return layer-specific typed repairs; there is no generic animation
+fallback. Successful artifacts are compiler-branded fresh objects, so copied
+data cannot claim verified authoring authority.
+
+Exact canonical endpoints link to their reviewed Catalogue assets. Other
+proved integer-bound variants remain explicitly `semantic-only` until a
+reviewed visual asset owns those endpoints. This preserves honest discovery:
+semantic support does not silently become presentation maturity.

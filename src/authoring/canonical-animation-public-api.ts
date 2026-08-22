@@ -91,3 +91,17 @@ export {
   type KpGovernedCanonicalProjectionKind,
   type KpGovernedCanonicalProjectionTarget
 } from "./governed-canonical-construction-projections.ts";
+
+export {
+  createKpFiniteBinderAuthoringApi,
+  isKpVerifiedFiniteBinderAuthoringArtifact,
+  KP_FINITE_BINDER_AUTHORING_COMPILER_AUTHORITY,
+  KP_FINITE_BINDER_AUTHORING_REQUEST_SCHEMA,
+  type KpFiniteBinderAuthoringApi,
+  type KpFiniteBinderAuthoringDeclaration,
+  type KpFiniteBinderAuthoringDiagnostic,
+  type KpFiniteBinderAuthoringOperator,
+  type KpFiniteBinderAuthoringRequest,
+  type KpFiniteBinderAuthoringResult,
+  type KpVerifiedFiniteBinderAuthoringArtifact
+} from "./finite-binder-authoring-api.ts";
