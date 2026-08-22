@@ -601,6 +601,27 @@
       "scope": "bf20 pressure test types",
       "checkedAt": "2026-08-22T17:10:45.898Z",
       "notes": "Cross-caller pressure fixtures and structural projections typecheck without introducing a production abstraction."
+    },
+    {
+      "command": "npm run test:finite-binder-expansion",
+      "status": "passed",
+      "scope": "bf21 promoted semantic kernel",
+      "checkedAt": "2026-08-22T17:20:05.029Z",
+      "notes": "99 focused checks pass with both sum and product routed through the shared proof, instance, identity, and lineage kernel."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "bf21 promoted kernel types",
+      "checkedAt": "2026-08-22T17:20:06.063Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "bf21 promotion boundary",
+      "checkedAt": "2026-08-22T17:20:06.986Z",
+      "notes": "Dependency and semantic-presentation gates pass; the kernel remains renderer-neutral."
     }
   ],
   "progress": {

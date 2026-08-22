@@ -13,22 +13,24 @@ import type {
   KpNormalizedFiniteSumSourceEndpoint,
   KpNormalizedFiniteSumTargetEndpoint
 } from "./finite-sum-endpoint-normalizer.ts";
+import {
+  deriveKpFiniteBinderExpansionKernel,
+  type KpFiniteBinderExpansionKernelResult,
+  type KpFiniteBinderSharedLineageEdge
+} from "./finite-binder-expansion-kernel.ts";
 
 export const KP_FINITE_BINDER_EXPAND_OPERATION = createKpOperationKind(
   "operation.equation.finite-binder-expand.v1"
 );
 
-export interface KpFiniteBinderExpansionLineageEdge {
-  readonly sourceId: KpFiniteBinderSemanticId;
-  readonly targetId: KpFiniteBinderSemanticId;
-  readonly relation:
-    | "body-template-instantiates"
-    | "bound-reference-substitutes-integer"
-    | "lower-bound-materializes-reference"
-    | "upper-bound-materializes-reference"
-    | "operator-introduces-connector";
-  readonly ordinal: number;
-}
+export type KpFiniteBinderExpansionLineageEdge =
+  | KpFiniteBinderSharedLineageEdge
+  | Readonly<{
+      sourceId: KpFiniteBinderSemanticId;
+      targetId: KpFiniteBinderSemanticId;
+      relation: "operator-introduces-connector";
+      ordinal: number;
+    }>;
 
 export interface KpFiniteBinderTargetConnector {
   readonly id: KpFiniteBinderSemanticId;
@@ -85,69 +87,14 @@ export function defineKpFiniteBinderExpansionOperation(input: Readonly<{
   rangeProof: KpVerifiedFiniteBinderRange;
 }>): KpFiniteBinderExpansionOperationResult {
   const source = input.source.semantic;
-  if (input.scopeProof.sourceId !== source.id ||
-      input.rangeProof.sourceId !== source.id ||
-      input.scopeProof.binderDeclarationId !== source.binder.id ||
-      input.rangeProof.binderDeclarationId !== source.binder.id) {
-    return invalid(
-      "finite-binder-expansion.proof-mismatch",
-      "Scope and range proofs must belong to the normalized source."
-    );
-  }
-  if (input.target.terms.length !== input.rangeProof.cardinality) {
-    return invalid(
-      "finite-binder-expansion.term-count-mismatch",
-      "The expanded target must contain exactly one term per range value."
-    );
-  }
-  const bodySymbol = source.body.freeSymbols[0];
-  if (bodySymbol === undefined || source.body.freeSymbols.length !== 1 ||
-      input.target.terms.some((term) => term.bodySymbol !== bodySymbol)) {
-    return invalid(
-      "finite-binder-expansion.body-template-mismatch",
-      "Every target term must instantiate the source body template."
-    );
-  }
-  if (input.target.terms.some((term, ordinal) =>
-    term.ordinal !== ordinal ||
-    term.indexValue !== input.rangeProof.values[ordinal]
-  )) {
-    return invalid(
-      "finite-binder-expansion.term-order-mismatch",
-      "Target indices must match the verified inclusive range in order."
-    );
-  }
-  const sourceReference = source.body.references[0];
-  if (sourceReference === undefined || source.body.references.length !== 1) {
-    return invalid(
-      "finite-binder-expansion.body-template-mismatch",
-      "The current expansion operation requires one direct binder reference."
-    );
-  }
-  const instances = input.target.terms.map((term) => {
-    const namespace = `${source.id}.instance.${integerIdPart(term.indexValue)}.${term.ordinal}`;
-    return {
-      id: createKpFiniteBinderSemanticId(namespace),
-      role: "body-instance" as const,
-      ordinal: term.ordinal,
-      indexValue: term.indexValue,
-      derivedFrom: source.body.id,
-      references: [{
-        id: createKpFiniteBinderSemanticId(`${namespace}.reference`),
-        role: "instantiated-reference" as const,
-        value: term.indexValue,
-        derivedFrom: sourceReference.id,
-        boundBy: source.binder.id
-      }]
-    };
+  const shared = deriveKpFiniteBinderExpansionKernel({
+    source,
+    members: input.target.terms,
+    scopeProof: input.scopeProof,
+    rangeProof: input.rangeProof
   });
-  const [firstInstance, ...remainingInstances] = instances;
-  if (firstInstance === undefined) {
-    return invalid(
-      "finite-binder-expansion.term-count-mismatch",
-      "Expansion requires at least one target instance."
-    );
-  }
+  if (shared.status !== "verified") return invalidFromKernel(shared);
+  const instances = shared.kernel.instances;
   const connectors = input.target.connectors.map((connector) => ({
     id: createKpFiniteBinderSemanticId(
       `${source.id}.connector.${connector.ordinal}`
@@ -156,38 +103,9 @@ export function defineKpFiniteBinderExpansionOperation(input: Readonly<{
     ordinal: connector.ordinal,
     rawLatex: connector.rawLatex
   }));
-  const lineage: KpFiniteBinderExpansionLineageEdge[] = [];
-  for (const instance of instances) {
-    lineage.push({
-      sourceId: source.body.id,
-      targetId: instance.id,
-      relation: "body-template-instantiates",
-      ordinal: instance.ordinal
-    });
-    lineage.push({
-      sourceId: sourceReference.id,
-      targetId: instance.references[0]!.id,
-      relation: "bound-reference-substitutes-integer",
-      ordinal: instance.ordinal
-    });
-  }
-  const firstReference = instances[0]!.references[0]!;
-  const lastInstance = instances.at(-1)!;
-  const lastReference = lastInstance.references[0]!;
-  // Boundary values derive target references but retain distinct occurrence
-  // identities; renderers may preserve material without claiming sameness.
-  lineage.push({
-    sourceId: source.lowerBound.id,
-    targetId: firstReference.id,
-    relation: "lower-bound-materializes-reference",
-    ordinal: 0
-  });
-  lineage.push({
-    sourceId: source.upperBound.id,
-    targetId: lastReference.id,
-    relation: "upper-bound-materializes-reference",
-    ordinal: lastInstance.ordinal
-  });
+  const lineage: KpFiniteBinderExpansionLineageEdge[] = [
+    ...shared.kernel.lineage
+  ];
   for (const connector of connectors) {
     lineage.push({
       sourceId: source.operator.id,
@@ -205,27 +123,16 @@ export function defineKpFiniteBinderExpansionOperation(input: Readonly<{
       source: input.source,
       target: {
         endpoint: input.target,
-        instances: [firstInstance, ...remainingInstances],
+        instances,
         connectors
       },
       scopeProof: input.scopeProof,
       rangeProof: input.rangeProof,
       lineage,
-      consumedSourceOccurrenceIds: [
-        source.operator.id,
-        source.binder.id,
-        source.lowerBound.id,
-        source.upperBound.id,
-        source.body.id,
-        sourceReference.id
-      ],
-      identityPolicy: "derive-distinct-occurrences-never-clone-identity" as const
+      consumedSourceOccurrenceIds: shared.kernel.consumedSourceOccurrenceIds,
+      identityPolicy: shared.kernel.identityPolicy
     }
   });
-}
-
-function integerIdPart(value: number): string {
-  return value < 0 ? `neg-${Math.abs(value)}` : String(value);
 }
 
 function invalid(
@@ -243,6 +150,24 @@ function invalid(
         "Regenerate the target directly from the verified source scope and finite range."
     }
   });
+}
+
+function invalidFromKernel(
+  result: Extract<KpFiniteBinderExpansionKernelResult, {
+    status: "invalid-expansion";
+  }>
+): KpFiniteBinderExpansionOperationResult {
+  const code = {
+    "finite-binder-kernel.proof-mismatch":
+      "finite-binder-expansion.proof-mismatch",
+    "finite-binder-kernel.member-count-mismatch":
+      "finite-binder-expansion.term-count-mismatch",
+    "finite-binder-kernel.member-order-mismatch":
+      "finite-binder-expansion.term-order-mismatch",
+    "finite-binder-kernel.body-template-mismatch":
+      "finite-binder-expansion.body-template-mismatch"
+  } as const;
+  return invalid(code[result.diagnostic.code], result.diagnostic.message);
 }
 
 function deepFreeze<T>(value: T): T {

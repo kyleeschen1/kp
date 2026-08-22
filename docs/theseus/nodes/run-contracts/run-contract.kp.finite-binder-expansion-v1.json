@@ -186,7 +186,8 @@
     {
       "id": "bf21",
       "title": "Promote finite binder recipe",
-      "status": "planned"
+      "summary": "Promoted one renderer-neutral finite-binder expansion kernel for proof ownership, ordered member validation, fresh occurrence creation, common lineage, and identity policy; sum and product now route through it while retaining independent connective topology, diagnostics, arithmetic policy, paint, motion, and timing.",
+      "status": "complete"
     },
     {
       "id": "bf22",

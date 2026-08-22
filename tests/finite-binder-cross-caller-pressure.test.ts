@@ -143,8 +143,13 @@ test("canonical Native KaTeX endpoints retain exact distinct paint owners", () =
   );
 });
 
-test("pressure callers share no presentation implementation", async () => {
-  const [sumPlan, productPlan, sumAdapter, productAdapter] = await Promise.all([
+test("pressure callers share the semantic kernel but no presentation implementation", async () => {
+  const [sumOperation, productOperation, sumPlan, productPlan,
+    sumAdapter, productAdapter] = await Promise.all([
+    readFile(new URL("../src/semantic/finite-binder-expansion-operation.ts",
+      import.meta.url), "utf8"),
+    readFile(new URL("../src/semantic/finite-product-expansion-operation.ts",
+      import.meta.url), "utf8"),
     readFile(new URL("../src/animation/finite-sum-expansion-presentation-plan.ts",
       import.meta.url), "utf8"),
     readFile(new URL("../src/animation/finite-product-expansion-presentation-plan.ts",
@@ -155,6 +160,8 @@ test("pressure callers share no presentation implementation", async () => {
       import.meta.url), "utf8")
   ]);
 
+  assert.match(sumOperation, /deriveKpFiniteBinderExpansionKernel/u);
+  assert.match(productOperation, /deriveKpFiniteBinderExpansionKernel/u);
   assert.doesNotMatch(sumPlan, /finite-product/u);
   assert.doesNotMatch(productPlan, /finite-sum/u);
   assert.doesNotMatch(sumAdapter, /finite-product/u);

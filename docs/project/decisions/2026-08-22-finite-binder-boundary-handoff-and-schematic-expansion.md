@@ -296,3 +296,22 @@ timing, and transit modules do not import one another. The next promotion slice
 may extract the proved scope, ordered-instance, identity, and lineage
 machinery, but it must leave connective topology, arithmetic, geometry,
 timing, and paint choreography with each operator caller.
+
+## Promoted Finite-Binder Kernel
+
+The caller-proven common laws now live in one renderer-neutral expansion
+kernel. Given a normalized finite-binder source, verified scope and range, and
+ordered target members, it:
+
+1. verifies proof ownership, cardinality, order, and the one-reference body
+   template;
+2. creates fresh body and bound-reference occurrences for every range value;
+3. records shared template, substitution, and boundary lineage;
+4. returns the consumed source occurrences and the no-cloned-identity policy.
+
+Both sum and product operations route through this kernel and translate its
+typed failures into their public diagnostics. Each caller then independently
+adds its connective topology. The kernel has no connector or adjacency type,
+no arithmetic policy, no endpoint or KaTeX dependency, and no paint, geometry,
+timing, animation, or renderer vocabulary. This is the promoted binder seam;
+presentation implementations remain deliberately separate.
