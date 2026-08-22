@@ -168,7 +168,8 @@
     {
       "id": "bf18",
       "title": "Build product pressure semantics",
-      "status": "planned"
+      "summary": "Added a product-owned endpoint grammar and verified expansion operation for product k=0..2: shared scope/range proofs derive fresh ordered instances, while implicit multiplicative adjacency owns no connector paint and the operation forbids arithmetic or presentation authority.",
+      "status": "complete"
     },
     {
       "id": "bf19",

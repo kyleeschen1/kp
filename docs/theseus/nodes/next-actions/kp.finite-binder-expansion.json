@@ -517,6 +517,27 @@
       "scope": "finite-sum generated inventory authority and preservation closure",
       "checkedAt": "2026-08-22T16:20:34.176Z",
       "notes": "All 11 checks pass after regenerating the three derived equation-surface ledgers from the already-live finite-sum capability."
+    },
+    {
+      "command": "npm run test:finite-binder-expansion",
+      "status": "passed",
+      "scope": "bf18 finite-product semantic pressure",
+      "checkedAt": "2026-08-22T16:30:22.910Z",
+      "notes": "85 focused tests pass; product proves closed scope, ordered inclusive range, fresh instances, implicit adjacency, and no arithmetic or presentation authority."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "bf18 product endpoint and operation types",
+      "checkedAt": "2026-08-22T16:30:26.502Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "bf18 semantic and presentation boundary",
+      "checkedAt": "2026-08-22T16:30:32.726Z",
+      "notes": "All dependency, framework-neutral, semantic, presentation, and compiler authority gates passed."
     }
   ],
   "progress": {

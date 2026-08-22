@@ -231,3 +231,26 @@ caller passes. Symbolic-bound implementation then requires
 its own semantic endpoint, assumptions, omitted-range vocabulary, and
 reversible visual exemplar. Finite-product pressure remains necessary before
 promoting a sum-specific presentation seam as a general binder motif.
+
+## Finite-Product Semantic Pressure
+
+The canonical product
+
+\[
+\prod_{k=0}^{2} x_k \longrightarrow x_0x_1x_2
+\]
+
+now proves a second semantic caller without inheriting the sum presentation.
+It reuses the closed-integer scope proof and inclusive ordered range, then
+derives three fresh body instances and two product-owned multiplicative
+adjacencies. Those adjacencies are semantic relationships with no explicit
+connector glyph; the product operator therefore does not manufacture plus
+paint or imply that its large-operator glyph persists into the target.
+
+The product operation remains separate during pressure. It describes
+expansion but never evaluates the product, and it exposes no motion, timing,
+geometry, or renderer decisions. Product presentation and cross-caller
+promotion remain the next two boundaries. Only after both callers pass may
+their common scope, ordered instantiation, boundary lineage, and occurrence
+identity machinery be extracted; additive connectors and implicit
+multiplicative adjacency must stay operator-owned.
