@@ -30,6 +30,13 @@
       "scope": "md01 durable direction and contract linkage",
       "checkedAt": "2026-08-22T23:09:23.734Z",
       "notes": "Validated 1051 nodes and 24571 events after recording the exemplar-local symbolic-materiality decision."
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "passed",
+      "scope": "md02 explicit flat preservation baseline",
+      "checkedAt": "2026-08-22T23:12:22.326Z",
+      "notes": "Captured forward and reverse binary and three-factor samples at 1240 by 760 with exact dark, organic-subtle, flat presentation metadata; each sample retained one accessible native equation."
     }
   ],
   "allowedWork": [
@@ -67,7 +74,8 @@
     {
       "id": "md02",
       "title": "Capture flat binary log-product baseline",
-      "status": "planned"
+      "summary": "The stable log-product visual harness now selects and records the exact flat comparator instead of relying on URL defaults; its deterministic contact sheet and manifest pass.",
+      "status": "complete"
     },
     {
       "id": "md03",

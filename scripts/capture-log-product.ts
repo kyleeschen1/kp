@@ -10,6 +10,12 @@ import {
 import { createKpVisualReviewHarness } from "./visual-review-harness.ts";
 
 const outputRoot = path.resolve("tmp/codex/log-product-checkpoint");
+const baselinePresentation = Object.freeze({
+  theme: "dark",
+  style: "organic-subtle",
+  focus: "flat",
+  view: "animation-catalogue"
+} as const);
 const animations = Object.freeze([{
   id: "animation.algebra.log-product.product-to-sum",
   label: "two factors",
@@ -49,6 +55,10 @@ async function capture(): Promise<void> {
       const page = await harness.page({ viewport, colorScheme: "dark" });
       const url = new URL("/", harness.baseUrl);
       url.searchParams.set("artifact", animation.id);
+      url.searchParams.set("theme", baselinePresentation.theme);
+      url.searchParams.set("style", baselinePresentation.style);
+      url.searchParams.set("focus", baselinePresentation.focus);
+      url.searchParams.set("view", baselinePresentation.view);
       await page.goto(url.toString(), { waitUntil: "domcontentloaded" });
       const stage = page.locator(
         `[data-kp-animation-catalogue-stage] [data-kp-log-product-stage]`
@@ -86,7 +96,7 @@ async function capture(): Promise<void> {
     }
 
     const htmlSource = buildKpVisualContactSheetHtml(items, {
-      title: "Log product · mandatory human checkpoint",
+      title: "Log product · flat preservation baseline",
       columns: 3,
       imageFit: "contain"
     });
@@ -107,6 +117,7 @@ async function capture(): Promise<void> {
     await writeFile(manifest, `${JSON.stringify({
       schemaVersion: "kp.log-product-visual-checkpoint.v1",
       animationIds: animations.map(({ id }) => id),
+      presentation: baselinePresentation,
       viewport,
       samples: evidence,
       sheet: path.relative(process.cwd(), sheet),
