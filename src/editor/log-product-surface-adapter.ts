@@ -27,6 +27,9 @@ import {
   syncKpEquationMaterialLayer
 } from "../rendering/equation-material-layer-dom.ts";
 import {
+  applyKpLogProductMaterialDepthToDom
+} from "../rendering/log-product-material-depth-dom.ts";
+import {
   kpLogProductSemanticMotionBundles
 } from "../semantic/log-product-semantic-motion.ts";
 import {
@@ -251,6 +254,13 @@ function applyFrame(
     setAccessibleEndpoint(root, false);
   });
   const ownership = session.transit.apply(frame.semanticProgress);
+  const materialMode = projectKpLogProductMaterialPresentationMode(
+    session.player.dataset["kpEditorAnimationFocusExperiment"]
+  );
+  applyKpLogProductMaterialDepthToDom({
+    stage: session.stage,
+    mode: materialMode.depthMode
+  });
   const accessibleIndex = ownership.visualOwner === "source-native" ? 0 : 1;
   setAccessibleEndpoint(session.endpointRoots[accessibleIndex], true);
   session.stage.dataset["kpLogProductProgress"] = String(frame.semanticProgress);

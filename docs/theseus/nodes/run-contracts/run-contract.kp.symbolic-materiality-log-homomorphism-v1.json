@@ -163,6 +163,34 @@
       "scope": "md09 flat preservation comparator",
       "checkedAt": "2026-08-22T23:41:39.331Z",
       "notes": "Stable flat contact sheet regenerated successfully after the elevated-only gate."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "md10 initial owner projection boundary",
+      "checkedAt": "2026-08-22T23:48:51.270Z",
+      "notes": "The first adapter attempt passed scene track frames where material owner IDs were required. Reworked the renderer-local seam to consume the material layer's existing authored semantic datasets instead of inventing a parallel owner mapping."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "md10 corrected owner projection boundary",
+      "checkedAt": "2026-08-22T23:48:54.382Z",
+      "notes": "All typed surfaces passed after using the material layer's semantic owner datasets."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "md10 depth owner projection",
+      "checkedAt": "2026-08-22T23:48:57.298Z",
+      "notes": "40 focused tests passed; transit inputs remain unchanged, flat/no-depth produce no local treatment, and the DOM projector performs no layout reads or motion-property writes."
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "passed",
+      "scope": "md10 flat owner-projection preservation",
+      "checkedAt": "2026-08-22T23:49:12.820Z",
+      "notes": "Stable flat visual capture passed after the local depth-owner projection seam; flat mode creates no local presentations."
     }
   ],
   "allowedWork": [
@@ -248,7 +276,8 @@
     {
       "id": "md10",
       "title": "Project depth poses without changing authoritative geometry or ownership",
-      "status": "planned"
+      "summary": "Projected material intent onto existing semantically identified transit owners through local datasets and normalized variables; authoritative frame geometry, transform, opacity, ownership, and the flat comparator remain unchanged, with no layout reads.",
+      "status": "complete"
     },
     {
       "id": "md11",
