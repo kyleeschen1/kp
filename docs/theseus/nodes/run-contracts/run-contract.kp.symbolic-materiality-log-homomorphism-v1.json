@@ -107,6 +107,27 @@
       "scope": "md06 typed sampler boundary",
       "checkedAt": "2026-08-22T23:29:08.340Z",
       "notes": "Application, Node, test, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "md07 semantic role and phase bindings",
+      "checkedAt": "2026-08-22T23:33:27.360Z",
+      "notes": "33 focused tests passed; bindings cover the canonical frontier, allowed verbs, phase authority, and persistent factor pairs."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "md07 initial typed boundary",
+      "checkedAt": "2026-08-22T23:33:36.177Z",
+      "notes": "Initial test typing preserved const-tuple verb narrowness; production bindings were valid. Widened only the test lookup to the declared role interface."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "md07 corrected typed boundary",
+      "checkedAt": "2026-08-22T23:33:41.163Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks passed after the test-only annotation."
     }
   ],
   "allowedWork": [
@@ -174,7 +195,8 @@
     {
       "id": "md07",
       "title": "Bind physical roles to semantic entities and causal phases",
-      "status": "planned"
+      "summary": "Bound every material role to authored canonical entity IDs and homomorphic causal phases; factor continuity is paired explicitly and no meaning is inferred from rendered glyphs.",
+      "status": "complete"
     },
     {
       "id": "md08",
