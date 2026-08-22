@@ -128,6 +128,20 @@
       "scope": "md07 corrected typed boundary",
       "checkedAt": "2026-08-22T23:33:41.163Z",
       "notes": "Application, Node, tests, Svelte, and domain typechecks passed after the test-only annotation."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "md08 material lineage guard",
+      "checkedAt": "2026-08-22T23:37:13.410Z",
+      "notes": "35 focused tests passed, including factor continuity and distinct generated target-application lineage."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "md08 typed lineage contract",
+      "checkedAt": "2026-08-22T23:37:17.381Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks passed."
     }
   ],
   "allowedWork": [
@@ -201,7 +215,8 @@
     {
       "id": "md08",
       "title": "Guard factor persistence and generated application lineage",
-      "status": "planned"
+      "summary": "Compiled canonical correspondence into an executable lineage contract: factor semantic identity persists through distinct occurrences, while target logarithm applications are generated successors of one withdrawn source application.",
+      "status": "complete"
     },
     {
       "id": "md09",
