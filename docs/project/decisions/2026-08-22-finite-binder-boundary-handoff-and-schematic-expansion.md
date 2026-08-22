@@ -274,3 +274,25 @@ native-material cache, but imports no finite-sum motion or presentation module.
 The parallel product and sum implementations are deliberately still separate.
 The next pressure slice must identify only the laws both callers demonstrate;
 shared extraction remains a later, independently reversible promotion.
+
+## Cross-Caller Pressure Result
+
+Structurally different sum and product cases now pass the same laws with
+different binder names, body symbols, and integer ranges. The proved common
+surface is deliberately narrow:
+
+- a verified local binder scope and capture-avoidance proof;
+- an inclusive, ordered, finite range whose cardinality equals the target
+  instance count;
+- one fresh body occurrence and bound-reference occurrence per range value;
+- common body-template, reference-substitution, and boundary-value lineage;
+- exact, distinct source and target Native KaTeX paint owners;
+- immutable semantic results with no presentation or arithmetic authority.
+
+The pressure suite also proves what must not be shared. A sum owns explicit
+additive connectors and their paint. A product owns implicit multiplicative
+adjacency and no connector glyph. Their presentation plans, surface adapters,
+timing, and transit modules do not import one another. The next promotion slice
+may extract the proved scope, ordered-instance, identity, and lineage
+machinery, but it must leave connective topology, arithmetic, geometry,
+timing, and paint choreography with each operator caller.

@@ -587,6 +587,20 @@
       "scope": "bf19 equation preservation",
       "checkedAt": "2026-08-22T17:05:50.259Z",
       "notes": "Inventory, authority graph, and preservation matrix pass with the product caller."
+    },
+    {
+      "command": "npm run test:finite-binder-expansion",
+      "status": "passed",
+      "scope": "bf20 cross-caller pressure",
+      "checkedAt": "2026-08-22T17:10:36.040Z",
+      "notes": "96 focused checks prove common scope, finite-range, ordered-instance, identity, lineage, and Native KaTeX ownership laws across variant sum and product bodies while connective topology and presentation remain caller-owned."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "bf20 pressure test types",
+      "checkedAt": "2026-08-22T17:10:45.898Z",
+      "notes": "Cross-caller pressure fixtures and structural projections typecheck without introducing a production abstraction."
     }
   ],
   "progress": {
