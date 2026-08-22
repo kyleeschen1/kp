@@ -24,6 +24,7 @@ export type KpEquationSurfaceFamilyId =
   | "distribution-factoring"
   | "exponent-radical"
   | "fraction"
+  | "finite-binder"
   | "function-wrap"
   | "inequality"
   | "linear-algebra"
@@ -158,6 +159,7 @@ const familyEvidence = Object.freeze({
   "distribution-factoring": evidence("npm run test:distribution-pressure"),
   "exponent-radical": evidence("npm run test:semantic-animation-convergence"),
   fraction: evidence("npm run test:operation-presentation-plans"),
+  "finite-binder": evidence("npm run test:finite-binder-expansion"),
   "function-wrap": evidence("npm run test:semantic-animation-convergence"),
   inequality: evidence("npm run test:operation-presentation-plans"),
   "linear-algebra": evidence("npm run test:matrix-linear-map"),
@@ -300,7 +302,8 @@ function preservationRow(input: {
       mathSemantics:
         pathClass === "log-exponent-specialized" ||
         pathClass === "logarithm-change-of-base-specialized" ||
-        pathClass === "log-quotient-specialized"
+        pathClass === "log-quotient-specialized" ||
+        pathClass === "finite-binder-expansion-specialized"
           ? "katex-mathml" as const
           : "semantic-stage-aria-label" as const,
       reducedMotionAttribute:
@@ -314,7 +317,8 @@ function preservationRow(input: {
       endpointAuthority:
         pathClass === "log-exponent-specialized" ||
         pathClass === "logarithm-change-of-base-specialized" ||
-        pathClass === "log-quotient-specialized"
+        pathClass === "log-quotient-specialized" ||
+        pathClass === "finite-binder-expansion-specialized"
           ? "semantic-native-katex" as const
           : "labelled-semantic-stage" as const
     }),
@@ -349,7 +353,8 @@ function migrationObligations(input: {
   const endpointAuthority =
     authority.pathClass === "log-exponent-specialized" ||
     authority.pathClass === "logarithm-change-of-base-specialized" ||
-    authority.pathClass === "log-quotient-specialized"
+    authority.pathClass === "log-quotient-specialized" ||
+    authority.pathClass === "finite-binder-expansion-specialized"
       ? "semantic-native-katex" as const
       : "labelled-semantic-stage" as const;
   const frames = preservationCheckpoints.map((progress) => {
@@ -470,6 +475,7 @@ function familyForAnimation(animationId: string): KpEquationSurfaceFamilyId {
   if (animationId.includes("exponent") ||
       animationId.includes("radical")) return "exponent-radical";
   if (animationId.includes("fraction")) return "fraction";
+  if (animationId.includes("finite-sum")) return "finite-binder";
   if (animationId.includes("function-wrap")) return "function-wrap";
   if (animationId.includes("inequality")) return "inequality";
   if (animationId.includes("linear-algebra")) return "linear-algebra";

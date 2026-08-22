@@ -2,6 +2,7 @@ export type KpEquationSelectedSurfaceCapability =
   | "carrier-preserving-simplification"
   | "equation-katex"
   | "fraction-equivalence"
+  | "finite-binder-expansion"
   | "log-exponent"
   | "logarithm-change-of-base"
   | "log-quotient"
@@ -16,6 +17,7 @@ export type KpEquationPrimarySurfaceCapability =
   | "carrier-preserving-simplification"
   | "equation-katex"
   | "fraction-equivalence"
+  | "finite-binder-expansion"
   | "log-exponent"
   | "logarithm-change-of-base"
   | "log-quotient"
@@ -234,6 +236,15 @@ readonly KpEquationSurfaceFamilyDeclaration[] = Object.freeze([
       "editor-animation-surface.fraction-equivalence.canonical-native-katex",
     rendererSourcePath:
       "src/editor/fraction-equivalence-surface-adapter.ts"
+  }),
+  declaration({
+    id: "family.equation.finite-binder-expansion",
+    matches: (id) => id === "animation.equation.finite-sum-expansion.v1",
+    selectedCapabilityIds: ["finite-binder-expansion"],
+    primaryCapabilityId: "finite-binder-expansion",
+    rendererAdapterId:
+      "editor-animation-surface.finite-sum-expansion.canonical-native-katex",
+    rendererSourcePath: "src/editor/finite-sum-surface-adapter.ts"
   }),
   declaration({
     id: "family.equation.logarithm-change-of-base",
@@ -516,6 +527,17 @@ const waveBStructuralByAnimationId = Object.freeze(Object.fromEntries(
 
 export const kpWaveCEquationDispositionDeclarations:
 readonly KpWaveCEquationDispositionDeclaration[] = Object.freeze([
+  waveC({
+    animationId: "animation.equation.finite-sum-expansion.v1",
+    classification: "generated-bespoke",
+    disposition: "adapter-backed",
+    presentationRoute: "specialized-native-adapter",
+    authoritySourcePath: "src/editor/finite-sum-surface-adapter.ts",
+    genericLayerTransition: "forbidden",
+    rationale:
+      "The canonical finite-sum candidate remains local to its dedicated " +
+      "Native KaTeX adapter until the mandatory human visual checkpoint."
+  }),
   waveC({
     animationId:
       "animation.operation-evaluation.two-times-one-carrier",

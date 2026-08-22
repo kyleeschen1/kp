@@ -816,6 +816,32 @@
     ]
   },
   {
+    "animationId": "animation.equation.finite-sum-expansion.v1",
+    "title": "Expand a finite sum",
+    "summary": "Expand a finite sum",
+    "tags": [
+      "algebra",
+      "animation",
+      "editor",
+      "equation",
+      "katex",
+      "sum"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.equation.finite-sum-expansion.v1",
+    "representations": [
+      {
+        "id": "editor-animation.animation.equation.finite-sum-expansion.v1",
+        "label": "Expand a finite sum",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.equation.finite-sum-expansion.v1",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
     "animationId": "animation.algebra.log-product.product-to-sum",
     "title": "Expand a logarithm of a product",
     "summary": "A typed native-KaTeX exemplar for logarithm application fission.",

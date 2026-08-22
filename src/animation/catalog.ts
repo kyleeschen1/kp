@@ -91,6 +91,9 @@ import {
 import {
   createKpCompoundRootCarrierAnimationAsset
 } from "./compound-root-carrier-adapter.ts";
+import {
+  createKpFiniteSumExpansionExemplarAsset
+} from "./finite-sum-expansion-exemplar.ts";
 import { enrichKpMatrixLinearMapAsset } from
   "./matrix-linear-map-asset-enrichment.ts";
 
@@ -126,6 +129,7 @@ export function createGeneratedAlgebraAnimationAssets():
     createKpCanonicalCancellationPressureAnimationAsset(),
     createKpEvenRootSolveAnimationAsset(),
     createKpCompoundRootCarrierAnimationAsset(),
+    createKpFiniteSumExpansionExemplarAsset(),
     createFractionSimplificationAnimationAsset(),
     createExponentExpansionAnimationAsset(),
     createExponentRadicalRewriteAnimationAsset(),

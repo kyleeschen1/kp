@@ -324,11 +324,60 @@
       "scope": "bf15 compositor ownership and settlement.",
       "checkedAt": "2026-08-21T23:54:14.051Z",
       "notes": "82 tests passed."
+    },
+    {
+      "command": "npm run test:finite-binder-expansion",
+      "status": "passed",
+      "scope": "bf16 sum candidate, Catalogue reachability, URL routing, and ownership; 73 tests passed.",
+      "checkedAt": "2026-08-22T00:17:55.114Z",
+      "notes": "Focused finite-binder suite passed."
+    },
+    {
+      "command": "npm run test:browser:finite-binder-sum",
+      "status": "passed",
+      "scope": "bf16 Chromium Catalogue mounting, direct seeks, rewind, nonblank paint, review readiness, and URL restoration.",
+      "checkedAt": "2026-08-22T00:17:56.435Z",
+      "notes": "2 browser tests passed."
+    },
+    {
+      "command": "npm run visual:finite-binder-sum",
+      "status": "passed",
+      "scope": "bf16 wide and phone contact sheet with forward and reverse samples.",
+      "checkedAt": "2026-08-22T00:17:57.415Z",
+      "notes": "Generated tmp/codex/finite-binder-sum-checkpoint/contact-sheet.png and manifest.json."
+    },
+    {
+      "command": "npm run check:animation-library-display-catalog",
+      "status": "passed",
+      "scope": "bf16 Catalogue display metadata.",
+      "checkedAt": "2026-08-22T00:17:58.352Z",
+      "notes": "Generated display metadata is current."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "bf16 asset, capability, architecture, browser, and capture types.",
+      "checkedAt": "2026-08-22T00:17:59.352Z",
+      "notes": "All TypeScript, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "bf16 lazy capability, specialized authority path, preservation family, and dependency boundaries.",
+      "checkedAt": "2026-08-22T00:18:00.325Z",
+      "notes": "All architecture gates passed."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "bf16 selected finite-sum lazy chunks and outer Catalogue budgets.",
+      "checkedAt": "2026-08-22T00:18:01.609Z",
+      "notes": "Gate passed; finite-sum capability is 4.62 kB gzip plus 0.33 kB CSS, with a 6.66 kB gzip asset chunk."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Packaged a framework-neutral finite-sum semantic asset, pure externally clocked motion, immutable Native KaTeX transit session, and lazy-capability-ready surface adapter without registering product presentation yet."
+    "summary": "Published the candidate finite-sum exemplar at a stable Catalogue URL with lazy Native KaTeX capability ownership, dev review capture, direct-seek browser proof, wide/phone contact-sheet evidence, and measured bundle isolation; awaiting the mandatory human choreography decision before product pressure."
   },
   "expectedLearning": [
     "Whether finite sum expansion can make bound scope, ordered instantiation, and one-to-many lineage perceptually clear without false persistence.",

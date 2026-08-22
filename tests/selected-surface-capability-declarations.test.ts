@@ -70,6 +70,7 @@ test("every capability loader remains a literal dynamic import", async () => {
   );
   const paths = [
     "equation-surface-capability.ts",
+    "finite-sum-surface-capability.ts",
     "log-exponent-surface-capability.ts",
     "logarithm-change-of-base-surface-capability.ts",
     "log-quotient-surface-capability.ts",
@@ -116,6 +117,7 @@ test("equation capabilities no longer branch in the selected host", async () => 
   );
   for (const capabilityId of [
     "equation-katex",
+    "finite-binder-expansion",
     "log-exponent",
     "logarithm-change-of-base",
     "log-quotient",

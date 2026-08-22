@@ -26,6 +26,7 @@ export type KpEquationSurfaceAuthorityPathClass =
   | "log-quotient-specialized"
   | "log-product-specialized"
   | "exponential-homomorphism-specialized"
+  | "finite-binder-expansion-specialized"
   | "operation-evaluation-specialized";
 
 export interface KpEquationSurfaceAuthorityNode {
@@ -124,6 +125,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/semantic/exponential-homomorphism-correspondence.ts",
     "export function compileKpExponentialHomomorphismCorrespondence",
     "Exponential homomorphism mints occurrence identity from normalized power syntax."),
+  node("compiler.finite-binder-expansion", "compiler", "local",
+    "src/semantic/canonical-finite-sum-expansion.ts",
+    "export const kpCanonicalFiniteSumExpansionOperation",
+    "The candidate finite sum enters presentation only through its verified scope, range, and expansion operation."),
   node("motif.generic-transition", "motif", "compatibility",
     "src/editor/equation-transition-motifs.ts",
     "export function createKpEditorEquationTransitionMotifFrame",
@@ -156,6 +161,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/animation/exponential-homomorphism-motif.ts",
     "export const kpExponentialHomomorphismMotifSchema",
     "The pressure exemplar declares payload continuity and base succession without glyph inference."),
+  node("motif.finite-sum-ordered-fan-out", "motif", "local",
+    "src/animation/finite-sum-expansion-presentation-plan.ts",
+    "export function compileKpFiniteSumExpansionPresentationPlan",
+    "The unpromoted sum exemplar owns its ordered fan-out presentation locally."),
   node("timing.generic-phase-easing", "local-timing", "local",
     "src/editor/equation-stage-frame.ts",
     "const easedProgress = localProgress * localProgress",
@@ -192,6 +201,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/rendering/exponential-homomorphism-transit-session.ts",
     "export const kpExponentialHomomorphismTransitProfile",
     "The unpromoted pressure exemplar owns one deterministic transit profile."),
+  node("timing.finite-sum-candidate", "local-timing", "local",
+    "src/animation/finite-sum-expansion-presentation-plan.ts",
+    "export const kpCanonicalFiniteSumExpansionPresentationPlan",
+    "The candidate sum owns one reversible timing profile pending human review."),
   node("renderer.generic-dom-measurement", "renderer-inference", "compatibility",
     "src/editor/equation-surface-adapter.ts",
     "measureKpEquationTransitionGeometry({",
@@ -224,6 +237,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/rendering/exponential-homomorphism-transit-session.ts",
     "export function createKpExponentialHomomorphismTransitSession",
     "The exponential pressure exemplar composes the canonical Native KaTeX scene session."),
+  node("renderer.finite-sum-transit", "renderer-inference", "local",
+    "src/rendering/finite-sum-transit-session.ts",
+    "export function createKpFiniteSumTransitSession",
+    "The sum candidate composes measured Native KaTeX ownership through a local transit session."),
   node("fallback.generic-whole-equation", "fallback", "compatibility",
     "src/editor/equation-surface-adapter.ts",
     "function applyLayerMotion(",
@@ -256,6 +273,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/editor/exponential-homomorphism-surface-adapter.ts",
     "function showEndpoint(",
     "Exponential preparation failures retain the readable source endpoint."),
+  node("fallback.finite-sum-source", "fallback", "canonical",
+    "src/editor/finite-sum-surface-adapter.ts",
+    "session.stage.dataset[\"kpFiniteSumStage\"] = \"failed\"",
+    "Finite-sum preparation fails closed to its readable source endpoint."),
   node("sampler.generic-semantic-token", "direct-sampler", "compatibility",
     "src/editor/semantic-equation-player-adapter.ts",
     "export function createKpEditorSemanticEquationTokenFrame",
@@ -272,6 +293,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/animation/log-exponent-timeline.ts",
     "export function sampleKpLogExponentSequenceFrame",
     "The log-exponent adapter directly samples its local sequence."),
+  node("sampler.finite-sum-motion", "direct-sampler", "local",
+    "src/animation/finite-sum-expansion-motion.ts",
+    "export function sampleKpFiniteSumExpansionMotion",
+    "The candidate sum samples one pure normalized external clock."),
   node("sampler.semantic-motion-choreography", "direct-sampler", "canonical",
     "src/domain-ir/semantic-motion-choreography-compiler.ts",
     "export function sampleKpSemanticMotionChoreography",
@@ -515,6 +540,19 @@ KpEquationSurfaceAuthorityRow {
       samplers: ["sampler.operation-native-scene"]
     });
   }
+  if (pathClass === "finite-binder-expansion-specialized") {
+    return row(asset.id, pathClass, transformationTypes, {
+      semantic: asset.transformations.length,
+      nonSemantic: 0
+    }, {
+      compiler: ["compiler.finite-binder-expansion"],
+      motif: ["motif.finite-sum-ordered-fan-out"],
+      timing: ["timing.finite-sum-candidate"],
+      renderer: ["renderer.finite-sum-transit"],
+      fallback: ["fallback.finite-sum-source"],
+      samplers: ["sampler.finite-sum-motion"]
+    });
+  }
 
   let semantic = 0;
   for (const transformation of asset.transformations) {
@@ -637,6 +675,9 @@ function authorityPathClass(
     animationId ===
       "animation.algebra.exponential-homomorphism.sum-to-product"
   ) return "exponential-homomorphism-specialized";
+  if (animationId === "animation.equation.finite-sum-expansion.v1") {
+    return "finite-binder-expansion-specialized";
+  }
   return "generic-semantic-equation";
 }
 

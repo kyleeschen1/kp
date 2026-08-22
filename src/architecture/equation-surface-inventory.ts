@@ -50,7 +50,8 @@ export const kpPostBaselineEquationSurfaceIds = Object.freeze([
   "animation.algebra.radical.solve-x-squared-nine",
   "animation.algebra.radical.compound-carrier-normalization",
   "animation.operation-evaluation.two-times-one-carrier",
-  "animation.operation-evaluation.two-times-three"
+  "animation.operation-evaluation.two-times-three",
+  "animation.equation.finite-sum-expansion.v1"
 ] as const);
 
 export interface KpEquationSurfaceInventory {

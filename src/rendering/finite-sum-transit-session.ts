@@ -12,6 +12,9 @@ import {
   type KpNativeKatexSceneOwnershipFrame
 } from "./native-katex-scene-compositor.ts";
 import {
+  compileKpNativeKatexEndpointOwnershipObservation
+} from "./native-katex-endpoint-ownership.ts";
+import {
   createKpNativeKatexTrackProjection
 } from "./native-katex-track-projection.ts";
 import {
@@ -37,13 +40,19 @@ export function createKpFiniteSumTransitSession(input: {
   const mode = input.mode ?? "full";
   const ownership = createKpFiniteSumNativePaintOwnership(input);
   const operation = kpCanonicalFiniteSumExpansionOperation;
+  // Track IDs address the projected ownership observations, not the raw leaf
+  // handles. Resolve semantic entities in that same paint namespace.
+  const sourceObservation =
+    compileKpNativeKatexEndpointOwnershipObservation(ownership.source);
+  const targetObservation =
+    compileKpNativeKatexEndpointOwnershipObservation(ownership.target);
   const sourceEntities = new Map(
-    ownership.source.handle.observation.atoms.map((atom) =>
+    sourceObservation.atoms.map((atom) =>
       [atom.id, atom.semanticEntityId]
     )
   );
   const targetEntities = new Map(
-    ownership.target.handle.observation.atoms.map((atom) =>
+    targetObservation.atoms.map((atom) =>
       [atom.id, atom.semanticEntityId]
     )
   );
@@ -168,7 +177,11 @@ export function createKpFiniteSumTransitSession(input: {
           });
         }
         throw new Error(
-          `Finite-sum transit received unclassified ${track.lifecycle} track ${track.id}.`
+          `Finite-sum transit received unclassified ${track.lifecycle} track ` +
+          `${track.id} (${track.sourceAtomId ?? "no-source-atom"}:` +
+          `${sourceEntity ?? "no-source-entity"} -> ` +
+          `${track.targetAtomId ?? "no-target-atom"}:` +
+          `${targetEntity ?? "no-target-entity"}).`
         );
       }));
     }

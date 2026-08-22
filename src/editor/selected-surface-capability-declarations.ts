@@ -117,6 +117,19 @@ export const kpEditorSelectedSurfaceCapabilityDeclarations = Object.freeze([
     }
   }),
   declaration({
+    capabilityId: "finite-binder-expansion",
+    domain: "equation",
+    adapterIds: [
+      "editor-animation-surface.finite-sum-expansion.canonical-native-katex"
+    ],
+    registrationOwner: "provided-registry",
+    async loadAndRegister(registry, registrationGuardAdapterId) {
+      const client = await import("./finite-sum-surface-capability.ts");
+      await registerOnce(registry, registrationGuardAdapterId,
+        () => client.registerKpEditorFiniteSumSurfaceCapability(registry));
+    }
+  }),
+  declaration({
     capabilityId: "log-exponent",
     domain: "equation",
     adapterIds: [

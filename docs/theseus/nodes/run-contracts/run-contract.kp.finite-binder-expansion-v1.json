@@ -156,7 +156,8 @@
     {
       "id": "bf16",
       "title": "Human sum checkpoint",
-      "status": "planned"
+      "summary": "Published and verified the finite-sum Catalogue candidate, corrected real KaTeX ownership namespaces, generated wide/phone contact-sheet evidence, and reached the mandatory human visual checkpoint.",
+      "status": "complete"
     },
     {
       "id": "bf17",

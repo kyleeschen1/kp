@@ -68,17 +68,18 @@ test("large-operator syntax and paint exist without claiming binder motion", () 
   assert.equal(paintShape?.paintClass, "subtree");
 });
 
-test("no finite-binder animation is already present in the Catalogue", () => {
-  const proposedIds = [
-    finiteBinderExpansionPreflight.canonicalSum.proposedAnimationId,
-    finiteBinderExpansionPreflight.productPressure.proposedAnimationId
-  ];
-  assert.deepEqual(
-    displayCatalog.filter(({ animationId }) =>
-      proposedIds.includes(animationId as typeof proposedIds[number])
-    ),
-    []
+test("the visual checkpoint publishes only the finite-sum candidate", () => {
+  const sum = displayCatalog.filter(({ animationId }) =>
+    animationId ===
+      finiteBinderExpansionPreflight.canonicalSum.proposedAnimationId
   );
+  const product = displayCatalog.filter(({ animationId }) =>
+    animationId ===
+      finiteBinderExpansionPreflight.productPressure.proposedAnimationId
+  );
+  assert.equal(sum.length, 1);
+  assert.equal(sum[0]?.availability, "playable");
+  assert.deepEqual(product, []);
 });
 
 test("the sum checkpoint precedes product pressure", () => {

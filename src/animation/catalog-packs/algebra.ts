@@ -37,6 +37,9 @@ import {
   createKpCompoundRootCarrierAnimationAsset
 } from "../compound-root-carrier-adapter.ts";
 import {
+  createKpFiniteSumExpansionExemplarAsset
+} from "../finite-sum-expansion-exemplar.ts";
+import {
   kpAlgebraChoreographyCapabilities
 } from "../algebra-choreography-capabilities.ts";
 import type {
@@ -54,6 +57,7 @@ export function createKpAlgebraAnimationPack(): KpAlgebraAnimationPack {
       createKpCanonicalCancellationPressureAnimationAsset(),
       createKpEvenRootSolveAnimationAsset(),
       createKpCompoundRootCarrierAnimationAsset(),
+      createKpFiniteSumExpansionExemplarAsset(),
       createFractionSimplificationAnimationAsset(),
       createExponentExpansionAnimationAsset(),
       createExponentRadicalRewriteAnimationAsset(),

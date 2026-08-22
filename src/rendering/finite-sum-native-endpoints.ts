@@ -119,19 +119,24 @@ function createSourceEndpoint(): KpFiniteSumNativeEndpoint {
     latex: "\\sum",
     motionSuffix: "operator"
   });
-  const declaration = annotate(builder, {
-    occurrenceId: source.binder.id,
-    role: source.binder.role,
-    parentOccurrenceId: source.operator.id,
-    latex: source.binder.symbol,
-    motionSuffix: "declaration"
-  });
   const lower = annotate(builder, {
     occurrenceId: source.lowerBound.id,
     role: source.lowerBound.role,
     parentOccurrenceId: source.operator.id,
     latex: String(source.lowerBound.value),
     motionSuffix: "lower"
+  });
+  // The declaration owns its equality syntax as compound paint. Leaving the
+  // separator outside this wrapper creates real KaTeX ink with no semantic
+  // owner even though `i` and `1` are individually annotated.
+  const declaration = annotate(builder, {
+    occurrenceId: source.binder.id,
+    role: source.binder.role,
+    parentOccurrenceId: source.operator.id,
+    latex: `${source.binder.symbol}=${lower}`,
+    annotationLatex: `${source.binder.symbol}=${source.lowerBound.value}`,
+    motionSuffix: "declaration",
+    positionBeforeOccurrenceId: source.lowerBound.id
   });
   const upper = annotate(builder, {
     occurrenceId: source.upperBound.id,
@@ -158,7 +163,7 @@ function createSourceEndpoint(): KpFiniteSumNativeEndpoint {
   return finishEndpoint(builder, {
     rawLatex: KP_CANONICAL_FINITE_SUM_SOURCE_LATEX,
     annotatedLatex:
-      `${operator}_{${declaration}=${lower}}^{${upper}} ${body}`,
+      `${operator}_{${declaration}}^{${upper}} ${body}`,
     accessibleText: "the sum from i equals one to three of a sub i"
   });
 }
@@ -219,14 +224,15 @@ function annotate(builder: EndpointBuilder, input: {
   readonly annotationLatex?: string | undefined;
   readonly parentOccurrenceId?: KpFiniteBinderSemanticId | undefined;
   readonly motionSuffix: string;
+  readonly positionBeforeOccurrenceId?: KpFiniteBinderSemanticId | undefined;
 }): string {
   const motionId = `${builder.stateId}.${input.motionSuffix}`;
-  builder.annotations.push({
+  const annotation = {
     selectorId: input.occurrenceId,
     motionId,
     latex: input.annotationLatex ?? input.latex
-  });
-  builder.nodes.push({
+  };
+  const node = {
     occurrenceId: input.occurrenceId,
     semanticId: input.occurrenceId,
     role: input.role,
@@ -236,7 +242,19 @@ function annotate(builder: EndpointBuilder, input: {
     motionId,
     presentationGroupId:
       `${builder.rootPresentationGroupId}.node.${input.motionSuffix}`
-  });
+  };
+  const insertionIndex = input.positionBeforeOccurrenceId === undefined
+    ? -1
+    : builder.nodes.findIndex(({ occurrenceId }) =>
+        occurrenceId === input.positionBeforeOccurrenceId
+      );
+  if (insertionIndex < 0) {
+    builder.annotations.push(annotation);
+    builder.nodes.push(node);
+  } else {
+    builder.annotations.splice(insertionIndex, 0, annotation);
+    builder.nodes.splice(insertionIndex, 0, node);
+  }
   return `\\htmlData{kp-motion-id=${motionId}}{${input.latex}}`;
 }
 

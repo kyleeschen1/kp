@@ -41,6 +41,7 @@ export const kpEditorSelectedSurfaceCapabilityValues = Object.freeze([
   "carrier-preserving-simplification",
   "equation-katex",
   "fraction-equivalence",
+  "finite-binder-expansion",
   "log-exponent",
   "logarithm-change-of-base",
   "log-quotient",
