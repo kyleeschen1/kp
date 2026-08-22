@@ -142,6 +142,27 @@
       "scope": "md08 typed lineage contract",
       "checkedAt": "2026-08-22T23:37:17.381Z",
       "notes": "Application, Node, tests, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "md09 presentation gate",
+      "checkedAt": "2026-08-22T23:41:34.183Z",
+      "notes": "37 focused tests passed; only elevated maps to active material mode, and no new clock is introduced."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "md09 typed presentation gate",
+      "checkedAt": "2026-08-22T23:41:37.411Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "passed",
+      "scope": "md09 flat preservation comparator",
+      "checkedAt": "2026-08-22T23:41:39.331Z",
+      "notes": "Stable flat contact sheet regenerated successfully after the elevated-only gate."
     }
   ],
   "allowedWork": [
@@ -221,7 +242,8 @@
     {
       "id": "md09",
       "title": "Gate treatment through existing elevated focus mode",
-      "status": "planned"
+      "summary": "Mapped the existing focus selector to a local presentation gate: elevated alone activates material depth and inline typography; flat, no-depth, and unknown values remain inert, with no new clock.",
+      "status": "complete"
     },
     {
       "id": "md10",

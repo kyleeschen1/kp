@@ -4,6 +4,9 @@ import {
   isKpLogProductAnimationId
 } from "../semantic/log-product-ids.ts";
 import {
+  projectKpLogProductMaterialPresentationMode
+} from "../animation/log-product-material-depth-mode.ts";
+import {
   sampleKpSemanticMotionChoreography,
   type KpCompiledSemanticMotionChoreography
 } from "../domain-ir/public-api.ts";
@@ -79,6 +82,7 @@ export const kpEditorLogProductSurfaceAdapter = Object.freeze({
       void prepareSurface(session, generation);
     }
     session.pendingState = state;
+    syncMaterialPresentationMode(session);
     if (session.transit !== undefined) applyFrame(session, state);
   }
 } satisfies KpEditorAnimationSurfaceAdapter);
@@ -139,6 +143,17 @@ function mountSurface(
     pendingState: state,
     disposed: false
   };
+}
+
+function syncMaterialPresentationMode(
+  session: KpLogProductSurfaceSession
+): void {
+  const mode = projectKpLogProductMaterialPresentationMode(
+    session.player.dataset["kpEditorAnimationFocusExperiment"]
+  );
+  session.stage.dataset["kpLogProductMaterialDepthMode"] = mode.depthMode;
+  session.stage.dataset["kpLogProductTypography"] = mode.typography;
+  session.stage.dataset["kpLogProductMaterialActive"] = String(mode.active);
 }
 
 async function prepareSurface(
