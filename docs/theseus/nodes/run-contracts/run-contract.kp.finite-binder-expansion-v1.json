@@ -174,7 +174,8 @@
     {
       "id": "bf19",
       "title": "Implement product presentation",
-      "status": "planned"
+      "summary": "Added an independently owned Native KaTeX finite-product presentation with retained equivalence context, ordered implicit-adjacency factor generation, deterministic external-clock motion, lazy Catalogue discovery, exact browser restoration, and wide/phone visual evidence while preserving the approved sum.",
+      "status": "complete"
     },
     {
       "id": "bf20",

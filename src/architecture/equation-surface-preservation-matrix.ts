@@ -475,7 +475,8 @@ function familyForAnimation(animationId: string): KpEquationSurfaceFamilyId {
   if (animationId.includes("exponent") ||
       animationId.includes("radical")) return "exponent-radical";
   if (animationId.includes("fraction")) return "fraction";
-  if (animationId.includes("finite-sum")) return "finite-binder";
+  if (animationId.includes("finite-sum") ||
+      animationId.includes("finite-product")) return "finite-binder";
   if (animationId.includes("function-wrap")) return "function-wrap";
   if (animationId.includes("inequality")) return "inequality";
   if (animationId.includes("linear-algebra")) return "linear-algebra";

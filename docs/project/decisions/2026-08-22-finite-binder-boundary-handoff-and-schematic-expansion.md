@@ -254,3 +254,23 @@ promotion remain the next two boundaries. Only after both callers pass may
 their common scope, ordered instantiation, boundary lineage, and occurrence
 identity machinery be extracted; additive connectors and implicit
 multiplicative adjacency must stay operator-owned.
+
+## Finite-Product Presentation Pressure
+
+The product now has an independently owned native-KaTeX presentation path. It
+retains the source product and equality relation, generates fresh target
+factors from left to right, and settles onto exact target-native paint. Its
+multiplicative adjacency is visible only as native factor spacing: no plus,
+dot, or multiplication glyph is invented by the presentation layer.
+
+The target factors and their introduced-reference tracks share one intentional
+contact cohort because their overlap expresses assembly of the same target
+subtree. This exception is semantic and typed; it does not relax the generic
+collision gate for unrelated material. Direct seek, reverse seek, URL restore,
+and phone and wide visual samples all use one external clock.
+
+This caller reuses the generic equation compositor and its opt-in dual-revision
+native-material cache, but imports no finite-sum motion or presentation module.
+The parallel product and sum implementations are deliberately still separate.
+The next pressure slice must identify only the laws both callers demonstrate;
+shared extraction remains a later, independently reversible promotion.

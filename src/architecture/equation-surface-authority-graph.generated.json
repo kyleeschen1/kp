@@ -107,6 +107,14 @@
       "summary": "The candidate finite sum enters presentation only through its verified scope, range, and expansion operation."
     },
     {
+      "id": "compiler.finite-product-expansion",
+      "category": "compiler",
+      "authority": "local",
+      "sourcePath": "src/semantic/canonical-finite-product-expansion.ts",
+      "sourceNeedle": "export const kpCanonicalFiniteProductExpansionOperation",
+      "summary": "The product pressure caller enters presentation only through its verified scope, range, adjacency, and expansion operation."
+    },
+    {
       "id": "motif.generic-transition",
       "category": "motif",
       "authority": "compatibility",
@@ -177,6 +185,14 @@
       "sourcePath": "src/animation/finite-sum-expansion-presentation-plan.ts",
       "sourceNeedle": "export function compileKpFiniteSumExpansionPresentationPlan",
       "summary": "The unpromoted sum exemplar owns its ordered fan-out presentation locally."
+    },
+    {
+      "id": "motif.finite-product-ordered-generation",
+      "category": "motif",
+      "authority": "local",
+      "sourcePath": "src/animation/finite-product-expansion-presentation-plan.ts",
+      "sourceNeedle": "export function compileKpFiniteProductExpansionPresentationPlan",
+      "summary": "The product pressure caller owns ordered adjacent-factor generation without additive connector paint."
     },
     {
       "id": "timing.generic-phase-easing",
@@ -259,6 +275,14 @@
       "summary": "The candidate sum owns one reversible timing profile pending human review."
     },
     {
+      "id": "timing.finite-product-candidate",
+      "category": "local-timing",
+      "authority": "local",
+      "sourcePath": "src/animation/finite-product-expansion-presentation-plan.ts",
+      "sourceNeedle": "export const kpCanonicalFiniteProductExpansionPresentationPlan",
+      "summary": "The product pressure caller owns one reversible timing profile pending cross-caller pressure."
+    },
+    {
       "id": "renderer.generic-dom-measurement",
       "category": "renderer-inference",
       "authority": "compatibility",
@@ -329,6 +353,14 @@
       "sourcePath": "src/rendering/finite-sum-transit-session.ts",
       "sourceNeedle": "export function createKpFiniteSumTransitSession",
       "summary": "The sum candidate composes measured Native KaTeX ownership through a local transit session."
+    },
+    {
+      "id": "renderer.finite-product-transit",
+      "category": "renderer-inference",
+      "authority": "local",
+      "sourcePath": "src/rendering/finite-product-transit-session.ts",
+      "sourceNeedle": "export function createKpFiniteProductTransitSession",
+      "summary": "The product pressure caller composes measured Native KaTeX ownership through a product-owned transit session."
     },
     {
       "id": "fallback.generic-whole-equation",
@@ -403,6 +435,14 @@
       "summary": "Finite-sum preparation fails closed to its readable source endpoint."
     },
     {
+      "id": "fallback.finite-product-source",
+      "category": "fallback",
+      "authority": "canonical",
+      "sourcePath": "src/editor/finite-product-surface-adapter.ts",
+      "sourceNeedle": "session.stage.dataset[\"kpFiniteProductStage\"] = \"failed\"",
+      "summary": "Finite-product preparation fails closed to its readable source endpoint."
+    },
+    {
       "id": "sampler.generic-semantic-token",
       "category": "direct-sampler",
       "authority": "compatibility",
@@ -441,6 +481,14 @@
       "sourcePath": "src/animation/finite-sum-expansion-motion.ts",
       "sourceNeedle": "export function sampleKpFiniteSumExpansionMotion",
       "summary": "The candidate sum samples one pure normalized external clock."
+    },
+    {
+      "id": "sampler.finite-product-motion",
+      "category": "direct-sampler",
+      "authority": "local",
+      "sourcePath": "src/animation/finite-product-expansion-motion.ts",
+      "sourceNeedle": "export function sampleKpFiniteProductExpansionMotion",
+      "summary": "The product pressure caller samples one pure normalized external clock."
     },
     {
       "id": "sampler.semantic-motion-choreography",
@@ -974,6 +1022,43 @@
         "sampler.generic-semantic-token",
         "sampler.linear-rearrangement",
         "sampler.witnessed-annihilation"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.equation.finite-product-expansion.v1",
+      "pathClass": "finite-product-expansion-specialized",
+      "transformationTypes": [
+        "finiteBinderExpand"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 1,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.finite-product-expansion"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.finite-product-ordered-generation"
+      ],
+      "localTimingNodeIds": [
+        "timing.finite-product-candidate"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.finite-product-transit"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.finite-product-source"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.finite-product-motion"
       ]
     },
     {

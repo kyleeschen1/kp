@@ -27,6 +27,7 @@ export type KpEquationSurfaceAuthorityPathClass =
   | "log-product-specialized"
   | "exponential-homomorphism-specialized"
   | "finite-binder-expansion-specialized"
+  | "finite-product-expansion-specialized"
   | "operation-evaluation-specialized";
 
 export interface KpEquationSurfaceAuthorityNode {
@@ -129,6 +130,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/semantic/canonical-finite-sum-expansion.ts",
     "export const kpCanonicalFiniteSumExpansionOperation",
     "The candidate finite sum enters presentation only through its verified scope, range, and expansion operation."),
+  node("compiler.finite-product-expansion", "compiler", "local",
+    "src/semantic/canonical-finite-product-expansion.ts",
+    "export const kpCanonicalFiniteProductExpansionOperation",
+    "The product pressure caller enters presentation only through its verified scope, range, adjacency, and expansion operation."),
   node("motif.generic-transition", "motif", "compatibility",
     "src/editor/equation-transition-motifs.ts",
     "export function createKpEditorEquationTransitionMotifFrame",
@@ -165,6 +170,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/animation/finite-sum-expansion-presentation-plan.ts",
     "export function compileKpFiniteSumExpansionPresentationPlan",
     "The unpromoted sum exemplar owns its ordered fan-out presentation locally."),
+  node("motif.finite-product-ordered-generation", "motif", "local",
+    "src/animation/finite-product-expansion-presentation-plan.ts",
+    "export function compileKpFiniteProductExpansionPresentationPlan",
+    "The product pressure caller owns ordered adjacent-factor generation without additive connector paint."),
   node("timing.generic-phase-easing", "local-timing", "local",
     "src/editor/equation-stage-frame.ts",
     "const easedProgress = localProgress * localProgress",
@@ -205,6 +214,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/animation/finite-sum-expansion-presentation-plan.ts",
     "export const kpCanonicalFiniteSumExpansionPresentationPlan",
     "The candidate sum owns one reversible timing profile pending human review."),
+  node("timing.finite-product-candidate", "local-timing", "local",
+    "src/animation/finite-product-expansion-presentation-plan.ts",
+    "export const kpCanonicalFiniteProductExpansionPresentationPlan",
+    "The product pressure caller owns one reversible timing profile pending cross-caller pressure."),
   node("renderer.generic-dom-measurement", "renderer-inference", "compatibility",
     "src/editor/equation-surface-adapter.ts",
     "measureKpEquationTransitionGeometry({",
@@ -241,6 +254,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/rendering/finite-sum-transit-session.ts",
     "export function createKpFiniteSumTransitSession",
     "The sum candidate composes measured Native KaTeX ownership through a local transit session."),
+  node("renderer.finite-product-transit", "renderer-inference", "local",
+    "src/rendering/finite-product-transit-session.ts",
+    "export function createKpFiniteProductTransitSession",
+    "The product pressure caller composes measured Native KaTeX ownership through a product-owned transit session."),
   node("fallback.generic-whole-equation", "fallback", "compatibility",
     "src/editor/equation-surface-adapter.ts",
     "function applyLayerMotion(",
@@ -277,6 +294,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/editor/finite-sum-surface-adapter.ts",
     "session.stage.dataset[\"kpFiniteSumStage\"] = \"failed\"",
     "Finite-sum preparation fails closed to its readable source endpoint."),
+  node("fallback.finite-product-source", "fallback", "canonical",
+    "src/editor/finite-product-surface-adapter.ts",
+    "session.stage.dataset[\"kpFiniteProductStage\"] = \"failed\"",
+    "Finite-product preparation fails closed to its readable source endpoint."),
   node("sampler.generic-semantic-token", "direct-sampler", "compatibility",
     "src/editor/semantic-equation-player-adapter.ts",
     "export function createKpEditorSemanticEquationTokenFrame",
@@ -297,6 +318,10 @@ export const kpEquationSurfaceAuthorityNodes = Object.freeze([
     "src/animation/finite-sum-expansion-motion.ts",
     "export function sampleKpFiniteSumExpansionMotion",
     "The candidate sum samples one pure normalized external clock."),
+  node("sampler.finite-product-motion", "direct-sampler", "local",
+    "src/animation/finite-product-expansion-motion.ts",
+    "export function sampleKpFiniteProductExpansionMotion",
+    "The product pressure caller samples one pure normalized external clock."),
   node("sampler.semantic-motion-choreography", "direct-sampler", "canonical",
     "src/domain-ir/semantic-motion-choreography-compiler.ts",
     "export function sampleKpSemanticMotionChoreography",
@@ -553,6 +578,19 @@ KpEquationSurfaceAuthorityRow {
       samplers: ["sampler.finite-sum-motion"]
     });
   }
+  if (pathClass === "finite-product-expansion-specialized") {
+    return row(asset.id, pathClass, transformationTypes, {
+      semantic: asset.transformations.length,
+      nonSemantic: 0
+    }, {
+      compiler: ["compiler.finite-product-expansion"],
+      motif: ["motif.finite-product-ordered-generation"],
+      timing: ["timing.finite-product-candidate"],
+      renderer: ["renderer.finite-product-transit"],
+      fallback: ["fallback.finite-product-source"],
+      samplers: ["sampler.finite-product-motion"]
+    });
+  }
 
   let semantic = 0;
   for (const transformation of asset.transformations) {
@@ -677,6 +715,9 @@ function authorityPathClass(
   ) return "exponential-homomorphism-specialized";
   if (animationId === "animation.equation.finite-sum-expansion.v1") {
     return "finite-binder-expansion-specialized";
+  }
+  if (animationId === "animation.equation.finite-product-expansion.v1") {
+    return "finite-product-expansion-specialized";
   }
   return "generic-semantic-equation";
 }

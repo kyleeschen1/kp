@@ -538,6 +538,55 @@
       "scope": "bf18 semantic and presentation boundary",
       "checkedAt": "2026-08-22T16:30:32.726Z",
       "notes": "All dependency, framework-neutral, semantic, presentation, and compiler authority gates passed."
+    },
+    {
+      "command": "npm run test:finite-binder-expansion",
+      "status": "passed",
+      "scope": "bf19 product presentation",
+      "checkedAt": "2026-08-22T17:05:44.360Z",
+      "notes": "91 focused semantic and presentation checks pass."
+    },
+    {
+      "command": "npm run test:browser:finite-binder-product",
+      "status": "passed",
+      "scope": "bf19 product browser",
+      "checkedAt": "2026-08-22T17:05:45.460Z",
+      "notes": "Direct seek and arbitrary URL restoration pass in Chromium."
+    },
+    {
+      "command": "npm run visual:finite-binder-product",
+      "status": "passed",
+      "scope": "bf19 product visual checkpoint",
+      "checkedAt": "2026-08-22T17:05:46.388Z",
+      "notes": "Wide and phone contact sheet generated with retained source and equality context."
+    },
+    {
+      "command": "npm run test:browser:finite-binder-sum",
+      "status": "passed",
+      "scope": "bf19 sum preservation",
+      "checkedAt": "2026-08-22T17:05:47.329Z",
+      "notes": "Approved finite-sum direct seek and URL restoration remain unchanged."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "bf19 type boundary",
+      "checkedAt": "2026-08-22T17:05:48.273Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "bf19 architecture boundary",
+      "checkedAt": "2026-08-22T17:05:49.321Z",
+      "notes": "Dependency, framework-neutral, semantic animation, and equation authority gates pass."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "bf19 equation preservation",
+      "checkedAt": "2026-08-22T17:05:50.259Z",
+      "notes": "Inventory, authority graph, and preservation matrix pass with the product caller."
     }
   ],
   "progress": {

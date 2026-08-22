@@ -257,6 +257,37 @@
     }
   },
   {
+    "id": "editor-animation.animation.equation.finite-product-expansion.v1",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.equation.finite-product-expansion.v1",
+    "title": "Expand a finite product",
+    "summary": "Expand a finite product",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 6000,
+    "beatCount": 120,
+    "tags": [
+      "algebra",
+      "animation",
+      "equation",
+      "katex",
+      "product"
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
+  },
+  {
     "id": "editor-animation.animation.generated.fraction-expression.two-fourths",
     "kind": "editor-animation-descriptor",
     "animationId": "animation.generated.fraction-expression.two-fourths",

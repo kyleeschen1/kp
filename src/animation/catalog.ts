@@ -94,6 +94,9 @@ import {
 import {
   createKpFiniteSumExpansionExemplarAsset
 } from "./finite-sum-expansion-exemplar.ts";
+import {
+  createKpFiniteProductExpansionExemplarAsset
+} from "./finite-product-expansion-exemplar.ts";
 import { enrichKpMatrixLinearMapAsset } from
   "./matrix-linear-map-asset-enrichment.ts";
 
@@ -130,6 +133,7 @@ export function createGeneratedAlgebraAnimationAssets():
     createKpEvenRootSolveAnimationAsset(),
     createKpCompoundRootCarrierAnimationAsset(),
     createKpFiniteSumExpansionExemplarAsset(),
+    createKpFiniteProductExpansionExemplarAsset(),
     createFractionSimplificationAnimationAsset(),
     createExponentExpansionAnimationAsset(),
     createExponentRadicalRewriteAnimationAsset(),

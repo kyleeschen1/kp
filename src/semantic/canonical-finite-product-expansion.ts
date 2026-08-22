@@ -12,6 +12,10 @@ export const KP_CANONICAL_FINITE_PRODUCT_SOURCE_LATEX =
   "\\prod_{k=0}^{2} x_k" as const;
 export const KP_CANONICAL_FINITE_PRODUCT_TARGET_LATEX =
   "x_0x_1x_2" as const;
+export const KP_CANONICAL_FINITE_PRODUCT_SOURCE_STATE_ID =
+  "finite-product.source" as const;
+export const KP_CANONICAL_FINITE_PRODUCT_TARGET_STATE_ID =
+  "finite-product.target" as const;
 
 const source = normalizeKpFiniteProductSourceEndpoint(
   KP_CANONICAL_FINITE_PRODUCT_SOURCE_LATEX

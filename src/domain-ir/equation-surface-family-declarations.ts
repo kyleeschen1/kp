@@ -247,6 +247,15 @@ readonly KpEquationSurfaceFamilyDeclaration[] = Object.freeze([
     rendererSourcePath: "src/editor/finite-sum-surface-adapter.ts"
   }),
   declaration({
+    id: "family.equation.finite-binder-expansion.product-pressure",
+    matches: (id) => id === "animation.equation.finite-product-expansion.v1",
+    selectedCapabilityIds: ["finite-binder-expansion"],
+    primaryCapabilityId: "finite-binder-expansion",
+    rendererAdapterId:
+      "editor-animation-surface.finite-product-expansion.canonical-native-katex",
+    rendererSourcePath: "src/editor/finite-product-surface-adapter.ts"
+  }),
+  declaration({
     id: "family.equation.logarithm-change-of-base",
     matches: (id) => id === "animation.equation.logarithm-change-of-base.v1",
     selectedCapabilityIds: ["logarithm-change-of-base"],
@@ -527,6 +536,17 @@ const waveBStructuralByAnimationId = Object.freeze(Object.fromEntries(
 
 export const kpWaveCEquationDispositionDeclarations:
 readonly KpWaveCEquationDispositionDeclaration[] = Object.freeze([
+  waveC({
+    animationId: "animation.equation.finite-product-expansion.v1",
+    classification: "generated-bespoke",
+    disposition: "adapter-backed",
+    presentationRoute: "specialized-native-adapter",
+    authoritySourcePath: "src/editor/finite-product-surface-adapter.ts",
+    genericLayerTransition: "forbidden",
+    rationale:
+      "The finite-product pressure caller remains product-owned until its " +
+      "presentation and cross-caller laws pass independently."
+  }),
   waveC({
     animationId: "animation.equation.finite-sum-expansion.v1",
     classification: "generated-bespoke",

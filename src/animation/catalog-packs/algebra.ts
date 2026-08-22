@@ -40,6 +40,9 @@ import {
   createKpFiniteSumExpansionExemplarAsset
 } from "../finite-sum-expansion-exemplar.ts";
 import {
+  createKpFiniteProductExpansionExemplarAsset
+} from "../finite-product-expansion-exemplar.ts";
+import {
   kpAlgebraChoreographyCapabilities
 } from "../algebra-choreography-capabilities.ts";
 import type {
@@ -58,6 +61,7 @@ export function createKpAlgebraAnimationPack(): KpAlgebraAnimationPack {
       createKpEvenRootSolveAnimationAsset(),
       createKpCompoundRootCarrierAnimationAsset(),
       createKpFiniteSumExpansionExemplarAsset(),
+      createKpFiniteProductExpansionExemplarAsset(),
       createFractionSimplificationAnimationAsset(),
       createExponentExpansionAnimationAsset(),
       createExponentRadicalRewriteAnimationAsset(),

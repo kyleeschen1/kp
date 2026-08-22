@@ -42,7 +42,8 @@ test("finite sum is reachable through one lazy Catalogue capability", async () =
     "finite-binder-expansion"
   );
   assert.deepEqual(capability.adapterIds, [
-    "editor-animation-surface.finite-sum-expansion.canonical-native-katex"
+    "editor-animation-surface.finite-sum-expansion.canonical-native-katex",
+    "editor-animation-surface.finite-product-expansion.canonical-native-katex"
   ]);
 });
 

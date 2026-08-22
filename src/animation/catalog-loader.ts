@@ -120,6 +120,7 @@ export const kpAnimationCatalogPackDeclarations: readonly KpAnimationCatalogPack
         id.startsWith("animation.algebra.log-quotient.") ||
         id.startsWith("animation.algebra.radical.") ||
         id === "animation.equation.finite-sum-expansion.v1" ||
+        id === "animation.equation.finite-product-expansion.v1" ||
         id === "animation.equation.logarithm-change-of-base.v1" ||
         id.startsWith("animation.equation.fraction-equivalence.") ||
         id.startsWith("animation.inequality."),
