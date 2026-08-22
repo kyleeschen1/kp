@@ -12,6 +12,7 @@ export function formatKpAnimationUrlPlayhead(value: number): string {
 
 export interface KpAnimationUrlReplaceScheduler {
   readonly request: (replace: () => void) => void;
+  readonly defer: (replace: () => void) => void;
   readonly flush: () => void;
   readonly dispose: () => void;
 }
@@ -111,6 +112,11 @@ export function createKpAnimationUrlReplaceScheduler(input: {
       } else {
         scheduleTrailingCommit();
       }
+    },
+    defer(replace: () => void): void {
+      if (disposed) return;
+      latestReplace = replace;
+      cancelTimer();
     },
     flush(): void {
       if (!disposed) commit();

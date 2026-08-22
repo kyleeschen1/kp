@@ -67,6 +67,9 @@ export function sampleKpNativeKatexSceneTrackFrames(
       rect,
       ...(sceneTrack.motionMetrics ? { metricProgress: paintProgress } : {}),
       ...(materialScale === undefined ? {} : { materialScale }),
+      ...(sceneTrack.materialPositioning === undefined
+        ? {}
+        : { materialPositioning: sceneTrack.materialPositioning }),
       ...(paintAlignmentRect === undefined
         ? {}
         : {

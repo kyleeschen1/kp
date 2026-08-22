@@ -17,6 +17,7 @@ import {
 } from "./native-katex-fragment-observer.ts";
 import {
   type KpEquationMaterialLayerOwnerFrame,
+  retainKpEquationMaterialOwnerVisual,
   setKpEquationMaterialOwnerVisual,
   syncKpEquationMaterialLayer
 } from "./equation-material-layer-dom.ts";
@@ -1043,18 +1044,29 @@ export function realizeKpNativeKatexTypographyStylePlan(input: {
       revisionKey:
         `target:${entry.targetPaintAtomId}:${entry.targetStyleFingerprint}`
     });
+    retainKpEquationMaterialOwnerVisual(owner);
     const endpointIdentity = frame.translateX === 0 && frame.translateY === 0 &&
       frame.scaleX === 1 && frame.scaleY === 1;
-    owner.style.left = `${entry.targetRect.left}px`;
-    owner.style.top = `${entry.targetRect.top}px`;
+    const compositorPositioning =
+      owner.dataset["kpEquationMaterialPositioning"] === "transform";
+    owner.style.left = compositorPositioning
+      ? "0px"
+      : `${entry.targetRect.left}px`;
+    owner.style.top = compositorPositioning
+      ? "0px"
+      : `${entry.targetRect.top}px`;
+    owner.style.translate = compositorPositioning
+      ? `${entry.targetRect.left}px ${entry.targetRect.top}px`
+      : "none";
     owner.style.width = `${entry.targetRect.width}px`;
     owner.style.height = `${entry.targetRect.height}px`;
     owner.style.transformOrigin = "0 0";
     // WebKit repaints even identity transforms; remove them before settlement.
-    owner.style.transform = endpointIdentity
+    const localTransform = endpointIdentity
       ? "none"
-      : `translate(${frame.translateX}px, ${frame.translateY}px) ` +
+      : ` translate(${frame.translateX}px, ${frame.translateY}px) ` +
         `scale(${frame.scaleX}, ${frame.scaleY})`;
+    owner.style.transform = localTransform.trim();
     if (visual instanceof HTMLElement) {
       owner.dataset["kpNativeKatexGlyphPaintFrame"] =
         entry.glyphPaintFrame === undefined ? "missing" : "measured";
@@ -1467,12 +1479,15 @@ export function createKpCanonicalNativeKatexSceneSession(
       : { supplementalMaterialOwners: plan.supplementalMaterialOwners })
   });
   // Successor synthesis may own every target, leaving no residual handoff.
+  let typographyWarmup:
+    | KpNativeKatexTypographyStyleFrame
+    | undefined;
   const typographyPlan = glyphLinks.length === 0
     ? undefined
     : (() => {
         const microscope = 1 - plan.endpointDwellFraction;
-        playback.apply(microscope);
-        return compileKpNativeKatexTypographyStylePlan({
+        const ownership = playback.apply(microscope);
+        const compiled = compileKpNativeKatexTypographyStylePlan({
           telemetry: measureKpNativeKatexCorrelatedHandoff({
             stage: source.stage,
             reconciliation,
@@ -1486,7 +1501,24 @@ export function createKpCanonicalNativeKatexSceneSession(
           maximumTranslationPx: 2,
           maximumScaleRatio: 1.1
         });
+        typographyWarmup = sampleKpNativeKatexTypographyStylePlan(
+          compiled,
+          microscope,
+          ownership.frames
+        );
+        return compiled;
       })();
+  if (typographyPlan !== undefined && typographyWarmup !== undefined) {
+    // Build and retain target-styled material paint while the surface is still
+    // preparing. Deferring this computed-style clone until the first moving
+    // frame causes a visible long task on constrained devices.
+    realizeKpNativeKatexTypographyStylePlan({
+      stage: source.stage,
+      target,
+      plan: typographyPlan,
+      frame: typographyWarmup
+    });
+  }
   playback.apply(0);
   source.stage.dataset["kpCanonicalNativeKatexSessionFactory"] =
     "shared-v1";

@@ -17,6 +17,16 @@ test("sum plan stages one ordered body fan-out", () => {
   assert.equal(plan.topology, "ordered-template-fan-out");
   assert.equal(plan.templateFanOut.sourceBodyTemplateId,
     operation.source.semantic.body.id);
+  assert.equal(plan.templateFanOut.route,
+    "renderer-measured-relation-clearance");
+  assert.deepEqual(plan.transitBoundary, {
+    relationOccurrenceId: "occurrence.finite-sum-equivalence.relation",
+    separates: {
+      sourceOccurrenceId: "occurrence.finite-sum-equivalence.source",
+      targetOccurrenceId: "occurrence.finite-sum-equivalence.target"
+    },
+    policy: "preserve-relation-legibility"
+  });
   assert.deepEqual(plan.instances.map(({ bodyInstanceId }) => bodyInstanceId),
     operation.target.instances.map(({ id }) => id));
   assert.deepEqual(plan.instances.map(({ bodyTransitWindow }) =>
@@ -30,16 +40,25 @@ test("sum plan stages one ordered body fan-out", () => {
   });
 });
 
-test("substituted references settle before their dependent connectors", () => {
+test("connectors complete exactly as their following terms settle", () => {
   const plan = kpCanonicalFiniteSumExpansionPresentationPlan;
   for (const instance of plan.instances.slice(1)) {
     const previous = plan.instances[instance.ordinal - 1]!;
     assert.ok(instance.precedingConnector !== undefined);
-    assert.ok(instance.precedingConnector!.receptionWindow.start >=
-      Math.max(
-        previous.referenceReceptionWindow.end,
-        instance.referenceReceptionWindow.end
-      ));
+    const connector = instance.precedingConnector!;
+    assert.ok(connector.receptionWindow.start >=
+      Math.max(previous.bodyTransitWindow.end,
+        previous.referenceReceptionWindow.end));
+    assert.equal(connector.receptionWindow.end,
+      Math.max(instance.bodyTransitWindow.end,
+        instance.referenceReceptionWindow.end));
+    assert.deepEqual(connector.arrivalCohort, {
+      id: `finite-sum.arrival-cohort.${instance.ordinal}`,
+      leftNeighborGroupId: previous.bodyInstanceId,
+      followerGroupId: instance.bodyInstanceId,
+      leadingConnectorId: connector.connectorId,
+      reception: "connector-completes-with-follower-settlement"
+    });
   }
   assert.ok(plan.targetHoldWindow.start >=
     plan.instances.at(-1)!.precedingConnector!.receptionWindow.end);

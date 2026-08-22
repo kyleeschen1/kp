@@ -1,7 +1,11 @@
 import {
   sampleKpFiniteSumExpansionMotion,
+  type KpFiniteSumExpansionMotionFrame,
   type KpFiniteSumMotionMode
 } from "../animation/finite-sum-expansion-motion.ts";
+import {
+  kpCanonicalFiniteSumExpansionPresentationPlan
+} from "../animation/finite-sum-expansion-presentation-plan.ts";
 import {
   kpCanonicalFiniteSumExpansionOperation
 } from "../semantic/canonical-finite-sum-expansion.ts";
@@ -20,6 +24,12 @@ import {
 import {
   createKpFiniteSumNativePaintOwnership
 } from "./finite-sum-native-paint-ownership.ts";
+import {
+  planKpFiniteSumRelationClearingTransit
+} from "./finite-sum-relation-aware-transit.ts";
+import type {
+  KpStageRelativeRect
+} from "./native-katex-fragment-observer.ts";
 import type {
   KpNativeKatexRenderedEndpointHandle
 } from "./native-katex-rendered-scene.ts";
@@ -35,9 +45,19 @@ export interface KpFiniteSumTransitSession {
 export function createKpFiniteSumTransitSession(input: {
   readonly sourceHandle: KpNativeKatexRenderedEndpointHandle;
   readonly targetHandle: KpNativeKatexRenderedEndpointHandle;
+  readonly relationInkRect: KpStageRelativeRect;
   readonly mode?: Exclude<KpFiniteSumMotionMode, "static"> | undefined;
 }): KpFiniteSumTransitSession {
   const mode = input.mode ?? "full";
+  let sampledMotionProgress: number | undefined;
+  let sampledMotion: KpFiniteSumExpansionMotionFrame | undefined;
+  const sampleMotion = (progress: number): KpFiniteSumExpansionMotionFrame => {
+    if (sampledMotionProgress !== progress || sampledMotion === undefined) {
+      sampledMotionProgress = progress;
+      sampledMotion = sampleKpFiniteSumExpansionMotion(progress, mode);
+    }
+    return sampledMotion;
+  };
   const ownership = createKpFiniteSumNativePaintOwnership(input);
   const operation = kpCanonicalFiniteSumExpansionOperation;
   // Track IDs address the projected ownership observations, not the raw leaf
@@ -87,16 +107,45 @@ export function createKpFiniteSumTransitSession(input: {
           : instanceOrdinal.get(targetEntity);
         if (track.lifecycle === "split" &&
             targetInstanceOrdinal !== undefined) {
+          const arrivalCohort = operation.target.instances[
+            targetInstanceOrdinal
+          ] === undefined
+            ? undefined
+            : kpCanonicalFiniteSumExpansionPresentationPlan.instances[
+                targetInstanceOrdinal
+              ]!.precedingConnector?.arrivalCohort;
+          const motionPath = mode === "reduced"
+            ? undefined
+            : planKpFiniteSumRelationClearingTransit({
+                id: `finite-sum.relation-clearing.${track.id}`,
+                relationOccurrenceId:
+                  kpCanonicalFiniteSumExpansionPresentationPlan
+                    .transitBoundary.relationOccurrenceId,
+                startPaintRect: track.startPaintRect,
+                endPaintRect: track.endPaintRect,
+                relationInkRect: input.relationInkRect
+              }).selected;
           return Object.freeze({
             ...track,
+            materialPositioning: "transform" as const,
             timingGroupId:
               `finite-sum.instance.${targetInstanceOrdinal}`,
+            semanticMotionUnitId:
+              `finite-sum.body.${targetInstanceOrdinal}`,
+            routingCohortId: "finite-sum.ordered-template-fan-out",
+            ...(arrivalCohort === undefined ? {} : {
+              intentionalContactGroupId: arrivalCohort.id
+            }),
+            ...(motionPath === undefined ? {} : {
+              motionPath,
+              motionPathSampling: "planned-curve" as const
+            }),
             sampleProgress: (progress: number) =>
-              sampleKpFiniteSumExpansionMotion(progress, mode)
-                .instances[targetInstanceOrdinal]!.bodyTransitProgress,
+              sampleMotion(progress).instances[targetInstanceOrdinal]!
+                .bodyTransitProgress,
             samplePaintPresence: (progress: number) =>
-              sampleKpFiniteSumExpansionMotion(progress, mode)
-                .instances[targetInstanceOrdinal]!.bodyPresence
+              sampleMotion(progress).instances[targetInstanceOrdinal]!
+                .bodyPresence
           });
         }
         if (track.lifecycle === "eliminate" &&
@@ -104,6 +153,7 @@ export function createKpFiniteSumTransitSession(input: {
             retainedScaffoldIds.has(sourceEntity)) {
           return Object.freeze({
             ...track,
+            materialPositioning: "transform" as const,
             endRect: Object.freeze({ ...track.startRect }),
             timingGroupId: "finite-sum.retained-source-scaffold",
             opacityScheduleAuthority: "semantic-choreography" as const,
@@ -121,20 +171,26 @@ export function createKpFiniteSumTransitSession(input: {
           : connectorOrdinal.get(targetEntity);
         const ordinal = targetReferenceOrdinal ?? targetConnectorOrdinal;
         if (track.lifecycle === "introduce" && ordinal !== undefined) {
+          const arrivalCohort =
+            kpCanonicalFiniteSumExpansionPresentationPlan.instances[ordinal]!
+              .precedingConnector?.arrivalCohort;
           const presence = (progress: number) => {
-            const frame = sampleKpFiniteSumExpansionMotion(progress, mode)
-              .instances[ordinal]!;
+            const frame = sampleMotion(progress).instances[ordinal]!;
             return targetReferenceOrdinal === undefined
               ? frame.precedingConnectorPresence
               : frame.referencePresence;
           };
           return Object.freeze({
             ...track,
+            materialPositioning: "transform" as const,
             startRect: Object.freeze({ ...track.endRect }),
             timingGroupId: targetReferenceOrdinal === undefined
               ? `finite-sum.connector.${ordinal - 1}`
               : `finite-sum.reference.${ordinal}`,
             opacityScheduleAuthority: "semantic-choreography" as const,
+            ...(arrivalCohort === undefined ? {} : {
+              intentionalContactGroupId: arrivalCohort.id
+            }),
             sampleProgress: () => 1,
             sampleOpacityProgress: presence,
             ...(mode === "reduced" ? {} : {

@@ -397,6 +397,62 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-08-22T00:54:40.391Z"
+    },
+    {
+      "command": "npm run test:finite-binder-expansion",
+      "status": "passed",
+      "scope": "bf17 finite-sum semantic and presentation contract",
+      "checkedAt": "2026-08-22T15:17:27.323Z",
+      "notes": "79 focused tests passed after the approved relation-clearing and arrival changes."
+    },
+    {
+      "command": "npm run perf:finite-binder-sum",
+      "status": "passed",
+      "scope": "bf17 constrained-phone hot-path gate",
+      "checkedAt": "2026-08-22T15:17:40.630Z",
+      "notes": "120-frame 6x CPU phone scrub passed; p95 17.7 ms, update p95 11.7 ms, zero clone rebuilds or repeated paint measurements."
+    },
+    {
+      "command": "npm run test:browser:finite-binder-sum",
+      "status": "passed",
+      "scope": "bf17 direct seek and endpoint preservation",
+      "checkedAt": "2026-08-22T15:17:41.730Z",
+      "notes": "Two Chromium browser tests passed."
+    },
+    {
+      "command": "npm run visual:finite-binder-sum",
+      "status": "passed",
+      "scope": "bf17 approved wide and phone visual preservation",
+      "checkedAt": "2026-08-22T15:17:42.724Z",
+      "notes": "Regenerated deterministic contact sheet after the performance repair; accepted choreography remains intact."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "bf17 TypeScript Svelte and domain boundaries",
+      "checkedAt": "2026-08-22T15:17:43.846Z",
+      "notes": "All typechecks passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "bf17 renderer ownership and framework boundaries",
+      "checkedAt": "2026-08-22T15:17:44.780Z",
+      "notes": "All architecture gates passed."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "bf17 lazy capability and Catalogue route bundle budgets",
+      "checkedAt": "2026-08-22T15:17:45.708Z",
+      "notes": "Bundle boundary passed; Catalogue route remained below its gzip ceiling."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "bf17 durable evidence integrity",
+      "checkedAt": "2026-08-22T15:18:49.609Z",
+      "notes": "Workspace validated 1049 nodes and 24510 events after checkpoint closure."
     }
   ],
   "progress": {

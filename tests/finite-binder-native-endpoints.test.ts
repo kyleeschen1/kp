@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  createKpFiniteSumNativeEndpoints,
+  kpDefaultFiniteSumLimitPlacement,
   kpCanonicalFiniteSumNativeEndpoints
 } from "../src/rendering/finite-sum-native-endpoints.ts";
 import {
@@ -20,6 +22,21 @@ test("finite sum compiles to exact native KaTeX endpoints", () => {
     assert.match(endpoint.nativeHtmlAndMathml, /class="katex-mathml"/u);
     assert.match(endpoint.nativeHtmlAndMathml, /class="katex-html"/u);
   }
+});
+
+test("finite sum limits default above and below but remain configurable", () => {
+  assert.equal(kpDefaultFiniteSumLimitPlacement, "above-below");
+  const [canonicalSource] = kpCanonicalFiniteSumNativeEndpoints;
+  const [sideSource] = createKpFiniteSumNativeEndpoints({
+    limitPlacement: "side"
+  });
+
+  assert.equal(canonicalSource.limitPlacement, "above-below");
+  assert.match(canonicalSource.annotated.annotatedLatex,
+    /\\mathop\{.*\}\\limits_/u);
+  assert.equal(sideSource.limitPlacement, "side");
+  assert.match(sideSource.annotated.annotatedLatex,
+    /\\mathop\{.*\}\\nolimits_/u);
 });
 
 test("source and target bind every finite-binder role exactly once", () => {

@@ -7,6 +7,9 @@ import {
 import {
   kpCanonicalFiniteSumExpansionOperation
 } from "../semantic/canonical-finite-sum-expansion.ts";
+import {
+  kpFiniteSumEquivalenceFrameOccurrenceIds
+} from "../semantic/finite-sum-equivalence-frame.ts";
 
 export interface KpFiniteSumPresentationWindow {
   readonly start: number;
@@ -29,6 +32,13 @@ export interface KpFiniteSumInstancePresentation {
   readonly precedingConnector?: Readonly<{
     connectorId: KpFiniteBinderSemanticId;
     receptionWindow: KpFiniteSumPresentationWindow;
+    arrivalCohort: Readonly<{
+      id: string;
+      leftNeighborGroupId: KpFiniteBinderSemanticId;
+      followerGroupId: KpFiniteBinderSemanticId;
+      leadingConnectorId: KpFiniteBinderSemanticId;
+      reception: "connector-completes-with-follower-settlement";
+    }>;
   }> | undefined;
 }
 
@@ -46,11 +56,19 @@ export interface KpFiniteSumExpansionPresentationPlan {
     relation: "fixed-native-equality";
     target: "live-then-native";
   }>;
+  readonly transitBoundary: Readonly<{
+    relationOccurrenceId: string;
+    separates: Readonly<{
+      sourceOccurrenceId: string;
+      targetOccurrenceId: string;
+    }>;
+    policy: "preserve-relation-legibility";
+  }>;
   readonly sourceHoldWindow: KpFiniteSumPresentationWindow;
   readonly templateFanOut: Readonly<{
     sourceBodyTemplateId: KpFiniteBinderSemanticId;
     topology: "one-source-to-ordered-distinct-instances";
-    route: "direct-baseline";
+    route: "renderer-measured-relation-clearance";
     sourcePaint: "retained-context-with-live-derived-copies";
   }>;
   readonly instances: readonly KpFiniteSumInstancePresentation[];
@@ -77,15 +95,15 @@ const REFERENCE_RECEPTION_WINDOWS = Object.freeze([
   window(0.62, 0.72)
 ]);
 const CONNECTOR_RECEPTION_WINDOWS = Object.freeze([
-  window(0.5, 0.58),
-  window(0.72, 0.8)
+  window(0.38, 0.5),
+  window(0.6, 0.72)
 ]);
 const TARGET_HOLD = window(0.8, 1);
 
 /**
  * This is intentionally exemplar-local. It records a reviewable hypothesis:
  * the body glyph fans out left-to-right, substituted indices arrive near
- * settlement, and a connector appears only after both adjacent terms exist.
+ * settlement, and each connector prepares the following term's landing.
  */
 export function compileKpFiniteSumExpansionPresentationPlan(
   operation: KpVerifiedFiniteBinderExpansionOperation
@@ -139,7 +157,16 @@ export function compileKpFiniteSumExpansionPresentationPlan(
         : {
             precedingConnector: Object.freeze({
               connectorId: connector.id,
-              receptionWindow: connectorWindow
+              receptionWindow: connectorWindow,
+              arrivalCohort: Object.freeze({
+                id: `finite-sum.arrival-cohort.${ordinal}`,
+                leftNeighborGroupId:
+                  operation.target.instances[ordinal - 1]!.id,
+                followerGroupId: instance.id,
+                leadingConnectorId: connector.id,
+                reception:
+                  "connector-completes-with-follower-settlement" as const
+              })
             })
           })
     });
@@ -158,11 +185,20 @@ export function compileKpFiniteSumExpansionPresentationPlan(
       relation: "fixed-native-equality" as const,
       target: "live-then-native" as const
     }),
+    transitBoundary: Object.freeze({
+      relationOccurrenceId:
+        kpFiniteSumEquivalenceFrameOccurrenceIds.relation,
+      separates: Object.freeze({
+        sourceOccurrenceId: kpFiniteSumEquivalenceFrameOccurrenceIds.source,
+        targetOccurrenceId: kpFiniteSumEquivalenceFrameOccurrenceIds.target
+      }),
+      policy: "preserve-relation-legibility" as const
+    }),
     sourceHoldWindow: SOURCE_HOLD,
     templateFanOut: Object.freeze({
       sourceBodyTemplateId: source.body.id,
       topology: "one-source-to-ordered-distinct-instances" as const,
-      route: "direct-baseline" as const,
+      route: "renderer-measured-relation-clearance" as const,
       sourcePaint: "retained-context-with-live-derived-copies" as const
     }),
     instances: Object.freeze(instances),
@@ -197,15 +233,33 @@ function assertCausalTiming(
     }
     const connector = instance.precedingConnector;
     const previous = plan.instances[instance.ordinal - 1];
-    if (connector !== undefined && previous !== undefined &&
-        connector.receptionWindow.start <
-          Math.max(
-            previous.referenceReceptionWindow.end,
-            instance.referenceReceptionWindow.end
-          )) {
-      throw new Error(
-        `Connector ${connector.connectorId} precedes its adjacent terms.`
+    if (connector !== undefined && previous !== undefined) {
+      const previousSettlement = Math.max(
+        previous.bodyTransitWindow.end,
+        previous.referenceReceptionWindow.end
       );
+      const followerSettlement = Math.max(
+        instance.bodyTransitWindow.end,
+        instance.referenceReceptionWindow.end
+      );
+      if (connector.receptionWindow.start < previousSettlement) {
+        throw new Error(
+          `Connector ${connector.connectorId} begins before its left neighbor settles.`
+        );
+      }
+      if (connector.receptionWindow.end !== followerSettlement) {
+        throw new Error(
+          `Connector ${connector.connectorId} must complete with its follower.`
+        );
+      }
+      if (connector.arrivalCohort.leftNeighborGroupId !==
+          previous.bodyInstanceId ||
+          connector.arrivalCohort.followerGroupId !== instance.bodyInstanceId ||
+          connector.arrivalCohort.leadingConnectorId !== connector.connectorId) {
+        throw new Error(
+          `Connector ${connector.connectorId} has an invalid arrival cohort.`
+        );
+      }
     }
   }
   if (plan.targetHoldWindow.start <

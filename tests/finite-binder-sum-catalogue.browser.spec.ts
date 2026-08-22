@@ -1,5 +1,9 @@
 import { expect, test, type Locator } from "@playwright/test";
 
+import {
+  kpCanonicalFiniteSumExpansionOperation
+} from "../src/semantic/canonical-finite-sum-expansion.ts";
+
 const animationId = "animation.equation.finite-sum-expansion.v1";
 
 test("finite sum mounts once and remains inspectable across direct seeks", async ({
@@ -39,6 +43,25 @@ test("finite sum mounts once and remains inspectable across direct seeks", async
   await expect(page.locator("body")).toHaveAttribute(
     "data-kp-dev-review-ready",
     "true"
+  );
+
+  await seek.fill("0.18");
+  await expect(stage).toHaveAttribute("data-kp-finite-sum-progress", "0.18");
+  const relationAtFirstTransit = await stage.locator(
+    ".kp-finite-sum-stage__relation .mrel"
+  ).boundingBox();
+  const firstBodyAtTransit = await stage.locator(
+    `[data-kp-equation-material-semantic-entity-id="` +
+    `${kpCanonicalFiniteSumExpansionOperation.target.instances[0]!.id}"]`
+  ).locator(":scope > *").boundingBox();
+  expect(relationAtFirstTransit).not.toBeNull();
+  expect(firstBodyAtTransit).not.toBeNull();
+  const relationCenterY = relationAtFirstTransit!.y +
+    relationAtFirstTransit!.height / 2;
+  const firstBodyCenterY = firstBodyAtTransit!.y +
+    firstBodyAtTransit!.height / 2;
+  expect(Math.abs(firstBodyCenterY - relationCenterY)).toBeGreaterThan(
+    relationAtFirstTransit!.height * 0.25
   );
 
   for (const progress of [0, 0.16, 0.34, 0.52, 0.7, 0.88, 1, 0.6, 0]) {

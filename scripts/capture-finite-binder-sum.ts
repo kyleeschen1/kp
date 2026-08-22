@@ -14,11 +14,11 @@ const animationId = "animation.equation.finite-sum-expansion.v1";
 const profiles = [{
   id: "wide",
   viewport: { width: 1_240, height: 760 },
-  samples: [0, 0.16, 0.34, 0.52, 0.7, 0.88, 1, 0.6, 0]
+  samples: [0, 0.18, 0.28, 0.44, 0.5, 0.66, 0.72, 0.88, 1, 0.6, 0]
 }, {
   id: "phone",
   viewport: { width: 390, height: 844 },
-  samples: [0, 0.34, 0.7, 1]
+  samples: [0, 0.18, 0.5, 0.72, 1]
 }] as const;
 
 interface CaptureEvidence {

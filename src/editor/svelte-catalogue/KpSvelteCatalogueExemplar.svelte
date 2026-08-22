@@ -93,6 +93,7 @@
   let selectionRevision = 0;
   let disposed = false;
   let playheadUrlScheduler: KpAnimationUrlReplaceScheduler | undefined;
+  let manualSeekActive = false;
   const initialUrlState = readKpAnimationDevelopmentUrlState(
     window.location.href
   );
@@ -259,7 +260,7 @@
     ) return;
     const animationId = detail.animationId;
     const progress = detail.progress;
-    playheadUrlScheduler?.request(() => {
+    const replace = () => {
       if (
         disposed ||
         view === undefined ||
@@ -288,7 +289,9 @@
           href
         );
       }
-    });
+    };
+    if (manualSeekActive) playheadUrlScheduler?.defer(replace);
+    else playheadUrlScheduler?.request(replace);
   }
 
   function restoreHistorySelection(): void {
@@ -483,11 +486,20 @@
     const pauseWhenHidden = (): void => {
       if (ownerDocument.hidden) pauseForBackground();
     };
+    const beginManualSeek = (event: Event): void => {
+      if (
+        event.target instanceof HTMLInputElement &&
+        event.target.dataset["action"] === "seek-editor-animation"
+      ) manualSeekActive = true;
+    };
     const flushSettledPlayhead = (event: Event): void => {
       if (
         event.target instanceof HTMLInputElement &&
         event.target.dataset["action"] === "seek-editor-animation"
-      ) playheadUrlScheduler?.flush();
+      ) {
+        manualSeekActive = false;
+        playheadUrlScheduler?.flush();
+      }
     };
     const flushAnimationControl = (event: Event): void => {
       if (
@@ -499,6 +511,7 @@
       KP_EDITOR_ANIMATION_FRAME_EVENT,
       replacePlayhead
     );
+    mountedShell.addEventListener("input", beginManualSeek, { capture: true });
     mountedShell.addEventListener("keydown", closeOverlay);
     mountedShell.addEventListener("change", flushSettledPlayhead);
     mountedShell.addEventListener("click", flushAnimationControl);
@@ -518,6 +531,9 @@
         KP_EDITOR_ANIMATION_FRAME_EVENT,
         replacePlayhead
       );
+      mountedShell.removeEventListener("input", beginManualSeek, {
+        capture: true
+      });
       mountedShell.removeEventListener("keydown", closeOverlay);
       mountedShell.removeEventListener("change", flushSettledPlayhead);
       mountedShell.removeEventListener("click", flushAnimationControl);

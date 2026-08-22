@@ -19,6 +19,9 @@ import {
   createKpNativeKatexRenderedEndpointHandle
 } from "../rendering/native-katex-rendered-scene.ts";
 import {
+  measureKpNativeKatexSubtreePaintRect
+} from "../rendering/native-katex-paint-geometry.ts";
+import {
   createKpFiniteSumTransitSession,
   type KpFiniteSumTransitSession
 } from "../rendering/finite-sum-transit-session.ts";
@@ -42,7 +45,7 @@ interface KpFiniteSumSurfaceSession {
   readonly frozenSource: HTMLElement;
   readonly relation: HTMLElement;
   readonly endpointRoots: readonly [HTMLElement, HTMLElement];
-  readonly materialLayer: HTMLElement;
+  readonly status: HTMLOutputElement;
   readonly fontReadiness: ReturnType<typeof createKpEquationFontReadiness>;
   generation: number;
   pendingState: KpEditorAnimationPlayerState;
@@ -151,7 +154,7 @@ function mountSurface(
     frozenSource,
     relation,
     endpointRoots: Object.freeze(roots),
-    materialLayer,
+    status,
     fontReadiness: createKpEquationFontReadiness(document),
     generation: 0,
     pendingState: state,
@@ -175,6 +178,13 @@ async function prepareSurface(
       )
     );
     if (session.disposed || session.generation !== generation) return;
+    const relationInkRect = measureKpNativeKatexSubtreePaintRect(
+      session.stage,
+      session.relation
+    );
+    if (relationInkRect === undefined) {
+      throw new Error("Finite-sum relation requires measurable native ink.");
+    }
     const accessibility =
       session.player.dataset["kpEditorAnimationAccessibilityMode"];
     session.transit = createKpFiniteSumTransitSession({
@@ -184,6 +194,7 @@ async function prepareSurface(
       targetHandle: createKpNativeKatexRenderedEndpointHandle({
         observation: target!
       }),
+      relationInkRect,
       mode: accessibility === "reduced-motion" ? "reduced" : "full"
     });
     session.stage.dataset["kpFiniteSumStage"] = "ready";
@@ -210,37 +221,56 @@ function applyFrame(
   const progress = accessibility === "static"
     ? state.progress < 0.5 ? 0 : 1
     : state.progress;
-  session.endpointRoots.forEach((root) => setAccessibleEndpoint(root, false));
   const ownership = session.transit.apply(progress);
-  session.materialLayer.style.visibility = progress === 0 || progress === 1
-    ? "hidden"
-    : "visible";
-  session.endpointRoots.forEach((root) => {
-    root.style.opacity = "0";
-    setAccessibleEndpoint(root, false);
+  const targetOwns = ownership.visualOwner === "target-native";
+  session.endpointRoots.forEach((root, index) => {
+    const active = targetOwns && index === 1;
+    setStyleIfChanged(root.style, "opacity", active ? "1" : "0");
+    setAccessibleEndpoint(root, active);
   });
-  if (ownership.visualOwner === "target-native") {
-    session.endpointRoots[1].style.opacity = "1";
-    setAccessibleEndpoint(session.endpointRoots[1], true);
-  }
-  session.stage.dataset["kpFiniteSumProgress"] = String(progress);
-  session.stage.dataset["kpFiniteSumVisualOwner"] = ownership.visualOwner;
-  const status = session.stage.querySelector<HTMLOutputElement>(
-    "[data-kp-finite-sum-status]"
+  setDatasetIfChanged(session.stage, "kpFiniteSumProgress", String(progress));
+  setDatasetIfChanged(
+    session.stage,
+    "kpFiniteSumVisualOwner",
+    ownership.visualOwner
   );
-  if (status !== null) {
-    status.textContent = progress === 0
-      ? "Finite sum ready."
-      : progress === 1
-        ? "The retained finite sum equals its three-term expansion."
-        : "The retained sum is generating one ordered term at a time.";
-  }
+  setTextIfChanged(session.status, progress === 0
+    ? "Finite sum ready."
+    : progress === 1
+      ? "The retained finite sum equals its three-term expansion."
+      : "The retained sum is generating one ordered term at a time.");
 }
 
 function setAccessibleEndpoint(root: HTMLElement, active: boolean): void {
-  root.setAttribute("aria-hidden", active ? "false" : "true");
-  if (active) root.removeAttribute("inert");
-  else root.setAttribute("inert", "");
+  const ariaHidden = active ? "false" : "true";
+  if (root.getAttribute("aria-hidden") !== ariaHidden) {
+    root.setAttribute("aria-hidden", ariaHidden);
+  }
+  if (active) {
+    if (root.hasAttribute("inert")) root.removeAttribute("inert");
+  } else if (!root.hasAttribute("inert")) {
+    root.setAttribute("inert", "");
+  }
+}
+
+function setStyleIfChanged(
+  style: CSSStyleDeclaration,
+  property: "opacity",
+  value: string
+): void {
+  if (style[property] !== value) style[property] = value;
+}
+
+function setDatasetIfChanged(
+  element: HTMLElement,
+  key: string,
+  value: string
+): void {
+  if (element.dataset[key] !== value) element.dataset[key] = value;
+}
+
+function setTextIfChanged(element: HTMLElement, value: string): void {
+  if (element.textContent !== value) element.textContent = value;
 }
 
 function disposeSurface(

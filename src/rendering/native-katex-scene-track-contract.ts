@@ -40,6 +40,8 @@ export type KpNativeKatexSceneTrackContract<
   readonly motionMetrics?: true;
   /** Renderer-local paint scale; it never changes measured layout authority. */
   readonly sampleMaterialScale?: (progress: number) => number;
+  /** Move the retained material owner without invalidating document layout. */
+  readonly materialPositioning?: "layout" | "transform" | undefined;
 } & KpNativeKatexSceneTrackOpacityContract;
 
 export interface KpNativeKatexSceneTrackFrameContract<
@@ -61,6 +63,7 @@ export interface KpNativeKatexSceneTrackFrameContract<
   readonly opacity: number;
   readonly metricProgress?: number;
   readonly materialScale?: number | undefined;
+  readonly materialPositioning?: "layout" | "transform" | undefined;
   readonly intentionalContactGroupId?: string | undefined;
   readonly intentionalForegroundOcclusion?:
     KpEquationIntentionalForegroundOcclusion | undefined;

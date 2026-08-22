@@ -113,6 +113,7 @@
     "test:finite-binder-expansion-preflight": "node --disable-warning=ExperimentalWarning --test tests/finite-binder-expansion-preflight.test.ts",
     "test:finite-binder-expansion": "node --disable-warning=ExperimentalWarning --test tests/finite-binder-*.test.ts",
     "test:browser:finite-binder-sum": "playwright test tests/finite-binder-sum-catalogue.browser.spec.ts --project=chromium --workers=1",
+    "perf:finite-binder-sum": "playwright test tests/finite-binder-sum-performance.browser.spec.ts --project=chromium --workers=1",
     "visual:finite-binder-sum": "node --disable-warning=ExperimentalWarning scripts/capture-finite-binder-sum.ts",
     "test:scheme-factorial": "node --disable-warning=ExperimentalWarning --test tests/scheme-factorial-*.test.ts",
     "visual:scheme-factorial": "playwright test tests/scheme-factorial.browser.spec.ts tests/scheme-factorial-catalogue.browser.spec.ts --project=chromium --workers=1",

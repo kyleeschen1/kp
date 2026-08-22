@@ -91,3 +91,14 @@ test("flush commits the latest settled position and dispose drops pending work",
   timer?.();
   assert.deepEqual(replacements, ["start", "settled"]);
 });
+
+test("defers continuous scrub history until the settled position flushes", () => {
+  const replacements: string[] = [];
+  const scheduler = createKpAnimationUrlReplaceScheduler();
+
+  scheduler.defer(() => replacements.push("0.42"));
+  scheduler.defer(() => replacements.push("0.63"));
+  assert.deepEqual(replacements, []);
+  scheduler.flush();
+  assert.deepEqual(replacements, ["0.63"]);
+});

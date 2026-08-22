@@ -2,10 +2,12 @@
 
 Status: active
 Last Updated: 2026-08-22
-Current Next Action: review the revised finite-sum exemplar's lineage-backed
-boundary handoff before product pressure or presentation promotion. The fixed
-range design and the separately scoped symbolic-ellipsis follow-up are recorded
-in
+Current Next Action: pressure the approved finite-sum retained-equivalence laws
+with the finite-product caller, while keeping relation-clearing arcs and
+connector-led arrivals exemplar-local until a structurally different caller
+passes. The accepted exemplar laws, performance evidence, later log/exponent
+pressure order, fixed-range design, and separately scoped symbolic-ellipsis
+follow-up are recorded in
 `../decisions/2026-08-22-finite-binder-boundary-handoff-and-schematic-expansion.md`.
 The completed
 TypeScript/Python extract-helper frontend tranche is recorded in

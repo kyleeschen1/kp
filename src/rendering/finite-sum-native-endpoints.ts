@@ -31,6 +31,11 @@ export type KpFiniteSumNativeEndpointRole =
   | "instantiated-reference"
   | "additive-connector";
 
+export type KpFiniteSumLimitPlacement = "above-below" | "side";
+
+export const kpDefaultFiniteSumLimitPlacement:
+KpFiniteSumLimitPlacement = "above-below";
+
 export interface KpFiniteSumNativeEndpointNode {
   readonly occurrenceId: KpFiniteBinderSemanticId;
   readonly semanticId: KpFiniteBinderSemanticId;
@@ -49,6 +54,7 @@ export interface KpFiniteSumNativeEndpoint {
   readonly annotated: KpSelectorAnnotatedLatex;
   readonly nativeHtmlAndMathml: string;
   readonly nodes: readonly KpFiniteSumNativeEndpointNode[];
+  readonly limitPlacement?: KpFiniteSumLimitPlacement | undefined;
 }
 
 type EndpointBuilder = {
@@ -61,10 +67,19 @@ type EndpointBuilder = {
 
 const operation = kpCanonicalFiniteSumExpansionOperation;
 
-export const kpCanonicalFiniteSumNativeEndpoints = Object.freeze([
-  createSourceEndpoint(),
-  createTargetEndpoint()
-]) as readonly [KpFiniteSumNativeEndpoint, KpFiniteSumNativeEndpoint];
+export function createKpFiniteSumNativeEndpoints(input: {
+  readonly limitPlacement?: KpFiniteSumLimitPlacement | undefined;
+} = {}): readonly [KpFiniteSumNativeEndpoint, KpFiniteSumNativeEndpoint] {
+  const limitPlacement = input.limitPlacement ??
+    kpDefaultFiniteSumLimitPlacement;
+  return Object.freeze([
+    createSourceEndpoint(limitPlacement),
+    createTargetEndpoint()
+  ]);
+}
+
+export const kpCanonicalFiniteSumNativeEndpoints =
+  createKpFiniteSumNativeEndpoints();
 
 export function bindKpFiniteSumNativeEndpointOwnership(input: {
   readonly root: HTMLElement;
@@ -109,7 +124,9 @@ export async function settleAndObserveKpFiniteSumNativeEndpoint(input: {
   });
 }
 
-function createSourceEndpoint(): KpFiniteSumNativeEndpoint {
+function createSourceEndpoint(
+  limitPlacement: KpFiniteSumLimitPlacement
+): KpFiniteSumNativeEndpoint {
   const source = operation.source.semantic;
   const reference = source.body.references[0]!;
   const builder = createBuilder("source");
@@ -163,8 +180,11 @@ function createSourceEndpoint(): KpFiniteSumNativeEndpoint {
   return finishEndpoint(builder, {
     rawLatex: KP_CANONICAL_FINITE_SUM_SOURCE_LATEX,
     annotatedLatex:
-      `${operator}_{${declaration}}^{${upper}} ${body}`,
-    accessibleText: "the sum from i equals one to three of a sub i"
+      `\\mathop{${operator}}\\${limitPlacement === "above-below"
+        ? "limits"
+        : "nolimits"}_{${declaration}}^{${upper}} ${body}`,
+    accessibleText: "the sum from i equals one to three of a sub i",
+    limitPlacement
   });
 }
 
@@ -262,6 +282,7 @@ function finishEndpoint(builder: EndpointBuilder, input: {
   readonly rawLatex: string;
   readonly annotatedLatex: string;
   readonly accessibleText: string;
+  readonly limitPlacement?: KpFiniteSumLimitPlacement | undefined;
 }): KpFiniteSumNativeEndpoint {
   const ids = builder.nodes.map(({ occurrenceId }) => occurrenceId);
   if (new Set(ids).size !== ids.length ||
@@ -289,6 +310,9 @@ function finishEndpoint(builder: EndpointBuilder, input: {
       output: "htmlAndMathml",
       trust: true
     }),
-    nodes: Object.freeze([...builder.nodes])
+    nodes: Object.freeze([...builder.nodes]),
+    ...(input.limitPlacement === undefined
+      ? {}
+      : { limitPlacement: input.limitPlacement })
   });
 }

@@ -50,6 +50,8 @@ export interface KpEquationMaterialLayerOwnerFrame {
   } | undefined;
   readonly opacity: number;
   readonly transform: string;
+  /** Opt-in compositor placement for hot paths with retained owner geometry. */
+  readonly positioning?: "layout" | "transform" | undefined;
   readonly filter?: string | undefined;
   readonly semanticDepth?: string | undefined;
   readonly clipPath?: string | undefined;
