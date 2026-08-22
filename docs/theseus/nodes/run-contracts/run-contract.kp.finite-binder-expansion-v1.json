@@ -2,9 +2,9 @@
   "id": "run-contract.kp.finite-binder-expansion-v1",
   "kind": "run-contract",
   "title": "Finite binder expansion",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Approved 24-slice binder tranche with a mandatory human checkpoint after the reversible finite-sum exemplar.",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -204,7 +204,8 @@
     {
       "id": "bf24",
       "title": "Release and closeout",
-      "status": "planned"
+      "summary": "Reconciled the decision record and next action with exact shipped truth, preserved unsupported cases as explicit nonclaims, linked canonical release evidence, and closed the 24-slice tranche. The accepted roadmap next considers a separately approved bounded Graph3D semantic-scene exemplar.",
+      "status": "complete"
     }
   ]
 }

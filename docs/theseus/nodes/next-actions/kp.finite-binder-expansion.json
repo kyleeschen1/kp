@@ -2,9 +2,9 @@
   "id": "kp.finite-binder-expansion",
   "kind": "next-action",
   "title": "Establish finite binder expansion",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Build and human-review one finite-sum expansion, then pressure only the approved binder seam with a finite product before narrow governed promotion.",
+  "summary": "Completed the approved finite-binder tranche: human-approved finite sum, independent finite product pressure caller, narrow shared semantic kernel, governed authoring with typed repair, exact Direct Coverage, deterministic browser behavior, and passing architecture and bundle gates. Symbolic or infinite bounds, nested binders, compound templates, arithmetic evaluation, and shared choreography remain explicit nonclaims.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -17,6 +17,10 @@
     {
       "kind": "file",
       "path": "docs/project/decisions/2026-08-20-prudent-animation-family-breadth-cadence.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-22-finite-binder-boundary-handoff-and-schematic-expansion.md"
     }
   ],
   "dependsOn": {
@@ -699,11 +703,18 @@
       "scope": "bf23 Theseus integrity",
       "checkedAt": "2026-08-22T17:47:23.724Z",
       "notes": "Workspace validates 1049 nodes and 24550 events before recording release completion."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "bf24 final closeout",
+      "checkedAt": "2026-08-22T17:50:02.289Z",
+      "notes": "Workspace validates 1049 nodes and 24563 events after resolving the next action and all 24 run slices."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "Human review approved the finite-sum direction and requested boundary persistence. The revised candidate now transfers lower and upper bound paint to distinct first and last target references, synthesizes only the interior reference, and records symbolic omitted-range expansion as a separate typed follow-up requiring its own proof and checkpoint."
+    "state": "complete",
+    "summary": "The completed family now supports reviewed canonical finite-sum and finite-product animation, shared verified scope/range/identity/lineage semantics, governed authoring for valid finite integer-bound variants, typed repairs for unsupported shapes, and exact Direct release evidence."
   },
   "expectedLearning": [
     "Whether finite sum expansion can make bound scope, ordered instantiation, and one-to-many lineage perceptually clear without false persistence.",

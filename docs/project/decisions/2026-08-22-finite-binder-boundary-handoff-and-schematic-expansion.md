@@ -362,3 +362,19 @@ rewind, and URL restoration, while architecture and bundle isolation remain
 green. At this boundary the measured internal Catalogue route is 134,926 gzip
 bytes against its 190,000-byte limit; the finite-binder assets remain lazy
 chunks rather than entering the outer shell.
+
+## Tranche Closeout
+
+The approved finite-binder tranche is complete. It produced one human-approved
+finite-sum exemplar, one independently presented finite-product pressure
+caller, a shared renderer-neutral kernel limited to scope, finite iteration,
+fresh occurrence identity, and lineage, plus governed discovery and authoring
+with exact readiness evidence.
+
+This result does not authorize symbolic or infinite bounds, nested binders,
+compound body templates, arithmetic evaluation, a generic binder renderer, or
+shared sum/product choreography. Those remain explicit gaps or separately
+checkpointed future work. Per the accepted post-root sequence, a bounded
+Graph3D semantic-scene transformation is the next capability candidate; it
+requires its own reviewed run contract rather than inheriting this tranche's
+visual treatment.
