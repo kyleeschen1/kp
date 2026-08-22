@@ -62,10 +62,10 @@ test("Calc BC planning starts from an exact equation coverage baseline", () => {
       kpEquationCoverageBaseline20260820.equationCapabilityCount
   );
   assert.deepEqual(live.byStatus, {
-    Direct: 8,
+    Direct: 9,
     Registered: 3,
     Exemplar: 2,
-    Missing: 16
+    Missing: 15
   });
 });
 
@@ -92,7 +92,7 @@ test("direct rows have exact authoring corpus compiler and exemplar evidence", (
   const direct = createKpAnimationTransformationCoverage().entries.filter(
     ({ status }) => status === "Direct"
   );
-  assert.equal(direct.length, 10);
+  assert.equal(direct.length, 11);
   for (const capabilityId of [
     "capability.equation.function-wrapping",
     "capability.equation.distribution",
@@ -154,6 +154,25 @@ test("direct rows have exact authoring corpus compiler and exemplar evidence", (
   ]);
   assert.equal(roots.caseCoverage.cases.find(({ operationClass }) =>
     operationClass === "blocked-rewrite")?.outcome, "typed-gap");
+
+  const finiteBinders = direct.find(({ capabilityId }) => capabilityId ===
+    "capability.equation.finite-binder-expansion");
+  assert.deepEqual(finiteBinders?.remainingRequirementIds, []);
+  assert.deepEqual(finiteBinders?.exemplarLinks.map(({ assetId }) => assetId), [
+    "animation.equation.finite-sum-expansion.v1",
+    "animation.equation.finite-product-expansion.v1"
+  ]);
+  assert.equal(finiteBinders?.caseCoverage?.status, "tracked");
+  if (finiteBinders?.caseCoverage?.status !== "tracked") {
+    assert.fail("Finite binder coverage must project its typed case ledger.");
+  }
+  assert.equal(finiteBinders.caseCoverage.caseCount, 11);
+  assert.equal(finiteBinders.caseCoverage.cases.find(({ operationClass }) =>
+    operationClass === "singleton-sum")?.outcome, "semantic-only");
+  assert.equal(finiteBinders.caseCoverage.cases.find(({ operationClass }) =>
+    operationClass === "finite-product-pressure")?.maturity.find(
+      ({ dimensionId }) => dimensionId === "exemplar-executable"
+    )?.status, "satisfied");
 });
 
 test("every equation capability exposes its case-ledger promotion state", () => {

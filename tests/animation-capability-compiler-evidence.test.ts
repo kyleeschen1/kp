@@ -182,6 +182,28 @@ test("root promotion has exact plan recipe and corpus authorities", () => {
   }
 });
 
+test("finite binders register both callers around one narrow kernel", () => {
+  const projection = createKpAnimationCapabilityCompilerEvidence();
+  const requirementIds = [
+    "requirement.equation.finite-binder-expansion.sum-normalizer",
+    "requirement.equation.finite-binder-expansion.product-normalizer",
+    "requirement.equation.finite-binder-expansion.kernel",
+    "requirement.equation.finite-binder-expansion.sum-operation",
+    "requirement.equation.finite-binder-expansion.product-operation",
+    "requirement.equation.finite-binder-expansion.recipe",
+    "requirement.equation.finite-binder-expansion.corpus"
+  ];
+  for (const requirementId of requirementIds) {
+    const requirement = projection.requirements.find((candidate) =>
+      candidate.requirementId === requirementId
+    );
+    assert.equal(requirement?.status, "matched", requirementId);
+    if (requirement?.status !== "matched") continue;
+    assert.equal(requirement.evidence[0]?.source,
+      "verified-capability-authority");
+  }
+});
+
 test("code frontends expose exact operation recipe and corpus authorities", () => {
   const projection = createKpAnimationCapabilityCompilerEvidence();
   for (const requirementId of [

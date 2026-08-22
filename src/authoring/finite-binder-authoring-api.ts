@@ -1,7 +1,8 @@
-import { kpFiniteProductExpansionExemplarId } from
-  "../animation/finite-product-expansion-exemplar.ts";
-import { kpFiniteSumExpansionExemplarId } from
-  "../animation/finite-sum-expansion-exemplar.ts";
+import {
+  KP_FINITE_BINDER_AUTHORING_COMPILER_AUTHORITY,
+  KP_FINITE_PRODUCT_EXPANSION_ANIMATION_ID,
+  KP_FINITE_SUM_EXPANSION_ANIMATION_ID
+} from "../domain-ir/finite-binder-authorities.ts";
 import {
   KP_FINITE_BINDER_EXPAND_OPERATION,
   type KpVerifiedFiniteBinderExpansionOperation
@@ -35,8 +36,8 @@ import { findKpForbiddenPresentationAuthority } from
 
 export const KP_FINITE_BINDER_AUTHORING_REQUEST_SCHEMA =
   "kp.finite-binder-authoring-request.v1" as const;
-export const KP_FINITE_BINDER_AUTHORING_COMPILER_AUTHORITY =
-  "compiler.authoring.finite-binder-expansion.v1" as const;
+export { KP_FINITE_BINDER_AUTHORING_COMPILER_AUTHORITY } from
+  "../domain-ir/finite-binder-authorities.ts";
 
 export type KpFiniteBinderAuthoringOperator = "sum" | "product";
 
@@ -132,7 +133,7 @@ const drivers = defineDrivers([{
     operationId: KP_FINITE_BINDER_EXPAND_OPERATION,
     friendlyName: "Expand a finite sum",
     aliases: ["finite sum", "sum expansion", "expand sigma"],
-    canonicalAnimationId: kpFiniteSumExpansionExemplarId
+    canonicalAnimationId: KP_FINITE_SUM_EXPANSION_ANIMATION_ID
   }),
   canonicalSource: KP_CANONICAL_FINITE_SUM_SOURCE_LATEX,
   canonicalTarget: KP_CANONICAL_FINITE_SUM_TARGET_LATEX,
@@ -144,7 +145,7 @@ const drivers = defineDrivers([{
     operationId: KP_FINITE_PRODUCT_EXPAND_OPERATION,
     friendlyName: "Expand a finite product",
     aliases: ["finite product", "product expansion", "expand pi"],
-    canonicalAnimationId: kpFiniteProductExpansionExemplarId
+    canonicalAnimationId: KP_FINITE_PRODUCT_EXPANSION_ANIMATION_ID
   }),
   canonicalSource: KP_CANONICAL_FINITE_PRODUCT_SOURCE_LATEX,
   canonicalTarget: KP_CANONICAL_FINITE_PRODUCT_TARGET_LATEX,

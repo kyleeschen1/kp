@@ -356,10 +356,16 @@ const equationCapabilityDrafts = Object.freeze([
     "Finite sum and product expansion",
     "family.equation.finite-binder-expansion.v1",
     [
-      requirement("requirement.equation.finite-binder-expansion.normalizer", "endpoint-normalizer", "normalizer.equation.finite-binder-expansion.v1", "A finite sum or product retains explicit operator, bound-variable, integer-limit, body-template, and instantiated-occurrence roles."),
-      requirement("requirement.equation.finite-binder-expansion.operation", "semantic-operation", "operation.equation.finite-binder-expand.v1", "A typed operation proves inclusive finite iteration, capture-free body instantiation, and ordered one-to-many lineage."),
-      requirement("requirement.equation.finite-binder-expansion.recipe", "canonical-recipe", "recipe.equation.finite-binder-expansion.v1", "A canonical recipe preserves binder scope and ordered instantiation while leaving sum and product presentation operator-owned."),
-      requirement("requirement.equation.finite-binder-expansion.corpus", "generation-corpus", "corpus.equation.finite-binder-expansion.v1", "Fixtures cover bounded sums and products, shifted integer bounds, compound bodies, shadowing, capture hazards, and unsupported symbolic or infinite ranges.")
+      requirement("requirement.equation.finite-binder-expansion.sum-normalizer", "endpoint-normalizer", "normalizer.equation.finite-binder-expansion.v1", "Finite sums retain explicit operator, bound-variable, integer-limit, body-template, connector, and instantiated-occurrence roles."),
+      requirement("requirement.equation.finite-binder-expansion.product-normalizer", "endpoint-normalizer", "normalizer.equation.finite-product-pressure.v1", "Finite products retain the same binder roles while keeping implicit multiplicative adjacency operator-owned."),
+      requirement("requirement.equation.finite-binder-expansion.kernel", "semantic-operation", "semantic-operation.finite-binder-expansion-kernel.v1", "A shared typed kernel proves inclusive iteration, capture-free body instantiation, fresh occurrence identity, and ordered one-to-many lineage."),
+      requirement("requirement.equation.finite-binder-expansion.sum-operation", "semantic-operation", "operation.equation.finite-binder-expand.v1", "The sum operation adds only explicit additive connective topology to the shared kernel result."),
+      requirement("requirement.equation.finite-binder-expansion.product-operation", "semantic-operation", "operation.equation.finite-product-expand.v1", "The product operation adds only implicit multiplicative adjacency to the shared kernel result."),
+      requirement("requirement.equation.finite-binder-expansion.recipe", "canonical-recipe", "recipe.equation.finite-binder-expansion.v1", "The reviewed sum recipe preserves binder scope and ordered instantiation without authorizing shared sum/product choreography."),
+      requirement("requirement.equation.finite-binder-expansion.sum-exemplar", "canonical-exemplar", "animation.equation.finite-sum-expansion.v1", "The approved sum exemplar proves ordered one-to-many instantiation, exact Native KaTeX settlement, seek, rewind, and reduced motion."),
+      requirement("requirement.equation.finite-binder-expansion.product-exemplar", "canonical-exemplar", "animation.equation.finite-product-expansion.v1", "The product pressure exemplar proves that shared binder semantics compose with independently owned multiplicative presentation."),
+      requirement("requirement.equation.finite-binder-expansion.authoring", "authoring-surface", "compiler.authoring.finite-binder-expansion.v1", "A governed registry compiles explicit sum or product requests through verified authorities and returns typed repairs without geometry input."),
+      requirement("requirement.equation.finite-binder-expansion.corpus", "generation-corpus", "corpus.equation.finite-binder-expansion.v1", "Fixtures exercise canonical and shifted sums and products plus symbolic-bound and target-order repairs through the public compiler.")
     ]
   ),
   capability(

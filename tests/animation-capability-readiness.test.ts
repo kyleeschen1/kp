@@ -15,7 +15,7 @@ import { kpAnimationCapabilityPlan } from
 import { createKpAnimationDomainFrontendEvidence } from
   "../src/architecture/animation-domain-frontend-evidence.ts";
 
-test("readiness derives the ten exact direct generation capabilities", () => {
+test("readiness derives the eleven exact direct generation capabilities", () => {
   const readiness = createKpAnimationCapabilityReadiness();
   const direct = readiness.entries.filter(({ status }) => status === "Direct");
   assert.deepEqual(direct.map(({ capabilityId }) => capabilityId), [
@@ -27,6 +27,7 @@ test("readiness derives the ten exact direct generation capabilities", () => {
     "capability.equation.alternative-logarithm-bases",
     "capability.equation.exponential-homomorphism",
     "capability.equation.radical-inversion",
+    "capability.equation.finite-binder-expansion",
     "capability.code.typescript-refactoring",
     "capability.code.python-refactoring"
   ]);
@@ -125,6 +126,42 @@ test("root inversion is direct only through the exact pressure corpus", () => {
       "corpus.equation.radical-inversion.v1"
     ],
     sourcePath: "src/authoring/root-rewrite-authoring-corpus.ts"
+  });
+});
+
+test("finite binders are direct only through both callers and governed corpus", () => {
+  const direct = createKpAnimationCapabilityDirectIntentEvidence().find(
+    ({ operationId }) => operationId ===
+      "semantic-operation.finite-binder-expansion-kernel.v1"
+  );
+  assert.deepEqual(direct, {
+    animationId: "animation.equation.finite-sum-expansion.v1",
+    operationId: "semantic-operation.finite-binder-expansion-kernel.v1",
+    authoringAuthorityId:
+      "compiler.authoring.finite-binder-expansion.v1",
+    planKind: "finite-binder-authoring-artifact",
+    resolvedAuthorityIds: [
+      "normalizer.equation.finite-binder-expansion.v1",
+      "normalizer.equation.finite-product-pressure.v1",
+      "semantic-operation.finite-binder-expansion-kernel.v1",
+      "operation.equation.finite-binder-expand.v1",
+      "operation.equation.finite-product-expand.v1",
+      "recipe.equation.finite-binder-expansion.v1",
+      "corpus.equation.finite-binder-expansion.v1"
+    ],
+    generationCorpusAuthorityIds: [
+      "corpus.equation.finite-binder-expansion.v1"
+    ],
+    requiredCompilerAuthorityIds: [
+      "normalizer.equation.finite-binder-expansion.v1",
+      "normalizer.equation.finite-product-pressure.v1",
+      "semantic-operation.finite-binder-expansion-kernel.v1",
+      "operation.equation.finite-binder-expand.v1",
+      "operation.equation.finite-product-expand.v1",
+      "recipe.equation.finite-binder-expansion.v1",
+      "corpus.equation.finite-binder-expansion.v1"
+    ],
+    sourcePath: "src/authoring/finite-binder-authoring-api.ts"
   });
 });
 

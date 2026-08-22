@@ -26,9 +26,11 @@ import {
   KP_CANONICAL_FINITE_PRODUCT_TARGET_STATE_ID,
   kpCanonicalFiniteProductExpansionOperation
 } from "../semantic/canonical-finite-product-expansion.ts";
+import { KP_FINITE_PRODUCT_EXPANSION_ANIMATION_ID } from
+  "../domain-ir/finite-binder-authorities.ts";
 
 export const kpFiniteProductExpansionExemplarId =
-  "animation.equation.finite-product-expansion.v1" as const;
+  KP_FINITE_PRODUCT_EXPANSION_ANIMATION_ID;
 
 export function createKpFiniteProductExpansionExemplarAsset():
 KpAnimationAsset {

@@ -32,7 +32,7 @@ const expectedCapabilityIds = Object.freeze([
   "capability.equation.polar-parametric-transformations",
   "capability.equation.differential-equation-transformations",
   "capability.equation.taylor-series-transformations",
-  "capability.equation.binders-and-calculus-operators",
+  "capability.equation.finite-binder-expansion",
   "capability.equation.multiline-derivation-continuity"
 ] as const);
 
@@ -113,7 +113,7 @@ test("detailed fraction root branch binder and derivation gaps remain visible", 
     "capability.equation.nested-fraction-normalization",
     "capability.equation.radical-inversion",
     "capability.equation.branching-and-domain-conditions",
-    "capability.equation.binders-and-calculus-operators",
+    "capability.equation.finite-binder-expansion",
     "capability.equation.multiline-derivation-continuity"
   ]) assert.ok(ids.has(id), `missing ordered capability ${id}`);
 });

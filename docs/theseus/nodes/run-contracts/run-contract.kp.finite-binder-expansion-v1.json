@@ -198,7 +198,8 @@
     {
       "id": "bf23",
       "title": "Promote readiness and release evidence",
-      "status": "planned"
+      "summary": "Promoted finite-binder readiness from exact sum and product assets, both operator authority chains, the shared semantic kernel, governed public authoring, and a fixed cross-operator corpus. Coverage now derives Direct with zero missing requirements; focused, browser, type, architecture, bundle, and workspace gates pass.",
+      "status": "complete"
     },
     {
       "id": "bf24",

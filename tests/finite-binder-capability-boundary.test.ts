@@ -21,7 +21,7 @@ test("finite binder expansion has one narrow planned authority boundary", () => 
   );
   assert.deepEqual(
     capability.requirements.map(({ id }) => id),
-    finiteBinderExpansionPreflight.requirementIds
+    finiteBinderExpansionPreflight.releaseRequirementIds
   );
   assert.doesNotMatch(
     capability.requirements.map(({ summary }) => summary).join(" "),

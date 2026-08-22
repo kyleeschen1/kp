@@ -12,8 +12,8 @@ import {
   normalizeKpFiniteSumTargetEndpoint
 } from "./finite-sum-endpoint-normalizer.ts";
 
-export const KP_FINITE_BINDER_EXPANSION_CORPUS_AUTHORITY =
-  "corpus.equation.finite-binder-expansion.v1" as const;
+export const KP_FINITE_SUM_EXPANSION_CORPUS_AUTHORITY =
+  "corpus.equation.finite-sum-expansion.v1" as const;
 
 export interface KpFiniteBinderCorpusRequest {
   readonly id: string;
@@ -50,11 +50,12 @@ export interface KpFiniteBinderCorpusCase {
 export const kpFiniteBinderExpansionCorpus = Object.freeze({
   schemaVersion: "kp.finite-binder-expansion-corpus.v1" as const,
   kind: "finite-binder-expansion-corpus" as const,
-  authority: KP_FINITE_BINDER_EXPANSION_CORPUS_AUTHORITY,
+  authority: KP_FINITE_SUM_EXPANSION_CORPUS_AUTHORITY,
   cases: Object.freeze(kpFiniteBinderCaseLedger.cases.map((entry) =>
     Object.freeze({
       id: `corpus.${entry.id}`,
-      expectedStatus: entry.disposition === "verified-direct-expansion"
+      expectedStatus: entry.disposition === "verified-direct-expansion" &&
+          entry.operationClass !== "finite-product-pressure"
         ? "accepted" as const
         : "repair-required" as const,
       request: Object.freeze({

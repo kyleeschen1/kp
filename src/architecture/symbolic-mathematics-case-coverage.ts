@@ -25,6 +25,7 @@ export type KpSymbolicCaseMaturityStatus =
 
 export type KpSymbolicCaseOutcome =
   | "animated-transition"
+  | "semantic-only"
   | "typed-gap"
   | "ordered-sequence";
 
@@ -340,20 +341,32 @@ function finiteBinderFamily(): KpSymbolicCaseCoverageFamily {
       }),
       outcome: entry.disposition === "typed-gap"
         ? "typed-gap" as const
-        : "animated-transition" as const,
+        : entry.operationClass === "canonical-sum" ||
+            entry.operationClass === "finite-product-pressure"
+          ? "animated-transition" as const
+          : "semantic-only" as const,
       requiredEvidenceIds: entry.requiredEvidenceIds,
-      maturity: finiteBinderMaturity(entry.disposition)
+      maturity: finiteBinderMaturity(entry.operationClass, entry.disposition)
     })))
   });
 }
 
 function finiteBinderMaturity(
+  operationClass: typeof kpFiniteBinderCaseLedger.cases[number]["operationClass"],
   disposition: typeof kpFiniteBinderCaseLedger.cases[number]["disposition"]
 ): readonly KpSymbolicCaseMaturityEvidence[] {
   if (disposition === "verified-direct-expansion") {
+    const isProduct = operationClass === "finite-product-pressure";
+    const exemplarId = operationClass === "canonical-sum"
+      ? "animation.equation.finite-sum-expansion.v1"
+      : isProduct
+        ? "animation.equation.finite-product-expansion.v1"
+        : undefined;
     return Object.freeze([
       maturity("notation-paintable", "satisfied", [
-        "normalizer.equation.finite-binder-expansion.v1",
+        isProduct
+          ? "normalizer.equation.finite-product-pressure.v1"
+          : "normalizer.equation.finite-binder-expansion.v1",
         "shape.compound.large-operator"
       ]),
       maturity("semantic-representable", "satisfied", [
@@ -362,11 +375,21 @@ function finiteBinderMaturity(
         "range.equation.finite-binder-expansion.v1"
       ]),
       maturity("operation-authoritative", "satisfied", [
-        "operation.equation.finite-binder-expand.v1"
+        "semantic-operation.finite-binder-expansion-kernel.v1",
+        isProduct
+          ? "operation.equation.finite-product-expand.v1"
+          : "operation.equation.finite-binder-expand.v1"
       ]),
-      maturity("exemplar-executable", "missing", []),
-      maturity("family-promoted", "missing", []),
-      maturity("generation-governed", "missing", [])
+      exemplarId === undefined
+        ? maturity("exemplar-executable", "not-applicable", [])
+        : maturity("exemplar-executable", "satisfied", [exemplarId]),
+      maturity("family-promoted", "satisfied", [
+        "semantic-operation.finite-binder-expansion-kernel.v1"
+      ]),
+      maturity("generation-governed", "satisfied", [
+        "compiler.authoring.finite-binder-expansion.v1",
+        "corpus.equation.finite-binder-expansion.v1"
+      ])
     ]);
   }
   if (disposition === "pressure-required") {
@@ -392,8 +415,11 @@ function finiteBinderMaturity(
     maturity("semantic-representable", "missing", []),
     maturity("operation-authoritative", "not-applicable", []),
     maturity("exemplar-executable", "not-applicable", []),
-    maturity("family-promoted", "missing", []),
-    maturity("generation-governed", "missing", [])
+    maturity("family-promoted", "not-applicable", []),
+    maturity("generation-governed", "satisfied", [
+      "compiler.authoring.finite-binder-expansion.v1",
+      "corpus.equation.finite-binder-expansion.v1"
+    ])
   ]);
 }
 

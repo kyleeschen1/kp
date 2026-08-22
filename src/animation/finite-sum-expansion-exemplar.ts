@@ -27,9 +27,11 @@ import {
   KP_CANONICAL_FINITE_SUM_TARGET_STATE_ID,
   kpCanonicalFiniteSumExpansionOperation
 } from "../semantic/canonical-finite-sum-expansion.ts";
+import { KP_FINITE_SUM_EXPANSION_ANIMATION_ID } from
+  "../domain-ir/finite-binder-authorities.ts";
 
 export const kpFiniteSumExpansionExemplarId =
-  "animation.equation.finite-sum-expansion.v1" as const;
+  KP_FINITE_SUM_EXPANSION_ANIMATION_ID;
 
 export function createKpFiniteSumExpansionExemplarAsset(): KpAnimationAsset {
   const operation = kpCanonicalFiniteSumExpansionOperation;

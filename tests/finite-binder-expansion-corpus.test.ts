@@ -7,7 +7,7 @@ import {
   kpFiniteBinderExpansionCorpus
 } from "../src/semantic/finite-binder-expansion-corpus.ts";
 
-test("semantic corpus accepts three direct sums and repairs every other case", () => {
+test("sum semantic corpus accepts three sums and hands product to its compiler", () => {
   assert.deepEqual(evaluateKpFiniteBinderExpansionCorpus(), {
     status: "passed",
     acceptedCount: 3,

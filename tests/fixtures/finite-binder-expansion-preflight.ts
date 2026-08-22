@@ -4,10 +4,23 @@ export const finiteBinderExpansionPreflight = Object.freeze({
     "capability.equation.binders-and-calculus-operators",
   capabilityId: "capability.equation.finite-binder-expansion",
   statusBeforeEvidence: "Missing",
-  requirementIds: Object.freeze([
+  statusAfterEvidence: "Direct",
+  baselineRequirementIds: Object.freeze([
     "requirement.equation.finite-binder-expansion.normalizer",
     "requirement.equation.finite-binder-expansion.operation",
     "requirement.equation.finite-binder-expansion.recipe",
+    "requirement.equation.finite-binder-expansion.corpus"
+  ]),
+  releaseRequirementIds: Object.freeze([
+    "requirement.equation.finite-binder-expansion.sum-normalizer",
+    "requirement.equation.finite-binder-expansion.product-normalizer",
+    "requirement.equation.finite-binder-expansion.kernel",
+    "requirement.equation.finite-binder-expansion.sum-operation",
+    "requirement.equation.finite-binder-expansion.product-operation",
+    "requirement.equation.finite-binder-expansion.recipe",
+    "requirement.equation.finite-binder-expansion.sum-exemplar",
+    "requirement.equation.finite-binder-expansion.product-exemplar",
+    "requirement.equation.finite-binder-expansion.authoring",
     "requirement.equation.finite-binder-expansion.corpus"
   ]),
   canonicalSum: Object.freeze({

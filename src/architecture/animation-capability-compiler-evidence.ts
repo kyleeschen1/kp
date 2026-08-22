@@ -8,6 +8,9 @@ import {
   KP_FRACTION_DENOMINATOR_GENERATION_CORPUS_AUTHORITY
 } from "../authoring/fraction-denominator-generation-corpus.ts";
 import {
+  KP_FINITE_BINDER_AUTHORING_CORPUS_AUTHORITY
+} from "../authoring/finite-binder-authoring-corpus.ts";
+import {
   KP_ROOT_REWRITE_GENERATION_CORPUS_AUTHORITY,
   KP_ROOT_REWRITE_RECIPE_AUTHORITY
 } from "../authoring/root-rewrite-authoring-corpus.ts";
@@ -24,6 +27,8 @@ import {
 import {
   KP_BOTH_SIDES_CAUSAL_RECIPE_AUTHORITY
 } from "../animation/both-sides-causal-recipe.ts";
+import { KP_FINITE_BINDER_EXPANSION_RECIPE } from
+  "../domain-ir/finite-binder-causal-recipe.ts";
 import {
   KP_LOGARITHM_BASE_HANDOFF_MOTIF_AUTHORITY,
   KP_LOGARITHM_CHANGE_OF_BASE_RECIPE_AUTHORITY
@@ -56,6 +61,16 @@ import {
 import {
   KP_LIKE_DENOMINATOR_COMBINATION_OPERATION_AUTHORITY
 } from "../semantic/fraction-like-denominator-combination.ts";
+import { KP_FINITE_BINDER_EXPANSION_KERNEL_AUTHORITY } from
+  "../semantic/finite-binder-expansion-kernel.ts";
+import { KP_FINITE_BINDER_EXPAND_OPERATION } from
+  "../semantic/finite-binder-expansion-operation.ts";
+import { KP_FINITE_SUM_ENDPOINT_NORMALIZER } from
+  "../semantic/finite-sum-endpoint-normalizer.ts";
+import { KP_FINITE_PRODUCT_EXPAND_OPERATION } from
+  "../semantic/finite-product-expansion-operation.ts";
+import { KP_FINITE_PRODUCT_ENDPOINT_NORMALIZER } from
+  "../semantic/finite-product-endpoint-normalizer.ts";
 import {
   KP_INVERSE_POWER_OPERATION_AUTHORITY
 } from "../semantic/inverse-power-operation.ts";
@@ -320,6 +335,27 @@ readonly KpAnimationCapabilityCompilerAuthority[] {
     verified(KP_FRACTION_DENOMINATOR_GENERATION_CORPUS_AUTHORITY,
       "generation-corpus",
       "src/authoring/fraction-denominator-generation-corpus.ts"),
+    verified(KP_FINITE_SUM_ENDPOINT_NORMALIZER,
+      "endpoint-normalizer",
+      "src/semantic/finite-sum-endpoint-normalizer.ts"),
+    verified(KP_FINITE_PRODUCT_ENDPOINT_NORMALIZER,
+      "endpoint-normalizer",
+      "src/semantic/finite-product-endpoint-normalizer.ts"),
+    verified(KP_FINITE_BINDER_EXPANSION_KERNEL_AUTHORITY,
+      "semantic-operation",
+      "src/semantic/finite-binder-expansion-kernel.ts"),
+    verified(KP_FINITE_BINDER_EXPAND_OPERATION,
+      "semantic-operation",
+      "src/semantic/finite-binder-expansion-operation.ts"),
+    verified(KP_FINITE_PRODUCT_EXPAND_OPERATION,
+      "semantic-operation",
+      "src/semantic/finite-product-expansion-operation.ts"),
+    verified(KP_FINITE_BINDER_EXPANSION_RECIPE,
+      "canonical-recipe",
+      "src/domain-ir/finite-binder-causal-recipe.ts"),
+    verified(KP_FINITE_BINDER_AUTHORING_CORPUS_AUTHORITY,
+      "generation-corpus",
+      "src/authoring/finite-binder-authoring-corpus.ts"),
     authority({
       authorityId: KP_BOTH_SIDES_OPERATION_FAMILY_AUTHORITY,
       kind: "semantic-operation",

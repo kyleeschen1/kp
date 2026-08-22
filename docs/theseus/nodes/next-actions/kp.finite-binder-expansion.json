@@ -643,6 +643,62 @@
       "scope": "bf22 authoring boundary",
       "checkedAt": "2026-08-22T17:29:14.805Z",
       "notes": "Dependency, framework-neutral, semantic-animation, and compiler-authority gates pass."
+    },
+    {
+      "command": "npm run test:finite-binder-expansion",
+      "status": "passed",
+      "scope": "bf23 focused release suite",
+      "checkedAt": "2026-08-22T17:47:16.832Z",
+      "notes": "107 finite-binder tests pass, including governed sum/product authoring and typed gaps."
+    },
+    {
+      "command": "npm run test:animation-transformation-coverage",
+      "status": "passed",
+      "scope": "bf23 generated readiness projection",
+      "checkedAt": "2026-08-22T17:47:17.827Z",
+      "notes": "17 coverage and symbolic-ledger tests pass; finite binders derive Direct with no remaining requirements."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "bf23 release type boundary",
+      "checkedAt": "2026-08-22T17:47:18.744Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "bf23 architecture boundary",
+      "checkedAt": "2026-08-22T17:47:19.676Z",
+      "notes": "Dependency direction, framework neutrality, semantic boundaries, and compiler authority ratchets pass."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "bf23 bundle isolation",
+      "checkedAt": "2026-08-22T17:47:20.786Z",
+      "notes": "Bundle boundary passes; measured Catalogue route is 134926 gzip bytes against 190000-byte limit."
+    },
+    {
+      "command": "npm run test:browser:finite-binder-sum",
+      "status": "passed",
+      "scope": "bf23 canonical sum browser gate",
+      "checkedAt": "2026-08-22T17:47:21.760Z",
+      "notes": "Two Chromium tests pass for direct seek and URL restore."
+    },
+    {
+      "command": "npm run test:browser:finite-binder-product",
+      "status": "passed",
+      "scope": "bf23 product pressure browser gate",
+      "checkedAt": "2026-08-22T17:47:22.740Z",
+      "notes": "Two Chromium tests pass for direct seek and URL restore."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "bf23 Theseus integrity",
+      "checkedAt": "2026-08-22T17:47:23.724Z",
+      "notes": "Workspace validates 1049 nodes and 24550 events before recording release completion."
     }
   ],
   "progress": {

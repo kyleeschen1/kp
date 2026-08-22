@@ -13,6 +13,10 @@ import {
   kpBalancedOperationAuthoringCorpus
 } from "../authoring/balanced-operation-authoring-corpus.ts";
 import {
+  evaluateKpFiniteBinderAuthoringCorpus,
+  KP_FINITE_BINDER_AUTHORING_CORPUS_AUTHORITY
+} from "../authoring/finite-binder-authoring-corpus.ts";
+import {
   KP_BOTH_SIDES_EQUATION_SERIES_AUTHORING_AUTHORITY,
   kpEquationSeriesBothSidesAuthoringDeclarations
 } from "../authoring/equation-series-both-sides-authoring.ts";
@@ -39,6 +43,22 @@ import {
   KP_TYPESCRIPT_EXTRACT_HELPER_CORPUS_AUTHORITY,
   KP_TYPESCRIPT_EXTRACT_HELPER_OPERATION_AUTHORITY
 } from "../domain-ir/code-extract-helper-authorities.ts";
+import {
+  KP_FINITE_BINDER_AUTHORING_COMPILER_AUTHORITY,
+  KP_FINITE_SUM_EXPANSION_ANIMATION_ID
+} from "../domain-ir/finite-binder-authorities.ts";
+import { KP_FINITE_BINDER_EXPANSION_RECIPE } from
+  "../domain-ir/finite-binder-causal-recipe.ts";
+import { KP_FINITE_BINDER_EXPANSION_KERNEL_AUTHORITY } from
+  "../semantic/finite-binder-expansion-kernel.ts";
+import { KP_FINITE_BINDER_EXPAND_OPERATION } from
+  "../semantic/finite-binder-expansion-operation.ts";
+import { KP_FINITE_SUM_ENDPOINT_NORMALIZER } from
+  "../semantic/finite-sum-endpoint-normalizer.ts";
+import { KP_FINITE_PRODUCT_EXPAND_OPERATION } from
+  "../semantic/finite-product-expansion-operation.ts";
+import { KP_FINITE_PRODUCT_ENDPOINT_NORMALIZER } from
+  "../semantic/finite-product-endpoint-normalizer.ts";
 import type { KpAnimationCapabilityPlan } from
   "./animation-capability-plan.ts";
 import {
@@ -76,6 +96,7 @@ export interface KpAnimationCapabilityDirectIntentEvidence {
     | KpCompiledEquationIntentPlan["kind"]
     | "equation-transform-series-runtime"
     | "root-rewrite-plan"
+    | "finite-binder-authoring-artifact"
     | "code-refactor-semantic-plan";
   readonly resolvedAuthorityIds: readonly string[];
   readonly generationCorpusAuthorityIds: readonly string[];
@@ -85,6 +106,7 @@ export interface KpAnimationCapabilityDirectIntentEvidence {
     | "src/authoring/compile-equation-intent.ts"
     | "src/authoring/compile-equation-transform-series.ts"
     | "src/authoring/root-rewrite-authoring-corpus.ts"
+    | "src/authoring/finite-binder-authoring-api.ts"
     | "src/authoring/code-operation-discovery-api.ts";
 }
 
@@ -165,9 +187,7 @@ export function compileKpAnimationCapabilityReadiness(input: {
       input.frontendEvidence.requirements
     );
     const directIntent = directIntentForCapability(
-      capability.requirements
-        .filter(({ kind }) => kind === "canonical-exemplar")
-        .map(({ authorityId }) => authorityId),
+      assetMatches.map(({ assetId }) => assetId),
       compilerMatches,
       frontendMatches,
       input.directIntentEvidence
@@ -320,14 +340,45 @@ readonly KpAnimationCapabilityDirectIntentEvidence[] {
   const balancedEvidence = createBalancedOperationDirectEvidence();
   const logarithmBaseEvidence = createLogarithmBaseDirectEvidence();
   const rootRewriteEvidence = createRootRewriteDirectEvidence();
+  const finiteBinderEvidence = createFiniteBinderDirectEvidence();
   const codeEvidence = createCodeRefactorDirectEvidence();
   return Object.freeze([
     ...intentEvidence,
     ...(balancedEvidence === undefined ? [] : [balancedEvidence]),
     ...(logarithmBaseEvidence === undefined ? [] : [logarithmBaseEvidence]),
     ...(rootRewriteEvidence === undefined ? [] : [rootRewriteEvidence]),
+    ...(finiteBinderEvidence === undefined ? [] : [finiteBinderEvidence]),
     ...codeEvidence
   ]);
+}
+
+function createFiniteBinderDirectEvidence():
+KpAnimationCapabilityDirectIntentEvidence | undefined {
+  const corpus = evaluateKpFiniteBinderAuthoringCorpus();
+  if (corpus.status !== "passed" || corpus.acceptedCount !== 4 ||
+      corpus.repairCount !== 2) return undefined;
+  const compilerAuthorities = Object.freeze([
+    KP_FINITE_SUM_ENDPOINT_NORMALIZER,
+    KP_FINITE_PRODUCT_ENDPOINT_NORMALIZER,
+    KP_FINITE_BINDER_EXPANSION_KERNEL_AUTHORITY,
+    KP_FINITE_BINDER_EXPAND_OPERATION,
+    KP_FINITE_PRODUCT_EXPAND_OPERATION,
+    KP_FINITE_BINDER_EXPANSION_RECIPE,
+    KP_FINITE_BINDER_AUTHORING_CORPUS_AUTHORITY
+  ]);
+  return Object.freeze({
+    animationId: KP_FINITE_SUM_EXPANSION_ANIMATION_ID,
+    operationId: KP_FINITE_BINDER_EXPANSION_KERNEL_AUTHORITY,
+    authoringAuthorityId:
+      KP_FINITE_BINDER_AUTHORING_COMPILER_AUTHORITY,
+    planKind: "finite-binder-authoring-artifact" as const,
+    resolvedAuthorityIds: compilerAuthorities,
+    generationCorpusAuthorityIds: Object.freeze([
+      KP_FINITE_BINDER_AUTHORING_CORPUS_AUTHORITY
+    ]),
+    requiredCompilerAuthorityIds: compilerAuthorities,
+    sourcePath: "src/authoring/finite-binder-authoring-api.ts" as const
+  });
 }
 
 function createCodeRefactorDirectEvidence():
@@ -550,11 +601,11 @@ function directIntentForCapability(
   ));
   return directIntents.find((intent) =>
     exemplarIds.includes(intent.animationId) &&
-    (intent.requiredCompilerAuthorityIds === undefined
-      ? intent.resolvedAuthorityIds.some((authorityId) =>
-          compilerAuthorityIds.has(authorityId))
-      : intent.requiredCompilerAuthorityIds.every((authorityId) =>
-          compilerAuthorityIds.has(authorityId))) &&
+    intent.resolvedAuthorityIds.some((authorityId) =>
+      compilerAuthorityIds.has(authorityId)) &&
+    (intent.requiredCompilerAuthorityIds === undefined ||
+      intent.requiredCompilerAuthorityIds.every((authorityId) =>
+        compilerAuthorityIds.has(authorityId))) &&
     (intent.requiredFrontendAuthorityIds === undefined ||
       intent.requiredFrontendAuthorityIds.every((authorityId) =>
         frontendAuthorityIds.has(authorityId)))

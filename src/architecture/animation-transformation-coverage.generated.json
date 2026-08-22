@@ -13,10 +13,10 @@
   "summary": {
     "total": 38,
     "byStatus": {
-      "Direct": 10,
+      "Direct": 11,
       "Registered": 4,
       "Exemplar": 7,
-      "Missing": 17
+      "Missing": 16
     }
   },
   "symbolicMathematics": {
@@ -124,10 +124,10 @@
           "capability.equation.finite-binder-expansion"
         ],
         "byStatus": {
-          "Direct": 0,
+          "Direct": 1,
           "Registered": 0,
           "Exemplar": 0,
-          "Missing": 2
+          "Missing": 1
         }
       },
       {
@@ -2744,51 +2744,125 @@
         "kind": "transformation-family",
         "authorityId": "family.equation.finite-binder-expansion.v1"
       },
-      "status": "Missing",
+      "status": "Direct",
       "requirements": [
         {
-          "id": "requirement.equation.finite-binder-expansion.normalizer",
+          "id": "requirement.equation.finite-binder-expansion.sum-normalizer",
           "kind": "endpoint-normalizer",
           "authorityId": "normalizer.equation.finite-binder-expansion.v1",
-          "summary": "A finite sum or product retains explicit operator, bound-variable, integer-limit, body-template, and instantiated-occurrence roles.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "summary": "Finite sums retain explicit operator, bound-variable, integer-limit, body-template, connector, and instantiated-occurrence roles.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "normalizer.equation.finite-binder-expansion.v1"
+          ]
         },
         {
-          "id": "requirement.equation.finite-binder-expansion.operation",
+          "id": "requirement.equation.finite-binder-expansion.product-normalizer",
+          "kind": "endpoint-normalizer",
+          "authorityId": "normalizer.equation.finite-product-pressure.v1",
+          "summary": "Finite products retain the same binder roles while keeping implicit multiplicative adjacency operator-owned.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "normalizer.equation.finite-product-pressure.v1"
+          ]
+        },
+        {
+          "id": "requirement.equation.finite-binder-expansion.kernel",
+          "kind": "semantic-operation",
+          "authorityId": "semantic-operation.finite-binder-expansion-kernel.v1",
+          "summary": "A shared typed kernel proves inclusive iteration, capture-free body instantiation, fresh occurrence identity, and ordered one-to-many lineage.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "semantic-operation.finite-binder-expansion-kernel.v1"
+          ]
+        },
+        {
+          "id": "requirement.equation.finite-binder-expansion.sum-operation",
           "kind": "semantic-operation",
           "authorityId": "operation.equation.finite-binder-expand.v1",
-          "summary": "A typed operation proves inclusive finite iteration, capture-free body instantiation, and ordered one-to-many lineage.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "summary": "The sum operation adds only explicit additive connective topology to the shared kernel result.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "operation.equation.finite-binder-expand.v1"
+          ]
+        },
+        {
+          "id": "requirement.equation.finite-binder-expansion.product-operation",
+          "kind": "semantic-operation",
+          "authorityId": "operation.equation.finite-product-expand.v1",
+          "summary": "The product operation adds only implicit multiplicative adjacency to the shared kernel result.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "operation.equation.finite-product-expand.v1"
+          ]
         },
         {
           "id": "requirement.equation.finite-binder-expansion.recipe",
           "kind": "canonical-recipe",
           "authorityId": "recipe.equation.finite-binder-expansion.v1",
-          "summary": "A canonical recipe preserves binder scope and ordered instantiation while leaving sum and product presentation operator-owned.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "summary": "The reviewed sum recipe preserves binder scope and ordered instantiation without authorizing shared sum/product choreography.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "recipe.equation.finite-binder-expansion.v1"
+          ]
+        },
+        {
+          "id": "requirement.equation.finite-binder-expansion.sum-exemplar",
+          "kind": "canonical-exemplar",
+          "authorityId": "animation.equation.finite-sum-expansion.v1",
+          "summary": "The approved sum exemplar proves ordered one-to-many instantiation, exact Native KaTeX settlement, seek, rewind, and reduced motion.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "animation.equation.finite-sum-expansion.v1"
+          ]
+        },
+        {
+          "id": "requirement.equation.finite-binder-expansion.product-exemplar",
+          "kind": "canonical-exemplar",
+          "authorityId": "animation.equation.finite-product-expansion.v1",
+          "summary": "The product pressure exemplar proves that shared binder semantics compose with independently owned multiplicative presentation.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "animation.equation.finite-product-expansion.v1"
+          ]
+        },
+        {
+          "id": "requirement.equation.finite-binder-expansion.authoring",
+          "kind": "authoring-surface",
+          "authorityId": "compiler.authoring.finite-binder-expansion.v1",
+          "summary": "A governed registry compiles explicit sum or product requests through verified authorities and returns typed repairs without geometry input.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "src/authoring/finite-binder-authoring-api.ts"
+          ]
         },
         {
           "id": "requirement.equation.finite-binder-expansion.corpus",
           "kind": "generation-corpus",
           "authorityId": "corpus.equation.finite-binder-expansion.v1",
-          "summary": "Fixtures cover bounded sums and products, shifted integer bounds, compound bodies, shadowing, capture hazards, and unsupported symbolic or infinite ranges.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "summary": "Fixtures exercise canonical and shifted sums and products plus symbolic-bound and target-order repairs through the public compiler.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "corpus.equation.finite-binder-expansion.v1"
+          ]
         }
       ],
       "gaps": [],
-      "remainingRequirementIds": [
-        "requirement.equation.finite-binder-expansion.normalizer",
-        "requirement.equation.finite-binder-expansion.operation",
-        "requirement.equation.finite-binder-expansion.recipe",
-        "requirement.equation.finite-binder-expansion.corpus"
+      "remainingRequirementIds": [],
+      "exemplarLinks": [
+        {
+          "assetId": "animation.equation.finite-sum-expansion.v1",
+          "title": "Expand a finite sum",
+          "href": "/?animation=editor-animation.animation.equation.finite-sum-expansion.v1"
+        },
+        {
+          "assetId": "animation.equation.finite-product-expansion.v1",
+          "title": "Expand a finite product",
+          "href": "/?animation=editor-animation.animation.equation.finite-product-expansion.v1"
+        }
       ],
-      "exemplarLinks": [],
       "evidenceTensions": [
-        "planned-capability-without-exact-asset"
+        "direct-deterministic-not-live-model-evidence"
       ],
       "caseCoverage": {
         "status": "tracked",
@@ -2829,23 +2903,31 @@
                 "dimensionId": "operation-authoritative",
                 "status": "satisfied",
                 "evidenceSourceIds": [
+                  "semantic-operation.finite-binder-expansion-kernel.v1",
                   "operation.equation.finite-binder-expand.v1"
                 ]
               },
               {
                 "dimensionId": "exemplar-executable",
-                "status": "missing",
-                "evidenceSourceIds": []
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "animation.equation.finite-sum-expansion.v1"
+                ]
               },
               {
                 "dimensionId": "family-promoted",
-                "status": "missing",
-                "evidenceSourceIds": []
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "semantic-operation.finite-binder-expansion-kernel.v1"
+                ]
               },
               {
                 "dimensionId": "generation-governed",
-                "status": "missing",
-                "evidenceSourceIds": []
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "compiler.authoring.finite-binder-expansion.v1",
+                  "corpus.equation.finite-binder-expansion.v1"
+                ]
               }
             ]
           },
@@ -2855,7 +2937,7 @@
             "title": "Expand a singleton finite sum",
             "sourceLatex": "\\sum_{i=2}^{2} a_i",
             "targetLatex": "a_2",
-            "outcome": "animated-transition",
+            "outcome": "semantic-only",
             "requiredEvidenceIds": [
               "explicit-integer-bounds",
               "singleton-range",
@@ -2883,23 +2965,29 @@
                 "dimensionId": "operation-authoritative",
                 "status": "satisfied",
                 "evidenceSourceIds": [
+                  "semantic-operation.finite-binder-expansion-kernel.v1",
                   "operation.equation.finite-binder-expand.v1"
                 ]
               },
               {
                 "dimensionId": "exemplar-executable",
-                "status": "missing",
+                "status": "not-applicable",
                 "evidenceSourceIds": []
               },
               {
                 "dimensionId": "family-promoted",
-                "status": "missing",
-                "evidenceSourceIds": []
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "semantic-operation.finite-binder-expansion-kernel.v1"
+                ]
               },
               {
                 "dimensionId": "generation-governed",
-                "status": "missing",
-                "evidenceSourceIds": []
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "compiler.authoring.finite-binder-expansion.v1",
+                  "corpus.equation.finite-binder-expansion.v1"
+                ]
               }
             ]
           },
@@ -2909,7 +2997,7 @@
             "title": "Expand across negative integer bounds",
             "sourceLatex": "\\sum_{i=-2}^{1} a_i",
             "targetLatex": "a_{-2}+a_{-1}+a_0+a_1",
-            "outcome": "animated-transition",
+            "outcome": "semantic-only",
             "requiredEvidenceIds": [
               "explicit-integer-bounds",
               "ascending-inclusive-range",
@@ -2937,23 +3025,29 @@
                 "dimensionId": "operation-authoritative",
                 "status": "satisfied",
                 "evidenceSourceIds": [
+                  "semantic-operation.finite-binder-expansion-kernel.v1",
                   "operation.equation.finite-binder-expand.v1"
                 ]
               },
               {
                 "dimensionId": "exemplar-executable",
-                "status": "missing",
+                "status": "not-applicable",
                 "evidenceSourceIds": []
               },
               {
                 "dimensionId": "family-promoted",
-                "status": "missing",
-                "evidenceSourceIds": []
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "semantic-operation.finite-binder-expansion-kernel.v1"
+                ]
               },
               {
                 "dimensionId": "generation-governed",
-                "status": "missing",
-                "evidenceSourceIds": []
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "compiler.authoring.finite-binder-expansion.v1",
+                  "corpus.equation.finite-binder-expansion.v1"
+                ]
               }
             ]
           },
@@ -2974,12 +3068,13 @@
                 "dimensionId": "notation-paintable",
                 "status": "satisfied",
                 "evidenceSourceIds": [
+                  "normalizer.equation.finite-product-pressure.v1",
                   "shape.compound.large-operator"
                 ]
               },
               {
                 "dimensionId": "semantic-representable",
-                "status": "pressure",
+                "status": "satisfied",
                 "evidenceSourceIds": [
                   "vocabulary.equation.finite-binder-expansion.v1",
                   "proof.equation.finite-binder-scope.v1",
@@ -2988,23 +3083,33 @@
               },
               {
                 "dimensionId": "operation-authoritative",
-                "status": "missing",
-                "evidenceSourceIds": []
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "semantic-operation.finite-binder-expansion-kernel.v1",
+                  "operation.equation.finite-product-expand.v1"
+                ]
               },
               {
                 "dimensionId": "exemplar-executable",
-                "status": "missing",
-                "evidenceSourceIds": []
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "animation.equation.finite-product-expansion.v1"
+                ]
               },
               {
                 "dimensionId": "family-promoted",
-                "status": "missing",
-                "evidenceSourceIds": []
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "semantic-operation.finite-binder-expansion-kernel.v1"
+                ]
               },
               {
                 "dimensionId": "generation-governed",
-                "status": "missing",
-                "evidenceSourceIds": []
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "compiler.authoring.finite-binder-expansion.v1",
+                  "corpus.equation.finite-binder-expansion.v1"
+                ]
               }
             ]
           },
@@ -3042,13 +3147,16 @@
               },
               {
                 "dimensionId": "family-promoted",
-                "status": "missing",
+                "status": "not-applicable",
                 "evidenceSourceIds": []
               },
               {
                 "dimensionId": "generation-governed",
-                "status": "missing",
-                "evidenceSourceIds": []
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "compiler.authoring.finite-binder-expansion.v1",
+                  "corpus.equation.finite-binder-expansion.v1"
+                ]
               }
             ]
           },
@@ -3086,13 +3194,16 @@
               },
               {
                 "dimensionId": "family-promoted",
-                "status": "missing",
+                "status": "not-applicable",
                 "evidenceSourceIds": []
               },
               {
                 "dimensionId": "generation-governed",
-                "status": "missing",
-                "evidenceSourceIds": []
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "compiler.authoring.finite-binder-expansion.v1",
+                  "corpus.equation.finite-binder-expansion.v1"
+                ]
               }
             ]
           },
@@ -3130,13 +3241,16 @@
               },
               {
                 "dimensionId": "family-promoted",
-                "status": "missing",
+                "status": "not-applicable",
                 "evidenceSourceIds": []
               },
               {
                 "dimensionId": "generation-governed",
-                "status": "missing",
-                "evidenceSourceIds": []
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "compiler.authoring.finite-binder-expansion.v1",
+                  "corpus.equation.finite-binder-expansion.v1"
+                ]
               }
             ]
           },
@@ -3174,13 +3288,16 @@
               },
               {
                 "dimensionId": "family-promoted",
-                "status": "missing",
+                "status": "not-applicable",
                 "evidenceSourceIds": []
               },
               {
                 "dimensionId": "generation-governed",
-                "status": "missing",
-                "evidenceSourceIds": []
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "compiler.authoring.finite-binder-expansion.v1",
+                  "corpus.equation.finite-binder-expansion.v1"
+                ]
               }
             ]
           },
@@ -3218,13 +3335,16 @@
               },
               {
                 "dimensionId": "family-promoted",
-                "status": "missing",
+                "status": "not-applicable",
                 "evidenceSourceIds": []
               },
               {
                 "dimensionId": "generation-governed",
-                "status": "missing",
-                "evidenceSourceIds": []
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "compiler.authoring.finite-binder-expansion.v1",
+                  "corpus.equation.finite-binder-expansion.v1"
+                ]
               }
             ]
           },
@@ -3262,13 +3382,16 @@
               },
               {
                 "dimensionId": "family-promoted",
-                "status": "missing",
+                "status": "not-applicable",
                 "evidenceSourceIds": []
               },
               {
                 "dimensionId": "generation-governed",
-                "status": "missing",
-                "evidenceSourceIds": []
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "compiler.authoring.finite-binder-expansion.v1",
+                  "corpus.equation.finite-binder-expansion.v1"
+                ]
               }
             ]
           },
@@ -3307,13 +3430,16 @@
               },
               {
                 "dimensionId": "family-promoted",
-                "status": "missing",
+                "status": "not-applicable",
                 "evidenceSourceIds": []
               },
               {
                 "dimensionId": "generation-governed",
-                "status": "missing",
-                "evidenceSourceIds": []
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "compiler.authoring.finite-binder-expansion.v1",
+                  "corpus.equation.finite-binder-expansion.v1"
+                ]
               }
             ]
           }

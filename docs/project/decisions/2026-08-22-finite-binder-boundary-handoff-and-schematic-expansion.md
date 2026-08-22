@@ -334,3 +334,31 @@ Exact canonical endpoints link to their reviewed Catalogue assets. Other
 proved integer-bound variants remain explicitly `semantic-only` until a
 reviewed visual asset owns those endpoints. This preserves honest discovery:
 semantic support does not silently become presentation maturity.
+
+## Readiness And Release Evidence
+
+The narrow finite-binder family now derives `Direct` from exact repository
+evidence. The declaration requires both endpoint normalizers, both
+operator-owned expansion operations, the shared identity-and-lineage kernel,
+the reviewed sum causal recipe, the distinct sum and product Catalogue assets,
+the governed authoring compiler, and its fixed generation corpus. Every
+requirement is satisfied; no title or visual similarity is used as evidence.
+
+The family corpus exercises canonical sum and product assets, shifted
+semantic-only variants of each operator, and typed repairs for a symbolic
+bound and a misordered product target. The case ledger therefore distinguishes
+three kinds of truth:
+
+- the canonical sum and product are executable reviewed transitions;
+- singleton and shifted sums are verified semantic operations without a
+  reviewed visual asset; and
+- unsupported binder shapes remain explicit typed gaps whose repair behavior
+  is governed without implying semantic or visual support.
+
+Readiness also requires the declared exemplar to be present in generated asset
+evidence. A direct-intent record with a plausible animation ID can no longer
+promote a missing asset. The sum and product browser suites pass direct seek,
+rewind, and URL restoration, while architecture and bundle isolation remain
+green. At this boundary the measured internal Catalogue route is 134,926 gzip
+bytes against its 190,000-byte limit; the finite-binder assets remain lazy
+chunks rather than entering the outer shell.

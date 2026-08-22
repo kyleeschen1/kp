@@ -51,6 +51,18 @@ test("change-of-base exemplar matches only its exact generated asset", () => {
   assert.match(alternativeBase.asset.href ?? "", /artifact=/);
 });
 
+test("finite binder evidence retains distinct reviewed sum and product assets", () => {
+  const evidence = createKpAnimationCapabilityAssetEvidence();
+  const assets = evidence.requirements.filter(({ capabilityId, status }) =>
+    capabilityId === "capability.equation.finite-binder-expansion" &&
+    status === "matched"
+  );
+  assert.deepEqual(assets.map(({ assetId }) => assetId), [
+    "animation.equation.finite-sum-expansion.v1",
+    "animation.equation.finite-product-expansion.v1"
+  ]);
+});
+
 test("display-only domain exemplars retain their generated canonical link", () => {
   const evidence = createKpAnimationCapabilityAssetEvidence();
   const graph3d = evidence.requirements.find(

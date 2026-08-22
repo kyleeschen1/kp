@@ -16,19 +16,24 @@ import { kpNativeKatexCompoundConformanceShapes } from
 import { finiteBinderExpansionPreflight } from
   "./fixtures/finite-binder-expansion-preflight.ts";
 
-test("preflight narrows the missing umbrella to finite binder expansion", () => {
+test("preflight baseline remains explicit after exact release promotion", () => {
   const capability = generatedCoverage.entries.find(({ capabilityId }) =>
     capabilityId === finiteBinderExpansionPreflight.capabilityId
   );
 
   assert.ok(capability);
+  assert.equal(finiteBinderExpansionPreflight.statusBeforeEvidence, "Missing");
   assert.equal(capability.status,
-    finiteBinderExpansionPreflight.statusBeforeEvidence);
+    finiteBinderExpansionPreflight.statusAfterEvidence);
   assert.deepEqual(
-    capability.remainingRequirementIds,
-    finiteBinderExpansionPreflight.requirementIds
+    capability.requirements.map(({ id }) => id),
+    finiteBinderExpansionPreflight.releaseRequirementIds
   );
-  assert.deepEqual(capability.exemplarLinks, []);
+  assert.deepEqual(capability.remainingRequirementIds, []);
+  assert.deepEqual(capability.exemplarLinks.map(({ assetId }) => assetId), [
+    finiteBinderExpansionPreflight.canonicalSum.proposedAnimationId,
+    finiteBinderExpansionPreflight.productPressure.proposedAnimationId
+  ]);
   assert.equal(generatedCoverage.entries.some(({ capabilityId }) =>
     capabilityId === finiteBinderExpansionPreflight.retiredBroadCapabilityId
   ), false);

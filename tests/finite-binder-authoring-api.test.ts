@@ -7,8 +7,26 @@ import {
   isKpVerifiedFiniteBinderAuthoringArtifact,
   KP_FINITE_BINDER_AUTHORING_REQUEST_SCHEMA
 } from "../src/authoring/finite-binder-authoring-api.ts";
+import {
+  evaluateKpFiniteBinderAuthoringCorpus,
+  kpFiniteBinderAuthoringCorpus
+} from "../src/authoring/finite-binder-authoring-corpus.ts";
 
 const api = createKpFiniteBinderAuthoringApi();
+
+test("family authoring corpus governs both operators and typed repairs", () => {
+  assert.deepEqual(evaluateKpFiniteBinderAuthoringCorpus(), {
+    status: "passed",
+    acceptedCount: 4,
+    repairCount: 2
+  });
+  assert.deepEqual(
+    kpFiniteBinderAuthoringCorpus.cases.map(({ operator }) => operator),
+    ["sum", "product", "sum", "product", "sum", "product"]
+  );
+  assert.doesNotMatch(JSON.stringify(kpFiniteBinderAuthoringCorpus),
+    /geometry|trajectory|keyframe|duration|renderer/iu);
+});
 
 test("finite-binder discovery lists and resolves both registered operators", () => {
   assert.deepEqual(api.list().map(({ operator }) => operator),
