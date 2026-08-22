@@ -22,9 +22,10 @@
       "animation.algebra.radical.solve-x-squared-nine",
       "animation.algebra.radical.compound-carrier-normalization",
       "animation.operation-evaluation.two-times-one-carrier",
-      "animation.operation-evaluation.two-times-three"
+      "animation.operation-evaluation.two-times-three",
+      "animation.equation.finite-sum-expansion.v1"
     ],
-    "currentCount": 41,
+    "currentCount": 42,
     "reconciled": true
   },
   "entries": [
@@ -455,6 +456,45 @@
         "representationId": "editor-animation.animation.comparison.linear-solve-programming",
         "representationKind": "editor",
         "href": "/?animation=editor-animation.animation.comparison.linear-solve-programming&view=editor",
+        "sourcePath": "src/editor/animation-library-display-catalog-builder.ts"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-inventory-entry.v1",
+      "animationId": "animation.equation.finite-sum-expansion.v1",
+      "title": "Expand a finite sum",
+      "semanticOwner": {
+        "kind": "catalog-animation-asset",
+        "assetId": "animation.equation.finite-sum-expansion.v1",
+        "primaryDescriptorId": "editor-animation.animation.equation.finite-sum-expansion.v1",
+        "sourcePath": "src/animation/catalog.ts"
+      },
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "catalogueSurface": {
+        "kind": "equation",
+        "slotKind": "equation",
+        "selectedCapabilityId": "finite-binder-expansion",
+        "rendererAdapterId": "editor-animation-surface.finite-sum-expansion.canonical-native-katex",
+        "rendererSourcePath": "src/editor/finite-sum-surface-adapter.ts"
+      },
+      "clockAuthority": {
+        "ownerId": "editor-animation-player",
+        "sourcePath": "src/editor/animation-player-controller.ts",
+        "durationMs": 6000,
+        "beatCount": 120
+      },
+      "lazyCapability": {
+        "packId": "algebra",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/algebra.ts"
+      },
+      "currentPresentationAuthority": {
+        "canonicalFormat": "legacy",
+        "representationId": "editor-animation.animation.equation.finite-sum-expansion.v1",
+        "representationKind": "editor",
+        "href": "/?animation=editor-animation.animation.equation.finite-sum-expansion.v1&view=editor",
         "sourcePath": "src/editor/animation-library-display-catalog-builder.ts"
       }
     },

@@ -99,6 +99,14 @@
       "summary": "Exponential homomorphism mints occurrence identity from normalized power syntax."
     },
     {
+      "id": "compiler.finite-binder-expansion",
+      "category": "compiler",
+      "authority": "local",
+      "sourcePath": "src/semantic/canonical-finite-sum-expansion.ts",
+      "sourceNeedle": "export const kpCanonicalFiniteSumExpansionOperation",
+      "summary": "The candidate finite sum enters presentation only through its verified scope, range, and expansion operation."
+    },
+    {
       "id": "motif.generic-transition",
       "category": "motif",
       "authority": "compatibility",
@@ -161,6 +169,14 @@
       "sourcePath": "src/animation/exponential-homomorphism-motif.ts",
       "sourceNeedle": "export const kpExponentialHomomorphismMotifSchema",
       "summary": "The pressure exemplar declares payload continuity and base succession without glyph inference."
+    },
+    {
+      "id": "motif.finite-sum-ordered-fan-out",
+      "category": "motif",
+      "authority": "local",
+      "sourcePath": "src/animation/finite-sum-expansion-presentation-plan.ts",
+      "sourceNeedle": "export function compileKpFiniteSumExpansionPresentationPlan",
+      "summary": "The unpromoted sum exemplar owns its ordered fan-out presentation locally."
     },
     {
       "id": "timing.generic-phase-easing",
@@ -235,6 +251,14 @@
       "summary": "The unpromoted pressure exemplar owns one deterministic transit profile."
     },
     {
+      "id": "timing.finite-sum-candidate",
+      "category": "local-timing",
+      "authority": "local",
+      "sourcePath": "src/animation/finite-sum-expansion-presentation-plan.ts",
+      "sourceNeedle": "export const kpCanonicalFiniteSumExpansionPresentationPlan",
+      "summary": "The candidate sum owns one reversible timing profile pending human review."
+    },
+    {
       "id": "renderer.generic-dom-measurement",
       "category": "renderer-inference",
       "authority": "compatibility",
@@ -297,6 +321,14 @@
       "sourcePath": "src/rendering/exponential-homomorphism-transit-session.ts",
       "sourceNeedle": "export function createKpExponentialHomomorphismTransitSession",
       "summary": "The exponential pressure exemplar composes the canonical Native KaTeX scene session."
+    },
+    {
+      "id": "renderer.finite-sum-transit",
+      "category": "renderer-inference",
+      "authority": "local",
+      "sourcePath": "src/rendering/finite-sum-transit-session.ts",
+      "sourceNeedle": "export function createKpFiniteSumTransitSession",
+      "summary": "The sum candidate composes measured Native KaTeX ownership through a local transit session."
     },
     {
       "id": "fallback.generic-whole-equation",
@@ -363,6 +395,14 @@
       "summary": "Exponential preparation failures retain the readable source endpoint."
     },
     {
+      "id": "fallback.finite-sum-source",
+      "category": "fallback",
+      "authority": "canonical",
+      "sourcePath": "src/editor/finite-sum-surface-adapter.ts",
+      "sourceNeedle": "session.stage.dataset[\"kpFiniteSumStage\"] = \"failed\"",
+      "summary": "Finite-sum preparation fails closed to its readable source endpoint."
+    },
+    {
       "id": "sampler.generic-semantic-token",
       "category": "direct-sampler",
       "authority": "compatibility",
@@ -393,6 +433,14 @@
       "sourcePath": "src/animation/log-exponent-timeline.ts",
       "sourceNeedle": "export function sampleKpLogExponentSequenceFrame",
       "summary": "The log-exponent adapter directly samples its local sequence."
+    },
+    {
+      "id": "sampler.finite-sum-motion",
+      "category": "direct-sampler",
+      "authority": "local",
+      "sourcePath": "src/animation/finite-sum-expansion-motion.ts",
+      "sourceNeedle": "export function sampleKpFiniteSumExpansionMotion",
+      "summary": "The candidate sum samples one pure normalized external clock."
     },
     {
       "id": "sampler.semantic-motion-choreography",
@@ -926,6 +974,43 @@
         "sampler.generic-semantic-token",
         "sampler.linear-rearrangement",
         "sampler.witnessed-annihilation"
+      ]
+    },
+    {
+      "schemaVersion": "kp.equation-surface-authority-row.v1",
+      "animationId": "animation.equation.finite-sum-expansion.v1",
+      "pathClass": "finite-binder-expansion-specialized",
+      "transformationTypes": [
+        "finiteBinderExpand"
+      ],
+      "semanticCompilerCoverage": {
+        "semantic": 1,
+        "nonSemantic": 0
+      },
+      "compilerNodeIds": [
+        "compiler.finite-binder-expansion"
+      ],
+      "registryNodeIds": [
+        "registry.selected-capability",
+        "registry.priority-resolution"
+      ],
+      "motifNodeIds": [
+        "motif.finite-sum-ordered-fan-out"
+      ],
+      "localTimingNodeIds": [
+        "timing.finite-sum-candidate"
+      ],
+      "rendererInferenceNodeIds": [
+        "renderer.finite-sum-transit"
+      ],
+      "sharedClockNodeId": "clock.shared-editor-player",
+      "privateClockAuthority": "none",
+      "cssAnimationAuthority": "none",
+      "fallbackNodeIds": [
+        "fallback.finite-sum-source"
+      ],
+      "directSamplerNodeIds": [
+        "sampler.finite-sum-motion"
       ]
     },
     {

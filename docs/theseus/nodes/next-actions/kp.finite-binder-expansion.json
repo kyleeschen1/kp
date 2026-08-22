@@ -510,6 +510,13 @@
       "scope": "finite-sum dual-revision cache types",
       "checkedAt": "2026-08-22T16:17:36.723Z",
       "notes": "Application, Node, test, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "finite-sum generated inventory authority and preservation closure",
+      "checkedAt": "2026-08-22T16:20:34.176Z",
+      "notes": "All 11 checks pass after regenerating the three derived equation-surface ledgers from the already-live finite-sum capability."
     }
   ],
   "progress": {
