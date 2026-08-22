@@ -30,19 +30,37 @@ test("finite sum mounts once and remains inspectable across direct seeks", async
   );
   await expect(stage).toHaveAttribute("data-kp-finite-sum-stage", "ready");
   await expect(stage.locator(".kp-finite-sum-stage__endpoint")).toHaveCount(2);
+  await expect(stage.locator(
+    ".kp-finite-sum-stage__frozen-source"
+  )).toBeVisible();
+  await expect(stage.locator(
+    ".kp-finite-sum-stage__relation"
+  )).toBeVisible();
   await expect(page.locator("body")).toHaveAttribute(
     "data-kp-dev-review-ready",
     "true"
   );
 
   for (const progress of [0, 0.16, 0.34, 0.52, 0.7, 0.88, 1, 0.6, 0]) {
+    const sourceBoxBefore = await stage.locator(
+      ".kp-finite-sum-stage__frozen-source"
+    ).boundingBox();
+    const relationBoxBefore = await stage.locator(
+      ".kp-finite-sum-stage__relation"
+    ).boundingBox();
     await seek.fill(String(progress));
     await expect(stage).toHaveAttribute(
       "data-kp-finite-sum-progress",
       String(progress)
     );
-    await expectOneAccessibleEndpoint(stage);
+    await expectAtMostOneAccessibleEndpoint(stage);
     expect(await visiblePaintCount(stage)).toBeGreaterThan(0);
+    expect(await stage.locator(
+      ".kp-finite-sum-stage__frozen-source"
+    ).boundingBox()).toEqual(sourceBoxBefore);
+    expect(await stage.locator(
+      ".kp-finite-sum-stage__relation"
+    ).boundingBox()).toEqual(relationBoxBefore);
   }
 
   await expect(stage).toHaveAttribute(
@@ -62,14 +80,14 @@ test("finite sum URL restores its semantic frame without playback", async ({
   );
   await expect(stage).toHaveAttribute("data-kp-finite-sum-stage", "ready");
   await expect(stage).toHaveAttribute("data-kp-finite-sum-progress", "0.63");
-  await expectOneAccessibleEndpoint(stage);
+  await expectAtMostOneAccessibleEndpoint(stage);
   expect(await visiblePaintCount(stage)).toBeGreaterThan(0);
 });
 
-async function expectOneAccessibleEndpoint(stage: Locator): Promise<void> {
+async function expectAtMostOneAccessibleEndpoint(stage: Locator): Promise<void> {
   await expect.poll(() => stage.locator(
     '.kp-finite-sum-stage__endpoint[aria-hidden="false"]'
-  ).count()).toBe(1);
+  ).count()).toBeLessThanOrEqual(1);
 }
 
 async function visiblePaintCount(stage: Locator): Promise<number> {
@@ -77,9 +95,12 @@ async function visiblePaintCount(stage: Locator): Promise<number> {
     const endpoints = [...root.querySelectorAll<HTMLElement>(
       ".kp-finite-sum-stage__endpoint"
     )].filter((element) => Number(getComputedStyle(element).opacity) > 0.01);
+    const retained = [...root.querySelectorAll<HTMLElement>(
+      ".kp-finite-sum-stage__frozen-source, .kp-finite-sum-stage__relation"
+    )].filter((element) => Number(getComputedStyle(element).opacity) > 0.01);
     const material = [...root.querySelectorAll<HTMLElement>(
       "[data-kp-equation-material-owner-id]"
     )].filter((element) => Number(getComputedStyle(element).opacity) > 0.01);
-    return endpoints.length + material.length;
+    return endpoints.length + retained.length + material.length;
   });
 }

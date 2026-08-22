@@ -6,6 +6,7 @@ import {
 import {
   createKpEquationFontReadiness
 } from "../rendering/equation-font-readiness.ts";
+import { renderLatexToHtml } from "../rendering/katex-adapter.ts";
 import {
   syncKpEquationMaterialLayer
 } from "../rendering/equation-material-layer-dom.ts";
@@ -22,6 +23,10 @@ import {
   type KpFiniteSumTransitSession
 } from "../rendering/finite-sum-transit-session.ts";
 import {
+  kpFiniteSumEquivalenceFrame,
+  kpFiniteSumEquivalenceFrameOccurrenceIds
+} from "../semantic/finite-sum-equivalence-frame.ts";
+import {
   KP_EDITOR_ANIMATION_DISPOSE_EVENT
 } from "./animation-player-controller.ts";
 import type {
@@ -34,7 +39,10 @@ import type {
 interface KpFiniteSumSurfaceSession {
   readonly player: HTMLElement;
   readonly stage: HTMLElement;
+  readonly frozenSource: HTMLElement;
+  readonly relation: HTMLElement;
   readonly endpointRoots: readonly [HTMLElement, HTMLElement];
+  readonly materialLayer: HTMLElement;
   readonly fontReadiness: ReturnType<typeof createKpEquationFontReadiness>;
   generation: number;
   pendingState: KpEditorAnimationPlayerState;
@@ -76,21 +84,56 @@ function mountSurface(
 ): KpFiniteSumSurfaceSession {
   const document = player.ownerDocument;
   const stage = document.createElement("section");
-  stage.className = "kp-finite-sum-stage";
+  stage.className =
+    "kp-finite-sum-stage kp-finite-sum-equivalence-stage";
   stage.dataset["kpFiniteSumStage"] = "preparing";
-  stage.setAttribute("aria-label", "Expand a finite sum");
+  stage.dataset["kpStateRetentionProjectionId"] =
+    kpFiniteSumEquivalenceFrame.projection.id;
+  stage.dataset["kpStateRetentionPolicy"] =
+    kpFiniteSumEquivalenceFrame.projection.policy;
+  stage.setAttribute("aria-label",
+    "Construct a finite sum expansion as a retained equivalence");
+  const frame = document.createElement("div");
+  frame.className = "kp-finite-sum-stage__frame";
+  const sourceCell = document.createElement("div");
+  sourceCell.className = "kp-finite-sum-stage__cell";
+  const targetCell = document.createElement("div");
+  targetCell.className = "kp-finite-sum-stage__cell";
+  const frozenSource = document.createElement("div");
+  frozenSource.className = "kp-finite-sum-stage__frozen-source";
+  frozenSource.dataset["kpStateRetentionOccurrenceId"] =
+    kpFiniteSumEquivalenceFrameOccurrenceIds.source;
+  frozenSource.innerHTML =
+    kpCanonicalFiniteSumNativeEndpoints[0].nativeHtmlAndMathml;
+  const relation = document.createElement("div");
+  relation.className = "kp-finite-sum-stage__relation";
+  relation.dataset["kpStateRetentionOccurrenceId"] =
+    kpFiniteSumEquivalenceFrameOccurrenceIds.relation;
+  relation.innerHTML = renderLatexToHtml("=", {
+    displayMode: true,
+    output: "htmlAndMathml"
+  });
   const createRoot = (index: 0 | 1): HTMLElement => {
     const endpoint = kpCanonicalFiniteSumNativeEndpoints[index];
     const root = document.createElement("div");
-    root.className = "kp-finite-sum-stage__endpoint";
+    root.className =
+      `kp-finite-sum-stage__endpoint ` +
+      `kp-finite-sum-stage__measurement ` +
+      `kp-finite-sum-stage__measurement--${endpoint.endpoint}`;
     root.dataset["kpFiniteSumEndpoint"] = endpoint.endpoint;
+    root.dataset["kpStateRetentionOccurrenceId"] = index === 0
+      ? kpFiniteSumEquivalenceFrame.projection.transitOccurrence.id
+      : kpFiniteSumEquivalenceFrameOccurrenceIds.target;
     root.innerHTML = endpoint.nativeHtmlAndMathml;
-    root.style.opacity = index === 0 ? "1" : "0";
-    setAccessibleEndpoint(root, index === 0);
+    root.style.opacity = "0";
+    setAccessibleEndpoint(root, false);
     bindKpFiniteSumNativeEndpointOwnership({ root, endpoint });
     return root;
   };
   const roots: [HTMLElement, HTMLElement] = [createRoot(0), createRoot(1)];
+  sourceCell.append(frozenSource, roots[0]);
+  targetCell.append(roots[1]);
+  frame.append(sourceCell, relation, targetCell);
   const materialLayer = document.createElement("div");
   materialLayer.className = "kp-finite-sum-stage__material-layer";
   materialLayer.dataset["kpEditorEquationMaterialLayer"] = "true";
@@ -100,12 +143,15 @@ function mountSurface(
   status.dataset["kpFiniteSumStatus"] = "true";
   status.setAttribute("aria-live", "polite");
   status.textContent = "Finite sum ready.";
-  stage.append(...roots, materialLayer, status);
+  stage.append(frame, materialLayer, status);
   slot.replaceChildren(stage);
   return {
     player,
     stage,
+    frozenSource,
+    relation,
     endpointRoots: Object.freeze(roots),
+    materialLayer,
     fontReadiness: createKpEquationFontReadiness(document),
     generation: 0,
     pendingState: state,
@@ -147,9 +193,9 @@ async function prepareSurface(
     session.stage.dataset["kpFiniteSumStage"] = "failed";
     session.stage.dataset["kpFiniteSumError"] =
       error instanceof Error ? error.message : String(error);
-    session.endpointRoots.forEach((root, index) => {
-      root.style.opacity = index === 0 ? "1" : "0";
-      setAccessibleEndpoint(root, index === 0);
+    session.endpointRoots.forEach((root) => {
+      root.style.opacity = "0";
+      setAccessibleEndpoint(root, false);
     });
   }
 }
@@ -166,8 +212,17 @@ function applyFrame(
     : state.progress;
   session.endpointRoots.forEach((root) => setAccessibleEndpoint(root, false));
   const ownership = session.transit.apply(progress);
-  const accessibleIndex = ownership.visualOwner === "source-native" ? 0 : 1;
-  setAccessibleEndpoint(session.endpointRoots[accessibleIndex]!, true);
+  session.materialLayer.style.visibility = progress === 0 || progress === 1
+    ? "hidden"
+    : "visible";
+  session.endpointRoots.forEach((root) => {
+    root.style.opacity = "0";
+    setAccessibleEndpoint(root, false);
+  });
+  if (ownership.visualOwner === "target-native") {
+    session.endpointRoots[1].style.opacity = "1";
+    setAccessibleEndpoint(session.endpointRoots[1], true);
+  }
   session.stage.dataset["kpFiniteSumProgress"] = String(progress);
   session.stage.dataset["kpFiniteSumVisualOwner"] = ownership.visualOwner;
   const status = session.stage.querySelector<HTMLOutputElement>(
@@ -177,8 +232,8 @@ function applyFrame(
     status.textContent = progress === 0
       ? "Finite sum ready."
       : progress === 1
-        ? "The three ordered terms are expanded."
-        : "Instantiating the sum body in order.";
+        ? "The retained finite sum equals its three-term expansion."
+        : "The retained sum is generating one ordered term at a time.";
   }
 }
 

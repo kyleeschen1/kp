@@ -11,7 +11,6 @@
   text-transform: none;
 }
 
-.kp-finite-sum-stage__endpoint,
 .kp-finite-sum-stage__material-layer {
   position: absolute;
   inset: 0;
@@ -20,12 +19,65 @@
   font-size: clamp(2.25rem, 5vw, 4rem);
 }
 
-.kp-finite-sum-stage__endpoint .katex-display {
+.kp-finite-sum-stage__endpoint .katex-display,
+.kp-finite-sum-stage__frozen-source .katex-display,
+.kp-finite-sum-stage__relation .katex-display {
   margin: 0;
 }
 
 .kp-finite-sum-stage__material-layer {
   pointer-events: none;
+  font-size: clamp(1.65rem, 3.3vw, 2.8rem);
+}
+
+.kp-finite-sum-stage__frame {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: max-content max-content max-content;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.4rem, 0.8vw, 0.75rem);
+  padding-inline: clamp(1rem, 4vw, 4rem);
+}
+
+.kp-finite-sum-stage__cell {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  min-height: clamp(8rem, 20vh, 12rem);
+  place-items: center;
+}
+
+.kp-finite-sum-stage__cell > * {
+  grid-area: 1 / 1;
+}
+
+.kp-finite-sum-stage__frozen-source,
+.kp-finite-sum-stage__relation,
+.kp-finite-sum-stage__measurement {
+  font-size: clamp(1.65rem, 3.3vw, 2.8rem);
+}
+
+.kp-finite-sum-stage__measurement {
+  position: relative;
+  inset: auto;
+  display: grid;
+  place-items: center;
+}
+
+@media (max-width: 42rem) {
+  .kp-finite-sum-stage__frame {
+    gap: 0.3rem;
+    padding-inline: 0.5rem;
+  }
+
+  .kp-finite-sum-stage__frozen-source,
+  .kp-finite-sum-stage__relation,
+  .kp-finite-sum-stage__measurement,
+  .kp-finite-sum-stage__material-layer {
+    font-size: clamp(1.1rem, 5vw, 1.85rem);
+  }
 }
 
 .kp-finite-sum-stage__status {

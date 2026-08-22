@@ -40,7 +40,7 @@ test("finite sum owns every settled endpoint atom exactly once", () => {
     /cannot enter durable state/u);
 });
 
-test("body fans out while boundary paint transfers to boundary references", () => {
+test("only the body fans out; range-derived references own fresh paint", () => {
   const ownership = createKpFiniteSumNativePaintOwnership({
     sourceHandle: handle(kpCanonicalFiniteSumNativeEndpoints[0]),
     targetHandle: handle(kpCanonicalFiniteSumNativeEndpoints[1])
@@ -53,18 +53,6 @@ test("body fans out while boundary paint transfers to boundary references", () =
       relation: "split",
       sourceEntityIds: [operation.source.semantic.body.id],
       targetEntityIds: operation.target.instances.map(({ id }) => id)
-    },
-    {
-      id: "paint.finite-binder.lower-bound-materializes-reference",
-      relation: "persist",
-      sourceEntityIds: [operation.source.semantic.lowerBound.id],
-      targetEntityIds: [operation.target.instances[0]!.references[0]!.id]
-    },
-    {
-      id: "paint.finite-binder.upper-bound-materializes-reference",
-      relation: "persist",
-      sourceEntityIds: [operation.source.semantic.upperBound.id],
-      targetEntityIds: [operation.target.instances[2]!.references[0]!.id]
     }
   ]);
   assert.equal(ownership.relations.some(({ sourceEntityIds }) =>

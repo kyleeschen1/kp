@@ -19,18 +19,13 @@ export interface KpFiniteSumInstancePresentation {
   readonly instantiatedReferenceId: KpFiniteBinderSemanticId;
   readonly bodyTransitWindow: KpFiniteSumPresentationWindow;
   readonly referenceReceptionWindow: KpFiniteSumPresentationWindow;
-  readonly referenceReception:
-    | Readonly<{
-        kind: "boundary-transfer";
-        boundaryRole: "lower-bound" | "upper-bound";
-        sourceBoundaryId: KpFiniteBinderSemanticId;
-        transitWindow: KpFiniteSumPresentationWindow;
-      }>
-    | Readonly<{
-        kind: "range-successor-instantiation";
-        sourceReferenceId: KpFiniteBinderSemanticId;
-        receptionWindow: KpFiniteSumPresentationWindow;
-      }>;
+  readonly referenceReception: Readonly<{
+    kind: "range-value-instantiation";
+    sourceReferenceId: KpFiniteBinderSemanticId;
+    value: number;
+    valueSource: "lower-bound" | "range-successor" | "upper-bound";
+    receptionWindow: KpFiniteSumPresentationWindow;
+  }>;
   readonly precedingConnector?: Readonly<{
     connectorId: KpFiniteBinderSemanticId;
     receptionWindow: KpFiniteSumPresentationWindow;
@@ -45,24 +40,18 @@ export interface KpFiniteSumExpansionPresentationPlan {
   readonly operationId: typeof KP_FINITE_BINDER_EXPAND_OPERATION;
   readonly direction: "forward";
   readonly topology: "ordered-template-fan-out";
-  readonly sourceHoldWindow: KpFiniteSumPresentationWindow;
-  readonly sourceScopeWithdrawal: Readonly<{
-    topology: "collapse-toward-operator-center";
-    operatorId: KpFiniteBinderSemanticId;
-    cohortIds: readonly KpFiniteBinderSemanticId[];
-    contractionWindow: KpFiniteSumPresentationWindow;
-    presenceWindow: KpFiniteSumPresentationWindow;
+  readonly stateRetention: Readonly<{
+    policy: "equivalence-frame";
+    source: "frozen-native-context";
+    relation: "fixed-native-equality";
+    target: "live-then-native";
   }>;
+  readonly sourceHoldWindow: KpFiniteSumPresentationWindow;
   readonly templateFanOut: Readonly<{
     sourceBodyTemplateId: KpFiniteBinderSemanticId;
     topology: "one-source-to-ordered-distinct-instances";
     route: "direct-baseline";
-    sourcePaint: "opaque-until-branches-separate";
-  }>;
-  readonly sourceReferenceWithdrawal: Readonly<{
-    sourceReferenceId: KpFiniteBinderSemanticId;
-    topology: "withdraw-before-substituted-reference-reception";
-    presenceWindow: KpFiniteSumPresentationWindow;
+    sourcePaint: "retained-context-with-live-derived-copies";
   }>;
   readonly instances: readonly KpFiniteSumInstancePresentation[];
   readonly targetHoldWindow: KpFiniteSumPresentationWindow;
@@ -76,22 +65,19 @@ export interface KpFiniteSumExpansionPresentationPlan {
   }>;
 }
 
-const SOURCE_HOLD = window(0, 0.14);
-const SOURCE_SCOPE_CONTRACTION = window(0.14, 0.25);
-const SOURCE_SCOPE_PRESENCE = window(0.18, 0.29);
-const SOURCE_REFERENCE_PRESENCE = window(0.18, 0.29);
+const SOURCE_HOLD = window(0, 0.08);
 const BODY_TRANSIT_WINDOWS = Object.freeze([
-  window(0.22, 0.46),
-  window(0.34, 0.58),
-  window(0.46, 0.7)
+  window(0.08, 0.28),
+  window(0.3, 0.5),
+  window(0.52, 0.72)
 ]);
 const REFERENCE_RECEPTION_WINDOWS = Object.freeze([
-  window(0.18, 0.48),
-  window(0.5, 0.6),
-  window(0.18, 0.72)
+  window(0.18, 0.28),
+  window(0.4, 0.5),
+  window(0.62, 0.72)
 ]);
 const CONNECTOR_RECEPTION_WINDOWS = Object.freeze([
-  window(0.6, 0.68),
+  window(0.5, 0.58),
   window(0.72, 0.8)
 ]);
 const TARGET_HOLD = window(0.8, 1);
@@ -130,22 +116,17 @@ export function compileKpFiniteSumExpansionPresentationPlan(
     const connectorWindow = ordinal === 0
       ? undefined
       : CONNECTOR_RECEPTION_WINDOWS[ordinal - 1];
-    const isFirst = ordinal === 0;
-    const isLast = ordinal === operation.target.instances.length - 1;
-    const referenceReception = isFirst || isLast
-      ? Object.freeze({
-          kind: "boundary-transfer" as const,
-          boundaryRole: isFirst ? "lower-bound" as const : "upper-bound" as const,
-          sourceBoundaryId: isFirst
-            ? source.lowerBound.id
-            : source.upperBound.id,
-          transitWindow: referenceReceptionWindow
-        })
-      : Object.freeze({
-          kind: "range-successor-instantiation" as const,
-          sourceReferenceId: sourceReference.id,
-          receptionWindow: referenceReceptionWindow
-        });
+    const referenceReception = Object.freeze({
+      kind: "range-value-instantiation" as const,
+      sourceReferenceId: sourceReference.id,
+      value: instance.indexValue,
+      valueSource: ordinal === 0
+        ? "lower-bound" as const
+        : ordinal === operation.target.instances.length - 1
+          ? "upper-bound" as const
+          : "range-successor" as const,
+      receptionWindow: referenceReceptionWindow
+    });
     return Object.freeze({
       ordinal,
       bodyInstanceId: instance.id,
@@ -171,28 +152,18 @@ export function compileKpFiniteSumExpansionPresentationPlan(
     operationId: operation.operation,
     direction: "forward" as const,
     topology: "ordered-template-fan-out" as const,
-    sourceHoldWindow: SOURCE_HOLD,
-    sourceScopeWithdrawal: Object.freeze({
-      topology: "collapse-toward-operator-center" as const,
-      operatorId: source.operator.id,
-      cohortIds: Object.freeze([
-        source.operator.id,
-        source.binder.id
-      ]),
-      contractionWindow: SOURCE_SCOPE_CONTRACTION,
-      presenceWindow: SOURCE_SCOPE_PRESENCE
+    stateRetention: Object.freeze({
+      policy: "equivalence-frame" as const,
+      source: "frozen-native-context" as const,
+      relation: "fixed-native-equality" as const,
+      target: "live-then-native" as const
     }),
+    sourceHoldWindow: SOURCE_HOLD,
     templateFanOut: Object.freeze({
       sourceBodyTemplateId: source.body.id,
       topology: "one-source-to-ordered-distinct-instances" as const,
       route: "direct-baseline" as const,
-      sourcePaint: "opaque-until-branches-separate" as const
-    }),
-    sourceReferenceWithdrawal: Object.freeze({
-      sourceReferenceId: sourceReference.id,
-      topology:
-        "withdraw-before-substituted-reference-reception" as const,
-      presenceWindow: SOURCE_REFERENCE_PRESENCE
+      sourcePaint: "retained-context-with-live-derived-copies" as const
     }),
     instances: Object.freeze(instances),
     targetHoldWindow: TARGET_HOLD,

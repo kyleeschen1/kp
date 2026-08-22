@@ -27,6 +27,7 @@ interface CaptureEvidence {
   readonly progress: number;
   readonly visualOwner: string;
   readonly accessibleEndpointCount: number;
+  readonly retainedContextVisible: boolean;
   readonly visibleMaterialOwnerCount: number;
   readonly file: string;
 }
@@ -140,12 +141,23 @@ async function captureSample(input: {
     accessibleEndpointCount: [...root.querySelectorAll<HTMLElement>(
       '.kp-finite-sum-stage__endpoint[aria-hidden="false"]'
     )].length,
+    retainedContextVisible: [
+      root.querySelector<HTMLElement>(".kp-finite-sum-stage__frozen-source"),
+      root.querySelector<HTMLElement>(".kp-finite-sum-stage__relation")
+    ].every((element) => element !== null &&
+      Number(getComputedStyle(element).opacity) > 0.01),
     visibleMaterialOwnerCount: [...root.querySelectorAll<HTMLElement>(
       "[data-kp-equation-material-owner-id]"
     )].filter((owner) => Number(getComputedStyle(owner).opacity) > 0.01).length
   }));
-  if (state.accessibleEndpointCount !== 1) {
-    throw new Error(`${id} must expose exactly one accessible endpoint.`);
+  const expectedEndpointCount = input.progress === 1 ? 1 : 0;
+  if (state.accessibleEndpointCount !== expectedEndpointCount) {
+    throw new Error(
+      `${id} expected ${expectedEndpointCount} accessible live endpoints.`
+    );
+  }
+  if (!state.retainedContextVisible) {
+    throw new Error(`${id} must keep source and equality context visible.`);
   }
   return {
     id,

@@ -56,9 +56,12 @@ export function createKpFiniteSumTransitSession(input: {
       [atom.id, atom.semanticEntityId]
     )
   );
-  const scopeIds = new Set<string>([
+  const retainedScaffoldIds = new Set<string>([
     operation.source.semantic.operator.id,
-    operation.source.semantic.binder.id
+    operation.source.semantic.binder.id,
+    operation.source.semantic.lowerBound.id,
+    operation.source.semantic.upperBound.id,
+    operation.source.semantic.body.references[0]!.id
   ]);
   const instanceOrdinal = new Map<string, number>(operation.target.instances.map(
     (instance) => [instance.id, instance.ordinal]
@@ -69,24 +72,6 @@ export function createKpFiniteSumTransitSession(input: {
   const connectorOrdinal = new Map<string, number>(operation.target.connectors.map(
     (connector) => [connector.id, connector.ordinal + 1]
   ));
-  const boundaryOrdinal = new Map<string, number>([
-    [operation.source.semantic.lowerBound.id, 0],
-    [
-      operation.source.semantic.upperBound.id,
-      operation.target.instances.length - 1
-    ]
-  ]);
-  const operatorAtom = ownership.source.handle.observation.atoms.find(
-    ({ semanticEntityId }) =>
-      semanticEntityId === operation.source.semantic.operator.id
-  );
-  if (operatorAtom === undefined) {
-    throw new Error("Finite-sum transit lacks measured operator ink.");
-  }
-  const operatorCenter = {
-    x: operatorAtom.rect.left + operatorAtom.rect.width / 2,
-    y: operatorAtom.rect.top + operatorAtom.rect.height / 2
-  };
   const trackProjection = createKpNativeKatexTrackProjection({
     id: "track-projection.finite-sum-expansion.canonical.v1",
     project({ tracks }) {
@@ -114,59 +99,18 @@ export function createKpFiniteSumTransitSession(input: {
                 .instances[targetInstanceOrdinal]!.bodyPresence
           });
         }
-        const sourceBoundaryOrdinal = sourceEntity === undefined
-          ? undefined
-          : boundaryOrdinal.get(sourceEntity);
-        const boundaryTargetReferenceOrdinal = targetEntity === undefined
-          ? undefined
-          : referenceOrdinal.get(targetEntity);
-        if (track.lifecycle === "persist" &&
-            sourceBoundaryOrdinal !== undefined &&
-            boundaryTargetReferenceOrdinal === sourceBoundaryOrdinal) {
-          return Object.freeze({
-            ...track,
-            timingGroupId:
-              `finite-sum.boundary.${sourceBoundaryOrdinal}`,
-            sampleProgress: (progress: number) =>
-              sampleKpFiniteSumExpansionMotion(progress, mode)
-                .instances[sourceBoundaryOrdinal]!.referenceTransitProgress
-          });
-        }
         if (track.lifecycle === "eliminate" &&
-            sourceEntity !== undefined && scopeIds.has(sourceEntity)) {
-          return Object.freeze({
-            ...track,
-            endRect: Object.freeze({
-              ...track.endRect,
-              left: operatorCenter.x - track.endRect.width / 2,
-              top: operatorCenter.y - track.endRect.height / 2
-            }),
-            timingGroupId: "finite-sum.source-scope-withdrawal",
-            opacityScheduleAuthority: "semantic-choreography" as const,
-            sampleProgress: (progress: number) =>
-              sampleKpFiniteSumExpansionMotion(progress, mode)
-                .sourceScope.contractionProgress,
-            sampleOpacityProgress: (progress: number) =>
-              1 - sampleKpFiniteSumExpansionMotion(progress, mode)
-                .sourceScope.presence,
-            ...(mode === "reduced" ? {} : {
-              sampleMaterialScale: (progress: number) =>
-                1 - 0.25 * sampleKpFiniteSumExpansionMotion(progress, mode)
-                  .sourceScope.contractionProgress
-            })
-          });
-        }
-        if (track.lifecycle === "eliminate" &&
-            sourceEntity === operation.source.semantic.body.references[0]!.id) {
+            sourceEntity !== undefined &&
+            retainedScaffoldIds.has(sourceEntity)) {
           return Object.freeze({
             ...track,
             endRect: Object.freeze({ ...track.startRect }),
-            timingGroupId: "finite-sum.source-reference-withdrawal",
+            timingGroupId: "finite-sum.retained-source-scaffold",
             opacityScheduleAuthority: "semantic-choreography" as const,
-            sampleProgress: () => 0,
-            sampleOpacityProgress: (progress: number) =>
-              1 - sampleKpFiniteSumExpansionMotion(progress, mode)
-                .sourceReferencePresence
+            // The frozen equivalence occurrence already paints these glyphs;
+            // hiding transit clones prevents boldening and crossing noise.
+            sampleProgress: () => 1,
+            sampleOpacityProgress: () => 1
           });
         }
         const targetReferenceOrdinal = targetEntity === undefined

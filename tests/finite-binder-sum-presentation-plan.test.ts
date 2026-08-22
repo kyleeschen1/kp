@@ -21,7 +21,13 @@ test("sum plan stages one ordered body fan-out", () => {
     operation.target.instances.map(({ id }) => id));
   assert.deepEqual(plan.instances.map(({ bodyTransitWindow }) =>
     bodyTransitWindow.start
-  ), [0.22, 0.34, 0.46]);
+  ), [0.08, 0.3, 0.52]);
+  assert.deepEqual(plan.stateRetention, {
+    policy: "equivalence-frame",
+    source: "frozen-native-context",
+    relation: "fixed-native-equality",
+    target: "live-then-native"
+  });
 });
 
 test("substituted references settle before their dependent connectors", () => {
@@ -39,30 +45,30 @@ test("substituted references settle before their dependent connectors", () => {
     plan.instances.at(-1)!.precedingConnector!.receptionWindow.end);
 });
 
-test("boundary paint transfers while the interior reference is synthesized", () => {
+test("all target references are derived in place from verified range truth", () => {
   const plan = kpCanonicalFiniteSumExpansionPresentationPlan;
   const operation = kpCanonicalFiniteSumExpansionOperation;
   assert.deepEqual(plan.instances.map(({ referenceReception }) =>
     referenceReception.kind
   ), [
-    "boundary-transfer",
-    "range-successor-instantiation",
-    "boundary-transfer"
+    "range-value-instantiation",
+    "range-value-instantiation",
+    "range-value-instantiation"
   ]);
-  assert.deepEqual(plan.instances.flatMap(({ referenceReception }) =>
-    referenceReception.kind === "boundary-transfer"
-      ? [referenceReception.sourceBoundaryId]
-      : []
-  ), [
-    operation.source.semantic.lowerBound.id,
-    operation.source.semantic.upperBound.id
+  assert.deepEqual(plan.instances.map(({ referenceReception }) =>
+    referenceReception.valueSource), [
+    "lower-bound",
+    "range-successor",
+    "upper-bound"
   ]);
-  assert.ok(plan.sourceScopeWithdrawal.cohortIds.includes(
-    operation.source.semantic.operator.id));
-  assert.equal(plan.sourceScopeWithdrawal.cohortIds.includes(
-    operation.source.semantic.lowerBound.id), false);
-  assert.equal(plan.sourceScopeWithdrawal.cohortIds.includes(
-    operation.source.semantic.upperBound.id), false);
+  assert.deepEqual(plan.instances.map(({ referenceReception }) =>
+    referenceReception.sourceReferenceId), [
+    operation.source.semantic.body.references[0]!.id,
+    operation.source.semantic.body.references[0]!.id,
+    operation.source.semantic.body.references[0]!.id
+  ]);
+  assert.equal(plan.templateFanOut.sourcePaint,
+    "retained-context-with-live-derived-copies");
 });
 
 test("candidate plan owns one clock and no renderer scheduling", () => {

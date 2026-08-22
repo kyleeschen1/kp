@@ -65,8 +65,6 @@ export function createKpFiniteSumNativePaintOwnership(input: {
     endpoint: "target"
   });
   const operation = kpCanonicalFiniteSumExpansionOperation;
-  const firstReference = operation.target.instances[0]!.references[0]!;
-  const lastReference = operation.target.instances.at(-1)!.references[0]!;
   const relations = projectKpNativeKatexSemanticPaintRelations({
     groups: [
       {
@@ -74,18 +72,6 @@ export function createKpFiniteSumNativePaintOwnership(input: {
         kind: "one-to-many",
         sourceEntityIds: [operation.source.semantic.body.id],
         targetEntityIds: operation.target.instances.map(({ id }) => id)
-      },
-      {
-        id: "finite-binder.lower-bound-materializes-reference",
-        kind: "one-to-one",
-        sourceEntityIds: [operation.source.semantic.lowerBound.id],
-        targetEntityIds: [firstReference.id]
-      },
-      {
-        id: "finite-binder.upper-bound-materializes-reference",
-        kind: "one-to-one",
-        sourceEntityIds: [operation.source.semantic.upperBound.id],
-        targetEntityIds: [lastReference.id]
       }
     ]
   });

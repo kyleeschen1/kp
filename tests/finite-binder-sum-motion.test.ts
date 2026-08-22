@@ -11,12 +11,10 @@ test("sum motion has exact source and target endpoints", () => {
   const target = sampleKpFiniteSumExpansionMotion(1);
 
   assert.equal(source.endpoint, "source");
-  assert.equal(source.sourceScope.presence, 1);
   assert.ok(source.instances.every(({ bodyTransitProgress, bodyPresence }) =>
     bodyTransitProgress === 0 && bodyPresence === 0
   ));
   assert.equal(target.endpoint, "target");
-  assert.equal(target.sourceScope.presence, 0);
   assert.ok(target.instances.every((instance) =>
     instance.bodyTransitProgress === 1 &&
     instance.bodyPresence === 1 &&
@@ -41,9 +39,6 @@ test("dense arbitrary seeks are deterministic bounded and monotone", () => {
     assert.deepEqual(frame,
       sampleKpFiniteSumExpansionMotion(index / 1000));
     const values = [
-      frame.sourceScope.contractionProgress,
-      frame.sourceScope.presence,
-      frame.sourceReferencePresence,
       ...frame.instances.flatMap((instance) => [
         instance.bodyTransitProgress,
         instance.bodyPresence,
@@ -68,15 +63,11 @@ test("dense arbitrary seeks are deterministic bounded and monotone", () => {
   }
 });
 
-test("reduced motion preserves semantic timing without depth contraction", () => {
+test("reduced motion preserves the same semantic generation windows", () => {
   for (let index = 0; index <= 100; index += 1) {
     const progress = index / 100;
     const full = sampleKpFiniteSumExpansionMotion(progress, "full");
     const reduced = sampleKpFiniteSumExpansionMotion(progress, "reduced");
-    assert.equal(reduced.sourceScope.contractionProgress, 0);
-    assert.equal(reduced.sourceScope.presence, full.sourceScope.presence);
-    assert.equal(reduced.sourceReferencePresence,
-      full.sourceReferencePresence);
     assert.deepEqual(reduced.instances, full.instances);
   }
 });
