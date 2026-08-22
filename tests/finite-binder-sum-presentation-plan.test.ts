@@ -39,18 +39,30 @@ test("substituted references settle before their dependent connectors", () => {
     plan.instances.at(-1)!.precedingConnector!.receptionWindow.end);
 });
 
-test("changed syntax never claims persistent paint identity", () => {
+test("boundary paint transfers while the interior reference is synthesized", () => {
   const plan = kpCanonicalFiniteSumExpansionPresentationPlan;
   const operation = kpCanonicalFiniteSumExpansionOperation;
-  const encoded = JSON.stringify(plan);
-
-  assert.match(encoded, /collapse-toward-operator-center/u);
-  assert.match(encoded,
-    /withdraw-before-substituted-reference-reception/u);
-  assert.doesNotMatch(encoded, /persist|clone-identity|arithmetic/u);
+  assert.deepEqual(plan.instances.map(({ referenceReception }) =>
+    referenceReception.kind
+  ), [
+    "boundary-transfer",
+    "range-successor-instantiation",
+    "boundary-transfer"
+  ]);
+  assert.deepEqual(plan.instances.flatMap(({ referenceReception }) =>
+    referenceReception.kind === "boundary-transfer"
+      ? [referenceReception.sourceBoundaryId]
+      : []
+  ), [
+    operation.source.semantic.lowerBound.id,
+    operation.source.semantic.upperBound.id
+  ]);
   assert.ok(plan.sourceScopeWithdrawal.cohortIds.includes(
-    operation.source.semantic.operator.id
-  ));
+    operation.source.semantic.operator.id));
+  assert.equal(plan.sourceScopeWithdrawal.cohortIds.includes(
+    operation.source.semantic.lowerBound.id), false);
+  assert.equal(plan.sourceScopeWithdrawal.cohortIds.includes(
+    operation.source.semantic.upperBound.id), false);
 });
 
 test("candidate plan owns one clock and no renderer scheduling", () => {

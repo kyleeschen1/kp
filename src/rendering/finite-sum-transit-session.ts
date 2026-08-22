@@ -58,9 +58,7 @@ export function createKpFiniteSumTransitSession(input: {
   );
   const scopeIds = new Set<string>([
     operation.source.semantic.operator.id,
-    operation.source.semantic.binder.id,
-    operation.source.semantic.lowerBound.id,
-    operation.source.semantic.upperBound.id
+    operation.source.semantic.binder.id
   ]);
   const instanceOrdinal = new Map<string, number>(operation.target.instances.map(
     (instance) => [instance.id, instance.ordinal]
@@ -71,6 +69,13 @@ export function createKpFiniteSumTransitSession(input: {
   const connectorOrdinal = new Map<string, number>(operation.target.connectors.map(
     (connector) => [connector.id, connector.ordinal + 1]
   ));
+  const boundaryOrdinal = new Map<string, number>([
+    [operation.source.semantic.lowerBound.id, 0],
+    [
+      operation.source.semantic.upperBound.id,
+      operation.target.instances.length - 1
+    ]
+  ]);
   const operatorAtom = ownership.source.handle.observation.atoms.find(
     ({ semanticEntityId }) =>
       semanticEntityId === operation.source.semantic.operator.id
@@ -107,6 +112,24 @@ export function createKpFiniteSumTransitSession(input: {
             samplePaintPresence: (progress: number) =>
               sampleKpFiniteSumExpansionMotion(progress, mode)
                 .instances[targetInstanceOrdinal]!.bodyPresence
+          });
+        }
+        const sourceBoundaryOrdinal = sourceEntity === undefined
+          ? undefined
+          : boundaryOrdinal.get(sourceEntity);
+        const boundaryTargetReferenceOrdinal = targetEntity === undefined
+          ? undefined
+          : referenceOrdinal.get(targetEntity);
+        if (track.lifecycle === "persist" &&
+            sourceBoundaryOrdinal !== undefined &&
+            boundaryTargetReferenceOrdinal === sourceBoundaryOrdinal) {
+          return Object.freeze({
+            ...track,
+            timingGroupId:
+              `finite-sum.boundary.${sourceBoundaryOrdinal}`,
+            sampleProgress: (progress: number) =>
+              sampleKpFiniteSumExpansionMotion(progress, mode)
+                .instances[sourceBoundaryOrdinal]!.referenceTransitProgress
           });
         }
         if (track.lifecycle === "eliminate" &&

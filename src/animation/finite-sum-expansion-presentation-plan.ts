@@ -19,6 +19,18 @@ export interface KpFiniteSumInstancePresentation {
   readonly instantiatedReferenceId: KpFiniteBinderSemanticId;
   readonly bodyTransitWindow: KpFiniteSumPresentationWindow;
   readonly referenceReceptionWindow: KpFiniteSumPresentationWindow;
+  readonly referenceReception:
+    | Readonly<{
+        kind: "boundary-transfer";
+        boundaryRole: "lower-bound" | "upper-bound";
+        sourceBoundaryId: KpFiniteBinderSemanticId;
+        transitWindow: KpFiniteSumPresentationWindow;
+      }>
+    | Readonly<{
+        kind: "range-successor-instantiation";
+        sourceReferenceId: KpFiniteBinderSemanticId;
+        receptionWindow: KpFiniteSumPresentationWindow;
+      }>;
   readonly precedingConnector?: Readonly<{
     connectorId: KpFiniteBinderSemanticId;
     receptionWindow: KpFiniteSumPresentationWindow;
@@ -74,9 +86,9 @@ const BODY_TRANSIT_WINDOWS = Object.freeze([
   window(0.46, 0.7)
 ]);
 const REFERENCE_RECEPTION_WINDOWS = Object.freeze([
-  window(0.38, 0.48),
+  window(0.18, 0.48),
   window(0.5, 0.6),
-  window(0.62, 0.72)
+  window(0.18, 0.72)
 ]);
 const CONNECTOR_RECEPTION_WINDOWS = Object.freeze([
   window(0.6, 0.68),
@@ -118,12 +130,29 @@ export function compileKpFiniteSumExpansionPresentationPlan(
     const connectorWindow = ordinal === 0
       ? undefined
       : CONNECTOR_RECEPTION_WINDOWS[ordinal - 1];
+    const isFirst = ordinal === 0;
+    const isLast = ordinal === operation.target.instances.length - 1;
+    const referenceReception = isFirst || isLast
+      ? Object.freeze({
+          kind: "boundary-transfer" as const,
+          boundaryRole: isFirst ? "lower-bound" as const : "upper-bound" as const,
+          sourceBoundaryId: isFirst
+            ? source.lowerBound.id
+            : source.upperBound.id,
+          transitWindow: referenceReceptionWindow
+        })
+      : Object.freeze({
+          kind: "range-successor-instantiation" as const,
+          sourceReferenceId: sourceReference.id,
+          receptionWindow: referenceReceptionWindow
+        });
     return Object.freeze({
       ordinal,
       bodyInstanceId: instance.id,
       instantiatedReferenceId: reference.id,
       bodyTransitWindow,
       referenceReceptionWindow,
+      referenceReception,
       ...(connector === undefined || connectorWindow === undefined
         ? {}
         : {
@@ -148,9 +177,7 @@ export function compileKpFiniteSumExpansionPresentationPlan(
       operatorId: source.operator.id,
       cohortIds: Object.freeze([
         source.operator.id,
-        source.binder.id,
-        source.lowerBound.id,
-        source.upperBound.id
+        source.binder.id
       ]),
       contractionWindow: SOURCE_SCOPE_CONTRACTION,
       presenceWindow: SOURCE_SCOPE_PRESENCE

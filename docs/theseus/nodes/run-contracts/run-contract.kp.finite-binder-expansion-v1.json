@@ -162,7 +162,8 @@
     {
       "id": "bf17",
       "title": "Resolve visual checkpoint",
-      "status": "planned"
+      "summary": "Recorded the approved binder-expansion direction, implemented lineage-backed lower/upper boundary handoff in the fixed-sum exemplar, preserved distinct occurrence identity and deterministic direct seek, and reopened a focused human checkpoint before product pressure.",
+      "status": "complete"
     },
     {
       "id": "bf18",

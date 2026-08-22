@@ -1,9 +1,13 @@
 # Animation Catalogue Thread
 
 Status: active
-Last Updated: 2026-08-21
-Current Next Action: propose one reversible finite sum/product binder exemplar
-and stop for human visual review before pressure or promotion. The completed
+Last Updated: 2026-08-22
+Current Next Action: review the revised finite-sum exemplar's lineage-backed
+boundary handoff before product pressure or presentation promotion. The fixed
+range design and the separately scoped symbolic-ellipsis follow-up are recorded
+in
+`../decisions/2026-08-22-finite-binder-boundary-handoff-and-schematic-expansion.md`.
+The completed
 TypeScript/Python extract-helper frontend tranche is recorded in
 `../reviews/2026-08-21-typescript-python-generation-frontends-closeout.md`.
 The durable order remains binder exemplar, binder pressure/promotion, bounded

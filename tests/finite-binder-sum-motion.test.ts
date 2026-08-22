@@ -20,7 +20,8 @@ test("sum motion has exact source and target endpoints", () => {
   assert.ok(target.instances.every((instance) =>
     instance.bodyTransitProgress === 1 &&
     instance.bodyPresence === 1 &&
-    instance.referencePresence === 1
+    instance.referencePresence === 1 &&
+    instance.referenceTransitProgress === 1
   ));
   assert.deepEqual(target.instances.map(({ precedingConnectorPresence }) =>
     precedingConnectorPresence
@@ -46,6 +47,7 @@ test("dense arbitrary seeks are deterministic bounded and monotone", () => {
       ...frame.instances.flatMap((instance) => [
         instance.bodyTransitProgress,
         instance.bodyPresence,
+        instance.referenceTransitProgress,
         instance.referencePresence,
         instance.precedingConnectorPresence
       ])
@@ -58,6 +60,8 @@ test("dense arbitrary seeks are deterministic bounded and monotone", () => {
         previous.instances[ordinal]!.bodyTransitProgress);
       assert.ok(instance.referencePresence >=
         previous.instances[ordinal]!.referencePresence);
+      assert.ok(instance.referenceTransitProgress >=
+        previous.instances[ordinal]!.referenceTransitProgress);
       assert.ok(instance.precedingConnectorPresence >=
         previous.instances[ordinal]!.precedingConnectorPresence);
     });

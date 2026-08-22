@@ -25,6 +25,7 @@ export interface KpFiniteSumExpansionMotionFrame {
     ordinal: number;
     bodyTransitProgress: number;
     bodyPresence: number;
+    referenceTransitProgress: number;
     referencePresence: number;
     precedingConnectorPresence: number;
   }>[];
@@ -51,6 +52,10 @@ export function sampleKpFiniteSumExpansionMotion(
       boundedProgress
     );
     const connector = instance.precedingConnector;
+    const referenceTransitProgress = sampleWindow(
+      instance.referenceReceptionWindow,
+      boundedProgress
+    );
     return Object.freeze({
       ordinal: instance.ordinal,
       bodyTransitProgress,
@@ -58,10 +63,9 @@ export function sampleKpFiniteSumExpansionMotion(
       bodyPresence: bodyTransitProgress === 0
         ? instance.ordinal === 0 && boundedProgress > 0 ? 1 : 0
         : 1,
-      referencePresence: sampleWindow(
-        instance.referenceReceptionWindow,
-        boundedProgress
-      ),
+      referenceTransitProgress,
+      referencePresence: instance.referenceReception.kind ===
+        "boundary-transfer" ? 1 : referenceTransitProgress,
       precedingConnectorPresence: connector === undefined
         ? 0
         : sampleWindow(connector.receptionWindow, boundedProgress)
@@ -115,6 +119,7 @@ function staticFrame(
       ordinal: instance.ordinal,
       bodyTransitProgress: target ? 1 : 0,
       bodyPresence: target ? 1 : 0,
+      referenceTransitProgress: target ? 1 : 0,
       referencePresence: target ? 1 : 0,
       precedingConnectorPresence:
         target && instance.precedingConnector !== undefined ? 1 : 0

@@ -87,6 +87,35 @@ test("one source body and reference derive every target occurrence", () => {
   assert.equal(Object.isFrozen(result.operation.lineage), true);
 });
 
+test("range boundaries derive the first and last references without cloning identity", () => {
+  const result = defineKpFiniteBinderExpansionOperation(operationInput());
+  assert.equal(result.status, "verified");
+  if (result.status !== "verified") return;
+
+  const { operation } = result;
+  const boundaryEdges = operation.lineage.filter(({ relation }) =>
+    relation === "lower-bound-materializes-reference" ||
+    relation === "upper-bound-materializes-reference"
+  );
+  assert.deepEqual(boundaryEdges, [
+    {
+      sourceId: operation.source.semantic.lowerBound.id,
+      targetId: operation.target.instances[0]!.references[0]!.id,
+      relation: "lower-bound-materializes-reference",
+      ordinal: 0
+    },
+    {
+      sourceId: operation.source.semantic.upperBound.id,
+      targetId: operation.target.instances[2]!.references[0]!.id,
+      relation: "upper-bound-materializes-reference",
+      ordinal: 2
+    }
+  ]);
+  assert.ok(boundaryEdges.every(({ sourceId, targetId }) =>
+    sourceId !== targetId
+  ));
+});
+
 test("sum operator derives connectors without persisting its identity", () => {
   const result = defineKpFiniteBinderExpansionOperation(operationInput());
   assert.equal(result.status, "verified");

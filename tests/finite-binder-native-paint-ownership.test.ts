@@ -40,19 +40,33 @@ test("finite sum owns every settled endpoint atom exactly once", () => {
     /cannot enter durable state/u);
 });
 
-test("only matching body ink fans out across the one-to-many lineage", () => {
+test("body fans out while boundary paint transfers to boundary references", () => {
   const ownership = createKpFiniteSumNativePaintOwnership({
     sourceHandle: handle(kpCanonicalFiniteSumNativeEndpoints[0]),
     targetHandle: handle(kpCanonicalFiniteSumNativeEndpoints[1])
   });
   const operation = kpCanonicalFiniteSumExpansionOperation;
 
-  assert.deepEqual(ownership.relations, [{
-    id: "paint.finite-binder.body-template-instantiates",
-    relation: "split",
-    sourceEntityIds: [operation.source.semantic.body.id],
-    targetEntityIds: operation.target.instances.map(({ id }) => id)
-  }]);
+  assert.deepEqual(ownership.relations, [
+    {
+      id: "paint.finite-binder.body-template-instantiates",
+      relation: "split",
+      sourceEntityIds: [operation.source.semantic.body.id],
+      targetEntityIds: operation.target.instances.map(({ id }) => id)
+    },
+    {
+      id: "paint.finite-binder.lower-bound-materializes-reference",
+      relation: "persist",
+      sourceEntityIds: [operation.source.semantic.lowerBound.id],
+      targetEntityIds: [operation.target.instances[0]!.references[0]!.id]
+    },
+    {
+      id: "paint.finite-binder.upper-bound-materializes-reference",
+      relation: "persist",
+      sourceEntityIds: [operation.source.semantic.upperBound.id],
+      targetEntityIds: [operation.target.instances[2]!.references[0]!.id]
+    }
+  ]);
   assert.equal(ownership.relations.some(({ sourceEntityIds }) =>
     sourceEntityIds.includes(operation.source.semantic.operator.id)
   ), false);

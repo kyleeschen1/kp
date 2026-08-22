@@ -24,6 +24,8 @@ export interface KpFiniteBinderExpansionLineageEdge {
   readonly relation:
     | "body-template-instantiates"
     | "bound-reference-substitutes-integer"
+    | "lower-bound-materializes-reference"
+    | "upper-bound-materializes-reference"
     | "operator-introduces-connector";
   readonly ordinal: number;
 }
@@ -169,6 +171,23 @@ export function defineKpFiniteBinderExpansionOperation(input: Readonly<{
       ordinal: instance.ordinal
     });
   }
+  const firstReference = instances[0]!.references[0]!;
+  const lastInstance = instances.at(-1)!;
+  const lastReference = lastInstance.references[0]!;
+  // Boundary values derive target references but retain distinct occurrence
+  // identities; renderers may preserve material without claiming sameness.
+  lineage.push({
+    sourceId: source.lowerBound.id,
+    targetId: firstReference.id,
+    relation: "lower-bound-materializes-reference",
+    ordinal: 0
+  });
+  lineage.push({
+    sourceId: source.upperBound.id,
+    targetId: lastReference.id,
+    relation: "upper-bound-materializes-reference",
+    ordinal: lastInstance.ordinal
+  });
   for (const connector of connectors) {
     lineage.push({
       sourceId: source.operator.id,
