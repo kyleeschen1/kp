@@ -39,6 +39,49 @@
   pointer-events: none;
 }
 
+/* A cached pseudo-element carries contact shadow. Its gradient never changes;
+   only compositor-friendly opacity and scale respond to the sampled pose. */
+.kp-log-product-stage[data-kp-log-product-material-active="true"]
+  [data-kp-log-product-material-role] {
+  z-index: 1;
+  isolation: isolate;
+}
+
+.kp-log-product-stage[data-kp-log-product-material-active="true"]
+  [data-kp-log-product-material-plane="active"] {
+  z-index: 2;
+}
+
+.kp-log-product-stage[data-kp-log-product-material-active="true"]
+  [data-kp-log-product-material-plane="subsurface"] {
+  z-index: 0;
+}
+
+.kp-log-product-stage[data-kp-log-product-material-active="true"]
+  [data-kp-log-product-material-role]::after {
+  position: absolute;
+  z-index: -1;
+  right: 8%;
+  bottom: -0.14em;
+  left: 8%;
+  height: 0.22em;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, currentcolor, transparent 72%);
+  content: "";
+  opacity: var(--kp-log-product-contact-shadow-opacity, 0);
+  pointer-events: none;
+  transform: scaleX(var(--kp-log-product-contact-shadow-scale, 0.62));
+  transform-origin: center;
+  will-change: opacity, transform;
+}
+
+@media (prefers-reduced-motion: reduce), (prefers-contrast: more) {
+  .kp-log-product-stage[data-kp-log-product-material-active="true"]
+    [data-kp-log-product-material-role]::after {
+    display: none;
+  }
+}
+
 .kp-log-product-stage__status {
   position: absolute;
   width: 1px;

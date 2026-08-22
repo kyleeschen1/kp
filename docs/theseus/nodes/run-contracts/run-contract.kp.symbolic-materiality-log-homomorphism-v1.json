@@ -191,6 +191,20 @@
       "scope": "md10 flat owner-projection preservation",
       "checkedAt": "2026-08-22T23:49:12.820Z",
       "notes": "Stable flat visual capture passed after the local depth-owner projection seam; flat mode creates no local presentations."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "md11 compositor-safe contact shadow",
+      "checkedAt": "2026-08-22T23:52:09.188Z",
+      "notes": "41 focused tests passed; the treatment is local, uses a static radial gradient, animates only pseudo-element opacity and scale, and contains no filter, blur, box shadow, or layout reads."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "md11 contact treatment boundary",
+      "checkedAt": "2026-08-22T23:52:12.449Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks passed."
     }
   ],
   "allowedWork": [
@@ -282,7 +296,8 @@
     {
       "id": "md11",
       "title": "Select compositor-safe local contact-shadow treatment",
-      "status": "planned"
+      "summary": "Selected an exemplar-local fixed radial contact shadow carried by a pseudo-element; only its opacity and scale vary, no animated blur or layout reads occur, and accessibility preference modes suppress it.",
+      "status": "complete"
     },
     {
       "id": "md12",

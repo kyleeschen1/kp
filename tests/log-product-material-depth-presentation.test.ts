@@ -71,3 +71,19 @@ test("the DOM projector does not read layout or rewrite motion properties", () =
     assert.equal(source.includes(forbidden), false, forbidden);
   }
 });
+
+test("contact shadow uses a local static gradient with opacity and scale", () => {
+  const css = readFileSync(new URL(
+    "../src/editor/log-product-surface.css",
+    import.meta.url
+  ), "utf8");
+  const materialTreatment = css.slice(css.indexOf(
+    ".kp-log-product-stage[data-kp-log-product-material-active"
+  ));
+  assert.match(materialTreatment, /::after/u);
+  assert.match(materialTreatment, /radial-gradient/u);
+  assert.match(materialTreatment, /will-change:\s*opacity, transform/u);
+  assert.doesNotMatch(materialTreatment, /filter:/u);
+  assert.doesNotMatch(materialTreatment, /blur\(/u);
+  assert.doesNotMatch(materialTreatment, /box-shadow:/u);
+});
