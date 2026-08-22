@@ -15,6 +15,8 @@ import {
 } from "../semantic/log-quotient-semantic-motion.ts";
 import { kpHomomorphicCrossoverCallerDeclarations } from
   "./homomorphic-crossover-caller-declarations.ts";
+import { kpLogProductHomomorphicCausalPhaseBindings } from
+  "./log-product-homomorphic-causal-phase-bindings.ts";
 import {
   createKpHomomorphicCrossoverEquationExtensionPack,
   kpHomomorphicCrossoverRecipeRegistration,
@@ -55,22 +57,7 @@ export const kpLogProductHomomorphicCrossoverCallerRegistration =
     recipeId: kpHomomorphicCrossoverRecipeRegistration.id,
     grammar: kpCanonicalHomomorphicCausalPhaseGrammar,
     precedence: kpCanonicalLogProductSemanticMotionPrecedence,
-    phaseBindings: [
-      binding(kpHomomorphicCausalPhaseIds.orient,
-        ["event.log-product.orient"]),
-      binding(kpHomomorphicCausalPhaseIds.releaseSourceSyntax,
-        ["event.log-product.release-shells", "event.log-product.depart"]),
-      binding(kpHomomorphicCausalPhaseIds.transferPayload,
-        ["event.log-product.arrive"]),
-      binding(kpHomomorphicCausalPhaseIds.receiveTargetApplications,
-        ["event.log-product.attach-target"], "coalesced"),
-      binding(kpHomomorphicCausalPhaseIds.resolveTargetConnector,
-        ["event.log-product.attach-target"], "coalesced"),
-      binding(kpHomomorphicCausalPhaseIds.settleTarget,
-        ["event.log-product.settle"]),
-      binding(kpHomomorphicCausalPhaseIds.yieldNativeTarget,
-        ["event.log-product.native-target-ready"])
-    ],
+    phaseBindings: kpLogProductHomomorphicCausalPhaseBindings,
     registryAuthority
   });
 

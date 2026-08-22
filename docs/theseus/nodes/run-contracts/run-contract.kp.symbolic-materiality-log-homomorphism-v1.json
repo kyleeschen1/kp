@@ -205,6 +205,20 @@
       "scope": "md11 contact treatment boundary",
       "checkedAt": "2026-08-22T23:52:12.449Z",
       "notes": "Application, Node, tests, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "md12 cohesive source-shell activation",
+      "checkedAt": "2026-08-22T23:57:51.386Z",
+      "notes": "44 focused tests passed; source operator and shells share one orient pose, hold it until release, and flat/no-depth remain exact surface rest."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "md12 causal phase sampler",
+      "checkedAt": "2026-08-22T23:57:59.265Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks passed."
     }
   ],
   "allowedWork": [
@@ -302,7 +316,8 @@
     {
       "id": "md12",
       "title": "Implement cohesive source-shell activation",
-      "status": "planned"
+      "summary": "Source ln operator and enclosures now activate as one material cohort from the existing orient event and hold their active pose until canonical release begins; the phase-to-event map is shared with the validated caller registration.",
+      "status": "complete"
     },
     {
       "id": "md13",

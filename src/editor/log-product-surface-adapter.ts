@@ -7,6 +7,9 @@ import {
   projectKpLogProductMaterialPresentationMode
 } from "../animation/log-product-material-depth-mode.ts";
 import {
+  sampleKpLogProductMaterialDepthChoreography
+} from "../animation/log-product-material-depth-choreography.ts";
+import {
   sampleKpSemanticMotionChoreography,
   type KpCompiledSemanticMotionChoreography
 } from "../domain-ir/public-api.ts";
@@ -259,7 +262,11 @@ function applyFrame(
   );
   applyKpLogProductMaterialDepthToDom({
     stage: session.stage,
-    mode: materialMode.depthMode
+    mode: materialMode.depthMode,
+    poseByRoleId: sampleKpLogProductMaterialDepthChoreography({
+      mode: materialMode.depthMode,
+      choreography: frame
+    })
   });
   const accessibleIndex = ownership.visualOwner === "source-native" ? 0 : 1;
   setAccessibleEndpoint(session.endpointRoots[accessibleIndex], true);
