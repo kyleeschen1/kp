@@ -1,0 +1,152 @@
+{
+  "id": "run-contract.kp.symbolic-materiality-log-homomorphism-v0",
+  "kind": "run-contract",
+  "title": "Symbolic Materiality Log Homomorphism",
+  "status": "superseded",
+  "summary": "Contract creation omitted mandatory autonomy fields; replacement v1 preserves the approved 22-slice scope with complete run hygiene.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-22-symbolic-materiality-log-homomorphism-long-loop-proposal.md",
+      "summary": "Approved 22-slice exemplar-first material-depth discovery plan with preservation boundary, verification cadence, deferrals, and mandatory human checkpoint."
+    }
+  ],
+  "verification": [
+    "npm run test:log-product",
+    "npm run visual:log-product",
+    "npm run typecheck",
+    "npm run verify:impact",
+    "npm run visual:contact-sheet",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Record the symbolic-materiality experiment and its physical laws.",
+    "Add exemplar-local pure depth presentation, semantic role bindings, inline-scale styling, and material treatment.",
+    "Use existing semantic phases, material owners, focus modes, Native KaTeX endpoints, and stable log-product visual capture.",
+    "Add one narrowly optional inert-by-default renderer presentation field only if existing material-frame fields cannot express the treatment."
+  ],
+  "disallowedWork": [
+    "Do not change the semantic law, occurrence identity, correspondence map, native endpoints, catalogue identity, clock, or approved flat animation.",
+    "Do not promote a universal 2.5D renderer, published style, catalogue rollout, or other animation caller.",
+    "Do not add WebGL glyphs, broad bundle refactors, reader layout work, public delivery work, curriculum, or LLM authoring."
+  ],
+  "goal": "Produce a reviewable inline-scale material-depth variant of ln(xy) to ln(x) plus ln(y) without changing accepted log-product semantics, then stop for human visual review.",
+  "target": "workflow.kp.delivery",
+  "slices": [
+    {
+      "id": "md01",
+      "title": "Record symbolic materiality experimental direction",
+      "status": "planned"
+    },
+    {
+      "id": "md02",
+      "title": "Capture flat binary log-product baseline",
+      "status": "planned"
+    },
+    {
+      "id": "md03",
+      "title": "Add semantic lineage endpoint and geometry preservation contract",
+      "status": "planned"
+    },
+    {
+      "id": "md04",
+      "title": "Define local inline-scale KaTeX experiment",
+      "status": "planned"
+    },
+    {
+      "id": "md05",
+      "title": "Define exemplar-local physical roles",
+      "status": "planned"
+    },
+    {
+      "id": "md06",
+      "title": "Add deterministic depth-pose sampler and no-depth projection",
+      "status": "planned"
+    },
+    {
+      "id": "md07",
+      "title": "Bind physical roles to semantic entities and causal phases",
+      "status": "planned"
+    },
+    {
+      "id": "md08",
+      "title": "Guard factor persistence and generated application lineage",
+      "status": "planned"
+    },
+    {
+      "id": "md09",
+      "title": "Gate treatment through existing elevated focus mode",
+      "status": "planned"
+    },
+    {
+      "id": "md10",
+      "title": "Project depth poses without changing authoritative geometry or ownership",
+      "status": "planned"
+    },
+    {
+      "id": "md11",
+      "title": "Select compositor-safe local contact-shadow treatment",
+      "status": "planned"
+    },
+    {
+      "id": "md12",
+      "title": "Implement cohesive source-shell activation",
+      "status": "planned"
+    },
+    {
+      "id": "md13",
+      "title": "Implement operator-penetration handoff without false identity",
+      "status": "planned"
+    },
+    {
+      "id": "md14",
+      "title": "Preserve direct factor release and clear corridor",
+      "status": "planned"
+    },
+    {
+      "id": "md15",
+      "title": "Apply depth-aware canonical function-wrap reception",
+      "status": "planned"
+    },
+    {
+      "id": "md16",
+      "title": "Synchronize generated logarithms and connector with reception",
+      "status": "planned"
+    },
+    {
+      "id": "md17",
+      "title": "Guarantee exact flat native settlement",
+      "status": "planned"
+    },
+    {
+      "id": "md18",
+      "title": "Tune local inline typography across viewport and theme",
+      "status": "planned"
+    },
+    {
+      "id": "md19",
+      "title": "Tune bounded exemplar-local causal overlap",
+      "status": "planned"
+    },
+    {
+      "id": "md20",
+      "title": "Verify seek reverse interruption accessibility and URL restoration",
+      "status": "planned"
+    },
+    {
+      "id": "md21",
+      "title": "Measure material owner hot-path and scoped loading impact",
+      "status": "planned"
+    },
+    {
+      "id": "md22",
+      "title": "Produce comparison evidence and human visual checkpoint",
+      "status": "planned"
+    }
+  ]
+}

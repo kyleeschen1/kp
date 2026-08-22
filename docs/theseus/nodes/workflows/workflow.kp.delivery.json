@@ -18,6 +18,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-19-planner-vocabulary-governed-binding-closeout.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-22-kp-symbolic-materiality-experiment.md"
     }
   ],
   "decisions": [],
