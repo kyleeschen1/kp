@@ -93,6 +93,20 @@
       "scope": "md05 contract integrity",
       "checkedAt": "2026-08-22T23:25:51.708Z",
       "notes": "Validated 1051 nodes and 24598 events after completing the role vocabulary slice."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "md06 pure depth sampler",
+      "checkedAt": "2026-08-22T23:28:58.586Z",
+      "notes": "29 focused tests passed, including inert flat and no-depth projections, bounded material poses, and deterministic repeated sampling."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "md06 typed sampler boundary",
+      "checkedAt": "2026-08-22T23:29:08.340Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks passed."
     }
   ],
   "allowedWork": [
@@ -154,7 +168,8 @@
     {
       "id": "md06",
       "title": "Add deterministic depth-pose sampler and no-depth projection",
-      "status": "planned"
+      "summary": "Added a pure normalized material-depth sampler with named verb profiles, deterministic clamping and easing, bounded depth, and exact inert flat/no-depth output.",
+      "status": "complete"
     },
     {
       "id": "md07",
