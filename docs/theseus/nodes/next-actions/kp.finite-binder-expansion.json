@@ -453,6 +453,42 @@
       "scope": "bf17 durable evidence integrity",
       "checkedAt": "2026-08-22T15:18:49.609Z",
       "notes": "Workspace validated 1049 nodes and 24510 events after checkpoint closure."
+    },
+    {
+      "command": "npm run test:finite-binder-expansion",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-22T15:43:48.715Z"
+    },
+    {
+      "command": "npm run test:browser:finite-binder-sum",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-22T15:43:59.641Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-22T15:44:18.948Z"
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "failed",
+      "scope": "standard",
+      "checkedAt": "2026-08-22T15:44:31.040Z"
+    },
+    {
+      "command": "npm run visual:finite-binder-sum",
+      "status": "passed",
+      "scope": "human-approved",
+      "checkedAt": "2026-08-22T15:46:35.166Z"
+    },
+    {
+      "command": "npm run perf:finite-binder-sum",
+      "status": "failed",
+      "scope": "approved-visual-baseline",
+      "checkedAt": "2026-08-22T15:47:44.920Z"
     }
   ],
   "progress": {

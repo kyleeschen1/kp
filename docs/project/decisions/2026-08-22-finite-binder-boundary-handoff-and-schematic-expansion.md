@@ -126,23 +126,29 @@ unchanged and the exact route curvature and reception response stay tunable.
 ## Approved Exemplar Performance Evidence
 
 Human review accepted the finite-sum choreography on 2026-08-22. A subsequent
-phone-viewport probe scrubbed 120 frames under 6x CPU throttling and established
-the following repeatable hot-path properties:
+phone-viewport probe scrubbed 120 frames under 6x CPU throttling. That tranche
+also changed compositor placement and target-clone retention, then regressed
+the accepted transit composition. Its numeric result is therefore diagnostic,
+not promotion evidence. The visual checkpoint remains authoritative.
 
-- constrained frame p95 remained within the 33.4 ms gate;
-- synchronous update p95 remained below 20 ms;
-- native target typography is realized before playback and retained rather
-  than reconstructed on every frame;
-- every moving material owner uses compositor positioning in this exemplar;
-- no material visual was replaced, paint alignment was not remeasured, and
-  accessibility attributes changed only at the two endpoint handoffs.
+The retained visual-neutral improvements are:
 
-Single-run maximum frames and Long Tasks remain diagnostic in this scoped dev
-probe because browser scheduling under 6x throttling is noisy. The production
-performance matrix continues to own KP's stricter 100 ms maximum-frame and
-50 ms Long Task product targets. Continuous manual scrubbing now defers History
-API writes until the range control settles; autoplay retains the coarse,
-throttled URL projection.
+- one cached semantic motion sample is shared by all tracks at a playhead;
+- unchanged status, dataset, style, and accessibility writes are skipped;
+- continuous manual scrubbing defers History API writes until the control
+  settles, while autoplay retains coarse throttled URL projection.
+
+The finite-sum stage keeps its established layout-positioned owner geometry.
+An experimental compositor-positioning opt-in mixed stage-relative endpoint
+coordinates with material-layer coordinates and displaced transit paint. A
+target-clone retention experiment also changed intermediate fragment
+composition. Both shared-renderer experiments were removed together before
+the canonical checkpoint could be re-established.
+
+Performance qualification resumes only after the recovered contact sheet
+passes human review. Each later optimization must be independently reversible
+and must preserve that reviewed sheet before its constrained-device metrics
+can count as evidence.
 
 ## Schematic Variable Bounds
 

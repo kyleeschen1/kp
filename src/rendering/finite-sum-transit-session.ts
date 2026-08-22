@@ -127,7 +127,6 @@ export function createKpFiniteSumTransitSession(input: {
               }).selected;
           return Object.freeze({
             ...track,
-            materialPositioning: "transform" as const,
             timingGroupId:
               `finite-sum.instance.${targetInstanceOrdinal}`,
             semanticMotionUnitId:
@@ -153,7 +152,6 @@ export function createKpFiniteSumTransitSession(input: {
             retainedScaffoldIds.has(sourceEntity)) {
           return Object.freeze({
             ...track,
-            materialPositioning: "transform" as const,
             endRect: Object.freeze({ ...track.startRect }),
             timingGroupId: "finite-sum.retained-source-scaffold",
             opacityScheduleAuthority: "semantic-choreography" as const,
@@ -182,7 +180,6 @@ export function createKpFiniteSumTransitSession(input: {
           };
           return Object.freeze({
             ...track,
-            materialPositioning: "transform" as const,
             startRect: Object.freeze({ ...track.endRect }),
             timingGroupId: targetReferenceOrdinal === undefined
               ? `finite-sum.connector.${ordinal - 1}`

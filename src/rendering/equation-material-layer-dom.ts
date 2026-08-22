@@ -20,7 +20,6 @@ interface KpEquationMaterialLayerState {
 
 const materialLayerStates =
   new WeakMap<HTMLElement, KpEquationMaterialLayerState>();
-const retainedMaterialVisualOwners = new WeakSet<HTMLElement>();
 
 export function syncKpEquationMaterialLayer(input: {
   readonly stage: HTMLElement;
@@ -54,17 +53,11 @@ export function syncKpEquationMaterialLayer(input: {
       layer.append(owner);
       state.owners.set(frame.ownerId, owner);
     }
-    // Target-typography realization may deliberately replace the source clone
-    // with a retained target-styled visual. Rebuilding the source here would
-    // cause two full computed-style clones on every frame before typography
-    // immediately restored the target again.
-    if (!retainedMaterialVisualOwners.has(owner)) {
-      setKpEquationMaterialOwnerVisual({
-        owner,
-        sourceElement: frame.sourceElement,
-        revisionKey: `source:${frame.ownerId}`
-      });
-    }
+    setKpEquationMaterialOwnerVisual({
+      owner,
+      sourceElement: frame.sourceElement,
+      revisionKey: `source:${frame.ownerId}`
+    });
     const visual = owner.firstElementChild as HTMLElement | null;
     if (visual !== null) {
       // KaTeX rule bounds already include their border. Without border-box,
@@ -101,9 +94,13 @@ export function syncKpEquationMaterialLayer(input: {
       setStyle(visual.style, "clipPath", frame.clipPath ?? "none");
       setStyle(visual.style, "transform", frame.visualTransform ?? "none");
     }
+    setStyle(owner.style, "left", `${frame.rect.left}px`);
+    setStyle(owner.style, "top", `${frame.rect.top}px`);
     setStyle(owner.style, "width", `${frame.rect.width}px`);
     setStyle(owner.style, "height", `${frame.rect.height}px`);
     setStyle(owner.style, "opacity", String(frame.opacity));
+    setStyle(owner.style, "transform", frame.transform);
+    setStyle(owner.style, "transformOrigin", "center center");
     setStyle(owner.style, "filter", frame.filter ?? "none");
     setOptionalDataset(
       owner,
@@ -152,11 +149,6 @@ export function syncKpEquationMaterialLayer(input: {
       "kpEquationMaterialFragmentRole",
       frame.fragmentRole
     );
-    setOptionalDataset(
-      owner,
-      "kpEquationMaterialPositioning",
-      frame.positioning
-    );
     if (
       (frame.paintAlignmentRect === undefined) !==
         (frame.expectedPaintRect === undefined)
@@ -167,9 +159,6 @@ export function syncKpEquationMaterialLayer(input: {
       );
     }
     const paintAlignmentRect = frame.paintAlignmentRect;
-    let ownerLeft = frame.rect.left;
-    let ownerTop = frame.rect.top;
-    let transformOrigin = "center center";
     if (paintAlignmentRect === undefined || visual === null) {
       for (const key of [
         "kpEquationMaterialPaintAlignment",
@@ -196,19 +185,7 @@ export function syncKpEquationMaterialLayer(input: {
         // stable owner box so endpoint alignment does not cache a collapsed
         // first-frame rectangle as the clone's intrinsic paint inset.
         const motionTransform = owner.style.transform;
-        const motionTranslate = owner.style.translate;
-        setStyle(
-          owner.style,
-          "translate",
-          frame.positioning === "transform"
-            ? transformPlacement(frame.rect.left, frame.rect.top)
-            : "none"
-        );
-        setStyle(
-          owner.style,
-          "transform",
-          "none"
-        );
+        setStyle(owner.style, "transform", "none");
         let measured;
         let nativePaint;
         try {
@@ -223,7 +200,6 @@ export function syncKpEquationMaterialLayer(input: {
             frame.sourceElement
           );
         } finally {
-          setStyle(owner.style, "translate", motionTranslate || "none");
           setStyle(owner.style, "transform", motionTransform || "none");
         }
         if (measured === undefined || nativePaint === undefined) {
@@ -271,13 +247,18 @@ export function syncKpEquationMaterialLayer(input: {
         paintAlignmentRect.top -
         frame.rect.top -
         Number(owner.dataset["kpEquationMaterialPaintInsetY"]);
-      ownerLeft = frame.rect.left + correctionX;
-      ownerTop = frame.rect.top + correctionY;
+      const ownerLeft = frame.rect.left + correctionX;
+      const ownerTop = frame.rect.top + correctionY;
+      setStyle(owner.style, "left", `${ownerLeft}px`);
+      setStyle(owner.style, "top", `${ownerTop}px`);
       // KaTeX wrapper centers are not reliable ink centers. Scaling around the
       // measured paint pivot prevents asymmetric glyphs from drifting.
-      transformOrigin =
+      setStyle(
+        owner.style,
+        "transformOrigin",
         `${paintAlignmentRect.left + paintAlignmentRect.width / 2 - ownerLeft}px ` +
-        `${paintAlignmentRect.top + paintAlignmentRect.height / 2 - ownerTop}px`;
+        `${paintAlignmentRect.top + paintAlignmentRect.height / 2 - ownerTop}px`
+      );
       const expected = frame.expectedPaintRect ?? paintAlignmentRect;
       for (const [key, value] of [
         ["kpEquationMaterialExpectedPaintInsetX", expected.left - frame.rect.left],
@@ -289,23 +270,7 @@ export function syncKpEquationMaterialLayer(input: {
         ["kpEquationMaterialPaintAlignment", "measured-ink"]
       ] as const) setDataset(owner, key, String(value));
     }
-    setStyle(owner.style, "transformOrigin", transformOrigin);
-    if (frame.positioning === "transform") {
-      setStyle(owner.style, "left", "0px");
-      setStyle(owner.style, "top", "0px");
-      setStyle(owner.style, "translate", transformPlacement(ownerLeft, ownerTop));
-      setStyle(owner.style, "transform", frame.transform);
-    } else {
-      setStyle(owner.style, "left", `${ownerLeft}px`);
-      setStyle(owner.style, "top", `${ownerTop}px`);
-      setStyle(owner.style, "translate", "none");
-      setStyle(owner.style, "transform", frame.transform);
-    }
   }
-}
-
-function transformPlacement(left: number, top: number): string {
-  return `${left}px ${top}px`;
 }
 
 function materialLayerState(layer: HTMLElement): KpEquationMaterialLayerState {
@@ -355,7 +320,6 @@ function setStyle(
     | "top"
     | "transform"
     | "transformOrigin"
-    | "translate"
     | "width",
   value: string
 ): void {
@@ -401,18 +365,4 @@ export function setKpEquationMaterialOwnerVisual(input: {
   input.owner.replaceChildren(visual);
   input.owner.dataset["kpEquationMaterialVisualRevision"] = input.revisionKey;
   return visual;
-}
-
-/**
- * Keep an explicitly realized visual across ordinary geometry updates.
- * Renderer sessions own the containing material node, so removing that node
- * also releases this weak retention automatically.
- */
-export function retainKpEquationMaterialOwnerVisual(
-  owner: HTMLElement
-): void {
-  if (owner.firstElementChild === null) {
-    throw new Error("Cannot retain a material owner before realizing its visual.");
-  }
-  retainedMaterialVisualOwners.add(owner);
 }

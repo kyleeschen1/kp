@@ -664,7 +664,6 @@ export function composeKpNativeKatexSceneMaterialOwners(input: {
       NonNullable<KpEquationMaterialLayerOwnerFrame["expectedPaintRect"]>;
     readonly opacity: number;
     readonly materialScale?: number | undefined;
-    readonly materialPositioning?: "layout" | "transform" | undefined;
     readonly intentionalContactGroupId?: string | undefined;
     readonly intentionalForegroundOcclusion?:
       KpEquationIntentionalForegroundOcclusion | undefined;
@@ -720,7 +719,6 @@ export function composeKpNativeKatexSceneMaterialOwners(input: {
         transform: frame.materialScale === undefined || frame.materialScale === 1
           ? "none"
           : `scale(${frame.materialScale})`,
-        positioning: frame.materialPositioning,
         fragmentRole: `${frame.paintKind}:${frame.sizingMode}`
       };
     }),

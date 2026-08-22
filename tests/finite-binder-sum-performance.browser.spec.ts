@@ -143,9 +143,6 @@ test("finite sum stays smooth and structurally quiet on a constrained phone", as
     const updatePercentile = (ratio: number): number =>
       sortedUpdates[Math.min(sortedUpdates.length - 1,
         Math.floor(sortedUpdates.length * ratio))] ?? 0;
-    const materialOwners = [...stage.querySelectorAll<HTMLElement>(
-      "[data-kp-equation-material-owner-id]"
-    )];
     return {
       frames: frameDeltas.length,
       meanMs: frameDeltas.reduce((sum, value) => sum + value, 0) /
@@ -166,12 +163,6 @@ test("finite sum stays smooth and structurally quiet on a constrained phone", as
       endpointAccessibilityMutations,
       paintAlignmentMeasurements,
       materialVisualMutations,
-      materialOwnerCount: materialOwners.length,
-      transformPositionedOwnerCount: materialOwners.filter((owner) =>
-        owner.style.left === "0px" &&
-        owner.style.top === "0px" &&
-        owner.style.translate !== "none"
-      ).length,
       finalProgress: stage.dataset["kpFiniteSumProgress"]
     };
   });
@@ -199,7 +190,6 @@ test("finite sum stays smooth and structurally quiet on a constrained phone", as
   expect(result.endpointAccessibilityMutations).toBeLessThanOrEqual(2);
   expect(result.paintAlignmentMeasurements).toBe(0);
   expect(result.materialVisualMutations).toBe(0);
-  expect(result.transformPositionedOwnerCount).toBe(result.materialOwnerCount);
   expect(result.finalProgress).toBe("1");
 
 });
