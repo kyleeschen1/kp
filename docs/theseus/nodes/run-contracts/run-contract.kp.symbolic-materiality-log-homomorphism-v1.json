@@ -79,6 +79,20 @@
       "scope": "md04 unchanged flat comparator after typography tokenization",
       "checkedAt": "2026-08-22T23:20:03.880Z",
       "notes": "Stable flat contact sheet regenerated successfully with the default display-size token path."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-22T23:25:24.540Z",
+      "notes": "26 focused log-product tests passed; role uniqueness, surface settlement, identity effects, and renderer-authority exclusion are covered."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "md05 contract integrity",
+      "checkedAt": "2026-08-22T23:25:51.708Z",
+      "notes": "Validated 1051 nodes and 24598 events after completing the role vocabulary slice."
     }
   ],
   "allowedWork": [
@@ -134,7 +148,8 @@
     {
       "id": "md05",
       "title": "Define exemplar-local physical roles",
-      "status": "planned"
+      "summary": "Defined source, factor, enclosure, application-syntax, and relation material roles as semantic vocabulary with explicit identity effects and no renderer authority.",
+      "status": "complete"
     },
     {
       "id": "md06",
