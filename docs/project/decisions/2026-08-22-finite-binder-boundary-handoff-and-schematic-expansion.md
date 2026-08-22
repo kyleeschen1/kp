@@ -145,10 +145,23 @@ target-clone retention experiment also changed intermediate fragment
 composition. Both shared-renderer experiments were removed together before
 the canonical checkpoint could be re-established.
 
-Performance qualification resumes only after the recovered contact sheet
-passes human review. Each later optimization must be independently reversible
-and must preserve that reviewed sheet before its constrained-device metrics
-can count as evidence.
+The recovered contact sheet subsequently passed human review. Performance
+qualification then resumed as a separate, independently reversible change.
+The finite-sum stage now explicitly opts into a dual-revision material cache:
+source and target native KaTeX clones are retained by revision and native
+source identity, warmed before the stage becomes ready, and switched without
+per-frame child replacement. General compositor callers keep the established
+replacement behavior until a structurally different second caller proves the
+cache boundary.
+
+The scoped probe now passes 120 steady-state frames under 6x CPU throttling at
+a phone viewport. Its latest sample reported 18.20 ms mean frame duration,
+17.6 ms p95 frame duration, 7.22 ms mean update cost, 9.4 ms p95 update cost,
+zero sampled material-child mutations, and zero sampled cache misses. The
+probe deliberately warms one-time browser and cache work before measuring;
+cold preparation remains a surface-lifecycle concern rather than recurring
+scrub cost. The approved visual contact sheet and exact native endpoints remain
+the promotion authority for every later optimization.
 
 ## Schematic Variable Bounds
 

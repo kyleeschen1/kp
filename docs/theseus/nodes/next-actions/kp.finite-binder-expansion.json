@@ -489,6 +489,27 @@
       "status": "failed",
       "scope": "approved-visual-baseline",
       "checkedAt": "2026-08-22T15:47:44.920Z"
+    },
+    {
+      "command": "npm run perf:finite-binder-sum",
+      "status": "passed",
+      "scope": "finite-sum dual-revision cache under 6x phone throttling",
+      "checkedAt": "2026-08-22T16:17:26.683Z",
+      "notes": "120 frames; 17.6 ms frame p95, 9.4 ms update p95, zero sampled material-child mutations, zero sampled cache misses."
+    },
+    {
+      "command": "npm run test:browser:finite-binder-sum",
+      "status": "passed",
+      "scope": "finite-sum dual-revision visual preservation",
+      "checkedAt": "2026-08-22T16:17:35.712Z",
+      "notes": "Two focused Chromium checks passed after cache isolation."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "finite-sum dual-revision cache types",
+      "checkedAt": "2026-08-22T16:17:36.723Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks passed."
     }
   ],
   "progress": {

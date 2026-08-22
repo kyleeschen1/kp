@@ -20,6 +20,13 @@ interface KpEquationMaterialLayerState {
 
 const materialLayerStates =
   new WeakMap<HTMLElement, KpEquationMaterialLayerState>();
+const materialVisualCaches = new WeakMap<
+  HTMLElement,
+  Map<string, {
+    readonly sourceElement: HTMLElement | SVGElement;
+    readonly visual: HTMLElement | SVGElement;
+  }>
+>();
 
 export function syncKpEquationMaterialLayer(input: {
   readonly stage: HTMLElement;
@@ -53,13 +60,12 @@ export function syncKpEquationMaterialLayer(input: {
       layer.append(owner);
       state.owners.set(frame.ownerId, owner);
     }
-    setKpEquationMaterialOwnerVisual({
+    const visual = setKpEquationMaterialOwnerVisual({
       owner,
       sourceElement: frame.sourceElement,
       revisionKey: `source:${frame.ownerId}`
     });
-    const visual = owner.firstElementChild as HTMLElement | null;
-    if (visual !== null) {
+    if (visual instanceof HTMLElement) {
       // KaTeX rule bounds already include their border. Without border-box,
       // sizing the clone to its owner adds the border a second time and makes
       // rule paint one pixel taller than the sampled native endpoint.
@@ -159,7 +165,7 @@ export function syncKpEquationMaterialLayer(input: {
       );
     }
     const paintAlignmentRect = frame.paintAlignmentRect;
-    if (paintAlignmentRect === undefined || visual === null) {
+    if (paintAlignmentRect === undefined || !(visual instanceof HTMLElement)) {
       for (const key of [
         "kpEquationMaterialPaintAlignment",
         "kpEquationMaterialPaintAlignmentKey",
@@ -334,21 +340,62 @@ export function setKpEquationMaterialOwnerVisual(input: {
   if (input.revisionKey.trim() === "") {
     throw new Error("Material visual revision key must be non-empty.");
   }
-  const current = input.owner.firstElementChild;
-  if (
-    current !== null &&
-    input.owner.dataset["kpEquationMaterialVisualRevision"] ===
-      input.revisionKey
-  ) {
-    return current as HTMLElement | SVGElement;
+  const cacheEnabled = input.owner.closest(
+    '[data-kp-equation-material-visual-cache="dual-revision"]'
+  ) !== null;
+  if (!cacheEnabled) {
+    const current = input.owner.firstElementChild;
+    if (
+      current !== null &&
+      input.owner.dataset["kpEquationMaterialVisualRevision"] ===
+        input.revisionKey
+    ) return current as HTMLElement | SVGElement;
+    const visual = cloneKpEquationMaterialVisual(input.sourceElement);
+    input.owner.replaceChildren(visual);
+    input.owner.dataset["kpEquationMaterialVisualRevision"] =
+      input.revisionKey;
+    return visual;
   }
+  const cache = materialVisualCache(input.owner);
+  const cached = cache.get(input.revisionKey);
+  if (cached?.sourceElement === input.sourceElement) {
+    activateKpEquationMaterialOwnerVisual(input.owner, cached.visual);
+    input.owner.dataset["kpEquationMaterialVisualRevision"] =
+      input.revisionKey;
+    return cached.visual;
+  }
+  if (cached !== undefined) {
+    // Compound scenes may reuse a stable owner ID for a new native endpoint.
+    // Revision labels alone cannot authorize paint reuse across that boundary.
+    cached.visual.remove();
+    cache.delete(input.revisionKey);
+  }
+  const visual = cloneKpEquationMaterialVisual(input.sourceElement);
+  cache.set(input.revisionKey, {
+    sourceElement: input.sourceElement,
+    visual
+  });
+  input.owner.append(visual);
+  activateKpEquationMaterialOwnerVisual(input.owner, visual);
+  input.owner.dataset["kpEquationMaterialVisualRevision"] = input.revisionKey;
+  const misses = Number(
+    input.owner.dataset["kpEquationMaterialVisualCacheMissCount"] ?? "0"
+  );
+  input.owner.dataset["kpEquationMaterialVisualCacheMissCount"] =
+    String(misses + 1);
+  return visual;
+}
+
+function cloneKpEquationMaterialVisual(
+  sourceElement: HTMLElement
+): HTMLElement | SVGElement {
   // A detached SVG path has no paint context. Clone its owning SVG so
   // structural ink remains native and intact inside the material layer.
   const cloneSource =
-    input.sourceElement instanceof SVGElement &&
-      !(input.sourceElement instanceof SVGSVGElement)
-      ? input.sourceElement.ownerSVGElement ?? input.sourceElement
-      : input.sourceElement;
+    sourceElement instanceof SVGElement &&
+      !(sourceElement instanceof SVGSVGElement)
+      ? sourceElement.ownerSVGElement ?? sourceElement
+      : sourceElement;
   const visual = cloneElementWithComputedStyles(cloneSource);
   stripKpMaterialCloneAuthority(visual);
   visual.style.opacity = "1";
@@ -362,7 +409,42 @@ export function setKpEquationMaterialOwnerVisual(input: {
   visual.style.position = "relative";
   visual.style.display = "block";
   visual.classList.add("editor-equation-stage__material-visual");
-  input.owner.replaceChildren(visual);
-  input.owner.dataset["kpEquationMaterialVisualRevision"] = input.revisionKey;
   return visual;
+}
+
+function activateKpEquationMaterialOwnerVisual(
+  owner: HTMLElement,
+  active: HTMLElement | SVGElement
+): void {
+  for (const child of owner.children) {
+    if (!(child instanceof HTMLElement || child instanceof SVGElement)) {
+      continue;
+    }
+    const selected = child === active;
+    child.style.display = selected ? "block" : "none";
+    if (selected) {
+      child.dataset["kpEquationMaterialVisualActive"] = "true";
+    } else {
+      delete child.dataset["kpEquationMaterialVisualActive"];
+    }
+  }
+}
+
+function materialVisualCache(
+  owner: HTMLElement
+): Map<string, {
+  readonly sourceElement: HTMLElement | SVGElement;
+  readonly visual: HTMLElement | SVGElement;
+}> {
+  const existing = materialVisualCaches.get(owner);
+  if (existing !== undefined) return existing;
+  // An explicitly opted-in exemplar may retain source and target typography
+  // as distinct paint identities. General callers keep replacement semantics
+  // until a second caller proves this cache boundary.
+  const created = new Map<string, {
+    readonly sourceElement: HTMLElement | SVGElement;
+    readonly visual: HTMLElement | SVGElement;
+  }>();
+  materialVisualCaches.set(owner, created);
+  return created;
 }

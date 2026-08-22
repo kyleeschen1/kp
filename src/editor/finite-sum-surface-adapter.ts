@@ -90,6 +90,7 @@ function mountSurface(
   stage.className =
     "kp-finite-sum-stage kp-finite-sum-equivalence-stage";
   stage.dataset["kpFiniteSumStage"] = "preparing";
+  stage.dataset["kpEquationMaterialVisualCache"] = "dual-revision";
   stage.dataset["kpStateRetentionProjectionId"] =
     kpFiniteSumEquivalenceFrame.projection.id;
   stage.dataset["kpStateRetentionPolicy"] =

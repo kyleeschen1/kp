@@ -51,10 +51,34 @@ test("finite sum stays smooth and structurally quiet on a constrained phone", as
       throw new Error("Finite-sum performance probe requires a ready player.");
     }
 
+    // This probe owns steady-state scrubbing. Exercise the sampler and style
+    // paths before observing so browser JIT and one-time cache work do not get
+    // mislabeled as recurring frame cost; cold preparation is tested at the
+    // surface lifecycle boundary instead.
+    for (let index = 0; index <= 24; index += 1) {
+      await new Promise<void>((resolve) => requestAnimationFrame(() => {
+        scrubber.value = String(index / 24);
+        scrubber.dispatchEvent(new Event("input", { bubbles: true }));
+        resolve();
+      }));
+    }
+    scrubber.value = "0";
+    scrubber.dispatchEvent(new Event("input", { bubbles: true }));
+    await new Promise<void>((resolve) => requestAnimationFrame(() =>
+      requestAnimationFrame(() => resolve())
+    ));
+
     let statusMutations = 0;
     let endpointAccessibilityMutations = 0;
     let paintAlignmentMeasurements = 0;
     let materialVisualMutations = 0;
+    const materialVisualCacheMisses = () =>
+      [...stage.querySelectorAll<HTMLElement>(
+        "[data-kp-equation-material-owner-id]"
+      )].reduce((total, owner) => total + Number(
+        owner.dataset["kpEquationMaterialVisualCacheMissCount"] ?? "0"
+      ), 0);
+    const materialVisualCacheMissesBefore = materialVisualCacheMisses();
     const mutationObserver = new MutationObserver((records) => {
       for (const record of records) {
         const target = record.target instanceof Element
@@ -163,6 +187,8 @@ test("finite sum stays smooth and structurally quiet on a constrained phone", as
       endpointAccessibilityMutations,
       paintAlignmentMeasurements,
       materialVisualMutations,
+      materialVisualCacheMissesDuringSample:
+        materialVisualCacheMisses() - materialVisualCacheMissesBefore,
       finalProgress: stage.dataset["kpFiniteSumProgress"]
     };
   });
@@ -190,6 +216,7 @@ test("finite sum stays smooth and structurally quiet on a constrained phone", as
   expect(result.endpointAccessibilityMutations).toBeLessThanOrEqual(2);
   expect(result.paintAlignmentMeasurements).toBe(0);
   expect(result.materialVisualMutations).toBe(0);
+  expect(result.materialVisualCacheMissesDuringSample).toBe(0);
   expect(result.finalProgress).toBe("1");
 
 });

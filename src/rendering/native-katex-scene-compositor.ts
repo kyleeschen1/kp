@@ -1467,12 +1467,15 @@ export function createKpCanonicalNativeKatexSceneSession(
       : { supplementalMaterialOwners: plan.supplementalMaterialOwners })
   });
   // Successor synthesis may own every target, leaving no residual handoff.
+  let typographyWarmup:
+    | KpNativeKatexTypographyStyleFrame
+    | undefined;
   const typographyPlan = glyphLinks.length === 0
     ? undefined
     : (() => {
         const microscope = 1 - plan.endpointDwellFraction;
-        playback.apply(microscope);
-        return compileKpNativeKatexTypographyStylePlan({
+        const ownership = playback.apply(microscope);
+        const compiled = compileKpNativeKatexTypographyStylePlan({
           telemetry: measureKpNativeKatexCorrelatedHandoff({
             stage: source.stage,
             reconciliation,
@@ -1486,7 +1489,29 @@ export function createKpCanonicalNativeKatexSceneSession(
           maximumTranslationPx: 2,
           maximumScaleRatio: 1.1
         });
+        typographyWarmup = sampleKpNativeKatexTypographyStylePlan(
+          compiled,
+          microscope,
+          ownership.frames
+        );
+        return compiled;
       })();
+  if (
+    source.stage.dataset["kpEquationMaterialVisualCache"] ===
+      "dual-revision" &&
+    typographyPlan !== undefined &&
+    typographyWarmup !== undefined
+  ) {
+    // Warm the detached target clone cache before the surface becomes ready.
+    // playback.apply(0) below restores the source visual, so prewarming cannot
+    // leak target typography into the approved source-phase composition.
+    realizeKpNativeKatexTypographyStylePlan({
+      stage: source.stage,
+      target,
+      plan: typographyPlan,
+      frame: typographyWarmup
+    });
+  }
   playback.apply(0);
   source.stage.dataset["kpCanonicalNativeKatexSessionFactory"] =
     "shared-v1";

@@ -55,7 +55,8 @@ test("finite sum mounts once and remains inspectable across direct seeks", async
   const firstBodyAtTransit = await stage.locator(
     `[data-kp-equation-material-semantic-entity-id="` +
     `${kpCanonicalFiniteSumExpansionOperation.target.instances[0]!.id}"]`
-  ).locator(":scope > *").boundingBox();
+  ).locator(':scope > [data-kp-equation-material-visual-active="true"]')
+    .boundingBox();
   expect(relationAtFirstTransit).not.toBeNull();
   expect(firstBodyAtTransit).not.toBeNull();
   const relationCenterY = relationAtFirstTransit!.y +
@@ -75,7 +76,8 @@ test("finite sum mounts once and remains inspectable across direct seeks", async
   const firstBodyAtArrival = await stage.locator(
     `[data-kp-equation-material-semantic-entity-id="` +
     `${kpCanonicalFiniteSumExpansionOperation.target.instances[0]!.id}"]`
-  ).locator(":scope > *").boundingBox();
+  ).locator(':scope > [data-kp-equation-material-visual-active="true"]')
+    .boundingBox();
   expect(stageAtFirstArrival).not.toBeNull();
   expect(relationAtFirstArrival).not.toBeNull();
   expect(firstBodyAtArrival).not.toBeNull();
