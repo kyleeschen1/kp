@@ -37,6 +37,20 @@
       "scope": "md02 explicit flat preservation baseline",
       "checkedAt": "2026-08-22T23:12:22.326Z",
       "notes": "Captured forward and reverse binary and three-factor samples at 1240 by 760 with exact dark, organic-subtle, flat presentation metadata; each sample retained one accessible native equation."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "md03 semantic lineage endpoint clock and URL preservation",
+      "checkedAt": "2026-08-22T23:15:34.615Z",
+      "notes": "All 22 focused log-product tests pass, including three new material-depth preservation cases."
+    },
+    {
+      "command": "npm run verify:impact -- --path tests/log-product-material-depth-preservation.test.ts",
+      "status": "passed",
+      "scope": "md03 impact inspection",
+      "checkedAt": "2026-08-22T23:15:35.907Z",
+      "notes": "Impact inspection identifies the new unmatched test as promotion-risk; broad type, test, and bundle gates remain deferred to the final checkpoint per visual-discovery cadence."
     }
   ],
   "allowedWork": [
@@ -80,7 +94,8 @@
     {
       "id": "md03",
       "title": "Add semantic lineage endpoint and geometry preservation contract",
-      "status": "planned"
+      "summary": "Executable preservation truth now freezes factor continuants, generated logarithm successors, exact Native KaTeX endpoints, shared external progress, reverse determinism, and presentation-mode URL parity.",
+      "status": "complete"
     },
     {
       "id": "md04",
