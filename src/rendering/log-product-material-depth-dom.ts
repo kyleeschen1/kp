@@ -55,6 +55,8 @@ export function applyKpLogProductMaterialDepthToDom(input: {
     const owner = owners.get(presentation.ownerId);
     if (owner === undefined) continue;
     owner.dataset["kpLogProductMaterialRole"] = presentation.roleId;
+    owner.dataset["kpLogProductMaterialIdentityEffect"] =
+      presentation.identityEffect;
     owner.dataset["kpLogProductMaterialPlane"] = presentation.pose.plane;
     owner.style.setProperty(
       "--kp-log-product-material-depth",
@@ -82,6 +84,7 @@ export function applyKpLogProductMaterialDepthToDom(input: {
 
 function clearPresentation(owner: HTMLElement): void {
   delete owner.dataset["kpLogProductMaterialRole"];
+  delete owner.dataset["kpLogProductMaterialIdentityEffect"];
   delete owner.dataset["kpLogProductMaterialPlane"];
   owner.style.removeProperty("--kp-log-product-material-depth");
   owner.style.removeProperty("--kp-log-product-material-activity");

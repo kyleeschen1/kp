@@ -58,9 +58,12 @@ function sampleRolePose(
   phaseProgress: ReadonlyMap<string, number>,
   mode: KpLogProductMaterialDepthMode
 ): KpLogProductMaterialDepthPose {
+  const first = instructions[0];
   let pose = sampleKpLogProductMaterialDepthPose({
     mode,
-    verb: "rest",
+    // Generated target syntax waits below the native surface before it owns
+    // paint; source and continuant roles still begin at surface by profile.
+    verb: first?.verb ?? "rest",
     progress: 0
   });
   for (const instruction of instructions) {
@@ -78,4 +81,3 @@ function sampleRolePose(
 
 type KpLogProductMaterialRoleBindingInstructions =
   typeof kpCanonicalLogProductMaterialRoleBindings[number]["phaseInstructions"];
-

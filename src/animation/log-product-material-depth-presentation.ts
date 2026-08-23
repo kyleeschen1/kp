@@ -7,7 +7,11 @@ import {
   type KpLogProductMaterialDepthPose
 } from "./log-product-material-depth-pose.ts";
 import type {
+  KpLogProductMaterialIdentityEffect,
   KpLogProductMaterialRoleId
+} from "./log-product-material-depth-roles.ts";
+import {
+  kpLogProductMaterialRoleDefinitions
 } from "./log-product-material-depth-roles.ts";
 
 export interface KpLogProductMaterialDepthOwnerReference {
@@ -19,6 +23,7 @@ export interface KpLogProductMaterialDepthOwnerPresentation {
   readonly ownerId: string;
   readonly semanticEntityId: string;
   readonly roleId: KpLogProductMaterialRoleId;
+  readonly identityEffect: KpLogProductMaterialIdentityEffect;
   readonly pose: KpLogProductMaterialDepthPose;
 }
 
@@ -36,6 +41,11 @@ export function projectKpLogProductMaterialDepthPresentation(input: {
       binding.entityIds.map((entityId) => [entityId, binding.roleId] as const)
     )
   );
+  const identityEffectByRoleId = new Map(
+    kpLogProductMaterialRoleDefinitions.map(({ id, identityEffect }) =>
+      [id, identityEffect] as const
+    )
+  );
   const restingPose = sampleKpLogProductMaterialDepthPose({
     mode: "material",
     verb: "rest",
@@ -50,8 +60,8 @@ export function projectKpLogProductMaterialDepthPresentation(input: {
       ownerId: owner.ownerId,
       semanticEntityId,
       roleId,
+      identityEffect: identityEffectByRoleId.get(roleId)!,
       pose: input.poseByRoleId?.[roleId] ?? restingPose
     })];
   }));
 }
-

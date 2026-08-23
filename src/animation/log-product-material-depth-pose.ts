@@ -83,7 +83,7 @@ const verbProfiles = Object.freeze({
   resolve: {
     from: "subsurface",
     to: "active",
-    fromActivity: 1,
+    fromActivity: 0,
     toActivity: 1
   },
   settle: {
@@ -148,4 +148,3 @@ export function sampleKpLogProductMaterialDepthPose(
     )
   };
 }
-

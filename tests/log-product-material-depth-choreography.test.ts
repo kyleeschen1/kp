@@ -10,6 +10,9 @@ import {
 import {
   sampleKpLogProductMaterialDepthChoreography
 } from "../src/animation/log-product-material-depth-choreography.ts";
+import {
+  kpCanonicalLogProductMaterialLineage
+} from "../src/animation/log-product-material-depth-lineage.ts";
 
 function sample(progress: number) {
   return sampleKpSemanticMotionChoreography({
@@ -41,7 +44,7 @@ test("source application activates cohesively during orient", () => {
   );
   assert.deepEqual(
     poses["role.material.log-product.target-application-syntax"],
-    { plane: "surface", normalizedDepth: 0, activity: 0 }
+    { plane: "subsurface", normalizedDepth: -1, activity: 0 }
   );
 });
 
@@ -75,4 +78,52 @@ test("flat and no-depth choreography remain exact surface rest", () => {
       pose.activity === 0
     ));
   }
+});
+
+test("operator penetration withdraws source before generated syntax rises", () => {
+  const sourceReleaseTracks = kpCanonicalCompiledLogProductSemanticMotion.tracks
+    .filter(({ eventId }) => [
+      "event.log-product.release-shells",
+      "event.log-product.depart"
+    ].includes(eventId));
+  const targetReception = kpCanonicalCompiledLogProductSemanticMotion.tracks
+    .find(({ eventId }) => eventId === "event.log-product.attach-target")!;
+  const afterSourceRelease = Math.min(
+    targetReception.window.start,
+    Math.max(...sourceReleaseTracks.map(({ window }) => window.end))
+  );
+  const latent = sampleKpLogProductMaterialDepthChoreography({
+    mode: "material",
+    choreography: sample(afterSourceRelease)
+  });
+  assert.deepEqual(
+    latent["role.material.log-product.source-application"],
+    { plane: "subsurface", normalizedDepth: -1, activity: 0 }
+  );
+  assert.deepEqual(
+    latent["role.material.log-product.target-application-syntax"],
+    { plane: "subsurface", normalizedDepth: -1, activity: 0 }
+  );
+
+  const receptionMidpoint =
+    (targetReception.window.start + targetReception.window.end) / 2;
+  const receiving = sampleKpLogProductMaterialDepthChoreography({
+    mode: "material",
+    choreography: sample(receptionMidpoint)
+  });
+  assert.equal(
+    receiving["role.material.log-product.source-application"].activity,
+    0
+  );
+  assert.ok(
+    receiving["role.material.log-product.target-application-syntax"]
+      .activity > 0
+  );
+
+  const lineage = kpCanonicalLogProductMaterialLineage.applicationDerivation;
+  assert.equal(lineage.sourceIdentityEffect, "withdraw-source");
+  assert.equal(lineage.targetIdentityEffect, "generate-successor");
+  assert.ok(lineage.generatedTargetApplicationEntityIds.every((id) =>
+    id !== lineage.sourceApplicationEntityId
+  ));
 });

@@ -219,6 +219,27 @@
       "scope": "md12 causal phase sampler",
       "checkedAt": "2026-08-22T23:57:59.265Z",
       "notes": "Application, Node, tests, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "failed",
+      "scope": "md13 initial operator handoff",
+      "checkedAt": "2026-08-23T00:01:40.490Z",
+      "notes": "Two new tests exposed that the resolve verb incorrectly treated latent generated syntax as already active and that an old target-rest expectation no longer matched the intended subsurface staging. Corrected the verb profile and expectation."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "md13 corrected operator handoff",
+      "checkedAt": "2026-08-23T00:01:42.294Z",
+      "notes": "45 focused tests passed; source withdrawal finishes before distinct generated target syntax becomes active, and identity effects remain explicit."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "md13 typed handoff boundary",
+      "checkedAt": "2026-08-23T00:01:44.000Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks passed."
     }
   ],
   "allowedWork": [
@@ -322,7 +343,8 @@
     {
       "id": "md13",
       "title": "Implement operator-penetration handoff without false identity",
-      "status": "planned"
+      "summary": "Source application withdraws to the subsurface before separately generated target applications rise; factor lineage and identity effects remain explicit.",
+      "status": "complete"
     },
     {
       "id": "md14",

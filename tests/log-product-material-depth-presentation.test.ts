@@ -35,6 +35,7 @@ test("material presentation projects roles without mutating transit owners", () 
     ownerId: "owner.factor",
     semanticEntityId: factorBinding.entityIds[0],
     roleId: "role.material.log-product.persistent-factor",
+    identityEffect: "preserve",
     pose: { plane: "surface", normalizedDepth: 0, activity: 0 }
   }]);
 });
