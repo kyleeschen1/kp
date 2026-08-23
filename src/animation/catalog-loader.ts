@@ -1,5 +1,9 @@
 import type { KpAnimationAsset } from "./asset.ts";
 import {
+  registerKpAnimationPackConformance,
+  type KpAnimationConformanceRegistrationDeclaration
+} from "./animation-conformance-registration.ts";
+import {
   kpNoAnimationRuntimeCapabilities,
   type KpAnimationRuntimeCapabilities
 } from "./runtime-capabilities.ts";
@@ -41,6 +45,7 @@ export interface KpLoadedAnimationAsset {
   readonly catalog: readonly KpAnimationAsset[];
   readonly packId: KpAnimationCatalogPackId;
   readonly runtimeCapabilities: KpAnimationRuntimeCapabilities;
+  readonly conformance: KpAnimationConformanceRegistrationDeclaration;
 }
 
 export type KpAnimationCatalogLoadFailureCode =
@@ -73,6 +78,13 @@ const packCache = new Map<string, Promise<KpLoadedAnimationPack>>();
 interface KpLoadedAnimationPack {
   readonly catalog: readonly KpAnimationAsset[];
   readonly runtimeCapabilities: KpAnimationRuntimeCapabilities;
+  readonly conformanceRegistrations:
+    readonly KpAnimationConformanceRegistrationDeclaration[];
+}
+
+interface KpUnregisteredAnimationPack {
+  readonly catalog: readonly KpAnimationAsset[];
+  readonly runtimeCapabilities: KpAnimationRuntimeCapabilities;
 }
 
 interface KpAnimationCatalogPackDeclaration {
@@ -80,7 +92,7 @@ interface KpAnimationCatalogPackDeclaration {
   readonly sourcePath: KpAnimationCatalogPackSourcePath;
   readonly owns: (animationId: string) => boolean;
   readonly cacheKey: (animationId: string) => string;
-  readonly load: (animationId: string) => Promise<KpLoadedAnimationPack>;
+  readonly load: (animationId: string) => Promise<KpUnregisteredAnimationPack>;
 }
 
 // These declarations are the build-visible lazy boundary. Literal imports
@@ -193,7 +205,26 @@ export async function loadKpAnimationAsset(
       packId
     );
   }
-  return { animation, catalog, packId, runtimeCapabilities };
+  const conformance = loadedPack.conformanceRegistrations.find(
+    ({ assetId }) => assetId === animationId
+  );
+  if (conformance === undefined) {
+    throw new KpAnimationCatalogLoadError(
+      "asset-missing-from-pack",
+      `Animation pack ${packId} did not register conformance for ${animationId}.`,
+      animationId,
+      packId
+    );
+  }
+  if (conformance.packId !== packId) {
+    throw new KpAnimationCatalogLoadError(
+      "asset-missing-from-pack",
+      `Animation ${animationId} conformance belongs to ${conformance.packId}, not ${packId}.`,
+      animationId,
+      packId
+    );
+  }
+  return { animation, catalog, packId, runtimeCapabilities, conformance };
 }
 
 export function kpAnimationCatalogPackId(
@@ -225,7 +256,16 @@ async function loadPack(
   const existing = packCache.get(cacheKey);
   if (existing !== undefined) return existing;
 
-  const loaded = declaration.load(animationId);
+  const loaded = declaration.load(animationId).then((pack) => {
+    const governed = registerKpAnimationPackConformance({
+      packId,
+      catalog: pack.catalog
+    });
+    return Object.freeze({
+      ...pack,
+      conformanceRegistrations: governed.conformanceRegistrations
+    });
+  });
   packCache.set(cacheKey, loaded);
   // A transient chunk failure must remain explicit without poisoning every
   // later attempt in this host for the lifetime of the page.
@@ -239,7 +279,7 @@ function pack(
   id: KpAnimationCatalogPackId,
   sourcePath: KpAnimationCatalogPackSourcePath,
   owns: (animationId: string) => boolean,
-  load: () => Promise<KpLoadedAnimationPack>
+  load: () => Promise<KpUnregisteredAnimationPack>
 ): KpAnimationCatalogPackDeclaration {
   return Object.freeze({
     id,
@@ -255,7 +295,7 @@ function splitPack(
   sourcePath: KpAnimationCatalogPackSourcePath,
   owns: (animationId: string) => boolean,
   cacheKey: (animationId: string) => string,
-  load: (animationId: string) => Promise<KpLoadedAnimationPack>
+  load: (animationId: string) => Promise<KpUnregisteredAnimationPack>
 ): KpAnimationCatalogPackDeclaration {
   return Object.freeze({ id, sourcePath, owns, cacheKey, load });
 }
@@ -272,7 +312,9 @@ function requirePackDeclaration(
   return declaration;
 }
 
-function dataOnlyPack(catalog: readonly KpAnimationAsset[]): KpLoadedAnimationPack {
+function dataOnlyPack(
+  catalog: readonly KpAnimationAsset[]
+): KpUnregisteredAnimationPack {
   return Object.freeze({
     catalog,
     runtimeCapabilities: kpNoAnimationRuntimeCapabilities

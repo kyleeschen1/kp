@@ -88,7 +88,8 @@
     {
       "id": "registration-gateway",
       "title": "registration-gateway",
-      "status": "planned"
+      "summary": "Integrated the common conformance gateway into lazy catalogue loading. Every carried asset resolves to generated manifest metadata or an explicit typed gap before use; undeclared assets fail closed, composite child ownership remains valid, and bundle boundaries still pass.",
+      "status": "complete"
     },
     {
       "id": "equation-grammar-v2",

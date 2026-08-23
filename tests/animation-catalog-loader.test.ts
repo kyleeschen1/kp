@@ -32,9 +32,17 @@ test("lazy capability packs preserve the complete concrete catalog", async () =>
     loaded.map(({ animation }) => animation.id).sort(),
     expectedIds
   );
-  loaded.forEach(({ animation, catalog, packId, runtimeCapabilities }) => {
+  loaded.forEach(({
+    animation,
+    catalog,
+    packId,
+    runtimeCapabilities,
+    conformance
+  }) => {
     assert.equal(kpAnimationCatalogPackId(animation.id), packId);
     assert.equal(catalog.some((candidate) => candidate.id === animation.id), true);
+    assert.equal(conformance.assetId, animation.id);
+    assert.equal(conformance.packId, packId);
     assert.equal(
       checkKpAnimationRuntimeRewindClockLaw({
         animation,

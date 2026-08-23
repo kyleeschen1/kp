@@ -168,6 +168,34 @@
       "scope": "slice 07 reverse-dependencies",
       "checkedAt": "2026-08-23T05:35:40.624Z",
       "notes": "All TypeScript, Svelte, and domain type boundaries pass."
+    },
+    {
+      "command": "npm run test:animation-conformance-registration",
+      "status": "passed",
+      "scope": "slice 08 registration-gateway",
+      "checkedAt": "2026-08-23T05:40:41.748Z",
+      "notes": "Seven tests prove all loadable assets pass the gateway, undeclared assets fail closed, typed gaps remain possible, composite child ownership is preserved, and no eager family import enters generated metadata."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "slice 08 lazy boundary",
+      "checkedAt": "2026-08-23T05:40:42.933Z",
+      "notes": "Passed after gateway integration: outer 3503, main 203249, catalogue route 136274, and place-value incremental 51097 gzip bytes; zero forbidden outer files."
+    },
+    {
+      "command": "npm run check:animation-conformance-registrations",
+      "status": "passed",
+      "scope": "slice 08 generated registrations",
+      "checkedAt": "2026-08-23T05:40:43.983Z",
+      "notes": "Generated lightweight registration metadata is current."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 08 registration-gateway",
+      "checkedAt": "2026-08-23T05:40:45.119Z",
+      "notes": "All repository type boundaries pass."
     }
   ],
   "progress": {
