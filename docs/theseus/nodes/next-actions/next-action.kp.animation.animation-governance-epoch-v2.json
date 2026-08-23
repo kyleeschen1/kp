@@ -21,6 +21,33 @@
   "verification": [
     "npm run verify:equation:release"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:animation-governance-inventory",
+      "status": "passed",
+      "scope": "generated static inventory classification",
+      "checkedAt": "2026-08-23T05:00:47.717Z",
+      "notes": "Three tests passed; all 58 loadable assets classify without runtime execution, with zero unsupported or unclassified adapters."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/selected-surface-capability.test.ts",
+      "status": "passed",
+      "scope": "capability selection regression",
+      "checkedAt": "2026-08-23T05:00:57.963Z",
+      "notes": "Five tests passed, including the new Lisp loadable-to-painter selection contract."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository type boundary",
+      "checkedAt": "2026-08-23T05:01:06.795Z",
+      "notes": "Application, node, tests, Svelte, and domain typechecks passed."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Slice 1 complete: generated inventory classifies 58 loadable assets across domains, surfaces, adapters, profiles, typography authority, motifs, review provenance, and explicit bypasses; repaired one Lisp capability-selection omission."
+  },
   "expectedLearning": [
     "Whether a common conformance gateway can make evolving principles retroactive without collapsing domain-specific renderer boundaries",
     "Whether typed equation compilation can eliminate raw motion bypasses while preserving approved choreography and lazy bundles"

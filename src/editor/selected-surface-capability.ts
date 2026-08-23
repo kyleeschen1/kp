@@ -98,6 +98,8 @@ export function deriveKpEditorSelectedSurfaceCapabilities(input: {
       input.animationId === "animation.programming.add.execution-trace" ||
       input.animationId === "animation.comparison.linear-solve-programming" ||
       input.animationId ===
+        "animation.programming.lisp-lambda-application" ||
+      input.animationId ===
         "animation.programming.python-free-shipping-refactor" ||
       input.animationId === "animation.programming.scheme-factorial"
     )

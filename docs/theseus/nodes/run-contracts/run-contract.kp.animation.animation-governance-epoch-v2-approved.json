@@ -46,7 +46,8 @@
     {
       "id": "inventory",
       "title": "inventory",
-      "status": "planned"
+      "summary": "Generated and verified static inventory for all 58 loadable assets; exposed 43 equation governance bypasses and repaired Lisp adapter capability selection.",
+      "status": "complete"
     },
     {
       "id": "baselines",

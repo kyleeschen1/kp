@@ -1,0 +1,4023 @@
+{
+  "schemaVersion": "kp.animation-governance-inventory.v1",
+  "kind": "animation-governance-inventory",
+  "summary": {
+    "assetCount": 58,
+    "equationAssetCount": 43,
+    "bypassedAssetCount": 43,
+    "unsupportedAssetCount": 0
+  },
+  "entries": [
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.algebra.exponential-homomorphism.difference-to-quotient",
+      "title": "Turn an exponential difference into a quotient",
+      "packId": "exponential-homomorphism",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "exponential-homomorphism"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.exponential-homomorphism.canonical-native-katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "operation.equation.exponential-difference-to-quotient.v1"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit",
+        "specialized-equation-adapter-direct"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.algebra.exponential-homomorphism.sum-to-product",
+      "title": "Turn an exponential sum into a product",
+      "packId": "exponential-homomorphism",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "exponential-homomorphism"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.exponential-homomorphism.canonical-native-katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "operation.equation.exponential-sum-to-product.v1"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit",
+        "specialized-equation-adapter-direct"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.algebra.log-exponent.solve-two-power-x",
+      "title": "Solve an exponential equation with logarithms",
+      "packId": "algebra",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "log-exponent"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.log-exponent.canonical-native-katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "applyNaturalLogBothSides",
+          "extractLogPowerExponent",
+          "divideBothSidesByLogBase"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit",
+        "specialized-equation-adapter-direct"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.algebra.log-product.equivalence-frame",
+      "title": "Keep the logarithm product law as an equivalence",
+      "packId": "log-product",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "log-product"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.log-product.canonical-native-katex",
+          "editor-animation-surface.log-product.equivalence-frame.native-katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "expandLogProductAsSum"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit",
+        "specialized-equation-adapter-direct"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.algebra.log-product.product-to-sum",
+      "title": "Expand a logarithm of a product",
+      "packId": "log-product",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "log-product"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.log-product.canonical-native-katex",
+          "editor-animation-surface.log-product.equivalence-frame.native-katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "expandLogProductAsSum"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit",
+        "specialized-equation-adapter-direct"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.algebra.log-product.three-factors-to-sum",
+      "title": "Expand a logarithm of multiple factors",
+      "packId": "log-product",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "log-product"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.log-product.canonical-native-katex",
+          "editor-animation-surface.log-product.equivalence-frame.native-katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "expandLogProductAsSum"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit",
+        "specialized-equation-adapter-direct"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.algebra.log-quotient.difference-to-quotient",
+      "title": "Combine a difference of logarithms",
+      "packId": "algebra",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "log-quotient"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.log-quotient.canonical-native-katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "combineLogDifferenceAsQuotient"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit",
+        "specialized-equation-adapter-direct"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.algebra.radical.compound-carrier-normalization",
+      "title": "Preserve x + 1 through an even root",
+      "packId": "algebra",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "even-root",
+          "equation-katex"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.even-root.canonical-native-katex",
+          "editor-animation-surface.root.compound-carrier.canonical-native-katex",
+          "editor-animation-surface.equation.katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "compound-carrier-normalization"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit",
+        "specialized-equation-adapter-direct"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.algebra.radical.solve-x-squared-nine",
+      "title": "Solve x² = 9 over the reals",
+      "packId": "algebra",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "even-root",
+          "equation-katex"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.even-root.canonical-native-katex",
+          "editor-animation-surface.root.compound-carrier.canonical-native-katex",
+          "editor-animation-surface.equation.katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "operation.equation.apply-inverse-power.v1",
+          "operation.arithmetic.evaluate-real-root.v1"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit",
+        "specialized-equation-adapter-direct"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.comparison.jacobian-hessian",
+      "title": "Jacobian and Hessian comparison",
+      "packId": "comparison",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "equation-katex"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "presentLatexForm",
+          "compareDerivativeMatrixForms"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.comparison.linear-solve-programming",
+      "title": "Linear solve and programming trace comparison",
+      "packId": "comparison",
+      "renderTargetKinds": [
+        "equation",
+        "programming"
+      ],
+      "domains": [
+        "equation",
+        "programming"
+      ],
+      "surface": {
+        "kind": "composite",
+        "slotKinds": [
+          "equation",
+          "programming"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "equation-katex",
+          "programming-trace"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.equation.katex",
+          "editor-animation-surface.programming.trace"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "continuity-v1",
+          "atomic-v1",
+          "counter-orbit-v1",
+          "none",
+          "counter-convergence-v1",
+          "semantic-depth-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "subtractBothSides",
+          "cancelAdditiveInverses",
+          "simplifyConstantDifference",
+          "advanceExecutionTrace"
+        ],
+        "presentationRecipeIds": [
+          "continuity-v1",
+          "atomic-v1",
+          "counter-orbit-v1",
+          "none",
+          "counter-convergence-v1",
+          "semantic-depth-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit",
+        "specialized-equation-adapter-direct"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.derivative-rules.tangent-graph",
+      "title": "Difference quotient converging to a tangent",
+      "packId": "graph",
+      "renderTargetKinds": [
+        "graph"
+      ],
+      "domains": [
+        "graph"
+      ],
+      "surface": {
+        "kind": "graph",
+        "slotKinds": [
+          "graph"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "graph-svg-katex-labels"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.graph.svg"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "not-applicable"
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "renderer-domain",
+        "opticalScale": "renderer-domain"
+      },
+      "motifs": {
+        "familyIds": [
+          "family.calculus.derivative-rules"
+        ],
+        "semanticTransformTypes": [
+          "convergeDifferenceQuotient",
+          "convergeDerivativeSecant"
+        ],
+        "presentationRecipeIds": []
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "gold",
+        "evidenceSourceIds": [
+          "docs/project/reviews/2026-07-23-derivative-secant-tangent-checkpoint.md"
+        ]
+      },
+      "bypasses": []
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.dot-projection.basic",
+      "title": "Dot product and vector projection",
+      "packId": "graph",
+      "renderTargetKinds": [
+        "graph"
+      ],
+      "domains": [
+        "graph"
+      ],
+      "surface": {
+        "kind": "graph",
+        "slotKinds": [
+          "graph"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "graph-svg-katex-labels"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.graph.svg"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "not-applicable"
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "renderer-domain",
+        "opticalScale": "renderer-domain"
+      },
+      "motifs": {
+        "familyIds": [
+          "family.linear-algebra.dot-projection"
+        ],
+        "semanticTransformTypes": [
+          "dotProduct",
+          "vectorProjection"
+        ],
+        "presentationRecipeIds": []
+      },
+      "review": {
+        "humanDisposition": "keep",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": []
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.economics.supply-demand-equilibrium-shift",
+      "title": "Supply and demand equilibrium shift",
+      "packId": "economics",
+      "renderTargetKinds": [
+        "graph"
+      ],
+      "domains": [
+        "graph"
+      ],
+      "surface": {
+        "kind": "graph",
+        "slotKinds": [
+          "graph"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "graph-svg-economics"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.graph.svg.economics"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "not-applicable"
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "renderer-domain",
+        "opticalScale": "renderer-domain"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "shiftDemandIntercept"
+        ],
+        "presentationRecipeIds": []
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": []
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.equation.finite-product-expansion.v1",
+      "title": "Expand a finite product",
+      "packId": "algebra",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "finite-binder-expansion"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.finite-sum-expansion.canonical-native-katex",
+          "editor-animation-surface.finite-product-expansion.canonical-native-katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "finiteBinderExpand"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit",
+        "specialized-equation-adapter-direct"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.equation.finite-sum-expansion.v1",
+      "title": "Expand a finite sum",
+      "packId": "algebra",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "finite-binder-expansion"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.finite-sum-expansion.canonical-native-katex",
+          "editor-animation-surface.finite-product-expansion.canonical-native-katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "finiteBinderExpand"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit",
+        "specialized-equation-adapter-direct"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+      "title": "Give one third a denominator of six",
+      "packId": "algebra",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "fraction-equivalence"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.fraction-equivalence.canonical-native-katex",
+          "editor-animation-surface.fraction-equivalence.common-denominator-pressure"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "introduceUnitFactor",
+          "alignCommonDenominator",
+          "simplifyConstantProduct"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit",
+        "specialized-equation-adapter-direct"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.equation.fraction-equivalence.compact.v1",
+      "title": "Scale numerator and denominator together",
+      "packId": "algebra",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "fraction-equivalence"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.fraction-equivalence.canonical-native-katex",
+          "editor-animation-surface.fraction-equivalence.common-denominator-pressure"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "scaleFractionEquivalently"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit",
+        "specialized-equation-adapter-direct"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.equation.fraction-equivalence.v1",
+      "title": "Multiply a fraction by two over two",
+      "packId": "algebra",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "fraction-equivalence"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.fraction-equivalence.canonical-native-katex",
+          "editor-animation-surface.fraction-equivalence.common-denominator-pressure"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "scaleFractionEquivalently"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit",
+        "specialized-equation-adapter-direct"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.equation.logarithm-change-of-base.v1",
+      "title": "Change logarithm base",
+      "packId": "algebra",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "logarithm-change-of-base"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.logarithm-change-of-base.canonical-native-katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "changeLogarithmBase"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit",
+        "specialized-equation-adapter-direct"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.exact-fraction-quantity.third-plus-sixth",
+      "title": "One third plus one sixth",
+      "packId": "exact-quantity",
+      "renderTargetKinds": [
+        "diagram"
+      ],
+      "domains": [
+        "diagram"
+      ],
+      "surface": {
+        "kind": "diagram",
+        "slotKinds": [
+          "diagram"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "exact-fraction-quantity",
+          "equation-katex"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.exact-fraction-quantity.synchronized",
+          "editor-animation-surface.equation.katex",
+          "editor-animation-surface.diagram.svg"
+        ],
+        "authority": "selected-capabilities-and-base-adapters"
+      },
+      "presentationProfile": {
+        "status": "not-applicable"
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "not-applicable",
+        "opticalScale": "renderer-domain"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "refine-partition",
+          "align-common-denominator",
+          "merge-disjoint-parts",
+          "recognize-equivalent-regrouping"
+        ],
+        "presentationRecipeIds": []
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "promoted",
+        "evidenceSourceIds": [
+          "review.kp.exact-fraction-quantity-persistent-stage-human-checkpoint",
+          "run-contract.kp.executable-motif-perceptual-continuity-repair-v0"
+        ]
+      },
+      "bypasses": []
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.generated.add-zero",
+      "title": "Generated: remove additive zero",
+      "packId": "generated-drafts",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "carrier-preserving-simplification"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.operation-evaluation.carrier-preserving-simplification"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "simplify-additive-identity"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "keep",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit",
+        "specialized-equation-adapter-direct"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.generated.calculus.derivative.power-rule-x-cubed",
+      "title": "Generated derivative power rule for x cubed",
+      "packId": "generated-problems",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "equation-katex"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [
+          "family.calculus.derivative-rules"
+        ],
+        "semanticTransformTypes": [
+          "applyDerivativePowerRule",
+          "simplifyConstantDifference"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.generated.calculus.derivative.sum-rule-polynomial",
+      "title": "Generated derivative sum rule for a polynomial",
+      "packId": "generated-problems",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "equation-katex"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "applyDerivativeSumRule",
+          "applyDerivativePowerRulesToTerms"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.generated.calculus.integral.power-rule-quadratic",
+      "title": "Generated integral power rule for a quadratic",
+      "packId": "generated-problems",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "equation-katex"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "applyAntiderivativePowerRule",
+          "simplifyAntiderivativePowerRule"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.generated.cancellation.additive-inverses",
+      "title": "Cancel an additive inverse pair",
+      "packId": "algebra",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "equation-katex"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "cancelAdditiveInverses"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.generated.distribution.expand-a-sum",
+      "title": "Generated distribute a over sum",
+      "packId": "algebra",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "equation-katex"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [
+          "family.algebra.distribution-factoring"
+        ],
+        "semanticTransformTypes": [
+          "distributeMultiplication"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "gold",
+        "evidenceSourceIds": [
+          "docs/project/reviews/2026-07-23-governed-semantic-authoring-exemplar-checkpoint.md",
+          "run-contract.kp.authoritative-roadmap-workbench-v1#s29"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.generated.distribution.factor-common-a",
+      "title": "Generated factor common a",
+      "packId": "algebra",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "equation-katex"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [
+          "family.algebra.distribution-factoring"
+        ],
+        "semanticTransformTypes": [
+          "factorCommonTerm"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.generated.exponent.square-as-product",
+      "title": "Generated expand square as product",
+      "packId": "algebra",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "equation-katex"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [
+          "family.algebra.exponent-log-laws"
+        ],
+        "semanticTransformTypes": [
+          "lowerExponent",
+          "unwrapUnitExponent"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.generated.fraction-expression.two-fourths",
+      "title": "Generated simplify two fourths",
+      "packId": "algebra",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "equation-katex"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [
+          "family.algebra.fraction-simplification"
+        ],
+        "semanticTransformTypes": [
+          "splitFractionFactors",
+          "mergeFractionCommonFactor",
+          "simplifyUnitFractionFactor"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.generated.function-wrap.apply-f",
+      "title": "Generated wrap x with f",
+      "packId": "algebra",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "equation-katex"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [
+          "family.algebra.exponent-log-laws"
+        ],
+        "semanticTransformTypes": [
+          "wrapFunction"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "gold",
+        "evidenceSourceIds": [
+          "docs/project/reviews/2026-07-16-phase-ordered-choreography-gestalt-style-loop-closeout.md"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.generated.linear-algebra.dot-product.three-vector",
+      "title": "Generated dot product",
+      "packId": "generated-problems",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "equation-katex"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "computeDotProduct"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+      "title": "Generated matrix-matrix product",
+      "packId": "generated-problems",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "equation-katex"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [
+          "family.linear-algebra.matrix-matrix-composition"
+        ],
+        "semanticTransformTypes": [
+          "multiplyMatrices"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.generated.linear-algebra.matrix-vector.two-by-two",
+      "title": "Generated matrix-vector product",
+      "packId": "generated-problems",
+      "renderTargetKinds": [
+        "equation",
+        "graph"
+      ],
+      "domains": [
+        "equation",
+        "graph"
+      ],
+      "surface": {
+        "kind": "composite",
+        "slotKinds": [
+          "equation",
+          "graph"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "equation-katex",
+          "graph-svg-katex-labels"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.equation.katex",
+          "editor-animation-surface.graph.svg"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [
+          "family.linear-algebra.matrix-vector"
+        ],
+        "semanticTransformTypes": [
+          "multiplyMatrixVector",
+          "applyLinearMapToVector"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit",
+        "specialized-equation-adapter-direct"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.generated.linear-solve.linear-68c15d41",
+      "title": "Solve 2x+3=8",
+      "packId": "algebra",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "equation-katex"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "subtractBothSides",
+          "cancelAdditiveInverses",
+          "simplifyConstantDifference",
+          "divideBothSides",
+          "cancelMultiplicativeInverses"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.generated.pipeline-diagram",
+      "title": "Generated: reveal a transformation pipeline",
+      "packId": "generated-drafts",
+      "renderTargetKinds": [
+        "diagram"
+      ],
+      "domains": [
+        "diagram"
+      ],
+      "surface": {
+        "kind": "diagram",
+        "slotKinds": [
+          "diagram"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [],
+        "adapterIds": [
+          "editor-animation-surface.diagram.svg"
+        ],
+        "authority": "base-adapters"
+      },
+      "presentationProfile": {
+        "status": "not-applicable"
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "not-applicable",
+        "opticalScale": "renderer-domain"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "diagram-reveal-intermediate"
+        ],
+        "presentationRecipeIds": []
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": []
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.generated.radical.square-root-as-power",
+      "title": "Generated rewrite square root as power",
+      "packId": "algebra",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "equation-katex"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [
+          "family.algebra.exponent-log-laws"
+        ],
+        "semanticTransformTypes": [
+          "rewritePowerAsRoot"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "promoted",
+        "evidenceSourceIds": [
+          "docs/project/reviews/2026-07-16-material-continuity-artifact-morph-loop-closeout.md",
+          "run-contract.kp.authoritative-roadmap-workbench-v1#s27"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.generated.substitute-three",
+      "title": "Generated: substitute 3 for x",
+      "packId": "generated-drafts",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "equation-katex"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "substituteValue"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.generated.substitute-three.provisional-incorrect",
+      "title": "Provisional learner step: substitute 3 for x and 2",
+      "packId": "generated-drafts",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "equation-katex"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "substituteValue"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.graph.surface-mode.mesh-to-donut",
+      "title": "Saddle surface mesh to donut",
+      "packId": "graph",
+      "renderTargetKinds": [
+        "graph"
+      ],
+      "domains": [
+        "graph"
+      ],
+      "surface": {
+        "kind": "graph",
+        "slotKinds": [
+          "graph"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "graph-webgl-3d"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.graph.webgl-3d"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "not-applicable"
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "renderer-domain",
+        "opticalScale": "renderer-domain"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "changeGraphSurfaceMode"
+        ],
+        "presentationRecipeIds": []
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": []
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.graph.vector.linear-map-scale",
+      "title": "Apply a scale matrix to a vector",
+      "packId": "graph",
+      "renderTargetKinds": [
+        "graph"
+      ],
+      "domains": [
+        "graph"
+      ],
+      "surface": {
+        "kind": "graph",
+        "slotKinds": [
+          "graph"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "graph-svg-katex-labels"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.graph.svg"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "not-applicable"
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "renderer-domain",
+        "opticalScale": "renderer-domain"
+      },
+      "motifs": {
+        "familyIds": [
+          "family.linear-algebra.vector-add-scale"
+        ],
+        "semanticTransformTypes": [
+          "applyLinearMapToVector"
+        ],
+        "presentationRecipeIds": []
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": []
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.inequality.sign-flip.basic",
+      "title": "Inequality sign flip",
+      "packId": "algebra",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "equation-katex"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [
+          "family.algebra.inequality"
+        ],
+        "semanticTransformTypes": [
+          "multiplyNegativeBothSidesInequality"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.integral-ftc.area-sweep",
+      "title": "Integral area sweep",
+      "packId": "graph",
+      "renderTargetKinds": [
+        "graph"
+      ],
+      "domains": [
+        "graph"
+      ],
+      "surface": {
+        "kind": "graph",
+        "slotKinds": [
+          "graph"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "graph-svg-katex-labels"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.graph.svg"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "not-applicable"
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "renderer-domain",
+        "opticalScale": "renderer-domain"
+      },
+      "motifs": {
+        "familyIds": [
+          "family.calculus.integral-ftc"
+        ],
+        "semanticTransformTypes": [
+          "accumulationDerivativeFtc"
+        ],
+        "presentationRecipeIds": []
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": []
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.linear-solve.solve-x",
+      "title": "Solve x + 3 = 7",
+      "packId": "algebra",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "equation-katex"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "continuity-v1",
+          "atomic-v1",
+          "counter-orbit-v1",
+          "none",
+          "counter-convergence-v1",
+          "semantic-depth-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [
+          "family.algebra.both-sides",
+          "family.algebra.cancel-combine"
+        ],
+        "semanticTransformTypes": [
+          "subtractBothSides",
+          "cancelAdditiveInverses",
+          "simplifyConstantDifference"
+        ],
+        "presentationRecipeIds": [
+          "continuity-v1",
+          "atomic-v1",
+          "counter-orbit-v1",
+          "none",
+          "counter-convergence-v1",
+          "semantic-depth-v1",
+          "concurrent-v1",
+          "together"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "gold",
+        "evidenceSourceIds": [
+          "docs/project/reviews/2026-07-21-solve-x-human-checkpoint-follow-up.md"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.operation-evaluation.five-plus-two",
+      "title": "5 + 2 → 7",
+      "packId": "operation-evaluation",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "operation-evaluation",
+          "equation-katex"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.operation-evaluation.canonical-native-katex",
+          "editor-animation-surface.equation.katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "simplifyConstantSum"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit",
+        "specialized-equation-adapter-direct"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.operation-evaluation.one-plus-two",
+      "title": "1 + 2 → 3",
+      "packId": "operation-evaluation",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "operation-evaluation",
+          "equation-katex"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.operation-evaluation.canonical-native-katex",
+          "editor-animation-surface.equation.katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "simplifyConstantSum"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit",
+        "specialized-equation-adapter-direct"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.operation-evaluation.three-sixths",
+      "title": "\\frac{3}{6} → \\frac{1}{2}",
+      "packId": "operation-evaluation",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "operation-evaluation",
+          "equation-katex"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.operation-evaluation.canonical-native-katex",
+          "editor-animation-surface.equation.katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "simplifyConstantQuotient"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit",
+        "specialized-equation-adapter-direct"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.operation-evaluation.two-times-one-carrier",
+      "title": "2 \\times 1 → 2",
+      "packId": "operation-evaluation",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "carrier-preserving-simplification"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.operation-evaluation.carrier-preserving-simplification"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "simplifyMultiplicativeIdentity"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "keep",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit",
+        "specialized-equation-adapter-direct"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.operation-evaluation.two-times-three",
+      "title": "2 \\times 3 → 6",
+      "packId": "operation-evaluation",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "operation-evaluation",
+          "equation-katex"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.operation-evaluation.canonical-native-katex",
+          "editor-animation-surface.equation.katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "simplifyConstantProduct"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit",
+        "specialized-equation-adapter-direct"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.physics.constant-force-work-energy",
+      "title": "Constant force and kinetic-energy change",
+      "packId": "physics",
+      "renderTargetKinds": [
+        "graph"
+      ],
+      "domains": [
+        "graph"
+      ],
+      "surface": {
+        "kind": "graph",
+        "slotKinds": [
+          "graph"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "graph-svg-katex-labels"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.graph.svg"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "not-applicable"
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "renderer-domain",
+        "opticalScale": "renderer-domain"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "accumulateConstantForceWork"
+        ],
+        "presentationRecipeIds": []
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": []
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.place-value-addition.278-plus-156",
+      "title": "Add 278 + 156 by place value",
+      "packId": "place-value",
+      "renderTargetKinds": [
+        "diagram"
+      ],
+      "domains": [
+        "diagram"
+      ],
+      "surface": {
+        "kind": "diagram",
+        "slotKinds": [
+          "diagram"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "place-value-addition"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.place-value-addition.synchronized",
+          "editor-animation-surface.diagram.svg"
+        ],
+        "authority": "selected-capabilities-and-base-adapters"
+      },
+      "presentationProfile": {
+        "status": "not-applicable"
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "not-applicable",
+        "opticalScale": "renderer-domain"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "evaluate-column",
+          "exchange-adjacent-place",
+          "settle-native-result"
+        ],
+        "presentationRecipeIds": []
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": []
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.programming.add.execution-trace",
+      "title": "Addition execution trace",
+      "packId": "programming",
+      "renderTargetKinds": [
+        "programming"
+      ],
+      "domains": [
+        "programming"
+      ],
+      "surface": {
+        "kind": "programming",
+        "slotKinds": [
+          "programming"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "programming-trace"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.programming.trace"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "not-applicable"
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "not-applicable",
+        "opticalScale": "renderer-domain"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "advanceExecutionTrace"
+        ],
+        "presentationRecipeIds": []
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": []
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.programming.lisp-lambda-application",
+      "title": "Lisp function application",
+      "packId": "programming",
+      "renderTargetKinds": [
+        "programming"
+      ],
+      "domains": [
+        "programming"
+      ],
+      "surface": {
+        "kind": "programming",
+        "slotKinds": [
+          "programming"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "programming-trace"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.programming.trace"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "not-applicable"
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "not-applicable",
+        "opticalScale": "renderer-domain"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "bindLispArgument",
+          "substituteLispBinding",
+          "evaluateLispPrimitiveAddition"
+        ],
+        "presentationRecipeIds": []
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": []
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.programming.python-free-shipping-refactor",
+      "title": "One free-shipping rule",
+      "packId": "programming",
+      "renderTargetKinds": [
+        "programming"
+      ],
+      "domains": [
+        "programming"
+      ],
+      "surface": {
+        "kind": "programming",
+        "slotKinds": [
+          "programming"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "programming-trace"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.programming.trace"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "not-applicable"
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "not-applicable",
+        "opticalScale": "renderer-domain"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "extractSharedRule",
+          "replaceWithNamedRuleCall",
+          "recomposeSourceRevision"
+        ],
+        "presentationRecipeIds": []
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": []
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.programming.scheme-factorial",
+      "title": "Evaluate (factorial 3)",
+      "packId": "programming",
+      "renderTargetKinds": [
+        "programming"
+      ],
+      "domains": [
+        "programming"
+      ],
+      "surface": {
+        "kind": "programming",
+        "slotKinds": [
+          "programming"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "programming-trace"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.programming.trace"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "not-applicable"
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "not-applicable",
+        "opticalScale": "renderer-domain"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "ExpandProcedure",
+          "ProjectBinding",
+          "ChooseBranch",
+          "ReducePrimitive",
+          "ResolveBase",
+          "ApplyPrimitive"
+        ],
+        "presentationRecipeIds": []
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": []
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.programming.typescript-free-shipping-refactor",
+      "title": "One free-shipping rule",
+      "packId": "programming",
+      "renderTargetKinds": [
+        "programming"
+      ],
+      "domains": [
+        "programming"
+      ],
+      "surface": {
+        "kind": "programming",
+        "slotKinds": [
+          "programming"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "programming-trace"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.programming.trace"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "not-applicable"
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "not-applicable",
+        "opticalScale": "renderer-domain"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "extractSharedRule",
+          "replaceWithNamedRuleCall",
+          "recomposeSourceRevision"
+        ],
+        "presentationRecipeIds": []
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": []
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.sample.fourier-transform-pair",
+      "title": "Fourier transform pair",
+      "packId": "complex-katex",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "equation-katex"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "presentLatexForm",
+          "compareFourierTransformPair"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit"
+      ]
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.sample.fundamental-theorem-calculus",
+      "title": "Fundamental Theorem of Calculus forms",
+      "packId": "complex-katex",
+      "renderTargetKinds": [
+        "equation"
+      ],
+      "domains": [
+        "equation"
+      ],
+      "surface": {
+        "kind": "equation",
+        "slotKinds": [
+          "equation"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "equation-katex"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "declared",
+        "schemaVersion": "kp.presentation-profile.v1",
+        "domain": "equation",
+        "recipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "adapter-local-implicit",
+        "opticalScale": "adapter-local-implicit"
+      },
+      "motifs": {
+        "familyIds": [
+          "family.calculus.integral-ftc"
+        ],
+        "semanticTransformTypes": [
+          "presentLatexForm",
+          "compareFundamentalTheoremForms"
+        ],
+        "presentationRecipeIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ]
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": [
+        "equation-grammar-v2-missing",
+        "typography-policy-implicit"
+      ]
+    }
+  ]
+}
