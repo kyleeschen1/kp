@@ -138,8 +138,10 @@ test("relief uses stationary contour paint and an explicit theme palette", () =>
   const materialTreatment = css.slice(css.indexOf(
     ".kp-log-product-stage[data-kp-log-product-material-active"
   ));
-  assert.match(css, /--kp-log-product-glyph-face:\s*#17191f/u);
+  assert.match(css, /--kp-log-product-glyph-face:\s*#0d0e12/u);
   assert.match(css, /--kp-log-product-glyph-face:\s*#ede8d0/u);
+  assert.match(css, /--kp-log-product-material-side-rgb:\s*26 29 38/u);
+  assert.match(css, /--kp-log-product-material-cast-rgb:\s*13 14 18/u);
   assert.match(materialTreatment, /text-shadow:/u);
   assert.match(materialTreatment, /material-relief-side-offset/u);
   assert.match(materialTreatment, /material-relief-cast-offset/u);

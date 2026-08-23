@@ -432,7 +432,7 @@ async function captureSample(input: {
     throw new Error(`${id} displaced foreground ink from its native plane.`);
   }
   const expectedGlyphColor = input.captureCaseId.includes("light")
-    ? "rgb(23, 25, 31)"
+    ? "rgb(13, 14, 18)"
     : "rgb(237, 232, 208)";
   const unexpectedGlyphColors = [
     ...state.visibleMaterialOwnerMetrics.map(({ color }) => color),
@@ -443,6 +443,17 @@ async function captureSample(input: {
       `${id} used glyph colors outside the resolved theme face: ` +
       [...new Set(unexpectedGlyphColors)].join(", ")
     );
+  }
+  if (input.captureCaseId.startsWith("material-")) {
+    const fontSizes = state.endpointMetrics.map(({ fontSize }) =>
+      Number.parseFloat(fontSize)
+    );
+    if (fontSizes.some((fontSize) => fontSize < 24 || fontSize > 28)) {
+      throw new Error(
+        `${id} escaped the bounded demonstration type scale: ` +
+        fontSizes.join(", ")
+      );
+    }
   }
   if (
     input.captureCaseId === "material-wide-dark" &&
@@ -503,7 +514,7 @@ async function assertPresentationRestored(input: {
     typography: root.dataset["kpLogProductTypography"] ?? ""
   }));
   const expected = input.presentation.focus === "elevated"
-    ? { depth: "material", typography: "inline" }
+    ? { depth: "material", typography: "demonstration" }
     : input.presentation.focus === "no-depth"
       ? { depth: "no-depth", typography: "display" }
       : { depth: "flat", typography: "display" };

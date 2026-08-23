@@ -11,11 +11,11 @@ import type {
 
 const MATERIAL_OWNER_SELECTOR = "[data-kp-equation-material-owner-id]";
 const PROJECTED_OWNER_SELECTOR = "[data-kp-log-product-material-role]";
-const RELIEF_SIDE_OFFSET_PX = 0.85;
-const RELIEF_SIDE_MAX_OPACITY = 0.62;
-const RELIEF_CAST_OFFSET_PX = 1.55;
-const RELIEF_CAST_BLUR_PX = 1.4;
-const RELIEF_CAST_MAX_OPACITY = 0.2;
+const RELIEF_SIDE_OFFSET_PX = 0.45;
+const RELIEF_SIDE_MAX_OPACITY = 0.78;
+const RELIEF_CAST_OFFSET_PX = 0.85;
+const RELIEF_CAST_BLUR_PX = 0.5;
+const RELIEF_CAST_MAX_OPACITY = 0.08;
 const MATERIAL_SURFACE_EPSILON = 0.001;
 
 export interface KpLogProductMaterialSurfaceProjection {

@@ -9,7 +9,7 @@ import {
 test("only elevated focus activates the local material treatment", () => {
   assert.deepEqual(projectKpLogProductMaterialPresentationMode("elevated"), {
     depthMode: "material",
-    typography: "inline",
+    typography: "demonstration",
     active: true
   });
   assert.deepEqual(projectKpLogProductMaterialPresentationMode("flat"), {

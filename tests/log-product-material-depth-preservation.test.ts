@@ -127,7 +127,7 @@ test("material depth remains an opt-in presentation over the flat URL", () => {
   assert.equal(flat.artifactId, noDepth.artifactId);
 });
 
-test("inline typography is local and inert until the exemplar selects it", () => {
+test("material demonstration size stays distinct from inline typography", () => {
   const css = readFileSync(new URL(
     "../src/editor/log-product-surface.css",
     import.meta.url
@@ -137,10 +137,18 @@ test("inline typography is local and inert until the exemplar selects it", () =>
     css,
     /--kp-log-product-display-font-size:\s*clamp\(2\.25rem, 5vw, 4rem\)/u
   );
+  assert.match(
+    css,
+    /--kp-log-product-demonstration-font-size:\s*1\.625rem/u
+  );
   assert.match(css, /--kp-log-product-inline-font-size:\s*1rem/u);
   assert.match(
     css,
     /--kp-log-product-equation-font-size:\s*var\(--kp-log-product-display-font-size\)/u
+  );
+  assert.match(
+    css,
+    /\[data-kp-log-product-typography="demonstration"\][\s\S]*?--kp-log-product-equation-font-size:\s*var\(--kp-log-product-demonstration-font-size\)/u
   );
   assert.match(
     css,

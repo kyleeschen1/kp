@@ -548,6 +548,27 @@
       "scope": "md22",
       "checkedAt": "2026-08-23T02:42:18.743Z",
       "notes": "Validated 1051 nodes and 24722 events after recording the stationary-face relief checkpoint."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T03:04:23.635Z",
+      "notes": "53 focused log-product checks passed after separating demonstration and inline typography and retuning light relief."
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "passed",
+      "scope": "exemplar",
+      "checkedAt": "2026-08-23T03:04:25.458Z",
+      "notes": "Stable browser capture passed after fixing the initial responsive-size resize regression with a fixed 26px demonstration token; dark/light, wide/narrow, resize, reduced-motion, forward/return, and endpoint evidence passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-23T03:04:26.714Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks completed with zero errors; no typecheck process remains."
     }
   ],
   "allowedWork": [
@@ -705,7 +726,7 @@
     {
       "id": "md22",
       "title": "Produce comparison evidence and human visual checkpoint",
-      "summary": "Built the reviewable stationary-face material exemplar: foreground KaTeX remains at authoritative geometry, contour-following relief carries the depth cue, light and dark faces use explicit coherent palettes, contact-shadow planes are removed, and focused semantic/browser/type/preservation evidence passes. Awaiting human visual checkpoint before promotion or completion.",
+      "summary": "Built the second reviewable material exemplar. Elevated equations now use a fixed 1.625rem demonstration token distinct from the retained 1rem inline token; light-mode faces are #0d0e12 with a narrow dark contour and minimal cast blur. A fluid type attempt was rejected by the resize harness and replaced with fixed optical geometry. Focused unit, browser, resize, theme, accessibility, and type evidence passes; awaiting human judgment of apparent gray during operator contraction before any choreography adjustment or promotion.",
       "status": "in-progress"
     }
   ]

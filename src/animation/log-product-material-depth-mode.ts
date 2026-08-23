@@ -7,7 +7,7 @@ import type {
 
 export interface KpLogProductMaterialPresentationMode {
   readonly depthMode: KpLogProductMaterialDepthMode;
-  readonly typography: "display" | "inline";
+  readonly typography: "display" | "demonstration" | "inline";
   readonly active: boolean;
 }
 
@@ -21,7 +21,7 @@ const modes: Readonly<
   }),
   elevated: Object.freeze({
     depthMode: "material",
-    typography: "inline",
+    typography: "demonstration",
     active: true
   }),
   "no-depth": Object.freeze({
@@ -39,4 +39,3 @@ export function projectKpLogProductMaterialPresentationMode(
   }
   return modes.flat;
 }
-

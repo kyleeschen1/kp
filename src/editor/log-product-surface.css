@@ -1,12 +1,13 @@
 .kp-log-product-stage {
   --kp-log-product-display-font-size: clamp(2.25rem, 5vw, 4rem);
+  --kp-log-product-demonstration-font-size: 1.625rem;
   --kp-log-product-inline-font-size: 1rem;
   --kp-log-product-equation-font-size:
     var(--kp-log-product-display-font-size);
   --kp-log-product-stage-block-size: 24rem;
-  --kp-log-product-glyph-face: #17191f;
-  --kp-log-product-material-side-rgb: 83 91 111;
-  --kp-log-product-material-cast-rgb: 24 27 35;
+  --kp-log-product-glyph-face: #0d0e12;
+  --kp-log-product-material-side-rgb: 26 29 38;
+  --kp-log-product-material-cast-rgb: 13 14 18;
   position: relative;
   display: grid;
   width: 100%;
@@ -40,8 +41,14 @@
   font-size: var(--kp-log-product-equation-font-size);
 }
 
-/* The inline treatment is an inert exemplar seam until the surface explicitly
-   selects it; the approved flat presentation continues to use display scale. */
+/* Demonstration and inline typography are different attentional roles. The
+   material stage needs enough apparent size for crisp faces and shallow
+   relief; 1rem remains available for genuine prose-inline composition. */
+.kp-log-product-stage[data-kp-log-product-typography="demonstration"] {
+  --kp-log-product-equation-font-size:
+    var(--kp-log-product-demonstration-font-size);
+}
+
 .kp-log-product-stage[data-kp-log-product-typography="inline"] {
   --kp-log-product-equation-font-size:
     var(--kp-log-product-inline-font-size);
