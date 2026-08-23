@@ -197,6 +197,20 @@
       "scope": "standard",
       "checkedAt": "2026-08-23T23:30:56.356Z",
       "notes": "Presentation-plan certificate propagation preserves all TypeScript, Svelte, and domain boundaries."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test evaluation family adapter and presentation plan suites",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T23:33:16.666Z",
+      "notes": "Five tests pass; adapter receives the exact certificate reference and its source contains no resolver, transform-kind, or asset-id input."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-23T23:33:17.984Z",
+      "notes": "The certificate-only adapter contract preserves all TypeScript, Svelte, and domain boundaries."
     }
   ],
   "progress": {

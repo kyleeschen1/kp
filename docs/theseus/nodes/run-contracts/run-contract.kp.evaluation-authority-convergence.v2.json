@@ -105,7 +105,8 @@
     {
       "id": "kp.eval-auth.s10",
       "title": "adapter-contract",
-      "status": "planned"
+      "summary": "Evaluation adapters now consume exact nominal family certificates from presentation transitions through a seam with no family, transform-kind, or asset-id re-resolution input.",
+      "status": "complete"
     },
     {
       "id": "kp.eval-auth.s11",
