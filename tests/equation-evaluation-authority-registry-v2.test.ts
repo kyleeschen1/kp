@@ -163,6 +163,7 @@ function grammarInput(
       },
       projection: { intent: "replacement" },
       typographyPolicyId: "typography.equation.fixture.v1",
+      typographyRequirements: { largeOperators: [] },
       teachingIntent: {
         kind: "cause",
         primaryEntityIds: ["entity.x"],

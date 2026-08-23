@@ -118,7 +118,8 @@
     {
       "id": "typography-policy",
       "title": "typography-policy",
-      "status": "planned"
+      "summary": "Separated equation typography into registered flow, TeX mathStyle, and optical scale dimensions. Large operators now require semantic entity/kind/limit-placement declarations and a compatible policy; a global displayMode switch is absent and cannot stand in for typography intent.",
+      "status": "complete"
     },
     {
       "id": "katex-endpoints",

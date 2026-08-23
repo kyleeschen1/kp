@@ -35,6 +35,13 @@ export interface KpEquationGrammarTransitionV2 {
     readonly intent: KpEquationProjectionIntentV2;
   };
   readonly typographyPolicyId: `typography.equation.${string}`;
+  readonly typographyRequirements: {
+    readonly largeOperators: readonly {
+      readonly entityId: string;
+      readonly kind: "sum" | "product" | "integral" | "limit";
+      readonly limitPlacement: "bounds" | "side";
+    }[];
+  };
   readonly teachingIntent: {
     readonly kind: "notice" | "compare" | "transmit" | "cause";
     readonly primaryEntityIds: readonly string[];
@@ -160,6 +167,11 @@ export function compileKpEquationGrammarV2(
       },
       projection: { intent: transition.projection.intent },
       typographyPolicyId: transition.typographyPolicyId,
+      typographyRequirements: {
+        largeOperators: transition.typographyRequirements.largeOperators.map(
+          (operator) => ({ ...operator })
+        )
+      },
       teachingIntent: {
         ...transition.teachingIntent,
         primaryEntityIds: [...transition.teachingIntent.primaryEntityIds],
@@ -253,7 +265,8 @@ function validateStatesAndTransitions(
     const path = `$.transitions[${index}]`;
     rejectUnknown(transition, [
       "id", "transformationId", "sourceStateId", "targetStateId",
-      "operation", "projection", "typographyPolicyId", "teachingIntent"
+      "operation", "projection", "typographyPolicyId",
+      "typographyRequirements", "teachingIntent"
     ], path, diagnostics);
     if (transition.id.trim() === "" || transitionIds.has(transition.id)) {
       add(diagnostics, "grammar.transition", `${path}.id`,
@@ -311,6 +324,22 @@ function validateTransition(
     add(diagnostics, "grammar.typography", `${path}.typographyPolicyId`,
       "Each transition requires an equation typography policy reference.");
   }
+  rejectUnknown(transition.typographyRequirements, ["largeOperators"],
+    `${path}.typographyRequirements`, diagnostics);
+  transition.typographyRequirements.largeOperators.forEach(
+    (operator, index) => {
+      const operatorPath =
+        `${path}.typographyRequirements.largeOperators[${index}]`;
+      rejectUnknown(operator, ["entityId", "kind", "limitPlacement"],
+        operatorPath, diagnostics);
+      if (!entitiesForTransition(states, transition).has(operator.entityId) ||
+          !["sum", "product", "integral", "limit"].includes(operator.kind) ||
+          !["bounds", "side"].includes(operator.limitPlacement)) {
+        add(diagnostics, "grammar.typography", operatorPath,
+          "Large operators require a transition entity, kind, and limit placement.");
+      }
+    }
+  );
   const source = states.get(transition.sourceStateId);
   const target = states.get(transition.targetStateId);
   const entities = new Set([
@@ -325,6 +354,16 @@ function validateTransition(
         `Operation role references foreign entity ${entityId}.`);
     }
   }
+}
+
+function entitiesForTransition(
+  states: ReadonlyMap<string, KpEquationGrammarStateV2>,
+  transition: KpEquationGrammarTransitionV2
+): ReadonlySet<string> {
+  return new Set([
+    ...(states.get(transition.sourceStateId)?.entityIds ?? []),
+    ...(states.get(transition.targetStateId)?.entityIds ?? [])
+  ]);
 }
 
 function rejectUnknown(

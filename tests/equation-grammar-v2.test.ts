@@ -140,6 +140,7 @@ function transition(
     },
     projection: { intent: "replacement" },
     typographyPolicyId: "typography.equation.fixture.v1",
+    typographyRequirements: { largeOperators: [] },
     teachingIntent: {
       kind: "transmit",
       primaryEntityIds: [targetEntityId],

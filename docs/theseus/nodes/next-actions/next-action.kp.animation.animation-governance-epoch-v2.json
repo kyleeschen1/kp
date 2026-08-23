@@ -266,6 +266,20 @@
       "scope": "slice-12-projection-choreography",
       "checkedAt": "2026-08-23T06:10:06.094Z",
       "notes": "All repository type boundaries pass after projection-only choreography resolution."
+    },
+    {
+      "command": "npm run test:equation-typography-policy-v2",
+      "status": "passed",
+      "scope": "slice-13-typography-policy",
+      "checkedAt": "2026-08-23T06:15:50.709Z",
+      "notes": "Four tests prove independent flow, TeX math style, and scale resolution; semantic large-operator requirements; incompatible and unknown policy repair; and foreign-entity rejection."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-13-typography-policy",
+      "checkedAt": "2026-08-23T06:15:51.717Z",
+      "notes": "All TypeScript, Svelte, and domain boundaries pass after adding semantic typography requirements."
     }
   ],
   "progress": {
