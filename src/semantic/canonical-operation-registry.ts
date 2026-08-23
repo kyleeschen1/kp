@@ -44,35 +44,17 @@ import {
   kpEquationLawOperationDefinitions,
   kpEquationLawOperationPack
 } from "./equation-law-operation-pack.ts";
+import type {
+  KpCanonicalOperationRegistry,
+  KpCanonicalOperationRegistryEntry,
+  KpCanonicalOperationResolution
+} from "./canonical-operation-registry-types.ts";
 
-export interface KpCanonicalOperationRegistryEntry {
-  readonly id: string;
-  readonly packId: string;
-  readonly canonicalComposition: readonly KpCanonicalOperationId[];
-  readonly operationSpecId?: string | undefined;
-  readonly sourceDefinitionId?: string | undefined;
-  readonly sourceTransformType?: string | undefined;
-  readonly authoringSummary?: string | undefined;
-  readonly contract: KpCanonicalOperationContract;
-}
-
-export interface KpCanonicalOperationRegistry {
-  readonly kind: "canonical-operation-registry";
-  readonly packs: readonly KpCanonicalOperationPack[];
-  readonly entries: readonly KpCanonicalOperationRegistryEntry[];
-}
-
-export type KpCanonicalOperationResolution =
-  | {
-      readonly status: "resolved";
-      readonly pack: KpCanonicalOperationPack;
-      readonly entry: KpCanonicalOperationRegistryEntry;
-    }
-  | {
-      readonly status: "unknown-operation" | "missing-pin" | "version-mismatch";
-      readonly operationId: string;
-      readonly message: string;
-    };
+export type {
+  KpCanonicalOperationRegistry,
+  KpCanonicalOperationRegistryEntry,
+  KpCanonicalOperationResolution
+} from "./canonical-operation-registry-types.ts";
 
 const generatedAlgebraDefinitions = listGeneratedAlgebraTransformDefinitions();
 

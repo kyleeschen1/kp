@@ -63,4 +63,5 @@ test("registration metadata contains no eager family imports", async () => {
   );
   assert.doesNotMatch(source, /import\(/u);
   assert.doesNotMatch(source, /catalog-packs\//u);
+  assert.doesNotMatch(source, /(?:codemirror|from ["']three|from ["']katex)/iu);
 });

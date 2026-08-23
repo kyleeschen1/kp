@@ -135,7 +135,7 @@ export async function inspectKpAnimationLibraryBundleBoundary(
     measureKpBundleClosureAttribution(distRoot, placeValueIncrementalFiles)
   ]);
   const forbiddenOuterFiles = outerFiles.filter((file) =>
-    /(?:place-value|native-katex|katex-|runtime-controller|equation-surface|graph-webgl)/i
+    /(?:place-value|native-katex|katex|runtime-controller|equation-surface|graph-webgl|codemirror|three)/i
       .test(file)
   );
   const totals = {

@@ -1,6 +1,6 @@
 import type { KpAssetBundle } from "./asset.ts";
 import type { KpSemanticTransformation } from "./asset-transformation.ts";
-import type { KpCanonicalOperationRegistry } from "./canonical-operation-registry.ts";
+import type { KpCanonicalOperationRegistry } from "./canonical-operation-registry-types.ts";
 import {
   cancellationOperationAuthority
 } from "./cancellation-operation-authority.ts";

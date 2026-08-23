@@ -693,11 +693,41 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-08-23T17:03:49.889Z"
+    },
+    {
+      "command": "npm run test:cross-domain-conformance-gateway",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T19:11:12.187Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T19:11:13.165Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T19:11:14.147Z"
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T19:11:15.103Z"
+    },
+    {
+      "command": "npm run verify:equation:boundary",
+      "status": "failed",
+      "scope": "standard",
+      "checkedAt": "2026-08-23T19:11:16.086Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 28 migrates finite binders, inequalities, substitution, calculus terminals, dot/matrix operations, and static equation comparisons through typed governance v2 protocols; only the deferred derivative power-rule exemplar remains an equation-v2 gap."
+    "summary": "Slice 29 adds one renderer-neutral manifest, review, and dependency gateway for 17 graph, programming, diagram, and 3D assets; mixed equation segments stay isolated, and lazy bundle boundaries remain green. The known stale derivative preservation baseline remains assigned to slice 30."
   },
   "expectedLearning": [
     "Whether a common conformance gateway can make evolving principles retroactive without collapsing domain-specific renderer boundaries",

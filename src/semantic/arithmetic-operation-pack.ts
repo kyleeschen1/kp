@@ -7,7 +7,7 @@ import {
 } from "./canonical-operation-contract.ts";
 import type {
   KpCanonicalOperationRegistryEntry
-} from "./canonical-operation-registry.ts";
+} from "./canonical-operation-registry-types.ts";
 import {
   kpOperationEvaluationAuthorityDescriptors
 } from "./operation-evaluation-authority.ts";
