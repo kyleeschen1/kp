@@ -84,6 +84,27 @@
       "scope": "slice 03 principle-ledger",
       "checkedAt": "2026-08-23T05:16:58.604Z",
       "notes": "Application, node, test, Svelte, and domain type checks accept the typed ledger."
+    },
+    {
+      "command": "npm run test:animation-conformance-manifest",
+      "status": "passed",
+      "scope": "slice 04 conformance-manifest",
+      "checkedAt": "2026-08-23T05:22:28.977Z",
+      "notes": "Four tests prove one manifest per 58 loadable assets, explicit equation compatibility gaps, renderer-neutral schema, and generated freshness."
+    },
+    {
+      "command": "npm run check:animation-conformance-manifest",
+      "status": "passed",
+      "scope": "slice 04 generated manifest",
+      "checkedAt": "2026-08-23T05:22:30.378Z",
+      "notes": "Committed manifest matches deterministic compilation."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 04 conformance-manifest",
+      "checkedAt": "2026-08-23T05:22:31.503Z",
+      "notes": "All TypeScript, Svelte, and domain type boundaries pass."
     }
   ],
   "progress": {

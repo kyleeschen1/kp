@@ -1,0 +1,4010 @@
+{
+  "schemaVersion": "kp.animation-conformance-manifest-set.v1",
+  "kind": "animation-conformance-manifest-set",
+  "manifests": [
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.algebra.exponential-homomorphism.difference-to-quotient",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.exponential.difference-to-quotient.ab",
+        "transformationIds": [
+          "transformation.exponential.difference-to-quotient.ab"
+        ],
+        "transformationTreeRootId": "transformation.exponential.difference-to-quotient.ab",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.exponential.difference-to-quotient.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.exponential-homomorphism.canonical-native-katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.animation.algebra.exponential-homomorphism.difference-to-quotient",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "exponential-homomorphism"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "specialized-equation-adapter-direct",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.algebra.exponential-homomorphism.sum-to-product",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.exponential.sum-to-product.ab",
+        "transformationIds": [
+          "transformation.exponential.sum-to-product.ab"
+        ],
+        "transformationTreeRootId": "transformation.exponential.sum-to-product.ab",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.exponential.sum-to-product.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.exponential-homomorphism.canonical-native-katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.animation.algebra.exponential-homomorphism.sum-to-product",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "exponential-homomorphism"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "specialized-equation-adapter-direct",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.algebra.log-exponent.solve-two-power-x",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.log-exponent.solve-two-power-x",
+        "transformationIds": [
+          "transformation.log-exponent.apply-log-both-sides",
+          "transformation.log-exponent.extract-exponent",
+          "transformation.log-exponent.divide-by-log-base"
+        ],
+        "transformationTreeRootId": "sequence.log-exponent.solve-two-power-x",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.log-exponent.solve-two-power-x.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.log-exponent.canonical-native-katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.animation.algebra.log-exponent.solve-two-power-x",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "log-exponent"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "specialized-equation-adapter-direct",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.algebra.log-product.equivalence-frame",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.log-product.equivalence-frame",
+        "transformationIds": [
+          "transformation.log-product.xy-to-sum"
+        ],
+        "transformationTreeRootId": "transformation.log-product.xy-to-sum",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.log-product.equivalence-frame.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.log-product.canonical-native-katex",
+          "editor-animation-surface.log-product.equivalence-frame.native-katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.log-product.equivalence-frame",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "log-product"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "specialized-equation-adapter-direct",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.algebra.log-product.product-to-sum",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.log-product.xy-to-sum",
+        "transformationIds": [
+          "transformation.log-product.xy-to-sum"
+        ],
+        "transformationTreeRootId": "transformation.log-product.xy-to-sum",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.log-product.xy-to-sum.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.log-product.canonical-native-katex",
+          "editor-animation-surface.log-product.equivalence-frame.native-katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.animation.algebra.log-product.product-to-sum",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "log-product"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "specialized-equation-adapter-direct",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.algebra.log-product.three-factors-to-sum",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.log-product.xyz-to-sum",
+        "transformationIds": [
+          "transformation.log-product.xyz-to-sum"
+        ],
+        "transformationTreeRootId": "transformation.log-product.xyz-to-sum",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.log-product.xyz-to-sum.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.log-product.canonical-native-katex",
+          "editor-animation-surface.log-product.equivalence-frame.native-katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.animation.algebra.log-product.three-factors-to-sum",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "log-product"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "specialized-equation-adapter-direct",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.algebra.log-quotient.difference-to-quotient",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.log-quotient.difference-to-quotient",
+        "transformationIds": [
+          "transformation.log-quotient.difference-to-quotient"
+        ],
+        "transformationTreeRootId": "transformation.log-quotient.difference-to-quotient",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.log-quotient.difference-to-quotient.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.log-quotient.canonical-native-katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.animation.algebra.log-quotient.difference-to-quotient",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "log-quotient"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "specialized-equation-adapter-direct",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.algebra.radical.compound-carrier-normalization",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.root.compound-carrier-normalization",
+        "transformationIds": [
+          "plan.root.compound-carrier.x-plus-one"
+        ],
+        "transformationTreeRootId": "plan.root.compound-carrier.x-plus-one",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.root.compound-carrier-normalization.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.even-root.canonical-native-katex",
+          "editor-animation-surface.root.compound-carrier.canonical-native-katex",
+          "editor-animation-surface.equation.katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.animation.algebra.radical.compound-carrier-normalization",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "even-root",
+          "equation-katex"
+        ],
+        "interactive": [
+          "accessibility",
+          "direct-seek",
+          "responsive",
+          "rewind"
+        ],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "specialized-equation-adapter-direct"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.algebra.radical.solve-x-squared-nine",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.even-root.solve-x-squared-nine",
+        "transformationIds": [
+          "operation.even-root.apply-inverse-square",
+          "operation.even-root.evaluate-square-root-nine"
+        ],
+        "transformationTreeRootId": "sequence.even-root.solve-x-squared-nine",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.even-root.solve-x-squared-nine.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.even-root.canonical-native-katex",
+          "editor-animation-surface.root.compound-carrier.canonical-native-katex",
+          "editor-animation-surface.equation.katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.animation.algebra.radical.solve-x-squared-nine",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "even-root",
+          "equation-katex"
+        ],
+        "interactive": [
+          "accessibility",
+          "direct-seek",
+          "responsive",
+          "rewind"
+        ],
+        "exports": [
+          "frame-sequence",
+          "static-step"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "specialized-equation-adapter-direct"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.comparison.jacobian-hessian",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.comparison.jacobian-hessian",
+        "transformationIds": [
+          "transform.comparison.jacobian-hessian.present-jacobian",
+          "transform.comparison.jacobian-hessian.present-hessian",
+          "transform.comparison.jacobian-hessian.compare-derivative-structure"
+        ],
+        "transformationTreeRootId": "diagram.comparison.jacobian-hessian.sequence",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.comparison.jacobian.formula",
+          "render.comparison.hessian.formula"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.comparison.jacobian-hessian.shared",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "equation-katex"
+        ],
+        "interactive": [],
+        "exports": []
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.comparison.linear-solve-programming",
+      "domains": [
+        "equation",
+        "programming"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.comparison.linear-solve-programming",
+        "transformationIds": [
+          "transform.linear-solve.subtract-both-sides-3",
+          "transform.linear-solve.cancel-left-additive-inverse",
+          "transform.linear-solve.simplify-right-difference",
+          "transform.programming.add.call",
+          "transform.programming.add.evaluate-return",
+          "transform.programming.add.return",
+          "transform.programming.add.output"
+        ],
+        "transformationTreeRootId": "diagram.comparison.linear-solve-programming.parallel",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.comparison.linear-solve.equation",
+          "render.comparison.programming.trace"
+        ],
+        "renderTargetKinds": [
+          "equation",
+          "programming"
+        ],
+        "surfaceKind": "composite",
+        "adapterIds": [
+          "editor-animation-surface.equation.katex",
+          "editor-animation-surface.programming.trace"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.comparison.linear-solve-programming.shared",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation",
+          "programming"
+        ],
+        "rendererCapabilityIds": [
+          "equation-katex",
+          "programming-trace"
+        ],
+        "interactive": [],
+        "exports": []
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "specialized-equation-adapter-direct",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.derivative-rules.tangent-graph",
+      "domains": [
+        "graph"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.derivative-rules.tangent-graph",
+        "transformationIds": [
+          "transform.derivative-rules.tangent-graph.converge-difference-quotient",
+          "transform.derivative-rules.tangent-graph.converge-secant"
+        ],
+        "transformationTreeRootId": "diagram.derivative-rules.tangent-graph.synchronized",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.derivative-rules.tangent-graph"
+        ],
+        "renderTargetKinds": [
+          "graph"
+        ],
+        "surfaceKind": "graph",
+        "adapterIds": [
+          "editor-animation-surface.graph.svg"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.derivative-rules.tangent-graph",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "graph"
+        ],
+        "rendererCapabilityIds": [
+          "graph-svg-katex-labels"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "gold",
+        "evidenceSourceIds": [
+          "docs/project/reviews/2026-07-23-derivative-secant-tangent-checkpoint.md"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.dot-projection.basic",
+      "domains": [
+        "graph"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.dot-projection.basic",
+        "transformationIds": [
+          "transform.dot-projection.compute-dot",
+          "transform.dot-projection.drop-projection"
+        ],
+        "transformationTreeRootId": "diagram.dot-projection.synchronized",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.dot-projection.basic"
+        ],
+        "renderTargetKinds": [
+          "graph"
+        ],
+        "surfaceKind": "graph",
+        "adapterIds": [
+          "editor-animation-surface.graph.svg"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.dot-projection.basic",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "graph"
+        ],
+        "rendererCapabilityIds": [
+          "graph-svg-katex-labels"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "keep",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.economics.supply-demand-equilibrium-shift",
+      "domains": [
+        "graph"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.economics.supply-demand-equilibrium-shift",
+        "transformationIds": [
+          "transform.economics.shift-demand-intercept"
+        ],
+        "transformationTreeRootId": "transform.economics.shift-demand-intercept",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.economics.supply-demand-equilibrium-shift"
+        ],
+        "renderTargetKinds": [
+          "graph"
+        ],
+        "surfaceKind": "graph",
+        "adapterIds": [
+          "editor-animation-surface.graph.svg.economics"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.economics.supply-demand-equilibrium-shift",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "graph"
+        ],
+        "rendererCapabilityIds": [
+          "graph-svg-economics"
+        ],
+        "interactive": [],
+        "exports": []
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.equation.finite-product-expansion.v1",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.finite-product-expansion.canonical",
+        "transformationIds": [
+          "transformation.equation.finite-product-expand.v1"
+        ],
+        "transformationTreeRootId": "transformation.equation.finite-product-expand.v1",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.finite-product-expansion.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.finite-sum-expansion.canonical-native-katex",
+          "editor-animation-surface.finite-product-expansion.canonical-native-katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.animation.equation.finite-product-expansion.v1",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "finite-binder-expansion"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "specialized-equation-adapter-direct",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.equation.finite-sum-expansion.v1",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.finite-sum-expansion.canonical",
+        "transformationIds": [
+          "transformation.equation.finite-sum-expand.v1"
+        ],
+        "transformationTreeRootId": "transformation.equation.finite-sum-expand.v1",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.finite-sum-expansion.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.finite-sum-expansion.canonical-native-katex",
+          "editor-animation-surface.finite-product-expansion.canonical-native-katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.animation.equation.finite-sum-expansion.v1",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "finite-binder-expansion"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "specialized-equation-adapter-direct",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "bundle.fraction.common-denominator-pressure",
+        "transformationIds": [
+          "presentation.transformation.fraction.common-denominator.third-plus-sixth.pressure.stage-unit-factor",
+          "presentation.transformation.fraction.common-denominator.third-plus-sixth.pressure.join-equivalent-fraction",
+          "transformation.fraction.common-denominator.third-plus-sixth.pressure.evaluate-products"
+        ],
+        "transformationTreeRootId": "animation-tree.animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.fraction-equivalence.common-denominator-pressure"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.fraction-equivalence.canonical-native-katex",
+          "editor-animation-surface.fraction-equivalence.common-denominator-pressure"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "fraction-equivalence"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "specialized-equation-adapter-direct",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.equation.fraction-equivalence.compact.v1",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.fraction-equivalence.symbolic-times-two.compact-paired-operation",
+        "transformationIds": [
+          "transformation.fraction-equivalence.symbolic-times-two"
+        ],
+        "transformationTreeRootId": "transformation.fraction-equivalence.symbolic-times-two",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.fraction-equivalence.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.fraction-equivalence.canonical-native-katex",
+          "editor-animation-surface.fraction-equivalence.common-denominator-pressure"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.animation.equation.fraction-equivalence.compact.v1",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "fraction-equivalence"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "specialized-equation-adapter-direct",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.equation.fraction-equivalence.v1",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.fraction-equivalence.symbolic-times-two.explain-unit-factor",
+        "transformationIds": [
+          "transformation.fraction-equivalence.symbolic-times-two"
+        ],
+        "transformationTreeRootId": "transformation.fraction-equivalence.symbolic-times-two",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.fraction-equivalence.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.fraction-equivalence.canonical-native-katex",
+          "editor-animation-surface.fraction-equivalence.common-denominator-pressure"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.animation.equation.fraction-equivalence.v1",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "fraction-equivalence"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "specialized-equation-adapter-direct",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.equation.logarithm-change-of-base.v1",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.logarithm.change-of-base.two-seven-natural",
+        "transformationIds": [
+          "transformation.logarithm.change-base.two-seven-natural"
+        ],
+        "transformationTreeRootId": "transformation.logarithm.change-base.two-seven-natural",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.logarithm.change-of-base.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.logarithm-change-of-base.canonical-native-katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.animation.equation.logarithm-change-of-base.v1",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "logarithm-change-of-base"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "specialized-equation-adapter-direct",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.exact-fraction-quantity.third-plus-sixth",
+      "domains": [
+        "diagram"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "bundle.exact-fraction-quantity.third-plus-sixth",
+        "transformationIds": [
+          "beat.exact-fraction.refine-third",
+          "beat.exact-fraction.align-sixths",
+          "beat.exact-fraction.merge-three-sixths",
+          "beat.exact-fraction.recognize-half"
+        ],
+        "transformationTreeRootId": "animation-tree.exact-fraction-quantity.third-plus-sixth",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.exact-fraction-quantity.third-plus-sixth.synchronized"
+        ],
+        "renderTargetKinds": [
+          "diagram"
+        ],
+        "surfaceKind": "diagram",
+        "adapterIds": [
+          "editor-animation-surface.exact-fraction-quantity.synchronized",
+          "editor-animation-surface.equation.katex",
+          "editor-animation-surface.diagram.svg"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.exact-fraction-quantity.third-plus-sixth.shared",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "diagram"
+        ],
+        "rendererCapabilityIds": [
+          "exact-fraction-quantity",
+          "equation-katex"
+        ],
+        "interactive": [],
+        "exports": [
+          "static-step"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "promoted",
+        "evidenceSourceIds": [
+          "review.kp.exact-fraction-quantity-persistent-stage-human-checkpoint",
+          "run-contract.kp.executable-motif-perceptual-continuity-repair-v0"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.generated.add-zero",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "animation.generated.add-zero.bundle",
+        "transformationIds": [
+          "transform.generated.add-zero.remove"
+        ],
+        "transformationTreeRootId": "diagram.animation.generated.add-zero.sequence",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.generated.add-zero"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.operation-evaluation.carrier-preserving-simplification"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.generated.add-zero",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "carrier-preserving-simplification"
+        ],
+        "interactive": [],
+        "exports": []
+      },
+      "reviewProvenance": {
+        "humanDisposition": "keep",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "specialized-equation-adapter-direct",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.generated.calculus.derivative.power-rule-x-cubed",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.generated.calculus.derivative.power-rule-x-cubed",
+        "transformationIds": [
+          "transform.generated.calculus.derivative.power-rule-x-cubed.apply-power-rule",
+          "transform.generated.calculus.derivative.power-rule-x-cubed.evaluate-exponent-decrement"
+        ],
+        "transformationTreeRootId": "diagram.generated.calculus.derivative.power-rule-x-cubed.generated-problem-animation",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.generated.calculus.derivative.power-rule-x-cubed.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.generated.calculus.derivative.power-rule-x-cubed.shared",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "equation-katex"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.generated.calculus.derivative.sum-rule-polynomial",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.generated.calculus.derivative.sum-rule-polynomial",
+        "transformationIds": [
+          "transform.generated.calculus.derivative.sum-rule-polynomial.distribute-sum-rule",
+          "transform.generated.calculus.derivative.sum-rule-polynomial.resolve-sum-terms"
+        ],
+        "transformationTreeRootId": "diagram.generated.calculus.derivative.sum-rule-polynomial.generated-problem-animation",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.generated.calculus.derivative.sum-rule-polynomial.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.generated.calculus.derivative.sum-rule-polynomial.shared",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "equation-katex"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.generated.calculus.integral.power-rule-quadratic",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.generated.calculus.integral.power-rule-quadratic",
+        "transformationIds": [
+          "transform.generated.calculus.integral.power-rule-quadratic.expand-integral-power-rule",
+          "transform.generated.calculus.integral.power-rule-quadratic.resolve-integral-power-rule"
+        ],
+        "transformationTreeRootId": "diagram.generated.calculus.integral.power-rule-quadratic.generated-problem-animation",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.generated.calculus.integral.power-rule-quadratic.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.generated.calculus.integral.power-rule-quadratic.shared",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "equation-katex"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.generated.cancellation.additive-inverses",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.generated.linear-solve.x-plus-3",
+        "transformationIds": [
+          "transform.generated.linear-solve.x-plus-3.cancel-additive-inverse"
+        ],
+        "transformationTreeRootId": "transform.generated.linear-solve.x-plus-3.cancel-additive-inverse",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.generated.cancellation.additive-inverses.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.animation.generated.cancellation.additive-inverses",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "equation-katex"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.generated.distribution.expand-a-sum",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.generated.distribution.expand-a-sum",
+        "transformationIds": [
+          "transform.generated.distribution.expand-a-sum.distribute"
+        ],
+        "transformationTreeRootId": "diagram.generated.distribution.expand-a-sum.animation-sequence",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.generated.distribution.expand-a-sum.expression"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.generated.distribution.expand-a-sum.shared",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "equation-katex"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "gold",
+        "evidenceSourceIds": [
+          "docs/project/reviews/2026-07-23-governed-semantic-authoring-exemplar-checkpoint.md",
+          "run-contract.kp.authoritative-roadmap-workbench-v1#s29"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.generated.distribution.factor-common-a",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.generated.distribution.factor-common-a",
+        "transformationIds": [
+          "transform.generated.distribution.factor-common-a.factor"
+        ],
+        "transformationTreeRootId": "diagram.generated.distribution.factor-common-a.animation-sequence",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.generated.distribution.factor-common-a.expression"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.generated.distribution.factor-common-a.shared",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "equation-katex"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.generated.exponent.square-as-product",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.generated.exponent.square-as-product",
+        "transformationIds": [
+          "transform.generated.exponent.square-as-product.lower-exponent",
+          "transform.generated.exponent.square-as-product.unwrap-unit-exponent"
+        ],
+        "transformationTreeRootId": "diagram.generated.exponent.square-as-product.animation-sequence",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.generated.exponent.square-as-product.expression"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.generated.exponent.square-as-product.shared",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "equation-katex"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.generated.fraction-expression.two-fourths",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.generated.fraction-expression.two-fourths",
+        "transformationIds": [
+          "transform.generated.fraction-expression.two-fourths.split-factors",
+          "transform.generated.fraction-expression.two-fourths.merge-common-factor",
+          "transform.generated.fraction-expression.two-fourths.simplify-unit-factor"
+        ],
+        "transformationTreeRootId": "diagram.generated.fraction-expression.two-fourths.animation-sequence",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.generated.fraction-expression.two-fourths.expression"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.generated.fraction-expression.two-fourths.shared",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "equation-katex"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.generated.function-wrap.apply-f",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.generated.function-wrap.apply-f",
+        "transformationIds": [
+          "transform.generated.function-wrap.apply-f.wrap-function"
+        ],
+        "transformationTreeRootId": "diagram.generated.function-wrap.apply-f.animation-sequence",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.generated.function-wrap.apply-f.expression"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.generated.function-wrap.apply-f.shared",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "equation-katex"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "gold",
+        "evidenceSourceIds": [
+          "docs/project/reviews/2026-07-16-phase-ordered-choreography-gestalt-style-loop-closeout.md"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.generated.linear-algebra.dot-product.three-vector",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.generated.linear-algebra.dot-product.three-vector",
+        "transformationIds": [
+          "transform.generated.linear-algebra.dot-product.three-vector.compute-dot-product"
+        ],
+        "transformationTreeRootId": "diagram.generated.linear-algebra.dot-product.three-vector.generated-problem-animation",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.generated.linear-algebra.dot-product.three-vector.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.generated.linear-algebra.dot-product.three-vector.shared",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "equation-katex"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.generated.linear-algebra.matrix-matrix.two-by-two",
+        "transformationIds": [
+          "transform.generated.linear-algebra.matrix-matrix.two-by-two.multiply-matrices"
+        ],
+        "transformationTreeRootId": "diagram.generated.linear-algebra.matrix-matrix.two-by-two.generated-problem-animation",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.generated.linear-algebra.matrix-matrix.two-by-two.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.generated.linear-algebra.matrix-matrix.two-by-two.shared",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "equation-katex"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.generated.linear-algebra.matrix-vector.two-by-two",
+      "domains": [
+        "equation",
+        "graph"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.generated.linear-algebra.matrix-vector.two-by-two",
+        "transformationIds": [
+          "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector",
+          "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector.apply-linear-map"
+        ],
+        "transformationTreeRootId": "diagram.generated.linear-algebra.matrix-vector.two-by-two.generated-problem-animation",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.generated.linear-algebra.matrix-vector.two-by-two.equation",
+          "render.generated.linear-algebra.matrix-vector.two-by-two.graph"
+        ],
+        "renderTargetKinds": [
+          "equation",
+          "graph"
+        ],
+        "surfaceKind": "composite",
+        "adapterIds": [
+          "editor-animation-surface.equation.katex",
+          "editor-animation-surface.graph.svg"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.generated.linear-algebra.matrix-vector.two-by-two.shared",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation",
+          "graph"
+        ],
+        "rendererCapabilityIds": [
+          "equation-katex",
+          "graph-svg-katex-labels"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "specialized-equation-adapter-direct",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.generated.linear-solve.linear-68c15d41",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.generated.linear-solve.linear-68c15d41",
+        "transformationIds": [
+          "transform.generated.linear-solve.linear-68c15d41.subtract-both-sides",
+          "transform.generated.linear-solve.linear-68c15d41.cancel-additive-inverses",
+          "transform.generated.linear-solve.linear-68c15d41.simplify-difference",
+          "transform.generated.linear-solve.linear-68c15d41.divide-both-sides",
+          "transform.generated.linear-solve.linear-68c15d41.cancel-multiplicative-inverses"
+        ],
+        "transformationTreeRootId": "diagram.generated.linear-solve.linear-68c15d41.sequence",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.generated.linear-solve.linear-68c15d41.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.generated.linear-solve.linear-68c15d41",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "equation-katex"
+        ],
+        "interactive": [],
+        "exports": [
+          "static-step",
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.generated.pipeline-diagram",
+      "domains": [
+        "diagram"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "animation.generated.pipeline-diagram.bundle",
+        "transformationIds": [
+          "transform.generated.pipeline.reveal"
+        ],
+        "transformationTreeRootId": "diagram.animation.generated.pipeline-diagram.sequence",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.generated.pipeline-diagram"
+        ],
+        "renderTargetKinds": [
+          "diagram"
+        ],
+        "surfaceKind": "diagram",
+        "adapterIds": [
+          "editor-animation-surface.diagram.svg"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.generated.pipeline",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "diagram"
+        ],
+        "rendererCapabilityIds": [],
+        "interactive": [],
+        "exports": []
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.generated.radical.square-root-as-power",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.generated.radical.square-root-as-power",
+        "transformationIds": [
+          "transform.generated.radical.square-root-as-power.rewrite-power-as-root"
+        ],
+        "transformationTreeRootId": "diagram.generated.radical.square-root-as-power.animation-sequence",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.generated.radical.square-root-as-power.expression"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.generated.radical.square-root-as-power.shared",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "equation-katex"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "promoted",
+        "evidenceSourceIds": [
+          "docs/project/reviews/2026-07-16-material-continuity-artifact-morph-loop-closeout.md",
+          "run-contract.kp.authoritative-roadmap-workbench-v1#s27"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.generated.substitute-three",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "animation.generated.substitute-three.bundle",
+        "transformationIds": [
+          "transform.generated.substitute-three"
+        ],
+        "transformationTreeRootId": "diagram.animation.generated.substitute-three.sequence",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.generated.substitute-three"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.generated.substitute-three",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "equation-katex"
+        ],
+        "interactive": [],
+        "exports": []
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.generated.substitute-three.provisional-incorrect",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "animation.generated.substitute-three.provisional-incorrect.bundle",
+        "transformationIds": [
+          "transform.generated.substitute-three"
+        ],
+        "transformationTreeRootId": "diagram.animation.generated.substitute-three.provisional-incorrect.sequence",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.generated.substitute-three"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.generated.substitute-three",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "equation-katex"
+        ],
+        "interactive": [],
+        "exports": []
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.graph.surface-mode.mesh-to-donut",
+      "domains": [
+        "graph"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.graph.surface-mode.mesh-to-donut",
+        "transformationIds": [
+          "transform.graph.surface-mode.mesh-to-donut"
+        ],
+        "transformationTreeRootId": "transform.graph.surface-mode.mesh-to-donut",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.graph.surface-mode.mesh-to-donut"
+        ],
+        "renderTargetKinds": [
+          "graph"
+        ],
+        "surfaceKind": "graph",
+        "adapterIds": [
+          "editor-animation-surface.graph.webgl-3d"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.graph.surface-mode.mesh-to-donut",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "graph"
+        ],
+        "rendererCapabilityIds": [
+          "graph-webgl-3d"
+        ],
+        "interactive": [],
+        "exports": []
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.graph.vector.linear-map-scale",
+      "domains": [
+        "graph"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.graph.vector.linear-map-scale",
+        "transformationIds": [
+          "transform.graph.vector.apply-linear-map-scale"
+        ],
+        "transformationTreeRootId": "transform.graph.vector.apply-linear-map-scale",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.graph.vector.linear-map-scale"
+        ],
+        "renderTargetKinds": [
+          "graph"
+        ],
+        "surfaceKind": "graph",
+        "adapterIds": [
+          "editor-animation-surface.graph.svg"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.graph.vector.linear-map-scale",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "graph"
+        ],
+        "rendererCapabilityIds": [
+          "graph-svg-katex-labels"
+        ],
+        "interactive": [],
+        "exports": []
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.inequality.sign-flip.basic",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.inequality.sign-flip.basic",
+        "transformationIds": [
+          "transform.inequality.sign-flip.multiply-negative"
+        ],
+        "transformationTreeRootId": "transform.inequality.sign-flip.multiply-negative",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.inequality.sign-flip.basic.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.inequality.sign-flip.basic",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "equation-katex"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.integral-ftc.area-sweep",
+      "domains": [
+        "graph"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.integral-ftc.area-sweep",
+        "transformationIds": [
+          "transform.integral-ftc.sweep-upper-bound"
+        ],
+        "transformationTreeRootId": "transform.integral-ftc.sweep-upper-bound",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.integral-ftc.area-sweep"
+        ],
+        "renderTargetKinds": [
+          "graph"
+        ],
+        "surfaceKind": "graph",
+        "adapterIds": [
+          "editor-animation-surface.graph.svg"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.integral-ftc.area-sweep",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "graph"
+        ],
+        "rendererCapabilityIds": [
+          "graph-svg-katex-labels"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.linear-solve.solve-x",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.linear-solve",
+        "transformationIds": [
+          "transform.linear-solve.subtract-both-sides-3",
+          "transform.linear-solve.cancel-left-additive-inverse",
+          "transform.linear-solve.simplify-right-difference"
+        ],
+        "transformationTreeRootId": "diagram.linear-solve.sequence",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.linear-solve.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.linear-solve.shared",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "equation-katex"
+        ],
+        "interactive": [
+          "accessibility",
+          "annotation",
+          "direct-seek",
+          "hover",
+          "responsive",
+          "rewind"
+        ],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "gold",
+        "evidenceSourceIds": [
+          "docs/project/reviews/2026-07-21-solve-x-human-checkpoint-follow-up.md"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.operation-evaluation.five-plus-two",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.operation-evaluation.five-plus-two",
+        "transformationIds": [
+          "transform.operation-evaluation.five-plus-two.simplify-sum"
+        ],
+        "transformationTreeRootId": "transform.operation-evaluation.five-plus-two.simplify-sum",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.operation-evaluation.five-plus-two.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.operation-evaluation.canonical-native-katex",
+          "editor-animation-surface.equation.katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.operation-evaluation.five-plus-two.shared",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "operation-evaluation",
+          "equation-katex"
+        ],
+        "interactive": [
+          "accessibility",
+          "direct-seek",
+          "responsive",
+          "rewind"
+        ],
+        "exports": [
+          "static-step"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "specialized-equation-adapter-direct"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.operation-evaluation.one-plus-two",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.operation-evaluation.one-plus-two",
+        "transformationIds": [
+          "transform.operation-evaluation.one-plus-two.simplify-sum"
+        ],
+        "transformationTreeRootId": "transform.operation-evaluation.one-plus-two.simplify-sum",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.operation-evaluation.one-plus-two.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.operation-evaluation.canonical-native-katex",
+          "editor-animation-surface.equation.katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.operation-evaluation.one-plus-two.shared",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "operation-evaluation",
+          "equation-katex"
+        ],
+        "interactive": [
+          "accessibility",
+          "direct-seek",
+          "responsive",
+          "rewind"
+        ],
+        "exports": [
+          "static-step"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "specialized-equation-adapter-direct"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.operation-evaluation.three-sixths",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.operation-evaluation.three-sixths",
+        "transformationIds": [
+          "transform.operation-evaluation.three-sixths.simplify-quotient"
+        ],
+        "transformationTreeRootId": "transform.operation-evaluation.three-sixths.simplify-quotient",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.operation-evaluation.three-sixths.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.operation-evaluation.canonical-native-katex",
+          "editor-animation-surface.equation.katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.operation-evaluation.three-sixths.shared",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "operation-evaluation",
+          "equation-katex"
+        ],
+        "interactive": [
+          "accessibility",
+          "direct-seek",
+          "responsive",
+          "rewind"
+        ],
+        "exports": [
+          "static-step"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "specialized-equation-adapter-direct"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.operation-evaluation.two-times-one-carrier",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.operation-evaluation.two-times-one-carrier",
+        "transformationIds": [
+          "transform.operation-evaluation.two-times-one-carrier.simplify-identity"
+        ],
+        "transformationTreeRootId": "transform.operation-evaluation.two-times-one-carrier.simplify-identity",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.operation-evaluation.two-times-one-carrier.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.operation-evaluation.carrier-preserving-simplification"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.operation-evaluation.two-times-one-carrier.shared",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "carrier-preserving-simplification"
+        ],
+        "interactive": [
+          "accessibility",
+          "direct-seek",
+          "responsive",
+          "rewind"
+        ],
+        "exports": [
+          "static-step"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "keep",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "specialized-equation-adapter-direct"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.operation-evaluation.two-times-three",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.operation-evaluation.two-times-three",
+        "transformationIds": [
+          "transform.operation-evaluation.two-times-three.simplify-product"
+        ],
+        "transformationTreeRootId": "transform.operation-evaluation.two-times-three.simplify-product",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.operation-evaluation.two-times-three.equation"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.operation-evaluation.canonical-native-katex",
+          "editor-animation-surface.equation.katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.operation-evaluation.two-times-three.shared",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "operation-evaluation",
+          "equation-katex"
+        ],
+        "interactive": [
+          "accessibility",
+          "direct-seek",
+          "responsive",
+          "rewind"
+        ],
+        "exports": [
+          "static-step"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "specialized-equation-adapter-direct"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.physics.constant-force-work-energy",
+      "domains": [
+        "graph"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.physics.constant-force-work-energy",
+        "transformationIds": [
+          "transform.physics.accumulate-constant-force-work"
+        ],
+        "transformationTreeRootId": "transform.physics.accumulate-constant-force-work",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.physics.constant-force-work-energy"
+        ],
+        "renderTargetKinds": [
+          "graph"
+        ],
+        "surfaceKind": "graph",
+        "adapterIds": [
+          "editor-animation-surface.graph.svg"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.physics.constant-force-work-energy",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "graph"
+        ],
+        "rendererCapabilityIds": [
+          "graph-svg-katex-labels"
+        ],
+        "interactive": [],
+        "exports": []
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.place-value-addition.278-plus-156",
+      "domains": [
+        "diagram"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "bundle.place-value-addition.278-plus-156",
+        "transformationIds": [
+          "beat.place-value.evaluate-ones",
+          "beat.place-value.exchange-ones",
+          "beat.place-value.evaluate-tens",
+          "beat.place-value.exchange-tens",
+          "beat.place-value.evaluate-hundreds",
+          "beat.place-value.settle"
+        ],
+        "transformationTreeRootId": "animation-tree.place-value-addition.278-plus-156",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.place-value-addition.278-plus-156.synchronized"
+        ],
+        "renderTargetKinds": [
+          "diagram"
+        ],
+        "surfaceKind": "diagram",
+        "adapterIds": [
+          "editor-animation-surface.place-value-addition.synchronized",
+          "editor-animation-surface.diagram.svg"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.place-value-addition.278-plus-156.shared",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "diagram"
+        ],
+        "rendererCapabilityIds": [
+          "place-value-addition"
+        ],
+        "interactive": [],
+        "exports": [
+          "static-step"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.programming.add.execution-trace",
+      "domains": [
+        "programming"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.programming.add.execution-trace",
+        "transformationIds": [
+          "transform.programming.add.call",
+          "transform.programming.add.evaluate-return",
+          "transform.programming.add.return",
+          "transform.programming.add.output"
+        ],
+        "transformationTreeRootId": "diagram.programming.add.execution-trace.animation",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.programming.add.execution-trace"
+        ],
+        "renderTargetKinds": [
+          "programming"
+        ],
+        "surfaceKind": "programming",
+        "adapterIds": [
+          "editor-animation-surface.programming.trace"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.programming.add.execution-trace",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "programming"
+        ],
+        "rendererCapabilityIds": [
+          "programming-trace"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.programming.lisp-lambda-application",
+      "domains": [
+        "programming"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.programming.lisp-lambda-application",
+        "transformationIds": [
+          "transform.lisp.bind-argument",
+          "transform.lisp.substitute-body",
+          "transform.lisp.evaluate-addition"
+        ],
+        "transformationTreeRootId": "sequence.programming.lisp-lambda-application",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.programming.lisp-lambda-application"
+        ],
+        "renderTargetKinds": [
+          "programming"
+        ],
+        "surfaceKind": "programming",
+        "adapterIds": [
+          "editor-animation-surface.programming.trace"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.programming.lisp-lambda-application",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "programming"
+        ],
+        "rendererCapabilityIds": [
+          "programming-trace"
+        ],
+        "interactive": [],
+        "exports": [
+          "frame-sequence",
+          "static-step"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.programming.python-free-shipping-refactor",
+      "domains": [
+        "programming"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.python.free-shipping-threshold",
+        "transformationIds": [
+          "transform.python.extract-shared-rule",
+          "transform.python.replace-cost-call",
+          "transform.python.replace-message-call",
+          "transform.python.recompose-program"
+        ],
+        "transformationTreeRootId": "sequence.python.free-shipping-threshold",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.python.free-shipping-threshold"
+        ],
+        "renderTargetKinds": [
+          "programming"
+        ],
+        "surfaceKind": "programming",
+        "adapterIds": [
+          "editor-animation-surface.programming.trace"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.python.free-shipping-threshold",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "programming"
+        ],
+        "rendererCapabilityIds": [
+          "programming-trace"
+        ],
+        "interactive": [],
+        "exports": [
+          "static-step"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.programming.scheme-factorial",
+      "domains": [
+        "programming"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.scheme-factorial.full-evaluation",
+        "transformationIds": [
+          "scheme-factorial.full.transition.0.expand",
+          "scheme-factorial.full.transition.0.bind",
+          "scheme-factorial.full.transition.0.choose",
+          "scheme-factorial.full.transition.0.reduce",
+          "scheme-factorial.full.transition.1.expand",
+          "scheme-factorial.full.transition.1.bind",
+          "scheme-factorial.full.transition.1.choose",
+          "scheme-factorial.full.transition.1.reduce",
+          "scheme-factorial.full.transition.2.expand",
+          "scheme-factorial.full.transition.2.bind",
+          "scheme-factorial.full.transition.2.choose",
+          "scheme-factorial.full.transition.2.reduce",
+          "scheme-factorial.full.transition.3.expand",
+          "scheme-factorial.full.transition.3.bind",
+          "scheme-factorial.full.transition.3.choose",
+          "scheme-factorial.full.transition.3.base",
+          "scheme-factorial.full.transition.2.return",
+          "scheme-factorial.full.transition.1.return",
+          "scheme-factorial.full.transition.0.return"
+        ],
+        "transformationTreeRootId": "sequence.scheme-factorial.full-evaluation",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.scheme-factorial.full-evaluation"
+        ],
+        "renderTargetKinds": [
+          "programming"
+        ],
+        "surfaceKind": "programming",
+        "adapterIds": [
+          "editor-animation-surface.programming.trace"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.scheme-factorial.full-evaluation",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "programming"
+        ],
+        "rendererCapabilityIds": [
+          "programming-trace"
+        ],
+        "interactive": [],
+        "exports": [
+          "static-step",
+          "frame-sequence"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.programming.typescript-free-shipping-refactor",
+      "domains": [
+        "programming"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.typescript.free-shipping-threshold",
+        "transformationIds": [
+          "transform.typescript.extract-shared-rule",
+          "transform.typescript.replace-cost-call",
+          "transform.typescript.replace-message-call",
+          "transform.typescript.recompose-program"
+        ],
+        "transformationTreeRootId": "sequence.typescript.free-shipping-threshold",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.typescript.free-shipping-threshold"
+        ],
+        "renderTargetKinds": [
+          "programming"
+        ],
+        "surfaceKind": "programming",
+        "adapterIds": [
+          "editor-animation-surface.programming.trace"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.typescript.free-shipping-threshold",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "programming"
+        ],
+        "rendererCapabilityIds": [
+          "programming-trace"
+        ],
+        "interactive": [],
+        "exports": [
+          "static-step"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.sample.fourier-transform-pair",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.sample.fourier-transform-pair",
+        "transformationIds": [
+          "transform.sample.fourier-transform-pair.present-1",
+          "transform.sample.fourier-transform-pair.present-2",
+          "transform.sample.fourier-transform-pair.compare"
+        ],
+        "transformationTreeRootId": "diagram.sample.fourier-transform-pair.sequence",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.sample.fourier.forward-transform",
+          "render.sample.fourier.inverse-transform"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.sample.fourier-transform-pair.shared",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "equation-katex"
+        ],
+        "interactive": [],
+        "exports": []
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
+      "assetId": "animation.sample.fundamental-theorem-calculus",
+      "domains": [
+        "equation"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.sample.fundamental-theorem-calculus",
+        "transformationIds": [
+          "transform.sample.fundamental-theorem-calculus.present-1",
+          "transform.sample.fundamental-theorem-calculus.present-2",
+          "transform.sample.fundamental-theorem-calculus.compare"
+        ],
+        "transformationTreeRootId": "diagram.sample.fundamental-theorem-calculus.sequence",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.sample.ftc.derivative-form",
+          "render.sample.ftc.net-change-form"
+        ],
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "surfaceKind": "equation",
+        "adapterIds": [
+          "editor-animation-surface.equation.katex"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.sample.fundamental-theorem-calculus.shared",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "equation"
+        ],
+        "rendererCapabilityIds": [
+          "equation-katex"
+        ],
+        "interactive": [],
+        "exports": []
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "equation-grammar-v2-missing",
+          "typography-policy-implicit",
+          "asset-presentation-constraints-missing"
+        ]
+      }
+    }
+  ]
+}

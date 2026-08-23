@@ -64,7 +64,8 @@
     {
       "id": "conformance-manifest",
       "title": "conformance-manifest",
-      "status": "planned"
+      "summary": "Generated one renderer-neutral conformance manifest for each of 58 loadable assets. Manifests expose semantic authority, projection, deterministic clock, legacy policy epoch, capabilities, review provenance, and typed compatibility gaps without DOM, CSS, coordinates, or renderer resources.",
+      "status": "complete"
     },
     {
       "id": "policy-epochs",
