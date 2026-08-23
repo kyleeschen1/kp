@@ -94,7 +94,8 @@
     {
       "id": "equation-grammar-v2",
       "title": "equation-grammar-v2",
-      "status": "planned"
+      "summary": "Defined and compiler-branded kp.equation-grammar.v2. It requires per-transition semantic operation, correspondence, projection, typography policy, teaching intent, pinned operation packs, governance-v2 epoch, and one clock; it rejects caller timing, paths, display mode, and asset-wide operation defaults. Inference stayed exactly at baseline.",
+      "status": "complete"
     },
     {
       "id": "transition-resolution",
