@@ -106,6 +106,13 @@
       "scope": "focused",
       "checkedAt": "2026-08-23T23:06:24.862Z",
       "notes": "The audit reports exactly the constant-difference missing runtime family profile."
+    },
+    {
+      "command": "node --test evaluation topology certificate",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T23:09:02.631Z",
+      "notes": "Closed topology vocabulary and nominal certificate guard pass."
     }
   ],
   "progress": {

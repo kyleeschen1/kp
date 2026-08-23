@@ -63,7 +63,8 @@
     {
       "id": "kp.eval-auth.s03",
       "title": "topology-certificate",
-      "status": "planned"
+      "summary": "Closed nominal evaluation-topology certificate defined; focused test and typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "kp.eval-auth.s04",
