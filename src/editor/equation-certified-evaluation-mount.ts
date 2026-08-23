@@ -22,6 +22,19 @@ export interface KpCertifiedEquationEvaluationMountResult {
   readonly familyProfileId?: string | undefined;
 }
 
+export function kpCertifiedEquationEvaluationTransformationIds(
+  plan: KpCompiledEquationPresentationPlanV2
+): readonly string[] {
+  return consumeKpEquationEvaluationFamilyTransitionsV2({
+    plan,
+    adapter: {
+      id: "adapter.editor.certified-equation-evaluation-identity.v2",
+      kind: "equation-evaluation-family-adapter-v2",
+      compile: ({ certificate }) => certificate.transformationId
+    }
+  });
+}
+
 /**
  * The generic host projects certified selector ownership into its existing
  * material layer; the shared Native KaTeX mount remains the sole paint sampler.

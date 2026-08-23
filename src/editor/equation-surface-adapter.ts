@@ -162,10 +162,6 @@ import {
   type KpEditorAnimationDiagnosticsCadenceState
 } from "./animation-diagnostics-cadence.ts";
 import {
-  type KpDerivativeDecrementChoreographyFrame,
-  type KpDerivativeDecrementChoreographyPlan
-} from "../animation/derivative-decrement-choreography.ts";
-import {
   type KpDerivativePowerChoreographyFrame,
   type KpDerivativePowerChoreographyPlan
 } from "../animation/derivative-power-choreography.ts";
@@ -191,7 +187,8 @@ import type {
   KpInequalityPivotChoreographyFrame
 } from "../animation/inequality-pivot-choreography.ts";
 import {
-  applyKpCertifiedEquationEvaluationMount
+  applyKpCertifiedEquationEvaluationMount,
+  kpCertifiedEquationEvaluationTransformationIds
 } from "./equation-certified-evaluation-mount.ts";
 
 const semanticMotionPlanCache = new WeakMap<HTMLElement, {
@@ -222,6 +219,13 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
     }
     const family = projectKpEquationSurfaceFamily(animation.id);
     const governance = requireKpGenericEquationMigrationV2(animation);
+    const certifiedEvaluationTransformationIds = new Set(
+      governance === undefined
+        ? []
+        : kpCertifiedEquationEvaluationTransformationIds(
+            governance.presentationPlan
+          )
+    );
     if (governance !== undefined) {
       slot.dataset["kpEquationPresentationPlanId"] =
         governance.presentationPlan.id;
@@ -331,8 +335,18 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
         return;
       }
       const transitionElement = transitionNodes.element;
+      const certifiedEvaluationOwnsPaint =
+        certifiedEvaluationTransformationIds.has(transition.id);
 
       transitionElement.dataset["kpEditorEquationMotif"] = motif.kind;
+      if (certifiedEvaluationOwnsPaint) {
+        transitionElement.dataset["kpEditorEquationCertifiedEvaluationPaint"] =
+          "owned";
+      } else {
+        delete transitionElement.dataset[
+          "kpEditorEquationCertifiedEvaluationPaint"
+        ];
+      }
       // Fraction composition can expose annotated focus identities now, but
       // its structural fraction rules still use the established layer-motion
       // path until their token geometry is promoted as a separate renderer slice.
@@ -1393,12 +1407,12 @@ function applyLinearRearrangementChoreography(input: {
   }
   if (
     input.transitionElement.dataset[
-      "kpEditorEquationDerivativeDecrementChoreography"
-    ] !== undefined
+      "kpEditorEquationCertifiedEvaluationPaint"
+    ] === "owned"
   ) {
-    // The derivative adapter already marks the subtraction cause as one
-    // semantic cohort. Per-fragment focus outlines turn that cohort into three
-    // unrelated boxes and compete with the preceding application trace.
+    // Certified evaluation paint is already one semantic cohort. Fragment
+    // focus chrome would split that cohort into unrelated boxes before the
+    // shared family mount samples it.
     focusTokens.forEach(clearEquationFocusBinding);
     existingShadow?.remove();
     return;
@@ -2409,12 +2423,6 @@ function applySemanticTokenMotion(input: {
         : motifKind === "copy-fan-out" || motifKind === "merge-fan-in" || motifKind === "substitute"
         ? { lineageChoreographyKind: motifKind }
         : {}),
-      ...(input.frame.derivativeDecrement === undefined
-        ? {}
-        : {
-            derivativeDecrementChoreographyPlan:
-              input.frame.derivativeDecrement.plan
-          }),
       ...(transformation.transformType === "distributeMultiplication"
         ? {
             distributionChoreographyKind: "canonical-fan-out" as const,
@@ -2575,17 +2583,6 @@ function applySemanticTokenMotion(input: {
       geometry,
       plan: geometry.derivativePowerChoreographyPlan,
       frame: tokenFrame.motion.derivativePower
-    });
-  }
-  if (
-    tokenFrame.motion.derivativeDecrement !== undefined &&
-    geometry.derivativeDecrementChoreographyPlan !== undefined
-  ) {
-    applyDerivativeDecrementTokenFocus({
-      transition: input.transitionElement,
-      geometry,
-      plan: geometry.derivativeDecrementChoreographyPlan,
-      frame: tokenFrame.motion.derivativeDecrement
     });
   }
   if (tokenFrame.motion.distributionChoreography !== undefined) {
@@ -3455,44 +3452,6 @@ function derivativeTraceMix(
   return source + (target - source) * progress;
 }
 
-function applyDerivativeDecrementTokenFocus(input: {
-  readonly transition: HTMLElement;
-  readonly geometry: KpPrecomputedEquationMotionPlan["geometry"];
-  readonly plan: KpDerivativeDecrementChoreographyPlan;
-  readonly frame: KpDerivativeDecrementChoreographyFrame;
-}): void {
-  input.transition.dataset["kpEditorEquationDerivativeDecrementChoreography"] =
-    input.plan.id;
-  input.transition.dataset["kpEditorEquationDerivativeDecrementPhase"] =
-    activeDerivativeDecrementPhase(input.frame);
-  input.transition.dataset["kpEditorEquationDerivativeDecrementSettlement"] =
-    String(input.frame.settlementProgress);
-  const roles = [
-    [input.plan.evaluation.minuendSelectorId, "source", "minuend"],
-    [
-      input.plan.evaluation.decrementOperatorSelectorId,
-      "source",
-      "decrement-operator"
-    ],
-    [
-      input.plan.evaluation.decrementAmountSelectorId,
-      "source",
-      "decrement-amount"
-    ],
-    [input.plan.evaluation.resultSelectorId, "target", "result"]
-  ] as const;
-  for (const [selectorId, side, role] of roles) {
-    const token = equationTokenForSelector(input.geometry, side, selectorId);
-    if (token === undefined) continue;
-    token.dataset["kpEditorDerivativeDecrementRole"] = role;
-    token.dataset["kpEditorDerivativeDecrementSalience"] = salienceState(
-      side === "target"
-        ? input.frame.attention.result
-        : input.frame.attention.decrementCause
-    );
-  }
-}
-
 function equationTokenForSelector(
   geometry: KpPrecomputedEquationMotionPlan["geometry"],
   side: "source" | "target",
@@ -3518,20 +3477,6 @@ function salienceState(strength: number): "focus" | "normal" {
 
 function activeDerivativePowerPhase(
   frame: KpDerivativePowerChoreographyFrame
-): string {
-  const active = Object.entries(frame.phases)
-    .filter(([, progress]) => progress > 0 && progress < 1)
-    .at(-1)?.[0];
-  if (active !== undefined) return active;
-  if (frame.semanticProgress === 0) return "ready";
-  if (frame.semanticProgress === 1) return "complete";
-  return Object.entries(frame.phases)
-    .filter(([, progress]) => progress === 1)
-    .at(-1)?.[0] ?? "ready";
-}
-
-function activeDerivativeDecrementPhase(
-  frame: KpDerivativeDecrementChoreographyFrame
 ): string {
   const active = Object.entries(frame.phases)
     .filter(([, progress]) => progress > 0 && progress < 1)

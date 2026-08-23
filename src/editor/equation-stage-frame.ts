@@ -3,12 +3,6 @@ import {
   type KpAnimationAsset
 } from "../animation/asset.ts";
 import {
-  compileKpDerivativeDecrementChoreography,
-  sampleKpDerivativeDecrementChoreography,
-  type KpDerivativeDecrementChoreographyFrame,
-  type KpDerivativeDecrementChoreographyPlan
-} from "../animation/derivative-decrement-choreography.ts";
-import {
   compileKpDerivativePowerChoreography,
   sampleKpDerivativePowerChoreography,
   type KpDerivativePowerChoreographyFrame,
@@ -106,8 +100,6 @@ const matrixMatrixCompositionChoreographyCache =
   new Map<string, KpMatrixMatrixCompositionChoreography>();
 const derivativePowerChoreographyCache =
   new Map<string, KpDerivativePowerChoreographyPlan>();
-const derivativeDecrementChoreographyCache =
-  new Map<string, KpDerivativeDecrementChoreographyPlan>();
 
 export interface KpEditorEquationStageFrame {
   readonly stageIdentityKey: string;
@@ -152,10 +144,6 @@ export interface KpEditorEquationStageFrame {
   readonly derivativePower?: {
     readonly plan: KpDerivativePowerChoreographyPlan;
     readonly frame: KpDerivativePowerChoreographyFrame;
-  } | undefined;
-  readonly derivativeDecrement?: {
-    readonly plan: KpDerivativeDecrementChoreographyPlan;
-    readonly frame: KpDerivativeDecrementChoreographyFrame;
   } | undefined;
 }
 
@@ -236,12 +224,6 @@ export function createKpEditorEquationStageFrame(input: {
     projection.transitions[0]?.id,
     localProgress
   );
-  const derivativeDecrement = createDerivativeDecrementFrame(
-    input.animation,
-    input.state,
-    projection.transitions[0]?.id,
-    localProgress
-  );
   const stageIdentityKey = projection.animationId;
   const mathLayout = input.mathLayout ?? "display";
   const contentKey = `${projection.direction}:${projection.transitions
@@ -279,8 +261,7 @@ export function createKpEditorEquationStageFrame(input: {
     ...(matrixMatrixComposition === undefined
       ? {}
       : { matrixMatrixComposition }),
-    ...(derivativePower === undefined ? {} : { derivativePower }),
-    ...(derivativeDecrement === undefined ? {} : { derivativeDecrement })
+    ...(derivativePower === undefined ? {} : { derivativePower })
   };
 }
 
@@ -536,40 +517,6 @@ function createDerivativePowerFrame(
   return {
     plan,
     frame: sampleKpDerivativePowerChoreography({
-      plan,
-      progress,
-      direction: state.direction
-    })
-  };
-}
-
-function createDerivativeDecrementFrame(
-  animation: KpAnimationAsset,
-  state: KpEditorAnimationPlayerState,
-  transformationId: string | undefined,
-  progress: number
-): KpEditorEquationStageFrame["derivativeDecrement"] {
-  if (animation.id !==
-      "animation.generated.calculus.derivative.power-rule-x-cubed") {
-    return undefined;
-  }
-  const transformation = animation.transformations.find(
-    (candidate) => candidate.id === transformationId &&
-      candidate.transformType === "simplifyConstantDifference"
-  );
-  if (transformation === undefined) return undefined;
-  let plan = derivativeDecrementChoreographyCache.get(transformation.id);
-  if (plan === undefined) {
-    plan = compileKpDerivativeDecrementChoreography({
-      id: `choreography.${transformation.id}.decrement-resolution`,
-      transformation,
-      bundle: animation.bundle
-    });
-    derivativeDecrementChoreographyCache.set(transformation.id, plan);
-  }
-  return {
-    plan,
-    frame: sampleKpDerivativeDecrementChoreography({
       plan,
       progress,
       direction: state.direction

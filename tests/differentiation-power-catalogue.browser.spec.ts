@@ -7,7 +7,7 @@ const applyTransitionId =
 const evaluateTransitionId =
   "transform.generated.calculus.derivative.power-rule-x-cubed.evaluate-exponent-decrement";
 
-test("derivative power rule keeps an explicit decrement and flat glyph motion", async ({
+test("derivative power rule delegates decrement evaluation to certified ink", async ({
   page
 }) => {
   const pageErrors: string[] = [];
@@ -143,28 +143,35 @@ test("derivative power rule keeps an explicit decrement and flat glyph motion", 
     evaluateTransitionId
   );
   const decrementOperator = activeTransition(stage).locator(
-    '[data-kp-editor-derivative-decrement-role="decrement-operator"]'
+    '[data-kp-editor-equation-source] [data-kp-motion-id$=".decrement-operator"]'
   );
   const decrementAmount = activeTransition(stage).locator(
-    '[data-kp-editor-derivative-decrement-role="decrement-amount"]'
+    '[data-kp-editor-equation-source] [data-kp-motion-id$=".decrement-amount"]'
   );
   const evaluatedResult = activeTransition(stage).locator(
-    '[data-kp-editor-derivative-decrement-role="result"]'
+    '[data-kp-editor-equation-target] [data-kp-motion-id$=".exponent"]'
   );
   await expect(decrementOperator).toContainText("−");
   await expect(decrementAmount).toContainText("1");
-  await expect(decrementOperator).toHaveAttribute(
-    "data-kp-editor-derivative-decrement-salience",
-    "focus"
+  await expect(activeTransition(stage)).not.toHaveAttribute(
+    "data-kp-editor-equation-derivative-decrement-choreography",
+    /.+/
   );
   await expect(activeTransition(stage).locator(
-    "[data-kp-editor-derivative-decrement-role].kp-focus-group"
+    "[data-kp-motion-id].kp-focus-group"
   )).toHaveCount(0);
   for (const glyph of [decrementOperator, decrementAmount]) {
     await expect(glyph).toHaveCSS("outline-style", "none");
     await expect(glyph).toHaveCSS("box-shadow", "none");
   }
   await expect(evaluatedResult).toHaveCSS("opacity", "0");
+  const evaluatedSourceMaterial = stage.locator(
+    '[data-kp-equation-material-fragment-role^="successor-source:"]'
+  );
+  await expect(evaluatedSourceMaterial).toHaveCount(3);
+  await expect.poll(async () => evaluatedSourceMaterial.evaluateAll((owners) =>
+    owners.filter((owner) => Number(getComputedStyle(owner).opacity) > 0).length
+  )).toBeGreaterThan(0);
   await expect(activeTransition(stage).locator(
     "[data-kp-equation-lineage-path-id]"
   )).toHaveCount(0);
@@ -184,8 +191,13 @@ test("derivative power rule keeps an explicit decrement and flat glyph motion", 
     "data-kp-operation-evaluation-family",
     "contributor-fusion"
   );
+  // Native tokens are retired while the material cohort owns paint; their
+  // hidden semantic transforms are not a second visible choreography.
   for (const glyph of [decrementOperator, decrementAmount, evaluatedResult]) {
-    await expect.poll(() => renderedScale(glyph)).toEqual({ x: 1, y: 1 });
+    await expect(glyph).toHaveAttribute(
+      "data-kp-equation-material-native-hidden",
+      "true"
+    );
     await expect(glyph).toHaveCSS("text-shadow", "none");
   }
 

@@ -267,6 +267,27 @@
       "scope": "standard",
       "checkedAt": "2026-08-23T23:43:17.744Z",
       "notes": "Generic certified evaluation mount preserves all TypeScript, Svelte, and domain boundaries."
+    },
+    {
+      "command": "npm run test:browser:differentiation-exemplar",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-23T23:51:36.543Z",
+      "notes": "Two Chromium checks pass; evaluation has no derivative-specific choreography marker, no fragment focus boxes, one certified material cohort, and direct URL restoration remains correct."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-23T23:51:37.888Z",
+      "notes": "Removing the derivative-only stage sampler and deriving paint ownership from certificates preserves all TypeScript, Svelte, and domain boundaries."
+    },
+    {
+      "command": "npm run visual:derivative-power",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T23:51:38.972Z",
+      "notes": "Nine-frame derivative capture preserves the first application beat and shows neutral shared ink compression with no fragment boxes."
     }
   ],
   "progress": {
