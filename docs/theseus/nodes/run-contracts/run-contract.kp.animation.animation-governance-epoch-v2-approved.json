@@ -142,7 +142,8 @@
     {
       "id": "compiled-presentation-plan",
       "title": "compiled-presentation-plan",
-      "status": "planned"
+      "summary": "Added one nominal equation presentation-plan compiler that resolves operations, mandatory evaluations, projection, typography, and transit from grammar v2. It preserves exact authority identity, one clock, generic adapter consumption, and typed semantic domain payloads while rejecting universal pose or caller presentation data.",
+      "status": "complete"
     },
     {
       "id": "architecture-ratchets",

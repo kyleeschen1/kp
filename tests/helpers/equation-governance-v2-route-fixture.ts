@@ -14,8 +14,7 @@ import {
 } from "../../src/domain-ir/equation-transit-obligations-v2.ts";
 
 export function compileKpEquationGovernanceV2RouteFixture() {
-  const grammar = compileKpEquationGrammarV2(input());
-  if (grammar.status !== "compiled") throw new Error("Fixture grammar failed.");
+  const grammar = compileKpEquationGovernanceV2GrammarFixture();
   const operations = resolveKpEquationGrammarV2Operations(grammar.grammar);
   if (operations.status !== "resolved") throw new Error("Fixture operations failed.");
   const projection = resolveKpEquationProjectionChoreographiesV2({
@@ -26,13 +25,20 @@ export function compileKpEquationGovernanceV2RouteFixture() {
   const obligations = compileKpEquationTransitObligationsV2({
     grammar: grammar.grammar,
     choreography: projection.choreography,
-    intents: [intent]
+    intents: [kpEquationGovernanceV2RouteFixtureIntent]
   });
   if (obligations.status !== "compiled") throw new Error("Fixture transit failed.");
   return obligations.obligations;
 }
 
-const intent: KpEquationTransitionTransitIntentV2 = {
+export function compileKpEquationGovernanceV2GrammarFixture() {
+  const grammar = compileKpEquationGrammarV2(input());
+  if (grammar.status !== "compiled") throw new Error("Fixture grammar failed.");
+  return grammar;
+}
+
+export const kpEquationGovernanceV2RouteFixtureIntent:
+  KpEquationTransitionTransitIntentV2 = {
   transitionId: "transition.0",
   boundaries: [{
     id: "boundary.equals",
