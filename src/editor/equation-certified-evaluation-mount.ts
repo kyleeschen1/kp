@@ -9,9 +9,13 @@ import {
   type KpEquationMaterialLayerOwnerFrame
 } from "../rendering/equation-material-layer-dom.ts";
 import {
-  createKpCertifiedNativeKatexContributorFusionPlayback
+  createKpCertifiedNativeKatexContributorFusionPlayback,
+  kpNativeKatexContributorFusionOpticalProfile
 } from
   "../rendering/native-katex-operation-evaluation-contributor-fusion.ts";
+import {
+  resolveKpSemanticSalience
+} from "../animation/semantic-salience-resolver.ts";
 import type {
   KpEditorEquationStageHotPathCache
 } from "./equation-stage-hot-path-cache.ts";
@@ -164,6 +168,10 @@ export function applyKpCertifiedEquationEvaluationMount(input: {
     ? input.localProgress
     : 1 - input.localProgress;
   playback.apply(progress);
+  applyCertifiedEvaluationSalience({
+    stage: input.stage,
+    progress
+  });
   input.stage.dataset["kpCertifiedEvaluationMount"] = "native-katex";
   input.stage.dataset["kpCertifiedEvaluationTransformationId"] =
     certificate.transformationId;
@@ -172,6 +180,75 @@ export function applyKpCertifiedEquationEvaluationMount(input: {
     transformationId: certificate.transformationId,
     familyProfileId: certificate.familyProfile.id
   });
+}
+
+function applyCertifiedEvaluationSalience(input: {
+  readonly stage: HTMLElement;
+  readonly progress: number;
+}): void {
+  const profile = kpNativeKatexContributorFusionOpticalProfile;
+  // Attention precedes the visible rewrite, releases during the ink knot,
+  // then acknowledges the result before returning to neutral at settlement.
+  const sourceStrength = 1 - smoothstep(
+    profile.gatherStartsAt,
+    profile.compressionStartsAt,
+    input.progress
+  );
+  const targetStrength = smoothstep(
+    profile.targetLegibilityStartsAt,
+    profile.targetExpansionEndsAt,
+    input.progress
+  ) * (1 - smoothstep(
+    profile.targetExpansionEndsAt,
+    1,
+    input.progress
+  ));
+  applyCohortSalience(input.stage, "source", sourceStrength);
+  applyCohortSalience(input.stage, "target", targetStrength);
+  input.stage.dataset["kpCertifiedEvaluationSaliencePhase"] =
+    input.progress < profile.gatherStartsAt
+      ? "orient"
+      : input.progress < profile.targetLegibilityStartsAt
+        ? "change"
+        : input.progress < 1
+          ? "recognize"
+          : "settled";
+}
+
+function applyCohortSalience(
+  stage: HTMLElement,
+  side: "source" | "target",
+  strength: number
+): void {
+  const salience = resolveKpSemanticSalience({
+    baseLevel: "normal",
+    identityFamily: "neutral",
+    presence: 1,
+    signals: strength > 0.01 ? ["focused"] : []
+  });
+  const formattedStrength = strength.toFixed(4);
+  stage.querySelectorAll<HTMLElement>(
+    `[data-kp-equation-material-fragment-role^="successor-${side}:"]`
+  ).forEach((owner) => {
+    owner.dataset["kpCertifiedEvaluationSalienceRole"] = `${side}-cohort`;
+    owner.dataset["kpSemanticSalienceLevel"] = salience.state.level;
+    owner.dataset["kpSemanticIdentityFamily"] =
+      salience.state.identityFamily;
+    owner.style.setProperty(
+      "--kp-certified-evaluation-salience-strength",
+      formattedStrength
+    );
+    // Brightness changes paint only, so native KaTeX measurement and the
+    // family-owned transform remain untouched.
+    owner.style.filter = `brightness(${(1 + 0.1 * strength).toFixed(4)})`;
+  });
+}
+
+function smoothstep(start: number, end: number, value: number): number {
+  if (value <= start) return 0;
+  if (value >= end) return 1;
+  const progress = (value - start) / (end - start);
+  return progress * progress * (3 - 2 * progress);
 }
 
 function requiredSelectorToken(

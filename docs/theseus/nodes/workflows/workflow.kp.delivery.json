@@ -288,6 +288,34 @@
       "scope": "focused",
       "checkedAt": "2026-08-23T23:51:38.972Z",
       "notes": "Nine-frame derivative capture preserves the first application beat and shows neutral shared ink compression with no fragment boxes."
+    },
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T23:56:37.083Z",
+      "notes": "All 32 derivative semantic, authored-beat, migration, and choreography checks pass after salience composition."
+    },
+    {
+      "command": "npm run test:browser:differentiation-exemplar",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-23T23:56:38.393Z",
+      "notes": "Two Chromium checks pass; source and target material cohorts receive deterministic focus-to-normal salience, no fragment boxes appear, and settlement is neutral."
+    },
+    {
+      "command": "npm run visual:derivative-power",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T23:56:39.439Z",
+      "notes": "Nine frames show subtle source orientation, neutral knot motion, result recognition, and normal settlement without cyan competition or layout changes."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-23T23:56:40.520Z",
+      "notes": "Semantic salience resolution on material owners preserves application, test, Svelte, and domain type boundaries."
     }
   ],
   "progress": {

@@ -169,6 +169,13 @@ test("derivative power rule delegates decrement evaluation to certified ink", as
     '[data-kp-equation-material-fragment-role^="successor-source:"]'
   );
   await expect(evaluatedSourceMaterial).toHaveCount(3);
+  await expect.poll(() => evaluatedSourceMaterial.evaluateAll((owners) =>
+    owners.every((owner) =>
+      owner.getAttribute("data-kp-certified-evaluation-salience-role") ===
+        "source-cohort" &&
+      owner.getAttribute("data-kp-semantic-salience-level") === "focus"
+    )
+  )).toBe(true);
   await expect.poll(async () => evaluatedSourceMaterial.evaluateAll((owners) =>
     owners.filter((owner) => Number(getComputedStyle(owner).opacity) > 0).length
   )).toBeGreaterThan(0);
@@ -183,6 +190,14 @@ test("derivative power rule delegates decrement evaluation to certified ink", as
   );
   await expect(evaluatedMaterial).toHaveCount(1);
   await expect.poll(() => renderedOpacity(evaluatedMaterial)).toBeGreaterThan(0);
+  await expect(evaluatedMaterial).toHaveAttribute(
+    "data-kp-certified-evaluation-salience-role",
+    "target-cohort"
+  );
+  await expect(evaluatedMaterial).toHaveAttribute(
+    "data-kp-semantic-salience-level",
+    "focus"
+  );
   await expect(stage).toHaveAttribute(
     "data-kp-certified-evaluation-mount",
     "native-katex"
@@ -209,6 +224,13 @@ test("derivative power rule delegates decrement evaluation to certified ink", as
   const result = stage.locator("[data-kp-editor-equation-target]");
   await expect(result).toHaveCSS("opacity", "1");
   await expect(result.locator(".katex")).toContainText("3x2");
+  await expect(stage).toHaveAttribute(
+    "data-kp-certified-evaluation-salience-phase",
+    "settled"
+  );
+  await expect(stage.locator(
+    '[data-kp-equation-material-fragment-role="successor-target:successor-target"]'
+  )).toHaveAttribute("data-kp-semantic-salience-level", "normal");
 
   await seek.fill("0");
   await expect(activeTransition(stage)).toHaveAttribute(

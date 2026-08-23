@@ -129,7 +129,8 @@
     {
       "id": "kp.eval-auth.s14",
       "title": "salience-composition",
-      "status": "planned"
+      "summary": "Certified evaluation cohorts now receive playhead-derived, paint-only attention: source orientation precedes neutral ink-knot change, result recognition follows, and settlement returns to normal. No boxes, caller timing, or layout-affecting emphasis were introduced.",
+      "status": "complete"
     },
     {
       "id": "kp.eval-auth.s15",
