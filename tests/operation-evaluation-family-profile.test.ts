@@ -4,9 +4,12 @@ import test from "node:test";
 import {
   kpCarrierPreservingSimplificationEvaluationFamilyProfile,
   kpContributorFusionEvaluationFamilyProfile,
+  kpOperationEvaluationFamilyReleaseRegistrations,
   resolveKpDefaultOperationEvaluationFamilyProfile,
+  resolveKpOperationEvaluationFamilyApplicability,
   resolveKpOperationEvaluationFamilyCandidate,
-  resolveKpOperationEvaluationFamilyProfile
+  resolveKpOperationEvaluationFamilyProfile,
+  resolveKpOperationEvaluationFamilyReleaseRegistration
 } from "../src/animation/operation-evaluation-family-profile.ts";
 import {
   createKpTwoTimesOneCarrierEvidenceCandidate,
@@ -15,6 +18,11 @@ import {
 import {
   verifyKpCarrierPreservingSimplificationEvidence
 } from "../src/semantic/carrier-preserving-simplification-evidence.ts";
+import {
+  compileKpContributorEvaluationTopologyCertificate
+} from "../src/semantic/evaluation-topology-certificate.ts";
+import { createGeneratedCalculusProblemFixture } from
+  "../src/semantic/generated-calculus-problem-fixture.ts";
 
 test("contributor fusion closes family and handoff compatibility", () => {
   const resolved = resolveKpOperationEvaluationFamilyProfile({
@@ -73,6 +81,58 @@ test("only the three approved arithmetic transformations select the profile", ()
     ),
     undefined
   );
+});
+
+test("semantic applicability is independent from transformation release maturity", () => {
+  assert.deepEqual(
+    kpOperationEvaluationFamilyReleaseRegistrations
+      .filter(({ familyProfileId }) =>
+        familyProfileId === kpContributorFusionEvaluationFamilyProfile.id)
+      .map(({ transformationKind, maturity }) => ({
+        transformationKind,
+        maturity
+      })),
+    [
+      { transformationKind: "simplifyConstantProduct", maturity: "promoted" },
+      { transformationKind: "simplifyConstantQuotient", maturity: "promoted" },
+      { transformationKind: "simplifyConstantSum", maturity: "promoted" }
+    ]
+  );
+  assert.equal(
+    resolveKpOperationEvaluationFamilyReleaseRegistration(
+      "simplifyConstantDifference"
+    ),
+    undefined
+  );
+
+  const fixture = createGeneratedCalculusProblemFixture(
+    "generated.calculus.derivative.power-rule-x-cubed"
+  );
+  const transformation = fixture.transformations.find(
+    (candidate) => candidate.transformType === "simplifyConstantDifference"
+  );
+  assert.ok(transformation);
+  const topology = compileKpContributorEvaluationTopologyCertificate({
+    bundle: fixture.bundle,
+    transformation,
+    operationId: "kp.arithmetic.subtract"
+  });
+  assert.equal(topology.status, "verified");
+  if (topology.status !== "verified") return;
+
+  const applicability = resolveKpOperationEvaluationFamilyApplicability({
+    familyProfileId: kpContributorFusionEvaluationFamilyProfile.id,
+    topologyCertificate: topology.certificate
+  });
+  assert.equal(applicability.status, "applicable");
+  assert.equal(
+    resolveKpDefaultOperationEvaluationFamilyProfile(transformation.transformType),
+    undefined
+  );
+  assert.equal(resolveKpOperationEvaluationFamilyApplicability({
+    familyProfileId: kpContributorFusionEvaluationFamilyProfile.id,
+    topologyCertificate: { ...topology.certificate }
+  }).status, "unverified-topology");
 });
 
 test("candidate resolution requires the exact handoff, identity operation, and minted evidence", () => {

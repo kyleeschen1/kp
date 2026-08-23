@@ -5,6 +5,11 @@ import {
   isKpVerifiedCarrierPreservingSimplificationEvidence,
   type KpVerifiedCarrierPreservingSimplificationEvidence
 } from "../semantic/carrier-preserving-simplification-evidence.ts";
+import {
+  isKpVerifiedEvaluationTopologyCertificate,
+  type KpEvaluationTopologyKind,
+  type KpVerifiedEvaluationTopologyCertificate
+} from "../semantic/evaluation-topology-certificate.ts";
 
 export const kpOperationEvaluationFamilyIds = [
   "punctuated-substitution",
@@ -55,6 +60,42 @@ export interface KpContributorFusionEvaluationFamilyProfile {
 export type KpOperationEvaluationFamilyProfile =
   | KpContributorFusionEvaluationFamilyProfile
   | KpCarrierPreservingSimplificationEvaluationFamilyProfile;
+
+export type KpOperationEvaluationFamilyProfileId =
+  KpOperationEvaluationFamilyProfile["id"];
+
+export const kpOperationEvaluationReleaseMaturities = [
+  "review-stage",
+  "promoted"
+] as const;
+
+export type KpOperationEvaluationReleaseMaturity =
+  (typeof kpOperationEvaluationReleaseMaturities)[number];
+
+export interface KpOperationEvaluationFamilyReleaseRegistration {
+  readonly schemaVersion: "kp.operation-evaluation-family-release.v1";
+  readonly transformationKind: string;
+  readonly familyProfileId: KpOperationEvaluationFamilyProfileId;
+  /** Release maturity belongs to this use, not to semantic applicability. */
+  readonly maturity: KpOperationEvaluationReleaseMaturity;
+}
+
+export type KpOperationEvaluationFamilyApplicabilityResolution =
+  | {
+      readonly status: "applicable";
+      readonly profile: KpOperationEvaluationFamilyProfile;
+      readonly topologyCertificate: KpVerifiedEvaluationTopologyCertificate;
+    }
+  | {
+      readonly status:
+        | "unsupported-family-profile"
+        | "unverified-topology"
+        | "incompatible-topology";
+      readonly familyProfileId: string;
+      readonly requiredTopology?: KpEvaluationTopologyKind | undefined;
+      readonly actualTopology?: KpEvaluationTopologyKind | undefined;
+      readonly message: string;
+    };
 
 export type KpOperationEvaluationFamilyProfileResolution =
   | {
@@ -132,6 +173,25 @@ const promotedProfiles: readonly KpOperationEvaluationFamilyProfile[] =
     kpCarrierPreservingSimplificationEvaluationFamilyProfile
   ]);
 
+export const kpOperationEvaluationFamilyReleaseRegistrations:
+readonly KpOperationEvaluationFamilyReleaseRegistration[] = Object.freeze([
+  ...kpContributorFusionEvaluationFamilyProfile.supportedTransformationKinds
+    .map((transformationKind) => Object.freeze({
+      schemaVersion: "kp.operation-evaluation-family-release.v1" as const,
+      transformationKind,
+      familyProfileId: kpContributorFusionEvaluationFamilyProfile.id,
+      maturity: "promoted" as const
+    })),
+  ...kpCarrierPreservingSimplificationEvaluationFamilyProfile
+    .supportedTransformationKinds.map((transformationKind) => Object.freeze({
+      schemaVersion: "kp.operation-evaluation-family-release.v1" as const,
+      transformationKind,
+      familyProfileId:
+        kpCarrierPreservingSimplificationEvaluationFamilyProfile.id,
+      maturity: "promoted" as const
+    }))
+]);
+
 /**
  * Family and paint handoff are independent authoring choices. Resolution
  * closes their compatibility before any renderer is selected, so callers
@@ -171,9 +231,71 @@ export function resolveKpOperationEvaluationFamilyProfile(input: {
 export function resolveKpDefaultOperationEvaluationFamilyProfile(
   transformationKind: string
 ): KpOperationEvaluationFamilyProfile | undefined {
-  return promotedProfiles.find(({ supportedTransformationKinds }) =>
-    supportedTransformationKinds.some((kind) => kind === transformationKind)
+  const release = kpOperationEvaluationFamilyReleaseRegistrations.find(
+    (candidate) => candidate.transformationKind === transformationKind &&
+      candidate.maturity === "promoted"
   );
+  return release === undefined
+    ? undefined
+    : promotedProfiles.find(({ id }) => id === release.familyProfileId);
+}
+
+export function resolveKpOperationEvaluationFamilyReleaseRegistration(
+  transformationKind: string
+): KpOperationEvaluationFamilyReleaseRegistration | undefined {
+  return kpOperationEvaluationFamilyReleaseRegistrations.find(
+    (candidate) => candidate.transformationKind === transformationKind
+  );
+}
+
+/**
+ * Applicability is proved by semantic topology. It intentionally does not
+ * inspect a transformation-kind release allowlist.
+ */
+export function resolveKpOperationEvaluationFamilyApplicability(input: {
+  readonly familyProfileId: string;
+  readonly topologyCertificate: unknown;
+}): KpOperationEvaluationFamilyApplicabilityResolution {
+  const profile = promotedProfiles.find(({ id }) =>
+    id === input.familyProfileId
+  );
+  if (profile === undefined) {
+    return Object.freeze({
+      status: "unsupported-family-profile" as const,
+      familyProfileId: input.familyProfileId,
+      message: `Unknown operation-evaluation family profile ${input.familyProfileId}.`
+    });
+  }
+
+  const requiredTopology: KpEvaluationTopologyKind =
+    profile.family === "contributor-fusion"
+      ? "contributors-create-result"
+      : "carrier-survives";
+  if (!isKpVerifiedEvaluationTopologyCertificate(input.topologyCertificate)) {
+    return Object.freeze({
+      status: "unverified-topology" as const,
+      familyProfileId: input.familyProfileId,
+      requiredTopology,
+      message:
+        `Family profile ${input.familyProfileId} requires a compiler-minted ${requiredTopology} topology certificate.`
+    });
+  }
+  if (input.topologyCertificate.topology !== requiredTopology) {
+    return Object.freeze({
+      status: "incompatible-topology" as const,
+      familyProfileId: input.familyProfileId,
+      requiredTopology,
+      actualTopology: input.topologyCertificate.topology,
+      message:
+        `Family profile ${input.familyProfileId} requires ${requiredTopology}, not ${input.topologyCertificate.topology}.`
+    });
+  }
+
+  return Object.freeze({
+    status: "applicable" as const,
+    profile,
+    topologyCertificate: input.topologyCertificate
+  });
 }
 
 export function resolveKpOperationEvaluationFamilyCandidate(input: {

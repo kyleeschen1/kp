@@ -127,6 +127,20 @@
       "scope": "standard",
       "checkedAt": "2026-08-23T23:14:02.660Z",
       "notes": "Application, test, Svelte, and domain typechecks pass with compiler-owned topology derivation."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/operation-evaluation-family-profile.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T23:17:27.189Z",
+      "notes": "Five family-profile tests pass, including independent semantic applicability and unchanged promoted release registrations."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-23T23:17:28.527Z",
+      "notes": "Family applicability and release maturity types preserve all application, test, Svelte, and domain boundaries."
     }
   ],
   "progress": {

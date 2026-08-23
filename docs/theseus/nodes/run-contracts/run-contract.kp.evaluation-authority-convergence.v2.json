@@ -75,7 +75,8 @@
     {
       "id": "kp.eval-auth.s05",
       "title": "family-maturity",
-      "status": "planned"
+      "summary": "Semantic applicability now resolves from nominal topology evidence while transformation release maturity is tracked separately; all existing promoted registrations are unchanged.",
+      "status": "complete"
     },
     {
       "id": "kp.eval-auth.s06",
