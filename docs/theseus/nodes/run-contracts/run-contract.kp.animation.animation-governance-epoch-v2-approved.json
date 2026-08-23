@@ -160,7 +160,8 @@
     {
       "id": "log-paint-ownership",
       "title": "log-paint-ownership",
-      "status": "planned"
+      "summary": "Compiled and applied equivalence-specific paint ownership. The left witness remains frozen native paint; source ln and shell tracks retain compositor accounting but are sampled permanently invisible; only factor clones and introduced right-side syntax paint live; and the material scene settles before one native-target handoff. Browser checks reject duplicate or blank paint across seek, rewind, reduced motion, and narrow layouts.",
+      "status": "complete"
     },
     {
       "id": "log-routes-and-arrival",

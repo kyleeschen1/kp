@@ -40,9 +40,9 @@ test("occurrence compilation scales from two to three provenance branches", () =
   const ledger = compile(kpMultiFactorCompiledLogProductOperation);
   assert.equal(ledger.provenanceCopies.length, 3);
   ledger.provenanceCopies.forEach((copy) => {
-    assert.equal(copy.correspondenceRecordIds.length, 4);
-    assert.equal(copy.sourceEntityIds.length, 4);
-    assert.equal(copy.targetEntityIds.length, 4);
+    assert.equal(copy.correspondenceRecordIds.length, 5);
+    assert.equal(copy.sourceEntityIds.length, 5);
+    assert.equal(copy.targetEntityIds.length, 5);
   });
 });
 

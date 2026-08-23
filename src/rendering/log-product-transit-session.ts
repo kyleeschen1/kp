@@ -49,6 +49,13 @@ import {
   kpCanonicalCompiledLogProductOperation,
   type KpCompiledLogProductOperation
 } from "../semantic/log-product-transformation-compiler.ts";
+import {
+  isKpCompiledLogProductEquivalencePaintOwnershipV2,
+  type KpCompiledLogProductEquivalencePaintOwnershipV2
+} from "../domain-ir/log-product-equivalence-paint-ownership-v2.ts";
+import {
+  applyKpNativeKatexLogProductEquivalencePaintOwnershipV2
+} from "./native-katex-log-product-equivalence-paint-ownership-v2.ts";
 
 function fissionRoute<Route extends {
   readonly variant: "direct" | "arc-above" | "arc-below";
@@ -160,6 +167,7 @@ export interface KpLogProductTransitSession {
   readonly transformationId: string;
   readonly semanticMotionChoreographyId: string;
   readonly canonical: KpCanonicalNativeKatexSceneSession;
+  readonly paintOwnershipPlanId?: string | undefined;
   readonly apply: (progress: number) => KpNativeKatexSceneOwnershipFrame;
   readonly retire: () => void;
 }
@@ -207,6 +215,8 @@ export function createKpLogProductTransitSession(input: {
   readonly targetEndpoint: KpLogProductNativeEndpoint;
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
+  readonly paintOwnership?:
+    KpCompiledLogProductEquivalencePaintOwnershipV2 | undefined;
 }): KpLogProductTransitSession {
   assertTransitInput(input);
   const rendererReadyPlan = compileKpCanonicalNativeKatexScenePlan({
@@ -225,6 +235,9 @@ export function createKpLogProductTransitSession(input: {
     lifecycle: "renderer-session" as const,
     transformationId: input.operation.transformation.id,
     semanticMotionChoreographyId: input.semanticMotion.id,
+    ...(input.paintOwnership === undefined
+      ? {}
+      : { paintOwnershipPlanId: input.paintOwnership.id }),
     canonical,
     apply(progress: number) {
       if (retired) {
@@ -249,6 +262,8 @@ function createKpLogProductHomomorphicTrackProjection(input: {
   readonly semanticMotion: KpCompiledSemanticMotionChoreography;
   readonly sourceEndpoint: KpLogProductNativeEndpoint;
   readonly targetEndpoint: KpLogProductNativeEndpoint;
+  readonly paintOwnership?:
+    KpCompiledLogProductEquivalencePaintOwnershipV2 | undefined;
 }): KpNativeKatexTrackProjection {
   const semanticProjection = createKpNativeKatexSemanticMotionTrackProjection(
     input.semanticMotion,
@@ -271,7 +286,7 @@ function createKpLogProductHomomorphicTrackProjection(input: {
         target: projectionInput.target,
         plan: homomorphicHandoff
       });
-      return applyKpNativeKatexFunctionWrapReception({
+      const wrappedTracks = applyKpNativeKatexFunctionWrapReception({
         tracks: handoffTracks,
         source: projectionInput.source,
         target: projectionInput.target,
@@ -283,6 +298,14 @@ function createKpLogProductHomomorphicTrackProjection(input: {
         horizontalSqueezeTreatment:
           kpNativeKatexLogProductHomomorphicProfile.horizontalSqueeze
       });
+      return input.paintOwnership === undefined
+        ? wrappedTracks
+        : applyKpNativeKatexLogProductEquivalencePaintOwnershipV2({
+            tracks: wrappedTracks,
+            source: projectionInput.source,
+            target: projectionInput.target,
+            plan: input.paintOwnership
+          });
     }
   });
 }
@@ -294,6 +317,8 @@ function assertTransitInput(input: {
   readonly targetEndpoint: KpLogProductNativeEndpoint;
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
+  readonly paintOwnership?:
+    KpCompiledLogProductEquivalencePaintOwnershipV2 | undefined;
 }): void {
   if (!isKpCompiledLogProductOperation(input.operation)) {
     throw new Error("Log-product transit requires nominal compiler authority.");
@@ -317,6 +342,15 @@ function assertTransitInput(input: {
     input.source.stage !== input.target.stage
   ) {
     throw new Error("Log-product transit has crossed endpoint or stage authority.");
+  }
+  if (input.paintOwnership !== undefined &&
+      (!isKpCompiledLogProductEquivalencePaintOwnershipV2(
+        input.paintOwnership
+      ) || input.paintOwnership.operationId !==
+        input.operation.transformation.id)) {
+    throw new Error(
+      "Log-product equivalence paint ownership must match the operation."
+    );
   }
 }
 

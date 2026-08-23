@@ -399,6 +399,34 @@
       "scope": "slice-19-log-occurrences",
       "checkedAt": "2026-08-23T07:03:16.724Z",
       "notes": "All TypeScript, Svelte, and domain type boundaries pass."
+    },
+    {
+      "command": "npm run test:log-product-equivalence-paint-ownership-v2",
+      "status": "passed",
+      "scope": "slice-20-log-paint-ownership",
+      "checkedAt": "2026-08-23T07:14:32.851Z",
+      "notes": "Ten tests prove compiled exclusive ownership, frozen retained syntax, all-target construction, nominal authority, and preservation of the existing binary and multi-factor handoff contracts."
+    },
+    {
+      "command": "npm run visual:log-product-equivalence-frame",
+      "status": "passed",
+      "scope": "slice-20-log-paint-ownership",
+      "checkedAt": "2026-08-23T07:14:33.853Z",
+      "notes": "Three single-worker Chromium checks prove the frame mounts, retained source ln and shells have zero visible live owners during transit, target native ownership settles, rewind works, reduced motion works, and narrow layout stays bounded."
+    },
+    {
+      "command": "npm run check:equation-governance-v2",
+      "status": "passed",
+      "scope": "slice-20-log-paint-ownership",
+      "checkedAt": "2026-08-23T07:14:34.861Z",
+      "notes": "The occurrence compiler, paint compiler, renderer projection, semantic frame, and specialized surface remain inside the v2 equation ownership gate."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-20-log-paint-ownership",
+      "checkedAt": "2026-08-23T07:14:35.825Z",
+      "notes": "All TypeScript, Svelte, and domain type boundaries pass."
     }
   ],
   "progress": {

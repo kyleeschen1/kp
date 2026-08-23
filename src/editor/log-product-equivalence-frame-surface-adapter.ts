@@ -194,7 +194,8 @@ async function prepareSurface(
       sourceEndpoint: kpCanonicalLogProductNativeEndpoints[0],
       targetEndpoint: kpCanonicalLogProductNativeEndpoints[1],
       source,
-      target
+      target,
+      paintOwnership: kpLogProductEquivalenceFrame.paintOwnership
     });
     session.stage.dataset["kpLogProductEquivalenceStage"] = "ready";
     applyFrame(session, session.pendingState);

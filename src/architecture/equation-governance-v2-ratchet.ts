@@ -91,7 +91,7 @@ export function checkKpEquationGovernanceV2Ratchets(
 
 function participatesInV2(file: KpEquationGovernanceV2SourceFile): boolean {
   return v2AuthorityPaths.has(file.path) ||
-    /(?:equation-(?:evaluation-authority-registry|grammar|presentation-plan|projection-choreography|transit-obligations|typography-policy)-v2|equation-measured-route-certificate-v2|native-katex-endpoint-typography-v2)/u.test(
+    /(?:equation-(?:evaluation-authority-registry|grammar|presentation-plan|projection-choreography|transit-obligations|typography-policy)-v2|equation-measured-route-certificate-v2|log-product-equivalence-(?:occurrences|paint-ownership)-v2|native-katex-endpoint-typography-v2)/u.test(
       file.source
     );
 }

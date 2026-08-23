@@ -83,7 +83,10 @@ export function compileKpLogProductEquivalenceOccurrencesV2(input: {
   }
   const records = correspondenceMap.records;
   const provenanceCopies = family.factors.map((factor) => {
-    const wrapperSemanticIds = new Set(Object.values(factor.targetWrapper));
+    const wrapperSemanticIds = new Set([
+      ...Object.values(factor.targetWrapper),
+      factor.semanticId
+    ]);
     const targetEntityIds = targetNodes
       .filter(({ semanticId }) => wrapperSemanticIds.has(semanticId))
       .map(({ id }) => id);

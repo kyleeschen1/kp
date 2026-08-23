@@ -7,6 +7,10 @@ import {
   compileKpLogProductEquivalenceOccurrencesV2,
   type KpCompiledLogProductEquivalenceOccurrencesV2
 } from "../domain-ir/log-product-equivalence-occurrences-v2.ts";
+import {
+  compileKpLogProductEquivalencePaintOwnershipV2,
+  type KpCompiledLogProductEquivalencePaintOwnershipV2
+} from "../domain-ir/log-product-equivalence-paint-ownership-v2.ts";
 import { kpCanonicalCompiledLogProductOperation } from
   "./log-product-transformation-compiler.ts";
 
@@ -31,6 +35,7 @@ export type KpVerifiedLogProductEquivalenceFrame = Readonly<{
   targetLatex: string;
   projection: KpVerifiedStateRetentionProjection;
   occurrences: KpCompiledLogProductEquivalenceOccurrencesV2;
+  paintOwnership: KpCompiledLogProductEquivalencePaintOwnershipV2;
   readonly [kpVerifiedLogProductEquivalenceFrameBrand]: true;
 }>;
 
@@ -81,6 +86,9 @@ KpVerifiedLogProductEquivalenceFrame {
     relationEntityId: "selector.log-product-equivalence.relation",
     operation
   });
+  const paintOwnership = compileKpLogProductEquivalencePaintOwnershipV2({
+    occurrences
+  });
   const frame = Object.freeze({
     schemaVersion: "kp.log-product-equivalence-frame.v1" as const,
     kind: "verified-log-product-equivalence-frame" as const,
@@ -90,7 +98,8 @@ KpVerifiedLogProductEquivalenceFrame {
     relationLatex: "=" as const,
     targetLatex: target.latex,
     projection,
-    occurrences
+    occurrences,
+    paintOwnership
   }) as KpVerifiedLogProductEquivalenceFrame;
   verifiedFrames.add(frame);
   return frame;

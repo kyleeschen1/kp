@@ -55,6 +55,12 @@ test("equivalence frame retains context around the canonical log transition",
     );
     await expect(relation).toBeVisible();
     expect(await visibleMaterialOwnerCount(stage)).toBeGreaterThan(0);
+    const retainedSyntaxOwners = stage.locator(
+      '[data-kp-equation-material-semantic-entity-id="source.log.operator"], ' +
+      '[data-kp-equation-material-semantic-entity-id="source.log.open"], ' +
+      '[data-kp-equation-material-semantic-entity-id="source.log.close"]'
+    );
+    expect(await visibleOwnerCount(retainedSyntaxOwners)).toBe(0);
     expect(await source.textContent()).toBe(sourceText);
     expect(await source.boundingBox()).toEqual(sourceRect);
 
@@ -131,7 +137,13 @@ test("equivalence frame keeps both expressions within a narrow viewport",
   });
 
 async function visibleMaterialOwnerCount(stage: Locator): Promise<number> {
-  return stage.locator("[data-kp-equation-material-owner-id]").evaluateAll(
+  return visibleOwnerCount(
+    stage.locator("[data-kp-equation-material-owner-id]")
+  );
+}
+
+async function visibleOwnerCount(owners: Locator): Promise<number> {
+  return owners.evaluateAll(
     (owners) => owners.filter((owner) => {
       const style = getComputedStyle(owner);
       return style.visibility !== "hidden" && Number(style.opacity) > 0;
