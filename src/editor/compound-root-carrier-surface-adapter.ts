@@ -1,6 +1,9 @@
 import {
+  createKpCompoundRootCarrierAnimationAsset,
   kpCompoundRootCarrierAnimationId
 } from "../animation/compound-root-carrier-adapter.ts";
+import { compileKpFractionRootMigrationV2 } from
+  "../domain-ir/fraction-root-migration-v2.ts";
 import {
   kpCompoundRootCarrierNativeEndpoints
 } from "../rendering/compound-root-carrier-native-endpoints.ts";
@@ -51,6 +54,9 @@ interface KpCompoundRootCarrierSurfaceSession {
 
 const sessions = new WeakMap<HTMLElement,
   KpCompoundRootCarrierSurfaceSession>();
+const canonicalGovernance = compileKpFractionRootMigrationV2(
+  createKpCompoundRootCarrierAnimationAsset()
+);
 
 export const kpEditorCompoundRootCarrierSurfaceAdapter = Object.freeze({
   id: "editor-animation-surface.root.compound-carrier.canonical-native-katex",
@@ -89,6 +95,8 @@ function mountSurface(
   stage.dataset["kpCompoundRootCarrierStage"] = "preparing";
   stage.dataset["kpCompoundRootCarrierAnimationId"] =
     kpCompoundRootCarrierAnimationId;
+  stage.dataset["kpEquationPresentationPlanId"] =
+    canonicalGovernance.presentationPlan.id;
   stage.setAttribute(
     "aria-label",
     "The square root of the square of x plus one becomes its absolute value"

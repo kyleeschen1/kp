@@ -6,6 +6,7 @@ import {
 import type {
   KpCanonicalOperationRole
 } from "../semantic/canonical-operation.ts";
+import type { CorrespondenceMap } from "../semantic/correspondence.ts";
 import {
   compileKpEquationGrammarV2,
   type KpCompiledEquationGrammarV2,
@@ -26,6 +27,7 @@ export interface KpEquationAssetMigrationOperationV2 {
   readonly semanticClass: KpEquationGrammarOperationV2["semanticClass"];
   readonly roleBindings: Readonly<Record<string, readonly string[]>>;
   readonly projectionIntent: KpEquationProjectionIntentV2;
+  readonly correspondenceMap?: CorrespondenceMap | undefined;
 }
 
 export interface KpEquationAssetMigrationV2 {
@@ -83,11 +85,12 @@ export function compileKpEquationAssetMigrationV2(input: {
   }> = [];
   const transitions = input.animation.transformations.map(
     (transformation, index) => {
-      const correspondenceMap = transformation.correspondenceMap;
+      const operation = operationsByTransformationId.get(transformation.id)!;
+      const correspondenceMap = operation.correspondenceMap ??
+        transformation.correspondenceMap;
       if (correspondenceMap === undefined) {
         fail(`${transformation.id} requires semantic correspondence.`);
       }
-      const operation = operationsByTransformationId.get(transformation.id)!;
       const entry = requiredOperation(operation.operationId);
       collectOperationPack(entry.packId, operationPacks);
       const sourceObjects = objectsById(

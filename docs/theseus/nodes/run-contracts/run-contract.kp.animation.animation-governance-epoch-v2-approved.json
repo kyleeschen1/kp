@@ -202,7 +202,8 @@
     {
       "id": "migrate-fraction-root",
       "title": "migrate-fraction-root",
-      "status": "planned"
+      "summary": "Migrated seven fraction, radical, root, and compound-carrier callers through typed equation grammar v2 while preserving reviewed renderers. Added operation and evaluation authority, compatibility correspondence, generic dispatch for generated callers, conformance regeneration, focused semantic/architecture/type checks, and sequential visual preservation.",
+      "status": "complete"
     },
     {
       "id": "migrate-binders-matrices",

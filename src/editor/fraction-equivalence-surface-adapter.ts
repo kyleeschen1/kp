@@ -1,10 +1,13 @@
 /// <reference types="vite/client" />
 
 import {
+  createKpFractionEquivalenceExemplarAsset,
   kpCompactFractionEquivalenceExemplarId,
   kpFractionEquivalenceExemplarId
 } from
   "../animation/fraction-equivalence-exemplar.ts";
+import { compileKpFractionRootMigrationV2 } from
+  "../domain-ir/fraction-root-migration-v2.ts";
 import {
   kpCanonicalCompactFractionEquivalencePresentationPlan,
   kpCanonicalFractionEquivalencePresentationPlan,
@@ -51,6 +54,14 @@ interface KpFractionEquivalenceSurfaceSession {
 
 const sessions = new WeakMap<HTMLElement,
   KpFractionEquivalenceSurfaceSession>();
+const governanceByMode = Object.freeze({
+  "explain-unit-factor": compileKpFractionRootMigrationV2(
+    createKpFractionEquivalenceExemplarAsset("explain-unit-factor")
+  ),
+  "compact-paired-operation": compileKpFractionRootMigrationV2(
+    createKpFractionEquivalenceExemplarAsset("compact-paired-operation")
+  )
+});
 
 export const kpEditorFractionEquivalenceSurfaceAdapter = Object.freeze({
   id: "editor-animation-surface.fraction-equivalence.canonical-native-katex",
@@ -95,6 +106,8 @@ function mountSurface(
   stage.className = "kp-fraction-equivalence-stage";
   stage.dataset["kpFractionEquivalenceStage"] = "preparing";
   stage.dataset["kpFractionEquivalencePresentationMode"] = mode;
+  stage.dataset["kpEquationPresentationPlanId"] =
+    governanceByMode[mode].presentationPlan.id;
   stage.setAttribute("aria-label", "Equivalent fraction scaling");
   const createRoot = (
     endpoint: typeof kpCanonicalFractionEquivalenceNativeEndpoints[number],

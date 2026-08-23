@@ -1,11 +1,14 @@
 /// <reference types="vite/client" />
 
 import {
+  createKpCommonDenominatorPressureAnimationAsset,
   kpCommonDenominatorPressureAnimationId,
   kpCommonDenominatorPressureTimeline,
   sampleKpCommonDenominatorPressureTimeline,
   type KpCommonDenominatorPressureTimelineSegment
 } from "../animation/common-denominator-pressure-exemplar.ts";
+import { compileKpFractionRootMigrationV2 } from
+  "../domain-ir/fraction-root-migration-v2.ts";
 import {
   createKpAdjacentPhaseEquivalentPoseSeamIntent
 } from "../animation/paint-continuity-plan-types.ts";
@@ -53,6 +56,10 @@ import type { KpEditorAnimationPlayerState } from
   "./animation-player-state.ts";
 import type { KpEditorAnimationSurfaceAdapter } from
   "./animation-surface-adapter-registry.ts";
+
+const canonicalGovernance = compileKpFractionRootMigrationV2(
+  createKpCommonDenominatorPressureAnimationAsset()
+);
 
 interface KpCommonDenominatorPressureSurfaceSession {
   readonly player: HTMLElement;
@@ -132,6 +139,8 @@ function mountSurface(
   const stage = document.createElement("section");
   stage.className = "kp-common-denominator-pressure-stage";
   stage.dataset["kpCommonDenominatorPressureStage"] = "preparing";
+  stage.dataset["kpEquationPresentationPlanId"] =
+    canonicalGovernance.presentationPlan.id;
   stage.setAttribute(
     "aria-label",
     "Give one third a denominator of six"

@@ -1,6 +1,9 @@
 import {
+  createKpEvenRootSolveAnimationAsset,
   kpEvenRootSolveAnimationId
 } from "../animation/even-root-solve-adapter.ts";
+import { compileKpFractionRootMigrationV2 } from
+  "../domain-ir/fraction-root-migration-v2.ts";
 import {
   createKpEvenRootSolveExemplar
 } from "../semantic/even-root-solve-exemplar.ts";
@@ -34,6 +37,9 @@ import type { KpEditorAnimationSurfaceAdapter } from
 
 const exemplar = createKpEvenRootSolveExemplar();
 const endpoints = createKpEvenRootNativeEndpoints(exemplar);
+const canonicalGovernance = compileKpFractionRootMigrationV2(
+  createKpEvenRootSolveAnimationAsset()
+);
 const INVERSE_POWER_END = 0.58;
 
 interface KpEvenRootSurfaceSession {
@@ -99,6 +105,8 @@ function mountSurface(
   stage.className = "kp-root-rewrite-stage kp-even-root-stage";
   stage.dataset["kpEvenRootStage"] = "preparing";
   stage.dataset["kpEvenRootAnimationId"] = kpEvenRootSolveAnimationId;
+  stage.dataset["kpEquationPresentationPlanId"] =
+    canonicalGovernance.presentationPlan.id;
   stage.setAttribute("aria-label", "Solve x squared equals nine over the reals");
   const roots = [
     createEndpointRoot(document, endpoints.inversePower.source, true),

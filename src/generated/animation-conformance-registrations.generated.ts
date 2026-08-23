@@ -64,16 +64,16 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.algebra.radical.compound-carrier-normalization",
     "packId": "algebra",
     "manifestId": "manifest.animation.algebra.radical.compound-carrier-normalization",
-    "policyEpochId": "policy.animation.legacy.v1",
-    "disposition": "compatibility"
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
+    "disposition": "conformant"
   },
   {
     "kind": "manifest-ref",
     "assetId": "animation.algebra.radical.solve-x-squared-nine",
     "packId": "algebra",
     "manifestId": "manifest.animation.algebra.radical.solve-x-squared-nine",
-    "policyEpochId": "policy.animation.legacy.v1",
-    "disposition": "compatibility"
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
+    "disposition": "conformant"
   },
   {
     "kind": "manifest-ref",
@@ -136,7 +136,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
     "packId": "algebra",
     "manifestId": "manifest.animation.equation.fraction-equivalence.common-denominator-pressure.v1",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -144,7 +144,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.equation.fraction-equivalence.compact.v1",
     "packId": "algebra",
     "manifestId": "manifest.animation.equation.fraction-equivalence.compact.v1",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -152,7 +152,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.equation.fraction-equivalence.v1",
     "packId": "algebra",
     "manifestId": "manifest.animation.equation.fraction-equivalence.v1",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -240,7 +240,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.generated.fraction-expression.two-fourths",
     "packId": "algebra",
     "manifestId": "manifest.animation.generated.fraction-expression.two-fourths",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -296,7 +296,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.generated.radical.square-root-as-power",
     "packId": "algebra",
     "manifestId": "manifest.animation.generated.radical.square-root-as-power",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {

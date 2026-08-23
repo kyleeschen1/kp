@@ -101,7 +101,85 @@ export const kpEquationLawOperationDefinitions = Object.freeze([
     "operation.equation.exponential-difference-to-quotient.v1",
     "difference",
     "quotient"
-  )
+  ),
+  operation({
+    id: "kp.algebra.scale-fraction-equivalently",
+    title: "Scale a fraction equivalently",
+    summary: "Copy one nonzero factor into numerator and denominator roles.",
+    transformType: "scaleFractionEquivalently",
+    canonicalComposition: ["kp.core.persist", "kp.core.fan-out"],
+    authoringRoles: [
+      entity("fraction-before", "source"),
+      entity("scale-factor", "source"),
+      entity("fraction-after", "target"),
+      entity("scale-factor-copies", "target", "one-or-more")
+    ]
+  }),
+  operation({
+    id: "kp.algebra.introduce-unit-factor",
+    title: "Introduce a unit fraction factor",
+    summary: "Preserve an expression while introducing one verified unit factor.",
+    transformType: "introduceUnitFactor",
+    canonicalComposition: ["kp.core.persist", "kp.core.introduce"],
+    authoringRoles: [
+      entity("expression-before", "source"),
+      entity("expression-after", "target"),
+      entity("unit-factor-after", "target")
+    ]
+  }),
+  operation({
+    id: "kp.algebra.align-common-denominator",
+    title: "Align a common denominator",
+    summary: "Preserve both addends while joining the unit factor into one fraction.",
+    transformType: "alignCommonDenominator",
+    canonicalComposition: ["kp.core.persist", "kp.core.reorder"],
+    authoringRoles: [
+      entity("staged-expression", "source"),
+      entity("aligned-expression", "target")
+    ]
+  }),
+  operation({
+    id: "operation.equation.apply-inverse-power.v1",
+    title: "Apply an inverse power",
+    summary: "Move a power into root-index structure and expose every valid branch.",
+    transformType: "operation.equation.apply-inverse-power.v1",
+    canonicalComposition: [
+      "kp.core.persist", "kp.core.reorder", "kp.core.introduce"
+    ],
+    authoringRoles: [
+      entity("equation-before", "source"),
+      entity("exponent-before", "source"),
+      entity("equation-after", "target"),
+      entity("root-index-after", "target"),
+      entity("branches-after", "target", "one-or-more")
+    ]
+  }),
+  operation({
+    id: "operation.arithmetic.evaluate-real-root.v1",
+    title: "Evaluate a real root",
+    summary: "Evaluate one real radical expression while preserving its branch operator.",
+    transformType: "operation.arithmetic.evaluate-real-root.v1",
+    canonicalComposition: ["kp.core.persist", "kp.core.merge"],
+    authoringRoles: [
+      entity("operands-before", "source", "one-or-more"),
+      entity("result-after", "target")
+    ]
+  }),
+  operation({
+    id: "operation.root.compound-carrier-normalization",
+    title: "Normalize a compound even-root carrier",
+    summary: "Preserve one compound carrier while radical syntax becomes absolute-value syntax.",
+    transformType: "compound-carrier-normalization",
+    canonicalComposition: [
+      "kp.core.persist", "kp.core.eliminate", "kp.core.introduce"
+    ],
+    authoringRoles: [
+      entity("carrier-before", "source"),
+      artifact("root-shell-before", "source", "one-or-more"),
+      entity("carrier-after", "target"),
+      artifact("absolute-shell-after", "target", "one-or-more")
+    ]
+  })
 ]);
 
 export const kpEquationLawOperationPack = createKpCanonicalOperationPack({

@@ -91,6 +91,34 @@ readonly KpEquationGovernanceV2MigrationDeclaration[] = Object.freeze([
     [
       "animation.linear-solve.solve-x",
       "editor-animation-surface.equation.katex"
+    ],
+    [
+      "animation.algebra.radical.compound-carrier-normalization",
+      "editor-animation-surface.root.compound-carrier.canonical-native-katex"
+    ],
+    [
+      "animation.algebra.radical.solve-x-squared-nine",
+      "editor-animation-surface.even-root.canonical-native-katex"
+    ],
+    [
+      "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+      "editor-animation-surface.fraction-equivalence.common-denominator-pressure"
+    ],
+    [
+      "animation.equation.fraction-equivalence.compact.v1",
+      "editor-animation-surface.fraction-equivalence.canonical-native-katex"
+    ],
+    [
+      "animation.equation.fraction-equivalence.v1",
+      "editor-animation-surface.fraction-equivalence.canonical-native-katex"
+    ],
+    [
+      "animation.generated.fraction-expression.two-fourths",
+      "editor-animation-surface.equation.katex"
+    ],
+    [
+      "animation.generated.radical.square-root-as-power",
+      "editor-animation-surface.equation.katex"
     ]
   ].map(([assetId, adapterId]) => structuralDeclaration(
     assetId!,

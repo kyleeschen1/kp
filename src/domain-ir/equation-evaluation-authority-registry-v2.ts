@@ -16,7 +16,8 @@ export type KpEquationEvaluationKindV2 =
   | "sum"
   | "cancellation"
   | "identity"
-  | "successor";
+  | "successor"
+  | "root";
 
 export type KpEquationEvaluationPresentationAuthorityV2 =
   | {
@@ -91,11 +92,13 @@ export const kpEquationEvaluationAuthorityRegistryV2 =
         evaluationKind: "cancellation",
         transformationKinds: [
           "cancelAdditiveInverses",
-          "cancelMultiplicativeInverses"
+          "cancelMultiplicativeInverses",
+          "simplifyUnitFractionFactor"
         ],
         semanticOperationIds: [
           "kp.algebra.cancel-additive-inverses",
-          "kp.algebra.cancel-multiplicative-inverses"
+          "kp.algebra.cancel-multiplicative-inverses",
+          "kp.algebra.simplify-unit-fraction-factor"
         ],
         presentationAuthority: {
           kind: "registered-cancellation",
@@ -103,6 +106,27 @@ export const kpEquationEvaluationAuthorityRegistryV2 =
           planCompilerId:
             "kp.presentation-plan-compiler.cancellation-operation",
           resultFormation: "survivor-after-annihilation"
+        }
+      },
+      {
+        id: "kp.evaluation-authority.real-root.v2",
+        evaluationKind: "root",
+        transformationKinds: [
+          "operation.arithmetic.evaluate-real-root.v1"
+        ],
+        semanticOperationIds: [
+          "operation.arithmetic.evaluate-real-root.v1"
+        ],
+        presentationAuthority: {
+          kind: "registered-operation-evaluation",
+          // Real-root evaluation reuses contributor fusion as presentation;
+          // the semantic operation remains distinct from multiplication.
+          presentationId: "kp.presentation.operation-evaluation.product",
+          familyProfileId:
+            "kp.evaluation-family.contributor-fusion.v1",
+          planCompilerId:
+            "kp.presentation-plan-compiler.successor-synthesis",
+          resultFormation: "successor-synthesis"
         }
       },
       {

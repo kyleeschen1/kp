@@ -644,6 +644,13 @@
       "scope": "visual preservation",
       "checkedAt": "2026-08-23T16:01:41.011Z",
       "notes": "Stable linear-equation command captured 39 desktop and phone states with reviewed choreography unchanged."
+    },
+    {
+      "command": "npm run verify:equation:fraction-root-governance-v2",
+      "status": "passed",
+      "scope": "slice27 semantic, architecture, type, and visual preservation suite",
+      "checkedAt": "2026-08-23T16:21:58.357Z",
+      "notes": "Passed focused migration tests, fraction equivalence, closed-root, compound-carrier, governance inventory/reverse-dependency/registration, architecture, typecheck, and sequential fraction/even-root/compound visual checks. Existing renderers and choreography remain unchanged."
     }
   ],
   "progress": {

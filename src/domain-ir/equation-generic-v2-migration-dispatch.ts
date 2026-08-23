@@ -3,6 +3,8 @@ import type { KpEquationAssetMigrationV2 } from
   "./equation-asset-migration-v2.ts";
 import { compileKpFunctionWrapMigrationV2 } from
   "./function-wrap-migration-v2.ts";
+import { compileKpFractionRootMigrationV2 } from
+  "./fraction-root-migration-v2.ts";
 import { compileKpGeneratedExponentMigrationV2 } from
   "./generated-exponent-migration-v2.ts";
 import { compileKpLinearOperationMigrationV2 } from
@@ -29,6 +31,13 @@ const compilers = new Map<string, Compiler>([
   ].map((assetId): [string, Compiler] => [
     assetId,
     compileKpLinearOperationMigrationV2
+  ]),
+  ...[
+    "animation.generated.fraction-expression.two-fourths",
+    "animation.generated.radical.square-root-as-power"
+  ].map((assetId): [string, Compiler] => [
+    assetId,
+    compileKpFractionRootMigrationV2
   ])
 ]);
 const cache = new WeakMap<KpAnimationAsset, KpEquationAssetMigrationV2>();
