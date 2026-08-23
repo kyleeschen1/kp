@@ -42,7 +42,8 @@ const materialProgressions = Object.freeze([
   {
     phase: "forward" as const,
     samples: [0, 0.22, 0.34, 0.4, 0.48, 0.54, 0.6, 0.66, 0.72, 1]
-  }
+  },
+  { phase: "return" as const, samples: [0.66, 0.48, 0.34, 0.22, 0] }
 ]);
 const responsiveMaterialProgressions = Object.freeze([
   { phase: "forward" as const, samples: [0.22, 0.48, 0.6, 0.72] }
@@ -55,6 +56,7 @@ const captureCases = Object.freeze([
     presentation: baselinePresentation,
     viewport: { width: 1_240, height: 760 } as const,
     colorScheme: "dark" as const,
+    reducedMotion: "no-preference" as const,
     progressions: animation.progressions
   })),
   Object.freeze({
@@ -63,6 +65,7 @@ const captureCases = Object.freeze([
     presentation: materialPresentation,
     viewport: { width: 1_240, height: 760 } as const,
     colorScheme: "dark" as const,
+    reducedMotion: "no-preference" as const,
     progressions: materialProgressions
   }),
   Object.freeze({
@@ -71,6 +74,7 @@ const captureCases = Object.freeze([
     presentation: materialPresentation,
     viewport: { width: 390, height: 844 } as const,
     colorScheme: "dark" as const,
+    reducedMotion: "no-preference" as const,
     progressions: responsiveMaterialProgressions
   }),
   Object.freeze({
@@ -79,7 +83,30 @@ const captureCases = Object.freeze([
     presentation: Object.freeze({ ...materialPresentation, theme: "light" }),
     viewport: { width: 1_240, height: 760 } as const,
     colorScheme: "light" as const,
+    reducedMotion: "no-preference" as const,
     progressions: responsiveMaterialProgressions
+  }),
+  Object.freeze({
+    id: "no-depth-wide-dark",
+    animation: animations[0],
+    presentation: Object.freeze({ ...materialPresentation, focus: "no-depth" }),
+    viewport: { width: 1_240, height: 760 } as const,
+    colorScheme: "dark" as const,
+    reducedMotion: "no-preference" as const,
+    progressions: Object.freeze([
+      { phase: "forward" as const, samples: [0.48] }
+    ])
+  }),
+  Object.freeze({
+    id: "material-reduced-motion-dark",
+    animation: animations[0],
+    presentation: materialPresentation,
+    viewport: { width: 1_240, height: 760 } as const,
+    colorScheme: "dark" as const,
+    reducedMotion: "reduce" as const,
+    progressions: Object.freeze([
+      { phase: "forward" as const, samples: [0.48] }
+    ])
   })
 ]);
 
@@ -89,9 +116,14 @@ interface CaptureEvidence {
   readonly animationId: string;
   readonly phase: "forward" | "return";
   readonly progress: number;
+  readonly semanticProgress: number;
   readonly visualOwner: string;
   readonly activeEndpointCount: number;
   readonly visibleMaterialOwnerCount: number;
+  readonly treatedMaterialOwnerCount: number;
+  readonly depthMode: string;
+  readonly typography: string;
+  readonly contactShadowDisplay: string;
   readonly visibleMaterialOwnerMetrics: readonly {
     readonly entityId: string;
     readonly fontSize: string;
@@ -119,7 +151,8 @@ async function capture(): Promise<void> {
       const { animation, presentation, viewport } = captureCase;
       const page = await harness.page({
         viewport,
-        colorScheme: captureCase.colorScheme
+        colorScheme: captureCase.colorScheme,
+        reducedMotion: captureCase.reducedMotion ?? "no-preference"
       });
       const url = new URL("/", harness.baseUrl);
       url.searchParams.set("artifact", animation.id);
@@ -136,6 +169,15 @@ async function capture(): Promise<void> {
         `[data-action="seek-editor-animation"]`
       );
       await waitForReady(stage);
+      await assertPresentationRestored({
+        captureCaseId: captureCase.id,
+        page,
+        stage,
+        presentation
+      });
+      if (captureCase.id === "material-wide-dark") {
+        await assertInterruptedSeek({ page, stage, seek });
+      }
 
       for (const progression of captureCase.progressions) {
         for (const progress of progression.samples) {
@@ -146,7 +188,8 @@ async function capture(): Promise<void> {
             stage,
             seek,
             phase: progression.phase,
-            progress
+            progress,
+            acceptSnappedProgress: captureCase.reducedMotion === "reduce"
           });
           evidence.push(captured);
           const image = await readFile(path.resolve(captured.file));
@@ -212,14 +255,21 @@ async function captureSample(input: {
   readonly seek: Locator;
   readonly phase: "forward" | "return";
   readonly progress: number;
+  readonly acceptSnappedProgress: boolean;
 }): Promise<CaptureEvidence> {
   await input.seek.fill(String(input.progress));
-  await input.page.waitForFunction(({ progress }) => {
+  await input.page.waitForFunction(({ progress, acceptSnappedProgress }) => {
     const stage = document.querySelector<HTMLElement>(
       "[data-kp-log-product-stage]"
     );
-    return Number(stage?.dataset["kpLogProductProgress"]) === progress;
-  }, { progress: input.progress });
+    const actual = Number(stage?.dataset["kpLogProductProgress"]);
+    return acceptSnappedProgress
+      ? actual === 0 || actual === 1
+      : actual === progress;
+  }, {
+    progress: input.progress,
+    acceptSnappedProgress: input.acceptSnappedProgress
+  });
   await input.stage.evaluate(async (root) => {
     await root.ownerDocument.fonts.ready;
     await new Promise<void>((resolve) => requestAnimationFrame(() =>
@@ -233,6 +283,7 @@ async function captureSample(input: {
   const file = path.join(outputRoot, `${id}.png`);
   await input.stage.screenshot({ path: file, animations: "disabled" });
   const state = await input.stage.evaluate((root) => ({
+    semanticProgress: Number(root.dataset["kpLogProductProgress"]),
     visualOwner: root.dataset["kpLogProductVisualOwner"] ?? "",
     activeEndpointCount: [...root.querySelectorAll<HTMLElement>(
       ".kp-log-product-stage__endpoint"
@@ -241,6 +292,19 @@ async function captureSample(input: {
     visibleMaterialOwnerCount: [...root.querySelectorAll<HTMLElement>(
       "[data-kp-equation-material-owner-id]"
     )].filter((owner) => Number(getComputedStyle(owner).opacity) > 0).length,
+    treatedMaterialOwnerCount: root.querySelectorAll(
+      "[data-kp-log-product-material-role]"
+    ).length,
+    depthMode: root.dataset["kpLogProductMaterialDepthMode"] ?? "",
+    typography: root.dataset["kpLogProductTypography"] ?? "",
+    contactShadowDisplay: (() => {
+      const treated = root.querySelector<HTMLElement>(
+        "[data-kp-log-product-material-role]"
+      );
+      return treated === null
+        ? "absent"
+        : getComputedStyle(treated, "::after").display;
+    })(),
     visibleMaterialOwnerMetrics: [...root.querySelectorAll<HTMLElement>(
       "[data-kp-equation-material-owner-id]"
     )].filter((owner) => Number(getComputedStyle(owner).opacity) > 0)
@@ -272,6 +336,18 @@ async function captureSample(input: {
   if (state.activeEndpointCount !== 1) {
     throw new Error(`${id} must expose exactly one accessible equation.`);
   }
+  if (
+    input.captureCaseId.startsWith("no-depth-") &&
+    state.treatedMaterialOwnerCount !== 0
+  ) {
+    throw new Error(`${id} projected material treatment in no-depth mode.`);
+  }
+  if (
+    input.captureCaseId.includes("reduced-motion") &&
+    !["absent", "none"].includes(state.contactShadowDisplay)
+  ) {
+    throw new Error(`${id} retained contact shadow in reduced motion.`);
+  }
   return {
     id,
     captureCaseId: input.captureCaseId,
@@ -281,6 +357,71 @@ async function captureSample(input: {
     ...state,
     file: path.relative(process.cwd(), file)
   };
+}
+
+async function assertPresentationRestored(input: {
+  readonly captureCaseId: string;
+  readonly page: Page;
+  readonly stage: Locator;
+  readonly presentation: {
+    readonly theme: string;
+    readonly style: string;
+    readonly focus: string;
+    readonly view: string;
+  };
+}): Promise<void> {
+  const restored = await input.page.evaluate(() => ({
+    search: location.search,
+    theme: document.documentElement.dataset["theme"] ?? ""
+  }));
+  const params = new URLSearchParams(restored.search);
+  for (const [key, expected] of Object.entries(input.presentation)) {
+    if (params.get(key) !== expected) {
+      throw new Error(
+        `${input.captureCaseId} did not restore ${key}=${expected}.`
+      );
+    }
+  }
+  const stageMode = await input.stage.evaluate((root) => ({
+    depth: root.dataset["kpLogProductMaterialDepthMode"] ?? "",
+    typography: root.dataset["kpLogProductTypography"] ?? ""
+  }));
+  const expected = input.presentation.focus === "elevated"
+    ? { depth: "material", typography: "inline" }
+    : input.presentation.focus === "no-depth"
+      ? { depth: "no-depth", typography: "display" }
+      : { depth: "flat", typography: "display" };
+  if (
+    stageMode.depth !== expected.depth ||
+    stageMode.typography !== expected.typography
+  ) {
+    throw new Error(
+      `${input.captureCaseId} restored ${stageMode.depth}/${stageMode.typography}; ` +
+      `expected ${expected.depth}/${expected.typography}.`
+    );
+  }
+}
+
+async function assertInterruptedSeek(input: {
+  readonly page: Page;
+  readonly stage: Locator;
+  readonly seek: Locator;
+}): Promise<void> {
+  for (const progress of [0.6, 0.34, 0.72]) {
+    await input.seek.fill(String(progress));
+  }
+  await input.page.waitForFunction(() => {
+    const stage = document.querySelector<HTMLElement>(
+      "[data-kp-log-product-stage]"
+    );
+    return Number(stage?.dataset["kpLogProductProgress"]) === 0.72;
+  });
+  const activeEndpointCount = await input.stage.locator(
+    ".kp-log-product-stage__endpoint[aria-hidden=\"false\"]"
+  ).count();
+  if (activeEndpointCount !== 1) {
+    throw new Error("Interrupted seek must retain one accessible endpoint.");
+  }
 }
 
 async function waitForReady(stage: Locator): Promise<void> {

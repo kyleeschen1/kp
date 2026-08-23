@@ -352,6 +352,27 @@
       "scope": "md19 denser causal handoff sampling",
       "checkedAt": "2026-08-23T00:39:45.847Z",
       "notes": "Stable comparison capture now includes 34, 40, 54, and 66 percent material samples around the source-to-target handoff without changing the canonical schedule."
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "failed",
+      "scope": "md20 initial lifecycle harness",
+      "checkedAt": "2026-08-23T00:48:00.475Z",
+      "notes": "The first lifecycle extension exposed a Locator/Page API mistake and then correctly revealed that reduced-motion semantic progress snaps to an endpoint rather than retaining the requested fractional value. The harness now records requested and actual semantic progress separately."
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "passed",
+      "scope": "md20 seek rewind interruption accessibility URL",
+      "checkedAt": "2026-08-23T00:48:01.928Z",
+      "notes": "Stable browser evidence passed forward and descending seeks, abrupt 60-to-34-to-72 interruption, flat/material/no-depth URL restoration, reduced-motion endpoint snapping, contact-shadow suppression, and exactly one accessible Native equation."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "md20 typed lifecycle harness",
+      "checkedAt": "2026-08-23T00:48:02.976Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks passed."
     }
   ],
   "allowedWork": [
@@ -497,7 +518,8 @@
     {
       "id": "md20",
       "title": "Verify seek reverse interruption accessibility and URL restoration",
-      "status": "planned"
+      "summary": "The stable log-product visual harness now verifies seek, descending replay, interruption, presentation URL restoration, reduced motion, no-depth suppression, and single-owner accessibility while retaining requested-versus-semantic progress evidence.",
+      "status": "complete"
     },
     {
       "id": "md21",
