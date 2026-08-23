@@ -275,6 +275,20 @@
       "scope": "md15 typed reception boundary",
       "checkedAt": "2026-08-23T00:11:01.705Z",
       "notes": "Application, Node, tests, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "failed",
+      "scope": "md16 initial cohort guard",
+      "checkedAt": "2026-08-23T00:12:54.370Z",
+      "notes": "The initial connector assertion compared a semantic family ID to an occurrence entity ID; the guard now consumes the authored semantic-motion role binding, matching the production authority layer."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "md16 synchronized generated cohort",
+      "checkedAt": "2026-08-23T00:12:56.333Z",
+      "notes": "48 focused tests passed; logarithm operators, enclosures, target relation, and connector share one reception pose throughout attachment."
     }
   ],
   "allowedWork": [
@@ -396,7 +410,8 @@
     {
       "id": "md16",
       "title": "Synchronize generated logarithms and connector with reception",
-      "status": "planned"
+      "summary": "Generated logarithm operators, enclosing parentheses, and the plus connector now have an executable one-cohort reception invariant backed by authored semantic role IDs.",
+      "status": "complete"
     },
     {
       "id": "md17",

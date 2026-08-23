@@ -5,7 +5,8 @@ import {
   sampleKpSemanticMotionChoreography
 } from "../src/domain-ir/semantic-motion-choreography-compiler.ts";
 import {
-  kpCanonicalCompiledLogProductSemanticMotion
+  kpCanonicalCompiledLogProductSemanticMotion,
+  kpCanonicalLogProductSemanticMotionRequest
 } from "../src/semantic/log-product-semantic-motion.ts";
 import {
   sampleKpLogProductMaterialDepthChoreography
@@ -231,5 +232,51 @@ test("material enclosure reception decorates the canonical function-wrap plan", 
   assert.equal(
     poses["role.material.log-product.target-enclosure"].plane,
     "active"
+  );
+});
+
+test("generated logarithms enclosures and connector rise as one reception cohort", () => {
+  const attachment = kpCanonicalCompiledLogProductSemanticMotion.tracks.find(
+    ({ eventId }) => eventId === "event.log-product.attach-target"
+  )!;
+  for (const fraction of [0.25, 0.5, 0.75]) {
+    const progress = attachment.window.start +
+      (attachment.window.end - attachment.window.start) * fraction;
+    const poses = sampleKpLogProductMaterialDepthChoreography({
+      mode: "material",
+      choreography: sample(progress)
+    });
+    const enclosure = poses["role.material.log-product.target-enclosure"];
+    assert.deepEqual(
+      poses["role.material.log-product.target-application-syntax"],
+      enclosure
+    );
+    assert.deepEqual(
+      poses["role.material.log-product.target-relation"],
+      enclosure
+    );
+  }
+
+  const byRole = new Map(kpCanonicalLogProductMaterialRoleBindings.map(
+    (binding) => [binding.roleId, binding] as const
+  ));
+  const semanticRoles = kpCanonicalCompiledLogProductOperation.contract.family;
+  assert.deepEqual(
+    new Set(byRole.get(
+      "role.material.log-product.target-application-syntax"
+    )!.entityIds),
+    new Set(semanticRoles.factors.map(({ targetWrapperOccurrenceId }) =>
+      `${targetWrapperOccurrenceId}.operator`
+    ))
+  );
+  assert.deepEqual(
+    new Set(byRole.get("role.material.log-product.target-relation")!
+      .entityIds),
+    new Set([
+      ...kpCanonicalLogProductSemanticMotionRequest.operation
+        .roleBindings["target-sum"]!,
+      ...kpCanonicalLogProductSemanticMotionRequest.operation
+        .roleBindings.connector!
+    ])
   );
 });
