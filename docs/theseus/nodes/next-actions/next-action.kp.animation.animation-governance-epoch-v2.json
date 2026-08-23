@@ -350,6 +350,34 @@
       "scope": "focused",
       "checkedAt": "2026-08-23T06:46:46.454Z",
       "notes": "All repository type boundaries pass with the generic nominal plan and typed domain extension point."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-governance-v2-ratchet.test.ts",
+      "status": "passed",
+      "scope": "slice-18-architecture-ratchets",
+      "checkedAt": "2026-08-23T06:55:39.921Z",
+      "notes": "Adversarial checks cover raw route and timing, display mode, CSS clocks, evaluation bypass, adapter bypass, and prove graph/code/3D exclusion."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-18-architecture-ratchets",
+      "checkedAt": "2026-08-23T06:55:40.955Z",
+      "notes": "All repository architecture gates pass with the equation-governance v2 closure enabled."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-18-architecture-ratchets",
+      "checkedAt": "2026-08-23T06:55:42.019Z",
+      "notes": "TypeScript, Svelte, and domain type checks pass."
+    },
+    {
+      "command": "npm run verify:equation:boundary",
+      "status": "failed",
+      "scope": "slice-18-preexisting-derivative-baseline",
+      "checkedAt": "2026-08-23T06:55:43.017Z",
+      "notes": "The boundary suite stops on the already deferred derivative power-rule preservation mismatch: current one-step exemplar differs from stale two-step snapshots. Slice 18 did not modify derivative semantics or assets; derivative remains explicitly deferred to slice 30."
     }
   ],
   "progress": {

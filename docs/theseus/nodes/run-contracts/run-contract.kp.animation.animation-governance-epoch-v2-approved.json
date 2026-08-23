@@ -148,7 +148,8 @@
     {
       "id": "architecture-ratchets",
       "title": "architecture-ratchets",
-      "status": "planned"
+      "summary": "Added an equation-governance v2 source gate: opted-in callers cannot own measured routes, timing, display mode, CSS clocks, evaluation resolution, or lower-layer compilation. Exact owners remain explicit, legacy debt is inventoried until migration, and graph/code/3D sources are demonstrably excluded.",
+      "status": "complete"
     },
     {
       "id": "log-occurrences",

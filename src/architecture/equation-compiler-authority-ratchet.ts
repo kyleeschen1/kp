@@ -78,6 +78,10 @@ const directSamplerPaths = paths([
   "src/animation/inequality-pivot-choreography.ts",
   "src/animation/linear-rearrangement-choreography.ts",
   "src/animation/log-exponent-timeline.ts",
+  // These legacy log-product samplers are explicitly inventoried until the
+  // family enters the v2 presentation-plan closure in the next migration.
+  "src/animation/log-product-material-depth-choreography.ts",
+  "src/animation/log-product-material-depth-pose.ts",
   "src/animation/matrix-linear-map-frame.ts",
   "src/animation/matrix-matrix-composition-choreography.ts",
   "src/animation/matrix-matrix-composition-progress.ts",
@@ -96,6 +100,9 @@ const directSamplerPaths = paths([
   "src/rendering/equation-matrix-vector-composition.ts",
   "src/rendering/equation-motion-path-planner.ts",
   "src/rendering/equation-motion-quality.ts",
+  // The v2 route certificate exposes pure sampling only after renderer-owned
+  // measurement, collision, settlement, and paint evidence are certified.
+  "src/rendering/equation-measured-route-certificate-v2.ts",
   "src/rendering/equation-motif-accessibility.ts",
   "src/rendering/equation-representational-succession.ts",
   "src/rendering/equation-semantic-depth.ts",
