@@ -235,6 +235,7 @@
     "test:equation-transit-obligations-v2": "node --disable-warning=ExperimentalWarning --test tests/equation-transit-obligations-v2.test.ts",
     "test:equation-measured-route-certificate-v2": "node --disable-warning=ExperimentalWarning --test tests/equation-measured-route-certificate-v2.test.ts",
     "test:equation-presentation-plan-v2": "node --disable-warning=ExperimentalWarning --test tests/equation-presentation-plan-v2.test.ts",
+    "test:log-product-equivalence-occurrences-v2": "node --disable-warning=ExperimentalWarning --test tests/log-product-equivalence-occurrences-v2.test.ts tests/log-product-equivalence-frame.test.ts",
     "check:equation-asset-manifest": "node --disable-warning=ExperimentalWarning scripts/generate-equation-asset-manifest.ts --check",
     "test:equation-asset-manifest": "node --disable-warning=ExperimentalWarning --test tests/equation-asset-manifest.test.ts tests/animation-library-display-catalog-generation.test.ts",
     "test:animation-capability-plan": "node --disable-warning=ExperimentalWarning --test tests/animation-capability-plan.test.ts tests/equation-animation-capability-plan.test.ts tests/cross-domain-animation-capability-plan.test.ts",

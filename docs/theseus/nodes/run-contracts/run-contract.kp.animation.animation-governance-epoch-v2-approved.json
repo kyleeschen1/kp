@@ -154,7 +154,8 @@
     {
       "id": "log-occurrences",
       "title": "log-occurrences",
-      "status": "planned"
+      "summary": "Compiled explicit renderer-neutral occurrence identity for the log-product equivalence: one retained witness, one equality, one derived provenance copy per factor, and one native target. Binary and multi-factor shapes derive from canonical correspondence, and every retained/derived/target occurrence has distinct paint identity without changing timing or routes.",
+      "status": "complete"
     },
     {
       "id": "log-paint-ownership",

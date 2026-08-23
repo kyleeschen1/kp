@@ -3,6 +3,10 @@ import {
   isKpVerifiedStateRetentionProjection,
   type KpVerifiedStateRetentionProjection
 } from "../domain-ir/state-retention-projection.ts";
+import {
+  compileKpLogProductEquivalenceOccurrencesV2,
+  type KpCompiledLogProductEquivalenceOccurrencesV2
+} from "../domain-ir/log-product-equivalence-occurrences-v2.ts";
 import { kpCanonicalCompiledLogProductOperation } from
   "./log-product-transformation-compiler.ts";
 
@@ -12,9 +16,9 @@ export const KP_LOG_PRODUCT_EQUIVALENCE_FRAME_ANIMATION_ID =
   "animation.algebra.log-product.equivalence-frame" as const;
 
 export const kpLogProductEquivalenceFrameOccurrenceIds = Object.freeze({
-  source: "occurrence.log-product-equivalence.source",
-  relation: "occurrence.log-product-equivalence.relation",
-  target: "occurrence.log-product-equivalence.target"
+  source: "occurrence.log-product-equivalence.retained-witness",
+  relation: "occurrence.log-product-equivalence.equality",
+  target: "occurrence.log-product-equivalence.native-target"
 } as const);
 
 export type KpVerifiedLogProductEquivalenceFrame = Readonly<{
@@ -26,6 +30,7 @@ export type KpVerifiedLogProductEquivalenceFrame = Readonly<{
   relationLatex: "=";
   targetLatex: string;
   projection: KpVerifiedStateRetentionProjection;
+  occurrences: KpCompiledLogProductEquivalenceOccurrencesV2;
   readonly [kpVerifiedLogProductEquivalenceFrameBrand]: true;
 }>;
 
@@ -70,6 +75,12 @@ KpVerifiedLogProductEquivalenceFrame {
     selectedOccurrenceId: kpLogProductEquivalenceFrameOccurrenceIds.target,
     historicalSnapshots: []
   });
+  const occurrences = compileKpLogProductEquivalenceOccurrencesV2({
+    transitionId: `transition.${operation.transformation.id}`,
+    relationStateId: "state.log-product-equivalence.relation",
+    relationEntityId: "selector.log-product-equivalence.relation",
+    operation
+  });
   const frame = Object.freeze({
     schemaVersion: "kp.log-product-equivalence-frame.v1" as const,
     kind: "verified-log-product-equivalence-frame" as const,
@@ -78,7 +89,8 @@ KpVerifiedLogProductEquivalenceFrame {
     sourceLatex: source.latex,
     relationLatex: "=" as const,
     targetLatex: target.latex,
-    projection
+    projection,
+    occurrences
   }) as KpVerifiedLogProductEquivalenceFrame;
   verifiedFrames.add(frame);
   return frame;

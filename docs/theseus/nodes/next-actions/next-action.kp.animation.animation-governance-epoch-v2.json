@@ -378,6 +378,27 @@
       "scope": "slice-18-preexisting-derivative-baseline",
       "checkedAt": "2026-08-23T06:55:43.017Z",
       "notes": "The boundary suite stops on the already deferred derivative power-rule preservation mismatch: current one-step exemplar differs from stale two-step snapshots. Slice 18 did not modify derivative semantics or assets; derivative remains explicitly deferred to slice 30."
+    },
+    {
+      "command": "npm run test:log-product-equivalence-occurrences-v2",
+      "status": "passed",
+      "scope": "slice-19-log-occurrences",
+      "checkedAt": "2026-08-23T07:03:14.510Z",
+      "notes": "Seven tests prove explicit binary and multi-factor retained/equality/provenance/target occurrence topology, exclusive paint identity, canonical operation authority, existing lazy loading, and asset validity."
+    },
+    {
+      "command": "npm run check:equation-governance-v2",
+      "status": "passed",
+      "scope": "slice-19-log-occurrences",
+      "checkedAt": "2026-08-23T07:03:15.695Z",
+      "notes": "The log occurrence compiler and semantic frame entered the v2 closure without caller-owned route, timing, display mode, CSS clocks, evaluation, or lower-layer bypass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-19-log-occurrences",
+      "checkedAt": "2026-08-23T07:03:16.724Z",
+      "notes": "All TypeScript, Svelte, and domain type boundaries pass."
     }
   ],
   "progress": {
