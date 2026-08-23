@@ -35,6 +35,16 @@ test("equivalence frame retains context around the canonical log transition",
       "data-kp-log-product-equivalence-stage", "ready"
     );
     await expect(stage).toHaveAttribute(
+      "data-kp-log-product-equivalence-route", "certified"
+    );
+    await expect(stage).toHaveAttribute(
+      "data-kp-log-product-equivalence-routed-track-count", "2"
+    );
+    await expect(stage).toHaveAttribute(
+      "data-kp-log-product-equivalence-route-variants",
+      "arc-above,arc-below"
+    );
+    await expect(stage).toHaveAttribute(
       "data-kp-state-retention-policy", "equivalence-frame"
     );
     const sourceText = await source.textContent();

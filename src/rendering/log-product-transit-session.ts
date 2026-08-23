@@ -36,7 +36,8 @@ import {
   compileKpLogProductHomomorphicHandoff
 } from "../animation/log-product-homomorphic-handoff.ts";
 import {
-  applyKpNativeKatexFunctionWrapReception
+  adaptKpNativeKatexFunctionWrapReception,
+  type KpNativeKatexFunctionWrapAdaptationCertificate
 } from "./native-katex-function-wrap-reception.ts";
 import {
   applyKpNativeKatexLogProductHomomorphicHandoff
@@ -56,6 +57,21 @@ import {
 import {
   applyKpNativeKatexLogProductEquivalencePaintOwnershipV2
 } from "./native-katex-log-product-equivalence-paint-ownership-v2.ts";
+import {
+  certifyKpNativeKatexLogProductEquivalenceRoutesV2,
+  routeKpNativeKatexLogProductEquivalenceV2,
+  type KpLogProductEquivalenceRouteCertificateV2,
+  type KpLogProductEquivalenceRouteEvidenceV2
+} from "./native-katex-log-product-equivalence-routes-v2.ts";
+import type {
+  KpCompiledEquationPresentationPlanV2
+} from "../domain-ir/equation-presentation-plan-v2.ts";
+import type {
+  KpCompiledLogProductEquivalenceOccurrencesV2
+} from "../domain-ir/log-product-equivalence-occurrences-v2.ts";
+import type {
+  KpLogProductEquivalenceDomainPayloadV2
+} from "../semantic/log-product-equivalence-frame.ts";
 
 function fissionRoute<Route extends {
   readonly variant: "direct" | "arc-above" | "arc-below";
@@ -168,6 +184,8 @@ export interface KpLogProductTransitSession {
   readonly semanticMotionChoreographyId: string;
   readonly canonical: KpCanonicalNativeKatexSceneSession;
   readonly paintOwnershipPlanId?: string | undefined;
+  readonly equivalenceRouteCertificate?:
+    KpLogProductEquivalenceRouteCertificateV2 | undefined;
   readonly apply: (progress: number) => KpNativeKatexSceneOwnershipFrame;
   readonly retire: () => void;
 }
@@ -217,15 +235,50 @@ export function createKpLogProductTransitSession(input: {
   readonly target: KpNativeKatexRenderedSceneObservation;
   readonly paintOwnership?:
     KpCompiledLogProductEquivalencePaintOwnershipV2 | undefined;
+  readonly equivalenceRoute?: {
+    readonly presentationPlan:
+      KpCompiledEquationPresentationPlanV2<
+        KpLogProductEquivalenceDomainPayloadV2
+      >;
+    readonly occurrences: KpCompiledLogProductEquivalenceOccurrencesV2;
+    readonly relationElement: HTMLElement;
+  } | undefined;
 }): KpLogProductTransitSession {
   assertTransitInput(input);
+  let routeEvidence: KpLogProductEquivalenceRouteEvidenceV2 | undefined;
+  let functionWrapCertificate:
+    KpNativeKatexFunctionWrapAdaptationCertificate | undefined;
   const rendererReadyPlan = compileKpCanonicalNativeKatexScenePlan({
     source: input.source,
     target: input.target,
     relations: projectKpLogProductNativePaintRelations(input.operation),
     copyFanOutRouting: false,
-    trackProjection: createKpLogProductHomomorphicTrackProjection(input)
+    trackProjection: createKpLogProductHomomorphicTrackProjection({
+      ...input,
+      captureRouteEvidence: (evidence) => {
+        routeEvidence = evidence;
+      },
+      captureFunctionWrapCertificate: (certificate) => {
+        functionWrapCertificate = certificate;
+      }
+    })
   });
+  const equivalenceRouteCertificate = input.equivalenceRoute === undefined
+    ? undefined
+    : certifyKpNativeKatexLogProductEquivalenceRoutesV2({
+        tracks: rendererReadyPlan.tracks,
+        target: input.target,
+        protectedTransit: rendererReadyPlan.protectedTransit,
+        evidence: requireCaptured(
+          routeEvidence,
+          "Log equivalence route evidence"
+        ),
+        functionWrap: requireCaptured(
+          functionWrapCertificate,
+          "Log equivalence function-wrap certificate"
+        ),
+        presentationPlan: input.equivalenceRoute.presentationPlan
+      });
   const canonical = createKpCanonicalNativeKatexSceneSession(
     rendererReadyPlan
   );
@@ -238,6 +291,9 @@ export function createKpLogProductTransitSession(input: {
     ...(input.paintOwnership === undefined
       ? {}
       : { paintOwnershipPlanId: input.paintOwnership.id }),
+    ...(equivalenceRouteCertificate === undefined
+      ? {}
+      : { equivalenceRouteCertificate }),
     canonical,
     apply(progress: number) {
       if (retired) {
@@ -264,6 +320,20 @@ function createKpLogProductHomomorphicTrackProjection(input: {
   readonly targetEndpoint: KpLogProductNativeEndpoint;
   readonly paintOwnership?:
     KpCompiledLogProductEquivalencePaintOwnershipV2 | undefined;
+  readonly equivalenceRoute?: {
+    readonly presentationPlan:
+      KpCompiledEquationPresentationPlanV2<
+        KpLogProductEquivalenceDomainPayloadV2
+      >;
+    readonly occurrences: KpCompiledLogProductEquivalenceOccurrencesV2;
+    readonly relationElement: HTMLElement;
+  } | undefined;
+  readonly captureRouteEvidence: (
+    evidence: KpLogProductEquivalenceRouteEvidenceV2
+  ) => void;
+  readonly captureFunctionWrapCertificate: (
+    certificate: KpNativeKatexFunctionWrapAdaptationCertificate
+  ) => void;
 }): KpNativeKatexTrackProjection {
   const semanticProjection = createKpNativeKatexSemanticMotionTrackProjection(
     input.semanticMotion,
@@ -286,7 +356,7 @@ function createKpLogProductHomomorphicTrackProjection(input: {
         target: projectionInput.target,
         plan: homomorphicHandoff
       });
-      const wrappedTracks = applyKpNativeKatexFunctionWrapReception({
+      const wrapped = adaptKpNativeKatexFunctionWrapReception({
         tracks: handoffTracks,
         source: projectionInput.source,
         target: projectionInput.target,
@@ -298,14 +368,26 @@ function createKpLogProductHomomorphicTrackProjection(input: {
         horizontalSqueezeTreatment:
           kpNativeKatexLogProductHomomorphicProfile.horizontalSqueeze
       });
-      return input.paintOwnership === undefined
-        ? wrappedTracks
+      input.captureFunctionWrapCertificate(wrapped.certificate);
+      const ownedTracks = input.paintOwnership === undefined
+        ? wrapped.tracks
         : applyKpNativeKatexLogProductEquivalencePaintOwnershipV2({
-            tracks: wrappedTracks,
+            tracks: wrapped.tracks,
             source: projectionInput.source,
             target: projectionInput.target,
             plan: input.paintOwnership
           });
+      if (input.equivalenceRoute === undefined) return ownedTracks;
+      const routed = routeKpNativeKatexLogProductEquivalenceV2({
+        tracks: ownedTracks,
+        source: projectionInput.source,
+        target: projectionInput.target,
+        relationElement: input.equivalenceRoute.relationElement,
+        presentationPlan: input.equivalenceRoute.presentationPlan,
+        occurrences: input.equivalenceRoute.occurrences
+      });
+      input.captureRouteEvidence(routed.evidence);
+      return routed.tracks;
     }
   });
 }
@@ -319,6 +401,14 @@ function assertTransitInput(input: {
   readonly target: KpNativeKatexRenderedSceneObservation;
   readonly paintOwnership?:
     KpCompiledLogProductEquivalencePaintOwnershipV2 | undefined;
+  readonly equivalenceRoute?: {
+    readonly presentationPlan:
+      KpCompiledEquationPresentationPlanV2<
+        KpLogProductEquivalenceDomainPayloadV2
+      >;
+    readonly occurrences: KpCompiledLogProductEquivalenceOccurrencesV2;
+    readonly relationElement: HTMLElement;
+  } | undefined;
 }): void {
   if (!isKpCompiledLogProductOperation(input.operation)) {
     throw new Error("Log-product transit requires nominal compiler authority.");
@@ -352,6 +442,23 @@ function assertTransitInput(input: {
       "Log-product equivalence paint ownership must match the operation."
     );
   }
+  if (
+    input.equivalenceRoute !== undefined &&
+    (
+      input.paintOwnership === undefined ||
+      input.equivalenceRoute.occurrences.operationId !==
+        input.operation.transformation.id
+    )
+  ) {
+    throw new Error(
+      "Log equivalence routing requires matching occurrence and paint authority."
+    );
+  }
+}
+
+function requireCaptured<T>(value: T | undefined, label: string): T {
+  if (value === undefined) throw new Error(`${label} was not compiled.`);
+  return value;
 }
 
 function bounded(value: number): number {

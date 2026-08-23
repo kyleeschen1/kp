@@ -25,6 +25,12 @@ test("LLM authoring catalog binds promoted operations to existing semantic motif
   assert.equal(byId.get("kp.algebra.rewrite-power-as-root")?.visualMotif, "radical-corner-transfer");
   assert.equal(byId.get("kp.algebra.distribute-multiplication")?.visualMotif, "copy-fan-out");
   assert.equal(byId.get("kp.semantic-motion.derivative-power-rule")?.visualMotif, "derivative-power");
+  assert.equal(byId.get("kp.semantic-motion.log-product")?.visualMotif,
+    "homomorphic-crossover");
+  assert.equal(
+    byId.get("kp.semantic-motion.log-product")?.extensionAuthority?.recipeId,
+    "recipe.equation.homomorphic-decomposition.v1"
+  );
   assert.equal(byId.get("kp.semantic-motion.dot-product")?.visualMotif, "dot-product-accumulate");
   assert.equal(byId.get("kp.semantic-motion.matrix-vector")?.visualMotif, "matrix-row-compose");
   assert.equal(byId.get("kp.semantic-motion.matrix-matrix")?.visualMotif, "matrix-cell-compose");

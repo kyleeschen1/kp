@@ -30,7 +30,9 @@ test("each v2 bypass class rejects an opted-in caller", () => {
     file("src/reader/v2-evaluation-bypass.ts", planImport +
       "resolveKpEquationEvaluationAuthoritiesV2({});"),
     file("src/reader/v2-compiler-bypass.ts", planImport +
-      "resolveKpEquationTypographyV2({});")
+      "resolveKpEquationTypographyV2({});"),
+    file("src/reader/v2-backing-plate.ts", planImport +
+      "export const concealment = { backingPlate: true };")
   ];
   const codes = new Set(checkKpEquationGovernanceV2Ratchets(fixtures)
     .map(({ code }) => code));
@@ -40,7 +42,8 @@ test("each v2 bypass class rejects an opted-in caller", () => {
     "v2-uncontrolled-display-mode",
     "v2-css-clock",
     "v2-unregistered-evaluation",
-    "v2-adapter-bypass"
+    "v2-adapter-bypass",
+    "v2-backing-plate"
   ]));
 });
 

@@ -4,7 +4,8 @@ export type KpEquationGovernanceV2RatchetCode =
   | "v2-uncontrolled-display-mode"
   | "v2-css-clock"
   | "v2-unregistered-evaluation"
-  | "v2-adapter-bypass";
+  | "v2-adapter-bypass"
+  | "v2-backing-plate";
 
 export interface KpEquationGovernanceV2SourceFile {
   readonly path: `src/${string}.ts`;
@@ -23,6 +24,8 @@ const authority = Object.freeze({
     "src/domain-ir/equation-evaluation-authority-registry-v2.ts",
   transitCompiler: "src/domain-ir/equation-transit-obligations-v2.ts",
   routeCertifier: "src/rendering/equation-measured-route-certificate-v2.ts",
+  logEquivalenceRoute:
+    "src/rendering/native-katex-log-product-equivalence-routes-v2.ts",
   endpointTypography:
     "src/rendering/native-katex-endpoint-typography-v2.ts"
 });
@@ -36,6 +39,7 @@ const v2AuthorityPaths = new Set<string>([
   authority.transitCompiler,
   authority.presentationCompiler,
   authority.routeCertifier,
+  authority.logEquivalenceRoute,
   authority.endpointTypography
 ]);
 
@@ -43,6 +47,8 @@ const routeProperty = /\b(?:motionPath|motionPathVariant|pathVariant|controlPoin
 const timingProperty = /\b(?:delayMs|durationMs|easing|endMs|keyframes?|progressRange|startMs|staggerMs|timing)\s*:/u;
 const cssClock = /(?:@keyframes\b|\b(?:animation|transition)-(?:duration|delay)\s*:|\banimation\s*:\s*[A-Za-z_-]+\s+\d|\btransition\s*:\s*[A-Za-z_-]+\s+\d)/u;
 const lowerLayerCompiler = /\b(?:compileKpEquationTransitObligationsV2|resolveKpEquationEvaluationAuthoritiesV2|resolveKpEquationGrammarV2Operations|resolveKpEquationProjectionChoreographiesV2|resolveKpEquationTypographyV2)\s*\(/u;
+const backingPlateProperty =
+  /\b(?:backingPlate|occlusionPlate|backdropPlate)\s*:/u;
 
 /**
  * Guards the closed v2 equation route without making equation-shaped policy a
@@ -58,6 +64,10 @@ export function checkKpEquationGovernanceV2Ratchets(
       continue;
     }
     const isAuthority = v2AuthorityPaths.has(file.path);
+    if (backingPlateProperty.test(file.source)) {
+      add(violations, "v2-backing-plate", file,
+        "Governed equation motion must route visible ink instead of hiding crossings with a backing plate.");
+    }
     if (!isAuthority && routeProperty.test(file.source)) {
       add(violations, "v2-caller-owned-route", file,
         "V2 equation callers express semantic transit intent; measured routes belong to the route certifier.");
@@ -91,7 +101,7 @@ export function checkKpEquationGovernanceV2Ratchets(
 
 function participatesInV2(file: KpEquationGovernanceV2SourceFile): boolean {
   return v2AuthorityPaths.has(file.path) ||
-    /(?:equation-(?:evaluation-authority-registry|grammar|presentation-plan|projection-choreography|transit-obligations|typography-policy)-v2|equation-measured-route-certificate-v2|log-product-equivalence-(?:occurrences|paint-ownership)-v2|native-katex-endpoint-typography-v2)/u.test(
+    /(?:equation-(?:evaluation-authority-registry|grammar|presentation-plan|projection-choreography|transit-obligations|typography-policy)-v2|equation-measured-route-certificate-v2|log-product-equivalence-(?:occurrences|paint-ownership|routes)-v2|native-katex-endpoint-typography-v2)/u.test(
       file.source
     );
 }

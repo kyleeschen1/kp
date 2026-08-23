@@ -14,6 +14,9 @@ import {
   kpEditorSelectedSurfaceCapabilityDeclarations
 } from "../src/editor/selected-surface-capability-declarations.ts";
 import {
+  isKpCompiledEquationPresentationPlanV2
+} from "../src/domain-ir/equation-presentation-plan-v2.ts";
+import {
   isKpVerifiedLogProductEquivalenceFrame,
   KP_LOG_PRODUCT_EQUIVALENCE_FRAME_ANIMATION_ID,
   kpLogProductEquivalenceFrame,
@@ -40,6 +43,32 @@ test("log-product equivalence projects one operation into distinct occurrences",
     assert.ok(target);
     assert.notEqual(source.id, target.id);
     assert.deepEqual(source.referentIds, target.referentIds);
+  });
+
+test("equivalence frame compiles one v2 semantic boundary and target arrival",
+  () => {
+    const plan = kpLogProductEquivalenceFrame.presentationPlan;
+    assert.equal(isKpCompiledEquationPresentationPlanV2(plan), true);
+    assert.equal(plan.clockAuthority, "kp.shared-normalized-clock.v1");
+    const transition = plan.transitions[0]!;
+    assert.equal(transition.projection.profile.intent, "equivalence");
+    assert.deepEqual(
+      transition.transit.boundaries[0]?.crossingRecordIds,
+      [
+        "correspondence.log-product.x-argument-continuity",
+        "correspondence.log-product.y-argument-continuity"
+      ]
+    );
+    assert.equal(
+      transition.transit.arrivals[0]?.timingAuthority,
+      "registered-renderer-profile"
+    );
+    assert.equal(
+      JSON.stringify(plan).match(
+        /(?:coordinates|delayMs|durationMs|motionPath|backingPlate)/gu
+      ),
+      null
+    );
   });
 
 test("equivalence asset reuses the canonical operation without motif duplication",

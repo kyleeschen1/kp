@@ -195,8 +195,22 @@ async function prepareSurface(
       targetEndpoint: kpCanonicalLogProductNativeEndpoints[1],
       source,
       target,
-      paintOwnership: kpLogProductEquivalenceFrame.paintOwnership
+      paintOwnership: kpLogProductEquivalenceFrame.paintOwnership,
+      equivalenceRoute: {
+        presentationPlan: kpLogProductEquivalenceFrame.presentationPlan,
+        occurrences: kpLogProductEquivalenceFrame.occurrences,
+        relationElement: session.relation
+      }
     });
+    const route = session.transit.equivalenceRouteCertificate;
+    if (route === undefined) {
+      throw new Error("Log equivalence surface lacks a certified v2 route.");
+    }
+    session.stage.dataset["kpLogProductEquivalenceRoute"] = "certified";
+    session.stage.dataset["kpLogProductEquivalenceRoutedTrackCount"] =
+      String(route.routedTrackIds.length);
+    session.stage.dataset["kpLogProductEquivalenceRouteVariants"] =
+      route.variants.join(",");
     session.stage.dataset["kpLogProductEquivalenceStage"] = "ready";
     applyFrame(session, session.pendingState);
   } catch (error: unknown) {

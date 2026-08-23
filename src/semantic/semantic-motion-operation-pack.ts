@@ -53,6 +53,28 @@ export const kpSemanticMotionOperationDefinitions:
       ]
     }),
     operation({
+      id: "kp.semantic-motion.log-product",
+      title: "Expand a logarithm over a product",
+      summary:
+        "Preserve ordered factors while one logarithm application derives " +
+        "one wrapped target per factor and additive connector structure.",
+      transformType: "expandLogProductAsSum",
+      canonicalComposition: ["kp.core.persist", "kp.core.fan-out"],
+      authoringRoles: [
+        entity("source-application", "source"),
+        entity("target-applications", "target", "one-or-more"),
+        entity("source-operator", "source"),
+        entity("target-operators", "target", "one-or-more"),
+        entity("source-arguments", "source", "one-or-more"),
+        entity("target-arguments", "target", "one-or-more"),
+        artifact("source-shells", "source", "one-or-more"),
+        artifact("target-shells", "target", "one-or-more"),
+        entity("source-product", "source"),
+        entity("target-sum", "target"),
+        artifact("connector", "target", "one-or-more")
+      ]
+    }),
+    operation({
       id: "kp.semantic-motion.derivative-power-rule",
       title: "Apply the derivative power rule",
       summary: "Branch the exponent into coefficient and predecessor roles while the base persists.",

@@ -92,7 +92,9 @@ test("every promoted generated algebra definition has one compatibility entry", 
 });
 
 test("semantic motion pack exposes only operations with explicit role contracts", () => {
-  assert.equal(kpSemanticMotionOperationEntries.length, 12);
+  assert.equal(kpSemanticMotionOperationEntries.length, 13);
+  assert.ok(kpSemanticMotionOperationEntries.some(({ id }) =>
+    id === "kp.semantic-motion.log-product"));
   assert.ok(kpSemanticMotionOperationEntries.every(
     (entry) => entry.sourceTransformType !== undefined
       && entry.contract.roles.length > 0

@@ -18,6 +18,12 @@ import type {
 } from "./motifs/visual-motif.ts";
 import type { KpHomomorphicCausalPhaseId } from
   "../domain-ir/homomorphic-causal-phases.ts";
+import {
+  kpHomomorphicCrossoverCallerDeclarations
+} from "./homomorphic-crossover-caller-declarations.ts";
+import {
+  kpHomomorphicCrossoverRecipePhaseIds
+} from "./equation-extension-packs/homomorphic-crossover.ts";
 
 export type KpLlmOperationVisualMotifKind =
   | EquationVisualMotifKind
@@ -76,10 +82,14 @@ export function createKpLlmSemanticMotionOperationCatalog():
   const operations = kpCanonicalOperationRegistry.entries
     .filter((entry) => entry.sourceTransformType !== undefined)
     .map((entry): KpLlmPromotedOperationAuthoringDefinition => {
+      const extensionCallers = kpHomomorphicCrossoverCallerDeclarations.filter(
+        ({ semanticMotionOperationId }) =>
+          semanticMotionOperationId === entry.id
+      );
       const rule = defaultEquationTransformVisualMotifRules.find(
         (candidate) => candidate.transformationKind === entry.sourceTransformType
       );
-      if (rule === undefined) {
+      if (rule === undefined && extensionCallers.length === 0) {
         throw new Error(
           `Promoted operation ${entry.id} has no equation visual motif for ${entry.sourceTransformType}.`
         );
@@ -93,7 +103,8 @@ export function createKpLlmSemanticMotionOperationCatalog():
       return {
         operationId: entry.id,
         operationPack: { packId: pack.id, version: pack.version },
-        summary: entry.authoringSummary ?? rule.summary ?? entry.sourceTransformType!,
+        summary: entry.authoringSummary ?? rule?.summary ??
+          entry.sourceTransformType!,
         transformType: entry.sourceTransformType!,
         canonicalComposition: [...entry.canonicalComposition],
         roles: entry.contract.roles.map((role) => ({ ...role })),
@@ -114,8 +125,24 @@ export function createKpLlmSemanticMotionOperationCatalog():
           fragmentRoleIds: [...entry.contract.cost.fragmentRoleIds]
         },
         explanationDepths: ["compact", "standard", "expanded"],
-        visualMotif: rule.descriptor.kind,
-        semanticPhaseIds: [...rule.descriptor.phaseIds]
+        visualMotif: extensionCallers.length > 0
+          ? "homomorphic-crossover"
+          : rule!.descriptor.kind,
+        semanticPhaseIds: extensionCallers.length > 0
+          ? [...kpHomomorphicCrossoverRecipePhaseIds]
+          : [...rule!.descriptor.phaseIds],
+        ...(extensionCallers.length === 0
+          ? {}
+          : {
+              extensionAuthority: {
+                operationKind: extensionCallers[0]!.operationKind,
+                recipeId: extensionCallers[0]!.recipeId,
+                semanticAuthorityIds: [...new Set(extensionCallers.map(
+                  ({ semanticAuthorityId }) => semanticAuthorityId
+                ))],
+                callerIds: extensionCallers.map(({ callerId }) => callerId)
+              }
+            })
       };
     });
   const operationPackIds = new Set(operations.map((operation) => operation.operationPack.packId));
