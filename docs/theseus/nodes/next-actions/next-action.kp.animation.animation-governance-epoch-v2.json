@@ -217,6 +217,20 @@
       "scope": "slice 09 no-worsening quarantine",
       "checkedAt": "2026-08-23T05:46:33.179Z",
       "notes": "Inference remained exactly at the pre-loop quarantine baseline: 93651 types and 150979 instantiations; unchanged stricter health ceilings remain visible."
+    },
+    {
+      "command": "npm run test:equation-grammar-v2-operation-resolution",
+      "status": "passed",
+      "scope": "slice-10-transition-resolution",
+      "checkedAt": "2026-08-23T05:54:05.765Z",
+      "notes": "Four focused tests prove per-transition resolution, typed repair states, one host clock, and evidence-bearing legacy compatibility."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-10-transition-resolution",
+      "checkedAt": "2026-08-23T05:54:06.814Z",
+      "notes": "TypeScript, Svelte, and domain checks pass after adding the v2 resolution boundary."
     }
   ],
   "progress": {

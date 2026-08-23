@@ -100,7 +100,8 @@
     {
       "id": "transition-resolution",
       "title": "transition-resolution",
-      "status": "planned"
+      "summary": "Resolved each v2 equation transition through pinned canonical operation packs under one host clock; unknown operations and pin failures now yield typed repair states, while asset defaults remain explicit legacy compatibility only.",
+      "status": "complete"
     },
     {
       "id": "evaluation-registry",
