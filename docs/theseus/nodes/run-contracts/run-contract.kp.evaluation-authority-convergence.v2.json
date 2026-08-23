@@ -81,7 +81,8 @@
     {
       "id": "kp.eval-auth.s06",
       "title": "authority-validation",
-      "status": "planned"
+      "summary": "Governance-v2 family claims are now checked against the actual per-transformation release registry; missing or mismatched claims return typed repair diagnostics.",
+      "status": "complete"
     },
     {
       "id": "kp.eval-auth.s07",

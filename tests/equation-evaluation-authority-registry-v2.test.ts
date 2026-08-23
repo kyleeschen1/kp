@@ -8,7 +8,8 @@ import {
 import {
   createKpEquationEvaluationAuthorityRegistryV2,
   kpEquationEvaluationAuthorityRegistryV2,
-  resolveKpEquationEvaluationAuthoritiesV2
+  resolveKpEquationEvaluationAuthoritiesV2,
+  validateKpEquationEvaluationAuthorityFamilyProfilesV2
 } from "../src/domain-ir/equation-evaluation-authority-registry-v2.ts";
 
 test("mandatory registry covers every approved evaluation class", () => {
@@ -18,7 +19,7 @@ test("mandatory registry covers every approved evaluation class", () => {
     )),
     new Set([
       "product", "quotient", "difference", "sum", "cancellation",
-      "identity", "successor"
+      "identity", "successor", "root"
     ])
   );
   assert.equal(kpEquationEvaluationAuthorityRegistryV2.genericFallback,
@@ -33,7 +34,6 @@ test("evaluation transitions receive only registry-owned authorities", () => {
   const grammar = compiledGrammar([
     ["kp.arithmetic.multiply", "evaluation"],
     ["kp.arithmetic.divide", "evaluation"],
-    ["kp.arithmetic.subtract", "evaluation"],
     ["kp.arithmetic.add", "evaluation"],
     ["kp.algebra.cancel-additive-inverses", "evaluation"],
     ["kp.semantic-motion.absorb-additive-identity", "evaluation"],
@@ -44,13 +44,37 @@ test("evaluation transitions receive only registry-owned authorities", () => {
   if (result.status !== "resolved") return;
   assert.deepEqual(result.evaluations.map(({ evaluationKind }) =>
     evaluationKind), [
-    "product", "quotient", "difference", "sum", "cancellation",
+    "product", "quotient", "sum", "cancellation",
     "identity", "successor"
   ]);
   assert.ok(result.evaluations.every(({ resolutionSource }) =>
     resolutionSource === "mandatory-evaluation-registry"));
   assert.ok(result.evaluations.every(({ presentationAuthority }) =>
     presentationAuthority.kind.startsWith("registered-")));
+});
+
+test("an authority claim without a matching family release fails closed", () => {
+  assert.deepEqual(
+    validateKpEquationEvaluationAuthorityFamilyProfilesV2(),
+    [{
+      code: "evaluation-authority.family-unregistered",
+      authorityId:
+        "kp.presentation.operation-evaluation.difference.authority-v2",
+      transformationKind: "simplifyConstantDifference",
+      claimedFamilyProfileId: "kp.evaluation-family.contributor-fusion.v1",
+      message:
+        "Evaluation authority kp.presentation.operation-evaluation.difference.authority-v2 claims kp.evaluation-family.contributor-fusion.v1, but simplifyConstantDifference has no family release registration."
+    }]
+  );
+  const result = resolveKpEquationEvaluationAuthoritiesV2({
+    grammar: compiledGrammar([["kp.arithmetic.subtract", "evaluation"]])
+  });
+  assert.equal(result.status, "repair-required");
+  if (result.status !== "repair-required") return;
+  assert.equal(
+    result.diagnostics[0]?.code,
+    "evaluation-authority.family-unregistered"
+  );
 });
 
 test("unregistered evaluations and misclassified registered operations fail", () => {

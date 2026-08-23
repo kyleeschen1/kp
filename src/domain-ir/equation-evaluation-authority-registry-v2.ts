@@ -5,6 +5,9 @@ import {
 import {
   kpOperationEvaluationAuthorityDescriptors
 } from "../semantic/operation-evaluation-authority.ts";
+import {
+  resolveKpOperationEvaluationFamilyReleaseRegistration
+} from "../animation/operation-evaluation-family-profile.ts";
 
 export const kpEquationEvaluationAuthorityRegistryV2SchemaVersion =
   "kp.equation-evaluation-authority-registry.v2" as const;
@@ -221,9 +224,15 @@ export interface KpEquationEvaluationAuthorityDiagnosticV2 {
   readonly code:
     | "evaluation-authority.grammar-uncompiled"
     | "evaluation-authority.unregistered"
-    | "evaluation-authority.misclassified";
+    | "evaluation-authority.misclassified"
+    | "evaluation-authority.family-unregistered"
+    | "evaluation-authority.family-mismatch";
   readonly transitionId?: string | undefined;
   readonly operationId?: string | undefined;
+  readonly authorityId?: string | undefined;
+  readonly transformationKind?: string | undefined;
+  readonly claimedFamilyProfileId?: string | undefined;
+  readonly registeredFamilyProfileId?: string | undefined;
   readonly message: string;
 }
 
@@ -269,6 +278,20 @@ export function resolveKpEquationEvaluationAuthoritiesV2(input: {
         });
         return;
       }
+      const familyDiagnostics =
+        validateKpEquationEvaluationAuthorityFamilyProfilesV2({
+          registry: createKpEquationEvaluationAuthorityRegistryV2({
+            entries: [entry]
+          })
+        });
+      if (familyDiagnostics.length > 0) {
+        diagnostics.push(...familyDiagnostics.map((diagnostic) => ({
+          ...diagnostic,
+          transitionId: transition.id,
+          operationId
+        })));
+        return;
+      }
       evaluations.push(Object.freeze({
         transitionId: transition.id,
         transformationId: transition.transformationId,
@@ -297,6 +320,57 @@ export function resolveKpEquationEvaluationAuthoritiesV2(input: {
     evaluations: Object.freeze(evaluations),
     diagnostics: Object.freeze([]) as readonly []
   });
+}
+
+export function validateKpEquationEvaluationAuthorityFamilyProfilesV2(input: {
+  readonly registry?: KpEquationEvaluationAuthorityRegistryV2 | undefined;
+} = {}): readonly KpEquationEvaluationAuthorityDiagnosticV2[] {
+  const registry = input.registry ?? kpEquationEvaluationAuthorityRegistryV2;
+  const arithmeticKinds = new Set<string>(
+    kpOperationEvaluationAuthorityDescriptors.map(
+      ({ transformationKind }) => transformationKind
+    )
+  );
+  const diagnostics: KpEquationEvaluationAuthorityDiagnosticV2[] = [];
+
+  registry.entries.forEach((entry) => {
+    if (entry.presentationAuthority.kind !==
+        "registered-operation-evaluation") {
+      return;
+    }
+    const claimedFamilyProfileId =
+      entry.presentationAuthority.familyProfileId;
+    entry.transformationKinds.forEach((transformationKind) => {
+      if (!arithmeticKinds.has(transformationKind)) return;
+      const release = resolveKpOperationEvaluationFamilyReleaseRegistration(
+        transformationKind
+      );
+      if (release === undefined) {
+        diagnostics.push({
+          code: "evaluation-authority.family-unregistered",
+          authorityId: entry.id,
+          transformationKind,
+          claimedFamilyProfileId,
+          message:
+            `Evaluation authority ${entry.id} claims ${claimedFamilyProfileId}, but ${transformationKind} has no family release registration.`
+        });
+        return;
+      }
+      if (release.familyProfileId !== claimedFamilyProfileId) {
+        diagnostics.push({
+          code: "evaluation-authority.family-mismatch",
+          authorityId: entry.id,
+          transformationKind,
+          claimedFamilyProfileId,
+          registeredFamilyProfileId: release.familyProfileId,
+          message:
+            `Evaluation authority ${entry.id} claims ${claimedFamilyProfileId}, but ${transformationKind} is registered to ${release.familyProfileId}.`
+        });
+      }
+    });
+  });
+
+  return Object.freeze(diagnostics);
 }
 
 function arithmeticKind(

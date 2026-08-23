@@ -1,5 +1,5 @@
 import {
-  resolveKpDefaultOperationEvaluationFamilyProfile
+  resolveKpOperationEvaluationFamilyReleaseRegistration
 } from "../animation/operation-evaluation-family-profile.ts";
 import {
   kpCanonicalOperationEvaluationTransformationKinds
@@ -39,7 +39,7 @@ export function auditKpEquationEvaluationFamilyAuthority(input: {
     const authority = entry.presentationAuthority;
     entry.transformationKinds.forEach((transformationKind) => {
       if (!canonicalKinds.has(transformationKind)) return;
-      const runtime = resolveKpDefaultOperationEvaluationFamilyProfile(
+      const runtime = resolveKpOperationEvaluationFamilyReleaseRegistration(
         transformationKind
       );
       if (runtime === undefined) {
@@ -51,12 +51,12 @@ export function auditKpEquationEvaluationFamilyAuthority(input: {
         }));
         return;
       }
-      if (runtime.id === authority.familyProfileId) return;
+      if (runtime.familyProfileId === authority.familyProfileId) return;
       issues.push(Object.freeze({
         authorityId: entry.id,
         transformationKind,
         claimedFamilyProfileId: authority.familyProfileId,
-        runtimeFamilyProfileId: runtime.id,
+        runtimeFamilyProfileId: runtime.familyProfileId,
         code: "evaluation-family.profile-mismatch" as const
       }));
     });

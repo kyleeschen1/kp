@@ -141,6 +141,20 @@
       "scope": "standard",
       "checkedAt": "2026-08-23T23:17:28.527Z",
       "notes": "Family applicability and release maturity types preserve all application, test, Svelte, and domain boundaries."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-evaluation-authority-registry-v2.test.ts tests/equation-evaluation-family-authority-audit.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T23:20:47.177Z",
+      "notes": "Seven authority and audit tests pass; missing subtraction release fails closed while registered paths resolve."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-23T23:20:48.524Z",
+      "notes": "Authority validation preserves application, test, Svelte, and domain type boundaries."
     }
   ],
   "progress": {
