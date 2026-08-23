@@ -71,6 +71,26 @@ readonly KpEquationGovernanceV2MigrationDeclaration[] = Object.freeze([
     [
       "animation.generated.function-wrap.apply-f",
       "editor-animation-surface.equation.katex"
+    ],
+    [
+      "animation.generated.cancellation.additive-inverses",
+      "editor-animation-surface.equation.katex"
+    ],
+    [
+      "animation.generated.distribution.expand-a-sum",
+      "editor-animation-surface.equation.katex"
+    ],
+    [
+      "animation.generated.distribution.factor-common-a",
+      "editor-animation-surface.equation.katex"
+    ],
+    [
+      "animation.generated.linear-solve.linear-68c15d41",
+      "editor-animation-surface.equation.katex"
+    ],
+    [
+      "animation.linear-solve.solve-x",
+      "editor-animation-surface.equation.katex"
     ]
   ].map(([assetId, adapterId]) => structuralDeclaration(
     assetId!,

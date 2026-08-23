@@ -219,10 +219,19 @@ export function createKpEquationLlmAuthoringCatalogue():
 KpEquationLlmAuthoringCatalogue {
   const operationCatalogue = createKpLlmSemanticMotionOperationCatalog();
   const surfaces = createSurfaceDefinitions();
-  const operations = Object.freeze([
-    ...operationCatalogue.operations,
+  const extensionOperations = Object.freeze([
     ...createKpHomomorphicCrossoverAuthoringOperations(),
     ...createKpExponentialHomomorphismAuthoringOperations()
+  ]);
+  const extensionOperationIds = new Set(extensionOperations.map(
+    ({ operationId }) => operationId
+  ));
+  const operations = Object.freeze([
+    // A specialized extension projection replaces the generic registry view
+    // of the same semantic operation; exposing both creates false ambiguity.
+    ...operationCatalogue.operations.filter(({ operationId }) =>
+      !extensionOperationIds.has(operationId)),
+    ...extensionOperations
   ]);
   assertUniqueIds(operations.map(({ operationId }) => operationId), "operation");
   return Object.freeze({

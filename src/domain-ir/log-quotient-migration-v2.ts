@@ -22,7 +22,7 @@ export function compileKpLogQuotientMigrationV2(
     animation,
     operations: [{
       transformationId: transformation.id,
-      operationId: "kp.semantic-motion.log-quotient",
+      operationId: "kp.semantic-motion.quotient",
       semanticClass: "transformation",
       roleBindings: {
         "source-difference": listKpEquationMigrationEndpointEntityIds({

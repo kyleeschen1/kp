@@ -114,7 +114,7 @@ test("homomorphic log and exponent families retain exact semantic operation auth
   assert.deepEqual(migrations.flatMap(({ operationIds }) => operationIds), [
     "kp.semantic-motion.log-product",
     "kp.semantic-motion.log-product",
-    "kp.semantic-motion.log-quotient",
+    "kp.semantic-motion.quotient",
     "operation.equation.exponential-sum-to-product.v1",
     "operation.equation.exponential-difference-to-quotient.v1"
   ]);
@@ -130,7 +130,7 @@ test("change of base compiles from verified semantic roles", () => {
   assert.equal(migration.presentationPlan.transitions.length, 1);
 });
 
-test("the structural migration ledger names the nine compiled callers and existing equivalence plan", () => {
+test("the structural migration ledger names every compiled caller and existing equivalence plan", () => {
   const structural = kpEquationGovernanceV2MigrationDeclarations.filter(
     ({ compilerId }) => compilerId !==
       "kp.equation-evaluation-migration-compiler.v2"
@@ -144,7 +144,12 @@ test("the structural migration ledger names the nine compiled callers and existi
     "animation.algebra.log-product.three-factors-to-sum",
     "animation.algebra.log-quotient.difference-to-quotient",
     "animation.equation.logarithm-change-of-base.v1",
+    "animation.generated.cancellation.additive-inverses",
+    "animation.generated.distribution.expand-a-sum",
+    "animation.generated.distribution.factor-common-a",
     "animation.generated.exponent.square-as-product",
-    "animation.generated.function-wrap.apply-f"
+    "animation.generated.function-wrap.apply-f",
+    "animation.generated.linear-solve.linear-68c15d41",
+    "animation.linear-solve.solve-x"
   ].sort());
 });

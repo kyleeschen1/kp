@@ -78,7 +78,7 @@ export const kpEquationLawOperationDefinitions = Object.freeze([
     ]
   }),
   operation({
-    id: "kp.semantic-motion.log-quotient",
+    id: "kp.semantic-motion.quotient",
     title: "Combine a logarithm difference as a quotient",
     summary:
       "Preserve ordered arguments while two logarithm applications fuse around one quotient.",

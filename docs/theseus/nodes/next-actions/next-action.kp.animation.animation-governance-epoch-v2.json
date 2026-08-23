@@ -546,6 +546,104 @@
       "scope": "visual preservation",
       "checkedAt": "2026-08-23T15:39:07.941Z",
       "notes": "Stable function-wrap checkpoint command completed with eight captures and no warnings."
+    },
+    {
+      "command": "npm run test:equation-linear-operation-migration-v2",
+      "status": "passed",
+      "scope": "focused linear-operation migration",
+      "checkedAt": "2026-08-23T16:01:27.543Z",
+      "notes": "Eight tests prove five caller migrations, exact operation authority, mandatory evaluation authority, whole-equation context roles, and generic adapter dispatch."
+    },
+    {
+      "command": "npm run test:registered-both-sides-additive",
+      "status": "passed",
+      "scope": "balanced additive semantics",
+      "checkedAt": "2026-08-23T16:01:28.697Z",
+      "notes": "Nineteen tests prove atomic branch coverage, shared additive recipes, fixture laws, and fail-closed drift."
+    },
+    {
+      "command": "npm run test:registered-both-sides-multiplicative",
+      "status": "passed",
+      "scope": "balanced multiplicative semantics",
+      "checkedAt": "2026-08-23T16:01:29.662Z",
+      "notes": "Twenty-six tests prove division entry, multiplicative cancellation, total correspondence, deterministic seek, and nonzero evidence."
+    },
+    {
+      "command": "npm run test:equation-generation-cancellation-trial",
+      "status": "passed",
+      "scope": "LLM cancellation pressure",
+      "checkedAt": "2026-08-23T16:01:30.606Z",
+      "notes": "Four tests prove semantic repair reaches witnessed annihilation without fallback and preserves endpoints and seek."
+    },
+    {
+      "command": "npm run test:equation-generation-distribution-trial",
+      "status": "passed",
+      "scope": "LLM distribution pressure",
+      "checkedAt": "2026-08-23T16:01:31.587Z",
+      "notes": "Four tests prove repaired roles preserve cardinality, product topology, inverse factoring, endpoints, and seek."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-llm-semantic-motion-operation-authoring.test.ts",
+      "status": "passed",
+      "scope": "LLM operation catalogue",
+      "checkedAt": "2026-08-23T16:01:32.563Z",
+      "notes": "Six tests prove extension projections replace generic duplicates and migration-only equation laws do not invent legacy visual motifs."
+    },
+    {
+      "command": "npm run test:animation-governance-inventory",
+      "status": "passed",
+      "scope": "governance inventory",
+      "checkedAt": "2026-08-23T16:01:33.536Z",
+      "notes": "All three inventory tests pass; five linear-operation callers now have no v2 or typography bypass."
+    },
+    {
+      "command": "npm run test:animation-governance-reverse-dependencies",
+      "status": "passed",
+      "scope": "manifest and reverse dependencies",
+      "checkedAt": "2026-08-23T16:01:34.495Z",
+      "notes": "All nine manifest and reverse-dependency tests pass after deterministic regeneration."
+    },
+    {
+      "command": "npm run test:animation-conformance-registration",
+      "status": "passed",
+      "scope": "lazy registration",
+      "checkedAt": "2026-08-23T16:01:35.488Z",
+      "notes": "All seven lazy conformance registration tests pass without eager family imports."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-08-23T16:01:36.634Z",
+      "notes": "All dependency, framework-neutral, semantic boundary, compiler authority, and governance-v2 ratchets pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "type system",
+      "checkedAt": "2026-08-23T16:01:37.801Z",
+      "notes": "Application, node, test, Svelte, and domain type checks pass."
+    },
+    {
+      "command": "npm run visual:cancellation-pressure",
+      "status": "passed",
+      "scope": "visual preservation",
+      "checkedAt": "2026-08-23T16:01:39.043Z",
+      "notes": "Stable cancellation contact sheet completed with the reviewed renderer unchanged."
+    },
+    {
+      "command": "npm run visual:distribution-pressure",
+      "status": "passed",
+      "scope": "visual preservation",
+      "checkedAt": "2026-08-23T16:01:40.041Z",
+      "notes": "Stable distribution contact sheet completed with reviewed distribution and factoring renderers unchanged."
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "visual preservation",
+      "checkedAt": "2026-08-23T16:01:41.011Z",
+      "notes": "Stable linear-equation command captured 39 desktop and phone states with reviewed choreography unchanged."
     }
   ],
   "progress": {

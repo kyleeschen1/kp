@@ -4,7 +4,7 @@
   "summary": {
     "assetCount": 58,
     "equationAssetCount": 43,
-    "bypassedAssetCount": 27,
+    "bypassedAssetCount": 22,
     "unsupportedAssetCount": 0
   },
   "entries": [
@@ -1815,8 +1815,8 @@
       },
       "typography": {
         "flow": "host-css",
-        "mathStyle": "adapter-local-implicit",
-        "opticalScale": "adapter-local-implicit"
+        "mathStyle": "governance-policy-v2",
+        "opticalScale": "governance-policy-v2"
       },
       "motifs": {
         "familyIds": [],
@@ -1840,10 +1840,7 @@
           "artifact-promotion.default-reviewable-composition-policy"
         ]
       },
-      "bypasses": [
-        "equation-grammar-v2-missing",
-        "typography-policy-implicit"
-      ]
+      "bypasses": []
     },
     {
       "schemaVersion": "kp.animation-governance-inventory-entry.v1",
@@ -1887,8 +1884,8 @@
       },
       "typography": {
         "flow": "host-css",
-        "mathStyle": "adapter-local-implicit",
-        "opticalScale": "adapter-local-implicit"
+        "mathStyle": "governance-policy-v2",
+        "opticalScale": "governance-policy-v2"
       },
       "motifs": {
         "familyIds": [
@@ -1915,10 +1912,7 @@
           "run-contract.kp.authoritative-roadmap-workbench-v1#s29"
         ]
       },
-      "bypasses": [
-        "equation-grammar-v2-missing",
-        "typography-policy-implicit"
-      ]
+      "bypasses": []
     },
     {
       "schemaVersion": "kp.animation-governance-inventory-entry.v1",
@@ -1962,8 +1956,8 @@
       },
       "typography": {
         "flow": "host-css",
-        "mathStyle": "adapter-local-implicit",
-        "opticalScale": "adapter-local-implicit"
+        "mathStyle": "governance-policy-v2",
+        "opticalScale": "governance-policy-v2"
       },
       "motifs": {
         "familyIds": [
@@ -1989,10 +1983,7 @@
           "artifact-promotion.default-reviewable-composition-policy"
         ]
       },
-      "bypasses": [
-        "equation-grammar-v2-missing",
-        "typography-policy-implicit"
-      ]
+      "bypasses": []
     },
     {
       "schemaVersion": "kp.animation-governance-inventory-entry.v1",
@@ -2483,8 +2474,8 @@
       },
       "typography": {
         "flow": "host-css",
-        "mathStyle": "adapter-local-implicit",
-        "opticalScale": "adapter-local-implicit"
+        "mathStyle": "governance-policy-v2",
+        "opticalScale": "governance-policy-v2"
       },
       "motifs": {
         "familyIds": [],
@@ -2513,10 +2504,7 @@
           "artifact-promotion.default-reviewable-composition-policy"
         ]
       },
-      "bypasses": [
-        "equation-grammar-v2-missing",
-        "typography-policy-implicit"
-      ]
+      "bypasses": []
     },
     {
       "schemaVersion": "kp.animation-governance-inventory-entry.v1",
@@ -3056,8 +3044,8 @@
       },
       "typography": {
         "flow": "host-css",
-        "mathStyle": "adapter-local-implicit",
-        "opticalScale": "adapter-local-implicit"
+        "mathStyle": "governance-policy-v2",
+        "opticalScale": "governance-policy-v2"
       },
       "motifs": {
         "familyIds": [
@@ -3087,10 +3075,7 @@
           "docs/project/reviews/2026-07-21-solve-x-human-checkpoint-follow-up.md"
         ]
       },
-      "bypasses": [
-        "equation-grammar-v2-missing",
-        "typography-policy-implicit"
-      ]
+      "bypasses": []
     },
     {
       "schemaVersion": "kp.animation-governance-inventory-entry.v1",

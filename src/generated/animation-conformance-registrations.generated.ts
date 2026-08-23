@@ -208,7 +208,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.generated.cancellation.additive-inverses",
     "packId": "algebra",
     "manifestId": "manifest.animation.generated.cancellation.additive-inverses",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -216,7 +216,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.generated.distribution.expand-a-sum",
     "packId": "algebra",
     "manifestId": "manifest.animation.generated.distribution.expand-a-sum",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -224,7 +224,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.generated.distribution.factor-common-a",
     "packId": "algebra",
     "manifestId": "manifest.animation.generated.distribution.factor-common-a",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -280,7 +280,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.generated.linear-solve.linear-68c15d41",
     "packId": "algebra",
     "manifestId": "manifest.animation.generated.linear-solve.linear-68c15d41",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -352,8 +352,8 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.linear-solve.solve-x",
     "packId": "algebra",
     "manifestId": "manifest.animation.linear-solve.solve-x",
-    "policyEpochId": "policy.animation.legacy.v1",
-    "disposition": "compatibility"
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
+    "disposition": "conformant"
   },
   {
     "kind": "manifest-ref",

@@ -5,6 +5,8 @@ import { compileKpFunctionWrapMigrationV2 } from
   "./function-wrap-migration-v2.ts";
 import { compileKpGeneratedExponentMigrationV2 } from
   "./generated-exponent-migration-v2.ts";
+import { compileKpLinearOperationMigrationV2 } from
+  "./linear-operation-migration-v2.ts";
 
 type Compiler = (animation: KpAnimationAsset) =>
   KpEquationAssetMigrationV2;
@@ -17,7 +19,17 @@ const compilers = new Map<string, Compiler>([
   [
     "animation.generated.function-wrap.apply-f",
     compileKpFunctionWrapMigrationV2
-  ]
+  ],
+  ...[
+    "animation.generated.cancellation.additive-inverses",
+    "animation.generated.distribution.expand-a-sum",
+    "animation.generated.distribution.factor-common-a",
+    "animation.generated.linear-solve.linear-68c15d41",
+    "animation.linear-solve.solve-x"
+  ].map((assetId): [string, Compiler] => [
+    assetId,
+    compileKpLinearOperationMigrationV2
+  ])
 ]);
 const cache = new WeakMap<KpAnimationAsset, KpEquationAssetMigrationV2>();
 

@@ -196,7 +196,8 @@
     {
       "id": "migrate-linear-operations",
       "title": "migrate-linear-operations",
-      "status": "planned"
+      "summary": "Migrated additive and multiplicative cancellation, balanced operations, arithmetic evaluation, distribution, factoring, and two linear-solve callers through one registry-driven equation governance v2 protocol. Whole-equation context roles are explicit without changing prior selector-only fingerprints; the generic adapter consumes every plan; log-quotient semantic identity now matches its canonical authoring operation; specialized LLM projections replace rather than duplicate generic catalogue entries. Reviewed renderers, timing, URLs, and family profiles remain unchanged.",
+      "status": "complete"
     },
     {
       "id": "migrate-fraction-root",

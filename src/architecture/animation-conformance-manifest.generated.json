@@ -2878,21 +2878,25 @@
         "seekPolicy": "deterministic-normalized-playhead"
       },
       "policy": {
-        "epochId": "policy.animation.legacy.v1",
+        "epochId": "policy.animation.governance-v2.preview.1",
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
-          "principle.animation.deterministic-single-clock"
+          "principle.animation.deterministic-single-clock",
+          "principle.animation.relation-clearing-transit",
+          "principle.animation.target-arrival-cohort"
         ],
         "principleContractIds": [
           "contract.animation.semantic-lineage.v1",
-          "contract.animation.deterministic-clock.v1"
+          "contract.animation.deterministic-clock.v1",
+          "contract.animation.relation-clearing-transit.v1",
+          "contract.animation.target-arrival-cohort.v1"
         ]
       },
       "resolvedProfiles": [
         {
           "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
           "domain": "equation",
-          "epochId": "policy.animation.legacy.v1",
+          "epochId": "policy.animation.governance-v2.preview.1",
           "source": "asset-declared",
           "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-1740be6e",
           "profileSchemaVersion": "kp.presentation-profile.v1",
@@ -2902,7 +2906,9 @@
       "dependencies": {
         "principleIds": [
           "principle.animation.semantic-lineage-authority",
-          "principle.animation.deterministic-single-clock"
+          "principle.animation.deterministic-single-clock",
+          "principle.animation.relation-clearing-transit",
+          "principle.animation.target-arrival-cohort"
         ],
         "motifIds": [
           "semantic-material-v2",
@@ -2942,8 +2948,6 @@
       "disposition": {
         "status": "compatibility",
         "gapCodes": [
-          "equation-grammar-v2-missing",
-          "typography-policy-implicit",
           "asset-presentation-constraints-missing"
         ]
       },
@@ -2988,21 +2992,25 @@
         "seekPolicy": "deterministic-normalized-playhead"
       },
       "policy": {
-        "epochId": "policy.animation.legacy.v1",
+        "epochId": "policy.animation.governance-v2.preview.1",
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
-          "principle.animation.deterministic-single-clock"
+          "principle.animation.deterministic-single-clock",
+          "principle.animation.relation-clearing-transit",
+          "principle.animation.target-arrival-cohort"
         ],
         "principleContractIds": [
           "contract.animation.semantic-lineage.v1",
-          "contract.animation.deterministic-clock.v1"
+          "contract.animation.deterministic-clock.v1",
+          "contract.animation.relation-clearing-transit.v1",
+          "contract.animation.target-arrival-cohort.v1"
         ]
       },
       "resolvedProfiles": [
         {
           "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
           "domain": "equation",
-          "epochId": "policy.animation.legacy.v1",
+          "epochId": "policy.animation.governance-v2.preview.1",
           "source": "asset-declared",
           "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
           "profileSchemaVersion": "kp.presentation-profile.v1",
@@ -3012,7 +3020,9 @@
       "dependencies": {
         "principleIds": [
           "principle.animation.semantic-lineage-authority",
-          "principle.animation.deterministic-single-clock"
+          "principle.animation.deterministic-single-clock",
+          "principle.animation.relation-clearing-transit",
+          "principle.animation.target-arrival-cohort"
         ],
         "motifIds": [
           "family.algebra.distribution-factoring",
@@ -3054,8 +3064,6 @@
       "disposition": {
         "status": "compatibility",
         "gapCodes": [
-          "equation-grammar-v2-missing",
-          "typography-policy-implicit",
           "asset-presentation-constraints-missing"
         ]
       },
@@ -3100,21 +3108,25 @@
         "seekPolicy": "deterministic-normalized-playhead"
       },
       "policy": {
-        "epochId": "policy.animation.legacy.v1",
+        "epochId": "policy.animation.governance-v2.preview.1",
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
-          "principle.animation.deterministic-single-clock"
+          "principle.animation.deterministic-single-clock",
+          "principle.animation.relation-clearing-transit",
+          "principle.animation.target-arrival-cohort"
         ],
         "principleContractIds": [
           "contract.animation.semantic-lineage.v1",
-          "contract.animation.deterministic-clock.v1"
+          "contract.animation.deterministic-clock.v1",
+          "contract.animation.relation-clearing-transit.v1",
+          "contract.animation.target-arrival-cohort.v1"
         ]
       },
       "resolvedProfiles": [
         {
           "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
           "domain": "equation",
-          "epochId": "policy.animation.legacy.v1",
+          "epochId": "policy.animation.governance-v2.preview.1",
           "source": "asset-declared",
           "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
           "profileSchemaVersion": "kp.presentation-profile.v1",
@@ -3124,7 +3136,9 @@
       "dependencies": {
         "principleIds": [
           "principle.animation.semantic-lineage-authority",
-          "principle.animation.deterministic-single-clock"
+          "principle.animation.deterministic-single-clock",
+          "principle.animation.relation-clearing-transit",
+          "principle.animation.target-arrival-cohort"
         ],
         "motifIds": [
           "family.algebra.distribution-factoring",
@@ -3165,8 +3179,6 @@
       "disposition": {
         "status": "compatibility",
         "gapCodes": [
-          "equation-grammar-v2-missing",
-          "typography-policy-implicit",
           "asset-presentation-constraints-missing"
         ]
       },
@@ -3909,21 +3921,25 @@
         "seekPolicy": "deterministic-normalized-playhead"
       },
       "policy": {
-        "epochId": "policy.animation.legacy.v1",
+        "epochId": "policy.animation.governance-v2.preview.1",
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
-          "principle.animation.deterministic-single-clock"
+          "principle.animation.deterministic-single-clock",
+          "principle.animation.relation-clearing-transit",
+          "principle.animation.target-arrival-cohort"
         ],
         "principleContractIds": [
           "contract.animation.semantic-lineage.v1",
-          "contract.animation.deterministic-clock.v1"
+          "contract.animation.deterministic-clock.v1",
+          "contract.animation.relation-clearing-transit.v1",
+          "contract.animation.target-arrival-cohort.v1"
         ]
       },
       "resolvedProfiles": [
         {
           "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
           "domain": "equation",
-          "epochId": "policy.animation.legacy.v1",
+          "epochId": "policy.animation.governance-v2.preview.1",
           "source": "asset-declared",
           "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275",
           "profileSchemaVersion": "kp.presentation-profile.v1",
@@ -3933,7 +3949,9 @@
       "dependencies": {
         "principleIds": [
           "principle.animation.semantic-lineage-authority",
-          "principle.animation.deterministic-single-clock"
+          "principle.animation.deterministic-single-clock",
+          "principle.animation.relation-clearing-transit",
+          "principle.animation.target-arrival-cohort"
         ],
         "motifIds": [
           "semantic-material-v2",
@@ -3975,8 +3993,6 @@
       "disposition": {
         "status": "compatibility",
         "gapCodes": [
-          "equation-grammar-v2-missing",
-          "typography-policy-implicit",
           "asset-presentation-constraints-missing"
         ]
       },
@@ -4854,21 +4870,25 @@
         "seekPolicy": "deterministic-normalized-playhead"
       },
       "policy": {
-        "epochId": "policy.animation.legacy.v1",
+        "epochId": "policy.animation.governance-v2.preview.1",
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
-          "principle.animation.deterministic-single-clock"
+          "principle.animation.deterministic-single-clock",
+          "principle.animation.relation-clearing-transit",
+          "principle.animation.target-arrival-cohort"
         ],
         "principleContractIds": [
           "contract.animation.semantic-lineage.v1",
-          "contract.animation.deterministic-clock.v1"
+          "contract.animation.deterministic-clock.v1",
+          "contract.animation.relation-clearing-transit.v1",
+          "contract.animation.target-arrival-cohort.v1"
         ]
       },
       "resolvedProfiles": [
         {
           "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
           "domain": "equation",
-          "epochId": "policy.animation.legacy.v1",
+          "epochId": "policy.animation.governance-v2.preview.1",
           "source": "asset-declared",
           "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-e7328d35",
           "profileSchemaVersion": "kp.presentation-profile.v1",
@@ -4878,7 +4898,9 @@
       "dependencies": {
         "principleIds": [
           "principle.animation.semantic-lineage-authority",
-          "principle.animation.deterministic-single-clock"
+          "principle.animation.deterministic-single-clock",
+          "principle.animation.relation-clearing-transit",
+          "principle.animation.target-arrival-cohort"
         ],
         "motifIds": [
           "family.algebra.both-sides",
@@ -4926,11 +4948,8 @@
         ]
       },
       "disposition": {
-        "status": "compatibility",
-        "gapCodes": [
-          "equation-grammar-v2-missing",
-          "typography-policy-implicit"
-        ]
+        "status": "conformant",
+        "gapCodes": []
       },
       "reviewFreshness": {
         "schemaVersion": "kp.animation-review-freshness.v1",

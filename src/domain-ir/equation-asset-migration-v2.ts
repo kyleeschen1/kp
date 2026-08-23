@@ -104,22 +104,39 @@ export function compileKpEquationAssetMigrationV2(input: {
         selectors.map(({ id }) => id));
       const targetEntityIds = targetObjects.flatMap(({ selectors }) =>
         selectors.map(({ id }) => id));
+      const boundEntityIds = new Set(Object.values(
+        operation.roleBindings
+      ).flat());
+      const boundSourceObjectIds = transformation.sourceObjectIds.filter(
+        (id) => boundEntityIds.has(id)
+      );
+      const boundTargetObjectIds = transformation.targetObjectIds.filter(
+        (id) => boundEntityIds.has(id)
+      );
       validateKpEquationMigrationRoleBindings({
         entry,
         roleBindings: operation.roleBindings,
-        sourceEntityIds: new Set(sourceEntityIds),
-        targetEntityIds: new Set(targetEntityIds)
+        sourceEntityIds: new Set([
+          ...transformation.sourceObjectIds,
+          ...sourceEntityIds
+        ]),
+        targetEntityIds: new Set([
+          ...transformation.targetObjectIds,
+          ...targetEntityIds
+        ])
       });
       const sourceStateId = `state.${input.animation.id}.migration.${index}.source`;
       const targetStateId = `state.${input.animation.id}.migration.${index}.target`;
       states.push({
         id: sourceStateId,
         objectIds: transformation.sourceObjectIds,
-        entityIds: sourceEntityIds
+        // Object-level context roles enter entity space only when an operation
+        // names them. Existing selector-only migrations keep identical plans.
+        entityIds: [...sourceEntityIds, ...boundSourceObjectIds]
       }, {
         id: targetStateId,
         objectIds: transformation.targetObjectIds,
-        entityIds: targetEntityIds
+        entityIds: [...targetEntityIds, ...boundTargetObjectIds]
       });
       return {
         id: `transition.${transformation.id}`,

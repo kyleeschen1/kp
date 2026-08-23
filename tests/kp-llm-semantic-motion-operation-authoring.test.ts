@@ -19,6 +19,7 @@ test("LLM authoring catalog binds promoted operations to existing semantic motif
 
   assert.deepEqual(catalog.operationPacks, [
     { packId: "kp.core", version: "1.0.0" },
+    { packId: "kp.arithmetic", version: "1.0.0" },
     { packId: "kp.algebra", version: "0.1.0" },
     { packId: "kp.semantic-motion", version: "0.1.0" }
   ]);
@@ -34,6 +35,7 @@ test("LLM authoring catalog binds promoted operations to existing semantic motif
   assert.equal(byId.get("kp.semantic-motion.dot-product")?.visualMotif, "dot-product-accumulate");
   assert.equal(byId.get("kp.semantic-motion.matrix-vector")?.visualMotif, "matrix-row-compose");
   assert.equal(byId.get("kp.semantic-motion.matrix-matrix")?.visualMotif, "matrix-cell-compose");
+  assert.equal(byId.has("kp.algebra.apply-natural-log-both-sides"), false);
   assert.deepEqual(
     byId.get("kp.semantic-motion.matrix-matrix")?.allowedLineageRelations,
     ["identity", "role-change", "fan-out", "fan-in"]

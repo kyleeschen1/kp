@@ -1,6 +1,8 @@
 import {
   kpCanonicalOperationRegistry
 } from "../semantic/canonical-operation-registry.ts";
+import { kpEquationLawOperationPack } from
+  "../semantic/equation-law-operation-pack.ts";
 import type {
   KpCanonicalOperationId,
   KpCanonicalOperationRole
@@ -80,7 +82,11 @@ export interface KpLlmSemanticMotionOperationCatalog {
 export function createKpLlmSemanticMotionOperationCatalog():
   KpLlmSemanticMotionOperationCatalog {
   const operations = kpCanonicalOperationRegistry.entries
-    .filter((entry) => entry.sourceTransformType !== undefined)
+    // Equation-law entries already govern compiled callers, but they do not
+    // become legacy motif-authoring operations until a surface-specific
+    // authoring projection is promoted. This avoids inventing a visual motif.
+    .filter((entry) => entry.sourceTransformType !== undefined &&
+      entry.packId !== kpEquationLawOperationPack.id)
     .map((entry): KpLlmPromotedOperationAuthoringDefinition => {
       const extensionCallers = kpHomomorphicCrossoverCallerDeclarations.filter(
         ({ semanticMotionOperationId }) =>
