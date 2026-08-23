@@ -136,7 +136,8 @@
     {
       "id": "route-certificates",
       "title": "route-certificates",
-      "status": "planned"
+      "summary": "Added nominal renderer-session measured-route certificates over the existing dense collision compiler. Certification requires one measurement revision, explicit semantic bindings, relation clearance without overlap waivers, exact endpoint settlement, and exclusive paint occurrences; later sampling is pure and rejects copied authority.",
+      "status": "complete"
     },
     {
       "id": "compiled-presentation-plan",
