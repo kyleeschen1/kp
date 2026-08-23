@@ -1,19 +1,9 @@
 import type { KpAnimationAsset } from "../animation/asset.ts";
 import {
-  kpCanonicalOperationRegistry,
-  type KpCanonicalOperationRegistryEntry
-} from "../semantic/canonical-operation-registry.ts";
-import type {
-  KpCanonicalOperationRole
-} from "../semantic/canonical-operation.ts";
-import {
-  compileKpEquationGrammarV2,
-  type KpCompiledEquationGrammarV2
-} from "./equation-grammar-v2.ts";
-import {
-  compileKpEquationPresentationPlanV2,
-  type KpCompiledEquationPresentationPlanV2
-} from "./equation-presentation-plan-v2.ts";
+  compileKpEquationAssetMigrationV2,
+  KpEquationAssetMigrationV2Error,
+  type KpEquationAssetMigrationV2
+} from "./equation-asset-migration-v2.ts";
 
 export const kpEquationEvaluationMigrationCompilerV2Id =
   "kp.equation-evaluation-migration-compiler.v2" as const;
@@ -24,8 +14,8 @@ export interface KpEquationEvaluationMigrationV2 {
   readonly compilerId: typeof kpEquationEvaluationMigrationCompilerV2Id;
   readonly assetId: string;
   readonly operationId: string;
-  readonly grammar: KpCompiledEquationGrammarV2;
-  readonly presentationPlan: KpCompiledEquationPresentationPlanV2;
+  readonly grammar: KpEquationAssetMigrationV2["grammar"];
+  readonly presentationPlan: KpEquationAssetMigrationV2["presentationPlan"];
 }
 
 export class KpEquationEvaluationMigrationV2Error extends Error {
@@ -44,113 +34,25 @@ export function compileKpEquationEvaluationMigrationV2(input: {
 }): KpEquationEvaluationMigrationV2 {
   const transformation = only(input.animation.transformations,
     `${input.animation.id} requires exactly one semantic transformation`);
-  const correspondenceMap = transformation.correspondenceMap;
-  if (correspondenceMap === undefined) {
-    throw new KpEquationEvaluationMigrationV2Error(
-      `${transformation.id} requires semantic correspondence.`
-    );
-  }
-  const entry = requiredOperation(input.operationId);
-  const pack = kpCanonicalOperationRegistry.packs.find(
-    ({ id }) => id === entry.packId
-  )!;
-  const sourceObjects = objectsById(
-    input.animation,
-    transformation.sourceObjectIds,
-    "source"
-  );
-  const targetObjects = objectsById(
-    input.animation,
-    transformation.targetObjectIds,
-    "target"
-  );
-  const sourceEntityIds = sourceObjects.flatMap(({ selectors }) =>
-    selectors.map(({ id }) => id));
-  const targetEntityIds = targetObjects.flatMap(({ selectors }) =>
-    selectors.map(({ id }) => id));
-  validateRoleBindings({
-    entry,
-    roleBindings: input.roleBindings,
-    sourceEntityIds: new Set(sourceEntityIds),
-    targetEntityIds: new Set(targetEntityIds)
-  });
-  const operationPacks = [pack, ...pack.dependencies.map((dependency) => {
-    const dependencyPack = kpCanonicalOperationRegistry.packs.find(
-      ({ id }) => id === dependency.packId &&
-        id !== pack.id && dependency.version.length > 0
-    );
-    if (dependencyPack === undefined ||
-        dependencyPack.version !== dependency.version) {
-      throw new KpEquationEvaluationMigrationV2Error(
-        `${pack.id} has an unresolved exact dependency ${dependency.packId}@${dependency.version}.`
-      );
-    }
-    return dependencyPack;
-  })];
-  const transitionId = `transition.${transformation.id}`;
-  const grammarResult = compileKpEquationGrammarV2({
-    schemaVersion: "kp.equation-grammar.v2",
-    id: `grammar.${input.animation.id}.v2`,
-    assetId: input.animation.id,
-    policyEpochId: "policy.animation.governance-v2.preview.1",
-    semanticSource: {
-      sourceId: input.animation.bundle.id,
-      revisionId: `${input.animation.id}@${input.animation.version}`,
-      operationPacks: operationPacks.map(({ id, version }) => ({
-        packId: id,
-        version
-      }))
-    },
-    clock: { authority: "kp.shared-normalized-clock.v1" },
-    states: [{
-      id: `state.${input.animation.id}.source`,
-      objectIds: transformation.sourceObjectIds,
-      entityIds: sourceEntityIds
-    }, {
-      id: `state.${input.animation.id}.target`,
-      objectIds: transformation.targetObjectIds,
-      entityIds: targetEntityIds
-    }],
-    transitions: [{
-      id: transitionId,
-      transformationId: transformation.id,
-      sourceStateId: `state.${input.animation.id}.source`,
-      targetStateId: `state.${input.animation.id}.target`,
-      operation: {
+  let migration: KpEquationAssetMigrationV2;
+  try {
+    migration = compileKpEquationAssetMigrationV2({
+      animation: input.animation,
+      operations: [{
+        transformationId: transformation.id,
         operationId: input.operationId,
         semanticClass: "evaluation",
         roleBindings: input.roleBindings,
-        correspondenceMap,
-        semanticAuthorityIds: [
-          transformation.id,
-          ...(transformation.lawRefs ?? []).map(({ id }) => id)
-        ]
-      },
-      projection: { intent: "replacement" },
-      typographyPolicyId: "typography.equation.stage.v2",
-      typographyRequirements: { largeOperators: [] },
-      teachingIntent: {
-        kind: "cause",
-        primaryEntityIds: targetEntityIds,
-        secondaryEntityIds: sourceEntityIds,
-        summary: transformation.title
-      }
-    }]
-  });
-  if (grammarResult.status !== "compiled") {
-    throw new KpEquationEvaluationMigrationV2Error(
-      grammarResult.diagnostics.map(({ message }) => message).join("\n")
-    );
+        projectionIntent: "replacement"
+      }]
+    });
+  } catch (error) {
+    if (error instanceof KpEquationAssetMigrationV2Error) {
+      throw new KpEquationEvaluationMigrationV2Error(error.message);
+    }
+    throw error;
   }
-  const presentation = compileKpEquationPresentationPlanV2({
-    grammar: grammarResult.grammar
-  });
-  if (presentation.status !== "compiled") {
-    throw new KpEquationEvaluationMigrationV2Error(
-      presentation.diagnostics.map(({ message }) => message).join("\n")
-    );
-  }
-  const transition = only(presentation.plan.transitions,
+  const transition = only(migration.presentationPlan.transitions,
     `${input.animation.id} requires one v2 presentation transition`);
   if (transition.evaluationAuthority === undefined ||
       transition.semanticOperation.operationId !== input.operationId ||
@@ -165,8 +67,8 @@ export function compileKpEquationEvaluationMigrationV2(input: {
     compilerId: kpEquationEvaluationMigrationCompilerV2Id,
     assetId: input.animation.id,
     operationId: input.operationId,
-    grammar: grammarResult.grammar,
-    presentationPlan: presentation.plan
+    grammar: migration.grammar,
+    presentationPlan: migration.presentationPlan
   });
 }
 
@@ -215,19 +117,6 @@ export function compileKpDirectArithmeticEvaluationMigrationV2(
   });
 }
 
-function requiredOperation(operationId: string):
-KpCanonicalOperationRegistryEntry {
-  const entry = kpCanonicalOperationRegistry.entries.find(
-    ({ id }) => id === operationId
-  );
-  if (entry === undefined) {
-    throw new KpEquationEvaluationMigrationV2Error(
-      `Unknown canonical evaluation operation ${operationId}.`
-    );
-  }
-  return entry;
-}
-
 function objectsById(
   animation: KpAnimationAsset,
   ids: readonly string[],
@@ -243,56 +132,6 @@ function objectsById(
     }
     return object;
   });
-}
-
-function validateRoleBindings(input: {
-  readonly entry: KpCanonicalOperationRegistryEntry;
-  readonly roleBindings: Readonly<Record<string, readonly string[]>>;
-  readonly sourceEntityIds: ReadonlySet<string>;
-  readonly targetEntityIds: ReadonlySet<string>;
-}): void {
-  const rolesById = new Map(input.entry.contract.roles.map((role) =>
-    [role.id, role]));
-  const supplied = Object.keys(input.roleBindings);
-  const unexpected = supplied.filter((id) => !rolesById.has(id));
-  const missing = [...rolesById.keys()].filter((id) =>
-    input.roleBindings[id] === undefined);
-  if (unexpected.length > 0 || missing.length > 0) {
-    throw new KpEquationEvaluationMigrationV2Error(
-      `${input.entry.id} role mismatch; missing [${missing.join(", ")}], ` +
-      `unexpected [${unexpected.join(", ")}].`
-    );
-  }
-  for (const role of input.entry.contract.roles) {
-    const entityIds = input.roleBindings[role.id]!;
-    validateCardinality(role, entityIds.length);
-    const endpoint = role.endpoint === "source"
-      ? input.sourceEntityIds
-      : input.targetEntityIds;
-    const foreign = entityIds.filter((id) => !endpoint.has(id));
-    if (foreign.length > 0) {
-      throw new KpEquationEvaluationMigrationV2Error(
-        `${input.entry.id} role ${role.id} binds foreign ${role.endpoint} ` +
-        `entities ${foreign.join(", ")}.`
-      );
-    }
-  }
-}
-
-function validateCardinality(
-  role: KpCanonicalOperationRole,
-  count: number
-): void {
-  const valid = role.cardinality === "exactly-one"
-    ? count === 1
-    : role.cardinality === "zero-or-one"
-      ? count <= 1
-      : count >= 1;
-  if (!valid) {
-    throw new KpEquationEvaluationMigrationV2Error(
-      `${role.id} requires ${role.cardinality}; received ${count}.`
-    );
-  }
 }
 
 function only<T>(values: readonly T[], message: string): T {

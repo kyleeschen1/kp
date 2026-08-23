@@ -1,8 +1,15 @@
 /// <reference types="vite/client" />
 
 import {
+  createKpLogQuotientAnimationAsset,
   kpLogQuotientAnimationId
 } from "../animation/log-quotient-adapter.ts";
+import {
+  compileKpLogQuotientMigrationV2
+} from "../domain-ir/log-quotient-migration-v2.ts";
+import type {
+  KpEquationAssetMigrationV2
+} from "../domain-ir/equation-asset-migration-v2.ts";
 import {
   kpCanonicalLogQuotientHomomorphicFusionChoreography
 } from "../animation/log-quotient-homomorphic-fusion.ts";
@@ -41,6 +48,7 @@ import type {
 } from "./animation-surface-adapter-registry.ts";
 
 interface KpLogQuotientSurfaceSession {
+  readonly governance: KpEquationAssetMigrationV2;
   readonly player: HTMLElement;
   readonly stage: HTMLElement;
   readonly endpointRoots: readonly [HTMLElement, HTMLElement];
@@ -52,6 +60,9 @@ interface KpLogQuotientSurfaceSession {
 }
 
 const sessions = new WeakMap<HTMLElement, KpLogQuotientSurfaceSession>();
+const canonicalGovernance = compileKpLogQuotientMigrationV2(
+  createKpLogQuotientAnimationAsset()
+);
 
 export const kpEditorLogQuotientSurfaceAdapter = Object.freeze({
   id: "editor-animation-surface.log-quotient.canonical-native-katex",
@@ -87,6 +98,8 @@ function mountSurface(
   const stage = document.createElement("section");
   stage.className = "kp-log-quotient-stage";
   stage.dataset["kpLogQuotientStage"] = "preparing";
+  stage.dataset["kpEquationPresentationPlanId"] =
+    canonicalGovernance.presentationPlan.id;
   stage.dataset["kpLogQuotientFractionTreatment"] = "compact-native";
   stage.dataset["kpLogQuotientSemanticMotionChoreographyId"] =
     kpCanonicalCompiledLogQuotientSemanticMotion.id;
@@ -123,6 +136,7 @@ function mountSurface(
   stage.append(...roots, materialLayer, status);
   slot.replaceChildren(stage);
   return {
+    governance: canonicalGovernance,
     player,
     stage,
     endpointRoots: Object.freeze(roots) as readonly [HTMLElement, HTMLElement],

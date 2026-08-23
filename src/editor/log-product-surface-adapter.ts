@@ -37,9 +37,16 @@ import {
   kpLogProductSemanticMotionBundles
 } from "../semantic/log-product-semantic-motion.ts";
 import {
+  compileKpLogProductMigrationV2
+} from "../domain-ir/log-product-migration-v2.ts";
+import type {
+  KpEquationAssetMigrationV2
+} from "../domain-ir/equation-asset-migration-v2.ts";
+import {
   type KpCompiledLogProductOperation
 } from "../semantic/log-product-transformation-compiler.ts";
 import {
+  getKpEditorAnimationPlaybackSession,
   KP_EDITOR_ANIMATION_DISPOSE_EVENT
 } from "./animation-player-controller.ts";
 import type {
@@ -50,6 +57,7 @@ import type {
 } from "./animation-surface-adapter-registry.ts";
 
 interface KpLogProductSurfaceSession {
+  readonly governance: KpEquationAssetMigrationV2;
   readonly player: HTMLElement;
   readonly stage: HTMLElement;
   readonly endpointRoots: readonly [HTMLElement, HTMLElement];
@@ -115,11 +123,21 @@ function mountSurface(
 ): KpLogProductSurfaceSession {
   const document = player.ownerDocument;
   const runtime = runtimeForAnimation(state.animationId);
+  const animation = getKpEditorAnimationPlaybackSession(player)?.animation;
+  if (animation === undefined || animation.id !== state.animationId) {
+    throw new Error(`Missing log-product animation ${state.animationId}.`);
+  }
+  const governance = compileKpLogProductMigrationV2({
+    animation,
+    semanticMotion: runtime.semanticBundle
+  });
   const stage = document.createElement("section");
   stage.className = "kp-log-product-stage";
   stage.dataset["kpLogProductStage"] = "preparing";
   stage.dataset["kpLogProductGeometryState"] = "preparing";
   stage.dataset["kpLogProductGeometryRevision"] = "0";
+  stage.dataset["kpEquationPresentationPlanId"] =
+    governance.presentationPlan.id;
   stage.dataset["kpLogProductSemanticMotionChoreographyId"] =
     runtime.semanticMotion.id;
   stage.dataset["kpLogProductSemanticMotionRecipeId"] =
@@ -155,6 +173,7 @@ function mountSurface(
   stage.append(...roots, materialLayer, status);
   slot.replaceChildren(stage);
   const session: KpLogProductSurfaceSession = {
+    governance,
     player,
     stage,
     endpointRoots: Object.freeze(roots) as readonly [HTMLElement, HTMLElement],
@@ -386,6 +405,7 @@ function runtimeForAnimation(animationId: string) {
   }
   return Object.freeze({
     operation: semantic.operation,
+    semanticBundle: semantic,
     semanticMotion: semantic.choreography,
     endpoints: endpoints.endpoints
   });

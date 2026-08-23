@@ -190,7 +190,8 @@
     {
       "id": "migrate-log-exponent",
       "title": "migrate-log-exponent",
-      "status": "planned"
+      "summary": "Migrated log, exponent, homomorphism, change-of-base, generated exponent, and function-wrap callers through generic and family-local equation governance v2 compilers with exact operation authority, role completeness, data-driven dispatch, unchanged family profiles, and sequential visual preservation. Log and finite-sum visuals are human-approved; derivative tuning remains intentionally deferred.",
+      "status": "complete"
     },
     {
       "id": "migrate-linear-operations",

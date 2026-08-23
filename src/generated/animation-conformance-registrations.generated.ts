@@ -8,7 +8,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.algebra.exponential-homomorphism.difference-to-quotient",
     "packId": "exponential-homomorphism",
     "manifestId": "manifest.animation.algebra.exponential-homomorphism.difference-to-quotient",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -16,7 +16,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.algebra.exponential-homomorphism.sum-to-product",
     "packId": "exponential-homomorphism",
     "manifestId": "manifest.animation.algebra.exponential-homomorphism.sum-to-product",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -24,7 +24,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.algebra.log-exponent.solve-two-power-x",
     "packId": "algebra",
     "manifestId": "manifest.animation.algebra.log-exponent.solve-two-power-x",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -32,7 +32,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.algebra.log-product.equivalence-frame",
     "packId": "log-product",
     "manifestId": "manifest.animation.algebra.log-product.equivalence-frame",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -40,7 +40,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.algebra.log-product.product-to-sum",
     "packId": "log-product",
     "manifestId": "manifest.animation.algebra.log-product.product-to-sum",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -48,7 +48,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.algebra.log-product.three-factors-to-sum",
     "packId": "log-product",
     "manifestId": "manifest.animation.algebra.log-product.three-factors-to-sum",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -56,7 +56,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.algebra.log-quotient.difference-to-quotient",
     "packId": "algebra",
     "manifestId": "manifest.animation.algebra.log-quotient.difference-to-quotient",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -160,7 +160,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.equation.logarithm-change-of-base.v1",
     "packId": "algebra",
     "manifestId": "manifest.animation.equation.logarithm-change-of-base.v1",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -232,7 +232,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.generated.exponent.square-as-product",
     "packId": "algebra",
     "manifestId": "manifest.animation.generated.exponent.square-as-product",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -248,7 +248,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.generated.function-wrap.apply-f",
     "packId": "algebra",
     "manifestId": "manifest.animation.generated.function-wrap.apply-f",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {

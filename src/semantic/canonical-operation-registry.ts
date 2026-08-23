@@ -40,6 +40,10 @@ import {
   kpArithmeticOperationEntries,
   kpArithmeticOperationPack
 } from "./arithmetic-operation-pack.ts";
+import {
+  kpEquationLawOperationDefinitions,
+  kpEquationLawOperationPack
+} from "./equation-law-operation-pack.ts";
 
 export interface KpCanonicalOperationRegistryEntry {
   readonly id: string;
@@ -97,12 +101,24 @@ export const kpSemanticMotionOperationEntries:
     contract: semanticMotionContract(definition)
   }));
 
+export const kpEquationLawOperationEntries:
+readonly KpCanonicalOperationRegistryEntry[] =
+  kpEquationLawOperationDefinitions.map((definition) => ({
+    id: definition.id,
+    packId: kpEquationLawOperationPack.id,
+    canonicalComposition: definition.canonicalComposition,
+    sourceTransformType: definition.transformType,
+    authoringSummary: definition.summary,
+    contract: semanticMotionContract(definition)
+  }));
+
 export const kpCanonicalOperationRegistry = createKpCanonicalOperationRegistry({
   packs: [
     kpCanonicalOperationCorePack,
     kpArithmeticOperationPack,
     kpGeneratedAlgebraOperationPack,
-    kpSemanticMotionOperationPack
+    kpSemanticMotionOperationPack,
+    kpEquationLawOperationPack
   ],
   entries: [
     ...kpCanonicalOperationCore.map((operation) => ({
@@ -114,7 +130,8 @@ export const kpCanonicalOperationRegistry = createKpCanonicalOperationRegistry({
     })),
     ...kpArithmeticOperationEntries,
     ...kpGeneratedAlgebraOperationEntries,
-    ...kpSemanticMotionOperationEntries
+    ...kpSemanticMotionOperationEntries,
+    ...kpEquationLawOperationEntries
   ]
 });
 

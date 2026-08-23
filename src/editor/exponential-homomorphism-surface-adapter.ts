@@ -1,11 +1,19 @@
 /// <reference types="vite/client" />
 
 import {
+  createKpExponentialHomomorphismAnimationAsset,
   kpExponentialHomomorphismAnimationId
 } from "../animation/exponential-homomorphism-adapter.ts";
 import {
+  createKpExponentialQuotientPressureAnimationAsset,
   kpExponentialQuotientPressureAnimationId
 } from "../animation/exponential-quotient-pressure-adapter.ts";
+import {
+  compileKpExponentialHomomorphismMigrationV2
+} from "../domain-ir/exponential-homomorphism-migration-v2.ts";
+import type {
+  KpEquationAssetMigrationV2
+} from "../domain-ir/equation-asset-migration-v2.ts";
 import {
   kpCanonicalExponentialHomomorphismAuthority
 } from "../semantic/exponential-homomorphism-exemplar.ts";
@@ -85,6 +93,7 @@ interface KpExponentialHomomorphismSurfaceDefinition {
   readonly sourceStatus: string;
   readonly transitStatus: string;
   readonly targetStatus: string;
+  readonly governance: KpEquationAssetMigrationV2;
 }
 
 const sessions = new WeakMap<HTMLElement,
@@ -99,7 +108,12 @@ const definitions = Object.freeze([
     sourceStatus: "Power with an additive exponent ready.",
     transitStatus:
       "The exponent payloads persist while the base derives two powers.",
-    targetStatus: "The additive exponent is now a product of powers."
+    targetStatus: "The additive exponent is now a product of powers.",
+    governance: compileKpExponentialHomomorphismMigrationV2({
+      animation: createKpExponentialHomomorphismAnimationAsset(),
+      authority: kpCanonicalExponentialHomomorphismAuthority,
+      operationId: "operation.equation.exponential-sum-to-product.v1"
+    })
   }),
   definition({
     animationId: kpExponentialQuotientPressureAnimationId,
@@ -109,7 +123,13 @@ const definitions = Object.freeze([
     sourceStatus: "Power with a subtractive exponent ready.",
     transitStatus:
       "The payloads persist while numerator and denominator powers form.",
-    targetStatus: "The subtractive exponent is now a quotient of powers."
+    targetStatus: "The subtractive exponent is now a quotient of powers.",
+    governance: compileKpExponentialHomomorphismMigrationV2({
+      animation: createKpExponentialQuotientPressureAnimationAsset(),
+      authority: kpExponentialQuotientPressureAuthority,
+      operationId:
+        "operation.equation.exponential-difference-to-quotient.v1"
+    })
   })
 ]);
 
@@ -161,6 +181,8 @@ function mountSurface(
   stage.dataset["kpExponentialHomomorphismStage"] = "preparing";
   stage.dataset["kpExponentialHomomorphismAnimationId"] =
     definitionValue.animationId;
+  stage.dataset["kpEquationPresentationPlanId"] =
+    definitionValue.governance.presentationPlan.id;
   stage.setAttribute("aria-label", definitionValue.ariaLabel);
 
   const roots: [HTMLElement, HTMLElement] = [

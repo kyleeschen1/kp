@@ -1,8 +1,15 @@
 /// <reference types="vite/client" />
 
 import {
+  createKpLogarithmChangeOfBaseExemplarAsset,
   kpLogarithmChangeOfBaseExemplarId
 } from "../animation/logarithm-change-of-base-exemplar.ts";
+import {
+  compileKpLogarithmChangeOfBaseMigrationV2
+} from "../domain-ir/logarithm-change-of-base-migration-v2.ts";
+import type {
+  KpEquationAssetMigrationV2
+} from "../domain-ir/equation-asset-migration-v2.ts";
 import {
   createKpEquationFontReadiness
 } from "../rendering/equation-font-readiness.ts";
@@ -29,6 +36,7 @@ import type {
 } from "./animation-surface-adapter-registry.ts";
 
 interface KpLogarithmChangeOfBaseSurfaceSession {
+  readonly governance: KpEquationAssetMigrationV2;
   readonly player: HTMLElement;
   readonly stage: HTMLElement;
   readonly endpointRoots: readonly [HTMLElement, HTMLElement];
@@ -41,6 +49,9 @@ interface KpLogarithmChangeOfBaseSurfaceSession {
 
 const sessions = new WeakMap<HTMLElement,
   KpLogarithmChangeOfBaseSurfaceSession>();
+const canonicalGovernance = compileKpLogarithmChangeOfBaseMigrationV2(
+  createKpLogarithmChangeOfBaseExemplarAsset()
+);
 
 export const kpEditorLogarithmChangeOfBaseSurfaceAdapter = Object.freeze({
   id: "editor-animation-surface.logarithm-change-of-base.canonical-native-katex",
@@ -76,6 +87,8 @@ function mountSurface(
   const stage = document.createElement("section");
   stage.className = "kp-logarithm-change-of-base-stage";
   stage.dataset["kpLogarithmChangeOfBaseStage"] = "preparing";
+  stage.dataset["kpEquationPresentationPlanId"] =
+    canonicalGovernance.presentationPlan.id;
   stage.setAttribute("aria-label", "Change logarithm base");
   const createRoot = (
     endpoint: typeof kpCanonicalLogarithmChangeOfBaseNativeEndpoints[number],
@@ -107,6 +120,7 @@ function mountSurface(
   stage.append(...roots, materialLayer, status);
   slot.replaceChildren(stage);
   return {
+    governance: canonicalGovernance,
     player,
     stage,
     endpointRoots: Object.freeze(roots) as readonly [HTMLElement, HTMLElement],

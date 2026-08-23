@@ -13,6 +13,9 @@ import {
   projectKpEquationSurfaceFamily
 } from "../domain-ir/equation-surface-family-declarations.ts";
 import {
+  requireKpGenericEquationMigrationV2
+} from "../domain-ir/equation-generic-v2-migration-dispatch.ts";
+import {
   findKpEquationStructuralChoreographyDeclaration
 } from "../animation/equation-structural-choreography-declarations.ts";
 import type {
@@ -211,6 +214,13 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
       return;
     }
     const family = projectKpEquationSurfaceFamily(animation.id);
+    const governance = requireKpGenericEquationMigrationV2(animation);
+    if (governance !== undefined) {
+      slot.dataset["kpEquationPresentationPlanId"] =
+        governance.presentationPlan.id;
+    } else {
+      delete slot.dataset["kpEquationPresentationPlanId"];
+    }
     const waveC = findKpWaveCEquationDispositionDeclaration(animation.id);
     if (
       family.disposition === "unsupported" ||

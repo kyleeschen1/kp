@@ -60,6 +60,12 @@ import {
   requireKpClosedDispatchEntry
 } from "../domain-ir/equation-extension-registry.ts";
 import {
+  compileKpLogExponentMigrationV2
+} from "../domain-ir/log-exponent-migration-v2.ts";
+import type {
+  KpEquationAssetMigrationV2
+} from "../domain-ir/equation-asset-migration-v2.ts";
+import {
   KP_EDITOR_ANIMATION_DISPOSE_EVENT
 } from "./animation-player-controller.ts";
 import type {
@@ -73,6 +79,7 @@ import {
 } from "./animation-surface-readiness.ts";
 
 interface KpLogExponentSurfaceSession {
+  readonly governance: KpEquationAssetMigrationV2;
   readonly player: HTMLElement;
   readonly fontReadiness: ReturnType<typeof createKpEquationFontReadiness>;
   readonly stage: HTMLElement;
@@ -103,6 +110,9 @@ interface KpLogExponentPreparedOperation {
 
 const sessions = new WeakMap<HTMLElement, KpLogExponentSurfaceSession>();
 const canonicalAnimation = createKpLogExponentAnimationAsset();
+const canonicalGovernance = compileKpLogExponentMigrationV2(
+  canonicalAnimation
+);
 
 interface KpLogExponentSurfaceDispatchEntry {
   readonly id: KpLogExponentOperationKind;
@@ -214,6 +224,8 @@ function mountSurface(
   const stage = document.createElement("section");
   stage.className = "kp-log-exponent-stage";
   stage.dataset["kpLogExponentStage"] = "preparing";
+  stage.dataset["kpEquationPresentationPlanId"] =
+    canonicalGovernance.presentationPlan.id;
   stage.setAttribute("aria-label", "Solve two to the x equals seven");
   // Native KaTeX geometry is not paintable until fonts and endpoint bounds
   // settle. Holding transport here prevents the clock from outrunning that
@@ -258,6 +270,7 @@ function mountSurface(
   slot.replaceChildren(stage);
 
   return {
+    governance: canonicalGovernance,
     player,
     fontReadiness: createKpEquationFontReadiness(document),
     stage,

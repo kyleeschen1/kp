@@ -49,8 +49,11 @@ test("every direct arithmetic caller reaches one authoritative v2 evaluation pla
 });
 
 test("the static v2 migration ledger exactly names the compiled evaluation subgroup", () => {
+  const evaluationDeclarations = kpEquationGovernanceV2MigrationDeclarations
+    .filter(({ compilerId }) =>
+      compilerId === "kp.equation-evaluation-migration-compiler.v2");
   assert.deepEqual(
-    kpEquationGovernanceV2MigrationDeclarations.map(({ assetId }) =>
+    evaluationDeclarations.map(({ assetId }) =>
       assetId).sort(),
     [
       ...directIds,
@@ -58,7 +61,7 @@ test("the static v2 migration ledger exactly names the compiled evaluation subgr
       "animation.generated.add-zero"
     ].sort()
   );
-  assert.ok(kpEquationGovernanceV2MigrationDeclarations.every(
+  assert.ok(evaluationDeclarations.every(
     ({ compilerSourcePath, typographyPolicyId }) =>
       compilerSourcePath ===
         "src/domain-ir/equation-evaluation-migration-v2.ts" &&

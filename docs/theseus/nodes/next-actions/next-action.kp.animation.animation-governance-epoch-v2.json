@@ -455,6 +455,97 @@
       "scope": "pre-existing-visual-baseline",
       "checkedAt": "2026-08-23T15:03:36.566Z",
       "notes": "Existing"
+    },
+    {
+      "command": "npm run test:equation-structural-migration-v2",
+      "status": "passed",
+      "scope": "structural caller migration",
+      "checkedAt": "2026-08-23T15:37:45.907Z",
+      "notes": "Eight focused tests prove ten caller migrations, exact operation authority, role completeness, and the existing equivalence plan."
+    },
+    {
+      "command": "npm run test:animation-governance-inventory",
+      "status": "passed",
+      "scope": "governance inventory",
+      "checkedAt": "2026-08-23T15:37:47.016Z",
+      "notes": "All loadable assets classify and the committed inventory matches deterministic compilation."
+    },
+    {
+      "command": "npm run test:animation-governance-reverse-dependencies",
+      "status": "passed",
+      "scope": "manifest and reverse dependencies",
+      "checkedAt": "2026-08-23T15:37:47.973Z",
+      "notes": "All nine manifest and dependency tests pass after v2 migration regeneration."
+    },
+    {
+      "command": "npm run test:animation-conformance-registration",
+      "status": "passed",
+      "scope": "lazy conformance registration",
+      "checkedAt": "2026-08-23T15:37:48.960Z",
+      "notes": "All seven conformance and lazy-pack registration tests pass without eager family imports."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-08-23T15:37:49.973Z",
+      "notes": "All dependency, framework-neutral, semantic boundary, compiler authority, and governance-v2 ratchets pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "type system",
+      "checkedAt": "2026-08-23T15:37:50.981Z",
+      "notes": "Application, node, test, Svelte, and domain type checks pass."
+    },
+    {
+      "command": "npm run visual:log-exponent",
+      "status": "passed",
+      "scope": "visual preservation",
+      "checkedAt": "2026-08-23T15:37:51.986Z",
+      "notes": "Stable log-exponent checkpoint command completed with the unchanged reviewed renderer."
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "passed",
+      "scope": "visual preservation",
+      "checkedAt": "2026-08-23T15:37:52.952Z",
+      "notes": "Stable log-product checkpoint command completed with the unchanged reviewed renderer."
+    },
+    {
+      "command": "npm run visual:log-quotient",
+      "status": "passed",
+      "scope": "visual preservation",
+      "checkedAt": "2026-08-23T15:37:53.929Z",
+      "notes": "Stable log-quotient checkpoint command completed with the unchanged reviewed renderer."
+    },
+    {
+      "command": "npm run visual:logarithm-change-of-base",
+      "status": "passed",
+      "scope": "visual preservation",
+      "checkedAt": "2026-08-23T15:37:54.871Z",
+      "notes": "Stable change-of-base checkpoint command completed with the unchanged reviewed renderer."
+    },
+    {
+      "command": "npm run visual:exponential-homomorphism",
+      "status": "passed",
+      "scope": "visual preservation",
+      "checkedAt": "2026-08-23T15:37:55.808Z",
+      "notes": "Stable exponential-homomorphism checkpoint command completed with the unchanged reviewed renderer."
+    },
+    {
+      "command": "npm run visual:exponent-radical",
+      "status": "passed",
+      "scope": "visual preservation",
+      "checkedAt": "2026-08-23T15:39:05.627Z",
+      "notes": "Stable exponent checkpoint command completed with the unchanged generic renderer."
+    },
+    {
+      "command": "npm run visual:function-wrap",
+      "status": "passed",
+      "scope": "visual preservation",
+      "checkedAt": "2026-08-23T15:39:07.941Z",
+      "notes": "Stable function-wrap checkpoint command completed with eight captures and no warnings."
     }
   ],
   "progress": {
