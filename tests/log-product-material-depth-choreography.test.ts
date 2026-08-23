@@ -276,7 +276,7 @@ test("generated logarithms enclosures and connector rise as one reception cohort
       ...kpCanonicalLogProductSemanticMotionRequest.operation
         .roleBindings["target-sum"]!,
       ...kpCanonicalLogProductSemanticMotionRequest.operation
-        .roleBindings.connector!
+        .roleBindings["connector"]!
     ])
   );
 });

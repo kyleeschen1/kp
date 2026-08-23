@@ -303,6 +303,41 @@
       "scope": "md17 typed settlement boundary",
       "checkedAt": "2026-08-23T00:16:36.678Z",
       "notes": "Application, Node, tests, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "failed",
+      "scope": "md18 initial inline typography capture",
+      "checkedAt": "2026-08-23T00:36:03.184Z",
+      "notes": "Responsive material capture exposed display-sized cached transit clones under inline Native endpoints. The surface now invalidates measurement, clears computed-style clone owners, and rebuilds after typography mode changes."
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "passed",
+      "scope": "md18 wide narrow dark light comparators",
+      "checkedAt": "2026-08-23T00:36:05.273Z",
+      "notes": "Stable capture produced flat preservation plus 1rem material-depth comparators at 1240x760 and 390x844 in dark mode, with a wide light-mode legibility smoke and consistent transit/native scale."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "md18 typography lifecycle",
+      "checkedAt": "2026-08-23T00:36:08.514Z",
+      "notes": "49 focused tests passed after inline token and endpoint invalidation changes."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "md18 initial typed boundary",
+      "checkedAt": "2026-08-23T00:36:11.564Z",
+      "notes": "A test accessed an index-signature role with dot syntax; corrected it to bracket access without production impact."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "md18 corrected typed boundary",
+      "checkedAt": "2026-08-23T00:36:15.072Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks passed."
     }
   ],
   "allowedWork": [
@@ -436,7 +471,8 @@
     {
       "id": "md18",
       "title": "Tune local inline typography across viewport and theme",
-      "status": "planned"
+      "summary": "The elevated exemplar now uses a stable 1rem inline KaTeX scale across wide and narrow dark presentations and a light smoke; typography changes invalidate measured clones so transit and Native endpoints cannot diverge.",
+      "status": "complete"
     },
     {
       "id": "md19",

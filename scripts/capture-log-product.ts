@@ -16,6 +16,12 @@ const baselinePresentation = Object.freeze({
   focus: "flat",
   view: "animation-catalogue"
 } as const);
+const materialPresentation = Object.freeze({
+  theme: "dark",
+  style: "organic-subtle",
+  focus: "elevated",
+  view: "animation-catalogue"
+} as const);
 const animations = Object.freeze([{
   id: "animation.algebra.log-product.product-to-sum",
   label: "two factors",
@@ -32,33 +38,92 @@ const animations = Object.freeze([{
   ]
 }] as const);
 
+const materialProgressions = Object.freeze([
+  { phase: "forward" as const, samples: [0, 0.22, 0.48, 0.6, 0.72, 1] }
+]);
+const responsiveMaterialProgressions = Object.freeze([
+  { phase: "forward" as const, samples: [0.22, 0.48, 0.6, 0.72] }
+]);
+
+const captureCases = Object.freeze([
+  ...animations.map((animation) => Object.freeze({
+    id: `flat-wide-${animation.label.replaceAll(" ", "-")}`,
+    animation,
+    presentation: baselinePresentation,
+    viewport: { width: 1_240, height: 760 } as const,
+    colorScheme: "dark" as const,
+    progressions: animation.progressions
+  })),
+  Object.freeze({
+    id: "material-wide-dark",
+    animation: animations[0],
+    presentation: materialPresentation,
+    viewport: { width: 1_240, height: 760 } as const,
+    colorScheme: "dark" as const,
+    progressions: materialProgressions
+  }),
+  Object.freeze({
+    id: "material-narrow-dark",
+    animation: animations[0],
+    presentation: materialPresentation,
+    viewport: { width: 390, height: 844 } as const,
+    colorScheme: "dark" as const,
+    progressions: responsiveMaterialProgressions
+  }),
+  Object.freeze({
+    id: "material-wide-light",
+    animation: animations[0],
+    presentation: Object.freeze({ ...materialPresentation, theme: "light" }),
+    viewport: { width: 1_240, height: 760 } as const,
+    colorScheme: "light" as const,
+    progressions: responsiveMaterialProgressions
+  })
+]);
+
 interface CaptureEvidence {
   readonly id: string;
+  readonly captureCaseId: string;
   readonly animationId: string;
   readonly phase: "forward" | "return";
   readonly progress: number;
   readonly visualOwner: string;
   readonly activeEndpointCount: number;
   readonly visibleMaterialOwnerCount: number;
+  readonly visibleMaterialOwnerMetrics: readonly {
+    readonly entityId: string;
+    readonly fontSize: string;
+    readonly width: number;
+    readonly height: number;
+    readonly transform: string;
+  }[];
+  readonly endpointMetrics: readonly {
+    readonly stateId: string;
+    readonly fontSize: string;
+    readonly width: number;
+    readonly atomWidths: readonly number[];
+  }[];
   readonly file: string;
 }
 
 async function capture(): Promise<void> {
   await mkdir(outputRoot, { recursive: true });
   const harness = createKpVisualReviewHarness();
-  const viewport = { width: 1_240, height: 760 } as const;
   const items: KpVisualContactSheetItem[] = [];
   const evidence: CaptureEvidence[] = [];
 
   try {
-    for (const animation of animations) {
-      const page = await harness.page({ viewport, colorScheme: "dark" });
+    for (const captureCase of captureCases) {
+      const { animation, presentation, viewport } = captureCase;
+      const page = await harness.page({
+        viewport,
+        colorScheme: captureCase.colorScheme
+      });
       const url = new URL("/", harness.baseUrl);
       url.searchParams.set("artifact", animation.id);
-      url.searchParams.set("theme", baselinePresentation.theme);
-      url.searchParams.set("style", baselinePresentation.style);
-      url.searchParams.set("focus", baselinePresentation.focus);
-      url.searchParams.set("view", baselinePresentation.view);
+      url.searchParams.set("theme", presentation.theme);
+      url.searchParams.set("style", presentation.style);
+      url.searchParams.set("focus", presentation.focus);
+      url.searchParams.set("view", presentation.view);
       await page.goto(url.toString(), { waitUntil: "domcontentloaded" });
       const stage = page.locator(
         `[data-kp-animation-catalogue-stage] [data-kp-log-product-stage]`
@@ -69,9 +134,10 @@ async function capture(): Promise<void> {
       );
       await waitForReady(stage);
 
-      for (const progression of animation.progressions) {
+      for (const progression of captureCase.progressions) {
         for (const progress of progression.samples) {
           const captured = await captureSample({
+            captureCaseId: captureCase.id,
             animationId: animation.id,
             page,
             stage,
@@ -84,7 +150,7 @@ async function capture(): Promise<void> {
           items.push({
             id: captured.id,
             label:
-              `${animation.label} · ${progression.phase} · ` +
+              `${captureCase.id} · ${progression.phase} · ` +
               `${Math.round(progress * 100)}%`,
             progress,
             viewport,
@@ -96,7 +162,7 @@ async function capture(): Promise<void> {
     }
 
     const htmlSource = buildKpVisualContactSheetHtml(items, {
-      title: "Log product · flat preservation baseline",
+      title: "Log product · flat preservation and material-depth comparators",
       columns: 3,
       imageFit: "contain"
     });
@@ -117,8 +183,12 @@ async function capture(): Promise<void> {
     await writeFile(manifest, `${JSON.stringify({
       schemaVersion: "kp.log-product-visual-checkpoint.v1",
       animationIds: animations.map(({ id }) => id),
-      presentation: baselinePresentation,
-      viewport,
+      captureCases: captureCases.map((captureCase) => ({
+        id: captureCase.id,
+        animationId: captureCase.animation.id,
+        presentation: captureCase.presentation,
+        viewport: captureCase.viewport
+      })),
       samples: evidence,
       sheet: path.relative(process.cwd(), sheet),
       html: path.relative(process.cwd(), html)
@@ -132,6 +202,7 @@ async function capture(): Promise<void> {
 }
 
 async function captureSample(input: {
+  readonly captureCaseId: string;
   readonly animationId: string;
   readonly page: Page;
   readonly stage: Locator;
@@ -153,7 +224,9 @@ async function captureSample(input: {
     ));
   });
   const familyKey = input.animationId.includes("three-factors") ? "xyz" : "xy";
-  const id = `${familyKey}-${input.phase}-${String(input.progress).replace(".", "-")}`;
+  const id = `${input.captureCaseId}-${familyKey}-${input.phase}-${
+    String(input.progress).replace(".", "-")
+  }`;
   const file = path.join(outputRoot, `${id}.png`);
   await input.stage.screenshot({ path: file, animations: "disabled" });
   const state = await input.stage.evaluate((root) => ({
@@ -164,13 +237,41 @@ async function captureSample(input: {
       .length,
     visibleMaterialOwnerCount: [...root.querySelectorAll<HTMLElement>(
       "[data-kp-equation-material-owner-id]"
-    )].filter((owner) => Number(getComputedStyle(owner).opacity) > 0).length
+    )].filter((owner) => Number(getComputedStyle(owner).opacity) > 0).length,
+    visibleMaterialOwnerMetrics: [...root.querySelectorAll<HTMLElement>(
+      "[data-kp-equation-material-owner-id]"
+    )].filter((owner) => Number(getComputedStyle(owner).opacity) > 0)
+      .map((owner) => {
+        const style = getComputedStyle(owner);
+        const rect = owner.getBoundingClientRect();
+        return {
+          entityId:
+            owner.dataset["kpEquationMaterialSemanticEntityId"] ?? "",
+          fontSize: style.fontSize,
+          width: Math.round(rect.width * 100) / 100,
+          height: Math.round(rect.height * 100) / 100,
+          transform: style.transform
+        };
+      }),
+    endpointMetrics: [...root.querySelectorAll<HTMLElement>(
+      ".kp-log-product-stage__endpoint"
+    )].map((endpoint) => ({
+      stateId: endpoint.dataset["kpLogProductEndpointStateId"] ?? "",
+      fontSize: getComputedStyle(endpoint).fontSize,
+      width: Math.round(endpoint.getBoundingClientRect().width * 100) / 100,
+      atomWidths: [...endpoint.querySelectorAll<HTMLElement>(
+        "[data-kp-semantic-entity-id]"
+      )].map((atom) =>
+        Math.round(atom.getBoundingClientRect().width * 100) / 100
+      )
+    }))
   }));
   if (state.activeEndpointCount !== 1) {
     throw new Error(`${id} must expose exactly one accessible equation.`);
   }
   return {
     id,
+    captureCaseId: input.captureCaseId,
     animationId: input.animationId,
     phase: input.phase,
     progress: input.progress,

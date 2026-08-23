@@ -77,19 +77,31 @@ export const kpEditorLogProductSurfaceAdapter = Object.freeze({
   },
   render({ player, slot, state }) {
     let session = sessions.get(player);
+    let created = false;
     if (session === undefined) {
       session = mountSurface(player, slot, state);
       sessions.set(player, session);
+      created = true;
       player.addEventListener(
         KP_EDITOR_ANIMATION_DISPOSE_EVENT,
         () => disposeSurface(player, session!),
         { once: true }
       );
+    }
+    session.pendingState = state;
+    const typographyChanged = syncMaterialPresentationMode(session);
+    if (created || typographyChanged) {
+      session.transit?.retire();
+      session.transit = undefined;
+      if (!created) {
+        // Computed-style clones intentionally freeze their source typography.
+        // A scale-mode switch therefore needs fresh owners, not reused paint.
+        syncKpEquationMaterialLayer({ stage: session.stage, owners: [] });
+      }
+      session.stage.dataset["kpLogProductStage"] = "preparing";
       const generation = ++session.generation;
       void prepareSurface(session, generation);
     }
-    session.pendingState = state;
-    syncMaterialPresentationMode(session);
     if (session.transit !== undefined) applyFrame(session, state);
   }
 } satisfies KpEditorAnimationSurfaceAdapter);
@@ -154,13 +166,16 @@ function mountSurface(
 
 function syncMaterialPresentationMode(
   session: KpLogProductSurfaceSession
-): void {
+): boolean {
   const mode = projectKpLogProductMaterialPresentationMode(
     session.player.dataset["kpEditorAnimationFocusExperiment"]
   );
+  const typographyChanged =
+    session.stage.dataset["kpLogProductTypography"] !== mode.typography;
   session.stage.dataset["kpLogProductMaterialDepthMode"] = mode.depthMode;
   session.stage.dataset["kpLogProductTypography"] = mode.typography;
   session.stage.dataset["kpLogProductMaterialActive"] = String(mode.active);
+  return typographyChanged;
 }
 
 async function prepareSurface(

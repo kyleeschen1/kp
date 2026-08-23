@@ -1,6 +1,6 @@
 .kp-log-product-stage {
   --kp-log-product-display-font-size: clamp(2.25rem, 5vw, 4rem);
-  --kp-log-product-inline-font-size: 1em;
+  --kp-log-product-inline-font-size: 1rem;
   --kp-log-product-equation-font-size:
     var(--kp-log-product-display-font-size);
   position: relative;

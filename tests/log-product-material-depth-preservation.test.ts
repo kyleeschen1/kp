@@ -137,7 +137,7 @@ test("inline typography is local and inert until the exemplar selects it", () =>
     css,
     /--kp-log-product-display-font-size:\s*clamp\(2\.25rem, 5vw, 4rem\)/u
   );
-  assert.match(css, /--kp-log-product-inline-font-size:\s*1em/u);
+  assert.match(css, /--kp-log-product-inline-font-size:\s*1rem/u);
   assert.match(
     css,
     /--kp-log-product-equation-font-size:\s*var\(--kp-log-product-display-font-size\)/u
