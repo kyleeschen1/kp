@@ -1,0 +1,937 @@
+{
+  "schemaVersion": "kp.animation-governance-reverse-dependencies.v1",
+  "kind": "animation-governance-reverse-dependencies",
+  "assetCount": 58,
+  "dependencies": [
+    {
+      "dependencyId": "atomic-v1",
+      "kind": "motif",
+      "callerAssetIds": [
+        "animation.comparison.linear-solve-programming",
+        "animation.linear-solve.solve-x"
+      ]
+    },
+    {
+      "dependencyId": "concurrent-v1",
+      "kind": "motif",
+      "callerAssetIds": [
+        "animation.algebra.exponential-homomorphism.difference-to-quotient",
+        "animation.algebra.exponential-homomorphism.sum-to-product",
+        "animation.algebra.log-exponent.solve-two-power-x",
+        "animation.algebra.log-product.equivalence-frame",
+        "animation.algebra.log-product.product-to-sum",
+        "animation.algebra.log-product.three-factors-to-sum",
+        "animation.algebra.log-quotient.difference-to-quotient",
+        "animation.algebra.radical.compound-carrier-normalization",
+        "animation.algebra.radical.solve-x-squared-nine",
+        "animation.comparison.jacobian-hessian",
+        "animation.comparison.linear-solve-programming",
+        "animation.equation.finite-product-expansion.v1",
+        "animation.equation.finite-sum-expansion.v1",
+        "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+        "animation.equation.fraction-equivalence.compact.v1",
+        "animation.equation.fraction-equivalence.v1",
+        "animation.equation.logarithm-change-of-base.v1",
+        "animation.generated.add-zero",
+        "animation.generated.calculus.derivative.power-rule-x-cubed",
+        "animation.generated.calculus.derivative.sum-rule-polynomial",
+        "animation.generated.calculus.integral.power-rule-quadratic",
+        "animation.generated.cancellation.additive-inverses",
+        "animation.generated.distribution.expand-a-sum",
+        "animation.generated.distribution.factor-common-a",
+        "animation.generated.exponent.square-as-product",
+        "animation.generated.fraction-expression.two-fourths",
+        "animation.generated.function-wrap.apply-f",
+        "animation.generated.linear-algebra.dot-product.three-vector",
+        "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+        "animation.generated.linear-algebra.matrix-vector.two-by-two",
+        "animation.generated.linear-solve.linear-68c15d41",
+        "animation.generated.radical.square-root-as-power",
+        "animation.generated.substitute-three",
+        "animation.generated.substitute-three.provisional-incorrect",
+        "animation.inequality.sign-flip.basic",
+        "animation.linear-solve.solve-x",
+        "animation.operation-evaluation.five-plus-two",
+        "animation.operation-evaluation.one-plus-two",
+        "animation.operation-evaluation.three-sixths",
+        "animation.operation-evaluation.two-times-one-carrier",
+        "animation.operation-evaluation.two-times-three",
+        "animation.sample.fourier-transform-pair",
+        "animation.sample.fundamental-theorem-calculus"
+      ]
+    },
+    {
+      "dependencyId": "continuity-v1",
+      "kind": "motif",
+      "callerAssetIds": [
+        "animation.comparison.linear-solve-programming",
+        "animation.linear-solve.solve-x"
+      ]
+    },
+    {
+      "dependencyId": "counter-convergence-v1",
+      "kind": "motif",
+      "callerAssetIds": [
+        "animation.comparison.linear-solve-programming",
+        "animation.linear-solve.solve-x"
+      ]
+    },
+    {
+      "dependencyId": "counter-orbit-v1",
+      "kind": "motif",
+      "callerAssetIds": [
+        "animation.algebra.exponential-homomorphism.difference-to-quotient",
+        "animation.algebra.exponential-homomorphism.sum-to-product",
+        "animation.algebra.log-exponent.solve-two-power-x",
+        "animation.algebra.log-product.equivalence-frame",
+        "animation.algebra.log-product.product-to-sum",
+        "animation.algebra.log-product.three-factors-to-sum",
+        "animation.algebra.log-quotient.difference-to-quotient",
+        "animation.algebra.radical.solve-x-squared-nine",
+        "animation.comparison.linear-solve-programming",
+        "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+        "animation.equation.fraction-equivalence.compact.v1",
+        "animation.equation.fraction-equivalence.v1",
+        "animation.equation.logarithm-change-of-base.v1",
+        "animation.generated.cancellation.additive-inverses",
+        "animation.generated.linear-solve.linear-68c15d41",
+        "animation.linear-solve.solve-x"
+      ]
+    },
+    {
+      "dependencyId": "crossfade-v1",
+      "kind": "motif",
+      "callerAssetIds": [
+        "animation.algebra.exponential-homomorphism.difference-to-quotient",
+        "animation.algebra.exponential-homomorphism.sum-to-product",
+        "animation.algebra.log-exponent.solve-two-power-x",
+        "animation.algebra.log-product.equivalence-frame",
+        "animation.algebra.log-product.product-to-sum",
+        "animation.algebra.log-product.three-factors-to-sum",
+        "animation.algebra.log-quotient.difference-to-quotient",
+        "animation.algebra.radical.compound-carrier-normalization",
+        "animation.algebra.radical.solve-x-squared-nine",
+        "animation.comparison.jacobian-hessian",
+        "animation.equation.finite-product-expansion.v1",
+        "animation.equation.finite-sum-expansion.v1",
+        "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+        "animation.equation.fraction-equivalence.compact.v1",
+        "animation.equation.fraction-equivalence.v1",
+        "animation.equation.logarithm-change-of-base.v1",
+        "animation.generated.add-zero",
+        "animation.generated.calculus.derivative.power-rule-x-cubed",
+        "animation.generated.calculus.derivative.sum-rule-polynomial",
+        "animation.generated.calculus.integral.power-rule-quadratic",
+        "animation.generated.cancellation.additive-inverses",
+        "animation.generated.distribution.expand-a-sum",
+        "animation.generated.distribution.factor-common-a",
+        "animation.generated.exponent.square-as-product",
+        "animation.generated.fraction-expression.two-fourths",
+        "animation.generated.function-wrap.apply-f",
+        "animation.generated.linear-algebra.dot-product.three-vector",
+        "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+        "animation.generated.linear-algebra.matrix-vector.two-by-two",
+        "animation.generated.linear-solve.linear-68c15d41",
+        "animation.generated.radical.square-root-as-power",
+        "animation.generated.substitute-three",
+        "animation.generated.substitute-three.provisional-incorrect",
+        "animation.inequality.sign-flip.basic",
+        "animation.operation-evaluation.five-plus-two",
+        "animation.operation-evaluation.one-plus-two",
+        "animation.operation-evaluation.three-sixths",
+        "animation.operation-evaluation.two-times-one-carrier",
+        "animation.operation-evaluation.two-times-three",
+        "animation.sample.fourier-transform-pair",
+        "animation.sample.fundamental-theorem-calculus"
+      ]
+    },
+    {
+      "dependencyId": "embedded-v1",
+      "kind": "motif",
+      "callerAssetIds": [
+        "animation.algebra.radical.compound-carrier-normalization",
+        "animation.comparison.jacobian-hessian",
+        "animation.equation.finite-product-expansion.v1",
+        "animation.equation.finite-sum-expansion.v1",
+        "animation.generated.add-zero",
+        "animation.generated.calculus.derivative.power-rule-x-cubed",
+        "animation.generated.calculus.derivative.sum-rule-polynomial",
+        "animation.generated.calculus.integral.power-rule-quadratic",
+        "animation.generated.distribution.expand-a-sum",
+        "animation.generated.distribution.factor-common-a",
+        "animation.generated.exponent.square-as-product",
+        "animation.generated.fraction-expression.two-fourths",
+        "animation.generated.function-wrap.apply-f",
+        "animation.generated.linear-algebra.dot-product.three-vector",
+        "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+        "animation.generated.linear-algebra.matrix-vector.two-by-two",
+        "animation.generated.radical.square-root-as-power",
+        "animation.generated.substitute-three",
+        "animation.generated.substitute-three.provisional-incorrect",
+        "animation.inequality.sign-flip.basic",
+        "animation.operation-evaluation.five-plus-two",
+        "animation.operation-evaluation.one-plus-two",
+        "animation.operation-evaluation.three-sixths",
+        "animation.operation-evaluation.two-times-one-carrier",
+        "animation.operation-evaluation.two-times-three",
+        "animation.sample.fourier-transform-pair",
+        "animation.sample.fundamental-theorem-calculus"
+      ]
+    },
+    {
+      "dependencyId": "family.algebra.both-sides",
+      "kind": "motif",
+      "callerAssetIds": [
+        "animation.linear-solve.solve-x"
+      ]
+    },
+    {
+      "dependencyId": "family.algebra.cancel-combine",
+      "kind": "motif",
+      "callerAssetIds": [
+        "animation.linear-solve.solve-x"
+      ]
+    },
+    {
+      "dependencyId": "family.algebra.distribution-factoring",
+      "kind": "motif",
+      "callerAssetIds": [
+        "animation.generated.distribution.expand-a-sum",
+        "animation.generated.distribution.factor-common-a"
+      ]
+    },
+    {
+      "dependencyId": "family.algebra.exponent-log-laws",
+      "kind": "motif",
+      "callerAssetIds": [
+        "animation.generated.exponent.square-as-product",
+        "animation.generated.function-wrap.apply-f",
+        "animation.generated.radical.square-root-as-power"
+      ]
+    },
+    {
+      "dependencyId": "family.algebra.fraction-simplification",
+      "kind": "motif",
+      "callerAssetIds": [
+        "animation.generated.fraction-expression.two-fourths"
+      ]
+    },
+    {
+      "dependencyId": "family.algebra.inequality",
+      "kind": "motif",
+      "callerAssetIds": [
+        "animation.inequality.sign-flip.basic"
+      ]
+    },
+    {
+      "dependencyId": "family.calculus.derivative-rules",
+      "kind": "motif",
+      "callerAssetIds": [
+        "animation.derivative-rules.tangent-graph",
+        "animation.generated.calculus.derivative.power-rule-x-cubed"
+      ]
+    },
+    {
+      "dependencyId": "family.calculus.integral-ftc",
+      "kind": "motif",
+      "callerAssetIds": [
+        "animation.integral-ftc.area-sweep",
+        "animation.sample.fundamental-theorem-calculus"
+      ]
+    },
+    {
+      "dependencyId": "family.linear-algebra.dot-projection",
+      "kind": "motif",
+      "callerAssetIds": [
+        "animation.dot-projection.basic"
+      ]
+    },
+    {
+      "dependencyId": "family.linear-algebra.matrix-matrix-composition",
+      "kind": "motif",
+      "callerAssetIds": [
+        "animation.generated.linear-algebra.matrix-matrix.two-by-two"
+      ]
+    },
+    {
+      "dependencyId": "family.linear-algebra.matrix-vector",
+      "kind": "motif",
+      "callerAssetIds": [
+        "animation.generated.linear-algebra.matrix-vector.two-by-two"
+      ]
+    },
+    {
+      "dependencyId": "family.linear-algebra.vector-add-scale",
+      "kind": "motif",
+      "callerAssetIds": [
+        "animation.graph.vector.linear-map-scale"
+      ]
+    },
+    {
+      "dependencyId": "flat-v1",
+      "kind": "motif",
+      "callerAssetIds": [
+        "animation.algebra.exponential-homomorphism.difference-to-quotient",
+        "animation.algebra.exponential-homomorphism.sum-to-product",
+        "animation.algebra.log-exponent.solve-two-power-x",
+        "animation.algebra.log-product.equivalence-frame",
+        "animation.algebra.log-product.product-to-sum",
+        "animation.algebra.log-product.three-factors-to-sum",
+        "animation.algebra.log-quotient.difference-to-quotient",
+        "animation.algebra.radical.compound-carrier-normalization",
+        "animation.algebra.radical.solve-x-squared-nine",
+        "animation.comparison.jacobian-hessian",
+        "animation.equation.finite-product-expansion.v1",
+        "animation.equation.finite-sum-expansion.v1",
+        "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+        "animation.equation.fraction-equivalence.compact.v1",
+        "animation.equation.fraction-equivalence.v1",
+        "animation.equation.logarithm-change-of-base.v1",
+        "animation.generated.add-zero",
+        "animation.generated.calculus.derivative.power-rule-x-cubed",
+        "animation.generated.calculus.derivative.sum-rule-polynomial",
+        "animation.generated.calculus.integral.power-rule-quadratic",
+        "animation.generated.cancellation.additive-inverses",
+        "animation.generated.distribution.expand-a-sum",
+        "animation.generated.distribution.factor-common-a",
+        "animation.generated.exponent.square-as-product",
+        "animation.generated.fraction-expression.two-fourths",
+        "animation.generated.function-wrap.apply-f",
+        "animation.generated.linear-algebra.dot-product.three-vector",
+        "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+        "animation.generated.linear-algebra.matrix-vector.two-by-two",
+        "animation.generated.linear-solve.linear-68c15d41",
+        "animation.generated.radical.square-root-as-power",
+        "animation.generated.substitute-three",
+        "animation.generated.substitute-three.provisional-incorrect",
+        "animation.inequality.sign-flip.basic",
+        "animation.operation-evaluation.five-plus-two",
+        "animation.operation-evaluation.one-plus-two",
+        "animation.operation-evaluation.three-sixths",
+        "animation.operation-evaluation.two-times-one-carrier",
+        "animation.operation-evaluation.two-times-three",
+        "animation.sample.fourier-transform-pair",
+        "animation.sample.fundamental-theorem-calculus"
+      ]
+    },
+    {
+      "dependencyId": "none",
+      "kind": "motif",
+      "callerAssetIds": [
+        "animation.algebra.exponential-homomorphism.difference-to-quotient",
+        "animation.algebra.exponential-homomorphism.sum-to-product",
+        "animation.algebra.log-exponent.solve-two-power-x",
+        "animation.algebra.log-product.equivalence-frame",
+        "animation.algebra.log-product.product-to-sum",
+        "animation.algebra.log-product.three-factors-to-sum",
+        "animation.algebra.log-quotient.difference-to-quotient",
+        "animation.algebra.radical.solve-x-squared-nine",
+        "animation.comparison.linear-solve-programming",
+        "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+        "animation.equation.fraction-equivalence.compact.v1",
+        "animation.equation.fraction-equivalence.v1",
+        "animation.equation.logarithm-change-of-base.v1",
+        "animation.generated.cancellation.additive-inverses",
+        "animation.generated.linear-solve.linear-68c15d41",
+        "animation.linear-solve.solve-x"
+      ]
+    },
+    {
+      "dependencyId": "semantic-depth-v1",
+      "kind": "motif",
+      "callerAssetIds": [
+        "animation.comparison.linear-solve-programming",
+        "animation.linear-solve.solve-x"
+      ]
+    },
+    {
+      "dependencyId": "semantic-material-v2",
+      "kind": "motif",
+      "callerAssetIds": [
+        "animation.algebra.exponential-homomorphism.difference-to-quotient",
+        "animation.algebra.exponential-homomorphism.sum-to-product",
+        "animation.algebra.log-exponent.solve-two-power-x",
+        "animation.algebra.log-product.equivalence-frame",
+        "animation.algebra.log-product.product-to-sum",
+        "animation.algebra.log-product.three-factors-to-sum",
+        "animation.algebra.log-quotient.difference-to-quotient",
+        "animation.algebra.radical.compound-carrier-normalization",
+        "animation.algebra.radical.solve-x-squared-nine",
+        "animation.comparison.jacobian-hessian",
+        "animation.equation.finite-product-expansion.v1",
+        "animation.equation.finite-sum-expansion.v1",
+        "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+        "animation.equation.fraction-equivalence.compact.v1",
+        "animation.equation.fraction-equivalence.v1",
+        "animation.equation.logarithm-change-of-base.v1",
+        "animation.generated.add-zero",
+        "animation.generated.calculus.derivative.power-rule-x-cubed",
+        "animation.generated.calculus.derivative.sum-rule-polynomial",
+        "animation.generated.calculus.integral.power-rule-quadratic",
+        "animation.generated.cancellation.additive-inverses",
+        "animation.generated.distribution.expand-a-sum",
+        "animation.generated.distribution.factor-common-a",
+        "animation.generated.exponent.square-as-product",
+        "animation.generated.fraction-expression.two-fourths",
+        "animation.generated.function-wrap.apply-f",
+        "animation.generated.linear-algebra.dot-product.three-vector",
+        "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+        "animation.generated.linear-algebra.matrix-vector.two-by-two",
+        "animation.generated.linear-solve.linear-68c15d41",
+        "animation.generated.radical.square-root-as-power",
+        "animation.generated.substitute-three",
+        "animation.generated.substitute-three.provisional-incorrect",
+        "animation.inequality.sign-flip.basic",
+        "animation.operation-evaluation.five-plus-two",
+        "animation.operation-evaluation.one-plus-two",
+        "animation.operation-evaluation.three-sixths",
+        "animation.operation-evaluation.two-times-one-carrier",
+        "animation.operation-evaluation.two-times-three",
+        "animation.sample.fourier-transform-pair",
+        "animation.sample.fundamental-theorem-calculus"
+      ]
+    },
+    {
+      "dependencyId": "successor-synthesis-v1",
+      "kind": "motif",
+      "callerAssetIds": [
+        "animation.algebra.exponential-homomorphism.difference-to-quotient",
+        "animation.algebra.exponential-homomorphism.sum-to-product",
+        "animation.algebra.log-exponent.solve-two-power-x",
+        "animation.algebra.log-product.equivalence-frame",
+        "animation.algebra.log-product.product-to-sum",
+        "animation.algebra.log-product.three-factors-to-sum",
+        "animation.algebra.log-quotient.difference-to-quotient",
+        "animation.algebra.radical.compound-carrier-normalization",
+        "animation.algebra.radical.solve-x-squared-nine",
+        "animation.comparison.jacobian-hessian",
+        "animation.equation.finite-product-expansion.v1",
+        "animation.equation.finite-sum-expansion.v1",
+        "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+        "animation.equation.fraction-equivalence.compact.v1",
+        "animation.equation.fraction-equivalence.v1",
+        "animation.equation.logarithm-change-of-base.v1",
+        "animation.generated.add-zero",
+        "animation.generated.calculus.derivative.power-rule-x-cubed",
+        "animation.generated.calculus.derivative.sum-rule-polynomial",
+        "animation.generated.calculus.integral.power-rule-quadratic",
+        "animation.generated.cancellation.additive-inverses",
+        "animation.generated.distribution.expand-a-sum",
+        "animation.generated.distribution.factor-common-a",
+        "animation.generated.exponent.square-as-product",
+        "animation.generated.fraction-expression.two-fourths",
+        "animation.generated.function-wrap.apply-f",
+        "animation.generated.linear-algebra.dot-product.three-vector",
+        "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+        "animation.generated.linear-algebra.matrix-vector.two-by-two",
+        "animation.generated.linear-solve.linear-68c15d41",
+        "animation.generated.radical.square-root-as-power",
+        "animation.generated.substitute-three",
+        "animation.generated.substitute-three.provisional-incorrect",
+        "animation.inequality.sign-flip.basic",
+        "animation.operation-evaluation.five-plus-two",
+        "animation.operation-evaluation.one-plus-two",
+        "animation.operation-evaluation.three-sixths",
+        "animation.operation-evaluation.two-times-one-carrier",
+        "animation.operation-evaluation.two-times-three",
+        "animation.sample.fourier-transform-pair",
+        "animation.sample.fundamental-theorem-calculus"
+      ]
+    },
+    {
+      "dependencyId": "together",
+      "kind": "motif",
+      "callerAssetIds": [
+        "animation.algebra.exponential-homomorphism.difference-to-quotient",
+        "animation.algebra.exponential-homomorphism.sum-to-product",
+        "animation.algebra.log-exponent.solve-two-power-x",
+        "animation.algebra.log-product.equivalence-frame",
+        "animation.algebra.log-product.product-to-sum",
+        "animation.algebra.log-product.three-factors-to-sum",
+        "animation.algebra.log-quotient.difference-to-quotient",
+        "animation.algebra.radical.solve-x-squared-nine",
+        "animation.comparison.linear-solve-programming",
+        "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+        "animation.equation.fraction-equivalence.compact.v1",
+        "animation.equation.fraction-equivalence.v1",
+        "animation.equation.logarithm-change-of-base.v1",
+        "animation.generated.linear-solve.linear-68c15d41",
+        "animation.linear-solve.solve-x"
+      ]
+    },
+    {
+      "dependencyId": "witnessed-annihilation-v1",
+      "kind": "motif",
+      "callerAssetIds": [
+        "animation.algebra.radical.compound-carrier-normalization",
+        "animation.comparison.jacobian-hessian",
+        "animation.equation.finite-product-expansion.v1",
+        "animation.equation.finite-sum-expansion.v1",
+        "animation.generated.add-zero",
+        "animation.generated.calculus.derivative.power-rule-x-cubed",
+        "animation.generated.calculus.derivative.sum-rule-polynomial",
+        "animation.generated.calculus.integral.power-rule-quadratic",
+        "animation.generated.distribution.expand-a-sum",
+        "animation.generated.distribution.factor-common-a",
+        "animation.generated.exponent.square-as-product",
+        "animation.generated.fraction-expression.two-fourths",
+        "animation.generated.function-wrap.apply-f",
+        "animation.generated.linear-algebra.dot-product.three-vector",
+        "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+        "animation.generated.linear-algebra.matrix-vector.two-by-two",
+        "animation.generated.radical.square-root-as-power",
+        "animation.generated.substitute-three",
+        "animation.generated.substitute-three.provisional-incorrect",
+        "animation.inequality.sign-flip.basic",
+        "animation.operation-evaluation.five-plus-two",
+        "animation.operation-evaluation.one-plus-two",
+        "animation.operation-evaluation.three-sixths",
+        "animation.operation-evaluation.two-times-one-carrier",
+        "animation.operation-evaluation.two-times-three",
+        "animation.sample.fourier-transform-pair",
+        "animation.sample.fundamental-theorem-calculus"
+      ]
+    },
+    {
+      "dependencyId": "principle.animation.deterministic-single-clock",
+      "kind": "principle",
+      "callerAssetIds": [
+        "animation.algebra.exponential-homomorphism.difference-to-quotient",
+        "animation.algebra.exponential-homomorphism.sum-to-product",
+        "animation.algebra.log-exponent.solve-two-power-x",
+        "animation.algebra.log-product.equivalence-frame",
+        "animation.algebra.log-product.product-to-sum",
+        "animation.algebra.log-product.three-factors-to-sum",
+        "animation.algebra.log-quotient.difference-to-quotient",
+        "animation.algebra.radical.compound-carrier-normalization",
+        "animation.algebra.radical.solve-x-squared-nine",
+        "animation.comparison.jacobian-hessian",
+        "animation.comparison.linear-solve-programming",
+        "animation.derivative-rules.tangent-graph",
+        "animation.dot-projection.basic",
+        "animation.economics.supply-demand-equilibrium-shift",
+        "animation.equation.finite-product-expansion.v1",
+        "animation.equation.finite-sum-expansion.v1",
+        "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+        "animation.equation.fraction-equivalence.compact.v1",
+        "animation.equation.fraction-equivalence.v1",
+        "animation.equation.logarithm-change-of-base.v1",
+        "animation.exact-fraction-quantity.third-plus-sixth",
+        "animation.generated.add-zero",
+        "animation.generated.calculus.derivative.power-rule-x-cubed",
+        "animation.generated.calculus.derivative.sum-rule-polynomial",
+        "animation.generated.calculus.integral.power-rule-quadratic",
+        "animation.generated.cancellation.additive-inverses",
+        "animation.generated.distribution.expand-a-sum",
+        "animation.generated.distribution.factor-common-a",
+        "animation.generated.exponent.square-as-product",
+        "animation.generated.fraction-expression.two-fourths",
+        "animation.generated.function-wrap.apply-f",
+        "animation.generated.linear-algebra.dot-product.three-vector",
+        "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+        "animation.generated.linear-algebra.matrix-vector.two-by-two",
+        "animation.generated.linear-solve.linear-68c15d41",
+        "animation.generated.pipeline-diagram",
+        "animation.generated.radical.square-root-as-power",
+        "animation.generated.substitute-three",
+        "animation.generated.substitute-three.provisional-incorrect",
+        "animation.graph.surface-mode.mesh-to-donut",
+        "animation.graph.vector.linear-map-scale",
+        "animation.inequality.sign-flip.basic",
+        "animation.integral-ftc.area-sweep",
+        "animation.linear-solve.solve-x",
+        "animation.operation-evaluation.five-plus-two",
+        "animation.operation-evaluation.one-plus-two",
+        "animation.operation-evaluation.three-sixths",
+        "animation.operation-evaluation.two-times-one-carrier",
+        "animation.operation-evaluation.two-times-three",
+        "animation.physics.constant-force-work-energy",
+        "animation.place-value-addition.278-plus-156",
+        "animation.programming.add.execution-trace",
+        "animation.programming.lisp-lambda-application",
+        "animation.programming.python-free-shipping-refactor",
+        "animation.programming.scheme-factorial",
+        "animation.programming.typescript-free-shipping-refactor",
+        "animation.sample.fourier-transform-pair",
+        "animation.sample.fundamental-theorem-calculus"
+      ]
+    },
+    {
+      "dependencyId": "principle.animation.semantic-lineage-authority",
+      "kind": "principle",
+      "callerAssetIds": [
+        "animation.algebra.exponential-homomorphism.difference-to-quotient",
+        "animation.algebra.exponential-homomorphism.sum-to-product",
+        "animation.algebra.log-exponent.solve-two-power-x",
+        "animation.algebra.log-product.equivalence-frame",
+        "animation.algebra.log-product.product-to-sum",
+        "animation.algebra.log-product.three-factors-to-sum",
+        "animation.algebra.log-quotient.difference-to-quotient",
+        "animation.algebra.radical.compound-carrier-normalization",
+        "animation.algebra.radical.solve-x-squared-nine",
+        "animation.comparison.jacobian-hessian",
+        "animation.comparison.linear-solve-programming",
+        "animation.derivative-rules.tangent-graph",
+        "animation.dot-projection.basic",
+        "animation.economics.supply-demand-equilibrium-shift",
+        "animation.equation.finite-product-expansion.v1",
+        "animation.equation.finite-sum-expansion.v1",
+        "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+        "animation.equation.fraction-equivalence.compact.v1",
+        "animation.equation.fraction-equivalence.v1",
+        "animation.equation.logarithm-change-of-base.v1",
+        "animation.exact-fraction-quantity.third-plus-sixth",
+        "animation.generated.add-zero",
+        "animation.generated.calculus.derivative.power-rule-x-cubed",
+        "animation.generated.calculus.derivative.sum-rule-polynomial",
+        "animation.generated.calculus.integral.power-rule-quadratic",
+        "animation.generated.cancellation.additive-inverses",
+        "animation.generated.distribution.expand-a-sum",
+        "animation.generated.distribution.factor-common-a",
+        "animation.generated.exponent.square-as-product",
+        "animation.generated.fraction-expression.two-fourths",
+        "animation.generated.function-wrap.apply-f",
+        "animation.generated.linear-algebra.dot-product.three-vector",
+        "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+        "animation.generated.linear-algebra.matrix-vector.two-by-two",
+        "animation.generated.linear-solve.linear-68c15d41",
+        "animation.generated.pipeline-diagram",
+        "animation.generated.radical.square-root-as-power",
+        "animation.generated.substitute-three",
+        "animation.generated.substitute-three.provisional-incorrect",
+        "animation.graph.surface-mode.mesh-to-donut",
+        "animation.graph.vector.linear-map-scale",
+        "animation.inequality.sign-flip.basic",
+        "animation.integral-ftc.area-sweep",
+        "animation.linear-solve.solve-x",
+        "animation.operation-evaluation.five-plus-two",
+        "animation.operation-evaluation.one-plus-two",
+        "animation.operation-evaluation.three-sixths",
+        "animation.operation-evaluation.two-times-one-carrier",
+        "animation.operation-evaluation.two-times-three",
+        "animation.physics.constant-force-work-energy",
+        "animation.place-value-addition.278-plus-156",
+        "animation.programming.add.execution-trace",
+        "animation.programming.lisp-lambda-application",
+        "animation.programming.python-free-shipping-refactor",
+        "animation.programming.scheme-factorial",
+        "animation.programming.typescript-free-shipping-refactor",
+        "animation.sample.fourier-transform-pair",
+        "animation.sample.fundamental-theorem-calculus"
+      ]
+    },
+    {
+      "dependencyId": "editor-animation-surface.diagram.svg",
+      "kind": "renderer",
+      "callerAssetIds": [
+        "animation.exact-fraction-quantity.third-plus-sixth",
+        "animation.generated.pipeline-diagram",
+        "animation.place-value-addition.278-plus-156"
+      ]
+    },
+    {
+      "dependencyId": "editor-animation-surface.equation.katex",
+      "kind": "renderer",
+      "callerAssetIds": [
+        "animation.algebra.radical.compound-carrier-normalization",
+        "animation.algebra.radical.solve-x-squared-nine",
+        "animation.comparison.jacobian-hessian",
+        "animation.comparison.linear-solve-programming",
+        "animation.exact-fraction-quantity.third-plus-sixth",
+        "animation.generated.calculus.derivative.power-rule-x-cubed",
+        "animation.generated.calculus.derivative.sum-rule-polynomial",
+        "animation.generated.calculus.integral.power-rule-quadratic",
+        "animation.generated.cancellation.additive-inverses",
+        "animation.generated.distribution.expand-a-sum",
+        "animation.generated.distribution.factor-common-a",
+        "animation.generated.exponent.square-as-product",
+        "animation.generated.fraction-expression.two-fourths",
+        "animation.generated.function-wrap.apply-f",
+        "animation.generated.linear-algebra.dot-product.three-vector",
+        "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+        "animation.generated.linear-algebra.matrix-vector.two-by-two",
+        "animation.generated.linear-solve.linear-68c15d41",
+        "animation.generated.radical.square-root-as-power",
+        "animation.generated.substitute-three",
+        "animation.generated.substitute-three.provisional-incorrect",
+        "animation.inequality.sign-flip.basic",
+        "animation.linear-solve.solve-x",
+        "animation.operation-evaluation.five-plus-two",
+        "animation.operation-evaluation.one-plus-two",
+        "animation.operation-evaluation.three-sixths",
+        "animation.operation-evaluation.two-times-three",
+        "animation.sample.fourier-transform-pair",
+        "animation.sample.fundamental-theorem-calculus"
+      ]
+    },
+    {
+      "dependencyId": "editor-animation-surface.even-root.canonical-native-katex",
+      "kind": "renderer",
+      "callerAssetIds": [
+        "animation.algebra.radical.compound-carrier-normalization",
+        "animation.algebra.radical.solve-x-squared-nine"
+      ]
+    },
+    {
+      "dependencyId": "editor-animation-surface.exact-fraction-quantity.synchronized",
+      "kind": "renderer",
+      "callerAssetIds": [
+        "animation.exact-fraction-quantity.third-plus-sixth"
+      ]
+    },
+    {
+      "dependencyId": "editor-animation-surface.exponential-homomorphism.canonical-native-katex",
+      "kind": "renderer",
+      "callerAssetIds": [
+        "animation.algebra.exponential-homomorphism.difference-to-quotient",
+        "animation.algebra.exponential-homomorphism.sum-to-product"
+      ]
+    },
+    {
+      "dependencyId": "editor-animation-surface.finite-product-expansion.canonical-native-katex",
+      "kind": "renderer",
+      "callerAssetIds": [
+        "animation.equation.finite-product-expansion.v1",
+        "animation.equation.finite-sum-expansion.v1"
+      ]
+    },
+    {
+      "dependencyId": "editor-animation-surface.finite-sum-expansion.canonical-native-katex",
+      "kind": "renderer",
+      "callerAssetIds": [
+        "animation.equation.finite-product-expansion.v1",
+        "animation.equation.finite-sum-expansion.v1"
+      ]
+    },
+    {
+      "dependencyId": "editor-animation-surface.fraction-equivalence.canonical-native-katex",
+      "kind": "renderer",
+      "callerAssetIds": [
+        "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+        "animation.equation.fraction-equivalence.compact.v1",
+        "animation.equation.fraction-equivalence.v1"
+      ]
+    },
+    {
+      "dependencyId": "editor-animation-surface.fraction-equivalence.common-denominator-pressure",
+      "kind": "renderer",
+      "callerAssetIds": [
+        "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+        "animation.equation.fraction-equivalence.compact.v1",
+        "animation.equation.fraction-equivalence.v1"
+      ]
+    },
+    {
+      "dependencyId": "editor-animation-surface.graph.svg",
+      "kind": "renderer",
+      "callerAssetIds": [
+        "animation.derivative-rules.tangent-graph",
+        "animation.dot-projection.basic",
+        "animation.generated.linear-algebra.matrix-vector.two-by-two",
+        "animation.graph.vector.linear-map-scale",
+        "animation.integral-ftc.area-sweep",
+        "animation.physics.constant-force-work-energy"
+      ]
+    },
+    {
+      "dependencyId": "editor-animation-surface.graph.svg.economics",
+      "kind": "renderer",
+      "callerAssetIds": [
+        "animation.economics.supply-demand-equilibrium-shift"
+      ]
+    },
+    {
+      "dependencyId": "editor-animation-surface.graph.webgl-3d",
+      "kind": "renderer",
+      "callerAssetIds": [
+        "animation.graph.surface-mode.mesh-to-donut"
+      ]
+    },
+    {
+      "dependencyId": "editor-animation-surface.log-exponent.canonical-native-katex",
+      "kind": "renderer",
+      "callerAssetIds": [
+        "animation.algebra.log-exponent.solve-two-power-x"
+      ]
+    },
+    {
+      "dependencyId": "editor-animation-surface.log-product.canonical-native-katex",
+      "kind": "renderer",
+      "callerAssetIds": [
+        "animation.algebra.log-product.equivalence-frame",
+        "animation.algebra.log-product.product-to-sum",
+        "animation.algebra.log-product.three-factors-to-sum"
+      ]
+    },
+    {
+      "dependencyId": "editor-animation-surface.log-product.equivalence-frame.native-katex",
+      "kind": "renderer",
+      "callerAssetIds": [
+        "animation.algebra.log-product.equivalence-frame",
+        "animation.algebra.log-product.product-to-sum",
+        "animation.algebra.log-product.three-factors-to-sum"
+      ]
+    },
+    {
+      "dependencyId": "editor-animation-surface.log-quotient.canonical-native-katex",
+      "kind": "renderer",
+      "callerAssetIds": [
+        "animation.algebra.log-quotient.difference-to-quotient"
+      ]
+    },
+    {
+      "dependencyId": "editor-animation-surface.logarithm-change-of-base.canonical-native-katex",
+      "kind": "renderer",
+      "callerAssetIds": [
+        "animation.equation.logarithm-change-of-base.v1"
+      ]
+    },
+    {
+      "dependencyId": "editor-animation-surface.operation-evaluation.canonical-native-katex",
+      "kind": "renderer",
+      "callerAssetIds": [
+        "animation.operation-evaluation.five-plus-two",
+        "animation.operation-evaluation.one-plus-two",
+        "animation.operation-evaluation.three-sixths",
+        "animation.operation-evaluation.two-times-three"
+      ]
+    },
+    {
+      "dependencyId": "editor-animation-surface.operation-evaluation.carrier-preserving-simplification",
+      "kind": "renderer",
+      "callerAssetIds": [
+        "animation.generated.add-zero",
+        "animation.operation-evaluation.two-times-one-carrier"
+      ]
+    },
+    {
+      "dependencyId": "editor-animation-surface.place-value-addition.synchronized",
+      "kind": "renderer",
+      "callerAssetIds": [
+        "animation.place-value-addition.278-plus-156"
+      ]
+    },
+    {
+      "dependencyId": "editor-animation-surface.programming.trace",
+      "kind": "renderer",
+      "callerAssetIds": [
+        "animation.comparison.linear-solve-programming",
+        "animation.programming.add.execution-trace",
+        "animation.programming.lisp-lambda-application",
+        "animation.programming.python-free-shipping-refactor",
+        "animation.programming.scheme-factorial",
+        "animation.programming.typescript-free-shipping-refactor"
+      ]
+    },
+    {
+      "dependencyId": "editor-animation-surface.root.compound-carrier.canonical-native-katex",
+      "kind": "renderer",
+      "callerAssetIds": [
+        "animation.algebra.radical.compound-carrier-normalization",
+        "animation.algebra.radical.solve-x-squared-nine"
+      ]
+    },
+    {
+      "dependencyId": "profile.diagram.renderer-domain",
+      "kind": "typography-policy",
+      "callerAssetIds": [
+        "animation.exact-fraction-quantity.third-plus-sixth",
+        "animation.generated.pipeline-diagram",
+        "animation.place-value-addition.278-plus-156"
+      ]
+    },
+    {
+      "dependencyId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+      "kind": "typography-policy",
+      "callerAssetIds": [
+        "animation.algebra.radical.compound-carrier-normalization",
+        "animation.comparison.jacobian-hessian",
+        "animation.equation.finite-product-expansion.v1",
+        "animation.equation.finite-sum-expansion.v1",
+        "animation.generated.add-zero",
+        "animation.generated.calculus.derivative.power-rule-x-cubed",
+        "animation.generated.calculus.derivative.sum-rule-polynomial",
+        "animation.generated.calculus.integral.power-rule-quadratic",
+        "animation.generated.distribution.expand-a-sum",
+        "animation.generated.distribution.factor-common-a",
+        "animation.generated.exponent.square-as-product",
+        "animation.generated.fraction-expression.two-fourths",
+        "animation.generated.function-wrap.apply-f",
+        "animation.generated.linear-algebra.dot-product.three-vector",
+        "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+        "animation.generated.linear-algebra.matrix-vector.two-by-two",
+        "animation.generated.radical.square-root-as-power",
+        "animation.generated.substitute-three",
+        "animation.generated.substitute-three.provisional-incorrect",
+        "animation.inequality.sign-flip.basic",
+        "animation.operation-evaluation.five-plus-two",
+        "animation.operation-evaluation.one-plus-two",
+        "animation.operation-evaluation.three-sixths",
+        "animation.operation-evaluation.two-times-one-carrier",
+        "animation.operation-evaluation.two-times-three",
+        "animation.sample.fourier-transform-pair",
+        "animation.sample.fundamental-theorem-calculus"
+      ]
+    },
+    {
+      "dependencyId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275",
+      "kind": "typography-policy",
+      "callerAssetIds": [
+        "animation.algebra.exponential-homomorphism.difference-to-quotient",
+        "animation.algebra.exponential-homomorphism.sum-to-product",
+        "animation.algebra.log-exponent.solve-two-power-x",
+        "animation.algebra.log-product.equivalence-frame",
+        "animation.algebra.log-product.product-to-sum",
+        "animation.algebra.log-product.three-factors-to-sum",
+        "animation.algebra.log-quotient.difference-to-quotient",
+        "animation.algebra.radical.solve-x-squared-nine",
+        "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+        "animation.equation.fraction-equivalence.compact.v1",
+        "animation.equation.fraction-equivalence.v1",
+        "animation.equation.logarithm-change-of-base.v1",
+        "animation.generated.linear-solve.linear-68c15d41"
+      ]
+    },
+    {
+      "dependencyId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-1740be6e",
+      "kind": "typography-policy",
+      "callerAssetIds": [
+        "animation.generated.cancellation.additive-inverses"
+      ]
+    },
+    {
+      "dependencyId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-e7328d35",
+      "kind": "typography-policy",
+      "callerAssetIds": [
+        "animation.comparison.linear-solve-programming",
+        "animation.linear-solve.solve-x"
+      ]
+    },
+    {
+      "dependencyId": "profile.graph.renderer-domain",
+      "kind": "typography-policy",
+      "callerAssetIds": [
+        "animation.derivative-rules.tangent-graph",
+        "animation.dot-projection.basic",
+        "animation.economics.supply-demand-equilibrium-shift",
+        "animation.generated.linear-algebra.matrix-vector.two-by-two",
+        "animation.graph.surface-mode.mesh-to-donut",
+        "animation.graph.vector.linear-map-scale",
+        "animation.integral-ftc.area-sweep",
+        "animation.physics.constant-force-work-energy"
+      ]
+    },
+    {
+      "dependencyId": "profile.programming.renderer-domain",
+      "kind": "typography-policy",
+      "callerAssetIds": [
+        "animation.comparison.linear-solve-programming",
+        "animation.programming.add.execution-trace",
+        "animation.programming.lisp-lambda-application",
+        "animation.programming.python-free-shipping-refactor",
+        "animation.programming.scheme-factorial",
+        "animation.programming.typescript-free-shipping-refactor"
+      ]
+    }
+  ]
+}

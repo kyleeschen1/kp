@@ -147,6 +147,27 @@
       "scope": "slice 06 review-freshness",
       "checkedAt": "2026-08-23T05:31:28.240Z",
       "notes": "All TypeScript, Svelte, and domain type boundaries pass."
+    },
+    {
+      "command": "npm run test:animation-governance-reverse-dependencies",
+      "status": "passed",
+      "scope": "slice 07 reverse-dependencies",
+      "checkedAt": "2026-08-23T05:35:36.236Z",
+      "notes": "Nine tests prove all four dependency kinds, exact caller invalidation, structured-declaration authority, complete manifest coverage, and generated freshness."
+    },
+    {
+      "command": "npm run check:animation-governance-reverse-dependencies",
+      "status": "passed",
+      "scope": "slice 07 generated graph",
+      "checkedAt": "2026-08-23T05:35:38.409Z",
+      "notes": "Committed reverse dependency graph matches deterministic compilation."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 07 reverse-dependencies",
+      "checkedAt": "2026-08-23T05:35:40.624Z",
+      "notes": "All TypeScript, Svelte, and domain type boundaries pass."
     }
   ],
   "progress": {

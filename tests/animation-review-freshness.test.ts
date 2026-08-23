@@ -43,6 +43,12 @@ const manifest = {
     profileSchemaVersion: "profile.v1",
     profileFingerprint: "kp-profile-fixture"
   }],
+  dependencies: {
+    principleIds: ["principle.animation.semantic-lineage-authority"],
+    motifIds: ["motif.review.fixture"],
+    rendererIds: ["adapter.equation.v1"],
+    typographyPolicyIds: ["profile.fixture"]
+  },
   capabilities: {
     surfaceSlotKinds: ["equation"],
     rendererCapabilityIds: ["equation-katex"],

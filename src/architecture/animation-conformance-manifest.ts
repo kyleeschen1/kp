@@ -71,6 +71,12 @@ export interface KpAnimationConformanceManifest {
   };
   readonly resolvedProfiles:
     readonly KpResolvedAnimationProfileProvenance[];
+  readonly dependencies: {
+    readonly principleIds: readonly string[];
+    readonly motifIds: readonly string[];
+    readonly rendererIds: readonly string[];
+    readonly typographyPolicyIds: readonly string[];
+  };
   readonly capabilities: {
     readonly surfaceSlotKinds: readonly string[];
     readonly rendererCapabilityIds: readonly string[];
@@ -182,6 +188,23 @@ function compileManifest(
           : {})
       })
     )),
+    dependencies: Object.freeze({
+      principleIds: Object.freeze([...epoch.requiredPrincipleIds]),
+      motifIds: Object.freeze(unique([
+        ...entry.motifs.familyIds,
+        ...entry.motifs.presentationRecipeIds
+      ])),
+      rendererIds: Object.freeze([...entry.renderer.adapterIds]),
+      typographyPolicyIds: Object.freeze(entry.domains.map((domain) =>
+        resolveKpAnimationProfileProvenance({
+          epochId: epoch.id,
+          domain,
+          ...(domain === "equation" && asset.presentationProfile !== undefined
+            ? { declaredProfile: asset.presentationProfile }
+            : {})
+        }).profileId
+      ))
+    }),
     capabilities: Object.freeze({
       surfaceSlotKinds: Object.freeze([...entry.surface.slotKinds]),
       rendererCapabilityIds: Object.freeze([

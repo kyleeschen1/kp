@@ -56,6 +56,28 @@
           "profileFingerprint": "kp-profile-0c767275"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.exponential-homomorphism.canonical-native-katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -146,6 +168,28 @@
           "profileFingerprint": "kp-profile-0c767275"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.exponential-homomorphism.canonical-native-katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -238,6 +282,28 @@
           "profileFingerprint": "kp-profile-0c767275"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.log-exponent.canonical-native-katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -329,6 +395,29 @@
           "profileFingerprint": "kp-profile-0c767275"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.log-product.canonical-native-katex",
+          "editor-animation-surface.log-product.equivalence-frame.native-katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -420,6 +509,29 @@
           "profileFingerprint": "kp-profile-0c767275"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.log-product.canonical-native-katex",
+          "editor-animation-surface.log-product.equivalence-frame.native-katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -511,6 +623,29 @@
           "profileFingerprint": "kp-profile-0c767275"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.log-product.canonical-native-katex",
+          "editor-animation-surface.log-product.equivalence-frame.native-katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -601,6 +736,28 @@
           "profileFingerprint": "kp-profile-0c767275"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.log-quotient.canonical-native-katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -693,6 +850,29 @@
           "profileFingerprint": "kp-profile-0b6278ca"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.even-root.canonical-native-katex",
+          "editor-animation-surface.root.compound-carrier.canonical-native-katex",
+          "editor-animation-surface.equation.katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -791,6 +971,30 @@
           "profileFingerprint": "kp-profile-0c767275"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.even-root.canonical-native-katex",
+          "editor-animation-surface.root.compound-carrier.canonical-native-katex",
+          "editor-animation-surface.equation.katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -890,6 +1094,27 @@
           "profileFingerprint": "kp-profile-0b6278ca"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -995,6 +1220,30 @@
           "profileFingerprint": "kp-profile-39a8df85"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "continuity-v1",
+          "atomic-v1",
+          "counter-orbit-v1",
+          "none",
+          "counter-convergence-v1",
+          "semantic-depth-v1",
+          "concurrent-v1",
+          "together"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.equation.katex",
+          "editor-animation-surface.programming.trace"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-e7328d35",
+          "profile.programming.renderer-domain"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation",
@@ -1085,6 +1334,21 @@
           "profileFingerprint": "kp-profile-936a5a0a"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "family.calculus.derivative-rules"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.graph.svg"
+        ],
+        "typographyPolicyIds": [
+          "profile.graph.renderer-domain"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "graph"
@@ -1172,6 +1436,21 @@
           "profileFingerprint": "kp-profile-936a5a0a"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "family.linear-algebra.dot-projection"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.graph.svg"
+        ],
+        "typographyPolicyIds": [
+          "profile.graph.renderer-domain"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "graph"
@@ -1260,6 +1539,19 @@
           "profileFingerprint": "kp-profile-936a5a0a"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [],
+        "rendererIds": [
+          "editor-animation-surface.graph.svg.economics"
+        ],
+        "typographyPolicyIds": [
+          "profile.graph.renderer-domain"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "graph"
@@ -1346,6 +1638,28 @@
           "profileFingerprint": "kp-profile-0b6278ca"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.finite-sum-expansion.canonical-native-katex",
+          "editor-animation-surface.finite-product-expansion.canonical-native-katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -1437,6 +1751,28 @@
           "profileFingerprint": "kp-profile-0b6278ca"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.finite-sum-expansion.canonical-native-katex",
+          "editor-animation-surface.finite-product-expansion.canonical-native-katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -1530,6 +1866,29 @@
           "profileFingerprint": "kp-profile-0c767275"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.fraction-equivalence.canonical-native-katex",
+          "editor-animation-surface.fraction-equivalence.common-denominator-pressure"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -1621,6 +1980,29 @@
           "profileFingerprint": "kp-profile-0c767275"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.fraction-equivalence.canonical-native-katex",
+          "editor-animation-surface.fraction-equivalence.common-denominator-pressure"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -1712,6 +2094,29 @@
           "profileFingerprint": "kp-profile-0c767275"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.fraction-equivalence.canonical-native-katex",
+          "editor-animation-surface.fraction-equivalence.common-denominator-pressure"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -1802,6 +2207,28 @@
           "profileFingerprint": "kp-profile-0c767275"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.logarithm-change-of-base.canonical-native-katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -1896,6 +2323,21 @@
           "profileFingerprint": "kp-profile-adf2d31d"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [],
+        "rendererIds": [
+          "editor-animation-surface.exact-fraction-quantity.synchronized",
+          "editor-animation-surface.equation.katex",
+          "editor-animation-surface.diagram.svg"
+        ],
+        "typographyPolicyIds": [
+          "profile.diagram.renderer-domain"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "diagram"
@@ -1985,6 +2427,27 @@
           "profileFingerprint": "kp-profile-0b6278ca"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.operation-evaluation.carrier-preserving-simplification"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -2076,6 +2539,28 @@
           "profileFingerprint": "kp-profile-0b6278ca"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "family.calculus.derivative-rules",
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -2166,6 +2651,27 @@
           "profileFingerprint": "kp-profile-0b6278ca"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -2256,6 +2762,27 @@
           "profileFingerprint": "kp-profile-0b6278ca"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -2345,6 +2872,27 @@
           "profileFingerprint": "kp-profile-1740be6e"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-1740be6e"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -2434,6 +2982,28 @@
           "profileFingerprint": "kp-profile-0b6278ca"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "family.algebra.distribution-factoring",
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -2524,6 +3094,28 @@
           "profileFingerprint": "kp-profile-0b6278ca"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "family.algebra.distribution-factoring",
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -2614,6 +3206,28 @@
           "profileFingerprint": "kp-profile-0b6278ca"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "family.algebra.exponent-log-laws",
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -2705,6 +3319,28 @@
           "profileFingerprint": "kp-profile-0b6278ca"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "family.algebra.fraction-simplification",
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -2794,6 +3430,28 @@
           "profileFingerprint": "kp-profile-0b6278ca"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "family.algebra.exponent-log-laws",
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -2883,6 +3541,27 @@
           "profileFingerprint": "kp-profile-0b6278ca"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -2972,6 +3651,28 @@
           "profileFingerprint": "kp-profile-0b6278ca"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "family.linear-algebra.matrix-matrix-composition",
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -3074,6 +3775,30 @@
           "profileFingerprint": "kp-profile-936a5a0a"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "family.linear-algebra.matrix-vector",
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.equation.katex",
+          "editor-animation-surface.graph.svg"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profile.graph.renderer-domain"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation",
@@ -3170,6 +3895,28 @@
           "profileFingerprint": "kp-profile-0c767275"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "counter-orbit-v1",
+          "none",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1",
+          "together"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -3259,6 +4006,19 @@
           "profileFingerprint": "kp-profile-adf2d31d"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [],
+        "rendererIds": [
+          "editor-animation-surface.diagram.svg"
+        ],
+        "typographyPolicyIds": [
+          "profile.diagram.renderer-domain"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "diagram"
@@ -3342,6 +4102,28 @@
           "profileFingerprint": "kp-profile-0b6278ca"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "family.algebra.exponent-log-laws",
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -3432,6 +4214,27 @@
           "profileFingerprint": "kp-profile-0b6278ca"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -3519,6 +4322,27 @@
           "profileFingerprint": "kp-profile-0b6278ca"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -3605,6 +4429,19 @@
           "profileFingerprint": "kp-profile-936a5a0a"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [],
+        "rendererIds": [
+          "editor-animation-surface.graph.webgl-3d"
+        ],
+        "typographyPolicyIds": [
+          "profile.graph.renderer-domain"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "graph"
@@ -3689,6 +4526,21 @@
           "profileFingerprint": "kp-profile-936a5a0a"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "family.linear-algebra.vector-add-scale"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.graph.svg"
+        ],
+        "typographyPolicyIds": [
+          "profile.graph.renderer-domain"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "graph"
@@ -3774,6 +4626,28 @@
           "profileFingerprint": "kp-profile-0b6278ca"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "family.algebra.inequality",
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -3862,6 +4736,21 @@
           "profileFingerprint": "kp-profile-936a5a0a"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "family.calculus.integral-ftc"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.graph.svg"
+        ],
+        "typographyPolicyIds": [
+          "profile.graph.renderer-domain"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "graph"
@@ -3951,6 +4840,30 @@
           "profileFingerprint": "kp-profile-e7328d35"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "family.algebra.both-sides",
+          "family.algebra.cancel-combine",
+          "continuity-v1",
+          "atomic-v1",
+          "counter-orbit-v1",
+          "none",
+          "counter-convergence-v1",
+          "semantic-depth-v1",
+          "concurrent-v1",
+          "together"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-e7328d35"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -4047,6 +4960,28 @@
           "profileFingerprint": "kp-profile-0b6278ca"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.operation-evaluation.canonical-native-katex",
+          "editor-animation-surface.equation.katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -4143,6 +5078,28 @@
           "profileFingerprint": "kp-profile-0b6278ca"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.operation-evaluation.canonical-native-katex",
+          "editor-animation-surface.equation.katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -4239,6 +5196,28 @@
           "profileFingerprint": "kp-profile-0b6278ca"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.operation-evaluation.canonical-native-katex",
+          "editor-animation-surface.equation.katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -4334,6 +5313,27 @@
           "profileFingerprint": "kp-profile-0b6278ca"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.operation-evaluation.carrier-preserving-simplification"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -4431,6 +5431,28 @@
           "profileFingerprint": "kp-profile-0b6278ca"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.operation-evaluation.canonical-native-katex",
+          "editor-animation-surface.equation.katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -4525,6 +5547,19 @@
           "profileFingerprint": "kp-profile-936a5a0a"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [],
+        "rendererIds": [
+          "editor-animation-surface.graph.svg"
+        ],
+        "typographyPolicyIds": [
+          "profile.graph.renderer-domain"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "graph"
@@ -4615,6 +5650,20 @@
           "profileFingerprint": "kp-profile-adf2d31d"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [],
+        "rendererIds": [
+          "editor-animation-surface.place-value-addition.synchronized",
+          "editor-animation-surface.diagram.svg"
+        ],
+        "typographyPolicyIds": [
+          "profile.diagram.renderer-domain"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "diagram"
@@ -4704,6 +5753,19 @@
           "profileFingerprint": "kp-profile-39a8df85"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [],
+        "rendererIds": [
+          "editor-animation-surface.programming.trace"
+        ],
+        "typographyPolicyIds": [
+          "profile.programming.renderer-domain"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "programming"
@@ -4792,6 +5854,19 @@
           "profileFingerprint": "kp-profile-39a8df85"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [],
+        "rendererIds": [
+          "editor-animation-surface.programming.trace"
+        ],
+        "typographyPolicyIds": [
+          "profile.programming.renderer-domain"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "programming"
@@ -4882,6 +5957,19 @@
           "profileFingerprint": "kp-profile-39a8df85"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [],
+        "rendererIds": [
+          "editor-animation-surface.programming.trace"
+        ],
+        "typographyPolicyIds": [
+          "profile.programming.renderer-domain"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "programming"
@@ -4986,6 +6074,19 @@
           "profileFingerprint": "kp-profile-39a8df85"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [],
+        "rendererIds": [
+          "editor-animation-surface.programming.trace"
+        ],
+        "typographyPolicyIds": [
+          "profile.programming.renderer-domain"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "programming"
@@ -5076,6 +6177,19 @@
           "profileFingerprint": "kp-profile-39a8df85"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [],
+        "rendererIds": [
+          "editor-animation-surface.programming.trace"
+        ],
+        "typographyPolicyIds": [
+          "profile.programming.renderer-domain"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "programming"
@@ -5166,6 +6280,27 @@
           "profileFingerprint": "kp-profile-0b6278ca"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -5256,6 +6391,28 @@
           "profileFingerprint": "kp-profile-0b6278ca"
         }
       ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [
+          "family.calculus.integral-ftc",
+          "semantic-material-v2",
+          "crossfade-v1",
+          "witnessed-annihilation-v1",
+          "embedded-v1",
+          "successor-synthesis-v1",
+          "flat-v1",
+          "concurrent-v1"
+        ],
+        "rendererIds": [
+          "editor-animation-surface.equation.katex"
+        ],
+        "typographyPolicyIds": [
+          "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca"
+        ]
+      },
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"

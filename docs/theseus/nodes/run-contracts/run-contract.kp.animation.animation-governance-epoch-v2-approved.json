@@ -82,7 +82,8 @@
     {
       "id": "reverse-dependencies",
       "title": "reverse-dependencies",
-      "status": "planned"
+      "summary": "Generated a structured reverse dependency graph from manifest-declared principles, motifs, renderers, and typography profiles. Dependency changes now return exact affected asset and review sets without treating import scans or string search as authority.",
+      "status": "complete"
     },
     {
       "id": "registration-gateway",
