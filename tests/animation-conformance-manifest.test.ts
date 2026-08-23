@@ -43,7 +43,23 @@ test("every loadable asset has one renderer-neutral conformance manifest", () =>
       "principle.animation.semantic-lineage-authority",
       "principle.animation.deterministic-single-clock"
     ]);
+    assert.ok(manifest.policy.principleContractIds.length > 0);
+    assert.equal(manifest.resolvedProfiles.length, manifest.domains.length);
+    assert.equal(manifest.resolvedProfiles.every(({ epochId }) =>
+      epochId === manifest.policy.epochId
+    ), true);
   }
+});
+
+test("current equation manifests preserve their declared profile provenance", () => {
+  const equationManifests = manifests().manifests.filter(({ domains }) =>
+    domains.includes("equation")
+  );
+  assert.equal(equationManifests.every(({ resolvedProfiles }) =>
+    resolvedProfiles
+      .filter(({ domain }) => domain === "equation")
+      .every(({ source }) => source === "asset-declared")
+  ), true);
 });
 
 test("current equation gaps are explicit compatibility, not silent conformance", () => {

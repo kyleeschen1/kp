@@ -39,8 +39,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0c767275"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -107,8 +122,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0c767275"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -177,8 +207,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0c767275"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -246,8 +291,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0c767275"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -315,8 +375,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0c767275"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -384,8 +459,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0c767275"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -452,8 +542,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0c767275"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -522,8 +627,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0b6278ca"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -598,8 +718,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0c767275"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -675,8 +810,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0b6278ca"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -750,8 +900,31 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-e7328d35",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-e7328d35"
+        },
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "programming",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "not-applicable",
+          "profileId": "profile.programming.renderer-domain",
+          "profileFingerprint": "kp-profile-39a8df85"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation",
@@ -819,8 +992,22 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "graph",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "not-applicable",
+          "profileId": "profile.graph.renderer-domain",
+          "profileFingerprint": "kp-profile-936a5a0a"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "graph"
@@ -885,8 +1072,22 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "graph",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "not-applicable",
+          "profileId": "profile.graph.renderer-domain",
+          "profileFingerprint": "kp-profile-936a5a0a"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "graph"
@@ -950,8 +1151,22 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "graph",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "not-applicable",
+          "profileId": "profile.graph.renderer-domain",
+          "profileFingerprint": "kp-profile-936a5a0a"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "graph"
@@ -1014,8 +1229,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0b6278ca"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -1083,8 +1313,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0b6278ca"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -1154,8 +1399,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0c767275"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -1223,8 +1483,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0c767275"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -1292,8 +1567,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0c767275"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -1360,8 +1650,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0c767275"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -1433,8 +1738,22 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "diagram",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "not-applicable",
+          "profileId": "profile.diagram.renderer-domain",
+          "profileFingerprint": "kp-profile-adf2d31d"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "diagram"
@@ -1500,8 +1819,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0b6278ca"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -1567,8 +1901,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0b6278ca"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -1635,8 +1984,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0b6278ca"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -1703,8 +2067,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0b6278ca"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -1770,8 +2149,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-1740be6e",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-1740be6e"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -1837,8 +2231,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0b6278ca"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -1905,8 +2314,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0b6278ca"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -1973,8 +2397,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0b6278ca"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -2042,8 +2481,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0b6278ca"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -2109,8 +2563,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0b6278ca"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -2176,8 +2645,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0b6278ca"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -2243,8 +2727,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0b6278ca"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -2315,8 +2814,31 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0b6278ca"
+        },
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "graph",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "not-applicable",
+          "profileId": "profile.graph.renderer-domain",
+          "profileFingerprint": "kp-profile-936a5a0a"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation",
@@ -2389,8 +2911,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0c767275",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0c767275"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -2457,8 +2994,22 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "diagram",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "not-applicable",
+          "profileId": "profile.diagram.renderer-domain",
+          "profileFingerprint": "kp-profile-adf2d31d"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "diagram"
@@ -2518,8 +3069,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0b6278ca"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -2586,8 +3152,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0b6278ca"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -2651,8 +3232,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0b6278ca"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -2716,8 +3312,22 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "graph",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "not-applicable",
+          "profileId": "profile.graph.renderer-domain",
+          "profileFingerprint": "kp-profile-936a5a0a"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "graph"
@@ -2779,8 +3389,22 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "graph",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "not-applicable",
+          "profileId": "profile.graph.renderer-domain",
+          "profileFingerprint": "kp-profile-936a5a0a"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "graph"
@@ -2842,8 +3466,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0b6278ca"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -2909,8 +3548,22 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "graph",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "not-applicable",
+          "profileId": "profile.graph.renderer-domain",
+          "profileFingerprint": "kp-profile-936a5a0a"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "graph"
@@ -2976,8 +3629,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-e7328d35",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-e7328d35"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -3050,8 +3718,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0b6278ca"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -3124,8 +3807,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0b6278ca"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -3198,8 +3896,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0b6278ca"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -3271,8 +3984,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0b6278ca"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -3344,8 +4072,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0b6278ca"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -3417,8 +4160,22 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "graph",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "not-applicable",
+          "profileId": "profile.graph.renderer-domain",
+          "profileFingerprint": "kp-profile-936a5a0a"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "graph"
@@ -3486,8 +4243,22 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "diagram",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "not-applicable",
+          "profileId": "profile.diagram.renderer-domain",
+          "profileFingerprint": "kp-profile-adf2d31d"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "diagram"
@@ -3554,8 +4325,22 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "programming",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "not-applicable",
+          "profileId": "profile.programming.renderer-domain",
+          "profileFingerprint": "kp-profile-39a8df85"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "programming"
@@ -3621,8 +4406,22 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "programming",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "not-applicable",
+          "profileId": "profile.programming.renderer-domain",
+          "profileFingerprint": "kp-profile-39a8df85"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "programming"
@@ -3690,8 +4489,22 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "programming",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "not-applicable",
+          "profileId": "profile.programming.renderer-domain",
+          "profileFingerprint": "kp-profile-39a8df85"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "programming"
@@ -3773,8 +4586,22 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "programming",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "not-applicable",
+          "profileId": "profile.programming.renderer-domain",
+          "profileFingerprint": "kp-profile-39a8df85"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "programming"
@@ -3842,8 +4669,22 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "programming",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "not-applicable",
+          "profileId": "profile.programming.renderer-domain",
+          "profileFingerprint": "kp-profile-39a8df85"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "programming"
@@ -3910,8 +4751,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0b6278ca"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"
@@ -3978,8 +4834,23 @@
         "requiredPrincipleIds": [
           "principle.animation.semantic-lineage-authority",
           "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
         ]
       },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "equation",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "asset-declared",
+          "profileId": "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
+          "profileSchemaVersion": "kp.presentation-profile.v1",
+          "profileFingerprint": "kp-profile-0b6278ca"
+        }
+      ],
       "capabilities": {
         "surfaceSlotKinds": [
           "equation"

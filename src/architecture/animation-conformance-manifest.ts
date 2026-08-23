@@ -6,8 +6,14 @@ import type {
   KpAnimationGovernanceInventory
 } from "./animation-governance-inventory.ts";
 import {
-  kpRequiredAnimationPrinciples,
-  type KpAnimationPrincipleId
+  resolveKpAnimationPolicyEpoch,
+  resolveKpAnimationProfileProvenance,
+  type KpAnimationPolicyEpochId,
+  type KpResolvedAnimationProfileProvenance
+} from "./animation-policy-epoch.ts";
+import type {
+  KpAnimationPrincipleContractId,
+  KpAnimationPrincipleId
 } from "./animation-principle-ledger.ts";
 
 export type KpAnimationConformanceGapCode =
@@ -54,9 +60,13 @@ export interface KpAnimationConformanceManifest {
     readonly seekPolicy: "deterministic-normalized-playhead";
   };
   readonly policy: {
-    readonly epochId: "policy.animation.legacy.v1";
+    readonly epochId: KpAnimationPolicyEpochId;
     readonly requiredPrincipleIds: readonly KpAnimationPrincipleId[];
+    readonly principleContractIds:
+      readonly KpAnimationPrincipleContractId[];
   };
+  readonly resolvedProfiles:
+    readonly KpResolvedAnimationProfileProvenance[];
   readonly capabilities: {
     readonly surfaceSlotKinds: readonly string[];
     readonly rendererCapabilityIds: readonly string[];
@@ -121,6 +131,7 @@ function compileManifest(
   asset: KpAnimationAsset,
   entry: KpAnimationGovernanceInventory["entries"][number]
 ): KpAnimationConformanceManifest {
+  const epoch = resolveKpAnimationPolicyEpoch("policy.animation.legacy.v1");
   const gaps: KpAnimationConformanceGapCode[] = [...entry.bypasses];
   if (asset.presentationConstraints === undefined) {
     gaps.push("asset-presentation-constraints-missing");
@@ -153,11 +164,19 @@ function compileManifest(
       seekPolicy: "deterministic-normalized-playhead" as const
     }),
     policy: Object.freeze({
-      epochId: "policy.animation.legacy.v1" as const,
-      requiredPrincipleIds: Object.freeze(
-        kpRequiredAnimationPrinciples.map(({ id }) => id)
-      )
+      epochId: epoch.id,
+      requiredPrincipleIds: Object.freeze([...epoch.requiredPrincipleIds]),
+      principleContractIds: Object.freeze([...epoch.principleContractIds])
     }),
+    resolvedProfiles: Object.freeze(entry.domains.map((domain) =>
+      resolveKpAnimationProfileProvenance({
+        epochId: epoch.id,
+        domain,
+        ...(domain === "equation" && asset.presentationProfile !== undefined
+          ? { declaredProfile: asset.presentationProfile }
+          : {})
+      })
+    )),
     capabilities: Object.freeze({
       surfaceSlotKinds: Object.freeze([...entry.surface.slotKinds]),
       rendererCapabilityIds: Object.freeze([

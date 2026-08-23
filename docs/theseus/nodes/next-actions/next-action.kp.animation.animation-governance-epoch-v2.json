@@ -105,6 +105,27 @@
       "scope": "slice 04 conformance-manifest",
       "checkedAt": "2026-08-23T05:22:31.503Z",
       "notes": "All TypeScript, Svelte, and domain type boundaries pass."
+    },
+    {
+      "command": "npm run test:animation-policy-epoch",
+      "status": "passed",
+      "scope": "slice 05 policy-epochs",
+      "checkedAt": "2026-08-23T05:27:51.125Z",
+      "notes": "Nine focused tests prove immutable epoch snapshots, deterministic profile fingerprints, legacy reproducibility, v2 implicit-profile rejection, and generated provenance coverage."
+    },
+    {
+      "command": "npm run check:animation-conformance-manifest",
+      "status": "passed",
+      "scope": "slice 05 provenance generation",
+      "checkedAt": "2026-08-23T05:27:52.225Z",
+      "notes": "Generated manifests are current after epoch and resolved-profile provenance fields."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 05 policy-epochs",
+      "checkedAt": "2026-08-23T05:27:53.167Z",
+      "notes": "All TypeScript, Svelte, and domain type boundaries pass."
     }
   ],
   "progress": {
