@@ -242,6 +242,20 @@ const checks = {
     "Pressure the canonical and structurally different change-of-base callers in Chromium.",
     "promotion"
   ),
+  logProductUnit: check(
+    "log-product-unit",
+    ["npm", "run", "test:log-product"],
+    "medium",
+    "Exercise log-product semantics, lineage, material roles, endpoints, and transit laws.",
+    "discovery"
+  ),
+  logProductVisual: check(
+    "log-product-visual",
+    ["npm", "run", "visual:log-product"],
+    "medium",
+    "Capture the bounded flat and material-depth log-product comparators.",
+    "discovery"
+  ),
   browserTestHostSmoke: check(
     "browser-test-host-smoke",
     [
@@ -394,6 +408,19 @@ const rules: readonly KpVerificationRule[] = [
       checks.logarithmChangeOfBaseBrowser
     ],
     reason: "The bounded change-of-base semantic, compositor, or exemplar family changed."
+  },
+  {
+    id: "log-product-material",
+    matches: isLogProductMaterialPath,
+    checks: [
+      checks.equationPreservation,
+      checks.logProductUnit,
+      checks.typecheckApp,
+      checks.logProductVisual,
+      checks.catalogueCapabilityBrowser,
+      checks.catalogueBundle
+    ],
+    reason: "The bounded log-product material-depth exemplar changed."
   },
   {
     id: "native-katex-renderer",
@@ -585,10 +612,12 @@ const rules: readonly KpVerificationRule[] = [
       (path.startsWith("src/animation/") &&
         path !== "src/animation/indexed-progress-schedule.ts" &&
         !isTypeScriptRefactorPath(path) &&
-        !isFunctionWrapPath(path)) ||
+        !isFunctionWrapPath(path) &&
+        !isLogProductMaterialPath(path)) ||
       (!path.startsWith("src/domain-ir/") &&
         !path.includes("equation-extension-dispatch") &&
         !isFunctionWrapPath(path) &&
+        !isLogProductMaterialPath(path) &&
         !isInferenceContractPath(path) &&
         !path.startsWith("src/rendering/native-katex-") &&
         (path.includes("equation") || path.includes("visual"))),
@@ -694,6 +723,15 @@ function isPublicFractionCompositionPath(path: string): boolean {
 function isFocusedPublicPath(path: string): boolean {
   return isPublicTypeScriptPath(path) ||
     isPublicFractionCompositionPath(path);
+}
+
+function isLogProductMaterialPath(path: string): boolean {
+  return path.startsWith("src/animation/log-product-material-depth-") ||
+    path === "src/rendering/log-product-material-depth-dom.ts" ||
+    path === "src/editor/log-product-surface-adapter.ts" ||
+    path === "src/editor/log-product-surface.css" ||
+    path === "scripts/capture-log-product.ts" ||
+    path.startsWith("tests/log-product-material-depth-");
 }
 
 function isTypeScriptRefactorPath(path: string): boolean {

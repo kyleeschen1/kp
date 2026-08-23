@@ -165,6 +165,30 @@ test("change-of-base rendering selects its bounded family gate", () => {
   assert.equal(ids(result).includes("build"), false);
 });
 
+test("log-product material discovery avoids broad unrelated gates", () => {
+  for (const path of [
+    "src/editor/log-product-surface-adapter.ts",
+    "src/rendering/log-product-material-depth-dom.ts",
+    "src/animation/log-product-material-depth-choreography.ts",
+    "scripts/capture-log-product.ts"
+  ]) {
+    const result = selectKpVerificationImpact([path], { mode: "discovery" });
+    assert.deepEqual(ids(result), [
+      "equation-surface-preservation",
+      "log-product-unit",
+      "log-product-visual"
+    ]);
+    assert.deepEqual(result.unmatchedPaths, []);
+  }
+
+  const promotion = selectKpVerificationImpact([
+    "src/editor/log-product-surface-adapter.ts"
+  ], { mode: "promotion" });
+  assert.ok(ids(promotion).includes("typecheck-app"));
+  assert.ok(ids(promotion).includes("catalogue-capability-browser"));
+  assert.ok(ids(promotion).includes("catalogue-bundle-boundary"));
+});
+
 test("inference contracts avoid Svelte and full-suite verification", () => {
   const result = selectKpVerificationImpact([
     "src/rendering/equation-motion-occlusion-types.ts"

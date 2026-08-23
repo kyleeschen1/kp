@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 import {
@@ -71,4 +72,24 @@ test("the equivalence frame stays in the lazy log-product capability", async () 
   assert.ok(declaration);
   assert.ok(declaration.adapterIds.includes(
     "editor-animation-surface.log-product.equivalence-frame.native-katex"));
+
+  const [declarations, capability] = await Promise.all([
+    readFile(new URL(
+      "../src/editor/selected-surface-capability-declarations.ts",
+      import.meta.url
+    ), "utf8"),
+    readFile(new URL(
+      "../src/editor/log-product-surface-capability.ts",
+      import.meta.url
+    ), "utf8")
+  ]);
+  assert.match(
+    declarations,
+    /await import\("\.\/log-product-surface-capability\.ts"\)/u
+  );
+  assert.match(capability, /import "\.\/log-product-surface\.css"/u);
+  assert.match(
+    capability,
+    /from "\.\/log-product-surface-adapter\.ts"/u
+  );
 });

@@ -373,6 +373,55 @@
       "scope": "md20 typed lifecycle harness",
       "checkedAt": "2026-08-23T00:48:02.976Z",
       "notes": "Application, Node, tests, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test scripts/verification-impact.test.ts scripts/verify-impact.test.ts",
+      "status": "passed",
+      "scope": "md21 focused impact selector",
+      "checkedAt": "2026-08-23T01:01:50.002Z",
+      "notes": "All 31 impact-selection tests passed; discovery mode now recognizes exemplar-local material paths and avoids unrelated full-suite and production-build escalation."
+    },
+    {
+      "command": "npm run verify:impact -- --mode discovery --path src/editor/log-product-surface-adapter.ts --path src/animation/log-product-material-depth-choreography.ts --path src/rendering/log-product-material-depth-dom.ts",
+      "status": "passed",
+      "scope": "md21 bounded discovery lane",
+      "checkedAt": "2026-08-23T01:02:00.146Z",
+      "notes": "Impact selection returns equation-surface-preservation, log-product-unit, and log-product-visual with no unmatched paths."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "md21 preservation boundary",
+      "checkedAt": "2026-08-23T01:02:09.077Z",
+      "notes": "All 11 equation-surface preservation checks passed without invoking unrelated catalogue or release lanes."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "md21 material owner and loading guards",
+      "checkedAt": "2026-08-23T01:02:17.435Z",
+      "notes": "All 50 focused tests passed, including lazy capability-source assertions and material role, lifecycle, and endpoint laws."
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "passed",
+      "scope": "md21 owner hot path and scoped loading",
+      "checkedAt": "2026-08-23T01:02:26.458Z",
+      "notes": "Stable browser capture observed at most 9 visible material owners against budget 12, zero stage overflow, zero presentation-layer per-frame layout reads, lazy loading of the log-product capability, and no unrelated animation capability loads."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "md21 typed performance and loading boundary",
+      "checkedAt": "2026-08-23T01:02:39.946Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks passed after the bounded impact-lane additions."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "md21 contract integrity",
+      "checkedAt": "2026-08-23T01:03:06.661Z",
+      "notes": "Validated 1051 nodes and 24694 events after completing the bounded performance and scoped-loading slice."
     }
   ],
   "allowedWork": [
@@ -524,7 +573,8 @@
     {
       "id": "md21",
       "title": "Measure material owner hot-path and scoped loading impact",
-      "status": "planned"
+      "summary": "Measured material presentation stays bounded at 9 visible owners against budget 12, zero stage overflow, and zero presentation-layer per-frame layout reads; the capability remains lazy, and a focused discovery lane replaces accidental full-suite and build escalation.",
+      "status": "complete"
     },
     {
       "id": "md22",

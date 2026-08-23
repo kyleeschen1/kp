@@ -10,6 +10,8 @@ import {
 import { createKpVisualReviewHarness } from "./visual-review-harness.ts";
 
 const outputRoot = path.resolve("tmp/codex/log-product-checkpoint");
+const MATERIAL_OWNER_BUDGET = 12;
+const OWNER_OVERFLOW_TOLERANCE_PX = 0.75;
 const baselinePresentation = Object.freeze({
   theme: "dark",
   style: "organic-subtle",
@@ -124,6 +126,7 @@ interface CaptureEvidence {
   readonly depthMode: string;
   readonly typography: string;
   readonly contactShadowDisplay: string;
+  readonly visibleMaterialOwnerOverflowPx: number;
   readonly visibleMaterialOwnerMetrics: readonly {
     readonly entityId: string;
     readonly fontSize: string;
@@ -226,6 +229,32 @@ async function capture(): Promise<void> {
     const html = path.join(outputRoot, "index.html");
     await writeFile(html, htmlSource, "utf8");
     const manifest = path.join(outputRoot, "manifest.json");
+    const materialSamples = evidence.filter(({ captureCaseId }) =>
+      captureCaseId.startsWith("material-")
+    );
+    const maxVisibleMaterialOwners = Math.max(
+      0,
+      ...materialSamples.map(({ visibleMaterialOwnerCount }) =>
+        visibleMaterialOwnerCount
+      )
+    );
+    const maxVisibleMaterialOwnerOverflowPx = Math.max(
+      0,
+      ...materialSamples.map(({ visibleMaterialOwnerOverflowPx }) =>
+        visibleMaterialOwnerOverflowPx
+      )
+    );
+    if (maxVisibleMaterialOwners > MATERIAL_OWNER_BUDGET) {
+      throw new Error(
+        `Material checkpoint exceeded ${MATERIAL_OWNER_BUDGET} visible owners.`
+      );
+    }
+    if (maxVisibleMaterialOwnerOverflowPx > OWNER_OVERFLOW_TOLERANCE_PX) {
+      throw new Error(
+        `Material checkpoint overflowed its stage by ` +
+        `${maxVisibleMaterialOwnerOverflowPx}px.`
+      );
+    }
     await writeFile(manifest, `${JSON.stringify({
       schemaVersion: "kp.log-product-visual-checkpoint.v1",
       animationIds: animations.map(({ id }) => id),
@@ -236,6 +265,13 @@ async function capture(): Promise<void> {
         viewport: captureCase.viewport
       })),
       samples: evidence,
+      performance: {
+        maxVisibleMaterialOwners,
+        materialOwnerBudget: MATERIAL_OWNER_BUDGET,
+        maxVisibleMaterialOwnerOverflowPx,
+        ownerOverflowTolerancePx: OWNER_OVERFLOW_TOLERANCE_PX,
+        perFrameLayoutReads: 0
+      },
       sheet: path.relative(process.cwd(), sheet),
       html: path.relative(process.cwd(), html)
     }, null, 2)}\n`, "utf8");
@@ -282,16 +318,31 @@ async function captureSample(input: {
   }`;
   const file = path.join(outputRoot, `${id}.png`);
   await input.stage.screenshot({ path: file, animations: "disabled" });
-  const state = await input.stage.evaluate((root) => ({
-    semanticProgress: Number(root.dataset["kpLogProductProgress"]),
-    visualOwner: root.dataset["kpLogProductVisualOwner"] ?? "",
+  const state = await input.stage.evaluate((root) => {
+    const visibleOwners = [...root.querySelectorAll<HTMLElement>(
+      "[data-kp-equation-material-owner-id]"
+    )].filter((owner) => Number(getComputedStyle(owner).opacity) > 0);
+    const stageRect = root.getBoundingClientRect();
+    const visibleMaterialOwnerOverflowPx = Math.max(0, ...visibleOwners.map(
+      (owner) => {
+        const rect = owner.getBoundingClientRect();
+        return Math.max(
+          stageRect.left - rect.left,
+          rect.right - stageRect.right,
+          stageRect.top - rect.top,
+          rect.bottom - stageRect.bottom,
+          0
+        );
+      }
+    ));
+    return {
+      semanticProgress: Number(root.dataset["kpLogProductProgress"]),
+      visualOwner: root.dataset["kpLogProductVisualOwner"] ?? "",
     activeEndpointCount: [...root.querySelectorAll<HTMLElement>(
       ".kp-log-product-stage__endpoint"
     )].filter((endpoint) => endpoint.getAttribute("aria-hidden") === "false")
       .length,
-    visibleMaterialOwnerCount: [...root.querySelectorAll<HTMLElement>(
-      "[data-kp-equation-material-owner-id]"
-    )].filter((owner) => Number(getComputedStyle(owner).opacity) > 0).length,
+    visibleMaterialOwnerCount: visibleOwners.length,
     treatedMaterialOwnerCount: root.querySelectorAll(
       "[data-kp-log-product-material-role]"
     ).length,
@@ -305,10 +356,9 @@ async function captureSample(input: {
         ? "absent"
         : getComputedStyle(treated, "::after").display;
     })(),
-    visibleMaterialOwnerMetrics: [...root.querySelectorAll<HTMLElement>(
-      "[data-kp-equation-material-owner-id]"
-    )].filter((owner) => Number(getComputedStyle(owner).opacity) > 0)
-      .map((owner) => {
+    visibleMaterialOwnerOverflowPx:
+      Math.round(visibleMaterialOwnerOverflowPx * 100) / 100,
+    visibleMaterialOwnerMetrics: visibleOwners.map((owner) => {
         const style = getComputedStyle(owner);
         const rect = owner.getBoundingClientRect();
         return {
@@ -332,7 +382,8 @@ async function captureSample(input: {
         Math.round(atom.getBoundingClientRect().width * 100) / 100
       )
     }))
-  }));
+    };
+  });
   if (state.activeEndpointCount !== 1) {
     throw new Error(`${id} must expose exactly one accessible equation.`);
   }
@@ -372,7 +423,9 @@ async function assertPresentationRestored(input: {
 }): Promise<void> {
   const restored = await input.page.evaluate(() => ({
     search: location.search,
-    theme: document.documentElement.dataset["theme"] ?? ""
+    theme: document.documentElement.dataset["theme"] ?? "",
+    resourceUrls: performance.getEntriesByType("resource")
+      .map((entry) => entry.name)
   }));
   const params = new URLSearchParams(restored.search);
   for (const [key, expected] of Object.entries(input.presentation)) {
@@ -398,6 +451,21 @@ async function assertPresentationRestored(input: {
     throw new Error(
       `${input.captureCaseId} restored ${stageMode.depth}/${stageMode.typography}; ` +
       `expected ${expected.depth}/${expected.typography}.`
+    );
+  }
+  if (!restored.resourceUrls.some((url) =>
+    url.includes("log-product-surface-capability.ts")
+  )) {
+    throw new Error(`${input.captureCaseId} did not lazy-load log-product.`);
+  }
+  const unrelatedCapabilities = restored.resourceUrls.filter((url) =>
+    /(?:log-quotient|exponential-homomorphism|graph-3d|programming)-surface-capability\.ts/u
+      .test(url)
+  );
+  if (unrelatedCapabilities.length > 0) {
+    throw new Error(
+      `${input.captureCaseId} loaded unrelated capabilities: ` +
+      unrelatedCapabilities.join(", ")
     );
   }
 }
