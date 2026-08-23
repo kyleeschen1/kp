@@ -66,9 +66,9 @@ material-depth experiment is preserved but deferred after human review; it is
 not a family-wide styling policy. The animation-governance v2 epoch is complete
 at the mandatory human checkpoint for the reversible differentiation exemplar
 `d/dx x^3 -> 3x^(3-1) -> 3x^2`. Review that canonical Catalogue behavior before
-a second caller or family promotion. An exemplar-local attention and decrement
-repair is the current candidate; its timing, path, size, and paint are not yet
-promoted. See
+a second caller or family promotion. An exemplar-local operator-triggered
+attention and decrement repair is the current candidate; its timing, path,
+size, and paint are not yet promoted. See
 `decisions/2026-08-23-flat-2d-baseline-and-deferred-symbolic-materiality.md`
 and `reviews/2026-08-23-animation-governance-epoch-v2-derivative-checkpoint.md`.
 

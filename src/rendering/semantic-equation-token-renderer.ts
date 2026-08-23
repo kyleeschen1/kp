@@ -1628,10 +1628,21 @@ function sampleDerivativePowerRelation(
   if (context.plan.operatorSelectorIds.some((selectorId) =>
     relation.source?.selectorIds.includes(selectorId)
   )) {
+    // The operator advances as one rigid application group, then recoils as
+    // it discharges. It triggers the rewrite without claiming result lineage.
+    const engagementX =
+      6 * context.frame.operator.engagementProgress +
+      2 * context.frame.operator.triggerProgress *
+        (1 - context.frame.operator.dischargeProgress);
+    const operatorX = interpolate(
+      engagementX,
+      -2,
+      context.frame.operator.dischargeProgress
+    );
     return sourceTokens.map((token) => frameToken(token, "source", {
       opacity: context.frame.operator.opacity,
-      x: 0,
-      y: -4 * context.frame.operator.removalProgress,
+      x: operatorX,
+      y: 0,
       scale: 1
     }));
   }

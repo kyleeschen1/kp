@@ -75,6 +75,8 @@ export interface KpDerivativePowerChoreographyFrame {
   readonly focus: {
     readonly exponentEmphasis: number;
     readonly shadowOpacity: number;
+    readonly operatorApplication: number;
+    readonly operand: number;
     readonly sourceExponent: number;
     readonly coefficient: number;
     readonly exponentWitness: number;
@@ -82,6 +84,9 @@ export interface KpDerivativePowerChoreographyFrame {
   };
   readonly operator: {
     readonly opacity: number;
+    readonly engagementProgress: number;
+    readonly triggerProgress: number;
+    readonly dischargeProgress: number;
     readonly removalProgress: number;
   };
   readonly base: {
@@ -535,29 +540,37 @@ export function sampleKpDerivativePowerChoreography(input: {
   const p = roundProgress(direction === "forward" ? progress : 1 - progress);
   const phases: Readonly<Record<KpDerivativePowerPhaseId, number>> = {
     "orient-exponent": phaseProgress(p, 0, 0.18),
-    "reflow-continuants": phaseProgress(p, 0.12, 0.46),
-    "branch-exponent": phaseProgress(p, 0.26, 0.36),
-    "drop-coefficient": phaseProgress(p, 0.3, 0.68),
-    "decrement-successor": phaseProgress(p, 0.66, 0.8),
-    "settle-derivative": phaseProgress(p, 0.78, 0.92),
-    "release-derivative-focus": phaseProgress(p, 0.9, 1)
+    // The source is intentionally motionless until operator engagement opens
+    // the rewrite gate. The inherited phase name remains compatibility data.
+    "reflow-continuants": phaseProgress(p, 0.3, 0.54),
+    "branch-exponent": phaseProgress(p, 0.3, 0.42),
+    "drop-coefficient": phaseProgress(p, 0.34, 0.7),
+    "decrement-successor": phaseProgress(p, 0.7, 0.84),
+    "settle-derivative": phaseProgress(p, 0.82, 0.94),
+    "release-derivative-focus": phaseProgress(p, 0.92, 1)
   };
   const branch = phases["branch-exponent"];
   const coefficient = phases["drop-coefficient"];
-  const retainedExponentTravel = phaseProgress(p, 0.28, 0.52);
-  const retainedExponentHandoff = phaseProgress(p, 0.52, 0.58);
+  const operatorEngagement = phaseProgress(p, 0.1, 0.28);
+  const rewriteTrigger = phaseProgress(p, 0.28, 0.34);
+  const retainedExponentTravel = phaseProgress(p, 0.32, 0.56);
+  const retainedExponentHandoff = phaseProgress(p, 0.56, 0.62);
   const decrementEntry = phases["decrement-successor"];
   const settle = phases["settle-derivative"];
   const focusRelease = phases["release-derivative-focus"];
-  // The operator yields as soon as its action becomes visible. Leaving it on
-  // stage through the branch makes the reflowed base collide with d/dx.
-  const operatorRemoval = phaseProgress(p, 0.3, 0.52);
-  const baseHandoff = phaseProgress(p, 0.82, 0.92);
-  const sourceExponentFocus = phases["orient-exponent"] *
-    (1 - phaseProgress(p, 0.34, 0.58));
-  const coefficientFocus = branch * (1 - phaseProgress(p, 0.64, 0.8));
+  const operatorDischarge = phaseProgress(p, 0.32, 0.56);
+  const baseHandoff = phaseProgress(p, 0.84, 0.94);
+  const operatorApplicationFocus = Math.max(
+    phases["orient-exponent"],
+    operatorEngagement
+  ) * (1 - operatorDischarge);
+  const operandFocus = operatorEngagement *
+    (1 - phaseProgress(p, 0.36, 0.54));
+  const sourceExponentFocus = rewriteTrigger *
+    (1 - phaseProgress(p, 0.42, 0.62));
+  const coefficientFocus = branch * (1 - phaseProgress(p, 0.68, 0.84));
   const exponentWitnessFocus = retainedExponentHandoff *
-    (1 - phaseProgress(p, 0.78, 0.92));
+    (1 - phaseProgress(p, 0.82, 0.94));
   const decrementCauseFocus = decrementEntry * (1 - focusRelease);
   const sourceScale = interpolate(
     1,
@@ -574,20 +587,27 @@ export function sampleKpDerivativePowerChoreography(input: {
     phases,
     focus: {
       exponentEmphasis: Math.max(
+        operatorApplicationFocus,
+        operandFocus,
         sourceExponentFocus,
         coefficientFocus,
         exponentWitnessFocus,
         decrementCauseFocus
       ),
       shadowOpacity: 0,
+      operatorApplication: operatorApplicationFocus,
+      operand: operandFocus,
       sourceExponent: sourceExponentFocus,
       coefficient: coefficientFocus,
       exponentWitness: exponentWitnessFocus,
       decrementCause: decrementCauseFocus
     },
     operator: {
-      opacity: 1 - operatorRemoval,
-      removalProgress: operatorRemoval
+      opacity: 1 - operatorDischarge,
+      engagementProgress: operatorEngagement,
+      triggerProgress: rewriteTrigger,
+      dischargeProgress: operatorDischarge,
+      removalProgress: operatorDischarge
     },
     base: {
       reflowProgress: phases["reflow-continuants"],

@@ -13,6 +13,7 @@ const outputRoot = path.resolve(
 const checkpoints = [
   { id: "source", progress: 0 },
   { id: "operator-applies", progress: 0.14 },
+  { id: "rewrite-triggered", progress: 0.18 },
   { id: "exponent-branches", progress: 0.28 },
   { id: "decrement-ready", progress: 0.49 },
   { id: "decrement-compresses", progress: 0.66 },

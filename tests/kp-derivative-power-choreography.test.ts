@@ -124,6 +124,8 @@ test("derivative power choreography previews, acts, settles, and releases", () =
   assert.deepEqual(end.focus, {
     exponentEmphasis: 0,
     shadowOpacity: 0,
+    operatorApplication: 0,
+    operand: 0,
     sourceExponent: 0,
     coefficient: 0,
     exponentWitness: 0,
@@ -135,6 +137,35 @@ test("derivative power choreography previews, acts, settles, and releases", () =
   assert.equal(end.coefficient.opacity, 1);
   assert.equal(end.decrementInput.opacity, 1);
   assert.equal(end.decrementArtifacts.opacity, 1);
+});
+
+test("operator engagement opens the derivative rewrite gate", () => {
+  const { plan } = fixture();
+  const approach = sampleKpDerivativePowerChoreography({
+    plan,
+    progress: 0.24
+  });
+  const contact = sampleKpDerivativePowerChoreography({
+    plan,
+    progress: 0.28
+  });
+  const rewrite = sampleKpDerivativePowerChoreography({
+    plan,
+    progress: 0.34
+  });
+
+  assert.ok(approach.operator.engagementProgress > 0);
+  assert.equal(approach.operator.triggerProgress, 0);
+  assert.equal(approach.base.reflowProgress, 0);
+  assert.equal(approach.coefficient.opacity, 0);
+  assert.equal(contact.operator.engagementProgress, 1);
+  assert.equal(contact.operator.triggerProgress, 0);
+  assert.equal(contact.base.reflowProgress, 0);
+  assert.equal(contact.coefficient.opacity, 0);
+  assert.ok(rewrite.operator.triggerProgress > 0);
+  assert.ok(rewrite.operator.dischargeProgress > 0);
+  assert.ok(rewrite.base.reflowProgress > 0);
+  assert.ok(rewrite.coefficient.opacity > 0);
 });
 
 test("derivative power keeps one retained-exponent owner during handoff", () => {

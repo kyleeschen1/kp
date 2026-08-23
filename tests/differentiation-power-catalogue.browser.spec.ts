@@ -41,7 +41,6 @@ test("derivative power rule keeps an explicit decrement and flat glyph motion", 
     "[data-kp-editor-equation-source] .katex"
   )).toContainText("d");
 
-  await seek.fill("0.28");
   const sourceExponent = stage.locator(
     '[data-kp-editor-derivative-power-role="source-exponent"]'
   );
@@ -51,6 +50,24 @@ test("derivative power rule keeps an explicit decrement and flat glyph motion", 
   const decrementInput = stage.locator(
     '[data-kp-editor-derivative-power-role="decrement-input-descendant"]'
   );
+  const operator = stage.locator(
+    '[data-kp-editor-derivative-power-role="derivative-operator"]'
+  ).first();
+  const sourceBase = stage.locator(
+    '[data-kp-editor-derivative-power-role="source-operand-base"]'
+  );
+
+  await seek.fill("0.14");
+  await expect.poll(() => renderedTranslationX(operator)).toBeGreaterThan(0);
+  await expect.poll(() => renderedTranslationX(sourceBase)).toBe(0);
+  await expect(coefficient).toHaveCSS("opacity", "0");
+
+  await seek.fill("0.18");
+  await expect.poll(() => renderedTranslationX(sourceBase)).not.toBe(0);
+  await expect.poll(() => renderedOpacity(operator)).toBeLessThan(1);
+  await expect.poll(() => renderedOpacity(coefficient)).toBeGreaterThan(0);
+
+  await seek.fill("0.3");
   await expect.poll(() => renderedOpacity(sourceExponent)).toBeLessThan(1);
   await expect.poll(() => renderedOpacity(sourceExponent)).toBeGreaterThan(0);
   await expect(coefficient).toHaveCSS("opacity", "1");
@@ -181,4 +198,14 @@ async function renderedScale(glyph: Locator): Promise<{
 
 async function renderedOpacity(glyph: Locator): Promise<number> {
   return glyph.evaluate((element) => Number(getComputedStyle(element).opacity));
+}
+
+async function renderedTranslationX(glyph: Locator): Promise<number> {
+  return glyph.evaluate((element) => {
+    const transform = getComputedStyle(element).transform;
+    const matrix = transform === "none"
+      ? new DOMMatrix()
+      : new DOMMatrix(transform);
+    return Math.round(matrix.e * 1_000) / 1_000;
+  });
 }

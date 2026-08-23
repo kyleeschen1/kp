@@ -54,11 +54,41 @@
       "scope": "generated capability projection",
       "checkedAt": "2026-08-23T04:01:08.099Z",
       "notes": "Generated transformation coverage is current."
+    },
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "32 focused derivative semantic and choreography tests",
+      "checkedAt": "2026-08-23T21:13:25.002Z"
+    },
+    {
+      "command": "npm run test:browser:differentiation-exemplar",
+      "status": "passed",
+      "scope": "Chromium operator-contact gating, flat glyphs, decrement handoff, direct restoration",
+      "checkedAt": "2026-08-23T21:13:26.019Z"
+    },
+    {
+      "command": "npm run visual:derivative-power",
+      "status": "passed",
+      "scope": "Eight deterministic operator-to-result review frames",
+      "checkedAt": "2026-08-23T21:13:26.972Z"
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "Equation semantic, endpoint, renderer, clock, and sampled-frame boundary",
+      "checkedAt": "2026-08-23T21:13:27.934Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Application, Node, tests, Svelte, and domain type boundaries",
+      "checkedAt": "2026-08-23T21:13:28.882Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Explicit human-requested exemplar repair implemented and verified: direct retained-exponent ownership, one coefficient branch, earlier operator withdrawal, explicit subtraction cause, quiet native result, and larger flat-2D KaTeX. Candidate remains at mandatory human visual checkpoint; no second caller or promotion."
+    "summary": "Operator-triggered derivative candidate implemented and verified: source holds until d/dx engagement reaches contact, contact gates base/exponent rewrite, operator presses and recoils while discharging without result lineage, and the existing decrement resolution remains intact. Human visual approval and second-caller promotion remain outstanding."
   },
   "revisitWhen": [
     "Resume at slice 30 of run-contract.kp.animation.animation-governance-epoch-v2-approved."

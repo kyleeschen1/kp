@@ -287,12 +287,12 @@ function derivativePowerBeatRange(
 ): readonly [number, number] {
   switch (id) {
     case "orient-exponent": return [0, 9];
-    case "reflow-continuants": return [6, 23];
-    case "branch-exponent": return [13, 18];
-    case "drop-coefficient": return [15, 34];
-    case "decrement-successor": return [33, 40];
-    case "settle-derivative": return [39, 46];
-    case "release-derivative-focus": return [45, 50];
+    case "reflow-continuants": return [15, 27];
+    case "branch-exponent": return [15, 21];
+    case "drop-coefficient": return [17, 35];
+    case "decrement-successor": return [35, 42];
+    case "settle-derivative": return [41, 47];
+    case "release-derivative-focus": return [46, 50];
   }
 }
 

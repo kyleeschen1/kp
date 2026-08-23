@@ -55,10 +55,13 @@ without changing the preserved observable contract:
 
 The candidate increases the derivative equation's native catalogue type size,
 gives the source exponent direct perceptual ownership of the retained exponent
-slot, and sends only the coefficient copy along a branch path. The derivative
-operator withdraws when its action becomes visible instead of remaining behind
-the reflowed expression. Semantic focus moves from the source exponent to the
-coefficient, retained exponent, explicit decrement cause, and native result.
+slot, and sends only the coefficient copy along a branch path. The source
+expression now remains motionless while `d/dx` engages its operand. Operator
+contact opens the rewrite gate; only then may the base reflow and exponent
+branch. The operator presses through that trigger, recoils, and discharges
+without claiming result lineage. Semantic focus moves from the complete
+operator-operand application to the exponent, coefficient, retained exponent,
+explicit decrement cause, and native result.
 
 The `simplifyConstantDifference` transition now has an exemplar-local typed
 presentation plan compiled from its existing subtraction metadata. It holds
@@ -77,8 +80,9 @@ human review.
 - `npm run test:browser:differentiation-exemplar` — 2 Chromium lifecycle and
   direct-restoration checks passed, including the direct exponent path and
   non-generic decrement handoff;
-- `npm run visual:derivative-power` — seven deterministic review frames and a
-  flat-glyph manifest produced;
+- `npm run visual:derivative-power` — eight deterministic review frames,
+  including operator contact and post-trigger rewrite, plus a flat-glyph
+  manifest produced;
 - `npm run typecheck` — application, Node, tests, Svelte, and domain checks
   passed;
 - `npm run build` — typecheck, Svelte diagnostics, domain checks, publication

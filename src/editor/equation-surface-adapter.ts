@@ -3233,7 +3233,22 @@ function applyDerivativePowerTokenFocus(input: {
   if (sourceExponent !== undefined) {
     sourceExponent.dataset["kpEditorDerivativePowerRole"] = "source-exponent";
     sourceExponent.dataset["kpEditorDerivativePowerSalience"] =
-      salienceState(input.frame.focus.sourceExponent);
+      salienceState(Math.max(
+        input.frame.focus.operand,
+        input.frame.focus.sourceExponent
+      ));
+  }
+  const baseRelation = input.geometry.relations.find(
+    (relation) => relation.recordId === "base-persists"
+  );
+  const sourceBase = input.geometry.sourceTokens.find(
+    (token) => token.motionId === baseRelation?.source?.motionIds[0]
+  )?.element;
+  if (sourceBase !== undefined) {
+    sourceBase.dataset["kpEditorDerivativePowerRole"] = "source-operand-base";
+    sourceBase.dataset["kpEditorDerivativePowerSalience"] = salienceState(
+      input.frame.focus.operand
+    );
   }
   exponentRelation?.target?.motionIds.forEach((motionId, index) => {
     const selectorId = exponentRelation.target?.selectorIds[index];
@@ -3257,7 +3272,7 @@ function applyDerivativePowerTokenFocus(input: {
     if (token === undefined) continue;
     token.dataset["kpEditorDerivativePowerRole"] = "derivative-operator";
     token.dataset["kpEditorDerivativePowerSalience"] = salienceState(
-      input.frame.focus.sourceExponent
+      input.frame.focus.operatorApplication
     );
   }
   for (const selectorId of
