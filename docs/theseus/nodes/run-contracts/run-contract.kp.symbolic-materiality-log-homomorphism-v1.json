@@ -506,6 +506,48 @@
       "scope": "md22 corrected checkpoint integrity",
       "checkedAt": "2026-08-23T02:18:11.610Z",
       "notes": "Validated 1051 nodes and 24714 events after recording the shared-surface and terminal-landing revision."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T02:41:13.124Z",
+      "notes": "53 log-product unit tests passed; stationary relief, exact zero endpoints, theme palettes, and no displacement/contact-shadow regressions are covered."
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "passed",
+      "scope": "exemplar",
+      "checkedAt": "2026-08-23T02:41:17.975Z",
+      "notes": "Bounded browser capture passed across flat/material, dark/light, wide/narrow, reduced-motion, forward/return, and late endpoint samples; all material foreground owners retained zero CSS translate."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T02:41:21.696Z",
+      "notes": "All 11 equation-surface preservation checks passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-23T02:41:25.635Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run verify:impact",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T02:41:41.108Z",
+      "notes": "Discovery impact selection is medium risk and resolves exactly to equation-surface preservation, log-product unit, and log-product visual checks with no unmatched paths."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "md22",
+      "checkedAt": "2026-08-23T02:42:18.743Z",
+      "notes": "Validated 1051 nodes and 24722 events after recording the stationary-face relief checkpoint."
     }
   ],
   "allowedWork": [
@@ -663,7 +705,7 @@
     {
       "id": "md22",
       "title": "Produce comparison evidence and human visual checkpoint",
-      "summary": "Corrected the rejected revision with one measured equation baseline, fixed-pixel cohort lift, conditional shadows, and a fully unpromoted 4 percent material landing interval before Native KaTeX handoff. Stable visual evidence passes; awaiting human review of alignment, dimensional feel, and terminal continuity.",
+      "summary": "Built the reviewable stationary-face material exemplar: foreground KaTeX remains at authoritative geometry, contour-following relief carries the depth cue, light and dark faces use explicit coherent palettes, contact-shadow planes are removed, and focused semantic/browser/type/preservation evidence passes. Awaiting human visual checkpoint before promotion or completion.",
       "status": "in-progress"
     }
   ]

@@ -91,7 +91,7 @@ test("the DOM projector avoids layout reads and does not rewrite motion properti
   }
 });
 
-test("material glyph lift and contact shadow remain on inverse planes", () => {
+test("material relief preserves the foreground face on its native plane", () => {
   const active = projectKpLogProductMaterialSurface({
     pose: { plane: "active", normalizedDepth: 1, activity: 1 }
   });
@@ -99,29 +99,38 @@ test("material glyph lift and contact shadow remain on inverse planes", () => {
     pose: { plane: "subsurface", normalizedDepth: -1, activity: 1 }
   });
 
-  assert.equal(active.glyphLiftPx, -active.shadowGroundingPx);
-  assert.equal(subsurface.glyphLiftPx, -subsurface.shadowGroundingPx);
-  assert.ok(active.glyphLiftPx < 0);
-  assert.ok(subsurface.glyphLiftPx > 0);
-  assert.equal(active.lifted, true);
-  assert.equal(active.shadowActive, true);
-  assert.ok(active.shadowOpacity > 0);
-  assert.ok(active.shadowScale > 0.62);
+  assert.equal(active.reliefActive, true);
+  assert.equal(active.reliefStrength, 1);
+  assert.ok(active.reliefSideOffsetPx > 0);
+  assert.ok(active.reliefSideOpacity > 0);
+  assert.ok(active.reliefCastOffsetPx > active.reliefSideOffsetPx);
+  assert.ok(active.reliefCastBlurPx > 0);
+  assert.ok(active.reliefCastOpacity > 0);
+  assert.deepEqual(subsurface, {
+    reliefActive: false,
+    reliefStrength: 0,
+    reliefSideOffsetPx: 0,
+    reliefSideOpacity: 0,
+    reliefCastOffsetPx: 0,
+    reliefCastBlurPx: 0,
+    reliefCastOpacity: 0
+  });
 
   const landed = projectKpLogProductMaterialSurface({
     pose: { plane: "surface", normalizedDepth: 0, activity: 0 }
   });
   assert.deepEqual(landed, {
-    lifted: false,
-    shadowActive: false,
-    glyphLiftPx: 0,
-    shadowGroundingPx: 0,
-    shadowOpacity: 0,
-    shadowScale: 0.62
+    reliefActive: false,
+    reliefStrength: 0,
+    reliefSideOffsetPx: 0,
+    reliefSideOpacity: 0,
+    reliefCastOffsetPx: 0,
+    reliefCastBlurPx: 0,
+    reliefCastOpacity: 0
   });
 });
 
-test("contact shadow uses a local static gradient with opacity and scale", () => {
+test("relief uses stationary contour paint and an explicit theme palette", () => {
   const css = readFileSync(new URL(
     "../src/editor/log-product-surface.css",
     import.meta.url
@@ -129,24 +138,22 @@ test("contact shadow uses a local static gradient with opacity and scale", () =>
   const materialTreatment = css.slice(css.indexOf(
     ".kp-log-product-stage[data-kp-log-product-material-active"
   ));
-  assert.match(materialTreatment, /::after/u);
-  assert.match(materialTreatment, /radial-gradient/u);
-  assert.match(materialTreatment, /will-change:\s*opacity, transform/u);
-  assert.match(materialTreatment, /will-change:\s*translate/u);
-  assert.match(materialTreatment, /contact-shadow-grounding-y/u);
-  assert.match(materialTreatment, /contact-shadow-surface-y/u);
+  assert.match(css, /--kp-log-product-glyph-face:\s*#17191f/u);
+  assert.match(css, /--kp-log-product-glyph-face:\s*#ede8d0/u);
+  assert.match(materialTreatment, /text-shadow:/u);
+  assert.match(materialTreatment, /material-relief-side-offset/u);
+  assert.match(materialTreatment, /material-relief-cast-offset/u);
   assert.match(
     materialTreatment,
-    /material-lifted="true"[^}]*will-change:\s*translate/su
-  );
-  assert.match(
-    materialTreatment,
-    /contact-shadow-active="true"[^}]*display:\s*block/su
+    /material-relief-active="true"[^}]*text-shadow:/su
   );
   assert.match(
     materialTreatment,
     /material-geometry-landed="true"[^}]*will-change:\s*auto/su
   );
+  assert.doesNotMatch(materialTreatment, /::after/u);
+  assert.doesNotMatch(materialTreatment, /radial-gradient/u);
+  assert.doesNotMatch(materialTreatment, /\btranslate:/u);
   assert.doesNotMatch(materialTreatment, /filter:/u);
   assert.doesNotMatch(materialTreatment, /blur\(/u);
   assert.doesNotMatch(materialTreatment, /box-shadow:/u);

@@ -126,17 +126,18 @@ interface CaptureEvidence {
   readonly activeEndpointCount: number;
   readonly visibleMaterialOwnerCount: number;
   readonly treatedMaterialOwnerCount: number;
-  readonly liftedMaterialOwnerCount: number;
-  readonly activeContactShadowCount: number;
+  readonly activeReliefOwnerCount: number;
+  readonly displacedMaterialOwnerCount: number;
   readonly promotedMaterialOwnerCount: number;
-  readonly materialSurfaceBaselineSpreadPx: number;
   readonly depthMode: string;
   readonly typography: string;
-  readonly contactShadowDisplay: string;
   readonly visibleMaterialOwnerOverflowPx: number;
   readonly visibleMaterialOwnerMetrics: readonly {
     readonly entityId: string;
     readonly fontSize: string;
+    readonly color: string;
+    readonly textShadow: string;
+    readonly translate: string;
     readonly width: number;
     readonly height: number;
     readonly transform: string;
@@ -144,6 +145,7 @@ interface CaptureEvidence {
   readonly endpointMetrics: readonly {
     readonly stateId: string;
     readonly fontSize: string;
+    readonly color: string;
     readonly width: number;
     readonly atomWidths: readonly number[];
   }[];
@@ -350,20 +352,6 @@ async function captureSample(input: {
     const visibleTreatedOwners = treatedOwners.filter((owner) =>
       visibleOwnerSet.has(owner)
     );
-    const projectedBaselines = treatedOwners.flatMap((owner) => {
-      const surfaceOffset = Number.parseFloat(
-        owner.style.getPropertyValue(
-          "--kp-log-product-contact-shadow-surface-y"
-        )
-      );
-      const ownerTop = Number.parseFloat(owner.style.top);
-      return Number.isFinite(surfaceOffset) && Number.isFinite(ownerTop)
-        ? [surfaceOffset + ownerTop]
-        : [];
-    });
-    const materialSurfaceBaselineSpreadPx = projectedBaselines.length === 0
-      ? 0
-      : Math.max(...projectedBaselines) - Math.min(...projectedBaselines);
     return {
       semanticProgress: Number(root.dataset["kpLogProductProgress"]),
       visualOwner: root.dataset["kpLogProductVisualOwner"] ?? "",
@@ -373,36 +361,33 @@ async function captureSample(input: {
       .length,
     visibleMaterialOwnerCount: visibleOwners.length,
     treatedMaterialOwnerCount: treatedOwners.length,
-    liftedMaterialOwnerCount: visibleTreatedOwners.filter((owner) =>
-      owner.dataset["kpLogProductMaterialLifted"] === "true"
+    activeReliefOwnerCount: visibleTreatedOwners.filter((owner) =>
+      owner.dataset["kpLogProductMaterialReliefActive"] === "true"
     ).length,
-    activeContactShadowCount: visibleTreatedOwners.filter((owner) =>
-      owner.dataset["kpLogProductContactShadowActive"] === "true"
+    displacedMaterialOwnerCount: visibleTreatedOwners.filter((owner) =>
+      getComputedStyle(owner).translate !== "none"
     ).length,
     promotedMaterialOwnerCount: visibleTreatedOwners.filter((owner) =>
       getComputedStyle(owner).willChange !== "auto"
     ).length,
-    materialSurfaceBaselineSpreadPx:
-      Math.round(materialSurfaceBaselineSpreadPx * 1_000) / 1_000,
     depthMode: root.dataset["kpLogProductMaterialDepthMode"] ?? "",
     typography: root.dataset["kpLogProductTypography"] ?? "",
-    contactShadowDisplay: (() => {
-      const treated = root.querySelector<HTMLElement>(
-        "[data-kp-log-product-material-role]"
-      );
-      return treated === null
-        ? "absent"
-        : getComputedStyle(treated, "::after").display;
-    })(),
     visibleMaterialOwnerOverflowPx:
       Math.round(visibleMaterialOwnerOverflowPx * 100) / 100,
     visibleMaterialOwnerMetrics: visibleOwners.map((owner) => {
         const style = getComputedStyle(owner);
+        const visual = owner.querySelector<HTMLElement>(
+          ".editor-equation-stage__material-visual"
+        );
+        const visualStyle = getComputedStyle(visual ?? owner);
         const rect = owner.getBoundingClientRect();
         return {
           entityId:
             owner.dataset["kpEquationMaterialSemanticEntityId"] ?? "",
           fontSize: style.fontSize,
+          color: visualStyle.color,
+          textShadow: visualStyle.textShadow,
+          translate: style.translate,
           width: Math.round(rect.width * 100) / 100,
           height: Math.round(rect.height * 100) / 100,
           transform: style.transform
@@ -413,6 +398,9 @@ async function captureSample(input: {
     )].map((endpoint) => ({
       stateId: endpoint.dataset["kpLogProductEndpointStateId"] ?? "",
       fontSize: getComputedStyle(endpoint).fontSize,
+      color: getComputedStyle(
+        endpoint.querySelector<HTMLElement>(".katex-html") ?? endpoint
+      ).color,
       width: Math.round(endpoint.getBoundingClientRect().width * 100) / 100,
       atomWidths: [...endpoint.querySelectorAll<HTMLElement>(
         "[data-kp-semantic-entity-id]"
@@ -433,27 +421,43 @@ async function captureSample(input: {
   }
   if (
     input.captureCaseId.includes("reduced-motion") &&
-    !["absent", "none"].includes(state.contactShadowDisplay)
+    state.activeReliefOwnerCount !== 0
   ) {
-    throw new Error(`${id} retained contact shadow in reduced motion.`);
+    throw new Error(`${id} retained material relief in reduced motion.`);
   }
-  if (state.materialSurfaceBaselineSpreadPx > 0.01) {
-    throw new Error(`${id} projected more than one material ground plane.`);
+  if (
+    input.captureCaseId.startsWith("material-") &&
+    state.displacedMaterialOwnerCount !== 0
+  ) {
+    throw new Error(`${id} displaced foreground ink from its native plane.`);
+  }
+  const expectedGlyphColor = input.captureCaseId.includes("light")
+    ? "rgb(23, 25, 31)"
+    : "rgb(237, 232, 208)";
+  const unexpectedGlyphColors = [
+    ...state.visibleMaterialOwnerMetrics.map(({ color }) => color),
+    ...state.endpointMetrics.map(({ color }) => color)
+  ].filter((color) => color !== expectedGlyphColor);
+  if (unexpectedGlyphColors.length > 0) {
+    throw new Error(
+      `${id} used glyph colors outside the resolved theme face: ` +
+      [...new Set(unexpectedGlyphColors)].join(", ")
+    );
   }
   if (
     input.captureCaseId === "material-wide-dark" &&
     input.progress >= 0.96 && input.progress < 1 &&
     (
-      state.liftedMaterialOwnerCount !== 0 ||
-      state.activeContactShadowCount !== 0 ||
+      state.activeReliefOwnerCount !== 0 ||
+      state.displacedMaterialOwnerCount !== 0 ||
       state.promotedMaterialOwnerCount !== 0
     )
   ) {
     throw new Error(
       `${id} retained material depth or layer promotion after landing: ` +
       JSON.stringify({
-        lifted: state.liftedMaterialOwnerCount,
-        shadows: state.activeContactShadowCount,
+        relief: state.activeReliefOwnerCount,
+        displaced: state.displacedMaterialOwnerCount,
         promoted: state.promotedMaterialOwnerCount
       })
     );

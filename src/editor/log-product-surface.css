@@ -4,6 +4,9 @@
   --kp-log-product-equation-font-size:
     var(--kp-log-product-display-font-size);
   --kp-log-product-stage-block-size: 24rem;
+  --kp-log-product-glyph-face: #17191f;
+  --kp-log-product-material-side-rgb: 83 91 111;
+  --kp-log-product-material-cast-rgb: 24 27 35;
   position: relative;
   display: grid;
   width: 100%;
@@ -17,6 +20,15 @@
   background: transparent;
   isolation: isolate;
   text-transform: none;
+}
+
+:is(
+  .kp-animation-catalogue-shell,
+  .kp-animation-catalogue-bootstrap
+)[data-kp-animation-catalogue-theme="dark"] .kp-log-product-stage {
+  --kp-log-product-glyph-face: #ede8d0;
+  --kp-log-product-material-side-rgb: 138 147 181;
+  --kp-log-product-material-cast-rgb: 0 0 0;
 }
 
 .kp-log-product-stage__endpoint,
@@ -43,9 +55,21 @@
   pointer-events: none;
 }
 
-/* Material roles share one measured equation surface. Only genuinely lifted
-   owners receive translation or layer promotion, so the final material pose
-   is raster-stable before Native KaTeX resumes paint ownership. */
+/* Native and cloned ink share an explicit theme face. Computed-style clones
+   freeze their original color inline, so this exemplar-local override keeps
+   light/dark paint coherent through every ownership phase. */
+.kp-log-product-stage__endpoint .katex-html,
+.kp-log-product-stage__endpoint .katex-html *,
+.kp-log-product-stage__material-layer
+  .editor-equation-stage__material-visual,
+.kp-log-product-stage__material-layer
+  .editor-equation-stage__material-visual * {
+  color: var(--kp-log-product-glyph-face) !important;
+}
+
+/* Foreground ink remains on its native baseline. Depth is a contour painted
+   behind the face, so semantic cohorts can feel raised without displacing
+   independently sized glyph boxes. */
 .kp-log-product-stage[data-kp-log-product-material-active="true"]
   [data-kp-log-product-material-role] {
   z-index: 1;
@@ -53,9 +77,23 @@
 }
 
 .kp-log-product-stage[data-kp-log-product-material-active="true"]
-  [data-kp-log-product-material-lifted="true"] {
-  translate: 0 var(--kp-log-product-material-glyph-lift-y, 0);
-  will-change: translate;
+  [data-kp-log-product-material-relief-active="true"]
+  .editor-equation-stage__material-visual,
+.kp-log-product-stage[data-kp-log-product-material-active="true"]
+  [data-kp-log-product-material-relief-active="true"]
+  .editor-equation-stage__material-visual * {
+  text-shadow:
+    0 var(--kp-log-product-material-relief-side-offset, 0)
+      0 rgb(
+        var(--kp-log-product-material-side-rgb) /
+        var(--kp-log-product-material-relief-side-opacity, 0)
+      ),
+    0 var(--kp-log-product-material-relief-cast-offset, 0)
+      var(--kp-log-product-material-relief-cast-blur, 0)
+      rgb(
+        var(--kp-log-product-material-cast-rgb) /
+        var(--kp-log-product-material-relief-cast-opacity, 0)
+      ) !important;
 }
 
 .kp-log-product-stage[data-kp-log-product-material-active="true"]
@@ -66,36 +104,6 @@
 .kp-log-product-stage[data-kp-log-product-material-active="true"]
   [data-kp-log-product-material-plane="subsurface"] {
   z-index: 0;
-}
-
-.kp-log-product-stage[data-kp-log-product-material-active="true"]
-  [data-kp-log-product-material-role]::after {
-  position: absolute;
-  z-index: -1;
-  right: 8%;
-  top:
-    calc(
-      var(--kp-log-product-contact-shadow-surface-y, 100%) + 0.04em
-    );
-  bottom: auto;
-  left: 8%;
-  display: none;
-  height: 0.22em;
-  border-radius: 50%;
-  background: radial-gradient(ellipse at center, currentcolor, transparent 72%);
-  content: "";
-  opacity: var(--kp-log-product-contact-shadow-opacity, 0);
-  pointer-events: none;
-  transform:
-    translateY(var(--kp-log-product-contact-shadow-grounding-y, 0))
-    scaleX(var(--kp-log-product-contact-shadow-scale, 0.62));
-  transform-origin: center;
-}
-
-.kp-log-product-stage[data-kp-log-product-material-active="true"]
-  [data-kp-log-product-contact-shadow-active="true"]::after {
-  display: block;
-  will-change: opacity, transform;
 }
 
 /* The shared compositor promotes material owners during transit. Once its
@@ -109,8 +117,12 @@
 
 @media (prefers-reduced-motion: reduce), (prefers-contrast: more) {
   .kp-log-product-stage[data-kp-log-product-material-active="true"]
-    [data-kp-log-product-material-role]::after {
-    display: none;
+    [data-kp-log-product-material-relief-active="true"]
+    .editor-equation-stage__material-visual,
+  .kp-log-product-stage[data-kp-log-product-material-active="true"]
+    [data-kp-log-product-material-relief-active="true"]
+    .editor-equation-stage__material-visual * {
+    text-shadow: none !important;
   }
 }
 
