@@ -41,6 +41,7 @@ export interface KpReaderCanonicalEquationFrame {
   readonly progress: number;
   readonly motionMode: "continuous" | "essential" | "checkpoint";
   readonly fontReadiness: KpEquationFontReadiness;
+  readonly typographyCacheKey: string;
   readonly presentationRevision: string;
   readonly measurementIdentity: KpEquationStageMeasurementIdentity;
   readonly appliedStageLayout?:
@@ -142,6 +143,7 @@ export function createKpReaderCanonicalEquationSession(input: {
     renderPlanId: frame.renderPlan.id,
     materialPlanId: frame.materialPlan.id,
     fontRevision: frame.fontReadiness.revision,
+    typographyCacheKey: frame.typographyCacheKey,
     measurementIdentity: frame.measurementIdentity,
     layoutApplicationId:
       frame.appliedStageLayout?.applicationId ?? "native",

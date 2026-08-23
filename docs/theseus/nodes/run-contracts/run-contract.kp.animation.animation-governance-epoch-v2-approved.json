@@ -124,7 +124,8 @@
     {
       "id": "katex-endpoints",
       "title": "katex-endpoints",
-      "status": "planned"
+      "summary": "Added semantic typography-parametric Native KaTeX v2 endpoints, exact SSR/client hydration identity, and mandatory typography invalidation in compositor geometry caches; existing sessions now declare legacy profile keys explicitly.",
+      "status": "complete"
     },
     {
       "id": "transit-obligations",

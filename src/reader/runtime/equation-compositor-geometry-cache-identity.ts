@@ -15,6 +15,7 @@ export interface KpReaderCompositorGeometryCacheIdentityInput {
   readonly renderPlanId: string;
   readonly materialPlanId: string;
   readonly fontRevision: number;
+  readonly typographyCacheKey: string;
   readonly measurementIdentity: KpEquationStageMeasurementIdentity;
   readonly layoutApplicationId: string;
   readonly surfaceWidthPx: number;
@@ -31,6 +32,7 @@ export function createKpReaderCompositorGeometryCacheIdentity(
     input.transitionId,
     input.renderPlanId,
     input.materialPlanId,
+    input.typographyCacheKey,
     input.measurementIdentity.coordinateSpaceId,
     input.layoutApplicationId,
     input.presentationGeometryRevision
@@ -70,6 +72,7 @@ export function createKpReaderCompositorGeometryCacheIdentity(
     input.renderPlanId,
     input.materialPlanId,
     input.fontRevision,
+    input.typographyCacheKey,
     input.measurementIdentity.coordinateSpaceId,
     input.measurementIdentity.revision,
     input.layoutApplicationId,

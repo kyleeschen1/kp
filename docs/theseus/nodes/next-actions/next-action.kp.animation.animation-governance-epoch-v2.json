@@ -280,6 +280,27 @@
       "scope": "slice-13-typography-policy",
       "checkedAt": "2026-08-23T06:15:51.717Z",
       "notes": "All TypeScript, Svelte, and domain boundaries pass after adding semantic typography requirements."
+    },
+    {
+      "command": "npm run test:native-katex-endpoint-typography-v2",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T06:26:06.725Z",
+      "notes": "Native endpoint typography mapping, SSR/client hydration identity, and compositor cache invalidation passed."
+    },
+    {
+      "command": "npm run test:equation-typography-policy-v2",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T06:26:08.656Z",
+      "notes": "Resolved typography policy behavior remained valid."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T06:26:10.302Z",
+      "notes": "Application, Node, tests, Svelte, and domain types passed."
     }
   ],
   "progress": {

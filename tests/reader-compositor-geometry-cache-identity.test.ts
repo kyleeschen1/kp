@@ -10,6 +10,7 @@ const baseline: KpReaderCompositorGeometryCacheIdentityInput = {
   renderPlanId: "render.fraction",
   materialPlanId: "material.fraction",
   fontRevision: 1,
+  typographyCacheKey: "typography.equation.stage.v2:fixture",
   measurementIdentity: {
     coordinateSpaceId: "fraction.stage",
     revision: 3
@@ -29,6 +30,7 @@ if (false) {
     renderPlanId: "fixture.render",
     materialPlanId: "fixture.material",
     fontRevision: 1,
+    typographyCacheKey: "fixture.typography",
     measurementIdentity: baseline.measurementIdentity,
     layoutApplicationId: "fixture.layout",
     surfaceWidthPx: 800,
@@ -46,6 +48,7 @@ test("every geometry authority invalidates the compositor cache identity", () =>
     { ...baseline, renderPlanId: "render.fraction.2" },
     { ...baseline, materialPlanId: "material.fraction.2" },
     { ...baseline, fontRevision: 2 },
+    { ...baseline, typographyCacheKey: "typography.equation.inline.v2:fixture" },
     {
       ...baseline,
       measurementIdentity: {

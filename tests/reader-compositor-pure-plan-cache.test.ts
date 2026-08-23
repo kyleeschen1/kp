@@ -11,6 +11,7 @@ const identity = (revision: number) =>
     renderPlanId: "fixture.render",
     materialPlanId: "fixture.material",
     fontRevision: 1,
+    typographyCacheKey: "fixture.typography",
     measurementIdentity: {
       coordinateSpaceId: "fixture.stage",
       revision

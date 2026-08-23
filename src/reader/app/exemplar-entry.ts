@@ -988,6 +988,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     progress: phaseProgress,
     motionMode: projection.mode,
     fontReadiness,
+    typographyCacheKey: `legacy:${equationPresentationProfile.id}`,
     presentationRevision,
     measurementIdentity: context.fit.measurementIdentity,
     appliedStageLayout: context.appliedStageLayout

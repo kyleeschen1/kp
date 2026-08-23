@@ -445,6 +445,7 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
       progress: framePlan.phaseProgress,
       motionMode,
       fontReadiness,
+      typographyCacheKey: `legacy:${input.equationPresentationProfile.id}`,
       presentationRevision: [
         sampleInput.presentationRevision ?? "host",
         focus.activeSource ?? "none",
@@ -474,6 +475,7 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
         progress: 0,
         motionMode,
         fontReadiness,
+        typographyCacheKey: `legacy:${input.equationPresentationProfile.id}`,
         presentationRevision: "adjacent-prewarm",
         measurementIdentity: adjacent.fit.measurementIdentity,
         appliedStageLayout: adjacent.appliedStageLayout
