@@ -180,6 +180,7 @@ async function capture(): Promise<void> {
       });
       if (captureCase.id === "material-wide-dark") {
         await assertInterruptedSeek({ page, stage, seek });
+        await assertTransactionalResize({ page, stage, seek });
       }
 
       for (const progression of captureCase.progressions) {
@@ -489,6 +490,111 @@ async function assertInterruptedSeek(input: {
   ).count();
   if (activeEndpointCount !== 1) {
     throw new Error("Interrupted seek must retain one accessible endpoint.");
+  }
+}
+
+async function assertTransactionalResize(input: {
+  readonly page: Page;
+  readonly stage: Locator;
+  readonly seek: Locator;
+}): Promise<void> {
+  const initialViewport = input.page.viewportSize();
+  if (initialViewport === null) {
+    throw new Error("Resize verification requires a fixed viewport.");
+  }
+  await input.seek.fill("0.54");
+  await input.page.waitForFunction(() => {
+    const stage = document.querySelector<HTMLElement>(
+      "[data-kp-log-product-stage]"
+    );
+    return Number(stage?.dataset["kpLogProductProgress"]) === 0.54;
+  });
+  const before = await geometrySnapshot(input.stage);
+  await input.page.setViewportSize({
+    width: Math.max(720, initialViewport.width - 360),
+    height: initialViewport.height
+  });
+  await waitForGeometryRevision(input.stage, before.revision);
+  const resized = await geometrySnapshot(input.stage);
+  assertResizeSnapshot(before, resized, "narrower");
+
+  await input.page.setViewportSize(initialViewport);
+  await waitForGeometryRevision(input.stage, resized.revision);
+  const restored = await geometrySnapshot(input.stage);
+  assertResizeSnapshot(before, restored, "restored");
+}
+
+async function geometrySnapshot(stage: Locator): Promise<{
+  readonly revision: number;
+  readonly semanticProgress: number;
+  readonly blockSize: number;
+  readonly activeEndpointCount: number;
+  readonly visibleMaterialOwnerCount: number;
+}> {
+  return stage.evaluate((root) => ({
+    revision: Number(root.dataset["kpLogProductGeometryRevision"] ?? "0"),
+    semanticProgress: Number(root.dataset["kpLogProductProgress"]),
+    blockSize: root.getBoundingClientRect().height,
+    activeEndpointCount: root.querySelectorAll(
+      ".kp-log-product-stage__endpoint[aria-hidden=\"false\"]"
+    ).length,
+    visibleMaterialOwnerCount: [...root.querySelectorAll<HTMLElement>(
+      "[data-kp-equation-material-owner-id]"
+    )].filter((owner) => Number(getComputedStyle(owner).opacity) > 0).length
+  }));
+}
+
+async function waitForGeometryRevision(
+  stage: Locator,
+  previousRevision: number
+): Promise<void> {
+  await stage.evaluate((root, revision) => new Promise<void>((resolve, reject) => {
+    const ready = (): boolean =>
+      root.dataset["kpLogProductGeometryState"] === "ready" &&
+      Number(root.dataset["kpLogProductGeometryRevision"] ?? "0") > revision;
+    if (ready()) {
+      resolve();
+      return;
+    }
+    const timeout = window.setTimeout(() => {
+      observer.disconnect();
+      reject(new Error(
+        root.dataset["kpLogProductError"] ??
+        "Timed out replacing log-product geometry after resize."
+      ));
+    }, 5_000);
+    const observer = new MutationObserver(() => {
+      if (!ready()) return;
+      window.clearTimeout(timeout);
+      observer.disconnect();
+      resolve();
+    });
+    observer.observe(root, {
+      attributes: true,
+      attributeFilter: [
+        "data-kp-log-product-geometry-state",
+        "data-kp-log-product-geometry-revision"
+      ]
+    });
+  }), previousRevision);
+}
+
+function assertResizeSnapshot(
+  expected: Awaited<ReturnType<typeof geometrySnapshot>>,
+  actual: Awaited<ReturnType<typeof geometrySnapshot>>,
+  label: string
+): void {
+  if (actual.semanticProgress !== expected.semanticProgress) {
+    throw new Error(`${label} resize changed semantic progress.`);
+  }
+  if (Math.abs(actual.blockSize - expected.blockSize) > 0.75) {
+    throw new Error(`${label} resize changed reserved stage block size.`);
+  }
+  if (actual.activeEndpointCount !== 1) {
+    throw new Error(`${label} resize lost accessible endpoint ownership.`);
+  }
+  if (actual.visibleMaterialOwnerCount === 0) {
+    throw new Error(`${label} resize blanked the material scene.`);
   }
 }
 

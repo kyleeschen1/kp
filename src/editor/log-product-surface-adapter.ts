@@ -60,6 +60,8 @@ interface KpLogProductSurfaceSession {
     KpLogProductNativeEndpoint
   ];
   readonly fontReadiness: ReturnType<typeof createKpEquationFontReadiness>;
+  resizeObserver?: ResizeObserver | undefined;
+  observedGeometryKey?: string | undefined;
   generation: number;
   pendingState: KpEditorAnimationPlayerState;
   transit?: KpLogProductTransitSession | undefined;
@@ -100,7 +102,7 @@ export const kpEditorLogProductSurfaceAdapter = Object.freeze({
       }
       session.stage.dataset["kpLogProductStage"] = "preparing";
       const generation = ++session.generation;
-      void prepareSurface(session, generation);
+      void prepareSurface(session, generation, false);
     }
     if (session.transit !== undefined) applyFrame(session, state);
   }
@@ -116,6 +118,8 @@ function mountSurface(
   const stage = document.createElement("section");
   stage.className = "kp-log-product-stage";
   stage.dataset["kpLogProductStage"] = "preparing";
+  stage.dataset["kpLogProductGeometryState"] = "preparing";
+  stage.dataset["kpLogProductGeometryRevision"] = "0";
   stage.dataset["kpLogProductSemanticMotionChoreographyId"] =
     runtime.semanticMotion.id;
   stage.dataset["kpLogProductSemanticMotionRecipeId"] =
@@ -150,7 +154,7 @@ function mountSurface(
   status.textContent = "Logarithm of a product ready.";
   stage.append(...roots, materialLayer, status);
   slot.replaceChildren(stage);
-  return {
+  const session: KpLogProductSurfaceSession = {
     player,
     stage,
     endpointRoots: Object.freeze(roots) as readonly [HTMLElement, HTMLElement],
@@ -162,6 +166,8 @@ function mountSurface(
     pendingState: state,
     disposed: false
   };
+  observeSurfaceGeometry(session);
+  return session;
 }
 
 function syncMaterialPresentationMode(
@@ -180,7 +186,8 @@ function syncMaterialPresentationMode(
 
 async function prepareSurface(
   session: KpLogProductSurfaceSession,
-  generation: number
+  generation: number,
+  preservePaint: boolean
 ): Promise<void> {
   try {
     const source = await settleAndObserveKpLogProductNativeEndpoint({
@@ -198,7 +205,7 @@ async function prepareSurface(
       fontReadiness: session.fontReadiness
     });
     if (session.disposed || session.generation !== generation) return;
-    session.transit = createKpLogProductTransitSession({
+    const replacement = createKpLogProductTransitSession({
       operation: session.operation,
       semanticMotion: session.semanticMotion,
       sourceEndpoint: session.endpoints[0],
@@ -218,7 +225,7 @@ async function prepareSurface(
       [...source.atoms, ...target.atoms].map((atom) => [atom.id, atom] as const)
     );
     session.stage.dataset["kpLogProductTrackSummary"] = JSON.stringify(
-      session.transit.canonical.session.tracks.map((track) => {
+      replacement.canonical.session.tracks.map((track) => {
         const visualAtom = visualAtoms.get(track.visualAtomId);
         return {
           id: track.id,
@@ -238,10 +245,31 @@ async function prepareSurface(
         };
       })
     );
+    const previous = session.transit;
+    session.transit = replacement;
+    try {
+      applyFrame(session, session.pendingState);
+    } catch (error: unknown) {
+      session.transit = previous;
+      replacement.retire();
+      throw error;
+    }
+    previous?.retire();
     session.stage.dataset["kpLogProductStage"] = "ready";
-    applyFrame(session, session.pendingState);
+    session.stage.dataset["kpLogProductGeometryState"] = "ready";
+    session.stage.dataset["kpLogProductGeometryRevision"] = String(
+      Number(session.stage.dataset["kpLogProductGeometryRevision"] ?? "0") + 1
+    );
+    delete session.stage.dataset["kpLogProductError"];
   } catch (error: unknown) {
     if (session.disposed || session.generation !== generation) return;
+    if (preservePaint && session.transit !== undefined) {
+      session.stage.dataset["kpLogProductGeometryState"] = "stale";
+      session.stage.dataset["kpLogProductError"] =
+        error instanceof Error ? error.message : String(error);
+      applyFrame(session, session.pendingState);
+      return;
+    }
     session.stage.dataset["kpLogProductStage"] = "failed";
     session.stage.dataset["kpLogProductError"] =
       error instanceof Error ? error.message : String(error);
@@ -250,6 +278,39 @@ async function prepareSurface(
       setAccessibleEndpoint(root, index === 0);
     });
   }
+}
+
+function observeSurfaceGeometry(session: KpLogProductSurfaceSession): void {
+  const view = session.stage.ownerDocument.defaultView;
+  const ResizeObserverConstructor = view?.ResizeObserver;
+  if (
+    view === null ||
+    view === undefined ||
+    ResizeObserverConstructor === undefined
+  ) {
+    return;
+  }
+  session.resizeObserver = new ResizeObserverConstructor((entries) => {
+    const entry = entries.find(({ target }) => target === session.stage);
+    if (entry === undefined || session.disposed) return;
+    const geometryKey = [
+      Math.round(entry.contentRect.width * 2) / 2,
+      Math.round(entry.contentRect.height * 2) / 2
+    ].join("x");
+    if (session.observedGeometryKey === undefined) {
+      session.observedGeometryKey = geometryKey;
+      return;
+    }
+    if (session.observedGeometryKey === geometryKey) return;
+    session.observedGeometryKey = geometryKey;
+    // ResizeObserver is already layout-batched. A resize is a renderer
+    // revision, not an animation event, so it must not create another clock.
+    // Current owners remain painted until replacement geometry is complete.
+    session.stage.dataset["kpLogProductGeometryState"] = "preparing";
+    const generation = ++session.generation;
+    void prepareSurface(session, generation, true);
+  });
+  session.resizeObserver.observe(session.stage);
 }
 
 function applyFrame(
@@ -337,6 +398,7 @@ function disposeSurface(
   if (session.disposed) return;
   session.disposed = true;
   session.generation += 1;
+  session.resizeObserver?.disconnect();
   session.transit?.retire();
   syncKpEquationMaterialLayer({ stage: session.stage, owners: [] });
   session.fontReadiness.dispose();

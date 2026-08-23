@@ -436,6 +436,41 @@
       "scope": "md22 exact flat material and accessibility comparison",
       "checkedAt": "2026-08-23T01:06:22.757Z",
       "notes": "Generated the stable flat, elevated inline, no-depth, reduced-motion, wide, narrow, dark, and light comparison sheet; all lifecycle, owner-budget, overflow, accessibility, and scoped-loading assertions passed."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "failed",
+      "scope": "md22 initial resize transaction",
+      "checkedAt": "2026-08-23T01:48:57.072Z",
+      "notes": "The focused no-private-clock guard rejected a requestAnimationFrame resize scheduler. ResizeObserver already batches geometry notifications, so the redundant clock was removed."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "md22 corrected grounded-depth and resize laws",
+      "checkedAt": "2026-08-23T01:49:07.204Z",
+      "notes": "All 52 focused tests passed; glyph lift and shadow projection remain inverse, stage geometry is viewport-independent, and the surface introduces no private animation clock."
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "passed",
+      "scope": "md22 transactional resize and grounded shadow comparison",
+      "checkedAt": "2026-08-23T01:49:16.040Z",
+      "notes": "The stable browser harness narrowed and restored the viewport at 54 percent progress while retaining semantic progress, fixed stage height, one accessible endpoint, and visible material owners; all comparator, overflow, owner-budget, and loading assertions passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "md22 typed resize and material projection boundary",
+      "checkedAt": "2026-08-23T01:49:24.075Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run verify:impact -- --mode discovery --path src/editor/log-product-surface-adapter.ts --path src/editor/log-product-surface.css --path src/rendering/log-product-material-depth-dom.ts --path scripts/capture-log-product.ts",
+      "status": "passed",
+      "scope": "md22 bounded revision impact",
+      "checkedAt": "2026-08-23T01:50:25.994Z",
+      "notes": "Discovery remains confined to equation preservation, log-product unit, and log-product visual gates with no unmatched paths."
     }
   ],
   "allowedWork": [
@@ -593,7 +628,7 @@
     {
       "id": "md22",
       "title": "Produce comparison evidence and human visual checkpoint",
-      "summary": "Exact comparison evidence is ready and automated gates pass; stopped at the mandatory human checkpoint for judgment of material choreography, inline legibility, depth treatment, and semantic continuity before any promotion.",
+      "summary": "Bounded revision is ready for human review: stage block geometry remains fixed through viewport resizing, semantic progress is frozen while replacement measurements swap atomically, and glyph lift now separates from an inversely grounded contact shadow without changing flat mode or native endpoints.",
       "status": "in-progress"
     }
   ]

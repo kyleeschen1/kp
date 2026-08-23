@@ -3,12 +3,16 @@
   --kp-log-product-inline-font-size: 1rem;
   --kp-log-product-equation-font-size:
     var(--kp-log-product-display-font-size);
+  --kp-log-product-stage-block-size: 24rem;
   position: relative;
   display: grid;
   width: 100%;
-  min-height: clamp(18rem, 48vh, 30rem);
+  block-size: var(--kp-log-product-stage-block-size);
+  min-height: 0;
   place-items: center;
   overflow: hidden;
+  overflow-anchor: none;
+  contain: layout paint;
   color: var(--kp-equation-foreground, currentColor);
   background: transparent;
   isolation: isolate;
@@ -39,12 +43,14 @@
   pointer-events: none;
 }
 
-/* A cached pseudo-element carries contact shadow. Its gradient never changes;
-   only compositor-friendly opacity and scale respond to the sampled pose. */
+/* The glyph owns the shadow paint, but inverse vertical translation keeps the
+   shadow on the implied surface instead of turning it into a moving halo. */
 .kp-log-product-stage[data-kp-log-product-material-active="true"]
   [data-kp-log-product-material-role] {
   z-index: 1;
   isolation: isolate;
+  translate: 0 var(--kp-log-product-material-glyph-lift-y, 0);
+  will-change: translate;
 }
 
 .kp-log-product-stage[data-kp-log-product-material-active="true"]
@@ -70,7 +76,9 @@
   content: "";
   opacity: var(--kp-log-product-contact-shadow-opacity, 0);
   pointer-events: none;
-  transform: scaleX(var(--kp-log-product-contact-shadow-scale, 0.62));
+  transform:
+    translateY(var(--kp-log-product-contact-shadow-grounding-y, 0))
+    scaleX(var(--kp-log-product-contact-shadow-scale, 0.62));
   transform-origin: center;
   will-change: opacity, transform;
 }

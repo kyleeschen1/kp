@@ -12,8 +12,37 @@ import type {
 const MATERIAL_OWNER_SELECTOR = "[data-kp-equation-material-owner-id]";
 const PROJECTED_OWNER_SELECTOR = "[data-kp-log-product-material-role]";
 const CONTACT_SHADOW_MAX_OPACITY = 0.18;
+const CONTACT_SHADOW_DEPTH_FADE = 0.35;
 const CONTACT_SHADOW_REST_SCALE = 0.62;
 const CONTACT_SHADOW_ACTIVE_SCALE = 1;
+const MATERIAL_LIFT_EM = 0.16;
+
+export interface KpLogProductMaterialSurfaceProjection {
+  readonly glyphLiftEm: number;
+  readonly shadowGroundingEm: number;
+  readonly shadowOpacity: number;
+  readonly shadowScale: number;
+}
+
+export function projectKpLogProductMaterialSurface(input: {
+  readonly pose: KpLogProductMaterialDepthPose;
+}): KpLogProductMaterialSurfaceProjection {
+  const absoluteDepth = Math.abs(input.pose.normalizedDepth);
+  return Object.freeze({
+    glyphLiftEm: -input.pose.normalizedDepth * MATERIAL_LIFT_EM,
+    // The inverse offset keeps the shadow on the implied baseline while its
+    // glyph rises above or sinks beneath that surface.
+    shadowGroundingEm: input.pose.normalizedDepth * MATERIAL_LIFT_EM,
+    shadowOpacity:
+      input.pose.activity * CONTACT_SHADOW_MAX_OPACITY *
+      (1 - absoluteDepth * CONTACT_SHADOW_DEPTH_FADE),
+    shadowScale:
+      CONTACT_SHADOW_REST_SCALE +
+      absoluteDepth * (
+        CONTACT_SHADOW_ACTIVE_SCALE - CONTACT_SHADOW_REST_SCALE
+      )
+  });
+}
 
 export function resolveKpLogProductDepthModeForVisualOwner(
   mode: KpLogProductMaterialDepthMode,
@@ -63,6 +92,9 @@ export function applyKpLogProductMaterialDepthToDom(input: {
   for (const presentation of presentations) {
     const owner = owners.get(presentation.ownerId);
     if (owner === undefined) continue;
+    const surface = projectKpLogProductMaterialSurface({
+      pose: presentation.pose
+    });
     owner.dataset["kpLogProductMaterialRole"] = presentation.roleId;
     owner.dataset["kpLogProductMaterialIdentityEffect"] =
       presentation.identityEffect;
@@ -77,16 +109,19 @@ export function applyKpLogProductMaterialDepthToDom(input: {
     );
     owner.style.setProperty(
       "--kp-log-product-contact-shadow-opacity",
-      String(presentation.pose.activity * CONTACT_SHADOW_MAX_OPACITY)
+      String(surface.shadowOpacity)
     );
     owner.style.setProperty(
       "--kp-log-product-contact-shadow-scale",
-      String(
-        CONTACT_SHADOW_REST_SCALE +
-        presentation.pose.activity * (
-          CONTACT_SHADOW_ACTIVE_SCALE - CONTACT_SHADOW_REST_SCALE
-        )
-      )
+      String(surface.shadowScale)
+    );
+    owner.style.setProperty(
+      "--kp-log-product-material-glyph-lift-y",
+      `${surface.glyphLiftEm}em`
+    );
+    owner.style.setProperty(
+      "--kp-log-product-contact-shadow-grounding-y",
+      `${surface.shadowGroundingEm}em`
     );
   }
 }
@@ -99,4 +134,6 @@ function clearPresentation(owner: HTMLElement): void {
   owner.style.removeProperty("--kp-log-product-material-activity");
   owner.style.removeProperty("--kp-log-product-contact-shadow-opacity");
   owner.style.removeProperty("--kp-log-product-contact-shadow-scale");
+  owner.style.removeProperty("--kp-log-product-material-glyph-lift-y");
+  owner.style.removeProperty("--kp-log-product-contact-shadow-grounding-y");
 }
