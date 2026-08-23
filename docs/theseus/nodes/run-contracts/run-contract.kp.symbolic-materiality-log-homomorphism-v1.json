@@ -254,6 +254,27 @@
       "scope": "md14 direct factor corridor",
       "checkedAt": "2026-08-23T00:08:01.928Z",
       "notes": "46 focused tests passed; persistent factors retain authored lineage and direct routes while source relation material clears beneath them."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "failed",
+      "scope": "md15 initial reception certificate",
+      "checkedAt": "2026-08-23T00:10:57.940Z",
+      "notes": "The new test initially used the invocation-group label rather than the compiled reception certificate's more precise all-enclosures-together synchronization value; production behavior was unchanged."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "md15 canonical function-wrap reception",
+      "checkedAt": "2026-08-23T00:10:59.911Z",
+      "notes": "47 focused tests passed; material enclosure roles cover the canonical function-wrap branches and share their attachment pose with generated application syntax."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "md15 typed reception boundary",
+      "checkedAt": "2026-08-23T00:11:01.705Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks passed."
     }
   ],
   "allowedWork": [
@@ -369,7 +390,8 @@
     {
       "id": "md15",
       "title": "Apply depth-aware canonical function-wrap reception",
-      "status": "planned"
+      "summary": "The material enclosure rise is now executable as a decoration of the existing all-enclosures-together function-wrap reception, preserving canonical horizontal squeeze geometry.",
+      "status": "complete"
     },
     {
       "id": "md16",

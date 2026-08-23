@@ -17,8 +17,12 @@ import {
   kpCanonicalLogProductMaterialRoleBindings
 } from "../src/animation/log-product-material-depth-bindings.ts";
 import {
+  compileKpLogProductFunctionWrapInvocationGroup,
   createKpLogProductSemanticMotionProjectionPolicy
 } from "../src/rendering/log-product-transit-session.ts";
+import {
+  createKpFunctionWrapInvocationGroupReception
+} from "../src/animation/function-wrap-invocation.ts";
 import {
   kpCanonicalCompiledLogProductOperation
 } from "../src/semantic/log-product-transformation-compiler.ts";
@@ -189,4 +193,43 @@ test("persistent factors keep the accepted direct corridor while source syntax c
       "direct"
     );
   }
+});
+
+test("material enclosure reception decorates the canonical function-wrap plan", () => {
+  const group = compileKpLogProductFunctionWrapInvocationGroup(
+    kpCanonicalCompiledLogProductOperation
+  );
+  const reception = createKpFunctionWrapInvocationGroupReception({
+    group,
+    direction: "forward"
+  });
+  const targetEnclosures = kpCanonicalLogProductMaterialRoleBindings.find(
+    ({ roleId }) => roleId === "role.material.log-product.target-enclosure"
+  )!;
+  assert.equal(group.synchronization, "together");
+  assert.equal(reception.synchronization, "all-enclosures-together");
+  assert.deepEqual(
+    new Set(targetEnclosures.entityIds),
+    new Set(group.branches.flatMap(({ enclosureEntityRoles }) =>
+      enclosureEntityRoles.map(({ entityId }) => entityId)
+    ))
+  );
+
+  const attachment = kpCanonicalCompiledLogProductSemanticMotion.tracks.find(
+    ({ eventId }) => eventId === "event.log-product.attach-target"
+  )!;
+  const poses = sampleKpLogProductMaterialDepthChoreography({
+    mode: "material",
+    choreography: sample(
+      (attachment.window.start + attachment.window.end) / 2
+    )
+  });
+  assert.deepEqual(
+    poses["role.material.log-product.target-enclosure"],
+    poses["role.material.log-product.target-application-syntax"]
+  );
+  assert.equal(
+    poses["role.material.log-product.target-enclosure"].plane,
+    "active"
+  );
 });
