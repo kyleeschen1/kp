@@ -2,8 +2,9 @@
   "id": "next-action.kp.animation.differentiation-power-rule-exemplar-v1",
   "kind": "next-action",
   "title": "Build flat 2D differentiation power-rule exemplar",
-  "status": "ready",
+  "status": "deferred",
   "domain": "kp.animation",
+  "summary": "Temporarily deferred while the approved governance loop builds the v2 route; the implementation and commit 31a609b0 remain the final recompilation baseline.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -58,5 +59,8 @@
   "progress": {
     "state": "partial",
     "summary": "Canonical flat-2D derivative power exemplar is implemented and verified at the human visual checkpoint; second-caller pressure and family promotion remain intentionally withheld."
-  }
+  },
+  "revisitWhen": [
+    "Resume at slice 30 of run-contract.kp.animation.animation-governance-epoch-v2-approved."
+  ]
 }

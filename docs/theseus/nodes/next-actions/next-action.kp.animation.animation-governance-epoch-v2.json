@@ -1,0 +1,56 @@
+{
+  "id": "next-action.kp.animation.animation-governance-epoch-v2",
+  "kind": "next-action",
+  "title": "Converge animation governance through equation grammar v2",
+  "status": "ready",
+  "domain": "kp.animation",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-22-animation-governance-epoch-v2-long-loop-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "next-action.kp.animation.differentiation-power-rule-exemplar-v1"
+    ]
+  },
+  "affects": [
+    "next-action.kp.animation.differentiation-power-rule-exemplar-v1"
+  ],
+  "verification": [
+    "npm run verify:equation:release"
+  ],
+  "expectedLearning": [
+    "Whether a common conformance gateway can make evolving principles retroactive without collapsing domain-specific renderer boundaries",
+    "Whether typed equation compilation can eliminate raw motion bypasses while preserving approved choreography and lazy bundles"
+  ],
+  "allowedWork": [
+    "Implement the approved Animation Governance Epoch v2 proposal through its two human checkpoints"
+  ],
+  "disallowedWork": [
+    "New animation families and unrelated dirty work"
+  ],
+  "criteria": [
+    {
+      "id": "manifest-coverage",
+      "weight": "high"
+    },
+    {
+      "id": "equation-v2-convergence",
+      "weight": "high"
+    },
+    {
+      "id": "retroactive-governance",
+      "weight": "high"
+    },
+    {
+      "id": "lazy-boundaries",
+      "weight": "medium"
+    },
+    {
+      "id": "derivative-review",
+      "weight": "high"
+    }
+  ]
+}

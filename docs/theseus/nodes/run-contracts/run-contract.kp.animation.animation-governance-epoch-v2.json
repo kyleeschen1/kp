@@ -1,0 +1,187 @@
+{
+  "id": "run-contract.kp.animation.animation-governance-epoch-v2",
+  "kind": "run-contract",
+  "title": "Animation Governance Epoch v2",
+  "status": "superseded",
+  "summary": "Superseded immediately because the first compatibility command omitted required autonomy fields; no implementation slices ran under it.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.animation-governance-epoch-v2.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-22-animation-governance-epoch-v2-long-loop-proposal.md",
+      "summary": "Approved rationale, exact 30-slice order, verification cadence, preservation boundary, rollback units, and mandatory human checkpoints"
+    }
+  ],
+  "verification": [
+    "npm run verify:equation:boundary",
+    "npm run verify:equation:promotion",
+    "npm run verify:equation:release",
+    "npm run build",
+    "theseus validate"
+  ],
+  "allowedWork": [
+    "Animation conformance, equation grammar v2, typed policy registries, provenance, review freshness, equation-family migrations, log-equivalence repair, and derivative recompilation described by the approved proposal",
+    "Family-sized compatibility deletion and stable verification tooling directly required by the approved migrations"
+  ],
+  "disallowedWork": [
+    "New animation families, public lesson layout, material-depth experiments, universal renderers, live LLM generation, broad non-equation renderer migrations, and unrelated dirty work"
+  ],
+  "goal": "Make animation principles retroactive and enforceable through one conformance gateway and a fully converged equation grammar v2, then return the derivative exemplar for review",
+  "target": "next-action.kp.animation.animation-governance-epoch-v2",
+  "slices": [
+    {
+      "id": "inventory",
+      "title": "inventory",
+      "status": "planned"
+    },
+    {
+      "id": "baselines",
+      "title": "baselines",
+      "status": "planned"
+    },
+    {
+      "id": "principle-ledger",
+      "title": "principle-ledger",
+      "status": "planned"
+    },
+    {
+      "id": "conformance-manifest",
+      "title": "conformance-manifest",
+      "status": "planned"
+    },
+    {
+      "id": "policy-epochs",
+      "title": "policy-epochs",
+      "status": "planned"
+    },
+    {
+      "id": "review-freshness",
+      "title": "review-freshness",
+      "status": "planned"
+    },
+    {
+      "id": "reverse-dependencies",
+      "title": "reverse-dependencies",
+      "status": "planned"
+    },
+    {
+      "id": "registration-gateway",
+      "title": "registration-gateway",
+      "status": "planned"
+    },
+    {
+      "id": "equation-grammar-v2",
+      "title": "equation-grammar-v2",
+      "status": "planned"
+    },
+    {
+      "id": "transition-resolution",
+      "title": "transition-resolution",
+      "status": "planned"
+    },
+    {
+      "id": "evaluation-registry",
+      "title": "evaluation-registry",
+      "status": "planned"
+    },
+    {
+      "id": "projection-choreography",
+      "title": "projection-choreography",
+      "status": "planned"
+    },
+    {
+      "id": "typography-policy",
+      "title": "typography-policy",
+      "status": "planned"
+    },
+    {
+      "id": "katex-endpoints",
+      "title": "katex-endpoints",
+      "status": "planned"
+    },
+    {
+      "id": "transit-obligations",
+      "title": "transit-obligations",
+      "status": "planned"
+    },
+    {
+      "id": "route-certificates",
+      "title": "route-certificates",
+      "status": "planned"
+    },
+    {
+      "id": "compiled-presentation-plan",
+      "title": "compiled-presentation-plan",
+      "status": "planned"
+    },
+    {
+      "id": "architecture-ratchets",
+      "title": "architecture-ratchets",
+      "status": "planned"
+    },
+    {
+      "id": "log-occurrences",
+      "title": "log-occurrences",
+      "status": "planned"
+    },
+    {
+      "id": "log-paint-ownership",
+      "title": "log-paint-ownership",
+      "status": "planned"
+    },
+    {
+      "id": "log-routes-and-arrival",
+      "title": "log-routes-and-arrival",
+      "status": "planned"
+    },
+    {
+      "id": "calibration-checkpoint",
+      "title": "calibration-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "promote-boundary-laws",
+      "title": "promote-boundary-laws",
+      "status": "planned"
+    },
+    {
+      "id": "migrate-evaluation",
+      "title": "migrate-evaluation",
+      "status": "planned"
+    },
+    {
+      "id": "migrate-log-exponent",
+      "title": "migrate-log-exponent",
+      "status": "planned"
+    },
+    {
+      "id": "migrate-linear-operations",
+      "title": "migrate-linear-operations",
+      "status": "planned"
+    },
+    {
+      "id": "migrate-fraction-root",
+      "title": "migrate-fraction-root",
+      "status": "planned"
+    },
+    {
+      "id": "migrate-binders-matrices",
+      "title": "migrate-binders-matrices",
+      "status": "planned"
+    },
+    {
+      "id": "cross-domain-gateway",
+      "title": "cross-domain-gateway",
+      "status": "planned"
+    },
+    {
+      "id": "derivative-release-checkpoint",
+      "title": "derivative-release-checkpoint",
+      "status": "planned"
+    }
+  ]
+}
