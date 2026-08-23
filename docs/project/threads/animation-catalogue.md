@@ -1,20 +1,21 @@
 # Animation Catalogue Thread
 
 Status: active
-Last Updated: 2026-08-22
-Current Next Action: pressure the approved finite-sum retained-equivalence laws
-with the finite-product caller, while keeping relation-clearing arcs and
-connector-led arrivals exemplar-local until a structurally different caller
-passes. The accepted exemplar laws, performance evidence, later log/exponent
-pressure order, fixed-range design, and separately scoped symbolic-ellipsis
-follow-up are recorded in
+Last Updated: 2026-08-23
+Current Next Action: build one reversible flat-2D differentiation exemplar for
+`d/dx x^3 -> 3x^2`, enumerate its typed case ledger, expose one canonical
+Catalogue URL, and stop for human review before pressure or promotion. The
+finite-sum/product binder tranche is already complete and `Direct`; its
+closeout remains recorded in
 `../decisions/2026-08-22-finite-binder-boundary-handoff-and-schematic-expansion.md`.
 The completed
 TypeScript/Python extract-helper frontend tranche is recorded in
 `../reviews/2026-08-21-typescript-python-generation-frontends-closeout.md`.
-The durable order remains binder exemplar, binder pressure/promotion, bounded
-Graph3D, differentiation, and integration; see
-`../decisions/2026-08-21-kp-post-root-capability-sequence.md`.
+The latest review moves differentiation ahead of bounded Graph3D after the
+symbolic-materiality checkpoint retained flat 2D as the production baseline.
+Integration remains a distinct follow-on family; Graph3D remains separate
+semantic-scene work rather than a glyph-depth continuation. See
+`../reviews/2026-08-23-flat-2d-post-materiality-next-step-review.md`.
 
 The accepted breadth cadence is two loops per family: one reversible exemplar
 and checkpoint, then one structurally different caller plus narrow promotion.

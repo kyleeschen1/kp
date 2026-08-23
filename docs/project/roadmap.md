@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-08-21
+Last Updated: 2026-08-23
 Status: active
 Active Thread: `threads/animation-catalogue.md`
 Supporting Threads:
@@ -60,6 +60,14 @@ does not yet support the request. Matrix, code, Graph2D, and Graph3D join the
 long-term generation envelope through domain-owned frontends rather than one
 universal renderer or semantic model. The accepted direction is recorded in
 `decisions/2026-08-17-kp-governed-cross-domain-animation-generation-priority.md`.
+
+Flat 2D is the canonical symbolic presentation. The bounded log-product
+material-depth experiment is preserved but deferred after human review; it is
+not a family-wide styling policy. The next repository slice is one reversible
+differentiation exemplar, beginning with
+`d/dx x^3 -> 3x^2`, followed by a human checkpoint. See
+`decisions/2026-08-23-flat-2d-baseline-and-deferred-symbolic-materiality.md`
+and `reviews/2026-08-23-flat-2d-post-materiality-next-step-review.md`.
 
 ## One Active Lane
 
@@ -223,16 +231,16 @@ Only this repository sequence is active:
    the generated case ledger now keeps remaining per-case exemplar and
    generation gaps visible rather than hiding them behind the Direct label. See
    `decisions/2026-08-21-kp-root-rewrite-vocabulary.md`.
-31. **Accepted post-root capability sequence:** TypeScript/Python refactors
-   now close through domain-owned generation frontends with both bounded
-   extract-helper capabilities `Direct`. Build one finite sum/product binder
-   exemplar next and stop for review; pressure binders
-   with a structurally different caller and case ledger before promotion;
-   build one bounded Graph3D semantic transformation; then establish distinct
-   differentiation and integration families. Graph2D function translation,
-   fraction structural pressure, and legacy Direct case-ledger migration do
-   not block this sequence. See
-   `decisions/2026-08-21-kp-post-root-capability-sequence.md`.
+31. **Post-root capability sequence:** TypeScript/Python refactors and the
+   finite-sum/product binder tranche are complete and `Direct`. The latest
+   visual checkpoint keeps flat 2D canonical and selects one differentiation
+   exemplar next, with integration as a distinct follow-on family. Bounded
+   Graph3D remains queued as separate semantic-scene work rather than a
+   continuation of glyph materiality. Graph2D function translation, fraction
+   structural pressure, and legacy Direct case-ledger migration do not block
+   this sequence. See
+   `decisions/2026-08-21-kp-post-root-capability-sequence.md` and
+   `reviews/2026-08-23-flat-2d-post-materiality-next-step-review.md`.
 32. **Persistent equivalence and derivation projection:** bounded proof
    complete. The state-retention compiler supports replacement,
    equivalence-frame, and derivation-trail policies, and the approved
@@ -252,6 +260,13 @@ Only this repository sequence is active:
    sequences, and prevents any new Direct symbolic family from bypassing case
    enumeration. Existing Direct families carry explicit migration debt. See
    `decisions/2026-08-21-kp-symbolic-case-coverage-ledger.md`.
+35. **Symbolic materiality checkpoint:** complete without promotion. The
+   log-product experiment proved optional renderer-owned depth can preserve
+   semantic authority, native endpoints, resize, seek, themes, and
+   accessibility, but relief amplified scale-driven swelling and thinning.
+   Preserve the exemplar as internal evidence; do not revisit families or
+   generalize its treatment. See
+   `decisions/2026-08-23-flat-2d-baseline-and-deferred-symbolic-materiality.md`.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.
@@ -266,7 +281,7 @@ The catalogue backlog and selection rationale are recorded in
 | Equation animation | The generated ledger has 29 equation capabilities: 8 Direct, 3 Registered, 2 Exemplar, and 16 Missing. Exponential duality and radical inversion are Direct; root is the first family with ten generated case-level maturity rows | Preserve the converged vocabulary; require case enumeration before new Direct promotions; migrate legacy Direct ledgers when they are touched; select the next accepted family packet from explicit gaps rather than prose memory. |
 | Graph2D | Economics and physics model callers are promoted; function transformations remain genuinely missing | Defer function translation: it proves symbolic/geometry continuity but not a missing host or runtime seam. |
 | Program animation | TypeScript and Python bounded extract-helper generation are `Direct`; each has language-owned parsing, legality, identity binding, corpus, authoring, and runtime-isolation evidence over an approved canonical artifact. Scheme remains an approved specialized exemplar rather than a general frontend. | Preserve approved choreography and build-time-only compilers. Variants remain semantic-plan-only until a separately governed artifact compiler exists; arbitrary refactors and execution remain typed gaps. |
-| Graph3D | One internal mesh-to-donut exemplar proves bounded hosting, not semantic scene generation | After binder infrastructure, build one bounded rotation/projection proof for camera/model separation, semantic identity, resource leases, fallback parity, and deterministic seek; calculus operator coverage follows as a distinct packet. |
+| Graph3D | One internal mesh-to-donut exemplar proves bounded hosting, not semantic scene generation | Retain one bounded rotation/projection proof for camera/model separation, semantic identity, resource leases, fallback parity, and deterministic seek after the next stable flat-2D calculus families; keep this distinct from deferred glyph materiality. |
 | Article and publication | `kp.article.v1` frozen; economics and algebra are real callers | Do not reopen grammar without demonstrated friction. |
 | Authoring | Whole-file CodeMirror/Vim editing and no-reload saving work | Defer advanced tooling until a real session exposes a need. |
 | Catalogue | One persistent lazy host spans equation, graph, code, and internal 3D capabilities without iframes | Preserve as the pressure lab while capability loading becomes declaration-driven. |

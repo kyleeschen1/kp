@@ -2,7 +2,8 @@
   "id": "run-contract.kp.symbolic-materiality-log-homomorphism-v1",
   "kind": "run-contract",
   "title": "Symbolic Materiality Log Homomorphism",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -726,8 +727,8 @@
     {
       "id": "md22",
       "title": "Produce comparison evidence and human visual checkpoint",
-      "summary": "Built the second reviewable material exemplar. Elevated equations now use a fixed 1.625rem demonstration token distinct from the retained 1rem inline token; light-mode faces are #0d0e12 with a narrow dark contour and minimal cast blur. A fluid type attempt was rejected by the resize harness and replaced with fixed optical geometry. Focused unit, browser, resize, theme, accessibility, and type evidence passes; awaiting human judgment of apparent gray during operator contraction before any choreography adjustment or promotion.",
-      "status": "in-progress"
+      "summary": "Human checkpoint complete. The material-depth log-product experiment produced useful stationary-face, theme, typography, resize, lifecycle, and performance evidence, but its scale-heavy symbolic motion still swells optically under relief. Flat 2D remains the canonical production presentation; the material profile stays exemplar-local and deferred, with no catalogue or family promotion. Future depth work must attach to shared motif roles and pass contrasting callers rather than require per-animation styling.",
+      "status": "complete"
     }
   ]
 }
