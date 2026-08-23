@@ -15,11 +15,14 @@ const CONTACT_SHADOW_MAX_OPACITY = 0.18;
 const CONTACT_SHADOW_DEPTH_FADE = 0.35;
 const CONTACT_SHADOW_REST_SCALE = 0.62;
 const CONTACT_SHADOW_ACTIVE_SCALE = 1;
-const MATERIAL_LIFT_EM = 0.16;
+const MATERIAL_LIFT_PX = 2.5;
+const MATERIAL_SURFACE_EPSILON = 0.001;
 
 export interface KpLogProductMaterialSurfaceProjection {
-  readonly glyphLiftEm: number;
-  readonly shadowGroundingEm: number;
+  readonly lifted: boolean;
+  readonly shadowActive: boolean;
+  readonly glyphLiftPx: number;
+  readonly shadowGroundingPx: number;
   readonly shadowOpacity: number;
   readonly shadowScale: number;
 }
@@ -28,14 +31,22 @@ export function projectKpLogProductMaterialSurface(input: {
   readonly pose: KpLogProductMaterialDepthPose;
 }): KpLogProductMaterialSurfaceProjection {
   const absoluteDepth = Math.abs(input.pose.normalizedDepth);
+  const normalizedDepth = absoluteDepth <= MATERIAL_SURFACE_EPSILON
+    ? 0
+    : input.pose.normalizedDepth;
+  const shadowOpacity =
+    input.pose.activity * CONTACT_SHADOW_MAX_OPACITY *
+    (1 - absoluteDepth * CONTACT_SHADOW_DEPTH_FADE);
   return Object.freeze({
-    glyphLiftEm: -input.pose.normalizedDepth * MATERIAL_LIFT_EM,
+    lifted: absoluteDepth > MATERIAL_SURFACE_EPSILON,
+    shadowActive: shadowOpacity > MATERIAL_SURFACE_EPSILON,
+    glyphLiftPx: normalizedDepth === 0
+      ? 0
+      : -normalizedDepth * MATERIAL_LIFT_PX,
     // The inverse offset keeps the shadow on the implied baseline while its
     // glyph rises above or sinks beneath that surface.
-    shadowGroundingEm: input.pose.normalizedDepth * MATERIAL_LIFT_EM,
-    shadowOpacity:
-      input.pose.activity * CONTACT_SHADOW_MAX_OPACITY *
-      (1 - absoluteDepth * CONTACT_SHADOW_DEPTH_FADE),
+    shadowGroundingPx: normalizedDepth * MATERIAL_LIFT_PX,
+    shadowOpacity,
     shadowScale:
       CONTACT_SHADOW_REST_SCALE +
       absoluteDepth * (
@@ -56,6 +67,7 @@ export function resolveKpLogProductDepthModeForVisualOwner(
 export function applyKpLogProductMaterialDepthToDom(input: {
   readonly stage: HTMLElement;
   readonly mode: KpLogProductMaterialDepthMode;
+  readonly surfaceBaselineY?: number | undefined;
   readonly poseByRoleId?: Readonly<
     Partial<Record<KpLogProductMaterialRoleId, KpLogProductMaterialDepthPose>>
   > | undefined;
@@ -99,6 +111,9 @@ export function applyKpLogProductMaterialDepthToDom(input: {
     owner.dataset["kpLogProductMaterialIdentityEffect"] =
       presentation.identityEffect;
     owner.dataset["kpLogProductMaterialPlane"] = presentation.pose.plane;
+    owner.dataset["kpLogProductMaterialLifted"] = String(surface.lifted);
+    owner.dataset["kpLogProductContactShadowActive"] =
+      String(surface.shadowActive);
     owner.style.setProperty(
       "--kp-log-product-material-depth",
       String(presentation.pose.normalizedDepth)
@@ -117,12 +132,29 @@ export function applyKpLogProductMaterialDepthToDom(input: {
     );
     owner.style.setProperty(
       "--kp-log-product-material-glyph-lift-y",
-      `${surface.glyphLiftEm}em`
+      `${surface.glyphLiftPx}px`
     );
     owner.style.setProperty(
       "--kp-log-product-contact-shadow-grounding-y",
-      `${surface.shadowGroundingEm}em`
+      `${surface.shadowGroundingPx}px`
     );
+    // The compositor already writes stage-relative top as inline geometry;
+    // consuming it here aligns shadows without a synchronous layout read.
+    const ownerTop = Number.parseFloat(owner.style.top);
+    if (
+      input.surfaceBaselineY !== undefined &&
+      Number.isFinite(input.surfaceBaselineY) &&
+      Number.isFinite(ownerTop)
+    ) {
+      owner.style.setProperty(
+        "--kp-log-product-contact-shadow-surface-y",
+        `${input.surfaceBaselineY - ownerTop}px`
+      );
+    } else {
+      owner.style.removeProperty(
+        "--kp-log-product-contact-shadow-surface-y"
+      );
+    }
   }
 }
 
@@ -130,10 +162,13 @@ function clearPresentation(owner: HTMLElement): void {
   delete owner.dataset["kpLogProductMaterialRole"];
   delete owner.dataset["kpLogProductMaterialIdentityEffect"];
   delete owner.dataset["kpLogProductMaterialPlane"];
+  delete owner.dataset["kpLogProductMaterialLifted"];
+  delete owner.dataset["kpLogProductContactShadowActive"];
   owner.style.removeProperty("--kp-log-product-material-depth");
   owner.style.removeProperty("--kp-log-product-material-activity");
   owner.style.removeProperty("--kp-log-product-contact-shadow-opacity");
   owner.style.removeProperty("--kp-log-product-contact-shadow-scale");
   owner.style.removeProperty("--kp-log-product-material-glyph-lift-y");
   owner.style.removeProperty("--kp-log-product-contact-shadow-grounding-y");
+  owner.style.removeProperty("--kp-log-product-contact-shadow-surface-y");
 }

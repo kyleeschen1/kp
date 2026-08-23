@@ -43,12 +43,17 @@
   pointer-events: none;
 }
 
-/* The glyph owns the shadow paint, but inverse vertical translation keeps the
-   shadow on the implied surface instead of turning it into a moving halo. */
+/* Material roles share one measured equation surface. Only genuinely lifted
+   owners receive translation or layer promotion, so the final material pose
+   is raster-stable before Native KaTeX resumes paint ownership. */
 .kp-log-product-stage[data-kp-log-product-material-active="true"]
   [data-kp-log-product-material-role] {
   z-index: 1;
   isolation: isolate;
+}
+
+.kp-log-product-stage[data-kp-log-product-material-active="true"]
+  [data-kp-log-product-material-lifted="true"] {
   translate: 0 var(--kp-log-product-material-glyph-lift-y, 0);
   will-change: translate;
 }
@@ -68,8 +73,13 @@
   position: absolute;
   z-index: -1;
   right: 8%;
-  bottom: -0.14em;
+  top:
+    calc(
+      var(--kp-log-product-contact-shadow-surface-y, 100%) + 0.04em
+    );
+  bottom: auto;
   left: 8%;
+  display: none;
   height: 0.22em;
   border-radius: 50%;
   background: radial-gradient(ellipse at center, currentcolor, transparent 72%);
@@ -80,7 +90,21 @@
     translateY(var(--kp-log-product-contact-shadow-grounding-y, 0))
     scaleX(var(--kp-log-product-contact-shadow-scale, 0.62));
   transform-origin: center;
+}
+
+.kp-log-product-stage[data-kp-log-product-material-active="true"]
+  [data-kp-log-product-contact-shadow-active="true"]::after {
+  display: block;
   will-change: opacity, transform;
+}
+
+/* The shared compositor promotes material owners during transit. Once its
+   measured geometry has landed, release that promotion before the atomic
+   native handoff so both sides rasterize through the same terminal path. */
+.kp-log-product-stage[
+  data-kp-log-product-material-geometry-landed="true"
+] [data-kp-log-product-material-role] {
+  will-change: auto;
 }
 
 @media (prefers-reduced-motion: reduce), (prefers-contrast: more) {

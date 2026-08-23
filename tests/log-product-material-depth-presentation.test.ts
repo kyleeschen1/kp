@@ -74,7 +74,7 @@ test("native endpoint ownership suppresses every residual material pose", () => 
   );
 });
 
-test("the DOM projector does not read layout or rewrite motion properties", () => {
+test("the DOM projector avoids layout reads and does not rewrite motion properties", () => {
   const source = readFileSync(new URL(
     "../src/rendering/log-product-material-depth-dom.ts",
     import.meta.url
@@ -85,8 +85,7 @@ test("the DOM projector does not read layout or rewrite motion properties", () =
     "offsetHeight",
     'style.transform',
     'style.opacity',
-    'style.left',
-    'style.top'
+    'style.left'
   ]) {
     assert.equal(source.includes(forbidden), false, forbidden);
   }
@@ -100,12 +99,26 @@ test("material glyph lift and contact shadow remain on inverse planes", () => {
     pose: { plane: "subsurface", normalizedDepth: -1, activity: 1 }
   });
 
-  assert.equal(active.glyphLiftEm, -active.shadowGroundingEm);
-  assert.equal(subsurface.glyphLiftEm, -subsurface.shadowGroundingEm);
-  assert.ok(active.glyphLiftEm < 0);
-  assert.ok(subsurface.glyphLiftEm > 0);
+  assert.equal(active.glyphLiftPx, -active.shadowGroundingPx);
+  assert.equal(subsurface.glyphLiftPx, -subsurface.shadowGroundingPx);
+  assert.ok(active.glyphLiftPx < 0);
+  assert.ok(subsurface.glyphLiftPx > 0);
+  assert.equal(active.lifted, true);
+  assert.equal(active.shadowActive, true);
   assert.ok(active.shadowOpacity > 0);
   assert.ok(active.shadowScale > 0.62);
+
+  const landed = projectKpLogProductMaterialSurface({
+    pose: { plane: "surface", normalizedDepth: 0, activity: 0 }
+  });
+  assert.deepEqual(landed, {
+    lifted: false,
+    shadowActive: false,
+    glyphLiftPx: 0,
+    shadowGroundingPx: 0,
+    shadowOpacity: 0,
+    shadowScale: 0.62
+  });
 });
 
 test("contact shadow uses a local static gradient with opacity and scale", () => {
@@ -121,6 +134,19 @@ test("contact shadow uses a local static gradient with opacity and scale", () =>
   assert.match(materialTreatment, /will-change:\s*opacity, transform/u);
   assert.match(materialTreatment, /will-change:\s*translate/u);
   assert.match(materialTreatment, /contact-shadow-grounding-y/u);
+  assert.match(materialTreatment, /contact-shadow-surface-y/u);
+  assert.match(
+    materialTreatment,
+    /material-lifted="true"[^}]*will-change:\s*translate/su
+  );
+  assert.match(
+    materialTreatment,
+    /contact-shadow-active="true"[^}]*display:\s*block/su
+  );
+  assert.match(
+    materialTreatment,
+    /material-geometry-landed="true"[^}]*will-change:\s*auto/su
+  );
   assert.doesNotMatch(materialTreatment, /filter:/u);
   assert.doesNotMatch(materialTreatment, /blur\(/u);
   assert.doesNotMatch(materialTreatment, /box-shadow:/u);

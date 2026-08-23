@@ -324,3 +324,32 @@ test("persistent factors bridge source withdrawal into target reception", () => 
       .activity > 0
   );
 });
+
+test("all visible target material roles land before native ownership", () => {
+  const settle = kpCanonicalCompiledLogProductSemanticMotion.tracks.find(
+    ({ eventId }) => eventId === "event.log-product.settle"
+  )!;
+  const nativeReady = kpCanonicalCompiledLogProductSemanticMotion.tracks.find(
+    ({ eventId }) => eventId === "event.log-product.native-target-ready"
+  )!;
+  assert.ok(settle.window.end <= nativeReady.window.start);
+
+  const landedRoleIds = [
+    "role.material.log-product.persistent-factor",
+    "role.material.log-product.target-enclosure",
+    "role.material.log-product.target-application-syntax",
+    "role.material.log-product.target-relation"
+  ] as const;
+
+  for (const progress of [settle.window.end, nativeReady.window.start, 0.99]) {
+    const poses = sampleKpLogProductMaterialDepthChoreography({
+      mode: "material",
+      choreography: sample(progress)
+    });
+    assert.ok(landedRoleIds.map((roleId) => poses[roleId]).every((pose) =>
+      pose.plane === "surface" &&
+      pose.normalizedDepth === 0 &&
+      pose.activity === 0
+    ));
+  }
+});

@@ -43,7 +43,10 @@ const animations = Object.freeze([{
 const materialProgressions = Object.freeze([
   {
     phase: "forward" as const,
-    samples: [0, 0.22, 0.34, 0.4, 0.48, 0.54, 0.6, 0.66, 0.72, 1]
+    samples: [
+      0, 0.22, 0.34, 0.4, 0.48, 0.54, 0.6, 0.66, 0.72, 0.93, 0.96,
+      0.99, 1
+    ]
   },
   { phase: "return" as const, samples: [0.66, 0.48, 0.34, 0.22, 0] }
 ]);
@@ -123,6 +126,10 @@ interface CaptureEvidence {
   readonly activeEndpointCount: number;
   readonly visibleMaterialOwnerCount: number;
   readonly treatedMaterialOwnerCount: number;
+  readonly liftedMaterialOwnerCount: number;
+  readonly activeContactShadowCount: number;
+  readonly promotedMaterialOwnerCount: number;
+  readonly materialSurfaceBaselineSpreadPx: number;
   readonly depthMode: string;
   readonly typography: string;
   readonly contactShadowDisplay: string;
@@ -336,6 +343,27 @@ async function captureSample(input: {
         );
       }
     ));
+    const treatedOwners = [...root.querySelectorAll<HTMLElement>(
+      "[data-kp-log-product-material-role]"
+    )];
+    const visibleOwnerSet = new Set(visibleOwners);
+    const visibleTreatedOwners = treatedOwners.filter((owner) =>
+      visibleOwnerSet.has(owner)
+    );
+    const projectedBaselines = treatedOwners.flatMap((owner) => {
+      const surfaceOffset = Number.parseFloat(
+        owner.style.getPropertyValue(
+          "--kp-log-product-contact-shadow-surface-y"
+        )
+      );
+      const ownerTop = Number.parseFloat(owner.style.top);
+      return Number.isFinite(surfaceOffset) && Number.isFinite(ownerTop)
+        ? [surfaceOffset + ownerTop]
+        : [];
+    });
+    const materialSurfaceBaselineSpreadPx = projectedBaselines.length === 0
+      ? 0
+      : Math.max(...projectedBaselines) - Math.min(...projectedBaselines);
     return {
       semanticProgress: Number(root.dataset["kpLogProductProgress"]),
       visualOwner: root.dataset["kpLogProductVisualOwner"] ?? "",
@@ -344,9 +372,18 @@ async function captureSample(input: {
     )].filter((endpoint) => endpoint.getAttribute("aria-hidden") === "false")
       .length,
     visibleMaterialOwnerCount: visibleOwners.length,
-    treatedMaterialOwnerCount: root.querySelectorAll(
-      "[data-kp-log-product-material-role]"
+    treatedMaterialOwnerCount: treatedOwners.length,
+    liftedMaterialOwnerCount: visibleTreatedOwners.filter((owner) =>
+      owner.dataset["kpLogProductMaterialLifted"] === "true"
     ).length,
+    activeContactShadowCount: visibleTreatedOwners.filter((owner) =>
+      owner.dataset["kpLogProductContactShadowActive"] === "true"
+    ).length,
+    promotedMaterialOwnerCount: visibleTreatedOwners.filter((owner) =>
+      getComputedStyle(owner).willChange !== "auto"
+    ).length,
+    materialSurfaceBaselineSpreadPx:
+      Math.round(materialSurfaceBaselineSpreadPx * 1_000) / 1_000,
     depthMode: root.dataset["kpLogProductMaterialDepthMode"] ?? "",
     typography: root.dataset["kpLogProductTypography"] ?? "",
     contactShadowDisplay: (() => {
@@ -399,6 +436,27 @@ async function captureSample(input: {
     !["absent", "none"].includes(state.contactShadowDisplay)
   ) {
     throw new Error(`${id} retained contact shadow in reduced motion.`);
+  }
+  if (state.materialSurfaceBaselineSpreadPx > 0.01) {
+    throw new Error(`${id} projected more than one material ground plane.`);
+  }
+  if (
+    input.captureCaseId === "material-wide-dark" &&
+    input.progress >= 0.96 && input.progress < 1 &&
+    (
+      state.liftedMaterialOwnerCount !== 0 ||
+      state.activeContactShadowCount !== 0 ||
+      state.promotedMaterialOwnerCount !== 0
+    )
+  ) {
+    throw new Error(
+      `${id} retained material depth or layer promotion after landing: ` +
+      JSON.stringify({
+        lifted: state.liftedMaterialOwnerCount,
+        shadows: state.activeContactShadowCount,
+        promoted: state.promotedMaterialOwnerCount
+      })
+    );
   }
   return {
     id,

@@ -26,6 +26,9 @@ import {
   createKpLogProductTransitSession,
   type KpLogProductTransitSession
 } from "../rendering/log-product-transit-session.ts";
+import type {
+  KpNativeKatexRenderedSceneObservation
+} from "../rendering/native-katex-rendered-scene.ts";
 import {
   syncKpEquationMaterialLayer
 } from "../rendering/equation-material-layer-dom.ts";
@@ -65,6 +68,7 @@ interface KpLogProductSurfaceSession {
   generation: number;
   pendingState: KpEditorAnimationPlayerState;
   transit?: KpLogProductTransitSession | undefined;
+  materialSurfaceBaselineY?: number | undefined;
   disposed: boolean;
 }
 
@@ -213,6 +217,9 @@ async function prepareSurface(
       source,
       target
     });
+    const replacementSurfaceBaselineY = resolveMaterialSurfaceBaselineY(
+      target
+    );
     const sourceEntities = new Map(source.atoms.map((atom) => [
       atom.id,
       atom.semanticEntityId
@@ -246,11 +253,14 @@ async function prepareSurface(
       })
     );
     const previous = session.transit;
+    const previousSurfaceBaselineY = session.materialSurfaceBaselineY;
     session.transit = replacement;
+    session.materialSurfaceBaselineY = replacementSurfaceBaselineY;
     try {
       applyFrame(session, session.pendingState);
     } catch (error: unknown) {
       session.transit = previous;
+      session.materialSurfaceBaselineY = previousSurfaceBaselineY;
       replacement.retire();
       throw error;
     }
@@ -334,6 +344,12 @@ function applyFrame(
     setAccessibleEndpoint(root, false);
   });
   const ownership = session.transit.apply(frame.semanticProgress);
+  const materialPoseProgress = Number(
+    session.stage.dataset["kpNativeKatexPoseProgress"] ?? "0"
+  );
+  session.stage.dataset["kpLogProductMaterialGeometryLanded"] = String(
+    ownership.visualOwner !== "source-native" && materialPoseProgress >= 1
+  );
   const materialMode = projectKpLogProductMaterialPresentationMode(
     session.player.dataset["kpEditorAnimationFocusExperiment"]
   );
@@ -346,7 +362,8 @@ function applyFrame(
     poseByRoleId: sampleKpLogProductMaterialDepthChoreography({
       mode: materialMode.depthMode,
       choreography: frame
-    })
+    }),
+    surfaceBaselineY: session.materialSurfaceBaselineY
   });
   const accessibleIndex = ownership.visualOwner === "source-native" ? 0 : 1;
   setAccessibleEndpoint(session.endpointRoots[accessibleIndex], true);
@@ -366,6 +383,29 @@ function applyFrame(
         : `One logarithm is becoming ${factorNames.length} while ` +
           `${factorNames.join(", ")} keep identity.`;
   }
+}
+
+function resolveMaterialSurfaceBaselineY(
+  target: KpNativeKatexRenderedSceneObservation
+): number {
+  const baselines = target.atoms
+    .map(({ baselineY }) => baselineY)
+    .filter((baseline): baseline is number =>
+      baseline !== null && baseline !== undefined && Number.isFinite(baseline)
+    )
+    .sort((left, right) => left - right);
+  if (baselines.length === 0) {
+    throw new Error(
+      "Log-product material depth requires a measured target equation baseline."
+    );
+  }
+  // KaTeX atoms have different ink boxes, but share the equation baseline.
+  // The median rejects isolated annotation/strut measurements without asking
+  // the per-frame DOM projector to perform layout reads.
+  const middle = Math.floor(baselines.length / 2);
+  return baselines.length % 2 === 1
+    ? baselines[middle]!
+    : (baselines[middle - 1]! + baselines[middle]!) / 2;
 }
 
 function runtimeForAnimation(animationId: string) {
