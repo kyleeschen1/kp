@@ -42,11 +42,39 @@
       "scope": "repository type boundary",
       "checkedAt": "2026-08-23T05:01:06.795Z",
       "notes": "Application, node, tests, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "bundle and lazy-loading baseline",
+      "checkedAt": "2026-08-23T05:10:17.057Z",
+      "notes": "Passed: outer 3504, main host 201935, measured catalogue route 134962, and place-value incremental 51100 gzip bytes; zero forbidden outer files."
+    },
+    {
+      "command": "npm run perf:animation",
+      "status": "passed",
+      "scope": "bounded economics catalogue runtime baseline",
+      "checkedAt": "2026-08-23T05:10:18.077Z",
+      "notes": "Zero regressions; 269195 initial script bytes, 2780 ms constrained hydration, 17.6 ms constrained frame p95. Existing product misses remain transfer, constrained LCP, and constrained loading long task."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "pre-loop TypeScript inference health",
+      "checkedAt": "2026-08-23T05:10:18.995Z",
+      "notes": "Observed 93651 types and 150979 instantiations against unchanged 55000 and 75000 ceilings. Slice-1 files are absent from the inference project closure; v2 records this as pre-existing debt and forbids further growth."
+    },
+    {
+      "command": "npm run test:animation-governance-baseline",
+      "status": "passed",
+      "scope": "typed baseline ratchets",
+      "checkedAt": "2026-08-23T05:10:19.938Z",
+      "notes": "Three tests passed; old ceilings remain authoritative, lazy declaration counts are tied to literal registries, and bundle observations retain headroom."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 1 complete: generated inventory classifies 58 loadable assets across domains, surfaces, adapters, profiles, typography authority, motifs, review provenance, and explicit bypasses; repaired one Lisp capability-selection omission."
+    "summary": "Slices 1-2 complete: static governance inventory and typed non-regression baselines exist. Bundle and runtime regression gates pass; inference entered red at 93651 types and 150979 instantiations, so unchanged health ceilings remain authoritative while a no-worsening quarantine blocks additional debt."
   },
   "expectedLearning": [
     "Whether a common conformance gateway can make evolving principles retroactive without collapsing domain-specific renderer boundaries",

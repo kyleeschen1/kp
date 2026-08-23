@@ -52,7 +52,8 @@
     {
       "id": "baselines",
       "title": "baselines",
-      "status": "planned"
+      "summary": "Recorded current inference, bundle, lazy-loading, focused verification, and runtime baselines without raising ceilings or leaving persistent processes. Inference debt is explicit and quarantined; bundle and runtime regression checks pass.",
+      "status": "complete"
     },
     {
       "id": "principle-ledger",
