@@ -171,7 +171,19 @@ test("derivative power rule keeps an explicit decrement and flat glyph motion", 
 
   await seek.fill("0.82");
   await expect.poll(() => renderedOpacity(decrementOperator)).toBeLessThan(1);
-  await expect.poll(() => renderedOpacity(evaluatedResult)).toBeGreaterThan(0);
+  const evaluatedMaterial = stage.locator(
+    '[data-kp-equation-material-fragment-role="successor-target:successor-target"]'
+  );
+  await expect(evaluatedMaterial).toHaveCount(1);
+  await expect.poll(() => renderedOpacity(evaluatedMaterial)).toBeGreaterThan(0);
+  await expect(stage).toHaveAttribute(
+    "data-kp-certified-evaluation-mount",
+    "native-katex"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-operation-evaluation-family",
+    "contributor-fusion"
+  );
   for (const glyph of [decrementOperator, decrementAmount, evaluatedResult]) {
     await expect.poll(() => renderedScale(glyph)).toEqual({ x: 1, y: 1 });
     await expect(glyph).toHaveCSS("text-shadow", "none");

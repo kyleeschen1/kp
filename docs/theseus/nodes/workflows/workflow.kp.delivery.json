@@ -239,6 +239,34 @@
       "scope": "standard",
       "checkedAt": "2026-08-23T23:36:13.482Z",
       "notes": "Shared Native KaTeX mount preserves all TypeScript, Svelte, and domain boundaries."
+    },
+    {
+      "command": "npm run test:browser:differentiation-exemplar",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-23T23:43:14.163Z",
+      "notes": "Two Chromium tests pass; the certified target owner is visible, the native token is retired, and direct URL restoration remains correct."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-23T23:43:15.476Z",
+      "notes": "All eleven equation inventory, authority, endpoint, and preservation checks pass after generic-host integration."
+    },
+    {
+      "command": "npm run visual:derivative-power",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-23T23:43:16.573Z",
+      "notes": "Nine-frame contact sheet shows 3 minus 1 compressing in the superscript and expanding into native 2 with 3x retained as context."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-23T23:43:17.744Z",
+      "notes": "Generic certified evaluation mount preserves all TypeScript, Svelte, and domain boundaries."
     }
   ],
   "progress": {

@@ -190,6 +190,9 @@ import type {
 import type {
   KpInequalityPivotChoreographyFrame
 } from "../animation/inequality-pivot-choreography.ts";
+import {
+  applyKpCertifiedEquationEvaluationMount
+} from "./equation-certified-evaluation-mount.ts";
 
 const semanticMotionPlanCache = new WeakMap<HTMLElement, {
   readonly contentKey: string;
@@ -447,6 +450,18 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
       semanticProgress: frame.semanticProgress,
       hotPath
     });
+    if (governance !== undefined) {
+      applyKpCertifiedEquationEvaluationMount({
+        stage,
+        plan: governance.presentationPlan,
+        activeTransformationIds: frame.projection.transitions.map(
+          ({ id }) => id
+        ),
+        localProgress: frame.localProgress,
+        direction: state.direction,
+        hotPath
+      });
+    }
     applyFocusExperiment(
       stage,
       player?.dataset["kpEditorAnimationFocusExperiment"] ?? "flat"
