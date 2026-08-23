@@ -301,6 +301,20 @@
       "scope": "focused",
       "checkedAt": "2026-08-23T06:26:10.302Z",
       "notes": "Application, Node, tests, Svelte, and domain types passed."
+    },
+    {
+      "command": "npm run test:equation-transit-obligations-v2",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T06:32:50.052Z",
+      "notes": "Three tests prove semantic boundary and target-cohort compilation, deterministic default arrivals, and fail-closed rejection of invalid semantics or caller motion."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T06:32:51.446Z",
+      "notes": "Repository type boundaries accept transit obligations while excluding author-owned route and timing fields."
     }
   ],
   "progress": {

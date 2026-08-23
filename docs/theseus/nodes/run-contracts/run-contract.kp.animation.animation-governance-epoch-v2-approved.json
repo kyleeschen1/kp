@@ -130,7 +130,8 @@
     {
       "id": "transit-obligations",
       "title": "transit-obligations",
-      "status": "planned"
+      "summary": "Compiled semantic relation-clearance and target-cohort intents into branded obligations. Moving records now require renderer-measured routes and registered timing; arrivals settle against native target ink before ownership, while invalid entities, duplicate cohorts, and caller paths or timing fail closed.",
+      "status": "complete"
     },
     {
       "id": "route-certificates",
