@@ -106,7 +106,8 @@
     {
       "id": "evaluation-registry",
       "title": "evaluation-registry",
-      "status": "planned"
+      "summary": "Made evaluation a declared semantic class and added one mandatory renderer-neutral authority registry covering product, quotient, difference, sum, cancellation, identity, and successor formation. Registered evaluations cannot masquerade as generic transforms; unregistered evaluations fail to typed repair; callers cannot author family, timing, or generic-fade behavior.",
+      "status": "complete"
     },
     {
       "id": "projection-choreography",

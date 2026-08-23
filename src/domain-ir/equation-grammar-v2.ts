@@ -19,6 +19,7 @@ export interface KpEquationGrammarStateV2 {
 
 export interface KpEquationGrammarOperationV2 {
   readonly operationId: string;
+  readonly semanticClass: "evaluation" | "transformation";
   readonly roleBindings: Readonly<Record<string, readonly string[]>>;
   readonly correspondenceMap: CorrespondenceMap;
   readonly semanticAuthorityIds: readonly string[];
@@ -139,6 +140,7 @@ export function compileKpEquationGrammarV2(
       targetStateId: transition.targetStateId,
       operation: {
         operationId: transition.operation.operationId,
+        semanticClass: transition.operation.semanticClass,
         roleBindings: Object.fromEntries(Object.entries(
           transition.operation.roleBindings
         ).map(([roleId, entityIds]) => [roleId, [...entityIds]])),
@@ -278,7 +280,7 @@ function validateTransition(
   diagnostics: KpEquationGrammarV2Diagnostic[]
 ): void {
   rejectUnknown(transition.operation, [
-    "operationId", "roleBindings", "correspondenceMap",
+    "operationId", "semanticClass", "roleBindings", "correspondenceMap",
     "semanticAuthorityIds"
   ], `${path}.operation`, diagnostics);
   if (transition.operation.operationId.trim() === "" ||
@@ -286,6 +288,11 @@ function validateTransition(
     transition.operation.semanticAuthorityIds.length === 0) {
     add(diagnostics, "grammar.operation", `${path}.operation`,
       "Each transition requires its own operation, roles, and semantic authority.");
+  }
+  if (transition.operation.semanticClass !== "evaluation" &&
+      transition.operation.semanticClass !== "transformation") {
+    add(diagnostics, "grammar.operation", `${path}.operation.semanticClass`,
+      "Operations must declare whether they evaluate or transform material.");
   }
   if (transition.operation.correspondenceMap.records.length === 0) {
     add(diagnostics, "grammar.correspondence",

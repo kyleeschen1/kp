@@ -172,6 +172,7 @@ function transition(
     targetStateId,
     operation: {
       operationId,
+      semanticClass: "transformation",
       roleBindings: { source: ["entity.x"], target: ["entity.x"] },
       correspondenceMap: {
         id: `correspondence.${id}`,

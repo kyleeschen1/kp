@@ -228,6 +228,7 @@
     "test:animation-conformance-registration": "node --disable-warning=ExperimentalWarning --test tests/animation-conformance-registration.test.ts tests/animation-catalog-loader.test.ts",
     "test:equation-grammar-v2": "node --disable-warning=ExperimentalWarning --test tests/equation-grammar-v2.test.ts",
     "test:equation-grammar-v2-operation-resolution": "node --disable-warning=ExperimentalWarning --test tests/equation-grammar-v2-operation-resolution.test.ts",
+    "test:equation-evaluation-authority-registry-v2": "node --disable-warning=ExperimentalWarning --test tests/equation-evaluation-authority-registry-v2.test.ts",
     "check:equation-asset-manifest": "node --disable-warning=ExperimentalWarning scripts/generate-equation-asset-manifest.ts --check",
     "test:equation-asset-manifest": "node --disable-warning=ExperimentalWarning --test tests/equation-asset-manifest.test.ts tests/animation-library-display-catalog-generation.test.ts",
     "test:animation-capability-plan": "node --disable-warning=ExperimentalWarning --test tests/animation-capability-plan.test.ts tests/equation-animation-capability-plan.test.ts tests/cross-domain-animation-capability-plan.test.ts",

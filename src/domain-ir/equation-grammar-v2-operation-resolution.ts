@@ -18,6 +18,7 @@ export interface KpResolvedEquationTransitionOperationV2 {
   readonly transitionId: string;
   readonly transformationId: string;
   readonly operationId: string;
+  readonly semanticClass: "evaluation" | "transformation";
   readonly operationPack: {
     readonly packId: string;
     readonly version: string;
@@ -103,6 +104,7 @@ export function resolveKpEquationGrammarV2Operations(
       transitionId: transition.id,
       transformationId: transition.transformationId,
       operationId,
+      semanticClass: transition.operation.semanticClass,
       operationPack: Object.freeze({
         packId: result.pack.id,
         version: result.pack.version

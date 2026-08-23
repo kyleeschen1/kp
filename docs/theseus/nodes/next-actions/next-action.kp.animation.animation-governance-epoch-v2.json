@@ -231,6 +231,27 @@
       "scope": "slice-10-transition-resolution",
       "checkedAt": "2026-08-23T05:54:06.814Z",
       "notes": "TypeScript, Svelte, and domain checks pass after adding the v2 resolution boundary."
+    },
+    {
+      "command": "npm run test:equation-evaluation-authority-registry-v2",
+      "status": "passed",
+      "scope": "slice-11-evaluation-registry",
+      "checkedAt": "2026-08-23T06:04:45.925Z",
+      "notes": "Five tests prove complete product, quotient, difference, sum, cancellation, identity, and successor coverage; mandatory resolution; misclassification repair; and rejection of generic or caller-owned evaluation."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-11-evaluation-registry",
+      "checkedAt": "2026-08-23T06:04:46.869Z",
+      "notes": "All TypeScript, Svelte, and domain checks pass with explicit evaluation semantic classification."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "slice-11-no-worsening-quarantine",
+      "checkedAt": "2026-08-23T06:04:47.796Z",
+      "notes": "The command remains red only against pre-existing strict health ceilings; counts are unchanged at exactly 93651 types and 150979 instantiations, so this slice introduced no inference regression."
     }
   ],
   "progress": {
