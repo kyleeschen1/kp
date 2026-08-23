@@ -69,7 +69,8 @@
     {
       "id": "kp.eval-auth.s04",
       "title": "topology-derivation",
-      "status": "planned"
+      "summary": "Compiler now derives and nominally verifies contributor evaluation topology from correspondence and endpoint metadata, returning typed repair diagnostics when proof is missing or ambiguous.",
+      "status": "complete"
     },
     {
       "id": "kp.eval-auth.s05",

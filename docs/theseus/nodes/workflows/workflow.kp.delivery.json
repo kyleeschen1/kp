@@ -113,6 +113,20 @@
       "scope": "focused",
       "checkedAt": "2026-08-23T23:09:02.631Z",
       "notes": "Closed topology vocabulary and nominal certificate guard pass."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/evaluation-topology-certificate.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T23:13:56.728Z",
+      "notes": "Three topology-certificate tests passed, including derivative derivation and typed repair fallback."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-23T23:14:02.660Z",
+      "notes": "Application, test, Svelte, and domain typechecks pass with compiler-owned topology derivation."
     }
   ],
   "progress": {
