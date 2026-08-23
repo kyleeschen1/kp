@@ -1,7 +1,12 @@
 /// <reference types="vite/client" />
 
-import { kpFiniteProductExpansionExemplarId } from
+import {
+  createKpFiniteProductExpansionExemplarAsset,
+  kpFiniteProductExpansionExemplarId
+} from
   "../animation/finite-product-expansion-exemplar.ts";
+import { compileKpTerminalEquationMigrationV2 } from
+  "../domain-ir/terminal-equation-migration-v2.ts";
 import { createKpEquationFontReadiness } from
   "../rendering/equation-font-readiness.ts";
 import { renderLatexToHtml } from "../rendering/katex-adapter.ts";
@@ -45,6 +50,9 @@ interface KpFiniteProductSurfaceSession {
 }
 
 const sessions = new WeakMap<HTMLElement, KpFiniteProductSurfaceSession>();
+const canonicalGovernance = compileKpTerminalEquationMigrationV2(
+  createKpFiniteProductExpansionExemplarAsset()
+);
 
 export const kpEditorFiniteProductSurfaceAdapter = Object.freeze({
   id: "editor-animation-surface.finite-product-expansion.canonical-native-katex",
@@ -81,6 +89,8 @@ function mountSurface(
   stage.className = "kp-finite-product-stage";
   stage.dataset["kpFiniteProductStage"] = "preparing";
   stage.dataset["kpEquationMaterialVisualCache"] = "dual-revision";
+  stage.dataset["kpEquationPresentationPlanId"] =
+    canonicalGovernance.presentationPlan.id;
   stage.dataset["kpStateRetentionProjectionId"] =
     kpFiniteProductEquivalenceFrame.projection.id;
   stage.dataset["kpStateRetentionPolicy"] =

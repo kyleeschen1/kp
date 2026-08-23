@@ -18,6 +18,8 @@ import { resolveKpAnimationPolicyEpoch } from
   "../src/architecture/animation-policy-epoch.ts";
 import { kpEquationGovernanceV2MigrationDeclarations } from
   "../src/domain-ir/equation-governance-v2-migrations.ts";
+import { kpEquationGovernanceV2Classifications } from
+  "../src/domain-ir/equation-governance-v2-classifications.ts";
 
 function manifests() {
   const assets = createKpAnimationAssets();
@@ -29,6 +31,10 @@ function manifests() {
     capabilityDeclarations: kpEditorSelectedSurfaceCapabilityDeclarationSet
   });
   return compileKpAnimationConformanceManifestSet({ assets, inventory });
+}
+
+function hasGap(gapCodes: readonly string[], gapCode: string): boolean {
+  return gapCodes.includes(gapCode);
 }
 
 test("every loadable asset has one renderer-neutral conformance manifest", () => {
@@ -75,22 +81,37 @@ test("equation migrations use v2 while remaining gaps stay explicit", () => {
   const migratedIds = new Set(
     kpEquationGovernanceV2MigrationDeclarations.map(({ assetId }) => assetId)
   );
+  const classifiedIds = new Set(
+    kpEquationGovernanceV2Classifications.map(({ assetId }) => assetId)
+  );
   const migrated = equationManifests.filter(({ assetId }) =>
     migratedIds.has(assetId));
   const compatibility = equationManifests.filter(({ assetId }) =>
-    !migratedIds.has(assetId));
+    !migratedIds.has(assetId) && !classifiedIds.has(assetId));
+  const classified = equationManifests.filter(({ assetId }) =>
+    classifiedIds.has(assetId));
   assert.ok(equationManifests.length > 0);
   assert.equal(migrated.length, migratedIds.size);
   assert.equal(migrated.every(({ policy, disposition }) =>
     policy.epochId === "policy.animation.governance-v2.preview.1" &&
-    !disposition.gapCodes.includes("equation-grammar-v2-missing") &&
-    !disposition.gapCodes.includes("typography-policy-implicit")
+    !hasGap(disposition.gapCodes, "equation-grammar-v2-missing") &&
+    !hasGap(disposition.gapCodes, "typography-policy-implicit")
   ), true);
   assert.equal(compatibility.every(({ disposition, policy }) =>
     policy.epochId === "policy.animation.legacy.v1" &&
     disposition.status === "compatibility" &&
-    disposition.gapCodes.includes("equation-grammar-v2-missing") &&
-    disposition.gapCodes.includes("typography-policy-implicit")
+    hasGap(disposition.gapCodes, "equation-grammar-v2-missing") &&
+    hasGap(disposition.gapCodes, "typography-policy-implicit")
+  ), true);
+  assert.equal(classified.length, classifiedIds.size);
+  assert.equal(classified.every(({ disposition, policy }) =>
+    policy.epochId === "policy.animation.governance-v2.preview.1" &&
+    disposition.status === "compatibility" &&
+    hasGap(disposition.gapCodes,
+      "diagnostic-equation-authority-rejected"
+    ) &&
+    !hasGap(disposition.gapCodes, "equation-grammar-v2-missing") &&
+    !hasGap(disposition.gapCodes, "typography-policy-implicit")
   ), true);
 });
 

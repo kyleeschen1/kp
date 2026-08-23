@@ -1,8 +1,11 @@
 /// <reference types="vite/client" />
 
 import {
+  createKpFiniteSumExpansionExemplarAsset,
   kpFiniteSumExpansionExemplarId
 } from "../animation/finite-sum-expansion-exemplar.ts";
+import { compileKpTerminalEquationMigrationV2 } from
+  "../domain-ir/terminal-equation-migration-v2.ts";
 import {
   createKpEquationFontReadiness
 } from "../rendering/equation-font-readiness.ts";
@@ -54,6 +57,9 @@ interface KpFiniteSumSurfaceSession {
 }
 
 const sessions = new WeakMap<HTMLElement, KpFiniteSumSurfaceSession>();
+const canonicalGovernance = compileKpTerminalEquationMigrationV2(
+  createKpFiniteSumExpansionExemplarAsset()
+);
 
 export const kpEditorFiniteSumSurfaceAdapter = Object.freeze({
   id: "editor-animation-surface.finite-sum-expansion.canonical-native-katex",
@@ -91,6 +97,8 @@ function mountSurface(
     "kp-finite-sum-stage kp-finite-sum-equivalence-stage";
   stage.dataset["kpFiniteSumStage"] = "preparing";
   stage.dataset["kpEquationMaterialVisualCache"] = "dual-revision";
+  stage.dataset["kpEquationPresentationPlanId"] =
+    canonicalGovernance.presentationPlan.id;
   stage.dataset["kpStateRetentionProjectionId"] =
     kpFiniteSumEquivalenceFrame.projection.id;
   stage.dataset["kpStateRetentionPolicy"] =

@@ -47,7 +47,7 @@ export const kpSemanticMotionOperationDefinitions:
       authoringRoles: [
         entity("sides-before", "source", "one-or-more"),
         entity("relation-before", "source"),
-        entity("negative-factor", "source", "zero-or-one"),
+        entity("negative-factor", "target", "zero-or-one"),
         entity("sides-after", "target", "one-or-more"),
         entity("relation-after", "target")
       ]

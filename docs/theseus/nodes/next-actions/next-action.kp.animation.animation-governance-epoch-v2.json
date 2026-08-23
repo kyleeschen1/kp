@@ -651,11 +651,53 @@
       "scope": "slice27 semantic, architecture, type, and visual preservation suite",
       "checkedAt": "2026-08-23T16:21:58.357Z",
       "notes": "Passed focused migration tests, fraction equivalence, closed-root, compound-carrier, governance inventory/reverse-dependency/registration, architecture, typecheck, and sequential fraction/even-root/compound visual checks. Existing renderers and choreography remain unchanged."
+    },
+    {
+      "command": "npm run test:equation-terminal-migration-v2",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T17:03:41.521Z"
+    },
+    {
+      "command": "npm run test:equation-operation-discovery-api",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T17:03:43.356Z"
+    },
+    {
+      "command": "npm run test:animation-governance-inventory",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T17:03:44.926Z"
+    },
+    {
+      "command": "npm run test:animation-governance-reverse-dependencies",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T17:03:46.358Z"
+    },
+    {
+      "command": "npm run test:animation-conformance-registration",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T17:03:47.508Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-23T17:03:48.599Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-23T17:03:49.889Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slices 1-2 complete: static governance inventory and typed non-regression baselines exist. Bundle and runtime regression gates pass; inference entered red at 93651 types and 150979 instantiations, so unchanged health ceilings remain authoritative while a no-worsening quarantine blocks additional debt."
+    "summary": "Slice 28 migrates finite binders, inequalities, substitution, calculus terminals, dot/matrix operations, and static equation comparisons through typed governance v2 protocols; only the deferred derivative power-rule exemplar remains an equation-v2 gap."
   },
   "expectedLearning": [
     "Whether a common conformance gateway can make evolving principles retroactive without collapsing domain-specific renderer boundaries",

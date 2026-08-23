@@ -145,6 +145,10 @@ test("the structural migration ledger names every compiled caller and existing e
     "animation.algebra.log-quotient.difference-to-quotient",
     "animation.algebra.radical.compound-carrier-normalization",
     "animation.algebra.radical.solve-x-squared-nine",
+    "animation.comparison.jacobian-hessian",
+    "animation.comparison.linear-solve-programming",
+    "animation.equation.finite-product-expansion.v1",
+    "animation.equation.finite-sum-expansion.v1",
     "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
     "animation.equation.fraction-equivalence.compact.v1",
     "animation.equation.fraction-equivalence.v1",
@@ -152,11 +156,20 @@ test("the structural migration ledger names every compiled caller and existing e
     "animation.generated.cancellation.additive-inverses",
     "animation.generated.distribution.expand-a-sum",
     "animation.generated.distribution.factor-common-a",
+    "animation.generated.calculus.derivative.sum-rule-polynomial",
+    "animation.generated.calculus.integral.power-rule-quadratic",
     "animation.generated.exponent.square-as-product",
     "animation.generated.fraction-expression.two-fourths",
     "animation.generated.function-wrap.apply-f",
     "animation.generated.linear-solve.linear-68c15d41",
+    "animation.generated.linear-algebra.dot-product.three-vector",
+    "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+    "animation.generated.linear-algebra.matrix-vector.two-by-two",
     "animation.generated.radical.square-root-as-power",
-    "animation.linear-solve.solve-x"
+    "animation.generated.substitute-three",
+    "animation.inequality.sign-flip.basic",
+    "animation.linear-solve.solve-x",
+    "animation.sample.fourier-transform-pair",
+    "animation.sample.fundamental-theorem-calculus"
   ].sort());
 });

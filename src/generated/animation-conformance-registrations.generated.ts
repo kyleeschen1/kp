@@ -80,7 +80,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.comparison.jacobian-hessian",
     "packId": "comparison",
     "manifestId": "manifest.animation.comparison.jacobian-hessian",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -88,7 +88,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.comparison.linear-solve-programming",
     "packId": "comparison",
     "manifestId": "manifest.animation.comparison.linear-solve-programming",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -120,7 +120,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.equation.finite-product-expansion.v1",
     "packId": "algebra",
     "manifestId": "manifest.animation.equation.finite-product-expansion.v1",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -128,7 +128,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.equation.finite-sum-expansion.v1",
     "packId": "algebra",
     "manifestId": "manifest.animation.equation.finite-sum-expansion.v1",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -192,7 +192,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.generated.calculus.derivative.sum-rule-polynomial",
     "packId": "generated-problems",
     "manifestId": "manifest.animation.generated.calculus.derivative.sum-rule-polynomial",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -200,7 +200,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.generated.calculus.integral.power-rule-quadratic",
     "packId": "generated-problems",
     "manifestId": "manifest.animation.generated.calculus.integral.power-rule-quadratic",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -256,7 +256,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.generated.linear-algebra.dot-product.three-vector",
     "packId": "generated-problems",
     "manifestId": "manifest.animation.generated.linear-algebra.dot-product.three-vector",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -264,7 +264,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.generated.linear-algebra.matrix-matrix.two-by-two",
     "packId": "generated-problems",
     "manifestId": "manifest.animation.generated.linear-algebra.matrix-matrix.two-by-two",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -272,7 +272,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.generated.linear-algebra.matrix-vector.two-by-two",
     "packId": "generated-problems",
     "manifestId": "manifest.animation.generated.linear-algebra.matrix-vector.two-by-two",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -304,7 +304,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.generated.substitute-three",
     "packId": "generated-drafts",
     "manifestId": "manifest.animation.generated.substitute-three",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -312,7 +312,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.generated.substitute-three.provisional-incorrect",
     "packId": "generated-drafts",
     "manifestId": "manifest.animation.generated.substitute-three.provisional-incorrect",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -336,7 +336,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.inequality.sign-flip.basic",
     "packId": "algebra",
     "manifestId": "manifest.animation.inequality.sign-flip.basic",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -456,7 +456,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.sample.fourier-transform-pair",
     "packId": "complex-katex",
     "manifestId": "manifest.animation.sample.fourier-transform-pair",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -464,7 +464,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.sample.fundamental-theorem-calculus",
     "packId": "complex-katex",
     "manifestId": "manifest.animation.sample.fundamental-theorem-calculus",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   }
 ] as const satisfies readonly KpAnimationConformanceRegistrationDeclaration[];

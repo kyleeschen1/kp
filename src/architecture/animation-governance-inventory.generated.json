@@ -4,7 +4,7 @@
   "summary": {
     "assetCount": 58,
     "equationAssetCount": 43,
-    "bypassedAssetCount": 15,
+    "bypassedAssetCount": 2,
     "unsupportedAssetCount": 0
   },
   "entries": [
@@ -699,8 +699,8 @@
       },
       "typography": {
         "flow": "host-css",
-        "mathStyle": "adapter-local-implicit",
-        "opticalScale": "adapter-local-implicit"
+        "mathStyle": "governance-policy-v2",
+        "opticalScale": "governance-policy-v2"
       },
       "motifs": {
         "familyIds": [],
@@ -725,10 +725,7 @@
           "artifact-promotion.default-reviewable-composition-policy"
         ]
       },
-      "bypasses": [
-        "equation-grammar-v2-missing",
-        "typography-policy-implicit"
-      ]
+      "bypasses": []
     },
     {
       "schemaVersion": "kp.animation-governance-inventory-entry.v1",
@@ -778,8 +775,8 @@
       },
       "typography": {
         "flow": "host-css",
-        "mathStyle": "adapter-local-implicit",
-        "opticalScale": "adapter-local-implicit"
+        "mathStyle": "governance-policy-v2",
+        "opticalScale": "governance-policy-v2"
       },
       "motifs": {
         "familyIds": [],
@@ -807,11 +804,7 @@
           "artifact-promotion.default-reviewable-composition-policy"
         ]
       },
-      "bypasses": [
-        "equation-grammar-v2-missing",
-        "typography-policy-implicit",
-        "specialized-equation-adapter-direct"
-      ]
+      "bypasses": []
     },
     {
       "schemaVersion": "kp.animation-governance-inventory-entry.v1",
@@ -1012,8 +1005,8 @@
       },
       "typography": {
         "flow": "host-css",
-        "mathStyle": "adapter-local-implicit",
-        "opticalScale": "adapter-local-implicit"
+        "mathStyle": "governance-policy-v2",
+        "opticalScale": "governance-policy-v2"
       },
       "motifs": {
         "familyIds": [],
@@ -1037,11 +1030,7 @@
           "artifact-promotion.default-reviewable-composition-policy"
         ]
       },
-      "bypasses": [
-        "equation-grammar-v2-missing",
-        "typography-policy-implicit",
-        "specialized-equation-adapter-direct"
-      ]
+      "bypasses": []
     },
     {
       "schemaVersion": "kp.animation-governance-inventory-entry.v1",
@@ -1086,8 +1075,8 @@
       },
       "typography": {
         "flow": "host-css",
-        "mathStyle": "adapter-local-implicit",
-        "opticalScale": "adapter-local-implicit"
+        "mathStyle": "governance-policy-v2",
+        "opticalScale": "governance-policy-v2"
       },
       "motifs": {
         "familyIds": [],
@@ -1111,11 +1100,7 @@
           "artifact-promotion.default-reviewable-composition-policy"
         ]
       },
-      "bypasses": [
-        "equation-grammar-v2-missing",
-        "typography-policy-implicit",
-        "specialized-equation-adapter-direct"
-      ]
+      "bypasses": []
     },
     {
       "schemaVersion": "kp.animation-governance-inventory-entry.v1",
@@ -1649,8 +1634,8 @@
       },
       "typography": {
         "flow": "host-css",
-        "mathStyle": "adapter-local-implicit",
-        "opticalScale": "adapter-local-implicit"
+        "mathStyle": "governance-policy-v2",
+        "opticalScale": "governance-policy-v2"
       },
       "motifs": {
         "familyIds": [],
@@ -1675,10 +1660,7 @@
           "artifact-promotion.default-reviewable-composition-policy"
         ]
       },
-      "bypasses": [
-        "equation-grammar-v2-missing",
-        "typography-policy-implicit"
-      ]
+      "bypasses": []
     },
     {
       "schemaVersion": "kp.animation-governance-inventory-entry.v1",
@@ -1722,8 +1704,8 @@
       },
       "typography": {
         "flow": "host-css",
-        "mathStyle": "adapter-local-implicit",
-        "opticalScale": "adapter-local-implicit"
+        "mathStyle": "governance-policy-v2",
+        "opticalScale": "governance-policy-v2"
       },
       "motifs": {
         "familyIds": [],
@@ -1748,10 +1730,7 @@
           "artifact-promotion.default-reviewable-composition-policy"
         ]
       },
-      "bypasses": [
-        "equation-grammar-v2-missing",
-        "typography-policy-implicit"
-      ]
+      "bypasses": []
     },
     {
       "schemaVersion": "kp.animation-governance-inventory-entry.v1",
@@ -2223,8 +2202,8 @@
       },
       "typography": {
         "flow": "host-css",
-        "mathStyle": "adapter-local-implicit",
-        "opticalScale": "adapter-local-implicit"
+        "mathStyle": "governance-policy-v2",
+        "opticalScale": "governance-policy-v2"
       },
       "motifs": {
         "familyIds": [],
@@ -2248,10 +2227,7 @@
           "artifact-promotion.default-reviewable-composition-policy"
         ]
       },
-      "bypasses": [
-        "equation-grammar-v2-missing",
-        "typography-policy-implicit"
-      ]
+      "bypasses": []
     },
     {
       "schemaVersion": "kp.animation-governance-inventory-entry.v1",
@@ -2295,8 +2271,8 @@
       },
       "typography": {
         "flow": "host-css",
-        "mathStyle": "adapter-local-implicit",
-        "opticalScale": "adapter-local-implicit"
+        "mathStyle": "governance-policy-v2",
+        "opticalScale": "governance-policy-v2"
       },
       "motifs": {
         "familyIds": [
@@ -2322,10 +2298,7 @@
           "artifact-promotion.default-reviewable-composition-policy"
         ]
       },
-      "bypasses": [
-        "equation-grammar-v2-missing",
-        "typography-policy-implicit"
-      ]
+      "bypasses": []
     },
     {
       "schemaVersion": "kp.animation-governance-inventory-entry.v1",
@@ -2374,8 +2347,8 @@
       },
       "typography": {
         "flow": "host-css",
-        "mathStyle": "adapter-local-implicit",
-        "opticalScale": "adapter-local-implicit"
+        "mathStyle": "governance-policy-v2",
+        "opticalScale": "governance-policy-v2"
       },
       "motifs": {
         "familyIds": [
@@ -2402,11 +2375,7 @@
           "artifact-promotion.default-reviewable-composition-policy"
         ]
       },
-      "bypasses": [
-        "equation-grammar-v2-missing",
-        "typography-policy-implicit",
-        "specialized-equation-adapter-direct"
-      ]
+      "bypasses": []
     },
     {
       "schemaVersion": "kp.animation-governance-inventory-entry.v1",
@@ -2645,8 +2614,8 @@
       },
       "typography": {
         "flow": "host-css",
-        "mathStyle": "adapter-local-implicit",
-        "opticalScale": "adapter-local-implicit"
+        "mathStyle": "governance-policy-v2",
+        "opticalScale": "governance-policy-v2"
       },
       "motifs": {
         "familyIds": [],
@@ -2670,10 +2639,7 @@
           "artifact-promotion.default-reviewable-composition-policy"
         ]
       },
-      "bypasses": [
-        "equation-grammar-v2-missing",
-        "typography-policy-implicit"
-      ]
+      "bypasses": []
     },
     {
       "schemaVersion": "kp.animation-governance-inventory-entry.v1",
@@ -2743,8 +2709,7 @@
         ]
       },
       "bypasses": [
-        "equation-grammar-v2-missing",
-        "typography-policy-implicit"
+        "diagnostic-equation-authority-rejected"
       ]
     },
     {
@@ -2891,8 +2856,8 @@
       },
       "typography": {
         "flow": "host-css",
-        "mathStyle": "adapter-local-implicit",
-        "opticalScale": "adapter-local-implicit"
+        "mathStyle": "governance-policy-v2",
+        "opticalScale": "governance-policy-v2"
       },
       "motifs": {
         "familyIds": [
@@ -2918,10 +2883,7 @@
           "artifact-promotion.default-reviewable-composition-policy"
         ]
       },
-      "bypasses": [
-        "equation-grammar-v2-missing",
-        "typography-policy-implicit"
-      ]
+      "bypasses": []
     },
     {
       "schemaVersion": "kp.animation-governance-inventory-entry.v1",
@@ -3810,8 +3772,8 @@
       },
       "typography": {
         "flow": "host-css",
-        "mathStyle": "adapter-local-implicit",
-        "opticalScale": "adapter-local-implicit"
+        "mathStyle": "governance-policy-v2",
+        "opticalScale": "governance-policy-v2"
       },
       "motifs": {
         "familyIds": [],
@@ -3836,10 +3798,7 @@
           "artifact-promotion.default-reviewable-composition-policy"
         ]
       },
-      "bypasses": [
-        "equation-grammar-v2-missing",
-        "typography-policy-implicit"
-      ]
+      "bypasses": []
     },
     {
       "schemaVersion": "kp.animation-governance-inventory-entry.v1",
@@ -3883,8 +3842,8 @@
       },
       "typography": {
         "flow": "host-css",
-        "mathStyle": "adapter-local-implicit",
-        "opticalScale": "adapter-local-implicit"
+        "mathStyle": "governance-policy-v2",
+        "opticalScale": "governance-policy-v2"
       },
       "motifs": {
         "familyIds": [
@@ -3911,10 +3870,7 @@
           "artifact-promotion.default-reviewable-composition-policy"
         ]
       },
-      "bypasses": [
-        "equation-grammar-v2-missing",
-        "typography-policy-implicit"
-      ]
+      "bypasses": []
     }
   ]
 }

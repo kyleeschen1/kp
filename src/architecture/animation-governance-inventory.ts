@@ -32,6 +32,9 @@ import type {
 import {
   findKpEquationGovernanceV2Migration
 } from "../domain-ir/equation-governance-v2-migrations.ts";
+import {
+  findKpEquationGovernanceV2Classification
+} from "../domain-ir/equation-governance-v2-classifications.ts";
 
 export type KpAnimationGovernanceDomain =
   | "equation"
@@ -41,6 +44,7 @@ export type KpAnimationGovernanceDomain =
 
 export type KpAnimationGovernanceBypassCode =
   | "adapter-unclassified"
+  | "diagnostic-equation-authority-rejected"
   | "equation-grammar-v2-missing"
   | "equation-profile-implicit"
   | "specialized-equation-adapter-direct"
@@ -218,6 +222,9 @@ function compileEntry(input: {
   const adapterIds = unique([...selectedAdapterIds, ...baseAdapterIds]);
   const domains = unique(surface.slotKinds.map(domainForSlot));
   const governanceV2 = findKpEquationGovernanceV2Migration(input.asset.id);
+  const classification = findKpEquationGovernanceV2Classification(
+    input.asset.id
+  );
   const bypasses: KpAnimationGovernanceBypassCode[] = [];
   if (surface.kind === "unsupported") bypasses.push("unsupported-surface");
   if (surface.slotKinds.length > 0 && adapterIds.length === 0) {
@@ -228,7 +235,9 @@ function compileEntry(input: {
     );
   }
   if (domains.includes("equation")) {
-    if (governanceV2 === undefined) {
+    if (classification?.disposition === "diagnostic-authority-rejected") {
+      bypasses.push("diagnostic-equation-authority-rejected");
+    } else if (governanceV2 === undefined) {
       bypasses.push("equation-grammar-v2-missing", "typography-policy-implicit");
     } else if (!adapterIds.includes(governanceV2.adapterId)) {
       input.diagnostics.push(

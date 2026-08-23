@@ -179,6 +179,47 @@ export const kpEquationLawOperationDefinitions = Object.freeze([
       entity("carrier-after", "target"),
       artifact("absolute-shell-after", "target", "one-or-more")
     ]
+  }),
+  operation({
+    id: "operation.equation.finite-binder-expand.v1",
+    title: "Expand a finite binder",
+    summary:
+      "Instantiate a scoped body over verified finite bounds and introduce its connectors.",
+    transformType: "finiteBinderExpand",
+    canonicalComposition: ["kp.core.fan-out", "kp.core.introduce"],
+    authoringRoles: [
+      entity("operator-before", "source"),
+      entity("binder-before", "source"),
+      entity("lower-bound-before", "source"),
+      entity("upper-bound-before", "source"),
+      entity("body-before", "source"),
+      entity("bound-reference-before", "source"),
+      entity("instances-after", "target", "one-or-more"),
+      entity("instantiated-references-after", "target", "one-or-more"),
+      artifact("connectors-after", "target", "one-or-more")
+    ]
+  }),
+  operation({
+    id: "kp.equation.present-latex-form",
+    title: "Present a LaTeX form",
+    summary: "Keep one authored mathematical form available as static comparison context.",
+    transformType: "presentLatexForm",
+    canonicalComposition: ["kp.core.persist"],
+    authoringRoles: [
+      entity("form-before", "source"),
+      entity("form-after", "target")
+    ]
+  }),
+  operation({
+    id: "kp.equation.compare-latex-forms",
+    title: "Compare LaTeX forms",
+    summary: "Relate two or more authored forms through one semantic comparison object.",
+    transformType: "compareLatexForms",
+    canonicalComposition: ["kp.core.persist", "kp.core.merge"],
+    authoringRoles: [
+      entity("forms-before", "source", "one-or-more"),
+      entity("comparison-after", "target")
+    ]
   })
 ]);
 

@@ -276,6 +276,90 @@
       "supportState": "available"
     },
     {
+      "operationId": "kp.arithmetic.multiply",
+      "familyId": "kp.arithmetic",
+      "friendlyName": "Multiply",
+      "aliases": [
+        "kp.arithmetic.multiply"
+      ],
+      "meaning": "Evaluate a direct product while preserving its exact operation identity.",
+      "positiveExamples": [
+        "Ask to multiply using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "transform-type.simplifyConstantProduct",
+        "law.arithmetic.constant-product",
+        "kp.arithmetic"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.arithmetic.divide",
+      "familyId": "kp.arithmetic",
+      "friendlyName": "Divide",
+      "aliases": [
+        "kp.arithmetic.divide"
+      ],
+      "meaning": "Evaluate a direct quotient while preserving its exact operation identity.",
+      "positiveExamples": [
+        "Ask to divide using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "transform-type.simplifyConstantQuotient",
+        "law.arithmetic.constant-quotient",
+        "kp.arithmetic"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.arithmetic.subtract",
+      "familyId": "kp.arithmetic",
+      "friendlyName": "Subtract",
+      "aliases": [
+        "kp.arithmetic.subtract"
+      ],
+      "meaning": "Evaluate a direct difference while preserving its exact operation identity.",
+      "positiveExamples": [
+        "Ask to subtract using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "transform-type.simplifyConstantDifference",
+        "law.arithmetic.constant-difference",
+        "kp.arithmetic"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.arithmetic.add",
+      "familyId": "kp.arithmetic",
+      "friendlyName": "Add",
+      "aliases": [
+        "kp.arithmetic.add"
+      ],
+      "meaning": "Evaluate a direct sum while preserving its exact operation identity.",
+      "positiveExamples": [
+        "Ask to add using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "transform-type.simplifyConstantSum",
+        "law.arithmetic.constant-sum",
+        "kp.arithmetic"
+      ],
+      "supportState": "available"
+    },
+    {
       "operationId": "kp.algebra.subtract-both-sides",
       "familyId": "kp.both-sides",
       "friendlyName": "Subtract both sides",
@@ -889,6 +973,256 @@
       "supportState": "available"
     },
     {
+      "operationId": "kp.algebra.apply-natural-log-both-sides",
+      "familyId": "kp.both-sides",
+      "friendlyName": "Apply natural log both sides",
+      "aliases": [
+        "kp.algebra.apply-natural-log-both-sides"
+      ],
+      "meaning": "Preserve both equation branches and their relation while introducing one natural-log application around each side.",
+      "positiveExamples": [
+        "Ask to apply natural log both sides using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "assumption.log-exponent.power-positive",
+        "assumption.log-exponent.right-positive",
+        "assumption.log-exponent.log-injective"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.extract-log-power-exponent",
+      "familyId": "kp.equation-laws",
+      "friendlyName": "Extract log power exponent",
+      "aliases": [
+        "kp.algebra.extract-log-power-exponent"
+      ],
+      "meaning": "Preserve the equation while a logged power becomes an extracted product.",
+      "positiveExamples": [
+        "Ask to extract log power exponent using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "transform-type.extractLogPowerExponent",
+        "law.extractLogPowerExponent",
+        "kp.equation-laws"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.divide-both-sides-by-log-base",
+      "familyId": "kp.both-sides",
+      "friendlyName": "Divide both sides by log base",
+      "aliases": [
+        "kp.algebra.divide-both-sides-by-log-base"
+      ],
+      "meaning": "Preserve logarithm material while product roles become an isolated quotient.",
+      "positiveExamples": [
+        "Ask to divide both sides by log base using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "assumption.log-exponent.log-base-nonzero"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "operation.equation.exponential-sum-to-product.v1",
+      "familyId": "kp.equation-laws",
+      "friendlyName": "Exponential sum to product",
+      "aliases": [
+        "operation.equation.exponential-sum-to-product.v1"
+      ],
+      "meaning": "Preserve exponent payloads while one power derives the successor product.",
+      "positiveExamples": [
+        "Ask to exponential sum to product using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "transform-type.operation.equation.exponential-sum-to-product.v1",
+        "law.operation.equation.exponential-sum-to-product.v1",
+        "kp.equation-laws"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "operation.equation.exponential-difference-to-quotient.v1",
+      "familyId": "kp.equation-laws",
+      "friendlyName": "Exponential difference to quotient",
+      "aliases": [
+        "operation.equation.exponential-difference-to-quotient.v1"
+      ],
+      "meaning": "Preserve exponent payloads while one power derives the successor quotient.",
+      "positiveExamples": [
+        "Ask to exponential difference to quotient using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "transform-type.operation.equation.exponential-difference-to-quotient.v1",
+        "law.operation.equation.exponential-difference-to-quotient.v1",
+        "kp.equation-laws"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.algebra.introduce-unit-factor",
+      "familyId": "kp.equation-laws",
+      "friendlyName": "Introduce unit factor",
+      "aliases": [
+        "kp.algebra.introduce-unit-factor"
+      ],
+      "meaning": "Preserve an expression while introducing one verified unit factor.",
+      "positiveExamples": [
+        "Ask to introduce unit factor using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "transform-type.introduceUnitFactor",
+        "law.introduceUnitFactor",
+        "kp.equation-laws"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "operation.equation.apply-inverse-power.v1",
+      "familyId": "kp.equation-laws",
+      "friendlyName": "Apply inverse power",
+      "aliases": [
+        "operation.equation.apply-inverse-power.v1"
+      ],
+      "meaning": "Move a power into root-index structure and expose every valid branch.",
+      "positiveExamples": [
+        "Ask to apply inverse power using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "transform-type.operation.equation.apply-inverse-power.v1",
+        "law.operation.equation.apply-inverse-power.v1",
+        "kp.equation-laws"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "operation.arithmetic.evaluate-real-root.v1",
+      "familyId": "kp.equation-laws",
+      "friendlyName": "Evaluate real root",
+      "aliases": [
+        "operation.arithmetic.evaluate-real-root.v1"
+      ],
+      "meaning": "Evaluate one real radical expression while preserving its branch operator.",
+      "positiveExamples": [
+        "Ask to evaluate real root using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "transform-type.operation.arithmetic.evaluate-real-root.v1",
+        "law.operation.arithmetic.evaluate-real-root.v1",
+        "kp.equation-laws"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "operation.root.compound-carrier-normalization",
+      "familyId": "kp.equation-laws",
+      "friendlyName": "Compound carrier normalization",
+      "aliases": [
+        "operation.root.compound-carrier-normalization"
+      ],
+      "meaning": "Preserve one compound carrier while radical syntax becomes absolute-value syntax.",
+      "positiveExamples": [
+        "Ask to compound carrier normalization using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "transform-type.compound-carrier-normalization",
+        "law.compound-carrier-normalization",
+        "kp.equation-laws"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "operation.equation.finite-binder-expand.v1",
+      "familyId": "kp.equation-laws",
+      "friendlyName": "Finite binder expand",
+      "aliases": [
+        "operation.equation.finite-binder-expand.v1"
+      ],
+      "meaning": "Instantiate a scoped body over verified finite bounds and introduce its connectors.",
+      "positiveExamples": [
+        "Ask to finite binder expand using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "transform-type.finiteBinderExpand",
+        "law.finiteBinderExpand",
+        "kp.equation-laws"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.equation.present-latex-form",
+      "familyId": "kp.equation-laws",
+      "friendlyName": "Present latex form",
+      "aliases": [
+        "kp.equation.present-latex-form"
+      ],
+      "meaning": "Keep one authored mathematical form available as static comparison context.",
+      "positiveExamples": [
+        "Ask to present latex form using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "transform-type.presentLatexForm",
+        "law.presentLatexForm",
+        "kp.equation-laws"
+      ],
+      "supportState": "available"
+    },
+    {
+      "operationId": "kp.equation.compare-latex-forms",
+      "familyId": "kp.equation-laws",
+      "friendlyName": "Compare latex forms",
+      "aliases": [
+        "kp.equation.compare-latex-forms"
+      ],
+      "meaning": "Relate two or more authored forms through one semantic comparison object.",
+      "positiveExamples": [
+        "Ask to compare latex forms using the declared semantic roles."
+      ],
+      "counterexamples": [
+        "Do not select this operation when its declared roles or required evidence are absent."
+      ],
+      "requiredEvidenceIds": [
+        "transform-type.compareLatexForms",
+        "law.compareLatexForms",
+        "kp.equation-laws"
+      ],
+      "supportState": "available"
+    },
+    {
       "operationId": "kp.semantic-motion.log-product",
       "familyId": "equation-pack.homomorphic-crossover",
       "friendlyName": "Log product",
@@ -946,46 +1280,6 @@
       ],
       "requiredEvidenceIds": [
         "assumption.equality.multiply-operand-nonzero"
-      ],
-      "supportState": "available"
-    },
-    {
-      "operationId": "kp.algebra.apply-natural-log-both-sides",
-      "familyId": "kp.both-sides",
-      "friendlyName": "Apply natural log both sides",
-      "aliases": [
-        "kp.algebra.apply-natural-log-both-sides"
-      ],
-      "meaning": "Apply the natural logarithm to both positive sides of an equation.",
-      "positiveExamples": [
-        "Ask to apply natural log both sides using the declared semantic roles."
-      ],
-      "counterexamples": [
-        "Do not select this operation when its declared roles or required evidence are absent."
-      ],
-      "requiredEvidenceIds": [
-        "assumption.log-exponent.power-positive",
-        "assumption.log-exponent.right-positive",
-        "assumption.log-exponent.log-injective"
-      ],
-      "supportState": "available"
-    },
-    {
-      "operationId": "kp.algebra.divide-both-sides-by-log-base",
-      "familyId": "kp.both-sides",
-      "friendlyName": "Divide both sides by log base",
-      "aliases": [
-        "kp.algebra.divide-both-sides-by-log-base"
-      ],
-      "meaning": "Divide both sides by the same verified nonzero logarithm of the base.",
-      "positiveExamples": [
-        "Ask to divide both sides by log base using the declared semantic roles."
-      ],
-      "counterexamples": [
-        "Do not select this operation when its declared roles or required evidence are absent."
-      ],
-      "requiredEvidenceIds": [
-        "assumption.log-exponent.log-base-nonzero"
       ],
       "supportState": "available"
     },
@@ -1152,8 +1446,16 @@
       "operationId": "kp.algebra.divide-both-sides-by-log-base"
     },
     {
+      "alias": "kp.algebra.extract-log-power-exponent",
+      "operationId": "kp.algebra.extract-log-power-exponent"
+    },
+    {
       "alias": "kp.algebra.factor-common-term",
       "operationId": "kp.algebra.factor-common-term"
+    },
+    {
+      "alias": "kp.algebra.introduce-unit-factor",
+      "operationId": "kp.algebra.introduce-unit-factor"
     },
     {
       "alias": "kp.algebra.lower-exponent",
@@ -1212,6 +1514,22 @@
       "operationId": "kp.algebra.wrap-function"
     },
     {
+      "alias": "kp.arithmetic.add",
+      "operationId": "kp.arithmetic.add"
+    },
+    {
+      "alias": "kp.arithmetic.divide",
+      "operationId": "kp.arithmetic.divide"
+    },
+    {
+      "alias": "kp.arithmetic.multiply",
+      "operationId": "kp.arithmetic.multiply"
+    },
+    {
+      "alias": "kp.arithmetic.subtract",
+      "operationId": "kp.arithmetic.subtract"
+    },
+    {
       "alias": "kp.core.copy",
       "operationId": "kp.core.copy"
     },
@@ -1262,6 +1580,14 @@
     {
       "alias": "kp.core.wrap",
       "operationId": "kp.core.wrap"
+    },
+    {
+      "alias": "kp.equation.compare-latex-forms",
+      "operationId": "kp.equation.compare-latex-forms"
+    },
+    {
+      "alias": "kp.equation.present-latex-form",
+      "operationId": "kp.equation.present-latex-form"
     },
     {
       "alias": "kp.semantic-motion.absorb-additive-identity",
@@ -1320,12 +1646,36 @@
       "operationId": "kp.semantic-motion.substitute-value"
     },
     {
+      "alias": "operation.arithmetic.evaluate-real-root.v1",
+      "operationId": "operation.arithmetic.evaluate-real-root.v1"
+    },
+    {
+      "alias": "operation.equation.apply-inverse-power.v1",
+      "operationId": "operation.equation.apply-inverse-power.v1"
+    },
+    {
+      "alias": "operation.equation.exponential-difference-to-quotient.v1",
+      "operationId": "operation.equation.exponential-difference-to-quotient.v1"
+    },
+    {
+      "alias": "operation.equation.exponential-sum-to-product.v1",
+      "operationId": "operation.equation.exponential-sum-to-product.v1"
+    },
+    {
+      "alias": "operation.equation.finite-binder-expand.v1",
+      "operationId": "operation.equation.finite-binder-expand.v1"
+    },
+    {
       "alias": "operation.equation.log-product-decomposition.v1",
       "operationId": "kp.semantic-motion.log-product"
     },
     {
       "alias": "operation.equation.log-quotient-fusion.v1",
       "operationId": "kp.semantic-motion.quotient"
+    },
+    {
+      "alias": "operation.root.compound-carrier-normalization",
+      "operationId": "operation.root.compound-carrier-normalization"
     },
     {
       "alias": "operation.wrap-function.v1",

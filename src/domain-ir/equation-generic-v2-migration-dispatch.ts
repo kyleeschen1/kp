@@ -9,6 +9,8 @@ import { compileKpGeneratedExponentMigrationV2 } from
   "./generated-exponent-migration-v2.ts";
 import { compileKpLinearOperationMigrationV2 } from
   "./linear-operation-migration-v2.ts";
+import { compileKpTerminalEquationMigrationV2 } from
+  "./terminal-equation-migration-v2.ts";
 
 type Compiler = (animation: KpAnimationAsset) =>
   KpEquationAssetMigrationV2;
@@ -38,6 +40,22 @@ const compilers = new Map<string, Compiler>([
   ].map((assetId): [string, Compiler] => [
     assetId,
     compileKpFractionRootMigrationV2
+  ]),
+  ...[
+    "animation.comparison.jacobian-hessian",
+    "animation.comparison.linear-solve-programming",
+    "animation.generated.calculus.derivative.sum-rule-polynomial",
+    "animation.generated.calculus.integral.power-rule-quadratic",
+    "animation.generated.linear-algebra.dot-product.three-vector",
+    "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+    "animation.generated.linear-algebra.matrix-vector.two-by-two",
+    "animation.generated.substitute-three",
+    "animation.inequality.sign-flip.basic",
+    "animation.sample.fourier-transform-pair",
+    "animation.sample.fundamental-theorem-calculus"
+  ].map((assetId): [string, Compiler] => [
+    assetId,
+    compileKpTerminalEquationMigrationV2
   ])
 ]);
 const cache = new WeakMap<KpAnimationAsset, KpEquationAssetMigrationV2>();

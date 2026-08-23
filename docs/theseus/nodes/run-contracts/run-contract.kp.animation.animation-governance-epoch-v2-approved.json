@@ -208,7 +208,8 @@
     {
       "id": "migrate-binders-matrices",
       "title": "migrate-binders-matrices",
-      "status": "planned"
+      "summary": "Terminal equation families now compile through data-driven governance v2 protocols, invalid diagnostic authority is explicit, duplicate operation projections are removed, and all focused, architecture, and type checks pass.",
+      "status": "complete"
     },
     {
       "id": "cross-domain-gateway",

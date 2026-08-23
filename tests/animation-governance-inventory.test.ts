@@ -17,6 +17,9 @@ import {
 import {
   kpEquationGovernanceV2MigrationDeclarations
 } from "../src/domain-ir/equation-governance-v2-migrations.ts";
+import {
+  kpEquationGovernanceV2Classifications
+} from "../src/domain-ir/equation-governance-v2-classifications.ts";
 
 function inventory() {
   const descriptors = createKpEditorAnimationLibrary();
@@ -50,9 +53,14 @@ test("distinguishes migrated equation governance from explicit compatibility", (
   const migratedIds = new Set(
     kpEquationGovernanceV2MigrationDeclarations.map(({ assetId }) => assetId)
   );
+  const classifiedIds = new Set(
+    kpEquationGovernanceV2Classifications.map(({ assetId }) => assetId)
+  );
   const migrated = equations.filter(({ assetId }) => migratedIds.has(assetId));
   const compatibility = equations.filter(({ assetId }) =>
-    !migratedIds.has(assetId));
+    !migratedIds.has(assetId) && !classifiedIds.has(assetId));
+  const classified = equations.filter(({ assetId }) =>
+    classifiedIds.has(assetId));
   assert.ok(equations.length > 0);
   assert.equal(migrated.length, migratedIds.size);
   assert.equal(migrated.every(({ bypasses, typography }) =>
@@ -65,6 +73,10 @@ test("distinguishes migrated equation governance from explicit compatibility", (
   assert.equal(compatibility.every(({ bypasses }) =>
     bypasses.includes("equation-grammar-v2-missing") &&
     bypasses.includes("typography-policy-implicit")
+  ), true);
+  assert.equal(classified.every(({ bypasses }) =>
+    bypasses.includes("diagnostic-equation-authority-rejected") &&
+    !bypasses.includes("equation-grammar-v2-missing")
   ), true);
   assert.equal(equations.every(({ renderer }) =>
     renderer.capabilityIds.length > 0 && renderer.adapterIds.length > 0

@@ -119,6 +119,58 @@ readonly KpEquationGovernanceV2MigrationDeclaration[] = Object.freeze([
     [
       "animation.generated.radical.square-root-as-power",
       "editor-animation-surface.equation.katex"
+    ],
+    [
+      "animation.comparison.jacobian-hessian",
+      "editor-animation-surface.equation.katex"
+    ],
+    [
+      "animation.comparison.linear-solve-programming",
+      "editor-animation-surface.equation.katex"
+    ],
+    [
+      "animation.equation.finite-product-expansion.v1",
+      "editor-animation-surface.finite-product-expansion.canonical-native-katex"
+    ],
+    [
+      "animation.equation.finite-sum-expansion.v1",
+      "editor-animation-surface.finite-sum-expansion.canonical-native-katex"
+    ],
+    [
+      "animation.generated.calculus.derivative.sum-rule-polynomial",
+      "editor-animation-surface.equation.katex"
+    ],
+    [
+      "animation.generated.calculus.integral.power-rule-quadratic",
+      "editor-animation-surface.equation.katex"
+    ],
+    [
+      "animation.generated.linear-algebra.dot-product.three-vector",
+      "editor-animation-surface.equation.katex"
+    ],
+    [
+      "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+      "editor-animation-surface.equation.katex"
+    ],
+    [
+      "animation.generated.linear-algebra.matrix-vector.two-by-two",
+      "editor-animation-surface.equation.katex"
+    ],
+    [
+      "animation.generated.substitute-three",
+      "editor-animation-surface.equation.katex"
+    ],
+    [
+      "animation.inequality.sign-flip.basic",
+      "editor-animation-surface.equation.katex"
+    ],
+    [
+      "animation.sample.fourier-transform-pair",
+      "editor-animation-surface.equation.katex"
+    ],
+    [
+      "animation.sample.fundamental-theorem-calculus",
+      "editor-animation-surface.equation.katex"
     ]
   ].map(([assetId, adapterId]) => structuralDeclaration(
     assetId!,

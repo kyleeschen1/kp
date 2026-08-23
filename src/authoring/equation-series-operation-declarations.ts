@@ -153,12 +153,27 @@ export function createKpEquationSeriesOperationRegistry(
   });
 }
 
+const promotedExtensionDeclarations =
+  createKpHomomorphicCrossoverAuthoringOperations().map(
+    promotedExtensionDeclaration
+  );
+const promotedExtensionIds = new Set<string>(promotedExtensionDeclarations.map(
+  ({ operationId }) => operationId
+));
+const extensionIds = new Set<string>(extensionOperationRegistrations.map(
+  ({ id }) => id
+));
 const existingOperationDeclarations = [
-    ...kpCanonicalOperationRegistry.entries.map(canonicalDeclaration),
-    ...extensionOperationRegistrations.map(extensionDeclaration),
-    ...createKpHomomorphicCrossoverAuthoringOperations().map(
-      promotedExtensionDeclaration
-    )
+    // Specialized authoring projections replace a canonical catalogue view;
+    // they do not create a second authority for the same operation identity.
+    ...kpCanonicalOperationRegistry.entries
+      .filter(({ id }) => !extensionIds.has(id) &&
+        !promotedExtensionIds.has(id))
+      .map(canonicalDeclaration),
+    ...extensionOperationRegistrations
+      .filter(({ id }) => !promotedExtensionIds.has(id))
+      .map(extensionDeclaration),
+    ...promotedExtensionDeclarations
   ];
 
 const bothSidesByOperationId = new Map(
@@ -168,9 +183,23 @@ const bothSidesByOperationId = new Map(
   ])
 );
 
+const specializedGovernedDeclarations = [
+  logarithmBaseDeclaration(),
+  fractionEquivalenceDeclaration(),
+  commonDenominatorDeclaration(),
+  ...commonDenominatorAliasDeclarations(),
+  likeDenominatorDeclaration(),
+  commonDenominatorProductEvaluationDeclaration()
+];
+const specializedGovernedIds = new Set(specializedGovernedDeclarations.map(
+  ({ operationId }) => operationId
+));
+
 export const kpEquationSeriesOperationRegistry =
   createKpEquationSeriesOperationRegistry([
-    ...existingOperationDeclarations.map((entry) => {
+    ...existingOperationDeclarations
+      .filter(({ operationId }) => !specializedGovernedIds.has(operationId))
+      .map((entry) => {
       const bothSides = bothSidesByOperationId.get(entry.operationId);
       return bothSides === undefined ? entry : {
         ...entry,
@@ -196,12 +225,7 @@ export const kpEquationSeriesOperationRegistry =
         (entry) => entry.operationId === operationId
       ))
       .map(bothSidesDeclaration),
-    logarithmBaseDeclaration(),
-    fractionEquivalenceDeclaration(),
-    commonDenominatorDeclaration(),
-    ...commonDenominatorAliasDeclarations(),
-    likeDenominatorDeclaration(),
-    commonDenominatorProductEvaluationDeclaration()
+    ...specializedGovernedDeclarations
   ]);
 
 function canonicalDeclaration(
