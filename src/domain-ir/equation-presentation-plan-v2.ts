@@ -24,6 +24,10 @@ import {
   type KpEquationTransitionTransitIntentV2,
   type KpEquationTransitionTransitObligationsV2
 } from "./equation-transit-obligations-v2.ts";
+import {
+  isKpVerifiedEquationEvaluationFamilyCertificateV2,
+  type KpVerifiedEquationEvaluationFamilyCertificateV2
+} from "./equation-evaluation-family-certificate-v2.ts";
 
 export const kpEquationPresentationPlanV2SchemaVersion =
   "kp.equation-presentation-plan.v2" as const;
@@ -49,6 +53,8 @@ export interface KpCompiledEquationPresentationTransitionV2<
   readonly semanticOperation: KpResolvedEquationTransitionOperationV2;
   readonly evaluationAuthority?:
     KpResolvedEquationEvaluationAuthorityV2 | undefined;
+  readonly evaluationFamilyCertificate?:
+    KpVerifiedEquationEvaluationFamilyCertificateV2 | undefined;
   readonly projection: KpResolvedEquationProjectionChoreographyV2;
   readonly typography: KpResolvedEquationTypographyV2;
   readonly transit: KpEquationTransitionTransitObligationsV2;
@@ -78,6 +84,7 @@ export interface KpEquationPresentationPlanDiagnosticV2 {
     | "presentation-plan.uncompiled-grammar"
     | "presentation-plan.operation"
     | "presentation-plan.evaluation"
+    | "presentation-plan.evaluation-family-certificate"
     | "presentation-plan.projection"
     | "presentation-plan.typography"
     | "presentation-plan.transit"
@@ -110,6 +117,8 @@ export function compileKpEquationPresentationPlanV2<
   readonly transitIntents?:
     readonly KpEquationTransitionTransitIntentV2[] | undefined;
   readonly domainPayloads?: readonly Payload[] | undefined;
+  readonly evaluationFamilyCertificates?:
+    readonly KpVerifiedEquationEvaluationFamilyCertificateV2[] | undefined;
 }): KpEquationPresentationPlanCompilationV2<Payload> {
   if (!isKpCompiledEquationGrammarV2(input.grammar)) {
     return repair("presentation-plan.uncompiled-grammar",
@@ -126,6 +135,17 @@ export function compileKpEquationPresentationPlanV2<
   if (evaluations.status !== "resolved") {
     return repair("presentation-plan.evaluation",
       evaluations.diagnostics[0]?.message ?? "Evaluation resolution failed.");
+  }
+  const evaluationFamilyCertificateDiagnostics =
+    validateEvaluationFamilyCertificates(
+      evaluations.evaluations,
+      input.evaluationFamilyCertificates ?? []
+    );
+  if (evaluationFamilyCertificateDiagnostics.length > 0) {
+    return Object.freeze({
+      status: "repair-required" as const,
+      diagnostics: Object.freeze(evaluationFamilyCertificateDiagnostics)
+    });
   }
   const projections = resolveKpEquationProjectionChoreographiesV2({
     grammar: input.grammar,
@@ -167,6 +187,10 @@ export function compileKpEquationPresentationPlanV2<
   const evaluationsByTransition = new Map(
     evaluations.evaluations.map((entry) => [entry.transitionId, entry])
   );
+  const familyCertificateByTransformation = new Map(
+    (input.evaluationFamilyCertificates ?? []).map((certificate) =>
+      [certificate.transformationId, certificate])
+  );
   const projectionsByTransition = new Map(
     projections.choreography.transitions.map((entry) =>
       [entry.transitionId, entry])
@@ -183,6 +207,7 @@ export function compileKpEquationPresentationPlanV2<
     const semanticOperation = operationsByTransition.get(transition.id)!;
     const projection = projectionsByTransition.get(transition.id)!;
     const transitObligations = transitByTransition.get(transition.id)!;
+    const evaluationAuthority = evaluationsByTransition.get(transition.id);
     if (projection.semanticOperation !== semanticOperation ||
         transitObligations.semanticOperation !== semanticOperation) {
       throw new Error(
@@ -194,9 +219,19 @@ export function compileKpEquationPresentationPlanV2<
       sourceStateId: transition.sourceStateId,
       targetStateId: transition.targetStateId,
       semanticOperation,
-      ...(evaluationsByTransition.get(transition.id) === undefined
+      ...(evaluationAuthority === undefined
         ? {}
-        : { evaluationAuthority: evaluationsByTransition.get(transition.id) }),
+        : { evaluationAuthority }),
+      ...(familyCertificateByTransformation.get(
+        semanticOperation.transformationId
+      ) === undefined
+        ? {}
+        : {
+            evaluationFamilyCertificate:
+              familyCertificateByTransformation.get(
+                semanticOperation.transformationId
+              )
+          }),
       projection,
       typography: typographyByTransition.get(transition.id)!,
       transit: transitObligations,
@@ -221,6 +256,54 @@ export function compileKpEquationPresentationPlanV2<
     plan,
     diagnostics: Object.freeze([]) as readonly []
   });
+}
+
+function validateEvaluationFamilyCertificates(
+  evaluations: readonly KpResolvedEquationEvaluationAuthorityV2[],
+  certificates:
+    readonly KpVerifiedEquationEvaluationFamilyCertificateV2[]
+): KpEquationPresentationPlanDiagnosticV2[] {
+  const diagnostics: KpEquationPresentationPlanDiagnosticV2[] = [];
+  const transformationIds = new Set<string>();
+  certificates.forEach((certificate) => {
+    if (!isKpVerifiedEquationEvaluationFamilyCertificateV2(certificate)) {
+      diagnostics.push({
+        code: "presentation-plan.evaluation-family-certificate",
+        message:
+          "Equation presentation plans require compiler-minted evaluation-family certificates."
+      });
+      return;
+    }
+    if (transformationIds.has(certificate.transformationId)) {
+      diagnostics.push({
+        code: "presentation-plan.evaluation-family-certificate",
+        message:
+          `Duplicate evaluation-family certificate for ${certificate.transformationId}.`
+      });
+      return;
+    }
+    transformationIds.add(certificate.transformationId);
+    const authority = evaluations.find((candidate) =>
+      candidate.transformationId === certificate.transformationId
+    );
+    if (
+      authority === undefined ||
+      authority.authorityId !== certificate.authorityId ||
+      authority.operationId !== certificate.operationId ||
+      authority.presentationAuthority.kind !==
+        "registered-operation-evaluation" ||
+      authority.presentationAuthority.familyProfileId !==
+        certificate.familyProfile.id
+    ) {
+      diagnostics.push({
+        code: "presentation-plan.evaluation-family-certificate",
+        transitionId: authority?.transitionId,
+        message:
+          `Evaluation-family certificate ${certificate.transformationId} does not match its resolved governance authority.`
+      });
+    }
+  });
+  return diagnostics;
 }
 
 export function isKpCompiledEquationPresentationPlanV2(

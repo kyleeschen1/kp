@@ -9,6 +9,9 @@ import {
   compileKpEquationEvaluationFamilyCertificateV2,
   isKpVerifiedEquationEvaluationFamilyCertificateV2
 } from "../src/domain-ir/equation-evaluation-family-certificate-v2.ts";
+import {
+  compileKpEquationPresentationPlanV2
+} from "../src/domain-ir/equation-presentation-plan-v2.ts";
 
 const animationId =
   "animation.generated.calculus.derivative.power-rule-x-cubed";
@@ -25,11 +28,11 @@ function derivative() {
     ({ semanticOperation }) =>
       semanticOperation.transformationId === transformation.id
   )!.evaluationAuthority!;
-  return { animation, transformation, authority };
+  return { animation, transformation, migration, authority };
 }
 
 test("derivative difference receives one compiler-minted family certificate", () => {
-  const { animation, transformation, authority } = derivative();
+  const { animation, transformation, migration, authority } = derivative();
   const result = compileKpEquationEvaluationFamilyCertificateV2({
     bundle: animation.bundle,
     transformation,
@@ -50,6 +53,16 @@ test("derivative difference receives one compiler-minted family certificate", ()
   assert.equal(
     result.certificate.topologyCertificate.topology,
     "contributors-create-result"
+  );
+  const presentation = compileKpEquationPresentationPlanV2({
+    grammar: migration.grammar,
+    evaluationFamilyCertificates: [result.certificate]
+  });
+  assert.equal(presentation.status, "compiled");
+  if (presentation.status !== "compiled") return;
+  assert.strictEqual(
+    presentation.plan.transitions[1]?.evaluationFamilyCertificate,
+    result.certificate
   );
 });
 

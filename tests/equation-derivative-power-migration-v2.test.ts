@@ -8,6 +8,9 @@ import {
 import {
   requireKpGenericEquationMigrationV2
 } from "../src/domain-ir/equation-generic-v2-migration-dispatch.ts";
+import {
+  isKpVerifiedEquationEvaluationFamilyCertificateV2
+} from "../src/domain-ir/equation-evaluation-family-certificate-v2.ts";
 
 const animationId =
   "animation.generated.calculus.derivative.power-rule-x-cubed";
@@ -42,6 +45,17 @@ test("derivative power v2 preserves its two authored semantic beats", () => {
   assert.equal(
     migration.presentationPlan.transitions[1]?.evaluationAuthority?.authorityId,
     "kp.presentation.operation-evaluation.difference.authority-v2"
+  );
+  const certificate = migration.presentationPlan.transitions[1]
+    ?.evaluationFamilyCertificate;
+  assert.equal(
+    isKpVerifiedEquationEvaluationFamilyCertificateV2(certificate),
+    true
+  );
+  assert.equal(certificate?.releaseMaturity, "review-stage");
+  assert.equal(
+    certificate?.familyProfile.rendererProfileId,
+    "kp.rendering.native-katex.operation-evaluation.contributor-fusion.v1"
   );
 });
 

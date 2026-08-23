@@ -183,6 +183,20 @@
       "scope": "standard",
       "checkedAt": "2026-08-23T23:26:28.081Z",
       "notes": "Family-certificate compiler preserves application, test, Svelte, and domain type boundaries."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test derivative migration presentation and family certificate suites",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T23:30:55.063Z",
+      "notes": "Nine presentation checks and six final focused checks pass; the plan retains the exact certificate object and the first derivative beat is unchanged."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-23T23:30:56.356Z",
+      "notes": "Presentation-plan certificate propagation preserves all TypeScript, Svelte, and domain boundaries."
     }
   ],
   "progress": {

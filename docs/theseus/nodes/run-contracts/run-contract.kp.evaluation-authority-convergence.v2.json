@@ -99,7 +99,8 @@
     {
       "id": "kp.eval-auth.s09",
       "title": "presentation-plan",
-      "status": "planned"
+      "summary": "Governance-v2 presentation transitions can carry compiler-minted family certificates by exact object identity; the derivative evaluation transition now does so while its first beat remains unchanged.",
+      "status": "complete"
     },
     {
       "id": "kp.eval-auth.s10",

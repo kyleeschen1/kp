@@ -6,6 +6,12 @@ import {
   type KpEquationAssetMigrationV2,
   type KpEquationAssetMigrationOperationV2
 } from "./equation-asset-migration-v2.ts";
+import {
+  compileKpEquationEvaluationFamilyCertificateV2
+} from "./equation-evaluation-family-certificate-v2.ts";
+import {
+  compileKpEquationPresentationPlanV2
+} from "./equation-presentation-plan-v2.ts";
 
 const derivativePowerAssetId =
   "animation.generated.calculus.derivative.power-rule-x-cubed";
@@ -70,7 +76,38 @@ export function compileKpDerivativePowerMigrationV2(
       projectionIntent: "replacement" as const
     })
   ];
-  return compileKpEquationAssetMigrationV2({ animation, operations });
+  const migration = compileKpEquationAssetMigrationV2({
+    animation,
+    operations
+  });
+  const evaluationAuthority = migration.presentationPlan.transitions.find(
+    ({ semanticOperation }) =>
+      semanticOperation.transformationId === evaluation.id
+  )?.evaluationAuthority;
+  if (evaluationAuthority === undefined) {
+    throw new Error(`${evaluation.id} lost evaluation authority.`);
+  }
+  const family = compileKpEquationEvaluationFamilyCertificateV2({
+    bundle: animation.bundle,
+    transformation: evaluation,
+    authority: evaluationAuthority
+  });
+  if (family.status !== "certified") {
+    throw new Error(family.diagnostics.map(({ message }) => message).join("\n"));
+  }
+  const presentation = compileKpEquationPresentationPlanV2({
+    grammar: migration.grammar,
+    evaluationFamilyCertificates: [family.certificate]
+  });
+  if (presentation.status !== "compiled") {
+    throw new Error(
+      presentation.diagnostics.map(({ message }) => message).join("\n")
+    );
+  }
+  return Object.freeze({
+    ...migration,
+    presentationPlan: presentation.plan
+  });
 }
 
 function requiredTransformation(
