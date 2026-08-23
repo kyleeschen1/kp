@@ -7,9 +7,14 @@
       "sourcePath": "src/editor/equation-transition-motifs.ts",
       "status": "live-compatibility",
       "surfaceAnimationIds": [
+        "animation.algebra.exponential-homomorphism.difference-to-quotient",
+        "animation.algebra.radical.compound-carrier-normalization",
+        "animation.algebra.radical.solve-x-squared-nine",
         "animation.comparison.jacobian-hessian",
         "animation.comparison.linear-solve-programming",
-        "animation.generated.add-zero",
+        "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+        "animation.equation.fraction-equivalence.compact.v1",
+        "animation.equation.fraction-equivalence.v1",
         "animation.generated.calculus.derivative.power-rule-x-cubed",
         "animation.generated.calculus.derivative.sum-rule-polynomial",
         "animation.generated.calculus.integral.power-rule-quadratic",
@@ -54,9 +59,14 @@
       "sourcePath": "src/editor/equation-stage-frame.ts",
       "status": "live-compatibility",
       "surfaceAnimationIds": [
+        "animation.algebra.exponential-homomorphism.difference-to-quotient",
+        "animation.algebra.radical.compound-carrier-normalization",
+        "animation.algebra.radical.solve-x-squared-nine",
         "animation.comparison.jacobian-hessian",
         "animation.comparison.linear-solve-programming",
-        "animation.generated.add-zero",
+        "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+        "animation.equation.fraction-equivalence.compact.v1",
+        "animation.equation.fraction-equivalence.v1",
         "animation.generated.calculus.derivative.power-rule-x-cubed",
         "animation.generated.calculus.derivative.sum-rule-polynomial",
         "animation.generated.calculus.integral.power-rule-quadratic",
@@ -98,9 +108,14 @@
       "sourcePath": "src/editor/equation-surface-adapter.ts",
       "status": "live-compatibility",
       "surfaceAnimationIds": [
+        "animation.algebra.exponential-homomorphism.difference-to-quotient",
+        "animation.algebra.radical.compound-carrier-normalization",
+        "animation.algebra.radical.solve-x-squared-nine",
         "animation.comparison.jacobian-hessian",
         "animation.comparison.linear-solve-programming",
-        "animation.generated.add-zero",
+        "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+        "animation.equation.fraction-equivalence.compact.v1",
+        "animation.equation.fraction-equivalence.v1",
         "animation.generated.calculus.derivative.power-rule-x-cubed",
         "animation.generated.calculus.derivative.sum-rule-polynomial",
         "animation.generated.calculus.integral.power-rule-quadratic",
@@ -157,9 +172,14 @@
       "sourcePath": "src/editor/equation-surface-adapter.ts",
       "status": "live-compatibility",
       "surfaceAnimationIds": [
+        "animation.algebra.exponential-homomorphism.difference-to-quotient",
+        "animation.algebra.radical.compound-carrier-normalization",
+        "animation.algebra.radical.solve-x-squared-nine",
         "animation.comparison.jacobian-hessian",
         "animation.comparison.linear-solve-programming",
-        "animation.generated.add-zero",
+        "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+        "animation.equation.fraction-equivalence.compact.v1",
+        "animation.equation.fraction-equivalence.v1",
         "animation.generated.calculus.derivative.power-rule-x-cubed",
         "animation.generated.calculus.derivative.sum-rule-polynomial",
         "animation.generated.calculus.integral.power-rule-quadratic",
@@ -216,9 +236,14 @@
       "sourcePath": "src/editor/semantic-equation-player-adapter.ts",
       "status": "live-compatibility",
       "surfaceAnimationIds": [
+        "animation.algebra.exponential-homomorphism.difference-to-quotient",
+        "animation.algebra.radical.compound-carrier-normalization",
+        "animation.algebra.radical.solve-x-squared-nine",
         "animation.comparison.jacobian-hessian",
         "animation.comparison.linear-solve-programming",
-        "animation.generated.add-zero",
+        "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+        "animation.equation.fraction-equivalence.compact.v1",
+        "animation.equation.fraction-equivalence.v1",
         "animation.generated.calculus.derivative.power-rule-x-cubed",
         "animation.generated.calculus.derivative.sum-rule-polynomial",
         "animation.generated.calculus.integral.power-rule-quadratic",
@@ -261,7 +286,8 @@
       "surfaceAnimationIds": [
         "animation.operation-evaluation.five-plus-two",
         "animation.operation-evaluation.one-plus-two",
-        "animation.operation-evaluation.three-sixths"
+        "animation.operation-evaluation.three-sixths",
+        "animation.operation-evaluation.two-times-three"
       ],
       "sourceCallers": [
         "src/editor/operation-evaluation-surface-capability.ts"
@@ -318,6 +344,7 @@
       "sourcePath": "src/editor/log-product-surface-adapter.ts",
       "status": "live-canonical",
       "surfaceAnimationIds": [
+        "animation.algebra.log-product.equivalence-frame",
         "animation.algebra.log-product.product-to-sum",
         "animation.algebra.log-product.three-factors-to-sum"
       ],

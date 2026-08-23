@@ -43,18 +43,25 @@ test("createGeneratedProblemRegistryRecords summarizes generated algebra, calcul
     animationRowId:
       "animation-generated-calculus-derivative-power-rule-x-cubed",
     traceId: "trace.generated.calculus.derivative.power-rule-x-cubed",
-    objectCount: 2,
-    selectorCount: 7,
-    transformationCount: 1,
-    traceStepCount: 2,
+    objectCount: 3,
+    selectorCount: 12,
+    transformationCount: 2,
+    traceStepCount: 3,
     flashcardCount: 3,
     drillDownCount: 0,
     objectTypes: ["expression"],
-    transformationTypes: ["applyDerivativePowerRule"],
-    transformDefinitionIds: [
-      "definition.generated.calculus.derivative.power-rule"
+    transformationTypes: [
+      "applyDerivativePowerRule",
+      "simplifyConstantDifference"
     ],
-    lawIds: ["law.calculus.derivative.power-rule"],
+    transformDefinitionIds: [
+      "definition.generated.calculus.derivative.power-rule",
+      "definition.generated.linear-solve.simplify-constant-difference"
+    ],
+    lawIds: [
+      "law.calculus.derivative.power-rule",
+      "law.arithmetic.constant-difference"
+    ],
     flashcardKinds: ["predict-next", "cloze", "explain-transform"],
     searchFields: calculus?.searchFields ?? []
   });

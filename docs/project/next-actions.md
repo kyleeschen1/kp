@@ -1,23 +1,25 @@
 # KP Next Actions
 
-Last Updated: 2026-08-21
+Last Updated: 2026-08-23
 
 These are human-readable candidates. Theseus stores the executable versions
 with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
 
-The bounded TypeScript and Python extract-helper generation tranche is
-complete. There is one active next action:
+The animation-governance v2 epoch is complete at its final mandatory human
+checkpoint. There is one active next action:
 
-1. Propose one reversible finite sum/product binder exemplar. Keep scope,
-   bound-variable identity, index motion, and large-operator paint local to the
-   exemplar, then stop for human visual review before adding a second caller or
-   promoting a shared binder family.
+1. Visually review the flat-2D differentiation exemplar
+   `d/dx x^3 -> 3x^(3-1) -> 3x^2` at
+   `/?artifact=animation.generated.calculus.derivative.power-rule-x-cubed&playhead=0`.
+   Stop before adding a second caller or promoting a shared differentiation
+   family.
 
 Everything else is frozen reference or parked horizon:
 
 - the catalogue remains an internal laboratory and inventory;
+- the finite-sum/product binder tranche is complete and `Direct`;
 - the eigenvector attentional-surface work remains a mixed, paused experiment;
 - TypeScript and Python expose only the bounded extract-helper operation;
   arbitrary refactors, runtime execution, and variant artifact synthesis remain

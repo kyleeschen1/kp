@@ -156,6 +156,7 @@ test("the structural migration ledger names every compiled caller and existing e
     "animation.generated.cancellation.additive-inverses",
     "animation.generated.distribution.expand-a-sum",
     "animation.generated.distribution.factor-common-a",
+    "animation.generated.calculus.derivative.power-rule-x-cubed",
     "animation.generated.calculus.derivative.sum-rule-polynomial",
     "animation.generated.calculus.integral.power-rule-quadratic",
     "animation.generated.exponent.square-as-product",

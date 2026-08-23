@@ -76,6 +76,10 @@ test("successor reversal is historical decomposition, not a false inverse", () =
   const plan = canonicalReversePlanForTransformationType({
     transformType: "simplifyConstantDifference"
   });
+  assert.equal(
+    plan?.sourceOperationId,
+    "kp.algebra.simplify-constant-difference"
+  );
   assert.equal(plan?.choreographyKind, "decompose-successor");
   assert.equal(plan?.validity, "authored-history-only");
   assert.match(plan?.interpretation ?? "", /without exposing.*mathematical inverse/);

@@ -2,7 +2,8 @@
   "id": "run-contract.kp.animation.animation-governance-epoch-v2-approved",
   "kind": "run-contract",
   "title": "Animation Governance Epoch v2",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -220,7 +221,8 @@
     {
       "id": "derivative-release-checkpoint",
       "title": "derivative-release-checkpoint",
-      "status": "planned"
+      "summary": "Prepared the canonical derivative power-rule human checkpoint after migrating both authored beats through equation governance v2. Semantic state, Native KaTeX renderer, choreography, deterministic seek and rewind, and flat 2D presentation remain unchanged; focused, browser, preservation, and build checks pass. The release umbrella remains honestly red only on recorded pre-existing inference and broad-baseline debt, with no ceiling increase or governance regression. No second caller or family promotion was attempted.",
+      "status": "complete"
     }
   ]
 }

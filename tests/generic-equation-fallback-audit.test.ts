@@ -49,12 +49,12 @@ test("generated fallback audit classifies every generic and failed-stage path", 
   assert.equal(audit.entries.some(({ status }) => status === "unreachable"), false);
 });
 
-test("generic whole-equation fallback is live on 23 surfaces and not deletable", () => {
+test("generic whole-equation fallback is live on 28 surfaces and not deletable", () => {
   const audit = compileKpGenericEquationFallbackAudit(input);
   const fallback = audit.entries.find(
     ({ nodeId }) => nodeId === "fallback.generic-whole-equation"
   )!;
-  assert.equal(fallback.surfaceAnimationIds.length, 23);
+  assert.equal(fallback.surfaceAnimationIds.length, 28);
   assert.equal(fallback.status, "live-compatibility");
   assert.equal(fallback.retirementDecision, "retain-live");
   assert.ok(fallback.sourceCallers.length > 0);

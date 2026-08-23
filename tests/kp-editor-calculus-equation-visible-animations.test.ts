@@ -26,23 +26,33 @@ function frame(animationId: string, progress = 0.5) {
 }
 
 test("generated calculus equations expose exact derivative and integral transitions", () => {
-  const cases = [
-    [
-      "animation.generated.calculus.derivative.power-rule-x-cubed",
-      "\\frac{d}{dx}x^{3}",
-      "3x^{2}"
-    ]
-  ] as const;
+  const derivativeApplied = frame(
+    "animation.generated.calculus.derivative.power-rule-x-cubed",
+    0.25
+  );
+  assert.equal(
+    derivativeApplied.projection.transitions[0]?.source[0]?.latex,
+    "\\frac{d}{dx}x^{3}"
+  );
+  assert.equal(
+    derivativeApplied.projection.transitions[0]?.target[0]?.latex,
+    "3x^{3-1}"
+  );
+  assert.equal(derivativeApplied.motifs[0]?.kind, "derivative-power");
 
-  for (const [index, [animationId, source, target]] of cases.entries()) {
-    const visible = frame(animationId);
-    assert.equal(visible.projection.transitions[0]?.source[0]?.latex, source);
-    assert.equal(visible.projection.transitions[0]?.target[0]?.latex, target);
-    assert.equal(
-      visible.motifs[0]?.kind,
-      index === 0 ? "derivative-power" : "artifact-replace"
-    );
-  }
+  const derivativeResolved = frame(
+    "animation.generated.calculus.derivative.power-rule-x-cubed",
+    0.75
+  );
+  assert.equal(
+    derivativeResolved.projection.transitions[0]?.source[0]?.latex,
+    "3x^{3-1}"
+  );
+  assert.equal(
+    derivativeResolved.projection.transitions[0]?.target[0]?.latex,
+    "3x^{2}"
+  );
+  assert.equal(derivativeResolved.motifs[0]?.kind, "successor-synthesis");
 
   const distributed = frame(
     "animation.generated.calculus.derivative.sum-rule-polynomial",

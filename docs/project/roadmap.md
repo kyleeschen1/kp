@@ -63,11 +63,12 @@ universal renderer or semantic model. The accepted direction is recorded in
 
 Flat 2D is the canonical symbolic presentation. The bounded log-product
 material-depth experiment is preserved but deferred after human review; it is
-not a family-wide styling policy. The next repository slice is one reversible
-differentiation exemplar, beginning with
-`d/dx x^3 -> 3x^2`, followed by a human checkpoint. See
+not a family-wide styling policy. The animation-governance v2 epoch is complete
+at the mandatory human checkpoint for the reversible differentiation exemplar
+`d/dx x^3 -> 3x^(3-1) -> 3x^2`. Review that canonical Catalogue behavior before
+a second caller or family promotion. See
 `decisions/2026-08-23-flat-2d-baseline-and-deferred-symbolic-materiality.md`
-and `reviews/2026-08-23-flat-2d-post-materiality-next-step-review.md`.
+and `reviews/2026-08-23-animation-governance-epoch-v2-derivative-checkpoint.md`.
 
 ## One Active Lane
 
@@ -231,8 +232,9 @@ Only this repository sequence is active:
    the generated case ledger now keeps remaining per-case exemplar and
    generation gaps visible rather than hiding them behind the Direct label. See
    `decisions/2026-08-21-kp-root-rewrite-vocabulary.md`.
-31. **Post-root capability sequence:** TypeScript/Python refactors and the
-   finite-sum/product binder tranche are complete and `Direct`. The latest
+31. **Post-root capability sequence:** The TypeScript, Python, and Scheme
+   code-animation foundation is complete. The subsequent TypeScript/Python
+   refactors and finite-sum/product binder tranche are complete and `Direct`. The latest
    visual checkpoint keeps flat 2D canonical and selects one differentiation
    exemplar next, with integration as a distinct follow-on family. Bounded
    Graph3D remains queued as separate semantic-scene work rather than a
@@ -267,6 +269,14 @@ Only this repository sequence is active:
    Preserve the exemplar as internal evidence; do not revisit families or
    generalize its treatment. See
    `decisions/2026-08-23-flat-2d-baseline-and-deferred-symbolic-materiality.md`.
+36. **Animation governance epoch v2:** implementation complete at the final
+   mandatory human checkpoint. All valid equation assets now enter grammar v2;
+   graph, programming, diagram, and 3D assets share conformance evidence
+   without entering equation-shaped presentation; and the derivative exemplar
+   retains its explicit middle state under governed compilation. Review the
+   canonical Catalogue URL before a second differentiation caller, family
+   promotion, or integration work. See
+   `reviews/2026-08-23-animation-governance-epoch-v2-derivative-checkpoint.md`.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.

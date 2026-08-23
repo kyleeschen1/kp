@@ -137,6 +137,10 @@ readonly KpEquationGovernanceV2MigrationDeclaration[] = Object.freeze([
       "editor-animation-surface.finite-sum-expansion.canonical-native-katex"
     ],
     [
+      "animation.generated.calculus.derivative.power-rule-x-cubed",
+      "editor-animation-surface.equation.katex"
+    ],
+    [
       "animation.generated.calculus.derivative.sum-rule-polynomial",
       "editor-animation-surface.equation.katex"
     ],

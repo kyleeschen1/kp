@@ -107,7 +107,8 @@ test("registry remains unique after adding the finite binder family", () => {
     ),
     [
       "capability.equation.radical-inversion",
-      "capability.equation.finite-binder-expansion"
+      "capability.equation.finite-binder-expansion",
+      "capability.equation.differentiation-transformations"
     ]
   );
 });

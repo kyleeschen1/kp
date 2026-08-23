@@ -41,8 +41,12 @@ export function canonicalReversePlanForTransformationType(input: {
   const candidates = registry.entries.filter(
     (entry) => entry.sourceTransformType === input.transformType
   );
+  // Transform types are shared by generated algebra and direct arithmetic.
+  // Preserve the authored transformation authority instead of registry order.
   const entry = candidates.find((candidate) =>
     candidate.packId === "kp.semantic-motion"
+  ) ?? candidates.find((candidate) =>
+    candidate.packId === "kp.algebra"
   ) ?? candidates[0];
   return entry === undefined
     ? undefined

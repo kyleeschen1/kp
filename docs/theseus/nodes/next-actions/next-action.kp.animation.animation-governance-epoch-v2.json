@@ -2,7 +2,7 @@
   "id": "next-action.kp.animation.animation-governance-epoch-v2",
   "kind": "next-action",
   "title": "Converge animation governance through equation grammar v2",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
   "sourceRefs": [
     {
@@ -723,11 +723,53 @@
       "status": "failed",
       "scope": "standard",
       "checkedAt": "2026-08-23T19:11:16.086Z"
+    },
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "slice 30 derivative semantic and governance checkpoint",
+      "checkedAt": "2026-08-23T19:45:28.506Z",
+      "notes": "26 tests pass, including the two-beat v2 migration, explicit 3-1 middle state, case ledger, semantic lineage, direct seek, and rewind."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "slice 30 generated equation authority and preservation",
+      "checkedAt": "2026-08-23T19:45:29.482Z",
+      "notes": "11 tests pass; every equation endpoint, semantic authority, renderer, clock, sampled-frame path, and family evidence remains frozen."
+    },
+    {
+      "command": "npm run test:browser:differentiation-exemplar",
+      "status": "passed",
+      "scope": "slice 30 canonical Catalogue Chromium checkpoint",
+      "checkedAt": "2026-08-23T19:45:30.454Z",
+      "notes": "2 tests pass for flat glyph motion, explicit decrement, terminal settlement, and direct semantic restoration."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice 30 production build",
+      "checkedAt": "2026-08-23T19:45:31.422Z",
+      "notes": "Full typecheck, Svelte diagnostics, domain typecheck, publication freshness, and Vite production bundle pass."
+    },
+    {
+      "command": "npm run verify:equation:release",
+      "status": "failed",
+      "scope": "slice 30 repository-wide release umbrella",
+      "checkedAt": "2026-08-23T19:45:32.403Z",
+      "notes": "The command reaches green architecture, typecheck, semantic convergence, Svelte catalogue, direction ratchets, bundle boundary, publication freshness, and five browser capability checks, then remains red at the pre-existing strict inference ceiling. Current 91745 types and 149050 instantiations improve on the run-entry quarantine 93651 and 150979; no ceiling changed and no governance regression exists. A direct broad unit continuation passed 5678 of 5743; remaining failures include sandbox-only listen EPERM and pre-existing stale global inventories outside this bounded visual checkpoint."
+    },
+    {
+      "command": "npm run theseus -- workspace validate",
+      "status": "passed",
+      "scope": "slice 30 durable project memory",
+      "checkedAt": "2026-08-23T19:45:33.369Z",
+      "notes": "Workspace valid with 1055 nodes and 24924 events before final slice closeout."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 29 adds one renderer-neutral manifest, review, and dependency gateway for 17 graph, programming, diagram, and 3D assets; mixed equation segments stay isolated, and lazy bundle boundaries remain green. The known stale derivative preservation baseline remains assigned to slice 30."
+    "summary": "All 30 approved slices have executed. The derivative exemplar is at its mandatory human visual checkpoint; no second caller or motif promotion occurred. Focused release evidence is green, while the repository-wide release umbrella remains classified red on the pre-existing strict inference ceiling and unrelated global baseline debt."
   },
   "expectedLearning": [
     "Whether a common conformance gateway can make evolving principles retroactive without collapsing domain-specific renderer boundaries",

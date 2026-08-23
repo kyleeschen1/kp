@@ -184,7 +184,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.generated.calculus.derivative.power-rule-x-cubed",
     "packId": "generated-problems",
     "manifestId": "manifest.animation.generated.calculus.derivative.power-rule-x-cubed",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {

@@ -2,10 +2,14 @@
 
 Status: active
 Last Updated: 2026-08-23
-Current Next Action: visually review the reversible flat-2D differentiation
-exemplar `d/dx x^3 -> 3x^(3-1) -> 3x^2` at its canonical Catalogue URL. Its
-typed case ledger, focused browser contract, and generated coverage are ready;
-stop before a second caller or family promotion. The
+Current Next Action: visually review the reversible, governance-v2 flat-2D
+differentiation exemplar `d/dx x^3 -> 3x^(3-1) -> 3x^2` at
+`/?artifact=animation.generated.calculus.derivative.power-rule-x-cubed&playhead=0`.
+Its two semantic transitions, typed case ledger, browser contract, generated
+coverage, and release evidence are ready; stop before a second caller or
+family promotion. See
+`../reviews/2026-08-23-animation-governance-epoch-v2-derivative-checkpoint.md`.
+The
 finite-sum/product binder tranche is already complete and `Direct`; its
 closeout remains recorded in
 `../decisions/2026-08-22-finite-binder-boundary-handoff-and-schematic-expansion.md`.

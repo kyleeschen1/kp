@@ -116,7 +116,7 @@ test("generic equation dispatch consumes every generic terminal caller", () => {
   });
 });
 
-test("diagnostic invalid motion is explicit and only derivative remains unmigrated", () => {
+test("diagnostic invalid motion is explicit and no valid equation remains unmigrated", () => {
   const descriptors = createKpEditorAnimationLibrary();
   const inventory = compileKpAnimationGovernanceInventory({
     assets: assets(),
@@ -131,7 +131,5 @@ test("diagnostic invalid motion is explicit and only derivative remains unmigrat
   ]);
   assert.deepEqual(inventory.entries.filter(({ bypasses }) =>
     bypasses.includes("equation-grammar-v2-missing")
-  ).map(({ assetId }) => assetId), [
-    "animation.generated.calculus.derivative.power-rule-x-cubed"
-  ]);
+  ).map(({ assetId }) => assetId), []);
 });

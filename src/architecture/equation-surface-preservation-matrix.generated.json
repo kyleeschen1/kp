@@ -508,7 +508,7 @@
       },
       "migrationObligations": {
         "semantic": {
-          "assetFingerprint": "fnv1a32-7397e5ee",
+          "assetFingerprint": "fnv1a32-35034b7e",
           "objectIds": [
             "log-product.state.product",
             "log-product.state.sum",
@@ -2795,7 +2795,7 @@
         {
           "transformationId": "transform.generated.calculus.derivative.power-rule-x-cubed.apply-power-rule",
           "transformationType": "applyDerivativePowerRule",
-          "transformationFingerprint": "fnv1a32-c9083e0c",
+          "transformationFingerprint": "fnv1a32-7a6f1c1f",
           "source": [
             {
               "objectId": "expression.generated.calculus.derivative.power-rule-x-cubed.initial",
@@ -2806,10 +2806,31 @@
           ],
           "target": [
             {
+              "objectId": "expression.generated.calculus.derivative.power-rule-x-cubed.applied",
+              "objectType": "expression",
+              "title": "Power rule with explicit decrement",
+              "semanticFingerprint": "fnv1a32-2f8f8557"
+            }
+          ]
+        },
+        {
+          "transformationId": "transform.generated.calculus.derivative.power-rule-x-cubed.evaluate-exponent-decrement",
+          "transformationType": "simplifyConstantDifference",
+          "transformationFingerprint": "fnv1a32-54ba0d75",
+          "source": [
+            {
+              "objectId": "expression.generated.calculus.derivative.power-rule-x-cubed.applied",
+              "objectType": "expression",
+              "title": "Power rule with explicit decrement",
+              "semanticFingerprint": "fnv1a32-2f8f8557"
+            }
+          ],
+          "target": [
+            {
               "objectId": "expression.generated.calculus.derivative.power-rule-x-cubed.derived",
               "objectType": "expression",
-              "title": "After applying the power rule",
-              "semanticFingerprint": "fnv1a32-66ca4318"
+              "title": "After evaluating the exponent decrement",
+              "semanticFingerprint": "fnv1a32-8b6e9357"
             }
           ]
         }
@@ -2841,17 +2862,19 @@
       },
       "migrationObligations": {
         "semantic": {
-          "assetFingerprint": "fnv1a32-f830b872",
+          "assetFingerprint": "fnv1a32-854b341b",
           "objectIds": [
             "expression.generated.calculus.derivative.power-rule-x-cubed.initial",
+            "expression.generated.calculus.derivative.power-rule-x-cubed.applied",
             "expression.generated.calculus.derivative.power-rule-x-cubed.derived"
           ],
           "transformationIds": [
-            "transform.generated.calculus.derivative.power-rule-x-cubed.apply-power-rule"
+            "transform.generated.calculus.derivative.power-rule-x-cubed.apply-power-rule",
+            "transform.generated.calculus.derivative.power-rule-x-cubed.evaluate-exponent-decrement"
           ]
         },
         "endpoints": {
-          "fingerprint": "fnv1a32-89cb1d1c",
+          "fingerprint": "fnv1a32-4b403a0c",
           "authority": "labelled-semantic-stage"
         },
         "renderer": {
@@ -2869,6 +2892,7 @@
         "sampledFrames": {
           "samplerNodeIds": [
             "sampler.generic-semantic-token",
+            "sampler.linear-rearrangement",
             "sampler.derivative-power"
           ],
           "checkpoints": [
@@ -2886,35 +2910,38 @@
               ],
               "activeSemanticObjectIds": [
                 "expression.generated.calculus.derivative.power-rule-x-cubed.initial",
+                "expression.generated.calculus.derivative.power-rule-x-cubed.applied",
                 "expression.generated.calculus.derivative.power-rule-x-cubed.derived"
               ],
-              "envelopeFingerprint": "fnv1a32-3665f96d"
+              "envelopeFingerprint": "fnv1a32-e3bf6f33"
             },
             {
               "direction": "forward",
               "progress": 0.5,
-              "phaseId": "animation.generated.calculus.derivative.power-rule-x-cubed.forward.0",
+              "phaseId": "animation.generated.calculus.derivative.power-rule-x-cubed.forward.1",
               "activeTransformationIds": [
-                "transform.generated.calculus.derivative.power-rule-x-cubed.apply-power-rule"
+                "transform.generated.calculus.derivative.power-rule-x-cubed.evaluate-exponent-decrement"
               ],
               "activeSemanticObjectIds": [
                 "expression.generated.calculus.derivative.power-rule-x-cubed.initial",
+                "expression.generated.calculus.derivative.power-rule-x-cubed.applied",
                 "expression.generated.calculus.derivative.power-rule-x-cubed.derived"
               ],
-              "envelopeFingerprint": "fnv1a32-a897a64d"
+              "envelopeFingerprint": "fnv1a32-4b931422"
             },
             {
               "direction": "forward",
               "progress": 1,
-              "phaseId": "animation.generated.calculus.derivative.power-rule-x-cubed.forward.0",
+              "phaseId": "animation.generated.calculus.derivative.power-rule-x-cubed.forward.1",
               "activeTransformationIds": [
-                "transform.generated.calculus.derivative.power-rule-x-cubed.apply-power-rule"
+                "transform.generated.calculus.derivative.power-rule-x-cubed.evaluate-exponent-decrement"
               ],
               "activeSemanticObjectIds": [
                 "expression.generated.calculus.derivative.power-rule-x-cubed.initial",
+                "expression.generated.calculus.derivative.power-rule-x-cubed.applied",
                 "expression.generated.calculus.derivative.power-rule-x-cubed.derived"
               ],
-              "envelopeFingerprint": "fnv1a32-26ddaa44"
+              "envelopeFingerprint": "fnv1a32-063b732b"
             }
           ]
         }

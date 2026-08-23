@@ -1,6 +1,8 @@
 import type { KpAnimationAsset } from "../animation/asset.ts";
 import type { KpEquationAssetMigrationV2 } from
   "./equation-asset-migration-v2.ts";
+import { compileKpDerivativePowerMigrationV2 } from
+  "./derivative-power-migration-v2.ts";
 import { compileKpFunctionWrapMigrationV2 } from
   "./function-wrap-migration-v2.ts";
 import { compileKpFractionRootMigrationV2 } from
@@ -16,6 +18,10 @@ type Compiler = (animation: KpAnimationAsset) =>
   KpEquationAssetMigrationV2;
 
 const compilers = new Map<string, Compiler>([
+  [
+    "animation.generated.calculus.derivative.power-rule-x-cubed",
+    compileKpDerivativePowerMigrationV2
+  ],
   [
     "animation.generated.exponent.square-as-product",
     compileKpGeneratedExponentMigrationV2

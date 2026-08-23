@@ -3,33 +3,28 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const completedContract =
-  "run-contract.kp.cross-language-code-animation-foundation-v1";
-const infrastructureCloseout =
-  "2026-08-16-post-convergence-infrastructure-compression-closeout.md";
+  "run-contract.kp.animation.animation-governance-epoch-v2-approved";
+const checkpointReview =
+  "2026-08-23-animation-governance-epoch-v2-derivative-checkpoint.md";
 
-test("current project direction closes infrastructure compression and returns to visual review", async () => {
-  const [roadmap, activeThread, nextActions, entrypoint] = await Promise.all([
+test("current project direction holds the derivative governance checkpoint", async () => {
+  const [roadmap, activeThread, nextActions, entrypoint, checkpoint] = await Promise.all([
     readFile("docs/project/roadmap.md", "utf8"),
-    readFile("docs/project/threads/architecture-convergence.md", "utf8"),
+    readFile("docs/project/threads/animation-catalogue.md", "utf8"),
     readFile("docs/project/next-actions.md", "utf8"),
-    readFile("docs/project/authoring/llm-generation-entrypoint.md", "utf8")
+    readFile("docs/project/authoring/llm-generation-entrypoint.md", "utf8"),
+    readFile(`docs/project/reviews/${checkpointReview}`, "utf8")
   ]);
 
-  for (const currentSource of [roadmap, activeThread]) {
-    assert.match(
-      currentSource,
-      new RegExp(infrastructureCloseout.replaceAll(".", "\\."))
-    );
-  }
-  assert.match(roadmap, new RegExp(completedContract.replaceAll(".", "\\.")));
+  assert.match(roadmap, /threads\/animation-catalogue\.md/);
+  assert.match(roadmap, new RegExp(checkpointReview.replaceAll(".", "\\.")));
   assert.match(roadmap, /TypeScript, Python, and Scheme/i);
-  assert.match(nextActions, /binary log-product/i);
+  assert.match(activeThread, /derivative\.power-rule-x-cubed/);
+  assert.match(activeThread, /stop before a second caller/i);
+  assert.match(nextActions, /d\/dx x\^3 -> 3x\^\(3-1\) -> 3x\^2/i);
   assert.match(nextActions, /human review/i);
-  assert.match(nextActions, /wrap\/unwrap/i);
-  assert.doesNotMatch(
-    activeThread.slice(0, activeThread.indexOf("## Goal")),
-    /repair the bounded catalogue stage-reservation/i
-  );
+  assert.match(checkpoint, new RegExp(completedContract.replaceAll(".", "\\.")));
+  assert.match(checkpoint, /no renderer, timing, path, glyph inference/i);
   assert.match(entrypoint, /Minimal Successful Construction/);
   assert.match(entrypoint, /canonical-animation-public-api\.ts/);
   assert.match(entrypoint, /\{ request, authority \}/);
