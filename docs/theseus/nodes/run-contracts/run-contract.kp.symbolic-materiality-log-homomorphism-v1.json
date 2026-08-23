@@ -289,6 +289,20 @@
       "scope": "md16 synchronized generated cohort",
       "checkedAt": "2026-08-23T00:12:56.333Z",
       "notes": "48 focused tests passed; logarithm operators, enclosures, target relation, and connector share one reception pose throughout attachment."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "md17 exact native settlement",
+      "checkedAt": "2026-08-23T00:16:24.077Z",
+      "notes": "49 focused tests passed; source and target Native KaTeX ownership force no-depth projection, clearing material residue at both endpoints."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "md17 typed settlement boundary",
+      "checkedAt": "2026-08-23T00:16:36.678Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks passed."
     }
   ],
   "allowedWork": [
@@ -416,7 +430,8 @@
     {
       "id": "md17",
       "title": "Guarantee exact flat native settlement",
-      "status": "planned"
+      "summary": "Native source and target ownership now fail closed to no-depth projection, guaranteeing exact KaTeX endpoints with no residual contact treatment or endpoint correction.",
+      "status": "complete"
     },
     {
       "id": "md18",

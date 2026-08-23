@@ -30,7 +30,8 @@ import {
   syncKpEquationMaterialLayer
 } from "../rendering/equation-material-layer-dom.ts";
 import {
-  applyKpLogProductMaterialDepthToDom
+  applyKpLogProductMaterialDepthToDom,
+  resolveKpLogProductDepthModeForVisualOwner
 } from "../rendering/log-product-material-depth-dom.ts";
 import {
   kpLogProductSemanticMotionBundles
@@ -262,7 +263,10 @@ function applyFrame(
   );
   applyKpLogProductMaterialDepthToDom({
     stage: session.stage,
-    mode: materialMode.depthMode,
+    mode: resolveKpLogProductDepthModeForVisualOwner(
+      materialMode.depthMode,
+      ownership.visualOwner
+    ),
     poseByRoleId: sampleKpLogProductMaterialDepthChoreography({
       mode: materialMode.depthMode,
       choreography: frame

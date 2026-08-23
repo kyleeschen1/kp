@@ -8,6 +8,9 @@ import {
 import {
   kpCanonicalLogProductMaterialRoleBindings
 } from "../src/animation/log-product-material-depth-bindings.ts";
+import {
+  resolveKpLogProductDepthModeForVisualOwner
+} from "../src/rendering/log-product-material-depth-dom.ts";
 
 const factorBinding = kpCanonicalLogProductMaterialRoleBindings.find(
   ({ roleId }) => roleId === "role.material.log-product.persistent-factor"
@@ -53,6 +56,21 @@ test("flat and no-depth presentations add no transit-owner treatment", () => {
     mode: "no-depth",
     owners
   }), []);
+});
+
+test("native endpoint ownership suppresses every residual material pose", () => {
+  assert.equal(
+    resolveKpLogProductDepthModeForVisualOwner("material", "source-native"),
+    "no-depth"
+  );
+  assert.equal(
+    resolveKpLogProductDepthModeForVisualOwner("material", "target-native"),
+    "no-depth"
+  );
+  assert.equal(
+    resolveKpLogProductDepthModeForVisualOwner("material", "material-scene"),
+    "material"
+  );
 });
 
 test("the DOM projector does not read layout or rewrite motion properties", () => {

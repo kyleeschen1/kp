@@ -15,6 +15,15 @@ const CONTACT_SHADOW_MAX_OPACITY = 0.18;
 const CONTACT_SHADOW_REST_SCALE = 0.62;
 const CONTACT_SHADOW_ACTIVE_SCALE = 1;
 
+export function resolveKpLogProductDepthModeForVisualOwner(
+  mode: KpLogProductMaterialDepthMode,
+  visualOwner: "source-native" | "material-scene" | "target-native"
+): KpLogProductMaterialDepthMode {
+  // Native endpoints must remain exact KaTeX paint, even while the local
+  // experiment remains selected for subsequent intermediate frames.
+  return visualOwner === "material-scene" ? mode : "no-depth";
+}
+
 export function applyKpLogProductMaterialDepthToDom(input: {
   readonly stage: HTMLElement;
   readonly mode: KpLogProductMaterialDepthMode;
