@@ -422,6 +422,20 @@
       "scope": "md21 contract integrity",
       "checkedAt": "2026-08-23T01:03:06.661Z",
       "notes": "Validated 1051 nodes and 24694 events after completing the bounded performance and scoped-loading slice."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "md22 final semantic and lifecycle comparator",
+      "checkedAt": "2026-08-23T01:06:10.078Z",
+      "notes": "All 50 focused tests passed at the visual checkpoint boundary."
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "passed",
+      "scope": "md22 exact flat material and accessibility comparison",
+      "checkedAt": "2026-08-23T01:06:22.757Z",
+      "notes": "Generated the stable flat, elevated inline, no-depth, reduced-motion, wide, narrow, dark, and light comparison sheet; all lifecycle, owner-budget, overflow, accessibility, and scoped-loading assertions passed."
     }
   ],
   "allowedWork": [
@@ -579,7 +593,8 @@
     {
       "id": "md22",
       "title": "Produce comparison evidence and human visual checkpoint",
-      "status": "planned"
+      "summary": "Exact comparison evidence is ready and automated gates pass; stopped at the mandatory human checkpoint for judgment of material choreography, inline legibility, depth treatment, and semantic continuity before any promotion.",
+      "status": "in-progress"
     }
   ]
 }
