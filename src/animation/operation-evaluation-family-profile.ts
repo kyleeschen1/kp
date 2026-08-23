@@ -182,6 +182,12 @@ readonly KpOperationEvaluationFamilyReleaseRegistration[] = Object.freeze([
       familyProfileId: kpContributorFusionEvaluationFamilyProfile.id,
       maturity: "promoted" as const
     })),
+  Object.freeze({
+    schemaVersion: "kp.operation-evaluation-family-release.v1" as const,
+    transformationKind: "simplifyConstantDifference",
+    familyProfileId: kpContributorFusionEvaluationFamilyProfile.id,
+    maturity: "review-stage" as const
+  }),
   ...kpCarrierPreservingSimplificationEvaluationFamilyProfile
     .supportedTransformationKinds.map((transformationKind) => Object.freeze({
       schemaVersion: "kp.operation-evaluation-family-release.v1" as const,

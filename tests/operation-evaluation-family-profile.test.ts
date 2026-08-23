@@ -95,14 +95,18 @@ test("semantic applicability is independent from transformation release maturity
     [
       { transformationKind: "simplifyConstantProduct", maturity: "promoted" },
       { transformationKind: "simplifyConstantQuotient", maturity: "promoted" },
-      { transformationKind: "simplifyConstantSum", maturity: "promoted" }
+      { transformationKind: "simplifyConstantSum", maturity: "promoted" },
+      {
+        transformationKind: "simplifyConstantDifference",
+        maturity: "review-stage"
+      }
     ]
   );
   assert.equal(
     resolveKpOperationEvaluationFamilyReleaseRegistration(
       "simplifyConstantDifference"
-    ),
-    undefined
+    )?.maturity,
+    "review-stage"
   );
 
   const fixture = createGeneratedCalculusProblemFixture(

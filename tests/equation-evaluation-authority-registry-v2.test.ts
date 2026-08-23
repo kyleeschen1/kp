@@ -34,6 +34,7 @@ test("evaluation transitions receive only registry-owned authorities", () => {
   const grammar = compiledGrammar([
     ["kp.arithmetic.multiply", "evaluation"],
     ["kp.arithmetic.divide", "evaluation"],
+    ["kp.arithmetic.subtract", "evaluation"],
     ["kp.arithmetic.add", "evaluation"],
     ["kp.algebra.cancel-additive-inverses", "evaluation"],
     ["kp.semantic-motion.absorb-additive-identity", "evaluation"],
@@ -44,7 +45,7 @@ test("evaluation transitions receive only registry-owned authorities", () => {
   if (result.status !== "resolved") return;
   assert.deepEqual(result.evaluations.map(({ evaluationKind }) =>
     evaluationKind), [
-    "product", "quotient", "sum", "cancellation",
+    "product", "quotient", "difference", "sum", "cancellation",
     "identity", "successor"
   ]);
   assert.ok(result.evaluations.every(({ resolutionSource }) =>
@@ -53,28 +54,14 @@ test("evaluation transitions receive only registry-owned authorities", () => {
     presentationAuthority.kind.startsWith("registered-")));
 });
 
-test("an authority claim without a matching family release fails closed", () => {
-  assert.deepEqual(
-    validateKpEquationEvaluationAuthorityFamilyProfilesV2(),
-    [{
-      code: "evaluation-authority.family-unregistered",
-      authorityId:
-        "kp.presentation.operation-evaluation.difference.authority-v2",
-      transformationKind: "simplifyConstantDifference",
-      claimedFamilyProfileId: "kp.evaluation-family.contributor-fusion.v1",
-      message:
-        "Evaluation authority kp.presentation.operation-evaluation.difference.authority-v2 claims kp.evaluation-family.contributor-fusion.v1, but simplifyConstantDifference has no family release registration."
-    }]
-  );
+test("review-stage difference registration closes the authority claim", () => {
+  assert.deepEqual(validateKpEquationEvaluationAuthorityFamilyProfilesV2(), []);
   const result = resolveKpEquationEvaluationAuthoritiesV2({
     grammar: compiledGrammar([["kp.arithmetic.subtract", "evaluation"]])
   });
-  assert.equal(result.status, "repair-required");
-  if (result.status !== "repair-required") return;
-  assert.equal(
-    result.diagnostics[0]?.code,
-    "evaluation-authority.family-unregistered"
-  );
+  assert.equal(result.status, "resolved");
+  if (result.status !== "resolved") return;
+  assert.equal(result.evaluations[0]?.evaluationKind, "difference");
 });
 
 test("unregistered evaluations and misclassified registered operations fail", () => {

@@ -87,7 +87,8 @@
     {
       "id": "kp.eval-auth.s07",
       "title": "difference-candidate",
-      "status": "planned"
+      "summary": "Constant difference is registered to contributor fusion at review-stage maturity; governance validation passes while the promoted-only default resolver remains unchanged.",
+      "status": "complete"
     },
     {
       "id": "kp.eval-auth.s08",

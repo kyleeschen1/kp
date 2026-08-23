@@ -155,6 +155,20 @@
       "scope": "standard",
       "checkedAt": "2026-08-23T23:20:48.524Z",
       "notes": "Authority validation preserves application, test, Svelte, and domain type boundaries."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test family profile and evaluation authority suites",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T23:23:04.346Z",
+      "notes": "Twelve tests pass; difference governance resolves through a review-stage release and promoted defaults remain unchanged."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-23T23:23:05.705Z",
+      "notes": "Review-stage difference registration preserves all TypeScript, Svelte, and domain boundaries."
     }
   ],
   "progress": {
