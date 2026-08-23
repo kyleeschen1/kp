@@ -39,7 +39,10 @@ const animations = Object.freeze([{
 }] as const);
 
 const materialProgressions = Object.freeze([
-  { phase: "forward" as const, samples: [0, 0.22, 0.48, 0.6, 0.72, 1] }
+  {
+    phase: "forward" as const,
+    samples: [0, 0.22, 0.34, 0.4, 0.48, 0.54, 0.6, 0.66, 0.72, 1]
+  }
 ]);
 const responsiveMaterialProgressions = Object.freeze([
   { phase: "forward" as const, samples: [0.22, 0.48, 0.6, 0.72] }

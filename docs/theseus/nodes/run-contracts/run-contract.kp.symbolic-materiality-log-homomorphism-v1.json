@@ -338,6 +338,20 @@
       "scope": "md18 corrected typed boundary",
       "checkedAt": "2026-08-23T00:36:15.072Z",
       "notes": "Application, Node, tests, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "md19 factor-bridge causal overlap",
+      "checkedAt": "2026-08-23T00:39:42.987Z",
+      "notes": "50 focused tests passed; persistent factors stay fully active from source release through the midpoint of target reception while source syntax is withdrawn and the generated cohort rises."
+    },
+    {
+      "command": "npm run visual:log-product",
+      "status": "passed",
+      "scope": "md19 denser causal handoff sampling",
+      "checkedAt": "2026-08-23T00:39:45.847Z",
+      "notes": "Stable comparison capture now includes 34, 40, 54, and 66 percent material samples around the source-to-target handoff without changing the canonical schedule."
     }
   ],
   "allowedWork": [
@@ -477,7 +491,8 @@
     {
       "id": "md19",
       "title": "Tune bounded exemplar-local causal overlap",
-      "status": "planned"
+      "summary": "The bounded timing pass retained the accepted semantic schedule and made factor persistence the explicit causal bridge; denser evidence covers release, transfer, reception, and settlement seams.",
+      "status": "complete"
     },
     {
       "id": "md20",

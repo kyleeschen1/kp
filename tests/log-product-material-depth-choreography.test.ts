@@ -280,3 +280,47 @@ test("generated logarithms enclosures and connector rise as one reception cohort
     ])
   );
 });
+
+test("persistent factors bridge source withdrawal into target reception", () => {
+  const sourceReleaseEnd = Math.max(
+    ...kpCanonicalCompiledLogProductSemanticMotion.tracks
+      .filter(({ eventId }) => [
+        "event.log-product.release-shells",
+        "event.log-product.depart"
+      ].includes(eventId))
+      .map(({ window }) => window.end)
+  );
+  const attachment = kpCanonicalCompiledLogProductSemanticMotion.tracks.find(
+    ({ eventId }) => eventId === "event.log-product.attach-target"
+  )!;
+  const bridgeSamples = [
+    sourceReleaseEnd,
+    attachment.window.start,
+    (attachment.window.start + attachment.window.end) / 2
+  ];
+
+  for (const progress of bridgeSamples) {
+    const poses = sampleKpLogProductMaterialDepthChoreography({
+      mode: "material",
+      choreography: sample(progress)
+    });
+    const factors = poses["role.material.log-product.persistent-factor"];
+    assert.equal(factors.plane, "active");
+    assert.equal(factors.activity, 1);
+  }
+
+  const receiving = sampleKpLogProductMaterialDepthChoreography({
+    mode: "material",
+    choreography: sample(
+      (attachment.window.start + attachment.window.end) / 2
+    )
+  });
+  assert.equal(
+    receiving["role.material.log-product.source-application"].activity,
+    0
+  );
+  assert.ok(
+    receiving["role.material.log-product.target-application-syntax"]
+      .activity > 0
+  );
+});
