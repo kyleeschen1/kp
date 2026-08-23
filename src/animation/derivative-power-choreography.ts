@@ -61,7 +61,7 @@ export interface KpDerivativePowerChoreographyPlan {
     readonly decrementAmountSelectorId: string;
     readonly sourceMinimumScale: number;
     readonly coefficientPathVariant: "arc-below";
-    readonly decrementInputPathVariant: "arc-above";
+    readonly decrementInputPathVariant: "direct";
   };
 }
 
@@ -75,6 +75,10 @@ export interface KpDerivativePowerChoreographyFrame {
   readonly focus: {
     readonly exponentEmphasis: number;
     readonly shadowOpacity: number;
+    readonly sourceExponent: number;
+    readonly coefficient: number;
+    readonly exponentWitness: number;
+    readonly decrementCause: number;
   };
   readonly operator: {
     readonly opacity: number;
@@ -88,6 +92,7 @@ export interface KpDerivativePowerChoreographyFrame {
   readonly exponentSource: {
     readonly opacity: number;
     readonly scale: number;
+    readonly pathProgress: number;
   };
   readonly coefficient: {
     readonly opacity: number;
@@ -104,6 +109,7 @@ export interface KpDerivativePowerChoreographyFrame {
   };
   readonly decrementArtifacts: {
     readonly opacity: number;
+    readonly entryProgress: number;
   };
   readonly settlementProgress: number;
 }
@@ -511,7 +517,10 @@ export function compileKpDerivativePowerChoreography(input: {
       decrementAmountSelectorId: decrementAmountRole.selectorId,
       sourceMinimumScale,
       coefficientPathVariant: "arc-below",
-      decrementInputPathVariant: "arc-above"
+      // One exponent owner stays perceptually anchored while its derived copy
+      // drops into coefficient position. A second arc made the split read as
+      // three unrelated copies instead of one retained witness plus one copy.
+      decrementInputPathVariant: "direct"
     }
   };
 }
@@ -526,18 +535,30 @@ export function sampleKpDerivativePowerChoreography(input: {
   const p = roundProgress(direction === "forward" ? progress : 1 - progress);
   const phases: Readonly<Record<KpDerivativePowerPhaseId, number>> = {
     "orient-exponent": phaseProgress(p, 0, 0.18),
-    "reflow-continuants": phaseProgress(p, 0.12, 0.34),
-    "branch-exponent": phaseProgress(p, 0.28, 0.44),
-    "drop-coefficient": phaseProgress(p, 0.36, 0.72),
-    "decrement-successor": phaseProgress(p, 0.44, 0.76),
-    "settle-derivative": phaseProgress(p, 0.74, 0.92),
-    "release-derivative-focus": phaseProgress(p, 0.88, 1)
+    "reflow-continuants": phaseProgress(p, 0.12, 0.46),
+    "branch-exponent": phaseProgress(p, 0.26, 0.36),
+    "drop-coefficient": phaseProgress(p, 0.3, 0.68),
+    "decrement-successor": phaseProgress(p, 0.66, 0.8),
+    "settle-derivative": phaseProgress(p, 0.78, 0.92),
+    "release-derivative-focus": phaseProgress(p, 0.9, 1)
   };
   const branch = phases["branch-exponent"];
   const coefficient = phases["drop-coefficient"];
-  const decrementInput = phases["decrement-successor"];
+  const retainedExponentTravel = phaseProgress(p, 0.28, 0.52);
+  const retainedExponentHandoff = phaseProgress(p, 0.52, 0.58);
+  const decrementEntry = phases["decrement-successor"];
   const settle = phases["settle-derivative"];
   const focusRelease = phases["release-derivative-focus"];
+  // The operator yields as soon as its action becomes visible. Leaving it on
+  // stage through the branch makes the reflowed base collide with d/dx.
+  const operatorRemoval = phaseProgress(p, 0.3, 0.52);
+  const baseHandoff = phaseProgress(p, 0.82, 0.92);
+  const sourceExponentFocus = phases["orient-exponent"] *
+    (1 - phaseProgress(p, 0.34, 0.58));
+  const coefficientFocus = branch * (1 - phaseProgress(p, 0.64, 0.8));
+  const exponentWitnessFocus = retainedExponentHandoff *
+    (1 - phaseProgress(p, 0.78, 0.92));
+  const decrementCauseFocus = decrementEntry * (1 - focusRelease);
   const sourceScale = interpolate(
     1,
     input.plan.exponent.sourceMinimumScale,
@@ -552,23 +573,33 @@ export function sampleKpDerivativePowerChoreography(input: {
     semanticProgress: p,
     phases,
     focus: {
-      exponentEmphasis: phases["orient-exponent"] * (1 - focusRelease),
-      shadowOpacity: 0
+      exponentEmphasis: Math.max(
+        sourceExponentFocus,
+        coefficientFocus,
+        exponentWitnessFocus,
+        decrementCauseFocus
+      ),
+      shadowOpacity: 0,
+      sourceExponent: sourceExponentFocus,
+      coefficient: coefficientFocus,
+      exponentWitness: exponentWitnessFocus,
+      decrementCause: decrementCauseFocus
     },
     operator: {
-      opacity: 1 - settle,
-      removalProgress: settle
+      opacity: 1 - operatorRemoval,
+      removalProgress: operatorRemoval
     },
     base: {
       reflowProgress: phases["reflow-continuants"],
-      sourceOpacity: 1 - settle,
-      targetOpacity: settle
+      sourceOpacity: 1 - baseHandoff,
+      targetOpacity: baseHandoff
     },
-    // The source remains nonzero through transit so both descendants have an
-    // intelligible material origin instead of popping in independently.
+    // The source exponent itself owns the direct branch into exponent
+    // position. Only the coefficient is born as a travelling copy.
     exponentSource: {
-      opacity: 1 - settle,
-      scale: sourceScale
+      opacity: 1 - retainedExponentHandoff,
+      scale: sourceScale,
+      pathProgress: retainedExponentTravel
     },
     coefficient: {
       opacity: branch,
@@ -577,14 +608,15 @@ export function sampleKpDerivativePowerChoreography(input: {
       pathVariant: input.plan.exponent.coefficientPathVariant
     },
     decrementInput: {
-      opacity: branch,
+      opacity: retainedExponentHandoff,
       scale: 1,
-      pathProgress: decrementInput,
-      decrementProgress: decrementInput,
+      pathProgress: retainedExponentTravel,
+      decrementProgress: decrementEntry,
       pathVariant: input.plan.exponent.decrementInputPathVariant
     },
     decrementArtifacts: {
-      opacity: decrementInput
+      opacity: decrementEntry,
+      entryProgress: decrementEntry
     },
     settlementProgress: settle
   };

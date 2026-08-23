@@ -51,9 +51,17 @@ test("derivative power rule keeps an explicit decrement and flat glyph motion", 
   const decrementInput = stage.locator(
     '[data-kp-editor-derivative-power-role="decrement-input-descendant"]'
   );
-  await expect(sourceExponent).toHaveCSS("opacity", "1");
+  await expect.poll(() => renderedOpacity(sourceExponent)).toBeLessThan(1);
+  await expect.poll(() => renderedOpacity(sourceExponent)).toBeGreaterThan(0);
   await expect(coefficient).toHaveCSS("opacity", "1");
-  await expect(decrementInput).toHaveCSS("opacity", "1");
+  await expect.poll(() => renderedOpacity(decrementInput)).toBeGreaterThan(0);
+  await expect.poll(async () => Math.round(1_000 * (
+    await renderedOpacity(sourceExponent) + await renderedOpacity(decrementInput)
+  )) / 1_000).toBe(1);
+  await expect(sourceExponent).toHaveAttribute(
+    "data-kp-equation-motion-path-variant",
+    "direct"
+  );
   for (const glyph of [sourceExponent, coefficient, decrementInput]) {
     await expect.poll(() => renderedScale(glyph)).toEqual({ x: 1, y: 1 });
     await expect(glyph).toHaveCSS("text-shadow", "none");
@@ -76,6 +84,33 @@ test("derivative power rule keeps an explicit decrement and flat glyph motion", 
     "data-kp-editor-equation-transition-id",
     evaluateTransitionId
   );
+  const decrementOperator = activeTransition(stage).locator(
+    '[data-kp-editor-derivative-decrement-role="decrement-operator"]'
+  );
+  const decrementAmount = activeTransition(stage).locator(
+    '[data-kp-editor-derivative-decrement-role="decrement-amount"]'
+  );
+  const evaluatedResult = activeTransition(stage).locator(
+    '[data-kp-editor-derivative-decrement-role="result"]'
+  );
+  await expect(decrementOperator).toContainText("−");
+  await expect(decrementAmount).toContainText("1");
+  await expect(decrementOperator).toHaveAttribute(
+    "data-kp-editor-derivative-decrement-salience",
+    "focus"
+  );
+  await expect(evaluatedResult).toHaveCSS("opacity", "0");
+  await expect(activeTransition(stage).locator(
+    "[data-kp-equation-lineage-path-id]"
+  )).toHaveCount(0);
+
+  await seek.fill("0.82");
+  await expect.poll(() => renderedOpacity(decrementOperator)).toBeLessThan(1);
+  await expect.poll(() => renderedOpacity(evaluatedResult)).toBeGreaterThan(0);
+  for (const glyph of [decrementOperator, decrementAmount, evaluatedResult]) {
+    await expect.poll(() => renderedScale(glyph)).toEqual({ x: 1, y: 1 });
+    await expect(glyph).toHaveCSS("text-shadow", "none");
+  }
 
   await seek.fill("1");
   await expect(activeTransition(stage)).toHaveAttribute(
@@ -142,4 +177,8 @@ async function renderedScale(glyph: Locator): Promise<{
       y: Math.round(matrix.d * 1_000) / 1_000
     };
   });
+}
+
+async function renderedOpacity(glyph: Locator): Promise<number> {
+  return glyph.evaluate((element) => Number(getComputedStyle(element).opacity));
 }

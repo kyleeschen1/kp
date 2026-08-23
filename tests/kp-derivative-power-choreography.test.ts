@@ -56,7 +56,7 @@ test("derivative power choreography compiles semantic branch roles", () => {
     decrementAmountSelectorId: "expression.target.decrement-amount",
     sourceMinimumScale: 1,
     coefficientPathVariant: "arc-below",
-    decrementInputPathVariant: "arc-above"
+    decrementInputPathVariant: "direct"
   });
   assert.deepEqual(plan.operatorApplication, {
     kind: "derivative-operator-application",
@@ -105,7 +105,8 @@ test("derivative power choreography previews, acts, settles, and releases", () =
   const { plan } = fixture();
   const preview = sampleKpDerivativePowerChoreography({ plan, progress: 0.16 });
   const act = sampleKpDerivativePowerChoreography({ plan, progress: 0.56 });
-  const settle = sampleKpDerivativePowerChoreography({ plan, progress: 0.82 });
+  const decrement = sampleKpDerivativePowerChoreography({ plan, progress: 0.72 });
+  const settle = sampleKpDerivativePowerChoreography({ plan, progress: 0.84 });
   const end = sampleKpDerivativePowerChoreography({ plan, progress: 1 });
 
   assert.ok(preview.focus.exponentEmphasis > 0);
@@ -114,13 +115,19 @@ test("derivative power choreography previews, acts, settles, and releases", () =
   assert.equal(act.exponentSource.scale, 1);
   assert.ok(act.exponentSource.opacity > 0);
   assert.ok(act.coefficient.pathProgress > 0);
-  assert.ok(act.decrementInput.decrementProgress > 0);
-  assert.ok(act.decrementArtifacts.opacity > 0);
+  assert.equal(act.decrementInput.decrementProgress, 0);
+  assert.equal(act.decrementArtifacts.opacity, 0);
+  assert.ok(decrement.decrementInput.decrementProgress > 0);
+  assert.ok(decrement.decrementArtifacts.opacity > 0);
   assert.ok(settle.settlementProgress > 0);
-  assert.ok(settle.exponentSource.opacity > 0);
+  assert.equal(settle.exponentSource.opacity, 0);
   assert.deepEqual(end.focus, {
     exponentEmphasis: 0,
-    shadowOpacity: 0
+    shadowOpacity: 0,
+    sourceExponent: 0,
+    coefficient: 0,
+    exponentWitness: 0,
+    decrementCause: 0
   });
   assert.equal(end.operator.opacity, 0);
   assert.equal(end.base.targetOpacity, 1);
@@ -128,6 +135,17 @@ test("derivative power choreography previews, acts, settles, and releases", () =
   assert.equal(end.coefficient.opacity, 1);
   assert.equal(end.decrementInput.opacity, 1);
   assert.equal(end.decrementArtifacts.opacity, 1);
+});
+
+test("derivative power keeps one retained-exponent owner during handoff", () => {
+  const { plan } = fixture();
+  for (const progress of [0.52, 0.54, 0.56, 0.58]) {
+    const frame = sampleKpDerivativePowerChoreography({ plan, progress });
+    assert.ok(Math.abs(
+      frame.exponentSource.opacity + frame.decrementInput.opacity - 1
+    ) < 1e-9);
+    assert.equal(frame.decrementInput.pathVariant, "direct");
+  }
 });
 
 test("derivative power choreography samples exact rewind symmetry", () => {

@@ -162,6 +162,10 @@ import {
   type KpEditorAnimationDiagnosticsCadenceState
 } from "./animation-diagnostics-cadence.ts";
 import {
+  type KpDerivativeDecrementChoreographyFrame,
+  type KpDerivativeDecrementChoreographyPlan
+} from "../animation/derivative-decrement-choreography.ts";
+import {
   type KpDerivativePowerChoreographyFrame,
   type KpDerivativePowerChoreographyPlan
 } from "../animation/derivative-power-choreography.ts";
@@ -2354,6 +2358,12 @@ function applySemanticTokenMotion(input: {
         : motifKind === "copy-fan-out" || motifKind === "merge-fan-in" || motifKind === "substitute"
         ? { lineageChoreographyKind: motifKind }
         : {}),
+      ...(input.frame.derivativeDecrement === undefined
+        ? {}
+        : {
+            derivativeDecrementChoreographyPlan:
+              input.frame.derivativeDecrement.plan
+          }),
       ...(transformation.transformType === "distributeMultiplication"
         ? {
             distributionChoreographyKind: "canonical-fan-out" as const,
@@ -2514,6 +2524,17 @@ function applySemanticTokenMotion(input: {
       geometry,
       plan: geometry.derivativePowerChoreographyPlan,
       frame: tokenFrame.motion.derivativePower
+    });
+  }
+  if (
+    tokenFrame.motion.derivativeDecrement !== undefined &&
+    geometry.derivativeDecrementChoreographyPlan !== undefined
+  ) {
+    applyDerivativeDecrementTokenFocus({
+      transition: input.transitionElement,
+      geometry,
+      plan: geometry.derivativeDecrementChoreographyPlan,
+      frame: tokenFrame.motion.derivativeDecrement
     });
   }
   if (tokenFrame.motion.distributionChoreography !== undefined) {
@@ -3211,6 +3232,8 @@ function applyDerivativePowerTokenFocus(input: {
   )?.element;
   if (sourceExponent !== undefined) {
     sourceExponent.dataset["kpEditorDerivativePowerRole"] = "source-exponent";
+    sourceExponent.dataset["kpEditorDerivativePowerSalience"] =
+      salienceState(input.frame.focus.sourceExponent);
   }
   exponentRelation?.target?.motionIds.forEach((motionId, index) => {
     const selectorId = exponentRelation.target?.selectorIds[index];
@@ -3218,15 +3241,113 @@ function applyDerivativePowerTokenFocus(input: {
       (candidate) => candidate.motionId === motionId
     )?.element;
     if (token === undefined || selectorId === undefined) return;
-    token.dataset["kpEditorDerivativePowerRole"] =
-      selectorId === input.plan.exponent.coefficientSelectorId
-        ? "coefficient-descendant"
-        : "decrement-input-descendant";
+    const coefficient = selectorId ===
+      input.plan.exponent.coefficientSelectorId;
+    token.dataset["kpEditorDerivativePowerRole"] = coefficient
+      ? "coefficient-descendant"
+      : "decrement-input-descendant";
+    token.dataset["kpEditorDerivativePowerSalience"] = salienceState(
+      coefficient
+        ? input.frame.focus.coefficient
+        : input.frame.focus.exponentWitness
+    );
   });
+  for (const selectorId of input.plan.operatorSelectorIds) {
+    const token = equationTokenForSelector(input.geometry, "source", selectorId);
+    if (token === undefined) continue;
+    token.dataset["kpEditorDerivativePowerRole"] = "derivative-operator";
+    token.dataset["kpEditorDerivativePowerSalience"] = salienceState(
+      input.frame.focus.sourceExponent
+    );
+  }
+  for (const selectorId of
+    input.plan.operatorApplication.introducedCauseSelectorIds) {
+    const token = equationTokenForSelector(input.geometry, "target", selectorId);
+    if (token === undefined) continue;
+    token.dataset["kpEditorDerivativePowerRole"] = "decrement-cause";
+    token.dataset["kpEditorDerivativePowerSalience"] = salienceState(
+      input.frame.focus.decrementCause
+    );
+  }
+}
+
+function applyDerivativeDecrementTokenFocus(input: {
+  readonly transition: HTMLElement;
+  readonly geometry: KpPrecomputedEquationMotionPlan["geometry"];
+  readonly plan: KpDerivativeDecrementChoreographyPlan;
+  readonly frame: KpDerivativeDecrementChoreographyFrame;
+}): void {
+  input.transition.dataset["kpEditorEquationDerivativeDecrementChoreography"] =
+    input.plan.id;
+  input.transition.dataset["kpEditorEquationDerivativeDecrementPhase"] =
+    activeDerivativeDecrementPhase(input.frame);
+  input.transition.dataset["kpEditorEquationDerivativeDecrementSettlement"] =
+    String(input.frame.settlementProgress);
+  const roles = [
+    [input.plan.evaluation.minuendSelectorId, "source", "minuend"],
+    [
+      input.plan.evaluation.decrementOperatorSelectorId,
+      "source",
+      "decrement-operator"
+    ],
+    [
+      input.plan.evaluation.decrementAmountSelectorId,
+      "source",
+      "decrement-amount"
+    ],
+    [input.plan.evaluation.resultSelectorId, "target", "result"]
+  ] as const;
+  for (const [selectorId, side, role] of roles) {
+    const token = equationTokenForSelector(input.geometry, side, selectorId);
+    if (token === undefined) continue;
+    token.dataset["kpEditorDerivativeDecrementRole"] = role;
+    token.dataset["kpEditorDerivativeDecrementSalience"] = salienceState(
+      side === "target"
+        ? input.frame.attention.result
+        : input.frame.attention.decrementCause
+    );
+  }
+}
+
+function equationTokenForSelector(
+  geometry: KpPrecomputedEquationMotionPlan["geometry"],
+  side: "source" | "target",
+  selectorId: string
+): HTMLElement | undefined {
+  for (const relation of geometry.relations) {
+    const endpoint = side === "source" ? relation.source : relation.target;
+    const selectorIndex = endpoint?.selectorIds.indexOf(selectorId) ?? -1;
+    if (endpoint === undefined || selectorIndex < 0) continue;
+    const motionId = endpoint.motionIds[selectorIndex];
+    return (side === "source"
+      ? geometry.sourceTokens
+      : geometry.targetTokens).find(
+        (token) => token.motionId === motionId
+      )?.element;
+  }
+  return undefined;
+}
+
+function salienceState(strength: number): "focus" | "normal" {
+  return strength > 0.35 ? "focus" : "normal";
 }
 
 function activeDerivativePowerPhase(
   frame: KpDerivativePowerChoreographyFrame
+): string {
+  const active = Object.entries(frame.phases)
+    .filter(([, progress]) => progress > 0 && progress < 1)
+    .at(-1)?.[0];
+  if (active !== undefined) return active;
+  if (frame.semanticProgress === 0) return "ready";
+  if (frame.semanticProgress === 1) return "complete";
+  return Object.entries(frame.phases)
+    .filter(([, progress]) => progress === 1)
+    .at(-1)?.[0] ?? "ready";
+}
+
+function activeDerivativeDecrementPhase(
+  frame: KpDerivativeDecrementChoreographyFrame
 ): string {
   const active = Object.entries(frame.phases)
     .filter(([, progress]) => progress > 0 && progress < 1)

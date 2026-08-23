@@ -1,6 +1,6 @@
 # Animation Governance Epoch v2 Derivative Checkpoint
 
-Status: canonical exemplar at mandatory human checkpoint
+Status: candidate presentation repair at mandatory human checkpoint
 Prepared: 2026-08-23
 Run contract: `run-contract.kp.animation.animation-governance-epoch-v2-approved`
 
@@ -27,19 +27,21 @@ no renderer, timing, path, glyph inference, or caller-owned presentation.
 | Canonical URL | `/?artifact=animation.generated.calculus.derivative.power-rule-x-cubed&playhead=0` |
 | Renderer | `editor-animation-surface.equation.katex` |
 | Semantic source | `src/semantic/generated-calculus-problem-fixture.ts` plus `src/semantic/derivative-power-rule-semantics.ts` |
-| Presentation source | `src/animation/derivative-power-choreography.ts` |
+| Presentation source | `src/animation/derivative-power-choreography.ts` plus exemplar-local `src/animation/derivative-decrement-choreography.ts` |
 | Accepted visual baseline | commit `31a609b0` |
 
 The stable asset ID alone does not establish this host or renderer. Human
 review should use the Catalogue URL above and the repository-owned
 `npm run visual:derivative-power` capture command.
 
-## Baseline Comparison
+## Governance Baseline Comparison
 
-The semantic fixture, correspondence, choreography, selector-annotated KaTeX,
-browser lifecycle contract, and visual capture script have no diff from
-`31a609b0`. The slice changes only governance compilation and generated
-evidence. The preserved observable contract is:
+At governance-run close, the semantic fixture, correspondence, choreography,
+selector-annotated KaTeX, browser lifecycle contract, and visual capture script
+had no diff from `31a609b0`; that run changed only governance compilation and
+generated evidence. A later exemplar-local presentation repair is now the
+candidate under review. It deliberately differs from the accepted baseline
+without changing the preserved observable contract:
 
 - the derivative operator is consumed only after its action is legible;
 - the base `x` remains one continuant;
@@ -49,15 +51,36 @@ evidence. The preserved observable contract is:
 - playback, direct seek, rewind, and native settlement reach the same states;
 - glyph paint stays flat 2D, without scale or text-shadow material treatment.
 
+## Candidate Presentation Repair
+
+The candidate increases the derivative equation's native catalogue type size,
+gives the source exponent direct perceptual ownership of the retained exponent
+slot, and sends only the coefficient copy along a branch path. The derivative
+operator withdraws when its action becomes visible instead of remaining behind
+the reflowed expression. Semantic focus moves from the source exponent to the
+coefficient, retained exponent, explicit decrement cause, and native result.
+
+The `simplifyConstantDifference` transition now has an exemplar-local typed
+presentation plan compiled from its existing subtraction metadata. It holds
+`3-1` as an explicit cause, withdraws `-1`, and recognizes native `2` without
+using the generic fan-in path treatment. This does not change any semantic
+state, correspondence ID, Native KaTeX endpoint, renderer authority, or family
+contract. Exact type size, timing, path, and paint remain provisional pending
+human review.
+
 ## Verification Evidence
 
 - `npm run test:equation-derivative-power-migration-v2` — 11 passed;
-- `npm run test:differentiation-exemplar` — 26 passed;
+- `npm run test:differentiation-exemplar` — 31 passed, including retained-owner,
+  explicit-subtraction-role, and rewind-symmetry checks;
 - `npm run test:equation-surface-preservation` — 11 passed;
 - `npm run test:browser:differentiation-exemplar` — 2 Chromium lifecycle and
-  direct-restoration checks passed;
+  direct-restoration checks passed, including the direct exponent path and
+  non-generic decrement handoff;
 - `npm run visual:derivative-power` — seven deterministic review frames and a
   flat-glyph manifest produced;
+- `npm run typecheck` — application, Node, tests, Svelte, and domain checks
+  passed;
 - `npm run build` — typecheck, Svelte diagnostics, domain checks, publication
   freshness, and the production bundle passed;
 - generated governance inventory, conformance manifest, reverse dependencies,
@@ -104,6 +127,6 @@ remain deferred.
 
 Preserve the verified semantic trace, exact endpoint mathematics, stable IDs,
 Catalogue URL, Native KaTeX geometry, deterministic clock, case-ledger gaps,
-and flat-2D baseline. The independently reversible rollback unit is the final
-governance slice commit; rollback must not remove the earlier reviewed
-derivative exemplar.
+and flat-2D baseline. The independently reversible rollback unit is the
+candidate derivative-presentation commit; rollback must not remove the earlier
+reviewed derivative exemplar or the completed governance epoch.

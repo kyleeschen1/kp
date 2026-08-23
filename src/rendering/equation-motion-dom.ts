@@ -26,6 +26,9 @@ import type {
   KpMatrixMatrixRendererPlan
 } from "../animation/matrix-matrix-composition-progress.ts";
 import type {
+  KpDerivativeDecrementChoreographyPlan
+} from "../animation/derivative-decrement-choreography.ts";
+import type {
   KpDerivativePowerChoreographyPlan
 } from "../animation/derivative-power-choreography.ts";
 import type {
@@ -129,6 +132,8 @@ export interface KpMeasuredEquationTransitionGeometry {
   readonly matrixMatrixCompositionPlan?: KpMatrixMatrixRendererPlan | undefined;
   readonly derivativePowerChoreographyPlan?:
     KpDerivativePowerChoreographyPlan | undefined;
+  readonly derivativeDecrementChoreographyPlan?:
+    KpDerivativeDecrementChoreographyPlan | undefined;
   readonly precomputedMotionPathsByMotionId?: Readonly<
     Record<string, KpEquationMotionPathCandidate>
   > | undefined;
@@ -270,6 +275,8 @@ export function measureKpEquationTransitionGeometry(input: {
   readonly matrixMatrixCompositionPlan?: KpMatrixMatrixRendererPlan | undefined;
   readonly derivativePowerChoreographyPlan?:
     KpDerivativePowerChoreographyPlan | undefined;
+  readonly derivativeDecrementChoreographyPlan?:
+    KpDerivativeDecrementChoreographyPlan | undefined;
 }): KpMeasuredEquationTransitionGeometry {
   const sourceTokens = measureAnnotatedEquationMotionTokens(input.sourceRoot);
   const targetTokens = measureAnnotatedEquationMotionTokens(input.targetRoot);
@@ -373,6 +380,12 @@ export function measureKpEquationTransitionGeometry(input: {
       : {
           derivativePowerChoreographyPlan:
             input.derivativePowerChoreographyPlan
+        }),
+    ...(input.derivativeDecrementChoreographyPlan === undefined
+      ? {}
+      : {
+          derivativeDecrementChoreographyPlan:
+            input.derivativeDecrementChoreographyPlan
         }),
     sourceTokens,
     targetTokens,

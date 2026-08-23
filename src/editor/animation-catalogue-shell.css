@@ -336,7 +336,16 @@
   .kp-animation-catalogue-shell__stage-host .editor-equation-stage__object {
   /* This is still native KaTeX typography rather than animated scaling; the
      standalone checkpoint only needs enough size to read at catalogue distance. */
-  --kp-editor-equation-fit-font-size: clamp(1.15rem, 2.8vw, 1.55rem);
+  --kp-editor-equation-fit-font-size: clamp(1.8rem, 5.5vw, 2.75rem);
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.derivative.power-rule-x-cubed"]
+  [data-kp-editor-derivative-power-salience="focus"],
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.derivative.power-rule-x-cubed"]
+  [data-kp-editor-derivative-decrement-salience="focus"] {
+  /* Position carries the semantic distinction; theme-aware paint only helps
+     the eye follow the current owner without changing KaTeX layout. */
+  color: var(--kp-catalogue-link);
 }
 
 .kp-animation-catalogue-shell__stage-host .editor-equation-stage__caption {

@@ -201,9 +201,11 @@ function lineageTokenPathPlans(
       ? derivativeBranchVariant(geometry, relation, motionId) ??
         (branchIndex % 2 === 0 ? "arc-above" : "arc-below")
       : pathPreference;
-    const variants = pathPreference.startsWith("around")
-      ? ["around-left", "around-right"] as const
-      : ["arc-above", "arc-below"] as const;
+    const variants = preferredVariant === "direct"
+      ? ["direct", "arc-above", "arc-below"] as const
+      : pathPreference.startsWith("around")
+        ? ["around-left", "around-right"] as const
+        : ["arc-above", "arc-below"] as const;
     const path = planKpEquationMotionPathBetweenPoints({
       id: `${planId}.lineage.${branchIndex}`,
       start: origin,
@@ -237,7 +239,7 @@ function derivativeBranchVariant(
   geometry: KpMeasuredEquationTransitionGeometry,
   relation: KpMeasuredEquationTransitionGeometry["relations"][number],
   motionId: string
-): "arc-above" | "arc-below" | undefined {
+): "direct" | "arc-above" | "arc-below" | undefined {
   const plan = geometry.derivativePowerChoreographyPlan;
   const motionIndex = relation.target?.motionIds.indexOf(motionId) ?? -1;
   const selectorId = relation.target?.selectorIds[motionIndex];

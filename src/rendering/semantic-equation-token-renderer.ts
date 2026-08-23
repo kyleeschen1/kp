@@ -45,6 +45,11 @@ import {
   type KpMatrixMatrixCompositionProgressFrame
 } from "./equation-matrix-matrix-composition.ts";
 import {
+  sampleKpDerivativeDecrementChoreography,
+  type KpDerivativeDecrementChoreographyFrame,
+  type KpDerivativeDecrementChoreographyPlan
+} from "../animation/derivative-decrement-choreography.ts";
+import {
   sampleKpDerivativePowerChoreography,
   type KpDerivativePowerChoreographyFrame,
   type KpDerivativePowerChoreographyPlan
@@ -154,6 +159,8 @@ export interface KpEquationTokenMotionFrame {
   readonly matrixMatrixComposition?:
     KpMatrixMatrixCompositionProgressFrame | undefined;
   readonly derivativePower?: KpDerivativePowerChoreographyFrame | undefined;
+  readonly derivativeDecrement?:
+    KpDerivativeDecrementChoreographyFrame | undefined;
   readonly witnessedAnnihilation?: KpWitnessedAnnihilationFrame | undefined;
   readonly independentZeroWitness?: KpIndependentZeroWitnessFrame | undefined;
 }
@@ -289,6 +296,11 @@ interface DerivativePowerChoreographyContext {
     KpMeasuredEquationTransitionGeometry["precomputedMotionPathsByMotionId"];
 }
 
+interface DerivativeDecrementChoreographyContext {
+  readonly plan: KpDerivativeDecrementChoreographyPlan;
+  readonly frame: KpDerivativeDecrementChoreographyFrame;
+}
+
 export function sampleKpEquationTokenMotion(
   geometry: KpMeasuredEquationTransitionGeometry,
   progress: number,
@@ -360,6 +372,10 @@ export function sampleKpEquationTokenMotion(
     geometry,
     p
   );
+  const derivativeDecrement = createDerivativeDecrementChoreographyContext(
+    geometry,
+    p
+  );
   for (const relation of geometry.relations) {
     const sampledTokens = sampleRelation(
       geometry,
@@ -379,6 +395,7 @@ export function sampleKpEquationTokenMotion(
       matrixVectorComposition,
       matrixMatrixComposition,
       derivativePower,
+      derivativeDecrement,
       witnessedAnnihilation
     );
     const depthPlan = geometry.depthPresentationRecipe === undefined
@@ -443,6 +460,9 @@ export function sampleKpEquationTokenMotion(
     ...(derivativePower === undefined
       ? {}
       : { derivativePower: derivativePower.frame }),
+    ...(derivativeDecrement === undefined
+      ? {}
+      : { derivativeDecrement: derivativeDecrement.frame }),
     ...(witnessedAnnihilation === undefined
       ? {}
       : { witnessedAnnihilation }),
@@ -519,6 +539,7 @@ function sampleRelation(
   matrixVectorComposition: KpMatrixVectorCompositionProgressFrame | undefined,
   matrixMatrixComposition: KpMatrixMatrixCompositionProgressFrame | undefined,
   derivativePower: DerivativePowerChoreographyContext | undefined,
+  derivativeDecrement: DerivativeDecrementChoreographyContext | undefined,
   witnessedAnnihilation: KpWitnessedAnnihilationFrame | undefined
 ): readonly KpEquationTokenMotionFrameToken[] {
   const sourceTokens = relationTokens(geometry.sourceTokens, relation.source?.motionIds ?? []);
@@ -546,6 +567,17 @@ function sampleRelation(
         derivativePower
       );
   if (derivativeTokens !== undefined) return derivativeTokens;
+  const derivativeDecrementTokens = derivativeDecrement === undefined
+    ? undefined
+    : sampleDerivativeDecrementRelation(
+        relation,
+        sourceTokens,
+        targetTokens,
+        derivativeDecrement
+      );
+  if (derivativeDecrementTokens !== undefined) {
+    return derivativeDecrementTokens;
+  }
   const distributionTokens = distributionChoreography === undefined
     ? undefined
     : sampleDistributionRelation(
@@ -1575,6 +1607,18 @@ function createDerivativePowerChoreographyContext(
   };
 }
 
+function createDerivativeDecrementChoreographyContext(
+  geometry: KpMeasuredEquationTransitionGeometry,
+  progress: number
+): DerivativeDecrementChoreographyContext | undefined {
+  const plan = geometry.derivativeDecrementChoreographyPlan;
+  if (plan === undefined) return undefined;
+  return {
+    plan,
+    frame: sampleKpDerivativeDecrementChoreography({ plan, progress })
+  };
+}
+
 function sampleDerivativePowerRelation(
   relation: KpMeasuredEquationTransitionRelationGeometry,
   sourceTokens: readonly AnnotatedMotionToken[],
@@ -1588,7 +1632,7 @@ function sampleDerivativePowerRelation(
       opacity: context.frame.operator.opacity,
       x: 0,
       y: -4 * context.frame.operator.removalProgress,
-      scale: 1 - (0.04 * context.frame.operator.removalProgress)
+      scale: 1
     }));
   }
   if (relation.recordId === "base-persists") {
@@ -1618,27 +1662,61 @@ function sampleDerivativePowerRelation(
     return targetTokens.map((token) => frameToken(token, "target", {
       opacity: context.frame.decrementArtifacts.opacity,
       x: 0,
-      y: 0,
+      y: 3 * (1 - context.frame.decrementArtifacts.entryProgress),
       scale: 1
     }));
   }
   if (relation.recordId !== "exponent-branches") return undefined;
   if (relation.source === undefined || relation.target === undefined) return [];
+  const targetExponentIndex = relation.target.selectorIds.indexOf(
+    context.plan.exponent.decrementInputSelectorId
+  );
+  const targetExponentMotionId = relation.target.motionIds[targetExponentIndex];
+  const targetExponent = targetTokens.find(
+    (token) => token.motionId === targetExponentMotionId
+  );
+  const sourceOwner = targetExponent === undefined
+    ? undefined
+    : sourceOwnerPathPose({
+        source: sourceTokens[0],
+        destination: targetExponent,
+        pathProgress: context.frame.exponentSource.pathProgress,
+        opacity: context.frame.exponentSource.opacity,
+        scale: context.frame.exponentSource.scale,
+        precomputedPath:
+          context.motionPathsByMotionId?.[targetExponent.motionId]
+      });
   return [
-    ...sourceTokens.map((token) => frameToken(token, "source", {
-      opacity: context.frame.exponentSource.opacity,
-      x: 0,
-      y: 0,
-      scale: context.frame.exponentSource.scale
-    })),
+    ...sourceTokens.map((token) => sourceOwner === undefined
+      ? frameToken(token, "source", {
+          opacity: context.frame.exponentSource.opacity,
+          x: 0,
+          y: 0,
+          scale: context.frame.exponentSource.scale
+        })
+      : {
+          motionId: token.motionId,
+          side: "source" as const,
+          pose: sourceOwner.pose,
+          lineagePathId: `${context.plan.id}.path.retained-exponent`,
+          lineageEdgeId: "exponent-branches",
+          lineageBranchIndex: 1,
+          motionPathVariant: sourceOwner.variant
+        }),
     ...targetTokens.map((token) => {
       const motionIndex = relation.target!.motionIds.indexOf(token.motionId);
       const selectorId = relation.target!.selectorIds[motionIndex];
       const coefficient =
         selectorId === context.plan.exponent.coefficientSelectorId;
-      const branch = coefficient
-        ? context.frame.coefficient
-        : context.frame.decrementInput;
+      if (!coefficient) {
+        return frameToken(token, "target", {
+          opacity: context.frame.decrementInput.opacity,
+          x: 0,
+          y: 0,
+          scale: context.frame.decrementInput.scale
+        });
+      }
+      const branch = context.frame.coefficient;
       const path = lineagePathPose({
         origin: relation.source!.bounds,
         destination: token.localRect,
@@ -1659,6 +1737,118 @@ function sampleDerivativePowerRelation(
       };
     })
   ];
+}
+
+function sampleDerivativeDecrementRelation(
+  relation: KpMeasuredEquationTransitionRelationGeometry,
+  sourceTokens: readonly AnnotatedMotionToken[],
+  targetTokens: readonly AnnotatedMotionToken[],
+  context: DerivativeDecrementChoreographyContext
+): readonly KpEquationTokenMotionFrameToken[] | undefined {
+  if (context.plan.contextRecordIds.includes(relation.recordId)) {
+    return [
+      ...sourceTokens.map((token) => frameToken(token, "source", {
+        opacity: context.frame.semanticProgress === 1 ? 0 : 1,
+        x: (relation.delta?.x ?? 0) * context.frame.contextReflowProgress,
+        y: (relation.delta?.y ?? 0) * context.frame.contextReflowProgress,
+        scale: 1
+      })),
+      ...targetTokens.map((token) => frameToken(token, "target", {
+        opacity: context.frame.semanticProgress === 1 ? 1 : 0,
+        x: 0,
+        y: 0,
+        scale: 1
+      }))
+    ];
+  }
+  if (relation.recordId !== context.plan.evaluation.recordId) return undefined;
+  if (relation.source === undefined || relation.target === undefined) return [];
+
+  const resultMotionId = relation.target.motionIds[
+    relation.target.selectorIds.indexOf(context.plan.evaluation.resultSelectorId)
+  ];
+  const resultToken = targetTokens.find(
+    (token) => token.motionId === resultMotionId
+  );
+  return [
+    ...sourceTokens.map((token) => {
+      const motionIndex = relation.source!.motionIds.indexOf(token.motionId);
+      const selectorId = relation.source!.selectorIds[motionIndex];
+      if (
+        selectorId === context.plan.evaluation.minuendSelectorId &&
+        resultToken !== undefined
+      ) {
+        const delta = tokenCenterDelta(token, resultToken);
+        return frameToken(token, "source", {
+          opacity: context.frame.minuend.opacity,
+          x: delta.x * context.frame.minuend.pathProgress,
+          y: delta.y * context.frame.minuend.pathProgress,
+          scale: 1
+        });
+      }
+      const direction = selectorId ===
+          context.plan.evaluation.decrementOperatorSelectorId
+        ? 1
+        : -1;
+      const withdrawal = context.frame.decrementCause.withdrawalProgress;
+      return frameToken(token, "source", {
+        opacity: context.frame.decrementCause.opacity,
+        x: direction * 1.5 * withdrawal,
+        y: 1.5 * withdrawal,
+        scale: 1
+      });
+    }),
+    ...targetTokens.map((token) => frameToken(token, "target", {
+      opacity: context.frame.result.opacity,
+      x: 0,
+      y: 0,
+      scale: 1
+    }))
+  ];
+}
+
+function sourceOwnerPathPose(input: {
+  readonly source: AnnotatedMotionToken | undefined;
+  readonly destination: AnnotatedMotionToken;
+  readonly pathProgress: number;
+  readonly opacity: number;
+  readonly scale: number;
+  readonly precomputedPath?: KpEquationMotionPathCandidate | undefined;
+}): {
+  readonly pose: KpEquationTokenMotionPose;
+  readonly variant: KpEquationMotionPathVariantId;
+} | undefined {
+  if (input.source === undefined) return undefined;
+  const sourceCenter = rectCenter(input.source.localRect);
+  const destinationCenter = rectCenter(input.destination.localRect);
+  const path = input.precomputedPath ?? planKpEquationMotionPathBetweenPoints({
+    id: "derivative.retained-exponent.direct",
+    start: sourceCenter,
+    end: destinationCenter,
+    variants: ["direct"],
+    preferredVariant: "direct",
+    clearance: 0,
+    moverRadius: 0
+  }).selected;
+  const point = sampleKpEquationMotionPath(path, input.pathProgress);
+  return {
+    pose: {
+      opacity: input.opacity,
+      x: point.x - sourceCenter.x,
+      y: point.y - sourceCenter.y,
+      scale: input.scale
+    },
+    variant: path.variant
+  };
+}
+
+function tokenCenterDelta(
+  source: AnnotatedMotionToken,
+  target: AnnotatedMotionToken
+): { readonly x: number; readonly y: number } {
+  const from = rectCenter(source.localRect);
+  const to = rectCenter(target.localRect);
+  return { x: to.x - from.x, y: to.y - from.y };
 }
 
 function sampleLineageRelation(

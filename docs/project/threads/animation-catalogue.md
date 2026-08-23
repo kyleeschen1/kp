@@ -5,9 +5,12 @@ Last Updated: 2026-08-23
 Current Next Action: visually review the reversible, governance-v2 flat-2D
 differentiation exemplar `d/dx x^3 -> 3x^(3-1) -> 3x^2` at
 `/?artifact=animation.generated.calculus.derivative.power-rule-x-cubed&playhead=0`.
-Its two semantic transitions, typed case ledger, browser contract, generated
-coverage, and release evidence are ready; stop before a second caller or
-family promotion. See
+Its candidate presentation gives one retained exponent direct ownership,
+stages `-1` as an explicit cause, resolves to a quiet native result, and uses
+larger native KaTeX type. Its two semantic transitions, typed case ledger,
+browser contract, generated coverage, and focused evidence are ready; exact
+timing, path, size, and paint remain provisional. Stop before a second caller
+or family promotion. See
 `../reviews/2026-08-23-animation-governance-epoch-v2-derivative-checkpoint.md`.
 The
 finite-sum/product binder tranche is already complete and `Direct`; its
