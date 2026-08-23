@@ -15,6 +15,10 @@ import type {
   KpAnimationPrincipleContractId,
   KpAnimationPrincipleId
 } from "./animation-principle-ledger.ts";
+import {
+  resolveKpAnimationReviewFreshness,
+  type KpAnimationReviewFreshness
+} from "./animation-review-freshness.ts";
 
 export type KpAnimationConformanceGapCode =
   | KpAnimationGovernanceBypassCode
@@ -78,6 +82,7 @@ export interface KpAnimationConformanceManifest {
     readonly maturity: string;
     readonly evidenceSourceIds: readonly string[];
   };
+  readonly reviewFreshness: KpAnimationReviewFreshness;
   readonly disposition: KpAnimationConformanceDisposition;
 }
 
@@ -137,7 +142,7 @@ function compileManifest(
     gaps.push("asset-presentation-constraints-missing");
   }
   const uniqueGaps = unique(gaps);
-  return Object.freeze({
+  const manifestWithoutFreshness = {
     schemaVersion: "kp.animation-conformance-manifest.v1" as const,
     kind: "animation-conformance-manifest" as const,
     assetId: asset.id,
@@ -193,6 +198,11 @@ function compileManifest(
       evidenceSourceIds: Object.freeze([...entry.review.evidenceSourceIds])
     }),
     disposition: disposition(entry.surface.kind, uniqueGaps)
+  } satisfies Omit<KpAnimationConformanceManifest, "reviewFreshness">;
+  const manifest = manifestWithoutFreshness as KpAnimationConformanceManifest;
+  return Object.freeze({
+    ...manifestWithoutFreshness,
+    reviewFreshness: resolveKpAnimationReviewFreshness({ manifest })
   });
 }
 

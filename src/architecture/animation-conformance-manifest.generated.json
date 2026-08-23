@@ -83,6 +83,13 @@
           "specialized-equation-adapter-direct",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.algebra.exponential-homomorphism.difference-to-quotient",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -166,6 +173,13 @@
           "specialized-equation-adapter-direct",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.algebra.exponential-homomorphism.sum-to-product",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -251,6 +265,13 @@
           "specialized-equation-adapter-direct",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.algebra.log-exponent.solve-two-power-x",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -335,6 +356,13 @@
           "specialized-equation-adapter-direct",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.algebra.log-product.equivalence-frame",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -419,6 +447,13 @@
           "specialized-equation-adapter-direct",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.algebra.log-product.product-to-sum",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -503,6 +538,13 @@
           "specialized-equation-adapter-direct",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.algebra.log-product.three-factors-to-sum",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -586,6 +628,13 @@
           "specialized-equation-adapter-direct",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.algebra.log-quotient.difference-to-quotient",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -676,6 +725,13 @@
           "typography-policy-implicit",
           "specialized-equation-adapter-direct"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.algebra.radical.compound-carrier-normalization",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -768,6 +824,13 @@
           "typography-policy-implicit",
           "specialized-equation-adapter-direct"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.algebra.radical.solve-x-squared-nine",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -851,6 +914,13 @@
           "typography-policy-implicit",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.comparison.jacobian-hessian",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -952,6 +1022,13 @@
           "specialized-equation-adapter-direct",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.comparison.linear-solve-programming",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -1032,6 +1109,13 @@
         "gapCodes": [
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.derivative-rules.tangent-graph",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -1112,6 +1196,15 @@
         "gapCodes": [
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.dot-projection.basic",
+        "state": "stale-by-policy",
+        "reason": "Legacy review provenance does not pin a policy epoch and cannot be assumed current.",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
       }
     },
     {
@@ -1189,6 +1282,13 @@
         "gapCodes": [
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.economics.supply-demand-equilibrium-shift",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -1273,6 +1373,13 @@
           "specialized-equation-adapter-direct",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.equation.finite-product-expansion.v1",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -1357,6 +1464,13 @@
           "specialized-equation-adapter-direct",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.equation.finite-sum-expansion.v1",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -1443,6 +1557,13 @@
           "specialized-equation-adapter-direct",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -1527,6 +1648,13 @@
           "specialized-equation-adapter-direct",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.equation.fraction-equivalence.compact.v1",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -1611,6 +1739,13 @@
           "specialized-equation-adapter-direct",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.equation.fraction-equivalence.v1",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -1694,6 +1829,13 @@
           "specialized-equation-adapter-direct",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.equation.logarithm-change-of-base.v1",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -1780,6 +1922,13 @@
         "gapCodes": [
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.exact-fraction-quantity.third-plus-sixth",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -1860,6 +2009,15 @@
           "typography-policy-implicit",
           "specialized-equation-adapter-direct",
           "asset-presentation-constraints-missing"
+        ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.generated.add-zero",
+        "state": "stale-by-policy",
+        "reason": "Legacy review provenance does not pin a policy epoch and cannot be assumed current.",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
         ]
       }
     },
@@ -1944,6 +2102,13 @@
           "typography-policy-implicit",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.generated.calculus.derivative.power-rule-x-cubed",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -2027,6 +2192,13 @@
           "typography-policy-implicit",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.generated.calculus.derivative.sum-rule-polynomial",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -2110,6 +2282,13 @@
           "typography-policy-implicit",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.generated.calculus.integral.power-rule-quadratic",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -2192,6 +2371,13 @@
           "typography-policy-implicit",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.generated.cancellation.additive-inverses",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -2275,6 +2461,13 @@
           "typography-policy-implicit",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.generated.distribution.expand-a-sum",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -2357,6 +2550,13 @@
           "typography-policy-implicit",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.generated.distribution.factor-common-a",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -2440,6 +2640,13 @@
           "typography-policy-implicit",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.generated.exponent.square-as-product",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -2524,6 +2731,13 @@
           "typography-policy-implicit",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.generated.fraction-expression.two-fourths",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -2606,6 +2820,13 @@
           "typography-policy-implicit",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.generated.function-wrap.apply-f",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -2688,6 +2909,13 @@
           "typography-policy-implicit",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.generated.linear-algebra.dot-product.three-vector",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -2770,6 +2998,13 @@
           "typography-policy-implicit",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -2868,6 +3103,13 @@
           "specialized-equation-adapter-direct",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.generated.linear-algebra.matrix-vector.two-by-two",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -2955,6 +3197,13 @@
           "typography-policy-implicit",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.generated.linear-solve.linear-68c15d41",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -3030,6 +3279,13 @@
         "gapCodes": [
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.generated.pipeline-diagram",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -3113,6 +3369,13 @@
           "typography-policy-implicit",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.generated.radical.square-root-as-power",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -3193,6 +3456,13 @@
           "typography-policy-implicit",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.generated.substitute-three",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -3273,6 +3543,13 @@
           "typography-policy-implicit",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.generated.substitute-three.provisional-incorrect",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -3350,6 +3627,13 @@
         "gapCodes": [
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.graph.surface-mode.mesh-to-donut",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -3427,6 +3711,13 @@
         "gapCodes": [
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.graph.vector.linear-map-scale",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -3509,6 +3800,13 @@
           "typography-policy-implicit",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.inequality.sign-flip.basic",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -3588,6 +3886,13 @@
         "gapCodes": [
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.integral-ftc.area-sweep",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -3678,6 +3983,13 @@
           "equation-grammar-v2-missing",
           "typography-policy-implicit"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.linear-solve.solve-x",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -3767,6 +4079,13 @@
           "typography-policy-implicit",
           "specialized-equation-adapter-direct"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.operation-evaluation.five-plus-two",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -3856,6 +4175,13 @@
           "typography-policy-implicit",
           "specialized-equation-adapter-direct"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.operation-evaluation.one-plus-two",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -3945,6 +4271,13 @@
           "typography-policy-implicit",
           "specialized-equation-adapter-direct"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.operation-evaluation.three-sixths",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -4031,6 +4364,15 @@
           "equation-grammar-v2-missing",
           "typography-policy-implicit",
           "specialized-equation-adapter-direct"
+        ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.operation-evaluation.two-times-one-carrier",
+        "state": "stale-by-policy",
+        "reason": "Legacy review provenance does not pin a policy epoch and cannot be assumed current.",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
         ]
       }
     },
@@ -4121,6 +4463,13 @@
           "typography-policy-implicit",
           "specialized-equation-adapter-direct"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.operation-evaluation.two-times-three",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -4198,6 +4547,13 @@
         "gapCodes": [
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.physics.constant-force-work-energy",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -4283,6 +4639,13 @@
         "gapCodes": [
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.place-value-addition.278-plus-156",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -4365,6 +4728,13 @@
         "gapCodes": [
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.programming.add.execution-trace",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -4447,6 +4817,13 @@
         "gapCodes": [
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.programming.lisp-lambda-application",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -4529,6 +4906,13 @@
         "gapCodes": [
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.programming.python-free-shipping-refactor",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -4627,6 +5011,13 @@
         "gapCodes": [
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.programming.scheme-factorial",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -4709,6 +5100,13 @@
         "gapCodes": [
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.programming.typescript-free-shipping-refactor",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -4792,6 +5190,13 @@
           "typography-policy-implicit",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.sample.fourier-transform-pair",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     },
     {
@@ -4875,6 +5280,13 @@
           "typography-policy-implicit",
           "asset-presentation-constraints-missing"
         ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.sample.fundamental-theorem-calculus",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
       }
     }
   ]

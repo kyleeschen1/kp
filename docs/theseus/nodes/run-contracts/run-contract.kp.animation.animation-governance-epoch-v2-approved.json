@@ -76,7 +76,8 @@
     {
       "id": "review-freshness",
       "title": "review-freshness",
-      "status": "planned"
+      "summary": "Added fail-closed current, stale-by-policy, stale-by-renderer, unreviewed, and waived review states. Only an explicit snapshot matching the exact policy, profiles, and renderer adapters can be current; legacy provenance remains visible but stale.",
+      "status": "complete"
     },
     {
       "id": "reverse-dependencies",

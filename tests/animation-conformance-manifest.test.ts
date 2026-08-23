@@ -48,6 +48,7 @@ test("every loadable asset has one renderer-neutral conformance manifest", () =>
     assert.equal(manifest.resolvedProfiles.every(({ epochId }) =>
       epochId === manifest.policy.epochId
     ), true);
+    assert.notEqual(manifest.reviewFreshness.state, "current");
   }
 });
 
