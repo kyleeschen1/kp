@@ -214,6 +214,7 @@
     "check:animation-governance-inventory": "node --disable-warning=ExperimentalWarning scripts/generate-animation-governance-inventory.ts --check",
     "test:animation-governance-inventory": "node --disable-warning=ExperimentalWarning --test tests/animation-governance-inventory.test.ts",
     "test:animation-governance-baseline": "node --disable-warning=ExperimentalWarning --test tests/animation-governance-baseline.test.ts",
+    "test:animation-principle-ledger": "node --disable-warning=ExperimentalWarning --test tests/animation-principle-ledger.test.ts",
     "check:equation-asset-manifest": "node --disable-warning=ExperimentalWarning scripts/generate-equation-asset-manifest.ts --check",
     "test:equation-asset-manifest": "node --disable-warning=ExperimentalWarning --test tests/equation-asset-manifest.test.ts tests/animation-library-display-catalog-generation.test.ts",
     "test:animation-capability-plan": "node --disable-warning=ExperimentalWarning --test tests/animation-capability-plan.test.ts tests/equation-animation-capability-plan.test.ts tests/cross-domain-animation-capability-plan.test.ts",

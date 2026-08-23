@@ -70,6 +70,20 @@
       "scope": "typed baseline ratchets",
       "checkedAt": "2026-08-23T05:10:19.938Z",
       "notes": "Three tests passed; old ceilings remain authoritative, lazy declaration counts are tied to literal registries, and bundle observations retain headroom."
+    },
+    {
+      "command": "npm run test:animation-principle-ledger",
+      "status": "passed",
+      "scope": "slice 03 principle-ledger",
+      "checkedAt": "2026-08-23T05:16:56.904Z",
+      "notes": "Four focused tests prove derived enforcement, promoted evidence requirements, duplicate rejection, replacement closure, and advisory exemplar status."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 03 principle-ledger",
+      "checkedAt": "2026-08-23T05:16:58.604Z",
+      "notes": "Application, node, test, Svelte, and domain type checks accept the typed ledger."
     }
   ],
   "progress": {

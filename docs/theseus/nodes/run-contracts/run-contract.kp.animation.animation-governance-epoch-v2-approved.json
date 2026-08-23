@@ -58,7 +58,8 @@
     {
       "id": "principle-ledger",
       "title": "principle-ledger",
-      "status": "planned"
+      "summary": "Added a typed principle ledger whose enforcement is derived from lifecycle status. Only evidence-backed principles with two distinct exemplars and contract IDs are required; single-exemplar visual discoveries remain advisory, and deprecated or blocked records carry no implicit global authority.",
+      "status": "complete"
     },
     {
       "id": "conformance-manifest",
