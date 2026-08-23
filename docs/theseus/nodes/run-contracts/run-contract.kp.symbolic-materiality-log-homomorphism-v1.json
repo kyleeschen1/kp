@@ -240,6 +240,20 @@
       "scope": "md13 typed handoff boundary",
       "checkedAt": "2026-08-23T00:01:44.000Z",
       "notes": "Application, Node, tests, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "failed",
+      "scope": "md14 initial corridor guard",
+      "checkedAt": "2026-08-23T00:07:57.500Z",
+      "notes": "Two assertion refinements distinguished causal overlap from exact pose completion: source release remains active during early transfer, so the guard now samples the clear corridor after release and protects ordering rather than an incidental depth constant."
+    },
+    {
+      "command": "npm run test:log-product",
+      "status": "passed",
+      "scope": "md14 direct factor corridor",
+      "checkedAt": "2026-08-23T00:08:01.928Z",
+      "notes": "46 focused tests passed; persistent factors retain authored lineage and direct routes while source relation material clears beneath them."
     }
   ],
   "allowedWork": [
@@ -349,7 +363,8 @@
     {
       "id": "md14",
       "title": "Preserve direct factor release and clear corridor",
-      "status": "planned"
+      "summary": "Executable coverage now protects the existing direct factor corridor: factor lineage stays preserved and lifted while source relation material clears, without changing canonical x/y geometry.",
+      "status": "complete"
     },
     {
       "id": "md15",

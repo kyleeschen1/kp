@@ -13,6 +13,15 @@ import {
 import {
   kpCanonicalLogProductMaterialLineage
 } from "../src/animation/log-product-material-depth-lineage.ts";
+import {
+  kpCanonicalLogProductMaterialRoleBindings
+} from "../src/animation/log-product-material-depth-bindings.ts";
+import {
+  createKpLogProductSemanticMotionProjectionPolicy
+} from "../src/rendering/log-product-transit-session.ts";
+import {
+  kpCanonicalCompiledLogProductOperation
+} from "../src/semantic/log-product-transformation-compiler.ts";
 
 function sample(progress: number) {
   return sampleKpSemanticMotionChoreography({
@@ -126,4 +135,58 @@ test("operator penetration withdraws source before generated syntax rises", () =
   assert.ok(lineage.generatedTargetApplicationEntityIds.every((id) =>
     id !== lineage.sourceApplicationEntityId
   ));
+});
+
+test("persistent factors keep the accepted direct corridor while source syntax clears", () => {
+  const transfer = kpCanonicalCompiledLogProductSemanticMotion.tracks.find(
+    ({ eventId }) => eventId === "event.log-product.arrive"
+  )!;
+  const sourceReleaseEnd = Math.max(
+    ...kpCanonicalCompiledLogProductSemanticMotion.tracks
+      .filter(({ eventId }) => [
+        "event.log-product.release-shells",
+        "event.log-product.depart"
+      ].includes(eventId))
+      .map(({ window }) => window.end)
+  );
+  const midpoint = (
+    Math.max(transfer.window.start, sourceReleaseEnd) + transfer.window.end
+  ) / 2;
+  const poses = sampleKpLogProductMaterialDepthChoreography({
+    mode: "material",
+    choreography: sample(midpoint)
+  });
+  const factors = poses["role.material.log-product.persistent-factor"];
+  const sourceRelation = poses["role.material.log-product.source-relation"];
+
+  assert.equal(factors.plane, "active");
+  assert.ok(factors.normalizedDepth > 0.8);
+  assert.equal(factors.activity, factors.normalizedDepth);
+  assert.ok(sourceRelation.normalizedDepth < factors.normalizedDepth);
+  assert.ok(sourceRelation.activity < factors.activity);
+
+  const factorBinding = kpCanonicalLogProductMaterialRoleBindings.find(
+    ({ roleId }) => roleId === "role.material.log-product.persistent-factor"
+  )!;
+  const lineage = kpCanonicalLogProductMaterialLineage.factorContinuities;
+  assert.deepEqual(
+    new Set(factorBinding.entityIds),
+    new Set(lineage.flatMap(({ sourceEntityId, targetEntityId }) => [
+      sourceEntityId,
+      targetEntityId
+    ]))
+  );
+
+  const policy = createKpLogProductSemanticMotionProjectionPolicy(
+    kpCanonicalCompiledLogProductOperation
+  );
+  for (const factor of kpCanonicalCompiledLogProductOperation.contract.family
+    .factors) {
+    assert.equal(
+      policy.routeByCorrespondenceRecordId[
+        `correspondence.log-product.${factor.name}-argument-continuity`
+      ]?.variant,
+      "direct"
+    );
+  }
 });
