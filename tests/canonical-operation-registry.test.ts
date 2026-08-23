@@ -16,9 +16,13 @@ import {
   resolveKpCanonicalOperation
 } from "../src/semantic/canonical-operation-registry.ts";
 import { listGeneratedAlgebraTransformDefinitions } from "../src/semantic/generated-algebra-transform-definition-registry.ts";
+import {
+  kpArithmeticOperationEntries
+} from "../src/semantic/arithmetic-operation-pack.ts";
 
 const pins = createKpCanonicalOperationProjectPins([
   { packId: "kp.core", version: "1.0.0" },
+  { packId: "kp.arithmetic", version: "1.0.0" },
   { packId: "kp.algebra", version: "0.1.0" },
   { packId: "kp.semantic-motion", version: "0.1.0" }
 ]);
@@ -51,6 +55,37 @@ test("default registry resolves exact core and algebra pins deterministically", 
       ? matrix.entry.contract.roles.map((role) => role.id)
       : [],
     ["left-rows", "right-columns", "cell-products", "result-cells"]
+  );
+});
+
+test("direct arithmetic resolves through its semantic pack instead of a generic merge", () => {
+  assert.deepEqual(
+    kpArithmeticOperationEntries.map(({ id }) => id).sort(),
+    [
+      "kp.arithmetic.add",
+      "kp.arithmetic.divide",
+      "kp.arithmetic.multiply",
+      "kp.arithmetic.subtract"
+    ]
+  );
+  const addition = resolveKpCanonicalOperation({
+    pins,
+    operationId: "kp.arithmetic.add"
+  });
+  assert.equal(addition.status, "resolved");
+  assert.equal(
+    addition.status === "resolved" ? addition.pack.id : undefined,
+    "kp.arithmetic"
+  );
+  assert.deepEqual(
+    addition.status === "resolved"
+      ? addition.entry.contract.roles.map(({ id }) => id)
+      : [],
+    ["operands-before", "result-after"]
+  );
+  assert.deepEqual(
+    addition.status === "resolved" ? addition.entry.canonicalComposition : [],
+    ["kp.core.merge"]
   );
 });
 

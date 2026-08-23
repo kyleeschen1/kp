@@ -61,6 +61,10 @@ import type {
 import type {
   KpOperationEvaluationFamilyComparisonSession
 } from "./operation-evaluation-family-comparison.dev.ts";
+import {
+  compileKpDirectArithmeticEvaluationMigrationV2,
+  type KpEquationEvaluationMigrationV2
+} from "../domain-ir/equation-evaluation-migration-v2.ts";
 
 interface OperationEvaluationSurfaceSession {
   readonly fontReadiness: ReturnType<typeof createKpEquationFontReadiness>;
@@ -117,11 +121,15 @@ KpEditorAnimationSurfaceAdapter = {
         { once: true }
       );
       const generation = ++session.generation;
+      const governance = compileKpDirectArithmeticEvaluationMigrationV2(
+        playbackSession.animation
+      );
       void prepareOperationEvaluationSurface({
         player,
         slot,
         session,
         generation,
+        governance,
         renderPlan: projectKpReaderEquationRenderPlan({
           animation: playbackSession.animation,
           // A single forward compilation owns both directions; rewind samples
@@ -163,6 +171,7 @@ async function prepareOperationEvaluationSurface(input: {
   readonly slot: HTMLElement;
   readonly session: OperationEvaluationSurfaceSession;
   readonly generation: number;
+  readonly governance: KpEquationEvaluationMigrationV2;
   readonly renderPlan: KpReaderEquationRenderPlan;
 }): Promise<void> {
   const transition = input.renderPlan.transitions[0];
@@ -257,6 +266,13 @@ async function prepareOperationEvaluationSurface(input: {
     stage.className =
       "editor-equation-stage kp-operation-evaluation-stage";
     stage.dataset["kpOperationEvaluationStage"] = "";
+    stage.dataset["kpEquationGovernanceCompilerId"] =
+      input.governance.compilerId;
+    stage.dataset["kpEquationGovernancePlanId"] =
+      input.governance.presentationPlan.id;
+    stage.dataset["kpEquationEvaluationAuthorityId"] =
+      input.governance.presentationPlan.transitions[0]!
+        .evaluationAuthority!.authorityId;
     stage.dataset["kpOperationEvaluationStatus"] = "preparing";
     stage.dataset["kpOperationEvaluationTransitionId"] = transition.id;
     stage.dataset["kpOperationEvaluationPresentationPlanId"] =
@@ -720,6 +736,7 @@ function markCompilationFailure(
   if (stage !== null) {
     stage.dataset["kpOperationEvaluationStatus"] = "error";
     stage.dataset["kpOperationEvaluationPreparationPhase"] = "error";
+    stage.dataset["kpOperationEvaluationError"] = message;
   }
   player.dataset["kpOperationEvaluationContinuityStatus"] = "error";
   slot.dataset["kpEditorAnimationAdapterStatus"] = "error";

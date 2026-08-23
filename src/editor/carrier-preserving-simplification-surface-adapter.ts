@@ -5,6 +5,7 @@ import {
   type KpCarrierPreservingSimplificationRecipe
 } from "../animation/carrier-preserving-simplification-recipe.ts";
 import {
+  createKpTwoTimesOneCarrierAnimationAsset,
   kpTwoTimesOneCarrierAnimationId
 } from "../animation/operation-evaluation-adapter.ts";
 import {
@@ -67,6 +68,10 @@ import type {
 import type {
   KpEditorAnimationSurfaceAdapter
 } from "./animation-surface-adapter-registry.ts";
+import {
+  compileKpEquationEvaluationMigrationV2,
+  type KpEquationEvaluationMigrationV2
+} from "../domain-ir/equation-evaluation-migration-v2.ts";
 
 type EndpointRoots = readonly [HTMLElement, HTMLElement];
 type NativeEndpoints = readonly [
@@ -77,6 +82,7 @@ type NativeEndpoints = readonly [
 interface KpCarrierPreservingSimplificationSurfaceDefinition {
   readonly animationId: string;
   readonly recipe: KpCarrierPreservingSimplificationRecipe;
+  readonly governance: KpEquationEvaluationMigrationV2;
   readonly endpoints: NativeEndpoints;
   readonly ariaLabel: string;
   readonly readyStatus: string;
@@ -150,14 +156,27 @@ export const kpEditorCarrierPreservingSimplificationSurfaceAdapter =
 function createSurfaceDefinitions():
 readonly KpCarrierPreservingSimplificationSurfaceDefinition[] {
   const exemplar = createKpTwoTimesOneCarrierExemplar();
+  const exemplarAnimation = createKpTwoTimesOneCarrierAnimationAsset();
   const generatedAddZero = createKpGeneratedAddZeroCarrierSource();
+  const exemplarRecipe = compileRecipe({
+    candidate: createKpTwoTimesOneCarrierEvidenceCandidate(),
+    bundle: exemplar.bundle,
+    transformation: exemplar.transformation
+  });
+  const generatedAddZeroRecipe = compileRecipe({
+    candidate: generatedAddZero.evidenceCandidate,
+    bundle: generatedAddZero.animation.bundle,
+    transformation: generatedAddZero.transformation
+  });
   return Object.freeze([
     Object.freeze({
       animationId: kpTwoTimesOneCarrierAnimationId,
-      recipe: compileRecipe({
-        candidate: createKpTwoTimesOneCarrierEvidenceCandidate(),
-        bundle: exemplar.bundle,
-        transformation: exemplar.transformation
+      recipe: exemplarRecipe,
+      governance: compileCarrierGovernance({
+        animation: exemplarAnimation,
+        operationId:
+          "kp.semantic-motion.absorb-multiplicative-identity",
+        recipe: exemplarRecipe
       }),
       endpoints:
         kpCanonicalCarrierPreservingSimplificationNativeEndpoints,
@@ -170,10 +189,11 @@ readonly KpCarrierPreservingSimplificationSurfaceDefinition[] {
     }),
     Object.freeze({
       animationId: kpGeneratedAddZeroAnimationId,
-      recipe: compileRecipe({
-        candidate: generatedAddZero.evidenceCandidate,
-        bundle: generatedAddZero.animation.bundle,
-        transformation: generatedAddZero.transformation
+      recipe: generatedAddZeroRecipe,
+      governance: compileCarrierGovernance({
+        animation: generatedAddZero.animation,
+        operationId: "kp.semantic-motion.absorb-additive-identity",
+        recipe: generatedAddZeroRecipe
       }),
       endpoints:
         kpGeneratedAddZeroCarrierPreservingSimplificationNativeEndpoints,
@@ -185,6 +205,28 @@ readonly KpCarrierPreservingSimplificationSurfaceDefinition[] {
         "The plus sign and zero fade away while x, equality, and four stay present."
     })
   ]);
+}
+
+function compileCarrierGovernance(input: {
+  readonly animation: import("../animation/asset.ts").KpAnimationAsset;
+  readonly operationId:
+    | "kp.semantic-motion.absorb-additive-identity"
+    | "kp.semantic-motion.absorb-multiplicative-identity";
+  readonly recipe: KpCarrierPreservingSimplificationRecipe;
+}): KpEquationEvaluationMigrationV2 {
+  const operator = input.recipe.removedSyntaxCohort.selectorRefs.filter(
+    (id) => id !== input.recipe.identityLawWitness.sourceSelectorRef
+  );
+  return compileKpEquationEvaluationMigrationV2({
+    animation: input.animation,
+    operationId: input.operationId,
+    roleBindings: {
+      "operand-before": [input.recipe.carrier.sourceSelectorRef],
+      operator,
+      identity: [input.recipe.identityLawWitness.sourceSelectorRef],
+      "operand-after": [input.recipe.carrier.targetSelectorRef]
+    }
+  });
 }
 
 function compileRecipe(input: {
@@ -237,6 +279,13 @@ function mountSurface(
   const stage = document.createElement("section");
   stage.className = "kp-carrier-preserving-simplification-stage";
   stage.dataset["kpCarrierPreservingSimplificationStage"] = "preparing";
+  stage.dataset["kpEquationGovernanceCompilerId"] =
+    definition.governance.compilerId;
+  stage.dataset["kpEquationGovernancePlanId"] =
+    definition.governance.presentationPlan.id;
+  stage.dataset["kpEquationEvaluationAuthorityId"] =
+    definition.governance.presentationPlan.transitions[0]!
+      .evaluationAuthority!.authorityId;
   stage.setAttribute(
     "aria-label",
     definition.ariaLabel

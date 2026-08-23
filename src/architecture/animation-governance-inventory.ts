@@ -29,6 +29,9 @@ import {
 import type {
   KpEditorSelectedSurfaceCapabilityDeclarationSet
 } from "../editor/selected-surface-capability-declarations.ts";
+import {
+  findKpEquationGovernanceV2Migration
+} from "../domain-ir/equation-governance-v2-migrations.ts";
 
 export type KpAnimationGovernanceDomain =
   | "equation"
@@ -88,10 +91,12 @@ export interface KpAnimationGovernanceInventoryEntry {
     readonly flow: "host-css";
     readonly mathStyle:
       | "adapter-local-implicit"
+      | "governance-policy-v2"
       | "renderer-domain"
       | "not-applicable";
     readonly opticalScale:
       | "adapter-local-implicit"
+      | "governance-policy-v2"
       | "renderer-domain"
       | "not-applicable";
   };
@@ -212,6 +217,7 @@ function compileEntry(input: {
   );
   const adapterIds = unique([...selectedAdapterIds, ...baseAdapterIds]);
   const domains = unique(surface.slotKinds.map(domainForSlot));
+  const governanceV2 = findKpEquationGovernanceV2Migration(input.asset.id);
   const bypasses: KpAnimationGovernanceBypassCode[] = [];
   if (surface.kind === "unsupported") bypasses.push("unsupported-surface");
   if (surface.slotKinds.length > 0 && adapterIds.length === 0) {
@@ -222,11 +228,19 @@ function compileEntry(input: {
     );
   }
   if (domains.includes("equation")) {
-    bypasses.push("equation-grammar-v2-missing", "typography-policy-implicit");
+    if (governanceV2 === undefined) {
+      bypasses.push("equation-grammar-v2-missing", "typography-policy-implicit");
+    } else if (!adapterIds.includes(governanceV2.adapterId)) {
+      input.diagnostics.push(
+        `Governance-v2 migration ${input.asset.id} requires undeclared adapter ` +
+        `${governanceV2.adapterId}.`
+      );
+    }
     if (input.asset.presentationProfile === undefined) {
       bypasses.push("equation-profile-implicit");
     }
-    if (capabilityIds.some((id) => id !== "equation-katex")) {
+    if (governanceV2 === undefined &&
+        capabilityIds.some((id) => id !== "equation-katex")) {
       bypasses.push("specialized-equation-adapter-direct");
     }
   }
@@ -271,12 +285,16 @@ function compileEntry(input: {
     typography: Object.freeze({
       flow: "host-css" as const,
       mathStyle: domains.includes("equation")
-        ? "adapter-local-implicit" as const
+        ? governanceV2 === undefined
+          ? "adapter-local-implicit" as const
+          : "governance-policy-v2" as const
         : domains.some((domain) => domain === "graph")
           ? "renderer-domain" as const
           : "not-applicable" as const,
       opticalScale: domains.includes("equation")
-        ? "adapter-local-implicit" as const
+        ? governanceV2 === undefined
+          ? "adapter-local-implicit" as const
+          : "governance-policy-v2" as const
         : domains.length > 0
           ? "renderer-domain" as const
           : "not-applicable" as const

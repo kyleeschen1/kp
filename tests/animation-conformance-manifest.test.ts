@@ -14,6 +14,10 @@ import { createKpEditorAnimationLibrary } from
   "../src/editor/animation-library.ts";
 import { kpEditorSelectedSurfaceCapabilityDeclarationSet } from
   "../src/editor/selected-surface-capability-declarations.ts";
+import { resolveKpAnimationPolicyEpoch } from
+  "../src/architecture/animation-policy-epoch.ts";
+import { kpEquationGovernanceV2MigrationDeclarations } from
+  "../src/domain-ir/equation-governance-v2-migrations.ts";
 
 function manifests() {
   const assets = createKpAnimationAssets();
@@ -39,10 +43,11 @@ test("every loadable asset has one renderer-neutral conformance manifest", () =>
     assert.ok(manifest.semanticAuthority.transformationIds.length > 0);
     assert.ok(manifest.projection.adapterIds.length > 0);
     assert.equal(manifest.clock.authority, "kp-animation-runtime-clock");
-    assert.deepEqual(manifest.policy.requiredPrincipleIds, [
-      "principle.animation.semantic-lineage-authority",
-      "principle.animation.deterministic-single-clock"
-    ]);
+    assert.deepEqual(
+      manifest.policy.requiredPrincipleIds,
+      resolveKpAnimationPolicyEpoch(manifest.policy.epochId)
+        .requiredPrincipleIds
+    );
     assert.ok(manifest.policy.principleContractIds.length > 0);
     assert.equal(manifest.resolvedProfiles.length, manifest.domains.length);
     assert.equal(manifest.resolvedProfiles.every(({ epochId }) =>
@@ -63,12 +68,26 @@ test("current equation manifests preserve their declared profile provenance", ()
   ), true);
 });
 
-test("current equation gaps are explicit compatibility, not silent conformance", () => {
+test("equation migrations use v2 while remaining gaps stay explicit", () => {
   const equationManifests = manifests().manifests.filter(({ domains }) =>
     domains.includes("equation")
   );
+  const migratedIds = new Set(
+    kpEquationGovernanceV2MigrationDeclarations.map(({ assetId }) => assetId)
+  );
+  const migrated = equationManifests.filter(({ assetId }) =>
+    migratedIds.has(assetId));
+  const compatibility = equationManifests.filter(({ assetId }) =>
+    !migratedIds.has(assetId));
   assert.ok(equationManifests.length > 0);
-  assert.equal(equationManifests.every(({ disposition }) =>
+  assert.equal(migrated.length, migratedIds.size);
+  assert.equal(migrated.every(({ policy, disposition }) =>
+    policy.epochId === "policy.animation.governance-v2.preview.1" &&
+    !disposition.gapCodes.includes("equation-grammar-v2-missing") &&
+    !disposition.gapCodes.includes("typography-policy-implicit")
+  ), true);
+  assert.equal(compatibility.every(({ disposition, policy }) =>
+    policy.epochId === "policy.animation.legacy.v1" &&
     disposition.status === "compatibility" &&
     disposition.gapCodes.includes("equation-grammar-v2-missing") &&
     disposition.gapCodes.includes("typography-policy-implicit")

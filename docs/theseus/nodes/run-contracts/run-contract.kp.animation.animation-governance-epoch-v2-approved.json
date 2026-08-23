@@ -184,7 +184,8 @@
     {
       "id": "migrate-evaluation",
       "title": "migrate-evaluation",
-      "status": "planned"
+      "summary": "Migrated six arithmetic and identity callers through v2, registered exact arithmetic authority, removed their grammar and typography bypasses, and preserved renderer implementations.",
+      "status": "complete"
     },
     {
       "id": "migrate-log-exponent",

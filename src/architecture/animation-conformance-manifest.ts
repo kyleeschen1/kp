@@ -142,7 +142,12 @@ function compileManifest(
   asset: KpAnimationAsset,
   entry: KpAnimationGovernanceInventory["entries"][number]
 ): KpAnimationConformanceManifest {
-  const epoch = resolveKpAnimationPolicyEpoch("policy.animation.legacy.v1");
+  const epoch = resolveKpAnimationPolicyEpoch(
+    entry.domains.includes("equation") &&
+      !entry.bypasses.includes("equation-grammar-v2-missing")
+      ? "policy.animation.governance-v2.preview.1"
+      : "policy.animation.legacy.v1"
+  );
   const gaps: KpAnimationConformanceGapCode[] = [...entry.bypasses];
   if (asset.presentationConstraints === undefined) {
     gaps.push("asset-presentation-constraints-missing");

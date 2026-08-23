@@ -427,6 +427,34 @@
       "scope": "slice-20-log-paint-ownership",
       "checkedAt": "2026-08-23T07:14:35.825Z",
       "notes": "All TypeScript, Svelte, and domain type boundaries pass."
+    },
+    {
+      "command": "npm-run-test-equation-presentation-plan-v2",
+      "status": "passed",
+      "scope": "slice24-evaluation-migration",
+      "checkedAt": "2026-08-23T15:03:15.954Z",
+      "notes": "Six"
+    },
+    {
+      "command": "npm-run-test-animation-policy-epoch",
+      "status": "passed",
+      "scope": "slice24-conformance",
+      "checkedAt": "2026-08-23T15:03:17.404Z",
+      "notes": "Migrated"
+    },
+    {
+      "command": "npm-run-visual-carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "slice24-visual-preservation",
+      "checkedAt": "2026-08-23T15:03:18.775Z",
+      "notes": "Five"
+    },
+    {
+      "command": "npm-run-visual-operation-evaluation-family-exemplar",
+      "status": "failed",
+      "scope": "pre-existing-visual-baseline",
+      "checkedAt": "2026-08-23T15:03:36.566Z",
+      "notes": "Existing"
     }
   ],
   "progress": {

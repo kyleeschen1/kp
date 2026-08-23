@@ -14,6 +14,9 @@ import {
 import {
   kpEditorSelectedSurfaceCapabilityDeclarationSet
 } from "../src/editor/selected-surface-capability-declarations.ts";
+import {
+  kpEquationGovernanceV2MigrationDeclarations
+} from "../src/domain-ir/equation-governance-v2-migrations.ts";
 
 function inventory() {
   const descriptors = createKpEditorAnimationLibrary();
@@ -40,12 +43,26 @@ test("classifies every loadable asset without starting a runtime", () => {
   );
 });
 
-test("makes current equation governance bypasses explicit", () => {
+test("distinguishes migrated equation governance from explicit compatibility", () => {
   const equations = inventory().entries.filter(({ domains }) =>
     domains.includes("equation")
   );
+  const migratedIds = new Set(
+    kpEquationGovernanceV2MigrationDeclarations.map(({ assetId }) => assetId)
+  );
+  const migrated = equations.filter(({ assetId }) => migratedIds.has(assetId));
+  const compatibility = equations.filter(({ assetId }) =>
+    !migratedIds.has(assetId));
   assert.ok(equations.length > 0);
-  assert.equal(equations.every(({ bypasses }) =>
+  assert.equal(migrated.length, migratedIds.size);
+  assert.equal(migrated.every(({ bypasses, typography }) =>
+    !bypasses.includes("equation-grammar-v2-missing") &&
+    !bypasses.includes("typography-policy-implicit") &&
+    !bypasses.includes("specialized-equation-adapter-direct") &&
+    typography.mathStyle === "governance-policy-v2" &&
+    typography.opticalScale === "governance-policy-v2"
+  ), true);
+  assert.equal(compatibility.every(({ bypasses }) =>
     bypasses.includes("equation-grammar-v2-missing") &&
     bypasses.includes("typography-policy-implicit")
   ), true);

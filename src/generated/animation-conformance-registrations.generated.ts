@@ -176,7 +176,7 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.generated.add-zero",
     "packId": "generated-drafts",
     "manifestId": "manifest.animation.generated.add-zero",
-    "policyEpochId": "policy.animation.legacy.v1",
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
     "disposition": "compatibility"
   },
   {
@@ -360,40 +360,40 @@ export const kpAnimationConformanceRegistrationDeclarations = [
     "assetId": "animation.operation-evaluation.five-plus-two",
     "packId": "operation-evaluation",
     "manifestId": "manifest.animation.operation-evaluation.five-plus-two",
-    "policyEpochId": "policy.animation.legacy.v1",
-    "disposition": "compatibility"
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
+    "disposition": "conformant"
   },
   {
     "kind": "manifest-ref",
     "assetId": "animation.operation-evaluation.one-plus-two",
     "packId": "operation-evaluation",
     "manifestId": "manifest.animation.operation-evaluation.one-plus-two",
-    "policyEpochId": "policy.animation.legacy.v1",
-    "disposition": "compatibility"
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
+    "disposition": "conformant"
   },
   {
     "kind": "manifest-ref",
     "assetId": "animation.operation-evaluation.three-sixths",
     "packId": "operation-evaluation",
     "manifestId": "manifest.animation.operation-evaluation.three-sixths",
-    "policyEpochId": "policy.animation.legacy.v1",
-    "disposition": "compatibility"
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
+    "disposition": "conformant"
   },
   {
     "kind": "manifest-ref",
     "assetId": "animation.operation-evaluation.two-times-one-carrier",
     "packId": "operation-evaluation",
     "manifestId": "manifest.animation.operation-evaluation.two-times-one-carrier",
-    "policyEpochId": "policy.animation.legacy.v1",
-    "disposition": "compatibility"
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
+    "disposition": "conformant"
   },
   {
     "kind": "manifest-ref",
     "assetId": "animation.operation-evaluation.two-times-three",
     "packId": "operation-evaluation",
     "manifestId": "manifest.animation.operation-evaluation.two-times-three",
-    "policyEpochId": "policy.animation.legacy.v1",
-    "disposition": "compatibility"
+    "policyEpochId": "policy.animation.governance-v2.preview.1",
+    "disposition": "conformant"
   },
   {
     "kind": "manifest-ref",

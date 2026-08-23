@@ -36,6 +36,10 @@ import {
 import {
   cancellationWitnessIdsForOperation
 } from "./cancellation-operation-authority.ts";
+import {
+  kpArithmeticOperationEntries,
+  kpArithmeticOperationPack
+} from "./arithmetic-operation-pack.ts";
 
 export interface KpCanonicalOperationRegistryEntry {
   readonly id: string;
@@ -96,6 +100,7 @@ export const kpSemanticMotionOperationEntries:
 export const kpCanonicalOperationRegistry = createKpCanonicalOperationRegistry({
   packs: [
     kpCanonicalOperationCorePack,
+    kpArithmeticOperationPack,
     kpGeneratedAlgebraOperationPack,
     kpSemanticMotionOperationPack
   ],
@@ -107,6 +112,7 @@ export const kpCanonicalOperationRegistry = createKpCanonicalOperationRegistry({
       authoringSummary: operation.summary,
       contract: coreOperationContract(operation)
     })),
+    ...kpArithmeticOperationEntries,
     ...kpGeneratedAlgebraOperationEntries,
     ...kpSemanticMotionOperationEntries
   ]

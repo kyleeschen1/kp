@@ -557,6 +557,18 @@
       ]
     },
     {
+      "dependencyId": "principle.animation.relation-clearing-transit",
+      "kind": "principle",
+      "callerAssetIds": [
+        "animation.generated.add-zero",
+        "animation.operation-evaluation.five-plus-two",
+        "animation.operation-evaluation.one-plus-two",
+        "animation.operation-evaluation.three-sixths",
+        "animation.operation-evaluation.two-times-one-carrier",
+        "animation.operation-evaluation.two-times-three"
+      ]
+    },
+    {
       "dependencyId": "principle.animation.semantic-lineage-authority",
       "kind": "principle",
       "callerAssetIds": [
@@ -618,6 +630,18 @@
         "animation.programming.typescript-free-shipping-refactor",
         "animation.sample.fourier-transform-pair",
         "animation.sample.fundamental-theorem-calculus"
+      ]
+    },
+    {
+      "dependencyId": "principle.animation.target-arrival-cohort",
+      "kind": "principle",
+      "callerAssetIds": [
+        "animation.generated.add-zero",
+        "animation.operation-evaluation.five-plus-two",
+        "animation.operation-evaluation.one-plus-two",
+        "animation.operation-evaluation.three-sixths",
+        "animation.operation-evaluation.two-times-one-carrier",
+        "animation.operation-evaluation.two-times-three"
       ]
     },
     {
