@@ -29,4 +29,12 @@ test("derivative power LaTeX exposes all semantic roles without changing notatio
   ), fixture.bundle.objects.map((object) =>
     object.selectors.map((selector) => selector.id)
   ));
+  assert.match(
+    annotated[0]?.annotatedLatex ?? "",
+    /kp-derivative-operator-application=/
+  );
+  assert.doesNotMatch(
+    annotated[1]?.annotatedLatex ?? "",
+    /kp-derivative-operator-application=/
+  );
 });

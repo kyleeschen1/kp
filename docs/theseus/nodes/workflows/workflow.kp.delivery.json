@@ -78,6 +78,20 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-08-12T03:39:49.252Z"
+    },
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T23:03:24.780Z",
+      "notes": "32 derivative semantic and choreography tests passed for the baseline candidate."
+    },
+    {
+      "command": "npm run test:browser:differentiation-exemplar",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T23:03:25.468Z",
+      "notes": "2 Chromium derivative catalogue lifecycle tests passed."
     }
   ],
   "progress": {

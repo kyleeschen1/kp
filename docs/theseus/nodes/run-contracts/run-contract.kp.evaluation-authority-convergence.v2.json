@@ -1,0 +1,163 @@
+{
+  "id": "run-contract.kp.evaluation-authority-convergence.v2",
+  "kind": "run-contract",
+  "title": "Evaluation authority convergence",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-23-evaluation-authority-convergence-run-proposal.md",
+      "summary": "User-approved 22-slice authority-to-paint convergence proposal with preservation, rollback, promotion, and stop boundaries."
+    }
+  ],
+  "verification": [
+    "npm run test:differentiation-exemplar",
+    "npm run test:browser:differentiation-exemplar",
+    "npm run test:equation-surface-preservation",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run visual:derivative-power",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Evaluation authority and family-profile types, registries, validation, and presentation-plan propagation.",
+    "Generic equation and shared Native KaTeX contributor-fusion integration.",
+    "Derivative decrement presentation, salience composition, and focused verification evidence."
+  ],
+  "disallowedWork": [
+    "Ink-knot timing, geometry, opacity, or optical-profile retuning.",
+    "Second subtraction caller or catalogue-wide subtraction promotion.",
+    "Changes to the first derivative-power transition or unrelated worktree files.",
+    "Caller-authored family, renderer, timing, keyframe, or geometry authority."
+  ],
+  "goal": "Preserve one compiler-owned evaluation-family decision through generic equation hosting and Native KaTeX paint, make the derivative 3 minus 1 transition use the existing ink-knot realization, fail closed on incompatible authority, and stop at human visual review.",
+  "target": "workflow.kp.delivery",
+  "runMode": "run",
+  "maxSlices": 22,
+  "commitCadence": "Commit after each independently verified slice; stage only exact in-scope paths and preserve unrelated worktree changes.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if a slice requires a new visual motif or caller-specific Native KaTeX offset.",
+    "Stop on duplicated paint ownership, public authoring compatibility break, or change to an already promoted evaluation caller.",
+    "Stop on unexplained preservation failure or work outside the allowed boundary.",
+    "Stop at the derivative contact-sheet human checkpoint before a second caller or broader promotion."
+  ],
+  "slices": [
+    {
+      "id": "kp.eval-auth.s01",
+      "title": "baseline",
+      "summary": "Existing derivative operator/scope candidate isolated; 32 focused tests and 2 Chromium checks pass.",
+      "status": "complete"
+    },
+    {
+      "id": "kp.eval-auth.s02",
+      "title": "compatibility-law",
+      "status": "planned"
+    },
+    {
+      "id": "kp.eval-auth.s03",
+      "title": "topology-certificate",
+      "status": "planned"
+    },
+    {
+      "id": "kp.eval-auth.s04",
+      "title": "topology-derivation",
+      "status": "planned"
+    },
+    {
+      "id": "kp.eval-auth.s05",
+      "title": "family-maturity",
+      "status": "planned"
+    },
+    {
+      "id": "kp.eval-auth.s06",
+      "title": "authority-validation",
+      "status": "planned"
+    },
+    {
+      "id": "kp.eval-auth.s07",
+      "title": "difference-candidate",
+      "status": "planned"
+    },
+    {
+      "id": "kp.eval-auth.s08",
+      "title": "typed-gaps",
+      "status": "planned"
+    },
+    {
+      "id": "kp.eval-auth.s09",
+      "title": "presentation-plan",
+      "status": "planned"
+    },
+    {
+      "id": "kp.eval-auth.s10",
+      "title": "adapter-contract",
+      "status": "planned"
+    },
+    {
+      "id": "kp.eval-auth.s11",
+      "title": "shared-mount",
+      "status": "planned"
+    },
+    {
+      "id": "kp.eval-auth.s12",
+      "title": "generic-host",
+      "status": "planned"
+    },
+    {
+      "id": "kp.eval-auth.s13",
+      "title": "derivative-override",
+      "status": "planned"
+    },
+    {
+      "id": "kp.eval-auth.s14",
+      "title": "salience-composition",
+      "status": "planned"
+    },
+    {
+      "id": "kp.eval-auth.s15",
+      "title": "native-ownership",
+      "status": "planned"
+    },
+    {
+      "id": "kp.eval-auth.s16",
+      "title": "paint-attestation",
+      "status": "planned"
+    },
+    {
+      "id": "kp.eval-auth.s17",
+      "title": "semantic-cohort",
+      "status": "planned"
+    },
+    {
+      "id": "kp.eval-auth.s18",
+      "title": "host-parity",
+      "status": "planned"
+    },
+    {
+      "id": "kp.eval-auth.s19",
+      "title": "lifecycle",
+      "status": "planned"
+    },
+    {
+      "id": "kp.eval-auth.s20",
+      "title": "architecture-ratchet",
+      "status": "planned"
+    },
+    {
+      "id": "kp.eval-auth.s21",
+      "title": "boundary-verification",
+      "status": "planned"
+    },
+    {
+      "id": "kp.eval-auth.s22",
+      "title": "visual-checkpoint",
+      "status": "planned"
+    }
+  ]
+}

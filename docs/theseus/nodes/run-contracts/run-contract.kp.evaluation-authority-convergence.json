@@ -1,0 +1,153 @@
+{
+  "id": "run-contract.kp.evaluation-authority-convergence",
+  "kind": "run-contract",
+  "title": "Evaluation authority convergence",
+  "status": "superseded",
+  "summary": "Replaced before execution because the compact creation command omitted required long-run hygiene fields and used non-namespaced slice ids.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-23-evaluation-authority-convergence-run-proposal.md",
+      "summary": "User-approved 22-slice authority-to-paint convergence proposal with preservation, rollback, promotion, and stop boundaries."
+    }
+  ],
+  "verification": [
+    "npm run test:differentiation-exemplar",
+    "npm run test:browser:differentiation-exemplar",
+    "npm run test:equation-surface-preservation",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run visual:derivative-power",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Evaluation authority and family-profile types, registries, validation, and presentation-plan propagation.",
+    "Generic equation and shared Native KaTeX contributor-fusion integration.",
+    "Derivative decrement presentation, salience composition, and focused verification evidence."
+  ],
+  "disallowedWork": [
+    "Ink-knot timing, geometry, opacity, or optical-profile retuning.",
+    "Second subtraction caller or catalogue-wide subtraction promotion.",
+    "Changes to the first derivative-power transition or unrelated worktree files.",
+    "Caller-authored family, renderer, timing, keyframe, or geometry authority."
+  ],
+  "goal": "Preserve one compiler-owned evaluation-family decision through generic equation hosting and Native KaTeX paint, make the derivative 3 minus 1 transition use the existing ink-knot realization, fail closed on incompatible authority, and stop at human visual review.",
+  "target": "workflow.kp.delivery",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "baseline",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "compatibility-law",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "topology-certificate",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "topology-derivation",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "family-maturity",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "authority-validation",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "difference-candidate",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "typed-gaps",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "presentation-plan",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "adapter-contract",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "shared-mount",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "generic-host",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "derivative-override",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "salience-composition",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "native-ownership",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "paint-attestation",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "semantic-cohort",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "host-parity",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "lifecycle",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "architecture-ratchet",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "boundary-verification",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "visual-checkpoint",
+      "status": "planned"
+    }
+  ]
+}

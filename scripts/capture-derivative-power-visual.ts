@@ -8,11 +8,13 @@ const animationId =
 const baseUrl =
   process.env["KP_VISUAL_BASE_URL"] ?? "http://127.0.0.1:8000";
 const outputRoot = path.resolve(
-  process.env["KP_VISUAL_OUTPUT"] ?? "tmp/codex/derivative-power-visual"
+  process.env["KP_VISUAL_OUTPUT"] ??
+    "tmp/codex/derivative-power-scope-trace-visual"
 );
 const checkpoints = [
   { id: "source", progress: 0 },
-  { id: "operator-applies", progress: 0.14 },
+  { id: "application-notice", progress: 0.07 },
+  { id: "operator-released", progress: 0.15 },
   { id: "rewrite-triggered", progress: 0.18 },
   { id: "exponent-branches", progress: 0.28 },
   { id: "decrement-ready", progress: 0.49 },
@@ -127,6 +129,31 @@ try {
     );
   }
 
+  await scrubber.fill("0.66");
+  const decrementGlyphs = await player.locator(
+    "[data-kp-editor-derivative-decrement-role]"
+  ).evaluateAll((elements) => elements.map((element) => {
+    const style = getComputedStyle(element);
+    return {
+      role: (element as HTMLElement).dataset[
+        "kpEditorDerivativeDecrementRole"
+      ],
+      dataset: { ...(element as HTMLElement).dataset },
+      className: element.className,
+      outlineStyle: style.outlineStyle,
+      outlineWidth: style.outlineWidth,
+      outlineColor: style.outlineColor,
+      boxShadow: style.boxShadow
+    };
+  }));
+  if (decrementGlyphs.some(({ outlineStyle, boxShadow }) =>
+    outlineStyle !== "none" || boxShadow !== "none"
+  )) {
+    throw new Error(
+      `Derivative decrement retained fragment boxes: ${JSON.stringify(decrementGlyphs)}`
+    );
+  }
+
   await scrubber.fill("0");
   if (Number(await scrubber.inputValue()) !== 0) {
     throw new Error("Derivative checkpoint did not rewind to its native source.");
@@ -135,11 +162,12 @@ try {
   await writeFile(
     path.join(outputRoot, "manifest.json"),
     `${JSON.stringify({
-      schemaVersion: "kp.derivative-power-visual-review.v1",
+      schemaVersion: "kp.derivative-power-visual-review.v2",
       animationId,
       baseUrl,
       captures,
-      flatGlyphs
+      flatGlyphs,
+      decrementGlyphs
     }, null, 2)}\n`,
     "utf8"
   );

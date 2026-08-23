@@ -53,18 +53,58 @@ test("derivative power rule keeps an explicit decrement and flat glyph motion", 
   const operator = stage.locator(
     '[data-kp-editor-derivative-power-role="derivative-operator"]'
   ).first();
+  const operatorApplication = stage.locator(
+    "[data-kp-derivative-operator-application]"
+  );
   const sourceBase = stage.locator(
     '[data-kp-editor-derivative-power-role="source-operand-base"]'
   );
+  const applicationTrace = stage.locator(
+    "[data-kp-editor-derivative-application-trace]"
+  );
 
-  await seek.fill("0.14");
-  await expect.poll(() => renderedTranslationX(operator)).toBeGreaterThan(0);
+  await seek.fill("0.07");
+  await expect(operatorApplication).toHaveCount(1);
+  await expect(applicationTrace).toHaveCount(1);
+  await expect.poll(() => renderedOpacity(applicationTrace)).toBeGreaterThan(0);
+  await expect.poll(() => renderedTranslationX(operator)).toBe(0);
+  await expect.poll(() => renderedTranslationX(sourceBase)).toBe(0);
+  await expect(coefficient).toHaveCSS("opacity", "0");
+  const traceContainsOperand = await applicationTrace.evaluate((trace) => {
+    const traceRect = trace.getBoundingClientRect();
+    const transition = trace.closest<HTMLElement>(
+      "[data-kp-editor-equation-transition-id]"
+    )!;
+    const operandRects = [
+      transition.querySelector<HTMLElement>(
+        '[data-kp-editor-derivative-power-role="source-operand-base"]'
+      )!.getBoundingClientRect(),
+      transition.querySelector<HTMLElement>(
+        '[data-kp-editor-derivative-power-role="source-exponent"]'
+      )!.getBoundingClientRect()
+    ];
+    return operandRects.every((rect) =>
+      traceRect.left <= rect.left && traceRect.top <= rect.top &&
+      traceRect.right >= rect.right && traceRect.bottom >= rect.bottom
+    );
+  });
+  expect(traceContainsOperand).toBe(true);
+  await expect(stage.locator(
+    "[data-kp-editor-derivative-power-role].kp-focus-group"
+  )).toHaveCount(0);
+
+  await seek.fill("0.15");
+  await expect.poll(() => renderedTranslationX(operator)).toBe(0);
+  await expect.poll(() => renderedOpacity(operatorApplication)).toBe(0);
+  await expect(applicationTrace).toHaveCount(1);
+  await expect.poll(() => renderedOpacity(applicationTrace)).toBe(1);
   await expect.poll(() => renderedTranslationX(sourceBase)).toBe(0);
   await expect(coefficient).toHaveCSS("opacity", "0");
 
   await seek.fill("0.18");
+  await expect.poll(() => renderedTranslationX(operator)).toBe(0);
   await expect.poll(() => renderedTranslationX(sourceBase)).not.toBe(0);
-  await expect.poll(() => renderedOpacity(operator)).toBeLessThan(1);
+  await expect.poll(() => renderedOpacity(operatorApplication)).toBe(0);
   await expect.poll(() => renderedOpacity(coefficient)).toBeGreaterThan(0);
 
   await seek.fill("0.3");
@@ -95,6 +135,7 @@ test("derivative power rule keeps an explicit decrement and flat glyph motion", 
   await expect(stage.locator(
     '[data-kp-editor-equation-target] [data-kp-motion-id$=".decrement-amount"]'
   )).toContainText("1");
+  await expect(applicationTrace).toHaveCount(0);
 
   await seek.fill("0.66");
   await expect(activeTransition(stage)).toHaveAttribute(
@@ -116,6 +157,13 @@ test("derivative power rule keeps an explicit decrement and flat glyph motion", 
     "data-kp-editor-derivative-decrement-salience",
     "focus"
   );
+  await expect(activeTransition(stage).locator(
+    "[data-kp-editor-derivative-decrement-role].kp-focus-group"
+  )).toHaveCount(0);
+  for (const glyph of [decrementOperator, decrementAmount]) {
+    await expect(glyph).toHaveCSS("outline-style", "none");
+    await expect(glyph).toHaveCSS("box-shadow", "none");
+  }
   await expect(evaluatedResult).toHaveCSS("opacity", "0");
   await expect(activeTransition(stage).locator(
     "[data-kp-equation-lineage-path-id]"

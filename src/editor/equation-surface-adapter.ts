@@ -1376,6 +1376,18 @@ function applyLinearRearrangementChoreography(input: {
     existingShadow?.remove();
     return;
   }
+  if (
+    input.transitionElement.dataset[
+      "kpEditorEquationDerivativeDecrementChoreography"
+    ] !== undefined
+  ) {
+    // The derivative adapter already marks the subtraction cause as one
+    // semantic cohort. Per-fragment focus outlines turn that cohort into three
+    // unrelated boxes and compete with the preceding application trace.
+    focusTokens.forEach(clearEquationFocusBinding);
+    existingShadow?.remove();
+    return;
+  }
   const bridgedFocus = activeBridge === undefined
     ? sampled.focus
     : {
@@ -1431,6 +1443,30 @@ function applyLinearRearrangementChoreography(input: {
     String(bridgedFocus.shadowOpacity)
   );
   if (existingShadow === null) input.transitionElement.append(shadow);
+}
+
+function clearEquationFocusBinding(element: HTMLElement): void {
+  element.classList.remove("kp-focus-group");
+  for (const attribute of [
+    "data-kp-focus-group",
+    "data-kp-focus-profile",
+    "data-kp-focus-phase",
+    "data-kp-focus-layout-participation",
+    "data-kp-focus-shadow-field"
+  ]) {
+    element.removeAttribute(attribute);
+  }
+  for (const property of [
+    "--kp-focus-z",
+    "--kp-focus-scale",
+    "--kp-focus-outline-strength",
+    "--kp-focus-shadow-y",
+    "--kp-focus-shadow-blur",
+    "--kp-focus-shadow-opacity",
+    "--kp-focus-context-dimming"
+  ]) {
+    element.style.removeProperty(property);
+  }
 }
 
 function applyDotProductTraversalChoreography(input: {
@@ -3223,6 +3259,15 @@ function applyDerivativePowerTokenFocus(input: {
     activeDerivativePowerPhase(input.frame);
   input.transition.dataset["kpEditorEquationDerivativePowerSettlement"] =
     String(input.frame.settlementProgress);
+  syncDerivativeApplicationTrace(input);
+  const operatorApplication = input.transition.querySelector<HTMLElement>(
+    "[data-kp-derivative-operator-application]"
+  );
+  if (operatorApplication !== null) {
+    operatorApplication.style.opacity = String(input.frame.operator.opacity);
+    operatorApplication.dataset["kpEditorDerivativePowerOperatorSalience"] =
+      salienceState(input.frame.focus.operatorApplication);
+  }
   const exponentRelation = input.geometry.relations.find(
     (relation) => relation.recordId === "exponent-branches"
   );
@@ -3284,6 +3329,115 @@ function applyDerivativePowerTokenFocus(input: {
       input.frame.focus.decrementCause
     );
   }
+}
+
+interface DerivativeApplicationTraceBounds {
+  readonly left: number;
+  readonly top: number;
+  readonly width: number;
+  readonly height: number;
+}
+
+function syncDerivativeApplicationTrace(input: {
+  readonly transition: HTMLElement;
+  readonly geometry: KpPrecomputedEquationMotionPlan["geometry"];
+  readonly plan: KpDerivativePowerChoreographyPlan;
+  readonly frame: KpDerivativePowerChoreographyFrame;
+}): void {
+  const existing = input.transition.querySelector<HTMLElement>(
+    "[data-kp-editor-derivative-application-trace]"
+  );
+  if (input.frame.applicationTrace.presence <= 0) {
+    existing?.remove();
+    return;
+  }
+  const source = derivativeApplicationTraceBounds({
+    geometry: input.geometry,
+    side: "source",
+    selectorIds: input.plan.operatorApplication.argumentSelectorIds
+  });
+  const target = derivativeApplicationTraceBounds({
+    geometry: input.geometry,
+    side: "target",
+    selectorIds: [
+      input.plan.exponent.coefficientSelectorId,
+      input.plan.base.targetSelectorId,
+      input.plan.exponent.decrementInputSelectorId,
+      ...input.plan.operatorApplication.introducedCauseSelectorIds
+    ]
+  });
+  if (source === undefined || target === undefined) {
+    existing?.remove();
+    return;
+  }
+  const progress = input.frame.applicationTrace.geometryProgress;
+  const bounds = {
+    left: derivativeTraceMix(source.left, target.left, progress),
+    top: derivativeTraceMix(source.top, target.top, progress),
+    width: derivativeTraceMix(source.width, target.width, progress),
+    height: derivativeTraceMix(source.height, target.height, progress)
+  };
+  const blockPadding = Math.max(4, bounds.height * 0.1);
+  const inlinePadding = Math.max(6, bounds.height * 0.14);
+  const trace = existing ?? document.createElement("span");
+  trace.className = "editor-equation-stage__derivative-application-trace";
+  trace.dataset["kpEditorDerivativeApplicationTrace"] = input.plan.id;
+  trace.dataset["kpEditorDerivativeApplicationTraceRole"] =
+    "operator-application-scope";
+  trace.setAttribute("aria-hidden", "true");
+  trace.style.left = `${bounds.left - inlinePadding}px`;
+  trace.style.top = `${bounds.top - blockPadding}px`;
+  trace.style.width = `${bounds.width + 2 * inlinePadding}px`;
+  trace.style.height = `${bounds.height + 2 * blockPadding}px`;
+  trace.style.setProperty(
+    "--kp-derivative-application-trace-presence",
+    String(input.frame.applicationTrace.presence)
+  );
+  trace.style.setProperty(
+    "--kp-derivative-application-trace-salience",
+    String(input.frame.applicationTrace.salience)
+  );
+  trace.style.setProperty(
+    "--kp-derivative-application-trace-line-strength",
+    `${42 + 20 * input.frame.applicationTrace.salience}%`
+  );
+  if (existing === null) input.transition.append(trace);
+}
+
+function derivativeApplicationTraceBounds(input: {
+  readonly geometry: KpPrecomputedEquationMotionPlan["geometry"];
+  readonly side: "source" | "target";
+  readonly selectorIds: readonly string[];
+}): DerivativeApplicationTraceBounds | undefined {
+  const tokens = input.side === "source"
+    ? input.geometry.sourceTokens
+    : input.geometry.targetTokens;
+  const rects = input.selectorIds.flatMap((selectorId) => {
+    for (const relation of input.geometry.relations) {
+      const endpoint = input.side === "source"
+        ? relation.source
+        : relation.target;
+      const selectorIndex = endpoint?.selectorIds.indexOf(selectorId) ?? -1;
+      const motionId = endpoint?.motionIds[selectorIndex];
+      const token = tokens.find((candidate) => candidate.motionId === motionId);
+      if (token !== undefined) return [token.localRect];
+    }
+    return [];
+  });
+  if (rects.length !== input.selectorIds.length) return undefined;
+  const left = Math.min(...rects.map((rect) => rect.left));
+  const top = Math.min(...rects.map((rect) => rect.top));
+  const right = Math.max(...rects.map((rect) => rect.left + rect.width));
+  const bottom = Math.max(...rects.map((rect) => rect.top + rect.height));
+  return { left, top, width: right - left, height: bottom - top };
+}
+
+function derivativeTraceMix(
+  source: number,
+  target: number,
+  progress: number
+): number {
+  return source + (target - source) * progress;
 }
 
 function applyDerivativeDecrementTokenFocus(input: {

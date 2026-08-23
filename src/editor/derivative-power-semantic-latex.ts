@@ -69,9 +69,32 @@ export function createKpDerivativePowerSelectorAnnotatedLatex(
         segment("exponent"),
         { kind: "latex", latex: "}" }
       ];
-  return createKpSelectorAnnotatedLatex({
+  const annotated = createKpSelectorAnnotatedLatex({
     id: `derivative-power.${state.objectId}`,
     expectedSelectorIds: state.selectors.map((selector) => selector.id),
     segments
   });
+  if (!source) return annotated;
+  const baseMotionId = annotated.annotations.find(
+    (annotation) => annotation.selectorId === bySuffix.get("base")?.id
+  )?.motionId;
+  const operandStart = baseMotionId === undefined
+    ? -1
+    : annotated.annotatedLatex.indexOf(
+        `\\htmlData{kp-motion-id=${baseMotionId}}`
+      );
+  if (operandStart < 0) {
+    throw new Error(`${state.objectId} cannot isolate its derivative operator.`);
+  }
+  // The semantic operator and variable remain individually addressable, while
+  // this renderer-owned wrapper keeps the fraction rule and denominator d in
+  // the same visual lifecycle as the notation they structurally complete.
+  const operatorApplicationId = `${annotated.id}.operator-application`;
+  return {
+    ...annotated,
+    annotatedLatex:
+      `\\htmlData{kp-derivative-operator-application=${operatorApplicationId}}{` +
+      `${annotated.annotatedLatex.slice(0, operandStart)}}` +
+      annotated.annotatedLatex.slice(operandStart)
+  };
 }

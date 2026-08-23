@@ -342,10 +342,35 @@
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.derivative.power-rule-x-cubed"]
   [data-kp-editor-derivative-power-salience="focus"],
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.derivative.power-rule-x-cubed"]
-  [data-kp-editor-derivative-decrement-salience="focus"] {
+  [data-kp-editor-derivative-decrement-salience="focus"],
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.derivative.power-rule-x-cubed"]
+  [data-kp-editor-derivative-power-operator-salience="focus"] {
   /* Position carries the semantic distinction; theme-aware paint only helps
      the eye follow the current owner without changing KaTeX layout. */
   color: var(--kp-catalogue-link);
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.derivative.power-rule-x-cubed"]
+  .editor-equation-stage__derivative-application-trace {
+  position: absolute;
+  z-index: 2;
+  box-sizing: border-box;
+  border: 1px solid color-mix(
+    in srgb,
+    var(--kp-catalogue-link)
+      var(--kp-derivative-application-trace-line-strength),
+    transparent
+  );
+  border-radius: 0.32rem;
+  opacity: var(--kp-derivative-application-trace-presence);
+  pointer-events: none;
+}
+
+@media (forced-colors: active) {
+  .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.derivative.power-rule-x-cubed"]
+    .editor-equation-stage__derivative-application-trace {
+    border-color: Highlight;
+  }
 }
 
 .kp-animation-catalogue-shell__stage-host .editor-equation-stage__caption {

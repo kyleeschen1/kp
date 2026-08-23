@@ -1628,20 +1628,13 @@ function sampleDerivativePowerRelation(
   if (context.plan.operatorSelectorIds.some((selectorId) =>
     relation.source?.selectorIds.includes(selectorId)
   )) {
-    // The operator advances as one rigid application group, then recoils as
-    // it discharges. It triggers the rewrite without claiming result lineage.
-    const engagementX =
-      6 * context.frame.operator.engagementProgress +
-      2 * context.frame.operator.triggerProgress *
-        (1 - context.frame.operator.dischargeProgress);
-    const operatorX = interpolate(
-      engagementX,
-      -2,
-      context.frame.operator.dischargeProgress
-    );
+    // Scope salience and the application trace communicate agency. Moving the
+    // notation itself would give the consumed operator false object lineage.
+    // The derivative-specific KaTeX wrapper owns removal so its structural
+    // fraction paint withdraws with these semantic fragments.
     return sourceTokens.map((token) => frameToken(token, "source", {
-      opacity: context.frame.operator.opacity,
-      x: operatorX,
+      opacity: 1,
+      x: 0,
       y: 0,
       scale: 1
     }));

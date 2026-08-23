@@ -55,7 +55,7 @@ test("derivative power choreography compiles semantic branch roles", () => {
     decrementOperatorSelectorId: "expression.target.decrement-operator",
     decrementAmountSelectorId: "expression.target.decrement-amount",
     sourceMinimumScale: 1,
-    coefficientPathVariant: "arc-below",
+    coefficientPathVariant: "arc-above",
     decrementInputPathVariant: "direct"
   });
   assert.deepEqual(plan.operatorApplication, {
@@ -132,6 +132,11 @@ test("derivative power choreography previews, acts, settles, and releases", () =
     decrementCause: 0
   });
   assert.equal(end.operator.opacity, 0);
+  assert.deepEqual(end.applicationTrace, {
+    presence: 0,
+    salience: 0,
+    geometryProgress: 1
+  });
   assert.equal(end.base.targetOpacity, 1);
   assert.equal(end.exponentSource.opacity, 0);
   assert.equal(end.coefficient.opacity, 1);
@@ -139,31 +144,35 @@ test("derivative power choreography previews, acts, settles, and releases", () =
   assert.equal(end.decrementArtifacts.opacity, 1);
 });
 
-test("operator engagement opens the derivative rewrite gate", () => {
+test("operator salience hands the derivative rewrite to one scope trace", () => {
   const { plan } = fixture();
-  const approach = sampleKpDerivativePowerChoreography({
+  const notice = sampleKpDerivativePowerChoreography({
     plan,
-    progress: 0.24
+    progress: 0.14
   });
-  const contact = sampleKpDerivativePowerChoreography({
+  const handoff = sampleKpDerivativePowerChoreography({
     plan,
-    progress: 0.28
+    progress: 0.3
   });
   const rewrite = sampleKpDerivativePowerChoreography({
     plan,
-    progress: 0.34
+    progress: 0.36
   });
 
-  assert.ok(approach.operator.engagementProgress > 0);
-  assert.equal(approach.operator.triggerProgress, 0);
-  assert.equal(approach.base.reflowProgress, 0);
-  assert.equal(approach.coefficient.opacity, 0);
-  assert.equal(contact.operator.engagementProgress, 1);
-  assert.equal(contact.operator.triggerProgress, 0);
-  assert.equal(contact.base.reflowProgress, 0);
-  assert.equal(contact.coefficient.opacity, 0);
-  assert.ok(rewrite.operator.triggerProgress > 0);
-  assert.ok(rewrite.operator.dischargeProgress > 0);
+  assert.equal(notice.operator.opacity, 1);
+  assert.ok(notice.focus.operatorApplication > 0);
+  assert.ok(notice.focus.operand > 0);
+  assert.ok(notice.applicationTrace.presence > 0);
+  assert.equal(notice.base.reflowProgress, 0);
+  assert.equal(notice.coefficient.opacity, 0);
+  assert.equal(handoff.operator.opacity, 0);
+  assert.equal(handoff.applicationTrace.presence, 1);
+  assert.equal(handoff.applicationTrace.geometryProgress, 0);
+  assert.equal(handoff.base.reflowProgress, 0);
+  assert.equal(handoff.coefficient.opacity, 0);
+  assert.equal(rewrite.operator.opacity, 0);
+  assert.equal(rewrite.applicationTrace.presence, 1);
+  assert.ok(rewrite.applicationTrace.geometryProgress > 0);
   assert.ok(rewrite.base.reflowProgress > 0);
   assert.ok(rewrite.coefficient.opacity > 0);
 });
