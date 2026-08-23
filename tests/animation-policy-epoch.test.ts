@@ -69,3 +69,24 @@ test("v2 preview rejects implicit equation profiles without changing legacy", ()
     "preserve-legacy"
   );
 });
+
+test("v2 requires approved equation boundary laws without mutating legacy", () => {
+  const legacy = resolveKpAnimationPolicyEpoch("policy.animation.legacy.v1");
+  const v2 = resolveKpAnimationPolicyEpoch(
+    "policy.animation.governance-v2.preview.1"
+  );
+  assert.deepEqual(legacy.requiredPrincipleIds, [
+    "principle.animation.semantic-lineage-authority",
+    "principle.animation.deterministic-single-clock"
+  ]);
+  assert.deepEqual(v2.requiredPrincipleIds, [
+    "principle.animation.semantic-lineage-authority",
+    "principle.animation.deterministic-single-clock",
+    "principle.animation.relation-clearing-transit",
+    "principle.animation.target-arrival-cohort"
+  ]);
+  assert.deepEqual(v2.principleContractIds.slice(-2), [
+    "contract.animation.relation-clearing-transit.v1",
+    "contract.animation.target-arrival-cohort.v1"
+  ]);
+});

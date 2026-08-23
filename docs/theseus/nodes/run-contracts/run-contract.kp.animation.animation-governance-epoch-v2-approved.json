@@ -172,13 +172,14 @@
     {
       "id": "calibration-checkpoint",
       "title": "calibration-checkpoint",
-      "summary": "Started the bounded visual calibration sheet for log equivalence, derivative evaluation, and finite-sum typography; no promotion is authorized before human review.",
-      "status": "in-progress"
+      "summary": "Human checkpoint approved log-equivalence boundary and arrival behavior and finite-sum comparison. Derivative visual tuning remains intentionally deferred to the final derivative checkpoint; no derivative aesthetics were promoted.",
+      "status": "complete"
     },
     {
       "id": "promote-boundary-laws",
       "title": "promote-boundary-laws",
-      "status": "planned"
+      "summary": "Promoted only relation-clearing transit and semantic target-arrival cohorts after two approved structural exemplars. Governance-v2 now requires their typed contracts; the frozen legacy epoch remains unchanged, derivative visuals remain deferred, and no geometry, timing, or domain exception was generalized. Focused ledger, epoch, transit, plan, architecture, and type checks passed.",
+      "status": "complete"
     },
     {
       "id": "migrate-evaluation",

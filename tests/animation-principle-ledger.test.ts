@@ -19,8 +19,8 @@ test("principle status derives enforcement instead of accepting caller policy", 
     [
       ["promoted", "required"],
       ["promoted", "required"],
-      ["approved-exemplar", "advisory"],
-      ["approved-exemplar", "advisory"],
+      ["promoted", "required"],
+      ["promoted", "required"],
       ["candidate", "none"],
       ["deprecated", "none"],
       ["blocked", "none"]
@@ -30,7 +30,9 @@ test("principle status derives enforcement instead of accepting caller policy", 
     kpRequiredAnimationPrinciples.map(({ id }) => id),
     [
       "principle.animation.semantic-lineage-authority",
-      "principle.animation.deterministic-single-clock"
+      "principle.animation.deterministic-single-clock",
+      "principle.animation.relation-clearing-transit",
+      "principle.animation.target-arrival-cohort"
     ]
   );
 });
@@ -73,13 +75,20 @@ test("ledger rejects duplicate IDs, duplicate exemplars, and missing replacement
   );
 });
 
-test("an approved exemplar remains advisory until explicitly promoted", () => {
+test("approved boundary and arrival laws require their two proven callers", () => {
   const relationClearing = kpAnimationPrinciples.find(
     ({ id }) => id === "principle.animation.relation-clearing-transit"
   )!;
-  assert.equal(relationClearing.status, "approved-exemplar");
+  assert.equal(relationClearing.status, "promoted");
   assert.equal(
     resolveKpAnimationPrincipleEnforcement(relationClearing),
-    "advisory"
+    "required"
   );
+  assert.deepEqual(relationClearing.exemplarAnimationIds, [
+    "animation.equation.finite-sum-expansion.v1",
+    "animation.algebra.log-product.equivalence-frame"
+  ]);
+  assert.deepEqual(relationClearing.contractIds, [
+    "contract.animation.relation-clearing-transit.v1"
+  ]);
 });

@@ -200,12 +200,17 @@ export const kpAnimationPrinciples = [
     statement:
       "A continuant crossing a retained relation takes a measured clear route while the relation stays fixed and legible.",
     rationale:
-      "The finite-sum exemplar passed review, but a structurally different log caller must prove the shared boundary before promotion.",
+      "Finite-sum generation and log equivalence independently proved that retained relations remain readable when continuants use renderer-measured crossing routes.",
     evidenceSourceIds: [
-      "docs/project/decisions/2026-08-22-finite-binder-boundary-handoff-and-schematic-expansion.md"
+      "docs/project/decisions/2026-08-22-finite-binder-boundary-handoff-and-schematic-expansion.md",
+      "docs/project/reviews/2026-08-23-animation-governance-v2-calibration-checkpoint.md"
     ],
-    status: "approved-exemplar",
-    exemplarAnimationIds: ["animation.equation.finite-sum-expansion.v1"]
+    status: "promoted",
+    exemplarAnimationIds: [
+      "animation.equation.finite-sum-expansion.v1",
+      "animation.algebra.log-product.equivalence-frame"
+    ],
+    contractIds: ["contract.animation.relation-clearing-transit.v1"]
   },
   {
     id: "principle.animation.target-arrival-cohort",
@@ -215,12 +220,17 @@ export const kpAnimationPrinciples = [
     statement:
       "An explicit target connector resolves with the complete follower group after its left neighbor settles.",
     rationale:
-      "The rhythm is accepted for finite sums but remains advisory until the log caller proves the same semantic boundary.",
+      "Finite-sum term generation and log wrapper reception independently proved that connected target syntax must arrive as one semantic cohort.",
     evidenceSourceIds: [
-      "docs/project/decisions/2026-08-22-finite-binder-boundary-handoff-and-schematic-expansion.md"
+      "docs/project/decisions/2026-08-22-finite-binder-boundary-handoff-and-schematic-expansion.md",
+      "docs/project/reviews/2026-08-23-animation-governance-v2-calibration-checkpoint.md"
     ],
-    status: "approved-exemplar",
-    exemplarAnimationIds: ["animation.equation.finite-sum-expansion.v1"]
+    status: "promoted",
+    exemplarAnimationIds: [
+      "animation.equation.finite-sum-expansion.v1",
+      "animation.algebra.log-product.equivalence-frame"
+    ],
+    contractIds: ["contract.animation.target-arrival-cohort.v1"]
   },
   {
     id: "principle.animation.typography-authority-v2",

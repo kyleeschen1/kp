@@ -56,11 +56,15 @@ export const kpAnimationPolicyEpochs = Object.freeze([
     status: "preview" as const,
     requiredPrincipleIds: [
       "principle.animation.semantic-lineage-authority",
-      "principle.animation.deterministic-single-clock"
+      "principle.animation.deterministic-single-clock",
+      "principle.animation.relation-clearing-transit",
+      "principle.animation.target-arrival-cohort"
     ],
     principleContractIds: [
       "contract.animation.semantic-lineage.v1",
-      "contract.animation.deterministic-clock.v1"
+      "contract.animation.deterministic-clock.v1",
+      "contract.animation.relation-clearing-transit.v1",
+      "contract.animation.target-arrival-cohort.v1"
     ],
     implicitProfilePolicy: "reject" as const
   })

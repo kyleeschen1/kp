@@ -1,6 +1,6 @@
 # Animation Governance v2 Calibration Checkpoint
 
-Status: mandatory human checkpoint; promotion withheld
+Status: approved for narrow boundary/arrival promotion; derivative tuning deferred
 Reviewed: 2026-08-23
 Run contract: `run-contract.kp.animation.animation-governance-epoch-v2-approved`
 Source plan: `2026-08-22-animation-governance-epoch-v2-long-loop-proposal.md`
@@ -77,5 +77,8 @@ candidate exemplar.
   settlement, four viewport/theme profiles, one owned browser/server lifecycle.
 - `npm run typecheck` — clean, including Svelte and domain projects.
 
-No shared aesthetic policy has been promoted. Slice 23 must not start until the
-checkpoint receives explicit human approval.
+Human review approved the log-equivalence and finite-sum evidence on
+2026-08-23. Derivative presentation still needs tuning and remains reserved for
+the final derivative checkpoint. The approval authorizes only the typed
+relation-clearing and target-arrival contracts; it does not approve shared
+timing, curvature, typography aesthetics, or derivative choreography.
