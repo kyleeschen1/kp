@@ -252,6 +252,20 @@
       "scope": "slice-11-no-worsening-quarantine",
       "checkedAt": "2026-08-23T06:04:47.796Z",
       "notes": "The command remains red only against pre-existing strict health ceilings; counts are unchanged at exactly 93651 types and 150979 instantiations, so this slice introduced no inference regression."
+    },
+    {
+      "command": "npm run test:equation-projection-choreography-v2",
+      "status": "passed",
+      "scope": "slice-12-projection-choreography",
+      "checkedAt": "2026-08-23T06:10:05.097Z",
+      "notes": "Four tests prove one operation projects through replacement, equivalence, and derivation topologies by identity reference; profiles contain no operation copies or raw motion; mismatches and missing profiles fail closed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-12-projection-choreography",
+      "checkedAt": "2026-08-23T06:10:06.094Z",
+      "notes": "All repository type boundaries pass after projection-only choreography resolution."
     }
   ],
   "progress": {

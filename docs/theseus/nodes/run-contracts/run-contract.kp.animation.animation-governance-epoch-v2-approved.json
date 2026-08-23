@@ -112,7 +112,8 @@
     {
       "id": "projection-choreography",
       "title": "projection-choreography",
-      "status": "planned"
+      "summary": "Added registered replacement, equivalence, and derivation representation topologies. Projection records reuse exact resolved semantic operation objects, add occurrence and paint-ownership obligations without coordinates or timing, and fail closed on missing profiles or cross-grammar operation resolution.",
+      "status": "complete"
     },
     {
       "id": "typography-policy",
