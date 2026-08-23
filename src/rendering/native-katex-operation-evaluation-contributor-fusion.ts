@@ -9,8 +9,12 @@ import {
   compileKpNativeKatexInkKnotMetrics,
   kpNativeKatexInkKnotOpticalProfile
 } from "./native-katex-ink-knot-geometry.ts";
+import {
+  isKpVerifiedEquationEvaluationFamilyCertificateV2,
+  type KpVerifiedEquationEvaluationFamilyCertificateV2
+} from "../domain-ir/equation-evaluation-family-certificate-v2.ts";
 
-interface KpContributorFusionPlaybackPort<Sample, Frame> {
+export interface KpContributorFusionPlaybackPort<Sample, Frame> {
   sample(progress: number): Sample;
   apply(progress: number): Frame;
   retire(retirement: KpNativeKatexPaintPreservingRetirement): void;
@@ -81,6 +85,34 @@ export function createKpNativeKatexContributorFusionPlayback<
       input.base.retire(retirement);
     }
   }) as Session;
+}
+
+/** Neutral mount for any host carrying a compiler-minted family decision. */
+export function createKpCertifiedNativeKatexContributorFusionPlayback<
+  Sample,
+  Frame,
+  Session extends KpContributorFusionPlaybackPort<Sample, Frame>
+>(input: {
+  readonly stage: HTMLElement;
+  readonly base: Session;
+  readonly certificate: KpVerifiedEquationEvaluationFamilyCertificateV2;
+}): Session {
+  if (!isKpVerifiedEquationEvaluationFamilyCertificateV2(input.certificate)) {
+    throw new Error(
+      "Native KaTeX contributor fusion requires a compiler-minted family certificate."
+    );
+  }
+  const familyProfile = input.certificate.familyProfile;
+  if (familyProfile.family !== "contributor-fusion") {
+    throw new Error(
+      `Native KaTeX contributor fusion cannot realize ${familyProfile.family}.`
+    );
+  }
+  return createKpNativeKatexContributorFusionPlayback({
+    stage: input.stage,
+    base: input.base,
+    familyProfile
+  });
 }
 
 export function applyKpNativeKatexContributorFusion(input: {

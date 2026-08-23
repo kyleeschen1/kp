@@ -211,6 +211,34 @@
       "scope": "standard",
       "checkedAt": "2026-08-23T23:33:17.984Z",
       "notes": "The certificate-only adapter contract preserves all TypeScript, Svelte, and domain boundaries."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test certified contributor fusion mount and family profile suites",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T23:36:10.075Z",
+      "notes": "Six tests pass; the neutral mount rejects forged certificates and delegates sampling and retirement unchanged."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-23T23:36:11.392Z",
+      "notes": "Eleven equation inventory, authority, endpoint, and preservation checks pass."
+    },
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-23T23:36:12.434Z",
+      "notes": "All 32 derivative semantic, choreography, migration, and coverage checks pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-23T23:36:13.482Z",
+      "notes": "Shared Native KaTeX mount preserves all TypeScript, Svelte, and domain boundaries."
     }
   ],
   "progress": {

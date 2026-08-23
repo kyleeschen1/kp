@@ -111,7 +111,8 @@
     {
       "id": "kp.eval-auth.s11",
       "title": "shared-mount",
-      "status": "planned"
+      "summary": "The existing Native KaTeX ink-knot playback is now available through a neutral certificate-gated mount; focused, equation-preservation, derivative, and type gates pass without optical changes.",
+      "status": "complete"
     },
     {
       "id": "kp.eval-auth.s12",
