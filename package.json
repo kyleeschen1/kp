@@ -136,6 +136,7 @@
     "visual:log-quotient": "node --disable-warning=ExperimentalWarning scripts/capture-log-quotient.ts",
     "visual:log-product": "node --disable-warning=ExperimentalWarning scripts/capture-log-product.ts",
     "visual:log-product-equivalence-frame": "playwright test tests/log-product-equivalence-frame-catalogue.browser.spec.ts --project=chromium --workers=1",
+    "visual:animation-governance-calibration": "node --disable-warning=ExperimentalWarning scripts/capture-animation-governance-calibration.ts",
     "visual:exponential-homomorphism": "node --disable-warning=ExperimentalWarning scripts/capture-exponential-homomorphism.ts",
     "visual:exponential-crossover-pressure": "node --disable-warning=ExperimentalWarning scripts/capture-exponential-crossover-pressure.ts",
     "visual:even-root": "node --disable-warning=ExperimentalWarning scripts/capture-even-root-checkpoint.ts",

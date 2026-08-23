@@ -172,7 +172,8 @@
     {
       "id": "calibration-checkpoint",
       "title": "calibration-checkpoint",
-      "status": "planned"
+      "summary": "Started the bounded visual calibration sheet for log equivalence, derivative evaluation, and finite-sum typography; no promotion is authorized before human review.",
+      "status": "in-progress"
     },
     {
       "id": "promote-boundary-laws",
