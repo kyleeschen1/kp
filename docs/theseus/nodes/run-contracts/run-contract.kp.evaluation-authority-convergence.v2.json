@@ -57,7 +57,8 @@
     {
       "id": "kp.eval-auth.s02",
       "title": "compatibility-law",
-      "status": "planned"
+      "summary": "Executable audit reports the constant-difference family mismatch; focused test and typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "kp.eval-auth.s03",

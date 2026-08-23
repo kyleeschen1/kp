@@ -92,6 +92,20 @@
       "scope": "focused",
       "checkedAt": "2026-08-23T23:03:25.468Z",
       "notes": "2 Chromium derivative catalogue lifecycle tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-23T23:06:24.218Z",
+      "notes": "Audit module preserves application, test, Svelte, and domain type boundaries."
+    },
+    {
+      "command": "node --test equation evaluation family authority audit",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T23:06:24.862Z",
+      "notes": "The audit reports exactly the constant-difference missing runtime family profile."
     }
   ],
   "progress": {
