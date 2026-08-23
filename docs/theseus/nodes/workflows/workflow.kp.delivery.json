@@ -169,6 +169,20 @@
       "scope": "standard",
       "checkedAt": "2026-08-23T23:23:05.705Z",
       "notes": "Review-stage difference registration preserves all TypeScript, Svelte, and domain boundaries."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-evaluation-family-certificate-v2.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-23T23:26:26.739Z",
+      "notes": "Three certificate tests pass for derivative certification, ambiguous correspondence, and incomplete topology without fallback."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-23T23:26:28.081Z",
+      "notes": "Family-certificate compiler preserves application, test, Svelte, and domain type boundaries."
     }
   ],
   "progress": {

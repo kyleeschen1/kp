@@ -93,7 +93,8 @@
     {
       "id": "kp.eval-auth.s08",
       "title": "typed-gaps",
-      "status": "planned"
+      "summary": "One compiler boundary now mints nominal evaluation-family certificates and returns typed repair gaps for unsupported, ambiguous, or incomplete topology with no generic fallback.",
+      "status": "complete"
     },
     {
       "id": "kp.eval-auth.s09",
