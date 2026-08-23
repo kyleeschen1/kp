@@ -28,9 +28,14 @@ test("derivative power semantics expose every source and target role", () => {
   assert.deepEqual(roles.targetRoles.map((role) => role.id), [
     "target.coefficient",
     "target.base",
-    "target.exponent"
+    "target.exponent",
+    "target.decrement-operator",
+    "target.decrement-amount"
   ]);
-  assert.deepEqual(roles.targetRoles.map((role) => role.value), [3, "x", 2]);
+  assert.deepEqual(
+    roles.targetRoles.map((role) => role.value),
+    [3, "x", 3, "subtract", 1]
+  );
 });
 
 test("source exponent explicitly drives coefficient transmission and decrement", () => {
@@ -49,14 +54,15 @@ test("source exponent explicitly drives coefficient transmission and decrement",
   )!;
 
   assert.equal(coefficient.operation, "transmit");
-  assert.equal(exponent.operation, "decrement");
+  assert.equal(exponent.operation, "transmit");
   assert.deepEqual(coefficient.derivedFromRoleIds, ["source.exponent"]);
   assert.deepEqual(exponent.derivedFromRoleIds, ["source.exponent"]);
-  assert.equal(exponent.value, 6);
+  assert.equal(exponent.value, 7);
   assert.deepEqual(roles.constraints.map((constraint) => constraint.id), [
     "differentiation-variable-matches-base",
     "coefficient-equals-source-exponent",
-    "target-exponent-is-predecessor"
+    "target-exponent-copies-source",
+    "decrement-amount-is-one"
   ]);
 });
 
@@ -87,10 +93,13 @@ test("derivative power correspondence gives every role one total lifecycle", () 
     "removal",
     "removal",
     "identity",
-    "fan-out"
+    "fan-out",
+    "introduction",
+    "introduction"
   ]);
   assert.deepEqual(
-    correspondence.records.at(-1)?.targetSelectorIds,
+    correspondence.records.find(({ id }) => id === "exponent-branches")
+      ?.targetSelectorIds,
     ["expression.target.coefficient", "expression.target.exponent"]
   );
   assert.deepEqual(validateCorrespondenceMap(correspondence, {

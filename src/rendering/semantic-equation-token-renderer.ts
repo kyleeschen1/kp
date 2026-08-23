@@ -1608,6 +1608,20 @@ function sampleDerivativePowerRelation(
       }))
     ];
   }
+  if (
+    relation.target?.selectorIds.some((selectorId) =>
+      context.plan.operatorApplication.introducedCauseSelectorIds.includes(
+        selectorId
+      )
+    )
+  ) {
+    return targetTokens.map((token) => frameToken(token, "target", {
+      opacity: context.frame.decrementArtifacts.opacity,
+      x: 0,
+      y: 0,
+      scale: 1
+    }));
+  }
   if (relation.recordId !== "exponent-branches") return undefined;
   if (relation.source === undefined || relation.target === undefined) return [];
   return [
@@ -1624,7 +1638,7 @@ function sampleDerivativePowerRelation(
         selectorId === context.plan.exponent.coefficientSelectorId;
       const branch = coefficient
         ? context.frame.coefficient
-        : context.frame.successorExponent;
+        : context.frame.decrementInput;
       const path = lineagePathPose({
         origin: relation.source!.bounds,
         destination: token.localRect,

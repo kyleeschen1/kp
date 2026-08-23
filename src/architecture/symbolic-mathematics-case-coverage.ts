@@ -5,6 +5,9 @@ import {
 import {
   kpFiniteBinderCaseLedger
 } from "../semantic/finite-binder-case-ledger.ts";
+import {
+  kpDifferentiationCaseLedger
+} from "../semantic/differentiation-case-ledger.ts";
 
 export const KP_SYMBOLIC_CASE_COVERAGE_SCHEMA =
   "kp.symbolic-case-coverage.v1" as const;
@@ -209,7 +212,7 @@ export const kpSymbolicCaseCoverageRegistry =
   defineKpSymbolicCaseCoverageRegistry({
     schemaVersion: KP_SYMBOLIC_CASE_COVERAGE_SCHEMA,
     kind: "symbolic-case-coverage-registry",
-    families: [rootFamily(), finiteBinderFamily()]
+    families: [rootFamily(), finiteBinderFamily(), differentiationFamily()]
   });
 
 export function defineKpSymbolicCaseCoverageRegistry(
@@ -349,6 +352,86 @@ function finiteBinderFamily(): KpSymbolicCaseCoverageFamily {
       maturity: finiteBinderMaturity(entry.operationClass, entry.disposition)
     })))
   });
+}
+
+function differentiationFamily(): KpSymbolicCaseCoverageFamily {
+  return Object.freeze({
+    schemaVersion: KP_SYMBOLIC_CASE_COVERAGE_SCHEMA,
+    kind: "symbolic-case-coverage-family" as const,
+    capabilityId: "capability.equation.differentiation-transformations",
+    authorityId: kpDifferentiationCaseLedger.authority,
+    cases: Object.freeze(kpDifferentiationCaseLedger.cases.map((entry) => ({
+      id: entry.id,
+      operationClass: entry.operationClass,
+      title: entry.title,
+      sourceLatex: entry.sourceLatex,
+      ...(entry.targetLatex === undefined ? {} : {
+        targetLatex: entry.targetLatex
+      }),
+      outcome: entry.disposition === "typed-gap"
+        ? "typed-gap" as const
+        : entry.disposition === "verified-exemplar"
+          ? "animated-transition" as const
+          : "semantic-only" as const,
+      requiredEvidenceIds: entry.requiredEvidenceIds,
+      maturity: differentiationMaturity(entry.disposition)
+    })))
+  });
+}
+
+function differentiationMaturity(
+  disposition:
+    typeof kpDifferentiationCaseLedger.cases[number]["disposition"]
+): readonly KpSymbolicCaseMaturityEvidence[] {
+  if (disposition === "verified-exemplar") {
+    return Object.freeze([
+      maturity("notation-paintable", "satisfied", [
+        "src/editor/derivative-power-semantic-latex.ts"
+      ]),
+      maturity("semantic-representable", "satisfied", [
+        "src/semantic/derivative-power-rule-semantics.ts"
+      ]),
+      maturity("operation-authoritative", "satisfied", [
+        "kp.calculus.derivative.power-rule",
+        "kp.arithmetic.subtract"
+      ]),
+      maturity("exemplar-executable", "satisfied", [
+        "animation.generated.calculus.derivative.power-rule-x-cubed"
+      ]),
+      maturity("family-promoted", "pressure", [
+        "next-action.kp.animation.differentiation-power-rule-exemplar-v1"
+      ]),
+      maturity("generation-governed", "missing", [])
+    ]);
+  }
+  if (disposition === "semantic-only") {
+    return Object.freeze([
+      maturity("notation-paintable", "satisfied", [
+        "src/editor/derivative-power-semantic-latex.ts"
+      ]),
+      maturity("semantic-representable", "satisfied", [
+        "src/semantic/derivative-power-rule-semantics.ts"
+      ]),
+      maturity("operation-authoritative", "satisfied", [
+        "kp.calculus.derivative.power-rule"
+      ]),
+      maturity("exemplar-executable", "missing", []),
+      maturity("family-promoted", "missing", []),
+      maturity("generation-governed", "missing", [])
+    ]);
+  }
+  return Object.freeze([
+    maturity("notation-paintable", "satisfied", [
+      "shape.compound.derivative-operator"
+    ]),
+    maturity("semantic-representable", "missing", []),
+    maturity("operation-authoritative", "not-applicable", []),
+    maturity("exemplar-executable", "not-applicable", []),
+    maturity("family-promoted", "not-applicable", []),
+    maturity("generation-governed", "satisfied", [
+      kpDifferentiationCaseLedger.authority
+    ])
+  ]);
 }
 
 function finiteBinderMaturity(

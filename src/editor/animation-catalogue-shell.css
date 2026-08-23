@@ -312,6 +312,9 @@
   min-height: 100%;
   border: 0;
   border-radius: 0;
+  /* The legacy player supplies a light-surface ink color with a more specific
+     `:has()` rule, so the catalogue must reassert its active theme here. */
+  color: var(--kp-equation-foreground);
   background: transparent;
 }
 
@@ -327,6 +330,26 @@
 
 .kp-animation-catalogue-shell__stage-host .editor-equation-stage__object {
   text-align: center;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.derivative.power-rule-x-cubed"]
+  .kp-animation-catalogue-shell__stage-host .editor-equation-stage__object {
+  /* This is still native KaTeX typography rather than animated scaling; the
+     standalone checkpoint only needs enough size to read at catalogue distance. */
+  --kp-editor-equation-fit-font-size: clamp(1.15rem, 2.8vw, 1.55rem);
+}
+
+.kp-animation-catalogue-shell__stage-host .editor-equation-stage__caption {
+  border-color: var(--kp-catalogue-border);
+  color: var(--kp-catalogue-muted);
+  background: var(--kp-catalogue-control-background);
+}
+
+.kp-animation-catalogue-shell__stage-host
+  .editor-equation-stage__caption
+  [data-kp-editor-equation-motif-label] {
+  color: var(--kp-catalogue-link);
+  background: var(--kp-catalogue-selection-wash);
 }
 
 /* The exact width and sequence treatment remain solve-x-specific; only the
@@ -360,6 +383,18 @@
   border-color: var(--kp-catalogue-border);
   padding: 0.65rem 0.85rem;
   background: var(--kp-catalogue-control-background);
+}
+
+.kp-animation-catalogue-shell__stage-host .editor-animation-player__transport button {
+  border-color: var(--kp-catalogue-border);
+  color: var(--kp-catalogue-ink);
+  background: var(--kp-catalogue-stage-background);
+}
+
+.kp-animation-catalogue-shell__stage-host .editor-animation-player__transport button:first-child {
+  border-color: var(--kp-catalogue-selection);
+  color: var(--kp-catalogue-stage-background);
+  background: var(--kp-catalogue-selection);
 }
 
 .kp-animation-catalogue-shell__stage-host .editor-animation-player__transport {

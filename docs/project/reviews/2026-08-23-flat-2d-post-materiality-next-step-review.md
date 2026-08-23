@@ -1,6 +1,6 @@
 # Flat-2D Post-Materiality Next-Step Review
 
-Status: current recommendation; implementation not yet approved
+Status: canonical exemplar at human checkpoint; family promotion withheld
 Reviewed: 2026-08-23
 Active thread: `../threads/animation-catalogue.md`
 
@@ -34,6 +34,13 @@ Build one reversible native-KaTeX differentiation exemplar:
 
 \[
 \frac{d}{dx}x^3 \longrightarrow 3x^2.
+\]
+
+The implemented exemplar makes the causal middle state explicit rather than
+asking one transition to hide the arithmetic:
+
+\[
+\frac{d}{dx}x^3 \longrightarrow 3x^{3-1} \longrightarrow 3x^2.
 \]
 
 This is small enough for a sharp human checkpoint and rich enough to pressure
@@ -79,3 +86,31 @@ The bounded Graph3D semantic-scene proof remains valuable and separate from
 glyph materiality. It is queued after stable 2D calculus pressure so the next
 visual checkpoint broadens mathematical capability rather than continuing the
 just-deferred aesthetic experiment.
+
+## Exemplar Checkpoint
+
+The first exemplar is available in the Animation Catalogue as
+`animation.generated.calculus.derivative.power-rule-x-cubed`. It adds one
+typed derivative-operator application contract and then reuses canonical
+constant-difference evaluation for the second beat. Native KaTeX owns all
+three endpoints; the motion adds neither glyph scaling nor text shadow.
+
+The differentiation case ledger records the positive-integer monomial as the
+only reviewed exemplar. Symbolic powers, constants, negative powers, compound
+bases, and chain-rule expressions remain explicit typed gaps or semantic-only
+cases. The coverage projection therefore does not claim `Direct` family
+support.
+
+Focused evidence at this checkpoint:
+
+- `npm run test:differentiation-exemplar` — 23 passing tests;
+- `npm run test:browser:differentiation-exemplar` — two Chromium lifecycle,
+  flatness, direct-seek, and rewind checks;
+- `npm run visual:derivative-power` — seven review frames and a flat-glyph
+  manifest; and
+- `npm run typecheck` plus
+  `npm run check:animation-transformation-coverage` — clean.
+
+Human visual approval remains the stop condition. A second caller, shared
+differentiation promotion, timing generalization, and material-depth styling
+remain outside this checkpoint.

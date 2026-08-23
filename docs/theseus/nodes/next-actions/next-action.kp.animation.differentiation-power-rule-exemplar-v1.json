@@ -1,0 +1,62 @@
+{
+  "id": "next-action.kp.animation.differentiation-power-rule-exemplar-v1",
+  "kind": "next-action",
+  "title": "Build flat 2D differentiation power-rule exemplar",
+  "status": "ready",
+  "domain": "kp.animation",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-23-flat-2d-post-materiality-next-step-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-23-flat-2d-baseline-and-deferred-symbolic-materiality.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/animation-catalogue.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "typed semantics, case ledger, choreography, generated fixture, catalogue import, and coverage",
+      "checkedAt": "2026-08-23T04:00:58.354Z",
+      "notes": "23 focused tests passed."
+    },
+    {
+      "command": "npm run test:browser:differentiation-exemplar",
+      "status": "passed",
+      "scope": "single Chromium exemplar lifecycle",
+      "checkedAt": "2026-08-23T04:01:00.650Z",
+      "notes": "Two checks passed: flat glyph motion, explicit decrement, native result, direct seek, and rewind."
+    },
+    {
+      "command": "npm run visual:derivative-power",
+      "status": "passed",
+      "scope": "seven-frame human-review capture",
+      "checkedAt": "2026-08-23T04:01:03.043Z",
+      "notes": "Dark-theme ink resolves correctly; all tracked glyphs remain scale 1 with no text shadow."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository TypeScript, Svelte, and domain contracts",
+      "checkedAt": "2026-08-23T04:01:05.460Z",
+      "notes": "No type or Svelte diagnostics."
+    },
+    {
+      "command": "npm run check:animation-transformation-coverage",
+      "status": "passed",
+      "scope": "generated capability projection",
+      "checkedAt": "2026-08-23T04:01:08.099Z",
+      "notes": "Generated transformation coverage is current."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Canonical flat-2D derivative power exemplar is implemented and verified at the human visual checkpoint; second-caller pressure and family promotion remain intentionally withheld."
+  }
+}

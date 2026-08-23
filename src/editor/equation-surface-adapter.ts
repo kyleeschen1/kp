@@ -3200,28 +3200,7 @@ function applyDerivativePowerTokenFocus(input: {
     (token) => token.motionId === sourceMotionId
   )?.element;
   if (sourceExponent !== undefined) {
-    sourceExponent.classList.add("kp-focus-group");
     sourceExponent.dataset["kpEditorDerivativePowerRole"] = "source-exponent";
-    sourceExponent.style.setProperty(
-      "--kp-focus-z",
-      `${6 * input.frame.focus.exponentEmphasis}px`
-    );
-    sourceExponent.style.setProperty(
-      "--kp-focus-scale",
-      String(1 + (0.08 * input.frame.focus.exponentEmphasis))
-    );
-    sourceExponent.style.setProperty(
-      "--kp-focus-shadow-y",
-      `${5 * input.frame.focus.exponentEmphasis}px`
-    );
-    sourceExponent.style.setProperty(
-      "--kp-focus-shadow-blur",
-      `${14 * input.frame.focus.exponentEmphasis}px`
-    );
-    sourceExponent.style.setProperty(
-      "--kp-focus-shadow-opacity",
-      String(input.frame.focus.shadowOpacity)
-    );
   }
   exponentRelation?.target?.motionIds.forEach((motionId, index) => {
     const selectorId = exponentRelation.target?.selectorIds[index];
@@ -3232,7 +3211,7 @@ function applyDerivativePowerTokenFocus(input: {
     token.dataset["kpEditorDerivativePowerRole"] =
       selectorId === input.plan.exponent.coefficientSelectorId
         ? "coefficient-descendant"
-        : "successor-descendant";
+        : "decrement-input-descendant";
   });
 }
 

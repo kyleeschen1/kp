@@ -36,8 +36,9 @@ export function createKpDerivativePowerSelectorAnnotatedLatex(
     return { kind: "selector", selectorId: selector.id, latex: rendered };
   };
   const source = state.objectId.endsWith(".initial");
+  const applied = state.objectId.endsWith(".applied");
   const target = state.objectId.endsWith(".derived");
-  if (!source && !target) return undefined;
+  if (!source && !applied && !target) return undefined;
 
   const segments: readonly KpSelectorAnnotatedLatexSegment[] = source
     ? [
@@ -49,6 +50,16 @@ export function createKpDerivativePowerSelectorAnnotatedLatex(
         segment("base"),
         { kind: "latex", latex: "^{" },
         segment("exponent"),
+        { kind: "latex", latex: "}" }
+      ]
+    : applied
+    ? [
+        segment("coefficient"),
+        segment("base"),
+        { kind: "latex", latex: "^{" },
+        segment("exponent"),
+        segment("decrement-operator"),
+        segment("decrement-amount"),
         { kind: "latex", latex: "}" }
       ]
     : [

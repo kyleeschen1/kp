@@ -2482,8 +2482,347 @@
         "planned-capability-without-exact-asset"
       ],
       "caseCoverage": {
-        "status": "not-declared",
-        "promotionGate": "required-before-direct"
+        "status": "tracked",
+        "authorityId": "coverage.equation.differentiation-cases.v1",
+        "caseCount": 7,
+        "cases": [
+          {
+            "id": "differentiation.canonical-positive-integer-power",
+            "operationClass": "canonical-positive-integer-power",
+            "title": "Differentiate the reviewed cubic",
+            "sourceLatex": "\\frac{d}{dx}x^3",
+            "targetLatex": "3x^2",
+            "outcome": "animated-transition",
+            "requiredEvidenceIds": [
+              "animation.generated.calculus.derivative.power-rule-x-cubed",
+              "law.calculus.derivative.power-rule",
+              "kp.presentation.operation-evaluation.difference"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "src/editor/derivative-power-semantic-latex.ts"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "src/semantic/derivative-power-rule-semantics.ts"
+                ]
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "kp.calculus.derivative.power-rule",
+                  "kp.arithmetic.subtract"
+                ]
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "animation.generated.calculus.derivative.power-rule-x-cubed"
+                ]
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "pressure",
+                "evidenceSourceIds": [
+                  "next-action.kp.animation.differentiation-power-rule-exemplar-v1"
+                ]
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "missing",
+                "evidenceSourceIds": []
+              }
+            ]
+          },
+          {
+            "id": "differentiation.other-positive-integer-power",
+            "operationClass": "other-positive-integer-power",
+            "title": "Represent another positive integer power",
+            "sourceLatex": "\\frac{d}{dx}x^5",
+            "targetLatex": "5x^4",
+            "outcome": "semantic-only",
+            "requiredEvidenceIds": [
+              "src/semantic/derivative-power-rule-semantics.ts",
+              "law.calculus.derivative.power-rule"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "src/editor/derivative-power-semantic-latex.ts"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "src/semantic/derivative-power-rule-semantics.ts"
+                ]
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "kp.calculus.derivative.power-rule"
+                ]
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "missing",
+                "evidenceSourceIds": []
+              }
+            ]
+          },
+          {
+            "id": "differentiation.symbolic-exponent",
+            "operationClass": "symbolic-exponent",
+            "title": "Defer a symbolic exponent",
+            "sourceLatex": "\\frac{d}{dx}x^n",
+            "outcome": "typed-gap",
+            "requiredEvidenceIds": [
+              "normalizer.equation.symbolic-power-rule.v1"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "shape.compound.derivative-operator"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "coverage.equation.differentiation-cases.v1"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "differentiation.constant",
+            "operationClass": "constant",
+            "title": "Defer the constant rule",
+            "sourceLatex": "\\frac{d}{dx}7",
+            "outcome": "typed-gap",
+            "requiredEvidenceIds": [
+              "operation.equation.derivative-constant-rule.v1"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "shape.compound.derivative-operator"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "coverage.equation.differentiation-cases.v1"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "differentiation.negative-power",
+            "operationClass": "negative-power",
+            "title": "Defer a negative power",
+            "sourceLatex": "\\frac{d}{dx}x^{-2}",
+            "outcome": "typed-gap",
+            "requiredEvidenceIds": [
+              "normalizer.equation.signed-exponent.v1"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "shape.compound.derivative-operator"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "coverage.equation.differentiation-cases.v1"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "differentiation.compound-base",
+            "operationClass": "compound-base",
+            "title": "Defer a compound powered base",
+            "sourceLatex": "\\frac{d}{dx}(x+1)^3",
+            "outcome": "typed-gap",
+            "requiredEvidenceIds": [
+              "operation.equation.derivative-chain-rule.v1"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "shape.compound.derivative-operator"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "coverage.equation.differentiation-cases.v1"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "differentiation.chain-rule",
+            "operationClass": "chain-rule",
+            "title": "Defer nested function differentiation",
+            "sourceLatex": "\\frac{d}{dx}f(g(x))",
+            "outcome": "typed-gap",
+            "requiredEvidenceIds": [
+              "operation.equation.derivative-chain-rule.v1"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "shape.compound.derivative-operator"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "coverage.equation.differentiation-cases.v1"
+                ]
+              }
+            ]
+          }
+        ]
       }
     },
     {

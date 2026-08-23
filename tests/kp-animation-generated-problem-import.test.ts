@@ -108,11 +108,17 @@ test("createGeneratedProblemAnimationAsset imports generated calculus derivative
 
   const frame = sampleKpAnimationRuntimeFrame({
     animation,
-    progress: 0.5
+    progress: 0.25
   });
 
   assert.deepEqual(frame.activeTransformationIds, [
     "transform.generated.calculus.derivative.power-rule-x-cubed.apply-power-rule"
+  ]);
+  assert.deepEqual(sampleKpAnimationRuntimeFrame({
+    animation,
+    progress: 0.75
+  }).activeTransformationIds, [
+    "transform.generated.calculus.derivative.power-rule-x-cubed.evaluate-exponent-decrement"
   ]);
 
   const projections = createKpAnimationFlashcardProjections({

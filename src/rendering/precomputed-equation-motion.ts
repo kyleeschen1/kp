@@ -245,8 +245,8 @@ function derivativeBranchVariant(
   if (selectorId === plan.exponent.coefficientSelectorId) {
     return plan.exponent.coefficientPathVariant;
   }
-  if (selectorId === plan.exponent.successorSelectorId) {
-    return plan.exponent.successorPathVariant;
+  if (selectorId === plan.exponent.decrementInputSelectorId) {
+    return plan.exponent.decrementInputPathVariant;
   }
   return undefined;
 }

@@ -21,6 +21,7 @@ test("derivative power LaTeX exposes all semantic roles without changing notatio
 
   assert.deepEqual(annotated.map((value) => value?.rawLatex), [
     "\\frac{d}{dx}x^{3}",
+    "3x^{3-1}",
     "3x^{2}"
   ]);
   assert.deepEqual(annotated.map((value) =>

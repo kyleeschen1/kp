@@ -40,6 +40,13 @@ test("generated calculus fixtures cover derivative and integral rules", () => {
         "expression.generated.calculus.derivative.power-rule-x-cubed.initial.exponent"
       ],
       [
+        "expression.generated.calculus.derivative.power-rule-x-cubed.applied.coefficient",
+        "expression.generated.calculus.derivative.power-rule-x-cubed.applied.base",
+        "expression.generated.calculus.derivative.power-rule-x-cubed.applied.exponent",
+        "expression.generated.calculus.derivative.power-rule-x-cubed.applied.decrement-operator",
+        "expression.generated.calculus.derivative.power-rule-x-cubed.applied.decrement-amount"
+      ],
+      [
         "expression.generated.calculus.derivative.power-rule-x-cubed.derived.coefficient",
         "expression.generated.calculus.derivative.power-rule-x-cubed.derived.base",
         "expression.generated.calculus.derivative.power-rule-x-cubed.derived.exponent"
@@ -52,6 +59,15 @@ test("generated calculus fixtures cover derivative and integral rules", () => {
   });
   assert.equal(derivativeTransition.status, "semantic");
   assert.deepEqual(derivativeTransition.diagnostics, []);
+  assert.deepEqual(
+    derivative.transformations.map(({ transformType }) => transformType),
+    ["applyDerivativePowerRule", "simplifyConstantDifference"]
+  );
+  assert.deepEqual(calculusObjectLatex(derivative), [
+    "\\frac{d}{dx}x^{3}",
+    "3x^{3-1}",
+    "3x^{2}"
+  ]);
 
   const derivativeSum = createGeneratedCalculusProblemFixture(
     "generated.calculus.derivative.sum-rule-polynomial"

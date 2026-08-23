@@ -41,6 +41,14 @@ export interface KpDerivativePowerChoreographyPlan {
   readonly correspondenceMapId: string;
   readonly phaseIds: readonly KpDerivativePowerPhaseId[];
   readonly operatorSelectorIds: readonly string[];
+  readonly operatorApplication: {
+    readonly kind: "derivative-operator-application";
+    readonly operatorSelectorIds: readonly string[];
+    readonly argumentSelectorIds: readonly string[];
+    readonly introducedCauseSelectorIds: readonly string[];
+    readonly consumesOperator: true;
+    readonly evaluationOperationId: "kp.arithmetic.subtract";
+  };
   readonly base: {
     readonly sourceSelectorId: string;
     readonly targetSelectorId: string;
@@ -48,10 +56,12 @@ export interface KpDerivativePowerChoreographyPlan {
   readonly exponent: {
     readonly sourceSelectorId: string;
     readonly coefficientSelectorId: string;
-    readonly successorSelectorId: string;
+    readonly decrementInputSelectorId: string;
+    readonly decrementOperatorSelectorId: string;
+    readonly decrementAmountSelectorId: string;
     readonly sourceMinimumScale: number;
     readonly coefficientPathVariant: "arc-below";
-    readonly successorPathVariant: "arc-above";
+    readonly decrementInputPathVariant: "arc-above";
   };
 }
 
@@ -85,12 +95,15 @@ export interface KpDerivativePowerChoreographyFrame {
     readonly pathProgress: number;
     readonly pathVariant: KpOrganicPathVariant;
   };
-  readonly successorExponent: {
+  readonly decrementInput: {
     readonly opacity: number;
     readonly scale: number;
     readonly pathProgress: number;
     readonly decrementProgress: number;
     readonly pathVariant: KpOrganicPathVariant;
+  };
+  readonly decrementArtifacts: {
+    readonly opacity: number;
   };
   readonly settlementProgress: number;
 }
@@ -176,7 +189,13 @@ export function createKpDerivativePowerRuleChoreography(
       source.base,
       source.exponent
     ],
-    targetEntityIds: [target.coefficient, target.base, target.exponent],
+    targetEntityIds: [
+      target.coefficient,
+      target.base,
+      target.exponent,
+      target.decrementOperator,
+      target.decrementAmount
+    ],
     edges: [
       {
         id: baseLineageId,
@@ -198,6 +217,20 @@ export function createKpDerivativePowerRuleChoreography(
         sourceEntityIds: [source.operator, source.variable],
         targetEntityIds: [],
         summary: "The derivative operator and variable leave after applying the rule."
+      },
+      {
+        id: `lineage.${transformation.id}.decrement-operator-introduction`,
+        relation: "introduction",
+        sourceEntityIds: [],
+        targetEntityIds: [target.decrementOperator],
+        summary: "The power rule introduces subtraction as an explicit cause."
+      },
+      {
+        id: `lineage.${transformation.id}.decrement-amount-introduction`,
+        relation: "introduction",
+        sourceEntityIds: [],
+        targetEntityIds: [target.decrementAmount],
+        summary: "The power rule introduces one as the decrement amount."
       }
     ]
   });
@@ -245,6 +278,28 @@ export function createKpDerivativePowerRuleChoreography(
           sourceEntityIds: [source.operator, source.variable],
           targetEntityIds: [],
           summary: "Applying the derivative rule consumes its operator notation."
+        },
+        {
+          id: `lifecycle.${transformation.id}.decrement-operator`,
+          kind: "introduction",
+          cause: {
+            kind: "semantic-introduction",
+            authorityId: "kp.calculus.derivative.power-rule#decrement"
+          },
+          sourceEntityIds: [],
+          targetEntityIds: [target.decrementOperator],
+          summary: "The rule introduces the subtraction operator."
+        },
+        {
+          id: `lifecycle.${transformation.id}.decrement-amount`,
+          kind: "introduction",
+          cause: {
+            kind: "semantic-introduction",
+            authorityId: "kp.calculus.derivative.power-rule#decrement"
+          },
+          sourceEntityIds: [],
+          targetEntityIds: [target.decrementAmount],
+          summary: "The rule introduces the unit decrement."
         }
       ]
     },
@@ -333,7 +388,7 @@ export function createKpDerivativePowerRuleChoreography(
       groupId: `group.${transformation.id}.source-exponent`,
       semanticEntityIds: [source.exponent],
       fragmentIds: [],
-      profile: "elevated",
+      profile: "flat",
       strength: 0.55,
       contextDimming: 0.1,
       accessibilityMode: "full"
@@ -355,7 +410,7 @@ export function compileKpDerivativePowerChoreography(input: {
   if (input.id.trim() === "") {
     throw new Error("Derivative power choreography id must not be empty.");
   }
-  const sourceMinimumScale = input.sourceMinimumScale ?? 0.7;
+  const sourceMinimumScale = input.sourceMinimumScale ?? 1;
   if (!(sourceMinimumScale > 0 && sourceMinimumScale <= 1)) {
     throw new Error(
       "Derivative power sourceMinimumScale must be greater than zero and at most one."
@@ -368,11 +423,15 @@ export function compileKpDerivativePowerChoreography(input: {
   const variable = record("differentiation-variable-consumed");
   const base = record("base-persists");
   const exponent = record("exponent-branches");
+  const decrementOperator = record("decrement-operator-introduced");
+  const decrementAmount = record("decrement-amount-introduced");
   if (
     operator?.relation !== "removal" ||
     variable?.relation !== "removal" ||
     base?.relation !== "identity" ||
     exponent?.relation !== "fan-out" ||
+    decrementOperator?.relation !== "introduction" ||
+    decrementAmount?.relation !== "introduction" ||
     base.sourceSelectorIds.length !== 1 ||
     base.targetSelectorIds.length !== 1 ||
     exponent.sourceSelectorIds.length !== 1 ||
@@ -388,14 +447,25 @@ export function compileKpDerivativePowerChoreography(input: {
   const successorRole = input.semanticRoles.targetRoles.find(
     (role) => role.id === "target.exponent"
   );
+  const decrementOperatorRole = input.semanticRoles.targetRoles.find(
+    (role) => role.id === "target.decrement-operator"
+  );
+  const decrementAmountRole = input.semanticRoles.targetRoles.find(
+    (role) => role.id === "target.decrement-amount"
+  );
   if (
     coefficientRole?.operation !== "transmit" ||
-    successorRole?.operation !== "decrement" ||
+    successorRole?.operation !== "transmit" ||
+    decrementOperatorRole?.operation !== "introduce" ||
+    decrementAmountRole?.operation !== "introduce" ||
     !exponent.targetSelectorIds.includes(coefficientRole.selectorId) ||
-    !exponent.targetSelectorIds.includes(successorRole.selectorId)
+    !exponent.targetSelectorIds.includes(successorRole.selectorId) ||
+    decrementOperator.targetSelectorIds[0] !==
+      decrementOperatorRole.selectorId ||
+    decrementAmount.targetSelectorIds[0] !== decrementAmountRole.selectorId
   ) {
     throw new Error(
-      "Derivative power exponent branches must identify coefficient transmission and exponent decrement."
+      "Derivative power choreography requires exponent branching and an explicit decrement cause."
     );
   }
 
@@ -408,6 +478,27 @@ export function compileKpDerivativePowerChoreography(input: {
       ...operator.sourceSelectorIds,
       ...variable.sourceSelectorIds
     ],
+    operatorApplication: {
+      kind: "derivative-operator-application",
+      operatorSelectorIds: [
+        ...operator.sourceSelectorIds,
+        ...variable.sourceSelectorIds
+      ],
+      argumentSelectorIds: [
+        input.semanticRoles.sourceRoles.find(
+          (role) => role.id === "source.base"
+        )!.selectorId,
+        input.semanticRoles.sourceRoles.find(
+          (role) => role.id === "source.exponent"
+        )!.selectorId
+      ],
+      introducedCauseSelectorIds: [
+        decrementOperatorRole.selectorId,
+        decrementAmountRole.selectorId
+      ],
+      consumesOperator: true,
+      evaluationOperationId: "kp.arithmetic.subtract"
+    },
     base: {
       sourceSelectorId: base.sourceSelectorIds[0]!,
       targetSelectorId: base.targetSelectorIds[0]!
@@ -415,10 +506,12 @@ export function compileKpDerivativePowerChoreography(input: {
     exponent: {
       sourceSelectorId: exponent.sourceSelectorIds[0]!,
       coefficientSelectorId: coefficientRole.selectorId,
-      successorSelectorId: successorRole.selectorId,
+      decrementInputSelectorId: successorRole.selectorId,
+      decrementOperatorSelectorId: decrementOperatorRole.selectorId,
+      decrementAmountSelectorId: decrementAmountRole.selectorId,
       sourceMinimumScale,
       coefficientPathVariant: "arc-below",
-      successorPathVariant: "arc-above"
+      decrementInputPathVariant: "arc-above"
     }
   };
 }
@@ -442,7 +535,7 @@ export function sampleKpDerivativePowerChoreography(input: {
   };
   const branch = phases["branch-exponent"];
   const coefficient = phases["drop-coefficient"];
-  const successor = phases["decrement-successor"];
+  const decrementInput = phases["decrement-successor"];
   const settle = phases["settle-derivative"];
   const focusRelease = phases["release-derivative-focus"];
   const sourceScale = interpolate(
@@ -460,7 +553,7 @@ export function sampleKpDerivativePowerChoreography(input: {
     phases,
     focus: {
       exponentEmphasis: phases["orient-exponent"] * (1 - focusRelease),
-      shadowOpacity: 0.24 * phases["orient-exponent"] * (1 - focusRelease)
+      shadowOpacity: 0
     },
     operator: {
       opacity: 1 - settle,
@@ -479,16 +572,19 @@ export function sampleKpDerivativePowerChoreography(input: {
     },
     coefficient: {
       opacity: branch,
-      scale: interpolate(input.plan.exponent.sourceMinimumScale, 1, coefficient),
+      scale: 1,
       pathProgress: coefficient,
       pathVariant: input.plan.exponent.coefficientPathVariant
     },
-    successorExponent: {
+    decrementInput: {
       opacity: branch,
-      scale: interpolate(input.plan.exponent.sourceMinimumScale, 1, successor),
-      pathProgress: successor,
-      decrementProgress: successor,
-      pathVariant: input.plan.exponent.successorPathVariant
+      scale: 1,
+      pathProgress: decrementInput,
+      decrementProgress: decrementInput,
+      pathVariant: input.plan.exponent.decrementInputPathVariant
+    },
+    decrementArtifacts: {
+      opacity: decrementInput
     },
     settlementProgress: settle
   };
@@ -520,6 +616,8 @@ function roleSelectors(
   readonly base: string;
   readonly exponent: string;
   readonly coefficient: string;
+  readonly decrementOperator: string;
+  readonly decrementAmount: string;
 } {
   const selector = (suffix: string): string =>
     roles.find((role) => role.id.endsWith(suffix))?.selectorId ?? "";
@@ -528,6 +626,8 @@ function roleSelectors(
     variable: selector("differentiation-variable"),
     base: selector("base"),
     exponent: selector("exponent"),
-    coefficient: selector("coefficient")
+    coefficient: selector("coefficient"),
+    decrementOperator: selector("decrement-operator"),
+    decrementAmount: selector("decrement-amount")
   };
 }

@@ -160,7 +160,7 @@ function createGeneratedDerivativeProblemFixture(
   const latex = generatedDerivativeProblemLatex(input);
   const semanticRoles = createKpDerivativePowerRuleSemanticRoles({
     sourceObjectId: ids.initial,
-    targetObjectId: ids.derived,
+    targetObjectId: ids.applied,
     differentiationVariable: input.variable,
     base: input.base,
     exponent: input.exponent
@@ -176,10 +176,31 @@ function createGeneratedDerivativeProblemFixture(
         semanticRoles.sourceRoles.map(derivativePowerRoleSelector)
       ),
       expressionObject(
-        ids.derived,
-        "After applying the power rule",
-        latex.derived,
+        ids.applied,
+        "Power rule with explicit decrement",
+        latex.applied,
         semanticRoles.targetRoles.map(derivativePowerRoleSelector)
+      ),
+      expressionObject(
+        ids.derived,
+        "After evaluating the exponent decrement",
+        latex.derived,
+        [
+          selector(ids.derived, "coefficient", "term", String(input.exponent)),
+          selector(ids.derived, "base", "term", input.base),
+          selector(
+            ids.derived,
+            "exponent",
+            "term",
+            String(input.exponent - 1),
+            {
+              successorTarget: true,
+              successorRole: "evaluated-difference",
+              successorRank: 0,
+              successorOperationId: "kp.arithmetic.subtract"
+            }
+          )
+        ]
       )
     ]
   });
@@ -190,7 +211,7 @@ function createGeneratedDerivativeProblemFixture(
       transformType: "applyDerivativePowerRule",
       title: "Apply the derivative power rule",
       sourceObjectIds: [ids.initial],
-      targetObjectIds: [ids.derived],
+      targetObjectIds: [ids.applied],
       preserves: ["value", "structure"],
       correspondenceMap: createKpDerivativePowerRuleCorrespondenceMap(
         semanticRoles,
@@ -199,13 +220,13 @@ function createGeneratedDerivativeProblemFixture(
       correspondence: [
         {
           sourceSelectorId: `${ids.initial}.base`,
-          targetSelectorId: `${ids.derived}.base`,
+          targetSelectorId: `${ids.applied}.base`,
           preserves: ["identity", "role"],
           summary: "The base variable persists as the differentiated variable."
         },
         {
           sourceSelectorId: `${ids.initial}.exponent`,
-          targetSelectorId: `${ids.derived}.coefficient`,
+          targetSelectorId: `${ids.applied}.coefficient`,
           preserves: ["value"],
           summary: "The original exponent becomes the coefficient."
         }
@@ -220,6 +241,53 @@ function createGeneratedDerivativeProblemFixture(
           level: "strict"
         }
       ]
+    }),
+    createKpSemanticTransformation({
+      id: ids.evaluateTransform,
+      definitionId:
+        "definition.generated.linear-solve.simplify-constant-difference",
+      transformType: "simplifyConstantDifference",
+      title: `Evaluate ${input.exponent} - 1`,
+      sourceObjectIds: [ids.applied],
+      targetObjectIds: [ids.derived],
+      preserves: ["value", "structure"],
+      correspondenceMap: {
+        id: `${ids.evaluateTransform}.correspondence`,
+        records: [
+          {
+            id: `${ids.evaluateTransform}.coefficient-persists`,
+            relation: "identity",
+            sourceSelectorIds: [`${ids.applied}.coefficient`],
+            targetSelectorIds: [`${ids.derived}.coefficient`],
+            summary:
+              "The transmitted coefficient persists through exponent evaluation."
+          },
+          {
+            id: `${ids.evaluateTransform}.base-persists`,
+            relation: "identity",
+            sourceSelectorIds: [`${ids.applied}.base`],
+            targetSelectorIds: [`${ids.derived}.base`],
+            summary:
+              "The differentiated base persists through exponent evaluation."
+          },
+          {
+            id: `${ids.evaluateTransform}.decrement-evaluates`,
+            relation: "fan-in",
+            sourceSelectorIds: [
+              `${ids.applied}.exponent`,
+              `${ids.applied}.decrement-operator`,
+              `${ids.applied}.decrement-amount`
+            ],
+            targetSelectorIds: [`${ids.derived}.exponent`],
+            summary:
+              "The copied exponent and subtraction witness evaluate into the decremented exponent."
+          }
+        ]
+      },
+      assumptions: [
+        `${input.exponent} - 1 evaluates exactly to ${input.exponent - 1}.`
+      ],
+      lawRefs: [{ id: "law.arithmetic.constant-difference", level: "strict" }]
     })
   ];
   const diagram = createKpSemanticDiagramSequence({
@@ -517,12 +585,15 @@ interface GeneratedDerivativeProblemIds {
   readonly diagram: string;
   readonly trace: string;
   readonly initial: string;
+  readonly applied: string;
   readonly derived: string;
   readonly transform: string;
+  readonly evaluateTransform: string;
 }
 
 interface GeneratedDerivativeProblemLatex {
   readonly initial: string;
+  readonly applied: string;
   readonly derived: string;
 }
 
@@ -568,8 +639,10 @@ function generatedDerivativeProblemIds(
     diagram: `diagram.${input.id}.sequence`,
     trace: `trace.${input.id}`,
     initial: `expression.${input.id}.initial`,
+    applied: `expression.${input.id}.applied`,
     derived: `expression.${input.id}.derived`,
-    transform: `transform.${input.id}.apply-power-rule`
+    transform: `transform.${input.id}.apply-power-rule`,
+    evaluateTransform: `transform.${input.id}.evaluate-exponent-decrement`
   };
 }
 
@@ -578,6 +651,8 @@ function generatedDerivativeProblemLatex(
 ): GeneratedDerivativeProblemLatex {
   return {
     initial: `\\frac{d}{d${input.variable}}${input.base}^{${input.exponent}}`,
+    applied:
+      `${input.exponent}${input.base}^{${input.exponent}-1}`,
     derived: `${input.exponent}${input.base}^{${input.exponent - 1}}`
   };
 }
@@ -653,10 +728,16 @@ function createGeneratedDerivativeProblemTrace(
         latex: latex.initial
       },
       {
-        id: `${ids.trace}.derived`,
-        latex: latex.derived,
+        id: `${ids.trace}.applied`,
+        latex: latex.applied,
         transformationId: ids.transform,
         rule: "applyDerivativePowerRule"
+      },
+      {
+        id: `${ids.trace}.derived`,
+        latex: latex.derived,
+        transformationId: ids.evaluateTransform,
+        rule: "simplifyConstantDifference"
       }
     ]
   };
@@ -756,7 +837,7 @@ function createGeneratedDerivativeProblemFlashcards(
       assetId: ids.asset,
       prompt: "Why does the exponent move into the coefficient position?",
       objectIds: [ids.initial, ids.derived],
-      transformationIds: [ids.transform],
+      transformationIds: [ids.transform, ids.evaluateTransform],
       timeMs: 1200,
       answer: {
         kind: "text",
@@ -885,22 +966,49 @@ function selector(
   objectId: string,
   suffix: string,
   kind: string,
-  label: string
+  label: string,
+  metadata?: CreateKpAssetSelectorInput["metadata"]
 ): CreateKpAssetSelectorInput {
   return {
     id: `${objectId}.${suffix}`,
     kind,
-    label
+    label,
+    ...(metadata === undefined ? {} : { metadata })
   };
 }
 
 function derivativePowerRoleSelector(
   role: KpDerivativePowerRuleSemanticRole
 ): CreateKpAssetSelectorInput {
+  const evaluationMetadata = role.id === "target.exponent"
+    ? {
+        successorContribution: "material-input",
+        successorRole: "minuend",
+        successorRank: 0,
+        successorOperationId: "kp.arithmetic.subtract"
+      }
+    : role.id === "target.decrement-operator"
+      ? {
+          successorContribution: "catalyst",
+          successorRole: "subtraction-operator",
+          successorRank: 0,
+          successorOperationId: "kp.arithmetic.subtract"
+        }
+      : role.id === "target.decrement-amount"
+        ? {
+            successorContribution: "material-input",
+            successorRole: "subtrahend",
+            successorRank: 1,
+            successorOperationId: "kp.arithmetic.subtract"
+          }
+        : undefined;
   return {
     id: role.selectorId,
     kind: role.selectorKind,
-    label: role.label
+    label: role.label,
+    ...(evaluationMetadata === undefined
+      ? {}
+      : { metadata: evaluationMetadata })
   };
 }
 

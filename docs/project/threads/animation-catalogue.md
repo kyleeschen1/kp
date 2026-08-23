@@ -2,9 +2,10 @@
 
 Status: active
 Last Updated: 2026-08-23
-Current Next Action: build one reversible flat-2D differentiation exemplar for
-`d/dx x^3 -> 3x^2`, enumerate its typed case ledger, expose one canonical
-Catalogue URL, and stop for human review before pressure or promotion. The
+Current Next Action: visually review the reversible flat-2D differentiation
+exemplar `d/dx x^3 -> 3x^(3-1) -> 3x^2` at its canonical Catalogue URL. Its
+typed case ledger, focused browser contract, and generated coverage are ready;
+stop before a second caller or family promotion. The
 finite-sum/product binder tranche is already complete and `Direct`; its
 closeout remains recorded in
 `../decisions/2026-08-22-finite-binder-boundary-handoff-and-schematic-expansion.md`.

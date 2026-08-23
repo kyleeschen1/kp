@@ -60,6 +60,24 @@ test("case maturity distinguishes polished exemplars from pressure evidence", ()
     dimensionId === "exemplar-executable")?.status, "missing");
 });
 
+test("differentiation coverage exposes one exemplar without overstating the family", () => {
+  const family = kpSymbolicCaseCoverageRegistry.families.find(
+    ({ capabilityId }) =>
+      capabilityId === "capability.equation.differentiation-transformations"
+  );
+  assert.ok(family);
+  assert.equal(family.cases.length, 7);
+  assert.equal(family.cases[0]?.outcome, "animated-transition");
+  assert.equal(family.cases[1]?.outcome, "semantic-only");
+  assert.ok(family.cases.slice(2).every(({ outcome }) =>
+    outcome === "typed-gap"
+  ));
+  assert.equal(family.cases[0]?.maturity.find(({ dimensionId }) =>
+    dimensionId === "family-promoted")?.status, "pressure");
+  assert.equal(family.cases[0]?.maturity.find(({ dimensionId }) =>
+    dimensionId === "generation-governed")?.status, "missing");
+});
+
 test("a new Direct symbolic family cannot bypass case enumeration", () => {
   assert.throws(() => projectKpSymbolicCaseCoverage({
     capabilityId: "capability.equation.future-direct-family",

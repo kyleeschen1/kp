@@ -12,13 +12,15 @@ export type KpDerivativePowerRuleRoleId =
   | "source.exponent"
   | "target.coefficient"
   | "target.base"
-  | "target.exponent";
+  | "target.exponent"
+  | "target.decrement-operator"
+  | "target.decrement-amount";
 
 export type KpDerivativePowerRuleSemanticOperation =
   | "given"
   | "preserve"
   | "transmit"
-  | "decrement";
+  | "introduce";
 
 export interface KpDerivativePowerRuleSemanticRole {
   readonly id: KpDerivativePowerRuleRoleId;
@@ -35,7 +37,8 @@ export interface KpDerivativePowerRuleSemanticConstraint {
   readonly id:
     | "differentiation-variable-matches-base"
     | "coefficient-equals-source-exponent"
-    | "target-exponent-is-predecessor";
+    | "target-exponent-copies-source"
+    | "decrement-amount-is-one";
   readonly roleIds: readonly KpDerivativePowerRuleRoleId[];
   readonly summary: string;
 }
@@ -132,12 +135,28 @@ export function createKpDerivativePowerRuleSemanticRoles(input: {
       side: "target",
       selectorId: `${input.targetObjectId}.exponent`,
       selectorKind: "term",
-      label: String(input.exponent - 1),
-      value: input.exponent - 1,
-      operation: "decrement",
-      // One source exponent drives two distinct outcomes; this is derivation,
-      // not two claims that the same visual identity survives unchanged.
+      label: String(input.exponent),
+      value: input.exponent,
+      operation: "transmit",
       derivedFromRoleIds: ["source.exponent"]
+    }),
+    role({
+      id: "target.decrement-operator",
+      side: "target",
+      selectorId: `${input.targetObjectId}.decrement-operator`,
+      selectorKind: "operator",
+      label: "-",
+      value: "subtract",
+      operation: "introduce"
+    }),
+    role({
+      id: "target.decrement-amount",
+      side: "target",
+      selectorId: `${input.targetObjectId}.decrement-amount`,
+      selectorKind: "term",
+      label: "1",
+      value: 1,
+      operation: "introduce"
     })
   ];
 
@@ -159,9 +178,15 @@ export function createKpDerivativePowerRuleSemanticRoles(input: {
         summary: "The source exponent is transmitted into coefficient position."
       },
       {
-        id: "target-exponent-is-predecessor",
+        id: "target-exponent-copies-source",
         roleIds: ["source.exponent", "target.exponent"],
-        summary: "The surviving power is one less than the source exponent."
+        summary:
+          "A visible copy of the source exponent remains in exponent position before evaluation."
+      },
+      {
+        id: "decrement-amount-is-one",
+        roleIds: ["target.decrement-operator", "target.decrement-amount"],
+        summary: "The power rule introduces an explicit subtraction of one."
       }
     ]
   };
@@ -218,7 +243,21 @@ export function createKpDerivativePowerRuleCorrespondenceMap(
           selectorId("target.exponent")
         ],
         summary:
-          "The source exponent branches into a transmitted coefficient and its decremented successor."
+          "The source exponent branches into a coefficient and a copy that remains in exponent position."
+      },
+      {
+        id: "decrement-operator-introduced",
+        relation: "introduction",
+        sourceSelectorIds: [],
+        targetSelectorIds: [selectorId("target.decrement-operator")],
+        summary: "The power rule introduces subtraction as a causal operator."
+      },
+      {
+        id: "decrement-amount-introduced",
+        relation: "introduction",
+        sourceSelectorIds: [],
+        targetSelectorIds: [selectorId("target.decrement-amount")],
+        summary: "The power rule introduces one as the decrement witness."
       }
     ]
   };

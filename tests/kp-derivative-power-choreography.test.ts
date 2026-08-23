@@ -51,10 +51,29 @@ test("derivative power choreography compiles semantic branch roles", () => {
   assert.deepEqual(plan.exponent, {
     sourceSelectorId: "expression.source.exponent",
     coefficientSelectorId: "expression.target.coefficient",
-    successorSelectorId: "expression.target.exponent",
-    sourceMinimumScale: 0.7,
+    decrementInputSelectorId: "expression.target.exponent",
+    decrementOperatorSelectorId: "expression.target.decrement-operator",
+    decrementAmountSelectorId: "expression.target.decrement-amount",
+    sourceMinimumScale: 1,
     coefficientPathVariant: "arc-below",
-    successorPathVariant: "arc-above"
+    decrementInputPathVariant: "arc-above"
+  });
+  assert.deepEqual(plan.operatorApplication, {
+    kind: "derivative-operator-application",
+    operatorSelectorIds: [
+      "expression.source.operator",
+      "expression.source.operator-variable"
+    ],
+    argumentSelectorIds: [
+      "expression.source.base",
+      "expression.source.exponent"
+    ],
+    introducedCauseSelectorIds: [
+      "expression.target.decrement-operator",
+      "expression.target.decrement-amount"
+    ],
+    consumesOperator: true,
+    evaluationOperationId: "kp.arithmetic.subtract"
   });
 });
 
@@ -92,10 +111,11 @@ test("derivative power choreography previews, acts, settles, and releases", () =
   assert.ok(preview.focus.exponentEmphasis > 0);
   assert.equal(preview.coefficient.opacity, 0);
   assert.ok(act.base.reflowProgress > 0.99);
-  assert.ok(act.exponentSource.scale >= 0.7);
+  assert.equal(act.exponentSource.scale, 1);
   assert.ok(act.exponentSource.opacity > 0);
   assert.ok(act.coefficient.pathProgress > 0);
-  assert.ok(act.successorExponent.decrementProgress > 0);
+  assert.ok(act.decrementInput.decrementProgress > 0);
+  assert.ok(act.decrementArtifacts.opacity > 0);
   assert.ok(settle.settlementProgress > 0);
   assert.ok(settle.exponentSource.opacity > 0);
   assert.deepEqual(end.focus, {
@@ -106,7 +126,8 @@ test("derivative power choreography previews, acts, settles, and releases", () =
   assert.equal(end.base.targetOpacity, 1);
   assert.equal(end.exponentSource.opacity, 0);
   assert.equal(end.coefficient.opacity, 1);
-  assert.equal(end.successorExponent.opacity, 1);
+  assert.equal(end.decrementInput.opacity, 1);
+  assert.equal(end.decrementArtifacts.opacity, 1);
 });
 
 test("derivative power choreography samples exact rewind symmetry", () => {
