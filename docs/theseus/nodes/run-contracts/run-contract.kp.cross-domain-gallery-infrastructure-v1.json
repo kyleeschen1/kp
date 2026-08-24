@@ -170,11 +170,39 @@
       "scope": "standard",
       "checkedAt": "2026-08-24T03:47:53.499Z",
       "notes": "All application, Node, test, Svelte, and domain typechecks pass with zero Svelte diagnostics."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/cross-domain-gallery-generation-router.test.ts tests/gallery-generation-result.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T03:51:19.451Z",
+      "notes": "All 10 router and result-projection assertions pass, including invalid envelopes, missing/duplicate/mismatched routes, exact selection, and forged result rejection."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T03:51:20.695Z",
+      "notes": "All architecture and cross-domain conformance gates pass; the router remains build-time and renderer-neutral."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T03:51:21.717Z",
+      "notes": "All application, Node, test, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run test:cross-domain-gallery-preflight",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T03:51:22.738Z",
+      "notes": "All 27 baseline preflight assertions remain green after adding the router."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 5 added kp.gallery-generation-result.v1 with the four reviewed dispositions. Accepted outputs retain request/domain/capability/frontend authority, opaque semantic-trace and explanation references, and executable lifecycle handles; repairs retain typed diagnostics. The seam deliberately carries references, not equation, graph, scene, or program semantics."
+    "summary": "Slice 6 added the build-time cross-domain gallery router. It validates the shared envelope, selects exactly one registered frontend by domain/source/frontend/capabilities, rejects missing or ambiguous routes and forged projections as typed repairs, and imports no domain frontend, semantic model, or renderer."
   },
   "allowedWork": [
     "Repair the two documented generation and explanation baseline drifts.",
@@ -230,7 +258,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s06",
       "title": "Thin-cross-domain-router",
-      "status": "planned"
+      "summary": "Implemented and tested exact registry-injected cross-domain routing with fail-closed diagnostics and result-authority preservation.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s07",
