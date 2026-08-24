@@ -372,6 +372,20 @@
       "scope": "standard",
       "checkedAt": "2026-08-24T00:04:21.512Z",
       "notes": "Paint attestation preserves TypeScript, Svelte, and domain boundaries."
+    },
+    {
+      "command": "npm run test:evaluation-authority-convergence",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T00:07:53.049Z",
+      "notes": "Twenty-four authority tests pass; fusion, carrier, cancellation, and unsupported inputs have disjoint outcomes, while carrier and cancellation fail closed as contributor fusion."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T00:07:54.348Z",
+      "notes": "The semantic cohort gate and stable npm command preserve TypeScript, Svelte, and domain boundaries."
     }
   ],
   "progress": {

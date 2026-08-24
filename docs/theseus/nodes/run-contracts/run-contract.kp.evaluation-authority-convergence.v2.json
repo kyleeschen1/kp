@@ -147,7 +147,8 @@
     {
       "id": "kp.eval-auth.s17",
       "title": "semantic-cohort",
-      "status": "planned"
+      "summary": "A stable authority-convergence gate now covers four disjoint semantic outcomes: contributor fusion, nominal carrier preservation, inverse cancellation, and typed unsupported repair. No second visual caller or release promotion was introduced.",
+      "status": "complete"
     },
     {
       "id": "kp.eval-auth.s18",
