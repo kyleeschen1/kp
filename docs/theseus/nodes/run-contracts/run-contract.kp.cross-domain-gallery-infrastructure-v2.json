@@ -687,11 +687,53 @@
       "scope": "broad",
       "checkedAt": "2026-08-24T22:57:30.521Z",
       "notes": "Dependency, semantic, equation-governance, and cross-domain gates pass."
+    },
+    {
+      "command": "npm run test:cross-domain-gallery",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T23:09:57.518Z",
+      "notes": "34 packet, curated-collection, authority-binding, routing, and typed-gap checks pass."
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T23:09:58.814Z",
+      "notes": "All 36 canonical Catalogue composition and lifecycle checks pass."
+    },
+    {
+      "command": "npm run visual:cross-domain-gallery",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T23:09:59.817Z",
+      "notes": "Chromium verifies four executable collection cases, one visible non-executable gap, grounded disclosures, in-shell navigation, direct links, responsive rail access, and generates a five-panel contact sheet."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T23:10:00.836Z",
+      "notes": "Application, Node, test, Svelte, and domain type checks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T23:10:01.855Z",
+      "notes": "Dependency, semantic, equation-governance, and cross-domain gates pass."
+    },
+    {
+      "command": "npm run check:cross-domain-gallery-conformance",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-24T23:10:02.872Z",
+      "notes": "The five-case packet remains current after adding its compact browser projection."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 27 complete. The five-case cross-domain conformance packet is durable; curated Catalogue collection assembly is next."
+    "summary": "Slice 28 complete. The curated cross-domain collection is assembled and mechanically verified; slice 29 opens the mandatory human visual checkpoint."
   },
   "allowedWork": [
     "Repair the two documented generation and explanation baseline drifts.",
@@ -893,7 +935,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s28",
       "title": "Curated-Catalogue-collection",
-      "status": "planned"
+      "summary": "Added the curated five-case collection, domain-grounded Generated through disclosures, stable Catalogue links, visible typed gap, responsive presentation, and stable visual command over the existing Catalogue host.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s29",

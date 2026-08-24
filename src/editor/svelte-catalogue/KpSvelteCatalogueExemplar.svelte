@@ -8,6 +8,10 @@
     projectKpAnimationCatalogueResultRows
   } from "../animation-catalogue-result-projection.ts";
   import {
+    findKpCrossDomainGalleryExecutableCase,
+    KP_CROSS_DOMAIN_GALLERY_COLLECTION
+  } from "../cross-domain-gallery-collection.ts";
+  import {
     createKpAnimationCatalogueSelectedHostViewModel,
     reduceKpAnimationCatalogueHostView,
     replaceKpAnimationCatalogueHostHealth,
@@ -123,6 +127,9 @@
         selectedHealth: view.health,
         query: view.chrome.query
       }));
+  let generatedThrough = $derived(view === undefined
+    ? undefined
+    : findKpCrossDomainGalleryExecutableCase(view.entry.animationId));
 
   function filterResults(event: Event): void {
     if (view === undefined || !(event.currentTarget instanceof HTMLInputElement)) {
@@ -594,6 +601,44 @@
     >
       <div class="kp-animation-catalogue-shell__rail-results">
         <p class="kp-animation-catalogue-shell__label">Artifacts</p>
+        <details
+          class="kp-animation-catalogue-shell__gallery-collection"
+          data-kp-cross-domain-gallery-collection={KP_CROSS_DOMAIN_GALLERY_COLLECTION.id}
+          open
+        >
+          <summary>
+            <span>{KP_CROSS_DOMAIN_GALLERY_COLLECTION.title}</span>
+            <span>{KP_CROSS_DOMAIN_GALLERY_COLLECTION.cases.length} cases</span>
+          </summary>
+          <p>{KP_CROSS_DOMAIN_GALLERY_COLLECTION.summary}</p>
+          <ol>
+            {#each KP_CROSS_DOMAIN_GALLERY_COLLECTION.cases as galleryCase (galleryCase.caseId)}
+              <li
+                data-kp-cross-domain-gallery-case={galleryCase.caseId}
+                data-kp-cross-domain-gallery-status={galleryCase.status}
+              >
+                {#if galleryCase.status === "executable"}
+                  <a
+                    class="kp-animation-catalogue-shell__gallery-link kp-animation-catalogue-shell__result-link"
+                    href={galleryCase.href}
+                    aria-current={galleryCase.animationId === view.entry.animationId
+                      ? "page"
+                      : undefined}
+                    onclick={selectResult}
+                  >
+                    <span>{galleryCase.title}</span>
+                    <small>{galleryCase.domainLabel}</small>
+                  </a>
+                {:else}
+                  <span class="kp-animation-catalogue-shell__gallery-gap">
+                    <span>{galleryCase.title}</span>
+                    <small>{galleryCase.domainLabel} · intentionally refused</small>
+                  </span>
+                {/if}
+              </li>
+            {/each}
+          </ol>
+        </details>
         <input
           class="kp-animation-catalogue-shell__search"
           type="search"
@@ -703,6 +748,33 @@
       onchange={changeInspector}
       oninput={inputParameter}
     >
+      {#if generatedThrough !== undefined}
+        <section
+          class="kp-animation-catalogue-shell__generated-through"
+          data-kp-cross-domain-gallery-disclosure={generatedThrough.caseId}
+          data-kp-cross-domain-gallery-frontend={generatedThrough.frontendId}
+          aria-labelledby="kp-cross-domain-gallery-disclosure-title"
+        >
+          <h3 id="kp-cross-domain-gallery-disclosure-title">Generated through</h3>
+          <p>{generatedThrough.teachingIntent}</p>
+          <dl>
+            <div>
+              <dt>Verified by</dt>
+              <dd>{generatedThrough.verifiedByLabel}</dd>
+            </div>
+            <div>
+              <dt>Capability</dt>
+              <dd>{generatedThrough.capabilityLabel}</dd>
+            </div>
+            <div>
+              <dt>Transformation</dt>
+              <dd>{generatedThrough.operationLabel}</dd>
+            </div>
+          </dl>
+          <p>{generatedThrough.explanation}</p>
+          <a href={generatedThrough.href}>Open direct Catalogue link</a>
+        </section>
+      {/if}
       {@html inspectorHtml}
     </aside>
   </main>
