@@ -736,11 +736,60 @@
       "scope": "slice s29 committed visual checkpoint",
       "checkedAt": "2026-08-24T23:11:40.613Z",
       "notes": "Two Chromium checks passed from commit 05e00f0de and regenerated four desktop domain captures plus one responsive collection capture for human review."
+    },
+    {
+      "command": "npm run test:cross-domain-gallery",
+      "status": "passed",
+      "scope": "slice s29 toggle revision",
+      "checkedAt": "2026-08-24T23:26:49.214Z",
+      "notes": "All 34 packet, collection, authority-binding, routing, and typed-gap checks pass after making gallery mode opt in."
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "slice s29 toggle revision",
+      "checkedAt": "2026-08-24T23:26:50.501Z",
+      "notes": "All 36 canonical Catalogue composition and lifecycle checks pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s29 toggle revision",
+      "checkedAt": "2026-08-24T23:26:51.550Z",
+      "notes": "Application, Node, test, Svelte, and domain type checks pass with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s29 toggle revision",
+      "checkedAt": "2026-08-24T23:26:52.601Z",
+      "notes": "Dependency, framework, semantic, equation-governance, and cross-domain gates pass."
+    },
+    {
+      "command": "npm run check:cross-domain-gallery-conformance",
+      "status": "passed",
+      "scope": "slice s29 toggle revision",
+      "checkedAt": "2026-08-24T23:26:53.715Z",
+      "notes": "The five-case conformance packet remains current."
+    },
+    {
+      "command": "npm run visual:cross-domain-gallery",
+      "status": "passed",
+      "scope": "slice s29 committed toggle checkpoint",
+      "checkedAt": "2026-08-24T23:26:54.767Z",
+      "notes": "Two Chromium checks pass from commit 256ab3ab2; direct visits start closed, open and close preserve the current player, in-shell gallery navigation retains the open state, responsive rail access works, and a six-panel closed/open contact sheet is regenerated."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s29 toggle checkpoint",
+      "checkedAt": "2026-08-24T23:27:12.016Z",
+      "notes": "Workspace validates at 1059 nodes and 25446 events after closing the context receipt and recording the revised human checkpoint."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT at slice 29. Review the committed curated gallery across equation, code, Graph2D, Graph3D, typed-gap, disclosure, and responsive states before release closeout."
+    "summary": "HUMAN_CHECKPOINT at slice 29 after commit 256ab3ab2. Gallery mode is now default-off and toggles the curated collection plus matching provenance disclosure together; review the six-panel closed/open contact sheet before release closeout."
   },
   "allowedWork": [
     "Repair the two documented generation and explanation baseline drifts.",
@@ -948,7 +997,7 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s29",
       "title": "Cross-domain-gallery-visual-checkpoint",
-      "summary": "Opened the mandatory curated-gallery visual checkpoint against committed implementation 05e00f0de; human review is required before release closeout.",
+      "summary": "Human approved the gallery content but requested that gallery mode not remain permanently open; revise it to an explicit default-off toggle and reopen the visual checkpoint.",
       "status": "in-progress"
     },
     {
