@@ -22,6 +22,11 @@ export const kpEditorGraphSvgAnimationIds = Object.freeze([
   "animation.physics.constant-force-work-energy"
 ] as const);
 
+export const kpEditorGraph3DAnimationIds = Object.freeze([
+  "animation.graph.surface-mode.mesh-to-donut",
+  "animation.graph-3d.saddle-denominator-four-to-eight"
+] as const);
+
 export function supportsKpEditorGraphSvgAnimation(
   animationId: string
 ): boolean {
@@ -88,7 +93,8 @@ export function deriveKpEditorSelectedSurfaceCapabilities(input: {
   }
   if (
     input.slotKinds.includes("graph") &&
-    input.animationId === "animation.graph.surface-mode.mesh-to-donut"
+    (kpEditorGraph3DAnimationIds as readonly string[])
+      .includes(input.animationId)
   ) {
     capabilities.push("graph-webgl-3d");
   }

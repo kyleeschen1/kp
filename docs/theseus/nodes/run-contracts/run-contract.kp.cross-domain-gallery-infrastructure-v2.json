@@ -466,6 +466,41 @@
       "scope": "slice s22 durable control record",
       "checkedAt": "2026-08-24T22:09:36.766Z",
       "notes": "Workspace validates at 1059 nodes and 25361 events after completing the Graph3D semantic trace and frame slice."
+    },
+    {
+      "command": "npm run test:graph-3d-runtime",
+      "status": "passed",
+      "scope": "slice s23 bounded Graph3D host registry",
+      "checkedAt": "2026-08-24T22:14:54.015Z",
+      "notes": "35 tests pass for exact capability selection, source/target/current projection, shared clock, fixed context, lazy capability, fallback, accessibility, and the preserved two-context lease."
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "slice s23 Catalogue capability preservation",
+      "checkedAt": "2026-08-24T22:14:55.265Z",
+      "notes": "All 36 selection, capability loading, hostability, and Svelte Catalogue tests pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s23 host boundary",
+      "checkedAt": "2026-08-24T22:14:56.315Z",
+      "notes": "Dependency, semantic, equation, and cross-domain gates pass with no new exceptions."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s23 type boundary",
+      "checkedAt": "2026-08-24T22:14:57.387Z",
+      "notes": "Application, Node, tests, Svelte, and domain projects compile with zero Svelte diagnostics."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s23 durable control record",
+      "checkedAt": "2026-08-24T22:15:15.823Z",
+      "notes": "Workspace validates at 1059 nodes and 25370 events after completing the bounded Graph3D host registration slice."
     }
   ],
   "allowedWork": [
@@ -638,7 +673,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s23",
       "title": "Bounded-Graph3D-host-registry",
-      "status": "planned"
+      "summary": "Added an exact saddle host contract and enrolled only the reviewed saddle asset beside the existing mesh-to-donut asset in Graph3D capability selection. The host projects one shared clock into immutable source, target, and current semantic surface truth; retains fixed camera and topology; declares the existing two-context lease, lazy Three backend, continuous semantic SVG fallback, and accessible single-image policy; and fails closed on metadata or asset drift. No renderer paint or Catalogue asset registration was added.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s24",
