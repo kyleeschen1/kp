@@ -1,0 +1,84 @@
+.kp-graph-3d-saddle-stage {
+  position: relative;
+  width: min(100%, 45rem);
+  margin: 0 auto;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, #315e6d 24%, transparent);
+  border-radius: 1.125rem;
+  background: #fbfaf7;
+  box-shadow: 0 1.1rem 2.8rem rgb(29 55 65 / 10%);
+}
+
+.kp-graph-3d-saddle-stage .graph-webgl__canvas,
+.kp-graph-3d-saddle-stage .graph-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.kp-graph-3d-saddle-labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  color: #223a44;
+}
+
+.kp-graph-3d-saddle-label {
+  position: absolute;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+}
+
+.kp-graph-3d-saddle-label--equation,
+.kp-graph-3d-saddle-label--parameter {
+  top: 1.15rem;
+  min-height: 2rem;
+  padding: 0.28rem 0.62rem;
+  border: 1px solid rgb(49 94 109 / 16%);
+  border-radius: 999px;
+  background: rgb(251 250 247 / 88%);
+  box-shadow: 0 0.25rem 0.8rem rgb(29 55 65 / 7%);
+  transform: none;
+  backdrop-filter: blur(5px);
+}
+
+.kp-graph-3d-saddle-label--equation {
+  left: 1.15rem;
+}
+
+.kp-graph-3d-saddle-label--parameter {
+  right: 1.15rem;
+  color: #1f6677;
+  font-weight: 600;
+}
+
+.kp-graph-3d-saddle-label--axis {
+  color: #46535f;
+  font-size: 0.92rem;
+}
+
+.kp-graph-3d-saddle-label .katex {
+  font-size: 1em;
+}
+
+@media (max-width: 640px) {
+  .kp-graph-3d-saddle-label--equation,
+  .kp-graph-3d-saddle-label--parameter {
+    top: 0.72rem;
+    min-height: 1.65rem;
+    padding: 0.2rem 0.42rem;
+    font-size: 0.82rem;
+  }
+
+  .kp-graph-3d-saddle-label--equation {
+    left: 0.72rem;
+  }
+
+  .kp-graph-3d-saddle-label--parameter {
+    right: 0.72rem;
+  }
+}

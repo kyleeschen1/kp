@@ -501,6 +501,83 @@
       "scope": "slice s23 durable control record",
       "checkedAt": "2026-08-24T22:15:15.823Z",
       "notes": "Workspace validates at 1059 nodes and 25370 events after completing the bounded Graph3D host registration slice."
+    },
+    {
+      "command": "npm",
+      "status": "passed",
+      "scope": "slice",
+      "checkedAt": "2026-08-24T22:27:39.355Z",
+      "notes": "All"
+    },
+    {
+      "command": "npm",
+      "status": "passed",
+      "scope": "slice",
+      "checkedAt": "2026-08-24T22:27:40.569Z",
+      "notes": "All"
+    },
+    {
+      "command": "npm",
+      "status": "passed",
+      "scope": "slice",
+      "checkedAt": "2026-08-24T22:27:41.641Z",
+      "notes": "All"
+    },
+    {
+      "command": "npm",
+      "status": "passed",
+      "scope": "slice",
+      "checkedAt": "2026-08-24T22:27:42.724Z",
+      "notes": "All"
+    },
+    {
+      "command": "npm",
+      "status": "passed",
+      "scope": "slice",
+      "checkedAt": "2026-08-24T22:27:43.784Z",
+      "notes": "Application,"
+    },
+    {
+      "command": "npm run test:graph-3d-runtime",
+      "status": "passed",
+      "scope": "slice s24 Graph3D shared paint",
+      "checkedAt": "2026-08-24T22:27:59.643Z",
+      "notes": "All 40 runtime tests pass for shared semantic sampling, fixed camera, KaTeX-owned visible labels, exact lazy adapter, fallback continuity, and context leases."
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "slice s24 Catalogue capability preservation",
+      "checkedAt": "2026-08-24T22:28:00.846Z",
+      "notes": "All 36 Catalogue selection, capability loading, hostability, and Svelte shell tests pass."
+    },
+    {
+      "command": "npm run test:cross-domain-gallery",
+      "status": "passed",
+      "scope": "slice s24 cross-domain preservation",
+      "checkedAt": "2026-08-24T22:28:01.925Z",
+      "notes": "All 26 shared generation router and existing equation, code, and Graph2D frontend tests pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s24 renderer and editor boundaries",
+      "checkedAt": "2026-08-24T22:28:03.089Z",
+      "notes": "All architecture gates pass with static paint Three-free and rendering independent from editor ownership."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s24 type boundary",
+      "checkedAt": "2026-08-24T22:28:04.222Z",
+      "notes": "Application, Node, tests, Svelte, and domain projects compile with zero Svelte diagnostics."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s24 durable control record",
+      "checkedAt": "2026-08-24T22:28:24.719Z",
+      "notes": "Workspace validates at 1059 nodes and 25385 events after completing the shared Graph3D paint slice."
     }
   ],
   "allowedWork": [
@@ -679,7 +756,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s24",
       "title": "Graph3D-WebGL-and-SVG-paint",
-      "status": "planned"
+      "summary": "Materialized the current semantic denominator into one renderer-neutral Graph3D frame consumed by both continuous SVG fallback and lazy Three/WebGL paint. Sampling is renderer-owned at 21 by 21, the camera and topology remain fixed, every visible graph label is KaTeX-owned, the exact saddle adapter reuses the shared clock and two-context lease lifecycle, and optical values remain provisional until the slice 26 human checkpoint.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s25",

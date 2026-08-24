@@ -303,7 +303,10 @@ export const kpEditorSelectedSurfaceCapabilityDeclarations = Object.freeze([
   declaration({
     capabilityId: "graph-webgl-3d",
     domain: "graph",
-    adapterIds: ["editor-animation-surface.graph.webgl-3d"],
+    adapterIds: [
+      "editor-animation-surface.graph.webgl-3d",
+      "editor-animation-surface.graph.webgl-3d-saddle"
+    ],
     registrationOwner: "capability-module-global-registry",
     async loadAndRegister(registry, registrationGuardAdapterId) {
       const client = await import("./graph-3d-surface-capability.ts");
