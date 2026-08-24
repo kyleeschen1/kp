@@ -228,6 +228,41 @@
       "scope": "broad",
       "checkedAt": "2026-08-24T20:52:08.672Z",
       "notes": "Workspace validates at 1059 nodes and 25310 events after completing slice 16 and closing its context receipt."
+    },
+    {
+      "command": "npm run test:animation-domain-frontends",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T21:00:48.715Z",
+      "notes": "36 tests pass for the bounded request, derived quadratic expressions, persistent curve/point correspondence, grounded claims, standard asset closure, deterministic endpoints, and mirrored rewind."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T21:00:50.059Z",
+      "notes": "Application, Node, tests, Svelte, and domain projects compile with the renderer-neutral Graph2D trace and asset."
+    },
+    {
+      "command": "npm run test:cross-domain-gallery",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-24T21:00:51.146Z",
+      "notes": "All 22 existing gallery routing and conformance tests remain green before Graph2D projection is added."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T21:00:52.193Z",
+      "notes": "All dependency, semantic, equation, and cross-domain boundaries pass; the new trace and asset import no editor or rendering authority."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T21:01:19.811Z",
+      "notes": "Workspace validates at 1059 nodes and 25317 events after completing the Graph2D semantic trace and asset slice."
     }
   ],
   "allowedWork": [
@@ -364,7 +399,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s17",
       "title": "Graph2D-semantic-trace-and-asset",
-      "status": "planned"
+      "summary": "Compiled the pinned Graph2D request into exact source y=x^2 and target y=(x-2)^2 expression states, a fixed semantic coordinate context, stable curve/vertex/sample identities, total typed correspondence, grounded explanation claims, and a renderer-neutral AnimationAsset. Playhead-derived frames preserve (u+h,u^2), direct seek, mirrored rewind, static endpoints, and accessibility; semantic focus names the curve and points while axes remain context. No SVG, DOM, Catalogue route, or family-promotion claim was added.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s18",
