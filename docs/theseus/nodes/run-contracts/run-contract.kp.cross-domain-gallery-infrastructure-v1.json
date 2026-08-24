@@ -128,11 +128,18 @@
       "scope": "standard",
       "checkedAt": "2026-08-24T03:41:36.952Z",
       "notes": "Application, Node, tests, Svelte, and domain typechecks pass with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run test:cross-domain-gallery-preflight",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T03:43:32.787Z",
+      "notes": "The stable preflight runs 27 assertions covering both repaired regressions and their production integration boundaries."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 3 restored deterministic parity between the canonical verified-session compiler and production JSON. The preservation snapshot was regenerated to record the standardized correspondence fingerprints; equations, selectors, timing, motifs, native host behavior, provider trace, and explanation remain unchanged."
+    "summary": "Slice 4 added the stable test:cross-domain-gallery-preflight command. It aggregates the exponential pressure/boundary/benchmark checks and the generated linear-solve parity/product checks into one repeatable gate for every later gallery slice."
   },
   "allowedWork": [
     "Repair the two documented generation and explanation baseline drifts.",
@@ -176,7 +183,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s04",
       "title": "Stable-gallery-preflight-gate",
-      "status": "planned"
+      "summary": "Added and passed a 27-assertion stable preflight that guards both repaired generation baselines before shared gallery infrastructure begins.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s05",

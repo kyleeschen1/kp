@@ -526,6 +526,7 @@
     "test:compile-equation-intent-cli": "node --disable-warning=ExperimentalWarning --test tests/compile-equation-intent-cli.test.ts",
     "prove:equation-generation-boundary": "node --disable-warning=ExperimentalWarning scripts/prove-equation-generation-boundary.ts",
     "test:equation-generation-boundary": "node --disable-warning=ExperimentalWarning --test tests/equation-generation-boundary-proof.test.ts tests/compile-equation-intent.test.ts tests/compile-equation-intent-cli.test.ts",
+    "test:cross-domain-gallery-preflight": "node --disable-warning=ExperimentalWarning --test tests/equation-generation-pressure-contract.test.ts tests/equation-generation-boundary-proof.test.ts tests/compile-equation-intent.test.ts tests/compile-equation-intent-cli.test.ts tests/homomorphic-generation-benchmark.test.ts tests/verified-generated-linear-solve-session.test.ts tests/generated-linear-solve-product-integration.test.ts",
     "generate:equation-reachability": "node --disable-warning=ExperimentalWarning scripts/generate-exact-equation-reachability-graph.ts",
     "check:equation-reachability": "node --disable-warning=ExperimentalWarning scripts/generate-exact-equation-reachability-graph.ts --check",
     "test:equation-reachability": "node --disable-warning=ExperimentalWarning --test tests/exact-equation-reachability-graph.test.ts tests/animation-api-caller-ledger.test.ts",
