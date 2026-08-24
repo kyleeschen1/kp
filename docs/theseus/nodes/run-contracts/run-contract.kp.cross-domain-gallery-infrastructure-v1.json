@@ -317,11 +317,46 @@
       "scope": "standard",
       "checkedAt": "2026-08-24T04:07:13.545Z",
       "notes": "All application, Node, test, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typescript-refactor-paint-role-contract.test.ts tests/typescript-refactor-css-clock.test.ts tests/typescript-refactor-surface-adapter.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T04:14:21.492Z",
+      "notes": "All 5 role-inventory, renderer-binding, CSS-clock, and adapter assertions pass; the contract contains no palette values and keeps syntax paint separate from semantic identity."
+    },
+    {
+      "command": "npm run test:typescript-refactor",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T04:14:22.725Z",
+      "notes": "All 102 TypeScript semantic, compiler, motion, rendering, public projection, and new paint-role contract assertions pass."
+    },
+    {
+      "command": "npm run test:cross-domain-gallery",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T04:14:23.735Z",
+      "notes": "All 22 gallery request, routing, projection, and generated packet assertions remain green."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T04:14:24.772Z",
+      "notes": "All dependency, semantic, compiler-authority, governance, and cross-domain conformance gates pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T04:14:25.832Z",
+      "notes": "All application, Node, test, Svelte, and domain typechecks pass with zero Svelte diagnostics."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 9 seeded kp.cross-domain-gallery-conformance-packet.v1 as a deterministic checked-in JSON projection of the exact equation and TypeScript requests and expected results. Stable generate, stale-check, and focused test commands now guard the packet; it copies no domain semantic plans and is ready for bounded graph cases later in the contract."
+    "summary": "Slice 10 defined the TypeScript-local kp.typescript-refactor-paint-roles.v1 contract. It inventories eleven optical concern families, binds every shared syntax role to a unique CSS property, declares explicit host theme authority, exposes the contract on the canonical stage, contains no palette values, and leaves compiler semantics, salience, presence, timing, geometry, host, and current dark paint unchanged."
   },
   "allowedWork": [
     "Repair the two documented generation and explanation baseline drifts.",
@@ -401,7 +436,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s10",
       "title": "TypeScript-theme-role-contract",
-      "status": "planned"
+      "summary": "Added and validated the TypeScript-local semantic paint-role contract with exact family and syntax coverage, explicit host theme authority, and an observable renderer binding; no optical value or animation behavior changed.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s11",
