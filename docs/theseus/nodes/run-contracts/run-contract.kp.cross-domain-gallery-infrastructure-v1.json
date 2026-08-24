@@ -135,11 +135,46 @@
       "scope": "focused",
       "checkedAt": "2026-08-24T03:43:32.787Z",
       "notes": "The stable preflight runs 27 assertions covering both repaired regressions and their production integration boundaries."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/gallery-generation-result.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T03:47:49.077Z",
+      "notes": "All 4 projection contract assertions pass across artifact reuse, compilation, semantic-plan-only honesty, repair diagnostics, and reference-only domain boundaries."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-motion-vocabulary.test.ts tests/equation-extension-registry.test.ts tests/equation-extension-pack-validator.test.ts tests/equation-motif-invocation.test.ts tests/equation-recipe-composition.test.ts tests/semantic-motion-compiler-contract.test.ts",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T03:47:50.413Z",
+      "notes": "All 23 renderer-neutral motion protocol assertions pass; the projection does not alter equation vocabulary or compiler authority."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T03:47:51.428Z",
+      "notes": "All 11 equation surface preservation assertions pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T03:47:52.485Z",
+      "notes": "All dependency, framework-neutral, semantic-boundary, governance, and cross-domain conformance architecture gates pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T03:47:53.499Z",
+      "notes": "All application, Node, test, Svelte, and domain typechecks pass with zero Svelte diagnostics."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 4 added the stable test:cross-domain-gallery-preflight command. It aggregates the exponential pressure/boundary/benchmark checks and the generated linear-solve parity/product checks into one repeatable gate for every later gallery slice."
+    "summary": "Slice 5 added kp.gallery-generation-result.v1 with the four reviewed dispositions. Accepted outputs retain request/domain/capability/frontend authority, opaque semantic-trace and explanation references, and executable lifecycle handles; repairs retain typed diagnostics. The seam deliberately carries references, not equation, graph, scene, or program semantics."
   },
   "allowedWork": [
     "Repair the two documented generation and explanation baseline drifts.",
@@ -189,7 +224,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s05",
       "title": "Shared-generation-result-projection",
-      "status": "planned"
+      "summary": "Implemented and tested the frozen reference-only shared result projection for compiled artifacts, existing artifacts, semantic-plan-only outputs, and repair-required gaps.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s06",
