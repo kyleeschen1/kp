@@ -2,24 +2,17 @@
 
 Status: active
 Last Updated: 2026-08-24
-Current Next Action: define and execute a bounded cross-domain generation
-gallery for demonstration next week. Repair the two focused
-generation/explanation baseline drifts, then route the approved `2^x = 7`
-solve, one Graph2D, one Graph3D, and the TypeScript refactor through the shared
-generation envelope and gallery-facing result projection. Treat the pinned
-packet as durable conformance evidence. Give the TypeScript exemplar a
-separately tuned light optical endpoint and stop for review before Python
-pressure or shared code-theme promotion. The exact graph exemplars remain
-proposed; the post-derivative mathematical family options stay live but
-paused. Human review approved the reversible, governance-v2 flat-2D
-differentiation exemplar `d/dx x^3 -> 3x^(3-1) -> 3x^2` on 2026-08-24. The
-completed evaluation authority loop carries one compiler-selected
-contributor-fusion certificate
-through the generic equation host to actual Native KaTeX ink-knot paint while
-preserving the approved first beat and native endpoints. See
-`../reviews/2026-08-23-animation-governance-epoch-v2-derivative-checkpoint.md`
-and
-`../reviews/2026-08-23-evaluation-authority-convergence-run-proposal.md`.
+Current Next Action: select the next equation family. The recommended bounded
+step is one indefinite-integration power-rule exemplar,
+`integral x^2 dx -> x^(2+1)/(2+1) + C -> x^3/3 + C`, through the governed
+construction entrance, canonical equation host, and Native KaTeX renderer.
+Use it to pressure semantic operator scope against a renderer-owned
+`outline | salience-only | none` policy, then stop for human review before a
+second caller or family promotion. The Graph3D saddle checkpoint is approved;
+the remaining cross-domain gallery assembly and release slices are paused,
+not complete. See
+`../decisions/2026-08-24-return-to-equation-family-breadth.md` and
+`../reviews/2026-08-24-equation-family-return-next-step-review.md`.
 
 A proposed recurring review now defines the prompt-to-reviewed-artifact target
 without granting the model mathematical or presentation authority. It measures
@@ -30,13 +23,14 @@ change the active implementation queue or require callers to share one literal
 frontend. See
 `../reviews/2026-08-23-governed-katex-explanation-benchmark-proposal.md`.
 
-The bounded next-family review is now recorded. It recommends a short,
-non-visual repair of the two generation/explanation baseline drifts followed by
-one reversible indefinite-integration exemplar. Inequality reversal is the
-strongest non-calculus alternative. This recommendation is awaiting family
-selection and is paused behind the accepted cross-domain gallery priority, so
-differentiation remains an approved `Exemplar`. See
-`../reviews/2026-08-23-post-derivative-next-family-review.md`.
+The bounded next-family review is now active again. Its two prerequisite
+generation/explanation drifts were repaired by the gallery run, so it now
+recommends one reversible indefinite-integration exemplar directly.
+Inequality reversal remains the strongest non-calculus alternative. Family
+selection is awaiting approval, and differentiation remains an approved
+`Exemplar`. See
+`../reviews/2026-08-23-post-derivative-next-family-review.md` and
+`../reviews/2026-08-24-equation-family-return-next-step-review.md`.
 
 The cross-domain gallery decision preserves one upper generation envelope
 while keeping equation, Graph2D, Graph3D, and code semantics and renderers

@@ -1,18 +1,17 @@
 # Generative Animation Compiler Thread
 
 Status: supporting
-Last Updated: 2026-08-21
-Current Next Action: exponential duality, narrow root promotion, bounded
-persistent-equivalence projection, and TypeScript/Python extract-helper
-frontend closure are complete. Proceed through one reversible binder exemplar,
-binder pressure/promotion with a case ledger, bounded Graph3D, differentiation,
-and integration. Treat common symbolic
-transformations through Calculus BC as the coverage horizon, derive every
-maturity claim, and retain typed gaps. Graph2D function translation and
-fraction structural pressure remain deferred. Models retain semantic-choice
-authority only; geometry, timing, and renderer policy remain code-owned. See
-`../decisions/2026-08-21-kp-post-root-capability-sequence.md` and
-`../reviews/2026-08-21-typescript-python-generation-frontends-long-loop-proposal.md`.
+Last Updated: 2026-08-24
+Current Next Action: binder promotion, the bounded Graph3D and Graph2D
+exemplars, and the differentiation exemplar are complete. The active Catalogue
+review recommends one reversible indefinite-integration power-rule exemplar
+next, pending explicit family selection. Route it through the governed
+construction request and existing equation compiler; do not introduce a
+parallel model-authored path. Treat common symbolic transformations through
+Calculus BC as the coverage horizon, derive every maturity claim, and retain
+typed gaps. Models retain semantic-choice authority only; truth, geometry,
+timing, and renderer policy remain code-owned. See
+`../reviews/2026-08-24-equation-family-return-next-step-review.md`.
 
 The completed carrier/discoverability run is recorded in
 `docs/project/reviews/2026-08-20-carrier-preserving-simplification-closeout.md`.

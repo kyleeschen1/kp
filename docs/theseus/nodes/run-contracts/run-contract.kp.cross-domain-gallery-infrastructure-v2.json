@@ -25,6 +25,10 @@
       "kind": "file",
       "path": "docs/project/authoring/llm-generation-entrypoint.md",
       "summary": "Canonical model-authored generation routing and typed repair boundary."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-24-return-to-equation-family-breadth.md"
     }
   ],
   "verification": [
@@ -652,7 +656,7 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT at slice 26. The Graph3D review sheet is ready; camera, material, scale, label placement, and timing await human approval before slices 27 through 30."
+    "summary": "USER_PAUSED after the approved Graph3D checkpoint at slice 26. Slices 27 through 30 remain planned and unfinished while the active project lane returns to equation-family selection."
   },
   "allowedWork": [
     "Repair the two documented generation and explanation baseline drifts.",
@@ -842,8 +846,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s26",
       "title": "Graph3D-visual-checkpoint",
-      "summary": "Opened the mandatory Graph3D visual checkpoint against committed route 6ca9957a8. Review the five deterministic source, intermediate, target, and phone captures before any optical promotion or broader Graph3D generalization.",
-      "status": "in-progress"
+      "summary": "Human approved the Graph3D saddle exemplar; camera, material, scale, KaTeX label placement, point sizing, and timing passed the canonical visual checkpoint.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s27",
