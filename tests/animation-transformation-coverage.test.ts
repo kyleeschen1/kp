@@ -235,7 +235,8 @@ test("cross-domain rows distinguish exact frontends from unproved gaps", () => {
   for (const entry of crossDomain.filter(({ capabilityId }) =>
     capabilityId !== "capability.code.typescript-refactoring" &&
     capabilityId !== "capability.code.python-refactoring" &&
-    capabilityId !== "capability.graph-2d.function-transformations"
+    capabilityId !== "capability.graph-2d.function-transformations" &&
+    capabilityId !== "capability.graph-3d.scene-transformations"
   )) {
     assert.deepEqual(entry.gaps.filter(({ kind }) =>
       kind === "frontend-required"
@@ -271,6 +272,17 @@ test("cross-domain rows distinguish exact frontends from unproved gaps", () => {
     "requirement.graph-2d.function.recipe",
     "requirement.graph-2d.function.exemplar",
     "requirement.graph-2d.function.corpus"
+  ]);
+  const graph3D = crossDomain.find(({ capabilityId }) =>
+    capabilityId === "capability.graph-3d.scene-transformations"
+  );
+  assert.equal(graph3D?.status, "Exemplar");
+  assert.deepEqual(graph3D?.gaps, []);
+  assert.deepEqual(graph3D?.remainingRequirementIds, [
+    "requirement.graph-3d.scene.operation",
+    "requirement.graph-3d.scene.recipe",
+    "requirement.graph-3d.scene.renderer",
+    "requirement.graph-3d.scene.corpus"
   ]);
   assert.ok(coverage.entries.filter(({ domain }) => domain === "equation")
     .every(({ gaps }) => gaps.length === 0));

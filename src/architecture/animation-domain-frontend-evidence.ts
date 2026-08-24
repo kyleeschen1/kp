@@ -12,6 +12,10 @@ import {
   KP_GRAPH_2D_FUNCTION_FRONTEND_ID,
   KP_GRAPH_2D_FUNCTION_FRONTEND_SOURCE
 } from "../domain-ir/graph-2d-function-generation-request.ts";
+import {
+  KP_GRAPH_3D_SCENE_FRONTEND_ID,
+  KP_GRAPH_3D_SCENE_FRONTEND_SOURCE
+} from "../domain-ir/graph-3d-scene-generation-request.ts";
 
 export const KP_ANIMATION_DOMAIN_FRONTEND_EVIDENCE_SCHEMA =
   "kp.animation-domain-frontend-evidence.v1" as const;
@@ -220,6 +224,11 @@ KpAnimationDomainFrontendEvidence {
         authorityId: KP_GRAPH_2D_FUNCTION_FRONTEND_ID,
         domain: "graph-2d",
         sourcePath: KP_GRAPH_2D_FUNCTION_FRONTEND_SOURCE
+      },
+      {
+        authorityId: KP_GRAPH_3D_SCENE_FRONTEND_ID,
+        domain: "graph-3d",
+        sourcePath: KP_GRAPH_3D_SCENE_FRONTEND_SOURCE
       }
     ])
   });

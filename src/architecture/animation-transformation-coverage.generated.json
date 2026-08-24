@@ -4474,8 +4474,10 @@
           "kind": "domain-frontend",
           "authorityId": "frontend.graph-3d.semantic-scene.v1",
           "summary": "Graph3D scene transformations must be normalized and verified by its domain-owned frontend.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "src/domain-ir/graph-3d-scene-generation-request.ts"
+          ]
         },
         {
           "id": "requirement.graph-3d.scene.operation",
@@ -4520,16 +4522,8 @@
           "evidenceSourceIds": []
         }
       ],
-      "gaps": [
-        {
-          "kind": "frontend-required",
-          "requirementId": "requirement.graph-3d.domain-frontend.scene-transformations",
-          "authorityId": "frontend.graph-3d.semantic-scene.v1",
-          "repair": "Provide exact evidence from the declared domain-owned frontend."
-        }
-      ],
+      "gaps": [],
       "remainingRequirementIds": [
-        "requirement.graph-3d.domain-frontend.scene-transformations",
         "requirement.graph-3d.scene.operation",
         "requirement.graph-3d.scene.recipe",
         "requirement.graph-3d.scene.renderer",

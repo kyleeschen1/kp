@@ -403,6 +403,34 @@
       "scope": "broad",
       "checkedAt": "2026-08-24T21:50:41.546Z",
       "notes": "Workspace validates at 1059 nodes and 25343 events with s20 intentionally in progress for renewed human review."
+    },
+    {
+      "command": "npm run check:animation-transformation-coverage",
+      "status": "passed",
+      "scope": "slice s21 generated coverage freshness",
+      "checkedAt": "2026-08-24T22:01:37.954Z",
+      "notes": "Graph3D frontend requirement is satisfied while operation, recipe, renderer, and corpus requirements remain explicit."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s21 TypeScript and Svelte boundaries",
+      "checkedAt": "2026-08-24T22:01:38.603Z",
+      "notes": "TypeScript, Svelte, and domain typechecks passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run test:animation-domain-frontends",
+      "status": "passed",
+      "scope": "slice s21 bounded Graph3D request and frontend evidence",
+      "checkedAt": "2026-08-24T22:01:39.090Z",
+      "notes": "49 tests passed; exact saddle request accepts only denominator 4 to 8 and rejects formula, camera, rendering, geometry, and sampling authority."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s21 durable control record",
+      "checkedAt": "2026-08-24T22:02:07.336Z",
+      "notes": "Workspace validates at 1059 nodes and 25352 events after closing the bounded Graph3D request slice."
     }
   ],
   "allowedWork": [
@@ -563,7 +591,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s21",
       "title": "Bounded-Graph3D-scene-request",
-      "status": "planned"
+      "summary": "Added the exact parameter-only Graph3D saddle request for denominator 4 to 8 over the fixed [-3,3] x/y domain. The request preserves family, identity, topology, axes, and camera state; rejects formulas, arbitrary parameters, camera instructions, geometry, paint, and sampling as typed repairs; and satisfies only the declared Graph3D frontend evidence gap while retaining operation, recipe, renderer, and corpus work.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s22",

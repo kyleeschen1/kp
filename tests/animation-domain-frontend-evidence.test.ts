@@ -10,9 +10,9 @@ import {
 import { kpAnimationCapabilityPlan } from
   "../src/architecture/cross-domain-animation-capability-plan.ts";
 
-test("proved code and bounded Graph2D frontends close only exact gaps", () => {
+test("proved code and bounded graph frontends close only exact gaps", () => {
   const evidence = createKpAnimationDomainFrontendEvidence();
-  assert.equal(evidence.authorities.length, 3);
+  assert.equal(evidence.authorities.length, 4);
   assert.equal(evidence.requirements.length, 9);
   const matched = evidence.requirements.filter(({ status }) =>
     status === "matched"
@@ -20,7 +20,8 @@ test("proved code and bounded Graph2D frontends close only exact gaps", () => {
   assert.deepEqual(matched.map(({ capabilityId }) => capabilityId), [
     "capability.code.typescript-refactoring",
     "capability.code.python-refactoring",
-    "capability.graph-2d.function-transformations"
+    "capability.graph-2d.function-transformations",
+    "capability.graph-3d.scene-transformations"
   ]);
   assert.ok(matched.filter(({ domain }) => domain === "code")
     .every((requirement) =>

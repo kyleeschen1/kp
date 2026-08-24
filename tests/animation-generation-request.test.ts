@@ -57,7 +57,7 @@ test("one envelope accepts opaque requests while only proved frontends close", (
         ({ code }) => code
       ),
       example.domain === "equation" || example.domain === "code" ||
-        example.domain === "graph-2d"
+        example.domain === "graph-2d" || example.domain === "graph-3d"
         ? []
         : ["animation-generation.frontend.required"]
     );
