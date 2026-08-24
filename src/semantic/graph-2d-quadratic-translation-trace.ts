@@ -148,7 +148,7 @@ function createTrace(
   const target = functionState("target", 2);
   const contextObject = createKpSemanticAssetObject({
     id: context.id,
-    objectType: "graph-2d-function-context",
+    objectType: "graph-2d",
     title: "Fixed coordinate context",
     value: context,
     selectors: [{
