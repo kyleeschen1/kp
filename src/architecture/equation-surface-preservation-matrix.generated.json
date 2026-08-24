@@ -4684,7 +4684,7 @@
         {
           "transformationId": "transform.generated.linear-solve.linear-68c15d41.subtract-both-sides",
           "transformationType": "subtractBothSides",
-          "transformationFingerprint": "fnv1a32-6d57d952",
+          "transformationFingerprint": "fnv1a32-71bb56ff",
           "source": [
             {
               "objectId": "equation.generated.linear-solve.linear-68c15d41.initial",
@@ -4747,7 +4747,7 @@
         {
           "transformationId": "transform.generated.linear-solve.linear-68c15d41.divide-both-sides",
           "transformationType": "divideBothSides",
-          "transformationFingerprint": "fnv1a32-d90fe40d",
+          "transformationFingerprint": "fnv1a32-8bc45b09",
           "source": [
             {
               "objectId": "equation.generated.linear-solve.linear-68c15d41.after-subtract",
@@ -4814,7 +4814,7 @@
       },
       "migrationObligations": {
         "semantic": {
-          "assetFingerprint": "fnv1a32-73468328",
+          "assetFingerprint": "fnv1a32-dde250cb",
           "objectIds": [
             "equation.generated.linear-solve.linear-68c15d41.initial",
             "equation.generated.linear-solve.linear-68c15d41.subtract-introduced",
@@ -4832,7 +4832,7 @@
           ]
         },
         "endpoints": {
-          "fingerprint": "fnv1a32-0c08b200",
+          "fingerprint": "fnv1a32-149de7ac",
           "authority": "labelled-semantic-stage"
         },
         "renderer": {

@@ -86,11 +86,53 @@
       "scope": "standard",
       "checkedAt": "2026-08-24T03:37:21.405Z",
       "notes": "Svelte and domain TypeScript checks pass with zero errors or warnings."
+    },
+    {
+      "command": "npm run generate:verified-generated-linear-solve",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T03:41:31.615Z",
+      "notes": "Regenerated the production asset from the trusted verified session; the delta is confined to compiler-standardized correspondence IDs and summaries."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/verified-generated-linear-solve-session.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T03:41:32.858Z",
+      "notes": "All 3 exact-provider, deterministic-session, and byte-equivalence assertions pass."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-linear-solve-product-integration.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T03:41:33.901Z",
+      "notes": "All 5 production integration assertions pass, including native KaTeX and compiler/provider exclusion from host closures."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T03:41:34.927Z",
+      "notes": "All 11 preservation assertions pass after refreshing the generated fingerprints for the canonical asset."
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "visual",
+      "checkedAt": "2026-08-24T03:41:35.931Z",
+      "notes": "Captured all 39 deterministic desktop and phone checkpoints successfully; no choreography or paint source changed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T03:41:36.952Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks pass with zero Svelte diagnostics."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 2 added executable pressure fixtures and corpus membership for both exponential homomorphism vocabularies. Compiler acceptance, benchmark parity, pressure-contract integrity, surface preservation, and typecheck all pass; the visual canary was intentionally deferred because this slice changes authoring fixtures only, not paint or choreography."
+    "summary": "Slice 3 restored deterministic parity between the canonical verified-session compiler and production JSON. The preservation snapshot was regenerated to record the standardized correspondence fingerprints; equations, selectors, timing, motifs, native host behavior, provider trace, and explanation remain unchanged."
   },
   "allowedWork": [
     "Repair the two documented generation and explanation baseline drifts.",
@@ -128,7 +170,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s03",
       "title": "Generated-linear-solve-parity-repair",
-      "status": "planned"
+      "summary": "Regenerated the verified linear-solve production asset and its preservation fingerprints from the trusted compiler, restoring byte equality and all product, surface, visual-capture, and type gates.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s04",

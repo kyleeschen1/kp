@@ -557,10 +557,10 @@
         "structure"
       ],
       "correspondenceMap": {
-        "id": "correspondence.transform.generated.linear-solve.linear-68c15d41.subtract-both-sides",
+        "id": "transform.generated.linear-solve.linear-68c15d41.subtract-both-sides.correspondence",
         "records": [
           {
-            "id": "lhs-coefficient-persists",
+            "id": "transform.generated.linear-solve.linear-68c15d41.subtract-both-sides.identity.0",
             "relation": "identity",
             "sourceSelectorIds": [
               "equation.generated.linear-solve.linear-68c15d41.initial.lhs.coefficient"
@@ -568,10 +568,10 @@
             "targetSelectorIds": [
               "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.lhs.coefficient"
             ],
-            "summary": "lhs.coefficient preserves semantic identity."
+            "summary": "The equation material persists."
           },
           {
-            "id": "lhs-variable-persists",
+            "id": "transform.generated.linear-solve.linear-68c15d41.subtract-both-sides.identity.1",
             "relation": "identity",
             "sourceSelectorIds": [
               "equation.generated.linear-solve.linear-68c15d41.initial.lhs.variable"
@@ -579,10 +579,10 @@
             "targetSelectorIds": [
               "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.lhs.variable"
             ],
-            "summary": "lhs.variable preserves semantic identity."
+            "summary": "The equation material persists."
           },
           {
-            "id": "lhs-addend-persists",
+            "id": "transform.generated.linear-solve.linear-68c15d41.subtract-both-sides.identity.2",
             "relation": "identity",
             "sourceSelectorIds": [
               "equation.generated.linear-solve.linear-68c15d41.initial.lhs.addend"
@@ -590,10 +590,10 @@
             "targetSelectorIds": [
               "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.lhs.addend"
             ],
-            "summary": "lhs.addend preserves semantic identity."
+            "summary": "The equation material persists."
           },
           {
-            "id": "equals-persists",
+            "id": "transform.generated.linear-solve.linear-68c15d41.subtract-both-sides.identity.3",
             "relation": "identity",
             "sourceSelectorIds": [
               "equation.generated.linear-solve.linear-68c15d41.initial.equals"
@@ -601,10 +601,10 @@
             "targetSelectorIds": [
               "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.equals"
             ],
-            "summary": "equals preserves semantic identity."
+            "summary": "The equation material persists."
           },
           {
-            "id": "rhs-value-persists",
+            "id": "transform.generated.linear-solve.linear-68c15d41.subtract-both-sides.identity.4",
             "relation": "identity",
             "sourceSelectorIds": [
               "equation.generated.linear-solve.linear-68c15d41.initial.rhs.value"
@@ -612,10 +612,10 @@
             "targetSelectorIds": [
               "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.rhs.value"
             ],
-            "summary": "rhs.value preserves semantic identity."
+            "summary": "The equation material persists."
           },
           {
-            "id": "balanced-inverses-enter",
+            "id": "transform.generated.linear-solve.linear-68c15d41.subtract-both-sides.introduce-balanced-operation",
             "relation": "introduction",
             "sourceSelectorIds": [],
             "targetSelectorIds": [
@@ -623,7 +623,7 @@
               "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.rhs.minus",
               "equation.generated.linear-solve.linear-68c15d41.subtract-introduced.rhs.subtrahend"
             ],
-            "summary": "Equal inverse terms enter on both sides."
+            "summary": "The same additive inverse enters both equation branches."
           }
         ]
       },
@@ -954,10 +954,10 @@
         "structure"
       ],
       "correspondenceMap": {
-        "id": "correspondence.transform.generated.linear-solve.linear-68c15d41.divide-both-sides",
+        "id": "transform.generated.linear-solve.linear-68c15d41.divide-both-sides.correspondence",
         "records": [
           {
-            "id": "coefficient-enters-numerator",
+            "id": "transform.generated.linear-solve.linear-68c15d41.divide-both-sides.identity.0",
             "relation": "identity",
             "sourceSelectorIds": [
               "equation.generated.linear-solve.linear-68c15d41.after-subtract.lhs.coefficient"
@@ -965,10 +965,10 @@
             "targetSelectorIds": [
               "equation.generated.linear-solve.linear-68c15d41.divide-introduced.lhs.coefficient"
             ],
-            "summary": "lhs.coefficient preserves semantic identity."
+            "summary": "The equation material persists."
           },
           {
-            "id": "variable-enters-numerator",
+            "id": "transform.generated.linear-solve.linear-68c15d41.divide-both-sides.identity.1",
             "relation": "identity",
             "sourceSelectorIds": [
               "equation.generated.linear-solve.linear-68c15d41.after-subtract.lhs.variable"
@@ -976,10 +976,10 @@
             "targetSelectorIds": [
               "equation.generated.linear-solve.linear-68c15d41.divide-introduced.lhs.variable"
             ],
-            "summary": "lhs.variable preserves semantic identity."
+            "summary": "The equation material persists."
           },
           {
-            "id": "relation-persists",
+            "id": "transform.generated.linear-solve.linear-68c15d41.divide-both-sides.identity.2",
             "relation": "identity",
             "sourceSelectorIds": [
               "equation.generated.linear-solve.linear-68c15d41.after-subtract.equals"
@@ -987,10 +987,10 @@
             "targetSelectorIds": [
               "equation.generated.linear-solve.linear-68c15d41.divide-introduced.equals"
             ],
-            "summary": "equals preserves semantic identity."
+            "summary": "The equation material persists."
           },
           {
-            "id": "constant-enters-numerator",
+            "id": "transform.generated.linear-solve.linear-68c15d41.divide-both-sides.identity.3",
             "relation": "identity",
             "sourceSelectorIds": [
               "equation.generated.linear-solve.linear-68c15d41.after-subtract.rhs.constant"
@@ -998,27 +998,27 @@
             "targetSelectorIds": [
               "equation.generated.linear-solve.linear-68c15d41.divide-introduced.rhs.constant"
             ],
-            "summary": "rhs.constant preserves semantic identity."
+            "summary": "The equation material persists."
           },
           {
-            "id": "matched-divisors-enter",
+            "id": "transform.generated.linear-solve.linear-68c15d41.divide-both-sides.introduce-matched-divisors",
             "relation": "introduction",
             "sourceSelectorIds": [],
             "targetSelectorIds": [
               "equation.generated.linear-solve.linear-68c15d41.divide-introduced.lhs.divide",
               "equation.generated.linear-solve.linear-68c15d41.divide-introduced.rhs.divisor"
             ],
-            "summary": "The same non-zero divisor enters beneath both sides."
+            "summary": "The same nonzero divisor enters both equation branches."
           },
           {
-            "id": "fraction-rules-enter",
+            "id": "transform.generated.linear-solve.linear-68c15d41.divide-both-sides.introduce-structural-notation",
             "relation": "introduction",
             "sourceSelectorIds": [],
             "targetSelectorIds": [
               "equation.generated.linear-solve.linear-68c15d41.divide-introduced.lhs.rule",
               "equation.generated.linear-solve.linear-68c15d41.divide-introduced.rhs.rule"
             ],
-            "summary": "Fraction rules expose the whole-side quotients."
+            "summary": "The quotient structure appears around both branches."
           }
         ]
       },
