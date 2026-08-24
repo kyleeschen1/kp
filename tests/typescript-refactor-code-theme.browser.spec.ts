@@ -193,6 +193,79 @@ test("TypeScript light endpoint is explicit, legible, deterministic, and paint-o
   }
 });
 
+test("the toolbar toggles the complete TypeScript Catalogue at the current frame", async ({
+  page,
+  baseURL
+}) => {
+  await mockReviewQuery(page);
+  const url = new URL("/", baseURL);
+  url.searchParams.set("artifact", animationId);
+  url.searchParams.set("theme", "dark");
+  url.searchParams.set("playhead", "0.42");
+  await page.goto(url.toString(), { waitUntil: "networkidle" });
+  await waitForTypeScriptPaint(page, 0.42);
+
+  const catalogue = page.locator("[data-kp-animation-catalogue]");
+  const rail = page.locator(".kp-animation-catalogue-shell__rail");
+  const search = page.getByRole("searchbox", { name: "Search artifacts" });
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const slot = page.locator(
+    '[data-kp-editor-animation-surface-slot="programming"]'
+  );
+  const stage = page.locator("[data-kp-typescript-refactor-stage]");
+  const toolbar = page.getByRole("complementary", {
+    name: "Development tools"
+  });
+  const themeToggle = toolbar.getByRole("button", { name: "Dark mode" });
+  const initialGeometry = await stage.boundingBox();
+  const initialProjection = await stage.getAttribute(
+    "data-kp-typescript-active-projection"
+  );
+
+  await expect(themeToggle).toHaveAttribute("aria-pressed", "true");
+  await expect(catalogue).toHaveCSS("background-color", "rgb(13, 14, 28)");
+  await expect(rail).toHaveCSS("background-color", "rgb(13, 14, 28)");
+  await expect(search).toHaveCSS("background-color", "rgb(17, 20, 36)");
+  await expect(stage).toHaveCSS("background-color", "rgb(13, 14, 28)");
+
+  await themeToggle.click();
+  await expect(themeToggle).toHaveAttribute("aria-pressed", "false");
+  await expect(catalogue).toHaveAttribute(
+    "data-kp-animation-catalogue-theme",
+    "light"
+  );
+  await expect(catalogue).toHaveCSS("background-color", "rgb(251, 250, 247)");
+  await expect(rail).toHaveCSS("background-color", "rgb(245, 243, 238)");
+  await expect(search).toHaveCSS("background-color", "rgb(255, 254, 250)");
+  await expect(slot).toHaveAttribute("data-kp-typescript-theme", "light");
+  await expect(stage).toHaveAttribute("data-kp-typescript-theme", "light");
+  await expect(stage).toHaveCSS("background-color", "rgb(251, 250, 247)");
+  await expect(player).toHaveAttribute("data-kp-editor-animation-progress", "0.42");
+  await expect(stage).toHaveAttribute(
+    "data-kp-typescript-active-projection",
+    initialProjection ?? ""
+  );
+  expect(await stage.boundingBox()).toEqual(initialGeometry);
+  expect(new URL(page.url()).searchParams.get("theme")).toBe("light");
+  expect(new URL(page.url()).searchParams.get("playhead")).toBe("0.42");
+
+  await themeToggle.click();
+  await expect(themeToggle).toHaveAttribute("aria-pressed", "true");
+  await expect(catalogue).toHaveAttribute(
+    "data-kp-animation-catalogue-theme",
+    "dark"
+  );
+  await expect(rail).toHaveCSS("background-color", "rgb(13, 14, 28)");
+  await expect(search).toHaveCSS("background-color", "rgb(17, 20, 36)");
+  await expect(slot).toHaveAttribute("data-kp-typescript-theme", "dark");
+  await expect(stage).toHaveAttribute("data-kp-typescript-theme", "dark");
+  await expect(stage).toHaveCSS("background-color", "rgb(13, 14, 28)");
+  await expect(player).toHaveAttribute("data-kp-editor-animation-progress", "0.42");
+  expect(await stage.boundingBox()).toEqual(initialGeometry);
+  expect(new URL(page.url()).searchParams.get("theme")).toBe("dark");
+  expect(new URL(page.url()).searchParams.get("playhead")).toBe("0.42");
+});
+
 function capture(
   id: string,
   label: string,

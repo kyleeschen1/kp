@@ -131,6 +131,13 @@ export function pauseKpEditorAnimationPlayers(
     });
 }
 
+export function resampleKpEditorAnimationPlayers(root: ParentNode): void {
+  root.querySelectorAll<HTMLElement>("[data-kp-editor-animation-player]")
+    .forEach((player) => {
+      dispatchKpEditorAnimationPlaybackAction(player, { type: "resample" });
+    });
+}
+
 export function disposeKpEditorAnimationPlayers(root: ParentNode): void {
   root.querySelectorAll<HTMLElement>("[data-kp-editor-animation-player]")
     .forEach(disposeKpEditorAnimationPlayer);

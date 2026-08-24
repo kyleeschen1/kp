@@ -478,11 +478,67 @@
       "scope": "standard",
       "checkedAt": "2026-08-24T04:34:02.445Z",
       "notes": "The production bundle builds successfully; existing large-chunk advisories remain warnings only."
+    },
+    {
+      "command": "npm run visual:code-theme",
+      "status": "passed",
+      "scope": "checkpoint",
+      "checkedAt": "2026-08-24T14:15:01.297Z",
+      "notes": "Toolbar dark-light-dark round trip updates Catalogue chrome and TypeScript endpoint without playhead, projection, URL, or geometry drift."
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T14:15:02.688Z",
+      "notes": "36 Catalogue ownership and lifecycle tests passed."
+    },
+    {
+      "command": "npm run test:typescript-refactor",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T14:15:03.767Z",
+      "notes": "106 TypeScript authority, semantic, motion, paint, and adapter tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T14:15:04.828Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T14:15:05.902Z",
+      "notes": "Dependency, framework-neutrality, semantic animation, equation governance, and cross-domain conformance gates passed."
+    },
+    {
+      "command": "npm run verify:public-typescript:fast",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-24T14:15:06.977Z",
+      "notes": "Public TypeScript projection typecheck and five publication contract tests passed."
+    },
+    {
+      "command": "npm run visual:development-dock",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-24T14:15:08.057Z",
+      "notes": "Generic Catalogue/Coverage theme toggle and exact review-state browser checks passed."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "checkpoint-evidence",
+      "checkedAt": "2026-08-24T14:15:35.436Z",
+      "notes": "Theme-toggle repair evidence and partial checkpoint state validate across 1,058 nodes and 25,253 events; s13 remains planned."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 12 implemented an independently tuned TypeScript light endpoint and explicit Catalogue URL/host projection while retaining dark as the static/public default. A stable seven-frame code-theme harness proves OS-preference independence, 4.5-plus observed syntax contrast, geometry parity, box-free semantic focus, transit salience, keyboard focus indication, direct-seek determinism, and phone fit. Dark and public preservation, architecture, bundles, builds, and all focused tests pass. The approved run now stops before Python for human optical review."
+    "summary": "Repaired s12 human-checkpoint feedback without advancing s13: theme-specific CSS no longer pins TypeScript Catalogue chrome dark in light mode, and runtime toggles resample the same semantic frame after host theme projection. Awaiting renewed visual approval."
   },
   "allowedWork": [
     "Repair the two documented generation and explanation baseline drifts.",

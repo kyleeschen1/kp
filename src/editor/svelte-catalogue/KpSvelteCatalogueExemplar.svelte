@@ -52,7 +52,8 @@
   } from "../animation-player-shell.ts";
   import {
     KP_EDITOR_ANIMATION_FRAME_EVENT,
-    pauseKpEditorAnimationPlayers
+    pauseKpEditorAnimationPlayers,
+    resampleKpEditorAnimationPlayers
   } from "../animation-player-controller.ts";
   import {
     createKpAnimationUrlReplaceScheduler,
@@ -518,8 +519,12 @@
     ownerDocument.addEventListener("visibilitychange", pauseWhenHidden);
     ownerWindow?.addEventListener("pagehide", pauseForBackground);
     window.addEventListener("popstate", restoreHistorySelection);
-    const syncDevelopmentTheme = (): void => {
+    const syncDevelopmentTheme = async (): Promise<void> => {
       syncRoutePresentation(window.location.href);
+      await tick();
+      // Adapters resolve host-owned paint at render time. Re-sample only after
+      // Svelte has projected the new theme so a paused frame changes endpoint.
+      resampleKpEditorAnimationPlayers(mountedShell);
     };
     window.addEventListener(
       "kp-development-theme-change",
