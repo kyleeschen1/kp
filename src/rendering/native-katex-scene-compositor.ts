@@ -96,6 +96,9 @@ export interface KpNativeKatexRendererSession extends
 const kpExecutableNativeKatexSceneSessionBrand: unique symbol = Symbol(
   "kp.executable-native-katex-scene-session"
 );
+const kpCanonicalNativeKatexCarrierSceneSessionBrand: unique symbol = Symbol(
+  "kp.canonical-native-katex-carrier-scene-session"
+);
 
 export interface KpNativeKatexExecutableMotionEvidence {
   readonly kind: "native-katex-executable-motion-evidence";
@@ -112,6 +115,22 @@ export interface KpCanonicalNativeKatexSceneSession {
   readonly session: KpNativeKatexRendererSession;
   readonly executableMotion: KpNativeKatexExecutableMotionEvidence;
   readonly [kpExecutableNativeKatexSceneSessionBrand]: true;
+}
+
+/**
+ * A carrier session owns measured native/material paint but is not runnable on
+ * its own. Certified external motion must wrap it before a host publishes
+ * readiness; ordinary compositor callers continue to require executable
+ * measured tracks from createKpCanonicalNativeKatexSceneSession.
+ */
+export interface KpCanonicalNativeKatexCarrierSceneSession {
+  readonly kind: "canonical-native-katex-carrier-scene-session";
+  readonly lifecycle: "renderer-session";
+  readonly reconciliation: KpNativeKatexSceneReconciliation;
+  readonly hierarchy: KpNativeKatexHierarchicalScenePlan;
+  readonly protectedTransit: KpEquationProtectedTransitCertificate;
+  readonly session: KpNativeKatexRendererSession;
+  readonly [kpCanonicalNativeKatexCarrierSceneSessionBrand]: true;
 }
 
 export interface KpCanonicalNativeKatexPureScenePlan {
@@ -1436,6 +1455,25 @@ export function compileKpCanonicalNativeKatexScenePlan(
 export function createKpCanonicalNativeKatexSceneSession(
   plan: KpNativeKatexRendererReadyScenePlan
 ): KpCanonicalNativeKatexSceneSession {
+  const carrier = createKpCanonicalNativeKatexCarrierSceneSession(plan);
+  const executableMotion = certifyKpNativeKatexExecutableMotion(
+    carrier.session
+  );
+  return Object.freeze({
+    kind: "canonical-native-katex-scene-session",
+    lifecycle: carrier.lifecycle,
+    reconciliation: carrier.reconciliation,
+    hierarchy: carrier.hierarchy,
+    protectedTransit: carrier.protectedTransit,
+    session: carrier.session,
+    executableMotion,
+    [kpExecutableNativeKatexSceneSessionBrand]: true as const
+  });
+}
+
+export function createKpCanonicalNativeKatexCarrierSceneSession(
+  plan: KpNativeKatexRendererReadyScenePlan
+): KpCanonicalNativeKatexCarrierSceneSession {
   if (!isKpNativeKatexRendererReadyScenePlan(plan)) {
     throw new Error(
       "Canonical native KaTeX rendering requires a live renderer-ready plan."
@@ -1629,16 +1667,14 @@ export function createKpCanonicalNativeKatexSceneSession(
     }
   });
   if (plan.structuralSuccession !== undefined) session.apply(0);
-  const executableMotion = certifyKpNativeKatexExecutableMotion(playback);
   return Object.freeze({
-    kind: "canonical-native-katex-scene-session",
+    kind: "canonical-native-katex-carrier-scene-session",
     lifecycle: "renderer-session",
     reconciliation,
     hierarchy,
     protectedTransit: plan.protectedTransit,
     session,
-    executableMotion,
-    [kpExecutableNativeKatexSceneSessionBrand]: true as const
+    [kpCanonicalNativeKatexCarrierSceneSessionBrand]: true as const
   });
 }
 

@@ -243,11 +243,17 @@ async function cohortGeometry(
       `[data-kp-equation-material-fragment-role^="successor-${requestedSide}:"]`
     )].filter((owner) => getComputedStyle(owner).visibility !== "hidden");
     const centers = owners.map((owner) => {
+      const style = getComputedStyle(owner);
       const rect = owner.getBoundingClientRect();
-      const matrix = new DOMMatrix(getComputedStyle(owner).transform);
+      const matrix = new DOMMatrix(style.transform);
+      const [originX = 0, originY = 0] = style.transformOrigin
+        .split(" ")
+        .map(Number.parseFloat);
       return {
-        x: rect.left + rect.width / 2,
-        y: rect.top + rect.height / 2,
+        // Material owners scale around measured KaTeX ink, so their
+        // transformed origin is the realized paint pivot for knot alignment.
+        x: rect.left + originX * Math.abs(matrix.a),
+        y: rect.top + originY * Math.abs(matrix.d),
         scale: Math.abs(matrix.a),
         role: owner.dataset["kpEquationMaterialFragmentRole"] ?? ""
       };

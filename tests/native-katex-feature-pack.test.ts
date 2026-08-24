@@ -16,6 +16,7 @@ import {
 import {
   compileKpCanonicalNativeKatexPureScenePlan,
   compileKpCanonicalNativeKatexScenePlan,
+  createKpCanonicalNativeKatexCarrierSceneSession,
   createKpCanonicalNativeKatexSceneSession
 } from "../src/rendering/native-katex-scene-compositor.ts";
 import {
@@ -41,6 +42,10 @@ test("native KaTeX pack is an immutable view of the canonical renderer", () => {
   assert.equal(
     kpNativeKatexFeaturePack.compose.compileScenePlan,
     compileKpCanonicalNativeKatexScenePlan
+  );
+  assert.equal(
+    kpNativeKatexFeaturePack.compose.createCarrierSession,
+    createKpCanonicalNativeKatexCarrierSceneSession
   );
   assert.equal(
     kpNativeKatexFeaturePack.compose.createSession,

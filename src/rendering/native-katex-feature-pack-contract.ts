@@ -10,6 +10,10 @@ export type KpCreateCanonicalNativeKatexSceneSession = typeof import(
   "./native-katex-scene-compositor.ts"
 )["createKpCanonicalNativeKatexSceneSession"];
 
+export type KpCreateCanonicalNativeKatexCarrierSceneSession = typeof import(
+  "./native-katex-scene-compositor.ts"
+)["createKpCanonicalNativeKatexCarrierSceneSession"];
+
 export type KpProjectNativeKatexSemanticPaintRelations = typeof import(
   "./native-katex-base-scene-plan.ts"
 )["projectKpNativeKatexSemanticPaintRelations"];
@@ -32,6 +36,7 @@ export interface KpNativeKatexFeaturePack {
   readonly compose: Readonly<{
     compilePurePlan: KpCompileCanonicalNativeKatexPureScenePlan;
     compileScenePlan: KpCompileCanonicalNativeKatexScenePlan;
+    createCarrierSession: KpCreateCanonicalNativeKatexCarrierSceneSession;
     createSession: KpCreateCanonicalNativeKatexSceneSession;
     projectRelations: KpProjectNativeKatexSemanticPaintRelations;
   }>;

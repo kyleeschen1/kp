@@ -130,7 +130,13 @@ export function applyKpNativeKatexContributorFusion(input: {
   if (sourceOwners.length === 0 || targetOwners.length === 0) return;
   const sourceRects = sourceOwners.map(ownerBaseRect);
   const targetRects = targetOwners.map(ownerBaseRect);
-  const knotCenter = centerOfUnion(targetRects);
+  const sourcePivots = sourceOwners.map((owner, index) =>
+    ownerPaintPivot(owner, sourceRects[index]!)
+  );
+  const targetPivots = targetOwners.map((owner, index) =>
+    ownerPaintPivot(owner, targetRects[index]!)
+  );
+  const knotCenter = centerOfPointBounds(targetPivots);
   const sourceArea = summedArea(sourceRects);
   const targetArea = summedArea(targetRects);
   // Endpoint ink boxes are the stable optical proxy. Exact raster sampling
@@ -163,13 +169,12 @@ export function applyKpNativeKatexContributorFusion(input: {
     input.progress < input.opticalProfile.ownershipHandoffAt;
   const sourceKernelOffsets = centeredOffsetsByNativeGeometry(
     sourceOwners,
-    sourceRects,
+    sourcePivots,
     kernelSpan
   );
 
   sourceOwners.forEach((owner, index) => {
-    const rect = sourceRects[index]!;
-    const sourceCenter = centerOfRect(rect);
+    const sourceCenter = sourcePivots[index]!;
     const slotOffset = sourceKernelOffsets[index]!;
     setOwnerPaintPresence(owner, sourceOwnsPaint);
     owner.style.transform = ownerTransform({
@@ -181,8 +186,7 @@ export function applyKpNativeKatexContributorFusion(input: {
     });
   });
   targetOwners.forEach((owner, index) => {
-    const rect = targetRects[index]!;
-    const targetCenter = centerOfRect(rect);
+    const targetCenter = targetPivots[index]!;
     setOwnerPaintPresence(owner, !sourceOwnsPaint);
     const visual = owner.firstElementChild as HTMLElement | null;
     if (visual !== null) {
@@ -270,20 +274,36 @@ function ownerBaseRect(owner: HTMLElement): KpInkRect {
   return { left, top, width, height };
 }
 
-function centerOfRect(rect: KpInkRect): { readonly x: number; readonly y: number } {
-  return {
-    x: rect.left + rect.width / 2,
-    y: rect.top + rect.height / 2
-  };
+function ownerPaintPivot(
+  owner: HTMLElement,
+  rect: KpInkRect
+): { readonly x: number; readonly y: number } {
+  if (owner.dataset["kpEquationMaterialPaintAlignment"] !== "measured-ink") {
+    // Generic equation mounts clone exact native token rectangles and need no
+    // separate ink inset; their carrier center is already the paint pivot.
+    return {
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2
+    };
+  }
+  const [originX, originY] = owner.style.transformOrigin
+    .split(" ")
+    .map(Number.parseFloat);
+  if (!Number.isFinite(originX) || !Number.isFinite(originY)) {
+    throw new Error(
+      "Ink-knot fusion requires a measured material-owner paint pivot."
+    );
+  }
+  return { x: rect.left + originX!, y: rect.top + originY! };
 }
 
-function centerOfUnion(
-  rects: readonly KpInkRect[]
+function centerOfPointBounds(
+  points: readonly { readonly x: number; readonly y: number }[]
 ): { readonly x: number; readonly y: number } {
-  const left = Math.min(...rects.map((rect) => rect.left));
-  const top = Math.min(...rects.map((rect) => rect.top));
-  const right = Math.max(...rects.map((rect) => rect.left + rect.width));
-  const bottom = Math.max(...rects.map((rect) => rect.top + rect.height));
+  const left = Math.min(...points.map(({ x }) => x));
+  const top = Math.min(...points.map(({ y }) => y));
+  const right = Math.max(...points.map(({ x }) => x));
+  const bottom = Math.max(...points.map(({ y }) => y));
   return { x: (left + right) / 2, y: (top + bottom) / 2 };
 }
 
@@ -296,18 +316,17 @@ function summedArea(rects: readonly KpInkRect[]): number {
 
 function centeredOffsetsByNativeGeometry(
   owners: readonly HTMLElement[],
-  rects: readonly KpInkRect[],
+  centers: readonly { readonly x: number; readonly y: number }[],
   span: number
 ): readonly { readonly x: number; readonly y: number }[] {
-  if (rects.length <= 1) return rects.map(() => ({ x: 0, y: 0 }));
-  const centers = rects.map(centerOfRect);
+  if (centers.length <= 1) return centers.map(() => ({ x: 0, y: 0 }));
   const spreadX = coordinateSpread(centers.map(({ x }) => x));
   const spreadY = coordinateSpread(centers.map(({ y }) => y));
   // Preserve the endpoint's own reading axis inside the compressed knot.
   // This keeps horizontal operators and stacked fractions on one measured
   // choreography without teaching the renderer quotient semantics.
   const dominantAxis = spreadY > spreadX ? "y" : "x";
-  const offsets = rects.map(() => ({ x: 0, y: 0 }));
+  const offsets = centers.map(() => ({ x: 0, y: 0 }));
   const byNativeCoordinate = (left: number, right: number) =>
     centers[left]![dominantAxis] - centers[right]![dominantAxis] || left - right;
   const materialIndexes = owners
@@ -338,9 +357,9 @@ function centeredOffsetsByNativeGeometry(
             ? []
             : [catalystIndexes[rank]!])
         ])
-      : rects.map((_, index) => index).sort(byNativeCoordinate);
+      : centers.map((_, index) => index).sort(byNativeCoordinate);
   orderedIndexes.forEach((sourceIndex, rank) => {
-    const offset = (rank / (rects.length - 1) - 0.5) * span;
+    const offset = (rank / (centers.length - 1) - 0.5) * span;
     offsets[sourceIndex] = dominantAxis === "x"
       ? { x: offset, y: 0 }
       : { x: 0, y: offset };

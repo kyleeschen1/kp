@@ -53,13 +53,22 @@ import {
   compileKpExecutableSuccessorMotifProgramAdapter,
   type KpExecutableSuccessorMotifProgramAdapterDispatch
 } from "./executable-successor-motif-program-adapter.ts";
+import {
+  isKpVerifiedEquationEvaluationFamilyCertificateV2,
+  type KpVerifiedEquationEvaluationFamilyCertificateV2
+} from "../../domain-ir/equation-evaluation-family-certificate-v2.ts";
 
 export interface KpReaderEquationMeasuredRendererSession
   extends KpNativeKatexRendererSession {
   readonly measurementIdentity: KpEquationStageMeasurementIdentity;
   readonly presentationMode:
     | "verified-motion"
+    | "certified-family-motion-carrier"
+    | "certified-family-motion"
+    | "review-family-motion"
     | "explicit-static-checkpoint";
+  readonly certifiedExternalMotionCertificate?:
+    KpVerifiedEquationEvaluationFamilyCertificateV2 | undefined;
   readonly executableProgramExecution?:
     KpExecutableSuccessorMotifProgramAdapterDispatch | undefined;
 }
@@ -75,6 +84,12 @@ export interface KpReaderEquationSceneCompositorInput {
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
   readonly nativeKatex: KpNativeKatexFeaturePack;
+  /**
+   * Exact compiler authority for a family renderer that will wrap a static
+   * measured carrier before the owning host publishes readiness.
+   */
+  readonly certifiedExternalMotionCertificate?:
+    KpVerifiedEquationEvaluationFamilyCertificateV2 | undefined;
 }
 
 export interface KpReaderEquationPureScenePlan {
@@ -186,7 +201,8 @@ export function createKpReaderEquationSceneCompositorSession(
   const prepared = prepareReaderEquationScene(input);
   const {
     measurementIdentity,
-    dispatch
+    dispatch,
+    renderTransition
   } = prepared;
   if (
     input.purePlan !== undefined &&
@@ -247,9 +263,27 @@ export function createKpReaderEquationSceneCompositorSession(
       ? {}
       : { purePlan: input.purePlan.nativePlan })
   });
-  const canonical = input.nativeKatex.compose.createSession(
-    rendererReadyPlan
-  );
+  const externalMotionCertificate =
+    input.certifiedExternalMotionCertificate;
+  if (externalMotionCertificate !== undefined) {
+    if (
+      !isKpVerifiedEquationEvaluationFamilyCertificateV2(
+        externalMotionCertificate
+      ) ||
+      renderTransition.id !== externalMotionCertificate.transformationId ||
+      externalMotionCertificate.familyProfile.family !==
+        "contributor-fusion" ||
+      dispatch.executableProgramExecution?.programKind !==
+        "operation-evaluation"
+    ) {
+      throw new Error(
+        "Reader external evaluation motion requires the transition's exact compiler-minted contributor-fusion certificate."
+      );
+    }
+  }
+  const canonical = externalMotionCertificate === undefined
+    ? input.nativeKatex.compose.createSession(rendererReadyPlan)
+    : input.nativeKatex.compose.createCarrierSession(rendererReadyPlan);
   if (dispatch.planKind === "factoring") {
     dispatch.factoring.recordEvidence();
   }
@@ -292,9 +326,14 @@ export function createKpReaderEquationSceneCompositorSession(
         ? canonical.session.mode
         : "checkpoint-settlement",
     presentationMode:
-      dispatch.planKind !== "explicit-static-checkpoint"
+      externalMotionCertificate !== undefined
+        ? "certified-family-motion-carrier"
+        : dispatch.planKind !== "explicit-static-checkpoint"
         ? "verified-motion"
         : "explicit-static-checkpoint",
+    ...(externalMotionCertificate === undefined
+      ? {}
+      : { certifiedExternalMotionCertificate: externalMotionCertificate }),
     ...(dispatch.executableProgramExecution === undefined
       ? {}
       : {

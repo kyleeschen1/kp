@@ -45,6 +45,16 @@ test("every direct arithmetic caller reaches one authoritative v2 evaluation pla
       migration.presentationPlan.transitions[0]?.semanticOperation.operationId,
       migration.operationId
     );
+    assert.equal(
+      migration.presentationPlan.transitions[0]?.evaluationFamilyCertificate
+        ?.resolutionSource,
+      "compiler-validated-evaluation-authority"
+    );
+    assert.equal(
+      migration.presentationPlan.transitions[0]?.evaluationFamilyCertificate
+        ?.familyProfile.family,
+      "contributor-fusion"
+    );
   }
 });
 

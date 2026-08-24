@@ -29,9 +29,6 @@ import {
   kpTwoTimesThreeEvaluationAnimationId
 } from "../animation/operation-evaluation-adapter.ts";
 import {
-  resolveKpDefaultOperationEvaluationFamilyProfile
-} from "../animation/operation-evaluation-family-profile.ts";
-import {
   projectKpReaderEquationRenderPlan,
   type KpReaderEquationRenderPlan,
   type KpReaderEquationStatePlan
@@ -47,7 +44,7 @@ import {
   createKpEquationStageMeasurementIdentity
 } from "../reader/runtime/public-api.ts";
 import {
-  createKpNativeKatexContributorFusionPlayback
+  createKpCertifiedNativeKatexContributorFusionPlayback
 } from "../rendering/native-katex-operation-evaluation-contributor-fusion.ts";
 import type {
   KpSelectorAnnotatedLatex
@@ -193,6 +190,21 @@ async function prepareOperationEvaluationSurface(input: {
     );
     return;
   }
+  const governanceTransition = input.governance.presentationPlan.transitions[0];
+  if (
+    governanceTransition === undefined ||
+    input.governance.presentationPlan.transitions.length !== 1 ||
+    governanceTransition.semanticOperation.transformationId !== transition.id
+  ) {
+    markCompilationFailure(
+      input.player,
+      input.slot,
+      "Operation evaluation requires matching reader and governance transitions."
+    );
+    return;
+  }
+  const evaluationFamilyCertificate =
+    governanceTransition.evaluationFamilyCertificate;
   const source = annotateEndpoint(transition.source);
   const target = annotateEndpoint(transition.target);
   try {
@@ -271,8 +283,7 @@ async function prepareOperationEvaluationSurface(input: {
     stage.dataset["kpEquationGovernancePlanId"] =
       input.governance.presentationPlan.id;
     stage.dataset["kpEquationEvaluationAuthorityId"] =
-      input.governance.presentationPlan.transitions[0]!
-        .evaluationAuthority!.authorityId;
+      governanceTransition.evaluationAuthority!.authorityId;
     stage.dataset["kpOperationEvaluationStatus"] = "preparing";
     stage.dataset["kpOperationEvaluationTransitionId"] = transition.id;
     stage.dataset["kpOperationEvaluationPresentationPlanId"] =
@@ -413,7 +424,14 @@ async function prepareOperationEvaluationSurface(input: {
       }),
       source: sourceScene,
       target: targetScene,
-      nativeKatex
+      nativeKatex,
+      ...(evaluationFamilyCertificate?.familyProfile.family ===
+          "contributor-fusion"
+        ? {
+            certifiedExternalMotionCertificate:
+              evaluationFamilyCertificate
+          }
+        : {})
     });
     const familyPlayback =
       familyReviewModule === undefined ||
@@ -424,22 +442,26 @@ async function prepareOperationEvaluationSurface(input: {
             base: canonicalPlayback,
             initialFamily: input.session.familyComparison.selectedFamily
           });
-    const defaultFamilyProfile =
-      resolveKpDefaultOperationEvaluationFamilyProfile(
-        transition.transformType
-      );
+    const familyCertificate = evaluationFamilyCertificate;
     const promotedPlayback =
-      defaultFamilyProfile?.family !== "contributor-fusion"
+      familyCertificate?.familyProfile.family !== "contributor-fusion"
       ? undefined
-      : createKpNativeKatexContributorFusionPlayback({
+      : createKpCertifiedNativeKatexContributorFusionPlayback({
           stage,
           base: canonicalPlayback,
-          familyProfile: defaultFamilyProfile
+          certificate: familyCertificate
         });
     // This generic adapter realizes contributor fusion only. The selected
     // carrier capability claims its exact reviewed callers first, so a newly
     // promoted family must not be coerced into contributor-fusion paint here.
-    const playback = familyPlayback ?? promotedPlayback ?? canonicalPlayback;
+    const playback = familyPlayback !== undefined
+      ? publishExternalFamilyMotion(familyPlayback, "review-family-motion")
+      : promotedPlayback !== undefined
+        ? publishExternalFamilyMotion(
+            promotedPlayback,
+            "certified-family-motion"
+          )
+        : canonicalPlayback;
     if (
       familyReviewModule !== undefined &&
       input.session.familyComparison !== undefined
@@ -723,6 +745,21 @@ function operationEvaluationMotionMode(
     : mode === "reduced-motion"
       ? "essential"
       : "continuous";
+}
+
+function publishExternalFamilyMotion(
+  playback: KpReaderEquationMeasuredRendererSession,
+  presentationMode: "certified-family-motion" | "review-family-motion"
+): KpReaderEquationMeasuredRendererSession {
+  if (playback.presentationMode !== "certified-family-motion-carrier") {
+    throw new Error(
+      "Operation evaluation can publish external family motion only from a certified static carrier."
+    );
+  }
+  return Object.freeze({
+    ...playback,
+    presentationMode
+  });
 }
 
 function markCompilationFailure(

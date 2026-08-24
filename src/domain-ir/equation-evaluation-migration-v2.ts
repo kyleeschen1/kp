@@ -4,6 +4,12 @@ import {
   KpEquationAssetMigrationV2Error,
   type KpEquationAssetMigrationV2
 } from "./equation-asset-migration-v2.ts";
+import {
+  compileKpEquationEvaluationFamilyCertificateV2
+} from "./equation-evaluation-family-certificate-v2.ts";
+import {
+  compileKpEquationPresentationPlanV2
+} from "./equation-presentation-plan-v2.ts";
 
 export const kpEquationEvaluationMigrationCompilerV2Id =
   "kp.equation-evaluation-migration-compiler.v2" as const;
@@ -107,13 +113,46 @@ export function compileKpDirectArithmeticEvaluationMigrationV2(
       `${animation.id} declares non-arithmetic successor ${operationId}.`
     );
   }
-  return compileKpEquationEvaluationMigrationV2({
+  const migration = compileKpEquationEvaluationMigrationV2({
     animation,
     operationId,
     roleBindings: {
       "operands-before": sourceSelectors.map(({ id }) => id),
       "result-after": targetSelectors.map(({ id }) => id)
     }
+  });
+  const transition = only(
+    migration.presentationPlan.transitions,
+    `${animation.id} requires one direct arithmetic transition`
+  );
+  const authority = transition.evaluationAuthority;
+  if (authority === undefined) {
+    throw new KpEquationEvaluationMigrationV2Error(
+      `${animation.id} lost direct arithmetic evaluation authority.`
+    );
+  }
+  const family = compileKpEquationEvaluationFamilyCertificateV2({
+    bundle: animation.bundle,
+    transformation,
+    authority
+  });
+  if (family.status !== "certified") {
+    throw new KpEquationEvaluationMigrationV2Error(
+      family.diagnostics.map(({ message }) => message).join("\n")
+    );
+  }
+  const presentation = compileKpEquationPresentationPlanV2({
+    grammar: migration.grammar,
+    evaluationFamilyCertificates: [family.certificate]
+  });
+  if (presentation.status !== "compiled") {
+    throw new KpEquationEvaluationMigrationV2Error(
+      presentation.diagnostics.map(({ message }) => message).join("\n")
+    );
+  }
+  return Object.freeze({
+    ...migration,
+    presentationPlan: presentation.plan
   });
 }
 

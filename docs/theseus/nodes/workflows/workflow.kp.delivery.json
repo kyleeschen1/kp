@@ -400,6 +400,62 @@
       "scope": "standard",
       "checkedAt": "2026-08-24T00:18:20.559Z",
       "notes": "Durable context receipt, failed host-parity evidence, and the paused s18 stop summary validate across 1,057 nodes and 25,066 events."
+    },
+    {
+      "command": "node --test direct arithmetic migration and native KaTeX feature pack",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T00:53:11.847Z",
+      "notes": "Eleven checks pass; all four direct arithmetic callers carry compiler-minted contributor-fusion certificates and the carrier factory remains behind the immutable feature-pack boundary."
+    },
+    {
+      "command": "npm run test:browser:evaluation-host-parity",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T00:53:13.265Z",
+      "notes": "Chromium proves standalone 5 plus 2 and embedded derivative 3 minus 1 expose the same contributor-fusion family, handoff, family profile, renderer profile, ink-knot primitive, and kernel state."
+    },
+    {
+      "command": "npm run visual:operation-evaluation-family-exemplar",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T00:53:14.318Z",
+      "notes": "Four Chromium checks pass for product family review, URL restoration, stacked fraction order, and promoted constant sum; measured paint pivots preserve horizontal or vertical knot alignment without optical-profile changes."
+    },
+    {
+      "command": "npm run test:browser:differentiation-exemplar",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T00:53:15.372Z",
+      "notes": "Three Chromium derivative checks pass for certified delegation, direct URL restoration, exact superscript geometry, exclusive intermediate ownership, and native endpoint settlement."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T00:53:16.436Z",
+      "notes": "All eleven equation inventory, authority, endpoint, family-evidence, and preservation checks pass."
+    },
+    {
+      "command": "npm run test:evaluation-authority-convergence",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T00:53:17.455Z",
+      "notes": "All twenty-four authority, certificate, semantic cohort, and telemetry laws pass."
+    },
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T00:53:18.522Z",
+      "notes": "All thirty-two derivative semantic, two-beat, choreography, migration, and case-coverage checks pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T00:53:19.582Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks pass with nominal carrier and certified-family presentation modes."
     }
   ],
   "progress": {

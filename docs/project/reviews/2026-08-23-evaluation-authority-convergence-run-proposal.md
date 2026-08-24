@@ -54,6 +54,20 @@ to an already promoted evaluation caller, unexplained preservation failure,
 or work outside the allowed boundary. Always stop at the final human visual
 checkpoint before a second caller or broader promotion.
 
+## Approved Scope Amendment — 2026-08-23
+
+Slice s18 exposed that the already-promoted standalone operation-evaluation
+host rejects its static canonical carrier scene before the certified
+contributor-fusion renderer can establish executable motion. It also still
+reselects the family from the transformation kind at runtime. The user
+approved one narrow exception to the promoted-caller stop condition: repair
+that lifecycle and authority boundary so direct arithmetic receives a
+compiler-minted family certificate and the certified family renderer supplies
+the motion evidence required for readiness. Preserve the caller's semantic
+endpoints, existing ink-knot optical profile, timing, geometry, and intended
+visual result. This amendment does not authorize subtraction promotion, a
+second subtraction caller, or any motif retuning.
+
 ## Ordered Slices
 
 Every passing slice is one focused commit. `Focused` means its narrow unit or
@@ -94,4 +108,3 @@ adds the affected equation-preservation, architecture, and browser gates.
 - `npm run check:architecture`
 - `npm run visual:derivative-power`
 - `theseus workspace validate`
-
