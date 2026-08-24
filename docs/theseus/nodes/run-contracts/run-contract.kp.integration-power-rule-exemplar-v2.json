@@ -61,6 +61,20 @@
       "scope": "slice s01 baseline",
       "checkedAt": "2026-08-24T23:50:27.010Z",
       "notes": "Protected singular evaluation-authority baseline passed unchanged."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s02 exact rational",
+      "checkedAt": "2026-08-24T23:55:03.077Z",
+      "notes": "Exact x-squared source, exact expanded quotient, exact one-third target metadata, fixture import, and terminal migration pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s02 exact rational",
+      "checkedAt": "2026-08-24T23:55:04.356Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks accept the normalized rational integration term."
     }
   ],
   "allowedWork": [
@@ -102,7 +116,8 @@
     {
       "id": "next-action.kp.integration-power-rule.s02",
       "title": "Exact-rational-canonical-sample",
-      "status": "planned"
+      "summary": "The existing integration asset now derives its coefficient through normalized exact-rational arithmetic and carries exact 1/3 metadata; its canonical raw states are integral x squared, x to 2+1 over 2+1 plus C, and x cubed over 3 plus C. Scoped tests and full typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.integration-power-rule.s03",

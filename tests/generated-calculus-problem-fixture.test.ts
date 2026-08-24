@@ -109,10 +109,25 @@ test("generated calculus fixtures cover derivative and integral rules", () => {
     ["applyAntiderivativePowerRule", "simplifyAntiderivativePowerRule"]
   );
   assert.deepEqual(calculusObjectLatex(integral), [
-    "\\int 6x^{2}\\,dx",
-    "\\frac{6}{2+1}x^{2+1}",
-    "2x^{3} + C"
+    "\\int x^{2}\\,dx",
+    "\\frac{x^{2+1}}{2+1} + C",
+    "\\frac{x^{3}}{3} + C"
   ]);
+  assert.deepEqual(
+    integral.bundle.objects[2]?.selectors.find((selector) =>
+      selector.id.endsWith(".coefficient")
+    ),
+    {
+      id: "expression.generated.calculus.integral.power-rule-quadratic.integrated.coefficient",
+      objectId: "expression.generated.calculus.integral.power-rule-quadratic.integrated",
+      kind: "coefficient",
+      label: "1/3",
+      metadata: {
+        exactNumerator: "1",
+        exactDenominator: "3"
+      }
+    }
+  );
   assert.deepEqual(integral.transformations[0]?.lawRefs, [
     {
       id: "law.calculus.integral.power-rule",

@@ -22,6 +22,10 @@ import {
 import {
   createKpAntiderivativePowerRuleSemantics
 } from "./antiderivative-power-rule-semantics.ts";
+import {
+  createKpRational,
+  type KpNormalizedRational
+} from "../../domains/math/exact-rational.ts";
 
 export type GeneratedCalculusProblemFamilyId =
   | "generated.calculus.derivative"
@@ -96,7 +100,7 @@ export const generatedCalculusProblemFixtureSpecs:
       title: "Generated integral power rule for a quadratic",
       variable: "x",
       base: "x",
-      coefficient: 6,
+      coefficient: 1,
       exponent: 2
     }
   ];
@@ -510,7 +514,11 @@ function createGeneratedIntegralPowerProblemFixture(
             ids.integrated,
             "coefficient",
             "coefficient",
-            formatNumber(antiderivative.coefficient)
+            formatExactRationalText(antiderivative.coefficient),
+            {
+              exactNumerator: antiderivative.coefficient.numerator.toString(),
+              exactDenominator: antiderivative.coefficient.denominator.toString()
+            }
           ),
           selector(ids.integrated, "base", "term", antiderivative.base),
           selector(ids.integrated, "exponent", "term", String(antiderivative.exponent)),
@@ -700,7 +708,7 @@ function generatedIntegralPowerProblemIds(
 
 function generatedIntegralPowerProblemLatex(
   input: GeneratedIntegralPowerProblemFixtureSpec,
-  antiderivative: GeneratedCalculusPolynomialTermSpec
+  antiderivative: GeneratedIntegralPowerTermSpec
 ): GeneratedIntegralPowerProblemLatex {
   return {
     initial:
@@ -709,9 +717,8 @@ function generatedIntegralPowerProblemLatex(
         base: input.base,
         exponent: input.exponent
       })}\\,d${input.variable}`,
-    expanded:
-      `\\frac{${formatNumber(input.coefficient)}}{${input.exponent}+1}${input.base}^{${input.exponent}+1}`,
-    integrated: `${formatUnsignedPolynomialTerm(antiderivative)} + C`
+    expanded: `${formatIntegralPowerRuleExpansion(input)} + C`,
+    integrated: `${formatExactIntegralPowerTerm(antiderivative)} + C`
   };
 }
 
@@ -900,7 +907,7 @@ function createGeneratedDerivativeSumProblemFlashcards(
 function createGeneratedIntegralPowerProblemFlashcards(
   input: GeneratedIntegralPowerProblemFixtureSpec,
   ids: GeneratedIntegralPowerProblemIds,
-  antiderivative: GeneratedCalculusPolynomialTermSpec
+  antiderivative: GeneratedIntegralPowerTermSpec
 ): readonly KpFlashcardSpec[] {
   return [
     createKpFlashcardSpec({
@@ -926,7 +933,7 @@ function createGeneratedIntegralPowerProblemFlashcards(
       timeMs: 1200,
       answer: {
         kind: "text",
-        value: formatNumber(antiderivative.coefficient)
+        value: formatExactRationalText(antiderivative.coefficient)
       }
     }),
     createKpFlashcardSpec({
@@ -1059,12 +1066,51 @@ function derivativeTermsFor(
 
 function integralPowerTermFor(
   input: GeneratedIntegralPowerProblemFixtureSpec
-): GeneratedCalculusPolynomialTermSpec {
+): GeneratedIntegralPowerTermSpec {
   return {
-    coefficient: input.coefficient / (input.exponent + 1),
+    coefficient: createKpRational(
+      BigInt(input.coefficient),
+      BigInt(input.exponent + 1)
+    ),
     base: input.base,
     exponent: input.exponent + 1
   };
+}
+
+interface GeneratedIntegralPowerTermSpec {
+  readonly coefficient: KpNormalizedRational;
+  readonly base: string;
+  readonly exponent: number;
+}
+
+function formatIntegralPowerRuleExpansion(
+  input: GeneratedIntegralPowerProblemFixtureSpec
+): string {
+  const coefficient = Math.abs(input.coefficient);
+  const coefficientText = coefficient === 1 ? "" : formatNumber(coefficient);
+  const sign = input.coefficient < 0 ? "-" : "";
+  return `${sign}\\frac{${coefficientText}${input.base}^{${input.exponent}+1}}{${input.exponent}+1}`;
+}
+
+function formatExactIntegralPowerTerm(
+  term: GeneratedIntegralPowerTermSpec
+): string {
+  const negative = term.coefficient.numerator < 0n;
+  const numerator = negative
+    ? -term.coefficient.numerator
+    : term.coefficient.numerator;
+  const coefficientText = numerator === 1n ? "" : numerator.toString();
+  const power = `${coefficientText}${term.base}^{${term.exponent}}`;
+  if (term.coefficient.denominator === 1n) {
+    return `${negative ? "-" : ""}${power}`;
+  }
+  return `${negative ? "-" : ""}\\frac{${power}}{${term.coefficient.denominator}}`;
+}
+
+function formatExactRationalText(value: KpNormalizedRational): string {
+  return value.denominator === 1n
+    ? value.numerator.toString()
+    : `${value.numerator}/${value.denominator}`;
 }
 
 function formatPolynomialTerms(

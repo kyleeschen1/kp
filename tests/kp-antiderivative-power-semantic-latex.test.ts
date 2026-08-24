@@ -19,9 +19,9 @@ test("antiderivative power LaTeX exposes expansion and settlement roles", () => 
     })
   );
   assert.deepEqual(annotated.map((value) => value?.rawLatex), [
-    "\\int 6x^{2}\\,dx",
-    "\\frac{6}{2+1}x^{2+1}",
-    "2x^{3} + C"
+    "\\int 1x^{2}\\,dx",
+    "\\frac{1}{2+1}x^{2+1}",
+    "1/3x^{3} + C"
   ]);
   assert.deepEqual(annotated.map((value) =>
     value?.annotations.map((annotation) => annotation.selectorId).sort()
