@@ -575,11 +575,25 @@
       "scope": "boundary-verification",
       "checkedAt": "2026-08-24T01:09:43.848Z",
       "notes": "Slice 21 tracked context, nine boundary records, and completion state validate across 1,057 nodes and 25,107 events."
+    },
+    {
+      "command": "npm run visual:derivative-power",
+      "status": "passed",
+      "scope": "visual-checkpoint",
+      "checkedAt": "2026-08-24T01:11:25.725Z",
+      "notes": "The stable capture produced all nine named canonical frames. Automated and agent inspection found no duplicate paint, fragment boxes during evaluation, geometry jump, or non-native final owner; human approval is intentionally still pending."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "visual-checkpoint",
+      "checkedAt": "2026-08-24T01:11:42.950Z",
+      "notes": "Final context receipt, visual evidence, workflow progress, and all 22 completed run slices validate across 1,057 nodes and 25,115 events."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Pressure-tested the human-approved ink-knot fusion on the structurally different 3/6 to 1/2 caller. Measured dominant-axis ordering preserves horizontal products and vertical fractions without semantic presentation hints; focused unit, Chromium visual, deterministic seek, paint ownership, and type checks pass. Awaiting human visual approval before any promotion."
+    "summary": "Evaluation authority convergence reached its mandatory human checkpoint: compiler-owned contributor-fusion authority now reaches generic Native KaTeX paint, derivative 3 minus 1 uses the shared ink knot, all release gates pass, and no second subtraction caller or broader promotion has begun."
   },
   "allowedWork": [
     "The semantic reader matches the accepted x + 3 = 7 animation card at named forward and reverse frames without typography changes, collisions, or discontinuities.",
