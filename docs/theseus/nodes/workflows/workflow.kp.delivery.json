@@ -351,6 +351,27 @@
       "scope": "standard",
       "checkedAt": "2026-08-24T00:01:08.927Z",
       "notes": "Endpoint settlement and ownership checks preserve TypeScript, Svelte, and domain boundaries."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/native-katex-certified-contributor-fusion-mount.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T00:04:19.012Z",
+      "notes": "Two tests pass; the realized primitive ID is stable and every family/profile/primitive dataset appears only as one renderer write."
+    },
+    {
+      "command": "npm run test:browser:differentiation-exemplar",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T00:04:20.425Z",
+      "notes": "Three Chromium checks pass and expose the compiler-selected family, family profile, renderer profile, and realized Native KaTeX ink-knot primitive."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T00:04:21.512Z",
+      "notes": "Paint attestation preserves TypeScript, Svelte, and domain boundaries."
     }
   ],
   "progress": {

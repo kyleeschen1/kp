@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import { createKpAnimationAssets } from "../src/animation/catalog.ts";
@@ -6,7 +7,8 @@ import {
   compileKpDerivativePowerMigrationV2
 } from "../src/domain-ir/derivative-power-migration-v2.ts";
 import {
-  createKpCertifiedNativeKatexContributorFusionPlayback
+  createKpCertifiedNativeKatexContributorFusionPlayback,
+  kpNativeKatexContributorFusionRealizedPrimitiveId
 } from "../src/rendering/native-katex-operation-evaluation-contributor-fusion.ts";
 
 const animationId =
@@ -43,4 +45,31 @@ test("neutral Native KaTeX mount consumes the derivative certificate", () => {
     base,
     certificate: { ...certificate }
   }), /compiler-minted family certificate/);
+});
+
+test("paint attestation stays write-only telemetry", () => {
+  assert.equal(
+    kpNativeKatexContributorFusionRealizedPrimitiveId,
+    "kp.rendering.native-katex.primitive.ink-knot.v1"
+  );
+  const source = readFileSync(new URL(
+    "../src/rendering/native-katex-operation-evaluation-contributor-fusion.ts",
+    import.meta.url
+  ), "utf8");
+  for (const key of [
+    "kpOperationEvaluationFamily",
+    "kpOperationEvaluationFamilyProfileId",
+    "kpOperationEvaluationRendererProfileId",
+    "kpOperationEvaluationRealizedPrimitiveId"
+  ]) {
+    const uses = source.split("\n").filter((line) =>
+      line.includes(`"${key}"`)
+    );
+    assert.equal(
+      uses.length,
+      1,
+      `${key} must have one renderer telemetry write and no authority reads.`
+    );
+    assert.match(uses[0]!, /dataset\[[^\]]+\]\s*=/);
+  }
 });

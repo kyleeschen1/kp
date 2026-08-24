@@ -34,6 +34,9 @@ export interface KpNativeKatexContributorFusionOpticalProfile {
   readonly kernelAreaRatio: number;
 }
 
+export const kpNativeKatexContributorFusionRealizedPrimitiveId =
+  "kp.rendering.native-katex.primitive.ink-knot.v1" as const;
+
 /**
  * This is the single tuning surface for every Native KaTeX caller of the
  * promoted contributor-fusion family. Semantic callers select the family;
@@ -212,6 +215,8 @@ export function applyKpNativeKatexContributorFusion(input: {
     input.familyProfile.id;
   input.stage.dataset["kpOperationEvaluationRendererProfileId"] =
     input.opticalProfile.id;
+  input.stage.dataset["kpOperationEvaluationRealizedPrimitiveId"] =
+    kpNativeKatexContributorFusionRealizedPrimitiveId;
   input.stage.dataset["kpOperationEvaluationLegibilityState"] =
     legibilityState;
   input.stage.dataset["kpOperationEvaluationReadableCohortCount"] =

@@ -141,7 +141,8 @@
     {
       "id": "kp.eval-auth.s16",
       "title": "paint-attestation",
-      "status": "planned"
+      "summary": "The shared Native KaTeX renderer now attests the realized ink-knot primitive alongside family and profile telemetry. Focused and browser ratchets prove those datasets are written for observation only and never read as authority.",
+      "status": "complete"
     },
     {
       "id": "kp.eval-auth.s17",

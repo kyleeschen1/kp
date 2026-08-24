@@ -206,6 +206,18 @@ test("derivative power rule delegates decrement evaluation to certified ink", as
     "data-kp-operation-evaluation-family",
     "contributor-fusion"
   );
+  await expect(stage).toHaveAttribute(
+    "data-kp-operation-evaluation-family-profile-id",
+    "kp.evaluation-family.contributor-fusion.v1"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-operation-evaluation-renderer-profile-id",
+    "kp.rendering.native-katex.operation-evaluation.contributor-fusion.v1"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-operation-evaluation-realized-primitive-id",
+    "kp.rendering.native-katex.primitive.ink-knot.v1"
+  );
   // Native tokens are retired while the material cohort owns paint; their
   // hidden semantic transforms are not a second visible choreography.
   for (const glyph of [decrementOperator, decrementAmount, evaluatedResult]) {
