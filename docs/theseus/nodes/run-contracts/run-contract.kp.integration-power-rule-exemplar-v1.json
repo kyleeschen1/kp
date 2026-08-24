@@ -1,0 +1,162 @@
+{
+  "id": "run-contract.kp.integration-power-rule-exemplar-v1",
+  "kind": "run-contract",
+  "title": "Integration power-rule exemplar",
+  "status": "superseded",
+  "summary": "Superseded before implementation because the compact add-run-contract help omitted mandatory typed-autonomy hygiene fields; v2 carries the identical approved scope with explicit run bounds.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-24-equation-family-return-next-step-review.md",
+      "summary": "Approved 20-slice exemplar scope, acceptance criteria, preservation boundary, rollback units, visual checkpoint, and deferrals."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/authoring/llm-generation-entrypoint.md",
+      "summary": "Canonical governed construction routing and typed repair boundary."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-24-return-to-equation-family-breadth.md",
+      "summary": "Accepted family priority and gallery-before-integration sequencing."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/principles/animation-design-diagnostic-language.md",
+      "summary": "Canonical motion diagnosis and direct-path, correspondence, attention, and native-paint rules."
+    }
+  ],
+  "verification": [
+    "npm run test:integration-power-rule",
+    "npm run test:differentiation-exemplar",
+    "npm run test:evaluation-authority-convergence",
+    "npm run visual:integration-power-rule",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Revise only the existing unreviewed integration power-rule asset to the approved exact three-state sequence.",
+    "Add exact integration semantics, lineage, assumptions, bounded typed gaps, and governed construction evidence.",
+    "Extract a renderer-owned outline, salience-only, or none operator-scope policy while preserving the derivative outline.",
+    "Add one integration-specific presentation plan and the smallest additive evaluation-cohort seam needed for two compiler-certified ink-knot groups.",
+    "Add scoped tests, a stable visual command, Catalogue lifecycle evidence, generated freshness, and project closeout evidence."
+  ],
+  "disallowedWork": [
+    "Do not implement arbitrary exponents, a general integration solver, definite integrals, substitution, area, or Fundamental Theorem choreography.",
+    "Do not add a sum-rule caller, promote the integration family, expand the live-model benchmark, or generalize catalogue-wide operator styling.",
+    "Do not retune or change the approved derivative choreography, scope outline, semantics, timings, selectors, or route.",
+    "Do not give models or renderers mathematical, correspondence, timing, geometry, or fallback authority.",
+    "Do not modify protected economics files, the broad editor-animation-visuals browser test, gallery behavior, Scheme, or the global application theme."
+  ],
+  "goal": "Ship one governed three-state indefinite-integration power-rule exemplar with exact rational truth, renderer-owned salience-only operator scope, two certified ink-knot evaluations, canonical Catalogue hosting, and a mandatory human visual checkpoint.",
+  "target": "workflow.kp.delivery",
+  "slices": [
+    {
+      "id": "next-action.kp.integration-power-rule.s01",
+      "title": "Baseline-and-protected-path-fence",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.integration-power-rule.s02",
+      "title": "Exact-rational-canonical-sample",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.integration-power-rule.s03",
+      "title": "Integration-semantic-selector-roles",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.integration-power-rule.s04",
+      "title": "Integration-correspondence-and-lineage",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.integration-power-rule.s05",
+      "title": "Bounded-integration-case-ledger",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.integration-power-rule.s06",
+      "title": "Governed-construction-binding",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.integration-power-rule.s07",
+      "title": "Discovery-and-coverage-projections",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.integration-power-rule.s08",
+      "title": "Renderer-owned-operator-scope-policy",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.integration-power-rule.s09",
+      "title": "Derivative-outline-preservation-pressure",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.integration-power-rule.s10",
+      "title": "Exact-selector-annotated-integration-KaTeX",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.integration-power-rule.s11",
+      "title": "Integration-first-transition-plan",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.integration-power-rule.s12",
+      "title": "Native-KaTeX-integration-material-transit",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.integration-power-rule.s13",
+      "title": "Two-cohort-evaluation-certification",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.integration-power-rule.s14",
+      "title": "Antiderivative-governance-presentation-payload",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.integration-power-rule.s15",
+      "title": "Dual-ink-knot-native-mount",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.integration-power-rule.s16",
+      "title": "Canonical-Catalogue-lifecycle",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.integration-power-rule.s17",
+      "title": "Integration-visual-review-sheet",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.integration-power-rule.s18",
+      "title": "Integration-human-visual-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.integration-power-rule.s19",
+      "title": "Approved-exemplar-regression-freeze",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.integration-power-rule.s20",
+      "title": "Release-gates-and-closeout",
+      "status": "planned"
+    }
+  ]
+}
