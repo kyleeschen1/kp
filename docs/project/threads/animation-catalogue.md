@@ -2,17 +2,18 @@
 
 Status: active
 Last Updated: 2026-08-24
-Current Next Action: review the curated cross-domain gallery at its mandatory
-human checkpoint, then run release closeout. After that loop completes, begin
-the approved bounded indefinite-integration power-rule exemplar,
+Current Next Action: begin the approved bounded indefinite-integration
+power-rule exemplar,
 `integral x^2 dx -> x^(2+1)/(2+1) + C -> x^3/3 + C`, through the governed
 construction entrance, canonical equation host, and Native KaTeX renderer.
 Use it to pressure semantic operator scope against a renderer-owned
 `outline | salience-only | none` policy, then stop for human review before a
-second caller or family promotion. The collection implementation is complete;
-the current gallery visual checkpoint and release slice remain unfinished. See
+second caller or family promotion. The cross-domain gallery is complete and
+human-approved; its default-off collection remains durable infrastructure and
+conformance evidence rather than the active design lane. See
 `../decisions/2026-08-24-return-to-equation-family-breadth.md` and
-`../reviews/2026-08-24-equation-family-return-next-step-review.md`.
+`../reviews/2026-08-24-equation-family-return-next-step-review.md`, plus
+`../reviews/2026-08-24-cross-domain-gallery-infrastructure-closeout.md`.
 
 A proposed recurring review now defines the prompt-to-reviewed-artifact target
 without granting the model mathematical or presentation authority. It measures

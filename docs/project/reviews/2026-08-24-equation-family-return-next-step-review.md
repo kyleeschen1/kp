@@ -1,6 +1,6 @@
 # Equation-Family Return Next-Step Review
 
-Status: approved; queued after cross-domain gallery closeout
+Status: approved; active after cross-domain gallery closeout
 Reviewed: 2026-08-24
 Active thread: `../threads/animation-catalogue.md`
 
@@ -115,6 +115,6 @@ without jumping to substitution or definite integration.
 ## Selection
 
 The user approved the bounded integration exemplar on 2026-08-24 and directed
-that it begin after the current cross-domain gallery run finishes. The gallery
-is at its mandatory curated visual checkpoint; integration implementation must
-not start before that checkpoint and release closeout complete.
+that it begin after the cross-domain gallery run finished. The gallery passed
+its revised human checkpoint and release closeout on 2026-08-24; the bounded
+integration exemplar is now authorized as the active implementation lane.

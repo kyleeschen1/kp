@@ -74,14 +74,12 @@ choice; do not clone the derivative-specific trace. See
 `decisions/2026-08-23-flat-2d-baseline-and-deferred-symbolic-materiality.md`
 and `reviews/2026-08-23-animation-governance-epoch-v2-derivative-checkpoint.md`.
 
-The bounded cross-domain generation gallery is complete through its approved
-Graph3D human checkpoint. Its equation, code, Graph2D, Graph3D, light-theme,
-typed-gap, and production-envelope work remains durable, while final curated
-assembly and release closeout are explicitly paused. The active lane has
-returned to equation-family breadth. The next-step review recommends one
-reversible indefinite-integration power-rule exemplar, which the user approved
-on 2026-08-24 for execution after the gallery's visual checkpoint and release
-closeout. Inequality reversal remains the strongest non-calculus alternative.
+The bounded cross-domain generation gallery is complete. Its governed
+five-case packet, equation, code, Graph2D, Graph3D, light-theme, typed-gap,
+default-off Catalogue collection, and production-envelope evidence passed
+human review and release closeout on 2026-08-24. The active lane is now one
+reversible indefinite-integration power-rule exemplar, already approved for
+execution. Inequality reversal remains the strongest non-calculus alternative.
 See
 `decisions/2026-08-24-return-to-equation-family-breadth.md` and
 `reviews/2026-08-24-equation-family-return-next-step-review.md`.
@@ -302,17 +300,15 @@ Only this repository sequence is active:
    identity but make its visible treatment a renderer policy so every caller
    can later switch from `outline` to `salience-only` or `none` together. See
    `reviews/2026-08-23-evaluation-authority-convergence-run-proposal.md`.
-38. **Cross-domain gallery demonstration:** partially complete and
-   user-paused after the approved Graph3D checkpoint. The two baseline repairs,
-   shared result projection and router, logarithmic equation route,
-   TypeScript/Python light-and-dark treatment, Graph2D parabola translation,
-   Graph3D saddle transformation, stable URLs, and conformance evidence are
-   durable. Curated collection assembly, gallery-wide review, and release
-   closeout remain unfinished slices rather than silently completed work. See
-   `reviews/2026-08-23-cross-domain-gallery-pipeline-next-step-review.md`.
-39. **Return to equation-family breadth:** selected and queued after the
-   current gallery closeout. Build no broad framework yet. The approved next
-   step is one governed
+38. **Cross-domain gallery demonstration:** complete and human-approved. The
+   two baseline repairs, shared result projection and router, logarithmic
+   equation route, TypeScript/Python light-and-dark treatment, Graph2D
+   translation, Graph3D saddle transformation, governed five-case packet,
+   stable URLs, visible typed gap, default-off Catalogue collection, and broad
+   release evidence are durable production infrastructure. See
+   `reviews/2026-08-24-cross-domain-gallery-infrastructure-closeout.md`.
+39. **Return to equation-family breadth:** active. Build no broad framework
+   yet. The approved next step is one governed
    indefinite-integration power-rule exemplar through the canonical equation
    host, with a renderer-owned operator-scope policy and a human checkpoint
    before a second caller or promotion. Inequality reversal remains the
@@ -330,12 +326,12 @@ The catalogue backlog and selection rationale are recorded in
 | --- | --- | --- |
 | Semantic/runtime spine | Strong and governed | Preserve; simplify callers around it. |
 | Equation animation | The generated ledger has 29 equation capabilities: 8 Direct, 3 Registered, 2 Exemplar, and 16 Missing. Exponential duality and radical inversion are Direct; root is the first family with ten generated case-level maturity rows | Preserve the converged vocabulary; require case enumeration before new Direct promotions; migrate legacy Direct ledgers when they are touched; select the next accepted family packet from explicit gaps rather than prose memory. |
-| Graph2D | Economics and physics model callers are promoted; function transformations remain genuinely missing | Defer function translation: it proves symbolic/geometry continuity but not a missing host or runtime seam. |
+| Graph2D | Economics and physics model callers are promoted; one exact monic-quadratic right-translation exemplar is governed and executable | Preserve the bounded translation proof without claiming arbitrary formula parsing, transformation-family promotion, or a universal graph frontend. |
 | Program animation | TypeScript and Python bounded extract-helper generation are `Direct`; each has language-owned parsing, legality, identity binding, corpus, authoring, and runtime-isolation evidence over an approved canonical artifact. Scheme remains an approved specialized exemplar rather than a general frontend. | Preserve approved choreography and build-time-only compilers. Variants remain semantic-plan-only until a separately governed artifact compiler exists; arbitrary refactors and execution remain typed gaps. |
-| Graph3D | One internal mesh-to-donut exemplar proves bounded hosting, not semantic scene generation | Retain one bounded rotation/projection proof for camera/model separation, semantic identity, resource leases, fallback parity, and deterministic seek after the next stable flat-2D calculus families; keep this distinct from deferred glyph materiality. |
+| Graph3D | The internal mesh-to-donut host proof and one governed fixed-camera saddle denominator-change exemplar are executable | Preserve semantic camera/model separation, stable topology, resource leases, SVG fallback, and deterministic seek; arbitrary formulas and camera requests remain typed gaps. |
 | Article and publication | `kp.article.v1` frozen; economics and algebra are real callers | Do not reopen grammar without demonstrated friction. |
 | Authoring | Whole-file CodeMirror/Vim editing and no-reload saving work | Defer advanced tooling until a real session exposes a need. |
-| Catalogue | One persistent lazy host spans equation, graph, code, and internal 3D capabilities without iframes | Preserve as the pressure lab while capability loading becomes declaration-driven. |
+| Catalogue | One persistent lazy host spans equation, graph, code, and 3D without iframes; a default-off curated cross-domain collection exposes four executable cases and one honest typed gap | Preserve it as the pressure lab and conformance surface; keep gallery provenance opt-in so it does not replace the ordinary asset-first Catalogue. |
 | Layout | Many useful experiments; the refined eigenvector surface is better but remains a mixed proof | Freeze layout development until observed educator use identifies a concrete failure worth fixing. |
 | Public product | Engine and routes are research-ready; educator demand is unvalidated | Continue educator discovery outside the active repository lane; do not infer validation from catalogue growth. |
 | LLM generation | One canonical planner vocabulary, deterministic verified-source binders, typed recovery, governed fraction operations, a pinned live-model corpus, and the new mixed carrier/fusion bounded benchmark are stable-green | Preserve deterministic narrowing and code-owned evidence; extend discovery one reviewed family at a time rather than giving the model presentation authority. |

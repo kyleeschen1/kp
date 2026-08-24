@@ -54,3 +54,10 @@ and Native KaTeX mechanisms. Inequality reversal remains the strongest
 non-calculus alternative.
 
 See `../reviews/2026-08-24-equation-family-return-next-step-review.md`.
+
+## Resolution
+
+The paused gallery slices resumed and completed on 2026-08-24 after human
+approval of a default-off curated collection. Its release gates passed, so the
+approved integration exemplar is now the active Catalogue lane. This resolves
+the sequencing condition without changing the preservation boundary above.
