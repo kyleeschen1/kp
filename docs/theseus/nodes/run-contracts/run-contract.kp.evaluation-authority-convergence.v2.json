@@ -165,7 +165,8 @@
     {
       "id": "kp.eval-auth.s20",
       "title": "architecture-ratchet",
-      "status": "planned"
+      "summary": "Architecture ratchets forbid production asset-ID dispatch and runtime family re-resolution, require verified external family motion before static Native KaTeX carrier readiness, and reject derivative-specific evaluation choreography; 27 authority tests, architecture gates, typecheck, and four Chromium exemplars pass.",
+      "status": "complete"
     },
     {
       "id": "kp.eval-auth.s21",

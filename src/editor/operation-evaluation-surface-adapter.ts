@@ -25,10 +25,6 @@ import {
   kpOpaqueGatherAndRecognizeSourceRetirementProgress
 } from "../animation/successor-synthesis.ts";
 import {
-  kpThreeSixthsEvaluationAnimationId,
-  kpTwoTimesThreeEvaluationAnimationId
-} from "../animation/operation-evaluation-adapter.ts";
-import {
   projectKpReaderEquationRenderPlan,
   type KpReaderEquationRenderPlan,
   type KpReaderEquationStatePlan
@@ -222,14 +218,8 @@ async function prepareOperationEvaluationSurface(input: {
     let familyReviewModule:
       typeof import("./operation-evaluation-family-comparison.dev.ts") |
       undefined;
-    if (
-      import.meta.env.DEV &&
-      (
-        input.renderPlan.animationId === kpTwoTimesThreeEvaluationAnimationId ||
-        input.renderPlan.animationId === kpThreeSixthsEvaluationAnimationId
-      )
-    ) {
-      familyReviewModule = await import(
+    if (import.meta.env.DEV) {
+      const candidateFamilyReviewModule = await import(
         "./operation-evaluation-family-comparison.dev.ts"
       );
       if (
@@ -238,37 +228,43 @@ async function prepareOperationEvaluationSurface(input: {
       ) {
         return;
       }
-      input.session.referenceComparison?.dispose();
-      input.session.referenceComparison = undefined;
-      input.session.familyComparison?.dispose();
-      input.session.familyComparison =
-        familyReviewModule.mountKpOperationEvaluationFamilyComparison({
-          slot: input.slot,
-          measurementHostId
-        });
-      stageHost = input.session.familyComparison.currentStageHost;
-    } else if (import.meta.env.DEV) {
-      const {
-        mountKpOperationEvaluationReferenceComparison
-      } = await import(
-        "./operation-evaluation-reference-comparison.dev.ts"
-      );
-      if (
-        input.session.disposed ||
-        input.session.generation !== input.generation
-      ) {
-        return;
+      if (candidateFamilyReviewModule
+        .supportsKpOperationEvaluationFamilyReview(
+          input.renderPlan.animationId
+        )) {
+        familyReviewModule = candidateFamilyReviewModule;
+        input.session.referenceComparison?.dispose();
+        input.session.referenceComparison = undefined;
+        input.session.familyComparison?.dispose();
+        input.session.familyComparison =
+          familyReviewModule.mountKpOperationEvaluationFamilyComparison({
+            slot: input.slot,
+            measurementHostId
+          });
+        stageHost = input.session.familyComparison.currentStageHost;
+      } else {
+        const {
+          mountKpOperationEvaluationReferenceComparison
+        } = await import(
+          "./operation-evaluation-reference-comparison.dev.ts"
+        );
+        if (
+          input.session.disposed ||
+          input.session.generation !== input.generation
+        ) {
+          return;
+        }
+        input.session.referenceComparison?.dispose();
+        input.session.referenceComparison =
+          mountKpOperationEvaluationReferenceComparison({
+            slot: input.slot,
+            source,
+            target,
+            synthesis,
+            measurementHostId
+          });
+        stageHost = input.session.referenceComparison.currentStageHost;
       }
-      input.session.referenceComparison?.dispose();
-      input.session.referenceComparison =
-        mountKpOperationEvaluationReferenceComparison({
-          slot: input.slot,
-          source,
-          target,
-          synthesis,
-          measurementHostId
-        });
-      stageHost = input.session.referenceComparison.currentStageHost;
     } else {
       stageHost.dataset["kpOperationEvaluationMeasurementHostId"] =
         measurementHostId;

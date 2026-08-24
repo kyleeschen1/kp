@@ -15,8 +15,19 @@ import {
 import {
   kpContributorFusionEvaluationFamilyProfile
 } from "../animation/operation-evaluation-family-profile.ts";
+import {
+  kpThreeSixthsEvaluationAnimationId,
+  kpTwoTimesThreeEvaluationAnimationId
+} from "../animation/operation-evaluation-adapter.ts";
 
 const familyQueryParameter = "evaluationFamily";
+
+export function supportsKpOperationEvaluationFamilyReview(
+  animationId: string
+): boolean {
+  return animationId === kpTwoTimesThreeEvaluationAnimationId ||
+    animationId === kpThreeSixthsEvaluationAnimationId;
+}
 
 export interface KpOperationEvaluationFamilyComparisonSession {
   readonly root: HTMLElement;

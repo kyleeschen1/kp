@@ -470,6 +470,41 @@
       "scope": "standard",
       "checkedAt": "2026-08-24T00:59:12.412Z",
       "notes": "Lifecycle snapshot coverage preserves application, Node, test, Svelte, and domain type boundaries."
+    },
+    {
+      "command": "npm run test:evaluation-authority-convergence",
+      "status": "passed",
+      "scope": "architecture-ratchet",
+      "checkedAt": "2026-08-24T01:05:18.514Z",
+      "notes": "27 authority and architecture tests passed, including production family-selection, carrier-readiness, and derivative-route guards."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture-ratchet",
+      "checkedAt": "2026-08-24T01:05:19.566Z",
+      "notes": "Dependency, framework-neutrality, semantic animation, operation presentation, compiler authority, governance, and cross-domain gates passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "architecture-ratchet",
+      "checkedAt": "2026-08-24T01:05:20.581Z",
+      "notes": "Application, Node, test, Svelte, and domain type checks passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run visual:operation-evaluation-family-exemplar",
+      "status": "passed",
+      "scope": "architecture-ratchet",
+      "checkedAt": "2026-08-24T01:05:21.637Z",
+      "notes": "Four Chromium exemplar checks passed after isolating the dev-only asset selector."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "architecture-ratchet",
+      "checkedAt": "2026-08-24T01:05:56.688Z",
+      "notes": "Slice 20 context receipt, four verification records, architecture summary, and run-contract transition validate across 1,057 nodes and 25,093 events."
     }
   ],
   "progress": {
