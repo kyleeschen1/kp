@@ -272,6 +272,100 @@ test("derivative power rule restores the requested semantic transition directly"
   );
 });
 
+test("certified decrement lifecycle is seek and direction independent", async ({
+  page
+}) => {
+  test.setTimeout(60_000);
+  await page.goto(`/?artifact=${animationId}&playhead=0.75`);
+  const player = cataloguePlayer(page);
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-hydrated",
+    "true",
+    { timeout: 30_000 }
+  );
+  const seek = player.locator('[data-action="seek-editor-animation"]');
+  const stage = player.locator("[data-kp-editor-equation-stage]");
+  await expect(activeTransition(stage)).toHaveAttribute(
+    "data-kp-editor-equation-transition-id",
+    evaluateTransitionId
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-operation-evaluation-legibility-state",
+    "kernel"
+  );
+  const forward = await evaluationLifecycleSnapshot(stage);
+
+  await seek.fill("0.9");
+  await seek.fill("0.75");
+  expect(await evaluationLifecycleSnapshot(stage)).toEqual(forward);
+
+  await player.focus();
+  await page.keyboard.press("r");
+  await player.locator(
+    '[data-action="toggle-editor-animation"]'
+  ).click();
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-direction",
+    "rewind"
+  );
+  await seek.fill("0.25");
+  expect(await evaluationLifecycleSnapshot(stage)).toEqual(forward);
+
+  await page.goto(`/?artifact=${animationId}&playhead=0.5`);
+  const replayPlayer = cataloguePlayer(page);
+  const replayStage = replayPlayer.locator(
+    "[data-kp-editor-equation-stage]"
+  );
+  await expect(activeTransition(replayStage)).toHaveAttribute(
+    "data-kp-editor-equation-transition-id",
+    evaluateTransitionId,
+    { timeout: 30_000 }
+  );
+  await expect(replayStage).toHaveAttribute(
+    "data-kp-certified-evaluation-native-settlement",
+    "source"
+  );
+  expect(await evaluationPaintOwners(replayStage)).toEqual(["native-source"]);
+
+  const replayToggle = replayPlayer.locator(
+    '[data-action="toggle-editor-animation"]'
+  );
+  await replayToggle.click();
+  await expect(replayPlayer).toHaveAttribute(
+    "data-kp-editor-animation-status",
+    "complete",
+    { timeout: 12_000 }
+  );
+  await expect(replayStage).toHaveAttribute(
+    "data-kp-certified-evaluation-native-settlement",
+    "target"
+  );
+  expect(await evaluationPaintOwners(replayStage)).toEqual(["native-target"]);
+
+  await replayToggle.click();
+  await expect(replayPlayer).toHaveAttribute(
+    "data-kp-editor-animation-status",
+    "complete",
+    { timeout: 12_000 }
+  );
+  await expect(replayStage).toHaveAttribute(
+    "data-kp-certified-evaluation-native-settlement",
+    "target"
+  );
+  expect(await evaluationPaintOwners(replayStage)).toEqual(["native-target"]);
+
+  await page.goto(`/?artifact=${animationId}&playhead=0.75`);
+  const restoredStage = cataloguePlayer(page).locator(
+    "[data-kp-editor-equation-stage]"
+  );
+  await expect(activeTransition(restoredStage)).toHaveAttribute(
+    "data-kp-editor-equation-transition-id",
+    evaluateTransitionId,
+    { timeout: 30_000 }
+  );
+  expect(await evaluationLifecycleSnapshot(restoredStage)).toEqual(forward);
+});
+
 test("certified decrement preserves superscript geometry and one paint owner", async ({
   page
 }) => {
@@ -377,6 +471,34 @@ async function evaluationPaintOwners(stage: Locator): Promise<string[]> {
       ...(native("target") ? ["native-target"] : [])
     ];
   });
+}
+
+async function evaluationLifecycleSnapshot(stage: Locator) {
+  return stage.evaluate((root) => ({
+    transitionId: root.querySelector<HTMLElement>(
+      "[data-kp-editor-equation-transition-id]:not([hidden])"
+    )?.dataset["kpEditorEquationTransitionId"],
+    localProgress: root.dataset["kpEditorEquationLocalProgress"],
+    family: root.dataset["kpOperationEvaluationFamily"],
+    familyProfile: root.dataset["kpOperationEvaluationFamilyProfileId"],
+    rendererProfile:
+      root.dataset["kpOperationEvaluationRendererProfileId"],
+    primitive: root.dataset["kpOperationEvaluationRealizedPrimitiveId"],
+    legibility: root.dataset["kpOperationEvaluationLegibilityState"],
+    settlement: root.dataset["kpCertifiedEvaluationNativeSettlement"],
+    saliencePhase: root.dataset["kpCertifiedEvaluationSaliencePhase"],
+    owners: [...root.querySelectorAll<HTMLElement>(
+      '[data-kp-equation-material-fragment-role^="successor-"]'
+    )].map((owner) => ({
+      role: owner.dataset["kpEquationMaterialFragmentRole"],
+      semanticEntityId:
+        owner.dataset["kpEquationMaterialSemanticEntityId"],
+      opacity: owner.style.opacity,
+      visibility: owner.style.visibility,
+      transform: owner.style.transform,
+      filter: owner.style.filter
+    }))
+  }));
 }
 
 function activeTransition(stage: Locator): Locator {

@@ -456,6 +456,20 @@
       "scope": "standard",
       "checkedAt": "2026-08-24T00:53:19.582Z",
       "notes": "Application, Node, test, Svelte, and domain typechecks pass with nominal carrier and certified-family presentation modes."
+    },
+    {
+      "command": "npm run test:browser:differentiation-exemplar",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T00:59:11.018Z",
+      "notes": "Four Chromium checks pass; the new lifecycle law proves interruption, reverse-equivalent sampling, replay, direct restoration, and exact native source/target settlement."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T00:59:12.412Z",
+      "notes": "Lifecycle snapshot coverage preserves application, Node, test, Svelte, and domain type boundaries."
     }
   ],
   "progress": {
