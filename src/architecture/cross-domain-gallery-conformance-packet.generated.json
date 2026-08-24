@@ -1,0 +1,220 @@
+{
+  "schemaVersion": "kp.cross-domain-gallery-conformance-packet.v1",
+  "kind": "cross-domain-gallery-conformance-packet",
+  "cases": [
+    {
+      "id": "conformance.gallery.equation.logarithmic-solve",
+      "request": {
+        "schemaVersion": "kp.animation-generation-request.v1",
+        "kind": "animation-generation-request",
+        "requestId": "request.equation.logarithmic-solve.two-power-x.v1",
+        "domain": "equation",
+        "source": {
+          "kind": "equation.canonical-logarithmic-solve",
+          "frontendId": "frontend.equation.logarithmic-solve-exemplar.v1",
+          "input": {
+            "schemaVersion": "kp.gallery-logarithmic-solve-source.v1",
+            "programId": "program.log-exponent.solve-two-power-x",
+            "transformationTreeId": "tree.log-exponent.solve-two-power-x",
+            "states": [
+              {
+                "id": "log-exponent.state.source",
+                "latex": "2^x=7"
+              },
+              {
+                "id": "log-exponent.state.logged-both-sides",
+                "latex": "\\ln(2^x)=\\ln 7"
+              },
+              {
+                "id": "log-exponent.state.exponent-extracted",
+                "latex": "x\\ln 2=\\ln 7"
+              },
+              {
+                "id": "log-exponent.state.solved",
+                "latex": "x=\\frac{\\ln 7}{\\ln 2}"
+              }
+            ]
+          }
+        },
+        "intent": {
+          "kind": "equation.solve-exponential-with-logarithms",
+          "summary": "Solve 2^x = 7 exactly by applying logarithms.",
+          "parameters": {
+            "operationIds": [
+              "operation.log-exponent.apply-log-both-sides",
+              "operation.log-exponent.extract-exponent",
+              "operation.log-exponent.divide-by-log-base"
+            ],
+            "terminalForm": "exact-symbolic-quotient"
+          }
+        },
+        "expectedOutputs": [
+          "semantic-plan",
+          "animation-artifact",
+          "typed-diagnostics",
+          "coverage-evidence"
+        ],
+        "capabilityPins": [
+          "capability.equation.transform-series",
+          "capability.equation.balanced-operations",
+          "capability.equation.power-and-exponent-transformations"
+        ]
+      },
+      "expectedResult": {
+        "schemaVersion": "kp.gallery-generation-result.v1",
+        "requestId": "request.equation.logarithmic-solve.two-power-x.v1",
+        "domain": "equation",
+        "capabilityPins": [
+          "capability.equation.transform-series",
+          "capability.equation.balanced-operations",
+          "capability.equation.power-and-exponent-transformations"
+        ],
+        "frontendAuthority": {
+          "frontendId": "frontend.equation.logarithmic-solve-exemplar.v1",
+          "sourcePath": "scripts/gallery-logarithmic-solve-frontend.ts"
+        },
+        "semanticTrace": {
+          "id": "tree.log-exponent.solve-two-power-x",
+          "kind": "kp.compiled-log-exponent-transformation-tree.v1",
+          "authoritySourcePath": "src/semantic/log-exponent-transformation-tree.ts"
+        },
+        "explanationClaimRefs": [
+          "claim.equation.logarithmic-solve.apply-log-both-sides",
+          "claim.equation.logarithmic-solve.extract-exponent",
+          "claim.equation.logarithmic-solve.isolate-x"
+        ],
+        "evidenceRefs": [
+          "evidence.equation.logarithmic-solve.exemplar-contract",
+          "evidence.equation.logarithmic-solve.surface-preservation"
+        ],
+        "diagnostics": [],
+        "status": "existing-artifact",
+        "artifact": {
+          "artifactId": "animation.algebra.log-exponent.solve-two-power-x",
+          "artifactSourcePath": "src/animation/catalog.ts",
+          "timelineId": "timeline.animation.algebra.log-exponent.solve-two-power-x",
+          "hostId": "editor-animation-player",
+          "hostSourcePath": "src/editor/animation-player-controller.ts",
+          "rendererId": "editor-animation-surface.log-exponent.canonical-native-katex",
+          "rendererSourcePath": "src/editor/log-exponent-surface-adapter.ts",
+          "directUrl": "/?animation=editor-animation.animation.algebra.log-exponent.solve-two-power-x&view=editor",
+          "directUrlSourcePath": "src/editor/animation-library-display-catalog-builder.ts"
+        }
+      }
+    },
+    {
+      "id": "conformance.gallery.code.typescript-extract-helper",
+      "request": {
+        "schemaVersion": "kp.animation-generation-request.v1",
+        "kind": "animation-generation-request",
+        "requestId": "request.code.typescript.extract-helper.gallery.v1",
+        "domain": "code",
+        "source": {
+          "kind": "code.source-revisions",
+          "frontendId": "frontend.code.typescript-compiler.v1",
+          "input": {
+            "schemaVersion": "kp.code-refactor-generation-request.v1",
+            "kind": "code-refactor-generation-request",
+            "requestId": "request.code.typescript.extract-helper.v1",
+            "language": "typescript",
+            "revisions": [
+              {
+                "revisionId": "free-shipping.before.v1",
+                "role": "before",
+                "path": "shipping-before.ts",
+                "sourceText": "export function shippingCost(total: number): number {\n  return total >= 50 ? 0 : 5;\n}\n\nexport function shippingMessage(total: number): string {\n  return total >= 50 ? \"Free shipping\" : \"Shipping: $5\";\n}"
+              },
+              {
+                "revisionId": "free-shipping.after.v1",
+                "role": "after",
+                "path": "shipping-after.ts",
+                "sourceText": "function qualifiesForFreeShipping(total: number): boolean {\n  return total >= 50;\n}\n\nexport function shippingCost(total: number): number {\n  return qualifiesForFreeShipping(total) ? 0 : 5;\n}\n\nexport function shippingMessage(total: number): string {\n  return qualifiesForFreeShipping(total) ? \"Free shipping\" : \"Shipping: $5\";\n}"
+              }
+            ],
+            "intent": {
+              "kind": "extract-helper",
+              "preserve": [
+                "behavior",
+                "program-identity"
+              ]
+            }
+          }
+        },
+        "intent": {
+          "kind": "code.extract-helper",
+          "summary": "Extract the duplicated free-shipping predicate into one helper.",
+          "parameters": {
+            "operation": "extract-helper"
+          }
+        },
+        "expectedOutputs": [
+          "semantic-plan",
+          "animation-artifact",
+          "typed-diagnostics",
+          "coverage-evidence"
+        ],
+        "capabilityPins": [
+          "capability.code.typescript-refactoring"
+        ]
+      },
+      "expectedResult": {
+        "schemaVersion": "kp.gallery-generation-result.v1",
+        "requestId": "request.code.typescript.extract-helper.gallery.v1",
+        "domain": "code",
+        "capabilityPins": [
+          "capability.code.typescript-refactoring"
+        ],
+        "frontendAuthority": {
+          "frontendId": "frontend.code.typescript-compiler.v1",
+          "sourcePath": "scripts/typescript-code-generation-frontend.ts"
+        },
+        "semanticTrace": {
+          "id": "contract.typescript.request.code.typescript.extract-helper.v1.extract-helper",
+          "kind": "kp.extract-helper-causal-contract.v1",
+          "authoritySourcePath": "scripts/typescript-code-generation-frontend.ts"
+        },
+        "explanationClaimRefs": [
+          "claim.code.typescript.extract-helper.legality",
+          "claim.code.typescript.extract-helper.causal-change",
+          "claim.code.typescript.extract-helper.behavior-cases"
+        ],
+        "evidenceRefs": [
+          "kp.typescript-code-generation-plan.v1",
+          "kp.typescript-extract-helper-legality.v1",
+          "kp.extract-helper-causal-contract.v1",
+          "operations.typescript.free-shipping-threshold",
+          "kp.typescript-refactor-behavior-certificate.v1"
+        ],
+        "diagnostics": [],
+        "status": "existing-artifact",
+        "artifact": {
+          "artifactId": "animation.programming.typescript-free-shipping-refactor",
+          "artifactSourcePath": "src/semantic/typescript-free-shipping-animation-asset.ts",
+          "timelineId": "timeline.typescript.free-shipping-threshold",
+          "hostId": "editor-animation-player",
+          "hostSourcePath": "src/editor/animation-player-controller.ts",
+          "rendererId": "adapter.programming.typescript-free-shipping-refactor",
+          "rendererSourcePath": "src/editor/typescript-refactor-surface-adapter.ts",
+          "directUrl": "/?artifact=animation.programming.typescript-free-shipping-refactor",
+          "directUrlSourcePath": "src/editor/animation-catalogue-route.ts",
+          "vignetteId": "vignette.programming.typescript-free-shipping",
+          "vignetteSourcePath": "src/article/vignettes/typescript-free-shipping-vignette.ts"
+        }
+      }
+    }
+  ],
+  "domains": [
+    "equation",
+    "code"
+  ],
+  "frontendIds": [
+    "frontend.equation.logarithmic-solve-exemplar.v1",
+    "frontend.code.typescript-compiler.v1"
+  ],
+  "dispositionCounts": {
+    "compiled-artifact": 0,
+    "existing-artifact": 2,
+    "semantic-plan-only": 0,
+    "repair-required": 0
+  }
+}

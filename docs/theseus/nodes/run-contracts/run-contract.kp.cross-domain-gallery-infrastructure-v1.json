@@ -282,11 +282,46 @@
       "scope": "standard",
       "checkedAt": "2026-08-24T04:03:30.645Z",
       "notes": "All 27 gallery baseline assertions remain green."
+    },
+    {
+      "command": "npm run test:cross-domain-gallery",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T04:07:09.129Z",
+      "notes": "All 22 shared projection, router, equation route, TypeScript route, and generated conformance packet assertions pass."
+    },
+    {
+      "command": "npm run check:cross-domain-gallery-conformance",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T04:07:10.379Z",
+      "notes": "The checked-in 2-case packet is byte-current with its routed source requests and results."
+    },
+    {
+      "command": "npm run test:cross-domain-gallery-preflight",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T04:07:11.449Z",
+      "notes": "All 27 baseline generation assertions remain green."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T04:07:12.501Z",
+      "notes": "All architecture, governance, and cross-domain conformance gates pass with the new reference-only packet schema."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T04:07:13.545Z",
+      "notes": "All application, Node, test, Svelte, and domain typechecks pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 8 routed the exact TypeScript extract-helper request through the existing compiler-owned orchestrator and shared projection. The canonical request reuses its artifact, causal trace, behavior evidence, timeline, host, renderer, vignette, and Catalogue URL. Valid variants that still demand an artifact receive artifact-unavailable; variants requesting semantic output receive semantic-plan-only. No compiler entered browser bundles and no code choreography or paint changed."
+    "summary": "Slice 9 seeded kp.cross-domain-gallery-conformance-packet.v1 as a deterministic checked-in JSON projection of the exact equation and TypeScript requests and expected results. Stable generate, stale-check, and focused test commands now guard the packet; it copies no domain semantic plans and is ready for bounded graph cases later in the contract."
   },
   "allowedWork": [
     "Repair the two documented generation and explanation baseline drifts.",
@@ -360,7 +395,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s09",
       "title": "Pinned-conformance-packet-seed",
-      "status": "planned"
+      "summary": "Added the generated two-domain conformance packet seed and stable generation, freshness, and 22-assertion gallery test commands.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s10",
