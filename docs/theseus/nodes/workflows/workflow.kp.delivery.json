@@ -316,6 +316,41 @@
       "scope": "standard",
       "checkedAt": "2026-08-23T23:56:40.520Z",
       "notes": "Semantic salience resolution on material owners preserves application, test, Svelte, and domain type boundaries."
+    },
+    {
+      "command": "npm run test:browser:differentiation-exemplar",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T00:01:04.350Z",
+      "notes": "Three Chromium checks pass; source and target endpoint settlement are native, seven intermediate samples have exactly one material cohort, and superscript owner geometry stays within 0.75 pixels of native boxes."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T00:01:05.651Z",
+      "notes": "All eleven inventory, authority, endpoint, and equation preservation checks pass after native settlement."
+    },
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T00:01:06.747Z",
+      "notes": "All 32 derivative semantic, two-beat, migration, and choreography checks pass."
+    },
+    {
+      "command": "npm run visual:derivative-power",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T00:01:07.863Z",
+      "notes": "The resolving material frame and exact native result are optically continuous with no visible settlement jump."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T00:01:08.927Z",
+      "notes": "Endpoint settlement and ownership checks preserve TypeScript, Svelte, and domain boundaries."
     }
   ],
   "progress": {

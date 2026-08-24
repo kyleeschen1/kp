@@ -135,7 +135,8 @@
     {
       "id": "kp.eval-auth.s15",
       "title": "native-ownership",
-      "status": "planned"
+      "summary": "Certified evaluation now returns exact endpoints to native KaTeX while one material cohort exclusively owns every intermediate frame. Chromium sampling verifies superscript geometry within 0.75 pixels, continuous paint across handoff, and no caller-specific offset.",
+      "status": "complete"
     },
     {
       "id": "kp.eval-auth.s16",

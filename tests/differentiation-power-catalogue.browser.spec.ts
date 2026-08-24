@@ -260,12 +260,111 @@ test("derivative power rule restores the requested semantic transition directly"
   );
 });
 
+test("certified decrement preserves superscript geometry and one paint owner", async ({
+  page
+}) => {
+  await page.goto(`/?artifact=${animationId}&playhead=0.5`);
+  const player = cataloguePlayer(page);
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-hydrated",
+    "true",
+    { timeout: 30_000 }
+  );
+  const seek = player.locator('[data-action="seek-editor-animation"]');
+  const stage = player.locator("[data-kp-editor-equation-stage]");
+  await expect(activeTransition(stage)).toHaveAttribute(
+    "data-kp-editor-equation-transition-id",
+    evaluateTransitionId
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-certified-evaluation-native-settlement",
+    "source"
+  );
+
+  const geometryResiduals = await stage.evaluate((root) => {
+    const stageRect = root.getBoundingClientRect();
+    return [...root.querySelectorAll<HTMLElement>(
+      '[data-kp-equation-material-fragment-role^="successor-source:"]'
+    )].map((owner) => {
+      const entityId = owner.dataset["kpEquationMaterialSemanticEntityId"]!;
+      const token = [...root.querySelectorAll<HTMLElement>(
+        "[data-kp-motion-id]"
+      )].find((candidate) =>
+        candidate.dataset["kpMotionId"]?.endsWith(entityId) === true
+      )!;
+      const rect = token.getBoundingClientRect();
+      return {
+        left: Math.abs(Number.parseFloat(owner.style.left) -
+          (rect.left - stageRect.left)),
+        top: Math.abs(Number.parseFloat(owner.style.top) -
+          (rect.top - stageRect.top)),
+        width: Math.abs(Number.parseFloat(owner.style.width) - rect.width),
+        height: Math.abs(Number.parseFloat(owner.style.height) - rect.height)
+      };
+    });
+  });
+  expect(geometryResiduals).toHaveLength(3);
+  geometryResiduals.forEach((residual) => {
+    expect(Math.max(
+      residual.left,
+      residual.top,
+      residual.width,
+      residual.height
+    )).toBeLessThanOrEqual(0.75);
+  });
+  expect(await evaluationPaintOwners(stage)).toEqual(["native-source"]);
+
+  for (const playhead of [0.59, 0.69, 0.75, 0.77, 0.79, 0.85, 0.99]) {
+    await seek.fill(String(playhead));
+    await expect.poll(() => evaluationPaintOwners(stage)).toHaveLength(1);
+    expect(await evaluationPaintOwners(stage)).toEqual([
+      playhead <= 0.75 ? "material-source" : "material-target"
+    ]);
+  }
+
+  await seek.fill("1");
+  await expect(stage).toHaveAttribute(
+    "data-kp-certified-evaluation-native-settlement",
+    "target"
+  );
+  expect(await evaluationPaintOwners(stage)).toEqual(["native-target"]);
+});
+
 function cataloguePlayer(page: Page): Locator {
   return page.locator(
     `[data-kp-animation-catalogue-stage] ` +
     `[data-kp-editor-animation-player]` +
     `[data-kp-editor-animation-id="${animationId}"]`
   );
+}
+
+async function evaluationPaintOwners(stage: Locator): Promise<string[]> {
+  return stage.evaluate((root) => {
+    const visible = (element: HTMLElement): boolean => {
+      const style = getComputedStyle(element);
+      return style.visibility !== "hidden" && Number(style.opacity) > 0.01;
+    };
+    const material = (
+      side: "source" | "target"
+    ): boolean => [...root.querySelectorAll<HTMLElement>(
+      `[data-kp-equation-material-fragment-role^="successor-${side}:"]`
+    )].some(visible);
+    const native = (
+      side: "source" | "target"
+    ): boolean => [...root.querySelectorAll<HTMLElement>(
+      `[data-kp-editor-equation-${side}] [data-kp-motion-id]`
+    )].filter((token) =>
+      token.dataset["kpMotionId"]?.endsWith(".exponent") === true ||
+      token.dataset["kpMotionId"]?.endsWith(".decrement-operator") === true ||
+      token.dataset["kpMotionId"]?.endsWith(".decrement-amount") === true
+    ).some(visible);
+    return [
+      ...(native("source") ? ["native-source"] : []),
+      ...(material("source") ? ["material-source"] : []),
+      ...(material("target") ? ["material-target"] : []),
+      ...(native("target") ? ["native-target"] : [])
+    ];
+  });
 }
 
 function activeTransition(stage: Locator): Locator {

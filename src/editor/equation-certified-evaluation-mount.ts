@@ -172,6 +172,11 @@ export function applyKpCertifiedEquationEvaluationMount(input: {
     stage: input.stage,
     progress
   });
+  settleCertifiedEvaluationNativeEndpoint({
+    stage: input.stage,
+    tokens,
+    progress
+  });
   input.stage.dataset["kpCertifiedEvaluationMount"] = "native-katex";
   input.stage.dataset["kpCertifiedEvaluationTransformationId"] =
     certificate.transformationId;
@@ -180,6 +185,44 @@ export function applyKpCertifiedEquationEvaluationMount(input: {
     transformationId: certificate.transformationId,
     familyProfileId: certificate.familyProfile.id
   });
+}
+
+function settleCertifiedEvaluationNativeEndpoint(input: {
+  readonly stage: HTMLElement;
+  readonly tokens: readonly {
+    readonly side: "source" | "target";
+    readonly token: HTMLElement;
+  }[];
+  readonly progress: number;
+}): void {
+  const nativeSide = input.progress <= 0
+    ? "source"
+    : input.progress >= 1
+      ? "target"
+      : undefined;
+  if (nativeSide === undefined) {
+    delete input.stage.dataset["kpCertifiedEvaluationNativeSettlement"];
+    return;
+  }
+  input.tokens.forEach(({ side, token }) => {
+    const ownsPaint = side === nativeSide;
+    token.style.opacity = ownsPaint ? "1" : "0";
+    token.style.visibility = ownsPaint ? "visible" : "hidden";
+    token.style.transform = "none";
+    token.style.filter = "none";
+    if (ownsPaint) {
+      delete token.dataset["kpEquationMaterialNativeHidden"];
+    } else {
+      token.dataset["kpEquationMaterialNativeHidden"] = "true";
+    }
+  });
+  input.stage.querySelectorAll<HTMLElement>(
+    '[data-kp-equation-material-fragment-role^="successor-"]'
+  ).forEach((owner) => {
+    owner.style.opacity = "0";
+    owner.style.visibility = "hidden";
+  });
+  input.stage.dataset["kpCertifiedEvaluationNativeSettlement"] = nativeSide;
 }
 
 function applyCertifiedEvaluationSalience(input: {
