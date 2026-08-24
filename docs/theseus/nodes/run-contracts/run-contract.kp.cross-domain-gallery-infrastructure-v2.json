@@ -347,6 +347,62 @@
       "scope": "broad",
       "checkedAt": "2026-08-24T21:27:23.379Z",
       "notes": "Workspace validates at 1059 nodes and 25326 events before slice completion."
+    },
+    {
+      "command": "npm run test:animation-domain-frontends",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T21:50:13.626Z",
+      "notes": "Focused Graph2D frontend, semantic asset, renderer, reduced point radii, KaTeX label output, and fail-closed text-policy tests pass (43/43)."
+    },
+    {
+      "command": "npm run visual:graph-2d-translation",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T21:50:14.689Z",
+      "notes": "Chromium passes the five-frame desktop/phone contact sheet plus retained seek/rewind; visible labels are KaTeX-only and support points are smaller filled witnesses."
+    },
+    {
+      "command": "npm run test:browser:physics-work-energy",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-24T21:50:15.727Z",
+      "notes": "Chromium, Firefox, and WebKit preserve the established physics graph while exercising the strict KaTeX-label policy and explicit prose exception (3/3)."
+    },
+    {
+      "command": "npm run test:cross-domain-gallery",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-24T21:50:16.752Z",
+      "notes": "All 26 shared generation-envelope, Graph2D route, explanation-grounding, and typed-gap tests remain green."
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-24T21:50:17.784Z",
+      "notes": "All 36 canonical Catalogue host, lifecycle, capability-selection, and Svelte shell tests remain green."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T21:50:18.840Z",
+      "notes": "Dependency, semantic, equation-governance, and cross-domain conformance gates pass with zero retiring dependency exceptions."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T21:50:19.892Z",
+      "notes": "TypeScript, Svelte, domain typechecks, economics publication consistency, and the production Vite bundle pass."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T21:50:41.546Z",
+      "notes": "Workspace validates at 1059 nodes and 25343 events with s20 intentionally in progress for renewed human review."
     }
   ],
   "allowedWork": [
@@ -501,7 +557,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s20",
       "title": "Graph2D-visual-checkpoint",
-      "status": "planned"
+      "summary": "Human checkpoint revision is implemented: support witnesses are smaller and filled, the vertex remains slightly more salient, every visible exemplar label is rendered by KaTeX, and the shared viewport rejects raw or unowned label text for strict graph profiles. Awaiting renewed human visual approval.",
+      "status": "in-progress"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s21",

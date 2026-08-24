@@ -331,7 +331,7 @@ function renderSynchronizedView(
           ${renderInlineEquation("energy", view.equations.energyLatex)}
           <span class="editor-graph-stage__physics-equation editor-graph-stage__physics-equation--unit" style="opacity:var(--kp-physics-unit-opacity, 1)" data-kp-physics-equation-role="unit" data-kp-latex="${escapeHtml(view.equations.unitLatex)}">${renderKpDimensionalContinuityInlineLatex(view.equations.unitLatex)}</span>
         </div>
-        <p data-kp-physics-narrative>${escapeHtml(view.narrative.text)}</p>
+        <p data-kp-graph-prose data-kp-physics-narrative>${escapeHtml(view.narrative.text)}</p>
       </div>
     </foreignObject>`;
 }

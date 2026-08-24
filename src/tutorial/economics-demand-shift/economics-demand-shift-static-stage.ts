@@ -49,6 +49,7 @@ export function renderKpEconomicsDemandShiftStaticStage(): string {
     presentation: {
       profileId: kpEconomicsGraphPresentationProfile.id,
       languageId: kpEconomicsGraphPresentationProfile.languageId,
+      textPolicy: "katex-only",
       axes: "visible",
       axisMarkers: true,
       xAxisEnd: viewport.width - kpEconomicsGraphPlotInsets.right

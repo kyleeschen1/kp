@@ -83,7 +83,15 @@ test("the compiled Graph2D route is deterministic responsive native SVG", async 
         "data-kp-graph-presentation-profile",
         "kp.graph.function-translation.quadratic.v1"
       );
+      await expect(graph).toHaveAttribute(
+        "data-kp-graph-text-policy",
+        "katex-only"
+      );
       await expect(graph.locator("canvas")).toHaveCount(0);
+      await expect(graph.locator("text")).toHaveCount(0);
+      await expect(graph.locator(
+        "[data-kp-graph2d-quadratic-math-label] > [data-kp-latex] > .katex"
+      )).toHaveCount(5);
       await expect(curve).toHaveCount(1);
       await expect(points).toHaveCount(3);
       await expect(graph.locator("[data-kp-editor-graph-axis]")).toHaveCount(2);
@@ -111,7 +119,9 @@ test("the compiled Graph2D route is deterministic responsive native SVG", async 
         )].map((point) => ({
           role: point.dataset["kpGraph2dQuadraticPointRole"],
           x: Number(point.dataset["kpGraphX"]),
-          y: Number(point.dataset["kpGraphY"])
+          y: Number(point.dataset["kpGraphY"]),
+          radius: Number(point.getAttribute("r")),
+          fill: getComputedStyle(point).fill
         }));
         return {
           axes,
@@ -121,6 +131,10 @@ test("the compiled Graph2D route is deterministic responsive native SVG", async 
             content?.dataset["kpGraph2dQuadraticHorizontalShift"]
           ),
           points,
+          vertexLabelLatex: svg.querySelector<HTMLElement>(
+            '[data-kp-graph2d-quadratic-math-label="point-vertex"] ' +
+            "[data-kp-latex]"
+          )?.dataset["kpLatex"] ?? "",
           description: svg.querySelector("desc")?.textContent ?? "",
           fitsViewport:
             svg.getBoundingClientRect().right <= window.innerWidth + 1 &&
@@ -134,8 +148,16 @@ test("the compiled Graph2D route is deterministic responsive native SVG", async 
       expect(observation.description).toContain("axes remain fixed");
       expect(observation.fitsViewport).toBe(true);
       expect(observation.points.map(({ y }) => y)).toEqual([1, 0, 1]);
+      expect(observation.points.map(({ radius }) => radius))
+        .toEqual([2.5, 3.5, 2.5]);
+      expect(observation.points.every(({ fill }) =>
+        fill !== "rgb(255, 255, 255)"
+      )).toBe(true);
       expect(observation.points.map(({ x }) => x)).toEqual(
         [-1, 0, 1].map((value) => value + entry.progress * 2)
+      );
+      expect(observation.vertexLabelLatex).toBe(
+        `\\operatorname{vertex}\\,(${entry.progress * 2},0)`
       );
       curvePaths.set(entry.progress, observation.curvePath);
       curveIdentityIds.add(observation.curveIdentityId);

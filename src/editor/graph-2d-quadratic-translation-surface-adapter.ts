@@ -43,6 +43,7 @@ const lifecycleAdapter = createKpEditorGraphSvgViewportLifecycleAdapter({
         profileId: kpGraph2DQuadraticTranslationPresentationProfile.id,
         languageId:
           kpGraph2DQuadraticTranslationPresentationProfile.languageId,
+        textPolicy: "katex-only" as const,
         axes: "visible" as const,
         axisMarkers: true
       });

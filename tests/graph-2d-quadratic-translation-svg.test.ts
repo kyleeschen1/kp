@@ -14,8 +14,10 @@ import { createKpEditorAnimationPlayerState } from
   "../src/editor/animation-player-state.ts";
 import { kpEditorGraph2DQuadraticTranslationSurfaceAdapter } from
   "../src/editor/graph-2d-quadratic-translation-surface-adapter.ts";
-import { createKpEditorGraphSvgViewportModel } from
-  "../src/editor/graph-svg-viewport-lifecycle.ts";
+import {
+  createKpEditorGraphSvgViewportModel,
+  renderKpEditorGraphSvgViewportStaticShell
+} from "../src/editor/graph-svg-viewport-lifecycle.ts";
 import {
   projectKpGraph2DQuadraticTranslationSvgFrame,
   renderKpGraph2DQuadraticTranslationSvgContent
@@ -37,6 +39,7 @@ test("SVG projection moves one curve and stable points through renderer geometry
   assert.ok(source.vertex.cx < middle.vertex.cx);
   assert.ok(middle.vertex.cx < target.vertex.cx);
   assert.equal(source.vertex.cy, target.vertex.cy);
+  assert.deepEqual(source.points.map(({ radius }) => radius), [2.5, 3.5, 2.5]);
   assert.equal(source.points.every((point, index) =>
     point.id === target.points[index]?.id && point.y === target.points[index]?.y
   ), true);
@@ -105,7 +108,40 @@ test("the source-native shell keeps axes contextual and endpoint math legible", 
   assert.match(html, /data-kp-graph2d-quadratic-equation="target"/u);
   assert.match(html, /style="opacity:0\.675"/u);
   assert.match(html, /data-kp-graph2d-quadratic-description/u);
+  assert.equal([
+    ...html.matchAll(/data-kp-graph2d-quadratic-math-label=/gu)
+  ].length, 5);
+  assert.match(
+    html,
+    /data-kp-latex="\\operatorname\{vertex\}\\,\(1,0\)"/u
+  );
+  assert.match(html, /class="katex"/u);
+  assert.doesNotMatch(html, /<text(?:\s|>)/u);
   assert.doesNotMatch(html, /<canvas|webgl/iu);
+});
+
+test("the shared viewport rejects raw text for a KaTeX-only graph", () => {
+  assert.throws(() => renderKpEditorGraphSvgViewportStaticShell({
+    model: {
+      width: 560,
+      height: 380,
+      xDomain: [-3, 5],
+      yDomain: [-1, 5],
+      xAxisY: 320,
+      yAxisX: 228
+    },
+    presentation: {
+      profileId: "kp.graph.function-translation.quadratic.v1",
+      languageId: "kp.graph.function-translation.v1",
+      textPolicy: "katex-only",
+      axes: "visible",
+      axisMarkers: true
+    },
+    progress: 0,
+    direction: "forward",
+    title: "Quadratic translation",
+    contentHtml: "<text>unowned label</text>"
+  }), /forbids raw SVG text/u);
 });
 
 test("the editor adapter is exact and outranks the generic graph adapter", () => {

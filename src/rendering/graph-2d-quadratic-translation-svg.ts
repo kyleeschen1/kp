@@ -2,7 +2,9 @@ import type {
   KpGraph2DQuadraticTranslationRuntimeFrame,
   KpGraph2DQuadraticTranslationRuntimePoint
 } from "../animation/graph-2d-quadratic-translation-asset.ts";
-import { renderLatexToHtml } from "./katex-adapter.ts";
+import {
+  renderKpDimensionalContinuityInlineLatex
+} from "./dimensional-continuity-inline-latex.ts";
 import type { KpGraph2DRuntimeSession } from
   "./graph-2d-runtime-session.ts";
 
@@ -42,7 +44,7 @@ export interface KpGraph2DQuadraticTranslationSvgProjection {
   readonly translationProgress: number;
   readonly points: readonly KpGraph2DQuadraticTranslationSvgPoint[];
   readonly vertex: KpGraph2DQuadraticTranslationSvgPoint;
-  readonly vertexLabel: string;
+  readonly vertexLabelLatex: string;
   readonly vertexLabelX: number;
   readonly vertexLabelY: number;
   readonly sourceEquationSalience: number;
@@ -88,7 +90,7 @@ export function projectKpGraph2DQuadraticTranslationSvgFrame(input: {
       y: point.y,
       cx: projected.x,
       cy: projected.y,
-      radius: point.role === "vertex" ? 6 : 4.25
+      radius: point.role === "vertex" ? 3.5 : 2.5
     });
   });
   const vertex = points.find(({ role }) => role === "vertex");
@@ -116,9 +118,10 @@ export function projectKpGraph2DQuadraticTranslationSvgFrame(input: {
     translationProgress: frame.translationProgress,
     points,
     vertex,
-    vertexLabel: `vertex (${format(frame.vertex.x)}, 0)`,
-    vertexLabelX: vertex.cx + 12,
-    vertexLabelY: vertex.cy - 12,
+    vertexLabelLatex:
+      `\\operatorname{vertex}\\,(${format(frame.vertex.x)},0)`,
+    vertexLabelX: vertex.cx + 9,
+    vertexLabelY: vertex.cy - 31,
     sourceEquationSalience: roundOpacity(
       1 - 0.65 * frame.translationProgress
     ),
@@ -141,22 +144,54 @@ export function renderKpGraph2DQuadraticTranslationSvgContent(input: {
   const descriptionId = "kp-graph-2d-quadratic-translation-description";
   return `<desc id="${descriptionId}" data-kp-graph2d-quadratic-description>${escapeHtml(projection.accessibilityDescription)}</desc>
     <g data-kp-graph2d-quadratic-context aria-hidden="true">
-      ${projection.ticks.map((tick) => `<g data-kp-graph2d-quadratic-tick="${tick.value}"><line class="editor-graph-stage__quadratic-tick" x1="${format(tick.x)}" y1="${format(tick.y - 4)}" x2="${format(tick.x)}" y2="${format(tick.y + 4)}" /><text class="editor-graph-stage__quadratic-tick-label" x="${format(tick.x)}" y="${format(tick.y + 19)}" text-anchor="middle">${tick.value}</text></g>`).join("")}
-      <text class="editor-graph-stage__quadratic-axis-label" x="${input.viewport.width - 27}" y="${format(input.viewport.xAxisY - 9)}">x</text>
-      <text class="editor-graph-stage__quadratic-axis-label" x="${format(input.viewport.yAxisX + 10)}" y="34">y</text>
+      ${projection.ticks.map((tick) => `<g data-kp-graph2d-quadratic-tick="${tick.value}"><line class="editor-graph-stage__quadratic-tick" x1="${format(tick.x)}" y1="${format(tick.y - 4)}" x2="${format(tick.x)}" y2="${format(tick.y + 4)}" />${renderMathLabel({
+        role: `tick-${tick.value}`,
+        latex: String(tick.value),
+        x: tick.x - 18,
+        y: tick.y + 7,
+        width: 36,
+        height: 24,
+        className: "editor-graph-stage__quadratic-tick-label"
+      })}</g>`).join("")}
+      ${renderMathLabel({
+        role: "axis-x",
+        latex: "x",
+        x: input.viewport.width - 43,
+        y: input.viewport.xAxisY - 33,
+        width: 28,
+        height: 28,
+        className: "editor-graph-stage__quadratic-axis-label"
+      })}
+      ${renderMathLabel({
+        role: "axis-y",
+        latex: "y",
+        x: input.viewport.yAxisX + 8,
+        y: 18,
+        width: 28,
+        height: 28,
+        className: "editor-graph-stage__quadratic-axis-label"
+      })}
     </g>
     <foreignObject class="editor-graph-stage__quadratic-equation-foreign-object" x="${input.viewport.width - 278}" y="14" width="254" height="48">
       <div xmlns="http://www.w3.org/1999/xhtml" class="editor-graph-stage__quadratic-equation-strip" data-kp-graph2d-quadratic-equations>
-        <span class="editor-graph-stage__quadratic-equation editor-graph-stage__quadratic-equation--source" data-kp-graph2d-quadratic-equation="source" data-kp-latex="${escapeHtml(input.frame.sourceLatex)}" style="opacity:${projection.sourceEquationSalience}">${renderLatexToHtml(input.frame.sourceLatex, { displayMode: false })}</span>
-        <span class="editor-graph-stage__quadratic-equation-arrow" aria-hidden="true">→</span>
-        <span class="editor-graph-stage__quadratic-equation editor-graph-stage__quadratic-equation--target" data-kp-graph2d-quadratic-equation="target" data-kp-latex="${escapeHtml(input.frame.targetLatex)}" style="opacity:${projection.targetEquationSalience}">${renderLatexToHtml(input.frame.targetLatex, { displayMode: false })}</span>
+        <span class="editor-graph-stage__quadratic-equation editor-graph-stage__quadratic-equation--source" data-kp-graph2d-quadratic-equation="source" data-kp-latex="${escapeHtml(input.frame.sourceLatex)}" style="opacity:${projection.sourceEquationSalience}">${renderKpDimensionalContinuityInlineLatex(input.frame.sourceLatex)}</span>
+        <span class="editor-graph-stage__quadratic-equation-arrow" data-kp-latex="\\longrightarrow" aria-hidden="true">${renderKpDimensionalContinuityInlineLatex("\\longrightarrow")}</span>
+        <span class="editor-graph-stage__quadratic-equation editor-graph-stage__quadratic-equation--target" data-kp-graph2d-quadratic-equation="target" data-kp-latex="${escapeHtml(input.frame.targetLatex)}" style="opacity:${projection.targetEquationSalience}">${renderKpDimensionalContinuityInlineLatex(input.frame.targetLatex)}</span>
       </div>
     </foreignObject>
     <path class="editor-graph-stage__quadratic-curve" data-kp-graph2d-quadratic-curve data-kp-semantic-entity-id="${escapeHtml(projection.curveIdentityId)}" d="${projection.curvePath}" />
     <g data-kp-graph2d-quadratic-points>
       ${projection.points.map((point) => `<circle class="editor-graph-stage__quadratic-point editor-graph-stage__quadratic-point--${point.role}" data-kp-graph2d-quadratic-point="${escapeHtml(point.id)}" data-kp-graph2d-quadratic-point-role="${point.role}" cx="${format(point.cx)}" cy="${format(point.cy)}" r="${point.radius}" />`).join("")}
     </g>
-    <text class="editor-graph-stage__quadratic-vertex-label" data-kp-graph2d-quadratic-vertex-label x="${format(projection.vertexLabelX)}" y="${format(projection.vertexLabelY)}">${escapeHtml(projection.vertexLabel)}</text>`;
+    ${renderMathLabel({
+      role: "point-vertex",
+      latex: projection.vertexLabelLatex,
+      x: projection.vertexLabelX,
+      y: projection.vertexLabelY,
+      width: 128,
+      height: 28,
+      className: "editor-graph-stage__quadratic-vertex-label"
+    })}`;
 }
 
 export function createKpGraph2DQuadraticTranslationSvgRuntimeSession(input: {
@@ -181,9 +216,13 @@ export function createKpGraph2DQuadraticTranslationSvgRuntimeSession(input: {
     input.content,
     "[data-kp-graph2d-quadratic-equation='target']"
   );
-  const vertexLabel = required<SVGTextElement>(
+  const vertexLabel = required<SVGForeignObjectElement>(
     input.content,
-    "[data-kp-graph2d-quadratic-vertex-label]"
+    '[data-kp-graph2d-quadratic-math-label="point-vertex"]'
+  );
+  const vertexLabelOwner = required<HTMLElement>(
+    vertexLabel,
+    "[data-kp-latex]"
   );
   const pointElements = new Map(
     Array.from(input.content.querySelectorAll<SVGCircleElement>(
@@ -230,7 +269,10 @@ export function createKpGraph2DQuadraticTranslationSvgRuntimeSession(input: {
       }
       vertexLabel.setAttribute("x", format(projection.vertexLabelX));
       vertexLabel.setAttribute("y", format(projection.vertexLabelY));
-      vertexLabel.textContent = projection.vertexLabel;
+      vertexLabelOwner.dataset["kpLatex"] = projection.vertexLabelLatex;
+      vertexLabelOwner.innerHTML = renderKpDimensionalContinuityInlineLatex(
+        projection.vertexLabelLatex
+      );
     },
     dispose() {
       if (status === "disposed") return;
@@ -268,6 +310,20 @@ function scaleCoordinate(
 ): number {
   return to[0] + (value - from[0]) / (from[1] - from[0]) *
     (to[1] - to[0]);
+}
+
+function renderMathLabel(input: {
+  readonly role: string;
+  readonly latex: string;
+  readonly x: number;
+  readonly y: number;
+  readonly width: number;
+  readonly height: number;
+  readonly className: string;
+}): string {
+  return `<foreignObject class="editor-graph-stage__quadratic-math-foreign-object" data-kp-graph2d-quadratic-math-label="${escapeHtml(input.role)}" x="${format(input.x)}" y="${format(input.y)}" width="${input.width}" height="${input.height}" aria-hidden="true">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="editor-graph-stage__quadratic-math-label ${input.className}" data-kp-latex="${escapeHtml(input.latex)}">${renderKpDimensionalContinuityInlineLatex(input.latex)}</div>
+  </foreignObject>`;
 }
 
 function required<ElementType extends Element>(

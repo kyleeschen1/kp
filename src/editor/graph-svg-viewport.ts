@@ -199,6 +199,7 @@ function economicsGraphSvgViewportPresentation(input: {
   return Object.freeze({
     profileId: kpEconomicsGraphPresentationProfile.id,
     languageId: kpEconomicsGraphPresentationProfile.languageId,
+    textPolicy: "katex-only" as const,
     axes: "visible" as const,
     axisMarkers: true,
     xAxisEnd: input.model.width - kpEconomicsGraphPlotInsets.right

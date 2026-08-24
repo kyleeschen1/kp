@@ -116,6 +116,9 @@ function graphSvgViewportPresentation(input: {
   return Object.freeze({
     profileId: profile?.id ?? "kp.graph.editor-default.v1",
     ...(profile === undefined ? {} : { languageId: profile.languageId }),
+    textPolicy: profile === undefined
+      ? "legacy-svg-text" as const
+      : "katex-only" as const,
     axes: physicsProfile ? "hidden" : "visible",
     axisMarkers: profile !== undefined
   });

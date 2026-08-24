@@ -35,6 +35,7 @@ export interface KpEditorGraphAxisProjection {
 export interface KpEditorGraphSvgViewportPresentation {
   readonly profileId: string;
   readonly languageId?: string | undefined;
+  readonly textPolicy: "katex-only" | "legacy-svg-text";
   readonly axes: "visible" | "hidden";
   readonly axisMarkers: boolean;
   readonly xAxisEnd?: number | undefined;
@@ -155,6 +156,9 @@ export function createKpEditorGraphSvgViewportLifecycleAdapter(input: {
       );
       if (content === null) return;
       input.renderer.render({ animation, content, model, player, slot, state, svg });
+      // A KaTeX-labelled capability must fail at its shared paint boundary
+      // instead of silently regressing one caller to browser SVG typography.
+      assertKpEditorGraphSvgTextPolicy(svg);
     }
   };
   return Object.freeze(adapter);
@@ -197,6 +201,14 @@ export function renderKpEditorGraphSvgViewportStaticShell(
   input: KpEditorGraphSvgViewportStaticShellInput
 ): string {
   const { model, presentation } = input;
+  if (
+    presentation.textPolicy === "katex-only" &&
+    /<text(?:\s|>)/u.test(input.contentHtml)
+  ) {
+    throw new Error(
+      `Graph SVG profile ${presentation.profileId} forbids raw SVG text.`
+    );
+  }
   const languageProfile = presentation.languageId === undefined
     ? ""
     : ` data-kp-graph-language-profile="${presentation.languageId}"`;
@@ -213,12 +225,39 @@ export function renderKpEditorGraphSvgViewportStaticShell(
     ? ""
     : `<line data-kp-editor-graph-axis="x" x1="${axisProjection.x.x1}" y1="${axisProjection.x.y1}" x2="${axisProjection.x.x2}" y2="${axisProjection.x.y2}"${axisMarker} />
     <line data-kp-editor-graph-axis="y" x1="${axisProjection.y.x1}" y1="${axisProjection.y.y1}" x2="${axisProjection.y.x2}" y2="${axisProjection.y.y2}"${axisMarker} />`;
-  return `<svg class="editor-graph-stage" data-kp-editor-graph-svg data-kp-graph-presentation-profile="${presentation.profileId}"${languageProfile} data-kp-editor-graph-origin-policy="${axisProjection.originPolicy}" data-kp-editor-graph-progress="${input.progress}" data-kp-editor-graph-direction="${input.direction}" viewBox="0 0 ${model.width} ${model.height}" role="img" aria-label="${escapeHtml(input.title)} graph animation">
+  return `<svg class="editor-graph-stage" data-kp-editor-graph-svg data-kp-graph-presentation-profile="${presentation.profileId}"${languageProfile} data-kp-graph-text-policy="${presentation.textPolicy}" data-kp-editor-graph-origin-policy="${axisProjection.originPolicy}" data-kp-editor-graph-progress="${input.progress}" data-kp-editor-graph-direction="${input.direction}" viewBox="0 0 ${model.width} ${model.height}" role="img" aria-label="${escapeHtml(input.title)} graph animation">
     <defs><pattern id="kp-editor-graph-grid" width="32" height="32" patternUnits="userSpaceOnUse"><path class="editor-graph-stage__default-grid-line" d="M 32 0 L 0 0 0 32" fill="none" /></pattern><marker id="kp-editor-graph-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke" /></marker><marker id="kp-editor-graph-axis-arrow" data-kp-axis-arrow-length="${kpEditorGraphAxisArrowMetrics.lengthInStrokeWidths}" data-kp-axis-arrow-breadth="${kpEditorGraphAxisArrowMetrics.breadthInStrokeWidths}" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="strokeWidth" markerWidth="${kpEditorGraphAxisArrowMetrics.lengthInStrokeWidths}" markerHeight="${kpEditorGraphAxisArrowMetrics.breadthInStrokeWidths}" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke" /></marker></defs>
     <rect class="editor-graph-stage__plot-plane" width="100%" height="100%" />
     <g data-kp-editor-graph-content>${input.contentHtml}</g>
     ${axes}
   </svg>`;
+}
+
+export function assertKpEditorGraphSvgTextPolicy(
+  svg: SVGSVGElement
+): void {
+  if (svg.dataset["kpGraphTextPolicy"] !== "katex-only") return;
+  if (svg.querySelector("text") !== null) throw new Error(
+    "KaTeX-only Graph SVG paint cannot contain raw SVG text."
+  );
+  for (const owner of svg.querySelectorAll<HTMLElement>("[data-kp-latex]")) {
+    if (owner.querySelector(".katex") === null) throw new Error(
+      "KaTeX-only Graph SVG labels must own rendered KaTeX paint."
+    );
+  }
+  for (const parent of svg.querySelectorAll<HTMLElement>("foreignObject *")) {
+    for (const child of parent.childNodes) {
+      if (
+        child.nodeType === 3 &&
+        child.textContent?.trim() !== "" &&
+        parent.closest("[data-kp-latex], [data-kp-graph-prose]") === null
+      ) {
+        throw new Error(
+          "KaTeX-only Graph SVG text must be owned by a data-kp-latex label."
+        );
+      }
+    }
+  }
 }
 
 function domain(

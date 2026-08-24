@@ -377,7 +377,7 @@ function renderSynchronizedView(
           ${renderInlineEquation("demand", view.equations.demandLatex, renderInlineLatex)}
           ${renderInlineEquation("equilibrium", view.equations.equilibriumLatex, renderInlineLatex)}
         </div>
-        <p data-kp-economics-narrative>${escapeHtml(view.narrative.text)}</p>
+        <p data-kp-graph-prose data-kp-economics-narrative>${escapeHtml(view.narrative.text)}</p>
       </div>
     </foreignObject>`;
 }
