@@ -386,6 +386,20 @@
       "scope": "standard",
       "checkedAt": "2026-08-24T00:07:54.348Z",
       "notes": "The semantic cohort gate and stable npm command preserve TypeScript, Svelte, and domain boundaries."
+    },
+    {
+      "command": "npm run test:browser:evaluation-host-parity",
+      "status": "failed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T00:17:36.894Z",
+      "notes": "Standalone animation.operation-evaluation.five-plus-two reaches error before paint attestation: Canonical Native KaTeX rejects the static base scene before certified contributor-fusion motion can attach. The existing constant-sum browser check reproduces the same failure. Repair would alter an already promoted evaluation caller, triggering the approved run stop condition."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T00:18:20.559Z",
+      "notes": "Durable context receipt, failed host-parity evidence, and the paused s18 stop summary validate across 1,057 nodes and 25,066 events."
     }
   ],
   "progress": {
