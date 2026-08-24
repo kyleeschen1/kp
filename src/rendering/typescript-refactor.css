@@ -1,6 +1,6 @@
 .kp-typescript-refactor {
-  /* Compatibility aliases remain local while the reviewed TypeScript endpoint
-     proves the semantic properties that may later serve another language. */
+  /* Compatibility aliases stay TypeScript-local even though their semantic
+     values now come from the promoted cross-language DOM optical profile. */
   --kp-code-foreground: var(--kp-typescript-paint-foreground-primary);
   --kp-code-keyword: var(--kp-typescript-paint-syntax-keyword);
   --kp-code-function: var(--kp-typescript-paint-syntax-function);

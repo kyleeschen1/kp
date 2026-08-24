@@ -1,35 +1,24 @@
 import {
+  kpCodePaintRoleDefinitions,
+  kpCodePaintRoleFamilies,
+  kpCodeSourceDomOpticalProfile,
+  type KpCodePaintChannel,
+  type KpCodePaintRoleDefinition,
+  type KpCodePaintRoleFamily,
+  type KpCodePaintRoleId
+} from "./code-source-dom-optical-profile.ts";
+import {
   kpCodeSyntaxRoles,
   type KpCodeSyntaxRole
 } from "../semantic/code-source-token-protocol.ts";
 
-export const kpTypeScriptRefactorPaintRoleFamilies = [
-  "surface",
-  "chrome",
-  "foreground",
-  "muted",
-  "border",
-  "syntax",
-  "focus",
-  "transit",
-  "withdrawal",
-  "selection",
-  "focus-ring"
-] as const;
+export const kpTypeScriptRefactorPaintRoleFamilies = kpCodePaintRoleFamilies;
 
-export type KpTypeScriptRefactorPaintRoleFamily =
-  typeof kpTypeScriptRefactorPaintRoleFamilies[number];
-
-export type KpTypeScriptRefactorPaintChannel =
-  | "background"
-  | "border"
-  | "color"
-  | "filter"
-  | "outline"
-  | "shadow";
+export type KpTypeScriptRefactorPaintRoleFamily = KpCodePaintRoleFamily;
+export type KpTypeScriptRefactorPaintChannel = KpCodePaintChannel;
 
 export interface KpTypeScriptRefactorPaintRoleSlot {
-  readonly id: string;
+  readonly id: KpCodePaintRoleId;
   readonly family: KpTypeScriptRefactorPaintRoleFamily;
   readonly channel: KpTypeScriptRefactorPaintChannel;
   readonly cssProperty: `--kp-typescript-paint-${string}`;
@@ -37,6 +26,7 @@ export interface KpTypeScriptRefactorPaintRoleSlot {
 
 export interface KpTypeScriptRefactorPaintRoleContract {
   readonly id: "kp.typescript-refactor-paint-roles.v1";
+  readonly profileId: "kp.code-source-dom-optical-profile.v1";
   readonly rendererId: "adapter.programming.typescript-free-shipping-refactor";
   readonly themeAuthority: "explicit-host";
   readonly families: readonly KpTypeScriptRefactorPaintRoleFamily[];
@@ -47,80 +37,71 @@ export interface KpTypeScriptRefactorPaintRoleContract {
   >>;
 }
 
-const nonSyntaxSlots = [
-  slot("surface.panel", "surface", "background"),
-  slot("surface.shadow", "surface", "shadow"),
-  slot("chrome.background", "chrome", "background"),
-  slot("chrome.foreground", "chrome", "color"),
-  slot("foreground.primary", "foreground", "color"),
-  slot("foreground.narration", "foreground", "color"),
-  slot("muted.annotation", "muted", "color"),
-  slot("border.frame", "border", "border"),
-  slot("border.divider", "border", "border"),
-  slot("focus.halo", "focus", "shadow"),
-  slot("focus.wash", "focus", "background"),
-  slot("transit.halo", "transit", "shadow"),
-  slot("withdrawal.filter", "withdrawal", "filter"),
-  slot("selection.background", "selection", "background"),
-  slot("selection.foreground", "selection", "color"),
-  slot("focus-ring.outline", "focus-ring", "outline")
-] as const;
-
+const slots = Object.freeze(kpCodePaintRoleDefinitions.map(toLocalSlot));
 const syntaxSlots = Object.freeze(Object.fromEntries(
-  kpCodeSyntaxRoles.map((role) => [
-    role,
-    slot(`syntax.${role}`, "syntax", "color")
+  kpCodeSyntaxRoles.map((syntaxRole) => [
+    syntaxRole,
+    requireSlot(slots, `syntax.${syntaxRole}`)
   ])
 ) as Record<KpCodeSyntaxRole, KpTypeScriptRefactorPaintRoleSlot>);
 
 /**
- * This contract remains TypeScript-local until the reviewed light treatment
- * survives a structurally different Python caller. It names paint inputs only;
- * semantic identity, presence, salience, and motion continue to come from the
- * compiler-owned artifact and sampled score.
+ * The promoted profile owns language-neutral DOM optics only. TypeScript
+ * retains its full syntax inventory, CSS namespace, semantic artifact, clock,
+ * geometry, native endpoint, and renderer lifecycle.
  */
 export const kpTypeScriptRefactorPaintRoleContract =
   createKpTypeScriptRefactorPaintRoleContract({
     id: "kp.typescript-refactor-paint-roles.v1",
+    profileId: kpCodeSourceDomOpticalProfile.id,
     rendererId: "adapter.programming.typescript-free-shipping-refactor",
     themeAuthority: "explicit-host",
     families: kpTypeScriptRefactorPaintRoleFamilies,
-    slots: Object.freeze([...nonSyntaxSlots, ...Object.values(syntaxSlots)]),
+    slots,
     syntaxSlots
   });
 
 export function createKpTypeScriptRefactorPaintRoleContract(
   input: KpTypeScriptRefactorPaintRoleContract
 ): KpTypeScriptRefactorPaintRoleContract {
-  assertExactValues(input.families, kpTypeScriptRefactorPaintRoleFamilies,
+  if (input.profileId !== kpCodeSourceDomOpticalProfile.id) {
+    throw new Error("TypeScript paint contract must use the promoted profile.");
+  }
+  assertExactValues(input.families, kpCodePaintRoleFamilies,
     "paint-role families");
   assertExactValues(Object.keys(input.syntaxSlots), kpCodeSyntaxRoles,
     "syntax roles");
+  assertExactValues(
+    input.slots.map(({ id }) => id),
+    kpCodePaintRoleDefinitions.map(({ id }) => id),
+    "paint roles"
+  );
 
-  const ids = new Set<string>();
   const properties = new Set<string>();
-  const coveredFamilies = new Set<KpTypeScriptRefactorPaintRoleFamily>();
+  const definitions = new Map(kpCodePaintRoleDefinitions.map((definition) =>
+    [definition.id, definition]));
   for (const paintSlot of input.slots) {
-    requireText(paintSlot.id, "Paint-role slot id");
-    if (ids.has(paintSlot.id)) {
-      throw new Error(`TypeScript paint contract repeats slot ${paintSlot.id}.`);
+    const definition = definitions.get(paintSlot.id);
+    if (definition === undefined || definition.family !== paintSlot.family ||
+        definition.channel !== paintSlot.channel) {
+      throw new Error(
+        `TypeScript paint slot ${paintSlot.id} drifts from the promoted role.`
+      );
     }
     if (properties.has(paintSlot.cssProperty)) {
       throw new Error(
         `TypeScript paint contract repeats property ${paintSlot.cssProperty}.`
       );
     }
-    ids.add(paintSlot.id);
     properties.add(paintSlot.cssProperty);
-    coveredFamilies.add(paintSlot.family);
   }
-  assertExactValues([...coveredFamilies], kpTypeScriptRefactorPaintRoleFamilies,
-    "covered paint-role families");
-
-  for (const role of kpCodeSyntaxRoles) {
-    const paintSlot = input.syntaxSlots[role];
-    if (!ids.has(paintSlot.id) || paintSlot.family !== "syntax") {
-      throw new Error(`TypeScript syntax role ${role} has no syntax paint slot.`);
+  for (const syntaxRole of kpCodeSyntaxRoles) {
+    const paintSlot = input.syntaxSlots[syntaxRole];
+    if (!input.slots.includes(paintSlot) ||
+        paintSlot.id !== `syntax.${syntaxRole}`) {
+      throw new Error(
+        `TypeScript syntax role ${syntaxRole} has no promoted paint slot.`
+      );
     }
   }
 
@@ -130,17 +111,25 @@ export function createKpTypeScriptRefactorPaintRoleContract(
   return Object.freeze(input);
 }
 
-function slot(
-  id: string,
-  family: KpTypeScriptRefactorPaintRoleFamily,
-  channel: KpTypeScriptRefactorPaintChannel
+function toLocalSlot(
+  definition: KpCodePaintRoleDefinition
 ): KpTypeScriptRefactorPaintRoleSlot {
   return Object.freeze({
-    id,
-    family,
-    channel,
-    cssProperty: `--kp-typescript-paint-${id.replaceAll(".", "-")}` as const
+    ...definition,
+    cssProperty:
+      `--kp-typescript-paint-${definition.id.replaceAll(".", "-")}` as const
   });
+}
+
+function requireSlot(
+  candidates: readonly KpTypeScriptRefactorPaintRoleSlot[],
+  id: KpCodePaintRoleId
+): KpTypeScriptRefactorPaintRoleSlot {
+  const paintSlot = candidates.find((candidate) => candidate.id === id);
+  if (paintSlot === undefined) {
+    throw new Error(`TypeScript has no promoted paint slot ${id}.`);
+  }
+  return paintSlot;
 }
 
 function assertExactValues(
@@ -154,8 +143,4 @@ function assertExactValues(
       left.some((value, index) => value !== right[index])) {
     throw new Error(`TypeScript ${label} must have exact coverage.`);
   }
-}
-
-function requireText(value: string, label: string): void {
-  if (value.trim() === "") throw new Error(`${label} must be non-empty.`);
 }

@@ -25,6 +25,7 @@ test("Python inventories the approved paint families with one language exception
     ["property"]
   );
   assert.equal(contract.themeAuthority, "explicit-host");
+  assert.equal(contract.profileId, "kp.code-source-dom-optical-profile.v1");
   assert.equal(new Set(contract.slots.map(({ id }) => id)).size,
     contract.slots.length);
   assert.equal(new Set(contract.slots.map(({ cssProperty }) => cssProperty)).size,
@@ -53,6 +54,8 @@ test("Python syntax paint stays exhaustive and separate from semantic identity",
   });
   assert.match(html,
     /data-kp-python-paint-contract="kp\.python-refactor-paint-roles\.v1"/u);
+  assert.match(html,
+    /data-kp-code-optical-profile="kp\.code-source-dom-optical-profile\.v1"/u);
   assert.match(html, /data-kp-semantic-entity-id=/u);
   assert.match(html, /data-kp-python-focus="false"/u);
 });

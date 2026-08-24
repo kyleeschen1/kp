@@ -67,6 +67,10 @@ test("TypeScript light endpoint is explicit, legible, deterministic, and paint-o
         "data-kp-typescript-paint-contract",
         "kp.typescript-refactor-paint-roles.v1"
       );
+      await expect(stage).toHaveAttribute(
+        "data-kp-code-optical-profile",
+        "kp.code-source-dom-optical-profile.v1"
+      );
       await expect(stage.locator("canvas, svg")).toHaveCount(0);
       await expect(stage).toHaveCSS(
         "background-color",
@@ -175,8 +179,8 @@ test("TypeScript light endpoint is explicit, legible, deterministic, and paint-o
   await writeFile(path.join(outputRoot, "manifest.json"), `${JSON.stringify({
     schemaVersion: "kp.typescript-refactor-code-theme-checkpoint.v1",
     animationId,
-    disposition: "Unreviewed",
-    promotion: "blocked-on-human-visual-approval",
+    disposition: "Approved",
+    promotion: "approved-canonical-reference",
     captures: items.map(({ dataUrl: _dataUrl, ...item }) => item)
   }, null, 2)}\n`, "utf8");
   const sheetContext = await browser.newContext({ viewport: wide });

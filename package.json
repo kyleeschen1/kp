@@ -471,6 +471,8 @@
     "visual:python-code-theme": "playwright test --config playwright.python-code-theme.config.ts --project=chromium --workers=1",
     "dev:cross-language-code-theme-visual": "vite --host 127.0.0.1 --port 4185 --strictPort",
     "visual:cross-language-code-theme": "playwright test --config playwright.cross-language-code-theme.config.ts --project=chromium --workers=1",
+    "test:browser:code-optical-profile": "playwright test --config playwright.cross-language-code-theme.config.ts --project=chromium --project=firefox --project=webkit --workers=1",
+    "test:code-optical-profile": "node --disable-warning=ExperimentalWarning --test tests/code-source-dom-optical-profile.test.ts",
     "test:python-refactor": "node --disable-warning=ExperimentalWarning --test --test-concurrency=2 tests/python-*.test.ts",
     "visual:generated-linear-solve": "npm run build && node --disable-warning=ExperimentalWarning scripts/capture-generated-linear-solve-review.ts",
     "visual:contact-sheet": "node --disable-warning=ExperimentalWarning scripts/capture-visual-contact-sheet.ts",

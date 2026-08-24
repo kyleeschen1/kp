@@ -36,7 +36,7 @@ export function renderKpTypeScriptRefactorCodeHtml(
 ): string {
   const projections = createKpTypeScriptRefactorSourceProjections(input.semantics);
   const endpoint = resolveKpTypeScriptRefactorOpticalEndpoint(input.theme);
-  return `<section class="kp-typescript-refactor" data-kp-typescript-refactor-stage="${encodeKpEditorHtmlAttribute(input.stageId)}" data-kp-typescript-active-projection="${input.activeProjectionId}" data-kp-typescript-paint-contract="${kpTypeScriptRefactorPaintRoleContract.id}" data-kp-typescript-theme="${endpoint.id}" style="${serializeKpTypeScriptRefactorOpticalEndpoint(endpoint)}" aria-label="${encodeKpEditorHtmlAttribute(input.accessibleDescription)}">
+  return `<section class="kp-typescript-refactor" data-kp-typescript-refactor-stage="${encodeKpEditorHtmlAttribute(input.stageId)}" data-kp-typescript-active-projection="${input.activeProjectionId}" data-kp-typescript-paint-contract="${kpTypeScriptRefactorPaintRoleContract.id}" data-kp-code-optical-profile="${kpTypeScriptRefactorPaintRoleContract.profileId}" data-kp-typescript-theme="${endpoint.id}" style="${serializeKpTypeScriptRefactorOpticalEndpoint(endpoint)}" aria-label="${encodeKpEditorHtmlAttribute(input.accessibleDescription)}">
     <header class="kp-typescript-refactor__file"><span>free-shipping.ts</span><span>TypeScript</span></header>
     <div class="kp-typescript-refactor__source" data-kp-typescript-source-owner>
       ${projections.map((projection) => renderProjection({

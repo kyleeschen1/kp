@@ -19,6 +19,7 @@ test("TypeScript paint roles inventory every optical concern without palette val
   assert.deepEqual(contract.families, kpTypeScriptRefactorPaintRoleFamilies);
   assert.deepEqual(Object.keys(contract.syntaxSlots), [...kpCodeSyntaxRoles]);
   assert.equal(contract.themeAuthority, "explicit-host");
+  assert.equal(contract.profileId, "kp.code-source-dom-optical-profile.v1");
   assert.equal(new Set(contract.slots.map(({ id }) => id)).size,
     contract.slots.length);
   assert.equal(new Set(contract.slots.map(({ cssProperty }) => cssProperty)).size,
@@ -47,6 +48,8 @@ test("syntax paint remains exhaustive and separate from semantic identity", () =
   });
   assert.match(html,
     /data-kp-typescript-paint-contract="kp\.typescript-refactor-paint-roles\.v1"/u);
+  assert.match(html,
+    /data-kp-code-optical-profile="kp\.code-source-dom-optical-profile\.v1"/u);
   assert.match(html, /data-kp-semantic-entity-id=/u);
   assert.match(html, /data-kp-typescript-focus="false"/u);
 });

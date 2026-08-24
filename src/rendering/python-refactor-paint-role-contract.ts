@@ -1,42 +1,30 @@
 import {
-  kpCodeSyntaxRoles
-} from "../semantic/code-source-token-protocol.ts";
+  kpCodePaintRoleFamilies,
+  kpCodeSourceDomOpticalProfile,
+  selectKpCodePaintRoleDefinitions,
+  type KpCodePaintChannel,
+  type KpCodePaintRoleDefinition,
+  type KpCodePaintRoleFamily,
+  type KpCodePaintRoleId
+} from "./code-source-dom-optical-profile.ts";
+import { kpCodeSyntaxRoles } from
+  "../semantic/code-source-token-protocol.ts";
 import type { KpPythonTokenKind } from
   "../semantic/python-source-tokens.ts";
 
-export const kpPythonRefactorPaintRoleFamilies = [
-  "surface",
-  "chrome",
-  "foreground",
-  "muted",
-  "border",
-  "syntax",
-  "focus",
-  "transit",
-  "withdrawal",
-  "selection",
-  "focus-ring"
-] as const;
+export const kpPythonRefactorPaintRoleFamilies = kpCodePaintRoleFamilies;
 
 export const kpPythonRefactorSyntaxRoles = Object.freeze(
   kpCodeSyntaxRoles.filter(
-    (role): role is KpPythonTokenKind => role !== "property"
+    (syntaxRole): syntaxRole is KpPythonTokenKind => syntaxRole !== "property"
   )
 );
 
-export type KpPythonRefactorPaintRoleFamily =
-  typeof kpPythonRefactorPaintRoleFamilies[number];
-
-export type KpPythonRefactorPaintChannel =
-  | "background"
-  | "border"
-  | "color"
-  | "filter"
-  | "outline"
-  | "shadow";
+export type KpPythonRefactorPaintRoleFamily = KpCodePaintRoleFamily;
+export type KpPythonRefactorPaintChannel = KpCodePaintChannel;
 
 export interface KpPythonRefactorPaintRoleSlot {
-  readonly id: string;
+  readonly id: KpCodePaintRoleId;
   readonly family: KpPythonRefactorPaintRoleFamily;
   readonly channel: KpPythonRefactorPaintChannel;
   readonly cssProperty: `--kp-python-paint-${string}`;
@@ -44,6 +32,7 @@ export interface KpPythonRefactorPaintRoleSlot {
 
 export interface KpPythonRefactorPaintRoleContract {
   readonly id: "kp.python-refactor-paint-roles.v1";
+  readonly profileId: "kp.code-source-dom-optical-profile.v1";
   readonly rendererId: "adapter.programming.python-free-shipping-refactor";
   readonly themeAuthority: "explicit-host";
   readonly families: readonly KpPythonRefactorPaintRoleFamily[];
@@ -54,79 +43,74 @@ export interface KpPythonRefactorPaintRoleContract {
   >>;
 }
 
-const nonSyntaxSlots = [
-  slot("surface.panel", "surface", "background"),
-  slot("surface.shadow", "surface", "shadow"),
-  slot("chrome.background", "chrome", "background"),
-  slot("chrome.foreground", "chrome", "color"),
-  slot("foreground.primary", "foreground", "color"),
-  slot("foreground.narration", "foreground", "color"),
-  slot("muted.annotation", "muted", "color"),
-  slot("border.frame", "border", "border"),
-  slot("border.divider", "border", "border"),
-  slot("focus.halo", "focus", "shadow"),
-  slot("focus.wash", "focus", "background"),
-  slot("transit.halo", "transit", "shadow"),
-  slot("withdrawal.filter", "withdrawal", "filter"),
-  slot("selection.background", "selection", "background"),
-  slot("selection.foreground", "selection", "color"),
-  slot("focus-ring.outline", "focus-ring", "outline")
-] as const;
-
+const supportedDefinitions = selectKpCodePaintRoleDefinitions(
+  kpPythonRefactorSyntaxRoles
+);
+const slots = Object.freeze(supportedDefinitions.map(toLocalSlot));
 const syntaxSlots = Object.freeze(Object.fromEntries(
-  kpPythonRefactorSyntaxRoles.map((role) => [
-    role,
-    slot(`syntax.${role}`, "syntax", "color")
+  kpPythonRefactorSyntaxRoles.map((syntaxRole) => [
+    syntaxRole,
+    requireSlot(slots, `syntax.${syntaxRole}`)
   ])
 ) as Record<KpPythonTokenKind, KpPythonRefactorPaintRoleSlot>);
 
 /**
- * Python stays local through the cross-language checkpoint. Its missing
- * property role is evidence for the later shared-contract comparison, while
- * semantic identity, presence, salience, and motion remain compiler-owned.
+ * Python consumes the approved DOM optical profile as a capability subset.
+ * Its absent property token remains an explicit language fact rather than a
+ * synthetic role, while all semantic and lifecycle authority stays local.
  */
 export const kpPythonRefactorPaintRoleContract =
   createKpPythonRefactorPaintRoleContract({
     id: "kp.python-refactor-paint-roles.v1",
+    profileId: kpCodeSourceDomOpticalProfile.id,
     rendererId: "adapter.programming.python-free-shipping-refactor",
     themeAuthority: "explicit-host",
     families: kpPythonRefactorPaintRoleFamilies,
-    slots: Object.freeze([...nonSyntaxSlots, ...Object.values(syntaxSlots)]),
+    slots,
     syntaxSlots
   });
 
 export function createKpPythonRefactorPaintRoleContract(
   input: KpPythonRefactorPaintRoleContract
 ): KpPythonRefactorPaintRoleContract {
-  assertExactValues(input.families, kpPythonRefactorPaintRoleFamilies,
+  if (input.profileId !== kpCodeSourceDomOpticalProfile.id) {
+    throw new Error("Python paint contract must use the promoted profile.");
+  }
+  assertExactValues(input.families, kpCodePaintRoleFamilies,
     "paint-role families");
   assertExactValues(Object.keys(input.syntaxSlots), kpPythonRefactorSyntaxRoles,
     "syntax roles");
+  assertExactValues(
+    input.slots.map(({ id }) => id),
+    supportedDefinitions.map(({ id }) => id),
+    "paint roles"
+  );
 
-  const ids = new Set<string>();
   const properties = new Set<string>();
-  const coveredFamilies = new Set<KpPythonRefactorPaintRoleFamily>();
+  const definitions = new Map(supportedDefinitions.map((definition) =>
+    [definition.id, definition]));
   for (const paintSlot of input.slots) {
-    requireText(paintSlot.id, "Paint-role slot id");
-    if (ids.has(paintSlot.id)) {
-      throw new Error(`Python paint contract repeats slot ${paintSlot.id}.`);
+    const definition = definitions.get(paintSlot.id);
+    if (definition === undefined || definition.family !== paintSlot.family ||
+        definition.channel !== paintSlot.channel) {
+      throw new Error(
+        `Python paint slot ${paintSlot.id} drifts from the promoted role.`
+      );
     }
     if (properties.has(paintSlot.cssProperty)) {
       throw new Error(
         `Python paint contract repeats property ${paintSlot.cssProperty}.`
       );
     }
-    ids.add(paintSlot.id);
     properties.add(paintSlot.cssProperty);
-    coveredFamilies.add(paintSlot.family);
   }
-  assertExactValues([...coveredFamilies], kpPythonRefactorPaintRoleFamilies,
-    "covered paint-role families");
-
-  for (const role of kpPythonRefactorSyntaxRoles) {
-    const paintSlot = input.syntaxSlots[role];
-    if (!ids.has(paintSlot.id) || paintSlot.family !== "syntax") {
-      throw new Error(`Python syntax role ${role} has no syntax paint slot.`);
+  for (const syntaxRole of kpPythonRefactorSyntaxRoles) {
+    const paintSlot = input.syntaxSlots[syntaxRole];
+    if (!input.slots.includes(paintSlot) ||
+        paintSlot.id !== `syntax.${syntaxRole}`) {
+      throw new Error(
+        `Python syntax role ${syntaxRole} has no promoted paint slot.`
+      );
     }
   }
 
@@ -136,17 +120,25 @@ export function createKpPythonRefactorPaintRoleContract(
   return Object.freeze(input);
 }
 
-function slot(
-  id: string,
-  family: KpPythonRefactorPaintRoleFamily,
-  channel: KpPythonRefactorPaintChannel
+function toLocalSlot(
+  definition: KpCodePaintRoleDefinition
 ): KpPythonRefactorPaintRoleSlot {
   return Object.freeze({
-    id,
-    family,
-    channel,
-    cssProperty: `--kp-python-paint-${id.replaceAll(".", "-")}` as const
+    ...definition,
+    cssProperty:
+      `--kp-python-paint-${definition.id.replaceAll(".", "-")}` as const
   });
+}
+
+function requireSlot(
+  candidates: readonly KpPythonRefactorPaintRoleSlot[],
+  id: KpCodePaintRoleId
+): KpPythonRefactorPaintRoleSlot {
+  const paintSlot = candidates.find((candidate) => candidate.id === id);
+  if (paintSlot === undefined) {
+    throw new Error(`Python has no promoted paint slot ${id}.`);
+  }
+  return paintSlot;
 }
 
 function assertExactValues(
@@ -160,8 +152,4 @@ function assertExactValues(
       left.some((value, index) => value !== right[index])) {
     throw new Error(`Python ${label} must have exact coverage.`);
   }
-}
-
-function requireText(value: string, label: string): void {
-  if (value.trim() === "") throw new Error(`${label} must be non-empty.`);
 }

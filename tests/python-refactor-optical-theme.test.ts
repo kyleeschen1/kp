@@ -15,6 +15,7 @@ test("dark endpoint covers the Python paint contract with prior optical values",
   const endpoint = kpPythonRefactorDarkOpticalEndpoint;
   assert.equal(endpoint.id, "dark");
   assert.equal(endpoint.contractId, kpPythonRefactorPaintRoleContract.id);
+  assert.equal(endpoint.profileId, "kp.code-source-dom-optical-profile.v1");
   assert.deepEqual(
     Object.keys(endpoint.properties).sort(),
     kpPythonRefactorPaintRoleContract.slots
@@ -27,7 +28,7 @@ test("dark endpoint covers the Python paint contract with prior optical values",
     "saturate(0.72) brightness(0.88)");
 });
 
-test("Python light is independently authored with non-glow withdrawal", () => {
+test("Python light projects the approved shared non-glow withdrawal", () => {
   const light = kpPythonRefactorLightOpticalEndpoint;
   assert.equal(resolveKpPythonRefactorOpticalEndpoint("light"), light);
   assert.equal(light.properties["--kp-python-paint-surface-panel"],

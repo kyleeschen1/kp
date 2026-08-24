@@ -35,7 +35,7 @@ export function renderKpPythonRefactorCodeHtml(
 ): string {
   const projections = createKpPythonRefactorSourceProjections(input.semantics);
   const endpoint = resolveKpPythonRefactorOpticalEndpoint(input.theme);
-  return `<section class="kp-python-refactor" data-kp-python-refactor-stage="${encodeKpEditorHtmlAttribute(input.stageId)}" data-kp-python-active-projection="${input.activeProjectionId}" data-kp-python-paint-contract="${kpPythonRefactorPaintRoleContract.id}" data-kp-python-theme="${endpoint.id}" style="${serializeKpPythonRefactorOpticalEndpoint(endpoint)}" aria-label="${encodeKpEditorHtmlAttribute(input.accessibleDescription)}">
+  return `<section class="kp-python-refactor" data-kp-python-refactor-stage="${encodeKpEditorHtmlAttribute(input.stageId)}" data-kp-python-active-projection="${input.activeProjectionId}" data-kp-python-paint-contract="${kpPythonRefactorPaintRoleContract.id}" data-kp-code-optical-profile="${kpPythonRefactorPaintRoleContract.profileId}" data-kp-python-theme="${endpoint.id}" style="${serializeKpPythonRefactorOpticalEndpoint(endpoint)}" aria-label="${encodeKpEditorHtmlAttribute(input.accessibleDescription)}">
     <header class="kp-python-refactor__file"><span>shipping.py</span><span>Python</span></header>
     <div class="kp-python-refactor__source" data-kp-python-source-owner>
       ${projections.map((projection) => renderProjection({

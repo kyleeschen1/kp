@@ -67,6 +67,10 @@ test("Python light endpoint is explicit, legible, deterministic, and paint-only"
         "data-kp-python-paint-contract",
         "kp.python-refactor-paint-roles.v1"
       );
+      await expect(stage).toHaveAttribute(
+        "data-kp-code-optical-profile",
+        "kp.code-source-dom-optical-profile.v1"
+      );
       await expect(stage.locator("canvas, svg")).toHaveCount(0);
       await expect(stage).toHaveCSS(
         "background-color",
@@ -174,8 +178,8 @@ test("Python light endpoint is explicit, legible, deterministic, and paint-only"
   await writeFile(path.join(outputRoot, "manifest.json"), `${JSON.stringify({
     schemaVersion: "kp.python-refactor-code-theme-checkpoint.v1",
     animationId,
-    disposition: "Unreviewed",
-    promotion: "blocked-on-cross-language-human-approval",
+    disposition: "Approved",
+    promotion: "approved-pressure-caller",
     captures: items.map(({ dataUrl: _dataUrl, ...item }) => item)
   }, null, 2)}\n`, "utf8");
   const sheetContext = await browser.newContext({ viewport: wide });

@@ -229,8 +229,8 @@
   outline-offset: 0.22rem;
 }
 
-/* Python remains a deliberately local second caller until visual review. Its
-   duplication makes the later shared/exceptions comparison evidence-based. */
+/* Python retains local CSS and renderer ownership while consuming the same
+   reviewed optical role values as the canonical TypeScript caller. */
 .editor-animation-player__surface:has(.kp-python-refactor) {
   border-style: solid;
   color: var(--kp-python-paint-foreground-narration, #e8ebf2);
@@ -245,8 +245,8 @@
 }
 
 .kp-python-refactor {
-  /* Keep legacy aliases local through comparison so paint-role promotion does
-     not require a semantic, source, score, or motion migration. */
+  /* Legacy aliases remain local so shared optics never become a semantic,
+     source, score, motion, or geometry migration. */
   --kp-code-foreground: var(--kp-python-paint-foreground-primary);
   --kp-code-keyword: var(--kp-python-paint-syntax-keyword);
   --kp-code-function: var(--kp-python-paint-syntax-function);

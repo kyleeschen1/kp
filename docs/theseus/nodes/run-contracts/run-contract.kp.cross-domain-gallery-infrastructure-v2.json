@@ -109,6 +109,83 @@
       "scope": "focused",
       "checkedAt": "2026-08-24T14:42:03.852Z",
       "notes": "Checkpoint config, browser comparison, and contract comparison compile cleanly across app, test, Svelte, and domain projects."
+    },
+    {
+      "command": "npm run test:code-optical-profile",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T20:39:15.486Z",
+      "notes": "Four shared-profile laws prove exact role coverage, explicit language capability subsets, namespace projection, and fail-closed validation."
+    },
+    {
+      "command": "npm run test:typescript-refactor",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-24T20:39:16.812Z",
+      "notes": "All 106 TypeScript refactor tests pass after profile projection."
+    },
+    {
+      "command": "npm run test:python-refactor",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-24T20:39:17.867Z",
+      "notes": "All 101 Python refactor tests pass after profile projection."
+    },
+    {
+      "command": "npm run visual:code-theme",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T20:39:18.986Z",
+      "notes": "Canonical TypeScript light, dark, responsive, geometry, and toolbar round-trip evidence remains green."
+    },
+    {
+      "command": "npm run visual:python-code-theme",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T20:39:20.082Z",
+      "notes": "Python pressure caller light, dark, responsive, geometry, and toolbar round-trip evidence remains green."
+    },
+    {
+      "command": "npm run test:browser:code-optical-profile",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T20:39:21.122Z",
+      "notes": "The shared TypeScript/Python optical boundary passes Chromium, Firefox, and WebKit."
+    },
+    {
+      "command": "npm run test:cross-domain-gallery-preflight",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-24T20:39:22.187Z",
+      "notes": "All 27 governed generation preflight checks pass."
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-24T20:39:23.309Z",
+      "notes": "All 36 canonical Catalogue host and lifecycle tests pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T20:39:24.454Z",
+      "notes": "Dependency, semantic, equation, and cross-domain boundaries pass with zero retiring dependency exceptions."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T20:39:25.600Z",
+      "notes": "Full typecheck, economics publication check, and production Vite build pass."
+    },
+    {
+      "command": "npm run visual:cross-language-code-theme",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T20:39:26.777Z",
+      "notes": "Approved six-panel Chromium artifact regenerates with 26 common roles, one TypeScript-only role, and zero endpoint differences."
     }
   ],
   "allowedWork": [
@@ -233,7 +310,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s15",
       "title": "Shared-code-optical-profile-promotion",
-      "status": "planned"
+      "summary": "Promoted the human-approved TypeScript/Python evidence into kp.code-source-dom-optical-profile.v1: eleven language-neutral DOM paint families, 27 role values, independently tuned dark/light endpoints, explicit capability-subset projection, and caller-local CSS namespaces. TypeScript retains syntax.property; Python does not synthesize it. Semantics, scores, clocks, geometry, native endpoints, renderers, and public behavior remain language-owned.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s16",

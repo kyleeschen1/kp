@@ -15,6 +15,7 @@ test("dark endpoint covers the TypeScript paint contract exactly", () => {
   const endpoint = kpTypeScriptRefactorDarkOpticalEndpoint;
   assert.equal(endpoint.id, "dark");
   assert.equal(endpoint.contractId, kpTypeScriptRefactorPaintRoleContract.id);
+  assert.equal(endpoint.profileId, "kp.code-source-dom-optical-profile.v1");
   assert.deepEqual(
     Object.keys(endpoint.properties).sort(),
     kpTypeScriptRefactorPaintRoleContract.slots
@@ -31,7 +32,7 @@ test("dark endpoint covers the TypeScript paint contract exactly", () => {
   );
 });
 
-test("light is an independently authored endpoint with non-glow withdrawal", () => {
+test("light projects the approved shared endpoint with non-glow withdrawal", () => {
   const light = kpTypeScriptRefactorLightOpticalEndpoint;
   assert.equal(resolveKpTypeScriptRefactorOpticalEndpoint("light"), light);
   assert.equal(

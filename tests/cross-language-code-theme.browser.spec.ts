@@ -38,9 +38,11 @@ const captures = [
 
 test("TypeScript and Python expose one reviewable optical boundary", async ({
   browser,
-  baseURL
+  baseURL,
+  browserName
 }) => {
-  await mkdir(outputRoot, { recursive: true });
+  const emitReviewArtifacts = browserName === "chromium";
+  if (emitReviewArtifacts) await mkdir(outputRoot, { recursive: true });
   const comparison = compareLocalContracts();
   expect(comparison.families).toBe("exact-match");
   expect(comparison.typescriptOnlyRoles).toEqual(["syntax.property"]);
@@ -81,6 +83,10 @@ test("TypeScript and Python expose one reviewable optical boundary", async ({
         contractAttribute(entry.language),
         contractId(entry.language)
       );
+      await expect(stage).toHaveAttribute(
+        "data-kp-code-optical-profile",
+        "kp.code-source-dom-optical-profile.v1"
+      );
       await expect(stage.locator("canvas, svg")).toHaveCount(0);
       await expect(stage).toHaveCSS(
         "background-color",
@@ -93,19 +99,21 @@ test("TypeScript and Python expose one reviewable optical boundary", async ({
         width: box!.width,
         height: box!.height
       });
-      const imageFile = path.join(outputRoot, `${entry.id}.png`);
-      const image = await stage.screenshot({
-        path: imageFile,
-        animations: "disabled"
-      });
-      items.push({
-        id: entry.id,
-        label: entry.label,
-        progress: entry.progress,
-        viewport,
-        file: path.relative(process.cwd(), imageFile),
-        dataUrl: `data:image/png;base64,${image.toString("base64")}`
-      });
+      if (emitReviewArtifacts) {
+        const imageFile = path.join(outputRoot, `${entry.id}.png`);
+        const image = await stage.screenshot({
+          path: imageFile,
+          animations: "disabled"
+        });
+        items.push({
+          id: entry.id,
+          label: entry.label,
+          progress: entry.progress,
+          viewport,
+          file: path.relative(process.cwd(), imageFile),
+          dataUrl: `data:image/png;base64,${image.toString("base64")}`
+        });
+      }
     } finally {
       await context.close();
     }
@@ -116,6 +124,7 @@ test("TypeScript and Python expose one reviewable optical boundary", async ({
   );
   expect(geometry.get("python.light")).toEqual(geometry.get("python.dark"));
 
+  if (!emitReviewArtifacts) return;
   const html = buildKpVisualContactSheetHtml(items, {
     title: "Kinetic Press · cross-language code themes",
     columns: 2,
@@ -124,10 +133,10 @@ test("TypeScript and Python expose one reviewable optical boundary", async ({
   await writeFile(path.join(outputRoot, "index.html"), html, "utf8");
   await writeFile(path.join(outputRoot, "manifest.json"), `${JSON.stringify({
     schemaVersion: "kp.cross-language-code-theme-checkpoint.v1",
-    disposition: "Unreviewed",
+    disposition: "Approved",
     canonicalReference: "animation.programming.typescript-free-shipping-refactor",
     pressureCaller: "animation.programming.python-free-shipping-refactor",
-    promotion: "blocked-on-human-cross-language-approval",
+    promotion: "promoted-kp.code-source-dom-optical-profile.v1",
     comparison,
     captures: items.map(({ dataUrl: _dataUrl, ...item }) => item)
   }, null, 2)}\n`, "utf8");
