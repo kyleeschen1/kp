@@ -51,11 +51,46 @@
       "scope": "focused",
       "checkedAt": "2026-08-24T03:31:25.070Z",
       "notes": "Workspace valid after contract issuance and slice start."
+    },
+    {
+      "command": "npm run test:equation-generation-boundary",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T03:37:17.061Z",
+      "notes": "All 12 boundary assertions pass; both exponential homomorphism callers now resolve through typed catalog-owned plans with zero repair rounds."
+    },
+    {
+      "command": "npm run test:homomorphic-generation-benchmark",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T03:37:18.359Z",
+      "notes": "All 9 homomorphic benchmark assertions pass across logarithm and exponential operation families."
+    },
+    {
+      "command": "npm run test:equation-generation-pressure-contract",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T03:37:19.371Z",
+      "notes": "All 4 pressure-corpus assertions pass; eight fixtures and two corpora are declared."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T03:37:20.379Z",
+      "notes": "All 11 surface-preservation assertions pass after extending the generation pressure corpus."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T03:37:21.405Z",
+      "notes": "Svelte and domain TypeScript checks pass with zero errors or warnings."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 1 established the approved 30-slice gallery contract, exact source references, verification envelope, and a worktree fence that excludes unrelated economics and browser-test changes."
+    "summary": "Slice 2 added executable pressure fixtures and corpus membership for both exponential homomorphism vocabularies. Compiler acceptance, benchmark parity, pressure-contract integrity, surface preservation, and typecheck all pass; the visual canary was intentionally deferred because this slice changes authoring fixtures only, not paint or choreography."
   },
   "allowedWork": [
     "Repair the two documented generation and explanation baseline drifts.",
@@ -87,7 +122,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s02",
       "title": "Exponential-pressure-fixture-repair",
-      "status": "planned"
+      "summary": "Added sum-to-product and difference-to-quotient pressure fixtures using catalog-owned exponential homomorphism plans and extended the boundary proof from six to eight accepted requests.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s03",

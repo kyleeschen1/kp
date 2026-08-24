@@ -42,6 +42,8 @@ test("canonical surface vocabularies compile through existing authorities", () =
     "accepted",
     "accepted",
     "accepted",
+    "accepted",
+    "accepted",
     "accepted"
   ]);
   assert.deepEqual(plans.map((result) =>
@@ -52,7 +54,9 @@ test("canonical surface vocabularies compile through existing authorities", () =
     "distribution-operation-plan",
     "homomorphic-crossover-semantic-motion-plan",
     "homomorphic-crossover-semantic-motion-plan",
-    "homomorphic-crossover-semantic-motion-plan"
+    "homomorphic-crossover-semantic-motion-plan",
+    "exponential-homomorphism-correspondence-plan",
+    "exponential-homomorphism-correspondence-plan"
   ]);
 });
 

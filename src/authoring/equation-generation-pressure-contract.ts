@@ -10,7 +10,9 @@ export type KpEquationGenerationPressureScenario =
   | "distribution-factoring"
   | "log-product-binary"
   | "log-product-three-factor"
-  | "log-quotient";
+  | "log-quotient"
+  | "exponential-sum-to-product"
+  | "exponential-difference-to-quotient";
 
 export type KpEquationGenerationProofId =
   | "catalogue-accepted"
@@ -76,6 +78,20 @@ const logProductRoleIds = Object.freeze([
   "connector"
 ]);
 
+const exponentialHomomorphismRoleIds = Object.freeze([
+  "source-power-application",
+  "source-base",
+  "source-exponent-payloads",
+  "source-superscript-region",
+  "source-connectors",
+  "target-power-applications",
+  "target-bases",
+  "target-exponent-payloads",
+  "target-superscript-regions",
+  "target-connectors",
+  "target-combination"
+]);
+
 function logProductPressureBindings(
   factorNames: readonly [string, string, ...string[]]
 ): Readonly<Record<string, readonly string[]>> {
@@ -104,6 +120,43 @@ function logProductPressureBindings(
     connector: Object.freeze(factorNames.slice(1).map((_, index) =>
       `target.connector.${index}`
     ))
+  });
+}
+
+function exponentialHomomorphismPressureBindings(
+  sourceConnector: "plus" | "minus",
+  targetCombination: "product" | "quotient"
+): Readonly<Record<string, readonly string[]>> {
+  // Pressure inputs keep plausible but untrusted entity IDs. The direct
+  // boundary proof must replace them with catalogue-owned canonical bindings.
+  return Object.freeze({
+    "source-power-application": Object.freeze(["source.power"]),
+    "source-base": Object.freeze(["source.base"]),
+    "source-exponent-payloads": Object.freeze([
+      "source.exponent.a",
+      "source.exponent.b"
+    ]),
+    "source-superscript-region": Object.freeze(["source.superscript"]),
+    "source-connectors": Object.freeze([`source.connector.${sourceConnector}`]),
+    "target-power-applications": Object.freeze([
+      "target.power.a",
+      "target.power.b"
+    ]),
+    "target-bases": Object.freeze(["target.base.a", "target.base.b"]),
+    "target-exponent-payloads": Object.freeze([
+      "target.exponent.a",
+      "target.exponent.b"
+    ]),
+    "target-superscript-regions": Object.freeze([
+      "target.superscript.a",
+      "target.superscript.b"
+    ]),
+    "target-connectors": Object.freeze([
+      `target.connector.${targetCombination}`
+    ]),
+    "target-combination": Object.freeze([
+      `target.combination.${targetCombination}`
+    ])
   });
 }
 
@@ -196,6 +249,30 @@ export const kpEquationGenerationPressureFixtures = Object.freeze([
     },
     teachingIntent:
       "Show two logarithm applications fusing around a quotient of persistent arguments."
+  }),
+  pressureFixture({
+    id: "pressure.equation.exponential-sum-to-product",
+    scenario: "exponential-sum-to-product",
+    animationId:
+      "animation.algebra.exponential-homomorphism.sum-to-product",
+    operationId: "operation.equation.exponential-sum-to-product.v1",
+    roleIds: exponentialHomomorphismRoleIds,
+    roleBindings: exponentialHomomorphismPressureBindings("plus", "product"),
+    teachingIntent:
+      "Show one power over an additive exponent becoming two ordered powers in a product."
+  }),
+  pressureFixture({
+    id: "pressure.equation.exponential-difference-to-quotient",
+    scenario: "exponential-difference-to-quotient",
+    animationId:
+      "animation.algebra.exponential-homomorphism.difference-to-quotient",
+    operationId:
+      "operation.equation.exponential-difference-to-quotient.v1",
+    roleIds: exponentialHomomorphismRoleIds,
+    roleBindings:
+      exponentialHomomorphismPressureBindings("minus", "quotient"),
+    teachingIntent:
+      "Show one power over a subtractive exponent becoming numerator and denominator powers."
   })
 ] as const satisfies readonly KpEquationGenerationPressureFixture[]);
 
@@ -206,6 +283,13 @@ export const kpEquationGenerationPressureCorpora = Object.freeze([
       "pressure.equation.log-product.binary",
       "pressure.equation.log-product.three-factor",
       "pressure.equation.log-quotient"
+    ])
+  }),
+  Object.freeze({
+    id: "corpus.equation.exponential-homomorphism.v1",
+    fixtureIds: Object.freeze([
+      "pressure.equation.exponential-sum-to-product",
+      "pressure.equation.exponential-difference-to-quotient"
     ])
   })
 ] as const satisfies readonly KpEquationGenerationPressureCorpus[]);
@@ -435,7 +519,9 @@ function isScenario(value: unknown): value is KpEquationGenerationPressureScenar
     value === "distribution-factoring" ||
     value === "log-product-binary" ||
     value === "log-product-three-factor" ||
-    value === "log-quotient";
+    value === "log-quotient" ||
+    value === "exponential-sum-to-product" ||
+    value === "exponential-difference-to-quotient";
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

@@ -7,7 +7,7 @@ import {
   validateKpEquationGenerationPressureFixture
 } from "../src/authoring/equation-generation-pressure-contract.ts";
 
-test("six contrasting LLM-shaped requests use only governed semantic vocabulary", () => {
+test("eight contrasting LLM-shaped requests use only governed semantic vocabulary", () => {
   assert.deepEqual(
     kpEquationGenerationPressureFixtures.map(({ scenario }) => scenario),
     [
@@ -16,26 +16,37 @@ test("six contrasting LLM-shaped requests use only governed semantic vocabulary"
       "distribution-factoring",
       "log-product-binary",
       "log-product-three-factor",
-      "log-quotient"
+      "log-quotient",
+      "exponential-sum-to-product",
+      "exponential-difference-to-quotient"
     ]
   );
   assert.equal(
     new Set(kpEquationGenerationPressureFixtures.map(({ id }) => id)).size,
-    6
+    8
   );
   for (const fixture of kpEquationGenerationPressureFixtures) {
     assert.deepEqual(validateKpEquationGenerationPressureFixture(fixture), []);
     assert.equal(fixture.successCriteria.maximumRepairCount, 0);
     assert.equal(fixture.repairAccounting.unit, "validator-round");
   }
-  assert.deepEqual(kpEquationGenerationPressureCorpora, [{
-    id: "corpus.equation.log-homomorphism.v1",
-    fixtureIds: [
-      "pressure.equation.log-product.binary",
-      "pressure.equation.log-product.three-factor",
-      "pressure.equation.log-quotient"
-    ]
-  }]);
+  assert.deepEqual(kpEquationGenerationPressureCorpora, [
+    {
+      id: "corpus.equation.log-homomorphism.v1",
+      fixtureIds: [
+        "pressure.equation.log-product.binary",
+        "pressure.equation.log-product.three-factor",
+        "pressure.equation.log-quotient"
+      ]
+    },
+    {
+      id: "corpus.equation.exponential-homomorphism.v1",
+      fixtureIds: [
+        "pressure.equation.exponential-sum-to-product",
+        "pressure.equation.exponential-difference-to-quotient"
+      ]
+    }
+  ]);
 });
 
 test("pressure requests contain no geometry, timing, renderer, or recipe authority", () => {
