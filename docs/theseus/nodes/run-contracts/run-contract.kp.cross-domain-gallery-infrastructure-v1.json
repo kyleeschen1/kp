@@ -198,11 +198,46 @@
       "scope": "standard",
       "checkedAt": "2026-08-24T03:51:22.738Z",
       "notes": "All 27 baseline preflight assertions remain green after adding the router."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/gallery-logarithmic-solve-generation.test.ts tests/cross-domain-gallery-generation-router.test.ts tests/gallery-generation-result.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T03:56:33.885Z",
+      "notes": "All 15 equation-route, router, and projection assertions pass; the exact request reuses canonical semantic, artifact, clock, host, renderer, URL, explanation, and evidence authorities while a nearby equation is refused."
+    },
+    {
+      "command": "npm run test:cross-domain-gallery-preflight",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T03:56:35.139Z",
+      "notes": "All 27 generation baseline assertions remain green."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T03:56:36.174Z",
+      "notes": "All 11 equation preservation assertions pass; the approved logarithmic choreography and endpoints are unchanged."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T03:56:37.207Z",
+      "notes": "All architecture, governance, and cross-domain conformance gates pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T03:56:38.265Z",
+      "notes": "All application, Node, test, Svelte, and domain typechecks pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 6 added the build-time cross-domain gallery router. It validates the shared envelope, selects exactly one registered frontend by domain/source/frontend/capabilities, rejects missing or ambiguous routes and forged projections as typed repairs, and imports no domain frontend, semantic model, or renderer."
+    "summary": "Slice 7 registered an exact 2^x=7 logarithmic-solve request. The route validates canonical states and operation IDs, reuses the approved native-KaTeX asset, and derives its timeline, host, renderer, direct URL, semantic tree, grounded claims, and evidence from existing authorities. Nearby equations return a typed gap. Real-caller pressure also made artifact authority source paths and evidence references mandatory in the shared projection."
   },
   "allowedWork": [
     "Repair the two documented generation and explanation baseline drifts.",
@@ -264,7 +299,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s07",
       "title": "Canonical-logarithmic-solve-route",
-      "status": "planned"
+      "summary": "Routed the canonical logarithmic solve as an existing artifact with derived lifecycle and semantic authority, grounded explanation claims, conformance evidence, and exact-variant refusal without changing choreography.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s08",

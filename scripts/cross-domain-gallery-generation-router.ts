@@ -108,6 +108,10 @@ function resultAuthorityMismatch(
     result.domain !== request.domain ||
     result.frontendAuthority.frontendId !== frontend.frontendId
   )) return "An accepted projection omitted routed request authority.";
+  if (result.status !== "repair-required" && (
+    result.explanationClaimRefs.length === 0 ||
+    result.evidenceRefs.length === 0
+  )) return "An accepted projection omitted explanation or conformance evidence.";
   return undefined;
 }
 

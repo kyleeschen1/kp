@@ -98,6 +98,21 @@ test("frontends cannot forge request or authority identity", () => {
     "gallery-generation.result-authority-mismatch");
 });
 
+test("accepted frontends cannot omit claims or conformance evidence", () => {
+  const incomplete: KpCrossDomainGalleryFrontend = {
+    ...frontend,
+    project: (request) => ({
+      ...frontend.project(request),
+      evidenceRefs: []
+    } as KpGalleryGenerationResult)
+  };
+  const result = routeKpCrossDomainGalleryGeneration(rawRequest, [incomplete]);
+
+  assert.equal(result.status, "repair-required");
+  assert.equal(result.diagnostics[0].code,
+    "gallery-generation.result-authority-mismatch");
+});
+
 test("the router imports no domain frontend renderer or semantic model", () => {
   const source = readFileSync(new URL(
     "../scripts/cross-domain-gallery-generation-router.ts",
@@ -131,6 +146,7 @@ function createFrontend(): KpCrossDomainGalleryFrontend {
         explanationClaimRefs: [
           "claim.code.extract-helper.behavior-preserved"
         ],
+        evidenceRefs: ["evidence.code.typescript.extract-helper.gallery"],
         reason: "generated-semantics-require-governed-artifact-compilation"
       })
   });

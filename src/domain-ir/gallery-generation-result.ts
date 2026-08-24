@@ -19,10 +19,14 @@ export interface KpGallerySemanticTraceReference {
 
 export interface KpGalleryArtifactReference {
   readonly artifactId: string;
+  readonly artifactSourcePath: string;
   readonly timelineId: string;
   readonly hostId: string;
+  readonly hostSourcePath: string;
   readonly rendererId: string;
+  readonly rendererSourcePath: string;
   readonly directUrl: string;
+  readonly directUrlSourcePath: string;
   readonly vignetteId?: string;
 }
 
@@ -46,6 +50,7 @@ interface KpGalleryGenerationAcceptedBase {
   // This is a reference on purpose: domain plans do not become a shared IR.
   readonly semanticTrace: KpGallerySemanticTraceReference;
   readonly explanationClaimRefs: readonly string[];
+  readonly evidenceRefs: readonly string[];
   readonly diagnostics: readonly [];
 }
 
@@ -76,6 +81,7 @@ export interface KpGalleryRepairRequiredResult {
   readonly frontendAuthority?: KpGalleryFrontendAuthorityReference;
   readonly semanticTrace?: KpGallerySemanticTraceReference;
   readonly explanationClaimRefs: readonly string[];
+  readonly evidenceRefs: readonly string[];
   readonly diagnostics: readonly [
     KpGalleryGenerationDiagnostic,
     ...KpGalleryGenerationDiagnostic[]
@@ -93,6 +99,7 @@ interface KpGalleryAcceptedProjectionBase {
   readonly frontendAuthoritySourcePath: string;
   readonly semanticTrace: KpGallerySemanticTraceReference;
   readonly explanationClaimRefs: readonly string[];
+  readonly evidenceRefs: readonly string[];
 }
 
 export type KpGalleryAcceptedProjectionInput =
@@ -110,6 +117,7 @@ export interface KpGalleryRepairProjectionInput {
   readonly frontendAuthoritySourcePath?: string;
   readonly semanticTrace?: KpGallerySemanticTraceReference;
   readonly explanationClaimRefs?: readonly string[];
+  readonly evidenceRefs?: readonly string[];
   readonly diagnostics: readonly [
     KpGalleryGenerationDiagnostic,
     ...KpGalleryGenerationDiagnostic[]
@@ -155,6 +163,7 @@ export function projectKpGalleryGenerationRepair(
       ? {}
       : { semanticTrace: input.semanticTrace }),
     explanationClaimRefs: [...(input.explanationClaimRefs ?? [])],
+    evidenceRefs: [...(input.evidenceRefs ?? [])],
     diagnostics: [...input.diagnostics] as [
       KpGalleryGenerationDiagnostic,
       ...KpGalleryGenerationDiagnostic[]
@@ -175,6 +184,7 @@ KpGalleryGenerationAcceptedBase {
     },
     semanticTrace: input.semanticTrace,
     explanationClaimRefs: [...input.explanationClaimRefs],
+    evidenceRefs: [...input.evidenceRefs],
     diagnostics: []
   };
 }

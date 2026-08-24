@@ -49,12 +49,19 @@ test("artifact dispositions share authority and lifecycle references", () => {
         "scripts/typescript-code-generation-frontend.ts",
       semanticTrace,
       explanationClaimRefs: ["claim.code.extract-helper.behavior-preserved"],
+      evidenceRefs: ["evidence.code.typescript.extract-helper.canonical"],
       artifact: {
         artifactId: "animation.programming.typescript-free-shipping-refactor",
+        artifactSourcePath:
+          "src/semantic/typescript-free-shipping-animation-asset.ts",
         timelineId: "timeline.typescript.free-shipping-threshold",
         hostId: "host.catalogue.animation-player",
+        hostSourcePath: "src/editor/animation-player-controller.ts",
         rendererId: "renderer.code.typescript-refactor",
-        directUrl: "/?animation=typescript-free-shipping-refactor"
+        rendererSourcePath: "src/editor/typescript-refactor-surface-adapter.ts",
+        directUrl: "/?animation=typescript-free-shipping-refactor",
+        directUrlSourcePath:
+          "src/editor/animation-library-display-catalog-builder.ts"
       }
     });
 
@@ -77,6 +84,7 @@ test("semantic-only results remain honest without an artifact handle", () => {
       "scripts/typescript-code-generation-frontend.ts",
     semanticTrace,
     explanationClaimRefs: ["claim.code.extract-helper.behavior-preserved"],
+    evidenceRefs: ["evidence.code.typescript.extract-helper.variant"],
     reason: "generated-semantics-require-governed-artifact-compilation"
   });
 
@@ -102,6 +110,7 @@ test("repairs preserve typed diagnostics without inventing authority", () => {
   assert.equal(result.status, "repair-required");
   assert.equal(result.semanticTrace, undefined);
   assert.equal(result.explanationClaimRefs.length, 0);
+  assert.equal(result.evidenceRefs.length, 0);
   assert.equal(result.diagnostics[0].authority, "domain-frontend");
   assert.equal(Object.isFrozen(result.diagnostics), true);
 });
