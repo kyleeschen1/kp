@@ -233,11 +233,60 @@
       "scope": "standard",
       "checkedAt": "2026-08-24T03:56:38.265Z",
       "notes": "All application, Node, test, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/gallery-typescript-refactor-generation.test.ts tests/code-generation-orchestrator.test.ts tests/cross-domain-gallery-generation-router.test.ts tests/gallery-generation-result.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T04:03:24.090Z",
+      "notes": "All 20 TypeScript route, code orchestration, router, and projection assertions pass, including exact artifact reuse and the artifact-requested versus semantic-plan-only variant distinction."
+    },
+    {
+      "command": "npm run test:code-generation-preflight",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T04:03:25.414Z",
+      "notes": "All 4 canonical code contracts, Direct readiness, stable route, and build-time frontend isolation assertions pass."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T04:03:26.439Z",
+      "notes": "The internal studio build and animation-library bundle boundary pass; TypeScript compiler ownership remains outside browser bundles."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T04:03:27.480Z",
+      "notes": "All architecture, governance, and cross-domain conformance gates pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T04:03:28.533Z",
+      "notes": "All application, Node, test, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T04:03:29.567Z",
+      "notes": "The production bundle builds successfully; existing large-chunk advisories remain warnings only."
+    },
+    {
+      "command": "npm run test:cross-domain-gallery-preflight",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T04:03:30.645Z",
+      "notes": "All 27 gallery baseline assertions remain green."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 7 registered an exact 2^x=7 logarithmic-solve request. The route validates canonical states and operation IDs, reuses the approved native-KaTeX asset, and derives its timeline, host, renderer, direct URL, semantic tree, grounded claims, and evidence from existing authorities. Nearby equations return a typed gap. Real-caller pressure also made artifact authority source paths and evidence references mandatory in the shared projection."
+    "summary": "Slice 8 routed the exact TypeScript extract-helper request through the existing compiler-owned orchestrator and shared projection. The canonical request reuses its artifact, causal trace, behavior evidence, timeline, host, renderer, vignette, and Catalogue URL. Valid variants that still demand an artifact receive artifact-unavailable; variants requesting semantic output receive semantic-plan-only. No compiler entered browser bundles and no code choreography or paint changed."
   },
   "allowedWork": [
     "Repair the two documented generation and explanation baseline drifts.",
@@ -305,7 +354,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s08",
       "title": "Canonical-TypeScript-code-route",
-      "status": "planned"
+      "summary": "Routed the canonical TypeScript refactor as an existing artifact with compiler-grounded claims and lifecycle authority, preserving honest repair and plan-only outcomes for edited variants.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s09",

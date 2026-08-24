@@ -28,6 +28,7 @@ export interface KpGalleryArtifactReference {
   readonly directUrl: string;
   readonly directUrlSourcePath: string;
   readonly vignetteId?: string;
+  readonly vignetteSourcePath?: string;
 }
 
 export interface KpGalleryGenerationDiagnostic {
