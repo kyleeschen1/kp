@@ -1,0 +1,233 @@
+{
+  "id": "run-contract.kp.cross-domain-gallery-infrastructure-v1",
+  "kind": "run-contract",
+  "title": "Cross-domain gallery infrastructure",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-23-cross-domain-gallery-pipeline-next-step-review.md",
+      "summary": "Reviewed production-seam gallery proposal, exemplar packet, light-mode promotion boundary, acceptance criteria, and rollback units."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-23-cross-domain-gallery-demonstration-priority.md",
+      "summary": "Accepted priority and scope guardrails for the next-week cross-domain gallery."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/authoring/llm-generation-entrypoint.md",
+      "summary": "Canonical routing and authority boundary for model-authored generation work."
+    }
+  ],
+  "verification": [
+    "npm run test:cross-domain-gallery-preflight",
+    "npm run test:cross-domain-gallery",
+    "npm run visual:code-theme",
+    "npm run visual:graph-2d-translation",
+    "npm run visual:graph-3d-saddle",
+    "npm run visual:cross-domain-gallery",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "git diff --check -- project memory",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T03:31:23.833Z",
+      "notes": "Tracked project-memory changes contain no whitespace errors; unrelated dirty paths remain excluded by contract."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T03:31:25.070Z",
+      "notes": "Workspace valid after contract issuance and slice start."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Slice 1 established the approved 30-slice gallery contract, exact source references, verification envelope, and a worktree fence that excludes unrelated economics and browser-test changes."
+  },
+  "allowedWork": [
+    "Repair the two documented generation and explanation baseline drifts.",
+    "Add a thin shared result projection and router over domain-owned frontends.",
+    "Route exact canonical equation and code requests without changing approved choreography.",
+    "Tune TypeScript light mode, pressure it with Python after review, and promote only the proven optical seam.",
+    "Build one exact Graph2D quadratic-translation frontend, asset, SVG adapter, and Catalogue route.",
+    "Build one exact fixed-camera Graph3D saddle-parameter frontend, asset, WebGL and SVG projection, and Catalogue route.",
+    "Add pinned conformance fixtures, stable scoped visual commands, Catalogue collection disclosure, direct URLs, Review evidence, tests, and project memory."
+  ],
+  "disallowedWork": [
+    "Do not build arbitrary graph formula parsers, a universal semantic IR, or a universal renderer.",
+    "Do not add a live LLM or network dependency to the gallery.",
+    "Do not compile arbitrary code variants into counterfeit animation artifacts.",
+    "Do not migrate Scheme, the public TypeScript lesson, or the global application theme.",
+    "Do not change derivative choreography, the operator scope-box treatment, integration, trigonometric rewrites, inequalities, limits, or root families.",
+    "Do not claim Graph2D or Graph3D family promotion from one exemplar.",
+    "Do not modify the existing dirty economics lesson, generated economics publication, or editor-animation-visuals browser test."
+  ],
+  "goal": "Ship a production-backed curated gallery with the approved logarithmic solve, bounded Graph2D translation, bounded Graph3D saddle transformation, reviewed programming light mode, and an honest typed gap through one governed generation and hosting envelope.",
+  "target": "workflow.kp.delivery",
+  "slices": [
+    {
+      "id": "next-action.kp.cross-domain-gallery.s01",
+      "title": "Contract-boundary-and-worktree-fence",
+      "summary": "Issued the approved contract, preserved unrelated dirty paths, validated project-memory whitespace and the Theseus workspace, and recorded the stale capsule as partial context.",
+      "status": "complete"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s02",
+      "title": "Exponential-pressure-fixture-repair",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s03",
+      "title": "Generated-linear-solve-parity-repair",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s04",
+      "title": "Stable-gallery-preflight-gate",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s05",
+      "title": "Shared-generation-result-projection",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s06",
+      "title": "Thin-cross-domain-router",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s07",
+      "title": "Canonical-logarithmic-solve-route",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s08",
+      "title": "Canonical-TypeScript-code-route",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s09",
+      "title": "Pinned-conformance-packet-seed",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s10",
+      "title": "TypeScript-theme-role-contract",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s11",
+      "title": "TypeScript-dark-parity-retokenization",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s12",
+      "title": "TypeScript-light-exemplar-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s13",
+      "title": "Python-light-theme-pressure",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s14",
+      "title": "Cross-language-theme-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s15",
+      "title": "Shared-code-optical-profile-promotion",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s16",
+      "title": "Bounded-Graph2D-function-request",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s17",
+      "title": "Graph2D-semantic-trace-and-asset",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s18",
+      "title": "Graph2D-SVG-runtime-adapter",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s19",
+      "title": "Graph2D-generation-and-Catalogue-route",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s20",
+      "title": "Graph2D-visual-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s21",
+      "title": "Bounded-Graph3D-scene-request",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s22",
+      "title": "Graph3D-semantic-trace-and-frames",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s23",
+      "title": "Bounded-Graph3D-host-registry",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s24",
+      "title": "Graph3D-WebGL-and-SVG-paint",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s25",
+      "title": "Graph3D-generation-and-Catalogue-route",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s26",
+      "title": "Graph3D-visual-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s27",
+      "title": "Completed-cross-domain-conformance-packet",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s28",
+      "title": "Curated-Catalogue-collection",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s29",
+      "title": "Cross-domain-gallery-visual-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s30",
+      "title": "Release-gates-and-closeout",
+      "status": "planned"
+    }
+  ]
+}

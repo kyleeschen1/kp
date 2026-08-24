@@ -74,6 +74,21 @@ choice; do not clone the derivative-specific trace. See
 `decisions/2026-08-23-flat-2d-baseline-and-deferred-symbolic-materiality.md`
 and `reviews/2026-08-23-animation-governance-epoch-v2-derivative-checkpoint.md`.
 
+For the next-week demonstration, the immediate bounded priority is now a
+curated cross-domain generation gallery: one equation, one Graph2D, one
+Graph3D, one code artifact, and one honest typed gap entering through the
+shared generation envelope while retaining domain-owned verification and
+rendering. Build its pinned requests and result dispositions through intended
+production seams so they remain useful as conformance cases. Use the approved
+`2^x = 7` logarithmic solve as the recommended equation reference and make an
+explicit TypeScript light theme the first code optical checkpoint. Light and
+dark are separately tuned endpoints over shared syntax and attention roles;
+the TypeScript checkpoint may authorize Python pressure, not a global theme
+migration. Integration, trigonometric rewrites, inequality reversal, limits,
+and the other post-derivative family candidates remain live options after this
+deadline rather than being discarded. See
+`decisions/2026-08-23-cross-domain-gallery-demonstration-priority.md`.
+
 ## One Active Lane
 
 The repository contains a large evidence portfolio, not a large active queue.
@@ -290,6 +305,19 @@ Only this repository sequence is active:
    identity but make its visible treatment a renderer policy so every caller
    can later switch from `outline` to `salience-only` or `none` together. See
    `reviews/2026-08-23-evaluation-authority-convergence-run-proposal.md`.
+38. **Cross-domain gallery demonstration:** accepted as the immediate bounded
+   priority for next week. After repairing the two focused generation and
+   explanation baseline drifts, project the approved `2^x = 7` solve, one
+   bounded Graph2D function transformation, one bounded Graph3D semantic-scene
+   transformation, the existing TypeScript refactor, and one typed refusal
+   through the common request, capability, host, URL, Review, and evidence
+   envelope. Treat the pinned packet as durable conformance evidence. Add a
+   separately tuned TypeScript light optical endpoint, stop for human review,
+   and use Python as the second caller before promoting a shared code-theme
+   seam. Preserve domain-owned frontends and renderers; do not build a
+   universal graph generator, arbitrary code animator, or global theme
+   migration. See
+   `reviews/2026-08-23-cross-domain-gallery-pipeline-next-step-review.md`.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.
