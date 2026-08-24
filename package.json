@@ -469,6 +469,8 @@
     "dev:python-refactor-visual": "vite --host 127.0.0.1 --port 4184 --strictPort",
     "visual:python-refactor": "playwright test --config playwright.python-refactor.config.ts --project=chromium --workers=1",
     "visual:python-code-theme": "playwright test --config playwright.python-code-theme.config.ts --project=chromium --workers=1",
+    "dev:cross-language-code-theme-visual": "vite --host 127.0.0.1 --port 4185 --strictPort",
+    "visual:cross-language-code-theme": "playwright test --config playwright.cross-language-code-theme.config.ts --project=chromium --workers=1",
     "test:python-refactor": "node --disable-warning=ExperimentalWarning --test --test-concurrency=2 tests/python-*.test.ts",
     "visual:generated-linear-solve": "npm run build && node --disable-warning=ExperimentalWarning scripts/capture-generated-linear-solve-review.ts",
     "visual:contact-sheet": "node --disable-warning=ExperimentalWarning scripts/capture-visual-contact-sheet.ts",

@@ -95,6 +95,20 @@
       "scope": "broad",
       "checkedAt": "2026-08-24T14:37:35.287Z",
       "notes": "Dependency, framework, semantic, equation, and cross-domain boundaries pass."
+    },
+    {
+      "command": "npm run visual:cross-language-code-theme",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T14:41:57.742Z",
+      "notes": "Chromium generated and verified a six-panel TypeScript/Python dark-light comparison; all common roles and normalized endpoint values align, while TypeScript alone owns syntax.property."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T14:42:03.852Z",
+      "notes": "Checkpoint config, browser comparison, and contract comparison compile cleanly across app, test, Svelte, and domain projects."
     }
   ],
   "allowedWork": [
@@ -213,7 +227,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s14",
       "title": "Cross-language-theme-checkpoint",
-      "status": "planned"
+      "summary": "Human checkpoint ready: stable six-panel Chromium sheet compares TypeScript and Python at dark convergence, light convergence, and light settlement. Eleven families and all common normalized endpoints match; TypeScript alone declares syntax.property. Await explicit visual approval before s15 shared-profile promotion.",
+      "status": "in-progress"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s15",
