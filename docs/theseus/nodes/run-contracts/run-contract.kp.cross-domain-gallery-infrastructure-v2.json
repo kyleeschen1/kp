@@ -997,8 +997,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s29",
       "title": "Cross-domain-gallery-visual-checkpoint",
-      "summary": "Human approved the gallery content but requested that gallery mode not remain permanently open; revise it to an explicit default-off toggle and reopen the visual checkpoint.",
-      "status": "in-progress"
+      "summary": "Human approved the revised gallery checkpoint on 2026-08-24. The Catalogue remains ordinary by default; native gallery mode reveals the curated five-case collection and matching Generated through disclosure together, preserves the player across toggle and in-shell selection, and remains responsive. Commit 256ab3ab2 is the accepted implementation rollback unit.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s30",
