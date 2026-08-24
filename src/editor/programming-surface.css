@@ -218,10 +218,15 @@
 
 .editor-animation-player__surface:has(.kp-typescript-refactor) {
   border-style: solid;
-  color: #e8ebf2;
-  background: #0d0e1c;
+  color: var(--kp-typescript-paint-foreground-narration, #e8ebf2);
+  background: var(--kp-typescript-paint-surface-panel, #0d0e1c);
   letter-spacing: normal;
   text-transform: none;
+}
+
+.editor-animation-player:focus-visible .kp-typescript-refactor {
+  outline: var(--kp-typescript-paint-focus-ring-outline);
+  outline-offset: 0.22rem;
 }
 
 /* Python remains a deliberately local second caller until visual review. Its

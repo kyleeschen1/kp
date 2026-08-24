@@ -13,6 +13,10 @@ import { renderKpTypeScriptRefactorCodeHtml } from
 import { renderKpTypeScriptRefactorDomFrame } from
   "../rendering/typescript-refactor-dom-session.ts";
 import {
+  applyKpTypeScriptRefactorOpticalEndpoint,
+  resolveKpTypeScriptRefactorOpticalEndpoint
+} from "../rendering/typescript-refactor-optical-theme.ts";
+import {
   KP_EDITOR_ANIMATION_DISPOSE_EVENT
 } from "./animation-player-controller.ts";
 import {
@@ -34,6 +38,10 @@ export const kpEditorTypeScriptRefactorSurfaceAdapter:
         state.surface.slotKinds.includes("programming");
     },
     render({ player, slot, state }) {
+      const endpoint = resolveKpTypeScriptRefactorOpticalEndpoint(
+        catalogueTheme(player)
+      );
+      applyKpTypeScriptRefactorOpticalEndpoint({ root: slot, endpoint });
       const sample = sampleKpTypeScriptRefactorScore(
         exemplar.score,
         state.progress * exemplar.score.durationMs
@@ -58,6 +66,7 @@ export const kpEditorTypeScriptRefactorSurfaceAdapter:
           narration: sample.narration,
           activeProjectionId: motion.accessibleProjectionId,
           focusSelectorIds: sample.focusSelectorIds,
+          theme: endpoint.id,
           accessibleDescription:
             `${exemplar.accessibility.title}. ${sample.narration}`
         });
@@ -73,6 +82,7 @@ export const kpEditorTypeScriptRefactorSurfaceAdapter:
           );
         }
       }
+      applyKpTypeScriptRefactorOpticalEndpoint({ root: shell, endpoint });
       renderKpTypeScriptRefactorDomFrame(shell, { motion, theater },
         exemplar.accessibility.title);
       slot.dataset["kpEditorProgrammingContract"] = "kp.typescript-refactor-score.v1";
@@ -88,4 +98,9 @@ export function registerKpEditorTypeScriptRefactorSurfaceAdapter(): () => void {
 function frameMode(player: HTMLElement): "animated" | "reduced-motion" | "static" {
   const mode = player.dataset["kpEditorAnimationAccessibilityMode"];
   return mode === "static" || mode === "reduced-motion" ? mode : "animated";
+}
+
+function catalogueTheme(player: HTMLElement): string | undefined {
+  return player.closest<HTMLElement>("[data-kp-animation-catalogue-theme]")
+    ?.dataset["kpAnimationCatalogueTheme"];
 }

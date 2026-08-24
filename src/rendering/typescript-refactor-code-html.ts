@@ -17,7 +17,7 @@ import {
 import { kpTypeScriptRefactorPaintRoleContract } from
   "./typescript-refactor-paint-role-contract.ts";
 import {
-  kpTypeScriptRefactorDarkOpticalEndpoint,
+  resolveKpTypeScriptRefactorOpticalEndpoint,
   serializeKpTypeScriptRefactorOpticalEndpoint
 } from "./typescript-refactor-optical-theme.ts";
 
@@ -28,13 +28,15 @@ export interface KpTypeScriptRefactorCodeHtmlInput {
   readonly activeProjectionId: KpTypeScriptRefactorSourceProjectionId;
   readonly focusSelectorIds: readonly string[];
   readonly accessibleDescription: string;
+  readonly theme?: "dark" | "light" | undefined;
 }
 
 export function renderKpTypeScriptRefactorCodeHtml(
   input: KpTypeScriptRefactorCodeHtmlInput
 ): string {
   const projections = createKpTypeScriptRefactorSourceProjections(input.semantics);
-  return `<section class="kp-typescript-refactor" data-kp-typescript-refactor-stage="${encodeKpEditorHtmlAttribute(input.stageId)}" data-kp-typescript-active-projection="${input.activeProjectionId}" data-kp-typescript-paint-contract="${kpTypeScriptRefactorPaintRoleContract.id}" data-kp-typescript-theme="${kpTypeScriptRefactorDarkOpticalEndpoint.id}" style="${serializeKpTypeScriptRefactorOpticalEndpoint(kpTypeScriptRefactorDarkOpticalEndpoint)}" aria-label="${encodeKpEditorHtmlAttribute(input.accessibleDescription)}">
+  const endpoint = resolveKpTypeScriptRefactorOpticalEndpoint(input.theme);
+  return `<section class="kp-typescript-refactor" data-kp-typescript-refactor-stage="${encodeKpEditorHtmlAttribute(input.stageId)}" data-kp-typescript-active-projection="${input.activeProjectionId}" data-kp-typescript-paint-contract="${kpTypeScriptRefactorPaintRoleContract.id}" data-kp-typescript-theme="${endpoint.id}" style="${serializeKpTypeScriptRefactorOpticalEndpoint(endpoint)}" aria-label="${encodeKpEditorHtmlAttribute(input.accessibleDescription)}">
     <header class="kp-typescript-refactor__file"><span>free-shipping.ts</span><span>TypeScript</span></header>
     <div class="kp-typescript-refactor__source" data-kp-typescript-source-owner>
       ${projections.map((projection) => renderProjection({

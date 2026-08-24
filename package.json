@@ -435,6 +435,7 @@
     "visual:programming-addition": "node --disable-warning=ExperimentalWarning scripts/capture-animation-catalogue.ts --scope programming-addition",
     "dev:typescript-refactor-visual": "vite --host 127.0.0.1 --port 4183 --strictPort",
     "visual:typescript-refactor": "playwright test --config playwright.typescript-refactor.config.ts --project=chromium --workers=1",
+    "visual:code-theme": "playwright test --config playwright.code-theme.config.ts --project=chromium --workers=1",
     "dev:public-typescript": "vite --config vite.public-typescript.config.ts",
     "typecheck:public-typescript": "tsc --project tsconfig.public-typescript.json --noEmit",
     "build:public-typescript": "vite build --config vite.public-typescript.config.ts",

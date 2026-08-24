@@ -401,11 +401,88 @@
       "scope": "standard",
       "checkedAt": "2026-08-24T04:20:33.412Z",
       "notes": "All application, Node, test, Svelte, and domain typechecks pass with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run visual:code-theme",
+      "status": "failed",
+      "scope": "visual-discovery",
+      "checkedAt": "2026-08-24T04:33:51.816Z",
+      "notes": "Initial harness attempts timed out because the test queried a withdrawal cohort at a frame where the semantic theater correctly emitted only transit tokens. The implementation was not implicated; the check was narrowed to observed frame roles and endpoint-level withdrawal validation."
+    },
+    {
+      "command": "npm run visual:code-theme",
+      "status": "passed",
+      "scope": "visual-checkpoint",
+      "checkedAt": "2026-08-24T04:33:53.164Z",
+      "notes": "Chromium passed seven deterministic dark/light/phone captures under opposing OS preferences. URL/host theme authority, exact geometry parity, at least 4.5 contrast for every observed syntax role, box-free focus, transit emphasis, keyboard focus ring, native DOM ownership, and no overflow all pass."
+    },
+    {
+      "command": "npm run visual:typescript-refactor",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-24T04:33:54.213Z",
+      "notes": "The canonical 11-frame dark TypeScript checkpoint still passes computed paint, geometry, direct-seek, reduced-motion, accessibility, and performance assertions."
+    },
+    {
+      "command": "npm run test:typescript-refactor",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T04:33:55.226Z",
+      "notes": "All 106 TypeScript compiler, semantic, motion, renderer, endpoint, role-contract, and public-projection assertions pass."
+    },
+    {
+      "command": "npm run verify:public-typescript",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-24T04:33:56.249Z",
+      "notes": "The intentionally unchanged public dark lesson passes typecheck, 5 publication tests, production build, gzip budgets, 6 Chromium enhancement/direct-seek/reduced-motion/phone/no-JavaScript checks."
+    },
+    {
+      "command": "npm run test:cross-domain-gallery",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T04:33:57.280Z",
+      "notes": "All 22 cross-domain route, result, explanation, and conformance-packet assertions remain green."
+    },
+    {
+      "command": "npm run test:cross-domain-gallery-preflight",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T04:33:58.316Z",
+      "notes": "All 27 baseline generation assertions remain green."
+    },
+    {
+      "command": "npm run check:animation-library-bundle-boundary",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T04:33:59.351Z",
+      "notes": "Internal studio build and browser bundle boundary pass; the optical endpoint adds no compiler or forbidden dependency."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T04:34:00.372Z",
+      "notes": "All dependency, semantic, compiler-authority, governance, and cross-domain conformance gates pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T04:34:01.389Z",
+      "notes": "All application, Node, test, Svelte, and domain typechecks pass with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T04:34:02.445Z",
+      "notes": "The production bundle builds successfully; existing large-chunk advisories remain warnings only."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 11 moved all canonical TypeScript renderer palette literals into one exact, validated dark optical endpoint and rewired CSS to semantic custom properties. Static output carries the endpoint without JavaScript, browser capture confirms unchanged computed colors and geometry across 11 states, and the intentionally separate public dark lesson remains intact."
+    "summary": "Slice 12 implemented an independently tuned TypeScript light endpoint and explicit Catalogue URL/host projection while retaining dark as the static/public default. A stable seven-frame code-theme harness proves OS-preference independence, 4.5-plus observed syntax contrast, geometry parity, box-free semantic focus, transit salience, keyboard focus indication, direct-seek determinism, and phone fit. Dark and public preservation, architecture, bundles, builds, and all focused tests pass. The approved run now stops before Python for human optical review."
   },
   "allowedWork": [
     "Repair the two documented generation and explanation baseline drifts.",
@@ -497,7 +574,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s12",
       "title": "TypeScript-light-exemplar-checkpoint",
-      "status": "planned"
+      "summary": "Shipped the explicit-host TypeScript light exemplar and stable dark/light visual command with deterministic, accessible, contrast-safe, geometry-preserving evidence; stopped at the mandatory human checkpoint before Python pressure or shared-theme promotion.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s13",

@@ -4,6 +4,8 @@ import test from "node:test";
 import {
   createKpTypeScriptRefactorOpticalEndpoint,
   kpTypeScriptRefactorDarkOpticalEndpoint,
+  kpTypeScriptRefactorLightOpticalEndpoint,
+  resolveKpTypeScriptRefactorOpticalEndpoint,
   serializeKpTypeScriptRefactorOpticalEndpoint
 } from "../src/rendering/typescript-refactor-optical-theme.ts";
 import { kpTypeScriptRefactorPaintRoleContract } from
@@ -27,6 +29,27 @@ test("dark endpoint covers the TypeScript paint contract exactly", () => {
     endpoint.properties["--kp-typescript-paint-withdrawal-filter"],
     "saturate(0.72) brightness(0.88)"
   );
+});
+
+test("light is an independently authored endpoint with non-glow withdrawal", () => {
+  const light = kpTypeScriptRefactorLightOpticalEndpoint;
+  assert.equal(resolveKpTypeScriptRefactorOpticalEndpoint("light"), light);
+  assert.equal(
+    light.properties["--kp-typescript-paint-surface-panel"],
+    "#fbfaf7"
+  );
+  assert.equal(
+    light.properties["--kp-typescript-paint-withdrawal-filter"],
+    "grayscale(0.32) opacity(0.72)"
+  );
+  assert.doesNotMatch(
+    light.properties["--kp-typescript-paint-withdrawal-filter"],
+    /brightness|saturate/u
+  );
+  assert.notDeepEqual(light.properties,
+    kpTypeScriptRefactorDarkOpticalEndpoint.properties);
+  assert.equal(resolveKpTypeScriptRefactorOpticalEndpoint("sepia"),
+    kpTypeScriptRefactorDarkOpticalEndpoint);
 });
 
 test("dark endpoint serializes deterministically in contract order", () => {
