@@ -1,6 +1,6 @@
 # Equation-Family Return Next-Step Review
 
-Status: recommendation awaiting family selection
+Status: approved; queued after cross-domain gallery closeout
 Reviewed: 2026-08-24
 Active thread: `../threads/animation-catalogue.md`
 
@@ -112,8 +112,9 @@ caller before promotion. A sum-rule case such as
 it tests scope, linearity, multiple persistent terms, and one final constant
 without jumping to substitution or definite integration.
 
-## Decision Needed
+## Selection
 
-Approve the bounded integration exemplar, choose inequality reversal instead,
-or retain another candidate. No implementation should start from this review
-alone.
+The user approved the bounded integration exemplar on 2026-08-24 and directed
+that it begin after the current cross-domain gallery run finishes. The gallery
+is at its mandatory curated visual checkpoint; integration implementation must
+not start before that checkpoint and release closeout complete.

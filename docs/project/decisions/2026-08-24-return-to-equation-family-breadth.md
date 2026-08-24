@@ -11,10 +11,11 @@ Catalogue lane to equation-family breadth. Pause the remaining cross-domain
 gallery assembly and release slices rather than treating the demonstration
 run as complete or discarding its finished infrastructure.
 
-This decision selects the work category, not the next mathematical family.
-The accompanying next-step review recommends one reversible indefinite-
-integration power-rule exemplar and awaits explicit family selection before
-an execution proposal is issued.
+The initial decision selected the work category rather than the next
+mathematical family. The user subsequently approved the accompanying review's
+one reversible indefinite-integration power-rule exemplar. Integration is now
+queued immediately after the current gallery run passes its human checkpoint
+and release closeout.
 
 ## Current Boundary
 

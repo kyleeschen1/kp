@@ -4,8 +4,8 @@ Status: supporting
 Last Updated: 2026-08-24
 Current Next Action: binder promotion, the bounded Graph3D and Graph2D
 exemplars, and the differentiation exemplar are complete. The active Catalogue
-review recommends one reversible indefinite-integration power-rule exemplar
-next, pending explicit family selection. Route it through the governed
+review's one reversible indefinite-integration power-rule exemplar is approved
+and queued after the current gallery closeout. Route it through the governed
 construction request and existing equation compiler; do not introduce a
 parallel model-authored path. Treat common symbolic transformations through
 Calculus BC as the coverage horizon, derive every maturity claim, and retain

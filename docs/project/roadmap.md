@@ -79,9 +79,10 @@ Graph3D human checkpoint. Its equation, code, Graph2D, Graph3D, light-theme,
 typed-gap, and production-envelope work remains durable, while final curated
 assembly and release closeout are explicitly paused. The active lane has
 returned to equation-family breadth. The next-step review recommends one
-reversible indefinite-integration power-rule exemplar, pending explicit family
-selection, with inequality reversal retained as the strongest non-calculus
-alternative. See
+reversible indefinite-integration power-rule exemplar, which the user approved
+on 2026-08-24 for execution after the gallery's visual checkpoint and release
+closeout. Inequality reversal remains the strongest non-calculus alternative.
+See
 `decisions/2026-08-24-return-to-equation-family-breadth.md` and
 `reviews/2026-08-24-equation-family-return-next-step-review.md`.
 
@@ -309,13 +310,13 @@ Only this repository sequence is active:
    durable. Curated collection assembly, gallery-wide review, and release
    closeout remain unfinished slices rather than silently completed work. See
    `reviews/2026-08-23-cross-domain-gallery-pipeline-next-step-review.md`.
-39. **Return to equation-family breadth:** active at family selection. Build
-   no broad framework yet. The recommended next step is one governed
+39. **Return to equation-family breadth:** selected and queued after the
+   current gallery closeout. Build no broad framework yet. The approved next
+   step is one governed
    indefinite-integration power-rule exemplar through the canonical equation
    host, with a renderer-owned operator-scope policy and a human checkpoint
-   before a second caller or promotion. The exact family awaits explicit
-   approval; inequality reversal remains the strongest non-calculus
-   alternative. See
+   before a second caller or promotion. Inequality reversal remains the
+   strongest non-calculus alternative. See
    `reviews/2026-08-24-equation-family-return-next-step-review.md`.
 
 Educator discovery continues as an external product-research track. Public
