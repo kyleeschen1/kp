@@ -171,7 +171,8 @@
     {
       "id": "kp.eval-auth.s21",
       "title": "boundary-verification",
-      "status": "planned"
+      "summary": "The full release boundary passed without implementation changes: 27 evaluation-authority tests, 32 derivative tests, 11 equation-preservation laws, all architecture and type gates, standalone/embedded host parity, four deterministic derivative Chromium checks, four promoted standalone family checks, and the stable nine-frame derivative capture.",
+      "status": "complete"
     },
     {
       "id": "kp.eval-auth.s22",
