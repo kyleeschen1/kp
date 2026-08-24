@@ -40,6 +40,29 @@
     "npm run build",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s01 baseline",
+      "checkedAt": "2026-08-24T23:50:24.647Z",
+      "notes": "Baseline command covers the current integration fixture, semantic map, native KaTeX annotations, import path, and terminal migration."
+    },
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "slice s01 baseline",
+      "checkedAt": "2026-08-24T23:50:25.920Z",
+      "notes": "Protected derivative exemplar baseline passed unchanged."
+    },
+    {
+      "command": "npm run test:evaluation-authority-convergence",
+      "status": "passed",
+      "scope": "slice s01 baseline",
+      "checkedAt": "2026-08-24T23:50:27.010Z",
+      "notes": "Protected singular evaluation-authority baseline passed unchanged."
+    }
+  ],
   "allowedWork": [
     "Revise only the existing unreviewed integration power-rule asset to the approved exact three-state sequence.",
     "Add exact integration semantics, lineage, assumptions, bounded typed gaps, and governed construction evidence.",
@@ -73,7 +96,8 @@
     {
       "id": "next-action.kp.integration-power-rule.s01",
       "title": "Baseline-and-protected-path-fence",
-      "status": "planned"
+      "summary": "Established a scoped integration test command, documented the canonical host and pre-change behavior, fenced derivative and evaluation baselines, and preserved every protected user path; all three baselines pass.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.integration-power-rule.s02",
