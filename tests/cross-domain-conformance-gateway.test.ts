@@ -52,8 +52,8 @@ function compile() {
 test("one common gateway covers graph, programming, diagram, and 3D", () => {
   const gateway = compileKpCrossDomainConformanceGateway(compile());
   assert.deepEqual(gateway.summary, {
-    assetCount: 17,
-    domainCounts: { graph: 8, programming: 6, diagram: 3 },
+    assetCount: 18,
+    domainCounts: { graph: 9, programming: 6, diagram: 3 },
     threeDimensionalAssetCount: 1
   });
   assert.equal(gateway.entries.every(({ rendererAdapterIds }) =>
@@ -63,6 +63,12 @@ test("one common gateway covers graph, programming, diagram, and 3D", () => {
     threeDimensional
   ).map(({ assetId }) => assetId), [
     "animation.graph.surface-mode.mesh-to-donut"
+  ]);
+  assert.deepEqual(gateway.entries.find(({ assetId }) =>
+    assetId === "animation.graph-2d.quadratic-translate-right-two"
+  )?.rendererAdapterIds, [
+    "editor-animation-surface.graph.svg",
+    "adapter.graph-2d.quadratic-translation.svg"
   ]);
 });
 
@@ -76,7 +82,7 @@ test("equation grammar remains limited to mixed assets' equation segment", () =>
   ]);
   assert.equal(gateway.entries.filter(({ equationGovernance }) =>
     equationGovernance === "absent"
-  ).length, 15);
+  ).length, 16);
 });
 
 test("pure cross-domain assets fail closed if routed through equation grammar", () => {

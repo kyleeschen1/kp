@@ -35,6 +35,9 @@ import { createDotProjectionAnimationAsset } from "./dot-projection-adapter.ts";
 import {
   createIntegralAreaSweepAnimationAsset
 } from "./integral-area-sweep-adapter.ts";
+import {
+  createKpGraph2DQuadraticTranslationAnimationAsset
+} from "./graph-2d-quadratic-translation-asset.ts";
 
 interface VectorObject {
   readonly id: string;
@@ -58,6 +61,7 @@ export function createGraphAnimationAssets(): readonly KpAnimationAsset[] {
   return [
     createGraphSurfaceModeAnimationAsset(),
     createLinearMapVectorAnimationAsset(),
+    createKpGraph2DQuadraticTranslationAnimationAsset().animation,
     createDerivativeTangentAnimationAsset(),
     createIntegralAreaSweepAnimationAsset(),
     createDotProjectionAnimationAsset()

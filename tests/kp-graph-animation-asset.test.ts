@@ -107,6 +107,7 @@ test("graph animation placeholders are available through the animation catalog",
     [
       "animation.graph.surface-mode.mesh-to-donut",
       "animation.graph.vector.linear-map-scale",
+      "animation.graph-2d.quadratic-translate-right-two",
       "animation.derivative-rules.tangent-graph",
       "animation.integral-ftc.area-sweep",
       "animation.dot-projection.basic"

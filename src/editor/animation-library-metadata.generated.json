@@ -1870,6 +1870,36 @@
     }
   },
   {
+    "id": "editor-animation.animation.graph-2d.quadratic-translate-right-two",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.graph-2d.quadratic-translate-right-two",
+    "title": "Translate a quadratic function",
+    "summary": "Follow one parabola and its material points as y = x² becomes y = (x − 2)².",
+    "renderTargetKinds": [
+      "graph"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2200,
+    "beatCount": 44,
+    "tags": [
+      "animation",
+      "graph-2d",
+      "quadratic",
+      "function-translation"
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
+  },
+  {
     "id": "editor-animation.animation.derivative-rules.tangent-graph",
     "kind": "editor-animation-descriptor",
     "animationId": "animation.derivative-rules.tangent-graph",

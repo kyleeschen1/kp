@@ -70,7 +70,7 @@ test("every capability loader remains a literal dynamic import", async () => {
   );
   const paths = [
     "equation-surface-capability.ts",
-    "finite-sum-surface-capability.ts",
+    "finite-binder-surface-capability.ts",
     "log-exponent-surface-capability.ts",
     "logarithm-change-of-base-surface-capability.ts",
     "log-quotient-surface-capability.ts",

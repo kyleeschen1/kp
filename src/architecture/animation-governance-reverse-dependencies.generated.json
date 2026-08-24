@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.animation-governance-reverse-dependencies.v1",
   "kind": "animation-governance-reverse-dependencies",
-  "assetCount": 58,
+  "assetCount": 59,
   "dependencies": [
     {
       "dependencyId": "atomic-v1",
@@ -535,6 +535,7 @@
         "animation.generated.radical.square-root-as-power",
         "animation.generated.substitute-three",
         "animation.generated.substitute-three.provisional-incorrect",
+        "animation.graph-2d.quadratic-translate-right-two",
         "animation.graph.surface-mode.mesh-to-donut",
         "animation.graph.vector.linear-map-scale",
         "animation.inequality.sign-flip.basic",
@@ -648,6 +649,7 @@
         "animation.generated.radical.square-root-as-power",
         "animation.generated.substitute-three",
         "animation.generated.substitute-three.provisional-incorrect",
+        "animation.graph-2d.quadratic-translate-right-two",
         "animation.graph.surface-mode.mesh-to-donut",
         "animation.graph.vector.linear-map-scale",
         "animation.inequality.sign-flip.basic",
@@ -716,6 +718,19 @@
         "animation.operation-evaluation.two-times-three",
         "animation.sample.fourier-transform-pair",
         "animation.sample.fundamental-theorem-calculus"
+      ]
+    },
+    {
+      "dependencyId": "adapter.graph-2d.quadratic-translation.svg",
+      "kind": "renderer",
+      "callerAssetIds": [
+        "animation.derivative-rules.tangent-graph",
+        "animation.dot-projection.basic",
+        "animation.generated.linear-algebra.matrix-vector.two-by-two",
+        "animation.graph-2d.quadratic-translate-right-two",
+        "animation.graph.vector.linear-map-scale",
+        "animation.integral-ftc.area-sweep",
+        "animation.physics.constant-force-work-energy"
       ]
     },
     {
@@ -826,6 +841,7 @@
         "animation.derivative-rules.tangent-graph",
         "animation.dot-projection.basic",
         "animation.generated.linear-algebra.matrix-vector.two-by-two",
+        "animation.graph-2d.quadratic-translate-right-two",
         "animation.graph.vector.linear-map-scale",
         "animation.integral-ftc.area-sweep",
         "animation.physics.constant-force-work-energy"
@@ -1013,6 +1029,7 @@
         "animation.dot-projection.basic",
         "animation.economics.supply-demand-equilibrium-shift",
         "animation.generated.linear-algebra.matrix-vector.two-by-two",
+        "animation.graph-2d.quadratic-translate-right-two",
         "animation.graph.surface-mode.mesh-to-donut",
         "animation.graph.vector.linear-map-scale",
         "animation.integral-ftc.area-sweep",

@@ -2023,6 +2023,31 @@
     ]
   },
   {
+    "animationId": "animation.graph-2d.quadratic-translate-right-two",
+    "title": "Translate a quadratic function",
+    "summary": "Follow one parabola and its material points as y = x² becomes y = (x − 2)².",
+    "tags": [
+      "animation",
+      "editor",
+      "function-translation",
+      "graph-2d",
+      "quadratic"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.graph-2d.quadratic-translate-right-two",
+    "representations": [
+      {
+        "id": "editor-animation.animation.graph-2d.quadratic-translate-right-two",
+        "label": "Translate a quadratic function",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.graph-2d.quadratic-translate-right-two",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
     "animationId": "animation.algebra.exponential-homomorphism.difference-to-quotient",
     "title": "Turn an exponential difference into a quotient",
     "summary": "A typed Native KaTeX pressure caller for exponential quotient duality.",

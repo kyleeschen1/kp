@@ -2,7 +2,7 @@
   "schemaVersion": "kp.animation-governance-inventory.v1",
   "kind": "animation-governance-inventory",
   "summary": {
-    "assetCount": 58,
+    "assetCount": 59,
     "equationAssetCount": 43,
     "bypassedAssetCount": 1,
     "unsupportedAssetCount": 0
@@ -828,7 +828,8 @@
           "graph-svg-katex-labels"
         ],
         "adapterIds": [
-          "editor-animation-surface.graph.svg"
+          "editor-animation-surface.graph.svg",
+          "adapter.graph-2d.quadratic-translation.svg"
         ],
         "authority": "selected-capability-declarations"
       },
@@ -881,7 +882,8 @@
           "graph-svg-katex-labels"
         ],
         "adapterIds": [
-          "editor-animation-surface.graph.svg"
+          "editor-animation-surface.graph.svg",
+          "adapter.graph-2d.quadratic-translation.svg"
         ],
         "authority": "selected-capability-declarations"
       },
@@ -2324,7 +2326,8 @@
         ],
         "adapterIds": [
           "editor-animation-surface.equation.katex",
-          "editor-animation-surface.graph.svg"
+          "editor-animation-surface.graph.svg",
+          "adapter.graph-2d.quadratic-translation.svg"
         ],
         "authority": "selected-capability-declarations"
       },
@@ -2711,6 +2714,57 @@
     },
     {
       "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.graph-2d.quadratic-translate-right-two",
+      "title": "Translate a quadratic function",
+      "packId": "graph",
+      "renderTargetKinds": [
+        "graph"
+      ],
+      "domains": [
+        "graph"
+      ],
+      "surface": {
+        "kind": "graph",
+        "slotKinds": [
+          "graph"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "graph-svg-katex-labels"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.graph.svg",
+          "adapter.graph-2d.quadratic-translation.svg"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "not-applicable"
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "renderer-domain",
+        "opticalScale": "renderer-domain"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "translateGraph2DFunctionHorizontally"
+        ],
+        "presentationRecipeIds": []
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": []
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
       "assetId": "animation.graph.surface-mode.mesh-to-donut",
       "title": "Saddle surface mesh to donut",
       "packId": "graph",
@@ -2781,7 +2835,8 @@
           "graph-svg-katex-labels"
         ],
         "adapterIds": [
-          "editor-animation-surface.graph.svg"
+          "editor-animation-surface.graph.svg",
+          "adapter.graph-2d.quadratic-translation.svg"
         ],
         "authority": "selected-capability-declarations"
       },
@@ -2904,7 +2959,8 @@
           "graph-svg-katex-labels"
         ],
         "adapterIds": [
-          "editor-animation-surface.graph.svg"
+          "editor-animation-surface.graph.svg",
+          "adapter.graph-2d.quadratic-translation.svg"
         ],
         "authority": "selected-capability-declarations"
       },
@@ -3385,7 +3441,8 @@
           "graph-svg-katex-labels"
         ],
         "adapterIds": [
-          "editor-animation-surface.graph.svg"
+          "editor-animation-surface.graph.svg",
+          "adapter.graph-2d.quadratic-translation.svg"
         ],
         "authority": "selected-capability-declarations"
       },

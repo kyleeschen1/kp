@@ -287,7 +287,10 @@ export const kpEditorSelectedSurfaceCapabilityDeclarations = Object.freeze([
   declaration({
     capabilityId: "graph-svg-katex-labels",
     domain: "graph",
-    adapterIds: ["editor-animation-surface.graph.svg"],
+    adapterIds: [
+      "editor-animation-surface.graph.svg",
+      "adapter.graph-2d.quadratic-translation.svg"
+    ],
     registrationOwner: "capability-module-global-registry",
     async loadAndRegister(registry, registrationGuardAdapterId) {
       const client = await import("./graph-svg-surface-capability.ts");

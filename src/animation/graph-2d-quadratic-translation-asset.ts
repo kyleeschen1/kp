@@ -192,6 +192,8 @@ KpGraph2DQuadraticTranslationAnimationAsset {
       domain: "graph-2d",
       graphMotionKind: "quadratic-horizontal-translation",
       semanticAuthority: trace.id,
+      summary:
+        "Follow one parabola and its material points as y = x² becomes y = (x − 2)².",
       visualStatus: "provisional-until-human-checkpoint"
     }
   });

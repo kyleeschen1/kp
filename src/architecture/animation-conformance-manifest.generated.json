@@ -1337,7 +1337,8 @@
         ],
         "surfaceKind": "graph",
         "adapterIds": [
-          "editor-animation-surface.graph.svg"
+          "editor-animation-surface.graph.svg",
+          "adapter.graph-2d.quadratic-translation.svg"
         ]
       },
       "clock": {
@@ -1375,7 +1376,8 @@
           "family.calculus.derivative-rules"
         ],
         "rendererIds": [
-          "editor-animation-surface.graph.svg"
+          "editor-animation-surface.graph.svg",
+          "adapter.graph-2d.quadratic-translation.svg"
         ],
         "typographyPolicyIds": [
           "profile.graph.renderer-domain"
@@ -1439,7 +1441,8 @@
         ],
         "surfaceKind": "graph",
         "adapterIds": [
-          "editor-animation-surface.graph.svg"
+          "editor-animation-surface.graph.svg",
+          "adapter.graph-2d.quadratic-translation.svg"
         ]
       },
       "clock": {
@@ -1477,7 +1480,8 @@
           "family.linear-algebra.dot-projection"
         ],
         "rendererIds": [
-          "editor-animation-surface.graph.svg"
+          "editor-animation-surface.graph.svg",
+          "adapter.graph-2d.quadratic-translation.svg"
         ],
         "typographyPolicyIds": [
           "profile.graph.renderer-domain"
@@ -3834,7 +3838,8 @@
         "surfaceKind": "composite",
         "adapterIds": [
           "editor-animation-surface.equation.katex",
-          "editor-animation-surface.graph.svg"
+          "editor-animation-surface.graph.svg",
+          "adapter.graph-2d.quadratic-translation.svg"
         ]
       },
       "clock": {
@@ -3895,7 +3900,8 @@
         ],
         "rendererIds": [
           "editor-animation-surface.equation.katex",
-          "editor-animation-surface.graph.svg"
+          "editor-animation-surface.graph.svg",
+          "adapter.graph-2d.quadratic-translation.svg"
         ],
         "typographyPolicyIds": [
           "profile.equation.declared.kp.presentation-profile.v1.kp-profile-0b6278ca",
@@ -4496,6 +4502,107 @@
     {
       "schemaVersion": "kp.animation-conformance-manifest.v1",
       "kind": "animation-conformance-manifest",
+      "assetId": "animation.graph-2d.quadratic-translate-right-two",
+      "domains": [
+        "graph"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.graph-2d.quadratic-translate-right-two.v1",
+        "transformationIds": [
+          "transform.graph-2d.quadratic-translate-right-two.v1"
+        ],
+        "transformationTreeRootId": "transform.graph-2d.quadratic-translate-right-two.v1",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.graph-2d.quadratic-translate-right-two"
+        ],
+        "renderTargetKinds": [
+          "graph"
+        ],
+        "surfaceKind": "graph",
+        "adapterIds": [
+          "editor-animation-surface.graph.svg",
+          "adapter.graph-2d.quadratic-translation.svg"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.graph-2d.quadratic-translate-right-two",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
+        ]
+      },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "graph",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "not-applicable",
+          "profileId": "profile.graph.renderer-domain",
+          "profileFingerprint": "kp-profile-936a5a0a"
+        }
+      ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [],
+        "rendererIds": [
+          "editor-animation-surface.graph.svg",
+          "adapter.graph-2d.quadratic-translation.svg"
+        ],
+        "typographyPolicyIds": [
+          "profile.graph.renderer-domain"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "graph"
+        ],
+        "rendererCapabilityIds": [
+          "graph-svg-katex-labels"
+        ],
+        "interactive": [],
+        "exports": [
+          "static-step"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "asset-presentation-constraints-missing"
+        ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.graph-2d.quadratic-translate-right-two",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
       "assetId": "animation.graph.surface-mode.mesh-to-donut",
       "domains": [
         "graph"
@@ -4614,7 +4721,8 @@
         ],
         "surfaceKind": "graph",
         "adapterIds": [
-          "editor-animation-surface.graph.svg"
+          "editor-animation-surface.graph.svg",
+          "adapter.graph-2d.quadratic-translation.svg"
         ]
       },
       "clock": {
@@ -4652,7 +4760,8 @@
           "family.linear-algebra.vector-add-scale"
         ],
         "rendererIds": [
-          "editor-animation-surface.graph.svg"
+          "editor-animation-surface.graph.svg",
+          "adapter.graph-2d.quadratic-translation.svg"
         ],
         "typographyPolicyIds": [
           "profile.graph.renderer-domain"
@@ -4828,7 +4937,8 @@
         ],
         "surfaceKind": "graph",
         "adapterIds": [
-          "editor-animation-surface.graph.svg"
+          "editor-animation-surface.graph.svg",
+          "adapter.graph-2d.quadratic-translation.svg"
         ]
       },
       "clock": {
@@ -4866,7 +4976,8 @@
           "family.calculus.integral-ftc"
         ],
         "rendererIds": [
-          "editor-animation-surface.graph.svg"
+          "editor-animation-surface.graph.svg",
+          "adapter.graph-2d.quadratic-translation.svg"
         ],
         "typographyPolicyIds": [
           "profile.graph.renderer-domain"
@@ -5652,7 +5763,8 @@
         ],
         "surfaceKind": "graph",
         "adapterIds": [
-          "editor-animation-surface.graph.svg"
+          "editor-animation-surface.graph.svg",
+          "adapter.graph-2d.quadratic-translation.svg"
         ]
       },
       "clock": {
@@ -5688,7 +5800,8 @@
         ],
         "motifIds": [],
         "rendererIds": [
-          "editor-animation-surface.graph.svg"
+          "editor-animation-surface.graph.svg",
+          "adapter.graph-2d.quadratic-translation.svg"
         ],
         "typographyPolicyIds": [
           "profile.graph.renderer-domain"

@@ -317,6 +317,14 @@ export const kpAnimationConformanceRegistrationDeclarations = [
   },
   {
     "kind": "manifest-ref",
+    "assetId": "animation.graph-2d.quadratic-translate-right-two",
+    "packId": "graph",
+    "manifestId": "manifest.animation.graph-2d.quadratic-translate-right-two",
+    "policyEpochId": "policy.animation.legacy.v1",
+    "disposition": "compatibility"
+  },
+  {
+    "kind": "manifest-ref",
     "assetId": "animation.graph.surface-mode.mesh-to-donut",
     "packId": "graph",
     "manifestId": "manifest.animation.graph.surface-mode.mesh-to-donut",

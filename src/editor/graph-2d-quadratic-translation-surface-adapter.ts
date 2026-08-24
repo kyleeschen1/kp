@@ -31,8 +31,11 @@ const runtimeLifecycle = new KpGraph2DRuntimeSessionLifecycle<
   KpGraph2DQuadraticTranslationSvgRuntimeSession
 >(createKpGraph2DQuadraticTranslationSvgRuntimeSession);
 
+export const KP_EDITOR_GRAPH_2D_QUADRATIC_TRANSLATION_ADAPTER_ID =
+  "adapter.graph-2d.quadratic-translation.svg" as const;
+
 const lifecycleAdapter = createKpEditorGraphSvgViewportLifecycleAdapter({
-  adapterId: "adapter.graph-2d.quadratic-translation.svg",
+  adapterId: KP_EDITOR_GRAPH_2D_QUADRATIC_TRANSLATION_ADAPTER_ID,
   supportedAnimationIds: [KP_GRAPH_2D_QUADRATIC_TRANSLATION_ANIMATION_ID],
   renderer: {
     presentation() {

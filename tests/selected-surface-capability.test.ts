@@ -63,6 +63,10 @@ test("selected surface capabilities keep rich renderers explicit", () => {
     slotKinds: ["graph"]
   }), ["graph-svg-katex-labels"]);
   assert.deepEqual(deriveKpEditorSelectedSurfaceCapabilities({
+    animationId: "animation.graph-2d.quadratic-translate-right-two",
+    slotKinds: ["graph"]
+  }), ["graph-svg-katex-labels"]);
+  assert.deepEqual(deriveKpEditorSelectedSurfaceCapabilities({
     animationId: "animation.economics.supply-demand-equilibrium-shift",
     slotKinds: ["graph"]
   }), ["graph-svg-economics"]);

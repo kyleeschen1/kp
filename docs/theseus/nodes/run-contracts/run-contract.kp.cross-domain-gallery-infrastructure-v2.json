@@ -298,6 +298,55 @@
       "scope": "broad",
       "checkedAt": "2026-08-24T21:10:44.673Z",
       "notes": "Workspace validates at 1059 nodes and 25324 events after completing the Graph2D SVG runtime adapter slice."
+    },
+    {
+      "command": "npm run test:animation-domain-frontends",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T21:27:16.640Z",
+      "notes": "42 Graph2D request, semantic trace, runtime asset, retained SVG, and typed repair checks pass."
+    },
+    {
+      "command": "npm run test:cross-domain-gallery",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T21:27:17.893Z",
+      "notes": "26 shared router tests pass, including the compiled Graph2D artifact route and exact nearby repair gaps."
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T21:27:19.006Z",
+      "notes": "36 canonical Catalogue host, selection, capability, navigation, and lifecycle tests pass."
+    },
+    {
+      "command": "npm run visual:graph-2d-translation",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T21:27:20.127Z",
+      "notes": "Chromium verifies direct route, exact adapter, retained curve identity, fixed axes, deterministic seek and rewind, responsive fit, accessibility, and review captures."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T21:27:21.212Z",
+      "notes": "Dependency, semantic, equation, governance, and cross-domain conformance gates pass with the new pure Graph2D asset."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T21:27:22.287Z",
+      "notes": "Full typecheck, publication check, and production Vite build pass; Graph2D asset and exact adapter remain lazy chunks."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T21:27:23.379Z",
+      "notes": "Workspace validates at 1059 nodes and 25326 events before slice completion."
     }
   ],
   "allowedWork": [
@@ -446,7 +495,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s19",
       "title": "Graph2D-generation-and-Catalogue-route",
-      "status": "planned"
+      "summary": "Routed the exact Graph2D request through the shared router as a compiled artifact; enrolled it in the lazy graph pack, Catalogue metadata, and conformance ledgers; registered the exact retained SVG adapter; and added stable browser evidence for direct routing, seek and rewind, persistent curve identity, fixed axes, responsive fit, and accessibility. Optical review remains at s20.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s20",
