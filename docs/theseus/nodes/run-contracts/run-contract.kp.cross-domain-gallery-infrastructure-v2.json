@@ -729,11 +729,18 @@
       "scope": "preservation",
       "checkedAt": "2026-08-24T23:10:02.872Z",
       "notes": "The five-case packet remains current after adding its compact browser projection."
+    },
+    {
+      "command": "npm run visual:cross-domain-gallery",
+      "status": "passed",
+      "scope": "slice s29 committed visual checkpoint",
+      "checkedAt": "2026-08-24T23:11:40.613Z",
+      "notes": "Two Chromium checks passed from commit 05e00f0de and regenerated four desktop domain captures plus one responsive collection capture for human review."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 28 complete. The curated cross-domain collection is assembled and mechanically verified; slice 29 opens the mandatory human visual checkpoint."
+    "summary": "HUMAN_CHECKPOINT at slice 29. Review the committed curated gallery across equation, code, Graph2D, Graph3D, typed-gap, disclosure, and responsive states before release closeout."
   },
   "allowedWork": [
     "Repair the two documented generation and explanation baseline drifts.",
@@ -941,7 +948,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s29",
       "title": "Cross-domain-gallery-visual-checkpoint",
-      "status": "planned"
+      "summary": "Opened the mandatory curated-gallery visual checkpoint against committed implementation 05e00f0de; human review is required before release closeout.",
+      "status": "in-progress"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s30",
