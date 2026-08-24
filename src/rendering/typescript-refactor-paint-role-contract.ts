@@ -53,6 +53,7 @@ const nonSyntaxSlots = [
   slot("chrome.background", "chrome", "background"),
   slot("chrome.foreground", "chrome", "color"),
   slot("foreground.primary", "foreground", "color"),
+  slot("foreground.narration", "foreground", "color"),
   slot("muted.annotation", "muted", "color"),
   slot("border.frame", "border", "border"),
   slot("border.divider", "border", "border"),

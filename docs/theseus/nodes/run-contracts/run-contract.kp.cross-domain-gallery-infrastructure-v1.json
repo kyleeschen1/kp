@@ -352,11 +352,60 @@
       "scope": "standard",
       "checkedAt": "2026-08-24T04:14:25.832Z",
       "notes": "All application, Node, test, Svelte, and domain typechecks pass with zero Svelte diagnostics."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typescript-refactor-optical-theme.test.ts tests/typescript-refactor-paint-role-contract.test.ts tests/typescript-refactor-css-clock.test.ts tests/typescript-refactor-code-html.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T04:20:26.889Z",
+      "notes": "All 11 endpoint coverage, deterministic serialization, fail-closed validation, paint-role, CSS-clock, and native HTML assertions pass."
+    },
+    {
+      "command": "npm run visual:typescript-refactor",
+      "status": "passed",
+      "scope": "visual",
+      "checkedAt": "2026-08-24T04:20:28.176Z",
+      "notes": "Chromium passed the canonical 11-checkpoint wide, phone, reduced-motion, direct-seek, computed-color, geometry, ownership, and accessibility capture; agent inspection found the dark endpoint visually unchanged."
+    },
+    {
+      "command": "npm run test:typescript-refactor",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T04:20:29.215Z",
+      "notes": "All 105 TypeScript compiler, semantic, motion, renderer, theme, and public-projection assertions pass."
+    },
+    {
+      "command": "npm run verify:public-typescript:fast",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-24T04:20:30.276Z",
+      "notes": "The intentionally unchanged dark public lesson typechecks and all 5 static/runtime publication assertions pass."
+    },
+    {
+      "command": "npm run test:cross-domain-gallery",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T04:20:31.323Z",
+      "notes": "All 22 gallery route, projection, and packet assertions remain green."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T04:20:32.364Z",
+      "notes": "All architecture, governance, compiler-authority, and cross-domain conformance gates pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-24T04:20:33.412Z",
+      "notes": "All application, Node, test, Svelte, and domain typechecks pass with zero Svelte diagnostics."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 10 defined the TypeScript-local kp.typescript-refactor-paint-roles.v1 contract. It inventories eleven optical concern families, binds every shared syntax role to a unique CSS property, declares explicit host theme authority, exposes the contract on the canonical stage, contains no palette values, and leaves compiler semantics, salience, presence, timing, geometry, host, and current dark paint unchanged."
+    "summary": "Slice 11 moved all canonical TypeScript renderer palette literals into one exact, validated dark optical endpoint and rewired CSS to semantic custom properties. Static output carries the endpoint without JavaScript, browser capture confirms unchanged computed colors and geometry across 11 states, and the intentionally separate public dark lesson remains intact."
   },
   "allowedWork": [
     "Repair the two documented generation and explanation baseline drifts.",
@@ -442,7 +491,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s11",
       "title": "TypeScript-dark-parity-retokenization",
-      "status": "planned"
+      "summary": "Retokenized the TypeScript renderer through the validated dark endpoint with exact prior paint values, no raw palette literals in CSS, deterministic static projection, and real Chromium parity across canonical states.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s12",
