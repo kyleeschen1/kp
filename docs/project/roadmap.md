@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-08-23
+Last Updated: 2026-08-24
 Status: active
 Active Thread: `threads/animation-catalogue.md`
 Supporting Threads:
@@ -63,12 +63,14 @@ universal renderer or semantic model. The accepted direction is recorded in
 
 Flat 2D is the canonical symbolic presentation. The bounded log-product
 material-depth experiment is preserved but deferred after human review; it is
-not a family-wide styling policy. The animation-governance v2 epoch is complete
-at the mandatory human checkpoint for the reversible differentiation exemplar
-`d/dx x^3 -> 3x^(3-1) -> 3x^2`. Review that canonical Catalogue behavior before
-a second caller or family promotion. An exemplar-local operator-triggered
-attention and decrement repair is the current candidate; its timing, path,
-size, and paint are not yet promoted. See
+not a family-wide styling policy. The animation-governance v2 epoch and the
+subsequent evaluation-authority convergence run are complete. Human review
+approved the reversible differentiation exemplar
+`d/dx x^3 -> 3x^(3-1) -> 3x^2` on 2026-08-24. Its operator-triggered scope box
+is approved for this exemplar only, not promoted as operator syntax. Before a
+second caller reuses the treatment, preserve semantic operator scope while
+making `outline`, `salience-only`, or `none` a renderer-owned presentation
+choice; do not clone the derivative-specific trace. See
 `decisions/2026-08-23-flat-2d-baseline-and-deferred-symbolic-materiality.md`
 and `reviews/2026-08-23-animation-governance-epoch-v2-derivative-checkpoint.md`.
 
@@ -275,10 +277,19 @@ Only this repository sequence is active:
    mandatory human checkpoint. All valid equation assets now enter grammar v2;
    graph, programming, diagram, and 3D assets share conformance evidence
    without entering equation-shaped presentation; and the derivative exemplar
-   retains its explicit middle state under governed compilation. Review the
-   canonical Catalogue URL before a second differentiation caller, family
-   promotion, or integration work. See
+   retains its explicit middle state under governed compilation. Human review
+   approved the canonical Catalogue behavior on 2026-08-24. See
    `reviews/2026-08-23-animation-governance-epoch-v2-derivative-checkpoint.md`.
+37. **Evaluation authority convergence:** complete and human-approved. One
+   compiler-minted family certificate now survives verified subtraction
+   semantics, governance v2, the generic equation host, and Native KaTeX
+   paint; `3 - 1 -> 2` uses the shared ink-knot contributor-fusion mechanism.
+   Runtime family reselection, derivative-specific decrement choreography,
+   duplicate intermediate paint, and silent fallback are ratcheted out. Keep
+   the scope box exemplar-local. Before a second caller, retain semantic scope
+   identity but make its visible treatment a renderer policy so every caller
+   can later switch from `outline` to `salience-only` or `none` together. See
+   `reviews/2026-08-23-evaluation-authority-convergence-run-proposal.md`.
 
 Educator discovery continues as an external product-research track. Public
 layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.

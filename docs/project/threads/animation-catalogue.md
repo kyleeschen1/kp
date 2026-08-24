@@ -1,18 +1,27 @@
 # Animation Catalogue Thread
 
 Status: active
-Last Updated: 2026-08-23
-Current Next Action: visually review the reversible, governance-v2 flat-2D
-differentiation exemplar `d/dx x^3 -> 3x^(3-1) -> 3x^2` at
-`/?artifact=animation.generated.calculus.derivative.power-rule-x-cubed&playhead=0`.
-Its candidate presentation lets `d/dx` engage and trigger the rewrite before
-the source moves, gives one retained exponent direct ownership, stages `-1` as
-an explicit cause, resolves to a quiet native result, and uses larger native
-KaTeX type. Its two semantic transitions, typed case ledger,
-browser contract, generated coverage, and focused evidence are ready; exact
-timing, path, size, and paint remain provisional. Stop before a second caller
-or family promotion. See
-`../reviews/2026-08-23-animation-governance-epoch-v2-derivative-checkpoint.md`.
+Last Updated: 2026-08-24
+Current Next Action: run a bounded post-checkpoint review before selecting a
+second differentiation caller, family promotion, or integration work. Human
+review approved the reversible, governance-v2 flat-2D differentiation
+exemplar `d/dx x^3 -> 3x^(3-1) -> 3x^2` on 2026-08-24. The completed evaluation
+authority loop carries one compiler-selected contributor-fusion certificate
+through the generic equation host to actual Native KaTeX ink-knot paint while
+preserving the approved first beat and native endpoints. See
+`../reviews/2026-08-23-animation-governance-epoch-v2-derivative-checkpoint.md`
+and
+`../reviews/2026-08-23-evaluation-authority-convergence-run-proposal.md`.
+
+Deferred presentation-policy note: the visible operator-application scope box
+is approved only as this exemplar's rendering. Preserve the semantic fact that
+an operator acts on a named scope. Before a second caller copies the treatment,
+pressure that scope with the new caller and extract a renderer-owned choice
+such as `outline`, `salience-only`, or `none`. Do not duplicate the current
+derivative-specific trace or make box geometry semantic authority. This keeps
+future catalogue-wide removal a renderer-policy change instead of a caller
+migration.
+
 The
 finite-sum/product binder tranche is already complete and `Direct`; its
 closeout remains recorded in
