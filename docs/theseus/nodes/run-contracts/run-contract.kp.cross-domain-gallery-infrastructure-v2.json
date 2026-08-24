@@ -634,11 +634,25 @@
       "scope": "slice s25 durable control record",
       "checkedAt": "2026-08-24T22:41:50.275Z",
       "notes": "Workspace validates at 1059 nodes and 25398 events after completing the Graph3D generation and Catalogue route."
+    },
+    {
+      "command": "npm run visual:graph-3d-saddle",
+      "status": "passed",
+      "scope": "slice s26 committed visual checkpoint",
+      "checkedAt": "2026-08-24T22:44:39.490Z",
+      "notes": "Two Chromium checks passed from commit 6ca9957a8 and regenerated five deterministic source, intermediate, target, and responsive captures for human optical review."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s26 human checkpoint control record",
+      "checkedAt": "2026-08-24T22:44:54.129Z",
+      "notes": "Workspace validates at 1059 nodes and 25405 events with slice 26 open at HUMAN_CHECKPOINT."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 25 began after commit 924b818ed; the shared Graph3D paint seam is green and the next boundary is exact generation plus Catalogue integration."
+    "summary": "HUMAN_CHECKPOINT at slice 26. The Graph3D review sheet is ready; camera, material, scale, label placement, and timing await human approval before slices 27 through 30."
   },
   "allowedWork": [
     "Repair the two documented generation and explanation baseline drifts.",
@@ -828,7 +842,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s26",
       "title": "Graph3D-visual-checkpoint",
-      "status": "planned"
+      "summary": "Opened the mandatory Graph3D visual checkpoint against committed route 6ca9957a8. Review the five deterministic source, intermediate, target, and phone captures before any optical promotion or broader Graph3D generalization.",
+      "status": "in-progress"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s27",
