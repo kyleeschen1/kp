@@ -4329,8 +4329,10 @@
           "kind": "domain-frontend",
           "authorityId": "frontend.graph-2d.function-model.v1",
           "summary": "Graph2D function transformations must be normalized and verified by its domain-owned frontend.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "src/domain-ir/graph-2d-function-generation-request.ts"
+          ]
         },
         {
           "id": "requirement.graph-2d.function.operation",
@@ -4365,16 +4367,8 @@
           "evidenceSourceIds": []
         }
       ],
-      "gaps": [
-        {
-          "kind": "frontend-required",
-          "requirementId": "requirement.graph-2d.domain-frontend.function-transformations",
-          "authorityId": "frontend.graph-2d.function-model.v1",
-          "repair": "Provide exact evidence from the declared domain-owned frontend."
-        }
-      ],
+      "gaps": [],
       "remainingRequirementIds": [
-        "requirement.graph-2d.domain-frontend.function-transformations",
         "requirement.graph-2d.function.operation",
         "requirement.graph-2d.function.recipe",
         "requirement.graph-2d.function.exemplar",

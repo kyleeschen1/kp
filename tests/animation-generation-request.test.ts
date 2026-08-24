@@ -56,7 +56,8 @@ test("one envelope accepts opaque requests while only proved frontends close", (
       validateKpAnimationGenerationCapabilityPins(result.request).map(
         ({ code }) => code
       ),
-      example.domain === "equation" || example.domain === "code"
+      example.domain === "equation" || example.domain === "code" ||
+        example.domain === "graph-2d"
         ? []
         : ["animation-generation.frontend.required"]
     );

@@ -226,7 +226,7 @@ test("direct homomorphic generation retains only the unreviewed product exemplar
   ]);
 });
 
-test("cross-domain rows expose only unproved frontend-required gaps", () => {
+test("cross-domain rows distinguish exact frontends from unproved gaps", () => {
   const coverage = createKpAnimationTransformationCoverage();
   const crossDomain = coverage.entries.filter(({ domain }) =>
     domain !== "equation"
@@ -234,7 +234,8 @@ test("cross-domain rows expose only unproved frontend-required gaps", () => {
   assert.equal(crossDomain.length, 9);
   for (const entry of crossDomain.filter(({ capabilityId }) =>
     capabilityId !== "capability.code.typescript-refactoring" &&
-    capabilityId !== "capability.code.python-refactoring"
+    capabilityId !== "capability.code.python-refactoring" &&
+    capabilityId !== "capability.graph-2d.function-transformations"
   )) {
     assert.deepEqual(entry.gaps.filter(({ kind }) =>
       kind === "frontend-required"
@@ -260,6 +261,17 @@ test("cross-domain rows expose only unproved frontend-required gaps", () => {
     assert.deepEqual(entry?.gaps, []);
     assert.deepEqual(entry?.remainingRequirementIds, []);
   }
+  const graph2D = crossDomain.find(({ capabilityId }) =>
+    capabilityId === "capability.graph-2d.function-transformations"
+  );
+  assert.equal(graph2D?.status, "Missing");
+  assert.deepEqual(graph2D?.gaps, []);
+  assert.deepEqual(graph2D?.remainingRequirementIds, [
+    "requirement.graph-2d.function.operation",
+    "requirement.graph-2d.function.recipe",
+    "requirement.graph-2d.function.exemplar",
+    "requirement.graph-2d.function.corpus"
+  ]);
   assert.ok(coverage.entries.filter(({ domain }) => domain === "equation")
     .every(({ gaps }) => gaps.length === 0));
   assert.equal(

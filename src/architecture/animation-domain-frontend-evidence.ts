@@ -8,6 +8,10 @@ import {
   kpCodeFrontendProofObligations,
   type KpCodeFrontendProofObligation
 } from "./animation-domain-frontend-candidates.ts";
+import {
+  KP_GRAPH_2D_FUNCTION_FRONTEND_ID,
+  KP_GRAPH_2D_FUNCTION_FRONTEND_SOURCE
+} from "../domain-ir/graph-2d-function-generation-request.ts";
 
 export const KP_ANIMATION_DOMAIN_FRONTEND_EVIDENCE_SCHEMA =
   "kp.animation-domain-frontend-evidence.v1" as const;
@@ -211,7 +215,12 @@ KpAnimationDomainFrontendEvidence {
           "prove-runtime-isolation":
             "tests/python-code-generation-runtime-isolation.test.ts"
         }
-      )
+      ),
+      {
+        authorityId: KP_GRAPH_2D_FUNCTION_FRONTEND_ID,
+        domain: "graph-2d",
+        sourcePath: KP_GRAPH_2D_FUNCTION_FRONTEND_SOURCE
+      }
     ])
   });
 }

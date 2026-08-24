@@ -186,6 +186,48 @@
       "scope": "focused",
       "checkedAt": "2026-08-24T20:39:26.777Z",
       "notes": "Approved six-panel Chromium artifact regenerates with 26 common roles, one TypeScript-only role, and zero endpoint differences."
+    },
+    {
+      "command": "npm run test:animation-domain-frontends",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T20:51:03.662Z",
+      "notes": "30 tests pass for the exact Graph2D parameter request, typed formula/presentation/variant repairs, frontend evidence, capability pins, and unchanged readiness distinctions."
+    },
+    {
+      "command": "npm run check:animation-transformation-coverage",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T20:51:04.925Z",
+      "notes": "Generated coverage is current: the Graph2D frontend requirement is satisfied while operation, recipe, exemplar, and corpus remain explicitly incomplete."
+    },
+    {
+      "command": "npm run test:cross-domain-gallery",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-24T20:51:06.024Z",
+      "notes": "All 22 existing equation/code gallery projection, routing, and conformance tests remain green."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T20:51:07.114Z",
+      "notes": "Application, Node, tests, Svelte, and domain projects compile with zero diagnostics."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T20:51:08.186Z",
+      "notes": "Dependency, framework-neutral, semantic, equation, and cross-domain conformance gates pass with the domain-owned Graph2D request boundary."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T20:52:08.672Z",
+      "notes": "Workspace validates at 1059 nodes and 25310 events after completing slice 16 and closing its context receipt."
     }
   ],
   "allowedWork": [
@@ -316,7 +358,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s16",
       "title": "Bounded-Graph2D-function-request",
-      "status": "planned"
+      "summary": "Added an exact parameter-only Graph2D monic-quadratic right-translation request and frontend authority. The boundary accepts only the pinned family, operation, shifts, real-line domain, preservation set, frontend, and capability; formulas, equation routing, presentation fields, arbitrary shifts, and other topologies return typed repairs. Coverage now satisfies only the frontend requirement while operation, recipe, exemplar, and corpus remain incomplete.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s17",
