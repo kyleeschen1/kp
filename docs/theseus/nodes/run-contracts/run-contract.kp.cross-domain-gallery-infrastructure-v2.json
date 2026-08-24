@@ -431,6 +431,41 @@
       "scope": "slice s21 durable control record",
       "checkedAt": "2026-08-24T22:02:07.336Z",
       "notes": "Workspace validates at 1059 nodes and 25352 events after closing the bounded Graph3D request slice."
+    },
+    {
+      "command": "npm run test:animation-domain-frontends",
+      "status": "passed",
+      "scope": "slice s22 Graph3D semantic trace and deterministic frames",
+      "checkedAt": "2026-08-24T22:09:14.251Z",
+      "notes": "55 tests pass, including exact endpoint expressions and witnesses, total correspondence, grounded claims, standard asset closure, direct seek, mirrored rewind, fixed camera identity, and accessibility."
+    },
+    {
+      "command": "npm run test:cross-domain-gallery",
+      "status": "passed",
+      "scope": "slice s22 gallery preservation",
+      "checkedAt": "2026-08-24T22:09:15.483Z",
+      "notes": "All 26 existing equation, code, and Graph2D routing and conformance tests remain green before Graph3D routing is added."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s22 semantic boundary",
+      "checkedAt": "2026-08-24T22:09:16.566Z",
+      "notes": "Dependency, semantic, equation, and cross-domain gates pass; the Graph3D trace and asset import no renderer or editor authority."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s22 type boundary",
+      "checkedAt": "2026-08-24T22:09:17.670Z",
+      "notes": "Application, Node, tests, Svelte, and domain projects compile with zero Svelte diagnostics."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s22 durable control record",
+      "checkedAt": "2026-08-24T22:09:36.766Z",
+      "notes": "Workspace validates at 1059 nodes and 25361 events after completing the Graph3D semantic trace and frame slice."
     }
   ],
   "allowedWork": [
@@ -597,7 +632,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s22",
       "title": "Graph3D-semantic-trace-and-frames",
-      "status": "planned"
+      "summary": "Compiled the pinned Graph3D request into exact denominator-4 and denominator-8 saddle states over the unchanged square domain, with stable surface, axis, camera, topology, and ridge/origin/valley witness identities. Added grounded explanation claims, total correspondence, a renderer-neutral AnimationAsset, and playhead-derived frames that preserve fixed camera and topology under direct seek and mirrored rewind. No SVG, WebGL, DOM, Catalogue, or family-promotion authority was added.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s23",
