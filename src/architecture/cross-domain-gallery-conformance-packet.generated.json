@@ -201,20 +201,371 @@
           "vignetteSourcePath": "src/article/vignettes/typescript-free-shipping-vignette.ts"
         }
       }
+    },
+    {
+      "id": "conformance.gallery.graph-2d.quadratic-translate-right-two",
+      "request": {
+        "schemaVersion": "kp.animation-generation-request.v1",
+        "kind": "animation-generation-request",
+        "requestId": "request.graph-2d.quadratic-translate-right-two.gallery.v1",
+        "domain": "graph-2d",
+        "source": {
+          "kind": "graph-2d.function-parameters",
+          "frontendId": "frontend.graph-2d.function-model.v1",
+          "input": {
+            "schemaVersion": "kp.graph-2d-function-generation-request.v1",
+            "kind": "graph-2d-function-generation-request",
+            "requestId": "request.graph-2d.quadratic-translate-right-two.v1",
+            "function": {
+              "familyId": "family.graph-2d.monic-quadratic-vertex-form.v1",
+              "curveId": "curve.graph-2d.quadratic-translation.primary",
+              "independentVariable": "x",
+              "dependentVariable": "y",
+              "domain": {
+                "kind": "real-line"
+              },
+              "sourceParameters": {
+                "horizontalShift": 0,
+                "verticalShift": 0
+              },
+              "targetParameters": {
+                "horizontalShift": 2,
+                "verticalShift": 0
+              }
+            },
+            "operation": {
+              "operationId": "operation.graph-2d.translate-horizontal.v1",
+              "kind": "horizontal-translation",
+              "displacement": 2
+            },
+            "preserve": [
+              "function-family",
+              "curve-identity",
+              "axis-context"
+            ]
+          }
+        },
+        "intent": {
+          "kind": "graph-2d.translate-function-horizontally",
+          "summary": "Translate y = x squared two units right while preserving curve and point identity.",
+          "parameters": {
+            "familyId": "family.graph-2d.monic-quadratic-vertex-form.v1",
+            "operationId": "operation.graph-2d.translate-horizontal.v1",
+            "sourceHorizontalShift": 0,
+            "targetHorizontalShift": 2,
+            "preserve": [
+              "function-family",
+              "curve-identity",
+              "axis-context"
+            ]
+          }
+        },
+        "expectedOutputs": [
+          "semantic-plan",
+          "animation-artifact",
+          "typed-diagnostics",
+          "coverage-evidence"
+        ],
+        "capabilityPins": [
+          "capability.graph-2d.function-transformations"
+        ]
+      },
+      "expectedResult": {
+        "schemaVersion": "kp.gallery-generation-result.v1",
+        "requestId": "request.graph-2d.quadratic-translate-right-two.gallery.v1",
+        "domain": "graph-2d",
+        "capabilityPins": [
+          "capability.graph-2d.function-transformations"
+        ],
+        "frontendAuthority": {
+          "frontendId": "frontend.graph-2d.function-model.v1",
+          "sourcePath": "scripts/gallery-graph-2d-quadratic-translation-frontend.ts"
+        },
+        "semanticTrace": {
+          "id": "trace.graph-2d.quadratic-translate-right-two.v1",
+          "kind": "kp.graph-2d-quadratic-translation-trace.v1",
+          "authoritySourcePath": "src/semantic/graph-2d-quadratic-translation-trace.ts"
+        },
+        "explanationClaimRefs": [
+          "claim.graph-2d.quadratic-translation.parameter",
+          "claim.graph-2d.quadratic-translation.points"
+        ],
+        "evidenceRefs": [
+          "operation.graph-2d.translate-horizontal.v1",
+          "recipe.graph-2d.quadratic-horizontal-translation.v1",
+          "law.graph-2d.horizontal-translation.point-correspondence",
+          "law.graph-2d.quadratic-translation.function-normalization",
+          "animation.reference-closure",
+          "graph-runtime.quadratic-horizontal-translation"
+        ],
+        "diagnostics": [],
+        "status": "compiled-artifact",
+        "artifact": {
+          "artifactId": "animation.graph-2d.quadratic-translate-right-two",
+          "artifactSourcePath": "src/animation/graph-2d-quadratic-translation-asset.ts",
+          "timelineId": "timeline.graph-2d.quadratic-translate-right-two",
+          "hostId": "editor-animation-player",
+          "hostSourcePath": "src/editor/animation-player-controller.ts",
+          "rendererId": "adapter.graph-2d.quadratic-translation.svg",
+          "rendererSourcePath": "src/editor/graph-2d-quadratic-translation-surface-adapter.ts",
+          "directUrl": "/?artifact=animation.graph-2d.quadratic-translate-right-two",
+          "directUrlSourcePath": "src/editor/animation-catalogue-route.ts"
+        }
+      }
+    },
+    {
+      "id": "conformance.gallery.graph-3d.saddle-denominator-four-to-eight",
+      "request": {
+        "schemaVersion": "kp.animation-generation-request.v1",
+        "kind": "animation-generation-request",
+        "requestId": "request.graph-3d.saddle-parameter.gallery.v1",
+        "domain": "graph-3d",
+        "source": {
+          "kind": "graph-3d.scene-parameters",
+          "frontendId": "frontend.graph-3d.semantic-scene.v1",
+          "input": {
+            "schemaVersion": "kp.graph-3d-scene-generation-request.v1",
+            "kind": "graph-3d-scene-generation-request",
+            "requestId": "request.graph-3d.saddle-denominator-four-to-eight.v1",
+            "scene": {
+              "familyId": "family.graph-3d.saddle-surface.v1",
+              "graphId": "graph.graph-3d.saddle-parameter.primary",
+              "surfaceId": "surface.graph-3d.saddle-parameter.primary",
+              "domain": {
+                "x": [
+                  -3,
+                  3
+                ],
+                "y": [
+                  -3,
+                  3
+                ]
+              },
+              "sourceParameters": {
+                "denominator": 4
+              },
+              "targetParameters": {
+                "denominator": 8
+              }
+            },
+            "operation": {
+              "operationId": "operation.graph-3d.flatten-saddle-denominator.v1",
+              "kind": "increase-saddle-denominator",
+              "parameter": "saddle.denominator",
+              "from": 4,
+              "to": 8
+            },
+            "preserve": [
+              "surface-family",
+              "surface-identity",
+              "xy-domain",
+              "topology",
+              "axis-context",
+              "camera-state"
+            ]
+          }
+        },
+        "intent": {
+          "kind": "graph-3d.increase-saddle-denominator",
+          "summary": "Increase the saddle denominator from four to eight while preserving the surface, domain, topology, axes, and fixed camera.",
+          "parameters": {
+            "familyId": "family.graph-3d.saddle-surface.v1",
+            "operationId": "operation.graph-3d.flatten-saddle-denominator.v1",
+            "sourceDenominator": 4,
+            "targetDenominator": 8,
+            "preserve": [
+              "surface-family",
+              "surface-identity",
+              "xy-domain",
+              "topology",
+              "axis-context",
+              "camera-state"
+            ]
+          }
+        },
+        "expectedOutputs": [
+          "semantic-plan",
+          "animation-artifact",
+          "typed-diagnostics",
+          "coverage-evidence"
+        ],
+        "capabilityPins": [
+          "capability.graph-3d.scene-transformations"
+        ]
+      },
+      "expectedResult": {
+        "schemaVersion": "kp.gallery-generation-result.v1",
+        "requestId": "request.graph-3d.saddle-parameter.gallery.v1",
+        "domain": "graph-3d",
+        "capabilityPins": [
+          "capability.graph-3d.scene-transformations"
+        ],
+        "frontendAuthority": {
+          "frontendId": "frontend.graph-3d.semantic-scene.v1",
+          "sourcePath": "scripts/gallery-graph-3d-saddle-parameter-frontend.ts"
+        },
+        "semanticTrace": {
+          "id": "trace.graph-3d.saddle-denominator-four-to-eight.v1",
+          "kind": "kp.graph-3d-saddle-parameter-trace.v1",
+          "authoritySourcePath": "src/semantic/graph-3d-saddle-parameter-trace.ts"
+        },
+        "explanationClaimRefs": [
+          "claim.graph-3d.saddle-denominator.parameter",
+          "claim.graph-3d.saddle-denominator.camera"
+        ],
+        "evidenceRefs": [
+          "operation.graph-3d.flatten-saddle-denominator.v1",
+          "recipe.graph-3d.saddle-denominator-transition.v1",
+          "law.graph-3d.saddle-denominator.height-field",
+          "law.graph-3d.saddle-denominator.fixed-context",
+          "animation.reference-closure",
+          "graph-runtime.saddle-denominator-transition"
+        ],
+        "diagnostics": [],
+        "status": "compiled-artifact",
+        "artifact": {
+          "artifactId": "animation.graph-3d.saddle-denominator-four-to-eight",
+          "artifactSourcePath": "src/animation/graph-3d-saddle-parameter-asset.ts",
+          "timelineId": "timeline.graph-3d.saddle-denominator-four-to-eight",
+          "hostId": "editor-animation-player",
+          "hostSourcePath": "src/editor/animation-player-controller.ts",
+          "rendererId": "editor-animation-surface.graph.webgl-3d-saddle",
+          "rendererSourcePath": "src/editor/graph-3d-saddle-parameter-surface-adapter.ts",
+          "directUrl": "/?artifact=animation.graph-3d.saddle-denominator-four-to-eight",
+          "directUrlSourcePath": "src/editor/animation-catalogue-route.ts"
+        }
+      }
+    },
+    {
+      "id": "conformance.gallery.gap.graph-3d-arbitrary-formula",
+      "request": {
+        "schemaVersion": "kp.animation-generation-request.v1",
+        "kind": "animation-generation-request",
+        "requestId": "request.graph-3d.arbitrary-formula.gallery-gap.v1",
+        "domain": "graph-3d",
+        "source": {
+          "kind": "graph-3d.scene-parameters",
+          "frontendId": "frontend.graph-3d.semantic-scene.v1",
+          "input": {
+            "schemaVersion": "kp.graph-3d-scene-generation-request.v1",
+            "kind": "graph-3d-scene-generation-request",
+            "requestId": "request.graph-3d.saddle-denominator-four-to-eight.v1",
+            "scene": {
+              "familyId": "family.graph-3d.saddle-surface.v1",
+              "graphId": "graph.graph-3d.saddle-parameter.primary",
+              "surfaceId": "surface.graph-3d.saddle-parameter.primary",
+              "domain": {
+                "x": [
+                  -3,
+                  3
+                ],
+                "y": [
+                  -3,
+                  3
+                ]
+              },
+              "sourceParameters": {
+                "denominator": 4
+              },
+              "targetParameters": {
+                "denominator": 8
+              }
+            },
+            "operation": {
+              "operationId": "operation.graph-3d.flatten-saddle-denominator.v1",
+              "kind": "increase-saddle-denominator",
+              "parameter": "saddle.denominator",
+              "from": 4,
+              "to": 8
+            },
+            "preserve": [
+              "surface-family",
+              "surface-identity",
+              "xy-domain",
+              "topology",
+              "axis-context",
+              "camera-state"
+            ],
+            "formula": "z=sin(xy)"
+          }
+        },
+        "intent": {
+          "kind": "graph-3d.increase-saddle-denominator",
+          "summary": "Increase the saddle denominator from four to eight while preserving the surface, domain, topology, axes, and fixed camera.",
+          "parameters": {
+            "familyId": "family.graph-3d.saddle-surface.v1",
+            "operationId": "operation.graph-3d.flatten-saddle-denominator.v1",
+            "sourceDenominator": 4,
+            "targetDenominator": 8,
+            "preserve": [
+              "surface-family",
+              "surface-identity",
+              "xy-domain",
+              "topology",
+              "axis-context",
+              "camera-state"
+            ]
+          }
+        },
+        "expectedOutputs": [
+          "semantic-plan",
+          "animation-artifact",
+          "typed-diagnostics",
+          "coverage-evidence"
+        ],
+        "capabilityPins": [
+          "capability.graph-3d.scene-transformations"
+        ]
+      },
+      "expectedResult": {
+        "schemaVersion": "kp.gallery-generation-result.v1",
+        "status": "repair-required",
+        "requestId": "request.graph-3d.arbitrary-formula.gallery-gap.v1",
+        "domain": "graph-3d",
+        "capabilityPins": [
+          "capability.graph-3d.scene-transformations"
+        ],
+        "frontendAuthority": {
+          "frontendId": "frontend.graph-3d.semantic-scene.v1",
+          "sourcePath": "scripts/gallery-graph-3d-saddle-parameter-frontend.ts"
+        },
+        "explanationClaimRefs": [],
+        "evidenceRefs": [],
+        "diagnostics": [
+          {
+            "authority": "domain-frontend",
+            "code": "graph-3d-scene.request.formula-forbidden",
+            "path": "$.formula",
+            "message": "formula cannot supply Graph3D surface truth at this boundary.",
+            "repair": "Choose the registered surface family and numeric parameters; the frontend owns the expression."
+          },
+          {
+            "authority": "domain-frontend",
+            "code": "graph-3d-scene.request.field-unknown",
+            "path": "$.formula",
+            "message": "formula is not part of the bounded Graph3D request protocol.",
+            "repair": "Use only fields in the generated request type."
+          }
+        ]
+      }
     }
   ],
   "domains": [
     "equation",
-    "code"
+    "code",
+    "graph-2d",
+    "graph-3d"
   ],
   "frontendIds": [
     "frontend.equation.logarithmic-solve-exemplar.v1",
-    "frontend.code.typescript-compiler.v1"
+    "frontend.code.typescript-compiler.v1",
+    "frontend.graph-2d.function-model.v1",
+    "frontend.graph-3d.semantic-scene.v1"
   ],
   "dispositionCounts": {
-    "compiled-artifact": 0,
+    "compiled-artifact": 2,
     "existing-artifact": 2,
     "semantic-plan-only": 0,
-    "repair-required": 0
+    "repair-required": 1
   }
 }

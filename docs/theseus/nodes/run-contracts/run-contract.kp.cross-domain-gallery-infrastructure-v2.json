@@ -652,11 +652,46 @@
       "scope": "slice s26 human checkpoint control record",
       "checkedAt": "2026-08-24T22:44:54.129Z",
       "notes": "Workspace validates at 1059 nodes and 25405 events with slice 26 open at HUMAN_CHECKPOINT."
+    },
+    {
+      "command": "npm run test:cross-domain-gallery",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T22:57:26.008Z",
+      "notes": "31 gallery routing, authority, artifact, and typed-gap checks pass."
+    },
+    {
+      "command": "npm run test:cross-domain-gallery-preflight",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-24T22:57:27.355Z",
+      "notes": "All 27 equation generation and explanation baseline checks pass."
+    },
+    {
+      "command": "npm run check:cross-domain-gallery-conformance",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T22:57:28.441Z",
+      "notes": "The checked-in five-case packet is current."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T22:57:29.497Z",
+      "notes": "Application, Node, test, Svelte, and domain type checks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T22:57:30.521Z",
+      "notes": "Dependency, semantic, equation-governance, and cross-domain gates pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "USER_PAUSED after the approved Graph3D checkpoint at slice 26. Slices 27 through 30 remain planned and unfinished while the active project lane returns to equation-family selection."
+    "summary": "Slice 27 complete. The five-case cross-domain conformance packet is durable; curated Catalogue collection assembly is next."
   },
   "allowedWork": [
     "Repair the two documented generation and explanation baseline drifts.",
@@ -852,7 +887,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s27",
       "title": "Completed-cross-domain-conformance-packet",
-      "status": "planned"
+      "summary": "Completed the durable five-case packet with equation, code, Graph2D, Graph3D, and one arbitrary-formula typed gap; all results preserve domain-owned authority and shared request identity.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s28",
