@@ -578,8 +578,68 @@
       "scope": "slice s24 durable control record",
       "checkedAt": "2026-08-24T22:28:24.719Z",
       "notes": "Workspace validates at 1059 nodes and 25385 events after completing the shared Graph3D paint slice."
+    },
+    {
+      "command": "npm run test:cross-domain-gallery",
+      "status": "passed",
+      "scope": "slice s25 exact Graph3D generation route",
+      "checkedAt": "2026-08-24T22:41:21.750Z",
+      "notes": "All 30 shared router, exact frontend, equation, code, Graph2D, and Graph3D projection tests pass."
+    },
+    {
+      "command": "npm run test:graph-3d-runtime",
+      "status": "passed",
+      "scope": "slice s25 Graph3D runtime preservation",
+      "checkedAt": "2026-08-24T22:41:23.159Z",
+      "notes": "All 40 Graph3D protocol, host, paint, fallback, WebGL, and context-lease tests pass."
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "slice s25 canonical Catalogue host",
+      "checkedAt": "2026-08-24T22:41:24.341Z",
+      "notes": "All 36 Catalogue selection, capability loading, navigation, and Svelte shell tests pass."
+    },
+    {
+      "command": "npm run visual:graph-3d-saddle",
+      "status": "passed",
+      "scope": "slice s25 deterministic browser integration",
+      "checkedAt": "2026-08-24T22:41:25.479Z",
+      "notes": "Two Chromium checks prove the direct route, exact adapter, fixed camera, KaTeX-only visible graph text, responsive sampling, retained seek and rewind, SVG context-loss fallback, and lease release; five checkpoint captures were generated."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s25 architecture boundary",
+      "checkedAt": "2026-08-24T22:41:26.622Z",
+      "notes": "Dependency, framework-neutral, semantic, equation, and cross-domain conformance gates pass with both bounded Graph3D assets registered."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s25 type boundary",
+      "checkedAt": "2026-08-24T22:41:27.917Z",
+      "notes": "Application, Node, tests, Svelte, and domain projects compile with zero Svelte diagnostics."
+    },
+    {
+      "command": "animation generated projection checks",
+      "status": "passed",
+      "scope": "slice s25 generated governance",
+      "checkedAt": "2026-08-24T22:41:29.066Z",
+      "notes": "Display catalogue, governance inventory, conformance manifest, reverse dependency, and conformance registration projections are current."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s25 durable control record",
+      "checkedAt": "2026-08-24T22:41:50.275Z",
+      "notes": "Workspace validates at 1059 nodes and 25398 events after completing the Graph3D generation and Catalogue route."
     }
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "Slice 25 began after commit 924b818ed; the shared Graph3D paint seam is green and the next boundary is exact generation plus Catalogue integration."
+  },
   "allowedWork": [
     "Repair the two documented generation and explanation baseline drifts.",
     "Add a thin shared result projection and router over domain-owned frontends.",
@@ -762,7 +822,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s25",
       "title": "Graph3D-generation-and-Catalogue-route",
-      "status": "planned"
+      "summary": "Routed the exact fixed-camera saddle denominator request through the shared generation envelope as a compiled artifact; enrolled it in the existing lazy graph pack, Catalogue metadata, hostability projection, and generated conformance ledgers; and added a stable Chromium command proving direct URL restoration, exact adapter selection, shared-clock seek and rewind, fixed camera and surface identity, responsive 21 by 21 sampling, KaTeX-only visible graph text, semantic SVG fallback, and WebGL lease release. The browser check also corrected Graph3D protocol attribute spelling so host diagnostics consistently use graph-3d. Optical values remain provisional for the slice 26 human checkpoint.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s26",

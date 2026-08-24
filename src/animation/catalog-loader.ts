@@ -159,6 +159,7 @@ export const kpAnimationCatalogPackDeclarations: readonly KpAnimationCatalogPack
     pack("graph", "src/animation/catalog-packs/graph.ts",
       (id) => id.startsWith("animation.graph.") ||
         id.startsWith("animation.graph-2d.") ||
+        id.startsWith("animation.graph-3d.") ||
         id === "animation.derivative-rules.tangent-graph" ||
         id === "animation.integral-ftc.area-sweep" ||
         id === "animation.dot-projection.basic",

@@ -2,7 +2,7 @@
   "schemaVersion": "kp.animation-governance-inventory.v1",
   "kind": "animation-governance-inventory",
   "summary": {
-    "assetCount": 59,
+    "assetCount": 60,
     "equationAssetCount": 43,
     "bypassedAssetCount": 1,
     "unsupportedAssetCount": 0
@@ -2765,6 +2765,57 @@
     },
     {
       "schemaVersion": "kp.animation-governance-inventory-entry.v1",
+      "assetId": "animation.graph-3d.saddle-denominator-four-to-eight",
+      "title": "Flatten a saddle by changing its denominator",
+      "packId": "graph",
+      "renderTargetKinds": [
+        "graph"
+      ],
+      "domains": [
+        "graph"
+      ],
+      "surface": {
+        "kind": "graph",
+        "slotKinds": [
+          "graph"
+        ]
+      },
+      "renderer": {
+        "capabilityIds": [
+          "graph-webgl-3d"
+        ],
+        "adapterIds": [
+          "editor-animation-surface.graph.webgl-3d",
+          "editor-animation-surface.graph.webgl-3d-saddle"
+        ],
+        "authority": "selected-capability-declarations"
+      },
+      "presentationProfile": {
+        "status": "not-applicable"
+      },
+      "typography": {
+        "flow": "host-css",
+        "mathStyle": "renderer-domain",
+        "opticalScale": "renderer-domain"
+      },
+      "motifs": {
+        "familyIds": [],
+        "semanticTransformTypes": [
+          "increaseGraph3DSaddleDenominator"
+        ],
+        "presentationRecipeIds": []
+      },
+      "review": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "bypasses": []
+    },
+    {
+      "schemaVersion": "kp.animation-governance-inventory-entry.v1",
       "assetId": "animation.graph.surface-mode.mesh-to-donut",
       "title": "Saddle surface mesh to donut",
       "packId": "graph",
@@ -2785,7 +2836,8 @@
           "graph-webgl-3d"
         ],
         "adapterIds": [
-          "editor-animation-surface.graph.webgl-3d"
+          "editor-animation-surface.graph.webgl-3d",
+          "editor-animation-surface.graph.webgl-3d-saddle"
         ],
         "authority": "selected-capability-declarations"
       },

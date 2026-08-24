@@ -75,6 +75,10 @@ test("selected surface capabilities keep rich renderers explicit", () => {
     slotKinds: ["graph"]
   }), ["graph-webgl-3d"]);
   assert.deepEqual(deriveKpEditorSelectedSurfaceCapabilities({
+    animationId: "animation.graph-3d.saddle-denominator-four-to-eight",
+    slotKinds: ["graph"]
+  }), ["graph-webgl-3d"]);
+  assert.deepEqual(deriveKpEditorSelectedSurfaceCapabilities({
     animationId: "animation.programming.add.execution-trace",
     slotKinds: ["programming"]
   }), ["programming-trace"]);

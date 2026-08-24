@@ -4603,6 +4603,107 @@
     {
       "schemaVersion": "kp.animation-conformance-manifest.v1",
       "kind": "animation-conformance-manifest",
+      "assetId": "animation.graph-3d.saddle-denominator-four-to-eight",
+      "domains": [
+        "graph"
+      ],
+      "semanticAuthority": {
+        "assetBundleId": "asset.graph-3d.saddle-denominator-four-to-eight.v1",
+        "transformationIds": [
+          "transform.graph-3d.saddle-denominator-four-to-eight.v1"
+        ],
+        "transformationTreeRootId": "transform.graph-3d.saddle-denominator-four-to-eight.v1",
+        "lineage": "canonical-semantic-transformation"
+      },
+      "projection": {
+        "renderTargetIds": [
+          "render.graph-3d.saddle-denominator-four-to-eight"
+        ],
+        "renderTargetKinds": [
+          "graph"
+        ],
+        "surfaceKind": "graph",
+        "adapterIds": [
+          "editor-animation-surface.graph.webgl-3d",
+          "editor-animation-surface.graph.webgl-3d-saddle"
+        ]
+      },
+      "clock": {
+        "authority": "kp-animation-runtime-clock",
+        "timelineId": "timeline.graph-3d.saddle-denominator-four-to-eight",
+        "seekPolicy": "deterministic-normalized-playhead"
+      },
+      "policy": {
+        "epochId": "policy.animation.legacy.v1",
+        "requiredPrincipleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "principleContractIds": [
+          "contract.animation.semantic-lineage.v1",
+          "contract.animation.deterministic-clock.v1"
+        ]
+      },
+      "resolvedProfiles": [
+        {
+          "schemaVersion": "kp.resolved-animation-profile-provenance.v1",
+          "domain": "graph",
+          "epochId": "policy.animation.legacy.v1",
+          "source": "not-applicable",
+          "profileId": "profile.graph.renderer-domain",
+          "profileFingerprint": "kp-profile-936a5a0a"
+        }
+      ],
+      "dependencies": {
+        "principleIds": [
+          "principle.animation.semantic-lineage-authority",
+          "principle.animation.deterministic-single-clock"
+        ],
+        "motifIds": [],
+        "rendererIds": [
+          "editor-animation-surface.graph.webgl-3d",
+          "editor-animation-surface.graph.webgl-3d-saddle"
+        ],
+        "typographyPolicyIds": [
+          "profile.graph.renderer-domain"
+        ]
+      },
+      "capabilities": {
+        "surfaceSlotKinds": [
+          "graph"
+        ],
+        "rendererCapabilityIds": [
+          "graph-webgl-3d"
+        ],
+        "interactive": [],
+        "exports": [
+          "static-step"
+        ]
+      },
+      "reviewProvenance": {
+        "humanDisposition": "unreviewed",
+        "maturity": "reviewable",
+        "evidenceSourceIds": [
+          "artifact-promotion.default-reviewable-composition-policy"
+        ]
+      },
+      "disposition": {
+        "status": "compatibility",
+        "gapCodes": [
+          "asset-presentation-constraints-missing"
+        ]
+      },
+      "reviewFreshness": {
+        "schemaVersion": "kp.animation-review-freshness.v1",
+        "assetId": "animation.graph-3d.saddle-denominator-four-to-eight",
+        "state": "unreviewed",
+        "reason": "No human review provenance is registered for this artifact.",
+        "evidenceSourceIds": []
+      }
+    },
+    {
+      "schemaVersion": "kp.animation-conformance-manifest.v1",
+      "kind": "animation-conformance-manifest",
       "assetId": "animation.graph.surface-mode.mesh-to-donut",
       "domains": [
         "graph"
@@ -4624,7 +4725,8 @@
         ],
         "surfaceKind": "graph",
         "adapterIds": [
-          "editor-animation-surface.graph.webgl-3d"
+          "editor-animation-surface.graph.webgl-3d",
+          "editor-animation-surface.graph.webgl-3d-saddle"
         ]
       },
       "clock": {
@@ -4660,7 +4762,8 @@
         ],
         "motifIds": [],
         "rendererIds": [
-          "editor-animation-surface.graph.webgl-3d"
+          "editor-animation-surface.graph.webgl-3d",
+          "editor-animation-surface.graph.webgl-3d-saddle"
         ],
         "typographyPolicyIds": [
           "profile.graph.renderer-domain"

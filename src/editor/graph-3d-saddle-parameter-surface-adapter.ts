@@ -95,9 +95,20 @@ export const kpEditorGraph3DSaddleSurfaceAdapter = Object.freeze({
     if (session.client !== undefined) {
       session.client.renderKpGraph3DSaddleWebGLFrame(session.shell, frame);
     }
-    slot.dataset["kpEditorGraph3DContract"] = contract.schemaVersion;
-    slot.dataset["kpEditorGraph3DRuntimeProtocol"] = frame.schemaVersion;
-    session.shell.dataset["kpEditorGraph3DTheme"] = frame.theme.id;
+    // Explicit attribute spelling keeps Graph3D as one protocol token; DOM
+    // dataset serialization would emit graph3-d and break host diagnostics.
+    slot.setAttribute(
+      "data-kp-editor-graph-3d-contract",
+      contract.schemaVersion
+    );
+    slot.setAttribute(
+      "data-kp-editor-graph-3d-runtime-protocol",
+      frame.schemaVersion
+    );
+    session.shell.setAttribute(
+      "data-kp-editor-graph-3d-theme",
+      frame.theme.id
+    );
   }
 } satisfies KpEditorAnimationSurfaceAdapter);
 
@@ -129,7 +140,10 @@ function beginCapabilityLoad(
 
 function loadCapability(session: KpEditorGraph3DSaddleSurfaceSession): void {
   if (session.loadPromise !== undefined || session.disposed) return;
-  session.shell.dataset["kpEditorGraph3DCapability"] = "loading";
+  session.shell.setAttribute(
+    "data-kp-editor-graph-3d-capability",
+    "loading"
+  );
   session.loadPromise = import(
     "../rendering/graph-3d-saddle-parameter-ports.ts"
   );
@@ -140,10 +154,16 @@ function loadCapability(session: KpEditorGraph3DSaddleSurfaceSession): void {
       session.shell,
       session.frame
     );
-    session.shell.dataset["kpEditorGraph3DCapability"] = outcome.status;
+    session.shell.setAttribute(
+      "data-kp-editor-graph-3d-capability",
+      outcome.status
+    );
   }).catch((error: unknown) => {
     if (session.disposed) return;
-    session.shell.dataset["kpEditorGraph3DCapability"] = "fallback";
+    session.shell.setAttribute(
+      "data-kp-editor-graph-3d-capability",
+      "fallback"
+    );
     session.shell.dataset["kpWebglStatus"] = "fallback";
     session.shell.dataset["kpWebglError"] = error instanceof Error
       ? error.message
@@ -162,9 +182,14 @@ function syncStaticPaint(
 ): void {
   session.stage.dataset["kpSaddleDenominator"] = currentDenominator(frame);
   session.shell.setAttribute("aria-label", frame.accessibility.description);
-  session.shell.dataset["kpEditorGraph3DProgress"] =
-    String(frame.clock.visualProgress);
-  session.shell.dataset["kpEditorGraph3DDirection"] = frame.clock.direction;
+  session.shell.setAttribute(
+    "data-kp-editor-graph-3d-progress",
+    String(frame.clock.visualProgress)
+  );
+  session.shell.setAttribute(
+    "data-kp-editor-graph-3d-direction",
+    frame.clock.direction
+  );
   const fallback = session.shell.querySelector<HTMLElement>(
     ".graph-webgl__fallback"
   );
@@ -194,7 +219,10 @@ function setVisibility(
   visibility: KpEditorGraph3DSaddleSurfaceSession["visibility"]
 ): void {
   session.visibility = visibility;
-  session.shell.dataset["kpEditorGraph3DVisibility"] = visibility;
+  session.shell.setAttribute(
+    "data-kp-editor-graph-3d-visibility",
+    visibility
+  );
 }
 
 function currentDenominator(

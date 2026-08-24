@@ -922,6 +922,31 @@
     ]
   },
   {
+    "animationId": "animation.graph-3d.saddle-denominator-four-to-eight",
+    "title": "Flatten a saddle by changing its denominator",
+    "summary": "Follow one fixed-camera saddle as its denominator increases from four to eight.",
+    "tags": [
+      "animation",
+      "editor",
+      "graph-3d",
+      "parameter-change",
+      "saddle"
+    ],
+    "availability": "playable",
+    "canonicalFormat": "legacy",
+    "featured": false,
+    "primaryRepresentationId": "editor-animation.animation.graph-3d.saddle-denominator-four-to-eight",
+    "representations": [
+      {
+        "id": "editor-animation.animation.graph-3d.saddle-denominator-four-to-eight",
+        "label": "Flatten a saddle by changing its denominator",
+        "kind": "editor",
+        "href": "/?animation=editor-animation.animation.graph-3d.saddle-denominator-four-to-eight",
+        "role": "canonical-host"
+      }
+    ]
+  },
+  {
     "animationId": "animation.sample.fourier-transform-pair",
     "title": "Fourier transform pair",
     "summary": "Fourier transform pair",

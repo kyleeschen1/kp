@@ -1900,6 +1900,36 @@
     }
   },
   {
+    "id": "editor-animation.animation.graph-3d.saddle-denominator-four-to-eight",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.graph-3d.saddle-denominator-four-to-eight",
+    "title": "Flatten a saddle by changing its denominator",
+    "summary": "Follow one fixed-camera saddle as its denominator increases from four to eight.",
+    "renderTargetKinds": [
+      "graph"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2600,
+    "beatCount": 52,
+    "tags": [
+      "animation",
+      "graph-3d",
+      "saddle",
+      "parameter-change"
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
+  },
+  {
     "id": "editor-animation.animation.derivative-rules.tangent-graph",
     "kind": "editor-animation-descriptor",
     "animationId": "animation.derivative-rules.tangent-graph",

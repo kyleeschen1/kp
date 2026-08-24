@@ -38,6 +38,9 @@ import {
 import {
   createKpGraph2DQuadraticTranslationAnimationAsset
 } from "./graph-2d-quadratic-translation-asset.ts";
+import {
+  createKpGraph3DSaddleParameterAnimationAsset
+} from "./graph-3d-saddle-parameter-asset.ts";
 
 interface VectorObject {
   readonly id: string;
@@ -62,6 +65,7 @@ export function createGraphAnimationAssets(): readonly KpAnimationAsset[] {
     createGraphSurfaceModeAnimationAsset(),
     createLinearMapVectorAnimationAsset(),
     createKpGraph2DQuadraticTranslationAnimationAsset().animation,
+    createKpGraph3DSaddleParameterAnimationAsset().animation,
     createDerivativeTangentAnimationAsset(),
     createIntegralAreaSweepAnimationAsset(),
     createDotProjectionAnimationAsset()

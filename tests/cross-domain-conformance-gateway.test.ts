@@ -52,9 +52,9 @@ function compile() {
 test("one common gateway covers graph, programming, diagram, and 3D", () => {
   const gateway = compileKpCrossDomainConformanceGateway(compile());
   assert.deepEqual(gateway.summary, {
-    assetCount: 18,
-    domainCounts: { graph: 9, programming: 6, diagram: 3 },
-    threeDimensionalAssetCount: 1
+    assetCount: 19,
+    domainCounts: { graph: 10, programming: 6, diagram: 3 },
+    threeDimensionalAssetCount: 2
   });
   assert.equal(gateway.entries.every(({ rendererAdapterIds }) =>
     rendererAdapterIds.length > 0
@@ -62,6 +62,7 @@ test("one common gateway covers graph, programming, diagram, and 3D", () => {
   assert.deepEqual(gateway.entries.filter(({ threeDimensional }) =>
     threeDimensional
   ).map(({ assetId }) => assetId), [
+    "animation.graph-3d.saddle-denominator-four-to-eight",
     "animation.graph.surface-mode.mesh-to-donut"
   ]);
   assert.deepEqual(gateway.entries.find(({ assetId }) =>
@@ -69,6 +70,12 @@ test("one common gateway covers graph, programming, diagram, and 3D", () => {
   )?.rendererAdapterIds, [
     "editor-animation-surface.graph.svg",
     "adapter.graph-2d.quadratic-translation.svg"
+  ]);
+  assert.deepEqual(gateway.entries.find(({ assetId }) =>
+    assetId === "animation.graph-3d.saddle-denominator-four-to-eight"
+  )?.rendererAdapterIds, [
+    "editor-animation-surface.graph.webgl-3d",
+    "editor-animation-surface.graph.webgl-3d-saddle"
   ]);
 });
 
@@ -82,7 +89,7 @@ test("equation grammar remains limited to mixed assets' equation segment", () =>
   ]);
   assert.equal(gateway.entries.filter(({ equationGovernance }) =>
     equationGovernance === "absent"
-  ).length, 16);
+  ).length, 17);
 });
 
 test("pure cross-domain assets fail closed if routed through equation grammar", () => {

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.animation-governance-reverse-dependencies.v1",
   "kind": "animation-governance-reverse-dependencies",
-  "assetCount": 59,
+  "assetCount": 60,
   "dependencies": [
     {
       "dependencyId": "atomic-v1",
@@ -536,6 +536,7 @@
         "animation.generated.substitute-three",
         "animation.generated.substitute-three.provisional-incorrect",
         "animation.graph-2d.quadratic-translate-right-two",
+        "animation.graph-3d.saddle-denominator-four-to-eight",
         "animation.graph.surface-mode.mesh-to-donut",
         "animation.graph.vector.linear-map-scale",
         "animation.inequality.sign-flip.basic",
@@ -650,6 +651,7 @@
         "animation.generated.substitute-three",
         "animation.generated.substitute-three.provisional-incorrect",
         "animation.graph-2d.quadratic-translate-right-two",
+        "animation.graph-3d.saddle-denominator-four-to-eight",
         "animation.graph.surface-mode.mesh-to-donut",
         "animation.graph.vector.linear-map-scale",
         "animation.inequality.sign-flip.basic",
@@ -858,6 +860,15 @@
       "dependencyId": "editor-animation-surface.graph.webgl-3d",
       "kind": "renderer",
       "callerAssetIds": [
+        "animation.graph-3d.saddle-denominator-four-to-eight",
+        "animation.graph.surface-mode.mesh-to-donut"
+      ]
+    },
+    {
+      "dependencyId": "editor-animation-surface.graph.webgl-3d-saddle",
+      "kind": "renderer",
+      "callerAssetIds": [
+        "animation.graph-3d.saddle-denominator-four-to-eight",
         "animation.graph.surface-mode.mesh-to-donut"
       ]
     },
@@ -1030,6 +1041,7 @@
         "animation.economics.supply-demand-equilibrium-shift",
         "animation.generated.linear-algebra.matrix-vector.two-by-two",
         "animation.graph-2d.quadratic-translate-right-two",
+        "animation.graph-3d.saddle-denominator-four-to-eight",
         "animation.graph.surface-mode.mesh-to-donut",
         "animation.graph.vector.linear-map-scale",
         "animation.integral-ftc.area-sweep",

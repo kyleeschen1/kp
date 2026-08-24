@@ -11,9 +11,12 @@
 
 .kp-graph-3d-saddle-stage .graph-webgl__canvas,
 .kp-graph-3d-saddle-stage .graph-svg {
-  display: block;
   width: 100%;
   height: auto;
+}
+
+.kp-graph-3d-saddle-stage .graph-svg {
+  display: block;
 }
 
 .kp-graph-3d-saddle-labels {

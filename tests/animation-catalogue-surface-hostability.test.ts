@@ -23,6 +23,9 @@ import {
   kpEditorExactFractionQuantitySurfaceAdapter
 } from "../src/editor/exact-fraction-quantity-surface-adapter.ts";
 import {
+  kpEditorGraph3DSaddleSurfaceAdapter
+} from "../src/editor/graph-3d-saddle-parameter-surface-adapter.ts";
+import {
   kpEditorGraph3DSurfaceAdapter
 } from "../src/editor/graph-3d-surface-adapter.ts";
 import {
@@ -71,6 +74,7 @@ function currentHostability() {
     kpEditorEquationSurfaceAdapter,
     kpEditorDiagramSvgAdapter,
     kpEditorGraph3DSurfaceAdapter,
+    kpEditorGraph3DSaddleSurfaceAdapter,
     graphSvgViewportAdapter,
     kpEditorOperationEvaluationSurfaceAdapter,
     kpEditorExactFractionQuantitySurfaceAdapter,
@@ -101,7 +105,7 @@ function currentHostability() {
 test("hostability requires every concrete asset slot to resolve an adapter", () => {
   const hostability = currentHostability();
 
-  assert.equal(hostability.length, 45);
+  assert.equal(hostability.length, 60);
   assert.deepEqual(
     Object.fromEntries(
       ["ready", "missing-adapter", "unsupported-surface"].map((status) => [
@@ -110,7 +114,7 @@ test("hostability requires every concrete asset slot to resolve an adapter", () 
       ])
     ),
     {
-      ready: 45,
+      ready: 60,
       "missing-adapter": 0,
       "unsupported-surface": 0
     }
@@ -172,6 +176,14 @@ test("hostability records exact generic and specialized adapter ownership", () =
       slotKind: "graph",
       status: "ready",
       adapterId: "editor-animation-surface.graph.webgl-3d"
+    }]
+  );
+  assert.deepEqual(
+    byId.get("animation.graph-3d.saddle-denominator-four-to-eight")?.slots,
+    [{
+      slotKind: "graph",
+      status: "ready",
+      adapterId: "editor-animation-surface.graph.webgl-3d-saddle"
     }]
   );
   assert.deepEqual(

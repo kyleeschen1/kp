@@ -325,6 +325,14 @@ export const kpAnimationConformanceRegistrationDeclarations = [
   },
   {
     "kind": "manifest-ref",
+    "assetId": "animation.graph-3d.saddle-denominator-four-to-eight",
+    "packId": "graph",
+    "manifestId": "manifest.animation.graph-3d.saddle-denominator-four-to-eight",
+    "policyEpochId": "policy.animation.legacy.v1",
+    "disposition": "compatibility"
+  },
+  {
+    "kind": "manifest-ref",
     "assetId": "animation.graph.surface-mode.mesh-to-donut",
     "packId": "graph",
     "manifestId": "manifest.animation.graph.surface-mode.mesh-to-donut",
