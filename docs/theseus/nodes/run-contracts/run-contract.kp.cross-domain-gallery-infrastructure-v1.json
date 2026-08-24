@@ -2,7 +2,8 @@
   "id": "run-contract.kp.cross-domain-gallery-infrastructure-v1",
   "kind": "run-contract",
   "title": "Cross-domain gallery infrastructure",
-  "status": "ready",
+  "status": "deferred",
+  "summary": "Administrative supersession after 12 completed slices: human approved the repaired TypeScript light checkpoint, but the original contract omitted required typed-autonomy controls. Corrected v2 preserves the approved 30-slice scope, completed evidence, and remaining order.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -540,6 +541,9 @@
     "state": "partial",
     "summary": "Repaired s12 human-checkpoint feedback without advancing s13: theme-specific CSS no longer pins TypeScript Catalogue chrome dark in light mode, and runtime toggles resample the same semantic frame after host theme projection. Awaiting renewed visual approval."
   },
+  "revisitWhen": [
+    "Never; continue with run-contract.kp.cross-domain-gallery-infrastructure-v2."
+  ],
   "allowedWork": [
     "Repair the two documented generation and explanation baseline drifts.",
     "Add a thin shared result projection and router over domain-owned frontends.",

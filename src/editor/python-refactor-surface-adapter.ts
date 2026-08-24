@@ -11,6 +11,10 @@ import {
 } from "../animation/python-refactor-token-theater.ts";
 import { renderKpPythonRefactorCodeHtml } from
   "../rendering/python-refactor-code-html.ts";
+import {
+  applyKpPythonRefactorOpticalEndpoint,
+  resolveKpPythonRefactorOpticalEndpoint
+} from "../rendering/python-refactor-optical-theme.ts";
 import { KP_EDITOR_ANIMATION_DISPOSE_EVENT } from
   "./animation-player-controller.ts";
 import {
@@ -32,6 +36,10 @@ export const kpEditorPythonRefactorSurfaceAdapter:
         state.surface.slotKinds.includes("programming");
     },
     render({ player, slot, state }) {
+      const endpoint = resolveKpPythonRefactorOpticalEndpoint(
+        catalogueTheme(player)
+      );
+      applyKpPythonRefactorOpticalEndpoint({ root: slot, endpoint });
       const sample = sampleKpPythonRefactorScore(
         exemplar.score,
         state.progress * exemplar.score.durationMs
@@ -56,6 +64,7 @@ export const kpEditorPythonRefactorSurfaceAdapter:
           narration: sample.narration,
           activeProjectionId: motion.accessibleProjectionId,
           focusSelectorIds: sample.focusSelectorIds,
+          theme: endpoint.id,
           accessibleDescription: accessibleDescription(sample.narration)
         });
         shell = slot.querySelector<HTMLElement>("[data-kp-python-refactor-stage]") ?? undefined;
@@ -70,6 +79,7 @@ export const kpEditorPythonRefactorSurfaceAdapter:
           );
         }
       }
+      applyKpPythonRefactorOpticalEndpoint({ root: shell, endpoint });
       syncShell(shell, motion, theater);
       slot.dataset["kpEditorProgrammingContract"] = "kp.python-refactor-score.v1";
     }
@@ -185,4 +195,9 @@ function frameMode(player: HTMLElement): "animated" | "reduced-motion" | "static
 
 function accessibleDescription(narration: string): string {
   return `${exemplar.accessibility.title}. ${narration}`;
+}
+
+function catalogueTheme(player: HTMLElement): string | undefined {
+  return player.closest<HTMLElement>("[data-kp-animation-catalogue-theme]")
+    ?.dataset["kpAnimationCatalogueTheme"];
 }

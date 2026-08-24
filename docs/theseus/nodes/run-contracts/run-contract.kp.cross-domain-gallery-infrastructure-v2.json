@@ -1,0 +1,299 @@
+{
+  "id": "run-contract.kp.cross-domain-gallery-infrastructure-v2",
+  "kind": "run-contract",
+  "title": "Cross-domain gallery infrastructure",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Typed continuation of the approved 30-slice cross-domain gallery run; v1 evidence for completed slices remains durable.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-23-cross-domain-gallery-pipeline-next-step-review.md",
+      "summary": "Approved gallery proposal, acceptance criteria, presentation checkpoints, and rollback boundaries."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-08-23-cross-domain-gallery-demonstration-priority.md",
+      "summary": "Accepted next-week demonstration priority and exact cross-domain scope."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/authoring/llm-generation-entrypoint.md",
+      "summary": "Canonical model-authored generation routing and typed repair boundary."
+    }
+  ],
+  "verification": [
+    "npm run test:cross-domain-gallery-preflight",
+    "npm run test:cross-domain-gallery",
+    "npm run visual:code-theme",
+    "npm run visual:graph-2d-translation",
+    "npm run visual:graph-3d-saddle",
+    "npm run visual:cross-domain-gallery",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:python-refactor",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T14:37:12.162Z",
+      "notes": "101 Python tests pass, including exact local paint-role coverage and preserved dark optical values."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T14:37:28.292Z",
+      "notes": "Application, Node, test, Svelte, and domain type checks pass."
+    },
+    {
+      "command": "npm run visual:python-code-theme",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-24T14:37:29.568Z",
+      "notes": "Chromium verifies explicit theme authority, light contrast, deterministic checkpoints, geometry parity, and complete toolbar round-trip."
+    },
+    {
+      "command": "npm run visual:python-refactor",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-24T14:37:30.671Z",
+      "notes": "Existing dark Python visual checkpoint passes unchanged."
+    },
+    {
+      "command": "npm run visual:code-theme",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-24T14:37:31.828Z",
+      "notes": "Human-approved TypeScript reference remains green."
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T14:37:32.994Z",
+      "notes": "Catalogue host and selection lifecycles remain green."
+    },
+    {
+      "command": "npm run test:cross-domain-gallery",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T14:37:34.153Z",
+      "notes": "Shared generation envelope remains byte-stable and fail-closed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-24T14:37:35.287Z",
+      "notes": "Dependency, framework, semantic, equation, and cross-domain boundaries pass."
+    }
+  ],
+  "allowedWork": [
+    "Repair the two documented generation and explanation baseline drifts.",
+    "Add a thin shared result projection and router over domain-owned frontends.",
+    "Route exact canonical equation and code requests without changing approved choreography.",
+    "Tune TypeScript light mode, pressure it with Python after review, and promote only the proven optical seam.",
+    "Build one exact Graph2D quadratic-translation frontend, asset, SVG adapter, and Catalogue route.",
+    "Build one exact fixed-camera Graph3D saddle-parameter frontend, asset, WebGL and SVG projection, and Catalogue route.",
+    "Add pinned conformance fixtures, stable scoped visual commands, Catalogue collection disclosure, direct URLs, Review evidence, tests, and project memory."
+  ],
+  "disallowedWork": [
+    "Do not build arbitrary graph formula parsers, a universal semantic IR, or a universal renderer.",
+    "Do not add a live LLM or network dependency to the gallery.",
+    "Do not compile arbitrary code variants into counterfeit animation artifacts.",
+    "Do not migrate Scheme, the public TypeScript lesson, or the global application theme.",
+    "Do not change derivative choreography, the operator scope-box treatment, integration, trigonometric rewrites, inequalities, limits, or root families.",
+    "Do not claim Graph2D or Graph3D family promotion from one exemplar.",
+    "Do not modify the existing dirty economics lesson, generated economics publication, or editor-animation-visuals browser test."
+  ],
+  "goal": "Ship a production-backed curated gallery with the approved logarithmic solve, bounded Graph2D translation, bounded Graph3D saddle transformation, reviewed programming light mode, and an honest typed gap through one governed generation and hosting envelope.",
+  "target": "workflow.kp.delivery",
+  "runMode": "run",
+  "maxSlices": 30,
+  "commitCadence": "Commit every independently reversible verified slice with exact path staging and completed Theseus evidence; emit loop status at slice starts, completions, commit boundaries, and stops.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop at s14 for human cross-language theme review before shared code-theme promotion.",
+    "Stop at s20 for human Graph2D visual review before Graph3D work.",
+    "Stop at s26 for human Graph3D visual review before gallery assembly.",
+    "Stop at s29 for human curated-gallery visual review before release closeout.",
+    "Stop if a requested domain requires arbitrary formula parsing, a universal semantic IR or renderer, counterfeit code animation, a live network or model dependency, or other scope outside the approved proposal.",
+    "Stop on failed semantic authority, deterministic lifecycle, renderer ownership, accessibility, lazy-loading, fallback, architecture, or production-closure evidence that cannot be repaired within the active slice.",
+    "Stop before modifying protected economics files, the editor-animation-visuals browser test, approved derivative choreography, Scheme, public TypeScript lesson behavior, or the global application theme.",
+    "Stop whenever subjective visual judgment is required or a second caller fails to justify the proposed shared boundary."
+  ],
+  "slices": [
+    {
+      "id": "next-action.kp.cross-domain-gallery.s01",
+      "title": "Contract-boundary-and-worktree-fence",
+      "summary": "Completed under v1: issued the approved contract boundary, protected unrelated dirty paths, and validated the initial workspace.",
+      "status": "complete"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s02",
+      "title": "Exponential-pressure-fixture-repair",
+      "summary": "Completed under v1: added exponential pressure fixtures through catalog-owned homomorphism plans.",
+      "status": "complete"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s03",
+      "title": "Generated-linear-solve-parity-repair",
+      "summary": "Completed under v1: restored generated linear-solve byte parity and production integration.",
+      "status": "complete"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s04",
+      "title": "Stable-gallery-preflight-gate",
+      "summary": "Completed under v1: established the stable gallery preflight gate.",
+      "status": "complete"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s05",
+      "title": "Shared-generation-result-projection",
+      "summary": "Completed under v1: implemented the shared reference-only generation result projection.",
+      "status": "complete"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s06",
+      "title": "Thin-cross-domain-router",
+      "summary": "Completed under v1: implemented the thin registry-injected cross-domain router.",
+      "status": "complete"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s07",
+      "title": "Canonical-logarithmic-solve-route",
+      "summary": "Completed under v1: routed the canonical logarithmic solve without choreography changes.",
+      "status": "complete"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s08",
+      "title": "Canonical-TypeScript-code-route",
+      "summary": "Completed under v1: routed the canonical TypeScript refactor with honest variant gaps.",
+      "status": "complete"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s09",
+      "title": "Pinned-conformance-packet-seed",
+      "summary": "Completed under v1: generated the pinned two-domain conformance packet seed and stable gallery tests.",
+      "status": "complete"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s10",
+      "title": "TypeScript-theme-role-contract",
+      "summary": "Completed under v1: defined and validated the TypeScript-local semantic paint-role contract.",
+      "status": "complete"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s11",
+      "title": "TypeScript-dark-parity-retokenization",
+      "summary": "Completed under v1: retokenized the reviewed TypeScript dark endpoint with parity evidence.",
+      "status": "complete"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s12",
+      "title": "TypeScript-light-exemplar-checkpoint",
+      "summary": "Completed and human-approved under v1: shipped the TypeScript light endpoint, repaired runtime toolbar projection across Catalogue chrome and code, and retained deterministic geometry and playhead state.",
+      "status": "complete"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s13",
+      "title": "Python-light-theme-pressure",
+      "summary": "Added a Python-local semantic paint-role contract and independently authored dark/light optical endpoints; projected Catalogue theme through the native DOM adapter; preserved semantic source, score, motion, geometry, and prior dark paint; added stable browser contrast, determinism, geometry, responsive, and toolbar-toggle evidence; retained the missing property role as explicit cross-language comparison evidence.",
+      "status": "complete"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s14",
+      "title": "Cross-language-theme-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s15",
+      "title": "Shared-code-optical-profile-promotion",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s16",
+      "title": "Bounded-Graph2D-function-request",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s17",
+      "title": "Graph2D-semantic-trace-and-asset",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s18",
+      "title": "Graph2D-SVG-runtime-adapter",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s19",
+      "title": "Graph2D-generation-and-Catalogue-route",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s20",
+      "title": "Graph2D-visual-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s21",
+      "title": "Bounded-Graph3D-scene-request",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s22",
+      "title": "Graph3D-semantic-trace-and-frames",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s23",
+      "title": "Bounded-Graph3D-host-registry",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s24",
+      "title": "Graph3D-WebGL-and-SVG-paint",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s25",
+      "title": "Graph3D-generation-and-Catalogue-route",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s26",
+      "title": "Graph3D-visual-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s27",
+      "title": "Completed-cross-domain-conformance-packet",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s28",
+      "title": "Curated-Catalogue-collection",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s29",
+      "title": "Cross-domain-gallery-visual-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.cross-domain-gallery.s30",
+      "title": "Release-gates-and-closeout",
+      "status": "planned"
+    }
+  ]
+}

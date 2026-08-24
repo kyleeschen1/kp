@@ -233,41 +233,48 @@
    duplication makes the later shared/exceptions comparison evidence-based. */
 .editor-animation-player__surface:has(.kp-python-refactor) {
   border-style: solid;
-  color: #e8ebf2;
-  background: #0d0e1c;
+  color: var(--kp-python-paint-foreground-narration, #e8ebf2);
+  background: var(--kp-python-paint-surface-panel, #0d0e1c);
   letter-spacing: normal;
   text-transform: none;
 }
 
+.editor-animation-player:focus-visible .kp-python-refactor {
+  outline: var(--kp-python-paint-focus-ring-outline);
+  outline-offset: 0.22rem;
+}
+
 .kp-python-refactor {
-  --kp-code-foreground: #ede8d0;
-  --kp-code-keyword: #9099d9;
-  --kp-code-function: #338fff;
-  --kp-code-property: #76afbf;
-  --kp-code-type: #c0965b;
-  --kp-code-boolean: #319aaa;
-  --kp-code-number: var(--kp-code-foreground);
-  --kp-code-string: #82b0ec;
-  --kp-code-comment: #db7b5f;
-  --kp-code-delimiter: #989898;
-  --kp-code-highlight-background: rgb(92 173 255 / 10%);
+  /* Keep legacy aliases local through comparison so paint-role promotion does
+     not require a semantic, source, score, or motion migration. */
+  --kp-code-foreground: var(--kp-python-paint-foreground-primary);
+  --kp-code-keyword: var(--kp-python-paint-syntax-keyword);
+  --kp-code-function: var(--kp-python-paint-syntax-function);
+  --kp-code-type: var(--kp-python-paint-syntax-type);
+  --kp-code-boolean: var(--kp-python-paint-syntax-boolean);
+  --kp-code-number: var(--kp-python-paint-syntax-number);
+  --kp-code-string: var(--kp-python-paint-syntax-string);
+  --kp-code-comment: var(--kp-python-paint-syntax-comment);
+  --kp-code-delimiter: var(--kp-python-paint-syntax-punctuation);
+  --kp-code-highlight-background: var(--kp-python-paint-focus-wash);
 
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   width: min(100% - 2rem, 54rem);
   min-height: 22rem;
   overflow: hidden;
-  border: 1px solid rgb(224 230 244 / 14%);
-  background: #0d0e1c;
-  box-shadow: 0 1rem 3rem rgb(0 0 0 / 18%);
+  border: 1px solid var(--kp-python-paint-border-frame);
+  background: var(--kp-python-paint-surface-panel);
+  box-shadow: var(--kp-python-paint-surface-shadow);
 }
 
 .kp-python-refactor__file {
   display: flex;
   justify-content: space-between;
   padding: 0.55rem 0.8rem;
-  border-bottom: 1px solid rgb(224 230 244 / 12%);
-  color: #a5adbd;
+  border-bottom: 1px solid var(--kp-python-paint-border-divider);
+  color: var(--kp-python-paint-chrome-foreground);
+  background: var(--kp-python-paint-chrome-background);
   font: 600 0.72rem/1.3 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     monospace;
 }
@@ -340,20 +347,25 @@
 
 .kp-python-refactor__token-theater [data-kp-python-token-role="transit"] {
   z-index: 2;
-  text-shadow: 0 0 0.55rem currentcolor;
+  text-shadow: var(--kp-python-paint-transit-halo);
 }
 
 .kp-python-refactor__token-theater [data-kp-python-token-role="withdrawal"] {
-  filter: saturate(0.72) brightness(0.88);
+  filter: var(--kp-python-paint-withdrawal-filter);
 }
 
 .kp-python-refactor [data-kp-python-focus="true"] {
-  text-shadow: 0 0 0.55rem rgb(207 229 255 / var(--kp-python-focus-shadow-alpha, 0));
+  text-shadow: var(--kp-python-paint-focus-halo);
 }
 
 .kp-python-refactor [data-kp-python-syntax-kind="keyword"],
 .kp-python-refactor__token-theater [data-kp-python-token-kind="keyword"] {
   color: var(--kp-code-keyword);
+}
+
+.kp-python-refactor [data-kp-python-syntax-kind="identifier"],
+.kp-python-refactor__token-theater [data-kp-python-token-kind="identifier"] {
+  color: var(--kp-python-paint-syntax-identifier);
 }
 
 .kp-python-refactor [data-kp-python-syntax-kind="function"],
@@ -387,20 +399,28 @@
 }
 
 .kp-python-refactor [data-kp-python-syntax-kind="operator"],
+.kp-python-refactor__token-theater [data-kp-python-token-kind="operator"] {
+  color: var(--kp-python-paint-syntax-operator);
+}
+
 .kp-python-refactor [data-kp-python-syntax-kind="punctuation"],
-.kp-python-refactor__token-theater [data-kp-python-token-kind="operator"],
 .kp-python-refactor__token-theater [data-kp-python-token-kind="punctuation"] {
-  color: var(--kp-code-delimiter);
+  color: var(--kp-python-paint-syntax-punctuation);
 }
 
 .kp-python-refactor__narration {
   min-height: 3.25rem;
   margin: 0;
   padding: 0.8rem 1rem;
-  border-top: 1px solid rgb(224 230 244 / 12%);
-  color: #e8ebf2;
+  border-top: 1px solid var(--kp-python-paint-border-divider);
+  color: var(--kp-python-paint-foreground-narration);
   font-size: 0.88rem;
   line-height: 1.55;
+}
+
+.kp-python-refactor ::selection {
+  color: var(--kp-python-paint-selection-foreground);
+  background: var(--kp-python-paint-selection-background);
 }
 
 @media (max-width: 700px) {

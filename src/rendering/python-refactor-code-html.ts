@@ -13,6 +13,12 @@ import {
   encodeKpHtmlAttribute as encodeKpEditorHtmlAttribute,
   encodeKpHtmlText as encodeKpEditorHtmlText
 } from "./html-output-encoding.ts";
+import { kpPythonRefactorPaintRoleContract } from
+  "./python-refactor-paint-role-contract.ts";
+import {
+  resolveKpPythonRefactorOpticalEndpoint,
+  serializeKpPythonRefactorOpticalEndpoint
+} from "./python-refactor-optical-theme.ts";
 
 export interface KpPythonRefactorCodeHtmlInput {
   readonly semantics: KpPythonRefactorSemanticArtifactV1;
@@ -21,13 +27,15 @@ export interface KpPythonRefactorCodeHtmlInput {
   readonly activeProjectionId: KpPythonRefactorSourceProjectionId;
   readonly focusSelectorIds: readonly string[];
   readonly accessibleDescription: string;
+  readonly theme?: "dark" | "light" | undefined;
 }
 
 export function renderKpPythonRefactorCodeHtml(
   input: KpPythonRefactorCodeHtmlInput
 ): string {
   const projections = createKpPythonRefactorSourceProjections(input.semantics);
-  return `<section class="kp-python-refactor" data-kp-python-refactor-stage="${encodeKpEditorHtmlAttribute(input.stageId)}" data-kp-python-active-projection="${input.activeProjectionId}" aria-label="${encodeKpEditorHtmlAttribute(input.accessibleDescription)}">
+  const endpoint = resolveKpPythonRefactorOpticalEndpoint(input.theme);
+  return `<section class="kp-python-refactor" data-kp-python-refactor-stage="${encodeKpEditorHtmlAttribute(input.stageId)}" data-kp-python-active-projection="${input.activeProjectionId}" data-kp-python-paint-contract="${kpPythonRefactorPaintRoleContract.id}" data-kp-python-theme="${endpoint.id}" style="${serializeKpPythonRefactorOpticalEndpoint(endpoint)}" aria-label="${encodeKpEditorHtmlAttribute(input.accessibleDescription)}">
     <header class="kp-python-refactor__file"><span>shipping.py</span><span>Python</span></header>
     <div class="kp-python-refactor__source" data-kp-python-source-owner>
       ${projections.map((projection) => renderProjection({
