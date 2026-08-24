@@ -130,6 +130,13 @@
   let generatedThrough = $derived(view === undefined
     ? undefined
     : findKpCrossDomainGalleryExecutableCase(view.entry.animationId));
+  let crossDomainGalleryOpen = $state(false);
+
+  function toggleCrossDomainGallery(event: Event): void {
+    if (!(event.currentTarget instanceof HTMLDetailsElement)) return;
+    // Gallery mode owns both collection navigation and provenance disclosure.
+    crossDomainGalleryOpen = event.currentTarget.open;
+  }
 
   function filterResults(event: Event): void {
     if (view === undefined || !(event.currentTarget instanceof HTMLInputElement)) {
@@ -587,6 +594,9 @@
     data-kp-animation-catalogue-theme={routePresentation.theme}
     data-kp-animation-catalogue-style={routePresentation.display.style}
     data-kp-animation-catalogue-focus={routePresentation.display.focus}
+    data-kp-cross-domain-gallery-open={crossDomainGalleryOpen
+      ? "true"
+      : "false"}
     aria-labelledby="kp-animation-catalogue-title"
   >
     <h1
@@ -604,11 +614,14 @@
         <details
           class="kp-animation-catalogue-shell__gallery-collection"
           data-kp-cross-domain-gallery-collection={KP_CROSS_DOMAIN_GALLERY_COLLECTION.id}
-          open
+          ontoggle={toggleCrossDomainGallery}
         >
           <summary>
             <span>{KP_CROSS_DOMAIN_GALLERY_COLLECTION.title}</span>
-            <span>{KP_CROSS_DOMAIN_GALLERY_COLLECTION.cases.length} cases</span>
+            <span>
+              {crossDomainGalleryOpen ? "Hide" : "Show"} ·
+              {KP_CROSS_DOMAIN_GALLERY_COLLECTION.cases.length} cases
+            </span>
           </summary>
           <p>{KP_CROSS_DOMAIN_GALLERY_COLLECTION.summary}</p>
           <ol>
@@ -748,7 +761,7 @@
       onchange={changeInspector}
       oninput={inputParameter}
     >
-      {#if generatedThrough !== undefined}
+      {#if crossDomainGalleryOpen && generatedThrough !== undefined}
         <section
           class="kp-animation-catalogue-shell__generated-through"
           data-kp-cross-domain-gallery-disclosure={generatedThrough.caseId}

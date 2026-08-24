@@ -24,7 +24,7 @@ const captures = [
   capture(executableCases[0]!, 0.52, phone, true)
 ] as const;
 
-test("the curated collection presents four governed artifacts and one typed gap", async ({
+test("the gallery toggle presents four governed artifacts and one typed gap", async ({
   browser,
   baseURL
 }) => {
@@ -51,6 +51,10 @@ test("the curated collection presents four governed artifacts and one typed gap"
       const disclosure = catalogue.locator(
         "[data-kp-cross-domain-gallery-disclosure]"
       );
+      const player = catalogue.locator("[data-kp-editor-animation-player]");
+      await player.evaluate((element) => {
+        element.setAttribute("data-kp-gallery-toggle-identity", "retained");
+      });
       if (entry.openRail) {
         await catalogue.getByRole("button", { name: "Artifacts" }).click();
         await expect(catalogue.locator(
@@ -58,6 +62,37 @@ test("the curated collection presents four governed artifacts and one typed gap"
         )).toBeVisible();
       }
       await expect(collection).toBeVisible();
+      await expect(collection).not.toHaveAttribute("open", "");
+      await expect(catalogue).toHaveAttribute(
+        "data-kp-cross-domain-gallery-open",
+        "false"
+      );
+      await expect(disclosure).toHaveCount(0);
+      if (entry === captures[0]) {
+        const imageFile = path.join(outputRoot, "catalogue-default.png");
+        const image = await catalogue.screenshot({
+          path: imageFile,
+          animations: "disabled"
+        });
+        items.push({
+          id: "catalogue-default",
+          label: "Catalogue default · gallery closed",
+          progress: entry.progress,
+          viewport: entry.viewport,
+          file: path.relative(process.cwd(), imageFile),
+          dataUrl: `data:image/png;base64,${image.toString("base64")}`
+        });
+      }
+      await collection.locator("summary").click();
+      await expect(collection).toHaveAttribute("open", "");
+      await expect(catalogue).toHaveAttribute(
+        "data-kp-cross-domain-gallery-open",
+        "true"
+      );
+      await expect(player).toHaveAttribute(
+        "data-kp-gallery-toggle-identity",
+        "retained"
+      );
       await expect(collection.locator(
         '[data-kp-cross-domain-gallery-status="executable"]'
       )).toHaveCount(4);
@@ -138,7 +173,24 @@ test("collection links select in place while the typed gap remains non-executabl
   await page.goto(`${first.href}&theme=light`);
   await waitForPaint(page, first.animationId, 0);
   const catalogue = page.locator("[data-kp-animation-catalogue]");
-  await catalogue.locator(
+  const collection = catalogue.locator(
+    "[data-kp-cross-domain-gallery-collection]"
+  );
+  const disclosure = catalogue.locator(
+    "[data-kp-cross-domain-gallery-disclosure]"
+  );
+  const player = catalogue.locator("[data-kp-editor-animation-player]");
+  await expect(collection).not.toHaveAttribute("open", "");
+  await expect(disclosure).toHaveCount(0);
+  await player.evaluate((element) => {
+    element.setAttribute("data-kp-gallery-toggle-identity", "retained");
+  });
+  await collection.locator("summary").click();
+  await expect(player).toHaveAttribute(
+    "data-kp-gallery-toggle-identity",
+    "retained"
+  );
+  await collection.locator(
     `[data-kp-cross-domain-gallery-case="${graph2D.caseId}"] a`
   ).click();
   await waitForPaint(page, graph2D.animationId, 0);
@@ -147,12 +199,20 @@ test("collection links select in place while the typed gap remains non-executabl
     graph2D.animationId
   );
   expect(documentRequests).toHaveLength(1);
+  await expect(collection).toHaveAttribute("open", "");
+  await expect(disclosure).toHaveAttribute(
+    "data-kp-cross-domain-gallery-disclosure",
+    graph2D.caseId
+  );
   await expect(catalogue.locator(
     '[data-kp-cross-domain-gallery-status="repair-required"] a'
   )).toHaveCount(0);
   await expect(catalogue.locator(
     "[data-kp-animation-catalogue-review-dock]"
   )).toHaveCount(1);
+  await collection.locator("summary").click();
+  await expect(collection).not.toHaveAttribute("open", "");
+  await expect(disclosure).toHaveCount(0);
 });
 
 function capture(
