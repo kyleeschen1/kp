@@ -557,8 +557,8 @@
     {
       "id": "next-action.kp.cross-domain-gallery.s20",
       "title": "Graph2D-visual-checkpoint",
-      "summary": "Human checkpoint revision is implemented: support witnesses are smaller and filled, the vertex remains slightly more salient, every visible exemplar label is rendered by KaTeX, and the shared viewport rejects raw or unowned label text for strict graph profiles. Awaiting renewed human visual approval.",
-      "status": "in-progress"
+      "summary": "Human review approved the corrected Graph2D checkpoint by requesting resume. The exemplar retains three semantic correspondence points while painting smaller filled support witnesses and a slightly more salient vertex; all visible graph labels use KaTeX under the strict shared text-ownership policy. Commit 2a3d63265 is the approved rollback unit.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.cross-domain-gallery.s21",
