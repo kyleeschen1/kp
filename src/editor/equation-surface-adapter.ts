@@ -190,6 +190,10 @@ import {
   applyKpCertifiedEquationEvaluationMount,
   kpCertifiedEquationEvaluationTransformationIds
 } from "./equation-certified-evaluation-mount.ts";
+import {
+  requireKpOperatorScopePresentationPolicy,
+  type KpOperatorScopePresentationPolicy
+} from "./operator-scope-presentation-policy.ts";
 
 const semanticMotionPlanCache = new WeakMap<HTMLElement, {
   readonly contentKey: string;
@@ -3271,7 +3275,12 @@ function applyDerivativePowerTokenFocus(input: {
     activeDerivativePowerPhase(input.frame);
   input.transition.dataset["kpEditorEquationDerivativePowerSettlement"] =
     String(input.frame.settlementProgress);
-  syncDerivativeApplicationTrace(input);
+  const operatorScopePolicy = requireKpOperatorScopePresentationPolicy(
+    input.plan.operatorApplication.kind
+  );
+  input.transition.dataset["kpEditorOperatorScopePresentation"] =
+    operatorScopePolicy.treatment;
+  syncDerivativeApplicationTrace({ ...input, policy: operatorScopePolicy });
   const operatorApplication = input.transition.querySelector<HTMLElement>(
     "[data-kp-derivative-operator-application]"
   );
@@ -3355,11 +3364,13 @@ function syncDerivativeApplicationTrace(input: {
   readonly geometry: KpPrecomputedEquationMotionPlan["geometry"];
   readonly plan: KpDerivativePowerChoreographyPlan;
   readonly frame: KpDerivativePowerChoreographyFrame;
+  readonly policy: KpOperatorScopePresentationPolicy;
 }): void {
   const existing = input.transition.querySelector<HTMLElement>(
     "[data-kp-editor-derivative-application-trace]"
   );
-  if (input.frame.applicationTrace.presence <= 0) {
+  if (input.policy.treatment !== "outline" ||
+      input.frame.applicationTrace.presence <= 0) {
     existing?.remove();
     return;
   }

@@ -187,6 +187,34 @@
       "scope": "slice s07 discovery and coverage",
       "checkedAt": "2026-08-25T00:21:06.771Z",
       "notes": "Dependency, semantic, equation-authority, governance, and cross-domain architecture gates pass."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s08 operator scope policy",
+      "checkedAt": "2026-08-25T00:26:17.767Z",
+      "notes": "Integration resolves salience-only through the renderer-owned policy and the scoped integration suite passes."
+    },
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "slice s08 operator scope policy",
+      "checkedAt": "2026-08-25T00:26:19.271Z",
+      "notes": "Derivative resolves outline through the same policy and all focused semantic and choreography tests pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s08 operator scope policy",
+      "checkedAt": "2026-08-25T00:26:20.568Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s08 operator scope policy",
+      "checkedAt": "2026-08-25T00:26:21.909Z",
+      "notes": "Renderer policy ownership respects every dependency and equation authority boundary."
     }
   ],
   "allowedWork": [
@@ -264,7 +292,8 @@
     {
       "id": "next-action.kp.integration-power-rule.s08",
       "title": "Renderer-owned-operator-scope-policy",
-      "status": "planned"
+      "summary": "Added a renderer-owned closed scope-treatment vocabulary and fail-closed registry, kept derivative on outline, assigned integration salience-only, and routed the existing derivative trace through the policy without moving semantic or geometry authority.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.integration-power-rule.s09",
