@@ -24,6 +24,7 @@ export interface KpAntiderivativePowerChoreographyPlan {
     readonly kind: "antiderivative-operator-application";
     readonly operatorSelectorIds: readonly string[];
     readonly argumentSelectorIds: readonly string[];
+    readonly argumentSemanticEntityId: string;
     readonly consumesOperator: true;
     readonly withdrawal: "opacity-only";
   };
@@ -36,6 +37,10 @@ export interface KpAntiderivativePowerChoreographyPlan {
     readonly targetSelectorIds: readonly [string, string];
   };
   readonly introducedSelectorIds: readonly string[];
+  readonly fractionStructure: {
+    readonly targetSemanticEntityId: string;
+    readonly lifecycle: "introduction";
+  };
 }
 
 export interface KpAntiderivativePowerChoreographyFrame {
@@ -137,6 +142,17 @@ export function compileKpAntiderivativePowerChoreography(input: {
     }
     return found.selectorId;
   };
+  const group = (
+    id: KpAntiderivativePowerRuleSemanticRoles["groups"][number]["id"]
+  ): string => {
+    const found = input.semanticRoles.groups.find((candidate) =>
+      candidate.id === id
+    );
+    if (found === undefined) {
+      throw new Error(`Antiderivative choreography lacks semantic group ${id}.`);
+    }
+    return found.semanticId;
+  };
   return Object.freeze({
     kind: "antiderivative-power-choreography-plan" as const,
     id: input.id,
@@ -153,6 +169,7 @@ export function compileKpAntiderivativePowerChoreography(input: {
         role("source.integrand-base"),
         role("source.integrand-exponent")
       ]),
+      argumentSemanticEntityId: group("source.integrand-scope"),
       consumesOperator: true as const,
       withdrawal: "opacity-only" as const
     }),
@@ -169,7 +186,11 @@ export function compileKpAntiderivativePowerChoreography(input: {
     }),
     introducedSelectorIds: Object.freeze(introductions.map((candidate) =>
       candidate!.targetSelectorIds[0]!
-    ))
+    )),
+    fractionStructure: Object.freeze({
+      targetSemanticEntityId: group("expanded.exact-quotient"),
+      lifecycle: "introduction" as const
+    })
   });
 }
 

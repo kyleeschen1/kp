@@ -33,6 +33,12 @@ test("integration first transition compiles its governed scope and lineage", () 
   ]);
   assert.deepEqual(plan.operatorApplication.argumentSelectorIds.map((id) =>
     id.split(".").at(-1)), ["base", "exponent"]);
+  assert.equal(
+    plan.operatorApplication.argumentSemanticEntityId.endsWith(
+      ".initial.integrand-scope"
+    ),
+    true
+  );
   assert.deepEqual(plan.exponentBranch.targetSelectorIds.map((id) =>
     id.split(".").at(-1)), [
     "numerator-exponent",
@@ -45,6 +51,12 @@ test("integration first transition compiles its governed scope and lineage", () 
     "connector",
     "constant"
   ]);
+  assert.equal(
+    plan.fractionStructure.targetSemanticEntityId.endsWith(
+      ".expanded.exact-quotient"
+    ),
+    true
+  );
   assert.doesNotMatch(JSON.stringify(plan),
     /outline|box|translate|geometry|path-variant/u);
 });

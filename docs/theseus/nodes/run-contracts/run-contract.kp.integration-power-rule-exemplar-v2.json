@@ -285,6 +285,34 @@
       "scope": "slice s11 integration first-transition plan",
       "checkedAt": "2026-08-25T00:44:38.191Z",
       "notes": "The pure choreography compiler preserves semantic, animation, rendering, and equation-authority boundaries."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s12 Native KaTeX material transit",
+      "checkedAt": "2026-08-25T01:03:22.222Z",
+      "notes": "Fifty-five focused tests prove semantic persistence, one-to-two exponent provenance, all required introductions, renderer-only geometry authority, and bounded exemplar status."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-transit",
+      "status": "passed",
+      "scope": "slice s12 Native KaTeX material transit",
+      "checkedAt": "2026-08-25T01:03:23.486Z",
+      "notes": "One Chromium canary traverses exact source-native, shared material-layer, and expanded target-native paint; realized source and target seams stay within 0.25px, ownership is exclusive, and base, split exponent, fraction, two increments, connector, and constant are present."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s12 Native KaTeX material transit",
+      "checkedAt": "2026-08-25T01:03:24.508Z",
+      "notes": "Application, Node, browser test, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s12 Native KaTeX material transit",
+      "checkedAt": "2026-08-25T01:03:25.546Z",
+      "notes": "The bounded renderer adapter reuses canonical scene and material owners without moving semantic or geometry authority."
     }
   ],
   "allowedWork": [
@@ -386,7 +414,8 @@
     {
       "id": "next-action.kp.integration-power-rule.s12",
       "title": "Native-KaTeX-integration-material-transit",
-      "status": "planned"
+      "summary": "Bound the integration choreography to the existing Native KaTeX scene compositor: the base persists, one exponent splits to two governed targets, unmatched operator paint eliminates, and fraction, both increments, connector, and constant introduce. A stable Chromium canary certifies realized-paint continuity, exclusive source/material/target ownership, exact native settlement, and no new paint system or promotion.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.integration-power-rule.s13",
