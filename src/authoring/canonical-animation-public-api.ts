@@ -73,6 +73,13 @@ export {
 } from "./governed-canonical-construction-cohort.ts";
 
 export {
+  createKpGovernedIntegrationPowerRuleResult,
+  kpGovernedIntegrationPowerRuleRevisionId,
+  type KpGovernedIntegrationPowerRuleFixture,
+  type KpGovernedIntegrationPowerRuleResult
+} from "./governed-integration-power-rule-fixture.ts";
+
+export {
   createKpGovernedCanonicalCompoundConstruction,
   sampleKpGovernedCanonicalCompoundConstruction,
   type KpGovernedCanonicalCompoundConstruction,

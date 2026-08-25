@@ -117,6 +117,27 @@
       "scope": "slice s05 case ledger",
       "checkedAt": "2026-08-25T00:08:00.521Z",
       "notes": "The closed case and repair vocabulary passes all TypeScript, Svelte, and domain checks."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s06 governed construction",
+      "checkedAt": "2026-08-25T00:12:38.555Z",
+      "notes": "The canonical case compiles through the public governed request with compiler-owned objects, operations, laws, roles, and lineage; n=-1 returns a typed repair before request construction."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s06 governed construction",
+      "checkedAt": "2026-08-25T00:12:39.839Z",
+      "notes": "The governed integration result union and public authoring export pass all typechecks."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s06 governed construction",
+      "checkedAt": "2026-08-25T00:12:40.918Z",
+      "notes": "All dependency, semantic, evaluation, equation-authority, and cross-domain conformance ratchets pass with the new authoring fixture."
     }
   ],
   "allowedWork": [
@@ -182,7 +203,8 @@
     {
       "id": "next-action.kp.integration-power-rule.s06",
       "title": "Governed-construction-binding",
-      "status": "planned"
+      "summary": "Bound the canonical monic-quadratic fixture through the single public governed construction request and compiler, with exact object and operation closure and compiler-owned laws, roles, and lineage. Unsupported cases now return their ledger repair before any request exists. Scoped tests, full typecheck, and architecture gates pass.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.integration-power-rule.s07",
