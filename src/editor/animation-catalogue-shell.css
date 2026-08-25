@@ -405,11 +405,21 @@
   text-align: center;
 }
 
-.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.derivative.power-rule-x-cubed"]
-  .kp-animation-catalogue-shell__stage-host .editor-equation-stage__object {
+.kp-animation-catalogue-shell:is(
+  [data-kp-animation-catalogue-selection="animation.generated.calculus.derivative.power-rule-x-cubed"],
+  [data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+) .kp-animation-catalogue-shell__stage-host .editor-equation-stage__object {
   /* This is still native KaTeX typography rather than animated scaling; the
      standalone checkpoint only needs enough size to read at catalogue distance. */
   --kp-editor-equation-fit-font-size: clamp(1.8rem, 5.5vw, 2.75rem);
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .kp-animation-catalogue-shell__stage-host
+  .editor-equation-stage__material-layer {
+  /* Native and material owners must share the same em context; the compositor
+     still owns every measured clone and its exact endpoint handoff. */
+  font-size: clamp(1.8rem, 5.5vw, 2.75rem);
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.derivative.power-rule-x-cubed"]

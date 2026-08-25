@@ -36,6 +36,12 @@ export function applyKpAntiderivativePowerEvaluationMount(input: {
   readonly activeTransformationIds: readonly string[];
   readonly localProgress: number;
   readonly direction: "forward" | "rewind";
+  readonly accessibilityMode?:
+    | "full-motion"
+    | "reduced-motion"
+    | "static"
+    | "narrated"
+    | undefined;
   readonly hotPath: KpEditorEquationStageHotPathCache;
 }): KpAntiderivativePowerEvaluationMountResult {
   const entries = consumeKpEquationPresentationPlanV2({
@@ -182,9 +188,12 @@ export function applyKpAntiderivativePowerEvaluationMount(input: {
       base,
       cohorts: payload.cohorts
     });
-  const progress = input.direction === "forward"
+  const semanticProgress = input.direction === "forward"
     ? input.localProgress
     : 1 - input.localProgress;
+  const progress = input.accessibilityMode === "static"
+    ? semanticProgress < 0.5 ? 0 : 1
+    : semanticProgress;
   playback.apply(progress);
   applyCohortSalience(input.stage, progress);
   settleNativeEndpoints({ stage: input.stage, tokens, progress });

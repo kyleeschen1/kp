@@ -122,6 +122,7 @@
     "test:browser:differentiation-exemplar": "playwright test tests/differentiation-power-catalogue.browser.spec.ts --project=chromium --workers=1",
     "test:browser:integration-power-rule-transit": "playwright test tests/integration-power-rule-transit.browser.spec.ts --project=chromium --workers=1",
     "test:browser:integration-power-rule-evaluation": "playwright test tests/integration-power-rule-evaluation.browser.spec.ts --project=chromium --workers=1",
+    "test:browser:integration-power-rule-catalogue": "playwright test tests/integration-power-rule-catalogue.browser.spec.ts --project=chromium --workers=1",
     "test:browser:evaluation-host-parity": "playwright test tests/evaluation-host-parity.browser.spec.ts --project=chromium --workers=1",
     "test:browser:finite-binder-sum": "playwright test tests/finite-binder-sum-catalogue.browser.spec.ts --project=chromium --workers=1",
     "test:browser:finite-binder-product": "playwright test tests/finite-binder-product-catalogue.browser.spec.ts --project=chromium --workers=1",

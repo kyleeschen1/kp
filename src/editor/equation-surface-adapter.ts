@@ -191,6 +191,13 @@ import {
   kpCertifiedEquationEvaluationTransformationIds
 } from "./equation-certified-evaluation-mount.ts";
 import {
+  applyKpAntiderivativePowerTransitMount,
+  disposeKpAntiderivativePowerTransitMount
+} from "./antiderivative-power-transit-mount.ts";
+import {
+  applyKpAntiderivativePowerEvaluationMount
+} from "./antiderivative-power-evaluation-mount.ts";
+import {
   requireKpOperatorScopePresentationPolicy,
   type KpOperatorScopePresentationPolicy
 } from "./operator-scope-presentation-policy.ts";
@@ -275,6 +282,7 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
     let contentChanged = false;
     if (stage?.dataset["kpEditorEquationStageIdentityKey"] !== frame.stageIdentityKey) {
       if (stage !== null) {
+        disposeKpAntiderivativePowerTransitMount(stage, "surface-disposed");
         disposeKpRadicalWebglMorph(stage);
         disposeKpEditorEquationStageHotPathCache(stage);
       }
@@ -288,6 +296,7 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
       ) {
         disposeKpRadicalWebglMorph(stage);
       }
+      disposeKpAntiderivativePowerTransitMount(stage, "scene-replaced");
       invalidateKpEditorEquationStageHotPathCache(stage, "content");
       replaceStageContent(stage, frame);
       contentChanged = true;
@@ -477,6 +486,30 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
         ),
         localProgress: frame.localProgress,
         direction: state.direction,
+        hotPath
+      });
+      applyKpAntiderivativePowerTransitMount({
+        player,
+        stage,
+        animation,
+        activeTransformationIds: frame.projection.transitions.map(
+          ({ id }) => id
+        ),
+        contentKey: frame.contentKey,
+        localProgress: frame.localProgress,
+        direction: state.direction,
+        accessibilityMode: editorAccessibilityMode(stage),
+        hotPath
+      });
+      applyKpAntiderivativePowerEvaluationMount({
+        stage,
+        plan: governance.presentationPlan,
+        activeTransformationIds: frame.projection.transitions.map(
+          ({ id }) => id
+        ),
+        localProgress: frame.localProgress,
+        direction: state.direction,
+        accessibilityMode: editorAccessibilityMode(stage),
         hotPath
       });
     }

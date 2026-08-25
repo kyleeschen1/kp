@@ -446,6 +446,62 @@
       "scope": "slice s15 renderer and authority boundaries",
       "checkedAt": "2026-08-25T01:42:12.876Z",
       "notes": "Renderer scoping remains certificate-owned, semantic and presentation boundaries pass, and no new family selection or paint system was introduced."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s16 canonical Catalogue integration",
+      "checkedAt": "2026-08-25T02:16:28.405Z",
+      "notes": "Sixty-one focused tests preserve exact semantics, governed first transit, two certified evaluation cohorts, bounded exemplar status, and typed gaps."
+    },
+    {
+      "command": "npm run test:evaluation-authority-convergence",
+      "status": "passed",
+      "scope": "slice s16 evaluation authority preservation",
+      "checkedAt": "2026-08-25T02:16:29.429Z",
+      "notes": "Thirty-four tests preserve registry-minted contributor-fusion authority, shared cohort lifecycle, and singular caller compatibility."
+    },
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "slice s16 derivative preservation",
+      "checkedAt": "2026-08-25T02:16:30.456Z",
+      "notes": "Thirty-five tests preserve the accepted derivative outline, single ink-knot evaluation, and existing generic host route."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-transit",
+      "status": "passed",
+      "scope": "slice s16 isolated Native KaTeX transit parity",
+      "checkedAt": "2026-08-25T02:16:31.462Z",
+      "notes": "Chromium preserves realized source, material, and target ownership and subpixel endpoint continuity after production host wiring."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-evaluation",
+      "status": "passed",
+      "scope": "slice s16 isolated dual-cohort parity",
+      "checkedAt": "2026-08-25T02:16:32.467Z",
+      "notes": "Chromium preserves two spatially disjoint certified ink knots under one lifecycle after production host wiring."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-catalogue",
+      "status": "passed",
+      "scope": "slice s16 canonical Catalogue lifecycle",
+      "checkedAt": "2026-08-25T02:16:33.494Z",
+      "notes": "Two Chromium canaries prove the existing Catalogue host uses salience-only operator treatment, shared Native KaTeX transit, two certified ink knots, exact endpoints, URL restoration, theme response, rewind, reduced motion, static accessibility truth, and typed repair telemetry."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s16 type safety",
+      "checkedAt": "2026-08-25T02:16:34.552Z",
+      "notes": "Application, Node, browser test, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s16 host and renderer boundaries",
+      "checkedAt": "2026-08-25T02:16:35.558Z",
+      "notes": "Dependency direction, semantic animation boundaries, evaluation presentation authority, equation governance, and cross-domain conformance gates pass."
     }
   ],
   "allowedWork": [
@@ -571,7 +627,8 @@
     {
       "id": "next-action.kp.integration-power-rule.s16",
       "title": "Canonical-Catalogue-lifecycle",
-      "status": "planned"
+      "summary": "Connected the governed integration first transit and dual certified evaluation cohorts to the existing Catalogue equation stage. The host now restores native endpoint paint before compositor ownership, applies salience-only operator attention with opacity withdrawal, realizes both 2+1 to 3 ink knots under one resolution clock, exposes exact native endpoints, retires on scene, measurement, and surface lifecycle boundaries, and reports a typed runtime repair gap instead of generic fallback. Stable Chromium checks cover URL restoration, seek, rewind, theme response, reduced motion, static accessibility truth, and derivative preservation.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.integration-power-rule.s17",
