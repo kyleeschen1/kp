@@ -138,6 +138,10 @@ test("rule-template projection previews complete grammar before binding", () => 
   assert.equal(before.ruleTemplateApplication.previewPresence, 0);
   assert.equal(before.ruleTemplateApplication.scaffoldPresence, 0);
   assert.equal(before.ruleTemplateApplication.bindingProgress, 0);
+  assert.equal(
+    before.ruleTemplateApplication.receiverSettlementProgress,
+    0
+  );
 
   const preview = sampleKpAntiderivativePowerChoreography({
     plan,
@@ -149,6 +153,10 @@ test("rule-template projection previews complete grammar before binding", () => 
   assert.equal(preview.ruleTemplateApplication.previewPresence, 1);
   assert.ok(preview.ruleTemplateApplication.scaffoldPresence > 0);
   assert.equal(preview.ruleTemplateApplication.bindingProgress, 0);
+  assert.equal(
+    preview.ruleTemplateApplication.receiverSettlementProgress,
+    0
+  );
   assert.ok(preview.ruleTemplateApplication.syntaxPresence > 0);
   assert.ok(preview.ruleTemplateApplication.closurePresence > 0);
   assert.equal(
@@ -168,6 +176,10 @@ test("rule-template projection previews complete grammar before binding", () => 
     binding.ruleTemplateApplication.syntaxResolutionProgress);
   assert.ok(binding.ruleTemplateApplication.syntaxPresence > 0);
   assert.ok(binding.ruleTemplateApplication.closurePresence > 0);
+  assert.equal(
+    binding.ruleTemplateApplication.receiverSettlementProgress,
+    0
+  );
   assert.equal(binding.ruleTemplateApplication.syntaxResolutionProgress, 0);
 
   const resolved = sampleKpAntiderivativePowerChoreography({
@@ -179,6 +191,10 @@ test("rule-template projection previews complete grammar before binding", () => 
   assert.equal(resolved.ruleTemplateApplication.vacancyPresence, 0);
   assert.equal(resolved.ruleTemplateApplication.scaffoldPresence, 1);
   assert.equal(resolved.ruleTemplateApplication.bindingProgress, 1);
+  assert.equal(
+    resolved.ruleTemplateApplication.receiverSettlementProgress,
+    1
+  );
   assert.equal(resolved.ruleTemplateApplication.syntaxPresence, 1);
   assert.equal(resolved.ruleTemplateApplication.syntaxResolutionProgress, 1);
   assert.equal(resolved.ruleTemplateApplication.closurePresence, 1);

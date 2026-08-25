@@ -415,11 +415,18 @@
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .kp-animation-catalogue-shell__stage-host .editor-equation-stage__object {
+  /* Script-style glyphs need enough final-size ink for source-to-receiver
+     metric continuity on narrow screens; this remains exemplar-local. */
+  --kp-editor-equation-fit-font-size: clamp(2.15rem, 5.5vw, 2.75rem);
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
   .kp-animation-catalogue-shell__stage-host
   .editor-equation-stage__material-layer {
   /* Native and material owners must share the same em context; the compositor
      still owns every measured clone and its exact endpoint handoff. */
-  font-size: clamp(1.8rem, 5.5vw, 2.75rem);
+  font-size: clamp(2.15rem, 5.5vw, 2.75rem);
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
@@ -442,11 +449,7 @@
   );
   border-radius: 999px;
   opacity: var(--kp-antiderivative-template-vacancy-presence, 0);
-  transform: translate(
-      var(--kp-antiderivative-template-vacancy-translate-x, 0),
-      var(--kp-antiderivative-template-vacancy-translate-y, 0)
-    )
-    scaleX(var(--kp-antiderivative-template-vacancy-scale, 0.72));
+  transform: scaleX(var(--kp-antiderivative-template-vacancy-scale, 0.72));
   transform-origin: center;
 }
 

@@ -22,7 +22,9 @@ import {
   observeKpNativeKatexRenderedScene
 } from "../rendering/native-katex-rendered-scene.ts";
 import {
-  kpAntiderivativeTemplateInstantiationProfileId
+  kpAntiderivativeTemplateInstantiationProfileId,
+  measureKpAntiderivativeTemplateReceiverPlacement,
+  type KpAntiderivativeTemplateReceiverPlacement
 } from "../rendering/native-katex-antiderivative-template-instantiation.ts";
 import type {
   KpCanonicalNativeKatexSceneSession
@@ -288,7 +290,6 @@ async function prepareSession(
     await session.fontReadiness.whenReady();
     if (session.disposed || session.generation !== generation) return;
     prepareNativeMeasurement(session);
-    positionTemplateReceiver(session);
     const source = observeKpNativeKatexRenderedScene({
       endpoint: "source",
       stage: session.stage,
@@ -310,6 +311,9 @@ async function prepareSession(
       viewportRevision: session.cacheRevision
     });
     if (session.disposed || session.generation !== generation) return;
+    const receiverPlacement =
+      measureKpAntiderivativeTemplateReceiverPlacement({ source, target });
+    positionTemplateReceiver(session, receiverPlacement);
     session.canonical = createKpAntiderivativePowerNativeKatexSceneSession({
       plan: session.plan,
       source,
@@ -377,39 +381,16 @@ function prepareNativeMeasurement(session: TransitMountSession): void {
   }
 }
 
-function positionTemplateReceiver(session: TransitMountSession): void {
+function positionTemplateReceiver(
+  session: TransitMountSession,
+  placement: KpAntiderivativeTemplateReceiverPlacement
+): void {
   const stageRect = session.stage.getBoundingClientRect();
-  const sourceTokens = [
-    ...session.roots.source.querySelectorAll<HTMLElement>(
-      "[data-kp-motion-id]"
-    )
-  ];
   const targetTokens = [
     ...session.roots.target.querySelectorAll<HTMLElement>(
       "[data-kp-motion-id]"
     )
   ];
-  const baseRelation = session.plan.choreography.ruleTemplateApplication
-    .bindingRelations[0];
-  const sourceBase = sourceTokens.find((candidate) =>
-    selectorIdFromMotionId(candidate) === baseRelation.sourceSelectorId
-  );
-  const targetBase = targetTokens.find((candidate) =>
-    selectorIdFromMotionId(candidate) === baseRelation.targetSelectorIds[0]
-  );
-  if (sourceBase === undefined || targetBase === undefined) {
-    throw new Error(
-      "Antiderivative template receiver requires its persistent base geometry."
-    );
-  }
-  const sourceBaseRect = sourceBase.getBoundingClientRect();
-  const targetBaseRect = targetBase.getBoundingClientRect();
-  const originTranslation = {
-    x: sourceBaseRect.left + sourceBaseRect.width / 2 -
-      (targetBaseRect.left + targetBaseRect.width / 2),
-    y: sourceBaseRect.top + sourceBaseRect.height / 2 -
-      (targetBaseRect.top + targetBaseRect.height / 2)
-  };
   for (const slot of session.templateReceiver.querySelectorAll<HTMLElement>(
     "[data-kp-antiderivative-template-vacancy]"
   )) {
@@ -429,17 +410,21 @@ function positionTemplateReceiver(session: TransitMountSession): void {
       Math.min(24, targetRect.width * 1.18)
     );
     slot.style.left = `${targetRect.left - stageRect.left +
+      placement.translation.x +
       (targetRect.width - width) / 2}px`;
     slot.style.top = `${targetRect.bottom - stageRect.top +
+      placement.translation.y +
       Math.max(1, targetRect.height * 0.06)}px`;
     slot.style.width = `${width}px`;
-    slot.dataset["kpAntiderivativeTemplateOriginX"] =
-      originTranslation.x.toFixed(4);
-    slot.dataset["kpAntiderivativeTemplateOriginY"] =
-      originTranslation.y.toFixed(4);
   }
   session.stage.dataset["kpAntiderivativeTemplateVacancyCount"] =
     String(session.templateReceiver.childElementCount);
+  session.stage.dataset["kpAntiderivativeTemplateReceiverLane"] =
+    placement.lane;
+  session.stage.dataset["kpAntiderivativeTemplateReceiverTranslateX"] =
+    placement.translation.x.toFixed(4);
+  session.stage.dataset["kpAntiderivativeTemplateReceiverTranslateY"] =
+    placement.translation.y.toFixed(4);
 }
 
 function applyFrame(session: TransitMountSession): void {
@@ -502,25 +487,6 @@ function applyRuleTemplateApplicationState(
   );
   session.templateReceiver.dataset["kpSemanticTraceRole"] =
     template.traceRole;
-  const receiverMotion = template.bindingProgress;
-  for (const slot of session.templateReceiver.querySelectorAll<HTMLElement>(
-    "[data-kp-antiderivative-template-vacancy]"
-  )) {
-    const originX = Number(
-      slot.dataset["kpAntiderivativeTemplateOriginX"] ?? 0
-    );
-    const originY = Number(
-      slot.dataset["kpAntiderivativeTemplateOriginY"] ?? 0
-    );
-    slot.style.setProperty(
-      "--kp-antiderivative-template-vacancy-translate-x",
-      `${originX * (1 - receiverMotion)}px`
-    );
-    slot.style.setProperty(
-      "--kp-antiderivative-template-vacancy-translate-y",
-      `${originY * (1 - receiverMotion)}px`
-    );
-  }
   const semanticIds = [
     ...session.plan.choreography.ruleTemplateApplication
       .scaffoldSemanticEntityIds,
@@ -567,8 +533,8 @@ function applyRuleTemplateApplicationState(
     template.receiverFocus.toFixed(4);
   session.stage.dataset["kpAntiderivativeTemplateVacancyPresence"] =
     template.vacancyPresence.toFixed(4);
-  session.stage.dataset["kpAntiderivativeTemplateReceiverMotion"] =
-    receiverMotion.toFixed(4);
+  session.stage.dataset["kpAntiderivativeTemplateReceiverSettlementProgress"] =
+    template.receiverSettlementProgress.toFixed(4);
   session.stage.dataset["kpAntiderivativeTemplateLawRefId"] =
     session.plan.choreography.ruleTemplateApplication.lawRefId;
   session.stage.dataset["kpAntiderivativeTemplatePreviewPresence"] =
@@ -827,7 +793,10 @@ function clearTelemetry(stage: HTMLElement): void {
   delete stage.dataset["kpAntiderivativeTemplateReceiverFocus"];
   delete stage.dataset["kpAntiderivativeTemplateVacancyPresence"];
   delete stage.dataset["kpAntiderivativeTemplateVacancyCount"];
-  delete stage.dataset["kpAntiderivativeTemplateReceiverMotion"];
+  delete stage.dataset["kpAntiderivativeTemplateReceiverLane"];
+  delete stage.dataset["kpAntiderivativeTemplateReceiverTranslateX"];
+  delete stage.dataset["kpAntiderivativeTemplateReceiverTranslateY"];
+  delete stage.dataset["kpAntiderivativeTemplateReceiverSettlementProgress"];
   delete stage.dataset["kpAntiderivativeTemplateLawRefId"];
   delete stage.dataset["kpAntiderivativeTemplatePreviewPresence"];
   delete stage.dataset["kpAntiderivativeTemplateScaffoldPresence"];

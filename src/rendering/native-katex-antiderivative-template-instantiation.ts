@@ -3,32 +3,39 @@ import {
   type KpAntiderivativePowerChoreographyPlan
 } from "../animation/antiderivative-power-choreography.ts";
 import {
-  sampleKpCanonicalNativeKatexCopyFanOutMotion
-} from "../animation/copy-fan-out-motion-profile.ts";
-import {
-  planKpEquationMotionPathBetweenPoints
-} from "./equation-motion-path-planner.ts";
-import {
   invalidateKpNativeKatexMotionPath
 } from "./native-katex-paint-geometry.ts";
 import type {
+  KpEquationMotionPathCandidate
+} from "./equation-motion-path-planner.ts";
+import type {
   KpNativeKatexPaintMeasuredSceneTrack
 } from "./native-katex-base-scene-plan.ts";
+import type {
+  KpNativeKatexRenderedSceneObservation
+} from "./native-katex-rendered-scene.ts";
 import {
   createKpNativeKatexTrackProjection,
   type KpNativeKatexTrackProjection
 } from "./native-katex-track-projection.ts";
 
 export const kpAntiderivativeTemplateInstantiationProfileId =
-  "kp.rendering.native-katex.antiderivative-template-instantiation-profile.v3";
+  "kp.rendering.native-katex.antiderivative-template-instantiation-profile.v4";
 
 const presentationProfile = Object.freeze({
   scaffoldPointScale: 0.9,
   fixedSyntaxPointScale: 0.88,
   closurePointScale: 0.9,
   numeratorVacancyOffsetInNativeHeights: 1.35,
-  denominatorBranchClearanceInNativeHeights: 1.8
+  receiverPathProgress: 0.5,
+  receiverGapInNativeHeights: 0.4,
+  stageEdgeInsetPx: 4
 });
+
+export interface KpAntiderivativeTemplateReceiverPlacement {
+  readonly lane: "right" | "above";
+  readonly translation: Readonly<{ x: number; y: number }>;
+}
 
 /**
  * This projection expresses one reviewed-candidate causal phrase: the rule's
@@ -57,7 +64,7 @@ export function createKpAntiderivativeTemplateInstantiationTrackProjection(
     template.bindingRelations[1].targetSelectorIds[0];
   return createKpNativeKatexTrackProjection({
     id: `track-projection.${kpAntiderivativeTemplateInstantiationProfileId}`,
-    project({ tracks, target }) {
+    project({ tracks, source, target }) {
       const targetEntityByAtomId = new Map(target.atoms.map((atom) => [
         atom.id,
         atom.semanticEntityId
@@ -89,10 +96,11 @@ export function createKpAntiderivativeTemplateInstantiationTrackProjection(
           "Antiderivative template projection requires base and denominator bindings plus one fraction rule."
         );
       }
-      const templateTranslation = translationBetweenCenters(
-        baseTrack.endRect,
-        baseTrack.startRect
-      );
+      const receiverPlacement = measureKpAntiderivativeTemplateReceiverPlacement({
+        source,
+        target
+      });
+      const receiverTranslation = receiverPlacement.translation;
       const occlusionId =
         "foreground-occlusion.antiderivative-template.denominator-through-rule";
       const numeratorReceptionContactGroupId =
@@ -129,13 +137,20 @@ export function createKpAntiderivativeTemplateInstantiationTrackProjection(
             baseTargetIds.has(targetEntityId)) {
           return Object.freeze({
             ...track,
-            timingGroupId: "antiderivative-template.base-binding",
-            semanticMotionUnitId: "antiderivative-template.base-binding",
-            // The persistent base travels into the already-visible numerator
-            // vacancy. Its contact with the fraction scaffold is therefore
-            // the rule's reception event, not incidental crowding.
-            intentionalContactGroupId: numeratorReceptionContactGroupId,
-            sampleProgress: sampleRuleBindingMotionInput,
+            timingGroupId: "antiderivative-template.receiver",
+            semanticMotionUnitId: "antiderivative-template.receiver",
+            // The base is received by the numerator vacancy, but shares the
+            // lower branch's contact allowance while leaving the source pose;
+            // otherwise collision repair pulls one member out of the rigid
+            // receiver cohort before settlement.
+            intentionalContactGroupId: denominatorReceptionContactGroupId,
+            motionPath: pathThroughReceiver(
+              track,
+              receiverTranslation,
+              receiverPlacement.lane
+            ),
+            motionPathSampling: "staged-waypoint" as const,
+            sampleProgress: sampleRuleMaterialPathProgress,
             motionMetrics: true as const
           });
         }
@@ -144,8 +159,8 @@ export function createKpAntiderivativeTemplateInstantiationTrackProjection(
             exponentTargetIds.has(targetEntityId)) {
           const bindingTrack = Object.freeze({
             ...track,
-            timingGroupId: "antiderivative-template.exponent-binding",
-            semanticMotionUnitId: "antiderivative-template.exponent-binding",
+            timingGroupId: "antiderivative-template.receiver",
+            semanticMotionUnitId: "antiderivative-template.receiver",
             routingCohortId: "antiderivative-template.exponent-fan-out",
             routingMemberId: targetEntityId,
             ...(targetEntityId === numeratorExponentTargetId
@@ -157,18 +172,21 @@ export function createKpAntiderivativeTemplateInstantiationTrackProjection(
                   intentionalContactGroupId:
                     denominatorReceptionContactGroupId
                 }),
-            sampleProgress: sampleRuleBindingMotionInput,
+            motionPath: pathThroughReceiver(
+              track,
+              receiverTranslation,
+              receiverPlacement.lane
+            ),
+            motionPathSampling: "staged-waypoint" as const,
+            sampleProgress: sampleRuleMaterialPathProgress,
+            ...(targetEntityId === denominatorExponentTargetId
+              ? {
+                  samplePaintPresence: sampleFollowerPresence
+                }
+              : {}),
             motionMetrics: true as const
           });
-          return withDenominatorRuleOcclusion(
-            targetEntityId === denominatorExponentTargetId
-              ? withMotionPath(bindingTrack, {
-                  variant: "arc-below",
-                  clearanceInNativeHeights: presentationProfile
-                    .denominatorBranchClearanceInNativeHeights
-                })
-              : bindingTrack
-          );
+          return withDenominatorRuleOcclusion(bindingTrack);
         }
         if (
           track.lifecycle === "introduce" &&
@@ -180,7 +198,6 @@ export function createKpAntiderivativeTemplateInstantiationTrackProjection(
               ...track,
               intentionalContactGroupId: numeratorReceptionContactGroupId
             }), {
-              timingGroupId: "antiderivative-template.scaffold",
               presence: (progress) =>
                 sampleKpAntiderivativeRuleTemplateApplication(progress)
                   .scaffoldPresence,
@@ -191,7 +208,7 @@ export function createKpAntiderivativeTemplateInstantiationTrackProjection(
                 return presentationProfile.scaffoldPointScale +
                   (1 - presentationProfile.scaffoldPointScale) * presence;
               },
-              translation: templateTranslation
+              translation: receiverTranslation
             }
           ));
         }
@@ -203,14 +220,10 @@ export function createKpAntiderivativeTemplateInstantiationTrackProjection(
           const role = fixedSyntaxRoleById.get(targetEntityId)!;
           return translatedIntroduction(Object.freeze({
             ...track,
-            ...(role === "denominator-successor"
-              ? {
-                  intentionalContactGroupId:
-                    denominatorReceptionContactGroupId
-                }
-              : {})
+            intentionalContactGroupId: role === "denominator-successor"
+              ? denominatorReceptionContactGroupId
+              : numeratorReceptionContactGroupId
           }), {
-            timingGroupId: "antiderivative-template.fixed-syntax",
             presence: (progress) =>
               sampleKpAntiderivativeRuleTemplateApplication(progress)
                 .syntaxPresence,
@@ -223,12 +236,12 @@ export function createKpAntiderivativeTemplateInstantiationTrackProjection(
             },
             translation: role === "numerator-successor"
               ? Object.freeze({
-                  x: templateTranslation.x + track.endPaintRect.height *
+                  x: receiverTranslation.x + track.endPaintRect.height *
                     presentationProfile
                       .numeratorVacancyOffsetInNativeHeights,
-                  y: templateTranslation.y
+                  y: receiverTranslation.y
                 })
-              : templateTranslation
+              : receiverTranslation
           });
         }
         if (
@@ -237,7 +250,6 @@ export function createKpAntiderivativeTemplateInstantiationTrackProjection(
           closureIds.has(targetEntityId)
         ) {
           return translatedIntroduction(track, {
-            timingGroupId: "antiderivative-template.rule-closure",
             presence: (progress) =>
               sampleKpAntiderivativeRuleTemplateApplication(progress)
                 .closurePresence,
@@ -248,7 +260,7 @@ export function createKpAntiderivativeTemplateInstantiationTrackProjection(
               return presentationProfile.closurePointScale +
                 (1 - presentationProfile.closurePointScale) * closure;
             },
-            translation: templateTranslation
+            translation: receiverTranslation
           });
         }
         if (track.lifecycle === "introduce") {
@@ -278,7 +290,6 @@ function translatedIntroduction(
     readonly lifecycle: "introduce";
   }>,
   input: {
-    readonly timingGroupId: string;
     readonly presence: (progress: number) => number;
     readonly scale: (progress: number) => number;
     readonly translation: Readonly<{ x: number; y: number }>;
@@ -289,37 +300,33 @@ function translatedIntroduction(
     ...withoutPath,
     startRect: translateRect(track.endRect, input.translation),
     startPaintRect: translateRect(track.endPaintRect, input.translation),
-    timingGroupId: input.timingGroupId,
+    timingGroupId: "antiderivative-template.receiver",
     semanticMotionUnitId: "antiderivative-template.receiver",
     opacityScheduleAuthority: "semantic-choreography" as const,
     sampleProgress: (progress) =>
-      sampleKpCanonicalNativeKatexCopyFanOutMotion(
-        sampleRuleBindingMotionInput(progress)
-      ).addendReflowProgress,
+      sampleKpAntiderivativeRuleTemplateApplication(progress)
+        .receiverSettlementProgress,
     sampleOpacityProgress: input.presence,
-    // Copy fan-out owns the exponent's branch geometry and therefore samples
-    // every track at its projected motion progress. Presence remains the
-    // template's authority, so fixed target paint cannot leak in early.
+    // Receiver settlement owns motion for the introduced grammar. Presence
+    // remains the template's separate authority, so target paint cannot leak
+    // in before the receiver opens.
     samplePaintPresence: input.presence,
     sampleMaterialScale: input.scale
   });
 }
 
-function sampleRuleBindingMotionInput(progress: number): number {
-  if (progress <= 0.26) return 0;
-  if (progress >= 0.82) return 1;
-  const local = (progress - 0.26) / (0.82 - 0.26);
-  return local * local * (3 - 2 * local);
+function sampleRuleMaterialPathProgress(progress: number): number {
+  const template = sampleKpAntiderivativeRuleTemplateApplication(progress);
+  const receiver = presentationProfile.receiverPathProgress;
+  return template.receiverSettlementProgress > 0
+    ? receiver + (1 - receiver) * template.receiverSettlementProgress
+    : receiver * template.bindingProgress;
 }
 
-function translationBetweenCenters(
-  from: Readonly<{ left: number; top: number; width: number; height: number }>,
-  to: Readonly<{ left: number; top: number; width: number; height: number }>
-): Readonly<{ x: number; y: number }> {
-  return Object.freeze({
-    x: to.left + to.width / 2 - (from.left + from.width / 2),
-    y: to.top + to.height / 2 - (from.top + from.height / 2)
-  });
+function sampleFollowerPresence(progress: number): number {
+  const binding = sampleKpAntiderivativeRuleTemplateApplication(progress)
+    .bindingProgress;
+  return smoothstep(clamp01((binding - 0.16) / 0.34));
 }
 
 function translateRect(
@@ -334,35 +341,115 @@ function translateRect(
   });
 }
 
-function withMotionPath(
-  track: KpNativeKatexPaintMeasuredSceneTrack,
-  input: {
-    readonly variant: "arc-above" | "arc-below";
-    readonly clearanceInNativeHeights: number;
+export function measureKpAntiderivativeTemplateReceiverPlacement(input: {
+  readonly source: KpNativeKatexRenderedSceneObservation;
+  readonly target: KpNativeKatexRenderedSceneObservation;
+}): KpAntiderivativeTemplateReceiverPlacement {
+  const stageRect = input.target.stage.getBoundingClientRect();
+  const sourceRect = unionAtomRects(input.source);
+  const targetRect = unionAtomRects(input.target);
+  const nativeHeight = Math.max(sourceRect.height, targetRect.height);
+  const gap = nativeHeight * presentationProfile.receiverGapInNativeHeights;
+  const rightTranslation = sourceRect.right + gap - targetRect.left;
+  const rightEdge = targetRect.right + rightTranslation;
+  if (
+    rightEdge <= stageRect.width - presentationProfile.stageEdgeInsetPx
+  ) {
+    return Object.freeze({
+      lane: "right" as const,
+      translation: Object.freeze({ x: rightTranslation, y: 0 })
+    });
   }
-): KpNativeKatexPaintMeasuredSceneTrack {
-  const center = (rect: Readonly<{
-    left: number;
-    top: number;
-    width: number;
-    height: number;
-  }>) => Object.freeze({
+  const aboveTranslation = Math.max(
+    presentationProfile.stageEdgeInsetPx - targetRect.top,
+    sourceRect.top - gap - targetRect.bottom
+  );
+  return Object.freeze({
+    lane: "above" as const,
+    translation: Object.freeze({ x: 0, y: aboveTranslation })
+  });
+}
+
+function unionAtomRects(
+  scene: KpNativeKatexRenderedSceneObservation
+): {
+  readonly left: number;
+  readonly top: number;
+  readonly right: number;
+  readonly bottom: number;
+  readonly width: number;
+  readonly height: number;
+} {
+  if (scene.atoms.length === 0) {
+    throw new Error("Antiderivative template placement requires native paint.");
+  }
+  const left = Math.min(...scene.atoms.map(({ rect }) => rect.left));
+  const top = Math.min(...scene.atoms.map(({ rect }) => rect.top));
+  const right = Math.max(...scene.atoms.map(({ rect }) =>
+    rect.left + rect.width
+  ));
+  const bottom = Math.max(...scene.atoms.map(({ rect }) =>
+    rect.top + rect.height
+  ));
+  return Object.freeze({
+    left,
+    top,
+    right,
+    bottom,
+    width: right - left,
+    height: bottom - top
+  });
+}
+
+function pathThroughReceiver(
+  track: KpNativeKatexPaintMeasuredSceneTrack,
+  translation: Readonly<{ x: number; y: number }>,
+  lane: KpAntiderivativeTemplateReceiverPlacement["lane"]
+): KpEquationMotionPathCandidate {
+  const start = rectCenter(track.startPaintRect);
+  const end = rectCenter(track.endPaintRect);
+  const receiver = {
+    x: end.x + translation.x,
+    y: end.y + translation.y
+  };
+  const travelDistance = distance(start, receiver) + distance(receiver, end);
+  return Object.freeze({
+    id: `path.${track.id}.antiderivative-template-receiver`,
+    variant: lane === "right" ? "around-right" as const : "arc-above" as const,
+    start: Object.freeze(start),
+    control: Object.freeze(receiver),
+    end: Object.freeze(end),
+    collisionCount: 0,
+    travelDistance,
+    readingOrderPenalty: 0,
+    preferencePenalty: 0,
+    score: travelDistance
+  });
+}
+
+function rectCenter(rect: Readonly<{
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+}>): { x: number; y: number } {
+  return {
     x: rect.left + rect.width / 2,
     y: rect.top + rect.height / 2
-  });
-  return Object.freeze({
-    ...track,
-    motionPath: planKpEquationMotionPathBetweenPoints({
-      id: `path.${track.id}.antiderivative-template-${input.variant}`,
-      start: center(track.startPaintRect),
-      end: center(track.endPaintRect),
-      variants: [input.variant],
-      preferredVariant: input.variant,
-      clearance: Math.max(
-        track.startPaintRect.height,
-        track.endPaintRect.height
-      ) * input.clearanceInNativeHeights
-    }).selected,
-    motionPathSampling: "planned-curve" as const
-  });
+  };
+}
+
+function distance(
+  left: Readonly<{ x: number; y: number }>,
+  right: Readonly<{ x: number; y: number }>
+): number {
+  return Math.hypot(right.x - left.x, right.y - left.y);
+}
+
+function clamp01(value: number): number {
+  return Math.max(0, Math.min(1, Number.isFinite(value) ? value : 0));
+}
+
+function smoothstep(value: number): number {
+  return value * value * (3 - 2 * value);
 }

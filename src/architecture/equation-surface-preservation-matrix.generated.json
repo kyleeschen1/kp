@@ -3115,13 +3115,13 @@
         {
           "transformationId": "transform.generated.calculus.integral.power-rule-quadratic.expand-integral-power-rule",
           "transformationType": "applyAntiderivativePowerRule",
-          "transformationFingerprint": "fnv1a32-38020232",
+          "transformationFingerprint": "fnv1a32-11413fc1",
           "source": [
             {
               "objectId": "expression.generated.calculus.integral.power-rule-quadratic.initial",
               "objectType": "expression",
               "title": "Integral expression",
-              "semanticFingerprint": "fnv1a32-0f2e05e8"
+              "semanticFingerprint": "fnv1a32-04603450"
             }
           ],
           "target": [
@@ -3129,20 +3129,20 @@
               "objectId": "expression.generated.calculus.integral.power-rule-quadratic.expanded",
               "objectType": "expression",
               "title": "Antiderivative power rule exposed",
-              "semanticFingerprint": "fnv1a32-84555696"
+              "semanticFingerprint": "fnv1a32-9b97be30"
             }
           ]
         },
         {
           "transformationId": "transform.generated.calculus.integral.power-rule-quadratic.resolve-integral-power-rule",
           "transformationType": "simplifyAntiderivativePowerRule",
-          "transformationFingerprint": "fnv1a32-29535789",
+          "transformationFingerprint": "fnv1a32-416f8c42",
           "source": [
             {
               "objectId": "expression.generated.calculus.integral.power-rule-quadratic.expanded",
               "objectType": "expression",
               "title": "Antiderivative power rule exposed",
-              "semanticFingerprint": "fnv1a32-84555696"
+              "semanticFingerprint": "fnv1a32-9b97be30"
             }
           ],
           "target": [
@@ -3150,7 +3150,7 @@
               "objectId": "expression.generated.calculus.integral.power-rule-quadratic.integrated",
               "objectType": "expression",
               "title": "After applying the integral power rule",
-              "semanticFingerprint": "fnv1a32-19faf147"
+              "semanticFingerprint": "fnv1a32-129ec5f1"
             }
           ]
         }
@@ -3182,7 +3182,7 @@
       },
       "migrationObligations": {
         "semantic": {
-          "assetFingerprint": "fnv1a32-07202095",
+          "assetFingerprint": "fnv1a32-ce207f43",
           "objectIds": [
             "expression.generated.calculus.integral.power-rule-quadratic.initial",
             "expression.generated.calculus.integral.power-rule-quadratic.expanded",
@@ -3194,7 +3194,7 @@
           ]
         },
         "endpoints": {
-          "fingerprint": "fnv1a32-60958165",
+          "fingerprint": "fnv1a32-a462f563",
           "authority": "labelled-semantic-stage"
         },
         "renderer": {
@@ -3231,7 +3231,7 @@
                 "expression.generated.calculus.integral.power-rule-quadratic.expanded",
                 "expression.generated.calculus.integral.power-rule-quadratic.integrated"
               ],
-              "envelopeFingerprint": "fnv1a32-d74ac7a6"
+              "envelopeFingerprint": "fnv1a32-71aa2ee9"
             },
             {
               "direction": "forward",
@@ -3245,7 +3245,7 @@
                 "expression.generated.calculus.integral.power-rule-quadratic.expanded",
                 "expression.generated.calculus.integral.power-rule-quadratic.integrated"
               ],
-              "envelopeFingerprint": "fnv1a32-95e0a2c8"
+              "envelopeFingerprint": "fnv1a32-b51e5fc3"
             },
             {
               "direction": "forward",
@@ -3259,7 +3259,7 @@
                 "expression.generated.calculus.integral.power-rule-quadratic.expanded",
                 "expression.generated.calculus.integral.power-rule-quadratic.integrated"
               ],
-              "envelopeFingerprint": "fnv1a32-9dba2683"
+              "envelopeFingerprint": "fnv1a32-24e4a940"
             }
           ]
         }

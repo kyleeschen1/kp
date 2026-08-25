@@ -893,6 +893,54 @@
       "status": "passed",
       "scope": "slice s18 receiving-template candidate: 1061 nodes and 25680 events",
       "checkedAt": "2026-08-25T20:47:29.983Z"
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s18 true receiver candidate: 63 focused semantic choreography and rendering tests",
+      "checkedAt": "2026-08-25T21:27:43.683Z"
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-catalogue",
+      "status": "passed",
+      "scope": "slice s18 true receiver candidate: 2 Chromium canonical Catalogue lifecycle and receiver tests",
+      "checkedAt": "2026-08-25T21:27:44.730Z"
+    },
+    {
+      "command": "npm run visual:integration-power-rule -- --base-url http://127.0.0.1:8000",
+      "status": "passed",
+      "scope": "slice s18 true receiver candidate: 14 deterministic desktop dark and narrow light review states",
+      "checkedAt": "2026-08-25T21:27:45.753Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s18 true receiver candidate: application node test Svelte and domain boundaries",
+      "checkedAt": "2026-08-25T21:27:46.766Z"
+    },
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "slice s18 true receiver candidate: 35 derivative preservation tests",
+      "checkedAt": "2026-08-25T21:27:47.792Z"
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "slice s18 true receiver candidate: 11 frozen endpoint and authority checks after matrix regeneration",
+      "checkedAt": "2026-08-25T21:27:48.791Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s18 true receiver candidate: dependency semantic equation governance and cross-domain gates",
+      "checkedAt": "2026-08-25T21:27:49.813Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s18 true receiver candidate: 1061 nodes and 25694 events before final checkpoint commit",
+      "checkedAt": "2026-08-25T21:28:08.712Z"
     }
   ],
   "allowedWork": [
@@ -1030,7 +1078,7 @@
     {
       "id": "next-action.kp.integration-power-rule.s18",
       "title": "Integration-human-visual-checkpoint",
-      "summary": "Human review rejected the receiving-underlines candidate. The scaffold is already populated and co-located with source material, so it reads as an ordinary expression morph rather than a template receiving material. Stop incremental styling; choose between a direct rewrite with no template motif and a true intermediate receiving topology before further implementation.",
+      "summary": "Human-review candidate now opens a renderer-measured receiver beside intact x squared, binds the persistent base and exponent fan-out into stationary grammar slots, holds the populated receiver, and settles the receiver as one cohort into exact native syntax; desktop dark and 390px light captures pass, awaiting explicit visual approval.",
       "status": "in-progress"
     },
     {

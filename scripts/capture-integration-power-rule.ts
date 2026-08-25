@@ -42,7 +42,21 @@ const samples = [
   {
     id: "template-binding",
     label: "Rule application · source symbols enter their slots",
-    progress: 0.34,
+    progress: 0.3,
+    theme: "dark",
+    viewport: desktopViewport
+  },
+  {
+    id: "template-bound",
+    label: "Rule application · populated receiver holds",
+    progress: 0.36,
+    theme: "dark",
+    viewport: desktopViewport
+  },
+  {
+    id: "template-settling",
+    label: "Rule application · receiver settles into the result",
+    progress: 0.42,
     theme: "dark",
     viewport: desktopViewport
   },
@@ -82,6 +96,20 @@ const samples = [
     viewport: desktopViewport
   },
   {
+    id: "narrow-light-template-scaffold",
+    label: "Narrow light · receiving structure opens",
+    progress: 0.24,
+    theme: "light",
+    viewport: narrowViewport
+  },
+  {
+    id: "narrow-light-template-bound",
+    label: "Narrow light · populated receiver holds",
+    progress: 0.36,
+    theme: "light",
+    viewport: narrowViewport
+  },
+  {
     id: "narrow-light-evaluation",
     label: "Narrow light · dual evaluation fit",
     progress: 0.75,
@@ -107,9 +135,13 @@ interface CaptureEvidence {
   readonly templateReceiverFocus: number;
   readonly templateVacancyPresence: number;
   readonly templateVacancyCount: number;
+  readonly templateReceiverLane: string;
+  readonly templateReceiverTranslateX: number;
+  readonly templateReceiverTranslateY: number;
   readonly templatePreviewPresence: number;
   readonly templateScaffoldPresence: number;
   readonly templateBindingProgress: number;
+  readonly templateReceiverSettlementProgress: number;
   readonly templateSyntaxPresence: number;
   readonly templateSyntaxResolutionProgress: number;
   readonly templateClosurePresence: number;
@@ -200,9 +232,9 @@ async function capture(baseUrl?: string): Promise<void> {
         "exponent provenance",
         "two ink-knot evaluations",
         "integration constant persistence",
-        "timing and reverse meaning",
-        "dark and light response",
-        "narrow fit"
+      "timing and reverse meaning",
+      "dark and light response",
+      "narrow receiver and evaluation fit"
       ],
       sheet: path.relative(process.cwd(), sheet),
       html: path.relative(process.cwd(), html)
@@ -300,6 +332,14 @@ async function captureSample(input: {
       templateVacancyCount: templateReceiver?.querySelectorAll(
         "[data-kp-antiderivative-template-vacancy]"
       ).length ?? 0,
+      templateReceiverLane:
+        root.dataset["kpAntiderivativeTemplateReceiverLane"] ?? "inactive",
+      templateReceiverTranslateX: Number(
+        root.dataset["kpAntiderivativeTemplateReceiverTranslateX"] ?? 0
+      ),
+      templateReceiverTranslateY: Number(
+        root.dataset["kpAntiderivativeTemplateReceiverTranslateY"] ?? 0
+      ),
       templatePreviewPresence: Number(
         root.dataset["kpAntiderivativeTemplatePreviewPresence"] ?? 0
       ),
@@ -308,6 +348,9 @@ async function captureSample(input: {
       ),
       templateBindingProgress: Number(
         root.dataset["kpAntiderivativeTemplateBindingProgress"] ?? 0
+      ),
+      templateReceiverSettlementProgress: Number(
+        root.dataset["kpAntiderivativeTemplateReceiverSettlementProgress"] ?? 0
       ),
       templateSyntaxPresence: Number(
         root.dataset["kpAntiderivativeTemplateSyntaxPresence"] ?? 0
@@ -415,7 +458,7 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   if (
     scaffold.transitVisualOwner !== "material-scene" ||
     scaffold.templateProfileId !==
-      "kp.rendering.native-katex.antiderivative-template-instantiation-profile.v3" ||
+      "kp.rendering.native-katex.antiderivative-template-instantiation-profile.v4" ||
     scaffold.templateTraceRole !== "prospective" ||
     scaffold.templateLawRefId !==
       "law.calculus.integral.power-rule" ||
@@ -427,8 +470,14 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     scaffold.templateSyntaxPresence <= 0 ||
     scaffold.templateClosurePresence <= 0 ||
     scaffold.templateBindingProgress !== 0 ||
+    scaffold.templateReceiverSettlementProgress !== 0 ||
     scaffold.templateSyntaxResolutionProgress !== 0 ||
-    scaffold.visibleMaterialOwnerCount === 0
+    scaffold.visibleMaterialOwnerCount === 0 ||
+    !["right", "above"].includes(scaffold.templateReceiverLane) ||
+    (
+      scaffold.templateReceiverTranslateX === 0 &&
+      scaffold.templateReceiverTranslateY === 0
+    )
   ) {
     throw new Error(
       "Template scaffold frame must expose prospective Native KaTeX structure."
@@ -443,6 +492,7 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     binding.templateVacancyPresence >= 1 ||
     binding.templateBindingProgress <= 0 ||
     binding.templateBindingProgress >= 1 ||
+    binding.templateReceiverSettlementProgress !== 0 ||
     binding.templateSyntaxPresence <= 0 ||
     binding.templateSyntaxResolutionProgress !== 0
   ) {
@@ -450,9 +500,32 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
       "Template binding frame must retain prospective grammar before live resolution."
     );
   }
+  const bound = required("template-bound");
+  if (
+    bound.templateBindingProgress !== 1 ||
+    bound.templateReceiverSettlementProgress !== 0 ||
+    bound.templateVacancyPresence !== 0 ||
+    bound.templateTraceRole !== "prospective"
+  ) {
+    throw new Error(
+      "Bound template frame must hold populated material at the receiver pose."
+    );
+  }
+  const settling = required("template-settling");
+  if (
+    settling.templateBindingProgress !== 1 ||
+    settling.templateReceiverSettlementProgress <= 0 ||
+    settling.templateReceiverSettlementProgress >= 1 ||
+    settling.templateTraceRole !== "prospective"
+  ) {
+    throw new Error(
+      "Settling template frame must move the populated receiver toward native syntax."
+    );
+  }
   const syntax = required("template-syntax");
   if (
     syntax.templateBindingProgress !== 1 ||
+    syntax.templateReceiverSettlementProgress !== 1 ||
     syntax.templateReceiverFocus !== 0 ||
     syntax.templateVacancyPresence !== 0 ||
     syntax.templateSyntaxPresence !== 1 ||

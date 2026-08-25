@@ -112,7 +112,10 @@ export function compileKpAntiderivativePowerNativeKatexScenePlan(input: {
       createKpAntiderivativeTemplateInstantiationTrackProjection(
         input.plan.choreography
       ),
-    copyFanOutRouting: true
+    // This exemplar's receiver pose owns both exponent branching and the
+    // subsequent whole-expression settlement; the generic one-stage fan-out
+    // sampler cannot represent that intermediate topology.
+    copyFanOutRouting: false
   });
 }
 

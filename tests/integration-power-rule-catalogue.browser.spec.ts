@@ -36,7 +36,7 @@ test("integration power rule uses governed transit and two certified ink knots",
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-template-profile-id",
-    "kp.rendering.native-katex.antiderivative-template-instantiation-profile.v3"
+    "kp.rendering.native-katex.antiderivative-template-instantiation-profile.v4"
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-power-visual-owner",
@@ -121,6 +121,18 @@ test("integration power rule uses governed transit and two certified ink knots",
     "data-kp-antiderivative-template-vacancy-count",
     "3"
   );
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-template-receiver-lane",
+    /right|above/
+  );
+  expect(
+    Math.abs(Number(await stage.getAttribute(
+      "data-kp-antiderivative-template-receiver-translate-x"
+    ))) +
+    Math.abs(Number(await stage.getAttribute(
+      "data-kp-antiderivative-template-receiver-translate-y"
+    )))
+  ).toBeGreaterThan(0);
   const vacancies = templateReceiver.locator(
     "[data-kp-antiderivative-template-vacancy]"
   );
@@ -153,6 +165,26 @@ test("integration power rule uses governed transit and two certified ink knots",
   await expect.poll(() => renderedOpacity(vacancies.first())).toBeGreaterThan(0);
   await expect.poll(() => renderedOpacity(vacancies.first())).toBeLessThan(1);
 
+  await seek.fill("0.36");
+  await expectTransitReady(stage);
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-template-binding-progress",
+    "1.0000"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-template-receiver-settlement-progress",
+    "0.0000"
+  );
+
+  await seek.fill("0.42");
+  await expectTransitReady(stage);
+  await expect.poll(async () => Number(await stage.getAttribute(
+    "data-kp-antiderivative-template-receiver-settlement-progress"
+  ))).toBeGreaterThan(0);
+  await expect.poll(async () => Number(await stage.getAttribute(
+    "data-kp-antiderivative-template-receiver-settlement-progress"
+  ))).toBeLessThan(1);
+
   await seek.fill("0.49");
   await expectTransitReady(stage);
   const visibleConstant = stage.locator(
@@ -168,6 +200,10 @@ test("integration power rule uses governed transit and two certified ink knots",
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-template-receiver-focus",
     "0.0000"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-template-receiver-settlement-progress",
+    "1.0000"
   );
   await expect.poll(() => renderedOpacity(vacancies.first())).toBe(0);
 

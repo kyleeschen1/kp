@@ -58,6 +58,7 @@ export interface KpEquationMotionPathPlan {
 
 export type KpEquationMotionPathSampling =
   | "planned-curve"
+  | "staged-waypoint"
   | "foreground-diagonal-role-transfer"
   | "minimal-clearance-role-transfer"
   | "canonical-clearance-lane";
@@ -383,6 +384,9 @@ export function sampleKpEquationMotionPathWithSampling(
   if (sampling === "planned-curve") {
     return sampleKpEquationMotionPath(path, progress);
   }
+  if (sampling === "staged-waypoint") {
+    return sampleStagedWaypoint(path, progress);
+  }
   if (sampling === "minimal-clearance-role-transfer") {
     return sampleMinimalClearanceRoleTransfer(path, progress);
   }
@@ -421,6 +425,28 @@ export function sampleKpEquationMotionPathWithSampling(
     x: baseline.x,
     // Linear transit keeps visible travel pending through the final descent.
     y: baseline.y + lift * liftProgress
+  };
+}
+
+function sampleStagedWaypoint(
+  path: Pick<KpEquationMotionPathCandidate, "start" | "control" | "end">,
+  progress: number
+): KpEquationLayoutPoint {
+  const p = clamp01(progress);
+  // This route deliberately stops at the candidate's control point. A named
+  // recognition dwell can therefore separate reception from rigid settlement
+  // without inventing another clock or losing exact native endpoints.
+  if (p <= 0.5) {
+    const local = smoothstep(p / 0.5);
+    return {
+      x: interpolate(path.start.x, path.control.x, local),
+      y: interpolate(path.start.y, path.control.y, local)
+    };
+  }
+  const local = smoothstep((p - 0.5) / 0.5);
+  return {
+    x: interpolate(path.control.x, path.end.x, local),
+    y: interpolate(path.control.y, path.end.y, local)
   };
 }
 

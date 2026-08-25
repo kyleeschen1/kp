@@ -96,6 +96,7 @@ export interface KpAntiderivativePowerChoreographyFrame {
     readonly previewPresence: number;
     readonly scaffoldPresence: number;
     readonly bindingProgress: number;
+    readonly receiverSettlementProgress: number;
     readonly syntaxPresence: number;
     readonly syntaxResolutionProgress: number;
     readonly closurePresence: number;
@@ -361,11 +362,12 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
 ): KpAntiderivativePowerChoreographyFrame["ruleTemplateApplication"] {
   const progress = clamp01(rewriteProgress);
   const preview = phaseProgress(progress, 0, 0.22);
-  const binding = phaseProgress(progress, 0.38, 0.88);
-  const syntaxResolution = phaseProgress(progress, 0.88, 0.98);
-  // The receiving structure is itself the rule application. It gets a quiet
-  // hold before source material moves, then yields focus as bound syntax
-  // becomes the live expanded expression.
+  const binding = phaseProgress(progress, 0.34, 0.62);
+  const receiverSettlement = phaseProgress(progress, 0.72, 0.94);
+  const syntaxResolution = phaseProgress(progress, 0.9, 0.98);
+  // Binding and settlement are separate semantic beats: the learner first
+  // sees material arrive in a prospective rule, then sees that populated
+  // receiver become the live expanded expression.
   const receiverFocus = roundProgress(preview * (1 - syntaxResolution));
   const vacancyPresence = roundProgress(preview * (1 - binding));
   // A receiving template cannot be inferred from faint endpoint fragments.
@@ -385,6 +387,7 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
     previewPresence: preview,
     scaffoldPresence,
     bindingProgress: binding,
+    receiverSettlementProgress: receiverSettlement,
     syntaxPresence,
     syntaxResolutionProgress: syntaxResolution,
     closurePresence
