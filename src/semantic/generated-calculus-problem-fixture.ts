@@ -1005,11 +1005,50 @@ function antiderivativePowerRoleSelector(
         exactDenominator: exactCoefficient.denominator.toString()
       }
     : undefined;
+  const cohort = role.id.startsWith("expanded.numerator-") ||
+      role.id === "target.numerator-exponent"
+    ? "cohort.antiderivative-power.numerator-successor"
+    : role.id.startsWith("expanded.denominator-") ||
+        role.id === "target.denominator"
+      ? "cohort.antiderivative-power.denominator-successor"
+      : undefined;
+  const contribution = role.id.endsWith("-successor-operator")
+    ? "catalyst"
+    : role.id.endsWith("-exponent") || role.id.endsWith("-increment")
+      ? "material-input"
+      : undefined;
+  const evaluationMetadata = cohort === undefined
+    ? undefined
+    : role.id === "target.numerator-exponent" ||
+        role.id === "target.denominator"
+      ? {
+          successorCohortId: cohort,
+          successorOperationId: "kp.arithmetic.add",
+          successorTarget: true
+        }
+      : contribution === undefined
+        ? undefined
+        : {
+            successorCohortId: cohort,
+            successorOperationId: "kp.arithmetic.add",
+            successorContribution: contribution,
+            successorRole: contribution === "catalyst"
+              ? "addition-operator"
+              : role.id.endsWith("-increment")
+                ? "addend"
+                : "augend",
+            successorRank: contribution === "material-input" &&
+                role.id.endsWith("-increment")
+              ? 1
+              : 0
+          };
   return {
     id: role.selectorId,
     kind: role.selectorKind,
     label: role.label,
-    ...(exactMetadata === undefined ? {} : { metadata: exactMetadata })
+    ...(exactMetadata === undefined && evaluationMetadata === undefined
+      ? {}
+      : { metadata: { ...exactMetadata, ...evaluationMetadata } })
   };
 }
 

@@ -124,7 +124,11 @@ test("generated calculus fixtures cover derivative and integral rules", () => {
       label: "3",
       metadata: {
         exactNumerator: "1",
-        exactDenominator: "3"
+        exactDenominator: "3",
+        successorCohortId:
+          "cohort.antiderivative-power.denominator-successor",
+        successorOperationId: "kp.arithmetic.add",
+        successorTarget: true
       }
     }
   );
@@ -158,8 +162,10 @@ test("generated calculus fixtures cover derivative and integral rules", () => {
       [
         "numerator-base",
         "numerator-exponent",
+        "numerator-successor-operator",
         "numerator-increment",
         "denominator-exponent",
+        "denominator-successor-operator",
         "denominator-increment",
         "connector",
         "constant"

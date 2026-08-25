@@ -56,11 +56,11 @@ export function createKpAntiderivativePowerSelectorAnnotatedLatex(
       segment("numerator-base"),
       { kind: "latex", latex: "^{" },
       segment("numerator-exponent"),
-      { kind: "latex", latex: "+" },
+      segment("numerator-successor-operator"),
       segment("numerator-increment"),
       { kind: "latex", latex: "}}{" },
       segment("denominator-exponent"),
-      { kind: "latex", latex: "+" },
+      segment("denominator-successor-operator"),
       segment("denominator-increment"),
       { kind: "latex", latex: "} " },
       segment("connector"),
@@ -134,7 +134,7 @@ function bindAntiderivativeSemanticGroups(input: {
     });
   } else {
     const quotient = input.stateKind === "expanded"
-      ? `\\frac{${token("numerator-base")}^{${token("numerator-exponent")}+${token("numerator-increment")}}}{${token("denominator-exponent")}+${token("denominator-increment")}}`
+      ? `\\frac{${token("numerator-base")}^{${token("numerator-exponent")}${token("numerator-successor-operator")}${token("numerator-increment")}}}{${token("denominator-exponent")}${token("denominator-successor-operator")}${token("denominator-increment")}}`
       : `\\frac{${token("numerator-base")}^{${token("numerator-exponent")}}}{${token("denominator")}}`;
     annotatedLatex = wrapExactFragment({
       annotatedLatex,

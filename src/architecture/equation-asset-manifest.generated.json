@@ -1681,11 +1681,11 @@
           "selectionParameter": "artifact"
         },
         "semanticEndpointFingerprints": [
-          "fnv1a32-56dc2fa0",
+          "fnv1a32-11413fc1",
           "fnv1a32-04603450",
-          "fnv1a32-6dcd5a74",
-          "fnv1a32-24e421b5",
-          "fnv1a32-d3cb5913"
+          "fnv1a32-9b97be30",
+          "fnv1a32-416f8c42",
+          "fnv1a32-129ec5f1"
         ],
         "nativeSettlement": {
           "slotKind": "equation",

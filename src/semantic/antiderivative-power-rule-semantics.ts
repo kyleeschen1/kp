@@ -18,8 +18,10 @@ export type KpAntiderivativePowerRuleRoleId =
   | "source.integration-variable"
   | "expanded.numerator-base"
   | "expanded.numerator-exponent"
+  | "expanded.numerator-successor-operator"
   | "expanded.numerator-increment"
   | "expanded.denominator-exponent"
+  | "expanded.denominator-successor-operator"
   | "expanded.denominator-increment"
   | "expanded.connector"
   | "expanded.integration-constant"
@@ -122,8 +124,10 @@ export function createKpAntiderivativePowerRuleSemanticRoles(input: {
   const expandedRoles: readonly KpAntiderivativePowerRuleSemanticRole[] = [
     semanticRole("expanded.numerator-base", "expanded", expanded("numerator-base"), "term", input.base, input.base, "preserve", ["source.integrand-base"]),
     semanticRole("expanded.numerator-exponent", "expanded", expanded("numerator-exponent"), "term", String(input.exponent), input.exponent, "transmit", ["source.integrand-exponent"]),
+    semanticRole("expanded.numerator-successor-operator", "expanded", expanded("numerator-successor-operator"), "operator", "+", "add", "introduce"),
     semanticRole("expanded.numerator-increment", "expanded", expanded("numerator-increment"), "constant", "1", 1, "introduce"),
     semanticRole("expanded.denominator-exponent", "expanded", expanded("denominator-exponent"), "term", String(input.exponent), input.exponent, "transmit", ["source.integrand-exponent"]),
+    semanticRole("expanded.denominator-successor-operator", "expanded", expanded("denominator-successor-operator"), "operator", "+", "add", "introduce"),
     semanticRole("expanded.denominator-increment", "expanded", expanded("denominator-increment"), "constant", "1", 1, "introduce"),
     semanticRole("expanded.connector", "expanded", expanded("connector"), "operator", "+", "add", "introduce"),
     semanticRole("expanded.integration-constant", "expanded", expanded("constant"), "constant", "C", "integration-constant", "introduce")
@@ -147,9 +151,9 @@ export function createKpAntiderivativePowerRuleSemanticRoles(input: {
     groups: [
       semanticGroup("source.integrand-scope", "source", source("integrand-scope"), ["source.integrand-base", "source.integrand-exponent"]),
       semanticGroup("source.integration-binding", "source", source("integration-binding"), ["source.differential-symbol", "source.integration-variable", "source.integrand-base"]),
-      semanticGroup("expanded.power-successor", "expanded", expanded("power-successor"), ["expanded.numerator-exponent", "expanded.numerator-increment"]),
-      semanticGroup("expanded.divisor-successor", "expanded", expanded("divisor-successor"), ["expanded.denominator-exponent", "expanded.denominator-increment"]),
-      semanticGroup("expanded.exact-quotient", "expanded", expanded("exact-quotient"), ["expanded.numerator-base", "expanded.numerator-exponent", "expanded.numerator-increment", "expanded.denominator-exponent", "expanded.denominator-increment"]),
+      semanticGroup("expanded.power-successor", "expanded", expanded("power-successor"), ["expanded.numerator-exponent", "expanded.numerator-successor-operator", "expanded.numerator-increment"]),
+      semanticGroup("expanded.divisor-successor", "expanded", expanded("divisor-successor"), ["expanded.denominator-exponent", "expanded.denominator-successor-operator", "expanded.denominator-increment"]),
+      semanticGroup("expanded.exact-quotient", "expanded", expanded("exact-quotient"), ["expanded.numerator-base", "expanded.numerator-exponent", "expanded.numerator-successor-operator", "expanded.numerator-increment", "expanded.denominator-exponent", "expanded.denominator-successor-operator", "expanded.denominator-increment"]),
       semanticGroup("target.exact-quotient", "target", target("exact-quotient"), ["target.numerator-base", "target.numerator-exponent", "target.denominator"])
     ],
     constraints: [
@@ -290,15 +294,17 @@ export function createKpAntiderivativePowerRuleLineageSemantics(input: {
     correspondence("integration-variable-consumed", "removal", [selector("source.integration-variable")], [], "The integration variable constrains the operation before leaving the rewritten expression."),
     correspondence("integrand-base-persists", "identity", [selector("source.integrand-base")], [selector("expanded.numerator-base")], "The integrand base persists in the quotient numerator."),
     correspondence("source-exponent-branches", "fan-out", [selector("source.integrand-exponent")], [selector("expanded.numerator-exponent"), selector("expanded.denominator-exponent")], "The source exponent supplies both successor expressions without cloning paint."),
+    correspondence("numerator-successor-operator-introduced", "introduction", [], [selector("expanded.numerator-successor-operator")], "The rule introduces the numerator successor operation."),
     correspondence("numerator-increment-introduced", "introduction", [], [selector("expanded.numerator-increment")], "The rule introduces one into the numerator exponent successor."),
+    correspondence("denominator-successor-operator-introduced", "introduction", [], [selector("expanded.denominator-successor-operator")], "The rule introduces the divisor successor operation."),
     correspondence("denominator-increment-introduced", "introduction", [], [selector("expanded.denominator-increment")], "The rule introduces one into the divisor successor."),
     correspondence("integration-connector-introduced", "introduction", [], [selector("expanded.connector")], "The first rewrite introduces the family-of-antiderivatives connector."),
     correspondence("integration-constant-introduced", "introduction", [], [selector("expanded.integration-constant")], "The first rewrite introduces the required constant of integration.")
   ];
   const resolutionRecords: CorrespondenceMap["records"] = [
     correspondence("numerator-base-persists", "identity", [selector("expanded.numerator-base")], [selector("target.numerator-base")], "The numerator base persists through evaluation."),
-    correspondence("power-successor-evaluates", "fan-in", [selector("expanded.numerator-exponent"), selector("expanded.numerator-increment")], [selector("target.numerator-exponent")], "The numerator successor expression evaluates to the target exponent."),
-    correspondence("divisor-successor-evaluates", "fan-in", [selector("expanded.denominator-exponent"), selector("expanded.denominator-increment")], [selector("target.denominator")], "The divisor successor expression evaluates to the exact denominator."),
+    correspondence("power-successor-evaluates", "fan-in", [selector("expanded.numerator-exponent"), selector("expanded.numerator-successor-operator"), selector("expanded.numerator-increment")], [selector("target.numerator-exponent")], "The numerator successor expression evaluates to the target exponent."),
+    correspondence("divisor-successor-evaluates", "fan-in", [selector("expanded.denominator-exponent"), selector("expanded.denominator-successor-operator"), selector("expanded.denominator-increment")], [selector("target.denominator")], "The divisor successor expression evaluates to the exact denominator."),
     correspondence("integration-connector-persists", "identity", [selector("expanded.connector")], [selector("target.connector")], "The integration connector persists after its introduction."),
     correspondence("integration-constant-persists", "identity", [selector("expanded.integration-constant")], [selector("target.integration-constant")], "The constant of integration persists through local arithmetic evaluation.")
   ];

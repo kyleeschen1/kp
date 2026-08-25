@@ -46,7 +46,9 @@ test("integration first transition compiles its governed scope and lineage", () 
   ]);
   assert.deepEqual(plan.introducedSelectorIds.map((id) =>
     id.split(".").at(-1)), [
+    "numerator-successor-operator",
     "numerator-increment",
+    "denominator-successor-operator",
     "denominator-increment",
     "connector",
     "constant"

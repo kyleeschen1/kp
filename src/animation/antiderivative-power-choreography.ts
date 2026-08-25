@@ -108,7 +108,9 @@ export function compileKpAntiderivativePowerChoreography(input: {
   const base = record("integrand-base-persists");
   const exponent = record("source-exponent-branches");
   const introductions = [
+    record("numerator-successor-operator-introduced"),
     record("numerator-increment-introduced"),
+    record("denominator-successor-operator-introduced"),
     record("denominator-increment-introduced"),
     record("integration-connector-introduced"),
     record("integration-constant-introduced")
@@ -128,7 +130,7 @@ export function compileKpAntiderivativePowerChoreography(input: {
       candidate.targetSelectorIds.length !== 1)
   ) {
     throw new Error(
-      "Antiderivative choreography requires operator removal, base persistence, exponent fan-out, and four governed introductions."
+      "Antiderivative choreography requires operator removal, base persistence, exponent fan-out, and six governed introductions."
     );
   }
   const role = (

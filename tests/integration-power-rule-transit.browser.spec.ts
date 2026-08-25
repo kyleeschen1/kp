@@ -406,7 +406,7 @@ test("canonical integration rewrite traverses real Native KaTeX paint owners", a
   expect(result.lifecycleCounts.persist).toBeGreaterThan(0);
   expect(result.lifecycleCounts.split).toBe(1);
   expect(result.splitTargetCount).toBe(2);
-  expect(result.lifecycleCounts.introduce).toBeGreaterThanOrEqual(5);
+  expect(result.lifecycleCounts.introduce).toBeGreaterThanOrEqual(7);
   expect(result.lifecycleCounts.eliminate).toBeGreaterThanOrEqual(3);
   expect(result.ownership.map(({ visualOwner }) => visualOwner)).toEqual([
     "source-native",

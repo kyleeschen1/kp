@@ -313,6 +313,55 @@
       "scope": "slice s12 Native KaTeX material transit",
       "checkedAt": "2026-08-25T01:03:25.546Z",
       "notes": "The bounded renderer adapter reuses canonical scene and material owners without moving semantic or geometry authority."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s13 two-cohort evaluation certification",
+      "checkedAt": "2026-08-25T01:16:25.393Z",
+      "notes": "Fifty-eight focused tests prove two disjoint numerator and denominator 2 plus 1 to 3 cohorts, explicit addition catalysts, exact rational metadata, and typed failure without fallback."
+    },
+    {
+      "command": "npm run test:evaluation-authority-convergence",
+      "status": "passed",
+      "scope": "slice s13 evaluation authority preservation",
+      "checkedAt": "2026-08-25T01:16:26.677Z",
+      "notes": "Thirty tests prove both cohort certificates use existing contributor-fusion applicability while the singular compiler remains exactly-one-record and all existing callers remain valid."
+    },
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "slice s13 derivative preservation",
+      "checkedAt": "2026-08-25T01:16:27.693Z",
+      "notes": "Thirty-five derivative and symbolic-case tests pass unchanged after the additive cohort compiler."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-transit",
+      "status": "passed",
+      "scope": "slice s13 Native KaTeX mechanism canary",
+      "checkedAt": "2026-08-25T01:16:28.717Z",
+      "notes": "Chromium traverses the exact expanded endpoint with both explicit addition catalysts and preserves exclusive source, material, and target paint ownership."
+    },
+    {
+      "command": "npm run check:equation-asset-manifest",
+      "status": "passed",
+      "scope": "slice s13 generated semantic endpoint inventory",
+      "checkedAt": "2026-08-25T01:16:29.739Z",
+      "notes": "The regenerated endpoint fingerprints are current after adding the two semantic addition selectors."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s13 type safety",
+      "checkedAt": "2026-08-25T01:16:30.787Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s13 architecture preservation",
+      "checkedAt": "2026-08-25T01:16:31.829Z",
+      "notes": "Semantic, evaluation-authority, renderer, and cross-domain boundaries remain closed."
     }
   ],
   "allowedWork": [
@@ -420,7 +469,8 @@
     {
       "id": "next-action.kp.integration-power-rule.s13",
       "title": "Two-cohort-evaluation-certification",
-      "status": "planned"
+      "summary": "Certified exactly two disjoint integration successor cohorts from correspondence and endpoint metadata: numerator 2,+,1 to 3 and denominator 2,+,1 to 3. Added semantic operator roles, fail-closed plural certification, and exact selector metadata while leaving the singular compiler and derivative callers unchanged; no general graph, fallback, family promotion, or arbitrary exponent support was added.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.integration-power-rule.s14",

@@ -40,12 +40,14 @@ test("integration transit requires both introduced successors fraction and plus 
   const transit = plan();
   assert.deepEqual(transit.introducedTargetSemanticEntityIds.map((id) =>
     id.split(".").at(-1)), [
+    "numerator-successor-operator",
     "numerator-increment",
+    "denominator-successor-operator",
     "denominator-increment",
     "connector",
     "constant",
     "exact-quotient"
   ]);
-  assert.equal(new Set(transit.requiredTargetSemanticEntityIds).size, 8);
+  assert.equal(new Set(transit.requiredTargetSemanticEntityIds).size, 10);
   assert.equal(transit.requiredSourceSemanticEntityIds.length, 5);
 });
