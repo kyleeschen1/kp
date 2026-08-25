@@ -99,6 +99,10 @@ test("semantic applicability is independent from transformation release maturity
       {
         transformationKind: "simplifyConstantDifference",
         maturity: "review-stage"
+      },
+      {
+        transformationKind: "simplifyAntiderivativePowerRule",
+        maturity: "review-stage"
       }
     ]
   );

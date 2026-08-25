@@ -8,6 +8,8 @@ import {
 import {
   resolveKpOperationEvaluationFamilyReleaseRegistration
 } from "../animation/operation-evaluation-family-profile.ts";
+import type { KpSemanticTransformation } from
+  "../semantic/asset-transformation.ts";
 
 export const kpEquationEvaluationAuthorityRegistryV2SchemaVersion =
   "kp.equation-evaluation-authority-registry.v2" as const;
@@ -78,7 +80,14 @@ export const kpEquationEvaluationAuthorityRegistryV2 =
       ...kpOperationEvaluationAuthorityDescriptors.map((descriptor) => ({
         id: `${descriptor.presentationId}.authority-v2`,
         evaluationKind: arithmeticKind(descriptor.transformationKind),
-        transformationKinds: [descriptor.transformationKind],
+        transformationKinds: [
+          descriptor.transformationKind,
+          // The parent resolution stays one transformation; only its two
+          // declared addition cohorts borrow this evaluation authority.
+          ...(descriptor.semanticOperationIds.includes("kp.arithmetic.add")
+            ? ["simplifyAntiderivativePowerRule"]
+            : [])
+        ],
         semanticOperationIds: descriptor.semanticOperationIds,
         presentationAuthority: {
           kind: "registered-operation-evaluation" as const,
@@ -225,6 +234,8 @@ export interface KpEquationEvaluationAuthorityDiagnosticV2 {
     | "evaluation-authority.grammar-uncompiled"
     | "evaluation-authority.unregistered"
     | "evaluation-authority.misclassified"
+    | "evaluation-authority.embedded-transition"
+    | "evaluation-authority.transformation-unregistered"
     | "evaluation-authority.family-unregistered"
     | "evaluation-authority.family-mismatch";
   readonly transitionId?: string | undefined;
@@ -241,6 +252,18 @@ export type KpEquationEvaluationAuthorityResolutionV2 =
       readonly status: "resolved";
       readonly evaluations:
         readonly KpResolvedEquationEvaluationAuthorityV2[];
+      readonly diagnostics: readonly [];
+    }
+  | {
+      readonly status: "repair-required";
+      readonly diagnostics:
+        readonly KpEquationEvaluationAuthorityDiagnosticV2[];
+    };
+
+export type KpEquationEmbeddedEvaluationAuthorityResolutionV2 =
+  | {
+      readonly status: "resolved";
+      readonly authority: KpResolvedEquationEvaluationAuthorityV2;
       readonly diagnostics: readonly [];
     }
   | {
@@ -322,14 +345,97 @@ export function resolveKpEquationEvaluationAuthoritiesV2(input: {
   });
 }
 
+/**
+ * Compound transformations can expose several disjoint arithmetic cohorts
+ * while retaining one parent transition. This registry-owned seam authorizes
+ * those embedded operations without pretending they are separate timeline
+ * transitions or weakening the singular evaluation path.
+ */
+export function resolveKpEquationEmbeddedEvaluationAuthorityV2(input: {
+  readonly grammar: KpCompiledEquationGrammarV2;
+  readonly transitionId: string;
+  readonly transformation: KpSemanticTransformation;
+  readonly operationId: string;
+  readonly registry?: KpEquationEvaluationAuthorityRegistryV2 | undefined;
+}): KpEquationEmbeddedEvaluationAuthorityResolutionV2 {
+  if (!isKpCompiledEquationGrammarV2(input.grammar)) {
+    return embeddedRepair([{
+      code: "evaluation-authority.grammar-uncompiled",
+      message: "Embedded evaluation authority requires compiler-minted grammar v2."
+    }]);
+  }
+  const transition = input.grammar.transitions.find(
+    ({ id }) => id === input.transitionId
+  );
+  if (transition === undefined ||
+      transition.transformationId !== input.transformation.id) {
+    return embeddedRepair([{
+      code: "evaluation-authority.embedded-transition",
+      transitionId: input.transitionId,
+      operationId: input.operationId,
+      message:
+        `Embedded evaluation ${input.operationId} must belong to the named compiled transition and transformation.`
+    }]);
+  }
+  const registry = input.registry ?? kpEquationEvaluationAuthorityRegistryV2;
+  const entry = registry.entries.find(({ semanticOperationIds }) =>
+    semanticOperationIds.includes(input.operationId)
+  );
+  if (entry === undefined) {
+    return embeddedRepair([{
+      code: "evaluation-authority.unregistered",
+      transitionId: input.transitionId,
+      operationId: input.operationId,
+      message:
+        `Embedded evaluation ${input.operationId} has no registered presentation authority.`
+    }]);
+  }
+  if (!entry.transformationKinds.includes(input.transformation.transformType)) {
+    return embeddedRepair([{
+      code: "evaluation-authority.transformation-unregistered",
+      transitionId: input.transitionId,
+      operationId: input.operationId,
+      authorityId: entry.id,
+      transformationKind: input.transformation.transformType,
+      message:
+        `Evaluation authority ${entry.id} does not govern embedded operation ${input.operationId} in ${input.transformation.transformType}.`
+    }]);
+  }
+  const familyDiagnostics =
+    validateKpEquationEvaluationAuthorityFamilyProfilesV2({
+      registry: createKpEquationEvaluationAuthorityRegistryV2({
+        entries: [entry]
+      })
+    });
+  if (familyDiagnostics.length > 0) {
+    return embeddedRepair(familyDiagnostics);
+  }
+  return Object.freeze({
+    status: "resolved" as const,
+    authority: Object.freeze({
+      transitionId: input.transitionId,
+      transformationId: input.transformation.id,
+      operationId: input.operationId,
+      authorityId: entry.id,
+      evaluationKind: entry.evaluationKind,
+      presentationAuthority: entry.presentationAuthority,
+      resolutionSource: "mandatory-evaluation-registry" as const
+    }),
+    diagnostics: Object.freeze([]) as readonly []
+  });
+}
+
 export function validateKpEquationEvaluationAuthorityFamilyProfilesV2(input: {
   readonly registry?: KpEquationEvaluationAuthorityRegistryV2 | undefined;
 } = {}): readonly KpEquationEvaluationAuthorityDiagnosticV2[] {
   const registry = input.registry ?? kpEquationEvaluationAuthorityRegistryV2;
   const arithmeticKinds = new Set<string>(
-    kpOperationEvaluationAuthorityDescriptors.map(
-      ({ transformationKind }) => transformationKind
-    )
+    [
+      ...kpOperationEvaluationAuthorityDescriptors.map(
+        ({ transformationKind }) => transformationKind
+      ),
+      "simplifyAntiderivativePowerRule"
+    ]
   );
   const diagnostics: KpEquationEvaluationAuthorityDiagnosticV2[] = [];
 
@@ -389,6 +495,15 @@ function arithmeticKind(
 function repair(
   diagnostics: readonly KpEquationEvaluationAuthorityDiagnosticV2[]
 ): KpEquationEvaluationAuthorityResolutionV2 {
+  return Object.freeze({
+    status: "repair-required" as const,
+    diagnostics: Object.freeze([...diagnostics])
+  });
+}
+
+function embeddedRepair(
+  diagnostics: readonly KpEquationEvaluationAuthorityDiagnosticV2[]
+): KpEquationEmbeddedEvaluationAuthorityResolutionV2 {
   return Object.freeze({
     status: "repair-required" as const,
     diagnostics: Object.freeze([...diagnostics])

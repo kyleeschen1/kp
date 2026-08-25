@@ -362,6 +362,48 @@
       "scope": "slice s13 architecture preservation",
       "checkedAt": "2026-08-25T01:16:31.829Z",
       "notes": "Semantic, evaluation-authority, renderer, and cross-domain boundaries remain closed."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s14 antiderivative governance payload",
+      "checkedAt": "2026-08-25T01:31:39.472Z",
+      "notes": "Sixty-one focused tests prove the parent operation remains one transformation, both addition cohorts carry registry-minted review-stage family certificates, dispatch selects the specialized compiler, and missing cohort authority fails closed."
+    },
+    {
+      "command": "npm run test:evaluation-authority-convergence",
+      "status": "passed",
+      "scope": "slice s14 plural and singular authority coexistence",
+      "checkedAt": "2026-08-25T01:31:40.755Z",
+      "notes": "Thirty-three tests prove the new embedded cohort authority and tuple compiler are additive while singular family certification and existing mounts retain their contracts."
+    },
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "slice s14 derivative parity",
+      "checkedAt": "2026-08-25T01:31:41.792Z",
+      "notes": "Thirty-five derivative tests preserve the two-beat grammar, outline policy, family certificate, and generic host route."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s14 type safety",
+      "checkedAt": "2026-08-25T01:31:42.846Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks pass with the typed antiderivative payload."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s14 governance and dispatch boundaries",
+      "checkedAt": "2026-08-25T01:31:43.882Z",
+      "notes": "Dependency direction, semantic boundaries, compiler authority, evaluation presentation, governance v2, and cross-domain conformance gates pass."
+    },
+    {
+      "command": "npm run check:animation-governance-inventory",
+      "status": "passed",
+      "scope": "slice s14 generated governance freshness",
+      "checkedAt": "2026-08-25T01:31:44.921Z",
+      "notes": "The canonical governance inventory remains current after specialized dispatch."
     }
   ],
   "allowedWork": [
@@ -475,7 +517,8 @@
     {
       "id": "next-action.kp.integration-power-rule.s14",
       "title": "Antiderivative-governance-presentation-payload",
-      "status": "planned"
+      "summary": "Added a dedicated antiderivative migration selected by generic dispatch. The parent resolution remains one transformation and one clocked transition, while an antiderivative-specific semantic-only payload carries exactly two registry-authorized, review-stage contributor-fusion certificates. Singular evaluation fields stay empty for this compound transition; existing singular callers and the derivative route remain unchanged.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.integration-power-rule.s15",

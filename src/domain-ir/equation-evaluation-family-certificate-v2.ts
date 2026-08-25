@@ -2,6 +2,7 @@ import {
   resolveKpOperationEvaluationFamilyApplicability,
   resolveKpOperationEvaluationFamilyReleaseRegistration,
   type KpOperationEvaluationFamilyProfile,
+  type KpOperationEvaluationFamilyProfileId,
   type KpOperationEvaluationReleaseMaturity
 } from "../animation/operation-evaluation-family-profile.ts";
 import type { KpAssetBundle } from "../semantic/asset.ts";
@@ -9,7 +10,9 @@ import type { KpSemanticTransformation } from
   "../semantic/asset-transformation.ts";
 import {
   compileKpContributorEvaluationTopologyCertificate,
+  compileKpContributorEvaluationTopologyCohortCertificates,
   type KpContributorEvaluationTopologyDiagnosticCode,
+  type KpVerifiedContributorEvaluationTopologyCohortCertificate,
   type KpVerifiedEvaluationTopologyCertificate
 } from "../semantic/evaluation-topology-certificate.ts";
 import type {
@@ -63,6 +66,22 @@ export type KpEquationEvaluationFamilyCertificateCompilationV2 =
         readonly KpEquationEvaluationFamilyCertificateDiagnosticV2[];
     };
 
+export type KpEquationEvaluationFamilyCohortCertificateCompilationV2 =
+  | {
+      readonly status: "certified";
+      readonly certificates: readonly [
+        KpVerifiedEquationEvaluationFamilyCertificateV2,
+        KpVerifiedEquationEvaluationFamilyCertificateV2,
+        ...KpVerifiedEquationEvaluationFamilyCertificateV2[]
+      ];
+      readonly diagnostics: readonly [];
+    }
+  | {
+      readonly status: "repair-required";
+      readonly diagnostics:
+        readonly KpEquationEvaluationFamilyCertificateDiagnosticV2[];
+    };
+
 const verifiedCertificates = new WeakSet<object>();
 
 export function isKpVerifiedEquationEvaluationFamilyCertificateV2(
@@ -81,50 +100,13 @@ export function compileKpEquationEvaluationFamilyCertificateV2(input: {
   readonly transformation: KpSemanticTransformation;
   readonly authority: KpResolvedEquationEvaluationAuthorityV2;
 }): KpEquationEvaluationFamilyCertificateCompilationV2 {
-  const { authority, transformation } = input;
-  if (authority.presentationAuthority.kind !==
-      "registered-operation-evaluation") {
-    return repair({
-      code: "evaluation-family-certificate.unsupported-authority",
-      path: "authority.presentationAuthority.kind",
-      message:
-        `Evaluation authority ${authority.authorityId} does not declare an operation-evaluation family.`
-    });
-  }
-  if (authority.transformationId !== transformation.id) {
-    return repair({
-      code: "evaluation-family-certificate.transformation-mismatch",
-      path: "authority.transformationId",
-      message:
-        `Authority transformation ${authority.transformationId} does not match ${transformation.id}.`
-    });
-  }
-
-  const release = resolveKpOperationEvaluationFamilyReleaseRegistration(
-    transformation.transformType
-  );
-  if (release === undefined) {
-    return repair({
-      code: "evaluation-family-certificate.missing-release",
-      path: "transformation.transformType",
-      message:
-        `Transformation ${transformation.transformType} has no evaluation-family release registration.`
-    });
-  }
-  if (release.familyProfileId !==
-      authority.presentationAuthority.familyProfileId) {
-    return repair({
-      code: "evaluation-family-certificate.profile-mismatch",
-      path: "authority.presentationAuthority.familyProfileId",
-      message:
-        `Authority claims ${authority.presentationAuthority.familyProfileId}, but ${transformation.transformType} is registered to ${release.familyProfileId}.`
-    });
-  }
+  const governance = resolveFamilyGovernance(input);
+  if (governance.status === "repair-required") return governance;
 
   const topology = compileKpContributorEvaluationTopologyCertificate({
     bundle: input.bundle,
-    transformation,
-    operationId: authority.operationId
+    transformation: input.transformation,
+    operationId: input.authority.operationId
   });
   if (topology.status !== "verified") {
     return Object.freeze({
@@ -135,7 +117,7 @@ export function compileKpEquationEvaluationFamilyCertificateV2(input: {
   }
 
   const applicability = resolveKpOperationEvaluationFamilyApplicability({
-    familyProfileId: release.familyProfileId,
+    familyProfileId: governance.familyProfileId,
     topologyCertificate: topology.certificate
   });
   if (applicability.status !== "applicable") {
@@ -146,17 +128,13 @@ export function compileKpEquationEvaluationFamilyCertificateV2(input: {
     });
   }
 
-  const certificate = Object.freeze({
-    schemaVersion: kpEquationEvaluationFamilyCertificateV2SchemaVersion,
-    authorityId: authority.authorityId,
-    transformationId: transformation.id,
-    operationId: authority.operationId,
-    familyProfile: applicability.profile,
-    releaseMaturity: release.maturity,
+  const certificate = mintFamilyCertificate({
+    authority: input.authority,
+    transformation: input.transformation,
     topologyCertificate: topology.certificate,
-    resolutionSource: "compiler-validated-evaluation-authority" as const
-  }) as unknown as KpVerifiedEquationEvaluationFamilyCertificateV2;
-  verifiedCertificates.add(certificate);
+    familyProfile: applicability.profile,
+    releaseMaturity: governance.releaseMaturity
+  });
   return Object.freeze({
     status: "certified" as const,
     certificate,
@@ -164,9 +142,171 @@ export function compileKpEquationEvaluationFamilyCertificateV2(input: {
   });
 }
 
+/**
+ * Certifies each disjoint cohort independently under one registry authority.
+ * The tuple is carried by a specialized payload; singular transitions keep
+ * their existing one-certificate contract.
+ */
+export function compileKpEquationEvaluationFamilyCohortCertificatesV2(input: {
+  readonly bundle: KpAssetBundle;
+  readonly transformation: KpSemanticTransformation;
+  readonly authority: KpResolvedEquationEvaluationAuthorityV2;
+}): KpEquationEvaluationFamilyCohortCertificateCompilationV2 {
+  const governance = resolveFamilyGovernance(input);
+  if (governance.status === "repair-required") {
+    return Object.freeze({
+      status: "repair-required" as const,
+      diagnostics: governance.diagnostics
+    });
+  }
+  const topology = compileKpContributorEvaluationTopologyCohortCertificates({
+    bundle: input.bundle,
+    transformation: input.transformation,
+    operationId: input.authority.operationId
+  });
+  if (topology.status !== "verified") {
+    return Object.freeze({
+      status: "repair-required" as const,
+      diagnostics: Object.freeze(topology.diagnostics.map((diagnostic) =>
+        Object.freeze({ ...diagnostic })))
+    });
+  }
+  const diagnostics: KpEquationEvaluationFamilyCertificateDiagnosticV2[] = [];
+  const certificates: KpVerifiedEquationEvaluationFamilyCertificateV2[] = [];
+  topology.certificates.forEach((topologyCertificate) => {
+    const applicability = resolveKpOperationEvaluationFamilyApplicability({
+      familyProfileId: governance.familyProfileId,
+      topologyCertificate
+    });
+    if (applicability.status !== "applicable") {
+      diagnostics.push({
+        code: `evaluation-family-certificate.${applicability.status}`,
+        path: `topologyCertificates.${topologyCertificate.cohortId}.topology`,
+        message: applicability.message
+      });
+      return;
+    }
+    certificates.push(mintFamilyCertificate({
+      authority: input.authority,
+      transformation: input.transformation,
+      topologyCertificate,
+      familyProfile: applicability.profile,
+      releaseMaturity: governance.releaseMaturity
+    }));
+  });
+  if (diagnostics.length > 0 || certificates.length < 2) {
+    return Object.freeze({
+      status: "repair-required" as const,
+      diagnostics: Object.freeze(diagnostics.map((diagnostic) =>
+        Object.freeze(diagnostic)))
+    });
+  }
+  return Object.freeze({
+    status: "certified" as const,
+    certificates: Object.freeze(certificates) as readonly [
+      KpVerifiedEquationEvaluationFamilyCertificateV2,
+      KpVerifiedEquationEvaluationFamilyCertificateV2,
+      ...KpVerifiedEquationEvaluationFamilyCertificateV2[]
+    ],
+    diagnostics: Object.freeze([]) as readonly []
+  });
+}
+
+type KpEquationEvaluationFamilyGovernanceResolutionV2 =
+  | {
+      readonly status: "resolved";
+      readonly familyProfileId: KpOperationEvaluationFamilyProfileId;
+      readonly releaseMaturity: KpOperationEvaluationReleaseMaturity;
+    }
+  | {
+      readonly status: "repair-required";
+      readonly diagnostics:
+        readonly KpEquationEvaluationFamilyCertificateDiagnosticV2[];
+    };
+
+function resolveFamilyGovernance(input: {
+  readonly transformation: KpSemanticTransformation;
+  readonly authority: KpResolvedEquationEvaluationAuthorityV2;
+}): KpEquationEvaluationFamilyGovernanceResolutionV2 {
+  const { authority, transformation } = input;
+  if (authority.presentationAuthority.kind !==
+      "registered-operation-evaluation") {
+    return governanceRepair({
+      code: "evaluation-family-certificate.unsupported-authority",
+      path: "authority.presentationAuthority.kind",
+      message:
+        `Evaluation authority ${authority.authorityId} does not declare an operation-evaluation family.`
+    });
+  }
+  if (authority.transformationId !== transformation.id) {
+    return governanceRepair({
+      code: "evaluation-family-certificate.transformation-mismatch",
+      path: "authority.transformationId",
+      message:
+        `Authority transformation ${authority.transformationId} does not match ${transformation.id}.`
+    });
+  }
+  const release = resolveKpOperationEvaluationFamilyReleaseRegistration(
+    transformation.transformType
+  );
+  if (release === undefined) {
+    return governanceRepair({
+      code: "evaluation-family-certificate.missing-release",
+      path: "transformation.transformType",
+      message:
+        `Transformation ${transformation.transformType} has no evaluation-family release registration.`
+    });
+  }
+  if (release.familyProfileId !==
+      authority.presentationAuthority.familyProfileId) {
+    return governanceRepair({
+      code: "evaluation-family-certificate.profile-mismatch",
+      path: "authority.presentationAuthority.familyProfileId",
+      message:
+        `Authority claims ${authority.presentationAuthority.familyProfileId}, but ${transformation.transformType} is registered to ${release.familyProfileId}.`
+    });
+  }
+  return Object.freeze({
+    status: "resolved" as const,
+    familyProfileId: release.familyProfileId,
+    releaseMaturity: release.maturity
+  });
+}
+
+function mintFamilyCertificate(input: {
+  readonly authority: KpResolvedEquationEvaluationAuthorityV2;
+  readonly transformation: KpSemanticTransformation;
+  readonly topologyCertificate: KpVerifiedEvaluationTopologyCertificate |
+    KpVerifiedContributorEvaluationTopologyCohortCertificate;
+  readonly familyProfile: KpOperationEvaluationFamilyProfile;
+  readonly releaseMaturity: KpOperationEvaluationReleaseMaturity;
+}): KpVerifiedEquationEvaluationFamilyCertificateV2 {
+  const certificate = Object.freeze({
+    schemaVersion: kpEquationEvaluationFamilyCertificateV2SchemaVersion,
+    authorityId: input.authority.authorityId,
+    transformationId: input.transformation.id,
+    operationId: input.authority.operationId,
+    familyProfile: input.familyProfile,
+    releaseMaturity: input.releaseMaturity,
+    topologyCertificate: input.topologyCertificate,
+    resolutionSource: "compiler-validated-evaluation-authority" as const
+  }) as unknown as KpVerifiedEquationEvaluationFamilyCertificateV2;
+  verifiedCertificates.add(certificate);
+  return certificate;
+}
+
 function repair(
   diagnostic: KpEquationEvaluationFamilyCertificateDiagnosticV2
 ): KpEquationEvaluationFamilyCertificateCompilationV2 {
+  return Object.freeze({
+    status: "repair-required" as const,
+    diagnostics: Object.freeze([Object.freeze(diagnostic)])
+  });
+}
+
+function governanceRepair(
+  diagnostic: KpEquationEvaluationFamilyCertificateDiagnosticV2
+): KpEquationEvaluationFamilyGovernanceResolutionV2 {
   return Object.freeze({
     status: "repair-required" as const,
     diagnostics: Object.freeze([Object.freeze(diagnostic)])

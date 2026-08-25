@@ -1,6 +1,8 @@
 import type { KpAnimationAsset } from "../animation/asset.ts";
 import type { KpEquationAssetMigrationV2 } from
   "./equation-asset-migration-v2.ts";
+import { compileKpAntiderivativePowerMigrationV2 } from
+  "./antiderivative-power-migration-v2.ts";
 import { compileKpDerivativePowerMigrationV2 } from
   "./derivative-power-migration-v2.ts";
 import { compileKpFunctionWrapMigrationV2 } from
@@ -21,6 +23,10 @@ const compilers = new Map<string, Compiler>([
   [
     "animation.generated.calculus.derivative.power-rule-x-cubed",
     compileKpDerivativePowerMigrationV2
+  ],
+  [
+    "animation.generated.calculus.integral.power-rule-quadratic",
+    compileKpAntiderivativePowerMigrationV2
   ],
   [
     "animation.generated.exponent.square-as-product",
@@ -51,7 +57,6 @@ const compilers = new Map<string, Compiler>([
     "animation.comparison.jacobian-hessian",
     "animation.comparison.linear-solve-programming",
     "animation.generated.calculus.derivative.sum-rule-polynomial",
-    "animation.generated.calculus.integral.power-rule-quadratic",
     "animation.generated.linear-algebra.dot-product.three-vector",
     "animation.generated.linear-algebra.matrix-matrix.two-by-two",
     "animation.generated.linear-algebra.matrix-vector.two-by-two",
