@@ -941,6 +941,69 @@
       "status": "passed",
       "scope": "slice s18 true receiver candidate: 1061 nodes and 25694 events before final checkpoint commit",
       "checkedAt": "2026-08-25T21:28:08.712Z"
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s18 explicit pattern binding instance handoff candidate",
+      "checkedAt": "2026-08-25T22:21:20.897Z",
+      "notes": "All 63 focused integration authority choreography transit evaluation and preservation tests passed."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-catalogue",
+      "status": "passed",
+      "scope": "slice s18 explicit template Catalogue lifecycle",
+      "checkedAt": "2026-08-25T22:21:36.517Z",
+      "notes": "Two Chromium cases prove the complete pattern binding instantiated hold rewrite handoff accessibility theme and lifecycle states."
+    },
+    {
+      "command": "npm run visual:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s18 explicit template desktop dark and narrow light checkpoint",
+      "checkedAt": "2026-08-25T22:22:11.490Z",
+      "notes": "Fourteen deterministic frames visibly show general law explicit bindings instantiated rule handoff exact expansion and both ink knots without background paint bleed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s18 explicit template type safety",
+      "checkedAt": "2026-08-25T22:22:24.859Z",
+      "notes": "Application Node test Svelte and domain typechecks passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s18 explicit template architecture preservation",
+      "checkedAt": "2026-08-25T22:22:26.114Z",
+      "notes": "Dependency semantic animation equation authority governance and cross-domain gates passed."
+    },
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "slice s18 derivative preservation",
+      "checkedAt": "2026-08-25T22:22:27.121Z",
+      "notes": "All 35 protected derivative semantic choreography selector and operator-policy checks passed unchanged."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "slice s18 endpoint and authority preservation",
+      "checkedAt": "2026-08-25T22:22:28.144Z",
+      "notes": "All 11 frozen endpoint semantic renderer clock and sampled-frame authority checks passed."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/integration-power-rule-transit.browser.spec.ts tests/integration-power-rule-evaluation.browser.spec.ts tests/differentiation-power-catalogue.browser.spec.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "slice s18 native transit evaluation and derivative browser preservation",
+      "checkedAt": "2026-08-25T22:22:29.154Z",
+      "notes": "Six Chromium cases passed across native integration transit dual evaluation and the unchanged derivative lifecycle."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s18 explicit template durable evidence",
+      "checkedAt": "2026-08-25T22:22:41.938Z",
+      "notes": "Theseus validates 1061 nodes and 25709 events after verification records and context receipt closure."
     }
   ],
   "allowedWork": [
@@ -1078,7 +1141,7 @@
     {
       "id": "next-action.kp.integration-power-rule.s18",
       "title": "Integration-human-visual-checkpoint",
-      "summary": "Human review rejected the spatial receiver candidate: exact live capture matches commit 811d7ca70, but three thin vacancy strokes plus destination syntax read as punctuation and an ordinary morph, not a mathematical template. The missing instructional beats are recognition of a complete general rule, explicit metavariable binding, and a stable instantiated-rule hold before rewrite. Do not attempt another salience or spacing tweak.",
+      "summary": "Implement the user-approved explicit pattern sequence: a complete general antiderivative power rule owns recognition, u maps to x and n maps to 2, the instantiated rule holds, and that instance hands off to the existing exact rewrite and dual ink-knot evaluation. Preserve all prior semantic and renderer boundaries.",
       "status": "in-progress"
     },
     {

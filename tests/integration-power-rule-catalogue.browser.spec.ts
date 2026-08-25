@@ -112,7 +112,7 @@ test("integration power rule uses governed transit and two certified ink knots",
     "data-kp-antiderivative-template-law-ref-id",
     "law.calculus.integral.power-rule"
   );
-  await expect(templateReceiver).toHaveAttribute("aria-hidden", "true");
+  await expect(templateReceiver).toHaveAttribute("aria-hidden", "false");
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-template-receiver-focus",
     "1.0000"
@@ -146,9 +146,31 @@ test("integration power rule uses governed transit and two certified ink knots",
     "data-kp-semantic-salience-level",
     "focus"
   );
-  await expect(stage.locator(
-    "[data-kp-antiderivative-rule-reference]"
-  )).toHaveCount(0);
+  const rulePanel = stage.locator(
+    "[data-kp-antiderivative-rule-template]"
+  );
+  const generalRule = rulePanel.locator(
+    "[data-kp-antiderivative-general-rule]"
+  );
+  const ruleBindings = rulePanel.locator(
+    "[data-kp-antiderivative-rule-bindings]"
+  );
+  const instantiatedRule = rulePanel.locator(
+    "[data-kp-antiderivative-instantiated-rule]"
+  );
+  await expect(rulePanel).toHaveCount(1);
+  await expect(rulePanel).toHaveAttribute("aria-hidden", "false");
+  await expect(generalRule).toHaveAttribute(
+    "data-kp-antiderivative-general-rule",
+    /\\int u\^n/u
+  );
+  await expect.poll(() => renderedOpacity(generalRule)).toBe(1);
+  await expect.poll(() => renderedOpacity(ruleBindings)).toBe(0);
+  await expect.poll(() => renderedOpacity(instantiatedRule)).toBe(0);
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-power-accessible-endpoint",
+    "rule-template"
+  );
 
   await seek.fill("0.34");
   await expectTransitReady(stage);
@@ -164,8 +186,15 @@ test("integration power rule uses governed transit and two certified ink knots",
   ))).toBeLessThan(1);
   await expect.poll(() => renderedOpacity(vacancies.first())).toBeGreaterThan(0);
   await expect.poll(() => renderedOpacity(vacancies.first())).toBeLessThan(1);
+  await expect.poll(() => renderedOpacity(generalRule)).toBe(1);
+  await expect.poll(() => renderedOpacity(ruleBindings)).toBe(1);
+  await expect.poll(() => renderedOpacity(instantiatedRule)).toBe(0);
+  await expect(rulePanel).toHaveAttribute(
+    "aria-label",
+    /u maps to x, and n maps to 2/u
+  );
 
-  await seek.fill("0.36");
+  await seek.fill("0.37");
   await expectTransitReady(stage);
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-template-binding-progress",
@@ -174,6 +203,12 @@ test("integration power rule uses governed transit and two certified ink knots",
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-template-receiver-settlement-progress",
     "0.0000"
+  );
+  await expect.poll(() => renderedOpacity(instantiatedRule)).toBe(1);
+  await expect.poll(() => renderedOpacity(ruleBindings)).toBe(1);
+  await expect(rulePanel).toHaveAttribute(
+    "aria-label",
+    /Instantiated power rule/u
   );
 
   await seek.fill("0.42");
@@ -184,6 +219,10 @@ test("integration power rule uses governed transit and two certified ink knots",
   await expect.poll(async () => Number(await stage.getAttribute(
     "data-kp-antiderivative-template-receiver-settlement-progress"
   ))).toBeLessThan(1);
+  await expect.poll(async () => Number(await stage.getAttribute(
+    "data-kp-antiderivative-rewrite-handoff-progress"
+  ))).toBeGreaterThan(0);
+  await expect.poll(() => renderedOpacity(instantiatedRule)).toBeGreaterThan(0);
 
   await seek.fill("0.49");
   await expectTransitReady(stage);
@@ -206,6 +245,8 @@ test("integration power rule uses governed transit and two certified ink knots",
     "1.0000"
   );
   await expect.poll(() => renderedOpacity(vacancies.first())).toBe(0);
+  await expect.poll(() => renderedOpacity(rulePanel)).toBe(0);
+  await expect(templateReceiver).toHaveAttribute("aria-hidden", "true");
 
   await seek.fill("0.5");
   await expect(activeTransition(stage)).toHaveAttribute(

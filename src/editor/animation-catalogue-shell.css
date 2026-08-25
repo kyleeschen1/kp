@@ -438,6 +438,86 @@
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-rule-template {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: grid;
+  grid-template-rows: minmax(3.2em, auto) minmax(1.5em, auto);
+  align-content: center;
+  justify-items: center;
+  gap: 0.85rem;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 1rem;
+  color: var(--kp-equation-foreground);
+  opacity: var(--kp-antiderivative-rule-template-panel-presence, 0);
+  isolation: isolate;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-rule-template::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: var(--kp-catalogue-stage-background);
+  content: "";
+  opacity: 1;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-rule-formula-stack {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  font-size: clamp(1.15rem, 3.6vw, 1.85rem);
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  :is(
+    .editor-equation-stage__antiderivative-general-rule,
+    .editor-equation-stage__antiderivative-instantiated-rule
+  ) {
+  grid-area: 1 / 1;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-general-rule {
+  opacity: var(--kp-antiderivative-general-rule-presence, 0);
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-instantiated-rule {
+  opacity: var(--kp-antiderivative-instantiated-rule-presence, 0);
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-rule-bindings {
+  color: color-mix(
+    in srgb,
+    var(--kp-catalogue-link) 82%,
+    var(--kp-equation-foreground)
+  );
+  font-size: clamp(1rem, 2.8vw, 1.4rem);
+  opacity: var(--kp-antiderivative-metavariable-bindings-presence, 0);
+  white-space: nowrap;
+}
+
+@media (max-width: 520px) {
+  .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+    .editor-equation-stage__antiderivative-rule-formula-stack {
+    font-size: clamp(1.05rem, 5vw, 1.35rem);
+  }
+
+  .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+    .editor-equation-stage__antiderivative-rule-bindings {
+    font-size: clamp(0.92rem, 4.2vw, 1.12rem);
+  }
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
   .editor-equation-stage__antiderivative-template-vacancy {
   position: absolute;
   box-sizing: border-box;

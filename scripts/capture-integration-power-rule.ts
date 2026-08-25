@@ -34,35 +34,35 @@ const samples = [
   },
   {
     id: "template-scaffold",
-    label: "Rule application · receiving structure opens",
+    label: "Rule application · complete power-rule pattern",
     progress: 0.24,
     theme: "dark",
     viewport: desktopViewport
   },
   {
     id: "template-binding",
-    label: "Rule application · source symbols enter their slots",
-    progress: 0.3,
+    label: "Rule application · u ↦ x and n ↦ 2",
+    progress: 0.34,
     theme: "dark",
     viewport: desktopViewport
   },
   {
     id: "template-bound",
-    label: "Rule application · populated receiver holds",
-    progress: 0.36,
+    label: "Rule application · instantiated rule holds",
+    progress: 0.37,
     theme: "dark",
     viewport: desktopViewport
   },
   {
     id: "template-settling",
-    label: "Rule application · receiver settles into the result",
+    label: "Rule application · instance hands off to rewrite",
     progress: 0.42,
     theme: "dark",
     viewport: desktopViewport
   },
   {
     id: "template-syntax",
-    label: "Rule application · fixed syntax resolves",
+    label: "Rule application · governed expanded result",
     progress: 0.49,
     theme: "dark",
     viewport: desktopViewport
@@ -97,15 +97,15 @@ const samples = [
   },
   {
     id: "narrow-light-template-scaffold",
-    label: "Narrow light · receiving structure opens",
+    label: "Narrow light · complete power-rule pattern",
     progress: 0.24,
     theme: "light",
     viewport: narrowViewport
   },
   {
     id: "narrow-light-template-bound",
-    label: "Narrow light · populated receiver holds",
-    progress: 0.36,
+    label: "Narrow light · instantiated rule holds",
+    progress: 0.37,
     theme: "light",
     viewport: narrowViewport
   },
@@ -133,6 +133,11 @@ interface CaptureEvidence {
   readonly templateTraceRole: string;
   readonly templateLawRefId: string;
   readonly templateReceiverFocus: number;
+  readonly ruleTemplatePanelPresence: number;
+  readonly generalRulePresence: number;
+  readonly metavariableBindingsPresence: number;
+  readonly instantiatedRulePresence: number;
+  readonly rewriteHandoffProgress: number;
   readonly templateVacancyPresence: number;
   readonly templateVacancyCount: number;
   readonly templateReceiverLane: string;
@@ -152,6 +157,7 @@ interface CaptureEvidence {
   readonly visibleCohortIds: readonly string[];
   readonly accessibleEndpoint: string;
   readonly visibleText: string;
+  readonly ruleTemplateText: string;
   readonly file: string;
 }
 
@@ -326,6 +332,21 @@ async function captureSample(input: {
       templateReceiverFocus: Number(
         root.dataset["kpAntiderivativeTemplateReceiverFocus"] ?? 0
       ),
+      ruleTemplatePanelPresence: Number(
+        root.dataset["kpAntiderivativeRuleTemplatePanelPresence"] ?? 0
+      ),
+      generalRulePresence: Number(
+        root.dataset["kpAntiderivativeGeneralRulePresence"] ?? 0
+      ),
+      metavariableBindingsPresence: Number(
+        root.dataset["kpAntiderivativeMetavariableBindingsPresence"] ?? 0
+      ),
+      instantiatedRulePresence: Number(
+        root.dataset["kpAntiderivativeInstantiatedRulePresence"] ?? 0
+      ),
+      rewriteHandoffProgress: Number(
+        root.dataset["kpAntiderivativeRewriteHandoffProgress"] ?? 0
+      ),
       templateVacancyPresence: Number(
         root.dataset["kpAntiderivativeTemplateVacancyPresence"] ?? 0
       ),
@@ -382,9 +403,13 @@ async function captureSample(input: {
       visibleText: [...root.querySelectorAll<HTMLElement>(
         "[data-kp-editor-equation-source], " +
         "[data-kp-editor-equation-target], " +
-        "[data-kp-equation-material-owner-id]"
+        "[data-kp-equation-material-owner-id], " +
+        "[data-kp-antiderivative-rule-template]"
       )].filter(visible).map((element) => element.textContent ?? "")
-        .join(" ").replace(/\s+/gu, " ").trim()
+        .join(" ").replace(/\s+/gu, " ").trim(),
+      ruleTemplateText: root.querySelector<HTMLElement>(
+        "[data-kp-antiderivative-rule-template]"
+      )?.textContent?.replace(/\s+/gu, " ").trim() ?? ""
     };
   });
   return {
@@ -463,6 +488,11 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     scaffold.templateLawRefId !==
       "law.calculus.integral.power-rule" ||
     scaffold.templateReceiverFocus !== 1 ||
+    scaffold.ruleTemplatePanelPresence !== 1 ||
+    scaffold.generalRulePresence !== 1 ||
+    scaffold.metavariableBindingsPresence !== 0 ||
+    scaffold.instantiatedRulePresence !== 0 ||
+    !scaffold.ruleTemplateText.includes("n≠−1") ||
     scaffold.templateVacancyPresence !== 1 ||
     scaffold.templateVacancyCount !== 3 ||
     scaffold.templatePreviewPresence !== 1 ||
@@ -487,6 +517,12 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   if (
     binding.templateTraceRole !== "prospective" ||
     binding.templateReceiverFocus !== 1 ||
+    binding.ruleTemplatePanelPresence !== 1 ||
+    binding.generalRulePresence !== 1 ||
+    binding.metavariableBindingsPresence !== 1 ||
+    binding.instantiatedRulePresence !== 0 ||
+    !binding.ruleTemplateText.includes("u↦x") ||
+    !binding.ruleTemplateText.includes("n↦2") ||
     binding.templateVacancyCount !== 3 ||
     binding.templateVacancyPresence <= 0 ||
     binding.templateVacancyPresence >= 1 ||
@@ -505,7 +541,12 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     bound.templateBindingProgress !== 1 ||
     bound.templateReceiverSettlementProgress !== 0 ||
     bound.templateVacancyPresence !== 0 ||
-    bound.templateTraceRole !== "prospective"
+    bound.templateTraceRole !== "prospective" ||
+    bound.ruleTemplatePanelPresence !== 1 ||
+    bound.metavariableBindingsPresence !== 1 ||
+    bound.instantiatedRulePresence !== 1 ||
+    !bound.ruleTemplateText.includes("x2") ||
+    !bound.ruleTemplateText.includes("2+1")
   ) {
     throw new Error(
       "Bound template frame must hold populated material at the receiver pose."
@@ -516,7 +557,10 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     settling.templateBindingProgress !== 1 ||
     settling.templateReceiverSettlementProgress <= 0 ||
     settling.templateReceiverSettlementProgress >= 1 ||
-    settling.templateTraceRole !== "prospective"
+    settling.templateTraceRole !== "prospective" ||
+    settling.rewriteHandoffProgress <= 0 ||
+    settling.rewriteHandoffProgress >= 1 ||
+    settling.instantiatedRulePresence <= 0
   ) {
     throw new Error(
       "Settling template frame must move the populated receiver toward native syntax."
@@ -530,7 +574,10 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     syntax.templateVacancyPresence !== 0 ||
     syntax.templateSyntaxPresence !== 1 ||
     syntax.templateClosurePresence !== 1 ||
-    syntax.templateSyntaxResolutionProgress !== 1
+    syntax.templateSyntaxResolutionProgress !== 1 ||
+    syntax.ruleTemplatePanelPresence !== 0 ||
+    syntax.instantiatedRulePresence !== 0 ||
+    syntax.rewriteHandoffProgress !== 1
   ) {
     throw new Error(
       "Template syntax frame must resolve the bound rule before evaluation."

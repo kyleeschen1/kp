@@ -21,6 +21,7 @@ import {
 import {
   observeKpNativeKatexRenderedScene
 } from "../rendering/native-katex-rendered-scene.ts";
+import { renderLatexToHtml } from "../rendering/katex-adapter.ts";
 import {
   kpAntiderivativeTemplateInstantiationProfileId,
   measureKpAntiderivativeTemplateReceiverPlacement,
@@ -242,7 +243,56 @@ function createTemplateReceiver(
     "--kp-antiderivative-template-vacancy-scale",
     "0.72"
   );
+  element.style.setProperty(
+    "--kp-antiderivative-rule-template-panel-presence",
+    "0"
+  );
+  element.style.setProperty(
+    "--kp-antiderivative-general-rule-presence",
+    "0"
+  );
+  element.style.setProperty(
+    "--kp-antiderivative-metavariable-bindings-presence",
+    "0"
+  );
+  element.style.setProperty(
+    "--kp-antiderivative-instantiated-rule-presence",
+    "0"
+  );
   element.setAttribute("aria-hidden", "true");
+
+  const rulePanel = stage.ownerDocument.createElement("div");
+  rulePanel.className =
+    "editor-equation-stage__antiderivative-rule-template";
+  rulePanel.dataset["kpAntiderivativeRuleTemplate"] = template.lawRefId;
+  rulePanel.setAttribute("role", "img");
+  rulePanel.setAttribute("aria-hidden", "true");
+
+  const formulaStack = stage.ownerDocument.createElement("div");
+  formulaStack.className =
+    "editor-equation-stage__antiderivative-rule-formula-stack";
+  const generalRule = createRuleTemplateFormula({
+    stage,
+    className: "editor-equation-stage__antiderivative-general-rule",
+    dataAttribute: "kpAntiderivativeGeneralRule",
+    latex: template.generalRuleLatex
+  });
+  const instantiatedRule = createRuleTemplateFormula({
+    stage,
+    className: "editor-equation-stage__antiderivative-instantiated-rule",
+    dataAttribute: "kpAntiderivativeInstantiatedRule",
+    latex: template.instantiatedRuleLatex
+  });
+  formulaStack.append(generalRule, instantiatedRule);
+  const bindings = createRuleTemplateFormula({
+    stage,
+    className: "editor-equation-stage__antiderivative-rule-bindings",
+    dataAttribute: "kpAntiderivativeRuleBindings",
+    latex: template.bindingLatex
+  });
+  rulePanel.append(formulaStack, bindings);
+  element.append(rulePanel);
+
   const bindingTargets = [
     {
       role: "base",
@@ -270,6 +320,28 @@ function createTemplateReceiver(
   return element;
 }
 
+function createRuleTemplateFormula(input: {
+  readonly stage: HTMLElement;
+  readonly className: string;
+  readonly dataAttribute:
+    | "kpAntiderivativeGeneralRule"
+    | "kpAntiderivativeRuleBindings"
+    | "kpAntiderivativeInstantiatedRule";
+  readonly latex: string;
+}): HTMLElement {
+  const formula = input.stage.ownerDocument.createElement("div");
+  formula.className = input.className;
+  formula.dataset[input.dataAttribute] = input.latex;
+  formula.innerHTML = renderLatexToHtml(input.latex, {
+    displayMode: false,
+    output: "htmlAndMathml"
+  });
+  // The panel owns one phase-specific accessible description; hidden
+  // crossfade layers must not announce duplicate equations to screen readers.
+  formula.setAttribute("aria-hidden", "true");
+  return formula;
+}
+
 function hideTemplateReceiver(session: TransitMountSession): void {
   session.templateReceiver.style.setProperty(
     "--kp-antiderivative-template-vacancy-presence",
@@ -279,7 +351,25 @@ function hideTemplateReceiver(session: TransitMountSession): void {
     "--kp-antiderivative-template-vacancy-scale",
     "0.72"
   );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-rule-template-panel-presence",
+    "0"
+  );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-general-rule-presence",
+    "0"
+  );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-metavariable-bindings-presence",
+    "0"
+  );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-instantiated-rule-presence",
+    "0"
+  );
   session.templateReceiver.dataset["kpSemanticTraceRole"] = "absent";
+  session.templateReceiver.setAttribute("aria-hidden", "true");
+  session.templateReceiver.setAttribute("inert", "");
 }
 
 async function prepareSession(
@@ -418,7 +508,9 @@ function positionTemplateReceiver(
     slot.style.width = `${width}px`;
   }
   session.stage.dataset["kpAntiderivativeTemplateVacancyCount"] =
-    String(session.templateReceiver.childElementCount);
+    String(session.templateReceiver.querySelectorAll(
+      "[data-kp-antiderivative-template-vacancy]"
+    ).length);
   session.stage.dataset["kpAntiderivativeTemplateReceiverLane"] =
     placement.lane;
   session.stage.dataset["kpAntiderivativeTemplateReceiverTranslateX"] =
@@ -448,13 +540,13 @@ function applyFrame(session: TransitMountSession): void {
   resetEndpointPresentation(session);
   const ownership = session.canonical.session.apply(rendererProgress);
   applyOperatorAndScopeSalience(session, frame, projection);
-  applyRuleTemplateApplicationState(
+  const templatePanelPresence = applyRuleTemplateApplicationState(
     session,
     frame,
     rendererProgress,
     projection
   );
-  settleAccessibility(session, rendererProgress);
+  settleAccessibility(session, rendererProgress, templatePanelPresence);
   session.stage.dataset["kpAntiderivativePowerTransit"] = "ready";
   session.stage.dataset["kpAntiderivativePowerTransitProgress"] =
     String(rendererProgress);
@@ -473,7 +565,7 @@ function applyRuleTemplateApplicationState(
   frame: ReturnType<typeof sampleKpAntiderivativePowerChoreography>,
   rendererProgress: number,
   projection: "full" | "reduced" | "no-depth"
-): void {
+): number {
   const template = projection === "full"
     ? frame.ruleTemplateApplication
     : sampleKpAntiderivativeRuleTemplateApplication(rendererProgress);
@@ -485,8 +577,53 @@ function applyRuleTemplateApplicationState(
     "--kp-antiderivative-template-vacancy-scale",
     (0.72 + 0.28 * template.previewPresence).toFixed(4)
   );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-rule-template-panel-presence",
+    template.panelPresence.toFixed(4)
+  );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-general-rule-presence",
+    template.generalRulePresence.toFixed(4)
+  );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-metavariable-bindings-presence",
+    template.metavariableBindingsPresence.toFixed(4)
+  );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-instantiated-rule-presence",
+    template.instantiatedRulePresence.toFixed(4)
+  );
   session.templateReceiver.dataset["kpSemanticTraceRole"] =
     template.traceRole;
+  const templateAuthority =
+    session.plan.choreography.ruleTemplateApplication;
+  const rulePanel = session.templateReceiver.querySelector<HTMLElement>(
+    "[data-kp-antiderivative-rule-template]"
+  );
+  if (rulePanel === null) {
+    throw new Error("Antiderivative rewrite lacks its rule-template panel.");
+  }
+  const panelIsPresent = template.panelPresence > 0.01;
+  session.templateReceiver.setAttribute(
+    "aria-hidden",
+    panelIsPresent ? "false" : "true"
+  );
+  rulePanel.setAttribute("aria-hidden", panelIsPresent ? "false" : "true");
+  if (panelIsPresent) {
+    session.templateReceiver.removeAttribute("inert");
+  } else {
+    session.templateReceiver.setAttribute("inert", "");
+  }
+  const [baseBinding, exponentBinding] =
+    templateAuthority.metavariableBindings;
+  rulePanel.setAttribute(
+    "aria-label",
+    template.instantiatedRulePresence > 0.01
+      ? `Instantiated power rule: integrate ${baseBinding.value} to the ${exponentBinding.value} power, then rewrite with exponent ${exponentBinding.value} plus one in the numerator and denominator, plus C.`
+      : template.metavariableBindingsPresence > 0.01
+        ? `Power rule binding: u maps to ${baseBinding.value}, and n maps to ${exponentBinding.value}.`
+        : "Power rule template: the integral of u to the n maps to u to the n plus one over n plus one, plus C, when n is not negative one."
+  );
   const semanticIds = [
     ...session.plan.choreography.ruleTemplateApplication
       .scaffoldSemanticEntityIds,
@@ -531,6 +668,16 @@ function applyRuleTemplateApplicationState(
     template.traceRole;
   session.stage.dataset["kpAntiderivativeTemplateReceiverFocus"] =
     template.receiverFocus.toFixed(4);
+  session.stage.dataset["kpAntiderivativeRuleTemplatePanelPresence"] =
+    template.panelPresence.toFixed(4);
+  session.stage.dataset["kpAntiderivativeGeneralRulePresence"] =
+    template.generalRulePresence.toFixed(4);
+  session.stage.dataset["kpAntiderivativeMetavariableBindingsPresence"] =
+    template.metavariableBindingsPresence.toFixed(4);
+  session.stage.dataset["kpAntiderivativeInstantiatedRulePresence"] =
+    template.instantiatedRulePresence.toFixed(4);
+  session.stage.dataset["kpAntiderivativeRewriteHandoffProgress"] =
+    template.rewriteHandoffProgress.toFixed(4);
   session.stage.dataset["kpAntiderivativeTemplateVacancyPresence"] =
     template.vacancyPresence.toFixed(4);
   session.stage.dataset["kpAntiderivativeTemplateReceiverSettlementProgress"] =
@@ -549,6 +696,7 @@ function applyRuleTemplateApplicationState(
     template.syntaxResolutionProgress.toFixed(4);
   session.stage.dataset["kpAntiderivativeTemplateClosurePresence"] =
     template.closurePresence.toFixed(4);
+  return template.panelPresence;
 }
 
 function resetEndpointPresentation(session: TransitMountSession): void {
@@ -645,20 +793,21 @@ function semanticPaintOwners(
 
 function settleAccessibility(
   session: TransitMountSession,
-  progress: number
+  progress: number,
+  templatePanelPresence: number
 ): void {
   const accessible = progress < 0.5 ? "source" : "target";
   for (const [side, root] of [
     ["source", session.roots.source],
     ["target", session.roots.target]
   ] as const) {
-    const active = side === accessible;
+    const active = templatePanelPresence <= 0.01 && side === accessible;
     root.setAttribute("aria-hidden", active ? "false" : "true");
     if (active) root.removeAttribute("inert");
     else root.setAttribute("inert", "");
   }
   session.stage.dataset["kpAntiderivativePowerAccessibleEndpoint"] =
-    accessible;
+    templatePanelPresence > 0.01 ? "rule-template" : accessible;
 }
 
 function showNativeCheckpoint(
@@ -791,6 +940,11 @@ function clearTelemetry(stage: HTMLElement): void {
   delete stage.dataset["kpAntiderivativeTemplateApplication"];
   delete stage.dataset["kpAntiderivativeTemplateTraceRole"];
   delete stage.dataset["kpAntiderivativeTemplateReceiverFocus"];
+  delete stage.dataset["kpAntiderivativeRuleTemplatePanelPresence"];
+  delete stage.dataset["kpAntiderivativeGeneralRulePresence"];
+  delete stage.dataset["kpAntiderivativeMetavariableBindingsPresence"];
+  delete stage.dataset["kpAntiderivativeInstantiatedRulePresence"];
+  delete stage.dataset["kpAntiderivativeRewriteHandoffProgress"];
   delete stage.dataset["kpAntiderivativeTemplateVacancyPresence"];
   delete stage.dataset["kpAntiderivativeTemplateVacancyCount"];
   delete stage.dataset["kpAntiderivativeTemplateReceiverLane"];

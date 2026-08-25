@@ -43,6 +43,21 @@ export interface KpAntiderivativePowerChoreographyPlan {
   readonly ruleTemplateApplication: {
     readonly kind: "antiderivative-rule-template-instantiation";
     readonly lawRefId: "law.calculus.integral.power-rule";
+    readonly generalRuleLatex: string;
+    readonly bindingLatex: string;
+    readonly instantiatedRuleLatex: string;
+    readonly metavariableBindings: readonly [
+      {
+        readonly metavariable: "u";
+        readonly value: string;
+        readonly sourceSelectorIds: readonly [string, string];
+      },
+      {
+        readonly metavariable: "n";
+        readonly value: string;
+        readonly sourceSelectorIds: readonly [string];
+      }
+    ];
     readonly scaffoldSemanticEntityIds: readonly string[];
     readonly fixedSyntaxGroups: readonly [
       {
@@ -92,6 +107,11 @@ export interface KpAntiderivativePowerChoreographyFrame {
   readonly ruleTemplateApplication: {
     readonly traceRole: "absent" | "prospective" | "live";
     readonly receiverFocus: number;
+    readonly panelPresence: number;
+    readonly generalRulePresence: number;
+    readonly metavariableBindingsPresence: number;
+    readonly instantiatedRulePresence: number;
+    readonly rewriteHandoffProgress: number;
     readonly vacancyPresence: number;
     readonly previewPresence: number;
     readonly scaffoldPresence: number;
@@ -220,6 +240,12 @@ export function compileKpAntiderivativePowerChoreography(input: {
     }
     return found.semanticId;
   };
+  const baseRole = sourceRole("source.integrand-base");
+  const integrationVariableRole = sourceRole("source.integration-variable");
+  const exponentRole = sourceRole("source.integrand-exponent");
+  const baseLabel = String(baseRole.label);
+  const integrationVariableLabel = String(integrationVariableRole.label);
+  const exponentLabel = String(exponentRole.label);
   return Object.freeze({
     kind: "antiderivative-power-choreography-plan" as const,
     id: input.id,
@@ -257,6 +283,29 @@ export function compileKpAntiderivativePowerChoreography(input: {
     ruleTemplateApplication: Object.freeze({
       kind: "antiderivative-rule-template-instantiation" as const,
       lawRefId: input.lawRefId,
+      generalRuleLatex:
+        String.raw`\begin{gathered}\int u^n\,du \longmapsto \frac{u^{n+1}}{n+1}+C\\[-0.08em] n\ne -1\end{gathered}`,
+      bindingLatex:
+        String.raw`u\mapsto ${baseLabel},\qquad n\mapsto ${exponentLabel}`,
+      instantiatedRuleLatex:
+        String.raw`\int ${baseLabel}^{${exponentLabel}}\,d${integrationVariableLabel} \longmapsto \frac{${baseLabel}^{${exponentLabel}+1}}{${exponentLabel}+1}+C`,
+      metavariableBindings: Object.freeze([
+        Object.freeze({
+          metavariable: "u" as const,
+          value: baseLabel,
+          sourceSelectorIds: Object.freeze([
+            baseRole.selectorId,
+            integrationVariableRole.selectorId
+          ] as const)
+        }),
+        Object.freeze({
+          metavariable: "n" as const,
+          value: exponentLabel,
+          sourceSelectorIds: Object.freeze([
+            exponentRole.selectorId
+          ] as const)
+        })
+      ] as const),
       scaffoldSemanticEntityIds: Object.freeze([
         group("expanded.exact-quotient")
       ]),
@@ -365,6 +414,24 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
   const binding = phaseProgress(progress, 0.34, 0.62);
   const receiverSettlement = phaseProgress(progress, 0.72, 0.94);
   const syntaxResolution = phaseProgress(progress, 0.9, 0.98);
+  const generalRulePresence = roundProgress(
+    phaseProgress(progress, 0, 0.12) *
+      (1 - phaseProgress(progress, 0.6, 0.68))
+  );
+  const metavariableBindingsPresence = roundProgress(
+    phaseProgress(progress, 0.34, 0.48) *
+      (1 - phaseProgress(progress, 0.76, 0.9))
+  );
+  const instantiatedRulePresence = roundProgress(
+    phaseProgress(progress, 0.6, 0.68) *
+      (1 - phaseProgress(progress, 0.76, 0.94))
+  );
+  const rewriteHandoffProgress = phaseProgress(progress, 0.72, 0.94);
+  const panelPresence = roundProgress(Math.max(
+    generalRulePresence,
+    metavariableBindingsPresence,
+    instantiatedRulePresence
+  ));
   // Binding and settlement are separate semantic beats: the learner first
   // sees material arrive in a prospective rule, then sees that populated
   // receiver become the live expanded expression.
@@ -383,6 +450,11 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
         ? "prospective" as const
         : "absent" as const,
     receiverFocus,
+    panelPresence,
+    generalRulePresence,
+    metavariableBindingsPresence,
+    instantiatedRulePresence,
+    rewriteHandoffProgress,
     vacancyPresence,
     previewPresence: preview,
     scaffoldPresence,
