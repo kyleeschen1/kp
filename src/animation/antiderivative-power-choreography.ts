@@ -9,6 +9,9 @@ export const kpAntiderivativePowerPhaseIds = Object.freeze([
   "notice-operator-scope",
   "withdraw-operator",
   "rewrite-power-rule",
+  "preview-rule-template",
+  "bind-rule-template",
+  "resolve-rule-syntax",
   "settle-expanded-rule"
 ] as const);
 
@@ -37,6 +40,24 @@ export interface KpAntiderivativePowerChoreographyPlan {
     readonly targetSelectorIds: readonly [string, string];
   };
   readonly introducedSelectorIds: readonly string[];
+  readonly ruleTemplateApplication: {
+    readonly kind: "antiderivative-rule-template-instantiation";
+    readonly scaffoldSemanticEntityIds: readonly string[];
+    readonly fixedSyntaxSelectorIds: readonly string[];
+    readonly closureSelectorIds: readonly string[];
+    readonly bindingRelations: readonly [
+      {
+        readonly relation: "persist";
+        readonly sourceSelectorId: string;
+        readonly targetSelectorIds: readonly [string];
+      },
+      {
+        readonly relation: "fan-out";
+        readonly sourceSelectorId: string;
+        readonly targetSelectorIds: readonly [string, string];
+      }
+    ];
+  };
   readonly fractionStructure: {
     readonly targetSemanticEntityId: string;
     readonly lifecycle: "introduction";
@@ -57,6 +78,13 @@ export interface KpAntiderivativePowerChoreographyFrame {
   readonly operator: {
     readonly opacity: number;
     readonly removalProgress: number;
+  };
+  readonly ruleTemplateApplication: {
+    readonly traceRole: "absent" | "prospective" | "live";
+    readonly scaffoldPresence: number;
+    readonly bindingProgress: number;
+    readonly syntaxPresence: number;
+    readonly closurePresence: number;
   };
   readonly rewriteProgress: number;
   readonly settlementProgress: number;
@@ -115,6 +143,14 @@ export function compileKpAntiderivativePowerChoreography(input: {
     record("integration-connector-introduced"),
     record("integration-constant-introduced")
   ];
+  const [
+    numeratorSuccessorOperator,
+    numeratorIncrement,
+    denominatorSuccessorOperator,
+    denominatorIncrement,
+    integrationConnector,
+    integrationConstant
+  ] = introductions;
   if (
     integral?.relation !== "removal" ||
     differential?.relation !== "removal" ||
@@ -189,6 +225,39 @@ export function compileKpAntiderivativePowerChoreography(input: {
     introducedSelectorIds: Object.freeze(introductions.map((candidate) =>
       candidate!.targetSelectorIds[0]!
     )),
+    ruleTemplateApplication: Object.freeze({
+      kind: "antiderivative-rule-template-instantiation" as const,
+      scaffoldSemanticEntityIds: Object.freeze([
+        group("expanded.exact-quotient")
+      ]),
+      fixedSyntaxSelectorIds: Object.freeze([
+        numeratorSuccessorOperator!.targetSelectorIds[0]!,
+        numeratorIncrement!.targetSelectorIds[0]!,
+        denominatorSuccessorOperator!.targetSelectorIds[0]!,
+        denominatorIncrement!.targetSelectorIds[0]!
+      ]),
+      closureSelectorIds: Object.freeze([
+        integrationConnector!.targetSelectorIds[0]!,
+        integrationConstant!.targetSelectorIds[0]!
+      ]),
+      bindingRelations: Object.freeze([
+        Object.freeze({
+          relation: "persist" as const,
+          sourceSelectorId: base.sourceSelectorIds[0]!,
+          targetSelectorIds: Object.freeze([
+            base.targetSelectorIds[0]!
+          ] as const)
+        }),
+        Object.freeze({
+          relation: "fan-out" as const,
+          sourceSelectorId: exponent.sourceSelectorIds[0]!,
+          targetSelectorIds: Object.freeze([
+            exponent.targetSelectorIds[0]!,
+            exponent.targetSelectorIds[1]!
+          ] as const)
+        })
+      ] as const)
+    }),
     fractionStructure: Object.freeze({
       targetSemanticEntityId: group("expanded.exact-quotient"),
       lifecycle: "introduction" as const
@@ -209,12 +278,18 @@ export function sampleKpAntiderivativePowerChoreography(input: {
   const phases: Readonly<Record<KpAntiderivativePowerPhaseId, number>> = {
     "notice-operator-scope": phaseProgress(semanticProgress, 0.04, 0.16),
     "withdraw-operator": phaseProgress(semanticProgress, 0.18, 0.32),
-    "rewrite-power-rule": phaseProgress(semanticProgress, 0.34, 0.86),
+    "rewrite-power-rule": phaseProgress(semanticProgress, 0.34, 0.9),
+    "preview-rule-template": phaseProgress(semanticProgress, 0.34, 0.52),
+    "bind-rule-template": phaseProgress(semanticProgress, 0.42, 0.78),
+    "resolve-rule-syntax": phaseProgress(semanticProgress, 0.58, 0.88),
     "settle-expanded-rule": phaseProgress(semanticProgress, 0.82, 1)
   };
   const notice = phases["notice-operator-scope"];
   const withdrawal = phases["withdraw-operator"];
   const focusRelease = phaseProgress(semanticProgress, 0.72, 0.94);
+  const template = sampleKpAntiderivativeRuleTemplateApplication(
+    phases["rewrite-power-rule"]
+  );
   return Object.freeze({
     kind: "antiderivative-power-choreography-frame" as const,
     planId: input.plan.id,
@@ -230,8 +305,39 @@ export function sampleKpAntiderivativePowerChoreography(input: {
       opacity: roundProgress(1 - withdrawal),
       removalProgress: withdrawal
     }),
+    ruleTemplateApplication: template,
     rewriteProgress: phases["rewrite-power-rule"],
     settlementProgress: phases["settle-expanded-rule"]
+  });
+}
+
+/**
+ * Rule application needs a receiving structure before source material can
+ * read as bound into it. This pure projection keeps that causal distinction
+ * deterministic while leaving opacity, scale, and measured geometry to the
+ * Native KaTeX presentation profile.
+ */
+export function sampleKpAntiderivativeRuleTemplateApplication(
+  rewriteProgress: number
+): KpAntiderivativePowerChoreographyFrame["ruleTemplateApplication"] {
+  const progress = clamp01(rewriteProgress);
+  const preview = phaseProgress(progress, 0, 0.26);
+  const binding = phaseProgress(progress, 0.08, 0.78);
+  const syntax = phaseProgress(progress, 0.78, 0.92);
+  const closure = phaseProgress(progress, 0.86, 0.98);
+  const scaffoldPresence = roundProgress(
+    Math.min(1, 0.58 * preview + 0.42 * syntax)
+  );
+  return Object.freeze({
+    traceRole: syntax >= 1
+      ? "live" as const
+      : preview > 0
+        ? "prospective" as const
+        : "absent" as const,
+    scaffoldPresence,
+    bindingProgress: binding,
+    syntaxPresence: syntax,
+    closurePresence: closure
   });
 }
 

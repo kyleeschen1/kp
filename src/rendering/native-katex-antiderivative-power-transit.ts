@@ -15,6 +15,10 @@ import {
   createKpCanonicalNativeKatexSceneSession,
   type KpCanonicalNativeKatexSceneSession
 } from "./native-katex-scene-compositor.ts";
+import {
+  createKpAntiderivativeTemplateInstantiationTrackProjection,
+  kpAntiderivativeTemplateInstantiationProfileId
+} from "./native-katex-antiderivative-template-instantiation.ts";
 
 export const kpAntiderivativePowerNativeKatexTransitMechanismId =
   "kp.rendering.native-katex.antiderivative-power-material-transit.v1";
@@ -23,6 +27,8 @@ export interface KpAntiderivativePowerNativeKatexTransitPlan {
   readonly kind: "antiderivative-power-native-katex-transit-plan";
   readonly mechanismId:
     typeof kpAntiderivativePowerNativeKatexTransitMechanismId;
+  readonly templateInstantiationProfileId:
+    typeof kpAntiderivativeTemplateInstantiationProfileId;
   readonly choreography: KpAntiderivativePowerChoreographyPlan;
   readonly semanticPaintRelations:
     readonly KpNativeKatexSemanticPaintRelation[];
@@ -66,6 +72,8 @@ export function createKpAntiderivativePowerNativeKatexTransitPlan(
   return Object.freeze({
     kind: "antiderivative-power-native-katex-transit-plan" as const,
     mechanismId: kpAntiderivativePowerNativeKatexTransitMechanismId,
+    templateInstantiationProfileId:
+      kpAntiderivativeTemplateInstantiationProfileId,
     choreography,
     semanticPaintRelations,
     requiredSourceSemanticEntityIds: Object.freeze([
@@ -100,6 +108,10 @@ export function compileKpAntiderivativePowerNativeKatexScenePlan(input: {
     source: input.source,
     target: input.target,
     relations: input.plan.semanticPaintRelations,
+    trackProjection:
+      createKpAntiderivativeTemplateInstantiationTrackProjection(
+        input.plan.choreography
+      ),
     copyFanOutRouting: true
   });
 }

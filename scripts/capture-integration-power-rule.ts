@@ -32,9 +32,23 @@ const samples = [
     viewport: desktopViewport
   },
   {
-    id: "power-rule-rewrite",
-    label: "Power rule · exponent fan-out",
-    progress: 0.28,
+    id: "template-scaffold",
+    label: "Rule application · prospective fraction scaffold",
+    progress: 0.24,
+    theme: "dark",
+    viewport: desktopViewport
+  },
+  {
+    id: "template-binding",
+    label: "Rule application · source binds into template",
+    progress: 0.34,
+    theme: "dark",
+    viewport: desktopViewport
+  },
+  {
+    id: "template-syntax",
+    label: "Rule application · fixed syntax resolves",
+    progress: 0.43,
     theme: "dark",
     viewport: desktopViewport
   },
@@ -86,6 +100,12 @@ interface CaptureEvidence {
   readonly transitVisualOwner: string;
   readonly operatorPresentation: string;
   readonly operatorSalienceStrength: number;
+  readonly templateProfileId: string;
+  readonly templateTraceRole: string;
+  readonly templateScaffoldPresence: number;
+  readonly templateBindingProgress: number;
+  readonly templateSyntaxPresence: number;
+  readonly templateClosurePresence: number;
   readonly evaluationStatus: string;
   readonly evaluationCohortCount: number;
   readonly evaluationLegibility: string;
@@ -167,6 +187,7 @@ async function capture(): Promise<void> {
       reviewChecklist: [
         "attention order",
         "salience-only operator scope",
+        "rule-template scaffold and source binding",
         "exponent provenance",
         "two ink-knot evaluations",
         "integration constant persistence",
@@ -251,6 +272,22 @@ async function captureSample(input: {
         root.dataset["kpAntiderivativeOperatorPresentation"] ?? "inactive",
       operatorSalienceStrength: Number(
         root.dataset["kpAntiderivativeOperatorSalienceStrength"] ?? 0
+      ),
+      templateProfileId:
+        root.dataset["kpAntiderivativeTemplateProfileId"] ?? "inactive",
+      templateTraceRole:
+        root.dataset["kpAntiderivativeTemplateTraceRole"] ?? "inactive",
+      templateScaffoldPresence: Number(
+        root.dataset["kpAntiderivativeTemplateScaffoldPresence"] ?? 0
+      ),
+      templateBindingProgress: Number(
+        root.dataset["kpAntiderivativeTemplateBindingProgress"] ?? 0
+      ),
+      templateSyntaxPresence: Number(
+        root.dataset["kpAntiderivativeTemplateSyntaxPresence"] ?? 0
+      ),
+      templateClosurePresence: Number(
+        root.dataset["kpAntiderivativeTemplateClosurePresence"] ?? 0
       ),
       evaluationStatus:
         root.dataset["kpAntiderivativeEvaluationMount"] ?? "inactive",
@@ -345,12 +382,40 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   ) {
     throw new Error("Scope review frame must expose salience-only attention.");
   }
-  const rewrite = required("power-rule-rewrite");
+  const scaffold = required("template-scaffold");
   if (
-    rewrite.transitVisualOwner !== "material-scene" ||
-    rewrite.visibleMaterialOwnerCount === 0
+    scaffold.transitVisualOwner !== "material-scene" ||
+    scaffold.templateProfileId !==
+      "kp.rendering.native-katex.antiderivative-template-instantiation-profile.v1" ||
+    scaffold.templateTraceRole !== "prospective" ||
+    scaffold.templateScaffoldPresence <= 0 ||
+    scaffold.templateSyntaxPresence !== 0 ||
+    scaffold.visibleMaterialOwnerCount === 0
   ) {
-    throw new Error("Rewrite review frame must expose Native KaTeX material transit.");
+    throw new Error(
+      "Template scaffold frame must expose prospective Native KaTeX structure."
+    );
+  }
+  const binding = required("template-binding");
+  if (
+    binding.templateTraceRole !== "prospective" ||
+    binding.templateBindingProgress <= 0 ||
+    binding.templateBindingProgress >= 1 ||
+    binding.templateSyntaxPresence !== 0
+  ) {
+    throw new Error(
+      "Template binding frame must keep source motion ahead of fixed syntax."
+    );
+  }
+  const syntax = required("template-syntax");
+  if (
+    syntax.templateBindingProgress !== 1 ||
+    syntax.templateSyntaxPresence !== 1 ||
+    syntax.templateClosurePresence <= 0
+  ) {
+    throw new Error(
+      "Template syntax frame must resolve the bound rule before evaluation."
+    );
   }
   const expanded = required("expanded-rule");
   if (!expanded.visibleText.includes("C")) {

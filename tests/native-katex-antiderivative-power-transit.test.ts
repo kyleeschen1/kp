@@ -7,6 +7,9 @@ import {
   createKpAntiderivativePowerNativeKatexTransitPlan,
   kpAntiderivativePowerNativeKatexTransitMechanismId
 } from "../src/rendering/native-katex-antiderivative-power-transit.ts";
+import {
+  kpAntiderivativeTemplateInstantiationProfileId
+} from "../src/rendering/native-katex-antiderivative-template-instantiation.ts";
 
 function plan() {
   const animation = createGeneratedProblemAnimationAssets().find(({ id }) =>
@@ -21,6 +24,10 @@ test("integration transit binds persistence and fan-out without minting paint po
   assert.equal(
     transit.mechanismId,
     kpAntiderivativePowerNativeKatexTransitMechanismId
+  );
+  assert.equal(
+    transit.templateInstantiationProfileId,
+    kpAntiderivativeTemplateInstantiationProfileId
   );
   assert.deepEqual(transit.semanticPaintRelations.map((relation) =>
     relation.relation), ["persist", "split"]);

@@ -1,6 +1,7 @@
 import type { KpAnimationAsset } from "../animation/asset.ts";
 import {
-  sampleKpAntiderivativePowerChoreography
+  sampleKpAntiderivativePowerChoreography,
+  sampleKpAntiderivativeRuleTemplateApplication
 } from "../animation/antiderivative-power-choreography.ts";
 import {
   resolveKpSemanticSalience
@@ -20,6 +21,9 @@ import {
 import {
   observeKpNativeKatexRenderedScene
 } from "../rendering/native-katex-rendered-scene.ts";
+import {
+  kpAntiderivativeTemplateInstantiationProfileId
+} from "../rendering/native-katex-antiderivative-template-instantiation.ts";
 import type {
   KpCanonicalNativeKatexSceneSession
 } from "../rendering/native-katex-scene-compositor.ts";
@@ -246,6 +250,8 @@ async function prepareSession(
     session.stage.dataset["kpAntiderivativePowerTransit"] = "ready";
     session.stage.dataset["kpAntiderivativePowerTransitMechanismId"] =
       kpAntiderivativePowerNativeKatexTransitMechanismId;
+    session.stage.dataset["kpAntiderivativeTemplateProfileId"] =
+      kpAntiderivativeTemplateInstantiationProfileId;
     session.stage.dataset["kpAntiderivativePowerTransitDynamicTrackCount"] =
       String(session.canonical.executableMotion.dynamicTrackIds.length);
     applyFrame(session);
@@ -324,6 +330,12 @@ function applyFrame(session: TransitMountSession): void {
   resetEndpointPresentation(session);
   const ownership = session.canonical.session.apply(rendererProgress);
   applyOperatorAndScopeSalience(session, frame, projection);
+  applyRuleTemplateApplicationState(
+    session,
+    frame,
+    rendererProgress,
+    projection
+  );
   settleAccessibility(session, rendererProgress);
   session.stage.dataset["kpAntiderivativePowerTransit"] = "ready";
   session.stage.dataset["kpAntiderivativePowerTransitProgress"] =
@@ -336,6 +348,41 @@ function applyFrame(session: TransitMountSession): void {
     projection;
   delete session.stage.dataset["kpAntiderivativePowerRepairGap"];
   delete session.stage.dataset["kpAntiderivativePowerRepairGapReason"];
+}
+
+function applyRuleTemplateApplicationState(
+  session: TransitMountSession,
+  frame: ReturnType<typeof sampleKpAntiderivativePowerChoreography>,
+  rendererProgress: number,
+  projection: "full" | "reduced" | "no-depth"
+): void {
+  const template = projection === "full"
+    ? frame.ruleTemplateApplication
+    : sampleKpAntiderivativeRuleTemplateApplication(rendererProgress);
+  const semanticIds = [
+    ...session.plan.choreography.ruleTemplateApplication
+      .scaffoldSemanticEntityIds,
+    ...session.plan.choreography.ruleTemplateApplication
+      .fixedSyntaxSelectorIds,
+    ...session.plan.choreography.ruleTemplateApplication.closureSelectorIds
+  ];
+  for (const semanticId of semanticIds) {
+    for (const element of semanticPaintOwners(session.stage, semanticId)) {
+      element.dataset["kpSemanticTraceRole"] = template.traceRole;
+    }
+  }
+  session.stage.dataset["kpAntiderivativeTemplateApplication"] =
+    "prospective-scaffold-binding";
+  session.stage.dataset["kpAntiderivativeTemplateTraceRole"] =
+    template.traceRole;
+  session.stage.dataset["kpAntiderivativeTemplateScaffoldPresence"] =
+    template.scaffoldPresence.toFixed(4);
+  session.stage.dataset["kpAntiderivativeTemplateBindingProgress"] =
+    template.bindingProgress.toFixed(4);
+  session.stage.dataset["kpAntiderivativeTemplateSyntaxPresence"] =
+    template.syntaxPresence.toFixed(4);
+  session.stage.dataset["kpAntiderivativeTemplateClosurePresence"] =
+    template.closurePresence.toFixed(4);
 }
 
 function resetEndpointPresentation(session: TransitMountSession): void {
@@ -559,6 +606,7 @@ function publishRepairGap(session: TransitMountSession): void {
 function clearTelemetry(stage: HTMLElement): void {
   delete stage.dataset["kpAntiderivativePowerTransit"];
   delete stage.dataset["kpAntiderivativePowerTransitMechanismId"];
+  delete stage.dataset["kpAntiderivativeTemplateProfileId"];
   delete stage.dataset["kpAntiderivativePowerTransitDynamicTrackCount"];
   delete stage.dataset["kpAntiderivativePowerTransitProgress"];
   delete stage.dataset["kpAntiderivativePowerSemanticProgress"];
@@ -571,6 +619,12 @@ function clearTelemetry(stage: HTMLElement): void {
   delete stage.dataset["kpAntiderivativeOperatorOpacity"];
   delete stage.dataset["kpAntiderivativeOperatorSalienceStrength"];
   delete stage.dataset["kpAntiderivativeIntegrandSalienceStrength"];
+  delete stage.dataset["kpAntiderivativeTemplateApplication"];
+  delete stage.dataset["kpAntiderivativeTemplateTraceRole"];
+  delete stage.dataset["kpAntiderivativeTemplateScaffoldPresence"];
+  delete stage.dataset["kpAntiderivativeTemplateBindingProgress"];
+  delete stage.dataset["kpAntiderivativeTemplateSyntaxPresence"];
+  delete stage.dataset["kpAntiderivativeTemplateClosurePresence"];
 }
 
 function bounded(value: number): number {

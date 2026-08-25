@@ -35,6 +35,10 @@ test("integration power rule uses governed transit and two certified ink knots",
     "kp.rendering.native-katex.antiderivative-power-material-transit.v1"
   );
   await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-template-profile-id",
+    "kp.rendering.native-katex.antiderivative-template-instantiation-profile.v1"
+  );
+  await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-power-visual-owner",
     "source-native"
   );
@@ -73,6 +77,25 @@ test("integration power rule uses governed transit and two certified ink knots",
     "data-kp-antiderivative-power-visual-owner",
     "material-scene"
   );
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-template-application",
+    "prospective-scaffold-binding"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-template-trace-role",
+    "prospective"
+  );
+  await expect.poll(async () => Number(await stage.getAttribute(
+    "data-kp-antiderivative-template-scaffold-presence"
+  ))).toBeGreaterThan(0);
+  await expect.poll(async () => Number(await stage.getAttribute(
+    "data-kp-antiderivative-template-binding-progress"
+  ))).toBeGreaterThan(0);
+  await expect.poll(async () => Number(await stage.getAttribute(
+    "data-kp-antiderivative-template-syntax-presence"
+  ))).toBe(0);
+  await expect.poll(() => visibleTemplateScaffoldOwners(stage))
+    .toBeGreaterThan(0);
   await expect.poll(() => visibleMaterialOwners(stage)).toBeGreaterThan(0);
   expect(await visiblePaintOwnerKinds(stage)).toEqual(["material"]);
 
@@ -221,6 +244,15 @@ async function visibleMaterialOwners(stage: Locator): Promise<number> {
       const style = getComputedStyle(owner);
       return style.visibility !== "hidden" && Number(style.opacity) > 0.01;
     }).length);
+}
+
+async function visibleTemplateScaffoldOwners(stage: Locator): Promise<number> {
+  return stage.locator(
+    '[data-kp-equation-material-semantic-entity-id$=".expanded.exact-quotient"]'
+  ).evaluateAll((owners) => owners.filter((owner) =>
+    Number(getComputedStyle(owner).opacity) > 0.01 &&
+    (owner as HTMLElement).dataset["kpSemanticTraceRole"] === "prospective"
+  ).length);
 }
 
 async function visiblePaintOwnerKinds(stage: Locator): Promise<string[]> {

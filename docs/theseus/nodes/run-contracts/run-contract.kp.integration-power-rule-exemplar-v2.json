@@ -523,6 +523,83 @@
       "scope": "slice s17 architecture preservation",
       "checkedAt": "2026-08-25T02:25:21.170Z",
       "notes": "Dependency direction, framework-neutral entrypoints, semantic animation boundaries, equation governance, and cross-domain conformance passed."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s18 template semantics and integration preservation",
+      "checkedAt": "2026-08-25T14:52:47.356Z",
+      "notes": "62 focused integration tests passed, including deterministic rule-template preview, binding, syntax, direct seek, reverse, and interruption safety."
+    },
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "slice s18 derivative preservation",
+      "checkedAt": "2026-08-25T14:52:48.701Z",
+      "notes": "35 differentiation tests passed; the existing derivative exemplar and its operator treatment remain unchanged."
+    },
+    {
+      "command": "npm run test:evaluation-authority-convergence",
+      "status": "passed",
+      "scope": "slice s18 evaluation authority preservation",
+      "checkedAt": "2026-08-25T14:52:49.720Z",
+      "notes": "34 evaluation authority tests passed; both certified integration ink-knot cohorts keep shared compiler authority."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-transit",
+      "status": "passed",
+      "scope": "slice s18 real Native KaTeX compositor path",
+      "checkedAt": "2026-08-25T14:52:50.769Z",
+      "notes": "Chromium canary passed realized-paint continuity and exclusive ownership with pair-bounded scaffold reception contact and denominator foreground occlusion."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-catalogue",
+      "status": "passed",
+      "scope": "slice s18 canonical Catalogue host",
+      "checkedAt": "2026-08-25T14:52:51.775Z",
+      "notes": "Two Chromium checks passed template telemetry, prospective scaffold ownership, lifecycle restoration, reverse playback, theme response, and static truth."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-evaluation",
+      "status": "passed",
+      "scope": "slice s18 ink-knot browser preservation",
+      "checkedAt": "2026-08-25T14:52:52.804Z",
+      "notes": "Both certified evaluation cohorts remained separate and shared one clock."
+    },
+    {
+      "command": "npm run test:browser:differentiation-exemplar",
+      "status": "passed",
+      "scope": "slice s18 derivative browser preservation",
+      "checkedAt": "2026-08-25T14:52:53.813Z",
+      "notes": "Four Chromium checks passed derivative restore, rewind, paint ownership, and superscript geometry."
+    },
+    {
+      "command": "npm run visual:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s18 human checkpoint evidence",
+      "checkedAt": "2026-08-25T14:52:54.850Z",
+      "notes": "Stable visual command emitted ten deterministic states covering source, salience, prospective scaffold, source binding, syntax resolution, both ink knots, target, and narrow light fit."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s18 type safety",
+      "checkedAt": "2026-08-25T14:52:55.882Z",
+      "notes": "Application, Node, test, Svelte, and domain type checks passed with zero Svelte errors or warnings."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s18 architecture preservation",
+      "checkedAt": "2026-08-25T14:52:56.896Z",
+      "notes": "Dependency, framework, semantic-animation, compiler authority, equation governance, and cross-domain gates passed."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s18 durable control state",
+      "checkedAt": "2026-08-25T14:53:18.871Z",
+      "notes": "Theseus workspace validated 1061 nodes and 25622 events after the checkpoint repair evidence was recorded."
     }
   ],
   "allowedWork": [
@@ -660,7 +737,7 @@
     {
       "id": "next-action.kp.integration-power-rule.s18",
       "title": "Integration-human-visual-checkpoint",
-      "summary": "Awaiting explicit human review of the canonical Catalogue animation and eight-state integration checkpoint sheet. Slices 19 and 20 remain prohibited until the user approves the choreography.",
+      "summary": "Human review found the certified ink knots correct but rejected the first transition because the integral does not visibly instantiate the antiderivative rule. Implementing one exemplar-local prospective scaffold and binding choreography while preserving semantics, endpoints, operator salience, lifecycle, and evaluation cohorts; the slice remains a human checkpoint.",
       "status": "in-progress"
     },
     {
