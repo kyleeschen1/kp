@@ -439,7 +439,9 @@
   line-height: 1;
   opacity: var(--kp-antiderivative-rule-reference-presence, 0);
   pointer-events: none;
-  transform: translateX(-50%);
+  transform: translateX(-50%)
+    scale(var(--kp-antiderivative-rule-reference-scale, 1));
+  transform-origin: center;
   white-space: nowrap;
 }
 

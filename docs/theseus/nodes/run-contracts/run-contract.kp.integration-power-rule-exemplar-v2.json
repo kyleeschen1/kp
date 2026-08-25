@@ -733,6 +733,62 @@
       "scope": "human-checkpoint rule-reference repair",
       "checkedAt": "2026-08-25T16:03:43.631Z",
       "notes": "Dependency direction, framework neutrality, semantic boundaries, equation authority, governance, and cross-domain gates passed."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s18 focal-template checkpoint",
+      "checkedAt": "2026-08-25T19:59:19.214Z",
+      "notes": "63 focused semantic, choreography, governance, and authority checks passed after the focal-rule salience repair."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-catalogue",
+      "status": "passed",
+      "scope": "slice s18 focal-template checkpoint",
+      "checkedAt": "2026-08-25T19:59:20.325Z",
+      "notes": "Two Chromium cases passed: the canonical Catalogue shows one focal law-pinned rule above contextual receiver paint, hands salience back during binding, and preserves lifecycle, theme, and accessibility."
+    },
+    {
+      "command": "npm run visual:integration-power-rule -- --base-url http://127.0.0.1:8000",
+      "status": "passed",
+      "scope": "slice s18 focal-template checkpoint",
+      "checkedAt": "2026-08-25T19:59:21.355Z",
+      "notes": "The stable ten-state capture attached to the exact live port 8000 server and shows the enlarged general n-rule cleanly separated above the dimmed concrete receiver."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s18 focal-template checkpoint",
+      "checkedAt": "2026-08-25T19:59:22.391Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s18 focal-template checkpoint",
+      "checkedAt": "2026-08-25T19:59:23.447Z",
+      "notes": "Dependency, semantic, equation-authority, governance, and cross-domain architecture gates passed."
+    },
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "slice s18 focal-template checkpoint",
+      "checkedAt": "2026-08-25T19:59:24.482Z",
+      "notes": "All 35 protected derivative semantic, choreography, selector, and policy checks passed unchanged."
+    },
+    {
+      "command": "npm run test:browser:differentiation-exemplar",
+      "status": "passed",
+      "scope": "slice s18 focal-template checkpoint",
+      "checkedAt": "2026-08-25T19:59:25.501Z",
+      "notes": "All four protected derivative Chromium lifecycle, rewind, geometry, and exclusive-paint cases passed unchanged."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s18 focal-template checkpoint",
+      "checkedAt": "2026-08-25T19:59:53.152Z",
+      "notes": "Theseus validates 1061 nodes and 25658 events after all verification records and context-receipt closure."
     }
   ],
   "allowedWork": [
@@ -870,7 +926,7 @@
     {
       "id": "next-action.kp.integration-power-rule.s18",
       "title": "Integration-human-visual-checkpoint",
-      "summary": "Human review rejected the strengthened target skeleton because no rule template is perceptually present. Live-frame inspection confirms the asset exposes only dim endpoint fragments, not an authored prospective rule. Replace the misleading template claim with one exemplar-local, semantically authored power-rule presentation before binding, preserving exact endpoints, lineage, operator salience, dual ink knots, and no-promotion boundary.",
+      "summary": "Human review still cannot perceive the template. Port 8000 serves both the new mount and stylesheet, so first attach the stable scoped capture to the exact live server and inspect its rendered pixels. Treat any live match as an attention-continuity failure: the rule must become the focal instructional subject before binding, not remain a small contextual annotation. Preserve endpoints, lineage, operator salience, dual ink knots, derivative behavior, and exemplar-only scope.",
       "status": "in-progress"
     },
     {

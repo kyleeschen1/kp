@@ -139,6 +139,7 @@ test("rule-template projection previews complete grammar before binding", () => 
   });
   assert.equal(before.ruleTemplateApplication.traceRole, "absent");
   assert.equal(before.ruleTemplateApplication.ruleReferencePresence, 0);
+  assert.equal(before.ruleTemplateApplication.ruleReferenceFocus, 0);
   assert.equal(before.ruleTemplateApplication.previewPresence, 0);
   assert.equal(before.ruleTemplateApplication.scaffoldPresence, 0);
   assert.equal(before.ruleTemplateApplication.bindingProgress, 0);
@@ -149,6 +150,7 @@ test("rule-template projection previews complete grammar before binding", () => 
   });
   assert.equal(preview.ruleTemplateApplication.traceRole, "prospective");
   assert.equal(preview.ruleTemplateApplication.ruleReferencePresence, 1);
+  assert.equal(preview.ruleTemplateApplication.ruleReferenceFocus, 1);
   assert.equal(preview.ruleTemplateApplication.previewPresence, 1);
   assert.ok(preview.ruleTemplateApplication.scaffoldPresence > 0);
   assert.equal(preview.ruleTemplateApplication.bindingProgress, 0);
@@ -165,6 +167,8 @@ test("rule-template projection previews complete grammar before binding", () => 
   });
   assert.equal(binding.ruleTemplateApplication.traceRole, "prospective");
   assert.equal(binding.ruleTemplateApplication.ruleReferencePresence, 1);
+  assert.ok(binding.ruleTemplateApplication.ruleReferenceFocus > 0);
+  assert.ok(binding.ruleTemplateApplication.ruleReferenceFocus < 1);
   assert.ok(binding.ruleTemplateApplication.bindingProgress >
     binding.ruleTemplateApplication.syntaxResolutionProgress);
   assert.ok(binding.ruleTemplateApplication.syntaxPresence > 0);
@@ -177,6 +181,7 @@ test("rule-template projection previews complete grammar before binding", () => 
   });
   assert.equal(resolved.ruleTemplateApplication.traceRole, "live");
   assert.equal(resolved.ruleTemplateApplication.ruleReferencePresence, 0);
+  assert.equal(resolved.ruleTemplateApplication.ruleReferenceFocus, 0);
   assert.equal(resolved.ruleTemplateApplication.scaffoldPresence, 1);
   assert.equal(resolved.ruleTemplateApplication.bindingProgress, 1);
   assert.equal(resolved.ruleTemplateApplication.syntaxPresence, 1);

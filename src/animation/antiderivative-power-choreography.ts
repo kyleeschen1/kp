@@ -98,6 +98,7 @@ export interface KpAntiderivativePowerChoreographyFrame {
   readonly ruleTemplateApplication: {
     readonly traceRole: "absent" | "prospective" | "live";
     readonly ruleReferencePresence: number;
+    readonly ruleReferenceFocus: number;
     readonly previewPresence: number;
     readonly scaffoldPresence: number;
     readonly bindingProgress: number;
@@ -377,6 +378,9 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
   const ruleReferencePresence = roundProgress(
     preview * (1 - syntaxResolution)
   );
+  const ruleReferenceFocus = roundProgress(
+    ruleReferencePresence * (1 - binding)
+  );
   // The fixed +1 grammar and +C form the receiving expression, while the
   // pinned law reference makes the general rule perceptible. Keeping these
   // roles separate avoids pretending dim endpoint fragments are a template.
@@ -396,6 +400,7 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
         ? "prospective" as const
         : "absent" as const,
     ruleReferencePresence,
+    ruleReferenceFocus,
     previewPresence: preview,
     scaffoldPresence,
     bindingProgress: binding,

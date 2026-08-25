@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { parseArgs } from "node:util";
 import type { Locator, Page } from "playwright";
 
 import {
@@ -104,6 +105,9 @@ interface CaptureEvidence {
   readonly templateTraceRole: string;
   readonly ruleReferenceLawRefId: string;
   readonly ruleReferencePresence: number;
+  readonly ruleReferenceFocus: number;
+  readonly ruleReferenceWidth: number;
+  readonly ruleReferenceHeight: number;
   readonly templatePreviewPresence: number;
   readonly templateScaffoldPresence: number;
   readonly templateBindingProgress: number;
@@ -120,9 +124,11 @@ interface CaptureEvidence {
   readonly file: string;
 }
 
-async function capture(): Promise<void> {
+async function capture(baseUrl?: string): Promise<void> {
   await mkdir(outputRoot, { recursive: true });
-  const harness = createKpVisualReviewHarness();
+  const harness = createKpVisualReviewHarness(
+    baseUrl === undefined ? {} : { baseUrl }
+  );
   const items: KpVisualContactSheetItem[] = [];
   const evidence: CaptureEvidence[] = [];
   const browserErrors: string[] = [];
@@ -265,6 +271,10 @@ async function captureSample(input: {
     const visibleOwners = [...root.querySelectorAll<HTMLElement>(
       "[data-kp-equation-material-owner-id]"
     )].filter(visible);
+    const ruleReference = root.querySelector<HTMLElement>(
+      "[data-kp-antiderivative-rule-reference]"
+    );
+    const ruleReferenceRect = ruleReference?.getBoundingClientRect();
     return {
       transitionId: root.querySelector<HTMLElement>(
         "[data-kp-editor-equation-transition-id]"
@@ -286,6 +296,11 @@ async function captureSample(input: {
       ruleReferencePresence: Number(
         root.dataset["kpAntiderivativeRuleReferencePresence"] ?? 0
       ),
+      ruleReferenceFocus: Number(
+        root.dataset["kpAntiderivativeRuleReferenceFocus"] ?? 0
+      ),
+      ruleReferenceWidth: ruleReferenceRect?.width ?? 0,
+      ruleReferenceHeight: ruleReferenceRect?.height ?? 0,
       templatePreviewPresence: Number(
         root.dataset["kpAntiderivativeTemplatePreviewPresence"] ?? 0
       ),
@@ -407,6 +422,9 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     scaffold.ruleReferenceLawRefId !==
       "law.calculus.integral.power-rule" ||
     scaffold.ruleReferencePresence !== 1 ||
+    scaffold.ruleReferenceFocus !== 1 ||
+    scaffold.ruleReferenceWidth <= 300 ||
+    scaffold.ruleReferenceHeight <= 30 ||
     scaffold.templatePreviewPresence !== 1 ||
     scaffold.templateScaffoldPresence <= 0 ||
     scaffold.templateSyntaxPresence <= 0 ||
@@ -424,6 +442,8 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   if (
     binding.templateTraceRole !== "prospective" ||
     binding.ruleReferencePresence !== 1 ||
+    binding.ruleReferenceFocus <= 0 ||
+    binding.ruleReferenceFocus >= 1 ||
     binding.templateBindingProgress <= 0 ||
     binding.templateBindingProgress >= 1 ||
     binding.templateSyntaxPresence <= 0 ||
@@ -437,6 +457,7 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   if (
     syntax.templateBindingProgress !== 1 ||
     syntax.ruleReferencePresence !== 0 ||
+    syntax.ruleReferenceFocus !== 0 ||
     syntax.templateSyntaxPresence !== 1 ||
     syntax.templateClosurePresence !== 1 ||
     syntax.templateSyntaxResolutionProgress !== 1
@@ -468,4 +489,12 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   }
 }
 
-await capture();
+const { values } = parseArgs({
+  args: process.argv.slice(2),
+  strict: true,
+  options: {
+    "base-url": { type: "string" }
+  }
+});
+
+await capture(values["base-url"]);

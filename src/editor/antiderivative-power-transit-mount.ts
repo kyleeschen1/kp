@@ -240,6 +240,10 @@ function createRuleReference(
     "--kp-antiderivative-rule-reference-presence",
     "0"
   );
+  element.style.setProperty(
+    "--kp-antiderivative-rule-reference-scale",
+    "1"
+  );
   element.setAttribute("aria-hidden", "true");
   // The formula is compiler-owned from the pinned law reference. Rendering it
   // here keeps transient KaTeX paint in the medium adapter instead of adding
@@ -257,7 +261,12 @@ function hideRuleReference(session: TransitMountSession): void {
     "--kp-antiderivative-rule-reference-presence",
     "0"
   );
+  session.ruleReference.style.setProperty(
+    "--kp-antiderivative-rule-reference-scale",
+    "1"
+  );
   session.ruleReference.dataset["kpSemanticTraceRole"] = "absent";
+  session.ruleReference.dataset["kpSemanticSalienceLevel"] = "normal";
   session.ruleReference.setAttribute("aria-hidden", "true");
 }
 
@@ -411,7 +420,17 @@ function applyRuleTemplateApplicationState(
     "--kp-antiderivative-rule-reference-presence",
     template.ruleReferencePresence.toFixed(4)
   );
+  // Human review found mere presence insufficient: the rule read as a caption.
+  // The renderer maps semantic focus to paint-only scale and hierarchy, then
+  // hands salience back to exact Native KaTeX receiver paint during binding.
+  const referenceScale = 1 + 0.36 * template.ruleReferenceFocus;
+  session.ruleReference.style.setProperty(
+    "--kp-antiderivative-rule-reference-scale",
+    referenceScale.toFixed(4)
+  );
   session.ruleReference.dataset["kpSemanticTraceRole"] = template.traceRole;
+  session.ruleReference.dataset["kpSemanticSalienceLevel"] =
+    template.ruleReferenceFocus > 0.01 ? "focus" : "normal";
   session.ruleReference.setAttribute(
     "aria-hidden",
     template.ruleReferencePresence > 0 ? "false" : "true"
@@ -428,12 +447,27 @@ function applyRuleTemplateApplicationState(
       element.dataset["kpSemanticTraceRole"] = template.traceRole;
     }
   }
+  const receiverIds = session.plan.choreography.ruleTemplateApplication
+    .bindingRelations.flatMap((relation) => [
+      relation.sourceSelectorId,
+      ...relation.targetSelectorIds
+    ]);
+  const receiverBrightness = 1 - 0.68 * template.ruleReferenceFocus;
+  for (const semanticId of [...semanticIds, ...receiverIds]) {
+    for (const element of semanticPaintOwners(session.stage, semanticId)) {
+      element.dataset["kpSemanticSalienceLevel"] =
+        template.ruleReferenceFocus > 0.01 ? "context" : "normal";
+      element.style.filter = `brightness(${receiverBrightness.toFixed(4)})`;
+    }
+  }
   session.stage.dataset["kpAntiderivativeTemplateApplication"] =
     "prospective-scaffold-binding";
   session.stage.dataset["kpAntiderivativeTemplateTraceRole"] =
     template.traceRole;
   session.stage.dataset["kpAntiderivativeRuleReferencePresence"] =
     template.ruleReferencePresence.toFixed(4);
+  session.stage.dataset["kpAntiderivativeRuleReferenceFocus"] =
+    template.ruleReferenceFocus.toFixed(4);
   session.stage.dataset["kpAntiderivativeRuleReferenceLawRefId"] =
     session.plan.choreography.ruleTemplateApplication.ruleReference.lawRefId;
   session.stage.dataset["kpAntiderivativeTemplatePreviewPresence"] =
@@ -687,6 +721,7 @@ function clearTelemetry(stage: HTMLElement): void {
   delete stage.dataset["kpAntiderivativeTemplateApplication"];
   delete stage.dataset["kpAntiderivativeTemplateTraceRole"];
   delete stage.dataset["kpAntiderivativeRuleReferencePresence"];
+  delete stage.dataset["kpAntiderivativeRuleReferenceFocus"];
   delete stage.dataset["kpAntiderivativeRuleReferenceLawRefId"];
   delete stage.dataset["kpAntiderivativeTemplatePreviewPresence"];
   delete stage.dataset["kpAntiderivativeTemplateScaffoldPresence"];

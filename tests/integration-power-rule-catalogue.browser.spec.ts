@@ -113,9 +113,29 @@ test("integration power rule uses governed transit and two certified ink knots",
     "law.calculus.integral.power-rule"
   );
   await expect(ruleReference).toHaveAttribute("aria-hidden", "false");
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-rule-reference-focus",
+    "1.0000"
+  );
+  await expect(ruleReference).toHaveAttribute(
+    "data-kp-semantic-salience-level",
+    "focus"
+  );
   await expect(ruleReference.locator(".katex")).toBeVisible();
   await expect(ruleReference).toContainText("n");
   await expect.poll(() => renderedOpacity(ruleReference)).toBe(1);
+  const ruleReferenceBox = await ruleReference.boundingBox();
+  expect(ruleReferenceBox?.width ?? 0).toBeGreaterThan(300);
+  expect(ruleReferenceBox?.height ?? 0).toBeGreaterThan(30);
+  const contextualReceivers = stage.locator(
+    '[data-kp-equation-material-owner-id]' +
+    '[data-kp-semantic-salience-level="context"]'
+  );
+  await expect.poll(() => contextualReceivers.count()).toBeGreaterThan(0);
+  await expect(contextualReceivers.first()).toHaveCSS(
+    "filter",
+    "brightness(0.32)"
+  );
 
   await seek.fill("0.43");
   await expectTransitReady(stage);
@@ -127,6 +147,7 @@ test("integration power rule uses governed transit and two certified ink knots",
     .toBeGreaterThan(0);
   await expect(ruleReference).toHaveAttribute("aria-hidden", "true");
   await expect.poll(() => renderedOpacity(ruleReference)).toBe(0);
+  await expect(contextualReceivers).toHaveCount(0);
 
   await seek.fill("0.5");
   await expect(activeTransition(stage)).toHaveAttribute(
