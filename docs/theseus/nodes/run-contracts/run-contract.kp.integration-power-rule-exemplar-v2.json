@@ -1225,7 +1225,7 @@
     {
       "id": "next-action.kp.integration-power-rule.s18",
       "title": "Integration-human-visual-checkpoint",
-      "summary": "Normal playback now uses the regenerated 7.2-second integration descriptor, holds recognition binding and instantiation distinctly, replaces the competing long arrow with equality, and fades the template fully before Native KaTeX rewrite transit.",
+      "summary": "USER_PAUSED at the human visual checkpoint. The visible long line is likely the target fraction-rule material owner held at the translated receiver, not a longmapsto; the separately rendered template fraction bar has no compositor correspondence. Diagnose a single template-scaffold-to-target fraction-bar handoff before further visual changes or promotion.",
       "status": "in-progress"
     },
     {
