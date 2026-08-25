@@ -660,7 +660,8 @@
     {
       "id": "next-action.kp.integration-power-rule.s18",
       "title": "Integration-human-visual-checkpoint",
-      "status": "planned"
+      "summary": "Awaiting explicit human review of the canonical Catalogue animation and eight-state integration checkpoint sheet. Slices 19 and 20 remain prohibited until the user approves the choreography.",
+      "status": "in-progress"
     },
     {
       "id": "next-action.kp.integration-power-rule.s19",
