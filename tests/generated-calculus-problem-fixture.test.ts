@@ -115,13 +115,13 @@ test("generated calculus fixtures cover derivative and integral rules", () => {
   ]);
   assert.deepEqual(
     integral.bundle.objects[2]?.selectors.find((selector) =>
-      selector.id.endsWith(".coefficient")
+      selector.id.endsWith(".denominator")
     ),
     {
-      id: "expression.generated.calculus.integral.power-rule-quadratic.integrated.coefficient",
+      id: "expression.generated.calculus.integral.power-rule-quadratic.integrated.denominator",
       objectId: "expression.generated.calculus.integral.power-rule-quadratic.integrated",
-      kind: "coefficient",
-      label: "1/3",
+      kind: "term",
+      label: "3",
       metadata: {
         exactNumerator: "1",
         exactDenominator: "3"
@@ -142,6 +142,36 @@ test("generated calculus fixtures cover derivative and integral rules", () => {
       }).status
     ),
     ["semantic", "semantic"]
+  );
+  assert.deepEqual(
+    integral.bundle.objects.map((object) =>
+      object.selectors.map((selector) => selector.id.slice(object.id.length + 1))
+    ),
+    [
+      [
+        "operator",
+        "base",
+        "exponent",
+        "differential-symbol",
+        "integration-variable"
+      ],
+      [
+        "numerator-base",
+        "numerator-exponent",
+        "numerator-increment",
+        "denominator-exponent",
+        "denominator-increment",
+        "connector",
+        "constant"
+      ],
+      [
+        "numerator-base",
+        "numerator-exponent",
+        "denominator",
+        "connector",
+        "constant"
+      ]
+    ]
   );
 });
 

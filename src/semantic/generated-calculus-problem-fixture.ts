@@ -20,7 +20,9 @@ import {
   createKpDerivativeSumRuleSemantics
 } from "./derivative-sum-rule-semantics.ts";
 import {
-  createKpAntiderivativePowerRuleSemantics
+  createKpAntiderivativePowerRuleLineageSemantics,
+  createKpAntiderivativePowerRuleSemanticRoles,
+  type KpAntiderivativePowerRuleSemanticRole
 } from "./antiderivative-power-rule-semantics.ts";
 import {
   createKpRational,
@@ -444,6 +446,11 @@ function createGeneratedIntegralPowerProblemFixture(
     input.coefficient,
     `Generated calculus fixture ${input.id} coefficient`
   );
+  if (input.coefficient !== 1) {
+    throw new Error(
+      `Generated calculus fixture ${input.id} must use the governed monic integration exemplar.`
+    );
+  }
 
   if (!Number.isInteger(input.exponent) || input.exponent < 0) {
     throw new Error(
@@ -454,10 +461,16 @@ function createGeneratedIntegralPowerProblemFixture(
   const ids = generatedIntegralPowerProblemIds(input);
   const antiderivative = integralPowerTermFor(input);
   const latex = generatedIntegralPowerProblemLatex(input, antiderivative);
-  const semantics = createKpAntiderivativePowerRuleSemantics({
+  const semanticRoles = createKpAntiderivativePowerRuleSemanticRoles({
     sourceObjectId: ids.initial,
     expandedObjectId: ids.expanded,
     targetObjectId: ids.integrated,
+    integrationVariable: input.variable,
+    base: input.base,
+    exponent: input.exponent
+  });
+  const semantics = createKpAntiderivativePowerRuleLineageSemantics({
+    roles: semanticRoles,
     expansionTransformationId: ids.expandTransform,
     resolutionTransformationId: ids.resolveTransform
   });
@@ -469,62 +482,25 @@ function createGeneratedIntegralPowerProblemFixture(
         ids.initial,
         "Integral expression",
         latex.initial,
-        [
-          selector(ids.initial, "operator", "operator", "\\int"),
-          selector(ids.initial, "coefficient", "coefficient", String(input.coefficient)),
-          selector(ids.initial, "base", "term", input.base),
-          selector(ids.initial, "exponent", "term", String(input.exponent)),
-          selector(ids.initial, "differential", "operator", `d${input.variable}`)
-        ]
+        semanticRoles.sourceRoles.map((role) =>
+          antiderivativePowerRoleSelector(role, antiderivative.coefficient)
+        )
       ),
       expressionObject(
         ids.expanded,
         "Antiderivative power rule exposed",
         latex.expanded,
-        [
-          selector(
-            ids.expanded,
-            "numerator-coefficient",
-            "coefficient",
-            String(input.coefficient)
-          ),
-          selector(
-            ids.expanded,
-            "denominator-exponent",
-            "term",
-            String(input.exponent)
-          ),
-          selector(ids.expanded, "denominator-increment", "constant", "1"),
-          selector(ids.expanded, "base", "term", input.base),
-          selector(
-            ids.expanded,
-            "power-exponent",
-            "term",
-            String(input.exponent)
-          ),
-          selector(ids.expanded, "power-increment", "constant", "1")
-        ]
+        semanticRoles.expandedRoles.map((role) =>
+          antiderivativePowerRoleSelector(role, antiderivative.coefficient)
+        )
       ),
       expressionObject(
         ids.integrated,
         "After applying the integral power rule",
         latex.integrated,
-        [
-          selector(
-            ids.integrated,
-            "coefficient",
-            "coefficient",
-            formatExactRationalText(antiderivative.coefficient),
-            {
-              exactNumerator: antiderivative.coefficient.numerator.toString(),
-              exactDenominator: antiderivative.coefficient.denominator.toString()
-            }
-          ),
-          selector(ids.integrated, "base", "term", antiderivative.base),
-          selector(ids.integrated, "exponent", "term", String(antiderivative.exponent)),
-          selector(ids.integrated, "connector", "operator", "+"),
-          selector(ids.integrated, "constant", "constant", "C")
-        ]
+        semanticRoles.targetRoles.map((role) =>
+          antiderivativePowerRoleSelector(role, antiderivative.coefficient)
+        )
       )
     ]
   });
@@ -1016,6 +992,24 @@ function derivativePowerRoleSelector(
     ...(evaluationMetadata === undefined
       ? {}
       : { metadata: evaluationMetadata })
+  };
+}
+
+function antiderivativePowerRoleSelector(
+  role: KpAntiderivativePowerRuleSemanticRole,
+  exactCoefficient: KpNormalizedRational
+): CreateKpAssetSelectorInput {
+  const exactMetadata = role.id === "target.denominator"
+    ? {
+        exactNumerator: exactCoefficient.numerator.toString(),
+        exactDenominator: exactCoefficient.denominator.toString()
+      }
+    : undefined;
+  return {
+    id: role.selectorId,
+    kind: role.selectorKind,
+    label: role.label,
+    ...(exactMetadata === undefined ? {} : { metadata: exactMetadata })
   };
 }
 

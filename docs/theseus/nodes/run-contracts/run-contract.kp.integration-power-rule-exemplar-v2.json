@@ -236,6 +236,34 @@
       "scope": "slice s09 derivative preservation",
       "checkedAt": "2026-08-25T00:29:34.158Z",
       "notes": "All thirty-five derivative semantic, migration, choreography, selector, case-ledger, and policy checks pass."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s10 exact Native KaTeX",
+      "checkedAt": "2026-08-25T00:37:00.859Z",
+      "notes": "Forty-nine tests prove exact source, expanded, and target notation, selector closure, trusted group wrappers, MathML, semantic lineage, and governed construction."
+    },
+    {
+      "command": "npm run check:equation-asset-manifest",
+      "status": "passed",
+      "scope": "slice s10 exact Native KaTeX",
+      "checkedAt": "2026-08-25T00:37:02.178Z",
+      "notes": "Canonical endpoint fingerprints are regenerated and current after the selector-role binding."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s10 exact Native KaTeX",
+      "checkedAt": "2026-08-25T00:37:03.280Z",
+      "notes": "Application, Node, test, Svelte, and domain types accept the exact role-bound fixture."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s10 exact Native KaTeX",
+      "checkedAt": "2026-08-25T00:37:04.394Z",
+      "notes": "Semantic truth, renderer annotations, and equation authority remain in their declared layers."
     }
   ],
   "allowedWork": [
@@ -325,7 +353,8 @@
     {
       "id": "next-action.kp.integration-power-rule.s10",
       "title": "Exact-selector-annotated-integration-KaTeX",
-      "status": "planned"
+      "summary": "Bound the canonical monic fixture to the declared roles and lineage, replaced legacy coefficient-first selectors with exact source, fraction, successor, denominator, and plus-C selectors, added trusted KaTeX group annotations for integrand, dx, quotient, and constant, and regenerated endpoint fingerprints. Scoped tests, MathML checks, typecheck, and architecture gates pass.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.integration-power-rule.s11",
