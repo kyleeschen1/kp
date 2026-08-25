@@ -64,8 +64,17 @@ test("derivative power rule delegates decrement evaluation to certified ink", as
   );
 
   await seek.fill("0.07");
+  await expect(activeTransition(stage)).toHaveAttribute(
+    "data-kp-editor-operator-scope-presentation",
+    "outline"
+  );
   await expect(operatorApplication).toHaveCount(1);
   await expect(applicationTrace).toHaveCount(1);
+  await expect(applicationTrace).toHaveAttribute(
+    "data-kp-editor-derivative-application-trace-role",
+    "operator-application-scope"
+  );
+  await expect(applicationTrace).toHaveCSS("border-style", "solid");
   await expect.poll(() => renderedOpacity(applicationTrace)).toBeGreaterThan(0);
   await expect.poll(() => renderedTranslationX(operator)).toBe(0);
   await expect.poll(() => renderedTranslationX(sourceBase)).toBe(0);

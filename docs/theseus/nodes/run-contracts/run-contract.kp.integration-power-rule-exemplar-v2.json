@@ -215,6 +215,27 @@
       "scope": "slice s08 operator scope policy",
       "checkedAt": "2026-08-25T00:26:21.909Z",
       "notes": "Renderer policy ownership respects every dependency and equation authority boundary."
+    },
+    {
+      "command": "npm run test:browser:differentiation-exemplar",
+      "status": "passed",
+      "scope": "slice s09 derivative preservation",
+      "checkedAt": "2026-08-25T00:29:31.350Z",
+      "notes": "Four Chromium checks preserve the artifact route, selector scope, outline phase timings, direct seek, rewind, replay, native endpoints, and one-paint-owner lifecycle."
+    },
+    {
+      "command": "npm run visual:derivative-power",
+      "status": "passed",
+      "scope": "slice s09 derivative preservation",
+      "checkedAt": "2026-08-25T00:29:32.865Z",
+      "notes": "Nine stable derivative frames were captured and inspected with the accepted scope outline and choreography unchanged."
+    },
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "slice s09 derivative preservation",
+      "checkedAt": "2026-08-25T00:29:34.158Z",
+      "notes": "All thirty-five derivative semantic, migration, choreography, selector, case-ledger, and policy checks pass."
     }
   ],
   "allowedWork": [
@@ -298,7 +319,8 @@
     {
       "id": "next-action.kp.integration-power-rule.s09",
       "title": "Derivative-outline-preservation-pressure",
-      "status": "planned"
+      "summary": "Added an executable assertion that the derivative transition resolves the outline policy and retains the accepted scope trace role and solid border. Four Chromium lifecycle checks, thirty-five focused tests, and nine inspected visual frames preserve the route, timings, selectors, choreography, and Native KaTeX ownership.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.integration-power-rule.s10",
