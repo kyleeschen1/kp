@@ -531,8 +531,11 @@ function applyFrame(session: TransitMountSession): void {
     : session.pending.accessibilityMode === "reduced-motion"
       ? "reduced"
       : "full";
+  // The visible rule must finish before material transit begins. Sampling the
+  // compositor from the handoff beat prevents two complete formula owners
+  // from crossfading into an unreadable stack of fraction bars.
   const rendererProgress = projection === "full"
-    ? frame.rewriteProgress
+    ? frame.ruleTemplateApplication.rewriteHandoffProgress
     : frame.rewriteProgress < 0.5 ? 0 : 1;
   // The generic equation sampler runs earlier in the shared host. Restore the
   // measured native endpoints before cloning so its presentation transforms

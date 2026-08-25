@@ -3231,7 +3231,7 @@
                 "expression.generated.calculus.integral.power-rule-quadratic.expanded",
                 "expression.generated.calculus.integral.power-rule-quadratic.integrated"
               ],
-              "envelopeFingerprint": "fnv1a32-71aa2ee9"
+              "envelopeFingerprint": "fnv1a32-acace2e6"
             },
             {
               "direction": "forward",
@@ -3245,7 +3245,7 @@
                 "expression.generated.calculus.integral.power-rule-quadratic.expanded",
                 "expression.generated.calculus.integral.power-rule-quadratic.integrated"
               ],
-              "envelopeFingerprint": "fnv1a32-b51e5fc3"
+              "envelopeFingerprint": "fnv1a32-df383b00"
             },
             {
               "direction": "forward",
@@ -3259,7 +3259,7 @@
                 "expression.generated.calculus.integral.power-rule-quadratic.expanded",
                 "expression.generated.calculus.integral.power-rule-quadratic.integrated"
               ],
-              "envelopeFingerprint": "fnv1a32-24e4a940"
+              "envelopeFingerprint": "fnv1a32-1ae30462"
             }
           ]
         }

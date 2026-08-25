@@ -284,11 +284,11 @@ export function compileKpAntiderivativePowerChoreography(input: {
       kind: "antiderivative-rule-template-instantiation" as const,
       lawRefId: input.lawRefId,
       generalRuleLatex:
-        String.raw`\begin{gathered}\int u^n\,du \longmapsto \frac{u^{n+1}}{n+1}+C\\[-0.08em] n\ne -1\end{gathered}`,
+        String.raw`\begin{gathered}\int u^n\,du = \frac{u^{n+1}}{n+1}+C\\[-0.08em] n\ne -1\end{gathered}`,
       bindingLatex:
         String.raw`u\mapsto ${baseLabel},\qquad n\mapsto ${exponentLabel}`,
       instantiatedRuleLatex:
-        String.raw`\int ${baseLabel}^{${exponentLabel}}\,d${integrationVariableLabel} \longmapsto \frac{${baseLabel}^{${exponentLabel}+1}}{${exponentLabel}+1}+C`,
+        String.raw`\int ${baseLabel}^{${exponentLabel}}\,d${integrationVariableLabel} = \frac{${baseLabel}^{${exponentLabel}+1}}{${exponentLabel}+1}+C`,
       metavariableBindings: Object.freeze([
         Object.freeze({
           metavariable: "u" as const,
@@ -412,21 +412,21 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
   const progress = clamp01(rewriteProgress);
   const preview = phaseProgress(progress, 0, 0.22);
   const binding = phaseProgress(progress, 0.34, 0.62);
-  const receiverSettlement = phaseProgress(progress, 0.72, 0.94);
-  const syntaxResolution = phaseProgress(progress, 0.9, 0.98);
+  const receiverSettlement = phaseProgress(progress, 0.84, 0.98);
+  const syntaxResolution = phaseProgress(progress, 0.94, 0.995);
   const generalRulePresence = roundProgress(
-    phaseProgress(progress, 0, 0.12) *
-      (1 - phaseProgress(progress, 0.6, 0.68))
+    phaseProgress(progress, 0, 0.08) *
+      (1 - phaseProgress(progress, 0.58, 0.66))
   );
   const metavariableBindingsPresence = roundProgress(
-    phaseProgress(progress, 0.34, 0.48) *
-      (1 - phaseProgress(progress, 0.76, 0.9))
+    phaseProgress(progress, 0.34, 0.42) *
+      (1 - phaseProgress(progress, 0.8, 0.84))
   );
   const instantiatedRulePresence = roundProgress(
-    phaseProgress(progress, 0.6, 0.68) *
-      (1 - phaseProgress(progress, 0.76, 0.94))
+    phaseProgress(progress, 0.58, 0.66) *
+      (1 - phaseProgress(progress, 0.8, 0.84))
   );
-  const rewriteHandoffProgress = phaseProgress(progress, 0.72, 0.94);
+  const rewriteHandoffProgress = phaseProgress(progress, 0.84, 0.98);
   const panelPresence = roundProgress(Math.max(
     generalRulePresence,
     metavariableBindingsPresence,

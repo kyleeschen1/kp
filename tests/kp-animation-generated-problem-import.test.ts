@@ -77,6 +77,7 @@ test("createGeneratedProblemAnimationAsset imports generated calculus derivative
     "generated.calculus.derivative.power-rule-x-cubed"
   );
   const animation = createGeneratedProblemAnimationAsset(fixture);
+  assert.equal(animation.timeline?.durationMs, 2_400);
 
   assert.equal(
     animation.id,
@@ -131,6 +132,15 @@ test("createGeneratedProblemAnimationAsset imports generated calculus derivative
     projections.flatMap((projection) => projection.diagnostics),
     []
   );
+});
+
+test("antiderivative power-rule import budgets time for explicit rule application", () => {
+  const fixture = createGeneratedCalculusProblemFixture(
+    "generated.calculus.integral.power-rule-quadratic"
+  );
+  const animation = createGeneratedProblemAnimationAsset(fixture);
+
+  assert.equal(animation.timeline?.durationMs, 7_200);
 });
 
 test("createGeneratedProblemAnimationAsset imports generated linear algebra matrix-vector steps", () => {

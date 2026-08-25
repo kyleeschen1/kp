@@ -42,7 +42,7 @@ const samples = [
   {
     id: "template-binding",
     label: "Rule application · u ↦ x and n ↦ 2",
-    progress: 0.34,
+    progress: 0.3,
     theme: "dark",
     viewport: desktopViewport
   },
@@ -56,7 +56,7 @@ const samples = [
   {
     id: "template-settling",
     label: "Rule application · instance hands off to rewrite",
-    progress: 0.42,
+    progress: 0.44,
     theme: "dark",
     viewport: desktopViewport
   },
@@ -481,7 +481,7 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   }
   const scaffold = required("template-scaffold");
   if (
-    scaffold.transitVisualOwner !== "material-scene" ||
+    scaffold.transitVisualOwner !== "source-native" ||
     scaffold.templateProfileId !==
       "kp.rendering.native-katex.antiderivative-template-instantiation-profile.v4" ||
     scaffold.templateTraceRole !== "prospective" ||
@@ -502,7 +502,6 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     scaffold.templateBindingProgress !== 0 ||
     scaffold.templateReceiverSettlementProgress !== 0 ||
     scaffold.templateSyntaxResolutionProgress !== 0 ||
-    scaffold.visibleMaterialOwnerCount === 0 ||
     !["right", "above"].includes(scaffold.templateReceiverLane) ||
     (
       scaffold.templateReceiverTranslateX === 0 &&
@@ -555,12 +554,14 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   const settling = required("template-settling");
   if (
     settling.templateBindingProgress !== 1 ||
+    settling.transitVisualOwner !== "material-scene" ||
     settling.templateReceiverSettlementProgress <= 0 ||
     settling.templateReceiverSettlementProgress >= 1 ||
     settling.templateTraceRole !== "prospective" ||
     settling.rewriteHandoffProgress <= 0 ||
     settling.rewriteHandoffProgress >= 1 ||
-    settling.instantiatedRulePresence <= 0
+    settling.ruleTemplatePanelPresence !== 0 ||
+    settling.instantiatedRulePresence !== 0
   ) {
     throw new Error(
       "Settling template frame must move the populated receiver toward native syntax."

@@ -117,7 +117,20 @@ function generatedProblemDurationMs(fixture: GeneratedProblemAnimationFixture): 
   const rowCount = generatedProblemMatrixVectorRowCount(fixture);
   if (rowCount !== undefined) return matrixVectorSemanticDurationMs(rowCount);
   const cellCount = generatedProblemMatrixMatrixCellCount(fixture);
-  return cellCount === undefined ? 2_400 : matrixMatrixSemanticDurationMs(cellCount);
+  if (cellCount !== undefined) return matrixMatrixSemanticDurationMs(cellCount);
+  const transformationTypes = new Set(
+    fixture.transformations.map(({ transformType }) => transformType)
+  );
+  if (
+    transformationTypes.has("applyAntiderivativePowerRule") &&
+    transformationTypes.has("simplifyAntiderivativePowerRule")
+  ) {
+    // This operation has distinct recognition, binding, instantiation,
+    // rewrite, and evaluation beats. The generic 2.4-second budget made the
+    // rule technically present but unreadable during ordinary playback.
+    return 7_200;
+  }
+  return 2_400;
 }
 
 export function generatedProblemMatrixVectorRowCount(

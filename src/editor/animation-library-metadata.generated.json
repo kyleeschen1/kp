@@ -1604,7 +1604,7 @@
       "scrubber",
       "rewind"
     ],
-    "durationMs": 2400,
+    "durationMs": 7200,
     "beatCount": 50,
     "tags": [
       "animation",

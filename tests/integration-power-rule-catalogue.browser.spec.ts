@@ -75,7 +75,7 @@ test("integration power rule uses governed transit and two certified ink knots",
   await expectTransitReady(stage);
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-power-visual-owner",
-    "material-scene"
+    "source-native"
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-template-application",
@@ -100,10 +100,6 @@ test("integration power rule uses governed transit and two certified ink knots",
   await expect.poll(async () => Number(await stage.getAttribute(
     "data-kp-antiderivative-template-syntax-resolution-progress"
   ))).toBe(0);
-  await expect.poll(() => visibleTemplateScaffoldOwners(stage))
-    .toBeGreaterThan(0);
-  await expect.poll(() => visibleMaterialOwners(stage)).toBeGreaterThan(0);
-  expect(await visiblePaintOwnerKinds(stage)).toEqual(["material"]);
   const templateReceiver = stage.locator(
     "[data-kp-antiderivative-template-receiver]"
   );
@@ -172,7 +168,7 @@ test("integration power rule uses governed transit and two certified ink knots",
     "rule-template"
   );
 
-  await seek.fill("0.34");
+  await seek.fill("0.3");
   await expectTransitReady(stage);
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-template-receiver-focus",
@@ -211,7 +207,7 @@ test("integration power rule uses governed transit and two certified ink knots",
     /Instantiated power rule/u
   );
 
-  await seek.fill("0.42");
+  await seek.fill("0.44");
   await expectTransitReady(stage);
   await expect.poll(async () => Number(await stage.getAttribute(
     "data-kp-antiderivative-template-receiver-settlement-progress"
@@ -222,7 +218,8 @@ test("integration power rule uses governed transit and two certified ink knots",
   await expect.poll(async () => Number(await stage.getAttribute(
     "data-kp-antiderivative-rewrite-handoff-progress"
   ))).toBeGreaterThan(0);
-  await expect.poll(() => renderedOpacity(instantiatedRule)).toBeGreaterThan(0);
+  await expect.poll(() => renderedOpacity(instantiatedRule)).toBe(0);
+  await expect.poll(() => renderedOpacity(rulePanel)).toBe(0);
 
   await seek.fill("0.49");
   await expectTransitReady(stage);
@@ -309,14 +306,13 @@ test("integration Catalogue lifecycle restores, rewinds, themes, and exposes sta
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-power-visual-owner",
-    "material-scene"
+    "source-native"
   );
-  const lightColor = await visibleMaterialColor(stage);
-  const lightTemplateGrammar = stage.locator(
-    '[data-kp-antiderivative-template-paint-role="grammar"]'
+  const lightTemplateRule = stage.locator(
+    "[data-kp-antiderivative-general-rule]"
   );
-  await expect(lightTemplateGrammar.first()).toBeVisible();
-  const lightTemplateColor = await lightTemplateGrammar.first().evaluate((element) =>
+  await expect(lightTemplateRule).toBeVisible();
+  const lightTemplateColor = await lightTemplateRule.evaluate((element) =>
     getComputedStyle(element).color
   );
 
@@ -324,13 +320,11 @@ test("integration Catalogue lifecycle restores, rewinds, themes, and exposes sta
   const darkPlayer = cataloguePlayer(page);
   const darkStage = darkPlayer.locator("[data-kp-editor-equation-stage]");
   await expectTransitReady(darkStage);
-  const darkColor = await visibleMaterialColor(darkStage);
-  expect(darkColor).not.toBe(lightColor);
-  const darkTemplateGrammar = darkStage.locator(
-    '[data-kp-antiderivative-template-paint-role="grammar"]'
+  const darkTemplateRule = darkStage.locator(
+    "[data-kp-antiderivative-general-rule]"
   );
-  await expect(darkTemplateGrammar.first()).toBeVisible();
-  const darkTemplateColor = await darkTemplateGrammar.first().evaluate((element) =>
+  await expect(darkTemplateRule).toBeVisible();
+  const darkTemplateColor = await darkTemplateRule.evaluate((element) =>
     getComputedStyle(element).color
   );
   expect(darkTemplateColor).not.toBe(lightTemplateColor);
@@ -382,6 +376,79 @@ test("integration Catalogue lifecycle restores, rewinds, themes, and exposes sta
   );
 });
 
+test("ordinary playback gives recognition binding and instantiation readable dwell", async ({
+  page
+}) => {
+  test.setTimeout(30_000);
+  await page.goto(`/?artifact=${animationId}&playhead=0&theme=dark`);
+  const player = cataloguePlayer(page);
+  const stage = player.locator("[data-kp-editor-equation-stage]");
+  await expectTransitReady(stage);
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-duration-ms",
+    "7200"
+  );
+  const dwell = stage.evaluate((root) => new Promise<{
+    recognitionAt: number;
+    bindingAt: number;
+    instantiatedAt: number;
+    handoffAt: number;
+  }>((resolve, reject) => {
+    const marks: Partial<Record<
+      "recognitionAt" | "bindingAt" | "instantiatedAt" | "handoffAt",
+      number
+    >> = {};
+    const startedAt = performance.now();
+    const observe = (): void => {
+      const now = performance.now();
+      if (
+        marks.recognitionAt === undefined &&
+        Number(root.dataset["kpAntiderivativeGeneralRulePresence"]) === 1
+      ) marks.recognitionAt = now;
+      if (
+        marks.bindingAt === undefined &&
+        Number(root.dataset[
+          "kpAntiderivativeMetavariableBindingsPresence"
+        ]) === 1
+      ) marks.bindingAt = now;
+      if (
+        marks.instantiatedAt === undefined &&
+        Number(root.dataset["kpAntiderivativeInstantiatedRulePresence"]) === 1
+      ) marks.instantiatedAt = now;
+      if (
+        marks.handoffAt === undefined &&
+        Number(root.dataset["kpAntiderivativeRewriteHandoffProgress"]) > 0.05
+      ) marks.handoffAt = now;
+      if (
+        marks.recognitionAt !== undefined &&
+        marks.bindingAt !== undefined &&
+        marks.instantiatedAt !== undefined &&
+        marks.handoffAt !== undefined
+      ) {
+        observer.disconnect();
+        resolve(marks as {
+          recognitionAt: number;
+          bindingAt: number;
+          instantiatedAt: number;
+          handoffAt: number;
+        });
+      } else if (now - startedAt > 8_000) {
+        observer.disconnect();
+        reject(new Error("Timed out observing the rule-template dwell beats."));
+      }
+    };
+    const observer = new MutationObserver(observe);
+    observer.observe(root, { attributes: true });
+    observe();
+  }));
+  await player.locator('[data-action="toggle-editor-animation"]').click();
+  const marks = await dwell;
+
+  expect(marks.bindingAt - marks.recognitionAt).toBeGreaterThan(500);
+  expect(marks.instantiatedAt - marks.bindingAt).toBeGreaterThan(350);
+  expect(marks.handoffAt - marks.instantiatedAt).toBeGreaterThan(250);
+});
+
 function cataloguePlayer(page: Page): Locator {
   return page.locator(
     `[data-kp-animation-catalogue-stage] ` +
@@ -394,54 +461,6 @@ function activeTransition(stage: Locator): Locator {
   return stage.locator(
     '[data-kp-editor-equation-transition-id]:not([hidden])'
   );
-}
-
-async function visibleMaterialOwners(stage: Locator): Promise<number> {
-  return stage.locator("[data-kp-equation-material-owner-id]")
-    .evaluateAll((owners) => owners.filter((owner) => {
-      const style = getComputedStyle(owner);
-      return style.visibility !== "hidden" && Number(style.opacity) > 0.01;
-    }).length);
-}
-
-async function visibleTemplateScaffoldOwners(stage: Locator): Promise<number> {
-  return stage.locator(
-    '[data-kp-equation-material-semantic-entity-id$=".expanded.exact-quotient"]'
-  ).evaluateAll((owners) => owners.filter((owner) =>
-    Number(getComputedStyle(owner).opacity) > 0.01 &&
-    (owner as HTMLElement).dataset["kpSemanticTraceRole"] === "prospective"
-  ).length);
-}
-
-async function visiblePaintOwnerKinds(stage: Locator): Promise<string[]> {
-  return stage.evaluate((root) => {
-    const visible = (element: HTMLElement): boolean => {
-      const style = getComputedStyle(element);
-      return style.visibility !== "hidden" && Number(style.opacity) > 0.01;
-    };
-    return [
-      ...([...root.querySelectorAll<HTMLElement>(
-        "[data-kp-editor-equation-source], [data-kp-editor-equation-target]"
-      )].some(visible) ? ["native"] : []),
-      ...([...root.querySelectorAll<HTMLElement>(
-        "[data-kp-equation-material-owner-id]"
-      )].some(visible) ? ["material"] : [])
-    ];
-  });
-}
-
-async function visibleMaterialColor(stage: Locator): Promise<string> {
-  return stage.locator("[data-kp-equation-material-owner-id]")
-    .evaluateAll((owners) => {
-      const visible = owners.find((owner) => {
-        const style = getComputedStyle(owner);
-        return style.visibility !== "hidden" && Number(style.opacity) > 0.01;
-      });
-      if (!(visible instanceof HTMLElement)) {
-        throw new Error("No visible integration material owner.");
-      }
-      return getComputedStyle(visible).color;
-    });
 }
 
 async function renderedOpacity(locator: Locator): Promise<number> {

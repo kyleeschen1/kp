@@ -77,7 +77,7 @@ test("integration first transition compiles its governed scope and lineage", () 
   );
   assert.equal(
     plan.ruleTemplateApplication.instantiatedRuleLatex,
-    String.raw`\int x^{2}\,dx \longmapsto \frac{x^{2+1}}{2+1}+C`
+    String.raw`\int x^{2}\,dx = \frac{x^{2+1}}{2+1}+C`
   );
   assert.deepEqual(
     plan.ruleTemplateApplication.metavariableBindings.map((binding) => ({
@@ -207,7 +207,7 @@ test("rule-template projection previews complete grammar before binding", () => 
 
   const binding = sampleKpAntiderivativePowerChoreography({
     plan,
-    progress: 0.68
+    progress: 0.6
   });
   assert.equal(binding.ruleTemplateApplication.traceRole, "prospective");
   assert.equal(binding.ruleTemplateApplication.receiverFocus, 1);
@@ -244,6 +244,13 @@ test("rule-template projection previews complete grammar before binding", () => 
     1
   );
   assert.equal(instantiated.ruleTemplateApplication.rewriteHandoffProgress, 0);
+
+  const holding = sampleKpAntiderivativePowerChoreography({
+    plan,
+    progress: 0.79
+  });
+  assert.equal(holding.ruleTemplateApplication.instantiatedRulePresence, 1);
+  assert.equal(holding.ruleTemplateApplication.rewriteHandoffProgress, 0);
 
   const resolved = sampleKpAntiderivativePowerChoreography({
     plan,

@@ -1004,6 +1004,90 @@
       "scope": "slice s18 explicit template durable evidence",
       "checkedAt": "2026-08-25T22:22:41.938Z",
       "notes": "Theseus validates 1061 nodes and 25709 events after verification records and context receipt closure."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s18 normal playback repair",
+      "checkedAt": "2026-08-25T22:43:57.123Z",
+      "notes": "All 64 focused integration authority choreography duration transit evaluation and preservation tests passed."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-catalogue",
+      "status": "passed",
+      "scope": "slice s18 normal playback and exact Catalogue lifecycle",
+      "checkedAt": "2026-08-25T22:43:58.392Z",
+      "notes": "Three Chromium cases passed including measured ordinary-playback dwell for recognition binding instantiation and handoff."
+    },
+    {
+      "command": "npm run visual:integration-power-rule -- --base-url http://127.0.0.1:8000",
+      "status": "passed",
+      "scope": "slice s18 exact live visual checkpoint",
+      "checkedAt": "2026-08-25T22:44:00.125Z",
+      "notes": "Fourteen exact-port frames show equality instead of the competing long arrow and a clean non-overlapping rewrite handoff."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s18 type safety",
+      "checkedAt": "2026-08-25T22:44:01.435Z",
+      "notes": "Application Node tests Svelte and domain typechecks passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s18 architecture preservation",
+      "checkedAt": "2026-08-25T22:44:02.594Z",
+      "notes": "Dependency semantic animation equation authority governance and cross-domain gates passed."
+    },
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "slice s18 derivative preservation",
+      "checkedAt": "2026-08-25T22:44:03.752Z",
+      "notes": "All 36 derivative and shared import checks passed with the derivative duration and choreography unchanged."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/integration-power-rule-transit.browser.spec.ts tests/integration-power-rule-evaluation.browser.spec.ts tests/differentiation-power-catalogue.browser.spec.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "slice s18 compositor and derivative browser preservation",
+      "checkedAt": "2026-08-25T22:44:04.894Z",
+      "notes": "Six Chromium mechanism cases passed across integration transit dual ink knots and derivative lifecycle."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "slice s18 regenerated duration authority preservation",
+      "checkedAt": "2026-08-25T22:44:06.145Z",
+      "notes": "All 11 inventory endpoint sampler renderer clock and browser-evidence preservation checks passed."
+    },
+    {
+      "command": "npm run generate:animation-library-metadata",
+      "status": "passed",
+      "scope": "slice s18 canonical Catalogue duration projection",
+      "checkedAt": "2026-08-25T22:44:07.323Z",
+      "notes": "Regenerated 77 descriptors so Catalogue consumes the governed 7200 millisecond timeline instead of stale 2400 millisecond metadata."
+    },
+    {
+      "command": "npm run generate:equation-surface-inventory",
+      "status": "passed",
+      "scope": "slice s18 generated inventory freshness",
+      "checkedAt": "2026-08-25T22:44:08.459Z",
+      "notes": "Regenerated the exact integration duration in the canonical equation surface inventory."
+    },
+    {
+      "command": "npm run generate:equation-surface-preservation-matrix",
+      "status": "passed",
+      "scope": "slice s18 generated sampled frame freshness",
+      "checkedAt": "2026-08-25T22:44:09.557Z",
+      "notes": "Regenerated only the integration sampled-frame fingerprints changed by the governed duration."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s18 normal playback durable evidence",
+      "checkedAt": "2026-08-25T22:44:27.625Z",
+      "notes": "Theseus validates 1061 nodes and 25724 events after context closure and verification records."
     }
   ],
   "allowedWork": [
@@ -1141,7 +1225,7 @@
     {
       "id": "next-action.kp.integration-power-rule.s18",
       "title": "Integration-human-visual-checkpoint",
-      "summary": "Implement the user-approved explicit pattern sequence: a complete general antiderivative power rule owns recognition, u maps to x and n maps to 2, the instantiated rule holds, and that instance hands off to the existing exact rewrite and dual ink-knot evaluation. Preserve all prior semantic and renderer boundaries.",
+      "summary": "Normal playback now uses the regenerated 7.2-second integration descriptor, holds recognition binding and instantiation distinctly, replaces the competing long arrow with equality, and fades the template fully before Native KaTeX rewrite transit.",
       "status": "in-progress"
     },
     {

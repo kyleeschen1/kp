@@ -858,6 +858,11 @@ function syncPlayerDom(
   player.dataset["kpEditorAnimationStatus"] = state.playbackStatus;
   player.dataset["kpEditorAnimationDirection"] = state.direction;
   player.dataset["kpEditorAnimationProgress"] = String(state.progress);
+  if (state.durationMs === undefined) {
+    delete player.dataset["kpEditorAnimationDurationMs"];
+  } else {
+    player.dataset["kpEditorAnimationDurationMs"] = String(state.durationMs);
+  }
 
   const scrubber = player.querySelector<HTMLInputElement>(
     '[data-action="seek-editor-animation"]'
