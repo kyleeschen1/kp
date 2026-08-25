@@ -24,6 +24,9 @@ import {
 import {
   kpAntiderivativeTemplateInstantiationProfileId
 } from "../rendering/native-katex-antiderivative-template-instantiation.ts";
+import {
+  renderLatexToHtml
+} from "../rendering/katex-adapter.ts";
 import type {
   KpCanonicalNativeKatexSceneSession
 } from "../rendering/native-katex-scene-compositor.ts";
@@ -69,6 +72,7 @@ interface TransitMountSession {
     readonly target: string;
   };
   readonly plan: KpAntiderivativePowerNativeKatexTransitPlan;
+  readonly ruleReference: HTMLElement;
   readonly fontReadiness: ReturnType<typeof createKpEquationFontReadiness>;
   generation: number;
   pending: PendingFrame;
@@ -135,6 +139,10 @@ export function applyKpAntiderivativePowerTransitMount(input: {
     const plan = createKpAntiderivativePowerNativeKatexTransitPlan(
       input.animation
     );
+    const ruleReference = createRuleReference(
+      input.stage,
+      plan.choreography.ruleTemplateApplication.ruleReference
+    );
     session = {
       stage: input.stage,
       player: input.player,
@@ -143,6 +151,7 @@ export function applyKpAntiderivativePowerTransitMount(input: {
       roots: endpoints.roots,
       objectIds: endpoints.objectIds,
       plan,
+      ruleReference,
       fontReadiness: createKpEquationFontReadiness(
         input.stage.ownerDocument
       ),
@@ -165,6 +174,7 @@ export function applyKpAntiderivativePowerTransitMount(input: {
   session.pending = pending;
 
   if (session.failure !== undefined) {
+    hideRuleReference(session);
     showNativeCheckpoint(session, semanticProgress(pending));
     publishRepairGap(session);
     return Object.freeze({
@@ -181,6 +191,7 @@ export function applyKpAntiderivativePowerTransitMount(input: {
     applyFrame(session);
   } catch (error: unknown) {
     session.failure = error instanceof Error ? error.message : String(error);
+    hideRuleReference(session);
     showNativeCheckpoint(session, semanticProgress(session.pending));
     publishRepairGap(session);
     return Object.freeze({
@@ -210,7 +221,44 @@ export function disposeKpAntiderivativePowerTransitMount(
   });
   session.fontReadiness.dispose();
   syncKpEquationMaterialLayer({ stage, owners: [] });
+  session.ruleReference.remove();
   sessions.delete(stage);
+}
+
+function createRuleReference(
+  stage: HTMLElement,
+  reference: KpAntiderivativePowerNativeKatexTransitPlan["choreography"]["ruleTemplateApplication"]["ruleReference"]
+): HTMLElement {
+  const element = stage.ownerDocument.createElement("div");
+  element.className =
+    "editor-equation-stage__antiderivative-rule-reference";
+  element.dataset["kpAntiderivativeRuleReference"] = reference.semanticId;
+  element.dataset["kpAntiderivativeRuleLawRefId"] = reference.lawRefId;
+  element.dataset["kpSemanticEntityId"] = reference.semanticId;
+  element.dataset["kpSemanticTraceRole"] = "absent";
+  element.style.setProperty(
+    "--kp-antiderivative-rule-reference-presence",
+    "0"
+  );
+  element.setAttribute("aria-hidden", "true");
+  // The formula is compiler-owned from the pinned law reference. Rendering it
+  // here keeps transient KaTeX paint in the medium adapter instead of adding
+  // an incidental endpoint or asking the renderer to infer a rule from glyphs.
+  element.innerHTML = renderLatexToHtml(reference.latex, {
+    displayMode: false,
+    output: "htmlAndMathml"
+  });
+  stage.append(element);
+  return element;
+}
+
+function hideRuleReference(session: TransitMountSession): void {
+  session.ruleReference.style.setProperty(
+    "--kp-antiderivative-rule-reference-presence",
+    "0"
+  );
+  session.ruleReference.dataset["kpSemanticTraceRole"] = "absent";
+  session.ruleReference.setAttribute("aria-hidden", "true");
 }
 
 async function prepareSession(
@@ -359,6 +407,15 @@ function applyRuleTemplateApplicationState(
   const template = projection === "full"
     ? frame.ruleTemplateApplication
     : sampleKpAntiderivativeRuleTemplateApplication(rendererProgress);
+  session.ruleReference.style.setProperty(
+    "--kp-antiderivative-rule-reference-presence",
+    template.ruleReferencePresence.toFixed(4)
+  );
+  session.ruleReference.dataset["kpSemanticTraceRole"] = template.traceRole;
+  session.ruleReference.setAttribute(
+    "aria-hidden",
+    template.ruleReferencePresence > 0 ? "false" : "true"
+  );
   const semanticIds = [
     ...session.plan.choreography.ruleTemplateApplication
       .scaffoldSemanticEntityIds,
@@ -375,6 +432,10 @@ function applyRuleTemplateApplicationState(
     "prospective-scaffold-binding";
   session.stage.dataset["kpAntiderivativeTemplateTraceRole"] =
     template.traceRole;
+  session.stage.dataset["kpAntiderivativeRuleReferencePresence"] =
+    template.ruleReferencePresence.toFixed(4);
+  session.stage.dataset["kpAntiderivativeRuleReferenceLawRefId"] =
+    session.plan.choreography.ruleTemplateApplication.ruleReference.lawRefId;
   session.stage.dataset["kpAntiderivativeTemplatePreviewPresence"] =
     template.previewPresence.toFixed(4);
   session.stage.dataset["kpAntiderivativeTemplateScaffoldPresence"] =
@@ -625,6 +686,8 @@ function clearTelemetry(stage: HTMLElement): void {
   delete stage.dataset["kpAntiderivativeIntegrandSalienceStrength"];
   delete stage.dataset["kpAntiderivativeTemplateApplication"];
   delete stage.dataset["kpAntiderivativeTemplateTraceRole"];
+  delete stage.dataset["kpAntiderivativeRuleReferencePresence"];
+  delete stage.dataset["kpAntiderivativeRuleReferenceLawRefId"];
   delete stage.dataset["kpAntiderivativeTemplatePreviewPresence"];
   delete stage.dataset["kpAntiderivativeTemplateScaffoldPresence"];
   delete stage.dataset["kpAntiderivativeTemplateBindingProgress"];

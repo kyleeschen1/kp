@@ -63,6 +63,15 @@ test("integration first transition compiles its governed scope and lineage", () 
     plan.ruleTemplateApplication.kind,
     "antiderivative-rule-template-instantiation"
   );
+  assert.deepEqual(plan.ruleTemplateApplication.ruleReference, {
+    semanticId: `${plan.id}.prospective-rule-reference`,
+    lawRefId: "law.calculus.integral.power-rule",
+    parameterSymbol: "n",
+    latex:
+      "\\int x^{n}\\,dx \\longmapsto \\frac{x^{n+1}}{n+1}+C\\quad(n\\ne -1)",
+    sourceBindingSelectorId:
+      plan.ruleTemplateApplication.bindingRelations[1].sourceSelectorId
+  });
   assert.deepEqual(
     plan.ruleTemplateApplication.fixedSyntaxGroups.map((group) => ({
       role: group.role,
@@ -129,6 +138,7 @@ test("rule-template projection previews complete grammar before binding", () => 
     progress: 0.33
   });
   assert.equal(before.ruleTemplateApplication.traceRole, "absent");
+  assert.equal(before.ruleTemplateApplication.ruleReferencePresence, 0);
   assert.equal(before.ruleTemplateApplication.previewPresence, 0);
   assert.equal(before.ruleTemplateApplication.scaffoldPresence, 0);
   assert.equal(before.ruleTemplateApplication.bindingProgress, 0);
@@ -138,6 +148,7 @@ test("rule-template projection previews complete grammar before binding", () => 
     progress: 0.48
   });
   assert.equal(preview.ruleTemplateApplication.traceRole, "prospective");
+  assert.equal(preview.ruleTemplateApplication.ruleReferencePresence, 1);
   assert.equal(preview.ruleTemplateApplication.previewPresence, 1);
   assert.ok(preview.ruleTemplateApplication.scaffoldPresence > 0);
   assert.equal(preview.ruleTemplateApplication.bindingProgress, 0);
@@ -153,6 +164,7 @@ test("rule-template projection previews complete grammar before binding", () => 
     progress: 0.68
   });
   assert.equal(binding.ruleTemplateApplication.traceRole, "prospective");
+  assert.equal(binding.ruleTemplateApplication.ruleReferencePresence, 1);
   assert.ok(binding.ruleTemplateApplication.bindingProgress >
     binding.ruleTemplateApplication.syntaxResolutionProgress);
   assert.ok(binding.ruleTemplateApplication.syntaxPresence > 0);
@@ -164,6 +176,7 @@ test("rule-template projection previews complete grammar before binding", () => 
     progress: 0.9
   });
   assert.equal(resolved.ruleTemplateApplication.traceRole, "live");
+  assert.equal(resolved.ruleTemplateApplication.ruleReferencePresence, 0);
   assert.equal(resolved.ruleTemplateApplication.scaffoldPresence, 1);
   assert.equal(resolved.ruleTemplateApplication.bindingProgress, 1);
   assert.equal(resolved.ruleTemplateApplication.syntaxPresence, 1);
@@ -211,6 +224,7 @@ test("integration first transition rejects incomplete correspondence", () => {
   assert.throws(() => compileKpAntiderivativePowerChoreography({
     id: "motion.invalid",
     semanticRoles: roles,
+    lawRefId: "law.calculus.integral.power-rule",
     correspondenceMap: {
       ...correspondenceMap,
       records: correspondenceMap.records.filter(({ id }) =>

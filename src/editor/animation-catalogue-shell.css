@@ -422,6 +422,32 @@
   font-size: clamp(1.8rem, 5.5vw, 2.75rem);
 }
 
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-rule-reference {
+  position: absolute;
+  z-index: 4;
+  top: max(0.75rem, calc(50% - 5rem));
+  left: 50%;
+  max-width: calc(100% - 1.5rem);
+  overflow: visible;
+  color: color-mix(
+    in srgb,
+    var(--kp-catalogue-link) 82%,
+    var(--kp-equation-foreground)
+  );
+  font-size: clamp(0.9rem, 2.4vw, 1.2rem);
+  line-height: 1;
+  opacity: var(--kp-antiderivative-rule-reference-presence, 0);
+  pointer-events: none;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-rule-reference .katex {
+  font-size: 1em;
+}
+
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.derivative.power-rule-x-cubed"]
   [data-kp-editor-derivative-power-salience="focus"],
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.derivative.power-rule-x-cubed"]
@@ -450,6 +476,11 @@
 }
 
 @media (forced-colors: active) {
+  .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+    .editor-equation-stage__antiderivative-rule-reference {
+    color: Highlight;
+  }
+
   .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.derivative.power-rule-x-cubed"]
     .editor-equation-stage__derivative-application-trace {
     border-color: Highlight;

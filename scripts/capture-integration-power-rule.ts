@@ -33,7 +33,7 @@ const samples = [
   },
   {
     id: "template-scaffold",
-    label: "Rule application · prospective rule template",
+    label: "Rule application · authored rule reference and receiver",
     progress: 0.24,
     theme: "dark",
     viewport: desktopViewport
@@ -102,6 +102,8 @@ interface CaptureEvidence {
   readonly operatorSalienceStrength: number;
   readonly templateProfileId: string;
   readonly templateTraceRole: string;
+  readonly ruleReferenceLawRefId: string;
+  readonly ruleReferencePresence: number;
   readonly templatePreviewPresence: number;
   readonly templateScaffoldPresence: number;
   readonly templateBindingProgress: number;
@@ -279,6 +281,11 @@ async function captureSample(input: {
         root.dataset["kpAntiderivativeTemplateProfileId"] ?? "inactive",
       templateTraceRole:
         root.dataset["kpAntiderivativeTemplateTraceRole"] ?? "inactive",
+      ruleReferenceLawRefId:
+        root.dataset["kpAntiderivativeRuleReferenceLawRefId"] ?? "inactive",
+      ruleReferencePresence: Number(
+        root.dataset["kpAntiderivativeRuleReferencePresence"] ?? 0
+      ),
       templatePreviewPresence: Number(
         root.dataset["kpAntiderivativeTemplatePreviewPresence"] ?? 0
       ),
@@ -318,7 +325,8 @@ async function captureSample(input: {
       visibleText: [...root.querySelectorAll<HTMLElement>(
         "[data-kp-editor-equation-source], " +
         "[data-kp-editor-equation-target], " +
-        "[data-kp-equation-material-owner-id]"
+        "[data-kp-equation-material-owner-id], " +
+        "[data-kp-antiderivative-rule-reference]"
       )].filter(visible).map((element) => element.textContent ?? "")
         .join(" ").replace(/\s+/gu, " ").trim()
     };
@@ -396,13 +404,17 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     scaffold.templateProfileId !==
       "kp.rendering.native-katex.antiderivative-template-instantiation-profile.v2" ||
     scaffold.templateTraceRole !== "prospective" ||
+    scaffold.ruleReferenceLawRefId !==
+      "law.calculus.integral.power-rule" ||
+    scaffold.ruleReferencePresence !== 1 ||
     scaffold.templatePreviewPresence !== 1 ||
     scaffold.templateScaffoldPresence <= 0 ||
     scaffold.templateSyntaxPresence <= 0 ||
     scaffold.templateClosurePresence <= 0 ||
     scaffold.templateBindingProgress !== 0 ||
     scaffold.templateSyntaxResolutionProgress !== 0 ||
-    scaffold.visibleMaterialOwnerCount === 0
+    scaffold.visibleMaterialOwnerCount === 0 ||
+    !scaffold.visibleText.includes("n")
   ) {
     throw new Error(
       "Template scaffold frame must expose prospective Native KaTeX structure."
@@ -411,6 +423,7 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   const binding = required("template-binding");
   if (
     binding.templateTraceRole !== "prospective" ||
+    binding.ruleReferencePresence !== 1 ||
     binding.templateBindingProgress <= 0 ||
     binding.templateBindingProgress >= 1 ||
     binding.templateSyntaxPresence <= 0 ||
@@ -423,6 +436,7 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   const syntax = required("template-syntax");
   if (
     syntax.templateBindingProgress !== 1 ||
+    syntax.ruleReferencePresence !== 0 ||
     syntax.templateSyntaxPresence !== 1 ||
     syntax.templateClosurePresence !== 1 ||
     syntax.templateSyntaxResolutionProgress !== 1

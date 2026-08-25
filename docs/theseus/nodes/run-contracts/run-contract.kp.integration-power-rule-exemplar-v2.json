@@ -684,6 +684,55 @@
       "scope": "unrelated broad baseline",
       "checkedAt": "2026-08-25T15:41:11.084Z",
       "notes": "25 of 28 passed. Three pre-existing convergence/source-audit expectations fail on native-katex-endpoint-ownership closure and reader compositor source shape; none of the files changed in this visual slice are implicated, so this checkpoint does not broaden scope to repair them."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "human-checkpoint rule-reference repair",
+      "checkedAt": "2026-08-25T16:03:37.127Z",
+      "notes": "Prospective rule reference, deterministic choreography, exact endpoints, and integration authority passed 63 of 63 focused tests."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-catalogue",
+      "status": "passed",
+      "scope": "human-checkpoint rule-reference repair",
+      "checkedAt": "2026-08-25T16:03:38.435Z",
+      "notes": "Canonical Catalogue host rendered one visible law-pinned KaTeX rule reference, withdrew it at syntax resolution, and preserved lifecycle/theme/accessibility in two Chromium cases."
+    },
+    {
+      "command": "npm run visual:integration-power-rule",
+      "status": "passed",
+      "scope": "human-checkpoint rule-reference repair",
+      "checkedAt": "2026-08-25T16:03:39.467Z",
+      "notes": "Ten-state review capture visibly shows the general n-rule above the source receiver during preview and binding."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "human-checkpoint rule-reference repair",
+      "checkedAt": "2026-08-25T16:03:40.482Z",
+      "notes": "Application, Node, tests, Svelte, and domains passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "human-checkpoint rule-reference repair",
+      "checkedAt": "2026-08-25T16:03:41.538Z",
+      "notes": "Derivative semantic and operator-scope preservation passed 35 of 35 focused tests."
+    },
+    {
+      "command": "npm run test:browser:differentiation-exemplar",
+      "status": "passed",
+      "scope": "human-checkpoint rule-reference repair",
+      "checkedAt": "2026-08-25T16:03:42.577Z",
+      "notes": "Four Chromium derivative lifecycle and paint-ownership cases passed unchanged."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "human-checkpoint rule-reference repair",
+      "checkedAt": "2026-08-25T16:03:43.631Z",
+      "notes": "Dependency direction, framework neutrality, semantic boundaries, equation authority, governance, and cross-domain gates passed."
     }
   ],
   "allowedWork": [
@@ -821,7 +870,7 @@
     {
       "id": "next-action.kp.integration-power-rule.s18",
       "title": "Integration-human-visual-checkpoint",
-      "summary": "Human review confirmed the first repair is served but perceptually too similar to the prior fan-out. Strengthening only the exemplar-local presentation so a legible prospective fraction template with vacant carrier positions appears and holds before x and the source exponent bind; endpoints, operator salience, certified evaluations, and promotion boundary remain fixed.",
+      "summary": "Human review rejected the strengthened target skeleton because no rule template is perceptually present. Live-frame inspection confirms the asset exposes only dim endpoint fragments, not an authored prospective rule. Replace the misleading template claim with one exemplar-local, semantically authored power-rule presentation before binding, preserving exact endpoints, lineage, operator salience, dual ink knots, and no-promotion boundary.",
       "status": "in-progress"
     },
     {

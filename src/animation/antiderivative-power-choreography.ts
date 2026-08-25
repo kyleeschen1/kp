@@ -42,6 +42,13 @@ export interface KpAntiderivativePowerChoreographyPlan {
   readonly introducedSelectorIds: readonly string[];
   readonly ruleTemplateApplication: {
     readonly kind: "antiderivative-rule-template-instantiation";
+    readonly ruleReference: {
+      readonly semanticId: string;
+      readonly lawRefId: "law.calculus.integral.power-rule";
+      readonly parameterSymbol: "n";
+      readonly latex: string;
+      readonly sourceBindingSelectorId: string;
+    };
     readonly scaffoldSemanticEntityIds: readonly string[];
     readonly fixedSyntaxGroups: readonly [
       {
@@ -90,6 +97,7 @@ export interface KpAntiderivativePowerChoreographyFrame {
   };
   readonly ruleTemplateApplication: {
     readonly traceRole: "absent" | "prospective" | "live";
+    readonly ruleReferencePresence: number;
     readonly previewPresence: number;
     readonly scaffoldPresence: number;
     readonly bindingProgress: number;
@@ -123,10 +131,20 @@ export function createKpAntiderivativePowerChoreography(
     resolutionTransformation,
     bundle: animation.bundle
   });
+  const powerRuleLaw = expansionTransformation.lawRefs?.find((reference) =>
+    reference.id === "law.calculus.integral.power-rule" &&
+    reference.level === "strict"
+  );
+  if (powerRuleLaw === undefined) {
+    throw new Error(
+      `Animation ${animation.id} lacks its strict antiderivative power-rule law.`
+    );
+  }
   return compileKpAntiderivativePowerChoreography({
     id: `motion.${expansionTransformation.id}`,
     semanticRoles,
-    correspondenceMap: expansionTransformation.correspondenceMap
+    correspondenceMap: expansionTransformation.correspondenceMap,
+    lawRefId: "law.calculus.integral.power-rule"
   });
 }
 
@@ -134,6 +152,7 @@ export function compileKpAntiderivativePowerChoreography(input: {
   readonly id: string;
   readonly semanticRoles: KpAntiderivativePowerRuleSemanticRoles;
   readonly correspondenceMap: CorrespondenceMap;
+  readonly lawRefId: "law.calculus.integral.power-rule";
 }): KpAntiderivativePowerChoreographyPlan {
   if (input.id.trim() === "") {
     throw new Error("Antiderivative power choreography id must not be empty.");
@@ -180,17 +199,20 @@ export function compileKpAntiderivativePowerChoreography(input: {
       "Antiderivative choreography requires operator removal, base persistence, exponent fan-out, and six governed introductions."
     );
   }
-  const role = (
+  const sourceRole = (
     id: KpAntiderivativePowerRuleSemanticRoles["sourceRoles"][number]["id"]
-  ): string => {
+  ): KpAntiderivativePowerRuleSemanticRoles["sourceRoles"][number] => {
     const found = input.semanticRoles.sourceRoles.find((candidate) =>
       candidate.id === id
     );
     if (found === undefined) {
       throw new Error(`Antiderivative choreography lacks source role ${id}.`);
     }
-    return found.selectorId;
+    return found;
   };
+  const role = (
+    id: KpAntiderivativePowerRuleSemanticRoles["sourceRoles"][number]["id"]
+  ): string => sourceRole(id).selectorId;
   const group = (
     id: KpAntiderivativePowerRuleSemanticRoles["groups"][number]["id"]
   ): string => {
@@ -238,6 +260,13 @@ export function compileKpAntiderivativePowerChoreography(input: {
     )),
     ruleTemplateApplication: Object.freeze({
       kind: "antiderivative-rule-template-instantiation" as const,
+      ruleReference: Object.freeze({
+        semanticId: `${input.id}.prospective-rule-reference`,
+        lawRefId: input.lawRefId,
+        parameterSymbol: "n" as const,
+        latex: `\\int ${sourceRole("source.integrand-base").label}^{n}\\,d${sourceRole("source.integration-variable").label} \\longmapsto \\frac{${sourceRole("source.integrand-base").label}^{n+1}}{n+1}+C\\quad(n\\ne -1)`,
+        sourceBindingSelectorId: exponent.sourceSelectorIds[0]!
+      }),
       scaffoldSemanticEntityIds: Object.freeze([
         group("expanded.exact-quotient")
       ]),
@@ -345,9 +374,12 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
   const preview = phaseProgress(progress, 0, 0.18);
   const binding = phaseProgress(progress, 0.26, 0.82);
   const syntaxResolution = phaseProgress(progress, 0.82, 0.92);
-  // The fixed +1 grammar and +C belong to the prospective rule template.
-  // Showing them before carrier motion creates readable vacancies without
-  // inventing placeholder glyphs or boxes that are absent from the endpoint.
+  const ruleReferencePresence = roundProgress(
+    preview * (1 - syntaxResolution)
+  );
+  // The fixed +1 grammar and +C form the receiving expression, while the
+  // pinned law reference makes the general rule perceptible. Keeping these
+  // roles separate avoids pretending dim endpoint fragments are a template.
   const scaffoldPresence = roundProgress(
     preview * (0.86 + 0.14 * syntaxResolution)
   );
@@ -363,6 +395,7 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
       : preview > 0
         ? "prospective" as const
         : "absent" as const,
+    ruleReferencePresence,
     previewPresence: preview,
     scaffoldPresence,
     bindingProgress: binding,

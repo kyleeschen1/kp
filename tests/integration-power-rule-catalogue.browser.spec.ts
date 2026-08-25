@@ -104,6 +104,18 @@ test("integration power rule uses governed transit and two certified ink knots",
     .toBeGreaterThan(0);
   await expect.poll(() => visibleMaterialOwners(stage)).toBeGreaterThan(0);
   expect(await visiblePaintOwnerKinds(stage)).toEqual(["material"]);
+  const ruleReference = stage.locator(
+    "[data-kp-antiderivative-rule-reference]"
+  );
+  await expect(ruleReference).toHaveCount(1);
+  await expect(ruleReference).toHaveAttribute(
+    "data-kp-antiderivative-rule-law-ref-id",
+    "law.calculus.integral.power-rule"
+  );
+  await expect(ruleReference).toHaveAttribute("aria-hidden", "false");
+  await expect(ruleReference.locator(".katex")).toBeVisible();
+  await expect(ruleReference).toContainText("n");
+  await expect.poll(() => renderedOpacity(ruleReference)).toBe(1);
 
   await seek.fill("0.43");
   await expectTransitReady(stage);
@@ -113,6 +125,8 @@ test("integration power rule uses governed transit and two certified ink knots",
   await expect(visibleConstant).toHaveCount(1);
   await expect.poll(() => renderedOpacity(visibleConstant))
     .toBeGreaterThan(0);
+  await expect(ruleReference).toHaveAttribute("aria-hidden", "true");
+  await expect.poll(() => renderedOpacity(ruleReference)).toBe(0);
 
   await seek.fill("0.5");
   await expect(activeTransition(stage)).toHaveAttribute(
@@ -178,6 +192,13 @@ test("integration Catalogue lifecycle restores, rewinds, themes, and exposes sta
     "material-scene"
   );
   const lightColor = await visibleMaterialColor(stage);
+  const lightRuleReference = stage.locator(
+    "[data-kp-antiderivative-rule-reference]"
+  );
+  await expect(lightRuleReference).toHaveAttribute("aria-hidden", "false");
+  const lightRuleColor = await lightRuleReference.evaluate((element) =>
+    getComputedStyle(element).color
+  );
 
   await page.goto(`/?artifact=${animationId}&playhead=0.28&theme=dark`);
   const darkPlayer = cataloguePlayer(page);
@@ -185,6 +206,14 @@ test("integration Catalogue lifecycle restores, rewinds, themes, and exposes sta
   await expectTransitReady(darkStage);
   const darkColor = await visibleMaterialColor(darkStage);
   expect(darkColor).not.toBe(lightColor);
+  const darkRuleReference = darkStage.locator(
+    "[data-kp-antiderivative-rule-reference]"
+  );
+  await expect(darkRuleReference).toHaveAttribute("aria-hidden", "false");
+  const darkRuleColor = await darkRuleReference.evaluate((element) =>
+    getComputedStyle(element).color
+  );
+  expect(darkRuleColor).not.toBe(lightRuleColor);
 
   await setPresentation(darkPlayer, "reduced-motion");
   await expect(darkStage).toHaveAttribute(
@@ -195,6 +224,7 @@ test("integration Catalogue lifecycle restores, rewinds, themes, and exposes sta
     "data-kp-antiderivative-power-visual-owner",
     /source-native|target-native/
   );
+  await expect(darkRuleReference).toHaveAttribute("aria-hidden", "true");
   await setPresentation(darkPlayer, "static");
   await expect(darkStage).toHaveAttribute(
     "data-kp-antiderivative-power-accessibility-projection",
