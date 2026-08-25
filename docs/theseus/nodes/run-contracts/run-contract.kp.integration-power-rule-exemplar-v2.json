@@ -75,6 +75,20 @@
       "scope": "slice s02 exact rational",
       "checkedAt": "2026-08-24T23:55:04.356Z",
       "notes": "Application, Node, test, Svelte, and domain typechecks accept the normalized rational integration term."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s03 semantic roles",
+      "checkedAt": "2026-08-24T23:59:55.716Z",
+      "notes": "Semantic tests cover all source, expanded, and target roles, stable scope and quotient groups, dx binding, successor provenance, required plus C, and exact quotient constraints."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s03 semantic roles",
+      "checkedAt": "2026-08-24T23:59:57.011Z",
+      "notes": "The closed integration role and group vocabulary passes all TypeScript, Svelte, and domain checks."
     }
   ],
   "allowedWork": [
@@ -122,7 +136,8 @@
     {
       "id": "next-action.kp.integration-power-rule.s03",
       "title": "Integration-semantic-selector-roles",
-      "status": "planned"
+      "summary": "Declared a closed renderer-neutral role vocabulary for all three states, stable semantic groups for the integrand, dx binding, both successor expressions, and exact quotients, plus constraints for exponent provenance and required plus C. Scoped tests and full typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.integration-power-rule.s04",
