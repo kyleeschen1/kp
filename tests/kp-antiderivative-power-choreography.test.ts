@@ -67,6 +67,9 @@ test("integration first transition compiles its governed scope and lineage", () 
     semanticId: `${plan.id}.prospective-rule-reference`,
     lawRefId: "law.calculus.integral.power-rule",
     parameterSymbol: "n",
+    baseSymbol: "x",
+    integrationVariable: "x",
+    boundValue: "2",
     latex:
       "\\int x^{n}\\,dx \\longmapsto \\frac{x^{n+1}}{n+1}+C\\quad(n\\ne -1)",
     sourceBindingSelectorId:
@@ -140,6 +143,7 @@ test("rule-template projection previews complete grammar before binding", () => 
   assert.equal(before.ruleTemplateApplication.traceRole, "absent");
   assert.equal(before.ruleTemplateApplication.ruleReferencePresence, 0);
   assert.equal(before.ruleTemplateApplication.ruleReferenceFocus, 0);
+  assert.equal(before.ruleTemplateApplication.ruleSlotBindingProgress, 0);
   assert.equal(before.ruleTemplateApplication.previewPresence, 0);
   assert.equal(before.ruleTemplateApplication.scaffoldPresence, 0);
   assert.equal(before.ruleTemplateApplication.bindingProgress, 0);
@@ -151,6 +155,7 @@ test("rule-template projection previews complete grammar before binding", () => 
   assert.equal(preview.ruleTemplateApplication.traceRole, "prospective");
   assert.equal(preview.ruleTemplateApplication.ruleReferencePresence, 1);
   assert.equal(preview.ruleTemplateApplication.ruleReferenceFocus, 1);
+  assert.equal(preview.ruleTemplateApplication.ruleSlotBindingProgress, 0);
   assert.equal(preview.ruleTemplateApplication.previewPresence, 1);
   assert.ok(preview.ruleTemplateApplication.scaffoldPresence > 0);
   assert.equal(preview.ruleTemplateApplication.bindingProgress, 0);
@@ -167,8 +172,9 @@ test("rule-template projection previews complete grammar before binding", () => 
   });
   assert.equal(binding.ruleTemplateApplication.traceRole, "prospective");
   assert.equal(binding.ruleTemplateApplication.ruleReferencePresence, 1);
-  assert.ok(binding.ruleTemplateApplication.ruleReferenceFocus > 0);
-  assert.ok(binding.ruleTemplateApplication.ruleReferenceFocus < 1);
+  assert.equal(binding.ruleTemplateApplication.ruleReferenceFocus, 1);
+  assert.ok(binding.ruleTemplateApplication.ruleSlotBindingProgress > 0);
+  assert.ok(binding.ruleTemplateApplication.ruleSlotBindingProgress < 1);
   assert.ok(binding.ruleTemplateApplication.bindingProgress >
     binding.ruleTemplateApplication.syntaxResolutionProgress);
   assert.ok(binding.ruleTemplateApplication.syntaxPresence > 0);
@@ -182,6 +188,7 @@ test("rule-template projection previews complete grammar before binding", () => 
   assert.equal(resolved.ruleTemplateApplication.traceRole, "live");
   assert.equal(resolved.ruleTemplateApplication.ruleReferencePresence, 0);
   assert.equal(resolved.ruleTemplateApplication.ruleReferenceFocus, 0);
+  assert.equal(resolved.ruleTemplateApplication.ruleSlotBindingProgress, 1);
   assert.equal(resolved.ruleTemplateApplication.scaffoldPresence, 1);
   assert.equal(resolved.ruleTemplateApplication.bindingProgress, 1);
   assert.equal(resolved.ruleTemplateApplication.syntaxPresence, 1);

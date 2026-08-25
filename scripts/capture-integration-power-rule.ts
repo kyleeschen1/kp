@@ -34,14 +34,14 @@ const samples = [
   },
   {
     id: "template-scaffold",
-    label: "Rule application · authored rule reference and receiver",
+    label: "Rule application · generic n-slots receive the instance",
     progress: 0.24,
     theme: "dark",
     viewport: desktopViewport
   },
   {
     id: "template-binding",
-    label: "Rule application · source binds into template",
+    label: "Rule application · n binds visibly to 2",
     progress: 0.34,
     theme: "dark",
     viewport: desktopViewport
@@ -108,6 +108,9 @@ interface CaptureEvidence {
   readonly ruleReferenceFocus: number;
   readonly ruleReferenceWidth: number;
   readonly ruleReferenceHeight: number;
+  readonly ruleSlotCount: number;
+  readonly ruleSlotBindingProgress: number;
+  readonly ruleBindingCuePresence: number;
   readonly templatePreviewPresence: number;
   readonly templateScaffoldPresence: number;
   readonly templateBindingProgress: number;
@@ -301,6 +304,15 @@ async function captureSample(input: {
       ),
       ruleReferenceWidth: ruleReferenceRect?.width ?? 0,
       ruleReferenceHeight: ruleReferenceRect?.height ?? 0,
+      ruleSlotCount: ruleReference?.querySelectorAll(
+        "[data-kp-antiderivative-rule-slot]"
+      ).length ?? 0,
+      ruleSlotBindingProgress: Number(
+        root.dataset["kpAntiderivativeRuleSlotBindingProgress"] ?? 0
+      ),
+      ruleBindingCuePresence: Number(
+        root.dataset["kpAntiderivativeRuleBindingCuePresence"] ?? 0
+      ),
       templatePreviewPresence: Number(
         root.dataset["kpAntiderivativeTemplatePreviewPresence"] ?? 0
       ),
@@ -425,6 +437,9 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     scaffold.ruleReferenceFocus !== 1 ||
     scaffold.ruleReferenceWidth <= 300 ||
     scaffold.ruleReferenceHeight <= 30 ||
+    scaffold.ruleSlotCount !== 3 ||
+    scaffold.ruleSlotBindingProgress !== 0 ||
+    scaffold.ruleBindingCuePresence !== 0 ||
     scaffold.templatePreviewPresence !== 1 ||
     scaffold.templateScaffoldPresence <= 0 ||
     scaffold.templateSyntaxPresence <= 0 ||
@@ -443,7 +458,11 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     binding.templateTraceRole !== "prospective" ||
     binding.ruleReferencePresence !== 1 ||
     binding.ruleReferenceFocus <= 0 ||
-    binding.ruleReferenceFocus >= 1 ||
+    binding.ruleReferenceFocus !== 1 ||
+    binding.ruleSlotCount !== 3 ||
+    binding.ruleSlotBindingProgress <= 0 ||
+    binding.ruleSlotBindingProgress >= 1 ||
+    binding.ruleBindingCuePresence <= 0 ||
     binding.templateBindingProgress <= 0 ||
     binding.templateBindingProgress >= 1 ||
     binding.templateSyntaxPresence <= 0 ||
@@ -458,6 +477,8 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     syntax.templateBindingProgress !== 1 ||
     syntax.ruleReferencePresence !== 0 ||
     syntax.ruleReferenceFocus !== 0 ||
+    syntax.ruleSlotBindingProgress !== 1 ||
+    syntax.ruleBindingCuePresence !== 0 ||
     syntax.templateSyntaxPresence !== 1 ||
     syntax.templateClosurePresence !== 1 ||
     syntax.templateSyntaxResolutionProgress !== 1

@@ -121,9 +121,33 @@ test("integration power rule uses governed transit and two certified ink knots",
     "data-kp-semantic-salience-level",
     "focus"
   );
-  await expect(ruleReference.locator(".katex")).toBeVisible();
+  await expect(ruleReference.locator(".katex").first()).toBeVisible();
   await expect(ruleReference).toContainText("n");
   await expect.poll(() => renderedOpacity(ruleReference)).toBe(1);
+  const ruleSlots = ruleReference.locator(
+    "[data-kp-antiderivative-rule-slot]"
+  );
+  const templateSymbols = ruleReference.locator(
+    ".editor-equation-stage__antiderivative-rule-slot-template"
+  );
+  const boundSymbols = ruleReference.locator(
+    ".editor-equation-stage__antiderivative-rule-slot-binding"
+  );
+  const bindingCue = ruleReference.locator(
+    "[data-kp-antiderivative-rule-binding-cue]"
+  );
+  await expect(ruleSlots).toHaveCount(3);
+  await expect(templateSymbols).toHaveCount(3);
+  await expect(boundSymbols).toHaveCount(3);
+  await expect(bindingCue).toHaveCount(1);
+  await expect(bindingCue).toHaveAttribute(
+    "data-kp-antiderivative-rule-binding-cue",
+    "n:2"
+  );
+  await expect.poll(() => renderedOpacity(templateSymbols.first())).toBe(1);
+  await expect.poll(() => renderedOpacity(boundSymbols.first())).toBe(0);
+  await expect.poll(() => renderedOpacity(bindingCue)).toBe(0);
+  await expect(boundSymbols.first()).toContainText("2");
   const ruleReferenceBox = await ruleReference.boundingBox();
   expect(ruleReferenceBox?.width ?? 0).toBeGreaterThan(300);
   expect(ruleReferenceBox?.height ?? 0).toBeGreaterThan(30);
@@ -134,7 +158,30 @@ test("integration power rule uses governed transit and two certified ink knots",
   await expect.poll(() => contextualReceivers.count()).toBeGreaterThan(0);
   await expect(contextualReceivers.first()).toHaveCSS(
     "filter",
-    "brightness(0.32)"
+    "brightness(0.22)"
+  );
+
+  await seek.fill("0.34");
+  await expectTransitReady(stage);
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-rule-reference-focus",
+    "1.0000"
+  );
+  await expect.poll(async () => Number(await stage.getAttribute(
+    "data-kp-antiderivative-rule-slot-binding-progress"
+  ))).toBeGreaterThan(0);
+  await expect.poll(async () => Number(await stage.getAttribute(
+    "data-kp-antiderivative-rule-slot-binding-progress"
+  ))).toBeLessThan(1);
+  await expect.poll(() => renderedOpacity(templateSymbols.first()))
+    .toBeLessThan(1);
+  await expect.poll(() => renderedOpacity(boundSymbols.first()))
+    .toBeGreaterThan(0);
+  await expect.poll(() => renderedOpacity(bindingCue)).toBeGreaterThan(0);
+  await expect(bindingCue).toContainText("n←2");
+  await expect(contextualReceivers.first()).toHaveCSS(
+    "filter",
+    "brightness(0.22)"
   );
 
   await seek.fill("0.43");
@@ -147,6 +194,11 @@ test("integration power rule uses governed transit and two certified ink knots",
     .toBeGreaterThan(0);
   await expect(ruleReference).toHaveAttribute("aria-hidden", "true");
   await expect.poll(() => renderedOpacity(ruleReference)).toBe(0);
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-rule-slot-binding-progress",
+    "1.0000"
+  );
+  await expect.poll(() => renderedOpacity(bindingCue)).toBe(0);
   await expect(contextualReceivers).toHaveCount(0);
 
   await seek.fill("0.5");

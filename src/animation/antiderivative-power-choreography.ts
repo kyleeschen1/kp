@@ -46,6 +46,9 @@ export interface KpAntiderivativePowerChoreographyPlan {
       readonly semanticId: string;
       readonly lawRefId: "law.calculus.integral.power-rule";
       readonly parameterSymbol: "n";
+      readonly baseSymbol: string;
+      readonly integrationVariable: string;
+      readonly boundValue: string;
       readonly latex: string;
       readonly sourceBindingSelectorId: string;
     };
@@ -99,6 +102,7 @@ export interface KpAntiderivativePowerChoreographyFrame {
     readonly traceRole: "absent" | "prospective" | "live";
     readonly ruleReferencePresence: number;
     readonly ruleReferenceFocus: number;
+    readonly ruleSlotBindingProgress: number;
     readonly previewPresence: number;
     readonly scaffoldPresence: number;
     readonly bindingProgress: number;
@@ -265,6 +269,9 @@ export function compileKpAntiderivativePowerChoreography(input: {
         semanticId: `${input.id}.prospective-rule-reference`,
         lawRefId: input.lawRefId,
         parameterSymbol: "n" as const,
+        baseSymbol: sourceRole("source.integrand-base").label,
+        integrationVariable: sourceRole("source.integration-variable").label,
+        boundValue: sourceRole("source.integrand-exponent").label,
         latex: `\\int ${sourceRole("source.integrand-base").label}^{n}\\,d${sourceRole("source.integration-variable").label} \\longmapsto \\frac{${sourceRole("source.integrand-base").label}^{n+1}}{n+1}+C\\quad(n\\ne -1)`,
         sourceBindingSelectorId: exponent.sourceSelectorIds[0]!
       }),
@@ -378,9 +385,9 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
   const ruleReferencePresence = roundProgress(
     preview * (1 - syntaxResolution)
   );
-  const ruleReferenceFocus = roundProgress(
-    ruleReferencePresence * (1 - binding)
-  );
+  // The rule remains the focal object through parameter binding. Attention
+  // transfers to the concrete receiver only when the instantiated rule exits.
+  const ruleReferenceFocus = ruleReferencePresence;
   // The fixed +1 grammar and +C form the receiving expression, while the
   // pinned law reference makes the general rule perceptible. Keeping these
   // roles separate avoids pretending dim endpoint fragments are a template.
@@ -401,6 +408,7 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
         : "absent" as const,
     ruleReferencePresence,
     ruleReferenceFocus,
+    ruleSlotBindingProgress: binding,
     previewPresence: preview,
     scaffoldPresence,
     bindingProgress: binding,
