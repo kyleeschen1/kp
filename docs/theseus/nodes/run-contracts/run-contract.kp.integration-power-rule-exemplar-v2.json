@@ -138,6 +138,55 @@
       "scope": "slice s06 governed construction",
       "checkedAt": "2026-08-25T00:12:40.918Z",
       "notes": "All dependency, semantic, evaluation, equation-authority, and cross-domain conformance ratchets pass with the new authoring fixture."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s07 discovery and coverage",
+      "checkedAt": "2026-08-25T00:20:58.635Z",
+      "notes": "The exact governed asset projects as Exemplar, the eight-case ledger is tracked, and promotion remains absent."
+    },
+    {
+      "command": "npm run check:equation-asset-manifest",
+      "status": "passed",
+      "scope": "slice s07 generated freshness",
+      "checkedAt": "2026-08-25T00:21:00.114Z",
+      "notes": "The canonical equation asset manifest is current."
+    },
+    {
+      "command": "npm run check:animation-library-display-catalog",
+      "status": "passed",
+      "scope": "slice s07 generated freshness",
+      "checkedAt": "2026-08-25T00:21:01.403Z",
+      "notes": "Catalogue discovery metadata is current."
+    },
+    {
+      "command": "npm run check:equation-operation-discovery-catalog",
+      "status": "passed",
+      "scope": "slice s07 generated freshness",
+      "checkedAt": "2026-08-25T00:21:02.699Z",
+      "notes": "The bounded equation operation discovery catalog is current."
+    },
+    {
+      "command": "npm run check:animation-transformation-coverage",
+      "status": "passed",
+      "scope": "slice s07 generated freshness",
+      "checkedAt": "2026-08-25T00:21:04.007Z",
+      "notes": "The readiness and symbolic case projections are current."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s07 discovery and coverage",
+      "checkedAt": "2026-08-25T00:21:05.483Z",
+      "notes": "All application, Node, test, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s07 discovery and coverage",
+      "checkedAt": "2026-08-25T00:21:06.771Z",
+      "notes": "Dependency, semantic, equation-authority, governance, and cross-domain architecture gates pass."
     }
   ],
   "allowedWork": [
@@ -209,7 +258,8 @@
     {
       "id": "next-action.kp.integration-power-rule.s07",
       "title": "Discovery-and-coverage-projections",
-      "status": "planned"
+      "summary": "Projected the exact Catalogue asset as Exemplar, registered the bounded eight-case integration ledger, regenerated canonical manifests and coverage, and preserved missing family-promotion and general-generation evidence.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.integration-power-rule.s08",

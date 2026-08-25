@@ -15,8 +15,8 @@
     "byStatus": {
       "Direct": 11,
       "Registered": 4,
-      "Exemplar": 7,
-      "Missing": 16
+      "Exemplar": 8,
+      "Missing": 15
     }
   },
   "symbolicMathematics": {
@@ -155,8 +155,8 @@
         "byStatus": {
           "Direct": 0,
           "Registered": 0,
-          "Exemplar": 0,
-          "Missing": 2
+          "Exemplar": 1,
+          "Missing": 1
         }
       },
       {
@@ -2834,7 +2834,7 @@
         "kind": "transformation-family",
         "authorityId": "family.equation.integration.v1"
       },
-      "status": "Missing",
+      "status": "Exemplar",
       "requirements": [
         {
           "id": "requirement.equation.integration.normalizer",
@@ -2861,6 +2861,16 @@
           "evidenceSourceIds": []
         },
         {
+          "id": "requirement.equation.integration.power-rule-exemplar",
+          "kind": "canonical-exemplar",
+          "authorityId": "animation.generated.calculus.integral.power-rule-quadratic",
+          "summary": "The bounded monic-quadratic asset demonstrates one governed indefinite power-rule rewrite without implying general integration support.",
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "animation.generated.calculus.integral.power-rule-quadratic"
+          ]
+        },
+        {
           "id": "requirement.equation.integration.authoring",
           "kind": "authoring-surface",
           "authorityId": "authoring.equation.integration.v1",
@@ -2885,13 +2895,401 @@
         "requirement.equation.integration.authoring",
         "requirement.equation.integration.corpus"
       ],
-      "exemplarLinks": [],
+      "exemplarLinks": [
+        {
+          "assetId": "animation.generated.calculus.integral.power-rule-quadratic",
+          "title": "Generated integral power rule for a quadratic",
+          "href": "/?artifact=animation.generated.calculus.integral.power-rule-quadratic"
+        }
+      ],
       "evidenceTensions": [
-        "planned-capability-without-exact-asset"
+        "playable-exemplar-without-general-generation"
       ],
       "caseCoverage": {
-        "status": "not-declared",
-        "promotionGate": "required-before-direct"
+        "status": "tracked",
+        "authorityId": "coverage.equation.integration-power-rule-cases.v1",
+        "caseCount": 8,
+        "cases": [
+          {
+            "id": "integration.canonical-monic-quadratic",
+            "operationClass": "canonical-monic-quadratic",
+            "title": "Integrate the monic quadratic exemplar",
+            "sourceLatex": "\\int x^2\\,dx",
+            "targetLatex": "\\frac{x^3}{3}+C",
+            "outcome": "animated-transition",
+            "requiredEvidenceIds": [
+              "animation.generated.calculus.integral.power-rule-quadratic",
+              "law.calculus.integral.power-rule",
+              "src/semantic/antiderivative-power-rule-semantics.ts"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "src/editor/antiderivative-power-semantic-latex.ts"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "src/semantic/antiderivative-power-rule-semantics.ts"
+                ]
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "kp.semantic-motion.expand-antiderivative",
+                  "kp.semantic-motion.resolve-antiderivative"
+                ]
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "animation.generated.calculus.integral.power-rule-quadratic"
+                ]
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "src/authoring/governed-integration-power-rule-fixture.ts",
+                  "coverage.equation.integration-power-rule-cases.v1"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "integration.negative-one-exponent",
+            "operationClass": "negative-one-exponent",
+            "title": "Route the logarithmic exception",
+            "sourceLatex": "\\int x^{-1}\\,dx",
+            "outcome": "typed-gap",
+            "requiredEvidenceIds": [
+              "operation.equation.integrate-logarithmic-case.v1"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "shape.compound.integral-operator"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "coverage.equation.integration-power-rule-cases.v1"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "integration.arbitrary-exponent",
+            "operationClass": "arbitrary-exponent",
+            "title": "Defer a symbolic exponent",
+            "sourceLatex": "\\int x^n\\,dx",
+            "outcome": "typed-gap",
+            "requiredEvidenceIds": [
+              "normalizer.equation.symbolic-integration-power.v1"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "shape.compound.integral-operator"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "coverage.equation.integration-power-rule-cases.v1"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "integration.definite-integral",
+            "operationClass": "definite-integral",
+            "title": "Defer definite bounds",
+            "sourceLatex": "\\int_0^1 x^2\\,dx",
+            "outcome": "typed-gap",
+            "requiredEvidenceIds": [
+              "operation.equation.integrate-definite-power.v1"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "shape.compound.integral-operator"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "coverage.equation.integration-power-rule-cases.v1"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "integration.substitution",
+            "operationClass": "substitution",
+            "title": "Defer substitution",
+            "sourceLatex": "\\int 2x\\cos(x^2)\\,dx",
+            "outcome": "typed-gap",
+            "requiredEvidenceIds": [
+              "operation.equation.integration-substitution.v1"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "shape.compound.integral-operator"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "coverage.equation.integration-power-rule-cases.v1"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "integration.area-accumulation",
+            "operationClass": "area-accumulation",
+            "title": "Defer area accumulation",
+            "sourceLatex": "\\operatorname{Area}_{[0,1]}(x^2)",
+            "outcome": "typed-gap",
+            "requiredEvidenceIds": [
+              "operation.graph.area-accumulation.v1"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "shape.compound.integral-operator"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "coverage.equation.integration-power-rule-cases.v1"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "integration.fundamental-theorem",
+            "operationClass": "fundamental-theorem",
+            "title": "Defer Fundamental Theorem choreography",
+            "sourceLatex": "\\frac{d}{dx}\\int_0^x t^2\\,dt",
+            "outcome": "typed-gap",
+            "requiredEvidenceIds": [
+              "operation.equation.fundamental-theorem-calculus.v1"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "shape.compound.integral-operator"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "coverage.equation.integration-power-rule-cases.v1"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "integration.unsupported-edited-variant",
+            "operationClass": "unsupported-edited-variant",
+            "title": "Reject an unbound edited variable",
+            "sourceLatex": "\\int y^2\\,dx",
+            "outcome": "typed-gap",
+            "requiredEvidenceIds": [
+              "normalizer.equation.integration-variable-binding.v1"
+            ],
+            "maturity": [
+              {
+                "dimensionId": "notation-paintable",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "shape.compound.integral-operator"
+                ]
+              },
+              {
+                "dimensionId": "semantic-representable",
+                "status": "missing",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "operation-authoritative",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "exemplar-executable",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "family-promoted",
+                "status": "not-applicable",
+                "evidenceSourceIds": []
+              },
+              {
+                "dimensionId": "generation-governed",
+                "status": "satisfied",
+                "evidenceSourceIds": [
+                  "coverage.equation.integration-power-rule-cases.v1"
+                ]
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -3192,12 +3590,12 @@
         {
           "assetId": "animation.equation.finite-sum-expansion.v1",
           "title": "Expand a finite sum",
-          "href": "/?animation=editor-animation.animation.equation.finite-sum-expansion.v1"
+          "href": "/?artifact=animation.equation.finite-sum-expansion.v1"
         },
         {
           "assetId": "animation.equation.finite-product-expansion.v1",
           "title": "Expand a finite product",
-          "href": "/?animation=editor-animation.animation.equation.finite-product-expansion.v1"
+          "href": "/?artifact=animation.equation.finite-product-expansion.v1"
         }
       ],
       "evidenceTensions": [

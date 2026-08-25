@@ -247,6 +247,86 @@
     },
     {
       "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.algebra.log-product.equivalence-frame",
+      "title": "Keep the logarithm product law as an equivalence",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.algebra.log-product.equivalence-frame",
+        "transformationIds": [
+          "transformation.log-product.xy-to-sum"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "The approved log-product operation projected as a persistent equivalence frame.",
+        "tags": [
+          "algebra",
+          "animation",
+          "editor",
+          "equation",
+          "equivalence",
+          "katex",
+          "logarithm",
+          "persistent-state"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "log-product",
+        "familyId": "logarithm",
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-c-generated-bespoke-diagnostic-static"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "log-product",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/log-product.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.algebra.log-product.equivalence-frame",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-8a21d2c3",
+          "fnv1a32-fde9de09",
+          "fnv1a32-7c792762"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.log-product.equivalence-frame.native-katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.animation.algebra.log-product.equivalence-frame",
+        "representations": [
+          {
+            "id": "editor-animation.animation.algebra.log-product.equivalence-frame",
+            "label": "Keep the logarithm product law as an equivalence",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.algebra.log-product.equivalence-frame",
+            "role": "canonical-host"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
       "assetId": "animation.algebra.log-product.product-to-sum",
       "title": "Expand a logarithm of a product",
       "semanticSource": {
@@ -829,6 +909,162 @@
     },
     {
       "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.equation.finite-product-expansion.v1",
+      "title": "Expand a finite product",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.equation.finite-product-expansion.v1",
+        "transformationIds": [
+          "transformation.equation.finite-product-expand.v1"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "Expand a finite product",
+        "tags": [
+          "algebra",
+          "animation",
+          "editor",
+          "equation",
+          "katex",
+          "product"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "finite-binder-expansion",
+        "familyId": "finite-binder",
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-c-generated-bespoke-diagnostic-static"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "algebra",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/algebra.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.equation.finite-product-expansion.v1",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-4bd81c62",
+          "fnv1a32-79893786",
+          "fnv1a32-184d704c"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.finite-product-expansion.canonical-native-katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "labelled-semantic-stage"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "semantic-stage-aria-label",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.animation.equation.finite-product-expansion.v1",
+        "representations": [
+          {
+            "id": "editor-animation.animation.equation.finite-product-expansion.v1",
+            "label": "Expand a finite product",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.equation.finite-product-expansion.v1",
+            "role": "canonical-host"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
+      "assetId": "animation.equation.finite-sum-expansion.v1",
+      "title": "Expand a finite sum",
+      "semanticSource": {
+        "kind": "catalog-animation-asset",
+        "sourcePath": "src/animation/catalog.ts",
+        "primaryDescriptorId": "editor-animation.animation.equation.finite-sum-expansion.v1",
+        "transformationIds": [
+          "transformation.equation.finite-sum-expand.v1"
+        ]
+      },
+      "pedagogicalIntent": {
+        "summary": "Expand a finite sum",
+        "tags": [
+          "algebra",
+          "animation",
+          "editor",
+          "equation",
+          "katex",
+          "sum"
+        ]
+      },
+      "capabilities": {
+        "renderTargetKinds": [
+          "equation"
+        ],
+        "selectedCapabilityId": "finite-binder-expansion",
+        "familyId": "finite-binder",
+        "disposition": "adapter-backed",
+        "migrationWave": "wave-c-generated-bespoke-diagnostic-static"
+      },
+      "lazyLoader": {
+        "kind": "catalog-pack",
+        "packId": "algebra",
+        "loaderSourcePath": "src/animation/catalog-loader.ts",
+        "packSourcePath": "src/animation/catalog-packs/algebra.ts"
+      },
+      "staticTruth": {
+        "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json",
+        "route": {
+          "href": "/?artifact=animation.equation.finite-sum-expansion.v1",
+          "selectionParameter": "artifact"
+        },
+        "semanticEndpointFingerprints": [
+          "fnv1a32-11474210",
+          "fnv1a32-5e197e06",
+          "fnv1a32-10269382"
+        ],
+        "nativeSettlement": {
+          "slotKind": "equation",
+          "adapterId": "editor-animation-surface.finite-sum-expansion.canonical-native-katex",
+          "adapterStatus": "ready",
+          "endpointAuthority": "semantic-native-katex"
+        }
+      },
+      "accessibilityTruth": {
+        "playerLabel": "descriptor-title-animation-player",
+        "mathSemantics": "katex-mathml",
+        "reducedMotionAttribute": "data-kp-editor-animation-accessibility-mode",
+        "reducedMotionValue": "reduced-motion"
+      },
+      "catalogue": {
+        "availability": "playable",
+        "canonicalFormat": "legacy",
+        "featured": false,
+        "primaryRepresentationId": "editor-animation.animation.equation.finite-sum-expansion.v1",
+        "representations": [
+          {
+            "id": "editor-animation.animation.equation.finite-sum-expansion.v1",
+            "label": "Expand a finite sum",
+            "kind": "editor",
+            "href": "/?animation=editor-animation.animation.equation.finite-sum-expansion.v1",
+            "role": "canonical-host"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-asset-manifest-entry.v1",
       "assetId": "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
       "title": "Give one third a denominator of six",
       "semanticSource": {
@@ -1234,7 +1470,8 @@
         "sourcePath": "src/animation/catalog.ts",
         "primaryDescriptorId": "editor-animation.animation.generated.calculus.derivative.power-rule-x-cubed",
         "transformationIds": [
-          "transform.generated.calculus.derivative.power-rule-x-cubed.apply-power-rule"
+          "transform.generated.calculus.derivative.power-rule-x-cubed.apply-power-rule",
+          "transform.generated.calculus.derivative.power-rule-x-cubed.evaluate-exponent-decrement"
         ]
       },
       "pedagogicalIntent": {
@@ -1272,9 +1509,11 @@
           "selectionParameter": "artifact"
         },
         "semanticEndpointFingerprints": [
-          "fnv1a32-c9083e0c",
+          "fnv1a32-7a6f1c1f",
           "fnv1a32-e9c63ea2",
-          "fnv1a32-66ca4318"
+          "fnv1a32-2f8f8557",
+          "fnv1a32-54ba0d75",
+          "fnv1a32-8b6e9357"
         ],
         "nativeSettlement": {
           "slotKind": "equation",
@@ -1443,10 +1682,10 @@
         },
         "semanticEndpointFingerprints": [
           "fnv1a32-38020232",
-          "fnv1a32-0f2e05e8",
-          "fnv1a32-84555696",
+          "fnv1a32-fb0726e7",
+          "fnv1a32-0758ac0d",
           "fnv1a32-29535789",
-          "fnv1a32-19faf147"
+          "fnv1a32-d501505b"
         ],
         "nativeSettlement": {
           "slotKind": "equation",
@@ -2369,14 +2608,14 @@
           "selectionParameter": "artifact"
         },
         "semanticEndpointFingerprints": [
-          "fnv1a32-6d57d952",
+          "fnv1a32-71bb56ff",
           "fnv1a32-0c1d2abc",
           "fnv1a32-460d6cad",
           "fnv1a32-c5621072",
           "fnv1a32-33d4add2",
           "fnv1a32-473201e4",
           "fnv1a32-47d51947",
-          "fnv1a32-d90fe40d",
+          "fnv1a32-8bc45b09",
           "fnv1a32-fa40ed4d",
           "fnv1a32-32801ec4",
           "fnv1a32-a4b1df51"

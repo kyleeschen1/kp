@@ -78,6 +78,23 @@ test("differentiation coverage exposes one exemplar without overstating the fami
     dimensionId === "generation-governed")?.status, "missing");
 });
 
+test("integration coverage exposes one governed candidate without promotion", () => {
+  const family = kpSymbolicCaseCoverageRegistry.families.find(
+    ({ capabilityId }) =>
+      capabilityId === "capability.equation.integration-transformations"
+  );
+  assert.ok(family);
+  assert.equal(family.cases.length, 8);
+  assert.equal(family.cases[0]?.outcome, "animated-transition");
+  assert.ok(family.cases.slice(1).every(({ outcome }) =>
+    outcome === "typed-gap"
+  ));
+  assert.equal(family.cases[0]?.maturity.find(({ dimensionId }) =>
+    dimensionId === "generation-governed")?.status, "satisfied");
+  assert.equal(family.cases[0]?.maturity.find(({ dimensionId }) =>
+    dimensionId === "family-promoted")?.status, "missing");
+});
+
 test("a new Direct symbolic family cannot bypass case enumeration", () => {
   assert.throws(() => projectKpSymbolicCaseCoverage({
     capabilityId: "capability.equation.future-direct-family",

@@ -8,6 +8,9 @@ import {
 import {
   kpDifferentiationCaseLedger
 } from "../semantic/differentiation-case-ledger.ts";
+import {
+  kpIntegrationCaseLedger
+} from "../semantic/integration-case-ledger.ts";
 
 export const KP_SYMBOLIC_CASE_COVERAGE_SCHEMA =
   "kp.symbolic-case-coverage.v1" as const;
@@ -212,7 +215,12 @@ export const kpSymbolicCaseCoverageRegistry =
   defineKpSymbolicCaseCoverageRegistry({
     schemaVersion: KP_SYMBOLIC_CASE_COVERAGE_SCHEMA,
     kind: "symbolic-case-coverage-registry",
-    families: [rootFamily(), finiteBinderFamily(), differentiationFamily()]
+    families: [
+      rootFamily(),
+      finiteBinderFamily(),
+      differentiationFamily(),
+      integrationFamily()
+    ]
   });
 
 export function defineKpSymbolicCaseCoverageRegistry(
@@ -430,6 +438,68 @@ function differentiationMaturity(
     maturity("family-promoted", "not-applicable", []),
     maturity("generation-governed", "satisfied", [
       kpDifferentiationCaseLedger.authority
+    ])
+  ]);
+}
+
+function integrationFamily(): KpSymbolicCaseCoverageFamily {
+  return Object.freeze({
+    schemaVersion: KP_SYMBOLIC_CASE_COVERAGE_SCHEMA,
+    kind: "symbolic-case-coverage-family" as const,
+    capabilityId: "capability.equation.integration-transformations",
+    authorityId: kpIntegrationCaseLedger.authority,
+    cases: Object.freeze(kpIntegrationCaseLedger.cases.map((entry) => ({
+      id: entry.id,
+      operationClass: entry.operationClass,
+      title: entry.title,
+      sourceLatex: entry.sourceLatex,
+      ...(entry.targetLatex === undefined ? {} : {
+        targetLatex: entry.targetLatex
+      }),
+      outcome: entry.disposition === "typed-gap"
+        ? "typed-gap" as const
+        : "animated-transition" as const,
+      requiredEvidenceIds: entry.requiredEvidenceIds,
+      maturity: integrationMaturity(entry.disposition)
+    })))
+  });
+}
+
+function integrationMaturity(
+  disposition: typeof kpIntegrationCaseLedger.cases[number]["disposition"]
+): readonly KpSymbolicCaseMaturityEvidence[] {
+  if (disposition === "exemplar-candidate") {
+    return Object.freeze([
+      maturity("notation-paintable", "satisfied", [
+        "src/editor/antiderivative-power-semantic-latex.ts"
+      ]),
+      maturity("semantic-representable", "satisfied", [
+        "src/semantic/antiderivative-power-rule-semantics.ts"
+      ]),
+      maturity("operation-authoritative", "satisfied", [
+        "kp.semantic-motion.expand-antiderivative",
+        "kp.semantic-motion.resolve-antiderivative"
+      ]),
+      maturity("exemplar-executable", "satisfied", [
+        "animation.generated.calculus.integral.power-rule-quadratic"
+      ]),
+      maturity("family-promoted", "missing", []),
+      maturity("generation-governed", "satisfied", [
+        "src/authoring/governed-integration-power-rule-fixture.ts",
+        kpIntegrationCaseLedger.authority
+      ])
+    ]);
+  }
+  return Object.freeze([
+    maturity("notation-paintable", "satisfied", [
+      "shape.compound.integral-operator"
+    ]),
+    maturity("semantic-representable", "missing", []),
+    maturity("operation-authoritative", "not-applicable", []),
+    maturity("exemplar-executable", "not-applicable", []),
+    maturity("family-promoted", "not-applicable", []),
+    maturity("generation-governed", "satisfied", [
+      kpIntegrationCaseLedger.authority
     ])
   ]);
 }

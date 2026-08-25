@@ -64,9 +64,32 @@ test("Calc BC planning starts from an exact equation coverage baseline", () => {
   assert.deepEqual(live.byStatus, {
     Direct: 9,
     Registered: 3,
-    Exemplar: 2,
-    Missing: 15
+    Exemplar: 3,
+    Missing: 14
   });
+});
+
+test("integration projects the exact governed exemplar without promotion", () => {
+  const integration = createKpAnimationTransformationCoverage().entries.find(
+    ({ capabilityId }) =>
+      capabilityId === "capability.equation.integration-transformations"
+  );
+  assert.ok(integration);
+  assert.equal(integration.status, "Exemplar");
+  assert.deepEqual(integration.exemplarLinks.map(({ assetId }) => assetId), [
+    "animation.generated.calculus.integral.power-rule-quadratic"
+  ]);
+  assert.deepEqual(integration.evidenceTensions, [
+    "playable-exemplar-without-general-generation"
+  ]);
+  assert.equal(integration.caseCoverage?.status, "tracked");
+  if (integration.caseCoverage?.status !== "tracked") {
+    assert.fail("Integration must project its bounded typed case ledger.");
+  }
+  assert.equal(integration.caseCoverage.caseCount, 8);
+  assert.equal(integration.caseCoverage.cases[0]?.maturity.find(
+    ({ dimensionId }) => dimensionId === "family-promoted"
+  )?.status, "missing");
 });
 
 test("coverage maturity keeps paint meaning promotion and generation separate", () => {

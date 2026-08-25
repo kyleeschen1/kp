@@ -43,6 +43,8 @@ test("registered exemplar and missing statuses retain distinct gates", () => {
     "capability.equation.log-homomorphic-decomposition"), "Direct");
   assert.equal(status(readiness,
     "capability.equation.alternative-logarithm-bases"), "Direct");
+  assert.equal(status(readiness,
+    "capability.equation.integration-transformations"), "Exemplar");
 });
 
 test("denominator operations derive registered status without visual parity", () => {

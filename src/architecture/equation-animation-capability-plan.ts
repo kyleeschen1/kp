@@ -314,6 +314,7 @@ const equationCapabilityDrafts = Object.freeze([
       requirement("requirement.equation.integration.normalizer", "endpoint-normalizer", "normalizer.equation.integral-notation.v1", "Bounds, integrands, differentials, constants of integration, and evaluation bars retain semantic roles."),
       requirement("requirement.equation.integration.operation", "semantic-operation", "operation.equation.integrate.v1", "Typed operations apply declared antiderivative, substitution, parts, accumulation, or evaluation laws with assumptions."),
       requirement("requirement.equation.integration.recipe", "canonical-recipe", "recipe.equation.integration.v1", "Recipes preserve binder scope and show contributor correspondence through supported integral rewrites."),
+      requirement("requirement.equation.integration.power-rule-exemplar", "canonical-exemplar", "animation.generated.calculus.integral.power-rule-quadratic", "The bounded monic-quadratic asset demonstrates one governed indefinite power-rule rewrite without implying general integration support."),
       requirement("requirement.equation.integration.authoring", "authoring-surface", "authoring.equation.integration.v1", "Governed authoring distinguishes indefinite, definite, and accumulation forms before selecting a recipe."),
       requirement("requirement.equation.integration.corpus", "generation-corpus", "corpus.equation.integration.v1", "Fixtures cover antiderivatives, definite evaluation, substitution, parts, area, volume, and improper integrals.")
     ]
