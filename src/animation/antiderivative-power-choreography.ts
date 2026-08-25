@@ -43,7 +43,16 @@ export interface KpAntiderivativePowerChoreographyPlan {
   readonly ruleTemplateApplication: {
     readonly kind: "antiderivative-rule-template-instantiation";
     readonly scaffoldSemanticEntityIds: readonly string[];
-    readonly fixedSyntaxSelectorIds: readonly string[];
+    readonly fixedSyntaxGroups: readonly [
+      {
+        readonly role: "numerator-successor";
+        readonly selectorIds: readonly [string, string];
+      },
+      {
+        readonly role: "denominator-successor";
+        readonly selectorIds: readonly [string, string];
+      }
+    ];
     readonly closureSelectorIds: readonly string[];
     readonly bindingRelations: readonly [
       {
@@ -81,9 +90,11 @@ export interface KpAntiderivativePowerChoreographyFrame {
   };
   readonly ruleTemplateApplication: {
     readonly traceRole: "absent" | "prospective" | "live";
+    readonly previewPresence: number;
     readonly scaffoldPresence: number;
     readonly bindingProgress: number;
     readonly syntaxPresence: number;
+    readonly syntaxResolutionProgress: number;
     readonly closurePresence: number;
   };
   readonly rewriteProgress: number;
@@ -230,12 +241,22 @@ export function compileKpAntiderivativePowerChoreography(input: {
       scaffoldSemanticEntityIds: Object.freeze([
         group("expanded.exact-quotient")
       ]),
-      fixedSyntaxSelectorIds: Object.freeze([
-        numeratorSuccessorOperator!.targetSelectorIds[0]!,
-        numeratorIncrement!.targetSelectorIds[0]!,
-        denominatorSuccessorOperator!.targetSelectorIds[0]!,
-        denominatorIncrement!.targetSelectorIds[0]!
-      ]),
+      fixedSyntaxGroups: Object.freeze([
+        Object.freeze({
+          role: "numerator-successor" as const,
+          selectorIds: Object.freeze([
+            numeratorSuccessorOperator!.targetSelectorIds[0]!,
+            numeratorIncrement!.targetSelectorIds[0]!
+          ] as const)
+        }),
+        Object.freeze({
+          role: "denominator-successor" as const,
+          selectorIds: Object.freeze([
+            denominatorSuccessorOperator!.targetSelectorIds[0]!,
+            denominatorIncrement!.targetSelectorIds[0]!
+          ] as const)
+        })
+      ] as const),
       closureSelectorIds: Object.freeze([
         integrationConnector!.targetSelectorIds[0]!,
         integrationConstant!.targetSelectorIds[0]!
@@ -279,9 +300,9 @@ export function sampleKpAntiderivativePowerChoreography(input: {
     "notice-operator-scope": phaseProgress(semanticProgress, 0.04, 0.16),
     "withdraw-operator": phaseProgress(semanticProgress, 0.18, 0.32),
     "rewrite-power-rule": phaseProgress(semanticProgress, 0.34, 0.9),
-    "preview-rule-template": phaseProgress(semanticProgress, 0.34, 0.52),
-    "bind-rule-template": phaseProgress(semanticProgress, 0.42, 0.78),
-    "resolve-rule-syntax": phaseProgress(semanticProgress, 0.58, 0.88),
+    "preview-rule-template": phaseProgress(semanticProgress, 0.34, 0.45),
+    "bind-rule-template": phaseProgress(semanticProgress, 0.49, 0.8),
+    "resolve-rule-syntax": phaseProgress(semanticProgress, 0.8, 0.86),
     "settle-expanded-rule": phaseProgress(semanticProgress, 0.82, 1)
   };
   const notice = phases["notice-operator-scope"];
@@ -321,23 +342,33 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
   rewriteProgress: number
 ): KpAntiderivativePowerChoreographyFrame["ruleTemplateApplication"] {
   const progress = clamp01(rewriteProgress);
-  const preview = phaseProgress(progress, 0, 0.26);
-  const binding = phaseProgress(progress, 0.08, 0.78);
-  const syntax = phaseProgress(progress, 0.78, 0.92);
-  const closure = phaseProgress(progress, 0.86, 0.98);
+  const preview = phaseProgress(progress, 0, 0.18);
+  const binding = phaseProgress(progress, 0.26, 0.82);
+  const syntaxResolution = phaseProgress(progress, 0.82, 0.92);
+  // The fixed +1 grammar and +C belong to the prospective rule template.
+  // Showing them before carrier motion creates readable vacancies without
+  // inventing placeholder glyphs or boxes that are absent from the endpoint.
   const scaffoldPresence = roundProgress(
-    Math.min(1, 0.58 * preview + 0.42 * syntax)
+    preview * (0.86 + 0.14 * syntaxResolution)
+  );
+  const syntaxPresence = roundProgress(
+    preview * (0.76 + 0.24 * syntaxResolution)
+  );
+  const closurePresence = roundProgress(
+    preview * (0.66 + 0.34 * syntaxResolution)
   );
   return Object.freeze({
-    traceRole: syntax >= 1
+    traceRole: syntaxResolution >= 1
       ? "live" as const
       : preview > 0
         ? "prospective" as const
         : "absent" as const,
+    previewPresence: preview,
     scaffoldPresence,
     bindingProgress: binding,
-    syntaxPresence: syntax,
-    closurePresence: closure
+    syntaxPresence,
+    syntaxResolutionProgress: syntaxResolution,
+    closurePresence
   });
 }
 

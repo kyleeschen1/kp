@@ -36,7 +36,7 @@ test("integration power rule uses governed transit and two certified ink knots",
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-template-profile-id",
-    "kp.rendering.native-katex.antiderivative-template-instantiation-profile.v1"
+    "kp.rendering.native-katex.antiderivative-template-instantiation-profile.v2"
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-power-visual-owner",
@@ -71,7 +71,7 @@ test("integration power rule uses governed transit and two certified ink knots",
   ))).toBe(0);
   await expect.poll(() => renderedOpacity(operator)).toBe(0);
 
-  await seek.fill("0.28");
+  await seek.fill("0.24");
   await expectTransitReady(stage);
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-power-visual-owner",
@@ -86,13 +86,19 @@ test("integration power rule uses governed transit and two certified ink knots",
     "prospective"
   );
   await expect.poll(async () => Number(await stage.getAttribute(
+    "data-kp-antiderivative-template-preview-presence"
+  ))).toBe(1);
+  await expect.poll(async () => Number(await stage.getAttribute(
     "data-kp-antiderivative-template-scaffold-presence"
   ))).toBeGreaterThan(0);
   await expect.poll(async () => Number(await stage.getAttribute(
     "data-kp-antiderivative-template-binding-progress"
-  ))).toBeGreaterThan(0);
+  ))).toBe(0);
   await expect.poll(async () => Number(await stage.getAttribute(
     "data-kp-antiderivative-template-syntax-presence"
+  ))).toBeGreaterThan(0);
+  await expect.poll(async () => Number(await stage.getAttribute(
+    "data-kp-antiderivative-template-syntax-resolution-progress"
   ))).toBe(0);
   await expect.poll(() => visibleTemplateScaffoldOwners(stage))
     .toBeGreaterThan(0);

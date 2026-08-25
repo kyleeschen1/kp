@@ -57,6 +57,11 @@ export function sampleKpNativeKatexSceneTrackFrames(
           paintProgress
         )
       : undefined;
+    const semanticOpacityProgress =
+      sceneTrack.opacityScheduleAuthority === "semantic-choreography" &&
+      sceneTrack.sampleOpacityProgress !== undefined
+        ? sceneTrack.sampleOpacityProgress(bounded)
+        : undefined;
     return Object.freeze({
       trackId: sceneTrack.id,
       componentId: sceneTrack.componentId,
@@ -104,6 +109,10 @@ export function sampleKpNativeKatexSceneTrackFrames(
         (sceneTrack.startOpacity +
         (sceneTrack.endOpacity - sceneTrack.startOpacity) *
         (
+          // Copy fan-out supplies a useful default introduction schedule, but
+          // it cannot override a motif's explicit presence law. Geometry and
+          // opacity are independently authored channels for prospective paint.
+          semanticOpacityProgress ??
           copySample?.[2] ??
           (
             sceneTrack.opacityStepAt === undefined

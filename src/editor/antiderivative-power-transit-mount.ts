@@ -362,8 +362,8 @@ function applyRuleTemplateApplicationState(
   const semanticIds = [
     ...session.plan.choreography.ruleTemplateApplication
       .scaffoldSemanticEntityIds,
-    ...session.plan.choreography.ruleTemplateApplication
-      .fixedSyntaxSelectorIds,
+    ...session.plan.choreography.ruleTemplateApplication.fixedSyntaxGroups
+      .flatMap(({ selectorIds }) => selectorIds),
     ...session.plan.choreography.ruleTemplateApplication.closureSelectorIds
   ];
   for (const semanticId of semanticIds) {
@@ -375,12 +375,16 @@ function applyRuleTemplateApplicationState(
     "prospective-scaffold-binding";
   session.stage.dataset["kpAntiderivativeTemplateTraceRole"] =
     template.traceRole;
+  session.stage.dataset["kpAntiderivativeTemplatePreviewPresence"] =
+    template.previewPresence.toFixed(4);
   session.stage.dataset["kpAntiderivativeTemplateScaffoldPresence"] =
     template.scaffoldPresence.toFixed(4);
   session.stage.dataset["kpAntiderivativeTemplateBindingProgress"] =
     template.bindingProgress.toFixed(4);
   session.stage.dataset["kpAntiderivativeTemplateSyntaxPresence"] =
     template.syntaxPresence.toFixed(4);
+  session.stage.dataset["kpAntiderivativeTemplateSyntaxResolutionProgress"] =
+    template.syntaxResolutionProgress.toFixed(4);
   session.stage.dataset["kpAntiderivativeTemplateClosurePresence"] =
     template.closurePresence.toFixed(4);
 }
@@ -621,9 +625,11 @@ function clearTelemetry(stage: HTMLElement): void {
   delete stage.dataset["kpAntiderivativeIntegrandSalienceStrength"];
   delete stage.dataset["kpAntiderivativeTemplateApplication"];
   delete stage.dataset["kpAntiderivativeTemplateTraceRole"];
+  delete stage.dataset["kpAntiderivativeTemplatePreviewPresence"];
   delete stage.dataset["kpAntiderivativeTemplateScaffoldPresence"];
   delete stage.dataset["kpAntiderivativeTemplateBindingProgress"];
   delete stage.dataset["kpAntiderivativeTemplateSyntaxPresence"];
+  delete stage.dataset["kpAntiderivativeTemplateSyntaxResolutionProgress"];
   delete stage.dataset["kpAntiderivativeTemplateClosurePresence"];
 }
 

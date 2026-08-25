@@ -600,6 +600,90 @@
       "scope": "slice s18 durable control state",
       "checkedAt": "2026-08-25T14:53:18.871Z",
       "notes": "Theseus workspace validated 1061 nodes and 25622 events after the checkpoint repair evidence was recorded."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "human-checkpoint",
+      "checkedAt": "2026-08-25T15:40:41.952Z",
+      "notes": "Focused semantic choreography and exact endpoint; 63/63 passed."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-transit",
+      "status": "passed",
+      "scope": "human-checkpoint",
+      "checkedAt": "2026-08-25T15:40:53.102Z",
+      "notes": "Real native KaTeX transit canary; Chromium passed."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-catalogue",
+      "status": "passed",
+      "scope": "human-checkpoint",
+      "checkedAt": "2026-08-25T15:40:54.320Z",
+      "notes": "Canonical Catalogue host; two Chromium cases passed."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "human-checkpoint",
+      "checkedAt": "2026-08-25T15:40:55.388Z",
+      "notes": "Real KaTeX compositor preservation; 82/82 passed."
+    },
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "human-checkpoint",
+      "checkedAt": "2026-08-25T15:40:56.467Z",
+      "notes": "Derivative exemplar preservation; 35/35 passed."
+    },
+    {
+      "command": "npm run test:evaluation-authority-convergence",
+      "status": "passed",
+      "scope": "human-checkpoint",
+      "checkedAt": "2026-08-25T15:40:57.580Z",
+      "notes": "Shared evaluation authority preservation; 34/34 passed."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-evaluation",
+      "status": "passed",
+      "scope": "human-checkpoint",
+      "checkedAt": "2026-08-25T15:40:58.644Z",
+      "notes": "Integration ink-knot evaluation preservation; Chromium passed."
+    },
+    {
+      "command": "npm run test:browser:differentiation-exemplar",
+      "status": "passed",
+      "scope": "human-checkpoint",
+      "checkedAt": "2026-08-25T15:40:59.675Z",
+      "notes": "Derivative browser preservation; four Chromium cases passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "human-checkpoint",
+      "checkedAt": "2026-08-25T15:41:00.704Z",
+      "notes": "Application, Node, tests, Svelte, and domains passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "human-checkpoint",
+      "checkedAt": "2026-08-25T15:41:01.723Z",
+      "notes": "All architecture gates passed."
+    },
+    {
+      "command": "npm run visual:integration-power-rule",
+      "status": "passed",
+      "scope": "human-checkpoint",
+      "checkedAt": "2026-08-25T15:41:02.765Z",
+      "notes": "Ten-state deterministic visual review capture passed."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "failed",
+      "scope": "unrelated broad baseline",
+      "checkedAt": "2026-08-25T15:41:11.084Z",
+      "notes": "25 of 28 passed. Three pre-existing convergence/source-audit expectations fail on native-katex-endpoint-ownership closure and reader compositor source shape; none of the files changed in this visual slice are implicated, so this checkpoint does not broaden scope to repair them."
     }
   ],
   "allowedWork": [
@@ -737,7 +821,7 @@
     {
       "id": "next-action.kp.integration-power-rule.s18",
       "title": "Integration-human-visual-checkpoint",
-      "summary": "Human review found the certified ink knots correct but rejected the first transition because the integral does not visibly instantiate the antiderivative rule. Implementing one exemplar-local prospective scaffold and binding choreography while preserving semantics, endpoints, operator salience, lifecycle, and evaluation cohorts; the slice remains a human checkpoint.",
+      "summary": "Human review confirmed the first repair is served but perceptually too similar to the prior fan-out. Strengthening only the exemplar-local presentation so a legible prospective fraction template with vacant carrier positions appears and holds before x and the source exponent bind; endpoints, operator salience, certified evaluations, and promotion boundary remain fixed.",
       "status": "in-progress"
     },
     {

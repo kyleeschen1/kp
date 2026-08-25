@@ -33,7 +33,7 @@ const samples = [
   },
   {
     id: "template-scaffold",
-    label: "Rule application · prospective fraction scaffold",
+    label: "Rule application · prospective rule template",
     progress: 0.24,
     theme: "dark",
     viewport: desktopViewport
@@ -102,9 +102,11 @@ interface CaptureEvidence {
   readonly operatorSalienceStrength: number;
   readonly templateProfileId: string;
   readonly templateTraceRole: string;
+  readonly templatePreviewPresence: number;
   readonly templateScaffoldPresence: number;
   readonly templateBindingProgress: number;
   readonly templateSyntaxPresence: number;
+  readonly templateSyntaxResolutionProgress: number;
   readonly templateClosurePresence: number;
   readonly evaluationStatus: string;
   readonly evaluationCohortCount: number;
@@ -277,6 +279,9 @@ async function captureSample(input: {
         root.dataset["kpAntiderivativeTemplateProfileId"] ?? "inactive",
       templateTraceRole:
         root.dataset["kpAntiderivativeTemplateTraceRole"] ?? "inactive",
+      templatePreviewPresence: Number(
+        root.dataset["kpAntiderivativeTemplatePreviewPresence"] ?? 0
+      ),
       templateScaffoldPresence: Number(
         root.dataset["kpAntiderivativeTemplateScaffoldPresence"] ?? 0
       ),
@@ -285,6 +290,9 @@ async function captureSample(input: {
       ),
       templateSyntaxPresence: Number(
         root.dataset["kpAntiderivativeTemplateSyntaxPresence"] ?? 0
+      ),
+      templateSyntaxResolutionProgress: Number(
+        root.dataset["kpAntiderivativeTemplateSyntaxResolutionProgress"] ?? 0
       ),
       templateClosurePresence: Number(
         root.dataset["kpAntiderivativeTemplateClosurePresence"] ?? 0
@@ -386,10 +394,14 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   if (
     scaffold.transitVisualOwner !== "material-scene" ||
     scaffold.templateProfileId !==
-      "kp.rendering.native-katex.antiderivative-template-instantiation-profile.v1" ||
+      "kp.rendering.native-katex.antiderivative-template-instantiation-profile.v2" ||
     scaffold.templateTraceRole !== "prospective" ||
+    scaffold.templatePreviewPresence !== 1 ||
     scaffold.templateScaffoldPresence <= 0 ||
-    scaffold.templateSyntaxPresence !== 0 ||
+    scaffold.templateSyntaxPresence <= 0 ||
+    scaffold.templateClosurePresence <= 0 ||
+    scaffold.templateBindingProgress !== 0 ||
+    scaffold.templateSyntaxResolutionProgress !== 0 ||
     scaffold.visibleMaterialOwnerCount === 0
   ) {
     throw new Error(
@@ -401,17 +413,19 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     binding.templateTraceRole !== "prospective" ||
     binding.templateBindingProgress <= 0 ||
     binding.templateBindingProgress >= 1 ||
-    binding.templateSyntaxPresence !== 0
+    binding.templateSyntaxPresence <= 0 ||
+    binding.templateSyntaxResolutionProgress !== 0
   ) {
     throw new Error(
-      "Template binding frame must keep source motion ahead of fixed syntax."
+      "Template binding frame must retain prospective grammar before live resolution."
     );
   }
   const syntax = required("template-syntax");
   if (
     syntax.templateBindingProgress !== 1 ||
     syntax.templateSyntaxPresence !== 1 ||
-    syntax.templateClosurePresence <= 0
+    syntax.templateClosurePresence !== 1 ||
+    syntax.templateSyntaxResolutionProgress !== 1
   ) {
     throw new Error(
       "Template syntax frame must resolve the bound rule before evaluation."

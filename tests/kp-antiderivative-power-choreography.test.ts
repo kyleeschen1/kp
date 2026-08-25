@@ -64,14 +64,19 @@ test("integration first transition compiles its governed scope and lineage", () 
     "antiderivative-rule-template-instantiation"
   );
   assert.deepEqual(
-    plan.ruleTemplateApplication.fixedSyntaxSelectorIds.map((id) =>
-      id.split(".").at(-1)
-    ),
+    plan.ruleTemplateApplication.fixedSyntaxGroups.map((group) => ({
+      role: group.role,
+      selectors: group.selectorIds.map((id) => id.split(".").at(-1))
+    })),
     [
-      "numerator-successor-operator",
-      "numerator-increment",
-      "denominator-successor-operator",
-      "denominator-increment"
+      {
+        role: "numerator-successor",
+        selectors: ["numerator-successor-operator", "numerator-increment"]
+      },
+      {
+        role: "denominator-successor",
+        selectors: ["denominator-successor-operator", "denominator-increment"]
+      }
     ]
   );
   assert.deepEqual(
@@ -117,13 +122,14 @@ test("operator salience and withdrawal finish before the rewrite begins", () => 
   assert.ok(rewrite.rewriteProgress > 0);
 });
 
-test("rule-template projection previews structure before binding and syntax", () => {
+test("rule-template projection previews complete grammar before binding", () => {
   const { plan } = fixture();
   const before = sampleKpAntiderivativePowerChoreography({
     plan,
     progress: 0.33
   });
   assert.equal(before.ruleTemplateApplication.traceRole, "absent");
+  assert.equal(before.ruleTemplateApplication.previewPresence, 0);
   assert.equal(before.ruleTemplateApplication.scaffoldPresence, 0);
   assert.equal(before.ruleTemplateApplication.bindingProgress, 0);
 
@@ -132,9 +138,15 @@ test("rule-template projection previews structure before binding and syntax", ()
     progress: 0.48
   });
   assert.equal(preview.ruleTemplateApplication.traceRole, "prospective");
+  assert.equal(preview.ruleTemplateApplication.previewPresence, 1);
   assert.ok(preview.ruleTemplateApplication.scaffoldPresence > 0);
-  assert.ok(preview.ruleTemplateApplication.bindingProgress > 0);
-  assert.equal(preview.ruleTemplateApplication.syntaxPresence, 0);
+  assert.equal(preview.ruleTemplateApplication.bindingProgress, 0);
+  assert.ok(preview.ruleTemplateApplication.syntaxPresence > 0);
+  assert.ok(preview.ruleTemplateApplication.closurePresence > 0);
+  assert.equal(
+    preview.ruleTemplateApplication.syntaxResolutionProgress,
+    0
+  );
 
   const binding = sampleKpAntiderivativePowerChoreography({
     plan,
@@ -142,9 +154,10 @@ test("rule-template projection previews structure before binding and syntax", ()
   });
   assert.equal(binding.ruleTemplateApplication.traceRole, "prospective");
   assert.ok(binding.ruleTemplateApplication.bindingProgress >
-    binding.ruleTemplateApplication.syntaxPresence);
-  assert.equal(binding.ruleTemplateApplication.syntaxPresence, 0);
-  assert.equal(binding.ruleTemplateApplication.closurePresence, 0);
+    binding.ruleTemplateApplication.syntaxResolutionProgress);
+  assert.ok(binding.ruleTemplateApplication.syntaxPresence > 0);
+  assert.ok(binding.ruleTemplateApplication.closurePresence > 0);
+  assert.equal(binding.ruleTemplateApplication.syntaxResolutionProgress, 0);
 
   const resolved = sampleKpAntiderivativePowerChoreography({
     plan,
@@ -154,7 +167,8 @@ test("rule-template projection previews structure before binding and syntax", ()
   assert.equal(resolved.ruleTemplateApplication.scaffoldPresence, 1);
   assert.equal(resolved.ruleTemplateApplication.bindingProgress, 1);
   assert.equal(resolved.ruleTemplateApplication.syntaxPresence, 1);
-  assert.ok(resolved.ruleTemplateApplication.closurePresence > 0);
+  assert.equal(resolved.ruleTemplateApplication.syntaxResolutionProgress, 1);
+  assert.equal(resolved.ruleTemplateApplication.closurePresence, 1);
 });
 
 test("integration first transition is direct-seek reverse and interruption safe", () => {
