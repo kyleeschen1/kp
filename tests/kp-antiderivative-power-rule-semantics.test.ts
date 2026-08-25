@@ -3,9 +3,14 @@ import test from "node:test";
 
 import {
   createKpAntiderivativePowerRuleSemantics,
+  createKpAntiderivativePowerRuleLineageSemantics,
   createKpAntiderivativePowerRuleSemanticRoles
 } from "../src/semantic/antiderivative-power-rule-semantics.ts";
-import { validateCorrespondenceMap } from "../src/semantic/correspondence.ts";
+import {
+  checkCorrespondenceMapRewindLaw,
+  validateCorrespondenceMap
+} from "../src/semantic/correspondence.ts";
+import { validateKpSemanticLineageGraph } from "../src/semantic/semantic-lineage-graph.ts";
 
 const semantics = createKpAntiderivativePowerRuleSemantics({
   sourceObjectId: "expression.source",
@@ -64,6 +69,61 @@ test("antiderivative power roles reject an unbound integration variable", () => 
     base: "y",
     exponent: 2
   }), /must match the integrand base/);
+});
+
+test("antiderivative correspondence and lineage are total and rewind-safe", () => {
+  const roles = createKpAntiderivativePowerRuleSemanticRoles({
+    sourceObjectId: "expression.source",
+    expandedObjectId: "expression.expanded",
+    targetObjectId: "expression.target",
+    integrationVariable: "x",
+    base: "x",
+    exponent: 2
+  });
+  const lineage = createKpAntiderivativePowerRuleLineageSemantics({
+    roles,
+    expansionTransformationId: "transform.expand",
+    resolutionTransformationId: "transform.resolve"
+  });
+
+  assert.deepEqual(validateCorrespondenceMap(lineage.expansion, {
+    sourceSelectorIds: roles.sourceRoles.map((role) => role.selectorId),
+    targetSelectorIds: roles.expandedRoles.map((role) => role.selectorId)
+  }), []);
+  assert.deepEqual(validateCorrespondenceMap(lineage.resolution, {
+    sourceSelectorIds: roles.expandedRoles.map((role) => role.selectorId),
+    targetSelectorIds: roles.targetRoles.map((role) => role.selectorId)
+  }), []);
+  assert.deepEqual(checkCorrespondenceMapRewindLaw(lineage.expansion), []);
+  assert.deepEqual(checkCorrespondenceMapRewindLaw(lineage.resolution), []);
+  assert.deepEqual(validateKpSemanticLineageGraph(lineage.expansionLineage), []);
+  assert.deepEqual(validateKpSemanticLineageGraph(lineage.resolutionLineage), []);
+  assert.deepEqual(
+    lineage.expansionLineage.edges.find((edge) =>
+      edge.id.endsWith("source-exponent-branches")
+    ),
+    {
+      id: "transform.expand.source-exponent-branches",
+      relation: "split",
+      sourceEntityIds: ["expression.source.exponent"],
+      targetEntityIds: [
+        "expression.expanded.numerator-exponent",
+        "expression.expanded.denominator-exponent"
+      ],
+      summary: "The source exponent supplies both successor expressions without cloning paint."
+    }
+  );
+  assert.deepEqual(
+    lineage.resolutionLineage.edges.filter((edge) => edge.relation === "merge")
+      .map((edge) => edge.targetEntityIds[0]),
+    ["expression.target.numerator-exponent", "expression.target.denominator"]
+  );
+  assert.equal(
+    lineage.resolution.records.find((record) =>
+      record.id === "integration-constant-persists"
+    )?.relation,
+    "identity"
+  );
 });
 
 test("antiderivative power rule exposes exponent branching and caused introductions", () => {

@@ -89,6 +89,20 @@
       "scope": "slice s03 semantic roles",
       "checkedAt": "2026-08-24T23:59:57.011Z",
       "notes": "The closed integration role and group vocabulary passes all TypeScript, Svelte, and domain checks."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s04 correspondence lineage",
+      "checkedAt": "2026-08-25T00:04:42.810Z",
+      "notes": "Expansion and resolution maps have total lifecycle coverage, exact rewind symmetry, valid lineage graphs, one exponent split, two evaluation merges, and plus-C persistence."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s04 correspondence lineage",
+      "checkedAt": "2026-08-25T00:04:44.061Z",
+      "notes": "The explicit correspondence-to-lineage relation boundary passes the complete typecheck suite."
     }
   ],
   "allowedWork": [
@@ -142,7 +156,8 @@
     {
       "id": "next-action.kp.integration-power-rule.s04",
       "title": "Integration-correspondence-and-lineage",
-      "status": "planned"
+      "summary": "Compiled total and rewind-safe expansion and resolution correspondence with valid semantic lineage graphs: one exponent split supplies both successors, each successor merges into its own 3, and plus C persists from the first rewritten state. Scoped tests and full typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.integration-power-rule.s05",

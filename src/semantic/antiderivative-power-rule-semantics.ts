@@ -1,4 +1,9 @@
 import type { CorrespondenceMap } from "./correspondence.ts";
+import {
+  createKpSemanticLineageGraph,
+  type KpSemanticLineageGraph,
+  type KpSemanticLineageRelation
+} from "./semantic-lineage-graph.ts";
 
 export type KpAntiderivativePowerRuleRoleId =
   | "source.integral-operator"
@@ -192,6 +197,117 @@ function semanticGroup(
   memberRoleIds: readonly KpAntiderivativePowerRuleRoleId[]
 ): KpAntiderivativePowerRuleSemanticGroup {
   return { id, state, semanticId, memberRoleIds };
+}
+
+export interface KpAntiderivativePowerRuleLineageSemantics {
+  readonly kind: "antiderivative-power-rule-lineage-semantics";
+  readonly expansion: CorrespondenceMap;
+  readonly resolution: CorrespondenceMap;
+  readonly expansionLineage: KpSemanticLineageGraph;
+  readonly resolutionLineage: KpSemanticLineageGraph;
+}
+
+export function createKpAntiderivativePowerRuleLineageSemantics(input: {
+  readonly roles: KpAntiderivativePowerRuleSemanticRoles;
+  readonly expansionTransformationId: string;
+  readonly resolutionTransformationId: string;
+}): KpAntiderivativePowerRuleLineageSemantics {
+  if (
+    input.expansionTransformationId.trim() === "" ||
+    input.resolutionTransformationId.trim() === ""
+  ) {
+    throw new Error("Antiderivative power-rule transformation ids must not be empty.");
+  }
+  const allRoles = [
+    ...input.roles.sourceRoles,
+    ...input.roles.expandedRoles,
+    ...input.roles.targetRoles
+  ];
+  const selector = (roleId: KpAntiderivativePowerRuleRoleId): string => {
+    const role = allRoles.find((candidate) => candidate.id === roleId);
+    if (role === undefined) {
+      throw new Error(`Antiderivative power-rule role ${roleId} is unavailable.`);
+    }
+    return role.selectorId;
+  };
+  const expansionRecords: CorrespondenceMap["records"] = [
+    correspondence("integral-operator-consumed", "removal", [selector("source.integral-operator")], [], "Applying the rule consumes the integral operator."),
+    correspondence("differential-symbol-consumed", "removal", [selector("source.differential-symbol")], [], "The differential symbol leaves after identifying an integration operation."),
+    correspondence("integration-variable-consumed", "removal", [selector("source.integration-variable")], [], "The integration variable constrains the operation before leaving the rewritten expression."),
+    correspondence("integrand-base-persists", "identity", [selector("source.integrand-base")], [selector("expanded.numerator-base")], "The integrand base persists in the quotient numerator."),
+    correspondence("source-exponent-branches", "fan-out", [selector("source.integrand-exponent")], [selector("expanded.numerator-exponent"), selector("expanded.denominator-exponent")], "The source exponent supplies both successor expressions without cloning paint."),
+    correspondence("numerator-increment-introduced", "introduction", [], [selector("expanded.numerator-increment")], "The rule introduces one into the numerator exponent successor."),
+    correspondence("denominator-increment-introduced", "introduction", [], [selector("expanded.denominator-increment")], "The rule introduces one into the divisor successor."),
+    correspondence("integration-connector-introduced", "introduction", [], [selector("expanded.connector")], "The first rewrite introduces the family-of-antiderivatives connector."),
+    correspondence("integration-constant-introduced", "introduction", [], [selector("expanded.integration-constant")], "The first rewrite introduces the required constant of integration.")
+  ];
+  const resolutionRecords: CorrespondenceMap["records"] = [
+    correspondence("numerator-base-persists", "identity", [selector("expanded.numerator-base")], [selector("target.numerator-base")], "The numerator base persists through evaluation."),
+    correspondence("power-successor-evaluates", "fan-in", [selector("expanded.numerator-exponent"), selector("expanded.numerator-increment")], [selector("target.numerator-exponent")], "The numerator successor expression evaluates to the target exponent."),
+    correspondence("divisor-successor-evaluates", "fan-in", [selector("expanded.denominator-exponent"), selector("expanded.denominator-increment")], [selector("target.denominator")], "The divisor successor expression evaluates to the exact denominator."),
+    correspondence("integration-connector-persists", "identity", [selector("expanded.connector")], [selector("target.connector")], "The integration connector persists after its introduction."),
+    correspondence("integration-constant-persists", "identity", [selector("expanded.integration-constant")], [selector("target.integration-constant")], "The constant of integration persists through local arithmetic evaluation.")
+  ];
+  const expansion: CorrespondenceMap = {
+    id: `${input.expansionTransformationId}.correspondence`,
+    records: expansionRecords
+  };
+  const resolution: CorrespondenceMap = {
+    id: `${input.resolutionTransformationId}.correspondence`,
+    records: resolutionRecords
+  };
+
+  return {
+    kind: "antiderivative-power-rule-lineage-semantics",
+    expansion,
+    resolution,
+    expansionLineage: createKpSemanticLineageGraph({
+      id: `${input.expansionTransformationId}.lineage`,
+      sourceEntityIds: input.roles.sourceRoles.map((role) => role.selectorId),
+      targetEntityIds: input.roles.expandedRoles.map((role) => role.selectorId),
+      edges: expansionRecords.map((record) => ({
+        id: `${input.expansionTransformationId}.${record.id}`,
+        relation: semanticLineageRelation(record.relation),
+        sourceEntityIds: record.sourceSelectorIds,
+        targetEntityIds: record.targetSelectorIds,
+        summary: record.summary
+      }))
+    }),
+    resolutionLineage: createKpSemanticLineageGraph({
+      id: `${input.resolutionTransformationId}.lineage`,
+      sourceEntityIds: input.roles.expandedRoles.map((role) => role.selectorId),
+      targetEntityIds: input.roles.targetRoles.map((role) => role.selectorId),
+      edges: resolutionRecords.map((record) => ({
+        id: `${input.resolutionTransformationId}.${record.id}`,
+        relation: semanticLineageRelation(record.relation),
+        sourceEntityIds: record.sourceSelectorIds,
+        targetEntityIds: record.targetSelectorIds,
+        summary: record.summary
+      }))
+    })
+  };
+}
+
+function correspondence(
+  id: string,
+  relation: CorrespondenceMap["records"][number]["relation"],
+  sourceSelectorIds: readonly string[],
+  targetSelectorIds: readonly string[],
+  summary: string
+): CorrespondenceMap["records"][number] {
+  return { id, relation, sourceSelectorIds, targetSelectorIds, summary };
+}
+
+function semanticLineageRelation(
+  relation: CorrespondenceMap["records"][number]["relation"]
+): KpSemanticLineageRelation {
+  if (relation === "identity") return "persist";
+  if (relation === "fan-out") return "split";
+  if (relation === "fan-in") return "merge";
+  if (relation === "introduction" || relation === "removal") return relation;
+  throw new Error(
+    `Antiderivative power-rule correspondence ${relation} has no lineage relation.`
+  );
 }
 
 export interface KpAntiderivativePowerRuleSemantics {
