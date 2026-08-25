@@ -4,9 +4,14 @@ import test from "node:test";
 
 import { createKpAnimationAssets } from "../src/animation/catalog.ts";
 import {
+  compileKpAntiderivativePowerMigrationV2,
+  isKpAntiderivativePowerEvaluationCohortsPayloadV2
+} from "../src/domain-ir/antiderivative-power-migration-v2.ts";
+import {
   compileKpDerivativePowerMigrationV2
 } from "../src/domain-ir/derivative-power-migration-v2.ts";
 import {
+  createKpCertifiedNativeKatexContributorFusionCohortPlayback,
   createKpCertifiedNativeKatexContributorFusionPlayback,
   kpNativeKatexContributorFusionRealizedPrimitiveId
 } from "../src/rendering/native-katex-operation-evaluation-contributor-fusion.ts";
@@ -45,6 +50,42 @@ test("neutral Native KaTeX mount consumes the derivative certificate", () => {
     base,
     certificate: { ...certificate }
   }), /compiler-minted family certificate/);
+});
+
+test("cohort mount preserves one base lifecycle for both integration knots", () => {
+  const animation = createKpAnimationAssets().find(({ id }) => id ===
+    "animation.generated.calculus.integral.power-rule-quadratic")!;
+  const migration = compileKpAntiderivativePowerMigrationV2(animation);
+  const payload = migration.presentationPlan.transitions[1]?.domainPayloads[0];
+  assert.ok(payload);
+  assert.equal(isKpAntiderivativePowerEvaluationCohortsPayloadV2(payload), true);
+  if (!isKpAntiderivativePowerEvaluationCohortsPayloadV2(payload)) return;
+  const retirements: unknown[] = [];
+  const base = {
+    sample: (progress: number) => ({ progress }),
+    apply: (progress: number) => ({ progress }),
+    retire: (retirement: unknown) => retirements.push(retirement)
+  };
+  const playback =
+    createKpCertifiedNativeKatexContributorFusionCohortPlayback({
+      stage: {} as HTMLElement,
+      base,
+      cohorts: payload.cohorts
+    });
+  assert.deepEqual(playback.sample(0.5), { progress: 0.5 });
+  const retirement = {
+    kind: "native-katex-paint-preserving-retirement",
+    reason: "scene-replaced",
+    structuralSuccession: "preserve"
+  } as const;
+  playback.retire(retirement);
+  assert.deepEqual(retirements, [retirement]);
+  assert.throws(() =>
+    createKpCertifiedNativeKatexContributorFusionCohortPlayback({
+      stage: {} as HTMLElement,
+      base,
+      cohorts: [payload.cohorts[0]!, payload.cohorts[0]!]
+    }), /unique certificate-owned cohort IDs/u);
 });
 
 test("paint attestation stays write-only telemetry", () => {

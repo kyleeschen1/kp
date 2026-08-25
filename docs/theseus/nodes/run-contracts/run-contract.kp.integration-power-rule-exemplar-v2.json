@@ -404,6 +404,48 @@
       "scope": "slice s14 generated governance freshness",
       "checkedAt": "2026-08-25T01:31:44.921Z",
       "notes": "The canonical governance inventory remains current after specialized dispatch."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s15 dual ink-knot mount",
+      "checkedAt": "2026-08-25T01:42:07.486Z",
+      "notes": "Sixty-one focused integration tests preserve exact semantics, first-transit ownership, governed payloads, and bounded exemplar status."
+    },
+    {
+      "command": "npm run test:evaluation-authority-convergence",
+      "status": "passed",
+      "scope": "slice s15 certified cohort lifecycle",
+      "checkedAt": "2026-08-25T01:42:08.746Z",
+      "notes": "Thirty-four tests prove the dual wrapper consumes both nominal certificates while sampling and retiring the base lifecycle exactly once; singular mounts remain unchanged."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-evaluation",
+      "status": "passed",
+      "scope": "slice s15 realized Native KaTeX cohort paint",
+      "checkedAt": "2026-08-25T01:42:09.777Z",
+      "notes": "One Chromium canary realizes eight material owners from live KaTeX geometry, keeps numerator and denominator cohorts disjoint by more than 12px at the kernel, transfers three source owners to one target owner per cohort, reports zero readable cohorts in the kernel and two afterward, and settles exact native endpoints under one shared clock and transition."
+    },
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "slice s15 derivative parity",
+      "checkedAt": "2026-08-25T01:42:10.823Z",
+      "notes": "Thirty-five tests preserve the accepted derivative outline, single evaluation certificate, choreography, and host route."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s15 type safety",
+      "checkedAt": "2026-08-25T01:42:11.845Z",
+      "notes": "Application, Node, browser tests, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s15 renderer and authority boundaries",
+      "checkedAt": "2026-08-25T01:42:12.876Z",
+      "notes": "Renderer scoping remains certificate-owned, semantic and presentation boundaries pass, and no new family selection or paint system was introduced."
     }
   ],
   "allowedWork": [
@@ -523,7 +565,8 @@
     {
       "id": "next-action.kp.integration-power-rule.s15",
       "title": "Dual-ink-knot-native-mount",
-      "status": "planned"
+      "summary": "Extended the existing certified Native KaTeX contributor-fusion primitive with certificate-owned cohort scoping and a tuple wrapper that applies one base clock and lifecycle exactly once. Added an antiderivative mount that builds eight live material owners from the two payload certificates, keeps the numerator and denominator knots independent, preserves source and target native settlement, and uses the shared salience resolver. A stable Chromium canary proves realized paint ownership, kernel legibility state, spatial separation, and deterministic settlement; Catalogue wiring remains for s16.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.integration-power-rule.s16",

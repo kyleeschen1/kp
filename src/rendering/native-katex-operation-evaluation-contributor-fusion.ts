@@ -64,6 +64,7 @@ export function createKpNativeKatexContributorFusionPlayback<
   readonly stage: HTMLElement;
   readonly base: Session;
   readonly familyProfile: KpContributorFusionEvaluationFamilyProfile;
+  readonly cohortId?: string | undefined;
 }): Session {
   requireCompatibleProfiles(
     input.familyProfile,
@@ -80,7 +81,8 @@ export function createKpNativeKatexContributorFusionPlayback<
         stage: input.stage,
         progress,
         familyProfile: input.familyProfile,
-        opticalProfile: kpNativeKatexContributorFusionOpticalProfile
+        opticalProfile: kpNativeKatexContributorFusionOpticalProfile,
+        cohortId: input.cohortId
       });
       return frame;
     },
@@ -118,15 +120,99 @@ export function createKpCertifiedNativeKatexContributorFusionPlayback<
   });
 }
 
+/**
+ * Several certified evaluations may share one semantic transition and clock.
+ * Cohort IDs scope the existing primitive to independent material groups;
+ * the base lifecycle is sampled, applied, and retired exactly once.
+ */
+export function createKpCertifiedNativeKatexContributorFusionCohortPlayback<
+  Sample,
+  Frame,
+  Session extends KpContributorFusionPlaybackPort<Sample, Frame>
+>(input: {
+  readonly stage: HTMLElement;
+  readonly base: Session;
+  readonly cohorts: readonly {
+    readonly cohortId: string;
+    readonly certificate: KpVerifiedEquationEvaluationFamilyCertificateV2;
+  }[];
+}): Session {
+  if (input.cohorts.length < 2) {
+    throw new Error(
+      "Native KaTeX cohort fusion requires at least two certified cohorts."
+    );
+  }
+  const cohortIds = new Set<string>();
+  input.cohorts.forEach(({ cohortId, certificate }) => {
+    if (!isKpVerifiedEquationEvaluationFamilyCertificateV2(certificate)) {
+      throw new Error(
+        "Native KaTeX cohort fusion requires compiler-minted family certificates."
+      );
+    }
+    const familyProfile = requireContributorFusionFamilyProfile(certificate);
+    if (certificate.topologyCertificate.cohortId !== cohortId ||
+        cohortId.trim() === "" || cohortIds.has(cohortId)) {
+      throw new Error(
+        "Native KaTeX cohort fusion requires unique certificate-owned cohort IDs."
+      );
+    }
+    cohortIds.add(cohortId);
+    requireCompatibleProfiles(
+      familyProfile,
+      kpNativeKatexContributorFusionOpticalProfile
+    );
+  });
+  return Object.freeze({
+    ...input.base,
+    sample(progress: number) {
+      return input.base.sample(progress);
+    },
+    apply(progress: number) {
+      const frame = input.base.apply(progress);
+      input.cohorts.forEach(({ cohortId, certificate }) => {
+        const familyProfile =
+          requireContributorFusionFamilyProfile(certificate);
+        const sourceOwners = materialOwners(input.stage, "source", cohortId);
+        const targetOwners = materialOwners(input.stage, "target", cohortId);
+        if (sourceOwners.length === 0 || targetOwners.length === 0) {
+          throw new Error(
+            `Native KaTeX cohort ${cohortId} lacks source or target material paint.`
+          );
+        }
+        applyKpNativeKatexContributorFusion({
+          stage: input.stage,
+          progress,
+          familyProfile,
+          opticalProfile: kpNativeKatexContributorFusionOpticalProfile,
+          cohortId
+        });
+      });
+      input.stage.dataset["kpOperationEvaluationCohortIds"] =
+        JSON.stringify([...cohortIds]);
+      input.stage.dataset["kpOperationEvaluationCohortCount"] =
+        String(cohortIds.size);
+      input.stage.dataset["kpOperationEvaluationReadableCohortCount"] =
+        input.stage.dataset["kpOperationEvaluationLegibilityState"] === "kernel"
+          ? "0"
+          : String(cohortIds.size);
+      return frame;
+    },
+    retire(retirement: KpNativeKatexPaintPreservingRetirement) {
+      input.base.retire(retirement);
+    }
+  }) as Session;
+}
+
 export function applyKpNativeKatexContributorFusion(input: {
   readonly stage: HTMLElement;
   readonly progress: number;
   readonly familyProfile: KpContributorFusionEvaluationFamilyProfile;
   readonly opticalProfile: KpNativeKatexContributorFusionOpticalProfile;
+  readonly cohortId?: string | undefined;
 }): void {
   requireCompatibleProfiles(input.familyProfile, input.opticalProfile);
-  const sourceOwners = materialOwners(input.stage, "source");
-  const targetOwners = materialOwners(input.stage, "target");
+  const sourceOwners = materialOwners(input.stage, "source", input.cohortId);
+  const targetOwners = materialOwners(input.stage, "target", input.cohortId);
   if (sourceOwners.length === 0 || targetOwners.length === 0) return;
   const sourceRects = sourceOwners.map(ownerBaseRect);
   const targetRects = targetOwners.map(ownerBaseRect);
@@ -242,13 +328,32 @@ function requireCompatibleProfiles(
   }
 }
 
+function requireContributorFusionFamilyProfile(
+  certificate: KpVerifiedEquationEvaluationFamilyCertificateV2
+): KpContributorFusionEvaluationFamilyProfile {
+  const familyProfile = certificate.familyProfile;
+  if (familyProfile.family !== "contributor-fusion") {
+    throw new Error(
+      `Native KaTeX cohort fusion cannot realize ${familyProfile.family}.`
+    );
+  }
+  return familyProfile;
+}
+
 function materialOwners(
   stage: HTMLElement,
-  side: "source" | "target"
+  side: "source" | "target",
+  cohortId?: string | undefined
 ): readonly HTMLElement[] {
-  return [...stage.querySelectorAll<HTMLElement>(
+  const owners = [...stage.querySelectorAll<HTMLElement>(
     `[data-kp-equation-material-fragment-role^="successor-${side}:"]`
   )];
+  return cohortId === undefined
+    ? owners
+    : owners.filter((owner) =>
+        owner.dataset["kpEquationMaterialVerifiedOperationCohortId"] ===
+          cohortId
+      );
 }
 
 function setOwnerPaintPresence(owner: HTMLElement, present: boolean): void {
