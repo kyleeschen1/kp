@@ -502,6 +502,27 @@
       "scope": "slice s16 host and renderer boundaries",
       "checkedAt": "2026-08-25T02:16:35.558Z",
       "notes": "Dependency direction, semantic animation boundaries, evaluation presentation authority, equation governance, and cross-domain conformance gates pass."
+    },
+    {
+      "command": "npm run visual:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s17 scoped Chromium review capture",
+      "checkedAt": "2026-08-25T02:25:18.905Z",
+      "notes": "Generated eight deterministic Catalogue checkpoints plus HTML, PNG contact sheet, and semantic manifest under ignored tmp/codex output."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s17 type safety",
+      "checkedAt": "2026-08-25T02:25:20.145Z",
+      "notes": "Completed with zero Svelte diagnostics and no TypeScript errors."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s17 architecture preservation",
+      "checkedAt": "2026-08-25T02:25:21.170Z",
+      "notes": "Dependency direction, framework-neutral entrypoints, semantic animation boundaries, equation governance, and cross-domain conformance passed."
     }
   ],
   "allowedWork": [
@@ -633,7 +654,8 @@
     {
       "id": "next-action.kp.integration-power-rule.s17",
       "title": "Integration-visual-review-sheet",
-      "status": "planned"
+      "summary": "Added a stable scoped visual command that captures eight deterministic Catalogue states spanning native source, salience-only scope, material rewrite, expanded fraction with persistent +C, both ink-knot phases, native target, and narrow light fit. The command emits a disposable PNG contact sheet, HTML review page, and machine-readable semantic manifest without adding permanent gallery chrome or claiming visual certification.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.integration-power-rule.s18",
