@@ -845,6 +845,54 @@
       "scope": "slice s18 visible slot-binding repair",
       "checkedAt": "2026-08-25T20:16:37.781Z",
       "notes": "Theseus validates 1061 nodes and 25669 events after verification records and receipt closure."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s18 receiving-template candidate: 63 focused semantic and compositor checks",
+      "checkedAt": "2026-08-25T20:47:08.410Z"
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-catalogue",
+      "status": "passed",
+      "scope": "slice s18 receiving-template candidate: two Chromium lifecycle and ownership checks",
+      "checkedAt": "2026-08-25T20:47:09.745Z"
+    },
+    {
+      "command": "npm run visual:integration-power-rule -- --base-url http://127.0.0.1:8000",
+      "status": "passed",
+      "scope": "slice s18 exact live receiving-template contact sheet",
+      "checkedAt": "2026-08-25T20:47:10.811Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s18 receiving-template candidate",
+      "checkedAt": "2026-08-25T20:47:11.853Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s18 receiving-template candidate",
+      "checkedAt": "2026-08-25T20:47:12.888Z"
+    },
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "slice s18 derivative preservation: 35 focused checks",
+      "checkedAt": "2026-08-25T20:47:13.933Z"
+    },
+    {
+      "command": "npm run test:browser:differentiation-exemplar",
+      "status": "passed",
+      "scope": "slice s18 derivative preservation: four Chromium checks",
+      "checkedAt": "2026-08-25T20:47:14.955Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s18 receiving-template candidate: 1061 nodes and 25680 events",
+      "checkedAt": "2026-08-25T20:47:29.983Z"
     }
   ],
   "allowedWork": [
@@ -982,7 +1030,7 @@
     {
       "id": "next-action.kp.integration-power-rule.s18",
       "title": "Integration-human-visual-checkpoint",
-      "summary": "Human review rejected the second candidate because it presents a general rule beside the concrete expression but never makes template instantiation perceptible. Revise the same exemplar so the source exponent visibly binds into both n roles and the generic rule itself settles into the concrete expanded expression. Preserve exact endpoints, correspondence, salience-only operator scope, dual ink knots, derivative behavior, and exemplar-only scope.",
+      "summary": "Human-review candidate removes the floating general-law equation and makes the governed expanded structure the receiving template: the full fraction, successor syntax, and +C open around retained x squared; three target-bound vacancy marks receive the persistent base and exponent fan-out; the same material settles into the exact expanded endpoint. Await explicit visual approval before s19.",
       "status": "in-progress"
     },
     {

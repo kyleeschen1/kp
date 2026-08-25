@@ -20,12 +20,12 @@ import {
 } from "./native-katex-track-projection.ts";
 
 export const kpAntiderivativeTemplateInstantiationProfileId =
-  "kp.rendering.native-katex.antiderivative-template-instantiation-profile.v2";
+  "kp.rendering.native-katex.antiderivative-template-instantiation-profile.v3";
 
 const presentationProfile = Object.freeze({
-  scaffoldPointScale: 0.78,
-  fixedSyntaxPointScale: 0.72,
-  closurePointScale: 0.76,
+  scaffoldPointScale: 0.9,
+  fixedSyntaxPointScale: 0.88,
+  closurePointScale: 0.9,
   numeratorVacancyOffsetInNativeHeights: 1.35,
   denominatorBranchClearanceInNativeHeights: 1.8
 });
@@ -131,10 +131,9 @@ export function createKpAntiderivativeTemplateInstantiationTrackProjection(
             ...track,
             timingGroupId: "antiderivative-template.base-binding",
             semanticMotionUnitId: "antiderivative-template.base-binding",
-            // The prospective fraction rule opens under the source x while x
-            // is being received into the numerator. This is motif contact,
-            // not incidental crowding, and remains pair-bounded by the rule's
-            // matching compiler-owned contact ID.
+            // The persistent base travels into the already-visible numerator
+            // vacancy. Its contact with the fraction scaffold is therefore
+            // the rule's reception event, not incidental crowding.
             intentionalContactGroupId: numeratorReceptionContactGroupId,
             sampleProgress: sampleRuleBindingMotionInput,
             motionMetrics: true as const

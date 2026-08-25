@@ -42,16 +42,7 @@ export interface KpAntiderivativePowerChoreographyPlan {
   readonly introducedSelectorIds: readonly string[];
   readonly ruleTemplateApplication: {
     readonly kind: "antiderivative-rule-template-instantiation";
-    readonly ruleReference: {
-      readonly semanticId: string;
-      readonly lawRefId: "law.calculus.integral.power-rule";
-      readonly parameterSymbol: "n";
-      readonly baseSymbol: string;
-      readonly integrationVariable: string;
-      readonly boundValue: string;
-      readonly latex: string;
-      readonly sourceBindingSelectorId: string;
-    };
+    readonly lawRefId: "law.calculus.integral.power-rule";
     readonly scaffoldSemanticEntityIds: readonly string[];
     readonly fixedSyntaxGroups: readonly [
       {
@@ -100,9 +91,8 @@ export interface KpAntiderivativePowerChoreographyFrame {
   };
   readonly ruleTemplateApplication: {
     readonly traceRole: "absent" | "prospective" | "live";
-    readonly ruleReferencePresence: number;
-    readonly ruleReferenceFocus: number;
-    readonly ruleSlotBindingProgress: number;
+    readonly receiverFocus: number;
+    readonly vacancyPresence: number;
     readonly previewPresence: number;
     readonly scaffoldPresence: number;
     readonly bindingProgress: number;
@@ -265,16 +255,7 @@ export function compileKpAntiderivativePowerChoreography(input: {
     )),
     ruleTemplateApplication: Object.freeze({
       kind: "antiderivative-rule-template-instantiation" as const,
-      ruleReference: Object.freeze({
-        semanticId: `${input.id}.prospective-rule-reference`,
-        lawRefId: input.lawRefId,
-        parameterSymbol: "n" as const,
-        baseSymbol: sourceRole("source.integrand-base").label,
-        integrationVariable: sourceRole("source.integration-variable").label,
-        boundValue: sourceRole("source.integrand-exponent").label,
-        latex: `\\int ${sourceRole("source.integrand-base").label}^{n}\\,d${sourceRole("source.integration-variable").label} \\longmapsto \\frac{${sourceRole("source.integrand-base").label}^{n+1}}{n+1}+C\\quad(n\\ne -1)`,
-        sourceBindingSelectorId: exponent.sourceSelectorIds[0]!
-      }),
+      lawRefId: input.lawRefId,
       scaffoldSemanticEntityIds: Object.freeze([
         group("expanded.exact-quotient")
       ]),
@@ -334,13 +315,13 @@ export function sampleKpAntiderivativePowerChoreography(input: {
     direction === "forward" ? progress : 1 - progress
   );
   const phases: Readonly<Record<KpAntiderivativePowerPhaseId, number>> = {
-    "notice-operator-scope": phaseProgress(semanticProgress, 0.04, 0.16),
-    "withdraw-operator": phaseProgress(semanticProgress, 0.18, 0.32),
-    "rewrite-power-rule": phaseProgress(semanticProgress, 0.34, 0.9),
-    "preview-rule-template": phaseProgress(semanticProgress, 0.34, 0.45),
-    "bind-rule-template": phaseProgress(semanticProgress, 0.49, 0.8),
-    "resolve-rule-syntax": phaseProgress(semanticProgress, 0.8, 0.86),
-    "settle-expanded-rule": phaseProgress(semanticProgress, 0.82, 1)
+    "notice-operator-scope": phaseProgress(semanticProgress, 0.04, 0.14),
+    "withdraw-operator": phaseProgress(semanticProgress, 0.14, 0.25),
+    "rewrite-power-rule": phaseProgress(semanticProgress, 0.27, 0.96),
+    "preview-rule-template": phaseProgress(semanticProgress, 0.27, 0.5),
+    "bind-rule-template": phaseProgress(semanticProgress, 0.52, 0.87),
+    "resolve-rule-syntax": phaseProgress(semanticProgress, 0.87, 0.94),
+    "settle-expanded-rule": phaseProgress(semanticProgress, 0.9, 1)
   };
   const notice = phases["notice-operator-scope"];
   const withdrawal = phases["withdraw-operator"];
@@ -379,36 +360,28 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
   rewriteProgress: number
 ): KpAntiderivativePowerChoreographyFrame["ruleTemplateApplication"] {
   const progress = clamp01(rewriteProgress);
-  const preview = phaseProgress(progress, 0, 0.18);
-  const binding = phaseProgress(progress, 0.26, 0.82);
-  const syntaxResolution = phaseProgress(progress, 0.82, 0.92);
-  const ruleReferencePresence = roundProgress(
-    preview * (1 - syntaxResolution)
-  );
-  // The rule remains the focal object through parameter binding. Attention
-  // transfers to the concrete receiver only when the instantiated rule exits.
-  const ruleReferenceFocus = ruleReferencePresence;
-  // The fixed +1 grammar and +C form the receiving expression, while the
-  // pinned law reference makes the general rule perceptible. Keeping these
-  // roles separate avoids pretending dim endpoint fragments are a template.
-  const scaffoldPresence = roundProgress(
-    preview * (0.86 + 0.14 * syntaxResolution)
-  );
-  const syntaxPresence = roundProgress(
-    preview * (0.76 + 0.24 * syntaxResolution)
-  );
-  const closurePresence = roundProgress(
-    preview * (0.66 + 0.34 * syntaxResolution)
-  );
+  const preview = phaseProgress(progress, 0, 0.22);
+  const binding = phaseProgress(progress, 0.38, 0.88);
+  const syntaxResolution = phaseProgress(progress, 0.88, 0.98);
+  // The receiving structure is itself the rule application. It gets a quiet
+  // hold before source material moves, then yields focus as bound syntax
+  // becomes the live expanded expression.
+  const receiverFocus = roundProgress(preview * (1 - syntaxResolution));
+  const vacancyPresence = roundProgress(preview * (1 - binding));
+  // A receiving template cannot be inferred from faint endpoint fragments.
+  // Its fraction, successor syntax, and +C arrive as one legible structure;
+  // color and vacancies distinguish prospective grammar from bound material.
+  const scaffoldPresence = preview;
+  const syntaxPresence = preview;
+  const closurePresence = preview;
   return Object.freeze({
     traceRole: syntaxResolution >= 1
       ? "live" as const
       : preview > 0
         ? "prospective" as const
         : "absent" as const,
-    ruleReferencePresence,
-    ruleReferenceFocus,
-    ruleSlotBindingProgress: binding,
+    receiverFocus,
+    vacancyPresence,
     previewPresence: preview,
     scaffoldPresence,
     bindingProgress: binding,

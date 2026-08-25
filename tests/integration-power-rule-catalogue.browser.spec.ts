@@ -36,7 +36,7 @@ test("integration power rule uses governed transit and two certified ink knots",
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-template-profile-id",
-    "kp.rendering.native-katex.antiderivative-template-instantiation-profile.v2"
+    "kp.rendering.native-katex.antiderivative-template-instantiation-profile.v3"
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-power-visual-owner",
@@ -79,7 +79,7 @@ test("integration power rule uses governed transit and two certified ink knots",
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-template-application",
-    "prospective-scaffold-binding"
+    "receiving-scaffold-binding"
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-template-trace-role",
@@ -104,87 +104,56 @@ test("integration power rule uses governed transit and two certified ink knots",
     .toBeGreaterThan(0);
   await expect.poll(() => visibleMaterialOwners(stage)).toBeGreaterThan(0);
   expect(await visiblePaintOwnerKinds(stage)).toEqual(["material"]);
-  const ruleReference = stage.locator(
-    "[data-kp-antiderivative-rule-reference]"
+  const templateReceiver = stage.locator(
+    "[data-kp-antiderivative-template-receiver]"
   );
-  await expect(ruleReference).toHaveCount(1);
-  await expect(ruleReference).toHaveAttribute(
-    "data-kp-antiderivative-rule-law-ref-id",
+  await expect(templateReceiver).toHaveCount(1);
+  await expect(templateReceiver).toHaveAttribute(
+    "data-kp-antiderivative-template-law-ref-id",
     "law.calculus.integral.power-rule"
   );
-  await expect(ruleReference).toHaveAttribute("aria-hidden", "false");
+  await expect(templateReceiver).toHaveAttribute("aria-hidden", "true");
   await expect(stage).toHaveAttribute(
-    "data-kp-antiderivative-rule-reference-focus",
+    "data-kp-antiderivative-template-receiver-focus",
     "1.0000"
   );
-  await expect(ruleReference).toHaveAttribute(
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-template-vacancy-count",
+    "3"
+  );
+  const vacancies = templateReceiver.locator(
+    "[data-kp-antiderivative-template-vacancy]"
+  );
+  await expect(vacancies).toHaveCount(3);
+  await expect.poll(() => renderedOpacity(vacancies.first())).toBe(1);
+  const grammar = stage.locator(
+    '[data-kp-antiderivative-template-paint-role="grammar"]'
+  );
+  await expect.poll(() => grammar.count()).toBeGreaterThan(0);
+  await expect(grammar.first()).toHaveAttribute(
     "data-kp-semantic-salience-level",
     "focus"
   );
-  await expect(ruleReference.locator(".katex").first()).toBeVisible();
-  await expect(ruleReference).toContainText("n");
-  await expect.poll(() => renderedOpacity(ruleReference)).toBe(1);
-  const ruleSlots = ruleReference.locator(
-    "[data-kp-antiderivative-rule-slot]"
-  );
-  const templateSymbols = ruleReference.locator(
-    ".editor-equation-stage__antiderivative-rule-slot-template"
-  );
-  const boundSymbols = ruleReference.locator(
-    ".editor-equation-stage__antiderivative-rule-slot-binding"
-  );
-  const bindingCue = ruleReference.locator(
-    "[data-kp-antiderivative-rule-binding-cue]"
-  );
-  await expect(ruleSlots).toHaveCount(3);
-  await expect(templateSymbols).toHaveCount(3);
-  await expect(boundSymbols).toHaveCount(3);
-  await expect(bindingCue).toHaveCount(1);
-  await expect(bindingCue).toHaveAttribute(
-    "data-kp-antiderivative-rule-binding-cue",
-    "n:2"
-  );
-  await expect.poll(() => renderedOpacity(templateSymbols.first())).toBe(1);
-  await expect.poll(() => renderedOpacity(boundSymbols.first())).toBe(0);
-  await expect.poll(() => renderedOpacity(bindingCue)).toBe(0);
-  await expect(boundSymbols.first()).toContainText("2");
-  const ruleReferenceBox = await ruleReference.boundingBox();
-  expect(ruleReferenceBox?.width ?? 0).toBeGreaterThan(300);
-  expect(ruleReferenceBox?.height ?? 0).toBeGreaterThan(30);
-  const contextualReceivers = stage.locator(
-    '[data-kp-equation-material-owner-id]' +
-    '[data-kp-semantic-salience-level="context"]'
-  );
-  await expect.poll(() => contextualReceivers.count()).toBeGreaterThan(0);
-  await expect(contextualReceivers.first()).toHaveCSS(
-    "filter",
-    "brightness(0.22)"
-  );
+  await expect(stage.locator(
+    "[data-kp-antiderivative-rule-reference]"
+  )).toHaveCount(0);
 
   await seek.fill("0.34");
   await expectTransitReady(stage);
   await expect(stage).toHaveAttribute(
-    "data-kp-antiderivative-rule-reference-focus",
+    "data-kp-antiderivative-template-receiver-focus",
     "1.0000"
   );
   await expect.poll(async () => Number(await stage.getAttribute(
-    "data-kp-antiderivative-rule-slot-binding-progress"
+    "data-kp-antiderivative-template-binding-progress"
   ))).toBeGreaterThan(0);
   await expect.poll(async () => Number(await stage.getAttribute(
-    "data-kp-antiderivative-rule-slot-binding-progress"
+    "data-kp-antiderivative-template-binding-progress"
   ))).toBeLessThan(1);
-  await expect.poll(() => renderedOpacity(templateSymbols.first()))
-    .toBeLessThan(1);
-  await expect.poll(() => renderedOpacity(boundSymbols.first()))
-    .toBeGreaterThan(0);
-  await expect.poll(() => renderedOpacity(bindingCue)).toBeGreaterThan(0);
-  await expect(bindingCue).toContainText("n←2");
-  await expect(contextualReceivers.first()).toHaveCSS(
-    "filter",
-    "brightness(0.22)"
-  );
+  await expect.poll(() => renderedOpacity(vacancies.first())).toBeGreaterThan(0);
+  await expect.poll(() => renderedOpacity(vacancies.first())).toBeLessThan(1);
 
-  await seek.fill("0.43");
+  await seek.fill("0.49");
   await expectTransitReady(stage);
   const visibleConstant = stage.locator(
     '[data-kp-motion-id$=".expanded.constant"]'
@@ -192,14 +161,15 @@ test("integration power rule uses governed transit and two certified ink knots",
   await expect(visibleConstant).toHaveCount(1);
   await expect.poll(() => renderedOpacity(visibleConstant))
     .toBeGreaterThan(0);
-  await expect(ruleReference).toHaveAttribute("aria-hidden", "true");
-  await expect.poll(() => renderedOpacity(ruleReference)).toBe(0);
   await expect(stage).toHaveAttribute(
-    "data-kp-antiderivative-rule-slot-binding-progress",
+    "data-kp-antiderivative-template-binding-progress",
     "1.0000"
   );
-  await expect.poll(() => renderedOpacity(bindingCue)).toBe(0);
-  await expect(contextualReceivers).toHaveCount(0);
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-template-receiver-focus",
+    "0.0000"
+  );
+  await expect.poll(() => renderedOpacity(vacancies.first())).toBe(0);
 
   await seek.fill("0.5");
   await expect(activeTransition(stage)).toHaveAttribute(
@@ -265,11 +235,11 @@ test("integration Catalogue lifecycle restores, rewinds, themes, and exposes sta
     "material-scene"
   );
   const lightColor = await visibleMaterialColor(stage);
-  const lightRuleReference = stage.locator(
-    "[data-kp-antiderivative-rule-reference]"
+  const lightTemplateGrammar = stage.locator(
+    '[data-kp-antiderivative-template-paint-role="grammar"]'
   );
-  await expect(lightRuleReference).toHaveAttribute("aria-hidden", "false");
-  const lightRuleColor = await lightRuleReference.evaluate((element) =>
+  await expect(lightTemplateGrammar.first()).toBeVisible();
+  const lightTemplateColor = await lightTemplateGrammar.first().evaluate((element) =>
     getComputedStyle(element).color
   );
 
@@ -279,14 +249,14 @@ test("integration Catalogue lifecycle restores, rewinds, themes, and exposes sta
   await expectTransitReady(darkStage);
   const darkColor = await visibleMaterialColor(darkStage);
   expect(darkColor).not.toBe(lightColor);
-  const darkRuleReference = darkStage.locator(
-    "[data-kp-antiderivative-rule-reference]"
+  const darkTemplateGrammar = darkStage.locator(
+    '[data-kp-antiderivative-template-paint-role="grammar"]'
   );
-  await expect(darkRuleReference).toHaveAttribute("aria-hidden", "false");
-  const darkRuleColor = await darkRuleReference.evaluate((element) =>
+  await expect(darkTemplateGrammar.first()).toBeVisible();
+  const darkTemplateColor = await darkTemplateGrammar.first().evaluate((element) =>
     getComputedStyle(element).color
   );
-  expect(darkRuleColor).not.toBe(lightRuleColor);
+  expect(darkTemplateColor).not.toBe(lightTemplateColor);
 
   await setPresentation(darkPlayer, "reduced-motion");
   await expect(darkStage).toHaveAttribute(
@@ -297,7 +267,9 @@ test("integration Catalogue lifecycle restores, rewinds, themes, and exposes sta
     "data-kp-antiderivative-power-visual-owner",
     /source-native|target-native/
   );
-  await expect(darkRuleReference).toHaveAttribute("aria-hidden", "true");
+  await expect.poll(() => renderedOpacity(darkStage.locator(
+    "[data-kp-antiderivative-template-vacancy]"
+  ).first())).toBe(0);
   await setPresentation(darkPlayer, "static");
   await expect(darkStage).toHaveAttribute(
     "data-kp-antiderivative-power-accessibility-projection",

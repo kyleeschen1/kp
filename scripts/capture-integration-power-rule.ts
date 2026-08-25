@@ -34,14 +34,14 @@ const samples = [
   },
   {
     id: "template-scaffold",
-    label: "Rule application · generic n-slots receive the instance",
+    label: "Rule application · receiving structure opens",
     progress: 0.24,
     theme: "dark",
     viewport: desktopViewport
   },
   {
     id: "template-binding",
-    label: "Rule application · n binds visibly to 2",
+    label: "Rule application · source symbols enter their slots",
     progress: 0.34,
     theme: "dark",
     viewport: desktopViewport
@@ -49,7 +49,7 @@ const samples = [
   {
     id: "template-syntax",
     label: "Rule application · fixed syntax resolves",
-    progress: 0.43,
+    progress: 0.49,
     theme: "dark",
     viewport: desktopViewport
   },
@@ -103,14 +103,10 @@ interface CaptureEvidence {
   readonly operatorSalienceStrength: number;
   readonly templateProfileId: string;
   readonly templateTraceRole: string;
-  readonly ruleReferenceLawRefId: string;
-  readonly ruleReferencePresence: number;
-  readonly ruleReferenceFocus: number;
-  readonly ruleReferenceWidth: number;
-  readonly ruleReferenceHeight: number;
-  readonly ruleSlotCount: number;
-  readonly ruleSlotBindingProgress: number;
-  readonly ruleBindingCuePresence: number;
+  readonly templateLawRefId: string;
+  readonly templateReceiverFocus: number;
+  readonly templateVacancyPresence: number;
+  readonly templateVacancyCount: number;
   readonly templatePreviewPresence: number;
   readonly templateScaffoldPresence: number;
   readonly templateBindingProgress: number;
@@ -274,10 +270,9 @@ async function captureSample(input: {
     const visibleOwners = [...root.querySelectorAll<HTMLElement>(
       "[data-kp-equation-material-owner-id]"
     )].filter(visible);
-    const ruleReference = root.querySelector<HTMLElement>(
-      "[data-kp-antiderivative-rule-reference]"
+    const templateReceiver = root.querySelector<HTMLElement>(
+      "[data-kp-antiderivative-template-receiver]"
     );
-    const ruleReferenceRect = ruleReference?.getBoundingClientRect();
     return {
       transitionId: root.querySelector<HTMLElement>(
         "[data-kp-editor-equation-transition-id]"
@@ -294,25 +289,17 @@ async function captureSample(input: {
         root.dataset["kpAntiderivativeTemplateProfileId"] ?? "inactive",
       templateTraceRole:
         root.dataset["kpAntiderivativeTemplateTraceRole"] ?? "inactive",
-      ruleReferenceLawRefId:
-        root.dataset["kpAntiderivativeRuleReferenceLawRefId"] ?? "inactive",
-      ruleReferencePresence: Number(
-        root.dataset["kpAntiderivativeRuleReferencePresence"] ?? 0
+      templateLawRefId:
+        root.dataset["kpAntiderivativeTemplateLawRefId"] ?? "inactive",
+      templateReceiverFocus: Number(
+        root.dataset["kpAntiderivativeTemplateReceiverFocus"] ?? 0
       ),
-      ruleReferenceFocus: Number(
-        root.dataset["kpAntiderivativeRuleReferenceFocus"] ?? 0
+      templateVacancyPresence: Number(
+        root.dataset["kpAntiderivativeTemplateVacancyPresence"] ?? 0
       ),
-      ruleReferenceWidth: ruleReferenceRect?.width ?? 0,
-      ruleReferenceHeight: ruleReferenceRect?.height ?? 0,
-      ruleSlotCount: ruleReference?.querySelectorAll(
-        "[data-kp-antiderivative-rule-slot]"
+      templateVacancyCount: templateReceiver?.querySelectorAll(
+        "[data-kp-antiderivative-template-vacancy]"
       ).length ?? 0,
-      ruleSlotBindingProgress: Number(
-        root.dataset["kpAntiderivativeRuleSlotBindingProgress"] ?? 0
-      ),
-      ruleBindingCuePresence: Number(
-        root.dataset["kpAntiderivativeRuleBindingCuePresence"] ?? 0
-      ),
       templatePreviewPresence: Number(
         root.dataset["kpAntiderivativeTemplatePreviewPresence"] ?? 0
       ),
@@ -352,8 +339,7 @@ async function captureSample(input: {
       visibleText: [...root.querySelectorAll<HTMLElement>(
         "[data-kp-editor-equation-source], " +
         "[data-kp-editor-equation-target], " +
-        "[data-kp-equation-material-owner-id], " +
-        "[data-kp-antiderivative-rule-reference]"
+        "[data-kp-equation-material-owner-id]"
       )].filter(visible).map((element) => element.textContent ?? "")
         .join(" ").replace(/\s+/gu, " ").trim()
     };
@@ -429,25 +415,20 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   if (
     scaffold.transitVisualOwner !== "material-scene" ||
     scaffold.templateProfileId !==
-      "kp.rendering.native-katex.antiderivative-template-instantiation-profile.v2" ||
+      "kp.rendering.native-katex.antiderivative-template-instantiation-profile.v3" ||
     scaffold.templateTraceRole !== "prospective" ||
-    scaffold.ruleReferenceLawRefId !==
+    scaffold.templateLawRefId !==
       "law.calculus.integral.power-rule" ||
-    scaffold.ruleReferencePresence !== 1 ||
-    scaffold.ruleReferenceFocus !== 1 ||
-    scaffold.ruleReferenceWidth <= 300 ||
-    scaffold.ruleReferenceHeight <= 30 ||
-    scaffold.ruleSlotCount !== 3 ||
-    scaffold.ruleSlotBindingProgress !== 0 ||
-    scaffold.ruleBindingCuePresence !== 0 ||
+    scaffold.templateReceiverFocus !== 1 ||
+    scaffold.templateVacancyPresence !== 1 ||
+    scaffold.templateVacancyCount !== 3 ||
     scaffold.templatePreviewPresence !== 1 ||
     scaffold.templateScaffoldPresence <= 0 ||
     scaffold.templateSyntaxPresence <= 0 ||
     scaffold.templateClosurePresence <= 0 ||
     scaffold.templateBindingProgress !== 0 ||
     scaffold.templateSyntaxResolutionProgress !== 0 ||
-    scaffold.visibleMaterialOwnerCount === 0 ||
-    !scaffold.visibleText.includes("n")
+    scaffold.visibleMaterialOwnerCount === 0
   ) {
     throw new Error(
       "Template scaffold frame must expose prospective Native KaTeX structure."
@@ -456,13 +437,10 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   const binding = required("template-binding");
   if (
     binding.templateTraceRole !== "prospective" ||
-    binding.ruleReferencePresence !== 1 ||
-    binding.ruleReferenceFocus <= 0 ||
-    binding.ruleReferenceFocus !== 1 ||
-    binding.ruleSlotCount !== 3 ||
-    binding.ruleSlotBindingProgress <= 0 ||
-    binding.ruleSlotBindingProgress >= 1 ||
-    binding.ruleBindingCuePresence <= 0 ||
+    binding.templateReceiverFocus !== 1 ||
+    binding.templateVacancyCount !== 3 ||
+    binding.templateVacancyPresence <= 0 ||
+    binding.templateVacancyPresence >= 1 ||
     binding.templateBindingProgress <= 0 ||
     binding.templateBindingProgress >= 1 ||
     binding.templateSyntaxPresence <= 0 ||
@@ -475,10 +453,8 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   const syntax = required("template-syntax");
   if (
     syntax.templateBindingProgress !== 1 ||
-    syntax.ruleReferencePresence !== 0 ||
-    syntax.ruleReferenceFocus !== 0 ||
-    syntax.ruleSlotBindingProgress !== 1 ||
-    syntax.ruleBindingCuePresence !== 0 ||
+    syntax.templateReceiverFocus !== 0 ||
+    syntax.templateVacancyPresence !== 0 ||
     syntax.templateSyntaxPresence !== 1 ||
     syntax.templateClosurePresence !== 1 ||
     syntax.templateSyntaxResolutionProgress !== 1
