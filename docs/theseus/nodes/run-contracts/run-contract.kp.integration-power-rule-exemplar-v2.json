@@ -103,6 +103,20 @@
       "scope": "slice s04 correspondence lineage",
       "checkedAt": "2026-08-25T00:04:44.061Z",
       "notes": "The explicit correspondence-to-lineage relation boundary passes the complete typecheck suite."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s05 case ledger",
+      "checkedAt": "2026-08-25T00:07:59.256Z",
+      "notes": "The ledger exposes one exemplar candidate and seven typed gaps with unique repair targets; validation rejects untyped gaps and false target claims."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s05 case ledger",
+      "checkedAt": "2026-08-25T00:08:00.521Z",
+      "notes": "The closed case and repair vocabulary passes all TypeScript, Svelte, and domain checks."
     }
   ],
   "allowedWork": [
@@ -162,7 +176,8 @@
     {
       "id": "next-action.kp.integration-power-rule.s05",
       "title": "Bounded-integration-case-ledger",
-      "status": "planned"
+      "summary": "Added a frozen integration case ledger with one exemplar candidate and typed repair gaps for n=-1, symbolic exponents, definite bounds, substitution, area, FTC, and unbound edits. Each gap names a unique repair target and cannot claim an executable target. Scoped tests and full typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.integration-power-rule.s06",
