@@ -1088,6 +1088,69 @@
       "scope": "slice s18 normal playback durable evidence",
       "checkedAt": "2026-08-25T22:44:27.625Z",
       "notes": "Theseus validates 1061 nodes and 25724 events after context closure and verification records."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "focused unit contracts",
+      "checkedAt": "2026-08-25T23:32:55.145Z",
+      "notes": "64 integration power-rule tests passed."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-catalogue",
+      "status": "passed",
+      "scope": "canonical browser exemplar",
+      "checkedAt": "2026-08-25T23:32:56.539Z",
+      "notes": "Three Catalogue lifecycle, continuity, and ordinary-playback checks passed."
+    },
+    {
+      "command": "npm run visual:integration-power-rule -- --base-url http://127.0.0.1:8000",
+      "status": "passed",
+      "scope": "desktop and narrow visual checkpoint",
+      "checkedAt": "2026-08-25T23:32:57.689Z",
+      "notes": "Contact sheet passed with coherent template handoff and no duplicate vacancy or fraction paint."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "static typing",
+      "checkedAt": "2026-08-25T23:32:58.818Z",
+      "notes": "App, Node, test, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture boundary preservation",
+      "checkedAt": "2026-08-25T23:32:59.968Z",
+      "notes": "All dependency, semantic animation, equation authority, governance, and conformance gates passed."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "equation preservation matrix",
+      "checkedAt": "2026-08-25T23:33:01.144Z",
+      "notes": "All 11 equation surface authority and preservation tests passed."
+    },
+    {
+      "command": "./node_modules/.bin/playwright test tests/integration-power-rule-transit.browser.spec.ts tests/integration-power-rule-evaluation.browser.spec.ts tests/differentiation-power-catalogue.browser.spec.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "mechanism and derivative browser preservation",
+      "checkedAt": "2026-08-25T23:33:02.281Z",
+      "notes": "Six Chromium mechanism and derivative preservation checks passed."
+    },
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "protected derivative unit contracts",
+      "checkedAt": "2026-08-25T23:33:34.662Z",
+      "notes": "All 36 derivative semantic, choreography, migration, and policy checks passed unchanged."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice s18 durable state",
+      "checkedAt": "2026-08-25T23:33:48.443Z",
+      "notes": "Theseus validates 1061 nodes and 25737 events after closing the context receipt and recording the renewed human-checkpoint summary."
     }
   ],
   "allowedWork": [
@@ -1225,7 +1288,7 @@
     {
       "id": "next-action.kp.integration-power-rule.s18",
       "title": "Integration-human-visual-checkpoint",
-      "summary": "USER_PAUSED at the human visual checkpoint. The visible long line is likely the target fraction-rule material owner held at the translated receiver, not a longmapsto; the separately rendered template fraction bar has no compositor correspondence. Diagnose a single template-scaffold-to-target fraction-bar handoff before further visual changes or promotion.",
+      "summary": "Replaced the detached instantiated-rule overlay with an actual source-native KaTeX RHS handoff. The template and material scene exchange ownership at matching paint geometry; one fraction rule and the plus-C owner move as a coherent formula across desktop and narrow hosts. Removed the three misleading vacancy underlines. Focused unit, Catalogue browser, responsive visual, type, architecture, equation-preservation, mechanism, and derivative checks pass. Awaiting renewed human visual approval before s19 regression freeze.",
       "status": "in-progress"
     },
     {

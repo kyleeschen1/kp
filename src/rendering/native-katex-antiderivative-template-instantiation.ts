@@ -3,7 +3,8 @@ import {
   type KpAntiderivativePowerChoreographyPlan
 } from "../animation/antiderivative-power-choreography.ts";
 import {
-  invalidateKpNativeKatexMotionPath
+  invalidateKpNativeKatexMotionPath,
+  measureKpNativeKatexPaintAtomRect
 } from "./native-katex-paint-geometry.ts";
 import type {
   KpEquationMotionPathCandidate
@@ -12,6 +13,7 @@ import type {
   KpNativeKatexPaintMeasuredSceneTrack
 } from "./native-katex-base-scene-plan.ts";
 import type {
+  KpNativeKatexPaintAtomObservation,
   KpNativeKatexRenderedSceneObservation
 } from "./native-katex-rendered-scene.ts";
 import {
@@ -20,7 +22,7 @@ import {
 } from "./native-katex-track-projection.ts";
 
 export const kpAntiderivativeTemplateInstantiationProfileId =
-  "kp.rendering.native-katex.antiderivative-template-instantiation-profile.v4";
+  "kp.rendering.native-katex.antiderivative-template-instantiation-profile.v5";
 
 const presentationProfile = Object.freeze({
   scaffoldPointScale: 0.9,
@@ -44,8 +46,12 @@ export interface KpAntiderivativeTemplateReceiverPlacement {
  * and a structurally different caller demonstrate a reusable motif boundary.
  */
 export function createKpAntiderivativeTemplateInstantiationTrackProjection(
-  plan: KpAntiderivativePowerChoreographyPlan
+  plan: KpAntiderivativePowerChoreographyPlan,
+  templateSource?: KpNativeKatexRenderedSceneObservation
 ): KpNativeKatexTrackProjection {
+  if (templateSource !== undefined) {
+    return createTemplateSourceHandoffProjection(plan, templateSource);
+  }
   const template = plan.ruleTemplateApplication;
   const scaffoldIds = new Set(template.scaffoldSemanticEntityIds);
   const fixedSyntaxRoleById = new Map(template.fixedSyntaxGroups.flatMap(
@@ -283,6 +289,99 @@ export function createKpAntiderivativeTemplateInstantiationTrackProjection(
       }));
     }
   });
+}
+
+/**
+ * The canonical Catalogue host renders the instantiated rule before transit.
+ * Measure that actual native RHS as the presentation source so the learner
+ * sees one equation—and especially one fraction rule—become the expanded
+ * result. The verified initial-to-expanded correspondence remains semantic
+ * authority; this projection changes only the renderer-owned source pose.
+ */
+function createTemplateSourceHandoffProjection(
+  plan: KpAntiderivativePowerChoreographyPlan,
+  templateSource: KpNativeKatexRenderedSceneObservation
+): KpNativeKatexTrackProjection {
+  const template = plan.ruleTemplateApplication;
+  return createKpNativeKatexTrackProjection({
+    id: `track-projection.${kpAntiderivativeTemplateInstantiationProfileId}.native-template-source`,
+    project({ tracks, target }) {
+      const targetAtoms = new Map(target.atoms.map((atom) => [atom.id, atom]));
+      const templateAtoms = templateSource.atoms;
+      const projected = tracks.map((track) => {
+        if (track.lifecycle === "eliminate") {
+          return Object.freeze({
+            ...track,
+            opacityScheduleAuthority: "semantic-choreography" as const,
+            // The instantiated panel has already explained the source-side
+            // operator and differential; neither belongs to the RHS handoff.
+            sampleProgress: () => 1,
+            sampleOpacityProgress: () => 1
+          });
+        }
+        const targetAtom = targetAtoms.get(track.targetAtomId ?? "");
+        if (targetAtom === undefined) {
+          throw new Error(
+            `Antiderivative template handoff cannot resolve target paint for ${track.id}.`
+          );
+        }
+        const sourceAtom = uniqueTemplateAtom(templateAtoms, targetAtom);
+        const withoutPath = invalidateKpNativeKatexMotionPath(track);
+        return Object.freeze({
+          ...withoutPath,
+          startRect: Object.freeze({ ...sourceAtom.rect }),
+          startPaintRect: Object.freeze(
+            measureKpNativeKatexPaintAtomRect(templateSource.stage, sourceAtom)
+          ),
+          timingGroupId: "antiderivative-template.native-handoff",
+          semanticMotionUnitId: "antiderivative-template.native-handoff",
+          ...(track.lifecycle === "persist" || track.lifecycle === "split"
+            ? { motionMetrics: true as const }
+            : {}),
+          ...(track.lifecycle === "introduce"
+            ? {
+                // The grammar is prospective in the visible template, so it
+                // is already fully painted when material ownership begins.
+                opacityScheduleAuthority:
+                  "semantic-choreography" as const,
+                sampleOpacityProgress: () => 1,
+                samplePaintPresence: () => 1
+              }
+            : {})
+        });
+      });
+      const fractionRule = projected.find((track) =>
+        track.paintKind === "rule" &&
+        track.targetAtomId !== undefined &&
+        targetAtoms.get(track.targetAtomId)?.semanticEntityId ===
+          template.scaffoldSemanticEntityIds[0]
+      );
+      if (fractionRule === undefined) {
+        throw new Error(
+          "Antiderivative native template handoff requires one shifting fraction rule."
+        );
+      }
+      return Object.freeze(projected);
+    }
+  });
+}
+
+function uniqueTemplateAtom(
+  atoms: readonly KpNativeKatexPaintAtomObservation[],
+  target: KpNativeKatexPaintAtomObservation
+): KpNativeKatexPaintAtomObservation {
+  const candidates = atoms.filter((atom) =>
+    atom.semanticEntityId === target.semanticEntityId &&
+    atom.paintKind === target.paintKind &&
+    atom.visualKey === target.visualKey
+  );
+  if (candidates.length !== 1) {
+    throw new Error(
+      `Antiderivative instantiated template expected one ${target.paintKind} ` +
+      `owner for ${target.semanticEntityId}; received ${candidates.length}.`
+    );
+  }
+  return candidates[0]!;
 }
 
 function translatedIntroduction(

@@ -93,6 +93,8 @@ export function compileKpAntiderivativePowerNativeKatexScenePlan(input: {
   readonly plan: KpAntiderivativePowerNativeKatexTransitPlan;
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
+  readonly templateSource?:
+    KpNativeKatexRenderedSceneObservation | undefined;
 }): KpNativeKatexRendererReadyScenePlan {
   assertEndpointSemanticPaint(
     input.source,
@@ -104,17 +106,22 @@ export function compileKpAntiderivativePowerNativeKatexScenePlan(input: {
     input.plan.requiredTargetSemanticEntityIds,
     "target"
   );
+  const presentationSource = input.templateSource ?? input.source;
   return compileKpCanonicalNativeKatexScenePlan({
-    source: input.source,
+    // Once the template is instantiated, its native RHS—not the earlier
+    // integral—is the visible source of this handoff. Giving that node to the
+    // compositor preserves its glyph metrics as well as its rectangles, so
+    // the whole fraction moves as one formula instead of bunching mid-flight.
+    source: presentationSource,
     target: input.target,
     relations: input.plan.semanticPaintRelations,
     trackProjection:
       createKpAntiderivativeTemplateInstantiationTrackProjection(
-        input.plan.choreography
+        input.plan.choreography,
+        input.templateSource
       ),
-    // This exemplar's receiver pose owns both exponent branching and the
-    // subsequent whole-expression settlement; the generic one-stage fan-out
-    // sampler cannot represent that intermediate topology.
+    // This exemplar owns its prospective template pose; the generic fan-out
+    // sampler cannot represent either that pose or its native-panel handoff.
     copyFanOutRouting: false
   });
 }
@@ -123,6 +130,8 @@ export function createKpAntiderivativePowerNativeKatexSceneSession(input: {
   readonly plan: KpAntiderivativePowerNativeKatexTransitPlan;
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
+  readonly templateSource?:
+    KpNativeKatexRenderedSceneObservation | undefined;
 }): KpCanonicalNativeKatexSceneSession {
   return createKpCanonicalNativeKatexSceneSession(
     compileKpAntiderivativePowerNativeKatexScenePlan(input)

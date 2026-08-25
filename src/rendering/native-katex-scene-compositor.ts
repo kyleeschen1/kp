@@ -2128,8 +2128,13 @@ function createGlyphPaintFrame(
     !Number.isFinite(scaleY) ||
     symmetricScaleRatio(scaleX / scaleY) > maximumInkScaleAnisotropy
   ) {
+    const sourceFontSize = getComputedStyle(source.element).fontSize;
+    const targetFontSize = getComputedStyle(target.element).fontSize;
     throw new Error(
-      "Native glyph metric interpolation requires uniform measured ink scale."
+      `Native glyph metric interpolation requires uniform measured ink scale ` +
+      `for ${source.semanticEntityId} → ${target.semanticEntityId} ` +
+      `(x=${scaleX.toFixed(4)}, y=${scaleY.toFixed(4)}, ` +
+      `fonts=${sourceFontSize}→${targetFontSize}).`
     );
   }
   return Object.freeze({

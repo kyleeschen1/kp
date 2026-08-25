@@ -190,7 +190,7 @@ test("rule-template projection previews complete grammar before binding", () => 
     0
   );
   assert.equal(preview.ruleTemplateApplication.instantiatedRulePresence, 0);
-  assert.equal(preview.ruleTemplateApplication.vacancyPresence, 1);
+  assert.equal(preview.ruleTemplateApplication.vacancyPresence, 0);
   assert.equal(preview.ruleTemplateApplication.previewPresence, 1);
   assert.ok(preview.ruleTemplateApplication.scaffoldPresence > 0);
   assert.equal(preview.ruleTemplateApplication.bindingProgress, 0);
@@ -218,8 +218,7 @@ test("rule-template projection previews complete grammar before binding", () => 
     1
   );
   assert.equal(binding.ruleTemplateApplication.instantiatedRulePresence, 0);
-  assert.ok(binding.ruleTemplateApplication.vacancyPresence > 0);
-  assert.ok(binding.ruleTemplateApplication.vacancyPresence < 1);
+  assert.equal(binding.ruleTemplateApplication.vacancyPresence, 0);
   assert.ok(binding.ruleTemplateApplication.bindingProgress >
     binding.ruleTemplateApplication.syntaxResolutionProgress);
   assert.ok(binding.ruleTemplateApplication.syntaxPresence > 0);

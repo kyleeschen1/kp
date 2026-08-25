@@ -36,7 +36,11 @@ test("integration power rule uses governed transit and two certified ink knots",
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-template-profile-id",
-    "kp.rendering.native-katex.antiderivative-template-instantiation-profile.v4"
+    "kp.rendering.native-katex.antiderivative-template-instantiation-profile.v5"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-template-handoff-source",
+    "instantiated-rule-rhs"
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-power-visual-owner",
@@ -115,25 +119,12 @@ test("integration power rule uses governed transit and two certified ink knots",
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-template-vacancy-count",
-    "3"
+    "0"
   );
-  await expect(stage).toHaveAttribute(
-    "data-kp-antiderivative-template-receiver-lane",
-    /right|above/
-  );
-  expect(
-    Math.abs(Number(await stage.getAttribute(
-      "data-kp-antiderivative-template-receiver-translate-x"
-    ))) +
-    Math.abs(Number(await stage.getAttribute(
-      "data-kp-antiderivative-template-receiver-translate-y"
-    )))
-  ).toBeGreaterThan(0);
   const vacancies = templateReceiver.locator(
     "[data-kp-antiderivative-template-vacancy]"
   );
-  await expect(vacancies).toHaveCount(3);
-  await expect.poll(() => renderedOpacity(vacancies.first())).toBe(1);
+  await expect(vacancies).toHaveCount(0);
   const grammar = stage.locator(
     '[data-kp-antiderivative-template-paint-role="grammar"]'
   );
@@ -153,6 +144,9 @@ test("integration power rule uses governed transit and two certified ink knots",
   );
   const instantiatedRule = rulePanel.locator(
     "[data-kp-antiderivative-instantiated-rule]"
+  );
+  const instantiatedResult = instantiatedRule.locator(
+    "[data-kp-antiderivative-template-result]"
   );
   await expect(rulePanel).toHaveCount(1);
   await expect(rulePanel).toHaveAttribute("aria-hidden", "false");
@@ -180,8 +174,6 @@ test("integration power rule uses governed transit and two certified ink knots",
   await expect.poll(async () => Number(await stage.getAttribute(
     "data-kp-antiderivative-template-binding-progress"
   ))).toBeLessThan(1);
-  await expect.poll(() => renderedOpacity(vacancies.first())).toBeGreaterThan(0);
-  await expect.poll(() => renderedOpacity(vacancies.first())).toBeLessThan(1);
   await expect.poll(() => renderedOpacity(generalRule)).toBe(1);
   await expect.poll(() => renderedOpacity(ruleBindings)).toBe(1);
   await expect.poll(() => renderedOpacity(instantiatedRule)).toBe(0);
@@ -202,10 +194,55 @@ test("integration power rule uses governed transit and two certified ink knots",
   );
   await expect.poll(() => renderedOpacity(instantiatedRule)).toBe(1);
   await expect.poll(() => renderedOpacity(ruleBindings)).toBe(1);
+  await expect(instantiatedResult).toHaveCount(1);
+  await expect(instantiatedResult.locator(".frac-line")).toHaveCount(1);
   await expect(rulePanel).toHaveAttribute(
     "aria-label",
     /Instantiated power rule/u
   );
+
+  await seek.fill("0.424");
+  await expectTransitReady(stage);
+  const templateFractionRect = await elementRect(
+    instantiatedResult.locator(".frac-line")
+  );
+  const templateConstant = instantiatedResult.locator(
+    '[data-kp-antiderivative-template-source-selector-id$=".expanded.constant"]'
+  );
+  await expect(templateConstant).toHaveCount(1);
+  const templateConstantRect = await textPaintRect(templateConstant);
+  const templateFractionToConstantGap =
+    rectCenterX(templateConstantRect) - rectCenterX(templateFractionRect);
+  expect(await effectiveOpacity(instantiatedResult.locator(".frac-line")))
+    .toBeGreaterThan(0.99);
+
+  await seek.fill("0.425");
+  await expectTransitReady(stage);
+  const materialFraction = stage.locator(
+    '[data-kp-equation-material-fragment-role="rule:rule-length"]'
+  );
+  await expect(materialFraction).toHaveCount(1);
+  const materialStartRect = await elementRect(materialFraction);
+  expect(maxRectDelta(templateFractionRect, materialStartRect))
+    .toBeLessThan(2);
+  expect(await effectiveOpacity(instantiatedResult.locator(".frac-line")))
+    .toBe(0);
+  expect(await effectiveOpacity(materialFraction)).toBeGreaterThan(0.99);
+  expect(await renderedOpacity(stage.locator(
+    "[data-kp-editor-equation-source]"
+  ))).toBe(0);
+  const materialConstant = stage.locator(
+    '[data-kp-equation-material-semantic-entity-id$=".expanded.constant"]'
+  );
+  await expect(materialConstant).toHaveCount(1);
+  const materialConstantStartRect = await textPaintRect(materialConstant);
+  expect(Math.hypot(
+    rectCenterX(templateConstantRect) -
+      rectCenterX(materialConstantStartRect),
+    rectCenterY(templateConstantRect) -
+      rectCenterY(materialConstantStartRect)
+  ))
+    .toBeLessThan(3);
 
   await seek.fill("0.44");
   await expectTransitReady(stage);
@@ -220,6 +257,14 @@ test("integration power rule uses governed transit and two certified ink knots",
   ))).toBeGreaterThan(0);
   await expect.poll(() => renderedOpacity(instantiatedRule)).toBe(0);
   await expect.poll(() => renderedOpacity(rulePanel)).toBe(0);
+  const materialMidRect = await elementRect(materialFraction);
+  const materialConstantMidRect = await textPaintRect(materialConstant);
+  expect(Math.abs(rectCenterX(materialMidRect) -
+    rectCenterX(materialStartRect))).toBeGreaterThan(8);
+  expect(Math.abs(
+    rectCenterX(materialConstantMidRect) - rectCenterX(materialMidRect) -
+      templateFractionToConstantGap
+  )).toBeLessThan(2);
 
   await seek.fill("0.49");
   await expectTransitReady(stage);
@@ -241,7 +286,6 @@ test("integration power rule uses governed transit and two certified ink knots",
     "data-kp-antiderivative-template-receiver-settlement-progress",
     "1.0000"
   );
-  await expect.poll(() => renderedOpacity(vacancies.first())).toBe(0);
   await expect.poll(() => renderedOpacity(rulePanel)).toBe(0);
   await expect(templateReceiver).toHaveAttribute("aria-hidden", "true");
 
@@ -338,9 +382,9 @@ test("integration Catalogue lifecycle restores, rewinds, themes, and exposes sta
     "data-kp-antiderivative-power-visual-owner",
     /source-native|target-native/
   );
-  await expect.poll(() => renderedOpacity(darkStage.locator(
+  await expect(darkStage.locator(
     "[data-kp-antiderivative-template-vacancy]"
-  ).first())).toBe(0);
+  )).toHaveCount(0);
   await setPresentation(darkPlayer, "static");
   await expect(darkStage).toHaveAttribute(
     "data-kp-antiderivative-power-accessibility-projection",
@@ -461,6 +505,68 @@ function activeTransition(stage: Locator): Locator {
   return stage.locator(
     '[data-kp-editor-equation-transition-id]:not([hidden])'
   );
+}
+
+interface TestRect {
+  readonly left: number;
+  readonly top: number;
+  readonly width: number;
+  readonly height: number;
+}
+
+async function elementRect(locator: Locator): Promise<TestRect> {
+  return locator.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    return {
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height
+    };
+  });
+}
+
+async function textPaintRect(locator: Locator): Promise<TestRect> {
+  return locator.evaluate((element) => {
+    const range = element.ownerDocument.createRange();
+    range.selectNodeContents(element);
+    const rect = range.getBoundingClientRect();
+    return {
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height
+    };
+  });
+}
+
+async function effectiveOpacity(locator: Locator): Promise<number> {
+  return locator.evaluate((element) => {
+    let opacity = 1;
+    let current: Element | null = element;
+    while (current !== null) {
+      opacity *= Number(getComputedStyle(current).opacity);
+      current = current.parentElement;
+    }
+    return opacity;
+  });
+}
+
+function maxRectDelta(left: TestRect, right: TestRect): number {
+  return Math.max(
+    Math.abs(left.left - right.left),
+    Math.abs(left.top - right.top),
+    Math.abs(left.width - right.width),
+    Math.abs(left.height - right.height)
+  );
+}
+
+function rectCenterX(rect: TestRect): number {
+  return rect.left + rect.width / 2;
+}
+
+function rectCenterY(rect: TestRect): number {
+  return rect.top + rect.height / 2;
 }
 
 async function renderedOpacity(locator: Locator): Promise<number> {

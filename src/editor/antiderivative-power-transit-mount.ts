@@ -23,10 +23,11 @@ import {
 } from "../rendering/native-katex-rendered-scene.ts";
 import { renderLatexToHtml } from "../rendering/katex-adapter.ts";
 import {
-  kpAntiderivativeTemplateInstantiationProfileId,
-  measureKpAntiderivativeTemplateReceiverPlacement,
-  type KpAntiderivativeTemplateReceiverPlacement
+  kpAntiderivativeTemplateInstantiationProfileId
 } from "../rendering/native-katex-antiderivative-template-instantiation.ts";
+import type {
+  KpSelectorAnnotatedLatex
+} from "../rendering/selector-annotated-latex.ts";
 import type {
   KpCanonicalNativeKatexSceneSession
 } from "../rendering/native-katex-scene-compositor.ts";
@@ -36,6 +37,9 @@ import type {
 import {
   KP_EDITOR_ANIMATION_DISPOSE_EVENT
 } from "./animation-player-controller.ts";
+import {
+  createKpAntiderivativePowerSelectorAnnotatedLatex
+} from "./antiderivative-power-semantic-latex.ts";
 
 export const kpAntiderivativePowerTransitRepairGapCode =
   "repair-gap.integration-power-rule.native-katex-transit-unavailable";
@@ -141,7 +145,9 @@ export function applyKpAntiderivativePowerTransitMount(input: {
     );
     const templateReceiver = createTemplateReceiver(
       input.stage,
-      plan.choreography.ruleTemplateApplication
+      plan.choreography.ruleTemplateApplication,
+      input.animation,
+      input.player.dataset["kpEditorAnimationMathLayout"] !== "inline"
     );
     session = {
       stage: input.stage,
@@ -227,7 +233,9 @@ export function disposeKpAntiderivativePowerTransitMount(
 
 function createTemplateReceiver(
   stage: HTMLElement,
-  template: KpAntiderivativePowerNativeKatexTransitPlan["choreography"]["ruleTemplateApplication"]
+  template: KpAntiderivativePowerNativeKatexTransitPlan["choreography"]["ruleTemplateApplication"],
+  animation: KpAnimationAsset,
+  displayMode: boolean
 ): HTMLElement {
   const element = stage.ownerDocument.createElement("div");
   element.className =
@@ -235,14 +243,6 @@ function createTemplateReceiver(
   element.dataset["kpAntiderivativeTemplateReceiver"] = template.lawRefId;
   element.dataset["kpAntiderivativeTemplateLawRefId"] = template.lawRefId;
   element.dataset["kpSemanticTraceRole"] = "absent";
-  element.style.setProperty(
-    "--kp-antiderivative-template-vacancy-presence",
-    "0"
-  );
-  element.style.setProperty(
-    "--kp-antiderivative-template-vacancy-scale",
-    "0.72"
-  );
   element.style.setProperty(
     "--kp-antiderivative-rule-template-panel-presence",
     "0"
@@ -277,11 +277,13 @@ function createTemplateReceiver(
     dataAttribute: "kpAntiderivativeGeneralRule",
     latex: template.generalRuleLatex
   });
-  const instantiatedRule = createRuleTemplateFormula({
+  const instantiatedRule = createInstantiatedRuleTemplateFormula({
     stage,
     className: "editor-equation-stage__antiderivative-instantiated-rule",
     dataAttribute: "kpAntiderivativeInstantiatedRule",
-    latex: template.instantiatedRuleLatex
+    latex: template.instantiatedRuleLatex,
+    animation,
+    displayMode
   });
   formulaStack.append(generalRule, instantiatedRule);
   const bindings = createRuleTemplateFormula({
@@ -292,30 +294,6 @@ function createTemplateReceiver(
   });
   rulePanel.append(formulaStack, bindings);
   element.append(rulePanel);
-
-  const bindingTargets = [
-    {
-      role: "base",
-      selectorId: template.bindingRelations[0].targetSelectorIds[0]
-    },
-    {
-      role: "numerator-exponent",
-      selectorId: template.bindingRelations[1].targetSelectorIds[0]
-    },
-    {
-      role: "denominator-exponent",
-      selectorId: template.bindingRelations[1].targetSelectorIds[1]
-    }
-  ] as const;
-  for (const target of bindingTargets) {
-    const slot = stage.ownerDocument.createElement("span");
-    slot.className =
-      "editor-equation-stage__antiderivative-template-vacancy";
-    slot.dataset["kpAntiderivativeTemplateVacancy"] = target.role;
-    slot.dataset["kpAntiderivativeTemplateTargetSelectorId"] =
-      target.selectorId;
-    element.append(slot);
-  }
   stage.append(element);
   return element;
 }
@@ -342,15 +320,115 @@ function createRuleTemplateFormula(input: {
   return formula;
 }
 
+function createInstantiatedRuleTemplateFormula(input: {
+  readonly stage: HTMLElement;
+  readonly className: string;
+  readonly dataAttribute: "kpAntiderivativeInstantiatedRule";
+  readonly latex: string;
+  readonly animation: KpAnimationAsset;
+  readonly displayMode: boolean;
+}): HTMLElement {
+  const template = instantiatedRuleTemplateLatex(input.animation);
+  if (normalizeTemplateLatex(template.rawLatex) !==
+      normalizeTemplateLatex(input.latex)) {
+    throw new Error(
+      `Antiderivative instantiated template rendered ${template.rawLatex}; ` +
+      `expected ${input.latex}.`
+    );
+  }
+  const formula = input.stage.ownerDocument.createElement("div");
+  formula.className = input.className;
+  formula.dataset[input.dataAttribute] = input.latex;
+  const prefix = input.stage.ownerDocument.createElement("span");
+  prefix.dataset["kpAntiderivativeInstantiatedPrefix"] = template.sourceLatex;
+  prefix.innerHTML = renderLatexToHtml(`${template.sourceLatex} =`, {
+    // Match the host's KaTeX math style. A display-style source handed to an
+    // inline-style target changes fraction script levels during the move.
+    displayMode: input.displayMode,
+    output: "htmlAndMathml",
+    trust: true
+  });
+  const result = input.stage.ownerDocument.createElement("span");
+  result.dataset["kpAntiderivativeTemplateResult"] =
+    template.targetObjectId;
+  // Keep this as a standalone KaTeX render. Nesting the annotated RHS inside
+  // another htmlData group changed script-level paint ownership on narrow
+  // layouts even though the printed formula looked equivalent.
+  result.innerHTML = renderLatexToHtml(
+    template.targetAnnotated.annotatedLatex,
+    {
+      displayMode: input.displayMode,
+      output: "htmlAndMathml",
+      trust: true
+    }
+  );
+  formula.append(prefix, result);
+  formula.setAttribute("aria-hidden", "true");
+  return formula;
+}
+
+interface InstantiatedRuleTemplateLatex {
+  readonly rawLatex: string;
+  readonly sourceLatex: string;
+  readonly targetObjectId: string;
+  readonly targetAnnotated: KpSelectorAnnotatedLatex;
+}
+
+function instantiatedRuleTemplateLatex(
+  animation: KpAnimationAsset
+): InstantiatedRuleTemplateLatex {
+  const transformation = animation.transformations.find(
+    ({ transformType }) => transformType === "applyAntiderivativePowerRule"
+  );
+  const source = animation.bundle.objects.find(({ id }) =>
+    id === transformation?.sourceObjectIds[0]
+  );
+  const target = animation.bundle.objects.find(({ id }) =>
+    id === transformation?.targetObjectIds[0]
+  );
+  const sourceLatex = semanticObjectLatex(source?.value);
+  const targetLatex = semanticObjectLatex(target?.value);
+  if (
+    transformation === undefined ||
+    source === undefined ||
+    target === undefined ||
+    sourceLatex === undefined ||
+    targetLatex === undefined
+  ) {
+    throw new Error(
+      "Antiderivative instantiated template requires exact source and expanded objects."
+    );
+  }
+  const targetAnnotated = createKpAntiderivativePowerSelectorAnnotatedLatex({
+    objectId: target.id,
+    selectors: target.selectors
+  });
+  if (targetAnnotated === undefined) {
+    throw new Error(
+      "Antiderivative instantiated template requires selector-annotated expanded KaTeX."
+    );
+  }
+  return Object.freeze({
+    rawLatex: `${sourceLatex} = ${targetLatex}`,
+    sourceLatex,
+    targetObjectId: target.id,
+    targetAnnotated
+  });
+}
+
+function semanticObjectLatex(value: unknown): string | undefined {
+  if (typeof value !== "object" || value === null || !("latex" in value)) {
+    return undefined;
+  }
+  const latex = (value as { readonly latex?: unknown }).latex;
+  return typeof latex === "string" ? latex : undefined;
+}
+
+function normalizeTemplateLatex(latex: string): string {
+  return latex.replace(/\s+/gu, "");
+}
+
 function hideTemplateReceiver(session: TransitMountSession): void {
-  session.templateReceiver.style.setProperty(
-    "--kp-antiderivative-template-vacancy-presence",
-    "0"
-  );
-  session.templateReceiver.style.setProperty(
-    "--kp-antiderivative-template-vacancy-scale",
-    "0.72"
-  );
   session.templateReceiver.style.setProperty(
     "--kp-antiderivative-rule-template-panel-presence",
     "0"
@@ -400,14 +478,26 @@ async function prepareSession(
       includeHiddenPaint: true,
       viewportRevision: session.cacheRevision
     });
+    const templateSourceRoot = requireTemplateSourceRoot(session);
+    alignTemplateSourceTypography(session, templateSourceRoot);
+    bindTemplateSourceOwnership(session, templateSourceRoot);
+    const templateSource = observeKpNativeKatexRenderedScene({
+      endpoint: "source",
+      stage: session.stage,
+      root: templateSourceRoot,
+      semanticEntityId: session.objectIds.target,
+      presentationGroupId:
+        `${session.objectIds.target}.template-instance-rhs`,
+      fontReadiness: session.fontReadiness,
+      includeHiddenPaint: true,
+      viewportRevision: session.cacheRevision
+    });
     if (session.disposed || session.generation !== generation) return;
-    const receiverPlacement =
-      measureKpAntiderivativeTemplateReceiverPlacement({ source, target });
-    positionTemplateReceiver(session, receiverPlacement);
     session.canonical = createKpAntiderivativePowerNativeKatexSceneSession({
       plan: session.plan,
       source,
-      target
+      target,
+      templateSource
     });
     session.stage.dataset["kpAntiderivativePowerTransit"] = "ready";
     session.stage.dataset["kpAntiderivativePowerTransitMechanismId"] =
@@ -416,6 +506,9 @@ async function prepareSession(
       kpAntiderivativeTemplateInstantiationProfileId;
     session.stage.dataset["kpAntiderivativePowerTransitDynamicTrackCount"] =
       String(session.canonical.executableMotion.dynamicTrackIds.length);
+    session.stage.dataset["kpAntiderivativeTemplateHandoffSource"] =
+      "instantiated-rule-rhs";
+    session.stage.dataset["kpAntiderivativeTemplateVacancyCount"] = "0";
     applyFrame(session);
   } catch (error: unknown) {
     if (session.disposed || session.generation !== generation) return;
@@ -471,52 +564,69 @@ function prepareNativeMeasurement(session: TransitMountSession): void {
   }
 }
 
-function positionTemplateReceiver(
-  session: TransitMountSession,
-  placement: KpAntiderivativeTemplateReceiverPlacement
-): void {
-  const stageRect = session.stage.getBoundingClientRect();
-  const targetTokens = [
-    ...session.roots.target.querySelectorAll<HTMLElement>(
-      "[data-kp-motion-id]"
-    )
-  ];
-  for (const slot of session.templateReceiver.querySelectorAll<HTMLElement>(
-    "[data-kp-antiderivative-template-vacancy]"
-  )) {
-    const selectorId =
-      slot.dataset["kpAntiderivativeTemplateTargetSelectorId"];
-    const target = targetTokens.find((candidate) =>
-      selectorIdFromMotionId(candidate) === selectorId
+function requireTemplateSourceRoot(session: TransitMountSession): HTMLElement {
+  const root = session.templateReceiver.querySelector<HTMLElement>(
+    "[data-kp-antiderivative-template-result]"
+  );
+  if (root === null) {
+    throw new Error(
+      "Antiderivative instantiated rule lacks its annotated RHS source."
     );
-    if (selectorId === undefined || target === undefined) {
-      throw new Error(
-        `Antiderivative template vacancy cannot resolve ${selectorId ?? "an unnamed binding target"}.`
-      );
-    }
-    const targetRect = target.getBoundingClientRect();
-    const width = Math.max(
-      8,
-      Math.min(24, targetRect.width * 1.18)
-    );
-    slot.style.left = `${targetRect.left - stageRect.left +
-      placement.translation.x +
-      (targetRect.width - width) / 2}px`;
-    slot.style.top = `${targetRect.bottom - stageRect.top +
-      placement.translation.y +
-      Math.max(1, targetRect.height * 0.06)}px`;
-    slot.style.width = `${width}px`;
   }
-  session.stage.dataset["kpAntiderivativeTemplateVacancyCount"] =
-    String(session.templateReceiver.querySelectorAll(
-      "[data-kp-antiderivative-template-vacancy]"
-    ).length);
-  session.stage.dataset["kpAntiderivativeTemplateReceiverLane"] =
-    placement.lane;
-  session.stage.dataset["kpAntiderivativeTemplateReceiverTranslateX"] =
-    placement.translation.x.toFixed(4);
-  session.stage.dataset["kpAntiderivativeTemplateReceiverTranslateY"] =
-    placement.translation.y.toFixed(4);
+  return root;
+}
+
+function alignTemplateSourceTypography(
+  session: TransitMountSession,
+  templateSourceRoot: HTMLElement
+): void {
+  const targetObject = session.roots.target.querySelector<HTMLElement>(
+    ".editor-equation-stage__object"
+  );
+  const instantiatedRule = templateSourceRoot.closest<HTMLElement>(
+    "[data-kp-antiderivative-instantiated-rule]"
+  );
+  if (targetObject === null || instantiatedRule === null) {
+    throw new Error(
+      "Antiderivative template handoff cannot resolve target typography."
+    );
+  }
+  // Native fitting may select a smaller display font on narrow hosts. The
+  // instantiated RHS must inherit that realized size before measurement or
+  // its script glyphs cannot satisfy the compositor's uniform-scale law.
+  instantiatedRule.style.fontSize = getComputedStyle(targetObject).fontSize;
+}
+
+function bindTemplateSourceOwnership(
+  session: TransitMountSession,
+  root: HTMLElement
+): void {
+  root.dataset["kpSemanticEntityId"] = session.objectIds.target;
+  root.dataset["kpPresentationGroupId"] =
+    `${session.objectIds.target}.template-instance-rhs`;
+  root.querySelectorAll<HTMLElement>("[data-kp-motion-id]")
+    .forEach((token, index) => {
+      const selectorId = selectorIdFromMotionId(token);
+      token.dataset["kpSemanticEntityId"] = selectorId;
+      token.dataset["kpPresentationGroupId"] =
+        `${selectorId}.template-instance`;
+      token.dataset["kpAntiderivativeTemplateSourceSelectorId"] = selectorId;
+      // The template is an ephemeral native source, not a second canonical
+      // endpoint. Namespace its DOM motion IDs so global endpoint queries and
+      // review tooling continue to see exactly one canonical selector owner.
+      token.dataset["kpMotionId"] =
+        `antiderivative-template-source.paint.${index}`;
+    });
+  bindSemanticGroups(root);
+  const fractionRules = root.querySelectorAll<HTMLElement>(".frac-line");
+  if (fractionRules.length !== 1) {
+    throw new Error(
+      `Antiderivative instantiated rule requires one native fraction rule; ` +
+      `received ${fractionRules.length}.`
+    );
+  }
+  fractionRules[0]!.dataset["kpAntiderivativeTemplateFractionSource"] =
+    "true";
 }
 
 function applyFrame(session: TransitMountSession): void {
@@ -549,6 +659,11 @@ function applyFrame(session: TransitMountSession): void {
     rendererProgress,
     projection
   );
+  // The compositor's presentation source is the instantiated template RHS.
+  // Retire the earlier integral while that panel or its material successor
+  // owns the scene; otherwise it resurfaces beneath the moving fraction.
+  session.roots.source.style.opacity =
+    templatePanelPresence <= 0.01 && rendererProgress === 0 ? "1" : "0";
   settleAccessibility(session, rendererProgress, templatePanelPresence);
   session.stage.dataset["kpAntiderivativePowerTransit"] = "ready";
   session.stage.dataset["kpAntiderivativePowerTransitProgress"] =
@@ -572,14 +687,6 @@ function applyRuleTemplateApplicationState(
   const template = projection === "full"
     ? frame.ruleTemplateApplication
     : sampleKpAntiderivativeRuleTemplateApplication(rendererProgress);
-  session.templateReceiver.style.setProperty(
-    "--kp-antiderivative-template-vacancy-presence",
-    template.vacancyPresence.toFixed(4)
-  );
-  session.templateReceiver.style.setProperty(
-    "--kp-antiderivative-template-vacancy-scale",
-    (0.72 + 0.28 * template.previewPresence).toFixed(4)
-  );
   session.templateReceiver.style.setProperty(
     "--kp-antiderivative-rule-template-panel-presence",
     template.panelPresence.toFixed(4)
@@ -790,6 +897,7 @@ function semanticPaintOwners(
     )
   ].filter((element) =>
     element.dataset["kpMotionId"]?.endsWith(selectorId) === true ||
+    element.dataset["kpAntiderivativeTemplateSourceSelectorId"] === selectorId ||
     element.dataset["kpEquationMaterialSemanticEntityId"] === selectorId
   );
 }
@@ -950,9 +1058,7 @@ function clearTelemetry(stage: HTMLElement): void {
   delete stage.dataset["kpAntiderivativeRewriteHandoffProgress"];
   delete stage.dataset["kpAntiderivativeTemplateVacancyPresence"];
   delete stage.dataset["kpAntiderivativeTemplateVacancyCount"];
-  delete stage.dataset["kpAntiderivativeTemplateReceiverLane"];
-  delete stage.dataset["kpAntiderivativeTemplateReceiverTranslateX"];
-  delete stage.dataset["kpAntiderivativeTemplateReceiverTranslateY"];
+  delete stage.dataset["kpAntiderivativeTemplateHandoffSource"];
   delete stage.dataset["kpAntiderivativeTemplateReceiverSettlementProgress"];
   delete stage.dataset["kpAntiderivativeTemplateLawRefId"];
   delete stage.dataset["kpAntiderivativeTemplatePreviewPresence"];

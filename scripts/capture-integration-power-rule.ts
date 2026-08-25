@@ -140,9 +140,7 @@ interface CaptureEvidence {
   readonly rewriteHandoffProgress: number;
   readonly templateVacancyPresence: number;
   readonly templateVacancyCount: number;
-  readonly templateReceiverLane: string;
-  readonly templateReceiverTranslateX: number;
-  readonly templateReceiverTranslateY: number;
+  readonly templateHandoffSource: string;
   readonly templatePreviewPresence: number;
   readonly templateScaffoldPresence: number;
   readonly templateBindingProgress: number;
@@ -240,7 +238,7 @@ async function capture(baseUrl?: string): Promise<void> {
         "integration constant persistence",
       "timing and reverse meaning",
       "dark and light response",
-      "narrow receiver and evaluation fit"
+      "narrow template handoff and evaluation fit"
       ],
       sheet: path.relative(process.cwd(), sheet),
       html: path.relative(process.cwd(), html)
@@ -353,14 +351,8 @@ async function captureSample(input: {
       templateVacancyCount: templateReceiver?.querySelectorAll(
         "[data-kp-antiderivative-template-vacancy]"
       ).length ?? 0,
-      templateReceiverLane:
-        root.dataset["kpAntiderivativeTemplateReceiverLane"] ?? "inactive",
-      templateReceiverTranslateX: Number(
-        root.dataset["kpAntiderivativeTemplateReceiverTranslateX"] ?? 0
-      ),
-      templateReceiverTranslateY: Number(
-        root.dataset["kpAntiderivativeTemplateReceiverTranslateY"] ?? 0
-      ),
+      templateHandoffSource:
+        root.dataset["kpAntiderivativeTemplateHandoffSource"] ?? "inactive",
       templatePreviewPresence: Number(
         root.dataset["kpAntiderivativeTemplatePreviewPresence"] ?? 0
       ),
@@ -483,7 +475,7 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   if (
     scaffold.transitVisualOwner !== "source-native" ||
     scaffold.templateProfileId !==
-      "kp.rendering.native-katex.antiderivative-template-instantiation-profile.v4" ||
+      "kp.rendering.native-katex.antiderivative-template-instantiation-profile.v5" ||
     scaffold.templateTraceRole !== "prospective" ||
     scaffold.templateLawRefId !==
       "law.calculus.integral.power-rule" ||
@@ -493,20 +485,16 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     scaffold.metavariableBindingsPresence !== 0 ||
     scaffold.instantiatedRulePresence !== 0 ||
     !scaffold.ruleTemplateText.includes("n≠−1") ||
-    scaffold.templateVacancyPresence !== 1 ||
-    scaffold.templateVacancyCount !== 3 ||
+    scaffold.templateVacancyPresence !== 0 ||
+    scaffold.templateVacancyCount !== 0 ||
+    scaffold.templateHandoffSource !== "instantiated-rule-rhs" ||
     scaffold.templatePreviewPresence !== 1 ||
     scaffold.templateScaffoldPresence <= 0 ||
     scaffold.templateSyntaxPresence <= 0 ||
     scaffold.templateClosurePresence <= 0 ||
     scaffold.templateBindingProgress !== 0 ||
     scaffold.templateReceiverSettlementProgress !== 0 ||
-    scaffold.templateSyntaxResolutionProgress !== 0 ||
-    !["right", "above"].includes(scaffold.templateReceiverLane) ||
-    (
-      scaffold.templateReceiverTranslateX === 0 &&
-      scaffold.templateReceiverTranslateY === 0
-    )
+    scaffold.templateSyntaxResolutionProgress !== 0
   ) {
     throw new Error(
       "Template scaffold frame must expose prospective Native KaTeX structure."
@@ -522,9 +510,8 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     binding.instantiatedRulePresence !== 0 ||
     !binding.ruleTemplateText.includes("u↦x") ||
     !binding.ruleTemplateText.includes("n↦2") ||
-    binding.templateVacancyCount !== 3 ||
-    binding.templateVacancyPresence <= 0 ||
-    binding.templateVacancyPresence >= 1 ||
+    binding.templateVacancyCount !== 0 ||
+    binding.templateVacancyPresence !== 0 ||
     binding.templateBindingProgress <= 0 ||
     binding.templateBindingProgress >= 1 ||
     binding.templateReceiverSettlementProgress !== 0 ||

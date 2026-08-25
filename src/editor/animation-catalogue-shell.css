@@ -490,7 +490,18 @@
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
   .editor-equation-stage__antiderivative-instantiated-rule {
+  display: flex;
+  align-items: center;
+  gap: 0.28em;
+  /* This formula becomes the compositor's native source, so its typographic
+     scale must match the display-math endpoint it hands off to. */
+  font-size: clamp(2.15rem, 5.5vw, 2.75rem);
   opacity: var(--kp-antiderivative-instantiated-rule-presence, 0);
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-instantiated-rule .katex-display {
+  margin: 0;
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
@@ -515,22 +526,6 @@
     .editor-equation-stage__antiderivative-rule-bindings {
     font-size: clamp(0.92rem, 4.2vw, 1.12rem);
   }
-}
-
-.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  .editor-equation-stage__antiderivative-template-vacancy {
-  position: absolute;
-  box-sizing: border-box;
-  height: 0;
-  border-bottom: 2px solid color-mix(
-    in srgb,
-    var(--kp-catalogue-link) 82%,
-    var(--kp-equation-foreground)
-  );
-  border-radius: 999px;
-  opacity: var(--kp-antiderivative-template-vacancy-presence, 0);
-  transform: scaleX(var(--kp-antiderivative-template-vacancy-scale, 0.72));
-  transform-origin: center;
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
@@ -568,11 +563,6 @@
 }
 
 @media (forced-colors: active) {
-  .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-    .editor-equation-stage__antiderivative-template-vacancy {
-    border-color: Highlight;
-  }
-
   .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.derivative.power-rule-x-cubed"]
     .editor-equation-stage__derivative-application-trace {
     border-color: Highlight;

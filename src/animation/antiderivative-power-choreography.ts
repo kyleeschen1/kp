@@ -424,7 +424,7 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
   );
   const instantiatedRulePresence = roundProgress(
     phaseProgress(progress, 0.58, 0.66) *
-      (1 - phaseProgress(progress, 0.8, 0.84))
+      (progress <= 0.84 ? 1 : 0)
   );
   const rewriteHandoffProgress = phaseProgress(progress, 0.84, 0.98);
   const panelPresence = roundProgress(Math.max(
@@ -436,10 +436,13 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
   // sees material arrive in a prospective rule, then sees that populated
   // receiver become the live expanded expression.
   const receiverFocus = roundProgress(preview * (1 - syntaxResolution));
-  const vacancyPresence = roundProgress(preview * (1 - binding));
+  // Binding is written directly into the instantiated rule. The former
+  // underline vacancies looked like extra fraction rules and created a second
+  // presentation authority without contributing semantic correspondence.
+  const vacancyPresence = 0;
   // A receiving template cannot be inferred from faint endpoint fragments.
   // Its fraction, successor syntax, and +C arrive as one legible structure;
-  // color and vacancies distinguish prospective grammar from bound material.
+  // the binding row distinguishes prospective grammar from bound material.
   const scaffoldPresence = preview;
   const syntaxPresence = preview;
   const closurePresence = preview;
