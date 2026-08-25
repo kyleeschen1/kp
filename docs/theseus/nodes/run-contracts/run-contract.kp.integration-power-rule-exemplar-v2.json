@@ -264,6 +264,27 @@
       "scope": "slice s10 exact Native KaTeX",
       "checkedAt": "2026-08-25T00:37:04.394Z",
       "notes": "Semantic truth, renderer annotations, and equation authority remain in their declared layers."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s11 integration first-transition plan",
+      "checkedAt": "2026-08-25T00:44:35.521Z",
+      "notes": "Fifty-three focused tests prove governed operator scope, exponent fan-out, introduced structures, opacity-only withdrawal, delayed rewrite, and deterministic seek, reverse, and interruption."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s11 integration first-transition plan",
+      "checkedAt": "2026-08-25T00:44:36.925Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice s11 integration first-transition plan",
+      "checkedAt": "2026-08-25T00:44:38.191Z",
+      "notes": "The pure choreography compiler preserves semantic, animation, rendering, and equation-authority boundaries."
     }
   ],
   "allowedWork": [
@@ -359,7 +380,8 @@
     {
       "id": "next-action.kp.integration-power-rule.s11",
       "title": "Integration-first-transition-plan",
-      "status": "planned"
+      "summary": "Compiled the governed first transition into semantic salience, opacity-only operator withdrawal, persistent base, exponent fan-out, and four typed introductions. Rewrite progress begins only after the operator exits, with deterministic seek, reverse, and interruption and no outline or geometry policy in the semantic plan.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.integration-power-rule.s12",

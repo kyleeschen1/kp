@@ -1,5 +1,10 @@
 import type { CorrespondenceMap } from "./correspondence.ts";
 import {
+  findKpAssetSelector,
+  type KpAssetBundle
+} from "./asset.ts";
+import type { KpSemanticTransformation } from "./asset-transformation.ts";
+import {
   createKpSemanticLineageGraph,
   type KpSemanticLineageGraph,
   type KpSemanticLineageRelation
@@ -175,6 +180,55 @@ export function createKpAntiderivativePowerRuleSemanticRoles(input: {
       }
     ]
   };
+}
+
+export function resolveKpAntiderivativePowerRuleSemanticRoles(input: {
+  readonly expansionTransformation: KpSemanticTransformation;
+  readonly resolutionTransformation: KpSemanticTransformation;
+  readonly bundle: KpAssetBundle;
+}): KpAntiderivativePowerRuleSemanticRoles {
+  const expansion = input.expansionTransformation;
+  const resolution = input.resolutionTransformation;
+  if (
+    expansion.transformType !== "applyAntiderivativePowerRule" ||
+    resolution.transformType !== "simplifyAntiderivativePowerRule" ||
+    expansion.sourceObjectIds.length !== 1 ||
+    expansion.targetObjectIds.length !== 1 ||
+    resolution.sourceObjectIds.length !== 1 ||
+    resolution.targetObjectIds.length !== 1 ||
+    expansion.targetObjectIds[0] !== resolution.sourceObjectIds[0]
+  ) {
+    throw new Error(
+      "Antiderivative power-rule roles require one governed expansion followed by one governed resolution."
+    );
+  }
+  const sourceObjectId = expansion.sourceObjectIds[0]!;
+  const expandedObjectId = expansion.targetObjectIds[0]!;
+  const targetObjectId = resolution.targetObjectIds[0]!;
+  const label = (selectorId: string): string => {
+    const value = findKpAssetSelector(input.bundle, selectorId)?.label;
+    if (value === undefined || value.trim() === "") {
+      throw new Error(
+        `Antiderivative power-rule selector ${selectorId} requires a semantic label.`
+      );
+    }
+    return value;
+  };
+  const exponentLabel = label(`${sourceObjectId}.exponent`);
+  const exponent = Number(exponentLabel);
+  if (!Number.isInteger(exponent)) {
+    throw new Error(
+      `Antiderivative power-rule exponent ${exponentLabel} must be an integer.`
+    );
+  }
+  return createKpAntiderivativePowerRuleSemanticRoles({
+    sourceObjectId,
+    expandedObjectId,
+    targetObjectId,
+    integrationVariable: label(`${sourceObjectId}.integration-variable`),
+    base: label(`${sourceObjectId}.base`),
+    exponent
+  });
 }
 
 function semanticRole(
