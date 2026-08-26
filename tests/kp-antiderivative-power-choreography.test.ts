@@ -67,17 +67,21 @@ test("integration first transition compiles its governed scope and lineage", () 
     plan.ruleTemplateApplication.lawRefId,
     "law.calculus.integral.power-rule"
   );
-  assert.match(
-    plan.ruleTemplateApplication.generalRuleLatex,
-    /\\int u\^n.*u\^\{n\+1\}.*n\\ne -1/u
+  assert.equal(
+    plan.ruleTemplateApplication.patternLatex,
+    String.raw`\int u^n\,du`
+  );
+  assert.equal(
+    plan.ruleTemplateApplication.replacementTemplateLatex,
+    String.raw`\frac{u^{n+1}}{n+1}+C`
   );
   assert.equal(
     plan.ruleTemplateApplication.bindingLatex,
     String.raw`u\mapsto x,\qquad n\mapsto 2`
   );
   assert.equal(
-    plan.ruleTemplateApplication.instantiatedRuleLatex,
-    String.raw`\int x^{2}\,dx = \frac{x^{2+1}}{2+1}+C`
+    plan.ruleTemplateApplication.instantiatedResultLatex,
+    String.raw`\frac{x^{2+1}}{2+1}+C`
   );
   assert.deepEqual(
     plan.ruleTemplateApplication.metavariableBindings.map((binding) => ({
@@ -153,7 +157,7 @@ test("operator salience and withdrawal finish before the rewrite begins", () => 
   assert.ok(rewrite.rewriteProgress > 0);
 });
 
-test("rule-template projection previews complete grammar before binding", () => {
+test("rule application separates match bind instantiate and rewrite", () => {
   const { plan } = fixture();
   const before = sampleKpAntiderivativePowerChoreography({
     plan,
@@ -162,14 +166,14 @@ test("rule-template projection previews complete grammar before binding", () => 
   assert.equal(before.ruleTemplateApplication.traceRole, "absent");
   assert.equal(before.ruleTemplateApplication.receiverFocus, 0);
   assert.equal(before.ruleTemplateApplication.panelPresence, 0);
-  assert.equal(before.ruleTemplateApplication.generalRulePresence, 0);
+  assert.equal(before.ruleTemplateApplication.matchProgress, 0);
+  assert.equal(before.ruleTemplateApplication.matchPresence, 0);
   assert.equal(
     before.ruleTemplateApplication.metavariableBindingsPresence,
     0
   );
-  assert.equal(before.ruleTemplateApplication.instantiatedRulePresence, 0);
+  assert.equal(before.ruleTemplateApplication.instantiatedResultPresence, 0);
   assert.equal(before.ruleTemplateApplication.vacancyPresence, 0);
-  assert.equal(before.ruleTemplateApplication.previewPresence, 0);
   assert.equal(before.ruleTemplateApplication.scaffoldPresence, 0);
   assert.equal(before.ruleTemplateApplication.bindingProgress, 0);
   assert.equal(
@@ -177,52 +181,53 @@ test("rule-template projection previews complete grammar before binding", () => 
     0
   );
 
-  const preview = sampleKpAntiderivativePowerChoreography({
+  const match = sampleKpAntiderivativePowerChoreography({
     plan,
-    progress: 0.43
+    progress: 0.39
   });
-  assert.equal(preview.ruleTemplateApplication.traceRole, "prospective");
-  assert.equal(preview.ruleTemplateApplication.receiverFocus, 1);
-  assert.equal(preview.ruleTemplateApplication.panelPresence, 1);
-  assert.equal(preview.ruleTemplateApplication.generalRulePresence, 1);
+  assert.equal(match.ruleTemplateApplication.traceRole, "prospective");
+  assert.equal(match.ruleTemplateApplication.receiverFocus, 1);
+  assert.equal(match.ruleTemplateApplication.panelPresence, 1);
+  assert.equal(match.ruleTemplateApplication.matchProgress, 1);
+  assert.equal(match.ruleTemplateApplication.matchPresence, 1);
   assert.equal(
-    preview.ruleTemplateApplication.metavariableBindingsPresence,
+    match.ruleTemplateApplication.metavariableBindingsPresence,
     0
   );
-  assert.equal(preview.ruleTemplateApplication.instantiatedRulePresence, 0);
-  assert.equal(preview.ruleTemplateApplication.vacancyPresence, 0);
-  assert.equal(preview.ruleTemplateApplication.previewPresence, 1);
-  assert.ok(preview.ruleTemplateApplication.scaffoldPresence > 0);
-  assert.equal(preview.ruleTemplateApplication.bindingProgress, 0);
+  assert.equal(match.ruleTemplateApplication.instantiationProgress, 0);
+  assert.equal(match.ruleTemplateApplication.targetPresence, 0);
+  assert.equal(match.ruleTemplateApplication.vacancyPresence, 0);
+  assert.equal(match.ruleTemplateApplication.scaffoldPresence, 0);
+  assert.equal(match.ruleTemplateApplication.bindingProgress, 0);
   assert.equal(
-    preview.ruleTemplateApplication.receiverSettlementProgress,
+    match.ruleTemplateApplication.receiverSettlementProgress,
     0
   );
-  assert.ok(preview.ruleTemplateApplication.syntaxPresence > 0);
-  assert.ok(preview.ruleTemplateApplication.closurePresence > 0);
+  assert.equal(match.ruleTemplateApplication.syntaxPresence, 0);
+  assert.equal(match.ruleTemplateApplication.closurePresence, 0);
   assert.equal(
-    preview.ruleTemplateApplication.syntaxResolutionProgress,
+    match.ruleTemplateApplication.syntaxResolutionProgress,
     0
   );
 
   const binding = sampleKpAntiderivativePowerChoreography({
     plan,
-    progress: 0.6
+    progress: 0.52
   });
   assert.equal(binding.ruleTemplateApplication.traceRole, "prospective");
   assert.equal(binding.ruleTemplateApplication.receiverFocus, 1);
   assert.equal(binding.ruleTemplateApplication.panelPresence, 1);
-  assert.equal(binding.ruleTemplateApplication.generalRulePresence, 1);
   assert.equal(
     binding.ruleTemplateApplication.metavariableBindingsPresence,
     1
   );
-  assert.equal(binding.ruleTemplateApplication.instantiatedRulePresence, 0);
+  assert.equal(binding.ruleTemplateApplication.instantiatedResultPresence, 0);
   assert.equal(binding.ruleTemplateApplication.vacancyPresence, 0);
   assert.ok(binding.ruleTemplateApplication.bindingProgress >
     binding.ruleTemplateApplication.syntaxResolutionProgress);
-  assert.ok(binding.ruleTemplateApplication.syntaxPresence > 0);
-  assert.ok(binding.ruleTemplateApplication.closurePresence > 0);
+  assert.equal(binding.ruleTemplateApplication.instantiationProgress, 0);
+  assert.equal(binding.ruleTemplateApplication.syntaxPresence, 0);
+  assert.equal(binding.ruleTemplateApplication.closurePresence, 0);
   assert.equal(
     binding.ruleTemplateApplication.receiverSettlementProgress,
     0
@@ -231,25 +236,30 @@ test("rule-template projection previews complete grammar before binding", () => 
 
   const instantiated = sampleKpAntiderivativePowerChoreography({
     plan,
-    progress: 0.74
+    progress: 0.69
   });
-  assert.equal(instantiated.ruleTemplateApplication.generalRulePresence, 0);
   assert.equal(
     instantiated.ruleTemplateApplication.metavariableBindingsPresence,
     1
   );
   assert.equal(
-    instantiated.ruleTemplateApplication.instantiatedRulePresence,
+    instantiated.ruleTemplateApplication.instantiatedResultPresence,
     1
   );
-  assert.equal(instantiated.ruleTemplateApplication.rewriteHandoffProgress, 0);
+  assert.equal(instantiated.ruleTemplateApplication.instantiationProgress, 1);
+  assert.equal(instantiated.ruleTemplateApplication.sourcePresence, 1);
+  assert.equal(instantiated.ruleTemplateApplication.targetPresence, 1);
+  assert.equal(instantiated.ruleTemplateApplication.rewriteCommitProgress, 0);
 
-  const holding = sampleKpAntiderivativePowerChoreography({
+  const rewriting = sampleKpAntiderivativePowerChoreography({
     plan,
-    progress: 0.79
+    progress: 0.84
   });
-  assert.equal(holding.ruleTemplateApplication.instantiatedRulePresence, 1);
-  assert.equal(holding.ruleTemplateApplication.rewriteHandoffProgress, 0);
+  assert.equal(rewriting.ruleTemplateApplication.instantiatedResultPresence, 1);
+  assert.ok(rewriting.ruleTemplateApplication.rewriteCommitProgress > 0);
+  assert.ok(rewriting.ruleTemplateApplication.rewriteCommitProgress < 1);
+  assert.ok(rewriting.ruleTemplateApplication.sourcePresence < 1);
+  assert.equal(rewriting.ruleTemplateApplication.targetPresence, 1);
 
   const resolved = sampleKpAntiderivativePowerChoreography({
     plan,
@@ -258,13 +268,15 @@ test("rule-template projection previews complete grammar before binding", () => 
   assert.equal(resolved.ruleTemplateApplication.traceRole, "live");
   assert.equal(resolved.ruleTemplateApplication.receiverFocus, 0);
   assert.equal(resolved.ruleTemplateApplication.panelPresence, 0);
-  assert.equal(resolved.ruleTemplateApplication.generalRulePresence, 0);
   assert.equal(
     resolved.ruleTemplateApplication.metavariableBindingsPresence,
     0
   );
-  assert.equal(resolved.ruleTemplateApplication.instantiatedRulePresence, 0);
-  assert.equal(resolved.ruleTemplateApplication.rewriteHandoffProgress, 1);
+  assert.equal(resolved.ruleTemplateApplication.instantiatedResultPresence, 1);
+  assert.equal(resolved.ruleTemplateApplication.instantiationProgress, 1);
+  assert.equal(resolved.ruleTemplateApplication.sourcePresence, 0);
+  assert.equal(resolved.ruleTemplateApplication.targetPresence, 1);
+  assert.equal(resolved.ruleTemplateApplication.rewriteCommitProgress, 1);
   assert.equal(resolved.ruleTemplateApplication.vacancyPresence, 0);
   assert.equal(resolved.ruleTemplateApplication.scaffoldPresence, 1);
   assert.equal(resolved.ruleTemplateApplication.bindingProgress, 1);

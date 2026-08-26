@@ -9,9 +9,10 @@ export const kpAntiderivativePowerPhaseIds = Object.freeze([
   "notice-operator-scope",
   "withdraw-operator",
   "rewrite-power-rule",
-  "preview-rule-template",
-  "bind-rule-template",
-  "resolve-rule-syntax",
+  "match-rule-pattern",
+  "bind-rule-metavariables",
+  "instantiate-rule-result",
+  "commit-rule-rewrite",
   "settle-expanded-rule"
 ] as const);
 
@@ -43,9 +44,10 @@ export interface KpAntiderivativePowerChoreographyPlan {
   readonly ruleTemplateApplication: {
     readonly kind: "antiderivative-rule-template-instantiation";
     readonly lawRefId: "law.calculus.integral.power-rule";
-    readonly generalRuleLatex: string;
+    readonly patternLatex: string;
+    readonly replacementTemplateLatex: string;
     readonly bindingLatex: string;
-    readonly instantiatedRuleLatex: string;
+    readonly instantiatedResultLatex: string;
     readonly metavariableBindings: readonly [
       {
         readonly metavariable: "u";
@@ -108,12 +110,15 @@ export interface KpAntiderivativePowerChoreographyFrame {
     readonly traceRole: "absent" | "prospective" | "live";
     readonly receiverFocus: number;
     readonly panelPresence: number;
-    readonly generalRulePresence: number;
+    readonly matchProgress: number;
+    readonly matchPresence: number;
     readonly metavariableBindingsPresence: number;
-    readonly instantiatedRulePresence: number;
-    readonly rewriteHandoffProgress: number;
+    readonly instantiatedResultPresence: number;
+    readonly instantiationProgress: number;
+    readonly rewriteCommitProgress: number;
+    readonly sourcePresence: number;
+    readonly targetPresence: number;
     readonly vacancyPresence: number;
-    readonly previewPresence: number;
     readonly scaffoldPresence: number;
     readonly bindingProgress: number;
     readonly receiverSettlementProgress: number;
@@ -244,7 +249,6 @@ export function compileKpAntiderivativePowerChoreography(input: {
   const integrationVariableRole = sourceRole("source.integration-variable");
   const exponentRole = sourceRole("source.integrand-exponent");
   const baseLabel = String(baseRole.label);
-  const integrationVariableLabel = String(integrationVariableRole.label);
   const exponentLabel = String(exponentRole.label);
   return Object.freeze({
     kind: "antiderivative-power-choreography-plan" as const,
@@ -283,12 +287,12 @@ export function compileKpAntiderivativePowerChoreography(input: {
     ruleTemplateApplication: Object.freeze({
       kind: "antiderivative-rule-template-instantiation" as const,
       lawRefId: input.lawRefId,
-      generalRuleLatex:
-        String.raw`\begin{gathered}\int u^n\,du = \frac{u^{n+1}}{n+1}+C\\[-0.08em] n\ne -1\end{gathered}`,
+      patternLatex: String.raw`\int u^n\,du`,
+      replacementTemplateLatex: String.raw`\frac{u^{n+1}}{n+1}+C`,
       bindingLatex:
         String.raw`u\mapsto ${baseLabel},\qquad n\mapsto ${exponentLabel}`,
-      instantiatedRuleLatex:
-        String.raw`\int ${baseLabel}^{${exponentLabel}}\,d${integrationVariableLabel} = \frac{${baseLabel}^{${exponentLabel}+1}}{${exponentLabel}+1}+C`,
+      instantiatedResultLatex:
+        String.raw`\frac{${baseLabel}^{${exponentLabel}+1}}{${exponentLabel}+1}+C`,
       metavariableBindings: Object.freeze([
         Object.freeze({
           metavariable: "u" as const,
@@ -368,9 +372,10 @@ export function sampleKpAntiderivativePowerChoreography(input: {
     "notice-operator-scope": phaseProgress(semanticProgress, 0.04, 0.14),
     "withdraw-operator": phaseProgress(semanticProgress, 0.14, 0.25),
     "rewrite-power-rule": phaseProgress(semanticProgress, 0.27, 0.96),
-    "preview-rule-template": phaseProgress(semanticProgress, 0.27, 0.5),
-    "bind-rule-template": phaseProgress(semanticProgress, 0.52, 0.87),
-    "resolve-rule-syntax": phaseProgress(semanticProgress, 0.87, 0.94),
+    "match-rule-pattern": phaseProgress(semanticProgress, 0.27, 0.42),
+    "bind-rule-metavariables": phaseProgress(semanticProgress, 0.42, 0.61),
+    "instantiate-rule-result": phaseProgress(semanticProgress, 0.61, 0.76),
+    "commit-rule-rewrite": phaseProgress(semanticProgress, 0.76, 0.94),
     "settle-expanded-rule": phaseProgress(semanticProgress, 0.9, 1)
   };
   const notice = phases["notice-operator-scope"];
@@ -401,65 +406,60 @@ export function sampleKpAntiderivativePowerChoreography(input: {
 }
 
 /**
- * Rule application needs a receiving structure before source material can
- * read as bound into it. This pure projection keeps that causal distinction
- * deterministic while leaving opacity, scale, and measured geometry to the
- * Native KaTeX presentation profile.
+ * Rule application keeps recognition, binding, instantiation, and rewrite
+ * distinct. In particular, binding is not computation, and the instantiated
+ * result exists prospectively before it becomes the live expression.
  */
 export function sampleKpAntiderivativeRuleTemplateApplication(
   rewriteProgress: number
 ): KpAntiderivativePowerChoreographyFrame["ruleTemplateApplication"] {
   const progress = clamp01(rewriteProgress);
-  const preview = phaseProgress(progress, 0, 0.22);
-  const binding = phaseProgress(progress, 0.34, 0.62);
-  const receiverSettlement = phaseProgress(progress, 0.84, 0.98);
-  const syntaxResolution = phaseProgress(progress, 0.94, 0.995);
-  const generalRulePresence = roundProgress(
-    phaseProgress(progress, 0, 0.08) *
-      (1 - phaseProgress(progress, 0.58, 0.66))
+  const matchProgress = phaseProgress(progress, 0, 0.16);
+  const matchPresence = roundProgress(
+    matchProgress * (1 - phaseProgress(progress, 0.44, 0.54))
   );
+  const binding = phaseProgress(progress, 0.22, 0.36);
   const metavariableBindingsPresence = roundProgress(
-    phaseProgress(progress, 0.34, 0.42) *
-      (1 - phaseProgress(progress, 0.8, 0.84))
+    binding * (1 - phaseProgress(progress, 0.66, 0.76))
   );
-  const instantiatedRulePresence = roundProgress(
-    phaseProgress(progress, 0.58, 0.66) *
-      (progress <= 0.84 ? 1 : 0)
-  );
-  const rewriteHandoffProgress = phaseProgress(progress, 0.84, 0.98);
+  const instantiationProgress = phaseProgress(progress, 0.46, 0.6);
+  const rewriteCommitProgress = phaseProgress(progress, 0.72, 0.94);
+  const sourcePresence = roundProgress(1 - rewriteCommitProgress);
+  const targetPresence = instantiationProgress;
+  const receiverSettlement = rewriteCommitProgress;
+  const syntaxResolution = rewriteCommitProgress;
+  const instantiatedResultPresence = targetPresence;
   const panelPresence = roundProgress(Math.max(
-    generalRulePresence,
-    metavariableBindingsPresence,
-    instantiatedRulePresence
+    matchPresence,
+    metavariableBindingsPresence
   ));
-  // Binding and settlement are separate semantic beats: the learner first
-  // sees material arrive in a prospective rule, then sees that populated
-  // receiver become the live expanded expression.
-  const receiverFocus = roundProgress(preview * (1 - syntaxResolution));
-  // Binding is written directly into the instantiated rule. The former
-  // underline vacancies looked like extra fraction rules and created a second
-  // presentation authority without contributing semantic correspondence.
+  const receiverFocus = roundProgress(
+    Math.max(matchPresence, metavariableBindingsPresence) *
+      (1 - syntaxResolution)
+  );
+  // A slot is semantic, but a box is not. The renderer may annotate the
+  // matched source without introducing vacant rules or duplicate equations.
   const vacancyPresence = 0;
-  // A receiving template cannot be inferred from faint endpoint fragments.
-  // Its fraction, successor syntax, and +C arrive as one legible structure;
-  // the binding row distinguishes prospective grammar from bound material.
-  const scaffoldPresence = preview;
-  const syntaxPresence = preview;
-  const closurePresence = preview;
+  const scaffoldPresence = instantiationProgress;
+  const syntaxPresence = instantiationProgress;
+  const closurePresence = instantiationProgress;
   return Object.freeze({
-    traceRole: syntaxResolution >= 1
+    traceRole: rewriteCommitProgress >= 1
       ? "live" as const
-      : preview > 0
+      : matchProgress > 0 || instantiationProgress > 0
         ? "prospective" as const
         : "absent" as const,
     receiverFocus,
     panelPresence,
-    generalRulePresence,
+    matchProgress,
+    matchPresence,
     metavariableBindingsPresence,
-    instantiatedRulePresence,
-    rewriteHandoffProgress,
+    instantiatedResultPresence,
+    instantiationProgress,
+    rewriteCommitProgress,
+    sourcePresence,
+    targetPresence,
     vacancyPresence,
-    previewPresence: preview,
     scaffoldPresence,
     bindingProgress: binding,
     receiverSettlementProgress: receiverSettlement,

@@ -13,41 +13,27 @@ import {
   syncKpEquationMaterialLayer
 } from "../rendering/equation-material-layer-dom.ts";
 import {
-  createKpAntiderivativePowerNativeKatexSceneSession,
   createKpAntiderivativePowerNativeKatexTransitPlan,
-  kpAntiderivativePowerNativeKatexTransitMechanismId,
   type KpAntiderivativePowerNativeKatexTransitPlan
 } from "../rendering/native-katex-antiderivative-power-transit.ts";
-import {
-  observeKpNativeKatexRenderedScene
-} from "../rendering/native-katex-rendered-scene.ts";
 import { renderLatexToHtml } from "../rendering/katex-adapter.ts";
-import {
-  kpAntiderivativeTemplateInstantiationProfileId
-} from "../rendering/native-katex-antiderivative-template-instantiation.ts";
-import type {
-  KpSelectorAnnotatedLatex
-} from "../rendering/selector-annotated-latex.ts";
-import type {
-  KpCanonicalNativeKatexSceneSession
-} from "../rendering/native-katex-scene-compositor.ts";
 import type {
   KpEditorEquationStageHotPathCache
 } from "./equation-stage-hot-path-cache.ts";
 import {
   KP_EDITOR_ANIMATION_DISPOSE_EVENT
 } from "./animation-player-controller.ts";
-import {
-  createKpAntiderivativePowerSelectorAnnotatedLatex
-} from "./antiderivative-power-semantic-latex.ts";
-
 export const kpAntiderivativePowerTransitRepairGapCode =
   "repair-gap.integration-power-rule.native-katex-transit-unavailable";
+export const kpAntiderivativeRuleApplicationNativeKatexMechanismId =
+  "kp.rendering.native-katex.antiderivative-rule-application.v1";
+export const kpAntiderivativeRuleApplicationPresentationProfileId =
+  "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v1";
 
 export interface KpAntiderivativePowerTransitMountResult {
   readonly status: "inactive" | "preparing" | "mounted" | "repair-gap";
   readonly mechanismId?:
-    typeof kpAntiderivativePowerNativeKatexTransitMechanismId | undefined;
+    typeof kpAntiderivativeRuleApplicationNativeKatexMechanismId | undefined;
   readonly repairGapCode?:
     typeof kpAntiderivativePowerTransitRepairGapCode | undefined;
 }
@@ -80,7 +66,7 @@ interface TransitMountSession {
   readonly fontReadiness: ReturnType<typeof createKpEquationFontReadiness>;
   generation: number;
   pending: PendingFrame;
-  canonical?: KpCanonicalNativeKatexSceneSession | undefined;
+  ready: boolean;
   failure?: string | undefined;
   disposed: boolean;
 }
@@ -145,9 +131,7 @@ export function applyKpAntiderivativePowerTransitMount(input: {
     );
     const templateReceiver = createTemplateReceiver(
       input.stage,
-      plan.choreography.ruleTemplateApplication,
-      input.animation,
-      input.player.dataset["kpEditorAnimationMathLayout"] !== "inline"
+      plan.choreography.ruleTemplateApplication
     );
     session = {
       stage: input.stage,
@@ -163,6 +147,7 @@ export function applyKpAntiderivativePowerTransitMount(input: {
       ),
       generation: 1,
       pending,
+      ready: false,
       disposed: false
     };
     sessions.set(input.stage, session);
@@ -188,7 +173,7 @@ export function applyKpAntiderivativePowerTransitMount(input: {
       repairGapCode: kpAntiderivativePowerTransitRepairGapCode
     });
   }
-  if (session.canonical === undefined) {
+  if (!session.ready) {
     showNativeCheckpoint(session, semanticProgress(pending));
     return Object.freeze({ status: "preparing" as const });
   }
@@ -207,7 +192,7 @@ export function applyKpAntiderivativePowerTransitMount(input: {
   }
   return Object.freeze({
     status: "mounted" as const,
-    mechanismId: kpAntiderivativePowerNativeKatexTransitMechanismId
+    mechanismId: kpAntiderivativeRuleApplicationNativeKatexMechanismId
   });
 }
 
@@ -220,11 +205,7 @@ export function disposeKpAntiderivativePowerTransitMount(
   if (session === undefined || session.disposed) return;
   session.disposed = true;
   session.generation += 1;
-  session.canonical?.session.retire({
-    kind: "native-katex-paint-preserving-retirement",
-    reason,
-    structuralSuccession: "retire-preserving-paint"
-  });
+  void reason;
   session.fontReadiness.dispose();
   syncKpEquationMaterialLayer({ stage, owners: [] });
   session.templateReceiver.remove();
@@ -233,9 +214,7 @@ export function disposeKpAntiderivativePowerTransitMount(
 
 function createTemplateReceiver(
   stage: HTMLElement,
-  template: KpAntiderivativePowerNativeKatexTransitPlan["choreography"]["ruleTemplateApplication"],
-  animation: KpAnimationAsset,
-  displayMode: boolean
+  template: KpAntiderivativePowerNativeKatexTransitPlan["choreography"]["ruleTemplateApplication"]
 ): HTMLElement {
   const element = stage.ownerDocument.createElement("div");
   element.className =
@@ -248,15 +227,11 @@ function createTemplateReceiver(
     "0"
   );
   element.style.setProperty(
-    "--kp-antiderivative-general-rule-presence",
+    "--kp-antiderivative-rule-match-presence",
     "0"
   );
   element.style.setProperty(
     "--kp-antiderivative-metavariable-bindings-presence",
-    "0"
-  );
-  element.style.setProperty(
-    "--kp-antiderivative-instantiated-rule-presence",
     "0"
   );
   element.setAttribute("aria-hidden", "true");
@@ -265,46 +240,47 @@ function createTemplateReceiver(
   rulePanel.className =
     "editor-equation-stage__antiderivative-rule-template";
   rulePanel.dataset["kpAntiderivativeRuleTemplate"] = template.lawRefId;
+  rulePanel.dataset["kpAntiderivativeRulePattern"] = template.patternLatex;
+  rulePanel.dataset["kpAntiderivativeRuleReplacementTemplate"] =
+    template.replacementTemplateLatex;
   rulePanel.setAttribute("role", "img");
   rulePanel.setAttribute("aria-hidden", "true");
 
-  const formulaStack = stage.ownerDocument.createElement("div");
-  formulaStack.className =
-    "editor-equation-stage__antiderivative-rule-formula-stack";
-  const generalRule = createRuleTemplateFormula({
-    stage,
-    className: "editor-equation-stage__antiderivative-general-rule",
-    dataAttribute: "kpAntiderivativeGeneralRule",
-    latex: template.generalRuleLatex
-  });
-  const instantiatedRule = createInstantiatedRuleTemplateFormula({
-    stage,
-    className: "editor-equation-stage__antiderivative-instantiated-rule",
-    dataAttribute: "kpAntiderivativeInstantiatedRule",
-    latex: template.instantiatedRuleLatex,
-    animation,
-    displayMode
-  });
-  formulaStack.append(generalRule, instantiatedRule);
+  const matchSlots = template.metavariableBindings.map(({ metavariable }) =>
+    createRuleMatchSlot(stage, metavariable)
+  );
   const bindings = createRuleTemplateFormula({
     stage,
     className: "editor-equation-stage__antiderivative-rule-bindings",
     dataAttribute: "kpAntiderivativeRuleBindings",
     latex: template.bindingLatex
   });
-  rulePanel.append(formulaStack, bindings);
+  rulePanel.append(...matchSlots, bindings);
   element.append(rulePanel);
   stage.append(element);
   return element;
+}
+
+function createRuleMatchSlot(
+  stage: HTMLElement,
+  metavariable: "u" | "n"
+): HTMLElement {
+  const slot = stage.ownerDocument.createElement("span");
+  slot.className = "editor-equation-stage__antiderivative-rule-match-slot";
+  slot.dataset["kpAntiderivativeRuleMatchSlot"] = metavariable;
+  slot.innerHTML = renderLatexToHtml(metavariable, {
+    displayMode: false,
+    output: "htmlAndMathml"
+  });
+  slot.setAttribute("aria-hidden", "true");
+  return slot;
 }
 
 function createRuleTemplateFormula(input: {
   readonly stage: HTMLElement;
   readonly className: string;
   readonly dataAttribute:
-    | "kpAntiderivativeGeneralRule"
-    | "kpAntiderivativeRuleBindings"
-    | "kpAntiderivativeInstantiatedRule";
+    "kpAntiderivativeRuleBindings";
   readonly latex: string;
 }): HTMLElement {
   const formula = input.stage.ownerDocument.createElement("div");
@@ -320,129 +296,17 @@ function createRuleTemplateFormula(input: {
   return formula;
 }
 
-function createInstantiatedRuleTemplateFormula(input: {
-  readonly stage: HTMLElement;
-  readonly className: string;
-  readonly dataAttribute: "kpAntiderivativeInstantiatedRule";
-  readonly latex: string;
-  readonly animation: KpAnimationAsset;
-  readonly displayMode: boolean;
-}): HTMLElement {
-  const template = instantiatedRuleTemplateLatex(input.animation);
-  if (normalizeTemplateLatex(template.rawLatex) !==
-      normalizeTemplateLatex(input.latex)) {
-    throw new Error(
-      `Antiderivative instantiated template rendered ${template.rawLatex}; ` +
-      `expected ${input.latex}.`
-    );
-  }
-  const formula = input.stage.ownerDocument.createElement("div");
-  formula.className = input.className;
-  formula.dataset[input.dataAttribute] = input.latex;
-  const prefix = input.stage.ownerDocument.createElement("span");
-  prefix.dataset["kpAntiderivativeInstantiatedPrefix"] = template.sourceLatex;
-  prefix.innerHTML = renderLatexToHtml(`${template.sourceLatex} =`, {
-    // Match the host's KaTeX math style. A display-style source handed to an
-    // inline-style target changes fraction script levels during the move.
-    displayMode: input.displayMode,
-    output: "htmlAndMathml",
-    trust: true
-  });
-  const result = input.stage.ownerDocument.createElement("span");
-  result.dataset["kpAntiderivativeTemplateResult"] =
-    template.targetObjectId;
-  // Keep this as a standalone KaTeX render. Nesting the annotated RHS inside
-  // another htmlData group changed script-level paint ownership on narrow
-  // layouts even though the printed formula looked equivalent.
-  result.innerHTML = renderLatexToHtml(
-    template.targetAnnotated.annotatedLatex,
-    {
-      displayMode: input.displayMode,
-      output: "htmlAndMathml",
-      trust: true
-    }
-  );
-  formula.append(prefix, result);
-  formula.setAttribute("aria-hidden", "true");
-  return formula;
-}
-
-interface InstantiatedRuleTemplateLatex {
-  readonly rawLatex: string;
-  readonly sourceLatex: string;
-  readonly targetObjectId: string;
-  readonly targetAnnotated: KpSelectorAnnotatedLatex;
-}
-
-function instantiatedRuleTemplateLatex(
-  animation: KpAnimationAsset
-): InstantiatedRuleTemplateLatex {
-  const transformation = animation.transformations.find(
-    ({ transformType }) => transformType === "applyAntiderivativePowerRule"
-  );
-  const source = animation.bundle.objects.find(({ id }) =>
-    id === transformation?.sourceObjectIds[0]
-  );
-  const target = animation.bundle.objects.find(({ id }) =>
-    id === transformation?.targetObjectIds[0]
-  );
-  const sourceLatex = semanticObjectLatex(source?.value);
-  const targetLatex = semanticObjectLatex(target?.value);
-  if (
-    transformation === undefined ||
-    source === undefined ||
-    target === undefined ||
-    sourceLatex === undefined ||
-    targetLatex === undefined
-  ) {
-    throw new Error(
-      "Antiderivative instantiated template requires exact source and expanded objects."
-    );
-  }
-  const targetAnnotated = createKpAntiderivativePowerSelectorAnnotatedLatex({
-    objectId: target.id,
-    selectors: target.selectors
-  });
-  if (targetAnnotated === undefined) {
-    throw new Error(
-      "Antiderivative instantiated template requires selector-annotated expanded KaTeX."
-    );
-  }
-  return Object.freeze({
-    rawLatex: `${sourceLatex} = ${targetLatex}`,
-    sourceLatex,
-    targetObjectId: target.id,
-    targetAnnotated
-  });
-}
-
-function semanticObjectLatex(value: unknown): string | undefined {
-  if (typeof value !== "object" || value === null || !("latex" in value)) {
-    return undefined;
-  }
-  const latex = (value as { readonly latex?: unknown }).latex;
-  return typeof latex === "string" ? latex : undefined;
-}
-
-function normalizeTemplateLatex(latex: string): string {
-  return latex.replace(/\s+/gu, "");
-}
-
 function hideTemplateReceiver(session: TransitMountSession): void {
   session.templateReceiver.style.setProperty(
     "--kp-antiderivative-rule-template-panel-presence",
     "0"
   );
   session.templateReceiver.style.setProperty(
-    "--kp-antiderivative-general-rule-presence",
+    "--kp-antiderivative-rule-match-presence",
     "0"
   );
   session.templateReceiver.style.setProperty(
     "--kp-antiderivative-metavariable-bindings-presence",
-    "0"
-  );
-  session.templateReceiver.style.setProperty(
-    "--kp-antiderivative-instantiated-rule-presence",
     "0"
   );
   session.templateReceiver.dataset["kpSemanticTraceRole"] = "absent";
@@ -458,56 +322,19 @@ async function prepareSession(
     await session.fontReadiness.whenReady();
     if (session.disposed || session.generation !== generation) return;
     prepareNativeMeasurement(session);
-    const source = observeKpNativeKatexRenderedScene({
-      endpoint: "source",
-      stage: session.stage,
-      root: session.roots.source,
-      semanticEntityId: session.objectIds.source,
-      presentationGroupId: `${session.objectIds.source}.root`,
-      fontReadiness: session.fontReadiness,
-      includeHiddenPaint: true,
-      viewportRevision: session.cacheRevision
-    });
-    const target = observeKpNativeKatexRenderedScene({
-      endpoint: "target",
-      stage: session.stage,
-      root: session.roots.target,
-      semanticEntityId: session.objectIds.target,
-      presentationGroupId: `${session.objectIds.target}.root`,
-      fontReadiness: session.fontReadiness,
-      includeHiddenPaint: true,
-      viewportRevision: session.cacheRevision
-    });
-    const templateSourceRoot = requireTemplateSourceRoot(session);
-    alignTemplateSourceTypography(session, templateSourceRoot);
-    bindTemplateSourceOwnership(session, templateSourceRoot);
-    const templateSource = observeKpNativeKatexRenderedScene({
-      endpoint: "source",
-      stage: session.stage,
-      root: templateSourceRoot,
-      semanticEntityId: session.objectIds.target,
-      presentationGroupId:
-        `${session.objectIds.target}.template-instance-rhs`,
-      fontReadiness: session.fontReadiness,
-      includeHiddenPaint: true,
-      viewportRevision: session.cacheRevision
-    });
     if (session.disposed || session.generation !== generation) return;
-    session.canonical = createKpAntiderivativePowerNativeKatexSceneSession({
-      plan: session.plan,
-      source,
-      target,
-      templateSource
-    });
+    assertSingleInstantiatedFractionOwner(session);
+    positionRuleMatchSlots(session);
+    session.ready = true;
     session.stage.dataset["kpAntiderivativePowerTransit"] = "ready";
     session.stage.dataset["kpAntiderivativePowerTransitMechanismId"] =
-      kpAntiderivativePowerNativeKatexTransitMechanismId;
+      kpAntiderivativeRuleApplicationNativeKatexMechanismId;
     session.stage.dataset["kpAntiderivativeTemplateProfileId"] =
-      kpAntiderivativeTemplateInstantiationProfileId;
+      kpAntiderivativeRuleApplicationPresentationProfileId;
     session.stage.dataset["kpAntiderivativePowerTransitDynamicTrackCount"] =
-      String(session.canonical.executableMotion.dynamicTrackIds.length);
-    session.stage.dataset["kpAntiderivativeTemplateHandoffSource"] =
-      "instantiated-rule-rhs";
+      "0";
+    session.stage.dataset["kpAntiderivativeInstantiatedResultOwner"] =
+      "canonical-target-native";
     session.stage.dataset["kpAntiderivativeTemplateVacancyCount"] = "0";
     applyFrame(session);
   } catch (error: unknown) {
@@ -564,73 +391,54 @@ function prepareNativeMeasurement(session: TransitMountSession): void {
   }
 }
 
-function requireTemplateSourceRoot(session: TransitMountSession): HTMLElement {
-  const root = session.templateReceiver.querySelector<HTMLElement>(
-    "[data-kp-antiderivative-template-result]"
-  );
-  if (root === null) {
-    throw new Error(
-      "Antiderivative instantiated rule lacks its annotated RHS source."
-    );
-  }
-  return root;
-}
-
-function alignTemplateSourceTypography(
-  session: TransitMountSession,
-  templateSourceRoot: HTMLElement
+function assertSingleInstantiatedFractionOwner(
+  session: TransitMountSession
 ): void {
-  const targetObject = session.roots.target.querySelector<HTMLElement>(
-    ".editor-equation-stage__object"
+  const fractionRules = session.roots.target.querySelectorAll<HTMLElement>(
+    ".frac-line"
   );
-  const instantiatedRule = templateSourceRoot.closest<HTMLElement>(
-    "[data-kp-antiderivative-instantiated-rule]"
-  );
-  if (targetObject === null || instantiatedRule === null) {
-    throw new Error(
-      "Antiderivative template handoff cannot resolve target typography."
-    );
-  }
-  // Native fitting may select a smaller display font on narrow hosts. The
-  // instantiated RHS must inherit that realized size before measurement or
-  // its script glyphs cannot satisfy the compositor's uniform-scale law.
-  instantiatedRule.style.fontSize = getComputedStyle(targetObject).fontSize;
-}
-
-function bindTemplateSourceOwnership(
-  session: TransitMountSession,
-  root: HTMLElement
-): void {
-  root.dataset["kpSemanticEntityId"] = session.objectIds.target;
-  root.dataset["kpPresentationGroupId"] =
-    `${session.objectIds.target}.template-instance-rhs`;
-  root.querySelectorAll<HTMLElement>("[data-kp-motion-id]")
-    .forEach((token, index) => {
-      const selectorId = selectorIdFromMotionId(token);
-      token.dataset["kpSemanticEntityId"] = selectorId;
-      token.dataset["kpPresentationGroupId"] =
-        `${selectorId}.template-instance`;
-      token.dataset["kpAntiderivativeTemplateSourceSelectorId"] = selectorId;
-      // The template is an ephemeral native source, not a second canonical
-      // endpoint. Namespace its DOM motion IDs so global endpoint queries and
-      // review tooling continue to see exactly one canonical selector owner.
-      token.dataset["kpMotionId"] =
-        `antiderivative-template-source.paint.${index}`;
-    });
-  bindSemanticGroups(root);
-  const fractionRules = root.querySelectorAll<HTMLElement>(".frac-line");
   if (fractionRules.length !== 1) {
     throw new Error(
-      `Antiderivative instantiated rule requires one native fraction rule; ` +
+      `Antiderivative instantiated result requires one native fraction rule; ` +
       `received ${fractionRules.length}.`
     );
   }
-  fractionRules[0]!.dataset["kpAntiderivativeTemplateFractionSource"] =
-    "true";
+  fractionRules[0]!.dataset["kpAntiderivativeInstantiatedFractionOwner"] =
+    "canonical-target-native";
+}
+
+function positionRuleMatchSlots(session: TransitMountSession): void {
+  const stageRect = session.stage.getBoundingClientRect();
+  const bindings = session.plan.choreography.ruleTemplateApplication
+    .metavariableBindings;
+  for (const binding of bindings) {
+    const slot = session.templateReceiver.querySelector<HTMLElement>(
+      `[data-kp-antiderivative-rule-match-slot="${binding.metavariable}"]`
+    );
+    const sourceSelectorId = binding.metavariable === "u"
+      ? session.plan.choreography.persistentBase.sourceSelectorId
+      : session.plan.choreography.exponentBranch.sourceSelectorId;
+    const source = [...session.roots.source.querySelectorAll<HTMLElement>(
+      "[data-kp-motion-id]"
+    )].find((element) =>
+      element.dataset["kpMotionId"]?.endsWith(sourceSelectorId) === true
+    );
+    if (slot === null || source === undefined) {
+      throw new Error(
+        `Antiderivative rule match cannot place ${binding.metavariable}.`
+      );
+    }
+    const sourceRect = source.getBoundingClientRect();
+    slot.style.left = `${sourceRect.left - stageRect.left +
+      sourceRect.width / 2}px`;
+    slot.style.top = `${sourceRect.top - stageRect.top}px`;
+    slot.dataset["kpAntiderivativeRuleMatchSourceSelectorId"] =
+      sourceSelectorId;
+  }
 }
 
 function applyFrame(session: TransitMountSession): void {
-  if (session.canonical === undefined) return;
+  if (!session.ready) return;
   const frame = sampleKpAntiderivativePowerChoreography({
     plan: session.plan.choreography,
     progress: session.pending.localProgress,
@@ -641,37 +449,39 @@ function applyFrame(session: TransitMountSession): void {
     : session.pending.accessibilityMode === "reduced-motion"
       ? "reduced"
       : "full";
-  // The visible rule must finish before material transit begins. Sampling the
-  // compositor from the handoff beat prevents two complete formula owners
-  // from crossfading into an unreadable stack of fraction bars.
-  const rendererProgress = projection === "full"
-    ? frame.ruleTemplateApplication.rewriteHandoffProgress
-    : frame.rewriteProgress < 0.5 ? 0 : 1;
+  const ruleApplication = projection === "full"
+    ? frame.ruleTemplateApplication
+    : sampleKpAntiderivativeRuleTemplateApplication(
+        frame.rewriteProgress < 0.5 ? 0 : 1
+      );
   // The generic equation sampler runs earlier in the shared host. Restore the
-  // measured native endpoints before cloning so its presentation transforms
-  // can never become the compositor's source geometry or paint.
+  // native endpoints before projecting this exemplar's deterministic presence
+  // and trace roles, or inherited transforms would move the matched subject.
   resetEndpointPresentation(session);
-  const ownership = session.canonical.session.apply(rendererProgress);
+  syncKpEquationMaterialLayer({ stage: session.stage, owners: [] });
+  positionRuleMatchSlots(session);
   applyOperatorAndScopeSalience(session, frame, projection);
   const templatePanelPresence = applyRuleTemplateApplicationState(
     session,
-    frame,
-    rendererProgress,
+    ruleApplication
+  );
+  const visualOwner = applyNativeRuleApplicationState(
+    session,
+    ruleApplication,
     projection
   );
-  // The compositor's presentation source is the instantiated template RHS.
-  // Retire the earlier integral while that panel or its material successor
-  // owns the scene; otherwise it resurfaces beneath the moving fraction.
-  session.roots.source.style.opacity =
-    templatePanelPresence <= 0.01 && rendererProgress === 0 ? "1" : "0";
-  settleAccessibility(session, rendererProgress, templatePanelPresence);
+  settleAccessibility(
+    session,
+    ruleApplication.rewriteCommitProgress,
+    templatePanelPresence
+  );
   session.stage.dataset["kpAntiderivativePowerTransit"] = "ready";
   session.stage.dataset["kpAntiderivativePowerTransitProgress"] =
-    String(rendererProgress);
+    String(ruleApplication.rewriteCommitProgress);
   session.stage.dataset["kpAntiderivativePowerSemanticProgress"] =
     String(frame.semanticProgress);
   session.stage.dataset["kpAntiderivativePowerVisualOwner"] =
-    ownership.visualOwner;
+    visualOwner;
   session.stage.dataset["kpAntiderivativePowerAccessibilityProjection"] =
     projection;
   delete session.stage.dataset["kpAntiderivativePowerRepairGap"];
@@ -680,28 +490,19 @@ function applyFrame(session: TransitMountSession): void {
 
 function applyRuleTemplateApplicationState(
   session: TransitMountSession,
-  frame: ReturnType<typeof sampleKpAntiderivativePowerChoreography>,
-  rendererProgress: number,
-  projection: "full" | "reduced" | "no-depth"
+  template: ReturnType<typeof sampleKpAntiderivativeRuleTemplateApplication>
 ): number {
-  const template = projection === "full"
-    ? frame.ruleTemplateApplication
-    : sampleKpAntiderivativeRuleTemplateApplication(rendererProgress);
   session.templateReceiver.style.setProperty(
     "--kp-antiderivative-rule-template-panel-presence",
     template.panelPresence.toFixed(4)
   );
   session.templateReceiver.style.setProperty(
-    "--kp-antiderivative-general-rule-presence",
-    template.generalRulePresence.toFixed(4)
+    "--kp-antiderivative-rule-match-presence",
+    template.matchPresence.toFixed(4)
   );
   session.templateReceiver.style.setProperty(
     "--kp-antiderivative-metavariable-bindings-presence",
     template.metavariableBindingsPresence.toFixed(4)
-  );
-  session.templateReceiver.style.setProperty(
-    "--kp-antiderivative-instantiated-rule-presence",
-    template.instantiatedRulePresence.toFixed(4)
   );
   session.templateReceiver.dataset["kpSemanticTraceRole"] =
     template.traceRole;
@@ -728,11 +529,11 @@ function applyRuleTemplateApplicationState(
     templateAuthority.metavariableBindings;
   rulePanel.setAttribute(
     "aria-label",
-    template.instantiatedRulePresence > 0.01
-      ? `Instantiated power rule: integrate ${baseBinding.value} to the ${exponentBinding.value} power, then rewrite with exponent ${exponentBinding.value} plus one in the numerator and denominator, plus C.`
+    template.instantiationProgress > 0.01
+      ? `Instantiated power-rule result: ${baseBinding.value} carries into the result and ${exponentBinding.value} fills both exponent slots before evaluation.`
       : template.metavariableBindingsPresence > 0.01
         ? `Power rule binding: u maps to ${baseBinding.value}, and n maps to ${exponentBinding.value}.`
-        : "Power rule template: the integral of u to the n maps to u to the n plus one over n plus one, plus C, when n is not negative one."
+        : "Power-rule match: u to the n matches the integrand's base and exponent."
   );
   const semanticIds = [
     ...session.plan.choreography.ruleTemplateApplication
@@ -746,7 +547,8 @@ function applyRuleTemplateApplicationState(
       element.dataset["kpSemanticTraceRole"] = template.traceRole;
       element.dataset["kpAntiderivativeTemplatePaintRole"] = "grammar";
       element.dataset["kpSemanticSalienceLevel"] =
-        template.receiverFocus > 0.01 ? "focus" : "normal";
+        template.instantiationProgress > 0.01 &&
+          template.rewriteCommitProgress < 1 ? "focus" : "normal";
       element.style.color = template.receiverFocus > 0.01
         ? "var(--kp-catalogue-link)"
         : "";
@@ -763,8 +565,9 @@ function applyRuleTemplateApplicationState(
     for (const element of semanticPaintOwners(session.stage, semanticId)) {
       element.dataset["kpAntiderivativeTemplatePaintRole"] = "binding";
       element.dataset["kpSemanticSalienceLevel"] =
-        template.bindingProgress > 0.01 &&
-          template.syntaxResolutionProgress < 1
+        (template.matchPresence > 0.01 ||
+          template.instantiationProgress > 0.01) &&
+          template.rewriteCommitProgress < 1
           ? "focus"
           : "normal";
       element.style.color = "";
@@ -773,29 +576,31 @@ function applyRuleTemplateApplicationState(
     }
   }
   session.stage.dataset["kpAntiderivativeTemplateApplication"] =
-    "receiving-scaffold-binding";
+    "match-bind-instantiate-rewrite";
   session.stage.dataset["kpAntiderivativeTemplateTraceRole"] =
     template.traceRole;
   session.stage.dataset["kpAntiderivativeTemplateReceiverFocus"] =
     template.receiverFocus.toFixed(4);
   session.stage.dataset["kpAntiderivativeRuleTemplatePanelPresence"] =
     template.panelPresence.toFixed(4);
-  session.stage.dataset["kpAntiderivativeGeneralRulePresence"] =
-    template.generalRulePresence.toFixed(4);
   session.stage.dataset["kpAntiderivativeMetavariableBindingsPresence"] =
     template.metavariableBindingsPresence.toFixed(4);
-  session.stage.dataset["kpAntiderivativeInstantiatedRulePresence"] =
-    template.instantiatedRulePresence.toFixed(4);
-  session.stage.dataset["kpAntiderivativeRewriteHandoffProgress"] =
-    template.rewriteHandoffProgress.toFixed(4);
+  session.stage.dataset["kpAntiderivativeInstantiatedResultPresence"] =
+    template.instantiatedResultPresence.toFixed(4);
+  session.stage.dataset["kpAntiderivativeRuleMatchProgress"] =
+    template.matchProgress.toFixed(4);
+  session.stage.dataset["kpAntiderivativeRuleMatchPresence"] =
+    template.matchPresence.toFixed(4);
+  session.stage.dataset["kpAntiderivativeRuleInstantiationProgress"] =
+    template.instantiationProgress.toFixed(4);
+  session.stage.dataset["kpAntiderivativeRuleRewriteCommitProgress"] =
+    template.rewriteCommitProgress.toFixed(4);
   session.stage.dataset["kpAntiderivativeTemplateVacancyPresence"] =
     template.vacancyPresence.toFixed(4);
   session.stage.dataset["kpAntiderivativeTemplateReceiverSettlementProgress"] =
     template.receiverSettlementProgress.toFixed(4);
   session.stage.dataset["kpAntiderivativeTemplateLawRefId"] =
     session.plan.choreography.ruleTemplateApplication.lawRefId;
-  session.stage.dataset["kpAntiderivativeTemplatePreviewPresence"] =
-    template.previewPresence.toFixed(4);
   session.stage.dataset["kpAntiderivativeTemplateScaffoldPresence"] =
     template.scaffoldPresence.toFixed(4);
   session.stage.dataset["kpAntiderivativeTemplateBindingProgress"] =
@@ -807,6 +612,66 @@ function applyRuleTemplateApplicationState(
   session.stage.dataset["kpAntiderivativeTemplateClosurePresence"] =
     template.closurePresence.toFixed(4);
   return template.panelPresence;
+}
+
+function applyNativeRuleApplicationState(
+  session: TransitMountSession,
+  template: ReturnType<typeof sampleKpAntiderivativeRuleTemplateApplication>,
+  projection: "full" | "reduced" | "no-depth"
+): "source-native" | "rule-application-native" | "target-native" {
+  if (projection === "no-depth") {
+    const target = template.rewriteCommitProgress >= 0.5;
+    session.roots.source.style.opacity = target ? "0" : "1";
+    session.roots.target.style.opacity = target ? "1" : "0";
+    return target ? "target-native" : "source-native";
+  }
+
+  const commit = template.rewriteCommitProgress;
+  const prospective = measureProspectiveTargetTranslation(session);
+  const targetOpacity = template.targetPresence * (0.76 + 0.24 * commit);
+  session.roots.source.style.opacity = String(template.sourcePresence);
+  session.roots.target.style.opacity = targetOpacity.toFixed(4);
+  session.roots.target.style.transform = `translate(${
+    ((1 - commit) * prospective.x).toFixed(3)
+  }px, ${((1 - commit) * prospective.y).toFixed(3)}px)`;
+  session.roots.target.dataset["kpAntiderivativeProspectivePlacement"] =
+    prospective.lane;
+  session.roots.target.dataset["kpSemanticTraceRole"] = template.traceRole;
+  session.roots.target.dataset["kpAntiderivativeInstantiatedResultOwner"] =
+    "canonical-target-native";
+
+  if (commit >= 1) return "target-native";
+  if (template.targetPresence > 0.01) return "rule-application-native";
+  return "source-native";
+}
+
+function measureProspectiveTargetTranslation(
+  session: TransitMountSession
+): Readonly<{ x: number; y: number; lane: "right" | "below" }> {
+  const sourcePaint = session.roots.source.querySelector<HTMLElement>(
+    ".katex-display > .katex, .katex"
+  );
+  const targetPaint = session.roots.target.querySelector<HTMLElement>(
+    ".katex-display > .katex, .katex"
+  );
+  if (sourcePaint === null || targetPaint === null) {
+    throw new Error(
+      "Antiderivative rule application cannot measure its native equations."
+    );
+  }
+  const stageRect = session.stage.getBoundingClientRect();
+  const sourceRect = sourcePaint.getBoundingClientRect();
+  const targetRect = targetPaint.getBoundingClientRect();
+  const gap = Math.max(14, sourceRect.height * 0.35);
+  const right = sourceRect.right + gap - targetRect.left;
+  if (targetRect.right + right <= stageRect.right - 2) {
+    return Object.freeze({ x: right, y: 0, lane: "right" as const });
+  }
+  return Object.freeze({
+    x: 0,
+    y: Math.max(38, (sourceRect.height + targetRect.height) * 0.62),
+    lane: "below" as const
+  });
 }
 
 function resetEndpointPresentation(session: TransitMountSession): void {
@@ -1052,16 +917,17 @@ function clearTelemetry(stage: HTMLElement): void {
   delete stage.dataset["kpAntiderivativeTemplateTraceRole"];
   delete stage.dataset["kpAntiderivativeTemplateReceiverFocus"];
   delete stage.dataset["kpAntiderivativeRuleTemplatePanelPresence"];
-  delete stage.dataset["kpAntiderivativeGeneralRulePresence"];
   delete stage.dataset["kpAntiderivativeMetavariableBindingsPresence"];
-  delete stage.dataset["kpAntiderivativeInstantiatedRulePresence"];
-  delete stage.dataset["kpAntiderivativeRewriteHandoffProgress"];
+  delete stage.dataset["kpAntiderivativeInstantiatedResultPresence"];
+  delete stage.dataset["kpAntiderivativeRuleMatchProgress"];
+  delete stage.dataset["kpAntiderivativeRuleMatchPresence"];
+  delete stage.dataset["kpAntiderivativeRuleInstantiationProgress"];
+  delete stage.dataset["kpAntiderivativeRuleRewriteCommitProgress"];
   delete stage.dataset["kpAntiderivativeTemplateVacancyPresence"];
   delete stage.dataset["kpAntiderivativeTemplateVacancyCount"];
-  delete stage.dataset["kpAntiderivativeTemplateHandoffSource"];
+  delete stage.dataset["kpAntiderivativeInstantiatedResultOwner"];
   delete stage.dataset["kpAntiderivativeTemplateReceiverSettlementProgress"];
   delete stage.dataset["kpAntiderivativeTemplateLawRefId"];
-  delete stage.dataset["kpAntiderivativeTemplatePreviewPresence"];
   delete stage.dataset["kpAntiderivativeTemplateScaffoldPresence"];
   delete stage.dataset["kpAntiderivativeTemplateBindingProgress"];
   delete stage.dataset["kpAntiderivativeTemplateSyntaxPresence"];

@@ -1151,6 +1151,111 @@
       "scope": "slice s18 durable state",
       "checkedAt": "2026-08-25T23:33:48.443Z",
       "notes": "Theseus validates 1061 nodes and 25737 events after closing the context receipt and recording the renewed human-checkpoint summary."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-26T01:24:01.064Z",
+      "notes": "Rule-application semantic phases, integration authority, exact targets, and no family promotion all pass."
+    },
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-26T01:24:02.353Z",
+      "notes": "Approved derivative semantics and operator-scope policy remain unchanged."
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-26T01:24:03.445Z",
+      "notes": "Canonical Catalogue host and selection lifecycles remain intact."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-transit",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-26T01:24:04.507Z",
+      "notes": "The lower-level real Native KaTeX compositor canary remains certified independently."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-evaluation",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-26T01:24:05.572Z",
+      "notes": "Both disjoint 2+1 evaluation cohorts still use the shared ink-knot primitive."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-26T01:24:06.647Z",
+      "notes": "Application, tests, Svelte, and domain projects typecheck."
+    },
+    {
+      "command": "npm run visual:integration-power-rule -- --base-url http://127.0.0.1:8000",
+      "status": "passed",
+      "scope": "visual",
+      "checkedAt": "2026-08-26T01:24:07.722Z",
+      "notes": "Stable contact sheet captures match, bind, one-owner instantiation, rewrite, reductions, themes, and narrow layout."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-catalogue",
+      "status": "passed",
+      "scope": "canonical exemplar",
+      "checkedAt": "2026-08-26T01:25:26.500Z",
+      "notes": "Three Chromium checks prove stationary match and bind, one canonical target fraction owner, native rewrite settlement, themes, accessibility, rewind, playback dwell, and both ink knots."
+    },
+    {
+      "command": "npm run visual:integration-power-rule -- --base-url http://127.0.0.1:8000",
+      "status": "passed",
+      "scope": "human checkpoint",
+      "checkedAt": "2026-08-26T01:25:27.765Z",
+      "notes": "Final 14-frame desktop and narrow contact sheet passed its semantic manifest and was visually inspected."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-08-26T01:26:47.708Z",
+      "notes": "Dependency direction, semantic animation, equation authority, governance, and cross-domain conformance gates pass."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-26T01:26:48.970Z",
+      "notes": "All 11 equation inventory, authority, endpoint, clock, and sampled-frame preservation checks pass."
+    },
+    {
+      "command": "npm run test:browser:differentiation-exemplar",
+      "status": "passed",
+      "scope": "derivative browser preservation",
+      "checkedAt": "2026-08-26T01:26:49.972Z",
+      "notes": "All four approved derivative Catalogue lifecycle, ink-knot, direct-seek, geometry, and ownership checks pass unchanged."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "final checkpoint",
+      "checkedAt": "2026-08-26T01:28:56.080Z",
+      "notes": "Final app, test, Svelte, and domain typecheck passed after telemetry cleanup."
+    },
+    {
+      "command": "npm run visual:integration-power-rule -- --base-url http://127.0.0.1:8000",
+      "status": "passed",
+      "scope": "final checkpoint",
+      "checkedAt": "2026-08-26T01:28:57.345Z",
+      "notes": "Final desktop and narrow Rule Application contact sheet passed its semantic manifest."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-catalogue",
+      "status": "passed",
+      "scope": "final checkpoint",
+      "checkedAt": "2026-08-26T01:28:58.375Z",
+      "notes": "Final three-case Chromium Catalogue checkpoint passed."
     }
   ],
   "allowedWork": [
@@ -1288,7 +1393,7 @@
     {
       "id": "next-action.kp.integration-power-rule.s18",
       "title": "Integration-human-visual-checkpoint",
-      "summary": "Replaced the detached instantiated-rule overlay with an actual source-native KaTeX RHS handoff. The template and material scene exchange ownership at matching paint geometry; one fraction rule and the plus-C owner move as a coherent formula across desktop and narrow hosts. Removed the three misleading vacancy underlines. Focused unit, Catalogue browser, responsive visual, type, architecture, equation-preservation, mechanism, and derivative checks pass. Awaiting renewed human visual approval before s19 regression freeze.",
+      "summary": "Encoded the candidate Rule Application grammar as match, bind, instantiate, rewrite, then reduce. The Catalogue exemplar now projects u and n onto the stationary source, exposes u maps to x and n maps to 2, reveals the canonical target as one prospective native RHS, and moves that same owner into focus. The detached full-rule panel and template fraction handoff are gone; one target-native fraction owner remains from instantiation through settlement, while both certified ink-knot reductions and the derivative are preserved. Awaiting human visual approval before s19.",
       "status": "in-progress"
     },
     {

@@ -33,36 +33,36 @@ const samples = [
     viewport: desktopViewport
   },
   {
-    id: "template-scaffold",
-    label: "Rule application · complete power-rule pattern",
-    progress: 0.24,
+    id: "rule-match",
+    label: "Rule application · match u and n in place",
+    progress: 0.2,
     theme: "dark",
     viewport: desktopViewport
   },
   {
-    id: "template-binding",
+    id: "rule-binding",
     label: "Rule application · u ↦ x and n ↦ 2",
-    progress: 0.3,
+    progress: 0.27,
     theme: "dark",
     viewport: desktopViewport
   },
   {
-    id: "template-bound",
-    label: "Rule application · instantiated rule holds",
-    progress: 0.37,
+    id: "rule-instantiated",
+    label: "Rule application · one prospective RHS",
+    progress: 0.35,
     theme: "dark",
     viewport: desktopViewport
   },
   {
-    id: "template-settling",
-    label: "Rule application · instance hands off to rewrite",
-    progress: 0.44,
+    id: "rule-rewriting",
+    label: "Rule application · native RHS becomes focal",
+    progress: 0.43,
     theme: "dark",
     viewport: desktopViewport
   },
   {
-    id: "template-syntax",
-    label: "Rule application · governed expanded result",
+    id: "rule-committed",
+    label: "Rule application · rewrite committed",
     progress: 0.49,
     theme: "dark",
     viewport: desktopViewport
@@ -96,16 +96,16 @@ const samples = [
     viewport: desktopViewport
   },
   {
-    id: "narrow-light-template-scaffold",
-    label: "Narrow light · complete power-rule pattern",
-    progress: 0.24,
+    id: "narrow-light-rule-match",
+    label: "Narrow light · match in place",
+    progress: 0.2,
     theme: "light",
     viewport: narrowViewport
   },
   {
-    id: "narrow-light-template-bound",
-    label: "Narrow light · instantiated rule holds",
-    progress: 0.37,
+    id: "narrow-light-rule-instantiated",
+    label: "Narrow light · one prospective RHS",
+    progress: 0.35,
     theme: "light",
     viewport: narrowViewport
   },
@@ -134,14 +134,14 @@ interface CaptureEvidence {
   readonly templateLawRefId: string;
   readonly templateReceiverFocus: number;
   readonly ruleTemplatePanelPresence: number;
-  readonly generalRulePresence: number;
+  readonly ruleMatchProgress: number;
+  readonly ruleMatchPresence: number;
   readonly metavariableBindingsPresence: number;
-  readonly instantiatedRulePresence: number;
-  readonly rewriteHandoffProgress: number;
+  readonly ruleInstantiationProgress: number;
+  readonly ruleRewriteCommitProgress: number;
   readonly templateVacancyPresence: number;
   readonly templateVacancyCount: number;
-  readonly templateHandoffSource: string;
-  readonly templatePreviewPresence: number;
+  readonly instantiatedResultOwner: string;
   readonly templateScaffoldPresence: number;
   readonly templateBindingProgress: number;
   readonly templateReceiverSettlementProgress: number;
@@ -154,6 +154,7 @@ interface CaptureEvidence {
   readonly visibleMaterialOwnerCount: number;
   readonly visibleCohortIds: readonly string[];
   readonly accessibleEndpoint: string;
+  readonly instantiatedFractionOwnerCount: number;
   readonly visibleText: string;
   readonly ruleTemplateText: string;
   readonly file: string;
@@ -226,19 +227,20 @@ async function capture(baseUrl?: string): Promise<void> {
     await writeFile(html, htmlSource, "utf8");
     const manifest = path.join(outputRoot, "manifest.json");
     await writeFile(manifest, `${JSON.stringify({
-      schemaVersion: "kp.integration-power-rule-visual-checkpoint.v1",
+      schemaVersion: "kp.integration-power-rule-visual-checkpoint.v2",
       animationId,
       samples: evidence,
       reviewChecklist: [
         "attention order",
         "salience-only operator scope",
-        "rule-template scaffold and source binding",
+        "in-place pattern match and metavariable binding",
+        "single-owner prospective RHS and native rewrite commit",
         "exponent provenance",
         "two ink-knot evaluations",
         "integration constant persistence",
-      "timing and reverse meaning",
-      "dark and light response",
-      "narrow template handoff and evaluation fit"
+        "timing and reverse meaning",
+        "dark and light response",
+        "narrow rule application and evaluation fit"
       ],
       sheet: path.relative(process.cwd(), sheet),
       html: path.relative(process.cwd(), html)
@@ -333,17 +335,20 @@ async function captureSample(input: {
       ruleTemplatePanelPresence: Number(
         root.dataset["kpAntiderivativeRuleTemplatePanelPresence"] ?? 0
       ),
-      generalRulePresence: Number(
-        root.dataset["kpAntiderivativeGeneralRulePresence"] ?? 0
+      ruleMatchProgress: Number(
+        root.dataset["kpAntiderivativeRuleMatchProgress"] ?? 0
+      ),
+      ruleMatchPresence: Number(
+        root.dataset["kpAntiderivativeRuleMatchPresence"] ?? 0
       ),
       metavariableBindingsPresence: Number(
         root.dataset["kpAntiderivativeMetavariableBindingsPresence"] ?? 0
       ),
-      instantiatedRulePresence: Number(
-        root.dataset["kpAntiderivativeInstantiatedRulePresence"] ?? 0
+      ruleInstantiationProgress: Number(
+        root.dataset["kpAntiderivativeRuleInstantiationProgress"] ?? 0
       ),
-      rewriteHandoffProgress: Number(
-        root.dataset["kpAntiderivativeRewriteHandoffProgress"] ?? 0
+      ruleRewriteCommitProgress: Number(
+        root.dataset["kpAntiderivativeRuleRewriteCommitProgress"] ?? 0
       ),
       templateVacancyPresence: Number(
         root.dataset["kpAntiderivativeTemplateVacancyPresence"] ?? 0
@@ -351,11 +356,8 @@ async function captureSample(input: {
       templateVacancyCount: templateReceiver?.querySelectorAll(
         "[data-kp-antiderivative-template-vacancy]"
       ).length ?? 0,
-      templateHandoffSource:
-        root.dataset["kpAntiderivativeTemplateHandoffSource"] ?? "inactive",
-      templatePreviewPresence: Number(
-        root.dataset["kpAntiderivativeTemplatePreviewPresence"] ?? 0
-      ),
+      instantiatedResultOwner:
+        root.dataset["kpAntiderivativeInstantiatedResultOwner"] ?? "inactive",
       templateScaffoldPresence: Number(
         root.dataset["kpAntiderivativeTemplateScaffoldPresence"] ?? 0
       ),
@@ -392,6 +394,9 @@ async function captureSample(input: {
         root.dataset["kpAntiderivativePowerAccessibleEndpoint"] ??
         root.dataset["kpAntiderivativeEvaluationNativeSettlement"] ??
         "material",
+      instantiatedFractionOwnerCount: root.querySelectorAll(
+        '[data-kp-antiderivative-instantiated-fraction-owner="canonical-target-native"]'
+      ).length,
       visibleText: [...root.querySelectorAll<HTMLElement>(
         "[data-kp-editor-equation-source], " +
         "[data-kp-editor-equation-target], " +
@@ -471,58 +476,53 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   ) {
     throw new Error("Scope review frame must expose salience-only attention.");
   }
-  const scaffold = required("template-scaffold");
+  const match = required("rule-match");
   if (
-    scaffold.transitVisualOwner !== "source-native" ||
-    scaffold.templateProfileId !==
-      "kp.rendering.native-katex.antiderivative-template-instantiation-profile.v5" ||
-    scaffold.templateTraceRole !== "prospective" ||
-    scaffold.templateLawRefId !==
+    match.transitVisualOwner !== "source-native" ||
+    match.templateProfileId !==
+      "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v1" ||
+    match.templateTraceRole !== "prospective" ||
+    match.templateLawRefId !==
       "law.calculus.integral.power-rule" ||
-    scaffold.templateReceiverFocus !== 1 ||
-    scaffold.ruleTemplatePanelPresence !== 1 ||
-    scaffold.generalRulePresence !== 1 ||
-    scaffold.metavariableBindingsPresence !== 0 ||
-    scaffold.instantiatedRulePresence !== 0 ||
-    !scaffold.ruleTemplateText.includes("n≠−1") ||
-    scaffold.templateVacancyPresence !== 0 ||
-    scaffold.templateVacancyCount !== 0 ||
-    scaffold.templateHandoffSource !== "instantiated-rule-rhs" ||
-    scaffold.templatePreviewPresence !== 1 ||
-    scaffold.templateScaffoldPresence <= 0 ||
-    scaffold.templateSyntaxPresence <= 0 ||
-    scaffold.templateClosurePresence <= 0 ||
-    scaffold.templateBindingProgress !== 0 ||
-    scaffold.templateReceiverSettlementProgress !== 0 ||
-    scaffold.templateSyntaxResolutionProgress !== 0
+    match.templateReceiverFocus !== 1 ||
+    match.ruleTemplatePanelPresence !== 1 ||
+    match.ruleMatchProgress !== 1 ||
+    match.ruleMatchPresence !== 1 ||
+    match.metavariableBindingsPresence !== 0 ||
+    match.ruleInstantiationProgress !== 0 ||
+    match.templateVacancyPresence !== 0 ||
+    match.templateVacancyCount !== 0 ||
+    match.instantiatedResultOwner !== "canonical-target-native" ||
+    match.templateBindingProgress !== 0 ||
+    match.templateReceiverSettlementProgress !== 0 ||
+    match.instantiatedFractionOwnerCount !== 1
   ) {
     throw new Error(
-      "Template scaffold frame must expose prospective Native KaTeX structure."
+      "Rule-match frame must annotate the stationary source without duplicate structure."
     );
   }
-  const binding = required("template-binding");
+  const binding = required("rule-binding");
   if (
     binding.templateTraceRole !== "prospective" ||
     binding.templateReceiverFocus !== 1 ||
     binding.ruleTemplatePanelPresence !== 1 ||
-    binding.generalRulePresence !== 1 ||
+    binding.ruleMatchPresence !== 1 ||
     binding.metavariableBindingsPresence !== 1 ||
-    binding.instantiatedRulePresence !== 0 ||
+    binding.ruleInstantiationProgress !== 0 ||
     !binding.ruleTemplateText.includes("u↦x") ||
     !binding.ruleTemplateText.includes("n↦2") ||
     binding.templateVacancyCount !== 0 ||
     binding.templateVacancyPresence !== 0 ||
-    binding.templateBindingProgress <= 0 ||
-    binding.templateBindingProgress >= 1 ||
+    binding.templateBindingProgress !== 1 ||
     binding.templateReceiverSettlementProgress !== 0 ||
-    binding.templateSyntaxPresence <= 0 ||
+    binding.templateSyntaxPresence !== 0 ||
     binding.templateSyntaxResolutionProgress !== 0
   ) {
     throw new Error(
-      "Template binding frame must retain prospective grammar before live resolution."
+      "Rule-binding frame must make metavariable acquisition explicit before instantiation."
     );
   }
-  const bound = required("template-bound");
+  const bound = required("rule-instantiated");
   if (
     bound.templateBindingProgress !== 1 ||
     bound.templateReceiverSettlementProgress !== 0 ||
@@ -530,31 +530,34 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     bound.templateTraceRole !== "prospective" ||
     bound.ruleTemplatePanelPresence !== 1 ||
     bound.metavariableBindingsPresence !== 1 ||
-    bound.instantiatedRulePresence !== 1 ||
-    !bound.ruleTemplateText.includes("x2") ||
-    !bound.ruleTemplateText.includes("2+1")
+    bound.ruleInstantiationProgress !== 1 ||
+    bound.transitVisualOwner !== "rule-application-native" ||
+    bound.instantiatedFractionOwnerCount !== 1 ||
+    !bound.visibleText.includes("2+1")
   ) {
     throw new Error(
-      "Bound template frame must hold populated material at the receiver pose."
+      "Instantiation frame must show one prospective canonical RHS before rewrite."
     );
   }
-  const settling = required("template-settling");
+  const settling = required("rule-rewriting");
   if (
     settling.templateBindingProgress !== 1 ||
-    settling.transitVisualOwner !== "material-scene" ||
+    settling.transitVisualOwner !== "rule-application-native" ||
     settling.templateReceiverSettlementProgress <= 0 ||
     settling.templateReceiverSettlementProgress >= 1 ||
     settling.templateTraceRole !== "prospective" ||
-    settling.rewriteHandoffProgress <= 0 ||
-    settling.rewriteHandoffProgress >= 1 ||
+    settling.ruleRewriteCommitProgress <= 0 ||
+    settling.ruleRewriteCommitProgress >= 1 ||
     settling.ruleTemplatePanelPresence !== 0 ||
-    settling.instantiatedRulePresence !== 0
+    settling.ruleInstantiationProgress !== 1 ||
+    settling.instantiatedFractionOwnerCount !== 1 ||
+    settling.visibleMaterialOwnerCount !== 0
   ) {
     throw new Error(
-      "Settling template frame must move the populated receiver toward native syntax."
+      "Rewrite frame must move the one native prospective RHS into focal position."
     );
   }
-  const syntax = required("template-syntax");
+  const syntax = required("rule-committed");
   if (
     syntax.templateBindingProgress !== 1 ||
     syntax.templateReceiverSettlementProgress !== 1 ||
@@ -564,11 +567,14 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     syntax.templateClosurePresence !== 1 ||
     syntax.templateSyntaxResolutionProgress !== 1 ||
     syntax.ruleTemplatePanelPresence !== 0 ||
-    syntax.instantiatedRulePresence !== 0 ||
-    syntax.rewriteHandoffProgress !== 1
+    syntax.ruleInstantiationProgress !== 1 ||
+    syntax.ruleRewriteCommitProgress !== 1 ||
+    syntax.transitVisualOwner !== "target-native" ||
+    syntax.instantiatedFractionOwnerCount !== 1 ||
+    syntax.visibleMaterialOwnerCount !== 0
   ) {
     throw new Error(
-      "Template syntax frame must resolve the bound rule before evaluation."
+      "Committed rule frame must settle the same canonical RHS before evaluation."
     );
   }
   const expanded = required("expanded-rule");

@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-08-24
+Last Updated: 2026-08-25
 Status: active
 Active Thread: `threads/animation-catalogue.md`
 Supporting Threads:
@@ -80,6 +80,12 @@ default-off Catalogue collection, and production-envelope evidence passed
 human review and release closeout on 2026-08-24. The active lane is now one
 reversible indefinite-integration power-rule exemplar, already approved for
 execution. Inequality reversal remains the strongest non-calculus alternative.
+The exemplar now pressure-tests the candidate Rule Application grammar
+`match -> bind -> instantiate -> rewrite -> reduce`: the subject remains fixed
+through binding, one canonical native RHS owns the fraction from instantiation
+through settlement, and existing ink knots retain reduction authority. This is
+an exemplar checkpoint, not a shared-family promotion. See
+`decisions/2026-08-25-rule-application-visual-grammar.md`.
 See
 `decisions/2026-08-24-return-to-equation-family-breadth.md` and
 `reviews/2026-08-24-equation-family-return-next-step-review.md`.
@@ -307,12 +313,15 @@ Only this repository sequence is active:
    stable URLs, visible typed gap, default-off Catalogue collection, and broad
    release evidence are durable production infrastructure. See
    `reviews/2026-08-24-cross-domain-gallery-infrastructure-closeout.md`.
-39. **Return to equation-family breadth:** active. Build no broad framework
-   yet. The approved next step is one governed
-   indefinite-integration power-rule exemplar through the canonical equation
-   host, with a renderer-owned operator-scope policy and a human checkpoint
-   before a second caller or promotion. Inequality reversal remains the
-   strongest non-calculus alternative. See
+39. **Return to equation-family breadth:** active at human checkpoint. Build
+   no broad framework yet. The governed indefinite-integration power-rule
+   exemplar now implements one reversible candidate Rule Application grammar:
+   match, bind, instantiate, rewrite, then delegate reduction to the existing
+   ink knot. One canonical native target owns the expanded fraction from its
+   prospective state through settlement. Stop for human review before a second
+   caller or promotion. Inequality reversal remains the strongest non-calculus
+   alternative. See
+   `decisions/2026-08-25-rule-application-visual-grammar.md` and
    `reviews/2026-08-24-equation-family-return-next-step-review.md`.
 
 Educator discovery continues as an external product-research track. Public

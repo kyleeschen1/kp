@@ -1,19 +1,28 @@
 # Animation Catalogue Thread
 
 Status: active
-Last Updated: 2026-08-24
-Current Next Action: begin the approved bounded indefinite-integration
-power-rule exemplar,
-`integral x^2 dx -> x^(2+1)/(2+1) + C -> x^3/3 + C`, through the governed
-construction entrance, canonical equation host, and Native KaTeX renderer.
-Use it to pressure semantic operator scope against a renderer-owned
-`outline | salience-only | none` policy, then stop for human review before a
-second caller or family promotion. The cross-domain gallery is complete and
-human-approved; its default-off collection remains durable infrastructure and
-conformance evidence rather than the active design lane. See
+Last Updated: 2026-08-25
+Current Next Action: review the bounded indefinite-integration power-rule
+exemplar at its mandatory human checkpoint. It now applies the candidate
+Rule Application grammar `match -> bind -> instantiate -> rewrite -> reduce`:
+the subject remains stationary through match and binding, the canonical native
+expanded target is the single prospective and live fraction owner, and the two
+`2 + 1 -> 3` computations retain their certified ink-knot choreography. Do not
+freeze this treatment, add a second caller, or promote shared infrastructure
+before approval. See
+`../decisions/2026-08-25-rule-application-visual-grammar.md`,
 `../decisions/2026-08-24-return-to-equation-family-breadth.md` and
 `../reviews/2026-08-24-equation-family-return-next-step-review.md`, plus
 `../reviews/2026-08-24-cross-domain-gallery-infrastructure-closeout.md`.
+
+The candidate Rule Application grammar standardizes semantic distinctions,
+not one literal visual effect. Fixed structure, metavariable slots, binding
+environment, instantiated replacement, committed rewrite, and later reduction
+remain separate. The integration exemplar renders source-anchored `u` and `n`
+callouts plus `u -> x, n -> 2`, then reveals the actual expanded target beside
+the stationary subject. That same native owner becomes focal; no detached
+full-rule panel or template fraction clone remains. Renderer styling is still
+provisional, and other callers do not yet consume this presentation.
 
 A proposed recurring review now defines the prompt-to-reviewed-artifact target
 without granting the model mathematical or presentation authority. It measures
