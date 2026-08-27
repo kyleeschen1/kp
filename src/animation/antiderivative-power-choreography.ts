@@ -20,6 +20,15 @@ export const kpAntiderivativePowerPhaseIds = Object.freeze([
 export type KpAntiderivativePowerPhaseId =
   (typeof kpAntiderivativePowerPhaseIds)[number];
 
+// Keep this renderer-facing shape named: the app's Oxc transform and
+// TypeScript do not parse line-broken chained indexed access types identically.
+export interface KpAntiderivativeRuleInstructionalProjection {
+  readonly patternLatex: string;
+  readonly replacementTemplateLatex: string;
+  readonly bindingLatex: string;
+  readonly metavariables: readonly ["n"];
+}
+
 export interface KpAntiderivativePowerChoreographyPlan {
   readonly kind: "antiderivative-power-choreography-plan";
   readonly id: string;
@@ -49,12 +58,7 @@ export interface KpAntiderivativePowerChoreographyPlan {
     readonly replacementTemplateLatex: string;
     readonly bindingLatex: string;
     readonly instantiatedResultLatex: string;
-    readonly instructionalProjection: {
-      readonly patternLatex: string;
-      readonly replacementTemplateLatex: string;
-      readonly bindingLatex: string;
-      readonly metavariables: readonly ["n"];
-    };
+    readonly instructionalProjection: KpAntiderivativeRuleInstructionalProjection;
     readonly metavariableBindings: readonly [
       {
         readonly metavariable: "u";

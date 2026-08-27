@@ -1,7 +1,8 @@
 import type { KpAnimationAsset } from "../animation/asset.ts";
 import {
   sampleKpAntiderivativePowerChoreography,
-  sampleKpAntiderivativeRuleTemplateApplication
+  sampleKpAntiderivativeRuleTemplateApplication,
+  type KpAntiderivativeRuleInstructionalProjection
 } from "../animation/antiderivative-power-choreography.ts";
 import {
   resolveKpSemanticSalience
@@ -281,8 +282,7 @@ function createTemplateReceiver(
 
 function createInstructionalRuleReference(
   stage: HTMLElement,
-  projection: KpAntiderivativePowerNativeKatexTransitPlan["choreography"]
-    ["ruleTemplateApplication"]["instructionalProjection"]
+  projection: KpAntiderivativeRuleInstructionalProjection
 ): HTMLElement {
   const reference = stage.ownerDocument.createElement("div");
   reference.className =
