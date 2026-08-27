@@ -178,6 +178,9 @@ test("rule application separates match bind instantiate and rewrite", () => {
     before.ruleTemplateApplication.metavariableBindingsPresence,
     0
   );
+  assert.equal(before.ruleTemplateApplication.ruleReferencePresence, 0);
+  assert.equal(before.ruleTemplateApplication.patternReferenceFocus, 0);
+  assert.equal(before.ruleTemplateApplication.replacementReferenceFocus, 0);
   assert.equal(before.ruleTemplateApplication.instantiatedResultPresence, 0);
   assert.equal(before.ruleTemplateApplication.templateRevealProgress, 0);
   assert.equal(before.ruleTemplateApplication.templateSlotPresence, 0);
@@ -189,9 +192,21 @@ test("rule application separates match bind instantiate and rewrite", () => {
     0
   );
 
+  const reference = sampleKpAntiderivativePowerChoreography({
+    plan,
+    progress: 0.2
+  });
+  assert.equal(reference.ruleTemplateApplication.traceRole, "prospective");
+  assert.equal(reference.ruleTemplateApplication.ruleReferencePresence, 1);
+  assert.equal(reference.ruleTemplateApplication.patternReferenceFocus, 1);
+  assert.equal(reference.ruleTemplateApplication.replacementReferenceFocus, 0);
+  assert.equal(reference.ruleTemplateApplication.matchProgress, 0);
+  assert.equal(reference.ruleTemplateApplication.matchPresence, 0);
+  assert.equal(reference.ruleTemplateApplication.bindingProgress, 0);
+
   const match = sampleKpAntiderivativePowerChoreography({
     plan,
-    progress: 0.24
+    progress: 0.26
   });
   assert.equal(match.ruleTemplateApplication.traceRole, "prospective");
   assert.equal(match.ruleTemplateApplication.receiverFocus, 1);
@@ -200,6 +215,13 @@ test("rule application separates match bind instantiate and rewrite", () => {
   assert.equal(match.ruleTemplateApplication.matchPresence, 1);
   assert.equal(
     match.ruleTemplateApplication.metavariableBindingsPresence,
+    0
+  );
+  assert.equal(match.ruleTemplateApplication.ruleReferencePresence, 1);
+  assert.equal(match.ruleTemplateApplication.patternReferenceFocus, 1);
+  assert.equal(match.ruleTemplateApplication.replacementReferenceFocus, 0);
+  assert.equal(
+    match.ruleTemplateApplication.ruleReferenceWithdrawalProgress,
     0
   );
   assert.equal(match.ruleTemplateApplication.instantiationProgress, 0);
@@ -222,7 +244,7 @@ test("rule application separates match bind instantiate and rewrite", () => {
 
   const binding = sampleKpAntiderivativePowerChoreography({
     plan,
-    progress: 0.39
+    progress: 0.41
   });
   assert.equal(binding.ruleTemplateApplication.traceRole, "prospective");
   assert.equal(binding.ruleTemplateApplication.receiverFocus, 1);
@@ -232,6 +254,9 @@ test("rule application separates match bind instantiate and rewrite", () => {
     1
   );
   assert.equal(binding.ruleTemplateApplication.instantiatedResultPresence, 0);
+  assert.equal(binding.ruleTemplateApplication.ruleReferencePresence, 1);
+  assert.equal(binding.ruleTemplateApplication.patternReferenceFocus, 1);
+  assert.equal(binding.ruleTemplateApplication.replacementReferenceFocus, 0);
   assert.equal(binding.ruleTemplateApplication.vacancyPresence, 0);
   assert.ok(binding.ruleTemplateApplication.bindingProgress >
     binding.ruleTemplateApplication.syntaxResolutionProgress);
@@ -256,10 +281,14 @@ test("rule application separates match bind instantiate and rewrite", () => {
   assert.equal(revealed.ruleTemplateApplication.instantiationProgress, 0);
   assert.equal(revealed.ruleTemplateApplication.sourcePresence, 0);
   assert.ok(revealed.ruleTemplateApplication.targetPresence > 0);
+  assert.equal(revealed.ruleTemplateApplication.ruleReferencePresence, 1);
+  assert.equal(revealed.ruleTemplateApplication.patternReferenceFocus, 0);
+  assert.equal(revealed.ruleTemplateApplication.replacementReferenceFocus, 1);
+  assert.ok(revealed.ruleTemplateApplication.closureProvenanceFocus > 0);
 
   const instantiated = sampleKpAntiderivativePowerChoreography({
     plan,
-    progress: 0.74
+    progress: 0.76
   });
   assert.equal(
     instantiated.ruleTemplateApplication.metavariableBindingsPresence,
@@ -275,6 +304,12 @@ test("rule application separates match bind instantiate and rewrite", () => {
   assert.equal(instantiated.ruleTemplateApplication.sourcePresence, 0);
   assert.equal(instantiated.ruleTemplateApplication.targetPresence, 1);
   assert.equal(instantiated.ruleTemplateApplication.rewriteCommitProgress, 0);
+  assert.equal(instantiated.ruleTemplateApplication.ruleReferencePresence, 1);
+  assert.equal(
+    instantiated.ruleTemplateApplication.replacementReferenceFocus,
+    1
+  );
+  assert.equal(instantiated.ruleTemplateApplication.closureProvenanceFocus, 1);
 
   const rewriting = sampleKpAntiderivativePowerChoreography({
     plan,
@@ -285,6 +320,11 @@ test("rule application separates match bind instantiate and rewrite", () => {
   assert.ok(rewriting.ruleTemplateApplication.rewriteCommitProgress < 1);
   assert.ok(rewriting.ruleTemplateApplication.sourcePresence < 1);
   assert.equal(rewriting.ruleTemplateApplication.targetPresence, 1);
+  assert.equal(rewriting.ruleTemplateApplication.ruleReferencePresence, 0);
+  assert.equal(
+    rewriting.ruleTemplateApplication.ruleReferenceWithdrawalProgress,
+    1
+  );
 
   const resolved = sampleKpAntiderivativePowerChoreography({
     plan,
@@ -304,6 +344,8 @@ test("rule application separates match bind instantiate and rewrite", () => {
   assert.equal(resolved.ruleTemplateApplication.sourcePresence, 0);
   assert.equal(resolved.ruleTemplateApplication.targetPresence, 1);
   assert.equal(resolved.ruleTemplateApplication.rewriteCommitProgress, 1);
+  assert.equal(resolved.ruleTemplateApplication.ruleReferencePresence, 0);
+  assert.equal(resolved.ruleTemplateApplication.closureProvenanceFocus, 0);
   assert.equal(resolved.ruleTemplateApplication.vacancyPresence, 0);
   assert.equal(resolved.ruleTemplateApplication.scaffoldPresence, 1);
   assert.equal(resolved.ruleTemplateApplication.bindingProgress, 1);

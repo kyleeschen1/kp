@@ -1305,6 +1305,48 @@
       "scope": "dark desktop and narrow light contact sheet",
       "checkedAt": "2026-08-27T00:49:22.755Z",
       "notes": "Capture assertions passed; subjective approval remains the named human checkpoint."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "episode-persistent rule reference semantics",
+      "checkedAt": "2026-08-27T02:06:03.906Z",
+      "notes": "64 focused integration tests passed with deterministic reference, match, binding, template, instantiation, withdrawal, and rewrite states."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "integration reference compile boundary",
+      "checkedAt": "2026-08-27T02:06:05.002Z",
+      "notes": "Application, test, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-catalogue",
+      "status": "passed",
+      "scope": "canonical Catalogue rule-reference exemplar",
+      "checkedAt": "2026-08-27T02:06:06.109Z",
+      "notes": "Three Chromium checks passed for reference salience transfer, slot binding, canonical native owner, accessibility, themes, rewind, pacing, and reductions."
+    },
+    {
+      "command": "npm run visual:integration-power-rule",
+      "status": "passed",
+      "scope": "rule-reference human checkpoint sheet",
+      "checkedAt": "2026-08-27T02:06:07.106Z",
+      "notes": "Stable dark desktop and narrow light capture passed 17 semantic checkpoints; subjective approval remains required."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "equation authority preservation",
+      "checkedAt": "2026-08-27T02:06:08.122Z",
+      "notes": "All 11 inventory, authority, endpoint, clock, and sampled-frame checks passed."
+    },
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "protected derivative preservation",
+      "checkedAt": "2026-08-27T02:06:09.158Z",
+      "notes": "All 36 derivative semantic, choreography, migration, and policy tests passed."
     }
   ],
   "allowedWork": [
@@ -1442,7 +1484,7 @@
     {
       "id": "next-action.kp.integration-power-rule.s18",
       "title": "Integration-human-visual-checkpoint",
-      "summary": "Encoded the candidate Rule Application grammar as match, bind, instantiate, rewrite, then reduce. The Catalogue exemplar now projects u and n onto the stationary source, exposes u maps to x and n maps to 2, reveals the canonical target as one prospective native RHS, and moves that same owner into focus. The detached full-rule panel and template fraction handoff are gone; one target-native fraction owner remains from instantiation through settlement, while both certified ink-knot reductions and the derivative are preserved. Awaiting human visual approval before s19.",
+      "summary": "The revised candidate keeps a compact instructional rule reference visible only during Rule Application. Its LHS is focal before and during exponent matching, attention transfers to its RHS before the one centered native template appears, n binds once and fills both target slots, and the reference withdraws before either certified ink-knot reduction. Awaiting human visual approval.",
       "status": "in-progress"
     },
     {
