@@ -4,7 +4,8 @@ import test from "node:test";
 import {
   compileKpAntiderivativePowerChoreography,
   createKpAntiderivativePowerChoreography,
-  sampleKpAntiderivativePowerChoreography
+  sampleKpAntiderivativePowerChoreography,
+  sampleKpAntiderivativeRuleTemplateApplication
 } from "../src/animation/antiderivative-power-choreography.ts";
 import { createGeneratedProblemAnimationAssets } from
   "../src/animation/catalog.ts";
@@ -84,10 +85,10 @@ test("integration first transition compiles its governed scope and lineage", () 
     String.raw`\frac{x^{2+1}}{2+1}+C`
   );
   assert.deepEqual(plan.ruleTemplateApplication.instructionalProjection, {
-    patternLatex: String.raw`\int x^n\,dx`,
-    replacementTemplateLatex: String.raw`\frac{x^{n+1}}{n+1}+C`,
-    bindingLatex: String.raw`n\mapsto 2`,
-    metavariables: ["n"]
+    patternLatex: String.raw`\int u^n\,du`,
+    replacementTemplateLatex: String.raw`\frac{u^{n+1}}{n+1}+C`,
+    bindingLatex: String.raw`u\mapsto x,\qquad n\mapsto 2`,
+    metavariables: ["u", "n"]
   });
   assert.deepEqual(
     plan.ruleTemplateApplication.metavariableBindings.map((binding) => ({
@@ -188,6 +189,15 @@ test("rule application separates match bind instantiate and rewrite", () => {
   assert.equal(before.ruleTemplateApplication.scaffoldPresence, 0);
   assert.equal(before.ruleTemplateApplication.bindingProgress, 0);
   assert.equal(
+    before.ruleTemplateApplication.explanationBeatId,
+    "orient-source"
+  );
+  assert.deepEqual(before.ruleTemplateApplication.depthLens, {
+    schemaPlanePresence: 0,
+    correspondencePlanePresence: 0,
+    prospectivePlaneDepth: 0
+  });
+  assert.equal(
     before.ruleTemplateApplication.receiverSettlementProgress,
     0
   );
@@ -204,6 +214,14 @@ test("rule application separates match bind instantiate and rewrite", () => {
   assert.equal(reference.ruleTemplateApplication.matchPresence, 0);
   assert.equal(reference.ruleTemplateApplication.bindingProgress, 0);
   assert.equal(reference.ruleTemplateApplication.sourcePresence, 0);
+  assert.equal(
+    reference.ruleTemplateApplication.explanationBeatId,
+    "recognize-rule"
+  );
+  assert.equal(
+    reference.ruleTemplateApplication.depthLens.schemaPlanePresence,
+    1
+  );
 
   const returnedSubject = sampleKpAntiderivativePowerChoreography({
     plan,
@@ -217,6 +235,10 @@ test("rule application separates match bind instantiate and rewrite", () => {
   assert.equal(
     returnedSubject.ruleTemplateApplication.patternProjectionPresence,
     0
+  );
+  assert.equal(
+    returnedSubject.ruleTemplateApplication.explanationBeatId,
+    "match-structure"
   );
 
   const match = sampleKpAntiderivativePowerChoreography({
@@ -252,6 +274,12 @@ test("rule application separates match bind instantiate and rewrite", () => {
   );
   assert.equal(match.ruleTemplateApplication.syntaxPresence, 0);
   assert.equal(match.ruleTemplateApplication.closurePresence, 0);
+  assert.equal(match.ruleTemplateApplication.explanationBeatId,
+    "match-structure");
+  assert.equal(
+    match.ruleTemplateApplication.depthLens.correspondencePlanePresence,
+    1
+  );
   assert.equal(
     match.ruleTemplateApplication.syntaxResolutionProgress,
     0
@@ -285,6 +313,8 @@ test("rule application separates match bind instantiate and rewrite", () => {
     0
   );
   assert.equal(binding.ruleTemplateApplication.syntaxResolutionProgress, 0);
+  assert.equal(binding.ruleTemplateApplication.explanationBeatId,
+    "bind-metavariables");
 
   const revealed = sampleKpAntiderivativePowerChoreography({
     plan,
@@ -298,6 +328,11 @@ test("rule application separates match bind instantiate and rewrite", () => {
   assert.ok(revealed.ruleTemplateApplication.targetPresence > 0);
   assert.equal(revealed.ruleTemplateApplication.rulePreviewPresence, 0);
   assert.equal(revealed.ruleTemplateApplication.patternProjectionPresence, 0);
+  assert.equal(revealed.ruleTemplateApplication.explanationBeatId,
+    "instantiate-template");
+  assert.ok(
+    revealed.ruleTemplateApplication.depthLens.prospectivePlaneDepth > 0
+  );
 
   const instantiated = sampleKpAntiderivativePowerChoreography({
     plan,
@@ -319,6 +354,12 @@ test("rule application separates match bind instantiate and rewrite", () => {
   assert.equal(instantiated.ruleTemplateApplication.rewriteCommitProgress, 0);
   assert.equal(instantiated.ruleTemplateApplication.rulePreviewPresence, 0);
   assert.equal(instantiated.ruleTemplateApplication.patternProjectionPresence, 0);
+  assert.equal(instantiated.ruleTemplateApplication.explanationBeatId,
+    "explain-closure");
+  assert.equal(
+    sampleKpAntiderivativeRuleTemplateApplication(0.85).explanationBeatId,
+    "propagate-binding"
+  );
 
   const rewriting = sampleKpAntiderivativePowerChoreography({
     plan,
@@ -334,6 +375,8 @@ test("rule application separates match bind instantiate and rewrite", () => {
     rewriting.ruleTemplateApplication.rulePreviewWithdrawalProgress,
     1
   );
+  assert.equal(rewriting.ruleTemplateApplication.explanationBeatId,
+    "commit-rewrite");
 
   const resolved = sampleKpAntiderivativePowerChoreography({
     plan,
@@ -365,6 +408,12 @@ test("rule application separates match bind instantiate and rewrite", () => {
   assert.equal(resolved.ruleTemplateApplication.syntaxPresence, 1);
   assert.equal(resolved.ruleTemplateApplication.syntaxResolutionProgress, 1);
   assert.equal(resolved.ruleTemplateApplication.closurePresence, 1);
+  assert.equal(resolved.ruleTemplateApplication.explanationBeatId,
+    "prepare-reduction");
+  assert.equal(
+    resolved.ruleTemplateApplication.depthLens.prospectivePlaneDepth,
+    0
+  );
 });
 
 test("integration first transition is direct-seek reverse and interruption safe", () => {

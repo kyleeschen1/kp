@@ -34,7 +34,7 @@ const samples = [
   },
   {
     id: "rule-preview",
-    label: "Rule application · one foreground rule preview",
+    label: "Rule application · verified schema plane",
     progress: 0.132,
     theme: "dark",
     viewport: desktopViewport
@@ -48,35 +48,42 @@ const samples = [
   },
   {
     id: "rule-match",
-    label: "Rule application · n slot identifies the source exponent",
+    label: "Rule application · u and n slots register through depth",
     progress: 0.259,
     theme: "dark",
     viewport: desktopViewport
   },
   {
     id: "rule-binding",
-    label: "Rule application · bind n ↦ 2",
+    label: "Rule application · bind u ↦ x and n ↦ 2",
     progress: 0.337,
     theme: "dark",
     viewport: desktopViewport
   },
   {
     id: "rule-template",
-    label: "Rule application · prospective replacement layer",
+    label: "Rule application · prospective template on back plane",
     progress: 0.39,
     theme: "dark",
     viewport: desktopViewport
   },
   {
+    id: "rule-propagation",
+    label: "Rule application · one binding supplies both n occurrences",
+    progress: 0.425,
+    theme: "dark",
+    viewport: desktopViewport
+  },
+  {
     id: "rule-instantiated",
-    label: "Rule application · binding fills both occurrences",
+    label: "Rule application · introduced constant explained",
     progress: 0.447,
     theme: "dark",
     viewport: desktopViewport
   },
   {
     id: "rule-rewriting",
-    label: "Rule application · prospective RHS becomes live",
+    label: "Rule application · prospective plane advances to live",
     progress: 0.471,
     theme: "dark",
     viewport: desktopViewport
@@ -132,7 +139,7 @@ const samples = [
   },
   {
     id: "narrow-light-rule-match",
-    label: "Narrow light · slot-only exponent match",
+    label: "Narrow light · u and n correspondence lens",
     progress: 0.259,
     theme: "light",
     viewport: narrowViewport
@@ -201,6 +208,16 @@ interface CaptureEvidence {
   readonly templateSyntaxPresence: number;
   readonly templateSyntaxResolutionProgress: number;
   readonly templateClosurePresence: number;
+  readonly explanationBeat: string;
+  readonly explanationGrounding: string;
+  readonly explanationText: string;
+  readonly depthLens: string;
+  readonly schemaPlanePresence: number;
+  readonly correspondencePlanePresence: number;
+  readonly prospectivePlaneDepth: number;
+  readonly patternSlotCount: number;
+  readonly bindingRelationCount: number;
+  readonly bindingRelationPresence: number;
   readonly evaluationStatus: string;
   readonly evaluationCohortCount: number;
   readonly evaluationLegibility: string;
@@ -287,7 +304,7 @@ async function capture(baseUrl?: string): Promise<void> {
     await writeFile(html, htmlSource, "utf8");
     const manifest = path.join(outputRoot, "manifest.json");
     await writeFile(manifest, `${JSON.stringify({
-      schemaVersion: "kp.integration-power-rule-visual-checkpoint.v6",
+      schemaVersion: "kp.integration-power-rule-visual-checkpoint.v7",
       animationId,
       samples: evidence,
       reviewChecklist: [
@@ -295,6 +312,8 @@ async function capture(baseUrl?: string): Promise<void> {
         "salience-only operator scope",
         "one-focus rule preview followed by complete withdrawal",
         "slot-only pattern projection with exclusive native fixed syntax",
+        "grounded one-line explanation at every pedagogical beat",
+        "three-plane live correspondence and prospective depth lens",
         "single-owner prospective lift with no fraction-rule paint replica",
         "single transform-only fraction-rule owner through evaluation",
         "exponent provenance",
@@ -491,7 +510,7 @@ async function captureSample(input: {
         root.dataset["kpAntiderivativeRuleTemplateSlotPresence"] ?? 0
       ),
       ruleTemplateSlotCount: root.querySelectorAll(
-        '[data-kp-antiderivative-rule-template-slot="n"]'
+        "[data-kp-antiderivative-rule-template-slot]"
       ).length,
       ruleRewriteCommitProgress: Number(
         root.dataset["kpAntiderivativeRuleRewriteCommitProgress"] ?? 0
@@ -521,6 +540,33 @@ async function captureSample(input: {
       ),
       templateClosurePresence: Number(
         root.dataset["kpAntiderivativeTemplateClosurePresence"] ?? 0
+      ),
+      explanationBeat:
+        root.dataset["kpAntiderivativeExplanationBeat"] ?? "inactive",
+      explanationGrounding:
+        root.dataset["kpAntiderivativeExplanationGrounding"] ?? "inactive",
+      explanationText: root.querySelector<HTMLElement>(
+        "[data-kp-antiderivative-explanation-rail]"
+      )?.textContent?.replace(/\s+/gu, " ").trim() ?? "",
+      depthLens:
+        root.dataset["kpAntiderivativeDepthLens"] ?? "inactive",
+      schemaPlanePresence: Number(
+        root.dataset["kpAntiderivativeSchemaPlanePresence"] ?? 0
+      ),
+      correspondencePlanePresence: Number(
+        root.dataset["kpAntiderivativeCorrespondencePlanePresence"] ?? 0
+      ),
+      prospectivePlaneDepth: Number(
+        root.dataset["kpAntiderivativeProspectivePlaneDepth"] ?? 0
+      ),
+      patternSlotCount: root.querySelectorAll(
+        "[data-kp-antiderivative-pattern-slot]"
+      ).length,
+      bindingRelationCount: Number(
+        root.dataset["kpAntiderivativeBindingRelationCount"] ?? 0
+      ),
+      bindingRelationPresence: Number(
+        root.dataset["kpAntiderivativeBindingRelationPresence"] ?? 0
       ),
       evaluationStatus:
         root.dataset["kpAntiderivativeEvaluationMount"] ?? "inactive",
@@ -688,7 +734,10 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     preview.metavariableBindingsPresence !== 0 ||
     preview.rulePreviewFractionCount !== 1 ||
     preview.fixedSyntaxOwner !== "rule-preview" ||
-    preview.visibleIntegralOwnerCount !== 1
+    preview.visibleIntegralOwnerCount !== 1 ||
+    preview.explanationBeat !== "recognize-rule" ||
+    preview.explanationGrounding !== "law.calculus.integral.power-rule" ||
+    preview.depthLens !== "three-plane"
   ) {
     throw new Error(
       "Rule-preview frame must establish the complete rule as the sole focus."
@@ -697,7 +746,7 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   if (
     match.transitVisualOwner !== "source-native" ||
     match.templateProfileId !==
-      "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v6" ||
+      "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v7" ||
     match.templateTraceRole !== "prospective" ||
     match.templateLawRefId !==
       "law.calculus.integral.power-rule" ||
@@ -720,7 +769,15 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     match.instantiatedFractionOwnerCount !== 1 ||
     match.fixedSyntaxOwner !== "source-native" ||
     match.visibleIntegralOwnerCount !== 1 ||
-    match.patternFixedSyntaxVisibleCount !== 0
+    match.patternFixedSyntaxVisibleCount !== 0 ||
+    match.patternSlotCount !== 3 ||
+    match.explanationBeat !== "match-structure" ||
+    match.explanationGrounding !==
+      "binding.u.source-base-and-integration-variable" ||
+    !match.explanationText.includes("u↦x") ||
+    match.depthLens !== "three-plane" ||
+    match.schemaPlanePresence !== 1 ||
+    match.correspondencePlanePresence !== 1
   ) {
     throw new Error(
       "Rule-match frame must annotate the stationary source without duplicate structure."
@@ -749,13 +806,15 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     binding.patternProjectionPresence !== 0 ||
     binding.ruleInstantiationProgress !== 0 ||
     !binding.ruleTemplateText.includes("n↦2") ||
-    binding.ruleTemplateText.includes("u↦x") ||
+    !binding.ruleTemplateText.includes("u↦x") ||
     binding.templateVacancyCount !== 0 ||
     binding.templateVacancyPresence !== 0 ||
     binding.templateBindingProgress !== 1 ||
     binding.templateReceiverSettlementProgress !== 0 ||
     binding.templateSyntaxPresence !== 0 ||
-    binding.templateSyntaxResolutionProgress !== 0
+    binding.templateSyntaxResolutionProgress !== 0 ||
+    binding.explanationBeat !== "bind-metavariables" ||
+    binding.explanationGrounding !== "binding.n.source-exponent"
   ) {
     throw new Error(
       "Rule-binding frame must make metavariable acquisition explicit before instantiation."
@@ -769,15 +828,33 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     template.rulePreviewPresence !== 0 ||
     template.patternProjectionPresence !== 0 ||
     template.ruleTemplateSlotPresence <= 0 ||
-    template.ruleTemplateSlotCount !== 2 ||
+    template.ruleTemplateSlotCount !== 3 ||
     template.transitVisualOwner !== "rule-application-native" ||
-    template.instantiatedFractionOwnerCount !== 1
+    template.instantiatedFractionOwnerCount !== 1 ||
+    template.explanationBeat !== "instantiate-template" ||
+    template.prospectivePlaneDepth <= 0 ||
+    template.bindingRelationCount !== 3 ||
+    template.bindingRelationPresence !== 1
   ) {
     throw new Error(
-      "Template frame must show two n slots on the one centered native RHS."
+      "Template frame must show one u and two n slots on the one native RHS."
     );
   }
   const bound = required("rule-instantiated");
+  const propagation = required("rule-propagation");
+  if (
+    propagation.explanationBeat !== "propagate-binding" ||
+    propagation.explanationGrounding !== "binding.n.fan-out" ||
+    !propagation.explanationText.includes("supplies both exponent occurrences") ||
+    propagation.ruleTemplateSlotCount !== 3 ||
+    propagation.instantiatedFractionOwnerCount !== 1 ||
+    propagation.bindingRelationCount !== 3 ||
+    propagation.bindingRelationPresence !== 1
+  ) {
+    throw new Error(
+      "Propagation frame must explain that one n binding supplies both uses."
+    );
+  }
   if (
     bound.templateBindingProgress !== 1 ||
     bound.templateReceiverSettlementProgress !== 0 ||
@@ -790,10 +867,12 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     bound.ruleInstantiationProgress !== 1 ||
     bound.ruleTemplateRevealProgress !== 1 ||
     bound.ruleTemplateSlotPresence !== 0 ||
-    bound.ruleTemplateSlotCount !== 2 ||
+    bound.ruleTemplateSlotCount !== 3 ||
     bound.transitVisualOwner !== "rule-application-native" ||
     bound.instantiatedFractionOwnerCount !== 1 ||
-    !bound.visibleText.includes("2+1")
+    !bound.visibleText.includes("2+1") ||
+    bound.explanationBeat !== "explain-closure" ||
+    !bound.explanationText.includes("family of antiderivatives")
   ) {
     throw new Error(
       "Instantiation frame must show one prospective canonical RHS before rewrite."

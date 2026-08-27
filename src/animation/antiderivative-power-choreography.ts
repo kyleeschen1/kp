@@ -20,13 +20,28 @@ export const kpAntiderivativePowerPhaseIds = Object.freeze([
 export type KpAntiderivativePowerPhaseId =
   (typeof kpAntiderivativePowerPhaseIds)[number];
 
+export const kpAntiderivativePowerExplanationBeatIds = Object.freeze([
+  "orient-source",
+  "recognize-rule",
+  "match-structure",
+  "bind-metavariables",
+  "instantiate-template",
+  "propagate-binding",
+  "explain-closure",
+  "commit-rewrite",
+  "prepare-reduction"
+] as const);
+
+export type KpAntiderivativePowerExplanationBeatId =
+  (typeof kpAntiderivativePowerExplanationBeatIds)[number];
+
 // Keep this renderer-facing shape named: the app's Oxc transform and
 // TypeScript do not parse line-broken chained indexed access types identically.
 export interface KpAntiderivativeRuleInstructionalProjection {
   readonly patternLatex: string;
   readonly replacementTemplateLatex: string;
   readonly bindingLatex: string;
-  readonly metavariables: readonly ["n"];
+  readonly metavariables: readonly ["u", "n"];
 }
 
 export interface KpAntiderivativePowerChoreographyPlan {
@@ -142,6 +157,13 @@ export interface KpAntiderivativePowerChoreographyFrame {
     readonly syntaxPresence: number;
     readonly syntaxResolutionProgress: number;
     readonly closurePresence: number;
+    readonly explanationBeatId: KpAntiderivativePowerExplanationBeatId;
+    readonly explanationPresence: number;
+    readonly depthLens: {
+      readonly schemaPlanePresence: number;
+      readonly correspondencePlanePresence: number;
+      readonly prospectivePlaneDepth: number;
+    };
   };
   readonly rewriteProgress: number;
   readonly settlementProgress: number;
@@ -310,16 +332,15 @@ export function compileKpAntiderivativePowerChoreography(input: {
         String.raw`u\mapsto ${baseLabel},\qquad n\mapsto ${exponentLabel}`,
       instantiatedResultLatex:
         String.raw`\frac{${baseLabel}^{${exponentLabel}+1}}{${exponentLabel}+1}+C`,
-      // The verified rule retains both metavariables. This introductory
-      // projection specializes the ambient integration variable so attention
-      // can stay on the exponent slot that teaches the reusable structure.
+      // The instructional lens exposes the same verified metavariables as the
+      // authority. Presentation may separate their slots in depth, but it must
+      // not silently specialize away the u binding that licenses both x roles.
       instructionalProjection: Object.freeze({
-        patternLatex:
-          String.raw`\int ${baseLabel}^n\,d${integrationVariableRole.label}`,
-        replacementTemplateLatex:
-          String.raw`\frac{${baseLabel}^{n+1}}{n+1}+C`,
-        bindingLatex: String.raw`n\mapsto ${exponentLabel}`,
-        metavariables: Object.freeze(["n"] as const)
+        patternLatex: String.raw`\int u^n\,du`,
+        replacementTemplateLatex: String.raw`\frac{u^{n+1}}{n+1}+C`,
+        bindingLatex:
+          String.raw`u\mapsto ${baseLabel},\qquad n\mapsto ${exponentLabel}`,
+        metavariables: Object.freeze(["u", "n"] as const)
       }),
       metavariableBindings: Object.freeze([
         Object.freeze({
@@ -505,6 +526,44 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
   const scaffoldPresence = templateRevealProgress;
   const syntaxPresence = templateRevealProgress;
   const closurePresence = templateRevealProgress;
+  const explanationBeatId = progress < 0.035
+    ? "orient-source" as const
+    : progress < 0.285
+      ? "recognize-rule" as const
+      : progress < 0.54
+        ? "match-structure" as const
+        : progress < 0.68
+          ? "bind-metavariables" as const
+          : progress < 0.82
+            ? "instantiate-template" as const
+            : progress < 0.9
+              ? "propagate-binding" as const
+              : progress < 0.96
+                ? "explain-closure" as const
+                : progress < 1
+                  ? "commit-rewrite" as const
+                  : "prepare-reduction" as const;
+  const explanationPresence = roundProgress(
+    phaseProgress(progress, 0.02, 0.05)
+  );
+  // Depth separates live notation, correspondence, and prospective schema.
+  // These are presentation roles sampled from the same playhead, never a
+  // second source of mathematical identity or rule applicability.
+  const depthLens = Object.freeze({
+    schemaPlanePresence: roundProgress(Math.max(
+      rulePreviewPresence,
+      patternProjectionPresence,
+      targetPresence * (1 - rewriteCommitProgress)
+    )),
+    correspondencePlanePresence: roundProgress(Math.max(
+      patternProjectionPresence,
+      metavariableBindingsPresence,
+      instantiationProgress * (1 - rewriteCommitProgress)
+    )),
+    prospectivePlaneDepth: roundProgress(
+      targetPresence * (1 - rewriteCommitProgress)
+    )
+  });
   return Object.freeze({
     traceRole: rewriteCommitProgress >= 1
       ? "live" as const
@@ -535,7 +594,10 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
     receiverSettlementProgress: receiverSettlement,
     syntaxPresence,
     syntaxResolutionProgress: syntaxResolution,
-    closurePresence
+    closurePresence,
+    explanationBeatId,
+    explanationPresence,
+    depthLens
   });
 }
 

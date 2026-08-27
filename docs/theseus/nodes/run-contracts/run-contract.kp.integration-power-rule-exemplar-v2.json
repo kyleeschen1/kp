@@ -1371,6 +1371,48 @@
       "status": "passed",
       "scope": "slice s18 layered rule candidate: application, Node, tests, Svelte, and domains",
       "checkedAt": "2026-08-27T04:36:20.393Z"
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "grounded schema choreography",
+      "checkedAt": "2026-08-27T07:22:12.182Z",
+      "notes": "All 64 focused semantic, authority, and deterministic explanation-beat tests pass."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-catalogue",
+      "status": "passed",
+      "scope": "canonical v7 Catalogue exemplar",
+      "checkedAt": "2026-08-27T07:22:13.432Z",
+      "notes": "Three Chromium scenarios prove grounded explanation, u and n matching, one canonical fraction owner, three measured relations, reverse, themes, no-depth, and reduced motion."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "v7 compile boundary",
+      "checkedAt": "2026-08-27T07:22:14.490Z",
+      "notes": "Application, tests, Svelte, and domain checks pass with zero Svelte errors or warnings."
+    },
+    {
+      "command": "npm run visual:integration-power-rule",
+      "status": "passed",
+      "scope": "21-frame human checkpoint",
+      "checkedAt": "2026-08-27T07:22:15.595Z",
+      "notes": "Dark desktop and narrow light contact sheet passes grounded-claim, depth-lens, relation-count, and single-paint-owner assertions."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-evaluation",
+      "status": "passed",
+      "scope": "post-rewrite ink-knot preservation",
+      "checkedAt": "2026-08-27T07:22:16.661Z",
+      "notes": "Both evaluation cohorts remain on the shared ink-knot path in Chromium and Firefox."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "semantic and endpoint preservation",
+      "checkedAt": "2026-08-27T07:22:17.781Z",
+      "notes": "All 11 inventory, authority, endpoint, clock, and sampled-frame preservation checks pass."
     }
   ],
   "allowedWork": [
@@ -1508,7 +1550,7 @@
     {
       "id": "next-action.kp.integration-power-rule.s18",
       "title": "Integration-human-visual-checkpoint",
-      "summary": "Layered-rule-lens candidate ready for human review: a transient complete-rule preview owns attention, its source stays hidden behind the preview, a full-size pattern layer aligns on the stationary subject and collapses to the local n slot, n maps to 2 before both native target slots fill, and the single prospective RHS settles from temporary renderer-owned depth before two unchanged ink knots.",
+      "summary": "The v7 candidate adds a deterministic one-line explanation rail grounded in verified laws and bindings, exposes the abstract u and n schema, maps u to x and n to 2 through three measured correspondence relations, and places the prospective canonical RHS on a shallow back plane before it becomes live. The source stays stationary, only one integral and fraction paint owner exist at a time, both ink-knot reductions remain unchanged, and reduced or no-depth modes preserve endpoint truth. Awaiting human visual approval before s19.",
       "status": "in-progress"
     },
     {

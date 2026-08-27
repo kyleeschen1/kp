@@ -24,12 +24,16 @@ import type {
 import {
   KP_EDITOR_ANIMATION_DISPOSE_EVENT
 } from "./animation-player-controller.ts";
+import {
+  removeKpAntiderivativePowerExplanationRail,
+  syncKpAntiderivativePowerExplanationRail
+} from "./antiderivative-power-explanation-rail.ts";
 export const kpAntiderivativePowerTransitRepairGapCode =
   "repair-gap.integration-power-rule.native-katex-transit-unavailable";
 export const kpAntiderivativeRuleApplicationNativeKatexMechanismId =
   "kp.rendering.native-katex.antiderivative-rule-application.v1";
 export const kpAntiderivativeRuleApplicationPresentationProfileId =
-  "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v6";
+  "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v7";
 
 export interface KpAntiderivativePowerTransitMountResult {
   readonly status: "inactive" | "preparing" | "mounted" | "repair-gap";
@@ -97,10 +101,15 @@ export function applyKpAntiderivativePowerTransitMount(input: {
   const transformation = input.animation.transformations.find(
     ({ transformType }) => transformType === "applyAntiderivativePowerRule"
   );
-  if (
-    transformation === undefined ||
-    !input.activeTransformationIds.includes(transformation.id)
-  ) {
+  if (transformation === undefined) {
+    disposeKpAntiderivativePowerTransitMount(input.stage, "scene-replaced");
+    removeKpAntiderivativePowerExplanationRail(input.stage);
+    clearTelemetry(input.stage);
+    return Object.freeze({ status: "inactive" as const });
+  }
+  if (!input.activeTransformationIds.includes(transformation.id)) {
+    // The evaluation mount immediately follows this call and reuses the same
+    // explanation rail. Keep it alive across the semantic operation boundary.
     disposeKpAntiderivativePowerTransitMount(input.stage, "scene-replaced");
     clearTelemetry(input.stage);
     return Object.freeze({ status: "inactive" as const });
@@ -244,6 +253,22 @@ function createTemplateReceiver(
     "--kp-antiderivative-pattern-projection-presence",
     "0"
   );
+  element.style.setProperty(
+    "--kp-antiderivative-schema-plane-presence",
+    "0"
+  );
+  element.style.setProperty(
+    "--kp-antiderivative-correspondence-plane-presence",
+    "0"
+  );
+  element.style.setProperty(
+    "--kp-antiderivative-template-relation-presence",
+    "0"
+  );
+  element.style.setProperty(
+    "--kp-antiderivative-template-relation-progress",
+    "0"
+  );
   element.setAttribute("aria-hidden", "true");
 
   const rulePanel = stage.ownerDocument.createElement("div");
@@ -273,9 +298,13 @@ function createTemplateReceiver(
     stage,
     className: "editor-equation-stage__antiderivative-rule-bindings",
     dataAttribute: "kpAntiderivativeRuleBindings",
-    latex: template.instructionalProjection.bindingLatex
+    latex: template.instructionalProjection.bindingLatex,
+    annotatedLatex: annotateInstructionalBindingsLatex(
+      template.instructionalProjection.bindingLatex
+    )
   });
-  rulePanel.append(rulePreview, patternProjection, bindings);
+  const relationLayer = createInstructionalRelationLayer(stage);
+  rulePanel.append(rulePreview, patternProjection, bindings, relationLayer);
   element.append(rulePanel);
   stage.append(element);
   return element;
@@ -347,30 +376,58 @@ function createInstructionalPatternProjection(
 function annotateInstructionalRulePreviewLatex(
   latex: string
 ): string {
-  return latex.replace(
-    /\bn\b/gu,
-    String.raw`{\htmlData{kp-antiderivative-rule-preview-slot=n}{n}}`
-  );
+  return latex
+    .replace(
+      /\bu\b/gu,
+      String.raw`{\htmlData{kp-antiderivative-rule-preview-slot=u}{u}}`
+    )
+    .replace(
+      /\bn\b/gu,
+      String.raw`{\htmlData{kp-antiderivative-rule-preview-slot=n}{n}}`
+    );
 }
 
 function annotateInstructionalPatternProjectionLatex(latex: string): string {
-  const annotated = latex
-    .replace(
-      String.raw`\int`,
-      String.raw`\htmlData{kp-antiderivative-pattern-fixed=operator}{\int}`
-    )
-    .replace(
-      "x^n",
-      String.raw`\htmlData{kp-antiderivative-pattern-fixed=base}{x}^{\htmlData{kp-antiderivative-pattern-slot=n}{n}}`
-    )
-    .replace(
-      String.raw`\,dx`,
-      String.raw`\htmlData{kp-antiderivative-pattern-fixed=differential}{\,dx}`
-    );
-  if (annotated === latex) {
+  if (latex !== String.raw`\int u^n\,du`) {
     throw new Error("Antiderivative instructional pattern cannot be projected.");
   }
-  return annotated;
+  return String.raw`\htmlData{kp-antiderivative-pattern-fixed=operator}{\int}` +
+    String.raw`\htmlData{kp-antiderivative-pattern-slot=u-base}{u}^{\htmlData{kp-antiderivative-pattern-slot=n}{n}}` +
+    String.raw`\htmlData{kp-antiderivative-pattern-fixed=differential}{\,d}` +
+    String.raw`\htmlData{kp-antiderivative-pattern-slot=u-differential}{u}`;
+}
+
+function annotateInstructionalBindingsLatex(latex: string): string {
+  const parts = latex.split(String.raw`,\qquad `);
+  if (parts.length !== 2) {
+    throw new Error(
+      "Antiderivative instructional bindings require u and n relations."
+    );
+  }
+  return String.raw`\htmlData{kp-antiderivative-binding-origin=u}{${parts[0]!}}` +
+    String.raw`,\qquad ` +
+    String.raw`\htmlData{kp-antiderivative-binding-origin=n}{${parts[1]!}}`;
+}
+
+function createInstructionalRelationLayer(stage: HTMLElement): SVGSVGElement {
+  const namespace = "http://www.w3.org/2000/svg";
+  const svg = stage.ownerDocument.createElementNS(namespace, "svg");
+  svg.classList.add(
+    "editor-equation-stage__antiderivative-binding-relations"
+  );
+  svg.dataset["kpAntiderivativeBindingRelations"] = "u-persist-n-fan-out";
+  svg.setAttribute("aria-hidden", "true");
+  for (const [relation, ordinal] of [
+    ["u-persist", "0"],
+    ["n-fan-out", "0"],
+    ["n-fan-out", "1"]
+  ] as const) {
+    const line = stage.ownerDocument.createElementNS(namespace, "line");
+    line.dataset["kpAntiderivativeBindingRelation"] = relation;
+    line.dataset["kpAntiderivativeBindingRelationOrdinal"] = ordinal;
+    svg.append(line);
+  }
+  return svg;
 }
 
 function createRuleTemplateFormula(input: {
@@ -423,6 +480,22 @@ function hideTemplateReceiver(session: TransitMountSession): void {
     "--kp-antiderivative-pattern-projection-presence",
     "0"
   );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-schema-plane-presence",
+    "0"
+  );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-correspondence-plane-presence",
+    "0"
+  );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-template-relation-presence",
+    "0"
+  );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-template-relation-progress",
+    "0"
+  );
   session.templateReceiver.dataset["kpSemanticTraceRole"] = "absent";
   session.templateReceiver.setAttribute("aria-hidden", "true");
   session.templateReceiver.setAttribute("inert", "");
@@ -439,6 +512,7 @@ async function prepareSession(
     if (session.disposed || session.generation !== generation) return;
     assertSingleInstantiatedFractionOwner(session);
     bindInstructionalTemplateSlots(session);
+    prepareInstructionalRelationLayer(session);
     session.ready = true;
     session.stage.dataset["kpAntiderivativePowerTransit"] = "ready";
     session.stage.dataset["kpAntiderivativePowerTransitMechanismId"] =
@@ -457,6 +531,82 @@ async function prepareSession(
     showNativeCheckpoint(session, semanticProgress(session.pending));
     publishRepairGap(session);
   }
+}
+
+function prepareInstructionalRelationLayer(
+  session: TransitMountSession
+): void {
+  const layer = session.templateReceiver.querySelector<SVGSVGElement>(
+    "[data-kp-antiderivative-binding-relations]"
+  );
+  const stageRect = session.stage.getBoundingClientRect();
+  if (layer === null || stageRect.width <= 0 || stageRect.height <= 0) {
+    throw new Error(
+      "Antiderivative binding relations require measurable stage geometry."
+    );
+  }
+  layer.setAttribute("viewBox", `0 0 ${stageRect.width} ${stageRect.height}`);
+  layer.setAttribute("preserveAspectRatio", "none");
+  const origin = (metavariable: "u" | "n"): HTMLElement => {
+    const element = session.templateReceiver.querySelector<HTMLElement>(
+      `[data-kp-antiderivative-binding-origin="${metavariable}"]`
+    );
+    if (element === null) {
+      throw new Error(
+        `Antiderivative relation layer lacks binding origin ${metavariable}.`
+      );
+    }
+    return element;
+  };
+  const target = (selectorId: string): HTMLElement => {
+    const matches = [
+      ...session.roots.target.querySelectorAll<HTMLElement>(
+        "[data-kp-motion-id]"
+      )
+    ].filter((candidate) =>
+      candidate.dataset["kpMotionId"]?.endsWith(selectorId) === true
+    );
+    if (matches.length !== 1) {
+      throw new Error(
+        `Antiderivative relation layer requires one target ${selectorId}.`
+      );
+    }
+    return matches[0]!;
+  };
+  const relations = [
+    {
+      line: layer.querySelector<SVGLineElement>(
+        '[data-kp-antiderivative-binding-relation="u-persist"]'
+      ),
+      from: origin("u"),
+      to: target(session.plan.choreography.persistentBase.targetSelectorId)
+    },
+    ...session.plan.choreography.exponentBranch.targetSelectorIds.map(
+      (selectorId, ordinal) => ({
+        line: layer.querySelector<SVGLineElement>(
+          `[data-kp-antiderivative-binding-relation="n-fan-out"]` +
+          `[data-kp-antiderivative-binding-relation-ordinal="${ordinal}"]`
+        ),
+        from: origin("n"),
+        to: target(selectorId)
+      })
+    )
+  ];
+  for (const { line, from, to } of relations) {
+    if (line === null) {
+      throw new Error("Antiderivative relation layer lacks a governed line.");
+    }
+    const fromRect = from.getBoundingClientRect();
+    const toRect = to.getBoundingClientRect();
+    line.setAttribute("x1", String(fromRect.left - stageRect.left +
+      fromRect.width / 2));
+    line.setAttribute("y1", String(fromRect.bottom - stageRect.top));
+    line.setAttribute("x2", String(toRect.left - stageRect.left +
+      toRect.width / 2));
+    line.setAttribute("y2", String(toRect.top - stageRect.top));
+  }
+  session.stage.dataset["kpAntiderivativeBindingRelationCount"] =
+    String(relations.length);
 }
 
 function prepareNativeMeasurement(session: TransitMountSession): void {
@@ -525,8 +675,12 @@ function bindInstructionalTemplateSlots(session: TransitMountSession): void {
   const targetTokens = [
     ...session.roots.target.querySelectorAll<HTMLElement>("[data-kp-motion-id]")
   ];
-  for (const selectorId of session.plan.choreography.exponentBranch
-    .targetSelectorIds) {
+  for (const [selectorId, metavariable] of [
+    [session.plan.choreography.persistentBase.targetSelectorId, "u"],
+    ...session.plan.choreography.exponentBranch.targetSelectorIds.map(
+      (selectorId) => [selectorId, "n"] as const
+    )
+  ] as const) {
     const token = targetTokens.find((candidate) =>
       candidate.dataset["kpMotionId"]?.endsWith(selectorId) === true
     );
@@ -535,7 +689,7 @@ function bindInstructionalTemplateSlots(session: TransitMountSession): void {
         `Antiderivative template cannot bind instructional slot ${selectorId}.`
       );
     }
-    token.dataset["kpAntiderivativeRuleTemplateSlot"] = "n";
+    token.dataset["kpAntiderivativeRuleTemplateSlot"] = metavariable;
   }
   session.roots.target.style.setProperty(
     "--kp-antiderivative-template-slot-presence",
@@ -578,6 +732,26 @@ function applyFrame(session: TransitMountSession): void {
     : sampleKpAntiderivativeRuleTemplateApplication(
         frame.rewriteProgress < 0.5 ? 0 : 1
       );
+  const templateAuthority =
+    session.plan.choreography.ruleTemplateApplication;
+  const baseBinding = templateAuthority.metavariableBindings.find(
+    ({ metavariable }) => metavariable === "u"
+  );
+  const exponentBinding = templateAuthority.metavariableBindings.find(
+    ({ metavariable }) => metavariable === "n"
+  );
+  if (baseBinding === undefined || exponentBinding === undefined) {
+    throw new Error(
+      "Antiderivative explanation requires verified u and n bindings."
+    );
+  }
+  syncKpAntiderivativePowerExplanationRail({
+    stage: session.stage,
+    beatId: ruleApplication.explanationBeatId,
+    presence: ruleApplication.explanationPresence,
+    baseValue: baseBinding.value,
+    exponentValue: exponentBinding.value
+  });
   // The generic equation sampler runs earlier in the shared host. Restore the
   // native endpoints before projecting this exemplar's deterministic presence
   // and trace roles, or inherited transforms would move the matched subject.
@@ -588,6 +762,8 @@ function applyFrame(session: TransitMountSession): void {
     session,
     ruleApplication
   );
+  session.stage.dataset["kpAntiderivativeDepthLens"] =
+    projection === "full" ? "three-plane" : projection;
   const visualOwner = applyNativeRuleApplicationState(
     session,
     ruleApplication,
@@ -651,6 +827,26 @@ function applyRuleTemplateApplicationState(
     "--kp-antiderivative-pattern-slot-shift",
     "0.62em"
   );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-schema-plane-presence",
+    template.depthLens.schemaPlanePresence.toFixed(4)
+  );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-correspondence-plane-presence",
+    template.depthLens.correspondencePlanePresence.toFixed(4)
+  );
+  const relationPresence = Math.min(
+    template.metavariableBindingsPresence,
+    template.targetPresence
+  ) * (1 - template.rewriteCommitProgress);
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-template-relation-presence",
+    relationPresence.toFixed(4)
+  );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-template-relation-progress",
+    template.instantiationProgress.toFixed(4)
+  );
   session.templateReceiver.dataset["kpSemanticTraceRole"] =
     template.traceRole;
   session.roots.target.style.setProperty(
@@ -681,21 +877,24 @@ function applyRuleTemplateApplicationState(
   } else {
     session.templateReceiver.setAttribute("inert", "");
   }
+  const baseBinding = templateAuthority.metavariableBindings.find(
+    ({ metavariable }) => metavariable === "u"
+  );
   const exponentBinding = templateAuthority.metavariableBindings.find(
     ({ metavariable }) => metavariable === "n"
   );
-  if (exponentBinding === undefined) {
-    throw new Error("Antiderivative rule projection requires exponent binding n.");
+  if (baseBinding === undefined || exponentBinding === undefined) {
+    throw new Error("Antiderivative rule projection requires u and n bindings.");
   }
   rulePanel.setAttribute(
     "aria-label",
     template.instantiationProgress >= 1
-      ? `Instantiated power-rule result: n maps to ${exponentBinding.value} in both occurrences, giving ${templateAuthority.instantiatedResultLatex} before evaluation.`
+      ? `Instantiated power-rule result: u maps to ${baseBinding.value}, and n maps to ${exponentBinding.value} in both occurrences, giving ${templateAuthority.instantiatedResultLatex} before evaluation.`
       : template.templateRevealProgress > 0.01
-        ? `Prospective power-rule template: ${templateAuthority.instructionalProjection.replacementTemplateLatex}. The binding n maps to ${exponentBinding.value}.`
+        ? `Prospective power-rule template: ${templateAuthority.instructionalProjection.replacementTemplateLatex}. The bindings are u maps to ${baseBinding.value} and n maps to ${exponentBinding.value}.`
       : template.metavariableBindingsPresence > 0.01
-        ? `Power rule binding: n maps to ${exponentBinding.value}.`
-        : `Power-rule match: ${templateAuthority.instructionalProjection.patternLatex} matches the integral, with n at the exponent.`
+        ? `Power rule bindings: u maps to ${baseBinding.value}, and n maps to ${exponentBinding.value}.`
+        : `Power-rule match: ${templateAuthority.instructionalProjection.patternLatex} matches the integral. The base and differential fill u, and the exponent fills n.`
   );
   const semanticIds = [
     ...session.plan.choreography.ruleTemplateApplication
@@ -803,6 +1002,15 @@ function applyRuleTemplateApplicationState(
       : template.sourcePresence > 0.01
         ? "source-native"
         : "none";
+  session.stage.dataset["kpAntiderivativeDepthLens"] = "three-plane";
+  session.stage.dataset["kpAntiderivativeSchemaPlanePresence"] =
+    template.depthLens.schemaPlanePresence.toFixed(4);
+  session.stage.dataset["kpAntiderivativeCorrespondencePlanePresence"] =
+    template.depthLens.correspondencePlanePresence.toFixed(4);
+  session.stage.dataset["kpAntiderivativeProspectivePlaneDepth"] =
+    template.depthLens.prospectivePlaneDepth.toFixed(4);
+  session.stage.dataset["kpAntiderivativeBindingRelationPresence"] =
+    relationPresence.toFixed(4);
   return template.panelPresence;
 }
 
@@ -859,18 +1067,26 @@ function applyNativeRuleApplicationState(
   const prospectiveLift = template.targetPresence > 0.01
     ? -0.56 * (1 - commit)
     : 0;
-  const prospectiveScale = 0.985 + 0.015 * commit;
-  session.roots.target.style.transform = prospectiveLift === 0
+  const prospectiveDepth = projection === "full"
+    ? -22 * template.depthLens.prospectivePlaneDepth
+    : 0;
+  const prospectivePitch = projection === "full"
+    ? 1.4 * template.depthLens.prospectivePlaneDepth
+    : 0;
+  session.roots.target.style.transform =
+    prospectiveLift === 0 && prospectiveDepth === 0
     ? "none"
-    : `translateY(${prospectiveLift.toFixed(4)}rem) ` +
-      `scale(${prospectiveScale.toFixed(4)})`;
+    : `translate3d(0, ${prospectiveLift.toFixed(4)}rem, ` +
+      `${prospectiveDepth.toFixed(4)}px) ` +
+      `rotateX(${prospectivePitch.toFixed(4)}deg)`;
   session.roots.target.style.setProperty(
     "--kp-antiderivative-prospective-depth",
     (template.targetPresence * (1 - commit)).toFixed(4)
   );
   // A subtree drop-shadow duplicates the fraction bar's realized paint and
   // reads as a second rule even though the DOM has only one `.frac-line`.
-  // Depth therefore uses one owner's lift, scale, and salience only.
+  // Depth therefore uses one owner's lift, shallow plane placement, and
+  // salience only.
   session.roots.target.style.filter = "none";
   session.roots.target.dataset["kpAntiderivativeProspectivePlacement"] =
     "center";
@@ -1153,6 +1369,12 @@ function clearTelemetry(stage: HTMLElement): void {
   delete stage.dataset["kpAntiderivativeTemplateSyntaxResolutionProgress"];
   delete stage.dataset["kpAntiderivativeTemplateClosurePresence"];
   delete stage.dataset["kpAntiderivativeFixedSyntaxOwner"];
+  delete stage.dataset["kpAntiderivativeDepthLens"];
+  delete stage.dataset["kpAntiderivativeSchemaPlanePresence"];
+  delete stage.dataset["kpAntiderivativeCorrespondencePlanePresence"];
+  delete stage.dataset["kpAntiderivativeProspectivePlaneDepth"];
+  delete stage.dataset["kpAntiderivativeBindingRelationCount"];
+  delete stage.dataset["kpAntiderivativeBindingRelationPresence"];
 }
 
 function bounded(value: number): number {

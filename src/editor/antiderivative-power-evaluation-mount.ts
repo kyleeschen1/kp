@@ -19,6 +19,9 @@ import { resolveKpSemanticSalience } from
   "../animation/semantic-salience-resolver.ts";
 import type { KpEditorEquationStageHotPathCache } from
   "./equation-stage-hot-path-cache.ts";
+import {
+  syncKpAntiderivativePowerExplanationRail
+} from "./antiderivative-power-explanation-rail.ts";
 
 export interface KpAntiderivativePowerEvaluationMountResult {
   readonly status: "inactive" | "mounted";
@@ -230,6 +233,16 @@ export function applyKpAntiderivativePowerEvaluationMount(input: {
     });
   playback.apply(progress);
   applyCohortSalience(input.stage, progress);
+  const evaluationProfile = kpNativeKatexContributorFusionOpticalProfile;
+  syncKpAntiderivativePowerExplanationRail({
+    stage: input.stage,
+    beatId: progress < evaluationProfile.targetLegibilityStartsAt
+      ? "reduce-arithmetic"
+      : progress < 1
+        ? "recognize-reduction"
+        : "final-result",
+    presence: 1
+  });
   settleNativeEndpoints({ stage: input.stage, tokens, progress });
   input.stage.dataset["kpAntiderivativeEvaluationMount"] = "native-katex";
   input.stage.dataset["kpAntiderivativeEvaluationTransformationId"] =
