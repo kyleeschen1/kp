@@ -149,7 +149,7 @@ test("operator context remains through projection and withdraws before the templ
 
   const matching = sampleKpAntiderivativePowerChoreography({
     plan,
-    progress: 0.49
+    progress: 0.52
   });
   assert.equal(matching.operator.opacity, 1);
   assert.ok(matching.rewriteProgress > 0);
@@ -203,10 +203,25 @@ test("rule application separates match bind instantiate and rewrite", () => {
   assert.equal(reference.ruleTemplateApplication.matchProgress, 0);
   assert.equal(reference.ruleTemplateApplication.matchPresence, 0);
   assert.equal(reference.ruleTemplateApplication.bindingProgress, 0);
+  assert.equal(reference.ruleTemplateApplication.sourcePresence, 0);
+
+  const returnedSubject = sampleKpAntiderivativePowerChoreography({
+    plan,
+    progress: 0.406
+  });
+  assert.equal(returnedSubject.ruleTemplateApplication.sourcePresence, 1);
+  assert.equal(
+    returnedSubject.ruleTemplateApplication.rulePreviewPresence,
+    0
+  );
+  assert.equal(
+    returnedSubject.ruleTemplateApplication.patternProjectionPresence,
+    0
+  );
 
   const match = sampleKpAntiderivativePowerChoreography({
     plan,
-    progress: 0.49
+    progress: 0.52
   });
   assert.equal(match.ruleTemplateApplication.traceRole, "prospective");
   assert.equal(match.ruleTemplateApplication.receiverFocus, 1);

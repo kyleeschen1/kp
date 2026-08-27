@@ -29,7 +29,7 @@ export const kpAntiderivativePowerTransitRepairGapCode =
 export const kpAntiderivativeRuleApplicationNativeKatexMechanismId =
   "kp.rendering.native-katex.antiderivative-rule-application.v1";
 export const kpAntiderivativeRuleApplicationPresentationProfileId =
-  "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v5";
+  "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v6";
 
 export interface KpAntiderivativePowerTransitMountResult {
   readonly status: "inactive" | "preparing" | "mounted" | "repair-gap";
@@ -637,19 +637,19 @@ function applyRuleTemplateApplicationState(
   );
   session.templateReceiver.style.setProperty(
     "--kp-antiderivative-pattern-projection-fixed-presence",
-    (1 - template.matchProgress).toFixed(4)
+    "0"
   );
   session.templateReceiver.style.setProperty(
     "--kp-antiderivative-pattern-projection-lift",
-    `${(-0.52 * (1 - template.patternProjectionProgress)).toFixed(4)}rem`
+    "0rem"
   );
   session.templateReceiver.style.setProperty(
     "--kp-antiderivative-pattern-slot-lift",
-    `${(-0.72 * template.matchProgress).toFixed(4)}em`
+    "-0.72em"
   );
   session.templateReceiver.style.setProperty(
     "--kp-antiderivative-pattern-slot-shift",
-    `${(0.62 * template.matchProgress).toFixed(4)}em`
+    "0.62em"
   );
   session.templateReceiver.dataset["kpSemanticTraceRole"] =
     template.traceRole;
@@ -797,6 +797,12 @@ function applyRuleTemplateApplicationState(
     template.syntaxResolutionProgress.toFixed(4);
   session.stage.dataset["kpAntiderivativeTemplateClosurePresence"] =
     template.closurePresence.toFixed(4);
+  session.stage.dataset["kpAntiderivativeFixedSyntaxOwner"] =
+    template.rulePreviewPresence > 0.01
+      ? "rule-preview"
+      : template.sourcePresence > 0.01
+        ? "source-native"
+        : "none";
   return template.panelPresence;
 }
 
@@ -848,12 +854,7 @@ function applyNativeRuleApplicationState(
 
   const commit = template.rewriteCommitProgress;
   const targetOpacity = template.targetPresence * (0.84 + 0.16 * commit);
-  // The preview owns attention in time, while the source remains the stable
-  // semantic subject behind it and returns before pattern projection begins.
-  const previewContext = 1 - template.rulePreviewPresence;
-  session.roots.source.style.opacity = String(
-    template.sourcePresence * previewContext
-  );
+  session.roots.source.style.opacity = String(template.sourcePresence);
   session.roots.target.style.opacity = targetOpacity.toFixed(4);
   const prospectiveLift = template.targetPresence > 0.01
     ? -0.56 * (1 - commit)
@@ -1151,6 +1152,7 @@ function clearTelemetry(stage: HTMLElement): void {
   delete stage.dataset["kpAntiderivativeTemplateSyntaxPresence"];
   delete stage.dataset["kpAntiderivativeTemplateSyntaxResolutionProgress"];
   delete stage.dataset["kpAntiderivativeTemplateClosurePresence"];
+  delete stage.dataset["kpAntiderivativeFixedSyntaxOwner"];
 }
 
 function bounded(value: number): number {

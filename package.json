@@ -121,7 +121,7 @@
     "test:equation-derivative-power-migration-v2": "node --disable-warning=ExperimentalWarning --test tests/equation-derivative-power-migration-v2.test.ts tests/equation-terminal-migration-v2.test.ts tests/equation-structural-migration-v2.test.ts",
     "test:browser:differentiation-exemplar": "playwright test tests/differentiation-power-catalogue.browser.spec.ts --project=chromium --workers=1",
     "test:browser:integration-power-rule-transit": "playwright test tests/integration-power-rule-transit.browser.spec.ts --project=chromium --workers=1",
-    "test:browser:integration-power-rule-evaluation": "playwright test tests/integration-power-rule-evaluation.browser.spec.ts --project=chromium --workers=1",
+    "test:browser:integration-power-rule-evaluation": "playwright test tests/integration-power-rule-evaluation.browser.spec.ts --project=chromium --project=firefox --workers=1",
     "test:browser:integration-power-rule-catalogue": "playwright test tests/integration-power-rule-catalogue.browser.spec.ts --project=chromium --workers=1",
     "visual:integration-power-rule": "node --disable-warning=ExperimentalWarning scripts/capture-integration-power-rule.ts",
     "test:browser:evaluation-host-parity": "playwright test tests/evaluation-host-parity.browser.spec.ts --project=chromium --workers=1",

@@ -499,11 +499,9 @@
   color: var(--kp-equation-foreground);
   font-size: clamp(2.15rem, 5.5vw, 2.75rem);
   opacity: var(--kp-antiderivative-pattern-projection-presence, 0);
-  text-shadow: 0 0.32rem 0.65rem color-mix(
-    in srgb,
-    var(--kp-catalogue-stage-background) 72%,
-    transparent
-  );
+  /* The pattern layer now owns only the metavariable slot. A shadow would
+     repaint that single piece of instructional ink as a fuzzy duplicate. */
+  text-shadow: none;
   transform: translate(
     -50%,
     calc(-50% + var(--kp-antiderivative-pattern-projection-lift, 0rem))

@@ -443,17 +443,19 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
   rewriteProgress: number
 ): KpAntiderivativePowerChoreographyFrame["ruleTemplateApplication"] {
   const progress = clamp01(rewriteProgress);
-  const rulePreviewRevealProgress = phaseProgress(progress, 0, 0.045);
-  const rulePreviewWithdrawalProgress = phaseProgress(progress, 0.255, 0.315);
+  const previewSourceWithdrawalProgress = phaseProgress(progress, 0, 0.035);
+  const rulePreviewRevealProgress = phaseProgress(progress, 0.035, 0.08);
+  const rulePreviewWithdrawalProgress = phaseProgress(progress, 0.245, 0.285);
   const rulePreviewPresence = roundProgress(
     rulePreviewRevealProgress * (1 - rulePreviewWithdrawalProgress)
   );
-  const patternProjectionProgress = phaseProgress(progress, 0.245, 0.39);
+  const previewSourceReturnProgress = phaseProgress(progress, 0.285, 0.32);
+  const patternProjectionProgress = phaseProgress(progress, 0.335, 0.46);
   const patternProjectionPresence = roundProgress(
-    phaseProgress(progress, 0.225, 0.285) *
+    phaseProgress(progress, 0.335, 0.38) *
       (1 - phaseProgress(progress, 0.54, 0.6))
   );
-  const matchProgress = phaseProgress(progress, 0.34, 0.41);
+  const matchProgress = phaseProgress(progress, 0.4, 0.45);
   const matchPresence = roundProgress(
     matchProgress * (1 - phaseProgress(progress, 0.54, 0.6))
   );
@@ -465,8 +467,15 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
   const templateRevealProgress = phaseProgress(progress, 0.68, 0.75);
   const instantiationProgress = phaseProgress(progress, 0.82, 0.88);
   const rewriteCommitProgress = phaseProgress(progress, 0.965, 0.995);
+  // The detached rule preview and the native subject are consecutive views,
+  // not competing copies. Once the preview has fully withdrawn, the native
+  // subject returns before its slot-only match scaffold appears.
+  const previewSuppression = roundProgress(
+    previewSourceWithdrawalProgress * (1 - previewSourceReturnProgress)
+  );
   const sourcePresence = roundProgress(
-    1 - phaseProgress(progress, 0.66, 0.75)
+    (1 - previewSuppression) *
+      (1 - phaseProgress(progress, 0.66, 0.75))
   );
   const targetPresence = templateRevealProgress;
   const templateSlotPresence = roundProgress(

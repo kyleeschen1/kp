@@ -40,8 +40,15 @@ const samples = [
     viewport: desktopViewport
   },
   {
+    id: "rule-subject-return",
+    label: "Rule application · native subject returns alone",
+    progress: 0.203,
+    theme: "dark",
+    viewport: desktopViewport
+  },
+  {
     id: "rule-match",
-    label: "Rule application · pattern layer aligns with the subject",
+    label: "Rule application · n slot identifies the source exponent",
     progress: 0.259,
     theme: "dark",
     viewport: desktopViewport
@@ -96,6 +103,13 @@ const samples = [
     viewport: desktopViewport
   },
   {
+    id: "fraction-reshape",
+    label: "Two evaluations · structural line follows readable results",
+    progress: 0.82,
+    theme: "dark",
+    viewport: desktopViewport
+  },
+  {
     id: "dual-evaluation-recognition",
     label: "Two evaluations · both results legible",
     progress: 0.87,
@@ -118,7 +132,7 @@ const samples = [
   },
   {
     id: "narrow-light-rule-match",
-    label: "Narrow light · aligned pattern layer and exponent slot",
+    label: "Narrow light · slot-only exponent match",
     progress: 0.259,
     theme: "light",
     viewport: narrowViewport
@@ -169,6 +183,9 @@ interface CaptureEvidence {
   readonly rulePreviewWithdrawalProgress: number;
   readonly patternProjectionPresence: number;
   readonly patternProjectionProgress: number;
+  readonly fixedSyntaxOwner: string;
+  readonly visibleIntegralOwnerCount: number;
+  readonly patternFixedSyntaxVisibleCount: number;
   readonly rulePreviewFractionCount: number;
   readonly ruleInstantiationProgress: number;
   readonly ruleTemplateRevealProgress: number;
@@ -194,6 +211,8 @@ interface CaptureEvidence {
   readonly visibleFractionRuleCount: number;
   readonly fractionReplicaEffectCount: number;
   readonly fractionOwner: string;
+  readonly fractionMotion: string;
+  readonly fractionReshapeProgress: number;
   readonly materialFractionOwnerCount: number;
   readonly visibleText: string;
   readonly ruleTemplateText: string;
@@ -268,16 +287,16 @@ async function capture(baseUrl?: string): Promise<void> {
     await writeFile(html, htmlSource, "utf8");
     const manifest = path.join(outputRoot, "manifest.json");
     await writeFile(manifest, `${JSON.stringify({
-      schemaVersion: "kp.integration-power-rule-visual-checkpoint.v5",
+      schemaVersion: "kp.integration-power-rule-visual-checkpoint.v6",
       animationId,
       samples: evidence,
       reviewChecklist: [
         "attention order",
         "salience-only operator scope",
         "one-focus rule preview followed by complete withdrawal",
-        "XY-aligned pattern projection and local metavariable binding",
+        "slot-only pattern projection with exclusive native fixed syntax",
         "single-owner prospective lift with no fraction-rule paint replica",
-        "single shifting fraction-rule owner through rewrite and evaluation",
+        "single transform-only fraction-rule owner through evaluation",
         "exponent provenance",
         "two ink-knot evaluations",
         "integration constant persistence",
@@ -393,6 +412,22 @@ async function captureSample(input: {
     const templateReceiver = root.querySelector<HTMLElement>(
       "[data-kp-antiderivative-template-receiver]"
     );
+    const integralOwners = [
+      root.querySelector<HTMLElement>(
+        '[data-kp-motion-id$=".initial.operator"]'
+      ),
+      root.querySelector<HTMLElement>(
+        '[data-kp-antiderivative-rule-preview-role="pattern"]'
+      ),
+      root.querySelector<HTMLElement>(
+        '[data-kp-antiderivative-pattern-fixed="operator"]'
+      )
+    ].filter((candidate): candidate is HTMLElement => candidate !== null);
+    const projectedFixedSyntax = [
+      ...root.querySelectorAll<HTMLElement>(
+        "[data-kp-antiderivative-pattern-fixed]"
+      )
+    ];
     return {
       transitionId: root.querySelector<HTMLElement>(
         "[data-kp-editor-equation-transition-id]"
@@ -438,6 +473,11 @@ async function captureSample(input: {
       patternProjectionProgress: Number(
         root.dataset["kpAntiderivativePatternProjectionProgress"] ?? 0
       ),
+      fixedSyntaxOwner:
+        root.dataset["kpAntiderivativeFixedSyntaxOwner"] ?? "inactive",
+      visibleIntegralOwnerCount: integralOwners.filter(realized).length,
+      patternFixedSyntaxVisibleCount:
+        projectedFixedSyntax.filter(realized).length,
       rulePreviewFractionCount: root.querySelectorAll(
         "[data-kp-antiderivative-rule-preview] .frac-line"
       ).length,
@@ -508,6 +548,12 @@ async function captureSample(input: {
       fractionOwner:
         root.dataset["kpAntiderivativeEvaluationFractionOwner"] ??
         root.dataset["kpAntiderivativePowerVisualOwner"] ?? "inactive",
+      fractionMotion:
+        root.dataset["kpAntiderivativeEvaluationFractionMotion"] ??
+        "inactive",
+      fractionReshapeProgress: Number(
+        root.dataset["kpAntiderivativeEvaluationFractionReshapeProgress"] ?? 0
+      ),
       materialFractionOwnerCount: root.querySelectorAll(
         '[data-kp-equation-material-fragment-role="rule:persistent-evaluation-fraction"]'
       ).length,
@@ -586,6 +632,7 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   const fractionlessFrames = new Set([
     "source",
     "scope-salience",
+    "rule-subject-return",
     "rule-match",
     "rule-binding",
     "narrow-light-rule-match"
@@ -606,13 +653,15 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   }
   for (const id of [
     "dual-evaluation-kernel",
+    "fraction-reshape",
     "dual-evaluation-recognition",
     "narrow-light-evaluation"
   ]) {
     const sample = required(id);
     if (
       sample.fractionOwner !== "material" ||
-      sample.materialFractionOwnerCount !== 1
+      sample.materialFractionOwnerCount !== 1 ||
+      sample.fractionMotion !== "transform-only"
     ) {
       throw new Error(
         `${id} must reshape one material fraction rule between native endpoints.`
@@ -637,7 +686,9 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     preview.patternProjectionPresence !== 0 ||
     preview.ruleMatchPresence !== 0 ||
     preview.metavariableBindingsPresence !== 0 ||
-    preview.rulePreviewFractionCount !== 1
+    preview.rulePreviewFractionCount !== 1 ||
+    preview.fixedSyntaxOwner !== "rule-preview" ||
+    preview.visibleIntegralOwnerCount !== 1
   ) {
     throw new Error(
       "Rule-preview frame must establish the complete rule as the sole focus."
@@ -646,7 +697,7 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   if (
     match.transitVisualOwner !== "source-native" ||
     match.templateProfileId !==
-      "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v5" ||
+      "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v6" ||
     match.templateTraceRole !== "prospective" ||
     match.templateLawRefId !==
       "law.calculus.integral.power-rule" ||
@@ -666,10 +717,25 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     match.instantiatedResultOwner !== "canonical-target-native" ||
     match.templateBindingProgress !== 0 ||
     match.templateReceiverSettlementProgress !== 0 ||
-    match.instantiatedFractionOwnerCount !== 1
+    match.instantiatedFractionOwnerCount !== 1 ||
+    match.fixedSyntaxOwner !== "source-native" ||
+    match.visibleIntegralOwnerCount !== 1 ||
+    match.patternFixedSyntaxVisibleCount !== 0
   ) {
     throw new Error(
       "Rule-match frame must annotate the stationary source without duplicate structure."
+    );
+  }
+  const returnedSubject = required("rule-subject-return");
+  if (
+    returnedSubject.rulePreviewPresence !== 0 ||
+    returnedSubject.patternProjectionPresence !== 0 ||
+    returnedSubject.fixedSyntaxOwner !== "source-native" ||
+    returnedSubject.visibleIntegralOwnerCount !== 1 ||
+    returnedSubject.patternFixedSyntaxVisibleCount !== 0
+  ) {
+    throw new Error(
+      "The reviewed 20% frame must contain one native integral and no scaffold copy."
     );
   }
   const binding = required("rule-binding");
@@ -779,6 +845,7 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   }
   for (const id of [
     "dual-evaluation-kernel",
+    "fraction-reshape",
     "dual-evaluation-recognition",
     "narrow-light-evaluation"
   ]) {

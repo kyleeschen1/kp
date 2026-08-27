@@ -134,7 +134,22 @@ test("two certified integration cohorts share one clock and remain separate", as
       onInvalidate: () => undefined
     });
 
-    const samples = [0, 0.25, 0.5, 0.53, 0.7, 1].map((progress) => {
+    const samples = [
+      0,
+      0.25,
+      0.5,
+      0.53,
+      0.57,
+      0.58,
+      0.6,
+      0.62,
+      0.64,
+      0.66,
+      0.68,
+      0.7,
+      0.72,
+      1
+    ].map((progress) => {
       const mounted = mountModule.applyKpAntiderivativePowerEvaluationMount({
         stage,
         plan: migration.presentationPlan,
@@ -203,6 +218,11 @@ test("two certified integration cohorts share one clock and remain separate", as
         }
         return opacity > 0.01;
       });
+      const visibleFractionRect = realizedFractionRules[0]
+        ?.getBoundingClientRect();
+      const materialFractionOwner = stage.querySelector<HTMLElement>(
+        '[data-kp-equation-material-fragment-role="rule:persistent-evaluation-fraction"]'
+      );
       return {
         progress,
         mounted,
@@ -213,6 +233,30 @@ test("two certified integration cohorts share one clock and remain separate", as
         materialFractionOwnerCount: stage.querySelectorAll(
           '[data-kp-equation-material-fragment-role="rule:persistent-evaluation-fraction"]'
         ).length,
+        fractionMotion:
+          stage.dataset["kpAntiderivativeEvaluationFractionMotion"],
+        fractionReshapeProgress: Number(
+          stage.dataset[
+            "kpAntiderivativeEvaluationFractionReshapeProgress"
+          ] ?? 0
+        ),
+        visibleFractionRect: visibleFractionRect === undefined
+          ? undefined
+          : {
+              left: visibleFractionRect.left,
+              top: visibleFractionRect.top,
+              width: visibleFractionRect.width,
+              height: visibleFractionRect.height
+            },
+        materialFractionLayout: materialFractionOwner === null
+          ? undefined
+          : {
+              left: materialFractionOwner.style.left,
+              top: materialFractionOwner.style.top,
+              width: materialFractionOwner.style.width,
+              height: materialFractionOwner.style.height,
+              transform: materialFractionOwner.style.transform
+            },
         legibilityState:
           stage.dataset["kpOperationEvaluationLegibilityState"],
         readableCohortCount:
@@ -278,7 +322,168 @@ test("two certified integration cohorts share one clock and remain separate", as
   expect(kernel.materialFractionOwnerCount).toBe(1);
   expect(settled.fractionOwner).toBe("target-native");
   expect(settled.materialFractionOwnerCount).toBe(0);
+  expect(source.fractionMotion).toBe("native");
+  expect(settled.fractionMotion).toBe("native");
+  const materialSamples = result.samples.filter((sample) =>
+    sample.progress > 0 && sample.progress < 1
+  );
+  expect(materialSamples.every((sample) =>
+    sample.fractionMotion === "transform-only"
+  )).toBe(true);
+  expect(new Set(materialSamples.map((sample) =>
+    sample.materialFractionLayout?.left
+  )).size).toBe(1);
+  expect(new Set(materialSamples.map((sample) =>
+    sample.materialFractionLayout?.top
+  )).size).toBe(1);
+  expect(new Set(materialSamples.map((sample) =>
+    sample.materialFractionLayout?.width
+  )).size).toBe(1);
+  expect(materialSamples.every((sample) => {
+    const layout = sample.materialFractionLayout;
+    return layout !== undefined &&
+      layout.transform.includes("translate3d(") &&
+      layout.transform.includes("scaleX(");
+  })).toBe(true);
+  const reshapingSamples = result.samples.filter((sample) =>
+    sample.progress >= 0.58 && sample.progress <= 0.7
+  );
+  expect(reshapingSamples[0]?.fractionReshapeProgress).toBe(0);
+  expect(reshapingSamples.at(-1)?.fractionReshapeProgress).toBe(1);
+  for (let index = 1; index < reshapingSamples.length; index += 1) {
+    const previous = reshapingSamples[index - 1]!;
+    const current = reshapingSamples[index]!;
+    expect(current.fractionReshapeProgress)
+      .toBeGreaterThanOrEqual(previous.fractionReshapeProgress);
+    expect(current.visibleFractionRect!.width)
+      .toBeLessThanOrEqual(previous.visibleFractionRect!.width + 0.1);
+  }
+  expect(reshapingSamples[0]!.visibleFractionRect!.width)
+    .toBeGreaterThan(reshapingSamples.at(-1)!.visibleFractionRect!.width);
   const numeratorCenter = kernel.byCohort[result.cohortIds[0]!]!.center!;
   const denominatorCenter = kernel.byCohort[result.cohortIds[1]!]!.center!;
   expect(Math.abs(numeratorCenter.y - denominatorCenter.y)).toBeGreaterThan(12);
+});
+
+test("live fraction reshape keeps one transform-only owner at frame cadence", async ({
+  page,
+  browserName
+}) => {
+  test.setTimeout(30_000);
+  await page.goto(`/?artifact=${animationId}&playhead=0.785&theme=dark`);
+  const player = page.locator(
+    `[data-kp-animation-catalogue-stage] ` +
+    `[data-kp-editor-animation-player]` +
+    `[data-kp-editor-animation-id="${animationId}"]`
+  );
+  const stage = player.locator("[data-kp-editor-equation-stage]");
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-evaluation-mount",
+    "native-katex",
+    { timeout: 30_000 }
+  );
+  const auditPromise = stage.evaluate((root) => new Promise<{
+    readonly browser: string;
+    readonly frames: readonly {
+      readonly at: number;
+      readonly reshape: number;
+      readonly width: number;
+      readonly visibleFractionCount: number;
+      readonly layoutLeft: string;
+      readonly layoutWidth: string;
+      readonly transform: string;
+    }[];
+  }>((resolve, reject) => {
+    const frames: {
+      at: number;
+      reshape: number;
+      width: number;
+      visibleFractionCount: number;
+      layoutLeft: string;
+      layoutWidth: string;
+      transform: string;
+    }[] = [];
+    const startedAt = performance.now();
+    const timeout = window.setTimeout(() => {
+      reject(new Error("Timed out observing the live fraction reshape."));
+    }, 5_000);
+    const realized = (element: HTMLElement): boolean => {
+      let opacity = 1;
+      for (
+        let current: HTMLElement | null = element;
+        current !== null;
+        current = current.parentElement
+      ) {
+        const style = getComputedStyle(current);
+        if (style.display === "none" || style.visibility === "hidden") {
+          return false;
+        }
+        opacity *= Number(style.opacity);
+        if (current === root) break;
+      }
+      return opacity > 0.01;
+    };
+    const sample = (at: number): void => {
+      const owner = root.querySelector<HTMLElement>(
+        '[data-kp-equation-material-fragment-role="rule:persistent-evaluation-fraction"]'
+      );
+      const reshape = Number(root.dataset[
+        "kpAntiderivativeEvaluationFractionReshapeProgress"
+      ] ?? 0);
+      if (owner !== null) {
+        const rect = owner.getBoundingClientRect();
+        frames.push({
+          at,
+          reshape,
+          width: rect.width,
+          visibleFractionCount: [
+            ...root.querySelectorAll<HTMLElement>(".frac-line")
+          ].filter(realized).length,
+          layoutLeft: owner.style.left,
+          layoutWidth: owner.style.width,
+          transform: owner.style.transform
+        });
+      }
+      if (reshape >= 1 && frames.length > 1) {
+        window.clearTimeout(timeout);
+        resolve({ browser: navigator.userAgent, frames });
+        return;
+      }
+      if (at - startedAt > 4_000) {
+        window.clearTimeout(timeout);
+        reject(new Error("Fraction reshape did not settle during playback."));
+        return;
+      }
+      requestAnimationFrame(sample);
+    };
+    requestAnimationFrame(sample);
+  }));
+  await player.locator('[data-action="toggle-editor-animation"]').click();
+  const audit = await auditPromise;
+  const active = audit.frames.filter(({ reshape }) =>
+    reshape > 0 && reshape < 1
+  );
+  const intervals = active.slice(1).map((frame, index) =>
+    frame.at - active[index]!.at
+  ).sort((left, right) => left - right);
+  const p95 = intervals[Math.floor((intervals.length - 1) * 0.95)] ?? Infinity;
+  expect(audit.browser.toLowerCase()).toContain(
+    browserName === "chromium" ? "chrome" : browserName
+  );
+  expect(active.length).toBeGreaterThanOrEqual(20);
+  expect(p95).toBeLessThan(50);
+  expect(new Set(audit.frames.map(({ layoutLeft }) => layoutLeft)).size)
+    .toBe(1);
+  expect(new Set(audit.frames.map(({ layoutWidth }) => layoutWidth)).size)
+    .toBe(1);
+  expect(audit.frames.every(({ transform }) =>
+    transform.includes("translate3d(") && transform.includes("scaleX(")
+  )).toBe(true);
+  expect(audit.frames.every(({ visibleFractionCount }) =>
+    visibleFractionCount === 1
+  )).toBe(true);
+  for (let index = 1; index < audit.frames.length; index += 1) {
+    expect(audit.frames[index]!.width)
+      .toBeLessThanOrEqual(audit.frames[index - 1]!.width + 0.1);
+  }
 });

@@ -212,6 +212,10 @@ export function applyKpAntiderivativePowerEvaluationMount(input: {
     token.dataset["kpEquationMaterialNativeHidden"] = "true";
   });
   settleFractionRuleOwnership(input.stage, fraction, progress);
+  input.stage.dataset["kpAntiderivativeEvaluationFractionMotion"] =
+    fraction.motion;
+  input.stage.dataset["kpAntiderivativeEvaluationFractionReshapeProgress"] =
+    fraction.reshapeProgress.toFixed(4);
 
   const base = {
     sample: (progress: number) => progress,
@@ -250,6 +254,8 @@ function createEvaluationFractionOwnership(input: {
 }): {
   readonly source: HTMLElement;
   readonly target: HTMLElement;
+  readonly motion: "native" | "transform-only";
+  readonly reshapeProgress: number;
   readonly materialOwner?: KpEquationMaterialLayerOwnerFrame | undefined;
 } {
   const endpointRoot = (side: "source" | "target"): HTMLElement => {
@@ -282,8 +288,11 @@ function createEvaluationFractionOwnership(input: {
   const target = fractionRule(endpointRoot("target"), "target");
   source.dataset["kpAntiderivativeEvaluationFractionNative"] = "source";
   target.dataset["kpAntiderivativeEvaluationFractionNative"] = "target";
-  if (input.progress <= 0 || input.progress >= 1) {
-    return { source, target };
+  if (input.progress <= 0) {
+    return { source, target, motion: "native", reshapeProgress: 0 };
+  }
+  if (input.progress >= 1) {
+    return { source, target, motion: "native", reshapeProgress: 1 };
   }
   const sourceRect = input.hotPath.structuralPaintRects.get(source);
   const targetRect = input.hotPath.structuralPaintRects.get(target);
@@ -294,25 +303,37 @@ function createEvaluationFractionOwnership(input: {
   }
   const profile = kpNativeKatexContributorFusionOpticalProfile;
   const reshapeProgress = smoothstep(
-    profile.gatherStartsAt,
+    profile.targetLegibilityStartsAt,
     profile.targetExpansionEndsAt,
     input.progress
   );
-  const rect = {
-    left: interpolate(sourceRect.left, targetRect.left, reshapeProgress),
-    top: interpolate(sourceRect.top, targetRect.top, reshapeProgress),
-    width: interpolate(sourceRect.width, targetRect.width, reshapeProgress),
-    height: interpolate(sourceRect.height, targetRect.height, reshapeProgress)
-  };
+  const sourceCenterX = sourceRect.left + sourceRect.width / 2;
+  const sourceCenterY = sourceRect.top + sourceRect.height / 2;
+  const targetCenterX = targetRect.left + targetRect.width / 2;
+  const targetCenterY = targetRect.top + targetRect.height / 2;
+  const translateX = (targetCenterX - sourceCenterX) * reshapeProgress;
+  const translateY = (targetCenterY - sourceCenterY) * reshapeProgress;
+  const scaleX = interpolate(
+    1,
+    targetRect.width / sourceRect.width,
+    reshapeProgress
+  );
   return {
     source,
     target,
+    motion: "transform-only",
+    reshapeProgress,
     materialOwner: {
       ownerId: "evaluation-structure.antiderivative-power.fraction-rule",
       sourceElement: source,
-      rect,
+      // Keep the structural owner's layout box stable. Width/position writes
+      // made a thin rule rasterize in visible steps during slow playback;
+      // compositor translation and horizontal scale preserve one crisp owner.
+      rect: sourceRect,
       opacity: 1,
-      transform: "none",
+      transform:
+        `translate3d(${translateX.toFixed(6)}px, ` +
+        `${translateY.toFixed(6)}px, 0) scaleX(${scaleX.toFixed(6)})`,
       filter: "none",
       semanticDepth: "live",
       fragmentRole: "rule:persistent-evaluation-fraction"
@@ -475,4 +496,6 @@ function clearMountTelemetry(stage: HTMLElement): void {
   delete stage.dataset["kpAntiderivativeEvaluationMount"];
   delete stage.dataset["kpAntiderivativeEvaluationTransformationId"];
   delete stage.dataset["kpAntiderivativeEvaluationFractionOwner"];
+  delete stage.dataset["kpAntiderivativeEvaluationFractionMotion"];
+  delete stage.dataset["kpAntiderivativeEvaluationFractionReshapeProgress"];
 }

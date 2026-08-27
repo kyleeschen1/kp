@@ -614,11 +614,53 @@
       "command": "npm run typecheck",
       "status": "passed",
       "checkedAt": "2026-08-27T05:25:44.545Z"
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-27T06:28:31.425Z",
+      "notes": "Covers choreography states, bindings, lifecycle, and prior integration regressions."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-catalogue",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-27T06:28:32.744Z",
+      "notes": "Certifies single realized integral paint during preview return and slot-only match."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-evaluation",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-27T06:28:33.769Z",
+      "notes": "Chromium and Firefox direct-seek plus live cadence probes certify exclusive fraction ownership and transform-only monotonic contraction."
+    },
+    {
+      "command": "npm run visual:integration-power-rule",
+      "status": "passed",
+      "scope": "exemplar",
+      "checkedAt": "2026-08-27T06:28:34.809Z",
+      "notes": "Captured v6 review sheet with subject-return, slot-only match, and fraction-reshape checkpoints."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-08-27T06:28:35.874Z",
+      "notes": "Svelte and domain type checks pass with zero reported errors or warnings."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-27T06:28:36.971Z",
+      "notes": "Existing equation-surface contracts remain intact."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 18 v5 candidate removes the subtree shadow replica and dual-native evaluation bars, slows the semantic sequence, and awaits the canonical human visual checkpoint."
+    "summary": "Implemented v6 candidate with one fixed-syntax owner, slot-only matching, delayed transform-only fraction contraction, and focused cross-browser evidence. Slice 18 remains at human visual checkpoint."
   },
   "allowedWork": [
     "The semantic reader matches the accepted x + 3 = 7 animation card at named forward and reverse frames without typography changes, collisions, or discontinuities.",
