@@ -34,21 +34,21 @@ const samples = [
   },
   {
     id: "rule-preview",
-    label: "Rule application · verified schema plane",
+    label: "Rule application · expression and template frames appear",
     progress: 0.132,
     theme: "dark",
     viewport: desktopViewport
   },
   {
-    id: "rule-subject-return",
-    label: "Rule application · native subject returns alone",
+    id: "rule-approach",
+    label: "Rule application · template approaches registration",
     progress: 0.203,
     theme: "dark",
     viewport: desktopViewport
   },
   {
     id: "rule-match",
-    label: "Rule application · u and n slots register through depth",
+    label: "Rule application · seam registers u and n",
     progress: 0.259,
     theme: "dark",
     viewport: desktopViewport
@@ -62,7 +62,7 @@ const samples = [
   },
   {
     id: "rule-template",
-    label: "Rule application · prospective template on back plane",
+    label: "Rule application · bound template retreats",
     progress: 0.39,
     theme: "dark",
     viewport: desktopViewport
@@ -83,7 +83,7 @@ const samples = [
   },
   {
     id: "rule-rewriting",
-    label: "Rule application · prospective plane advances to live",
+    label: "Rule application · instantiated frame advances to live",
     progress: 0.471,
     theme: "dark",
     viewport: desktopViewport
@@ -132,21 +132,21 @@ const samples = [
   },
   {
     id: "narrow-light-rule-preview",
-    label: "Narrow light · complete rule preview fit",
+    label: "Narrow light · framed expression and template",
     progress: 0.132,
     theme: "light",
     viewport: narrowViewport
   },
   {
     id: "narrow-light-rule-match",
-    label: "Narrow light · u and n correspondence lens",
+    label: "Narrow light · registration seam and slots",
     progress: 0.259,
     theme: "light",
     viewport: narrowViewport
   },
   {
     id: "narrow-light-rule-template",
-    label: "Narrow light · layered prospective rewrite",
+    label: "Narrow light · retreated template frame",
     progress: 0.39,
     theme: "light",
     viewport: narrowViewport
@@ -218,6 +218,15 @@ interface CaptureEvidence {
   readonly patternSlotCount: number;
   readonly bindingRelationCount: number;
   readonly bindingRelationPresence: number;
+  readonly registrationFrameCount: number;
+  readonly registrationFrameState: string;
+  readonly sourceFramePresence: number;
+  readonly templateFramePresence: number;
+  readonly templateApproachProgress: number;
+  readonly registrationSeamProgress: number;
+  readonly templateRetreatProgress: number;
+  readonly sourceFrameText: string;
+  readonly templateFrameText: string;
   readonly evaluationStatus: string;
   readonly evaluationCohortCount: number;
   readonly evaluationLegibility: string;
@@ -304,17 +313,17 @@ async function capture(baseUrl?: string): Promise<void> {
     await writeFile(html, htmlSource, "utf8");
     const manifest = path.join(outputRoot, "manifest.json");
     await writeFile(manifest, `${JSON.stringify({
-      schemaVersion: "kp.integration-power-rule-visual-checkpoint.v7",
+      schemaVersion: "kp.integration-power-rule-visual-checkpoint.v8",
       animationId,
       samples: evidence,
       reviewChecklist: [
         "attention order",
         "salience-only operator scope",
-        "one-focus rule preview followed by complete withdrawal",
-        "slot-only pattern projection with exclusive native fixed syntax",
+        "two labeled representation frames with one live source",
+        "full pattern face with accent slots and complementary paint ownership",
         "grounded one-line explanation at every pedagogical beat",
-        "three-plane live correspondence and prospective depth lens",
-        "single-owner prospective lift with no fraction-rule paint replica",
+        "approach registration seam retreat and depth-exchange commitment",
+        "single-owner framed template with no fraction-rule paint replica",
         "single transform-only fraction-rule owner through evaluation",
         "exponent provenance",
         "two ink-knot evaluations",
@@ -434,9 +443,6 @@ async function captureSample(input: {
     const integralOwners = [
       root.querySelector<HTMLElement>(
         '[data-kp-motion-id$=".initial.operator"]'
-      ),
-      root.querySelector<HTMLElement>(
-        '[data-kp-antiderivative-rule-preview-role="pattern"]'
       ),
       root.querySelector<HTMLElement>(
         '[data-kp-antiderivative-pattern-fixed="operator"]'
@@ -568,6 +574,32 @@ async function captureSample(input: {
       bindingRelationPresence: Number(
         root.dataset["kpAntiderivativeBindingRelationPresence"] ?? 0
       ),
+      registrationFrameCount: Number(
+        root.dataset["kpAntiderivativeRegistrationFrameCount"] ?? 0
+      ),
+      registrationFrameState:
+        root.dataset["kpAntiderivativeRegistrationFrameState"] ?? "inactive",
+      sourceFramePresence: Number(
+        root.dataset["kpAntiderivativeSourceFramePresence"] ?? 0
+      ),
+      templateFramePresence: Number(
+        root.dataset["kpAntiderivativeTemplateFramePresence"] ?? 0
+      ),
+      templateApproachProgress: Number(
+        root.dataset["kpAntiderivativeTemplateApproachProgress"] ?? 0
+      ),
+      registrationSeamProgress: Number(
+        root.dataset["kpAntiderivativeRegistrationSeamProgress"] ?? 0
+      ),
+      templateRetreatProgress: Number(
+        root.dataset["kpAntiderivativeTemplateRetreatProgress"] ?? 0
+      ),
+      sourceFrameText: root.querySelector<HTMLElement>(
+        '[data-kp-antiderivative-registration-frame="source"]'
+      )?.textContent?.replace(/\s+/gu, " ").trim() ?? "",
+      templateFrameText: root.querySelector<HTMLElement>(
+        '[data-kp-antiderivative-registration-frame="template"]'
+      )?.textContent?.replace(/\s+/gu, " ").trim() ?? "",
       evaluationStatus:
         root.dataset["kpAntiderivativeEvaluationMount"] ?? "inactive",
       evaluationCohortCount: Number(
@@ -678,9 +710,11 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   const fractionlessFrames = new Set([
     "source",
     "scope-salience",
-    "rule-subject-return",
+    "rule-preview",
+    "rule-approach",
     "rule-match",
     "rule-binding",
+    "narrow-light-rule-preview",
     "narrow-light-rule-match"
   ]);
   for (const sample of evidence) {
@@ -727,26 +761,33 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   const match = required("rule-match");
   const preview = required("rule-preview");
   if (
-    preview.transitVisualOwner !== "source-native" ||
+    preview.transitVisualOwner !== "rule-application-native" ||
     preview.rulePreviewPresence !== 1 ||
-    preview.patternProjectionPresence !== 0 ||
+    preview.patternProjectionPresence !== 1 ||
     preview.ruleMatchPresence !== 0 ||
     preview.metavariableBindingsPresence !== 0 ||
-    preview.rulePreviewFractionCount !== 1 ||
-    preview.fixedSyntaxOwner !== "rule-preview" ||
-    preview.visibleIntegralOwnerCount !== 1 ||
+    preview.rulePreviewFractionCount !== 0 ||
+    preview.fixedSyntaxOwner !== "source-and-pattern-native" ||
+    preview.visibleIntegralOwnerCount !== 2 ||
+    preview.patternFixedSyntaxVisibleCount !== 2 ||
     preview.explanationBeat !== "recognize-rule" ||
     preview.explanationGrounding !== "law.calculus.integral.power-rule" ||
-    preview.depthLens !== "three-plane"
+    preview.depthLens !== "framed-registration" ||
+    preview.registrationFrameCount !== 2 ||
+    preview.sourceFramePresence !== 1 ||
+    preview.templateFramePresence !== 1 ||
+    preview.registrationFrameState !== "approaching" ||
+    !preview.sourceFrameText.includes("EXPRESSION") ||
+    !preview.templateFrameText.includes("POWER RULE · TEMPLATE")
   ) {
     throw new Error(
-      "Rule-preview frame must establish the complete rule as the sole focus."
+      "Rule invocation must establish distinct expression and template frames."
     );
   }
   if (
-    match.transitVisualOwner !== "source-native" ||
+    match.transitVisualOwner !== "rule-application-native" ||
     match.templateProfileId !==
-      "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v7" ||
+      "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v8" ||
     match.templateTraceRole !== "prospective" ||
     match.templateLawRefId !==
       "law.calculus.integral.power-rule" ||
@@ -755,11 +796,10 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     match.ruleMatchProgress !== 1 ||
     match.ruleMatchPresence !== 1 ||
     match.metavariableBindingsPresence !== 0 ||
-    match.rulePreviewPresence !== 0 ||
+    match.rulePreviewPresence !== 1 ||
     match.patternProjectionPresence !== 1 ||
     match.patternProjectionProgress !== 1 ||
-    match.rulePreviewFractionCount !== 1 ||
-    !match.rulePreviewText.includes("C") ||
+    match.rulePreviewFractionCount !== 0 ||
     match.ruleInstantiationProgress !== 0 ||
     match.templateVacancyPresence !== 0 ||
     match.templateVacancyCount !== 0 ||
@@ -767,32 +807,39 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     match.templateBindingProgress !== 0 ||
     match.templateReceiverSettlementProgress !== 0 ||
     match.instantiatedFractionOwnerCount !== 1 ||
-    match.fixedSyntaxOwner !== "source-native" ||
-    match.visibleIntegralOwnerCount !== 1 ||
-    match.patternFixedSyntaxVisibleCount !== 0 ||
+    match.fixedSyntaxOwner !== "source-and-pattern-native" ||
+    match.visibleIntegralOwnerCount !== 2 ||
+    match.patternFixedSyntaxVisibleCount !== 2 ||
     match.patternSlotCount !== 3 ||
     match.explanationBeat !== "match-structure" ||
     match.explanationGrounding !==
       "binding.u.source-base-and-integration-variable" ||
     !match.explanationText.includes("u↦x") ||
-    match.depthLens !== "three-plane" ||
+    match.depthLens !== "framed-registration" ||
     match.schemaPlanePresence !== 1 ||
-    match.correspondencePlanePresence !== 1
+    match.correspondencePlanePresence !== 1 ||
+    match.registrationFrameCount !== 2 ||
+    match.registrationFrameState !== "registering" ||
+    match.registrationSeamProgress <= 0 ||
+    match.templateApproachProgress !== 1 ||
+    match.bindingRelationCount !== 0 ||
+    match.bindingRelationPresence !== 0
   ) {
     throw new Error(
-      "Rule-match frame must annotate the stationary source without duplicate structure."
+      "Rule-match frame must register homologous source and pattern structure with complementary paint."
     );
   }
-  const returnedSubject = required("rule-subject-return");
+  const returnedSubject = required("rule-approach");
   if (
-    returnedSubject.rulePreviewPresence !== 0 ||
-    returnedSubject.patternProjectionPresence !== 0 ||
-    returnedSubject.fixedSyntaxOwner !== "source-native" ||
-    returnedSubject.visibleIntegralOwnerCount !== 1 ||
-    returnedSubject.patternFixedSyntaxVisibleCount !== 0
+    returnedSubject.rulePreviewPresence !== 1 ||
+    returnedSubject.fixedSyntaxOwner !== "source-and-pattern-native" ||
+    returnedSubject.visibleIntegralOwnerCount !== 2 ||
+    returnedSubject.patternFixedSyntaxVisibleCount !== 2 ||
+    returnedSubject.registrationFrameCount !== 2 ||
+    returnedSubject.templateApproachProgress <= 0
   ) {
     throw new Error(
-      "The reviewed 20% frame must contain one native integral and no scaffold copy."
+      "The approach frame must keep source and rule-pattern integrals on distinct planes."
     );
   }
   const binding = required("rule-binding");
@@ -800,10 +847,9 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     binding.templateTraceRole !== "prospective" ||
     binding.templateReceiverFocus !== 1 ||
     binding.ruleTemplatePanelPresence !== 1 ||
-    binding.ruleMatchPresence !== 0 ||
+    binding.ruleMatchPresence <= 0 ||
     binding.metavariableBindingsPresence !== 1 ||
-    binding.rulePreviewPresence !== 0 ||
-    binding.patternProjectionPresence !== 0 ||
+    binding.rulePreviewPresence !== 1 ||
     binding.ruleInstantiationProgress !== 0 ||
     !binding.ruleTemplateText.includes("n↦2") ||
     !binding.ruleTemplateText.includes("u↦x") ||
@@ -814,7 +860,9 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     binding.templateSyntaxPresence !== 0 ||
     binding.templateSyntaxResolutionProgress !== 0 ||
     binding.explanationBeat !== "bind-metavariables" ||
-    binding.explanationGrounding !== "binding.n.source-exponent"
+    binding.explanationGrounding !== "binding.n.source-exponent" ||
+    binding.registrationFrameState !== "bound" ||
+    binding.registrationSeamProgress !== 1
   ) {
     throw new Error(
       "Rule-binding frame must make metavariable acquisition explicit before instantiation."
@@ -825,7 +873,7 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     template.templateBindingProgress !== 1 ||
     template.ruleTemplateRevealProgress <= 0 ||
     template.ruleInstantiationProgress !== 0 ||
-    template.rulePreviewPresence !== 0 ||
+    template.rulePreviewPresence !== 1 ||
     template.patternProjectionPresence !== 0 ||
     template.ruleTemplateSlotPresence <= 0 ||
     template.ruleTemplateSlotCount !== 3 ||
@@ -833,8 +881,11 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     template.instantiatedFractionOwnerCount !== 1 ||
     template.explanationBeat !== "instantiate-template" ||
     template.prospectivePlaneDepth <= 0 ||
-    template.bindingRelationCount !== 3 ||
-    template.bindingRelationPresence !== 1
+    template.bindingRelationCount !== 0 ||
+    template.bindingRelationPresence !== 0 ||
+    template.registrationFrameCount !== 2 ||
+    template.registrationFrameState !== "bound" ||
+    template.templateRetreatProgress <= 0
   ) {
     throw new Error(
       "Template frame must show one u and two n slots on the one native RHS."
@@ -848,8 +899,9 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     !propagation.explanationText.includes("supplies both exponent occurrences") ||
     propagation.ruleTemplateSlotCount !== 3 ||
     propagation.instantiatedFractionOwnerCount !== 1 ||
-    propagation.bindingRelationCount !== 3 ||
-    propagation.bindingRelationPresence !== 1
+    propagation.bindingRelationCount !== 0 ||
+    propagation.bindingRelationPresence !== 0 ||
+    propagation.registrationFrameState !== "instantiating"
   ) {
     throw new Error(
       "Propagation frame must explain that one n binding supplies both uses."
@@ -861,8 +913,8 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     bound.templateVacancyPresence !== 0 ||
     bound.templateTraceRole !== "prospective" ||
     bound.ruleTemplatePanelPresence !== 1 ||
-    bound.metavariableBindingsPresence !== 1 ||
-    bound.rulePreviewPresence !== 0 ||
+    bound.metavariableBindingsPresence !== 0 ||
+    bound.rulePreviewPresence !== 1 ||
     bound.patternProjectionPresence !== 0 ||
     bound.ruleInstantiationProgress !== 1 ||
     bound.ruleTemplateRevealProgress !== 1 ||
@@ -872,7 +924,8 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     bound.instantiatedFractionOwnerCount !== 1 ||
     !bound.visibleText.includes("2+1") ||
     bound.explanationBeat !== "explain-closure" ||
-    !bound.explanationText.includes("family of antiderivatives")
+    !bound.explanationText.includes("family of antiderivatives") ||
+    bound.registrationFrameState !== "instantiated"
   ) {
     throw new Error(
       "Instantiation frame must show one prospective canonical RHS before rewrite."
@@ -887,12 +940,16 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     settling.templateTraceRole !== "prospective" ||
     settling.ruleRewriteCommitProgress <= 0 ||
     settling.ruleRewriteCommitProgress >= 1 ||
-    settling.ruleTemplatePanelPresence !== 0 ||
-    settling.rulePreviewPresence !== 0 ||
-    settling.rulePreviewWithdrawalProgress !== 1 ||
+    settling.ruleTemplatePanelPresence <= 0 ||
+    settling.ruleTemplatePanelPresence >= 1 ||
+    settling.rulePreviewPresence <= 0 ||
+    settling.rulePreviewPresence >= 1 ||
+    settling.rulePreviewWithdrawalProgress <= 0 ||
+    settling.rulePreviewWithdrawalProgress >= 1 ||
     settling.ruleInstantiationProgress !== 1 ||
     settling.instantiatedFractionOwnerCount !== 1 ||
-    settling.visibleMaterialOwnerCount !== 0
+    settling.visibleMaterialOwnerCount !== 0 ||
+    settling.registrationFrameState !== "committing"
   ) {
     throw new Error(
       "Rewrite frame must move the one native prospective RHS into focal position."
@@ -912,7 +969,10 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     syntax.ruleRewriteCommitProgress !== 1 ||
     syntax.transitVisualOwner !== "target-native" ||
     syntax.instantiatedFractionOwnerCount !== 1 ||
-    syntax.visibleMaterialOwnerCount !== 0
+    syntax.visibleMaterialOwnerCount !== 0 ||
+    syntax.registrationFrameState !== "committed" ||
+    syntax.sourceFramePresence !== 0 ||
+    syntax.templateFramePresence !== 0
   ) {
     throw new Error(
       "Committed rule frame must settle the same canonical RHS before evaluation."

@@ -163,6 +163,11 @@ export interface KpAntiderivativePowerChoreographyFrame {
       readonly schemaPlanePresence: number;
       readonly correspondencePlanePresence: number;
       readonly prospectivePlaneDepth: number;
+      readonly sourceFramePresence: number;
+      readonly templateFramePresence: number;
+      readonly templateApproachProgress: number;
+      readonly registrationSeamProgress: number;
+      readonly templateRetreatProgress: number;
     };
   };
   readonly rewriteProgress: number;
@@ -464,40 +469,31 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
   rewriteProgress: number
 ): KpAntiderivativePowerChoreographyFrame["ruleTemplateApplication"] {
   const progress = clamp01(rewriteProgress);
-  const previewSourceWithdrawalProgress = phaseProgress(progress, 0, 0.035);
   const rulePreviewRevealProgress = phaseProgress(progress, 0.035, 0.08);
-  const rulePreviewWithdrawalProgress = phaseProgress(progress, 0.245, 0.285);
+  const rulePreviewWithdrawalProgress = phaseProgress(progress, 0.965, 0.995);
   const rulePreviewPresence = roundProgress(
     rulePreviewRevealProgress * (1 - rulePreviewWithdrawalProgress)
   );
-  const previewSourceReturnProgress = phaseProgress(progress, 0.285, 0.32);
-  const patternProjectionProgress = phaseProgress(progress, 0.335, 0.46);
+  const patternProjectionProgress = phaseProgress(progress, 0.285, 0.46);
   const patternProjectionPresence = roundProgress(
-    phaseProgress(progress, 0.335, 0.38) *
-      (1 - phaseProgress(progress, 0.54, 0.6))
+    rulePreviewPresence * (1 - phaseProgress(progress, 0.63, 0.68))
   );
-  const matchProgress = phaseProgress(progress, 0.4, 0.45);
+  const matchProgress = phaseProgress(progress, 0.335, 0.46);
   const matchPresence = roundProgress(
-    matchProgress * (1 - phaseProgress(progress, 0.54, 0.6))
+    matchProgress * (1 - phaseProgress(progress, 0.63, 0.68))
   );
-  const binding = phaseProgress(progress, 0.56, 0.63);
+  const binding = phaseProgress(progress, 0.52, 0.63);
+  const templateRevealProgress = phaseProgress(progress, 0.68, 0.75);
   const instructionWithdrawalProgress = phaseProgress(progress, 0.93, 0.96);
   const metavariableBindingsPresence = roundProgress(
-    binding * (1 - instructionWithdrawalProgress)
+    binding * (1 - templateRevealProgress) *
+      (1 - instructionWithdrawalProgress)
   );
-  const templateRevealProgress = phaseProgress(progress, 0.68, 0.75);
   const instantiationProgress = phaseProgress(progress, 0.82, 0.88);
   const rewriteCommitProgress = phaseProgress(progress, 0.965, 0.995);
-  // The detached rule preview and the native subject are consecutive views,
-  // not competing copies. Once the preview has fully withdrawn, the native
-  // subject returns before its slot-only match scaffold appears.
-  const previewSuppression = roundProgress(
-    previewSourceWithdrawalProgress * (1 - previewSourceReturnProgress)
-  );
-  const sourcePresence = roundProgress(
-    (1 - previewSuppression) *
-      (1 - phaseProgress(progress, 0.66, 0.75))
-  );
+  // The expression stays available while the prospective rule frame registers
+  // against it. Only rewrite commitment transfers live ownership away from it.
+  const sourcePresence = roundProgress(1 - rewriteCommitProgress);
   const targetPresence = templateRevealProgress;
   const templateSlotPresence = roundProgress(
     targetPresence * (1 - instantiationProgress)
@@ -562,7 +558,15 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
     )),
     prospectivePlaneDepth: roundProgress(
       targetPresence * (1 - rewriteCommitProgress)
-    )
+    ),
+    sourceFramePresence: rulePreviewPresence,
+    templateFramePresence: rulePreviewPresence,
+    templateApproachProgress: phaseProgress(progress, 0.08, 0.285),
+    registrationSeamProgress: phaseProgress(progress, 0.285, 0.63),
+    // Keep the planes registered while structure and bindings are being read.
+    // The template separates only after the match is complete, so depth does
+    // not turn the central comparison into two drifting equations.
+    templateRetreatProgress: phaseProgress(progress, 0.68, 0.82)
   });
   return Object.freeze({
     traceRole: rewriteCommitProgress >= 1

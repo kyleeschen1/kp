@@ -470,48 +470,128 @@
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  .editor-equation-stage__antiderivative-rule-preview {
+  .editor-equation-stage__antiderivative-registration-frame {
   position: absolute;
-  z-index: 4;
   top: 50%;
   left: 50%;
-  display: grid;
-  grid-template-columns: max-content max-content max-content;
-  align-items: center;
-  column-gap: clamp(0.62rem, 2vw, 1rem);
-  color: var(--kp-equation-foreground);
-  font-size: clamp(1.18rem, 3.4vw, 1.7rem);
-  opacity: var(--kp-antiderivative-rule-preview-presence, 0);
-  text-shadow: none;
-  transform: translate3d(
-      -50%,
-      calc(-50% - 0.3rem),
-      calc(-18px * var(--kp-antiderivative-schema-plane-presence, 0))
-    )
-    rotateX(
-      calc(1.2deg * var(--kp-antiderivative-schema-plane-presence, 0))
-    );
+  width: clamp(12.75rem, 34vw, 14.25rem);
+  height: clamp(5rem, 15vw, 5.65rem);
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  border-radius: 0.58rem;
+  backface-visibility: hidden;
+  pointer-events: none;
   transform-style: preserve-3d;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-registration-frame--source {
+  z-index: 4;
+  border-color: color-mix(
+    in srgb,
+    var(--kp-equation-foreground) 34%,
+    transparent
+  );
+  opacity: var(--kp-antiderivative-source-frame-presence, 0);
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-registration-frame--template {
+  z-index: 2;
+  border-color: color-mix(
+    in srgb,
+    var(--kp-catalogue-link) 52%,
+    transparent
+  );
+  opacity: var(--kp-antiderivative-template-frame-presence, 0);
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-registration-frame-label {
+  position: absolute;
+  top: -0.48rem;
+  left: 0.85rem;
+  padding-inline: 0.38rem;
+  color: color-mix(
+    in srgb,
+    var(--kp-equation-foreground) 68%,
+    var(--kp-catalogue-stage-background)
+  );
+  background: var(--kp-catalogue-stage-background);
+  font-size: 0.54rem;
+  font-weight: 680;
+  letter-spacing: 0.14em;
+  line-height: 1;
   white-space: nowrap;
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  .editor-equation-stage__antiderivative-rule-preview-side {
-  color: var(--kp-equation-foreground);
-}
-
-.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  .editor-equation-stage__antiderivative-rule-preview-connector {
+  .editor-equation-stage__antiderivative-registration-frame--template
+  .editor-equation-stage__antiderivative-registration-frame-label {
+  top: -1.02rem;
+  right: 0.85rem;
+  left: auto;
   color: color-mix(
     in srgb,
-    var(--kp-equation-foreground) 68%,
-    transparent
+    var(--kp-catalogue-link) 82%,
+    var(--kp-equation-foreground)
   );
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  [data-kp-antiderivative-rule-preview-slot] {
-  color: var(--kp-catalogue-link) !important;
+  .editor-equation-stage__antiderivative-registration-frame--source
+  .editor-equation-stage__antiderivative-registration-frame-label--initial {
+  opacity: calc(1 - var(--kp-antiderivative-template-face-progress, 0));
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-registration-frame--source
+  .editor-equation-stage__antiderivative-registration-frame-label--committed {
+  opacity: var(--kp-antiderivative-template-face-progress, 0);
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-registration-frame--template
+  .editor-equation-stage__antiderivative-registration-frame-label--initial {
+  opacity: calc(1 - var(--kp-antiderivative-template-commit-progress, 0));
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-registration-frame--template
+  .editor-equation-stage__antiderivative-registration-frame-label--committed {
+  opacity: var(--kp-antiderivative-template-commit-progress, 0);
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-registration-field {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: var(--kp-antiderivative-registration-seam-position, 12%);
+  border-bottom-right-radius: inherit;
+  border-bottom-left-radius: inherit;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--kp-catalogue-link) 5%, transparent),
+    transparent
+  );
+  opacity: var(--kp-antiderivative-registration-seam-presence, 0);
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-registration-seam {
+  position: absolute;
+  right: 1.15rem;
+  bottom: var(--kp-antiderivative-registration-seam-position, 12%);
+  left: 1.15rem;
+  height: 1px;
+  background: color-mix(
+    in srgb,
+    var(--kp-catalogue-link) 72%,
+    transparent
+  );
+  opacity: var(--kp-antiderivative-registration-seam-presence, 0);
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
@@ -523,17 +603,9 @@
   color: var(--kp-equation-foreground);
   font-size: clamp(2.15rem, 5.5vw, 2.75rem);
   opacity: var(--kp-antiderivative-pattern-projection-presence, 0);
-  /* The pattern layer now owns only the metavariable slot. A shadow would
-     repaint that single piece of instructional ink as a fuzzy duplicate. */
+  /* Inline frame transforms keep these callouts registered to the native
+     source. The overlay never owns the integral or differential paint. */
   text-shadow: none;
-  transform: translate3d(
-      -50%,
-      calc(-50% + var(--kp-antiderivative-pattern-projection-lift, 0rem)),
-      calc(-34px * var(--kp-antiderivative-schema-plane-presence, 0))
-    )
-    rotateX(
-      calc(1.8deg * var(--kp-antiderivative-schema-plane-presence, 0))
-    );
   transform-style: preserve-3d;
   white-space: nowrap;
 }
@@ -547,55 +619,13 @@
   [data-kp-antiderivative-pattern-slot] {
   position: relative;
   display: inline-block;
-  --kp-antiderivative-pattern-slot-x: 0em;
-  --kp-antiderivative-pattern-slot-y: 0em;
   color: var(--kp-catalogue-link) !important;
-  transform: translate3d(
-    var(--kp-antiderivative-pattern-slot-x),
-    var(--kp-antiderivative-pattern-slot-y),
-    0
-  );
   transform-style: preserve-3d;
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  [data-kp-antiderivative-pattern-slot="u-base"] {
-  --kp-antiderivative-pattern-slot-x: -0.7em;
-  --kp-antiderivative-pattern-slot-y: 0.54em;
-  --kp-antiderivative-pattern-leader-angle: -34deg;
-  --kp-antiderivative-pattern-leader-width: 0.82em;
-}
-
-.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  [data-kp-antiderivative-pattern-slot="n"] {
-  --kp-antiderivative-pattern-slot-x: 0.62em;
-  --kp-antiderivative-pattern-slot-y: -0.72em;
-  --kp-antiderivative-pattern-leader-angle: 128deg;
-  --kp-antiderivative-pattern-leader-width: 0.9em;
-}
-
-.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  [data-kp-antiderivative-pattern-slot="u-differential"] {
-  --kp-antiderivative-pattern-slot-x: 0.68em;
-  --kp-antiderivative-pattern-slot-y: 0.56em;
-  --kp-antiderivative-pattern-leader-angle: 214deg;
-  --kp-antiderivative-pattern-leader-width: 0.8em;
-}
-
-.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
   [data-kp-antiderivative-pattern-slot]::after {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: var(--kp-antiderivative-pattern-leader-width, 0.9em);
-  height: 1px;
-  background: currentColor;
-  content: "";
-  opacity: var(--kp-antiderivative-rule-match-presence, 0);
-  transform: translateZ(17px)
-    rotate(var(--kp-antiderivative-pattern-leader-angle, 128deg))
-    scaleX(var(--kp-antiderivative-rule-match-presence, 0));
-  transform-origin: left center;
+  content: none;
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
@@ -631,59 +661,24 @@
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
   .editor-equation-stage__antiderivative-rule-bindings {
   position: absolute;
-  top: 50%;
+  bottom: 0.62rem;
   left: 50%;
   color: color-mix(
     in srgb,
     var(--kp-catalogue-link) 82%,
     var(--kp-equation-foreground)
   );
-  font-size: clamp(1rem, 2.8vw, 1.4rem);
+  font-size: clamp(0.86rem, 2.25vw, 1.08rem);
   opacity: var(--kp-antiderivative-metavariable-bindings-presence, 0);
-  transform: translate3d(
-      -50%,
-      calc(-100% - 2.8rem),
-      calc(-12px * var(--kp-antiderivative-correspondence-plane-presence, 0))
-    )
-    rotateX(
-      calc(0.8deg * var(--kp-antiderivative-correspondence-plane-presence, 0))
-    );
+  transform: translateX(-50%);
   white-space: nowrap;
-}
-
-.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  .editor-equation-stage__antiderivative-binding-relations {
-  position: absolute;
-  z-index: 1;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  opacity: var(--kp-antiderivative-template-relation-presence, 0);
-  pointer-events: none;
-  transform: translateZ(-11px);
-}
-
-.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  .editor-equation-stage__antiderivative-binding-relations line {
-  stroke: color-mix(
-    in srgb,
-    var(--kp-catalogue-link) 58%,
-    transparent
-  );
-  stroke-width: 1.15;
-  stroke-dasharray: 4 5;
-  stroke-dashoffset: calc(
-    18px - 18px * var(--kp-antiderivative-template-relation-progress, 0)
-  );
-  vector-effect: non-scaling-stroke;
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
   .editor-equation-stage__antiderivative-explanation {
   position: absolute;
   z-index: 7;
-  top: calc(50% + 3.35rem);
+  top: calc(50% + 4.15rem);
   left: 50%;
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);
@@ -738,20 +733,21 @@
 
 @media (max-width: 520px) {
   .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  .editor-equation-stage__antiderivative-rule-preview {
-    column-gap: 0.5rem;
-    font-size: clamp(1.08rem, 4.9vw, 1.3rem);
+  .editor-equation-stage__antiderivative-registration-frame {
+    width: min(11rem, calc(100% - 2.2rem));
+    height: 4.9rem;
   }
 
   .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
     .editor-equation-stage__antiderivative-rule-bindings {
-    font-size: clamp(0.92rem, 4.2vw, 1.12rem);
-    transform: translate(-50%, calc(-100% - 2.45rem));
+    bottom: 0.48rem;
+    font-size: clamp(0.78rem, 3.7vw, 0.94rem);
+    transform: translateX(-50%);
   }
 
   .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
     .editor-equation-stage__antiderivative-explanation {
-    top: calc(50% + 3rem);
+    top: calc(50% + 3.65rem);
     grid-template-columns: 1fr;
     gap: 0.25rem;
     width: calc(100% - 1.25rem);
@@ -826,6 +822,24 @@
 }
 
 @media (forced-colors: active) {
+  .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+    .editor-equation-stage__antiderivative-registration-frame {
+    border-color: CanvasText;
+  }
+
+  .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+    :is(
+      .editor-equation-stage__antiderivative-registration-frame-label,
+      .editor-equation-stage__antiderivative-registration-seam
+    ) {
+    color: Highlight;
+  }
+
+  .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+    .editor-equation-stage__antiderivative-registration-seam {
+    background: Highlight;
+  }
+
   .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
     .editor-equation-stage__antiderivative-explanation {
     border-color: CanvasText;

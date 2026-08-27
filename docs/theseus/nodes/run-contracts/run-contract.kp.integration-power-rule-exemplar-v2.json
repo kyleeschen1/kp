@@ -1413,6 +1413,42 @@
       "scope": "semantic and endpoint preservation",
       "checkedAt": "2026-08-27T07:22:17.781Z",
       "notes": "All 11 inventory, authority, endpoint, clock, and sampled-frame preservation checks pass."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "s18 framed rule registration semantics and renderer contracts",
+      "checkedAt": "2026-08-27T23:21:49.054Z"
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-catalogue",
+      "status": "passed",
+      "scope": "s18 Chromium lifecycle playback frame ownership and clipping",
+      "checkedAt": "2026-08-27T23:21:50.262Z"
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-evaluation",
+      "status": "passed",
+      "scope": "s18 Chromium and Firefox evaluation preservation",
+      "checkedAt": "2026-08-27T23:21:51.308Z"
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "s18 equation family preservation boundary",
+      "checkedAt": "2026-08-27T23:21:52.346Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s18 TypeScript Svelte and domain contracts",
+      "checkedAt": "2026-08-27T23:21:53.371Z"
+    },
+    {
+      "command": "npm run visual:integration-power-rule",
+      "status": "passed",
+      "scope": "s18 21-frame dark desktop and narrow light registration checkpoint",
+      "checkedAt": "2026-08-27T23:22:00.925Z"
     }
   ],
   "allowedWork": [
@@ -1550,7 +1586,7 @@
     {
       "id": "next-action.kp.integration-power-rule.s18",
       "title": "Integration-human-visual-checkpoint",
-      "summary": "The v7 candidate adds a deterministic one-line explanation rail grounded in verified laws and bindings, exposes the abstract u and n schema, maps u to x and n to 2 through three measured correspondence relations, and places the prospective canonical RHS on a shallow back plane before it becomes live. The source stays stationary, only one integral and fraction paint owner exist at a time, both ink-knot reductions remain unchanged, and reduced or no-depth modes preserve endpoint truth. Awaiting human visual approval before s19.",
+      "summary": "The v8 candidate replaces the cluttered floating depth lens with two labeled shallow-3D frames. The source expression and full rule pattern remain separately readable, align under one registration seam with complementary clip ownership, bind u to x and n to 2, then separate as the pattern face yields to one canonical Native KaTeX RHS template. The operator remains salience-only, the source becomes the matched power after withdrawal, one fraction owner exists from template reveal onward, the grounded explanation rail and both ink-knot reductions remain intact, and reduced or no-depth modes retain endpoint truth. Scoped semantic, Chromium lifecycle, Chromium and Firefox evaluation, equation-preservation, typecheck, and 21-frame visual capture checks pass. Awaiting explicit human visual approval before s19.",
       "status": "in-progress"
     },
     {

@@ -36,7 +36,7 @@ test("integration power rule uses governed transit and two certified ink knots",
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-template-profile-id",
-    "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v7"
+    "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v8"
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-instantiated-result-owner",
@@ -85,7 +85,7 @@ test("integration power rule uses governed transit and two certified ink knots",
   await expectTransitReady(stage);
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-power-visual-owner",
-    "source-native"
+    "rule-application-native"
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-template-application",
@@ -131,14 +131,14 @@ test("integration power rule uses governed transit and two certified ink knots",
   const ruleBindings = rulePanel.locator(
     "[data-kp-antiderivative-rule-bindings]"
   );
-  const rulePreview = rulePanel.locator(
-    "[data-kp-antiderivative-rule-preview]"
+  const sourceFrame = rulePanel.locator(
+    '[data-kp-antiderivative-registration-frame="source"]'
   );
-  const rulePreviewPattern = rulePreview.locator(
-    '[data-kp-antiderivative-rule-preview-role="pattern"]'
+  const templateFrame = rulePanel.locator(
+    '[data-kp-antiderivative-registration-frame="template"]'
   );
-  const rulePreviewReplacement = rulePreview.locator(
-    '[data-kp-antiderivative-rule-preview-role="replacement"]'
+  const registrationSeam = sourceFrame.locator(
+    "[data-kp-antiderivative-registration-seam]"
   );
   const patternProjection = rulePanel.locator(
     "[data-kp-antiderivative-rule-pattern-projection]"
@@ -151,9 +151,6 @@ test("integration power rule uses governed transit and two certified ink knots",
   );
   const explanationRail = stage.locator(
     "[data-kp-antiderivative-explanation-rail]"
-  );
-  const bindingRelations = stage.locator(
-    "[data-kp-antiderivative-binding-relations]"
   );
   await expect(rulePanel).toHaveCount(1);
   await expect(rulePanel).toHaveAttribute("aria-hidden", "false");
@@ -169,26 +166,25 @@ test("integration power rule uses governed transit and two certified ink knots",
     "data-kp-antiderivative-rule-authority-pattern",
     String.raw`\int u^n\,du`
   );
-  await expect(rulePreview).toHaveCount(1);
-  await expect.poll(() => renderedOpacity(rulePreview)).toBe(1);
-  await expect(rulePreviewPattern).toContainText("∫undu");
-  await expect(rulePreviewReplacement).toContainText("un+1n+1+C");
-  await expect(rulePreviewPattern).toHaveAttribute(
-    "data-kp-semantic-salience-level",
-    "focus"
+  await expect(sourceFrame).toHaveCount(1);
+  await expect(templateFrame).toHaveCount(1);
+  await expect(sourceFrame).toContainText("EXPRESSION");
+  await expect(templateFrame).toContainText("POWER RULE · TEMPLATE");
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-registration-frame-count",
+    "2"
   );
-  await expect(rulePreviewReplacement).toHaveAttribute(
-    "data-kp-semantic-salience-level",
-    "focus"
-  );
+  await expect.poll(() => renderedOpacity(sourceFrame)).toBe(1);
+  await expect.poll(() => renderedOpacity(templateFrame)).toBe(1);
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-rule-preview-presence",
     "1.0000"
   );
-  await expect.poll(() => renderedOpacity(patternProjection)).toBe(0);
+  await expect.poll(() => renderedOpacity(patternProjection)).toBe(1);
   await expect.poll(() => renderedOpacity(ruleBindings)).toBe(0);
-  await expect(stage.locator("[data-kp-editor-equation-target]"))
-    .toHaveCSS("opacity", "0");
+  await expect.poll(() => renderedOpacity(
+    stage.locator("[data-kp-editor-equation-target]")
+  )).toBe(0);
   await expect(stage.locator("[data-kp-editor-equation-source] .katex"))
     .toContainText("∫x2dx");
   await expect(stage).toHaveAttribute(
@@ -197,10 +193,10 @@ test("integration power rule uses governed transit and two certified ink knots",
   );
   await expect.poll(() => renderedOpacity(
     stage.locator("[data-kp-editor-equation-source]")
-  )).toBeLessThan(0.1);
+  )).toBe(1);
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-fixed-syntax-owner",
-    "rule-preview"
+    "source-and-pattern-native"
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-explanation-beat",
@@ -217,24 +213,24 @@ test("integration power rule uses governed transit and two certified ink knots",
   await expect(explanationRail).toHaveAttribute("aria-live", "off");
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-depth-lens",
-    "three-plane"
+    "framed-registration"
   );
-  await expectSingleIntegralPaint(stage, 1);
-  await expectFractionPaint(stage, 1);
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-registration-frame-state",
+    "approaching"
+  );
+  await expectIntegralPlanePaint(stage, 2);
+  await expectFractionPaint(stage, 0);
 
   await seek.fill("0.203");
   await expectTransitReady(stage);
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-rule-preview-presence",
-    "0.0000"
-  );
-  await expect(stage).toHaveAttribute(
-    "data-kp-antiderivative-pattern-projection-presence",
-    "0.0000"
+    "1.0000"
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-fixed-syntax-owner",
-    "source-native"
+    "source-and-pattern-native"
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-explanation-beat",
@@ -243,13 +239,15 @@ test("integration power rule uses governed transit and two certified ink knots",
   await expect.poll(() => renderedOpacity(
     stage.locator("[data-kp-editor-equation-source]")
   )).toBe(1);
-  await expectSingleIntegralPaint(stage, 1);
+  await expect.poll(() => renderedOpacity(templateFrame)).toBe(1);
+  await expectIntegralPlanePaint(stage, 2);
+  await expectFractionPaint(stage, 0);
 
   await seek.fill("0.259");
   await expectTransitReady(stage);
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-rule-preview-presence",
-    "0.0000"
+    "1.0000"
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-pattern-projection-presence",
@@ -269,14 +267,14 @@ test("integration power rule uses governed transit and two certified ink knots",
   await expect(projectedFixedSyntax).toHaveCount(2);
   await expect.poll(() => projectedFixedSyntax.evaluateAll((elements) =>
     elements.map((element) => Number(getComputedStyle(element).opacity))
-  )).toEqual([0, 0]);
+  )).toEqual([1, 1]);
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-fixed-syntax-owner",
-    "source-native"
+    "source-and-pattern-native"
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-depth-lens",
-    "three-plane"
+    "framed-registration"
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-schema-plane-presence",
@@ -287,10 +285,25 @@ test("integration power rule uses governed transit and two certified ink knots",
     "1.0000"
   );
   await expect(explanationRail).toContainText("u↦x");
-  await expectSingleIntegralPaint(stage, 1);
+  await expectIntegralPlanePaint(stage, 2);
   await expect.poll(async () => Number(await stage.getAttribute(
     "data-kp-antiderivative-rule-match-presence"
   ))).toBe(1);
+  await expect.poll(async () => Number(await stage.getAttribute(
+    "data-kp-antiderivative-registration-seam-progress"
+  ))).toBeGreaterThan(0);
+  await expect.poll(() => renderedOpacity(registrationSeam)).toBe(1);
+  const [sourceClip, patternClip] = await Promise.all([
+    stage.locator("[data-kp-editor-equation-source]").evaluate((element) =>
+      getComputedStyle(element).clipPath
+    ),
+    patternProjection.evaluate((element) =>
+      getComputedStyle(element).clipPath
+    )
+  ]);
+  expect(sourceClip).toMatch(/^inset\(/u);
+  expect(patternClip).toMatch(/^inset\(/u);
+  expect(sourceClip).not.toBe(patternClip);
   expect(maxRectDelta(sourceBaseRect, await elementRect(sourceBase)))
     .toBeLessThan(0.5);
   await expectFractionPaint(stage, 0);
@@ -319,10 +332,6 @@ test("integration power rule uses governed transit and two certified ink knots",
     "bind-metavariables"
   );
   await expect(explanationRail).toContainText("The exponent is");
-  await expect(stage).toHaveAttribute(
-    "data-kp-antiderivative-pattern-projection-presence",
-    "0.0000"
-  );
   expect(maxRectDelta(sourceBaseRect, await elementRect(sourceBase)))
     .toBeLessThan(0.5);
   await expectFractionPaint(stage, 0);
@@ -340,7 +349,7 @@ test("integration power rule uses governed transit and two certified ink knots",
     "data-kp-antiderivative-template-receiver-settlement-progress",
     "0.0000"
   );
-  await expect.poll(() => renderedOpacity(ruleBindings)).toBe(1);
+  await expect.poll(() => renderedOpacity(ruleBindings)).toBe(0);
   const instantiatedResult = stage.locator(
     "[data-kp-editor-equation-target]"
   );
@@ -384,10 +393,6 @@ test("integration power rule uses governed transit and two certified ink knots",
     /Prospective power-rule template/u
   );
   await expect(stage).toHaveAttribute(
-    "data-kp-antiderivative-pattern-projection-presence",
-    "0.0000"
-  );
-  await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-explanation-beat",
     "instantiate-template"
   );
@@ -397,22 +402,22 @@ test("integration power rule uses governed transit and two certified ink knots",
   await expect(instantiatedResult).toHaveCSS("transform", /matrix3d/u);
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-binding-relation-count",
-    "3"
+    "0"
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-binding-relation-presence",
-    "1.0000"
+    "0.0000"
   );
-  await expect(bindingRelations.locator("line")).toHaveCount(3);
-  await expect.poll(() => renderedOpacity(bindingRelations)).toBe(1);
-  await expect.poll(() => bindingRelations.locator("line").evaluateAll(
-    (lines) => lines.every((line) =>
-      Number(line.getAttribute("x1")) !== Number(line.getAttribute("x2")) ||
-      Number(line.getAttribute("y1")) !== Number(line.getAttribute("y2"))
-    )
-  )).toBe(true);
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-registration-frame-state",
+    "bound"
+  );
+  await expect.poll(async () => Number(await stage.getAttribute(
+    "data-kp-antiderivative-template-retreat-progress"
+  ))).toBeGreaterThan(0);
+  await expect(templateFrame).toHaveCSS("transform", /matrix3d/u);
   expect(maxRectDelta(sourceBaseRect, await elementRect(sourceBase)))
-    .toBeLessThan(0.5);
+    .toBeGreaterThan(4);
   await expectFractionPaint(stage, 1);
 
   await seek.fill("0.425");
@@ -430,7 +435,7 @@ test("integration power rule uses governed transit and two certified ink knots",
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-binding-relation-presence",
-    "1.0000"
+    "0.0000"
   );
   await expectFractionPaint(stage, 1);
 
@@ -454,7 +459,11 @@ test("integration power rule uses governed transit and two certified ink knots",
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-rule-preview-presence",
-    "0.0000"
+    "1.0000"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-registration-frame-state",
+    "instantiated"
   );
   const instantiatedFractionRect = await elementRect(instantiatedFraction);
   await expectFractionPaint(stage, 1);
@@ -470,12 +479,14 @@ test("integration power rule uses governed transit and two certified ink knots",
   await expect.poll(async () => Number(await stage.getAttribute(
     "data-kp-antiderivative-rule-rewrite-commit-progress"
   ))).toBeGreaterThan(0);
-  await expect.poll(() => renderedOpacity(rulePanel)).toBe(0);
-  await expect.poll(() => renderedOpacity(rulePreview)).toBe(0);
+  await expect.poll(() => renderedOpacity(rulePanel)).toBeGreaterThan(0);
   await expect(stage).toHaveAttribute(
-    "data-kp-antiderivative-rule-preview-withdrawal-progress",
-    "1.0000"
+    "data-kp-antiderivative-registration-frame-state",
+    "committing"
   );
+  await expect.poll(async () => Number(await stage.getAttribute(
+    "data-kp-antiderivative-rule-preview-withdrawal-progress"
+  ))).toBeGreaterThan(0);
   const movingFractionRect = await elementRect(instantiatedFraction);
   expect(Math.abs(movingFractionRect.top - instantiatedFractionRect.top))
     .toBeGreaterThan(0.5);
@@ -517,11 +528,9 @@ test("integration power rule uses governed transit and two certified ink knots",
   const settledFractionCenter = settledFractionRect.left +
     settledFractionRect.width / 2;
   expect(Math.abs(settledFractionCenter - movingFractionCenter))
-    .toBeLessThan(0.75);
-  expect(settledFractionRect.width - movingFractionRect.width)
-    .toBeGreaterThan(0.3);
-  expect(settledFractionRect.width - movingFractionRect.width)
-    .toBeLessThan(2);
+    .toBeGreaterThan(4);
+  expect(Math.abs(settledFractionRect.width - movingFractionRect.width))
+    .toBeLessThan(4);
   await expect(stage.locator(
     "[data-kp-equation-material-fragment-role=\"rule:rule-length\"]"
   )).toHaveCount(0);
@@ -877,7 +886,7 @@ async function expectFractionPaint(
   expect(audit.replicaEffects).toEqual([]);
 }
 
-async function expectSingleIntegralPaint(
+async function expectIntegralPlanePaint(
   stage: Locator,
   expectedVisibleIntegralCount: number
 ): Promise<void> {
@@ -901,9 +910,6 @@ async function expectSingleIntegralPaint(
     const candidates = [
       root.querySelector<HTMLElement>(
         '[data-kp-motion-id$=".initial.operator"]'
-      ),
-      root.querySelector<HTMLElement>(
-        '[data-kp-antiderivative-rule-preview-role="pattern"]'
       ),
       root.querySelector<HTMLElement>(
         '[data-kp-antiderivative-pattern-fixed="operator"]'
