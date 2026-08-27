@@ -29,7 +29,7 @@ export const kpAntiderivativePowerTransitRepairGapCode =
 export const kpAntiderivativeRuleApplicationNativeKatexMechanismId =
   "kp.rendering.native-katex.antiderivative-rule-application.v1";
 export const kpAntiderivativeRuleApplicationPresentationProfileId =
-  "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v4";
+  "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v5";
 
 export interface KpAntiderivativePowerTransitMountResult {
   readonly status: "inactive" | "preparing" | "mounted" | "repair-gap";
@@ -647,6 +647,10 @@ function applyRuleTemplateApplicationState(
     "--kp-antiderivative-pattern-slot-lift",
     `${(-0.72 * template.matchProgress).toFixed(4)}em`
   );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-pattern-slot-shift",
+    `${(0.62 * template.matchProgress).toFixed(4)}em`
+  );
   session.templateReceiver.dataset["kpSemanticTraceRole"] =
     template.traceRole;
   session.roots.target.style.setProperty(
@@ -700,11 +704,17 @@ function applyRuleTemplateApplicationState(
       .flatMap(({ selectorIds }) => selectorIds),
     ...session.plan.choreography.ruleTemplateApplication.closureSelectorIds
   ];
+  const closureIds = new Set(templateAuthority.closureSelectorIds);
   for (const semanticId of semanticIds) {
     for (const element of semanticPaintOwners(session.stage, semanticId)) {
       element.dataset["kpSemanticTraceRole"] = template.traceRole;
       element.dataset["kpAntiderivativeTemplatePaintRole"] = "grammar";
-      element.dataset["kpSemanticSalienceLevel"] = "normal";
+      element.dataset["kpSemanticSalienceLevel"] =
+        closureIds.has(semanticId) &&
+          template.targetPresence > 0.01 &&
+          template.rewriteCommitProgress < 1
+          ? "context"
+          : "normal";
       element.style.color = "";
       element.style.filter = "none";
     }
@@ -846,19 +856,21 @@ function applyNativeRuleApplicationState(
   );
   session.roots.target.style.opacity = targetOpacity.toFixed(4);
   const prospectiveLift = template.targetPresence > 0.01
-    ? -0.42 * (1 - commit)
+    ? -0.56 * (1 - commit)
     : 0;
+  const prospectiveScale = 0.985 + 0.015 * commit;
   session.roots.target.style.transform = prospectiveLift === 0
     ? "none"
-    : `translateY(${prospectiveLift.toFixed(4)}rem)`;
+    : `translateY(${prospectiveLift.toFixed(4)}rem) ` +
+      `scale(${prospectiveScale.toFixed(4)})`;
   session.roots.target.style.setProperty(
     "--kp-antiderivative-prospective-depth",
     (template.targetPresence * (1 - commit)).toFixed(4)
   );
-  session.roots.target.style.filter =
-    template.targetPresence * (1 - commit) > 0.01
-      ? "drop-shadow(0 0.38rem 0.46rem color-mix(in srgb, var(--kp-catalogue-link) 18%, transparent))"
-      : "none";
+  // A subtree drop-shadow duplicates the fraction bar's realized paint and
+  // reads as a second rule even though the DOM has only one `.frac-line`.
+  // Depth therefore uses one owner's lift, scale, and salience only.
+  session.roots.target.style.filter = "none";
   session.roots.target.dataset["kpAntiderivativeProspectivePlacement"] =
     "center";
   session.roots.target.dataset["kpSemanticTraceRole"] = template.traceRole;

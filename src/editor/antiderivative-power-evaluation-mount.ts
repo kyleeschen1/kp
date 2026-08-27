@@ -120,6 +120,18 @@ export function applyKpAntiderivativePowerEvaluationMount(input: {
     ...binding,
     token: requiredSelectorToken(input.hotPath.motionTokens, binding.selectorId)
   }));
+  const semanticProgress = input.direction === "forward"
+    ? input.localProgress
+    : 1 - input.localProgress;
+  const progress = input.accessibilityMode === "static"
+    ? semanticProgress < 0.5 ? 0 : 1
+    : semanticProgress;
+  const fraction = createEvaluationFractionOwnership({
+    stage: input.stage,
+    tokens,
+    progress,
+    hotPath: input.hotPath
+  });
   const previousStyles = tokens.map(({ token }) => ({
     token,
     opacity: token.style.opacity,
@@ -133,35 +145,53 @@ export function applyKpAntiderivativePowerEvaluationMount(input: {
     token.style.transform = "none";
     token.style.filter = "none";
   });
+  const previousFractionStyles = [fraction.source, fraction.target].map(
+    (rule) => ({
+      rule,
+      opacity: rule.style.opacity,
+      visibility: rule.style.visibility,
+      filter: rule.style.filter
+    })
+  );
+  previousFractionStyles.forEach(({ rule }) => {
+    rule.style.opacity = "1";
+    rule.style.visibility = "visible";
+    rule.style.filter = "none";
+  });
   try {
     syncKpEquationMaterialLayer({
       stage: input.stage,
-      owners: tokens.map(({
-        token,
-        selectorId,
-        cohortId,
-        side,
-        contribution
-      }) => {
-        const rect = input.hotPath.motionTokenRects.get(token);
-        if (rect === undefined) {
-          throw new Error(
-            `Antiderivative evaluation selector ${selectorId} has no native geometry.`
-          );
-        }
-        return {
-          ownerId: `evaluation-cohort.${cohortId}.${selectorId}`,
-          sourceElement: token,
-          sourceMotionId: token.dataset["kpMotionId"],
-          semanticEntityId: selectorId,
-          verifiedOperationCohortId: cohortId,
-          rect,
-          opacity: 1,
-          transform: "none",
-          filter: "none",
-          fragmentRole: `successor-${side}:${contribution}`
-        } satisfies KpEquationMaterialLayerOwnerFrame;
-      })
+      owners: [
+        ...tokens.map(({
+          token,
+          selectorId,
+          cohortId,
+          side,
+          contribution
+        }) => {
+          const rect = input.hotPath.motionTokenRects.get(token);
+          if (rect === undefined) {
+            throw new Error(
+              `Antiderivative evaluation selector ${selectorId} has no native geometry.`
+            );
+          }
+          return {
+            ownerId: `evaluation-cohort.${cohortId}.${selectorId}`,
+            sourceElement: token,
+            sourceMotionId: token.dataset["kpMotionId"],
+            semanticEntityId: selectorId,
+            verifiedOperationCohortId: cohortId,
+            rect,
+            opacity: 1,
+            transform: "none",
+            filter: "none",
+            fragmentRole: `successor-${side}:${contribution}`
+          } satisfies KpEquationMaterialLayerOwnerFrame;
+        }),
+        ...(fraction.materialOwner === undefined
+          ? []
+          : [fraction.materialOwner])
+      ]
     });
   } finally {
     previousStyles.forEach((previous) => {
@@ -170,12 +200,18 @@ export function applyKpAntiderivativePowerEvaluationMount(input: {
       previous.token.style.transform = previous.transform;
       previous.token.style.filter = previous.filter;
     });
+    previousFractionStyles.forEach((previous) => {
+      previous.rule.style.opacity = previous.opacity;
+      previous.rule.style.visibility = previous.visibility;
+      previous.rule.style.filter = previous.filter;
+    });
   }
   tokens.forEach(({ token }) => {
     token.style.opacity = "0";
     token.style.visibility = "hidden";
     token.dataset["kpEquationMaterialNativeHidden"] = "true";
   });
+  settleFractionRuleOwnership(input.stage, fraction, progress);
 
   const base = {
     sample: (progress: number) => progress,
@@ -188,12 +224,6 @@ export function applyKpAntiderivativePowerEvaluationMount(input: {
       base,
       cohorts: payload.cohorts
     });
-  const semanticProgress = input.direction === "forward"
-    ? input.localProgress
-    : 1 - input.localProgress;
-  const progress = input.accessibilityMode === "static"
-    ? semanticProgress < 0.5 ? 0 : 1
-    : semanticProgress;
   playback.apply(progress);
   applyCohortSalience(input.stage, progress);
   settleNativeEndpoints({ stage: input.stage, tokens, progress });
@@ -207,6 +237,118 @@ export function applyKpAntiderivativePowerEvaluationMount(input: {
     transformationId: transition.semanticOperation.transformationId,
     cohortIds
   });
+}
+
+function createEvaluationFractionOwnership(input: {
+  readonly stage: HTMLElement;
+  readonly tokens: readonly {
+    readonly side: "source" | "target";
+    readonly token: HTMLElement;
+  }[];
+  readonly progress: number;
+  readonly hotPath: KpEditorEquationStageHotPathCache;
+}): {
+  readonly source: HTMLElement;
+  readonly target: HTMLElement;
+  readonly materialOwner?: KpEquationMaterialLayerOwnerFrame | undefined;
+} {
+  const endpointRoot = (side: "source" | "target"): HTMLElement => {
+    const token = input.tokens.find((candidate) => candidate.side === side)
+      ?.token;
+    const root = token?.closest<HTMLElement>(
+      `[data-kp-editor-equation-${side}], [data-endpoint="${side}"]`
+    );
+    if (root === null || root === undefined || !input.stage.contains(root)) {
+      throw new Error(
+        `Antiderivative evaluation lacks its ${side} fraction endpoint.`
+      );
+    }
+    return root;
+  };
+  const fractionRule = (
+    root: HTMLElement,
+    side: "source" | "target"
+  ): HTMLElement => {
+    const rules = [...root.querySelectorAll<HTMLElement>(".frac-line")];
+    if (rules.length !== 1) {
+      throw new Error(
+        `Antiderivative evaluation requires one ${side} fraction rule; ` +
+        `found ${rules.length}.`
+      );
+    }
+    return rules[0]!;
+  };
+  const source = fractionRule(endpointRoot("source"), "source");
+  const target = fractionRule(endpointRoot("target"), "target");
+  source.dataset["kpAntiderivativeEvaluationFractionNative"] = "source";
+  target.dataset["kpAntiderivativeEvaluationFractionNative"] = "target";
+  if (input.progress <= 0 || input.progress >= 1) {
+    return { source, target };
+  }
+  const sourceRect = input.hotPath.structuralPaintRects.get(source);
+  const targetRect = input.hotPath.structuralPaintRects.get(target);
+  if (sourceRect === undefined || targetRect === undefined) {
+    throw new Error(
+      "Antiderivative evaluation fraction rules lack cached native geometry."
+    );
+  }
+  const profile = kpNativeKatexContributorFusionOpticalProfile;
+  const reshapeProgress = smoothstep(
+    profile.gatherStartsAt,
+    profile.targetExpansionEndsAt,
+    input.progress
+  );
+  const rect = {
+    left: interpolate(sourceRect.left, targetRect.left, reshapeProgress),
+    top: interpolate(sourceRect.top, targetRect.top, reshapeProgress),
+    width: interpolate(sourceRect.width, targetRect.width, reshapeProgress),
+    height: interpolate(sourceRect.height, targetRect.height, reshapeProgress)
+  };
+  return {
+    source,
+    target,
+    materialOwner: {
+      ownerId: "evaluation-structure.antiderivative-power.fraction-rule",
+      sourceElement: source,
+      rect,
+      opacity: 1,
+      transform: "none",
+      filter: "none",
+      semanticDepth: "live",
+      fragmentRole: "rule:persistent-evaluation-fraction"
+    }
+  };
+}
+
+function settleFractionRuleOwnership(
+  stage: HTMLElement,
+  fraction: {
+    readonly source: HTMLElement;
+    readonly target: HTMLElement;
+  },
+  progress: number
+): void {
+  const nativeSide = progress <= 0
+    ? "source"
+    : progress >= 1
+      ? "target"
+      : undefined;
+  for (const [side, rule] of [
+    ["source", fraction.source],
+    ["target", fraction.target]
+  ] as const) {
+    const ownsPaint = side === nativeSide;
+    rule.style.opacity = ownsPaint ? "1" : "0";
+    rule.style.visibility = ownsPaint ? "visible" : "hidden";
+    rule.style.filter = "none";
+    if (ownsPaint) {
+      delete rule.dataset["kpEquationMaterialNativeHidden"];
+    } else {
+      rule.dataset["kpEquationMaterialNativeHidden"] = "true";
+    }
+  }
+  stage.dataset["kpAntiderivativeEvaluationFractionOwner"] =
+    nativeSide === undefined ? "material" : `${nativeSide}-native`;
 }
 
 function settleNativeEndpoints(input: {
@@ -316,7 +458,21 @@ function smoothstep(start: number, end: number, value: number): number {
   return progress * progress * (3 - 2 * progress);
 }
 
+function interpolate(start: number, end: number, progress: number): number {
+  return start + (end - start) * progress;
+}
+
 function clearMountTelemetry(stage: HTMLElement): void {
+  stage.querySelectorAll<HTMLElement>(
+    "[data-kp-antiderivative-evaluation-fraction-native]"
+  ).forEach((rule) => {
+    delete rule.dataset["kpAntiderivativeEvaluationFractionNative"];
+    delete rule.dataset["kpEquationMaterialNativeHidden"];
+    rule.style.removeProperty("opacity");
+    rule.style.removeProperty("visibility");
+    rule.style.removeProperty("filter");
+  });
   delete stage.dataset["kpAntiderivativeEvaluationMount"];
   delete stage.dataset["kpAntiderivativeEvaluationTransformationId"];
+  delete stage.dataset["kpAntiderivativeEvaluationFractionOwner"];
 }

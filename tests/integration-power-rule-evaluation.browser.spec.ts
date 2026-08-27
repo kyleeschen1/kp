@@ -185,10 +185,34 @@ test("two certified integration cohorts share one clock and remain separate", as
           }
         )
       );
+      const realizedFractionRules = [
+        ...stage.querySelectorAll<HTMLElement>(".frac-line")
+      ].filter((rule) => {
+        let opacity = 1;
+        for (
+          let current: HTMLElement | null = rule;
+          current !== null;
+          current = current.parentElement
+        ) {
+          const style = getComputedStyle(current);
+          if (style.display === "none" || style.visibility === "hidden") {
+            return false;
+          }
+          opacity *= Number(style.opacity);
+          if (current === stage) break;
+        }
+        return opacity > 0.01;
+      });
       return {
         progress,
         mounted,
         byCohort,
+        visibleFractionRuleCount: realizedFractionRules.length,
+        fractionOwner:
+          stage.dataset["kpAntiderivativeEvaluationFractionOwner"],
+        materialFractionOwnerCount: stage.querySelectorAll(
+          '[data-kp-equation-material-fragment-role="rule:persistent-evaluation-fraction"]'
+        ).length,
         legibilityState:
           stage.dataset["kpOperationEvaluationLegibilityState"],
         readableCohortCount:
@@ -228,6 +252,7 @@ test("two certified integration cohorts share one clock and remain separate", as
     for (const cohortId of result.cohortIds) {
       expect(sample.byCohort[cohortId]?.ownerCount).toBe(4);
     }
+    expect(sample.visibleFractionRuleCount).toBe(1);
   }
   const source = result.samples.find(({ progress }) => progress === 0)!;
   const kernel = result.samples.find(({ progress }) => progress === 0.5)!;
@@ -247,6 +272,12 @@ test("two certified integration cohorts share one clock and remain separate", as
   expect(recognized.readableCohortCount).toBe("2");
   expect(source.settlement).toBe("source");
   expect(settled.settlement).toBe("target");
+  expect(source.fractionOwner).toBe("source-native");
+  expect(source.materialFractionOwnerCount).toBe(0);
+  expect(kernel.fractionOwner).toBe("material");
+  expect(kernel.materialFractionOwnerCount).toBe(1);
+  expect(settled.fractionOwner).toBe("target-native");
+  expect(settled.materialFractionOwnerCount).toBe(0);
   const numeratorCenter = kernel.byCohort[result.cohortIds[0]!]!.center!;
   const denominatorCenter = kernel.byCohort[result.cohortIds[1]!]!.center!;
   expect(Math.abs(numeratorCenter.y - denominatorCenter.y)).toBeGreaterThan(12);

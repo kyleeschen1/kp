@@ -443,30 +443,30 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
   rewriteProgress: number
 ): KpAntiderivativePowerChoreographyFrame["ruleTemplateApplication"] {
   const progress = clamp01(rewriteProgress);
-  const rulePreviewRevealProgress = phaseProgress(progress, 0, 0.06);
-  const rulePreviewWithdrawalProgress = phaseProgress(progress, 0.22, 0.3);
+  const rulePreviewRevealProgress = phaseProgress(progress, 0, 0.045);
+  const rulePreviewWithdrawalProgress = phaseProgress(progress, 0.255, 0.315);
   const rulePreviewPresence = roundProgress(
     rulePreviewRevealProgress * (1 - rulePreviewWithdrawalProgress)
   );
-  const patternProjectionProgress = phaseProgress(progress, 0.22, 0.36);
+  const patternProjectionProgress = phaseProgress(progress, 0.245, 0.39);
   const patternProjectionPresence = roundProgress(
-    phaseProgress(progress, 0.2, 0.26) *
-      (1 - phaseProgress(progress, 0.47, 0.53))
+    phaseProgress(progress, 0.225, 0.285) *
+      (1 - phaseProgress(progress, 0.54, 0.6))
   );
-  const matchProgress = phaseProgress(progress, 0.31, 0.39);
+  const matchProgress = phaseProgress(progress, 0.34, 0.41);
   const matchPresence = roundProgress(
-    matchProgress * (1 - phaseProgress(progress, 0.47, 0.53))
+    matchProgress * (1 - phaseProgress(progress, 0.54, 0.6))
   );
-  const binding = phaseProgress(progress, 0.43, 0.51);
-  const instructionWithdrawalProgress = phaseProgress(progress, 0.88, 0.94);
+  const binding = phaseProgress(progress, 0.56, 0.63);
+  const instructionWithdrawalProgress = phaseProgress(progress, 0.93, 0.96);
   const metavariableBindingsPresence = roundProgress(
     binding * (1 - instructionWithdrawalProgress)
   );
-  const templateRevealProgress = phaseProgress(progress, 0.61, 0.69);
-  const instantiationProgress = phaseProgress(progress, 0.78, 0.86);
-  const rewriteCommitProgress = phaseProgress(progress, 0.95, 0.995);
+  const templateRevealProgress = phaseProgress(progress, 0.68, 0.75);
+  const instantiationProgress = phaseProgress(progress, 0.82, 0.88);
+  const rewriteCommitProgress = phaseProgress(progress, 0.965, 0.995);
   const sourcePresence = roundProgress(
-    1 - phaseProgress(progress, 0.57, 0.67)
+    1 - phaseProgress(progress, 0.66, 0.75)
   );
   const targetPresence = templateRevealProgress;
   const templateSlotPresence = roundProgress(

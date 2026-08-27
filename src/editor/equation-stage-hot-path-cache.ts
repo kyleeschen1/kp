@@ -18,6 +18,8 @@ export interface KpEditorEquationStageHotPathCache {
   readonly transitions: readonly KpEditorEquationTransitionNodes[];
   readonly motionTokens: readonly HTMLElement[];
   readonly motionTokenRects: ReadonlyMap<HTMLElement, KpEditorEquationLocalRect>;
+  readonly structuralPaintRects:
+    ReadonlyMap<HTMLElement, KpEditorEquationLocalRect>;
 }
 
 export interface KpEditorEquationLocalRect {
@@ -102,6 +104,17 @@ export function getKpEditorEquationStageHotPathCache(input: {
     token,
     localRect(token.getBoundingClientRect(), stageRect)
   ] as const));
+  // Structural KaTeX paint such as fraction rules can persist while nearby
+  // tokens rewrite. Cache it beside token geometry so a compositor can keep
+  // one owner without introducing per-frame layout reads.
+  const structuralPaintRects = new Map(
+    [...input.stage.querySelectorAll<HTMLElement>(".frac-line")].map(
+      (paint) => [
+        paint,
+        localRect(paint.getBoundingClientRect(), stageRect)
+      ] as const
+    )
+  );
   const revision = Number(input.stage.dataset["kpEditorEquationCacheRevision"] ?? 0);
   const cache: InternalCache = {
     contentKey: input.contentKey,
@@ -109,6 +122,7 @@ export function getKpEditorEquationStageHotPathCache(input: {
     transitions,
     motionTokens,
     motionTokenRects,
+    structuralPaintRects,
     width: stageRect.width,
     height: stageRect.height,
     onInvalidate: input.onInvalidate,

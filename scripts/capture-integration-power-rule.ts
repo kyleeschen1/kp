@@ -35,42 +35,42 @@ const samples = [
   {
     id: "rule-preview",
     label: "Rule application · one foreground rule preview",
-    progress: 0.11,
+    progress: 0.132,
     theme: "dark",
     viewport: desktopViewport
   },
   {
     id: "rule-match",
     label: "Rule application · pattern layer aligns with the subject",
-    progress: 0.245,
+    progress: 0.259,
     theme: "dark",
     viewport: desktopViewport
   },
   {
     id: "rule-binding",
     label: "Rule application · bind n ↦ 2",
-    progress: 0.29,
+    progress: 0.337,
     theme: "dark",
     viewport: desktopViewport
   },
   {
     id: "rule-template",
     label: "Rule application · prospective replacement layer",
-    progress: 0.35,
+    progress: 0.39,
     theme: "dark",
     viewport: desktopViewport
   },
   {
     id: "rule-instantiated",
     label: "Rule application · binding fills both occurrences",
-    progress: 0.423,
+    progress: 0.447,
     theme: "dark",
     viewport: desktopViewport
   },
   {
     id: "rule-rewriting",
     label: "Rule application · prospective RHS becomes live",
-    progress: 0.462,
+    progress: 0.471,
     theme: "dark",
     viewport: desktopViewport
   },
@@ -112,28 +112,28 @@ const samples = [
   {
     id: "narrow-light-rule-preview",
     label: "Narrow light · complete rule preview fit",
-    progress: 0.11,
+    progress: 0.132,
     theme: "light",
     viewport: narrowViewport
   },
   {
     id: "narrow-light-rule-match",
     label: "Narrow light · aligned pattern layer and exponent slot",
-    progress: 0.245,
+    progress: 0.259,
     theme: "light",
     viewport: narrowViewport
   },
   {
     id: "narrow-light-rule-template",
     label: "Narrow light · layered prospective rewrite",
-    progress: 0.35,
+    progress: 0.39,
     theme: "light",
     viewport: narrowViewport
   },
   {
     id: "narrow-light-rule-instantiated",
     label: "Narrow light · instantiated template",
-    progress: 0.423,
+    progress: 0.447,
     theme: "light",
     viewport: narrowViewport
   },
@@ -191,6 +191,10 @@ interface CaptureEvidence {
   readonly visibleCohortIds: readonly string[];
   readonly accessibleEndpoint: string;
   readonly instantiatedFractionOwnerCount: number;
+  readonly visibleFractionRuleCount: number;
+  readonly fractionReplicaEffectCount: number;
+  readonly fractionOwner: string;
+  readonly materialFractionOwnerCount: number;
   readonly visibleText: string;
   readonly ruleTemplateText: string;
   readonly rulePreviewText: string;
@@ -264,7 +268,7 @@ async function capture(baseUrl?: string): Promise<void> {
     await writeFile(html, htmlSource, "utf8");
     const manifest = path.join(outputRoot, "manifest.json");
     await writeFile(manifest, `${JSON.stringify({
-      schemaVersion: "kp.integration-power-rule-visual-checkpoint.v4",
+      schemaVersion: "kp.integration-power-rule-visual-checkpoint.v5",
       animationId,
       samples: evidence,
       reviewChecklist: [
@@ -272,8 +276,8 @@ async function capture(baseUrl?: string): Promise<void> {
         "salience-only operator scope",
         "one-focus rule preview followed by complete withdrawal",
         "XY-aligned pattern projection and local metavariable binding",
-        "temporary renderer-owned depth with a no-depth endpoint path",
-        "single-owner prospective RHS and native rewrite commit",
+        "single-owner prospective lift with no fraction-rule paint replica",
+        "single shifting fraction-rule owner through rewrite and evaluation",
         "exponent provenance",
         "two ink-knot evaluations",
         "integration constant persistence",
@@ -344,9 +348,48 @@ async function captureSample(input: {
       const style = getComputedStyle(element);
       return style.visibility !== "hidden" && Number(style.opacity) > 0.01;
     };
+    const realized = (element: HTMLElement): boolean => {
+      let opacity = 1;
+      for (
+        let current: HTMLElement | null = element;
+        current !== null;
+        current = current.parentElement
+      ) {
+        const style = getComputedStyle(current);
+        if (
+          style.display === "none" ||
+          style.visibility === "hidden" ||
+          style.contentVisibility === "hidden"
+        ) return false;
+        opacity *= Number(style.opacity);
+        if (current === root) break;
+      }
+      return opacity > 0.01 && element.getClientRects().length > 0;
+    };
     const visibleOwners = [...root.querySelectorAll<HTMLElement>(
       "[data-kp-equation-material-owner-id]"
     )].filter(visible);
+    const visibleFractionRules = [
+      ...root.querySelectorAll<HTMLElement>(".frac-line")
+    ].filter(realized);
+    const fractionReplicaEffects = visibleFractionRules.flatMap((rule) => {
+      const effects: string[] = [];
+      for (
+        let current: HTMLElement | null = rule;
+        current !== null;
+        current = current.parentElement
+      ) {
+        const style = getComputedStyle(current);
+        if (style.filter.includes("drop-shadow")) {
+          effects.push(`drop-shadow:${current.className}`);
+        }
+        if (current === rule && style.boxShadow !== "none") {
+          effects.push(`box-shadow:${current.className}`);
+        }
+        if (current === root) break;
+      }
+      return effects;
+    });
     const templateReceiver = root.querySelector<HTMLElement>(
       "[data-kp-antiderivative-template-receiver]"
     );
@@ -460,6 +503,14 @@ async function captureSample(input: {
       instantiatedFractionOwnerCount: root.querySelectorAll(
         '[data-kp-antiderivative-instantiated-fraction-owner="canonical-target-native"]'
       ).length,
+      visibleFractionRuleCount: visibleFractionRules.length,
+      fractionReplicaEffectCount: fractionReplicaEffects.length,
+      fractionOwner:
+        root.dataset["kpAntiderivativeEvaluationFractionOwner"] ??
+        root.dataset["kpAntiderivativePowerVisualOwner"] ?? "inactive",
+      materialFractionOwnerCount: root.querySelectorAll(
+        '[data-kp-equation-material-fragment-role="rule:persistent-evaluation-fraction"]'
+      ).length,
       visibleText: [...root.querySelectorAll<HTMLElement>(
         "[data-kp-editor-equation-source], " +
         "[data-kp-editor-equation-target], " +
@@ -532,6 +583,42 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     if (sample === undefined) throw new Error(`Missing review sample ${id}.`);
     return sample;
   };
+  const fractionlessFrames = new Set([
+    "source",
+    "scope-salience",
+    "rule-match",
+    "rule-binding",
+    "narrow-light-rule-match"
+  ]);
+  for (const sample of evidence) {
+    const expectedRuleCount = fractionlessFrames.has(sample.id) ? 0 : 1;
+    if (
+      sample.visibleFractionRuleCount !== expectedRuleCount ||
+      sample.fractionReplicaEffectCount !== 0
+    ) {
+      throw new Error(
+        `${sample.id} must realize ${expectedRuleCount} fraction rule with ` +
+        `no shadow or other paint replica; received ` +
+        `${sample.visibleFractionRuleCount} and ` +
+        `${sample.fractionReplicaEffectCount} replica effects.`
+      );
+    }
+  }
+  for (const id of [
+    "dual-evaluation-kernel",
+    "dual-evaluation-recognition",
+    "narrow-light-evaluation"
+  ]) {
+    const sample = required(id);
+    if (
+      sample.fractionOwner !== "material" ||
+      sample.materialFractionOwnerCount !== 1
+    ) {
+      throw new Error(
+        `${id} must reshape one material fraction rule between native endpoints.`
+      );
+    }
+  }
   if (required("source").transitVisualOwner !== "source-native") {
     throw new Error("Source review frame must retain native integral paint.");
   }
@@ -559,7 +646,7 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   if (
     match.transitVisualOwner !== "source-native" ||
     match.templateProfileId !==
-      "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v4" ||
+      "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v5" ||
     match.templateTraceRole !== "prospective" ||
     match.templateLawRefId !==
       "law.calculus.integral.power-rule" ||

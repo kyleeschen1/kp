@@ -36,7 +36,7 @@ test("integration power rule uses governed transit and two certified ink knots",
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-template-profile-id",
-    "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v4"
+    "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v5"
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-instantiated-result-owner",
@@ -48,6 +48,7 @@ test("integration power rule uses governed transit and two certified ink knots",
   );
   await expect(stage.locator("[data-kp-editor-equation-source] .katex"))
     .toContainText("∫x2dx");
+  await expectFractionPaint(stage, 0);
 
   await seek.fill("0.06");
   await expectTransitReady(stage);
@@ -80,7 +81,7 @@ test("integration power rule uses governed transit and two certified ink knots",
   );
   const sourceBaseRect = await elementRect(sourceBase);
 
-  await seek.fill("0.11");
+  await seek.fill("0.132");
   await expectTransitReady(stage);
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-power-visual-owner",
@@ -188,8 +189,9 @@ test("integration power rule uses governed transit and two certified ink knots",
   await expect.poll(() => renderedOpacity(
     stage.locator("[data-kp-editor-equation-source]")
   )).toBeLessThan(0.1);
+  await expectFractionPaint(stage, 1);
 
-  await seek.fill("0.245");
+  await seek.fill("0.259");
   await expectTransitReady(stage);
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-rule-preview-presence",
@@ -211,8 +213,9 @@ test("integration power rule uses governed transit and two certified ink knots",
   ))).toBe(1);
   expect(maxRectDelta(sourceBaseRect, await elementRect(sourceBase)))
     .toBeLessThan(0.5);
+  await expectFractionPaint(stage, 0);
 
-  await seek.fill("0.29");
+  await seek.fill("0.337");
   await expectTransitReady(stage);
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-template-receiver-focus",
@@ -236,8 +239,9 @@ test("integration power rule uses governed transit and two certified ink knots",
   );
   expect(maxRectDelta(sourceBaseRect, await elementRect(sourceBase)))
     .toBeLessThan(0.5);
+  await expectFractionPaint(stage, 0);
 
-  await seek.fill("0.35");
+  await seek.fill("0.39");
   await expectTransitReady(stage);
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-template-binding-progress",
@@ -296,8 +300,9 @@ test("integration power rule uses governed transit and two certified ink knots",
   );
   expect(maxRectDelta(sourceBaseRect, await elementRect(sourceBase)))
     .toBeLessThan(0.5);
+  await expectFractionPaint(stage, 1);
 
-  await seek.fill("0.423");
+  await seek.fill("0.447");
   await expectTransitReady(stage);
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-rule-instantiation-progress",
@@ -320,8 +325,9 @@ test("integration power rule uses governed transit and two certified ink knots",
     "0.0000"
   );
   const instantiatedFractionRect = await elementRect(instantiatedFraction);
+  await expectFractionPaint(stage, 1);
 
-  await seek.fill("0.462");
+  await seek.fill("0.471");
   await expectTransitReady(stage);
   await expect.poll(async () => Number(await stage.getAttribute(
     "data-kp-antiderivative-template-receiver-settlement-progress"
@@ -345,6 +351,7 @@ test("integration power rule uses governed transit and two certified ink knots",
   await expect(stage.locator(
     '[data-kp-antiderivative-instantiated-fraction-owner="canonical-target-native"]'
   )).toHaveCount(1);
+  await expectFractionPaint(stage, 1);
 
   await seek.fill("0.49");
   await expectTransitReady(stage);
@@ -373,15 +380,22 @@ test("integration power rule uses governed transit and two certified ink knots",
   const settledFractionRect = await elementRect(instantiatedFraction);
   expect(Math.abs(settledFractionRect.top - movingFractionRect.top))
     .toBeGreaterThan(0.5);
-  expect(Math.abs(settledFractionRect.left - movingFractionRect.left))
+  const movingFractionCenter = movingFractionRect.left +
+    movingFractionRect.width / 2;
+  const settledFractionCenter = settledFractionRect.left +
+    settledFractionRect.width / 2;
+  expect(Math.abs(settledFractionCenter - movingFractionCenter))
     .toBeLessThan(0.5);
-  expect(Math.abs(settledFractionRect.width - movingFractionRect.width))
-    .toBeLessThan(0.5);
+  expect(settledFractionRect.width - movingFractionRect.width)
+    .toBeGreaterThan(0.3);
+  expect(settledFractionRect.width - movingFractionRect.width)
+    .toBeLessThan(2);
   await expect(stage.locator(
     "[data-kp-equation-material-fragment-role=\"rule:rule-length\"]"
   )).toHaveCount(0);
   await expect.poll(() => renderedOpacity(rulePanel)).toBe(0);
   await expect(templateReceiver).toHaveAttribute("aria-hidden", "true");
+  await expectFractionPaint(stage, 1);
 
   await seek.fill("0.5");
   await expect(activeTransition(stage)).toHaveAttribute(
@@ -396,10 +410,15 @@ test("integration power rule uses governed transit and two certified ink knots",
     "data-kp-antiderivative-evaluation-native-settlement",
     "source"
   );
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-evaluation-fraction-owner",
+    "source-native"
+  );
   await expect(stage.locator("[data-kp-editor-equation-source] .katex"))
     .toContainText("2+1");
   await expect(stage.locator("[data-kp-editor-equation-source] .katex"))
     .toContainText("+C");
+  await expectFractionPaint(stage, 1);
 
   await seek.fill("0.75");
   await expect(stage.locator(
@@ -416,15 +435,25 @@ test("integration power rule uses governed transit and two certified ink knots",
     "data-kp-operation-evaluation-cohort-count",
     "2"
   );
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-evaluation-fraction-owner",
+    "material"
+  );
+  await expectFractionPaint(stage, 1);
 
   await seek.fill("1");
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-evaluation-native-settlement",
     "target"
   );
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-evaluation-fraction-owner",
+    "target-native"
+  );
   const finalKatex = stage.locator("[data-kp-editor-equation-target] .katex");
   await expect(finalKatex).toContainText("x3");
   await expect(finalKatex).toContainText("+C");
+  await expectFractionPaint(stage, 1);
   expect(pageErrors).toEqual([]);
 });
 
@@ -432,12 +461,12 @@ test("integration Catalogue lifecycle restores, rewinds, themes, and exposes sta
   page
 }) => {
   test.setTimeout(60_000);
-  await page.goto(`/?artifact=${animationId}&playhead=0.36&theme=light`);
+  await page.goto(`/?artifact=${animationId}&playhead=0.39&theme=light`);
   const player = cataloguePlayer(page);
   const seek = player.locator('[data-action="seek-editor-animation"]');
   const stage = player.locator("[data-kp-editor-equation-stage]");
   await expectTransitReady(stage);
-  await expect(seek).toHaveValue("0.36");
+  await expect(seek).toHaveValue("0.39");
   await expect(page.locator("html")).toHaveAttribute(
     "data-kp-development-theme",
     "light"
@@ -454,7 +483,7 @@ test("integration Catalogue lifecycle restores, rewinds, themes, and exposes sta
     getComputedStyle(element).color
   );
 
-  await page.goto(`/?artifact=${animationId}&playhead=0.36&theme=dark`);
+  await page.goto(`/?artifact=${animationId}&playhead=0.39&theme=dark`);
   const darkPlayer = cataloguePlayer(page);
   const darkStage = darkPlayer.locator("[data-kp-editor-equation-stage]");
   await expectTransitReady(darkStage);
@@ -524,7 +553,7 @@ test("ordinary playback gives recognition binding and instantiation readable dwe
   await expectTransitReady(stage);
   await expect(player).toHaveAttribute(
     "data-kp-editor-animation-duration-ms",
-    "10800"
+    "14800"
   );
   const dwell = stage.evaluate((root) => new Promise<{
     recognitionAt: number;
@@ -582,8 +611,8 @@ test("ordinary playback gives recognition binding and instantiation readable dwe
   await player.locator('[data-action="toggle-editor-animation"]').click();
   const marks = await dwell;
 
-  expect(marks.bindingAt - marks.recognitionAt).toBeGreaterThan(500);
-  expect(marks.instantiatedAt - marks.bindingAt).toBeGreaterThan(1_500);
+  expect(marks.bindingAt - marks.recognitionAt).toBeGreaterThan(900);
+  expect(marks.instantiatedAt - marks.bindingAt).toBeGreaterThan(1_300);
   expect(marks.handoffAt - marks.instantiatedAt).toBeGreaterThan(350);
 });
 
@@ -631,6 +660,58 @@ function maxRectDelta(left: TestRect, right: TestRect): number {
 
 async function renderedOpacity(locator: Locator): Promise<number> {
   return locator.evaluate((element) => Number(getComputedStyle(element).opacity));
+}
+
+async function expectFractionPaint(
+  stage: Locator,
+  expectedVisibleRuleCount: number
+): Promise<void> {
+  const audit = await stage.evaluate((root) => {
+    const isRealized = (element: HTMLElement): boolean => {
+      let opacity = 1;
+      for (
+        let current: HTMLElement | null = element;
+        current !== null;
+        current = current.parentElement
+      ) {
+        const style = getComputedStyle(current);
+        if (
+          style.display === "none" ||
+          style.visibility === "hidden" ||
+          style.contentVisibility === "hidden"
+        ) return false;
+        opacity *= Number(style.opacity);
+        if (current === root) break;
+      }
+      return opacity > 0.01 && element.getClientRects().length > 0;
+    };
+    const rules = [...root.querySelectorAll<HTMLElement>(".frac-line")]
+      .filter(isRealized);
+    const replicaEffects = rules.flatMap((rule) => {
+      const effects: string[] = [];
+      for (
+        let current: HTMLElement | null = rule;
+        current !== null;
+        current = current.parentElement
+      ) {
+        const style = getComputedStyle(current);
+        if (style.filter.includes("drop-shadow")) {
+          effects.push(`drop-shadow:${current.className}`);
+        }
+        if (current === rule && style.boxShadow !== "none") {
+          effects.push(`box-shadow:${current.className}`);
+        }
+        if (current === root) break;
+      }
+      return effects;
+    });
+    return {
+      visibleRuleCount: rules.length,
+      replicaEffects
+    };
+  });
+  expect(audit.visibleRuleCount).toBe(expectedVisibleRuleCount);
+  expect(audit.replicaEffects).toEqual([]);
 }
 
 async function expectTransitReady(stage: Locator): Promise<void> {

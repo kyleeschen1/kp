@@ -834,7 +834,7 @@
       "clockAuthority": {
         "ownerId": "editor-animation-player",
         "sourcePath": "src/editor/animation-player-controller.ts",
-        "durationMs": 10800,
+        "durationMs": 14800,
         "beatCount": 50
       },
       "lazyCapability": {
