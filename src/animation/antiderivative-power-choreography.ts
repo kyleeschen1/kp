@@ -124,11 +124,10 @@ export interface KpAntiderivativePowerChoreographyFrame {
     readonly matchProgress: number;
     readonly matchPresence: number;
     readonly metavariableBindingsPresence: number;
-    readonly ruleReferencePresence: number;
-    readonly patternReferenceFocus: number;
-    readonly replacementReferenceFocus: number;
-    readonly ruleReferenceWithdrawalProgress: number;
-    readonly closureProvenanceFocus: number;
+    readonly rulePreviewPresence: number;
+    readonly rulePreviewWithdrawalProgress: number;
+    readonly patternProjectionPresence: number;
+    readonly patternProjectionProgress: number;
     readonly instantiatedResultPresence: number;
     readonly templateRevealProgress: number;
     readonly templateSlotPresence: number;
@@ -399,7 +398,7 @@ export function sampleKpAntiderivativePowerChoreography(input: {
   );
   const phases: Readonly<Record<KpAntiderivativePowerPhaseId, number>> = {
     "notice-operator-scope": phaseProgress(semanticProgress, 0.02, 0.12),
-    "withdraw-operator": phaseProgress(semanticProgress, 0.4, 0.48),
+    "withdraw-operator": phaseProgress(semanticProgress, 0.56, 0.64),
     "rewrite-power-rule": phaseProgress(semanticProgress, 0.14, 0.96),
     "match-rule-pattern": phaseProgress(semanticProgress, 0.14, 0.34),
     "bind-rule-metavariables": phaseProgress(semanticProgress, 0.3, 0.46),
@@ -410,7 +409,7 @@ export function sampleKpAntiderivativePowerChoreography(input: {
   };
   const notice = phases["notice-operator-scope"];
   const withdrawal = phases["withdraw-operator"];
-  const focusRelease = phaseProgress(semanticProgress, 0.48, 0.62);
+  const focusRelease = phaseProgress(semanticProgress, 0.64, 0.72);
   const template = sampleKpAntiderivativeRuleTemplateApplication(
     phases["rewrite-power-rule"]
   );
@@ -444,35 +443,30 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
   rewriteProgress: number
 ): KpAntiderivativePowerChoreographyFrame["ruleTemplateApplication"] {
   const progress = clamp01(rewriteProgress);
-  const ruleReferenceRevealProgress = phaseProgress(progress, 0, 0.06);
-  const matchProgress = phaseProgress(progress, 0.08, 0.14);
+  const rulePreviewRevealProgress = phaseProgress(progress, 0, 0.06);
+  const rulePreviewWithdrawalProgress = phaseProgress(progress, 0.22, 0.3);
+  const rulePreviewPresence = roundProgress(
+    rulePreviewRevealProgress * (1 - rulePreviewWithdrawalProgress)
+  );
+  const patternProjectionProgress = phaseProgress(progress, 0.22, 0.36);
+  const patternProjectionPresence = roundProgress(
+    phaseProgress(progress, 0.2, 0.26) *
+      (1 - phaseProgress(progress, 0.47, 0.53))
+  );
+  const matchProgress = phaseProgress(progress, 0.31, 0.39);
   const matchPresence = roundProgress(
-    matchProgress * (1 - phaseProgress(progress, 0.26, 0.32))
+    matchProgress * (1 - phaseProgress(progress, 0.47, 0.53))
   );
-  const binding = phaseProgress(progress, 0.22, 0.3);
-  const ruleReferenceWithdrawalProgress = phaseProgress(
-    progress,
-    0.76,
-    0.84
-  );
+  const binding = phaseProgress(progress, 0.43, 0.51);
+  const instructionWithdrawalProgress = phaseProgress(progress, 0.88, 0.94);
   const metavariableBindingsPresence = roundProgress(
-    binding * (1 - ruleReferenceWithdrawalProgress)
+    binding * (1 - instructionWithdrawalProgress)
   );
-  const ruleReferencePresence = roundProgress(
-    ruleReferenceRevealProgress * (1 - ruleReferenceWithdrawalProgress)
-  );
-  const referenceAttentionTransfer = phaseProgress(progress, 0.38, 0.48);
-  const patternReferenceFocus = roundProgress(
-    ruleReferencePresence * (1 - referenceAttentionTransfer)
-  );
-  const replacementReferenceFocus = roundProgress(
-    ruleReferencePresence * referenceAttentionTransfer
-  );
-  const templateRevealProgress = phaseProgress(progress, 0.5, 0.6);
-  const instantiationProgress = phaseProgress(progress, 0.64, 0.74);
-  const rewriteCommitProgress = phaseProgress(progress, 0.84, 0.96);
+  const templateRevealProgress = phaseProgress(progress, 0.61, 0.69);
+  const instantiationProgress = phaseProgress(progress, 0.78, 0.86);
+  const rewriteCommitProgress = phaseProgress(progress, 0.95, 0.995);
   const sourcePresence = roundProgress(
-    1 - phaseProgress(progress, 0.42, 0.49)
+    1 - phaseProgress(progress, 0.57, 0.67)
   );
   const targetPresence = templateRevealProgress;
   const templateSlotPresence = roundProgress(
@@ -481,20 +475,18 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
   const receiverSettlement = rewriteCommitProgress;
   const syntaxResolution = rewriteCommitProgress;
   const instantiatedResultPresence = instantiationProgress;
-  const closureProvenanceFocus = roundProgress(
-    replacementReferenceFocus * templateRevealProgress
-  );
   const panelPresence = roundProgress(Math.max(
-    ruleReferencePresence,
+    rulePreviewPresence,
+    patternProjectionPresence,
     matchPresence,
     metavariableBindingsPresence
   ));
   const receiverFocus = roundProgress(
     Math.max(
+      rulePreviewPresence,
+      patternProjectionPresence,
       matchPresence,
-      metavariableBindingsPresence,
-      patternReferenceFocus,
-      replacementReferenceFocus
+      metavariableBindingsPresence
     ) *
       (1 - syntaxResolution)
   );
@@ -507,7 +499,8 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
   return Object.freeze({
     traceRole: rewriteCommitProgress >= 1
       ? "live" as const
-      : ruleReferencePresence > 0 || matchProgress > 0 ||
+      : rulePreviewPresence > 0 || patternProjectionPresence > 0 ||
+          matchProgress > 0 ||
           instantiationProgress > 0
         ? "prospective" as const
         : "absent" as const,
@@ -516,11 +509,10 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
     matchProgress,
     matchPresence,
     metavariableBindingsPresence,
-    ruleReferencePresence,
-    patternReferenceFocus,
-    replacementReferenceFocus,
-    ruleReferenceWithdrawalProgress,
-    closureProvenanceFocus,
+    rulePreviewPresence,
+    rulePreviewWithdrawalProgress,
+    patternProjectionPresence,
+    patternProjectionProgress,
     instantiatedResultPresence,
     templateRevealProgress,
     templateSlotPresence,

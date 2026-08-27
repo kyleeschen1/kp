@@ -1347,6 +1347,30 @@
       "scope": "protected derivative preservation",
       "checkedAt": "2026-08-27T02:06:09.158Z",
       "notes": "All 36 derivative semantic, choreography, migration, and policy tests passed."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s18 layered rule candidate: 64 semantic and presentation tests",
+      "checkedAt": "2026-08-27T04:35:56.257Z"
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-catalogue",
+      "status": "passed",
+      "scope": "slice s18 layered rule candidate: Chromium lifecycle, theme, no-depth, rewind, ownership, and ordinary-playback dwell",
+      "checkedAt": "2026-08-27T04:36:03.843Z"
+    },
+    {
+      "command": "npm run visual:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s18 layered rule candidate: 18 deterministic dark, light, desktop, and narrow frames inspected at the human checkpoint",
+      "checkedAt": "2026-08-27T04:36:13.201Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s18 layered rule candidate: application, Node, tests, Svelte, and domains",
+      "checkedAt": "2026-08-27T04:36:20.393Z"
     }
   ],
   "allowedWork": [
@@ -1484,7 +1508,7 @@
     {
       "id": "next-action.kp.integration-power-rule.s18",
       "title": "Integration-human-visual-checkpoint",
-      "summary": "The revised candidate keeps a compact instructional rule reference visible only during Rule Application. Its LHS is focal before and during exponent matching, attention transfers to its RHS before the one centered native template appears, n binds once and fills both target slots, and the reference withdraws before either certified ink-knot reduction. Awaiting human visual approval.",
+      "summary": "Layered-rule-lens candidate ready for human review: a transient complete-rule preview owns attention, its source stays hidden behind the preview, a full-size pattern layer aligns on the stationary subject and collapses to the local n slot, n maps to 2 before both native target slots fill, and the single prospective RHS settles from temporary renderer-owned depth before two unchanged ink knots.",
       "status": "in-progress"
     },
     {

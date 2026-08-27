@@ -29,7 +29,7 @@ export const kpAntiderivativePowerTransitRepairGapCode =
 export const kpAntiderivativeRuleApplicationNativeKatexMechanismId =
   "kp.rendering.native-katex.antiderivative-rule-application.v1";
 export const kpAntiderivativeRuleApplicationPresentationProfileId =
-  "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v3";
+  "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v4";
 
 export interface KpAntiderivativePowerTransitMountResult {
   readonly status: "inactive" | "preparing" | "mounted" | "repair-gap";
@@ -237,7 +237,11 @@ function createTemplateReceiver(
     "0"
   );
   element.style.setProperty(
-    "--kp-antiderivative-rule-reference-presence",
+    "--kp-antiderivative-rule-preview-presence",
+    "0"
+  );
+  element.style.setProperty(
+    "--kp-antiderivative-pattern-projection-presence",
     "0"
   );
   element.setAttribute("aria-hidden", "true");
@@ -257,105 +261,116 @@ function createTemplateReceiver(
   rulePanel.setAttribute("role", "img");
   rulePanel.setAttribute("aria-hidden", "true");
 
-  const ruleReference = createInstructionalRuleReference(
+  const rulePreview = createInstructionalRulePreview(
     stage,
     template.instructionalProjection
   );
-  const matchSlots = template.metavariableBindings
-    .filter(({ metavariable }) =>
-      template.instructionalProjection.metavariables.some(
-        (candidate) => candidate === metavariable
-      )
-    )
-    .map(({ metavariable }) => createRuleMatchSlot(stage, metavariable));
+  const patternProjection = createInstructionalPatternProjection(
+    stage,
+    template.instructionalProjection
+  );
   const bindings = createRuleTemplateFormula({
     stage,
     className: "editor-equation-stage__antiderivative-rule-bindings",
     dataAttribute: "kpAntiderivativeRuleBindings",
     latex: template.instructionalProjection.bindingLatex
   });
-  rulePanel.append(ruleReference, ...matchSlots, bindings);
+  rulePanel.append(rulePreview, patternProjection, bindings);
   element.append(rulePanel);
   stage.append(element);
   return element;
 }
 
-function createInstructionalRuleReference(
+function createInstructionalRulePreview(
   stage: HTMLElement,
   projection: KpAntiderivativeRuleInstructionalProjection
 ): HTMLElement {
-  const reference = stage.ownerDocument.createElement("div");
-  reference.className =
-    "editor-equation-stage__antiderivative-rule-reference";
-  reference.dataset["kpAntiderivativeRuleReference"] = "episode";
-  reference.dataset["kpSemanticTraceRole"] = "absent";
-  reference.setAttribute("aria-hidden", "true");
+  const preview = stage.ownerDocument.createElement("div");
+  preview.className =
+    "editor-equation-stage__antiderivative-rule-preview";
+  preview.dataset["kpAntiderivativeRulePreview"] = "transient";
+  preview.dataset["kpSemanticTraceRole"] = "absent";
+  preview.setAttribute("aria-hidden", "true");
 
   const pattern = createRuleTemplateFormula({
     stage,
     className:
-      "editor-equation-stage__antiderivative-rule-reference-side",
-    dataAttribute: "kpAntiderivativeRuleReferencePattern",
+      "editor-equation-stage__antiderivative-rule-preview-side",
+    dataAttribute: "kpAntiderivativeRulePreviewPattern",
     latex: projection.patternLatex,
-    annotatedLatex: annotateInstructionalRuleReferenceLatex(
+    annotatedLatex: annotateInstructionalRulePreviewLatex(
       projection.patternLatex
     )
   });
-  pattern.dataset["kpAntiderivativeRuleReferenceRole"] = "pattern";
+  pattern.dataset["kpAntiderivativeRulePreviewRole"] = "pattern";
   const connector = createRuleTemplateFormula({
     stage,
     className:
-      "editor-equation-stage__antiderivative-rule-reference-connector",
-    dataAttribute: "kpAntiderivativeRuleReferenceConnector",
+      "editor-equation-stage__antiderivative-rule-preview-connector",
+    dataAttribute: "kpAntiderivativeRulePreviewConnector",
     latex: String.raw`\Rightarrow`
   });
-  connector.dataset["kpAntiderivativeRuleReferenceRole"] = "connector";
+  connector.dataset["kpAntiderivativeRulePreviewRole"] = "connector";
   const replacement = createRuleTemplateFormula({
     stage,
     className:
-      "editor-equation-stage__antiderivative-rule-reference-side",
-    dataAttribute: "kpAntiderivativeRuleReferenceReplacement",
+      "editor-equation-stage__antiderivative-rule-preview-side",
+    dataAttribute: "kpAntiderivativeRulePreviewReplacement",
     latex: projection.replacementTemplateLatex,
-    annotatedLatex: annotateInstructionalRuleReferenceLatex(
-      projection.replacementTemplateLatex,
-      true
+    annotatedLatex: annotateInstructionalRulePreviewLatex(
+      projection.replacementTemplateLatex
     )
   });
-  replacement.dataset["kpAntiderivativeRuleReferenceRole"] = "replacement";
-  reference.append(pattern, connector, replacement);
-  return reference;
+  replacement.dataset["kpAntiderivativeRulePreviewRole"] = "replacement";
+  preview.append(pattern, connector, replacement);
+  return preview;
 }
 
-function annotateInstructionalRuleReferenceLatex(
-  latex: string,
-  includeClosure = false
-): string {
-  const annotatedSlots = latex.replace(
-    /\bn\b/gu,
-    String.raw`{\htmlData{kp-antiderivative-rule-reference-slot=n}{n}}`
-  );
-  if (!includeClosure) return annotatedSlots;
-  // +C is rule-provided structure rather than a later arithmetic result, so
-  // it receives its own paint owner in the temporary instructional reference.
-  return annotatedSlots.replace(
-    /\+C$/u,
-    String.raw`\htmlData{kp-antiderivative-rule-reference-closure=constant}{+C}`
-  );
-}
-
-function createRuleMatchSlot(
+function createInstructionalPatternProjection(
   stage: HTMLElement,
-  metavariable: "u" | "n"
+  projection: KpAntiderivativeRuleInstructionalProjection
 ): HTMLElement {
-  const slot = stage.ownerDocument.createElement("span");
-  slot.className = "editor-equation-stage__antiderivative-rule-match-slot";
-  slot.dataset["kpAntiderivativeRuleMatchSlot"] = metavariable;
-  slot.innerHTML = renderLatexToHtml(metavariable, {
-    displayMode: false,
-    output: "htmlAndMathml"
+  const pattern = createRuleTemplateFormula({
+    stage,
+    className:
+      "editor-equation-stage__antiderivative-pattern-projection",
+    dataAttribute: "kpAntiderivativeRulePatternProjection",
+    latex: projection.patternLatex,
+    annotatedLatex: annotateInstructionalPatternProjectionLatex(
+      projection.patternLatex
+    )
   });
-  slot.setAttribute("aria-hidden", "true");
-  return slot;
+  pattern.dataset["kpSemanticTraceRole"] = "absent";
+  return pattern;
+}
+
+function annotateInstructionalRulePreviewLatex(
+  latex: string
+): string {
+  return latex.replace(
+    /\bn\b/gu,
+    String.raw`{\htmlData{kp-antiderivative-rule-preview-slot=n}{n}}`
+  );
+}
+
+function annotateInstructionalPatternProjectionLatex(latex: string): string {
+  const annotated = latex
+    .replace(
+      String.raw`\int`,
+      String.raw`\htmlData{kp-antiderivative-pattern-fixed=operator}{\int}`
+    )
+    .replace(
+      "x^n",
+      String.raw`\htmlData{kp-antiderivative-pattern-fixed=base}{x}^{\htmlData{kp-antiderivative-pattern-slot=n}{n}}`
+    )
+    .replace(
+      String.raw`\,dx`,
+      String.raw`\htmlData{kp-antiderivative-pattern-fixed=differential}{\,dx}`
+    );
+  if (annotated === latex) {
+    throw new Error("Antiderivative instructional pattern cannot be projected.");
+  }
+  return annotated;
 }
 
 function createRuleTemplateFormula(input: {
@@ -363,9 +378,10 @@ function createRuleTemplateFormula(input: {
   readonly className: string;
   readonly dataAttribute:
     | "kpAntiderivativeRuleBindings"
-    | "kpAntiderivativeRuleReferencePattern"
-    | "kpAntiderivativeRuleReferenceConnector"
-    | "kpAntiderivativeRuleReferenceReplacement";
+    | "kpAntiderivativeRulePreviewPattern"
+    | "kpAntiderivativeRulePreviewConnector"
+    | "kpAntiderivativeRulePreviewReplacement"
+    | "kpAntiderivativeRulePatternProjection";
   readonly latex: string;
   readonly annotatedLatex?: string | undefined;
 }): HTMLElement {
@@ -400,7 +416,11 @@ function hideTemplateReceiver(session: TransitMountSession): void {
     "0"
   );
   session.templateReceiver.style.setProperty(
-    "--kp-antiderivative-rule-reference-presence",
+    "--kp-antiderivative-rule-preview-presence",
+    "0"
+  );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-pattern-projection-presence",
     "0"
   );
   session.templateReceiver.dataset["kpSemanticTraceRole"] = "absent";
@@ -419,7 +439,6 @@ async function prepareSession(
     if (session.disposed || session.generation !== generation) return;
     assertSingleInstantiatedFractionOwner(session);
     bindInstructionalTemplateSlots(session);
-    positionRuleMatchSlots(session);
     session.ready = true;
     session.stage.dataset["kpAntiderivativePowerTransit"] = "ready";
     session.stage.dataset["kpAntiderivativePowerTransitMechanismId"] =
@@ -542,41 +561,6 @@ function clearInstructionalTemplateSlots(session: TransitMountSession): void {
   );
 }
 
-function positionRuleMatchSlots(session: TransitMountSession): void {
-  const stageRect = session.stage.getBoundingClientRect();
-  const bindings = session.plan.choreography.ruleTemplateApplication
-    .metavariableBindings.filter(({ metavariable }) =>
-      session.plan.choreography.ruleTemplateApplication
-        .instructionalProjection.metavariables.some(
-          (candidate) => candidate === metavariable
-        )
-    );
-  for (const binding of bindings) {
-    const slot = session.templateReceiver.querySelector<HTMLElement>(
-      `[data-kp-antiderivative-rule-match-slot="${binding.metavariable}"]`
-    );
-    const sourceSelectorId = binding.metavariable === "u"
-      ? session.plan.choreography.persistentBase.sourceSelectorId
-      : session.plan.choreography.exponentBranch.sourceSelectorId;
-    const source = [...session.roots.source.querySelectorAll<HTMLElement>(
-      "[data-kp-motion-id]"
-    )].find((element) =>
-      element.dataset["kpMotionId"]?.endsWith(sourceSelectorId) === true
-    );
-    if (slot === null || source === undefined) {
-      throw new Error(
-        `Antiderivative rule match cannot place ${binding.metavariable}.`
-      );
-    }
-    const sourceRect = source.getBoundingClientRect();
-    slot.style.left = `${sourceRect.left - stageRect.left +
-      sourceRect.width / 2}px`;
-    slot.style.top = `${sourceRect.top - stageRect.top}px`;
-    slot.dataset["kpAntiderivativeRuleMatchSourceSelectorId"] =
-      sourceSelectorId;
-  }
-}
-
 function applyFrame(session: TransitMountSession): void {
   if (!session.ready) return;
   const frame = sampleKpAntiderivativePowerChoreography({
@@ -599,7 +583,6 @@ function applyFrame(session: TransitMountSession): void {
   // and trace roles, or inherited transforms would move the matched subject.
   resetEndpointPresentation(session);
   syncKpEquationMaterialLayer({ stage: session.stage, owners: [] });
-  positionRuleMatchSlots(session);
   applyOperatorAndScopeSalience(session, frame, projection);
   const templatePanelPresence = applyRuleTemplateApplicationState(
     session,
@@ -645,8 +628,24 @@ function applyRuleTemplateApplicationState(
     template.metavariableBindingsPresence.toFixed(4)
   );
   session.templateReceiver.style.setProperty(
-    "--kp-antiderivative-rule-reference-presence",
-    template.ruleReferencePresence.toFixed(4)
+    "--kp-antiderivative-rule-preview-presence",
+    template.rulePreviewPresence.toFixed(4)
+  );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-pattern-projection-presence",
+    template.patternProjectionPresence.toFixed(4)
+  );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-pattern-projection-fixed-presence",
+    (1 - template.matchProgress).toFixed(4)
+  );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-pattern-projection-lift",
+    `${(-0.52 * (1 - template.patternProjectionProgress)).toFixed(4)}rem`
+  );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-pattern-slot-lift",
+    `${(-0.72 * template.matchProgress).toFixed(4)}em`
   );
   session.templateReceiver.dataset["kpSemanticTraceRole"] =
     template.traceRole;
@@ -666,7 +665,7 @@ function applyRuleTemplateApplicationState(
   if (rulePanel === null) {
     throw new Error("Antiderivative rewrite lacks its rule-template panel.");
   }
-  applyInstructionalRuleReferenceState(session, template);
+  applyInstructionalRuleLayerState(session, template);
   const panelIsPresent = template.panelPresence > 0.01;
   session.templateReceiver.setAttribute(
     "aria-hidden",
@@ -750,16 +749,14 @@ function applyRuleTemplateApplicationState(
     template.panelPresence.toFixed(4);
   session.stage.dataset["kpAntiderivativeMetavariableBindingsPresence"] =
     template.metavariableBindingsPresence.toFixed(4);
-  session.stage.dataset["kpAntiderivativeRuleReferencePresence"] =
-    template.ruleReferencePresence.toFixed(4);
-  session.stage.dataset["kpAntiderivativeRulePatternReferenceFocus"] =
-    template.patternReferenceFocus.toFixed(4);
-  session.stage.dataset["kpAntiderivativeRuleReplacementReferenceFocus"] =
-    template.replacementReferenceFocus.toFixed(4);
-  session.stage.dataset["kpAntiderivativeRuleReferenceWithdrawalProgress"] =
-    template.ruleReferenceWithdrawalProgress.toFixed(4);
-  session.stage.dataset["kpAntiderivativeRuleClosureProvenanceFocus"] =
-    template.closureProvenanceFocus.toFixed(4);
+  session.stage.dataset["kpAntiderivativeRulePreviewPresence"] =
+    template.rulePreviewPresence.toFixed(4);
+  session.stage.dataset["kpAntiderivativeRulePreviewWithdrawalProgress"] =
+    template.rulePreviewWithdrawalProgress.toFixed(4);
+  session.stage.dataset["kpAntiderivativePatternProjectionPresence"] =
+    template.patternProjectionPresence.toFixed(4);
+  session.stage.dataset["kpAntiderivativePatternProjectionProgress"] =
+    template.patternProjectionProgress.toFixed(4);
   session.stage.dataset["kpAntiderivativeInstantiatedResultPresence"] =
     template.instantiatedResultPresence.toFixed(4);
   session.stage.dataset["kpAntiderivativeRuleMatchProgress"] =
@@ -793,45 +790,38 @@ function applyRuleTemplateApplicationState(
   return template.panelPresence;
 }
 
-function applyInstructionalRuleReferenceState(
+function applyInstructionalRuleLayerState(
   session: TransitMountSession,
   template: ReturnType<typeof sampleKpAntiderivativeRuleTemplateApplication>
 ): void {
-  const reference = session.templateReceiver.querySelector<HTMLElement>(
-    "[data-kp-antiderivative-rule-reference]"
+  const preview = session.templateReceiver.querySelector<HTMLElement>(
+    "[data-kp-antiderivative-rule-preview]"
   );
-  const pattern = reference?.querySelector<HTMLElement>(
-    '[data-kp-antiderivative-rule-reference-role="pattern"]'
+  const previewPattern = preview?.querySelector<HTMLElement>(
+    '[data-kp-antiderivative-rule-preview-role="pattern"]'
   );
-  const replacement = reference?.querySelector<HTMLElement>(
-    '[data-kp-antiderivative-rule-reference-role="replacement"]'
+  const previewReplacement = preview?.querySelector<HTMLElement>(
+    '[data-kp-antiderivative-rule-preview-role="replacement"]'
   );
-  const closure = replacement?.querySelector<HTMLElement>(
-    "[data-kp-antiderivative-rule-reference-closure]"
+  const projection = session.templateReceiver.querySelector<HTMLElement>(
+    "[data-kp-antiderivative-rule-pattern-projection]"
   );
   if (
-    reference === null || reference === undefined ||
-    pattern === null || pattern === undefined ||
-    replacement === null || replacement === undefined ||
-    closure === null || closure === undefined
+    preview === null || preview === undefined ||
+    previewPattern === null || previewPattern === undefined ||
+    previewReplacement === null || previewReplacement === undefined ||
+    projection === null
   ) {
     throw new Error(
-      "Antiderivative rule application lacks its instructional reference."
+      "Antiderivative rule application lacks its instructional layers."
     );
   }
-  reference.dataset["kpSemanticTraceRole"] = template.traceRole;
-  pattern.dataset["kpSemanticSalienceLevel"] =
-    template.patternReferenceFocus > 0.01 ? "focus" : "context";
-  replacement.dataset["kpSemanticSalienceLevel"] =
-    template.replacementReferenceFocus > 0.01 ? "focus" : "context";
-  pattern.style.opacity = String(
-    0.46 + 0.54 * template.patternReferenceFocus
-  );
-  replacement.style.opacity = String(
-    0.46 + 0.54 * template.replacementReferenceFocus
-  );
-  closure.dataset["kpSemanticSalienceLevel"] =
-    template.closureProvenanceFocus > 0.01 ? "focus" : "normal";
+  preview.dataset["kpSemanticTraceRole"] = template.traceRole;
+  previewPattern.dataset["kpSemanticSalienceLevel"] = "focus";
+  previewReplacement.dataset["kpSemanticSalienceLevel"] = "focus";
+  projection.dataset["kpSemanticTraceRole"] = template.traceRole;
+  projection.dataset["kpSemanticSalienceLevel"] =
+    template.patternProjectionPresence > 0.01 ? "focus" : "context";
 }
 
 function applyNativeRuleApplicationState(
@@ -848,9 +838,27 @@ function applyNativeRuleApplicationState(
 
   const commit = template.rewriteCommitProgress;
   const targetOpacity = template.targetPresence * (0.84 + 0.16 * commit);
-  session.roots.source.style.opacity = String(template.sourcePresence);
+  // The preview owns attention in time, while the source remains the stable
+  // semantic subject behind it and returns before pattern projection begins.
+  const previewContext = 1 - template.rulePreviewPresence;
+  session.roots.source.style.opacity = String(
+    template.sourcePresence * previewContext
+  );
   session.roots.target.style.opacity = targetOpacity.toFixed(4);
-  session.roots.target.style.transform = "none";
+  const prospectiveLift = template.targetPresence > 0.01
+    ? -0.42 * (1 - commit)
+    : 0;
+  session.roots.target.style.transform = prospectiveLift === 0
+    ? "none"
+    : `translateY(${prospectiveLift.toFixed(4)}rem)`;
+  session.roots.target.style.setProperty(
+    "--kp-antiderivative-prospective-depth",
+    (template.targetPresence * (1 - commit)).toFixed(4)
+  );
+  session.roots.target.style.filter =
+    template.targetPresence * (1 - commit) > 0.01
+      ? "drop-shadow(0 0.38rem 0.46rem color-mix(in srgb, var(--kp-catalogue-link) 18%, transparent))"
+      : "none";
   session.roots.target.dataset["kpAntiderivativeProspectivePlacement"] =
     "center";
   session.roots.target.dataset["kpSemanticTraceRole"] = template.traceRole;

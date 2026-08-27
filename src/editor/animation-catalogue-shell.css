@@ -449,61 +449,92 @@
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  .editor-equation-stage__antiderivative-rule-match-slot {
+  .editor-equation-stage__antiderivative-rule-preview {
   position: absolute;
-  z-index: 2;
-  color: color-mix(
-    in srgb,
-    var(--kp-catalogue-link) 78%,
-    var(--kp-equation-foreground)
-  );
-  font-size: clamp(0.92rem, 2.4vw, 1.15rem);
-  line-height: 1;
-  opacity: var(--kp-antiderivative-rule-match-presence, 0);
-  transform: translate(-50%, calc(-100% - 0.34rem));
-  text-shadow: 0 0 0.7rem var(--kp-catalogue-stage-background);
-  white-space: nowrap;
-}
-
-.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  .editor-equation-stage__antiderivative-rule-reference {
-  position: absolute;
+  z-index: 4;
   top: 50%;
   left: 50%;
   display: grid;
   grid-template-columns: max-content max-content max-content;
   align-items: center;
-  column-gap: clamp(0.5rem, 1.8vw, 0.9rem);
+  column-gap: clamp(0.62rem, 2vw, 1rem);
   color: var(--kp-equation-foreground);
-  font-size: clamp(0.92rem, 2.25vw, 1.15rem);
-  opacity: var(--kp-antiderivative-rule-reference-presence, 0);
-  transform: translate(-50%, calc(-100% - 5.75rem));
+  font-size: clamp(1.18rem, 3.4vw, 1.7rem);
+  opacity: var(--kp-antiderivative-rule-preview-presence, 0);
+  text-shadow:
+    0 0.35rem 0.8rem color-mix(
+      in srgb,
+      var(--kp-catalogue-stage-background) 82%,
+      transparent
+    );
+  transform: translate(-50%, calc(-50% - 0.3rem));
   white-space: nowrap;
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  .editor-equation-stage__antiderivative-rule-reference-side {
+  .editor-equation-stage__antiderivative-rule-preview-side {
   color: var(--kp-equation-foreground);
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  .editor-equation-stage__antiderivative-rule-reference-connector {
+  .editor-equation-stage__antiderivative-rule-preview-connector {
   color: color-mix(
     in srgb,
-    var(--kp-equation-foreground) 54%,
+    var(--kp-equation-foreground) 68%,
     transparent
   );
-  opacity: 0.72;
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  [data-kp-antiderivative-rule-reference-slot] {
+  [data-kp-antiderivative-rule-preview-slot] {
   color: var(--kp-catalogue-link) !important;
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  [data-kp-antiderivative-rule-reference-closure][data-kp-semantic-salience-level="focus"] {
+  .editor-equation-stage__antiderivative-pattern-projection {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  left: 50%;
+  color: var(--kp-equation-foreground);
+  font-size: clamp(2.15rem, 5.5vw, 2.75rem);
+  opacity: var(--kp-antiderivative-pattern-projection-presence, 0);
+  text-shadow: 0 0.32rem 0.65rem color-mix(
+    in srgb,
+    var(--kp-catalogue-stage-background) 72%,
+    transparent
+  );
+  transform: translate(
+    -50%,
+    calc(-50% + var(--kp-antiderivative-pattern-projection-lift, 0rem))
+  );
+  white-space: nowrap;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  [data-kp-antiderivative-pattern-fixed] {
+  opacity: var(--kp-antiderivative-pattern-projection-fixed-presence, 1);
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  [data-kp-antiderivative-pattern-slot] {
+  position: relative;
+  display: inline-block;
   color: var(--kp-catalogue-link) !important;
+  transform: translateY(var(--kp-antiderivative-pattern-slot-lift, 0em));
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  [data-kp-antiderivative-pattern-slot]::after {
+  position: absolute;
+  top: calc(100% + 0.08rem);
+  left: 50%;
+  width: 1px;
+  height: calc(-1 * var(--kp-antiderivative-pattern-slot-lift, 0em));
+  max-height: 0.52rem;
+  background: currentColor;
+  content: "";
+  opacity: var(--kp-antiderivative-rule-match-presence, 0);
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
@@ -534,18 +565,6 @@
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  .editor-equation-stage__antiderivative-rule-match-slot::after {
-  position: absolute;
-  top: calc(100% + 0.1rem);
-  left: 50%;
-  width: 1px;
-  height: 0.28rem;
-  background: currentColor;
-  content: "";
-  opacity: 0.72;
-}
-
-.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
   .editor-equation-stage__antiderivative-rule-bindings {
   position: absolute;
   top: 50%;
@@ -563,10 +582,9 @@
 
 @media (max-width: 520px) {
   .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-    .editor-equation-stage__antiderivative-rule-reference {
-    column-gap: 0.42rem;
-    font-size: clamp(0.82rem, 3.7vw, 0.98rem);
-    transform: translate(-50%, calc(-100% - 5.25rem));
+    .editor-equation-stage__antiderivative-rule-preview {
+    column-gap: 0.5rem;
+    font-size: clamp(0.96rem, 4.35vw, 1.14rem);
   }
 
   .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]

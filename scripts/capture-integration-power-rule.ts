@@ -33,44 +33,44 @@ const samples = [
     viewport: desktopViewport
   },
   {
-    id: "rule-reference",
-    label: "Rule application · read the rule before matching",
-    progress: 0.1,
+    id: "rule-preview",
+    label: "Rule application · one foreground rule preview",
+    progress: 0.11,
     theme: "dark",
     viewport: desktopViewport
   },
   {
     id: "rule-match",
-    label: "Rule application · reference LHS identifies the pattern",
-    progress: 0.13,
+    label: "Rule application · pattern layer aligns with the subject",
+    progress: 0.245,
     theme: "dark",
     viewport: desktopViewport
   },
   {
     id: "rule-binding",
     label: "Rule application · bind n ↦ 2",
-    progress: 0.21,
+    progress: 0.29,
     theme: "dark",
     viewport: desktopViewport
   },
   {
     id: "rule-template",
-    label: "Rule application · reference RHS authorizes the rewrite",
-    progress: 0.32,
+    label: "Rule application · prospective replacement layer",
+    progress: 0.35,
     theme: "dark",
     viewport: desktopViewport
   },
   {
     id: "rule-instantiated",
     label: "Rule application · binding fills both occurrences",
-    progress: 0.38,
+    progress: 0.423,
     theme: "dark",
     viewport: desktopViewport
   },
   {
     id: "rule-rewriting",
     label: "Rule application · prospective RHS becomes live",
-    progress: 0.44,
+    progress: 0.462,
     theme: "dark",
     viewport: desktopViewport
   },
@@ -110,23 +110,30 @@ const samples = [
     viewport: desktopViewport
   },
   {
+    id: "narrow-light-rule-preview",
+    label: "Narrow light · complete rule preview fit",
+    progress: 0.11,
+    theme: "light",
+    viewport: narrowViewport
+  },
+  {
     id: "narrow-light-rule-match",
-    label: "Narrow light · pattern reference and exponent slot",
-    progress: 0.13,
+    label: "Narrow light · aligned pattern layer and exponent slot",
+    progress: 0.245,
     theme: "light",
     viewport: narrowViewport
   },
   {
     id: "narrow-light-rule-template",
-    label: "Narrow light · reference-guided rewrite",
-    progress: 0.32,
+    label: "Narrow light · layered prospective rewrite",
+    progress: 0.35,
     theme: "light",
     viewport: narrowViewport
   },
   {
     id: "narrow-light-rule-instantiated",
     label: "Narrow light · instantiated template",
-    progress: 0.38,
+    progress: 0.423,
     theme: "light",
     viewport: narrowViewport
   },
@@ -158,12 +165,11 @@ interface CaptureEvidence {
   readonly ruleMatchProgress: number;
   readonly ruleMatchPresence: number;
   readonly metavariableBindingsPresence: number;
-  readonly ruleReferencePresence: number;
-  readonly patternReferenceFocus: number;
-  readonly replacementReferenceFocus: number;
-  readonly ruleReferenceWithdrawalProgress: number;
-  readonly closureProvenanceFocus: number;
-  readonly ruleReferenceFractionCount: number;
+  readonly rulePreviewPresence: number;
+  readonly rulePreviewWithdrawalProgress: number;
+  readonly patternProjectionPresence: number;
+  readonly patternProjectionProgress: number;
+  readonly rulePreviewFractionCount: number;
   readonly ruleInstantiationProgress: number;
   readonly ruleTemplateRevealProgress: number;
   readonly ruleTemplateSlotPresence: number;
@@ -187,7 +193,7 @@ interface CaptureEvidence {
   readonly instantiatedFractionOwnerCount: number;
   readonly visibleText: string;
   readonly ruleTemplateText: string;
-  readonly ruleReferenceText: string;
+  readonly rulePreviewText: string;
   readonly file: string;
 }
 
@@ -258,14 +264,15 @@ async function capture(baseUrl?: string): Promise<void> {
     await writeFile(html, htmlSource, "utf8");
     const manifest = path.join(outputRoot, "manifest.json");
     await writeFile(manifest, `${JSON.stringify({
-      schemaVersion: "kp.integration-power-rule-visual-checkpoint.v3",
+      schemaVersion: "kp.integration-power-rule-visual-checkpoint.v4",
       animationId,
       samples: evidence,
       reviewChecklist: [
         "attention order",
         "salience-only operator scope",
-        "episode-persistent rule reference with LHS-to-RHS attention transfer",
-        "in-place pattern match and metavariable binding",
+        "one-focus rule preview followed by complete withdrawal",
+        "XY-aligned pattern projection and local metavariable binding",
+        "temporary renderer-owned depth with a no-depth endpoint path",
         "single-owner prospective RHS and native rewrite commit",
         "exponent provenance",
         "two ink-knot evaluations",
@@ -376,25 +383,20 @@ async function captureSample(input: {
       metavariableBindingsPresence: Number(
         root.dataset["kpAntiderivativeMetavariableBindingsPresence"] ?? 0
       ),
-      ruleReferencePresence: Number(
-        root.dataset["kpAntiderivativeRuleReferencePresence"] ?? 0
+      rulePreviewPresence: Number(
+        root.dataset["kpAntiderivativeRulePreviewPresence"] ?? 0
       ),
-      patternReferenceFocus: Number(
-        root.dataset["kpAntiderivativeRulePatternReferenceFocus"] ?? 0
+      rulePreviewWithdrawalProgress: Number(
+        root.dataset["kpAntiderivativeRulePreviewWithdrawalProgress"] ?? 0
       ),
-      replacementReferenceFocus: Number(
-        root.dataset["kpAntiderivativeRuleReplacementReferenceFocus"] ?? 0
+      patternProjectionPresence: Number(
+        root.dataset["kpAntiderivativePatternProjectionPresence"] ?? 0
       ),
-      ruleReferenceWithdrawalProgress: Number(
-        root.dataset[
-          "kpAntiderivativeRuleReferenceWithdrawalProgress"
-        ] ?? 0
+      patternProjectionProgress: Number(
+        root.dataset["kpAntiderivativePatternProjectionProgress"] ?? 0
       ),
-      closureProvenanceFocus: Number(
-        root.dataset["kpAntiderivativeRuleClosureProvenanceFocus"] ?? 0
-      ),
-      ruleReferenceFractionCount: root.querySelectorAll(
-        "[data-kp-antiderivative-rule-reference] .frac-line"
+      rulePreviewFractionCount: root.querySelectorAll(
+        "[data-kp-antiderivative-rule-preview] .frac-line"
       ).length,
       ruleInstantiationProgress: Number(
         root.dataset["kpAntiderivativeRuleInstantiationProgress"] ?? 0
@@ -468,8 +470,8 @@ async function captureSample(input: {
       ruleTemplateText: root.querySelector<HTMLElement>(
         "[data-kp-antiderivative-rule-template]"
       )?.textContent?.replace(/\s+/gu, " ").trim() ?? "",
-      ruleReferenceText: root.querySelector<HTMLElement>(
-        "[data-kp-antiderivative-rule-reference]"
+      rulePreviewText: root.querySelector<HTMLElement>(
+        "[data-kp-antiderivative-rule-preview]"
       )?.textContent?.replace(/\s+/gu, " ").trim() ?? ""
     };
   });
@@ -541,24 +543,23 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     throw new Error("Scope review frame must expose salience-only attention.");
   }
   const match = required("rule-match");
-  const reference = required("rule-reference");
+  const preview = required("rule-preview");
   if (
-    reference.transitVisualOwner !== "source-native" ||
-    reference.ruleReferencePresence !== 1 ||
-    reference.patternReferenceFocus !== 1 ||
-    reference.replacementReferenceFocus !== 0 ||
-    reference.ruleMatchPresence !== 0 ||
-    reference.metavariableBindingsPresence !== 0 ||
-    reference.ruleReferenceFractionCount !== 1
+    preview.transitVisualOwner !== "source-native" ||
+    preview.rulePreviewPresence !== 1 ||
+    preview.patternProjectionPresence !== 0 ||
+    preview.ruleMatchPresence !== 0 ||
+    preview.metavariableBindingsPresence !== 0 ||
+    preview.rulePreviewFractionCount !== 1
   ) {
     throw new Error(
-      "Rule-reference frame must establish the complete rule before matching."
+      "Rule-preview frame must establish the complete rule as the sole focus."
     );
   }
   if (
     match.transitVisualOwner !== "source-native" ||
     match.templateProfileId !==
-      "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v3" ||
+      "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v4" ||
     match.templateTraceRole !== "prospective" ||
     match.templateLawRefId !==
       "law.calculus.integral.power-rule" ||
@@ -567,11 +568,11 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     match.ruleMatchProgress !== 1 ||
     match.ruleMatchPresence !== 1 ||
     match.metavariableBindingsPresence !== 0 ||
-    match.ruleReferencePresence !== 1 ||
-    match.patternReferenceFocus !== 1 ||
-    match.replacementReferenceFocus !== 0 ||
-    match.ruleReferenceFractionCount !== 1 ||
-    !match.ruleReferenceText.includes("C") ||
+    match.rulePreviewPresence !== 0 ||
+    match.patternProjectionPresence !== 1 ||
+    match.patternProjectionProgress !== 1 ||
+    match.rulePreviewFractionCount !== 1 ||
+    !match.rulePreviewText.includes("C") ||
     match.ruleInstantiationProgress !== 0 ||
     match.templateVacancyPresence !== 0 ||
     match.templateVacancyCount !== 0 ||
@@ -591,9 +592,8 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     binding.ruleTemplatePanelPresence !== 1 ||
     binding.ruleMatchPresence !== 0 ||
     binding.metavariableBindingsPresence !== 1 ||
-    binding.ruleReferencePresence !== 1 ||
-    binding.patternReferenceFocus !== 1 ||
-    binding.replacementReferenceFocus !== 0 ||
+    binding.rulePreviewPresence !== 0 ||
+    binding.patternProjectionPresence !== 0 ||
     binding.ruleInstantiationProgress !== 0 ||
     !binding.ruleTemplateText.includes("n↦2") ||
     binding.ruleTemplateText.includes("u↦x") ||
@@ -613,10 +613,8 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     template.templateBindingProgress !== 1 ||
     template.ruleTemplateRevealProgress <= 0 ||
     template.ruleInstantiationProgress !== 0 ||
-    template.ruleReferencePresence !== 1 ||
-    template.patternReferenceFocus !== 0 ||
-    template.replacementReferenceFocus !== 1 ||
-    template.closureProvenanceFocus !== 1 ||
+    template.rulePreviewPresence !== 0 ||
+    template.patternProjectionPresence !== 0 ||
     template.ruleTemplateSlotPresence <= 0 ||
     template.ruleTemplateSlotCount !== 2 ||
     template.transitVisualOwner !== "rule-application-native" ||
@@ -634,9 +632,8 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     bound.templateTraceRole !== "prospective" ||
     bound.ruleTemplatePanelPresence !== 1 ||
     bound.metavariableBindingsPresence !== 1 ||
-    bound.ruleReferencePresence !== 1 ||
-    bound.replacementReferenceFocus !== 1 ||
-    bound.closureProvenanceFocus !== 1 ||
+    bound.rulePreviewPresence !== 0 ||
+    bound.patternProjectionPresence !== 0 ||
     bound.ruleInstantiationProgress !== 1 ||
     bound.ruleTemplateRevealProgress !== 1 ||
     bound.ruleTemplateSlotPresence !== 0 ||
@@ -659,8 +656,8 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     settling.ruleRewriteCommitProgress <= 0 ||
     settling.ruleRewriteCommitProgress >= 1 ||
     settling.ruleTemplatePanelPresence !== 0 ||
-    settling.ruleReferencePresence !== 0 ||
-    settling.ruleReferenceWithdrawalProgress !== 1 ||
+    settling.rulePreviewPresence !== 0 ||
+    settling.rulePreviewWithdrawalProgress !== 1 ||
     settling.ruleInstantiationProgress !== 1 ||
     settling.instantiatedFractionOwnerCount !== 1 ||
     settling.visibleMaterialOwnerCount !== 0
