@@ -128,7 +128,7 @@ function generatedProblemDurationMs(fixture: GeneratedProblemAnimationFixture): 
     // This operation has distinct recognition, binding, instantiation,
     // rewrite, and evaluation beats. The generic 2.4-second budget made the
     // rule technically present but unreadable during ordinary playback.
-    return 7_200;
+    return 10_800;
   }
   return 2_400;
 }

@@ -140,7 +140,7 @@ test("antiderivative power-rule import budgets time for explicit rule applicatio
   );
   const animation = createGeneratedProblemAnimationAsset(fixture);
 
-  assert.equal(animation.timeline?.durationMs, 7_200);
+  assert.equal(animation.timeline?.durationMs, 10_800);
 });
 
 test("createGeneratedProblemAnimationAsset imports generated linear algebra matrix-vector steps", () => {

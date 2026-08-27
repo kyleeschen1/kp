@@ -34,29 +34,36 @@ const samples = [
   },
   {
     id: "rule-match",
-    label: "Rule application · match u and n in place",
-    progress: 0.2,
+    label: "Rule application · recognize the exponent slot",
+    progress: 0.12,
     theme: "dark",
     viewport: desktopViewport
   },
   {
     id: "rule-binding",
-    label: "Rule application · u ↦ x and n ↦ 2",
-    progress: 0.27,
+    label: "Rule application · bind n ↦ 2",
+    progress: 0.2,
+    theme: "dark",
+    viewport: desktopViewport
+  },
+  {
+    id: "rule-template",
+    label: "Rule application · prospective template with n slots",
+    progress: 0.3,
     theme: "dark",
     viewport: desktopViewport
   },
   {
     id: "rule-instantiated",
-    label: "Rule application · one prospective RHS",
-    progress: 0.35,
+    label: "Rule application · binding fills both occurrences",
+    progress: 0.37,
     theme: "dark",
     viewport: desktopViewport
   },
   {
     id: "rule-rewriting",
-    label: "Rule application · native RHS becomes focal",
-    progress: 0.43,
+    label: "Rule application · prospective RHS becomes live",
+    progress: 0.44,
     theme: "dark",
     viewport: desktopViewport
   },
@@ -97,15 +104,22 @@ const samples = [
   },
   {
     id: "narrow-light-rule-match",
-    label: "Narrow light · match in place",
-    progress: 0.2,
+    label: "Narrow light · exponent slot",
+    progress: 0.12,
+    theme: "light",
+    viewport: narrowViewport
+  },
+  {
+    id: "narrow-light-rule-template",
+    label: "Narrow light · prospective template",
+    progress: 0.3,
     theme: "light",
     viewport: narrowViewport
   },
   {
     id: "narrow-light-rule-instantiated",
-    label: "Narrow light · one prospective RHS",
-    progress: 0.35,
+    label: "Narrow light · instantiated template",
+    progress: 0.37,
     theme: "light",
     viewport: narrowViewport
   },
@@ -138,6 +152,9 @@ interface CaptureEvidence {
   readonly ruleMatchPresence: number;
   readonly metavariableBindingsPresence: number;
   readonly ruleInstantiationProgress: number;
+  readonly ruleTemplateRevealProgress: number;
+  readonly ruleTemplateSlotPresence: number;
+  readonly ruleTemplateSlotCount: number;
   readonly ruleRewriteCommitProgress: number;
   readonly templateVacancyPresence: number;
   readonly templateVacancyCount: number;
@@ -347,6 +364,15 @@ async function captureSample(input: {
       ruleInstantiationProgress: Number(
         root.dataset["kpAntiderivativeRuleInstantiationProgress"] ?? 0
       ),
+      ruleTemplateRevealProgress: Number(
+        root.dataset["kpAntiderivativeRuleTemplateRevealProgress"] ?? 0
+      ),
+      ruleTemplateSlotPresence: Number(
+        root.dataset["kpAntiderivativeRuleTemplateSlotPresence"] ?? 0
+      ),
+      ruleTemplateSlotCount: root.querySelectorAll(
+        '[data-kp-antiderivative-rule-template-slot="n"]'
+      ).length,
       ruleRewriteCommitProgress: Number(
         root.dataset["kpAntiderivativeRuleRewriteCommitProgress"] ?? 0
       ),
@@ -480,7 +506,7 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   if (
     match.transitVisualOwner !== "source-native" ||
     match.templateProfileId !==
-      "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v1" ||
+      "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v2" ||
     match.templateTraceRole !== "prospective" ||
     match.templateLawRefId !==
       "law.calculus.integral.power-rule" ||
@@ -506,11 +532,11 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     binding.templateTraceRole !== "prospective" ||
     binding.templateReceiverFocus !== 1 ||
     binding.ruleTemplatePanelPresence !== 1 ||
-    binding.ruleMatchPresence !== 1 ||
+    binding.ruleMatchPresence !== 0 ||
     binding.metavariableBindingsPresence !== 1 ||
     binding.ruleInstantiationProgress !== 0 ||
-    !binding.ruleTemplateText.includes("u↦x") ||
     !binding.ruleTemplateText.includes("n↦2") ||
+    binding.ruleTemplateText.includes("u↦x") ||
     binding.templateVacancyCount !== 0 ||
     binding.templateVacancyPresence !== 0 ||
     binding.templateBindingProgress !== 1 ||
@@ -522,6 +548,20 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
       "Rule-binding frame must make metavariable acquisition explicit before instantiation."
     );
   }
+  const template = required("rule-template");
+  if (
+    template.templateBindingProgress !== 1 ||
+    template.ruleTemplateRevealProgress <= 0 ||
+    template.ruleInstantiationProgress !== 0 ||
+    template.ruleTemplateSlotPresence <= 0 ||
+    template.ruleTemplateSlotCount !== 2 ||
+    template.transitVisualOwner !== "rule-application-native" ||
+    template.instantiatedFractionOwnerCount !== 1
+  ) {
+    throw new Error(
+      "Template frame must show two n slots on the one centered native RHS."
+    );
+  }
   const bound = required("rule-instantiated");
   if (
     bound.templateBindingProgress !== 1 ||
@@ -531,6 +571,9 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     bound.ruleTemplatePanelPresence !== 1 ||
     bound.metavariableBindingsPresence !== 1 ||
     bound.ruleInstantiationProgress !== 1 ||
+    bound.ruleTemplateRevealProgress !== 1 ||
+    bound.ruleTemplateSlotPresence !== 0 ||
+    bound.ruleTemplateSlotCount !== 2 ||
     bound.transitVisualOwner !== "rule-application-native" ||
     bound.instantiatedFractionOwnerCount !== 1 ||
     !bound.visibleText.includes("2+1")

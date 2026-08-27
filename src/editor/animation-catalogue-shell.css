@@ -466,6 +466,33 @@
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  [data-kp-antiderivative-rule-template-slot] {
+  color: var(--kp-equation-foreground) !important;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  [data-kp-antiderivative-rule-template-slot][data-kp-semantic-salience-level="focus"] {
+  color: var(--kp-catalogue-link) !important;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  [data-kp-antiderivative-rule-template-slot] > * {
+  opacity: var(--kp-antiderivative-bound-value-presence, 1);
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  [data-kp-antiderivative-rule-template-slot]::after {
+  position: absolute;
+  display: grid;
+  inset: 0;
+  place-items: center;
+  color: var(--kp-catalogue-link);
+  content: attr(data-kp-antiderivative-rule-template-slot);
+  opacity: var(--kp-antiderivative-template-slot-presence, 0);
+  pointer-events: none;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
   .editor-equation-stage__antiderivative-rule-match-slot::after {
   position: absolute;
   top: calc(100% + 0.1rem);
@@ -513,6 +540,19 @@
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
   [data-kp-antiderivative-template-paint-role="binding"][data-kp-semantic-salience-level="focus"] * {
   color: var(--kp-catalogue-link) !important;
+}
+
+/* The generic transition diagnostic labels this custom Rule Application as
+   copy fan-out. Keeping that developer rail inside the artboard competes with
+   the instructional notation and misnames the semantic event. */
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__caption {
+  display: none;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__transition {
+  grid-template-rows: minmax(7.5rem, 1fr);
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.derivative.power-rule-x-cubed"]

@@ -11,6 +11,7 @@ export const kpAntiderivativePowerPhaseIds = Object.freeze([
   "rewrite-power-rule",
   "match-rule-pattern",
   "bind-rule-metavariables",
+  "reveal-rule-template",
   "instantiate-rule-result",
   "commit-rule-rewrite",
   "settle-expanded-rule"
@@ -48,6 +49,12 @@ export interface KpAntiderivativePowerChoreographyPlan {
     readonly replacementTemplateLatex: string;
     readonly bindingLatex: string;
     readonly instantiatedResultLatex: string;
+    readonly instructionalProjection: {
+      readonly patternLatex: string;
+      readonly replacementTemplateLatex: string;
+      readonly bindingLatex: string;
+      readonly metavariables: readonly ["n"];
+    };
     readonly metavariableBindings: readonly [
       {
         readonly metavariable: "u";
@@ -114,6 +121,8 @@ export interface KpAntiderivativePowerChoreographyFrame {
     readonly matchPresence: number;
     readonly metavariableBindingsPresence: number;
     readonly instantiatedResultPresence: number;
+    readonly templateRevealProgress: number;
+    readonly templateSlotPresence: number;
     readonly instantiationProgress: number;
     readonly rewriteCommitProgress: number;
     readonly sourcePresence: number;
@@ -293,6 +302,17 @@ export function compileKpAntiderivativePowerChoreography(input: {
         String.raw`u\mapsto ${baseLabel},\qquad n\mapsto ${exponentLabel}`,
       instantiatedResultLatex:
         String.raw`\frac{${baseLabel}^{${exponentLabel}+1}}{${exponentLabel}+1}+C`,
+      // The verified rule retains both metavariables. This introductory
+      // projection specializes the ambient integration variable so attention
+      // can stay on the exponent slot that teaches the reusable structure.
+      instructionalProjection: Object.freeze({
+        patternLatex:
+          String.raw`\int ${baseLabel}^n\,d${integrationVariableRole.label}`,
+        replacementTemplateLatex:
+          String.raw`\frac{${baseLabel}^{n+1}}{n+1}+C`,
+        bindingLatex: String.raw`n\mapsto ${exponentLabel}`,
+        metavariables: Object.freeze(["n"] as const)
+      }),
       metavariableBindings: Object.freeze([
         Object.freeze({
           metavariable: "u" as const,
@@ -369,18 +389,19 @@ export function sampleKpAntiderivativePowerChoreography(input: {
     direction === "forward" ? progress : 1 - progress
   );
   const phases: Readonly<Record<KpAntiderivativePowerPhaseId, number>> = {
-    "notice-operator-scope": phaseProgress(semanticProgress, 0.04, 0.14),
-    "withdraw-operator": phaseProgress(semanticProgress, 0.14, 0.25),
-    "rewrite-power-rule": phaseProgress(semanticProgress, 0.27, 0.96),
-    "match-rule-pattern": phaseProgress(semanticProgress, 0.27, 0.42),
-    "bind-rule-metavariables": phaseProgress(semanticProgress, 0.42, 0.61),
-    "instantiate-rule-result": phaseProgress(semanticProgress, 0.61, 0.76),
-    "commit-rule-rewrite": phaseProgress(semanticProgress, 0.76, 0.94),
+    "notice-operator-scope": phaseProgress(semanticProgress, 0.02, 0.12),
+    "withdraw-operator": phaseProgress(semanticProgress, 0.4, 0.48),
+    "rewrite-power-rule": phaseProgress(semanticProgress, 0.14, 0.96),
+    "match-rule-pattern": phaseProgress(semanticProgress, 0.14, 0.34),
+    "bind-rule-metavariables": phaseProgress(semanticProgress, 0.3, 0.46),
+    "reveal-rule-template": phaseProgress(semanticProgress, 0.48, 0.62),
+    "instantiate-rule-result": phaseProgress(semanticProgress, 0.62, 0.76),
+    "commit-rule-rewrite": phaseProgress(semanticProgress, 0.78, 0.94),
     "settle-expanded-rule": phaseProgress(semanticProgress, 0.9, 1)
   };
   const notice = phases["notice-operator-scope"];
   const withdrawal = phases["withdraw-operator"];
-  const focusRelease = phaseProgress(semanticProgress, 0.72, 0.94);
+  const focusRelease = phaseProgress(semanticProgress, 0.48, 0.62);
   const template = sampleKpAntiderivativeRuleTemplateApplication(
     phases["rewrite-power-rule"]
   );
@@ -414,21 +435,27 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
   rewriteProgress: number
 ): KpAntiderivativePowerChoreographyFrame["ruleTemplateApplication"] {
   const progress = clamp01(rewriteProgress);
-  const matchProgress = phaseProgress(progress, 0, 0.16);
+  const matchProgress = phaseProgress(progress, 0, 0.1);
   const matchPresence = roundProgress(
-    matchProgress * (1 - phaseProgress(progress, 0.44, 0.54))
+    matchProgress * (1 - phaseProgress(progress, 0.24, 0.3))
   );
-  const binding = phaseProgress(progress, 0.22, 0.36);
+  const binding = phaseProgress(progress, 0.2, 0.3);
   const metavariableBindingsPresence = roundProgress(
-    binding * (1 - phaseProgress(progress, 0.66, 0.76))
+    binding * (1 - phaseProgress(progress, 0.74, 0.82))
   );
-  const instantiationProgress = phaseProgress(progress, 0.46, 0.6);
-  const rewriteCommitProgress = phaseProgress(progress, 0.72, 0.94);
-  const sourcePresence = roundProgress(1 - rewriteCommitProgress);
-  const targetPresence = instantiationProgress;
+  const templateRevealProgress = phaseProgress(progress, 0.48, 0.58);
+  const instantiationProgress = phaseProgress(progress, 0.62, 0.72);
+  const rewriteCommitProgress = phaseProgress(progress, 0.82, 0.94);
+  const sourcePresence = roundProgress(
+    1 - phaseProgress(progress, 0.38, 0.46)
+  );
+  const targetPresence = templateRevealProgress;
+  const templateSlotPresence = roundProgress(
+    targetPresence * (1 - instantiationProgress)
+  );
   const receiverSettlement = rewriteCommitProgress;
   const syntaxResolution = rewriteCommitProgress;
-  const instantiatedResultPresence = targetPresence;
+  const instantiatedResultPresence = instantiationProgress;
   const panelPresence = roundProgress(Math.max(
     matchPresence,
     metavariableBindingsPresence
@@ -440,9 +467,9 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
   // A slot is semantic, but a box is not. The renderer may annotate the
   // matched source without introducing vacant rules or duplicate equations.
   const vacancyPresence = 0;
-  const scaffoldPresence = instantiationProgress;
-  const syntaxPresence = instantiationProgress;
-  const closurePresence = instantiationProgress;
+  const scaffoldPresence = templateRevealProgress;
+  const syntaxPresence = templateRevealProgress;
+  const closurePresence = templateRevealProgress;
   return Object.freeze({
     traceRole: rewriteCommitProgress >= 1
       ? "live" as const
@@ -455,6 +482,8 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
     matchPresence,
     metavariableBindingsPresence,
     instantiatedResultPresence,
+    templateRevealProgress,
+    templateSlotPresence,
     instantiationProgress,
     rewriteCommitProgress,
     sourcePresence,

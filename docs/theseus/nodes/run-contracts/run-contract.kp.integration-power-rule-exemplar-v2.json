@@ -1256,6 +1256,55 @@
       "scope": "final checkpoint",
       "checkedAt": "2026-08-26T01:28:58.375Z",
       "notes": "Final three-case Chromium Catalogue checkpoint passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "integration exemplar compile boundary",
+      "checkedAt": "2026-08-27T00:49:06.087Z",
+      "notes": "TypeScript, Svelte, and domain checks passed."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "semantic choreography and generated import",
+      "checkedAt": "2026-08-27T00:49:07.335Z",
+      "notes": "64 focused tests passed."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-catalogue",
+      "status": "passed",
+      "scope": "canonical Catalogue exemplar",
+      "checkedAt": "2026-08-27T00:49:08.376Z",
+      "notes": "Three Chromium lifecycle, timing, theme, reverse, and native-owner tests passed."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-transit",
+      "status": "passed",
+      "scope": "Native KaTeX transit mechanism",
+      "checkedAt": "2026-08-27T00:49:09.394Z",
+      "notes": "Real source-native to target-native compositor path passed."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-evaluation",
+      "status": "passed",
+      "scope": "post-rewrite ink-knot preservation",
+      "checkedAt": "2026-08-27T00:49:10.418Z",
+      "notes": "Both evaluation cohorts remain distinct and share the canonical clock."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "equation surface authority and snapshots",
+      "checkedAt": "2026-08-27T00:49:11.481Z",
+      "notes": "All 11 preservation checks passed after deterministic regeneration."
+    },
+    {
+      "command": "npm run visual:integration-power-rule",
+      "status": "passed",
+      "scope": "dark desktop and narrow light contact sheet",
+      "checkedAt": "2026-08-27T00:49:22.755Z",
+      "notes": "Capture assertions passed; subjective approval remains the named human checkpoint."
     }
   ],
   "allowedWork": [
