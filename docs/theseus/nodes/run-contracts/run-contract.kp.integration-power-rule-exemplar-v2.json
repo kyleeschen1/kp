@@ -1449,6 +1449,41 @@
       "status": "passed",
       "scope": "s18 21-frame dark desktop and narrow light registration checkpoint",
       "checkedAt": "2026-08-27T23:22:00.925Z"
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-28T01:04:08.000Z",
+      "notes": "64 governed integration, semantic choreography, Native KaTeX, and evaluation tests passed."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-catalogue",
+      "status": "passed",
+      "scope": "chromium-canary",
+      "checkedAt": "2026-08-28T01:04:09.455Z",
+      "notes": "Canonical Catalogue direct-seek, rewind, accessibility, single fraction ownership, stationary rewrite, and two evaluation knots passed."
+    },
+    {
+      "command": "npm run visual:integration-power-rule",
+      "status": "passed",
+      "scope": "human-checkpoint",
+      "checkedAt": "2026-08-28T01:04:10.558Z",
+      "notes": "Generated v9 dark/light desktop/narrow contact sheet for the single-focal schema projection candidate."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-28T01:04:11.811Z",
+      "notes": "All 11 equation inventory, authority, and endpoint preservation checks passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "type-safety",
+      "checkedAt": "2026-08-28T01:04:13.112Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks passed."
     }
   ],
   "allowedWork": [
@@ -1586,7 +1621,7 @@
     {
       "id": "next-action.kp.integration-power-rule.s18",
       "title": "Integration-human-visual-checkpoint",
-      "summary": "The v8 candidate replaces the cluttered floating depth lens with two labeled shallow-3D frames. The source expression and full rule pattern remain separately readable, align under one registration seam with complementary clip ownership, bind u to x and n to 2, then separate as the pattern face yields to one canonical Native KaTeX RHS template. The operator remains salience-only, the source becomes the matched power after withdrawal, one fraction owner exists from template reveal onward, the grounded explanation rail and both ink-knot reductions remain intact, and reduced or no-depth modes retain endpoint truth. Scoped semantic, Chromium lifecycle, Chromium and Firefox evaluation, equation-preservation, typecheck, and 21-frame visual capture checks pass. Awaiting explicit human visual approval before s19.",
+      "summary": "The v9 human-review candidate removes both 3D frames, labels, registration seam, binding formula, clips, and spatial transit. One stationary focal locus now passes visible ownership from the concrete integral to the full abstract pattern, pauses at an explicit turnover, then reveals the one canonical Native KaTeX replacement; the grounded explanation rail carries u-to-x and n-to-2 mappings, slot propagation remains visible on the RHS, and the rewrite commits without moving or duplicating its fraction rule. Semantic source ownership, exact endpoints, salience-only operator treatment, accessibility projections, two certified ink knots, and all unrelated equation surfaces remain preserved. Focused tests, Chromium lifecycle, equation preservation, typecheck, and the v9 dark/light desktop/narrow capture pass. Awaiting explicit human visual approval before s19.",
       "status": "in-progress"
     },
     {

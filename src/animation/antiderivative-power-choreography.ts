@@ -163,11 +163,6 @@ export interface KpAntiderivativePowerChoreographyFrame {
       readonly schemaPlanePresence: number;
       readonly correspondencePlanePresence: number;
       readonly prospectivePlaneDepth: number;
-      readonly sourceFramePresence: number;
-      readonly templateFramePresence: number;
-      readonly templateApproachProgress: number;
-      readonly registrationSeamProgress: number;
-      readonly templateRetreatProgress: number;
     };
   };
   readonly rewriteProgress: number;
@@ -338,8 +333,8 @@ export function compileKpAntiderivativePowerChoreography(input: {
       instantiatedResultLatex:
         String.raw`\frac{${baseLabel}^{${exponentLabel}+1}}{${exponentLabel}+1}+C`,
       // The instructional lens exposes the same verified metavariables as the
-      // authority. Presentation may separate their slots in depth, but it must
-      // not silently specialize away the u binding that licenses both x roles.
+      // authority. Presentation may vary support, but it must not silently
+      // specialize away the u binding that licenses both x roles.
       instructionalProjection: Object.freeze({
         patternLatex: String.raw`\int u^n\,du`,
         replacementTemplateLatex: String.raw`\frac{u^{n+1}}{n+1}+C`,
@@ -474,7 +469,7 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
   const rulePreviewPresence = roundProgress(
     rulePreviewRevealProgress * (1 - rulePreviewWithdrawalProgress)
   );
-  const patternProjectionProgress = phaseProgress(progress, 0.285, 0.46);
+  const patternProjectionProgress = phaseProgress(progress, 0.08, 0.285);
   const patternProjectionPresence = roundProgress(
     rulePreviewPresence * (1 - phaseProgress(progress, 0.63, 0.68))
   );
@@ -483,7 +478,7 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
     matchProgress * (1 - phaseProgress(progress, 0.63, 0.68))
   );
   const binding = phaseProgress(progress, 0.52, 0.63);
-  const templateRevealProgress = phaseProgress(progress, 0.68, 0.75);
+  const templateRevealProgress = phaseProgress(progress, 0.7, 0.77);
   const instructionWithdrawalProgress = phaseProgress(progress, 0.93, 0.96);
   const metavariableBindingsPresence = roundProgress(
     binding * (1 - templateRevealProgress) *
@@ -491,8 +486,8 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
   );
   const instantiationProgress = phaseProgress(progress, 0.82, 0.88);
   const rewriteCommitProgress = phaseProgress(progress, 0.965, 0.995);
-  // The expression stays available while the prospective rule frame registers
-  // against it. Only rewrite commitment transfers live ownership away from it.
+  // Semantic ownership remains with the source until commitment even while
+  // the presentation temporarily abstracts it into the rule pattern.
   const sourcePresence = roundProgress(1 - rewriteCommitProgress);
   const targetPresence = templateRevealProgress;
   const templateSlotPresence = roundProgress(
@@ -542,9 +537,9 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
   const explanationPresence = roundProgress(
     phaseProgress(progress, 0.02, 0.05)
   );
-  // Depth separates live notation, correspondence, and prospective schema.
-  // These are presentation roles sampled from the same playhead, never a
-  // second source of mathematical identity or rule applicability.
+  // These layer roles express instructional availability, not simultaneous
+  // paint. The renderer projects source, pattern, and replacement into one
+  // focal locus and must keep their combined salience bounded.
   const depthLens = Object.freeze({
     schemaPlanePresence: roundProgress(Math.max(
       rulePreviewPresence,
@@ -558,15 +553,7 @@ export function sampleKpAntiderivativeRuleTemplateApplication(
     )),
     prospectivePlaneDepth: roundProgress(
       targetPresence * (1 - rewriteCommitProgress)
-    ),
-    sourceFramePresence: rulePreviewPresence,
-    templateFramePresence: rulePreviewPresence,
-    templateApproachProgress: phaseProgress(progress, 0.08, 0.285),
-    registrationSeamProgress: phaseProgress(progress, 0.285, 0.63),
-    // Keep the planes registered while structure and bindings are being read.
-    // The template separates only after the match is complete, so depth does
-    // not turn the central comparison into two drifting equations.
-    templateRetreatProgress: phaseProgress(progress, 0.68, 0.82)
+    )
   });
   return Object.freeze({
     traceRole: rewriteCommitProgress >= 1

@@ -158,7 +158,7 @@ test("operator context remains through projection and withdraws before the templ
 
   const template = sampleKpAntiderivativePowerChoreography({
     plan,
-    progress: 0.7
+    progress: 0.73
   });
   assert.equal(template.operator.opacity, 0);
   assert.ok(template.ruleTemplateApplication.templateRevealProgress > 0);
@@ -195,12 +195,7 @@ test("rule application separates match bind instantiate and rewrite", () => {
   assert.deepEqual(before.ruleTemplateApplication.depthLens, {
     schemaPlanePresence: 0,
     correspondencePlanePresence: 0,
-    prospectivePlaneDepth: 0,
-    sourceFramePresence: 0,
-    templateFramePresence: 0,
-    templateApproachProgress: 0,
-    registrationSeamProgress: 0,
-    templateRetreatProgress: 0
+    prospectivePlaneDepth: 0
   });
   assert.equal(
     before.ruleTemplateApplication.receiverSettlementProgress,
@@ -214,15 +209,14 @@ test("rule application separates match bind instantiate and rewrite", () => {
   assert.equal(reference.ruleTemplateApplication.traceRole, "prospective");
   assert.equal(reference.ruleTemplateApplication.rulePreviewPresence, 1);
   assert.equal(reference.ruleTemplateApplication.patternProjectionPresence, 1);
-  assert.equal(reference.ruleTemplateApplication.patternProjectionProgress, 0);
+  assert.ok(reference.ruleTemplateApplication.patternProjectionProgress > 0);
+  assert.ok(reference.ruleTemplateApplication.patternProjectionProgress < 1);
   assert.equal(reference.ruleTemplateApplication.matchProgress, 0);
   assert.equal(reference.ruleTemplateApplication.matchPresence, 0);
   assert.equal(reference.ruleTemplateApplication.bindingProgress, 0);
   assert.equal(reference.ruleTemplateApplication.sourcePresence, 1);
   assert.equal(reference.ruleTemplateApplication.targetPresence, 0);
   assert.equal(reference.ruleTemplateApplication.templateSlotPresence, 0);
-  assert.equal(reference.ruleTemplateApplication.depthLens.sourceFramePresence, 1);
-  assert.equal(reference.ruleTemplateApplication.depthLens.templateFramePresence, 1);
   assert.equal(
     reference.ruleTemplateApplication.explanationBeatId,
     "recognize-rule"
@@ -284,9 +278,6 @@ test("rule application separates match bind instantiate and rewrite", () => {
   assert.equal(
     match.ruleTemplateApplication.depthLens.correspondencePlanePresence,
     1
-  );
-  assert.ok(
-    match.ruleTemplateApplication.depthLens.registrationSeamProgress > 0
   );
   assert.equal(
     match.ruleTemplateApplication.syntaxResolutionProgress,

@@ -422,26 +422,6 @@
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  .kp-animation-catalogue-shell__stage-host .editor-equation-stage {
-  perspective: 880px;
-  perspective-origin: 50% 45%;
-  transform-style: preserve-3d;
-}
-
-.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  :is(
-    .editor-equation-stage__content,
-    .editor-equation-stage__transition,
-    .editor-equation-stage__object,
-    [data-kp-editor-equation-source],
-    [data-kp-editor-equation-target],
-    .editor-equation-stage__antiderivative-template-receiver,
-    .editor-equation-stage__antiderivative-rule-template
-  ) {
-  transform-style: preserve-3d;
-}
-
-.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
   .kp-animation-catalogue-shell__stage-host
   .editor-equation-stage__material-layer {
   /* Native and material owners must share the same em context; the compositor
@@ -455,7 +435,6 @@
   z-index: 3;
   inset: 0;
   pointer-events: none;
-  transform-style: preserve-3d;
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
@@ -470,131 +449,6 @@
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  .editor-equation-stage__antiderivative-registration-frame {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: clamp(12.75rem, 34vw, 14.25rem);
-  height: clamp(5rem, 15vw, 5.65rem);
-  box-sizing: border-box;
-  border: 1px solid transparent;
-  border-radius: 0.58rem;
-  backface-visibility: hidden;
-  pointer-events: none;
-  transform-style: preserve-3d;
-}
-
-.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  .editor-equation-stage__antiderivative-registration-frame--source {
-  z-index: 4;
-  border-color: color-mix(
-    in srgb,
-    var(--kp-equation-foreground) 34%,
-    transparent
-  );
-  opacity: var(--kp-antiderivative-source-frame-presence, 0);
-}
-
-.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  .editor-equation-stage__antiderivative-registration-frame--template {
-  z-index: 2;
-  border-color: color-mix(
-    in srgb,
-    var(--kp-catalogue-link) 52%,
-    transparent
-  );
-  opacity: var(--kp-antiderivative-template-frame-presence, 0);
-}
-
-.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  .editor-equation-stage__antiderivative-registration-frame-label {
-  position: absolute;
-  top: -0.48rem;
-  left: 0.85rem;
-  padding-inline: 0.38rem;
-  color: color-mix(
-    in srgb,
-    var(--kp-equation-foreground) 68%,
-    var(--kp-catalogue-stage-background)
-  );
-  background: var(--kp-catalogue-stage-background);
-  font-size: 0.54rem;
-  font-weight: 680;
-  letter-spacing: 0.14em;
-  line-height: 1;
-  white-space: nowrap;
-}
-
-.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  .editor-equation-stage__antiderivative-registration-frame--template
-  .editor-equation-stage__antiderivative-registration-frame-label {
-  top: -1.02rem;
-  right: 0.85rem;
-  left: auto;
-  color: color-mix(
-    in srgb,
-    var(--kp-catalogue-link) 82%,
-    var(--kp-equation-foreground)
-  );
-}
-
-.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  .editor-equation-stage__antiderivative-registration-frame--source
-  .editor-equation-stage__antiderivative-registration-frame-label--initial {
-  opacity: calc(1 - var(--kp-antiderivative-template-face-progress, 0));
-}
-
-.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  .editor-equation-stage__antiderivative-registration-frame--source
-  .editor-equation-stage__antiderivative-registration-frame-label--committed {
-  opacity: var(--kp-antiderivative-template-face-progress, 0);
-}
-
-.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  .editor-equation-stage__antiderivative-registration-frame--template
-  .editor-equation-stage__antiderivative-registration-frame-label--initial {
-  opacity: calc(1 - var(--kp-antiderivative-template-commit-progress, 0));
-}
-
-.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  .editor-equation-stage__antiderivative-registration-frame--template
-  .editor-equation-stage__antiderivative-registration-frame-label--committed {
-  opacity: var(--kp-antiderivative-template-commit-progress, 0);
-}
-
-.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  .editor-equation-stage__antiderivative-registration-field {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: var(--kp-antiderivative-registration-seam-position, 12%);
-  border-bottom-right-radius: inherit;
-  border-bottom-left-radius: inherit;
-  background: linear-gradient(
-    to top,
-    color-mix(in srgb, var(--kp-catalogue-link) 5%, transparent),
-    transparent
-  );
-  opacity: var(--kp-antiderivative-registration-seam-presence, 0);
-}
-
-.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  .editor-equation-stage__antiderivative-registration-seam {
-  position: absolute;
-  right: 1.15rem;
-  bottom: var(--kp-antiderivative-registration-seam-position, 12%);
-  left: 1.15rem;
-  height: 1px;
-  background: color-mix(
-    in srgb,
-    var(--kp-catalogue-link) 72%,
-    transparent
-  );
-  opacity: var(--kp-antiderivative-registration-seam-presence, 0);
-}
-
-.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
   .editor-equation-stage__antiderivative-pattern-projection {
   position: absolute;
   z-index: 3;
@@ -603,10 +457,9 @@
   color: var(--kp-equation-foreground);
   font-size: clamp(2.15rem, 5.5vw, 2.75rem);
   opacity: var(--kp-antiderivative-pattern-projection-presence, 0);
-  /* Inline frame transforms keep these callouts registered to the native
-     source. The overlay never owns the integral or differential paint. */
+  /* This full pattern temporarily owns the same locus as the source. */
   text-shadow: none;
-  transform-style: preserve-3d;
+  transform: translate3d(-50%, -50%, 0);
   white-space: nowrap;
 }
 
@@ -620,7 +473,6 @@
   position: relative;
   display: inline-block;
   color: var(--kp-catalogue-link) !important;
-  transform-style: preserve-3d;
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
@@ -632,7 +484,6 @@
   [data-kp-antiderivative-rule-template-slot] {
   position: relative;
   color: var(--kp-equation-foreground) !important;
-  transform-style: preserve-3d;
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
@@ -655,23 +506,6 @@
   content: attr(data-kp-antiderivative-rule-template-slot);
   opacity: var(--kp-antiderivative-template-slot-presence, 0);
   pointer-events: none;
-  transform: translateZ(14px);
-}
-
-.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  .editor-equation-stage__antiderivative-rule-bindings {
-  position: absolute;
-  bottom: 0.62rem;
-  left: 50%;
-  color: color-mix(
-    in srgb,
-    var(--kp-catalogue-link) 82%,
-    var(--kp-equation-foreground)
-  );
-  font-size: clamp(0.86rem, 2.25vw, 1.08rem);
-  opacity: var(--kp-antiderivative-metavariable-bindings-presence, 0);
-  transform: translateX(-50%);
-  white-space: nowrap;
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
@@ -732,19 +566,6 @@
 }
 
 @media (max-width: 520px) {
-  .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-  .editor-equation-stage__antiderivative-registration-frame {
-    width: min(11rem, calc(100% - 2.2rem));
-    height: 4.9rem;
-  }
-
-  .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-    .editor-equation-stage__antiderivative-rule-bindings {
-    bottom: 0.48rem;
-    font-size: clamp(0.78rem, 3.7vw, 0.94rem);
-    transform: translateX(-50%);
-  }
-
   .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
     .editor-equation-stage__antiderivative-explanation {
     top: calc(50% + 3.65rem);
@@ -822,24 +643,6 @@
 }
 
 @media (forced-colors: active) {
-  .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-    .editor-equation-stage__antiderivative-registration-frame {
-    border-color: CanvasText;
-  }
-
-  .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-    :is(
-      .editor-equation-stage__antiderivative-registration-frame-label,
-      .editor-equation-stage__antiderivative-registration-seam
-    ) {
-    color: Highlight;
-  }
-
-  .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-    .editor-equation-stage__antiderivative-registration-seam {
-    background: Highlight;
-  }
-
   .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
     .editor-equation-stage__antiderivative-explanation {
     border-color: CanvasText;

@@ -33,7 +33,7 @@ export const kpAntiderivativePowerTransitRepairGapCode =
 export const kpAntiderivativeRuleApplicationNativeKatexMechanismId =
   "kp.rendering.native-katex.antiderivative-rule-application.v1";
 export const kpAntiderivativeRuleApplicationPresentationProfileId =
-  "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v8";
+  "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v9";
 
 export interface KpAntiderivativePowerTransitMountResult {
   readonly status: "inactive" | "preparing" | "mounted" | "repair-gap";
@@ -261,26 +261,6 @@ function createTemplateReceiver(
     "--kp-antiderivative-correspondence-plane-presence",
     "0"
   );
-  element.style.setProperty(
-    "--kp-antiderivative-source-frame-presence",
-    "0"
-  );
-  element.style.setProperty(
-    "--kp-antiderivative-template-frame-presence",
-    "0"
-  );
-  element.style.setProperty(
-    "--kp-antiderivative-registration-seam-presence",
-    "0"
-  );
-  element.style.setProperty(
-    "--kp-antiderivative-registration-seam-progress",
-    "0"
-  );
-  element.style.setProperty(
-    "--kp-antiderivative-registration-seam-position",
-    "12%"
-  );
   element.setAttribute("aria-hidden", "true");
 
   const rulePanel = stage.ownerDocument.createElement("div");
@@ -298,83 +278,21 @@ function createTemplateReceiver(
   rulePanel.setAttribute("role", "img");
   rulePanel.setAttribute("aria-hidden", "true");
 
-  const sourceFrame = createRegistrationFrame({
-    stage,
-    role: "source",
-    label: "SOURCE EXPRESSION",
-    committedLabel: "MATCHED POWER"
-  });
-  const templateFrame = createRegistrationFrame({
-    stage,
-    role: "template",
-    label: "POWER RULE · TEMPLATE",
-    committedLabel: "REWRITTEN EXPRESSION"
-  });
   const patternProjection = createInstructionalPatternProjection(
     stage,
     template.instructionalProjection
   );
-  const bindings = createRuleTemplateFormula({
-    stage,
-    className: "editor-equation-stage__antiderivative-rule-bindings",
-    dataAttribute: "kpAntiderivativeRuleBindings",
-    latex: template.instructionalProjection.bindingLatex,
-    annotatedLatex: annotateInstructionalBindingsLatex(
-      template.instructionalProjection.bindingLatex
-    )
-  });
-  templateFrame.append(bindings);
-  rulePanel.append(sourceFrame, templateFrame, patternProjection);
+  rulePanel.append(patternProjection);
   element.append(rulePanel);
   stage.append(element);
   return element;
 }
 
-function createRegistrationFrame(input: {
-  readonly stage: HTMLElement;
-  readonly role: "source" | "template";
-  readonly label: string;
-  readonly committedLabel?: string | undefined;
-}): HTMLElement {
-  const frame = input.stage.ownerDocument.createElement("div");
-  frame.className =
-    "editor-equation-stage__antiderivative-registration-frame " +
-    `editor-equation-stage__antiderivative-registration-frame--${input.role}`;
-  frame.dataset["kpAntiderivativeRegistrationFrame"] = input.role;
-  frame.setAttribute("aria-hidden", "true");
-
-  const label = input.stage.ownerDocument.createElement("span");
-  label.className =
-    "editor-equation-stage__antiderivative-registration-frame-label " +
-    "editor-equation-stage__antiderivative-registration-frame-label--initial";
-  label.textContent = input.label;
-  frame.append(label);
-  if (input.committedLabel !== undefined) {
-    const committed = input.stage.ownerDocument.createElement("span");
-    committed.className =
-      "editor-equation-stage__antiderivative-registration-frame-label " +
-      "editor-equation-stage__antiderivative-registration-frame-label--committed";
-    committed.textContent = input.committedLabel;
-    frame.append(committed);
-  }
-  if (input.role === "source") {
-    const field = input.stage.ownerDocument.createElement("span");
-    field.className =
-      "editor-equation-stage__antiderivative-registration-field";
-    const seam = input.stage.ownerDocument.createElement("span");
-    seam.className =
-      "editor-equation-stage__antiderivative-registration-seam";
-    seam.dataset["kpAntiderivativeRegistrationSeam"] = "match-bind";
-    frame.append(field, seam);
-  }
-  return frame;
-}
-
 /*
- * The rule's pattern is the first face of the template plane. It may coexist
- * with the source while the frames are separate; during registration the two
- * structurally homologous integrals receive complementary clips, so their
- * paint never piles up. The RHS appears only after this match has completed.
+ * The pattern temporarily takes over the source's focal locus. This makes
+ * abstraction perceptible without asking the reader to compare two equations
+ * or interpret a second spatial diagram. The RHS appears only after the
+ * pattern has withdrawn.
  */
 function createInstructionalPatternProjection(
   stage: HTMLElement,
@@ -404,24 +322,10 @@ function annotateInstructionalPatternProjectionLatex(latex: string): string {
     String.raw`\htmlData{kp-antiderivative-pattern-slot=u-differential}{u}`;
 }
 
-function annotateInstructionalBindingsLatex(latex: string): string {
-  const parts = latex.split(String.raw`,\qquad `);
-  if (parts.length !== 2) {
-    throw new Error(
-      "Antiderivative instructional bindings require u and n relations."
-    );
-  }
-  return String.raw`\htmlData{kp-antiderivative-binding-origin=u}{${parts[0]!}}` +
-    String.raw`,\qquad ` +
-    String.raw`\htmlData{kp-antiderivative-binding-origin=n}{${parts[1]!}}`;
-}
-
 function createRuleTemplateFormula(input: {
   readonly stage: HTMLElement;
   readonly className: string;
-  readonly dataAttribute:
-    | "kpAntiderivativeRuleBindings"
-    | "kpAntiderivativeRulePatternProjection";
+  readonly dataAttribute: "kpAntiderivativeRulePatternProjection";
   readonly latex: string;
   readonly annotatedLatex?: string | undefined;
 }): HTMLElement {
@@ -470,26 +374,6 @@ function hideTemplateReceiver(session: TransitMountSession): void {
   session.templateReceiver.style.setProperty(
     "--kp-antiderivative-correspondence-plane-presence",
     "0"
-  );
-  session.templateReceiver.style.setProperty(
-    "--kp-antiderivative-source-frame-presence",
-    "0"
-  );
-  session.templateReceiver.style.setProperty(
-    "--kp-antiderivative-template-frame-presence",
-    "0"
-  );
-  session.templateReceiver.style.setProperty(
-    "--kp-antiderivative-registration-seam-presence",
-    "0"
-  );
-  session.templateReceiver.style.setProperty(
-    "--kp-antiderivative-registration-seam-progress",
-    "0"
-  );
-  session.templateReceiver.style.setProperty(
-    "--kp-antiderivative-registration-seam-position",
-    "12%"
   );
   session.templateReceiver.dataset["kpSemanticTraceRole"] = "absent";
   session.templateReceiver.setAttribute("aria-hidden", "true");
@@ -682,7 +566,7 @@ function applyFrame(session: TransitMountSession): void {
     projection
   );
   session.stage.dataset["kpAntiderivativeDepthLens"] =
-    projection === "full" ? "framed-registration" : projection;
+    projection === "full" ? "schema-projection" : projection;
   const visualOwner = applyNativeRuleApplicationState(
     session,
     ruleApplication,
@@ -711,6 +595,7 @@ function applyRuleTemplateApplicationState(
   template: ReturnType<typeof sampleKpAntiderivativeRuleTemplateApplication>,
   projection: "full" | "reduced" | "no-depth"
 ): number {
+  const visualProjection = schemaProjectionState(template, projection);
   session.templateReceiver.style.setProperty(
     "--kp-antiderivative-rule-template-panel-presence",
     template.panelPresence.toFixed(4)
@@ -729,23 +614,11 @@ function applyRuleTemplateApplicationState(
   );
   session.templateReceiver.style.setProperty(
     "--kp-antiderivative-pattern-projection-presence",
-    template.patternProjectionPresence.toFixed(4)
+    visualProjection.patternInkPresence.toFixed(4)
   );
   session.templateReceiver.style.setProperty(
     "--kp-antiderivative-pattern-projection-fixed-presence",
     "1"
-  );
-  session.templateReceiver.style.setProperty(
-    "--kp-antiderivative-pattern-projection-lift",
-    "0rem"
-  );
-  session.templateReceiver.style.setProperty(
-    "--kp-antiderivative-pattern-slot-lift",
-    "-0.72em"
-  );
-  session.templateReceiver.style.setProperty(
-    "--kp-antiderivative-pattern-slot-shift",
-    "0.62em"
   );
   session.templateReceiver.style.setProperty(
     "--kp-antiderivative-schema-plane-presence",
@@ -754,31 +627,6 @@ function applyRuleTemplateApplicationState(
   session.templateReceiver.style.setProperty(
     "--kp-antiderivative-correspondence-plane-presence",
     template.depthLens.correspondencePlanePresence.toFixed(4)
-  );
-  const frameProjection = registrationFrameProjection(
-    template,
-    projection,
-    session.stage.clientWidth
-  );
-  session.templateReceiver.style.setProperty(
-    "--kp-antiderivative-source-frame-presence",
-    frameProjection.sourcePresence.toFixed(4)
-  );
-  session.templateReceiver.style.setProperty(
-    "--kp-antiderivative-template-frame-presence",
-    frameProjection.templatePresence.toFixed(4)
-  );
-  session.templateReceiver.style.setProperty(
-    "--kp-antiderivative-registration-seam-presence",
-    frameProjection.seamPresence.toFixed(4)
-  );
-  session.templateReceiver.style.setProperty(
-    "--kp-antiderivative-registration-seam-progress",
-    frameProjection.seamProgress.toFixed(4)
-  );
-  session.templateReceiver.style.setProperty(
-    "--kp-antiderivative-registration-seam-position",
-    `${(12 + 70 * frameProjection.seamProgress).toFixed(3)}%`
   );
   session.templateReceiver.style.setProperty(
     "--kp-antiderivative-template-face-progress",
@@ -806,11 +654,7 @@ function applyRuleTemplateApplicationState(
   if (rulePanel === null) {
     throw new Error("Antiderivative rewrite lacks its rule-template panel.");
   }
-  applyInstructionalRuleLayerState(
-    session,
-    template,
-    frameProjection
-  );
+  applyInstructionalRuleLayerState(session, template, visualProjection);
   const panelIsPresent = template.panelPresence > 0.01;
   session.templateReceiver.setAttribute(
     "aria-hidden",
@@ -942,221 +786,104 @@ function applyRuleTemplateApplicationState(
   session.stage.dataset["kpAntiderivativeTemplateClosurePresence"] =
     template.closurePresence.toFixed(4);
   session.stage.dataset["kpAntiderivativeFixedSyntaxOwner"] =
-    template.patternProjectionPresence > 0.01
-      ? "source-and-pattern-native"
-      : template.sourcePresence > 0.01
+    visualProjection.primaryRepresentation === "schema-pattern"
+      ? "pattern-projection"
+      : visualProjection.primaryRepresentation === "source"
         ? "source-native"
         : "none";
   session.stage.dataset["kpAntiderivativeDepthLens"] =
-    projection === "full" ? "framed-registration" : projection;
+    projection === "full" ? "schema-projection" : projection;
   session.stage.dataset["kpAntiderivativeSchemaPlanePresence"] =
     template.depthLens.schemaPlanePresence.toFixed(4);
   session.stage.dataset["kpAntiderivativeCorrespondencePlanePresence"] =
     template.depthLens.correspondencePlanePresence.toFixed(4);
   session.stage.dataset["kpAntiderivativeProspectivePlaneDepth"] =
     template.depthLens.prospectivePlaneDepth.toFixed(4);
-  session.stage.dataset["kpAntiderivativeRegistrationFrameCount"] = "2";
-  session.stage.dataset["kpAntiderivativeSourceFramePresence"] =
-    frameProjection.sourcePresence.toFixed(4);
-  session.stage.dataset["kpAntiderivativeTemplateFramePresence"] =
-    frameProjection.templatePresence.toFixed(4);
-  session.stage.dataset["kpAntiderivativeTemplateApproachProgress"] =
-    template.depthLens.templateApproachProgress.toFixed(4);
-  session.stage.dataset["kpAntiderivativeRegistrationSeamProgress"] =
-    frameProjection.seamProgress.toFixed(4);
-  session.stage.dataset["kpAntiderivativeTemplateRetreatProgress"] =
-    template.depthLens.templateRetreatProgress.toFixed(4);
-  session.stage.dataset["kpAntiderivativeRegistrationFrameState"] =
-    registrationFrameState(template);
+  session.stage.dataset["kpAntiderivativeSchemaProjection"] =
+    "single-focal";
+  session.stage.dataset["kpAntiderivativePrimaryRepresentation"] =
+    visualProjection.primaryRepresentation;
+  session.stage.dataset["kpAntiderivativePrimaryRepresentationCount"] =
+    visualProjection.primaryRepresentation === "turnover" ? "0" : "1";
+  session.stage.dataset["kpAntiderivativeRegistrationFrameCount"] = "0";
   session.stage.dataset["kpAntiderivativeBindingRelationCount"] = "0";
   session.stage.dataset["kpAntiderivativeBindingRelationPresence"] = "0.0000";
   return template.panelPresence;
 }
 
-interface RegistrationFrameProjection {
-  readonly sourcePresence: number;
-  readonly templatePresence: number;
-  readonly seamPresence: number;
-  readonly seamProgress: number;
-  readonly sourceRootTransform: string;
-  readonly sourceFrameTransform: string;
-  readonly templateRootTransform: string;
-  readonly templateFrameTransform: string;
-  readonly sourceInkClipPath: string;
-  readonly targetInkClipPath: string;
-  readonly targetInkOpacity: number;
+interface SchemaProjectionState {
+  readonly sourceInkPresence: number;
+  readonly patternInkPresence: number;
+  readonly targetInkPresence: number;
+  readonly primaryRepresentation:
+    | "source"
+    | "schema-pattern"
+    | "replacement-template"
+    | "instantiated-rewrite"
+    | "committed-rewrite"
+    | "turnover";
 }
 
-function registrationFrameProjection(
+function schemaProjectionState(
   template: ReturnType<typeof sampleKpAntiderivativeRuleTemplateApplication>,
-  projection: "full" | "reduced" | "no-depth",
-  stageWidth: number
-): RegistrationFrameProjection {
+  projection: "full" | "reduced" | "no-depth"
+): SchemaProjectionState {
   if (projection !== "full") {
+    const committed = template.rewriteCommitProgress >= 0.5;
     return Object.freeze({
-      sourcePresence: 0,
-      templatePresence: 0,
-      seamPresence: 0,
-      seamProgress: 0,
-      sourceRootTransform: "none",
-      sourceFrameTransform: "translate3d(-50%, -50%, 0)",
-      templateRootTransform: "none",
-      templateFrameTransform: "translate3d(-50%, -50%, 0)",
-      sourceInkClipPath: "none",
-      targetInkClipPath: "none",
-      targetInkOpacity: 1
+      sourceInkPresence: committed ? 0 : 1,
+      patternInkPresence: 0,
+      targetInkPresence: committed ? 1 : 0,
+      primaryRepresentation: committed
+        ? "committed-rewrite" as const
+        : "source" as const
     });
   }
-  const framePresence = template.depthLens.sourceFramePresence;
-  const commit = template.rewriteCommitProgress;
-  const approach = template.depthLens.templateApproachProgress;
-  const retreat = template.depthLens.templateRetreatProgress;
-  const spatialApproach = approach * approach;
-  const separation = stageWidth <= 520 ? 4.25 : 6.2;
-  const sourcePoseBeforeCommit = {
-    x: mix(mix(-separation, -0.12, spatialApproach), -separation * 0.78, retreat),
-    y: mix(mix(0.38, 0.06, spatialApproach), 0.52, retreat),
-    z: mix(mix(16, 7, spatialApproach), 13, retreat),
-    rotateX: mix(mix(-1.9, -0.45, spatialApproach), -1.8, retreat),
-    rotateY: mix(mix(4.1, 0.7, spatialApproach), 3.8, retreat),
-    rotateZ: mix(mix(0.72, 0.12, spatialApproach), 0.68, retreat)
-  };
-  const sourcePose = {
-    x: mix(0, mix(sourcePoseBeforeCommit.x, -separation, commit), framePresence),
-    y: mix(0, mix(sourcePoseBeforeCommit.y, 0.72, commit), framePresence),
-    z: mix(0, mix(sourcePoseBeforeCommit.z, -50, commit), framePresence),
-    rotateX: mix(0, mix(sourcePoseBeforeCommit.rotateX, -3.1, commit), framePresence),
-    rotateY: mix(0, mix(sourcePoseBeforeCommit.rotateY, 5.2, commit), framePresence),
-    rotateZ: mix(0, mix(sourcePoseBeforeCommit.rotateZ, 1.1, commit), framePresence)
-  };
-  const templatePoseBeforeCommit = {
-    x: mix(mix(separation, 0.12, spatialApproach), separation * 0.78, retreat),
-    y: mix(mix(-0.38, -0.06, spatialApproach), -0.52, retreat),
-    z: mix(mix(-46, -6, spatialApproach), -38, retreat),
-    rotateX: mix(mix(2.1, 0.45, spatialApproach), 1.8, retreat),
-    rotateY: mix(mix(-4.1, -0.7, spatialApproach), -3.8, retreat),
-    rotateZ: mix(mix(-0.72, -0.12, spatialApproach), -0.68, retreat)
-  };
-  const templatePose = {
-    x: mix(templatePoseBeforeCommit.x, 0, commit),
-    y: mix(templatePoseBeforeCommit.y, 0, commit),
-    z: mix(templatePoseBeforeCommit.z, 0, commit),
-    rotateX: mix(templatePoseBeforeCommit.rotateX, 0, commit),
-    rotateY: mix(templatePoseBeforeCommit.rotateY, 0, commit),
-    rotateZ: mix(templatePoseBeforeCommit.rotateZ, 0, commit)
-  };
-  const seam = template.depthLens.registrationSeamProgress;
-  const registering = approach >= 0.999 || seam > 0;
-  const sourceReplacement = registering
-    ? seam * (1 - retreat)
-    : 0;
-  const targetReveal = registering
-    ? seam + (1 - seam) * retreat
-    : 1;
-  // As the two planes converge, the prospective ink first yields, then the
-  // registration seam repaints it region by region. This prevents the common
-  // failure mode where two legible formulas become one illegible stack.
-  const targetInkOpacity = registering
-    ? 1
-    : 1 - bounded((approach - 0.72) / 0.28);
+  // Semantic source ownership persists until commit, but presentation passes
+  // through one surface at a time: concrete source, abstract pattern, then
+  // replacement. This is the key boundary between rewrite truth and support.
+  const sourceInkPresence = 1 - template.patternProjectionProgress;
+  const patternInkPresence = template.patternProjectionPresence *
+    template.patternProjectionProgress;
+  const targetInkPresence = template.targetPresence;
+  const primaryRepresentation = template.rewriteCommitProgress >= 1
+    ? "committed-rewrite" as const
+    : targetInkPresence > 0.01
+      ? template.instantiationProgress >= 1
+        ? "instantiated-rewrite" as const
+        : "replacement-template" as const
+      : patternInkPresence > 0.01
+        ? "schema-pattern" as const
+        : sourceInkPresence > 0.01
+          ? "source" as const
+          : "turnover" as const;
   return Object.freeze({
-    sourcePresence: template.depthLens.sourceFramePresence,
-    templatePresence: template.depthLens.templateFramePresence,
-    seamPresence: template.patternProjectionPresence,
-    seamProgress: template.depthLens.registrationSeamProgress,
-    sourceRootTransform: rootPoseTransform(sourcePose),
-    sourceFrameTransform: framePoseTransform(sourcePose),
-    templateRootTransform: rootPoseTransform(templatePose),
-    templateFrameTransform: framePoseTransform(templatePose),
-    sourceInkClipPath:
-      `inset(0 0 ${(sourceReplacement * 100).toFixed(3)}% 0)`,
-    targetInkClipPath:
-      `inset(${((1 - targetReveal) * 100).toFixed(3)}% 0 0 0)`,
-    targetInkOpacity
+    sourceInkPresence,
+    patternInkPresence,
+    targetInkPresence,
+    primaryRepresentation
   });
-}
-
-function rootPoseTransform(pose: {
-  readonly x: number;
-  readonly y: number;
-  readonly z: number;
-  readonly rotateX: number;
-  readonly rotateY: number;
-  readonly rotateZ: number;
-}): string {
-  return `translate3d(${pose.x.toFixed(4)}rem, ${pose.y.toFixed(4)}rem, ` +
-    `${pose.z.toFixed(4)}px) rotateX(${pose.rotateX.toFixed(4)}deg) ` +
-    `rotateY(${pose.rotateY.toFixed(4)}deg) ` +
-    `rotateZ(${pose.rotateZ.toFixed(4)}deg)`;
-}
-
-function framePoseTransform(pose: {
-  readonly x: number;
-  readonly y: number;
-  readonly z: number;
-  readonly rotateX: number;
-  readonly rotateY: number;
-  readonly rotateZ: number;
-}): string {
-  return `translate3d(calc(-50% + ${pose.x.toFixed(4)}rem), ` +
-    `calc(-50% + ${pose.y.toFixed(4)}rem), ${pose.z.toFixed(4)}px) ` +
-    `rotateX(${pose.rotateX.toFixed(4)}deg) ` +
-    `rotateY(${pose.rotateY.toFixed(4)}deg) ` +
-    `rotateZ(${pose.rotateZ.toFixed(4)}deg)`;
-}
-
-function registrationFrameState(
-  template: ReturnType<typeof sampleKpAntiderivativeRuleTemplateApplication>
-): "absent" | "approaching" | "registering" | "bound" |
-  "instantiating" | "instantiated" | "committing" | "committed" {
-  if (template.rewriteCommitProgress >= 1) return "committed";
-  if (template.rewriteCommitProgress > 0) return "committing";
-  if (template.instantiationProgress >= 1) return "instantiated";
-  if (template.instantiationProgress > 0) return "instantiating";
-  if (template.bindingProgress >= 1) return "bound";
-  if (template.matchProgress > 0) return "registering";
-  if (template.rulePreviewPresence > 0) return "approaching";
-  return "absent";
 }
 
 function applyInstructionalRuleLayerState(
   session: TransitMountSession,
   template: ReturnType<typeof sampleKpAntiderivativeRuleTemplateApplication>,
-  frameProjection: RegistrationFrameProjection
+  visualProjection: SchemaProjectionState
 ): void {
-  const sourceFrame = session.templateReceiver.querySelector<HTMLElement>(
-    '[data-kp-antiderivative-registration-frame="source"]'
-  );
-  const templateFrame = session.templateReceiver.querySelector<HTMLElement>(
-    '[data-kp-antiderivative-registration-frame="template"]'
-  );
-  const projection = session.templateReceiver.querySelector<HTMLElement>(
+  const pattern = session.templateReceiver.querySelector<HTMLElement>(
     "[data-kp-antiderivative-rule-pattern-projection]"
   );
-  if (
-    sourceFrame === null ||
-    templateFrame === null ||
-    projection === null
-  ) {
+  if (pattern === null) {
     throw new Error(
-      "Antiderivative rule application lacks its instructional layers."
+      "Antiderivative rule application lacks its instructional pattern."
     );
   }
-  const state = registrationFrameState(template);
-  sourceFrame.style.transform = frameProjection.sourceFrameTransform;
-  sourceFrame.dataset["kpAntiderivativeRegistrationFrameState"] = state;
-  sourceFrame.dataset["kpSemanticTraceRole"] = "live";
-  templateFrame.style.transform = frameProjection.templateFrameTransform;
-  templateFrame.dataset["kpAntiderivativeRegistrationFrameState"] = state;
-  templateFrame.dataset["kpSemanticTraceRole"] = template.traceRole;
-  projection.dataset["kpSemanticTraceRole"] = template.traceRole;
-  projection.dataset["kpSemanticSalienceLevel"] =
-    template.patternProjectionPresence > 0.01 ? "focus" : "context";
-  projection.style.transform = frameProjection.templateFrameTransform;
-  projection.style.clipPath = frameProjection.targetInkClipPath;
-  projection.style.opacity = (
-    template.patternProjectionPresence * frameProjection.targetInkOpacity
-  ).toFixed(4);
+  pattern.dataset["kpSemanticTraceRole"] = template.traceRole;
+  pattern.dataset["kpSemanticSalienceLevel"] =
+    visualProjection.patternInkPresence > 0.01 ? "focus" : "context";
+  pattern.style.transform = "translate3d(-50%, -50%, 0)";
+  pattern.style.clipPath = "none";
+  pattern.style.opacity = visualProjection.patternInkPresence.toFixed(4);
 }
 
 function applyNativeRuleApplicationState(
@@ -1164,35 +891,22 @@ function applyNativeRuleApplicationState(
   template: ReturnType<typeof sampleKpAntiderivativeRuleTemplateApplication>,
   projection: "full" | "reduced" | "no-depth"
 ): "source-native" | "rule-application-native" | "target-native" {
-  if (projection === "no-depth") {
-    const target = template.rewriteCommitProgress >= 0.5;
-    session.roots.source.style.opacity = target ? "0" : "1";
-    session.roots.target.style.opacity = target ? "1" : "0";
-    return target ? "target-native" : "source-native";
-  }
-
+  const visualProjection = schemaProjectionState(template, projection);
   const commit = template.rewriteCommitProgress;
-  const frameProjection = registrationFrameProjection(
-    template,
-    projection,
-    session.stage.clientWidth
-  );
-  const targetOpacity = template.targetPresence *
-    (0.84 + 0.16 * commit) * frameProjection.targetInkOpacity;
-  session.roots.source.style.opacity = String(template.sourcePresence);
-  session.roots.target.style.opacity = targetOpacity.toFixed(4);
-  session.roots.source.style.transform = frameProjection.sourceRootTransform;
-  session.roots.target.style.transform = frameProjection.templateRootTransform;
-  session.roots.source.style.clipPath = frameProjection.sourceInkClipPath;
-  session.roots.target.style.clipPath = frameProjection.targetInkClipPath;
+  session.roots.source.style.opacity =
+    visualProjection.sourceInkPresence.toFixed(4);
+  session.roots.target.style.opacity =
+    visualProjection.targetInkPresence.toFixed(4);
+  session.roots.source.style.transform = "none";
+  session.roots.target.style.transform = "none";
+  session.roots.source.style.clipPath = "none";
+  session.roots.target.style.clipPath = "none";
   session.roots.target.style.setProperty(
     "--kp-antiderivative-prospective-depth",
     (template.targetPresence * (1 - commit)).toFixed(4)
   );
-  // A subtree drop-shadow duplicates the fraction bar's realized paint and
-  // reads as a second rule even though the DOM has only one `.frac-line`.
-  // The frame perimeter therefore carries depth while the canonical KaTeX
-  // target remains the only instantiated fraction owner.
+  // The canonical target remains stationary and owns the only fraction rule.
+  // Schema projection is a change of semantic owner, not a spatial transit.
   session.roots.target.style.filter = "none";
   session.roots.target.dataset["kpAntiderivativeProspectivePlacement"] =
     "center";
@@ -1202,8 +916,8 @@ function applyNativeRuleApplicationState(
 
   if (commit >= 1) return "target-native";
   if (
-    template.targetPresence > 0.01 ||
-    template.patternProjectionPresence > 0.01
+    visualProjection.targetInkPresence > 0.01 ||
+    visualProjection.patternInkPresence > 0.01
   ) return "rule-application-native";
   return "source-native";
 }
@@ -1486,18 +1200,11 @@ function clearTelemetry(stage: HTMLElement): void {
   delete stage.dataset["kpAntiderivativeBindingRelationCount"];
   delete stage.dataset["kpAntiderivativeBindingRelationPresence"];
   delete stage.dataset["kpAntiderivativeRegistrationFrameCount"];
-  delete stage.dataset["kpAntiderivativeSourceFramePresence"];
-  delete stage.dataset["kpAntiderivativeTemplateFramePresence"];
-  delete stage.dataset["kpAntiderivativeTemplateApproachProgress"];
-  delete stage.dataset["kpAntiderivativeRegistrationSeamProgress"];
-  delete stage.dataset["kpAntiderivativeTemplateRetreatProgress"];
-  delete stage.dataset["kpAntiderivativeRegistrationFrameState"];
+  delete stage.dataset["kpAntiderivativeSchemaProjection"];
+  delete stage.dataset["kpAntiderivativePrimaryRepresentation"];
+  delete stage.dataset["kpAntiderivativePrimaryRepresentationCount"];
 }
 
 function bounded(value: number): number {
   return Math.max(0, Math.min(1, Number.isFinite(value) ? value : 0));
-}
-
-function mix(from: number, to: number, progress: number): number {
-  return from + (to - from) * bounded(progress);
 }
