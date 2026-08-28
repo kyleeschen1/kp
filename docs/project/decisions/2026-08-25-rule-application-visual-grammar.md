@@ -106,6 +106,55 @@ and renderer boundaries are actually shared. Prediction, application, and
 mental-execution modes remain future projections of the same semantic states,
 not part of this slice.
 
+## Preserved Alternative: Abstraction By Skeletonization
+
+Preserve **skeletonization** as a distinct presentation candidate, not as a
+replacement for the semantic Rule Application grammar or as an approved
+catalogue-wide motif. A successful match may progressively subordinate the
+particulars of the subject until its fixed structure and metavariable slots
+are perceived as the pattern itself:
+
+```text
+x * (y + 3)
+-> [x] * ([y] + [3])
+-> A * (B + C)
+```
+
+The reverse passage can express instantiation. For a compound subtree, the
+renderer may first let that subtree behave as one object before replacing it
+with a metavariable. The brackets above describe semantic grouping only; they
+do not prescribe visible boxes.
+
+This candidate offers four promising visual laws:
+
+- successful matching removes perceptual detail while preserving structure;
+- a metavariable binds one semantic object, including a whole subtree;
+- completed correspondences settle out of focus instead of accumulating; and
+- a failed match may collapse everything that succeeds so the unmatched
+  operator, constraint, or shape remains as a residue.
+
+The particulars are not semantically irrelevant or discarded. Their stable
+identities and the binding environment remain recoverable, and repeated uses
+of one metavariable must abstract or instantiate as one coupled event. For the
+integration exemplar, both occurrences supplied by `n -> 2` must therefore
+change together. Fixed syntax should remain stationary, color or fading cannot
+be the only carrier of the distinction, and accessibility must expose the
+concrete subject, abstract pattern, and bindings as separate instructional
+states.
+
+Skeletonization and the exemplar-local Rule Lens solve different problems and
+may compose. Skeletonization is a candidate authored transition for learning
+to perceive a schema; the Rule Lens is a learner-controlled inspection
+affordance for recovering either side of a stable comparison without changing
+semantic time. Neither changes the canonical beats
+`match -> bind -> instantiate -> rewrite -> reduce`.
+
+Before promotion, pressure one reversible exemplar for deterministic direct
+seek and rewind, stable Native KaTeX ownership and metrics, repeated-variable
+binding, a compound-subtree caller, and one failed-match residue. Do not add a
+shared skeletonization type, Markdown effect syntax, or catalogue rollout from
+the idea alone.
+
 ## Alternatives Considered
 
 - **Show the full abstract rule beside the subject:** rejected for the
