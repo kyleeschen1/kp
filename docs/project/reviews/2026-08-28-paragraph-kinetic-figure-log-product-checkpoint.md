@@ -2,13 +2,14 @@
 
 Date: 2026-08-28
 Status: human checkpoint
+Revision: 2
 
 ## Candidate
 
 The **Paragraph Kinetic Figure** is a local, stateful figure attached to one
-ordinary explanatory paragraph. Its numbered controls select conceptual
-reading states, while linked phrases and semantic figure entities exchange
-salience in both directions.
+ordinary explanatory paragraph inside a larger lesson passage. Its numbered
+controls select conceptual reading states, while linked phrases and semantic
+figure entities exchange salience in both directions.
 
 The first exemplar is available at:
 
@@ -33,12 +34,21 @@ reading-state projections, and their quiet document-scale styling.
 - Four numbered conceptual states remain directly revisitable.
 - States 1 and 2 share the source equation while expressing different
   attentional intent.
-- State 3 visibly pauses during the structural separation.
-- State 4 settles on the canonical target.
+- The rewrite is an entry transition rather than a resting state: entering
+  state 3 replays the canonical transformation and settles on valid target
+  notation with introduced logarithm syntax and the connector emphasized.
+- States 3 and 4 share the target equation while expressing change-focused
+  and whole-result attention respectively.
 - Selecting a state focuses its linked prose phrase; activating a prose phrase
   selects or replays the same state.
+- Hover previews prose/control correspondence without moving the semantic
+  playhead or changing the URL.
+- A quiet, optional disclosure exposes the product-law template and domain
+  conditions without making it permanent stage content.
 - The paragraph text and layout remain constant.
 - Reduced motion reaches the same endpoints directly.
+- The figure is embedded between ordinary surrounding lesson paragraphs and
+  followed by a non-example that pressures structural reading.
 
 ## Preservation and Rollback
 

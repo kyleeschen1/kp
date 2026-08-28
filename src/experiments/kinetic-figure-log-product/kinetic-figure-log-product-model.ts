@@ -10,17 +10,22 @@ export type KpLogProductKineticFigureStateId =
 
 export type KpLogProductKineticFigurePose =
   | "source"
-  | "transformation"
   | "target";
+
+export type KpLogProductKineticFigureTransitionId =
+  "transition.log-product.split";
 
 export interface KpLogProductKineticFigureState {
   readonly id: KpLogProductKineticFigureStateId;
   readonly ordinal: 1 | 2 | 3 | 4;
   readonly label: string;
   readonly pose: KpLogProductKineticFigurePose;
+  readonly entryTransitionId?:
+    KpLogProductKineticFigureTransitionId | undefined;
   readonly proseTargetId: `prose.log-product.${string}`;
   readonly attentionTargetId?:
     | "semantic.log-product.product"
+    | "semantic.log-product.introduced-structure"
     | "semantic.log-product.sum"
     | undefined;
 }
@@ -35,14 +40,14 @@ readonly KpLogProductKineticFigureState[] = Object.freeze([
   Object.freeze({
     id: "whole",
     ordinal: 1,
-    label: "See the whole expression",
+    label: "Read the expression",
     pose: "source",
     proseTargetId: "prose.log-product.claim"
   }),
   Object.freeze({
     id: "product",
     ordinal: 2,
-    label: "Identify the product",
+    label: "Locate the product",
     pose: "source",
     proseTargetId: "prose.log-product.together",
     attentionTargetId: "semantic.log-product.product"
@@ -50,14 +55,16 @@ readonly KpLogProductKineticFigureState[] = Object.freeze([
   Object.freeze({
     id: "transform",
     ordinal: 3,
-    label: "Separate the factors",
-    pose: "transformation",
-    proseTargetId: "prose.log-product.separates"
+    label: "Watch the product separate",
+    pose: "target",
+    entryTransitionId: "transition.log-product.split",
+    proseTargetId: "prose.log-product.separates",
+    attentionTargetId: "semantic.log-product.introduced-structure"
   }),
   Object.freeze({
     id: "result",
     ordinal: 4,
-    label: "Read the result",
+    label: "Read the rewritten form",
     pose: "target",
     proseTargetId: "prose.log-product.result",
     attentionTargetId: "semantic.log-product.sum"

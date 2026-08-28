@@ -23,9 +23,17 @@ test("log-product Kinetic Figure exposes four ordered conceptual states", () => 
     [
       { ordinal: 1, pose: "source" },
       { ordinal: 2, pose: "source" },
-      { ordinal: 3, pose: "transformation" },
+      { ordinal: 3, pose: "target" },
       { ordinal: 4, pose: "target" }
     ]
+  );
+  assert.equal(
+    readKpLogProductKineticFigureState("transform").entryTransitionId,
+    "transition.log-product.split"
+  );
+  assert.equal(
+    readKpLogProductKineticFigureState("transform").attentionTargetId,
+    "semantic.log-product.introduced-structure"
   );
   assert.equal(new Set(
     kpLogProductKineticFigureStates.map(({ proseTargetId }) => proseTargetId)

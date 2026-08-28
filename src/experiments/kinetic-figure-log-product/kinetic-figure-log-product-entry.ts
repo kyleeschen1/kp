@@ -35,9 +35,6 @@ const descriptorId =
   "editor-animation.animation.algebra.log-product.product-to-sum";
 const poseProgress: Record<KpLogProductKineticFigurePose, number> = {
   source: 0,
-  // This is the canonical log-product handoff's legible transformation pose:
-  // factors have left the shared wrapper but the target has not yet settled.
-  transformation: 0.48,
   target: 1
 };
 const progressTolerance = 0.004;
@@ -81,35 +78,46 @@ export function mountKpLogProductKineticFigure(input: {
   let active = readKpLogProductKineticFigureState(
     window.location.hash.slice(1)
   );
+  let preview: KpLogProductKineticFigureState | undefined;
   let pendingTargetProgress: number | undefined;
+  let initialProjectionPending = true;
   let disposed = false;
 
   const select = (
     stateId: KpLogProductKineticFigureStateId,
-    options: { readonly replay?: boolean; readonly updateHash?: boolean } = {}
+    options: {
+      readonly animate?: boolean;
+      readonly replayTransition?: boolean;
+      readonly updateHash?: boolean;
+    } = {}
   ): void => {
     const next = readKpLogProductKineticFigureState(stateId);
-    const replay = options.replay === true && next.id === active.id;
     active = next;
+    preview = undefined;
+    projectPreviewState(article);
     projectReadingState(article, active);
     if (options.updateHash !== false) {
       history.replaceState(null, "", `#${active.id}`);
     }
-    movePlayerToState(player, active, replay);
+    movePlayerToState(player, active, {
+      animate: options.animate !== false,
+      replayTransition: options.replayTransition === true
+    });
   };
 
   const movePlayerToState = (
     owner: HTMLElement,
     state: KpLogProductKineticFigureState,
-    replay: boolean
+    options: {
+      readonly animate: boolean;
+      readonly replayTransition: boolean;
+    }
   ): void => {
     if (owner.dataset["kpEditorAnimationHydrated"] !== "true") return;
     const target = poseProgress[state.pose];
     let current = Number(owner.dataset["kpEditorAnimationProgress"] ?? 0);
-    if (replay && target > 0) {
-      current = state.pose === "target"
-        ? poseProgress.transformation
-        : poseProgress.source;
+    if (options.replayTransition && state.entryTransitionId !== undefined) {
+      current = poseProgress.source;
       dispatchKpEditorAnimationPlaybackAction(owner, {
         type: "seek",
         progress: current
@@ -117,6 +125,7 @@ export function mountKpLogProductKineticFigure(input: {
     }
     if (
       window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      !options.animate ||
       current > target ||
       Math.abs(current - target) <= progressTolerance
     ) {
@@ -137,8 +146,21 @@ export function mountKpLogProductKineticFigure(input: {
   };
 
   const handleFrame = (): void => {
-    projectFigureAttention(player, active);
+    projectFigureAttention(player, resolveAttentionState(active, preview));
     const current = Number(player.dataset["kpEditorAnimationProgress"] ?? 0);
+    if (
+      initialProjectionPending &&
+      player.dataset["kpEditorAnimationHydrated"] === "true"
+    ) {
+      initialProjectionPending = false;
+      const target = poseProgress[active.pose];
+      dispatchKpEditorAnimationPlaybackAction(player, {
+        type: "seek",
+        progress: target
+      });
+      markSettled(article, active);
+      return;
+    }
     if (
       pendingTargetProgress !== undefined &&
       current + progressTolerance >= pendingTargetProgress
@@ -160,11 +182,23 @@ export function mountKpLogProductKineticFigure(input: {
       if (Math.abs(current - target) <= progressTolerance) {
         markSettled(article, active);
       } else {
-        movePlayerToState(player, active, false);
+        movePlayerToState(player, active, {
+          animate: true,
+          replayTransition: false
+        });
       }
     }
   };
   const handleClick = (event: MouseEvent): void => {
+    const ruleToggle = event.target instanceof Element
+      ? event.target.closest<HTMLButtonElement>(
+          "[data-kp-kinetic-figure-rule-toggle]"
+        )
+      : null;
+    if (ruleToggle !== null) {
+      toggleRuleDisclosure(article, ruleToggle);
+      return;
+    }
     const target = event.target instanceof Element
       ? event.target.closest<HTMLElement>(
           "[data-kp-kinetic-figure-state], [data-kp-kinetic-figure-prose-link]"
@@ -174,7 +208,9 @@ export function mountKpLogProductKineticFigure(input: {
     const stateId = target.dataset["kpKineticFigureState"] ??
       target.dataset["kpKineticFigureProseLink"];
     if (!isStateId(stateId)) return;
-    select(stateId, { replay: stateId === active.id });
+    select(stateId, {
+      replayTransition: stateId === "transform"
+    });
   };
   const handlePointerOver = (event: PointerEvent): void => {
     const target = event.target instanceof Element
@@ -183,19 +219,51 @@ export function mountKpLogProductKineticFigure(input: {
         )
       : null;
     const stateId = target?.dataset["kpKineticFigureProseLink"];
+    if (!isStateId(stateId)) return;
+    preview = readKpLogProductKineticFigureState(stateId);
+    projectPreviewState(article, preview);
+    projectFigureAttention(player, resolveAttentionState(active, preview));
+  };
+  const handlePointerOut = (event: PointerEvent): void => {
+    const target = event.target instanceof Element
+      ? event.target.closest<HTMLElement>(
+          "[data-kp-kinetic-figure-prose-link]"
+        )
+      : null;
+    if (target === null) return;
+    if (
+      event.relatedTarget instanceof Node &&
+      target.contains(event.relatedTarget)
+    ) return;
+    preview = undefined;
+    projectPreviewState(article);
+    projectFigureAttention(player, active);
+  };
+  const handleFocusIn = (event: FocusEvent): void => {
+    const target = event.target instanceof Element
+      ? event.target.closest<HTMLElement>(
+          "[data-kp-kinetic-figure-prose-link]"
+        )
+      : null;
+    if (target === null || !target.matches(":focus-visible")) return;
+    const stateId = target.dataset["kpKineticFigureProseLink"];
     if (!isStateId(stateId) || stateId === active.id) return;
-    select(stateId);
+    select(stateId, {
+      replayTransition: stateId === "transform"
+    });
   };
   const handleHashChange = (): void => {
     const state = readKpLogProductKineticFigureState(
       window.location.hash.slice(1)
     );
-    select(state.id, { updateHash: false });
+    select(state.id, { animate: false, updateHash: false });
   };
 
   player.addEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, handleFrame);
   article.addEventListener("click", handleClick);
   article.addEventListener("pointerover", handlePointerOver);
+  article.addEventListener("pointerout", handlePointerOut);
+  article.addEventListener("focusin", handleFocusIn);
   window.addEventListener("hashchange", handleHashChange);
   projectReadingState(article, active);
   hydrateKpEditorAnimationPlayers(article, {
@@ -209,6 +277,8 @@ export function mountKpLogProductKineticFigure(input: {
       player.removeEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, handleFrame);
       article.removeEventListener("click", handleClick);
       article.removeEventListener("pointerover", handlePointerOver);
+      article.removeEventListener("pointerout", handlePointerOut);
+      article.removeEventListener("focusin", handleFocusIn);
       window.removeEventListener("hashchange", handleHashChange);
       disposeKpEditorAnimationPlayers(article);
       unregisterCapability();
@@ -243,24 +313,81 @@ function projectReadingState(
   ));
 }
 
+function projectPreviewState(
+  article: HTMLElement,
+  state?: KpLogProductKineticFigureState | undefined
+): void {
+  if (state === undefined) {
+    delete article.dataset["kpKineticFigurePreviewState"];
+  } else {
+    article.dataset["kpKineticFigurePreviewState"] = state.id;
+  }
+  article.querySelectorAll<HTMLElement>(
+    "[data-kp-kinetic-figure-state], [data-kp-kinetic-figure-prose-link]"
+  ).forEach((element) => {
+    const stateId = element.dataset["kpKineticFigureState"] ??
+      element.dataset["kpKineticFigureProseLink"];
+    if (stateId === state?.id) {
+      element.dataset["kpKineticFigurePreview"] = "true";
+    } else {
+      delete element.dataset["kpKineticFigurePreview"];
+    }
+  });
+}
+
+function resolveAttentionState(
+  active: KpLogProductKineticFigureState,
+  preview?: KpLogProductKineticFigureState | undefined
+): KpLogProductKineticFigureState {
+  // Preview never moves the semantic playhead. It may borrow figure salience
+  // only when the linked entity already exists at the active endpoint.
+  return preview?.pose === active.pose ? preview : active;
+}
+
 function projectFigureAttention(
   player: HTMLElement,
   state: KpLogProductKineticFigureState
 ): void {
   player.querySelectorAll<HTMLElement>("[data-kp-kinetic-figure-attention]")
     .forEach((element) => delete element.dataset["kpKineticFigureAttention"]);
-  const semanticId = state.attentionTargetId ===
+  const semanticIds = state.attentionTargetId ===
       "semantic.log-product.product"
-    ? kpCanonicalLogProductFamily.sourceProductSemanticId
-    : state.attentionTargetId === "semantic.log-product.sum"
-      ? kpCanonicalLogProductFamily.targetSumSemanticId
-      : undefined;
-  if (semanticId === undefined) return;
-  player.querySelectorAll<HTMLElement>(
-    `[data-kp-semantic-identity-id="${CSS.escape(semanticId)}"]`
-  ).forEach((element) => {
-    element.dataset["kpKineticFigureAttention"] = "focus";
-  });
+    ? [kpCanonicalLogProductFamily.sourceProductSemanticId]
+    : state.attentionTargetId === "semantic.log-product.introduced-structure"
+      ? [
+          ...kpCanonicalLogProductFamily.factors.flatMap(({ targetWrapper }) => [
+            targetWrapper.operator,
+            targetWrapper.open,
+            targetWrapper.close
+          ]),
+          ...kpCanonicalLogProductFamily.connectorSemanticIds
+        ]
+      : state.attentionTargetId === "semantic.log-product.sum"
+        ? [kpCanonicalLogProductFamily.targetSumSemanticId]
+        : [];
+  for (const semanticId of semanticIds) {
+    player.querySelectorAll<HTMLElement>(
+      `[data-kp-semantic-identity-id="${CSS.escape(semanticId)}"]`
+    ).forEach((element) => {
+      element.dataset["kpKineticFigureAttention"] = "focus";
+    });
+  }
+}
+
+function toggleRuleDisclosure(
+  article: HTMLElement,
+  button: HTMLButtonElement
+): void {
+  const disclosure = requiredElement<HTMLElement>(
+    article,
+    "[data-kp-kinetic-figure-rule-disclosure]"
+  );
+  const expanded = button.getAttribute("aria-expanded") === "true";
+  button.setAttribute("aria-expanded", String(!expanded));
+  button.replaceChildren(document.createTextNode(
+    expanded ? "Show product law" : "Hide product law"
+  ));
+  disclosure.hidden = expanded;
 }
 
 function markSettled(
@@ -281,37 +408,48 @@ function renderPage(
     <main class="kp-kinetic-figure-page">
       <article class="kp-kinetic-figure-article">
         <header class="kp-kinetic-figure-article__header">
-          <p class="kp-kinetic-figure-article__eyebrow">Kinetic Figure study</p>
-          <h1>Reading a logarithm law</h1>
-          <p>One paragraph holds the explanation. The figure below acts as a local microscope for the part you are reading.</p>
+          <p class="kp-kinetic-figure-article__eyebrow">Algebra · Logarithms</p>
+          <h1>Multiplicative structure inside logarithms</h1>
+          <p class="kp-kinetic-figure-article__lede">Logarithm laws let us choose a form that exposes the structure we need. The value remains fixed while the notation changes.</p>
         </header>
-        <section class="kp-kinetic-figure" data-kp-kinetic-figure data-kp-kinetic-figure-model="paragraph-stateful.v1">
-          <p class="kp-kinetic-figure__paragraph">
-            <button type="button" data-kp-kinetic-figure-prose-link="whole">Logarithms turn multiplication into addition.</button>
-            In ${inline("\\ln(xy)")},
-            <button type="button" data-kp-kinetic-figure-prose-link="product">the two factors initially occur together</button>
-            inside the logarithm. The product law
-            <button type="button" data-kp-kinetic-figure-prose-link="transform">separates them</button>,
-            <button type="button" data-kp-kinetic-figure-prose-link="result">giving ${inline("\\ln(x)+\\ln(y)")}.</button>
-          </p>
-          <figure class="kp-kinetic-figure__figure" aria-labelledby="kinetic-figure-caption">
-            <figcaption id="kinetic-figure-caption" class="kp-kinetic-figure__caption">
-              <span data-kp-kinetic-figure-state-label aria-live="polite">1 · See the whole expression</span>
-              <span>Product law</span>
-            </figcaption>
-            <div class="kp-kinetic-figure__stage">
-              ${renderKpEditorAnimationPlayerShell({ descriptor, chrome: "catalogue" })}
-            </div>
-            <nav class="kp-kinetic-figure__states" aria-label="Conceptual states">
-              ${kpLogProductKineticFigureStates.map((state) => `
-                <button type="button" data-kp-kinetic-figure-state="${state.id}" aria-label="State ${state.ordinal}: ${state.label}">${state.ordinal}</button>
-              `).join("")}
-            </nav>
-          </figure>
+        <section class="kp-kinetic-figure-lesson-section" aria-labelledby="products-heading">
+          <h2 id="products-heading">From a product to a sum</h2>
+          <p class="kp-kinetic-figure-article__body">Suppose ${inline("x>0")} and ${inline("y>0")}. When a logarithm contains a product, we can rewrite it as a sum of logarithms. This is useful when the factors are easier to reason about separately.</p>
+          <section class="kp-kinetic-figure" data-kp-kinetic-figure data-kp-kinetic-figure-model="paragraph-stateful.v2">
+            <p class="kp-kinetic-figure__paragraph">
+              <button type="button" data-kp-kinetic-figure-prose-link="whole">Consider ${inline("\\ln(xy)")}.</button>
+              Here,
+              <button type="button" data-kp-kinetic-figure-prose-link="product">the factors ${inline("x")} and ${inline("y")} form one product inside a single logarithm.</button>
+              Applying the product law
+              <button type="button" data-kp-kinetic-figure-prose-link="transform">separates that multiplicative structure into two logarithms</button>.
+              <button type="button" data-kp-kinetic-figure-prose-link="result">The rewritten form is ${inline("\\ln(x)+\\ln(y)")}.</button>
+            </p>
+            <figure class="kp-kinetic-figure__figure" aria-labelledby="kinetic-figure-caption">
+              <figcaption id="kinetic-figure-caption" class="kp-kinetic-figure__caption">
+                <span data-kp-kinetic-figure-state-label aria-live="polite">1 · Read the expression</span>
+                <button type="button" data-kp-kinetic-figure-rule-toggle aria-expanded="false" aria-controls="kinetic-figure-product-law">Show product law</button>
+              </figcaption>
+              <div id="kinetic-figure-product-law" class="kp-kinetic-figure__rule-disclosure" data-kp-kinetic-figure-rule-disclosure hidden>
+                <span>Reference</span>
+                <div>${inline("\\ln(uv)=\\ln(u)+\\ln(v)")}</div>
+                <p>for ${inline("u>0")} and ${inline("v>0")}</p>
+              </div>
+              <div class="kp-kinetic-figure__stage">
+                ${renderKpEditorAnimationPlayerShell({ descriptor, chrome: "catalogue" })}
+              </div>
+              <nav class="kp-kinetic-figure__states" aria-label="Conceptual states">
+                ${kpLogProductKineticFigureStates.map((state) => `
+                  <button type="button" data-kp-kinetic-figure-state="${state.id}" aria-label="State ${state.ordinal}: ${state.label}">${state.ordinal}</button>
+                `).join("")}
+              </nav>
+            </figure>
+          </section>
+          <p class="kp-kinetic-figure-article__body">The rewrite does not approximate ${inline("\\ln(xy)")}; it names the same quantity in a different form. The two logarithms make each factor available for later algebraic work.</p>
         </section>
-        <p class="kp-kinetic-figure-article__afterword">
-          The numbered states are reading positions, not timestamps. You can return to the paragraph without losing the surrounding argument.
-        </p>
+        <section class="kp-kinetic-figure-lesson-section kp-kinetic-figure-lesson-section--boundary" aria-labelledby="boundary-heading">
+          <h2 id="boundary-heading">A boundary worth noticing</h2>
+          <p class="kp-kinetic-figure-article__body">The product law responds to multiplication, not to every operation inside a logarithm. In general, ${inline("\\ln(x+y)\\ne\\ln(x)+\\ln(y)")}. Reading the internal structure correctly is what determines whether the rewrite is available.</p>
+        </section>
       </article>
     </main>
   `;
