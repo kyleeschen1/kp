@@ -1,0 +1,231 @@
+:root {
+  color-scheme: light dark;
+  --kp-figure-paper: light-dark(#f7f4ed, #171917);
+  --kp-figure-ink: light-dark(#262922, #eff0e9);
+  --kp-figure-muted: light-dark(#74766d, #a7aaa1);
+  --kp-figure-rule: light-dark(rgb(38 41 34 / 16%), rgb(239 240 233 / 16%));
+  --kp-figure-accent: light-dark(#8d3b25, #e99678);
+  --kp-figure-wash: light-dark(rgb(174 91 57 / 10%), rgb(233 150 120 / 12%));
+}
+
+body {
+  margin: 0;
+  background: var(--kp-figure-paper);
+  color: var(--kp-figure-ink);
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.kp-kinetic-figure-page {
+  min-height: 100vh;
+  padding: clamp(3rem, 8vw, 7rem) 1.25rem 8rem;
+}
+
+.kp-kinetic-figure-article {
+  width: min(100%, 45rem);
+  margin: 0 auto;
+}
+
+.kp-kinetic-figure-article__header {
+  margin-bottom: clamp(3.5rem, 9vw, 6.5rem);
+}
+
+.kp-kinetic-figure-article__eyebrow,
+.kp-kinetic-figure__caption,
+.kp-kinetic-figure__states,
+.kp-kinetic-figure-article__afterword {
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.kp-kinetic-figure-article__eyebrow {
+  margin: 0 0 0.8rem;
+  color: var(--kp-figure-accent);
+  font-size: 0.72rem;
+  font-weight: 680;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.kp-kinetic-figure-article h1 {
+  max-width: 12ch;
+  margin: 0;
+  font-size: clamp(2.35rem, 7vw, 4.8rem);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+}
+
+.kp-kinetic-figure-article__header > p:last-child,
+.kp-kinetic-figure-article__afterword {
+  max-width: 38rem;
+  color: var(--kp-figure-muted);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.kp-kinetic-figure-article__header > p:last-child {
+  margin: 1.5rem 0 0;
+}
+
+.kp-kinetic-figure__paragraph {
+  margin: 0;
+  font-size: clamp(1.24rem, 2.8vw, 1.55rem);
+  line-height: 1.72;
+}
+
+.kp-kinetic-figure__paragraph button {
+  display: inline;
+  margin: 0;
+  padding: 0.06em 0.12em;
+  border: 0;
+  border-radius: 0.14em;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  text-align: inherit;
+  cursor: pointer;
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+.kp-kinetic-figure__paragraph button[data-kp-semantic-salience-level="focus"] {
+  background: var(--kp-figure-wash);
+  color: var(--kp-figure-accent);
+}
+
+.kp-kinetic-figure__paragraph button:focus-visible {
+  outline: 2px solid var(--kp-figure-accent);
+  outline-offset: 0.16em;
+}
+
+.kp-kinetic-figure__figure {
+  margin: 2rem 0 0;
+  padding: 1.15rem 0 0;
+  border-top: 1px solid var(--kp-figure-rule);
+}
+
+.kp-kinetic-figure__caption {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--kp-figure-muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.035em;
+}
+
+.kp-kinetic-figure__caption span:first-child {
+  color: var(--kp-figure-ink);
+  font-weight: 650;
+}
+
+.kp-kinetic-figure__stage {
+  min-height: 10.5rem;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.kp-kinetic-figure__stage .editor-animation-player {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.kp-kinetic-figure__stage .editor-animation-player__stage {
+  min-height: 9.5rem;
+  padding: 0;
+  background: transparent;
+}
+
+.kp-kinetic-figure__stage .editor-animation-player__surface,
+.kp-kinetic-figure__stage .editor-animation-player__surface:has(.editor-equation-stage) {
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.kp-kinetic-figure__stage .kp-log-product-stage {
+  --kp-log-product-stage-block-size: 9.5rem;
+  --kp-log-product-display-font-size: clamp(2.25rem, 6vw, 3.35rem);
+}
+
+.kp-kinetic-figure__stage .editor-animation-player__controls {
+  display: none;
+}
+
+.kp-kinetic-figure__stage [data-kp-kinetic-figure-attention="focus"],
+.kp-kinetic-figure__stage [data-kp-kinetic-figure-attention="focus"] * {
+  /* The native log-product surface deliberately owns glyph paint through this
+     variable, including cloned ink during transit. Project attention through
+     that ownership seam instead of fighting its continuity rule. */
+  --kp-log-product-glyph-face: var(--kp-figure-accent);
+  color: var(--kp-figure-accent) !important;
+  transition: color 180ms ease;
+}
+
+.kp-kinetic-figure__states {
+  display: flex;
+  justify-content: center;
+  gap: 0.62rem;
+  margin-top: 0.25rem;
+}
+
+.kp-kinetic-figure__states button {
+  width: 1.9rem;
+  height: 1.9rem;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--kp-figure-muted);
+  font: 620 0.75rem/1 ui-sans-serif, system-ui, sans-serif;
+  cursor: pointer;
+  transition: border-color 160ms ease, color 160ms ease, background 160ms ease;
+}
+
+.kp-kinetic-figure__states button:hover {
+  color: var(--kp-figure-ink);
+}
+
+.kp-kinetic-figure__states button[aria-current] {
+  border-color: var(--kp-figure-accent);
+  background: var(--kp-figure-wash);
+  color: var(--kp-figure-accent);
+}
+
+.kp-kinetic-figure__states button:focus-visible {
+  outline: 2px solid var(--kp-figure-accent);
+  outline-offset: 2px;
+}
+
+.kp-kinetic-figure-article__afterword {
+  margin: clamp(4rem, 10vw, 7rem) 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--kp-figure-rule);
+}
+
+@media (max-width: 36rem) {
+  .kp-kinetic-figure-page {
+    padding-inline: 1rem;
+  }
+
+  .kp-kinetic-figure__paragraph {
+    line-height: 1.62;
+  }
+
+  .kp-kinetic-figure__stage,
+  .kp-kinetic-figure__stage .editor-animation-player__stage {
+    min-height: 9rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kp-kinetic-figure *,
+  .kp-kinetic-figure *::before,
+  .kp-kinetic-figure *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

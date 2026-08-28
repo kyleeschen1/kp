@@ -13,12 +13,22 @@ type KpAnimationDevelopmentRootRoute =
 type KpDevelopmentToolbarClient = typeof import(
   "./dev-toolbar/development-toolbar-bootstrap.ts"
 );
+type KpLogProductKineticFigureClient = typeof import(
+  "./experiments/kinetic-figure-log-product/kinetic-figure-log-product-entry.ts"
+);
 
 // Production compilation erases both the branch and the development graph.
 const loadKpDevelopmentToolbar:
   | (() => Promise<KpDevelopmentToolbarClient>)
   | undefined = import.meta.env.DEV
     ? () => import("./dev-toolbar/development-toolbar-bootstrap.ts")
+    : undefined;
+const loadKpLogProductKineticFigure:
+  | (() => Promise<KpLogProductKineticFigureClient>)
+  | undefined = import.meta.env.DEV
+    ? () => import(
+        "./experiments/kinetic-figure-log-product/kinetic-figure-log-product-entry.ts"
+      )
     : undefined;
 
 async function bootstrap(): Promise<void> {
@@ -63,6 +73,16 @@ async function bootstrap(): Promise<void> {
         search: window.location.search,
         hash: window.location.hash
       });
+      registerPagehide(session.dispose);
+      return;
+    }
+    case "kinetic-figure-log-product": {
+      if (loadKpLogProductKineticFigure === undefined) {
+        await import("./main.ts");
+        return;
+      }
+      const experiment = await loadKpLogProductKineticFigure();
+      const session = experiment.mountKpLogProductKineticFigure({ root });
       registerPagehide(session.dispose);
       return;
     }
