@@ -36,7 +36,7 @@ test("integration power rule uses governed transit and two certified ink knots",
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-template-profile-id",
-    "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v9"
+    "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v10"
   );
   await expect(stage).toHaveAttribute(
     "data-kp-antiderivative-instantiated-result-owner",
@@ -49,6 +49,69 @@ test("integration power rule uses governed transit and two certified ink knots",
   await expect(stage.locator("[data-kp-editor-equation-source] .katex"))
     .toContainText("∫x2dx");
   await expectFractionPaint(stage, 0);
+  const ruleLens = stage.locator(
+    "[data-kp-antiderivative-rule-lens-control]"
+  );
+  const ruleLensToggle = ruleLens.locator(
+    "[data-kp-antiderivative-rule-lens-toggle]"
+  );
+  const rulePattern = stage.locator(
+    "[data-kp-antiderivative-rule-pattern-projection]"
+  );
+  await expect(ruleLens).toHaveCount(1);
+  await expect(ruleLens).toBeVisible();
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-rule-lens-phase",
+    "match"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-rule-lens-view",
+    "concrete"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-rule-lens-override",
+    "automatic"
+  );
+  await expect(ruleLensToggle).toHaveText("Show pattern");
+  await expect(ruleLensToggle).toHaveAttribute("aria-pressed", "false");
+  const initialProgress = await seek.inputValue();
+  await ruleLensToggle.click();
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-status",
+    "paused"
+  );
+  await expect(seek).toHaveValue(initialProgress);
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-rule-lens-view",
+    "abstract"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-rule-lens-override",
+    "abstract"
+  );
+  await expect.poll(() => renderedOpacity(rulePattern)).toBe(1);
+  await expect.poll(() => renderedOpacity(
+    stage.locator("[data-kp-editor-equation-source]")
+  )).toBe(0);
+  await expect(ruleLensToggle).toHaveText("Show instance");
+  await expect(ruleLensToggle).toHaveAttribute("aria-pressed", "true");
+  await ruleLensToggle.click();
+  await expect(seek).toHaveValue(initialProgress);
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-rule-lens-view",
+    "concrete"
+  );
+  await expect.poll(() => renderedOpacity(rulePattern)).toBe(0);
+  await expect.poll(() => renderedOpacity(
+    stage.locator("[data-kp-editor-equation-source]")
+  )).toBe(1);
+  await expectFractionPaint(stage, 0);
+  await player.locator('[data-action="toggle-editor-animation"]').click();
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-rule-lens-override",
+    "automatic"
+  );
+  await player.locator('[data-action="toggle-editor-animation"]').click();
 
   await seek.fill("0.06");
   await expectTransitReady(stage);
@@ -421,6 +484,54 @@ test("integration power rule uses governed transit and two certified ink knots",
   expect(maxRectDelta(sourceBaseRect, await elementRect(sourceBase)))
     .toBeLessThan(0.5);
   await expectFractionPaint(stage, 1);
+
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-rule-lens-phase",
+    "replacement"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-rule-lens-view",
+    "abstract"
+  );
+  await expect(ruleLensToggle).toHaveText("Show bound form");
+  const templateProgress = await seek.inputValue();
+  await ruleLensToggle.click();
+  await expect(seek).toHaveValue(templateProgress);
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-rule-lens-view",
+    "concrete"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-primary-representation",
+    "instantiated-rewrite"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-rule-template-slot-presence",
+    "0.0000"
+  );
+  await expect(ruleLensToggle).toHaveText("Show template");
+  await expect(rulePanel).toHaveAttribute("aria-hidden", "true");
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-power-accessible-endpoint",
+    "target"
+  );
+  await expectFractionPaint(stage, 1);
+  await ruleLensToggle.click();
+  await expect(seek).toHaveValue(templateProgress);
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-rule-lens-view",
+    "abstract"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-rule-template-slot-presence",
+    "1.0000"
+  );
+  await player.locator('[data-action="toggle-editor-animation"]').click();
+  await expect(stage).toHaveAttribute(
+    "data-kp-antiderivative-rule-lens-override",
+    "automatic"
+  );
+  await player.locator('[data-action="toggle-editor-animation"]').click();
 
   await seek.fill("0.425");
   await expectTransitReady(stage);

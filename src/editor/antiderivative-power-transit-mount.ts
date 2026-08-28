@@ -22,6 +22,7 @@ import type {
   KpEditorEquationStageHotPathCache
 } from "./equation-stage-hot-path-cache.ts";
 import {
+  dispatchKpEditorAnimationPlaybackAction,
   KP_EDITOR_ANIMATION_DISPOSE_EVENT
 } from "./animation-player-controller.ts";
 import {
@@ -33,7 +34,10 @@ export const kpAntiderivativePowerTransitRepairGapCode =
 export const kpAntiderivativeRuleApplicationNativeKatexMechanismId =
   "kp.rendering.native-katex.antiderivative-rule-application.v1";
 export const kpAntiderivativeRuleApplicationPresentationProfileId =
-  "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v9";
+  "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v10";
+
+type RuleLensPhase = "match" | "replacement";
+type RuleLensView = "abstract" | "concrete";
 
 export interface KpAntiderivativePowerTransitMountResult {
   readonly status: "inactive" | "preparing" | "mounted" | "repair-gap";
@@ -68,11 +72,13 @@ interface TransitMountSession {
   };
   readonly plan: KpAntiderivativePowerNativeKatexTransitPlan;
   readonly templateReceiver: HTMLElement;
+  readonly ruleLensControl: HTMLElement;
   readonly fontReadiness: ReturnType<typeof createKpEquationFontReadiness>;
   generation: number;
   pending: PendingFrame;
   ready: boolean;
   failure?: string | undefined;
+  ruleLensOverride?: RuleLensView | undefined;
   disposed: boolean;
 }
 
@@ -143,6 +149,7 @@ export function applyKpAntiderivativePowerTransitMount(input: {
       input.stage,
       plan.choreography.ruleTemplateApplication
     );
+    const ruleLensControl = createRuleLensControl(input.stage);
     session = {
       stage: input.stage,
       player: input.player,
@@ -152,6 +159,7 @@ export function applyKpAntiderivativePowerTransitMount(input: {
       objectIds: endpoints.objectIds,
       plan,
       templateReceiver,
+      ruleLensControl,
       fontReadiness: createKpEquationFontReadiness(
         input.stage.ownerDocument
       ),
@@ -161,6 +169,7 @@ export function applyKpAntiderivativePowerTransitMount(input: {
       disposed: false
     };
     sessions.set(input.stage, session);
+    bindRuleLensControl(session);
     input.player.addEventListener(
       KP_EDITOR_ANIMATION_DISPOSE_EVENT,
       () => disposeKpAntiderivativePowerTransitMount(
@@ -220,6 +229,8 @@ export function disposeKpAntiderivativePowerTransitMount(
   syncKpEquationMaterialLayer({ stage, owners: [] });
   clearInstructionalTemplateSlots(session);
   session.templateReceiver.remove();
+  session.ruleLensControl.remove();
+  delete session.player.dataset["kpAntiderivativeRuleLensOverride"];
   sessions.delete(stage);
 }
 
@@ -286,6 +297,56 @@ function createTemplateReceiver(
   element.append(rulePanel);
   stage.append(element);
   return element;
+}
+
+function createRuleLensControl(stage: HTMLElement): HTMLElement {
+  const control = stage.ownerDocument.createElement("div");
+  control.className = "editor-equation-stage__antiderivative-rule-lens";
+  control.dataset["kpAntiderivativeRuleLensControl"] = "true";
+  control.setAttribute("role", "group");
+  control.setAttribute("aria-label", "Rule inspection");
+  control.hidden = true;
+
+  const cue = stage.ownerDocument.createElement("span");
+  cue.className = "editor-equation-stage__antiderivative-rule-lens-cue";
+  cue.textContent = "RULE LENS";
+  cue.setAttribute("aria-hidden", "true");
+
+  const toggle = stage.ownerDocument.createElement("button");
+  toggle.className = "editor-equation-stage__antiderivative-rule-lens-toggle";
+  toggle.dataset["kpAntiderivativeRuleLensToggle"] = "true";
+  toggle.type = "button";
+  toggle.disabled = true;
+  toggle.setAttribute("aria-pressed", "false");
+  toggle.textContent = "Show pattern";
+  control.append(cue, toggle);
+  stage.append(control);
+  return control;
+}
+
+function bindRuleLensControl(session: TransitMountSession): void {
+  const toggle = session.ruleLensControl.querySelector<HTMLButtonElement>(
+    "[data-kp-antiderivative-rule-lens-toggle]"
+  );
+  if (toggle === null) {
+    throw new Error("Antiderivative Rule Lens requires its toggle.");
+  }
+  toggle.addEventListener("click", () => {
+    if (!session.ready || session.disposed) return;
+    const currentView = session.stage.dataset["kpAntiderivativeRuleLensView"];
+    session.ruleLensOverride = currentView === "abstract"
+      ? "concrete"
+      : "abstract";
+    session.player.dataset["kpAntiderivativeRuleLensOverride"] =
+      session.ruleLensOverride;
+    // Inspection is a support projection at the current semantic time. Pause
+    // before repainting so the comparison cannot quietly advance the lesson.
+    dispatchKpEditorAnimationPlaybackAction(session.player, {
+      type: "pause",
+      nowMs: performance.now()
+    });
+    applyFrame(session);
+  });
 }
 
 /*
@@ -378,6 +439,11 @@ function hideTemplateReceiver(session: TransitMountSession): void {
   session.templateReceiver.dataset["kpSemanticTraceRole"] = "absent";
   session.templateReceiver.setAttribute("aria-hidden", "true");
   session.templateReceiver.setAttribute("inert", "");
+  session.ruleLensControl.hidden = true;
+  const toggle = session.ruleLensControl.querySelector<HTMLButtonElement>(
+    "[data-kp-antiderivative-rule-lens-toggle]"
+  );
+  if (toggle !== null) toggle.disabled = true;
 }
 
 async function prepareSession(
@@ -392,6 +458,12 @@ async function prepareSession(
     assertSingleInstantiatedFractionOwner(session);
     bindInstructionalTemplateSlots(session);
     session.ready = true;
+    session.ruleLensControl.hidden = false;
+    const ruleLensToggle = session.ruleLensControl
+      .querySelector<HTMLButtonElement>(
+        "[data-kp-antiderivative-rule-lens-toggle]"
+      );
+    if (ruleLensToggle !== null) ruleLensToggle.disabled = false;
     session.stage.dataset["kpAntiderivativePowerTransit"] = "ready";
     session.stage.dataset["kpAntiderivativePowerTransitMechanismId"] =
       kpAntiderivativeRuleApplicationNativeKatexMechanismId;
@@ -519,6 +591,15 @@ function clearInstructionalTemplateSlots(session: TransitMountSession): void {
 
 function applyFrame(session: TransitMountSession): void {
   if (!session.ready) return;
+  if (
+    session.ruleLensOverride !== undefined &&
+    session.player.dataset["kpEditorAnimationStatus"] === "playing"
+  ) {
+    // Play resumes the authored explanation; the lens remains available but
+    // does not become a second timeline or a sticky semantic state.
+    session.ruleLensOverride = undefined;
+    delete session.player.dataset["kpAntiderivativeRuleLensOverride"];
+  }
   const frame = sampleKpAntiderivativePowerChoreography({
     plan: session.plan.choreography,
     progress: session.pending.localProgress,
@@ -560,7 +641,7 @@ function applyFrame(session: TransitMountSession): void {
   resetEndpointPresentation(session);
   syncKpEquationMaterialLayer({ stage: session.stage, owners: [] });
   applyOperatorAndScopeSalience(session, frame, projection);
-  const templatePanelPresence = applyRuleTemplateApplicationState(
+  const ruleProjection = applyRuleTemplateApplicationState(
     session,
     ruleApplication,
     projection
@@ -570,12 +651,12 @@ function applyFrame(session: TransitMountSession): void {
   const visualOwner = applyNativeRuleApplicationState(
     session,
     ruleApplication,
-    projection
+    ruleProjection.visualProjection
   );
+  syncRuleLensControl(session, ruleApplication, ruleProjection.visualProjection);
   settleAccessibility(
     session,
-    ruleApplication,
-    templatePanelPresence
+    ruleProjection.visualProjection
   );
   session.stage.dataset["kpAntiderivativePowerTransit"] = "ready";
   session.stage.dataset["kpAntiderivativePowerTransitProgress"] =
@@ -594,11 +675,36 @@ function applyRuleTemplateApplicationState(
   session: TransitMountSession,
   template: ReturnType<typeof sampleKpAntiderivativeRuleTemplateApplication>,
   projection: "full" | "reduced" | "no-depth"
-): number {
-  const visualProjection = schemaProjectionState(template, projection);
+): {
+  readonly panelPresence: number;
+  readonly visualProjection: SchemaProjectionState;
+} {
+  const visualProjection = schemaProjectionState(
+    template,
+    projection,
+    session.ruleLensOverride
+  );
+  const lensPhase = ruleLensPhase(template);
+  const inspectingAbstractReplacement =
+    session.ruleLensOverride === "abstract" && lensPhase === "replacement";
+  const inspectingConcreteReplacement =
+    session.ruleLensOverride === "concrete" && lensPhase === "replacement";
+  const templateSlotPresence = inspectingAbstractReplacement
+    ? 1
+    : inspectingConcreteReplacement
+      ? 0
+      : template.templateSlotPresence;
+  const boundValuePresence = inspectingAbstractReplacement
+    ? 0
+    : inspectingConcreteReplacement
+      ? 1
+      : template.instantiationProgress;
+  const panelPresence = visualProjection.patternInkPresence > 0.01
+    ? Math.max(1, template.panelPresence)
+    : template.panelPresence;
   session.templateReceiver.style.setProperty(
     "--kp-antiderivative-rule-template-panel-presence",
-    template.panelPresence.toFixed(4)
+    panelPresence.toFixed(4)
   );
   session.templateReceiver.style.setProperty(
     "--kp-antiderivative-rule-match-presence",
@@ -640,11 +746,11 @@ function applyRuleTemplateApplicationState(
     template.traceRole;
   session.roots.target.style.setProperty(
     "--kp-antiderivative-template-slot-presence",
-    template.templateSlotPresence.toFixed(4)
+    templateSlotPresence.toFixed(4)
   );
   session.roots.target.style.setProperty(
     "--kp-antiderivative-bound-value-presence",
-    template.instantiationProgress.toFixed(4)
+    boundValuePresence.toFixed(4)
   );
   const templateAuthority =
     session.plan.choreography.ruleTemplateApplication;
@@ -655,7 +761,9 @@ function applyRuleTemplateApplicationState(
     throw new Error("Antiderivative rewrite lacks its rule-template panel.");
   }
   applyInstructionalRuleLayerState(session, template, visualProjection);
-  const panelIsPresent = template.panelPresence > 0.01;
+  const panelIsPresent =
+    visualProjection.primaryRepresentation === "schema-pattern" ||
+    visualProjection.primaryRepresentation === "replacement-template";
   session.templateReceiver.setAttribute(
     "aria-hidden",
     panelIsPresent ? "false" : "true"
@@ -677,9 +785,10 @@ function applyRuleTemplateApplicationState(
   }
   rulePanel.setAttribute(
     "aria-label",
-    template.instantiationProgress >= 1
+    visualProjection.primaryRepresentation === "instantiated-rewrite" ||
+      visualProjection.primaryRepresentation === "committed-rewrite"
       ? `Instantiated power-rule result: u maps to ${baseBinding.value}, and n maps to ${exponentBinding.value} in both occurrences, giving ${templateAuthority.instantiatedResultLatex} before evaluation.`
-      : template.templateRevealProgress > 0.01
+      : visualProjection.primaryRepresentation === "replacement-template"
         ? `Prospective power-rule template: ${templateAuthority.instructionalProjection.replacementTemplateLatex}. The bindings are u maps to ${baseBinding.value} and n maps to ${exponentBinding.value}.`
       : template.metavariableBindingsPresence > 0.01
         ? `Power rule bindings: u maps to ${baseBinding.value}, and n maps to ${exponentBinding.value}.`
@@ -744,7 +853,7 @@ function applyRuleTemplateApplicationState(
   session.stage.dataset["kpAntiderivativeTemplateReceiverFocus"] =
     template.receiverFocus.toFixed(4);
   session.stage.dataset["kpAntiderivativeRuleTemplatePanelPresence"] =
-    template.panelPresence.toFixed(4);
+    panelPresence.toFixed(4);
   session.stage.dataset["kpAntiderivativeMetavariableBindingsPresence"] =
     template.metavariableBindingsPresence.toFixed(4);
   session.stage.dataset["kpAntiderivativeRulePreviewPresence"] =
@@ -766,7 +875,7 @@ function applyRuleTemplateApplicationState(
   session.stage.dataset["kpAntiderivativeRuleTemplateRevealProgress"] =
     template.templateRevealProgress.toFixed(4);
   session.stage.dataset["kpAntiderivativeRuleTemplateSlotPresence"] =
-    template.templateSlotPresence.toFixed(4);
+    templateSlotPresence.toFixed(4);
   session.stage.dataset["kpAntiderivativeRuleRewriteCommitProgress"] =
     template.rewriteCommitProgress.toFixed(4);
   session.stage.dataset["kpAntiderivativeTemplateVacancyPresence"] =
@@ -808,7 +917,7 @@ function applyRuleTemplateApplicationState(
   session.stage.dataset["kpAntiderivativeRegistrationFrameCount"] = "0";
   session.stage.dataset["kpAntiderivativeBindingRelationCount"] = "0";
   session.stage.dataset["kpAntiderivativeBindingRelationPresence"] = "0.0000";
-  return template.panelPresence;
+  return Object.freeze({ panelPresence, visualProjection });
 }
 
 interface SchemaProjectionState {
@@ -826,8 +935,30 @@ interface SchemaProjectionState {
 
 function schemaProjectionState(
   template: ReturnType<typeof sampleKpAntiderivativeRuleTemplateApplication>,
-  projection: "full" | "reduced" | "no-depth"
+  projection: "full" | "reduced" | "no-depth",
+  lensOverride?: RuleLensView | undefined
 ): SchemaProjectionState {
+  if (lensOverride !== undefined) {
+    const phase = ruleLensPhase(template);
+    if (phase === "match") {
+      return Object.freeze({
+        sourceInkPresence: lensOverride === "concrete" ? 1 : 0,
+        patternInkPresence: lensOverride === "abstract" ? 1 : 0,
+        targetInkPresence: 0,
+        primaryRepresentation: lensOverride === "abstract"
+          ? "schema-pattern" as const
+          : "source" as const
+      });
+    }
+    return Object.freeze({
+      sourceInkPresence: 0,
+      patternInkPresence: 0,
+      targetInkPresence: 1,
+      primaryRepresentation: lensOverride === "abstract"
+        ? "replacement-template" as const
+        : "instantiated-rewrite" as const
+    });
+  }
   if (projection !== "full") {
     const committed = template.rewriteCommitProgress >= 0.5;
     return Object.freeze({
@@ -865,6 +996,55 @@ function schemaProjectionState(
   });
 }
 
+function ruleLensPhase(
+  template: ReturnType<typeof sampleKpAntiderivativeRuleTemplateApplication>
+): RuleLensPhase {
+  switch (template.explanationBeatId) {
+    case "instantiate-template":
+    case "propagate-binding":
+    case "explain-closure":
+    case "commit-rewrite":
+    case "prepare-reduction":
+      return "replacement";
+    default:
+      return "match";
+  }
+}
+
+function syncRuleLensControl(
+  session: TransitMountSession,
+  template: ReturnType<typeof sampleKpAntiderivativeRuleTemplateApplication>,
+  visualProjection: SchemaProjectionState
+): void {
+  const phase = ruleLensPhase(template);
+  const view = visualProjection.primaryRepresentation === "schema-pattern" ||
+      visualProjection.primaryRepresentation === "replacement-template"
+    ? "abstract"
+    : visualProjection.primaryRepresentation === "turnover"
+      ? "turnover"
+      : "concrete";
+  const toggle = session.ruleLensControl.querySelector<HTMLButtonElement>(
+    "[data-kp-antiderivative-rule-lens-toggle]"
+  );
+  if (toggle === null) {
+    throw new Error("Antiderivative Rule Lens requires its toggle.");
+  }
+  const label = phase === "match"
+    ? view === "abstract" ? "Show instance" : "Show pattern"
+    : view === "abstract" ? "Show bound form" : "Show template";
+  toggle.textContent = label;
+  toggle.setAttribute("aria-label", label);
+  toggle.setAttribute("aria-pressed", view === "abstract" ? "true" : "false");
+  toggle.dataset["kpAntiderivativeRuleLensPhase"] = phase;
+  toggle.dataset["kpAntiderivativeRuleLensView"] = view;
+  session.ruleLensControl.dataset["kpAntiderivativeRuleLensPhase"] = phase;
+  session.ruleLensControl.dataset["kpAntiderivativeRuleLensView"] = view;
+  session.stage.dataset["kpAntiderivativeRuleLensPhase"] = phase;
+  session.stage.dataset["kpAntiderivativeRuleLensView"] = view;
+  session.stage.dataset["kpAntiderivativeRuleLensOverride"] =
+    session.ruleLensOverride ?? "automatic";
+}
+
 function applyInstructionalRuleLayerState(
   session: TransitMountSession,
   template: ReturnType<typeof sampleKpAntiderivativeRuleTemplateApplication>,
@@ -889,9 +1069,8 @@ function applyInstructionalRuleLayerState(
 function applyNativeRuleApplicationState(
   session: TransitMountSession,
   template: ReturnType<typeof sampleKpAntiderivativeRuleTemplateApplication>,
-  projection: "full" | "reduced" | "no-depth"
+  visualProjection: SchemaProjectionState
 ): "source-native" | "rule-application-native" | "target-native" {
-  const visualProjection = schemaProjectionState(template, projection);
   const commit = template.rewriteCommitProgress;
   session.roots.source.style.opacity =
     visualProjection.sourceInkPresence.toFixed(4);
@@ -913,6 +1092,22 @@ function applyNativeRuleApplicationState(
   session.roots.target.dataset["kpSemanticTraceRole"] = template.traceRole;
   session.roots.target.dataset["kpAntiderivativeInstantiatedResultOwner"] =
     "canonical-target-native";
+
+  if (
+    session.ruleLensOverride === "concrete" &&
+    ruleLensPhase(template) === "match"
+  ) {
+    // The authored operator may already have faded at this semantic instant.
+    // Concrete inspection restores its native paint without restoring semantic
+    // ownership or changing the playhead.
+    for (const selectorId of
+      session.plan.choreography.operatorApplication.operatorSelectorIds) {
+      for (const element of semanticPaintOwners(session.stage, selectorId)) {
+        element.style.opacity = "1";
+      }
+    }
+    session.stage.dataset["kpAntiderivativeOperatorOpacity"] = "1";
+  }
 
   if (commit >= 1) return "target-native";
   if (
@@ -1018,23 +1213,26 @@ function semanticPaintOwners(
 
 function settleAccessibility(
   session: TransitMountSession,
-  template: ReturnType<typeof sampleKpAntiderivativeRuleTemplateApplication>,
-  templatePanelPresence: number
+  visualProjection: SchemaProjectionState
 ): void {
-  const accessible = template.targetPresence > template.sourcePresence
+  const templateIsAccessible =
+    visualProjection.primaryRepresentation === "schema-pattern" ||
+    visualProjection.primaryRepresentation === "replacement-template";
+  const accessible = visualProjection.targetInkPresence >
+      visualProjection.sourceInkPresence
     ? "target"
     : "source";
   for (const [side, root] of [
     ["source", session.roots.source],
     ["target", session.roots.target]
   ] as const) {
-    const active = templatePanelPresence <= 0.01 && side === accessible;
+    const active = !templateIsAccessible && side === accessible;
     root.setAttribute("aria-hidden", active ? "false" : "true");
     if (active) root.removeAttribute("inert");
     else root.setAttribute("inert", "");
   }
   session.stage.dataset["kpAntiderivativePowerAccessibleEndpoint"] =
-    templatePanelPresence > 0.01 ? "rule-template" : accessible;
+    templateIsAccessible ? "rule-template" : accessible;
 }
 
 function showNativeCheckpoint(
@@ -1203,6 +1401,9 @@ function clearTelemetry(stage: HTMLElement): void {
   delete stage.dataset["kpAntiderivativeSchemaProjection"];
   delete stage.dataset["kpAntiderivativePrimaryRepresentation"];
   delete stage.dataset["kpAntiderivativePrimaryRepresentationCount"];
+  delete stage.dataset["kpAntiderivativeRuleLensPhase"];
+  delete stage.dataset["kpAntiderivativeRuleLensView"];
+  delete stage.dataset["kpAntiderivativeRuleLensOverride"];
 }
 
 function bounded(value: number): number {

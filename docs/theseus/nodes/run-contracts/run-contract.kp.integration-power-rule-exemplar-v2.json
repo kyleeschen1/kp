@@ -1484,6 +1484,48 @@
       "scope": "type-safety",
       "checkedAt": "2026-08-28T01:04:13.112Z",
       "notes": "Application, Node, test, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-28T02:53:47.701Z",
+      "notes": "64 focused semantic, choreography, migration, and authority tests passed."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-catalogue",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-28T02:53:48.756Z",
+      "notes": "Three Chromium lifecycle tests passed, including fixed-playhead lens toggles and Play reset."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-28T02:53:49.786Z",
+      "notes": "Application, Node, test, Svelte, and domain type checks passed."
+    },
+    {
+      "command": "npm run visual:integration-power-rule",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-28T02:53:50.805Z",
+      "notes": "v10 desktop dark and narrow light visual checkpoint generated; paired lens views and single fraction ownership passed."
+    },
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-28T02:54:26.286Z",
+      "notes": "36 protected derivative semantic and choreography tests passed unchanged."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-28T02:54:27.481Z",
+      "notes": "11 authority, inventory, endpoint, and caller preservation checks passed."
     }
   ],
   "allowedWork": [
@@ -1621,7 +1663,7 @@
     {
       "id": "next-action.kp.integration-power-rule.s18",
       "title": "Integration-human-visual-checkpoint",
-      "summary": "The v9 human-review candidate removes both 3D frames, labels, registration seam, binding formula, clips, and spatial transit. One stationary focal locus now passes visible ownership from the concrete integral to the full abstract pattern, pauses at an explicit turnover, then reveals the one canonical Native KaTeX replacement; the grounded explanation rail carries u-to-x and n-to-2 mappings, slot propagation remains visible on the RHS, and the rewrite commits without moving or duplicating its fraction rule. Semantic source ownership, exact endpoints, salience-only operator treatment, accessibility projections, two certified ink knots, and all unrelated equation surfaces remain preserved. Focused tests, Chromium lifecycle, equation preservation, typecheck, and the v9 dark/light desktop/narrow capture pass. Awaiting explicit human visual approval before s19.",
+      "summary": "The v10 human-review candidate keeps the approved single-locus match-bind-instantiate-rewrite choreography and adds an exemplar-local Rule Lens. It pauses at fixed semantic time to compare the concrete integral with the abstract pattern, or the abstract RHS template with its bound form; Play clears the inspection override and resumes the authored sequence. Exact endpoints, semantic trace, salience-only operator scope, one native fraction owner, explanation rail, two certified ink knots, lifecycle modes, and unrelated callers remain unchanged. Focused tests, Chromium lifecycle, full typecheck, and the v10 desktop/narrow dark/light checkpoint pass. Awaiting explicit human visual approval before s19.",
       "status": "in-progress"
     },
     {

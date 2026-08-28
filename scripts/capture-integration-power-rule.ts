@@ -17,6 +17,7 @@ const outputRoot = path.resolve(
 );
 const desktopViewport = { width: 1_240, height: 760 } as const;
 const narrowViewport = { width: 390, height: 844 } as const;
+type RuleLensView = "abstract" | "concrete";
 const samples = [
   {
     id: "source",
@@ -54,6 +55,14 @@ const samples = [
     viewport: desktopViewport
   },
   {
+    id: "rule-match-instance",
+    label: "Rule Lens · matched concrete instance",
+    progress: 0.259,
+    theme: "dark",
+    viewport: desktopViewport,
+    lensView: "concrete"
+  },
+  {
     id: "rule-binding",
     label: "Rule application · bind u ↦ x and n ↦ 2",
     progress: 0.337,
@@ -73,6 +82,14 @@ const samples = [
     progress: 0.39,
     theme: "dark",
     viewport: desktopViewport
+  },
+  {
+    id: "rule-template-bound",
+    label: "Rule Lens · instantiated bound form",
+    progress: 0.39,
+    theme: "dark",
+    viewport: desktopViewport,
+    lensView: "concrete"
   },
   {
     id: "rule-propagation",
@@ -218,6 +235,12 @@ interface CaptureEvidence {
   readonly explanationBeat: string;
   readonly explanationGrounding: string;
   readonly explanationText: string;
+  readonly ruleLensPhase: string;
+  readonly ruleLensView: string;
+  readonly ruleLensOverride: string;
+  readonly ruleLensControlCount: number;
+  readonly ruleLensControlLabel: string;
+  readonly ruleLensPressed: string;
   readonly depthLens: string;
   readonly schemaPlanePresence: number;
   readonly correspondencePlanePresence: number;
@@ -277,6 +300,7 @@ async function capture(baseUrl?: string): Promise<void> {
       const captured = await captureSample({
         page,
         baseUrl: harness.baseUrl,
+        lensView: "lensView" in sample ? sample.lensView : undefined,
         ...sample
       });
       evidence.push(captured);
@@ -318,7 +342,7 @@ async function capture(baseUrl?: string): Promise<void> {
     await writeFile(html, htmlSource, "utf8");
     const manifest = path.join(outputRoot, "manifest.json");
     await writeFile(manifest, `${JSON.stringify({
-      schemaVersion: "kp.integration-power-rule-visual-checkpoint.v9",
+      schemaVersion: "kp.integration-power-rule-visual-checkpoint.v10",
       animationId,
       samples: evidence,
       reviewChecklist: [
@@ -326,6 +350,7 @@ async function capture(baseUrl?: string): Promise<void> {
         "salience-only operator scope",
         "one primary mathematical representation at every beat",
         "source-to-pattern abstraction in one stationary focal locus",
+        "learner-controlled instance-pattern and template-bound comparisons without semantic-time advance",
         "full pattern face with accent metavariable slots",
         "grounded one-line explanation at every pedagogical beat",
         "pattern withdrawal before replacement-template appearance",
@@ -359,6 +384,7 @@ async function captureSample(input: {
   readonly progress: number;
   readonly theme: "dark" | "light";
   readonly viewport: { readonly width: number; readonly height: number };
+  readonly lensView?: RuleLensView | undefined;
 }): Promise<CaptureEvidence> {
   const url = new URL("/", input.baseUrl);
   url.searchParams.set("artifact", animationId);
@@ -381,6 +407,17 @@ async function captureSample(input: {
   const stage = player.locator("[data-kp-editor-equation-stage]");
   await stage.waitFor();
   await waitForGovernedFrame(stage, input.progress);
+  if (input.lensView !== undefined) {
+    const currentView = await stage.getAttribute(
+      "data-kp-antiderivative-rule-lens-view"
+    );
+    if (currentView !== input.lensView) {
+      await stage.locator(
+        "[data-kp-antiderivative-rule-lens-toggle]"
+      ).click();
+    }
+    await waitForRuleLensView(stage, input.lensView);
+  }
   await settle(stage);
   const repairGap = await stage.getAttribute(
     "data-kp-antiderivative-power-repair-gap"
@@ -569,6 +606,21 @@ async function captureSample(input: {
       explanationText: root.querySelector<HTMLElement>(
         "[data-kp-antiderivative-explanation-rail]"
       )?.textContent?.replace(/\s+/gu, " ").trim() ?? "",
+      ruleLensPhase:
+        root.dataset["kpAntiderivativeRuleLensPhase"] ?? "inactive",
+      ruleLensView:
+        root.dataset["kpAntiderivativeRuleLensView"] ?? "inactive",
+      ruleLensOverride:
+        root.dataset["kpAntiderivativeRuleLensOverride"] ?? "inactive",
+      ruleLensControlCount: root.querySelectorAll(
+        "[data-kp-antiderivative-rule-lens-control]"
+      ).length,
+      ruleLensControlLabel: root.querySelector<HTMLElement>(
+        "[data-kp-antiderivative-rule-lens-toggle]"
+      )?.textContent?.trim() ?? "",
+      ruleLensPressed: root.querySelector<HTMLElement>(
+        "[data-kp-antiderivative-rule-lens-toggle]"
+      )?.getAttribute("aria-pressed") ?? "inactive",
       depthLens:
         root.dataset["kpAntiderivativeDepthLens"] ?? "inactive",
       schemaPlanePresence: Number(
@@ -708,6 +760,32 @@ async function settle(stage: Locator): Promise<void> {
   });
 }
 
+async function waitForRuleLensView(
+  stage: Locator,
+  expectedView: RuleLensView
+): Promise<void> {
+  await stage.evaluate((root, expected) =>
+    new Promise<void>((resolve, reject) => {
+      const ready = (): boolean =>
+        root.dataset["kpAntiderivativeRuleLensView"] === expected;
+      if (ready()) {
+        resolve();
+        return;
+      }
+      const timeout = window.setTimeout(() => {
+        observer.disconnect();
+        reject(new Error(`Timed out selecting Rule Lens view ${expected}.`));
+      }, 4_000);
+      const observer = new MutationObserver(() => {
+        if (!ready()) return;
+        window.clearTimeout(timeout);
+        observer.disconnect();
+        resolve();
+      });
+      observer.observe(root, { attributes: true, subtree: false });
+    }), expectedView);
+}
+
 function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   const byId = new Map(evidence.map((sample) => [sample.id, sample]));
   const required = (id: string): CaptureEvidence => {
@@ -721,6 +799,7 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     "rule-preview",
     "rule-approach",
     "rule-match",
+    "rule-match-instance",
     "rule-binding",
     "rule-turnover",
     "narrow-light-rule-preview",
@@ -800,7 +879,7 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   if (
     match.transitVisualOwner !== "rule-application-native" ||
     match.templateProfileId !==
-      "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v9" ||
+      "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v10" ||
     match.templateTraceRole !== "prospective" ||
     match.templateLawRefId !==
       "law.calculus.integral.power-rule" ||
@@ -839,10 +918,33 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     match.patternInkOpacity !== 1 ||
     match.targetInkOpacity !== 0 ||
     match.bindingRelationCount !== 0 ||
-    match.bindingRelationPresence !== 0
+    match.bindingRelationPresence !== 0 ||
+    match.ruleLensPhase !== "match" ||
+    match.ruleLensView !== "abstract" ||
+    match.ruleLensOverride !== "automatic" ||
+    match.ruleLensControlCount !== 1 ||
+    match.ruleLensControlLabel !== "Show instance" ||
+    match.ruleLensPressed !== "true"
   ) {
     throw new Error(
       "Rule-match beat must give the in-place pattern sole focal ownership."
+    );
+  }
+  const matchedInstance = required("rule-match-instance");
+  if (
+    matchedInstance.ruleLensPhase !== "match" ||
+    matchedInstance.ruleLensView !== "concrete" ||
+    matchedInstance.ruleLensOverride !== "concrete" ||
+    matchedInstance.ruleLensControlLabel !== "Show pattern" ||
+    matchedInstance.ruleLensPressed !== "false" ||
+    matchedInstance.primaryRepresentation !== "source" ||
+    matchedInstance.sourceInkOpacity !== 1 ||
+    matchedInstance.patternInkOpacity !== 0 ||
+    matchedInstance.targetInkOpacity !== 0 ||
+    matchedInstance.visibleFractionRuleCount !== 0
+  ) {
+    throw new Error(
+      "Match inspection must restore the complete concrete instance in place."
     );
   }
   const returnedSubject = required("rule-approach");
@@ -925,6 +1027,24 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   ) {
     throw new Error(
       "Template frame must show one u and two n slots on the one native RHS."
+    );
+  }
+  const boundTemplate = required("rule-template-bound");
+  if (
+    boundTemplate.ruleLensPhase !== "replacement" ||
+    boundTemplate.ruleLensView !== "concrete" ||
+    boundTemplate.ruleLensOverride !== "concrete" ||
+    boundTemplate.ruleLensControlLabel !== "Show template" ||
+    boundTemplate.ruleLensPressed !== "false" ||
+    boundTemplate.primaryRepresentation !== "instantiated-rewrite" ||
+    boundTemplate.ruleTemplateSlotPresence !== 0 ||
+    boundTemplate.sourceInkOpacity !== 0 ||
+    boundTemplate.patternInkOpacity !== 0 ||
+    boundTemplate.targetInkOpacity !== 1 ||
+    boundTemplate.visibleFractionRuleCount !== 1
+  ) {
+    throw new Error(
+      "Instantiation inspection must reveal the bound form on the same owner."
     );
   }
   const bound = required("rule-instantiated");

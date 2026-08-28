@@ -438,6 +438,75 @@
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-rule-lens {
+  position: absolute;
+  z-index: 8;
+  top: calc(50% - 5rem);
+  left: 50%;
+  display: inline-flex;
+  gap: 0.52rem;
+  align-items: center;
+  padding: 0.25rem 0.3rem 0.25rem 0.55rem;
+  border: 1px solid color-mix(
+    in srgb,
+    var(--kp-equation-foreground) 16%,
+    transparent
+  );
+  border-radius: 999px;
+  color: color-mix(
+    in srgb,
+    var(--kp-equation-foreground) 62%,
+    var(--kp-catalogue-stage-background)
+  );
+  background: color-mix(
+    in srgb,
+    var(--kp-catalogue-stage-background) 92%,
+    var(--kp-equation-foreground)
+  );
+  box-shadow: 0 0.35rem 1rem color-mix(
+    in srgb,
+    var(--kp-catalogue-stage-background) 78%,
+    transparent
+  );
+  font: 650 0.64rem/1 var(--kp-font-sans, system-ui, sans-serif);
+  letter-spacing: 0.11em;
+  transform: translateX(-50%);
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-rule-lens[hidden] {
+  display: none;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-rule-lens-toggle {
+  min-height: 1.65rem;
+  padding: 0.32rem 0.58rem;
+  border: 0;
+  border-radius: 999px;
+  color: var(--kp-catalogue-link);
+  background: var(--kp-catalogue-selection-wash);
+  font: 620 0.72rem/1 var(--kp-font-sans, system-ui, sans-serif);
+  letter-spacing: 0;
+  cursor: pointer;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-rule-lens-toggle:hover {
+  background: color-mix(
+    in srgb,
+    var(--kp-catalogue-link) 18%,
+    transparent
+  );
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-rule-lens-toggle:focus-visible {
+  outline: 2px solid var(--kp-catalogue-link);
+  outline-offset: 2px;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
   .editor-equation-stage__antiderivative-rule-template {
   position: absolute;
   z-index: 2;
@@ -567,6 +636,11 @@
 
 @media (max-width: 520px) {
   .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+    .editor-equation-stage__antiderivative-rule-lens {
+    top: calc(50% - 4.55rem);
+  }
+
+  .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
     .editor-equation-stage__antiderivative-explanation {
     top: calc(50% + 3.65rem);
     grid-template-columns: 1fr;
@@ -651,10 +725,25 @@
 
   .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
     :is(
+      .editor-equation-stage__antiderivative-rule-lens-toggle,
       .editor-equation-stage__antiderivative-explanation-cue,
       .editor-equation-stage__antiderivative-explanation-math
     ) {
     color: Highlight;
+  }
+
+  .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+    .editor-equation-stage__antiderivative-rule-lens {
+    border-color: CanvasText;
+    color: CanvasText;
+    background: Canvas;
+    box-shadow: none;
+  }
+
+  .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+    .editor-equation-stage__antiderivative-rule-lens-toggle {
+    border: 1px solid Highlight;
+    background: Canvas;
   }
 
   .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.derivative.power-rule-x-cubed"]
