@@ -35,32 +35,32 @@ const samples = [
   },
   {
     id: "rule-preview",
-    label: "Rule application · source abstracts into pattern",
+    label: "Motion passage · rule enters beside the instance",
     progress: 0.132,
     theme: "dark",
     viewport: desktopViewport
   },
   {
     id: "rule-approach",
-    label: "Rule application · pattern owns the focal surface",
+    label: "Motion passage · concrete instance remains the subject",
     progress: 0.203,
     theme: "dark",
     viewport: desktopViewport
   },
   {
     id: "rule-match",
-    label: "Rule application · match u and n in place",
+    label: "Motion passage · first binding becomes explicit",
     progress: 0.259,
     theme: "dark",
     viewport: desktopViewport
   },
   {
     id: "rule-match-instance",
-    label: "Rule Lens · matched concrete instance",
+    label: "Rule Lens · optional abstract pattern",
     progress: 0.259,
     theme: "dark",
     viewport: desktopViewport,
-    lensView: "concrete"
+    lensView: "abstract"
   },
   {
     id: "rule-binding",
@@ -71,7 +71,7 @@ const samples = [
   },
   {
     id: "rule-turnover",
-    label: "Rule application · pattern yields before rewrite",
+    label: "Motion passage · instance holds before rewrite",
     progress: 0.353,
     theme: "dark",
     viewport: desktopViewport
@@ -156,14 +156,14 @@ const samples = [
   },
   {
     id: "narrow-light-rule-preview",
-    label: "Narrow light · source-to-pattern projection",
+    label: "Narrow light · stacked rule context",
     progress: 0.132,
     theme: "light",
     viewport: narrowViewport
   },
   {
     id: "narrow-light-rule-match",
-    label: "Narrow light · pattern and slots",
+    label: "Narrow light · binding ledger and instance",
     progress: 0.259,
     theme: "light",
     viewport: narrowViewport
@@ -235,6 +235,11 @@ interface CaptureEvidence {
   readonly explanationBeat: string;
   readonly explanationGrounding: string;
   readonly explanationText: string;
+  readonly passageLayout: string;
+  readonly ruleReferencePresence: number;
+  readonly bindingLedgerPresence: number;
+  readonly baseBindingState: string;
+  readonly exponentBindingState: string;
   readonly ruleLensPhase: string;
   readonly ruleLensView: string;
   readonly ruleLensOverride: string;
@@ -279,6 +284,8 @@ interface CaptureEvidence {
   readonly accessibleEndpoint: string;
   readonly instantiatedFractionOwnerCount: number;
   readonly visibleFractionRuleCount: number;
+  readonly visibleContextualFractionRuleCount: number;
+  readonly visibleTotalFractionRuleCount: number;
   readonly fractionReplicaEffectCount: number;
   readonly fractionOwner: string;
   readonly fractionMotion: string;
@@ -358,21 +365,21 @@ async function capture(baseUrl?: string): Promise<void> {
     await writeFile(html, htmlSource, "utf8");
     const manifest = path.join(outputRoot, "manifest.json");
     await writeFile(manifest, `${JSON.stringify({
-      schemaVersion: "kp.integration-power-rule-visual-checkpoint.v11",
+      schemaVersion: "kp.integration-power-rule-visual-checkpoint.v12",
       animationId,
       samples: evidence,
       reviewChecklist: [
         "attention order",
         "salience-only operator scope",
-        "one primary mathematical representation at every beat",
-        "coupled repeated-u abstraction in one stationary focal locus",
-        "later n abstraction and synchronized two-use instantiation",
-        "measured in-place slot registration without boxes or connectors",
-        "learner-controlled instance-pattern and template-bound comparisons without semantic-time advance",
-        "full pattern face with accent metavariable slots",
-        "grounded one-line explanation at every pedagogical beat",
-        "pattern withdrawal before replacement-template appearance",
+        "one live mathematical subject at every beat",
+        "quiet full-rule reference beside the concrete instance",
+        "progressive u then n binding ledger with completed bindings settling",
+        "grounded narrative claim beside the corresponding semantic beat",
+        "learner-controlled pattern inspection without semantic-time advance",
+        "automatic flow keeps skeletonization behind the optional Rule Lens",
+        "concrete instance yields directly to the instantiated replacement",
         "single native replacement owner with no fraction-rule paint replica",
+        "contextual reference fraction remains outside animated ownership",
         "single transform-only fraction-rule owner through evaluation",
         "exponent provenance",
         "two ink-knot evaluations",
@@ -477,10 +484,20 @@ async function captureSample(input: {
     const visibleOwners = [...root.querySelectorAll<HTMLElement>(
       "[data-kp-equation-material-owner-id]"
     )].filter(visible);
-    const visibleFractionRules = [
+    const visibleTotalFractionRules = [
       ...root.querySelectorAll<HTMLElement>(".frac-line")
     ].filter(realized);
-    const fractionReplicaEffects = visibleFractionRules.flatMap((rule) => {
+    const visibleContextualFractionRules = visibleTotalFractionRules.filter(
+      (rule) => rule.hasAttribute(
+        "data-kp-antiderivative-contextual-fraction"
+      )
+    );
+    const visibleFractionRules = visibleTotalFractionRules.filter(
+      (rule) => !rule.hasAttribute(
+        "data-kp-antiderivative-contextual-fraction"
+      )
+    );
+    const fractionReplicaEffects = visibleTotalFractionRules.flatMap((rule) => {
       const effects: string[] = [];
       for (
         let current: HTMLElement | null = rule;
@@ -662,6 +679,18 @@ async function captureSample(input: {
       explanationText: root.querySelector<HTMLElement>(
         "[data-kp-antiderivative-explanation-rail]"
       )?.textContent?.replace(/\s+/gu, " ").trim() ?? "",
+      passageLayout:
+        root.dataset["kpAntiderivativePassageLayout"] ?? "inactive",
+      ruleReferencePresence: Number(
+        root.dataset["kpAntiderivativeRuleReferencePresence"] ?? 0
+      ),
+      bindingLedgerPresence: Number(
+        root.dataset["kpAntiderivativeBindingLedgerPresence"] ?? 0
+      ),
+      baseBindingState:
+        root.dataset["kpAntiderivativeBindingUState"] ?? "inactive",
+      exponentBindingState:
+        root.dataset["kpAntiderivativeBindingNState"] ?? "inactive",
       ruleLensPhase:
         root.dataset["kpAntiderivativeRuleLensPhase"] ?? "inactive",
       ruleLensView:
@@ -770,6 +799,9 @@ async function captureSample(input: {
         '[data-kp-antiderivative-instantiated-fraction-owner="canonical-target-native"]'
       ).length,
       visibleFractionRuleCount: visibleFractionRules.length,
+      visibleContextualFractionRuleCount:
+        visibleContextualFractionRules.length,
+      visibleTotalFractionRuleCount: visibleTotalFractionRules.length,
       fractionReplicaEffectCount: fractionReplicaEffects.length,
       fractionOwner:
         root.dataset["kpAntiderivativeEvaluationFractionOwner"] ??
@@ -936,47 +968,46 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   }
   const preview = required("rule-preview");
   if (
-    preview.transitVisualOwner !== "rule-application-native" ||
+    preview.transitVisualOwner !== "source-native" ||
     preview.rulePreviewPresence !== 1 ||
     preview.patternProjectionPresence !== 1 ||
     preview.ruleMatchPresence !== 0 ||
     preview.metavariableBindingsPresence !== 0 ||
     preview.rulePreviewFractionCount !== 0 ||
-    preview.fixedSyntaxOwner !== "single-locus-skeletonization" ||
+    preview.fixedSyntaxOwner !== "source-native" ||
     preview.visibleIntegralOwnerCount !== 1 ||
-    preview.patternFixedSyntaxVisibleCount !== 2 ||
+    preview.patternFixedSyntaxVisibleCount !== 0 ||
     preview.explanationBeat !== "recognize-rule" ||
     preview.explanationGrounding !== "law.calculus.integral.power-rule" ||
     preview.depthLens !== "schema-projection" ||
-    preview.schemaProjection !== "single-focal" ||
-    preview.primaryRepresentation !== "schema-pattern" ||
+    preview.schemaProjection !== "motion-passage" ||
+    preview.primaryRepresentation !== "source" ||
     preview.primaryRepresentationCount !== 1 ||
     preview.registrationFrameCount !== 0 ||
     preview.sourceInkOpacity !== 1 ||
-    preview.patternInkOpacity !== 1 ||
-    preview.skeletonization !== "abstract-bind-instantiate" ||
+    preview.patternInkOpacity !== 0 ||
+    preview.skeletonization !== "optional-rule-lens" ||
     preview.skeletonRegistrationCount !== 5 ||
     preview.skeletonRegistrationError >= 0.5 ||
-    preview.patternBasePaintOpacities.length !== 2 ||
-    Math.abs(
-      preview.sourceBasePaintOpacity +
-        preview.patternBasePaintOpacities[0]! - 1
-    ) > 0.02 ||
-    Math.abs(
-      preview.sourceDifferentialPaintOpacity +
-        preview.patternBasePaintOpacities[1]! - 1
-    ) > 0.02 ||
+    preview.sourceBasePaintOpacity !== 1 ||
+    preview.sourceDifferentialPaintOpacity !== 1 ||
+    preview.skeletonBaseProgress !== 0 ||
+    preview.skeletonExponentProgress !== 0 ||
+    preview.passageLayout !== "split" ||
+    preview.ruleReferencePresence !== 1 ||
+    preview.bindingLedgerPresence !== 0 ||
+    preview.visibleContextualFractionRuleCount !== 1 ||
     preview.targetInkOpacity !== 0
   ) {
     throw new Error(
-      "Rule invocation must abstract source into one in-place schema surface."
+      "Rule invocation must establish context while retaining the instance."
     );
   }
   const match = required("rule-match");
   if (
-    match.transitVisualOwner !== "rule-application-native" ||
+    match.transitVisualOwner !== "source-native" ||
     match.templateProfileId !==
-      "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v11" ||
+      "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v12" ||
     match.templateTraceRole !== "prospective" ||
     match.templateLawRefId !==
       "law.calculus.integral.power-rule" ||
@@ -996,83 +1027,92 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     match.templateBindingProgress !== 0 ||
     match.templateReceiverSettlementProgress !== 0 ||
     match.instantiatedFractionOwnerCount !== 1 ||
-    match.fixedSyntaxOwner !== "single-locus-skeletonization" ||
+    match.fixedSyntaxOwner !== "source-native" ||
     match.visibleIntegralOwnerCount !== 1 ||
-    match.patternFixedSyntaxVisibleCount !== 2 ||
+    match.patternFixedSyntaxVisibleCount !== 0 ||
     match.patternSlotCount !== 3 ||
     match.explanationBeat !== "match-structure" ||
     match.explanationGrounding !==
       "binding.u.source-base-and-integration-variable" ||
     !match.explanationText.includes("u↦x") ||
     match.depthLens !== "schema-projection" ||
-    match.schemaProjection !== "single-focal" ||
-    match.primaryRepresentation !== "schema-pattern" ||
+    match.schemaProjection !== "motion-passage" ||
+    match.primaryRepresentation !== "source" ||
     match.primaryRepresentationCount !== 1 ||
     match.schemaPlanePresence !== 1 ||
     match.correspondencePlanePresence !== 1 ||
     match.registrationFrameCount !== 0 ||
     match.sourceInkOpacity !== 1 ||
-    match.patternInkOpacity !== 1 ||
-    match.skeletonBaseProgress !== 1 ||
-    match.skeletonExponentProgress !== 1 ||
-    match.sourceBasePaintOpacity !== 0 ||
-    match.sourceDifferentialPaintOpacity !== 0 ||
-    match.sourceExponentPaintOpacity !== 0 ||
-    match.patternBasePaintOpacities.some((opacity) => opacity !== 1) ||
-    match.patternExponentPaintOpacity !== 1 ||
+    match.patternInkOpacity !== 0 ||
+    match.skeletonBaseProgress !== 0 ||
+    match.skeletonExponentProgress !== 0 ||
+    match.sourceBasePaintOpacity !== 1 ||
+    match.sourceDifferentialPaintOpacity !== 1 ||
+    match.sourceExponentPaintOpacity !== 1 ||
+    match.patternBasePaintOpacities.some((opacity) => opacity !== 0) ||
+    match.patternExponentPaintOpacity !== 0 ||
     match.targetInkOpacity !== 0 ||
     match.bindingRelationCount !== 0 ||
     match.bindingRelationPresence !== 0 ||
     match.ruleLensPhase !== "match" ||
-    match.ruleLensView !== "abstract" ||
+    match.ruleLensView !== "concrete" ||
     match.ruleLensOverride !== "automatic" ||
     match.ruleLensControlCount !== 1 ||
-    match.ruleLensControlLabel !== "Show instance" ||
-    match.ruleLensPressed !== "true"
+    match.ruleLensControlLabel !== "Show pattern" ||
+    match.ruleLensPressed !== "false" ||
+    match.passageLayout !== "split" ||
+    match.ruleReferencePresence !== 1 ||
+    match.bindingLedgerPresence !== 1 ||
+    match.baseBindingState !== "focus" ||
+    match.visibleContextualFractionRuleCount !== 1
   ) {
     throw new Error(
-      "Rule-match beat must give the in-place pattern sole focal ownership."
+      "Rule-match beat must pair the concrete subject with one focused binding."
     );
   }
   const matchedInstance = required("rule-match-instance");
   if (
     matchedInstance.ruleLensPhase !== "match" ||
-    matchedInstance.ruleLensView !== "concrete" ||
-    matchedInstance.ruleLensOverride !== "concrete" ||
-    matchedInstance.ruleLensControlLabel !== "Show pattern" ||
-    matchedInstance.ruleLensPressed !== "false" ||
-    matchedInstance.primaryRepresentation !== "source" ||
+    matchedInstance.ruleLensView !== "abstract" ||
+    matchedInstance.ruleLensOverride !== "abstract" ||
+    matchedInstance.ruleLensControlLabel !== "Show instance" ||
+    matchedInstance.ruleLensPressed !== "true" ||
+    matchedInstance.primaryRepresentation !== "schema-pattern" ||
     matchedInstance.sourceInkOpacity !== 1 ||
-    matchedInstance.patternInkOpacity !== 0 ||
+    matchedInstance.patternInkOpacity !== 1 ||
     matchedInstance.targetInkOpacity !== 0 ||
+    matchedInstance.skeletonBaseProgress !== 1 ||
+    matchedInstance.skeletonExponentProgress !== 1 ||
+    matchedInstance.skeletonization !==
+      "rule-lens-abstract-bind-instantiate" ||
     matchedInstance.visibleFractionRuleCount !== 0
   ) {
     throw new Error(
-      "Match inspection must restore the complete concrete instance in place."
+      "Rule Lens inspection must expose the abstract pattern in place."
     );
   }
   const returnedSubject = required("rule-approach");
   if (
     returnedSubject.rulePreviewPresence !== 1 ||
-    returnedSubject.fixedSyntaxOwner !== "single-locus-skeletonization" ||
+    returnedSubject.fixedSyntaxOwner !== "source-native" ||
     returnedSubject.visibleIntegralOwnerCount !== 1 ||
-    returnedSubject.patternFixedSyntaxVisibleCount !== 2 ||
+    returnedSubject.patternFixedSyntaxVisibleCount !== 0 ||
     returnedSubject.registrationFrameCount !== 0 ||
     returnedSubject.sourceInkOpacity !== 1 ||
-    returnedSubject.patternInkOpacity !== 1 ||
-    returnedSubject.skeletonBaseProgress !== 1 ||
+    returnedSubject.patternInkOpacity !== 0 ||
+    returnedSubject.skeletonBaseProgress !== 0 ||
     returnedSubject.skeletonExponentProgress !== 0 ||
-    returnedSubject.sourceBasePaintOpacity !== 0 ||
-    returnedSubject.sourceDifferentialPaintOpacity !== 0 ||
+    returnedSubject.sourceBasePaintOpacity !== 1 ||
+    returnedSubject.sourceDifferentialPaintOpacity !== 1 ||
     returnedSubject.sourceExponentPaintOpacity !== 1 ||
     returnedSubject.patternBasePaintOpacities.some(
-      (opacity) => opacity !== 1
+      (opacity) => opacity !== 0
     ) ||
     returnedSubject.patternExponentPaintOpacity !== 0 ||
     returnedSubject.targetInkOpacity !== 0
   ) {
     throw new Error(
-      "The pattern beat must retain one stationary abstract representation."
+      "The matching beat must retain one stationary concrete representation."
     );
   }
   const binding = required("rule-binding");
@@ -1095,15 +1135,18 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     binding.explanationGrounding !== "binding.n.source-exponent" ||
     binding.registrationFrameCount !== 0 ||
     binding.sourceInkOpacity <= 0 ||
-    binding.patternInkOpacity <= 0 ||
-    binding.skeletonBaseProgress !== 1 ||
-    binding.skeletonExponentProgress !== 1 ||
-    binding.sourceBasePaintOpacity !== 0 ||
+    binding.patternInkOpacity !== 0 ||
+    binding.skeletonBaseProgress !== 0 ||
+    binding.skeletonExponentProgress !== 0 ||
+    binding.sourceBasePaintOpacity !== 1 ||
     binding.sourceDifferentialPaintOpacity !== 0 ||
-    binding.sourceExponentPaintOpacity !== 0 ||
-    binding.patternBasePaintOpacities.some((opacity) => opacity !== 1) ||
-    binding.patternExponentPaintOpacity !== 1 ||
-    binding.targetInkOpacity !== 0
+    binding.sourceExponentPaintOpacity !== 1 ||
+    binding.patternBasePaintOpacities.some((opacity) => opacity !== 0) ||
+    binding.patternExponentPaintOpacity !== 0 ||
+    binding.targetInkOpacity !== 0 ||
+    binding.bindingLedgerPresence !== 1 ||
+    binding.baseBindingState !== "context" ||
+    binding.exponentBindingState !== "focus"
   ) {
     throw new Error(
       "Rule-binding frame must make metavariable acquisition explicit before instantiation."
@@ -1111,9 +1154,9 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   }
   const turnover = required("rule-turnover");
   if (
-    turnover.primaryRepresentation !== "turnover" ||
-    turnover.primaryRepresentationCount !== 0 ||
-    turnover.sourceInkOpacity !== 0 ||
+    turnover.primaryRepresentation !== "source" ||
+    turnover.primaryRepresentationCount !== 1 ||
+    turnover.sourceInkOpacity !== 1 ||
     turnover.patternInkOpacity !== 0 ||
     turnover.targetInkOpacity !== 0 ||
     turnover.visibleFractionRuleCount !== 0 ||

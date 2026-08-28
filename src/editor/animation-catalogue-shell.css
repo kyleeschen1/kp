@@ -442,7 +442,9 @@
   position: absolute;
   z-index: 8;
   top: calc(50% - 5rem);
-  left: 50%;
+  left: calc(
+    50% + var(--kp-antiderivative-passage-workspace-shift, 0%)
+  );
   display: inline-flex;
   gap: 0.52rem;
   align-items: center;
@@ -471,6 +473,7 @@
   font: 650 0.64rem/1 var(--kp-font-sans, system-ui, sans-serif);
   letter-spacing: 0.11em;
   transform: translateX(-50%);
+  white-space: nowrap;
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
@@ -518,11 +521,124 @@
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-passage-context {
+  position: absolute;
+  z-index: 5;
+  top: calc(50% - 6.2rem);
+  left: 61%;
+  display: grid;
+  gap: 0.48rem;
+  width: min(23rem, 35%);
+  box-sizing: border-box;
+  color: color-mix(
+    in srgb,
+    var(--kp-equation-foreground) 68%,
+    var(--kp-catalogue-stage-background)
+  );
+  opacity: var(--kp-antiderivative-rule-reference-presence, 0);
+  pointer-events: none;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  :is(
+    .editor-equation-stage__antiderivative-passage-context-cue,
+    .editor-equation-stage__antiderivative-binding-ledger-cue
+  ) {
+  font: 650 0.62rem/1 var(--kp-font-sans, system-ui, sans-serif);
+  letter-spacing: 0.14em;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-rule-reference {
+  padding-bottom: 0.72rem;
+  border-bottom: 1px solid color-mix(
+    in srgb,
+    var(--kp-equation-foreground) 18%,
+    transparent
+  );
+  color: color-mix(
+    in srgb,
+    var(--kp-equation-foreground) 72%,
+    var(--kp-catalogue-stage-background)
+  );
+  font-size: clamp(0.92rem, 1.65vw, 1.16rem);
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-rule-reference[data-kp-semantic-salience-level="focus"] {
+  color: var(--kp-equation-foreground);
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-binding-ledger {
+  display: grid;
+  gap: 0.45rem;
+  padding-top: 0.08rem;
+  opacity: var(--kp-antiderivative-binding-ledger-presence, 0);
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-binding-ledger-rows {
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  gap: 0.48rem;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-binding-ledger-row {
+  min-width: 3.6rem;
+  padding: 0.28rem 0.52rem;
+  border: 1px solid color-mix(
+    in srgb,
+    var(--kp-equation-foreground) 16%,
+    transparent
+  );
+  border-radius: 0.32rem;
+  color: color-mix(
+    in srgb,
+    var(--kp-equation-foreground) 62%,
+    var(--kp-catalogue-stage-background)
+  );
+  background: color-mix(
+    in srgb,
+    var(--kp-catalogue-stage-background) 92%,
+    transparent
+  );
+  font-size: 0.86rem;
+  text-align: center;
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-binding-ledger-row[data-kp-antiderivative-binding-ledger-row="u"] {
+  opacity: var(--kp-antiderivative-binding-u-presence, 0);
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-binding-ledger-row[data-kp-antiderivative-binding-ledger-row="n"] {
+  opacity: var(--kp-antiderivative-binding-n-presence, 0);
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+  .editor-equation-stage__antiderivative-binding-ledger-row[data-kp-semantic-salience-level="focus"] {
+  border-color: color-mix(
+    in srgb,
+    var(--kp-catalogue-link) 46%,
+    transparent
+  );
+  color: var(--kp-catalogue-link);
+  background: var(--kp-catalogue-selection-wash);
+}
+
+.kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
   .editor-equation-stage__antiderivative-pattern-projection {
   position: absolute;
   z-index: 3;
   top: 50%;
-  left: 50%;
+  left: calc(
+    50% + var(--kp-antiderivative-passage-workspace-shift, 0%)
+  );
   color: var(--kp-equation-foreground);
   font-size: clamp(2.15rem, 5.5vw, 2.75rem);
   opacity: var(--kp-antiderivative-pattern-projection-presence, 0);
@@ -585,12 +701,12 @@
   position: absolute;
   z-index: 7;
   top: calc(50% + 4.15rem);
-  left: 50%;
+  left: 61%;
   display: grid;
-  grid-template-columns: max-content minmax(0, 1fr);
-  gap: 0.72rem;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.3rem;
   align-items: baseline;
-  width: min(35rem, calc(100% - 2rem));
+  width: min(23rem, 35%);
   box-sizing: border-box;
   padding-top: 0.58rem;
   border-top: 1px solid color-mix(
@@ -607,7 +723,6 @@
   line-height: 1.42;
   opacity: var(--kp-antiderivative-explanation-presence, 0);
   pointer-events: none;
-  transform: translateX(-50%);
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
@@ -637,20 +752,49 @@
   font-size: 1.02em;
 }
 
-@media (max-width: 520px) {
+@media (max-width: 620px) {
+  .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+    .editor-equation-stage[data-kp-antiderivative-passage-layout] {
+    --kp-antiderivative-passage-workspace-shift: 0% !important;
+  }
+
   .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
     .editor-equation-stage__antiderivative-rule-lens {
-    top: calc(50% - 4.55rem);
+    top: calc(50% - 4.85rem);
+    left: 50%;
+  }
+
+  .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+    .editor-equation-stage__antiderivative-passage-context {
+    top: calc(50% - 10.4rem);
+    left: 0.75rem;
+    gap: 0.35rem;
+    width: calc(100% - 1.5rem);
+    text-align: center;
+  }
+
+  .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+    .editor-equation-stage__antiderivative-rule-reference {
+    padding-bottom: 0.5rem;
+    font-size: clamp(0.84rem, 3.5vw, 1rem);
+  }
+
+  .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
+    .editor-equation-stage__antiderivative-binding-ledger {
+    justify-items: center;
+    gap: 0.3rem;
   }
 
   .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
     .editor-equation-stage__antiderivative-explanation {
-    top: calc(50% + 3.65rem);
+    top: calc(50% + 4.05rem);
+    left: 0.75rem;
     grid-template-columns: 1fr;
     gap: 0.25rem;
-    width: calc(100% - 1.25rem);
+    width: calc(100% - 1.5rem);
     padding-top: 0.48rem;
     font-size: clamp(0.7rem, 3.25vw, 0.79rem);
+    text-align: center;
   }
 }
 
@@ -721,7 +865,11 @@
 
 @media (forced-colors: active) {
   .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
-    .editor-equation-stage__antiderivative-explanation {
+    :is(
+      .editor-equation-stage__antiderivative-explanation,
+      .editor-equation-stage__antiderivative-rule-reference,
+      .editor-equation-stage__antiderivative-binding-ledger-row
+    ) {
     border-color: CanvasText;
     color: CanvasText;
   }

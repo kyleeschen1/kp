@@ -1582,6 +1582,34 @@
       "scope": "s18 durable evidence",
       "checkedAt": "2026-08-28T03:39:01.084Z",
       "notes": "Validated 1061 nodes and 25845 events after the v11 checkpoint evidence update."
+    },
+    {
+      "command": "npm run visual:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s18 motion-passage checkpoint",
+      "checkedAt": "2026-08-28T18:30:35.550Z",
+      "notes": "Captured desktop dark and narrow light states; automatic playback preserves the concrete subject, while the Rule Lens exposes optional abstraction."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "slice s18 semantic preservation",
+      "checkedAt": "2026-08-28T18:30:44.811Z",
+      "notes": "All 64 focused integration semantics, construction, choreography, evaluation-cohort, migration, and coverage checks pass."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-catalogue",
+      "status": "passed",
+      "scope": "slice s18 Catalogue runtime",
+      "checkedAt": "2026-08-28T18:30:45.972Z",
+      "notes": "Three Chromium checks pass, including motion-passage state, Rule Lens inspection, fraction ownership, lifecycle, themes, and authored dwell."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice s18 type safety",
+      "checkedAt": "2026-08-28T18:30:47.119Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks pass with no Svelte warnings."
     }
   ],
   "allowedWork": [
@@ -1719,7 +1747,7 @@
     {
       "id": "next-action.kp.integration-power-rule.s18",
       "title": "Integration-human-visual-checkpoint",
-      "summary": "The v11 human-review candidate replaces comparison-diagram choreography with in-place skeletonization on the canonical integration power-rule exemplar. The two concrete u roles abstract together into registered u slots, n follows as a distinct binding, and the single native RHS reverses the process by restoring u before synchronously propagating n to both uses. Five measured fixed-and-slot loci stay within 0.5px; identical fixed syntax hands off atomically so only one integral glyph is painted. Rule Lens remains an exemplar-local fixed-time comparison affordance. Exact endpoints, semantic trace, explanation rail, salience-only operator scope, one native fraction owner, two certified ink knots, lifecycle modes, and unrelated callers remain unchanged. Focused tests, Chromium lifecycle, typecheck, Catalogue host checks, and the v11 desktop/narrow dark/light checkpoint pass. Awaiting explicit human visual approval before s19.",
+      "summary": "Motion-passage candidate verified and ready for human review.",
       "status": "in-progress"
     },
     {

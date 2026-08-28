@@ -34,7 +34,7 @@ export const kpAntiderivativePowerTransitRepairGapCode =
 export const kpAntiderivativeRuleApplicationNativeKatexMechanismId =
   "kp.rendering.native-katex.antiderivative-rule-application.v1";
 export const kpAntiderivativeRuleApplicationPresentationProfileId =
-  "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v11";
+  "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v12";
 
 type RuleLensPhase = "match" | "replacement";
 type RuleLensView = "abstract" | "concrete";
@@ -272,6 +272,16 @@ function createTemplateReceiver(
     "--kp-antiderivative-correspondence-plane-presence",
     "0"
   );
+  element.style.setProperty(
+    "--kp-antiderivative-rule-reference-presence",
+    "0"
+  );
+  element.style.setProperty(
+    "--kp-antiderivative-binding-ledger-presence",
+    "0"
+  );
+  element.style.setProperty("--kp-antiderivative-binding-u-presence", "0");
+  element.style.setProperty("--kp-antiderivative-binding-n-presence", "0");
   element.setAttribute("aria-hidden", "true");
 
   const rulePanel = stage.ownerDocument.createElement("div");
@@ -294,9 +304,101 @@ function createTemplateReceiver(
     template.instructionalProjection
   );
   rulePanel.append(patternProjection);
-  element.append(rulePanel);
+  const passageContext = createMotionPassageContext(stage, template);
+  element.append(rulePanel, passageContext);
   stage.append(element);
   return element;
+}
+
+function createMotionPassageContext(
+  stage: HTMLElement,
+  template: KpAntiderivativePowerNativeKatexTransitPlan["choreography"]["ruleTemplateApplication"]
+): HTMLElement {
+  const baseBinding = template.metavariableBindings.find(
+    ({ metavariable }) => metavariable === "u"
+  );
+  const exponentBinding = template.metavariableBindings.find(
+    ({ metavariable }) => metavariable === "n"
+  );
+  if (baseBinding === undefined || exponentBinding === undefined) {
+    throw new Error("Antiderivative motion passage requires u and n bindings.");
+  }
+  const context = stage.ownerDocument.createElement("section");
+  context.className =
+    "editor-equation-stage__antiderivative-passage-context";
+  context.dataset["kpAntiderivativePassageContext"] = "rule-and-bindings";
+  context.setAttribute("aria-label", "Power rule and current bindings");
+
+  const ruleCue = stage.ownerDocument.createElement("span");
+  ruleCue.className =
+    "editor-equation-stage__antiderivative-passage-context-cue";
+  ruleCue.textContent = "POWER RULE";
+  ruleCue.setAttribute("aria-hidden", "true");
+
+  const ruleReference = stage.ownerDocument.createElement("div");
+  ruleReference.className =
+    "editor-equation-stage__antiderivative-rule-reference";
+  ruleReference.dataset["kpAntiderivativeRuleReference"] = template.lawRefId;
+  const ruleLatex = `${template.instructionalProjection.patternLatex}` +
+    `=${template.instructionalProjection.replacementTemplateLatex}`;
+  ruleReference.dataset["kpAntiderivativeRuleReferenceLatex"] = ruleLatex;
+  ruleReference.innerHTML = renderLatexToHtml(ruleLatex, {
+    displayMode: false,
+    output: "htmlAndMathml"
+  });
+  for (const fractionRule of ruleReference.querySelectorAll<HTMLElement>(
+    ".frac-line"
+  )) {
+    fractionRule.dataset["kpAntiderivativeContextualFraction"] =
+      "rule-reference";
+  }
+  ruleReference.setAttribute("role", "img");
+  ruleReference.setAttribute(
+    "aria-label",
+    "Integral power rule: the integral of u to the n with respect to u equals u to the n plus one over n plus one, plus C."
+  );
+
+  const ledger = stage.ownerDocument.createElement("div");
+  ledger.className =
+    "editor-equation-stage__antiderivative-binding-ledger";
+  ledger.dataset["kpAntiderivativeBindingLedger"] = "current";
+  const ledgerCue = stage.ownerDocument.createElement("span");
+  ledgerCue.className =
+    "editor-equation-stage__antiderivative-binding-ledger-cue";
+  ledgerCue.textContent = "BINDINGS";
+  ledgerCue.setAttribute("aria-hidden", "true");
+  const rows = stage.ownerDocument.createElement("div");
+  rows.className =
+    "editor-equation-stage__antiderivative-binding-ledger-rows";
+  rows.append(
+    createBindingLedgerRow(stage, "u", baseBinding.value),
+    createBindingLedgerRow(stage, "n", exponentBinding.value)
+  );
+  ledger.append(ledgerCue, rows);
+  context.append(ruleCue, ruleReference, ledger);
+  return context;
+}
+
+function createBindingLedgerRow(
+  stage: HTMLElement,
+  metavariable: "u" | "n",
+  value: string
+): HTMLElement {
+  const row = stage.ownerDocument.createElement("div");
+  row.className =
+    "editor-equation-stage__antiderivative-binding-ledger-row";
+  row.dataset["kpAntiderivativeBindingLedgerRow"] = metavariable;
+  row.dataset["kpSemanticSalienceLevel"] = "context";
+  row.innerHTML = renderLatexToHtml(
+    String.raw`${metavariable}\mapsto ${value}`,
+    { displayMode: false, output: "htmlAndMathml" }
+  );
+  row.setAttribute("role", "img");
+  row.setAttribute(
+    "aria-label",
+    `${metavariable} maps to ${value}`
+  );
+  return row;
 }
 
 function createRuleLensControl(stage: HTMLElement): HTMLElement {
@@ -435,6 +537,25 @@ function hideTemplateReceiver(session: TransitMountSession): void {
   session.templateReceiver.style.setProperty(
     "--kp-antiderivative-correspondence-plane-presence",
     "0"
+  );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-rule-reference-presence",
+    "0"
+  );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-binding-ledger-presence",
+    "0"
+  );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-binding-u-presence",
+    "0"
+  );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-binding-n-presence",
+    "0"
+  );
+  session.stage.style.removeProperty(
+    "--kp-antiderivative-passage-workspace-shift"
   );
   session.templateReceiver.dataset["kpSemanticTraceRole"] = "absent";
   session.templateReceiver.setAttribute("aria-hidden", "true");
@@ -783,6 +904,11 @@ function applyRuleTemplateApplicationState(
     projection,
     session.ruleLensOverride
   );
+  const passage = motionPassageState(
+    template,
+    projection,
+    session.ruleLensOverride
+  );
   const templateSlotPresence = Math.max(
     1 - skeletonization.targetBaseInstantiation,
     1 - skeletonization.targetExponentInstantiation
@@ -827,6 +953,26 @@ function applyRuleTemplateApplicationState(
     template.depthLens.correspondencePlanePresence.toFixed(4)
   );
   session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-rule-reference-presence",
+    passage.ruleReferencePresence.toFixed(4)
+  );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-binding-ledger-presence",
+    passage.bindingLedgerPresence.toFixed(4)
+  );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-binding-u-presence",
+    passage.baseBindingPresence.toFixed(4)
+  );
+  session.templateReceiver.style.setProperty(
+    "--kp-antiderivative-binding-n-presence",
+    passage.exponentBindingPresence.toFixed(4)
+  );
+  session.stage.style.setProperty(
+    "--kp-antiderivative-passage-workspace-shift",
+    `${(-16 * passage.ruleReferencePresence).toFixed(3)}%`
+  );
+  session.templateReceiver.style.setProperty(
     "--kp-antiderivative-template-face-progress",
     template.templateRevealProgress.toFixed(4)
   );
@@ -857,15 +1003,17 @@ function applyRuleTemplateApplicationState(
     skeletonization
   );
   applyInstructionalRuleLayerState(session, template, visualProjection);
+  applyMotionPassageState(session, passage);
   const panelIsPresent =
     visualProjection.primaryRepresentation === "schema-pattern" ||
     visualProjection.primaryRepresentation === "replacement-template";
+  const contextIsPresent = passage.ruleReferencePresence > 0.01;
   session.templateReceiver.setAttribute(
     "aria-hidden",
-    panelIsPresent ? "false" : "true"
+    panelIsPresent || contextIsPresent ? "false" : "true"
   );
   rulePanel.setAttribute("aria-hidden", panelIsPresent ? "false" : "true");
-  if (panelIsPresent) {
+  if (panelIsPresent || contextIsPresent) {
     session.templateReceiver.removeAttribute("inert");
   } else {
     session.templateReceiver.setAttribute("inert", "");
@@ -1005,7 +1153,7 @@ function applyRuleTemplateApplicationState(
   session.stage.dataset["kpAntiderivativeProspectivePlaneDepth"] =
     template.depthLens.prospectivePlaneDepth.toFixed(4);
   session.stage.dataset["kpAntiderivativeSchemaProjection"] =
-    "single-focal";
+    "motion-passage";
   session.stage.dataset["kpAntiderivativePrimaryRepresentation"] =
     visualProjection.primaryRepresentation;
   session.stage.dataset["kpAntiderivativePrimaryRepresentationCount"] =
@@ -1014,7 +1162,9 @@ function applyRuleTemplateApplicationState(
   session.stage.dataset["kpAntiderivativeBindingRelationCount"] = "0";
   session.stage.dataset["kpAntiderivativeBindingRelationPresence"] = "0.0000";
   session.stage.dataset["kpAntiderivativeSkeletonization"] =
-    "abstract-bind-instantiate";
+    session.ruleLensOverride === "abstract"
+      ? "rule-lens-abstract-bind-instantiate"
+      : "optional-rule-lens";
   session.stage.dataset["kpAntiderivativeSkeletonBaseProgress"] =
     skeletonization.sourceBaseAbstraction.toFixed(4);
   session.stage.dataset["kpAntiderivativeSkeletonExponentProgress"] =
@@ -1023,7 +1173,105 @@ function applyRuleTemplateApplicationState(
     skeletonization.targetBaseInstantiation.toFixed(4);
   session.stage.dataset["kpAntiderivativeInstantiationExponentProgress"] =
     skeletonization.targetExponentInstantiation.toFixed(4);
+  session.stage.dataset["kpAntiderivativePassageLayout"] =
+    passage.ruleReferencePresence > 0.01 ? "split" : "centered";
+  session.stage.dataset["kpAntiderivativeRuleReferencePresence"] =
+    passage.ruleReferencePresence.toFixed(4);
+  session.stage.dataset["kpAntiderivativeBindingLedgerPresence"] =
+    passage.bindingLedgerPresence.toFixed(4);
+  session.stage.dataset["kpAntiderivativeBindingUState"] =
+    passage.baseBindingSalience;
+  session.stage.dataset["kpAntiderivativeBindingNState"] =
+    passage.exponentBindingSalience;
   return Object.freeze({ panelPresence, visualProjection });
+}
+
+interface MotionPassageState {
+  readonly ruleReferencePresence: number;
+  readonly ruleReferenceSalience: "focus" | "context";
+  readonly bindingLedgerPresence: number;
+  readonly baseBindingPresence: number;
+  readonly exponentBindingPresence: number;
+  readonly baseBindingSalience: "focus" | "context";
+  readonly exponentBindingSalience: "focus" | "context";
+}
+
+function motionPassageState(
+  template: ReturnType<typeof sampleKpAntiderivativeRuleTemplateApplication>,
+  projection: "full" | "reduced" | "no-depth",
+  lensOverride?: RuleLensView | undefined
+): MotionPassageState {
+  const referencePresence = projection === "full"
+    ? template.rulePreviewPresence * (1 - template.rewriteCommitProgress)
+    : 0;
+  const baseBindingPresence = referencePresence * Math.max(
+    template.matchProgress,
+    template.bindingProgress,
+    template.instantiationProgress
+  );
+  const exponentBindingPresence = referencePresence * Math.max(
+    template.bindingProgress,
+    template.instantiationProgress
+  );
+  return Object.freeze({
+    ruleReferencePresence: referencePresence,
+    ruleReferenceSalience: template.explanationBeatId === "recognize-rule"
+      ? "focus"
+      : "context",
+    bindingLedgerPresence: Math.max(
+      baseBindingPresence,
+      exponentBindingPresence
+    ),
+    baseBindingPresence,
+    exponentBindingPresence,
+    baseBindingSalience:
+      template.explanationBeatId === "match-structure" ||
+      (lensOverride === "abstract" && ruleLensPhase(template) === "match")
+        ? "focus"
+        : "context",
+    exponentBindingSalience:
+      template.explanationBeatId === "bind-metavariables" ||
+      (lensOverride === "abstract" && ruleLensPhase(template) === "replacement")
+        ? "focus"
+        : "context"
+  });
+}
+
+function applyMotionPassageState(
+  session: TransitMountSession,
+  state: MotionPassageState
+): void {
+  const context = session.templateReceiver.querySelector<HTMLElement>(
+    "[data-kp-antiderivative-passage-context]"
+  );
+  const reference = session.templateReceiver.querySelector<HTMLElement>(
+    "[data-kp-antiderivative-rule-reference]"
+  );
+  const ledger = session.templateReceiver.querySelector<HTMLElement>(
+    "[data-kp-antiderivative-binding-ledger]"
+  );
+  const baseRow = session.templateReceiver.querySelector<HTMLElement>(
+    '[data-kp-antiderivative-binding-ledger-row="u"]'
+  );
+  const exponentRow = session.templateReceiver.querySelector<HTMLElement>(
+    '[data-kp-antiderivative-binding-ledger-row="n"]'
+  );
+  if (
+    context === null || reference === null || ledger === null ||
+    baseRow === null || exponentRow === null
+  ) {
+    throw new Error("Antiderivative motion passage is incomplete.");
+  }
+  context.setAttribute(
+    "aria-hidden",
+    state.ruleReferencePresence > 0.01 ? "false" : "true"
+  );
+  reference.dataset["kpSemanticSalienceLevel"] =
+    state.ruleReferenceSalience;
+  ledger.dataset["kpSemanticSalienceLevel"] = "context";
+  baseRow.dataset["kpSemanticSalienceLevel"] = state.baseBindingSalience;
+  exponentRow.dataset["kpSemanticSalienceLevel"] =
+    state.exponentBindingSalience;
 }
 
 interface SkeletonizationState {
@@ -1070,12 +1318,12 @@ function skeletonizationState(
   }
   const instantiation = template.instantiationProgress;
   return Object.freeze({
-    // The two u occurrences abstract as one binding before n becomes general.
-    sourceBaseAbstraction: template.patternProjectionProgress,
-    sourceExponentAbstraction: template.matchProgress,
-    // Identical fixed glyphs hand off atomically at the registered pixel;
-    // crossfading them would create a darker duplicate instead of abstraction.
-    fixedPatternPresence: template.patternProjectionProgress > 0 ? 1 : 0,
+    // The authored passage keeps the instance concrete. Skeletonization is an
+    // inspection projection, not a second automatic explanation competing
+    // with the rule reference and binding ledger.
+    sourceBaseAbstraction: 0,
+    sourceExponentAbstraction: 0,
+    fixedPatternPresence: 0,
     // Reverse skeletonization first restores u, then propagates n to both uses.
     targetBaseInstantiation: intervalProgress(instantiation, 0, 0.58),
     targetExponentInstantiation: intervalProgress(instantiation, 0.28, 1)
@@ -1209,26 +1457,19 @@ function schemaProjectionState(
         : "source" as const
     });
   }
-  // Skeletonization keeps one composited equation surface: the source retains
-  // layout while its concrete leaves yield paint to registered abstract slots.
-  // Source and pattern roots may both participate without duplicating a glyph.
-  const sourceInkPresence = Math.max(
-    1 - template.patternProjectionProgress,
-    template.patternProjectionPresence
-  );
-  const patternInkPresence = template.patternProjectionPresence;
+  // The default motion passage keeps the concrete instance as the subject.
+  // Its contextual rule reference explains applicability; only the explicit
+  // Rule Lens projects the abstract pattern onto this focal locus.
   const targetInkPresence = template.targetPresence;
+  const sourceInkPresence = 1 - targetInkPresence;
+  const patternInkPresence = 0;
   const primaryRepresentation = template.rewriteCommitProgress >= 1
     ? "committed-rewrite" as const
-    : targetInkPresence > 0.01
+    : targetInkPresence >= 0.5
       ? template.instantiationProgress >= 1
         ? "instantiated-rewrite" as const
         : "replacement-template" as const
-      : patternInkPresence > 0.01
-        ? "schema-pattern" as const
-        : sourceInkPresence > 0.01
-          ? "source" as const
-          : "turnover" as const;
+      : "source" as const;
   return Object.freeze({
     sourceInkPresence,
     patternInkPresence,
@@ -1317,8 +1558,10 @@ function applyNativeRuleApplicationState(
     visualProjection.sourceInkPresence.toFixed(4);
   session.roots.target.style.opacity =
     visualProjection.targetInkPresence.toFixed(4);
-  session.roots.source.style.transform = "none";
-  session.roots.target.style.transform = "none";
+  session.roots.source.style.transform =
+    "translateX(var(--kp-antiderivative-passage-workspace-shift, 0%))";
+  session.roots.target.style.transform =
+    "translateX(var(--kp-antiderivative-passage-workspace-shift, 0%))";
   session.roots.source.style.clipPath = "none";
   session.roots.target.style.clipPath = "none";
   session.roots.target.style.setProperty(
@@ -1614,6 +1857,9 @@ function publishRepairGap(session: TransitMountSession): void {
 }
 
 function clearTelemetry(stage: HTMLElement): void {
+  stage.style.removeProperty(
+    "--kp-antiderivative-passage-workspace-shift"
+  );
   delete stage.dataset["kpAntiderivativePowerTransit"];
   delete stage.dataset["kpAntiderivativePowerTransitMechanismId"];
   delete stage.dataset["kpAntiderivativeTemplateProfileId"];
@@ -1670,6 +1916,11 @@ function clearTelemetry(stage: HTMLElement): void {
   delete stage.dataset["kpAntiderivativeInstantiationExponentProgress"];
   delete stage.dataset["kpAntiderivativeSkeletonizationRegistrationCount"];
   delete stage.dataset["kpAntiderivativeSkeletonizationRegistrationError"];
+  delete stage.dataset["kpAntiderivativePassageLayout"];
+  delete stage.dataset["kpAntiderivativeRuleReferencePresence"];
+  delete stage.dataset["kpAntiderivativeBindingLedgerPresence"];
+  delete stage.dataset["kpAntiderivativeBindingUState"];
+  delete stage.dataset["kpAntiderivativeBindingNState"];
 }
 
 function bounded(value: number): number {
