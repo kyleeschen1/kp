@@ -1526,6 +1526,62 @@
       "scope": "preservation",
       "checkedAt": "2026-08-28T02:54:27.481Z",
       "notes": "11 authority, inventory, endpoint, and caller preservation checks passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s18 v11 compile boundaries",
+      "checkedAt": "2026-08-28T03:38:06.825Z",
+      "notes": "TypeScript, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run test:integration-power-rule",
+      "status": "passed",
+      "scope": "s18 integration semantic preservation",
+      "checkedAt": "2026-08-28T03:38:07.889Z",
+      "notes": "All 64 focused integration authority, choreography, import, evaluation, and coverage tests passed."
+    },
+    {
+      "command": "npm run test:differentiation-exemplar",
+      "status": "passed",
+      "scope": "s18 adjacent derivative preservation",
+      "checkedAt": "2026-08-28T03:38:08.901Z",
+      "notes": "All 36 derivative exemplar and shared operator-policy tests passed."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "s18 equation authority preservation",
+      "checkedAt": "2026-08-28T03:38:09.914Z",
+      "notes": "All 11 inventory, authority graph, endpoint, renderer, clock, and browser-evidence preservation checks passed."
+    },
+    {
+      "command": "npm run test:browser:integration-power-rule-catalogue",
+      "status": "passed",
+      "scope": "s18 canonical Chromium lifecycle",
+      "checkedAt": "2026-08-28T03:38:10.953Z",
+      "notes": "Three canonical Chromium tests passed, including skeleton paint ownership, replay, rewind, themes, accessibility projections, and dwell."
+    },
+    {
+      "command": "npm run visual:integration-power-rule",
+      "status": "passed",
+      "scope": "s18 v11 visual checkpoint",
+      "checkedAt": "2026-08-28T03:38:12.015Z",
+      "notes": "Stable capture produced the v11 dark, light, narrow, and phase contact sheet with five-locus registration below 0.5px, one fraction-rule owner, and synchronized binding evidence."
+    },
+    {
+      "command": "npm run test:svelte-catalogue-shell",
+      "status": "passed",
+      "scope": "s18 Catalogue host preservation",
+      "checkedAt": "2026-08-28T03:38:13.038Z",
+      "notes": "All 36 Catalogue host, navigation, lifecycle, capability, and Svelte boundary tests passed."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s18 durable evidence",
+      "checkedAt": "2026-08-28T03:39:01.084Z",
+      "notes": "Validated 1061 nodes and 25845 events after the v11 checkpoint evidence update."
     }
   ],
   "allowedWork": [
@@ -1663,7 +1719,7 @@
     {
       "id": "next-action.kp.integration-power-rule.s18",
       "title": "Integration-human-visual-checkpoint",
-      "summary": "The v10 human-review candidate keeps the approved single-locus match-bind-instantiate-rewrite choreography and adds an exemplar-local Rule Lens. It pauses at fixed semantic time to compare the concrete integral with the abstract pattern, or the abstract RHS template with its bound form; Play clears the inspection override and resumes the authored sequence. Exact endpoints, semantic trace, salience-only operator scope, one native fraction owner, explanation rail, two certified ink knots, lifecycle modes, and unrelated callers remain unchanged. Focused tests, Chromium lifecycle, full typecheck, and the v10 desktop/narrow dark/light checkpoint pass. Awaiting explicit human visual approval before s19.",
+      "summary": "The v11 human-review candidate replaces comparison-diagram choreography with in-place skeletonization on the canonical integration power-rule exemplar. The two concrete u roles abstract together into registered u slots, n follows as a distinct binding, and the single native RHS reverses the process by restoring u before synchronously propagating n to both uses. Five measured fixed-and-slot loci stay within 0.5px; identical fixed syntax hands off atomically so only one integral glyph is painted. Rule Lens remains an exemplar-local fixed-time comparison affordance. Exact endpoints, semantic trace, explanation rail, salience-only operator scope, one native fraction owner, two certified ink knots, lifecycle modes, and unrelated callers remain unchanged. Focused tests, Chromium lifecycle, typecheck, Catalogue host checks, and the v11 desktop/narrow dark/light checkpoint pass. Awaiting explicit human visual approval before s19.",
       "status": "in-progress"
     },
     {

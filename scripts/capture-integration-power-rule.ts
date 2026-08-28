@@ -251,6 +251,22 @@ interface CaptureEvidence {
   readonly sourceInkOpacity: number;
   readonly patternInkOpacity: number;
   readonly targetInkOpacity: number;
+  readonly skeletonization: string;
+  readonly skeletonBaseProgress: number;
+  readonly skeletonExponentProgress: number;
+  readonly instantiationBaseProgress: number;
+  readonly instantiationExponentProgress: number;
+  readonly skeletonRegistrationCount: number;
+  readonly skeletonRegistrationError: number;
+  readonly sourceBasePaintOpacity: number;
+  readonly sourceDifferentialPaintOpacity: number;
+  readonly sourceExponentPaintOpacity: number;
+  readonly patternBasePaintOpacities: readonly number[];
+  readonly patternExponentPaintOpacity: number;
+  readonly targetTemplateBasePaintOpacity: number;
+  readonly targetTemplateExponentPaintOpacities: readonly number[];
+  readonly targetBoundBasePaintOpacity: number;
+  readonly targetBoundExponentPaintOpacities: readonly number[];
   readonly patternSlotCount: number;
   readonly bindingRelationCount: number;
   readonly bindingRelationPresence: number;
@@ -342,14 +358,16 @@ async function capture(baseUrl?: string): Promise<void> {
     await writeFile(html, htmlSource, "utf8");
     const manifest = path.join(outputRoot, "manifest.json");
     await writeFile(manifest, `${JSON.stringify({
-      schemaVersion: "kp.integration-power-rule-visual-checkpoint.v10",
+      schemaVersion: "kp.integration-power-rule-visual-checkpoint.v11",
       animationId,
       samples: evidence,
       reviewChecklist: [
         "attention order",
         "salience-only operator scope",
         "one primary mathematical representation at every beat",
-        "source-to-pattern abstraction in one stationary focal locus",
+        "coupled repeated-u abstraction in one stationary focal locus",
+        "later n abstraction and synchronized two-use instantiation",
+        "measured in-place slot registration without boxes or connectors",
         "learner-controlled instance-pattern and template-bound comparisons without semantic-time advance",
         "full pattern face with accent metavariable slots",
         "grounded one-line explanation at every pedagogical beat",
@@ -505,6 +523,44 @@ async function captureSample(input: {
     const targetRoot = root.querySelector<HTMLElement>(
       "[data-kp-editor-equation-target]"
     );
+    const sourcePaintOpacity = (motionIdSuffix: string): number => {
+      const token = [...root.querySelectorAll<HTMLElement>(
+        "[data-kp-editor-equation-source] [data-kp-motion-id]"
+      )].find((candidate) =>
+        candidate.dataset["kpMotionId"]?.endsWith(motionIdSuffix) === true
+      );
+      return token === undefined ? 0 : Number(getComputedStyle(token).opacity);
+    };
+    const patternPaintOpacities = (slotId: string): readonly number[] =>
+      [...root.querySelectorAll<HTMLElement>(
+        `[data-kp-antiderivative-pattern-slot="${slotId}"]`
+      )].map((slot) => Number(getComputedStyle(slot).opacity));
+    const targetSlotPaint = (metavariable: "u" | "n"): {
+      readonly template: readonly number[];
+      readonly bound: readonly number[];
+    } => {
+      const tokens = [...root.querySelectorAll<HTMLElement>(
+        `[data-kp-antiderivative-rule-template-slot="${metavariable}"]`
+      )];
+      return {
+        template: tokens.map((token) =>
+          Number(getComputedStyle(token, "::after").opacity)
+        ),
+        bound: tokens.map((token) => {
+          const child = token.firstElementChild;
+          return child instanceof HTMLElement
+            ? Number(getComputedStyle(child).opacity)
+            : 0;
+        })
+      };
+    };
+    const patternBasePaintOpacities = [
+      ...patternPaintOpacities("u-base"),
+      ...patternPaintOpacities("u-differential")
+    ];
+    const patternExponentPaintOpacities = patternPaintOpacities("n");
+    const targetBasePaint = targetSlotPaint("u");
+    const targetExponentPaint = targetSlotPaint("n");
     return {
       transitionId: root.querySelector<HTMLElement>(
         "[data-kp-editor-equation-transition-id]"
@@ -648,6 +704,38 @@ async function captureSample(input: {
       targetInkOpacity: targetRoot === null
         ? 0
         : Number(getComputedStyle(targetRoot).opacity),
+      skeletonization:
+        root.dataset["kpAntiderivativeSkeletonization"] ?? "inactive",
+      skeletonBaseProgress: Number(
+        root.dataset["kpAntiderivativeSkeletonBaseProgress"] ?? 0
+      ),
+      skeletonExponentProgress: Number(
+        root.dataset["kpAntiderivativeSkeletonExponentProgress"] ?? 0
+      ),
+      instantiationBaseProgress: Number(
+        root.dataset["kpAntiderivativeInstantiationBaseProgress"] ?? 0
+      ),
+      instantiationExponentProgress: Number(
+        root.dataset["kpAntiderivativeInstantiationExponentProgress"] ?? 0
+      ),
+      skeletonRegistrationCount: Number(
+        root.dataset["kpAntiderivativeSkeletonizationRegistrationCount"] ?? 0
+      ),
+      skeletonRegistrationError: Number(
+        root.dataset["kpAntiderivativeSkeletonizationRegistrationError"] ??
+          Number.POSITIVE_INFINITY
+      ),
+      sourceBasePaintOpacity: sourcePaintOpacity(".initial.base"),
+      sourceDifferentialPaintOpacity: sourcePaintOpacity(
+        ".initial.integration-variable"
+      ),
+      sourceExponentPaintOpacity: sourcePaintOpacity(".initial.exponent"),
+      patternBasePaintOpacities,
+      patternExponentPaintOpacity: patternExponentPaintOpacities[0] ?? 0,
+      targetTemplateBasePaintOpacity: targetBasePaint.template[0] ?? 0,
+      targetTemplateExponentPaintOpacities: targetExponentPaint.template,
+      targetBoundBasePaintOpacity: targetBasePaint.bound[0] ?? 0,
+      targetBoundExponentPaintOpacities: targetExponentPaint.bound,
       patternSlotCount: root.querySelectorAll(
         "[data-kp-antiderivative-pattern-slot]"
       ).length,
@@ -854,8 +942,8 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     preview.ruleMatchPresence !== 0 ||
     preview.metavariableBindingsPresence !== 0 ||
     preview.rulePreviewFractionCount !== 0 ||
-    preview.fixedSyntaxOwner !== "pattern-projection" ||
-    preview.visibleIntegralOwnerCount !== 2 ||
+    preview.fixedSyntaxOwner !== "single-locus-skeletonization" ||
+    preview.visibleIntegralOwnerCount !== 1 ||
     preview.patternFixedSyntaxVisibleCount !== 2 ||
     preview.explanationBeat !== "recognize-rule" ||
     preview.explanationGrounding !== "law.calculus.integral.power-rule" ||
@@ -864,10 +952,19 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     preview.primaryRepresentation !== "schema-pattern" ||
     preview.primaryRepresentationCount !== 1 ||
     preview.registrationFrameCount !== 0 ||
-    preview.sourceInkOpacity <= 0 ||
-    preview.patternInkOpacity <= 0 ||
+    preview.sourceInkOpacity !== 1 ||
+    preview.patternInkOpacity !== 1 ||
+    preview.skeletonization !== "abstract-bind-instantiate" ||
+    preview.skeletonRegistrationCount !== 5 ||
+    preview.skeletonRegistrationError >= 0.5 ||
+    preview.patternBasePaintOpacities.length !== 2 ||
     Math.abs(
-      preview.sourceInkOpacity + preview.patternInkOpacity - 1
+      preview.sourceBasePaintOpacity +
+        preview.patternBasePaintOpacities[0]! - 1
+    ) > 0.02 ||
+    Math.abs(
+      preview.sourceDifferentialPaintOpacity +
+        preview.patternBasePaintOpacities[1]! - 1
     ) > 0.02 ||
     preview.targetInkOpacity !== 0
   ) {
@@ -879,7 +976,7 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   if (
     match.transitVisualOwner !== "rule-application-native" ||
     match.templateProfileId !==
-      "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v10" ||
+      "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v11" ||
     match.templateTraceRole !== "prospective" ||
     match.templateLawRefId !==
       "law.calculus.integral.power-rule" ||
@@ -899,7 +996,7 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     match.templateBindingProgress !== 0 ||
     match.templateReceiverSettlementProgress !== 0 ||
     match.instantiatedFractionOwnerCount !== 1 ||
-    match.fixedSyntaxOwner !== "pattern-projection" ||
+    match.fixedSyntaxOwner !== "single-locus-skeletonization" ||
     match.visibleIntegralOwnerCount !== 1 ||
     match.patternFixedSyntaxVisibleCount !== 2 ||
     match.patternSlotCount !== 3 ||
@@ -914,8 +1011,15 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     match.schemaPlanePresence !== 1 ||
     match.correspondencePlanePresence !== 1 ||
     match.registrationFrameCount !== 0 ||
-    match.sourceInkOpacity !== 0 ||
+    match.sourceInkOpacity !== 1 ||
     match.patternInkOpacity !== 1 ||
+    match.skeletonBaseProgress !== 1 ||
+    match.skeletonExponentProgress !== 1 ||
+    match.sourceBasePaintOpacity !== 0 ||
+    match.sourceDifferentialPaintOpacity !== 0 ||
+    match.sourceExponentPaintOpacity !== 0 ||
+    match.patternBasePaintOpacities.some((opacity) => opacity !== 1) ||
+    match.patternExponentPaintOpacity !== 1 ||
     match.targetInkOpacity !== 0 ||
     match.bindingRelationCount !== 0 ||
     match.bindingRelationPresence !== 0 ||
@@ -950,12 +1054,21 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
   const returnedSubject = required("rule-approach");
   if (
     returnedSubject.rulePreviewPresence !== 1 ||
-    returnedSubject.fixedSyntaxOwner !== "pattern-projection" ||
+    returnedSubject.fixedSyntaxOwner !== "single-locus-skeletonization" ||
     returnedSubject.visibleIntegralOwnerCount !== 1 ||
     returnedSubject.patternFixedSyntaxVisibleCount !== 2 ||
     returnedSubject.registrationFrameCount !== 0 ||
-    returnedSubject.sourceInkOpacity !== 0 ||
+    returnedSubject.sourceInkOpacity !== 1 ||
     returnedSubject.patternInkOpacity !== 1 ||
+    returnedSubject.skeletonBaseProgress !== 1 ||
+    returnedSubject.skeletonExponentProgress !== 0 ||
+    returnedSubject.sourceBasePaintOpacity !== 0 ||
+    returnedSubject.sourceDifferentialPaintOpacity !== 0 ||
+    returnedSubject.sourceExponentPaintOpacity !== 1 ||
+    returnedSubject.patternBasePaintOpacities.some(
+      (opacity) => opacity !== 1
+    ) ||
+    returnedSubject.patternExponentPaintOpacity !== 0 ||
     returnedSubject.targetInkOpacity !== 0
   ) {
     throw new Error(
@@ -981,8 +1094,15 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     binding.explanationBeat !== "bind-metavariables" ||
     binding.explanationGrounding !== "binding.n.source-exponent" ||
     binding.registrationFrameCount !== 0 ||
-    binding.sourceInkOpacity !== 0 ||
+    binding.sourceInkOpacity <= 0 ||
     binding.patternInkOpacity <= 0 ||
+    binding.skeletonBaseProgress !== 1 ||
+    binding.skeletonExponentProgress !== 1 ||
+    binding.sourceBasePaintOpacity !== 0 ||
+    binding.sourceDifferentialPaintOpacity !== 0 ||
+    binding.sourceExponentPaintOpacity !== 0 ||
+    binding.patternBasePaintOpacities.some((opacity) => opacity !== 1) ||
+    binding.patternExponentPaintOpacity !== 1 ||
     binding.targetInkOpacity !== 0
   ) {
     throw new Error(
@@ -1023,7 +1143,17 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     template.primaryRepresentationCount !== 1 ||
     template.sourceInkOpacity !== 0 ||
     template.patternInkOpacity !== 0 ||
-    template.targetInkOpacity <= 0
+    template.targetInkOpacity <= 0 ||
+    template.instantiationBaseProgress !== 0 ||
+    template.instantiationExponentProgress !== 0 ||
+    template.targetTemplateBasePaintOpacity !== 1 ||
+    template.targetTemplateExponentPaintOpacities.some(
+      (opacity) => opacity !== 1
+    ) ||
+    template.targetBoundBasePaintOpacity !== 0 ||
+    template.targetBoundExponentPaintOpacities.some(
+      (opacity) => opacity !== 0
+    )
   ) {
     throw new Error(
       "Template frame must show one u and two n slots on the one native RHS."
@@ -1057,7 +1187,14 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     propagation.instantiatedFractionOwnerCount !== 1 ||
     propagation.bindingRelationCount !== 0 ||
     propagation.bindingRelationPresence !== 0 ||
-    propagation.primaryRepresentation !== "replacement-template"
+    propagation.primaryRepresentation !== "replacement-template" ||
+    propagation.instantiationBaseProgress <=
+      propagation.instantiationExponentProgress ||
+    propagation.targetBoundBasePaintOpacity <=
+      propagation.targetBoundExponentPaintOpacities[0]! ||
+    propagation.targetBoundExponentPaintOpacities.length !== 2 ||
+    propagation.targetBoundExponentPaintOpacities[0] !==
+      propagation.targetBoundExponentPaintOpacities[1]
   ) {
     throw new Error(
       "Propagation frame must explain that one n binding supplies both uses."
@@ -1081,7 +1218,17 @@ function assertReviewCoverage(evidence: readonly CaptureEvidence[]): void {
     !bound.visibleText.includes("2+1") ||
     bound.explanationBeat !== "explain-closure" ||
     !bound.explanationText.includes("family of antiderivatives") ||
-    bound.primaryRepresentation !== "instantiated-rewrite"
+    bound.primaryRepresentation !== "instantiated-rewrite" ||
+    bound.instantiationBaseProgress !== 1 ||
+    bound.instantiationExponentProgress !== 1 ||
+    bound.targetTemplateBasePaintOpacity !== 0 ||
+    bound.targetTemplateExponentPaintOpacities.some(
+      (opacity) => opacity !== 0
+    ) ||
+    bound.targetBoundBasePaintOpacity !== 1 ||
+    bound.targetBoundExponentPaintOpacities.some(
+      (opacity) => opacity !== 1
+    )
   ) {
     throw new Error(
       "Instantiation frame must show one prospective canonical RHS before rewrite."

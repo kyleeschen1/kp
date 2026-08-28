@@ -34,7 +34,7 @@ export const kpAntiderivativePowerTransitRepairGapCode =
 export const kpAntiderivativeRuleApplicationNativeKatexMechanismId =
   "kp.rendering.native-katex.antiderivative-rule-application.v1";
 export const kpAntiderivativeRuleApplicationPresentationProfileId =
-  "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v10";
+  "kp.rendering.native-katex.antiderivative-rule-application-exemplar.v11";
 
 type RuleLensPhase = "match" | "replacement";
 type RuleLensView = "abstract" | "concrete";
@@ -457,6 +457,7 @@ async function prepareSession(
     if (session.disposed || session.generation !== generation) return;
     assertSingleInstantiatedFractionOwner(session);
     bindInstructionalTemplateSlots(session);
+    registerInstructionalPatternSlots(session);
     session.ready = true;
     session.ruleLensControl.hidden = false;
     const ruleLensToggle = session.ruleLensControl
@@ -575,10 +576,96 @@ function bindInstructionalTemplateSlots(session: TransitMountSession): void {
   );
 }
 
+function registerInstructionalPatternSlots(
+  session: TransitMountSession
+): void {
+  const template = session.plan.choreography.ruleTemplateApplication;
+  const baseBinding = template.metavariableBindings.find(
+    ({ metavariable }) => metavariable === "u"
+  );
+  const exponentBinding = template.metavariableBindings.find(
+    ({ metavariable }) => metavariable === "n"
+  );
+  if (baseBinding === undefined || exponentBinding === undefined) {
+    throw new Error("Antiderivative skeletonization requires u and n bindings.");
+  }
+  const baseSourceId = baseBinding.sourceSelectorIds[0];
+  const differentialSourceId = baseBinding.sourceSelectorIds[1];
+  const exponentSourceId = exponentBinding.sourceSelectorIds[0];
+  if (
+    baseSourceId === undefined ||
+    differentialSourceId === undefined ||
+    exponentSourceId === undefined
+  ) {
+    throw new Error("Antiderivative skeletonization has incomplete bindings.");
+  }
+  const pairs = [
+    ["slot", "u-base", baseSourceId],
+    ["slot", "u-differential", differentialSourceId],
+    ["slot", "n", exponentSourceId]
+  ] as const;
+  const bindingSourceIds = new Set([
+    baseSourceId,
+    differentialSourceId,
+    exponentSourceId
+  ]);
+  const fixedSourceIds = session.plan.choreography.operatorApplication
+    .operatorSelectorIds.filter((id) => !bindingSourceIds.has(id));
+  if (fixedSourceIds.length !== 2) {
+    throw new Error(
+      "Antiderivative skeletonization requires integral and differential fixed syntax."
+    );
+  }
+  const registeredPairs = [
+    ...pairs,
+    ["fixed", "operator", fixedSourceIds[0]!],
+    ["fixed", "differential", fixedSourceIds[1]!]
+  ] as const;
+  let maxRegistrationError = 0;
+  for (const [kind, patternId, sourceSelectorId] of registeredPairs) {
+    const source = findNativeMotionToken(
+      session.roots.source,
+      sourceSelectorId
+    );
+    const slot = session.templateReceiver.querySelector<HTMLElement>(
+      kind === "slot"
+        ? `[data-kp-antiderivative-pattern-slot="${patternId}"]`
+        : `[data-kp-antiderivative-pattern-fixed="${patternId}"]`
+    );
+    if (source === undefined || slot === null) {
+      throw new Error(
+        `Antiderivative skeletonization cannot register ${kind} ${patternId}.`
+      );
+    }
+    slot.style.removeProperty("translate");
+    const sourceRect = source.getBoundingClientRect();
+    const slotRect = slot.getBoundingClientRect();
+    const offsetX = centerX(sourceRect) - centerX(slotRect);
+    const offsetY = centerY(sourceRect) - centerY(slotRect);
+    slot.style.translate = `${offsetX.toFixed(3)}px ${offsetY.toFixed(3)}px`;
+    const registeredRect = slot.getBoundingClientRect();
+    maxRegistrationError = Math.max(
+      maxRegistrationError,
+      Math.abs(centerX(sourceRect) - centerX(registeredRect)),
+      Math.abs(centerY(sourceRect) - centerY(registeredRect))
+    );
+  }
+  session.stage.dataset["kpAntiderivativeSkeletonizationRegistrationCount"] =
+    String(registeredPairs.length);
+  session.stage.dataset["kpAntiderivativeSkeletonizationRegistrationError"] =
+    maxRegistrationError.toFixed(4);
+}
+
 function clearInstructionalTemplateSlots(session: TransitMountSession): void {
   for (const token of session.roots.target.querySelectorAll<HTMLElement>(
     "[data-kp-antiderivative-rule-template-slot]"
   )) {
+    token.style.removeProperty(
+      "--kp-antiderivative-template-slot-presence"
+    );
+    token.style.removeProperty(
+      "--kp-antiderivative-bound-value-presence"
+    );
     delete token.dataset["kpAntiderivativeRuleTemplateSlot"];
   }
   session.roots.target.style.removeProperty(
@@ -587,6 +674,13 @@ function clearInstructionalTemplateSlots(session: TransitMountSession): void {
   session.roots.target.style.removeProperty(
     "--kp-antiderivative-bound-value-presence"
   );
+  for (const slot of session.templateReceiver.querySelectorAll<HTMLElement>(
+    "[data-kp-antiderivative-pattern-slot], " +
+      "[data-kp-antiderivative-pattern-fixed]"
+  )) {
+    slot.style.removeProperty("--kp-antiderivative-pattern-slot-presence");
+    slot.style.removeProperty("translate");
+  }
 }
 
 function applyFrame(session: TransitMountSession): void {
@@ -684,21 +778,19 @@ function applyRuleTemplateApplicationState(
     projection,
     session.ruleLensOverride
   );
-  const lensPhase = ruleLensPhase(template);
-  const inspectingAbstractReplacement =
-    session.ruleLensOverride === "abstract" && lensPhase === "replacement";
-  const inspectingConcreteReplacement =
-    session.ruleLensOverride === "concrete" && lensPhase === "replacement";
-  const templateSlotPresence = inspectingAbstractReplacement
-    ? 1
-    : inspectingConcreteReplacement
-      ? 0
-      : template.templateSlotPresence;
-  const boundValuePresence = inspectingAbstractReplacement
-    ? 0
-    : inspectingConcreteReplacement
-      ? 1
-      : template.instantiationProgress;
+  const skeletonization = skeletonizationState(
+    template,
+    projection,
+    session.ruleLensOverride
+  );
+  const templateSlotPresence = Math.max(
+    1 - skeletonization.targetBaseInstantiation,
+    1 - skeletonization.targetExponentInstantiation
+  );
+  const boundValuePresence = Math.max(
+    skeletonization.targetBaseInstantiation,
+    skeletonization.targetExponentInstantiation
+  );
   const panelPresence = visualProjection.patternInkPresence > 0.01
     ? Math.max(1, template.panelPresence)
     : template.panelPresence;
@@ -724,7 +816,7 @@ function applyRuleTemplateApplicationState(
   );
   session.templateReceiver.style.setProperty(
     "--kp-antiderivative-pattern-projection-fixed-presence",
-    "1"
+    skeletonization.fixedPatternPresence.toFixed(4)
   );
   session.templateReceiver.style.setProperty(
     "--kp-antiderivative-schema-plane-presence",
@@ -760,6 +852,10 @@ function applyRuleTemplateApplicationState(
   if (rulePanel === null) {
     throw new Error("Antiderivative rewrite lacks its rule-template panel.");
   }
+  applySkeletonizationPaintState(
+    session,
+    skeletonization
+  );
   applyInstructionalRuleLayerState(session, template, visualProjection);
   const panelIsPresent =
     visualProjection.primaryRepresentation === "schema-pattern" ||
@@ -896,7 +992,7 @@ function applyRuleTemplateApplicationState(
     template.closurePresence.toFixed(4);
   session.stage.dataset["kpAntiderivativeFixedSyntaxOwner"] =
     visualProjection.primaryRepresentation === "schema-pattern"
-      ? "pattern-projection"
+      ? "single-locus-skeletonization"
       : visualProjection.primaryRepresentation === "source"
         ? "source-native"
         : "none";
@@ -917,7 +1013,150 @@ function applyRuleTemplateApplicationState(
   session.stage.dataset["kpAntiderivativeRegistrationFrameCount"] = "0";
   session.stage.dataset["kpAntiderivativeBindingRelationCount"] = "0";
   session.stage.dataset["kpAntiderivativeBindingRelationPresence"] = "0.0000";
+  session.stage.dataset["kpAntiderivativeSkeletonization"] =
+    "abstract-bind-instantiate";
+  session.stage.dataset["kpAntiderivativeSkeletonBaseProgress"] =
+    skeletonization.sourceBaseAbstraction.toFixed(4);
+  session.stage.dataset["kpAntiderivativeSkeletonExponentProgress"] =
+    skeletonization.sourceExponentAbstraction.toFixed(4);
+  session.stage.dataset["kpAntiderivativeInstantiationBaseProgress"] =
+    skeletonization.targetBaseInstantiation.toFixed(4);
+  session.stage.dataset["kpAntiderivativeInstantiationExponentProgress"] =
+    skeletonization.targetExponentInstantiation.toFixed(4);
   return Object.freeze({ panelPresence, visualProjection });
+}
+
+interface SkeletonizationState {
+  readonly sourceBaseAbstraction: number;
+  readonly sourceExponentAbstraction: number;
+  readonly fixedPatternPresence: number;
+  readonly targetBaseInstantiation: number;
+  readonly targetExponentInstantiation: number;
+}
+
+function skeletonizationState(
+  template: ReturnType<typeof sampleKpAntiderivativeRuleTemplateApplication>,
+  projection: "full" | "reduced" | "no-depth",
+  lensOverride?: RuleLensView | undefined
+): SkeletonizationState {
+  if (lensOverride !== undefined) {
+    const abstract = lensOverride === "abstract";
+    if (ruleLensPhase(template) === "match") {
+      return Object.freeze({
+        sourceBaseAbstraction: abstract ? 1 : 0,
+        sourceExponentAbstraction: abstract ? 1 : 0,
+        fixedPatternPresence: abstract ? 1 : 0,
+        targetBaseInstantiation: 0,
+        targetExponentInstantiation: 0
+      });
+    }
+    return Object.freeze({
+      sourceBaseAbstraction: 1,
+      sourceExponentAbstraction: 1,
+      fixedPatternPresence: 0,
+      targetBaseInstantiation: abstract ? 0 : 1,
+      targetExponentInstantiation: abstract ? 0 : 1
+    });
+  }
+  if (projection !== "full") {
+    const instantiated = template.rewriteCommitProgress >= 0.5 ? 1 : 0;
+    return Object.freeze({
+      sourceBaseAbstraction: 0,
+      sourceExponentAbstraction: 0,
+      fixedPatternPresence: 0,
+      targetBaseInstantiation: instantiated,
+      targetExponentInstantiation: instantiated
+    });
+  }
+  const instantiation = template.instantiationProgress;
+  return Object.freeze({
+    // The two u occurrences abstract as one binding before n becomes general.
+    sourceBaseAbstraction: template.patternProjectionProgress,
+    sourceExponentAbstraction: template.matchProgress,
+    // Identical fixed glyphs hand off atomically at the registered pixel;
+    // crossfading them would create a darker duplicate instead of abstraction.
+    fixedPatternPresence: template.patternProjectionProgress > 0 ? 1 : 0,
+    // Reverse skeletonization first restores u, then propagates n to both uses.
+    targetBaseInstantiation: intervalProgress(instantiation, 0, 0.58),
+    targetExponentInstantiation: intervalProgress(instantiation, 0.28, 1)
+  });
+}
+
+function applySkeletonizationPaintState(
+  session: TransitMountSession,
+  state: SkeletonizationState
+): void {
+  const authority = session.plan.choreography.ruleTemplateApplication;
+  const baseBinding = authority.metavariableBindings.find(
+    ({ metavariable }) => metavariable === "u"
+  );
+  const exponentBinding = authority.metavariableBindings.find(
+    ({ metavariable }) => metavariable === "n"
+  );
+  if (baseBinding === undefined || exponentBinding === undefined) {
+    throw new Error("Antiderivative skeletonization requires u and n bindings.");
+  }
+  const sourcePresenceById = new Map<string, number>([
+    ...baseBinding.sourceSelectorIds.map((id) =>
+      [id, 1 - state.sourceBaseAbstraction] as const
+    ),
+    ...exponentBinding.sourceSelectorIds.map((id) =>
+      [id, 1 - state.sourceExponentAbstraction] as const
+    )
+  ]);
+  if (
+    state.sourceBaseAbstraction > 0 ||
+    state.sourceExponentAbstraction > 0
+  ) {
+    for (const [selectorId, presence] of sourcePresenceById) {
+      const token = findNativeMotionToken(session.roots.source, selectorId);
+      if (token === undefined) {
+        throw new Error(
+          `Antiderivative skeletonization cannot resolve ${selectorId}.`
+        );
+      }
+      token.style.opacity = presence.toFixed(4);
+    }
+    const slotIds = new Set(sourcePresenceById.keys());
+    for (const selectorId of
+      session.plan.choreography.operatorApplication.operatorSelectorIds) {
+      if (slotIds.has(selectorId)) continue;
+      const token = findNativeMotionToken(session.roots.source, selectorId);
+      if (token === undefined) continue;
+      const existingPresence = Number(token.style.opacity || "1");
+      token.style.opacity = (
+        existingPresence * (1 - state.fixedPatternPresence)
+      ).toFixed(4);
+    }
+  }
+  for (const slot of session.templateReceiver.querySelectorAll<HTMLElement>(
+    "[data-kp-antiderivative-pattern-slot]"
+  )) {
+    const slotId = slot.dataset["kpAntiderivativePatternSlot"];
+    const presence = slotId === "n"
+      ? state.sourceExponentAbstraction
+      : state.sourceBaseAbstraction;
+    slot.style.setProperty(
+      "--kp-antiderivative-pattern-slot-presence",
+      presence.toFixed(4)
+    );
+  }
+  for (const token of session.roots.target.querySelectorAll<HTMLElement>(
+    "[data-kp-antiderivative-rule-template-slot]"
+  )) {
+    const metavariable = token.dataset["kpAntiderivativeRuleTemplateSlot"];
+    const progress = metavariable === "n"
+      ? state.targetExponentInstantiation
+      : state.targetBaseInstantiation;
+    token.style.setProperty(
+      "--kp-antiderivative-template-slot-presence",
+      (1 - progress).toFixed(4)
+    );
+    token.style.setProperty(
+      "--kp-antiderivative-bound-value-presence",
+      progress.toFixed(4)
+    );
+  }
 }
 
 interface SchemaProjectionState {
@@ -942,7 +1181,7 @@ function schemaProjectionState(
     const phase = ruleLensPhase(template);
     if (phase === "match") {
       return Object.freeze({
-        sourceInkPresence: lensOverride === "concrete" ? 1 : 0,
+        sourceInkPresence: 1,
         patternInkPresence: lensOverride === "abstract" ? 1 : 0,
         targetInkPresence: 0,
         primaryRepresentation: lensOverride === "abstract"
@@ -970,12 +1209,14 @@ function schemaProjectionState(
         : "source" as const
     });
   }
-  // Semantic source ownership persists until commit, but presentation passes
-  // through one surface at a time: concrete source, abstract pattern, then
-  // replacement. This is the key boundary between rewrite truth and support.
-  const sourceInkPresence = 1 - template.patternProjectionProgress;
-  const patternInkPresence = template.patternProjectionPresence *
-    template.patternProjectionProgress;
+  // Skeletonization keeps one composited equation surface: the source retains
+  // layout while its concrete leaves yield paint to registered abstract slots.
+  // Source and pattern roots may both participate without duplicating a glyph.
+  const sourceInkPresence = Math.max(
+    1 - template.patternProjectionProgress,
+    template.patternProjectionPresence
+  );
+  const patternInkPresence = template.patternProjectionPresence;
   const targetInkPresence = template.targetPresence;
   const primaryRepresentation = template.rewriteCommitProgress >= 1
     ? "committed-rewrite" as const
@@ -1211,6 +1452,24 @@ function semanticPaintOwners(
   );
 }
 
+function findNativeMotionToken(
+  root: HTMLElement,
+  selectorId: string
+): HTMLElement | undefined {
+  return [...root.querySelectorAll<HTMLElement>("[data-kp-motion-id]")]
+    .find((candidate) =>
+      candidate.dataset["kpMotionId"]?.endsWith(selectorId) === true
+    );
+}
+
+function centerX(rect: DOMRect): number {
+  return rect.left + rect.width / 2;
+}
+
+function centerY(rect: DOMRect): number {
+  return rect.top + rect.height / 2;
+}
+
 function settleAccessibility(
   session: TransitMountSession,
   visualProjection: SchemaProjectionState
@@ -1404,8 +1663,20 @@ function clearTelemetry(stage: HTMLElement): void {
   delete stage.dataset["kpAntiderivativeRuleLensPhase"];
   delete stage.dataset["kpAntiderivativeRuleLensView"];
   delete stage.dataset["kpAntiderivativeRuleLensOverride"];
+  delete stage.dataset["kpAntiderivativeSkeletonization"];
+  delete stage.dataset["kpAntiderivativeSkeletonBaseProgress"];
+  delete stage.dataset["kpAntiderivativeSkeletonExponentProgress"];
+  delete stage.dataset["kpAntiderivativeInstantiationBaseProgress"];
+  delete stage.dataset["kpAntiderivativeInstantiationExponentProgress"];
+  delete stage.dataset["kpAntiderivativeSkeletonizationRegistrationCount"];
+  delete stage.dataset["kpAntiderivativeSkeletonizationRegistrationError"];
 }
 
 function bounded(value: number): number {
   return Math.max(0, Math.min(1, Number.isFinite(value) ? value : 0));
+}
+
+function intervalProgress(value: number, start: number, end: number): number {
+  if (end <= start) return value >= end ? 1 : 0;
+  return bounded((value - start) / (end - start));
 }

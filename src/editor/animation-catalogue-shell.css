@@ -534,6 +534,8 @@
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
   [data-kp-antiderivative-pattern-fixed] {
+  position: relative;
+  display: inline-block;
   opacity: var(--kp-antiderivative-pattern-projection-fixed-presence, 1);
 }
 
@@ -542,6 +544,7 @@
   position: relative;
   display: inline-block;
   color: var(--kp-catalogue-link) !important;
+  opacity: var(--kp-antiderivative-pattern-slot-presence, 0);
 }
 
 .kp-animation-catalogue-shell[data-kp-animation-catalogue-selection="animation.generated.calculus.integral.power-rule-quadratic"]
