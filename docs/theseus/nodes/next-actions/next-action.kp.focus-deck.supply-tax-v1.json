@@ -17,6 +17,10 @@
     {
       "kind": "file",
       "path": "domains/economics/per-unit-tax-welfare-model.ts"
+    },
+    {
+      "kind": "file",
+      "path": "domains/economics/per-unit-tax-welfare-accounting.ts"
     }
   ],
   "dependsOn": {
@@ -110,6 +114,20 @@
       "scope": "focused",
       "checkedAt": "2026-08-30T07:25:39.021Z",
       "notes": "Exact tax-equilibrium solver and evaluators pass the isolated domain type boundary."
+    },
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T07:27:40.216Z",
+      "notes": "Nine exact contract, equilibrium, and welfare tests pass; lost private surplus 16 equals revenue 12 plus DWL 4."
+    },
+    {
+      "command": "npm run typecheck:domains",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T07:27:41.256Z",
+      "notes": "Welfare accounting remains inside the isolated economics domain boundary."
     }
   ],
   "progress": {

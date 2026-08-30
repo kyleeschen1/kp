@@ -72,7 +72,8 @@
     {
       "id": "s04",
       "title": "Welfare-truth",
-      "status": "planned"
+      "summary": "Computed exact before/after consumer and producer surplus, government revenue, total surplus, and deadweight loss with redistribution and welfare closure identities independent of geometry.",
+      "status": "complete"
     },
     {
       "id": "s05",
