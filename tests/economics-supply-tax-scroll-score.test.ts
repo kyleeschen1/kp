@@ -8,7 +8,11 @@ import { createKpEconomicsSupplyTaxAnimationAsset } from
   "../src/animation/economics-supply-tax-asset.ts";
 import { compileKpSupplyTaxScrollScoreArticle } from
   "../src/experiments/kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-article.ts";
-import { projectKpSupplyTaxScrollScorePhraseAttention } from
+import {
+  projectKpSupplyTaxScrollScoreCoverageUnits,
+  projectKpSupplyTaxScrollScorePhraseAttention,
+  readKpSupplyTaxScrollScorePhraseFocusProfile
+} from
   "../src/experiments/kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-attention.ts";
 import {
   canonicalKpSupplyTaxScrollScorePhraseUnits,
@@ -120,7 +124,8 @@ test("reading light transfers early, holds, and snaps in reduced motion", () => 
   const attention = projectKpSupplyTaxScrollScorePhraseAttention({
     score,
     sample: sampleAtHalfReception,
-    discrete: false
+    discrete: false,
+    profile: "reception"
   });
   const byId = new Map(attention.map((entry) => [entry.phraseId, entry]));
   assert.equal(byId.get("shift-supply")?.role, "focus");
@@ -139,16 +144,64 @@ test("reading light transfers early, holds, and snaps in reduced motion", () => 
   const held = projectKpSupplyTaxScrollScorePhraseAttention({
     score,
     sample: heldSample,
-    discrete: false
+    discrete: false,
+    profile: "reception"
   });
   assert.equal(held.find(({ phraseId }) => phraseId === phrase.id)?.strength, 1);
   const discrete = projectKpSupplyTaxScrollScorePhraseAttention({
     score,
     sample: sampleAtHalfReception,
-    discrete: true
+    discrete: true,
+    profile: "reception"
   });
   assert.equal(discrete.find(({ phraseId }) =>
     phraseId === phrase.id)?.strength, 1);
+});
+
+test("word progress advances in reading order and preserves profile choice", () => {
+  const score = createScore();
+  const passage = score.passages[0]!;
+  const phrase = passage.phrases.find(({ id }) => id === "shift-supply")!;
+  const sample = sampleKpSupplyTaxScrollScore(
+    score,
+    passage.offsetUnits + phrase.startUnits + phrase.wordUnits * 0.5
+  );
+  const attention = projectKpSupplyTaxScrollScorePhraseAttention({
+    score,
+    sample,
+    discrete: false,
+    profile: "karaoke"
+  });
+  const active = attention.find(({ phraseId }) => phraseId === phrase.id)!;
+  assert.equal(active.strength, 1);
+  assert.equal(active.coverage, 0.5);
+  const units = projectKpSupplyTaxScrollScoreCoverageUnits({
+    unitCount: 7,
+    coverage: active.coverage
+  });
+  assert.equal(units[0]?.strength, 1);
+  assert.ok((units[3]?.strength ?? 0) > 0);
+  assert.ok((units[3]?.strength ?? 0) < 1);
+  assert.equal(units[6]?.strength, 0);
+  assert.ok(units.every((unit, index) => index === 0 ||
+    unit.strength <= units[index - 1]!.strength));
+  assert.deepEqual(
+    projectKpSupplyTaxScrollScoreCoverageUnits({ unitCount: 7, coverage: 0.5 }),
+    units
+  );
+  assert.equal(projectKpSupplyTaxScrollScorePhraseAttention({
+    score,
+    sample,
+    discrete: false,
+    profile: "coverage"
+  }).find(({ phraseId }) => phraseId === phrase.id)?.coverage, 0.5);
+  assert.equal(readKpSupplyTaxScrollScorePhraseFocusProfile(""), "karaoke");
+  assert.equal(readKpSupplyTaxScrollScorePhraseFocusProfile(
+    "?phrase-focus=coverage"
+  ), "coverage");
+  assert.equal(readKpSupplyTaxScrollScorePhraseFocusProfile(
+    "?phrase-focus=reception"
+  ), "reception");
 });
 
 test("scrub profile is linear, reversible, and suppresses playback bloom", () => {

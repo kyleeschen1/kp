@@ -21,6 +21,12 @@ import { applyKpSemanticVisualDomTheme } from
 import { compileKpSupplyTaxScrollScoreArticle } from
   "./kinetic-figure-supply-tax-scroll-score-article.ts";
 import {
+  projectKpSupplyTaxScrollScoreCoverageUnits,
+  projectKpSupplyTaxScrollScorePhraseAttention,
+  readKpSupplyTaxScrollScorePhraseFocusProfile,
+  type KpSupplyTaxScrollScorePhraseFocusProfile
+} from "./kinetic-figure-supply-tax-scroll-score-attention.ts";
+import {
   canonicalKpSupplyTaxScrollScorePhraseUnits,
   createKpSupplyTaxScrollScore,
   kpSupplyTaxScrollScorePhraseHash,
@@ -30,8 +36,6 @@ import {
   type KpSupplyTaxScrollScorePhraseV1,
   type KpSupplyTaxScrollScoreV1
 } from "./kinetic-figure-supply-tax-scroll-score-score.ts";
-import { projectKpSupplyTaxScrollScorePhraseAttention } from
-  "./kinetic-figure-supply-tax-scroll-score-attention.ts";
 import {
   projectKpSupplyTaxScene,
   projectKpSupplyTaxSceneDom,
@@ -59,6 +63,11 @@ interface PassageLayout {
   readonly endY: number;
 }
 
+interface PhraseBinding {
+  readonly element: HTMLElement;
+  readonly coverageUnits: readonly HTMLElement[];
+}
+
 export interface KpSupplyTaxScrollScoreSession {
   dispose(): void;
 }
@@ -70,7 +79,7 @@ export interface KpSupplyTaxScrollScoreSession {
 export function mountKpSupplyTaxScrollScore(input: {
   readonly root: HTMLElement;
 }): KpSupplyTaxScrollScoreSession {
-  applyKpSemanticVisualDomTheme({ root: input.root, theme: "light" });
+  applyKpSemanticVisualDomTheme({ root: input.root, theme: "dark" });
   const compiled = compileKpSupplyTaxScrollScoreArticle({
     text: articleText,
     lock: importLock
@@ -94,7 +103,15 @@ export function mountKpSupplyTaxScrollScore(input: {
   const railOutput = requiredElement<HTMLOutputElement>(station,
     "[data-kp-scroll-score-position]");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const phraseElements = bindPhraseElements(passage, pedagogicalScore);
+  const phraseFocusProfile = readKpSupplyTaxScrollScorePhraseFocusProfile(
+    window.location.search
+  );
+  passage.dataset["kpScrollScorePhraseFocusProfile"] = phraseFocusProfile;
+  const phraseBindings = bindPhraseElements(
+    passage,
+    pedagogicalScore,
+    phraseFocusProfile
+  );
   const sceneBySlug = new Map(
     createKpSupplyTaxPedagogicalScore(authority).beats.map((beat) => [
       beat.slug,
@@ -157,21 +174,35 @@ export function mountKpSupplyTaxScrollScore(input: {
       projectKpSupplyTaxScrollScorePhraseAttention({
         score: pedagogicalScore,
         sample,
-        discrete: reducedMotion.matches
+        discrete: reducedMotion.matches,
+        profile: phraseFocusProfile
       }).map((attention) => [attention.phraseId, attention] as const)
     );
-    phraseElements.forEach((element, id) => {
+    phraseBindings.forEach((binding, id) => {
       const active = id === sample.phrase.id;
       const attention = phraseAttention.get(id);
       if (attention === undefined) {
         throw new Error(`Missing prose attention projection for ${id}.`);
       }
+      const { element } = binding;
       element.dataset["kpScrollScorePhraseActive"] = String(active);
       element.dataset["kpScrollScorePhraseAttention"] = attention.role;
       element.style.setProperty("--kp-scroll-score-phrase-focus",
         attention.strength.toFixed(4));
       element.style.setProperty("--kp-scroll-score-phrase-focus-percent",
         `${(attention.strength * 100).toFixed(2)}%`);
+      const unitProjection = projectKpSupplyTaxScrollScoreCoverageUnits({
+        unitCount: binding.coverageUnits.length,
+        coverage: attention.coverage
+      });
+      binding.coverageUnits.forEach((unit, index) => {
+        const unitStrength = unitProjection[index]?.strength ?? 0;
+        const paintStrength = attention.strength * unitStrength;
+        unit.style.setProperty("--kp-scroll-score-unit-coverage",
+          paintStrength.toFixed(4));
+        unit.style.setProperty("--kp-scroll-score-unit-coverage-percent",
+          `${(paintStrength * 100).toFixed(2)}%`);
+      });
     });
     rail.value = sample.units.toFixed(3);
     const percent = Math.round(sample.phraseProgress * 100);
@@ -464,9 +495,10 @@ function renderPassage(passage: KpSupplyTaxScrollScorePassageV1): string {
 
 function bindPhraseElements(
   root: HTMLElement,
-  score: KpSupplyTaxScrollScoreV1
-): ReadonlyMap<string, HTMLElement> {
-  const elements = new Map<string, HTMLElement>();
+  score: KpSupplyTaxScrollScoreV1,
+  profile: KpSupplyTaxScrollScorePhraseFocusProfile
+): ReadonlyMap<string, PhraseBinding> {
+  const elements = new Map<string, PhraseBinding>();
   for (const phrase of score.phrases) {
     const passage = requiredElement<HTMLElement>(root,
       `[data-kp-scroll-score-passage="${phrase.passageId}"]`);
@@ -491,12 +523,69 @@ function bindPhraseElements(
       scorePassage.offsetUnits + phrase.motionEndUnits);
     while (link.firstChild !== null) span.append(link.firstChild);
     link.replaceWith(span);
-    elements.set(phrase.id, span);
+    const coverageUnits = profile === "reception"
+      ? Object.freeze([])
+      : bindPhraseCoverageUnits(span);
+    elements.set(phrase.id, Object.freeze({
+      element: span,
+      coverageUnits
+    }));
   }
   if (elements.size !== score.phrases.length) {
     throw new Error("Every Scroll Score phrase requires one rendered owner.");
   }
   return elements;
+}
+
+function bindPhraseCoverageUnits(root: HTMLElement): readonly HTMLElement[] {
+  const units: HTMLElement[] = [];
+  const bindNode = (node: Node): void => {
+    if (node instanceof Text) {
+      bindTextCoverageUnits(node, units);
+      return;
+    }
+    if (!(node instanceof HTMLElement)) return;
+    // Native inline KaTeX remains one display atom; its internal renderer DOM
+    // must never become reading-progress authority.
+    if (node.classList.contains("kp-article-math--inline")) {
+      registerCoverageUnit(node, units);
+      return;
+    }
+    Array.from(node.childNodes).forEach(bindNode);
+  };
+  Array.from(root.childNodes).forEach(bindNode);
+  return Object.freeze(units);
+}
+
+function bindTextCoverageUnits(
+  node: Text,
+  units: HTMLElement[]
+): void {
+  const value = node.data;
+  const matches = Array.from(value.matchAll(/\s*\S+/gu));
+  if (matches.length === 0) return;
+  const fragment = document.createDocumentFragment();
+  let cursor = 0;
+  for (const match of matches) {
+    const index = match.index ?? cursor;
+    if (index > cursor) fragment.append(value.slice(cursor, index));
+    const unit = document.createElement("span");
+    unit.textContent = match[0];
+    registerCoverageUnit(unit, units);
+    fragment.append(unit);
+    cursor = index + match[0].length;
+  }
+  if (cursor < value.length) fragment.append(value.slice(cursor));
+  node.replaceWith(fragment);
+}
+
+function registerCoverageUnit(
+  element: HTMLElement,
+  units: HTMLElement[]
+): void {
+  element.classList.add("kp-scroll-score-coverage-unit");
+  element.dataset["kpScrollScoreCoverageUnit"] = String(units.length);
+  units.push(element);
 }
 
 function requiredScene(

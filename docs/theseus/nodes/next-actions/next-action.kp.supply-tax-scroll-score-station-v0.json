@@ -102,11 +102,67 @@
       "scope": "TypeScript, Svelte, and domain boundaries",
       "checkedAt": "2026-08-30T21:37:47.354Z",
       "notes": "All configured checks passed after the exemplar-local attention projection was added."
+    },
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "coverage and reception attention profiles",
+      "checkedAt": "2026-08-30T21:53:21.282Z",
+      "notes": "63 of 63 passed, including monotone two-unit coverage, deterministic sampling, and profile selection."
+    },
+    {
+      "command": "npm run test:browser:economics-supply-tax-scroll-score",
+      "status": "passed",
+      "scope": "canonical Chromium coverage-sweep exemplar",
+      "checkedAt": "2026-08-30T21:53:22.475Z",
+      "notes": "7 of 7 passed: reading-order spread and reverse, reception fallback, geometry parity, native find across wrappers, KaTeX atom ownership, reduced motion, and phone fit."
+    },
+    {
+      "command": "npm run visual:economics-supply-tax-scroll-score",
+      "status": "passed",
+      "scope": "coverage midpoint plus desktop and phone endpoints",
+      "checkedAt": "2026-08-30T21:53:23.539Z",
+      "notes": "Stable visual command captured the soft advancing frontier and settled states; aesthetic approval remains human-owned."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript, Svelte, and domain boundaries",
+      "checkedAt": "2026-08-30T21:53:24.609Z",
+      "notes": "All configured checks passed after adding the local coverage profile and DOM display-unit binding."
+    },
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "karaoke profile, coverage projection, and supply-tax preservation",
+      "checkedAt": "2026-08-30T22:03:37.247Z",
+      "notes": "63 of 63 passed, including deterministic karaoke/coverage profile selection, monotone reading-order units, and unchanged economics authority."
+    },
+    {
+      "command": "npm run test:browser:economics-supply-tax-scroll-score",
+      "status": "passed",
+      "scope": "dark karaoke Chromium exemplar",
+      "checkedAt": "2026-08-30T22:03:38.432Z",
+      "notes": "7 of 7 passed: dark host paint, forward/reverse word progress, KaTeX atomic ownership, comparison profiles, native find, direct seek, reduced motion, and phone fit."
+    },
+    {
+      "command": "npm run visual:economics-supply-tax-scroll-score",
+      "status": "passed",
+      "scope": "dark karaoke midpoint and responsive endpoints",
+      "checkedAt": "2026-08-30T22:03:39.432Z",
+      "notes": "Stable visual command captured the dark midpoint, market, welfare, and phone states; exact aesthetic approval remains human-owned."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript, Svelte, and domain boundaries",
+      "checkedAt": "2026-08-30T22:03:40.437Z",
+      "notes": "All configured checks passed with zero Svelte errors or warnings after the local theme and paint-profile change."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 2/2 complete. HUMAN_CHECKPOINT: the underline is replaced by a deterministic reading-light field with stable full-opacity ink, early reversible phrase handoff, and discrete reduced-motion focus. Shared motif promotion remains intentionally unstarted pending visual approval."
+    "summary": "Slice 2/2 complete. HUMAN_CHECKPOINT: the default Scroll Score is now a dark optical-system exemplar with deterministic karaoke ink advancing through reading-order display units. Full text opacity, layout, search, native KaTeX ownership, direct seek/reverse, reduced motion, stage truth, and Focus Deck authority remain preserved. The prior coverage wash and reception spotlight remain query-selectable; no shared motif or theme policy was promoted."
   },
   "expectedLearning": [
     "Whether a compact paragraph can act as a proportional searchable semantic scrub surface without making native scrolling feel trapped."
