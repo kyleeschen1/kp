@@ -21,6 +21,10 @@
     {
       "kind": "file",
       "path": "domains/economics/per-unit-tax-welfare-accounting.ts"
+    },
+    {
+      "kind": "file",
+      "path": "domains/economics/per-unit-tax-welfare-asset.ts"
     }
   ],
   "dependsOn": {
@@ -128,6 +132,20 @@
       "scope": "focused",
       "checkedAt": "2026-08-30T07:27:41.256Z",
       "notes": "Welfare accounting remains inside the isolated economics domain boundary."
+    },
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T07:30:51.068Z",
+      "notes": "Thirteen exact tests pass, including semantic reference closure, original-supply persistence, welfare boundaries, and absence of geometry, paint, or timing fields."
+    },
+    {
+      "command": "npm run typecheck:domains",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T07:30:52.091Z",
+      "notes": "Semantic asset types remain domain-owned and geometry-free."
     }
   ],
   "progress": {

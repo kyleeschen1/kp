@@ -78,7 +78,8 @@
     {
       "id": "s05",
       "title": "Semantic-asset",
-      "status": "planned"
+      "summary": "Defined immutable exact curve, price, wedge, welfare-region, correspondence, and lineage entities with resolvable IDs and no geometry, paint, progress, or timing fields.",
+      "status": "complete"
     },
     {
       "id": "s06",
