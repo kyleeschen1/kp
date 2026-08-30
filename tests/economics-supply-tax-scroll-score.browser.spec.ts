@@ -44,7 +44,7 @@ test("Scroll Score mounts one searchable two-paragraph semantic station", async 
   const score = page.locator("[data-kp-supply-tax-scroll-score]");
   await expect(score).toHaveAttribute(
     "data-kp-scroll-score-phrase-focus-profile",
-    "karaoke"
+    "reception-wave"
   );
   await expect(page.locator("#app")).toHaveAttribute(
     "data-kp-visual-theme",
@@ -80,7 +80,7 @@ test("Scroll Score mounts one searchable two-paragraph semantic station", async 
   expect(errors).toEqual([]);
 });
 
-test("rail and native scroll sample proportional motion in both directions", async ({
+test("rail and native scroll settle a reversible semantic reception wave", async ({
   page
 }) => {
   await page.goto(path);
@@ -112,30 +112,24 @@ test("rail and native scroll sample proportional motion in both directions", asy
     opacity: "1",
     decoration: "none"
   }));
-  const coverageUnits = activePhrase.locator(
+  const progressUnits = activePhrase.locator(
     "[data-kp-scroll-score-coverage-unit]"
   );
-  expect(await coverageUnits.count()).toBeGreaterThan(3);
-  const coverageAtHalf = await coverageUnits.evaluateAll((elements) =>
+  expect(await progressUnits.count()).toBeGreaterThan(3);
+  const settledAtHalf = await progressUnits.evaluateAll((elements) =>
     elements.map((element) => Number(
       (element as HTMLElement).style.getPropertyValue(
         "--kp-scroll-score-unit-coverage"
       )
     )));
-  expect(coverageAtHalf[0]).toBe(1);
-  expect(coverageAtHalf.at(-1)).toBe(0);
-  expect(coverageAtHalf.every((value, index) => index === 0 ||
-    value <= coverageAtHalf[index - 1]!)).toBe(true);
-  expect(await coverageUnits.first().evaluate((element) => ({
+  expect(settledAtHalf.every((value) => value === 1)).toBe(true);
+  expect(await progressUnits.first().evaluate((element) => ({
     background: getComputedStyle(element).backgroundImage,
     opacity: getComputedStyle(element).opacity
   }))).toEqual(expect.objectContaining({
     background: "none",
     opacity: "1"
   }));
-  expect(await coverageUnits.first().evaluate((element) =>
-    getComputedStyle(element).color)).not.toBe(await coverageUnits.last()
-    .evaluate((element) => getComputedStyle(element).color));
   const taxedSupply = score.locator(
     '[data-kp-supply-tax-entity="curve.economics.tax.supply-with-tax"]'
   );
@@ -145,19 +139,32 @@ test("rail and native scroll sample proportional motion in both directions", asy
     )
   ))).toBe(0);
 
-  await seekPhraseProgress(page, "shift-supply", 0.25);
+  await seekPhraseProgress(page, "shift-supply", 0.09);
   await expectNumericAttribute(score, "data-kp-scroll-score-phrase-progress",
-    0.25);
+    0.09);
   await expectNumericAttribute(score, "data-kp-supply-tax-model-progress",
-    0.25);
-  const coverageAtQuarter = await coverageUnits.evaluateAll((elements) =>
+    0.09);
+  const waveAtReception = await progressUnits.evaluateAll((elements) =>
     elements.map((element) => Number(
       (element as HTMLElement).style.getPropertyValue(
         "--kp-scroll-score-unit-coverage"
       )
     )));
-  expect(coverageAtQuarter.reduce((sum, value) => sum + value, 0))
-    .toBeLessThan(coverageAtHalf.reduce((sum, value) => sum + value, 0));
+  expect(Math.max(...waveAtReception)).toBeGreaterThan(0.75);
+  expect(Math.min(...waveAtReception)).toBeGreaterThan(0.4);
+  expect(Math.min(...waveAtReception)).toBeLessThan(0.6);
+  expect(new Set(await progressUnits.evaluateAll((elements) =>
+    elements.map((element) => getComputedStyle(element).color))).size)
+    .toBeGreaterThan(1);
+
+  await seekPhraseProgress(page, "shift-supply", 0.5);
+  await seekPhraseProgress(page, "shift-supply", 0.09);
+  expect(await progressUnits.evaluateAll((elements) =>
+    elements.map((element) => Number(
+      (element as HTMLElement).style.getPropertyValue(
+        "--kp-scroll-score-unit-coverage"
+      )
+    )))).toEqual(waveAtReception);
 
   const stationBox = await score.locator(
     "[data-kp-scroll-score-station]"
@@ -207,7 +214,7 @@ test("semantic links, keyboard rail, and native find seek stable endpoints", asy
   )).toBeVisible();
 });
 
-test("coverage and reception comparisons remain geometry-compatible", async ({
+test("legacy attention comparisons remain geometry-compatible", async ({
   page
 }) => {
   await page.goto(`${path}?phrase-focus=reception#phrase.shift-supply`);
@@ -246,6 +253,17 @@ test("coverage and reception comparisons remain geometry-compatible", async ({
   await expect(score.locator(
     '[data-kp-scroll-score-phrase="shift-supply"]'
   )).toContainText("buyer-facing supply shifts upward");
+
+  await page.goto(`${path}?phrase-focus=karaoke#phrase.shift-supply`);
+  await expect(score).toHaveAttribute(
+    "data-kp-scroll-score-phrase-focus-profile",
+    "karaoke"
+  );
+  const karaokeHeight = await score.locator(
+    '[data-kp-scroll-score-corridor="market-adjustment"] ' +
+    "[data-kp-scroll-score-cue]"
+  ).evaluate((element) => element.getBoundingClientRect().height);
+  expect(Math.abs(karaokeHeight - receptionHeight)).toBeLessThanOrEqual(1);
 });
 
 test("reduced motion projects discrete checkpoints without losing prose", async ({
@@ -295,9 +313,9 @@ test("Scroll Score visual checkpoint captures both compact arguments", async ({
   page
 }, testInfo) => {
   await page.goto(path);
-  await seekPhraseProgress(page, "shift-supply", 0.5);
+  await seekPhraseProgress(page, "shift-supply", 0.09);
   await page.screenshot({
-    path: testInfo.outputPath("supply-tax-scroll-score-karaoke-dark.png")
+    path: testInfo.outputPath("supply-tax-scroll-score-reception-wave-dark.png")
   });
   await page.goto(`${path}#phrase.contract-quantity`);
   await page.screenshot({

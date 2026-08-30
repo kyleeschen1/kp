@@ -254,6 +254,18 @@ html { scroll-behavior: auto; }
   box-decoration-break: clone;
 }
 
+/* Reception is transient: a local edge introduces the semantic phrase, then
+ * every unit shares the phrase's stable focus while stage motion continues. */
+[data-kp-scroll-score-phrase-focus-profile="reception-wave"]
+  .kp-scroll-score-coverage-unit {
+  background-image: none;
+  color: color-mix(
+    in srgb,
+    var(--kp-st-strong) var(--kp-scroll-score-unit-coverage-percent),
+    var(--kp-st-ink)
+  );
+}
+
 /* Karaoke advances ink rather than opacity, so prose remains crisp and the
  * semantic score can reverse or seek without leaving a blurred text state. */
 [data-kp-scroll-score-phrase-focus-profile="karaoke"]
@@ -371,6 +383,8 @@ html { scroll-behavior: auto; }
     background-image: none;
   }
   .kp-scroll-score-coverage-unit { background-image: none; }
+  [data-kp-scroll-score-phrase-focus-profile="reception-wave"]
+    .kp-scroll-score-coverage-unit { color: inherit; }
   [data-kp-scroll-score-phrase-focus-profile="karaoke"]
     .kp-scroll-score-coverage-unit { color: var(--kp-st-strong); }
 }

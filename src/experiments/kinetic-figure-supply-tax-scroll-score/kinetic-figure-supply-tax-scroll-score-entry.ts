@@ -23,6 +23,7 @@ import { compileKpSupplyTaxScrollScoreArticle } from
 import {
   projectKpSupplyTaxScrollScoreCoverageUnits,
   projectKpSupplyTaxScrollScorePhraseAttention,
+  projectKpSupplyTaxScrollScoreReceptionWaveUnits,
   readKpSupplyTaxScrollScorePhraseFocusProfile,
   type KpSupplyTaxScrollScorePhraseFocusProfile
 } from "./kinetic-figure-supply-tax-scroll-score-attention.ts";
@@ -191,13 +192,20 @@ export function mountKpSupplyTaxScrollScore(input: {
         attention.strength.toFixed(4));
       element.style.setProperty("--kp-scroll-score-phrase-focus-percent",
         `${(attention.strength * 100).toFixed(2)}%`);
-      const unitProjection = projectKpSupplyTaxScrollScoreCoverageUnits({
-        unitCount: binding.coverageUnits.length,
-        coverage: attention.coverage
-      });
+      const unitProjection = phraseFocusProfile === "reception-wave"
+        ? projectKpSupplyTaxScrollScoreReceptionWaveUnits({
+          unitCount: binding.coverageUnits.length,
+          progress: attention.coverage
+        })
+        : projectKpSupplyTaxScrollScoreCoverageUnits({
+          unitCount: binding.coverageUnits.length,
+          coverage: attention.coverage
+        });
       binding.coverageUnits.forEach((unit, index) => {
         const unitStrength = unitProjection[index]?.strength ?? 0;
-        const paintStrength = attention.strength * unitStrength;
+        const paintStrength = phraseFocusProfile === "reception-wave"
+          ? Math.max(attention.strength, unitStrength)
+          : attention.strength * unitStrength;
         unit.style.setProperty("--kp-scroll-score-unit-coverage",
           paintStrength.toFixed(4));
         unit.style.setProperty("--kp-scroll-score-unit-coverage-percent",

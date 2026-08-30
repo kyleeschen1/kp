@@ -11,6 +11,7 @@ import { compileKpSupplyTaxScrollScoreArticle } from
 import {
   projectKpSupplyTaxScrollScoreCoverageUnits,
   projectKpSupplyTaxScrollScorePhraseAttention,
+  projectKpSupplyTaxScrollScoreReceptionWaveUnits,
   readKpSupplyTaxScrollScorePhraseFocusProfile
 } from
   "../src/experiments/kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-attention.ts";
@@ -195,13 +196,55 @@ test("word progress advances in reading order and preserves profile choice", () 
     discrete: false,
     profile: "coverage"
   }).find(({ phraseId }) => phraseId === phrase.id)?.coverage, 0.5);
-  assert.equal(readKpSupplyTaxScrollScorePhraseFocusProfile(""), "karaoke");
+  assert.equal(readKpSupplyTaxScrollScorePhraseFocusProfile(""),
+    "reception-wave");
+  assert.equal(readKpSupplyTaxScrollScorePhraseFocusProfile(
+    "?phrase-focus=karaoke"
+  ), "karaoke");
   assert.equal(readKpSupplyTaxScrollScorePhraseFocusProfile(
     "?phrase-focus=coverage"
   ), "coverage");
   assert.equal(readKpSupplyTaxScrollScorePhraseFocusProfile(
     "?phrase-focus=reception"
   ), "reception");
+});
+
+test("reception wave is local, reversible, and disappears into stable focus", () => {
+  const score = createScore();
+  const passage = score.passages[0]!;
+  const phrase = passage.phrases.find(({ id }) => id === "shift-supply")!;
+  const sample = sampleKpSupplyTaxScrollScore(
+    score,
+    passage.offsetUnits + phrase.startUnits + phrase.wordUnits * 0.09
+  );
+  const attention = projectKpSupplyTaxScrollScorePhraseAttention({
+    score,
+    sample,
+    discrete: false,
+    profile: "reception-wave"
+  }).find(({ phraseId }) => phraseId === phrase.id)!;
+  assert.ok(Math.abs(attention.strength - 0.5) < Number.EPSILON * 8);
+  assert.ok(Math.abs(attention.coverage - 0.5) < Number.EPSILON * 8);
+  const midpoint = projectKpSupplyTaxScrollScoreReceptionWaveUnits({
+    unitCount: 9,
+    progress: 0.5
+  });
+  assert.equal(midpoint[4]?.strength, 1);
+  assert.equal(midpoint[0]?.strength, 0);
+  assert.equal(midpoint[8]?.strength, 0);
+  assert.ok(midpoint.filter(({ strength }) => strength > 0).length <= 3);
+  assert.deepEqual(projectKpSupplyTaxScrollScoreReceptionWaveUnits({
+    unitCount: 9,
+    progress: 0.5
+  }), midpoint);
+  assert.ok(projectKpSupplyTaxScrollScoreReceptionWaveUnits({
+    unitCount: 9,
+    progress: 0
+  }).every(({ strength }) => strength === 0));
+  assert.ok(projectKpSupplyTaxScrollScoreReceptionWaveUnits({
+    unitCount: 9,
+    progress: 1
+  }).every(({ strength }) => strength < Number.EPSILON));
 });
 
 test("scrub profile is linear, reversible, and suppresses playback bloom", () => {

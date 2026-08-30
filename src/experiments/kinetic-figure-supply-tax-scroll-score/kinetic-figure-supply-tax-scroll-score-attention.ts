@@ -6,7 +6,7 @@ import type {
 export type KpSupplyTaxScrollScorePhraseAttentionRole =
   "focus" | "releasing" | "context";
 export type KpSupplyTaxScrollScorePhraseFocusProfile =
-  "karaoke" | "coverage" | "reception";
+  "reception-wave" | "karaoke" | "coverage" | "reception";
 
 export interface KpSupplyTaxScrollScorePhraseAttentionV1 {
   readonly phraseId: string;
@@ -48,9 +48,11 @@ export function projectKpSupplyTaxScrollScorePhraseAttention(input: {
         phraseId: phrase.id,
         role: "focus" as const,
         strength: reception,
-        coverage: input.profile !== "reception" && !input.discrete
-          ? input.sample.phraseProgress
-          : 1
+        coverage: phraseCoverage({
+          profile: input.profile,
+          phraseProgress: input.sample.phraseProgress,
+          discrete: input.discrete
+        })
       });
     }
     if (phrase.id === releasingId && reception < 1) {
@@ -71,6 +73,30 @@ export function projectKpSupplyTaxScrollScorePhraseAttention(input: {
 }
 
 /**
+ * Move one brief, local reception edge through a semantic phrase. Unlike
+ * karaoke coverage, the edge leaves no bright history behind; phrase-level
+ * attention owns the stable state before and after reception.
+ */
+export function projectKpSupplyTaxScrollScoreReceptionWaveUnits(input: {
+  readonly unitCount: number;
+  readonly progress: number;
+}): readonly KpSupplyTaxScrollScoreCoverageUnitV1[] {
+  validateUnitProjectionInput(input.unitCount, input.progress,
+    "reception-wave progress");
+  if (input.unitCount === 0) return Object.freeze([]);
+  const envelope = Math.sin(Math.PI * input.progress);
+  const center = input.progress * (input.unitCount - 1);
+  const halfWidth = Math.min(1.75, input.unitCount);
+  return Object.freeze(Array.from({ length: input.unitCount }, (_, index) => {
+    const proximity = Math.max(0, 1 - Math.abs(index - center) / halfWidth);
+    return Object.freeze({
+      index,
+      strength: envelope * smoothstep(proximity)
+    });
+  }));
+}
+
+/**
  * Resolve a soft two-unit frontier in reading order. Geometry and wrapping
  * remain DOM concerns; this projection only says how much light each stable
  * display unit receives at a sampled score position.
@@ -79,13 +105,8 @@ export function projectKpSupplyTaxScrollScoreCoverageUnits(input: {
   readonly unitCount: number;
   readonly coverage: number;
 }): readonly KpSupplyTaxScrollScoreCoverageUnitV1[] {
-  if (!Number.isInteger(input.unitCount) || input.unitCount < 0) {
-    throw new Error("Scroll Score coverage unit count must be nonnegative.");
-  }
-  if (!Number.isFinite(input.coverage) ||
-    input.coverage < 0 || input.coverage > 1) {
-    throw new Error("Scroll Score phrase coverage must be between zero and one.");
-  }
+  validateUnitProjectionInput(input.unitCount, input.coverage,
+    "phrase coverage");
   if (input.unitCount === 0) return Object.freeze([]);
   const frontierUnits = Math.min(2, input.unitCount);
   const denominator = input.unitCount - 1 + frontierUnits;
@@ -102,8 +123,34 @@ export function readKpSupplyTaxScrollScorePhraseFocusProfile(
   search: string
 ): KpSupplyTaxScrollScorePhraseFocusProfile {
   const profile = new URLSearchParams(search).get("phrase-focus");
-  if (profile === "coverage" || profile === "reception") return profile;
-  return "karaoke";
+  if (profile === "karaoke" || profile === "coverage" ||
+    profile === "reception") return profile;
+  return "reception-wave";
+}
+
+function phraseCoverage(input: {
+  readonly profile: KpSupplyTaxScrollScorePhraseFocusProfile;
+  readonly phraseProgress: number;
+  readonly discrete: boolean;
+}): number {
+  if (input.discrete || input.profile === "reception") return 1;
+  if (input.profile === "reception-wave") {
+    return Math.min(1, input.phraseProgress / receptionShare);
+  }
+  return input.phraseProgress;
+}
+
+function validateUnitProjectionInput(
+  unitCount: number,
+  progress: number,
+  progressLabel: string
+): void {
+  if (!Number.isInteger(unitCount) || unitCount < 0) {
+    throw new Error("Scroll Score display unit count must be nonnegative.");
+  }
+  if (!Number.isFinite(progress) || progress < 0 || progress > 1) {
+    throw new Error(`Scroll Score ${progressLabel} must be between zero and one.`);
+  }
 }
 
 function smoothstep(progress: number): number {

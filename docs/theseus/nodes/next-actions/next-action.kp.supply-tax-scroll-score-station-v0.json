@@ -158,11 +158,39 @@
       "scope": "TypeScript, Svelte, and domain boundaries",
       "checkedAt": "2026-08-30T22:03:40.437Z",
       "notes": "All configured checks passed with zero Svelte errors or warnings after the local theme and paint-profile change."
+    },
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "semantic reception-wave and supply-tax preservation",
+      "checkedAt": "2026-08-30T22:20:36.357Z",
+      "notes": "64 of 64 passed, including normalized phrase reception, local reversible wave projection, stable endpoints, legacy profile parsing, and unchanged economics authority."
+    },
+    {
+      "command": "npm run test:browser:economics-supply-tax-scroll-score",
+      "status": "passed",
+      "scope": "dark reception-wave Chromium exemplar",
+      "checkedAt": "2026-08-30T22:20:37.710Z",
+      "notes": "7 of 7 passed: transient leading edge, uniform clause settlement, deterministic reverse, legacy profile geometry, native find, KaTeX atomic ownership, reduced motion, and phone fit."
+    },
+    {
+      "command": "npm run visual:economics-supply-tax-scroll-score",
+      "status": "passed",
+      "scope": "reception-wave entry plus responsive endpoints",
+      "checkedAt": "2026-08-30T22:20:38.806Z",
+      "notes": "Stable visual command captured the brief clause-entry wave and settled market, welfare, and phone states; aesthetic approval remains human-owned."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript, Svelte, and domain boundaries",
+      "checkedAt": "2026-08-30T22:20:39.994Z",
+      "notes": "All configured checks passed with zero Svelte errors or warnings after the local reception-wave profile change."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 2/2 complete. HUMAN_CHECKPOINT: the default Scroll Score is now a dark optical-system exemplar with deterministic karaoke ink advancing through reading-order display units. Full text opacity, layout, search, native KaTeX ownership, direct seek/reverse, reduced motion, stage truth, and Focus Deck authority remain preserved. The prior coverage wash and reception spotlight remain query-selectable; no shared motif or theme policy was promoted."
+    "summary": "Slice 2/2 complete. HUMAN_CHECKPOINT: the dark Scroll Score now defaults to a semantic reception wave. A localized leading edge introduces each active phrase during the early reception interval; it then disappears into uniform stable phrase focus while the graph transition continues. Ordinary context stays readable, previous focus releases smoothly, and karaoke, coverage, and whole-phrase reception remain query-selectable. No shared motif, schema, theme, Article, clock, stage, or Focus Deck authority was promoted or changed."
   },
   "expectedLearning": [
     "Whether a compact paragraph can act as a proportional searchable semantic scrub surface without making native scrolling feel trapped."
