@@ -104,13 +104,13 @@ button { font: inherit; }
 .kp-supply-tax-steps button > span:first-child { font-size: 0.62rem; text-align: center; }
 
 .kp-supply-tax-deck__main { min-width: 0; }
-.kp-supply-tax-figure { margin: 0; padding: clamp(1rem, 3vw, 1.8rem); border-bottom: 1.5px solid var(--kp-st-rule); }
+.kp-supply-tax-figure { margin: 0; padding: clamp(0.65rem, 2vw, 1.15rem); border-bottom: 1.5px solid var(--kp-st-rule); }
 .kp-supply-tax-stage__visual {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 9.5rem;
   align-items: center;
   gap: clamp(0.6rem, 2vw, 1.2rem);
-  width: min(100%, 48rem);
+  width: min(100%, 44rem);
   margin-inline: auto;
 }
 .kp-supply-tax-stage__graph { min-width: 0; }
@@ -254,7 +254,7 @@ button { font: inherit; }
   text-underline-offset: 0.2em;
 }
 
-.kp-supply-tax-narrative { min-height: 13rem; padding: 1.35rem clamp(1rem, 3vw, 2rem); }
+.kp-supply-tax-narrative { min-height: 8.75rem; padding: 1rem clamp(1rem, 3vw, 2rem); }
 .kp-supply-tax-narrative h1,
 .kp-supply-tax-narrative h3 { margin: 0 0 0.7rem; color: var(--kp-st-strong); font-size: 1.2rem; }
 .kp-supply-tax-narrative p { margin: 0.6rem 0; font-size: 0.94rem; line-height: 1.55; }
@@ -317,7 +317,7 @@ button { font: inherit; }
   .kp-supply-tax-deck__body { grid-template-columns: 1fr; }
   .kp-supply-tax-steps { border-right: 0; border-bottom: 1.5px solid var(--kp-st-rule); }
   .kp-supply-tax-steps ol { grid-template-columns: repeat(8, minmax(2rem, 1fr)); }
-  .kp-supply-tax-steps button { min-height: 2.25rem; grid-template-columns: 1fr; }
+  .kp-supply-tax-steps button { min-height: 2.75rem; grid-template-columns: 1fr; }
   .kp-supply-tax-steps button > span:last-child { display: none; }
   .kp-supply-tax-figure { padding-inline: 0.45rem; }
   .kp-supply-tax-stage__visual { grid-template-columns: 1fr; }

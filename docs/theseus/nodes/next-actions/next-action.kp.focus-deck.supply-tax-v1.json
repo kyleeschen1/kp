@@ -403,6 +403,27 @@
       "scope": "standard",
       "checkedAt": "2026-08-30T08:34:36.990Z",
       "notes": "Native beforematch activation and listener cleanup pass application, test, Svelte, and domain type boundaries."
+    },
+    {
+      "command": "npm run test:browser:economics-supply-tax",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T08:42:40.555Z",
+      "notes": "Five Chromium tests pass: forward/reverse/replay endpoints, rapid interruption, distant seek, URL, reduced motion, native find, keyboard, accessible exact values, 44px phone controls, no overflow, and visual capture."
+    },
+    {
+      "command": "npm run visual:economics-supply-tax-focus-deck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T08:42:41.615Z",
+      "notes": "Stable visual command captured all eight semantic states plus the phone state under the repo-owned disposable Playwright output directory."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-30T08:42:42.571Z",
+      "notes": "Responsive, accessibility, dynamic description, browser spec, application, Svelte, and domain type boundaries pass."
     }
   ],
   "progress": {

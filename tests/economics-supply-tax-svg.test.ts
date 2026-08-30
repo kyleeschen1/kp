@@ -215,6 +215,8 @@ test("welfare ledger reads exact before and after values from semantic regions",
   assert.equal(count(html, 'data-kp-exact-value="9/2"'), 2);
   assert.equal(count(html, 'data-kp-exact-value="12/1"'), 1);
   assert.equal(count(html, 'data-kp-exact-value="4/1"'), 1);
+  assert.equal(count(html, 'aria-label="25 divided by 2"'), 2);
+  assert.equal(count(html, 'aria-label="9 divided by 2"'), 2);
 });
 
 function count(value: string, needle: string): number {

@@ -159,7 +159,7 @@ export function renderKpSupplyTaxWelfareLedger(
   const tax = semantics.model.input.tax;
   return `<aside class="kp-supply-tax-ledger" aria-label="Exact welfare accounting" data-kp-supply-tax-ledger>
     <h2>Welfare</h2>
-    <div class="kp-supply-tax-ledger__tax" data-kp-supply-tax-entity="${escapeAttribute(tax.id)}">
+    <div class="kp-supply-tax-ledger__tax" data-kp-supply-tax-entity="${escapeAttribute(tax.id)}" aria-label="Per-unit tax ${exactDtoSpoken(tax.finalAmount)}">
       <span>Per-unit tax</span>
       ${renderLatexToHtml(`t=${exactDtoLatex(tax.finalAmount)}`, { displayMode: false })}
     </div>
@@ -246,6 +246,19 @@ export function projectKpSupplyTaxTransitSvgDom(input: {
   label.setAttribute("x", format(projection.buyerFacingSupply.end.x - 68));
   label.setAttribute("y", format(projection.buyerFacingSupply.end.y - 31));
   projectTaxedMarketDom(input.root, projection.market);
+  const title = input.root.querySelector<SVGTitleElement>("title");
+  const description = input.root.querySelector<SVGDescElement>("desc");
+  if (title === null || description === null) {
+    throw new Error("Supply-tax SVG requires an accessible title and description.");
+  }
+  title.textContent = projection.phase === "untaxed"
+    ? "Untaxed supply and demand equilibrium"
+    : projection.phase === "taxed"
+      ? "Taxed supply and demand equilibrium"
+      : "A per-unit tax changes market equilibrium";
+  description.textContent = projection.phase === "untaxed"
+    ? "Demand P equals 12 minus Q and supply P equals 2 plus Q intersect at quantity 5 and price 7."
+    : `A tax of ${exactLatex(projection.market.priceWedge)} shifts buyer-facing supply while original supply remains visible. Quantity is ${exactLatex(projection.market.quantity)}, consumers pay ${exactLatex(projection.market.consumerPrice)}, and producers receive ${exactLatex(projection.market.producerPrice)}.`;
   input.root.dataset["kpSupplyTaxSvgPhase"] = projection.phase;
   input.root.dataset["kpSupplyTaxSvgProgress"] = format(projection.progress);
 }
@@ -389,7 +402,8 @@ function ledgerValue(region: KpSupplyTaxRegionEntityV1 | undefined): string {
   const entity = region === undefined
     ? ' data-kp-supply-tax-ledger-zero="true"'
     : ` data-kp-supply-tax-entity="${escapeAttribute(region.id)}"`;
-  return `<span class="kp-supply-tax-ledger__value" data-kp-exact-value="${exactValue}"${entity}>${renderLatexToHtml(latex,
+  const spoken = region === undefined ? "zero" : exactDtoSpoken(region.value);
+  return `<span class="kp-supply-tax-ledger__value" data-kp-exact-value="${exactValue}" aria-label="${escapeAttribute(spoken)}"${entity}>${renderLatexToHtml(latex,
     { displayMode: false })}</span>`;
 }
 
@@ -397,6 +411,12 @@ function exactDtoLatex(value: ExactRationalDto): string {
   return value.denominator === "1"
     ? value.numerator
     : `\\frac{${value.numerator}}{${value.denominator}}`;
+}
+
+function exactDtoSpoken(value: ExactRationalDto): string {
+  return value.denominator === "1"
+    ? value.numerator
+    : `${value.numerator} divided by ${value.denominator}`;
 }
 
 function pointPair(point: KpSupplyTaxSvgPointV1): string {

@@ -66,6 +66,8 @@ export function mountKpSupplyTaxKineticFigure(input: {
   );
   const scenes = compiled.deck.scenes;
   const graph = requiredElement<SVGSVGElement>(deck, ".kp-supply-tax-graph");
+  const caption = requiredElement<HTMLElement>(deck,
+    "[data-kp-supply-tax-stage-caption]");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const durationMs = authority.animation.timeline?.durationMs;
   if (durationMs === undefined) {
@@ -92,16 +94,20 @@ export function mountKpSupplyTaxKineticFigure(input: {
     });
   };
   const projectFrame = (progress: number): void => {
+    const frame = sampleKpEconomicsSupplyTaxAnimationFrame({
+      asset: authority,
+      progress: exactProgress(progress)
+    });
     projectKpSupplyTaxTransitSvgDom({
       root: graph,
       semantics: authority.semantics,
       // The shared clock stores global model progress. Rewind changes the
       // clock direction, not the pure domain sampler's coordinate system.
-      frame: sampleKpEconomicsSupplyTaxAnimationFrame({
-        asset: authority,
-        progress: exactProgress(progress)
-      })
+      frame
     });
+    caption.textContent = frame.phase === "taxed"
+      ? authority.accessibility.settledDescription
+      : authority.accessibility.description;
     deck.dataset["kpSupplyTaxClockProgress"] = progress.toFixed(4);
   };
   const projectBeatChrome = (scene: KpSupplyTaxArticleDeckSceneV1): void => {
@@ -319,7 +325,7 @@ function renderPage(
 
 function renderStaticStage(): string {
   return `<figure class="kp-supply-tax-figure" data-kp-supply-tax-stage data-kp-supply-tax-stage-state="baseline-market">
-    <figcaption class="kp-supply-tax-visually-hidden">Demand and original supply intersect at five units and a price of seven before the tax.</figcaption>
+    <figcaption class="kp-supply-tax-visually-hidden" data-kp-supply-tax-stage-caption>Demand and original supply intersect at five units and a price of seven before the tax.</figcaption>
     <div class="kp-supply-tax-stage__visual">
       <div class="kp-supply-tax-stage__graph">${renderKpSupplyTaxInteractiveSvg()}</div>
       ${renderKpSupplyTaxWelfareLedger()}

@@ -168,7 +168,8 @@
     {
       "id": "s20",
       "title": "Responsive-checkpoint-surface",
-      "status": "planned"
+      "summary": "Completed responsive and accessibility hardening with state-aware descriptions, spoken exact values, compact desktop height, 44px phone controls, no horizontal overflow, keyboard and reduced-motion behavior, and stable browser/visual npm commands.",
+      "status": "complete"
     },
     {
       "id": "s21",
