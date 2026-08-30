@@ -333,6 +333,20 @@
       "scope": "standard",
       "checkedAt": "2026-08-30T08:16:27.612Z",
       "notes": "Taxed-market projections typecheck across application, tests, Svelte with zero diagnostics, and domain projects."
+    },
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T08:20:19.758Z",
+      "notes": "Forty-nine tests pass; six semantic region boundary projections and the exact before/after welfare ledger agree with domain-owned values without inferring welfare from visual area."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-30T08:20:20.800Z",
+      "notes": "Welfare region, ledger, route, application, Svelte with zero diagnostics, and domain projects typecheck."
     }
   ],
   "progress": {

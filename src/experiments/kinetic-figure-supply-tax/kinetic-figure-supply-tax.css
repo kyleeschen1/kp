@@ -104,7 +104,15 @@ button { font: inherit; }
 
 .kp-supply-tax-deck__main { min-width: 0; }
 .kp-supply-tax-figure { margin: 0; padding: clamp(1rem, 3vw, 1.8rem); border-bottom: 1.5px solid var(--kp-st-rule); }
-.kp-supply-tax-stage__graph { width: min(100%, 42rem); margin-inline: auto; }
+.kp-supply-tax-stage__visual {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 9.5rem;
+  align-items: center;
+  gap: clamp(0.6rem, 2vw, 1.2rem);
+  width: min(100%, 48rem);
+  margin-inline: auto;
+}
+.kp-supply-tax-stage__graph { min-width: 0; }
 .kp-supply-tax-graph { display: block; width: 100%; height: auto; overflow: visible; }
 .kp-supply-tax-graph__grid line {
   stroke: color-mix(in srgb, var(--kp-st-ink) 8%, var(--kp-st-paper));
@@ -114,6 +122,11 @@ button { font: inherit; }
   stroke: color-mix(in srgb, var(--kp-st-ink) 62%, var(--kp-st-paper));
   stroke-width: 1.5;
 }
+.kp-supply-tax-graph__region { opacity: 0; stroke-width: 1.25; }
+.kp-supply-tax-graph__region--consumer-surplus { fill: #8f493f; stroke: #8f493f; }
+.kp-supply-tax-graph__region--producer-surplus { fill: #37666a; stroke: #37666a; }
+.kp-supply-tax-graph__region--government-revenue { fill: var(--kp-st-header); stroke: var(--kp-st-header); }
+.kp-supply-tax-graph__region--deadweight-loss { fill: #8f493f; stroke: #8f493f; stroke-dasharray: 3 2; }
 .kp-supply-tax-graph__curve > line { fill: none; stroke-width: 2.5; }
 .kp-supply-tax-graph__curve--demand > line { stroke: #8f493f; }
 .kp-supply-tax-graph__curve--supply > line { stroke: #37666a; }
@@ -158,6 +171,43 @@ button { font: inherit; }
   color: var(--kp-st-strong);
   font-size: 0.95rem;
 }
+
+.kp-supply-tax-ledger {
+  align-self: stretch;
+  padding: 0.65rem 0 0.45rem 0.8rem;
+  border-inline-start: 1.5px solid var(--kp-st-rule);
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+.kp-supply-tax-ledger h2 {
+  margin: 0 0 0.75rem;
+  color: var(--kp-st-strong);
+  font-size: 0.75rem;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+.kp-supply-tax-ledger__columns,
+.kp-supply-tax-ledger__row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 0.3rem;
+}
+.kp-supply-tax-ledger__columns {
+  margin-bottom: 0.45rem;
+  color: var(--kp-st-muted);
+  font-size: 0.56rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.kp-supply-tax-ledger__row { padding: 0.42rem 0; border-top: 1px solid var(--kp-st-rule); }
+.kp-supply-tax-ledger__label {
+  grid-column: 1 / -1;
+  margin-bottom: 0.18rem;
+  color: var(--kp-st-muted);
+  font-size: 0.62rem;
+  line-height: 1.25;
+}
+.kp-supply-tax-ledger__value { color: var(--kp-st-strong); font-size: 0.78rem; }
 
 .kp-supply-tax-narrative { min-height: 13rem; padding: 1.35rem clamp(1rem, 3vw, 2rem); }
 .kp-supply-tax-narrative h1,
@@ -205,4 +255,18 @@ button { font: inherit; }
   .kp-supply-tax-steps button { min-height: 2.25rem; grid-template-columns: 1fr; }
   .kp-supply-tax-steps button > span:last-child { display: none; }
   .kp-supply-tax-figure { padding-inline: 0.45rem; }
+  .kp-supply-tax-stage__visual { grid-template-columns: 1fr; }
+  .kp-supply-tax-ledger {
+    display: grid;
+    grid-template-columns: 5rem repeat(4, minmax(0, 1fr));
+    align-items: end;
+    padding: 0.6rem 0.7rem 0;
+    border-block-start: 1.5px solid var(--kp-st-rule);
+    border-inline-start: 0;
+  }
+  .kp-supply-tax-ledger h2 { align-self: center; margin: 0; }
+  .kp-supply-tax-ledger__columns { display: none; }
+  .kp-supply-tax-ledger__row { display: block; min-width: 0; padding: 0 0.25rem; border-top: 0; }
+  .kp-supply-tax-ledger__label { display: block; min-height: 2rem; font-size: 0.54rem; }
+  .kp-supply-tax-ledger__value { display: inline-block; margin-inline-end: 0.1rem; font-size: 0.68rem; }
 }

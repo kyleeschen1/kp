@@ -138,7 +138,8 @@
     {
       "id": "s15",
       "title": "Welfare-regions",
-      "status": "planned"
+      "summary": "Added six boundary-projected welfare polygons and a compact Article-stage ledger whose before/after KaTeX values come directly from exact semantic regions; both phases exist once for deterministic later projection.",
+      "status": "complete"
     },
     {
       "id": "s16",

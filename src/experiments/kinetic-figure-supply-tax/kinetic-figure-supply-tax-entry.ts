@@ -17,7 +17,10 @@ import {
   compileKpSupplyTaxArticle,
   type KpSupplyTaxArticleDeckSceneV1
 } from "./kinetic-figure-supply-tax-article.ts";
-import { renderKpSupplyTaxInteractiveSvg } from
+import {
+  renderKpSupplyTaxInteractiveSvg,
+  renderKpSupplyTaxWelfareLedger
+} from
   "./kinetic-figure-supply-tax-svg.ts";
 
 const importLock = importLockValue as KpArticleImportLock;
@@ -86,7 +89,10 @@ function renderPage(
 function renderStaticStage(): string {
   return `<figure class="kp-supply-tax-figure" data-kp-supply-tax-stage data-kp-supply-tax-stage-state="baseline-market">
     <figcaption class="kp-supply-tax-visually-hidden">Demand and original supply intersect at five units and a price of seven before the tax.</figcaption>
-    <div class="kp-supply-tax-stage__graph">${renderKpSupplyTaxInteractiveSvg()}</div>
+    <div class="kp-supply-tax-stage__visual">
+      <div class="kp-supply-tax-stage__graph">${renderKpSupplyTaxInteractiveSvg()}</div>
+      ${renderKpSupplyTaxWelfareLedger()}
+    </div>
   </figure>`;
 }
 

@@ -9,8 +9,10 @@ import {
   kpSupplyTaxGraphViewport,
   projectKpSupplyTaxBaselineSvg,
   projectKpSupplyTaxTransitSvg,
+  projectKpSupplyTaxWelfareRegionsSvg,
   renderKpSupplyTaxInteractiveSvg,
-  renderKpSupplyTaxBaselineSvg
+  renderKpSupplyTaxBaselineSvg,
+  renderKpSupplyTaxWelfareLedger
 } from "../src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-svg.ts";
 
 test("baseline SVG geometry projects exact semantic curves and equilibrium", () => {
@@ -165,6 +167,54 @@ test("interactive SVG contains one exact taxed-market view with KaTeX labels", (
   assert.match(svg, /data-kp-supply-tax-market-mark="wedge"/u);
   assert.match(svg, /data-kp-supply-tax-market-mark="quantity-guide"/u);
   assert.doesNotMatch(svg, /<text(?:\s|>)/u);
+});
+
+test("welfare polygons project every semantic region boundary without owning value truth", () => {
+  const semantics = createKpPerUnitTaxWelfareAsset();
+  const projection = projectKpSupplyTaxWelfareRegionsSvg(semantics);
+
+  assert.equal(projection.regions.length, semantics.entities.regions.length);
+  for (const semanticRegion of semantics.entities.regions) {
+    const projected = projection.regions.find(({ entityId }) =>
+      entityId === semanticRegion.id);
+    assert.ok(projected);
+    assert.equal(projected.phase, semanticRegion.phase);
+    assert.equal(projected.role, semanticRegion.role);
+    assert.deepEqual(projected.value, semanticRegion.value);
+    assert.equal(projected.points.length, 4);
+  }
+  const deadweightLoss = projection.regions.find(({ role }) =>
+    role === "deadweight-loss");
+  assert.ok(deadweightLoss);
+  assert.deepEqual(deadweightLoss.points[1], deadweightLoss.points[2]);
+});
+
+test("interactive SVG retains each welfare region exactly once and initially absent", () => {
+  const semantics = createKpPerUnitTaxWelfareAsset();
+  const svg = renderKpSupplyTaxInteractiveSvg(semantics);
+  for (const region of semantics.entities.regions) {
+    assert.equal(count(svg, `data-kp-supply-tax-entity="${region.id}"`), 1);
+  }
+  assert.equal(count(svg, 'class="kp-supply-tax-graph__region '), 6);
+  assert.equal(count(svg, 'data-kp-supply-tax-region-phase="untaxed"'), 2);
+  assert.equal(count(svg, 'data-kp-supply-tax-region-phase="taxed"'), 4);
+  assert.equal(count(svg, 'data-kp-presence="false" points='), 6);
+});
+
+test("welfare ledger reads exact before and after values from semantic regions", () => {
+  const semantics = createKpPerUnitTaxWelfareAsset();
+  const html = renderKpSupplyTaxWelfareLedger(semantics);
+
+  assert.match(html, /aria-label="Exact welfare accounting"/u);
+  assert.equal(count(html, "kp-supply-tax-ledger__row"), 4);
+  for (const region of semantics.entities.regions) {
+    assert.equal(count(html, `data-kp-supply-tax-entity="${region.id}"`), 1);
+  }
+  assert.equal(count(html, 'data-kp-supply-tax-ledger-zero="true"'), 2);
+  assert.equal(count(html, 'data-kp-exact-value="25/2"'), 2);
+  assert.equal(count(html, 'data-kp-exact-value="9/2"'), 2);
+  assert.equal(count(html, 'data-kp-exact-value="12/1"'), 1);
+  assert.equal(count(html, 'data-kp-exact-value="4/1"'), 1);
 });
 
 function count(value: string, needle: string): number {

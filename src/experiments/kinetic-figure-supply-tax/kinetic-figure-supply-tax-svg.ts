@@ -2,7 +2,9 @@ import type { ExactRationalDto } from "../../../protocols/public-api.ts";
 import {
   createKpPerUnitTaxWelfareAsset,
   type KpPerUnitTaxWelfareAssetV1,
-  type KpSupplyTaxCurveEntityV1
+  type KpSupplyTaxCurveEntityV1,
+  type KpSupplyTaxRegionBoundaryV1,
+  type KpSupplyTaxRegionEntityV1
 } from "../../../domains/economics/per-unit-tax-welfare-asset.ts";
 import type { KpPerUnitTaxWelfareFrameV1 } from
   "../../../domains/economics/per-unit-tax-welfare-frame.ts";
@@ -71,6 +73,16 @@ export interface KpSupplyTaxTransitSvgProjectionV1 {
   }>;
 }
 
+export interface KpSupplyTaxWelfareRegionSvgProjectionV1 {
+  readonly regions: readonly Readonly<{
+    entityId: string;
+    phase: KpSupplyTaxRegionEntityV1["phase"];
+    role: KpSupplyTaxRegionEntityV1["role"];
+    value: ExactRationalDto;
+    points: readonly KpSupplyTaxSvgPointV1[];
+  }>[];
+}
+
 export function projectKpSupplyTaxBaselineSvg(
   semantics: KpPerUnitTaxWelfareAssetV1 = createKpPerUnitTaxWelfareAsset()
 ): KpSupplyTaxBaselineSvgProjectionV1 {
@@ -110,6 +122,48 @@ export function renderKpSupplyTaxInteractiveSvg(
   semantics: KpPerUnitTaxWelfareAssetV1 = createKpPerUnitTaxWelfareAsset()
 ): string {
   return renderKpSupplyTaxSvg(semantics, true);
+}
+
+export function projectKpSupplyTaxWelfareRegionsSvg(
+  semantics: KpPerUnitTaxWelfareAssetV1 = createKpPerUnitTaxWelfareAsset()
+): KpSupplyTaxWelfareRegionSvgProjectionV1 {
+  return Object.freeze({
+    regions: Object.freeze(semantics.entities.regions.map((region) => {
+      const qStart = exactNumber(region.quantityInterval.start);
+      const qEnd = exactNumber(region.quantityInterval.end);
+      return Object.freeze({
+        entityId: region.id,
+        phase: region.phase,
+        role: region.role,
+        value: region.value,
+        points: Object.freeze([
+          regionPoint(semantics, region.upperBoundary, qStart),
+          regionPoint(semantics, region.upperBoundary, qEnd),
+          regionPoint(semantics, region.lowerBoundary, qEnd),
+          regionPoint(semantics, region.lowerBoundary, qStart)
+        ])
+      });
+    }))
+  });
+}
+
+export function renderKpSupplyTaxWelfareLedger(
+  semantics: KpPerUnitTaxWelfareAssetV1 = createKpPerUnitTaxWelfareAsset()
+): string {
+  const consumerBefore = requiredRegion(semantics, "consumer-surplus", "untaxed");
+  const consumerAfter = requiredRegion(semantics, "consumer-surplus", "taxed");
+  const producerBefore = requiredRegion(semantics, "producer-surplus", "untaxed");
+  const producerAfter = requiredRegion(semantics, "producer-surplus", "taxed");
+  const revenue = requiredRegion(semantics, "government-revenue", "taxed");
+  const loss = requiredRegion(semantics, "deadweight-loss", "taxed");
+  return `<aside class="kp-supply-tax-ledger" aria-label="Exact welfare accounting" data-kp-supply-tax-ledger>
+    <h2>Welfare</h2>
+    <div class="kp-supply-tax-ledger__columns" aria-hidden="true"><span>Before</span><span>After</span></div>
+    ${ledgerRow("Consumer surplus", consumerBefore, consumerAfter)}
+    ${ledgerRow("Producer surplus", producerBefore, producerAfter)}
+    ${ledgerRow("Government revenue", undefined, revenue)}
+    ${ledgerRow("Deadweight loss", undefined, loss)}
+  </aside>`;
 }
 
 export function projectKpSupplyTaxTransitSvg(input: {
@@ -209,6 +263,7 @@ function renderKpSupplyTaxSvg(
   const plotTop = kpSupplyTaxGraphViewport.top;
   const plotBottom = kpSupplyTaxGraphViewport.height - kpSupplyTaxGraphViewport.bottom;
   const equilibrium = projection.equilibrium.point;
+  const welfare = projectKpSupplyTaxWelfareRegionsSvg(semantics);
   const taxed = semantics.model.states.taxed;
   const taxedQuantity = exactNumber(taxed.quantity);
   const taxedConsumerPrice = exactNumber(taxed.consumerPrice);
@@ -223,6 +278,9 @@ function renderKpSupplyTaxSvg(
       ${qTicks.filter((value) => value > qMin).map((value) => `<line x1="${format(mapQuantity(semantics, value))}" y1="${format(plotTop)}" x2="${format(mapQuantity(semantics, value))}" y2="${format(plotBottom)}"/>`).join("")}
       ${pTicks.map((value) => `<line x1="${format(plotLeft)}" y1="${format(mapPrice(semantics, value))}" x2="${format(plotRight)}" y2="${format(mapPrice(semantics, value))}"/>`).join("")}
     </g>
+    ${includeTransitLayer ? `<g class="kp-supply-tax-graph__welfare-regions" aria-label="Welfare regions">
+      ${welfare.regions.map((region) => `<polygon class="kp-supply-tax-graph__region kp-supply-tax-graph__region--${escapeAttribute(region.role)}" data-kp-supply-tax-entity="${escapeAttribute(region.entityId)}" data-kp-supply-tax-region-phase="${region.phase}" data-kp-presence="false" points="${region.points.map(pointPair).join(" ")}"/>`).join("")}
+    </g>` : ""}
     <g class="kp-supply-tax-graph__axes" data-kp-supply-tax-presentation="axes">
       <line x1="${format(plotLeft)}" y1="${format(plotBottom)}" x2="${format(plotRight)}" y2="${format(plotBottom)}"/>
       <line x1="${format(plotLeft)}" y1="${format(plotTop)}" x2="${format(plotLeft)}" y2="${format(plotBottom)}"/>
@@ -269,6 +327,65 @@ function renderKpSupplyTaxSvg(
       ${mathLabel("Q_t=3", taxedEquilibrium.x - 28, plotBottom + 8, 62, 28, "taxed-quantity")}
     </g>` : ""}
   </svg>`;
+}
+
+function regionPoint(
+  semantics: KpPerUnitTaxWelfareAssetV1,
+  boundary: KpSupplyTaxRegionBoundaryV1,
+  quantity: number
+): KpSupplyTaxSvgPointV1 {
+  if (boundary.kind === "curve") {
+    const curve = semantics.entities.curves.find(({ id }) => id === boundary.entityId);
+    if (curve === undefined) throw new Error(`Missing region curve ${boundary.entityId}.`);
+    return graphPoint(semantics, quantity, curvePrice(curve, quantity));
+  }
+  const price = semantics.entities.prices.find(({ id }) => id === boundary.entityId);
+  if (price === undefined) throw new Error(`Missing region price ${boundary.entityId}.`);
+  return graphPoint(semantics, quantity, exactNumber(price.value));
+}
+
+function requiredRegion(
+  semantics: KpPerUnitTaxWelfareAssetV1,
+  role: KpSupplyTaxRegionEntityV1["role"],
+  phase: KpSupplyTaxRegionEntityV1["phase"]
+): KpSupplyTaxRegionEntityV1 {
+  const region = semantics.entities.regions.find((candidate) =>
+    candidate.role === role && candidate.phase === phase);
+  if (region === undefined) throw new Error(`Missing ${phase} ${role} region.`);
+  return region;
+}
+
+function ledgerRow(
+  label: string,
+  before: KpSupplyTaxRegionEntityV1 | undefined,
+  after: KpSupplyTaxRegionEntityV1
+): string {
+  return `<div class="kp-supply-tax-ledger__row" data-kp-supply-tax-ledger-role="${escapeAttribute(after.role)}">
+    <span class="kp-supply-tax-ledger__label">${escapeAttribute(label)}</span>
+    ${ledgerValue(before)}
+    ${ledgerValue(after)}
+  </div>`;
+}
+
+function ledgerValue(region: KpSupplyTaxRegionEntityV1 | undefined): string {
+  const latex = region === undefined ? "0" : exactDtoLatex(region.value);
+  const exactValue = region === undefined ? "0/1" :
+    `${region.value.numerator}/${region.value.denominator}`;
+  const entity = region === undefined
+    ? ' data-kp-supply-tax-ledger-zero="true"'
+    : ` data-kp-supply-tax-entity="${escapeAttribute(region.id)}"`;
+  return `<span class="kp-supply-tax-ledger__value" data-kp-exact-value="${exactValue}"${entity}>${renderLatexToHtml(latex,
+    { displayMode: false })}</span>`;
+}
+
+function exactDtoLatex(value: ExactRationalDto): string {
+  return value.denominator === "1"
+    ? value.numerator
+    : `\\frac{${value.numerator}}{${value.denominator}}`;
+}
+
+function pointPair(point: KpSupplyTaxSvgPointV1): string {
+  return `${format(point.x)},${format(point.y)}`;
 }
 
 function projectTaxedMarketDom(
