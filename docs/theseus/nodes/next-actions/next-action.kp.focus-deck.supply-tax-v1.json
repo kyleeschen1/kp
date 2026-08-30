@@ -9,6 +9,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-08-29-supply-tax-focus-deck-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "domains/economics/per-unit-tax-welfare.ts"
     }
   ],
   "dependsOn": {
@@ -74,6 +78,20 @@
       "scope": "focused",
       "checkedAt": "2026-08-30T07:19:24.838Z",
       "notes": "Workspace graph valid before baseline slice completion."
+    },
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T07:22:56.486Z",
+      "notes": "Supply-tax input contract passed three exact schema, identity, and invalid-transition tests."
+    },
+    {
+      "command": "npm run typecheck:domains",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T07:22:57.479Z",
+      "notes": "New economics input authority passes the isolated domain type boundary."
     }
   ],
   "progress": {

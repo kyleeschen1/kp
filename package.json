@@ -142,6 +142,7 @@
     "test:browser:kinetic-figure-log-product": "playwright test tests/kinetic-figure-log-product.browser.spec.ts --project=chromium --workers=1",
     "test:kinetic-figure-delta-epsilon": "node --disable-warning=ExperimentalWarning --test tests/kinetic-figure-delta-epsilon.test.ts tests/legacy-root-route.test.ts",
     "test:browser:kinetic-figure-delta-epsilon": "playwright test tests/kinetic-figure-delta-epsilon.browser.spec.ts --project=chromium --workers=1",
+    "test:economics-supply-tax": "node --disable-warning=ExperimentalWarning --test tests/economics-supply-tax-*.test.ts",
     "test:log-product-equivalence-frame": "node --disable-warning=ExperimentalWarning --test tests/log-product-equivalence-frame.test.ts",
     "test:log-exponent": "node --disable-warning=ExperimentalWarning --test tests/log-exponent-*.test.ts",
     "test:logarithm-change-of-base": "node --disable-warning=ExperimentalWarning --test tests/logarithm-change-of-base*.test.ts",

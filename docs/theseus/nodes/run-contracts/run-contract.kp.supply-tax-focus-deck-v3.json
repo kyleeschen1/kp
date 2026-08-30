@@ -60,7 +60,8 @@
     {
       "id": "s02",
       "title": "Tax-input",
-      "status": "planned"
+      "summary": "Added and verified the bounded exact-rational zero-to-positive tax schema, stable curve/equilibrium/wedge IDs, preservation roles, input validation, and focused npm command.",
+      "status": "complete"
     },
     {
       "id": "s03",
