@@ -134,8 +134,20 @@ test("supply-tax deck supports keyboard controls and fits a phone", async ({
   await deck.locator(
     '[data-kp-focus-deck-select="surplus-redistribution"]'
   ).click();
+  await expect(deck.locator(
+    '[data-kp-supply-tax-math-label="quantity-tick-3"]'
+  )).toHaveCSS("visibility", "hidden");
   await expect(deck.locator('[data-kp-exact-value="25/2"]').first())
     .toHaveAccessibleName("25 divided by 2");
+  const consumerRow = deck.locator(
+    '[data-kp-supply-tax-ledger-role="consumer-surplus"]'
+  );
+  const ledgerColumns = await consumerRow.locator(
+    ".kp-supply-tax-ledger__label, .kp-supply-tax-ledger__value"
+  ).evaluateAll((elements) => elements.map((element) =>
+    element.getBoundingClientRect().left));
+  expect(ledgerColumns[0]).toBeLessThan(ledgerColumns[1]!);
+  expect(ledgerColumns[1]).toBeLessThan(ledgerColumns[2]!);
 });
 
 test("supply-tax visual checkpoint captures all eight states and phone", async ({

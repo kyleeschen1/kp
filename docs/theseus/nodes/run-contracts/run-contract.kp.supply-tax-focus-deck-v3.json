@@ -2,7 +2,8 @@
   "id": "run-contract.kp.supply-tax-focus-deck-v3",
   "kind": "run-contract",
   "title": "Supply-tax Focus Deck",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -174,7 +175,8 @@
     {
       "id": "s21",
       "title": "Boundary-and-visual-checkpoint",
-      "status": "planned"
+      "summary": "Reached the mandatory human visual checkpoint after inspecting all eight semantic states and phone, correcting the taxed-quantity tick collision and exact-value ledger layout, moving all three Focus Decks to standalone experiment hosts, and passing focused semantic, Article, type, build, Chromium, visual, equation-preservation, and Theseus gates. Full npm test reaches only the pre-existing inference-budget drift, whose fixture graph excludes this exemplar; no budget increase, shared extraction, promotion, or catalogue rollout was performed.",
+      "status": "complete"
     }
   ]
 }

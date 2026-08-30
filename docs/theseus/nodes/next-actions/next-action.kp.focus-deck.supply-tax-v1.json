@@ -2,7 +2,7 @@
   "id": "next-action.kp.focus-deck.supply-tax-v1",
   "kind": "next-action",
   "title": "Build the supply-tax Focus Deck exemplar",
-  "status": "ready",
+  "status": "resolved",
   "domain": "economics",
   "summary": "Build the approved exact-rational, Article-backed, eight-beat supply-tax Focus Deck and stop at human visual review before shared extraction or promotion.",
   "sourceRefs": [
@@ -424,11 +424,116 @@
       "scope": "standard",
       "checkedAt": "2026-08-30T08:42:42.571Z",
       "notes": "Responsive, accessibility, dynamic description, browser spec, application, Svelte, and domain type boundaries pass."
+    },
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T09:01:51.737Z",
+      "notes": "Final boundary: 55 exact semantic, Article, score, route, SVG, salience, navigation, searchability, and welfare tests passed."
+    },
+    {
+      "command": "npm run test:kp-article-v1",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-30T09:01:52.826Z",
+      "notes": "Final boundary: all 122 Article v1 preservation and static-publication tests passed."
+    },
+    {
+      "command": "npm run test:kinetic-figure-log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T09:01:53.796Z",
+      "notes": "Final boundary: all 17 log-product Focus Deck semantic and route preservation tests passed."
+    },
+    {
+      "command": "npm run test:kinetic-figure-delta-epsilon",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T09:01:54.772Z",
+      "notes": "Final boundary: all 8 delta-epsilon Focus Deck semantic, route, and exact-model preservation tests passed."
+    },
+    {
+      "command": "npm run test:browser:economics-supply-tax",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T09:01:55.729Z",
+      "notes": "Final boundary: 5 Chromium cases passed, including motion, interruption, native find, phone layout, exact ledger columns, and eight-state capture."
+    },
+    {
+      "command": "npm run test:browser:kinetic-figure-log-product",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-30T09:01:56.693Z",
+      "notes": "Standalone experiment-host correction preserved all 11 log-product Chromium cases."
+    },
+    {
+      "command": "npm run test:browser:kinetic-figure-delta-epsilon",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-30T09:01:57.658Z",
+      "notes": "Standalone experiment-host correction preserved all 4 delta-epsilon Chromium cases."
+    },
+    {
+      "command": "npm run visual:economics-supply-tax-focus-deck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T09:01:58.617Z",
+      "notes": "Stable visual command captured all eight semantic states and phone; manual audit corrected the Q_t tick collision and responsive exact-value ledger."
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-30T09:01:59.600Z",
+      "notes": "Impact-selected canonical preservation capture produced 39 deterministic linear-equation states."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-30T09:02:00.582Z",
+      "notes": "All 11 equation authority, inventory, endpoint, and preservation-matrix tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-30T09:02:01.536Z",
+      "notes": "Final application, node, test, Svelte with zero diagnostics, and domain typechecks passed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-30T09:02:02.518Z",
+      "notes": "Final production typecheck and Vite bundle completed successfully."
+    },
+    {
+      "command": "npm run verify:impact",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-30T09:02:03.514Z",
+      "notes": "Impact selector completed and required publication, type, Theseus, equation preservation, focused visual, full test, and build checks."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "broad",
+      "checkedAt": "2026-08-30T09:02:04.507Z",
+      "notes": "Architecture and governance gates pass after standalone experiment hosts; the run stops at an existing TypeScript inference-budget drift (91987 types and 149499 instantiations vs August 18 ceilings). The inference project file list contains no supply-tax or Focus Deck files, so the ceiling was not raised in this visual exemplar loop."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-30T09:02:26.814Z",
+      "notes": "Workspace graph valid with final slice evidence before the mandatory human checkpoint."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Baseline reconciled and verified: approved Focus Deck variants, routes, clock endpoint behavior, project direction, and control records are isolated for commit; unrelated worktree edits remain untouched."
+    "summary": "The exact Article-backed eight-beat supply-tax Focus Deck is implemented and visually audited at desktop and phone. It is paused at the required human checkpoint before any shared extraction or promotion; the unrelated repository-wide TypeScript inference budget drift remains explicitly recorded."
   },
   "expectedLearning": [
     "Whether discrete semantic snaps make a multifaceted graph-and-welfare change easier to compare, replay, and inspect than continuous scrollytelling."

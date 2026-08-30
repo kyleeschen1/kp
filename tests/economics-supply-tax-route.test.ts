@@ -20,15 +20,20 @@ test("supply-tax Focus Deck owns one isolated normalized route", () => {
   }), "kinetic-figure-supply-tax");
 });
 
-test("bootstrap lazily owns the route without changing existing figure entries", () => {
+test("a standalone experiment page owns the route without application inversion", () => {
   const bootstrap = readFileSync("src/bootstrap.ts", "utf8");
+  const page = readFileSync(
+    "experiments/kinetic-figure/supply-tax/index.html",
+    "utf8"
+  );
   const entry = readFileSync(
     "src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-entry.ts",
     "utf8"
   );
 
   assert.match(bootstrap, /case "kinetic-figure-supply-tax"/u);
-  assert.match(bootstrap, /loadKpSupplyTaxKineticFigure/u);
+  assert.doesNotMatch(bootstrap, /loadKpSupplyTaxKineticFigure/u);
+  assert.match(page, /kinetic-figure-supply-tax-page\.ts/u);
   assert.match(entry, /economics-supply-tax\.kp\.md\?raw/u);
   assert.match(entry, /compileKpSupplyTaxArticle/u);
   assert.equal((entry.match(/createKpReaderTimelinePlaybackClock/g) ?? []).length, 2);

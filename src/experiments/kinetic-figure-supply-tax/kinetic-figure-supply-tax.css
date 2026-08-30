@@ -190,6 +190,11 @@ button { font: inherit; }
   place-items: center;
   font-size: 0.85rem;
 }
+.kp-supply-tax-graph:not([data-kp-supply-tax-svg-phase="untaxed"])
+  [data-kp-supply-tax-math-label="quantity-tick-3"] {
+  /* The semantic Q_t label replaces the ordinary tick at the taxed state. */
+  visibility: hidden;
+}
 .kp-supply-tax-graph__curve .kp-supply-tax-graph__math > div,
 .kp-supply-tax-graph__equilibrium .kp-supply-tax-graph__math > div {
   color: var(--kp-st-strong);
@@ -235,7 +240,11 @@ button { font: inherit; }
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
-.kp-supply-tax-ledger__row { padding: 0.42rem 0; border-top: 1px solid var(--kp-st-rule); }
+.kp-supply-tax-ledger__row {
+  min-height: 3rem;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--kp-st-rule);
+}
 .kp-supply-tax-ledger__label {
   grid-column: 1 / -1;
   margin-bottom: 0.18rem;
@@ -243,7 +252,13 @@ button { font: inherit; }
   font-size: 0.62rem;
   line-height: 1.25;
 }
-.kp-supply-tax-ledger__value { color: var(--kp-st-strong); font-size: 0.78rem; }
+.kp-supply-tax-ledger__value {
+  display: flex;
+  min-height: 1.45rem;
+  align-items: center;
+  color: var(--kp-st-strong);
+  font-size: 0.78rem;
+}
 .kp-supply-tax-ledger [data-kp-supply-tax-entity][data-kp-semantic-salience-level="focus"] {
   background: color-mix(in srgb, var(--kp-st-focus) 11%, transparent);
   box-shadow: inset 2px 0 var(--kp-st-focus);
@@ -322,16 +337,35 @@ button { font: inherit; }
   .kp-supply-tax-figure { padding-inline: 0.45rem; }
   .kp-supply-tax-stage__visual { grid-template-columns: 1fr; }
   .kp-supply-tax-ledger {
-    display: grid;
-    grid-template-columns: 5rem repeat(4, minmax(0, 1fr));
-    align-items: end;
-    padding: 0.6rem 0.7rem 0;
+    display: block;
+    padding: 0.75rem 0.7rem 0.25rem;
     border-block-start: 1.5px solid var(--kp-st-rule);
     border-inline-start: 0;
   }
-  .kp-supply-tax-ledger h2 { align-self: center; margin: 0; }
-  .kp-supply-tax-ledger__columns { display: none; }
-  .kp-supply-tax-ledger__row { display: block; min-width: 0; padding: 0 0.25rem; border-top: 0; }
-  .kp-supply-tax-ledger__label { display: block; min-height: 2rem; font-size: 0.54rem; }
-  .kp-supply-tax-ledger__value { display: inline-block; margin-inline-end: 0.1rem; font-size: 0.68rem; }
+  .kp-supply-tax-ledger h2 { margin: 0 0 0.65rem; }
+  .kp-supply-tax-ledger__tax { margin-bottom: 0.65rem; }
+  .kp-supply-tax-ledger__columns,
+  .kp-supply-tax-ledger__row {
+    grid-template-columns: minmax(0, 1.9fr) repeat(2, minmax(3.6rem, 0.8fr));
+    column-gap: 0.55rem;
+  }
+  .kp-supply-tax-ledger__columns {
+    display: grid;
+    margin-bottom: 0;
+  }
+  .kp-supply-tax-ledger__columns::before { content: "Measure"; }
+  .kp-supply-tax-ledger__row {
+    min-height: 2.65rem;
+    align-items: center;
+    padding: 0.35rem 0;
+  }
+  .kp-supply-tax-ledger__label {
+    grid-column: 1;
+    margin: 0;
+    font-size: 0.6rem;
+  }
+  .kp-supply-tax-ledger__value {
+    min-height: 1.5rem;
+    font-size: 0.72rem;
+  }
 }

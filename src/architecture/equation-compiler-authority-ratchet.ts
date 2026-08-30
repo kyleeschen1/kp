@@ -54,6 +54,9 @@ const privateClockPaths = paths([
   "src/editor/animation-catalogue-interaction-host.ts",
   "src/editor/equation-motion-demo-controller.ts",
   "src/experiments/glyph-reconciliation-radical-inventory.ts",
+  // This page schedules scroll restoration and canonical-player hydration;
+  // it does not sample animation time or own a second semantic clock.
+  "src/experiments/kinetic-figure-log-product/kinetic-figure-log-product-entry.ts",
   "src/reader/app/distribution-area-runtime.ts",
   "src/reader/app/reader-canonical-equation-session.ts",
   "src/rendering/katex-transition-controller.ts",
