@@ -2,7 +2,8 @@
   "id": "run-contract.kp.integration-power-rule-exemplar-v2",
   "kind": "run-contract",
   "title": "Integration power-rule exemplar",
-  "status": "ready",
+  "status": "deferred",
+  "summary": "User moved the active lane to the approved supply-tax Focus Deck loop; preserve integration slice 18 as unapproved human-checkpoint evidence without marking it complete.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -1611,6 +1612,9 @@
       "checkedAt": "2026-08-28T18:30:47.119Z",
       "notes": "Application, Node, test, Svelte, and domain typechecks pass with no Svelte warnings."
     }
+  ],
+  "revisitWhen": [
+    "User explicitly resumes the integration Rule Application visual checkpoint."
   ],
   "allowedWork": [
     "Revise only the existing unreviewed integration power-rule asset to the approved exact three-state sequence.",

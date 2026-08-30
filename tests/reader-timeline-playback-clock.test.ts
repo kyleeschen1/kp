@@ -52,6 +52,22 @@ test("timeline clock advances global progress and settles at an exact stop", () 
   assert.equal(fake.pending(), 0);
 });
 
+test("timeline clock clamps a long final frame to the exact endpoint", () => {
+  const fake = fakeScheduler();
+  const clock = createKpReaderTimelinePlaybackClock({
+    id: "clock.endpoint-overshoot",
+    durationMs: 1_000,
+    initialProgress: 0.8,
+    scheduler: fake.scheduler
+  });
+  clock.play({ direction: "forward", stopAt: 1 });
+  fake.step(450);
+  assert.equal(clock.getSnapshot().progress, 1);
+  assert.equal(clock.getSnapshot().settled, true);
+  assert.equal(clock.getStatus(), "paused");
+  assert.equal(fake.pending(), 0);
+});
+
 test("seek, pause, replay, and rewind share the same clock identity", () => {
   const fake = fakeScheduler();
   const clock = createKpReaderTimelinePlaybackClock({

@@ -1,0 +1,55 @@
+{
+  "id": "next-action.kp.focus-deck.navigation-refinement-v1",
+  "kind": "next-action",
+  "title": "Refine Focus Deck navigation and left step rail",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "Navigation refinement is complete at the required human visual checkpoint; shared extraction and the second caller remain unapproved.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/experiments/kinetic-figure-log-product/kinetic-figure-log-product-focus-deck.ts"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T02:25:36.932Z",
+      "notes": "TypeScript, Svelte, and domain type boundaries for the left-rail refinement."
+    },
+    {
+      "command": "npm run test:kinetic-figure-log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T02:25:38.160Z",
+      "notes": "Semantic focus continuity, beat navigation, and preserved route behavior."
+    },
+    {
+      "command": "npm run test:browser:kinetic-figure-log-product -- --grep Focus Deck --reporter=line",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T02:25:39.187Z",
+      "notes": "Desktop left rail, prominent navigation, playback separation, mobile disclosure, full-equation fit, direct links, and reduced motion."
+    },
+    {
+      "command": "npm run visual:kinetic-figure-log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T02:25:40.229Z",
+      "notes": "Desktop four-beat and phone full-equation visual checkpoint inspected."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/current-direction-authoring-ratchet.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T02:25:41.236Z",
+      "notes": "Canonical Focus Deck direction and preservation boundary."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Implemented and visually inspected the left Steps rail, prominent semantic navigation, separated replay controls, persistent product focus, and compact mobile disclosure."
+  }
+}

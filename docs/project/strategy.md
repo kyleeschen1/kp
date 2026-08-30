@@ -1,10 +1,16 @@
 # KP Strategy
 
-Last Updated: 2026-08-21
+Last Updated: 2026-08-29
 
 ## North Star
 
 > **Kinetic Press turns explanations into reusable mental machinery.**
+
+KP's current product emphasis is **domain-specific literacy**: accelerating a
+learner's ability to perceive, inspect, and manipulate the authentic formal
+representations of a field. This sharpens the north star rather than replacing
+it. The desired transfer is visible when temporary scaffolding recedes and the
+learner can read the real artifact differently.
 
 KP is a semantic medium for acquiring, manipulating, retaining, and reusing
 ways of seeing. Its verified semantic-to-interactive compiler makes those ways
@@ -34,6 +40,14 @@ seek/rewind, responsive execution, accessibility, hover, annotations, Cloze,
 and renderer-independent compilation. Bespoke motion planning is not itself a
 product thesis.
 
+Domain literacy is a product and selection lens, not an architectural reset or
+a math-only scope. The present semantic/runtime/renderer boundaries, governed
+authoring path, and exemplar-first promotion evidence remain authoritative.
+Equation, code, Graph2D, Graph3D, diagram, and prose representations keep their
+domain-owned semantics and renderers while contributing to the same outcome:
+expert structure becomes temporarily explicit, recoverable, and eventually
+transparent in skilled use.
+
 At the learner-facing level, KP is a salience-transmission and semantic-memory
 medium. Semantic authority establishes what is true; an **attentional beat**
 combines a meaningful state with a decision about whether prose, an object, a
@@ -45,10 +59,11 @@ visual treatments are proved through reviewed exemplars before promotion.
 
 KP is learner-facing in the long term. The first learner product should deepen
 understanding for people who have already encountered the notation rather than
-claim to be a complete curriculum. Before shaping that public product, the
-internal Animation Catalogue is the immediate pressure lab: it should make the
-executable library easy to search, play, tune, review, and compare across
-domains while revealing which abstractions and host seams are actually shared.
+claim to be a complete curriculum. The internal Animation Catalogue remains
+the source and pressure lab; the bounded Focus Deck experiment is now the
+immediate learner-facing projection question. It should reveal whether one
+approved executable figure can become a clear, portable, directly navigable
+artifact without duplicating the Article or animation source.
 
 A bounded **Proof Memory Loop** experiment now tests a sharper product wedge:
 KP helps a learner inspect, reconstruct, and retain a difficult symbolic
@@ -67,17 +82,20 @@ Chat discovers an explanation; KP crystallizes it; practice internalizes it.
 
 ## Current Strategic Stage
 
-KP is in **governed animation generation and capability coverage alongside
-external educator discovery**. The semantic/runtime engine is sufficiently
-capable, while the existence and shape of a valuable educator workflow remain
-unvalidated. Repository work now makes the executable library legible and
-authorable: natural-language intent or ordered source states should resolve to
-verified semantic operations and canonical motifs when supported, and to
-typed repair gaps when unsupported. Common symbolic transformations through
-Calculus BC are the accepted near-term coverage horizon, with maturity kept
-distinct from mere KaTeX paintability. Native LaTeX is the first reference
-input; matrix, code, Graph2D, and Graph3D remain domain-owned future frontends
-over the shared request, sequencing, hosting, URL, and review envelope.
+KP is in **bounded Focus Deck product discovery over the governed animation
+and publication foundation, alongside external educator discovery**. The
+semantic/runtime engine is sufficiently capable to test a concrete learner
+artifact: a compact, document-backed sequence of semantic attentional beats
+with executable Kinetic Figures. The first experiment projects an approved
+log-product asset into a Focus Deck without changing Article, animation,
+clock, renderer, or semantic authority. The Animation Catalogue and governed
+generation pipeline remain the source and production foundation.
+
+The deck is the initial format for testing the vision of interoperable,
+executable teaching artifacts, not a universal layout. Flashcards remain a
+sibling projection from the same semantic material, while scheduling,
+accounts, and SRS product work remain paused. Code, Graph2D, and Graph3D remain
+in the pressure sequence through their domain-owned semantics and renderers.
 
 This is not permission for undirected domain expansion, a universal generator,
 or a complete CAS. The product/quotient crossover, evidence-derived
@@ -95,8 +113,8 @@ transition. Root is the first family whose generated coverage is derived case
 by case from its typed vocabulary. Every new Direct symbolic family must now
 enumerate cases and maturity; older Direct families remain explicit migration
 debt. Additional motif families and domain frontends remain ordered gaps.
-Learner-facing layout, curriculum, SRS, broad tutoring, and public-site
-expansion remain paused.
+Broader learner-facing layout, curriculum, SRS scheduling, broad tutoring, and
+public-site expansion remain paused outside the bounded Focus Deck exemplar.
 
 The normal-matrix checkpoint validates searchable proof truth, semantic
 identity, direct state, prompts, native settlement, accessibility, and bounded
@@ -112,12 +130,13 @@ send a KP artifact because its inspectable, manipulable, directly retrievable
 semantic state preserves conceptual machinery better than their ordinary
 explanation, video link, diagram, or worksheet.
 
-The immediate repository question is which accepted family packet offers the
-strongest new semantic pressure. Capability readiness and case maturity now
-come from generated evidence rather than narrative memory; future Direct
-promotion must include a typed case ledger. Human visual review remains the
-promotion gate for subjective choreography. This is equation-domain breadth,
-not a universal graph, code, diagram, 3D, or curriculum compiler.
+The immediate repository question is whether the Focus Deck can make one
+approved Kinetic Figure clear, portable, searchable, and directly navigable
+without duplicating its source or runtime. Capability readiness and case
+maturity still come from generated evidence rather than narrative memory;
+future Direct promotion must include a typed case ledger. Human visual review
+remains the promotion gate. This is a bounded projection experiment, not a
+universal graph, code, diagram, 3D, curriculum, or slide compiler.
 
 The convergence phase should reduce historical representations, implicit
 registration, compatibility paths, terminology drift, and model retrieval

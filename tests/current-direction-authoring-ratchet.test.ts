@@ -2,29 +2,42 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-const completedContract =
-  "run-contract.kp.animation.animation-governance-epoch-v2-approved";
-const checkpointReview =
-  "2026-08-23-animation-governance-epoch-v2-derivative-checkpoint.md";
+const focusDeckDecision =
+  "2026-08-29-focus-deck-initial-portable-figure-priority.md";
+const focusDeckReview =
+  "2026-08-29-supply-tax-focus-deck-long-loop-proposal.md";
 
-test("current project direction holds the derivative governance checkpoint", async () => {
-  const [roadmap, activeThread, nextActions, entrypoint, checkpoint] = await Promise.all([
+test("current project direction holds the bounded Focus Deck checkpoint", async () => {
+  const [roadmap, activeThread, catalogueThread, nextActions, entrypoint, decision, review] =
+    await Promise.all([
     readFile("docs/project/roadmap.md", "utf8"),
+    readFile("docs/project/threads/focus-deck.md", "utf8"),
     readFile("docs/project/threads/animation-catalogue.md", "utf8"),
     readFile("docs/project/next-actions.md", "utf8"),
     readFile("docs/project/authoring/llm-generation-entrypoint.md", "utf8"),
-    readFile(`docs/project/reviews/${checkpointReview}`, "utf8")
+    readFile(`docs/project/decisions/${focusDeckDecision}`, "utf8"),
+    readFile(`docs/project/reviews/${focusDeckReview}`, "utf8")
   ]);
 
-  assert.match(roadmap, /threads\/animation-catalogue\.md/);
-  assert.match(roadmap, new RegExp(checkpointReview.replaceAll(".", "\\.")));
-  assert.match(roadmap, /TypeScript, Python, and Scheme/i);
-  assert.match(activeThread, /derivative\.power-rule-x-cubed/);
-  assert.match(activeThread, /stop before a second caller/i);
-  assert.match(nextActions, /d\/dx x\^3 -> 3x\^\(3-1\) -> 3x\^2/i);
-  assert.match(nextActions, /human review/i);
-  assert.match(checkpoint, new RegExp(completedContract.replaceAll(".", "\\.")));
-  assert.match(checkpoint, /no renderer, timing, path, glyph inference/i);
+  assert.match(roadmap, /Active Thread: `threads\/focus-deck\.md`/);
+  assert.match(roadmap, new RegExp(focusDeckDecision.replaceAll(".", "\\.")));
+  assert.match(roadmap, new RegExp(focusDeckReview.replaceAll(".", "\\.")));
+  assert.match(roadmap, /flashcard capability remains preserved/i);
+  assert.match(activeThread,
+    /animation\.algebra\.log-product\.equivalence-frame/);
+  assert.match(activeThread, /supply-tax Focus Deck/i);
+  assert.match(activeThread, /P_D = 12 - Q/);
+  assert.match(activeThread, /Flashcards remain a sibling projection/i);
+  assert.match(activeThread, /no new[\s\S]*animation clock/i);
+  assert.match(catalogueThread, /Status: supporting/i);
+  assert.match(catalogueThread, /indefinite-integration power-rule exemplar/i);
+  assert.match(nextActions, /approved supply-tax Focus Deck run/i);
+  assert.match(nextActions, /Stop before a shared component/i);
+  assert.match(nextActions, /flashcard specifications and projections remain supported/i);
+  assert.match(decision, /The Focus Deck is a projection/i);
+  assert.match(decision, /existing `kp\.article-deck\.v1` derivation/i);
+  assert.match(review, /graph geometry[\s\S]*economic truth/i);
+  assert.match(review, /human visual checkpoint/i);
   assert.match(entrypoint, /Minimal Successful Construction/);
   assert.match(entrypoint, /canonical-animation-public-api\.ts/);
   assert.match(entrypoint, /\{ request, authority \}/);

@@ -1,0 +1,110 @@
+{
+  "id": "next-action.kp.focus-deck.supply-tax-v1",
+  "kind": "next-action",
+  "title": "Build the supply-tax Focus Deck exemplar",
+  "status": "ready",
+  "domain": "economics",
+  "summary": "Build the approved exact-rational, Article-backed, eight-beat supply-tax Focus Deck and stop at human visual review before shared extraction or promotion.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-29-supply-tax-focus-deck-long-loop-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.focus-deck.navigation-refinement-v1"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:economics-supply-tax",
+    "npm run test:browser:economics-supply-tax",
+    "npm run visual:economics-supply-tax-focus-deck",
+    "npm run typecheck"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:kinetic-figure-log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T07:19:18.797Z",
+      "notes": "Log-product Focus Deck semantic, route, and preservation suite passed (17 tests)."
+    },
+    {
+      "command": "npm run test:kinetic-figure-delta-epsilon",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T07:19:19.771Z",
+      "notes": "Delta-epsilon Focus Deck semantic, exact-model, route, and preservation suite passed (8 tests)."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T07:19:20.763Z",
+      "notes": "Application, node, test, Svelte, and domain typechecks passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run test:browser:kinetic-figure-log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T07:19:21.829Z",
+      "notes": "Chromium baseline passed all 11 Focus Deck, local, scroll, phone, direct-link, and visual-checkpoint cases."
+    },
+    {
+      "command": "npm run test:browser:kinetic-figure-delta-epsilon",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T07:19:22.858Z",
+      "notes": "Chromium baseline passed all four semantic navigation, direct-link, searchability, phone, and visual-checkpoint cases when run sequentially on the shared preview port."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/current-direction-authoring-ratchet.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T07:19:23.861Z",
+      "notes": "Current direction ratchet passed with the approved supply-tax loop active and prior animation work preserved."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T07:19:24.838Z",
+      "notes": "Workspace graph valid before baseline slice completion."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Baseline reconciled and verified: approved Focus Deck variants, routes, clock endpoint behavior, project direction, and control records are isolated for commit; unrelated worktree edits remain untouched."
+  },
+  "expectedLearning": [
+    "Whether discrete semantic snaps make a multifaceted graph-and-welfare change easier to compare, replay, and inspect than continuous scrollytelling."
+  ],
+  "allowedWork": [
+    "One exact-rational, Article-backed, eight-beat native SVG and KaTeX supply-tax Focus Deck using the existing reader clock."
+  ],
+  "disallowedWork": [
+    "Shared Focus Deck extraction, generalized tax or Graph2D grammar, custom search, duplicate prose, controls, unrelated exemplar changes, or promotion before human review."
+  ],
+  "criteria": [
+    {
+      "id": "exact-market-and-welfare-truth",
+      "weight": "high"
+    },
+    {
+      "id": "searchable-single-prose-source",
+      "weight": "medium"
+    },
+    {
+      "id": "deterministic-direct-seek-and-replay",
+      "weight": "medium"
+    },
+    {
+      "id": "human-visual-checkpoint",
+      "weight": "high"
+    }
+  ]
+}

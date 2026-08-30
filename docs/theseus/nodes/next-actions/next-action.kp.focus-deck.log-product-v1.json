@@ -1,0 +1,48 @@
+{
+  "id": "next-action.kp.focus-deck.log-product-v1",
+  "kind": "next-action",
+  "title": "Build the full-equation log-product Focus Deck exemplar",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "Implementation objective is complete at the required human visual checkpoint.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/experiments/kinetic-figure-log-product/kinetic-figure-log-product-focus-deck.ts"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T02:02:52.758Z",
+      "notes": "Type and Svelte/domain conformance for the bounded Focus Deck projection."
+    },
+    {
+      "command": "npm run test:kinetic-figure-log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T02:02:53.920Z",
+      "notes": "Semantic beat, navigation, route, and preservation tests."
+    },
+    {
+      "command": "npm run test:browser:kinetic-figure-log-product -- --grep Focus Deck --reporter=line",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T02:02:54.945Z",
+      "notes": "Whole-equation lifecycle, direct links, reduced motion, searchability, and phone-width browser checks."
+    },
+    {
+      "command": "npm run visual:kinetic-figure-log-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T02:02:55.910Z",
+      "notes": "Scoped four-beat visual capture inspected at the exemplar checkpoint."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Implemented the bounded whole-equation Focus Deck projection and stopped at its human visual checkpoint; no second caller or shared host was added."
+  }
+}

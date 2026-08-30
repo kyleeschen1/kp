@@ -90,6 +90,13 @@ function mountSurface(
     kpLogProductEquivalenceFrameOccurrenceIds.source;
   frozenSource.innerHTML =
     kpCanonicalLogProductNativeEndpoints[0].nativeHtmlAndMathml;
+  // The retained witness is real instructional context, not decorative paint.
+  // Bind its semantic identities so projection hosts can focus a subtree
+  // without reaching through KaTeX's incidental DOM structure.
+  bindKpLogProductNativeEndpointOwnership({
+    root: frozenSource,
+    endpoint: kpCanonicalLogProductNativeEndpoints[0]
+  });
   const relation = document.createElement("div");
   relation.className = "kp-log-product-equivalence-stage__relation";
   relation.dataset["kpStateRetentionOccurrenceId"] =

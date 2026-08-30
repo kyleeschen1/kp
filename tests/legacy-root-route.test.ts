@@ -14,6 +14,7 @@ test("legacy root classifies every supported route before its fallback", () => {
     "lisp-function-application",
     "economics-demand-shift",
     "kinetic-figure-log-product",
+    "kinetic-figure-delta-epsilon",
     "concept-room",
     "animation-coverage",
     "animation-catalogue",
@@ -27,6 +28,8 @@ test("legacy root classifies every supported route before its fallback", () => {
     "economics-demand-shift");
   assert.equal(select("/experiments/kinetic-figure/log-product/"),
     "kinetic-figure-log-product");
+  assert.equal(select("/experiments/kinetic-figure/delta-epsilon/"),
+    "kinetic-figure-delta-epsilon");
   assert.equal(select("/concepts/mathematics/linear-equations/unknown"),
     "concept-room");
   assert.equal(select("/", "?view=coverage"), "animation-coverage");

@@ -1,0 +1,161 @@
+{
+  "id": "run-contract.kp.supply-tax-focus-deck-v2",
+  "kind": "run-contract",
+  "title": "Supply-tax Focus Deck",
+  "status": "superseded",
+  "summary": "Superseded before execution by v3 so the approved contract targets the bounded ready supply-tax next action; no slice began under v2.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-08-29-supply-tax-focus-deck-long-loop-proposal.md",
+      "summary": "User-approved objective, canonical boundary, exact 21-slice scope, verification, rollback, promotion gate, and stop conditions."
+    }
+  ],
+  "verification": [
+    "npm run test:economics-supply-tax",
+    "npm run test:browser:economics-supply-tax",
+    "npm run visual:economics-supply-tax-focus-deck",
+    "npm run test:kp-article-v1",
+    "npm run test:kinetic-figure-log-product",
+    "npm run test:kinetic-figure-delta-epsilon",
+    "npm run typecheck",
+    "npm run build",
+    "npm run verify:impact",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Exact-rational zero-to-positive per-unit-tax equilibrium and welfare truth.",
+    "One bounded semantic asset, sampled frame, eight-beat score, Article, vignette, native SVG and KaTeX renderer, route, and Focus Deck projection.",
+    "Existing-clock adjacent, reverse, replay, rapid-repeat, distant-seek, URL, native-find, reduced-motion, accessibility, responsive, and scoped visual evidence."
+  ],
+  "disallowedWork": [
+    "Destructive changes to the existing demand-shift lesson or model, shared Focus Deck extraction, or generalized Graph2D, tax, welfare, and surplus grammars.",
+    "Positive-tax-to-higher-tax scenarios, nonlinear curves, elasticity or incidence controls, sliders, calculators, custom search, duplicate hidden prose, or a deck-local clock.",
+    "Changes to log-product, delta-epsilon, integration, gallery, flashcard, Graph3D, or code exemplars beyond bounded preservation tests; broad cross-browser promotion before review."
+  ],
+  "goal": "Build one document-backed eight-beat Focus Deck that explains an exact per-unit tax, welfare redistribution, and deadweight loss through semantic-snap navigation over the existing continuous clock.",
+  "target": "workflow.kp.delivery",
+  "runMode": "run",
+  "maxSlices": 21,
+  "commitCadence": "Commit every independently reversible verified slice with exact path staging and completed Theseus evidence; never stage unrelated dirty files.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if exact market-clearing or welfare identities fail or graph geometry must become economic truth.",
+    "Stop if original supply cannot remain marginal-cost evidence, direct seek must replay history, rapid navigation creates half-states, or a second clock is required.",
+    "Stop if native find requires duplicate hidden prose or custom search interception.",
+    "Stop if work requires shared Focus Deck extraction, destructive demand-shift migration, unrelated dirty-file ownership, or any disallowed expansion.",
+    "Stop at slice s21 for explicit human visual review before promotion or generalization."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Baseline",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Tax-input",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Taxed-equilibrium",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Welfare-truth",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Semantic-asset",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Sampled-frame",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Animation-asset",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Pedagogical-score",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Article-source",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Searchable-publication",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Route-and-host",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Baseline-SVG",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Tax-transit",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Taxed-equilibrium-view",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Welfare-regions",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Scene-salience",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Adjacent-navigation",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Navigation-compression",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Native-find",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Responsive-checkpoint-surface",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Boundary-and-visual-checkpoint",
+      "status": "planned"
+    }
+  ]
+}

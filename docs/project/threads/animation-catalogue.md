@@ -1,15 +1,18 @@
 # Animation Catalogue Thread
 
-Status: active
-Last Updated: 2026-08-25
-Current Next Action: review the bounded indefinite-integration power-rule
-exemplar at its mandatory human checkpoint. It now applies the candidate
-Rule Application grammar `match -> bind -> instantiate -> rewrite -> reduce`:
+Status: supporting; current visual checkpoint preserved
+Last Updated: 2026-08-29
+Current Next Action: no active Catalogue slice. Preserve the bounded
+indefinite-integration power-rule exemplar at its current visual checkpoint
+while `focus-deck.md` owns the active product experiment. The integration
+candidate applies the Rule Application grammar
+`match -> bind -> instantiate -> rewrite -> reduce`:
 the subject remains stationary through match and binding, the canonical native
 expanded target is the single prospective and live fraction owner, and the two
 `2 + 1 -> 3` computations retain their certified ink-knot choreography. Do not
 freeze this treatment, add a second caller, or promote shared infrastructure
-before approval. See
+before a separately approved return to this thread. See
+`focus-deck.md`,
 `../decisions/2026-08-25-rule-application-visual-grammar.md`,
 `../decisions/2026-08-24-return-to-equation-family-breadth.md` and
 `../reviews/2026-08-24-equation-family-return-next-step-review.md`, plus

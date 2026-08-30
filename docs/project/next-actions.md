@@ -1,24 +1,31 @@
 # KP Next Actions
 
-Last Updated: 2026-08-23
+Last Updated: 2026-08-30
 
 These are human-readable candidates. Theseus stores the executable versions
 with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
 
-The animation-governance v2 epoch is complete at its final mandatory human
-checkpoint. There is one active next action:
+The governed animation and publication foundation is preserved. There is one
+active next action:
 
-1. Visually review the flat-2D differentiation exemplar
-   `d/dx x^3 -> 3x^(3-1) -> 3x^2` at
-   `/?artifact=animation.generated.calculus.derivative.power-rule-x-cubed&playhead=0`.
-   Stop before adding a second caller or promoting a shared differentiation
-   family.
+1. Execute the approved supply-tax Focus Deck run at
+   `/experiments/kinetic-figure/supply-tax/`. Build exact equilibrium and
+   welfare truth, eight semantic beats, a searchable Article projection,
+   deterministic adjacent and distant navigation, native find, and a scoped
+   responsive visual checkpoint. Stop before a shared component, generalized
+   tax or Graph2D grammar, automatic deck generation, or flashcard UI.
 
 Everything else is frozen reference or parked horizon:
 
-- the catalogue remains an internal laboratory and inventory;
+- the catalogue remains the supporting internal laboratory and inventory;
+- the current indefinite-integration Rule Application treatment remains
+  preserved at its visual checkpoint without promotion;
+- the approved differentiation exemplar and its renderer-owned operator-scope
+  option remain preserved evidence;
+- flashcard specifications and projections remain supported, while SRS
+  scheduling and learner-account work remain paused;
 - the finite-sum/product binder tranche is complete and `Direct`;
 - the eigenvector attentional-surface work remains a mixed, paused experiment;
 - TypeScript and Python expose only the bounded extract-helper operation;
@@ -26,9 +33,10 @@ Everything else is frozen reference or parked horizon:
   typed gaps. Scheme, algebra, and fraction composition are approved evidence
   rather than active expansion;
 - economics variants and the normal-matrix route are preserved experiments;
-- layout comparison, Graph3D, broader linear algebra/SICP, advanced CodeMirror,
-  LLM tutoring, SRS, Public Web, Public Editor, accounts, and curriculum work
-  are not in the active queue; and
+- layout comparison beyond the bounded Focus Deck callers, Graph3D, broader
+  linear algebra/SICP, advanced CodeMirror, LLM tutoring, SRS scheduling,
+  Public Web, Public Editor, accounts, and curriculum work are not in the
+  active queue; and
 - further compatibility or architecture work requires a named measured
   blocker rather than another broad cleanup pass.
 

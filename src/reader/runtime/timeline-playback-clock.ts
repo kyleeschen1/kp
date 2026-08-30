@@ -84,11 +84,14 @@ export function createKpReaderTimelinePlaybackClock(input: {
     previousNowMs = nowMs;
     const delta = elapsedMs / input.durationMs *
       (direction === "forward" ? 1 : -1);
-    const candidate = boundedProgress(snapshot.progress + delta);
+    const candidate = snapshot.progress + delta;
     const reachedStop = direction === "forward"
       ? candidate >= stopAt
       : candidate <= stopAt;
-    const progress = reachedStop ? stopAt : candidate;
+    // A normal frame interval can cross an exact endpoint. Test the authored
+    // stop before validating an intermediate sample so endpoint overshoot
+    // settles at the stop instead of being mistaken for invalid caller input.
+    const progress = reachedStop ? stopAt : boundedProgress(candidate);
     sequence += 1;
     if (reachedStop) status = "paused";
     publish(createKpReaderClockSample({

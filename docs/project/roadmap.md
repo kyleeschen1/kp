@@ -1,9 +1,10 @@
 # KP Roadmap
 
-Last Updated: 2026-08-25
+Last Updated: 2026-08-30
 Status: active
-Active Thread: `threads/animation-catalogue.md`
+Active Thread: `threads/focus-deck.md`
 Supporting Threads:
+- `threads/animation-catalogue.md`
 - `threads/generative-animation-compiler.md`
 - `threads/architecture-convergence.md`
 - `threads/explanation-attention.md`
@@ -23,6 +24,16 @@ nor its evidence. The ledger remains retrievable at
 ## Executive Direction
 
 > **Kinetic Press turns explanations into reusable mental machinery.**
+
+The current product emphasis is domain-specific literacy: help learners see,
+inspect, and manipulate the expert structure encoded by authentic formal
+representations, then let temporary scaffolding recede. This emphasis guides
+product differentiation and exemplar review; it does not replace the current
+architecture, reopen completed convergence, or create a math-only queue.
+Graph2D, Graph3D, code, diagrams, prose, and equations remain in the accepted
+cross-domain envelope through their existing domain-owned frontends and
+renderers. See
+`decisions/2026-08-26-domain-literacy-emphasis-with-architecture-continuity.md`.
 
 KP is a semantic medium for acquiring, manipulating, retaining, and reusing
 ways of seeing. The verified semantic-to-interactive compiler is the machinery
@@ -46,9 +57,12 @@ budgets, and a native catalogue.
 
 Educator product discovery remains the next product-validation gate and is
 being carried forward outside this Codex thread. The repository's active
-working lane has returned to the internal Animation Catalogue: build durable
-semantic animation capabilities that remain useful under any later product
-layout. This does not validate demand or reopen learner-facing layout work.
+working lane is now one bounded Focus Deck experiment: project an existing
+approved Kinetic Figure into a compact, directly navigable, document-backed
+format without changing its semantic or animation authority. The internal
+Animation Catalogue remains the source and pressure lab rather than the active
+product surface. This does not by itself validate demand or select a universal
+learner layout.
 
 The catalogue contains a mixture of teaching animations, fixtures, and
 diagnostic proofs. The supported equation domain has completed its narrow-core
@@ -77,14 +91,16 @@ and `reviews/2026-08-23-animation-governance-epoch-v2-derivative-checkpoint.md`.
 The bounded cross-domain generation gallery is complete. Its governed
 five-case packet, equation, code, Graph2D, Graph3D, light-theme, typed-gap,
 default-off Catalogue collection, and production-envelope evidence passed
-human review and release closeout on 2026-08-24. The active lane is now one
-reversible indefinite-integration power-rule exemplar, already approved for
-execution. Inequality reversal remains the strongest non-calculus alternative.
-The exemplar now pressure-tests the candidate Rule Application grammar
+human review and release closeout on 2026-08-24. The indefinite-integration
+power-rule exemplar and its candidate Rule Application grammar are preserved
+at their current visual checkpoint:
 `match -> bind -> instantiate -> rewrite -> reduce`: the subject remains fixed
 through binding, one canonical native RHS owns the fraction from instantiation
 through settlement, and existing ink knots retain reduction authority. This is
-an exemplar checkpoint, not a shared-family promotion. See
+an exemplar checkpoint, not a shared-family promotion or the active lane. The
+active lane is the first Focus Deck projection, with flashcards preserved as a
+sibling future projection. See
+`decisions/2026-08-29-focus-deck-initial-portable-figure-priority.md`,
 `decisions/2026-08-25-rule-application-visual-grammar.md`.
 See
 `decisions/2026-08-24-return-to-equation-family-breadth.md` and
@@ -313,7 +329,7 @@ Only this repository sequence is active:
    stable URLs, visible typed gap, default-off Catalogue collection, and broad
    release evidence are durable production infrastructure. See
    `reviews/2026-08-24-cross-domain-gallery-infrastructure-closeout.md`.
-39. **Return to equation-family breadth:** active at human checkpoint. Build
+39. **Return to equation-family breadth:** preserved at visual checkpoint. Build
    no broad framework yet. The governed indefinite-integration power-rule
    exemplar now implements one reversible candidate Rule Application grammar:
    match, bind, instantiate, rewrite, then delegate reduction to the existing
@@ -323,9 +339,20 @@ Only this repository sequence is active:
    alternative. See
    `decisions/2026-08-25-rule-application-visual-grammar.md` and
    `reviews/2026-08-24-equation-family-return-next-step-review.md`.
+40. **Focus Deck pressure exemplar:** active under an approved 21-slice run.
+   The approved log-product and delta-epsilon decks remain preserved evidence.
+   Build one exact-rational, Article-backed supply-tax deck with eight semantic
+   beats, native SVG and KaTeX, the existing reader clock, deterministic direct
+   seek, and native-find restoration. Stop at human visual review before a
+   shared component, automatic deck generation, or generalized tax, welfare,
+   Graph2D, or Focus Deck grammar. See
+   `decisions/2026-08-29-focus-deck-initial-portable-figure-priority.md` and
+   `reviews/2026-08-29-supply-tax-focus-deck-long-loop-proposal.md`.
 
 Educator discovery continues as an external product-research track. Public
-layout, curriculum, SRS, LLM tutoring, and application expansion remain frozen.
+curriculum, SRS scheduling, broad LLM tutoring, and application expansion
+remain frozen. Focus Deck is the one bounded learner-facing layout exception;
+flashcard capability remains preserved but is not the active product slice.
 The catalogue backlog and selection rationale are recorded in
 `reviews/2026-08-14-animation-catalogue-backlog-next-step-review.md`.
 
@@ -341,8 +368,8 @@ The catalogue backlog and selection rationale are recorded in
 | Article and publication | `kp.article.v1` frozen; economics and algebra are real callers | Do not reopen grammar without demonstrated friction. |
 | Authoring | Whole-file CodeMirror/Vim editing and no-reload saving work | Defer advanced tooling until a real session exposes a need. |
 | Catalogue | One persistent lazy host spans equation, graph, code, and 3D without iframes; a default-off curated cross-domain collection exposes four executable cases and one honest typed gap | Preserve it as the pressure lab and conformance surface; keep gallery provenance opt-in so it does not replace the ordinary asset-first Catalogue. |
-| Layout | Many useful experiments; the refined eigenvector surface is better but remains a mixed proof | Freeze layout development until observed educator use identifies a concrete failure worth fixing. |
-| Public product | Engine and routes are research-ready; educator demand is unvalidated | Continue educator discovery outside the active repository lane; do not infer validation from catalogue growth. |
+| Layout | Log-product and delta-epsilon are preserved Focus Deck evidence; the supply-tax caller is the active bounded pressure question | Test discrete semantic snaps against one multifaceted graph-and-welfare change; stop for review before sharing or generalizing the shell. |
+| Public product | Engine and routes are research-ready; educator demand is unvalidated | Test whether a compact document-backed Focus Deck remains useful under real representational complexity while educator discovery continues; do not infer validation from the exemplar. |
 | LLM generation | One canonical planner vocabulary, deterministic verified-source binders, typed recovery, governed fraction operations, a pinned live-model corpus, and the new mixed carrier/fusion bounded benchmark are stable-green | Preserve deterministic narrowing and code-owned evidence; extend discovery one reviewed family at a time rather than giving the model presentation authority. |
 
 ## Active Tightening Phase

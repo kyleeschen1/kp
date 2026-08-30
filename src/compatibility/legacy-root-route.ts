@@ -18,6 +18,7 @@ export const kpLegacyRootRouteKinds = [
   "lisp-function-application",
   "economics-demand-shift",
   "kinetic-figure-log-product",
+  "kinetic-figure-delta-epsilon",
   "concept-room",
   "animation-coverage",
   "animation-catalogue",
@@ -50,6 +51,9 @@ export function selectKpLegacyRootRoute(input: {
     : `${input.pathname}/`;
   if (normalizedPathname === "/experiments/kinetic-figure/log-product/") {
     return "kinetic-figure-log-product";
+  }
+  if (normalizedPathname === "/experiments/kinetic-figure/delta-epsilon/") {
+    return "kinetic-figure-delta-epsilon";
   }
   if (input.pathname === "/concepts" ||
       input.pathname.startsWith("/concepts/")) {
