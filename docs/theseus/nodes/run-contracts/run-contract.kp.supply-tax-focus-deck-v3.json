@@ -84,7 +84,8 @@
     {
       "id": "s06",
       "title": "Sampled-frame",
-      "status": "planned"
+      "summary": "Added a pure exact sampled frame over one normalized playhead; deterministic endpoints, intermediate market truth, rewind, direct seek, and persistent original supply pass without a scheduler or DOM state.",
+      "status": "complete"
     },
     {
       "id": "s07",

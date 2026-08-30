@@ -25,6 +25,10 @@
     {
       "kind": "file",
       "path": "domains/economics/per-unit-tax-welfare-asset.ts"
+    },
+    {
+      "kind": "file",
+      "path": "domains/economics/per-unit-tax-welfare-frame.ts"
     }
   ],
   "dependsOn": {
@@ -146,6 +150,20 @@
       "scope": "focused",
       "checkedAt": "2026-08-30T07:30:52.091Z",
       "notes": "Semantic asset types remain domain-owned and geometry-free."
+    },
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T07:33:13.196Z",
+      "notes": "Seventeen exact tests pass; frame sampling proves endpoints, midpoint, original-supply retention, reverse equality, direct-seek equality, and bounded progress."
+    },
+    {
+      "command": "npm run typecheck:domains",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T07:33:14.173Z",
+      "notes": "Pure sampled-frame projection passes the isolated economics domain boundary."
     }
   ],
   "progress": {
