@@ -47,5 +47,8 @@ test("static host exposes eight semantic scene containers and one Article source
 
   assert.match(entry, /scenes\.map\(\(scene, index\) => renderScene/u);
   assert.match(entry, /hidden="until-found"/u);
+  assert.match(entry, /addEventListener\("beforematch"/u);
+  assert.match(entry, /select\(scene, \{ animate: false, history: "replace" \}\)/u);
+  assert.doesNotMatch(entry, /(?:metaKey|ctrlKey|keydown|window\.find|searchIndex)/u);
   assert.doesNotMatch(entry, /This first state is the reference|The accounting now closes/u);
 });

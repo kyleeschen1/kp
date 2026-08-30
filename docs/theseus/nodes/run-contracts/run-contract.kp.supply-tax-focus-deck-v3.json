@@ -162,7 +162,8 @@
     {
       "id": "s19",
       "title": "Native-find",
-      "status": "planned"
+      "summary": "Connected native hidden-until-found discovery to direct semantic beat selection through beforematch; preserved one searchable Article prose source without Cmd+F interception, custom search, or duplicate transcripts.",
+      "status": "complete"
     },
     {
       "id": "s20",

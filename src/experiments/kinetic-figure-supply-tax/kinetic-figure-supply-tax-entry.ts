@@ -234,6 +234,17 @@ export function mountKpSupplyTaxKineticFigure(input: {
     const scene = scenes.find((candidate) => candidate.beat.id === beat.id)!;
     select(scene, { animate: false, history: "none" });
   };
+  const handleBeforeMatch = (event: Event): void => {
+    const section = event.target instanceof Element
+      ? event.target.closest<HTMLElement>("[data-kp-focus-deck-beat]")
+      : null;
+    const slug = section?.dataset["kpFocusDeckBeat"];
+    const scene = scenes.find((candidate) => candidate.beat.slug === slug);
+    if (scene === undefined) return;
+    // Native find owns discovery and scrolling. The deck only restores the
+    // matched semantic state, directly and without replaying prior beats.
+    select(scene, { animate: false, history: "replace" });
+  };
 
   const unsubscribe = clock.subscribe((sample) => {
     projectFrame(sample.progress);
@@ -247,11 +258,13 @@ export function mountKpSupplyTaxKineticFigure(input: {
   projectScene(active);
   projectFrame(active.beat.settledFrame === "untaxed" ? 0 : 1);
   deck.addEventListener("click", handleClick);
+  deck.addEventListener("beforematch", handleBeforeMatch, true);
   window.addEventListener("popstate", handleLocation);
   window.addEventListener("hashchange", handleLocation);
   return Object.freeze({
     dispose: () => {
       deck.removeEventListener("click", handleClick);
+      deck.removeEventListener("beforematch", handleBeforeMatch, true);
       window.removeEventListener("popstate", handleLocation);
       window.removeEventListener("hashchange", handleLocation);
       unsubscribe();

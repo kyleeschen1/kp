@@ -389,6 +389,20 @@
       "scope": "standard",
       "checkedAt": "2026-08-30T08:32:35.616Z",
       "notes": "URL restoration, history navigation, rapid coalescing, and navigation-disposition policy pass application, test, Svelte, and domain type boundaries."
+    },
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T08:34:35.927Z",
+      "notes": "Fifty-five tests pass; inactive Article sections remain hidden-until-found, beforematch selects and directly seeks the semantic beat, and no keyboard interception or custom search index exists."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-30T08:34:36.990Z",
+      "notes": "Native beforematch activation and listener cleanup pass application, test, Svelte, and domain type boundaries."
     }
   ],
   "progress": {
