@@ -156,8 +156,13 @@ export function renderKpSupplyTaxWelfareLedger(
   const producerAfter = requiredRegion(semantics, "producer-surplus", "taxed");
   const revenue = requiredRegion(semantics, "government-revenue", "taxed");
   const loss = requiredRegion(semantics, "deadweight-loss", "taxed");
+  const tax = semantics.model.input.tax;
   return `<aside class="kp-supply-tax-ledger" aria-label="Exact welfare accounting" data-kp-supply-tax-ledger>
     <h2>Welfare</h2>
+    <div class="kp-supply-tax-ledger__tax" data-kp-supply-tax-entity="${escapeAttribute(tax.id)}">
+      <span>Per-unit tax</span>
+      ${renderLatexToHtml(`t=${exactDtoLatex(tax.finalAmount)}`, { displayMode: false })}
+    </div>
     <div class="kp-supply-tax-ledger__columns" aria-hidden="true"><span>Before</span><span>After</span></div>
     ${ledgerRow("Consumer surplus", consumerBefore, consumerAfter)}
     ${ledgerRow("Producer surplus", producerBefore, producerAfter)}
@@ -307,7 +312,7 @@ function renderKpSupplyTaxSvg(
       <line class="kp-supply-tax-graph__guide" x1="${format(plotLeft)}" y1="${format(equilibrium.y)}" x2="${format(equilibrium.x)}" y2="${format(equilibrium.y)}"/>
       <line class="kp-supply-tax-graph__guide" x1="${format(equilibrium.x)}" y1="${format(equilibrium.y)}" x2="${format(equilibrium.x)}" y2="${format(plotBottom)}"/>
       <circle cx="${format(equilibrium.x)}" cy="${format(equilibrium.y)}" r="4"/>
-      ${mathLabel("E_0=(5,7)", equilibrium.x + 8, equilibrium.y - 34, 104, 32, "untaxed-equilibrium")}
+      ${mathLabel("E_0=(5,7)", equilibrium.x + 8, equilibrium.y - 34, 104, 32, "untaxed-equilibrium", requiredPriceId(semantics, "untaxed-market"))}
     </g>
     ${includeTransitLayer ? `<g class="kp-supply-tax-graph__taxed-market" data-kp-supply-tax-entity="${escapeAttribute(taxed.id)}" data-kp-presence="false" style="opacity:0">
       <line class="kp-supply-tax-graph__guide" data-kp-supply-tax-market-mark="consumer-price-guide" x1="${format(plotLeft)}" y1="${format(taxedEquilibrium.y)}" x2="${format(taxedEquilibrium.x)}" y2="${format(taxedEquilibrium.y)}"/>
@@ -322,8 +327,8 @@ function renderKpSupplyTaxSvg(
       <circle data-kp-supply-tax-market-mark="taxed-equilibrium-point" cx="${format(taxedEquilibrium.x)}" cy="${format(taxedEquilibrium.y)}" r="4"/>
       <circle class="kp-supply-tax-graph__producer-point" data-kp-supply-tax-market-mark="producer-point" cx="${format(taxedProducerPoint.x)}" cy="${format(taxedProducerPoint.y)}" r="3.25"/>
       ${mathLabel("E_t", taxedEquilibrium.x + 8, taxedEquilibrium.y - 30, 44, 30, "taxed-equilibrium")}
-      ${mathLabel("P_c=9", plotLeft - 59, taxedEquilibrium.y - 14, 58, 28, "consumer-price")}
-      ${mathLabel("P_p=5", plotLeft - 59, taxedProducerPoint.y - 14, 58, 28, "producer-price")}
+      ${mathLabel("P_c=9", plotLeft - 59, taxedEquilibrium.y - 14, 58, 28, "consumer-price", requiredPriceId(semantics, "consumer"))}
+      ${mathLabel("P_p=5", plotLeft - 59, taxedProducerPoint.y - 14, 58, 28, "producer-price", requiredPriceId(semantics, "producer"))}
       ${mathLabel("Q_t=3", taxedEquilibrium.x - 28, plotBottom + 8, 62, 28, "taxed-quantity")}
     </g>` : ""}
   </svg>`;
@@ -353,6 +358,16 @@ function requiredRegion(
     candidate.role === role && candidate.phase === phase);
   if (region === undefined) throw new Error(`Missing ${phase} ${role} region.`);
   return region;
+}
+
+function requiredPriceId(
+  semantics: KpPerUnitTaxWelfareAssetV1,
+  role: KpPerUnitTaxWelfareAssetV1["entities"]["prices"][number]["role"]
+): string {
+  const price = semantics.entities.prices.find((candidate) =>
+    candidate.role === role);
+  if (price === undefined) throw new Error(`Missing ${role} price entity.`);
+  return price.id;
 }
 
 function ledgerRow(
@@ -543,8 +558,10 @@ function ticks(minimum: number, maximum: number, step: number): readonly number[
   return Object.freeze(result);
 }
 
-function mathLabel(latex: string, x: number, y: number, width: number, height: number, role: string): string {
-  return `<foreignObject class="kp-supply-tax-graph__math" data-kp-supply-tax-math-label="${escapeAttribute(role)}" x="${format(x)}" y="${format(y)}" width="${width}" height="${height}" aria-hidden="true"><div xmlns="http://www.w3.org/1999/xhtml">${renderLatexToHtml(latex, { displayMode: false })}</div></foreignObject>`;
+function mathLabel(latex: string, x: number, y: number, width: number, height: number, role: string, entityId?: string): string {
+  const entity = entityId === undefined ? "" :
+    ` data-kp-supply-tax-entity="${escapeAttribute(entityId)}"`;
+  return `<foreignObject class="kp-supply-tax-graph__math" data-kp-supply-tax-math-label="${escapeAttribute(role)}"${entity} x="${format(x)}" y="${format(y)}" width="${width}" height="${height}" aria-hidden="true"><div xmlns="http://www.w3.org/1999/xhtml">${renderLatexToHtml(latex, { displayMode: false })}</div></foreignObject>`;
 }
 
 function format(value: number): string {

@@ -347,6 +347,20 @@
       "scope": "standard",
       "checkedAt": "2026-08-30T08:20:20.800Z",
       "notes": "Welfare region, ledger, route, application, Svelte with zero diagnostics, and domain projects typecheck."
+    },
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T08:25:03.218Z",
+      "notes": "Fifty-two tests pass; all eight beats resolve deterministic reference-closed scenes with distinct target, context, historical trace, and presence semantics."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-30T08:25:04.262Z",
+      "notes": "Shared semantic salience resolver use and SVG, KaTeX, ledger DOM projection pass all application, test, Svelte, and domain type boundaries."
     }
   ],
   "progress": {

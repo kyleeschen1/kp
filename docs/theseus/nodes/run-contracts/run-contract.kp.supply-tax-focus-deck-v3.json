@@ -144,7 +144,8 @@
     {
       "id": "s16",
       "title": "Scene-salience",
-      "status": "planned"
+      "summary": "Projected score attention through KP semantic salience state into one scene-level target/context/trace/presence model; adapters use non-layout paint emphasis and keep contextual text and math fully legible.",
+      "status": "complete"
     },
     {
       "id": "s17",

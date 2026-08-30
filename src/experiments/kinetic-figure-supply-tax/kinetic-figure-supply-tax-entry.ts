@@ -9,6 +9,8 @@ import importLockValue from
 
 import type { KpArticleImportLock } from
   "../../article/kp-article-import-lock.ts";
+import { createKpEconomicsSupplyTaxAnimationAsset } from
+  "../../animation/economics-supply-tax-asset.ts";
 import { compileKpArticleMarkdownFragmentHtml } from
   "../../article/kp-article-static-html.ts";
 import { applyKpSemanticVisualDomTheme } from
@@ -17,6 +19,10 @@ import {
   compileKpSupplyTaxArticle,
   type KpSupplyTaxArticleDeckSceneV1
 } from "./kinetic-figure-supply-tax-article.ts";
+import {
+  projectKpSupplyTaxScene,
+  projectKpSupplyTaxSceneDom
+} from "./kinetic-figure-supply-tax-scene.ts";
 import {
   renderKpSupplyTaxInteractiveSvg,
   renderKpSupplyTaxWelfareLedger
@@ -42,6 +48,18 @@ export function mountKpSupplyTaxKineticFigure(input: {
     lock: importLock
   });
   input.root.innerHTML = renderPage(compiled.deck.scenes);
+  const authority = createKpEconomicsSupplyTaxAnimationAsset();
+  const deck = requiredElement<HTMLElement>(
+    input.root,
+    "[data-kp-supply-tax-focus-deck]"
+  );
+  projectKpSupplyTaxSceneDom({
+    root: deck,
+    scene: projectKpSupplyTaxScene({
+      authority,
+      beat: compiled.deck.scenes[0]!.beat
+    })
+  });
   return Object.freeze({ dispose: () => undefined });
 }
 
@@ -118,4 +136,13 @@ function escapeHtml(value: string): string {
 
 function escapeAttribute(value: string): string {
   return escapeHtml(value);
+}
+
+function requiredElement<T extends Element>(
+  root: ParentNode,
+  selector: string
+): T {
+  const element = root.querySelector<T>(selector);
+  if (element === null) throw new Error(`Missing supply-tax element ${selector}.`);
+  return element;
 }

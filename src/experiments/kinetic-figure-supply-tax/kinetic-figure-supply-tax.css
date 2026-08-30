@@ -122,11 +122,11 @@ button { font: inherit; }
   stroke: color-mix(in srgb, var(--kp-st-ink) 62%, var(--kp-st-paper));
   stroke-width: 1.5;
 }
-.kp-supply-tax-graph__region { opacity: 0; stroke-width: 1.25; }
-.kp-supply-tax-graph__region--consumer-surplus { fill: #8f493f; stroke: #8f493f; }
-.kp-supply-tax-graph__region--producer-surplus { fill: #37666a; stroke: #37666a; }
-.kp-supply-tax-graph__region--government-revenue { fill: var(--kp-st-header); stroke: var(--kp-st-header); }
-.kp-supply-tax-graph__region--deadweight-loss { fill: #8f493f; stroke: #8f493f; stroke-dasharray: 3 2; }
+.kp-supply-tax-graph__region { visibility: hidden; stroke-width: 1.25; }
+.kp-supply-tax-graph__region--consumer-surplus { fill: color-mix(in srgb, #8f493f 16%, transparent); stroke: #8f493f; }
+.kp-supply-tax-graph__region--producer-surplus { fill: color-mix(in srgb, #37666a 16%, transparent); stroke: #37666a; }
+.kp-supply-tax-graph__region--government-revenue { fill: color-mix(in srgb, var(--kp-st-header) 18%, transparent); stroke: var(--kp-st-header); }
+.kp-supply-tax-graph__region--deadweight-loss { fill: color-mix(in srgb, #8f493f 24%, transparent); stroke: #8f493f; stroke-dasharray: 3 2; }
 .kp-supply-tax-graph__curve > line { fill: none; stroke-width: 2.5; }
 .kp-supply-tax-graph__curve--demand > line { stroke: #8f493f; }
 .kp-supply-tax-graph__curve--supply > line { stroke: #37666a; }
@@ -158,6 +158,29 @@ button { font: inherit; }
   stroke: var(--kp-st-focus);
   stroke-width: 2.25;
 }
+[data-kp-supply-tax-entity][data-kp-semantic-salience-level="focus"] {
+  color: var(--kp-st-strong);
+}
+.kp-supply-tax-graph__curve[data-kp-semantic-salience-level="focus"] > line,
+.kp-supply-tax-graph__wedge[data-kp-semantic-salience-level="focus"] > line {
+  stroke-width: 3.35;
+}
+.kp-supply-tax-graph__taxed-market[data-kp-semantic-salience-level="focus"] > circle,
+.kp-supply-tax-graph__equilibrium[data-kp-semantic-salience-level="focus"] > circle {
+  stroke-width: 2.5;
+}
+.kp-supply-tax-graph__region[data-kp-semantic-salience-level="focus"] {
+  fill-opacity: 1;
+  stroke-width: 2.2;
+}
+.kp-supply-tax-graph__equilibrium[data-kp-semantic-trace-role="historical"] circle {
+  fill: var(--kp-st-paper);
+  stroke: var(--kp-st-muted);
+}
+.kp-supply-tax-graph__region[data-kp-semantic-trace-role="historical"] {
+  fill: transparent;
+  stroke-dasharray: 4 3;
+}
 .kp-supply-tax-graph__math { color: var(--kp-st-ink); overflow: visible; }
 .kp-supply-tax-graph__math > div {
   display: grid;
@@ -185,6 +208,18 @@ button { font: inherit; }
   letter-spacing: 0.055em;
   text-transform: uppercase;
 }
+.kp-supply-tax-ledger__tax {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  margin: -0.15rem 0 0.7rem;
+  padding: 0.35rem 0.4rem;
+  border: 1px solid var(--kp-st-rule);
+  color: var(--kp-st-muted);
+  font-size: 0.6rem;
+}
+.kp-supply-tax-ledger__tax .katex { color: var(--kp-st-strong); font-size: 0.8rem; }
 .kp-supply-tax-ledger__columns,
 .kp-supply-tax-ledger__row {
   display: grid;
@@ -208,6 +243,15 @@ button { font: inherit; }
   line-height: 1.25;
 }
 .kp-supply-tax-ledger__value { color: var(--kp-st-strong); font-size: 0.78rem; }
+.kp-supply-tax-ledger [data-kp-supply-tax-entity][data-kp-semantic-salience-level="focus"] {
+  background: color-mix(in srgb, var(--kp-st-focus) 11%, transparent);
+  box-shadow: inset 2px 0 var(--kp-st-focus);
+}
+.kp-supply-tax-ledger [data-kp-supply-tax-entity][data-kp-semantic-trace-role="historical"] {
+  text-decoration: underline;
+  text-decoration-color: var(--kp-st-rule);
+  text-underline-offset: 0.2em;
+}
 
 .kp-supply-tax-narrative { min-height: 13rem; padding: 1.35rem clamp(1rem, 3vw, 2rem); }
 .kp-supply-tax-narrative h1,
