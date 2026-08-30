@@ -24,9 +24,28 @@ export interface KpSupplyTaxSceneProjectionV1 {
   readonly entities: readonly KpSupplyTaxSceneEntityV1[];
 }
 
+export interface KpSupplyTaxSceneTransitionEntityV1 {
+  readonly entityId: string;
+  readonly presence: number;
+  readonly focus: number;
+  readonly bloom: number;
+  readonly historical: number;
+  readonly target: KpSupplyTaxSceneEntityV1;
+}
+
+export interface KpSupplyTaxSceneTransitionProjectionV1 {
+  readonly fromBeatId: KpSupplyTaxPedagogicalBeatV1["id"];
+  readonly toBeatId: KpSupplyTaxPedagogicalBeatV1["id"];
+  readonly progress: number;
+  readonly entities: readonly KpSupplyTaxSceneTransitionEntityV1[];
+}
+
+export type KpSupplyTaxSceneTransitionProfile = "playback" | "scrub";
+
 export type KpSupplyTaxNavigationMotion = "forward" | "rewind" | "settle";
 export type KpSupplyTaxNavigationDisposition =
-  "animate-forward" | "animate-rewind" | "direct-settle";
+  "animate-forward" | "animate-rewind" | "animate-attention" |
+  "direct-settle";
 
 export function kpSupplyTaxBeatHash(
   beat: KpSupplyTaxPedagogicalBeatV1
@@ -66,7 +85,7 @@ export function resolveKpSupplyTaxNavigationDisposition(input: {
   const motion = resolveKpSupplyTaxNavigationMotion(input);
   if (motion === "forward") return "animate-forward";
   if (motion === "rewind") return "animate-rewind";
-  return "direct-settle";
+  return "animate-attention";
 }
 
 export function projectKpSupplyTaxScene(input: {
@@ -117,9 +136,106 @@ export function projectKpSupplyTaxSceneDom(input: {
   readonly root: HTMLElement;
   readonly scene: KpSupplyTaxSceneProjectionV1;
 }): void {
-  input.root.dataset["kpSupplyTaxSceneBeat"] = input.scene.beatSlug;
-  input.root.dataset["kpSupplyTaxSceneFrame"] = input.scene.settledFrame;
-  const sceneById = new Map(input.scene.entities.map((entity) =>
+  projectSceneVisualDom({
+    root: input.root,
+    beatSlug: input.scene.beatSlug,
+    settledFrame: input.scene.settledFrame,
+    entities: input.scene.entities.map((entity) => ({
+      entityId: entity.entityId,
+      presence: entity.salience.presence,
+      focus: entity.salience.level === "focus" ? 1 : 0,
+      bloom: 0,
+      historical: entity.traceRole === "historical" ? 1 : 0,
+      target: entity
+    }))
+  });
+  delete input.root.dataset["kpSupplyTaxTransitionFrom"];
+  delete input.root.dataset["kpSupplyTaxTransitionTo"];
+  input.root.dataset["kpSupplyTaxTransitionProgress"] = "1.0000";
+}
+
+/**
+ * Interpolate renderer paint between authored semantic stops. This remains a
+ * pure playhead projection: endpoints carry meaning; the scalar only carries
+ * the learner's gaze from one endpoint to the next.
+ */
+export function projectKpSupplyTaxSceneTransition(input: {
+  readonly from: KpSupplyTaxSceneProjectionV1;
+  readonly to: KpSupplyTaxSceneProjectionV1;
+  readonly progress: number;
+  readonly profile?: KpSupplyTaxSceneTransitionProfile;
+}): KpSupplyTaxSceneTransitionProjectionV1 {
+  const progress = boundedProgress(input.progress);
+  const profile = input.profile ?? "playback";
+  const visualProgress = profile === "scrub" ? progress : smoothstep(progress);
+  const fromById = new Map(input.from.entities.map((entity) =>
+    [entity.entityId, entity] as const));
+  const entities = input.to.entities.map((target) => {
+    const source = fromById.get(target.entityId);
+    if (source === undefined) {
+      throw new Error(`Transition source is missing ${target.entityId}.`);
+    }
+    return Object.freeze({
+      entityId: target.entityId,
+      presence: interpolatePresence({ source, target, progress, profile }),
+      focus: interpolate(
+        source.salience.level === "focus" ? 1 : 0,
+        target.salience.level === "focus" ? 1 : 0,
+        visualProgress
+      ),
+      // Scroll scrubbing is direct manipulation. Playback may announce a new
+      // arrival, but scrubbed paint must remain attached to the user's input.
+      bloom: profile === "scrub"
+        ? 0
+        : projectReceptionBloom({ source, target, progress }),
+      historical: interpolateHistoricalRole({
+        source,
+        target,
+        progress: visualProgress
+      }),
+      target
+    });
+  });
+  if (fromById.size !== entities.length) {
+    throw new Error("Supply-tax transition endpoints must share entity identity.");
+  }
+  return Object.freeze({
+    fromBeatId: input.from.beatId,
+    toBeatId: input.to.beatId,
+    progress,
+    entities: Object.freeze(entities)
+  });
+}
+
+export function projectKpSupplyTaxSceneTransitionDom(input: {
+  readonly root: HTMLElement;
+  readonly from: KpSupplyTaxSceneProjectionV1;
+  readonly to: KpSupplyTaxSceneProjectionV1;
+  readonly progress: number;
+  readonly profile?: KpSupplyTaxSceneTransitionProfile;
+}): void {
+  const transition = projectKpSupplyTaxSceneTransition(input);
+  projectSceneVisualDom({
+    root: input.root,
+    beatSlug: input.to.beatSlug,
+    settledFrame: input.to.settledFrame,
+    entities: transition.entities
+  });
+  input.root.dataset["kpSupplyTaxTransitionFrom"] = input.from.beatSlug;
+  input.root.dataset["kpSupplyTaxTransitionTo"] = input.to.beatSlug;
+  input.root.dataset["kpSupplyTaxTransitionProgress"] =
+    transition.progress.toFixed(4);
+}
+
+function projectSceneVisualDom(input: {
+  readonly root: HTMLElement;
+  readonly beatSlug: string;
+  readonly settledFrame: KpSupplyTaxPedagogicalBeatV1["settledFrame"];
+  readonly entities: readonly KpSupplyTaxSceneTransitionEntityV1[];
+}): void {
+  input.root.dataset["kpSupplyTaxSceneBeat"] = input.beatSlug;
+  input.root.dataset["kpSupplyTaxSceneFrame"] = input.settledFrame;
+  const sceneById = new Map(input.entities.map((entity) =>
     [entity.entityId, entity] as const));
   input.root.querySelectorAll<HTMLElement | SVGElement>(
     "[data-kp-supply-tax-entity]"
@@ -129,16 +245,99 @@ export function projectKpSupplyTaxSceneDom(input: {
     if (entity === undefined) {
       throw new Error(`Rendered supply-tax entity ${String(id)} is not in the scene.`);
     }
-    element.dataset["kpSemanticSalienceLevel"] = entity.salience.level;
-    element.dataset["kpSemanticTraceRole"] = entity.traceRole;
-    element.dataset["kpPresence"] = String(entity.salience.presence > 0);
-    // Presence is categorical at semantic snaps; focus paint never changes
-    // layout or makes required contextual information translucent.
-    element.style.visibility = entity.salience.presence > 0
-      ? "visible"
-      : "hidden";
-    if (entity.salience.presence > 0) element.style.removeProperty("opacity");
+    element.dataset["kpSemanticSalienceLevel"] = entity.target.salience.level;
+    element.dataset["kpSemanticTraceRole"] = entity.target.traceRole;
+    element.dataset["kpPresence"] = String(entity.presence > 0);
+    const emphasis = Math.min(1, entity.focus + entity.bloom * 0.4);
+    element.style.setProperty("--kp-supply-tax-focus-progress",
+      entity.focus.toFixed(4));
+    element.style.setProperty("--kp-supply-tax-attention-percent",
+      `${(emphasis * 100).toFixed(2)}%`);
+    element.style.setProperty("--kp-supply-tax-focus-wash",
+      `${(entity.focus * 11 + entity.bloom * 6).toFixed(2)}%`);
+    element.style.setProperty("--kp-supply-tax-bloom-progress",
+      entity.bloom.toFixed(4));
+    element.style.setProperty("--kp-supply-tax-bloom-fill",
+      `${(entity.bloom * 6).toFixed(2)}%`);
+    element.style.setProperty("--kp-supply-tax-historical-progress",
+      entity.historical.toFixed(4));
+    element.style.setProperty("--kp-supply-tax-historical-percent",
+      `${(entity.historical * 100).toFixed(2)}%`);
+    // Nested semantic labels inherit presence from their rendered parent. If
+    // both owned opacity, a single arrival would be unintentionally squared.
+    const parentEntity = element.parentElement?.closest(
+      "[data-kp-supply-tax-entity]"
+    );
+    if (parentEntity !== null && parentEntity !== undefined) return;
+    element.style.visibility = entity.presence > 0 ? "visible" : "hidden";
+    if (entity.presence >= 1) element.style.removeProperty("opacity");
+    else element.style.opacity = entity.presence.toFixed(4);
   });
+}
+
+function interpolate(from: number, to: number, progress: number): number {
+  return from + (to - from) * progress;
+}
+
+function interpolatePresence(input: {
+  readonly source: KpSupplyTaxSceneEntityV1;
+  readonly target: KpSupplyTaxSceneEntityV1;
+  readonly progress: number;
+  readonly profile: KpSupplyTaxSceneTransitionProfile;
+}): number {
+  const from = input.source.salience.presence;
+  const to = input.target.salience.presence;
+  if (input.profile === "scrub") return interpolate(from, to, input.progress);
+  if (from === 0 && to === 1) return easeOutCubic(input.progress);
+  if (from === 1 && to === 0) return 1 - input.progress ** 3;
+  return interpolate(from, to, smoothstep(input.progress));
+}
+
+function projectReceptionBloom(input: {
+  readonly source: KpSupplyTaxSceneEntityV1;
+  readonly target: KpSupplyTaxSceneEntityV1;
+  readonly progress: number;
+}): number {
+  const receivesFocus = input.source.salience.level !== "focus" &&
+    input.target.salience.level === "focus" &&
+    input.target.salience.presence > 0;
+  if (!receivesFocus) return 0;
+  // A single attack and recoil reads as reception; oscillation would turn
+  // semantic attention into decorative spring motion.
+  const peak = 0.36;
+  const settled = 0.82;
+  if (input.progress <= peak) return smoothstep(input.progress / peak);
+  if (input.progress >= settled) return 0;
+  return 1 - smoothstep((input.progress - peak) / (settled - peak));
+}
+
+function interpolateHistoricalRole(input: {
+  readonly source: KpSupplyTaxSceneEntityV1;
+  readonly target: KpSupplyTaxSceneEntityV1;
+  readonly progress: number;
+}): number {
+  const sourceHistorical = input.source.traceRole === "historical" ? 1 : 0;
+  const targetHistorical = input.target.traceRole === "historical" ? 1 : 0;
+  // An arriving or leaving object keeps the style of its visible endpoint;
+  // otherwise an absent historical outline would briefly flash as a fill.
+  if (input.source.salience.presence === 0) return targetHistorical;
+  if (input.target.salience.presence === 0) return sourceHistorical;
+  return interpolate(sourceHistorical, targetHistorical, input.progress);
+}
+
+function smoothstep(progress: number): number {
+  return progress * progress * (3 - 2 * progress);
+}
+
+function easeOutCubic(progress: number): number {
+  return 1 - (1 - progress) ** 3;
+}
+
+function boundedProgress(value: number): number {
+  if (!Number.isFinite(value) || value < 0 || value > 1) {
+    throw new Error("Supply-tax scene progress must be between zero and one.");
+  }
+  return value;
 }
 
 function isPresent(

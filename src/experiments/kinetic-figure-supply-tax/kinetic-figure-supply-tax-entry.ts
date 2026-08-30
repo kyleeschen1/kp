@@ -29,9 +29,11 @@ import {
 import {
   projectKpSupplyTaxScene,
   projectKpSupplyTaxSceneDom,
+  projectKpSupplyTaxSceneTransitionDom,
   kpSupplyTaxBeatHash,
   readKpSupplyTaxBeatFromHash,
-  resolveKpSupplyTaxNavigationDisposition
+  resolveKpSupplyTaxNavigationDisposition,
+  type KpSupplyTaxSceneProjectionV1
 } from "./kinetic-figure-supply-tax-scene.ts";
 import {
   projectKpSupplyTaxTransitSvgDom,
@@ -81,34 +83,41 @@ export function mountKpSupplyTaxKineticFigure(input: {
   const clock = createKpReaderTimelinePlaybackClock({
     id: "clock.focus-deck.economics.supply-tax.v1",
     durationMs,
-    initialProgress: initialScene.beat.settledFrame === "untaxed" ? 0 : 1,
+    // The reader clock measures the current edge. Domain model progress is a
+    // projection of its source and target semantic states.
+    initialProgress: 1,
     ownerWindow: window
   });
   let active = initialScene;
-  let pendingSettledScene: KpSupplyTaxArticleDeckSceneV1 | undefined;
+  let activeTransition: Readonly<{
+    from: KpSupplyTaxSceneProjectionV1;
+    to: KpSupplyTaxSceneProjectionV1;
+  }> | undefined;
 
+  const sceneProjection = (
+    scene: KpSupplyTaxArticleDeckSceneV1
+  ): KpSupplyTaxSceneProjectionV1 =>
+    projectKpSupplyTaxScene({ authority, beat: scene.beat });
   const projectScene = (scene: KpSupplyTaxArticleDeckSceneV1): void => {
-    projectKpSupplyTaxSceneDom({
-      root: deck,
-      scene: projectKpSupplyTaxScene({ authority, beat: scene.beat })
-    });
+    projectKpSupplyTaxSceneDom({ root: deck, scene: sceneProjection(scene) });
   };
-  const projectFrame = (progress: number): void => {
+  const projectFrame = (modelProgress: number): void => {
     const frame = sampleKpEconomicsSupplyTaxAnimationFrame({
       asset: authority,
-      progress: exactProgress(progress)
+      progress: exactProgress(modelProgress)
     });
     projectKpSupplyTaxTransitSvgDom({
       root: graph,
       semantics: authority.semantics,
-      // The shared clock stores global model progress. Rewind changes the
-      // clock direction, not the pure domain sampler's coordinate system.
+      // Model progress is derived from the active semantic edge before the
+      // exact domain sampler sees it; attention-only edges hold an endpoint.
       frame
     });
     caption.textContent = frame.phase === "taxed"
       ? authority.accessibility.settledDescription
       : authority.accessibility.description;
-    deck.dataset["kpSupplyTaxClockProgress"] = progress.toFixed(4);
+    deck.dataset["kpSupplyTaxClockProgress"] = modelProgress.toFixed(4);
+    deck.dataset["kpSupplyTaxModelProgress"] = modelProgress.toFixed(4);
   };
   const projectBeatChrome = (scene: KpSupplyTaxArticleDeckSceneV1): void => {
     deck.dataset["kpFocusDeckActiveBeat"] = scene.beat.slug;
@@ -144,8 +153,9 @@ export function mountKpSupplyTaxKineticFigure(input: {
     replay.hidden = scene.beat.transitionFromPrevious !== "sample-tax-imposition";
   };
   const settleAt = (scene: KpSupplyTaxArticleDeckSceneV1): void => {
-    const progress = scene.beat.settledFrame === "untaxed" ? 0 : 1;
-    clock.seek(progress);
+    activeTransition = undefined;
+    clock.seek(1);
+    projectFrame(modelProgressForScene(scene));
     projectScene(scene);
   };
   const updateLocation = (
@@ -173,7 +183,7 @@ export function mountKpSupplyTaxKineticFigure(input: {
     }
     const previous = active;
     active = scene;
-    pendingSettledScene = undefined;
+    activeTransition = undefined;
     projectBeatChrome(active);
     const disposition = resolveKpSupplyTaxNavigationDisposition({
       from: previous.beat,
@@ -187,25 +197,30 @@ export function mountKpSupplyTaxKineticFigure(input: {
       settleAt(active);
       return;
     }
-    if (disposition === "animate-forward") {
-      projectScene(active);
-      clock.seek(0);
-      clock.play({ direction: "forward", stopAt: 1 });
-      return;
-    }
-    // Keep the taxed scene present while its geometry rewinds, then remove
-    // derived objects only at the categorical untaxed endpoint.
-    clock.seek(1);
-    pendingSettledScene = active;
-    clock.play({ direction: "rewind", stopAt: 0 });
+    activeTransition = Object.freeze({
+      from: sceneProjection(previous),
+      to: sceneProjection(active)
+    });
+    clock.seek(0);
+    // Forward local edge time can still project a decreasing domain value.
+    // This lets every adjacent attention edge share one deterministic clock.
+    clock.play({ direction: "forward", stopAt: 1 });
   };
   const replay = (): void => {
     if (active.beat.transitionFromPrevious !== "sample-tax-imposition") return;
-    pendingSettledScene = undefined;
-    projectScene(active);
+    const activeIndex = scenes.indexOf(active);
+    const previous = scenes[activeIndex - 1];
+    if (previous === undefined) return;
+    if (reducedMotion.matches) {
+      settleAt(active);
+      return;
+    }
+    activeTransition = Object.freeze({
+      from: sceneProjection(previous),
+      to: sceneProjection(active)
+    });
     clock.seek(0);
-    if (reducedMotion.matches) clock.seek(1);
-    else clock.play({ direction: "forward", stopAt: 1 });
+    clock.play({ direction: "forward", stopAt: 1 });
   };
   const selectAdjacent = (direction: -1 | 1): void => {
     const index = scenes.indexOf(active);
@@ -253,11 +268,26 @@ export function mountKpSupplyTaxKineticFigure(input: {
   };
 
   const unsubscribe = clock.subscribe((sample) => {
-    projectFrame(sample.progress);
-    if (sample.settled && pendingSettledScene !== undefined) {
-      const pending = pendingSettledScene;
-      pendingSettledScene = undefined;
-      projectScene(pending);
+    const transition = activeTransition;
+    if (transition === undefined) {
+      projectFrame(modelProgressForScene(active));
+      return;
+    }
+    const modelProgress = interpolate(
+      modelProgressForProjection(transition.from),
+      modelProgressForProjection(transition.to),
+      sample.progress
+    );
+    projectFrame(modelProgress);
+    projectKpSupplyTaxSceneTransitionDom({
+      root: deck,
+      from: transition.from,
+      to: transition.to,
+      progress: sample.progress
+    });
+    if (sample.progress >= 1) {
+      activeTransition = undefined;
+      projectKpSupplyTaxSceneDom({ root: deck, scene: transition.to });
     }
   });
   projectBeatChrome(active);
@@ -277,6 +307,22 @@ export function mountKpSupplyTaxKineticFigure(input: {
       clock.dispose();
     }
   });
+}
+
+function modelProgressForScene(
+  scene: KpSupplyTaxArticleDeckSceneV1
+): number {
+  return scene.beat.settledFrame === "untaxed" ? 0 : 1;
+}
+
+function modelProgressForProjection(
+  scene: KpSupplyTaxSceneProjectionV1
+): number {
+  return scene.settledFrame === "untaxed" ? 0 : 1;
+}
+
+function interpolate(from: number, to: number, progress: number): number {
+  return from + (to - from) * progress;
 }
 
 function renderPage(

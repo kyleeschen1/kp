@@ -7,6 +7,7 @@ import { createKpSupplyTaxPedagogicalScore } from
   "../src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-score.ts";
 import {
   projectKpSupplyTaxScene,
+  projectKpSupplyTaxSceneTransition,
   kpSupplyTaxBeatHash,
   readKpSupplyTaxBeatFromHash,
   resolveKpSupplyTaxNavigationDisposition,
@@ -68,6 +69,49 @@ test("presence introduces tax and welfare objects only at authored beats", () =>
   assert.equal(presence(7, lossId), 1);
 });
 
+test("adjacent scene paint reveals, blooms, and settles receiving focus", () => {
+  const authority = createKpEconomicsSupplyTaxAnimationAsset();
+  const beats = createKpSupplyTaxPedagogicalScore(authority).beats;
+  const from = projectKpSupplyTaxScene({ authority, beat: beats[5]! });
+  const to = projectKpSupplyTaxScene({ authority, beat: beats[6]! });
+  const revenueId = authority.semantics.entities.regions.find(({ role }) =>
+    role === "government-revenue")!.id;
+  const historicalConsumerId = authority.semantics.entities.regions.find(
+    ({ phase, role }) => phase === "untaxed" && role === "consumer-surplus"
+  )!.id;
+  const source = projectKpSupplyTaxSceneTransition({ from, to, progress: 0 });
+  const middle = projectKpSupplyTaxSceneTransition({ from, to, progress: 0.5 });
+  const target = projectKpSupplyTaxSceneTransition({ from, to, progress: 1 });
+  const revenue = (projection: typeof source) =>
+    projection.entities.find(({ entityId }) => entityId === revenueId)!;
+  const historicalConsumer = (projection: typeof source) =>
+    projection.entities.find(({ entityId }) =>
+      entityId === historicalConsumerId)!;
+
+  assert.equal(revenue(source).presence, 0);
+  assert.equal(revenue(source).focus, 0);
+  assert.equal(revenue(source).bloom, 0);
+  assert.equal(revenue(middle).presence, 0.875);
+  assert.equal(revenue(middle).focus, 0.5);
+  assert.ok(revenue(middle).bloom > 0.7);
+  assert.equal(revenue(target).presence, 1);
+  assert.equal(revenue(target).focus, 1);
+  assert.equal(revenue(target).bloom, 0);
+  assert.equal(historicalConsumer(source).historical, 1);
+  assert.equal(historicalConsumer(middle).historical, 1);
+  assert.equal(historicalConsumer(target).historical, 1);
+  assert.equal(historicalConsumer(middle).bloom, 0);
+
+  const lossTransition = projectKpSupplyTaxSceneTransition({
+    from: projectKpSupplyTaxScene({ authority, beat: beats[6]! }),
+    to: projectKpSupplyTaxScene({ authority, beat: beats[7]! }),
+    progress: 0.5
+  });
+  const untaxedMarket = lossTransition.entities.find(({ entityId }) =>
+    entityId === authority.semantics.model.states.untaxed.id)!;
+  assert.equal(untaxedMarket.historical, 0.5);
+});
+
 test("only the adjacent tax-imposition edge owns forward or reverse motion", () => {
   const authority = createKpEconomicsSupplyTaxAnimationAsset();
   const beats = createKpSupplyTaxPedagogicalScore(authority).beats;
@@ -112,7 +156,8 @@ test("navigation compresses distant, reduced-motion, and interrupted requests", 
   assert.equal(disposition(1, 2, { reducedMotion: true }), "direct-settle");
   assert.equal(disposition(1, 2, { allowMotion: false }), "direct-settle");
   assert.equal(disposition(0, 7), "direct-settle");
-  assert.equal(disposition(4, 5), "direct-settle");
+  assert.equal(disposition(4, 5), "animate-attention");
+  assert.equal(disposition(5, 4), "animate-attention");
 });
 
 test("semantic hashes restore canonical beats without replaying history", () => {

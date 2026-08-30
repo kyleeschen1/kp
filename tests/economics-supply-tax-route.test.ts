@@ -38,7 +38,9 @@ test("a standalone experiment page owns the route without application inversion"
   assert.match(entry, /compileKpSupplyTaxArticle/u);
   assert.equal((entry.match(/createKpReaderTimelinePlaybackClock/g) ?? []).length, 2);
   assert.match(entry, /clock\.play\(\{ direction: "forward", stopAt: 1 \}\)/u);
-  assert.match(entry, /clock\.play\(\{ direction: "rewind", stopAt: 0 \}\)/u);
+  assert.match(entry, /projectKpSupplyTaxSceneTransitionDom/u);
+  assert.match(entry, /modelProgressForProjection/u);
+  assert.doesNotMatch(entry, /clock\.play\(\{ direction: "rewind"/u);
   assert.match(entry, /readKpSupplyTaxBeatFromHash/u);
   assert.match(entry, /history\.pushState\(null, "", hash\)/u);
   assert.doesNotMatch(entry, /kinetic-figure-(log-product|delta-epsilon)-entry/u);

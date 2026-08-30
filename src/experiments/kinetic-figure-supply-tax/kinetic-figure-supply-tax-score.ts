@@ -128,7 +128,8 @@ export function createKpSupplyTaxPedagogicalScore(
       settledFrame: "taxed",
       transitionFromPrevious: "none",
       targetEntityIds: [consumerPrice, producerPrice, wedge],
-      contextEntityIds: [demand, supply, taxedSupply, taxed]
+      contextEntityIds: [demand, supply, taxedSupply, taxed],
+      historicalTraceEntityIds: [untaxed]
     }),
     beat({
       id: "beat.economics.supply-tax.quantity-contraction",
@@ -153,7 +154,7 @@ export function createKpSupplyTaxPedagogicalScore(
       transitionFromPrevious: "none",
       targetEntityIds: [taxedConsumer, taxedProducer],
       contextEntityIds: [demand, supply, taxedSupply, consumerPrice, producerPrice],
-      historicalTraceEntityIds: [untaxedConsumer, untaxedProducer]
+      historicalTraceEntityIds: [untaxed, untaxedConsumer, untaxedProducer]
     }),
     beat({
       id: "beat.economics.supply-tax.government-revenue",
@@ -165,7 +166,15 @@ export function createKpSupplyTaxPedagogicalScore(
       settledFrame: "taxed",
       transitionFromPrevious: "none",
       targetEntityIds: [revenue],
-      contextEntityIds: [supply, taxedSupply, wedge, taxed, taxedConsumer, taxedProducer]
+      contextEntityIds: [
+        supply,
+        taxedSupply,
+        wedge,
+        taxed,
+        taxedConsumer,
+        taxedProducer
+      ],
+      historicalTraceEntityIds: [untaxed, untaxedConsumer, untaxedProducer]
     }),
     beat({
       id: "beat.economics.supply-tax.deadweight-loss",
@@ -177,7 +186,17 @@ export function createKpSupplyTaxPedagogicalScore(
       settledFrame: "taxed",
       transitionFromPrevious: "none",
       targetEntityIds: [deadweightLoss],
-      contextEntityIds: [demand, supply, taxedSupply, untaxed, taxed, revenue]
+      contextEntityIds: [
+        demand,
+        supply,
+        taxedSupply,
+        untaxed,
+        taxed,
+        taxedConsumer,
+        taxedProducer,
+        revenue
+      ],
+      historicalTraceEntityIds: [untaxedConsumer, untaxedProducer]
     })
   ] satisfies readonly KpSupplyTaxPedagogicalBeatV1[]);
 

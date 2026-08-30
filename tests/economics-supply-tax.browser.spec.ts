@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 const path = "/experiments/kinetic-figure/supply-tax/";
 
-test("supply-tax deck navigates exact semantic stops and one motion edge", async ({
+test("supply-tax deck navigates exact semantic stops and one domain-motion edge", async ({
   page
 }) => {
   const errors: string[] = [];
@@ -37,6 +37,8 @@ test("supply-tax deck navigates exact semantic stops and one motion edge", async
     "tax-input");
   await expect(deck).toHaveAttribute("data-kp-supply-tax-clock-progress",
     "0.0000");
+  await expect(deck).toHaveAttribute("data-kp-supply-tax-transition-progress",
+    "1.0000", { timeout: 5_000 });
   await deck.locator("[data-kp-focus-deck-next]").click();
   await expect.poll(async () => Number(
     await deck.getAttribute("data-kp-supply-tax-clock-progress")
@@ -58,6 +60,73 @@ test("supply-tax deck navigates exact semantic stops and one motion edge", async
   expect(errors).toEqual([]);
 });
 
+test("new welfare entities and focus handoffs arrive on the reader clock", async ({
+  page
+}, testInfo) => {
+  await page.goto(`${path}#beat.quantity-contraction`);
+  const deck = page.locator("[data-kp-supply-tax-focus-deck]");
+  const next = deck.locator("[data-kp-focus-deck-next]");
+  const transitionProgress = async () => Number(
+    await deck.getAttribute("data-kp-supply-tax-transition-progress")
+  );
+  const assertAnimatedArrival = async (
+    selector: string,
+    captureName: string
+  ) => {
+    await next.click();
+    await page.waitForFunction(() => {
+      const value = Number(document.querySelector(
+        "[data-kp-supply-tax-focus-deck]"
+      )?.getAttribute("data-kp-supply-tax-transition-progress"));
+      return value > 0.38 && value < 0.52;
+    });
+    const entity = deck.locator(selector).first();
+    const paint = await entity.evaluate((element) => ({
+      focus: Number((element as HTMLElement).style.getPropertyValue(
+        "--kp-supply-tax-focus-progress"
+      )),
+      bloom: Number((element as HTMLElement).style.getPropertyValue(
+        "--kp-supply-tax-bloom-progress"
+      )),
+      opacity: Number(getComputedStyle(element).opacity),
+      strokeWidth: Number.parseFloat(getComputedStyle(element).strokeWidth)
+    }));
+    expect(paint.focus).toBeGreaterThan(0);
+    expect(paint.focus).toBeLessThan(1);
+    expect(paint.bloom).toBeGreaterThan(0.65);
+    expect(paint.opacity).toBeGreaterThan(0);
+    expect(paint.opacity).toBeLessThan(1);
+    expect(paint.strokeWidth).toBeGreaterThan(2.2);
+    await page.screenshot({
+      path: testInfo.outputPath(`supply-tax-bloom-${captureName}.png`),
+      fullPage: true
+    });
+    await expect.poll(transitionProgress, { timeout: 5_000 }).toBeCloseTo(1, 3);
+    await expect(entity).toBeVisible();
+    await expect(entity).toHaveCSS("opacity", "1");
+    await expect(entity).toHaveCSS("stroke-width", "2.2px");
+    expect(await entity.evaluate((element) => Number(
+      (element as HTMLElement).style.getPropertyValue(
+        "--kp-supply-tax-bloom-progress"
+      )
+    ))).toBe(0);
+  };
+
+  await assertAnimatedArrival(
+    ".kp-supply-tax-graph__region--consumer-surplus" +
+    '[data-kp-supply-tax-region-phase="taxed"]',
+    "surplus"
+  );
+  await assertAnimatedArrival(
+    ".kp-supply-tax-graph__region--government-revenue",
+    "revenue"
+  );
+  await assertAnimatedArrival(
+    ".kp-supply-tax-graph__region--deadweight-loss",
+    "deadweight-loss"
+  );
+});
+
 test("rapid and distant requests settle without half states", async ({ page }) => {
   await page.goto(`${path}#beat.tax-input`);
   const deck = page.locator("[data-kp-supply-tax-focus-deck]");
@@ -75,6 +144,13 @@ test("rapid and distant requests settle without half states", async ({ page }) =
   await expect(deck.locator(
     ".kp-supply-tax-graph__region--deadweight-loss"
   )).toBeVisible();
+  expect(await deck.locator(
+    ".kp-supply-tax-graph__region--deadweight-loss"
+  ).evaluate((element) => Number(
+    (element as HTMLElement).style.getPropertyValue(
+      "--kp-supply-tax-bloom-progress"
+    )
+  ))).toBe(0);
   expect(new URL(page.url()).hash).toBe("#beat.deadweight-loss");
 });
 
