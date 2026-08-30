@@ -7,7 +7,10 @@ import type { KpArticleImportLock } from
   "../src/article/kp-article-import-lock.ts";
 import { serializeKpVignetteReleasePayload } from
   "../src/article/kp-article-import-lock.ts";
-import { economicsSupplyTaxVignetteRelease } from
+import {
+  economicsSupplyTaxStaticVignetteRelease,
+  economicsSupplyTaxVignetteRelease
+} from
   "../src/article/vignettes/economics-supply-tax-vignette.ts";
 import {
   compileKpSupplyTaxArticle,
@@ -21,13 +24,17 @@ const lock = JSON.parse(readFileSync(
 )) as KpArticleImportLock;
 
 test("supply-tax vignette release is content-addressed and locally locked", () => {
-  const integrity = `sha256:${createHash("sha256")
+  const initialIntegrity = `sha256:${createHash("sha256")
     .update(serializeKpVignetteReleasePayload(economicsSupplyTaxVignetteRelease))
     .digest("hex")}`;
+  const staticIntegrity = `sha256:${createHash("sha256")
+    .update(serializeKpVignetteReleasePayload(economicsSupplyTaxStaticVignetteRelease))
+    .digest("hex")}`;
 
-  assert.equal(economicsSupplyTaxVignetteRelease.integrity, integrity);
-  assert.equal(lock.entries[0]?.integrity, integrity);
-  assert.equal(lock.entries[0]?.version, "1.0.0");
+  assert.equal(economicsSupplyTaxVignetteRelease.integrity, initialIntegrity);
+  assert.equal(economicsSupplyTaxStaticVignetteRelease.integrity, staticIntegrity);
+  assert.equal(lock.entries[0]?.integrity, staticIntegrity);
+  assert.equal(lock.entries[0]?.version, "1.1.0");
 });
 
 test("one Article source derives exactly eight score-backed deck scenes", () => {

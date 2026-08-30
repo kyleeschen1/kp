@@ -49,6 +49,10 @@
     {
       "kind": "file",
       "path": "src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-article.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-publication.ts"
     }
   ],
   "dependsOn": {
@@ -233,6 +237,20 @@
       "scope": "standard",
       "checkedAt": "2026-08-30T07:49:53.543Z",
       "notes": "Article source compiler, local vignette, score-backed deck derivation, application, Svelte, and domain boundaries typecheck."
+    },
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T07:53:28.621Z",
+      "notes": "Thirty-four tests pass; all nine representative prose phrases occur exactly once, semantic HTML and build-time KaTeX are present, and reduced-motion checkpoint seeking is direct."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-30T07:53:29.562Z",
+      "notes": "Static publication, content-addressed static vignette release, application, Svelte, and domain boundaries typecheck."
     }
   ],
   "progress": {

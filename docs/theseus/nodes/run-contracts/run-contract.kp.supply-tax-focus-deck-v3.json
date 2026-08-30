@@ -108,7 +108,8 @@
     {
       "id": "s10",
       "title": "Searchable-publication",
-      "status": "planned"
+      "summary": "Derived complete semantic HTML from the single Article source with all explanation exactly once, build-time accessible KaTeX, real semantic anchors and TOC, two static checkpoints, and direct reduced-motion seeking; no custom search or hidden prose.",
+      "status": "complete"
     },
     {
       "id": "s11",

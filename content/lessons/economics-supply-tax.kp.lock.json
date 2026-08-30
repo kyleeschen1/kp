@@ -7,8 +7,8 @@
       "request": "vignette.economics.supply-tax-welfare@1",
       "vignetteId": "vignette.economics.supply-tax-welfare",
       "requestedMajor": 1,
-      "version": "1.0.0",
-      "integrity": "sha256:23c61d1971f7a006cc3e78bad613bca1e975171dc34932a90ee4b3326c2c9b9c",
+      "version": "1.1.0",
+      "integrity": "sha256:7495544318b1a867c0bb51db6033deb948a2d62ee868955c615241e31c49ea33",
       "moduleSpecifier": "../../animation/economics-supply-tax-asset.ts"
     }
   ]
