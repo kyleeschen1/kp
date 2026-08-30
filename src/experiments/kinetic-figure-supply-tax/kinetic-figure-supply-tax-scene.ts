@@ -25,6 +25,22 @@ export interface KpSupplyTaxSceneProjectionV1 {
 }
 
 export type KpSupplyTaxNavigationMotion = "forward" | "rewind" | "settle";
+export type KpSupplyTaxNavigationDisposition =
+  "animate-forward" | "animate-rewind" | "direct-settle";
+
+export function kpSupplyTaxBeatHash(
+  beat: KpSupplyTaxPedagogicalBeatV1
+): string {
+  return `#beat.${beat.slug}`;
+}
+
+export function readKpSupplyTaxBeatFromHash(
+  beats: readonly KpSupplyTaxPedagogicalBeatV1[],
+  hash: string
+): KpSupplyTaxPedagogicalBeatV1 {
+  const slug = hash.startsWith("#beat.") ? hash.slice("#beat.".length) : "";
+  return beats.find((beat) => beat.slug === slug) ?? beats[0]!;
+}
 
 export function resolveKpSupplyTaxNavigationMotion(input: {
   readonly from: KpSupplyTaxPedagogicalBeatV1;
@@ -33,6 +49,24 @@ export function resolveKpSupplyTaxNavigationMotion(input: {
   if (input.from.ordinal === 2 && input.to.ordinal === 3) return "forward";
   if (input.from.ordinal === 3 && input.to.ordinal === 2) return "rewind";
   return "settle";
+}
+
+export function resolveKpSupplyTaxNavigationDisposition(input: {
+  readonly from: KpSupplyTaxPedagogicalBeatV1;
+  readonly to: KpSupplyTaxPedagogicalBeatV1;
+  readonly interrupted: boolean;
+  readonly reducedMotion: boolean;
+  readonly allowMotion?: boolean | undefined;
+}): KpSupplyTaxNavigationDisposition {
+  if (input.reducedMotion || input.interrupted ||
+      input.allowMotion === false ||
+      Math.abs(input.to.ordinal - input.from.ordinal) !== 1) {
+    return "direct-settle";
+  }
+  const motion = resolveKpSupplyTaxNavigationMotion(input);
+  if (motion === "forward") return "animate-forward";
+  if (motion === "rewind") return "animate-rewind";
+  return "direct-settle";
 }
 
 export function projectKpSupplyTaxScene(input: {

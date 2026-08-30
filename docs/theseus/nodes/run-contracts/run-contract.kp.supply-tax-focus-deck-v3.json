@@ -156,7 +156,8 @@
     {
       "id": "s18",
       "title": "Navigation-compression",
-      "status": "planned"
+      "summary": "Added semantic #beat.<slug> URLs, direct initial/popstate restoration, distant-seek compression, reduced-motion settling, and interruption coalescing without replaying intermediate states or adding a clock.",
+      "status": "complete"
     },
     {
       "id": "s19",

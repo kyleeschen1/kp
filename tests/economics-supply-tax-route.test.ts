@@ -34,6 +34,8 @@ test("bootstrap lazily owns the route without changing existing figure entries",
   assert.equal((entry.match(/createKpReaderTimelinePlaybackClock/g) ?? []).length, 2);
   assert.match(entry, /clock\.play\(\{ direction: "forward", stopAt: 1 \}\)/u);
   assert.match(entry, /clock\.play\(\{ direction: "rewind", stopAt: 0 \}\)/u);
+  assert.match(entry, /readKpSupplyTaxBeatFromHash/u);
+  assert.match(entry, /history\.pushState\(null, "", hash\)/u);
   assert.doesNotMatch(entry, /kinetic-figure-(log-product|delta-epsilon)-entry/u);
 });
 

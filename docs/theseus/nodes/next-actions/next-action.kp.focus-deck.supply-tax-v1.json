@@ -375,6 +375,20 @@
       "scope": "standard",
       "checkedAt": "2026-08-30T08:29:46.624Z",
       "notes": "Adjacent controls, replay, exact frame projection, clock subscription, and explicit canonical-timeline requirement pass application, test, Svelte, and domain type boundaries."
+    },
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T08:32:34.566Z",
+      "notes": "Fifty-five tests pass; semantic hashes restore beats directly, distant and reduced-motion navigation settles, and live-motion interruption coalesces to one canonical endpoint."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-30T08:32:35.616Z",
+      "notes": "URL restoration, history navigation, rapid coalescing, and navigation-disposition policy pass application, test, Svelte, and domain type boundaries."
     }
   ],
   "progress": {

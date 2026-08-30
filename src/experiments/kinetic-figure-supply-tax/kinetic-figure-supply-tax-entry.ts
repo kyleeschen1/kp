@@ -29,7 +29,9 @@ import {
 import {
   projectKpSupplyTaxScene,
   projectKpSupplyTaxSceneDom,
-  resolveKpSupplyTaxNavigationMotion
+  kpSupplyTaxBeatHash,
+  readKpSupplyTaxBeatFromHash,
+  resolveKpSupplyTaxNavigationDisposition
 } from "./kinetic-figure-supply-tax-scene.ts";
 import {
   projectKpSupplyTaxTransitSvgDom,
@@ -69,13 +71,18 @@ export function mountKpSupplyTaxKineticFigure(input: {
   if (durationMs === undefined) {
     throw new Error("Supply-tax animation requires its canonical timeline.");
   }
+  const initialBeat = readKpSupplyTaxBeatFromHash(
+    scenes.map(({ beat }) => beat),
+    window.location.hash
+  );
+  const initialScene = scenes.find(({ beat }) => beat.id === initialBeat.id)!;
   const clock = createKpReaderTimelinePlaybackClock({
     id: "clock.focus-deck.economics.supply-tax.v1",
     durationMs,
-    initialProgress: 0,
+    initialProgress: initialScene.beat.settledFrame === "untaxed" ? 0 : 1,
     ownerWindow: window
   });
-  let active = scenes[0]!;
+  let active = initialScene;
   let pendingSettledScene: KpSupplyTaxArticleDeckSceneV1 | undefined;
 
   const projectScene = (scene: KpSupplyTaxArticleDeckSceneV1): void => {
@@ -135,21 +142,46 @@ export function mountKpSupplyTaxKineticFigure(input: {
     clock.seek(progress);
     projectScene(scene);
   };
-  const select = (scene: KpSupplyTaxArticleDeckSceneV1): void => {
-    if (scene.beat.id === active.beat.id) return;
+  const updateLocation = (
+    scene: KpSupplyTaxArticleDeckSceneV1,
+    mode: "none" | "push" | "replace"
+  ): void => {
+    if (mode === "none") return;
+    const hash = kpSupplyTaxBeatHash(scene.beat);
+    if (window.location.hash === hash) return;
+    if (mode === "push") history.pushState(null, "", hash);
+    else history.replaceState(null, "", hash);
+  };
+  const select = (
+    scene: KpSupplyTaxArticleDeckSceneV1,
+    options: {
+      readonly animate?: boolean | undefined;
+      readonly history?: "none" | "push" | "replace" | undefined;
+    } = {}
+  ): void => {
+    const interrupted = clock.getStatus() === "playing";
+    if (scene.beat.id === active.beat.id) {
+      if (options.animate === false || interrupted) settleAt(scene);
+      updateLocation(scene, options.history ?? "push");
+      return;
+    }
     const previous = active;
     active = scene;
     pendingSettledScene = undefined;
     projectBeatChrome(active);
-    const motion = resolveKpSupplyTaxNavigationMotion({
+    const disposition = resolveKpSupplyTaxNavigationDisposition({
       from: previous.beat,
-      to: active.beat
+      to: active.beat,
+      interrupted,
+      reducedMotion: reducedMotion.matches,
+      allowMotion: options.animate
     });
-    if (reducedMotion.matches || motion === "settle") {
+    updateLocation(active, options.history ?? "push");
+    if (disposition === "direct-settle") {
       settleAt(active);
       return;
     }
-    if (motion === "forward") {
+    if (disposition === "animate-forward") {
       projectScene(active);
       clock.seek(0);
       clock.play({ direction: "forward", stopAt: 1 });
@@ -172,7 +204,7 @@ export function mountKpSupplyTaxKineticFigure(input: {
   const selectAdjacent = (direction: -1 | 1): void => {
     const index = scenes.indexOf(active);
     const next = scenes[index + direction];
-    if (next !== undefined) select(next);
+    if (next !== undefined) select(next, { history: "push" });
   };
   const handleClick = (event: MouseEvent): void => {
     const target = event.target instanceof Element ? event.target : null;
@@ -191,7 +223,16 @@ export function mountKpSupplyTaxKineticFigure(input: {
     const slug = target?.closest<HTMLElement>("[data-kp-focus-deck-select]")
       ?.dataset["kpFocusDeckSelect"];
     const scene = scenes.find(({ beat }) => beat.slug === slug);
-    if (scene !== undefined) select(scene);
+    if (scene !== undefined) select(scene, { history: "push" });
+  };
+
+  const handleLocation = (): void => {
+    const beat = readKpSupplyTaxBeatFromHash(
+      scenes.map(({ beat }) => beat),
+      window.location.hash
+    );
+    const scene = scenes.find((candidate) => candidate.beat.id === beat.id)!;
+    select(scene, { animate: false, history: "none" });
   };
 
   const unsubscribe = clock.subscribe((sample) => {
@@ -204,11 +245,15 @@ export function mountKpSupplyTaxKineticFigure(input: {
   });
   projectBeatChrome(active);
   projectScene(active);
-  projectFrame(0);
+  projectFrame(active.beat.settledFrame === "untaxed" ? 0 : 1);
   deck.addEventListener("click", handleClick);
+  window.addEventListener("popstate", handleLocation);
+  window.addEventListener("hashchange", handleLocation);
   return Object.freeze({
     dispose: () => {
       deck.removeEventListener("click", handleClick);
+      window.removeEventListener("popstate", handleLocation);
+      window.removeEventListener("hashchange", handleLocation);
       unsubscribe();
       clock.dispose();
     }

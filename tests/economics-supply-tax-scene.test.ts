@@ -7,6 +7,9 @@ import { createKpSupplyTaxPedagogicalScore } from
   "../src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-score.ts";
 import {
   projectKpSupplyTaxScene,
+  kpSupplyTaxBeatHash,
+  readKpSupplyTaxBeatFromHash,
+  resolveKpSupplyTaxNavigationDisposition,
   resolveKpSupplyTaxNavigationMotion
 } from
   "../src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-scene.ts";
@@ -84,4 +87,42 @@ test("only the adjacent tax-imposition edge owns forward or reverse motion", () 
     from: beats[0]!,
     to: beats[7]!
   }), "settle");
+});
+
+test("navigation compresses distant, reduced-motion, and interrupted requests", () => {
+  const authority = createKpEconomicsSupplyTaxAnimationAsset();
+  const beats = createKpSupplyTaxPedagogicalScore(authority).beats;
+  const disposition = (from: number, to: number, options: {
+    interrupted?: boolean;
+    reducedMotion?: boolean;
+    allowMotion?: boolean;
+  } = {}) => resolveKpSupplyTaxNavigationDisposition({
+    from: beats[from]!,
+    to: beats[to]!,
+    interrupted: options.interrupted ?? false,
+    reducedMotion: options.reducedMotion ?? false,
+    ...(options.allowMotion === undefined ? {} : {
+      allowMotion: options.allowMotion
+    })
+  });
+
+  assert.equal(disposition(1, 2), "animate-forward");
+  assert.equal(disposition(2, 1), "animate-rewind");
+  assert.equal(disposition(1, 2, { interrupted: true }), "direct-settle");
+  assert.equal(disposition(1, 2, { reducedMotion: true }), "direct-settle");
+  assert.equal(disposition(1, 2, { allowMotion: false }), "direct-settle");
+  assert.equal(disposition(0, 7), "direct-settle");
+  assert.equal(disposition(4, 5), "direct-settle");
+});
+
+test("semantic hashes restore canonical beats without replaying history", () => {
+  const authority = createKpEconomicsSupplyTaxAnimationAsset();
+  const beats = createKpSupplyTaxPedagogicalScore(authority).beats;
+
+  assert.equal(kpSupplyTaxBeatHash(beats[7]!), "#beat.deadweight-loss");
+  assert.equal(readKpSupplyTaxBeatFromHash(
+    beats,
+    "#beat.government-revenue"
+  ).ordinal, 7);
+  assert.equal(readKpSupplyTaxBeatFromHash(beats, "#unknown").ordinal, 1);
 });
