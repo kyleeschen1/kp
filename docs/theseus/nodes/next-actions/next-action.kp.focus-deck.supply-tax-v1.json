@@ -361,6 +361,20 @@
       "scope": "standard",
       "checkedAt": "2026-08-30T08:25:04.262Z",
       "notes": "Shared semantic salience resolver use and SVG, KaTeX, ledger DOM projection pass all application, test, Svelte, and domain type boundaries."
+    },
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T08:29:45.587Z",
+      "notes": "Fifty-three tests pass; only the adjacent 2-to-3 tax edge owns forward motion, its inverse owns rewind, distant and other adjacent edges settle, and the host uses one reader clock."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-30T08:29:46.624Z",
+      "notes": "Adjacent controls, replay, exact frame projection, clock subscription, and explicit canonical-timeline requirement pass application, test, Svelte, and domain type boundaries."
     }
   ],
   "progress": {

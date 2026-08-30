@@ -150,7 +150,8 @@
     {
       "id": "s17",
       "title": "Adjacent-navigation",
-      "status": "planned"
+      "summary": "Enabled symbol-only step, previous, next, and replay controls over the existing reader clock; tax motion plays forward and reverse only at its semantic edge, while all other adjacent changes settle directly.",
+      "status": "complete"
     },
     {
       "id": "s18",

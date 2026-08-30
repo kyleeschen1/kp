@@ -5,7 +5,10 @@ import { createKpEconomicsSupplyTaxAnimationAsset } from
   "../src/animation/economics-supply-tax-asset.ts";
 import { createKpSupplyTaxPedagogicalScore } from
   "../src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-score.ts";
-import { projectKpSupplyTaxScene } from
+import {
+  projectKpSupplyTaxScene,
+  resolveKpSupplyTaxNavigationMotion
+} from
   "../src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-scene.ts";
 
 test("every score beat resolves one deterministic semantic scene", () => {
@@ -60,4 +63,25 @@ test("presence introduces tax and welfare objects only at authored beats", () =>
   assert.equal(presence(6, revenueId), 1);
   assert.equal(presence(6, lossId), 0);
   assert.equal(presence(7, lossId), 1);
+});
+
+test("only the adjacent tax-imposition edge owns forward or reverse motion", () => {
+  const authority = createKpEconomicsSupplyTaxAnimationAsset();
+  const beats = createKpSupplyTaxPedagogicalScore(authority).beats;
+  for (let index = 0; index < beats.length - 1; index += 1) {
+    const forward = resolveKpSupplyTaxNavigationMotion({
+      from: beats[index]!,
+      to: beats[index + 1]!
+    });
+    const rewind = resolveKpSupplyTaxNavigationMotion({
+      from: beats[index + 1]!,
+      to: beats[index]!
+    });
+    assert.equal(forward, index === 1 ? "forward" : "settle");
+    assert.equal(rewind, index === 1 ? "rewind" : "settle");
+  }
+  assert.equal(resolveKpSupplyTaxNavigationMotion({
+    from: beats[0]!,
+    to: beats[7]!
+  }), "settle");
 });

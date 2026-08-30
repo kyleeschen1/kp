@@ -31,7 +31,9 @@ test("bootstrap lazily owns the route without changing existing figure entries",
   assert.match(bootstrap, /loadKpSupplyTaxKineticFigure/u);
   assert.match(entry, /economics-supply-tax\.kp\.md\?raw/u);
   assert.match(entry, /compileKpSupplyTaxArticle/u);
-  assert.doesNotMatch(entry, /createKpReaderTimelinePlaybackClock/u);
+  assert.equal((entry.match(/createKpReaderTimelinePlaybackClock/g) ?? []).length, 2);
+  assert.match(entry, /clock\.play\(\{ direction: "forward", stopAt: 1 \}\)/u);
+  assert.match(entry, /clock\.play\(\{ direction: "rewind", stopAt: 0 \}\)/u);
   assert.doesNotMatch(entry, /kinetic-figure-(log-product|delta-epsilon)-entry/u);
 });
 

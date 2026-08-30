@@ -9,21 +9,30 @@ import importLockValue from
 
 import type { KpArticleImportLock } from
   "../../article/kp-article-import-lock.ts";
-import { createKpEconomicsSupplyTaxAnimationAsset } from
-  "../../animation/economics-supply-tax-asset.ts";
+import {
+  createKpEconomicsSupplyTaxAnimationAsset,
+  sampleKpEconomicsSupplyTaxAnimationFrame
+} from "../../animation/economics-supply-tax-asset.ts";
 import { compileKpArticleMarkdownFragmentHtml } from
   "../../article/kp-article-static-html.ts";
 import { applyKpSemanticVisualDomTheme } from
   "../../rendering/semantic-visual-dom-theme.ts";
+import { createKpReaderTimelinePlaybackClock } from
+  "../../reader/runtime/timeline-playback-clock.ts";
+import {
+  renderKpFocusDeckControlIcon
+} from "../focus-deck-control-icons.ts";
 import {
   compileKpSupplyTaxArticle,
   type KpSupplyTaxArticleDeckSceneV1
 } from "./kinetic-figure-supply-tax-article.ts";
 import {
   projectKpSupplyTaxScene,
-  projectKpSupplyTaxSceneDom
+  projectKpSupplyTaxSceneDom,
+  resolveKpSupplyTaxNavigationMotion
 } from "./kinetic-figure-supply-tax-scene.ts";
 import {
+  projectKpSupplyTaxTransitSvgDom,
   renderKpSupplyTaxInteractiveSvg,
   renderKpSupplyTaxWelfareLedger
 } from
@@ -53,14 +62,157 @@ export function mountKpSupplyTaxKineticFigure(input: {
     input.root,
     "[data-kp-supply-tax-focus-deck]"
   );
-  projectKpSupplyTaxSceneDom({
-    root: deck,
-    scene: projectKpSupplyTaxScene({
-      authority,
-      beat: compiled.deck.scenes[0]!.beat
-    })
+  const scenes = compiled.deck.scenes;
+  const graph = requiredElement<SVGSVGElement>(deck, ".kp-supply-tax-graph");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const durationMs = authority.animation.timeline?.durationMs;
+  if (durationMs === undefined) {
+    throw new Error("Supply-tax animation requires its canonical timeline.");
+  }
+  const clock = createKpReaderTimelinePlaybackClock({
+    id: "clock.focus-deck.economics.supply-tax.v1",
+    durationMs,
+    initialProgress: 0,
+    ownerWindow: window
   });
-  return Object.freeze({ dispose: () => undefined });
+  let active = scenes[0]!;
+  let pendingSettledScene: KpSupplyTaxArticleDeckSceneV1 | undefined;
+
+  const projectScene = (scene: KpSupplyTaxArticleDeckSceneV1): void => {
+    projectKpSupplyTaxSceneDom({
+      root: deck,
+      scene: projectKpSupplyTaxScene({ authority, beat: scene.beat })
+    });
+  };
+  const projectFrame = (progress: number): void => {
+    projectKpSupplyTaxTransitSvgDom({
+      root: graph,
+      semantics: authority.semantics,
+      // The shared clock stores global model progress. Rewind changes the
+      // clock direction, not the pure domain sampler's coordinate system.
+      frame: sampleKpEconomicsSupplyTaxAnimationFrame({
+        asset: authority,
+        progress: exactProgress(progress)
+      })
+    });
+    deck.dataset["kpSupplyTaxClockProgress"] = progress.toFixed(4);
+  };
+  const projectBeatChrome = (scene: KpSupplyTaxArticleDeckSceneV1): void => {
+    deck.dataset["kpFocusDeckActiveBeat"] = scene.beat.slug;
+    scenes.forEach((candidate) => {
+      const selected = candidate.beat.id === scene.beat.id;
+      const section = requiredElement<HTMLElement>(deck,
+        `[data-kp-focus-deck-beat="${candidate.beat.slug}"]`);
+      section.dataset["kpFocusDeckBeatActive"] = String(selected);
+      if (selected) section.removeAttribute("hidden");
+      else section.setAttribute("hidden", "until-found");
+      const button = requiredElement<HTMLButtonElement>(deck,
+        `[data-kp-focus-deck-select="${candidate.beat.slug}"]`);
+      button.disabled = false;
+      if (selected) button.setAttribute("aria-current", "step");
+      else button.removeAttribute("aria-current");
+    });
+    const index = scenes.indexOf(scene);
+    const previous = requiredElement<HTMLButtonElement>(deck,
+      "[data-kp-focus-deck-previous]");
+    const next = requiredElement<HTMLButtonElement>(deck,
+      "[data-kp-focus-deck-next]");
+    previous.disabled = index === 0;
+    next.disabled = index === scenes.length - 1;
+    deck.querySelectorAll<HTMLOutputElement>("[data-kp-focus-deck-position]")
+      .forEach((output) => {
+        output.value = `Step ${scene.beat.ordinal} of ${scenes.length}`;
+      });
+    requiredElement<HTMLOutputElement>(deck,
+      "[data-kp-focus-deck-position-short]").value =
+        `${scene.beat.ordinal} of ${scenes.length}`;
+    const replay = requiredElement<HTMLButtonElement>(deck,
+      "[data-kp-supply-tax-replay]");
+    replay.hidden = scene.beat.transitionFromPrevious !== "sample-tax-imposition";
+  };
+  const settleAt = (scene: KpSupplyTaxArticleDeckSceneV1): void => {
+    const progress = scene.beat.settledFrame === "untaxed" ? 0 : 1;
+    clock.seek(progress);
+    projectScene(scene);
+  };
+  const select = (scene: KpSupplyTaxArticleDeckSceneV1): void => {
+    if (scene.beat.id === active.beat.id) return;
+    const previous = active;
+    active = scene;
+    pendingSettledScene = undefined;
+    projectBeatChrome(active);
+    const motion = resolveKpSupplyTaxNavigationMotion({
+      from: previous.beat,
+      to: active.beat
+    });
+    if (reducedMotion.matches || motion === "settle") {
+      settleAt(active);
+      return;
+    }
+    if (motion === "forward") {
+      projectScene(active);
+      clock.seek(0);
+      clock.play({ direction: "forward", stopAt: 1 });
+      return;
+    }
+    // Keep the taxed scene present while its geometry rewinds, then remove
+    // derived objects only at the categorical untaxed endpoint.
+    clock.seek(1);
+    pendingSettledScene = active;
+    clock.play({ direction: "rewind", stopAt: 0 });
+  };
+  const replay = (): void => {
+    if (active.beat.transitionFromPrevious !== "sample-tax-imposition") return;
+    pendingSettledScene = undefined;
+    projectScene(active);
+    clock.seek(0);
+    if (reducedMotion.matches) clock.seek(1);
+    else clock.play({ direction: "forward", stopAt: 1 });
+  };
+  const selectAdjacent = (direction: -1 | 1): void => {
+    const index = scenes.indexOf(active);
+    const next = scenes[index + direction];
+    if (next !== undefined) select(next);
+  };
+  const handleClick = (event: MouseEvent): void => {
+    const target = event.target instanceof Element ? event.target : null;
+    if (target?.closest("[data-kp-focus-deck-previous]") !== null) {
+      selectAdjacent(-1);
+      return;
+    }
+    if (target?.closest("[data-kp-focus-deck-next]") !== null) {
+      selectAdjacent(1);
+      return;
+    }
+    if (target?.closest("[data-kp-supply-tax-replay]") !== null) {
+      replay();
+      return;
+    }
+    const slug = target?.closest<HTMLElement>("[data-kp-focus-deck-select]")
+      ?.dataset["kpFocusDeckSelect"];
+    const scene = scenes.find(({ beat }) => beat.slug === slug);
+    if (scene !== undefined) select(scene);
+  };
+
+  const unsubscribe = clock.subscribe((sample) => {
+    projectFrame(sample.progress);
+    if (sample.settled && pendingSettledScene !== undefined) {
+      const pending = pendingSettledScene;
+      pendingSettledScene = undefined;
+      projectScene(pending);
+    }
+  });
+  projectBeatChrome(active);
+  projectScene(active);
+  projectFrame(0);
+  deck.addEventListener("click", handleClick);
+  return Object.freeze({
+    dispose: () => {
+      deck.removeEventListener("click", handleClick);
+      unsubscribe();
+      clock.dispose();
+    }
+  });
 }
 
 function renderPage(
@@ -79,7 +231,7 @@ function renderPage(
         </header>
         <div class="kp-supply-tax-deck__body">
           <nav class="kp-supply-tax-steps" aria-label="Figure steps">
-            <header><span>Steps</span><output>1 of ${scenes.length}</output></header>
+            <header><span>Steps</span><output data-kp-focus-deck-position-short>1 of ${scenes.length}</output></header>
             <ol>${scenes.map(({ beat }, index) => `<li>
               <button type="button" data-kp-focus-deck-select="${escapeAttribute(beat.slug)}"${index === 0 ? ' aria-current="step"' : ""} disabled>
                 <span aria-hidden="true">${beat.ordinal}</span>
@@ -93,9 +245,12 @@ function renderPage(
               ${scenes.map((scene, index) => renderScene(scene, index === 0)).join("")}
             </section>
             <footer class="kp-supply-tax-navigation" aria-label="Figure navigation">
-              <button type="button" aria-label="Previous step" title="Previous step" disabled>←</button>
-              <output aria-live="polite">Step 1 of ${scenes.length}</output>
-              <button type="button" aria-label="Next step" title="Next step" disabled>→</button>
+              <button type="button" data-kp-focus-deck-previous aria-label="Previous step" title="Previous step" disabled>${renderKpFocusDeckControlIcon("previous")}</button>
+              <div class="kp-supply-tax-navigation__status">
+                <output data-kp-focus-deck-position aria-live="polite">Step 1 of ${scenes.length}</output>
+                <button type="button" data-kp-supply-tax-replay aria-label="Replay transformation" title="Replay transformation" hidden>${renderKpFocusDeckControlIcon("replay")}</button>
+              </div>
+              <button type="button" data-kp-focus-deck-next aria-label="Next step" title="Next step">${renderKpFocusDeckControlIcon("next")}</button>
             </footer>
           </div>
         </div>
@@ -145,4 +300,14 @@ function requiredElement<T extends Element>(
   const element = root.querySelector<T>(selector);
   if (element === null) throw new Error(`Missing supply-tax element ${selector}.`);
   return element;
+}
+
+function exactProgress(value: number): { numerator: string; denominator: string } {
+  if (value <= 0) return { numerator: "0", denominator: "1" };
+  if (value >= 1) return { numerator: "1", denominator: "1" };
+  const denominator = 1_000_000;
+  return {
+    numerator: String(Math.round(value * denominator)),
+    denominator: String(denominator)
+  };
 }

@@ -100,6 +100,7 @@ button { font: inherit; }
   color: var(--kp-st-strong);
 }
 .kp-supply-tax-steps button:disabled { opacity: 1; }
+.kp-supply-tax-steps button:not(:disabled) { cursor: pointer; }
 .kp-supply-tax-steps button > span:first-child { font-size: 0.62rem; text-align: center; }
 
 .kp-supply-tax-deck__main { min-width: 0; }
@@ -272,6 +273,26 @@ button { font: inherit; }
   color: var(--kp-st-muted);
   font: 500 1.15rem/1 ui-sans-serif, system-ui, sans-serif;
 }
+.kp-supply-tax-navigation button:not(:disabled) { cursor: pointer; }
+.kp-supply-tax-navigation button:disabled { color: var(--kp-st-rule); }
+.kp-supply-tax-navigation button:focus-visible,
+.kp-supply-tax-steps button:focus-visible {
+  outline: 2px solid var(--kp-st-focus);
+  outline-offset: -3px;
+}
+.kp-supply-tax-navigation__status {
+  display: flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+}
+.kp-supply-tax-navigation__status button {
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+}
+.kp-supply-tax-navigation__status button[hidden] { display: none; }
+.kp-focus-deck-control__icon { display: block; margin: auto; }
 .kp-supply-tax-navigation output {
   color: var(--kp-st-muted);
   font: 600 0.68rem/1 ui-sans-serif, system-ui, sans-serif;

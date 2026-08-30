@@ -24,6 +24,17 @@ export interface KpSupplyTaxSceneProjectionV1 {
   readonly entities: readonly KpSupplyTaxSceneEntityV1[];
 }
 
+export type KpSupplyTaxNavigationMotion = "forward" | "rewind" | "settle";
+
+export function resolveKpSupplyTaxNavigationMotion(input: {
+  readonly from: KpSupplyTaxPedagogicalBeatV1;
+  readonly to: KpSupplyTaxPedagogicalBeatV1;
+}): KpSupplyTaxNavigationMotion {
+  if (input.from.ordinal === 2 && input.to.ordinal === 3) return "forward";
+  if (input.from.ordinal === 3 && input.to.ordinal === 2) return "rewind";
+  return "settle";
+}
+
 export function projectKpSupplyTaxScene(input: {
   readonly authority: KpEconomicsSupplyTaxAnimationAsset;
   readonly beat: KpSupplyTaxPedagogicalBeatV1;
