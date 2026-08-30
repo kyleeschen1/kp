@@ -61,6 +61,10 @@
     {
       "kind": "file",
       "path": "src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-route.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-svg.ts"
     }
   ],
   "dependsOn": {
@@ -287,6 +291,20 @@
       "scope": "broad",
       "checkedAt": "2026-08-30T08:00:15.069Z",
       "notes": "Full typecheck, zero-diagnostic Svelte check, domain boundary, publication integrity check, and production bundle pass with the lazy supply-tax route."
+    },
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T08:06:17.557Z",
+      "notes": "Forty-one tests pass; exact curve endpoints and equilibrium project correctly, semantic identities are order-independent, all 21 visible graph labels use KaTeX, and SVG accessibility is present."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-30T08:06:18.512Z",
+      "notes": "Native SVG renderer, route host, KaTeX projections, application, Svelte, and domain boundaries typecheck with zero Svelte diagnostics."
     }
   ],
   "progress": {

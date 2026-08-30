@@ -104,17 +104,42 @@ button { font: inherit; }
 
 .kp-supply-tax-deck__main { min-width: 0; }
 .kp-supply-tax-figure { margin: 0; padding: clamp(1rem, 3vw, 1.8rem); border-bottom: 1.5px solid var(--kp-st-rule); }
-.kp-supply-tax-stage__placeholder {
-  display: grid;
-  min-height: 15rem;
-  place-content: center;
-  gap: 0.65rem;
-  color: var(--kp-st-strong);
-  text-align: center;
+.kp-supply-tax-stage__graph { width: min(100%, 42rem); margin-inline: auto; }
+.kp-supply-tax-graph { display: block; width: 100%; height: auto; overflow: visible; }
+.kp-supply-tax-graph__grid line {
+  stroke: color-mix(in srgb, var(--kp-st-ink) 8%, var(--kp-st-paper));
+  stroke-width: 1;
 }
-.kp-supply-tax-stage__placeholder > div:first-child,
-.kp-supply-tax-stage__placeholder > div:nth-child(2) { font-size: 1.15rem; }
-.kp-supply-tax-stage__placeholder > div:last-child { margin-top: 0.6rem; font-size: 1.35rem; }
+.kp-supply-tax-graph__axes line {
+  stroke: color-mix(in srgb, var(--kp-st-ink) 62%, var(--kp-st-paper));
+  stroke-width: 1.5;
+}
+.kp-supply-tax-graph__curve > line { fill: none; stroke-width: 2.5; }
+.kp-supply-tax-graph__curve--demand > line { stroke: #8f493f; }
+.kp-supply-tax-graph__curve--supply > line { stroke: #37666a; }
+.kp-supply-tax-graph__guide {
+  stroke: color-mix(in srgb, var(--kp-st-ink) 35%, var(--kp-st-paper));
+  stroke-width: 1.1;
+  stroke-dasharray: 4 4;
+}
+.kp-supply-tax-graph__equilibrium circle {
+  fill: var(--kp-st-strong);
+  stroke: var(--kp-st-paper);
+  stroke-width: 1.5;
+}
+.kp-supply-tax-graph__math { color: var(--kp-st-ink); overflow: visible; }
+.kp-supply-tax-graph__math > div {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  font-size: 0.85rem;
+}
+.kp-supply-tax-graph__curve .kp-supply-tax-graph__math > div,
+.kp-supply-tax-graph__equilibrium .kp-supply-tax-graph__math > div {
+  color: var(--kp-st-strong);
+  font-size: 0.95rem;
+}
 
 .kp-supply-tax-narrative { min-height: 13rem; padding: 1.35rem clamp(1rem, 3vw, 2rem); }
 .kp-supply-tax-narrative h1,
@@ -161,5 +186,5 @@ button { font: inherit; }
   .kp-supply-tax-steps ol { grid-template-columns: repeat(8, minmax(2rem, 1fr)); }
   .kp-supply-tax-steps button { min-height: 2.25rem; grid-template-columns: 1fr; }
   .kp-supply-tax-steps button > span:last-child { display: none; }
-  .kp-supply-tax-stage__placeholder { min-height: 11rem; }
+  .kp-supply-tax-figure { padding-inline: 0.45rem; }
 }

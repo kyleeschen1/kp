@@ -120,7 +120,8 @@
     {
       "id": "s12",
       "title": "Baseline-SVG",
-      "status": "planned"
+      "summary": "Replaced the placeholder with a native SVG baseline projected from exact semantic axes, demand, original supply, and untaxed equilibrium; every visible tick, axis, curve, and point label uses KaTeX and semantic identity is independent of DOM order.",
+      "status": "complete"
     },
     {
       "id": "s13",

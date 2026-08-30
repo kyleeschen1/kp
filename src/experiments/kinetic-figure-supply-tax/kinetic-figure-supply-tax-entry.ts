@@ -11,13 +11,14 @@ import type { KpArticleImportLock } from
   "../../article/kp-article-import-lock.ts";
 import { compileKpArticleMarkdownFragmentHtml } from
   "../../article/kp-article-static-html.ts";
-import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
 import { applyKpSemanticVisualDomTheme } from
   "../../rendering/semantic-visual-dom-theme.ts";
 import {
   compileKpSupplyTaxArticle,
   type KpSupplyTaxArticleDeckSceneV1
 } from "./kinetic-figure-supply-tax-article.ts";
+import { renderKpSupplyTaxBaselineSvg } from
+  "./kinetic-figure-supply-tax-svg.ts";
 
 const importLock = importLockValue as KpArticleImportLock;
 
@@ -85,11 +86,7 @@ function renderPage(
 function renderStaticStage(): string {
   return `<figure class="kp-supply-tax-figure" data-kp-supply-tax-stage data-kp-supply-tax-stage-state="baseline-market">
     <figcaption class="kp-supply-tax-visually-hidden">Demand and original supply intersect at five units and a price of seven before the tax.</figcaption>
-    <div class="kp-supply-tax-stage__placeholder" role="img" aria-label="Untaxed supply and demand equilibrium">
-      <div>${renderLatexToHtml("D:\\;P=12-Q", { displayMode: false })}</div>
-      <div>${renderLatexToHtml("S:\\;P=2+Q", { displayMode: false })}</div>
-      <div>${renderLatexToHtml("E_0=(5,7)", { displayMode: false })}</div>
-    </div>
+    <div class="kp-supply-tax-stage__graph">${renderKpSupplyTaxBaselineSvg()}</div>
   </figure>`;
 }
 
