@@ -120,6 +120,53 @@ test("forward and rewind project identical tax geometry at the same model state"
   assert.deepEqual(rewind, forward);
 });
 
+test("taxed market projects exact equilibrium, incidence, guides, and wedge", () => {
+  const semantics = createKpPerUnitTaxWelfareAsset();
+  const projection = projectKpSupplyTaxTransitSvg({
+    semantics,
+    frame: sampleKpPerUnitTaxWelfareFrame({
+      asset: semantics,
+      progress: { numerator: "1", denominator: "1" }
+    })
+  });
+
+  assert.equal(projection.market.entityId, semantics.model.states.taxed.id);
+  assert.equal(projection.market.wedgeEntityId, semantics.entities.wedge.id);
+  assert.equal(projection.market.quantity, 3);
+  assert.equal(projection.market.consumerPrice, 9);
+  assert.equal(projection.market.producerPrice, 5);
+  assert.equal(projection.market.priceWedge, 4);
+  assert.equal(projection.market.equilibriumPoint.x,
+    projection.market.producerPoint.x);
+  assert.equal(projection.market.consumerPriceAxisPoint.y,
+    projection.market.equilibriumPoint.y);
+  assert.equal(projection.market.producerPriceAxisPoint.y,
+    projection.market.producerPoint.y);
+  assert.equal(projection.market.quantityAxisPoint.x,
+    projection.market.equilibriumPoint.x);
+  const pixelsPerPriceUnit = (kpSupplyTaxGraphViewport.height -
+    kpSupplyTaxGraphViewport.bottom - kpSupplyTaxGraphViewport.top) / 14;
+  assert.ok(Math.abs(projection.market.producerPoint.y -
+    projection.market.equilibriumPoint.y - 4 * pixelsPerPriceUnit) < 1e-9);
+});
+
+test("interactive SVG contains one exact taxed-market view with KaTeX labels", () => {
+  const semantics = createKpPerUnitTaxWelfareAsset();
+  const svg = renderKpSupplyTaxInteractiveSvg(semantics);
+
+  assert.equal(count(svg,
+    `data-kp-supply-tax-entity="${semantics.model.states.taxed.id}"`), 1);
+  assert.equal(count(svg,
+    `data-kp-supply-tax-entity="${semantics.entities.wedge.id}"`), 1);
+  for (const role of ["taxed-equilibrium", "consumer-price", "producer-price",
+    "taxed-quantity", "tax-wedge"]) {
+    assert.equal(count(svg, `data-kp-supply-tax-math-label="${role}"`), 1);
+  }
+  assert.match(svg, /data-kp-supply-tax-market-mark="wedge"/u);
+  assert.match(svg, /data-kp-supply-tax-market-mark="quantity-guide"/u);
+  assert.doesNotMatch(svg, /<text(?:\s|>)/u);
+});
+
 function count(value: string, needle: string): number {
   return value.split(needle).length - 1;
 }

@@ -319,6 +319,20 @@
       "scope": "standard",
       "checkedAt": "2026-08-30T08:10:03.017Z",
       "notes": "Tax-transit pure projection and SVG DOM adapter typecheck across application, tests, Svelte, and domain boundaries with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T08:16:26.565Z",
+      "notes": "Forty-six tests pass, including exact taxed equilibrium, incidence, guide, wedge-span, semantic identity, and KaTeX-label checks."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-30T08:16:27.612Z",
+      "notes": "Taxed-market projections typecheck across application, tests, Svelte with zero diagnostics, and domain projects."
     }
   ],
   "progress": {

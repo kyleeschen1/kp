@@ -132,7 +132,8 @@
     {
       "id": "s14",
       "title": "Taxed-equilibrium-view",
-      "status": "planned"
+      "summary": "Projected E_t, Q_t, consumer and producer prices, exact tax wedge, guide lines, and retained E_0/original supply from the sampled semantic frame; renderer geometry remains downstream of economic truth.",
+      "status": "complete"
     },
     {
       "id": "s15",

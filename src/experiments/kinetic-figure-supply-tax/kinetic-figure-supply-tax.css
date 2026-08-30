@@ -131,6 +131,20 @@ button { font: inherit; }
   stroke: var(--kp-st-paper);
   stroke-width: 1.5;
 }
+.kp-supply-tax-graph__taxed-market > circle {
+  fill: var(--kp-st-focus);
+  stroke: var(--kp-st-paper);
+  stroke-width: 1.5;
+}
+.kp-supply-tax-graph__taxed-market > circle.kp-supply-tax-graph__producer-point {
+  fill: var(--kp-st-paper);
+  stroke: var(--kp-st-focus);
+  stroke-width: 2;
+}
+.kp-supply-tax-graph__wedge > line {
+  stroke: var(--kp-st-focus);
+  stroke-width: 2.25;
+}
 .kp-supply-tax-graph__math { color: var(--kp-st-ink); overflow: visible; }
 .kp-supply-tax-graph__math > div {
   display: grid;

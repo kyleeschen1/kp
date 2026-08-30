@@ -54,6 +54,21 @@ export interface KpSupplyTaxTransitSvgProjectionV1 {
     present: boolean;
     opacity: number;
   }>;
+  readonly market: Readonly<{
+    entityId: string;
+    present: boolean;
+    opacity: number;
+    quantity: number;
+    consumerPrice: number;
+    producerPrice: number;
+    priceWedge: number;
+    equilibriumPoint: KpSupplyTaxSvgPointV1;
+    producerPoint: KpSupplyTaxSvgPointV1;
+    quantityAxisPoint: KpSupplyTaxSvgPointV1;
+    consumerPriceAxisPoint: KpSupplyTaxSvgPointV1;
+    producerPriceAxisPoint: KpSupplyTaxSvgPointV1;
+    wedgeEntityId: string;
+  }>;
 }
 
 export function projectKpSupplyTaxBaselineSvg(
@@ -112,6 +127,12 @@ export function projectKpSupplyTaxTransitSvg(input: {
   const originalIntercept = exactNumber(input.frame.curves.originalSupplyIntercept);
   const taxedIntercept = exactNumber(input.frame.curves.buyerFacingSupplyIntercept);
   const progress = exactNumber(input.frame.modelProgress);
+  const quantity = exactNumber(input.frame.market.quantity);
+  const consumerPrice = exactNumber(input.frame.market.consumerPrice);
+  const producerPrice = exactNumber(input.frame.market.producerPrice);
+  const priceWedge = exactNumber(input.frame.market.priceWedge);
+  const present = progress > 0;
+  const opacity = Math.min(1, progress / 0.14);
   return Object.freeze({
     phase: input.frame.phase,
     progress,
@@ -124,10 +145,25 @@ export function projectKpSupplyTaxTransitSvg(input: {
       entityId: taxed.id,
       start: graphPoint(input.semantics, qMin, taxedIntercept + slope * qMin),
       end: graphPoint(input.semantics, qMax, taxedIntercept + slope * qMax),
-      present: progress > 0,
+      present,
       // Reveal follows the playhead, so direct seek and reverse never depend
       // on a CSS clock while the two supply curves separate.
-      opacity: Math.min(1, progress / 0.14)
+      opacity
+    }),
+    market: Object.freeze({
+      entityId: input.semantics.model.states.taxed.id,
+      present,
+      opacity,
+      quantity,
+      consumerPrice,
+      producerPrice,
+      priceWedge,
+      equilibriumPoint: graphPoint(input.semantics, quantity, consumerPrice),
+      producerPoint: graphPoint(input.semantics, quantity, producerPrice),
+      quantityAxisPoint: graphPoint(input.semantics, quantity, 0),
+      consumerPriceAxisPoint: graphPoint(input.semantics, 0, consumerPrice),
+      producerPriceAxisPoint: graphPoint(input.semantics, 0, producerPrice),
+      wedgeEntityId: input.semantics.entities.wedge.id
     })
   });
 }
@@ -150,6 +186,7 @@ export function projectKpSupplyTaxTransitSvgDom(input: {
   if (label === null) throw new Error("Missing buyer-facing supply KaTeX label.");
   label.setAttribute("x", format(projection.buyerFacingSupply.end.x - 68));
   label.setAttribute("y", format(projection.buyerFacingSupply.end.y - 31));
+  projectTaxedMarketDom(input.root, projection.market);
   input.root.dataset["kpSupplyTaxSvgPhase"] = projection.phase;
   input.root.dataset["kpSupplyTaxSvgProgress"] = format(projection.progress);
 }
@@ -172,6 +209,12 @@ function renderKpSupplyTaxSvg(
   const plotTop = kpSupplyTaxGraphViewport.top;
   const plotBottom = kpSupplyTaxGraphViewport.height - kpSupplyTaxGraphViewport.bottom;
   const equilibrium = projection.equilibrium.point;
+  const taxed = semantics.model.states.taxed;
+  const taxedQuantity = exactNumber(taxed.quantity);
+  const taxedConsumerPrice = exactNumber(taxed.consumerPrice);
+  const taxedProducerPrice = exactNumber(taxed.producerPrice);
+  const taxedEquilibrium = graphPoint(semantics, taxedQuantity, taxedConsumerPrice);
+  const taxedProducerPoint = graphPoint(semantics, taxedQuantity, taxedProducerPrice);
 
   return `<svg class="kp-supply-tax-graph" viewBox="0 0 ${kpSupplyTaxGraphViewport.width} ${kpSupplyTaxGraphViewport.height}" role="img" aria-labelledby="kp-supply-tax-graph-title kp-supply-tax-graph-description" data-kp-supply-tax-svg-state="baseline-market">
     <title id="kp-supply-tax-graph-title">Untaxed supply and demand equilibrium</title>
@@ -208,7 +251,55 @@ function renderKpSupplyTaxSvg(
       <circle cx="${format(equilibrium.x)}" cy="${format(equilibrium.y)}" r="4"/>
       ${mathLabel("E_0=(5,7)", equilibrium.x + 8, equilibrium.y - 34, 104, 32, "untaxed-equilibrium")}
     </g>
+    ${includeTransitLayer ? `<g class="kp-supply-tax-graph__taxed-market" data-kp-supply-tax-entity="${escapeAttribute(taxed.id)}" data-kp-presence="false" style="opacity:0">
+      <line class="kp-supply-tax-graph__guide" data-kp-supply-tax-market-mark="consumer-price-guide" x1="${format(plotLeft)}" y1="${format(taxedEquilibrium.y)}" x2="${format(taxedEquilibrium.x)}" y2="${format(taxedEquilibrium.y)}"/>
+      <line class="kp-supply-tax-graph__guide" data-kp-supply-tax-market-mark="producer-price-guide" x1="${format(plotLeft)}" y1="${format(taxedProducerPoint.y)}" x2="${format(taxedProducerPoint.x)}" y2="${format(taxedProducerPoint.y)}"/>
+      <line class="kp-supply-tax-graph__guide" data-kp-supply-tax-market-mark="quantity-guide" x1="${format(taxedEquilibrium.x)}" y1="${format(taxedEquilibrium.y)}" x2="${format(taxedEquilibrium.x)}" y2="${format(plotBottom)}"/>
+      <g class="kp-supply-tax-graph__wedge" data-kp-supply-tax-entity="${escapeAttribute(semantics.entities.wedge.id)}">
+        <line data-kp-supply-tax-market-mark="wedge" x1="${format(taxedEquilibrium.x)}" y1="${format(taxedEquilibrium.y)}" x2="${format(taxedProducerPoint.x)}" y2="${format(taxedProducerPoint.y)}"/>
+        <line data-kp-supply-tax-market-mark="wedge-cap-consumer" x1="${format(taxedEquilibrium.x - 5)}" y1="${format(taxedEquilibrium.y)}" x2="${format(taxedEquilibrium.x + 5)}" y2="${format(taxedEquilibrium.y)}"/>
+        <line data-kp-supply-tax-market-mark="wedge-cap-producer" x1="${format(taxedProducerPoint.x - 5)}" y1="${format(taxedProducerPoint.y)}" x2="${format(taxedProducerPoint.x + 5)}" y2="${format(taxedProducerPoint.y)}"/>
+        ${mathLabel("t=P_c-P_p=4", taxedEquilibrium.x + 8, (taxedEquilibrium.y + taxedProducerPoint.y) / 2 - 15, 126, 30, "tax-wedge")}
+      </g>
+      <circle data-kp-supply-tax-market-mark="taxed-equilibrium-point" cx="${format(taxedEquilibrium.x)}" cy="${format(taxedEquilibrium.y)}" r="4"/>
+      <circle class="kp-supply-tax-graph__producer-point" data-kp-supply-tax-market-mark="producer-point" cx="${format(taxedProducerPoint.x)}" cy="${format(taxedProducerPoint.y)}" r="3.25"/>
+      ${mathLabel("E_t", taxedEquilibrium.x + 8, taxedEquilibrium.y - 30, 44, 30, "taxed-equilibrium")}
+      ${mathLabel("P_c=9", plotLeft - 59, taxedEquilibrium.y - 14, 58, 28, "consumer-price")}
+      ${mathLabel("P_p=5", plotLeft - 59, taxedProducerPoint.y - 14, 58, 28, "producer-price")}
+      ${mathLabel("Q_t=3", taxedEquilibrium.x - 28, plotBottom + 8, 62, 28, "taxed-quantity")}
+    </g>` : ""}
   </svg>`;
+}
+
+function projectTaxedMarketDom(
+  root: SVGSVGElement,
+  market: KpSupplyTaxTransitSvgProjectionV1["market"]
+): void {
+  const group = requiredSvgGroup(root, market.entityId);
+  group.dataset["kpPresence"] = String(market.present);
+  group.style.opacity = format(market.opacity);
+  setLine(group, "consumer-price-guide", market.consumerPriceAxisPoint,
+    market.equilibriumPoint);
+  setLine(group, "producer-price-guide", market.producerPriceAxisPoint,
+    market.producerPoint);
+  setLine(group, "quantity-guide", market.equilibriumPoint,
+    market.quantityAxisPoint);
+  setLine(group, "wedge", market.equilibriumPoint, market.producerPoint);
+  setHorizontalCap(group, "wedge-cap-consumer", market.equilibriumPoint);
+  setHorizontalCap(group, "wedge-cap-producer", market.producerPoint);
+  setCircle(group, "taxed-equilibrium-point", market.equilibriumPoint);
+  setCircle(group, "producer-point", market.producerPoint);
+  setMathLabel(group, "taxed-equilibrium", "E_t",
+    market.equilibriumPoint.x + 8, market.equilibriumPoint.y - 30);
+  setMathLabel(group, "consumer-price", `P_c=${exactLatex(market.consumerPrice)}`,
+    kpSupplyTaxGraphViewport.left - 59, market.consumerPriceAxisPoint.y - 14);
+  setMathLabel(group, "producer-price", `P_p=${exactLatex(market.producerPrice)}`,
+    kpSupplyTaxGraphViewport.left - 59, market.producerPriceAxisPoint.y - 14);
+  setMathLabel(group, "taxed-quantity", `Q_t=${exactLatex(market.quantity)}`,
+    market.quantityAxisPoint.x - 28, market.quantityAxisPoint.y + 8);
+  setMathLabel(group, "tax-wedge", `t=P_c-P_p=${exactLatex(market.priceWedge)}`,
+    market.equilibriumPoint.x + 8,
+    (market.equilibriumPoint.y + market.producerPoint.y) / 2 - 15);
 }
 
 function requiredSvgGroup(root: SVGSVGElement, entityId: string): SVGGElement {
@@ -230,6 +321,69 @@ function setCurveLine(
   line.setAttribute("y1", format(start.y));
   line.setAttribute("x2", format(end.x));
   line.setAttribute("y2", format(end.y));
+}
+
+function setLine(
+  group: SVGGElement,
+  role: string,
+  start: KpSupplyTaxSvgPointV1,
+  end: KpSupplyTaxSvgPointV1
+): void {
+  const line = group.querySelector<SVGLineElement>(
+    `[data-kp-supply-tax-market-mark="${role}"]`
+  );
+  if (line === null) throw new Error(`Missing taxed-market line ${role}.`);
+  line.setAttribute("x1", format(start.x));
+  line.setAttribute("y1", format(start.y));
+  line.setAttribute("x2", format(end.x));
+  line.setAttribute("y2", format(end.y));
+}
+
+function setHorizontalCap(
+  group: SVGGElement,
+  role: string,
+  center: KpSupplyTaxSvgPointV1
+): void {
+  setLine(group, role, { x: center.x - 5, y: center.y },
+    { x: center.x + 5, y: center.y });
+}
+
+function setCircle(
+  group: SVGGElement,
+  role: string,
+  point: KpSupplyTaxSvgPointV1
+): void {
+  const circle = group.querySelector<SVGCircleElement>(
+    `[data-kp-supply-tax-market-mark="${role}"]`
+  );
+  if (circle === null) throw new Error(`Missing taxed-market point ${role}.`);
+  circle.setAttribute("cx", format(point.x));
+  circle.setAttribute("cy", format(point.y));
+}
+
+function setMathLabel(
+  group: SVGGElement,
+  role: string,
+  latex: string,
+  x: number,
+  y: number
+): void {
+  const label = group.querySelector<SVGForeignObjectElement>(
+    `[data-kp-supply-tax-math-label="${role}"]`
+  );
+  if (label === null) throw new Error(`Missing taxed-market KaTeX label ${role}.`);
+  const content = label.querySelector<HTMLDivElement>("div");
+  if (content === null) throw new Error(`Missing KaTeX content for ${role}.`);
+  content.innerHTML = renderLatexToHtml(latex, { displayMode: false });
+  label.setAttribute("x", format(x));
+  label.setAttribute("y", format(y));
+}
+
+function exactLatex(value: number): string {
+  if (Number.isInteger(value)) return String(value);
+  const doubled = value * 2;
+  if (Number.isInteger(doubled)) return `\\frac{${doubled}}{2}`;
+  return format(value);
 }
 
 function graphPoint(semantics: KpPerUnitTaxWelfareAssetV1, quantity: number, price: number): KpSupplyTaxSvgPointV1 {
