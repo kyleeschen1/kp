@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "kp.article-import-lock.v1",
+  "documentId": "lesson.economics.supply-tax-scroll-score",
+  "entries": [
+    {
+      "alias": "supplyTax",
+      "request": "vignette.economics.supply-tax-welfare@1",
+      "vignetteId": "vignette.economics.supply-tax-welfare",
+      "requestedMajor": 1,
+      "version": "1.1.0",
+      "integrity": "sha256:7495544318b1a867c0bb51db6033deb948a2d62ee868955c615241e31c49ea33",
+      "moduleSpecifier": "../../animation/economics-supply-tax-asset.ts"
+    }
+  ]
+}

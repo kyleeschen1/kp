@@ -1,0 +1,144 @@
+{
+  "id": "next-action.kp.supply-tax-scroll-score-station-v0",
+  "kind": "next-action",
+  "title": "Supply-tax",
+  "status": "ready",
+  "domain": "delivery",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/threads/focus-deck.md",
+      "summary": "Approved"
+    },
+    {
+      "kind": "file",
+      "path": "src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-score.ts",
+      "summary": "Canonical"
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/economics-supply-tax-asset.ts",
+      "summary": "Canonical"
+    },
+    {
+      "kind": "file",
+      "path": "src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-svg.ts",
+      "summary": "Existing"
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "workflow.kp.delivery"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:economics-supply-tax",
+    "npm run test:browser:economics-supply-tax-scroll-score",
+    "npm run typecheck"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "semantic score, Article binding, scrub profile, and Focus Deck preservation",
+      "checkedAt": "2026-08-30T19:43:21.079Z",
+      "notes": "61 of 61 supply-tax tests passed, including the new two-paragraph score and unchanged existing callers."
+    },
+    {
+      "command": "npm run test:browser:economics-supply-tax-scroll-score",
+      "status": "passed",
+      "scope": "canonical Chromium exemplar",
+      "checkedAt": "2026-08-30T19:50:54.541Z",
+      "notes": "6 of 6 passed: proportional forward and reverse scrub, scrub profile, semantic links, keyboard rail, native find, reduced motion, and phone overflow."
+    },
+    {
+      "command": "npm run test:browser:economics-supply-tax",
+      "status": "passed",
+      "scope": "Focus Deck preservation",
+      "checkedAt": "2026-08-30T19:50:55.672Z",
+      "notes": "6 of 6 existing Focus Deck browser checks passed after adding the opt-in scrub transition profile."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript, Svelte, and domain boundaries",
+      "checkedAt": "2026-08-30T19:50:56.700Z",
+      "notes": "All configured checks passed with zero Svelte errors or warnings."
+    },
+    {
+      "command": "npm run visual:economics-supply-tax-scroll-score",
+      "status": "passed",
+      "scope": "disposable desktop and phone checkpoint captures",
+      "checkedAt": "2026-08-30T19:50:57.688Z",
+      "notes": "Stable visual command captured market, welfare, and phone states; choreography now awaits the required human exemplar review."
+    },
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "reading-light attention projection and supply-tax semantics",
+      "checkedAt": "2026-08-30T21:37:44.099Z",
+      "notes": "62 of 62 passed, including deterministic early transfer, stable hold, and reduced-motion snap."
+    },
+    {
+      "command": "npm run test:browser:economics-supply-tax-scroll-score",
+      "status": "passed",
+      "scope": "canonical Chromium prose-focus exemplar",
+      "checkedAt": "2026-08-30T21:37:45.320Z",
+      "notes": "6 of 6 passed; spotlight paint keeps opacity at one, removes text decoration, preserves direct seek, native find, reduced motion, and phone fit."
+    },
+    {
+      "command": "npm run visual:economics-supply-tax-scroll-score",
+      "status": "passed",
+      "scope": "desktop and phone spotlight checkpoint",
+      "checkedAt": "2026-08-30T21:37:46.343Z",
+      "notes": "Scoped captures show a quiet feathered phrase field with stable ink and no underline; exact aesthetic approval remains human-owned."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript, Svelte, and domain boundaries",
+      "checkedAt": "2026-08-30T21:37:47.354Z",
+      "notes": "All configured checks passed after the exemplar-local attention projection was added."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Slice 2/2 complete. HUMAN_CHECKPOINT: the underline is replaced by a deterministic reading-light field with stable full-opacity ink, early reversible phrase handoff, and discrete reduced-motion focus. Shared motif promotion remains intentionally unstarted pending visual approval."
+  },
+  "expectedLearning": [
+    "Whether a compact paragraph can act as a proportional searchable semantic scrub surface without making native scrolling feel trapped."
+  ],
+  "allowedWork": [
+    "Add one separate supply-tax Scroll Score Station route that reuses the existing model, score, SVG renderer, and deterministic sampled-frame authority.",
+    "Add local score bindings, projection lifecycle, styles, and focused verification for the two-paragraph stacked exemplar."
+  ],
+  "disallowedWork": [
+    "Do not change the approved supply-tax Focus Deck route, behavior, prose, economics truth, or animation authority.",
+    "Do not extract shared Scroll Score infrastructure or generalize beyond this exemplar before human review."
+  ],
+  "criteria": [
+    {
+      "id": "native-scroll-remains-proportional",
+      "weight": "high"
+    },
+    {
+      "id": "two-paragraph-semantic-score-is-searchable",
+      "weight": "high"
+    },
+    {
+      "id": "direct-seek-and-reverse-are-deterministic",
+      "weight": "high"
+    },
+    {
+      "id": "stacked-desktop-mobile-fit",
+      "weight": "high"
+    },
+    {
+      "id": "focus-deck-preservation",
+      "weight": "high"
+    }
+  ]
+}
