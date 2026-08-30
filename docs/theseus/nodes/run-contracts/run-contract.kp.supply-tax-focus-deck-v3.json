@@ -126,7 +126,8 @@
     {
       "id": "s13",
       "title": "Tax-transit",
-      "status": "planned"
+      "summary": "Added a deterministic tax-transit projection and SVG adapter: original supply remains fixed, distinct buyer-facing supply shifts by the exact sampled tax, reveal follows playhead state, forward and rewind agree, and no clock or DOM-history reconstruction was introduced.",
+      "status": "complete"
     },
     {
       "id": "s14",

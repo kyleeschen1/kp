@@ -3,9 +3,13 @@ import test from "node:test";
 
 import { createKpPerUnitTaxWelfareAsset } from
   "../domains/economics/per-unit-tax-welfare-asset.ts";
+import { sampleKpPerUnitTaxWelfareFrame } from
+  "../domains/economics/per-unit-tax-welfare-frame.ts";
 import {
   kpSupplyTaxGraphViewport,
   projectKpSupplyTaxBaselineSvg,
+  projectKpSupplyTaxTransitSvg,
+  renderKpSupplyTaxInteractiveSvg,
   renderKpSupplyTaxBaselineSvg
 } from "../src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-svg.ts";
 
@@ -58,3 +62,64 @@ test("baseline graph provides one accessible image description", () => {
   assert.match(svg, /<desc[^>]*>Demand P equals 12 minus Q/u);
   assert.match(svg, /data-kp-supply-tax-svg-state="baseline-market"/u);
 });
+
+test("tax transit shifts buyer-facing supply while original supply stays fixed", () => {
+  const semantics = createKpPerUnitTaxWelfareAsset();
+  const projectionAt = (numerator: string) => projectKpSupplyTaxTransitSvg({
+    semantics,
+    frame: sampleKpPerUnitTaxWelfareFrame({
+      asset: semantics,
+      progress: { numerator, denominator: "2" }
+    })
+  });
+  const start = projectionAt("0");
+  const middle = projectionAt("1");
+  const end = projectionAt("2");
+
+  assert.deepEqual(start.originalSupply, middle.originalSupply);
+  assert.deepEqual(middle.originalSupply, end.originalSupply);
+  assert.equal(start.buyerFacingSupply.present, false);
+  assert.equal(start.buyerFacingSupply.opacity, 0);
+  assert.equal(middle.buyerFacingSupply.present, true);
+  assert.equal(middle.buyerFacingSupply.opacity, 1);
+  assert.ok(middle.buyerFacingSupply.start.y < start.buyerFacingSupply.start.y);
+  assert.ok(end.buyerFacingSupply.start.y < middle.buyerFacingSupply.start.y);
+  assert.equal(end.buyerFacingSupply.end.y, kpSupplyTaxGraphViewport.top);
+});
+
+test("interactive SVG retains both supply identities in separate groups", () => {
+  const semantics = createKpPerUnitTaxWelfareAsset();
+  const svg = renderKpSupplyTaxInteractiveSvg(semantics);
+
+  assert.equal(count(svg, `data-kp-supply-tax-entity="${semantics.model.input.supply.id}"`), 1);
+  assert.equal(count(svg, `data-kp-supply-tax-entity="${semantics.model.input.supply.taxedId}"`), 1);
+  assert.match(svg, /data-kp-supply-tax-math-label="taxed-supply"/u);
+  assert.match(svg, /data-kp-presence="false" style="opacity:0"/u);
+  assert.doesNotMatch(svg, /createKpReaderTimelinePlaybackClock/u);
+});
+
+test("forward and rewind project identical tax geometry at the same model state", () => {
+  const semantics = createKpPerUnitTaxWelfareAsset();
+  const forward = projectKpSupplyTaxTransitSvg({
+    semantics,
+    frame: sampleKpPerUnitTaxWelfareFrame({
+      asset: semantics,
+      progress: { numerator: "1", denominator: "4" },
+      direction: "forward"
+    })
+  });
+  const rewind = projectKpSupplyTaxTransitSvg({
+    semantics,
+    frame: sampleKpPerUnitTaxWelfareFrame({
+      asset: semantics,
+      progress: { numerator: "3", denominator: "4" },
+      direction: "rewind"
+    })
+  });
+
+  assert.deepEqual(rewind, forward);
+});
+
+function count(value: string, needle: string): number {
+  return value.split(needle).length - 1;
+}

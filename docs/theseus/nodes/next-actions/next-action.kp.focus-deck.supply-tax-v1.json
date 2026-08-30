@@ -305,6 +305,20 @@
       "scope": "standard",
       "checkedAt": "2026-08-30T08:06:18.512Z",
       "notes": "Native SVG renderer, route host, KaTeX projections, application, Svelte, and domain boundaries typecheck with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T08:10:01.949Z",
+      "notes": "Forty-four tests pass; tax transit keeps original supply geometrically fixed, shifts a distinct buyer-facing supply from exact frames, reveals deterministically, and matches forward/rewind geometry."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-30T08:10:03.017Z",
+      "notes": "Tax-transit pure projection and SVG DOM adapter typecheck across application, tests, Svelte, and domain boundaries with zero Svelte diagnostics."
     }
   ],
   "progress": {

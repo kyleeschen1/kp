@@ -117,6 +117,10 @@ button { font: inherit; }
 .kp-supply-tax-graph__curve > line { fill: none; stroke-width: 2.5; }
 .kp-supply-tax-graph__curve--demand > line { stroke: #8f493f; }
 .kp-supply-tax-graph__curve--supply > line { stroke: #37666a; }
+.kp-supply-tax-graph__curve--taxed-supply > line {
+  stroke: #37666a;
+  stroke-dasharray: 7 4;
+}
 .kp-supply-tax-graph__guide {
   stroke: color-mix(in srgb, var(--kp-st-ink) 35%, var(--kp-st-paper));
   stroke-width: 1.1;

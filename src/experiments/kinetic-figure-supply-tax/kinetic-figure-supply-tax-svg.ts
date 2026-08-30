@@ -4,6 +4,8 @@ import {
   type KpPerUnitTaxWelfareAssetV1,
   type KpSupplyTaxCurveEntityV1
 } from "../../../domains/economics/per-unit-tax-welfare-asset.ts";
+import type { KpPerUnitTaxWelfareFrameV1 } from
+  "../../../domains/economics/per-unit-tax-welfare-frame.ts";
 import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
 
 export const kpSupplyTaxGraphViewport = Object.freeze({
@@ -34,6 +36,23 @@ export interface KpSupplyTaxBaselineSvgProjectionV1 {
   readonly equilibrium: Readonly<{
     entityId: string;
     point: KpSupplyTaxSvgPointV1;
+  }>;
+}
+
+export interface KpSupplyTaxTransitSvgProjectionV1 {
+  readonly phase: KpPerUnitTaxWelfareFrameV1["phase"];
+  readonly progress: number;
+  readonly originalSupply: Readonly<{
+    entityId: string;
+    start: KpSupplyTaxSvgPointV1;
+    end: KpSupplyTaxSvgPointV1;
+  }>;
+  readonly buyerFacingSupply: Readonly<{
+    entityId: string;
+    start: KpSupplyTaxSvgPointV1;
+    end: KpSupplyTaxSvgPointV1;
+    present: boolean;
+    opacity: number;
   }>;
 }
 
@@ -68,6 +87,76 @@ export function projectKpSupplyTaxBaselineSvg(
 
 export function renderKpSupplyTaxBaselineSvg(
   semantics: KpPerUnitTaxWelfareAssetV1 = createKpPerUnitTaxWelfareAsset()
+): string {
+  return renderKpSupplyTaxSvg(semantics, false);
+}
+
+export function renderKpSupplyTaxInteractiveSvg(
+  semantics: KpPerUnitTaxWelfareAssetV1 = createKpPerUnitTaxWelfareAsset()
+): string {
+  return renderKpSupplyTaxSvg(semantics, true);
+}
+
+export function projectKpSupplyTaxTransitSvg(input: {
+  readonly semantics: KpPerUnitTaxWelfareAssetV1;
+  readonly frame: KpPerUnitTaxWelfareFrameV1;
+}): KpSupplyTaxTransitSvgProjectionV1 {
+  if (input.frame.assetId !== input.semantics.id) {
+    throw new Error("Supply-tax SVG frame does not belong to its semantic asset.");
+  }
+  const original = requiredCurve(input.semantics, "marginal-cost-supply");
+  const taxed = requiredCurve(input.semantics, "buyer-facing-taxed-supply");
+  const qMin = exactNumber(input.semantics.model.input.axes.quantity.minimum);
+  const qMax = exactNumber(input.semantics.model.input.axes.quantity.maximum);
+  const slope = exactNumber(original.slope);
+  const originalIntercept = exactNumber(input.frame.curves.originalSupplyIntercept);
+  const taxedIntercept = exactNumber(input.frame.curves.buyerFacingSupplyIntercept);
+  const progress = exactNumber(input.frame.modelProgress);
+  return Object.freeze({
+    phase: input.frame.phase,
+    progress,
+    originalSupply: Object.freeze({
+      entityId: original.id,
+      start: graphPoint(input.semantics, qMin, originalIntercept + slope * qMin),
+      end: graphPoint(input.semantics, qMax, originalIntercept + slope * qMax)
+    }),
+    buyerFacingSupply: Object.freeze({
+      entityId: taxed.id,
+      start: graphPoint(input.semantics, qMin, taxedIntercept + slope * qMin),
+      end: graphPoint(input.semantics, qMax, taxedIntercept + slope * qMax),
+      present: progress > 0,
+      // Reveal follows the playhead, so direct seek and reverse never depend
+      // on a CSS clock while the two supply curves separate.
+      opacity: Math.min(1, progress / 0.14)
+    })
+  });
+}
+
+export function projectKpSupplyTaxTransitSvgDom(input: {
+  readonly root: SVGSVGElement;
+  readonly semantics: KpPerUnitTaxWelfareAssetV1;
+  readonly frame: KpPerUnitTaxWelfareFrameV1;
+}): void {
+  const projection = projectKpSupplyTaxTransitSvg(input);
+  const original = requiredSvgGroup(input.root, projection.originalSupply.entityId);
+  const taxed = requiredSvgGroup(input.root, projection.buyerFacingSupply.entityId);
+  setCurveLine(original, projection.originalSupply.start, projection.originalSupply.end);
+  setCurveLine(taxed, projection.buyerFacingSupply.start, projection.buyerFacingSupply.end);
+  taxed.dataset["kpPresence"] = String(projection.buyerFacingSupply.present);
+  taxed.style.opacity = format(projection.buyerFacingSupply.opacity);
+  const label = taxed.querySelector<SVGForeignObjectElement>(
+    '[data-kp-supply-tax-math-label="taxed-supply"]'
+  );
+  if (label === null) throw new Error("Missing buyer-facing supply KaTeX label.");
+  label.setAttribute("x", format(projection.buyerFacingSupply.end.x - 68));
+  label.setAttribute("y", format(projection.buyerFacingSupply.end.y - 31));
+  input.root.dataset["kpSupplyTaxSvgPhase"] = projection.phase;
+  input.root.dataset["kpSupplyTaxSvgProgress"] = format(projection.progress);
+}
+
+function renderKpSupplyTaxSvg(
+  semantics: KpPerUnitTaxWelfareAssetV1,
+  includeTransitLayer: boolean
 ): string {
   const projection = projectKpSupplyTaxBaselineSvg(semantics);
   const input = semantics.model.input;
@@ -109,6 +198,10 @@ export function renderKpSupplyTaxBaselineSvg(
       <line x1="${format(projection.supply.start.x)}" y1="${format(projection.supply.start.y)}" x2="${format(projection.supply.end.x)}" y2="${format(projection.supply.end.y)}"/>
       ${mathLabel("S", projection.supply.end.x - 4, projection.supply.end.y - 29, 36, 30, "supply")}
     </g>
+    ${includeTransitLayer ? `<g class="kp-supply-tax-graph__curve kp-supply-tax-graph__curve--taxed-supply" data-kp-supply-tax-entity="${escapeAttribute(semantics.model.input.supply.taxedId)}" data-kp-presence="false" style="opacity:0">
+      <line x1="${format(projection.supply.start.x)}" y1="${format(projection.supply.start.y)}" x2="${format(projection.supply.end.x)}" y2="${format(projection.supply.end.y)}"/>
+      ${mathLabel("S_t=S+t", projection.supply.end.x - 68, projection.supply.end.y - 31, 88, 30, "taxed-supply")}
+    </g>` : ""}
     <g class="kp-supply-tax-graph__equilibrium" data-kp-supply-tax-entity="${escapeAttribute(projection.equilibrium.entityId)}">
       <line class="kp-supply-tax-graph__guide" x1="${format(plotLeft)}" y1="${format(equilibrium.y)}" x2="${format(equilibrium.x)}" y2="${format(equilibrium.y)}"/>
       <line class="kp-supply-tax-graph__guide" x1="${format(equilibrium.x)}" y1="${format(equilibrium.y)}" x2="${format(equilibrium.x)}" y2="${format(plotBottom)}"/>
@@ -116,6 +209,27 @@ export function renderKpSupplyTaxBaselineSvg(
       ${mathLabel("E_0=(5,7)", equilibrium.x + 8, equilibrium.y - 34, 104, 32, "untaxed-equilibrium")}
     </g>
   </svg>`;
+}
+
+function requiredSvgGroup(root: SVGSVGElement, entityId: string): SVGGElement {
+  const group = root.querySelector<SVGGElement>(
+    `[data-kp-supply-tax-entity="${entityId}"]`
+  );
+  if (group === null) throw new Error(`Missing SVG entity ${entityId}.`);
+  return group;
+}
+
+function setCurveLine(
+  group: SVGGElement,
+  start: KpSupplyTaxSvgPointV1,
+  end: KpSupplyTaxSvgPointV1
+): void {
+  const line = group.querySelector<SVGLineElement>("line");
+  if (line === null) throw new Error("Supply-tax curve entity requires a line.");
+  line.setAttribute("x1", format(start.x));
+  line.setAttribute("y1", format(start.y));
+  line.setAttribute("x2", format(end.x));
+  line.setAttribute("y2", format(end.y));
 }
 
 function graphPoint(semantics: KpPerUnitTaxWelfareAssetV1, quantity: number, price: number): KpSupplyTaxSvgPointV1 {
