@@ -66,7 +66,8 @@
     {
       "id": "s03",
       "title": "Taxed-equilibrium",
-      "status": "planned"
+      "summary": "Solved exact untaxed and taxed equilibria, distinct consumer/producer prices, market-clearing identities, tax-wedge equality, axis bounds, and curve evaluators.",
+      "status": "complete"
     },
     {
       "id": "s04",

@@ -13,6 +13,10 @@
     {
       "kind": "file",
       "path": "domains/economics/per-unit-tax-welfare.ts"
+    },
+    {
+      "kind": "file",
+      "path": "domains/economics/per-unit-tax-welfare-model.ts"
     }
   ],
   "dependsOn": {
@@ -92,6 +96,20 @@
       "scope": "focused",
       "checkedAt": "2026-08-30T07:22:57.479Z",
       "notes": "New economics input authority passes the isolated domain type boundary."
+    },
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T07:25:37.999Z",
+      "notes": "Six contract and model tests pass, including Q0=5, P0=7, Qt=3, Pc=9, Pp=5, and Pc-Pp=t=4."
+    },
+    {
+      "command": "npm run typecheck:domains",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T07:25:39.021Z",
+      "notes": "Exact tax-equilibrium solver and evaluators pass the isolated domain type boundary."
     }
   ],
   "progress": {
