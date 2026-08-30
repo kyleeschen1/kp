@@ -90,7 +90,8 @@
     {
       "id": "s07",
       "title": "Animation-asset",
-      "status": "planned"
+      "summary": "Built a reference-closed animation asset with one transformation, exact sampler binding, existing reader-clock authority, original-supply retention, static export, graph render target, and strict economic checks.",
+      "status": "complete"
     },
     {
       "id": "s08",

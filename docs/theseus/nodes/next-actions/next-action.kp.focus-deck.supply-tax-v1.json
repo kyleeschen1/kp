@@ -29,6 +29,10 @@
     {
       "kind": "file",
       "path": "domains/economics/per-unit-tax-welfare-frame.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/economics-supply-tax-asset.ts"
     }
   ],
   "dependsOn": {
@@ -164,6 +168,20 @@
       "scope": "focused",
       "checkedAt": "2026-08-30T07:33:14.173Z",
       "notes": "Pure sampled-frame projection passes the isolated economics domain boundary."
+    },
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T07:38:54.208Z",
+      "notes": "Twenty-one tests pass; animation reference closure, original-supply retention, exact sampler delegation, and existing-clock metadata are verified."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-30T07:38:55.215Z",
+      "notes": "Application, test, Svelte, and domain type boundaries pass after animation asset integration."
     }
   ],
   "progress": {
