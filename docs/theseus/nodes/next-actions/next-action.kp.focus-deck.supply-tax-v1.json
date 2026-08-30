@@ -33,6 +33,10 @@
     {
       "kind": "file",
       "path": "src/animation/economics-supply-tax-asset.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-score.ts"
     }
   ],
   "dependsOn": {
@@ -182,6 +186,20 @@
       "scope": "standard",
       "checkedAt": "2026-08-30T07:38:55.215Z",
       "notes": "Application, test, Svelte, and domain type boundaries pass after animation asset integration."
+    },
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T07:44:41.676Z",
+      "notes": "Twenty-seven tests pass; the score has eight ordered semantic stops, reference-closed attention roles, one motion owner, deterministic endpoints, and persistent original supply."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-08-30T07:44:42.631Z",
+      "notes": "Application, test, Svelte, and economics score boundaries typecheck after adding the pedagogical score."
     }
   ],
   "progress": {

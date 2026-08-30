@@ -96,7 +96,8 @@
     {
       "id": "s08",
       "title": "Pedagogical-score",
-      "status": "planned"
+      "summary": "Defined eight ordered semantic stops with stable targets, context, trace roles, deterministic untaxed/taxed endpoints, and exactly one tax-imposition motion edge; no paint, geometry, or timing fields.",
+      "status": "complete"
     },
     {
       "id": "s09",
