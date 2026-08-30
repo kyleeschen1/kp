@@ -48,20 +48,23 @@ test("Scroll Score mounts one searchable two-paragraph semantic station", async 
   );
   await expect(page.locator("#app")).toHaveAttribute(
     "data-kp-visual-theme",
-    "dark"
+    "light"
   );
   await expect(page.locator(".kp-scroll-score-page")).toHaveCSS(
     "background-color",
-    "rgb(13, 14, 28)"
+    "rgb(244, 241, 233)"
   );
   await expect(score).toHaveAttribute("data-kp-scroll-score-active-phrase",
     "orient-market");
   await expect(score.locator("[data-kp-scroll-score-cue]")).toHaveCount(2);
   await expect(score.locator("[data-kp-scroll-score-phrase]")).toHaveCount(8);
   await expect(score.getByText(
-    "The contraction reduces consumer and producer surplus",
+    "Before the tax, consumer and producer surplus",
     { exact: false }
   )).toHaveCount(1);
+  await expect(score.locator("[data-kp-supply-tax-ledger]")).toHaveCount(0);
+  await expect(score.locator("[data-kp-scroll-score-stage-fact]"))
+    .toHaveCount(7);
   await expect(score.locator("[data-kp-scroll-score-rail]"))
     .toHaveAccessibleName("Supply-tax semantic score");
   await expect(score.locator("svg text")).toHaveCount(0);
@@ -78,6 +81,75 @@ test("Scroll Score mounts one searchable two-paragraph semantic station", async 
   await expect(proseMath.locator("[data-kp-scroll-score-coverage-unit]"))
     .toHaveCount(0);
   expect(errors).toEqual([]);
+});
+
+test("the local stage lens keeps each causal beat visually sparse", async ({
+  page
+}) => {
+  await page.goto(path);
+  const score = page.locator("[data-kp-supply-tax-scroll-score]");
+  await expect(score).toHaveAttribute("data-kp-scroll-score-stage-lens-to",
+    "baseline-market");
+  await expect(score.locator(
+    '[data-kp-supply-tax-math-label="untaxed-equilibrium"]'
+  )).toBeVisible();
+  await expect(score.locator(
+    '[data-kp-supply-tax-math-label="consumer-price"]'
+  )).toBeHidden();
+  expect(await score.locator(
+    '[data-kp-supply-tax-math-label^="quantity-tick-"], ' +
+    '[data-kp-supply-tax-math-label^="price-tick-"]'
+  ).evaluateAll((elements) => elements.every((element) =>
+    getComputedStyle(element).visibility === "hidden"))).toBe(true);
+
+  await page.goto(`${path}#phrase.introduce-tax`);
+  await expect(score).toHaveAttribute("data-kp-scroll-score-stage-lens-to",
+    "tax-input");
+  await expect.poll(async () => Number(await score.locator(
+    '[data-kp-scroll-score-stage-fact="tax-wedge"]'
+  ).evaluate((element) => getComputedStyle(element).opacity)))
+    .toBeGreaterThan(0.99);
+  await expect(score.locator(
+    '[data-kp-supply-tax-math-label="taxed-supply"]'
+  )).toBeHidden();
+
+  await page.goto(`${path}#phrase.shift-supply`);
+  await expect(score).toHaveAttribute("data-kp-scroll-score-stage-lens-to",
+    "supply-translation");
+  await expect(score.locator(
+    '[data-kp-supply-tax-math-label="taxed-supply"]'
+  )).toBeVisible();
+  await expect(score.locator(
+    '[data-kp-supply-tax-math-label="consumer-price"]'
+  )).toBeHidden();
+  await expect(score.locator(
+    ".kp-supply-tax-graph__curve--demand > line"
+  )).toHaveCSS("stroke-opacity", "0.42");
+  await expect.poll(async () => Number(await score.locator(
+    ".kp-supply-tax-graph__curve--taxed-supply > line"
+  ).evaluate((element) => getComputedStyle(element).strokeOpacity)))
+    .toBeGreaterThan(0.99);
+
+  await seekPhraseProgress(page, "compare-private-surplus", 0.3);
+  const consumerBefore = score.locator(
+    '.kp-supply-tax-graph__region--consumer-surplus' +
+    '[data-kp-supply-tax-region-phase="untaxed"]'
+  );
+  const consumerAfter = score.locator(
+    '.kp-supply-tax-graph__region--consumer-surplus' +
+    '[data-kp-supply-tax-region-phase="taxed"]'
+  );
+  await expect(consumerBefore).toHaveCSS("opacity", "1");
+  await expect(consumerAfter).toHaveCSS("opacity", "0");
+  await seekPhraseProgress(page, "compare-private-surplus", 0.82);
+  await expect(consumerBefore).toHaveCSS("opacity", "0");
+  await expect(consumerAfter).toHaveCSS("opacity", "1");
+
+  await page.goto(`${path}#phrase.trace-revenue`);
+  await expect(score.locator(
+    ".kp-supply-tax-graph__region--government-revenue"
+  )).toHaveCSS("opacity", "1");
+  await expect(consumerAfter).toHaveCSS("opacity", "0.22");
 });
 
 test("rail and native scroll settle a reversible semantic reception wave", async ({
@@ -205,7 +277,7 @@ test("semantic links, keyboard rail, and native find seek stable endpoints", asy
     const searchable = window as unknown as Window & {
       find(text: string): boolean;
     };
-    return searchable.find("prevented trades between three and five");
+    return searchable.find("remaining triangle is not transferred to anyone");
   })).toBe(true);
   await expect(score).toHaveAttribute("data-kp-scroll-score-active-phrase",
     "identify-loss");
@@ -252,7 +324,7 @@ test("legacy attention comparisons remain geometry-compatible", async ({
     getComputedStyle(element).backgroundImage)).toContain("linear-gradient");
   await expect(score.locator(
     '[data-kp-scroll-score-phrase="shift-supply"]'
-  )).toContainText("buyer-facing supply shifts upward");
+  )).toContainText("buyer-facing supply rises by four dollars");
 
   await page.goto(`${path}?phrase-focus=karaoke#phrase.shift-supply`);
   await expect(score).toHaveAttribute(
@@ -290,7 +362,7 @@ test("reduced motion projects discrete checkpoints without losing prose", async 
     "1.0000");
   await expect(score.locator(
     '[data-kp-scroll-score-phrase="shift-supply"]'
-  )).toContainText("buyer-facing supply shifts upward");
+  )).toContainText("buyer-facing supply rises by four dollars");
 });
 
 test("stacked phone station fits or exposes the ordinary-flow fallback", async ({
@@ -315,11 +387,20 @@ test("Scroll Score visual checkpoint captures both compact arguments", async ({
   await page.goto(path);
   await seekPhraseProgress(page, "shift-supply", 0.09);
   await page.screenshot({
-    path: testInfo.outputPath("supply-tax-scroll-score-reception-wave-dark.png")
+    path: testInfo.outputPath("supply-tax-scroll-score-reception-wave-light.png")
   });
   await page.goto(`${path}#phrase.contract-quantity`);
   await page.screenshot({
     path: testInfo.outputPath("supply-tax-scroll-score-market.png")
+  });
+  await page.goto(path);
+  await seekPhraseProgress(page, "compare-private-surplus", 0.3);
+  await page.screenshot({
+    path: testInfo.outputPath("supply-tax-scroll-score-surplus-before.png")
+  });
+  await seekPhraseProgress(page, "compare-private-surplus", 0.82);
+  await page.screenshot({
+    path: testInfo.outputPath("supply-tax-scroll-score-surplus-after.png")
   });
   await page.goto(`${path}#phrase.identify-loss`);
   await page.screenshot({

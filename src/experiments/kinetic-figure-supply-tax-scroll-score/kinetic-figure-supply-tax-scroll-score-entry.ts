@@ -18,6 +18,7 @@ import {
 } from "../../animation/economics-supply-tax-asset.ts";
 import { applyKpSemanticVisualDomTheme } from
   "../../rendering/semantic-visual-dom-theme.ts";
+import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
 import { compileKpSupplyTaxScrollScoreArticle } from
   "./kinetic-figure-supply-tax-scroll-score-article.ts";
 import {
@@ -38,6 +39,12 @@ import {
   type KpSupplyTaxScrollScoreV1
 } from "./kinetic-figure-supply-tax-scroll-score-score.ts";
 import {
+  kpSupplyTaxScrollScoreStageFacts,
+  projectKpSupplyTaxScrollScoreStageLens
+} from "./kinetic-figure-supply-tax-scroll-score-stage-lens.ts";
+import { projectKpSupplyTaxScrollScoreStageLensDom } from
+  "./kinetic-figure-supply-tax-scroll-score-stage-lens-dom.ts";
+import {
   projectKpSupplyTaxScene,
   projectKpSupplyTaxSceneDom,
   projectKpSupplyTaxSceneTransitionDom,
@@ -48,8 +55,7 @@ import { createKpSupplyTaxPedagogicalScore } from
   "../kinetic-figure-supply-tax/kinetic-figure-supply-tax-score.ts";
 import {
   projectKpSupplyTaxTransitSvgDom,
-  renderKpSupplyTaxInteractiveSvg,
-  renderKpSupplyTaxWelfareLedger
+  renderKpSupplyTaxInteractiveSvg
 } from "../kinetic-figure-supply-tax/kinetic-figure-supply-tax-svg.ts";
 
 const importLock = importLockValue as KpArticleImportLock;
@@ -80,7 +86,7 @@ export interface KpSupplyTaxScrollScoreSession {
 export function mountKpSupplyTaxScrollScore(input: {
   readonly root: HTMLElement;
 }): KpSupplyTaxScrollScoreSession {
-  applyKpSemanticVisualDomTheme({ root: input.root, theme: "dark" });
+  applyKpSemanticVisualDomTheme({ root: input.root, theme: "light" });
   const compiled = compileKpSupplyTaxScrollScoreArticle({
     text: articleText,
     lock: importLock
@@ -124,6 +130,7 @@ export function mountKpSupplyTaxScrollScore(input: {
   let activePhraseId: string | undefined;
   let projectedUnits = 0;
   let fit: "stationary" | "ordinary" = "stationary";
+  let seekAnchor: Readonly<{ units: number; scrollY: number }> | undefined;
 
   const projectFrame = (modelProgress: number): void => {
     const frame = sampleKpEconomicsSupplyTaxAnimationFrame({
@@ -143,8 +150,11 @@ export function mountKpSupplyTaxScrollScore(input: {
     projectedUnits = sample.units;
     const from = requiredScene(sceneBySlug, sample.fromBeat.slug);
     const to = requiredScene(sceneBySlug, sample.toBeat.slug);
+    // A canonical endpoint may round a fraction of a pixel short after the
+    // document coordinate is restored. Reduced motion still owes the learner
+    // the discrete semantic stop, not an accidental pre-transition state.
     const directProgress = reducedMotion.matches
-      ? sample.phraseProgress >= 1 ? 1 : 0
+      ? sample.phraseProgress >= 0.999 ? 1 : 0
       : sample.phraseProgress;
     const modelProgress = interpolate(
       modelProgressForScene(from),
@@ -165,9 +175,19 @@ export function mountKpSupplyTaxScrollScore(input: {
         profile: "scrub"
       });
     }
+    projectKpSupplyTaxScrollScoreStageLensDom({
+      root: passage,
+      lens: projectKpSupplyTaxScrollScoreStageLens({
+        authority,
+        fromBeat: sample.fromBeat,
+        toBeat: sample.toBeat,
+        progress: directProgress
+      })
+    });
     caption.textContent = sample.toBeat.claim;
     passage.dataset["kpScrollScoreActivePassage"] = sample.passage.id;
     passage.dataset["kpScrollScoreActivePhrase"] = sample.phrase.id;
+    passage.dataset["kpScrollScoreActiveBeat"] = sample.toBeat.slug;
     passage.dataset["kpScrollScorePhraseProgress"] =
       sample.phraseProgress.toFixed(4);
     passage.dataset["kpScrollScoreResting"] = String(sample.resting);
@@ -317,6 +337,15 @@ export function mountKpSupplyTaxScrollScore(input: {
           ? "release"
           : "score";
     }
+    if (seekAnchor !== undefined &&
+        Math.abs(window.scrollY - seekAnchor.scrollY) <= 1) {
+      // Native scrolling rounds document coordinates, but a rail/hash seek is
+      // a request for exact semantic units. Retain that endpoint until an
+      // actual reader scroll moves away from the restored coordinate.
+      projectUnits(seekAnchor.units, updateHistory);
+      return;
+    }
+    seekAnchor = undefined;
     projectUnits(unitsFromScroll(), updateHistory);
   };
 
@@ -338,7 +367,9 @@ export function mountKpSupplyTaxScrollScore(input: {
 
   function seekUnits(units: number, updateHistory: boolean): void {
     const bounded = Math.max(0, Math.min(pedagogicalScore.totalUnits, units));
-    window.scrollTo({ top: scrollYForUnits(bounded), behavior: "auto" });
+    const scrollY = scrollYForUnits(bounded);
+    seekAnchor = Object.freeze({ units: bounded, scrollY });
+    window.scrollTo({ top: scrollY, behavior: "auto" });
     projectUnits(bounded, updateHistory);
   }
 
@@ -469,8 +500,14 @@ function renderStaticStage(): string {
   return `<figure class="kp-supply-tax-figure kp-scroll-score-stage" data-kp-supply-tax-stage data-kp-supply-tax-stage-state="baseline-market">
     <figcaption class="kp-supply-tax-visually-hidden" data-kp-supply-tax-stage-caption>Demand and original supply intersect at five units and a price of seven before the tax.</figcaption>
     <div class="kp-supply-tax-stage__visual">
-      <div class="kp-supply-tax-stage__graph">${renderKpSupplyTaxInteractiveSvg()}</div>
-      ${renderKpSupplyTaxWelfareLedger()}
+      <div class="kp-supply-tax-stage__graph">
+        ${renderKpSupplyTaxInteractiveSvg()}
+        <div class="kp-scroll-score-stage-facts" aria-hidden="true">
+          ${kpSupplyTaxScrollScoreStageFacts.map(({ id, latex }) =>
+            `<span data-kp-scroll-score-stage-fact="${id}" data-kp-scroll-score-stage-fact-present="false">${renderLatexToHtml(latex, { displayMode: false })}</span>`
+          ).join("")}
+        </div>
+      </div>
     </div>
   </figure>`;
 }

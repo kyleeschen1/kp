@@ -1,18 +1,18 @@
 html { scroll-behavior: auto; }
 
 .kp-scroll-score-page {
-  color-scheme: dark;
-  /* Supply-tax aliases originate at :root for the light Focus Deck. Rebind
-   * them here so this local host can consume its projected dark endpoints. */
-  --kp-st-page: var(--kp-semantic-page, #0d0e1c);
-  --kp-st-paper: var(--kp-semantic-surface, #15172a);
-  --kp-st-ink: var(--kp-semantic-ink, #d6d7df);
-  --kp-st-strong: var(--kp-semantic-ink-strong, #f4f4f8);
-  --kp-st-muted: var(--kp-semantic-ink-secondary, #a6a9b7);
-  --kp-st-focus: var(--kp-semantic-focus, #07d0d8);
+  color-scheme: light;
+  /* The shared Focus Deck publishes its aliases at :root. This local
+   * projection rebinds them to the selected semantic light endpoints. */
+  --kp-st-page: var(--kp-semantic-page, #f4f1e9);
+  --kp-st-paper: var(--kp-semantic-surface, #fffdf8);
+  --kp-st-ink: var(--kp-semantic-ink, #292b3a);
+  --kp-st-strong: var(--kp-semantic-ink-strong, #151622);
+  --kp-st-muted: var(--kp-semantic-ink-secondary, #565968);
+  --kp-st-focus: var(--kp-semantic-focus, #086f74);
   --kp-st-rule: color-mix(in srgb, var(--kp-st-ink) 20%, var(--kp-st-paper));
-  --kp-st-header: var(--kp-semantic-surface-raised, #20233a);
-  --kp-st-header-ink: var(--kp-semantic-ink-strong, #f4f4f8);
+  --kp-st-header: var(--kp-semantic-surface-raised, #ebe7dc);
+  --kp-st-header-ink: var(--kp-semantic-ink-strong, #151622);
   min-height: 100svh;
   padding: clamp(1rem, 4vw, 2.5rem);
   background: var(--kp-st-page);
@@ -82,7 +82,74 @@ html { scroll-behavior: auto; }
 }
 
 .kp-scroll-score-stage .kp-supply-tax-stage__visual {
-  width: min(100%, 42rem);
+  grid-template-columns: minmax(0, 1fr);
+  width: min(100%, 38rem);
+  margin-inline: auto;
+}
+
+.kp-scroll-score-stage .kp-supply-tax-stage__graph {
+  position: relative;
+}
+
+/* The local lens uses one neutral graph language. Semantic focus is carried
+ * by strength, dash, and presence rather than a permanent curve color key. */
+.kp-scroll-score-stage .kp-supply-tax-graph__curve--demand > line,
+.kp-scroll-score-stage .kp-supply-tax-graph__curve--supply > line {
+  stroke: var(--kp-st-ink);
+}
+
+.kp-scroll-score-stage .kp-supply-tax-graph__curve--taxed-supply > line {
+  stroke: var(--kp-st-focus);
+}
+
+.kp-scroll-score-stage .kp-supply-tax-graph__region {
+  --kp-supply-tax-region-fill: color-mix(
+    in srgb,
+    var(--kp-st-focus) 16%,
+    transparent
+  );
+  --kp-supply-tax-region-stroke: var(--kp-st-focus);
+}
+
+.kp-scroll-score-stage-facts {
+  position: absolute;
+  z-index: 1;
+  top: clamp(0.2rem, 1.2vw, 0.55rem);
+  right: clamp(0.35rem, 2vw, 0.85rem);
+  display: grid;
+  min-width: 8.5rem;
+  min-height: 2.1rem;
+  place-items: center end;
+  pointer-events: none;
+}
+
+.kp-scroll-score-stage-facts > span {
+  --kp-scroll-score-stage-fact-strength: 0;
+  grid-area: 1 / 1;
+  padding: 0.34rem 0.5rem;
+  border: 1px solid color-mix(
+    in srgb,
+    var(--kp-st-focus) 26%,
+    var(--kp-st-paper)
+  );
+  background: color-mix(in srgb, var(--kp-st-paper) 94%, transparent);
+  box-shadow: 0 0.18rem 0.55rem color-mix(
+    in srgb,
+    var(--kp-st-ink) 5%,
+    transparent
+  );
+  color: var(--kp-st-strong);
+  opacity: var(--kp-scroll-score-stage-fact-strength);
+  transform: scale(calc(0.985 + 0.015 * var(--kp-scroll-score-stage-fact-strength)));
+  transform-origin: center right;
+}
+
+.kp-scroll-score-stage-facts > span .katex {
+  font-size: clamp(0.78rem, 1.8vw, 0.92rem);
+}
+
+.kp-scroll-score-stage-facts > span[data-kp-scroll-score-stage-fact-present="false"] {
+  visibility: hidden;
 }
 
 .kp-scroll-score-rail {
@@ -315,55 +382,6 @@ html { scroll-behavior: auto; }
   .kp-scroll-score-page { padding: 0.85rem 0; }
   .kp-scroll-score-intro { padding-inline: 1rem; }
   .kp-scroll-score-station { border-inline: 0; }
-  .kp-scroll-score-stage .kp-supply-tax-stage__visual {
-    grid-template-columns: minmax(0, 1fr) 7.6rem;
-    align-items: stretch;
-    gap: 0.45rem;
-  }
-  .kp-scroll-score-stage .kp-supply-tax-ledger {
-    display: block;
-    padding: 0.35rem 0 0.1rem 0.45rem;
-    border-block-start: 0;
-    border-inline-start: 1.5px solid var(--kp-st-rule);
-  }
-  .kp-scroll-score-stage .kp-supply-tax-ledger h2 {
-    margin-bottom: 0.35rem;
-    font-size: 0.63rem;
-  }
-  .kp-scroll-score-stage .kp-supply-tax-ledger__tax {
-    display: block;
-    margin: 0 0 0.3rem;
-    padding: 0.25rem;
-  }
-  .kp-scroll-score-stage .kp-supply-tax-ledger__tax > span {
-    display: block;
-    margin-bottom: 0.1rem;
-  }
-  .kp-scroll-score-stage .kp-supply-tax-ledger__columns,
-  .kp-scroll-score-stage .kp-supply-tax-ledger__row {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 0.2rem;
-  }
-  .kp-scroll-score-stage .kp-supply-tax-ledger__columns::before {
-    content: none;
-  }
-  .kp-scroll-score-stage .kp-supply-tax-ledger__columns {
-    margin-bottom: 0;
-    font-size: 0.48rem;
-  }
-  .kp-scroll-score-stage .kp-supply-tax-ledger__row {
-    min-height: 2.15rem;
-    padding: 0.22rem 0;
-  }
-  .kp-scroll-score-stage .kp-supply-tax-ledger__label {
-    grid-column: 1 / -1;
-    margin: 0;
-    font-size: 0.5rem;
-  }
-  .kp-scroll-score-stage .kp-supply-tax-ledger__value {
-    min-height: 1rem;
-    font-size: 0.62rem;
-  }
   .kp-scroll-score-rail {
     grid-template-columns: minmax(6.5rem, 0.42fr) minmax(0, 1fr);
     gap: 0.55rem;

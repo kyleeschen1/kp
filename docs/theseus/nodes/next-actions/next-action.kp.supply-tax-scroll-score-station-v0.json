@@ -186,11 +186,67 @@
       "scope": "TypeScript, Svelte, and domain boundaries",
       "checkedAt": "2026-08-30T22:20:39.994Z",
       "notes": "All configured checks passed with zero Svelte errors or warnings after the local reception-wave profile change."
+    },
+    {
+      "command": "npm-run-test-economics-supply-tax",
+      "status": "passed",
+      "scope": "supply-tax-unit-contracts",
+      "checkedAt": "2026-08-30T22:59:44.780Z",
+      "notes": "65-tests-passed"
+    },
+    {
+      "command": "npm-run-test-browser-economics-supply-tax-scroll-score",
+      "status": "passed",
+      "scope": "scroll-score-chromium-exemplar",
+      "checkedAt": "2026-08-30T22:59:46.428Z",
+      "notes": "8-tests-passed"
+    },
+    {
+      "command": "npm-run-test-browser-economics-supply-tax",
+      "status": "passed",
+      "scope": "focus-deck-preservation",
+      "checkedAt": "2026-08-30T22:59:47.414Z",
+      "notes": "6-tests-passed"
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "repository-types",
+      "checkedAt": "2026-08-30T22:59:48.427Z",
+      "notes": "passed"
+    },
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "sparse-stage-lens-contracts",
+      "checkedAt": "2026-08-30T23:00:04.447Z",
+      "notes": "65 of 65 passed"
+    },
+    {
+      "command": "npm run test:browser:economics-supply-tax-scroll-score",
+      "status": "passed",
+      "scope": "light-sparse-scroll-score-exemplar",
+      "checkedAt": "2026-08-30T23:00:05.598Z",
+      "notes": "8 of 8 passed"
+    },
+    {
+      "command": "npm run test:browser:economics-supply-tax",
+      "status": "passed",
+      "scope": "approved-focus-deck-preservation",
+      "checkedAt": "2026-08-30T23:00:06.619Z",
+      "notes": "6 of 6 passed"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository-types",
+      "checkedAt": "2026-08-30T23:00:07.705Z",
+      "notes": "passed"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 2/2 complete. HUMAN_CHECKPOINT: the dark Scroll Score now defaults to a semantic reception wave. A localized leading edge introduces each active phrase during the early reception interval; it then disappears into uniform stable phrase focus while the graph transition continues. Ordinary context stays readable, previous focus releases smoothly, and karaoke, coverage, and whole-phrase reception remain query-selectable. No shared motif, schema, theme, Article, clock, stage, or Focus Deck authority was promoted or changed."
+    "summary": "HUMAN_CHECKPOINT-light-ledger-free-sparse-stage-lens-implemented-with-causal-tax-copy-before-after-welfare-replacement-exact-seek-preserved-and-Focus-Deck-unchanged"
   },
   "expectedLearning": [
     "Whether a compact paragraph can act as a proportional searchable semantic scrub surface without making native scrolling feel trapped."

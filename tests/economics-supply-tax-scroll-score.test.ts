@@ -23,6 +23,8 @@ import {
   sampleKpSupplyTaxScrollScore
 } from
   "../src/experiments/kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-score.ts";
+import { projectKpSupplyTaxScrollScoreStageLens } from
+  "../src/experiments/kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-stage-lens.ts";
 import {
   projectKpSupplyTaxScene,
   projectKpSupplyTaxSceneTransition
@@ -275,6 +277,56 @@ test("scrub profile is linear, reversible, and suppresses playback bloom", () =>
   assert.equal(entity(reverseSample).presence, 0.25);
   assert.equal(entity(reverseSample).focus, 0.25);
   assert.equal(entity(reverseSample).bloom, 0);
+});
+
+test("stage lens reveals only the evidence owned by each causal beat", () => {
+  const authority = createKpEconomicsSupplyTaxAnimationAsset();
+  const beats = createKpSupplyTaxPedagogicalScore(authority).beats;
+  const bySlug = new Map(beats.map((beat) => [beat.slug, beat] as const));
+  const lens = (from: string, to: string, progress: number) =>
+    projectKpSupplyTaxScrollScoreStageLens({
+      authority,
+      fromBeat: bySlug.get(from)!,
+      toBeat: bySlug.get(to)!,
+      progress
+    });
+
+  const baseline = lens("baseline-market", "baseline-market", 1);
+  assert.equal(baseline.labelStrengths["untaxed-equilibrium"], 1);
+  assert.equal(baseline.labelStrengths["consumer-price"], 0);
+  assert.equal(baseline.curveStrengths.demand, 1);
+  assert.equal(baseline.factStrengths["tax-wedge"], 0);
+
+  const supply = lens("tax-input", "supply-translation", 1);
+  assert.equal(supply.curveStrengths.demand, 0.42);
+  assert.equal(supply.curveStrengths["taxed-supply"], 1);
+  assert.equal(supply.labelStrengths["taxed-supply"], 1);
+  assert.equal(supply.labelStrengths["consumer-price"], 0);
+  assert.equal(supply.factStrengths["supply-translation"], 1);
+
+  const beforeConsumer = authority.semantics.entities.regions.find(
+    ({ phase, role }) => phase === "untaxed" && role === "consumer-surplus"
+  )!.id;
+  const afterConsumer = authority.semantics.entities.regions.find(
+    ({ phase, role }) => phase === "taxed" && role === "consumer-surplus"
+  )!.id;
+  const recall = lens("quantity-contraction", "surplus-redistribution", 0.3);
+  assert.equal(recall.regionStrengths[beforeConsumer], 1);
+  assert.equal(recall.regionStrengths[afterConsumer], 0);
+  assert.equal(recall.curveStrengths["taxed-supply"], 0);
+  assert.equal(recall.labelStrengths["untaxed-equilibrium"], 0.9);
+  const replacement = lens(
+    "quantity-contraction",
+    "surplus-redistribution",
+    0.82
+  );
+  assert.equal(replacement.regionStrengths[beforeConsumer], 0);
+  assert.ok(Math.abs(replacement.regionStrengths[afterConsumer]! - 1) <
+    Number.EPSILON * 2);
+  assert.deepEqual(
+    lens("quantity-contraction", "surplus-redistribution", 0.3),
+    recall
+  );
 });
 
 test("Scroll Score owns one normalized standalone route", () => {
