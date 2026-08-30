@@ -1,0 +1,165 @@
+:root {
+  color-scheme: light;
+  --kp-st-page: var(--kp-semantic-page, #f4f1e9);
+  --kp-st-paper: var(--kp-semantic-surface, #fffdf8);
+  --kp-st-ink: var(--kp-semantic-ink, #292b3a);
+  --kp-st-strong: var(--kp-semantic-ink-strong, #151622);
+  --kp-st-muted: var(--kp-semantic-ink-secondary, #565968);
+  --kp-st-focus: var(--kp-semantic-focus, #086f74);
+  --kp-st-rule: color-mix(in srgb, var(--kp-st-ink) 20%, var(--kp-st-paper));
+  --kp-st-header: #29333d;
+  --kp-st-header-ink: #f7f4eb;
+  background: var(--kp-st-page);
+  color: var(--kp-st-ink);
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--kp-st-page); }
+button { font: inherit; }
+
+.kp-supply-tax-page {
+  min-height: 100svh;
+  padding: clamp(1rem, 4vw, 2.5rem);
+}
+
+.kp-supply-tax-article { width: min(100%, 66rem); margin-inline: auto; }
+.kp-supply-tax-page__intro { margin-bottom: 0.9rem; }
+.kp-supply-tax-page__intro p {
+  margin: 0;
+  color: var(--kp-st-muted);
+  font: 650 0.68rem/1.2 ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: 0.075em;
+  text-transform: uppercase;
+}
+.kp-supply-tax-page__intro h1 {
+  margin: 0.25rem 0 0;
+  color: var(--kp-st-strong);
+  font-size: clamp(1.7rem, 4vw, 2.45rem);
+  font-weight: 600;
+  letter-spacing: -0.028em;
+}
+
+.kp-supply-tax-deck {
+  overflow: clip;
+  border: 1.5px solid color-mix(in srgb, var(--kp-st-header) 38%, var(--kp-st-paper));
+  background: var(--kp-st-paper);
+  box-shadow: 0 0.35rem 1.2rem color-mix(in srgb, var(--kp-st-header) 8%, transparent);
+}
+
+.kp-supply-tax-deck__header {
+  display: flex;
+  min-height: 3.15rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 0.95rem;
+  border-bottom: 2px solid color-mix(in srgb, var(--kp-st-header) 70%, black);
+  background: var(--kp-st-header);
+  color: color-mix(in srgb, var(--kp-st-header-ink) 78%, var(--kp-st-header));
+  font: 650 0.67rem/1.2 ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.kp-supply-tax-deck__header > span:first-child { color: var(--kp-st-header-ink); }
+
+.kp-supply-tax-deck__body { display: grid; grid-template-columns: 12rem minmax(0, 1fr); }
+.kp-supply-tax-steps {
+  padding: 1rem 0.7rem;
+  border-right: 1.5px solid var(--kp-st-rule);
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+.kp-supply-tax-steps > header {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0.45rem 0.7rem;
+  color: var(--kp-st-muted);
+  font-size: 0.64rem;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.kp-supply-tax-steps ol { display: grid; gap: 0.15rem; margin: 0; padding: 0; list-style: none; }
+.kp-supply-tax-steps button {
+  display: grid;
+  width: 100%;
+  min-height: 2.85rem;
+  grid-template-columns: 1.25rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem;
+  border: 0;
+  border-inline-start: 3px solid transparent;
+  background: transparent;
+  color: var(--kp-st-muted);
+  font: 620 0.69rem/1.25 ui-sans-serif, system-ui, sans-serif;
+  text-align: left;
+}
+.kp-supply-tax-steps button[aria-current="step"] {
+  border-inline-start-color: var(--kp-st-focus);
+  color: var(--kp-st-strong);
+}
+.kp-supply-tax-steps button:disabled { opacity: 1; }
+.kp-supply-tax-steps button > span:first-child { font-size: 0.62rem; text-align: center; }
+
+.kp-supply-tax-deck__main { min-width: 0; }
+.kp-supply-tax-figure { margin: 0; padding: clamp(1rem, 3vw, 1.8rem); border-bottom: 1.5px solid var(--kp-st-rule); }
+.kp-supply-tax-stage__placeholder {
+  display: grid;
+  min-height: 15rem;
+  place-content: center;
+  gap: 0.65rem;
+  color: var(--kp-st-strong);
+  text-align: center;
+}
+.kp-supply-tax-stage__placeholder > div:first-child,
+.kp-supply-tax-stage__placeholder > div:nth-child(2) { font-size: 1.15rem; }
+.kp-supply-tax-stage__placeholder > div:last-child { margin-top: 0.6rem; font-size: 1.35rem; }
+
+.kp-supply-tax-narrative { min-height: 13rem; padding: 1.35rem clamp(1rem, 3vw, 2rem); }
+.kp-supply-tax-narrative h1,
+.kp-supply-tax-narrative h3 { margin: 0 0 0.7rem; color: var(--kp-st-strong); font-size: 1.2rem; }
+.kp-supply-tax-narrative p { margin: 0.6rem 0; font-size: 0.94rem; line-height: 1.55; }
+.kp-supply-tax-narrative a { color: inherit; text-decoration-color: var(--kp-st-focus); }
+
+.kp-supply-tax-navigation {
+  display: grid;
+  grid-template-columns: 3rem 1fr 3rem;
+  align-items: center;
+  border-top: 1.5px solid var(--kp-st-rule);
+}
+.kp-supply-tax-navigation button {
+  min-height: 3rem;
+  border: 0;
+  background: transparent;
+  color: var(--kp-st-muted);
+  font: 500 1.15rem/1 ui-sans-serif, system-ui, sans-serif;
+}
+.kp-supply-tax-navigation output {
+  color: var(--kp-st-muted);
+  font: 600 0.68rem/1 ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+.kp-supply-tax-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 46rem) {
+  .kp-supply-tax-page { padding: 0; }
+  .kp-supply-tax-page__intro { padding: 1rem 1rem 0; }
+  .kp-supply-tax-deck { border-inline: 0; }
+  .kp-supply-tax-deck__body { grid-template-columns: 1fr; }
+  .kp-supply-tax-steps { border-right: 0; border-bottom: 1.5px solid var(--kp-st-rule); }
+  .kp-supply-tax-steps ol { grid-template-columns: repeat(8, minmax(2rem, 1fr)); }
+  .kp-supply-tax-steps button { min-height: 2.25rem; grid-template-columns: 1fr; }
+  .kp-supply-tax-steps button > span:last-child { display: none; }
+  .kp-supply-tax-stage__placeholder { min-height: 11rem; }
+}

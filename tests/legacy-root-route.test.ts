@@ -15,6 +15,7 @@ test("legacy root classifies every supported route before its fallback", () => {
     "economics-demand-shift",
     "kinetic-figure-log-product",
     "kinetic-figure-delta-epsilon",
+    "kinetic-figure-supply-tax",
     "concept-room",
     "animation-coverage",
     "animation-catalogue",
@@ -30,6 +31,8 @@ test("legacy root classifies every supported route before its fallback", () => {
     "kinetic-figure-log-product");
   assert.equal(select("/experiments/kinetic-figure/delta-epsilon/"),
     "kinetic-figure-delta-epsilon");
+  assert.equal(select("/experiments/kinetic-figure/supply-tax/"),
+    "kinetic-figure-supply-tax");
   assert.equal(select("/concepts/mathematics/linear-equations/unknown"),
     "concept-room");
   assert.equal(select("/", "?view=coverage"), "animation-coverage");

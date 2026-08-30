@@ -53,6 +53,14 @@
     {
       "kind": "file",
       "path": "src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-publication.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-entry.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-route.ts"
     }
   ],
   "dependsOn": {
@@ -251,6 +259,34 @@
       "scope": "standard",
       "checkedAt": "2026-08-30T07:53:29.562Z",
       "notes": "Static publication, content-addressed static vignette release, application, Svelte, and domain boundaries typecheck."
+    },
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-08-30T08:00:12.151Z",
+      "notes": "Thirty-seven tests pass, including isolated route classification, lazy bootstrap ownership, Article-backed host, eight until-found scenes, and no deck-local clock."
+    },
+    {
+      "command": "npm run test:kinetic-figure-log-product",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-30T08:00:13.121Z",
+      "notes": "All 17 log-product Focus Deck and shared legacy route tests pass after adding the supply-tax route."
+    },
+    {
+      "command": "npm run test:kinetic-figure-delta-epsilon",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-08-30T08:00:14.091Z",
+      "notes": "All eight delta-epsilon Focus Deck and shared legacy route tests pass after adding the supply-tax route."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-08-30T08:00:15.069Z",
+      "notes": "Full typecheck, zero-diagnostic Svelte check, domain boundary, publication integrity check, and production bundle pass with the lazy supply-tax route."
     }
   ],
   "progress": {

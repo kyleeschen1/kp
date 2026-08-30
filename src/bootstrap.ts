@@ -19,6 +19,9 @@ type KpLogProductKineticFigureClient = typeof import(
 type KpDeltaEpsilonKineticFigureClient = typeof import(
   "./experiments/kinetic-figure-delta-epsilon/kinetic-figure-delta-epsilon-entry.ts"
 );
+type KpSupplyTaxKineticFigureClient = typeof import(
+  "./experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-entry.ts"
+);
 
 // Production compilation erases both the branch and the development graph.
 const loadKpDevelopmentToolbar:
@@ -38,6 +41,13 @@ const loadKpDeltaEpsilonKineticFigure:
   | undefined = import.meta.env.DEV
     ? () => import(
         "./experiments/kinetic-figure-delta-epsilon/kinetic-figure-delta-epsilon-entry.ts"
+      )
+    : undefined;
+const loadKpSupplyTaxKineticFigure:
+  | (() => Promise<KpSupplyTaxKineticFigureClient>)
+  | undefined = import.meta.env.DEV
+    ? () => import(
+        "./experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-entry.ts"
       )
     : undefined;
 
@@ -103,6 +113,16 @@ async function bootstrap(): Promise<void> {
       }
       const experiment = await loadKpDeltaEpsilonKineticFigure();
       const session = experiment.mountKpDeltaEpsilonKineticFigure({ root });
+      registerPagehide(session.dispose);
+      return;
+    }
+    case "kinetic-figure-supply-tax": {
+      if (loadKpSupplyTaxKineticFigure === undefined) {
+        await import("./main.ts");
+        return;
+      }
+      const experiment = await loadKpSupplyTaxKineticFigure();
+      const session = experiment.mountKpSupplyTaxKineticFigure({ root });
       registerPagehide(session.dispose);
       return;
     }
