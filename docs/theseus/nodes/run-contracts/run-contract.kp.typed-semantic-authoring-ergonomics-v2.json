@@ -176,7 +176,8 @@
     {
       "id": "s21",
       "title": "generated-semantic-plumbing",
-      "status": "planned"
+      "summary": "Mechanical construct plumbing is byte-reproducible, mathematical rules remain authored, and focused, facade, closure, architecture, typecheck, and production-build checks pass.",
+      "status": "complete"
     },
     {
       "id": "s22",

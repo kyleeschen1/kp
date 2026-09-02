@@ -342,11 +342,42 @@
       "status": "passed",
       "scope": "slice-s20-standard",
       "checkedAt": "2026-09-02T21:56:08.900Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test construct generation, public API, and import closure suites",
+      "status": "passed",
+      "scope": "slice-s21-focused",
+      "checkedAt": "2026-09-02T21:59:36.418Z",
+      "notes": "Generator idempotence, checked-in byte equality, plumbing contents, facade inventory, and bundle closure passed."
+    },
+    {
+      "command": "npm run check:dependency-direction",
+      "status": "passed",
+      "scope": "slice-s21-architecture",
+      "checkedAt": "2026-09-02T21:59:37.775Z"
+    },
+    {
+      "command": "npm run check:framework-neutral-entrypoints",
+      "status": "passed",
+      "scope": "slice-s21-architecture",
+      "checkedAt": "2026-09-02T21:59:38.853Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s21-broad",
+      "checkedAt": "2026-09-02T21:59:39.919Z"
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "slice-s21-production",
+      "checkedAt": "2026-09-02T21:59:41.006Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s20 projects escaped, customizable construct LaTeX from descriptor requirements and explicit semantic authority, returning typed gaps for missing metadata."
+    "summary": "Slice s21 deterministically generates checked-in child, optic, correspondence, serialization, autocomplete, and conformance plumbing from the two descriptors."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",
