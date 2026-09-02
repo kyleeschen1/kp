@@ -3,6 +3,7 @@ import type {
   KpCausalStructuralIntroductionChoreography,
   KpCounterOrbitCancellationChoreography,
   KpHomomorphicFusionChoreography,
+  KpSemanticRoleTransferChoreography,
   KpSynchronizedBalancedIntroductionChoreography
 } from "../animation/equation-operation-choreography.ts";
 import type {
@@ -69,11 +70,93 @@ export function applyKpNativeKatexOperationChoreography(input: {
       return applySynchronizedIntroduction(input, input.choreography);
     case "causal-structural-introduction":
       return applyCausalStructuralIntroduction(input, input.choreography);
+    case "semantic-role-transfer":
+      return applySemanticRoleTransfer(input, input.choreography);
     case "canonical-function-wrap":
       return applyCanonicalFunctionWrap(input, input.choreography);
     case "homomorphic-fusion":
       return applyHomomorphicFusion(input, input.choreography);
   }
+}
+
+function applySemanticRoleTransfer(
+  input: Parameters<typeof applyKpNativeKatexOperationChoreography>[0],
+  choreography: KpSemanticRoleTransferChoreography
+): readonly KpNativeKatexPaintMeasuredSceneTrack[] {
+  // The choreography validates the whole semantic rewrite, while the existing
+  // symbol-motion contract remains the sole timing authority for retiring and
+  // entering structure. This adapter only promotes the role-changing object.
+  const sourceEntities = new Map(input.source.atoms.map((atom) => [
+    atom.id,
+    atom.semanticEntityId
+  ]));
+  const targetEntities = new Map(input.target.atoms.map((atom) => [
+    atom.id,
+    atom.semanticEntityId
+  ]));
+  const forward = choreography.direction === "forward";
+  const transferSourceId = forward
+    ? choreography.roleTransfer.sourceEntityIds[0]!
+    : choreography.roleTransfer.targetEntityIds[0]!;
+  const transferTargetId = forward
+    ? choreography.roleTransfer.targetEntityIds[0]!
+    : choreography.roleTransfer.sourceEntityIds[0]!;
+  const contextPairs = new Set(choreography.contextContinuants.flatMap(
+    (continuant) => continuant.sourceEntityIds.flatMap((sourceEntityId) =>
+      continuant.targetEntityIds.map((targetEntityId) =>
+        semanticPairKey(
+          forward ? sourceEntityId : targetEntityId,
+          forward ? targetEntityId : sourceEntityId
+        )
+      )
+    )
+  ));
+  let matchedTransfer = false;
+  let matchedContext = false;
+  const tracks = input.tracks.map((track) => {
+    const sourceEntityId = track.sourceAtomId === undefined
+      ? undefined
+      : sourceEntities.get(track.sourceAtomId);
+    const targetEntityId = track.targetAtomId === undefined
+      ? undefined
+      : targetEntities.get(track.targetAtomId);
+    if (
+      track.lifecycle === "persist" &&
+      sourceEntityId === transferSourceId &&
+      targetEntityId === transferTargetId
+    ) {
+      matchedTransfer = true;
+      return Object.freeze({
+        ...track,
+        timingGroupId: `${choreography.id}.role-transfer`,
+        opacityScheduleAuthority: "semantic-choreography" as const
+      });
+    }
+    if (
+      track.lifecycle === "persist" &&
+      sourceEntityId !== undefined &&
+      targetEntityId !== undefined &&
+      contextPairs.has(semanticPairKey(sourceEntityId, targetEntityId))
+    ) {
+      matchedContext = true;
+      // Existing rigid-compound authority owns the residual logarithm and
+      // unchanged right-hand side. Re-grouping that paint here invalidates
+      // their already-certified collision schedule.
+      return track;
+    }
+    return track;
+  });
+  if (!matchedTransfer) {
+    throw new Error(
+      `Operation choreography ${choreography.id} has no measured role-transfer continuant.`
+    );
+  }
+  if (!matchedContext) {
+    throw new Error(
+      `Operation choreography ${choreography.id} has no measured persistent context.`
+    );
+  }
+  return Object.freeze(tracks);
 }
 
 function applyHomomorphicFusion(
@@ -1300,4 +1383,8 @@ function windowProgress(progress: number, start: number, end: number): number {
 function smoothWindow(progress: number, start: number, end: number): number {
   const local = windowProgress(progress, start, end);
   return local * local * (3 - 2 * local);
+}
+
+function semanticPairKey(sourceEntityId: string, targetEntityId: string): string {
+  return `${sourceEntityId}\u0000${targetEntityId}`;
 }

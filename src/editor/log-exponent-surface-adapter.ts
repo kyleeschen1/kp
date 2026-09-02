@@ -6,7 +6,8 @@ import {
 } from "../animation/log-exponent-adapter.ts";
 import {
   createKpCanonicalFunctionWrapChoreography,
-  createKpCausalStructuralIntroductionChoreography
+  createKpCausalStructuralIntroductionChoreography,
+  createKpSemanticRoleTransferChoreography
 } from "../animation/equation-operation-choreography.ts";
 import {
   kpCanonicalLogExponentSymbolMotionPlans
@@ -37,6 +38,9 @@ import type {
   KpNativeKatexRenderedSceneObservation
 } from "../rendering/native-katex-rendered-scene.ts";
 import type {
+  KpNativeKatexScenePaintReadiness
+} from "../rendering/native-katex-scene-compositor.ts";
+import type {
   KpNativeKatexFeaturePack
 } from "../rendering/native-katex-feature-pack-contract.ts";
 import {
@@ -45,9 +49,6 @@ import {
 import type {
   KpCompiledLogExponentOperation
 } from "../semantic/log-exponent-transformation-compiler.ts";
-import {
-  compileKpEquationOperationChoreography
-} from "../reader/renderers/equation-operation-choreography-compiler.ts";
 import type {
   KpEquationOperationChoreography
 } from "../rendering/native-katex-operation-choreography.ts";
@@ -162,11 +163,18 @@ const kpLogExponentSurfaceDispatch =
         activeStatus: "Moving x from exponent to coefficient.",
         targetStatus: "The exponent is now a coefficient.",
         compileChoreography: ({ operation }) =>
-          compileKpEquationOperationChoreography({
-            animation: canonicalAnimation,
+          createKpSemanticRoleTransferChoreography({
             transformation: operation.transformation,
-            motifKind: "append-after-shift",
-            direction: "forward"
+            direction: "forward",
+            roleTransferRecordId:
+              "correspondence.extract-exponent.unknown-x",
+            sourceRetirementRecordIds: [
+              "correspondence.extract-exponent.retire-log-enclosure",
+              "correspondence.extract-exponent.retire-power-container"
+            ],
+            targetEntryRecordIds: [
+              "correspondence.extract-exponent.introduce-product-container"
+            ]
           })
       }),
       surfaceDispatch({
@@ -358,10 +366,8 @@ async function prepareSurface(
     session.preparedOperations = Object.freeze(preparedOperations);
     session.stage.dataset["kpLogExponentStage"] = "ready";
     applyFrame(session, session.pendingState);
-    publishKpEditorAnimationSurfaceReadiness({
-      player: session.player,
-      readiness: "ready"
-    });
+    // applyFrame owns readiness from here: a measured endpoint is not enough
+    // when the current operation's structural paint is still preparing.
   } catch (error: unknown) {
     if (session.disposed || session.generation !== generation) return;
     failSurface(session, session.pendingState, error);
@@ -388,12 +394,31 @@ function applyFrame(
   let activeTransit = session.activeTransit;
   if (activeTransit?.operationIndex !== frame.operationIndex) {
     const prepared = preparedOperations[frame.operationIndex]!;
+    const operationIndex = frame.operationIndex;
     let nextTransit: KpLogExponentTransitSession;
     try {
       // Compile the successor before releasing current paint. If measured
       // geometry rejects it, the current task can still install a semantic
       // endpoint fallback without exposing a blank frame.
-      nextTransit = createKpLogExponentTransitSession(prepared);
+      nextTransit = createKpLogExponentTransitSession({
+        ...prepared,
+        onPaintReadinessChange(readiness) {
+          // Structural capture and WebGL leasing settle asynchronously. Defer
+          // publication until the compositor has returned from its current
+          // apply call, then reject notifications from a retired operation.
+          queueMicrotask(() => {
+            if (
+              session.disposed ||
+              session.activeTransit?.operationIndex !== operationIndex
+            ) return;
+            syncSurfacePaintReadiness(
+              session,
+              readiness,
+              session.pendingState
+            );
+          });
+        }
+      });
     } catch (error: unknown) {
       failSurface(session, state, error);
       return;
@@ -432,6 +457,12 @@ function applyFrame(
     failSurface(session, state, error);
     return;
   }
+  syncSurfacePaintReadiness(
+    session,
+    activeTransit.transit.readPaintReadiness(),
+    state
+  );
+  if (session.stage.dataset["kpLogExponentStage"] === "failed") return;
   const accessibleIndex = ownership.visualOwner === "source-native"
     ? frame.operationIndex
     : frame.operationIndex + 1;
@@ -453,6 +484,46 @@ function applyFrame(
       operationProgress
     );
   }
+}
+
+function syncSurfacePaintReadiness(
+  session: KpLogExponentSurfaceSession,
+  readiness: KpNativeKatexScenePaintReadiness,
+  state: KpEditorAnimationPlayerState
+): void {
+  session.stage.dataset["kpLogExponentPaintReadiness"] = readiness.status;
+  if (readiness.reason === undefined) {
+    delete session.stage.dataset["kpLogExponentPaintReadinessReason"];
+  } else {
+    session.stage.dataset["kpLogExponentPaintReadinessReason"] =
+      readiness.reason;
+  }
+  if (readiness.status === "unavailable") {
+    failSurface(
+      session,
+      state,
+      new Error(readiness.reason ?? "Native structural paint is unavailable.")
+    );
+    return;
+  }
+  publishSurfaceReadinessIfChanged(
+    session,
+    readiness.status === "ready" ? "ready" : "preparing"
+  );
+}
+
+function publishSurfaceReadinessIfChanged(
+  session: KpLogExponentSurfaceSession,
+  readiness: "preparing" | "ready"
+): void {
+  if (
+    session.player.dataset["kpEditorAnimationSurfaceReadiness"] === readiness &&
+    session.player.dataset["kpEditorAnimationSurfaceError"] === undefined
+  ) return;
+  publishKpEditorAnimationSurfaceReadiness({
+    player: session.player,
+    readiness
+  });
 }
 
 function setAccessibleEndpoint(root: HTMLElement, active: boolean): void {

@@ -106,6 +106,19 @@ export interface KpNativeKatexExecutableMotionEvidence {
   readonly dynamicTrackIds: readonly [string, ...string[]];
 }
 
+export type KpNativeKatexScenePaintReadiness = Readonly<{
+  readonly status: "preparing" | "ready" | "unavailable";
+  readonly reason?: string | undefined;
+}>;
+
+export interface KpNativeKatexSceneSessionOptions {
+  /** Reserve structural paint before semantic time is allowed to advance. */
+  readonly eagerStructuralPaint?: boolean | undefined;
+  readonly onPaintReadinessChange?: (
+    readiness: KpNativeKatexScenePaintReadiness
+  ) => void;
+}
+
 export interface KpCanonicalNativeKatexSceneSession {
   readonly kind: "canonical-native-katex-scene-session";
   readonly lifecycle: "renderer-session";
@@ -113,6 +126,7 @@ export interface KpCanonicalNativeKatexSceneSession {
   readonly hierarchy: KpNativeKatexHierarchicalScenePlan;
   readonly protectedTransit: KpEquationProtectedTransitCertificate;
   readonly session: KpNativeKatexRendererSession;
+  readonly readPaintReadiness: () => KpNativeKatexScenePaintReadiness;
   readonly executableMotion: KpNativeKatexExecutableMotionEvidence;
   readonly [kpExecutableNativeKatexSceneSessionBrand]: true;
 }
@@ -130,6 +144,7 @@ export interface KpCanonicalNativeKatexCarrierSceneSession {
   readonly hierarchy: KpNativeKatexHierarchicalScenePlan;
   readonly protectedTransit: KpEquationProtectedTransitCertificate;
   readonly session: KpNativeKatexRendererSession;
+  readonly readPaintReadiness: () => KpNativeKatexScenePaintReadiness;
   readonly [kpCanonicalNativeKatexCarrierSceneSessionBrand]: true;
 }
 
@@ -1453,9 +1468,13 @@ export function compileKpCanonicalNativeKatexScenePlan(
 }
 
 export function createKpCanonicalNativeKatexSceneSession(
-  plan: KpNativeKatexRendererReadyScenePlan
+  plan: KpNativeKatexRendererReadyScenePlan,
+  options: KpNativeKatexSceneSessionOptions = {}
 ): KpCanonicalNativeKatexSceneSession {
-  const carrier = createKpCanonicalNativeKatexCarrierSceneSession(plan);
+  const carrier = createKpCanonicalNativeKatexCarrierSceneSession(
+    plan,
+    options
+  );
   const executableMotion = certifyKpNativeKatexExecutableMotion(
     carrier.session
   );
@@ -1466,13 +1485,15 @@ export function createKpCanonicalNativeKatexSceneSession(
     hierarchy: carrier.hierarchy,
     protectedTransit: carrier.protectedTransit,
     session: carrier.session,
+    readPaintReadiness: carrier.readPaintReadiness,
     executableMotion,
     [kpExecutableNativeKatexSceneSessionBrand]: true as const
   });
 }
 
 export function createKpCanonicalNativeKatexCarrierSceneSession(
-  plan: KpNativeKatexRendererReadyScenePlan
+  plan: KpNativeKatexRendererReadyScenePlan,
+  options: KpNativeKatexSceneSessionOptions = {}
 ): KpCanonicalNativeKatexCarrierSceneSession {
   if (!isKpNativeKatexRendererReadyScenePlan(plan)) {
     throw new Error(
@@ -1555,6 +1576,21 @@ export function createKpCanonicalNativeKatexCarrierSceneSession(
     "shared-v1";
   let latestProgress = 0;
   let disposed = false;
+  let paintReadiness: KpNativeKatexScenePaintReadiness = Object.freeze({
+    status: plan.structuralSuccession === undefined
+      ? "ready"
+      : "preparing"
+  });
+  const commitPaintReadiness = (
+    next: KpNativeKatexScenePaintReadiness
+  ): void => {
+    if (
+      paintReadiness.status === next.status &&
+      paintReadiness.reason === next.reason
+    ) return;
+    paintReadiness = Object.freeze(next);
+    options.onPaintReadinessChange?.(paintReadiness);
+  };
   const session: KpNativeKatexRendererSession = Object.freeze({
     ...playback,
     apply(progress: number) {
@@ -1592,6 +1628,8 @@ export function createKpCanonicalNativeKatexCarrierSceneSession(
             progress: bounded,
             visible: false,
             enabled: fullMotion,
+            prewarm:
+              options.eagerStructuralPaint === true && bounded < 1,
             onSettled: () => session.apply(latestProgress)
           });
       const structuralReady =
@@ -1645,6 +1683,8 @@ export function createKpCanonicalNativeKatexCarrierSceneSession(
           progress: bounded,
           visible: canvasOwnsStructuralPaint,
           enabled: true,
+          prewarm:
+            options.eagerStructuralPaint === true && bounded < 1,
           onSettled: () => session.apply(latestProgress)
         });
         source.stage.dataset["kpNativeKatexStructuralPaintOwner"] =
@@ -1652,6 +1692,23 @@ export function createKpCanonicalNativeKatexCarrierSceneSession(
             ? "solid-mask-canvas"
             : "native-material-clones";
       }
+      commitPaintReadiness(structuralSync === undefined
+        ? { status: "ready" }
+        : structuralSync.status === "ready"
+          ? { status: "ready" }
+          : structuralSync.status === "unavailable"
+            ? {
+                status: "unavailable",
+                ...(structuralSync.reason === undefined
+                  ? {}
+                  : { reason: structuralSync.reason })
+              }
+            : {
+                status: "preparing",
+                ...(structuralSync.reason === undefined
+                  ? {}
+                  : { reason: structuralSync.reason })
+              });
       return ownership;
     },
     retire(retirement: KpNativeKatexPaintPreservingRetirement) {
@@ -1674,6 +1731,7 @@ export function createKpCanonicalNativeKatexCarrierSceneSession(
     hierarchy,
     protectedTransit: plan.protectedTransit,
     session,
+    readPaintReadiness: () => paintReadiness,
     [kpCanonicalNativeKatexCarrierSceneSessionBrand]: true as const
   });
 }
@@ -2123,11 +2181,19 @@ function createGlyphPaintFrame(
   const scaleX = safeScale(sourcePaint.width, targetPaint.width);
   const scaleY = safeScale(sourcePaint.height, targetPaint.height);
   const maximumInkScaleAnisotropy = 1.025;
-  if (
+  const measuredInkScale =
     !Number.isFinite(scaleX) ||
     !Number.isFinite(scaleY) ||
     symmetricScaleRatio(scaleX / scaleY) > maximumInkScaleAnisotropy
-  ) {
+      ? undefined
+      : Math.sqrt(scaleX * scaleY);
+  const sourceScale = measuredInkScale ??
+    resolveEquivalentGlyphTypographyScale({
+      source,
+      target,
+      maximumScaleDrift: maximumInkScaleAnisotropy
+    });
+  if (sourceScale === undefined) {
     const sourceFontSize = getComputedStyle(source.element).fontSize;
     const targetFontSize = getComputedStyle(target.element).fontSize;
     throw new Error(
@@ -2144,8 +2210,69 @@ function createGlyphPaintFrame(
     sourceInsetY: sourcePaint.top - source.rect.top,
     targetInsetX: targetPaint.left - target.rect.left,
     targetInsetY: targetPaint.top - target.rect.top,
-    sourceScale: Math.sqrt(scaleX * scaleY)
+    sourceScale
   });
+}
+
+function resolveEquivalentGlyphTypographyScale(input: {
+  readonly source: KpNativeKatexHandoffTelemetry["observations"][number];
+  readonly target: KpNativeKatexHandoffTelemetry["observations"][number];
+  readonly maximumScaleDrift: number;
+}): number | undefined {
+  if (
+    input.source.paintFingerprint !== input.target.paintFingerprint ||
+    input.source.fontRevision !== input.target.fontRevision
+  ) return undefined;
+  const sourceStyle = getComputedStyle(input.source.element);
+  const targetStyle = getComputedStyle(input.target.element);
+  if (
+    glyphMetricStyleFingerprint(sourceStyle) !==
+    glyphMetricStyleFingerprint(targetStyle)
+  ) return undefined;
+  const fontScale = safeScale(
+    Number.parseFloat(sourceStyle.fontSize),
+    Number.parseFloat(targetStyle.fontSize)
+  );
+  const sourceLayout = directTextLayoutRect(input.source.element);
+  const targetLayout = directTextLayoutRect(input.target.element);
+  const layoutScaleX = safeScale(sourceLayout.width, targetLayout.width);
+  const layoutScaleY = safeScale(sourceLayout.height, targetLayout.height);
+  if (
+    !Number.isFinite(fontScale) ||
+    !Number.isFinite(layoutScaleX) ||
+    !Number.isFinite(layoutScaleY) ||
+    symmetricScaleRatio(layoutScaleX / fontScale) >
+      input.maximumScaleDrift ||
+    symmetricScaleRatio(layoutScaleY / fontScale) > input.maximumScaleDrift
+  ) return undefined;
+  // Canvas ink bounds are font-size hinted in some engines. When the same
+  // glyph, font metrics, and DOM text box prove a uniform CSS role change,
+  // the computed font ratio is the stable scale authority for the clone.
+  return fontScale;
+}
+
+function directTextLayoutRect(element: HTMLElement): DOMRect {
+  const range = element.ownerDocument.createRange();
+  range.selectNodeContents(element);
+  const rect = range.getBoundingClientRect();
+  return rect.width > 0 && rect.height > 0
+    ? rect
+    : element.getBoundingClientRect();
+}
+
+function glyphMetricStyleFingerprint(computed: CSSStyleDeclaration): string {
+  return [
+    "font-family",
+    "font-style",
+    "font-weight",
+    "font-stretch",
+    "font-kerning",
+    "font-feature-settings",
+    "font-variation-settings",
+    "letter-spacing"
+  ].map((property) =>
+    `${property}:${computed.getPropertyValue(property)}`
+  ).join("|");
 }
 
 function createTargetGlyphPaintFrame(

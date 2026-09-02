@@ -19,6 +19,8 @@ import {
 import { applyKpSemanticVisualDomTheme } from
   "../../rendering/semantic-visual-dom-theme.ts";
 import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
+import { createKpReaderTimelinePlaybackClock } from
+  "../../reader/runtime/timeline-playback-clock.ts";
 import { compileKpSupplyTaxScrollScoreArticle } from
   "./kinetic-figure-supply-tax-scroll-score-article.ts";
 import {
@@ -59,15 +61,37 @@ import {
 } from "../kinetic-figure-supply-tax/kinetic-figure-supply-tax-svg.ts";
 
 const importLock = importLockValue as KpArticleImportLock;
-const stationTopPx = 12;
-const stationGapPx = 12;
+const stationTopPx = 0;
+const stationGapPx = 20;
+const readerScrollIdleMs = 150;
+const readerWheelIdleMs = 240;
+const attentionTransitionDurationMs = 480;
+const snapMinimumDurationMs = 180;
+const snapMaximumDurationMs = 340;
+const snapDurationPerPixelMs = 0.45;
+const snapPositionTolerancePx = 0.75;
 
-interface PassageLayout {
-  readonly passage: KpSupplyTaxScrollScorePassageV1;
-  readonly corridor: HTMLElement;
-  readonly cue: HTMLElement;
+interface PhraseLayout {
+  readonly phrase: KpSupplyTaxScrollScorePhraseV1;
+  readonly copy: HTMLElement;
+  readonly snapY: number;
+}
+
+interface SemanticTransition {
+  readonly targetIndex: number;
+  readonly edgeStartUnits: number;
+  readonly edgeEndUnits: number;
+  readonly clockExtent: number;
+}
+
+interface ScrollSettlement {
+  readonly targetIndex: number;
   readonly startY: number;
-  readonly endY: number;
+  readonly targetY: number;
+  readonly startedAtMs: number;
+  readonly durationMs: number;
+  frameHandle: number | undefined;
+  lastWrittenY: number;
 }
 
 interface PhraseBinding {
@@ -80,8 +104,9 @@ export interface KpSupplyTaxScrollScoreSession {
 }
 
 /**
- * This host treats document position as a seekable playhead. It samples the
- * existing economics authority directly; it never starts a competing clock.
+ * Browser input owns live movement and momentum. Once it becomes quiet, one
+ * interruptible correction settles the nearest semantic paragraph while the
+ * shared reader clock interpolates the corresponding lesson edge.
  */
 export function mountKpSupplyTaxScrollScore(input: {
   readonly root: HTMLElement;
@@ -110,6 +135,16 @@ export function mountKpSupplyTaxScrollScore(input: {
   const railOutput = requiredElement<HTMLOutputElement>(station,
     "[data-kp-scroll-score-position]");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const authoredDurationMs = authority.animation.timeline?.durationMs;
+  if (authoredDurationMs === undefined) {
+    throw new Error("Supply-tax animation requires its canonical timeline.");
+  }
+  const clock = createKpReaderTimelinePlaybackClock({
+    id: "clock.scroll-score.economics.supply-tax.v1",
+    durationMs: authoredDurationMs,
+    initialProgress: 1,
+    ownerWindow: window
+  });
   const phraseFocusProfile = readKpSupplyTaxScrollScorePhraseFocusProfile(
     window.location.search
   );
@@ -124,13 +159,20 @@ export function mountKpSupplyTaxScrollScore(input: {
       beat.slug,
       projectKpSupplyTaxScene({ authority, beat })
     ] as const));
-  let layouts: readonly PassageLayout[] = [];
+  let layouts: readonly PhraseLayout[] = [];
   let disposed = false;
   let frameRequest: number | undefined;
+  let scrollSettlementTimer: number | undefined;
   let activePhraseId: string | undefined;
   let projectedUnits = 0;
   let fit: "stationary" | "ordinary" = "stationary";
   let seekAnchor: Readonly<{ units: number; scrollY: number }> | undefined;
+  let settledIndex = 0;
+  let transition: SemanticTransition | undefined;
+  let scrollSettlement: ScrollSettlement | undefined;
+  let lastReaderIntentAtMs = Number.NEGATIVE_INFINITY;
+  let lastReaderScrollAtMs = Number.NEGATIVE_INFINITY;
+  let readerIntentIdleMs = readerScrollIdleMs;
 
   const projectFrame = (modelProgress: number): void => {
     const frame = sampleKpEconomicsSupplyTaxAnimationFrame({
@@ -145,8 +187,21 @@ export function mountKpSupplyTaxScrollScore(input: {
     passage.dataset["kpSupplyTaxModelProgress"] = modelProgress.toFixed(4);
   };
 
-  const projectUnits = (units: number, updateHistory: boolean): void => {
+  const projectUnits = (
+    units: number,
+    updateHistory: boolean,
+    focusPhrase?: KpSupplyTaxScrollScorePhraseV1
+  ): void => {
     const sample = sampleKpSupplyTaxScrollScore(pedagogicalScore, units);
+    const focusSample = focusPhrase === undefined
+      ? sample
+      : sampleKpSupplyTaxScrollScore(
+        pedagogicalScore,
+        canonicalKpSupplyTaxScrollScorePhraseUnits(
+          pedagogicalScore,
+          focusPhrase
+        )
+      );
     projectedUnits = sample.units;
     const from = requiredScene(sceneBySlug, sample.fromBeat.slug);
     const to = requiredScene(sceneBySlug, sample.toBeat.slug);
@@ -185,8 +240,8 @@ export function mountKpSupplyTaxScrollScore(input: {
       })
     });
     caption.textContent = sample.toBeat.claim;
-    passage.dataset["kpScrollScoreActivePassage"] = sample.passage.id;
-    passage.dataset["kpScrollScoreActivePhrase"] = sample.phrase.id;
+    passage.dataset["kpScrollScoreActivePassage"] = focusSample.passage.id;
+    passage.dataset["kpScrollScoreActivePhrase"] = focusSample.phrase.id;
     passage.dataset["kpScrollScoreActiveBeat"] = sample.toBeat.slug;
     passage.dataset["kpScrollScorePhraseProgress"] =
       sample.phraseProgress.toFixed(4);
@@ -194,13 +249,13 @@ export function mountKpSupplyTaxScrollScore(input: {
     const phraseAttention = new Map(
       projectKpSupplyTaxScrollScorePhraseAttention({
         score: pedagogicalScore,
-        sample,
+        sample: focusSample,
         discrete: reducedMotion.matches,
         profile: phraseFocusProfile
       }).map((attention) => [attention.phraseId, attention] as const)
     );
     phraseBindings.forEach((binding, id) => {
-      const active = id === sample.phrase.id;
+      const active = id === focusSample.phrase.id;
       const attention = phraseAttention.get(id);
       if (attention === undefined) {
         throw new Error(`Missing prose attention projection for ${id}.`);
@@ -235,141 +290,158 @@ export function mountKpSupplyTaxScrollScore(input: {
     rail.value = sample.units.toFixed(3);
     const percent = Math.round(sample.phraseProgress * 100);
     rail.setAttribute("aria-valuetext",
-      `${plainLabel(sample.phrase.label)}, ${percent}%`);
-    railOutput.value = plainLabel(sample.phrase.label);
-    if (updateHistory && activePhraseId !== sample.phrase.id) {
+      `${plainLabel(focusSample.phrase.label)}, ${percent}%`);
+    railOutput.value = plainLabel(focusSample.phrase.label);
+    if (updateHistory && activePhraseId !== focusSample.phrase.id) {
       history.replaceState(null, "", kpSupplyTaxScrollScorePhraseHash(
-        sample.phrase));
+        focusSample.phrase));
     }
-    activePhraseId = sample.phrase.id;
+    activePhraseId = focusSample.phrase.id;
+  };
+
+  const phraseIndex = (phrase: KpSupplyTaxScrollScorePhraseV1): number =>
+    pedagogicalScore.phrases.findIndex(({ id }) => id === phrase.id);
+
+  const projectStationPhase = (): void => {
+    const first = layouts[0];
+    const last = layouts[layouts.length - 1];
+    if (first === undefined || last === undefined) return;
+    passage.dataset["kpScrollScoreStationPhase"] =
+      window.scrollY < first.snapY
+        ? "approach"
+        : window.scrollY > last.snapY
+          ? "release"
+          : "score";
   };
 
   const measure = (): void => {
     if (disposed) return;
     const stationHeight = station.getBoundingClientRect().height;
-    const corridorEntries = pedagogicalScore.passages.map((scorePassage) => {
-      const corridor = requiredElement<HTMLElement>(passage,
-        `[data-kp-scroll-score-corridor="${scorePassage.id}"]`);
-      const cue = requiredElement<HTMLElement>(corridor,
-        "[data-kp-scroll-score-cue]");
-      corridor.style.setProperty("--kp-scroll-score-cue-height",
-        `${cue.getBoundingClientRect().height}px`);
-      return { passage: scorePassage, corridor, cue };
-    });
-    const maxCueHeight = Math.max(...corridorEntries.map(({ cue }) =>
-      cue.getBoundingClientRect().height));
-    const fitsStation = stationHeight + maxCueHeight + stationGapPx +
-      stationTopPx * 2 <= window.innerHeight;
-    passage.dataset["kpScrollScoreFit"] = fitsStation
-      ? "stationary"
-      : "ordinary";
-    const nextFit: "stationary" | "ordinary" = fitsStation
-      ? "stationary"
-      : "ordinary";
-    fit = nextFit;
-    passage.style.setProperty("--kp-scroll-score-cue-top",
-      `${stationTopPx + stationHeight + stationGapPx}px`);
-    // Setting cue height changes the corridor's realized height, so measure
-    // document endpoints only after all renderer-owned size variables exist.
-    layouts = Object.freeze(corridorEntries.map((entry) => {
-      const corridorRect = entry.corridor.getBoundingClientRect();
-      const cueHeight = entry.cue.getBoundingClientRect().height;
-      const documentTop = window.scrollY + corridorRect.top;
-      const cueTop = stationTopPx + stationHeight + stationGapPx;
-      return Object.freeze({
-        ...entry,
-        startY: documentTop - cueTop,
-        endY: Math.max(documentTop - cueTop,
-          documentTop + corridorRect.height - cueHeight - cueTop)
-      });
+    const phraseEntries = pedagogicalScore.phrases.map((phrase) => ({
+      phrase,
+      copy: requiredElement<HTMLElement>(passage,
+        `[data-kp-scroll-score-phrase="${phrase.id}"]`)
     }));
+    const maxCopyHeight = Math.max(...phraseEntries.map(({ copy }) =>
+      copy.getBoundingClientRect().height));
+    const fitsStation = stationHeight + maxCopyHeight + stationGapPx <=
+      window.innerHeight;
+    fit = fitsStation ? "stationary" : "ordinary";
+    passage.dataset["kpScrollScoreFit"] = fit;
+    const readingY = fit === "stationary"
+      ? stationTopPx + stationHeight + stationGapPx
+      : window.innerHeight * 0.58;
+    passage.style.setProperty("--kp-scroll-score-snap-top", `${readingY}px`);
+    document.documentElement.style.setProperty(
+      "--kp-scroll-score-snap-top",
+      `${readingY}px`
+    );
+    layouts = Object.freeze(phraseEntries.map((entry) => Object.freeze({
+      ...entry,
+      snapY: window.scrollY + entry.copy.getBoundingClientRect().top - readingY
+    })));
+    projectStationPhase();
+    if (activePhraseId !== undefined) return;
     const target = readKpSupplyTaxScrollScorePhraseFromHash(
       pedagogicalScore,
       window.location.hash
     );
-    if (target !== undefined && activePhraseId === undefined) {
+    if (target !== undefined) {
       seekPhrase(target, false);
-    } else {
-      projectFromScroll(false);
-    }
-  };
-
-  const unitsFromScroll = (): number => {
-    if (layouts.length === 0) return projectedUnits;
-    if (fit === "ordinary") {
-      const readingY = window.innerHeight * 0.58;
-      const closest = layouts.reduce((winner, candidate) => {
-        const candidateDistance = Math.abs(
-          candidate.cue.getBoundingClientRect().top - readingY);
-        const winnerDistance = Math.abs(
-          winner.cue.getBoundingClientRect().top - readingY);
-        return candidateDistance < winnerDistance ? candidate : winner;
-      });
-      return closest.passage.offsetUnits + closest.passage.totalUnits;
-    }
-    const y = window.scrollY;
-    const first = layouts[0]!;
-    if (y <= first.startY) return 0;
-    for (const [index, layout] of layouts.entries()) {
-      if (y <= layout.endY) {
-        const progress = layout.endY === layout.startY
-          ? 1
-          : (y - layout.startY) / (layout.endY - layout.startY);
-        return layout.passage.offsetUnits +
-          Math.max(0, Math.min(1, progress)) * layout.passage.totalUnits;
-      }
-      const next = layouts[index + 1];
-      if (next !== undefined && y < next.startY) {
-        return layout.passage.offsetUnits + layout.passage.totalUnits;
-      }
-    }
-    return pedagogicalScore.totalUnits;
-  };
-
-  const projectFromScroll = (updateHistory = true): void => {
-    const first = layouts[0];
-    const last = layouts[layouts.length - 1];
-    if (first !== undefined && last !== undefined) {
-      const y = window.scrollY;
-      passage.dataset["kpScrollScoreStationPhase"] = y < first.startY
-        ? "approach"
-        : y > last.endY
-          ? "release"
-          : "score";
-    }
-    if (seekAnchor !== undefined &&
-        Math.abs(window.scrollY - seekAnchor.scrollY) <= 1) {
-      // Native scrolling rounds document coordinates, but a rail/hash seek is
-      // a request for exact semantic units. Retain that endpoint until an
-      // actual reader scroll moves away from the restored coordinate.
-      projectUnits(seekAnchor.units, updateHistory);
       return;
     }
-    seekAnchor = undefined;
-    projectUnits(unitsFromScroll(), updateHistory);
+    settleAtIndex(closestPhraseIndex(), false);
+  };
+
+  const closestPhraseIndex = (): number => {
+    if (layouts.length === 0) return settledIndex;
+    const closest = layouts.reduce((winner, candidate) =>
+      Math.abs(window.scrollY - candidate.snapY) <
+          Math.abs(window.scrollY - winner.snapY)
+        ? candidate
+        : winner);
+    return Math.max(0, phraseIndex(closest.phrase));
   };
 
   const scrollYForUnits = (units: number): number => {
     const sample = sampleKpSupplyTaxScrollScore(pedagogicalScore, units);
-    const layout = layouts.find(({ passage: candidate }) =>
-      candidate.id === sample.passage.id);
-    if (layout === undefined) return window.scrollY;
-    if (fit === "ordinary") {
-      return window.scrollY + layout.cue.getBoundingClientRect().top -
-        window.innerHeight * 0.55;
+    return layouts.find(({ phrase }) => phrase.id === sample.phrase.id)?.snapY ??
+      window.scrollY;
+  };
+
+  const settleAtIndex = (index: number, updateHistory: boolean): void => {
+    const targetIndex = Math.max(0, Math.min(
+      pedagogicalScore.phrases.length - 1,
+      index
+    ));
+    const phrase = pedagogicalScore.phrases[targetIndex]!;
+    clock.pause();
+    transition = undefined;
+    settledIndex = targetIndex;
+    passage.dataset["kpScrollScoreTransition"] = "settled";
+    projectUnits(canonicalKpSupplyTaxScrollScorePhraseUnits(
+      pedagogicalScore,
+      phrase
+    ), updateHistory);
+  };
+
+  const startTransitionTo = (index: number, updateHistory: boolean): void => {
+    const targetIndex = Math.max(0, Math.min(
+      pedagogicalScore.phrases.length - 1,
+      index
+    ));
+    if (targetIndex === settledIndex) return;
+    if (reducedMotion.matches || Math.abs(targetIndex - settledIndex) !== 1) {
+      settleAtIndex(targetIndex, updateHistory);
+      return;
     }
-    const localProgress = sample.passage.totalUnits === 0
-      ? 0
-      : (sample.units - sample.passage.offsetUnits) /
-        sample.passage.totalUnits;
-    return interpolate(layout.startY, layout.endY, localProgress);
+    const forward = targetIndex > settledIndex;
+    const edgePhrase = pedagogicalScore.phrases[
+      forward ? targetIndex : settledIndex
+    ]!;
+    const edgePassage = pedagogicalScore.passages.find(({ id }) =>
+      id === edgePhrase.passageId);
+    if (edgePassage === undefined) {
+      throw new Error(`Missing transition passage ${edgePhrase.passageId}.`);
+    }
+    const edgeStartUnits = edgePassage.offsetUnits + edgePhrase.startUnits +
+      Number.EPSILON * 1024;
+    const edgeEndUnits = edgePassage.offsetUnits + edgePhrase.motionEndUnits;
+    const clockExtent = edgePhrase.act === "motion"
+      ? 1
+      : attentionTransitionDurationMs / authoredDurationMs;
+    clock.pause();
+    clock.seek(forward ? 0 : clockExtent);
+    transition = Object.freeze({
+      targetIndex,
+      edgeStartUnits,
+      edgeEndUnits,
+      clockExtent
+    });
+    const targetPhrase = pedagogicalScore.phrases[targetIndex]!;
+    passage.dataset["kpScrollScoreTransition"] = "playing";
+    projectUnits(forward ? edgeStartUnits : edgeEndUnits,
+      updateHistory, targetPhrase);
+    clock.play({
+      direction: forward ? "forward" : "rewind",
+      stopAt: forward ? clockExtent : 0
+    });
   };
 
   function seekUnits(units: number, updateHistory: boolean): void {
     const bounded = Math.max(0, Math.min(pedagogicalScore.totalUnits, units));
     const scrollY = scrollYForUnits(bounded);
+    cancelScrollSettlement("settled");
+    cancelScrollSettlementTimer();
+    clock.pause();
+    transition = undefined;
+    const sample = sampleKpSupplyTaxScrollScore(pedagogicalScore, bounded);
+    settledIndex = Math.max(0, phraseIndex(sample.phrase));
     seekAnchor = Object.freeze({ units: bounded, scrollY });
+    // Rail and URL navigation restore one exact semantic landmark even though
+    // the browser may round the corresponding document coordinate.
     window.scrollTo({ top: scrollY, behavior: "auto" });
+    passage.dataset["kpScrollScoreTransition"] = "settled";
     projectUnits(bounded, updateHistory);
   }
 
@@ -383,13 +455,206 @@ export function mountKpSupplyTaxScrollScore(input: {
     ), updateHistory);
   }
 
-  const scheduleProjection = (): void => {
+  const scheduleStationProjection = (): void => {
     if (frameRequest !== undefined) return;
     frameRequest = window.requestAnimationFrame(() => {
       frameRequest = undefined;
-      projectFromScroll();
+      projectStationPhase();
     });
   };
+
+  const cancelScrollSettlementTimer = (): void => {
+    if (scrollSettlementTimer === undefined) return;
+    window.clearTimeout(scrollSettlementTimer);
+    scrollSettlementTimer = undefined;
+  };
+
+  const cancelScrollSettlement = (
+    nextPhase: "reader" | "settled" = "reader"
+  ): void => {
+    const active = scrollSettlement;
+    if (active?.frameHandle !== undefined) {
+      window.cancelAnimationFrame(active.frameHandle);
+    }
+    scrollSettlement = undefined;
+    passage.dataset["kpScrollScoreScrollPhase"] = nextPhase;
+    delete passage.dataset["kpScrollScoreSnapTarget"];
+    delete passage.dataset["kpScrollScoreSnapDurationMs"];
+  };
+
+  const finishScrollSettlement = (): void => {
+    const active = scrollSettlement;
+    if (active === undefined) return;
+    if (active.frameHandle !== undefined) {
+      window.cancelAnimationFrame(active.frameHandle);
+    }
+    window.scrollTo({ top: active.targetY, behavior: "auto" });
+    seekAnchor = Object.freeze({
+      units: projectedUnits,
+      scrollY: active.targetY
+    });
+    passage.dataset["kpScrollScoreLastSnapTarget"] =
+      pedagogicalScore.phrases[active.targetIndex]!.id;
+    passage.dataset["kpScrollScoreLastSnapY"] = active.targetY.toFixed(2);
+    passage.dataset["kpScrollScoreLastSnapDurationMs"] =
+      active.durationMs.toFixed(2);
+    passage.dataset["kpScrollScoreLastSnapDistancePx"] =
+      Math.abs(active.targetY - active.startY).toFixed(2);
+    scrollSettlement = undefined;
+    passage.dataset["kpScrollScoreScrollPhase"] = "settled";
+    delete passage.dataset["kpScrollScoreSnapTarget"];
+    delete passage.dataset["kpScrollScoreSnapDurationMs"];
+    projectStationPhase();
+  };
+
+  const tickScrollSettlement = (nowMs: number): void => {
+    const active = scrollSettlement;
+    if (active === undefined || disposed) return;
+    active.frameHandle = undefined;
+    const progress = Math.max(0, Math.min(1,
+      (nowMs - active.startedAtMs) / active.durationMs));
+    const eased = 1 - (1 - progress) ** 3;
+    const candidate = interpolate(active.startY, active.targetY, eased);
+    // The correction must never overshoot or reverse, even if a renderer
+    // reports a fractional scroll position differently between frames.
+    const nextY = active.targetY >= active.startY
+      ? Math.min(active.targetY, Math.max(active.lastWrittenY, candidate))
+      : Math.max(active.targetY, Math.min(active.lastWrittenY, candidate));
+    active.lastWrittenY = nextY;
+    window.scrollTo({ top: nextY, behavior: "auto" });
+    if (progress >= 1) {
+      finishScrollSettlement();
+      return;
+    }
+    active.frameHandle = window.requestAnimationFrame(tickScrollSettlement);
+  };
+
+  const requestSemanticTarget = (targetIndex: number): void => {
+    if (transition?.targetIndex === targetIndex) return;
+    startTransitionTo(targetIndex, true);
+  };
+
+  const beginScrollSettlement = (): void => {
+    cancelScrollSettlementTimer();
+    if (layouts.length === 0 || scrollSettlement !== undefined) return;
+    if (seekAnchor !== undefined &&
+        Math.abs(window.scrollY - seekAnchor.scrollY) <= 1) return;
+    seekAnchor = undefined;
+    const targetIndex = closestPhraseIndex();
+    requestSemanticTarget(targetIndex);
+    const maximumY = Math.max(0,
+      document.documentElement.scrollHeight - window.innerHeight);
+    const targetY = Math.max(0, Math.min(maximumY,
+      layouts[targetIndex]?.snapY ?? window.scrollY));
+    const startY = window.scrollY;
+    passage.dataset["kpScrollScoreSnapTarget"] =
+      pedagogicalScore.phrases[targetIndex]!.id;
+    if (fit === "ordinary" || reducedMotion.matches ||
+        Math.abs(targetY - startY) <= snapPositionTolerancePx) {
+      passage.dataset["kpScrollScoreScrollPhase"] = "snapping";
+      scrollSettlement = {
+        targetIndex,
+        startY,
+        targetY,
+        startedAtMs: performance.now(),
+        durationMs: 1,
+        frameHandle: undefined,
+        lastWrittenY: startY
+      };
+      finishScrollSettlement();
+      return;
+    }
+    const durationMs = Math.max(snapMinimumDurationMs, Math.min(
+      snapMaximumDurationMs,
+      snapMinimumDurationMs + Math.abs(targetY - startY) *
+        snapDurationPerPixelMs
+    ));
+    passage.dataset["kpScrollScoreScrollPhase"] = "snapping";
+    passage.dataset["kpScrollScoreSnapDurationMs"] =
+      durationMs.toFixed(2);
+    scrollSettlement = {
+      targetIndex,
+      startY,
+      targetY,
+      startedAtMs: performance.now(),
+      durationMs,
+      frameHandle: undefined,
+      lastWrittenY: startY
+    };
+    scrollSettlement.frameHandle = window.requestAnimationFrame(
+      tickScrollSettlement
+    );
+  };
+
+  const scheduleScrollSettlement = (delayMs = readerScrollIdleMs): void => {
+    cancelScrollSettlementTimer();
+    scrollSettlementTimer = window.setTimeout(() => {
+      scrollSettlementTimer = undefined;
+      const nowMs = performance.now();
+      const remainingQuietMs = Math.max(
+        lastReaderIntentAtMs + readerIntentIdleMs - nowMs,
+        lastReaderScrollAtMs + readerScrollIdleMs - nowMs
+      );
+      if (remainingQuietMs > 0) {
+        scheduleScrollSettlement(remainingQuietMs);
+        return;
+      }
+      beginScrollSettlement();
+    }, Math.max(0, delayMs));
+  };
+
+  const interruptForReaderInput = (event?: Event): void => {
+    lastReaderIntentAtMs = performance.now();
+    readerIntentIdleMs = event instanceof WheelEvent
+      ? readerWheelIdleMs
+      : readerScrollIdleMs;
+    cancelScrollSettlementTimer();
+    cancelScrollSettlement("reader");
+    seekAnchor = undefined;
+    if (transition !== undefined) {
+      // Rapid navigation resolves the already selected beat directly before
+      // accepting another target, so interruption cannot leave mixed scenes.
+      settleAtIndex(transition.targetIndex, false);
+    }
+  };
+
+  const handleReaderKeydown = (event: KeyboardEvent): void => {
+    if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey ||
+        event.target instanceof HTMLInputElement ||
+        event.target instanceof HTMLTextAreaElement ||
+        event.target instanceof HTMLSelectElement ||
+        (event.target instanceof HTMLElement && event.target.isContentEditable)) {
+      return;
+    }
+    if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "]
+      .includes(event.key)) {
+      interruptForReaderInput();
+    }
+  };
+
+  const handleScroll = (): void => {
+    scheduleStationProjection();
+    if (scrollSettlement !== undefined) return;
+    if (seekAnchor !== undefined &&
+        Math.abs(window.scrollY - seekAnchor.scrollY) <= 1) return;
+    lastReaderScrollAtMs = performance.now();
+    passage.dataset["kpScrollScoreScrollPhase"] = "reader";
+    scheduleScrollSettlement();
+  };
+
+  const handleScrollEnd = (): void => {
+    if (scrollSettlement !== undefined ||
+        (seekAnchor !== undefined &&
+          Math.abs(window.scrollY - seekAnchor.scrollY) <= 1)) return;
+    const nowMs = performance.now();
+    const remainingQuietMs = Math.max(
+      lastReaderIntentAtMs + readerIntentIdleMs - nowMs,
+      lastReaderScrollAtMs + readerScrollIdleMs - nowMs
+    );
+    scheduleScrollSettlement(Math.max(0, remainingQuietMs));
+  };
+  // The rail seeks the same document corridor as scrolling, so prose, stage,
+  // URL, and the continuous semantic sample cannot drift into separate states.
   const handleRailInput = (): void => seekUnits(Number(rail.value), true);
   const handleRailKeydown = (event: KeyboardEvent): void => {
     if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"]
@@ -397,16 +662,16 @@ export function mountKpSupplyTaxScrollScore(input: {
     event.preventDefault();
     const checkpoints = pedagogicalScore.phrases.map((phrase) =>
       canonicalKpSupplyTaxScrollScorePhraseUnits(pedagogicalScore, phrase));
-    const current = Number(rail.value);
+    const activeIndex = pedagogicalScore.phrases.findIndex(({ id }) =>
+      id === activePhraseId);
     const target = event.key === "Home"
       ? 0
       : event.key === "End"
         ? pedagogicalScore.totalUnits
         : event.key === "ArrowRight" || event.key === "ArrowDown"
-          ? checkpoints.find((value) => value > current + 0.01) ??
+          ? checkpoints[Math.min(checkpoints.length - 1, activeIndex + 1)] ??
             pedagogicalScore.totalUnits
-          : [...checkpoints].reverse().find((value) =>
-            value < current - 0.01) ?? 0;
+          : checkpoints[Math.max(0, activeIndex - 1)] ?? 0;
     seekUnits(target, true);
   };
   const handleHashChange = (): void => {
@@ -440,15 +705,48 @@ export function mountKpSupplyTaxScrollScore(input: {
     const phrase = pedagogicalScore.phrases.find(({ id }) => id === phraseId);
     if (phrase !== undefined) seekPhrase(phrase, true);
   };
-  const handleReducedMotion = (): void => projectUnits(projectedUnits, false);
+  const handleReducedMotion = (): void => {
+    if (scrollSettlement !== undefined) finishScrollSettlement();
+    if (transition !== undefined) {
+      settleAtIndex(transition.targetIndex, false);
+      return;
+    }
+    projectUnits(projectedUnits, false);
+  };
+
+  const unsubscribe = clock.subscribe((sample) => {
+    const activeTransition = transition;
+    if (activeTransition === undefined || sample.source !== "autoplay") return;
+    const progress = activeTransition.clockExtent === 0
+      ? 1
+      : Math.max(0, Math.min(1,
+        sample.progress / activeTransition.clockExtent));
+    const targetPhrase = pedagogicalScore.phrases[
+      activeTransition.targetIndex
+    ]!;
+    projectUnits(interpolate(
+      activeTransition.edgeStartUnits,
+      activeTransition.edgeEndUnits,
+      progress
+    ), false, targetPhrase);
+    if (!sample.settled) return;
+    settleAtIndex(activeTransition.targetIndex, false);
+  });
 
   const resizeObserver = new ResizeObserver(() => measure());
   resizeObserver.observe(station);
-  passage.querySelectorAll<HTMLElement>("[data-kp-scroll-score-cue]")
-    .forEach((cue) => resizeObserver.observe(cue));
-  window.addEventListener("scroll", scheduleProjection, { passive: true });
+  passage.querySelectorAll<HTMLElement>("[data-kp-scroll-score-phrase]")
+    .forEach((phrase) => resizeObserver.observe(phrase));
+  window.addEventListener("scroll", handleScroll, { passive: true });
+  window.addEventListener("scrollend", handleScrollEnd);
+  window.addEventListener("wheel", interruptForReaderInput, { passive: true });
+  window.addEventListener("touchstart", interruptForReaderInput,
+    { passive: true });
+  window.addEventListener("pointerdown", interruptForReaderInput,
+    { passive: true });
   window.addEventListener("resize", measure);
   window.addEventListener("hashchange", handleHashChange);
+  document.addEventListener("keydown", handleReaderKeydown);
   document.addEventListener("selectionchange", handleSelection);
   passage.addEventListener("beforematch", handleBeforeMatch, true);
   rail.addEventListener("input", handleRailInput);
@@ -461,15 +759,27 @@ export function mountKpSupplyTaxScrollScore(input: {
     dispose: () => {
       disposed = true;
       if (frameRequest !== undefined) window.cancelAnimationFrame(frameRequest);
+      cancelScrollSettlementTimer();
+      cancelScrollSettlement("settled");
       resizeObserver.disconnect();
-      window.removeEventListener("scroll", scheduleProjection);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scrollend", handleScrollEnd);
+      window.removeEventListener("wheel", interruptForReaderInput);
+      window.removeEventListener("touchstart", interruptForReaderInput);
+      window.removeEventListener("pointerdown", interruptForReaderInput);
       window.removeEventListener("resize", measure);
       window.removeEventListener("hashchange", handleHashChange);
+      document.removeEventListener("keydown", handleReaderKeydown);
       document.removeEventListener("selectionchange", handleSelection);
       passage.removeEventListener("beforematch", handleBeforeMatch, true);
       rail.removeEventListener("input", handleRailInput);
       rail.removeEventListener("keydown", handleRailKeydown);
       reducedMotion.removeEventListener("change", handleReducedMotion);
+      unsubscribe();
+      clock.dispose();
+      document.documentElement.style.removeProperty(
+        "--kp-scroll-score-snap-top"
+      );
     }
   });
 }
@@ -478,11 +788,11 @@ function renderPage(score: KpSupplyTaxScrollScoreV1): string {
   return `<main class="kp-scroll-score-page">
     <article class="kp-scroll-score-article" aria-labelledby="kp-scroll-score-title">
       <header class="kp-scroll-score-intro">
-        <p>Scroll Score · Economics</p>
+        <p>Vertical Score · Economics</p>
         <h1 id="kp-scroll-score-title">How does a tax reshape a market?</h1>
-        <p>Scroll normally. The paragraph is the score; the stage follows its argument.</p>
+        <p>The figure stays with the argument while each ordinary paragraph selects a semantic state.</p>
       </header>
-      <section class="kp-scroll-score-passage" data-kp-supply-tax-scroll-score data-kp-scroll-score-fit="stationary" data-kp-scroll-score-station-phase="approach" aria-label="Per-unit tax Scroll Score Station">
+      <section class="kp-scroll-score-passage" data-kp-supply-tax-scroll-score data-kp-scroll-score-projection="inline-sticky-score" data-kp-scroll-score-fit="stationary" data-kp-scroll-score-station-phase="approach" data-kp-scroll-score-scroll-phase="settled" data-kp-scroll-score-transition="settled" aria-label="Per-unit tax vertical Scroll Score">
         <div class="kp-scroll-score-station" data-kp-scroll-score-station>
           ${renderStaticStage()}
           ${renderScoreRail(score)}
@@ -491,7 +801,7 @@ function renderPage(score: KpSupplyTaxScrollScoreV1): string {
           ${score.passages.map((passage) => renderPassage(passage)).join("")}
         </div>
       </section>
-      <p class="kp-scroll-score-release-note">The stage has settled. Continue scrolling to leave this visual argument.</p>
+      <p class="kp-scroll-score-release-note">The market now contains less trade and an unrecovered loss from the transactions that no longer occur.</p>
     </article>
   </main>`;
 }
@@ -531,11 +841,21 @@ function renderScoreRail(score: KpSupplyTaxScrollScoreV1): string {
 }
 
 function renderPassage(passage: KpSupplyTaxScrollScorePassageV1): string {
-  return `<section class="kp-scroll-score-corridor" data-kp-scroll-score-corridor="${passage.id}" style="--kp-scroll-score-unit-count:${passage.totalUnits}">
-    <div class="kp-scroll-score-cue" data-kp-scroll-score-cue data-kp-scroll-score-passage="${passage.id}">
-      ${compileKpArticleMarkdownFragmentHtml(passage.markdown)}
-    </div>
+  return `<section class="kp-scroll-score-corridor" data-kp-scroll-score-corridor="${passage.id}" aria-label="${plainLabel(passage.id)}">
+    ${passage.phrases.map((phrase, index) => renderPhrase(phrase, index)).join("")}
   </section>`;
+}
+
+function renderPhrase(
+  phrase: KpSupplyTaxScrollScorePhraseV1,
+  passageIndex: number
+): string {
+  const first = passageIndex === 0 ? "true" : "false";
+  return `<div class="kp-scroll-score-beat" data-kp-scroll-score-beat="${phrase.id}" data-kp-scroll-score-act="${phrase.act}" data-kp-scroll-score-first-in-passage="${first}">
+    <div class="kp-scroll-score-phrase" data-kp-scroll-score-cue data-kp-scroll-score-passage="${phrase.passageId}" data-kp-scroll-score-phrase="${phrase.id}" data-kp-scroll-score-phrase-active="false" data-kp-scroll-score-act="${phrase.act}">
+      ${compileKpArticleMarkdownFragmentHtml(phrase.label)}
+    </div>
+  </div>`;
 }
 
 function bindPhraseElements(
@@ -545,29 +865,14 @@ function bindPhraseElements(
 ): ReadonlyMap<string, PhraseBinding> {
   const elements = new Map<string, PhraseBinding>();
   for (const phrase of score.phrases) {
-    const passage = requiredElement<HTMLElement>(root,
-      `[data-kp-scroll-score-passage="${phrase.passageId}"]`);
-    const link = Array.from(passage.querySelectorAll<HTMLAnchorElement>(
-      'a[href^="kp-ref:"]'
-    )).find((candidate) => candidate.getAttribute("href") ===
-      `kp-ref:${phrase.referenceAddress}`);
-    if (link === undefined) {
-      throw new Error(`Rendered Scroll Score phrase ${phrase.id} is missing.`);
-    }
-    const span = document.createElement("span");
-    span.id = `phrase.${phrase.id}`;
-    span.className = "kp-scroll-score-phrase";
-    span.dataset["kpScrollScorePhrase"] = phrase.id;
-    span.dataset["kpScrollScorePhraseActive"] = "false";
-    span.dataset["kpScrollScoreAct"] = phrase.act;
+    const span = requiredElement<HTMLElement>(root,
+      `[data-kp-scroll-score-phrase="${phrase.id}"]`);
     const scorePassage = score.passages.find(({ id }) =>
       id === phrase.passageId)!;
     span.dataset["kpScrollScoreStartUnits"] = String(
       scorePassage.offsetUnits + phrase.startUnits);
     span.dataset["kpScrollScoreEndUnits"] = String(
       scorePassage.offsetUnits + phrase.motionEndUnits);
-    while (link.firstChild !== null) span.append(link.firstChild);
-    link.replaceWith(span);
     const coverageUnits = profile === "reception"
       ? Object.freeze([])
       : bindPhraseCoverageUnits(span);

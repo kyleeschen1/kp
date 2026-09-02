@@ -3,6 +3,7 @@ import type {
   KpCausalStructuralIntroductionChoreography,
   KpCounterOrbitCancellationChoreography,
   KpHomomorphicFusionChoreography,
+  KpSemanticRoleTransferChoreography,
   KpSynchronizedBalancedIntroductionChoreography
 } from "./equation-operation-choreography.ts";
 import {
@@ -34,6 +35,9 @@ export type KpRegisteredEquationOperationChoreography =
         KpVerifiedOperationPresentationPlan | undefined;
     })
   | (KpCausalStructuralIntroductionChoreography & {
+      readonly operationPresentationPlan?: undefined;
+    })
+  | (KpSemanticRoleTransferChoreography & {
       readonly operationPresentationPlan?: undefined;
     })
   | (KpCanonicalFunctionWrapChoreography & {

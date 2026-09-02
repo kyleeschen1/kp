@@ -1,0 +1,167 @@
+.kp-log-exponent-focus-card-section { margin-top: clamp(2.75rem, 8vw, 5rem); }
+
+.kp-log-exponent-focus-card__header-detail {
+  color: color-mix(in srgb, var(--kp-st-header-ink) 72%, transparent);
+}
+
+.kp-log-exponent-focus-card__stage {
+  place-items: stretch;
+  padding: 0;
+  container-type: inline-size;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+.kp-log-exponent-focus-card__stage .editor-animation-player,
+.kp-log-exponent-focus-card__stage .editor-animation-player__stage,
+.kp-log-exponent-focus-card__stage .editor-animation-player__surface,
+.kp-log-exponent-focus-card__stage .kp-log-exponent-stage {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.kp-log-exponent-focus-card__stage .editor-animation-player {
+  display: grid;
+  border: 0;
+  background: transparent;
+}
+
+.kp-log-exponent-focus-card__stage .editor-animation-player__stage {
+  padding: clamp(1rem, 4vw, 2rem);
+  background: var(--kp-st-paper);
+}
+
+.kp-log-exponent-focus-card__stage .editor-animation-player__surface {
+  border: 0;
+  border-radius: 0;
+  color: var(--kp-st-strong);
+  background: transparent;
+}
+
+.kp-log-exponent-focus-card__stage .kp-log-exponent-stage {
+  /* Structural material may use the player's padding as transit headroom;
+     the Focus Deck stage remains the card's outer paint boundary. */
+  overflow: visible;
+}
+
+.kp-log-exponent-focus-card__stage .editor-animation-player__controls {
+  display: none;
+}
+
+.kp-log-exponent-focus-card[data-kp-log-exponent-cursor-enhanced="true"]
+  .kp-focus-deck__scrubber input {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+}
+
+.kp-log-exponent-focus-card[data-kp-log-exponent-cursor-enhanced="true"]
+  .kp-focus-deck__scrubber input::-webkit-slider-runnable-track {
+  height: 0.2rem;
+  border: 0;
+  background: transparent;
+}
+
+.kp-log-exponent-focus-card[data-kp-log-exponent-cursor-enhanced="true"]
+  .kp-focus-deck__scrubber input::-webkit-slider-thumb {
+  width: 1rem;
+  height: 1rem;
+  margin-top: -0.4rem;
+  -webkit-appearance: none;
+  appearance: none;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.kp-log-exponent-focus-card[data-kp-log-exponent-cursor-enhanced="true"]
+  .kp-focus-deck__scrubber input::-moz-range-track,
+.kp-log-exponent-focus-card[data-kp-log-exponent-cursor-enhanced="true"]
+  .kp-focus-deck__scrubber input::-moz-range-progress {
+  height: 0.2rem;
+  border: 0;
+  background: transparent;
+}
+
+.kp-log-exponent-focus-card[data-kp-log-exponent-cursor-enhanced="true"]
+  .kp-focus-deck__scrubber input::-moz-range-thumb {
+  width: 1rem;
+  height: 1rem;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+[data-kp-log-exponent-cursor-track] {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  right: 0.48rem;
+  left: 0.48rem;
+  height: 0.2rem;
+  transform: translateY(-50%);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--kp-st-ink) 28%, var(--kp-st-paper));
+  pointer-events: none;
+}
+
+[data-kp-log-exponent-cursor] {
+  position: absolute;
+  top: 50%;
+  left: var(--kp-log-exponent-cursor-progress, 0%);
+  width: 0.9rem;
+  height: 0.9rem;
+  transform: translate(-50%, -50%);
+  border: 2px solid var(--kp-st-paper);
+  border-radius: 50%;
+  background: var(--kp-st-focus);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--kp-st-ink) 25%, transparent);
+  transition: none;
+}
+
+.kp-log-exponent-focus-card[data-kp-log-exponent-cursor-motion="transition"]
+  [data-kp-log-exponent-cursor] {
+  transition: left 180ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kp-log-exponent-focus-card[data-kp-log-exponent-cursor-motion="transition"]
+    [data-kp-log-exponent-cursor] {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  [data-kp-log-exponent-cursor-track] { background: CanvasText; }
+  [data-kp-log-exponent-cursor] {
+    border-color: Canvas;
+    background: Highlight;
+    box-shadow: none;
+  }
+}
+
+.kp-log-exponent-focus-card__stage .kp-log-exponent-stage__endpoint,
+.kp-log-exponent-focus-card__stage .kp-log-exponent-stage__material-layer {
+  font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+  font-size: clamp(1.8rem, 7.4cqi, 2.8rem);
+}
+
+.kp-log-exponent-focus-card[data-kp-log-exponent-transition="active"]
+.kp-focus-deck__header {
+  box-shadow:
+    inset 0 -1px color-mix(in srgb, black 18%, transparent),
+    inset 0 1px color-mix(in srgb, white 10%, transparent),
+    0 0.45rem 0.78rem -0.44rem color-mix(
+      in srgb,
+      var(--kp-st-header) 78%,
+      transparent
+    );
+}
+
+@media (max-width: 46rem) {
+  .kp-log-exponent-focus-card-section { margin-top: 3rem; }
+  .kp-log-exponent-focus-card__stage .editor-animation-player__stage {
+    padding: 0.75rem;
+  }
+}

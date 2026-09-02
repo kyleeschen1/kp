@@ -1,12 +1,14 @@
 # Focus Deck Thread
 
-Status: active; approved supply-tax pressure exemplar in implementation
-Last Updated: 2026-08-30
-Current Next Action: build the bounded eight-beat supply-tax Focus Deck at
-`/experiments/kinetic-figure/supply-tax/` under
-`../reviews/2026-08-29-supply-tax-focus-deck-long-loop-proposal.md`. Stop at
-human visual review before extracting a shared deck component or promoting a
-general tax, welfare, Graph2D, or Focus Deck grammar.
+Status: checkpoint-preserved; four-card composition ready for human review
+Last Updated: 2026-09-02
+Current Next Action: after the active typed semantic authoring proof, review
+the preserved four-card composition at
+`/experiments/kinetic-figure/supply-tax/`, with particular attention to the
+TypeScript card's code density, helper fusion, call-site propagation, phone
+fit, Safari controls, and handoff between Article prose and source motion.
+Preserve every domain-owned semantic trace, renderer, and clock plus the
+shared Focus Deck shell.
 
 ## Goal
 
@@ -102,12 +104,107 @@ Adjacent navigation may animate the edge, while distant or rapid navigation
 must resolve directly to a deterministic endpoint using the existing reader
 clock.
 
-## Candidate Sequence After Supply-Tax Review
+Human review approved the supply-tax card as the current visual reference. The
+existing governed logarithmic solve is the second bounded caller:
+`2^x=7 -> ln(2^x)=ln 7 -> x ln 2=ln 7 -> x=ln 7/ln 2`. It is not a new
+equation asset: the canonical semantic trace, operation windows, Native KaTeX
+endpoints, and compositor remain authoritative. The bounded extraction may
+share card frame, header, stage/passage sizing, scrubber, navigation, and
+accessibility hooks. It must not flatten economics and equation state into one
+domain model or introduce a duplicate animation implementation. That bounded
+projection is now present on the approved route; native readiness queues rather
+than loses a requested rewrite, and runtime failure remains an observable
+static fallback.
 
-1. `2^x = 7`: longer equation solve and checkpoint/navigation pressure.
-2. TypeScript extract helper: code density and renderer pressure.
-3. one Graph3D caller: depth, fallback, and embed-cost pressure.
-4. only then consider automatic Article-to-deck editorial diagnostics or a
+The surface-to-contour Graph3D experiment is now the third bounded caller on
+the same route and retains its standalone wrapper around the identical card
+render/mount code. Its setup seek no longer settles a newly armed edge, forward
+and reverse navigation expose real intermediate semantic positions, and
+realized KaTeX labels are clamped inside the responsive stage-fit boundary.
+These repairs make it valid checkpoint evidence, not a promoted Graph3D family
+or a universal fit policy. Each card now ignores semantic hashes owned by its
+siblings, so linking or navigating one figure does not reset another card.
+
+The approved TypeScript free-shipping extract-helper asset is now the fourth
+bounded caller. Its seven Focus Deck beats are derived from the existing
+Article blocks and canonical pedagogical-score checkpoints: orient, compare
+the duplicated decisions, introduce the helper, move the shared rule, replace
+the price call, replace the message call, and verify behavior. The card reuses
+the build-time semantic artifact, native selectable-code renderer, token
+theater, exact source projections, and shared reader clock. It does not parse,
+execute, or restate TypeScript semantics in the deck.
+
+The code card keeps prose at the nearest semantic beat while its slider samples
+the canonical code timeline continuously; this avoids presenting two clipped
+half-passages as if prose were interpolated paint. Previous and Next interrupt
+an active edit by settling the visible target and immediately starting exactly
+the newly requested adjacent edge. All seven passages and the final eleven-line
+source fit at phone width in Chromium, Firefox, and WebKit. These are checkpoint
+findings, not approval of a general code-deck contract.
+
+## Resolved Firefox Exponent Role Transfer
+
+The compact Focus Deck's `logged.exponent -> extracted.coefficient` transition
+now runs through the canonical compositor in Firefox. The failure was a
+measurement artifact rather than a semantic or choreography defect.
+
+All three engines reported an exact `0.7` computed font-size ratio, matching
+DOM text-width ratios within subpixel tolerance and with no wrapper transforms.
+Firefox alone returned size-hinted Canvas ink ratios of approximately `0.7173`
+horizontal and `0.6935` vertical, which incorrectly crossed the existing
+`1.025` anisotropy gate.
+
+The shared typography handoff now uses the computed font ratio only when the
+same paint fingerprint, font revision, metric style fingerprint, and DOM text
+box independently prove a uniform typographic role change. Non-equivalent or
+geometrically inconsistent glyphs still fail closed. The global anisotropy
+threshold is unchanged, and the repair contains no browser, glyph, equation,
+or caller-specific offset.
+
+The stable multi-card browser command now includes Firefox. Its 28 Chromium
+and Firefox checks pass across automatic playback, material ownership, rapid
+navigation, readiness queuing, static fallback, remount, reverse, slider,
+direct-link, desktop, and phone behavior. The focused WebKit role-transfer
+representative and Firefox log-product and log-quotient preservation checks
+also pass. This is repair evidence for one shared measurement mechanism, not a
+new animation-family promotion.
+
+## Resolved Safari Cadence And Compact KaTeX Fit
+
+Arrow traversal no longer exposes one specially slowed exponent-role-transfer
+edge. Browser measurement showed the prior card policy mixing immediate
+attention-only steps, roughly two-second ordinary rewrites, and a four-second
+role transfer in both Chromium and WebKit. All motion-owning `act` phases now
+use the same card-local `0.85` automatic tempo; the canonical operation windows
+and semantic endpoints remain unchanged.
+
+The equation card also retains the last programmatic passage offset until a
+matching delayed scroll event has been consumed. Safari can deliver that event
+after snap restoration; it must not reclaim the deterministic playhead and
+turn a settled arrow action into a native scrub. Real passage displacement
+still enters the existing native-scroll path.
+
+Compact-host KaTeX now uses explicit endpoint and material-layer selectors, a
+Safari text-size lock, and a container-relative `1.8rem` to `2.8rem` scale with
+a viewport fallback. This is a bounded Focus Deck fit policy, not a change to
+KaTeX, native endpoint geometry, or the shared compositor. The executable
+browser check samples endpoint and in-flight material paint across every
+rewrite at phone width and verifies the compact desktop ceiling.
+
+The stable multi-card browser command now runs Chromium, Firefox, and WebKit.
+All 48 checks pass across readiness, automatic and rapid navigation, forward
+and reverse material continuity, delayed-scroll ownership, direct restoration,
+compact paint bounds, desktop, and phone behavior. Human review remains the
+gate for the adjusted equation scale and cadence.
+
+## Candidate Sequence After TypeScript Pressure
+
+1. Human visual review of the four-card composition, especially TypeScript
+   code density, helper/call motion, Article handoff, mobile fit, and Safari
+   interaction.
+2. After approval, observe one educator or learner using the composition
+   without control instructions.
+3. Only then consider automatic Article-to-deck editorial diagnostics or a
    shared embedding package.
 
 Integration Rule Application remains preserved at its current visual

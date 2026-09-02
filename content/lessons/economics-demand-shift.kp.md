@@ -32,8 +32,8 @@ why do sellers supply more?
 :::
 
 :::kp-focus{#initial-equilibrium stage=market target="market/equilibrium" context="market/axes market/demand market/supply"}
-The starting supply schedule, $S$, and demand schedule, $D_0$,
-collect possible price–quantity combinations; neither curve is a
+The initial supply schedule, $S$, and demand schedule, $D_0$,
+collect possible price–quantity combinations. Neither curve is a
 path that the market travels over time. They meet at
 $E_0=(6,8)$. At that point sellers want to supply $Q=6$ and
 buyers want to purchase $Q=6$, so the market clears.

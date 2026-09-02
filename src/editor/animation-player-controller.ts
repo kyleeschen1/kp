@@ -176,16 +176,17 @@ export function getKpEditorAnimationAuthoringState(
   return authoringStates.get(player);
 }
 
+/** Returns false when the player cannot yet accept the requested action. */
 export function dispatchKpEditorAnimationPlaybackAction(
   player: HTMLElement,
   action: KpEditorAnimationPlaybackAction
-): void {
+): boolean {
   const session = sessions.get(player);
-  if (session === undefined) return;
+  if (session === undefined) return false;
   if (
     isPlaybackStartAction(action) &&
     readKpEditorAnimationSurfaceReadiness(player) !== "ready"
-  ) return;
+  ) return false;
 
   syncRenderQualityForPlaybackAction(player, session, action);
 
@@ -207,6 +208,7 @@ export function dispatchKpEditorAnimationPlaybackAction(
   } else {
     cancelPlayerFrame(player);
   }
+  return true;
 }
 
 export function replaceKpEditorAnimationPlaybackAsset(
@@ -456,7 +458,12 @@ function commitPlayerLoadOutcome(
   outcome: KpEditorAnimationLoadOutcome
 ): void {
   const current = player.dataset["kpEditorAnimationLoadStatus"];
-  if (current === "ready" || current === "failed") return;
+  if (
+    current === "failed" ||
+    (current === "ready" && outcome.status !== "failed")
+  ) return;
+  // Initial readiness is not immunity from a later compositor failure. Hosts
+  // need the failure transition so they can stop promising invisible motion.
   player.dataset["kpEditorAnimationLoadStatus"] = outcome.status;
   if (outcome.status === "loading") return;
   if (outcome.status === "failed") {

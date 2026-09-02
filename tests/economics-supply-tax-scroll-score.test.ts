@@ -346,5 +346,12 @@ test("Scroll Score owns one normalized standalone route", () => {
   assert.match(entry, /economics-supply-tax-scroll-score\.kp\.md\?raw/u);
   assert.match(entry, /sampleKpEconomicsSupplyTaxAnimationFrame/u);
   assert.match(entry, /profile: "scrub"/u);
-  assert.doesNotMatch(entry, /createKpReaderTimelinePlaybackClock|clock\.play/u);
+  assert.match(entry, /createKpReaderTimelinePlaybackClock/u);
+  assert.match(entry, /clock\.play/u);
+  assert.match(entry, /data-kp-scroll-score-projection="inline-sticky-score"/u);
+  assert.match(entry, /addEventListener\("wheel", interruptForReaderInput/u);
+  assert.match(entry,
+    /addEventListener\("touchstart", interruptForReaderInput/u);
+  assert.match(entry, /requestAnimationFrame\(tickScrollSettlement\)/u);
+  assert.doesNotMatch(entry, /data-kp-scroll-score-transition aria-hidden/u);
 });

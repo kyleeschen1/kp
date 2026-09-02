@@ -65,6 +65,17 @@ test("baseline graph provides one accessible image description", () => {
   assert.match(svg, /data-kp-supply-tax-svg-state="baseline-market"/u);
 });
 
+test("the coordinate frame has proportional positive-direction arrows", () => {
+  const svg = renderKpSupplyTaxBaselineSvg();
+
+  assert.equal(count(svg, "data-kp-supply-tax-axis-arrow"), 1);
+  assert.match(svg, /markerUnits="strokeWidth"/u);
+  assert.match(svg,
+    /data-kp-supply-tax-axis="quantity"[^>]*marker-end="url\(#kp-supply-tax-axis-arrow\)"/u);
+  assert.match(svg,
+    /data-kp-supply-tax-axis="price"[^>]*marker-end="url\(#kp-supply-tax-axis-arrow\)"/u);
+});
+
 test("tax transit shifts buyer-facing supply while original supply stays fixed", () => {
   const semantics = createKpPerUnitTaxWelfareAsset();
   const projectionAt = (numerator: string) => projectKpSupplyTaxTransitSvg({

@@ -1,6 +1,7 @@
 import type {
   KpCanonicalNativeKatexSceneSession,
-  KpNativeKatexSceneOwnershipFrame
+  KpNativeKatexSceneOwnershipFrame,
+  KpNativeKatexScenePaintReadiness
 } from "./native-katex-scene-compositor.ts";
 import type {
   KpNativeKatexSemanticPaintRelation
@@ -44,6 +45,7 @@ export interface KpLogExponentTransitSession {
   readonly sourceStateId: string;
   readonly targetStateId: string;
   readonly canonical: KpCanonicalNativeKatexSceneSession;
+  readonly readPaintReadiness: () => KpNativeKatexScenePaintReadiness;
   readonly apply: (
     application: KpLogExponentTransitApplication
   ) => KpNativeKatexSceneOwnershipFrame;
@@ -80,6 +82,9 @@ export function createKpLogExponentTransitSession(input: {
   readonly operationChoreography?: KpEquationOperationChoreography | undefined;
   readonly symbolMotionContract: KpCompiledSymbolMotionContract;
   readonly horizontalAxisSemanticEntityIds?: readonly string[] | undefined;
+  readonly onPaintReadinessChange?: (
+    readiness: KpNativeKatexScenePaintReadiness
+  ) => void;
 }): KpLogExponentTransitSession {
   assertTransitInput(input);
   const rendererReadyPlan = input.nativeKatex.compose.compileScenePlan({
@@ -101,8 +106,20 @@ export function createKpLogExponentTransitSession(input: {
         }),
     ...optionalTrackProjection(input.operation)
   });
+  let reducedMotion = false;
   const canonical = input.nativeKatex.compose.createSession(
-    rendererReadyPlan
+    rendererReadyPlan,
+    {
+      // Focus Deck edges promise immediate, inspectable interpolation. Hold
+      // the one active operation's structural lease at its source checkpoint
+      // so the semantic clock never discovers paint capacity mid-rewrite.
+      eagerStructuralPaint: true,
+      onPaintReadinessChange(readiness) {
+        input.onPaintReadinessChange?.(
+          reducedMotion ? { status: "ready" } : readiness
+        );
+      }
+    }
   );
   const sourceEntityByAtomId = new Map(input.source.atoms.map((atom) => [
     atom.id,
@@ -138,11 +155,15 @@ export function createKpLogExponentTransitSession(input: {
     sourceStateId: input.sourceEndpoint.stateId,
     targetStateId: input.targetEndpoint.stateId,
     canonical,
+    readPaintReadiness: () => reducedMotion
+      ? Object.freeze({ status: "ready" as const })
+      : canonical.readPaintReadiness(),
     apply(application: KpLogExponentTransitApplication) {
       if (retired) {
         throw new Error("Cannot apply a retired log-exponent transit session.");
       }
       const requested = bounded(application.progress);
+      reducedMotion = application.reducedMotion === true;
       const semanticProgress = application.direction === "forward"
         ? requested
         : 1 - requested;

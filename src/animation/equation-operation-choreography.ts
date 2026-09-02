@@ -59,6 +59,24 @@ export interface KpCausalStructuralIntroductionChoreography
   };
 }
 
+export interface KpSemanticRoleTransferRelation {
+  readonly relationRecordId: string;
+  readonly sourceEntityIds: readonly string[];
+  readonly targetEntityIds: readonly string[];
+}
+
+export interface KpSemanticRoleTransferChoreography
+  extends KpEquationOperationChoreographyBase {
+  readonly kind: "semantic-role-transfer";
+  /** The first exemplar is the log-power exponent extraction. */
+  readonly maturity: "candidate";
+  readonly roleTransfer: KpSemanticRoleTransferRelation;
+  readonly contextContinuants: readonly KpSemanticRoleTransferRelation[];
+  readonly sourceStructureRetirements:
+    readonly KpSemanticRoleTransferRelation[];
+  readonly targetStructureEntries: readonly KpSemanticRoleTransferRelation[];
+}
+
 export interface KpCanonicalFunctionWrapChoreography
   extends KpEquationOperationChoreographyBase {
   readonly kind: "canonical-function-wrap";
@@ -152,8 +170,79 @@ export type KpEquationOperationChoreography =
   | KpCounterOrbitCancellationChoreography
   | KpSynchronizedBalancedIntroductionChoreography
   | KpCausalStructuralIntroductionChoreography
+  | KpSemanticRoleTransferChoreography
   | KpCanonicalFunctionWrapChoreography
   | KpHomomorphicFusionChoreography;
+
+export function createKpSemanticRoleTransferChoreography(input: {
+  readonly transformation: KpSemanticTransformation;
+  readonly direction: "forward" | "rewind";
+  readonly roleTransferRecordId: string;
+  readonly sourceRetirementRecordIds: readonly string[];
+  readonly targetEntryRecordIds: readonly string[];
+}): KpSemanticRoleTransferChoreography {
+  const records = input.transformation.correspondenceMap?.records;
+  if (records === undefined) {
+    throw new Error("Semantic role transfer requires correspondence authority.");
+  }
+  const roleTransfer = requireRoleTransferRelation(
+    records,
+    input.roleTransferRecordId,
+    "role-change",
+    "role transfer"
+  );
+  if (
+    roleTransfer.sourceSelectorIds.length !== 1 ||
+    roleTransfer.targetSelectorIds.length !== 1
+  ) {
+    throw new Error("Semantic role transfer requires one persistent object.");
+  }
+  const contextContinuants = records
+    .filter((record) =>
+      record.id !== roleTransfer.id &&
+      (record.relation === "identity" || record.relation === "role-change")
+    )
+    .map(roleTransferRelationProjection);
+  if (contextContinuants.length === 0) {
+    throw new Error("Semantic role transfer requires persistent context.");
+  }
+  requireUniqueNonempty(
+    input.sourceRetirementRecordIds,
+    "Semantic role-transfer source retirements"
+  );
+  requireUniqueNonempty(
+    input.targetEntryRecordIds,
+    "Semantic role-transfer target entries"
+  );
+  const sourceStructureRetirements = input.sourceRetirementRecordIds.map(
+    (recordId) => roleTransferRelationProjection(requireRoleTransferRelation(
+      records,
+      recordId,
+      "removal",
+      "source structure retirement"
+    ))
+  );
+  const targetStructureEntries = input.targetEntryRecordIds.map(
+    (recordId) => roleTransferRelationProjection(requireRoleTransferRelation(
+      records,
+      recordId,
+      "introduction",
+      "target structure entry"
+    ))
+  );
+  return Object.freeze({
+    schemaVersion: "kp.equation-operation-choreography.v1" as const,
+    kind: "semantic-role-transfer" as const,
+    maturity: "candidate" as const,
+    id: `operation-choreography.${input.transformation.id}.semantic-role-transfer.${input.direction}`,
+    transformationId: input.transformation.id,
+    direction: input.direction,
+    roleTransfer: roleTransferRelationProjection(roleTransfer),
+    contextContinuants: Object.freeze(contextContinuants),
+    sourceStructureRetirements: Object.freeze(sourceStructureRetirements),
+    targetStructureEntries: Object.freeze(targetStructureEntries)
+  }) as KpSemanticRoleTransferChoreography;
+}
 
 export function createKpHomomorphicFusionChoreography(input: {
   readonly transformation: KpSemanticTransformation;
@@ -564,6 +653,45 @@ function requireRelation(
 function relationProjection(
   record: SelectorCorrespondenceRecord
 ): KpHomomorphicFusionRelation {
+  return Object.freeze({
+    relationRecordId: record.id,
+    sourceEntityIds: Object.freeze([...record.sourceSelectorIds]),
+    targetEntityIds: Object.freeze([...record.targetSelectorIds])
+  });
+}
+
+function requireRoleTransferRelation(
+  records: readonly SelectorCorrespondenceRecord[],
+  id: string,
+  relation: SelectorCorrespondenceRecord["relation"],
+  label: string
+): SelectorCorrespondenceRecord {
+  const record = records.find((candidate) => candidate.id === id);
+  if (record === undefined || record.relation !== relation) {
+    throw new Error(
+      `Semantic ${label} requires ${relation} correspondence ${id}.`
+    );
+  }
+  if (relation === "removal") {
+    requireUniqueNonempty(record.sourceSelectorIds, `${label} source`);
+    if (record.targetSelectorIds.length !== 0) {
+      throw new Error(`${label} removal cannot own target material.`);
+    }
+  } else if (relation === "introduction") {
+    requireUniqueNonempty(record.targetSelectorIds, `${label} target`);
+    if (record.sourceSelectorIds.length !== 0) {
+      throw new Error(`${label} introduction cannot own source material.`);
+    }
+  } else {
+    requireUniqueNonempty(record.sourceSelectorIds, `${label} source`);
+    requireUniqueNonempty(record.targetSelectorIds, `${label} target`);
+  }
+  return record;
+}
+
+function roleTransferRelationProjection(
+  record: SelectorCorrespondenceRecord
+): KpSemanticRoleTransferRelation {
   return Object.freeze({
     relationRecordId: record.id,
     sourceEntityIds: Object.freeze([...record.sourceSelectorIds]),

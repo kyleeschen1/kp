@@ -35,7 +35,7 @@ async function expectNumericAttribute(
     .toBeCloseTo(expected, 2);
 }
 
-test("Scroll Score mounts one searchable two-paragraph semantic station", async ({
+test("Vertical Score mounts eight searchable paragraph landmarks", async ({
   page
 }) => {
   const errors: string[] = [];
@@ -56,8 +56,22 @@ test("Scroll Score mounts one searchable two-paragraph semantic station", async 
   );
   await expect(score).toHaveAttribute("data-kp-scroll-score-active-phrase",
     "orient-market");
-  await expect(score.locator("[data-kp-scroll-score-cue]")).toHaveCount(2);
+  await expect(score).toHaveAttribute("data-kp-scroll-score-projection",
+    "inline-sticky-score");
+  await expect(page.locator("html")).toHaveCSS("scroll-snap-type", "none");
+  await expect(score.locator("[data-kp-scroll-score-cue]")).toHaveCount(8);
   await expect(score.locator("[data-kp-scroll-score-phrase]")).toHaveCount(8);
+  await expect(score.locator("[data-kp-scroll-score-phrase] > p"))
+    .toHaveCount(8);
+  await expect(score.locator("[data-kp-scroll-score-phrase]").first())
+    .toHaveCSS("scroll-snap-align", "none");
+  await expect(score.locator("[data-kp-scroll-score-transition]"))
+    .toHaveCount(0);
+  await expect(score.locator(".kp-scroll-score-rest")).toHaveCount(0);
+  const station = score.locator("[data-kp-scroll-score-station]");
+  await expect(station).toHaveCSS("position", "sticky");
+  await expect(station).toHaveCSS("box-shadow", "none");
+  await expect(station).toHaveCSS("border-top-width", "0px");
   await expect(score.getByText(
     "Before the tax, consumer and producer surplus",
     { exact: false }
@@ -238,12 +252,12 @@ test("rail and native scroll settle a reversible semantic reception wave", async
       )
     )))).toEqual(waveAtReception);
 
+  await page.goto(`${path}#phrase.shift-supply`);
   const stationBox = await score.locator(
     "[data-kp-scroll-score-station]"
   ).boundingBox();
   const cueBox = await score.locator(
-    '[data-kp-scroll-score-corridor="market-adjustment"] ' +
-    "[data-kp-scroll-score-cue]"
+    '[data-kp-scroll-score-phrase="shift-supply"]'
   ).boundingBox();
   expect(stationBox).not.toBeNull();
   expect(cueBox).not.toBeNull();
@@ -252,6 +266,154 @@ test("rail and native scroll settle a reversible semantic reception wave", async
   );
   expect(cueBox!.y + cueBox!.height).toBeLessThanOrEqual(
     (await page.viewportSize())!.height + 1);
+});
+
+test("ordinary paragraph settlement starts one deterministic semantic edge", async ({
+  page
+}) => {
+  await page.goto(`${path}#phrase.introduce-tax`);
+  const score = page.locator("[data-kp-supply-tax-scroll-score]");
+  const current = score.locator(
+    '[data-kp-scroll-score-phrase="introduce-tax"]'
+  );
+  const target = score.locator(
+    '[data-kp-scroll-score-phrase="shift-supply"]'
+  );
+  const paragraphGap = await current.evaluate((element) => {
+    const next = element.closest("[data-kp-scroll-score-beat]")
+      ?.nextElementSibling?.querySelector<HTMLElement>(
+        "[data-kp-scroll-score-phrase]"
+      );
+    if (next === null || next === undefined) return Number.NaN;
+    return next.getBoundingClientRect().top -
+      element.getBoundingClientRect().bottom;
+  });
+  expect(paragraphGap).toBeGreaterThanOrEqual(12);
+  expect(paragraphGap).toBeLessThanOrEqual(20);
+  const targetY = await target.evaluate((element) => {
+    const snapTop = Number.parseFloat(getComputedStyle(
+      document.documentElement
+    ).getPropertyValue("--kp-scroll-score-snap-top"));
+    return window.scrollY + element.getBoundingClientRect().top - snapTop;
+  });
+  await page.evaluate((top) => window.scrollTo({ top, behavior: "auto" }),
+    targetY);
+  await expect(score).toHaveAttribute("data-kp-scroll-score-scroll-phase",
+    "reader");
+  await page.waitForTimeout(40);
+  await expect(score).toHaveAttribute("data-kp-scroll-score-active-phrase",
+    "introduce-tax");
+  await expect(score).toHaveAttribute("data-kp-scroll-score-active-phrase",
+    "shift-supply");
+  await expect(score).toHaveAttribute("data-kp-scroll-score-transition",
+    "playing");
+  await expect.poll(async () => Number(await score.getAttribute(
+    "data-kp-supply-tax-model-progress"
+  ))).toBeGreaterThan(0);
+  expect(Number(await score.getAttribute("data-kp-supply-tax-model-progress")))
+    .toBeLessThan(1);
+  await expect(score).toHaveAttribute("data-kp-scroll-score-transition",
+    "settled", { timeout: 2_000 });
+  await expectNumericAttribute(score, "data-kp-supply-tax-model-progress", 1);
+});
+
+test("live reader input stays monotone before one proportional nearest snap", async ({
+  page
+}) => {
+  await page.goto(`${path}#phrase.introduce-tax`);
+  const score = page.locator("[data-kp-supply-tax-scroll-score]");
+  const samples: number[] = [];
+  for (let index = 0; index < 18; index += 1) {
+    await page.mouse.wheel(0, 32);
+    await page.waitForTimeout(70);
+    samples.push(await page.evaluate(() => window.scrollY));
+  }
+  const reversals = samples.flatMap((value, index) => {
+    const previous = samples[index - 1];
+    return previous !== undefined && value < previous - 1
+      ? [{ index, previous, value }]
+      : [];
+  });
+  expect(reversals, JSON.stringify(samples)).toEqual([]);
+  const expected = await score.locator(
+    "[data-kp-scroll-score-phrase]"
+  ).evaluateAll((elements) => {
+    const snapTop = Number.parseFloat(getComputedStyle(
+      document.documentElement
+    ).getPropertyValue("--kp-scroll-score-snap-top"));
+    const maximumY = Math.max(0,
+      document.documentElement.scrollHeight - window.innerHeight);
+    return elements.map((element) => ({
+      id: (element as HTMLElement).dataset["kpScrollScorePhrase"]!,
+      y: Math.max(0, Math.min(maximumY,
+        window.scrollY + element.getBoundingClientRect().top - snapTop))
+    })).reduce((winner, candidate) =>
+      Math.abs(candidate.y - window.scrollY) <
+          Math.abs(winner.y - window.scrollY)
+        ? candidate
+        : winner);
+  });
+  const snapStartY = await page.evaluate(() => window.scrollY);
+  await expect(score).toHaveAttribute("data-kp-scroll-score-scroll-phase",
+    "snapping");
+  const snapSamples: number[] = [snapStartY];
+  for (let index = 0; index < 24; index += 1) {
+    await page.waitForTimeout(20);
+    snapSamples.push(await page.evaluate(() => window.scrollY));
+    if (await score.getAttribute("data-kp-scroll-score-scroll-phase") ===
+        "settled") break;
+  }
+  const towardTarget = Math.sign(expected.y - snapStartY);
+  const correctionReversals = snapSamples.flatMap((value, index) => {
+    const previous = snapSamples[index - 1];
+    if (previous === undefined || towardTarget === 0) return [];
+    const reversed = towardTarget > 0
+      ? value < previous - 1
+      : value > previous + 1;
+    const overshot = towardTarget > 0
+      ? value > expected.y + 1
+      : value < expected.y - 1;
+    return reversed || overshot ? [{ index, previous, value }] : [];
+  });
+  expect(correctionReversals, JSON.stringify(snapSamples)).toEqual([]);
+  await expect(score).toHaveAttribute("data-kp-scroll-score-scroll-phase",
+    "settled", { timeout: 2_000 });
+  await expect(score).toHaveAttribute("data-kp-scroll-score-last-snap-target",
+    expected.id);
+  await expect.poll(async () => Math.abs(
+    await page.evaluate(() => window.scrollY) - expected.y
+  )).toBeLessThanOrEqual(1);
+  const duration = Number(await score.getAttribute(
+    "data-kp-scroll-score-last-snap-duration-ms"
+  ));
+  expect(duration).toBeGreaterThanOrEqual(180);
+  expect(duration).toBeLessThanOrEqual(340);
+  const settledY = await page.evaluate(() => window.scrollY);
+  await page.waitForTimeout(420);
+  expect(Math.abs(await page.evaluate(() => window.scrollY) - settledY))
+    .toBeLessThanOrEqual(1);
+});
+
+test("new input interrupts a simulated snap before applying its own delta", async ({
+  page
+}) => {
+  await page.goto(`${path}#phrase.introduce-tax`);
+  const score = page.locator("[data-kp-supply-tax-scroll-score]");
+  await page.mouse.wheel(0, 64);
+  await expect(score).toHaveAttribute("data-kp-scroll-score-scroll-phase",
+    "reader");
+  await page.waitForFunction(() => document.querySelector(
+    "[data-kp-supply-tax-scroll-score]"
+  )?.getAttribute("data-kp-scroll-score-scroll-phase") === "snapping");
+  const beforeInterrupt = await page.evaluate(() => window.scrollY);
+  await page.mouse.wheel(0, 88);
+  await expect(score).toHaveAttribute("data-kp-scroll-score-scroll-phase",
+    "reader");
+  expect(await page.evaluate(() => window.scrollY)).toBeGreaterThanOrEqual(
+    beforeInterrupt - 1
+  );
+  await expect(score).toHaveAttribute("data-kp-scroll-score-scroll-phase",
+    "settled", { timeout: 2_000 });
 });
 
 test("semantic links, keyboard rail, and native find seek stable endpoints", async ({
@@ -266,7 +428,9 @@ test("semantic links, keyboard rail, and native find seek stable endpoints", asy
   )).toBeVisible();
 
   const rail = score.locator("[data-kp-scroll-score-rail]");
-  await rail.focus();
+  await rail.evaluate((element) => {
+    (element as HTMLInputElement).focus({ preventScroll: true });
+  });
   await page.keyboard.press("ArrowRight");
   await expect(score).toHaveAttribute("data-kp-scroll-score-active-phrase",
     "identify-loss");
@@ -303,8 +467,7 @@ test("legacy attention comparisons remain geometry-compatible", async ({
   expect(await phrase.evaluate((element) =>
     getComputedStyle(element).backgroundImage)).toContain("linear-gradient");
   const receptionHeight = await score.locator(
-    '[data-kp-scroll-score-corridor="market-adjustment"] ' +
-    "[data-kp-scroll-score-cue]"
+    '[data-kp-scroll-score-phrase="shift-supply"]'
   ).evaluate((element) => element.getBoundingClientRect().height);
 
   await page.goto(`${path}?phrase-focus=coverage#phrase.shift-supply`);
@@ -313,8 +476,7 @@ test("legacy attention comparisons remain geometry-compatible", async ({
     "coverage"
   );
   const coverageHeight = await score.locator(
-    '[data-kp-scroll-score-corridor="market-adjustment"] ' +
-    "[data-kp-scroll-score-cue]"
+    '[data-kp-scroll-score-phrase="shift-supply"]'
   ).evaluate((element) => element.getBoundingClientRect().height);
   expect(Math.abs(coverageHeight - receptionHeight)).toBeLessThanOrEqual(1);
   expect(await score.locator(
@@ -332,8 +494,7 @@ test("legacy attention comparisons remain geometry-compatible", async ({
     "karaoke"
   );
   const karaokeHeight = await score.locator(
-    '[data-kp-scroll-score-corridor="market-adjustment"] ' +
-    "[data-kp-scroll-score-cue]"
+    '[data-kp-scroll-score-phrase="shift-supply"]'
   ).evaluate((element) => element.getBoundingClientRect().height);
   expect(Math.abs(karaokeHeight - receptionHeight)).toBeLessThanOrEqual(1);
 });

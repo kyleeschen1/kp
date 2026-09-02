@@ -292,6 +292,11 @@ function renderKpSupplyTaxSvg(
   return `<svg class="kp-supply-tax-graph" viewBox="0 0 ${kpSupplyTaxGraphViewport.width} ${kpSupplyTaxGraphViewport.height}" role="img" aria-labelledby="kp-supply-tax-graph-title kp-supply-tax-graph-description" data-kp-supply-tax-svg-state="baseline-market">
     <title id="kp-supply-tax-graph-title">Untaxed supply and demand equilibrium</title>
     <desc id="kp-supply-tax-graph-description">Demand P equals 12 minus Q and supply P equals 2 plus Q intersect at quantity 5 and price 7.</desc>
+    <defs>
+      <marker id="kp-supply-tax-axis-arrow" data-kp-supply-tax-axis-arrow viewBox="0 0 10 10" refX="8.25" refY="5" markerUnits="strokeWidth" markerWidth="5.5" markerHeight="5.5" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/>
+      </marker>
+    </defs>
     <g class="kp-supply-tax-graph__grid" aria-hidden="true">
       ${qTicks.filter((value) => value > qMin).map((value) => `<line x1="${format(mapQuantity(semantics, value))}" y1="${format(plotTop)}" x2="${format(mapQuantity(semantics, value))}" y2="${format(plotBottom)}"/>`).join("")}
       ${pTicks.map((value) => `<line x1="${format(plotLeft)}" y1="${format(mapPrice(semantics, value))}" x2="${format(plotRight)}" y2="${format(mapPrice(semantics, value))}"/>`).join("")}
@@ -300,14 +305,14 @@ function renderKpSupplyTaxSvg(
       ${welfare.regions.map((region) => `<polygon class="kp-supply-tax-graph__region kp-supply-tax-graph__region--${escapeAttribute(region.role)}" data-kp-supply-tax-entity="${escapeAttribute(region.entityId)}" data-kp-supply-tax-region-phase="${region.phase}" data-kp-presence="false" points="${region.points.map(pointPair).join(" ")}"/>`).join("")}
     </g>` : ""}
     <g class="kp-supply-tax-graph__axes" data-kp-supply-tax-presentation="axes">
-      <line x1="${format(plotLeft)}" y1="${format(plotBottom)}" x2="${format(plotRight)}" y2="${format(plotBottom)}"/>
-      <line x1="${format(plotLeft)}" y1="${format(plotTop)}" x2="${format(plotLeft)}" y2="${format(plotBottom)}"/>
+      <line data-kp-supply-tax-axis="quantity" x1="${format(plotLeft)}" y1="${format(plotBottom)}" x2="${format(plotRight)}" y2="${format(plotBottom)}" marker-end="url(#kp-supply-tax-axis-arrow)"/>
+      <line data-kp-supply-tax-axis="price" x1="${format(plotLeft)}" y1="${format(plotBottom)}" x2="${format(plotLeft)}" y2="${format(plotTop)}" marker-end="url(#kp-supply-tax-axis-arrow)"/>
     </g>
     <g class="kp-supply-tax-graph__ticks" aria-hidden="true">
       ${qTicks.map((value) => mathLabel(String(value), mapQuantity(semantics, value) - 18, plotBottom + 9, 36, 26, `quantity-tick-${value}`)).join("")}
       ${pTicks.map((value) => mathLabel(String(value), plotLeft - 42, mapPrice(semantics, value) - 13, 34, 26, `price-tick-${value}`)).join("")}
       ${mathLabel("Q", plotRight - 7, plotBottom + 23, 34, 28, "quantity-axis")}
-      ${mathLabel("P", plotLeft - 36, plotTop - 10, 34, 28, "price-axis")}
+      ${mathLabel("P", plotLeft - 44, plotTop - 10, 34, 28, "price-axis")}
     </g>
     <g class="kp-supply-tax-graph__curve kp-supply-tax-graph__curve--demand" data-kp-supply-tax-entity="${escapeAttribute(projection.demand.entityId)}">
       <line x1="${format(projection.demand.start.x)}" y1="${format(projection.demand.start.y)}" x2="${format(projection.demand.end.x)}" y2="${format(projection.demand.end.y)}"/>

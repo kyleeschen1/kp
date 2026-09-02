@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "kp.article-import-lock.v1",
+  "documentId": "lesson.algebra.log-exponent-focus-card",
+  "entries": [
+    {
+      "alias": "logSolve",
+      "request": "vignette.algebra.log-exponent-solve@1",
+      "vignetteId": "vignette.algebra.log-exponent-solve",
+      "requestedMajor": 1,
+      "version": "1.0.0",
+      "integrity": "sha256:dce14bb5e9c7f51f43162030fa0a22c9d3a3e08a1b4ef8c9bd15bb885f2d307c",
+      "moduleSpecifier": "../../animation/log-exponent-adapter.ts"
+    }
+  ]
+}

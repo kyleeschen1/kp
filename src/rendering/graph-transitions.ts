@@ -158,7 +158,8 @@ export interface GraphSurfaceModeSampler
 
 export function createGraph3DTo2DTransitionDescriptor(
   objects: readonly KpSemanticObject[],
-  graph: Graph3DObject
+  graph: Graph3DObject,
+  sourceCamera: Graph3DObject["camera"] = graph.camera
 ): Graph3DTo2DTransitionDescriptor {
   const axes = objects
     .filter(
@@ -180,7 +181,7 @@ export function createGraph3DTo2DTransitionDescriptor(
   return {
     axes,
     camera: {
-      from: graph.camera,
+      from: sourceCamera,
       target: {
         ...graph.camera,
         azimuthDegrees: 0,

@@ -1,9 +1,10 @@
 # KP Roadmap
 
-Last Updated: 2026-08-30
+Last Updated: 2026-09-02
 Status: active
-Active Thread: `threads/focus-deck.md`
+Active Thread: `threads/typed-semantic-authoring-framework.md`
 Supporting Threads:
+- `threads/focus-deck.md`
 - `threads/animation-catalogue.md`
 - `threads/generative-animation-compiler.md`
 - `threads/architecture-convergence.md`
@@ -56,13 +57,13 @@ whole-file editing, semantic navigation, review capture, accessibility, route
 budgets, and a native catalogue.
 
 Educator product discovery remains the next product-validation gate and is
-being carried forward outside this Codex thread. The repository's active
-working lane is now one bounded Focus Deck experiment: project an existing
-approved Kinetic Figure into a compact, directly navigable, document-backed
-format without changing its semantic or animation authority. The internal
+being carried forward outside this Codex thread. The Focus Deck experiment is
+preserved at its four-card human checkpoint while the approved typed semantic
+authoring facade has a 28-slice ergonomics and algebraic-representation proposal
+waiting for explicit approval. The internal
 Animation Catalogue remains the source and pressure lab rather than the active
-product surface. This does not by itself validate demand or select a universal
-learner layout.
+product surface. Neither proof by itself validates demand or selects a
+universal learner layout or semantic model.
 
 The catalogue contains a mixture of teaching animations, fixtures, and
 diagnostic proofs. The supported equation domain has completed its narrow-core
@@ -74,6 +75,16 @@ does not yet support the request. Matrix, code, Graph2D, and Graph3D join the
 long-term generation envelope through domain-owned frontends rather than one
 universal renderer or semantic model. The accepted direction is recorded in
 `decisions/2026-08-17-kp-governed-cross-domain-animation-generation-priority.md`.
+
+A typed semantic authoring framework is accepted, and its first bounded proof
+is complete under explicit user direction. TypeScript
+constructors, hygienic semantic macros, generated construct plumbing, typed
+semantic optics, and bounded LaTeX elaboration should converge on the same
+immutable objects while domain frontends retain their own truth. KP will own
+only a small extensible symbolic kernel for supported explanations, not a
+complete CAS or theorem prover. See
+`decisions/2026-09-02-typed-semantic-authoring-framework-goals.md` and
+`threads/typed-semantic-authoring-framework.md`.
 
 Flat 2D is the canonical symbolic presentation. The bounded log-product
 material-depth experiment is preserved but deferred after human review; it is
@@ -98,8 +109,8 @@ at their current visual checkpoint:
 through binding, one canonical native RHS owns the fraction from instantiation
 through settlement, and existing ink knots retain reduction authority. This is
 an exemplar checkpoint, not a shared-family promotion or the active lane. The
-active lane is the first Focus Deck projection, with flashcards preserved as a
-sibling future projection. See
+Focus Deck projection and flashcards remain preserved sibling projections
+while the typed semantic authoring facade waits at its API checkpoint. See
 `decisions/2026-08-29-focus-deck-initial-portable-figure-priority.md`,
 `decisions/2026-08-25-rule-application-visual-grammar.md`.
 See
@@ -339,15 +350,62 @@ Only this repository sequence is active:
    alternative. See
    `decisions/2026-08-25-rule-application-visual-grammar.md` and
    `reviews/2026-08-24-equation-family-return-next-step-review.md`.
-40. **Focus Deck pressure exemplar:** active under an approved 21-slice run.
+40. **Focus Deck pressure exemplar:** supply-tax approved; four-card
+   cross-domain shared-shell composition is preserved at human review while
+   the typed semantic authoring facade waits at its API checkpoint.
    The approved log-product and delta-epsilon decks remain preserved evidence.
-   Build one exact-rational, Article-backed supply-tax deck with eight semantic
-   beats, native SVG and KaTeX, the existing reader clock, deterministic direct
-   seek, and native-find restoration. Stop at human visual review before a
-   shared component, automatic deck generation, or generalized tax, welfare,
-   Graph2D, or Focus Deck grammar. See
+   The exact-rational, Article-backed supply-tax deck passed human review. The
+   canonical `2^x=7` logarithmic solve and repaired surface-to-contour Graph3D
+   figure now sit on the same page through the identical projection scaffold;
+   economics, equation, and calculus semantics, clocks, and renderers remain
+   domain-owned. The Graph3D setup-seek lifecycle and compact fit defects have
+   bounded repairs with Chromium and WebKit intermediate-frame evidence.
+   The Firefox compact log-exponent paint-measurement artifact from
+   `logged.exponent` to `extracted.coefficient` is repaired at the shared
+   compositor seam: equivalent glyph typography may use its computed font
+   ratio only when font, revision, and DOM geometry independently prove the
+   uniform role change. The global anisotropy threshold and fail-closed
+   behavior remain unchanged, with no browser or caller exception. The Safari
+   pressure then removed the card-local special slow tempo for exponent role
+   transfer, prevented delayed programmatic passage events from reclaiming the
+   settled playhead, and bounded compact KaTeX sizing through explicit,
+   container-relative endpoint and material selectors. Chromium, Firefox, and
+   WebKit pass the complete 48-check pre-code multi-card suite, including
+   in-flight phone paint bounds. The approved TypeScript free-shipping
+   extract-helper is now the fourth bounded caller: seven beats derive from
+   its existing Article and canonical score, while native selectable source,
+   token motion, direct seek, interruption, and final settlement remain owned
+   by the established code runtime. Focused four-card interaction and phone-fit
+   representatives pass in Chromium, Firefox, and WebKit. Resume human review
+   and stop before automatic deck generation, embedding extraction, or broader
+   catalogue migration. See
    `decisions/2026-08-29-focus-deck-initial-portable-figure-priority.md` and
-   `reviews/2026-08-29-supply-tax-focus-deck-long-loop-proposal.md`.
+   `decisions/2026-09-01-focus-deck-shared-shell-log-exponent-pressure.md`.
+41. **Typed semantic authoring proof:** narrow facade implemented; a 28-slice
+   ergonomics and algebraic-representation loop is proposed and awaiting
+   explicit approval under
+   `reviews/2026-09-02-typed-semantic-authoring-ergonomics-long-loop-proposal.md`.
+   The prior facade checkpoint is recorded in
+   `reviews/2026-09-02-typed-semantic-authoring-next-step-review.md`. The
+   completed proof remains recorded under approved plan
+   revision `plan-revision.kp.v23`. One affine `R^2 -> R^2` function now
+   elaborates from bounded LaTeX and produces the same typed `2 x 2` Jacobian
+   as hand authoring; a quadratic scalar pressure caller produces a symmetric
+   Hessian. Typed semantic optics emit immutable rewrite correspondence, and
+   stable handles recover objects or selections directly at arbitrary scene
+   steps. Focused tests, repository-wide typechecks, and the production bundle
+   pass. Import-tiered core and optional authoring entrypoints now have an
+   exact export inventory, consumer-only inference proof, and realized
+   production-bundle closure guard. The proposed successor keeps matrices as
+   compatible finite-dimensional representations, tests internal linear-map,
+   basis, and law-evidence capabilities, and requires at least 50 percent less
+   applicable author setup before a unit-tagged economics pressure caller. Do
+   not create its Theseus contract before approval. A full linear
+   supply-demand pack, public algebra hierarchy, general CAS work, broad
+   construct generation, animation reparameterization, and Article grammar
+   changes remain out of scope. See
+   `decisions/2026-09-02-typed-semantic-authoring-framework-goals.md` and
+   `threads/typed-semantic-authoring-framework.md`.
 
 Educator discovery continues as an external product-research track. Public
 curriculum, SRS scheduling, broad LLM tutoring, and application expansion
@@ -368,7 +426,7 @@ The catalogue backlog and selection rationale are recorded in
 | Article and publication | `kp.article.v1` frozen; economics and algebra are real callers | Do not reopen grammar without demonstrated friction. |
 | Authoring | Whole-file CodeMirror/Vim editing and no-reload saving work | Defer advanced tooling until a real session exposes a need. |
 | Catalogue | One persistent lazy host spans equation, graph, code, and 3D without iframes; a default-off curated cross-domain collection exposes four executable cases and one honest typed gap | Preserve it as the pressure lab and conformance surface; keep gallery provenance opt-in so it does not replace the ordinary asset-first Catalogue. |
-| Layout | Log-product and delta-epsilon are preserved Focus Deck evidence; the supply-tax caller is the active bounded pressure question | Test discrete semantic snaps against one multifaceted graph-and-welfare change; stop for review before sharing or generalizing the shell. |
+| Layout | Supply-tax is the approved Focus Deck reference; log-exponent, repaired surface-to-contour, and the canonical TypeScript extract-helper are bounded second, third, and fourth callers through one shared projection shell. Browser-specific equation repairs remain at their shared seams, while the code card preserves its Article, score, native source projections, token theater, and clock. | Review the four-card composition, including 3D motion, mobile fit, Safari equation cadence, TypeScript code density and canonical refactor motion, and attention hierarchy. Share only card chrome, stage/passage geometry, and navigation hooks; retain domain-owned semantic and renderer authority and stop before automatic generation or catalogue-wide rollout. |
 | Public product | Engine and routes are research-ready; educator demand is unvalidated | Test whether a compact document-backed Focus Deck remains useful under real representational complexity while educator discovery continues; do not infer validation from the exemplar. |
 | LLM generation | One canonical planner vocabulary, deterministic verified-source binders, typed recovery, governed fraction operations, a pinned live-model corpus, and the new mixed carrier/fusion bounded benchmark are stable-green | Preserve deterministic narrowing and code-owned evidence; extend discovery one reviewed family at a time rather than giving the model presentation authority. |
 

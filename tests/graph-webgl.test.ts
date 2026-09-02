@@ -7,6 +7,7 @@ import {
   createGraph3DWebGLSceneModel,
   createGraph3DWebGLRendererDescriptor,
   GRAPH_3D_WEBGL_RENDERER_KIND,
+  projectGraphPoint3DToWebGLScreen,
   renderGraph3DWebGLFallback
 } from "../src/rendering/graph-webgl.ts";
 import {
@@ -190,6 +191,39 @@ test("WebGL scene model exposes front-facing 2D graph view", () => {
   assert.ok(surface?.grid.flat().every((point) => point.z === 0));
 });
 
+test("WebGL xy transition interpolates distinct fitted endpoint cameras", () => {
+  const scene = createDefaultGraph3DScene();
+  const source = scene[0] as Graph3DObject;
+  const target: Graph3DObject = {
+    ...source,
+    viewMode: "xy",
+    camera: {
+      azimuthDegrees: 0,
+      elevationDegrees: -90,
+      scale: 54,
+      origin: [source.width / 2, source.height / 2]
+    }
+  };
+  const targetScene = scene.map((object) =>
+    object.id === target.id ? target : object);
+  const model = createGraph3DWebGLSceneModel(targetScene, target, {
+    previousObjects: scene,
+    transitionProgress: 0.5
+  });
+
+  assert.equal(model.viewTransition?.camera.from, source.camera);
+  assert.equal(model.camera.azimuthDegrees,
+    (source.camera.azimuthDegrees + target.camera.azimuthDegrees) / 2);
+  assert.equal(model.camera.elevationDegrees,
+    (source.camera.elevationDegrees + target.camera.elevationDegrees) / 2);
+  assert.equal(model.camera.scale,
+    (source.camera.scale + target.camera.scale) / 2);
+  assert.deepEqual(model.camera.origin, [
+    (source.camera.origin[0] + target.camera.origin[0]) / 2,
+    (source.camera.origin[1] + target.camera.origin[1]) / 2
+  ]);
+});
+
 test("WebGL Three scene builds retained geometry for surfaces, mesh lines, and axes", () => {
   const scene = createDefaultGraph3DScene();
   const graph = scene[0] as Graph3DObject;
@@ -281,6 +315,32 @@ test("WebGL camera derives an orthographic view from graph dimensions and camera
   assert.equal(camera.top, graph.height / (2 * graph.camera.scale));
   assert.equal(camera.bottom, -graph.height / (2 * graph.camera.scale));
   assert.ok(camera.position.length() > 0);
+});
+
+test("WebGL xy view has a stable up vector and preserves graph-axis orientation", () => {
+  const scene = createDefaultGraph3DScene();
+  const source = scene[0] as Graph3DObject;
+  const graph: Graph3DObject = {
+    ...source,
+    viewMode: "xy",
+    camera: {
+      ...source.camera,
+      azimuthDegrees: 0,
+      elevationDegrees: -90
+    }
+  };
+  const camera = createGraph3DWebGLCamera(graph);
+  const origin = projectGraphPoint3DToWebGLScreen(graph, { x: 0, y: 0, z: 0 });
+  const positiveX = projectGraphPoint3DToWebGLScreen(graph,
+    { x: 1, y: 0, z: 0 });
+  const positiveY = projectGraphPoint3DToWebGLScreen(graph,
+    { x: 0, y: 1, z: 0 });
+
+  assert.ok(camera.up.z > 0.999);
+  assert.ok(positiveX.x > origin.x);
+  assert.ok(Math.abs(positiveX.y - origin.y) < 1e-9);
+  assert.ok(positiveY.y < origin.y);
+  assert.ok(Math.abs(positiveY.x - origin.x) < 1e-9);
 });
 
 function material(value: unknown): {

@@ -27,6 +27,7 @@ import type {
 import {
   GRAPH_3D_WEBGL_RENDERER_KIND,
   createGraph3DWebGLSceneModel,
+  graph3DWebGLCameraUp,
   type Graph3DWebGLSceneModel,
   type Graph3DWebGLSurfaceModel
 } from "./graph-webgl.ts";
@@ -199,7 +200,8 @@ export function createGraph3DWebGLCamera(
     radius * Math.sin(elevation),
     horizontalRadius * Math.sin(azimuth)
   );
-  camera.up.set(0, 1, 0);
+  const up = graph3DWebGLCameraUp(graph, cameraSettings);
+  camera.up.set(up.x, up.y, up.z);
   camera.lookAt(0, 0, 0);
   camera.updateProjectionMatrix();
 
@@ -394,14 +396,19 @@ function requireProtocolGraph(
   }
   const origin = frame.stage.anchors.plotOrigin;
   const camera = frame.camera;
+  // The frame camera describes the target endpoint. A camera transition may
+  // legitimately carry a differently framed source scene, but both endpoints
+  // must retain the same stage coordinate space.
   if (
     graph.width !== frame.stage.width ||
     graph.height !== frame.stage.height ||
-    graph.camera.origin[0] !== origin[0] ||
-    graph.camera.origin[1] !== origin[1] ||
-    graph.camera.azimuthDegrees !== camera.azimuthDegrees ||
-    graph.camera.elevationDegrees !== camera.elevationDegrees ||
-    graph.camera.scale !== camera.scale
+    (endpoint === "target" && (
+      graph.camera.origin[0] !== origin[0] ||
+      graph.camera.origin[1] !== origin[1] ||
+      graph.camera.azimuthDegrees !== camera.azimuthDegrees ||
+      graph.camera.elevationDegrees !== camera.elevationDegrees ||
+      graph.camera.scale !== camera.scale
+    ))
   ) {
     throw new Error(
       `Graph3D protocol ${endpoint} scene disagrees with stage or camera state.`

@@ -5,7 +5,8 @@ import {
   createKpFractionCompositionEquationAnimationAsset
 } from "../src/animation/fraction-composition-equation-adapter.ts";
 import {
-  createKpCausalStructuralIntroductionChoreography
+  createKpCausalStructuralIntroductionChoreography,
+  createKpSemanticRoleTransferChoreography
 } from "../src/animation/equation-operation-choreography.ts";
 import {
   createKpFunctionWrapReceptionPlan
@@ -47,6 +48,9 @@ import type {
 import {
   kpCanonicalCompiledLogProductOperation
 } from "../src/semantic/log-product-transformation-compiler.ts";
+import {
+  kpCanonicalLogExponentTransformationTree
+} from "../src/semantic/log-exponent-transformation-tree.ts";
 
 const animation = createKpFractionCompositionEquationAnimationAsset();
 
@@ -638,6 +642,40 @@ test("semantic role changes keep metric and motion progress together", () => {
   }], 0.4, false)[0]!.metricProgress, 0.4);
 });
 
+test("semantic role transfer is named without regrouping certified context", () => {
+  const operation = kpCanonicalLogExponentTransformationTree.operations[1]!;
+  const choreography = createKpSemanticRoleTransferChoreography({
+    transformation: operation.transformation,
+    direction: "forward",
+    roleTransferRecordId: "correspondence.extract-exponent.unknown-x",
+    sourceRetirementRecordIds: [
+      "correspondence.extract-exponent.retire-log-enclosure",
+      "correspondence.extract-exponent.retire-power-container"
+    ],
+    targetEntryRecordIds: [
+      "correspondence.extract-exponent.introduce-product-container"
+    ]
+  });
+  const sourceExponent = atom("source", "logged.exponent", 84, 8);
+  const targetCoefficient = atom("target", "extracted.coefficient", 18, 20);
+  const sourceBase = atom("source", "logged.base", 54, 20);
+  const targetBase = atom("target", "extracted.base", 64, 20);
+  const tracks = applyKpNativeKatexOperationChoreography({
+    source: scene("source", [sourceExponent, sourceBase]),
+    target: scene("target", [targetCoefficient, targetBase]),
+    tracks: [
+      persistedTrack(sourceExponent, targetCoefficient, 0),
+      persistedTrack(sourceBase, targetBase, 1)
+    ],
+    choreography
+  });
+  const transfer = tracks[0]!;
+  const context = tracks[1]!;
+  assert.match(transfer.timingGroupId!, /role-transfer$/);
+  assert.equal(transfer.sampleProgress, undefined);
+  assert.equal(context.timingGroupId, undefined);
+});
+
 function scene(
   endpoint: "source" | "target",
   atoms: readonly KpNativeKatexPaintAtomObservation[]
@@ -698,6 +736,29 @@ function introducedTrack(
     startPaintRect: { ...target.rect, top: target.rect.top + 8 },
     endPaintRect: target.rect,
     startOpacity: 0,
+    endOpacity: 1
+  };
+}
+
+function persistedTrack(
+  source: KpNativeKatexPaintAtomObservation,
+  target: KpNativeKatexPaintAtomObservation,
+  index: number
+): KpNativeKatexPaintMeasuredSceneTrack {
+  return {
+    id: `track.persist.${index}`,
+    componentId: `component.persist.${index}`,
+    lifecycle: "persist",
+    sourceAtomId: source.id,
+    targetAtomId: target.id,
+    visualAtomId: source.id,
+    paintKind: source.paintKind,
+    sizingMode: "rect",
+    startRect: source.rect,
+    endRect: target.rect,
+    startPaintRect: source.rect,
+    endPaintRect: target.rect,
+    startOpacity: 1,
     endOpacity: 1
   };
 }

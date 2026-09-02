@@ -1,107 +1,251 @@
 import "katex/dist/katex.min.css";
 import "../../styles.css";
+import "../focus-deck-scaffold.css";
+import "../kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card.css";
+import "../../rendering/typescript-refactor.css";
+import "../kinetic-figure-typescript-focus-card/kinetic-figure-typescript-focus-card.css";
+import "../kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score.css";
 import "./kinetic-figure-supply-tax.css";
 
 import articleText from
-  "../../../content/lessons/economics-supply-tax.kp.md?raw";
+  "../../../content/lessons/economics-supply-tax-scroll-score.kp.md?raw";
 import importLockValue from
-  "../../../content/lessons/economics-supply-tax.kp.lock.json" with { type: "json" };
+  "../../../content/lessons/economics-supply-tax-scroll-score.kp.lock.json" with { type: "json" };
 
 import type { KpArticleImportLock } from
   "../../article/kp-article-import-lock.ts";
+import { compileKpArticleMarkdownFragmentHtml } from
+  "../../article/kp-article-static-html.ts";
 import {
   createKpEconomicsSupplyTaxAnimationAsset,
   sampleKpEconomicsSupplyTaxAnimationFrame
 } from "../../animation/economics-supply-tax-asset.ts";
-import { compileKpArticleMarkdownFragmentHtml } from
-  "../../article/kp-article-static-html.ts";
 import { applyKpSemanticVisualDomTheme } from
   "../../rendering/semantic-visual-dom-theme.ts";
+import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
 import { createKpReaderTimelinePlaybackClock } from
   "../../reader/runtime/timeline-playback-clock.ts";
+import { renderKpFocusDeckScaffold } from
+  "../focus-deck-scaffold.ts";
 import {
-  renderKpFocusDeckControlIcon
-} from "../focus-deck-control-icons.ts";
+  createKpLogExponentFocusCardAuthority,
+  mountKpLogExponentFocusCard,
+  readKpLogExponentFocusCardInitialIndex,
+  renderKpLogExponentFocusCard
+} from
+  "../kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card.ts";
 import {
-  compileKpSupplyTaxArticle,
-  type KpSupplyTaxArticleDeckSceneV1
-} from "./kinetic-figure-supply-tax-article.ts";
+  createKpSurfaceContourFocusCardAuthority,
+  mountKpSurfaceContourFocusCard,
+  readKpSurfaceContourFocusCardInitialIndex,
+  renderKpSurfaceContourFocusCard
+} from
+  "../kinetic-figure-surface-contour/kinetic-figure-surface-contour-entry.ts";
+import {
+  createKpTypeScriptFocusCardAuthority,
+  mountKpTypeScriptFocusCard,
+  readKpTypeScriptFocusCardInitialIndex,
+  renderKpTypeScriptFocusCard
+} from
+  "../kinetic-figure-typescript-focus-card/kinetic-figure-typescript-focus-card.ts";
+import { compileKpSupplyTaxScrollScoreArticle } from
+  "../kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-article.ts";
+import {
+  createKpSupplyTaxScrollScore,
+  readKpSupplyTaxScrollScorePhraseFromHash,
+  type KpSupplyTaxScrollScorePhraseV1,
+  type KpSupplyTaxScrollScoreV1
+} from
+  "../kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-score.ts";
+import {
+  kpSupplyTaxScrollScoreStageFacts,
+  projectKpSupplyTaxScrollScoreStageLens
+} from
+  "../kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-stage-lens.ts";
+import { projectKpSupplyTaxScrollScoreStageLensDom } from
+  "../kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-stage-lens-dom.ts";
 import {
   projectKpSupplyTaxScene,
   projectKpSupplyTaxSceneDom,
   projectKpSupplyTaxSceneTransitionDom,
   kpSupplyTaxBeatHash,
-  readKpSupplyTaxBeatFromHash,
-  resolveKpSupplyTaxNavigationDisposition,
   type KpSupplyTaxSceneProjectionV1
 } from "./kinetic-figure-supply-tax-scene.ts";
 import {
+  createKpSupplyTaxPedagogicalScore,
+  type KpSupplyTaxPedagogicalBeatV1
+} from "./kinetic-figure-supply-tax-score.ts";
+import {
   projectKpSupplyTaxTransitSvgDom,
-  renderKpSupplyTaxInteractiveSvg,
-  renderKpSupplyTaxWelfareLedger
-} from
-  "./kinetic-figure-supply-tax-svg.ts";
+  renderKpSupplyTaxInteractiveSvg
+} from "./kinetic-figure-supply-tax-svg.ts";
 
 const importLock = importLockValue as KpArticleImportLock;
+const focusDeckAttentionTransitionDurationMs = 480;
+const scrollEndFallbackMs = 220;
+const wheelQuietWindowMs = 140;
+const endpointTolerancePx = 1;
+const mouseDragActivationPx = 6;
+const swipeCommitRatio = 0.08;
+const wheelCommitRatio = 0.025;
+const mouseSwipeVelocityPxPerMs = 0.25;
+const mouseSwipeVelocityFreshnessMs = 120;
+const nativeSwipeVelocityPagesPerMs = 0.0003;
+
+interface KpSupplyTaxFocusPhraseScene {
+  readonly phrase: KpSupplyTaxScrollScorePhraseV1;
+  readonly beat: KpSupplyTaxPedagogicalBeatV1;
+}
+
+interface SemanticEdge {
+  readonly lowerIndex: number;
+  readonly upperIndex: number;
+}
+
+interface PendingNavigation {
+  readonly targetIndex: number;
+  readonly history: "none" | "push" | "replace";
+}
+
+interface ProgrammaticPlayback {
+  readonly edgeStartProgress: number;
+  readonly edgeTargetProgress: number;
+  readonly clockStartProgress: number;
+  readonly clockTargetProgress: number;
+}
+
+interface MouseDrag {
+  readonly pointerId: number;
+  readonly startX: number;
+  readonly startY: number;
+  readonly startPosition: number;
+  active: boolean;
+  lastSampleTime: number;
+  velocityPxPerMs: number;
+}
+
+interface NativeScrollGesture {
+  readonly originIndex: number;
+  peakDisplacement: number;
+  lastPosition: number;
+  lastSampleTime: number;
+  peakVelocityPagesPerMs: number;
+}
+
+interface WheelGesture {
+  readonly originIndex: number;
+  intentPages: number;
+  lastEventTime: number;
+}
+
+type NavigationMode =
+  "idle" | "native" | "programmatic" | "correcting" | "scrubber";
 
 export interface KpSupplyTaxKineticFigureSession {
   dispose(): void;
 }
 
 /**
- * The first route slice mounts a static semantic checkpoint. Later slices add
- * SVG projection and clock-driven enhancement without changing Article prose.
+ * This projection keeps the Scroll Score's authored phrases and stage lens,
+ * while native scrolling owns physical input. The passive scroll adapter only
+ * seeks the existing reader clock, which remains the sole semantic playhead.
  */
 export function mountKpSupplyTaxKineticFigure(input: {
   readonly root: HTMLElement;
 }): KpSupplyTaxKineticFigureSession {
   applyKpSemanticVisualDomTheme({ root: input.root, theme: "light" });
-  const compiled = compileKpSupplyTaxArticle({
+  const authority = createKpEconomicsSupplyTaxAnimationAsset();
+  const score = createKpSupplyTaxPedagogicalScore(authority);
+  const compiled = compileKpSupplyTaxScrollScoreArticle({
     text: articleText,
     lock: importLock
   });
-  input.root.innerHTML = renderPage(compiled.deck.scenes);
-  const authority = createKpEconomicsSupplyTaxAnimationAsset();
-  const deck = requiredElement<HTMLElement>(
-    input.root,
-    "[data-kp-supply-tax-focus-deck]"
+  const scrollScore = createKpSupplyTaxScrollScore({
+    document: compiled.document,
+    score
+  });
+  const scenes = createPhraseScenes(scrollScore);
+  const logExponentAuthority = createKpLogExponentFocusCardAuthority();
+  const logExponentInitialIndex = readKpLogExponentFocusCardInitialIndex(
+    logExponentAuthority,
+    window.location.hash
   );
-  const scenes = compiled.deck.scenes;
+  const surfaceContourAuthority = createKpSurfaceContourFocusCardAuthority();
+  const surfaceContourInitialIndex = readKpSurfaceContourFocusCardInitialIndex(
+    surfaceContourAuthority,
+    window.location.hash
+  );
+  const typeScriptAuthority = createKpTypeScriptFocusCardAuthority();
+  const typeScriptInitialIndex = readKpTypeScriptFocusCardInitialIndex(
+    typeScriptAuthority,
+    window.location.hash
+  );
+  input.root.innerHTML = renderPage({
+    scenes,
+    logExponentAuthority,
+    logExponentInitialIndex,
+    surfaceContourAuthority,
+    surfaceContourInitialIndex,
+    typeScriptAuthority,
+    typeScriptInitialIndex
+  });
+  const logExponentSession = mountKpLogExponentFocusCard({
+    root: input.root,
+    authority: logExponentAuthority
+  });
+  const surfaceContourSession = mountKpSurfaceContourFocusCard({
+    root: input.root,
+    authority: surfaceContourAuthority
+  });
+  const typeScriptSession = mountKpTypeScriptFocusCard({
+    root: input.root,
+    authority: typeScriptAuthority
+  });
+
+  const deck = requiredElement<HTMLElement>(input.root,
+    "[data-kp-supply-tax-focus-deck]");
   const graph = requiredElement<SVGSVGElement>(deck, ".kp-supply-tax-graph");
+  const viewport = requiredElement<HTMLElement>(deck,
+    "[data-kp-supply-tax-card-viewport]");
+  const scrubber = requiredElement<HTMLInputElement>(deck,
+    "[data-kp-supply-tax-state-scrubber]");
   const caption = requiredElement<HTMLElement>(deck,
     "[data-kp-supply-tax-stage-caption]");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const durationMs = authority.animation.timeline?.durationMs;
-  if (durationMs === undefined) {
+  const authoredDurationMs = authority.animation.timeline?.durationMs;
+  if (authoredDurationMs === undefined) {
     throw new Error("Supply-tax animation requires its canonical timeline.");
   }
-  const initialBeat = readKpSupplyTaxBeatFromHash(
-    scenes.map(({ beat }) => beat),
-    window.location.hash
-  );
-  const initialScene = scenes.find(({ beat }) => beat.id === initialBeat.id)!;
+  const initialIndex = readSceneIndexFromHash(scenes, scrollScore,
+    window.location.hash);
   const clock = createKpReaderTimelinePlaybackClock({
     id: "clock.focus-deck.economics.supply-tax.v1",
-    durationMs,
-    // The reader clock measures the current edge. Domain model progress is a
-    // projection of its source and target semantic states.
+    // The canonical clock retains enough temporal room for the domain motion.
+    // Attention-only page turns use a shorter named range on this same clock.
+    durationMs: authoredDurationMs,
     initialProgress: 1,
     ownerWindow: window
   });
-  let active = initialScene;
-  let activeTransition: Readonly<{
-    from: KpSupplyTaxSceneProjectionV1;
-    to: KpSupplyTaxSceneProjectionV1;
-  }> | undefined;
+  const projections = scenes.map(({ beat }) =>
+    projectKpSupplyTaxScene({ authority, beat }));
+  let settledIndex = initialIndex;
+  let position = initialIndex;
+  let activeEdge: SemanticEdge | undefined;
+  let pendingNavigation: PendingNavigation | undefined;
+  let programmaticPlayback: ProgrammaticPlayback | undefined;
+  let navigationMode: NavigationMode = "idle";
+  let scrollFrame: number | undefined;
+  let scrollEndTimer: number | undefined;
+  let restoreSnapFrame: number | undefined;
+  let projectedModelProgress: number | undefined;
+  let mouseDrag: MouseDrag | undefined;
+  let nativeScrollGesture: NativeScrollGesture | undefined;
+  let wheelGesture: WheelGesture | undefined;
+  let disposed = false;
 
-  const sceneProjection = (
-    scene: KpSupplyTaxArticleDeckSceneV1
-  ): KpSupplyTaxSceneProjectionV1 =>
-    projectKpSupplyTaxScene({ authority, beat: scene.beat });
-  const projectScene = (scene: KpSupplyTaxArticleDeckSceneV1): void => {
-    projectKpSupplyTaxSceneDom({ root: deck, scene: sceneProjection(scene) });
-  };
   const projectFrame = (modelProgress: number): void => {
+    if (projectedModelProgress !== undefined &&
+        Math.abs(projectedModelProgress - modelProgress) < 0.000001) return;
     const frame = sampleKpEconomicsSupplyTaxAnimationFrame({
       asset: authority,
       progress: exactProgress(modelProgress)
@@ -109,32 +253,96 @@ export function mountKpSupplyTaxKineticFigure(input: {
     projectKpSupplyTaxTransitSvgDom({
       root: graph,
       semantics: authority.semantics,
-      // Model progress is derived from the active semantic edge before the
-      // exact domain sampler sees it; attention-only edges hold an endpoint.
       frame
     });
-    caption.textContent = frame.phase === "taxed"
-      ? authority.accessibility.settledDescription
-      : authority.accessibility.description;
-    deck.dataset["kpSupplyTaxClockProgress"] = modelProgress.toFixed(4);
+    projectedModelProgress = modelProgress;
     deck.dataset["kpSupplyTaxModelProgress"] = modelProgress.toFixed(4);
   };
-  const projectBeatChrome = (scene: KpSupplyTaxArticleDeckSceneV1): void => {
+
+  const projectNavigationPosition = (nextPosition: number): void => {
+    position = boundedPosition(nextPosition, scenes.length);
+    scrubber.value = position.toFixed(4);
+    scrubber.style.setProperty("--kp-supply-tax-scrubber-progress",
+      `${(position / Math.max(1, scenes.length - 1) * 100).toFixed(3)}%`);
+    scrubber.setAttribute("aria-valuetext",
+      scrubberValueText(position, scenes));
+    deck.dataset["kpSupplyTaxDeckPosition"] = position.toFixed(4);
+  };
+
+  const projectLens = (
+    from: KpSupplyTaxFocusPhraseScene,
+    to: KpSupplyTaxFocusPhraseScene,
+    progress: number
+  ): void => {
+    projectKpSupplyTaxScrollScoreStageLensDom({
+      root: deck,
+      lens: projectKpSupplyTaxScrollScoreStageLens({
+        authority,
+        fromBeat: from.beat,
+        toBeat: to.beat,
+        progress
+      })
+    });
+  };
+
+  const projectEndpoint = (index: number): void => {
+    const scene = scenes[index]!;
+    projectNavigationPosition(index);
+    projectFrame(modelProgressForScene(scene));
+    projectKpSupplyTaxSceneDom({ root: deck, scene: projections[index]! });
+    projectLens(scene, scene, 1);
+    caption.textContent = scene.beat.claim;
+    deck.dataset["kpSupplyTaxClockProgress"] = "1.0000";
+    deck.dataset["kpSupplyTaxGestureProgress"] = "1.0000";
+    deck.dataset["kpSupplyTaxInteraction"] = "settled";
+  };
+
+  const projectEdge = (edge: SemanticEdge, progress: number): void => {
+    const bounded = Math.max(0, Math.min(1, progress));
+    const from = scenes[edge.lowerIndex]!;
+    const to = scenes[edge.upperIndex]!;
+    const fromProjection = projections[edge.lowerIndex]!;
+    const toProjection = projections[edge.upperIndex]!;
+    projectNavigationPosition(edge.lowerIndex + bounded);
+    projectFrame(interpolate(
+      modelProgressForProjection(fromProjection),
+      modelProgressForProjection(toProjection),
+      bounded
+    ));
+    if (bounded <= 0) {
+      projectKpSupplyTaxSceneDom({ root: deck, scene: fromProjection });
+    } else if (bounded >= 1) {
+      projectKpSupplyTaxSceneDom({ root: deck, scene: toProjection });
+    } else {
+      projectKpSupplyTaxSceneTransitionDom({
+        root: deck,
+        from: fromProjection,
+        to: toProjection,
+        progress: bounded,
+        profile: "scrub"
+      });
+    }
+    projectLens(from, to, bounded);
+    caption.textContent = bounded < 0.5 ? from.beat.claim : to.beat.claim;
+    deck.dataset["kpSupplyTaxClockProgress"] = bounded.toFixed(4);
+    deck.dataset["kpSupplyTaxGestureProgress"] = bounded.toFixed(4);
+    deck.dataset["kpSupplyTaxInteraction"] = pendingNavigation === undefined
+      ? "scrubbing"
+      : "snapping";
+  };
+
+  const projectChrome = (index: number): void => {
+    const scene = scenes[index]!;
     deck.dataset["kpFocusDeckActiveBeat"] = scene.beat.slug;
-    scenes.forEach((candidate) => {
-      const selected = candidate.beat.id === scene.beat.id;
+    deck.dataset["kpFocusDeckActivePhrase"] = scene.phrase.id;
+    scenes.forEach((candidate, candidateIndex) => {
+      const selected = candidateIndex === index;
       const section = requiredElement<HTMLElement>(deck,
         `[data-kp-focus-deck-beat="${candidate.beat.slug}"]`);
       section.dataset["kpFocusDeckBeatActive"] = String(selected);
-      if (selected) section.removeAttribute("hidden");
-      else section.setAttribute("hidden", "until-found");
-      const button = requiredElement<HTMLButtonElement>(deck,
-        `[data-kp-focus-deck-select="${candidate.beat.slug}"]`);
-      button.disabled = false;
-      if (selected) button.setAttribute("aria-current", "step");
-      else button.removeAttribute("aria-current");
+      if (selected) section.setAttribute("aria-current", "page");
+      else section.removeAttribute("aria-current");
     });
-    const index = scenes.indexOf(scene);
     const previous = requiredElement<HTMLButtonElement>(deck,
       "[data-kp-focus-deck-previous]");
     const next = requiredElement<HTMLButtonElement>(deck,
@@ -143,264 +351,843 @@ export function mountKpSupplyTaxKineticFigure(input: {
     next.disabled = index === scenes.length - 1;
     deck.querySelectorAll<HTMLOutputElement>("[data-kp-focus-deck-position]")
       .forEach((output) => {
-        output.value = `Step ${scene.beat.ordinal} of ${scenes.length}`;
+        output.value = `Step ${scene.beat.ordinal} of ${scenes.length}: ` +
+          scene.beat.title;
       });
-    requiredElement<HTMLOutputElement>(deck,
-      "[data-kp-focus-deck-position-short]").value =
-        `${scene.beat.ordinal} of ${scenes.length}`;
     const replay = requiredElement<HTMLButtonElement>(deck,
       "[data-kp-supply-tax-replay]");
-    replay.hidden = scene.beat.transitionFromPrevious !== "sample-tax-imposition";
+    replay.hidden = scene.beat.transitionFromPrevious !==
+      "sample-tax-imposition";
   };
-  const settleAt = (scene: KpSupplyTaxArticleDeckSceneV1): void => {
-    activeTransition = undefined;
-    clock.seek(1);
-    projectFrame(modelProgressForScene(scene));
-    projectScene(scene);
-  };
+
   const updateLocation = (
-    scene: KpSupplyTaxArticleDeckSceneV1,
+    index: number,
     mode: "none" | "push" | "replace"
   ): void => {
     if (mode === "none") return;
-    const hash = kpSupplyTaxBeatHash(scene.beat);
+    const hash = kpSupplyTaxBeatHash(scenes[index]!.beat);
     if (window.location.hash === hash) return;
     if (mode === "push") history.pushState(null, "", hash);
     else history.replaceState(null, "", hash);
   };
-  const select = (
-    scene: KpSupplyTaxArticleDeckSceneV1,
-    options: {
-      readonly animate?: boolean | undefined;
-      readonly history?: "none" | "push" | "replace" | undefined;
-    } = {}
+
+  const cancelScrollProjection = (): void => {
+    if (scrollFrame === undefined) return;
+    window.cancelAnimationFrame(scrollFrame);
+    scrollFrame = undefined;
+  };
+
+  const cancelScrollEndFallback = (): void => {
+    if (scrollEndTimer === undefined) return;
+    window.clearTimeout(scrollEndTimer);
+    scrollEndTimer = undefined;
+  };
+
+  const cancelSnapRestore = (): void => {
+    if (restoreSnapFrame === undefined) return;
+    window.cancelAnimationFrame(restoreSnapFrame);
+    restoreSnapFrame = undefined;
+  };
+
+  const disableNativeSnap = (): void => {
+    cancelSnapRestore();
+    viewport.dataset["kpSupplyTaxSnapDisabled"] = "true";
+    // WebKit can otherwise resolve a same-task scrollLeft write against the
+    // previous snap style and pull the viewport back to its current page.
+    void viewport.offsetWidth;
+  };
+
+  const restoreNativeSnapSoon = (): void => {
+    cancelSnapRestore();
+    restoreSnapFrame = window.requestAnimationFrame(() => {
+      restoreSnapFrame = undefined;
+      delete viewport.dataset["kpSupplyTaxSnapDisabled"];
+      navigationMode = "idle";
+    });
+  };
+
+  const readNativePosition = (): number => boundedPosition(
+    viewport.scrollLeft / Math.max(1, viewport.clientWidth),
+    scenes.length
+  );
+
+  const writeNativePosition = (nextPosition: number): void => {
+    viewport.scrollLeft = boundedPosition(nextPosition, scenes.length) *
+      Math.max(1, viewport.clientWidth);
+  };
+
+  const finishAt = (
+    index: number,
+    historyMode: PendingNavigation["history"]
   ): void => {
-    const interrupted = clock.getStatus() === "playing";
-    if (scene.beat.id === active.beat.id) {
-      if (options.animate === false || interrupted) settleAt(scene);
-      updateLocation(scene, options.history ?? "push");
-      return;
-    }
-    const previous = active;
-    active = scene;
-    activeTransition = undefined;
-    projectBeatChrome(active);
-    const disposition = resolveKpSupplyTaxNavigationDisposition({
-      from: previous.beat,
-      to: active.beat,
-      interrupted,
-      reducedMotion: reducedMotion.matches,
-      allowMotion: options.animate
-    });
-    updateLocation(active, options.history ?? "push");
-    if (disposition === "direct-settle") {
-      settleAt(active);
-      return;
-    }
-    activeTransition = Object.freeze({
-      from: sceneProjection(previous),
-      to: sceneProjection(active)
-    });
-    clock.seek(0);
-    // Forward local edge time can still project a decreasing domain value.
-    // This lets every adjacent attention edge share one deterministic clock.
-    clock.play({ direction: "forward", stopAt: 1 });
+    cancelScrollProjection();
+    cancelScrollEndFallback();
+    const bounded = boundedIndex(index, scenes.length);
+    nativeScrollGesture = undefined;
+    wheelGesture = undefined;
+    delete deck.dataset["kpSupplyTaxWheelIntent"];
+    delete deck.dataset["kpSupplyTaxPlaybackKind"];
+    delete deck.dataset["kpSupplyTaxPlaybackDurationMs"];
+    pendingNavigation = undefined;
+    programmaticPlayback = undefined;
+    activeEdge = undefined;
+    clock.pause();
+    clock.seek(1, historyMode === "none" ? "url" : "controls");
+    navigationMode = "correcting";
+    disableNativeSnap();
+    writeNativePosition(bounded);
+    settledIndex = bounded;
+    projectEndpoint(bounded);
+    projectChrome(bounded);
+    updateLocation(bounded, historyMode);
+    restoreNativeSnapSoon();
   };
+
+  const directSeek = (
+    index: number,
+    historyMode: PendingNavigation["history"]
+  ): void => finishAt(index, historyMode);
+
+  const startProgrammaticNavigation = (
+    targetIndex: number,
+    historyMode: PendingNavigation["history"]
+  ): void => {
+    cancelScrollProjection();
+    cancelScrollEndFallback();
+    nativeScrollGesture = undefined;
+    wheelGesture = undefined;
+    programmaticPlayback = undefined;
+    const target = boundedIndex(targetIndex, scenes.length);
+    const currentPosition = readNativePosition();
+    projectNavigationPosition(currentPosition);
+    if (reducedMotion.matches || Math.abs(target - currentPosition) > 1) {
+      directSeek(target, historyMode);
+      return;
+    }
+    const lowerIndex = Math.min(Math.floor(currentPosition), target);
+    const upperIndex = Math.max(Math.ceil(currentPosition), target);
+    if (lowerIndex === upperIndex) {
+      directSeek(target, historyMode);
+      return;
+    }
+    navigationMode = "programmatic";
+    disableNativeSnap();
+    activeEdge = Object.freeze({ lowerIndex, upperIndex });
+    pendingNavigation = Object.freeze({
+      targetIndex: target,
+      history: historyMode
+    });
+    const currentProgress = currentPosition - lowerIndex;
+    const targetProgress = target - lowerIndex;
+    const domainMotion = scenes[upperIndex]!.beat.transitionFromPrevious ===
+      "sample-tax-imposition";
+    const fullEdgeDurationMs = domainMotion
+      ? authoredDurationMs
+      : Math.min(authoredDurationMs, focusDeckAttentionTransitionDurationMs);
+    const remainingEdge = Math.abs(targetProgress - currentProgress);
+    const clockDistance = Math.min(1,
+      fullEdgeDurationMs / authoredDurationMs * remainingEdge);
+    const forward = targetProgress > currentProgress;
+    const clockStartProgress = forward ? 0 : clockDistance;
+    const clockTargetProgress = forward ? clockDistance : 0;
+    programmaticPlayback = Object.freeze({
+      edgeStartProgress: currentProgress,
+      edgeTargetProgress: targetProgress,
+      clockStartProgress,
+      clockTargetProgress
+    });
+    deck.dataset["kpSupplyTaxPlaybackKind"] = domainMotion
+      ? "domain-motion"
+      : "attention";
+    deck.dataset["kpSupplyTaxPlaybackDurationMs"] = String(Math.round(
+      fullEdgeDurationMs * remainingEdge
+    ));
+    clock.seek(clockStartProgress);
+    clock.play({
+      direction: forward ? "forward" : "rewind",
+      stopAt: clockTargetProgress
+    });
+  };
+
+  const requestIndex = (index: number): void => {
+    const target = boundedIndex(index, scenes.length);
+    if (target === settledIndex && navigationMode === "idle") return;
+    if (Math.abs(target - settledIndex) !== 1) {
+      directSeek(target, "push");
+      return;
+    }
+    startProgrammaticNavigation(target, "push");
+  };
+
+  const requestAdjacent = (direction: -1 | 1): void => {
+    requestIndex(settledIndex + direction);
+  };
+
   const replay = (): void => {
-    if (active.beat.transitionFromPrevious !== "sample-tax-imposition") return;
-    const activeIndex = scenes.indexOf(active);
-    const previous = scenes[activeIndex - 1];
-    if (previous === undefined) return;
-    if (reducedMotion.matches) {
-      settleAt(active);
+    const scene = scenes[settledIndex]!;
+    if (scene.beat.transitionFromPrevious !== "sample-tax-imposition") return;
+    const target = settledIndex;
+    directSeek(target - 1, "none");
+    startProgrammaticNavigation(target, "none");
+  };
+
+  const projectPosition = (nextPosition: number): void => {
+    const nearest = Math.round(nextPosition);
+    if (Math.abs(nextPosition - nearest) <= 0.0001) {
+      activeEdge = undefined;
+      pendingNavigation = undefined;
+      projectEndpoint(boundedIndex(nearest, scenes.length));
       return;
     }
-    activeTransition = Object.freeze({
-      from: sceneProjection(previous),
-      to: sceneProjection(active)
-    });
-    clock.seek(0);
-    clock.play({ direction: "forward", stopAt: 1 });
+    const lowerIndex = Math.floor(nextPosition);
+    const upperIndex = Math.min(scenes.length - 1, lowerIndex + 1);
+    if (lowerIndex === upperIndex) {
+      projectEndpoint(lowerIndex);
+      return;
+    }
+    activeEdge = Object.freeze({ lowerIndex, upperIndex });
+    pendingNavigation = undefined;
+    programmaticPlayback = undefined;
+    clock.seek(nextPosition - lowerIndex);
   };
-  const selectAdjacent = (direction: -1 | 1): void => {
-    const index = scenes.indexOf(active);
-    const next = scenes[index + direction];
-    if (next !== undefined) select(next, { history: "push" });
+
+  const recordNativeScrollSample = (
+    nextPosition: number,
+    sampleTime: number
+  ): void => {
+    const gesture = nativeScrollGesture;
+    if (gesture === undefined) {
+      nativeScrollGesture = {
+        originIndex: settledIndex,
+        peakDisplacement: nextPosition - settledIndex,
+        lastPosition: nextPosition,
+        lastSampleTime: sampleTime,
+        peakVelocityPagesPerMs: 0
+      };
+      return;
+    }
+    const displacement = nextPosition - gesture.originIndex;
+    if (Math.abs(displacement) > Math.abs(gesture.peakDisplacement)) {
+      gesture.peakDisplacement = displacement;
+    }
+    const elapsed = Math.max(1, sampleTime - gesture.lastSampleTime);
+    const velocity = (nextPosition - gesture.lastPosition) / elapsed;
+    if (Math.abs(velocity) > Math.abs(gesture.peakVelocityPagesPerMs)) {
+      gesture.peakVelocityPagesPerMs = velocity;
+    }
+    gesture.lastPosition = nextPosition;
+    gesture.lastSampleTime = sampleTime;
   };
+
+  const projectNativeScroll = (): void => {
+    scrollFrame = undefined;
+    if (navigationMode === "programmatic" ||
+        navigationMode === "correcting" ||
+        navigationMode === "scrubber") return;
+    navigationMode = "native";
+    const nextPosition = readNativePosition();
+    recordNativeScrollSample(nextPosition, performance.now());
+    projectPosition(nextPosition);
+  };
+
+  const scheduleNativeProjection = (): void => {
+    if (scrollFrame !== undefined) return;
+    // Native scrolling may emit more samples than the display can paint. The
+    // passive listener records no semantic state; one frame samples the reader
+    // clock and projects all renderers together.
+    scrollFrame = window.requestAnimationFrame(projectNativeScroll);
+  };
+
+  const flushNativeProjection = (): void => {
+    cancelScrollProjection();
+    projectNativeScroll();
+  };
+
+  const settleNativeScroll = (): void => {
+    cancelScrollEndFallback();
+    if (navigationMode === "programmatic" ||
+        navigationMode === "correcting" ||
+        navigationMode === "scrubber" || mouseDrag?.active) return;
+    const wheel = wheelGesture;
+    if (wheel !== undefined &&
+        performance.now() - wheel.lastEventTime < wheelQuietWindowMs) {
+      scheduleScrollEndFallback();
+      return;
+    }
+    flushNativeProjection();
+    const nextPosition = readNativePosition();
+    const gesture = nativeScrollGesture;
+    nativeScrollGesture = undefined;
+    wheelGesture = undefined;
+    const wheelCommitted = wheel !== undefined &&
+      Math.abs(wheel.intentPages) >= wheelCommitRatio;
+    const nativeCommitted = gesture !== undefined && (
+      Math.abs(gesture.peakDisplacement) >= swipeCommitRatio ||
+      Math.abs(gesture.peakVelocityPagesPerMs) >=
+        nativeSwipeVelocityPagesPerMs
+    );
+    const direction = Math.sign(wheel?.intentPages ||
+      gesture?.peakDisplacement ||
+      gesture?.peakVelocityPagesPerMs || 0);
+    const origin = wheel?.originIndex ?? gesture?.originIndex ?? settledIndex;
+    const visibleTarget = boundedIndex(nextPosition, scenes.length);
+    // Intent rescues a short Safari gesture that snap resistance erased. Once
+    // the reader has visibly crossed a page boundary, their observed position
+    // is stronger evidence than the gesture's (possibly much older) origin.
+    const target = visibleTarget !== origin
+      ? visibleTarget
+      : (wheelCommitted || nativeCommitted) && direction !== 0
+        ? boundedIndex(origin + direction, scenes.length)
+        : visibleTarget;
+    const exactOffset = target * Math.max(1, viewport.clientWidth);
+    const historyMode = target === settledIndex ? "none" : "push";
+    if (Math.abs(viewport.scrollLeft - exactOffset) <= endpointTolerancePx &&
+        target === settledIndex && navigationMode === "idle") return;
+    finishAt(target, historyMode);
+  };
+
+  const scheduleScrollEndFallback = (): void => {
+    cancelScrollEndFallback();
+    scrollEndTimer = window.setTimeout(settleNativeScroll,
+      scrollEndFallbackMs);
+  };
+
+  const interruptProgrammaticNavigation = (): void => {
+    if (navigationMode !== "programmatic") return;
+    clock.pause();
+    pendingNavigation = undefined;
+    programmaticPlayback = undefined;
+    activeEdge = undefined;
+    cancelSnapRestore();
+    delete viewport.dataset["kpSupplyTaxSnapDisabled"];
+    navigationMode = "native";
+  };
+
+  const handlePointerDown = (event: PointerEvent): void => {
+    interruptProgrammaticNavigation();
+    if (event.pointerType !== "mouse" || event.button !== 0 ||
+        !event.isPrimary) return;
+    const target = event.target instanceof Element ? event.target : null;
+    if (target?.closest(
+      "a, button, input, select, textarea, [contenteditable]"
+    ) !== null) return;
+    mouseDrag = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      startPosition: readNativePosition(),
+      active: false,
+      lastSampleTime: event.timeStamp,
+      velocityPxPerMs: 0
+    };
+    viewport.setPointerCapture(event.pointerId);
+  };
+
+  const handlePointerMove = (event: PointerEvent): void => {
+    const drag = mouseDrag;
+    if (drag === undefined || drag.pointerId !== event.pointerId) return;
+    const deltaX = drag.startX - event.clientX;
+    const deltaY = drag.startY - event.clientY;
+    if (!drag.active) {
+      if (Math.abs(deltaX) < mouseDragActivationPx) return;
+      if (Math.abs(deltaX) <= Math.abs(deltaY)) {
+        mouseDrag = undefined;
+        if (viewport.hasPointerCapture(event.pointerId)) {
+          viewport.releasePointerCapture(event.pointerId);
+        }
+        return;
+      }
+      drag.active = true;
+      clock.pause();
+      pendingNavigation = undefined;
+      activeEdge = undefined;
+      navigationMode = "native";
+      disableNativeSnap();
+      viewport.dataset["kpSupplyTaxMouseDragging"] = "true";
+      window.getSelection()?.removeAllRanges();
+    }
+    event.preventDefault();
+    const width = Math.max(1, viewport.clientWidth);
+    const before = viewport.scrollLeft;
+    writeNativePosition(drag.startPosition + deltaX / width);
+    const elapsed = Math.max(1, event.timeStamp - drag.lastSampleTime);
+    const instantaneousVelocity = (viewport.scrollLeft - before) / elapsed;
+    drag.velocityPxPerMs = drag.velocityPxPerMs * 0.55 +
+      instantaneousVelocity * 0.45;
+    drag.lastSampleTime = event.timeStamp;
+  };
+
+  const finishMouseDrag = (event: PointerEvent, canceled = false): void => {
+    const drag = mouseDrag;
+    if (drag === undefined || drag.pointerId !== event.pointerId) return;
+    mouseDrag = undefined;
+    if (viewport.hasPointerCapture(event.pointerId)) {
+      viewport.releasePointerCapture(event.pointerId);
+    }
+    delete viewport.dataset["kpSupplyTaxMouseDragging"];
+    if (!drag.active) return;
+    const currentPosition = readNativePosition();
+    const displacement = currentPosition - drag.startPosition;
+    const velocityIsFresh = event.timeStamp - drag.lastSampleTime <=
+      mouseSwipeVelocityFreshnessMs;
+    const committed = !canceled && (
+      Math.abs(displacement) >= swipeCommitRatio ||
+      velocityIsFresh && Math.abs(drag.velocityPxPerMs) >=
+        mouseSwipeVelocityPxPerMs
+    );
+    const direction = Math.sign(displacement || drag.velocityPxPerMs);
+    const origin = boundedIndex(drag.startPosition, scenes.length);
+    const visibleTarget = boundedIndex(currentPosition, scenes.length);
+    const target = visibleTarget !== origin
+      ? visibleTarget
+      : committed && direction !== 0
+        ? boundedIndex(origin + direction, scenes.length)
+        : visibleTarget;
+    startProgrammaticNavigation(target, "push");
+  };
+
+  const handlePointerUp = (event: PointerEvent): void => {
+    finishMouseDrag(event);
+  };
+
+  const handlePointerCancel = (event: PointerEvent): void => {
+    finishMouseDrag(event, true);
+  };
+
+  const handleScroll = (event: Event): void => {
+    if (navigationMode === "programmatic" ||
+        navigationMode === "correcting" ||
+        navigationMode === "scrubber") return;
+    recordNativeScrollSample(readNativePosition(), event.timeStamp);
+    scheduleNativeProjection();
+    scheduleScrollEndFallback();
+  };
+
+  const handleWheel = (event: WheelEvent): void => {
+    interruptProgrammaticNavigation();
+    const deltaX = wheelDeltaPixels(event, viewport.clientWidth);
+    const deltaY = wheelDeltaPixels(event, viewport.clientHeight, "y");
+    if (Math.abs(deltaX) < Math.max(1, Math.abs(deltaY) * 0.65)) return;
+    const sampleTime = performance.now();
+    const stale = wheelGesture === undefined ||
+      sampleTime - wheelGesture.lastEventTime > scrollEndFallbackMs * 2;
+    if (stale) {
+      wheelGesture = {
+        originIndex: settledIndex,
+        intentPages: 0,
+        lastEventTime: sampleTime
+      };
+    }
+    wheelGesture!.intentPages += deltaX / Math.max(1, viewport.clientWidth);
+    wheelGesture!.lastEventTime = sampleTime;
+    deck.dataset["kpSupplyTaxWheelIntent"] =
+      wheelGesture!.intentPages.toFixed(4);
+    // WebKit's snap physics can erase a short gesture from scrollLeft. This
+    // passive intent sample lets exact semantic settlement remain independent
+    // of that renderer-owned resistance.
+    scheduleScrollEndFallback();
+  };
+
+  const handleScrollEnd = (): void => settleNativeScroll();
+
+  const beginScrubberNavigation = (): void => {
+    if (navigationMode === "scrubber") return;
+    cancelScrollProjection();
+    cancelScrollEndFallback();
+    clock.pause();
+    nativeScrollGesture = undefined;
+    wheelGesture = undefined;
+    pendingNavigation = undefined;
+    programmaticPlayback = undefined;
+    activeEdge = undefined;
+    navigationMode = "scrubber";
+    disableNativeSnap();
+  };
+
+  const handleScrubberInput = (): void => {
+    beginScrubberNavigation();
+    const nextPosition = boundedPosition(Number(scrubber.value), scenes.length);
+    writeNativePosition(nextPosition);
+    projectPosition(nextPosition);
+  };
+
+  const finishScrubberNavigation = (): void => {
+    if (navigationMode !== "scrubber") return;
+    startProgrammaticNavigation(
+      boundedIndex(Number(scrubber.value), scenes.length),
+      "push"
+    );
+  };
+
+  const handleScrubberKeydown = (event: KeyboardEvent): void => {
+    if (event.altKey || event.ctrlKey || event.metaKey) return;
+    let target: number | undefined;
+    if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
+      target = boundedIndex(position - 1, scenes.length);
+    } else if (event.key === "ArrowRight" || event.key === "ArrowUp") {
+      target = boundedIndex(position + 1, scenes.length);
+    } else if (event.key === "Home") {
+      target = 0;
+    } else if (event.key === "End") {
+      target = scenes.length - 1;
+    }
+    if (target === undefined) return;
+    event.preventDefault();
+    requestIndex(target);
+  };
+
+  const handleScrubberBlur = (): void => finishScrubberNavigation();
+
   const handleClick = (event: MouseEvent): void => {
     const target = event.target instanceof Element ? event.target : null;
     if (target?.closest("[data-kp-focus-deck-previous]") !== null) {
-      selectAdjacent(-1);
+      requestAdjacent(-1);
       return;
     }
     if (target?.closest("[data-kp-focus-deck-next]") !== null) {
-      selectAdjacent(1);
+      requestAdjacent(1);
       return;
     }
     if (target?.closest("[data-kp-supply-tax-replay]") !== null) {
       replay();
+    }
+  };
+
+  const handleKeydown = (event: KeyboardEvent): void => {
+    if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) {
       return;
     }
-    const slug = target?.closest<HTMLElement>("[data-kp-focus-deck-select]")
-      ?.dataset["kpFocusDeckSelect"];
-    const scene = scenes.find(({ beat }) => beat.slug === slug);
-    if (scene !== undefined) select(scene, { history: "push" });
+    if (event.target instanceof HTMLElement && event.target.closest(
+      "a, button, input, select, textarea, [contenteditable]"
+    ) !== null) return;
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      requestAdjacent(-1);
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      requestAdjacent(1);
+    }
   };
 
   const handleLocation = (): void => {
-    const beat = readKpSupplyTaxBeatFromHash(
-      scenes.map(({ beat }) => beat),
+    const index = findSceneIndexFromHash(
+      scenes,
+      scrollScore,
       window.location.hash
     );
-    const scene = scenes.find((candidate) => candidate.beat.id === beat.id)!;
-    select(scene, { animate: false, history: "none" });
+    if (index !== undefined) directSeek(index, "none");
   };
+
+  const revealMatchedScene = (element: Element | null): void => {
+    const slug = element?.closest<HTMLElement>("[data-kp-focus-deck-beat]")
+      ?.dataset["kpFocusDeckBeat"];
+    const index = scenes.findIndex(({ beat }) => beat.slug === slug);
+    if (index >= 0 && index !== settledIndex) directSeek(index, "replace");
+  };
+
   const handleBeforeMatch = (event: Event): void => {
-    const section = event.target instanceof Element
-      ? event.target.closest<HTMLElement>("[data-kp-focus-deck-beat]")
-      : null;
-    const slug = section?.dataset["kpFocusDeckBeat"];
-    const scene = scenes.find((candidate) => candidate.beat.slug === slug);
-    if (scene === undefined) return;
-    // Native find owns discovery and scrolling. The deck only restores the
-    // matched semantic state, directly and without replaying prior beats.
-    select(scene, { animate: false, history: "replace" });
+    revealMatchedScene(event.target instanceof Element ? event.target : null);
+  };
+
+  const handleSelectionChange = (): void => {
+    // Browser find may intentionally seek through beforematch, but incidental
+    // selection churn must not redirect a touch or trackpad gesture in flight.
+    if (navigationMode !== "idle") return;
+    const anchor = window.getSelection()?.anchorNode;
+    revealMatchedScene(anchor instanceof Element ? anchor :
+      anchor?.parentElement ?? null);
+  };
+
+  const handleResize = (): void => {
+    if (navigationMode === "idle") {
+      finishAt(settledIndex, "none");
+      return;
+    }
+    const mode = navigationMode;
+    const preservedPosition = mode === "native"
+      ? nativeScrollGesture?.lastPosition ?? position
+      : position;
+    disableNativeSnap();
+    writeNativePosition(preservedPosition);
+    // A resize during endpoint correction canceled its pending snap restore;
+    // active gestures and clocks restore snap through their normal settlement.
+    if (mode === "correcting") restoreNativeSnapSoon();
+  };
+  const handleReducedMotion = (): void => {
+    if (activeEdge !== undefined) directSeek(Math.round(position), "none");
   };
 
   const unsubscribe = clock.subscribe((sample) => {
-    const transition = activeTransition;
-    if (transition === undefined) {
-      projectFrame(modelProgressForScene(active));
-      return;
+    const edge = activeEdge;
+    if (edge === undefined) return;
+    const playback = programmaticPlayback;
+    const edgeProgress = navigationMode === "programmatic" &&
+        playback !== undefined
+      ? projectProgrammaticEdgeProgress(playback, sample.progress)
+      : sample.progress;
+    if (navigationMode === "programmatic") {
+      writeNativePosition(edge.lowerIndex + edgeProgress);
     }
-    const modelProgress = interpolate(
-      modelProgressForProjection(transition.from),
-      modelProgressForProjection(transition.to),
-      sample.progress
-    );
-    projectFrame(modelProgress);
-    projectKpSupplyTaxSceneTransitionDom({
-      root: deck,
-      from: transition.from,
-      to: transition.to,
-      progress: sample.progress
-    });
-    if (sample.progress >= 1) {
-      activeTransition = undefined;
-      projectKpSupplyTaxSceneDom({ root: deck, scene: transition.to });
+    projectEdge(edge, edgeProgress);
+    const navigation = pendingNavigation;
+    if (!sample.settled || navigation === undefined) return;
+    const targetProgress = navigation.targetIndex - edge.lowerIndex;
+    if (Math.abs(edgeProgress - targetProgress) <= 0.0001) {
+      finishAt(navigation.targetIndex, navigation.history);
     }
   });
-  projectBeatChrome(active);
-  projectScene(active);
-  projectFrame(active.beat.settledFrame === "untaxed" ? 0 : 1);
+
+  finishAt(initialIndex, "none");
   deck.addEventListener("click", handleClick);
+  deck.addEventListener("keydown", handleKeydown);
   deck.addEventListener("beforematch", handleBeforeMatch, true);
+  viewport.addEventListener("scroll", handleScroll, { passive: true });
+  viewport.addEventListener("scrollend", handleScrollEnd);
+  // Touch and trackpad input remain browser-native. Desktop browsers do not
+  // make overflow surfaces mouse-draggable, so this adapter changes only the
+  // real scroll offset and lets the existing scroll sampler own semantics.
+  viewport.addEventListener("pointerdown", handlePointerDown,
+    { passive: true });
+  viewport.addEventListener("pointermove", handlePointerMove);
+  viewport.addEventListener("pointerup", handlePointerUp, { passive: true });
+  viewport.addEventListener("pointercancel", handlePointerCancel,
+    { passive: true });
+  viewport.addEventListener("wheel", handleWheel,
+    { passive: true });
+  scrubber.addEventListener("input", handleScrubberInput);
+  scrubber.addEventListener("change", finishScrubberNavigation);
+  scrubber.addEventListener("keydown", handleScrubberKeydown);
+  scrubber.addEventListener("blur", handleScrubberBlur);
+  document.addEventListener("selectionchange", handleSelectionChange);
+  window.addEventListener("resize", handleResize);
   window.addEventListener("popstate", handleLocation);
   window.addEventListener("hashchange", handleLocation);
+  reducedMotion.addEventListener("change", handleReducedMotion);
+
   return Object.freeze({
     dispose: () => {
+      if (disposed) return;
+      disposed = true;
       deck.removeEventListener("click", handleClick);
+      deck.removeEventListener("keydown", handleKeydown);
       deck.removeEventListener("beforematch", handleBeforeMatch, true);
+      viewport.removeEventListener("scroll", handleScroll);
+      viewport.removeEventListener("scrollend", handleScrollEnd);
+      viewport.removeEventListener("pointerdown", handlePointerDown);
+      viewport.removeEventListener("pointermove", handlePointerMove);
+      viewport.removeEventListener("pointerup", handlePointerUp);
+      viewport.removeEventListener("pointercancel", handlePointerCancel);
+      viewport.removeEventListener("wheel", handleWheel);
+      scrubber.removeEventListener("input", handleScrubberInput);
+      scrubber.removeEventListener("change", finishScrubberNavigation);
+      scrubber.removeEventListener("keydown", handleScrubberKeydown);
+      scrubber.removeEventListener("blur", handleScrubberBlur);
+      document.removeEventListener("selectionchange", handleSelectionChange);
+      window.removeEventListener("resize", handleResize);
       window.removeEventListener("popstate", handleLocation);
       window.removeEventListener("hashchange", handleLocation);
+      reducedMotion.removeEventListener("change", handleReducedMotion);
+      cancelScrollProjection();
+      cancelScrollEndFallback();
+      cancelSnapRestore();
+      logExponentSession.dispose();
+      surfaceContourSession.dispose();
+      typeScriptSession.dispose();
       unsubscribe();
       clock.dispose();
     }
   });
 }
 
-function modelProgressForScene(
-  scene: KpSupplyTaxArticleDeckSceneV1
+function createPhraseScenes(
+  score: KpSupplyTaxScrollScoreV1
+): readonly KpSupplyTaxFocusPhraseScene[] {
+  return Object.freeze(score.phrases.map((phrase) => {
+    const passage = score.passages.find(({ id }) => id === phrase.passageId);
+    if (passage === undefined) {
+      throw new Error(`Missing Focus Deck passage ${phrase.passageId}.`);
+    }
+    return Object.freeze({
+      phrase,
+      beat: phrase.beat
+    });
+  }));
+}
+
+function readSceneIndexFromHash(
+  scenes: readonly KpSupplyTaxFocusPhraseScene[],
+  score: KpSupplyTaxScrollScoreV1,
+  hash: string
 ): number {
+  return findSceneIndexFromHash(scenes, score, hash) ?? 0;
+}
+
+function findSceneIndexFromHash(
+  scenes: readonly KpSupplyTaxFocusPhraseScene[],
+  score: KpSupplyTaxScrollScoreV1,
+  hash: string
+): number | undefined {
+  const phrase = readKpSupplyTaxScrollScorePhraseFromHash(score, hash);
+  if (phrase !== undefined) {
+    return scenes.findIndex((scene) => scene.phrase.id === phrase.id);
+  }
+  if (!hash.startsWith("#beat.")) return undefined;
+  const slug = hash.slice("#beat.".length);
+  const index = scenes.findIndex((scene) => scene.beat.slug === slug);
+  return index < 0 ? undefined : index;
+}
+
+function modelProgressForScene(scene: KpSupplyTaxFocusPhraseScene): number {
   return scene.beat.settledFrame === "untaxed" ? 0 : 1;
 }
 
-function modelProgressForProjection(
-  scene: KpSupplyTaxSceneProjectionV1
-): number {
+function modelProgressForProjection(scene: KpSupplyTaxSceneProjectionV1): number {
   return scene.settledFrame === "untaxed" ? 0 : 1;
+}
+
+function boundedIndex(index: number, count: number): number {
+  return Math.max(0, Math.min(count - 1, Math.round(index)));
+}
+
+function boundedPosition(value: number, count: number): number {
+  return Math.max(0, Math.min(count - 1, value));
+}
+
+function projectProgrammaticEdgeProgress(
+  playback: ProgrammaticPlayback,
+  clockProgress: number
+): number {
+  const clockDistance = playback.clockTargetProgress -
+    playback.clockStartProgress;
+  if (Math.abs(clockDistance) <= 0.000001) {
+    return playback.edgeTargetProgress;
+  }
+  const traversal = Math.max(0, Math.min(1,
+    (clockProgress - playback.clockStartProgress) / clockDistance));
+  return interpolate(
+    playback.edgeStartProgress,
+    playback.edgeTargetProgress,
+    traversal
+  );
+}
+
+function scrubberValueText(
+  position: number,
+  scenes: readonly KpSupplyTaxFocusPhraseScene[]
+): string {
+  const index = boundedIndex(position, scenes.length);
+  return `Step ${index + 1} of ${scenes.length}: ${scenes[index]!.beat.title}`;
 }
 
 function interpolate(from: number, to: number, progress: number): number {
   return from + (to - from) * progress;
 }
 
-function renderPage(
-  scenes: readonly KpSupplyTaxArticleDeckSceneV1[]
-): string {
+function wheelDeltaPixels(
+  event: WheelEvent,
+  pageSize: number,
+  axis: "x" | "y" = "x"
+): number {
+  const delta = axis === "x" ? event.deltaX : event.deltaY;
+  if (event.deltaMode === WheelEvent.DOM_DELTA_LINE) return delta * 16;
+  if (event.deltaMode === WheelEvent.DOM_DELTA_PAGE) return delta * pageSize;
+  return delta;
+}
+
+function renderPage(input: {
+  readonly scenes: readonly KpSupplyTaxFocusPhraseScene[];
+  readonly logExponentAuthority: ReturnType<
+    typeof createKpLogExponentFocusCardAuthority
+  >;
+  readonly logExponentInitialIndex: number;
+  readonly surfaceContourAuthority: ReturnType<
+    typeof createKpSurfaceContourFocusCardAuthority
+  >;
+  readonly surfaceContourInitialIndex: number;
+  readonly typeScriptAuthority: ReturnType<
+    typeof createKpTypeScriptFocusCardAuthority
+  >;
+  readonly typeScriptInitialIndex: number;
+}): string {
+  const scenes = input.scenes;
   return `<main class="kp-supply-tax-page">
     <article class="kp-supply-tax-article" aria-labelledby="kp-supply-tax-page-title">
       <header class="kp-supply-tax-page__intro">
         <p>Focus Deck · Economics</p>
-        <h1 id="kp-supply-tax-page-title">What changes when a market is taxed?</h1>
+        <h1 id="kp-supply-tax-page-title">How does a tax reshape a market?</h1>
       </header>
-      <section class="kp-supply-tax-deck" data-kp-supply-tax-focus-deck data-kp-focus-deck-active-beat="${escapeAttribute(scenes[0]!.beat.slug)}" aria-label="Per-unit tax Focus Deck">
-        <header class="kp-supply-tax-deck__header">
-          <span>Kinetic Figure</span>
-          <span>Supply, tax, and welfare</span>
-        </header>
-        <div class="kp-supply-tax-deck__body">
-          <nav class="kp-supply-tax-steps" aria-label="Figure steps">
-            <header><span>Steps</span><output data-kp-focus-deck-position-short>1 of ${scenes.length}</output></header>
-            <ol>${scenes.map(({ beat }, index) => `<li>
-              <button type="button" data-kp-focus-deck-select="${escapeAttribute(beat.slug)}"${index === 0 ? ' aria-current="step"' : ""} disabled>
-                <span aria-hidden="true">${beat.ordinal}</span>
-                <span>${escapeHtml(beat.title)}</span>
-              </button>
-            </li>`).join("")}</ol>
-          </nav>
-          <div class="kp-supply-tax-deck__main">
-            ${renderStaticStage()}
-            <section class="kp-supply-tax-narrative" aria-label="Explanation">
-              ${scenes.map((scene, index) => renderScene(scene, index === 0)).join("")}
-            </section>
-            <footer class="kp-supply-tax-navigation" aria-label="Figure navigation">
-              <button type="button" data-kp-focus-deck-previous aria-label="Previous step" title="Previous step" disabled>${renderKpFocusDeckControlIcon("previous")}</button>
-              <div class="kp-supply-tax-navigation__status">
-                <output data-kp-focus-deck-position aria-live="polite">Step 1 of ${scenes.length}</output>
-                <button type="button" data-kp-supply-tax-replay aria-label="Replay transformation" title="Replay transformation" hidden>${renderKpFocusDeckControlIcon("replay")}</button>
-              </div>
-              <button type="button" data-kp-focus-deck-next aria-label="Next step" title="Next step">${renderKpFocusDeckControlIcon("next")}</button>
-            </footer>
-          </div>
-        </div>
-      </section>
+      ${renderKpFocusDeckScaffold({
+        id: "focus-deck.economics.supply-tax.v1",
+        ariaLabel: "Per-unit tax Focus Deck",
+        activeBeatSlug: scenes[0]!.beat.slug,
+        stageHtml: renderStaticStage(),
+        beats: scenes.map((scene) => ({
+          slug: scene.beat.slug,
+          title: scene.beat.title,
+          html: compileKpArticleMarkdownFragmentHtml(scene.phrase.label),
+          domId: `phrase.${scene.phrase.id}`,
+          attributes: {
+            "data-kp-focus-deck-phrase": scene.phrase.id
+          }
+        })),
+        rootAttributes: {
+          "data-kp-supply-tax-focus-deck": true,
+          "data-kp-focus-deck-active-phrase": scenes[0]!.phrase.id
+        },
+        viewportAttributes: {
+          "data-kp-supply-tax-card-viewport": true
+        },
+        scrubberAttributes: {
+          "data-kp-supply-tax-state-scrubber": true
+        },
+        replayAttributes: {
+          "data-kp-supply-tax-replay": true
+        },
+        classAliases: {
+          root: "kp-supply-tax-deck",
+          header: "kp-supply-tax-deck__header",
+          body: "kp-supply-tax-deck__body",
+          main: "kp-supply-tax-deck__main",
+          card: "kp-supply-tax-card",
+          narrative: "kp-supply-tax-narrative",
+          passagePage: "kp-supply-tax-narrative__page",
+          navigation: "kp-supply-tax-navigation",
+          navigationRail: "kp-supply-tax-navigation__rail",
+          scrubber: "kp-supply-tax-navigation__scrubber",
+          ticks: "kp-supply-tax-navigation__ticks",
+          visuallyHidden: "kp-supply-tax-visually-hidden"
+        }
+      })}
+      ${renderKpLogExponentFocusCard({
+        authority: input.logExponentAuthority,
+        initialIndex: input.logExponentInitialIndex
+      })}
+      ${renderKpSurfaceContourFocusCard({
+        authority: input.surfaceContourAuthority,
+        initialIndex: input.surfaceContourInitialIndex
+      })}
+      ${renderKpTypeScriptFocusCard({
+        authority: input.typeScriptAuthority,
+        initialIndex: input.typeScriptInitialIndex
+      })}
     </article>
   </main>`;
 }
 
 function renderStaticStage(): string {
-  return `<figure class="kp-supply-tax-figure" data-kp-supply-tax-stage data-kp-supply-tax-stage-state="baseline-market">
-    <figcaption class="kp-supply-tax-visually-hidden" data-kp-supply-tax-stage-caption>Demand and original supply intersect at five units and a price of seven before the tax.</figcaption>
+  return `<figure class="kp-focus-deck__stage kp-supply-tax-figure kp-scroll-score-stage" data-kp-supply-tax-stage data-kp-supply-tax-stage-state="baseline-market">
+    <figcaption class="kp-focus-deck__visually-hidden kp-supply-tax-visually-hidden" data-kp-supply-tax-stage-caption>Demand and original supply intersect at five units and a price of seven before the tax.</figcaption>
     <div class="kp-supply-tax-stage__visual">
-      <div class="kp-supply-tax-stage__graph">${renderKpSupplyTaxInteractiveSvg()}</div>
-      ${renderKpSupplyTaxWelfareLedger()}
+      <div class="kp-supply-tax-stage__graph">
+        ${renderKpSupplyTaxInteractiveSvg()}
+        <div class="kp-scroll-score-stage-facts" aria-hidden="true">
+          ${kpSupplyTaxScrollScoreStageFacts.map(({ id, latex }) =>
+            `<span data-kp-scroll-score-stage-fact="${id}" data-kp-scroll-score-stage-fact-present="false">${renderLatexToHtml(latex, { displayMode: false })}</span>`
+          ).join("")}
+        </div>
+      </div>
     </div>
   </figure>`;
-}
-
-function renderScene(
-  scene: KpSupplyTaxArticleDeckSceneV1,
-  active: boolean
-): string {
-  const source = scene.articleScene.kind === "reading"
-    ? scene.articleScene.markdown
-    : [
-        scene.articleScene.beforeMarkdown,
-        scene.articleScene.afterMarkdown ?? ""
-      ].filter(Boolean).join("\n\n");
-  return `<section id="beat.${escapeAttribute(scene.beat.slug)}" data-kp-focus-deck-beat="${escapeAttribute(scene.beat.slug)}" data-kp-focus-deck-beat-active="${String(active)}"${active ? "" : ' hidden="until-found"'}>
-    ${compileKpArticleMarkdownFragmentHtml(source)}
-  </section>`;
-}
-
-function escapeHtml(value: string): string {
-  return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;").replaceAll('"', "&quot;");
-}
-
-function escapeAttribute(value: string): string {
-  return escapeHtml(value);
 }
 
 function requiredElement<T extends Element>(

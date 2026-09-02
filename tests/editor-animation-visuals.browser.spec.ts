@@ -327,7 +327,7 @@ test("design diagnostics distinguish promoted motion from incomplete succession"
   await selector.selectOption(
     "editor-animation.sample.animation.radical-rewrite.square-root-as-power"
   );
-  await player.locator('[data-action="seek-editor-animation"]').fill("0.5");
+  await player.locator('[data-action="seek-editor-animation"]').fill("0.25");
   await expect(diagnostics.locator("[data-kp-editor-design-strategy]"))
     .toHaveText("operation-specific · radical-corner-transfer");
   await expect(player).toHaveAttribute(

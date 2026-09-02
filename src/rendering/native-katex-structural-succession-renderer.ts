@@ -93,6 +93,7 @@ export function syncKpNativeKatexStructuralSuccession(input: {
   readonly progress: number;
   readonly visible: boolean;
   readonly enabled: boolean;
+  readonly prewarm?: boolean | undefined;
   readonly onSettled?: (() => void) | undefined;
 }): KpNativeKatexStructuralSuccessionSyncResult {
   if (!input.enabled) {
@@ -143,8 +144,11 @@ export function syncKpNativeKatexStructuralSuccession(input: {
   state.visible = input.visible;
   state.onSettled = input.onSettled;
   const requiresContext =
-    input.progress >= state.intent.paintStrategy.morph.start &&
-    input.progress < 1;
+    input.prewarm === true ||
+    (
+      input.progress >= state.intent.paintStrategy.morph.start &&
+      input.progress < 1
+    );
   if (requiresContext) {
     cancelIdleContextRelease(input.stage, state);
     if (state.status === "prepared") {

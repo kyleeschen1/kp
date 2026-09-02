@@ -81,6 +81,54 @@ export interface Graph3DWebGLSurfaceQuad {
   };
 }
 
+export function graph3DWebGLCameraUp(
+  graph: Graph3DObject,
+  camera: Graph3DObject["camera"] = graph.camera
+): GraphPoint3D {
+  if (graph.viewMode !== "xy") return { x: 0, y: 1, z: 0 };
+  // A literal top-down camera makes Three's world-Y up vector parallel to the
+  // view ray. Roll toward graph-y (Three Z) before that singular endpoint so
+  // x remains screen-right and y remains screen-up throughout the handoff.
+  const topDownProgress = smoothstep(clamp(
+    (-camera.elevationDegrees - 45) / 45,
+    0,
+    1
+  ));
+  return normalizeVector({
+    x: 0,
+    y: 1 - topDownProgress,
+    z: topDownProgress
+  });
+}
+
+export function projectGraphPoint3DToWebGLScreen(
+  graph: Graph3DObject,
+  point: GraphPoint3D,
+  camera: Graph3DObject["camera"] = graph.camera
+): { readonly x: number; readonly y: number; readonly depth: number } {
+  const azimuth = degreesToRadians(camera.azimuthDegrees);
+  const elevation = degreesToRadians(camera.elevationDegrees);
+  const view = normalizeVector({
+    x: Math.cos(elevation) * Math.cos(azimuth),
+    y: Math.sin(elevation),
+    z: Math.cos(elevation) * Math.sin(azimuth)
+  });
+  const up = graph3DWebGLCameraUp(graph, camera);
+  const right = normalizeVector(cross(up, view));
+  const screenUp = normalizeVector(cross(view, right));
+  const world = {
+    x: point.x + (camera.origin[0] - graph.width / 2) / camera.scale,
+    y: point.z + (graph.height / 2 - camera.origin[1]) / camera.scale,
+    z: point.y
+  };
+
+  return {
+    x: graph.width / 2 + dot(world, right) * camera.scale,
+    y: graph.height / 2 - dot(world, screenUp) * camera.scale,
+    depth: dot(world, view)
+  };
+}
+
 export function createGraph3DWebGLSceneModel(
   objects: readonly KpSemanticObject[],
   graph: Graph3DObject,
@@ -112,7 +160,13 @@ export function createGraph3DWebGLSceneModel(
       : undefined;
   const viewTransition =
     viewMode === "xy"
-      ? createGraph3DTo2DTransitionDescriptor(objects, graph)
+      ? createGraph3DTo2DTransitionDescriptor(
+          objects,
+          graph,
+          previousGraph?.viewMode === "3d"
+            ? previousGraph.camera
+            : graph.camera
+        )
       : undefined;
   const viewProgress =
     viewMode === "xy"
@@ -135,7 +189,7 @@ export function createGraph3DWebGLSceneModel(
       viewTransition === undefined
         ? graph.camera
         : interpolateCamera(
-            graph.camera,
+            viewTransition.camera.from,
             viewTransition.camera.target,
             viewProgress
           ),
@@ -304,6 +358,36 @@ function applyViewProgressToSurfaceModels(
       surface.morphTarget.role
     )
   );
+}
+
+function cross(left: GraphPoint3D, right: GraphPoint3D): GraphPoint3D {
+  return {
+    x: left.y * right.z - left.z * right.y,
+    y: left.z * right.x - left.x * right.z,
+    z: left.x * right.y - left.y * right.x
+  };
+}
+
+function dot(left: GraphPoint3D, right: GraphPoint3D): number {
+  return left.x * right.x + left.y * right.y + left.z * right.z;
+}
+
+function normalizeVector(vector: GraphPoint3D): GraphPoint3D {
+  const length = Math.hypot(vector.x, vector.y, vector.z);
+  if (length <= Number.EPSILON) return { x: 1, y: 0, z: 0 };
+  return {
+    x: vector.x / length,
+    y: vector.y / length,
+    z: vector.z / length
+  };
+}
+
+function degreesToRadians(value: number): number {
+  return value / 180 * Math.PI;
+}
+
+function smoothstep(value: number): number {
+  return value * value * (3 - 2 * value);
 }
 
 function gridFromVertices(
