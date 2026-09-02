@@ -29,6 +29,10 @@
   "affects": [
     "plan-revision.kp.v24"
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "Recorded a 28-slice authoring-ergonomics proposal: coordinate-free linear maps beneath compatible matrix projections, explicit basis and law evidence, deterministic defaults and templates, a 50 percent boilerplate-reduction gate, two-basis proof, and unit-tagged economics pressure. Explicit approval is required before creating a run contract or implementing slices."
+  },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",
     "planRevisionId": "plan-revision.kp.v24",

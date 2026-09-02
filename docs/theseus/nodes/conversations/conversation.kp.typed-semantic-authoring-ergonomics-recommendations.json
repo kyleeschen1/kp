@@ -1,0 +1,75 @@
+{
+  "id": "conversation.kp.typed-semantic-authoring-ergonomics-recommendations",
+  "kind": "conversation",
+  "title": "Propose typed semantic authoring ergonomics loop",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "The project owner asked Codex to record its typed semantic authoring recommendations and propose a forced long loop. The resulting proposal prioritizes low-boilerplate defaults and semantic templates, keeps matrices as compatible basis-dependent representations, tests internal linear-map and law-evidence capabilities, and requires explicit approval before execution.",
+  "sourceRefs": [
+    {
+      "kind": "transcript",
+      "provider": "codex",
+      "localPath": "docs/project/reviews/2026-09-02-typed-semantic-authoring-ergonomics-long-loop-proposal.md",
+      "turnRange": "Typed semantic authoring algebra comparison, recommendation capture, and long-loop proposal",
+      "digest": "sha256:8e0c8228172e56598b0880c9aa31041bee21367142a3664c1131bc6d5d4dd27f",
+      "summary": "The project owner asked Codex to record its typed semantic authoring recommendations and propose a forced long loop. The resulting proposal prioritizes low-boilerplate defaults and semantic templates, keeps matrices as compatible basis-dependent representations, tests internal linear-map and law-evidence capabilities, and requires explicit approval before execution."
+    }
+  ],
+  "affects": [
+    "priority-change.kp.typed-semantic-authoring-api-review"
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Conversation captured with authority, trust, privacy, and transcript provenance."
+  },
+  "conversation": {
+    "schemaVersion": "theseus.conversation.v1",
+    "occurredAt": "2026-09-02T20:40:25.000Z",
+    "participants": [
+      {
+        "id": "project-owner",
+        "role": "human",
+        "displayName": "Project owner"
+      },
+      {
+        "id": "codex",
+        "role": "llm",
+        "provider": "codex"
+      }
+    ],
+    "transcriptRanges": [
+      {
+        "provider": "codex",
+        "localPath": "docs/project/reviews/2026-09-02-typed-semantic-authoring-ergonomics-long-loop-proposal.md",
+        "turnRange": "Typed semantic authoring algebra comparison, recommendation capture, and long-loop proposal",
+        "digest": "sha256:8e0c8228172e56598b0880c9aa31041bee21367142a3664c1131bc6d5d4dd27f"
+      }
+    ],
+    "summary": "The project owner asked Codex to record its typed semantic authoring recommendations and propose a forced long loop. The resulting proposal prioritizes low-boilerplate defaults and semantic templates, keeps matrices as compatible basis-dependent representations, tests internal linear-map and law-evidence capabilities, and requires explicit approval before execution.",
+    "proposals": [
+      {
+        "id": "run-authoring-ergonomics-proof",
+        "statement": "Execute the recorded 28-slice authoring-ergonomics proof with a 50 percent burden-reduction gate, two-basis affine pressure, unit-tagged economics pressure, and a final API checkpoint.",
+        "proposedBy": "codex",
+        "status": "proposed",
+        "linkedEntityIds": [
+          "priority-change.kp.typed-semantic-authoring-api-review"
+        ]
+      }
+    ],
+    "objections": [],
+    "decisions": [],
+    "trust": {
+      "level": "self-reported",
+      "rationale": "The project document records the recommendations and the user's request to prepare a long-loop proposal; the exact contract has not yet been approved."
+    },
+    "privacy": {
+      "classification": "project",
+      "containsSensitiveData": false,
+      "retention": "Retain with project history."
+    },
+    "linkedEntityIds": [
+      "priority-change.kp.typed-semantic-authoring-api-review"
+    ]
+  }
+}

@@ -1,11 +1,11 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: checkpoint; narrow public authoring facade implemented
+Status: checkpoint; ergonomics long loop proposed, explicit approval pending
 Last Updated: 2026-09-02
-Current Next Action: review the promoted names, inferred diagnostics, dynamic
-LaTeX narrowing, and consumer fixture. If accepted, begin one domain-owned
-linear supply-demand capability pack; do not start code generation, Article
-integration, or broader algebra from this checkpoint alone.
+Current Next Action: review and explicitly approve or reject
+`../reviews/2026-09-02-typed-semantic-authoring-ergonomics-long-loop-proposal.md`.
+Do not create a run contract, resume the stale supply-tax action, or begin the
+28 proposed slices without that approval.
 
 ## Goal
 
@@ -171,6 +171,42 @@ instantiations over its library baseline, while the full repository measures
 94,851 and 154,909 against stale 55,000 and 75,000 ceilings. The dirty-worktree
 `npm test` preflight also stops on the separate untracked Focus Deck private
 clock inventory gap. Neither ceiling nor unrelated caller was changed here.
+
+## Current Ergonomics And Algebra Recommendation
+
+The API review exposed a more useful next pressure than immediately building
+the full economics pack. Keep matrices as compatible finite-dimensional
+authoring values, but model a derivative internally as a semantic linear map
+whose matrix depends on declared source and target bases. Higher derivatives
+use the minimum multilinear structure required by the caller. A gradient
+requires inner-product or duality authority and must not be inferred from
+differentiability alone.
+
+The public priority remains authoring convenience: deterministic semantic-path
+IDs, canonical local defaults, inferred signatures, compact/operator/expanded
+LaTeX templates, and descriptor-derived optics, correspondence, serialization,
+and autocomplete documentation. Ordinary authors should not pass algebra,
+basis, equality, or law dictionaries. Advanced callers may supply explicit
+immutable dictionaries without global registration or import-order authority.
+
+Algebraic laws belong to a carrier together with its operations and equality.
+Evidence is recorded as `proved`, `tested`, or `assumed`, with an authority,
+suite, or assumption ID; booleans such as `isMonoid` or `symmetric: true` are
+not themselves proof. JavaScript numeric operations must not be advertised as
+strict exact laws when their equality does not support that claim.
+
+One bounded Jacobian/Hessian descriptor should drive only mechanical plumbing.
+Mathematical rules, capability requirements, and repair behavior remain
+hand-written. Missing basis or inner-product authority produces typed gaps,
+not guessed matrices or gradients.
+
+The proposed proof measures the current consumer fixture and requires at least
+a 50 percent reduction in applicable manual IDs, low-level constructors, and
+positive semantic setup while preserving inference and diagnostics. It then
+pressures the abstraction with the same affine map in two bases and one
+unit-tagged quantity-to-price derivative. The loop stops for API review before
+public algebraic promotion, a full supply-demand pack, a broad generator,
+Article integration, animation reparameterization, or CAS work.
 
 ## Stop Conditions
 

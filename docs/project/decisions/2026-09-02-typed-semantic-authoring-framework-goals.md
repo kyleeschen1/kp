@@ -1,7 +1,7 @@
 # Typed Semantic Authoring Framework Goals
 
 Date: 2026-09-02
-Status: accepted; narrow public authoring facade at API checkpoint
+Status: accepted; ergonomics and algebra refinement proposed
 
 ## Decision
 
@@ -154,3 +154,43 @@ those proven constructors are part of the promoted authoring surface. No
 convenience aliases, root namespace, generator contract, domain protocol, or
 internal module layout is promoted by this outcome. The next decision remains
 the API checkpoint, followed by one linear economics caller if accepted.
+
+## Recommended Ergonomics And Representation Refinement
+
+The API checkpoint now has a concrete successor proposal. Its governing
+recommendation is to optimize the public surface for low-boilerplate authoring
+while testing a smaller algebraic layer beneath it:
+
+- derivatives are semantic linear maps; Jacobians are finite-basis matrix
+  representations rather than the definition of differentiation;
+- second derivatives use the minimum multilinear structure needed for a
+  Hessian, and gradients require explicit inner-product or duality authority;
+- source and target semantic spaces remain distinct even when dimensions
+  coincide;
+- capabilities use explicit immutable dictionaries, hidden nominal space
+  identities, and no global or import-order instance resolution;
+- law claims are evidence records (`proved`, `tested`, or `assumed`) tied to
+  the actual carrier, operations, and equality rather than boolean traits;
+- domain objects remain concrete, while only appropriate value, change,
+  tangent, or coordinate carriers receive algebraic structure;
+- a local authoring context supplies deterministic IDs, standard scalar and
+  Cartesian defaults, notation defaults, and explicit overrides;
+- one bounded semantic construct descriptor may generate Jacobian/Hessian
+  LaTeX forms, children, optics, correspondence, serialization metadata,
+  autocomplete documentation, elaboration hooks, and conformance plumbing;
+  and
+- unavailable basis, equality, unit, or inner-product authority returns an
+  exact typed repair gap.
+
+The proposed proof must reduce the current consumer fixture's applicable
+manual identity, constructor, and positive setup burden by at least 50 percent,
+represent the same affine map in two different bases with map-level agreement,
+and reject an invalid same-dimension composition in a unit-tagged
+quantity-to-price pressure caller.
+
+These recommendations are recorded but not yet execution authority. The exact
+28-slice proposal is
+`../reviews/2026-09-02-typed-semantic-authoring-ergonomics-long-loop-proposal.md`.
+It stops before a public `VectorSpace` hierarchy, full economics semantics,
+general code generation, Article integration, animation reparameterization,
+or a CAS.
