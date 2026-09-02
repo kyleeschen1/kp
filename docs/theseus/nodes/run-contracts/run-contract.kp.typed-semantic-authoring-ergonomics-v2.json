@@ -74,7 +74,8 @@
     {
       "id": "s04",
       "title": "equality-and-law-evidence",
-      "status": "planned"
+      "summary": "Equality and law-evidence contracts reject missing or mismatched authority; focused and standard checks pass.",
+      "status": "complete"
     },
     {
       "id": "s05",

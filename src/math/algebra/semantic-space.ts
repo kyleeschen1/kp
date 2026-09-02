@@ -34,9 +34,9 @@ export function defineKpSemanticSpace<Value>():
   return (input) => createSpace(input);
 }
 
-export function sameKpSemanticSpace(
-  left: KpSemanticSpace<unknown>,
-  right: KpSemanticSpace<unknown>
+export function sameKpSemanticSpace<LeftValue, RightValue>(
+  left: KpSemanticSpace<LeftValue>,
+  right: KpSemanticSpace<RightValue>
 ): boolean {
   return left.id === right.id && left.dimension === right.dimension;
 }

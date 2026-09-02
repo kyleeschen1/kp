@@ -65,11 +65,23 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-09-02T20:52:52.748Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-math-algebraic-capabilities.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-02T20:55:48.111Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-02T20:55:49.329Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s03 added immutable nominal semantic spaces whose literal identities reject same-dimension domain substitutions without author-written brands."
+    "summary": "s04 added exact-versus-approximate equality modes and audited proved, tested, or assumed law evidence tied to carrier, operations, and equality IDs."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",
