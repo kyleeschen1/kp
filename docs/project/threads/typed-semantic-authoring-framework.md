@@ -1,11 +1,11 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: checkpoint; ergonomics long loop proposed, explicit approval pending
+Status: human API checkpoint; ergonomics long loop complete
 Last Updated: 2026-09-02
-Current Next Action: review and explicitly approve or reject
-`../reviews/2026-09-02-typed-semantic-authoring-ergonomics-long-loop-proposal.md`.
-Do not create a run contract, resume the stale supply-tax action, or begin the
-28 proposed slices without that approval.
+Current Next Action: review the public names, call shape, and promotion choices
+in `../reviews/2026-09-02-typed-semantic-authoring-ergonomics-closeout.md`.
+Choose accept, request a bounded API revision, or roll back the facade before
+an economics caller or broader promotion begins.
 
 ## Goal
 
@@ -207,6 +207,40 @@ pressures the abstraction with the same affine map in two bases and one
 unit-tagged quantity-to-price derivative. The loop stops for API review before
 public algebraic promotion, a full supply-demand pack, a broad generator,
 Article integration, animation reparameterization, or CAS work.
+
+## Ergonomics And Algebra Outcome
+
+The approved 28-slice run is complete and stopped at its required human
+checkpoint. The implementation now separates coordinate-free linear and
+bounded bilinear derivatives from basis-dependent matrix representations,
+keeps equality and law evidence explicit, and requires duality before a
+covector is called a gradient. The existing matrix-first contracts remain
+source- and runtime-compatible adapters.
+
+Ordinary function authoring now receives deterministic semantic-path IDs,
+inferred parameter environments and output shapes, authored provenance, and
+default Jacobian/Hessian descriptors. The measured affine-Jacobian plus
+quadratic-Hessian fixture fell from 10 manual identity literals, 11 low-level
+constructor calls, and 49 authored setup lines to 0, 0, and 16 respectively.
+Its inferred public closure is also cheaper than the compatibility fixture.
+
+Mechanical Jacobian and Hessian child, optic, correspondence, serialization,
+autocomplete, and conformance plumbing is generated deterministically from
+two bounded descriptors. Mathematical rules, evidence, capability
+requirements, and repair behavior remain authored. LaTeX elaboration exposes
+typed gaps for space, basis, unit, and static-shape authority it cannot know.
+
+Optional algebra and unit packs are imported explicitly, accept custom spaces,
+bases, units, and evidence without registration, and do not enter the core
+bundle. A two-basis affine proof and a unit-tagged quantity-to-price derivative
+confirm that the shared seam is not a basis-specific matrix library or an
+economics ontology.
+
+The implementation and review recommendation are recorded in
+`../reviews/2026-09-02-typed-semantic-authoring-ergonomics-closeout.md`.
+No economics hierarchy, Article integration, renderer work, runtime animation
+reparameterization, general CAS, public HKT/typeclass hierarchy, or broad
+generator catalogue was authorized or implemented.
 
 ## Stop Conditions
 

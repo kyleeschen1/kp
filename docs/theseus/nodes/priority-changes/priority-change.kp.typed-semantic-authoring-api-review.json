@@ -525,11 +525,71 @@
       "status": "passed",
       "scope": "slice-s27-production",
       "checkedAt": "2026-09-02T22:30:25.198Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test complete typed semantic authoring boundary suite",
+      "status": "passed",
+      "scope": "slice-s28-focused",
+      "checkedAt": "2026-09-02T22:39:06.162Z",
+      "notes": "All 71 focused math, optics, LaTeX, scene, facade, inference, and pressure tests passed."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.inference.json --noEmit",
+      "status": "passed",
+      "scope": "slice-s28-inference",
+      "checkedAt": "2026-09-02T22:39:07.332Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning scripts/check-typed-math-authoring-inference.ts",
+      "status": "passed",
+      "scope": "slice-s28-local-inference",
+      "checkedAt": "2026-09-02T22:39:08.380Z",
+      "notes": "Five authoring fixtures passed at 32313 types and 34388 instantiations under 34000 and 37000 ceilings."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s28-broad",
+      "checkedAt": "2026-09-02T22:39:09.409Z"
+    },
+    {
+      "command": "npm run check:dependency-direction and npm run check:framework-neutral-entrypoints",
+      "status": "passed",
+      "scope": "slice-s28-architecture",
+      "checkedAt": "2026-09-02T22:39:10.451Z",
+      "notes": "Both architecture gates passed across 1977 TypeScript modules."
+    },
+    {
+      "command": "npm run measure:inference-attribution",
+      "status": "passed",
+      "scope": "slice-s28-attribution",
+      "checkedAt": "2026-09-02T22:39:11.488Z",
+      "notes": "All 29 fixtures measured; ergonomic consumer remained below compatibility consumer and the frozen global ceiling was not changed."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "slice-s28-production",
+      "checkedAt": "2026-09-02T22:39:12.527Z"
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "slice-s28-diagnostic-known-unrelated",
+      "checkedAt": "2026-09-02T22:39:13.583Z",
+      "notes": "Unchanged documented stop: untracked Focus Deck log-exponent caller has an uninventoried private clock; this run did not modify or waive it and no new failure appeared."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-s28-control-plane",
+      "checkedAt": "2026-09-02T22:39:14.647Z",
+      "notes": "Validation passed before final closeout records with 1078 nodes and 26337 events."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s27 attributes compiler cost to representative consumers, enforces a narrow local budget, and proves parameter typos fail at the author expression with an autocomplete-quality suggestion."
+    "summary": "The 28-slice ergonomics run satisfies its compatibility, burden, semantic safety, basis, extension, inference, and bundle gates and is stopped for human review of names and call shape."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",

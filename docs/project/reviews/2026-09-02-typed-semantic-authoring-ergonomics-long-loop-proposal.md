@@ -1,7 +1,7 @@
 # Typed Semantic Authoring Ergonomics Long-Loop Proposal
 
 Date: 2026-09-02
-Status: proposed; explicit approval required
+Status: implemented; mandatory API checkpoint pending
 Target: `priority-change.kp.typed-semantic-authoring-api-review`
 Active thread: `../threads/typed-semantic-authoring-framework.md`
 
