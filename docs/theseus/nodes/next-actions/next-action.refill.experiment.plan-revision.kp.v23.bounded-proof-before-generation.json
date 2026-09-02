@@ -18,6 +18,26 @@
   "verification": [
     "theseus validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-semantic-math.test.ts",
+      "status": "passed",
+      "scope": "slice 1 typed semantic math kernel",
+      "checkedAt": "2026-09-02T14:35:24.423Z",
+      "notes": "Five affine Jacobian, quadratic Hessian, shape composition, signature composition, and free-variable checks pass."
+    },
+    {
+      "command": "TypeScript app and test project no-emit checks",
+      "status": "passed",
+      "scope": "slice 1 static shape and signature contracts",
+      "checkedAt": "2026-09-02T14:35:25.493Z",
+      "notes": "Both tsconfig.app and tsconfig.test pass, including expected compile-time failures for incompatible matrix multiplication and function composition."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Slice 1 of 3 complete: typed scalar, vector, matrix, function signatures, static matrix and function composition, affine Jacobian, quadratic Hessian, KaTeX projection, macro metadata, and expansion correspondence pass focused runtime and app/test type checks."
+  },
   "expectedLearning": [
     "An approved plan depends on an active assumption without outcome evidence."
   ],
