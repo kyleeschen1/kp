@@ -176,11 +176,24 @@
       "status": "passed",
       "scope": "slice-s11-standard",
       "checkedAt": "2026-09-02T21:19:11.567Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-math-expression-differentiable-adapter.test.ts tests/typed-semantic-math.test.ts",
+      "status": "passed",
+      "scope": "slice-s12-focused",
+      "checkedAt": "2026-09-02T21:23:47.197Z",
+      "notes": "Seven adapter and compatibility tests passed, including non-symmetric Jacobian orientation and directional application."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s12-standard",
+      "checkedAt": "2026-09-02T21:23:48.441Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s11 defines coordinate-free differentiable maps, validates derivative semantic spaces, and exposes an explicit missing-capability repair gap."
+    "summary": "Slice s12 adapts expression-backed vector functions through the existing Jacobian derivation, with explicit semantic spaces and no second differentiation rule set."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",

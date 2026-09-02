@@ -122,7 +122,8 @@
     {
       "id": "s12",
       "title": "expression-function-adapter",
-      "status": "planned"
+      "summary": "Expression functions now supply coordinate-free derivative maps through the current Jacobian authority; value, orientation, dimensional rejection, compatibility, and typechecks pass.",
+      "status": "complete"
     },
     {
       "id": "s13",
