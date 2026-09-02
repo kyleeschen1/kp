@@ -1,0 +1,32 @@
+{
+  "id": "next-action.kp.typed-math.post-domain-pressure-iteration",
+  "kind": "next-action",
+  "title": "Restore typed authoring health and pressure nonlinear unit maps",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Execute the approved three-slice iteration: inventory the existing Focus Deck log-exponent clock without behavior change, attribute and narrowly rebaseline the 30-fixture TypeScript inference budget, then add one renderer-free radius-to-area nonlinear unit-scalar caller and record whether repeated mechanics justify a later helper. Excludes economics parity, visible inspector work, public facade promotion, unit algebra, CAS scope, and helper implementation beyond this iteration.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-02-typed-authoring-post-domain-pressure-next-step-review.md"
+    }
+  ],
+  "verification": [
+    "Architecture checks pass with the existing Focus Deck timing unchanged.",
+    "Global inference attribution shows no accidental public-barrel or framework closure and the remeasured budget passes.",
+    "Circle values, point-dependent derivatives, unit rendering, runtime guards, and compile-time unit rejections pass in focused tests.",
+    "The helper decision is recorded from market and circle evidence, with each implementation slice committed independently."
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run verify:impact -- --path src/architecture/equation-compiler-authority-ratchet.ts --run",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-02T23:50:28.739Z"
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Approved iteration started. Allowed: behavior-preserving private-clock inventory, evidence-backed 30-fixture inference rebaseline, and one test-owned nonlinear radius-to-area caller plus helper decision. Disallowed: economics parity, visible UI, public promotion, inferred unit algebra, CAS expansion, and a fourth implementation slice."
+  }
+}

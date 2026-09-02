@@ -54,6 +54,10 @@ const privateClockPaths = paths([
   "src/editor/animation-catalogue-interaction-host.ts",
   "src/editor/equation-motion-demo-controller.ts",
   "src/experiments/glyph-reconciliation-radical-inventory.ts",
+  // This Focus Deck only coalesces native scroll projection, restores WebKit
+  // snap state, and waits for canonical-player hydration. Semantic time still
+  // arrives through the shared player's animation-frame event.
+  "src/experiments/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card.ts",
   // This page schedules scroll restoration and canonical-player hydration;
   // it does not sample animation time or own a second semantic clock.
   "src/experiments/kinetic-figure-log-product/kinetic-figure-log-product-entry.ts",
