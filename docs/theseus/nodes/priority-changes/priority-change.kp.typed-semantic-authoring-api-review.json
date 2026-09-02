@@ -493,11 +493,43 @@
       "status": "passed",
       "scope": "slice-s26-production",
       "checkedAt": "2026-09-02T22:20:39.298Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning scripts/check-typed-math-authoring-inference.ts",
+      "status": "passed",
+      "scope": "slice-s27-inference-budget",
+      "checkedAt": "2026-09-02T22:30:20.604Z",
+      "notes": "Five representative authoring fixtures passed at 32313 types and 34388 instantiations under narrow local ceilings."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test typed math authoring inference and diagnostics suites",
+      "status": "passed",
+      "scope": "slice-s27-focused",
+      "checkedAt": "2026-09-02T22:30:21.874Z",
+      "notes": "The local budget contract and exactly one typo-local diagnostic with the suggested semantic parameter name passed."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.inference.json --noEmit",
+      "status": "passed",
+      "scope": "slice-s27-inference",
+      "checkedAt": "2026-09-02T22:30:22.950Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s27-broad",
+      "checkedAt": "2026-09-02T22:30:24.092Z"
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "slice-s27-production",
+      "checkedAt": "2026-09-02T22:30:25.198Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s26 moves standard algebra and unit implementations behind explicit facades; core stays light and custom extensions require no registration."
+    "summary": "Slice s27 attributes compiler cost to representative consumers, enforces a narrow local budget, and proves parameter typos fail at the author expression with an autocomplete-quality suggestion."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",

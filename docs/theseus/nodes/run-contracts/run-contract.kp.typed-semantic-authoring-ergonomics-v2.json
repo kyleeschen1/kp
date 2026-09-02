@@ -212,7 +212,8 @@
     {
       "id": "s27",
       "title": "inference-and-diagnostics-boundary",
-      "status": "planned"
+      "summary": "Ergonomic authoring is cheaper than the compatibility fixture, stays under its local compiler-cost budget, and preserves local suggested-name diagnostics; standard and production checks pass.",
+      "status": "complete"
     },
     {
       "id": "s28",
