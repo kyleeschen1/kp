@@ -1,12 +1,11 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: next; narrow public authoring facade approved
+Status: checkpoint; narrow public authoring facade implemented
 Last Updated: 2026-09-02
-Current Next Action: implement one independently reversible public-facade
-slice with a core entrypoint, optional calculus/optics/LaTeX/scene entrypoints,
-an exact export and architecture guard, a consumer-style inference fixture,
-and an import-closure check. Stop for API review before the first economics
-capability pack, code generation, Article integration, or broader algebra.
+Current Next Action: review the promoted names, inferred diagnostics, dynamic
+LaTeX narrowing, and consumer fixture. If accepted, begin one domain-owned
+linear supply-demand capability pack; do not start code generation, Article
+integration, or broader algebra from this checkpoint alone.
 
 ## Goal
 
@@ -142,6 +141,36 @@ a consumer fixture. It does not freeze internal file layout or authorize a
 root namespace object, code generator, economics hierarchy, Article grammar,
 renderer integration, general CAS, or catalogue rollout. See
 `../reviews/2026-09-02-typed-semantic-authoring-next-step-review.md`.
+
+## Public Facade Outcome
+
+The promotion slice completed in three checkpoint commits:
+
+- `e16697782` adds explicit core, calculus, optics, bounded-LaTeX, and scene
+  entrypoints with exact runtime export inventories and declaration-only
+  facade checks.
+- `c23fcde35` adds the consumer fixture. It authors the affine Jacobian,
+  quadratic Hessian, matrix selection rewrite, parsed-function narrowing, and
+  scene recovery through only the promoted entrances, while retaining static
+  failures for incompatible matrices and function signatures.
+- `f936334e3` adds an in-memory production-bundle closure guard. Every pack is
+  framework-neutral; the core excludes optional LaTeX, optics, and scene
+  modules and tree-shakes the shared Hessian and Jacobian implementations.
+
+The consumer proof justified exposing the existing expression constructors in
+the core facade; without them authors could not construct typed expression
+outputs through public imports. It did not demonstrate a repeated burden that
+justifies aliases, a namespace object, or code generation. Runtime-elaborated
+function shapes correctly require an explicit vector guard before Jacobian
+construction.
+
+Focused facade checks, repository-wide typechecks, dependency gates, and the
+production bundle pass. The frozen repository-wide inference ceiling remains
+red from pre-existing growth: this fixture adds 3,962 types and 6,258
+instantiations over its library baseline, while the full repository measures
+94,851 and 154,909 against stale 55,000 and 75,000 ceilings. The dirty-worktree
+`npm test` preflight also stops on the separate untracked Focus Deck private
+clock inventory gap. Neither ceiling nor unrelated caller was changed here.
 
 ## Stop Conditions
 

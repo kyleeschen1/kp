@@ -1,7 +1,7 @@
 # Typed Semantic Authoring Promotion Next-Step Review
 
 Date: 2026-09-02
-Status: accepted; narrow public facade is next
+Status: implemented; API review pending
 Active thread: `../threads/typed-semantic-authoring-framework.md`
 
 ## Recommendation
@@ -97,3 +97,29 @@ The existing delivery queue still mentions supply-tax scroll work, but it does
 not override this explicit typed-authoring promotion decision. A successor
 Theseus plan revision should reconcile that stale operational action before
 implementation begins.
+
+## Implementation Checkpoint
+
+The facade rollback unit is complete in `e16697782`, `c23fcde35`, and
+`f936334e3`. The core and four optional packs have explicit named exports and
+own no implementation. The consumer fixture confirms the intended static and
+dynamic authoring boundaries, including compile-time composition errors and a
+required runtime vector guard for parsed functions. The realized bundle guard
+keeps every pack framework-neutral and proves the core does not retain the
+optional LaTeX, optics, scene, Hessian, or Jacobian implementation paths.
+
+One API change emerged from actual hand authoring: the core facade now exports
+the existing expression constructors because typed scalar and function output
+construction is otherwise impossible without reaching into an internal
+module. No convenience aliases were warranted.
+
+The checkpoint review should now answer only these questions:
+
+1. Are the core and capability-pack names understandable from autocomplete?
+2. Is the parsed-function vector guard the right honest dynamic boundary?
+3. Are the current diagnostics sufficient before an economics caller exists?
+4. Does any repeated burden in the fixture justify exactly one helper?
+
+If the answers are acceptable, proceed to the bounded linear supply-demand
+caller described above. Reopening implementation layout, code generation,
+Article grammar, or general algebra is outside this checkpoint.

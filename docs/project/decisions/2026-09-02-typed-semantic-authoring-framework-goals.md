@@ -1,7 +1,7 @@
 # Typed Semantic Authoring Framework Goals
 
 Date: 2026-09-02
-Status: accepted; narrow public authoring facade approved
+Status: accepted; narrow public authoring facade at API checkpoint
 
 ## Decision
 
@@ -140,3 +140,17 @@ import closure.
 The first economics capability pack follows only after this API checkpoint.
 Code generation and mixed Markdown/TypeScript integration follow only after a
 real domain caller demonstrates repeated plumbing or file-switching friction.
+
+## Promotion Outcome
+
+The import-tiered facade, public-only consumer fixture, and realized
+production-bundle closure guard are implemented. The proof preserved literal
+dimension inference, invalid-composition errors, typed dynamic narrowing,
+immutable optics, and direct scene recovery without adding implementation to
+the facades or importing renderer, Article, domain, or runtime-host authority.
+
+The consumer required raw expression constructors in the core entrypoint, so
+those proven constructors are part of the promoted authoring surface. No
+convenience aliases, root namespace, generator contract, domain protocol, or
+internal module layout is promoted by this outcome. The next decision remains
+the API checkpoint, followed by one linear economics caller if accepted.

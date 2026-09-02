@@ -2,15 +2,23 @@
   "id": "priority-change.kp.typed-semantic-authoring-facade.v2",
   "kind": "priority-change",
   "title": "Priority change priority-change.kp.typed-semantic-authoring-facade.v2",
-  "status": "active",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "The user approved the import-tiered typed semantic authoring facade and directed its three-slice implementation under active plan revision v24.",
+  "summary": "All three approved facade slices are committed and the bounded rollback unit is ready for human API review before an economics caller.",
   "sourceRefs": [
     {
       "kind": "user-intent",
       "intent": "The user approved the import-tiered typed semantic authoring facade and directed its three-slice implementation under active plan revision v24.",
       "occurredAt": "2026-09-02T15:34:10.850Z",
       "summary": "Priority change disposition: checkpoint."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-02-typed-semantic-authoring-next-step-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/typed-semantic-authoring-framework.md"
     }
   ],
   "dependsOn": {
