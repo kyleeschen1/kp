@@ -32,11 +32,18 @@
       "scope": "slice 1 static shape and signature contracts",
       "checkedAt": "2026-09-02T14:35:25.493Z",
       "notes": "Both tsconfig.app and tsconfig.test pass, including expected compile-time failures for incompatible matrix multiplication and function composition."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-semantic-math.test.ts tests/typed-semantic-optics.test.ts",
+      "status": "passed",
+      "scope": "slice 2 semantic optics and immutable rewrites",
+      "checkedAt": "2026-09-02T14:41:51.351Z",
+      "notes": "Eight combined tests pass for typed derivatives, static composition, equation lenses, matrix traversals, stable descriptors, immutable rebuilding, and correspondence."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 1 of 3 complete: typed scalar, vector, matrix, function signatures, static matrix and function composition, affine Jacobian, quadratic Hessian, KaTeX projection, macro metadata, and expansion correspondence pass focused runtime and app/test type checks."
+    "summary": "Slices 1 and 2 of 3 complete: typed math kernel plus exact equation lenses, matrix entry and row/column traversals, serializable semantic paths, immutable rewrites, untouched-child identity preservation, operation authority, and per-entity correspondence."
   },
   "expectedLearning": [
     "An approved plan depends on an active assumption without outcome evidence."

@@ -118,6 +118,18 @@ export interface KpTypedFunction<
   readonly provenance: KpMathProvenance;
 }
 
+export interface KpTypedEquation<
+  Left extends KpScalarValue = KpScalarValue,
+  Right extends KpScalarValue = KpScalarValue
+> {
+  readonly id: string;
+  readonly kind: "typed-equation";
+  readonly relation: "equals";
+  readonly left: Left;
+  readonly right: Right;
+  readonly provenance: KpMathProvenance;
+}
+
 export type KpDerivativeMatrixKind = "jacobian" | "hessian";
 
 export interface KpDerivativeMatrix<
@@ -283,6 +295,58 @@ export function defineKpTypedFunction<
     },
     provenance: input.provenance ?? authored(input.id)
   });
+}
+
+export function createKpTypedEquation<
+  const Left extends KpScalarValue,
+  const Right extends KpScalarValue
+>(input: {
+  readonly id: string;
+  readonly left: Left;
+  readonly right: Right;
+  readonly provenance?: KpMathProvenance | undefined;
+}): KpTypedEquation<Left, Right> {
+  requireText(input.id, "Typed equation id");
+  if (input.left.id === input.right.id) {
+    throw new Error(`Typed equation ${input.id} requires distinct side identities.`);
+  }
+  return deepFreeze({
+    id: input.id,
+    kind: "typed-equation" as const,
+    relation: "equals" as const,
+    left: input.left,
+    right: input.right,
+    provenance: input.provenance ?? authored(input.id)
+  });
+}
+
+export function rebuildKpTypedMatrix<Rows extends number, Columns extends number>(
+  input: {
+    readonly source: KpTypedMatrix<Rows, Columns>;
+    readonly rows: readonly (readonly KpScalarValue[])[];
+    readonly provenance?: KpMathProvenance | undefined;
+  }
+): KpTypedMatrix<Rows, Columns> {
+  if (input.rows.length !== input.source.rowCount) {
+    throw new Error(
+      `Typed matrix ${input.source.id} rewrite requires ${input.source.rowCount} rows.`
+    );
+  }
+  if (input.rows.some((row) => row.length !== input.source.columnCount)) {
+    throw new Error(
+      `Typed matrix ${input.source.id} rewrite requires ` +
+      `${input.source.columnCount} columns.`
+    );
+  }
+  requireUniqueIds(input.rows.flatMap((row) => [...row]),
+    `Typed matrix ${input.source.id} rewritten entries`);
+  return createMatrixValue(
+    input.source.id,
+    input.source.rowCount,
+    input.source.columnCount,
+    input.rows,
+    input.provenance ?? input.source.provenance
+  );
 }
 
 export function composeKpFunctionSignatures<
@@ -458,7 +522,8 @@ export function projectKpDerivativeMatrixToLatex(
 }
 
 export function projectKpTypedMathToLatex(
-  value: KpTypedMathValue | KpTypedFunction | KpDerivativeMatrix
+  value: KpTypedMathValue | KpTypedFunction | KpTypedEquation |
+    KpDerivativeMatrix
 ): string {
   switch (value.kind) {
     case "scalar-expression":
@@ -471,6 +536,9 @@ export function projectKpTypedMathToLatex(
     case "typed-function":
       return `${value.name}(${value.parameters.map(({ name }) => name).join(", ")}) = ` +
         projectKpTypedMathToLatex(value.output);
+    case "typed-equation":
+      return `${expressionToLatex(value.left.expression)} = ` +
+        expressionToLatex(value.right.expression);
     case "derivative-matrix":
       return projectKpDerivativeMatrixToLatex(value, "expanded");
   }
