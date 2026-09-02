@@ -56,11 +56,39 @@
       "scope": "pre-existing repository-wide frozen ceiling",
       "checkedAt": "2026-09-02T15:42:33.768Z",
       "notes": "Current overall is 94,851 types and 154,909 instantiations against stale 55,000/75,000 ceilings; project history already recorded roughly 92k/149k before this facade, and no ceiling was raised."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test typed-math authoring facade tests",
+      "status": "passed",
+      "scope": "slice 3 export and bundle-closure contracts",
+      "checkedAt": "2026-09-02T15:50:41.518Z",
+      "notes": "Four focused tests pass: exact runtime exports, declaration-only facades, framework-neutral pack closures, and a core bundle without optional LaTeX, optics, scene, Hessian, or Jacobian implementation reachability."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "promotion type closure",
+      "checkedAt": "2026-09-02T15:50:42.547Z",
+      "notes": "Application, node, test, Svelte, and domain type checks pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "production bundle",
+      "checkedAt": "2026-09-02T15:50:43.592Z",
+      "notes": "Publication check and Vite production build pass."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "repository-wide deterministic suite",
+      "checkedAt": "2026-09-02T15:50:50.851Z",
+      "notes": "Architecture preflight stops on the unrelated untracked Focus Deck file src/experiments/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card.ts because its private clock is not inventoried; typed-authoring focused and shared dependency gates pass."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "Slice 2 complete: consumer-only fixture authors affine Jacobian, quadratic Hessian, optics, LaTeX recovery, and scene lookup through promoted entrypoints; static negative cases remain enforced."
+    "state": "complete",
+    "summary": "Slice 3 complete: in-memory production bundles prove framework-neutral optional packs and a tree-shaken core capability closure without freezing internal module layout."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",
