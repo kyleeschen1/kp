@@ -21,6 +21,26 @@
   "affects": [
     "plan-revision.kp.v24"
   ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-math-authoring-public-api.test.ts",
+      "status": "passed",
+      "scope": "slice 1 facade inventories",
+      "checkedAt": "2026-09-02T15:37:13.619Z",
+      "notes": "Two tests pass for exact runtime exports and declaration-only facades."
+    },
+    {
+      "command": "TypeScript app and test project no-emit checks",
+      "status": "passed",
+      "scope": "slice 1 facade type closure",
+      "checkedAt": "2026-09-02T15:37:14.633Z",
+      "notes": "Both tsconfig.app and tsconfig.test pass."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Slice 1 complete: added explicit core, calculus, optics, bounded-LaTeX, and scene authoring entrypoints with exact runtime export inventory tests."
+  },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",
     "planRevisionId": "plan-revision.kp.v24",
