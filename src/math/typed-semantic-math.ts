@@ -9,6 +9,10 @@ import {
   type MathExpression,
   type NumericScope
 } from "./expression.ts";
+import {
+  createKpLawEvidence,
+  type KpLawEvidence
+} from "./algebra/law-evidence.ts";
 
 export interface KpScalarType {
   readonly kind: "scalar";
@@ -173,6 +177,8 @@ export interface KpDerivativeMatrix<
   readonly matrix: KpTypedMatrix<Rows, Columns>;
   readonly rowLabels: readonly string[];
   readonly columnLabels: readonly string[];
+  /** Evidence is non-enumerable at runtime to preserve the promoted object shape. */
+  readonly symmetryEvidence?: KpLawEvidence | undefined;
   readonly symmetric: boolean;
   readonly compactEntityId: string;
   readonly macro: Readonly<{
@@ -544,7 +550,6 @@ export function deriveKpJacobian<
       (_, index) => `${input.source.name}_{${index + 1}}`
     ),
     columnLabels: parameterNames,
-    symmetric: false,
     summary: "Expanding the Jacobian derives one partial derivative per matrix entry."
   });
 }
@@ -590,7 +595,11 @@ export function deriveKpHessian<
     matrix,
     rowLabels: parameterNames,
     columnLabels: parameterNames,
-    symmetric: true,
+    symmetryEvidence: {
+      kind: "assumed",
+      assumptionId: "kp.assumption.expression-hessian-mixed-partial-symmetry.v1",
+      rationale: "The supported expression is assumed twice differentiable at its evaluation point."
+    },
     summary: "Expanding the Hessian derives one second partial derivative per matrix entry."
   });
 }
@@ -667,12 +676,15 @@ function derivativeMatrix<
   readonly matrix: KpTypedMatrix<Rows, Columns>;
   readonly rowLabels: readonly string[];
   readonly columnLabels: readonly string[];
-  readonly symmetric: boolean;
+  readonly symmetryEvidence?: KpLawEvidence | undefined;
   readonly summary: string;
 }): KpDerivativeMatrix<Kind, Rows, Columns> {
   requireText(input.id, `${input.derivativeKind} id`);
   const compactEntityId = `${input.id}.compact`;
-  return deepFreeze({
+  const symmetryEvidence = input.symmetryEvidence === undefined
+    ? undefined
+    : createKpLawEvidence(input.symmetryEvidence);
+  const value = {
     id: input.id,
     kind: "derivative-matrix" as const,
     derivativeKind: input.derivativeKind,
@@ -682,7 +694,8 @@ function derivativeMatrix<
     matrix: input.matrix,
     rowLabels: input.rowLabels,
     columnLabels: input.columnLabels,
-    symmetric: input.symmetric,
+    // The boolean remains only as the promoted compatibility projection.
+    symmetric: symmetryEvidence !== undefined,
     compactEntityId,
     macro: {
       id: `kp.math.macro.${input.derivativeKind}.v1` as const,
@@ -703,7 +716,14 @@ function derivativeMatrix<
     },
     provenance: derived([input.source.id],
       `kp.math.${input.derivativeKind}.macro.v1`)
-  });
+  };
+  if (symmetryEvidence !== undefined) {
+    Object.defineProperty(value, "symmetryEvidence", {
+      value: symmetryEvidence,
+      enumerable: false
+    });
+  }
+  return deepFreeze(value) as KpDerivativeMatrix<Kind, Rows, Columns>;
 }
 
 function createMatrixValue<Rows extends number, Columns extends number>(

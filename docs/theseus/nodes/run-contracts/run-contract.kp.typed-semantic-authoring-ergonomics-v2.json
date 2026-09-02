@@ -140,7 +140,8 @@
     {
       "id": "s15",
       "title": "hessian-and-symmetry-evidence",
-      "status": "planned"
+      "summary": "Hessian matrices require declared bases and explicit symmetry evidence, missing bases return a typed gap, and the legacy boolean remains source-compatible; broad checks pass.",
+      "status": "complete"
     },
     {
       "id": "s16",

@@ -227,11 +227,30 @@
       "status": "passed",
       "scope": "slice-s14-standard",
       "checkedAt": "2026-09-02T21:31:09.564Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test Hessian projection and typed math compatibility suites",
+      "status": "passed",
+      "scope": "slice-s15-focused",
+      "checkedAt": "2026-09-02T21:37:19.790Z",
+      "notes": "Basis-explicit values, missing-basis gap, symmetry evidence validation, legacy boolean compatibility, public inventory, and import closure passed."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.inference.json --noEmit",
+      "status": "passed",
+      "scope": "slice-s15-inference",
+      "checkedAt": "2026-09-02T21:37:21.023Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s15-broad",
+      "checkedAt": "2026-09-02T21:37:22.091Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s14 projects Df(x) only through explicit domain and codomain bases; absent bases retain the derivative map and return a typed repair gap."
+    "summary": "Slice s15 adds basis-explicit Hessian projection and named symmetry evidence; the promoted symmetric boolean is now a compatibility projection with unchanged enumerable shape."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",
