@@ -323,11 +323,30 @@
       "status": "passed",
       "scope": "slice-s19-standard",
       "checkedAt": "2026-09-02T21:51:57.373Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-math-construct-latex.test.ts",
+      "status": "passed",
+      "scope": "slice-s20-focused",
+      "checkedAt": "2026-09-02T21:56:06.686Z",
+      "notes": "Compact, operator, expanded, escaping, custom notation, basis metadata, and capability-gap cases passed."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.inference.json --noEmit",
+      "status": "passed",
+      "scope": "slice-s20-inference",
+      "checkedAt": "2026-09-02T21:56:07.852Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s20-standard",
+      "checkedAt": "2026-09-02T21:56:08.900Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s19 records bounded Jacobian/Hessian macro metadata, capabilities, children, projection forms, and template inputs in validated descriptors."
+    "summary": "Slice s20 projects escaped, customizable construct LaTeX from descriptor requirements and explicit semantic authority, returning typed gaps for missing metadata."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",

@@ -170,7 +170,8 @@
     {
       "id": "s20",
       "title": "automatic-latex-templates",
-      "status": "planned"
+      "summary": "Descriptor-driven LaTeX templates cover compact, operator, and basis-qualified expanded forms without guessing missing authority; focused and standard checks pass.",
+      "status": "complete"
     },
     {
       "id": "s21",
