@@ -373,11 +373,30 @@
       "status": "passed",
       "scope": "slice-s21-production",
       "checkedAt": "2026-09-02T21:59:41.006Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-math-elaboration-capabilities.test.ts tests/typed-latex-elaborator.test.ts",
+      "status": "passed",
+      "scope": "slice-s22-focused",
+      "checkedAt": "2026-09-02T22:03:51.790Z",
+      "notes": "Parsed affine success, source-span identity, explicit space/basis/unit/static-shape gaps, supplied-reference closure, and existing elaboration behavior passed."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.inference.json --noEmit",
+      "status": "passed",
+      "scope": "slice-s22-inference",
+      "checkedAt": "2026-09-02T22:03:53.063Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s22-standard",
+      "checkedAt": "2026-09-02T22:03:54.163Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s21 deterministically generates checked-in child, optic, correspondence, serialization, autocomplete, and conformance plumbing from the two descriptors."
+    "summary": "Slice s22 preserves parsed values and source spans while exposing explicit repair gaps for every semantic authority absent from bounded LaTeX."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",

@@ -182,7 +182,8 @@
     {
       "id": "s22",
       "title": "honest-elaboration-gaps",
-      "status": "planned"
+      "summary": "LaTeX elaboration no longer risks implying parsed space, basis, unit, or literal-shape authority; focused, inference, and standard checks pass.",
+      "status": "complete"
     },
     {
       "id": "s23",
