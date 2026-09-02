@@ -92,7 +92,8 @@
     {
       "id": "s07",
       "title": "product-space-defaults",
-      "status": "planned"
+      "summary": "Standard scalar/Cartesian constructors are registry-free, deterministic, shape-checked, and explicitly overridable.",
+      "status": "complete"
     },
     {
       "id": "s08",

@@ -22,6 +22,11 @@ import {
   createKpLinearMap,
   identityKpLinearMap
 } from "../src/math/algebra/linear-map.ts";
+import {
+  createKpCartesianSpace,
+  createKpFloatingPointScalars,
+  createKpStandardScalarSpace
+} from "../src/math/algebra/standard-spaces.ts";
 
 test("semantic spaces retain deterministic nominal identity and dimensions", () => {
   const quantity = defineKpSemanticSpace<number>()({
@@ -341,5 +346,62 @@ test("linear maps compose by semantic source and target space", () => {
       outer: quantityToRevenue as unknown as typeof priceToRevenue
     }),
     /cannot compose kp.space.linear-map.price with kp.space.linear-map.quantity/
+  );
+});
+
+test("standard scalar and Cartesian spaces are deterministic local defaults", () => {
+  const firstScalars = createKpFloatingPointScalars();
+  const secondScalars = createKpFloatingPointScalars();
+  const scalar = createKpStandardScalarSpace({
+    id: "kp.space.standard.scalar",
+    label: "Scalar"
+  });
+  const plane = createKpCartesianSpace({
+    id: "kp.space.standard.plane",
+    label: "Plane",
+    dimension: 2
+  });
+
+  assert.equal(firstScalars.id, secondScalars.id);
+  assert.equal(firstScalars.equality.id, secondScalars.equality.id);
+  assert.equal(firstScalars.equality.mode, "approximate");
+  assert.equal(scalar.scale(3, 4), 12);
+  assert.deepEqual(plane.vectors.add([1, 2], [3, -1]), [4, 1]);
+  assert.deepEqual(plane.scale(2, [3, -1]), [6, -2]);
+  assert.equal(plane.space.dimension, 2);
+  assert.equal(Object.isFrozen(plane.vectors.zero), true);
+});
+
+test("Cartesian defaults allow explicit scalar authority and reject bad shape", () => {
+  const exact = createKpEquality<number>({
+    id: "kp.equality.standard.exact-fixture",
+    mode: "exact",
+    equals: Object.is
+  });
+  const exactScalars = createKpScalarSystem({
+    id: "kp.scalars.standard.exact-fixture",
+    carrierId: "kp.carrier.standard.exact-fixture",
+    equality: exact,
+    zero: 0,
+    one: 1,
+    add: (left, right) => left + right,
+    multiply: (left, right) => left * right,
+    negate: (value) => -value
+  });
+  const plane = createKpCartesianSpace({
+    id: "kp.space.standard.custom-plane",
+    dimension: 2,
+    scalars: exactScalars
+  });
+
+  assert.equal(plane.scalars, exactScalars);
+  assert.equal(plane.vectors.equality.mode, "exact");
+  assert.throws(
+    () => plane.scale(2, [1] as unknown as readonly [number, number]),
+    /requires 2 coordinates/
+  );
+  assert.throws(
+    () => createKpFloatingPointScalars({ tolerance: 0 }),
+    /tolerance must be positive/
   );
 });

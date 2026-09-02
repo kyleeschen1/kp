@@ -101,11 +101,23 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-09-02T21:01:08.292Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-math-algebraic-capabilities.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-02T21:03:10.385Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.inference.json --noEmit",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-02T21:03:11.568Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s06 added audited linear maps with identity and composition; both static and runtime checks reject equal-dimensional but semantically mismatched intermediate spaces."
+    "summary": "s07 added deterministic floating-point scalar and Cartesian-space defaults with explicit approximate equality and replaceable scalar authority."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",
