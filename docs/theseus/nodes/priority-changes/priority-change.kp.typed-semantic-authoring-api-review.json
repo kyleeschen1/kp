@@ -442,11 +442,31 @@
       "status": "passed",
       "scope": "slice-s24-standard",
       "checkedAt": "2026-09-02T22:11:43.763Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-math-unit-tagged-economics-pressure.test.ts",
+      "status": "passed",
+      "scope": "slice-s25-focused",
+      "checkedAt": "2026-09-02T22:15:52.125Z",
+      "notes": "Price value, dP/dQ directional value, USD/item label, and runtime semantic-composition rejection passed."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.inference.json --noEmit",
+      "status": "passed",
+      "scope": "slice-s25-inference",
+      "checkedAt": "2026-09-02T22:15:53.376Z",
+      "notes": "Unit-tagged valid composition and equal-dimensional invalid composition fixture passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s25-standard",
+      "checkedAt": "2026-09-02T22:15:54.425Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s24 proves one affine derivative has distinct matrices in standard and diagonal basis pairs while preserving exact map behavior and reversible coordinates."
+    "summary": "Slice s25 proves the generic semantic-space model supports unit-tagged quantity-to-price derivatives and labels without a shared economics ontology."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",

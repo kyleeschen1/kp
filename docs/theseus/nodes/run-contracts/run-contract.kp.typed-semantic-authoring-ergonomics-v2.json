@@ -200,7 +200,8 @@
     {
       "id": "s25",
       "title": "unit-tagged-economics-pressure",
-      "status": "planned"
+      "summary": "The bounded economics caller preserves units, derivative meaning, and semantic composition safety without expanding into equilibrium or welfare models; standard checks pass.",
+      "status": "complete"
     },
     {
       "id": "s26",
