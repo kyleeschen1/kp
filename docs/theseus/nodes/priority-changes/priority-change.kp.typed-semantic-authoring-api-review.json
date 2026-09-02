@@ -284,11 +284,31 @@
       "status": "passed",
       "scope": "slice-s17-standard",
       "checkedAt": "2026-09-02T21:44:26.050Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-math-authoring-builders.test.ts",
+      "status": "passed",
+      "scope": "slice-s18-focused",
+      "checkedAt": "2026-09-02T21:48:10.359Z",
+      "notes": "Inferred IDs, parameter/output wrappers, provenance, Jacobian values, and free-variable diagnostics passed."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.inference.json --noEmit",
+      "status": "passed",
+      "scope": "slice-s18-inference",
+      "checkedAt": "2026-09-02T21:48:11.594Z",
+      "notes": "Literal parameter names, environment autocomplete, vector dimensions, and negative property access compiled as expected."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s18-standard",
+      "checkedAt": "2026-09-02T21:48:12.716Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s17 adds immutable local authoring contexts with semantic-path IDs, injective segment encoding, authored provenance, and explicit deterministic defaults."
+    "summary": "Slice s18 adds a scoped function builder that infers typed parameters, scalar/vector wrappers, IDs, and provenance without hiding the semantic result tree."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",
