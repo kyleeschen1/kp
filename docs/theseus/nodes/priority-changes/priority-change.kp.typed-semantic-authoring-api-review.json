@@ -77,11 +77,23 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-09-02T20:55:49.329Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-math-algebraic-capabilities.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-02T20:58:03.948Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.inference.json --noEmit",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-02T20:58:05.121Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s04 added exact-versus-approximate equality modes and audited proved, tested, or assumed law evidence tied to carrier, operations, and equality IDs."
+    "summary": "s05 added immutable additive, scalar, and vector-space dictionaries with carrier/equality-checked law attachment and weakest-capability summation."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",

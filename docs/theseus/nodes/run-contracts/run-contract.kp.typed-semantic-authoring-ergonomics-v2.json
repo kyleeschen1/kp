@@ -80,7 +80,8 @@
     {
       "id": "s05",
       "title": "bounded-algebra-dictionaries",
-      "status": "planned"
+      "summary": "Minimal algebra dictionaries and mismatch tests pass without HKTs, inheritance, registries, or unused capabilities.",
+      "status": "complete"
     },
     {
       "id": "s06",
