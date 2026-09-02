@@ -392,11 +392,42 @@
       "status": "passed",
       "scope": "slice-s22-standard",
       "checkedAt": "2026-09-02T22:03:54.163Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test ergonomic metrics, consumer runtime, facade, compatibility, and import closure suites",
+      "status": "passed",
+      "scope": "slice-s23-focused",
+      "checkedAt": "2026-09-02T22:08:36.681Z",
+      "notes": "Manual IDs 10 to 0, low-level calls 11 to 0, setup lines 49 to 16; runtime values and public compatibility pass."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.inference.json --noEmit",
+      "status": "passed",
+      "scope": "slice-s23-inference",
+      "checkedAt": "2026-09-02T22:08:37.980Z"
+    },
+    {
+      "command": "npm run check:dependency-direction and framework-neutral entrypoints",
+      "status": "passed",
+      "scope": "slice-s23-architecture",
+      "checkedAt": "2026-09-02T22:08:39.045Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s23-broad",
+      "checkedAt": "2026-09-02T22:08:40.129Z"
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "slice-s23-production",
+      "checkedAt": "2026-09-02T22:08:41.208Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s22 preserves parsed values and source spans while exposing explicit repair gaps for every semantic authority absent from bounded LaTeX."
+    "summary": "Slice s23 promotes narrow context, builder, descriptor, and ergonomic calculus helpers; the consumer beats every 50 percent burden target without weakening values or types."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",

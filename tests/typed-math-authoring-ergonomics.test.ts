@@ -10,6 +10,8 @@ import {
 const sourcePath = "tests/type-fixtures/typed-math-authoring-public-api.ts";
 const baselinePath =
   "tests/fixtures/typed-math-authoring-ergonomics-baseline.json";
+const ergonomicSourcePath =
+  "tests/type-fixtures/typed-math-authoring-ergonomic-public-api.ts";
 
 test("typed math public authoring has a stable ergonomics baseline", () => {
   const source = readFileSync(sourcePath, "utf8");
@@ -24,6 +26,37 @@ test("typed math public authoring has a stable ergonomics baseline", () => {
   assert.ok(expected.manualIdentityLiterals > 0);
   assert.ok(expected.lowLevelConstructorCalls > 0);
   assert.ok(expected.authoredSemanticSetupLines > 0);
+});
+
+test("the ergonomic public consumer reduces every burden by at least half", () => {
+  const baseline = JSON.parse(
+    readFileSync(baselinePath, "utf8")
+  ) as KpAuthoringErgonomicsMeasurement;
+  const source = readFileSync(ergonomicSourcePath, "utf8");
+  const ergonomic = measureTypedMathAuthoringErgonomics(
+    source,
+    ergonomicSourcePath
+  );
+
+  assert.ok(
+    ergonomic.manualIdentityLiterals <= baseline.manualIdentityLiterals / 2
+  );
+  assert.ok(
+    ergonomic.lowLevelConstructorCalls <= baseline.lowLevelConstructorCalls / 2
+  );
+  assert.ok(
+    ergonomic.authoredSemanticSetupLines <=
+      baseline.authoredSemanticSetupLines / 2
+  );
+  assert.deepEqual(ergonomic, {
+    schemaVersion: "kp.typed-math-authoring-ergonomics.v1",
+    source: ergonomicSourcePath,
+    region: baseline.region,
+    manualIdentityLiterals: 0,
+    lowLevelConstructorCalls: 0,
+    authoredSemanticSetupLines: 16,
+    constructorCalls: {}
+  });
 });
 
 test("the ergonomics measure rejects missing or duplicated region markers", () => {

@@ -188,7 +188,8 @@
     {
       "id": "s23",
       "title": "ergonomic-public-consumer",
-      "status": "planned"
+      "summary": "The public ergonomic consumer reduces IDs 100 percent, low-level calls 100 percent, and setup lines 67 percent while preserving behavior, inference, closure, architecture, and production build.",
+      "status": "complete"
     },
     {
       "id": "s24",

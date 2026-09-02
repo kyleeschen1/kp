@@ -39,3 +39,18 @@ export {
   type KpTypedVector,
   type KpVectorType
 } from "../typed-semantic-math.ts";
+
+export {
+  createKpMathAuthoringContext,
+  type KpMathAuthoringContext,
+  type KpMathAuthoringDefaults,
+  type KpMathAuthoringNotation,
+  type KpSemanticAuthoringRef
+} from "./context.ts";
+
+export {
+  defineKpAuthoredFunction,
+  type KpFunctionOutputBuilder,
+  type KpParameterEnvironment,
+  type KpParametersForNames
+} from "./builders.ts";

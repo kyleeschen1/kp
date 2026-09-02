@@ -22,11 +22,13 @@ test("typed math authoring entrypoints expose exact runtime inventories", () => 
     "composeKpFunctionSignatures",
     "constant",
     "cos",
+    "createKpMathAuthoringContext",
     "createKpScalarExpression",
     "createKpScalarParameter",
     "createKpTypedEquation",
     "createKpTypedMatrix",
     "createKpTypedVector",
+    "defineKpAuthoredFunction",
     "defineKpTypedFunction",
     "divide",
     "evaluateKpTypedMatrix",
@@ -40,8 +42,12 @@ test("typed math authoring entrypoints expose exact runtime inventories", () => 
     "variable"
   ]);
   assert.deepEqual(Object.keys(calculus).sort(), [
+    "deriveKpAuthoredHessian",
+    "deriveKpAuthoredJacobian",
     "deriveKpHessian",
     "deriveKpJacobian",
+    "kpHessianConstructDescriptor",
+    "kpJacobianConstructDescriptor",
     "projectKpDerivativeMatrixToLatex"
   ]);
   assert.deepEqual(Object.keys(optics).sort(), [
