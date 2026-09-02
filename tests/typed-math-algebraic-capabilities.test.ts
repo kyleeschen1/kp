@@ -31,6 +31,10 @@ import {
   createKpFiniteBasis,
   sameKpFiniteBasis
 } from "../src/math/algebra/finite-basis.ts";
+import {
+  applyKpMatrixRepresentation,
+  representKpLinearMap
+} from "../src/math/algebra/matrix-representation.ts";
 
 test("semantic spaces retain deterministic nominal identity and dimensions", () => {
   const quantity = defineKpSemanticSpace<number>()({
@@ -483,5 +487,113 @@ test("finite bases reject duplicates and invalid coordinate ordering", () => {
       coordinateIsomorphism: evidence
     }),
     /vector 0 has invalid coordinates/
+  );
+});
+
+test("matrix representations carry bases and agree with their source map", () => {
+  type Vec2 = readonly [number, number];
+  const domain = createKpCartesianSpace({
+    id: "kp.space.matrix.domain",
+    dimension: 2
+  });
+  const codomain = createKpCartesianSpace({
+    id: "kp.space.matrix.codomain",
+    dimension: 2
+  });
+  const standardBasis = <const Id extends string>(
+    id: string,
+    space: ReturnType<typeof createKpCartesianSpace<Id, 2>>
+  ) => createKpFiniteBasis({
+    id,
+    space,
+    vectors: [[1, 0] as Vec2, [0, 1] as Vec2] as const,
+    coordinates: (value) => value,
+    fromCoordinates: (coordinates) => coordinates,
+    coordinateIsomorphism: {
+      kind: "tested" as const,
+      suiteId: `${id}.round-trip-test`,
+      equalityId: space.vectors.equality.id
+    }
+  });
+  const map = createKpLinearMap({
+    id: "kp.map.matrix.fixture",
+    domain,
+    codomain,
+    apply: (value): Vec2 => [
+      2 * value[0]! + value[1]!,
+      3 * value[1]!
+    ],
+    linearity: {
+      kind: "tested",
+      suiteId: "kp.test.map.matrix.fixture",
+      equalityId: codomain.vectors.equality.id
+    }
+  });
+  const representation = representKpLinearMap({
+    id: "kp.matrix-representation.fixture",
+    map,
+    domainBasis: standardBasis("kp.basis.matrix.domain", domain),
+    codomainBasis: standardBasis("kp.basis.matrix.codomain", codomain)
+  });
+
+  assert.deepEqual(representation.rows, [[2, 1], [0, 3]]);
+  assert.deepEqual(applyKpMatrixRepresentation(representation, [4, -2]), [6, -6]);
+  assert.deepEqual(map.apply([4, -2]), [6, -6]);
+  assert.equal(representation.sourceMapId, map.id);
+  assert.equal(Object.isFrozen(representation.rows[0]), true);
+});
+
+test("matrix representations reject a basis from another semantic space", () => {
+  type Vec1 = readonly [number];
+  const domain = createKpCartesianSpace({
+    id: "kp.space.matrix.expected-domain",
+    dimension: 1
+  });
+  const wrongDomain = createKpCartesianSpace({
+    id: "kp.space.matrix.wrong-domain",
+    dimension: 1
+  });
+  const codomain = createKpCartesianSpace({
+    id: "kp.space.matrix.expected-codomain",
+    dimension: 1
+  });
+  const basis = <const Id extends string>(
+    id: string,
+    space: ReturnType<typeof createKpCartesianSpace<Id, 1>>
+  ) => createKpFiniteBasis({
+    id,
+    space,
+    vectors: [[1] as Vec1] as const,
+    coordinates: (value) => value,
+    fromCoordinates: (coordinates) => coordinates,
+    coordinateIsomorphism: {
+      kind: "tested" as const,
+      suiteId: `${id}.test`,
+      equalityId: space.vectors.equality.id
+    }
+  });
+  const map = createKpLinearMap({
+    id: "kp.map.matrix.invalid-basis",
+    domain,
+    codomain,
+    apply: (value) => value,
+    linearity: {
+      kind: "tested",
+      suiteId: "kp.test.map.matrix.invalid-basis",
+      equalityId: codomain.vectors.equality.id
+    }
+  });
+
+  assert.throws(
+    () => representKpLinearMap({
+      id: "kp.matrix-representation.invalid-basis",
+      map,
+      domainBasis: basis(
+        "kp.basis.matrix.wrong-domain",
+        wrongDomain
+      ) as unknown as ReturnType<typeof basis<"kp.space.matrix.expected-domain">>,
+      codomainBasis: basis("kp.basis.matrix.codomain", codomain)
+    }),
+    /domain basis must belong to kp.space.matrix.expected-domain/
   );
 });

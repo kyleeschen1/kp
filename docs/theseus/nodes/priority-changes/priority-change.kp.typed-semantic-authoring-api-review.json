@@ -125,11 +125,23 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-09-02T21:07:33.019Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-math-algebraic-capabilities.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-02T21:09:36.545Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.inference.json --noEmit",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-02T21:09:37.713Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s08 added ordered finite bases with generic scalar coordinates, duplicate rejection, basis-vector coordinate checks, and round-trip validation."
+    "summary": "s09 added basis-aware matrix representations that retain source-map identity, reject bases from other semantic spaces, and agree with direct map application."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",

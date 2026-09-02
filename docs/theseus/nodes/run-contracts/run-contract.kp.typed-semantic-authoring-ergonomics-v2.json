@@ -104,7 +104,8 @@
     {
       "id": "s09",
       "title": "basis-aware-matrix-representation",
-      "status": "planned"
+      "summary": "Basis-aware matrix construction and application pass coordinate-agreement and mismatch tests.",
+      "status": "complete"
     },
     {
       "id": "s10",
