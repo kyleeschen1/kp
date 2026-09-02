@@ -246,11 +246,30 @@
       "status": "passed",
       "scope": "slice-s15-broad",
       "checkedAt": "2026-09-02T21:37:22.091Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-math-gradient-identification.test.ts",
+      "status": "passed",
+      "scope": "slice-s16-focused",
+      "checkedAt": "2026-09-02T21:40:58.186Z",
+      "notes": "Missing-duality gap, Euclidean identification equation, and semantic-space mismatch tests passed."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.inference.json --noEmit",
+      "status": "passed",
+      "scope": "slice-s16-inference",
+      "checkedAt": "2026-09-02T21:40:59.406Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s16-standard",
+      "checkedAt": "2026-09-02T21:41:00.489Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s15 adds basis-explicit Hessian projection and named symmetry evidence; the promoted symmetric boolean is now a compatibility projection with unchanged enumerable shape."
+    "summary": "Slice s16 keeps scalar derivatives as covectors until an explicit inner-product duality identifies a gradient; missing capability returns a typed gap."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",

@@ -146,7 +146,8 @@
     {
       "id": "s16",
       "title": "gradient-capability-gap",
-      "status": "planned"
+      "summary": "Gradient identification now requires explicit duality, preserves covectors on repair gaps, and rejects same-dimension semantic mismatches; focused and standard checks pass.",
+      "status": "complete"
     },
     {
       "id": "s17",
