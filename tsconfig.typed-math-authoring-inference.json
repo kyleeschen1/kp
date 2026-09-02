@@ -12,6 +12,7 @@
     "tests/type-fixtures/typed-math-authoring-ergonomic-public-api.ts",
     "tests/type-fixtures/typed-math-linear-maps.ts",
     "tests/type-fixtures/typed-math-second-derivative-maps.ts",
-    "tests/type-fixtures/typed-math-unit-tagged-economics.ts"
+    "tests/type-fixtures/typed-math-unit-tagged-economics.ts",
+    "tests/type-fixtures/typed-linear-supply-demand.ts"
   ]
 }

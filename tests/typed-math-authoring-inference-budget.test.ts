@@ -10,7 +10,7 @@ test("typed math authoring keeps a narrow, local inference budget", () => {
   const { measured, ceilings, measuredProject } =
     kpTypedMathAuthoringInferenceBudget;
   assert.equal(measuredProject, "tsconfig.typed-math-authoring-inference.json");
-  assert.equal(kpTypedMathAuthoringInferenceBudget.fixtureCount, 5);
+  assert.equal(kpTypedMathAuthoringInferenceBudget.fixtureCount, 6);
   assert.ok(ceilings.types > measured.types);
   assert.ok(ceilings.instantiations > measured.instantiations);
   assert.ok(ceilings.types / measured.types < 1.06);
@@ -21,5 +21,5 @@ test("typed math authoring keeps a narrow, local inference budget", () => {
     readonly include?: readonly string[];
   };
   assert.notEqual(config.compilerOptions?.skipLibCheck, true);
-  assert.equal(config.include?.length, 5);
+  assert.equal(config.include?.length, 6);
 });
