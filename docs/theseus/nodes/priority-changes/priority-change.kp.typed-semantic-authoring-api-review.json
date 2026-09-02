@@ -113,11 +113,23 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-09-02T21:03:11.568Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-math-algebraic-capabilities.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-02T21:07:31.787Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-02T21:07:33.019Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s07 added deterministic floating-point scalar and Cartesian-space defaults with explicit approximate equality and replaceable scalar authority."
+    "summary": "s08 added ordered finite bases with generic scalar coordinates, duplicate rejection, basis-vector coordinate checks, and round-trip validation."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",

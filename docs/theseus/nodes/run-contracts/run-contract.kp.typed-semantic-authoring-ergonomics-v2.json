@@ -98,7 +98,8 @@
     {
       "id": "s08",
       "title": "finite-basis-contract",
-      "status": "planned"
+      "summary": "Finite basis identity, ordering, coordinate round trips, evidence equality, and invalid-basis failures pass focused and standard checks.",
+      "status": "complete"
     },
     {
       "id": "s09",

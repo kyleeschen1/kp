@@ -27,6 +27,10 @@ import {
   createKpFloatingPointScalars,
   createKpStandardScalarSpace
 } from "../src/math/algebra/standard-spaces.ts";
+import {
+  createKpFiniteBasis,
+  sameKpFiniteBasis
+} from "../src/math/algebra/finite-basis.ts";
 
 test("semantic spaces retain deterministic nominal identity and dimensions", () => {
   const quantity = defineKpSemanticSpace<number>()({
@@ -403,5 +407,81 @@ test("Cartesian defaults allow explicit scalar authority and reject bad shape", 
   assert.throws(
     () => createKpFloatingPointScalars({ tolerance: 0 }),
     /tolerance must be positive/
+  );
+});
+
+test("finite bases validate ordering and coordinate round trips", () => {
+  type Vec2 = readonly [number, number];
+  const plane = createKpCartesianSpace({
+    id: "kp.space.basis.plane",
+    dimension: 2
+  });
+  const basis = createKpFiniteBasis({
+    id: "kp.basis.plane.standard",
+    space: plane,
+    vectors: [[1, 0] as Vec2, [0, 1] as Vec2] as const,
+    coordinates: (value) => value,
+    fromCoordinates: (coordinates) => coordinates,
+    coordinateIsomorphism: {
+      kind: "tested",
+      suiteId: "kp.test.basis.plane.standard",
+      equalityId: plane.vectors.equality.id
+    }
+  });
+  const reconstructed = createKpFiniteBasis({
+    id: "kp.basis.plane.standard",
+    space: plane,
+    vectors: [[1, 0] as Vec2, [0, 1] as Vec2] as const,
+    coordinates: (value) => value,
+    fromCoordinates: (coordinates) => coordinates,
+    coordinateIsomorphism: {
+      kind: "tested",
+      suiteId: "kp.test.basis.plane.standard",
+      equalityId: plane.vectors.equality.id
+    }
+  });
+
+  assert.deepEqual(basis.coordinates([3, -2]), [3, -2]);
+  assert.deepEqual(basis.fromCoordinates([4, 5]), [4, 5]);
+  assert.equal(sameKpFiniteBasis(basis, reconstructed), true);
+  assert.equal(Object.isFrozen(basis.vectors), true);
+});
+
+test("finite bases reject duplicates and invalid coordinate ordering", () => {
+  type Vec2 = readonly [number, number];
+  const plane = createKpCartesianSpace({
+    id: "kp.space.basis.invalid-plane",
+    dimension: 2
+  });
+  const evidence = {
+    kind: "tested" as const,
+    suiteId: "kp.test.basis.invalid",
+    equalityId: plane.vectors.equality.id
+  };
+
+  assert.throws(
+    () => createKpFiniteBasis({
+      id: "kp.basis.plane.duplicate",
+      space: plane,
+      vectors: [[1, 0] as Vec2, [1, 0] as Vec2] as const,
+      coordinates: (value) => value,
+      fromCoordinates: (coordinates) => coordinates,
+      coordinateIsomorphism: evidence
+    }),
+    /repeats a basis vector/
+  );
+  assert.throws(
+    () => createKpFiniteBasis({
+      id: "kp.basis.plane.swapped",
+      space: plane,
+      vectors: [[1, 0] as Vec2, [0, 1] as Vec2] as const,
+      coordinates: (value) => [value[1]!, value[0]!] as const,
+      fromCoordinates: (coordinates) => [
+        coordinates[1]!,
+        coordinates[0]!
+      ] as const,
+      coordinateIsomorphism: evidence
+    }),
+    /vector 0 has invalid coordinates/
   );
 });
