@@ -1,4 +1,18 @@
 export {
+  add,
+  constant,
+  cos,
+  divide,
+  multiply,
+  negate,
+  power,
+  sin,
+  variable,
+  type MathExpression,
+  type NumericScope
+} from "../expression.ts";
+
+export {
   composeKpFunctionSignatures,
   createKpScalarExpression,
   createKpScalarParameter,

@@ -35,11 +35,32 @@
       "scope": "slice 1 facade type closure",
       "checkedAt": "2026-09-02T15:37:14.633Z",
       "notes": "Both tsconfig.app and tsconfig.test pass."
+    },
+    {
+      "command": "tsc --project tsconfig.inference.json --noEmit",
+      "status": "passed",
+      "scope": "slice 2 public authoring consumer contract",
+      "checkedAt": "2026-09-02T15:42:31.700Z",
+      "notes": "Positive and expected-negative public API inference cases compile."
+    },
+    {
+      "command": "npm run measure:inference-attribution",
+      "status": "passed",
+      "scope": "slice 2 marginal inference attribution",
+      "checkedAt": "2026-09-02T15:42:32.749Z",
+      "notes": "The typed math consumer adds 3,962 types and 6,258 instantiations over the library baseline, below the existing animation public API fixture; overall red ceiling is inherited from the native-KaTeX fixture and stale global baseline."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "pre-existing repository-wide frozen ceiling",
+      "checkedAt": "2026-09-02T15:42:33.768Z",
+      "notes": "Current overall is 94,851 types and 154,909 instantiations against stale 55,000/75,000 ceilings; project history already recorded roughly 92k/149k before this facade, and no ceiling was raised."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice 1 complete: added explicit core, calculus, optics, bounded-LaTeX, and scene authoring entrypoints with exact runtime export inventory tests."
+    "summary": "Slice 2 complete: consumer-only fixture authors affine Jacobian, quadratic Hessian, optics, LaTeX recovery, and scene lookup through promoted entrypoints; static negative cases remain enforced."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",

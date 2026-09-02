@@ -18,17 +18,26 @@ const entrypoints = [
 
 test("typed math authoring entrypoints expose exact runtime inventories", () => {
   assert.deepEqual(Object.keys(core).sort(), [
+    "add",
     "composeKpFunctionSignatures",
+    "constant",
+    "cos",
     "createKpScalarExpression",
     "createKpScalarParameter",
     "createKpTypedEquation",
     "createKpTypedMatrix",
     "createKpTypedVector",
     "defineKpTypedFunction",
+    "divide",
     "evaluateKpTypedMatrix",
     "isKpTypedVectorFunction",
+    "multiply",
     "multiplyKpTypedMatrices",
-    "projectKpTypedMathToLatex"
+    "negate",
+    "power",
+    "projectKpTypedMathToLatex",
+    "sin",
+    "variable"
   ]);
   assert.deepEqual(Object.keys(calculus).sort(), [
     "deriveKpHessian",
