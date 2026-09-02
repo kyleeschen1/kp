@@ -2,11 +2,11 @@
 
 Status: bounded domain pressure complete; API promotion checkpoint
 Last Updated: 2026-09-02
-Current Next Action: review the bounded supply-demand pressure findings in
-`../reviews/2026-09-02-typed-semantic-authoring-ergonomics-closeout.md` and
-decide whether a second non-economics unit-scalar caller should test one local
-builder. Do not promote an economics ontology, unit algebra, or renderer path
-from this single caller.
+Current Next Action: approve or revise the ordered sequence in
+`../reviews/2026-09-02-typed-authoring-post-domain-pressure-next-step-review.md`.
+The recommendation is to restore the two known broad gates, add one isolated
+nonlinear `radius -> area` unit-scalar caller, and make the helper decision from
+the resulting comparison before reconciling or rendering the economics model.
 
 ## Goal
 
@@ -279,6 +279,14 @@ The current public names and pack split need no revision from this evidence.
 The experiment reaches the internal differentiable-map constructor, but that
 alone does not justify widening the authoring facade. A second caller must
 demonstrate the same burden before promotion.
+
+The proposed post-pressure sequence is recorded in
+`../reviews/2026-09-02-typed-authoring-post-domain-pressure-next-step-review.md`.
+It places the existing private-clock inventory and stale global-inference
+baseline repairs first, then uses a nonlinear circle-area caller to decide
+whether one optional unit-aware scalar-map builder is real. Any visible market
+inspector follows explicit parity with the canonical exact-rational supply-tax
+model so the project retains one economics source of truth.
 
 ## Stop Conditions
 

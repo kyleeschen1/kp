@@ -61,7 +61,9 @@ being carried forward outside this Codex thread. The Focus Deck experiment is
 preserved at its four-card human checkpoint. The typed semantic authoring
 facade completed its approved ergonomics and algebraic-representation loop and
 one bounded supply-demand pressure caller; it now waits at an API promotion
-checkpoint. The internal
+checkpoint with an ordered post-pressure proposal: restore the two known broad
+health gates, add one nonlinear non-economics unit-map caller, and decide from
+that evidence whether one optional helper is warranted. The internal
 Animation Catalogue remains the source and pressure lab rather than the active
 product surface. Neither proof by itself validates demand or selects a
 universal learner layout or semantic model.
@@ -411,6 +413,7 @@ Only this repository sequence is active:
    decision. A full supply-demand pack, public algebra hierarchy, general CAS
    work, broad construct generation, animation reparameterization, and Article
    grammar changes remain out of scope. See
+   `reviews/2026-09-02-typed-authoring-post-domain-pressure-next-step-review.md`,
    `decisions/2026-09-02-typed-semantic-authoring-framework-goals.md` and
    `threads/typed-semantic-authoring-framework.md`.
 
