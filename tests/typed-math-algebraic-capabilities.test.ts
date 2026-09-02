@@ -39,6 +39,10 @@ import {
   createKpDifferentiableMap,
   createKpDifferentiableMapRequiredGap
 } from "../src/math/algebra/differentiable-map.ts";
+import {
+  createKpSecondDerivativeMap,
+  createKpSecondDerivativeRequiredGap
+} from "../src/math/algebra/second-derivative-map.ts";
 
 test("semantic spaces retain deterministic nominal identity and dimensions", () => {
   const quantity = defineKpSemanticSpace<number>()({
@@ -681,5 +685,84 @@ test("differentiable maps reject false derivative authority and expose gaps", ()
     requirement: "derivativeAt",
     message: "Source kp.function.opaque has no declared coordinate-free derivative.",
     repair: "Supply a differentiable-map adapter with an explicit derivativeAt map."
+  });
+});
+
+test("scalar second derivatives are bounded bilinear maps", () => {
+  const domain = createKpStandardScalarSpace({
+    id: "kp.space.second-derivative.domain"
+  });
+  const codomain = createKpStandardScalarSpace({
+    id: "kp.space.second-derivative.codomain"
+  });
+  const evidence = {
+    kind: "tested" as const,
+    suiteId: "kp.test.second-derivative.quadratic-bilinearity",
+    equalityId: codomain.vectors.equality.id
+  };
+  const secondDerivative = createKpSecondDerivativeMap({
+    id: "kp.second-derivative.quadratic.at-3",
+    domain,
+    codomain,
+    apply: (left, right) => 2 * left * right,
+    leftLinearity: evidence,
+    rightLinearity: evidence,
+    sourceFunctionIds: ["kp.function.quadratic"]
+  });
+  const scalars = domain.scalars;
+
+  assert.equal(secondDerivative.apply(4, 5), 40);
+  assert.equal(
+    secondDerivative.apply(domain.vectors.add(2, 3), 7),
+    codomain.vectors.add(
+      secondDerivative.apply(2, 7),
+      secondDerivative.apply(3, 7)
+    )
+  );
+  assert.equal(
+    secondDerivative.apply(4, domain.scale(3, 2)),
+    codomain.scale(scalars.multiply(3, scalars.one),
+      secondDerivative.apply(4, 2))
+  );
+  assert.equal(secondDerivative.leftLinearity.kind, "tested");
+  assert.deepEqual(secondDerivative.sourceFunctionIds, ["kp.function.quadratic"]);
+  assert.equal(Object.isFrozen(secondDerivative), true);
+});
+
+test("second derivative evidence is explicit and missing capability is a gap", () => {
+  const domain = createKpStandardScalarSpace({
+    id: "kp.space.second-derivative.validation-domain"
+  });
+  const codomain = createKpStandardScalarSpace({
+    id: "kp.space.second-derivative.validation-codomain"
+  });
+
+  assert.throws(
+    () => createKpSecondDerivativeMap({
+      id: "kp.second-derivative.invalid-evidence",
+      domain,
+      codomain,
+      apply: (left, right) => left * right,
+      leftLinearity: {
+        kind: "tested",
+        suiteId: "kp.test.second-derivative.invalid",
+        equalityId: "kp.equality.unrelated"
+      },
+      rightLinearity: {
+        kind: "proved",
+        authorityId: "kp.math.second-derivative.right-linearity.v1"
+      }
+    }),
+    /left linearity must use equality/
+  );
+  assert.deepEqual(createKpSecondDerivativeRequiredGap({
+    sourceId: "kp.function.once-differentiable"
+  }), {
+    status: "repair-required",
+    code: "kp.calculus.second-derivative-required",
+    sourceId: "kp.function.once-differentiable",
+    requirement: "secondDerivativeAt",
+    message: "Source kp.function.once-differentiable has no declared second derivative.",
+    repair: "Supply a scalar-function adapter with an explicit second derivative."
   });
 });

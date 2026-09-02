@@ -128,7 +128,8 @@
     {
       "id": "s13",
       "title": "second-derivative-map",
-      "status": "planned"
+      "summary": "Bounded scalar second derivatives are explicit bilinear maps with evidence and semantic-space safety; focused, inference, and standard checks pass without tensor expansion.",
+      "status": "complete"
     },
     {
       "id": "s14",

@@ -189,11 +189,30 @@
       "status": "passed",
       "scope": "slice-s12-standard",
       "checkedAt": "2026-09-02T21:23:48.441Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-math-algebraic-capabilities.test.ts",
+      "status": "passed",
+      "scope": "slice-s13-focused",
+      "checkedAt": "2026-09-02T21:27:44.514Z",
+      "notes": "17 capability tests passed, including bilinearity checks, evidence rejection, and second-derivative gap."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.inference.json --noEmit",
+      "status": "passed",
+      "scope": "slice-s13-inference",
+      "checkedAt": "2026-09-02T21:27:45.712Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s13-standard",
+      "checkedAt": "2026-09-02T21:27:46.755Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s12 adapts expression-backed vector functions through the existing Jacobian derivation, with explicit semantic spaces and no second differentiation rule set."
+    "summary": "Slice s13 adds only the bilinear second-derivative-at-a-point value, explicit left/right linearity evidence, semantic typing, and a missing-capability gap."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",
