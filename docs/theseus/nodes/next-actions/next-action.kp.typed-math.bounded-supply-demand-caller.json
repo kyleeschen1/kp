@@ -1,0 +1,83 @@
+{
+  "id": "next-action.kp.typed-math.bounded-supply-demand-caller",
+  "kind": "next-action",
+  "title": "Pressure typed authoring with bounded supply-demand scenarios",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "Bounded supply-demand pressure is complete at the API promotion checkpoint; no renderer integration or shared economics ontology was introduced.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-02-typed-semantic-authoring-ergonomics-closeout.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-linear-supply-demand-pressure.test.ts",
+      "status": "passed",
+      "scope": "bounded-domain",
+      "checkedAt": "2026-09-02T23:35:48.198Z",
+      "notes": "5 tests pass: curves, unit-safe derivatives, neutral imports, tax/floor welfare, deterministic recovery."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning scripts/check-typed-math-authoring-inference.ts",
+      "status": "passed",
+      "scope": "typed-math-inference",
+      "checkedAt": "2026-09-02T23:35:49.442Z",
+      "notes": "Six fixtures pass at 34,176 types and 40,254 instantiations under narrow ceilings."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository-types",
+      "checkedAt": "2026-09-02T23:35:50.478Z",
+      "notes": "Application, node, test, Svelte, and domain typechecks pass with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "production-bundle",
+      "checkedAt": "2026-09-02T23:35:51.504Z",
+      "notes": "Publication check and production bundle pass; the experiment has no public route."
+    },
+    {
+      "command": "npm run check:dependency-direction",
+      "status": "passed",
+      "scope": "architecture-boundary",
+      "checkedAt": "2026-09-02T23:35:52.561Z",
+      "notes": "Dependency direction passes with zero exceptions."
+    },
+    {
+      "command": "npm run check:framework-neutral-entrypoints",
+      "status": "passed",
+      "scope": "architecture-boundary",
+      "checkedAt": "2026-09-02T23:35:53.624Z",
+      "notes": "Framework-neutral entrypoint gate passes."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "failed",
+      "scope": "diagnostic-broad",
+      "checkedAt": "2026-09-02T23:35:54.728Z",
+      "notes": "Stops on the previously preserved Focus Deck log-exponent private-clock inventory gap; no failure names the new caller."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "diagnostic-broad",
+      "checkedAt": "2026-09-02T23:35:55.825Z",
+      "notes": "The stale repository-wide budget records 21 fixtures while 30 now compile; focused typed-math inference passes and this slice does not rebaseline the unrelated global ceiling."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "control-plane",
+      "checkedAt": "2026-09-02T23:36:19.002Z",
+      "notes": "Validated 1,079 nodes and 26,366 events after resolving the bounded caller."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Implemented one experimental renderer-free linear market with typed affine curves and immutable baseline, seller-tax, and price-floor snapshots. Unit and rationing failures are explicit; focused tests, inference, typecheck, bundle, and boundary gates pass. Recorded repeated unit-map plumbing for second-caller review without promotion."
+  }
+}

@@ -1,11 +1,12 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: human API checkpoint; ergonomics long loop complete
+Status: bounded domain pressure complete; API promotion checkpoint
 Last Updated: 2026-09-02
-Current Next Action: review the public names, call shape, and promotion choices
-in `../reviews/2026-09-02-typed-semantic-authoring-ergonomics-closeout.md`.
-Choose accept, request a bounded API revision, or roll back the facade before
-an economics caller or broader promotion begins.
+Current Next Action: review the bounded supply-demand pressure findings in
+`../reviews/2026-09-02-typed-semantic-authoring-ergonomics-closeout.md` and
+decide whether a second non-economics unit-scalar caller should test one local
+builder. Do not promote an economics ontology, unit algebra, or renderer path
+from this single caller.
 
 ## Goal
 
@@ -241,6 +242,43 @@ The implementation and review recommendation are recorded in
 No economics hierarchy, Article integration, renderer work, runtime animation
 reparameterization, general CAS, public HKT/typeclass hierarchy, or broad
 generator catalogue was authorized or implemented.
+
+## Bounded Domain Pressure Outcome
+
+The user accepted the checkpoint recommendation, and commit `189e14a9a`
+implements one experimental, renderer-free linear supply-demand caller. A
+single author declaration produces typed demand and supply curves, semantic
+quantity and price spaces, coordinate-free `dP/dQ` maps, stable identities,
+and immutable baseline, seller-tax, and price-floor snapshots. The snapshots
+derive equilibrium quantity, buyer and seller prices, shortage or surplus,
+consumer and producer surplus, government revenue, deadweight loss, and total
+surplus. A binding floor must state its efficient-lowest-cost rationing
+assumption; the implementation does not silently choose one.
+
+The pressure supports the existing direction:
+
+- the standard authoring context and unit descriptors keep the ordinary market
+  declaration concise while preserving exact unit-ID inference;
+- policy changes are immutable inputs whose full derived snapshots can be
+  recovered directly without replaying animation;
+- the domain formulas remain small, explicit, and independently testable, so
+  no CAS or generic economics solver is justified; and
+- no renderer, Graph2D, Article, animation, registry, or public facade import
+  enters the experiment.
+
+It also exposes two bounded friction points. A domain implementer still repeats
+unit-tagged scalar-space construction, differentiable-map and linear-map
+wrapping, law evidence, and runtime unit guards. The welfare unit must be
+declared rather than derived from price and quantity. Do not solve either by
+adding a universal unit algebra or public typeclass hierarchy. If a
+structurally different domain caller repeats the first cluster, test one local
+unit-aware scalar-map builder. Treat derived unit products as a separate,
+explicitly scoped decision.
+
+The current public names and pack split need no revision from this evidence.
+The experiment reaches the internal differentiable-map constructor, but that
+alone does not justify widening the authoring facade. A second caller must
+demonstrate the same burden before promotion.
 
 ## Stop Conditions
 

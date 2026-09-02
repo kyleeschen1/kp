@@ -58,9 +58,10 @@ budgets, and a native catalogue.
 
 Educator product discovery remains the next product-validation gate and is
 being carried forward outside this Codex thread. The Focus Deck experiment is
-preserved at its four-card human checkpoint while the approved typed semantic
-authoring facade has a 28-slice ergonomics and algebraic-representation proposal
-waiting for explicit approval. The internal
+preserved at its four-card human checkpoint. The typed semantic authoring
+facade completed its approved ergonomics and algebraic-representation loop and
+one bounded supply-demand pressure caller; it now waits at an API promotion
+checkpoint. The internal
 Animation Catalogue remains the source and pressure lab rather than the active
 product surface. Neither proof by itself validates demand or selects a
 universal learner layout or semantic model.
@@ -110,7 +111,8 @@ through binding, one canonical native RHS owns the fraction from instantiation
 through settlement, and existing ink knots retain reduction authority. This is
 an exemplar checkpoint, not a shared-family promotion or the active lane. The
 Focus Deck projection and flashcards remain preserved sibling projections
-while the typed semantic authoring facade waits at its API checkpoint. See
+while the typed semantic authoring facade waits at its post-domain-pressure
+API checkpoint. See
 `decisions/2026-08-29-focus-deck-initial-portable-figure-priority.md`,
 `decisions/2026-08-25-rule-application-visual-grammar.md`.
 See
@@ -381,9 +383,9 @@ Only this repository sequence is active:
    catalogue migration. See
    `decisions/2026-08-29-focus-deck-initial-portable-figure-priority.md` and
    `decisions/2026-09-01-focus-deck-shared-shell-log-exponent-pressure.md`.
-41. **Typed semantic authoring proof:** narrow facade implemented; a 28-slice
-   ergonomics and algebraic-representation loop is proposed and awaiting
-   explicit approval under
+41. **Typed semantic authoring and bounded domain pressure:** complete at an
+   API promotion checkpoint. The approved 28-slice ergonomics and
+   algebraic-representation loop is recorded under
    `reviews/2026-09-02-typed-semantic-authoring-ergonomics-long-loop-proposal.md`.
    The prior facade checkpoint is recorded in
    `reviews/2026-09-02-typed-semantic-authoring-next-step-review.md`. The
@@ -396,14 +398,19 @@ Only this repository sequence is active:
    steps. Focused tests, repository-wide typechecks, and the production bundle
    pass. Import-tiered core and optional authoring entrypoints now have an
    exact export inventory, consumer-only inference proof, and realized
-   production-bundle closure guard. The proposed successor keeps matrices as
-   compatible finite-dimensional representations, tests internal linear-map,
-   basis, and law-evidence capabilities, and requires at least 50 percent less
-   applicable author setup before a unit-tagged economics pressure caller. Do
-   not create its Theseus contract before approval. A full linear
-   supply-demand pack, public algebra hierarchy, general CAS work, broad
-   construct generation, animation reparameterization, and Article grammar
-   changes remain out of scope. See
+   production-bundle closure guard. The completed successor keeps matrices as
+   compatible finite-dimensional representations, provides coordinate-free
+   linear and bounded bilinear maps with explicit law evidence, and reduces
+   the measured ordinary authoring setup by more than 50 percent. One
+   experimental linear supply-demand caller now derives immutable baseline,
+   seller-tax, and price-floor snapshots with unit-safe `dP/dQ`, stable source
+   identity, welfare results, and an explicit floor-rationing assumption. It
+   has no renderer, Article, Graph2D, animation, registry, or public facade
+   integration. A second non-economics unit-scalar caller is required before
+   considering one local map builder; derived unit products require a separate
+   decision. A full supply-demand pack, public algebra hierarchy, general CAS
+   work, broad construct generation, animation reparameterization, and Article
+   grammar changes remain out of scope. See
    `decisions/2026-09-02-typed-semantic-authoring-framework-goals.md` and
    `threads/typed-semantic-authoring-framework.md`.
 

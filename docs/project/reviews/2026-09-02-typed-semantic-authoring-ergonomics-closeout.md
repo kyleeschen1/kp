@@ -1,13 +1,17 @@
 # Typed Semantic Authoring Ergonomics Closeout
 
 Date: 2026-09-02
-Status: HUMAN_CHECKPOINT
+Status: ACCEPTED; BOUNDED DOMAIN PRESSURE COMPLETE
 Run: `run-contract.kp.typed-semantic-authoring-ergonomics-v2`
 Source proposal:
 `2026-09-02-typed-semantic-authoring-ergonomics-long-loop-proposal.md`
 Active thread: `../threads/typed-semantic-authoring-framework.md`
 
 ## Recommendation
+
+Accepted by the user on 2026-09-02 and implemented as the bounded pressure
+described below. The current recommendation is to keep the result experimental
+and require a structurally different caller before promoting another helper.
 
 Accept the architecture and ergonomic direction for one bounded domain caller,
 but review the public names and call shape before declaring the new algebraic
@@ -17,10 +21,11 @@ authoring contexts, bounded construct descriptors, and import-on-demand packs.
 It does not support a public universal typeclass hierarchy, a full economics
 ontology, a broad generator, Article syntax, or a CAS.
 
-The smallest useful next step after human approval is a test-owned or
+The smallest useful next step after human approval was a test-owned or
 experimental linear supply-demand caller with one tax and one price-floor
-scenario. That caller should decide whether any remaining authoring friction
-justifies another helper and which domain protocols are genuinely shared.
+scenario. That caller was intended to decide whether any remaining authoring
+friction justified another helper and which domain protocols were genuinely
+shared.
 
 ## Outcome Against The Contract
 
@@ -35,7 +40,7 @@ justifies another helper and which domain protocols are genuinely shared.
 | Honest missing capability behavior | Basis, inner-product, space, unit, and static-shape omissions return typed repair gaps rather than manufactured authority. |
 | Import-on-demand closure | Core excludes optional algebra implementations, LaTeX, optics, scene, domain, Article, and renderer modules. |
 | Bounded TypeScript cost | Five representative fixtures pass at 32,313 types and 34,388 instantiations under local ceilings of 34,000 and 37,000. |
-| Stop before broad promotion | This document is the required checkpoint; no post-checkpoint implementation occurred. |
+| Stop before broad promotion | The long loop stopped here; the user then explicitly approved only the bounded experimental domain caller. |
 
 The ergonomic consumer is cheaper than the compatibility consumer in isolated
 inference: 3,336 versus 5,187 types above the library baseline, and 5,511
@@ -137,7 +142,42 @@ Suggested dispositions are:
 - **Rollback:** revert the ergonomic facade as a unit while retaining the
   compatibility characterization and architectural findings.
 
-## Verification
+## Post-Checkpoint Bounded Domain Pressure
+
+Commit `189e14a9a` implements the accepted recommendation without broadening
+the public surface. The experimental caller defines affine demand and supply,
+derives semantic `dP/dQ` linear maps, and evaluates immutable baseline,
+per-unit seller-tax, and price-floor scenarios. Stable snapshot IDs and source
+IDs make every scenario result directly recoverable. Taxes preserve separate
+buyer and seller prices; floors expose demanded, supplied, traded, shortage,
+and surplus quantities and require an explicit efficient-lowest-cost rationing
+assumption before producer surplus is calculated.
+
+The author-facing declaration retains exact quantity, price, and welfare unit
+IDs. Compile-time fixtures reject a quantity supplied as a price wedge and a
+price floor without rationing. Runtime guards reject cast-through unit errors.
+The scenario formulas remain hand-authored domain truth; no symbolic solver,
+generic economics hierarchy, renderer, Article grammar, Graph2D adapter,
+animation path, or registry was introduced.
+
+This caller does not justify another public abstraction yet. It found a real
+implementation burden around constructing unit-tagged scalar spaces, wrapping
+unit functions as differentiable maps and linear derivatives, attaching law
+evidence, and repeating runtime unit guards. It also requires authors to
+declare the welfare unit because the current unit pack does not derive product
+units. The next defensible pressure is one structurally different unit-scalar
+domain caller. If that repeats the map-wrapping burden, test one local
+unit-aware scalar-map builder; evaluate derived unit products separately.
+
+The focused typed-math inference contract now includes six fixtures and passes
+at 34,176 types and 40,254 instantiations under ceilings of 36,000 and 43,000.
+Repository-wide typecheck and the production bundle pass. Dependency-direction
+and framework-neutral entrypoint gates pass. The aggregate architecture check
+still stops at the previously preserved Focus Deck private-clock inventory
+gap, and the stale repository-wide inference ceiling still reflects 21 rather
+than the current 30 fixtures; neither unrelated baseline was waived or raised.
+
+## Original Run Verification
 
 - 71 focused typed-math, optics, LaTeX, scene, facade, inference, and pressure
   tests pass.
