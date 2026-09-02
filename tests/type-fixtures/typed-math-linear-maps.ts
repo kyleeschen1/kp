@@ -9,6 +9,7 @@ import {
   createKpLinearMap
 } from "../../src/math/algebra/linear-map.ts";
 import { defineKpSemanticSpace } from "../../src/math/algebra/semantic-space.ts";
+import { createKpDifferentiableMap } from "../../src/math/algebra/differentiable-map.ts";
 
 const scalarEquality = createKpEquality<number>({
   id: "kp.equality.fixture.scalar",
@@ -96,4 +97,20 @@ composeKpLinearMaps({
   inner: quantityToPrice,
   // @ts-expect-error Quantity and price are distinct intermediate spaces.
   outer: quantityToRevenue
+});
+
+createKpDifferentiableMap({
+  id: "kp.function.fixture.valid-derivative",
+  domain: quantity,
+  codomain: price,
+  evaluate: (value) => 2 * value,
+  derivativeAt: () => quantityToPrice
+});
+createKpDifferentiableMap({
+  id: "kp.function.fixture.invalid-derivative",
+  domain: quantity,
+  codomain: price,
+  evaluate: (value) => 2 * value,
+  // @ts-expect-error A derivative must preserve the declared semantic spaces.
+  derivativeAt: () => quantityToRevenue
 });

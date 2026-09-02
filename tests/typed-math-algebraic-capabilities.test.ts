@@ -35,6 +35,10 @@ import {
   applyKpMatrixRepresentation,
   representKpLinearMap
 } from "../src/math/algebra/matrix-representation.ts";
+import {
+  createKpDifferentiableMap,
+  createKpDifferentiableMapRequiredGap
+} from "../src/math/algebra/differentiable-map.ts";
 
 test("semantic spaces retain deterministic nominal identity and dimensions", () => {
   const quantity = defineKpSemanticSpace<number>()({
@@ -596,4 +600,86 @@ test("matrix representations reject a basis from another semantic space", () => 
     }),
     /domain basis must belong to kp.space.matrix.expected-domain/
   );
+});
+
+test("differentiable maps return coordinate-free linear derivatives", () => {
+  const domain = createKpStandardScalarSpace({
+    id: "kp.space.differentiable.domain"
+  });
+  const codomain = createKpStandardScalarSpace({
+    id: "kp.space.differentiable.codomain"
+  });
+  const square = createKpDifferentiableMap({
+    id: "kp.function.differentiable.square",
+    domain,
+    codomain,
+    evaluate: (value) => value ** 2,
+    derivativeAt: (at) => createKpLinearMap({
+      id: `kp.derivative.differentiable.square.at.${at}`,
+      domain,
+      codomain,
+      apply: (tangent) => 2 * at * tangent,
+      linearity: {
+        kind: "proved",
+        authorityId: "kp.math.derivative.square-linearity.v1"
+      }
+    })
+  });
+
+  assert.equal(square.evaluate(3), 9);
+  assert.equal(square.derivativeAt(3).apply(4), 24);
+  assert.equal(square.derivativeAt(3).domain.space.id, domain.space.id);
+  assert.equal(square.derivativeAt(3).codomain.space.id, codomain.space.id);
+  assert.equal(square.derivativeAt(3).linearity.kind, "proved");
+  assert.equal(Object.isFrozen(square), true);
+});
+
+test("differentiable maps reject false derivative authority and expose gaps", () => {
+  const domain = createKpStandardScalarSpace({
+    id: "kp.space.differentiable.expected-domain"
+  });
+  const wrongDomain = createKpStandardScalarSpace({
+    id: "kp.space.differentiable.wrong-domain"
+  });
+  const codomain = createKpStandardScalarSpace({
+    id: "kp.space.differentiable.expected-codomain"
+  });
+  const invalid = createKpDifferentiableMap({
+    id: "kp.function.differentiable.invalid",
+    domain,
+    codomain,
+    evaluate: (value) => value,
+    derivativeAt: () => createKpLinearMap({
+      id: "kp.derivative.differentiable.invalid",
+      domain: wrongDomain,
+      codomain,
+      apply: (value) => value,
+      linearity: {
+        kind: "tested",
+        suiteId: "kp.test.derivative.differentiable.invalid",
+        equalityId: codomain.vectors.equality.id
+      }
+    }) as unknown as ReturnType<typeof createKpLinearMap<
+      number,
+      number,
+      number,
+      "kp.space.differentiable.expected-domain",
+      "kp.space.differentiable.expected-codomain"
+    >>
+  });
+
+  assert.throws(
+    () => invalid.derivativeAt(2),
+    /derivative domain must be kp.space.differentiable.expected-domain/
+  );
+  assert.deepEqual(createKpDifferentiableMapRequiredGap({
+    sourceId: "kp.function.opaque"
+  }), {
+    status: "repair-required",
+    code: "kp.calculus.differentiable-map-required",
+    sourceId: "kp.function.opaque",
+    requirement: "derivativeAt",
+    message: "Source kp.function.opaque has no declared coordinate-free derivative.",
+    repair: "Supply a differentiable-map adapter with an explicit derivativeAt map."
+  });
 });

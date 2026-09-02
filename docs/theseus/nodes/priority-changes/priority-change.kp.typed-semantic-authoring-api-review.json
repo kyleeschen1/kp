@@ -157,11 +157,30 @@
       "scope": "slice-s10-broad",
       "checkedAt": "2026-09-02T21:15:24.525Z",
       "notes": "Application, node, tests, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-math-algebraic-capabilities.test.ts",
+      "status": "passed",
+      "scope": "slice-s11-focused",
+      "checkedAt": "2026-09-02T21:19:09.260Z",
+      "notes": "15 algebraic capability tests passed, including coordinate-free derivative and typed-gap cases."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.inference.json --noEmit",
+      "status": "passed",
+      "scope": "slice-s11-inference",
+      "checkedAt": "2026-09-02T21:19:10.478Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s11-standard",
+      "checkedAt": "2026-09-02T21:19:11.567Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s10 added an explicit basis-aware representation adapter while preserving legacy matrix construction and promoted signatures."
+    "summary": "Slice s11 defines coordinate-free differentiable maps, validates derivative semantic spaces, and exposes an explicit missing-capability repair gap."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",
