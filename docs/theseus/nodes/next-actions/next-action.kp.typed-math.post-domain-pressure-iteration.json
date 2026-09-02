@@ -23,6 +23,18 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-09-02T23:50:28.739Z"
+    },
+    {
+      "command": "npm run measure:inference-attribution",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-02T23:55:31.208Z"
+    },
+    {
+      "command": "npm run verify:impact -- --path src/architecture/typescript-inference-budget.ts --path tests/typescript-inference-budget.test.ts --run",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-02T23:55:36.442Z"
     }
   ],
   "progress": {

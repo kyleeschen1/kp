@@ -9,7 +9,7 @@ test("inference ceilings retain measured, narrow structural headroom", () => {
   assert.ok(ceilings.instantiations > measuredProject.instantiations);
   assert.ok(ceilings.types / measuredProject.types < 1.05);
   assert.ok(ceilings.instantiations / measuredProject.instantiations < 1.08);
-  assert.equal(typescriptInferenceBudget.fixtureCount, 21);
+  assert.equal(typescriptInferenceBudget.fixtureCount, 30);
 
   const config = JSON.parse(readFileSync("tsconfig.inference.json", "utf8")) as {
     readonly compilerOptions?: { readonly skipLibCheck?: boolean };
@@ -22,7 +22,8 @@ test("owner-local inference laws avoid broad public barrels", () => {
     ["concept-room-theme-inference.ts", "../../src/app-adapters/concept-room-theme.ts"],
     ["concept-room-inference.ts", "../../src/authoring/handles.ts"],
     ["concept-manifest-inference.ts", "../../src/authoring/concept-manifest.ts"],
-    ["concept-room-state-inference.ts", "../../src/kernel/concept-room-state.ts"]
+    ["concept-room-state-inference.ts", "../../src/kernel/concept-room-state.ts"],
+    ["native-katex-executable-scene.ts", "../../src/rendering/native-katex-scene-compositor.ts"]
   ]);
 
   for (const [fixture, owner] of imports) {
