@@ -110,7 +110,8 @@
     {
       "id": "s10",
       "title": "matrix-compatibility-adapter",
-      "status": "planned"
+      "summary": "Basis-aware representations adapt to promoted typed matrices with frozen authority metadata; legacy matrices remain unchanged and all focused, inference, and broad checks pass.",
+      "status": "complete"
     },
     {
       "id": "s11",

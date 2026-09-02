@@ -98,6 +98,18 @@ export interface KpTypedMatrix<
   readonly rowCount: Rows;
   readonly columnCount: Columns;
   readonly rows: readonly (readonly KpScalarValue[])[];
+  /** Basis authority is present only when a matrix was projected from a map. */
+  readonly representation?: KpTypedMatrixRepresentationRef | undefined;
+}
+
+export interface KpTypedMatrixRepresentationRef {
+  readonly kind: "matrix-representation-ref";
+  readonly id: string;
+  readonly sourceMapId: string;
+  readonly domainSpaceId: string;
+  readonly codomainSpaceId: string;
+  readonly domainBasisId: string;
+  readonly codomainBasisId: string;
 }
 
 export type KpTypedMathValue =
@@ -285,6 +297,7 @@ export function createKpTypedMatrix<
   readonly id: string;
   readonly rows: Rows & RowsWithLength<Rows, Rows[0]["length"]>;
   readonly provenance?: KpMathProvenance | undefined;
+  readonly representation?: KpTypedMatrixRepresentationRef | undefined;
 }): KpTypedMatrix<Rows["length"], Rows[0]["length"]> {
   requireText(input.id, "Typed matrix id");
   const columnCount = input.rows[0].length as Rows[0]["length"];
@@ -299,7 +312,8 @@ export function createKpTypedMatrix<
     input.rows.length as Rows["length"],
     columnCount,
     input.rows,
-    input.provenance ?? authored(input.id)
+    input.provenance ?? authored(input.id),
+    input.representation
   );
 }
 
@@ -308,6 +322,7 @@ export function createKpTypedMatrixFromRows(input: {
   readonly id: string;
   readonly rows: readonly (readonly KpScalarValue[])[];
   readonly provenance?: KpMathProvenance | undefined;
+  readonly representation?: KpTypedMatrixRepresentationRef | undefined;
 }): KpTypedMatrix {
   requireText(input.id, "Typed matrix id");
   const firstRow = input.rows[0];
@@ -326,7 +341,8 @@ export function createKpTypedMatrixFromRows(input: {
     input.rows.length,
     firstRow.length,
     input.rows,
-    input.provenance ?? authored(input.id)
+    input.provenance ?? authored(input.id),
+    input.representation
   );
 }
 
@@ -423,7 +439,8 @@ export function rebuildKpTypedMatrix<Rows extends number, Columns extends number
     input.source.rowCount,
     input.source.columnCount,
     input.rows,
-    input.provenance ?? input.source.provenance
+    input.provenance ?? input.source.provenance,
+    input.source.representation
   );
 }
 
@@ -694,7 +711,8 @@ function createMatrixValue<Rows extends number, Columns extends number>(
   rowCount: Rows,
   columnCount: Columns,
   rows: readonly (readonly KpScalarValue[])[],
-  provenance: KpMathProvenance
+  provenance: KpMathProvenance,
+  representation?: KpTypedMatrixRepresentationRef | undefined
 ): KpTypedMatrix<Rows, Columns> {
   return deepFreeze({
     id,
@@ -707,7 +725,8 @@ function createMatrixValue<Rows extends number, Columns extends number>(
       rows: rowCount,
       columns: columnCount
     },
-    provenance
+    provenance,
+    ...(representation === undefined ? {} : { representation })
   });
 }
 

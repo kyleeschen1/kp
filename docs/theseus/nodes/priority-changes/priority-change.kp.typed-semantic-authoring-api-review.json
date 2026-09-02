@@ -137,11 +137,31 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-09-02T21:09:37.713Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test typed matrix compatibility and existing typed math suites",
+      "status": "passed",
+      "scope": "slice-s10-focused",
+      "checkedAt": "2026-09-02T21:15:22.230Z",
+      "notes": "13 focused compatibility, import-closure, and typed-math tests passed."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.inference.json --noEmit",
+      "status": "passed",
+      "scope": "slice-s10-inference",
+      "checkedAt": "2026-09-02T21:15:23.429Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s10-broad",
+      "checkedAt": "2026-09-02T21:15:24.525Z",
+      "notes": "Application, node, tests, Svelte, and domain typechecks passed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s09 added basis-aware matrix representations that retain source-map identity, reject bases from other semantic spaces, and agree with direct map application."
+    "summary": "Slice s10 added an explicit basis-aware representation adapter while preserving legacy matrix construction and promoted signatures."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",
