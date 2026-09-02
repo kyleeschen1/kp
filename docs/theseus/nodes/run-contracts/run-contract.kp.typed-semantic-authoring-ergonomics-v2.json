@@ -194,7 +194,8 @@
     {
       "id": "s24",
       "title": "two-basis-affine-pressure",
-      "status": "planned"
+      "summary": "The two-basis proof confirms coordinate-free maps are primary and matrices are basis-tagged representations; focused, inference, and standard checks pass.",
+      "status": "complete"
     },
     {
       "id": "s25",
