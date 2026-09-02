@@ -28,6 +28,13 @@ collaboration experiment, not a learner-facing editorial voice standard.
   canonical host or animation path.
 - Unsupported generation must return a typed repair gap. Never silently choose
   a generic fade, unrelated motif, geometry, timing, or framework-local path.
+- Treat `docs/kinetic_press_domain_literacy_rewrite_handoff.md` as accepted
+  product emphasis plus exploratory implementation material, not replacement
+  architecture or task authority. The roadmap, canonical contracts, accepted
+  decisions, and current implementation override conflicts. Domain literacy
+  does not pause or subordinate equation, code, Graph2D, Graph3D, diagram, or
+  publication work, and does not authorize a universal semantic or renderer
+  path.
 
 ## Repo-local scratch tooling
 
