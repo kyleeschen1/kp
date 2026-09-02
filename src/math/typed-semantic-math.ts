@@ -48,6 +48,13 @@ export type KpMathProvenance =
       sourceId: string;
     }>
   | Readonly<{
+      kind: "parsed";
+      sourceId: string;
+      startOffset: number;
+      endOffset: number;
+      revisionId?: string | undefined;
+    }>
+  | Readonly<{
       kind: "derived";
       sourceIds: readonly string[];
       methodId: string;
@@ -116,6 +123,14 @@ export interface KpTypedFunction<
   readonly output: Output;
   readonly type: KpFunctionType<ParameterTypes<Parameters>, Output["type"]>;
   readonly provenance: KpMathProvenance;
+}
+
+export function isKpTypedVectorFunction<
+  Parameters extends readonly KpScalarParameter[]
+>(
+  value: KpTypedFunction<Parameters, KpTypedMathValue>
+): value is KpTypedFunction<Parameters, KpTypedVector> {
+  return value.output.kind === "typed-vector";
 }
 
 export interface KpTypedEquation<
@@ -218,13 +233,49 @@ export function createKpTypedVector<
   requireText(input.id, "Typed vector id");
   requireUniqueIds(input.entries, `Typed vector ${input.id} entries`);
   const size = input.entries.length as Entries["length"];
+  return createVectorValue(
+    input.id,
+    size,
+    input.entries,
+    input.provenance ?? authored(input.id)
+  );
+}
+
+/** Runtime parsers can verify a non-empty vector, but cannot invent a literal size. */
+export function createKpTypedVectorFromEntries(input: {
+  readonly id: string;
+  readonly entries: readonly KpScalarValue[];
+  readonly provenance?: KpMathProvenance | undefined;
+}): KpTypedVector {
+  requireText(input.id, "Typed vector id");
+  if (input.entries.length === 0) {
+    throw new Error(`Typed vector ${input.id} requires at least one entry.`);
+  }
+  requireUniqueIds(input.entries, `Typed vector ${input.id} entries`);
+  return createVectorValue(
+    input.id,
+    input.entries.length,
+    input.entries,
+    input.provenance ?? authored(input.id)
+  );
+}
+
+function createVectorValue<
+  Size extends number,
+  Entries extends readonly KpScalarValue[]
+>(
+  id: string,
+  size: Size,
+  entries: Entries,
+  provenance: KpMathProvenance
+): KpTypedVector<Size, Entries> {
   return deepFreeze({
-    id: input.id,
+    id,
     kind: "typed-vector" as const,
     size,
-    entries: input.entries,
+    entries,
     type: { kind: "vector" as const, size },
-    provenance: input.provenance ?? authored(input.id)
+    provenance
   });
 }
 
@@ -247,6 +298,33 @@ export function createKpTypedMatrix<
     input.id,
     input.rows.length as Rows["length"],
     columnCount,
+    input.rows,
+    input.provenance ?? authored(input.id)
+  );
+}
+
+/** Runtime parsers preserve verified dimensions as existential number values. */
+export function createKpTypedMatrixFromRows(input: {
+  readonly id: string;
+  readonly rows: readonly (readonly KpScalarValue[])[];
+  readonly provenance?: KpMathProvenance | undefined;
+}): KpTypedMatrix {
+  requireText(input.id, "Typed matrix id");
+  const firstRow = input.rows[0];
+  if (firstRow === undefined || firstRow.length === 0) {
+    throw new Error(`Typed matrix ${input.id} requires at least one entry.`);
+  }
+  if (input.rows.some((row) => row.length !== firstRow.length)) {
+    throw new Error(`Typed matrix ${input.id} must be rectangular.`);
+  }
+  requireUniqueIds(
+    input.rows.flatMap((row) => [...row]),
+    `Typed matrix ${input.id} entries`
+  );
+  return createMatrixValue(
+    input.id,
+    input.rows.length,
+    firstRow.length,
     input.rows,
     input.provenance ?? authored(input.id)
   );
