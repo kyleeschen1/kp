@@ -34,6 +34,7 @@ import {
   resolveKpSemanticSelectionAtStep
 } from "../../src/math/authoring/scene.ts";
 
+// KP_AUTHORING_ERGONOMICS_START: affine-jacobian-and-quadratic-hessian
 const x = createKpScalarParameter({ id: "public.parameter.x", name: "x" });
 const y = createKpScalarParameter({ id: "public.parameter.y", name: "y" });
 const scalar = (id: string, value: number) => createKpScalarExpression({
@@ -86,6 +87,7 @@ const hessian = deriveKpHessian({
   id: "public.hessian.quadratic",
   source: quadratic
 });
+// KP_AUTHORING_ERGONOMICS_END: affine-jacobian-and-quadratic-hessian
 
 const firstColumn = createKpMatrixOptics(jacobian.matrix).cols.slice(0, 1);
 const rewrite = transformKpSemanticSelection({

@@ -1,0 +1,198 @@
+{
+  "id": "run-contract.kp.typed-semantic-authoring-ergonomics-v2",
+  "kind": "run-contract",
+  "title": "Typed semantic authoring ergonomics v2",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/priority-changes/priority-change.kp.typed-semantic-authoring-api-review.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-02-typed-semantic-authoring-ergonomics-long-loop-proposal.md",
+      "summary": "User-approved 28-slice authoring-ergonomics proposal with exact risks, verification tiers, commit boundaries, stop conditions, preservation boundary, and deferrals."
+    }
+  ],
+  "verification": [
+    "node --disable-warning=ExperimentalWarning --test tests/typed-semantic-math.test.ts tests/typed-semantic-optics.test.ts tests/typed-latex-elaborator.test.ts tests/typed-math-scene.test.ts tests/typed-math-authoring-public-api.test.ts tests/typed-math-authoring-import-closure.test.ts",
+    "./node_modules/.bin/tsc --project tsconfig.inference.json --noEmit",
+    "npm run typecheck",
+    "npm run check:dependency-direction",
+    "npm run check:framework-neutral-entrypoints",
+    "npm run measure:inference-attribution",
+    "npm run build:bundle",
+    "npm test diagnostic with only the documented unrelated Focus Deck failure tolerated",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Typed semantic math and authoring modules, narrow generated artifacts, focused tests, and type fixtures.",
+    "Explicit immutable algebraic capability dictionaries, nominal semantic spaces, coordinate-free linear and bounded multilinear derivatives, finite bases, and compatible matrix representations.",
+    "Deterministic local authoring defaults, semantic-path IDs, Jacobian/Hessian descriptors and templates, typed gaps, two-basis proof, and unit-tagged quantity-to-price pressure.",
+    "Import closure, inference attribution, architecture, bundle, documentation, and Theseus evidence required by the approved boundary."
+  ],
+  "disallowedWork": [
+    "No public HKT or universal typeclass framework, general CAS or theorem prover, full economics ontology, Article or Markdown grammar, renderer or animation work, runtime reparameterization, Focus Deck, Catalogue, broad generator catalogue, global registry, inference-ceiling rebaseline, or unrelated fixes.",
+    "No guessed semantic space, basis, unit, equality, law, proof, or matrix authority; no mathematical rules in generated plumbing."
+  ],
+  "goal": "Reduce hand-authoring boilerplate by at least 50 percent while proving coordinate-free linear and multilinear derivatives beneath compatible basis-aware matrix projections, deterministic semantic templates, explicit law evidence, and import-on-demand extensibility.",
+  "target": "priority-change.kp.typed-semantic-authoring-api-review",
+  "runMode": "run",
+  "maxSlices": 28,
+  "commitCadence": "Commit implementation, tests, and completed Theseus evidence after each verified slice.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop on an unavoidable public compatibility break or any guessed semantic authority.",
+    "Stop if same-dimension but semantically invalid composition typechecks, generation is non-deterministic, or code generation decides mathematical truth.",
+    "Stop if local inference cannot be bounded without weakening guarantees or raising the frozen global ceiling.",
+    "Stop if the ergonomic public consumer cannot reduce each applicable burden measure by at least 50 percent.",
+    "Stop if work reaches renderer, animation, Article, Focus Deck, full economics, broad CAS, broad generation, or unrelated dirty-worktree scope.",
+    "Stop on any new broad verification failure or if an inherited failure changes shape.",
+    "Always stop after s28 for mandatory human API review before public algebraic promotion or broader work."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "ergonomics-baseline",
+      "summary": "Added a deterministic syntax-aware ergonomics measure, frozen baseline, marker contract, and passing focused/type-fixture checks.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "compatibility-characterization",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "nominal-semantic-spaces",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "equality-and-law-evidence",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "bounded-algebra-dictionaries",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "linear-map-kernel",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "product-space-defaults",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "finite-basis-contract",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "basis-aware-matrix-representation",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "matrix-compatibility-adapter",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "abstract-differentiable-map",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "expression-function-adapter",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "second-derivative-map",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "jacobian-projection",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "hessian-and-symmetry-evidence",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "gradient-capability-gap",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "deterministic-authoring-context",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "ergonomic-scalar-function-builders",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "semantic-construct-descriptor",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "automatic-latex-templates",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "generated-semantic-plumbing",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "honest-elaboration-gaps",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "ergonomic-public-consumer",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "two-basis-affine-pressure",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "unit-tagged-economics-pressure",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "extension-pack-closure",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "inference-and-diagnostics-boundary",
+      "status": "planned"
+    },
+    {
+      "id": "s28",
+      "title": "closeout-and-api-checkpoint",
+      "status": "planned"
+    }
+  ]
+}

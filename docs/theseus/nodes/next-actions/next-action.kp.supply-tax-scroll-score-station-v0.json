@@ -2,8 +2,9 @@
   "id": "next-action.kp.supply-tax-scroll-score-station-v0",
   "kind": "next-action",
   "title": "Supply-tax",
-  "status": "ready",
+  "status": "resolved",
   "domain": "delivery",
+  "summary": "Resolved as completed stale control-plane work. The node already contains passing semantic, browser, visual, and typecheck evidence; the roadmap records the supply-tax exemplar as approved, and the active typed-authoring priority pauses further supply-tax work.",
   "sourceRefs": [
     {
       "kind": "file",

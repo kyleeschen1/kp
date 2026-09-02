@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "kp.typed-math-authoring-ergonomics.v1",
+  "source": "tests/type-fixtures/typed-math-authoring-public-api.ts",
+  "region": "affine-jacobian-and-quadratic-hessian",
+  "manualIdentityLiterals": 10,
+  "lowLevelConstructorCalls": 11,
+  "authoredSemanticSetupLines": 49,
+  "constructorCalls": {
+    "createKpScalarExpression": 4,
+    "createKpScalarParameter": 2,
+    "createKpTypedVector": 1,
+    "defineKpTypedFunction": 2,
+    "deriveKpHessian": 1,
+    "deriveKpJacobian": 1
+  }
+}

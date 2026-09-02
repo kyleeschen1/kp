@@ -29,9 +29,23 @@
   "affects": [
     "plan-revision.kp.v24"
   ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-math-authoring-ergonomics.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-02T20:47:22.901Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.inference.json --noEmit",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-02T20:47:24.139Z"
+    }
+  ],
   "progress": {
     "state": "partial",
-    "summary": "Recorded a 28-slice authoring-ergonomics proposal: coordinate-free linear maps beneath compatible matrix projections, explicit basis and law evidence, deterministic defaults and templates, a 50 percent boilerplate-reduction gate, two-basis proof, and unit-tagged economics pressure. Explicit approval is required before creating a run contract or implementing slices."
+    "summary": "s01 established a syntax-aware checked-in ergonomics baseline: 10 manual identity literals, 11 low-level constructor calls, and 49 positive semantic setup lines in the affine Jacobian and quadratic Hessian fixture."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",
