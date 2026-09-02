@@ -41,11 +41,23 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-09-02T20:47:24.139Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-math-authoring-compatibility.test.ts tests/typed-math-authoring-public-api.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-02T20:50:47.902Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-02T20:50:49.189Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s01 established a syntax-aware checked-in ergonomics baseline: 10 manual identity literals, 11 low-level constructor calls, and 49 positive semantic setup lines in the affine Jacobian and quadratic Hessian fixture."
+    "summary": "s02 characterized the promoted Jacobian/Hessian value shape, IDs, LaTeX, optics, correspondence, and scene-handle behavior without freezing private layout."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",

@@ -62,7 +62,8 @@
     {
       "id": "s02",
       "title": "compatibility-characterization",
-      "status": "planned"
+      "summary": "Added narrow public compatibility characterization; focused and repository typechecks pass.",
+      "status": "complete"
     },
     {
       "id": "s03",
