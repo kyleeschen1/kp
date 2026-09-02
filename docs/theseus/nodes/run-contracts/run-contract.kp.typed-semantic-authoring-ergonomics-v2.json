@@ -152,7 +152,8 @@
     {
       "id": "s17",
       "title": "deterministic-authoring-context",
-      "status": "planned"
+      "summary": "Authoring IDs and provenance now derive solely from semantic paths, with visible overridable defaults and no counters, registries, or global state; standard checks pass.",
+      "status": "complete"
     },
     {
       "id": "s18",

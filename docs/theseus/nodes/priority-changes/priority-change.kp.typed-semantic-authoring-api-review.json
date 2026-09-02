@@ -265,11 +265,30 @@
       "status": "passed",
       "scope": "slice-s16-standard",
       "checkedAt": "2026-09-02T21:41:00.489Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-math-authoring-context.test.ts",
+      "status": "passed",
+      "scope": "slice-s17-focused",
+      "checkedAt": "2026-09-02T21:44:23.730Z",
+      "notes": "Determinism, injective collision avoidance, defaults, overrides, provenance, immutability, and validation passed."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.inference.json --noEmit",
+      "status": "passed",
+      "scope": "slice-s17-inference",
+      "checkedAt": "2026-09-02T21:44:24.975Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s17-standard",
+      "checkedAt": "2026-09-02T21:44:26.050Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s16 keeps scalar derivatives as covectors until an explicit inner-product duality identifies a gradient; missing capability returns a typed gap."
+    "summary": "Slice s17 adds immutable local authoring contexts with semantic-path IDs, injective segment encoding, authored provenance, and explicit deterministic defaults."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",
