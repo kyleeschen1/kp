@@ -68,7 +68,8 @@
     {
       "id": "s03",
       "title": "nominal-semantic-spaces",
-      "status": "planned"
+      "summary": "Nominal semantic spaces, runtime validation, and positive/negative type fixtures pass.",
+      "status": "complete"
     },
     {
       "id": "s04",

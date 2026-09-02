@@ -53,11 +53,23 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-09-02T20:50:49.189Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-math-algebraic-capabilities.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-02T20:52:51.529Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.inference.json --noEmit",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-02T20:52:52.748Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s02 characterized the promoted Jacobian/Hessian value shape, IDs, LaTeX, optics, correspondence, and scene-handle behavior without freezing private layout."
+    "summary": "s03 added immutable nominal semantic spaces whose literal identities reject same-dimension domain substitutions without author-written brands."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",
