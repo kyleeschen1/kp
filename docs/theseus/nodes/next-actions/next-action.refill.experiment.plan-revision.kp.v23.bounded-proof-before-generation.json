@@ -2,9 +2,9 @@
   "id": "next-action.refill.experiment.plan-revision.kp.v23.bounded-proof-before-generation",
   "kind": "next-action",
   "title": "Test bounded-proof-before-generation",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Run a bounded uncertainty-reduction experiment for: One affine Jacobian and one quadratic Hessian must prove the seam before broader construct generation or domain rollout. Selection rationale: The user explicitly approved the recorded framework and directed implementation to begin; this bounded affine-Jacobian and quadratic-Hessian proof is the accepted first slice.",
+  "summary": "Completed the affine Jacobian and quadratic Hessian vertical proof across typed construction, optics, bounded LaTeX elaboration, KaTeX projection, and direct scene-step recovery; promotion review remains a separate decision.",
   "sourceRefs": [
     {
       "kind": "user-intent",
@@ -39,11 +39,39 @@
       "scope": "slice 2 semantic optics and immutable rewrites",
       "checkedAt": "2026-09-02T14:41:51.351Z",
       "notes": "Eight combined tests pass for typed derivatives, static composition, equation lenses, matrix traversals, stable descriptors, immutable rebuilding, and correspondence."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-semantic-math.test.ts tests/typed-semantic-optics.test.ts tests/typed-latex-elaborator.test.ts tests/typed-math-scene.test.ts",
+      "status": "passed",
+      "scope": "three-slice typed semantic authoring proof",
+      "checkedAt": "2026-09-02T14:53:40.917Z",
+      "notes": "All 13 focused tests pass; app and test TypeScript projects also pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository-wide TypeScript, Svelte, and domain packages",
+      "checkedAt": "2026-09-02T14:55:48.924Z",
+      "notes": "All typecheck stages pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "production bundle",
+      "checkedAt": "2026-09-02T14:55:50.195Z",
+      "notes": "Publication check and Vite production bundle pass; only existing chunk-size warnings remain."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "dirty-worktree full deterministic suite",
+      "checkedAt": "2026-09-02T14:55:51.218Z",
+      "notes": "Architecture preflight stopped on the pre-existing untracked Focus Deck private-clock inventory gap at src/experiments/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card.ts; the proof did not modify that file."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "Slices 1 and 2 of 3 complete: typed math kernel plus exact equation lenses, matrix entry and row/column traversals, serializable semantic paths, immutable rewrites, untouched-child identity preservation, operation authority, and per-entity correspondence."
+    "state": "complete",
+    "summary": "Implemented bounded LaTeX elaboration with typed repair gaps and stable direct scene-step recovery."
   },
   "expectedLearning": [
     "An approved plan depends on an active assumption without outcome evidence."

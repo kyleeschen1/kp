@@ -1,7 +1,7 @@
 # Typed Semantic Authoring Framework Goals
 
 Date: 2026-09-02
-Status: accepted; first bounded proof active
+Status: accepted; first bounded proof complete, promotion pending
 
 ## Decision
 
@@ -112,4 +112,18 @@ LaTeX frontend, and recovered at every scene step. Pressure the result with one
 scalar quadratic Hessian before promoting the construct or generator boundary.
 
 The user selected this slice on 2026-09-02. The Focus Deck human checkpoint is
-preserved while this bounded proof is active.
+preserved while this bounded proof proceeds to promotion review.
+
+## Bounded Proof Result
+
+The first proof completed on 2026-09-02. It demonstrates one shared typed tree
+across hand-authored functions, derivative macros, semantic optics, bounded
+LaTeX elaboration, KaTeX projection, and immutable scene-step recovery. It also
+confirms the intended static/dynamic boundary: literal TypeScript dimensions
+participate in compile-time shape checking, while arbitrary parsed LaTeX
+returns runtime-verified existential dimensions or a typed repair gap.
+
+The result supports continuing the framework, but it does not yet justify a
+generated construct catalogue, economics facade, Article grammar extension,
+renderer-wide integration, or broader symbolic algebra. Those remain separate
+promotion decisions.

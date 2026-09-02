@@ -1,11 +1,13 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: active; bounded affine-Jacobian and quadratic-Hessian proof selected
+Status: checkpoint-ready; bounded proof complete, promotion review pending
 Last Updated: 2026-09-02
-Current Next Action: implement the approved vertical slice through typed
-construction, semantic optics, bounded LaTeX elaboration, KaTeX projection,
-and deterministic scene-step recovery. Stop before catalogue generation,
-broad algebra coverage, domain rollout, or Article grammar changes.
+Current Next Action: review the proof API and decide which boundaries have
+earned promotion. In particular, decide whether typed values, derivative
+macros, optics, LaTeX elaboration, and scene handles should remain a local
+experimental package or receive a narrow public authoring facade. Stop before
+catalogue generation, broad algebra coverage, domain rollout, or Article
+grammar changes.
 
 ## Goal
 
@@ -96,6 +98,37 @@ typed function
 A scalar quadratic Hessian is the required structurally different pressure
 caller. Stop after those two proofs and decide which declarations and generated
 artifacts are genuinely shared before expanding the catalogue.
+
+## Proof Outcome
+
+The approved proof is complete in three checkpoint commits:
+
+- `d41524c1c` adds statically shaped scalar, vector, matrix, and function
+  values; shape-safe composition; inferred signatures; Jacobian and Hessian
+  macros; semantic correspondence; numeric evaluation; and KaTeX projection.
+- `e6127e926` adds typed equation lenses, matrix lenses and traversals,
+  serializable semantic paths, immutable selected rewrites, stable target
+  references, and generated correspondence.
+- `f8924b491` adds bounded scalar/function LaTeX elaboration with explicit
+  symbol environments, source spans, existential runtime dimensions, and
+  typed repair gaps, plus stable handles for direct object and selection
+  recovery from any immutable scene-step snapshot.
+
+The affine vector function elaborates from LaTeX and produces the same numeric
+`2 x 2` Jacobian as the hand-authored function. A hand-authored quadratic
+scalar function produces a symmetric typed Hessian. Invalid static matrix and
+function composition are compile-time errors; unknown parsed symbols, invalid
+signatures, and ragged matrices return repair-required results.
+
+This proves the convergence seam without a general CAS, code generator,
+domain facade, renderer integration, Article grammar change, or catalogue
+rollout. Runtime-parsed dimensions remain honestly existential until a build
+step emits a statically typed module.
+
+Focused tests, repository-wide typechecks, and the production bundle pass.
+The dirty-worktree `npm test` gate currently stops on the preserved untracked
+Focus Deck caller's separate private-clock inventory gap; the proof neither
+created nor modified that file.
 
 ## Stop Conditions
 
