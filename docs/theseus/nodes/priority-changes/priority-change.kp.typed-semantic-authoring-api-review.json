@@ -1,0 +1,51 @@
+{
+  "id": "priority-change.kp.typed-semantic-authoring-api-review",
+  "kind": "priority-change",
+  "title": "Typed semantic authoring API review",
+  "status": "active",
+  "domain": "kp",
+  "summary": "The approved facade plan requires a human API checkpoint before economics, code generation, Article integration, or broader algebra.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "The approved facade plan requires a human API checkpoint before economics, code generation, Article integration, or broader algebra.",
+      "occurredAt": "2026-09-02T15:55:47.701Z",
+      "summary": "Priority change disposition: checkpoint."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-02-typed-semantic-authoring-next-step-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "tests/type-fixtures/typed-math-authoring-public-api.ts"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v24"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v24"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v24",
+    "rationale": "The approved facade plan requires a human API checkpoint before economics, code generation, Article integration, or broader algebra.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [],
+    "changes": [
+      {
+        "subject": "typed-semantic-authoring-api-review",
+        "to": "now"
+      },
+      {
+        "subject": "supply-tax-scroll-score",
+        "to": "paused"
+      }
+    ],
+    "effectiveAt": "2026-09-02T15:55:47.701Z",
+    "requestedBy": "user"
+  }
+}
