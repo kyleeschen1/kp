@@ -86,7 +86,8 @@
     {
       "id": "s06",
       "title": "linear-map-kernel",
-      "status": "planned"
+      "summary": "Linear-map identity/composition, provenance, law evidence, and semantic-space rejection pass focused and type checks.",
+      "status": "complete"
     },
     {
       "id": "s07",

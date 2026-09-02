@@ -17,6 +17,11 @@ import {
   createKpVectorSpace,
   sumKpValues
 } from "../src/math/algebra/algebraic-structures.ts";
+import {
+  composeKpLinearMaps,
+  createKpLinearMap,
+  identityKpLinearMap
+} from "../src/math/algebra/linear-map.ts";
 
 test("semantic spaces retain deterministic nominal identity and dimensions", () => {
   const quantity = defineKpSemanticSpace<number>()({
@@ -234,5 +239,107 @@ test("algebra dictionaries reject law and carrier mismatches", () => {
       laws: [wrongLaw]
     }),
     /must use carrier kp.carrier.expected/
+  );
+});
+
+test("linear maps compose by semantic source and target space", () => {
+  const scalarEquality = createKpEquality<number>({
+    id: "kp.equality.linear-map.scalar",
+    mode: "exact",
+    equals: Object.is
+  });
+  const scalars = createKpScalarSystem({
+    id: "kp.scalars.linear-map.fixture",
+    carrierId: "kp.carrier.linear-map.scalar",
+    equality: scalarEquality,
+    zero: 0,
+    one: 1,
+    add: (left, right) => left + right,
+    multiply: (left, right) => left * right,
+    negate: (value) => -value
+  });
+  const vectorSpace = <const Id extends string>(id: Id) => {
+    const descriptor = defineKpSemanticSpace<number>()({ id, dimension: 1 });
+    const equality = createKpEquality<number>({
+      id: `${id}.equality`,
+      mode: "exact",
+      equals: Object.is
+    });
+    return createKpVectorSpace({
+      id: `${id}.vector-space`,
+      space: descriptor,
+      vectors: createKpAdditiveCommutativeGroup({
+        id: `${id}.additive`,
+        carrierId: id,
+        equality,
+        zero: 0,
+        add: (left, right) => left + right,
+        negate: (value) => -value
+      }),
+      scalars,
+      scale: (scalar, value) => scalar * value
+    });
+  };
+  const quantity = vectorSpace("kp.space.linear-map.quantity");
+  const price = vectorSpace("kp.space.linear-map.price");
+  const revenue = vectorSpace("kp.space.linear-map.revenue");
+  const quantityToPrice = createKpLinearMap({
+    id: "kp.map.quantity-to-price",
+    domain: quantity,
+    codomain: price,
+    apply: (value) => 2 * value,
+    linearity: {
+      kind: "tested",
+      suiteId: "kp.test.quantity-to-price-linearity",
+      equalityId: price.vectors.equality.id
+    }
+  });
+  const priceToRevenue = createKpLinearMap({
+    id: "kp.map.price-to-revenue",
+    domain: price,
+    codomain: revenue,
+    apply: (value) => 3 * value,
+    linearity: {
+      kind: "tested",
+      suiteId: "kp.test.price-to-revenue-linearity",
+      equalityId: revenue.vectors.equality.id
+    }
+  });
+  const quantityToRevenue = createKpLinearMap({
+    id: "kp.map.quantity-to-revenue.direct",
+    domain: quantity,
+    codomain: revenue,
+    apply: (value) => 6 * value,
+    linearity: {
+      kind: "tested",
+      suiteId: "kp.test.quantity-to-revenue-linearity",
+      equalityId: revenue.vectors.equality.id
+    }
+  });
+  const composed = composeKpLinearMaps({
+    id: "kp.map.quantity-to-revenue",
+    inner: quantityToPrice,
+    outer: priceToRevenue
+  });
+  const identity = identityKpLinearMap({
+    id: "kp.map.quantity.identity",
+    space: quantity
+  });
+
+  assert.equal(composed.apply(4), 24);
+  assert.deepEqual(composed.sourceMapIds, [
+    "kp.map.quantity-to-price",
+    "kp.map.price-to-revenue"
+  ]);
+  assert.equal(identity.apply(7), 7);
+  assert.equal(composed.linearity.kind, "proved");
+  assert.equal(Object.isFrozen(composed.sourceMapIds), true);
+  assert.throws(
+    () => composeKpLinearMaps({
+      id: "kp.map.invalid-runtime-composition",
+      inner: quantityToPrice,
+      outer: quantityToRevenue as unknown as typeof priceToRevenue
+    }),
+    /cannot compose kp.space.linear-map.price with kp.space.linear-map.quantity/
   );
 });
