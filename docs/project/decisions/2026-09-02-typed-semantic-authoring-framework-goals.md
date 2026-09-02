@@ -1,7 +1,7 @@
 # Typed Semantic Authoring Framework Goals
 
 Date: 2026-09-02
-Status: accepted; first bounded proof complete, promotion pending
+Status: accepted; narrow public authoring facade approved
 
 ## Decision
 
@@ -127,3 +127,16 @@ The result supports continuing the framework, but it does not yet justify a
 generated construct catalogue, economics facade, Article grammar extension,
 renderer-wide integration, or broader symbolic algebra. Those remain separate
 promotion decisions.
+
+## Promotion Decision
+
+On 2026-09-02 the user approved promoting the proof contracts through a narrow
+public authoring facade. The facade will expose a small core plus optional
+calculus, optics, bounded-LaTeX, and scene-recovery entrypoints. It will be
+validated from a consumer-style TypeScript fixture and must not pull optional
+capabilities, renderers, domains, Article code, or runtime hosts into the core
+import closure.
+
+The first economics capability pack follows only after this API checkpoint.
+Code generation and mixed Markdown/TypeScript integration follow only after a
+real domain caller demonstrates repeated plumbing or file-switching friction.

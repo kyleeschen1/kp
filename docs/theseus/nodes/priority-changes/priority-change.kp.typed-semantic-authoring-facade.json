@@ -1,0 +1,43 @@
+{
+  "id": "priority-change.kp.typed-semantic-authoring-facade",
+  "kind": "priority-change",
+  "title": "Priority change priority-change.kp.typed-semantic-authoring-facade",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "Superseded by a corrected v2 priority record linked to active plan revision v24.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "The user approved narrow promotion of the completed typed semantic authoring proof and asked for next steps; the import-tiered facade is the smallest reversible next slice.",
+      "occurredAt": "2026-09-02T15:09:21.764Z",
+      "summary": "Priority change disposition: checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v23"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v23"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v23",
+    "rationale": "The user approved narrow promotion of the completed typed semantic authoring proof and asked for next steps; the import-tiered facade is the smallest reversible next slice.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [],
+    "changes": [
+      {
+        "subject": "typed-semantic-authoring-facade",
+        "to": "now"
+      },
+      {
+        "subject": "supply-tax-scroll-score",
+        "to": "paused"
+      }
+    ],
+    "effectiveAt": "2026-09-02T15:09:21.764Z",
+    "requestedBy": "user"
+  }
+}

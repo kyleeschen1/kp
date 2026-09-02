@@ -1,10 +1,10 @@
 {
-  "id": "plan-revision.kp.v23",
+  "id": "plan-revision.kp.v24",
   "kind": "plan-revision",
-  "title": "Kinetic Press typed semantic authoring proof v23",
-  "status": "superseded",
+  "title": "Kinetic Press typed semantic authoring facade v24",
+  "status": "active",
   "domain": "kp",
-  "summary": "Prove one bounded typed semantic authoring chain without building a general CAS or changing existing domain, runtime, renderer, Article, or Focus Deck authority.",
+  "summary": "Promote the completed typed semantic proof through one import-tiered public facade, consumer inference contract, and dependency-closure guard before any domain, generator, Article, or algebra expansion.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -181,12 +181,12 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "The user selected the bounded typed semantic authoring proof; prior product-plan phases remain preserved while the new proof slice is active."
+    "summary": "The user approved the reviewed narrow facade boundary; implementation is authorized through one three-slice iteration and must stop at API review."
   },
   "planRevision": {
     "schemaVersion": "theseus.plan-revision.v2",
-    "revision": 23,
-    "objective": "Prove a typed affine-function, Jacobian and quadratic-Hessian authoring kernel with shape-safe composition, semantic optics, bounded LaTeX elaboration, KaTeX projection, and deterministic step recovery while retaining explicit typed gaps and avoiding general CAS scope.",
+    "revision": 24,
+    "objective": "Curate core and optional typed math authoring entrypoints, prove hand-authoring inference and static rejection through a consumer fixture, and enforce import closure without moving implementation or broadening into economics, code generation, Article integration, renderers, or a CAS.",
     "assumptions": [
       {
         "id": "single-roadmap-authority",
@@ -925,7 +925,10 @@
         "title": "Typed semantic authoring vertical slice",
         "objective": "Implement typed scalar, vector, matrix, function, Jacobian and Hessian construction; generated-style semantic optics and immutable rewrite correspondence; bounded LaTeX elaboration and KaTeX projection; and deterministic scene-step recovery with focused static and runtime tests.",
         "horizon": "now",
-        "status": "active",
+        "status": "complete",
+        "evidence": [
+          "next-action.refill.experiment.plan-revision.kp.v23.bounded-proof-before-generation"
+        ],
         "topic": "Platform · Typed semantic authoring",
         "architectureBenefit": "One autocomplete-friendly semantic source shared by library and bounded LaTeX authoring.",
         "rationale": "The user approved the framework goals and requested implementation after the algebra boundary was recorded.",
@@ -935,21 +938,34 @@
         "id": "typed-semantic-authoring-promotion-review",
         "title": "Typed semantic authoring promotion review",
         "objective": "Review the two proof callers and decide which construct declarations, code generation, units, domain packs, and Article integration deserve later promotion.",
-        "horizon": "next",
-        "status": "planned",
+        "horizon": "now",
+        "status": "complete",
+        "evidence": [
+          "priority-change.kp.typed-semantic-authoring-facade"
+        ],
         "topic": "Platform · Authoring governance",
         "architectureBenefit": "Prevents the proof from becoming a universal AST, CAS, parser, or catalogue rollout.",
         "rationale": "Shared infrastructure requires evidence from both proof callers and an explicit promotion decision.",
         "canonicalExemplar": "Jacobian and Hessian proof review"
+      },
+      {
+        "id": "typed-semantic-authoring-public-facade",
+        "title": "Typed semantic authoring public facade",
+        "objective": "Expose a core public authoring entrypoint plus optional calculus, optics, bounded-LaTeX, and scene entrypoints; prove the facade from consumer-style type fixtures; and enforce an exact export and dependency-closure boundary.",
+        "horizon": "now",
+        "status": "active",
+        "topic": "Platform · Typed semantic authoring",
+        "architectureBenefit": "Autocomplete-friendly stable imports without always loading optional capabilities or freezing implementation layout.",
+        "rationale": "The completed affine Jacobian and quadratic Hessian proof passed review, and the user explicitly approved narrow facade promotion before economics or generation work.",
+        "canonicalExemplar": "Affine Jacobian and quadratic Hessian authored only through promoted entrypoints"
       }
     ],
     "approval": {
-      "status": "superseded",
+      "status": "approved",
       "decidedAt": "2026-09-02T15:10:00.000Z",
       "decidedBy": "user",
-      "rationale": "Superseded by plan-revision.kp.v24."
+      "rationale": "The user explicitly approved the reviewed narrow public-facade promotion and directed implementation to begin."
     },
-    "supersedes": "plan-revision.kp.v22",
-    "supersededBy": "plan-revision.kp.v24"
+    "supersedes": "plan-revision.kp.v23"
   }
 }

@@ -1,13 +1,12 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: checkpoint-ready; bounded proof complete, promotion review pending
+Status: next; narrow public authoring facade approved
 Last Updated: 2026-09-02
-Current Next Action: review the proof API and decide which boundaries have
-earned promotion. In particular, decide whether typed values, derivative
-macros, optics, LaTeX elaboration, and scene handles should remain a local
-experimental package or receive a narrow public authoring facade. Stop before
-catalogue generation, broad algebra coverage, domain rollout, or Article
-grammar changes.
+Current Next Action: implement one independently reversible public-facade
+slice with a core entrypoint, optional calculus/optics/LaTeX/scene entrypoints,
+an exact export and architecture guard, a consumer-style inference fixture,
+and an import-closure check. Stop for API review before the first economics
+capability pack, code generation, Article integration, or broader algebra.
 
 ## Goal
 
@@ -129,6 +128,20 @@ Focused tests, repository-wide typechecks, and the production bundle pass.
 The dirty-worktree `npm test` gate currently stops on the preserved untracked
 Focus Deck caller's separate private-clock inventory gap; the proof neither
 created nor modified that file.
+
+## Promotion Decision
+
+The user approved narrow promotion on 2026-09-02. The promoted boundary is the
+proven typed value and function contracts, static composition guarantees,
+Jacobian and Hessian macros, semantic optics and immutable rewrite results,
+bounded-LaTeX result and diagnostic contracts, renderer-neutral projection,
+and stable scene recovery handles.
+
+Promotion means curating import-tiered public entrypoints and proving them from
+a consumer fixture. It does not freeze internal file layout or authorize a
+root namespace object, code generator, economics hierarchy, Article grammar,
+renderer integration, general CAS, or catalogue rollout. See
+`../reviews/2026-09-02-typed-semantic-authoring-next-step-review.md`.
 
 ## Stop Conditions
 
