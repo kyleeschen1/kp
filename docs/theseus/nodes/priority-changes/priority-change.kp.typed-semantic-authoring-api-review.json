@@ -462,11 +462,42 @@
       "status": "passed",
       "scope": "slice-s25-standard",
       "checkedAt": "2026-09-02T22:15:54.425Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test authoring context, extension pack, facade inventory, and import closure suites",
+      "status": "passed",
+      "scope": "slice-s26-focused",
+      "checkedAt": "2026-09-02T22:20:34.622Z",
+      "notes": "Core excludes algebra implementations; explicit algebra/unit facades, custom basis/unit extension, and no-registration behavior passed."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.inference.json --noEmit",
+      "status": "passed",
+      "scope": "slice-s26-inference",
+      "checkedAt": "2026-09-02T22:20:35.880Z"
+    },
+    {
+      "command": "npm run check:dependency-direction and framework-neutral entrypoints",
+      "status": "passed",
+      "scope": "slice-s26-architecture",
+      "checkedAt": "2026-09-02T22:20:37.030Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s26-broad",
+      "checkedAt": "2026-09-02T22:20:38.168Z"
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "slice-s26-production",
+      "checkedAt": "2026-09-02T22:20:39.298Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s25 proves the generic semantic-space model supports unit-tagged quantity-to-price derivatives and labels without a shared economics ontology."
+    "summary": "Slice s26 moves standard algebra and unit implementations behind explicit facades; core stays light and custom extensions require no registration."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",

@@ -74,7 +74,7 @@ test("context defaults are visible, immutable, and explicitly overridable", () =
 
   assert.equal(defaults.defaults.notation.derivative, "D");
   assert.equal(defaults.defaults.notation.jacobian, "J");
-  assert.equal(defaults.defaults.scalars.equality.mode, "approximate");
+  assert.equal(defaults.defaults.scalars, undefined);
   assert.equal(customized.defaults.scalars, scalars);
   assert.deepEqual(customized.defaults.notation, {
     derivative: "\\mathrm{d}",

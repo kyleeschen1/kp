@@ -7,13 +7,17 @@ import * as core from "../src/math/authoring/public-api.ts";
 import * as latex from "../src/math/authoring/latex.ts";
 import * as optics from "../src/math/authoring/optics.ts";
 import * as scene from "../src/math/authoring/scene.ts";
+import * as algebra from "../src/math/authoring/algebra.ts";
+import * as units from "../src/math/authoring/units.ts";
 
 const entrypoints = [
   "src/math/authoring/public-api.ts",
   "src/math/authoring/calculus.ts",
   "src/math/authoring/optics.ts",
   "src/math/authoring/latex.ts",
-  "src/math/authoring/scene.ts"
+  "src/math/authoring/scene.ts",
+  "src/math/authoring/algebra.ts",
+  "src/math/authoring/units.ts"
 ] as const;
 
 test("typed math authoring entrypoints expose exact runtime inventories", () => {
@@ -66,6 +70,25 @@ test("typed math authoring entrypoints expose exact runtime inventories", () => 
     "createKpTypedMathSceneTimeline",
     "recoverKpTypedMathObjectAtStep",
     "resolveKpSemanticSelectionAtStep"
+  ]);
+  assert.deepEqual(Object.keys(algebra).sort(), [
+    "applyKpMatrixRepresentation",
+    "composeKpLinearMaps",
+    "createKpCartesianSpace",
+    "createKpFiniteBasis",
+    "createKpFloatingPointScalars",
+    "createKpLinearMap",
+    "createKpStandardMathAuthoringContext",
+    "createKpStandardScalarSpace",
+    "identityKpLinearMap",
+    "representKpLinearMap",
+    "sameKpFiniteBasis"
+  ]);
+  assert.deepEqual(Object.keys(units).sort(), [
+    "createKpUnitDescriptor",
+    "createKpUnitTaggedScalarSpace",
+    "createKpUnitValue",
+    "projectKpDerivativeUnitToLatex"
   ]);
 });
 

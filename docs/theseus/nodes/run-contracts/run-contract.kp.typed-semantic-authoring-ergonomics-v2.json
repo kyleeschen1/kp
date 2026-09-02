@@ -206,7 +206,8 @@
     {
       "id": "s26",
       "title": "extension-pack-closure",
-      "status": "planned"
+      "summary": "Default and custom capability packs are imported on demand, core excludes optional algebra implementations, and closure, architecture, typecheck, and production build pass.",
+      "status": "complete"
     },
     {
       "id": "s27",

@@ -10,7 +10,9 @@ const entrypoints = [
   "calculus",
   "optics",
   "latex",
-  "scene"
+  "scene",
+  "algebra",
+  "units"
 ] as const;
 
 const forbiddenHostZones = [
@@ -46,11 +48,18 @@ test("core authoring tree-shakes optional capability implementations", async () 
     "src/math/latex-tokenizer.ts",
     "src/math/typed-latex-elaborator.ts",
     "src/math/typed-math-scene.ts",
-    "src/math/typed-semantic-optics.ts"
+    "src/math/typed-semantic-optics.ts",
+    "src/math/authoring/standard-context.ts"
   ];
 
   assert.deepEqual(
     bundle.moduleIds.filter((moduleId) => optionalModulePaths.includes(moduleId)),
+    []
+  );
+  assert.deepEqual(
+    bundle.moduleIds.filter((moduleId) =>
+      moduleId.startsWith("src/math/algebra/")
+    ),
     []
   );
 

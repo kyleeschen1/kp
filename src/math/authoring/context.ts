@@ -1,6 +1,5 @@
 import type { KpMathProvenance } from "../typed-semantic-math.ts";
 import type { KpScalarSystem } from "../algebra/algebraic-structures.ts";
-import { createKpFloatingPointScalars } from "../algebra/standard-spaces.ts";
 
 export interface KpMathAuthoringNotation {
   readonly derivative: string;
@@ -9,7 +8,7 @@ export interface KpMathAuthoringNotation {
 }
 
 export interface KpMathAuthoringDefaults {
-  readonly scalars: KpScalarSystem<number>;
+  readonly scalars?: KpScalarSystem<number> | undefined;
   readonly notation: KpMathAuthoringNotation;
 }
 
@@ -40,8 +39,10 @@ export function createKpMathAuthoringContext(input: {
   }> | undefined;
 }): KpMathAuthoringContext {
   requireNamespace(input.namespace);
-  const defaults = Object.freeze({
-    scalars: input.defaults?.scalars ?? createKpFloatingPointScalars(),
+  const defaults: KpMathAuthoringDefaults = Object.freeze({
+    ...(input.defaults?.scalars === undefined
+      ? {}
+      : { scalars: input.defaults.scalars }),
     notation: Object.freeze({
       derivative: requireNotation(
         input.defaults?.notation?.derivative ?? "D",
