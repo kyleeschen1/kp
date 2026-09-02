@@ -164,7 +164,8 @@
     {
       "id": "s19",
       "title": "semantic-construct-descriptor",
-      "status": "planned"
+      "summary": "Two validated construct descriptors now centralize mechanical authoring metadata without mathematical rules or renderer policy; standard checks pass.",
+      "status": "complete"
     },
     {
       "id": "s20",

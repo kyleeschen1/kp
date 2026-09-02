@@ -304,11 +304,30 @@
       "status": "passed",
       "scope": "slice-s18-standard",
       "checkedAt": "2026-09-02T21:48:12.716Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-math-construct-descriptor.test.ts",
+      "status": "passed",
+      "scope": "slice-s19-focused",
+      "checkedAt": "2026-09-02T21:51:54.967Z",
+      "notes": "Canonical declarations and duplicate/missing descriptor validation passed."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.inference.json --noEmit",
+      "status": "passed",
+      "scope": "slice-s19-inference",
+      "checkedAt": "2026-09-02T21:51:56.302Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s19-standard",
+      "checkedAt": "2026-09-02T21:51:57.373Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s18 adds a scoped function builder that infers typed parameters, scalar/vector wrappers, IDs, and provenance without hiding the semantic result tree."
+    "summary": "Slice s19 records bounded Jacobian/Hessian macro metadata, capabilities, children, projection forms, and template inputs in validated descriptors."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",
