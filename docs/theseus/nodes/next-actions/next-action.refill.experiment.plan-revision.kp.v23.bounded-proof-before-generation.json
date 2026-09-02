@@ -1,0 +1,40 @@
+{
+  "id": "next-action.refill.experiment.plan-revision.kp.v23.bounded-proof-before-generation",
+  "kind": "next-action",
+  "title": "Test bounded-proof-before-generation",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Run a bounded uncertainty-reduction experiment for: One affine Jacobian and one quadratic Hessian must prove the seam before broader construct generation or domain rollout. Selection rationale: The user explicitly approved the recorded framework and directed implementation to begin; this bounded affine-Jacobian and quadratic-Hessian proof is the accepted first slice.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "Approved refill option refill.experiment.plan-revision.kp.v23.bounded-proof-before-generation: The user explicitly approved the recorded framework and directed implementation to begin; this bounded affine-Jacobian and quadratic-Hessian proof is the accepted first slice.",
+      "occurredAt": "2026-09-02T14:23:59.892Z"
+    }
+  ],
+  "affects": [
+    "plan-revision.kp.v23"
+  ],
+  "verification": [
+    "theseus validate"
+  ],
+  "expectedLearning": [
+    "An approved plan depends on an active assumption without outcome evidence."
+  ],
+  "allowedWork": [
+    "Run a bounded uncertainty-reduction experiment for: One affine Jacobian and one quadratic Hessian must prove the seam before broader construct generation or domain rollout."
+  ],
+  "disallowedWork": [
+    "Do not broaden beyond the selected refill option without another approval."
+  ],
+  "criteria": [
+    {
+      "id": "selected-option-addressed",
+      "weight": "high"
+    },
+    {
+      "id": "selection-provenance-preserved",
+      "weight": "high"
+    }
+  ]
+}

@@ -1,10 +1,10 @@
 {
-  "id": "plan-revision.kp.v22",
+  "id": "plan-revision.kp.v23",
   "kind": "plan-revision",
-  "title": "Kinetic Press post-checkpoint product-surface roadmap v22",
-  "status": "superseded",
+  "title": "Kinetic Press typed semantic authoring proof v23",
+  "status": "active",
   "domain": "kp",
-  "summary": "Close generated solve, explanation spine, and rank-5 vector work; prove one reversible Svelte 5 catalogue shell before rank-6 matrix pressure and the approved Internal Studio and Public Web sequence.",
+  "summary": "Prove one bounded typed semantic authoring chain without building a general CAS or changing existing domain, runtime, renderer, Article, or Focus Deck authority.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -145,6 +145,26 @@
       "kind": "file",
       "path": "docs/project/reviews/2026-08-02-vector-dot-projection-review-package.md",
       "summary": "Seven-checkpoint vector review and human-approved rank-5 release evidence."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-02-typed-semantic-authoring-framework-goals.md",
+      "summary": "User-accepted capability goals, algebra boundary, risks, and first proof slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/typed-semantic-authoring-framework.md",
+      "summary": "Human-readable supporting thread and proof boundary."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Current roadmap and preserved Focus Deck checkpoint."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v22.json",
+      "summary": "Superseded predecessor retained for product-plan history and prior evidence."
     }
   ],
   "affects": [
@@ -161,12 +181,12 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "The six-loop convergence proposal and run contract are approved. M2/M3 and the vector exemplar are active; catalogue, performance, and programming-host work remain bounded preparation rather than inserted promotion ranks."
+    "summary": "The user selected the bounded typed semantic authoring proof; prior product-plan phases remain preserved while the new proof slice is active."
   },
   "planRevision": {
     "schemaVersion": "theseus.plan-revision.v2",
-    "revision": 22,
-    "objective": "Move from the certified rank-5 catalogue to a complexity-negative Svelte 5 host exemplar, pressure it with the rank-6 matrix caller, then build Internal Studio, portable Public Web, bounded editorial support, and a constrained Public Editor without moving animation truth into framework authority.",
+    "revision": 23,
+    "objective": "Prove a typed affine-function, Jacobian and quadratic-Hessian authoring kernel with shape-safe composition, semantic optics, bounded LaTeX elaboration, KaTeX projection, and deterministic step recovery while retaining explicit typed gaps and avoiding general CAS scope.",
     "assumptions": [
       {
         "id": "single-roadmap-authority",
@@ -246,6 +266,31 @@
       {
         "id": "framework-neutral-svelte-boundary",
         "statement": "Svelte components may own application composition and lifecycle but not assets, semantic truth, runtime frames, clocks, renderer ports, authoring commands, or publication bundles.",
+        "status": "active"
+      },
+      {
+        "id": "typed-tree-convergence",
+        "statement": "TypeScript construction, semantic macros, generated plumbing, and bounded LaTeX elaborate into one immutable typed semantic tree.",
+        "status": "active"
+      },
+      {
+        "id": "small-symbolic-kernel",
+        "statement": "The proof needs typed structure, substitution, bounded differentiation, local rewrites, and shape validation, not arbitrary solving or simplification.",
+        "status": "active"
+      },
+      {
+        "id": "semantic-optics-not-renderer-paths",
+        "statement": "Optics resolve stable semantic entities and transformations; renderer nodes never become canonical identity.",
+        "status": "active"
+      },
+      {
+        "id": "dynamic-inputs-return-gaps",
+        "statement": "Runtime LaTeX and dynamic shapes are verified at runtime and return typed diagnostics instead of guessed static authority.",
+        "status": "active"
+      },
+      {
+        "id": "bounded-proof-before-generation",
+        "statement": "One affine Jacobian and one quadratic Hessian must prove the seam before broader construct generation or domain rollout.",
         "status": "active"
       }
     ],
@@ -874,15 +919,36 @@
         "architectureBenefit": "Central motif evolution after concrete caller pressure exists.",
         "rationale": "A universal registry remains speculative until an actual redesign demands it.",
         "canonicalExemplar": "First intentionally redesigned shared motif"
+      },
+      {
+        "id": "typed-semantic-authoring-vertical-slice",
+        "title": "Typed semantic authoring vertical slice",
+        "objective": "Implement typed scalar, vector, matrix, function, Jacobian and Hessian construction; generated-style semantic optics and immutable rewrite correspondence; bounded LaTeX elaboration and KaTeX projection; and deterministic scene-step recovery with focused static and runtime tests.",
+        "horizon": "now",
+        "status": "active",
+        "topic": "Platform · Typed semantic authoring",
+        "architectureBenefit": "One autocomplete-friendly semantic source shared by library and bounded LaTeX authoring.",
+        "rationale": "The user approved the framework goals and requested implementation after the algebra boundary was recorded.",
+        "canonicalExemplar": "Affine R2 to R2 Jacobian with quadratic scalar Hessian pressure"
+      },
+      {
+        "id": "typed-semantic-authoring-promotion-review",
+        "title": "Typed semantic authoring promotion review",
+        "objective": "Review the two proof callers and decide which construct declarations, code generation, units, domain packs, and Article integration deserve later promotion.",
+        "horizon": "next",
+        "status": "planned",
+        "topic": "Platform · Authoring governance",
+        "architectureBenefit": "Prevents the proof from becoming a universal AST, CAS, parser, or catalogue rollout.",
+        "rationale": "Shared infrastructure requires evidence from both proof callers and an explicit promotion decision.",
+        "canonicalExemplar": "Jacobian and Hessian proof review"
       }
     ],
     "approval": {
-      "status": "superseded",
+      "status": "approved",
       "decidedAt": "2026-09-02T14:23:04.000Z",
       "decidedBy": "user",
-      "rationale": "Superseded by plan-revision.kp.v23."
+      "rationale": "The user explicitly approved the recorded typed semantic authoring framework and directed implementation to begin with its bounded proof slice."
     },
-    "supersedes": "plan-revision.kp.v21",
-    "supersededBy": "plan-revision.kp.v23"
+    "supersedes": "plan-revision.kp.v22"
   }
 }
