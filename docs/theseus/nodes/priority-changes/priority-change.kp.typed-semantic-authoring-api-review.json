@@ -208,11 +208,30 @@
       "status": "passed",
       "scope": "slice-s13-standard",
       "checkedAt": "2026-09-02T21:27:46.755Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-math-jacobian-projection.test.ts tests/typed-math-expression-differentiable-adapter.test.ts",
+      "status": "passed",
+      "scope": "slice-s14-focused",
+      "checkedAt": "2026-09-02T21:31:07.273Z",
+      "notes": "Four projection and adapter tests passed, including basis-present agreement and basis-required gap behavior."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.inference.json --noEmit",
+      "status": "passed",
+      "scope": "slice-s14-inference",
+      "checkedAt": "2026-09-02T21:31:08.513Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s14-standard",
+      "checkedAt": "2026-09-02T21:31:09.564Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s13 adds only the bilinear second-derivative-at-a-point value, explicit left/right linearity evidence, semantic typing, and a missing-capability gap."
+    "summary": "Slice s14 projects Df(x) only through explicit domain and codomain bases; absent bases retain the derivative map and return a typed repair gap."
   },
   "priorityChange": {
     "schemaVersion": "theseus.priority-change.v1",

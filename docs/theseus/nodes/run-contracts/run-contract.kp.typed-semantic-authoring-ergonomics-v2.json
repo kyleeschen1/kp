@@ -134,7 +134,8 @@
     {
       "id": "s14",
       "title": "jacobian-projection",
-      "status": "planned"
+      "summary": "Jacobian projection is basis-explicit, coordinate-free derivatives remain usable without bases, and all focused, inference, and standard checks pass.",
+      "status": "complete"
     },
     {
       "id": "s15",
