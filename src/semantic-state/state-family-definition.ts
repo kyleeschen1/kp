@@ -1,3 +1,6 @@
+import type {
+  KpAggregateSemanticSnapshot
+} from "./aggregate-snapshot.ts";
 import type { KpCompiledSemanticStateSchema } from
   "./authoring-schema-compiler.ts";
 import type {
@@ -8,8 +11,11 @@ import type {
 } from "./authoring-schema.ts";
 import type { KpSemanticStateHandleSet } from
   "./authoring-state-handles.ts";
-import type { KpSemanticStateOperationTree } from
-  "./authoring-state-transform.ts";
+import {
+  defineKpSemanticStateTransform,
+  type KpSemanticStateOperationTree,
+  type KpSemanticStateTransformApplication
+} from "./authoring-state-transform.ts";
 import { requireAndFreezeKpPersistentSemanticValue } from
   "./entity-version-store.ts";
 import type {
@@ -134,6 +140,21 @@ export interface KpSemanticStateFamilyApplicationRecord<Parameters> {
   readonly transitionPlan: KpSemanticStateTransitionPlan;
 }
 
+export type KpAppliedSemanticStateFamily<
+  Root extends KpSemanticStateGroupDescriptor<KpSemanticStateMemberMap>,
+  Parameters
+> = Omit<
+  KpSemanticStateFamilyApplicationRecord<Parameters>,
+  "schemaVersion" | "kind"
+> & {
+  readonly schemaVersion: "kp.applied-semantic-state-family.v1";
+  readonly kind: "applied-semantic-state-family";
+  readonly endpointApplication: KpSemanticStateTransformApplication<Root>;
+  readonly commit: KpSemanticStateTransformApplication<Root>["commit"];
+  readonly before: KpSemanticStateTransformApplication<Root>["before"];
+  readonly after: KpSemanticStateTransformApplication<Root>["after"];
+};
+
 export interface KpSemanticStateFamilyDefinitionCapabilities<
   Root extends KpSemanticStateGroupDescriptor<KpSemanticStateMemberMap>,
   Parameters,
@@ -174,6 +195,16 @@ export interface KpSemanticStateFamilyDefinition<
     >;
     readonly sourceId: string;
   }): KpSemanticStateFamilyApplicationRecord<Parameters>;
+  apply(
+    before: KpAggregateSemanticSnapshot,
+    input: {
+      readonly applicationId: string;
+      readonly parameters: Parameters & NoInfer<
+        KpSemanticStateDataShape<Parameters>
+      >;
+      readonly sourceId: string;
+    }
+  ): KpAppliedSemanticStateFamily<Root, Parameters>;
 }
 
 export type KpSemanticStateFamilyErrorCode =
@@ -264,6 +295,46 @@ export function defineKpSemanticStateFamily<
     author: input.author
   });
 
+  const prepareApplication = (applicationInput: {
+    readonly applicationId: string;
+    readonly parameters: Parameters & NoInfer<
+      KpSemanticStateDataShape<Parameters>
+    >;
+    readonly sourceId: string;
+  }): KpSemanticStateFamilyApplicationRecord<Parameters> => {
+    const applicationSourceId = requireSourceId(
+      applicationInput.sourceId,
+      "application"
+    );
+    let parameters: Parameters;
+    try {
+      parameters = requireAndFreezeKpPersistentSemanticValue(
+        applicationInput.parameters
+      ) as Parameters;
+    } catch (error) {
+      throw new KpSemanticStateFamilyError(
+        "invalid-family-parameters",
+        `Semantic state family ${JSON.stringify(input.id)} parameters are not persistent structural data: ${error instanceof Error ? error.message : String(error)}`
+      );
+    }
+    const transformationId = input.compiled.identityScope
+      .appliedTransformation(definitionId, applicationInput.applicationId);
+    return Object.freeze<KpSemanticStateFamilyApplicationRecord<Parameters>>({
+      schemaVersion: "kp.semantic-state-family-application-record.v1",
+      kind: "semantic-state-family-application-record",
+      definitionId,
+      transformationId,
+      applicationId: applicationInput.applicationId,
+      parameters,
+      source: Object.freeze({
+        schemaVersion: "kp.semantic-state-family-source-provenance.v1",
+        kind: "authored",
+        sourceId: applicationSourceId
+      }),
+      transitionPlan
+    });
+  };
+
   return Object.freeze<KpSemanticStateFamilyDefinition<
     KpSemanticStateGroupDescriptor<Members>,
     Parameters,
@@ -275,43 +346,33 @@ export function defineKpSemanticStateFamily<
     localId: input.id,
     declaration,
     capabilities,
-    prepareApplication(applicationInput: {
-      readonly applicationId: string;
-      readonly parameters: Parameters & NoInfer<
-        KpSemanticStateDataShape<Parameters>
-      >;
-      readonly sourceId: string;
-    }) {
-      const applicationSourceId = requireSourceId(
-        applicationInput.sourceId,
-        "application"
+    prepareApplication,
+    apply(before, applicationInput) {
+      const application = prepareApplication(applicationInput);
+      const endpointDefinition = defineKpSemanticStateTransform({
+        compiled: input.compiled,
+        handles: input.handles,
+        id: input.id,
+        author(state) {
+          const result = input.author(application.parameters, state);
+          return result;
+        }
+      });
+      const endpointApplication = endpointDefinition.apply(
+        before,
+        application.applicationId
       );
-      let parameters: Parameters;
-      try {
-        parameters = requireAndFreezeKpPersistentSemanticValue(
-          applicationInput.parameters
-        ) as Parameters;
-      } catch (error) {
-        throw new KpSemanticStateFamilyError(
-          "invalid-family-parameters",
-          `Semantic state family ${JSON.stringify(input.id)} parameters are not persistent structural data: ${error instanceof Error ? error.message : String(error)}`
-        );
-      }
-      const transformationId = input.compiled.identityScope
-        .appliedTransformation(definitionId, applicationInput.applicationId);
-      return Object.freeze<KpSemanticStateFamilyApplicationRecord<Parameters>>({
-        schemaVersion: "kp.semantic-state-family-application-record.v1",
-        kind: "semantic-state-family-application-record",
-        definitionId,
-        transformationId,
-        applicationId: applicationInput.applicationId,
-        parameters,
-        source: Object.freeze({
-          schemaVersion: "kp.semantic-state-family-source-provenance.v1",
-          kind: "authored",
-          sourceId: applicationSourceId
-        }),
-        transitionPlan
+      return Object.freeze<KpAppliedSemanticStateFamily<
+        KpSemanticStateGroupDescriptor<Members>,
+        Parameters
+      >>({
+        ...application,
+        schemaVersion: "kp.applied-semantic-state-family.v1",
+        kind: "applied-semantic-state-family",
+        endpointApplication,
+        commit: endpointApplication.commit,
+        before: endpointApplication.before,
+        after: endpointApplication.after
       });
     }
   });

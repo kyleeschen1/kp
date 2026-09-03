@@ -96,7 +96,8 @@
     {
       "id": "s05",
       "title": "Persistent endpoint application",
-      "status": "planned"
+      "summary": "Persistent-endpoints-run-through-existing-transaction-projection-and-recovery-authority",
+      "status": "complete"
     },
     {
       "id": "s06",
