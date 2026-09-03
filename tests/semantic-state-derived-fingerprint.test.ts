@@ -16,8 +16,11 @@ import { materializeKpSemanticStateInitialSnapshot } from
   "../src/semantic-state/authoring-state-materializer.ts";
 import { defineKpSemanticStateTransform } from
   "../src/semantic-state/authoring-state-transform.ts";
-import { createKpSemanticConcreteDerivationFingerprint } from
-  "../src/semantic-state/derived-fingerprint.ts";
+import {
+  createKpSemanticConcreteDerivationFingerprint,
+  createKpSemanticDerivationFingerprint,
+  type KpSemanticDerivedDependencyToken
+} from "../src/semantic-state/derived-fingerprint.ts";
 import {
   compileKpSemanticDerivedGraph,
   normalizeKpSemanticDerivedGraphInput
@@ -68,6 +71,56 @@ test("an unrelated branch snapshot reuses the exact fingerprint", () => {
   assert.deepEqual(branch, shared);
   assert.equal(branch.key.includes(fixture.shared.id), false);
   assert.equal(branch.key.includes(fixture.unrelatedBranch.id), false);
+});
+
+test("nested fingerprints compose concrete dependency authority", () => {
+  const fixture = createNestedFixture();
+  const initial = createKpSemanticDerivationFingerprint({
+    graph: fixture.graph,
+    snapshot: fixture.initial,
+    target: fixture.handles.refs.summary
+  });
+  const updated = createKpSemanticDerivationFingerprint({
+    graph: fixture.graph,
+    snapshot: fixture.updated,
+    target: fixture.handles.refs.summary
+  });
+  const doubled = requireDerivedToken(initial.dependencies[0]);
+  const concrete = doubled.fingerprint.dependencies[0];
+
+  assert.equal(doubled.slotId, fixture.handles.refs.doubled.slotId);
+  assert.equal(concrete?.kind, "semantic-concrete-dependency-token");
+  assert.notEqual(updated.key, initial.key);
+  assert.ok(Object.isFrozen(doubled));
+  assert.ok(Object.isFrozen(doubled.fingerprint));
+});
+
+test("diamond fingerprints ignore declaration order and unrelated branches", () => {
+  const fixture = createNestedFixture();
+  const first = createKpSemanticDerivationFingerprint({
+    graph: fixture.graph,
+    snapshot: fixture.initial,
+    target: fixture.handles.refs.total
+  });
+  const permuted = createKpSemanticDerivationFingerprint({
+    graph: fixture.permutedGraph,
+    snapshot: fixture.initial,
+    target: fixture.handles.refs.total
+  });
+  const branch = createKpSemanticDerivationFingerprint({
+    graph: fixture.graph,
+    snapshot: fixture.unrelatedBranch,
+    target: fixture.handles.refs.total
+  });
+  const left = requireDerivedToken(first.dependencies[0]);
+  const right = requireDerivedToken(first.dependencies[1]);
+  const leftShared = requireDerivedToken(left.fingerprint.dependencies[0]);
+  const rightShared = requireDerivedToken(right.fingerprint.dependencies[0]);
+
+  assert.equal(leftShared.key, rightShared.key);
+  assert.deepEqual(permuted, first);
+  assert.deepEqual(branch, first);
+  assert.notEqual(fixture.unrelatedBranch.id, fixture.initial.id);
 });
 
 function createFixture() {
@@ -168,6 +221,100 @@ function readToken(
   );
   if (token === undefined) {
     throw new Error(`Missing concrete fingerprint token ${slotId}.`);
+  }
+  return token;
+}
+
+function createNestedFixture() {
+  const compiled = compileKpSemanticStateSchema(
+    "lesson.nested-derived-fingerprint",
+    kpStateGroup({
+      base: kpStateValue<number>(2),
+      other: kpStateValue<number>(0),
+      doubled: kpStateDerived<number>(),
+      summary: kpStateDerived<number>(),
+      left: kpStateDerived<number>(),
+      right: kpStateDerived<number>(),
+      total: kpStateDerived<number>()
+    })
+  );
+  const handles = createKpSemanticStateHandleSet(compiled);
+  const doubled = defineKpSemanticStateDerivation({
+    compiled,
+    target: handles.refs.doubled,
+    dependencies: [handles.refs.base],
+    compute: ([base]) => base * 2
+  });
+  const summary = defineKpSemanticStateDerivation({
+    compiled,
+    target: handles.refs.summary,
+    dependencies: [handles.refs.doubled],
+    compute: ([value]) => value + 1
+  });
+  const left = defineKpSemanticStateDerivation({
+    compiled,
+    target: handles.refs.left,
+    dependencies: [handles.refs.doubled],
+    compute: ([value]) => value + 2
+  });
+  const right = defineKpSemanticStateDerivation({
+    compiled,
+    target: handles.refs.right,
+    dependencies: [handles.refs.doubled],
+    compute: ([value]) => value + 3
+  });
+  const total = defineKpSemanticStateDerivation({
+    compiled,
+    target: handles.refs.total,
+    dependencies: [handles.refs.left, handles.refs.right],
+    compute: ([leftValue, rightValue]) => leftValue + rightValue
+  });
+  const definitions = [summary, total, right, doubled, left];
+  const initial = materializeKpSemanticStateInitialSnapshot(compiled, {
+    derivations: definitions
+  });
+  const updateBase = defineKpSemanticStateTransform({
+    compiled,
+    handles,
+    id: "update-base",
+    author(state) {
+      state.base.update(value => value + 1);
+    }
+  });
+  const updated = updateBase.apply(initial, "first").commit.after;
+  const updateOther = defineKpSemanticStateTransform({
+    compiled,
+    handles,
+    id: "update-other",
+    author(state) {
+      state.other.update(value => value + 1);
+    }
+  });
+  const unrelatedBranch = updateOther.apply(initial, "first").commit.after;
+  const graph = compileKpSemanticDerivedGraph(
+    normalizeKpSemanticDerivedGraphInput(compiled, definitions)
+  );
+  const permutedGraph = compileKpSemanticDerivedGraph(
+    normalizeKpSemanticDerivedGraphInput(compiled, [...definitions].reverse())
+  );
+  return {
+    compiled,
+    handles,
+    initial,
+    updated,
+    unrelatedBranch,
+    graph,
+    permutedGraph
+  };
+}
+
+function requireDerivedToken(
+  token: ReturnType<typeof createKpSemanticDerivationFingerprint>[
+    "dependencies"
+  ][number] | undefined
+): KpSemanticDerivedDependencyToken {
+  if (token?.kind !== "semantic-derived-dependency-token") {
+    throw new Error("Expected a nested derived fingerprint token.");
   }
   return token;
 }

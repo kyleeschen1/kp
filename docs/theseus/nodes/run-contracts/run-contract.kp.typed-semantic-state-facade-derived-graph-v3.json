@@ -126,7 +126,8 @@
     {
       "id": "s12",
       "title": "Compose nested derived fingerprints",
-      "status": "planned"
+      "summary": "nested-fingerprint-keys-track-exact-leaf-versions-and-ignore-declaration-order-or-unrelated-snapshot-identity",
+      "status": "complete"
     },
     {
       "id": "s13",

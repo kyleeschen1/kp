@@ -926,11 +926,53 @@
       "scope": "standard",
       "checkedAt": "2026-09-03T18:07:50.603Z",
       "notes": "workspace-valid-1088-nodes-26861-events-after-v3-s11-closeout"
+    },
+    {
+      "command": "node-test-semantic-state-derived-fingerprint",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T18:11:42.644Z",
+      "notes": "five-chain-diamond-permutation-and-equivalent-branch-fingerprint-laws-passed"
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T18:11:43.824Z",
+      "notes": "all-type-projects-pass-with-recursive-token-contracts-and-no-new-casts"
+    },
+    {
+      "command": "npm-run-test-semantic-state",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T18:11:44.865Z",
+      "notes": "133-semantic-state-laws-passed"
+    },
+    {
+      "command": "npm-run-check-architecture",
+      "status": "passed",
+      "scope": "impact-router",
+      "checkedAt": "2026-09-03T18:11:45.909Z",
+      "notes": "nested-fingerprint-architecture-gates-passed"
+    },
+    {
+      "command": "npm-run-check-inference",
+      "status": "passed",
+      "scope": "diagnostic",
+      "checkedAt": "2026-09-03T18:11:46.950Z",
+      "notes": "types-103188-instantiations-172704"
+    },
+    {
+      "command": "theseus-workspace-validate",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T18:11:55.841Z",
+      "notes": "workspace-valid-1088-nodes-26872-events-after-v3-s12-closeout"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "v3-s11-complete-concrete-fingerprints-use-only-derivation-slot-entity-and-version-authority"
+    "summary": "v3-s12-complete-nested-derived-fingerprints-compose-deterministically-through-chains-and-diamonds"
   },
   "expectedLearning": [
     "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",
