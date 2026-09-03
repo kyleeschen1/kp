@@ -353,6 +353,17 @@ work remains focused preflight rather than a padded long loop. See
 `../reviews/2026-09-02-semantic-state-architecture-sequencing-review.md` and
 `../decisions/2026-09-02-persistent-semantic-state-architecture-direction.md`.
 
+## Pending Foundation Long Loop
+
+The proposed first run contains 30 independently reversible slices. It keeps
+the test-ledger, unit-scalar helper, and economics-parity work as bounded
+opening gates, then implements only the explicit nonvisual identity, snapshot,
+role-binding, transaction, lineage, and recovery kernel. It stops at a
+mandatory architecture/API checkpoint before proxy ergonomics, lazy derived
+evaluation, interpolation, timeline, or renderer work. No run contract is
+active until the user approves the exact proposal in
+`../reviews/2026-09-02-persistent-semantic-state-foundation-long-loop-proposal.md`.
+
 ## Stop Conditions
 
 - A feature requires a universal mutable registry or import-order authority.
