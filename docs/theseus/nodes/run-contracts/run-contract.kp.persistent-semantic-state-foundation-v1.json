@@ -148,7 +148,8 @@
     {
       "id": "s15",
       "title": "parity-negatives-and-provenance",
-      "status": "planned"
+      "summary": "Closed parity negatives: canonical slope validation remains upstream, forged units and infeasible trade fail, non-binary-exact rationals are not coerced, explicit model/state IDs must close, a second market satisfies welfare laws, and price floors remain outside the adapter.",
+      "status": "complete"
     },
     {
       "id": "s16",

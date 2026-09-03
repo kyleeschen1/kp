@@ -2,9 +2,10 @@ import {
   createKpPerUnitTaxWelfareAccounting,
   type KpPerUnitTaxWelfareAccountingV1
 } from "../../../domains/economics/per-unit-tax-welfare-accounting.ts";
-import type {
-  KpPerUnitTaxMarketStateV1,
-  KpPerUnitTaxWelfareModelV1
+import {
+  kpPerUnitTaxWelfareModelSchemaVersion,
+  type KpPerUnitTaxMarketStateV1,
+  type KpPerUnitTaxWelfareModelV1
 } from "../../../domains/economics/per-unit-tax-welfare-model.ts";
 import {
   createKpRational,
@@ -81,6 +82,7 @@ export function projectKpExactRationalLinearMarket<
   PriceUnitId,
   WelfareUnitId
 > {
+  requireCanonicalSourceClosure(input.model);
   const welfare = createKpPerUnitTaxWelfareAccounting(input.model);
   const market = createKpLinearSupplyDemandExperiment({
     author: input.author,
@@ -161,6 +163,47 @@ export function projectKpExactRationalLinearMarket<
       })
     })
   });
+}
+
+function requireCanonicalSourceClosure(
+  model: KpPerUnitTaxWelfareModelV1
+): void {
+  if (model.schemaVersion !== kpPerUnitTaxWelfareModelSchemaVersion) {
+    throw new Error("Exact economics model schema version is not supported.");
+  }
+  const expectedModelId = `model.${model.input.id}`;
+  if (model.id !== expectedModelId) {
+    throw new Error(
+      `Exact economics model id must be ${expectedModelId}; received ${model.id}.`
+    );
+  }
+  if (model.states.untaxed.id !== model.input.equilibriumIds.untaxed ||
+      model.states.taxed.id !== model.input.equilibriumIds.taxed) {
+    throw new Error(
+      "Exact economics state ids must close over the declared equilibrium ids."
+    );
+  }
+  if (model.states.untaxed.phase !== "untaxed" ||
+      model.states.taxed.phase !== "taxed") {
+    throw new Error("Exact economics state phases do not match their source roles.");
+  }
+  const sourceIds = [
+    model.id,
+    model.input.id,
+    model.input.demand.id,
+    model.input.supply.id,
+    model.input.tax.id,
+    model.states.untaxed.id,
+    model.states.taxed.id
+  ];
+  for (const id of sourceIds) {
+    if (id.trim().length === 0 || id.trim() !== id) {
+      throw new Error("Exact economics source ids must be non-empty and trimmed.");
+    }
+  }
+  if (new Set(sourceIds).size !== sourceIds.length) {
+    throw new Error("Exact economics source ids must remain distinct.");
+  }
 }
 
 interface ExactWelfareView {

@@ -420,6 +420,20 @@
       "scope": "s14-exact-rational-adapter",
       "checkedAt": "2026-09-03T08:05:51.206Z",
       "notes": "The one-way adapter keeps canonical domain authority upstream and passes 1980-module dependency direction with no exceptions."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/economics-supply-tax-parity-negatives.test.ts tests/economics-supply-tax-parity-characterization.test.ts tests/economics-supply-tax-model.test.ts tests/economics-supply-tax-welfare.test.ts tests/typed-linear-supply-demand-pressure.test.ts",
+      "status": "passed",
+      "scope": "s15-parity-negatives",
+      "checkedAt": "2026-09-03T08:09:28.586Z",
+      "notes": "22 tests passed for unit forgery, slope validation, infeasible tax, exact Number representability, source closure, a second welfare invariant, and explicit price-floor exclusion."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s15-parity-negatives",
+      "checkedAt": "2026-09-03T08:09:29.641Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks passed."
     }
   ],
   "expectedLearning": [
