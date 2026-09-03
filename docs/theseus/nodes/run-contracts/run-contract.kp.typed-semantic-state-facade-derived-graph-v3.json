@@ -66,7 +66,8 @@
     {
       "id": "s02",
       "title": "Normalize dependency declarations",
-      "status": "planned"
+      "summary": "normalized-typed-dependencies-to-deterministic-definition-local-graph-input-with-exact-schema-paths-and-zero-compute-calls",
+      "status": "complete"
     },
     {
       "id": "s03",

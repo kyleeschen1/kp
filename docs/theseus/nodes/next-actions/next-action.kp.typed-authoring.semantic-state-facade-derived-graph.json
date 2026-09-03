@@ -513,11 +513,53 @@
       "scope": "standard",
       "checkedAt": "2026-09-03T17:15:02.954Z",
       "notes": "workspace valid with 1088 nodes and 26752 events after v3 s01 closeout"
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T17:21:57.998Z",
+      "notes": "107 semantic-state laws pass including stable graph input source paths and zero compute calls"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T17:21:59.210Z",
+      "notes": "application node test Svelte and domain TypeScript checks pass"
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T17:22:00.252Z",
+      "notes": "ratchet remains green at 103192 types and 172704 instantiations"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T17:22:01.374Z",
+      "notes": "dependency and semantic architecture gates pass with the new graph module"
+    },
+    {
+      "command": "npm run test:equation-reachability",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T17:22:02.461Z",
+      "notes": "12 tests pass after scan-only count update from 4110 to 4112"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T17:22:22.311Z",
+      "notes": "workspace valid with 1088 nodes and 26763 events after v3 s02 closeout"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "v3-s01-complete-derived-bindings-compile-to-existing-authority-and-the-single-measured-inference-refresh-is-green"
+    "summary": "v3-s02-complete-typed-definitions-now-normalize-to-frozen-definition-local-nodes-and-stable-path-aware-edges-without-execution"
   },
   "expectedLearning": [
     "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",
