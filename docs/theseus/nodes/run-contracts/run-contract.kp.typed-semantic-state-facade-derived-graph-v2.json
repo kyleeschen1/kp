@@ -98,7 +98,8 @@
     {
       "id": "s07",
       "title": "Typed update compilation",
-      "status": "planned"
+      "summary": "Added exact typed update(previous => next) on writable leaves, retained derived read-only boundaries, and proved deterministic revision, alias propagation, rollback, and immutable history.",
+      "status": "complete"
     },
     {
       "id": "s08",

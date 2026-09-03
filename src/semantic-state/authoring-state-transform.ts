@@ -1,5 +1,6 @@
 import type { KpAggregateSemanticSnapshot } from "./aggregate-snapshot.ts";
 import type {
+  KpCompiledSemanticStateLeaf,
   KpCompiledSemanticStateSchema
 } from "./authoring-schema-compiler.ts";
 import type {
@@ -8,11 +9,15 @@ import type {
   KpSemanticStateLeafHandle
 } from "./authoring-state-handles.ts";
 import type {
+  KpSemanticStateDerivedDescriptor,
   KpSemanticStateGroupDescriptor,
   KpSemanticStateLeafDescriptor,
   KpSemanticStateMemberMap,
+  KpSemanticStateOptionalDescriptor,
+  KpSemanticStateValueDescriptor,
   KpSemanticStateSchemaNode
 } from "./authoring-schema.ts";
+import type { KpPersistentSemanticValue } from "./entity-version-store.ts";
 import type {
   KpAppliedTransformationId,
   KpTransformationDefinitionId
@@ -48,12 +53,23 @@ export interface KpSemanticStateOperationLeafHandle<
   read(): Value;
 }
 
+export interface KpSemanticStateWritableOperationLeafHandle<
+  Value,
+  DescriptorKind extends "required-value" | "optional-value"
+> extends KpSemanticStateOperationLeafHandle<Value, DescriptorKind> {
+  update(update: (previous: Value) => Value): void;
+}
+
 type KpSemanticStateOperationNode<Node extends KpSemanticStateSchemaNode> =
   Node extends KpSemanticStateGroupDescriptor<infer Members>
     ? KpSemanticStateOperationMembers<Members>
-    : Node extends KpSemanticStateLeafDescriptor<infer Value>
-      ? KpSemanticStateOperationLeafHandle<Value, Node["kind"]>
-      : never;
+    : Node extends KpSemanticStateValueDescriptor<infer Value>
+      ? KpSemanticStateWritableOperationLeafHandle<Value, "required-value">
+      : Node extends KpSemanticStateOptionalDescriptor<infer Value>
+        ? KpSemanticStateWritableOperationLeafHandle<Value, "optional-value">
+        : Node extends KpSemanticStateDerivedDescriptor<infer Value>
+          ? KpSemanticStateOperationLeafHandle<Value, "derived-value">
+          : never;
 
 export type KpSemanticStateOperationMembers<
   Members extends KpSemanticStateMemberMap
@@ -98,6 +114,9 @@ export function defineKpSemanticStateTransform<
   readonly author: (state: KpSemanticStateOperationTree<Root>) => void;
 }): KpSemanticStateTransformDefinition<Root> {
   const definitionId = input.compiled.identityScope.transformation(input.id);
+  const leafByEncodedPath = new Map(
+    input.compiled.leaves.map((leaf) => [leaf.encodedPath, leaf])
+  );
   return Object.freeze({
     schemaVersion: "kp.semantic-state-transform-definition.v1",
     kind: "semantic-state-transform-definition",
@@ -114,7 +133,8 @@ export function defineKpSemanticStateTransform<
       });
       const state = createOperationTree(
         input.handles.refs,
-        transaction
+        transaction,
+        leafByEncodedPath
       ) as KpSemanticStateOperationTree<Root>;
 
       try {
@@ -152,24 +172,48 @@ export function defineKpSemanticStateTransform<
 
 function createOperationTree(
   refs: Readonly<Record<string, unknown>>,
-  transaction: KpSemanticTransaction
+  transaction: KpSemanticTransaction,
+  leafByEncodedPath: ReadonlyMap<string, KpCompiledSemanticStateLeaf>
 ): Readonly<Record<string, unknown>> {
   const result: Record<string, unknown> = {};
   for (const key of Object.keys(refs).sort(compareStrings)) {
     const value = refs[key];
     if (isLeafReference(value)) {
-      result[key] = Object.freeze({
+      const leaf = leafByEncodedPath.get(value.encodedPath);
+      if (leaf === undefined) {
+        throw new Error(
+          `Semantic state operation handle ${JSON.stringify(value.path)} was not compiled.`
+        );
+      }
+      const handle: Record<string, unknown> = {
         schemaVersion: "kp.semantic-state-operation-leaf-handle.v1" as const,
         kind: "semantic-state-operation-leaf-handle" as const,
         reference: value,
         read() {
           return transaction.read(transaction.scope, value.slotId).version.value;
         }
-      });
+      };
+      if (value.descriptorKind !== "derived-value") {
+        handle["update"] = (
+          update: (
+            previous: KpPersistentSemanticValue
+          ) => KpPersistentSemanticValue
+        ) => {
+          transaction.update(transaction.scope, {
+            id: leaf.identities.operationIds.update,
+            sourceId: leaf.identities.operationIds.update,
+            revisionId: "update",
+            slotId: value.slotId,
+            update
+          });
+        };
+      }
+      result[key] = Object.freeze(handle);
     } else if (value !== null && typeof value === "object") {
       result[key] = createOperationTree(
         value as Readonly<Record<string, unknown>>,
-        transaction
+        transaction,
+        leafByEncodedPath
       );
     } else {
       throw new Error(`Semantic state handle tree member ${JSON.stringify(key)} is invalid.`);

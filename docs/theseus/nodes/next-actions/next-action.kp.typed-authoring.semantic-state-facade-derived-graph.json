@@ -199,11 +199,32 @@
       "scope": "standard",
       "checkedAt": "2026-09-03T13:11:18.423Z",
       "notes": "Impact-directed architecture gates pass with zero dependency-direction exceptions."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T13:17:43.403Z",
+      "notes": "87 of 87 laws pass; typed update preserves frozen prior input, exact kernel journal metadata, alias propagation, nondeterminism rollback, and prior snapshot recovery."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T13:17:44.569Z",
+      "notes": "Writable required and optional leaves expose exact update callbacks while derived leaves remain read-only and incompatible domain values fail compilation."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T13:17:45.690Z",
+      "notes": "Impact-directed architecture gates pass with zero dependency-direction exceptions."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s06 adds deterministic transform definitions with explicit application IDs, typed transaction-local reads, automatic commit-or-abort cleanup, empty-transform diagnostics, and expired captured handles."
+    "summary": "s07 compiles typed update callbacks to the existing transaction kernel with schema-derived write identities. No author IDs or order-derived identity are introduced; kernel determinism and alias laws remain authoritative."
   },
   "expectedLearning": [
     "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",

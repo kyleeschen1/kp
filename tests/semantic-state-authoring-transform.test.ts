@@ -14,7 +14,10 @@ import {
 } from "../src/semantic-state/authoring-state-transform.ts";
 import { kpStateGroup, kpStateValue } from
   "../src/semantic-state/authoring-schema.ts";
-import { KpSemanticTransactionError } from
+import {
+  beginKpSemanticTransaction,
+  KpSemanticTransactionError
+} from
   "../src/semantic-state/transaction.ts";
 
 test("transform definitions derive identity without callback-order authority", () => {
@@ -104,6 +107,120 @@ test("non-void callback results cannot become hidden transform state", () => {
     assert.equal(error.code, "unsupported-callback-result");
     return true;
   });
+});
+
+test("update compiles to one deterministic same-entity revision", () => {
+  const fixture = createFixture();
+  const seen: unknown[] = [];
+  const definition = defineKpSemanticStateTransform({
+    ...fixture,
+    id: "raise-supply",
+    author(state) {
+      state.market.supply.update(previous => {
+        seen.push(previous);
+        assert.equal(Object.isFrozen(previous), true);
+        return { ...previous, intercept: previous.intercept + 4 };
+      });
+    }
+  });
+
+  const application = definition.apply(fixture.initial, "first");
+
+  assert.equal(seen.length, 2);
+  assert.equal(seen[0], seen[1]);
+  assert.deepEqual(application.before.market.supply.read(), {
+    intercept: 2,
+    slope: 1
+  });
+  assert.deepEqual(application.after.market.supply.read(), {
+    intercept: 6,
+    slope: 1
+  });
+  assert.deepEqual(fixture.handles.pin(fixture.initial).market.supply.read(), {
+    intercept: 2,
+    slope: 1
+  });
+  assert.equal(application.commit.journal.length, 1);
+  const operation = application.commit.journal[0]?.operation;
+  assert.equal(operation?.kind, "update");
+  assert.deepEqual(operation, {
+    kind: "update",
+    sourceId: "schema.market.supply.update",
+    revisionId: "update",
+    slotId: fixture.compiled.identityScope.slot("market.supply"),
+    previousVersionId:
+      "kp-state/lesson.transform-shell/entity/initial.market.supply/version/initial",
+    nextVersionId:
+      "kp-state/lesson.transform-shell/entity/initial.market.supply/version/from/raise-supply/application/first/revision/update"
+  });
+});
+
+test("update through an existing alias advances every shared role", () => {
+  const fixture = createFixture();
+  const aliasDefinition = fixture.compiled.identityScope
+    .transformation("prepare-alias");
+  const aliasTransaction = beginKpSemanticTransaction({
+    identities: fixture.compiled.identityScope,
+    before: fixture.initial,
+    transformationId: fixture.compiled.identityScope.appliedTransformation(
+      aliasDefinition,
+      "first"
+    )
+  });
+  aliasTransaction.bind(aliasTransaction.scope, {
+    id: "prepare.alias",
+    sourceId: "prepare.alias",
+    sourceSlotId: fixture.compiled.identityScope.slot("market.supply"),
+    targetSlotId: fixture.compiled.identityScope.slot("market.demand")
+  });
+  const aliased = aliasTransaction.commit(aliasTransaction.scope).after;
+  const definition = defineKpSemanticStateTransform({
+    ...fixture,
+    id: "raise-through-demand",
+    author(state) {
+      state.market.demand.update(previous => ({
+        ...previous,
+        intercept: previous.intercept + 5
+      }));
+    }
+  });
+
+  const application = definition.apply(aliased, "first");
+
+  assert.equal(application.before.market.supply.read().intercept, 2);
+  assert.equal(application.before.market.demand.read().intercept, 2);
+  assert.equal(application.after.market.supply.read().intercept, 7);
+  assert.equal(application.after.market.demand.read().intercept, 7);
+  assert.equal(
+    application.commit.after.bindings[0]?.versionId,
+    application.commit.after.bindings[1]?.versionId
+  );
+});
+
+test("nondeterministic update results abort without changing the input", () => {
+  const fixture = createFixture();
+  let counter = 0;
+  const definition = defineKpSemanticStateTransform({
+    ...fixture,
+    id: "unstable-supply",
+    author(state) {
+      state.market.supply.update(previous => ({
+        ...previous,
+        intercept: previous.intercept + counter++
+      }));
+    }
+  });
+
+  assert.throws(() => definition.apply(fixture.initial, "first"), (error) => {
+    assert.ok(error instanceof KpSemanticTransactionError);
+    assert.equal(error.code, "nondeterministic-update");
+    return true;
+  });
+  assert.equal(
+    fixture.handles.pin(fixture.initial).market.supply.read().intercept,
+    2
+  );
+  assert.equal(fixture.initial.entityStores[0]?.versions.length, 1);
 });
 
 function createFixture() {
