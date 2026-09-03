@@ -262,11 +262,32 @@
       "scope": "standard",
       "checkedAt": "2026-09-03T13:24:11.948Z",
       "notes": "All architecture gates pass with zero dependency-direction exceptions."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T13:26:56.388Z",
+      "notes": "94 of 94 laws pass; optional handles introduce, read, revise, and remove through kernel lifecycle operations while preserving prior snapshots and rejecting invalid dispositions."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T13:26:57.528Z",
+      "notes": "Only optional leaves expose introduce and remove, introduced values retain exact types, and required or derived leaves cannot use lifecycle methods."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T13:26:58.590Z",
+      "notes": "All architecture gates pass with zero dependency-direction exceptions."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s09 adds target.bindCopy(source) and deterministically mints copy identity from compiled target path plus explicit transform and application IDs; order and callback identity remain non-authoritative."
+    "summary": "s10 completes typed optional lifecycle compilation with deterministic per-application entity identities and no new storage or absence model."
   },
   "expectedLearning": [
     "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",

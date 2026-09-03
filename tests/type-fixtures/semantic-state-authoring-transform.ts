@@ -6,7 +6,12 @@ import { materializeKpSemanticStateInitialSnapshot } from
   "../../src/semantic-state/authoring-state-materializer.ts";
 import { defineKpSemanticStateTransform } from
   "../../src/semantic-state/authoring-state-transform.ts";
-import { kpStateDerived, kpStateGroup, kpStateValue } from
+import {
+  kpStateDerived,
+  kpStateGroup,
+  kpStateOptional,
+  kpStateValue
+} from
   "../../src/semantic-state/authoring-schema.ts";
 
 interface SupplyCurve {
@@ -37,6 +42,7 @@ const compiled = compileKpSemanticStateSchema("lesson.transform-types", kpStateG
     intercept: 12,
     slope: -1
   }),
+  policy: kpStateOptional<{ readonly rate: number }>(),
   equilibrium: kpStateDerived<number>()
 }));
 const handles = createKpSemanticStateHandleSet(compiled);
@@ -64,6 +70,15 @@ const transform = defineKpSemanticStateTransform({
 
     state.supplyAlias.bind(state.supply);
     state.supplyAlias.bindCopy(state.supply);
+
+    state.policy.introduce({ rate: 2 });
+    state.policy.remove();
+
+    // @ts-expect-error Optional introduction preserves the exact value type.
+    state.policy.introduce({ rate: "two" });
+
+    // @ts-expect-error Required values cannot enter the optional lifecycle.
+    state.supply.remove();
 
     // @ts-expect-error Bind requires matching semantic value types.
     state.supply.bind(state.demand);

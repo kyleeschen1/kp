@@ -80,13 +80,22 @@ export interface KpSemanticStateWritableOperationLeafHandle<
   ): void;
 }
 
+export interface KpSemanticStateOptionalOperationLeafHandle<Value>
+  extends KpSemanticStateWritableOperationLeafHandle<
+    Value,
+    "optional-value"
+  > {
+  introduce(value: Value): void;
+  remove(): void;
+}
+
 type KpSemanticStateOperationNode<Node extends KpSemanticStateSchemaNode> =
   Node extends KpSemanticStateGroupDescriptor<infer Members>
     ? KpSemanticStateOperationMembers<Members>
     : Node extends KpSemanticStateValueDescriptor<infer Value>
       ? KpSemanticStateWritableOperationLeafHandle<Value, "required-value">
       : Node extends KpSemanticStateOptionalDescriptor<infer Value>
-        ? KpSemanticStateWritableOperationLeafHandle<Value, "optional-value">
+        ? KpSemanticStateOptionalOperationLeafHandle<Value>
         : Node extends KpSemanticStateDerivedDescriptor<infer Value>
           ? KpSemanticStateOperationLeafHandle<Value, "derived-value">
           : never;
@@ -155,8 +164,10 @@ export function defineKpSemanticStateTransform<
         input.handles.refs,
         transaction,
         leafByEncodedPath,
-        (leaf) => input.compiled.identityScope.entity(
-          `${leaf.encodedPath}.from.${input.id}.${applicationId}`
+        (leaf, operation) => input.compiled.identityScope.entity(
+          operation === "copy"
+            ? `${leaf.encodedPath}.from.${input.id}.${applicationId}`
+            : `${leaf.encodedPath}.introduced-by.${input.id}.${applicationId}`
         )
       ) as KpSemanticStateOperationTree<Root>;
 
@@ -197,7 +208,10 @@ function createOperationTree(
   refs: Readonly<Record<string, unknown>>,
   transaction: KpSemanticTransaction,
   leafByEncodedPath: ReadonlyMap<string, KpCompiledSemanticStateLeaf>,
-  copyEntityId: (leaf: KpCompiledSemanticStateLeaf) => KpSemanticEntityId
+  operationEntityId: (
+    leaf: KpCompiledSemanticStateLeaf,
+    operation: "copy" | "introduce"
+  ) => KpSemanticEntityId
 ): Readonly<Record<string, unknown>> {
   const result: Record<string, unknown> = {};
   for (const key of Object.keys(refs).sort(compareStrings)) {
@@ -248,9 +262,27 @@ function createOperationTree(
             sourceId: leaf.identities.operationIds.bindCopy,
             sourceSlotId: source.reference.slotId,
             targetSlotId: value.slotId,
-            newEntityId: copyEntityId(leaf)
+            newEntityId: operationEntityId(leaf, "copy")
           });
         };
+        if (value.descriptorKind === "optional-value") {
+          handle["introduce"] = (introduced: KpPersistentSemanticValue) => {
+            transaction.introduce(transaction.scope, {
+              id: leaf.identities.operationIds.introduce,
+              sourceId: leaf.identities.operationIds.introduce,
+              slotId: value.slotId,
+              newEntityId: operationEntityId(leaf, "introduce"),
+              value: introduced
+            });
+          };
+          handle["remove"] = () => {
+            transaction.remove(transaction.scope, {
+              id: leaf.identities.operationIds.remove,
+              sourceId: leaf.identities.operationIds.remove,
+              slotId: value.slotId
+            });
+          };
+        }
       }
       result[key] = Object.freeze(handle);
     } else if (value !== null && typeof value === "object") {
@@ -258,7 +290,7 @@ function createOperationTree(
         value as Readonly<Record<string, unknown>>,
         transaction,
         leafByEncodedPath,
-        copyEntityId
+        operationEntityId
       );
     } else {
       throw new Error(`Semantic state handle tree member ${JSON.stringify(key)} is invalid.`);

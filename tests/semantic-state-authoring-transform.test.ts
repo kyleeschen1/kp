@@ -12,7 +12,7 @@ import {
   KpSemanticStateTransformError,
   type KpSemanticStateOperationLeafHandle
 } from "../src/semantic-state/authoring-state-transform.ts";
-import { kpStateGroup, kpStateValue } from
+import { kpStateGroup, kpStateOptional, kpStateValue } from
   "../src/semantic-state/authoring-schema.ts";
 import {
   beginKpSemanticTransaction,
@@ -404,13 +404,91 @@ test("bindCopy rejects self-copy and a repeated copy identity", () => {
   );
 });
 
+test("optional handles introduce update and remove through one lifecycle", () => {
+  const fixture = createFixture();
+  const introduce = defineKpSemanticStateTransform({
+    ...fixture,
+    id: "introduce-policy",
+    author(state) {
+      state.market.policy.introduce({ rate: 2 });
+      assert.equal(state.market.policy.read().rate, 2);
+    }
+  });
+  const introduced = introduce.apply(fixture.initial, "first");
+  assert.equal(introduced.after.market.policy.read().rate, 2);
+  const introduction = introduced.commit.journal[0]?.operation;
+  assert.equal(introduction?.kind, "introduce");
+  if (introduction?.kind !== "introduce") {
+    throw new Error("Expected an introduction operation.");
+  }
+  assert.equal(
+    introduction.newEntityId,
+    "kp-state/lesson.transform-shell/entity/market.policy.introduced-by.introduce-policy.first"
+  );
+
+  const revise = defineKpSemanticStateTransform({
+    ...fixture,
+    id: "revise-policy",
+    author(state) {
+      state.market.policy.update(previous => ({
+        rate: previous.rate + 1
+      }));
+    }
+  });
+  const revised = revise.apply(introduced.commit.after, "first");
+  assert.equal(revised.after.market.policy.read().rate, 3);
+
+  const remove = defineKpSemanticStateTransform({
+    ...fixture,
+    id: "remove-policy",
+    author(state) {
+      state.market.policy.remove();
+    }
+  });
+  const removed = remove.apply(revised.commit.after, "first");
+  assert.throws(() => removed.after.market.policy.read(), /removed/u);
+  assert.equal(revised.after.market.policy.read().rate, 3);
+  assert.equal(introduced.after.market.policy.read().rate, 2);
+});
+
+test("optional lifecycle rejects operations from the wrong disposition", () => {
+  const fixture = createFixture();
+  const removeAbsent = defineKpSemanticStateTransform({
+    ...fixture,
+    id: "remove-absent-policy",
+    author(state) {
+      state.market.policy.remove();
+    }
+  });
+  assert.throws(
+    () => removeAbsent.apply(fixture.initial, "first"),
+    (error) => error instanceof KpSemanticTransactionError &&
+      error.code === "invalid-removal"
+  );
+
+  const introduce = defineKpSemanticStateTransform({
+    ...fixture,
+    id: "introduce-policy-once",
+    author(state) {
+      state.market.policy.introduce({ rate: 2 });
+    }
+  });
+  const introduced = introduce.apply(fixture.initial, "first");
+  assert.throws(
+    () => introduce.apply(introduced.commit.after, "second"),
+    (error) => error instanceof KpSemanticTransactionError &&
+      error.code === "invalid-introduction"
+  );
+});
+
 function createFixture() {
   const compiled = compileKpSemanticStateSchema(
     "lesson.transform-shell",
     kpStateGroup({
       market: kpStateGroup({
         supply: kpStateValue({ intercept: 2, slope: 1 }),
-        demand: kpStateValue({ intercept: 12, slope: -1 })
+        demand: kpStateValue({ intercept: 12, slope: -1 }),
+        policy: kpStateOptional<{ readonly rate: number }>()
       })
     })
   );
