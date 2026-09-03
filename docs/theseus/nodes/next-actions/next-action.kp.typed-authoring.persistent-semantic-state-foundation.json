@@ -658,6 +658,34 @@
       "scope": "s21-pinned-references-and-recovery",
       "checkedAt": "2026-09-03T09:19:14.104Z",
       "notes": "Workspace schema and run references validate."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "s22-change-dispositions-and-change-sets",
+      "checkedAt": "2026-09-03T09:25:16.774Z",
+      "notes": "Twenty-six laws pass, including all seven dispositions, exact endpoint closure, impossible identity relations, crossed snapshots, duplicate targets, and value/visual-independence."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s22-change-dispositions-and-change-sets",
+      "checkedAt": "2026-09-03T09:25:17.894Z",
+      "notes": "Repository TypeScript, Svelte, and domain checks pass for the exhaustive change-record union."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s22-change-dispositions-and-change-sets",
+      "checkedAt": "2026-09-03T09:25:18.929Z",
+      "notes": "All architecture gates pass at 1,986 modules with zero dependency exceptions."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s22-change-dispositions-and-change-sets",
+      "checkedAt": "2026-09-03T09:25:20.033Z",
+      "notes": "Workspace schema and run references validate."
     }
   ],
   "expectedLearning": [

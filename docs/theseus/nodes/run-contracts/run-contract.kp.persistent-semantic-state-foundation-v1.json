@@ -190,7 +190,8 @@
     {
       "id": "s22",
       "title": "change-dispositions-and-change-sets",
-      "status": "planned"
+      "summary": "Defined immutable persisted, revised, introduced, removed, copied, bound, and derived change records over exact pinned role endpoints. Validation enforces disposition-specific identity laws, snapshot closure, and unique target ownership without consulting payload or visual equality.",
+      "status": "complete"
     },
     {
       "id": "s23",
