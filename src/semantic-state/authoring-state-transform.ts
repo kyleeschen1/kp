@@ -26,11 +26,19 @@ import {
   beginKpSemanticTransaction,
   KpSemanticTransactionError,
   type KpSemanticTransaction,
-  type KpSemanticTransactionCommit
+  type KpSemanticTransactionCommit,
+  type KpSemanticTransactionScope
 } from "./transaction.ts";
+
+declare const kpSemanticStateOperationValue: unique symbol;
+const kpSemanticStateOperationScope = Symbol(
+  "kp.semantic-state-operation.scope"
+);
 
 export type KpSemanticStateTransformErrorCode =
   | "empty-transform"
+  | "foreign-operation-handle"
+  | "invalid-bind-source"
   | "unsupported-callback-result";
 
 export class KpSemanticStateTransformError extends Error {
@@ -50,14 +58,22 @@ export interface KpSemanticStateOperationLeafHandle<
   readonly schemaVersion: "kp.semantic-state-operation-leaf-handle.v1";
   readonly kind: "semantic-state-operation-leaf-handle";
   readonly reference: KpSemanticStateLeafHandle<Value, DescriptorKind>;
+  readonly [kpSemanticStateOperationValue]?: (value: Value) => Value;
   read(): Value;
 }
+
+export type KpSemanticStateBindableOperationLeafHandle<Value> =
+  KpSemanticStateOperationLeafHandle<
+    Value,
+    "required-value" | "optional-value"
+  >;
 
 export interface KpSemanticStateWritableOperationLeafHandle<
   Value,
   DescriptorKind extends "required-value" | "optional-value"
 > extends KpSemanticStateOperationLeafHandle<Value, DescriptorKind> {
   update(update: (previous: Value) => Value): void;
+  bind(source: KpSemanticStateBindableOperationLeafHandle<NoInfer<Value>>): void;
 }
 
 type KpSemanticStateOperationNode<Node extends KpSemanticStateSchemaNode> =
@@ -189,6 +205,7 @@ function createOperationTree(
         schemaVersion: "kp.semantic-state-operation-leaf-handle.v1" as const,
         kind: "semantic-state-operation-leaf-handle" as const,
         reference: value,
+        [kpSemanticStateOperationScope]: transaction.scope,
         read() {
           return transaction.read(transaction.scope, value.slotId).version.value;
         }
@@ -207,6 +224,15 @@ function createOperationTree(
             update
           });
         };
+        handle["bind"] = (source: unknown) => {
+          assertOperationSource(source, transaction.scope);
+          transaction.bind(transaction.scope, {
+            id: leaf.identities.operationIds.bind,
+            sourceId: leaf.identities.operationIds.bind,
+            sourceSlotId: source.reference.slotId,
+            targetSlotId: value.slotId
+          });
+        };
       }
       result[key] = Object.freeze(handle);
     } else if (value !== null && typeof value === "object") {
@@ -220,6 +246,35 @@ function createOperationTree(
     }
   }
   return Object.freeze(result);
+}
+
+function assertOperationSource(
+  value: unknown,
+  scope: KpSemanticTransactionScope
+): asserts value is KpSemanticStateBindableOperationLeafHandle<
+  KpPersistentSemanticValue
+> {
+  if (value === null || typeof value !== "object" ||
+      (value as { readonly kind?: unknown }).kind !==
+        "semantic-state-operation-leaf-handle" ||
+      (value as { readonly [kpSemanticStateOperationScope]?: unknown })[
+        kpSemanticStateOperationScope
+      ] !== scope) {
+    throw new KpSemanticStateTransformError(
+      "foreign-operation-handle",
+      "Semantic state bind sources must come from the current transform application."
+    );
+  }
+  const descriptorKind = (
+    value as { readonly reference?: { readonly descriptorKind?: unknown } }
+  ).reference?.descriptorKind;
+  if (descriptorKind !== "required-value" &&
+      descriptorKind !== "optional-value") {
+    throw new KpSemanticStateTransformError(
+      "invalid-bind-source",
+      "Semantic state bind sources must be writable value handles."
+    );
+  }
 }
 
 function isLeafReference(

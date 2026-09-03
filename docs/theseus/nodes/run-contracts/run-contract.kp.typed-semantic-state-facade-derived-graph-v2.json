@@ -104,7 +104,8 @@
     {
       "id": "s08",
       "title": "Typed shared bind",
-      "status": "planned"
+      "summary": "Added typed shared binding with exact identity sharing, local source scope validation, explicit invalid-repeat behavior, and alias-update propagation.",
+      "status": "complete"
     },
     {
       "id": "s09",

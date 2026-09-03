@@ -223,6 +223,110 @@ test("nondeterministic update results abort without changing the input", () => {
   assert.equal(fixture.initial.entityStores[0]?.versions.length, 1);
 });
 
+test("bind shares exact identity and later updates advance both roles", () => {
+  const fixture = createFixture();
+  const definition = defineKpSemanticStateTransform({
+    ...fixture,
+    id: "share-market-curve",
+    author(state) {
+      state.market.demand.bind(state.market.supply);
+      state.market.supply.update(previous => ({
+        ...previous,
+        intercept: previous.intercept + 3
+      }));
+    }
+  });
+
+  const application = definition.apply(fixture.initial, "first");
+  const supplyBinding = application.commit.after.bindings.find(
+    ({ slotId }) => slotId ===
+      fixture.compiled.identityScope.slot("market.supply")
+  );
+  const demandBinding = application.commit.after.bindings.find(
+    ({ slotId }) => slotId ===
+      fixture.compiled.identityScope.slot("market.demand")
+  );
+
+  assert.equal(application.before.market.supply.read().intercept, 2);
+  assert.equal(application.before.market.demand.read().intercept, 12);
+  assert.equal(application.after.market.supply.read().intercept, 5);
+  assert.equal(application.after.market.demand.read().intercept, 5);
+  assert.equal(supplyBinding?.entityId, demandBinding?.entityId);
+  assert.equal(supplyBinding?.versionId, demandBinding?.versionId);
+  assert.deepEqual(
+    application.commit.journal.map(({ operation }) => operation.kind),
+    ["bind", "update"]
+  );
+  assert.equal(
+    application.commit.journal[0]?.writeId,
+    "schema.market.demand.bind"
+  );
+});
+
+test("bind rejects self-aliasing and an already shared target", () => {
+  const fixture = createFixture();
+  const selfBind = defineKpSemanticStateTransform({
+    ...fixture,
+    id: "self-bind",
+    author(state) {
+      state.market.supply.bind(state.market.supply);
+    }
+  });
+  assert.throws(() => selfBind.apply(fixture.initial, "first"), (error) => {
+    assert.ok(error instanceof KpSemanticTransactionError);
+    assert.equal(error.code, "invalid-bind");
+    return true;
+  });
+
+  const bind = defineKpSemanticStateTransform({
+    ...fixture,
+    id: "bind-once",
+    author(state) {
+      state.market.demand.bind(state.market.supply);
+    }
+  });
+  const first = bind.apply(fixture.initial, "first");
+  assert.throws(() => bind.apply(first.commit.after, "second"), (error) => {
+    assert.ok(error instanceof KpSemanticTransactionError);
+    assert.equal(error.code, "invalid-bind");
+    return true;
+  });
+});
+
+test("bind sources cannot leak across transform application scopes", () => {
+  const fixture = createFixture();
+  let captured: KpSemanticStateOperationLeafHandle<
+    { readonly intercept: number; readonly slope: number },
+    "required-value"
+  > | undefined;
+  const capture = defineKpSemanticStateTransform({
+    ...fixture,
+    id: "capture-source",
+    author(state) {
+      captured = state.market.supply;
+      state.market.supply.update(previous => ({
+        ...previous,
+        intercept: previous.intercept + 1
+      }));
+    }
+  });
+  const first = capture.apply(fixture.initial, "first");
+  const reuse = defineKpSemanticStateTransform({
+    ...fixture,
+    id: "reuse-source",
+    author(state) {
+      assert.notEqual(captured, undefined);
+      state.market.demand.bind(captured!);
+    }
+  });
+
+  assert.throws(() => reuse.apply(first.commit.after, "first"), (error) => {
+    assert.ok(error instanceof KpSemanticStateTransformError);
+    assert.equal(error.code, "foreign-operation-handle");
+    return true;
+  });
+});
+
 function createFixture() {
   const compiled = compileKpSemanticStateSchema(
     "lesson.transform-shell",

@@ -220,11 +220,32 @@
       "scope": "standard",
       "checkedAt": "2026-09-03T13:17:45.690Z",
       "notes": "Impact-directed architecture gates pass with zero dependency-direction exceptions."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T13:21:10.419Z",
+      "notes": "90 of 90 laws pass; typed bind shares exact entity and version identity, aliases propagate later updates, invalid self and repeated binding fail, and scoped sources cannot leak."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T13:21:11.564Z",
+      "notes": "Bind sources preserve invariant leaf value types; compatible aliases compile while incompatible and derived sources are rejected."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T13:21:12.610Z",
+      "notes": "All architecture gates pass with zero dependency-direction exceptions."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s07 compiles typed update callbacks to the existing transaction kernel with schema-derived write identities. No author IDs or order-derived identity are introduced; kernel determinism and alias laws remain authoritative."
+    "summary": "s08 adds target.bind(source) without IDs or low-level calls. Source handles must belong to the current application, value types are invariant, and the existing kernel remains binding and idempotence authority."
   },
   "expectedLearning": [
     "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",

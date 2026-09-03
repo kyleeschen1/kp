@@ -27,6 +27,16 @@ const compiled = compileKpSemanticStateSchema("lesson.transform-types", kpStateG
     intercept: 2,
     slope: 1
   }),
+  supplyAlias: kpStateValue<SupplyCurve>({
+    kind: "supply",
+    intercept: 3,
+    slope: 1
+  }),
+  demand: kpStateValue<DemandCurve>({
+    kind: "demand",
+    intercept: 12,
+    slope: -1
+  }),
   equilibrium: kpStateDerived<number>()
 }));
 const handles = createKpSemanticStateHandleSet(compiled);
@@ -51,6 +61,14 @@ const transform = defineKpSemanticStateTransform({
     };
     // @ts-expect-error Update callbacks must preserve the exact leaf value type.
     state.supply.update((_previous) => demand);
+
+    state.supplyAlias.bind(state.supply);
+
+    // @ts-expect-error Bind requires matching semantic value types.
+    state.supply.bind(state.demand);
+
+    // @ts-expect-error Derived handles cannot be shared into writable state.
+    state.supply.bind(state.equilibrium);
 
     // @ts-expect-error Derived values are read-only transaction inputs.
     state.equilibrium.update(previous => previous);
