@@ -4,6 +4,8 @@ import { kpStateGroup, kpStateValue } from
   "../../src/semantic-state/authoring-schema.ts";
 import { createKpSemanticStateHandleSet } from
   "../../src/semantic-state/authoring-state-handles.ts";
+import { materializeKpSemanticStateInitialSnapshot } from
+  "../../src/semantic-state/authoring-state-materializer.ts";
 import {
   defineKpSemanticStateFamily,
   kpStateFamilyParameters
@@ -57,6 +59,26 @@ family.prepareApplication({
   applicationId: "valid",
   parameters: { multiplier: 2, label: "small" },
   sourceId: "type.state-family-definition.valid"
+});
+
+const initial = materializeKpSemanticStateInitialSnapshot(compiled);
+const sourceApplication = family.apply(initial, {
+  applicationId: "source",
+  parameters: { multiplier: 2, label: "small" },
+  sourceId: "type.state-family-definition.source"
+});
+
+family.reparameterize(sourceApplication, {
+  applicationId: "branch",
+  parameters: { multiplier: 3, label: "large" },
+  sourceId: "type.state-family-definition.branch"
+});
+
+family.reparameterize(sourceApplication, {
+  applicationId: "invalid-branch",
+  // @ts-expect-error Reparameterization preserves the exact parameter type.
+  parameters: { multiplier: 3, label: "medium" },
+  sourceId: "type.state-family-definition.invalid-branch"
 });
 
 family.prepareApplication({

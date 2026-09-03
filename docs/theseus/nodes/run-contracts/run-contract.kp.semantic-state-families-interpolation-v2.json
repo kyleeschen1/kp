@@ -168,7 +168,8 @@
     {
       "id": "s17",
       "title": "Immutable reparameterization",
-      "status": "planned"
+      "summary": "State-family definitions now reparameterize an applied family from its exact original persistent source into a distinct immutable application with frozen typed parameters and immediate-source provenance; reused or foreign source authority is rejected and evaluator caches remain isolated.",
+      "status": "complete"
     },
     {
       "id": "s18",

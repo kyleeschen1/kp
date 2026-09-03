@@ -26,6 +26,7 @@ import type { KpSemanticProgress } from "./semantic-progress.ts";
 import { validateKpSemanticStateFamilyEndpoint } from
   "./state-family-application-validation.ts";
 import {
+  areKpSemanticStateTransitionPlansEqual,
   compileKpSemanticStateTransitionPlan,
   type KpSemanticStateDiscreteTransitionDeclaration,
   type KpSemanticStateInterpolationDeclaration,
@@ -126,11 +127,30 @@ export interface KpSemanticStateFamilyDefinitionDeclaration {
   readonly transitionPlan: KpSemanticStateTransitionPlan;
 }
 
-export interface KpSemanticStateFamilySourceProvenance {
+export interface KpSemanticStateFamilyAuthoredSourceProvenance {
   readonly schemaVersion: "kp.semantic-state-family-source-provenance.v1";
   readonly kind: "authored";
   readonly sourceId: string;
 }
+
+export interface KpSemanticStateFamilyApplicationReference {
+  readonly schemaVersion: "kp.semantic-state-family-application-reference.v1";
+  readonly kind: "semantic-state-family-application-reference";
+  readonly definitionId: KpTransformationDefinitionId;
+  readonly transformationId: KpAppliedTransformationId;
+  readonly applicationId: string;
+}
+
+export interface KpSemanticStateFamilyReparameterizedSourceProvenance {
+  readonly schemaVersion: "kp.semantic-state-family-source-provenance.v1";
+  readonly kind: "reparameterized";
+  readonly sourceId: string;
+  readonly sourceApplication: KpSemanticStateFamilyApplicationReference;
+}
+
+export type KpSemanticStateFamilySourceProvenance =
+  | KpSemanticStateFamilyAuthoredSourceProvenance
+  | KpSemanticStateFamilyReparameterizedSourceProvenance;
 
 export interface KpSemanticStateFamilyApplicationRecord<Parameters> {
   readonly schemaVersion: "kp.semantic-state-family-application-record.v1";
@@ -208,12 +228,24 @@ export interface KpSemanticStateFamilyDefinition<
       readonly sourceId: string;
     }
   ): KpAppliedSemanticStateFamily<Root, Parameters>;
+  reparameterize(
+    source: KpAppliedSemanticStateFamily<Root, Parameters>,
+    input: {
+      readonly applicationId: string;
+      readonly parameters: Parameters & NoInfer<
+        KpSemanticStateDataShape<Parameters>
+      >;
+      readonly sourceId: string;
+    }
+  ): KpAppliedSemanticStateFamily<Root, Parameters>;
 }
 
 export type KpSemanticStateFamilyErrorCode =
+  | "foreign-reparameterization-source"
   | "invalid-family-parameters"
   | "invalid-family-source"
-  | "invalid-transition-capabilities";
+  | "invalid-transition-capabilities"
+  | "reused-source-application-id";
 
 export class KpSemanticStateFamilyError extends Error {
   readonly code: KpSemanticStateFamilyErrorCode;
@@ -304,7 +336,23 @@ export function defineKpSemanticStateFamily<
       KpSemanticStateDataShape<Parameters>
     >;
     readonly sourceId: string;
-  }): KpSemanticStateFamilyApplicationRecord<Parameters> => {
+  }): KpSemanticStateFamilyApplicationRecord<Parameters> =>
+    prepareApplicationRecord(applicationInput, Object.freeze({
+      schemaVersion: "kp.semantic-state-family-source-provenance.v1",
+      kind: "authored",
+      sourceId: requireSourceId(applicationInput.sourceId, "application")
+    }));
+
+  const prepareApplicationRecord = (
+    applicationInput: {
+      readonly applicationId: string;
+      readonly parameters: Parameters & NoInfer<
+        KpSemanticStateDataShape<Parameters>
+      >;
+      readonly sourceId: string;
+    },
+    provenance: KpSemanticStateFamilySourceProvenance
+  ): KpSemanticStateFamilyApplicationRecord<Parameters> => {
     const applicationSourceId = requireSourceId(
       applicationInput.sourceId,
       "application"
@@ -329,12 +377,48 @@ export function defineKpSemanticStateFamily<
       transformationId,
       applicationId: applicationInput.applicationId,
       parameters,
-      source: Object.freeze({
-        schemaVersion: "kp.semantic-state-family-source-provenance.v1",
-        kind: "authored",
-        sourceId: applicationSourceId
-      }),
+      source: provenance.kind === "authored"
+        ? provenance
+        : Object.freeze({ ...provenance, sourceId: applicationSourceId }),
       transitionPlan
+    });
+  };
+
+  const applyApplication = (
+    before: KpAggregateSemanticSnapshot,
+    application: KpSemanticStateFamilyApplicationRecord<Parameters>
+  ): KpAppliedSemanticStateFamily<
+    KpSemanticStateGroupDescriptor<Members>,
+    Parameters
+  > => {
+    const endpointDefinition = defineKpSemanticStateTransform({
+      compiled: input.compiled,
+      handles: input.handles,
+      id: input.id,
+      author(state) {
+        const result = input.author(application.parameters, state);
+        return result;
+      }
+    });
+    const endpointApplication = endpointDefinition.apply(
+      before,
+      application.applicationId
+    );
+    validateKpSemanticStateFamilyEndpoint({
+      commit: endpointApplication.commit,
+      transitionPlan: application.transitionPlan
+    });
+    return Object.freeze<KpAppliedSemanticStateFamily<
+      KpSemanticStateGroupDescriptor<Members>,
+      Parameters
+    >>({
+      ...application,
+      schemaVersion: "kp.applied-semantic-state-family.v1",
+      kind: "applied-semantic-state-family",
+      endpointApplication,
+      commit: endpointApplication.commit,
+      before: endpointApplication.before,
+      after: endpointApplication.after
     });
   };
 
@@ -352,35 +436,47 @@ export function defineKpSemanticStateFamily<
     prepareApplication,
     apply(before, applicationInput) {
       const application = prepareApplication(applicationInput);
-      const endpointDefinition = defineKpSemanticStateTransform({
-        compiled: input.compiled,
-        handles: input.handles,
-        id: input.id,
-        author(state) {
-          const result = input.author(application.parameters, state);
-          return result;
-        }
-      });
-      const endpointApplication = endpointDefinition.apply(
-        before,
-        application.applicationId
+      return applyApplication(before, application);
+    },
+    reparameterize(source, applicationInput) {
+      if (source.definitionId !== definitionId ||
+        source.commit.before.namespace !== input.compiled.namespace ||
+        !areKpSemanticStateTransitionPlansEqual(
+          source.transitionPlan,
+          transitionPlan
+        )) {
+        throw new KpSemanticStateFamilyError(
+          "foreign-reparameterization-source",
+          `Semantic state family ${JSON.stringify(input.id)} cannot reparameterize foreign application ${JSON.stringify(source.applicationId)}.`
+        );
+      }
+      if (source.applicationId === applicationInput.applicationId) {
+        throw new KpSemanticStateFamilyError(
+          "reused-source-application-id",
+          `Reparameterized application ${JSON.stringify(applicationInput.applicationId)} must not reuse its source application ID.`
+        );
+      }
+      const application = prepareApplicationRecord(
+        applicationInput,
+        Object.freeze({
+          schemaVersion: "kp.semantic-state-family-source-provenance.v1",
+          kind: "reparameterized",
+          sourceId: requireSourceId(
+            applicationInput.sourceId,
+            "reparameterization"
+          ),
+          sourceApplication: Object.freeze({
+            schemaVersion: "kp.semantic-state-family-application-reference.v1",
+            kind: "semantic-state-family-application-reference",
+            definitionId: source.definitionId,
+            transformationId: source.transformationId,
+            applicationId: source.applicationId
+          })
+        })
       );
-      validateKpSemanticStateFamilyEndpoint({
-        commit: endpointApplication.commit,
-        transitionPlan: application.transitionPlan
-      });
-      return Object.freeze<KpAppliedSemanticStateFamily<
-        KpSemanticStateGroupDescriptor<Members>,
-        Parameters
-      >>({
-        ...application,
-        schemaVersion: "kp.applied-semantic-state-family.v1",
-        kind: "applied-semantic-state-family",
-        endpointApplication,
-        commit: endpointApplication.commit,
-        before: endpointApplication.before,
-        after: endpointApplication.after
-      });
+      // Reparameterization intentionally branches from the original source,
+      // never from an interior sample or the prior application's endpoint.
+      return applyApplication(source.commit.before, application);
     }
   });
 }
