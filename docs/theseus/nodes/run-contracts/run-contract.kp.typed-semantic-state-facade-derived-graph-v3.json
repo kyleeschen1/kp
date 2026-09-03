@@ -120,7 +120,8 @@
     {
       "id": "s11",
       "title": "Fingerprint concrete dependencies",
-      "status": "planned"
+      "summary": "concrete-fingerprints-distinguish-versions-alias-slots-and-copies-while-reusing-equivalent-branches",
+      "status": "complete"
     },
     {
       "id": "s12",
