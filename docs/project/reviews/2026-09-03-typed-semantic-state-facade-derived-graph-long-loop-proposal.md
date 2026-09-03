@@ -1,11 +1,11 @@
 # Typed Semantic State Facade And Derived Graph Long-Loop Proposal
 
 Date: 2026-09-03
-Status: PROPOSED; AWAITING APPROVAL
-Proposed target:
+Status: APPROVED; EXECUTING
+Target:
 `next-action.kp.typed-authoring.semantic-state-facade-derived-graph`
-Proposed contract:
-`run-contract.kp.typed-semantic-state-facade-derived-graph-v1`
+Active contract:
+`run-contract.kp.typed-semantic-state-facade-derived-graph-v2`
 Active thread: `../threads/typed-semantic-authoring-framework.md`
 Source checkpoint:
 `2026-09-03-persistent-semantic-state-foundation-closeout.md`
@@ -298,8 +298,12 @@ After this loop, separate reviewed contracts would still be required for:
 ## Approval Effect
 
 Approval authorizes creation of
-`run-contract.kp.typed-semantic-state-facade-derived-graph-v1` with these exact
+`run-contract.kp.typed-semantic-state-facade-derived-graph-v2` with these exact
 26 slices, allowed and disallowed work, verification cadence, commit cadence,
 and stop conditions. It authorizes autonomous execution until the mandatory
 s26 `HUMAN_CHECKPOINT` or an earlier named stop condition. It does not approve
 any deferred work.
+
+The unstarted v1 control record was superseded before implementation because
+it omitted required typed-autonomy metadata. The v2 contract preserves the
+reviewed slice order and scope while adding the complete execution metadata.

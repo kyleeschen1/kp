@@ -1,0 +1,172 @@
+{
+  "id": "run-contract.kp.typed-semantic-state-facade-derived-graph-v1",
+  "kind": "run-contract",
+  "title": "Typed semantic state facade and derived graph",
+  "status": "superseded",
+  "summary": "Superseded before implementation because the bounded add-run-contract help omitted required typed-autonomy fields; v2 preserves the exact approved 26 slices, scope, verification cadence, commit cadence, and stop conditions.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.typed-authoring.semantic-state-facade-derived-graph.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-03-typed-semantic-state-facade-derived-graph-long-loop-proposal.md",
+      "summary": "User-approved 26-slice proposal; owns exact slice risks, checks, commit cadence, stop conditions, and deferrals."
+    }
+  ],
+  "verification": [
+    "npm run test:semantic-state",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run check:inference",
+    "npm test",
+    "npm run build:bundle",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Internal semantic-state schema, descriptor, typed-handle, transform, dependency-graph, evaluator, cache, diagnostics, tests, fixtures, measurements, and documentation specified by the approved proposal.",
+    "Narrow extensions to the existing semantic-state kernel and one-way authority adapter required by named facade and derived operations.",
+    "One typed supply-tax pressure exemplar that preserves the exact-rational economics model as canonical authority."
+  ],
+  "disallowedWork": [
+    "Public facade promotion, compatibility migration, catalogue rollout, runtime Proxy tracking, implicit assignment, generic stage exposure, ambient state, global registries, import-order authority, or filesystem code generation.",
+    "Interpolation, at-progress state families, aggregate timelines, runtime reparameterization, Article, Focus Deck, renderer, Graph2D, Graph3D, KaTeX, CSS, browser, URL, or animation integration.",
+    "Broad economics packs, derived mathematical rules, persistent-collection redesign, CAS, theorem proving, knowledge objects, procedures, macro catalogues, or live LLM integration."
+  ],
+  "goal": "Implement the approved internal descriptor-driven typed property facade, explicit derived dependency graph, lazy version-keyed evaluation, supply-tax pressure proof, LLM-shaped corpus, and scale evidence while preserving the semantic-state foundation and canonical economics authority.",
+  "target": "next-action.kp.typed-authoring.semantic-state-facade-derived-graph",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Authoring and compiler baseline",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Schema leaf and group vocabulary",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Deterministic schema paths and identities",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Initial snapshot materialization",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Typed read and pinned-view handles",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Transformation definition and application shell",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Typed update compilation",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Typed shared bind",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Typed copy binding",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Optional introduce and remove",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Facade transaction convergence",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Facade API gate",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Typed derivation definition",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Derived-binding transaction operation",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Dependency graph validation",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Cycle detection and ordering",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Lazy requested evaluator",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Dependency-version fingerprints",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Caller-owned lazy cache",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Selective recomputation",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Absence and failure semantics",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "History and recovery law gate",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Supply-tax facade exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Multi-object transform and direct recovery pressure",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "LLM-shaped corpus and representative scale probe",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Loop closeout and mandatory API checkpoint",
+      "status": "planned"
+    }
+  ]
+}

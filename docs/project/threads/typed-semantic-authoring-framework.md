@@ -1,10 +1,10 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: Loop 2 typed state facade and derived graph proposal awaiting approval
+Status: Loop 2 typed state facade and derived graph run active
 Last Updated: 2026-09-03
-Current Next Action: review and explicitly approve or reject
-`../reviews/2026-09-03-typed-semantic-state-facade-derived-graph-long-loop-proposal.md`.
-Do not create or execute its Theseus run contract without approval.
+Current Next Action: execute
+`run-contract.kp.typed-semantic-state-facade-derived-graph-v2` through its
+mandatory API checkpoint. Theseus owns current-slice status.
 
 ## Goal
 
@@ -381,16 +381,16 @@ Executable slice history remains owned by
 `run-contract.kp.persistent-semantic-state-foundation-v1`; this thread does not
 duplicate it.
 
-## Typed Facade And Derived Graph Proposal
+## Typed Facade And Derived Graph Run
 
-The foundation checkpoint recommendation has been converted into a separately
-reviewable 26-slice Loop 2 proposal. It chooses a descriptor-driven, statically
+The foundation checkpoint recommendation became an approved 26-slice Loop 2
+run. It chooses a descriptor-driven, statically
 typed property facade made of ordinary nested handle objects. Explicit handles
 remain dependency authority; runtime `Proxy` observation, ambient assignment,
 generic staged writes, global registries, and filesystem code generation are
 excluded.
 
-The proposed loop restores domain-specific leaf types before enabling derived
+The loop restores domain-specific leaf types before enabling derived
 evaluation, compiles all named operations into the existing transaction kernel,
 adds a definition-scoped explicit dependency graph and caller-owned lazy cache,
 then pressures the result with one exact-rationally checked supply-tax example,
@@ -400,7 +400,10 @@ Article, public facade, or broad domain work.
 
 The human-readable scope and exact slice proposal live in
 `../reviews/2026-09-03-typed-semantic-state-facade-derived-graph-long-loop-proposal.md`.
-No executable run contract exists until the user approves that proposal.
+Executable progress and verification evidence live only in
+`run-contract.kp.typed-semantic-state-facade-derived-graph-v2`; this thread
+does not duplicate them. The metadata-incomplete, unstarted v1 contract was
+superseded before implementation.
 
 ## Stop Conditions
 

@@ -1,0 +1,135 @@
+{
+  "id": "next-action.kp.typed-authoring.semantic-state-facade-derived-graph",
+  "kind": "next-action",
+  "title": "Implement typed semantic state facade and explicit derived graph",
+  "status": "ready",
+  "domain": "typed-authoring",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-03-typed-semantic-state-facade-derived-graph-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-03-persistent-semantic-state-foundation-closeout.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.typed-authoring.persistent-semantic-state-foundation"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:semantic-state",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run check:inference",
+    "npm test",
+    "npm run build:bundle",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T12:32:37.341Z",
+      "notes": "The first s01 run passed 6176 of 6177 tests; the new baseline files changed only the generated exact-equation reachability scan count. Regenerated the ledger and its focused test now passes."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T12:32:38.744Z",
+      "notes": "67 of 67 semantic-state laws pass, including the two new raw authoring baseline laws."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T12:32:39.948Z",
+      "notes": "Application, node, test, Svelte, and domain TypeScript projects pass."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T12:32:41.420Z",
+      "notes": "Inference remains at the incoming baseline: 102058 types and 170776 instantiations."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T12:32:42.676Z",
+      "notes": "All architecture gates pass with zero dependency-direction exceptions."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T12:32:43.837Z",
+      "notes": "Production bundle succeeds; the existing large-chunk advisory remains nonblocking."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T12:34:45.376Z",
+      "notes": "Workspace validates with 1087 nodes and 26628 events before s01 closeout."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T12:42:00.061Z",
+      "notes": "After regenerating the expected reachability ledger, the complete suite passes 6177 of 6177 tests."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "s01 froze a 69-line raw market packet with 10 manual identity calls, 7 low-level constructors, 7 metadata fields, and one persistent-value narrowing; all broad gates pass after refreshing the generated reachability scan count."
+  },
+  "expectedLearning": [
+    "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",
+    "Whether explicit derived dependencies and dependency-version fingerprints provide lazy selective recomputation without runtime read tracking or semantic-history side effects.",
+    "Whether a supply-tax pressure exemplar, fixed LLM-shaped corpus, and representative graph scale probe justify the facade boundary without public promotion."
+  ],
+  "allowedWork": [
+    "Internal typed state descriptors, handles, transaction compilation, derived graph, evaluator, cache, diagnostics, tests, measurements, one typed supply-tax exemplar, and supporting documentation.",
+    "Narrow changes to the existing semantic-state kernel and one-way authority adapter required by named operations."
+  ],
+  "disallowedWork": [
+    "No runtime Proxy authority, implicit assignment, generic stage exposure, public facade, global registry, filesystem code generation, renderer, animation, timeline, interpolation, Article, or browser work.",
+    "No economics authority fork, broad domain pack, storage redesign, CAS, theorem prover, knowledge or procedure system, macro catalogue, or live LLM integration."
+  ],
+  "criteria": [
+    {
+      "id": "typed-property-handles-preserve-domain-values",
+      "weight": "high"
+    },
+    {
+      "id": "named-operations-compile-to-existing-kernel",
+      "weight": "high"
+    },
+    {
+      "id": "explicit-derived-graph-is-lazy-and-history-free",
+      "weight": "high"
+    },
+    {
+      "id": "exact-economics-authority-remains-upstream",
+      "weight": "high"
+    },
+    {
+      "id": "llm-and-scale-pressure-stay-within-ratchets",
+      "weight": "medium"
+    },
+    {
+      "id": "broad-verification-and-closeout-checkpoint-pass",
+      "weight": "high"
+    }
+  ]
+}
