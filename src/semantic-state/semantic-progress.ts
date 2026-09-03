@@ -5,10 +5,16 @@ import {
 } from "../../protocols/exact-rational.ts";
 
 declare const kpSemanticProgressBrand: unique symbol;
+declare const kpSemanticProgressEncodingBrand: unique symbol;
 
 /** Exact, normalized progress at the semantic state-family boundary. */
 export type KpSemanticProgress = NormalizedExactRational & {
   readonly [kpSemanticProgressBrand]: "semantic-progress";
+};
+
+/** Canonical JSON-safe spelling used inside durable declarations and keys. */
+export type KpSemanticProgressEncoding = string & {
+  readonly [kpSemanticProgressEncodingBrand]: "semantic-progress-encoding";
 };
 
 export const kpSemanticProgressZero = asSemanticProgress(
@@ -49,8 +55,9 @@ export function compareKpSemanticProgress(
 
 export function encodeKpSemanticProgress(
   progress: KpSemanticProgress
-): string {
-  return `${progress.numerator}/${progress.denominator}`;
+): KpSemanticProgressEncoding {
+  return `${progress.numerator}/${progress.denominator}` as
+    KpSemanticProgressEncoding;
 }
 
 export function isKpSemanticProgressZero(

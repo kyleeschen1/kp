@@ -84,7 +84,8 @@
     {
       "id": "s03",
       "title": "Transition-mode declarations",
-      "status": "planned"
+      "summary": "Three-disjoint-serializable-modes-with-exact-targets-and-local-diagnostics",
+      "status": "complete"
     },
     {
       "id": "s04",
