@@ -110,7 +110,7 @@ export function createKpSemanticEntityVersionStore<
     id: input.identities.initialVersion(input.entityId),
     entityId: input.entityId,
     ordinal: 0,
-    value: cloneAndFreezePersistentSemanticValue(input.value),
+    value: cloneAndFreezeKpPersistentSemanticValue(input.value),
     provenance: Object.freeze({ kind: "initial", sourceId })
   });
 
@@ -147,7 +147,7 @@ export function createKpCopiedSemanticEntityVersionStore<
     id: versionId,
     entityId: input.entityId,
     ordinal: 0,
-    value: cloneAndFreezePersistentSemanticValue<Value>(
+    value: cloneAndFreezeKpPersistentSemanticValue<Value>(
       input.copiedFrom.value as Value
     ),
     provenance: Object.freeze({
@@ -192,7 +192,7 @@ export function appendKpSemanticEntityVersion<
     id: versionId,
     entityId: store.entityId,
     ordinal,
-    value: cloneAndFreezePersistentSemanticValue(input.value),
+    value: cloneAndFreezeKpPersistentSemanticValue(input.value),
     provenance: Object.freeze({
       kind: "successor",
       previousVersionId: store.latestVersionId,
@@ -242,7 +242,7 @@ function requireSourceId(value: string): string {
   return value;
 }
 
-function cloneAndFreezePersistentSemanticValue<
+export function cloneAndFreezeKpPersistentSemanticValue<
   Value extends KpPersistentSemanticValue
 >(value: Value): KpDeepReadonly<Value> {
   return clonePersistentValue(value, new WeakSet(), "value") as

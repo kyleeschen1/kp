@@ -68,7 +68,8 @@
     {
       "id": "s02",
       "title": "Schema leaf and group vocabulary",
-      "status": "planned"
+      "summary": "Added the internal schema descriptor vocabulary, exact recursive value inference, persistent-data validation reuse, runtime laws, and negative type fixtures without creating runtime state.",
+      "status": "complete"
     },
     {
       "id": "s03",

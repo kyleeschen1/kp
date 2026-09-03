@@ -87,11 +87,39 @@
       "scope": "broad",
       "checkedAt": "2026-09-03T12:42:00.061Z",
       "notes": "After regenerating the expected reachability ledger, the complete suite passes 6177 of 6177 tests."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T12:50:44.299Z",
+      "notes": "69 of 69 laws pass; schema descriptors clone and freeze initial data and reject invalid persistent values before state construction."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T12:50:45.449Z",
+      "notes": "Named domain interfaces, nested groups, optional and derived leaf types, tuple literals, and negative function/value fixtures compile as intended."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T12:50:46.484Z",
+      "notes": "Recursive descriptors remain within ratchets at 102946 types and 173080 instantiations; no ceiling change was required."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T12:50:47.529Z",
+      "notes": "Impact-directed architecture verification passes with zero dependency-direction exceptions."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s01 froze a 69-line raw market packet with 10 manual identity calls, 7 low-level constructors, 7 metadata fields, and one persistent-value narrowing; all broad gates pass after refreshing the generated reachability scan count."
+    "summary": "s02 adds immutable required, optional, derived, and nested-group descriptors. Named domain interfaces and tuples retain exact readonly types; invalid executable data is rejected statically and at runtime without IDs or casts in author code."
   },
   "expectedLearning": [
     "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",
