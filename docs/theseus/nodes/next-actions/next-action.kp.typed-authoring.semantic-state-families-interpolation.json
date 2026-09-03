@@ -572,6 +572,62 @@
       "scope": "s11 patch hygiene",
       "checkedAt": "2026-09-03T21:59:36.837Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-state-derived-fingerprint.test.ts tests/semantic-state-family-fingerprint.test.ts tests/semantic-state-family-source-resolution.test.ts",
+      "status": "passed",
+      "scope": "s12 focused fingerprints",
+      "checkedAt": "2026-09-03T22:07:02.574Z",
+      "notes": "13 tests pass; canonical progress, changed progress, application branches, concrete reuse, and nested determinism covered."
+    },
+    {
+      "command": "npm run verify:impact -- --path src/semantic-state/derived-fingerprint.ts --path tests/semantic-state-family-fingerprint.test.ts",
+      "status": "passed",
+      "scope": "s12 impact",
+      "checkedAt": "2026-09-03T22:07:03.723Z",
+      "notes": "Promotion/high risk semantic-state impact selected semantic-state, typecheck, and architecture gates."
+    },
+    {
+      "command": "npm run generate:equation-reachability",
+      "status": "passed",
+      "scope": "s12 generated architecture",
+      "checkedAt": "2026-09-03T22:07:04.768Z",
+      "notes": "Exact equation reachability graph regenerated for 68 roots."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "s12 semantic state",
+      "checkedAt": "2026-09-03T22:07:05.825Z",
+      "notes": "206 tests pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s12 repository types",
+      "checkedAt": "2026-09-03T22:07:06.887Z",
+      "notes": "Application, node, test, Svelte, and domain checks pass with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s12 architecture",
+      "checkedAt": "2026-09-03T22:07:07.930Z",
+      "notes": "All gates pass for 2006 TypeScript modules and 7449/7500 local references with zero retiring exceptions."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s12 durable state",
+      "checkedAt": "2026-09-03T22:07:08.973Z",
+      "notes": "Workspace valid before slice close."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s12 patch hygiene",
+      "checkedAt": "2026-09-03T22:07:10.032Z",
+      "notes": "No whitespace errors."
     }
   ],
   "expectedLearning": [

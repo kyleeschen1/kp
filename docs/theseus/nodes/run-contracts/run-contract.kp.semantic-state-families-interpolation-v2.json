@@ -138,7 +138,8 @@
     {
       "id": "s12",
       "title": "Transient derivation fingerprints",
-      "status": "planned"
+      "summary": "Derived fingerprints now compose exact concrete and transient driver authority without payload serialization, object identity, whole-sample keys, or fake semantic IDs.",
+      "status": "complete"
     },
     {
       "id": "s13",

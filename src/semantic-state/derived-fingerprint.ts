@@ -8,11 +8,13 @@ import type {
 import { areKpSemanticDerivedBindingsEqual } from "./derived-binding.ts";
 import {
   KpSemanticDerivedEvaluationError,
-  resolveKpSemanticConcreteDependency
+  resolveKpSemanticConcreteDependency,
+  type KpSemanticTransientDependencyToken
 } from "./derived-evaluator.ts";
 import type {
   KpSemanticDerivedGraph,
-  KpSemanticDerivedGraphDefinitionInput
+  KpSemanticDerivedGraphDefinitionInput,
+  KpSemanticDerivedGraphLeafReference
 } from "./derived-graph.ts";
 import type {
   KpSemanticDerivationId,
@@ -20,6 +22,8 @@ import type {
   KpSemanticSlotId,
   KpSemanticVersionId
 } from "./identity.ts";
+import type { KpSemanticStateReadSource } from
+  "./state-family-sample-source.ts";
 
 export interface KpSemanticConcreteDependencyToken {
   readonly schemaVersion: "kp.semantic-concrete-dependency-token.v1";
@@ -48,8 +52,18 @@ export interface KpSemanticDerivedDependencyToken {
   readonly key: string;
 }
 
+export interface KpSemanticTransientDerivationDependencyToken {
+  readonly schemaVersion:
+    "kp.semantic-transient-derivation-dependency-token.v1";
+  readonly kind: "semantic-transient-derivation-dependency-token";
+  readonly slotId: KpSemanticSlotId;
+  readonly driver: KpSemanticTransientDependencyToken;
+  readonly key: string;
+}
+
 export type KpSemanticDerivationDependencyToken =
   | KpSemanticConcreteDependencyToken
+  | KpSemanticTransientDerivationDependencyToken
   | KpSemanticDerivedDependencyToken;
 
 export interface KpSemanticDerivationFingerprint {
@@ -66,7 +80,7 @@ export function createKpSemanticConcreteDerivationFingerprint(input: {
   readonly snapshot: KpAggregateSemanticSnapshot;
   readonly target: KpDerivedSemanticStateLeafHandle<unknown>;
 }): KpSemanticConcreteDerivationFingerprint {
-  const definition = requireDefinition(input);
+  const definition = requireDefinition(input, input.snapshot);
   assertDefinitionAuthority(input.snapshot, definition);
   const dependencies = Object.freeze(definition.dependencies.map(
     ({ dependency }): KpSemanticConcreteDependencyToken =>
@@ -91,11 +105,25 @@ export function createKpSemanticDerivationFingerprint(input: {
   readonly graph: KpSemanticDerivedGraph;
   readonly snapshot: KpAggregateSemanticSnapshot;
   readonly target: KpDerivedSemanticStateLeafHandle<unknown>;
-}): KpSemanticDerivationFingerprint {
-  const definition = requireDefinition(input);
+}): KpSemanticDerivationFingerprint;
+export function createKpSemanticDerivationFingerprint(input: {
+  readonly graph: KpSemanticDerivedGraph;
+  readonly source: KpSemanticStateReadSource;
+  readonly target: KpDerivedSemanticStateLeafHandle<unknown>;
+}): KpSemanticDerivationFingerprint;
+export function createKpSemanticDerivationFingerprint(input: {
+  readonly graph: KpSemanticDerivedGraph;
+  readonly target: KpDerivedSemanticStateLeafHandle<unknown>;
+} & (
+  | { readonly snapshot: KpAggregateSemanticSnapshot }
+  | { readonly source: KpSemanticStateReadSource }
+)): KpSemanticDerivationFingerprint {
+  const snapshot = readAuthoritySnapshot(input);
+  const definition = requireDefinition(input, snapshot);
   return createFingerprint(
     input.graph,
-    input.snapshot,
+    snapshot,
+    "source" in input ? input.source : undefined,
     definition,
     new Map()
   );
@@ -104,6 +132,7 @@ export function createKpSemanticDerivationFingerprint(input: {
 function createFingerprint(
   graph: KpSemanticDerivedGraph,
   snapshot: KpAggregateSemanticSnapshot,
+  source: KpSemanticStateReadSource | undefined,
   definition: KpSemanticDerivedGraphDefinitionInput,
   fingerprints: Map<KpSemanticSlotId, KpSemanticDerivationFingerprint>
 ): KpSemanticDerivationFingerprint {
@@ -113,11 +142,12 @@ function createFingerprint(
   const dependencies = Object.freeze(definition.dependencies.map(
     ({ dependency }): KpSemanticDerivationDependencyToken => {
       if (dependency.descriptorKind !== "derived-value") {
-        return createConcreteToken(graph, snapshot, dependency);
+        return createDependencyToken(graph, snapshot, source, dependency);
       }
       const nested = createFingerprint(
         graph,
         snapshot,
+        source,
         readDefinition(graph, snapshot, dependency.slotId),
         fingerprints
       );
@@ -153,18 +183,43 @@ function createFingerprint(
   return fingerprint;
 }
 
+function createDependencyToken(
+  graph: KpSemanticDerivedGraph,
+  snapshot: KpAggregateSemanticSnapshot,
+  source: KpSemanticStateReadSource | undefined,
+  dependency: KpSemanticDerivedGraphLeafReference
+): KpSemanticConcreteDependencyToken |
+  KpSemanticTransientDerivationDependencyToken {
+  const resolved = source === undefined
+    ? resolveKpSemanticConcreteDependency({ graph, snapshot, dependency })
+    : resolveKpSemanticConcreteDependency({ graph, source, dependency });
+  if (resolved.kind === "resolved-semantic-concrete-dependency") {
+    return createConcreteTokenFromResolution(resolved);
+  }
+  return createTransientToken(resolved.token);
+}
+
 function createConcreteToken(
   graph: KpSemanticDerivedGraph,
   snapshot: KpAggregateSemanticSnapshot,
-  dependency: Parameters<
-    typeof resolveKpSemanticConcreteDependency
-  >[0]["dependency"]
+  dependency: KpSemanticDerivedGraphLeafReference
 ): KpSemanticConcreteDependencyToken {
   const resolved = resolveKpSemanticConcreteDependency({
     graph,
     snapshot,
     dependency
   });
+  return createConcreteTokenFromResolution(resolved);
+}
+
+function createConcreteTokenFromResolution(
+  resolved: {
+    readonly kind: "resolved-semantic-concrete-dependency";
+    readonly slotId: KpSemanticSlotId;
+    readonly entityId: KpSemanticEntityId;
+    readonly versionId: KpSemanticVersionId;
+  }
+): KpSemanticConcreteDependencyToken {
   return Object.freeze({
     schemaVersion: "kp.semantic-concrete-dependency-token.v1",
     kind: "semantic-concrete-dependency-token",
@@ -176,6 +231,31 @@ function createConcreteToken(
       resolved.slotId,
       resolved.entityId,
       resolved.versionId
+    ])
+  });
+}
+
+function createTransientToken(
+  driver: KpSemanticTransientDependencyToken
+): KpSemanticTransientDerivationDependencyToken {
+  return Object.freeze({
+    schemaVersion:
+      "kp.semantic-transient-derivation-dependency-token.v1",
+    kind: "semantic-transient-derivation-dependency-token",
+    slotId: driver.slotId,
+    driver,
+    key: encodeAuthority([
+      "transient",
+      driver.definitionId,
+      driver.transformationId,
+      driver.applicationId,
+      driver.declarationId,
+      driver.slotId,
+      driver.beforeEntityId,
+      driver.beforeVersionId,
+      driver.afterEntityId,
+      driver.afterVersionId,
+      driver.progress
     ])
   });
 }
@@ -205,28 +285,44 @@ function assertDefinitionAuthority(
 
 function requireDefinition(input: {
   readonly graph: KpSemanticDerivedGraph;
-  readonly snapshot: KpAggregateSemanticSnapshot;
   readonly target: KpDerivedSemanticStateLeafHandle<unknown>;
-}): KpSemanticDerivedGraphDefinitionInput {
-  if (input.snapshot.namespace !== input.graph.namespace) {
+} & (
+  | { readonly snapshot: KpAggregateSemanticSnapshot }
+  | { readonly source: KpSemanticStateReadSource }
+), snapshot: KpAggregateSemanticSnapshot): KpSemanticDerivedGraphDefinitionInput {
+  const sourceNamespace = "source" in input
+    ? input.source.namespace
+    : snapshot.namespace;
+  if (sourceNamespace !== input.graph.namespace ||
+    snapshot.namespace !== input.graph.namespace) {
     throw new KpSemanticDerivedEvaluationError({
       code: "foreign-derived-snapshot",
       slotId: input.target.slotId,
-      snapshotId: input.snapshot.id,
+      snapshotId: snapshot.id,
       path: input.target.path,
-      message: `Cannot fingerprint snapshot ${JSON.stringify(input.snapshot.id)} outside graph ${JSON.stringify(input.graph.namespace)}.`
+      message: `Cannot fingerprint semantic source in ${JSON.stringify(sourceNamespace)} outside graph ${JSON.stringify(input.graph.namespace)}.`
     });
   }
   if (input.target.namespace !== input.graph.namespace) {
     throw new KpSemanticDerivedEvaluationError({
       code: "foreign-derived-target",
       slotId: input.target.slotId,
-      snapshotId: input.snapshot.id,
+      snapshotId: snapshot.id,
       path: input.target.path,
       message: `Cannot fingerprint target ${JSON.stringify(input.target.path)} outside graph ${JSON.stringify(input.graph.namespace)}.`
     });
   }
-  return readDefinition(input.graph, input.snapshot, input.target.slotId);
+  return readDefinition(input.graph, snapshot, input.target.slotId);
+}
+
+function readAuthoritySnapshot(input:
+  | { readonly snapshot: KpAggregateSemanticSnapshot }
+  | { readonly source: KpSemanticStateReadSource }
+): KpAggregateSemanticSnapshot {
+  if ("snapshot" in input) return input.snapshot;
+  return input.source.kind === "persistent-snapshot"
+    ? input.source.snapshot
+    : input.source.base.snapshot;
 }
 
 function readDefinition(
