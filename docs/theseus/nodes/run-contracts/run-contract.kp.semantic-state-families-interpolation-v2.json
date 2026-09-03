@@ -108,7 +108,8 @@
     {
       "id": "s07",
       "title": "Ephemeral sample-source contract",
-      "status": "planned"
+      "summary": "Persistent-snapshot-and-ephemeral-declared-driver-sources-are-disjoint-frozen-and-history-neutral",
+      "status": "complete"
     },
     {
       "id": "s08",
