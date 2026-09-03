@@ -1,6 +1,6 @@
 # KP Next Actions
 
-Last Updated: 2026-08-30
+Last Updated: 2026-09-02
 
 These are human-readable candidates. Theseus stores the executable versions
 with source refs, verification, run-contract slices, and completion evidence.
@@ -10,15 +10,16 @@ with source refs, verification, run-contract slices, and completion evidence.
 The governed animation and publication foundation is preserved. There is one
 active next action:
 
-1. Execute the approved supply-tax Focus Deck run at
-   `/experiments/kinetic-figure/supply-tax/`. Build exact equilibrium and
-   welfare truth, eight semantic beats, a searchable Article projection,
-   deterministic adjacent and distant navigation, native find, and a scoped
-   responsive visual checkpoint. Stop before a shared component, generalized
-   tax or Graph2D grammar, automatic deck generation, or flashcard UI.
+1. Execute the approved persistent semantic state foundation in 30 reversible
+   slices. Restore trustworthy repository health, decide the bounded
+   unit-scalar helper, preserve exact-rational economics authority, and prove
+   the internal immutable state and transaction laws. Stop at the mandatory
+   architecture/API checkpoint before proxy ergonomics, lazy derivation,
+   interpolation, timeline, or renderer integration.
 
 Everything else is frozen reference or parked horizon:
 
+- the Focus Deck remains preserved at its four-card human checkpoint;
 - the catalogue remains the supporting internal laboratory and inventory;
 - the current indefinite-integration Rule Application treatment remains
   preserved at its visual checkpoint without promotion;

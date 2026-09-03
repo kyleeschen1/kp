@@ -35,7 +35,7 @@ test("Calculus BC taxonomy is an ordered projection of canonical capabilities", 
   }
 });
 
-test("new curriculum capability rows remain evidence-derived missing gaps", () => {
+test("new curriculum capability rows retain their evidence-derived maturity", () => {
   const coverage = createKpAnimationTransformationCoverage();
   for (const capabilityId of [
     "capability.equation.trigonometric-transformations",
@@ -43,7 +43,6 @@ test("new curriculum capability rows remain evidence-derived missing gaps", () =
     "capability.equation.sequence-series-transformations",
     "capability.equation.limit-transformations",
     "capability.equation.differentiation-transformations",
-    "capability.equation.integration-transformations",
     "capability.equation.polar-parametric-transformations",
     "capability.equation.differential-equation-transformations",
     "capability.equation.taylor-series-transformations"
@@ -56,6 +55,14 @@ test("new curriculum capability rows remain evidence-derived missing gaps", () =
       evidenceSourceIds.length === 0
     ), true, capabilityId);
   }
+
+  const integration = coverage.entries.find(({ capabilityId }) =>
+    capabilityId === "capability.equation.integration-transformations"
+  );
+  assert.equal(integration?.status, "Exemplar");
+  assert.ok(integration?.requirements.some(({ evidenceSourceIds }) =>
+    evidenceSourceIds.length > 0
+  ));
 });
 
 test("curriculum declarations do not duplicate capability authority IDs", () => {

@@ -47,7 +47,18 @@ test("catalog separates executable routes from generic presentation labels", () 
   );
   assert.deepEqual(
     [...new Set(missingPlanEntries.map(({ animationId }) => animationId))],
-    ["animation.algebra.log-exponent.solve-two-power-x"]
+    [
+      "animation.algebra.radical.solve-x-squared-nine",
+      "animation.algebra.radical.compound-carrier-normalization",
+      "animation.equation.finite-sum-expansion.v1",
+      "animation.equation.finite-product-expansion.v1",
+      "animation.algebra.log-exponent.solve-two-power-x",
+      "animation.equation.logarithm-change-of-base.v1",
+      "animation.equation.fraction-equivalence.v1",
+      "animation.equation.fraction-equivalence.compact.v1",
+      "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+      "animation.generated.calculus.integral.power-rule-quadratic"
+    ]
   );
   assert.ok(missingPlanEntries.every(({ status }) => status === "incomplete"));
   assert.equal(report.coverage, "incomplete");
@@ -59,14 +70,20 @@ test("catalog separates executable routes from generic presentation labels", () 
     [...new Set(report.issues.map(({ code }) => code))],
     [
       "catalog.missing-execution-route",
+      "catalog.semantic-fallback",
       "catalog.presentation-planning-failed"
     ]
   );
-  assert.ok(report.issues
-    .filter(({ code }) => code === "catalog.presentation-planning-failed")
-    .every(({ animationId }) =>
-      animationId === "animation.algebra.log-exponent.solve-two-power-x"
-    ));
+  assert.deepEqual(
+    [...new Set(report.issues
+      .filter(({ code }) => code === "catalog.presentation-planning-failed")
+      .map(({ animationId }) => animationId))],
+    [
+      "animation.algebra.log-exponent.solve-two-power-x",
+      "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+      "animation.generated.calculus.integral.power-rule-quadratic"
+    ]
+  );
   assert.deepEqual(
     new Set(report.entries
       .filter(({ status }) => status === "incomplete")

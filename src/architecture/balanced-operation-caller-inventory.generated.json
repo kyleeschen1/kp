@@ -32,6 +32,7 @@
         "src/animation/equation-linear-rearrangement-kind.ts",
         "src/animation/motifs/equation-visual-motif-defaults.ts",
         "src/animation/symbolic-manipulation-families/algebra.ts",
+        "src/authoring/balanced-operation-authoring-corpus.ts",
         "src/semantic/both-sides-operation-registration.ts",
         "src/semantic/both-sides-operation-registrations/additive.ts",
         "src/semantic/canonical-operation-registry.ts",
@@ -81,6 +82,7 @@
         "src/animation/semantic-motion-library-promotion.ts",
         "src/animation/symbolic-manipulation-families/algebra.ts",
         "src/animation/verified-linear-problem-animation-compiler.ts",
+        "src/authoring/balanced-operation-authoring-corpus.ts",
         "src/reader/compiler/fraction-composition-preservation-manifest.ts",
         "src/semantic/algebra-trace-port-fixture.ts",
         "src/semantic/both-sides-operation-registration.ts",
@@ -132,6 +134,7 @@
         "src/animation/fraction-composition-visual-motifs.ts",
         "src/animation/motifs/equation-visual-motif-defaults.ts",
         "src/animation/symbolic-manipulation-families/algebra.ts",
+        "src/authoring/balanced-operation-authoring-corpus.ts",
         "src/reader/compiler/fraction-composition-preservation-manifest.ts",
         "src/semantic/both-sides-operation-registration.ts",
         "src/semantic/both-sides-operation-registrations/multiplicative.ts",
@@ -180,6 +183,7 @@
         "src/animation/motifs/equation-visual-motif-defaults.ts",
         "src/animation/symbolic-manipulation-families/algebra.ts",
         "src/animation/verified-linear-problem-animation-compiler.ts",
+        "src/authoring/balanced-operation-authoring-corpus.ts",
         "src/reader/compiler/fraction-composition-preservation-manifest.ts",
         "src/semantic/canonical-operation-registry.ts",
         "src/semantic/both-sides-operation-registration.ts",
@@ -228,8 +232,10 @@
       },
       "literalSourcePaths": [
         "src/animation/equation-linear-rearrangement-kind.ts",
+        "src/authoring/balanced-operation-authoring-corpus.ts",
         "src/semantic/both-sides-operation-registration.ts",
         "src/semantic/both-sides-operation-registrations/logarithmic.ts",
+        "src/semantic/equation-law-operation-pack.ts",
         "src/semantic/log-exponent-transformation-compiler.ts"
       ],
       "gaps": [],
@@ -267,8 +273,10 @@
         "operationId": "kp.algebra.divide-both-sides-by-log-base"
       },
       "literalSourcePaths": [
+        "src/authoring/balanced-operation-authoring-corpus.ts",
         "src/semantic/both-sides-operation-registration.ts",
         "src/semantic/both-sides-operation-registrations/logarithmic.ts",
+        "src/semantic/equation-law-operation-pack.ts",
         "src/semantic/log-exponent-transformation-compiler.ts"
       ],
       "gaps": [],

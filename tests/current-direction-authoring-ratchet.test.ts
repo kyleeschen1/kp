@@ -6,38 +6,66 @@ const focusDeckDecision =
   "2026-08-29-focus-deck-initial-portable-figure-priority.md";
 const focusDeckReview =
   "2026-08-29-supply-tax-focus-deck-long-loop-proposal.md";
+const stateDecision =
+  "2026-09-02-persistent-semantic-state-architecture-direction.md";
+const stateProposal =
+  "2026-09-02-persistent-semantic-state-foundation-long-loop-proposal.md";
 
-test("current project direction holds the bounded Focus Deck checkpoint", async () => {
-  const [roadmap, activeThread, catalogueThread, nextActions, entrypoint, decision, review] =
+test("current project direction advances semantic state and preserves Focus Deck", async () => {
+  const [
+    roadmap,
+    activeThread,
+    focusDeckThread,
+    catalogueThread,
+    nextActions,
+    entrypoint,
+    focusDecision,
+    focusReview,
+    semanticStateDecision,
+    semanticStateProposal
+  ] =
     await Promise.all([
     readFile("docs/project/roadmap.md", "utf8"),
+    readFile("docs/project/threads/typed-semantic-authoring-framework.md", "utf8"),
     readFile("docs/project/threads/focus-deck.md", "utf8"),
     readFile("docs/project/threads/animation-catalogue.md", "utf8"),
     readFile("docs/project/next-actions.md", "utf8"),
     readFile("docs/project/authoring/llm-generation-entrypoint.md", "utf8"),
     readFile(`docs/project/decisions/${focusDeckDecision}`, "utf8"),
-    readFile(`docs/project/reviews/${focusDeckReview}`, "utf8")
+    readFile(`docs/project/reviews/${focusDeckReview}`, "utf8"),
+    readFile(`docs/project/decisions/${stateDecision}`, "utf8"),
+    readFile(`docs/project/reviews/${stateProposal}`, "utf8")
   ]);
 
-  assert.match(roadmap, /Active Thread: `threads\/focus-deck\.md`/);
-  assert.match(roadmap, new RegExp(focusDeckDecision.replaceAll(".", "\\.")));
-  assert.match(roadmap, new RegExp(focusDeckReview.replaceAll(".", "\\.")));
+  assert.match(
+    roadmap,
+    /Active Thread: `threads\/typed-semantic-authoring-framework\.md`/
+  );
+  assert.match(roadmap, /Supporting Threads:[\s\S]*`threads\/focus-deck\.md`/);
+  assert.match(roadmap, new RegExp(stateDecision.replaceAll(".", "\\.")));
   assert.match(roadmap, /flashcard capability remains preserved/i);
   assert.match(activeThread,
+    /Accepted Semantic State Architecture Direction/);
+  assert.match(activeThread, /unit-scalar helper/i);
+  assert.match(activeThread, /nonvisual persistent[\s\S]{0,80}snapshot/i);
+  assert.match(focusDeckThread,
     /animation\.algebra\.log-product\.equivalence-frame/);
-  assert.match(activeThread, /supply-tax Focus Deck/i);
-  assert.match(activeThread, /P_D = 12 - Q/);
-  assert.match(activeThread, /Flashcards remain a sibling projection/i);
-  assert.match(activeThread, /no new[\s\S]*animation clock/i);
+  assert.match(focusDeckThread, /supply-tax caller/i);
+  assert.match(focusDeckThread, /P_D = 12 - Q/);
+  assert.match(focusDeckThread, /Flashcards remain a sibling projection/i);
+  assert.match(focusDeckThread, /no new[\s\S]*animation clock/i);
   assert.match(catalogueThread, /Status: supporting/i);
   assert.match(catalogueThread, /indefinite-integration power-rule exemplar/i);
-  assert.match(nextActions, /approved supply-tax Focus Deck run/i);
-  assert.match(nextActions, /Stop before a shared component/i);
-  assert.match(nextActions, /flashcard specifications and projections remain supported/i);
-  assert.match(decision, /The Focus Deck is a projection/i);
-  assert.match(decision, /existing `kp\.article-deck\.v1` derivation/i);
-  assert.match(review, /graph geometry[\s\S]*economic truth/i);
-  assert.match(review, /human visual checkpoint/i);
+  assert.match(nextActions, /approved persistent semantic state foundation/i);
+  assert.match(nextActions, /mandatory\s+architecture\/API checkpoint/i);
+  assert.match(nextActions, /Focus Deck remains preserved/i);
+  assert.match(focusDecision, /The Focus Deck is a projection/i);
+  assert.match(focusDecision, /existing `kp\.article-deck\.v1` derivation/i);
+  assert.match(focusReview, /graph geometry[\s\S]*economic truth/i);
+  assert.match(focusReview, /human visual checkpoint/i);
+  assert.match(semanticStateDecision, /explicit nonvisual persistent snapshot/i);
+  assert.match(semanticStateProposal, /30-slice,[\s\S]*nonvisual foundation/i);
+  assert.match(semanticStateProposal, /Always stop at `HUMAN_CHECKPOINT`/);
   assert.match(entrypoint, /Minimal Successful Construction/);
   assert.match(entrypoint, /canonical-animation-public-api\.ts/);
   assert.match(entrypoint, /\{ request, authority \}/);

@@ -76,7 +76,8 @@
     {
       "id": "s03",
       "title": "generated-order-and-direction-ledgers",
-      "status": "planned"
+      "summary": "Reconciled all 14 generated-order and direction failures, regenerated balanced-operation and 68-root reachability ledgers, preserved import-order determinism and an honest calculus promotion gap, and aligned human-readable direction with the approved state-foundation run.",
+      "status": "complete"
     },
     {
       "id": "s04",

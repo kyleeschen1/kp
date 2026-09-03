@@ -31,8 +31,8 @@ test("coverage view is one ordered evidence-derived list", () => {
   assert.deepEqual(view.statusCounts, [
     { status: "Direct", count: 11 },
     { status: "Registered", count: 4 },
-    { status: "Exemplar", count: 7 },
-    { status: "Missing", count: 16 }
+    { status: "Exemplar", count: 8 },
+    { status: "Missing", count: 15 }
   ]);
   assert.deepEqual(
     view.rows.map(({ order }) => order),

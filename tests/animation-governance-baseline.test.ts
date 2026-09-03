@@ -30,7 +30,7 @@ test("epoch v2 preserves existing inference and runtime targets", () => {
     kpAnimationPerformanceTargets
   );
   assert.ok(
-    kpAnimationGovernanceEpochV2Baseline.inference.observed.types >
+    kpAnimationGovernanceEpochV2Baseline.inference.observed.types <=
       typescriptInferenceBudget.ceilings.types
   );
   assert.deepEqual(inspectKpAnimationGovernanceInferenceRegression({

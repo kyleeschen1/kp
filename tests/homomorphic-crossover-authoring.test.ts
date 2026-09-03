@@ -45,6 +45,22 @@ test("the LLM catalogue exposes one shared recipe through exact caller authority
     recipeId: "recipe.equation.homomorphic-decomposition.v1",
     semanticAuthorityIds: ["law.logarithm.quotient"],
     callerIds: ["animation.algebra.log-quotient.difference-to-quotient"]
+  }, {
+    operationId: "operation.equation.exponential-sum-to-product.v1",
+    operationKind: "operation.equation.exponential-sum-to-product.v1",
+    recipeId: "recipe.equation.exponential-homomorphism.v1",
+    semanticAuthorityIds: ["law.exponential.sum-to-product"],
+    callerIds: [
+      "animation.algebra.exponential-homomorphism.sum-to-product"
+    ]
+  }, {
+    operationId: "operation.equation.exponential-difference-to-quotient.v1",
+    operationKind: "operation.equation.exponential-difference-to-quotient.v1",
+    recipeId: "recipe.equation.exponential-homomorphism.v1",
+    semanticAuthorityIds: ["law.exponential.difference-to-quotient"],
+    callerIds: [
+      "animation.algebra.exponential-homomorphism.difference-to-quotient"
+    ]
   }]);
   assert.ok(homomorphicOperations.every(({ semanticPhaseIds }) =>
     JSON.stringify(semanticPhaseIds) === JSON.stringify(

@@ -91,6 +91,7 @@ const rawEntries = [
       rearrangementPath,
       motifDefaultsPath,
       algebraFamilyPath,
+      "src/authoring/balanced-operation-authoring-corpus.ts",
       "src/semantic/both-sides-operation-registration.ts",
       "src/semantic/both-sides-operation-registrations/additive.ts",
       "src/semantic/canonical-operation-registry.ts",
@@ -132,6 +133,7 @@ const rawEntries = [
       "src/animation/semantic-motion-library-promotion.ts",
       algebraFamilyPath,
       "src/animation/verified-linear-problem-animation-compiler.ts",
+      "src/authoring/balanced-operation-authoring-corpus.ts",
       "src/reader/compiler/fraction-composition-preservation-manifest.ts",
       "src/semantic/algebra-trace-port-fixture.ts",
       "src/semantic/both-sides-operation-registration.ts",
@@ -177,6 +179,7 @@ const rawEntries = [
       "src/animation/fraction-composition-visual-motifs.ts",
       motifDefaultsPath,
       algebraFamilyPath,
+      "src/authoring/balanced-operation-authoring-corpus.ts",
       "src/reader/compiler/fraction-composition-preservation-manifest.ts",
       "src/semantic/both-sides-operation-registration.ts",
       "src/semantic/both-sides-operation-registrations/multiplicative.ts",
@@ -219,6 +222,7 @@ const rawEntries = [
       motifDefaultsPath,
       algebraFamilyPath,
       "src/animation/verified-linear-problem-animation-compiler.ts",
+      "src/authoring/balanced-operation-authoring-corpus.ts",
       "src/reader/compiler/fraction-composition-preservation-manifest.ts",
       "src/semantic/canonical-operation-registry.ts",
       "src/semantic/both-sides-operation-registration.ts",
@@ -261,8 +265,10 @@ const rawEntries = [
     ),
     literalSourcePaths: [
       rearrangementPath,
+      "src/authoring/balanced-operation-authoring-corpus.ts",
       "src/semantic/both-sides-operation-registration.ts",
       "src/semantic/both-sides-operation-registrations/logarithmic.ts",
+      "src/semantic/equation-law-operation-pack.ts",
       logCompilerPath
     ],
     gaps: []
@@ -292,8 +298,10 @@ const rawEntries = [
       "kp.algebra.divide-both-sides-by-log-base"
     ),
     literalSourcePaths: [
+      "src/authoring/balanced-operation-authoring-corpus.ts",
       "src/semantic/both-sides-operation-registration.ts",
       "src/semantic/both-sides-operation-registrations/logarithmic.ts",
+      "src/semantic/equation-law-operation-pack.ts",
       logCompilerPath
     ],
     gaps: []

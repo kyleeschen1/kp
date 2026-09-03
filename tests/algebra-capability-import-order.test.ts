@@ -44,6 +44,10 @@ test("every compiler-first and pack-first clean-process order has the same resul
   assert.deepEqual(results[0], {
     assetIds: [
       "animation.generated.cancellation.additive-inverses",
+      "animation.algebra.radical.solve-x-squared-nine",
+      "animation.algebra.radical.compound-carrier-normalization",
+      "animation.equation.finite-sum-expansion.v1",
+      "animation.equation.finite-product-expansion.v1",
       "animation.generated.fraction-expression.two-fourths",
       "animation.generated.exponent.square-as-product",
       "animation.generated.radical.square-root-as-power",
@@ -52,7 +56,11 @@ test("every compiler-first and pack-first clean-process order has the same resul
       "animation.generated.distribution.factor-common-a",
       "animation.inequality.sign-flip.basic",
       "animation.algebra.log-exponent.solve-two-power-x",
-      "animation.algebra.log-quotient.difference-to-quotient"
+      "animation.algebra.log-quotient.difference-to-quotient",
+      "animation.equation.logarithm-change-of-base.v1",
+      "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
+      "animation.equation.fraction-equivalence.v1",
+      "animation.equation.fraction-equivalence.compact.v1"
     ],
     capabilityKeys: [
       "canonicalReverseChoreography",

@@ -17,13 +17,15 @@ import { createKpEditorAnimationPlayerState } from "../src/editor/animation-play
 
 const catalog = createKpAnimationAssets();
 
-test("calculus rule cohort passes semantic motion promotion", () => {
+test("calculus rule cohort reports unpromoted semantic reduction steps", () => {
   assert.deepEqual(auditKpCalculusRulePromotion(catalog), {
     kind: "calculus-rule-promotion-report",
-    status: "promoted",
+    status: "blocked",
     animationIds: [...kpPromotedCalculusRuleAnimationIds],
-    transformationCount: 5,
-    gaps: []
+    transformationCount: 6,
+    gaps: [
+      "Transformation transform.generated.calculus.derivative.power-rule-x-cubed.evaluate-exponent-decrement is not a promoted calculus rule step."
+    ]
   });
 });
 

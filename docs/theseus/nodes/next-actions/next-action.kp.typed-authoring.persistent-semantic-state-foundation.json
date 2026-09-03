@@ -91,6 +91,41 @@
       "scope": "broad",
       "checkedAt": "2026-09-03T06:22:46.767Z",
       "notes": "Workspace valid before s02 completion."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test <s03 generated order and direction tests>",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T06:32:12.457Z",
+      "notes": "All 52 assigned import-order, generation-ledger, maturity, and active-direction tests passed; clean-process pack results remain identical."
+    },
+    {
+      "command": "npm run check:balanced-operation-inventory",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T06:32:13.645Z",
+      "notes": "Balanced-operation literal caller inventory is current after adding the canonical authoring corpus and equation-law pack evidence."
+    },
+    {
+      "command": "npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T06:32:14.675Z",
+      "notes": "Exact generated reachability graph is current with 68 declared roots."
+    },
+    {
+      "command": "npm run check:animation-transformation-coverage",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T06:32:15.716Z",
+      "notes": "Generated transformation coverage is current; integration remains evidence-derived Exemplar while the calculus reduction promotion gap stays explicit."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T06:32:18.962Z",
+      "notes": "Workspace valid before s03 completion."
     }
   ],
   "expectedLearning": [

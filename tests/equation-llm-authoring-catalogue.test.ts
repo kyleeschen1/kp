@@ -80,12 +80,14 @@ test("recipe catalogue groups callers and owners from canonical declarations", (
     recipeId: "recipe.equation.function-application.v1",
     kind: "structural-recipe",
     callerAnimationIds: [
+      "animation.equation.logarithm-change-of-base.v1",
       "animation.algebra.log-quotient.difference-to-quotient",
       "animation.generated.function-wrap.apply-f"
     ],
     ownerSourcePaths: [
+      "src/animation/logarithm-change-of-base-presentation-plan.ts",
+      "src/animation/function-wrap-motif.ts",
       "src/editor/log-quotient-surface-adapter.ts",
-      "src/animation/function-wrap-motif.ts"
     ],
     selectionAuthority: "kp-compiler"
   });

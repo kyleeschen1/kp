@@ -13,8 +13,11 @@ import {
 } from "../src/animation/equation-structural-choreography-declarations.ts";
 
 const expectedWaveBIds = Object.freeze([
+  "animation.algebra.exponential-homomorphism.difference-to-quotient",
+  "animation.algebra.exponential-homomorphism.sum-to-product",
   "animation.algebra.log-exponent.solve-two-power-x",
   "animation.algebra.log-quotient.difference-to-quotient",
+  "animation.equation.logarithm-change-of-base.v1",
   "animation.generated.exponent.square-as-product",
   "animation.generated.fraction-expression.two-fourths",
   "animation.generated.function-wrap.apply-f",

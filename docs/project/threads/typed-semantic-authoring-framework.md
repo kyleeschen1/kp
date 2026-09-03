@@ -1,13 +1,13 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: semantic-state direction accepted; test-ledger recovery next
+Status: persistent semantic state foundation loop active
 Last Updated: 2026-09-02
-Current Next Action: restore or explicitly classify the 34 stale
-repository-wide closed-world ledger failures, then implement the internal
-experimental unit-scalar differentiable-map helper accepted in
-`../decisions/2026-09-02-unit-scalar-differentiable-map-helper-boundary.md`,
-migrate only the market and circle pressure callers, measure authoring and
-inference cost, and stop for API review.
+Current Next Action: execute the approved 30-slice nonvisual persistent
+semantic state foundation at
+`../reviews/2026-09-02-persistent-semantic-state-foundation-long-loop-proposal.md`.
+It restores the closed-world ledgers, completes the bounded unit-scalar helper
+and economics-parity gates, proves the immutable state kernel, and stops at the
+mandatory architecture/API checkpoint before loop 2.
 
 ## Goal
 
@@ -353,16 +353,16 @@ work remains focused preflight rather than a padded long loop. See
 `../reviews/2026-09-02-semantic-state-architecture-sequencing-review.md` and
 `../decisions/2026-09-02-persistent-semantic-state-architecture-direction.md`.
 
-## Pending Foundation Long Loop
+## Active Foundation Long Loop
 
-The proposed first run contains 30 independently reversible slices. It keeps
+The approved first run contains 30 independently reversible slices. It keeps
 the test-ledger, unit-scalar helper, and economics-parity work as bounded
 opening gates, then implements only the explicit nonvisual identity, snapshot,
 role-binding, transaction, lineage, and recovery kernel. It stops at a
 mandatory architecture/API checkpoint before proxy ergonomics, lazy derived
-evaluation, interpolation, timeline, or renderer work. No run contract is
-active until the user approves the exact proposal in
-`../reviews/2026-09-02-persistent-semantic-state-foundation-long-loop-proposal.md`.
+evaluation, interpolation, timeline, or renderer work. Its executable status
+is owned by `run-contract.kp.persistent-semantic-state-foundation-v1`; this
+thread records direction without duplicating per-slice progress.
 
 ## Stop Conditions
 
