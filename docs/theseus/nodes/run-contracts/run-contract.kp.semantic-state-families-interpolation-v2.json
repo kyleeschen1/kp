@@ -78,7 +78,8 @@
     {
       "id": "s02",
       "title": "Exact semantic progress",
-      "status": "planned"
+      "summary": "Exact-progress-normalizes-compares-and-encodes-without-numeric-authority",
+      "status": "complete"
     },
     {
       "id": "s03",

@@ -89,6 +89,48 @@
       "scope": "control-plane",
       "checkedAt": "2026-09-03T20:36:57.134Z",
       "notes": "1091 nodes and 27029 events valid before completion records"
+    },
+    {
+      "command": "node semantic-state-progress test",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T20:40:49.181Z",
+      "notes": "Four exact normalization endpoint comparison encoding and rejection laws passed"
+    },
+    {
+      "command": "npm run verify:impact semantic-progress",
+      "status": "passed",
+      "scope": "impact",
+      "checkedAt": "2026-09-03T20:40:50.366Z",
+      "notes": "High-risk semantic-state path selected semantic-state typecheck and architecture gates"
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T20:40:51.440Z",
+      "notes": "159 of 159 semantic-state tests passed"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T20:40:52.536Z",
+      "notes": "All application node test Svelte and domain typechecks passed"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T20:40:53.615Z",
+      "notes": "2001 TypeScript modules and all architecture gateways passed"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "control-plane",
+      "checkedAt": "2026-09-03T20:40:54.722Z",
+      "notes": "1091 nodes and 27041 events valid before completion records"
     }
   ],
   "expectedLearning": [
