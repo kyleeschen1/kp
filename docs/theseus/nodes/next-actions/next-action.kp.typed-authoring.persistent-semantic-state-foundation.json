@@ -203,6 +203,34 @@
       "scope": "broad",
       "checkedAt": "2026-09-03T07:07:41.674Z",
       "notes": "Workspace valid at 1084 nodes and 26428 events before slice closeout."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/unit-scalar-map-helper-baseline.test.ts tests/typed-linear-supply-demand-pressure.test.ts tests/typed-circle-measurement-pressure.test.ts tests/typed-math-authoring-inference-budget.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T07:15:35.247Z",
+      "notes": "All 13 baseline, market, circle, and existing inference-budget tests passed; exact IDs, spaces, units, values, derivatives, evidence, and diagnostics are characterized."
+    },
+    {
+      "command": "npm run check:unit-scalar-helper-baseline",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T07:15:36.530Z",
+      "notes": "Authoring burden is frozen at 148 measured setup lines, 8 low-level constructors, 6 unit guards, and focused inference at 33441 types and 39168 instantiations."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-math-authoring-builders.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T07:15:37.691Z",
+      "notes": "Both existing authoring-builder inference and free-variable diagnostic tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T07:15:38.861Z",
+      "notes": "Repository TypeScript, Svelte, and domain checks passed after adding the baseline measurement tooling."
     }
   ],
   "expectedLearning": [

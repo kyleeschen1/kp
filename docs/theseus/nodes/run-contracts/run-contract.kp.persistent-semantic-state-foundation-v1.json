@@ -94,7 +94,8 @@
     {
       "id": "s06",
       "title": "helper-baseline-and-contract",
-      "status": "planned"
+      "summary": "Characterized the two unchanged pressure callers: their shared mechanics are isolated from authored affine and nonlinear rules, exact observable contracts are frozen, and focused authoring plus inference baselines are reproducible.",
+      "status": "complete"
     },
     {
       "id": "s07",

@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "types": [],
+    "noEmit": true
+  },
+  "include": [
+    "tests/type-fixtures/typed-linear-supply-demand.ts",
+    "tests/typed-math-fixtures/typed-circle-measurement.ts"
+  ]
+}

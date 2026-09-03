@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "kp.unit-scalar-helper-baseline.v1",
+  "authoring": {
+    "callers": [
+      {
+        "id": "market",
+        "source": "src/experiments/typed-linear-supply-demand/typed-linear-supply-demand.ts",
+        "functionNames": [
+          "createKpLinearSupplyDemandExperiment",
+          "createCurve"
+        ],
+        "authoredSetupLines": 80,
+        "mechanicalStatements": 8,
+        "constructorCalls": {
+          "createKpUnitTaggedScalarSpace": 2,
+          "createKpDifferentiableMap": 1,
+          "createKpLinearMap": 1
+        },
+        "unitGuardCalls": 3,
+        "semanticPathCalls": 7,
+        "derivativeUnitProjectionCalls": 1
+      },
+      {
+        "id": "circle",
+        "source": "tests/fixtures/typed-circle-measurement.ts",
+        "functionNames": [
+          "createKpCircleMeasurement"
+        ],
+        "authoredSetupLines": 68,
+        "mechanicalStatements": 8,
+        "constructorCalls": {
+          "createKpUnitTaggedScalarSpace": 2,
+          "createKpDifferentiableMap": 1,
+          "createKpLinearMap": 1
+        },
+        "unitGuardCalls": 3,
+        "semanticPathCalls": 6,
+        "derivativeUnitProjectionCalls": 1
+      }
+    ],
+    "totals": {
+      "authoredSetupLines": 148,
+      "mechanicalStatements": 16,
+      "constructorCalls": 8,
+      "unitGuardCalls": 6,
+      "semanticPathCalls": 13,
+      "derivativeUnitProjectionCalls": 2
+    }
+  },
+  "inference": {
+    "project": "tsconfig.unit-scalar-map-helper-inference.json",
+    "fixtureCount": 2,
+    "types": 33441,
+    "instantiations": 39168
+  }
+}

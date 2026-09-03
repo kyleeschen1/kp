@@ -408,6 +408,8 @@
     "check:reader-parser-isolation": "node --disable-warning=ExperimentalWarning scripts/check-semantic-reader-parser-isolation.ts",
     "check:inference": "node --disable-warning=ExperimentalWarning scripts/check-inference-contracts.ts",
     "measure:inference-attribution": "node --disable-warning=ExperimentalWarning scripts/measure-typescript-inference-attribution.ts",
+    "measure:unit-scalar-helper": "node --disable-warning=ExperimentalWarning scripts/measure-unit-scalar-map-helper.ts",
+    "check:unit-scalar-helper-baseline": "node --disable-warning=ExperimentalWarning scripts/measure-unit-scalar-map-helper.ts --check",
     "generate:concept-catalog": "node --disable-warning=ExperimentalWarning scripts/generate-concept-catalog.ts",
     "check:concept-catalog": "node --disable-warning=ExperimentalWarning scripts/generate-concept-catalog.ts --check",
     "typecheck:protocols": "tsc --project protocols/tsconfig.json --noEmit",
