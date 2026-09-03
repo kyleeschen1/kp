@@ -142,7 +142,8 @@
     {
       "id": "s14",
       "title": "exact-rational-adapter-or-formula-boundary",
-      "status": "planned"
+      "summary": "Added the narrow one-way projection from a canonical exact-rational supply-tax model into the typed pressure market; it normalizes exact inputs, rejects non-exact Number projection, validates all equilibrium and welfare outputs against canonical authority, and records explicit source/state links without reversing dependencies.",
+      "status": "complete"
     },
     {
       "id": "s15",

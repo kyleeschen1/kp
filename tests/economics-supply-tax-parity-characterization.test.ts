@@ -11,15 +11,13 @@ import {
   kpPerUnitTaxWelfareExemplarInput
 } from "../domains/economics/per-unit-tax-welfare.ts";
 import {
-  createKpLinearSupplyDemandExperiment,
-  evaluateKpLinearMarketScenario
-} from "../src/experiments/typed-linear-supply-demand/typed-linear-supply-demand.ts";
+  projectKpExactRationalLinearMarket
+} from "../src/experiments/typed-linear-supply-demand/exact-rational-adapter.ts";
 import {
   createKpStandardMathAuthoringContext
 } from "../src/math/authoring/algebra.ts";
 import {
-  createKpUnitDescriptor,
-  createKpUnitValue
+  createKpUnitDescriptor
 } from "../src/math/authoring/units.ts";
 
 const quantityUnit = createKpUnitDescriptor({
@@ -38,39 +36,25 @@ const welfareUnit = createKpUnitDescriptor({
 function createCharacterizedPair() {
   const exactModel = createKpPerUnitTaxWelfareModel();
   const exactWelfare = createKpPerUnitTaxWelfareAccounting(exactModel);
-  const typedMarket = createKpLinearSupplyDemandExperiment({
+  const projection = projectKpExactRationalLinearMarket({
     author: createKpStandardMathAuthoringContext({
       namespace: "lesson.economics.supply-tax-parity"
     }),
     key: "canonical-exemplar",
+    model: exactModel,
     units: {
       quantity: quantityUnit,
       price: priceUnit,
       welfare: welfareUnit
-    },
-    // These duplicated literals characterize the pre-adapter boundary. The
-    // exact input remains authoritative until the next slice adds one-way use.
-    demand: {
-      priceAtZero: createKpUnitValue(priceUnit, 12),
-      priceDropPerQuantity: 1
-    },
-    supply: {
-      priceAtZero: createKpUnitValue(priceUnit, 2),
-      priceRisePerQuantity: 1
     }
   });
   return Object.freeze({
     exactModel,
     exactWelfare,
-    typedMarket,
-    typedUntaxed: evaluateKpLinearMarketScenario(typedMarket, {
-      kind: "baseline"
-    }),
-    typedTaxed: evaluateKpLinearMarketScenario(typedMarket, {
-      kind: "per-unit-seller-tax",
-      id: "seller-tax",
-      amount: createKpUnitValue(priceUnit, 4)
-    })
+    projection,
+    typedMarket: projection.market,
+    typedUntaxed: projection.snapshots.untaxed,
+    typedTaxed: projection.snapshots.taxed
   });
 }
 
@@ -187,9 +171,63 @@ test("each side retains explicit units and source identities before adaptation",
     price: priceUnit,
     welfare: welfareUnit
   });
+  assert.deepEqual(pair.projection.sourceIds, [
+    pair.exactModel.id,
+    pair.exactWelfare.id,
+    pair.exactModel.input.demand.id,
+    pair.exactModel.input.supply.id,
+    pair.exactModel.input.tax.id,
+    pair.exactModel.states.untaxed.id,
+    pair.exactModel.states.taxed.id
+  ]);
+  assert.deepEqual(pair.projection.stateLinks, {
+    untaxed: {
+      canonicalStateId: pair.exactModel.states.untaxed.id,
+      typedSnapshotId: pair.typedUntaxed.id
+    },
+    taxed: {
+      canonicalStateId: pair.exactModel.states.taxed.id,
+      typedSnapshotId: pair.typedTaxed.id
+    }
+  });
   assert.equal(Object.isFrozen(pair), true);
   assert.equal(Object.isFrozen(pair.typedUntaxed), true);
   assert.equal(Object.isFrozen(pair.exactModel), true);
+});
+
+test("the one-way adapter consumes normalized exact-rational inputs", () => {
+  const model = createKpPerUnitTaxWelfareModel({
+    ...kpPerUnitTaxWelfareExemplarInput,
+    demand: {
+      ...kpPerUnitTaxWelfareExemplarInput.demand,
+      priceIntercept: exact("24", "2"),
+      priceChangePerQuantity: exact("2", "2")
+    },
+    supply: {
+      ...kpPerUnitTaxWelfareExemplarInput.supply,
+      priceIntercept: exact("6", "3"),
+      priceChangePerQuantity: exact("4", "4")
+    },
+    tax: {
+      ...kpPerUnitTaxWelfareExemplarInput.tax,
+      initialAmount: exact("0", "8"),
+      finalAmount: exact("8", "2")
+    }
+  });
+  const projection = projectKpExactRationalLinearMarket({
+    author: createKpStandardMathAuthoringContext({
+      namespace: "lesson.economics.normalized-parity"
+    }),
+    key: "normalized",
+    model,
+    units: { quantity: quantityUnit, price: priceUnit, welfare: welfareUnit }
+  });
+
+  assert.deepEqual(projection.canonical.model.input.demand.priceIntercept,
+    exact("12"));
+  assert.deepEqual(projection.canonical.model.input.tax.finalAmount, exact("4"));
+  assert.deepEqual(projection.snapshots.taxed.quantities.traded,
+    unit(3, quantityUnit.id));
 });
 
 function exact(numerator: string, denominator = "1") {
