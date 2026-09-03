@@ -1,9 +1,16 @@
-import type { KpAggregateSemanticSnapshot } from "./aggregate-snapshot.ts";
-import { requireAndFreezeKpPersistentSemanticValue } from
-  "./entity-version-store.ts";
+import {
+  readKpSemanticSlotBinding,
+  type KpAggregateSemanticSnapshot
+} from "./aggregate-snapshot.ts";
+import {
+  requireAndFreezeKpPersistentSemanticValue,
+  type KpPersistentSemanticValue
+} from "./entity-version-store.ts";
 import type {
   KpAppliedTransformationId,
+  KpSemanticEntityId,
   KpSemanticSlotId,
+  KpSemanticVersionId,
   KpTransformationDefinitionId
 } from "./identity.ts";
 import {
@@ -46,7 +53,24 @@ export interface KpEphemeralSemanticStateDriverOverlay<Value = unknown> {
   readonly transitionMode: "semantic-interpolation" | "discrete";
   readonly targetSlotId: KpSemanticSlotId;
   readonly targetPath: readonly string[];
+  readonly endpoints: KpEphemeralSemanticStateDriverEndpoints;
   readonly value: Value;
+}
+
+export interface KpEphemeralSemanticStateDriverEndpointReference {
+  readonly schemaVersion:
+    "kp.ephemeral-semantic-state-driver-endpoint-reference.v1";
+  readonly kind: "ephemeral-semantic-state-driver-endpoint-reference";
+  readonly entityId: KpSemanticEntityId;
+  readonly versionId: KpSemanticVersionId;
+}
+
+export interface KpEphemeralSemanticStateDriverEndpoints {
+  readonly schemaVersion:
+    "kp.ephemeral-semantic-state-driver-endpoints.v1";
+  readonly kind: "ephemeral-semantic-state-driver-endpoints";
+  readonly before: KpEphemeralSemanticStateDriverEndpointReference;
+  readonly after: KpEphemeralSemanticStateDriverEndpointReference;
 }
 
 export interface KpEphemeralSemanticStateReadSource {
@@ -56,7 +80,9 @@ export interface KpEphemeralSemanticStateReadSource {
   readonly application: KpEphemeralSemanticStateApplicationReference;
   readonly progress: KpSemanticProgress;
   readonly base: KpPersistentSemanticStateReadSource;
-  readonly drivers: readonly KpEphemeralSemanticStateDriverOverlay[];
+  readonly drivers: readonly KpEphemeralSemanticStateDriverOverlay<
+    KpPersistentSemanticValue
+  >[];
   readonly driverIndex: Readonly<Record<KpSemanticSlotId, number>>;
 }
 
@@ -177,7 +203,7 @@ export function createKpEphemeralSemanticStateReadSource<
         message: `Ephemeral semantic source repeats driver slot ${JSON.stringify(declaration.target.slotId)}.`
       });
     }
-    let frozenValue: unknown;
+    let frozenValue: KpPersistentSemanticValue;
     try {
       frozenValue = requireAndFreezeKpPersistentSemanticValue(value);
     } catch (cause) {
@@ -198,6 +224,11 @@ export function createKpEphemeralSemanticStateReadSource<
       transitionMode: declaration.transitionMode,
       targetSlotId: declaration.target.slotId,
       targetPath: Object.freeze([...declaration.target.path]),
+      endpoints: createDriverEndpoints(
+        input.application.commit.before,
+        input.application.commit.after,
+        declaration.target.slotId
+      ),
       value: frozenValue
     });
   });
@@ -222,5 +253,32 @@ export function createKpEphemeralSemanticStateReadSource<
     ),
     drivers: Object.freeze(drivers),
     driverIndex: Object.freeze(driverIndex)
+  });
+}
+
+function createDriverEndpoints(
+  before: KpAggregateSemanticSnapshot,
+  after: KpAggregateSemanticSnapshot,
+  slotId: KpSemanticSlotId
+): KpEphemeralSemanticStateDriverEndpoints {
+  return Object.freeze({
+    schemaVersion: "kp.ephemeral-semantic-state-driver-endpoints.v1",
+    kind: "ephemeral-semantic-state-driver-endpoints",
+    before: createDriverEndpointReference(before, slotId),
+    after: createDriverEndpointReference(after, slotId)
+  });
+}
+
+function createDriverEndpointReference(
+  snapshot: KpAggregateSemanticSnapshot,
+  slotId: KpSemanticSlotId
+): KpEphemeralSemanticStateDriverEndpointReference {
+  const binding = readKpSemanticSlotBinding(snapshot, slotId);
+  return Object.freeze({
+    schemaVersion:
+      "kp.ephemeral-semantic-state-driver-endpoint-reference.v1",
+    kind: "ephemeral-semantic-state-driver-endpoint-reference",
+    entityId: binding.entityId,
+    versionId: binding.versionId
   });
 }

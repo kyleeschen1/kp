@@ -132,7 +132,8 @@
     {
       "id": "s11",
       "title": "Generalized concrete resolution",
-      "status": "planned"
+      "summary": "Generalized concrete dependency resolution across persistent and ephemeral sample sources while preserving exact committed authority and issuing explicit transient driver tokens.",
+      "status": "complete"
     },
     {
       "id": "s12",

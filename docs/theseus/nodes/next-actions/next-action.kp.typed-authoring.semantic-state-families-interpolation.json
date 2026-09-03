@@ -495,6 +495,83 @@
       "scope": "control-plane",
       "checkedAt": "2026-09-03T21:40:49.581Z",
       "notes": "1091-nodes-and-27125-events-valid-before-completion-records"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-state-derived-evaluator.test.ts tests/semantic-state-family-source-resolution.test.ts tests/semantic-state-family-sample-source.test.ts tests/semantic-state-derived-fingerprint.test.ts",
+      "status": "passed",
+      "scope": "s11 focused source resolution",
+      "checkedAt": "2026-09-03T21:59:25.365Z",
+      "notes": "25 tests pass; persistent parity, transient token, unaffected dependency, and failure behavior covered."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s11 focused type compatibility",
+      "checkedAt": "2026-09-03T21:59:26.623Z",
+      "notes": "Legacy snapshot and persistent-source overloads retain exact concrete result typing."
+    },
+    {
+      "command": "npm run verify:impact -- --path src/semantic-state/derived-evaluator.ts --path src/semantic-state/state-family-sample-source.ts --path tests/semantic-state-family-source-resolution.test.ts",
+      "status": "passed",
+      "scope": "s11 impact",
+      "checkedAt": "2026-09-03T21:59:27.803Z",
+      "notes": "Promotion/high risk semantic-state kernel impact; semantic-state, typecheck, and architecture checks required and run."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "s11 semantic state",
+      "checkedAt": "2026-09-03T21:59:28.973Z",
+      "notes": "202 tests pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s11 repository types",
+      "checkedAt": "2026-09-03T21:59:30.046Z",
+      "notes": "Application, node, test, Svelte, and domain type checks pass with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s11 architecture",
+      "checkedAt": "2026-09-03T21:59:31.097Z",
+      "notes": "Dependency direction and framework-neutral gates pass for 2006 TypeScript modules and 7448/7499 local references with zero retiring exceptions."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s11 inference",
+      "checkedAt": "2026-09-03T21:59:32.281Z",
+      "notes": "Contracts pass at 106169 types and 179683 instantiations."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "s11 bundle",
+      "checkedAt": "2026-09-03T21:59:33.374Z",
+      "notes": "Production bundle builds; existing large-chunk warning remains advisory."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s11 complete repository",
+      "checkedAt": "2026-09-03T21:59:34.513Z",
+      "notes": "6312 tests pass with zero failures, skips, cancellations, or todos."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s11 durable state",
+      "checkedAt": "2026-09-03T21:59:35.664Z",
+      "notes": "Workspace valid before slice close."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s11 patch hygiene",
+      "checkedAt": "2026-09-03T21:59:36.837Z",
+      "notes": "No whitespace errors."
     }
   ],
   "expectedLearning": [
