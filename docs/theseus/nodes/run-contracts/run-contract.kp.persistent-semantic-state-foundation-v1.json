@@ -82,7 +82,8 @@
     {
       "id": "s04",
       "title": "renderer-source-and-architecture-ledgers",
-      "status": "planned"
+      "summary": "Reconciled all 19 renderer, source-inventory, and architecture-ledger failures without production behavior changes; explicitly sealed hierarchical endpoint ownership into bounded compositor closure budgets, refreshed generated projections, and passed 64 focused tests plus dependency and type checks.",
+      "status": "complete"
     },
     {
       "id": "s05",

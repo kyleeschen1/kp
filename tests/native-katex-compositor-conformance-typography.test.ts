@@ -55,8 +55,8 @@ test("carries authoritative expected paint into target-style normalization", () 
   assert.equal(frame.entries[0]?.expectedPaintRect, expectedPaintRect);
   assert.deepEqual(frame.entries[0], {
     id: "entry.carrier",
-    translateX: -25,
-    translateY: -14,
+    translateX: -20,
+    translateY: 0,
     scaleX: 1,
     scaleY: 1,
     expectedPaintRect

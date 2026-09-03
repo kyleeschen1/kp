@@ -153,6 +153,7 @@ const visual = {
 };
 const ownerStyle = fakeStyle();
 const owner = {
+  closest: () => null,
   dataset: {} as Record<string, string>,
   firstElementChild: visual,
   ownerDocument,

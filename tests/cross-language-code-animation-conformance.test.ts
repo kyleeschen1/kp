@@ -22,6 +22,12 @@ import { createKpTypeScriptFreeShippingAnimationAsset } from
   "../src/semantic/typescript-free-shipping-animation-asset.ts";
 import { createKpTypeScriptRefactorSourceProjections } from
   "../src/semantic/typescript-refactor-source-projections.ts";
+import { kpCodeSourceDomOpticalProfile } from
+  "../src/rendering/code-source-dom-optical-profile.ts";
+import { kpPythonRefactorPaintRoleContract } from
+  "../src/rendering/python-refactor-paint-role-contract.ts";
+import { kpTypeScriptRefactorPaintRoleContract } from
+  "../src/rendering/typescript-refactor-paint-role-contract.ts";
 
 const typescript = createKpTypeScriptFreeShippingAnimationAsset();
 const python = createKpPythonFreeShippingAnimationAsset();
@@ -140,26 +146,66 @@ test("token theaters are deterministic, inactive at endpoints, and absent in red
 });
 
 test("the approved callers share optical theme tokens without sharing language syntax", async () => {
-  const css = [
-    await readFile(
+  assert.equal(
+    kpPythonRefactorPaintRoleContract.profileId,
+    kpCodeSourceDomOpticalProfile.id
+  );
+  assert.equal(
+    kpTypeScriptRefactorPaintRoleContract.profileId,
+    kpCodeSourceDomOpticalProfile.id
+  );
+  assert.deepEqual(
+    Object.fromEntries([
+      "foreground.primary",
+      "syntax.keyword",
+      "syntax.function",
+      "syntax.number",
+      "syntax.string",
+      "focus.wash"
+    ].map((role) => [
+      role,
+      kpCodeSourceDomOpticalProfile.endpoints.dark.values[
+        role as keyof typeof kpCodeSourceDomOpticalProfile.endpoints.dark.values
+      ]
+    ])),
+    {
+      "foreground.primary": "#ede8d0",
+      "syntax.keyword": "#9099d9",
+      "syntax.function": "#338fff",
+      "syntax.number": "#ede8d0",
+      "syntax.string": "#82b0ec",
+      "focus.wash": "rgb(92 173 255 / 10%)"
+    }
+  );
+
+  const [pythonCss, typeScriptCss] = await Promise.all([
+    readFile(
       new URL("../src/editor/programming-surface.css", import.meta.url),
       "utf8"
     ),
-    await readFile(
+    readFile(
       new URL("../src/rendering/typescript-refactor.css", import.meta.url),
       "utf8"
     )
-  ].join("\n");
-  for (const value of [
-    "--kp-code-foreground: #ede8d0",
-    "--kp-code-keyword: #9099d9",
-    "--kp-code-function: #338fff",
-    "--kp-code-number: var(--kp-code-foreground)",
-    "--kp-code-string: #82b0ec",
-    "--kp-code-highlight-background: rgb(92 173 255 / 10%)"
-  ]) {
-    assert.equal(css.split(value).length - 1, 2, value);
+  ]);
+  for (const [css, language] of [
+    [pythonCss, "python"],
+    [typeScriptCss, "typescript"]
+  ] as const) {
+    for (const [alias, role] of [
+      ["foreground", "foreground-primary"],
+      ["keyword", "syntax-keyword"],
+      ["function", "syntax-function"],
+      ["string", "syntax-string"],
+      ["highlight-background", "focus-wash"]
+    ] as const) {
+      assert.match(
+        css,
+        new RegExp(`--kp-code-${alias}: var\\(--kp-${language}-paint-${role}\\)`)
+      );
+    }
   }
+  const css = `${pythonCss}\n${typeScriptCss}`;
   assert.match(css, /data-kp-typescript-syntax-kind/u);
   assert.match(css, /data-kp-python-syntax-kind/u);
 

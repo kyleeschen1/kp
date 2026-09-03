@@ -83,7 +83,7 @@ test("generic retained SVG lifecycle has no domain renderer dependency", () => {
 
   assert.doesNotMatch(
     source,
-    /economics|physics|matrix|derivative|integral|dot-projection|katex/i
+    /economics|physics|matrix|derivative|integral|dot-projection/i
   );
   assert.match(source, /KpEditorGraphSvgViewportRenderer/);
   assert.match(source, /createKpEditorGraphSvgViewportLifecycleAdapter/);

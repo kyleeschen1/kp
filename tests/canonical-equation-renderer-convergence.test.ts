@@ -308,7 +308,11 @@ test("reader keeps no compositor query switch and one adapter loader", async () 
   );
   assert.match(
     adapter,
-    /const rendererReadyPlan = input\.nativeKatex\.compose\.compileScenePlan\([\s\S]*?const canonical = input\.nativeKatex\.compose\.createSession\(\s*rendererReadyPlan\s*\)/u
+    /const rendererReadyPlan = input\.nativeKatex\.compose\.compileScenePlan\(/u
+  );
+  assert.match(
+    adapter,
+    /\? input\.nativeKatex\.compose\.createSession\(rendererReadyPlan\)\s*: input\.nativeKatex\.compose\.createCarrierSession\(rendererReadyPlan\)/u
   );
   assert.match(
     experiment,

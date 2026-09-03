@@ -126,6 +126,55 @@
       "scope": "broad",
       "checkedAt": "2026-09-03T06:32:18.962Z",
       "notes": "Workspace valid before s03 completion."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test <s04 renderer source and architecture tests>",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T06:44:05.911Z",
+      "notes": "All 64 assigned renderer ownership, source-inventory, route-boundary, generated-ledger, optical-profile, and DOM-fixture tests passed."
+    },
+    {
+      "command": "npm run generate:equation-surface-disposition-ledger -- --check",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T06:44:07.103Z",
+      "notes": "The 43-row equation disposition ledger is current and classifies every canonical equation surface exactly once."
+    },
+    {
+      "command": "npm run check:post-convergence-inventory",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T06:44:08.139Z",
+      "notes": "The post-convergence infrastructure projection is current with 60 loadable assets and 17 selected capabilities."
+    },
+    {
+      "command": "npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T06:44:09.180Z",
+      "notes": "Exact equation reachability remains current with 68 declared roots after ledger repairs."
+    },
+    {
+      "command": "npm run check:dependency-direction",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T06:44:10.215Z",
+      "notes": "Dependency-direction gate passed across 1,978 TypeScript modules with no retiring exceptions."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T06:44:11.246Z",
+      "notes": "Application, Node, test, Svelte, and domain TypeScript checks passed with no diagnostics."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T06:44:12.285Z",
+      "notes": "Workspace valid before s04 completion."
     }
   ],
   "expectedLearning": [

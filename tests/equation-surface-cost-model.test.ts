@@ -9,8 +9,8 @@ import {
 test("equation cost plan covers one representative per preservation family", () => {
   const plan = createKpEquationSurfaceCostPlan();
 
-  assert.equal(plan.families.length, 14);
-  assert.equal(new Set(plan.families.map(({ familyId }) => familyId)).size, 14);
+  assert.equal(plan.families.length, 15);
+  assert.equal(new Set(plan.families.map(({ familyId }) => familyId)).size, 15);
   assert.equal(
     plan.families.every((family) =>
       family.sourcePaths.length > 0 &&
@@ -34,16 +34,16 @@ test("compatibility counts preserve the measured surface authority split", () =>
   const counts = createKpEquationSurfaceCostPlan().compatibility;
 
   assert.deepEqual(counts, {
-    equationSurfaceCount: 30,
-    familyCount: 14,
-    genericCompatibilityRows: 23,
-    specializedAdapterRows: 7,
-    rowsWithNonSemanticTransitions: 5,
-    nonSemanticTransitionCount: 8,
-    wholeEquationFallbackRows: 23,
+    equationSurfaceCount: 43,
+    familyCount: 15,
+    genericCompatibilityRows: 28,
+    specializedAdapterRows: 15,
+    rowsWithNonSemanticTransitions: 10,
+    nonSemanticTransitionCount: 16,
+    wholeEquationFallbackRows: 28,
     privateClockRows: 0,
     cssAnimationAuthorityRows: 0,
-    uniqueLocalSamplerNodes: 15
+    uniqueLocalSamplerNodes: 16
   });
 });
 

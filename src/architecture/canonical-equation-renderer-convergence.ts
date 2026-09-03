@@ -48,6 +48,7 @@ export const kpCanonicalEquationRendererConvergence = Object.freeze({
     "src/rendering/equation-material-layer-dom.ts",
     "src/rendering/equation-material-owner.ts",
     "src/rendering/native-katex-base-scene-plan.ts",
+    "src/rendering/native-katex-endpoint-ownership.ts",
     "src/rendering/native-katex-paint-geometry.ts",
     "src/rendering/native-katex-scene-track-contract.ts",
     "src/rendering/native-katex-scene-track-sampling.ts",
@@ -75,27 +76,33 @@ export const kpCanonicalEquationRendererConvergence = Object.freeze({
     "src/rendering/equation-font-readiness.ts",
     "src/rendering/equation-material-layer-dom.ts",
     "src/rendering/equation-material-owner.ts",
+    "src/rendering/native-katex-endpoint-ownership.ts",
     "src/rendering/native-katex-paint-geometry.ts",
     "src/rendering/native-katex-scene-track-sampling.ts",
     "src/rendering/native-katex-structural-succession-renderer.ts"
   ]),
   maximumProductionModules: 4,
-  // The axis-continuant contract adds generic routing authority to the one
-  // compositor instead of introducing an equation-specific renderer. Keep the
+  // Hierarchical endpoint ownership adds generic routing at the one compositor
+  // boundary instead of introducing an equation-specific renderer. Keep the
   // ratchet close enough that a parallel implementation still cannot hide.
-  maximumProductionSourceBytes: 140_000,
+  maximumProductionSourceBytes: 145_000,
   // Freeze direct dependencies so core reductions cannot hide in helpers.
-  maximumProductionDirectDependencyModules: 14,
+  maximumProductionDirectDependencyModules: 15,
   maximumProductionDirectDependencySourceBytes: 295_000,
   // Planner source receives responsibilities still embedded in the current
   // compositor. The aggregate ceiling, not this migration envelope, prevents
   // source from disappearing while those functions move to their true owner.
   maximumProductionScenePlanBoundaryModules: 20,
   maximumProductionScenePlanBoundarySourceBytes: 315_000,
-  maximumProductionRendererSupportModules: 7,
-  maximumProductionRendererSupportSourceBytes: 65_000,
+  // Endpoint ownership is an explicit eighth support owner. Its bounded module
+  // and byte allocation makes the extraction visible instead of hiding it in
+  // the compositor or an unmeasured helper closure.
+  maximumProductionRendererSupportModules: 8,
+  maximumProductionRendererSupportSourceBytes: 80_000,
   maximumProductionAggregateModules: 31,
-  maximumProductionAggregateSourceBytes: 455_000,
+  // The aggregate now counts the endpoint owner alongside the already bounded
+  // plan-boundary extraction and remains tighter than the partition ceilings.
+  maximumProductionAggregateSourceBytes: 505_000,
   maximumExperimentRouteGzipGrowthBytes: 12_000,
   maximumReaderRouteRegressionRatio: 0.05,
   forbiddenProductionVocabulary: Object.freeze([
@@ -166,15 +173,15 @@ export function validateKpCanonicalEquationRendererConvergence(
     issues.push("The native scene core has an unbounded direct dependency closure.");
   }
   if (
-    policy.maximumProductionSourceBytes !== 140_000 ||
-    policy.maximumProductionDirectDependencyModules !== 14 ||
+    policy.maximumProductionSourceBytes !== 145_000 ||
+    policy.maximumProductionDirectDependencyModules !== 15 ||
     policy.maximumProductionDirectDependencySourceBytes !== 295_000 ||
     policy.maximumProductionScenePlanBoundaryModules !== 20 ||
     policy.maximumProductionScenePlanBoundarySourceBytes !== 315_000 ||
-    policy.maximumProductionRendererSupportModules !== 7 ||
-    policy.maximumProductionRendererSupportSourceBytes !== 65_000 ||
+    policy.maximumProductionRendererSupportModules !== 8 ||
+    policy.maximumProductionRendererSupportSourceBytes !== 80_000 ||
     policy.maximumProductionAggregateModules !== 31 ||
-    policy.maximumProductionAggregateSourceBytes !== 455_000 ||
+    policy.maximumProductionAggregateSourceBytes !== 505_000 ||
     policy.maximumExperimentRouteGzipGrowthBytes !== 12_000 ||
     policy.maximumReaderRouteRegressionRatio !== 0.05
   ) {

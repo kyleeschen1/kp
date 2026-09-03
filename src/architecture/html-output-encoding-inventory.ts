@@ -117,6 +117,10 @@ export const kpHtmlEncodingOwners = [
     "html-text",
     "html-attribute"
   ]),
+  retain("src/experiments/focus-deck-scaffold.ts", "review-tool", [
+    "html-text",
+    "html-attribute"
+  ]),
   retain("src/project-dashboard/render.ts", "application", [
     "html-text",
     "html-attribute"
@@ -130,6 +134,14 @@ export const kpHtmlEncodingOwners = [
     "html-text",
     "html-attribute",
     "svg-text"
+  ]),
+  retain("src/rendering/graph-2d-quadratic-translation-svg.ts", "rendering", [
+    "html-attribute",
+    "svg-text",
+    "svg-attribute"
+  ]),
+  retain("src/rendering/graph-3d-saddle-parameter-paint.ts", "rendering", [
+    "html-attribute"
   ]),
   retain("src/rendering/graph-svg.ts", "rendering", [
     "svg-text",

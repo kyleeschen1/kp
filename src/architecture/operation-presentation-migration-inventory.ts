@@ -324,7 +324,7 @@ export const kpExecutableMotifMigrationLedger = Object.freeze([
     "endpoint.successor-owned-target-bypass",
     "endpoint-bypass",
     "src/rendering/native-katex-scene-compositor.ts",
-    "A successor synthesis owns its target paint directly.",
+    "Successor synthesis may own every target, leaving no residual handoff.",
     "route-through-endpoint-microscope",
     "s14",
     "Successor-owned target atoms currently bypass dense typography handoff inspection."

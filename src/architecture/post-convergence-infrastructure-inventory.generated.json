@@ -1,51 +1,63 @@
 {
   "schemaVersion": "kp.post-convergence-infrastructure-inventory.v1",
   "catalogue": {
-    "loadableAssetCount": 45,
+    "loadableAssetCount": 60,
     "renderTargetCounts": {
       "diagram": 3,
-      "equation": 30,
-      "graph": 8,
+      "equation": 43,
+      "graph": 10,
       "programming": 6
     }
   },
   "equationSurfaces": {
-    "count": 30,
+    "count": 43,
     "dispositionCounts": {
-      "canonical": 3,
-      "adapter-backed": 22,
+      "canonical": 4,
+      "adapter-backed": 30,
       "static-only": 4,
-      "unsupported": 0,
+      "unsupported": 4,
       "retirement-candidate": 1
     }
   },
   "selectedCapabilities": {
-    "count": 11,
+    "count": 17,
     "ids": [
+      "carrier-preserving-simplification",
       "equation-katex",
+      "even-root",
       "exact-fraction-quantity",
+      "exponential-homomorphism",
+      "finite-binder-expansion",
+      "fraction-equivalence",
       "graph-svg-economics",
       "graph-svg-katex-labels",
       "graph-webgl-3d",
       "log-exponent",
       "log-product",
       "log-quotient",
+      "logarithm-change-of-base",
       "operation-evaluation",
       "place-value-addition",
       "programming-trace"
     ],
     "callerCounts": {
-      "equation-katex": 27,
+      "carrier-preserving-simplification": 2,
+      "equation-katex": 29,
+      "even-root": 2,
       "exact-fraction-quantity": 1,
+      "exponential-homomorphism": 2,
+      "finite-binder-expansion": 2,
+      "fraction-equivalence": 3,
       "graph-svg-economics": 1,
-      "graph-svg-katex-labels": 6,
-      "graph-webgl-3d": 1,
+      "graph-svg-katex-labels": 7,
+      "graph-webgl-3d": 2,
       "log-exponent": 1,
-      "log-product": 2,
+      "log-product": 3,
       "log-quotient": 1,
-      "operation-evaluation": 3,
+      "logarithm-change-of-base": 1,
+      "operation-evaluation": 4,
       "place-value-addition": 1,
-      "programming-trace": 5
+      "programming-trace": 6
     }
   },
   "compatibility": {

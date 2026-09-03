@@ -48,6 +48,7 @@ test("governed construction has one explicit public authoring seam", () => {
     "tests/governed-canonical-construction-repair.test.ts",
     "tests/governed-exponent-absorption-fixture.test.ts",
     "tests/governed-fraction-split-merge-variation.test.ts",
+    "tests/governed-integration-power-rule-fixture.test.ts",
     "tests/governed-radical-succession-fixture.test.ts",
     "tests/pre-expansion-llm-generation-benchmark.test.ts",
     "tests/typescript-free-shipping-vignette.test.ts"

@@ -9,16 +9,21 @@ import {
 } from "../src/domain-ir/equation-surface-family-declarations.ts";
 
 const expectedWaveCIds = Object.freeze([
+  "animation.algebra.log-product.equivalence-frame",
   "animation.algebra.log-product.product-to-sum",
   "animation.algebra.log-product.three-factors-to-sum",
   "animation.comparison.jacobian-hessian",
   "animation.comparison.linear-solve-programming",
+  "animation.equation.finite-product-expansion.v1",
+  "animation.equation.finite-sum-expansion.v1",
+  "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
   "animation.generated.calculus.derivative.power-rule-x-cubed",
   "animation.generated.calculus.derivative.sum-rule-polynomial",
   "animation.generated.calculus.integral.power-rule-quadratic",
   "animation.generated.substitute-three",
   "animation.generated.substitute-three.provisional-incorrect",
   "animation.inequality.sign-flip.basic",
+  "animation.operation-evaluation.two-times-one-carrier",
   "animation.sample.fourier-transform-pair",
   "animation.sample.fundamental-theorem-calculus"
 ]);

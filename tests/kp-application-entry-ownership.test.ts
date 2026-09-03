@@ -68,7 +68,7 @@ test("entry owners state the migrations that slices 16 through 19 must prove", (
   );
 });
 
-test("the shared main build does not compile or own Public Web routes", () => {
+test("the shared production build does not compile or own Public Web routes", () => {
   const publicWeb = findKpApplicationEntryOwner("entry-owner.public-web");
   const developmentInputs = readFileSync(
     "src/dev-toolbar/development-page-build-entries.ts",
@@ -83,7 +83,19 @@ test("the shared main build does not compile or own Public Web routes", () => {
   for (const document of publicWeb.hostDocuments) {
     assert.doesNotMatch(developmentInputs, new RegExp(escapeRegExp(document)));
   }
-  assert.doesNotMatch(mainConfig, /src\/public-web\//u);
+  const developmentCompiler = mainConfig.slice(
+    mainConfig.indexOf("async function compileCrossBuildDevelopmentPublication"),
+    mainConfig.indexOf("function readArticleLock")
+  );
+  assert.match(
+    mainConfig,
+    /name: "kp-cross-build-development-publications",\s*apply: "serve"/u
+  );
+  assert.equal((developmentCompiler.match(/src\/public-web\//gu) ?? []).length, 3);
+  assert.doesNotMatch(
+    mainConfig.replace(developmentCompiler, ""),
+    /src\/public-web\//u
+  );
   assert.doesNotMatch(mainConfig, /kp-(?:typescript|fraction)-.+publication/u);
 });
 

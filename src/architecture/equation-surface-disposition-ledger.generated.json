@@ -224,6 +224,78 @@
     },
     {
       "schemaVersion": "kp.equation-surface-disposition-entry.v1",
+      "animationId": "animation.algebra.log-product.equivalence-frame",
+      "familyId": "logarithm",
+      "disposition": "adapter-backed",
+      "migrationWave": "wave-c-generated-bespoke-diagnostic-static",
+      "rationale": "The row has valid semantic endpoints but still relies on a local or generic compatibility presentation path that must be adapted into the canonical compiler.",
+      "preservationBoundary": {
+        "semanticEndpointFingerprints": [
+          "fnv1a32-8a21d2c3",
+          "fnv1a32-fde9de09",
+          "fnv1a32-7c792762"
+        ],
+        "route": "/?artifact=animation.algebra.log-product.equivalence-frame",
+        "adapterId": "editor-animation-surface.log-product.equivalence-frame.native-katex",
+        "accessibilityMode": "semantic-stage-aria-label",
+        "visualVerificationCommand": "npm run visual:equation-surface-preservation"
+      },
+      "rollbackUnit": {
+        "id": "rollback.equation-surface.animation.algebra.log-product.equivalence-frame",
+        "scope": "single-equation-surface-authority-path",
+        "restorePathClass": "log-product-specialized",
+        "restoreSourcePaths": [
+          "src/animation/catalog-packs/log-product.ts",
+          "src/animation/catalog.ts",
+          "src/editor/log-product-equivalence-frame-surface-adapter.ts"
+        ],
+        "verificationCommands": [
+          "npm run test:log-exponent && npm run test:log-quotient && npm run test:log-product",
+          "npm run visual:equation-surface-preservation",
+          "npm run test:browser:equation-surface-preservation"
+        ]
+      },
+      "retirementEvidence": {
+        "status": "blocked-active-callers",
+        "productionCallers": [
+          {
+            "id": "catalogue.animation.algebra.log-product.equivalence-frame",
+            "kind": "catalogue-owner",
+            "sourcePath": "src/animation/catalog.ts"
+          },
+          {
+            "id": "pack.animation.algebra.log-product.equivalence-frame",
+            "kind": "lazy-pack",
+            "sourcePath": "src/animation/catalog-packs/log-product.ts"
+          },
+          {
+            "id": "route.animation.algebra.log-product.equivalence-frame",
+            "kind": "presentation-route",
+            "sourcePath": "src/editor/log-product-equivalence-frame-surface-adapter.ts"
+          }
+        ],
+        "conformanceCallers": [
+          {
+            "id": "preservation.animation.algebra.log-product.equivalence-frame",
+            "kind": "preservation-contract",
+            "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json"
+          },
+          {
+            "id": "browser.animation.algebra.log-product.equivalence-frame",
+            "kind": "browser-conformance",
+            "sourcePath": "tests/equation-surface-preservation.browser.spec.ts"
+          },
+          {
+            "id": "family.logarithm",
+            "kind": "family-verification",
+            "command": "npm run test:log-exponent && npm run test:log-quotient && npm run test:log-product"
+          }
+        ],
+        "retirementCondition": "zero-production-and-conformance-callers-after-replacement"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-disposition-entry.v1",
       "animationId": "animation.algebra.log-product.product-to-sum",
       "familyId": "logarithm",
       "disposition": "adapter-backed",
@@ -441,6 +513,152 @@
     },
     {
       "schemaVersion": "kp.equation-surface-disposition-entry.v1",
+      "animationId": "animation.algebra.radical.compound-carrier-normalization",
+      "familyId": "exponent-radical",
+      "disposition": "unsupported",
+      "migrationWave": "wave-c-generated-bespoke-diagnostic-static",
+      "rationale": "Equation surface animation.algebra.radical.compound-carrier-normalization has no supported semantic motion contract.",
+      "preservationBoundary": {
+        "semanticEndpointFingerprints": [
+          "fnv1a32-59c98bcb",
+          "fnv1a32-6ec417c8",
+          "fnv1a32-5da363bd"
+        ],
+        "route": "/?artifact=animation.algebra.radical.compound-carrier-normalization",
+        "adapterId": "editor-animation-surface.root.compound-carrier.canonical-native-katex",
+        "accessibilityMode": "semantic-stage-aria-label",
+        "visualVerificationCommand": "npm run visual:equation-surface-preservation"
+      },
+      "rollbackUnit": {
+        "id": "rollback.equation-surface.animation.algebra.radical.compound-carrier-normalization",
+        "scope": "single-equation-surface-authority-path",
+        "restorePathClass": "generic-semantic-equation",
+        "restoreSourcePaths": [
+          "src/animation/catalog-packs/algebra.ts",
+          "src/animation/catalog.ts",
+          "src/editor/compound-root-carrier-surface-adapter.ts"
+        ],
+        "verificationCommands": [
+          "npm run test:semantic-animation-convergence",
+          "npm run visual:equation-surface-preservation",
+          "npm run test:browser:equation-surface-preservation"
+        ]
+      },
+      "retirementEvidence": {
+        "status": "blocked-active-callers",
+        "productionCallers": [
+          {
+            "id": "catalogue.animation.algebra.radical.compound-carrier-normalization",
+            "kind": "catalogue-owner",
+            "sourcePath": "src/animation/catalog.ts"
+          },
+          {
+            "id": "pack.animation.algebra.radical.compound-carrier-normalization",
+            "kind": "lazy-pack",
+            "sourcePath": "src/animation/catalog-packs/algebra.ts"
+          },
+          {
+            "id": "route.animation.algebra.radical.compound-carrier-normalization",
+            "kind": "presentation-route",
+            "sourcePath": "src/editor/compound-root-carrier-surface-adapter.ts"
+          }
+        ],
+        "conformanceCallers": [
+          {
+            "id": "preservation.animation.algebra.radical.compound-carrier-normalization",
+            "kind": "preservation-contract",
+            "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json"
+          },
+          {
+            "id": "browser.animation.algebra.radical.compound-carrier-normalization",
+            "kind": "browser-conformance",
+            "sourcePath": "tests/equation-surface-preservation.browser.spec.ts"
+          },
+          {
+            "id": "family.exponent-radical",
+            "kind": "family-verification",
+            "command": "npm run test:semantic-animation-convergence"
+          }
+        ],
+        "retirementCondition": "zero-production-and-conformance-callers-after-replacement"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-disposition-entry.v1",
+      "animationId": "animation.algebra.radical.solve-x-squared-nine",
+      "familyId": "exponent-radical",
+      "disposition": "unsupported",
+      "migrationWave": "wave-c-generated-bespoke-diagnostic-static",
+      "rationale": "Equation surface animation.algebra.radical.solve-x-squared-nine has no supported semantic motion contract.",
+      "preservationBoundary": {
+        "semanticEndpointFingerprints": [
+          "fnv1a32-69fea672",
+          "fnv1a32-abd3a26c",
+          "fnv1a32-fb9b2762",
+          "fnv1a32-b43a3bfd",
+          "fnv1a32-1b40ae9e"
+        ],
+        "route": "/?artifact=animation.algebra.radical.solve-x-squared-nine",
+        "adapterId": "editor-animation-surface.even-root.canonical-native-katex",
+        "accessibilityMode": "semantic-stage-aria-label",
+        "visualVerificationCommand": "npm run visual:equation-surface-preservation"
+      },
+      "rollbackUnit": {
+        "id": "rollback.equation-surface.animation.algebra.radical.solve-x-squared-nine",
+        "scope": "single-equation-surface-authority-path",
+        "restorePathClass": "generic-semantic-equation",
+        "restoreSourcePaths": [
+          "src/animation/catalog-packs/algebra.ts",
+          "src/animation/catalog.ts",
+          "src/editor/even-root-surface-adapter.ts"
+        ],
+        "verificationCommands": [
+          "npm run test:semantic-animation-convergence",
+          "npm run visual:equation-surface-preservation",
+          "npm run test:browser:equation-surface-preservation"
+        ]
+      },
+      "retirementEvidence": {
+        "status": "blocked-active-callers",
+        "productionCallers": [
+          {
+            "id": "catalogue.animation.algebra.radical.solve-x-squared-nine",
+            "kind": "catalogue-owner",
+            "sourcePath": "src/animation/catalog.ts"
+          },
+          {
+            "id": "pack.animation.algebra.radical.solve-x-squared-nine",
+            "kind": "lazy-pack",
+            "sourcePath": "src/animation/catalog-packs/algebra.ts"
+          },
+          {
+            "id": "route.animation.algebra.radical.solve-x-squared-nine",
+            "kind": "presentation-route",
+            "sourcePath": "src/editor/even-root-surface-adapter.ts"
+          }
+        ],
+        "conformanceCallers": [
+          {
+            "id": "preservation.animation.algebra.radical.solve-x-squared-nine",
+            "kind": "preservation-contract",
+            "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json"
+          },
+          {
+            "id": "browser.animation.algebra.radical.solve-x-squared-nine",
+            "kind": "browser-conformance",
+            "sourcePath": "tests/equation-surface-preservation.browser.spec.ts"
+          },
+          {
+            "id": "family.exponent-radical",
+            "kind": "family-verification",
+            "command": "npm run test:semantic-animation-convergence"
+          }
+        ],
+        "retirementCondition": "zero-production-and-conformance-callers-after-replacement"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-disposition-entry.v1",
       "animationId": "animation.comparison.jacobian-hessian",
       "familyId": "comparison",
       "disposition": "static-only",
@@ -594,6 +812,150 @@
             "id": "family.comparison",
             "kind": "family-verification",
             "command": "npm run test:equation-surface-preservation"
+          }
+        ],
+        "retirementCondition": "zero-production-and-conformance-callers-after-replacement"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-disposition-entry.v1",
+      "animationId": "animation.equation.finite-product-expansion.v1",
+      "familyId": "finite-binder",
+      "disposition": "adapter-backed",
+      "migrationWave": "wave-c-generated-bespoke-diagnostic-static",
+      "rationale": "The row has valid semantic endpoints but still relies on a local or generic compatibility presentation path that must be adapted into the canonical compiler.",
+      "preservationBoundary": {
+        "semanticEndpointFingerprints": [
+          "fnv1a32-4bd81c62",
+          "fnv1a32-79893786",
+          "fnv1a32-184d704c"
+        ],
+        "route": "/?artifact=animation.equation.finite-product-expansion.v1",
+        "adapterId": "editor-animation-surface.finite-product-expansion.canonical-native-katex",
+        "accessibilityMode": "semantic-stage-aria-label",
+        "visualVerificationCommand": "npm run visual:equation-surface-preservation"
+      },
+      "rollbackUnit": {
+        "id": "rollback.equation-surface.animation.equation.finite-product-expansion.v1",
+        "scope": "single-equation-surface-authority-path",
+        "restorePathClass": "finite-product-expansion-specialized",
+        "restoreSourcePaths": [
+          "src/animation/catalog-packs/algebra.ts",
+          "src/animation/catalog.ts",
+          "src/editor/finite-product-surface-adapter.ts"
+        ],
+        "verificationCommands": [
+          "npm run test:finite-binder-expansion",
+          "npm run visual:equation-surface-preservation",
+          "npm run test:browser:equation-surface-preservation"
+        ]
+      },
+      "retirementEvidence": {
+        "status": "blocked-active-callers",
+        "productionCallers": [
+          {
+            "id": "catalogue.animation.equation.finite-product-expansion.v1",
+            "kind": "catalogue-owner",
+            "sourcePath": "src/animation/catalog.ts"
+          },
+          {
+            "id": "pack.animation.equation.finite-product-expansion.v1",
+            "kind": "lazy-pack",
+            "sourcePath": "src/animation/catalog-packs/algebra.ts"
+          },
+          {
+            "id": "route.animation.equation.finite-product-expansion.v1",
+            "kind": "presentation-route",
+            "sourcePath": "src/editor/finite-product-surface-adapter.ts"
+          }
+        ],
+        "conformanceCallers": [
+          {
+            "id": "preservation.animation.equation.finite-product-expansion.v1",
+            "kind": "preservation-contract",
+            "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json"
+          },
+          {
+            "id": "browser.animation.equation.finite-product-expansion.v1",
+            "kind": "browser-conformance",
+            "sourcePath": "tests/equation-surface-preservation.browser.spec.ts"
+          },
+          {
+            "id": "family.finite-binder",
+            "kind": "family-verification",
+            "command": "npm run test:finite-binder-expansion"
+          }
+        ],
+        "retirementCondition": "zero-production-and-conformance-callers-after-replacement"
+      }
+    },
+    {
+      "schemaVersion": "kp.equation-surface-disposition-entry.v1",
+      "animationId": "animation.equation.finite-sum-expansion.v1",
+      "familyId": "finite-binder",
+      "disposition": "adapter-backed",
+      "migrationWave": "wave-c-generated-bespoke-diagnostic-static",
+      "rationale": "The row has valid semantic endpoints but still relies on a local or generic compatibility presentation path that must be adapted into the canonical compiler.",
+      "preservationBoundary": {
+        "semanticEndpointFingerprints": [
+          "fnv1a32-11474210",
+          "fnv1a32-5e197e06",
+          "fnv1a32-10269382"
+        ],
+        "route": "/?artifact=animation.equation.finite-sum-expansion.v1",
+        "adapterId": "editor-animation-surface.finite-sum-expansion.canonical-native-katex",
+        "accessibilityMode": "katex-mathml",
+        "visualVerificationCommand": "npm run visual:equation-surface-preservation"
+      },
+      "rollbackUnit": {
+        "id": "rollback.equation-surface.animation.equation.finite-sum-expansion.v1",
+        "scope": "single-equation-surface-authority-path",
+        "restorePathClass": "finite-binder-expansion-specialized",
+        "restoreSourcePaths": [
+          "src/animation/catalog-packs/algebra.ts",
+          "src/animation/catalog.ts",
+          "src/editor/finite-sum-surface-adapter.ts"
+        ],
+        "verificationCommands": [
+          "npm run test:finite-binder-expansion",
+          "npm run visual:equation-surface-preservation",
+          "npm run test:browser:equation-surface-preservation"
+        ]
+      },
+      "retirementEvidence": {
+        "status": "blocked-active-callers",
+        "productionCallers": [
+          {
+            "id": "catalogue.animation.equation.finite-sum-expansion.v1",
+            "kind": "catalogue-owner",
+            "sourcePath": "src/animation/catalog.ts"
+          },
+          {
+            "id": "pack.animation.equation.finite-sum-expansion.v1",
+            "kind": "lazy-pack",
+            "sourcePath": "src/animation/catalog-packs/algebra.ts"
+          },
+          {
+            "id": "route.animation.equation.finite-sum-expansion.v1",
+            "kind": "presentation-route",
+            "sourcePath": "src/editor/finite-sum-surface-adapter.ts"
+          }
+        ],
+        "conformanceCallers": [
+          {
+            "id": "preservation.animation.equation.finite-sum-expansion.v1",
+            "kind": "preservation-contract",
+            "sourcePath": "src/architecture/equation-surface-preservation-matrix.generated.json"
+          },
+          {
+            "id": "browser.animation.equation.finite-sum-expansion.v1",
+            "kind": "browser-conformance",
+            "sourcePath": "tests/equation-surface-preservation.browser.spec.ts"
+          },
+          {
+            "id": "family.finite-binder",
+            "kind": "family-verification",
+            "command": "npm run test:finite-binder-expansion"
           }
         ],
         "retirementCondition": "zero-production-and-conformance-callers-after-replacement"
@@ -974,9 +1336,11 @@
       "rationale": "The row has valid semantic endpoints but still relies on a local or generic compatibility presentation path that must be adapted into the canonical compiler.",
       "preservationBoundary": {
         "semanticEndpointFingerprints": [
-          "fnv1a32-c9083e0c",
+          "fnv1a32-7a6f1c1f",
           "fnv1a32-e9c63ea2",
-          "fnv1a32-66ca4318"
+          "fnv1a32-2f8f8557",
+          "fnv1a32-54ba0d75",
+          "fnv1a32-8b6e9357"
         ],
         "route": "/?artifact=animation.generated.calculus.derivative.power-rule-x-cubed",
         "adapterId": "editor-animation-surface.equation.katex",
@@ -1120,11 +1484,11 @@
       "rationale": "The row has valid semantic endpoints but still relies on a local or generic compatibility presentation path that must be adapted into the canonical compiler.",
       "preservationBoundary": {
         "semanticEndpointFingerprints": [
-          "fnv1a32-38020232",
-          "fnv1a32-0f2e05e8",
-          "fnv1a32-84555696",
-          "fnv1a32-29535789",
-          "fnv1a32-19faf147"
+          "fnv1a32-11413fc1",
+          "fnv1a32-04603450",
+          "fnv1a32-9b97be30",
+          "fnv1a32-416f8c42",
+          "fnv1a32-129ec5f1"
         ],
         "route": "/?artifact=animation.generated.calculus.integral.power-rule-quadratic",
         "adapterId": "editor-animation-surface.equation.katex",
@@ -1855,14 +2219,14 @@
       "rationale": "The row has valid semantic endpoints but still relies on a local or generic compatibility presentation path that must be adapted into the canonical compiler.",
       "preservationBoundary": {
         "semanticEndpointFingerprints": [
-          "fnv1a32-6d57d952",
+          "fnv1a32-71bb56ff",
           "fnv1a32-0c1d2abc",
           "fnv1a32-460d6cad",
           "fnv1a32-c5621072",
           "fnv1a32-33d4add2",
           "fnv1a32-473201e4",
           "fnv1a32-47d51947",
-          "fnv1a32-d90fe40d",
+          "fnv1a32-8bc45b09",
           "fnv1a32-fa40ed4d",
           "fnv1a32-32801ec4",
           "fnv1a32-a4b1df51"
