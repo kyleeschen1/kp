@@ -1234,11 +1234,81 @@
       "scope": "standard",
       "checkedAt": "2026-09-03T18:48:03.726Z",
       "notes": "workspace-valid-1088-nodes-26935-events-after-v3-s17-closeout"
+    },
+    {
+      "command": "node-test-supply-tax-derived-parity-and-market",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T18:54:07.671Z",
+      "notes": "31-market-laws-pass-including-explicit-dependencies-two-exact-markets-and-no-local-rational-formulas"
+    },
+    {
+      "command": "npm-run-test-semantic-state",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T18:54:08.852Z",
+      "notes": "148-semantic-state-laws-passed-with-equilibrium-incidence-and-revenue-projection"
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T18:54:09.922Z",
+      "notes": "exact-derived-result-and-read-only-handle-contracts-pass-all-type-projects"
+    },
+    {
+      "command": "npm-run-check-architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T18:54:10.998Z",
+      "notes": "canonical-economics-to-internal-pressure-direction-passes-with-zero-new-exceptions"
+    },
+    {
+      "command": "npm-run-check-inference",
+      "status": "passed",
+      "scope": "diagnostic",
+      "checkedAt": "2026-09-03T18:54:12.040Z",
+      "notes": "types-103188-instantiations-172704-unchanged"
+    },
+    {
+      "command": "npm-run-test-equation-reachability",
+      "status": "passed",
+      "scope": "generated-scan",
+      "checkedAt": "2026-09-03T18:54:13.099Z",
+      "notes": "scan-count-4123-and-twelve-laws-passed"
+    },
+    {
+      "command": "npm-run-test-equation-surface-preservation",
+      "status": "passed",
+      "scope": "impact-router",
+      "checkedAt": "2026-09-03T18:54:14.213Z",
+      "notes": "eleven-authority-and-preservation-laws-passed"
+    },
+    {
+      "command": "npm-run-verify-impact-contract",
+      "status": "passed",
+      "scope": "routing",
+      "checkedAt": "2026-09-03T18:54:15.293Z",
+      "notes": "high-risk-unmatched-pressure-caller-reviewed-and-slice-standard-contract-gates-executed"
+    },
+    {
+      "command": "git-diff-check",
+      "status": "passed",
+      "scope": "hygiene",
+      "checkedAt": "2026-09-03T18:54:16.355Z",
+      "notes": "no-whitespace-errors"
+    },
+    {
+      "command": "theseus-workspace-validate",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T18:54:27.228Z",
+      "notes": "workspace-valid-1088-nodes-26950-events-after-v3-s18-closeout"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "v3-s17-complete-typed-supply-tax-base-state-updates-exact-canonical-values-with-only-generic-facade-primitives"
+    "summary": "v3-s18-complete-explicit-derived-equilibrium-incidence-and-revenue-retain-exact-canonical-economics"
   },
   "expectedLearning": [
     "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",

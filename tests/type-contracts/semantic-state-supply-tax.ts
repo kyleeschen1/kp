@@ -3,15 +3,21 @@ import type {
   KpLinearTaxSupplyContractV1,
   KpPerUnitTaxContractV1
 } from "../../domains/economics/per-unit-tax-welfare.ts";
-import type { KpPerUnitTaxMarketPhase } from
-  "../../domains/economics/per-unit-tax-welfare-model.ts";
+import type {
+  KpPerUnitTaxMarketPhase,
+  KpPerUnitTaxMarketStateV1
+} from "../../domains/economics/per-unit-tax-welfare-model.ts";
 import {
   createKpSemanticStateSupplyTaxAuthoring,
-  type KpSupplyTaxBuyerFacingSupplyState
+  type KpSupplyTaxBuyerFacingSupplyState,
+  type KpSupplyTaxGovernmentRevenueState,
+  type KpSupplyTaxIncidenceState
 } from
   "../../src/experiments/typed-linear-supply-demand/semantic-state-supply-tax.ts";
 import { defineKpSemanticStateTransform } from
   "../../src/semantic-state/authoring-state-transform.ts";
+import { evaluateKpSemanticDerivedValue } from
+  "../../src/semantic-state/derived-evaluator.ts";
 
 const fixture = createKpSemanticStateSupplyTaxAuthoring();
 const before = fixture.handles.pin(fixture.initial);
@@ -27,6 +33,27 @@ void originalSupply;
 void tax;
 void phase;
 void supply;
+
+const equilibrium: KpPerUnitTaxMarketStateV1 =
+  evaluateKpSemanticDerivedValue({
+    graph: fixture.graph,
+    snapshot: fixture.initial,
+    target: fixture.handles.refs.outcomes.equilibrium
+  });
+const incidence: KpSupplyTaxIncidenceState = evaluateKpSemanticDerivedValue({
+  graph: fixture.graph,
+  snapshot: fixture.initial,
+  target: fixture.handles.refs.outcomes.incidence
+});
+const revenue: KpSupplyTaxGovernmentRevenueState =
+  evaluateKpSemanticDerivedValue({
+    graph: fixture.graph,
+    snapshot: fixture.initial,
+    target: fixture.handles.refs.outcomes.governmentRevenue
+  });
+void equilibrium;
+void incidence;
+void revenue;
 
 defineKpSemanticStateTransform({
   compiled: fixture.compiled,
@@ -47,5 +74,8 @@ defineKpSemanticStateTransform({
       // @ts-expect-error Exact rational fields cannot degrade to numbers.
       taxAmount: 4
     }));
+
+    // @ts-expect-error Derived equilibrium is read-only inside transforms.
+    state.outcomes.equilibrium.update(previous => previous);
   }
 });

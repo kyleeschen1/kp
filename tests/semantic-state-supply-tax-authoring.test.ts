@@ -4,11 +4,15 @@ import test from "node:test";
 
 import { createKpSemanticStateSupplyTaxAuthoring } from
   "../src/experiments/typed-linear-supply-demand/semantic-state-supply-tax.ts";
+import { evaluateKpSemanticDerivedValue } from
+  "../src/semantic-state/derived-evaluator.ts";
+import { kpPerUnitTaxWelfareExemplarInput } from
+  "../domains/economics/per-unit-tax-welfare.ts";
 
 const SUPPLY_TAX_AUTHORING_SOURCE =
   "src/experiments/typed-linear-supply-demand/semantic-state-supply-tax.ts";
 
-test("the supply-tax base packet keeps ordinary authoring compact", () => {
+test("the supply-tax packet keeps ordinary authoring compact", () => {
   const authoring = readAuthoringRegion();
   const metrics = Object.freeze({
     manualIdentityFactoryCalls: countMatches(
@@ -39,8 +43,124 @@ test("the supply-tax base packet keeps ordinary authoring compact", () => {
     manualKernelMetadataFields: 0,
     authorCasts: 0,
     marketFacadePrimitives: 0,
-    authoredSetupLines: 29
+    authoredSetupLines: 74
   });
+});
+
+test("derived market outcomes retain explicit exact-rational dependencies", () => {
+  const fixture = createKpSemanticStateSupplyTaxAuthoring();
+  const dependencyPaths = Object.fromEntries(
+    fixture.graph.input.definitions.map(definition => [
+      definition.target.path?.join("."),
+      definition.dependencies.map(edge => edge.dependency.path?.join("."))
+    ])
+  );
+
+  assert.deepEqual(dependencyPaths, {
+    "outcomes.equilibrium": [
+      "source.demand",
+      "market.phase",
+      "market.supply"
+    ],
+    "outcomes.governmentRevenue": ["outcomes.equilibrium"],
+    "outcomes.incidence": ["outcomes.equilibrium"]
+  });
+  assert.deepEqual(
+    evaluateKpSemanticDerivedValue({
+      graph: fixture.graph,
+      snapshot: fixture.initial,
+      target: fixture.handles.refs.outcomes.equilibrium
+    }),
+    fixture.model.states.untaxed
+  );
+  assert.deepEqual(
+    evaluateKpSemanticDerivedValue({
+      graph: fixture.graph,
+      snapshot: fixture.applied.commit.after,
+      target: fixture.handles.refs.outcomes.equilibrium
+    }),
+    fixture.model.states.taxed
+  );
+  assert.deepEqual(
+    evaluateKpSemanticDerivedValue({
+      graph: fixture.graph,
+      snapshot: fixture.applied.commit.after,
+      target: fixture.handles.refs.outcomes.incidence
+    }),
+    {
+      marketStateId: fixture.model.states.taxed.id,
+      phase: "taxed",
+      buyerPrice: { numerator: "9", denominator: "1" },
+      sellerPrice: { numerator: "5", denominator: "1" },
+      priceWedge: { numerator: "4", denominator: "1" },
+      taxAmount: fixture.model.states.taxed.taxAmount,
+      wedgeEqualsTaxExactly: true
+    }
+  );
+  assert.deepEqual(
+    evaluateKpSemanticDerivedValue({
+      graph: fixture.graph,
+      snapshot: fixture.applied.commit.after,
+      target: fixture.handles.refs.outcomes.governmentRevenue
+    }),
+    {
+      marketStateId: fixture.model.states.taxed.id,
+      phase: "taxed",
+      amount: fixture.accounting.states.taxed.governmentRevenue
+    }
+  );
+});
+
+test("derived outcomes follow a second canonical exact market", () => {
+  const fixture = createKpSemanticStateSupplyTaxAuthoring({
+    ...kpPerUnitTaxWelfareExemplarInput,
+    demand: {
+      ...kpPerUnitTaxWelfareExemplarInput.demand,
+      priceIntercept: { numerator: "14", denominator: "1" }
+    }
+  });
+  const snapshot = fixture.applied.commit.after;
+
+  assert.deepEqual(evaluateKpSemanticDerivedValue({
+    graph: fixture.graph,
+    snapshot,
+    target: fixture.handles.refs.outcomes.equilibrium
+  }), fixture.model.states.taxed);
+  assert.deepEqual(evaluateKpSemanticDerivedValue({
+    graph: fixture.graph,
+    snapshot,
+    target: fixture.handles.refs.outcomes.incidence
+  }), {
+    marketStateId: fixture.model.states.taxed.id,
+    phase: "taxed",
+    buyerPrice: { numerator: "10", denominator: "1" },
+    sellerPrice: { numerator: "6", denominator: "1" },
+    priceWedge: { numerator: "4", denominator: "1" },
+    taxAmount: { numerator: "4", denominator: "1" },
+    wedgeEqualsTaxExactly: true
+  });
+  assert.deepEqual(evaluateKpSemanticDerivedValue({
+    graph: fixture.graph,
+    snapshot,
+    target: fixture.handles.refs.outcomes.governmentRevenue
+  }), {
+    marketStateId: fixture.model.states.taxed.id,
+    phase: "taxed",
+    amount: { numerator: "16", denominator: "1" }
+  });
+});
+
+test("the pressure caller keeps exact-rational formulas in canonical economics", () => {
+  const source = readFileSync(SUPPLY_TAX_AUTHORING_SOURCE, "utf8");
+
+  assert.match(source, /createKpPerUnitTaxWelfareModel/u);
+  assert.match(source, /createKpPerUnitTaxWelfareAccounting/u);
+  assert.match(source, /evaluateKpPerUnitTaxBuyerFacingSupplyPrice/u);
+  assert.doesNotMatch(source, /domains\/math\/exact-rational/u);
+  assert.doesNotMatch(
+    source,
+    /(?:add|subtract|multiply|divide|equal)KpRationals/u
+  );
 });
 
 test("the typed seller-tax update retains exact canonical market values", () => {

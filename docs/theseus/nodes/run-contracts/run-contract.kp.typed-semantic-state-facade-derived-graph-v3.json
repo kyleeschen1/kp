@@ -162,7 +162,8 @@
     {
       "id": "s18",
       "title": "Prove derived supply tax parity",
-      "status": "planned"
+      "summary": "derived-market-graph-declares-exact-dependencies-and-projects-two-canonical-markets-without-formula-fork",
+      "status": "complete"
     },
     {
       "id": "s19",
