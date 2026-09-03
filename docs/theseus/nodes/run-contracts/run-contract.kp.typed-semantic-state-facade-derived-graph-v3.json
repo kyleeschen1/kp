@@ -138,7 +138,8 @@
     {
       "id": "s14",
       "title": "Recompute only affected requested descendants",
-      "status": "planned"
+      "summary": "selective-chain-diamond-alias-copy-and-branch-recomputation-laws-pass-without-commit-time-work",
+      "status": "complete"
     },
     {
       "id": "s15",

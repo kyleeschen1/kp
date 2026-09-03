@@ -1,14 +1,17 @@
 import type { KpAggregateSemanticSnapshot } from "./aggregate-snapshot.ts";
 import type { KpDerivedSemanticStateLeafHandle } from
   "./authoring-state-handles.ts";
-import { evaluateKpSemanticDerivedValue } from "./derived-evaluator.ts";
-import { createKpSemanticDerivationFingerprint } from
-  "./derived-fingerprint.ts";
-import type { KpSemanticDerivedGraph } from "./derived-graph.ts";
 import {
-  requireAndFreezeKpPersistentSemanticValue,
-  type KpPersistentSemanticValue
-} from "./entity-version-store.ts";
+  evaluateKpSemanticDerivedValueWithMemo,
+  type KpSemanticDerivedEvaluationMemo
+} from "./derived-evaluator.ts";
+import {
+  createKpSemanticDerivationFingerprint,
+  type KpSemanticDerivationFingerprint
+} from "./derived-fingerprint.ts";
+import type { KpSemanticDerivedGraph } from "./derived-graph.ts";
+import type { KpPersistentSemanticValue } from "./entity-version-store.ts";
+import type { KpSemanticSlotId } from "./identity.ts";
 
 export interface KpSemanticDerivedCacheStats {
   readonly schemaVersion: "kp.semantic-derived-cache-stats.v1";
@@ -19,7 +22,9 @@ export interface KpSemanticDerivedCacheStats {
   readonly misses: number;
 }
 
-export type KpSemanticDerivedCacheErrorCode = "derived-cache-disposed";
+export type KpSemanticDerivedCacheErrorCode =
+  | "derived-cache-disposed"
+  | "derived-cache-fingerprint-missing";
 
 export class KpSemanticDerivedCacheError extends Error {
   readonly code: KpSemanticDerivedCacheErrorCode;
@@ -64,18 +69,20 @@ class KpSemanticDerivedValueCacheState implements KpSemanticDerivedValueCache {
   }): unknown {
     this.#assertActive();
     const fingerprint = createKpSemanticDerivationFingerprint(input);
-    const cached = this.#values.get(fingerprint.key);
-    if (cached !== undefined) {
-      this.#hits += 1;
-      return cached;
-    }
-
-    this.#misses += 1;
-    const value = requireAndFreezeKpPersistentSemanticValue(
-      evaluateKpSemanticDerivedValue(input)
-    );
-    this.#values.set(fingerprint.key, value);
-    return value;
+    const keys = indexFingerprintKeys(fingerprint);
+    const memo: KpSemanticDerivedEvaluationMemo = Object.freeze({
+      read: (slotId: KpSemanticSlotId) => {
+        const key = requireFingerprintKey(keys, slotId);
+        const cached = this.#values.get(key);
+        if (cached === undefined) this.#misses += 1;
+        else this.#hits += 1;
+        return cached;
+      },
+      write: (slotId: KpSemanticSlotId, value: KpPersistentSemanticValue) => {
+        this.#values.set(requireFingerprintKey(keys, slotId), value);
+      }
+    });
+    return evaluateKpSemanticDerivedValueWithMemo({ ...input, memo });
   }
 
   inspect(): KpSemanticDerivedCacheStats {
@@ -115,4 +122,34 @@ export function createKpSemanticDerivedValueCache():
 KpSemanticDerivedValueCache {
   // Freezing the capability surface does not freeze its caller-owned storage.
   return Object.freeze(new KpSemanticDerivedValueCacheState());
+}
+
+function indexFingerprintKeys(
+  root: KpSemanticDerivationFingerprint
+): ReadonlyMap<KpSemanticSlotId, string> {
+  const keys = new Map<KpSemanticSlotId, string>();
+  const visit = (fingerprint: KpSemanticDerivationFingerprint): void => {
+    keys.set(fingerprint.targetSlotId, fingerprint.key);
+    for (const dependency of fingerprint.dependencies) {
+      if (dependency.kind === "semantic-derived-dependency-token") {
+        visit(dependency.fingerprint);
+      }
+    }
+  };
+  visit(root);
+  return keys;
+}
+
+function requireFingerprintKey(
+  keys: ReadonlyMap<KpSemanticSlotId, string>,
+  slotId: KpSemanticSlotId
+): string {
+  const key = keys.get(slotId);
+  if (key === undefined) {
+    throw new KpSemanticDerivedCacheError(
+      "derived-cache-fingerprint-missing",
+      `Requested derived slot ${JSON.stringify(slotId)} has no fingerprint in the active closure.`
+    );
+  }
+  return key;
 }

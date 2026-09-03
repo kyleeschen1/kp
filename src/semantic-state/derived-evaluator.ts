@@ -38,6 +38,11 @@ export interface KpResolvedSemanticConcreteDependency {
   readonly value: KpPersistentSemanticValue;
 }
 
+export interface KpSemanticDerivedEvaluationMemo {
+  read(slotId: KpSemanticSlotId): KpPersistentSemanticValue | undefined;
+  write(slotId: KpSemanticSlotId, value: KpPersistentSemanticValue): void;
+}
+
 export type KpSemanticDerivedEvaluationErrorCode =
   | "derived-compute-failed"
   | "derived-dependency-not-concrete"
@@ -135,6 +140,24 @@ export function evaluateKpSemanticDerivedValue(input: {
   readonly snapshot: KpAggregateSemanticSnapshot;
   readonly target: KpDerivedSemanticStateLeafHandle<unknown>;
 }): unknown {
+  return evaluateKpSemanticDerivedValueWithMemo({
+    ...input,
+    memo: createRequestMemo()
+  });
+}
+
+export function evaluateKpSemanticDerivedValueWithMemo<const Result>(input: {
+  readonly graph: KpSemanticDerivedGraph;
+  readonly snapshot: KpAggregateSemanticSnapshot;
+  readonly target: KpDerivedSemanticStateLeafHandle<Result>;
+  readonly memo: KpSemanticDerivedEvaluationMemo;
+}): Result;
+export function evaluateKpSemanticDerivedValueWithMemo(input: {
+  readonly graph: KpSemanticDerivedGraph;
+  readonly snapshot: KpAggregateSemanticSnapshot;
+  readonly target: KpDerivedSemanticStateLeafHandle<unknown>;
+  readonly memo: KpSemanticDerivedEvaluationMemo;
+}): unknown {
   if (input.snapshot.namespace !== input.graph.namespace) {
     throw new KpSemanticDerivedEvaluationError({
       code: "foreign-derived-snapshot",
@@ -160,7 +183,7 @@ export function evaluateKpSemanticDerivedValue(input: {
     input.graph,
     input.snapshot,
     definition,
-    new Map()
+    input.memo
   );
 }
 
@@ -168,11 +191,8 @@ function evaluateGraphDefinition(
   graph: KpSemanticDerivedGraph,
   snapshot: KpAggregateSemanticSnapshot,
   definition: KpSemanticDerivedGraphDefinitionInput,
-  evaluated: Map<KpSemanticSlotId, unknown>
-): unknown {
-  if (evaluated.has(definition.target.slotId)) {
-    return evaluated.get(definition.target.slotId);
-  }
+  memo: KpSemanticDerivedEvaluationMemo
+): KpPersistentSemanticValue {
   const declared = readKpSemanticDerivedBinding(
     snapshot,
     definition.target.slotId
@@ -188,6 +208,8 @@ function evaluateGraphDefinition(
       message: `Derived definition ${JSON.stringify(definition.id)} does not match snapshot ${JSON.stringify(snapshot.id)} authority for ${JSON.stringify(definition.target.path)}.`
     });
   }
+  const previous = memo.read(definition.target.slotId);
+  if (previous !== undefined) return previous;
   const values: readonly unknown[] = Object.freeze(
     definition.dependencies.map(({ dependency }): unknown =>
       dependency.descriptorKind === "derived-value"
@@ -195,7 +217,7 @@ function evaluateGraphDefinition(
             graph,
             snapshot,
             readGraphDefinition(graph, snapshot, dependency.slotId),
-            evaluated
+            memo
           )
         : resolveKpSemanticConcreteDependency({
             graph,
@@ -236,10 +258,22 @@ function evaluateGraphDefinition(
       message: `Compute returned a non-persistent value for derived path ${JSON.stringify(definition.target.path)} in snapshot ${JSON.stringify(snapshot.id)}.`
     });
   }
-  // This table deduplicates one requested closure and is discarded after read;
-  // it is not the caller-owned cross-request cache introduced later.
-  evaluated.set(definition.target.slotId, value);
+  // Memo lifetime is explicit: ordinary reads use a request-local table while
+  // caller caches map each slot to its already validated fingerprint.
+  memo.write(definition.target.slotId, value);
   return value;
+}
+
+function createRequestMemo(): KpSemanticDerivedEvaluationMemo {
+  const values = new Map<KpSemanticSlotId, KpPersistentSemanticValue>();
+  return Object.freeze({
+    read(slotId: KpSemanticSlotId) {
+      return values.get(slotId);
+    },
+    write(slotId: KpSemanticSlotId, value: KpPersistentSemanticValue) {
+      values.set(slotId, value);
+    }
+  });
 }
 
 function readGraphDefinition(
