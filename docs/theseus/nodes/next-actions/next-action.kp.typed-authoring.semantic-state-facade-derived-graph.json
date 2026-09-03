@@ -1164,11 +1164,81 @@
       "scope": "standard",
       "checkedAt": "2026-09-03T18:39:36.403Z",
       "notes": "workspace-valid-1088-nodes-26920-events-after-v3-s16-closeout"
+    },
+    {
+      "command": "node-test-semantic-state-supply-tax-authoring-and-market",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T18:47:41.944Z",
+      "notes": "28-base-schema-exact-update-domain-parity-and-market-pressure-laws-passed"
+    },
+    {
+      "command": "npm-run-test-semantic-state",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T18:47:43.161Z",
+      "notes": "145-semantic-state-laws-passed-including-compact-supply-tax-authoring"
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T18:47:44.394Z",
+      "notes": "all-type-projects-pass-with-exact-demand-supply-tax-phase-and-rational-update-contracts"
+    },
+    {
+      "command": "npm-run-check-architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T18:47:45.499Z",
+      "notes": "framework-neutral-and-domain-direction-gates-pass-for-internal-pressure-caller"
+    },
+    {
+      "command": "npm-run-check-inference",
+      "status": "passed",
+      "scope": "diagnostic",
+      "checkedAt": "2026-09-03T18:47:46.546Z",
+      "notes": "types-103188-instantiations-172704-unchanged"
+    },
+    {
+      "command": "npm-run-test-equation-reachability",
+      "status": "passed",
+      "scope": "generated-scan",
+      "checkedAt": "2026-09-03T18:47:47.595Z",
+      "notes": "scan-count-4123-and-twelve-laws-passed"
+    },
+    {
+      "command": "npm-run-test-equation-surface-preservation",
+      "status": "passed",
+      "scope": "impact-router",
+      "checkedAt": "2026-09-03T18:47:48.677Z",
+      "notes": "eleven-generated-authority-and-preservation-laws-passed"
+    },
+    {
+      "command": "npm-run-verify-impact-contract",
+      "status": "passed",
+      "scope": "routing",
+      "checkedAt": "2026-09-03T18:47:49.734Z",
+      "notes": "high-risk-unmatched-experiment-selection-reviewed-and-slice-standard-gates-executed"
+    },
+    {
+      "command": "git-diff-check",
+      "status": "passed",
+      "scope": "hygiene",
+      "checkedAt": "2026-09-03T18:47:50.786Z",
+      "notes": "no-whitespace-errors"
+    },
+    {
+      "command": "theseus-workspace-validate",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T18:48:03.726Z",
+      "notes": "workspace-valid-1088-nodes-26935-events-after-v3-s17-closeout"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "v3-s16-complete-derived-evaluation-and-caller-cache-add-no-semantic-history-and-pinned-recovery-needs-no-compute"
+    "summary": "v3-s17-complete-typed-supply-tax-base-state-updates-exact-canonical-values-with-only-generic-facade-primitives"
   },
   "expectedLearning": [
     "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",

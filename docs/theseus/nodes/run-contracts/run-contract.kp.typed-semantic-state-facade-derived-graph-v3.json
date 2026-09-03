@@ -156,7 +156,8 @@
     {
       "id": "s17",
       "title": "Author supply tax base schema and update",
-      "status": "planned"
+      "summary": "compact-base-schema-preserves-exact-domain-types-and-applies-canonical-buyer-facing-supply-update",
+      "status": "complete"
     },
     {
       "id": "s18",
