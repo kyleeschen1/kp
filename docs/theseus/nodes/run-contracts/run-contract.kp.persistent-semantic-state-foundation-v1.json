@@ -154,7 +154,8 @@
     {
       "id": "s16",
       "title": "economics-authority-gate",
-      "status": "planned"
+      "summary": "Closed economics authority with one canonical exact-rational source, a one-way typed adapter, explicit representability and endpoint gaps, reviewed-asset preservation checks, and a fully green repository gate.",
+      "status": "complete"
     },
     {
       "id": "s17",

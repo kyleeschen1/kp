@@ -434,6 +434,41 @@
       "scope": "s15-parity-negatives",
       "checkedAt": "2026-09-03T08:09:29.641Z",
       "notes": "Application, Node, test, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/economics-supply-tax-authority-boundary.test.ts tests/economics-supply-tax-parity-negatives.test.ts tests/economics-supply-tax-parity-characterization.test.ts tests/economics-supply-tax-model.test.ts tests/economics-supply-tax-welfare.test.ts tests/exact-rational-cross-boundary-conformance.test.ts tests/typed-linear-supply-demand-pressure.test.ts",
+      "status": "passed",
+      "scope": "s16-economics-authority-gate",
+      "checkedAt": "2026-09-03T08:22:22.706Z",
+      "notes": "28 focused tests passed for sole exact authority, one-way internal projection, reviewed-asset preservation, supported parity, and explicit gaps."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s16-economics-authority-gate",
+      "checkedAt": "2026-09-03T08:22:23.757Z",
+      "notes": "Complete repository gate passed 6110 of 6110 tests, including architecture and inference checks."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s16-economics-authority-gate",
+      "checkedAt": "2026-09-03T08:22:24.780Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "s16-economics-authority-gate",
+      "checkedAt": "2026-09-03T08:22:25.825Z",
+      "notes": "Production bundle passed; existing chunk-size warning remains advisory."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s16-economics-authority-gate",
+      "checkedAt": "2026-09-03T08:23:52.949Z",
+      "notes": "Workspace schema and run-contract references validate after the economics authority gate."
     }
   ],
   "expectedLearning": [
