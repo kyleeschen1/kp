@@ -114,7 +114,8 @@
     {
       "id": "s08",
       "title": "Exact endpoint short-circuit",
-      "status": "planned"
+      "summary": "Exact-zero-and-one-short-circuit-to-existing-persistent-endpoint-authority",
+      "status": "complete"
     },
     {
       "id": "s09",

@@ -362,6 +362,55 @@
       "scope": "control-plane",
       "checkedAt": "2026-09-03T21:24:39.874Z",
       "notes": "1091-nodes-and-27094-events-valid-before-completion-records"
+    },
+    {
+      "command": "focused-endpoint-sampling-and-transition-tests",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T21:29:49.095Z",
+      "notes": "Nine-of-nine-exact-endpoint-recovery-zero-callback-and-structural-plan-equality-laws-passed"
+    },
+    {
+      "command": "npm-run-verify-impact-family-evaluator",
+      "status": "passed",
+      "scope": "impact",
+      "checkedAt": "2026-09-03T21:29:50.327Z",
+      "notes": "High-risk-semantic-state-path-selected-semantic-state-typecheck-and-architecture-gates"
+    },
+    {
+      "command": "npm-run-test-semantic-state",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T21:29:51.459Z",
+      "notes": "187-of-187-semantic-state-tests-passed"
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T21:29:52.574Z",
+      "notes": "TypeScript-Svelte-and-domain-checks-passed-with-zero-Svelte-diagnostics"
+    },
+    {
+      "command": "npm-run-check-architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T21:29:53.738Z",
+      "notes": "2006-TypeScript-modules-7443-of-7494-local-references-zero-exceptions-and-all-gateways-passed"
+    },
+    {
+      "command": "npm-run-check-inference",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T21:29:54.925Z",
+      "notes": "104748-types-and-176895-instantiations-without-ratchet-change"
+    },
+    {
+      "command": "theseus-workspace-validate",
+      "status": "passed",
+      "scope": "control-plane",
+      "checkedAt": "2026-09-03T21:29:56.096Z",
+      "notes": "1091-nodes-and-27104-events-valid-before-completion-records"
     }
   ],
   "expectedLearning": [

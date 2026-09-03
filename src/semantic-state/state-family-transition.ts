@@ -149,6 +149,17 @@ export interface KpSemanticStateTransitionPlan {
   readonly declarations: readonly KpSemanticStateTransitionDeclaration[];
 }
 
+export function areKpSemanticStateTransitionPlansEqual(
+  left: KpSemanticStateTransitionPlan,
+  right: KpSemanticStateTransitionPlan
+): boolean {
+  return left.namespace === right.namespace &&
+    left.declarations.length === right.declarations.length &&
+    left.declarations.every((declaration, index) =>
+      areDeclarationsEqual(declaration, right.declarations[index])
+    );
+}
+
 export type KpSemanticStateTransitionDiagnosticCode =
   | "cross-schema-transition-target"
   | "duplicate-discrete-change-point"
@@ -348,4 +359,34 @@ function formatPath(path: readonly string[]): string {
 
 function compareStrings(left: string, right: string): number {
   return left < right ? -1 : left > right ? 1 : 0;
+}
+
+function areDeclarationsEqual(
+  left: KpSemanticStateTransitionDeclaration,
+  right: KpSemanticStateTransitionDeclaration | undefined
+): boolean {
+  if (right === undefined ||
+    left.id !== right.id ||
+    left.source.id !== right.source.id ||
+    left.transitionMode !== right.transitionMode ||
+    left.target.namespace !== right.target.namespace ||
+    left.target.slotId !== right.target.slotId ||
+    left.target.encodedPath !== right.target.encodedPath ||
+    left.target.descriptorKind !== right.target.descriptorKind ||
+    left.target.path.length !== right.target.path.length ||
+    !left.target.path.every((part, index) => part === right.target.path[index])) {
+    return false;
+  }
+  if (left.transitionMode !== "discrete") return true;
+  if (right.transitionMode !== "discrete" ||
+    left.changePoints.length !== right.changePoints.length) {
+    return false;
+  }
+  return left.changePoints.every((point, index) => {
+    const other = right.changePoints[index];
+    return other !== undefined &&
+      point.id === other.id &&
+      point.at === other.at &&
+      point.valueSourceId === other.valueSourceId;
+  });
 }
