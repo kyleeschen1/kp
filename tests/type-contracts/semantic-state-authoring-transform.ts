@@ -1,5 +1,7 @@
 import { compileKpSemanticStateSchema } from
   "../../src/semantic-state/authoring-schema-compiler.ts";
+import { defineKpSemanticStateDerivation } from
+  "../../src/semantic-state/authoring-derived-definition.ts";
 import { createKpSemanticStateHandleSet } from
   "../../src/semantic-state/authoring-state-handles.ts";
 import { materializeKpSemanticStateInitialSnapshot } from
@@ -46,7 +48,21 @@ const compiled = compileKpSemanticStateSchema("lesson.transform-types", kpStateG
   equilibrium: kpStateDerived<number>()
 }));
 const handles = createKpSemanticStateHandleSet(compiled);
-const initial = materializeKpSemanticStateInitialSnapshot(compiled);
+const initialEquilibrium = defineKpSemanticStateDerivation({
+  compiled,
+  target: handles.refs.equilibrium,
+  dependencies: [handles.refs.supply, handles.refs.demand],
+  compute: ([supply, demand]) => demand.intercept - supply.intercept
+});
+const revisedEquilibrium = defineKpSemanticStateDerivation({
+  compiled,
+  target: handles.refs.equilibrium,
+  dependencies: [handles.refs.supply],
+  compute: ([supply]) => supply.intercept
+});
+const initial = materializeKpSemanticStateInitialSnapshot(compiled, {
+  derivations: [initialEquilibrium]
+});
 const transform = defineKpSemanticStateTransform({
   compiled,
   handles,
@@ -74,6 +90,8 @@ const transform = defineKpSemanticStateTransform({
     state.policy.introduce({ rate: 2 });
     state.policy.remove();
 
+    state.equilibrium.derive(revisedEquilibrium);
+
     // @ts-expect-error Optional introduction preserves the exact value type.
     state.policy.introduce({ rate: "two" });
 
@@ -94,6 +112,9 @@ const transform = defineKpSemanticStateTransform({
 
     // @ts-expect-error Derived values are read-only transaction inputs.
     state.equilibrium.update(previous => previous);
+
+    // @ts-expect-error Writable values cannot install derivations.
+    state.supply.derive(revisedEquilibrium);
 
     // @ts-expect-error Scoped transaction reads are immutable.
     state.supply.read().intercept = 4;

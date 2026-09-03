@@ -1,0 +1,172 @@
+{
+  "id": "run-contract.kp.typed-semantic-state-facade-derived-graph-v3",
+  "kind": "run-contract",
+  "title": "Typed semantic state facade and derived graph v3 recovery",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "User approved recovery contract that preserves v2 slices s01 through s13 and supersedes only its stopped unexecuted remainder.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.typed-authoring.semantic-state-facade-derived-graph.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-03-typed-semantic-state-facade-derived-graph-long-loop-proposal.md",
+      "summary": "Canonical approved proposal including the v3 inference recovery addendum exact slices risks checks boundaries stop conditions and deferrals."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-03-persistent-semantic-state-foundation-closeout.md",
+      "summary": "Accepted foundation checkpoint and preserved semantic state laws."
+    }
+  ],
+  "verification": [
+    "npm run test:semantic-state",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run check:inference",
+    "npm test",
+    "npm run build:bundle",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Internal semantic state schema typed handles transformations dependency graph evaluator cache diagnostics tests fixtures measurements documentation and the one approved inference budget refresh described by the proposal.",
+    "Narrow extensions to the existing semantic state kernel and one way authority adapter required by named facade and derived operations.",
+    "One typed supply tax pressure exemplar that preserves exact rational economics as canonical authority."
+  ],
+  "disallowedWork": [
+    "Any later inference ceiling increase fixture removal skipLibCheck casts weakened typing broad barrel closure or unexplained compiler growth.",
+    "Public facade compatibility migration Proxy observation ambient state global registry filesystem generation persistent storage redesign or catalogue rollout.",
+    "Interpolation timeline runtime reparameterization renderer animation Article Focus Deck URL CSS browser broad economics knowledge procedure CAS or live LLM work."
+  ],
+  "goal": "Recover the derived binding transaction boundary under one measured inference refresh then complete the approved explicit dependency graph lazy version keyed evaluation supply tax pressure corpus scale evidence and mandatory API checkpoint while preserving the semantic state foundation and canonical economics authority.",
+  "target": "next-action.kp.typed-authoring.semantic-state-facade-derived-graph",
+  "runMode": "run",
+  "maxSlices": 22,
+  "commitCadence": "Commit implementation tests and completed Theseus evidence after every independently reversible verified slice while preserving unrelated user work.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if the first slice cannot pass the calculated post s14 inference ceilings after attribution and removal of accidental broad closure.",
+    "Stop if exact leaf or derived types require casts brands low level stores snapshots staged writes Proxy observation ambient state or a global or import ordered registry.",
+    "Stop if paths object references payload equality callback identity or statement order replace explicit semantic identity or dependency authority.",
+    "Stop if a cycle reaches compute an invalid or partial value escapes or reads and cache activity mutate semantic history.",
+    "Stop if exact rational economics authority forks or any deferred public visual timeline renderer Article browser or catalogue work becomes necessary.",
+    "Stop if any later inference ratchet fails scale evidence requires storage redesign or a broad verification failure cannot be repaired inside the named slice.",
+    "Always stop after s22 at a mandatory human architecture and API checkpoint before Loop 3."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Recover derived binding transaction and refresh inference budget",
+      "summary": "recovered-typed-derive-transaction-projection-and-post-feature-inference-ratchet-with-6214-broad-tests-passing",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "Normalize dependency declarations",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Validate missing duplicate and self dependencies",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Validate cross schema type and capability boundaries",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Detect dependency cycles",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Order dependencies deterministically",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Resolve pinned concrete dependencies",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Evaluate nested derived dependencies",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Restrict evaluation to requested closure",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Localize compute failures",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Fingerprint concrete dependencies",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Compose nested derived fingerprints",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Add caller owned lazy cache",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Recompute only affected requested descendants",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Define absence stale and retry semantics",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Prove history and recovery laws",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Author supply tax base schema and update",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Prove derived supply tax parity",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Pressure multi object recovery and branches",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Freeze LLM shaped authoring corpus",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Run graph scale and compiler attribution",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Close out at mandatory API checkpoint",
+      "status": "planned"
+    }
+  ]
+}

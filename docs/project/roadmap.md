@@ -682,9 +682,12 @@ clocks, frames, and renderer ports remain outside Svelte authority.
   and passed its mandatory nonvisual architecture/API checkpoint. Its exact
   result and Loop 2 recommendation are recorded in
   `reviews/2026-09-03-persistent-semantic-state-foundation-closeout.md`. The
-  user approved the 26-slice statically typed facade and explicit derived-graph
-  proposal, which is now executing through
-  `run-contract.kp.typed-semantic-state-facade-derived-graph-v2`. Theseus owns
+  user approved the statically typed facade and explicit derived-graph
+  direction. After v2 stopped at its slice-14 inference boundary, the approved
+  22-slice v3 recovery retained completed history, authorized one measured
+  post-derived-binding budget refresh, and replaced only the unexecuted
+  remainder. It is now executing through
+  `run-contract.kp.typed-semantic-state-facade-derived-graph-v3`. Theseus owns
   live slice status; interpolation, timeline, renderer, and public-promotion
   work remain outside the approved contract.
 - The normal-matrix Proof Memory implementation is preserved at its mandatory

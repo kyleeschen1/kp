@@ -422,11 +422,102 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-09-03T15:25:27.431Z"
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "s14-partial",
+      "checkedAt": "2026-09-03T15:53:39.277Z",
+      "notes": "104 semantic-state laws pass, including derived replacement, concrete-to-derived introduction, read-only preservation, sharing, and authority projection."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s14-partial",
+      "checkedAt": "2026-09-03T15:53:40.460Z",
+      "notes": "Application, node, test, Svelte, domain, and negative derive contracts pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s14-partial",
+      "checkedAt": "2026-09-03T15:53:41.492Z",
+      "notes": "Dependency direction, framework neutrality, semantic boundaries, equation governance, and cross-domain gateway pass."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "contract-stop",
+      "checkedAt": "2026-09-03T15:53:42.523Z",
+      "notes": "Contracts compile, but aggregate inference reaches 103142 types against the fixed 103000 ceiling; instantiations remain green at 172548 against 176000. Bounded simplification did not restore the ceiling without weakening the typed boundary."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T17:14:00.482Z",
+      "notes": "104 semantic-state runtime and type-boundary laws passed"
+    },
+    {
+      "command": "npm run measure:inference-attribution",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T17:14:01.672Z",
+      "notes": "42 fixtures measured at 103192 types and 172704 instantiations without new broad-barrel closure"
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T17:14:02.740Z",
+      "notes": "post-derive measured counts pass deterministic 3-percent and 5-percent ceilings"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T17:14:03.794Z",
+      "notes": "TypeScript and Svelte checks passed"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T17:14:04.832Z",
+      "notes": "architecture boundaries passed"
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T17:14:05.871Z",
+      "notes": "production bundle passed with existing chunk-size advisory only"
+    },
+    {
+      "command": "npm run test:equation-reachability",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T17:14:06.892Z",
+      "notes": "regenerated inventory changed only scanned file count from 4106 to 4110; 12 tests passed"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T17:14:07.937Z",
+      "notes": "all 6214 tests passed"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T17:15:02.954Z",
+      "notes": "workspace valid with 1088 nodes and 26752 events after v3 s01 closeout"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s13 adds typed definition-scoped derivations with explicit dependency tuples, stable serializable declarations, inferred result contracts, and zero evaluation or registry authority; impact-selected tests, typecheck, and architecture pass."
+    "summary": "v3-s01-complete-derived-bindings-compile-to-existing-authority-and-the-single-measured-inference-refresh-is-green"
   },
   "expectedLearning": [
     "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",

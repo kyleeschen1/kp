@@ -1,11 +1,11 @@
 # Typed Semantic State Facade And Derived Graph Long-Loop Proposal
 
 Date: 2026-09-03
-Status: APPROVED; EXECUTING
+Status: V2 STOPPED AT S14; V3 RECOVERY APPROVED
 Target:
 `next-action.kp.typed-authoring.semantic-state-facade-derived-graph`
 Active contract:
-`run-contract.kp.typed-semantic-state-facade-derived-graph-v2`
+`run-contract.kp.typed-semantic-state-facade-derived-graph-v3`
 Active thread: `../threads/typed-semantic-authoring-framework.md`
 Source checkpoint:
 `2026-09-03-persistent-semantic-state-foundation-closeout.md`
@@ -307,3 +307,66 @@ any deferred work.
 The unstarted v1 control record was superseded before implementation because
 it omitted required typed-autonomy metadata. The v2 contract preserves the
 reviewed slice order and scope while adding the complete execution metadata.
+
+## Approved V3 Inference-Recovery Addendum
+
+The user approved this addendum on 2026-09-03 after v2 stopped at s14. V2's
+completed s01-s13 history remains authoritative. V3 supersedes only the
+unexecuted remainder, retains the same target and scope, and absorbs the
+preserved uncommitted s14 implementation as its first rollback unit.
+
+The inference stop is resolved through one measured post-s14 budget refresh,
+not an open-ended exception. The existing attribution command must cover the
+actual `derive` authoring contract and first remove any accidental broad
+closure. The refreshed ceilings are deterministic:
+
+- types: `ceil100(measured types * 1.03)`;
+- instantiations: `ceil100(measured instantiations * 1.05)`.
+
+No later ceiling increase is allowed in v3. Fixture removal, `skipLibCheck`,
+casts, weakened leaf or derived types, broad barrel imports, and unexplained
+compiler growth are stop conditions. The refresh and the derived-binding
+operation commit together so reverting that commit restores both the feature
+and its budget boundary.
+
+The remaining visual scope is none. The estimate is 8-14 agent hours. Every
+slice is one independently reversible commit, starts from bounded Theseus
+context, records focused evidence, and uses standard or broad verification at
+the named boundary.
+
+### V3 Ordered Slices
+
+| Slice | Target and intended change | Risk | Verification | Commit boundary and stop condition |
+| --- | --- | --- | --- | --- |
+| s01 | Recover v2 s14: finish typed `derive`, successor evolution, exact change records, adapter projection, attribution, and the single budget refresh. | High | Broad plus derived-operation runtime/type laws and inference attribution. | Commit the stopped slice and ratchet together. Stop on broad imports, weakened types, unexplained cost, or failure under the calculated ceiling. |
+| s02 | Normalize typed dependency declarations into definition-local graph input. | Medium | Standard plus stable-edge and source-path laws. | Commit normalization only. Stop if execution or global registration discovers dependencies. |
+| s03 | Add missing, duplicate, and self-dependency diagnostics. | High | Standard plus exact diagnostic-code and path tests. | Commit local validation only. Stop if invalid edges survive until evaluation. |
+| s04 | Add cross-schema, incompatible-value, and absent-capability validation with negative type fixtures. | High | Standard plus compile-time and runtime rejection fixtures. | Commit boundary diagnostics only. Stop on casts or scope leakage. |
+| s05 | Detect direct, two-node, and long cycles before compute execution. | High | Standard plus cycle tests proving zero callback calls. | Commit cycle detection only. Stop if a callback observes a cyclic graph. |
+| s06 | Produce deterministic topological ordering without making declaration order semantic. | Medium | Standard plus diamond and permutation laws. | Commit ordering only. Stop if permutations change results. |
+| s07 | Resolve concrete dependencies from one explicitly pinned snapshot. | High | Standard plus alias, copy, absence, and historical-read laws. | Commit concrete resolution only. Stop on ambient-current-state reads. |
+| s08 | Evaluate single and nested derived dependencies without caching. | High | Standard plus exact result-type and nested-chain laws. | Commit derived resolution only. Stop if evaluation creates history or partial values escape. |
+| s09 | Restrict evaluation to the requested dependency closure. | High | Standard plus diamond and independent-branch call counts. | Commit laziness mechanics only. Stop on eager whole-graph traversal. |
+| s10 | Make compute failures atomic and locally diagnostic. | High | Standard plus thrown-compute and invalid-result tests. | Commit evaluator failure boundary only. Stop if a partial result or generic exception escapes. |
+| s11 | Fingerprint concrete dependencies using exact entity/version authority. | High | Focused update, alias, copy, and branch laws. | Commit concrete tokens only. Stop on payload serialization, value equality, or object identity. |
+| s12 | Compose nested-derived fingerprints deterministically. | High | Standard chain, diamond, and equivalent-branch laws. | Commit derived tokens only. Stop on whole-snapshot identity or order dependence. |
+| s13 | Add a caller-owned disposable lazy cache outside snapshots and transactions. | High | Standard hit/miss, isolation, reset, and frozen-result laws. | Commit cache lifecycle only. Stop on global state or semantic-equality dependence. |
+| s14 | Recompute only requested descendants affected by changed dependency versions. | High | Standard chain, diamond, alias-update, copy-divergence, and branch counts. | Commit selective recomputation only. Stop on commit-time evaluation or broad invalidation. |
+| s15 | Localize optional absence, removed dependencies, stale definitions, compute failures, and retry behavior. | High | Standard typed-error inventory and no-failure-cache laws. | Commit failure semantics only. Stop if `undefined`, `NaN`, or stale values conceal failure. |
+| s16 | Prove evaluation and caching add no semantic history or authority. | High | Broad exact-inventory and pinned-recovery comparison. | Commit the history/recovery gate. Stop if evaluation is needed to reconstruct committed state. |
+| s17 | Re-author the internal supply-tax base schema and typed supply update. | High | Standard authoring metrics, exact types, and existing market tests. | Commit schema/update pressure only. Stop on economics-specific facade primitives. |
+| s18 | Add explicit equilibrium, incidence, and government-revenue derivations with exact-rational parity. | High | Standard canonical-economics parity and dependency laws. | Commit the derived market proof only. Stop if formulas fork or use approximate authority. |
+| s19 | Pressure pinned views, alias/copy behavior, branching, and direct recovery in one multi-object transform. | High | Standard pinned-view, branch-isolation, recovery, and fingerprint laws. | Commit pressure laws and bounded corrections. Stop if meaning depends on ambient recency or replay. |
+| s20 | Freeze a compact LLM-shaped valid/invalid authoring corpus with deterministic typed repairs. | Medium | Standard output-stability and exact-diagnostic inventory. | Commit corpus only. Stop if ordinary cases require IDs, stores, casts, or generic staging. |
+| s21 | Run the 128-concrete/64-derived/16-change scale probe and final compiler attribution. | High | Broad operation-count, sharing, cache, inference, and bundle gates. | Commit measurements and bounded fixes. Stop if another ratchet increase or storage redesign is indicated. |
+| s22 | Produce the closeout, retained/rejected abstraction record, and Loop 3 recommendation. | High | Broad plus manual API packet. | Commit closeout evidence, then always stop at `HUMAN_CHECKPOINT`. |
+
+### V3 Preserved Boundary And Deferrals
+
+Semantic state remains authoritative under `src/semantic-state/`; existing
+semantic projection remains one-way; exact-rational economics remains
+canonical. V3 does not authorize a public facade, compatibility migration,
+Proxy observation, global registry, ambient transaction state, filesystem code
+generation, storage redesign, interpolation, timeline, runtime
+reparameterization, renderer, animation, Article, Focus Deck, URL, browser,
+catalogue, broad economics, knowledge/procedure, CAS, or live-LLM work.

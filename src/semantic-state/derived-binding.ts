@@ -104,6 +104,19 @@ export function unsupportedKpSemanticDerivedWrite(
   });
 }
 
+export function areKpSemanticDerivedBindingsEqual(
+  left: KpSemanticDerivedBindingDeclaration,
+  right: KpSemanticDerivedBindingDeclaration
+): boolean {
+  return left.derivationId === right.derivationId &&
+    left.slotId === right.slotId &&
+    left.sourceId === right.sourceId &&
+    left.dependencies.length === right.dependencies.length &&
+    left.dependencies.every((dependency, index) =>
+      dependency.slotId === right.dependencies[index]?.slotId
+    );
+}
+
 function assertPrefix(value: string, prefix: string, label: string): void {
   if (!value.startsWith(prefix)) {
     throw new Error(

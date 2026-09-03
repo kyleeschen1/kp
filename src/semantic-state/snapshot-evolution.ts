@@ -12,6 +12,10 @@ import type {
   KpSemanticSlotId,
   KpSemanticStateIdentityScope
 } from "./identity.ts";
+import {
+  areKpSemanticDerivedBindingsEqual,
+  type KpSemanticDerivedBindingDeclaration
+} from "./derived-binding.ts";
 
 export interface KpSemanticEntityStoreReplacement {
   readonly entityId: KpSemanticEntityId;
@@ -26,6 +30,7 @@ export interface KpCreateSuccessorAggregateSemanticSnapshotInput {
   readonly entityStoreAdditions?: readonly KpAnySemanticEntityVersionStore[];
   readonly slotRebindings: readonly KpSemanticSlotBinding[];
   readonly slotAbsenceReplacements?: readonly KpSemanticSlotAbsence[];
+  readonly derivedBindingReplacements?: readonly KpSemanticDerivedBindingDeclaration[];
 }
 
 export function createKpSuccessorAggregateSemanticSnapshot(
@@ -40,7 +45,8 @@ export function createKpSuccessorAggregateSemanticSnapshot(
     input.entityStoreReplacements.length === 0 &&
     (input.entityStoreAdditions?.length ?? 0) === 0 &&
     input.slotRebindings.length === 0 &&
-    (input.slotAbsenceReplacements?.length ?? 0) === 0
+    (input.slotAbsenceReplacements?.length ?? 0) === 0 &&
+    (input.derivedBindingReplacements?.length ?? 0) === 0
   ) {
     throw new Error("A semantic successor snapshot requires an explicit change.");
   }
@@ -55,6 +61,11 @@ export function createKpSuccessorAggregateSemanticSnapshot(
   ]);
   const rebindings = indexRebindings(input);
   const absenceReplacements = indexAbsenceReplacements(input, rebindings);
+  const derivedReplacements = indexDerivedBindingReplacements(
+    input,
+    rebindings,
+    absenceReplacements
+  );
   const priorBindings = new Map(
     input.parent.bindings.map((binding) => [binding.slotId, binding] as const)
   );
@@ -62,7 +73,7 @@ export function createKpSuccessorAggregateSemanticSnapshot(
     ...input.parent.requiredSlotIds,
     ...input.parent.optionalSlotIds
   ].flatMap((slotId) => {
-    if (absenceReplacements.has(slotId)) {
+    if (absenceReplacements.has(slotId) || derivedReplacements.has(slotId)) {
       return [];
     }
     const binding = rebindings.get(slotId) ?? priorBindings.get(slotId);
@@ -72,12 +83,25 @@ export function createKpSuccessorAggregateSemanticSnapshot(
     input.parent.absences.map((absence) => [absence.slotId, absence] as const)
   );
   const proposedAbsences = input.parent.optionalSlotIds.flatMap((slotId) => {
-    if (rebindings.has(slotId)) {
+    if (rebindings.has(slotId) || derivedReplacements.has(slotId)) {
       return [];
     }
     const absence = absenceReplacements.get(slotId) ?? priorAbsences.get(slotId);
     return absence === undefined ? [] : [absence];
   });
+  const priorDerivedBindings = new Map(
+    input.parent.derivedBindings.map((declaration) =>
+      [declaration.slotId, declaration] as const
+    )
+  );
+  const proposedDerivedBindings = [
+    ...input.parent.derivedBindings.map((declaration) =>
+      derivedReplacements.get(declaration.slotId) ?? declaration
+    ),
+    ...[...derivedReplacements.values()].filter(
+      (declaration) => !priorDerivedBindings.has(declaration.slotId)
+    )
+  ];
   const validated = createKpAggregateSemanticSnapshot({
     identities: input.identities,
     snapshotId: input.identities.successorSnapshot(input.transformationId),
@@ -85,7 +109,7 @@ export function createKpSuccessorAggregateSemanticSnapshot(
     optionalSlotIds: input.parent.optionalSlotIds,
     bindings: proposedBindings,
     absences: proposedAbsences,
-    derivedBindings: input.parent.derivedBindings,
+    derivedBindings: proposedDerivedBindings,
     entityStores: nextStores
   });
 
@@ -101,6 +125,13 @@ export function createKpSuccessorAggregateSemanticSnapshot(
       ? absence
       : priorAbsences.get(absence.slotId) ?? absence
   ));
+  const derivedBindings = derivedReplacements.size === 0
+    ? input.parent.derivedBindings
+    : Object.freeze(validated.derivedBindings.map(
+      (declaration) => derivedReplacements.has(declaration.slotId)
+        ? declaration
+        : priorDerivedBindings.get(declaration.slotId) ?? declaration
+    ));
 
   return Object.freeze({
     ...validated,
@@ -108,9 +139,50 @@ export function createKpSuccessorAggregateSemanticSnapshot(
     optionalSlotIds: input.parent.optionalSlotIds,
     bindings,
     absences,
-    derivedBindings: input.parent.derivedBindings,
+    derivedBindings,
+    derivedBindingIndex: derivedReplacements.size === 0
+      ? input.parent.derivedBindingIndex
+      : validated.derivedBindingIndex,
     entityStores: nextStores
   });
+}
+
+function indexDerivedBindingReplacements(
+  input: KpCreateSuccessorAggregateSemanticSnapshotInput,
+  rebindings: ReadonlyMap<KpSemanticSlotId, KpSemanticSlotBinding>,
+  absenceReplacements: ReadonlyMap<KpSemanticSlotId, KpSemanticSlotAbsence>
+): ReadonlyMap<KpSemanticSlotId, KpSemanticDerivedBindingDeclaration> {
+  const replacements = new Map<
+    KpSemanticSlotId,
+    KpSemanticDerivedBindingDeclaration
+  >();
+  for (const declaration of input.derivedBindingReplacements ?? []) {
+    if (replacements.has(declaration.slotId)) {
+      throw new Error(
+        `Semantic successor derives slot ${JSON.stringify(declaration.slotId)} more than once.`
+      );
+    }
+    if (rebindings.has(declaration.slotId) ||
+        absenceReplacements.has(declaration.slotId)) {
+      throw new Error(
+        `Semantic successor cannot derive and bind or mark slot ${JSON.stringify(declaration.slotId)} absent in one staged write.`
+      );
+    }
+    const previousOrdinal = input.parent.derivedBindingIndex[
+      declaration.slotId
+    ];
+    const previous = previousOrdinal === undefined
+      ? undefined
+      : input.parent.derivedBindings[previousOrdinal];
+    if (previous !== undefined &&
+        areKpSemanticDerivedBindingsEqual(previous, declaration)) {
+      throw new Error(
+        `Semantic successor derived binding for ${JSON.stringify(declaration.slotId)} must change its explicit declaration.`
+      );
+    }
+    replacements.set(declaration.slotId, declaration);
+  }
+  return replacements;
 }
 
 function validateAdditions(

@@ -24,10 +24,13 @@ import type {
   KpSemanticStateIdentityScope
 } from "./identity.ts";
 import {
+  unsupportedKpSemanticDerivedWrite,
+  type KpSemanticDerivedBindingDeclaration
+} from "./derived-binding.ts";
+import {
   createKpSuccessorAggregateSemanticSnapshot,
   type KpSemanticEntityStoreReplacement
 } from "./snapshot-evolution.ts";
-import { unsupportedKpSemanticDerivedWrite } from "./derived-binding.ts";
 
 declare const kpSemanticTransactionScopeBrand: unique symbol;
 const kpSemanticTransactionConstructorAuthority = Symbol(
@@ -50,6 +53,7 @@ export interface KpSemanticTransactionStagedWrite {
   readonly entityStoreAdditions?: readonly KpSemanticEntityVersionStore<KpPersistentSemanticValue>[];
   readonly slotRebindings: readonly KpSemanticSlotBinding[];
   readonly slotAbsenceReplacements?: readonly KpSemanticSlotAbsence[];
+  readonly derivedBindingReplacements?: readonly KpSemanticDerivedBindingDeclaration[];
 }
 
 export interface KpSemanticTransactionUpdateInput {
@@ -89,6 +93,12 @@ export interface KpSemanticTransactionRemoveInput {
   readonly id: string;
   readonly sourceId: string;
   readonly slotId: KpSemanticSlotId;
+}
+
+export interface KpSemanticTransactionDeriveInput {
+  readonly id: string;
+  readonly sourceId: string;
+  readonly declaration: KpSemanticDerivedBindingDeclaration;
 }
 
 export type KpSemanticTransactionJournalOperation =
@@ -138,6 +148,11 @@ export type KpSemanticTransactionJournalOperation =
     readonly removedEntityId: KpSemanticEntityId;
     readonly removedVersionId: KpSemanticEntityVersion<KpPersistentSemanticValue>["id"];
     readonly absenceReason: "removed";
+  }
+  | {
+    readonly kind: "derive";
+    readonly sourceId: string;
+    readonly slotId: KpSemanticSlotId;
   };
 
 export interface KpSemanticTransactionJournalEntry {
@@ -171,6 +186,7 @@ export type KpSemanticTransactionErrorCode =
   | "invalid-copy"
   | "invalid-introduction"
   | "invalid-removal"
+  | "invalid-derivation"
   | "required-slot-removal";
 
 export class KpSemanticTransactionError extends Error {
@@ -552,6 +568,33 @@ export class KpSemanticTransaction {
     }));
   }
 
+  derive(
+    scope: KpSemanticTransactionScope,
+    input: KpSemanticTransactionDeriveInput
+  ): void {
+    this.#assertOpenScope(scope);
+    requireWriteId(input.id);
+    requireWriteId(input.sourceId);
+    const slotId = input.declaration.slotId;
+    if (!this.#working.requiredSlotIds.includes(slotId) &&
+        !this.#working.optionalSlotIds.includes(slotId)) {
+      throw new KpSemanticTransactionError(
+        "invalid-derivation",
+        `Semantic derivation ${input.id} targets undeclared slot ${slotId}.`
+      );
+    }
+    this.#stage({
+      id: input.id,
+      entityStoreReplacements: [],
+      slotRebindings: [],
+      derivedBindingReplacements: [input.declaration]
+    }, Object.freeze({
+      kind: "derive",
+      sourceId: input.sourceId,
+      slotId
+    }));
+  }
+
   #stage(
     write: KpSemanticTransactionStagedWrite,
     operation: KpSemanticTransactionJournalOperation
@@ -579,7 +622,8 @@ export class KpSemanticTransaction {
       entityStoreReplacements: write.entityStoreReplacements,
       entityStoreAdditions: write.entityStoreAdditions ?? [],
       slotRebindings: write.slotRebindings,
-      slotAbsenceReplacements: write.slotAbsenceReplacements ?? []
+      slotAbsenceReplacements: write.slotAbsenceReplacements ?? [],
+      derivedBindingReplacements: write.derivedBindingReplacements ?? []
     });
     const entry = Object.freeze({
       sequence: this.#journal.length,

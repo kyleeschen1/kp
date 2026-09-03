@@ -5,11 +5,17 @@ import { typescriptInferenceBudget } from "../src/architecture/typescript-infere
 
 test("inference ceilings retain measured, narrow structural headroom", () => {
   const { measuredProject, ceilings } = typescriptInferenceBudget;
+  const ceilHundred = (value: number) => Math.ceil(value / 100) * 100;
   assert.ok(ceilings.types > measuredProject.types);
   assert.ok(ceilings.instantiations > measuredProject.instantiations);
   assert.ok(ceilings.types / measuredProject.types < 1.05);
   assert.ok(ceilings.instantiations / measuredProject.instantiations < 1.08);
-  assert.equal(typescriptInferenceBudget.fixtureCount, 30);
+  assert.equal(ceilings.types, ceilHundred(measuredProject.types * 1.03));
+  assert.equal(
+    ceilings.instantiations,
+    ceilHundred(measuredProject.instantiations * 1.05)
+  );
+  assert.equal(typescriptInferenceBudget.fixtureCount, 42);
 
   const config = JSON.parse(readFileSync("tsconfig.inference.json", "utf8")) as {
     readonly compilerOptions?: { readonly skipLibCheck?: boolean };

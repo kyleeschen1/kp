@@ -4,6 +4,11 @@ import type {
   KpCompiledSemanticStateSchema
 } from "./authoring-schema-compiler.ts";
 import type {
+  KpSemanticStateDependencyTuple,
+  KpSemanticStateDerivationDefinition,
+  KpSemanticStateDerivationDefinitionSource
+} from "./authoring-derived-definition.ts";
+import type {
   KpPinnedSemanticStateHandleTree,
   KpSemanticStateHandleSet,
   KpSemanticStateLeafHandle
@@ -37,6 +42,7 @@ const kpSemanticStateOperationScope = Symbol(
 export type KpSemanticStateTransformErrorCode =
   | "empty-transform"
   | "foreign-operation-handle"
+  | "invalid-derivation-definition"
   | "invalid-bind-source"
   | "unsupported-callback-result";
 
@@ -76,6 +82,16 @@ export interface KpSemanticStateOptionalOperationLeafHandle<Value>
   remove(): void;
 }
 
+export interface KpSemanticStateDerivedOperationLeafHandle<Value>
+  extends KpSemanticStateOperationLeafHandle<Value> {
+  derive(
+    definition: KpSemanticStateDerivationDefinition<
+      NoInfer<Value>,
+      KpSemanticStateDependencyTuple
+    >
+  ): void;
+}
+
 type KpSemanticStateOperationNode<Node extends KpSemanticStateSchemaNode> =
   Node extends KpSemanticStateGroupDescriptor<infer Members>
     ? KpSemanticStateOperationMembersInternal<Members>
@@ -84,7 +100,7 @@ type KpSemanticStateOperationNode<Node extends KpSemanticStateSchemaNode> =
       : Node extends KpSemanticStateOptionalDescriptor<infer Value>
         ? KpSemanticStateOptionalOperationLeafHandle<Value>
         : Node extends KpSemanticStateDerivedDescriptor<infer Value>
-          ? KpSemanticStateOperationLeafHandle<Value>
+          ? KpSemanticStateDerivedOperationLeafHandle<Value>
           : never;
 
 type KpSemanticStateOperationMembersInternal<
@@ -228,7 +244,16 @@ function createOperationTree(
           return transaction.read(transaction.scope, value.slotId).version.value;
         }
       };
-      if (value.descriptorKind !== "derived-value") {
+      if (value.descriptorKind === "derived-value") {
+        handle["derive"] = (definition: unknown) => {
+          assertDerivationDefinition(definition, value);
+          transaction.derive(transaction.scope, {
+            id: leaf.identities.operationIds.derive,
+            sourceId: leaf.identities.operationIds.derive,
+            declaration: definition.declaration
+          });
+        };
+      } else {
         handle["update"] = (
           update: (
             previous: KpPersistentSemanticValue
@@ -293,6 +318,26 @@ function createOperationTree(
     }
   }
   return Object.freeze(result);
+}
+
+function assertDerivationDefinition(
+  value: unknown,
+  target: KpSemanticStateLeafHandle<unknown>
+): asserts value is KpSemanticStateDerivationDefinitionSource {
+  const declaration = value === null || typeof value !== "object"
+    ? undefined
+    : (value as {
+      readonly declaration?: { readonly slotId?: unknown };
+    }).declaration;
+  if (value === null || typeof value !== "object" ||
+      (value as { readonly kind?: unknown }).kind !==
+        "semantic-state-derivation-definition" ||
+      declaration?.slotId !== target.slotId) {
+    throw new KpSemanticStateTransformError(
+      "invalid-derivation-definition",
+      `Semantic derive for ${JSON.stringify(target.path)} requires a definition for the same compiled target.`
+    );
+  }
 }
 
 function assertOperationSource(

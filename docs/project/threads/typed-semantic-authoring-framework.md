@@ -3,7 +3,7 @@
 Status: Loop 2 typed state facade and derived graph run active
 Last Updated: 2026-09-03
 Current Next Action: execute
-`run-contract.kp.typed-semantic-state-facade-derived-graph-v2` through its
+`run-contract.kp.typed-semantic-state-facade-derived-graph-v3` through its
 mandatory API checkpoint. Theseus owns current-slice status.
 
 ## Goal
@@ -383,8 +383,8 @@ duplicate it.
 
 ## Typed Facade And Derived Graph Run
 
-The foundation checkpoint recommendation became an approved 26-slice Loop 2
-run. It chooses a descriptor-driven, statically
+The foundation checkpoint recommendation became an approved Loop 2 run. It
+chooses a descriptor-driven, statically
 typed property facade made of ordinary nested handle objects. Explicit handles
 remain dependency authority; runtime `Proxy` observation, ambient assignment,
 generic staged writes, global registries, and filesystem code generation are
@@ -401,9 +401,14 @@ Article, public facade, or broad domain work.
 The human-readable scope and exact slice proposal live in
 `../reviews/2026-09-03-typed-semantic-state-facade-derived-graph-long-loop-proposal.md`.
 Executable progress and verification evidence live only in
-`run-contract.kp.typed-semantic-state-facade-derived-graph-v2`; this thread
+`run-contract.kp.typed-semantic-state-facade-derived-graph-v3`; this thread
 does not duplicate them. The metadata-incomplete, unstarted v1 contract was
-superseded before implementation.
+superseded before implementation. V2 completed its first thirteen slices and
+then stopped when the derived-binding operation exceeded the fixed type-count
+ceiling by 142. The user-approved v3 recovery preserves that completed history,
+absorbs the uncommitted operation as its first rollback unit, permits one
+attributed post-operation budget refresh, and replaces only v2's unexecuted
+remainder. No later inference-ceiling increase is authorized in v3.
 
 ## Stop Conditions
 

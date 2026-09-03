@@ -1,4 +1,5 @@
 import {
+  readKpSemanticDerivedBinding,
   readKpSemanticSlotBinding,
   type KpAggregateSemanticSnapshot
 } from "./aggregate-snapshot.ts";
@@ -8,6 +9,10 @@ import {
   type KpSemanticDerivationId,
   type KpSemanticSlotId
 } from "./identity.ts";
+import {
+  areKpSemanticDerivedBindingsEqual,
+  type KpSemanticDerivedBindingDeclaration
+} from "./derived-binding.ts";
 import type { KpPinnedVersionReference } from "./pinned-recovery.ts";
 
 export interface KpSemanticChangeEndpoint {
@@ -64,6 +69,13 @@ export interface KpDerivedSemanticChange extends KpSemanticChangeRecordBase {
   readonly target: KpSemanticChangeEndpoint;
 }
 
+export interface KpDerivedBindingSemanticChange
+  extends KpSemanticChangeRecordBase {
+  readonly kind: "derived-binding";
+  readonly previous?: KpSemanticDerivedBindingDeclaration;
+  readonly next: KpSemanticDerivedBindingDeclaration;
+}
+
 export type KpSemanticChangeRecord =
   | KpPersistedSemanticChange
   | KpRevisedSemanticChange
@@ -71,7 +83,8 @@ export type KpSemanticChangeRecord =
   | KpRemovedSemanticChange
   | KpCopiedSemanticChange
   | KpBoundSemanticChange
-  | KpDerivedSemanticChange;
+  | KpDerivedSemanticChange
+  | KpDerivedBindingSemanticChange;
 
 export interface KpSemanticChangeSet {
   readonly schemaVersion: "kp.semantic-change-set.v1";
@@ -114,17 +127,16 @@ export function createKpSemanticChangeSet(input: {
     }
     recordIds.add(record.id);
     validateRecord(record, input.before, input.after);
-    for (const target of recordTargets(record)) {
-      if (targetSlots.has(target.slotId)) {
+    for (const slotId of recordTargetSlotIds(record)) {
+      if (targetSlots.has(slotId)) {
         throw new Error(
-          `Semantic change set assigns target slot ${JSON.stringify(target.slotId)} more than once.`
+          `Semantic change set assigns target slot ${JSON.stringify(slotId)} more than once.`
         );
       }
-      targetSlots.add(target.slotId);
+      targetSlots.add(slotId);
     }
     return freezeRecord(record);
   });
-
   return Object.freeze({
     schemaVersion: "kp.semantic-change-set.v1",
     kind: "semantic-change-set",
@@ -236,6 +248,42 @@ function validateRecord(
         );
       }
       return;
+    case "derived-binding":
+      validateDerivedBindingChange(record, before, after);
+      return;
+  }
+}
+
+function validateDerivedBindingChange(
+  change: KpDerivedBindingSemanticChange,
+  before: KpAggregateSemanticSnapshot,
+  after: KpAggregateSemanticSnapshot
+): void {
+  const target = readKpSemanticDerivedBinding(after, change.next.slotId);
+  if (!areKpSemanticDerivedBindingsEqual(target, change.next)) {
+    throw new Error(
+      `Derived-binding change ${change.id} does not match its exact target declaration.`
+    );
+  }
+  const source = readOptionalDerivedBinding(before, change.next.slotId);
+  if (change.previous === undefined) {
+    if (source !== undefined) {
+      throw new Error(
+        `Derived-binding change ${change.id} omits its existing source declaration.`
+      );
+    }
+    return;
+  }
+  if (source === undefined ||
+      !areKpSemanticDerivedBindingsEqual(source, change.previous)) {
+    throw new Error(
+      `Derived-binding change ${change.id} does not match its exact source declaration.`
+    );
+  }
+  if (areKpSemanticDerivedBindingsEqual(change.previous, change.next)) {
+    throw new Error(
+      `Derived-binding change ${change.id} must change its declaration.`
+    );
   }
 }
 
@@ -268,9 +316,9 @@ function requireSameSlot(
   }
 }
 
-function recordTargets(
+function recordTargetSlotIds(
   record: KpSemanticChangeRecord
-): readonly KpSemanticChangeEndpoint[] {
+): readonly KpSemanticSlotId[] {
   switch (record.kind) {
     case "removed":
       return [];
@@ -280,7 +328,9 @@ function recordTargets(
     case "copied":
     case "bound":
     case "derived":
-      return [record.target];
+      return [record.target.slotId];
+    case "derived-binding":
+      return [record.next.slotId];
   }
 }
 
@@ -292,6 +342,8 @@ function freezeRecord(record: KpSemanticChangeRecord): KpSemanticChangeRecord {
         sources: Object.freeze(record.sources.map(freezeEndpoint)),
         target: freezeEndpoint(record.target)
       });
+    case "derived-binding":
+      return Object.freeze({ ...record });
     case "bound":
       return Object.freeze({
         ...record,
@@ -320,6 +372,17 @@ function freezeRecord(record: KpSemanticChangeRecord): KpSemanticChangeRecord {
     case "removed":
       return Object.freeze({ ...record, source: freezeEndpoint(record.source) });
   }
+}
+
+function readOptionalDerivedBinding(
+  snapshot: KpAggregateSemanticSnapshot,
+  slotId: KpSemanticSlotId
+): KpSemanticDerivedBindingDeclaration | undefined {
+  const ordinal = snapshot.derivedBindingIndex[slotId];
+  const declaration = ordinal === undefined
+    ? undefined
+    : snapshot.derivedBindings[ordinal];
+  return declaration?.slotId === slotId ? declaration : undefined;
 }
 
 function freezeEndpoint(

@@ -92,6 +92,10 @@ type RemoveOperation = Extract<
   KpSemanticTransactionJournalOperation,
   { readonly kind: "remove" }
 >;
+type DeriveOperation = Extract<
+  KpSemanticTransactionJournalOperation,
+  { readonly kind: "derive" }
+>;
 
 export function projectKpSemanticTransactionToExistingAuthority(input: {
   readonly commit: KpSemanticTransactionCommit;
@@ -145,7 +149,10 @@ function projectChangeSet(
       continue;
     }
     if (before !== undefined && after === undefined) {
-      requireSingleSlotOperation(commit, "remove", slotId);
+      const derive = optionalSingleDeriveOperation(commit, slotId);
+      if (derive === undefined) {
+        requireSingleSlotOperation(commit, "remove", slotId);
+      }
       records.push({
         kind: "removed",
         id: changeRecordId("removed", slotId),
@@ -239,6 +246,40 @@ function projectChangeSet(
         target: endpoint(commit.after, slotId)
       });
     }
+  }
+
+  const derivedSlots = new Set<KpSemanticSlotId>();
+  for (const operation of commit.journal.map(({ operation }) => operation)) {
+    if (operation.kind !== "derive") continue;
+    if (derivedSlots.has(operation.slotId)) {
+      throw new KpSemanticStateAuthorityProjectionError(
+        "ambiguous-slot-history",
+        `Semantic slot ${operation.slotId} has more than one explicit derive operation.`
+      );
+    }
+    derivedSlots.add(operation.slotId);
+    const targetOrdinal = commit.after.derivedBindingIndex[operation.slotId];
+    const target = targetOrdinal === undefined
+      ? undefined
+      : commit.after.derivedBindings[targetOrdinal];
+    if (target === undefined || target.slotId !== operation.slotId) {
+      throw new KpSemanticStateAuthorityProjectionError(
+        "invalid-authority-projection",
+        `Semantic derive for ${operation.slotId} has no target declaration.`
+      );
+    }
+    const sourceOrdinal = commit.before.derivedBindingIndex[operation.slotId];
+    const source = sourceOrdinal === undefined
+      ? undefined
+      : commit.before.derivedBindings[sourceOrdinal];
+    records.push({
+      kind: "derived-binding",
+      id: changeRecordId("derived-binding", operation.slotId),
+      ...(source === undefined
+        ? {}
+        : { previous: source }),
+      next: target
+    });
   }
 
   return createKpSemanticChangeSet({
@@ -369,6 +410,8 @@ function projectCorrespondence(
           "unsupported-composition",
           "Executed derived changes are outside the declaration-only foundation."
         );
+      case "derived-binding":
+        break;
     }
   }
 
@@ -637,6 +680,23 @@ function requireSingleSlotOperation<
   return operation as NonNullable<ReturnType<
     typeof optionalSingleSlotOperation<Kind>
   >>;
+}
+
+function optionalSingleDeriveOperation(
+  commit: KpSemanticTransactionCommit,
+  slotId: KpSemanticSlotId
+): DeriveOperation | undefined {
+  const matches = commit.journal.map(({ operation }) => operation).filter(
+    (operation): operation is DeriveOperation =>
+      operation.kind === "derive" && operation.slotId === slotId
+  );
+  if (matches.length > 1) {
+    throw new KpSemanticStateAuthorityProjectionError(
+      "ambiguous-slot-history",
+      `Semantic slot ${slotId} has more than one explicit derive operation.`
+    );
+  }
+  return matches[0];
 }
 
 function optionalSingleEntityOperation<

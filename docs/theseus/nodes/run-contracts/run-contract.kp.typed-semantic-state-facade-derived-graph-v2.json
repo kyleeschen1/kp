@@ -2,9 +2,9 @@
   "id": "run-contract.kp.typed-semantic-state-facade-derived-graph-v2",
   "kind": "run-contract",
   "title": "Typed semantic state facade and derived graph v2",
-  "status": "ready",
+  "status": "superseded",
   "domain": "kp",
-  "summary": "Hygiene-complete execution contract replacing the unstarted metadata-incomplete v1; exact scope is owned by the user-approved proposal.",
+  "summary": "V3-recovery-approved-after-s14-inference-stop-preserving-completed-s01-through-s13-and-replacing-only-unexecuted-remainder",
   "sourceRefs": [
     {
       "kind": "file",
@@ -140,6 +140,7 @@
     {
       "id": "s14",
       "title": "Derived-binding transaction operation",
+      "summary": "STOP_CONDITION: derived-binding transaction implementation is preserved uncommitted; focused laws, typecheck, and architecture pass, but inference remains 142 types above the fixed ceiling after bounded simplification. Human direction is required before changing the ratchet or narrowing the approved authority record.",
       "status": "planned"
     },
     {

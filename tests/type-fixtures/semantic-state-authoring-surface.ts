@@ -1,9 +1,13 @@
 import type {
   KpSemanticStateBindableOperationLeafHandle,
-  KpSemanticStateOperationLeafHandle,
+  KpSemanticStateDerivedOperationLeafHandle,
   KpSemanticStateOptionalOperationLeafHandle,
   KpSemanticStateWritableOperationLeafHandle
 } from "../../src/semantic-state/authoring-state-transform.ts";
+import type { KpSemanticStateDerivationDefinition } from
+  "../../src/semantic-state/authoring-derived-definition.ts";
+import type { KpSemanticStateLeafHandle } from
+  "../../src/semantic-state/authoring-state-handles.ts";
 
 interface SupplyCurve {
   readonly kind: "supply";
@@ -23,7 +27,15 @@ declare const supplySource:
 declare const demandSource:
   KpSemanticStateBindableOperationLeafHandle<DemandCurve>;
 declare const policy: KpSemanticStateOptionalOperationLeafHandle<number>;
-declare const equilibrium: KpSemanticStateOperationLeafHandle<number>;
+declare const equilibrium: KpSemanticStateDerivedOperationLeafHandle<number>;
+declare const equilibriumDefinition: KpSemanticStateDerivationDefinition<
+  number,
+  readonly [KpSemanticStateLeafHandle<SupplyCurve>]
+>;
+declare const invalidEquilibriumDefinition: KpSemanticStateDerivationDefinition<
+  string,
+  readonly [KpSemanticStateLeafHandle<SupplyCurve>]
+>;
 
 supply.update(previous => ({
   kind: "supply",
@@ -33,9 +45,13 @@ supply.bind(supplySource);
 supply.bindCopy(supplySource);
 policy.introduce(2);
 policy.remove();
+equilibrium.derive(equilibriumDefinition);
 
 // @ts-expect-error Binding retains the target leaf's domain value type.
 supply.bind(demandSource);
 
 // @ts-expect-error Derived handles remain read-only.
 equilibrium.update(previous => previous);
+
+// @ts-expect-error Derived replacement preserves the declared result type.
+equilibrium.derive(invalidEquilibriumDefinition);
