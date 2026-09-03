@@ -1,0 +1,215 @@
+{
+  "id": "run-contract.kp.persistent-semantic-state-foundation-v1",
+  "kind": "run-contract",
+  "title": "Persistent semantic state foundation v1",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.typed-authoring.persistent-semantic-state-foundation.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-02-persistent-semantic-state-foundation-long-loop-proposal.md",
+      "summary": "User-approved 30-slice proposal with exact phase gates, boundaries, verification tiers, commit cadence, stop conditions, and deferrals."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-02-persistent-semantic-state-architecture-direction.md",
+      "summary": "Accepted persistent semantic state architecture direction and seven-loop horizon."
+    }
+  ],
+  "verification": [
+    "npm run verify:impact -- --path <changed-path>",
+    "node --disable-warning=ExperimentalWarning --test tests/typed-linear-supply-demand-pressure.test.ts tests/typed-circle-measurement-pressure.test.ts",
+    "node --disable-warning=ExperimentalWarning --test tests/economics-supply-tax-model.test.ts tests/exact-rational-cross-boundary-conformance.test.ts",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run check:inference",
+    "npm test",
+    "npm run build:bundle",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Exact stale-test expectation and generated-manifest repairs proven against canonical production owners.",
+    "One internal unit-scalar differentiable-map helper, only the market and circle caller migrations, and focused burden and inference measurement.",
+    "A narrow one-way adapter or shared formula boundary retaining exact-rational economics authority.",
+    "Internal semantic-state contracts, immutable storage, transactions, role bindings, change sets, recovery adapters, law tests, negative fixtures, diagnostics, architecture evidence, and project memory."
+  ],
+  "disallowedWork": [
+    "No public semantic-state API, global store, event-sourcing framework, runtime Proxy, implicit assignment, or import-order registry.",
+    "No lazy derived evaluation, dependency cache, at-progress state families, interpolation, aggregate timeline, URL, Article, Focus Deck, renderer, Graph2D, KaTeX, CSS, or browser work.",
+    "No inferred derivatives, units, bases, equality, proof, physical predicates, price-floor parity, general CAS, theorem prover, ontology, HKT hierarchy, knowledge catalogue, procedure framework, broad macros, or LLM authoring.",
+    "No production behavior changes merely to satisfy stale ledgers, public facade expansion, broad directory rewrite, or unrelated worktree changes."
+  ],
+  "goal": "Restore trustworthy project health, complete the bounded unit-scalar helper and exact-rational economics parity gates, then prove immutable entity/version identity, aggregate snapshots, explicit transaction operations, structural sharing, lineage, and direct recovery in one internal nonvisual kernel.",
+  "target": "next-action.kp.typed-authoring.persistent-semantic-state-foundation",
+  "runMode": "run",
+  "maxSlices": 30,
+  "commitCadence": "Commit implementation, tests, and completed Theseus evidence after each verified slice.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if a ledger repair weakens a ceiling, deletes meaningful coverage, or changes product behavior solely to satisfy a stale test.",
+    "Stop if the helper must infer mathematical rules or weakens inference, diagnostics, identity, units, or law evidence beyond one bounded input-shape revision.",
+    "Stop if economics parity forks or replaces exact-rational authority or changes the approved supply-tax artifact.",
+    "Stop if identity derives from JavaScript reference, structural or glyph equality, renderer nodes, slot names, or transaction statement order.",
+    "Stop if committed snapshots mutate, branches leak, partial transactions escape, expired scopes remain usable, or recovery requires replay.",
+    "Stop if implementation requires a mutable global registry, import-order authority, public proxy, renderer/runtime dependency, or public facade expansion.",
+    "Stop if local inference cannot be bounded without weakening nominal distinctions or raising an unrelated global ceiling, or if any new broad failure appears.",
+    "Always stop after s30 at a mandatory human architecture and API checkpoint before loop 2."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "broad-failure-baseline",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "catalogue-and-asset-ledgers",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "generated-order-and-direction-ledgers",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "renderer-source-and-architecture-ledgers",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "repository-health-gate",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "helper-baseline-and-contract",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "unit-scalar-helper-core",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "runtime-guards-and-map-wrapping",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "source-evidence-and-unit-latex-plumbing",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "market-migration",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "circle-migration",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "helper-api-gate",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "economics-parity-characterization",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "exact-rational-adapter-or-formula-boundary",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "parity-negatives-and-provenance",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "economics-authority-gate",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "state-identity-contract",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "immutable-entity-version-store",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "role-bindings-and-aggregate-snapshots",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "structural-sharing-and-branches",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "pinned-references-and-recovery",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "change-dispositions-and-change-sets",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "explicit-transaction-lifecycle",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "update-operation",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "shared-bind-operation",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "copy-with-lineage-operation",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "introduce-and-remove-operations",
+      "status": "planned"
+    },
+    {
+      "id": "s28",
+      "title": "derived-binding-declaration-boundary",
+      "status": "planned"
+    },
+    {
+      "id": "s29",
+      "title": "provenance-correspondence-and-law-convergence",
+      "status": "planned"
+    },
+    {
+      "id": "s30",
+      "title": "foundation-closeout-and-mandatory-checkpoint",
+      "status": "planned"
+    }
+  ]
+}

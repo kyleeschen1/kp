@@ -1,0 +1,63 @@
+{
+  "id": "next-action.kp.typed-authoring.persistent-semantic-state-foundation",
+  "kind": "next-action",
+  "title": "Build the persistent semantic state foundation",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-02-persistent-semantic-state-foundation-long-loop-proposal.md",
+      "summary": "User-approved 30-slice foundation proposal."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "conversation.kp.semantic-state-architecture-direction-20260902"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery",
+    "next-action.kp.typed-math.unit-scalar-map-helper"
+  ],
+  "verification": [
+    "npm test",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run check:inference",
+    "npm run build:bundle",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether explicit entity, version, role, and snapshot distinctions support immutable alias, copy, branch, transaction, and direct-recovery laws without proxy or renderer authority.",
+    "Whether the helper and exact-rational parity gates produce a trustworthy foundation for the later ergonomic and interpolation loops."
+  ],
+  "allowedWork": [
+    "Execute only the approved 30-slice persistent semantic state foundation proposal."
+  ],
+  "disallowedWork": [
+    "Do not enter proxy, lazy derivation, interpolation, timeline, renderer, Article, Focus Deck, knowledge-object, procedure, macro, or LLM scope."
+  ],
+  "criteria": [
+    {
+      "id": "broad-test-signal-restored",
+      "weight": "high"
+    },
+    {
+      "id": "helper-checkpoint-resolved",
+      "weight": "high"
+    },
+    {
+      "id": "exact-rational-economics-authority-preserved",
+      "weight": "high"
+    },
+    {
+      "id": "immutable-state-laws-pass",
+      "weight": "high"
+    },
+    {
+      "id": "public-and-renderer-boundaries-preserved",
+      "weight": "high"
+    }
+  ]
+}
