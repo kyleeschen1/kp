@@ -63,6 +63,16 @@ export interface KpSemanticDerivedGraphInput {
   readonly edges: readonly KpSemanticDerivedGraphEdgeInput[];
 }
 
+export interface KpSemanticDerivedGraph {
+  readonly schemaVersion: "kp.semantic-derived-graph.v1";
+  readonly kind: "semantic-derived-graph";
+  readonly namespace: string;
+  readonly input: KpSemanticDerivedGraphInput;
+  readonly evaluationOrder:
+    readonly KpSemanticDerivedGraphDefinitionInput[];
+  readonly evaluationIndex: Readonly<Record<string, number>>;
+}
+
 export type KpSemanticDerivedGraphDiagnosticCode =
   | "cross-schema-derived-dependency"
   | "cross-schema-derived-target"
@@ -331,6 +341,48 @@ export function validateKpSemanticDerivedGraphInput(
   return input;
 }
 
+export function compileKpSemanticDerivedGraph(
+  input: KpSemanticDerivedGraphInput
+): KpSemanticDerivedGraph {
+  validateKpSemanticDerivedGraphInput(input);
+  const definitions = new Map(input.definitions.map((definition) => [
+    definition.target.slotId,
+    definition
+  ]));
+  const visited = new Set<KpSemanticSlotId>();
+  const evaluationOrder: KpSemanticDerivedGraphDefinitionInput[] = [];
+
+  const visit = (definition: KpSemanticDerivedGraphDefinitionInput): void => {
+    if (visited.has(definition.target.slotId)) return;
+    const dependencies = definition.dependencies
+      .map(({ dependency }) => definitions.get(dependency.slotId))
+      .filter((candidate) => candidate !== undefined)
+      .sort((left, right) =>
+        left.target.slotId.localeCompare(right.target.slotId)
+      );
+    for (const dependency of dependencies) visit(dependency);
+    visited.add(definition.target.slotId);
+    evaluationOrder.push(definition);
+  };
+
+  for (const definition of [...input.definitions].sort(
+    compareNormalizedDefinitions
+  )) visit(definition);
+
+  const evaluationIndex: Record<string, number> = {};
+  evaluationOrder.forEach((definition, index) => {
+    evaluationIndex[definition.target.slotId] = index;
+  });
+  return Object.freeze({
+    schemaVersion: "kp.semantic-derived-graph.v1",
+    kind: "semantic-derived-graph",
+    namespace: input.namespace,
+    input,
+    evaluationOrder: Object.freeze(evaluationOrder),
+    evaluationIndex: Object.freeze(evaluationIndex)
+  });
+}
+
 function createLeafReference(
   leaf: KpCompiledSemanticStateLeaf
 ): KpSemanticDerivedGraphLeafReference {
@@ -365,6 +417,16 @@ function compareDefinitions(
     right.declaration.derivationId
   ) || left.declaration.slotId.localeCompare(right.declaration.slotId) ||
     left.declaration.sourceId.localeCompare(right.declaration.sourceId);
+}
+
+function compareNormalizedDefinitions(
+  left: KpSemanticDerivedGraphDefinitionInput,
+  right: KpSemanticDerivedGraphDefinitionInput
+): number {
+  return left.target.slotId.localeCompare(right.target.slotId) ||
+    left.id.localeCompare(right.id) || left.sourceId.localeCompare(
+      right.sourceId
+    );
 }
 
 function createDiagnostic(input: {

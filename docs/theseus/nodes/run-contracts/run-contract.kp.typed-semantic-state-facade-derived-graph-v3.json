@@ -90,7 +90,8 @@
     {
       "id": "s06",
       "title": "Order dependencies deterministically",
-      "status": "planned"
+      "summary": "compiled-deterministic-dependencies-first-order-and-slot-index-with-diamond-and-permutation-laws",
+      "status": "complete"
     },
     {
       "id": "s07",

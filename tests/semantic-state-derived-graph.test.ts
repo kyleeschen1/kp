@@ -16,6 +16,7 @@ import { createKpSemanticStateHandleSet } from
   "../src/semantic-state/authoring-state-handles.ts";
 import {
   KpSemanticDerivedGraphValidationError,
+  compileKpSemanticDerivedGraph,
   type KpSemanticDerivedGraphDiagnostic,
   type KpSemanticDerivedGraphInput,
   normalizeKpSemanticDerivedGraphInput,
@@ -402,6 +403,44 @@ test("long dependency cycles canonicalize independently of definition order", ()
   assert.equal(fixture.computeCalls(), 0);
 });
 
+test("diamond graphs compile in dependencies-first order", () => {
+  const fixture = createDiamondFixture(false, false);
+  const graph = compileKpSemanticDerivedGraph(fixture.graph);
+
+  assert.deepEqual(
+    graph.evaluationOrder.map(({ target }) => target.path),
+    [["root"], ["left"], ["right"], ["top"]]
+  );
+  for (const definition of graph.evaluationOrder) {
+    const targetIndex = graph.evaluationIndex[definition.target.slotId]!;
+    for (const { dependency } of definition.dependencies) {
+      const dependencyIndex = graph.evaluationIndex[dependency.slotId];
+      if (dependencyIndex !== undefined) {
+        assert.ok(dependencyIndex < targetIndex);
+      }
+    }
+  }
+  assert.equal(fixture.computeCalls(), 0);
+  assert.ok(Object.isFrozen(graph));
+  assert.ok(Object.isFrozen(graph.evaluationOrder));
+  assert.ok(Object.isFrozen(graph.evaluationIndex));
+});
+
+test("definition and edge permutations do not change evaluation order", () => {
+  const ordinary = createDiamondFixture(false, false);
+  const permuted = createDiamondFixture(true, true);
+  const ordinaryGraph = compileKpSemanticDerivedGraph(ordinary.graph);
+  const permutedGraph = compileKpSemanticDerivedGraph(permuted.graph);
+
+  assert.deepEqual(
+    ordinaryGraph.evaluationOrder.map(({ target }) => target.slotId),
+    permutedGraph.evaluationOrder.map(({ target }) => target.slotId)
+  );
+  assert.deepEqual(ordinaryGraph.evaluationIndex, permutedGraph.evaluationIndex);
+  assert.equal(ordinary.computeCalls(), 0);
+  assert.equal(permuted.computeCalls(), 0);
+});
+
 function createFixture(
   namespace = "lesson.derived-graph-normalization"
 ) {
@@ -507,6 +546,64 @@ function createCycleFixture(
     definitionFor("alpha", dependencySlots.alpha),
     definitionFor("beta", dependencySlots.beta),
     definitionFor("gamma", dependencySlots.gamma)
+  ];
+  return {
+    graph: normalizeKpSemanticDerivedGraphInput(
+      compiled,
+      reverseDefinitions ? [...definitions].reverse() : definitions
+    ),
+    computeCalls: () => computeCalls
+  };
+}
+
+function createDiamondFixture(
+  reverseDefinitions: boolean,
+  reverseTopDependencies: boolean
+) {
+  let computeCalls = 0;
+  const compiled = compileKpSemanticStateSchema(
+    "lesson.derived-diamond",
+    kpStateGroup({
+      seed: kpStateValue(1),
+      root: kpStateDerived<number>(),
+      left: kpStateDerived<number>(),
+      right: kpStateDerived<number>(),
+      top: kpStateDerived<number>()
+    })
+  );
+  const handles = createKpSemanticStateHandleSet(compiled);
+  const definitionFor = (
+    encodedPath: "root" | "left" | "right" | "top",
+    dependencySlotIds: readonly KpSemanticSlotId[]
+  ) => {
+    const ordinal = compiled.leafIndex[encodedPath];
+    if (ordinal === undefined) {
+      throw new Error(`Missing diamond fixture path ${encodedPath}.`);
+    }
+    const leaf = compiled.leaves[ordinal]!;
+    return createDefinitionSource({
+      derivationId: leaf.identities.derivationId,
+      targetSlotId: leaf.identities.slotId,
+      dependencySlotIds,
+      sourceId: leaf.identities.sourceIds.derivation,
+      compute: () => {
+        computeCalls += 1;
+        return 1;
+      }
+    });
+  };
+  const topDependencies = [
+    handles.refs.left.slotId,
+    handles.refs.right.slotId
+  ];
+  const definitions = [
+    definitionFor("root", [handles.refs.seed.slotId]),
+    definitionFor("left", [handles.refs.root.slotId]),
+    definitionFor("right", [handles.refs.root.slotId]),
+    definitionFor(
+      "top",
+      reverseTopDependencies ? [...topDependencies].reverse() : topDependencies
+    )
   ];
   return {
     graph: normalizeKpSemanticDerivedGraphInput(

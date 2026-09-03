@@ -660,11 +660,46 @@
       "scope": "standard",
       "checkedAt": "2026-09-03T17:39:40.820Z",
       "notes": "workspace valid with 1088 nodes and 26793 events after v3 s05 closeout"
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T17:43:02.411Z",
+      "notes": "119 laws pass including dependencies-first diamond order and definition-edge permutation invariance"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T17:43:03.586Z",
+      "notes": "all TypeScript Svelte and domain projects pass with compiled graph order"
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T17:43:04.629Z",
+      "notes": "inference remains green at 103192 types and 172704 instantiations"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T17:43:05.717Z",
+      "notes": "all architecture and gateway gates pass"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T17:43:19.995Z",
+      "notes": "workspace valid with 1088 nodes and 26803 events after v3 s06 closeout"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "v3-s05-complete-direct-and-indirect-cycles-fail-with-canonical-paths-before-any-compute-call"
+    "summary": "v3-s06-complete-validated-graphs-compile-to-frozen-dependencies-first-order-independent-of-definition-or-edge-order"
   },
   "expectedLearning": [
     "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",
