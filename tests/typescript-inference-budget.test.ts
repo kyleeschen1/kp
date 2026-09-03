@@ -10,12 +10,12 @@ test("inference ceilings retain measured, narrow structural headroom", () => {
   assert.ok(ceilings.instantiations > measuredProject.instantiations);
   assert.ok(ceilings.types / measuredProject.types < 1.05);
   assert.ok(ceilings.instantiations / measuredProject.instantiations < 1.08);
-  assert.equal(ceilings.types, ceilHundred(measuredProject.types * 1.03));
+  assert.equal(ceilings.types, ceilHundred(measuredProject.types * 1.02));
   assert.equal(
     ceilings.instantiations,
-    ceilHundred(measuredProject.instantiations * 1.05)
+    ceilHundred(measuredProject.instantiations * 1.03)
   );
-  assert.equal(typescriptInferenceBudget.fixtureCount, 42);
+  assert.equal(typescriptInferenceBudget.fixtureCount, 44);
 
   const config = JSON.parse(readFileSync("tsconfig.inference.json", "utf8")) as {
     readonly compilerOptions?: { readonly skipLibCheck?: boolean };
@@ -29,7 +29,8 @@ test("owner-local inference laws avoid broad public barrels", () => {
     ["concept-room-inference.ts", "../../src/authoring/handles.ts"],
     ["concept-manifest-inference.ts", "../../src/authoring/concept-manifest.ts"],
     ["concept-room-state-inference.ts", "../../src/kernel/concept-room-state.ts"],
-    ["native-katex-executable-scene.ts", "../../src/rendering/native-katex-scene-compositor.ts"]
+    ["native-katex-executable-scene.ts", "../../src/rendering/native-katex-scene-compositor.ts"],
+    ["semantic-state-family-inference.ts", "../../src/semantic-state/state-family-evaluator.ts"]
   ]);
 
   for (const [fixture, owner] of imports) {

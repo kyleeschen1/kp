@@ -162,7 +162,8 @@
     {
       "id": "s16",
       "title": "Authority and compiler checkpoint",
-      "status": "planned"
+      "summary": "Sampling, derived views, cache hits and eviction, reset, disposal, and recreation leave snapshots, versions, journal, change records, correspondence, provenance, lineage, and recovery exact. One direct-owner inference fixture explains the measured 106981 types and 181525 instantiations; the sole approved ratchet sets formula-derived ceilings of 109200 and 187000.",
+      "status": "complete"
     },
     {
       "id": "s17",

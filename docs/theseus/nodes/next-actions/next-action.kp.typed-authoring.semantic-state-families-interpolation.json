@@ -859,6 +859,146 @@
       "scope": "s15-diff",
       "checkedAt": "2026-09-03T23:08:04.367Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "s16-typecheck-initial",
+      "checkedAt": "2026-09-03T23:28:28.301Z",
+      "notes": "The new laws and fixture used literal-inferred value descriptors where widened string and number types were intended. Explicit descriptor generics repaired the test-only typing without changing runtime behavior."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "s16-pre-ratchet",
+      "checkedAt": "2026-09-03T23:28:29.610Z",
+      "notes": "The direct family fixture measured 106981 types and 181525 instantiations, narrowly exceeding the prior 106300 and 181400 ceilings and triggering the single approved s16 ratchet."
+    },
+    {
+      "command": "npm run measure:inference-attribution",
+      "status": "passed",
+      "scope": "s16-inference-attribution",
+      "checkedAt": "2026-09-03T23:28:30.681Z",
+      "notes": "44 fixtures measured; overall 106981 types and 181525 instantiations. The direct-owner semantic-state family fixture has 34328 types, 40467 instantiations, and no public barrel imports."
+    },
+    {
+      "command": "npm run check:public-typescript-budgets",
+      "status": "failed",
+      "scope": "s16-public-budget-concurrent-preflight",
+      "checkedAt": "2026-09-03T23:28:31.827Z",
+      "notes": "A concurrent general Vite build removed the public manifest between its build and budget check; the sequential rerun passed without source changes."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-state-family-authority-checkpoint.test.ts tests/semantic-state-derived-history.test.ts tests/semantic-state-family-evaluator-laws.test.ts tests/semantic-state-pinned-recovery.test.ts tests/semantic-state-authority-adapter.test.ts",
+      "status": "passed",
+      "scope": "s16-authority",
+      "checkedAt": "2026-09-03T23:28:32.922Z",
+      "notes": "19 authority, history, recovery, and sampling laws passed before the type-only fixture annotations; runtime behavior was unchanged by those annotations."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typescript-inference-budget.test.ts tests/semantic-state-family-authority-checkpoint.test.ts tests/semantic-state-derived-history.test.ts tests/semantic-state-pinned-recovery.test.ts",
+      "status": "passed",
+      "scope": "s16-ratchet-laws",
+      "checkedAt": "2026-09-03T23:28:33.977Z",
+      "notes": "10 focused laws passed, including exact authority parity, recovery independence, direct-owner imports, 44-fixture count, and the approved 2-percent type and 3-percent instantiation formulas."
+    },
+    {
+      "command": "npm run verify:impact -- --path tests/semantic-state-family-authority-checkpoint.test.ts --path tests/type-fixtures/semantic-state-family-inference.ts --path src/architecture/typescript-inference-budget.ts --path tests/typescript-inference-budget.test.ts",
+      "status": "passed",
+      "scope": "s16-impact",
+      "checkedAt": "2026-09-03T23:28:35.075Z",
+      "notes": "High-risk promotion checks identified. The public visual browser check was excluded by the approved nonvisual run contract; its type, unit, build, and budget components passed separately."
+    },
+    {
+      "command": "npm run generate:equation-reachability",
+      "status": "passed",
+      "scope": "s16-reachability",
+      "checkedAt": "2026-09-03T23:28:36.178Z",
+      "notes": "Generated exact equation reachability graph from 68 roots."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "s16-semantic-state",
+      "checkedAt": "2026-09-03T23:28:37.291Z",
+      "notes": "225 semantic-state tests passed with zero failures."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s16-typecheck",
+      "checkedAt": "2026-09-03T23:28:38.398Z",
+      "notes": "TypeScript, Svelte, and domain checks passed with zero Svelte errors or warnings."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s16-architecture",
+      "checkedAt": "2026-09-03T23:28:39.474Z",
+      "notes": "Dependency direction passed for 2006 TypeScript modules and 7449 of 7500 local references with zero retiring exceptions; all architecture and gateway checks passed."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s16-inference",
+      "checkedAt": "2026-09-03T23:28:40.543Z",
+      "notes": "The single approved ratchet passed at 106981 measured types and 181525 measured instantiations against formula-derived ceilings of 109200 and 187000."
+    },
+    {
+      "command": "npm run test:typescript-refactor",
+      "status": "passed",
+      "scope": "s16-typescript-route",
+      "checkedAt": "2026-09-03T23:28:41.636Z",
+      "notes": "110 TypeScript refactor tests passed with zero failures."
+    },
+    {
+      "command": "npm run verify:public-typescript:fast",
+      "status": "passed",
+      "scope": "s16-public-typescript-fast",
+      "checkedAt": "2026-09-03T23:28:42.712Z",
+      "notes": "Public TypeScript route typecheck and five publication tests passed."
+    },
+    {
+      "command": "npm run build:public-typescript",
+      "status": "passed",
+      "scope": "s16-public-typescript-build",
+      "checkedAt": "2026-09-03T23:28:43.799Z",
+      "notes": "Public TypeScript route built 37 modules successfully."
+    },
+    {
+      "command": "npm run check:public-typescript-budgets",
+      "status": "passed",
+      "scope": "s16-public-typescript-budget",
+      "checkedAt": "2026-09-03T23:28:44.863Z",
+      "notes": "Sequential public budget check passed at 3626 HTML gzip bytes and 14267 startup code and CSS gzip bytes with no forbidden closure entries."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "s16-bundle",
+      "checkedAt": "2026-09-03T23:28:45.903Z",
+      "notes": "Production bundle passed for 1603 modules; existing large-chunk advisory only."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s16-full-regression",
+      "checkedAt": "2026-09-03T23:28:46.945Z",
+      "notes": "6335 tests passed with zero failures, cancellations, skips, or todos."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s16-workspace",
+      "checkedAt": "2026-09-03T23:28:47.925Z",
+      "notes": "Workspace valid with 1091 nodes and 27207 events before completion evidence."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s16-diff",
+      "checkedAt": "2026-09-03T23:28:48.978Z",
+      "notes": "No whitespace errors."
     }
   ],
   "expectedLearning": [
