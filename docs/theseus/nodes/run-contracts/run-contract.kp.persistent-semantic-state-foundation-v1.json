@@ -112,7 +112,8 @@
     {
       "id": "s09",
       "title": "source-evidence-and-unit-latex-plumbing",
-      "status": "planned"
+      "summary": "Added the one-call internal authoring composition with explicit function and derivative provenance, named tested-law evidence, stable IDs, and derivative-unit LaTeX; no source, proof, unit relation, or presentation is inferred.",
+      "status": "complete"
     },
     {
       "id": "s10",

@@ -9,6 +9,7 @@ import type { KpMathAuthoringContext } from "./context.ts";
 import {
   createKpUnitTaggedScalarSpace,
   createKpUnitValue,
+  projectKpDerivativeUnitToLatex,
   type KpUnitDescriptor,
   type KpUnitValue
 } from "./units.ts";
@@ -51,6 +52,37 @@ export interface KpAuthoredUnitScalarMapBinding<
     KpUnitValue<CodomainUnitId>,
     number
   >;
+}
+
+export interface KpAuthoredUnitScalarMap<
+  DomainUnitId extends string,
+  CodomainUnitId extends string
+> {
+  readonly kind: "authored-unit-scalar-map";
+  readonly context: KpMathAuthoringContext;
+  readonly ids: KpAuthoredUnitScalarMapDefinition<
+    DomainUnitId,
+    CodomainUnitId
+  >["ids"];
+  readonly units: KpAuthoredUnitScalarMapDefinition<
+    DomainUnitId,
+    CodomainUnitId
+  >["units"];
+  readonly spaces: KpAuthoredUnitScalarMapDefinition<
+    DomainUnitId,
+    CodomainUnitId
+  >["spaces"];
+  readonly map: KpDifferentiableMap<
+    KpUnitValue<DomainUnitId>,
+    KpUnitValue<CodomainUnitId>,
+    number
+  >;
+  readonly provenance: Readonly<{
+    sourceFunctionId: string;
+    derivativeSourceMapId: string;
+    testedLinearitySuiteId: string;
+  }>;
+  readonly derivativeUnitLatex: string;
 }
 
 export function createKpAuthoredUnitScalarMapDefinition<
@@ -201,6 +233,79 @@ export function bindKpAuthoredUnitScalarMapDefinition<
   });
 }
 
+export function defineKpAuthoredUnitScalarMap<
+  const DomainUnitId extends string,
+  const CodomainUnitId extends string
+>(
+  author: KpMathAuthoringContext,
+  input: {
+    readonly path: string;
+    readonly derivativePath?: string | undefined;
+    readonly domain: Readonly<{
+      path: string;
+      label: string;
+      unit: KpUnitDescriptor<DomainUnitId>;
+    }>;
+    readonly codomain: Readonly<{
+      path: string;
+      label: string;
+      unit: KpUnitDescriptor<CodomainUnitId>;
+    }>;
+    readonly evaluateMagnitude: (value: number) => number;
+    readonly derivativeMagnitudeAt: (point: number, change: number) => number;
+    readonly diagnostics: Readonly<{
+      evaluationInput: string;
+      derivativePoint: string;
+      derivativeChange: string;
+    }>;
+    readonly source: Readonly<{
+      functionId: string;
+      derivativeMapId?: string | undefined;
+    }>;
+    readonly testedLinearitySuiteId: string;
+  }
+): KpAuthoredUnitScalarMap<DomainUnitId, CodomainUnitId> {
+  const definition = createKpAuthoredUnitScalarMapDefinition(author, input);
+  const provenance = Object.freeze({
+    sourceFunctionId: requireMetadataId(
+      input.source.functionId,
+      "Unit-scalar source function id"
+    ),
+    derivativeSourceMapId: requireMetadataId(
+      input.source.derivativeMapId ?? definition.ids.map,
+      "Unit-scalar derivative source map id"
+    ),
+    testedLinearitySuiteId: requireMetadataId(
+      input.testedLinearitySuiteId,
+      "Unit-scalar tested-linearity suite id"
+    )
+  });
+  const binding = bindKpAuthoredUnitScalarMapDefinition(definition, {
+    diagnostics: input.diagnostics,
+    linearity: {
+      kind: "tested",
+      suiteId: provenance.testedLinearitySuiteId,
+      equalityId: definition.spaces.codomain.vectors.equality.id
+    },
+    sourceFunctionIds: [provenance.sourceFunctionId],
+    derivativeSourceMapIds: [provenance.derivativeSourceMapId]
+  });
+
+  return Object.freeze({
+    kind: "authored-unit-scalar-map" as const,
+    context: author,
+    ids: definition.ids,
+    units: definition.units,
+    spaces: definition.spaces,
+    map: binding.map,
+    provenance,
+    derivativeUnitLatex: projectKpDerivativeUnitToLatex({
+      domain: definition.units.domain,
+      codomain: definition.units.codomain
+    })
+  });
+}
+
 function requireUnitMagnitude<const UnitId extends string>(
   value: KpUnitValue<string>,
   unit: KpUnitDescriptor<UnitId>,
@@ -216,6 +321,13 @@ function requireUnitMagnitude<const UnitId extends string>(
 }
 
 function requireDiagnosticLabel(value: string, label: string): string {
+  if (value.trim().length === 0 || value.trim() !== value) {
+    throw new Error(`${label} must be non-empty and trimmed.`);
+  }
+  return value;
+}
+
+function requireMetadataId(value: string, label: string): string {
   if (value.trim().length === 0 || value.trim() !== value) {
     throw new Error(`${label} must be non-empty and trimmed.`);
   }

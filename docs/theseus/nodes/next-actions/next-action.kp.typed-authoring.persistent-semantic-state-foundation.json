@@ -287,6 +287,27 @@
       "scope": "focused",
       "checkedAt": "2026-09-03T07:23:26.842Z",
       "notes": "Unmigrated caller authoring and focused inference baseline remains exact."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/unit-scalar-map-helper-core.test.ts tests/unit-scalar-map-helper-binding.test.ts tests/unit-scalar-map-helper-metadata.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T07:26:05.553Z",
+      "notes": "Nine helper tests passed for stable IDs, exact provenance, default and explicit derivative sources, tested evidence, derivative-unit LaTeX, and negative metadata cases."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T07:26:06.799Z",
+      "notes": "All helper and negative type fixtures compile without weakening unit distinctions."
+    },
+    {
+      "command": "npm run check:dependency-direction",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T07:26:07.912Z",
+      "notes": "The composed helper remains inside the framework-neutral math authoring boundary."
     }
   ],
   "expectedLearning": [
