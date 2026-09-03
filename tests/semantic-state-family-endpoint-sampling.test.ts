@@ -64,15 +64,13 @@ test("exact one returns the committed after source and pinned view", () => {
   assert.equal(fixture.counters.compute, 0);
 });
 
-test("interior progress fails before interpolation or overlay allocation", () => {
+test("endpoint checks precede all interior interpolation work", () => {
   const fixture = createFixture();
   const evaluator = createKpSemanticStateFamilyEvaluator(fixture);
   const history = captureHistory(fixture);
 
-  assert.throws(() => evaluator.at(createKpSemanticProgress(1n, 2n)),
-    (error) => error instanceof KpSemanticStateFamilyEvaluatorError &&
-      error.code === "interior-sampling-unsupported"
-  );
+  evaluator.at(createKpSemanticProgress(0n));
+  evaluator.at(createKpSemanticProgress(1n));
   assert.deepEqual(captureHistory(fixture), history);
   assert.equal(fixture.counters.interpolate, 0);
   assert.equal(fixture.counters.compute, 0);
@@ -90,7 +88,12 @@ test("endpoint sources recover through existing snapshot authority", () => {
     createKpSemanticProgress(0n),
     createKpSemanticProgress(1n)
   ]) {
-    const source = evaluator.at(progress).source;
+    const sample = evaluator.at(progress);
+    assert.equal(sample.kind, "persistent-endpoint");
+    if (sample.kind !== "persistent-endpoint") {
+      throw new Error("Expected a persistent endpoint sample.");
+    }
+    const source = sample.source;
     assert.equal(recoverKpPinnedSnapshot(
       recovery,
       pinKpAggregateSemanticSnapshot(source.snapshot)
@@ -118,10 +121,12 @@ test("equivalent declarations do not make callback identity authoritative", () =
     application: fixture.application
   });
 
-  assert.equal(
-    evaluator.at(createKpSemanticProgress(1n)).source.snapshot,
-    fixture.application.commit.after
-  );
+  const sample = evaluator.at(createKpSemanticProgress(1n));
+  assert.equal(sample.kind, "persistent-endpoint");
+  if (sample.kind !== "persistent-endpoint") {
+    throw new Error("Expected a persistent endpoint sample.");
+  }
+  assert.equal(sample.source.snapshot, fixture.application.commit.after);
   assert.equal(equivalent.counters.interpolate, 0);
 });
 

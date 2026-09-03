@@ -120,7 +120,8 @@
     {
       "id": "s09",
       "title": "Typed semantic-driver interpolation",
-      "status": "planned"
+      "summary": "Interior-exact-progress-invokes-typed-semantic-driver-interpolation-and-validates-ephemeral-output",
+      "status": "complete"
     },
     {
       "id": "s10",
