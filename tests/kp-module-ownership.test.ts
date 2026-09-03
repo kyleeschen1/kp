@@ -75,6 +75,7 @@ test("specific reader seams override the broader product host", () => {
 test("core, renderer, experience, public, and host examples resolve explicitly", () => {
   const examples = {
     "src/semantic/document.ts": "neutral-core",
+    "src/semantic-state/identity.ts": "neutral-core",
     "src/animation/runtime-sampler.ts": "neutral-core",
     "src/rendering/graph-svg.ts": "renderer",
     "src/tutorial/card-runtime.ts": "experience",

@@ -469,6 +469,41 @@
       "scope": "s16-economics-authority-gate",
       "checkedAt": "2026-09-03T08:23:52.949Z",
       "notes": "Workspace schema and run-contract references validate after the economics authority gate."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-state-identity.test.ts tests/kp-module-ownership.test.ts",
+      "status": "passed",
+      "scope": "s17-state-identity-contract",
+      "checkedAt": "2026-09-03T08:50:03.681Z",
+      "notes": "Nine focused runtime tests pass for deterministic construction, identity-kind separation, scope ownership, invalid inputs, and neutral-core module ownership."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s17-state-identity-contract",
+      "checkedAt": "2026-09-03T08:50:04.717Z",
+      "notes": "Application, Node, test type fixtures, Svelte, and domain typechecks pass; cross-kind and forged-string negative fixtures remain rejected."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s17-state-identity-contract",
+      "checkedAt": "2026-09-03T08:50:05.744Z",
+      "notes": "Full gate passed 6114 of 6114 after exact regeneration of the 68-root reachability inventory for three new scanned files."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "s17-state-identity-contract",
+      "checkedAt": "2026-09-03T08:50:06.791Z",
+      "notes": "Production bundle passed; the existing large-chunk advisory remains non-blocking."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s17-state-identity-contract",
+      "checkedAt": "2026-09-03T08:50:07.852Z",
+      "notes": "Workspace schema and active run references validate."
     }
   ],
   "expectedLearning": [

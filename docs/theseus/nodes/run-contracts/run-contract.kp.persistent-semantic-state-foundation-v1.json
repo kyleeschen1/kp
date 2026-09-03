@@ -160,7 +160,8 @@
     {
       "id": "s17",
       "title": "state-identity-contract",
-      "status": "planned"
+      "summary": "Defined deterministic scoped branded IDs for entities, immutable versions, aggregate snapshots, contextual slots, occurrences, aliases, labels, representations, transformation definitions, and applications; authors use factories rather than casts, and no runtime object identity or public facade is involved.",
+      "status": "complete"
     },
     {
       "id": "s18",

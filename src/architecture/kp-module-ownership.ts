@@ -134,6 +134,11 @@ export const kpModuleOwnershipRules: readonly KpModuleOwnershipRule[] =
     ownershipRule("src/reader/app/", "application"),
     ownershipRule("src/architecture/", "governance"),
     ownershipRule("src/domain-ir/", "neutral-core"),
+    ownershipRule(
+      "src/semantic-state/",
+      "neutral-core",
+      "Persistent semantic identity and snapshot truth is framework-neutral."
+    ),
     ownershipRule("src/semantic/", "neutral-core"),
     ownershipRule("src/animation/", "neutral-core"),
     ownershipRule("src/kernel/", "neutral-core"),
