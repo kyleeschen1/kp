@@ -173,6 +173,48 @@
       "scope": "control-plane",
       "checkedAt": "2026-09-03T20:48:00.565Z",
       "notes": "1091 nodes and 27051 events valid before completion records"
+    },
+    {
+      "command": "node state-family definition and transition tests",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T20:55:05.839Z",
+      "notes": "Six family identity parameter provenance and capability-shell tests passed"
+    },
+    {
+      "command": "npm run verify:impact state-family-definition",
+      "status": "passed",
+      "scope": "impact",
+      "checkedAt": "2026-09-03T20:55:07.020Z",
+      "notes": "High-risk semantic-state path selected semantic-state typecheck and architecture gates"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T20:55:08.130Z",
+      "notes": "Exact parameter and transition callback inference plus invalid parameter fixtures passed"
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T20:55:09.254Z",
+      "notes": "165 of 165 semantic-state tests passed"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T20:55:10.344Z",
+      "notes": "2003 TypeScript modules and all architecture gateways passed"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "control-plane",
+      "checkedAt": "2026-09-03T20:55:11.417Z",
+      "notes": "1091 nodes and 27061 events valid before completion records"
     }
   ],
   "expectedLearning": [

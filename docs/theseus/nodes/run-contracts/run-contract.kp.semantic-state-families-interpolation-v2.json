@@ -90,7 +90,8 @@
     {
       "id": "s04",
       "title": "Typed family definition and application records",
-      "status": "planned"
+      "summary": "Typed-family-records-reuse-transformation-identity-and-separate-durable-data-from-capabilities",
+      "status": "complete"
     },
     {
       "id": "s05",

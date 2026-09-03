@@ -108,6 +108,10 @@ type KpSemanticStateOperationMembersInternal<
 > = { readonly [Key in keyof Members]:
   KpSemanticStateOperationNode<Members[Key]> };
 
+export type KpSemanticStateOperationTree<
+  Root extends KpSemanticStateGroupDescriptor<KpSemanticStateMemberMap>
+> = KpSemanticStateOperationMembersInternal<Root["members"]>;
+
 export interface KpSemanticStateTransformApplication<
   Root extends KpSemanticStateGroupDescriptor<KpSemanticStateMemberMap>
 > {
