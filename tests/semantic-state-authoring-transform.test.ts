@@ -10,6 +10,7 @@ import { materializeKpSemanticStateInitialSnapshot } from
 import {
   defineKpSemanticStateTransform,
   KpSemanticStateTransformError,
+  type KpSemanticStateBindableOperationLeafHandle,
   type KpSemanticStateOperationLeafHandle
 } from "../src/semantic-state/authoring-state-transform.ts";
 import { kpStateGroup, kpStateOptional, kpStateValue } from
@@ -50,8 +51,7 @@ test("transform definitions derive identity without callback-order authority", (
 test("an empty transform aborts and expires every scoped handle", () => {
   const fixture = createFixture();
   let captured: KpSemanticStateOperationLeafHandle<
-    { readonly intercept: number; readonly slope: number },
-    "required-value"
+    { readonly intercept: number; readonly slope: number }
   > | undefined;
   const definition = defineKpSemanticStateTransform({
     ...fixture,
@@ -295,9 +295,8 @@ test("bind rejects self-aliasing and an already shared target", () => {
 
 test("bind sources cannot leak across transform application scopes", () => {
   const fixture = createFixture();
-  let captured: KpSemanticStateOperationLeafHandle<
-    { readonly intercept: number; readonly slope: number },
-    "required-value"
+  let captured: KpSemanticStateBindableOperationLeafHandle<
+    { readonly intercept: number; readonly slope: number }
   > | undefined;
   const capture = defineKpSemanticStateTransform({
     ...fixture,

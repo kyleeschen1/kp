@@ -283,11 +283,81 @@
       "scope": "standard",
       "checkedAt": "2026-09-03T13:26:58.590Z",
       "notes": "All architecture gates pass with zero dependency-direction exceptions."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T14:14:01.742Z",
+      "notes": "Initial convergence run reached 104223 types and 176145 instantiations, exceeding the unchanged 103000 and 176000 ceilings."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T14:14:02.884Z",
+      "notes": "Initial broad suite found the expected exact-equation reachability inventory drift after moving exhaustive contracts; regenerated the checked-in inventory before rerunning."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T14:14:03.900Z",
+      "notes": "95 semantic-state tests passed, including exact facade/raw transaction and projection convergence."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T14:14:04.928Z",
+      "notes": "Runtime sources, representative inference fixtures, and exhaustive negative type contracts compile."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T14:14:05.958Z",
+      "notes": "Passed without raising ceilings at 102883 types and 172113 instantiations."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T14:14:06.979Z",
+      "notes": "Dependency, framework neutrality, authority, governance, and cross-domain gates passed."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T14:14:07.998Z",
+      "notes": "Production bundle completed; only the pre-existing chunk-size advisory remains."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T14:14:09.031Z",
+      "notes": "6205 tests passed after regenerating the exact reachability inventory."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "durable",
+      "checkedAt": "2026-09-03T14:14:10.064Z",
+      "notes": "Workspace valid with 1087 nodes and 26697 events before completion records."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "hygiene",
+      "checkedAt": "2026-09-03T14:14:11.060Z",
+      "notes": "No whitespace errors."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s10 completes typed optional lifecycle compilation with deterministic per-application entity identities and no new storage or absence model."
+    "summary": "s11 proves exact facade-to-kernel convergence for mixed update, bind, bindCopy, introduce, and remove operations; the bounded type-surface repair preserves exhaustive contracts while returning inference below unchanged ceilings."
   },
   "expectedLearning": [
     "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",

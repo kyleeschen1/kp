@@ -11,7 +11,6 @@ import type {
 import type {
   KpSemanticStateDerivedDescriptor,
   KpSemanticStateGroupDescriptor,
-  KpSemanticStateLeafDescriptor,
   KpSemanticStateMemberMap,
   KpSemanticStateOptionalDescriptor,
   KpSemanticStateValueDescriptor,
@@ -31,7 +30,6 @@ import {
   type KpSemanticTransactionScope
 } from "./transaction.ts";
 
-declare const kpSemanticStateOperationValue: unique symbol;
 const kpSemanticStateOperationScope = Symbol(
   "kp.semantic-state-operation.scope"
 );
@@ -52,27 +50,19 @@ export class KpSemanticStateTransformError extends Error {
   }
 }
 
-export interface KpSemanticStateOperationLeafHandle<
-  Value,
-  DescriptorKind extends KpSemanticStateLeafDescriptor["kind"]
-> {
-  readonly schemaVersion: "kp.semantic-state-operation-leaf-handle.v1";
-  readonly kind: "semantic-state-operation-leaf-handle";
-  readonly reference: KpSemanticStateLeafHandle<Value, DescriptorKind>;
-  readonly [kpSemanticStateOperationValue]?: (value: Value) => Value;
+export interface KpSemanticStateOperationLeafHandle<Value> {
+  readonly reference: KpSemanticStateLeafHandle<Value>;
   read(): Value;
 }
 
-export type KpSemanticStateBindableOperationLeafHandle<Value> =
-  KpSemanticStateOperationLeafHandle<
-    Value,
-    "required-value" | "optional-value"
-  >;
+export interface KpSemanticStateBindableOperationLeafHandle<Value> {
+  readonly writable: true;
+  readonly reference: KpSemanticStateLeafHandle<Value>;
+}
 
-export interface KpSemanticStateWritableOperationLeafHandle<
-  Value,
-  DescriptorKind extends "required-value" | "optional-value"
-> extends KpSemanticStateOperationLeafHandle<Value, DescriptorKind> {
+export interface KpSemanticStateWritableOperationLeafHandle<Value>
+  extends KpSemanticStateOperationLeafHandle<Value> {
+  readonly writable: true;
   update(update: (previous: Value) => Value): void;
   bind(source: KpSemanticStateBindableOperationLeafHandle<NoInfer<Value>>): void;
   bindCopy(
@@ -81,33 +71,26 @@ export interface KpSemanticStateWritableOperationLeafHandle<
 }
 
 export interface KpSemanticStateOptionalOperationLeafHandle<Value>
-  extends KpSemanticStateWritableOperationLeafHandle<
-    Value,
-    "optional-value"
-  > {
+  extends KpSemanticStateWritableOperationLeafHandle<Value> {
   introduce(value: Value): void;
   remove(): void;
 }
 
 type KpSemanticStateOperationNode<Node extends KpSemanticStateSchemaNode> =
   Node extends KpSemanticStateGroupDescriptor<infer Members>
-    ? KpSemanticStateOperationMembers<Members>
+    ? KpSemanticStateOperationMembersInternal<Members>
     : Node extends KpSemanticStateValueDescriptor<infer Value>
-      ? KpSemanticStateWritableOperationLeafHandle<Value, "required-value">
+      ? KpSemanticStateWritableOperationLeafHandle<Value>
       : Node extends KpSemanticStateOptionalDescriptor<infer Value>
         ? KpSemanticStateOptionalOperationLeafHandle<Value>
         : Node extends KpSemanticStateDerivedDescriptor<infer Value>
-          ? KpSemanticStateOperationLeafHandle<Value, "derived-value">
+          ? KpSemanticStateOperationLeafHandle<Value>
           : never;
 
-export type KpSemanticStateOperationMembers<
+type KpSemanticStateOperationMembersInternal<
   Members extends KpSemanticStateMemberMap
 > = { readonly [Key in keyof Members]:
   KpSemanticStateOperationNode<Members[Key]> };
-
-export type KpSemanticStateOperationTree<
-  Root extends KpSemanticStateGroupDescriptor<KpSemanticStateMemberMap>
-> = KpSemanticStateOperationMembers<Root["members"]>;
 
 export interface KpSemanticStateTransformApplication<
   Root extends KpSemanticStateGroupDescriptor<KpSemanticStateMemberMap>
@@ -135,18 +118,28 @@ export interface KpSemanticStateTransformDefinition<
 }
 
 export function defineKpSemanticStateTransform<
-  const Root extends KpSemanticStateGroupDescriptor<KpSemanticStateMemberMap>
+  const Members extends KpSemanticStateMemberMap
 >(input: {
-  readonly compiled: KpCompiledSemanticStateSchema<Root>;
-  readonly handles: KpSemanticStateHandleSet<Root>;
+  readonly compiled: KpCompiledSemanticStateSchema<
+    KpSemanticStateGroupDescriptor<Members>
+  >;
+  readonly handles: KpSemanticStateHandleSet<
+    KpSemanticStateGroupDescriptor<Members>
+  >;
   readonly id: string;
-  readonly author: (state: KpSemanticStateOperationTree<Root>) => void;
-}): KpSemanticStateTransformDefinition<Root> {
+  readonly author: (
+    state: KpSemanticStateOperationMembersInternal<Members>
+  ) => void;
+}): KpSemanticStateTransformDefinition<
+  KpSemanticStateGroupDescriptor<Members>
+> {
   const definitionId = input.compiled.identityScope.transformation(input.id);
-  const leafByEncodedPath = new Map(
+  const leafByEncodedPath = new Map<string, KpCompiledSemanticStateLeaf>(
     input.compiled.leaves.map((leaf) => [leaf.encodedPath, leaf])
   );
-  return Object.freeze({
+  return Object.freeze<KpSemanticStateTransformDefinition<
+    KpSemanticStateGroupDescriptor<Members>
+  >>({
     schemaVersion: "kp.semantic-state-transform-definition.v1",
     kind: "semantic-state-transform-definition",
     id: definitionId,
@@ -169,7 +162,7 @@ export function defineKpSemanticStateTransform<
             ? `${leaf.encodedPath}.from.${input.id}.${applicationId}`
             : `${leaf.encodedPath}.introduced-by.${input.id}.${applicationId}`
         )
-      ) as KpSemanticStateOperationTree<Root>;
+      ) as KpSemanticStateOperationMembersInternal<Members>;
 
       try {
         const callbackResult = input.author(state);
@@ -180,7 +173,9 @@ export function defineKpSemanticStateTransform<
           );
         }
         const commit = transaction.commit(transaction.scope);
-        return Object.freeze({
+        return Object.freeze<KpSemanticStateTransformApplication<
+          KpSemanticStateGroupDescriptor<Members>
+        >>({
           schemaVersion: "kp.semantic-state-transform-application.v1" as const,
           kind: "semantic-state-transform-application" as const,
           definitionId,
@@ -226,6 +221,7 @@ function createOperationTree(
       const handle: Record<string, unknown> = {
         schemaVersion: "kp.semantic-state-operation-leaf-handle.v1" as const,
         kind: "semantic-state-operation-leaf-handle" as const,
+        writable: value.descriptorKind !== "derived-value",
         reference: value,
         [kpSemanticStateOperationScope]: transaction.scope,
         read() {
@@ -330,10 +326,7 @@ function assertOperationSource(
 
 function isLeafReference(
   value: unknown
-): value is KpSemanticStateLeafHandle<
-  unknown,
-  KpSemanticStateLeafDescriptor["kind"]
-> {
+): value is KpSemanticStateLeafHandle<unknown> {
   return value !== null && typeof value === "object" &&
     (value as { readonly kind?: unknown }).kind ===
       "semantic-state-leaf-handle";

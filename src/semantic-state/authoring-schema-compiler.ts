@@ -102,7 +102,7 @@ export function compileKpSemanticStateSchema<
     leafIndex[leaf.encodedPath] = index;
   });
 
-  return Object.freeze({
+  return Object.freeze<KpCompiledSemanticStateSchema<Root>>({
     schemaVersion: "kp.compiled-semantic-state-schema.v1",
     kind: "compiled-semantic-state-schema",
     namespace: identityScope.namespace,
@@ -181,22 +181,26 @@ function createCompiledLeaf(
     .map(encodeKpSemanticStatePathSegment)
     .join(".");
   const base = `schema.${encodedPath}`;
-  return Object.freeze({
+  return Object.freeze<KpCompiledSemanticStateLeaf>({
     schemaVersion: "kp.compiled-semantic-state-leaf.v1",
     kind: "compiled-semantic-state-leaf",
     path: Object.freeze([...path]),
     encodedPath,
     descriptor,
-    identities: Object.freeze({
+    identities: Object.freeze<KpSemanticStateLeafIdentityDefaults>({
       slotId: identityScope.slot(encodedPath),
       initialEntityId: identityScope.entity(`initial.${encodedPath}`),
       derivationId: identityScope.derivation(`derived.${encodedPath}`),
-      sourceIds: Object.freeze({
+      sourceIds: Object.freeze<
+        KpSemanticStateLeafIdentityDefaults["sourceIds"]
+      >({
         initialValue: `${base}.initial-value`,
         initialAbsence: `${base}.initial-absence`,
         derivation: `${base}.derivation`
       }),
-      operationIds: Object.freeze({
+      operationIds: Object.freeze<
+        KpSemanticStateLeafIdentityDefaults["operationIds"]
+      >({
         update: `${base}.update`,
         bind: `${base}.bind`,
         bindCopy: `${base}.bind-copy`,

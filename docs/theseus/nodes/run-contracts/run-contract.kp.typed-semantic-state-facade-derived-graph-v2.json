@@ -122,7 +122,8 @@
     {
       "id": "s11",
       "title": "Facade transaction convergence",
-      "status": "planned"
+      "summary": "Exact transaction and projection equivalence pass for mixed operations; all broad gates pass at 6205 tests with inference at 102883 types and 172113 instantiations.",
+      "status": "complete"
     },
     {
       "id": "s12",

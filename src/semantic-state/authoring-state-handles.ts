@@ -36,62 +36,50 @@ export class KpSemanticStateViewError extends Error {
   }
 }
 
-export interface KpSemanticStateLeafHandle<
-  Value,
-  DescriptorKind extends KpSemanticStateLeafDescriptor["kind"]
-> {
+export interface KpSemanticStateLeafHandle<Value> {
   readonly schemaVersion: "kp.semantic-state-leaf-handle.v1";
   readonly kind: "semantic-state-leaf-handle";
   readonly namespace: string;
-  readonly descriptorKind: DescriptorKind;
+  readonly descriptorKind: KpSemanticStateLeafDescriptor["kind"];
   readonly path: readonly string[];
   readonly encodedPath: string;
   readonly slotId: KpSemanticSlotId;
   readonly [kpSemanticStateHandleValue]?: Value;
 }
 
-export interface KpPinnedSemanticStateLeafHandle<
-  Value,
-  DescriptorKind extends KpSemanticStateLeafDescriptor["kind"]
-> {
+export interface KpPinnedSemanticStateLeafHandle<Value> {
   readonly schemaVersion: "kp.pinned-semantic-state-leaf-handle.v1";
   readonly kind: "pinned-semantic-state-leaf-handle";
-  readonly reference: KpSemanticStateLeafHandle<Value, DescriptorKind>;
+  readonly reference: KpSemanticStateLeafHandle<Value>;
   readonly snapshotId: KpAggregateSnapshotId;
   read(): Value;
 }
 
-type KpSemanticStateHandleNode<Node extends KpSemanticStateSchemaNode> =
+type KpSemanticStateHandleNode<
+  Node extends KpSemanticStateSchemaNode,
+  Pinned extends boolean
+> =
   Node extends KpSemanticStateGroupDescriptor<infer Members>
-    ? KpSemanticStateHandleMembers<Members>
+    ? KpSemanticStateHandleMembersInternal<Members, Pinned>
     : Node extends KpSemanticStateLeafDescriptor<infer Value>
-      ? KpSemanticStateLeafHandle<Value, Node["kind"]>
+      ? Pinned extends true
+        ? KpPinnedSemanticStateLeafHandle<Value>
+        : KpSemanticStateLeafHandle<Value>
       : never;
 
-type KpPinnedSemanticStateHandleNode<Node extends KpSemanticStateSchemaNode> =
-  Node extends KpSemanticStateGroupDescriptor<infer Members>
-    ? KpPinnedSemanticStateHandleMembers<Members>
-    : Node extends KpSemanticStateLeafDescriptor<infer Value>
-      ? KpPinnedSemanticStateLeafHandle<Value, Node["kind"]>
-      : never;
-
-export type KpSemanticStateHandleMembers<
-  Members extends KpSemanticStateMemberMap
+type KpSemanticStateHandleMembersInternal<
+  Members extends KpSemanticStateMemberMap,
+  Pinned extends boolean
 > = { readonly [Key in keyof Members]:
-  KpSemanticStateHandleNode<Members[Key]> };
-
-export type KpPinnedSemanticStateHandleMembers<
-  Members extends KpSemanticStateMemberMap
-> = { readonly [Key in keyof Members]:
-  KpPinnedSemanticStateHandleNode<Members[Key]> };
+  KpSemanticStateHandleNode<Members[Key], Pinned> };
 
 export type KpSemanticStateHandleTree<
   Root extends KpSemanticStateGroupDescriptor<KpSemanticStateMemberMap>
-> = KpSemanticStateHandleMembers<Root["members"]>;
+> = KpSemanticStateHandleMembersInternal<Root["members"], false>;
 
 export type KpPinnedSemanticStateHandleTree<
   Root extends KpSemanticStateGroupDescriptor<KpSemanticStateMemberMap>
-> = KpPinnedSemanticStateHandleMembers<Root["members"]>;
+> = KpSemanticStateHandleMembersInternal<Root["members"], true>;
 
 export interface KpSemanticStateHandleSet<
   Root extends KpSemanticStateGroupDescriptor<KpSemanticStateMemberMap>
@@ -109,15 +97,15 @@ export function createKpSemanticStateHandleSet<
 >(
   compiled: KpCompiledSemanticStateSchema<Root>
 ): KpSemanticStateHandleSet<Root> {
-  const leafByEncodedPath = new Map(
+  const leafByEncodedPath = new Map<string, KpCompiledSemanticStateLeaf>(
     compiled.leaves.map((leaf) => [leaf.encodedPath, leaf])
   );
   const referenceByEncodedPath = new Map<
     string,
-    KpSemanticStateLeafHandle<unknown, KpSemanticStateLeafDescriptor["kind"]>
+    KpSemanticStateLeafHandle<unknown>
   >();
   const refs = buildHandleTree(compiled.root, [], (leaf) => {
-    const reference = Object.freeze({
+    const reference = Object.freeze<KpSemanticStateLeafHandle<unknown>>({
       schemaVersion: "kp.semantic-state-leaf-handle.v1" as const,
       kind: "semantic-state-leaf-handle" as const,
       namespace: compiled.namespace,
@@ -130,7 +118,7 @@ export function createKpSemanticStateHandleSet<
     return reference;
   }, leafByEncodedPath) as KpSemanticStateHandleTree<Root>;
 
-  return Object.freeze({
+  return Object.freeze<KpSemanticStateHandleSet<Root>>({
     schemaVersion: "kp.semantic-state-handle-set.v1",
     kind: "semantic-state-handle-set",
     refs,
@@ -143,7 +131,7 @@ export function createKpSemanticStateHandleSet<
             `Semantic state handle reference ${JSON.stringify(leaf.path)} was not compiled.`
           );
         }
-        return Object.freeze({
+        return Object.freeze<KpPinnedSemanticStateLeafHandle<unknown>>({
           schemaVersion: "kp.pinned-semantic-state-leaf-handle.v1" as const,
           kind: "pinned-semantic-state-leaf-handle" as const,
           reference,

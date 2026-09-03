@@ -83,7 +83,9 @@ export function kpStateValue<Value>(
   const frozen = cloneAndFreezeKpPersistentSemanticValue(
     initialValue as KpPersistentSemanticValue
   ) as KpSemanticStateReadonlyValue<Value>;
-  return Object.freeze({
+  return Object.freeze<KpSemanticStateValueDescriptor<
+    KpSemanticStateReadonlyValue<Value>
+  >>({
     schemaVersion: "kp.semantic-state-schema-node.v1",
     kind: "required-value",
     initialValue: frozen
@@ -92,7 +94,9 @@ export function kpStateValue<Value>(
 
 export function kpStateOptional<Value>():
   KpSemanticStateOptionalDescriptor<KpSemanticStateReadonlyValue<Value>> {
-  return Object.freeze({
+  return Object.freeze<KpSemanticStateOptionalDescriptor<
+    KpSemanticStateReadonlyValue<Value>
+  >>({
     schemaVersion: "kp.semantic-state-schema-node.v1",
     kind: "optional-value"
   });
@@ -100,7 +104,9 @@ export function kpStateOptional<Value>():
 
 export function kpStateDerived<Value>():
   KpSemanticStateDerivedDescriptor<KpSemanticStateReadonlyValue<Value>> {
-  return Object.freeze({
+  return Object.freeze<KpSemanticStateDerivedDescriptor<
+    KpSemanticStateReadonlyValue<Value>
+  >>({
     schemaVersion: "kp.semantic-state-schema-node.v1",
     kind: "derived-value"
   });
@@ -112,7 +118,7 @@ export function kpStateGroup<const Members extends KpSemanticStateMemberMap>(
   if (Object.keys(members).length === 0) {
     throw new Error("A semantic state schema group requires at least one member.");
   }
-  return Object.freeze({
+  return Object.freeze<KpSemanticStateGroupDescriptor<Members>>({
     schemaVersion: "kp.semantic-state-schema-node.v1",
     kind: "group",
     members: Object.freeze({ ...members })
