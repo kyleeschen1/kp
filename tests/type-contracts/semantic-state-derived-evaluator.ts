@@ -11,6 +11,8 @@ import { createKpSemanticStateHandleSet } from
   "../../src/semantic-state/authoring-state-handles.ts";
 import { materializeKpSemanticStateInitialSnapshot } from
   "../../src/semantic-state/authoring-state-materializer.ts";
+import { createKpSemanticDerivedValueCache } from
+  "../../src/semantic-state/derived-cache.ts";
 import { evaluateKpSemanticDerivedValue } from
   "../../src/semantic-state/derived-evaluator.ts";
 import {
@@ -61,8 +63,15 @@ const exactSummary: Summary = evaluateKpSemanticDerivedValue({
   snapshot,
   target: handles.refs.summary
 });
+const cache = createKpSemanticDerivedValueCache();
+const cachedSummary: Summary = cache.evaluate({
+  graph,
+  snapshot,
+  target: handles.refs.summary
+});
 void amount;
 void exactSummary;
+void cachedSummary;
 
 // @ts-expect-error derived evaluation retains the target's exact result type
 const wrong: string = evaluateKpSemanticDerivedValue({

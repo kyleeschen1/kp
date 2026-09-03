@@ -968,11 +968,60 @@
       "scope": "standard",
       "checkedAt": "2026-09-03T18:11:55.841Z",
       "notes": "workspace-valid-1088-nodes-26872-events-after-v3-s12-closeout"
+    },
+    {
+      "command": "node-test-semantic-state-derived-cache",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T18:15:45.274Z",
+      "notes": "three-hit-miss-isolation-reset-disposal-and-branch-reuse-laws-passed"
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T18:15:46.412Z",
+      "notes": "cached-evaluation-preserves-exact-result-types-across-all-type-projects"
+    },
+    {
+      "command": "npm-run-test-semantic-state",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T18:15:47.462Z",
+      "notes": "136-semantic-state-laws-passed"
+    },
+    {
+      "command": "npm-run-check-architecture",
+      "status": "passed",
+      "scope": "impact-router",
+      "checkedAt": "2026-09-03T18:15:48.588Z",
+      "notes": "caller-owned-cache-architecture-gates-passed"
+    },
+    {
+      "command": "npm-run-check-inference",
+      "status": "passed",
+      "scope": "diagnostic",
+      "checkedAt": "2026-09-03T18:15:49.665Z",
+      "notes": "types-103188-instantiations-172704"
+    },
+    {
+      "command": "npm-run-test-equation-reachability",
+      "status": "passed",
+      "scope": "generated-scan",
+      "checkedAt": "2026-09-03T18:15:50.712Z",
+      "notes": "scan-count-4119-and-reachability-laws-passed"
+    },
+    {
+      "command": "theseus-workspace-validate",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T18:16:00.379Z",
+      "notes": "workspace-valid-1088-nodes-26884-events-after-v3-s13-closeout"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "v3-s12-complete-nested-derived-fingerprints-compose-deterministically-through-chains-and-diamonds"
+    "summary": "v3-s13-complete-caller-owned-cache-is-fingerprint-keyed-isolated-resettable-disposable-and-outside-semantic-authority"
   },
   "expectedLearning": [
     "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",

@@ -132,7 +132,8 @@
     {
       "id": "s13",
       "title": "Add caller owned lazy cache",
-      "status": "planned"
+      "summary": "caller-owned-cache-reuses-frozen-results-across-equivalent-branches-with-explicit-lifecycle",
+      "status": "complete"
     },
     {
       "id": "s14",
