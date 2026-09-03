@@ -63,12 +63,19 @@ const transform = defineKpSemanticStateTransform({
     state.supply.update((_previous) => demand);
 
     state.supplyAlias.bind(state.supply);
+    state.supplyAlias.bindCopy(state.supply);
 
     // @ts-expect-error Bind requires matching semantic value types.
     state.supply.bind(state.demand);
 
+    // @ts-expect-error Copy binding requires matching semantic value types.
+    state.supply.bindCopy(state.demand);
+
     // @ts-expect-error Derived handles cannot be shared into writable state.
     state.supply.bind(state.equilibrium);
+
+    // @ts-expect-error Derived handles cannot be copied into writable state.
+    state.supply.bindCopy(state.equilibrium);
 
     // @ts-expect-error Derived values are read-only transaction inputs.
     state.equilibrium.update(previous => previous);

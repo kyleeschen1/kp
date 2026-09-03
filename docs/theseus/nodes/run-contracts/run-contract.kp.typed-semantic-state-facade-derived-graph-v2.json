@@ -110,7 +110,8 @@
     {
       "id": "s09",
       "title": "Typed copy binding",
-      "status": "planned"
+      "summary": "Added typed independent copy binding with exact copied-from provenance, deterministic per-application entity identity, divergence laws, and local invalid-copy behavior.",
+      "status": "complete"
     },
     {
       "id": "s10",

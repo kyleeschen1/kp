@@ -327,6 +327,83 @@ test("bind sources cannot leak across transform application scopes", () => {
   });
 });
 
+test("bindCopy creates deterministic provenance and independent identity", () => {
+  const fixture = createFixture();
+  const definition = defineKpSemanticStateTransform({
+    ...fixture,
+    id: "copy-market-curve",
+    author(state) {
+      state.market.demand.bindCopy(state.market.supply);
+      state.market.supply.update(previous => ({
+        ...previous,
+        intercept: previous.intercept + 3
+      }));
+    }
+  });
+
+  const first = definition.apply(fixture.initial, "first");
+  const second = definition.apply(fixture.initial, "second");
+  const firstCopy = first.commit.journal[0]?.operation;
+  const secondCopy = second.commit.journal[0]?.operation;
+  assert.equal(firstCopy?.kind, "bind-copy");
+  assert.equal(secondCopy?.kind, "bind-copy");
+  if (firstCopy?.kind !== "bind-copy" ||
+      secondCopy?.kind !== "bind-copy") {
+    throw new Error("Expected copy operations.");
+  }
+
+  assert.equal(first.after.market.demand.read().intercept, 2);
+  assert.equal(first.after.market.supply.read().intercept, 5);
+  assert.notEqual(
+    first.after.market.demand.read(),
+    first.before.market.supply.read()
+  );
+  assert.equal(
+    firstCopy.newEntityId,
+    "kp-state/lesson.transform-shell/entity/market.demand.from.copy-market-curve.first"
+  );
+  assert.notEqual(firstCopy.newEntityId, firstCopy.copiedFromEntityId);
+  assert.notEqual(firstCopy.newEntityId, secondCopy.newEntityId);
+  const sourceBefore = first.commit.before.bindings.find(
+    ({ slotId }) => slotId ===
+      fixture.compiled.identityScope.slot("market.supply")
+  );
+  assert.equal(firstCopy.copiedFromVersionId, sourceBefore?.versionId);
+});
+
+test("bindCopy rejects self-copy and a repeated copy identity", () => {
+  const fixture = createFixture();
+  const selfCopy = defineKpSemanticStateTransform({
+    ...fixture,
+    id: "self-copy",
+    author(state) {
+      state.market.supply.bindCopy(state.market.supply);
+    }
+  });
+  assert.throws(() => selfCopy.apply(fixture.initial, "first"), (error) => {
+    assert.ok(error instanceof KpSemanticTransactionError);
+    assert.equal(error.code, "invalid-copy");
+    return true;
+  });
+
+  const repeatedCopy = defineKpSemanticStateTransform({
+    ...fixture,
+    id: "repeated-copy",
+    author(state) {
+      state.market.demand.bindCopy(state.market.supply);
+      state.market.demand.bindCopy(state.market.supply);
+    }
+  });
+  assert.throws(
+    () => repeatedCopy.apply(fixture.initial, "first"),
+    (error) => {
+      assert.ok(error instanceof KpSemanticTransactionError);
+      assert.equal(error.code, "invalid-copy");
+      return true;
+    }
+  );
+});
+
 function createFixture() {
   const compiled = compileKpSemanticStateSchema(
     "lesson.transform-shell",

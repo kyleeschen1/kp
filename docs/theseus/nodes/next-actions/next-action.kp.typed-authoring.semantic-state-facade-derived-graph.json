@@ -241,11 +241,32 @@
       "scope": "standard",
       "checkedAt": "2026-09-03T13:21:12.610Z",
       "notes": "All architecture gates pass with zero dependency-direction exceptions."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T13:24:09.642Z",
+      "notes": "92 of 92 laws pass; typed bindCopy preserves exact source-version provenance, deep immutable value copying, independent updates, deterministic fresh entities, and atomic invalid-copy failures."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T13:24:10.860Z",
+      "notes": "Copy binding retains exact invariant leaf value compatibility and rejects incompatible or derived sources."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T13:24:11.948Z",
+      "notes": "All architecture gates pass with zero dependency-direction exceptions."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s08 adds target.bind(source) without IDs or low-level calls. Source handles must belong to the current application, value types are invariant, and the existing kernel remains binding and idempotence authority."
+    "summary": "s09 adds target.bindCopy(source) and deterministically mints copy identity from compiled target path plus explicit transform and application IDs; order and callback identity remain non-authoritative."
   },
   "expectedLearning": [
     "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",
