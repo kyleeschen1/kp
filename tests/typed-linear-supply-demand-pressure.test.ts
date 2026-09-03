@@ -78,6 +78,10 @@ test("linear curves retain semantic spaces and coordinate-free derivatives", () 
     equalityId: market.spaces.price.vectors.equality.id
   });
   assert.equal(market.demand.derivativeUnitLatex, "\\frac{\\mathrm{USD}}{\\mathrm{item}}");
+  assert.equal(market.spaces.quantity, market.demand.priceAt.domain);
+  assert.equal(market.spaces.price, market.demand.priceAt.codomain);
+  assert.equal(market.demand.priceAt.domain, market.supply.priceAt.domain);
+  assert.equal(market.demand.priceAt.codomain, market.supply.priceAt.codomain);
   assert.equal(Object.isFrozen(market), true);
   assert.equal(Object.isFrozen(market.demand), true);
 

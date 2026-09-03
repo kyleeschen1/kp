@@ -118,7 +118,8 @@
     {
       "id": "s10",
       "title": "market-migration",
-      "status": "planned"
+      "summary": "Migrated only the typed linear supply-demand caller to the helper, preserving exact public shape, shared space objects, IDs, values, derivatives, diagnostics, sources, law evidence, and scenario behavior; measured burden fell with bounded inference growth.",
+      "status": "complete"
     },
     {
       "id": "s11",

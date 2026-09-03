@@ -103,6 +103,10 @@ export function createKpAuthoredUnitScalarMapDefinition<
       label: string;
       unit: KpUnitDescriptor<CodomainUnitId>;
     }>;
+    readonly spaces?: Readonly<{
+      domain: KpVectorSpace<KpUnitValue<DomainUnitId>, number>;
+      codomain: KpVectorSpace<KpUnitValue<CodomainUnitId>, number>;
+    }> | undefined;
     readonly evaluateMagnitude: (value: number) => number;
     readonly derivativeMagnitudeAt: (point: number, change: number) => number;
   }
@@ -124,18 +128,34 @@ export function createKpAuthoredUnitScalarMapDefinition<
       input.derivativePath ?? input.path
     )
   });
-  const domain = createKpUnitTaggedScalarSpace({
-    id: author.id("spaces", input.domain.path),
+  const domainId = author.id("spaces", input.domain.path);
+  const codomainId = author.id("spaces", input.codomain.path);
+  const domain = input.spaces?.domain ?? createKpUnitTaggedScalarSpace({
+    id: domainId,
     label: input.domain.label,
     unit: input.domain.unit,
     scalars
   });
-  const codomain = createKpUnitTaggedScalarSpace({
-    id: author.id("spaces", input.codomain.path),
+  const codomain = input.spaces?.codomain ?? createKpUnitTaggedScalarSpace({
+    id: codomainId,
     label: input.codomain.label,
     unit: input.codomain.unit,
     scalars
   });
+  requireCompatibleAuthoredSpace(
+    domain,
+    domainId,
+    input.domain.label,
+    input.domain.unit,
+    "domain"
+  );
+  requireCompatibleAuthoredSpace(
+    codomain,
+    codomainId,
+    input.codomain.label,
+    input.codomain.unit,
+    "codomain"
+  );
 
   return Object.freeze({
     kind: "authored-unit-scalar-map-definition" as const,
@@ -251,6 +271,10 @@ export function defineKpAuthoredUnitScalarMap<
       label: string;
       unit: KpUnitDescriptor<CodomainUnitId>;
     }>;
+    readonly spaces?: Readonly<{
+      domain: KpVectorSpace<KpUnitValue<DomainUnitId>, number>;
+      codomain: KpVectorSpace<KpUnitValue<CodomainUnitId>, number>;
+    }> | undefined;
     readonly evaluateMagnitude: (value: number) => number;
     readonly derivativeMagnitudeAt: (point: number, change: number) => number;
     readonly diagnostics: Readonly<{
@@ -332,4 +356,28 @@ function requireMetadataId(value: string, label: string): string {
     throw new Error(`${label} must be non-empty and trimmed.`);
   }
   return value;
+}
+
+function requireCompatibleAuthoredSpace<const UnitId extends string>(
+  space: KpVectorSpace<KpUnitValue<UnitId>, number>,
+  expectedId: string,
+  expectedLabel: string,
+  unit: KpUnitDescriptor<UnitId>,
+  role: "domain" | "codomain"
+): void {
+  if (space.space.id !== expectedId || space.id !== `${expectedId}.vector-space`) {
+    throw new Error(
+      `Unit-scalar ${role} space must use semantic path ${expectedId}.`
+    );
+  }
+  if (space.space.label !== expectedLabel) {
+    throw new Error(
+      `Unit-scalar ${role} space must use label ${expectedLabel}.`
+    );
+  }
+  if (space.vectors.zero.unitId !== unit.id) {
+    throw new Error(
+      `Unit-scalar ${role} space must use unit ${unit.id}.`
+    );
+  }
 }

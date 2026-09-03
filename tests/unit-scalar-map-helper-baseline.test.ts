@@ -46,20 +46,35 @@ const areaUnit = createKpUnitDescriptor({
   symbol: "m²"
 });
 
-test("market and circle freeze the repeated mechanical authoring baseline", () => {
-  assert.deepEqual(measureKpUnitScalarAuthoringBurden(), baseline.authoring);
+test("market and circle retain the frozen before-helper comparison", () => {
+  const current = measureKpUnitScalarAuthoringBurden();
   assert.equal(baseline.authoring.totals.authoredSetupLines, 148);
   assert.equal(baseline.authoring.totals.constructorCalls, 8);
   assert.equal(baseline.authoring.totals.unitGuardCalls, 6);
 
-  for (const caller of baseline.authoring.callers) {
-    assert.deepEqual(caller.constructorCalls, {
+  for (const before of baseline.authoring.callers) {
+    assert.deepEqual(before.constructorCalls, {
       createKpUnitTaggedScalarSpace: 2,
       createKpDifferentiableMap: 1,
       createKpLinearMap: 1
     });
-    assert.equal(caller.unitGuardCalls, 3);
-    assert.equal(caller.derivativeUnitProjectionCalls, 1);
+    assert.equal(before.unitGuardCalls, 3);
+    assert.equal(before.derivativeUnitProjectionCalls, 1);
+
+    const after = current.callers.find(({ id }) => id === before.id);
+    if (after === undefined) {
+      throw new Error(`Missing current burden measurement for ${before.id}.`);
+    }
+    if (after.constructorCalls["defineKpAuthoredUnitScalarMap"] === undefined) {
+      assert.deepEqual(after, before);
+    } else {
+      assert.ok(after.authoredSetupLines < before.authoredSetupLines);
+      assert.deepEqual(after.constructorCalls, {
+        defineKpAuthoredUnitScalarMap: 1
+      });
+      assert.equal(after.unitGuardCalls, 0);
+      assert.equal(after.derivativeUnitProjectionCalls, 0);
+    }
   }
 });
 

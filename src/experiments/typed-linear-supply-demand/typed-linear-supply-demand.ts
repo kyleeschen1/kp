@@ -1,14 +1,11 @@
 import type { KpVectorSpace } from "../../math/algebra/algebraic-structures.ts";
-import {
-  createKpDifferentiableMap,
-  type KpDifferentiableMap
-} from "../../math/algebra/differentiable-map.ts";
-import { createKpLinearMap } from "../../math/algebra/linear-map.ts";
+import type { KpDifferentiableMap } from
+  "../../math/algebra/differentiable-map.ts";
 import type { KpMathAuthoringContext } from "../../math/authoring/public-api.ts";
+import { defineKpAuthoredUnitScalarMap } from
+  "../../math/authoring/unit-scalar-map.ts";
 import {
-  createKpUnitTaggedScalarSpace,
   createKpUnitValue,
-  projectKpDerivativeUnitToLatex,
   type KpUnitDescriptor,
   type KpUnitValue
 } from "../../math/authoring/units.ts";
@@ -151,8 +148,7 @@ export function createKpLinearSupplyDemandExperiment<
   PriceUnitId,
   WelfareUnitId
 > {
-  const scalars = input.author.defaults.scalars;
-  if (scalars === undefined) {
+  if (input.author.defaults.scalars === undefined) {
     throw new Error(
       "Linear supply-demand authoring requires numeric scalar defaults; " +
       "use createKpStandardMathAuthoringContext."
@@ -185,25 +181,11 @@ export function createKpLinearSupplyDemandExperiment<
     );
   }
 
-  const quantitySpace = createKpUnitTaggedScalarSpace({
-    id: context.id("spaces", "quantity"),
-    label: "Market quantity",
-    unit: input.units.quantity,
-    scalars
-  });
-  const priceSpace = createKpUnitTaggedScalarSpace({
-    id: context.id("spaces", "price"),
-    label: "Market price",
-    unit: input.units.price,
-    scalars
-  });
   const demand = createCurve({
     context,
     role: "demand",
     quantityUnit: input.units.quantity,
     priceUnit: input.units.price,
-    quantitySpace,
-    priceSpace,
     priceAtZero: demandPriceAtZero,
     signedSlope: -demandSlope
   });
@@ -212,8 +194,10 @@ export function createKpLinearSupplyDemandExperiment<
     role: "supply",
     quantityUnit: input.units.quantity,
     priceUnit: input.units.price,
-    quantitySpace,
-    priceSpace,
+    spaces: {
+      quantity: demand.priceAt.domain,
+      price: demand.priceAt.codomain
+    },
     priceAtZero: supplyPriceAtZero,
     signedSlope: supplySlope
   });
@@ -223,7 +207,10 @@ export function createKpLinearSupplyDemandExperiment<
     id: input.author.id("markets", input.key),
     context,
     units: Object.freeze({ ...input.units }),
-    spaces: Object.freeze({ quantity: quantitySpace, price: priceSpace }),
+    spaces: Object.freeze({
+      quantity: demand.priceAt.domain,
+      price: demand.priceAt.codomain
+    }),
     demand,
     supply
   });
@@ -278,52 +265,48 @@ function createCurve<
   readonly role: "demand" | "supply";
   readonly quantityUnit: KpUnitDescriptor<QuantityUnitId>;
   readonly priceUnit: KpUnitDescriptor<PriceUnitId>;
-  readonly quantitySpace: KpVectorSpace<KpUnitValue<QuantityUnitId>, number>;
-  readonly priceSpace: KpVectorSpace<KpUnitValue<PriceUnitId>, number>;
+  readonly spaces?: Readonly<{
+    quantity: KpVectorSpace<KpUnitValue<QuantityUnitId>, number>;
+    price: KpVectorSpace<KpUnitValue<PriceUnitId>, number>;
+  }> | undefined;
   readonly priceAtZero: KpUnitValue<PriceUnitId>;
   readonly signedSlope: number;
 }): KpLinearSupplyDemandCurve<QuantityUnitId, PriceUnitId> {
   const id = input.context.id("curves", input.role);
-  const derivativeId = input.context.id("derivatives", input.role);
-  const priceAt = createKpDifferentiableMap({
-    id: input.context.id("functions", `${input.role}-price-at-quantity`),
-    domain: input.quantitySpace,
-    codomain: input.priceSpace,
-    evaluate: (quantity) => createKpUnitValue(
-      input.priceUnit,
-      input.priceAtZero.magnitude + input.signedSlope * requireUnitMagnitude(
-        quantity,
-        input.quantityUnit,
-        `${capitalize(input.role)} quantity`
-      )
-    ),
-    derivativeAt: (quantity) => {
-      requireUnitMagnitude(
-        quantity,
-        input.quantityUnit,
-        `${capitalize(input.role)} derivative point`
-      );
-      return createKpLinearMap({
-        id: derivativeId,
-        domain: input.quantitySpace,
-        codomain: input.priceSpace,
-        apply: (change) => createKpUnitValue(
-          input.priceUnit,
-          input.signedSlope * requireUnitMagnitude(
-            change,
-            input.quantityUnit,
-            `${capitalize(input.role)} quantity change`
-          )
-        ),
-        linearity: {
-          kind: "tested",
-          suiteId: "kp.test.typed-linear-supply-demand.derivative-linearity",
-          equalityId: input.priceSpace.vectors.equality.id
-        },
-        sourceMapIds: [id]
-      });
+  const authored = defineKpAuthoredUnitScalarMap(input.context, {
+    path: `${input.role}-price-at-quantity`,
+    derivativePath: input.role,
+    domain: {
+      path: "quantity",
+      label: "Market quantity",
+      unit: input.quantityUnit
     },
-    sourceFunctionIds: [id]
+    codomain: {
+      path: "price",
+      label: "Market price",
+      unit: input.priceUnit
+    },
+    ...(input.spaces === undefined ? {} : {
+      spaces: {
+        domain: input.spaces.quantity,
+        codomain: input.spaces.price
+      }
+    }),
+    evaluateMagnitude: (quantity) =>
+      input.priceAtZero.magnitude + input.signedSlope * quantity,
+    derivativeMagnitudeAt: (_quantity, change) =>
+      input.signedSlope * change,
+    diagnostics: {
+      evaluationInput: `${capitalize(input.role)} quantity`,
+      derivativePoint: `${capitalize(input.role)} derivative point`,
+      derivativeChange: `${capitalize(input.role)} quantity change`
+    },
+    source: {
+      functionId: id,
+      derivativeMapId: id
+    },
+    testedLinearitySuiteId:
+      "kp.test.typed-linear-supply-demand.derivative-linearity"
   });
 
   return Object.freeze({
@@ -336,11 +319,8 @@ function createCurve<
       domainUnitId: input.quantityUnit.id,
       codomainUnitId: input.priceUnit.id
     }),
-    priceAt,
-    derivativeUnitLatex: projectKpDerivativeUnitToLatex({
-      domain: input.quantityUnit,
-      codomain: input.priceUnit
-    })
+    priceAt: authored.map,
+    derivativeUnitLatex: authored.derivativeUnitLatex
   });
 }
 

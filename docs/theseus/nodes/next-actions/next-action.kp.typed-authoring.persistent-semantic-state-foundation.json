@@ -308,6 +308,27 @@
       "scope": "focused",
       "checkedAt": "2026-09-03T07:26:07.912Z",
       "notes": "The composed helper remains inside the framework-neutral math authoring boundary."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-linear-supply-demand-pressure.test.ts tests/unit-scalar-map-helper-baseline.test.ts tests/unit-scalar-map-helper-core.test.ts tests/unit-scalar-map-helper-binding.test.ts tests/unit-scalar-map-helper-metadata.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T07:31:13.125Z",
+      "notes": "All 18 market, baseline, and helper tests passed; exact IDs, results, units, errors, evidence, object shape, and shared space references are preserved."
+    },
+    {
+      "command": "npm run --silent measure:unit-scalar-helper",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T07:31:14.295Z",
+      "notes": "Market setup fell from 80 to 49 measured lines and four low-level constructors to one helper call; focused closure moved from 33441/39168 to 33849 types/40105 instantiations."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T07:31:15.329Z",
+      "notes": "Repository TypeScript, Svelte, and domain checks pass after the market migration."
     }
   ],
   "expectedLearning": [

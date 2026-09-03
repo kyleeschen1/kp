@@ -67,6 +67,24 @@ test("custom units and caller-authored nonlinear rules remain explicit", () => {
   );
 });
 
+test("explicit compatible spaces are reused without a cache or registry", () => {
+  const first = createDefinition();
+  const second = createKpAuthoredUnitScalarMapDefinition(
+    createKpStandardMathAuthoringContext({ namespace: "fixture.circle" }),
+    { ...definitionInput(), spaces: first.spaces }
+  );
+
+  assert.equal(second.spaces.domain, first.spaces.domain);
+  assert.equal(second.spaces.codomain, first.spaces.codomain);
+  assert.throws(
+    () => createKpAuthoredUnitScalarMapDefinition(
+      createKpStandardMathAuthoringContext({ namespace: "fixture.other" }),
+      { ...definitionInput(), spaces: first.spaces }
+    ),
+    /Unit-scalar domain space must use semantic path fixture.other.spaces.radius/
+  );
+});
+
 test("the core rejects absent scalar defaults and invalid authored paths", () => {
   assert.throws(
     () => createKpAuthoredUnitScalarMapDefinition(

@@ -9,7 +9,8 @@ import ts from "typescript";
 const CONSTRUCTOR_NAMES = Object.freeze([
   "createKpUnitTaggedScalarSpace",
   "createKpDifferentiableMap",
-  "createKpLinearMap"
+  "createKpLinearMap",
+  "defineKpAuthoredUnitScalarMap"
 ]);
 
 const callerSpecs = Object.freeze([
@@ -188,7 +189,9 @@ function measureCaller(
       0
     ),
     mechanicalStatements: statements.size,
-    constructorCalls: Object.freeze(Object.fromEntries(constructorCalls)),
+    constructorCalls: Object.freeze(Object.fromEntries(
+      [...constructorCalls].filter(([, count]) => count > 0)
+    )),
     unitGuardCalls,
     semanticPathCalls,
     derivativeUnitProjectionCalls
