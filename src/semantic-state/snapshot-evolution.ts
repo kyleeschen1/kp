@@ -3,6 +3,7 @@ import {
   readKpSemanticSlotBinding,
   type KpAggregateSemanticSnapshot,
   type KpAnySemanticEntityVersionStore,
+  type KpSemanticSlotAbsence,
   type KpSemanticSlotBinding
 } from "./aggregate-snapshot.ts";
 import type {
@@ -24,6 +25,7 @@ export interface KpCreateSuccessorAggregateSemanticSnapshotInput {
   readonly entityStoreReplacements: readonly KpSemanticEntityStoreReplacement[];
   readonly entityStoreAdditions?: readonly KpAnySemanticEntityVersionStore[];
   readonly slotRebindings: readonly KpSemanticSlotBinding[];
+  readonly slotAbsenceReplacements?: readonly KpSemanticSlotAbsence[];
 }
 
 export function createKpSuccessorAggregateSemanticSnapshot(
@@ -37,7 +39,8 @@ export function createKpSuccessorAggregateSemanticSnapshot(
   if (
     input.entityStoreReplacements.length === 0 &&
     (input.entityStoreAdditions?.length ?? 0) === 0 &&
-    input.slotRebindings.length === 0
+    input.slotRebindings.length === 0 &&
+    (input.slotAbsenceReplacements?.length ?? 0) === 0
   ) {
     throw new Error("A semantic successor snapshot requires an explicit change.");
   }
@@ -51,29 +54,59 @@ export function createKpSuccessorAggregateSemanticSnapshot(
     ...additions
   ]);
   const rebindings = indexRebindings(input);
-  const proposedBindings = input.parent.bindings.map((binding) =>
-    rebindings.get(binding.slotId) ?? binding
+  const absenceReplacements = indexAbsenceReplacements(input, rebindings);
+  const priorBindings = new Map(
+    input.parent.bindings.map((binding) => [binding.slotId, binding] as const)
   );
+  const proposedBindings = [
+    ...input.parent.requiredSlotIds,
+    ...input.parent.optionalSlotIds
+  ].flatMap((slotId) => {
+    if (absenceReplacements.has(slotId)) {
+      return [];
+    }
+    const binding = rebindings.get(slotId) ?? priorBindings.get(slotId);
+    return binding === undefined ? [] : [binding];
+  });
+  const priorAbsences = new Map(
+    input.parent.absences.map((absence) => [absence.slotId, absence] as const)
+  );
+  const proposedAbsences = input.parent.optionalSlotIds.flatMap((slotId) => {
+    if (rebindings.has(slotId)) {
+      return [];
+    }
+    const absence = absenceReplacements.get(slotId) ?? priorAbsences.get(slotId);
+    return absence === undefined ? [] : [absence];
+  });
   const validated = createKpAggregateSemanticSnapshot({
     identities: input.identities,
     snapshotId: input.identities.successorSnapshot(input.transformationId),
     requiredSlotIds: input.parent.requiredSlotIds,
+    optionalSlotIds: input.parent.optionalSlotIds,
     bindings: proposedBindings,
+    absences: proposedAbsences,
     entityStores: nextStores
   });
 
   // Unchanged nodes are reused because the caller declared no change for their
   // identity. Equality of payloads is never consulted to decide sharing.
-  const bindings = Object.freeze(input.parent.bindings.map((binding, index) =>
+  const bindings = Object.freeze(validated.bindings.map((binding) =>
     rebindings.has(binding.slotId)
-      ? validated.bindings[index]!
-      : binding
+      ? binding
+      : priorBindings.get(binding.slotId) ?? binding
+  ));
+  const absences = Object.freeze(validated.absences.map((absence) =>
+    absenceReplacements.has(absence.slotId)
+      ? absence
+      : priorAbsences.get(absence.slotId) ?? absence
   ));
 
   return Object.freeze({
     ...validated,
     requiredSlotIds: input.parent.requiredSlotIds,
+    optionalSlotIds: input.parent.optionalSlotIds,
     bindings,
+    absences,
     entityStores: nextStores
   });
 }
@@ -168,8 +201,15 @@ function indexRebindings(
         `Semantic successor rebinds slot ${JSON.stringify(binding.slotId)} more than once.`
       );
     }
-    const previous = readKpSemanticSlotBinding(input.parent, binding.slotId);
-    if (
+    const previousOrdinal = input.parent.bindingIndex[binding.slotId];
+    const previous = previousOrdinal === undefined
+      ? undefined
+      : input.parent.bindings[previousOrdinal];
+    if (previous === undefined &&
+        input.parent.absenceIndex[binding.slotId] === undefined) {
+      readKpSemanticSlotBinding(input.parent, binding.slotId);
+    }
+    if (previous !== undefined &&
       previous.entityId === binding.entityId &&
       previous.versionId === binding.versionId
     ) {
@@ -180,4 +220,41 @@ function indexRebindings(
     rebindings.set(binding.slotId, binding);
   }
   return rebindings;
+}
+
+function indexAbsenceReplacements(
+  input: KpCreateSuccessorAggregateSemanticSnapshotInput,
+  rebindings: ReadonlyMap<KpSemanticSlotId, KpSemanticSlotBinding>
+): ReadonlyMap<KpSemanticSlotId, KpSemanticSlotAbsence> {
+  const replacements = new Map<KpSemanticSlotId, KpSemanticSlotAbsence>();
+  const optional = new Set(input.parent.optionalSlotIds);
+  for (const absence of input.slotAbsenceReplacements ?? []) {
+    if (!optional.has(absence.slotId)) {
+      throw new Error(
+        `Semantic successor can mark only a declared optional slot absent: ${JSON.stringify(absence.slotId)}.`
+      );
+    }
+    if (rebindings.has(absence.slotId)) {
+      throw new Error(
+        `Semantic successor cannot bind and mark slot ${JSON.stringify(absence.slotId)} absent in one staged write.`
+      );
+    }
+    if (replacements.has(absence.slotId)) {
+      throw new Error(
+        `Semantic successor replaces absence for slot ${JSON.stringify(absence.slotId)} more than once.`
+      );
+    }
+    const previousOrdinal = input.parent.absenceIndex[absence.slotId];
+    const previous = previousOrdinal === undefined
+      ? undefined
+      : input.parent.absences[previousOrdinal];
+    if (previous !== undefined && previous.reason === absence.reason &&
+        previous.sourceId === absence.sourceId) {
+      throw new Error(
+        `Semantic successor absence for ${JSON.stringify(absence.slotId)} must change its explicit state.`
+      );
+    }
+    replacements.set(absence.slotId, absence);
+  }
+  return replacements;
 }

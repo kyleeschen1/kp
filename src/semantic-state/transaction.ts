@@ -1,12 +1,17 @@
 import {
+  createKpSemanticSlotAbsence,
   readKpSemanticSlotBinding,
+  readKpSemanticSlotAbsence,
   readKpSnapshotEntityStore,
   type KpAggregateSemanticSnapshot,
+  type KpSemanticSlotAbsence,
+  type KpSemanticSlotAbsenceReason,
   type KpSemanticSlotBinding
 } from "./aggregate-snapshot.ts";
 import {
   appendKpSemanticEntityVersion,
   createKpCopiedSemanticEntityVersionStore,
+  createKpSemanticEntityVersionStore,
   readKpSemanticEntityVersion,
   type KpPersistentSemanticValue,
   type KpSemanticEntityVersion,
@@ -43,6 +48,7 @@ export interface KpSemanticTransactionStagedWrite {
   readonly entityStoreReplacements: readonly KpSemanticEntityStoreReplacement[];
   readonly entityStoreAdditions?: readonly KpSemanticEntityVersionStore<KpPersistentSemanticValue>[];
   readonly slotRebindings: readonly KpSemanticSlotBinding[];
+  readonly slotAbsenceReplacements?: readonly KpSemanticSlotAbsence[];
 }
 
 export interface KpSemanticTransactionUpdateInput {
@@ -68,6 +74,20 @@ export interface KpSemanticTransactionBindCopyInput {
   readonly sourceSlotId: KpSemanticSlotId;
   readonly targetSlotId: KpSemanticSlotId;
   readonly newEntityId: KpSemanticEntityId;
+}
+
+export interface KpSemanticTransactionIntroduceInput {
+  readonly id: string;
+  readonly sourceId: string;
+  readonly slotId: KpSemanticSlotId;
+  readonly newEntityId: KpSemanticEntityId;
+  readonly value: KpPersistentSemanticValue;
+}
+
+export interface KpSemanticTransactionRemoveInput {
+  readonly id: string;
+  readonly sourceId: string;
+  readonly slotId: KpSemanticSlotId;
 }
 
 export type KpSemanticTransactionJournalOperation =
@@ -101,6 +121,22 @@ export type KpSemanticTransactionJournalOperation =
     readonly replacedEntityId: KpSemanticEntityId;
     readonly newEntityId: KpSemanticEntityId;
     readonly newVersionId: KpSemanticEntityVersion<KpPersistentSemanticValue>["id"];
+  }
+  | {
+    readonly kind: "introduce";
+    readonly sourceId: string;
+    readonly slotId: KpSemanticSlotId;
+    readonly previousAbsenceReason: KpSemanticSlotAbsenceReason;
+    readonly newEntityId: KpSemanticEntityId;
+    readonly newVersionId: KpSemanticEntityVersion<KpPersistentSemanticValue>["id"];
+  }
+  | {
+    readonly kind: "remove";
+    readonly sourceId: string;
+    readonly slotId: KpSemanticSlotId;
+    readonly removedEntityId: KpSemanticEntityId;
+    readonly removedVersionId: KpSemanticEntityVersion<KpPersistentSemanticValue>["id"];
+    readonly absenceReason: "removed";
   };
 
 export interface KpSemanticTransactionJournalEntry {
@@ -110,6 +146,7 @@ export interface KpSemanticTransactionJournalEntry {
   readonly replacedEntityIds: readonly KpSemanticEntityId[];
   readonly addedEntityIds: readonly KpSemanticEntityId[];
   readonly reboundSlotIds: readonly KpSemanticSlotId[];
+  readonly absentSlotIds: readonly KpSemanticSlotId[];
 }
 
 export interface KpSemanticTransactionCommit {
@@ -130,7 +167,10 @@ export type KpSemanticTransactionErrorCode =
   | "reentrant-operation"
   | "nondeterministic-update"
   | "invalid-bind"
-  | "invalid-copy";
+  | "invalid-copy"
+  | "invalid-introduction"
+  | "invalid-removal"
+  | "required-slot-removal";
 
 export class KpSemanticTransactionError extends Error {
   readonly code: KpSemanticTransactionErrorCode;
@@ -409,6 +449,103 @@ export class KpSemanticTransaction {
     }));
   }
 
+  introduce(
+    scope: KpSemanticTransactionScope,
+    input: KpSemanticTransactionIntroduceInput
+  ): void {
+    this.#assertOpenScope(scope);
+    requireWriteId(input.id);
+    requireWriteId(input.sourceId);
+    const absenceOrdinal = this.#working.absenceIndex[input.slotId];
+    const absence = absenceOrdinal === undefined
+      ? undefined
+      : this.#working.absences[absenceOrdinal];
+    if (absence === undefined || absence.slotId !== input.slotId) {
+      throw new KpSemanticTransactionError(
+        "invalid-introduction",
+        `Semantic introduction ${input.id} requires an explicitly absent optional role.`
+      );
+    }
+    if (this.#working.entityIndex[input.newEntityId] !== undefined) {
+      throw new KpSemanticTransactionError(
+        "invalid-introduction",
+        `Semantic introduction ${input.id} requires a new entity identity, but ${input.newEntityId} is already materialized.`
+      );
+    }
+    const store = createKpSemanticEntityVersionStore({
+      identities: this.#identities,
+      entityId: input.newEntityId,
+      value: input.value,
+      sourceId: input.sourceId
+    });
+
+    this.#stage({
+      id: input.id,
+      entityStoreReplacements: [],
+      entityStoreAdditions: [store],
+      slotRebindings: [{
+        slotId: input.slotId,
+        entityId: store.entityId,
+        versionId: store.latestVersionId
+      }]
+    }, Object.freeze({
+      kind: "introduce",
+      sourceId: input.sourceId,
+      slotId: input.slotId,
+      previousAbsenceReason: absence.reason,
+      newEntityId: store.entityId,
+      newVersionId: store.latestVersionId
+    }));
+  }
+
+  remove(
+    scope: KpSemanticTransactionScope,
+    input: KpSemanticTransactionRemoveInput
+  ): void {
+    this.#assertOpenScope(scope);
+    requireWriteId(input.id);
+    requireWriteId(input.sourceId);
+    if (this.#working.requiredSlotIds.includes(input.slotId)) {
+      throw new KpSemanticTransactionError(
+        "required-slot-removal",
+        `Semantic removal ${input.id} cannot remove required role ${input.slotId}.`
+      );
+    }
+    if (!this.#working.optionalSlotIds.includes(input.slotId)) {
+      throw new KpSemanticTransactionError(
+        "invalid-removal",
+        `Semantic removal ${input.id} requires a declared optional role.`
+      );
+    }
+    if (this.#working.absenceIndex[input.slotId] !== undefined) {
+      const absence = readKpSemanticSlotAbsence(this.#working, input.slotId);
+      throw new KpSemanticTransactionError(
+        "invalid-removal",
+        `Semantic removal ${input.id} cannot remove an already absent role (${absence.reason}).`
+      );
+    }
+    const binding = readKpSemanticSlotBinding(this.#working, input.slotId);
+    const absence = createKpSemanticSlotAbsence({
+      slotId: input.slotId,
+      reason: "removed",
+      sourceId: input.sourceId
+    });
+
+    this.#stage({
+      id: input.id,
+      entityStoreReplacements: [],
+      slotRebindings: [],
+      slotAbsenceReplacements: [absence]
+    }, Object.freeze({
+      kind: "remove",
+      sourceId: input.sourceId,
+      slotId: input.slotId,
+      removedEntityId: binding.entityId,
+      removedVersionId: binding.versionId,
+      absenceReason: "removed"
+    }));
+  }
+
   #stage(
     write: KpSemanticTransactionStagedWrite,
     operation: KpSemanticTransactionJournalOperation
@@ -429,7 +566,8 @@ export class KpSemanticTransaction {
       transformationId: this.transformationId,
       entityStoreReplacements: write.entityStoreReplacements,
       entityStoreAdditions: write.entityStoreAdditions ?? [],
-      slotRebindings: write.slotRebindings
+      slotRebindings: write.slotRebindings,
+      slotAbsenceReplacements: write.slotAbsenceReplacements ?? []
     });
     const entry = Object.freeze({
       sequence: this.#journal.length,
@@ -443,6 +581,9 @@ export class KpSemanticTransaction {
       ),
       reboundSlotIds: Object.freeze(
         write.slotRebindings.map(({ slotId }) => slotId)
+      ),
+      absentSlotIds: Object.freeze(
+        (write.slotAbsenceReplacements ?? []).map(({ slotId }) => slotId)
       )
     });
 

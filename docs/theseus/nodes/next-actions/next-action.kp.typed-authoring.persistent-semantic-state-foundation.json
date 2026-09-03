@@ -854,6 +854,48 @@
       "scope": "s26-copy-with-lineage-operation",
       "checkedAt": "2026-09-03T09:52:29.414Z",
       "notes": "Workspace schema and active run references validate before copy-slice completion."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "s27-introduce-and-remove-operations",
+      "checkedAt": "2026-09-03T10:00:10.195Z",
+      "notes": "52 semantic-state laws pass, including total optional-role state, typed absence, introduce/remove reversibility metadata, and required-slot diagnostics."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s27-introduce-and-remove-operations",
+      "checkedAt": "2026-09-03T10:00:11.406Z",
+      "notes": "Repository TypeScript, Svelte, and domain checks pass; lifecycle values and new identities retain nominal structural constraints."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s27-introduce-and-remove-operations",
+      "checkedAt": "2026-09-03T10:00:12.449Z",
+      "notes": "Architecture gates pass at 1987 modules with zero dependency-direction exceptions."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s27-introduce-and-remove-operations",
+      "checkedAt": "2026-09-03T10:00:13.459Z",
+      "notes": "Inference contracts pass at 101296 types and 169393 instantiations."
+    },
+    {
+      "command": "npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "s27-introduce-and-remove-operations",
+      "checkedAt": "2026-09-03T10:00:14.489Z",
+      "notes": "Exact equation reachability remains current at 68 roots."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s27-introduce-and-remove-operations",
+      "checkedAt": "2026-09-03T10:00:15.521Z",
+      "notes": "Workspace schema and active run references validate before lifecycle-slice completion."
     }
   ],
   "expectedLearning": [

@@ -220,7 +220,8 @@
     {
       "id": "s27",
       "title": "introduce-and-remove-operations",
-      "status": "planned"
+      "summary": "Added total optional-role state: each optional slot is exactly bound or represented by a frozen typed absence. Introduce materializes a fresh entity from absence; remove preserves the old materialized store and records exact removed entity/version metadata. Required, absent, undeclared, reused, and ambiguous lifecycle operations fail locally.",
+      "status": "complete"
     },
     {
       "id": "s28",
