@@ -744,11 +744,60 @@
       "scope": "standard",
       "checkedAt": "2026-09-03T17:50:27.148Z",
       "notes": "workspace-valid-1088-nodes-26815-events-after-v3-s07-closeout"
+    },
+    {
+      "command": "node-test-semantic-state-derived-evaluator",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T17:56:57.600Z",
+      "notes": "six-resolver-and-nested-evaluation-laws-passed"
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T17:56:58.762Z",
+      "notes": "exact-derived-result-type-and-all-type-projects-passed"
+    },
+    {
+      "command": "npm-run-test-semantic-state",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T17:56:59.911Z",
+      "notes": "125-semantic-state-laws-passed"
+    },
+    {
+      "command": "npm-run-check-architecture",
+      "status": "passed",
+      "scope": "impact-router",
+      "checkedAt": "2026-09-03T17:57:01.012Z",
+      "notes": "semantic-kernel-architecture-gates-passed"
+    },
+    {
+      "command": "npm-run-check-inference",
+      "status": "passed",
+      "scope": "diagnostic",
+      "checkedAt": "2026-09-03T17:57:02.078Z",
+      "notes": "types-103192-instantiations-172704"
+    },
+    {
+      "command": "npm-run-test-equation-reachability",
+      "status": "passed",
+      "scope": "generated-scan",
+      "checkedAt": "2026-09-03T17:57:03.138Z",
+      "notes": "scan-count-4115-and-reachability-laws-passed"
+    },
+    {
+      "command": "theseus-workspace-validate",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T17:57:20.081Z",
+      "notes": "workspace-valid-1088-nodes-26826-events-after-v3-s08-closeout"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "v3-s07-complete-concrete-dependencies-resolve-from-one-pinned-snapshot-with-exact-alias-copy-version-and-absence-laws"
+    "summary": "v3-s08-complete-typed-requested-evaluation-resolves-single-and-nested-derived-values-from-one-pinned-snapshot-without-cache-or-history"
   },
   "expectedLearning": [
     "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",

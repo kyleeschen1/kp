@@ -20,6 +20,7 @@ import { materializeKpSemanticStateInitialSnapshot } from
 import { defineKpSemanticStateTransform } from
   "../src/semantic-state/authoring-state-transform.ts";
 import {
+  evaluateKpSemanticDerivedValue,
   KpSemanticDerivedEvaluationError,
   resolveKpSemanticConcreteDependency
 } from "../src/semantic-state/derived-evaluator.ts";
@@ -107,6 +108,28 @@ test("derived and foreign snapshots cannot enter concrete resolution", () => {
   );
 });
 
+test("one requested derived value evaluates from concrete dependencies", () => {
+  const fixture = createNestedFixture("lesson.single-derived-evaluator");
+
+  assert.equal(evaluateKpSemanticDerivedValue({
+    graph: fixture.graph,
+    snapshot: fixture.snapshot,
+    target: fixture.handles.refs.doubled
+  }), 6);
+  assert.deepEqual(fixture.calls, { doubled: 1, summary: 0 });
+});
+
+test("nested derived dependencies evaluate in declared tuple order", () => {
+  const fixture = createNestedFixture("lesson.nested-derived-evaluator");
+
+  assert.deepEqual(evaluateKpSemanticDerivedValue({
+    graph: fixture.graph,
+    snapshot: fixture.snapshot,
+    target: fixture.handles.refs.summary
+  }), { amount: 9, label: "3 + 6" });
+  assert.deepEqual(fixture.calls, { doubled: 1, summary: 1 });
+});
+
 function createFixture(namespace = "lesson.derived-evaluator") {
   const compiled = compileKpSemanticStateSchema(namespace, kpStateGroup({
     source: kpStateValue({ amount: 2 }),
@@ -188,4 +211,45 @@ function readAmount(value: KpPersistentSemanticValue): number {
     throw new Error("Expected an amount record.");
   }
   return value["amount"];
+}
+
+function createNestedFixture(namespace: string) {
+  const compiled = compileKpSemanticStateSchema(namespace, kpStateGroup({
+    base: kpStateValue({ amount: 3 }),
+    doubled: kpStateDerived<number>(),
+    summary: kpStateDerived<{
+      readonly amount: number;
+      readonly label: string;
+    }>()
+  }));
+  const handles = createKpSemanticStateHandleSet(compiled);
+  const calls = { doubled: 0, summary: 0 };
+  const doubled = defineKpSemanticStateDerivation({
+    compiled,
+    target: handles.refs.doubled,
+    dependencies: [handles.refs.base],
+    compute: ([base]) => {
+      calls.doubled += 1;
+      return base.amount * 2;
+    }
+  });
+  const summary = defineKpSemanticStateDerivation({
+    compiled,
+    target: handles.refs.summary,
+    dependencies: [handles.refs.base, handles.refs.doubled],
+    compute: ([base, derived]) => {
+      calls.summary += 1;
+      return {
+        amount: base.amount + derived,
+        label: `${base.amount} + ${derived}`
+      };
+    }
+  });
+  const snapshot = materializeKpSemanticStateInitialSnapshot(compiled, {
+    derivations: [summary, doubled]
+  });
+  const graph = compileKpSemanticDerivedGraph(
+    normalizeKpSemanticDerivedGraphInput(compiled, [summary, doubled])
+  );
+  return { compiled, handles, calls, doubled, summary, snapshot, graph };
 }
