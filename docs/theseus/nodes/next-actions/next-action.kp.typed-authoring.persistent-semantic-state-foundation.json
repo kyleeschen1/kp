@@ -686,6 +686,48 @@
       "scope": "s22-change-dispositions-and-change-sets",
       "checkedAt": "2026-09-03T09:25:20.033Z",
       "notes": "Workspace schema and run references validate."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T09:36:50.377Z",
+      "notes": "31 semantic-state tests pass, including transaction commit, abort, scope isolation, and failed-stage atomicity."
+    },
+    {
+      "command": "npx tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T09:36:51.544Z",
+      "notes": "Test-project typecheck passes with nominal transaction-scope fixtures."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T09:36:52.600Z",
+      "notes": "Architecture gates pass at 1987 TypeScript modules with zero dependency-direction exceptions."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T09:36:53.669Z",
+      "notes": "Inference contracts pass at 100523 types and 167918 instantiations."
+    },
+    {
+      "command": "npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T09:36:54.734Z",
+      "notes": "Exact equation reachability graph is current at 68 roots."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s23-explicit-transaction-lifecycle",
+      "checkedAt": "2026-09-03T09:37:06.391Z",
+      "notes": "Workspace schema and active run references validate before slice completion."
     }
   ],
   "expectedLearning": [

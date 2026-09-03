@@ -196,7 +196,8 @@
     {
       "id": "s23",
       "title": "explicit-transaction-lifecycle",
-      "status": "planned"
+      "summary": "Added an instance-local scoped transaction with deterministic successor identity, read-your-writes, failure-atomic staging, commit/abort, and capability expiry; no Proxy or global registry.",
+      "status": "complete"
     },
     {
       "id": "s24",
