@@ -16,9 +16,10 @@ const store = createKpSemanticEntityVersionStore({
 });
 const successor = appendKpSemanticEntityVersion(store, {
   value: { tax: 4, curve: { slope: 2 } },
+  revisionId: "market-tax",
   transformationId: identities.appliedTransformation(
     identities.transformation("add-tax"),
-    0
+    "first"
   )
 });
 

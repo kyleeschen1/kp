@@ -34,8 +34,16 @@ export type KpAnySemanticStateId =
 export interface KpSemanticStateIdentityScope {
   readonly namespace: string;
   entity(localId: string): KpSemanticEntityId;
-  version(entityId: KpSemanticEntityId, ordinal: number): KpSemanticVersionId;
-  snapshot(ordinal: number): KpAggregateSnapshotId;
+  initialVersion(entityId: KpSemanticEntityId): KpSemanticVersionId;
+  successorVersion(
+    entityId: KpSemanticEntityId,
+    transformationId: KpAppliedTransformationId,
+    revisionId: string
+  ): KpSemanticVersionId;
+  initialSnapshot(): KpAggregateSnapshotId;
+  successorSnapshot(
+    transformationId: KpAppliedTransformationId
+  ): KpAggregateSnapshotId;
   slot(path: string): KpSemanticSlotId;
   occurrence(localId: string): KpStateOccurrenceId;
   alias(localId: string): KpAuthorAliasId;
@@ -44,7 +52,7 @@ export interface KpSemanticStateIdentityScope {
   transformation(localId: string): KpTransformationDefinitionId;
   appliedTransformation(
     definitionId: KpTransformationDefinitionId,
-    ordinal: number
+    applicationId: string
   ): KpAppliedTransformationId;
 }
 
@@ -54,15 +62,6 @@ function requireSemanticIdPart(value: string, label: string): string {
   if (!semanticIdPartPattern.test(value)) {
     throw new Error(
       `Invalid semantic state ${label} ${JSON.stringify(value)}; expected a lowercase, scoped identifier.`
-    );
-  }
-  return value;
-}
-
-function requireOrdinal(value: number, label: string): number {
-  if (!Number.isSafeInteger(value) || value < 0) {
-    throw new Error(
-      `Invalid semantic state ${label} ${JSON.stringify(value)}; expected a non-negative safe integer.`
     );
   }
   return value;
@@ -99,13 +98,31 @@ export function createKpSemanticStateIdentityScope(
       return `${entityPrefix}${requireSemanticIdPart(localId, "entity id")}` as
         KpSemanticEntityId;
     },
-    version(entityId, ordinal) {
+    initialVersion(entityId) {
       assertOwnedId(entityId, entityPrefix, "entity id");
-      return `${entityId}/version/${requireOrdinal(ordinal, "version ordinal")}` as
+      return `${entityId}/version/initial` as
         KpSemanticVersionId;
     },
-    snapshot(ordinal) {
-      return `${prefix}/snapshot/${requireOrdinal(ordinal, "snapshot ordinal")}` as
+    successorVersion(entityId, transformationId, revisionId) {
+      assertOwnedId(entityId, entityPrefix, "entity id");
+      const transformationSuffix = ownedTransformationSuffix(
+        transformationId,
+        transformationPrefix,
+        "applied transformation id"
+      );
+      return `${entityId}/version/from/${transformationSuffix}/revision/${requireSemanticIdPart(revisionId, "revision id")}` as
+        KpSemanticVersionId;
+    },
+    initialSnapshot() {
+      return `${prefix}/snapshot/initial` as KpAggregateSnapshotId;
+    },
+    successorSnapshot(transformationId) {
+      const transformationSuffix = ownedTransformationSuffix(
+        transformationId,
+        transformationPrefix,
+        "applied transformation id"
+      );
+      return `${prefix}/snapshot/from/${transformationSuffix}` as
         KpAggregateSnapshotId;
     },
     slot(path) {
@@ -132,18 +149,33 @@ export function createKpSemanticStateIdentityScope(
       return `${transformationPrefix}${requireSemanticIdPart(localId, "transformation id")}` as
         KpTransformationDefinitionId;
     },
-    appliedTransformation(definitionId, ordinal) {
+    appliedTransformation(definitionId, applicationId) {
       assertOwnedId(
         definitionId,
         transformationPrefix,
         "transformation definition id"
       );
-      return `${definitionId}/application/${requireOrdinal(ordinal, "transformation application ordinal")}` as
+      return `${definitionId}/application/${requireSemanticIdPart(applicationId, "transformation application id")}` as
         KpAppliedTransformationId;
     }
   };
 
   return Object.freeze(scope);
+}
+
+function ownedTransformationSuffix(
+  transformationId: KpAppliedTransformationId,
+  transformationPrefix: string,
+  label: string
+): string {
+  assertOwnedId(transformationId, transformationPrefix, label);
+  const suffix = transformationId.slice(transformationPrefix.length);
+  if (!suffix.includes("/application/")) {
+    throw new Error(
+      `Semantic state ${label} ${JSON.stringify(transformationId)} is not an applied transformation.`
+    );
+  }
+  return suffix;
 }
 
 export function areSameKpSemanticStateId<Id extends KpAnySemanticStateId>(

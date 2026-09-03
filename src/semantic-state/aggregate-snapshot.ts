@@ -34,7 +34,7 @@ export interface KpAggregateSemanticSnapshot {
 
 export interface KpCreateAggregateSemanticSnapshotInput {
   readonly identities: KpSemanticStateIdentityScope;
-  readonly ordinal: number;
+  readonly snapshotId: KpAggregateSnapshotId;
   readonly requiredSlotIds: readonly KpSemanticSlotId[];
   readonly bindings: readonly KpSemanticSlotBinding[];
   readonly entityStores: readonly KpAnySemanticEntityVersionStore[];
@@ -43,7 +43,8 @@ export interface KpCreateAggregateSemanticSnapshotInput {
 export function createKpAggregateSemanticSnapshot(
   input: KpCreateAggregateSemanticSnapshotInput
 ): KpAggregateSemanticSnapshot {
-  const snapshotId = input.identities.snapshot(input.ordinal);
+  const snapshotPrefix = `kp-state/${input.identities.namespace}/snapshot/`;
+  assertPrefix(input.snapshotId, snapshotPrefix, "Aggregate snapshot id");
   const slotPrefix = `kp-state/${input.identities.namespace}/slot/`;
   const requiredSlotIds = freezeUniqueIds(
     input.requiredSlotIds,
@@ -75,7 +76,7 @@ export function createKpAggregateSemanticSnapshot(
   return Object.freeze({
     schemaVersion: "kp.aggregate-semantic-snapshot.v1",
     kind: "aggregate-semantic-snapshot",
-    id: snapshotId,
+    id: input.snapshotId,
     namespace: input.identities.namespace,
     requiredSlotIds,
     bindings,

@@ -178,7 +178,8 @@
     {
       "id": "s20",
       "title": "structural-sharing-and-branches",
-      "status": "planned"
+      "summary": "Added explicit successor snapshot construction with structural sharing for unchanged slots and stores, changed-node separation, branch isolation, and deterministic direct recovery. Corrected version and snapshot identity so branches derive from stable applied-transformation and revision keys rather than ordinal or statement order.",
+      "status": "complete"
     },
     {
       "id": "s21",

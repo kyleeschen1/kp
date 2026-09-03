@@ -15,15 +15,15 @@ import {
 
 const ids = createKpSemanticStateIdentityScope("fixture.semantic-state");
 const entity = ids.entity("market");
-const version = ids.version(entity, 0);
-const snapshot = ids.snapshot(0);
+const version = ids.initialVersion(entity);
+const snapshot = ids.initialSnapshot();
 const slot = ids.slot("market.supply");
 const occurrence = ids.occurrence("market.graph");
 const alias = ids.alias("m");
 const label = ids.displayLabel("market.title");
 const representation = ids.representation("market.graph");
 const transformation = ids.transformation("add-tax");
-const applied = ids.appliedTransformation(transformation, 0);
+const applied = ids.appliedTransformation(transformation, "first");
 
 const exactKinds: [
   KpSemanticEntityId,
@@ -53,9 +53,9 @@ void exactKinds;
 areSameKpSemanticStateId(entity, ids.entity("supply"));
 
 // @ts-expect-error A version cannot be used as an entity.
-ids.version(version, 1);
+ids.initialVersion(version);
 // @ts-expect-error A snapshot cannot be used as a transformation definition.
-ids.appliedTransformation(snapshot, 1);
+ids.appliedTransformation(snapshot, "first");
 // @ts-expect-error Entity and slot identities have different equality domains.
 areSameKpSemanticStateId(entity, slot);
 // @ts-expect-error An ordinary string is not a minted semantic entity ID.

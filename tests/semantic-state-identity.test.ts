@@ -15,8 +15,11 @@ test("semantic state identities are deterministic without reference identity", (
 
   assert.notEqual(first, second);
   assert.equal(firstEntity, reconstructedEntity);
-  assert.equal(first.version(firstEntity, 0), second.version(reconstructedEntity, 0));
-  assert.equal(first.snapshot(0), second.snapshot(0));
+  assert.equal(
+    first.initialVersion(firstEntity),
+    second.initialVersion(reconstructedEntity)
+  );
+  assert.equal(first.initialSnapshot(), second.initialSnapshot());
   assert.equal(Object.isFrozen(first), true);
   assert.equal(areSameKpSemanticStateId(firstEntity, reconstructedEntity), true);
 });
@@ -26,14 +29,14 @@ test("identity kinds remain distinct even when their author token matches", () =
   const token = "primary";
   const values = [
     ids.entity(token),
-    ids.snapshot(0),
+    ids.initialSnapshot(),
     ids.slot(token),
     ids.occurrence(token),
     ids.alias(token),
     ids.displayLabel(token),
     ids.representation(token),
     ids.transformation(token),
-    ids.appliedTransformation(ids.transformation(token), 0)
+    ids.appliedTransformation(ids.transformation(token), "first")
   ];
 
   assert.equal(new Set(values).size, values.length);
@@ -47,12 +50,22 @@ test("versions belong to entities while snapshots remain aggregate identities", 
   const market = ids.entity("market");
   const supply = ids.entity("supply");
 
-  assert.equal(
-    ids.version(market, 2),
-    "kp-state/lesson.market/entity/market/version/2"
+  const applied = ids.appliedTransformation(
+    ids.transformation("add-tax"),
+    "first"
   );
-  assert.notEqual(ids.version(market, 2), ids.version(supply, 2));
-  assert.notEqual(ids.version(market, 2), ids.snapshot(2));
+  assert.equal(
+    ids.successorVersion(market, applied, "market-price"),
+    "kp-state/lesson.market/entity/market/version/from/add-tax/application/first/revision/market-price"
+  );
+  assert.notEqual(
+    ids.successorVersion(market, applied, "market-price"),
+    ids.successorVersion(supply, applied, "market-price")
+  );
+  assert.notEqual(
+    ids.successorVersion(market, applied, "market-price"),
+    ids.successorSnapshot(applied)
+  );
 });
 
 test("scope ownership and identifier inputs fail locally", () => {
@@ -60,11 +73,11 @@ test("scope ownership and identifier inputs fail locally", () => {
   const right = createKpSemanticStateIdentityScope("lesson.right");
 
   assert.throws(
-    () => right.version(left.entity("market"), 0),
+    () => right.initialVersion(left.entity("market")),
     /does not belong to identity scope/u
   );
   assert.throws(
-    () => right.appliedTransformation(left.transformation("add-tax"), 0),
+    () => right.appliedTransformation(left.transformation("add-tax"), "first"),
     /does not belong to identity scope/u
   );
   assert.throws(
@@ -72,9 +85,8 @@ test("scope ownership and identifier inputs fail locally", () => {
     /Invalid semantic state namespace/u
   );
   assert.throws(() => left.entity(""), /Invalid semantic state entity id/u);
-  assert.throws(() => left.snapshot(-1), /snapshot ordinal/u);
   assert.throws(
-    () => left.version(left.entity("market"), 1.5),
-    /version ordinal/u
+    () => left.appliedTransformation(left.transformation("add-tax"), "Not Valid"),
+    /transformation application id/u
   );
 });

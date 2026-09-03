@@ -49,13 +49,13 @@ test("aggregate snapshots close every required contextual slot", () => {
   const fixture = snapshotFixture();
   const snapshot = createKpAggregateSemanticSnapshot({
     identities: fixture.identities,
-    ordinal: 0,
+    snapshotId: fixture.identities.initialSnapshot(),
     requiredSlotIds: [fixture.supplySlot, fixture.demandSlot],
     bindings: fixture.bindings,
     entityStores: [fixture.supply, fixture.demand]
   });
 
-  assert.equal(snapshot.id, "kp-state/test.market-snapshot/snapshot/0");
+  assert.equal(snapshot.id, "kp-state/test.market-snapshot/snapshot/initial");
   assert.equal(
     readKpSemanticSlotBinding(snapshot, fixture.supplySlot).entityId,
     fixture.supply.entityId
@@ -77,7 +77,7 @@ test("role naming is independent from aliases and entity identity", () => {
   const authorAlias = fixture.identities.alias("s");
   const snapshot = createKpAggregateSemanticSnapshot({
     identities: fixture.identities,
-    ordinal: 0,
+    snapshotId: fixture.identities.initialSnapshot(),
     requiredSlotIds: [fixture.supplySlot, alternateRole],
     bindings: [
       fixture.bindings[0]!,
@@ -100,7 +100,7 @@ test("incomplete, duplicate, and extra bindings cannot commit", () => {
   const fixture = snapshotFixture();
   const input = {
     identities: fixture.identities,
-    ordinal: 0,
+    snapshotId: fixture.identities.initialSnapshot(),
     requiredSlotIds: [fixture.supplySlot, fixture.demandSlot],
     entityStores: [fixture.supply, fixture.demand]
   } as const;
@@ -134,7 +134,7 @@ test("bindings reject foreign scopes, missing entities, and missing versions", (
   const foreign = createKpSemanticStateIdentityScope("test.foreign-snapshot");
   const commonInput = {
     identities: fixture.identities,
-    ordinal: 0,
+    snapshotId: fixture.identities.initialSnapshot(),
     requiredSlotIds: [fixture.supplySlot],
     entityStores: [fixture.supply]
   } as const;
@@ -166,7 +166,14 @@ test("bindings reject foreign scopes, missing entities, and missing versions", (
       ...commonInput,
       bindings: [{
         ...fixture.bindings[0]!,
-        versionId: fixture.identities.version(fixture.supply.entityId, 9)
+        versionId: fixture.identities.successorVersion(
+          fixture.supply.entityId,
+          fixture.identities.appliedTransformation(
+            fixture.identities.transformation("uncommitted"),
+            "missing"
+          ),
+          "supply"
+        )
       }]
     }),
     /does not belong to entity/u

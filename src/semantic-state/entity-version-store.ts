@@ -78,6 +78,7 @@ export interface KpAppendSemanticEntityVersionInput<
 > {
   readonly value: Value;
   readonly transformationId: KpAppliedTransformationId;
+  readonly revisionId: string;
 }
 
 export function createKpSemanticEntityVersionStore<
@@ -87,7 +88,7 @@ export function createKpSemanticEntityVersionStore<
 ): KpSemanticEntityVersionStore<Value> {
   const sourceId = requireSourceId(input.sourceId);
   const version = freezeVersion<Value>({
-    id: input.identities.version(input.entityId, 0),
+    id: input.identities.initialVersion(input.entityId),
     entityId: input.entityId,
     ordinal: 0,
     value: cloneAndFreezePersistentSemanticValue(input.value),
@@ -111,11 +112,20 @@ export function appendKpSemanticEntityVersion<
   store: KpSemanticEntityVersionStore<Value>,
   input: KpAppendSemanticEntityVersionInput<Value>
 ): KpSemanticEntityVersionStore<Value> {
-  assertAppliedTransformationScope(store, input.transformationId);
   const identities = createKpSemanticStateIdentityScope(store.namespace);
   const ordinal = store.versions.length;
+  const versionId = identities.successorVersion(
+    store.entityId,
+    input.transformationId,
+    input.revisionId
+  );
+  if (store.versionIndex[versionId] !== undefined) {
+    throw new Error(
+      `Semantic entity ${JSON.stringify(store.entityId)} already has revision ${JSON.stringify(input.revisionId)} for transformation ${JSON.stringify(input.transformationId)}.`
+    );
+  }
   const version = freezeVersion<Value>({
-    id: identities.version(store.entityId, ordinal),
+    id: versionId,
     entityId: store.entityId,
     ordinal,
     value: cloneAndFreezePersistentSemanticValue(input.value),
@@ -166,21 +176,6 @@ function requireSourceId(value: string): string {
     throw new Error("An initial semantic entity version requires a source id.");
   }
   return value;
-}
-
-function assertAppliedTransformationScope(
-  store: KpSemanticEntityVersionStore<KpPersistentSemanticValue>,
-  transformationId: KpAppliedTransformationId
-): void {
-  const prefix = `kp-state/${store.namespace}/transformation/`;
-  if (
-    !transformationId.startsWith(prefix) ||
-    !transformationId.includes("/application/")
-  ) {
-    throw new Error(
-      `Applied transformation ${JSON.stringify(transformationId)} does not belong to entity scope ${JSON.stringify(store.namespace)}.`
-    );
-  }
 }
 
 function cloneAndFreezePersistentSemanticValue<

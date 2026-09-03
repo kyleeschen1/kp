@@ -19,7 +19,7 @@ const supply = createKpSemanticEntityVersionStore({
 
 createKpAggregateSemanticSnapshot({
   identities,
-  ordinal: 0,
+  snapshotId: identities.initialSnapshot(),
   requiredSlotIds: [supplySlot],
   bindings: [{
     slotId: supplySlot,
@@ -31,7 +31,7 @@ createKpAggregateSemanticSnapshot({
 
 createKpAggregateSemanticSnapshot({
   identities,
-  ordinal: 1,
+  snapshotId: identities.initialSnapshot(),
   // @ts-expect-error An author alias cannot stand in for a contextual slot.
   requiredSlotIds: [identities.alias("s")],
   bindings: [],
@@ -40,7 +40,7 @@ createKpAggregateSemanticSnapshot({
 
 createKpAggregateSemanticSnapshot({
   identities,
-  ordinal: 2,
+  snapshotId: identities.initialSnapshot(),
   requiredSlotIds: [supplySlot],
   bindings: [{
     slotId: supplySlot,

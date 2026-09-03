@@ -17,7 +17,7 @@ function marketFixture() {
   return {
     identities,
     entityId: identities.entity("market"),
-    addTax: identities.appliedTransformation(transformation, 0)
+    addTax: identities.appliedTransformation(transformation, "first")
   };
 }
 
@@ -65,7 +65,8 @@ test("successors retain entity identity and explicit provenance", () => {
   });
   const successorStore = appendKpSemanticEntityVersion(initialStore, {
     value: { tax: 4 },
-    transformationId: fixture.addTax
+    transformationId: fixture.addTax,
+    revisionId: "market-tax"
   });
   const initial = readLatestKpSemanticEntityVersion(initialStore);
   const successor = readLatestKpSemanticEntityVersion(successorStore);
@@ -94,7 +95,8 @@ test("materialized versions recover directly without transformation replay", () 
   });
   const nextStore = appendKpSemanticEntityVersion(initialStore, {
     value: { tax: 4 },
-    transformationId: fixture.addTax
+    transformationId: fixture.addTax,
+    revisionId: "market-tax"
   });
   const initialId = initialStore.latestVersionId;
 
@@ -107,7 +109,7 @@ test("materialized versions recover directly without transformation replay", () 
   assert.throws(
     () => readKpSemanticEntityVersion(
       nextStore,
-      fixture.identities.version(fixture.identities.entity("supply"), 0)
+      fixture.identities.initialVersion(fixture.identities.entity("supply"))
     ),
     /does not belong to entity/u
   );
@@ -135,11 +137,12 @@ test("stores reject mutable executable values and foreign transformations", () =
   assert.throws(
     () => appendKpSemanticEntityVersion(store, {
       value: { tax: 1 },
+      revisionId: "market-tax",
       transformationId: foreign.appliedTransformation(
         foreign.transformation("add-tax"),
-        0
+        "first"
       )
     }),
-    /does not belong to entity scope/u
+    /does not belong to identity scope/u
   );
 });

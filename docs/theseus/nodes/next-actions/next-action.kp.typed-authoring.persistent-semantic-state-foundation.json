@@ -581,6 +581,41 @@
       "scope": "s19-role-bindings-and-aggregate-snapshots",
       "checkedAt": "2026-09-03T09:04:12.830Z",
       "notes": "Workspace schema and run references validate."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "s20-structural-sharing-and-branches",
+      "checkedAt": "2026-09-03T09:12:05.177Z",
+      "notes": "Seventeen laws pass for unchanged-node sharing, changed-node separation, branch isolation, deterministic recovery, equal-value distinct versions, distinct branch IDs, fake ancestry rejection, and duplicate revision rejection."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s20-structural-sharing-and-branches",
+      "checkedAt": "2026-09-03T09:12:06.394Z",
+      "notes": "Repository TypeScript, Svelte, and domain checks pass after replacing order-based version and snapshot IDs with transformation-derived identities."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s20-structural-sharing-and-branches",
+      "checkedAt": "2026-09-03T09:12:07.454Z",
+      "notes": "All architecture gates pass at 1,984 modules with zero dependency exceptions."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s20-structural-sharing-and-branches",
+      "checkedAt": "2026-09-03T09:12:08.498Z",
+      "notes": "Inference contracts pass at 100,176 types and 167,264 instantiations."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s20-structural-sharing-and-branches",
+      "checkedAt": "2026-09-03T09:12:09.548Z",
+      "notes": "Workspace schema and run references validate."
     }
   ],
   "expectedLearning": [
