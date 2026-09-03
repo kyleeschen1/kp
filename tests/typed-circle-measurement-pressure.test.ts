@@ -81,6 +81,21 @@ test("the derivative is a point-dependent linear map over radius changes", () =>
   });
 });
 
+test("the algebraic map preserves its signed vector-space extension", () => {
+  const circle = createCircle();
+  const radius = createKpUnitValue(radiusUnit, -2);
+  const change = createKpUnitValue(radiusUnit, 0.5);
+
+  assert.deepEqual(circle.areaAtRadius.evaluate(radius), {
+    magnitude: 4 * Math.PI,
+    unitId: areaUnit.id
+  });
+  assert.deepEqual(circle.areaAtRadius.derivativeAt(radius).apply(change), {
+    magnitude: -2 * Math.PI,
+    unitId: areaUnit.id
+  });
+});
+
 test("circle evaluation and differentiation reject runtime unit forgery", () => {
   const circle = createCircle();
   const forgedArea = createKpUnitValue(areaUnit, 2) as never;

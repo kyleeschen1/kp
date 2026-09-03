@@ -124,7 +124,8 @@
     {
       "id": "s11",
       "title": "circle-migration",
-      "status": "planned"
+      "summary": "Migrated only the nonlinear circle caller to the helper, preserving public shape, IDs, units, diagnostics, point-dependent derivatives, tested evidence, and the explicit signed vector-space extension; setup fell from 68 to 27 lines.",
+      "status": "complete"
     },
     {
       "id": "s12",

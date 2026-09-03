@@ -329,6 +329,27 @@
       "scope": "broad",
       "checkedAt": "2026-09-03T07:31:15.329Z",
       "notes": "Repository TypeScript, Svelte, and domain checks pass after the market migration."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-circle-measurement-pressure.test.ts tests/unit-scalar-map-helper-baseline.test.ts tests/unit-scalar-map-helper-core.test.ts tests/unit-scalar-map-helper-binding.test.ts tests/unit-scalar-map-helper-metadata.test.ts",
+      "status": "passed",
+      "scope": "s11-circle-migration",
+      "checkedAt": "2026-09-03T07:35:45.539Z",
+      "notes": "18 focused tests passed, including signed-space nonlinear behavior, stable identity, provenance, diagnostics, and helper contracts."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s11-circle-migration",
+      "checkedAt": "2026-09-03T07:35:46.733Z",
+      "notes": "TypeScript, Svelte, and domain checks passed with zero diagnostics."
+    },
+    {
+      "command": "npm run --silent measure:unit-scalar-helper",
+      "status": "passed",
+      "scope": "s11-circle-migration",
+      "checkedAt": "2026-09-03T07:35:47.783Z",
+      "notes": "Circle setup fell from 68 to 27 lines; combined setup is 76 lines with two helper calls, zero direct unit guards, and focused inference at 33845 types and 40058 instantiations."
     }
   ],
   "expectedLearning": [
