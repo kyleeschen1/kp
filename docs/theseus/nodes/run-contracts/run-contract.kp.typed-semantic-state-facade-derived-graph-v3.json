@@ -78,7 +78,8 @@
     {
       "id": "s04",
       "title": "Validate cross schema type and capability boundaries",
-      "status": "planned"
+      "summary": "validated-cross-schema-target-and-dependency-edges-target-kinds-derivation-identities-and-definition-local-compute-capability",
+      "status": "complete"
     },
     {
       "id": "s05",

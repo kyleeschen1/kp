@@ -590,11 +590,46 @@
       "scope": "standard",
       "checkedAt": "2026-09-03T17:28:49.178Z",
       "notes": "workspace valid with 1088 nodes and 26773 events after v3 s03 closeout"
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T17:34:33.595Z",
+      "notes": "114 laws pass including cross-schema target dependency target-kind identity and missing-compute diagnostics"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T17:34:34.736Z",
+      "notes": "negative fixtures prove exact result dependency tuple and derived-target types"
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T17:34:35.762Z",
+      "notes": "inference remains green at 103192 types and 172704 instantiations"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T17:34:36.836Z",
+      "notes": "all architecture and cross-domain conformance gates pass"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T17:34:49.601Z",
+      "notes": "workspace valid with 1088 nodes and 26783 events after v3 s04 closeout"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "v3-s03-complete-local-graph-validation-fails-before-evaluation-with-exact-source-and-path-diagnostics"
+    "summary": "v3-s04-complete-schema-boundaries-and-executable-capability-fail-locally-while-types-preserve-result-and-dependency-values"
   },
   "expectedLearning": [
     "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",

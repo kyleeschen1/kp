@@ -1,7 +1,9 @@
 import { compileKpSemanticStateSchema } from
   "../../src/semantic-state/authoring-schema-compiler.ts";
-import { defineKpSemanticStateDerivation } from
-  "../../src/semantic-state/authoring-derived-definition.ts";
+import {
+  defineKpSemanticStateDerivation,
+  type KpSemanticStateDerivationDefinition
+} from "../../src/semantic-state/authoring-derived-definition.ts";
 import { createKpSemanticStateHandleSet } from
   "../../src/semantic-state/authoring-state-handles.ts";
 import { materializeKpSemanticStateInitialSnapshot } from
@@ -60,6 +62,34 @@ const revisedEquilibrium = defineKpSemanticStateDerivation({
   dependencies: [handles.refs.supply],
   compute: ([supply]) => supply.intercept
 });
+const incompatibleDerivedResult: KpSemanticStateDerivationDefinition<
+  number,
+  readonly [typeof handles.refs.supply]
+> = defineKpSemanticStateDerivation({
+  compiled,
+  target: handles.refs.equilibrium,
+  dependencies: [handles.refs.supply],
+  // @ts-expect-error A derived definition preserves its exact result type.
+  compute: ([supply]) => supply.kind
+});
+// @ts-expect-error Dependency tuples preserve each handle's value type.
+const incompatibleDerivedDependency: KpSemanticStateDerivationDefinition<
+  number,
+  readonly [typeof handles.refs.demand]
+> = revisedEquilibrium;
+defineKpSemanticStateDerivation({
+  compiled,
+  // @ts-expect-error Only a derived leaf can be a derivation target.
+  target: handles.refs.supply,
+  dependencies: [handles.refs.demand],
+  compute: ([demand]) => ({
+    kind: "supply",
+    intercept: demand.intercept,
+    slope: 1
+  })
+});
+void incompatibleDerivedResult;
+void incompatibleDerivedDependency;
 const initial = materializeKpSemanticStateInitialSnapshot(compiled, {
   derivations: [initialEquilibrium]
 });

@@ -64,10 +64,15 @@ export interface KpSemanticDerivedGraphInput {
 }
 
 export type KpSemanticDerivedGraphDiagnosticCode =
+  | "cross-schema-derived-dependency"
+  | "cross-schema-derived-target"
   | "duplicate-derived-definition"
   | "duplicate-derived-dependency"
+  | "incompatible-derived-identity"
+  | "invalid-derived-target"
   | "missing-derived-definition"
   | "missing-derived-dependency"
+  | "missing-derived-compute-capability"
   | "self-derived-dependency";
 
 export interface KpSemanticDerivedGraphDiagnostic {
@@ -174,7 +179,15 @@ export function validateKpSemanticDerivedGraphInput(
     KpSemanticSlotId,
     KpSemanticDerivedGraphDefinitionInput
   >();
+  const expectationsByTarget = new Map(
+    input.expectedDefinitions.map((expected) => [
+      expected.target.slotId,
+      expected
+    ])
+  );
   const localSlotPrefix = `kp-state/${input.namespace}/slot/`;
+  const localDerivationPrefix =
+    `kp-state/${input.namespace}/derivation/`;
 
   for (const expected of input.expectedDefinitions) {
     if (!input.definitions.some(({ target }) =>
@@ -191,6 +204,50 @@ export function validateKpSemanticDerivedGraphInput(
   }
 
   for (const definition of input.definitions) {
+    if (!hasComputeCapability(definition.definition)) {
+      diagnostics.push(createDiagnostic({
+        code: "missing-derived-compute-capability",
+        derivationId: definition.id,
+        sourceId: definition.sourceId,
+        target: definition.target,
+        message: `Derived schema path ${formatPath(definition.target.path)} has durable dependency data but no definition-local compute capability.`
+      }));
+    }
+    if (definition.target.path === null) {
+      diagnostics.push(createDiagnostic({
+        code: definition.target.slotId.startsWith(localSlotPrefix)
+          ? "invalid-derived-target"
+          : "cross-schema-derived-target",
+        derivationId: definition.id,
+        sourceId: definition.sourceId,
+        target: definition.target,
+        message: definition.target.slotId.startsWith(localSlotPrefix)
+          ? `Derived definition targets undeclared local slot ${JSON.stringify(definition.target.slotId)}.`
+          : `Derived definition target ${JSON.stringify(definition.target.slotId)} does not belong to schema ${JSON.stringify(input.namespace)}.`
+      }));
+    } else if (definition.target.descriptorKind !== "derived-value") {
+      diagnostics.push(createDiagnostic({
+        code: "invalid-derived-target",
+        derivationId: definition.id,
+        sourceId: definition.sourceId,
+        target: definition.target,
+        message: `Semantic state path ${formatPath(definition.target.path)} is ${JSON.stringify(definition.target.descriptorKind)}, not a derived target.`
+      }));
+    } else {
+      const expected = expectationsByTarget.get(definition.target.slotId);
+      if (expected !== undefined &&
+          (definition.id !== expected.id ||
+            !definition.id.startsWith(localDerivationPrefix))) {
+        diagnostics.push(createDiagnostic({
+          code: "incompatible-derived-identity",
+          derivationId: definition.id,
+          sourceId: definition.sourceId,
+          target: definition.target,
+          message: `Derived schema path ${formatPath(definition.target.path)} requires derivation ${JSON.stringify(expected.id)}, not ${JSON.stringify(definition.id)}.`
+        }));
+      }
+    }
+
     const previous = definitionsByTarget.get(definition.target.slotId);
     if (previous !== undefined) {
       diagnostics.push(createDiagnostic({
@@ -248,6 +305,15 @@ export function validateKpSemanticDerivedGraphInput(
           target: definition.target,
           dependency: edge.dependency,
           message: `Derived schema path ${formatPath(definition.target.path)} references undeclared local dependency ${JSON.stringify(edge.dependency.slotId)}.`
+        }));
+      } else if (edge.dependency.path === null) {
+        diagnostics.push(createDiagnostic({
+          code: "cross-schema-derived-dependency",
+          derivationId: definition.id,
+          sourceId: definition.sourceId,
+          target: definition.target,
+          dependency: edge.dependency,
+          message: `Derived schema path ${formatPath(definition.target.path)} references dependency ${JSON.stringify(edge.dependency.slotId)} outside schema ${JSON.stringify(input.namespace)}.`
         }));
       }
     }
@@ -321,4 +387,15 @@ function createDiagnostic(input: {
 
 function formatPath(path: readonly string[] | null): string {
   return path === null ? "<unresolved>" : JSON.stringify(path);
+}
+
+function hasComputeCapability(
+  definition: KpSemanticStateDerivationDefinitionSource
+): boolean {
+  const candidate: unknown = definition;
+  return isRecord(candidate) && typeof candidate["compute"] === "function";
+}
+
+function isRecord(value: unknown): value is Readonly<Record<string, unknown>> {
+  return value !== null && typeof value === "object";
 }

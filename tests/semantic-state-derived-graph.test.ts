@@ -240,10 +240,125 @@ test("duplicate target definitions report one stable local diagnostic", () => {
   }]);
 });
 
-function createFixture() {
+test("cross-schema targets and dependencies remain distinct diagnostics", () => {
+  const fixture = createFixture();
+  const foreign = createFixture("lesson.foreign-derived-graph");
+  const target = fixture.handles.refs.metrics.equilibrium;
+  const foreignDependency = createDefinitionSource({
+    derivationId: fixture.equilibrium.id,
+    targetSlotId: target.slotId,
+    dependencySlotIds: [foreign.handles.refs.market.supply.slotId],
+    sourceId: "fixture.foreign-dependency"
+  });
+  const dependencyDiagnostics = validationDiagnostics(
+    normalizeKpSemanticDerivedGraphInput(fixture.compiled, [
+      foreignDependency,
+      fixture.revenue
+    ])
+  );
+  assert.deepEqual(projectDiagnostics(dependencyDiagnostics), [{
+    code: "cross-schema-derived-dependency",
+    sourceId: "fixture.foreign-dependency",
+    targetPath: ["metrics", "equilibrium"],
+    dependencyPath: null
+  }]);
+
+  const foreignTarget = createDefinitionSource({
+    derivationId: foreign.equilibrium.id,
+    targetSlotId: foreign.handles.refs.metrics.equilibrium.slotId,
+    dependencySlotIds: [fixture.handles.refs.market.supply.slotId],
+    sourceId: "fixture.foreign-target"
+  });
+  const targetDiagnostics = validationDiagnostics(
+    normalizeKpSemanticDerivedGraphInput(fixture.compiled, [
+      fixture.equilibrium,
+      fixture.revenue,
+      foreignTarget
+    ])
+  );
+  assert.deepEqual(projectDiagnostics(targetDiagnostics), [{
+    code: "cross-schema-derived-target",
+    sourceId: "fixture.foreign-target",
+    targetPath: null,
+    dependencyPath: null
+  }]);
+});
+
+test("target kind and derivation identity must match compiled authority", () => {
+  const fixture = createFixture();
+  const invalidTarget = createDefinitionSource({
+    derivationId: fixture.compiled.identityScope.derivation("invalid.supply"),
+    targetSlotId: fixture.handles.refs.market.supply.slotId,
+    dependencySlotIds: [fixture.handles.refs.market.demand.slotId],
+    sourceId: "fixture.invalid-target"
+  });
+  const targetDiagnostics = validationDiagnostics(
+    normalizeKpSemanticDerivedGraphInput(fixture.compiled, [
+      fixture.equilibrium,
+      fixture.revenue,
+      invalidTarget
+    ])
+  );
+  assert.deepEqual(projectDiagnostics(targetDiagnostics), [{
+    code: "invalid-derived-target",
+    sourceId: "fixture.invalid-target",
+    targetPath: ["market", "supply"],
+    dependencyPath: null
+  }]);
+
+  const wrongIdentity = createDefinitionSource({
+    derivationId: fixture.compiled.identityScope.derivation(
+      "wrong.equilibrium"
+    ),
+    targetSlotId: fixture.handles.refs.metrics.equilibrium.slotId,
+    dependencySlotIds: [fixture.handles.refs.market.supply.slotId],
+    sourceId: "fixture.wrong-identity"
+  });
+  const identityDiagnostics = validationDiagnostics(
+    normalizeKpSemanticDerivedGraphInput(fixture.compiled, [
+      wrongIdentity,
+      fixture.revenue
+    ])
+  );
+  assert.deepEqual(projectDiagnostics(identityDiagnostics), [{
+    code: "incompatible-derived-identity",
+    sourceId: "fixture.wrong-identity",
+    targetPath: ["metrics", "equilibrium"],
+    dependencyPath: null
+  }]);
+});
+
+test("durable declarations cannot replace definition-local compute capability", () => {
+  const fixture = createFixture();
+  const declarationOnly = createDefinitionSource({
+    derivationId: fixture.equilibrium.id,
+    targetSlotId: fixture.handles.refs.metrics.equilibrium.slotId,
+    dependencySlotIds: [fixture.handles.refs.market.supply.slotId],
+    sourceId: "fixture.declaration-only",
+    computeCapability: false
+  });
+  const diagnostics = validationDiagnostics(
+    normalizeKpSemanticDerivedGraphInput(fixture.compiled, [
+      declarationOnly,
+      fixture.revenue
+    ])
+  );
+
+  assert.deepEqual(projectDiagnostics(diagnostics), [{
+    code: "missing-derived-compute-capability",
+    sourceId: "fixture.declaration-only",
+    targetPath: ["metrics", "equilibrium"],
+    dependencyPath: null
+  }]);
+  assert.equal(fixture.computeCalls(), 0);
+});
+
+function createFixture(
+  namespace = "lesson.derived-graph-normalization"
+) {
   let computeCalls = 0;
   const compiled = compileKpSemanticStateSchema(
-    "lesson.derived-graph-normalization",
+    namespace,
     kpStateGroup({
       market: kpStateGroup({
         supply: kpStateValue({ intercept: 2, slope: 1 }),
@@ -291,8 +406,9 @@ function createDefinitionSource(input: {
   readonly targetSlotId: KpSemanticSlotId;
   readonly dependencySlotIds: readonly KpSemanticSlotId[];
   readonly sourceId: string;
+  readonly computeCapability?: false;
 }): KpSemanticStateDerivationDefinitionSource {
-  return Object.freeze({
+  const definition = Object.freeze({
     schemaVersion: "kp.semantic-state-derivation-definition.v1",
     kind: "semantic-state-derivation-definition",
     declaration: Object.freeze({
@@ -308,8 +424,14 @@ function createDefinitionSource(input: {
         })
       )),
       sourceId: input.sourceId
-    })
+    }),
+    ...(input.computeCapability === false
+      ? {}
+      : { compute: () => {
+          throw new Error("Validation must not invoke compute capability.");
+        } })
   });
+  return definition;
 }
 
 function validationDiagnostics(
