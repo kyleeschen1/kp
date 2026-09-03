@@ -1,0 +1,191 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+
+import { KpSemanticSlotAccessError } from
+  "../src/semantic-state/aggregate-snapshot.ts";
+import { defineKpSemanticStateDerivation } from
+  "../src/semantic-state/authoring-derived-definition.ts";
+import { compileKpSemanticStateSchema } from
+  "../src/semantic-state/authoring-schema-compiler.ts";
+import {
+  kpStateDerived,
+  kpStateGroup,
+  kpStateOptional,
+  kpStateValue
+} from "../src/semantic-state/authoring-schema.ts";
+import { createKpSemanticStateHandleSet } from
+  "../src/semantic-state/authoring-state-handles.ts";
+import { materializeKpSemanticStateInitialSnapshot } from
+  "../src/semantic-state/authoring-state-materializer.ts";
+import { defineKpSemanticStateTransform } from
+  "../src/semantic-state/authoring-state-transform.ts";
+import {
+  KpSemanticDerivedEvaluationError,
+  resolveKpSemanticConcreteDependency
+} from "../src/semantic-state/derived-evaluator.ts";
+import {
+  compileKpSemanticDerivedGraph,
+  normalizeKpSemanticDerivedGraphInput,
+  type KpSemanticDerivedGraphLeafReference
+} from "../src/semantic-state/derived-graph.ts";
+import type { KpPersistentSemanticValue } from
+  "../src/semantic-state/entity-version-store.ts";
+
+test("concrete resolution retains exact alias and copy authority", () => {
+  const fixture = createFixture();
+  const source = resolve(fixture, fixture.shared, "source");
+  const alias = resolve(fixture, fixture.shared, "alias");
+  const copy = resolve(fixture, fixture.shared, "copy");
+
+  assert.equal(source.snapshotId, fixture.shared.id);
+  assert.equal(alias.entityId, source.entityId);
+  assert.equal(alias.versionId, source.versionId);
+  assert.equal(alias.value, source.value);
+  assert.notEqual(copy.entityId, source.entityId);
+  assert.deepEqual(copy.value, source.value);
+  assert.notEqual(copy.value, source.value);
+  assert.equal(readAmount(source.value), 2);
+  assert.ok(Object.isFrozen(source));
+});
+
+test("one pinned snapshot never follows a newer alias revision", () => {
+  const fixture = createFixture();
+  const historical = resolve(fixture, fixture.shared, "source");
+  const current = resolve(fixture, fixture.updated, "source");
+  const currentAlias = resolve(fixture, fixture.updated, "alias");
+  const currentCopy = resolve(fixture, fixture.updated, "copy");
+
+  assert.notEqual(current.versionId, historical.versionId);
+  assert.equal(readAmount(historical.value), 2);
+  assert.equal(readAmount(current.value), 5);
+  assert.equal(currentAlias.entityId, current.entityId);
+  assert.equal(currentAlias.versionId, current.versionId);
+  assert.equal(currentCopy.entityId, resolve(
+    fixture,
+    fixture.shared,
+    "copy"
+  ).entityId);
+  assert.equal(readAmount(currentCopy.value), 2);
+  assert.deepEqual(resolve(fixture, fixture.shared, "source"), historical);
+});
+
+test("optional absence stays an explicit pinned snapshot diagnostic", () => {
+  const fixture = createFixture();
+  assert.throws(
+    () => resolve(fixture, fixture.shared, "optional"),
+    (error) => error instanceof KpSemanticSlotAccessError &&
+      error.code === "slot-absent" &&
+      error.slotId === fixture.handles.refs.optional.slotId
+  );
+});
+
+test("derived and foreign snapshots cannot enter concrete resolution", () => {
+  const fixture = createFixture();
+  const derivedTarget = fixture.graph.input.definitions[0]?.target;
+  if (derivedTarget === undefined) {
+    throw new Error("Expected the evaluator fixture derived target.");
+  }
+  assert.throws(
+    () => resolveKpSemanticConcreteDependency({
+      graph: fixture.graph,
+      snapshot: fixture.shared,
+      dependency: derivedTarget
+    }),
+    (error) => error instanceof KpSemanticDerivedEvaluationError &&
+      error.code === "derived-dependency-not-concrete"
+  );
+
+  const foreign = createFixture("lesson.foreign-derived-evaluator");
+  assert.throws(
+    () => resolveKpSemanticConcreteDependency({
+      graph: fixture.graph,
+      snapshot: foreign.initial,
+      dependency: dependencyFor(fixture, "source")
+    }),
+    (error) => error instanceof KpSemanticDerivedEvaluationError &&
+      error.code === "foreign-derived-snapshot"
+  );
+});
+
+function createFixture(namespace = "lesson.derived-evaluator") {
+  const compiled = compileKpSemanticStateSchema(namespace, kpStateGroup({
+    source: kpStateValue({ amount: 2 }),
+    alias: kpStateValue({ amount: 9 }),
+    copy: kpStateValue({ amount: 7 }),
+    optional: kpStateOptional<{ readonly amount: number }>(),
+    total: kpStateDerived<number>()
+  }));
+  const handles = createKpSemanticStateHandleSet(compiled);
+  const total = defineKpSemanticStateDerivation({
+    compiled,
+    target: handles.refs.total,
+    dependencies: [
+      handles.refs.source,
+      handles.refs.alias,
+      handles.refs.copy,
+      handles.refs.optional
+    ],
+    compute: ([source, alias, copy, optional]) =>
+      source.amount + alias.amount + copy.amount + optional.amount
+  });
+  const initial = materializeKpSemanticStateInitialSnapshot(compiled, {
+    derivations: [total]
+  });
+  const shareAndCopy = defineKpSemanticStateTransform({
+    compiled,
+    handles,
+    id: "share-and-copy",
+    author(state) {
+      state.alias.bind(state.source);
+      state.copy.bindCopy(state.source);
+    }
+  });
+  const shared = shareAndCopy.apply(initial, "first").commit.after;
+  const update = defineKpSemanticStateTransform({
+    compiled,
+    handles,
+    id: "update-source",
+    author(state) {
+      state.source.update(({ amount }) => ({ amount: amount + 3 }));
+    }
+  });
+  const updated = update.apply(shared, "first").commit.after;
+  const graph = compileKpSemanticDerivedGraph(
+    normalizeKpSemanticDerivedGraphInput(compiled, [total])
+  );
+  return { compiled, handles, total, initial, shared, updated, graph };
+}
+
+function resolve(
+  fixture: ReturnType<typeof createFixture>,
+  snapshot: ReturnType<typeof createFixture>["initial"],
+  encodedPath: "source" | "alias" | "copy" | "optional"
+) {
+  return resolveKpSemanticConcreteDependency({
+    graph: fixture.graph,
+    snapshot,
+    dependency: dependencyFor(fixture, encodedPath)
+  });
+}
+
+function dependencyFor(
+  fixture: ReturnType<typeof createFixture>,
+  encodedPath: "source" | "alias" | "copy" | "optional"
+): KpSemanticDerivedGraphLeafReference {
+  const dependency = fixture.graph.input.edges.find(({ dependency }) =>
+    dependency.encodedPath === encodedPath
+  )?.dependency;
+  if (dependency === undefined) {
+    throw new Error(`Missing evaluator dependency ${encodedPath}.`);
+  }
+  return dependency;
+}
+
+function readAmount(value: KpPersistentSemanticValue): number {
+  if (value === null || typeof value !== "object" ||
+      Array.isArray(value) || !("amount" in value) ||
+      typeof value["amount"] !== "number") {
+    throw new Error("Expected an amount record.");
+  }
+  return value["amount"];
+}

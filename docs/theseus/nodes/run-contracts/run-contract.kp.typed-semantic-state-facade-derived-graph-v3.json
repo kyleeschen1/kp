@@ -96,7 +96,8 @@
     {
       "id": "s07",
       "title": "Resolve pinned concrete dependencies",
-      "status": "planned"
+      "summary": "pinned-concrete-resolution-is-explicit-history-stable-and-side-effect-free",
+      "status": "complete"
     },
     {
       "id": "s08",
