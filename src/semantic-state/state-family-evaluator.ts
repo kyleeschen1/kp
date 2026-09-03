@@ -19,6 +19,7 @@ import type { KpSemanticSlotId } from "./identity.ts";
 import {
   compareKpSemanticProgress,
   decodeKpSemanticProgress,
+  encodeKpSemanticProgress,
   isKpSemanticProgressOne,
   isKpSemanticProgressZero,
   kpSemanticProgressOne,
@@ -60,6 +61,19 @@ export interface KpSemanticStateFamilyEvaluator<
   readonly schemaVersion: "kp.semantic-state-family-evaluator.v1";
   readonly kind: "semantic-state-family-evaluator";
   at(progress: KpSemanticProgress): KpSemanticStateFamilySample<Root>;
+  inspect(): KpSemanticStateFamilyEvaluatorStats;
+  reset(): void;
+  dispose(): void;
+}
+
+export interface KpSemanticStateFamilyEvaluatorStats {
+  readonly schemaVersion: "kp.semantic-state-family-evaluator-stats.v1";
+  readonly kind: "semantic-state-family-evaluator-stats";
+  readonly status: "active" | "disposed";
+  readonly capacity: number;
+  readonly entries: number;
+  readonly hits: number;
+  readonly misses: number;
 }
 
 export interface KpEphemeralSemanticStateFamilySample {
@@ -89,7 +103,9 @@ export type KpSemanticStateFamilySample<
 export type KpSemanticStateFamilyEvaluatorErrorCode =
   | "definition-application-mismatch"
   | "discrete-selection-failed"
+  | "family-evaluator-disposed"
   | "interpolation-failed"
+  | "invalid-evaluator-cache-capacity"
   | "invalid-discrete-result"
   | "invalid-interpolation-result";
 
@@ -126,7 +142,11 @@ export function createKpSemanticStateFamilyEvaluator<
     Transitions
   >;
   readonly application: KpAppliedSemanticStateFamily<Root, Parameters>;
+  readonly sampleCacheCapacity?: number;
 }): KpSemanticStateFamilyEvaluator<Root> {
+  const sampleCacheCapacity = requireSampleCacheCapacity(
+    input.sampleCacheCapacity ?? 0
+  );
   if (input.definition.id !== input.application.definitionId ||
     !areKpSemanticStateTransitionPlansEqual(
       input.definition.declaration.transitionPlan,
@@ -168,13 +188,29 @@ export function createKpSemanticStateFamilyEvaluator<
       .filter(hasPresentationCapability)
       .map(createPresentationTransition)
   );
+  const samples = new Map<string, KpEphemeralSemanticStateFamilySample>();
+  let hits = 0;
+  let misses = 0;
+  let disposed = false;
 
   return Object.freeze({
     schemaVersion: "kp.semantic-state-family-evaluator.v1",
     kind: "semantic-state-family-evaluator",
     at(progress: KpSemanticProgress) {
+      assertEvaluatorActive(disposed);
+      // Endpoints already have stable persistent identity and never enter the
+      // bounded cache of arbitrary interior progress samples.
       if (isKpSemanticProgressZero(progress)) return before;
       if (isKpSemanticProgressOne(progress)) return after;
+      const key = encodeKpSemanticProgress(progress);
+      const cached = samples.get(key);
+      if (cached !== undefined) {
+        hits += 1;
+        samples.delete(key);
+        samples.set(key, cached);
+        return cached;
+      }
+      misses += 1;
       const drivers = driverCapabilities.map((capability) => {
         if (hasInterpolationCapability(capability)) {
           return interpolateDriver({
@@ -202,15 +238,72 @@ export function createKpSemanticStateFamilyEvaluator<
         progress,
         drivers
       });
-      return Object.freeze({
+      const sample = Object.freeze({
         schemaVersion: "kp.semantic-state-family-sample.v1" as const,
         kind: "ephemeral-interior" as const,
         progress,
         source,
         presentationTransitions
       });
+      retainSample(samples, key, sample, sampleCacheCapacity);
+      return sample;
+    },
+    inspect() {
+      return Object.freeze({
+        schemaVersion: "kp.semantic-state-family-evaluator-stats.v1" as const,
+        kind: "semantic-state-family-evaluator-stats" as const,
+        status: disposed ? "disposed" as const : "active" as const,
+        capacity: sampleCacheCapacity,
+        entries: samples.size,
+        hits,
+        misses
+      });
+    },
+    reset() {
+      assertEvaluatorActive(disposed);
+      samples.clear();
+      hits = 0;
+      misses = 0;
+    },
+    dispose() {
+      if (disposed) return;
+      samples.clear();
+      disposed = true;
     }
   });
+}
+
+function requireSampleCacheCapacity(capacity: number): number {
+  if (!Number.isSafeInteger(capacity) || capacity < 0) {
+    throw new KpSemanticStateFamilyEvaluatorError({
+      code: "invalid-evaluator-cache-capacity",
+      message: "Semantic state family evaluator cache capacity must be a non-negative safe integer."
+    });
+  }
+  return capacity;
+}
+
+function assertEvaluatorActive(disposed: boolean): void {
+  if (disposed) {
+    throw new KpSemanticStateFamilyEvaluatorError({
+      code: "family-evaluator-disposed",
+      message: "A disposed semantic state family evaluator cannot sample or reset."
+    });
+  }
+}
+
+function retainSample(
+  samples: Map<string, KpEphemeralSemanticStateFamilySample>,
+  key: string,
+  sample: KpEphemeralSemanticStateFamilySample,
+  capacity: number
+): void {
+  if (capacity === 0) return;
+  if (samples.size >= capacity) {
+    const leastRecentlyUsed = samples.keys().next().value;
+    if (leastRecentlyUsed !== undefined) samples.delete(leastRecentlyUsed);
+  }
+  samples.set(key, sample);
 }
 
 interface KpUnknownSemanticStateDiscreteCapability {

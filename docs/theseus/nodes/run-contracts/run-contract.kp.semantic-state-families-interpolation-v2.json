@@ -150,7 +150,8 @@
     {
       "id": "s14",
       "title": "Bounded caller-owned evaluator cache",
-      "status": "planned"
+      "summary": "Applied-family evaluators now provide an explicit bounded interior-sample cache with normalized progress keys, deterministic LRU eviction, hit and miss statistics, reset, idempotent disposal, and application-local ownership; capacity defaults to zero and persistent endpoints plus the existing snapshot-derived cache remain unchanged.",
+      "status": "complete"
     },
     {
       "id": "s15",
