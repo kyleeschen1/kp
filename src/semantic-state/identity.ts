@@ -18,6 +18,7 @@ export type KpTransformationDefinitionId =
   KpSemanticStateId<"transformation-definition">;
 export type KpAppliedTransformationId =
   KpSemanticStateId<"applied-transformation">;
+export type KpSemanticDerivationId = KpSemanticStateId<"derivation">;
 
 export type KpAnySemanticStateId =
   | KpSemanticEntityId
@@ -29,7 +30,8 @@ export type KpAnySemanticStateId =
   | KpDisplayLabelId
   | KpSemanticRepresentationId
   | KpTransformationDefinitionId
-  | KpAppliedTransformationId;
+  | KpAppliedTransformationId
+  | KpSemanticDerivationId;
 
 export interface KpSemanticStateIdentityScope {
   readonly namespace: string;
@@ -54,6 +56,7 @@ export interface KpSemanticStateIdentityScope {
     definitionId: KpTransformationDefinitionId,
     applicationId: string
   ): KpAppliedTransformationId;
+  derivation(localId: string): KpSemanticDerivationId;
 }
 
 const semanticIdPartPattern = /^[a-z0-9]+(?:[._-][a-z0-9]+)*$/u;
@@ -91,6 +94,7 @@ export function createKpSemanticStateIdentityScope(
   const prefix = `kp-state/${validNamespace}`;
   const entityPrefix = `${prefix}/entity/`;
   const transformationPrefix = `${prefix}/transformation/`;
+  const derivationPrefix = `${prefix}/derivation/`;
 
   const scope: KpSemanticStateIdentityScope = {
     namespace: validNamespace,
@@ -157,6 +161,10 @@ export function createKpSemanticStateIdentityScope(
       );
       return `${definitionId}/application/${requireSemanticIdPart(applicationId, "transformation application id")}` as
         KpAppliedTransformationId;
+    },
+    derivation(localId) {
+      return `${derivationPrefix}${requireSemanticIdPart(localId, "derivation id")}` as
+        KpSemanticDerivationId;
     }
   };
 

@@ -226,7 +226,8 @@
     {
       "id": "s28",
       "title": "derived-binding-declaration-boundary",
-      "status": "planned"
+      "summary": "Added nominal serializable derived-slot declarations with stable slot dependencies. Aggregate snapshots treat them as read-only slot state, transaction reads and every write path return typed unsupported diagnostics, and successor snapshots share declarations without evaluation, caching, invalidation, or dynamic-read tracking.",
+      "status": "complete"
     },
     {
       "id": "s29",

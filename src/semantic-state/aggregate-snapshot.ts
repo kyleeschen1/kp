@@ -10,6 +10,11 @@ import type {
   KpSemanticStateIdentityScope,
   KpSemanticVersionId
 } from "./identity.ts";
+import {
+  createKpSemanticDerivedBindingDeclaration,
+  unsupportedKpSemanticDerivedRead,
+  type KpSemanticDerivedBindingDeclaration
+} from "./derived-binding.ts";
 
 export type KpAnySemanticEntityVersionStore =
   KpSemanticEntityVersionStore<KpPersistentSemanticValue>;
@@ -64,6 +69,8 @@ export interface KpAggregateSemanticSnapshot {
   readonly bindingIndex: Readonly<Record<string, number>>;
   readonly absences: readonly KpSemanticSlotAbsence[];
   readonly absenceIndex: Readonly<Record<string, number>>;
+  readonly derivedBindings: readonly KpSemanticDerivedBindingDeclaration[];
+  readonly derivedBindingIndex: Readonly<Record<string, number>>;
   readonly entityStores: readonly KpAnySemanticEntityVersionStore[];
   readonly entityIndex: Readonly<Record<string, number>>;
 }
@@ -75,6 +82,7 @@ export interface KpCreateAggregateSemanticSnapshotInput {
   readonly optionalSlotIds?: readonly KpSemanticSlotId[];
   readonly bindings: readonly KpSemanticSlotBinding[];
   readonly absences?: readonly KpSemanticSlotAbsence[];
+  readonly derivedBindings?: readonly KpSemanticDerivedBindingDeclaration[];
   readonly entityStores: readonly KpAnySemanticEntityVersionStore[];
 }
 
@@ -131,11 +139,28 @@ export function createKpAggregateSemanticSnapshot(
     bindingIndex,
     slotPrefix
   );
-  validateSlotStateClosure(
+  const derivedBindings = Object.freeze((input.derivedBindings ?? []).map(
+    (declaration) => createKpSemanticDerivedBindingDeclaration({
+      identities: input.identities,
+      derivationId: declaration.derivationId,
+      slotId: declaration.slotId,
+      dependencySlotIds: declaration.dependencies.map(({ slotId }) => slotId),
+      sourceId: declaration.sourceId
+    })
+  ));
+  const derivedBindingIndex = createDerivedBindingIndex(
+    derivedBindings,
     requiredSlotIds,
     optionalSlotIds,
     bindingIndex,
     absenceIndex
+  );
+  validateSlotStateClosure(
+    requiredSlotIds,
+    optionalSlotIds,
+    bindingIndex,
+    absenceIndex,
+    derivedBindingIndex
   );
 
   return Object.freeze({
@@ -149,6 +174,8 @@ export function createKpAggregateSemanticSnapshot(
     bindingIndex,
     absences,
     absenceIndex,
+    derivedBindings,
+    derivedBindingIndex,
     entityStores,
     entityIndex
   });
@@ -163,6 +190,13 @@ export function readKpSemanticSlotBinding(
     ? undefined
     : snapshot.bindings[ordinal];
   if (binding === undefined || binding.slotId !== slotId) {
+    const derivedOrdinal = snapshot.derivedBindingIndex[slotId];
+    const derived = derivedOrdinal === undefined
+      ? undefined
+      : snapshot.derivedBindings[derivedOrdinal];
+    if (derived !== undefined && derived.slotId === slotId) {
+      return unsupportedKpSemanticDerivedRead(derived);
+    }
     const absenceOrdinal = snapshot.absenceIndex[slotId];
     const absence = absenceOrdinal === undefined
       ? undefined
@@ -180,6 +214,22 @@ export function readKpSemanticSlotBinding(
     );
   }
   return binding;
+}
+
+export function readKpSemanticDerivedBinding(
+  snapshot: KpAggregateSemanticSnapshot,
+  slotId: KpSemanticSlotId
+): KpSemanticDerivedBindingDeclaration {
+  const ordinal = snapshot.derivedBindingIndex[slotId];
+  const declaration = ordinal === undefined
+    ? undefined
+    : snapshot.derivedBindings[ordinal];
+  if (declaration === undefined || declaration.slotId !== slotId) {
+    throw new Error(
+      `Semantic slot ${JSON.stringify(slotId)} has no derived declaration in aggregate snapshot ${JSON.stringify(snapshot.id)}.`
+    );
+  }
+  return declaration;
 }
 
 export function readKpSemanticSlotAbsence(
@@ -350,10 +400,12 @@ function validateSlotStateClosure(
   requiredSlotIds: readonly KpSemanticSlotId[],
   optionalSlotIds: readonly KpSemanticSlotId[],
   bindingIndex: Readonly<Record<string, number>>,
-  absenceIndex: Readonly<Record<string, number>>
+  absenceIndex: Readonly<Record<string, number>>,
+  derivedBindingIndex: Readonly<Record<string, number>>
 ): void {
   const missingRequired = requiredSlotIds.filter(
-    (slotId) => bindingIndex[slotId] === undefined
+    (slotId) => bindingIndex[slotId] === undefined &&
+      derivedBindingIndex[slotId] === undefined
   );
   if (missingRequired.length > 0) {
     throw new Error(
@@ -361,13 +413,59 @@ function validateSlotStateClosure(
     );
   }
   const missingOptional = optionalSlotIds.filter((slotId) =>
-    bindingIndex[slotId] === undefined && absenceIndex[slotId] === undefined
+    bindingIndex[slotId] === undefined && absenceIndex[slotId] === undefined &&
+      derivedBindingIndex[slotId] === undefined
   );
   if (missingOptional.length > 0) {
     throw new Error(
       `Aggregate semantic snapshot is incomplete; missing optional slot state: ${missingOptional.join(", ")}.`
     );
   }
+}
+
+function createDerivedBindingIndex(
+  declarations: readonly KpSemanticDerivedBindingDeclaration[],
+  requiredSlotIds: readonly KpSemanticSlotId[],
+  optionalSlotIds: readonly KpSemanticSlotId[],
+  bindingIndex: Readonly<Record<string, number>>,
+  absenceIndex: Readonly<Record<string, number>>
+): Readonly<Record<string, number>> {
+  const declaredSlots = new Set([...requiredSlotIds, ...optionalSlotIds]);
+  const derivationIds = new Set<string>();
+  const index: Record<string, number> = {};
+  declarations.forEach((declaration, ordinal) => {
+    if (!declaredSlots.has(declaration.slotId)) {
+      throw new Error(
+        `Derived semantic slot ${JSON.stringify(declaration.slotId)} is not declared by the snapshot.`
+      );
+    }
+    if (bindingIndex[declaration.slotId] !== undefined ||
+        absenceIndex[declaration.slotId] !== undefined) {
+      throw new Error(
+        `Derived semantic slot ${JSON.stringify(declaration.slotId)} cannot also be bound or absent.`
+      );
+    }
+    if (index[declaration.slotId] !== undefined) {
+      throw new Error(
+        `Aggregate semantic snapshot derives slot ${JSON.stringify(declaration.slotId)} more than once.`
+      );
+    }
+    if (derivationIds.has(declaration.derivationId)) {
+      throw new Error(
+        `Aggregate semantic snapshot repeats derivation ${JSON.stringify(declaration.derivationId)}.`
+      );
+    }
+    for (const dependency of declaration.dependencies) {
+      if (!declaredSlots.has(dependency.slotId)) {
+        throw new Error(
+          `Derived semantic dependency ${JSON.stringify(dependency.slotId)} is not declared by the snapshot.`
+        );
+      }
+    }
+    index[declaration.slotId] = ordinal;
+    derivationIds.add(declaration.derivationId);
+  });
+  return Object.freeze(index);
 }
 
 function freezeUniqueIds<Id extends string>(

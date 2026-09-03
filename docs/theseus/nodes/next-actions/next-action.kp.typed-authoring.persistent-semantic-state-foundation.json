@@ -896,6 +896,48 @@
       "scope": "s27-introduce-and-remove-operations",
       "checkedAt": "2026-09-03T10:00:15.521Z",
       "notes": "Workspace schema and active run references validate before lifecycle-slice completion."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "s28-derived-binding-declaration-boundary",
+      "checkedAt": "2026-09-03T10:06:51.319Z",
+      "notes": "58 semantic-state laws pass, including serialized nominal derivations, typed dependency references, read/write prohibition, declaration sharing, and explicit absence of reactive machinery."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s28-derived-binding-declaration-boundary",
+      "checkedAt": "2026-09-03T10:06:52.481Z",
+      "notes": "Repository TypeScript, Svelte, and domain checks pass; derivation and dependency IDs reject cross-kind substitution."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s28-derived-binding-declaration-boundary",
+      "checkedAt": "2026-09-03T10:06:53.512Z",
+      "notes": "Architecture gates pass at 1988 modules with zero dependency-direction exceptions."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s28-derived-binding-declaration-boundary",
+      "checkedAt": "2026-09-03T10:06:54.529Z",
+      "notes": "Inference contracts pass at 101452 types and 169645 instantiations."
+    },
+    {
+      "command": "npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "s28-derived-binding-declaration-boundary",
+      "checkedAt": "2026-09-03T10:06:55.578Z",
+      "notes": "Exact equation reachability remains current at 68 roots."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s28-derived-binding-declaration-boundary",
+      "checkedAt": "2026-09-03T10:06:56.621Z",
+      "notes": "Workspace schema and active run references validate before derived-boundary completion."
     }
   ],
   "expectedLearning": [

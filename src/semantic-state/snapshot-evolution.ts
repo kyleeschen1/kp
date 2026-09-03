@@ -85,6 +85,7 @@ export function createKpSuccessorAggregateSemanticSnapshot(
     optionalSlotIds: input.parent.optionalSlotIds,
     bindings: proposedBindings,
     absences: proposedAbsences,
+    derivedBindings: input.parent.derivedBindings,
     entityStores: nextStores
   });
 
@@ -107,6 +108,7 @@ export function createKpSuccessorAggregateSemanticSnapshot(
     optionalSlotIds: input.parent.optionalSlotIds,
     bindings,
     absences,
+    derivedBindings: input.parent.derivedBindings,
     entityStores: nextStores
   });
 }

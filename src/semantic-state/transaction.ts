@@ -27,6 +27,7 @@ import {
   createKpSuccessorAggregateSemanticSnapshot,
   type KpSemanticEntityStoreReplacement
 } from "./snapshot-evolution.ts";
+import { unsupportedKpSemanticDerivedWrite } from "./derived-binding.ts";
 
 declare const kpSemanticTransactionScopeBrand: unique symbol;
 const kpSemanticTransactionConstructorAuthority = Symbol(
@@ -260,6 +261,7 @@ export class KpSemanticTransaction {
     requireWriteId(input.id);
     requireWriteId(input.sourceId);
     requireWriteId(input.revisionId);
+    this.#assertWritableSlot(input.slotId);
 
     const previousBinding = readKpSemanticSlotBinding(
       this.#working,
@@ -342,6 +344,7 @@ export class KpSemanticTransaction {
     this.#assertOpenScope(scope);
     requireWriteId(input.id);
     requireWriteId(input.sourceId);
+    this.#assertWritableSlot(input.targetSlotId);
     if (input.sourceSlotId === input.targetSlotId) {
       throw new KpSemanticTransactionError(
         "invalid-bind",
@@ -390,6 +393,7 @@ export class KpSemanticTransaction {
     this.#assertOpenScope(scope);
     requireWriteId(input.id);
     requireWriteId(input.sourceId);
+    this.#assertWritableSlot(input.targetSlotId);
     if (input.sourceSlotId === input.targetSlotId) {
       throw new KpSemanticTransactionError(
         "invalid-copy",
@@ -456,6 +460,7 @@ export class KpSemanticTransaction {
     this.#assertOpenScope(scope);
     requireWriteId(input.id);
     requireWriteId(input.sourceId);
+    this.#assertWritableSlot(input.slotId);
     const absenceOrdinal = this.#working.absenceIndex[input.slotId];
     const absence = absenceOrdinal === undefined
       ? undefined
@@ -505,6 +510,7 @@ export class KpSemanticTransaction {
     this.#assertOpenScope(scope);
     requireWriteId(input.id);
     requireWriteId(input.sourceId);
+    this.#assertWritableSlot(input.slotId);
     if (this.#working.requiredSlotIds.includes(input.slotId)) {
       throw new KpSemanticTransactionError(
         "required-slot-removal",
@@ -551,6 +557,12 @@ export class KpSemanticTransaction {
     operation: KpSemanticTransactionJournalOperation
   ): void {
     requireWriteId(write.id);
+    for (const { slotId } of write.slotRebindings) {
+      this.#assertWritableSlot(slotId);
+    }
+    for (const { slotId } of write.slotAbsenceReplacements ?? []) {
+      this.#assertWritableSlot(slotId);
+    }
     if (this.#writeIds.has(write.id)) {
       throw new KpSemanticTransactionError(
         "duplicate-write",
@@ -639,6 +651,16 @@ export class KpSemanticTransaction {
         "scope-expired",
         `Semantic transaction ${this.transactionId} scope expired after ${this.#status}.`
       );
+    }
+  }
+
+  #assertWritableSlot(slotId: KpSemanticSlotId): void {
+    const ordinal = this.#working.derivedBindingIndex[slotId];
+    const declaration = ordinal === undefined
+      ? undefined
+      : this.#working.derivedBindings[ordinal];
+    if (declaration !== undefined && declaration.slotId === slotId) {
+      unsupportedKpSemanticDerivedWrite(declaration);
     }
   }
 }
