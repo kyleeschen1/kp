@@ -353,11 +353,74 @@
       "scope": "hygiene",
       "checkedAt": "2026-09-03T14:14:11.060Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-state-authoring-api-gate.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T14:36:14.170Z",
+      "notes": "Typed packet measures 0 identity factories, 0 low-level constructors, 0 kernel metadata fields, 0 persistent-value narrowings, 0 casts, 31 setup lines, and the three visible deferred derivation slot reads."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T14:36:15.370Z",
+      "notes": "97 semantic-state laws pass including the executable API comparison packet."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T14:36:16.387Z",
+      "notes": "Exact market curve callback inference and all TypeScript, Svelte, and domain projects pass."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T14:36:17.427Z",
+      "notes": "Unchanged inference result: 102883 types and 172113 instantiations."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T14:36:18.450Z",
+      "notes": "All architecture and authority gates pass with no new exceptions."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T14:36:19.480Z",
+      "notes": "Production bundle passes with the pre-existing chunk-size advisory only."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T14:36:20.531Z",
+      "notes": "Complete suite passes 6207 of 6207 tests."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "durable",
+      "checkedAt": "2026-09-03T14:36:21.566Z",
+      "notes": "Workspace valid before s12 completion records."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "hygiene",
+      "checkedAt": "2026-09-03T14:36:22.603Z",
+      "notes": "No whitespace errors."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s11 proves exact facade-to-kernel convergence for mixed update, bind, bindCopy, introduce, and remove operations; the bounded type-surface repair preserves exhaustive contracts while returning inference below unchanged ceilings."
+    "summary": "s12 retains the internal descriptor/handle/transform facade after measurable burden reduction and exact type review; public promotion remains deferred, and s13 must eliminate three visible temporary derivation slot references."
   },
   "expectedLearning": [
     "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",

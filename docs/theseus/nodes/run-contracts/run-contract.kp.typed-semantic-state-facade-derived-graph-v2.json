@@ -128,7 +128,8 @@
     {
       "id": "s12",
       "title": "Facade API gate",
-      "status": "planned"
+      "summary": "API gate retains the internal facade: ordinary kernel boilerplate reaches zero, setup falls from 69 to 31 lines, inference remains below unchanged ceilings, and the only visible gap is the explicitly scheduled typed derivation boundary.",
+      "status": "complete"
     },
     {
       "id": "s13",
