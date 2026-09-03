@@ -2,7 +2,7 @@
   "id": "next-action.kp.typed-authoring.semantic-state-facade-derived-graph",
   "kind": "next-action",
   "title": "Implement typed semantic state facade and explicit derived graph",
-  "status": "ready",
+  "status": "resolved",
   "domain": "typed-authoring",
   "sourceRefs": [
     {
@@ -12,6 +12,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-03-persistent-semantic-state-foundation-closeout.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-03-typed-semantic-state-facade-derived-graph-closeout.md"
     }
   ],
   "dependsOn": {
@@ -1535,11 +1539,102 @@
       "scope": "broad",
       "checkedAt": "2026-09-03T19:32:02.602Z",
       "notes": "workspace-valid-1088-nodes-26998-events-after-v3-s21-closeout"
+    },
+    {
+      "command": "node-test-final-author-packet",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T19:40:21.898Z",
+      "notes": "12-api-gate-supply-tax-corpus-and-scale-laws-passed-with-raw-69-lines-typed-34-lines-and-realistic-supply-tax-82-lines"
+    },
+    {
+      "command": "npm-run-test-semantic-state",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T19:40:23.190Z",
+      "notes": "153-semantic-state-laws-passed-at-final-checkpoint"
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T19:40:24.339Z",
+      "notes": "application-node-test-svelte-and-domain-type-projects-pass-at-final-checkpoint"
+    },
+    {
+      "command": "npm-run-check-architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T19:40:25.542Z",
+      "notes": "dependency-direction-has-zero-exceptions-and-equation-authority-ratchets-pass-at-2001-source-files"
+    },
+    {
+      "command": "npm-run-check-inference",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T19:40:26.637Z",
+      "notes": "final-types-104742-instantiations-176892-remain-below-frozen-106300-and-181400-ceilings"
+    },
+    {
+      "command": "npm-run-test-equation-reachability",
+      "status": "passed",
+      "scope": "generated-scan",
+      "checkedAt": "2026-09-03T19:40:27.820Z",
+      "notes": "4129-files-and-twelve-reachability-laws-pass-at-closeout"
+    },
+    {
+      "command": "npm-run-test-equation-surface-preservation",
+      "status": "passed",
+      "scope": "impact-router",
+      "checkedAt": "2026-09-03T19:40:29.041Z",
+      "notes": "eleven-authority-and-preservation-laws-pass-at-closeout"
+    },
+    {
+      "command": "npm-run-verify-impact-contract",
+      "status": "passed",
+      "scope": "routing",
+      "checkedAt": "2026-09-03T19:40:30.300Z",
+      "notes": "documentation-and-theseus-state-select-broad-typecheck-test-and-build-gates"
+    },
+    {
+      "command": "npm-run-build-bundle",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T19:40:31.509Z",
+      "notes": "production-bundle-passes-with-existing-large-chunk-advisories-only"
+    },
+    {
+      "command": "git-diff-check",
+      "status": "passed",
+      "scope": "hygiene",
+      "checkedAt": "2026-09-03T19:40:32.679Z",
+      "notes": "no-whitespace-errors-in-closeout-roadmap-or-thread"
+    },
+    {
+      "command": "npm-test",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T19:47:20.772Z",
+      "notes": "final-closeout-suite-passed-6263-tests-with-zero-failures-in-544064ms"
+    },
+    {
+      "command": "theseus-workspace-validate",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T19:47:38.182Z",
+      "notes": "final-workspace-valid-1088-nodes-27018-events-after-v3-s22-auto-resolution"
+    },
+    {
+      "command": "git-diff-cached-check",
+      "status": "passed",
+      "scope": "hygiene",
+      "checkedAt": "2026-09-03T19:48:39.512Z",
+      "notes": "final-staged-closeout-passes-after-removing-four-markdown-hard-break-whitespace-errors"
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "v3-s21-complete-representative-scale-remains-selective-shared-caller-cached-and-within-frozen-inference-ratchets"
+    "state": "complete",
+    "summary": "loop-2-internal-facade-and-derived-graph-complete-with-public-promotion-deferred-and-loop-3-proposal-recommended"
   },
   "expectedLearning": [
     "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",

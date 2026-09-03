@@ -1,10 +1,10 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: Loop 2 typed state facade and derived graph run active
+Status: Loop 2 complete at mandatory architecture/API checkpoint
 Last Updated: 2026-09-03
-Current Next Action: execute
-`run-contract.kp.typed-semantic-state-facade-derived-graph-v3` through its
-mandatory API checkpoint. Theseus owns current-slice status.
+Current Next Action: review the Loop 2 closeout and decide whether to approve a
+separate Loop 3 proposal for one nonvisual applied state family and pure
+`at(progress)` boundary.
 
 ## Goal
 
@@ -409,6 +409,43 @@ ceiling by 142. The user-approved v3 recovery preserves that completed history,
 absorbs the uncommitted operation as its first rollback unit, permits one
 attributed post-operation budget refresh, and replaces only v2's unexecuted
 remainder. No later inference-ceiling increase is authorized in v3.
+
+## Typed Facade And Derived Graph Outcome
+
+Loop 2 is complete and stopped at its mandatory human checkpoint. The internal
+descriptor and ordinary-handle facade restores exact leaf types and compiles
+named update, alias, copy, lifecycle, and derivation operations through the
+existing immutable transaction kernel. Explicit typed dependency tuples feed a
+definition-local graph with pre-execution diagnostics, stable ordering, lazy
+requested-closure evaluation, exact version-derived fingerprints, and a
+caller-owned disposable cache. Reads, failures, and cache activity add no
+semantic history or recovery authority.
+
+The realistic supply-tax pressure caller retains the canonical exact-rational
+economics model upstream, and a second exact market passes equilibrium,
+incidence, and revenue parity. The fixed generation-shaped corpus contains
+three accepted cases and six exact repairs without routine low-level IDs,
+stores, casts, or generic staging. A 128-concrete/64-derived scale probe keeps
+127 of 128 entity stores and bindings shared per revision, performs no
+untouched-chain recomputation, and remains within the frozen inference
+ratchets.
+
+The facade remains internal. A realistic caller still coordinates schema
+compilation, handle creation, derivation definitions, snapshot materialization,
+graph compilation, and transformation application, so the direct-module
+surface has not earned public promotion. The recommended next step, if the
+checkpoint is approved, is a separately reviewed nonvisual Loop 3 proposal:
+one applied state family with persistent endpoints, pure ephemeral
+`at(progress)`, explicit semantic/presentation/discrete modes, canonical
+exact-rational tax reparameterization, and a structurally different pressure
+caller. Aggregate timelines, URL addressing, renderers, Article integration,
+public promotion, and live LLM evaluation remain later decisions.
+
+The exact metrics, retained and rejected abstractions, candidate comparison,
+and checkpoint questions are recorded in
+`../reviews/2026-09-03-typed-semantic-state-facade-derived-graph-closeout.md`.
+Executable history remains owned by
+`run-contract.kp.typed-semantic-state-facade-derived-graph-v3`.
 
 ## Stop Conditions
 

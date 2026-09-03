@@ -61,13 +61,16 @@ being carried forward outside this Codex thread. The Focus Deck experiment is
 preserved at its four-card human checkpoint. The typed semantic authoring
 facade completed its approved ergonomics and algebraic-representation loop and
 two structurally different unit-scalar pressure callers. The broad clock and
-inference gates are restored. The approved 30-slice successor run reconciled
-the stale closed-world ledgers, retained the bounded unit-scalar helper,
-preserved exact-rational economics authority, and implemented the internal
-persistent entity/version/snapshot and explicit transaction foundation. It is
-now stopped at its mandatory architecture/API checkpoint before a typed
-property facade, derived evaluation, interpolation, runtime, or renderer work.
-The internal
+inference gates are restored. The first persistent-state loop reconciled the
+stale closed-world ledgers, retained the bounded unit-scalar helper, preserved
+exact-rational economics authority, and implemented the internal immutable
+entity/version/snapshot and explicit transaction foundation. The completed
+Loop 2 adds a typed property facade, explicit dependency graph, lazy pinned
+evaluation, exact version fingerprints, caller-owned caching, supply-tax
+pressure, a fixed generation-shaped corpus, and representative scale evidence.
+It is stopped at its mandatory architecture/API checkpoint before public
+promotion, state-family interpolation, aggregate timeline, runtime, or
+renderer work. The internal
 Animation Catalogue remains the source and pressure lab rather than the active
 product surface. Neither proof by itself validates demand or selects a
 universal learner layout or semantic model.
@@ -423,13 +426,18 @@ Only this repository sequence is active:
    snapshots, structural sharing and branches, direct pinned recovery,
    explicit update/bind/copy/lifecycle transactions, declaration-only derived
    bindings, and one-way projection into canonical change, correspondence,
-   provenance, and lineage authority. It intentionally exposes no public
-   facade, lazy evaluator, interpolation, timeline, or renderer integration.
-   Human review should decide the narrow typed facade and explicit dependency
-   boundary before loop 2 is proposed. The estimate remains three long loops
-   through the decisive semantic
-   proof, five through one reviewed Graph2D/KaTeX exemplar, and seven through
-   the full bounded knowledge/procedure/generation horizon. A full
+   provenance, and lineage authority. Loop 2 now adds the retained internal
+   descriptor and typed-handle facade, named operations, explicit derived
+   dependency graph, lazy pinned evaluator, version fingerprints,
+   caller-owned cache, failure and history laws, canonical supply-tax pressure,
+   fixed generation-shaped corpus, and representative scale probe. It exposes
+   no public facade, interpolation, timeline, or renderer integration. Human
+   review should decide whether to authorize a separate nonvisual Loop 3
+   proposal for applied state families and pure ephemeral `at(progress)` over
+   one independent tax driver. The estimate remains three long loops through
+   the decisive semantic proof, five through one reviewed Graph2D/KaTeX
+   exemplar, and seven through the full bounded
+   knowledge/procedure/generation horizon. A full
    supply-demand pack, public algebra hierarchy, general CAS work, broad
    construct generation, automatic animation reparameterization rollout, and
    Article grammar changes remain out of scope. See
@@ -451,7 +459,7 @@ The catalogue backlog and selection rationale are recorded in
 
 | Area | State | Direction |
 | --- | --- | --- |
-| Semantic/runtime spine | Strong and governed; the internal persistent entity/version/snapshot and transaction foundation is complete at a mandatory API checkpoint | Preserve the existing runtime; review the typed state facade and derived-dependency boundary before any loop-2, timeline, or renderer integration. |
+| Semantic/runtime spine | Strong and governed; the internal persistent foundation, typed state facade, explicit derived graph, lazy evaluator, and caller-owned cache are complete at a mandatory API checkpoint | Review the Loop 2 boundary. If accepted, propose one nonvisual applied state family with pure ephemeral `at(progress)` before aggregate timeline, public facade, or renderer integration. |
 | Equation animation | The generated ledger has 29 equation capabilities: 8 Direct, 3 Registered, 2 Exemplar, and 16 Missing. Exponential duality and radical inversion are Direct; root is the first family with ten generated case-level maturity rows | Preserve the converged vocabulary; require case enumeration before new Direct promotions; migrate legacy Direct ledgers when they are touched; select the next accepted family packet from explicit gaps rather than prose memory. |
 | Graph2D | Economics and physics model callers are promoted; one exact monic-quadratic right-translation exemplar is governed and executable | Preserve the bounded translation proof without claiming arbitrary formula parsing, transformation-family promotion, or a universal graph frontend. |
 | Program animation | TypeScript and Python bounded extract-helper generation are `Direct`; each has language-owned parsing, legality, identity binding, corpus, authoring, and runtime-isolation evidence over an approved canonical artifact. Scheme remains an approved specialized exemplar rather than a general frontend. | Preserve approved choreography and build-time-only compilers. Variants remain semantic-plan-only until a separately governed artifact compiler exists; arbitrary refactors and execution remain typed gaps. |
@@ -686,10 +694,13 @@ clocks, frames, and renderer ports remain outside Svelte authority.
   direction. After v2 stopped at its slice-14 inference boundary, the approved
   22-slice v3 recovery retained completed history, authorized one measured
   post-derived-binding budget refresh, and replaced only the unexecuted
-  remainder. It is now executing through
-  `run-contract.kp.typed-semantic-state-facade-derived-graph-v3`. Theseus owns
-  live slice status; interpolation, timeline, renderer, and public-promotion
-  work remain outside the approved contract.
+  remainder. V3 completed the explicit graph, evaluator, caller-owned cache,
+  failure and history laws, exact supply-tax pressure, fixed LLM-shaped corpus,
+  and scale attribution, and is stopped at its mandatory human API checkpoint.
+  Its closeout and Loop 3 recommendation are recorded in
+  `reviews/2026-09-03-typed-semantic-state-facade-derived-graph-closeout.md`.
+  Interpolation, timeline, renderer, and public-promotion work remain outside
+  the completed contract; no Loop 3 execution is authorized yet.
 - The normal-matrix Proof Memory implementation is preserved at its mandatory
   checkpoint. Architecture passed; attentional experience did not. Its s26-s27
   continuation is closed without hardening or release.
