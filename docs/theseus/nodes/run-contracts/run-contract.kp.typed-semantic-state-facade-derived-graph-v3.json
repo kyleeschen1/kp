@@ -168,7 +168,8 @@
     {
       "id": "s19",
       "title": "Pressure multi object recovery and branches",
-      "status": "planned"
+      "summary": "one-multi-object-tax-transform-and-divergent-branches-recover-directly-without-ambient-recency-or-replay",
+      "status": "complete"
     },
     {
       "id": "s20",

@@ -83,6 +83,12 @@ export function createKpSemanticStateSupplyTaxAuthoring(
       phase: kpStateValue<KpPerUnitTaxMarketPhase>("untaxed"),
       supply: kpStateValue<KpSupplyTaxBuyerFacingSupplyState>(untaxedSupply)
     }),
+    comparison: kpStateGroup({
+      sharedSupply:
+        kpStateValue<KpSupplyTaxBuyerFacingSupplyState>(untaxedSupply),
+      copiedSupply:
+        kpStateValue<KpSupplyTaxBuyerFacingSupplyState>(untaxedSupply)
+    }),
     outcomes: kpStateGroup({
       equilibrium: kpStateDerived<KpPerUnitTaxMarketStateV1>(),
       incidence: kpStateDerived<KpSupplyTaxIncidenceState>(),
@@ -142,6 +148,8 @@ export function createKpSemanticStateSupplyTaxAuthoring(
     author(state) {
       state.market.phase.update(() => "taxed");
       state.market.supply.update(() => taxedSupply);
+      state.comparison.sharedSupply.bind(state.market.supply);
+      state.comparison.copiedSupply.bindCopy(state.market.supply);
     }
   });
   const applied = addSellerTax.apply(initial, "first");

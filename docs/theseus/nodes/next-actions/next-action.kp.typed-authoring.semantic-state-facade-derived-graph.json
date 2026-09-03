@@ -1304,11 +1304,81 @@
       "scope": "standard",
       "checkedAt": "2026-09-03T18:54:27.228Z",
       "notes": "workspace-valid-1088-nodes-26950-events-after-v3-s18-closeout"
+    },
+    {
+      "command": "node-test-supply-tax-branch-recovery-pressure",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T18:58:44.251Z",
+      "notes": "27-alias-copy-cache-recovery-and-supply-tax-laws-passed"
+    },
+    {
+      "command": "npm-run-test-semantic-state",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T18:58:45.402Z",
+      "notes": "149-semantic-state-laws-passed-including-pinned-multi-branch-pressure"
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T18:58:46.492Z",
+      "notes": "all-type-projects-pass-with-exact-shared-and-copied-supply-handle-types"
+    },
+    {
+      "command": "npm-run-check-architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T18:58:47.565Z",
+      "notes": "multi-object-pressure-retains-framework-neutral-and-domain-boundaries"
+    },
+    {
+      "command": "npm-run-check-inference",
+      "status": "passed",
+      "scope": "diagnostic",
+      "checkedAt": "2026-09-03T18:58:48.623Z",
+      "notes": "types-103188-instantiations-172704-unchanged"
+    },
+    {
+      "command": "npm-run-test-equation-reachability",
+      "status": "passed",
+      "scope": "generated-scan",
+      "checkedAt": "2026-09-03T18:58:49.701Z",
+      "notes": "scan-count-4123-and-twelve-laws-passed"
+    },
+    {
+      "command": "npm-run-test-equation-surface-preservation",
+      "status": "passed",
+      "scope": "impact-router",
+      "checkedAt": "2026-09-03T18:58:50.872Z",
+      "notes": "eleven-authority-and-preservation-laws-passed"
+    },
+    {
+      "command": "npm-run-verify-impact-contract",
+      "status": "passed",
+      "scope": "routing",
+      "checkedAt": "2026-09-03T18:58:51.944Z",
+      "notes": "high-risk-internal-pressure-selection-reviewed-and-slice-standard-gates-executed"
+    },
+    {
+      "command": "git-diff-check",
+      "status": "passed",
+      "scope": "hygiene",
+      "checkedAt": "2026-09-03T18:58:52.974Z",
+      "notes": "no-whitespace-errors"
+    },
+    {
+      "command": "theseus-workspace-validate",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T18:59:03.993Z",
+      "notes": "workspace-valid-1088-nodes-26965-events-after-v3-s19-closeout"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "v3-s18-complete-explicit-derived-equilibrium-incidence-and-revenue-retain-exact-canonical-economics"
+    "summary": "v3-s19-complete-pinned-alias-copy-branches-recovery-and-fingerprints-remain-version-authoritative"
   },
   "expectedLearning": [
     "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",

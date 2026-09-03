@@ -6,8 +6,21 @@ import { createKpSemanticStateSupplyTaxAuthoring } from
   "../src/experiments/typed-linear-supply-demand/semantic-state-supply-tax.ts";
 import { evaluateKpSemanticDerivedValue } from
   "../src/semantic-state/derived-evaluator.ts";
+import { createKpSemanticDerivationFingerprint } from
+  "../src/semantic-state/derived-fingerprint.ts";
 import { kpPerUnitTaxWelfareExemplarInput } from
   "../domains/economics/per-unit-tax-welfare.ts";
+import { readKpSemanticSlotBinding } from
+  "../src/semantic-state/aggregate-snapshot.ts";
+import { defineKpSemanticStateTransform } from
+  "../src/semantic-state/authoring-state-transform.ts";
+import {
+  createKpSemanticSnapshotRecoveryIndex,
+  pinKpAggregateSemanticSnapshot,
+  pinKpSemanticSlotVersion,
+  recoverKpPinnedSnapshot,
+  recoverKpPinnedVersion
+} from "../src/semantic-state/pinned-recovery.ts";
 
 const SUPPLY_TAX_AUTHORING_SOURCE =
   "src/experiments/typed-linear-supply-demand/semantic-state-supply-tax.ts";
@@ -43,7 +56,7 @@ test("the supply-tax packet keeps ordinary authoring compact", () => {
     manualKernelMetadataFields: 0,
     authorCasts: 0,
     marketFacadePrimitives: 0,
-    authoredSetupLines: 74
+    authoredSetupLines: 82
   });
 });
 
@@ -212,16 +225,147 @@ test("the typed seller-tax update retains exact canonical market values", () => 
   });
   assert.deepEqual(
     fixture.applied.commit.journal.map(entry => entry.operation.kind),
-    ["update", "update"]
+    ["update", "update", "bind", "bind-copy"]
   );
   assert.deepEqual(
     fixture.applied.commit.journal.map(entry =>
-      entry.operation.kind === "update" ? entry.operation.slotId : undefined
-    ),
+      entry.operation.kind === "update" ? entry.operation.slotId : null
+    ).filter(slotId => slotId !== null),
     [
       fixture.compiled.identityScope.slot("market.phase"),
       fixture.compiled.identityScope.slot("market.supply")
     ]
+  );
+});
+
+test("pinned branches recover alias copy and fingerprint authority directly", () => {
+  const fixture = createKpSemanticStateSupplyTaxAuthoring();
+  const first = fixture.applied.commit.after;
+  const repeated = fixture.addSellerTax.apply(fixture.initial, "first")
+    .commit.after;
+  const alternate = fixture.addSellerTax.apply(fixture.initial, "alternate")
+    .commit.after;
+  const reaffirmSharedSupply = defineKpSemanticStateTransform({
+    compiled: fixture.compiled,
+    handles: fixture.handles,
+    id: "reaffirm-shared-supply",
+    author(state) {
+      state.comparison.sharedSupply.update(previous => ({ ...previous }));
+    }
+  });
+  const reaffirmed = reaffirmSharedSupply.apply(first, "first").commit.after;
+  const firstView = fixture.handles.pin(first);
+  const alternateView = fixture.handles.pin(alternate);
+  const reaffirmedView = fixture.handles.pin(reaffirmed);
+
+  assert.equal(
+    fixture.handles.pin(fixture.initial).market.supply.read().phase,
+    "untaxed"
+  );
+  assert.equal(firstView.source.demand.read(), alternateView.source.demand.read());
+  assert.equal(firstView.market.supply.read(), firstView.comparison.sharedSupply.read());
+  assert.notEqual(firstView.market.supply.read(), firstView.comparison.copiedSupply.read());
+  assert.deepEqual(
+    firstView.market.supply.read(),
+    firstView.comparison.copiedSupply.read()
+  );
+  assert.equal(
+    reaffirmedView.market.supply.read(),
+    reaffirmedView.comparison.sharedSupply.read()
+  );
+  assert.equal(
+    reaffirmedView.comparison.copiedSupply.read(),
+    firstView.comparison.copiedSupply.read()
+  );
+
+  const firstSupply = readKpSemanticSlotBinding(
+    first,
+    fixture.handles.refs.market.supply.slotId
+  );
+  const firstShared = readKpSemanticSlotBinding(
+    first,
+    fixture.handles.refs.comparison.sharedSupply.slotId
+  );
+  const firstCopy = readKpSemanticSlotBinding(
+    first,
+    fixture.handles.refs.comparison.copiedSupply.slotId
+  );
+  const reaffirmedSupply = readKpSemanticSlotBinding(
+    reaffirmed,
+    fixture.handles.refs.market.supply.slotId
+  );
+  const reaffirmedShared = readKpSemanticSlotBinding(
+    reaffirmed,
+    fixture.handles.refs.comparison.sharedSupply.slotId
+  );
+  const reaffirmedCopy = readKpSemanticSlotBinding(
+    reaffirmed,
+    fixture.handles.refs.comparison.copiedSupply.slotId
+  );
+  assert.equal(firstShared.entityId, firstSupply.entityId);
+  assert.equal(firstShared.versionId, firstSupply.versionId);
+  assert.notEqual(firstCopy.entityId, firstSupply.entityId);
+  assert.equal(reaffirmedSupply.entityId, reaffirmedShared.entityId);
+  assert.equal(reaffirmedSupply.versionId, reaffirmedShared.versionId);
+  assert.notEqual(reaffirmedSupply.versionId, firstSupply.versionId);
+  assert.deepEqual(reaffirmedCopy, firstCopy);
+
+  const fingerprint = (snapshot: typeof first) =>
+    createKpSemanticDerivationFingerprint({
+      graph: fixture.graph,
+      snapshot,
+      target: fixture.handles.refs.outcomes.governmentRevenue
+    }).key;
+  assert.notEqual(fingerprint(fixture.initial), fingerprint(first));
+  assert.equal(fingerprint(first), fingerprint(repeated));
+  assert.notEqual(fingerprint(first), fingerprint(alternate));
+  assert.notEqual(fingerprint(first), fingerprint(reaffirmed));
+  assert.deepEqual(evaluateKpSemanticDerivedValue({
+    graph: fixture.graph,
+    snapshot: reaffirmed,
+    target: fixture.handles.refs.outcomes.governmentRevenue
+  }), {
+    marketStateId: fixture.model.states.taxed.id,
+    phase: "taxed",
+    amount: fixture.accounting.states.taxed.governmentRevenue
+  });
+
+  const firstSnapshotReference = pinKpAggregateSemanticSnapshot(first);
+  const alternateSnapshotReference = pinKpAggregateSemanticSnapshot(alternate);
+  const firstSupplyReference = pinKpSemanticSlotVersion(
+    first,
+    fixture.handles.refs.market.supply.slotId
+  );
+  const alternateCopyReference = pinKpSemanticSlotVersion(
+    alternate,
+    fixture.handles.refs.comparison.copiedSupply.slotId
+  );
+  const reaffirmedSharedReference = pinKpSemanticSlotVersion(
+    reaffirmed,
+    fixture.handles.refs.comparison.sharedSupply.slotId
+  );
+  const recovery = createKpSemanticSnapshotRecoveryIndex([
+    fixture.initial,
+    first,
+    alternate,
+    reaffirmed
+  ]);
+  assert.equal(recoverKpPinnedSnapshot(recovery, firstSnapshotReference), first);
+  assert.equal(
+    recoverKpPinnedSnapshot(recovery, alternateSnapshotReference),
+    alternate
+  );
+  assert.deepEqual(
+    recoverKpPinnedVersion(recovery, firstSupplyReference).value,
+    firstView.market.supply.read()
+  );
+  assert.deepEqual(
+    recoverKpPinnedVersion(recovery, alternateCopyReference).value,
+    alternateView.comparison.copiedSupply.read()
+  );
+  assert.deepEqual(
+    recoverKpPinnedVersion(recovery, reaffirmedSharedReference).value,
+    reaffirmedView.comparison.sharedSupply.read()
   );
 });
 

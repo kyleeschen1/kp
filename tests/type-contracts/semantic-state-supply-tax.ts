@@ -28,11 +28,17 @@ const tax: KpPerUnitTaxContractV1 = before.source.tax.read();
 const phase: KpPerUnitTaxMarketPhase = before.market.phase.read();
 const supply: KpSupplyTaxBuyerFacingSupplyState =
   before.market.supply.read();
+const sharedSupply: KpSupplyTaxBuyerFacingSupplyState =
+  before.comparison.sharedSupply.read();
+const copiedSupply: KpSupplyTaxBuyerFacingSupplyState =
+  before.comparison.copiedSupply.read();
 void demand;
 void originalSupply;
 void tax;
 void phase;
 void supply;
+void sharedSupply;
+void copiedSupply;
 
 const equilibrium: KpPerUnitTaxMarketStateV1 =
   evaluateKpSemanticDerivedValue({
