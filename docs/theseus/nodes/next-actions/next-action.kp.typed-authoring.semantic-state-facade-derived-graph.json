@@ -1374,11 +1374,81 @@
       "scope": "standard",
       "checkedAt": "2026-09-03T18:59:03.993Z",
       "notes": "workspace-valid-1088-nodes-26965-events-after-v3-s19-closeout"
+    },
+    {
+      "command": "node-test-semantic-state-llm-corpus-and-authoring-laws",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T19:04:13.587Z",
+      "notes": "34-corpus-schema-transform-and-graph-laws-passed"
+    },
+    {
+      "command": "npm-run-test-semantic-state",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T19:04:14.795Z",
+      "notes": "152-semantic-state-laws-passed-including-nine-case-deterministic-corpus"
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T19:04:15.849Z",
+      "notes": "three-invalid-value-lifecycle-and-derived-write-cases-require-exact-typed-repairs"
+    },
+    {
+      "command": "npm-run-check-architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T19:04:16.897Z",
+      "notes": "test-only-corpus-retains-framework-neutral-and-authority-boundaries"
+    },
+    {
+      "command": "npm-run-check-inference",
+      "status": "passed",
+      "scope": "diagnostic",
+      "checkedAt": "2026-09-03T19:04:17.960Z",
+      "notes": "types-103188-instantiations-172704-unchanged"
+    },
+    {
+      "command": "npm-run-test-equation-reachability",
+      "status": "passed",
+      "scope": "generated-scan",
+      "checkedAt": "2026-09-03T19:04:19.003Z",
+      "notes": "scan-count-4126-and-twelve-laws-passed"
+    },
+    {
+      "command": "npm-run-test-equation-surface-preservation",
+      "status": "passed",
+      "scope": "impact-router",
+      "checkedAt": "2026-09-03T19:04:20.076Z",
+      "notes": "eleven-authority-and-preservation-laws-passed"
+    },
+    {
+      "command": "npm-run-verify-impact-contract",
+      "status": "passed",
+      "scope": "routing",
+      "checkedAt": "2026-09-03T19:04:21.187Z",
+      "notes": "high-risk-unmatched-test-fixtures-reviewed-and-slice-standard-gates-executed"
+    },
+    {
+      "command": "git-diff-check",
+      "status": "passed",
+      "scope": "hygiene",
+      "checkedAt": "2026-09-03T19:04:22.250Z",
+      "notes": "no-whitespace-errors"
+    },
+    {
+      "command": "theseus-workspace-validate",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T19:04:34.795Z",
+      "notes": "workspace-valid-1088-nodes-26980-events-after-v3-s20-closeout"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "v3-s19-complete-pinned-alias-copy-branches-recovery-and-fingerprints-remain-version-authoritative"
+    "summary": "v3-s20-complete-fixed-llm-shaped-corpus-is-deterministic-local-and-explicit-about-typed-repair"
   },
   "expectedLearning": [
     "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",

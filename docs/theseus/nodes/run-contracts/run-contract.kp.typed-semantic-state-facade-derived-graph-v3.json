@@ -174,7 +174,8 @@
     {
       "id": "s20",
       "title": "Freeze LLM shaped authoring corpus",
-      "status": "planned"
+      "summary": "nine-case-generation-shaped-fixture-needs-no-low-level-ids-stores-casts-or-generic-staging",
+      "status": "complete"
     },
     {
       "id": "s21",
