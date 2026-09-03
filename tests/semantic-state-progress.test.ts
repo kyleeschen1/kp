@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   compareKpSemanticProgress,
   createKpSemanticProgress,
+  decodeKpSemanticProgress,
   encodeKpSemanticProgress,
   isKpSemanticProgressOne,
   isKpSemanticProgressZero,
@@ -64,4 +65,20 @@ test("semantic progress rejects invalid and out-of-range rationals", () => {
     () => createKpSemanticProgress(3n, 2n),
     /between zero and one/u
   );
+});
+
+test("semantic progress decodes only canonical exact encodings", () => {
+  assert.deepEqual(
+    decodeKpSemanticProgress(encodeKpSemanticProgress(
+      createKpSemanticProgress(2n, 3n)
+    )),
+    createKpSemanticProgress(2n, 3n)
+  );
+  for (const invalid of ["2/4", "01/2", "1/0", "4/3"]) {
+    assert.throws(() => Reflect.apply(
+      decodeKpSemanticProgress,
+      undefined,
+      [invalid]
+    ), RangeError);
+  }
 });

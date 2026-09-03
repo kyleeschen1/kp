@@ -453,6 +453,48 @@
       "scope": "control-plane",
       "checkedAt": "2026-09-03T21:34:49.332Z",
       "notes": "1091-nodes-and-27115-events-valid-before-completion-records"
+    },
+    {
+      "command": "focused-discrete-presentation-progress-tests",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T21:40:43.988Z",
+      "notes": "Twenty-four-of-twenty-four-exact-threshold-rewind-metadata-failure-and-canonical-decoding-laws-passed"
+    },
+    {
+      "command": "npm-run-verify-impact-discrete-presentation",
+      "status": "passed",
+      "scope": "impact",
+      "checkedAt": "2026-09-03T21:40:45.210Z",
+      "notes": "High-risk-semantic-state-path-selected-semantic-state-typecheck-and-architecture-gates"
+    },
+    {
+      "command": "npm-run-test-semantic-state",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T21:40:46.308Z",
+      "notes": "198-of-198-semantic-state-tests-passed"
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T21:40:47.417Z",
+      "notes": "TypeScript-Svelte-and-domain-checks-passed-with-zero-Svelte-diagnostics"
+    },
+    {
+      "command": "npm-run-check-architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T21:40:48.522Z",
+      "notes": "2006-TypeScript-modules-7446-of-7497-local-references-zero-exceptions-and-all-gateways-passed"
+    },
+    {
+      "command": "theseus-workspace-validate",
+      "status": "passed",
+      "scope": "control-plane",
+      "checkedAt": "2026-09-03T21:40:49.581Z",
+      "notes": "1091-nodes-and-27125-events-valid-before-completion-records"
     }
   ],
   "expectedLearning": [

@@ -126,7 +126,8 @@
     {
       "id": "s10",
       "title": "Discrete and presentation-only semantics",
-      "status": "planned"
+      "summary": "Exact-discrete-selection-is-stateless-and-presentation-only-transitions-never-write-semantic-overlays",
+      "status": "complete"
     },
     {
       "id": "s11",

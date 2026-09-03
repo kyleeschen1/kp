@@ -60,6 +60,20 @@ export function encodeKpSemanticProgress(
     KpSemanticProgressEncoding;
 }
 
+export function decodeKpSemanticProgress(
+  encoding: KpSemanticProgressEncoding
+): KpSemanticProgress {
+  const match = /^(0|[1-9][0-9]*)\/(1|[1-9][0-9]*)$/u.exec(encoding);
+  if (match === null) {
+    throw new RangeError("Semantic progress encoding must be canonical n/d.");
+  }
+  const progress = createKpSemanticProgress(BigInt(match[1]!), BigInt(match[2]!));
+  if (encodeKpSemanticProgress(progress) !== encoding) {
+    throw new RangeError("Semantic progress encoding must be normalized.");
+  }
+  return progress;
+}
+
 export function isKpSemanticProgressZero(
   progress: KpSemanticProgress
 ): boolean {

@@ -1,3 +1,8 @@
+import {
+  readKpSemanticSlotBinding,
+  readKpSnapshotEntityStore,
+  type KpAggregateSemanticSnapshot
+} from "./aggregate-snapshot.ts";
 import type {
   KpPinnedSemanticStateHandleTree
 } from "./authoring-state-handles.ts";
@@ -12,6 +17,8 @@ import {
 } from "./entity-version-store.ts";
 import type { KpSemanticSlotId } from "./identity.ts";
 import {
+  compareKpSemanticProgress,
+  decodeKpSemanticProgress,
   isKpSemanticProgressOne,
   isKpSemanticProgressZero,
   kpSemanticProgressOne,
@@ -30,8 +37,11 @@ import type {
   KpSemanticStateFamilyDefinition,
   KpSemanticStateTransitionCapabilitySource
 } from "./state-family-definition.ts";
-import { areKpSemanticStateTransitionPlansEqual } from
-  "./state-family-transition.ts";
+import {
+  areKpSemanticStateTransitionPlansEqual,
+  type KpSemanticStateDiscreteTransitionDeclaration,
+  type KpSemanticStatePresentationTransitionDeclaration
+} from "./state-family-transition.ts";
 
 export interface KpPersistentSemanticStateFamilySample<
   Root extends KpSemanticStateGroupDescriptor<KpSemanticStateMemberMap>
@@ -57,6 +67,18 @@ export interface KpEphemeralSemanticStateFamilySample {
   readonly kind: "ephemeral-interior";
   readonly progress: KpSemanticProgress;
   readonly source: KpEphemeralSemanticStateReadSource;
+  readonly presentationTransitions:
+    readonly KpSemanticStateFamilyPresentationTransition[];
+}
+
+export interface KpSemanticStateFamilyPresentationTransition {
+  readonly schemaVersion:
+    "kp.semantic-state-family-presentation-transition.v1";
+  readonly kind: "semantic-state-family-presentation-transition";
+  readonly declarationId: string;
+  readonly sourceId: string;
+  readonly targetSlotId: KpSemanticSlotId;
+  readonly targetPath: readonly string[];
 }
 
 export type KpSemanticStateFamilySample<
@@ -66,9 +88,10 @@ export type KpSemanticStateFamilySample<
 
 export type KpSemanticStateFamilyEvaluatorErrorCode =
   | "definition-application-mismatch"
+  | "discrete-selection-failed"
   | "interpolation-failed"
-  | "invalid-interpolation-result"
-  | "transition-mode-sampling-unsupported";
+  | "invalid-discrete-result"
+  | "invalid-interpolation-result";
 
 export class KpSemanticStateFamilyEvaluatorError extends Error {
   readonly code: KpSemanticStateFamilyEvaluatorErrorCode;
@@ -130,10 +153,20 @@ export function createKpSemanticStateFamilyEvaluator<
     ),
     view: input.application.after
   });
-  const interpolationCapabilities = input.definition.capabilities.transitions
-    .filter(hasInterpolationCapability);
-  const unsupported = input.definition.capabilities.transitions.find(
-    ({ transitionMode }) => transitionMode === "discrete"
+  const orderedCapabilities = [...input.definition.capabilities.transitions]
+    .sort((left, right) =>
+      compareStrings(
+        left.declaration.target.slotId,
+        right.declaration.target.slotId
+      ) || compareStrings(left.declaration.id, right.declaration.id)
+    );
+  const driverCapabilities = orderedCapabilities.filter(
+    ({ transitionMode }) => transitionMode !== "presentation-only"
+  );
+  const presentationTransitions = Object.freeze(
+    orderedCapabilities
+      .filter(hasPresentationCapability)
+      .map(createPresentationTransition)
   );
 
   return Object.freeze({
@@ -142,21 +175,28 @@ export function createKpSemanticStateFamilyEvaluator<
     at(progress: KpSemanticProgress) {
       if (isKpSemanticProgressZero(progress)) return before;
       if (isKpSemanticProgressOne(progress)) return after;
-      if (unsupported !== undefined) {
+      const drivers = driverCapabilities.map((capability) => {
+        if (hasInterpolationCapability(capability)) {
+          return interpolateDriver({
+            capability,
+            application: input.application,
+            progress
+          });
+        }
+        if (hasDiscreteCapability(capability)) {
+          return selectDiscreteDriver({
+            capability,
+            application: input.application,
+            progress
+          });
+        }
         throw new KpSemanticStateFamilyEvaluatorError({
-          code: "transition-mode-sampling-unsupported",
+          code: "definition-application-mismatch",
           progress,
-          declarationId: unsupported.declaration.id,
-          message: `Semantic state-family transition ${JSON.stringify(unsupported.declaration.id)} requires discrete sampling support.`
+          declarationId: capability.declaration.id,
+          message: `Semantic transition ${JSON.stringify(capability.declaration.id)} has no matching sampling capability.`
         });
-      }
-      const drivers = interpolationCapabilities.map((capability) =>
-        interpolateDriver({
-          capability,
-          application: input.application,
-          progress
-        })
-      );
+      });
       const source = createKpEphemeralSemanticStateReadSource({
         application: input.application,
         progress,
@@ -166,10 +206,29 @@ export function createKpSemanticStateFamilyEvaluator<
         schemaVersion: "kp.semantic-state-family-sample.v1" as const,
         kind: "ephemeral-interior" as const,
         progress,
-        source
+        source,
+        presentationTransitions
       });
     }
   });
+}
+
+interface KpUnknownSemanticStateDiscreteCapability {
+  readonly transitionMode: "discrete";
+  readonly declaration: KpSemanticStateDiscreteTransitionDeclaration<unknown>;
+  select(input: {
+    readonly before: never;
+    readonly after: never;
+    readonly changePointId: string;
+    readonly valueSourceId: string;
+    readonly parameters: never;
+  }): unknown;
+}
+
+interface KpUnknownSemanticStatePresentationCapability {
+  readonly transitionMode: "presentation-only";
+  readonly declaration:
+    KpSemanticStatePresentationTransitionDeclaration<unknown>;
 }
 
 interface KpUnknownSemanticStateInterpolationCapability {
@@ -192,6 +251,21 @@ function hasInterpolationCapability(
   return capability.transitionMode === "semantic-interpolation" &&
     "interpolate" in capability &&
     typeof capability.interpolate === "function";
+}
+
+function hasDiscreteCapability(
+  capability: KpSemanticStateTransitionCapabilitySource
+): capability is KpSemanticStateTransitionCapabilitySource &
+  KpUnknownSemanticStateDiscreteCapability {
+  return capability.transitionMode === "discrete" &&
+    "select" in capability && typeof capability.select === "function";
+}
+
+function hasPresentationCapability(
+  capability: KpSemanticStateTransitionCapabilitySource
+): capability is KpSemanticStateTransitionCapabilitySource &
+  KpUnknownSemanticStatePresentationCapability {
+  return capability.transitionMode === "presentation-only";
 }
 
 function interpolateDriver<
@@ -247,6 +321,84 @@ function interpolateDriver<
   });
 }
 
+function selectDiscreteDriver<
+  Root extends KpSemanticStateGroupDescriptor<KpSemanticStateMemberMap>,
+  Parameters
+>(input: {
+  readonly capability: KpUnknownSemanticStateDiscreteCapability;
+  readonly application: KpAppliedSemanticStateFamily<Root, Parameters>;
+  readonly progress: KpSemanticProgress;
+}): KpEphemeralSemanticStateDriverInput<unknown> {
+  const before = readConcreteValue(
+    input.application.commit.before,
+    input.capability.declaration.target.slotId
+  );
+  const after = readConcreteValue(
+    input.application.commit.after,
+    input.capability.declaration.target.slotId
+  );
+  const active = [...input.capability.declaration.changePoints]
+    .reverse()
+    .find(({ at }) => compareKpSemanticProgress(
+      decodeKpSemanticProgress(at),
+      input.progress
+    ) <= 0);
+  if (active === undefined) {
+    return Object.freeze({
+      declaration: input.capability.declaration,
+      value: before
+    });
+  }
+  let result: unknown;
+  try {
+    result = Reflect.apply(input.capability.select, undefined, [{
+      before,
+      after,
+      changePointId: active.id,
+      valueSourceId: active.valueSourceId,
+      parameters: input.application.parameters
+    }]);
+  } catch (cause) {
+    throw new KpSemanticStateFamilyEvaluatorError({
+      code: "discrete-selection-failed",
+      progress: input.progress,
+      declarationId: input.capability.declaration.id,
+      cause,
+      message: `Discrete semantic transition ${JSON.stringify(input.capability.declaration.id)} failed at ${JSON.stringify(active.id)}.`
+    });
+  }
+  let value: KpPersistentSemanticValue;
+  try {
+    value = requireAndFreezeKpPersistentSemanticValue(result);
+  } catch (cause) {
+    throw new KpSemanticStateFamilyEvaluatorError({
+      code: "invalid-discrete-result",
+      progress: input.progress,
+      declarationId: input.capability.declaration.id,
+      cause,
+      message: `Discrete semantic transition ${JSON.stringify(input.capability.declaration.id)} returned a non-structural value.`
+    });
+  }
+  return Object.freeze({
+    declaration: input.capability.declaration,
+    value
+  });
+}
+
+function createPresentationTransition(
+  capability: KpUnknownSemanticStatePresentationCapability
+): KpSemanticStateFamilyPresentationTransition {
+  return Object.freeze({
+    schemaVersion:
+      "kp.semantic-state-family-presentation-transition.v1",
+    kind: "semantic-state-family-presentation-transition",
+    declarationId: capability.declaration.id,
+    sourceId: capability.declaration.source.id,
+    targetSlotId: capability.declaration.target.slotId,
+    targetPath: capability.declaration.target.path
+  });
+}
+
 function readConcreteValue(
   snapshot: KpAggregateSemanticSnapshot,
   slotId: KpSemanticSlotId
@@ -270,8 +422,7 @@ function createEndpointSample<
     ...input
   });
 }
-import {
-  readKpSemanticSlotBinding,
-  readKpSnapshotEntityStore,
-  type KpAggregateSemanticSnapshot
-} from "./aggregate-snapshot.ts";
+
+function compareStrings(left: string, right: string): number {
+  return left < right ? -1 : left > right ? 1 : 0;
+}

@@ -76,6 +76,7 @@ export interface KpSemanticStateDiscreteTransitionCapability<
     readonly before: Value;
     readonly after: Value;
     readonly changePointId: string;
+    readonly valueSourceId: string;
     readonly parameters: Parameters;
   }): Value;
 }
