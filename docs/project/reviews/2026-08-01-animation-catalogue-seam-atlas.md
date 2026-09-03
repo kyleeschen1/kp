@@ -1,13 +1,13 @@
 # Animation Catalogue Seam Atlas and Provisional Queue
 
 Date: 2026-08-01
-Status: updated after native programming host integration
+Status: updated after catalogue ledger reconciliation
 
 ## Outcome
 
-The internal catalogue now has one row for each of 45 concrete lazy-loadable
-assets across 13 packs. The catalogue load probe loaded and routed every row:
-45 meaningfully painted through a native adapter, with no remaining native-host
+The internal catalogue now has one row for each of 60 concrete lazy-loadable
+assets across 14 packs. The catalogue load probe loaded and routed every row:
+60 meaningfully painted through a native adapter, with no remaining native-host
 capability gaps, no loading failures, and no iframes. The
 Graph3D surface transition now uses the bounded lazy Three.js adapter over its
 semantic SVG fallback and shared WebGL lease pool.
@@ -27,15 +27,26 @@ missing capability; and `Keep or Retire?` identifies ambiguous authored intent.
 
 | Concrete asset | Pack | Surface | Observed host | Contexts | Provisional question |
 | --- | --- | --- | --- | ---: | --- |
+| `animation.algebra.exponential-homomorphism.difference-to-quotient` | exponential-homomorphism | equation | Painted · canonical native KaTeX | 1 | Keep? |
+| `animation.algebra.exponential-homomorphism.sum-to-product` | exponential-homomorphism | equation | Painted · canonical native KaTeX | 1 | Keep? |
 | `animation.algebra.log-exponent.solve-two-power-x` | algebra | equation | Painted · canonical native KaTeX | 1 | Keep? |
+| `animation.algebra.log-product.equivalence-frame` | log-product | equation | Painted · canonical native KaTeX | 1 | Keep? |
 | `animation.algebra.log-product.product-to-sum` | log-product | equation | Painted · canonical native KaTeX | 1 | Human checkpoint |
 | `animation.algebra.log-product.three-factors-to-sum` | log-product | equation | Painted · canonical native KaTeX | 1 | Human checkpoint |
 | `animation.algebra.log-quotient.difference-to-quotient` | algebra | equation | Painted · canonical native KaTeX | 1 | Keep? |
+| `animation.algebra.radical.compound-carrier-normalization` | algebra | equation | Painted · native KaTeX compound carrier | 1 | Keep? |
+| `animation.algebra.radical.solve-x-squared-nine` | algebra | equation | Painted · native KaTeX even root | 1 | Keep? |
 | `animation.comparison.jacobian-hessian` | comparison | equation | Painted · KaTeX | 1 | Keep? |
 | `animation.comparison.linear-solve-programming` | comparison | composite | Painted · KaTeX + programming trace | 1 | Keep? |
 | `animation.derivative-rules.tangent-graph` | graph | graph | Painted · SVG graph | 3 | Keep? |
 | `animation.dot-projection.basic` | graph | graph | Painted · SVG graph | 3 | Keep? |
 | `animation.economics.supply-demand-equilibrium-shift` | economics | graph | Painted · exact SVG graph | 1 | Approved exemplar |
+| `animation.equation.finite-product-expansion.v1` | algebra | equation | Painted · canonical native KaTeX | 1 | Keep? |
+| `animation.equation.finite-sum-expansion.v1` | algebra | equation | Painted · canonical native KaTeX | 1 | Keep? |
+| `animation.equation.fraction-equivalence.common-denominator-pressure.v1` | algebra | equation | Painted · canonical native KaTeX | 1 | Keep? |
+| `animation.equation.fraction-equivalence.compact.v1` | algebra | equation | Painted · canonical native KaTeX | 1 | Keep? |
+| `animation.equation.fraction-equivalence.v1` | algebra | equation | Painted · canonical native KaTeX | 1 | Keep? |
+| `animation.equation.logarithm-change-of-base.v1` | algebra | equation | Painted · canonical native KaTeX | 1 | Keep? |
 | `animation.exact-fraction-quantity.third-plus-sixth` | exact-quantity | diagram | Painted · synchronized fraction | 1 | Keep? |
 | `animation.generated.add-zero` | generated-drafts | equation | Painted · KaTeX | 1 | Keep? |
 | `animation.generated.calculus.derivative.power-rule-x-cubed` | generated-problems | equation | Painted · KaTeX | 3 | Keep? |
@@ -55,6 +66,8 @@ missing capability; and `Keep or Retire?` identifies ambiguous authored intent.
 | `animation.generated.radical.square-root-as-power` | algebra | equation | Painted · KaTeX | 5 | Keep? |
 | `animation.generated.substitute-three` | generated-drafts | equation | Painted · KaTeX | 1 | Keep? |
 | `animation.generated.substitute-three.provisional-incorrect` | generated-drafts | equation | Painted · KaTeX | 1 | Keep or Retire? |
+| `animation.graph-2d.quadratic-translate-right-two` | graph | graph | Painted · SVG graph | 1 | Keep? |
+| `animation.graph-3d.saddle-denominator-four-to-eight` | graph | graph | Painted · lazy WebGL / semantic SVG | 1 | Keep? |
 | `animation.graph.surface-mode.mesh-to-donut` | graph | graph | Painted · lazy WebGL / semantic SVG | 1 | Keep? |
 | `animation.graph.vector.linear-map-scale` | graph | graph | Painted · SVG graph | 3 | Keep? |
 | `animation.inequality.sign-flip.basic` | algebra | equation | Painted · KaTeX | 3 | Keep? |
@@ -63,6 +76,8 @@ missing capability; and `Keep or Retire?` identifies ambiguous authored intent.
 | `animation.operation-evaluation.five-plus-two` | operation-evaluation | equation | Painted · native KaTeX operation | 1 | Keep? |
 | `animation.operation-evaluation.one-plus-two` | operation-evaluation | equation | Painted · native KaTeX operation | 2 | Keep? |
 | `animation.operation-evaluation.three-sixths` | operation-evaluation | equation | Painted · native KaTeX operation | 1 | Keep? |
+| `animation.operation-evaluation.two-times-one-carrier` | operation-evaluation | equation | Painted · native KaTeX operation | 1 | Keep? |
+| `animation.operation-evaluation.two-times-three` | operation-evaluation | equation | Painted · native KaTeX operation | 2 | Keep? |
 | `animation.place-value-addition.278-plus-156` | place-value | diagram | Painted · synchronized place value | 2 | Keep? |
 | `animation.physics.constant-force-work-energy` | physics | graph | Painted · exact SVG graph/diagram | 1 | Approved exemplar |
 | `animation.programming.add.execution-trace` | programming | programming | Painted · native programming trace | 1 | Keep? |
@@ -75,15 +90,10 @@ missing capability; and `Keep or Retire?` identifies ambiguous authored intent.
 
 ## Shared Seams
 
-The catalogue crosses five surface shapes: 29 equation, seven graph, three
-diagram, one composite, and five programming assets. Adapter reuse is strong:
-the general KaTeX adapter participates in 23 rows, the SVG graph adapter in six,
-the canonical operation-evaluation adapter in three, the bounded Graph3D
-adapter in one, the programming trace adapter in two, the Lisp material adapter
-in one, the TypeScript refactor adapter in one, the Python refactor adapter in
-one, the Scheme factorial adapter in one, the log-exponent and log-quotient
-adapters in one each, the log-product adapter in two, and three specialized
-diagram adapters each cover one row.
+The catalogue crosses five surface shapes: 41 equation, nine graph, three
+diagram, two composite, and five programming assets. Adapter reuse remains
+strong across the general and specialized KaTeX paths, SVG graph hosts, bounded
+Graph3D hosts, programming hosts, and specialized diagram adapters.
 This is evidence for keeping the adapter registry seam, not for inventing a
 universal renderer.
 
@@ -98,7 +108,7 @@ not a new canonical-port candidate merely because it rendered successfully.
 
 ## Context Consolidation Queue
 
-The 45 assets retain their related display contexts beneath one row per asset.
+The 60 assets retain their related display contexts beneath one row per asset.
 These subordinate contexts stay under Details and do not mint additional
 catalogue rows.
 

@@ -85,11 +85,11 @@ test("generated calculus equations expose exact derivative and integral transiti
   );
   assert.equal(
     antiderivativeExpanded.projection.transitions[0]?.source[0]?.latex,
-    "\\int 6x^{2}\\,dx"
+    "\\int x^{2}\\,dx"
   );
   assert.equal(
     antiderivativeExpanded.projection.transitions[0]?.target[0]?.latex,
-    "\\frac{6}{2+1}x^{2+1}"
+    "\\frac{x^{2+1}}{2+1} + C"
   );
   assert.equal(antiderivativeExpanded.motifs[0]?.kind, "copy-fan-out");
 
@@ -99,11 +99,11 @@ test("generated calculus equations expose exact derivative and integral transiti
   );
   assert.equal(
     antiderivativeResolved.projection.transitions[0]?.source[0]?.latex,
-    "\\frac{6}{2+1}x^{2+1}"
+    "\\frac{x^{2+1}}{2+1} + C"
   );
   assert.equal(
     antiderivativeResolved.projection.transitions[0]?.target[0]?.latex,
-    "2x^{3} + C"
+    "\\frac{x^{3}}{3} + C"
   );
   assert.equal(antiderivativeResolved.motifs[0]?.kind, "merge-fan-in");
 });

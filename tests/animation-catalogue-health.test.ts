@@ -32,6 +32,9 @@ import {
   kpEditorGraph3DSurfaceAdapter
 } from "../src/editor/graph-3d-surface-adapter.ts";
 import {
+  kpEditorGraph3DSaddleSurfaceAdapter
+} from "../src/editor/graph-3d-saddle-parameter-surface-adapter.ts";
+import {
   createKpEditorGraphSvgDomainAdapter as
     createKpEditorGraphSvgViewportAdapter
 } from "../src/editor/graph-svg-domain-renderers.ts";
@@ -77,6 +80,7 @@ function currentHostability(): readonly KpAnimationCatalogueSurfaceHostability[]
     kpEditorEquationSurfaceAdapter,
     kpEditorDiagramSvgAdapter,
     kpEditorGraph3DSurfaceAdapter,
+    kpEditorGraph3DSaddleSurfaceAdapter,
     graphSvgViewportAdapter,
     kpEditorOperationEvaluationSurfaceAdapter,
     kpEditorExactFractionQuantitySurfaceAdapter,
@@ -142,7 +146,7 @@ test("current unobserved catalogue health is honest about review and breakage", 
         health.filter((entry) => entry.status === status).length
       ])
     ),
-    { ready: 0, review: 45, broken: 0 }
+    { ready: 0, review: 60, broken: 0 }
   );
   assert.deepEqual(
     health

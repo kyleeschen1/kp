@@ -35,9 +35,9 @@ test("editor animation surface dispatch covers every current concrete asset", ()
       ])
     ),
     {
-      equation: 40,
+      equation: 53,
       diagram: 3,
-      graph: 11,
+      graph: 13,
       programming: 5,
       composite: 3
     }

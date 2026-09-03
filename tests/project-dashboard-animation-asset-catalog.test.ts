@@ -19,6 +19,10 @@ test("generated algebra dashboard catalog exposes animation asset rows", () => {
     "animation-linear-solve-solve-x",
     "animation-generated-linear-linear-68c15d41",
     "animation-generated-cancellation-additive-inverses",
+    "animation-algebra-radical-solve-x-squared-nine",
+    "animation-algebra-radical-compound-carrier-normalization",
+    "exemplar-equation-finite-sum-expansion-v1",
+    "exemplar-equation-finite-product-expansion-v1",
     "animation-generated-fraction-expression-two-fourths",
     "animation-generated-exponent-square-as-product",
     "animation-generated-radical-square-root-as-power",
@@ -28,8 +32,15 @@ test("generated algebra dashboard catalog exposes animation asset rows", () => {
     "animation-inequality-sign-flip-basic",
     "animation-algebra-log-exponent-solve-two-power-x",
     "animation-algebra-log-quotient-difference-to-quotient",
+    "exemplar-equation-logarithm-change-of-base-v1",
+    "exemplar-equation-fraction-equivalence-explain-unit-factor-v1",
+    "exemplar-equation-fraction-equivalence-compact-paired-operation-v1",
+    "exemplar-fraction-common-denominator-pressure-v1",
     "animation-algebra-log-product-xy-to-sum",
-    "animation-algebra-log-product-xyz-to-sum"
+    "animation-algebra-log-product-xyz-to-sum",
+    "animation-algebra-log-product-equivalence-frame",
+    "animation-algebra-exponential-sum-to-product",
+    "animation-algebra-exponential-difference-to-quotient"
   ]);
   const fractionRow = rows.find((row) =>
     row.id === "animation-generated-fraction-expression-two-fourths");

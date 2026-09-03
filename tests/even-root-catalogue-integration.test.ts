@@ -56,6 +56,7 @@ test("selection loads the specialized root surface with generic static fallback"
   );
   assert.ok(evenRoot);
   assert.deepEqual(evenRoot.adapterIds, [
-    "editor-animation-surface.even-root.canonical-native-katex"
+    "editor-animation-surface.even-root.canonical-native-katex",
+    "editor-animation-surface.root.compound-carrier.canonical-native-katex"
   ]);
 });

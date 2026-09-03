@@ -34,9 +34,9 @@ test("editor animation picker groups the concrete catalog by supported surface",
       ["algebra", 7],
       ["calculus", 4],
       ["linear-algebra", 4],
-      ["equation", 18],
+      ["equation", 31],
       ["diagram", 3],
-      ["graph", 3],
+      ["graph", 5],
       ["programming", 5],
       ["composite", 1]
     ]

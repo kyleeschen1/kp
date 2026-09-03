@@ -70,7 +70,8 @@
     {
       "id": "s02",
       "title": "catalogue-and-asset-ledgers",
-      "status": "planned"
+      "summary": "Reconciled all 16 catalogue and asset ledger failures to the canonical 60-asset registry, restored the saddle adapter in the test-only health registry, and verified generated manifests without production behavior changes.",
+      "status": "complete"
     },
     {
       "id": "s03",

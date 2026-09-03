@@ -63,6 +63,34 @@
       "scope": "broad",
       "checkedAt": "2026-09-03T06:13:20.927Z",
       "notes": "Workspace valid before s01 completion."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test <s02 catalogue and asset tests>",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T06:22:41.484Z",
+      "notes": "All 62 catalogue, adapter-ledger, picker, calculus projection, and dashboard asset tests passed."
+    },
+    {
+      "command": "npm run check:animation-library-display-catalog",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T06:22:42.711Z",
+      "notes": "Generated animation library display metadata is current after the 60-asset reconciliation."
+    },
+    {
+      "command": "npm run check:animation-conformance-manifest",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T06:22:43.742Z",
+      "notes": "Animation conformance manifest remains current."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T06:22:46.767Z",
+      "notes": "Workspace valid before s02 completion."
     }
   ],
   "expectedLearning": [
