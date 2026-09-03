@@ -84,6 +84,14 @@ export interface KpSemanticDerivedEvaluationMemo {
   write(slotId: KpSemanticSlotId, value: KpPersistentSemanticValue): void;
 }
 
+export interface KpSemanticStateSampleView<Result> {
+  readonly schemaVersion: "kp.semantic-state-sample-view.v1";
+  readonly kind: "semantic-state-sample-view";
+  readonly source: KpEphemeralSemanticStateReadSource;
+  readonly reference: KpDerivedSemanticStateLeafHandle<Result>;
+  read(): Result;
+}
+
 export type KpSemanticDerivedEvaluationErrorCode =
   | "derived-compute-failed"
   | "derived-dependency-absent"
@@ -264,15 +272,22 @@ export function evaluateKpSemanticDerivedValue<const Result>(input: {
   readonly snapshot: KpAggregateSemanticSnapshot;
   readonly target: KpDerivedSemanticStateLeafHandle<Result>;
 }): Result;
+export function evaluateKpSemanticDerivedValue<const Result>(input: {
+  readonly graph: KpSemanticDerivedGraph;
+  readonly source: KpSemanticStateReadSource;
+  readonly target: KpDerivedSemanticStateLeafHandle<Result>;
+}): Result;
 export function evaluateKpSemanticDerivedValue(input: {
   readonly graph: KpSemanticDerivedGraph;
-  readonly snapshot: KpAggregateSemanticSnapshot;
   readonly target: KpDerivedSemanticStateLeafHandle<unknown>;
-}): unknown {
-  return evaluateKpSemanticDerivedValueWithMemo({
-    ...input,
-    memo: createRequestMemo()
-  });
+} & (
+  | { readonly snapshot: KpAggregateSemanticSnapshot }
+  | { readonly source: KpSemanticStateReadSource }
+)): unknown {
+  const memo = createRequestMemo();
+  return "snapshot" in input
+    ? evaluateKpSemanticDerivedValueWithMemo({ ...input, memo })
+    : evaluateKpSemanticDerivedValueWithMemo({ ...input, memo });
 }
 
 export function evaluateKpSemanticDerivedValueWithMemo<const Result>(input: {
@@ -281,44 +296,75 @@ export function evaluateKpSemanticDerivedValueWithMemo<const Result>(input: {
   readonly target: KpDerivedSemanticStateLeafHandle<Result>;
   readonly memo: KpSemanticDerivedEvaluationMemo;
 }): Result;
+export function evaluateKpSemanticDerivedValueWithMemo<const Result>(input: {
+  readonly graph: KpSemanticDerivedGraph;
+  readonly source: KpSemanticStateReadSource;
+  readonly target: KpDerivedSemanticStateLeafHandle<Result>;
+  readonly memo: KpSemanticDerivedEvaluationMemo;
+}): Result;
 export function evaluateKpSemanticDerivedValueWithMemo(input: {
   readonly graph: KpSemanticDerivedGraph;
-  readonly snapshot: KpAggregateSemanticSnapshot;
   readonly target: KpDerivedSemanticStateLeafHandle<unknown>;
   readonly memo: KpSemanticDerivedEvaluationMemo;
-}): unknown {
-  if (input.snapshot.namespace !== input.graph.namespace) {
+} & (
+  | { readonly snapshot: KpAggregateSemanticSnapshot }
+  | { readonly source: KpSemanticStateReadSource }
+)): unknown {
+  const source = "source" in input ? input.source : undefined;
+  const snapshot = readEvaluationSnapshot(input);
+  const sourceNamespace = source?.namespace ?? snapshot.namespace;
+  if (sourceNamespace !== input.graph.namespace ||
+    snapshot.namespace !== input.graph.namespace) {
     throw new KpSemanticDerivedEvaluationError({
       code: "foreign-derived-snapshot",
       slotId: input.target.slotId,
-      snapshotId: input.snapshot.id,
-      message: `Derived graph ${JSON.stringify(input.graph.namespace)} cannot evaluate snapshot ${JSON.stringify(input.snapshot.id)} in ${JSON.stringify(input.snapshot.namespace)}.`
+      snapshotId: snapshot.id,
+      message: `Derived graph ${JSON.stringify(input.graph.namespace)} cannot evaluate semantic source in ${JSON.stringify(sourceNamespace)}.`
     });
   }
   if (input.target.namespace !== input.graph.namespace) {
     throw new KpSemanticDerivedEvaluationError({
       code: "foreign-derived-target",
       slotId: input.target.slotId,
-      snapshotId: input.snapshot.id,
+      snapshotId: snapshot.id,
       message: `Derived target ${JSON.stringify(input.target.path)} belongs to ${JSON.stringify(input.target.namespace)}, not graph ${JSON.stringify(input.graph.namespace)}.`
     });
   }
   const definition = readGraphDefinition(
     input.graph,
-    input.snapshot,
+    snapshot,
     input.target.slotId
   );
   return evaluateGraphDefinition(
     input.graph,
-    input.snapshot,
+    snapshot,
+    source,
     definition,
     input.memo
   );
 }
 
+export function createKpSemanticStateSampleView<const Result>(input: {
+  readonly graph: KpSemanticDerivedGraph;
+  readonly source: KpEphemeralSemanticStateReadSource;
+  readonly target: KpDerivedSemanticStateLeafHandle<Result>;
+}): KpSemanticStateSampleView<Result> {
+  const value = evaluateKpSemanticDerivedValue(input);
+  return Object.freeze({
+    schemaVersion: "kp.semantic-state-sample-view.v1",
+    kind: "semantic-state-sample-view",
+    source: input.source,
+    reference: input.target,
+    read() {
+      return value;
+    }
+  });
+}
+
 function evaluateGraphDefinition(
   graph: KpSemanticDerivedGraph,
   snapshot: KpAggregateSemanticSnapshot,
+  source: KpSemanticStateReadSource | undefined,
   definition: KpSemanticDerivedGraphDefinitionInput,
   memo: KpSemanticDerivedEvaluationMemo
 ): KpPersistentSemanticValue {
@@ -345,14 +391,11 @@ function evaluateGraphDefinition(
         ? evaluateGraphDefinition(
             graph,
             snapshot,
+            source,
             readGraphDefinition(graph, snapshot, dependency.slotId),
             memo
           )
-        : resolveKpSemanticConcreteDependency({
-            graph,
-            snapshot,
-            dependency
-          }).value
+        : resolveDependencyValue(graph, snapshot, source, dependency)
     )
   );
   const capability = requireComputeCapability(definition, snapshot);
@@ -391,6 +434,27 @@ function evaluateGraphDefinition(
   // caller caches map each slot to its already validated fingerprint.
   memo.write(definition.target.slotId, value);
   return value;
+}
+
+function resolveDependencyValue(
+  graph: KpSemanticDerivedGraph,
+  snapshot: KpAggregateSemanticSnapshot,
+  source: KpSemanticStateReadSource | undefined,
+  dependency: KpSemanticDerivedGraphLeafReference
+): KpPersistentSemanticValue {
+  return source === undefined
+    ? resolveKpSemanticConcreteDependency({ graph, snapshot, dependency }).value
+    : resolveKpSemanticConcreteDependency({ graph, source, dependency }).value;
+}
+
+function readEvaluationSnapshot(input:
+  | { readonly snapshot: KpAggregateSemanticSnapshot }
+  | { readonly source: KpSemanticStateReadSource }
+): KpAggregateSemanticSnapshot {
+  if ("snapshot" in input) return input.snapshot;
+  return input.source.kind === "persistent-snapshot"
+    ? input.source.snapshot
+    : input.source.base.snapshot;
 }
 
 function createRequestMemo(): KpSemanticDerivedEvaluationMemo {

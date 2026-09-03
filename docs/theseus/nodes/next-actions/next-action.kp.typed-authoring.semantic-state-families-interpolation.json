@@ -628,6 +628,83 @@
       "scope": "s12 patch hygiene",
       "checkedAt": "2026-09-03T22:07:10.032Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "node --import tsx --test tests/semantic-state-family-derived-evaluation.test.ts tests/semantic-state-derived-evaluator.test.ts tests/semantic-state-derived-fingerprint.test.ts tests/semantic-state-family-source.test.ts",
+      "status": "passed",
+      "scope": "s13-focused",
+      "checkedAt": "2026-09-03T22:46:17.501Z",
+      "notes": "28 tests passed; requested-closure traversal, diamond sharing, persistent parity, typed sample views, stale authority rejection, and atomic invalid-result failure."
+    },
+    {
+      "command": "npm run verify:impact -- --path src/semantic-state/derived-evaluator.ts --path tests/semantic-state-family-derived-evaluation.test.ts",
+      "status": "passed",
+      "scope": "s13-impact",
+      "checkedAt": "2026-09-03T22:46:18.726Z",
+      "notes": "Promotion-sensitive high-risk change; required semantic-state, typecheck, and architecture gates identified."
+    },
+    {
+      "command": "npm run generate:equation-reachability",
+      "status": "passed",
+      "scope": "s13-reachability",
+      "checkedAt": "2026-09-03T22:46:19.837Z",
+      "notes": "Generated equation reachability graph from 68 roots."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "s13-semantic-state",
+      "checkedAt": "2026-09-03T22:46:20.946Z",
+      "notes": "212 semantic-state tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s13-typecheck",
+      "checkedAt": "2026-09-03T22:46:22.031Z",
+      "notes": "TypeScript and Svelte domain checks passed with zero Svelte errors or warnings."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s13-architecture",
+      "checkedAt": "2026-09-03T22:46:23.066Z",
+      "notes": "2006 modules and 7449 of 7500 local references checked; zero retiring exceptions."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s13-inference",
+      "checkedAt": "2026-09-03T22:46:24.125Z",
+      "notes": "Inference budget passed: 106281 types and 179783 instantiations."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "s13-bundle",
+      "checkedAt": "2026-09-03T22:46:25.191Z",
+      "notes": "Production bundle passed for 1603 modules; existing large-chunk advisory only."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s13-full-regression",
+      "checkedAt": "2026-09-03T22:46:26.274Z",
+      "notes": "6322 tests passed with zero failures, cancellations, skips, or todos."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s13-workspace",
+      "checkedAt": "2026-09-03T22:46:27.363Z",
+      "notes": "Workspace valid before slice completion: 1091 nodes and 27162 events."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s13-diff",
+      "checkedAt": "2026-09-03T22:46:28.463Z",
+      "notes": "No whitespace errors."
     }
   ],
   "expectedLearning": [

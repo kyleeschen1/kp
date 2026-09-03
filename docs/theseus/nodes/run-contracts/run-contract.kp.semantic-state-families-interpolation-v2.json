@@ -144,7 +144,8 @@
     {
       "id": "s13",
       "title": "Derived evaluation over a sample source",
-      "status": "planned"
+      "summary": "Derived evaluation now accepts ephemeral sample sources, traverses only the requested closure with shared diamond memoization, preserves persistent snapshot parity for unaffected branches, and exposes no partial view on stale or invalid evaluation.",
+      "status": "complete"
     },
     {
       "id": "s14",
