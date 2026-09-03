@@ -122,11 +122,13 @@ test("one requested derived value evaluates from concrete dependencies", () => {
 test("nested derived dependencies evaluate in declared tuple order", () => {
   const fixture = createNestedFixture("lesson.nested-derived-evaluator");
 
-  assert.deepEqual(evaluateKpSemanticDerivedValue({
+  const result = evaluateKpSemanticDerivedValue({
     graph: fixture.graph,
     snapshot: fixture.snapshot,
     target: fixture.handles.refs.summary
-  }), { amount: 9, label: "3 + 6" });
+  });
+  assert.deepEqual(result, { amount: 9, label: "3 + 6" });
+  assert.ok(Object.isFrozen(result));
   assert.deepEqual(fixture.calls, { doubled: 1, summary: 1 });
 });
 
@@ -145,6 +147,41 @@ test("one requested diamond closure excludes independent definitions", () => {
     total: 1,
     independent: 0
   });
+});
+
+test("compute failures identify their exact target without partial escape", () => {
+  const fixture = createFailureFixture();
+
+  assert.throws(
+    () => evaluateKpSemanticDerivedValue({
+      graph: fixture.graph,
+      snapshot: fixture.snapshot,
+      target: fixture.handles.refs.total
+    }),
+    (error) => error instanceof KpSemanticDerivedEvaluationError &&
+      error.code === "derived-compute-failed" &&
+      error.slotId === fixture.handles.refs.failure.slotId &&
+      error.path?.join(".") === "failure" &&
+      error.cause === fixture.failure
+  );
+  assert.deepEqual(fixture.calls, { first: 1, failure: 1, total: 0 });
+});
+
+test("invalid derived results fail before becoming observable values", () => {
+  const fixture = createInvalidResultFixture();
+
+  assert.throws(
+    () => evaluateKpSemanticDerivedValue({
+      graph: fixture.graph,
+      snapshot: fixture.snapshot,
+      target: fixture.handles.refs.invalid
+    }),
+    (error) => error instanceof KpSemanticDerivedEvaluationError &&
+      error.code === "invalid-derived-result" &&
+      error.slotId === fixture.handles.refs.invalid.slotId &&
+      error.path?.join(".") === "invalid" &&
+      error.cause instanceof Error
+  );
 });
 
 function createFixture(namespace = "lesson.derived-evaluator") {
@@ -338,4 +375,78 @@ function createDiamondFixture() {
     normalizeKpSemanticDerivedGraphInput(compiled, definitions)
   );
   return { compiled, handles, calls, snapshot, graph };
+}
+
+function createFailureFixture() {
+  const compiled = compileKpSemanticStateSchema(
+    "lesson.derived-compute-failure",
+    kpStateGroup({
+      base: kpStateValue(2),
+      first: kpStateDerived<number>(),
+      failure: kpStateDerived<number>(),
+      total: kpStateDerived<number>()
+    })
+  );
+  const handles = createKpSemanticStateHandleSet(compiled);
+  const calls = { first: 0, failure: 0, total: 0 };
+  const failure = new Error("fixture compute failure");
+  const first = defineKpSemanticStateDerivation({
+    compiled,
+    target: handles.refs.first,
+    dependencies: [handles.refs.base],
+    compute: ([base]) => {
+      calls.first += 1;
+      return base + 1;
+    }
+  });
+  const failing = defineKpSemanticStateDerivation({
+    compiled,
+    target: handles.refs.failure,
+    dependencies: [handles.refs.base],
+    compute: () => {
+      calls.failure += 1;
+      throw failure;
+    }
+  });
+  const total = defineKpSemanticStateDerivation({
+    compiled,
+    target: handles.refs.total,
+    dependencies: [handles.refs.first, handles.refs.failure],
+    compute: ([left, right]) => {
+      calls.total += 1;
+      return left + right;
+    }
+  });
+  const definitions = [total, failing, first];
+  const snapshot = materializeKpSemanticStateInitialSnapshot(compiled, {
+    derivations: definitions
+  });
+  const graph = compileKpSemanticDerivedGraph(
+    normalizeKpSemanticDerivedGraphInput(compiled, definitions)
+  );
+  return { compiled, handles, calls, failure, snapshot, graph };
+}
+
+function createInvalidResultFixture() {
+  const compiled = compileKpSemanticStateSchema(
+    "lesson.invalid-derived-result",
+    kpStateGroup({
+      base: kpStateValue(2),
+      invalid: kpStateDerived<number>()
+    })
+  );
+  const handles = createKpSemanticStateHandleSet(compiled);
+  const invalid = defineKpSemanticStateDerivation({
+    compiled,
+    target: handles.refs.invalid,
+    dependencies: [handles.refs.base],
+    compute: () => Number.POSITIVE_INFINITY
+  });
+  const snapshot = materializeKpSemanticStateInitialSnapshot(compiled, {
+    derivations: [invalid]
+  });
+  const graph = compileKpSemanticDerivedGraph(
+    normalizeKpSemanticDerivedGraphInput(compiled, [invalid])
+  );
+  return { compiled, handles, snapshot, graph };
 }

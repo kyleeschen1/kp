@@ -17,10 +17,12 @@ import type {
 } from "./derived-graph.ts";
 import {
   readKpSemanticEntityVersion,
+  requireAndFreezeKpPersistentSemanticValue,
   type KpPersistentSemanticValue
 } from "./entity-version-store.ts";
 import type {
   KpAggregateSnapshotId,
+  KpSemanticDerivationId,
   KpSemanticEntityId,
   KpSemanticSlotId,
   KpSemanticVersionId
@@ -37,22 +39,30 @@ export interface KpResolvedSemanticConcreteDependency {
 }
 
 export type KpSemanticDerivedEvaluationErrorCode =
+  | "derived-compute-failed"
   | "derived-dependency-not-concrete"
   | "derived-target-not-found"
   | "foreign-derived-dependency"
   | "foreign-derived-snapshot"
   | "foreign-derived-target"
+  | "invalid-derived-result"
   | "stale-derived-definition";
 
 export class KpSemanticDerivedEvaluationError extends Error {
   readonly code: KpSemanticDerivedEvaluationErrorCode;
   readonly slotId: KpSemanticSlotId;
   readonly snapshotId: KpAggregateSnapshotId;
+  readonly path: readonly string[] | null;
+  readonly derivationId: KpSemanticDerivationId | undefined;
+  override readonly cause: unknown;
 
   constructor(input: {
     readonly code: KpSemanticDerivedEvaluationErrorCode;
     readonly slotId: KpSemanticSlotId;
     readonly snapshotId: KpAggregateSnapshotId;
+    readonly path?: readonly string[] | null;
+    readonly derivationId?: KpSemanticDerivationId;
+    readonly cause?: unknown;
     readonly message: string;
   }) {
     super(input.message);
@@ -60,6 +70,9 @@ export class KpSemanticDerivedEvaluationError extends Error {
     this.code = input.code;
     this.slotId = input.slotId;
     this.snapshotId = input.snapshotId;
+    this.path = input.path ?? null;
+    this.derivationId = input.derivationId;
+    this.cause = input.cause;
   }
 }
 
@@ -195,11 +208,34 @@ function evaluateGraphDefinition(
 
   // Graph validation proves the existential callback matches its declared
   // dependency tuple; Reflect.apply keeps that erasure inside this boundary.
-  const value: unknown = Reflect.apply(
-    capability.compute,
-    undefined,
-    [values]
-  );
+  let computed: unknown;
+  try {
+    computed = Reflect.apply(capability.compute, undefined, [values]);
+  } catch (cause) {
+    throw new KpSemanticDerivedEvaluationError({
+      code: "derived-compute-failed",
+      slotId: definition.target.slotId,
+      snapshotId: snapshot.id,
+      path: definition.target.path,
+      derivationId: definition.id,
+      cause,
+      message: `Compute failed for derived path ${JSON.stringify(definition.target.path)} in snapshot ${JSON.stringify(snapshot.id)}.`
+    });
+  }
+  let value: KpPersistentSemanticValue;
+  try {
+    value = requireAndFreezeKpPersistentSemanticValue(computed);
+  } catch (cause) {
+    throw new KpSemanticDerivedEvaluationError({
+      code: "invalid-derived-result",
+      slotId: definition.target.slotId,
+      snapshotId: snapshot.id,
+      path: definition.target.path,
+      derivationId: definition.id,
+      cause,
+      message: `Compute returned a non-persistent value for derived path ${JSON.stringify(definition.target.path)} in snapshot ${JSON.stringify(snapshot.id)}.`
+    });
+  }
   // This table deduplicates one requested closure and is discarded after read;
   // it is not the caller-owned cross-request cache introduced later.
   evaluated.set(definition.target.slotId, value);

@@ -249,8 +249,14 @@ export function cloneAndFreezeKpPersistentSemanticValue<
     KpDeepReadonly<Value>;
 }
 
+export function requireAndFreezeKpPersistentSemanticValue(
+  value: unknown
+): KpPersistentSemanticValue {
+  return clonePersistentValue(value, new WeakSet(), "value");
+}
+
 function clonePersistentValue(
-  value: KpPersistentSemanticValue,
+  value: unknown,
   ancestors: WeakSet<object>,
   path: string
 ): KpPersistentSemanticValue {

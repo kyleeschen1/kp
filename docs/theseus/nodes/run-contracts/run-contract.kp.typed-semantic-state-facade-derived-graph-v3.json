@@ -114,7 +114,8 @@
     {
       "id": "s10",
       "title": "Localize compute failures",
-      "status": "planned"
+      "summary": "evaluator-freezes-valid-results-and-rejects-thrown-or-nonpersistent-results-before-exposure",
+      "status": "complete"
     },
     {
       "id": "s11",
