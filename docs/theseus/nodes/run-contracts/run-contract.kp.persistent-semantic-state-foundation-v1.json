@@ -214,7 +214,8 @@
     {
       "id": "s26",
       "title": "copy-with-lineage-operation",
-      "status": "planned"
+      "summary": "Implemented bindCopy as a new materialized entity with cloned ordinal-zero value and exact copied-from entity/version, transformation, and authored-source provenance. Copies and sources diverge independently; reused, foreign, and cross-scope identities fail locally.",
+      "status": "complete"
     },
     {
       "id": "s27",

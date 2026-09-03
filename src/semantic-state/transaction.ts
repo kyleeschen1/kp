@@ -6,9 +6,11 @@ import {
 } from "./aggregate-snapshot.ts";
 import {
   appendKpSemanticEntityVersion,
+  createKpCopiedSemanticEntityVersionStore,
   readKpSemanticEntityVersion,
   type KpPersistentSemanticValue,
-  type KpSemanticEntityVersion
+  type KpSemanticEntityVersion,
+  type KpSemanticEntityVersionStore
 } from "./entity-version-store.ts";
 import type {
   KpAppliedTransformationId,
@@ -39,6 +41,7 @@ export interface KpSemanticTransactionRead {
 export interface KpSemanticTransactionStagedWrite {
   readonly id: string;
   readonly entityStoreReplacements: readonly KpSemanticEntityStoreReplacement[];
+  readonly entityStoreAdditions?: readonly KpSemanticEntityVersionStore<KpPersistentSemanticValue>[];
   readonly slotRebindings: readonly KpSemanticSlotBinding[];
 }
 
@@ -57,6 +60,14 @@ export interface KpSemanticTransactionBindInput {
   readonly sourceId: string;
   readonly sourceSlotId: KpSemanticSlotId;
   readonly targetSlotId: KpSemanticSlotId;
+}
+
+export interface KpSemanticTransactionBindCopyInput {
+  readonly id: string;
+  readonly sourceId: string;
+  readonly sourceSlotId: KpSemanticSlotId;
+  readonly targetSlotId: KpSemanticSlotId;
+  readonly newEntityId: KpSemanticEntityId;
 }
 
 export type KpSemanticTransactionJournalOperation =
@@ -79,6 +90,17 @@ export type KpSemanticTransactionJournalOperation =
     readonly sourceEntityId: KpSemanticEntityId;
     readonly replacedEntityId: KpSemanticEntityId;
     readonly versionId: KpSemanticEntityVersion<KpPersistentSemanticValue>["id"];
+  }
+  | {
+    readonly kind: "bind-copy";
+    readonly sourceId: string;
+    readonly sourceSlotId: KpSemanticSlotId;
+    readonly targetSlotId: KpSemanticSlotId;
+    readonly copiedFromEntityId: KpSemanticEntityId;
+    readonly copiedFromVersionId: KpSemanticEntityVersion<KpPersistentSemanticValue>["id"];
+    readonly replacedEntityId: KpSemanticEntityId;
+    readonly newEntityId: KpSemanticEntityId;
+    readonly newVersionId: KpSemanticEntityVersion<KpPersistentSemanticValue>["id"];
   };
 
 export interface KpSemanticTransactionJournalEntry {
@@ -86,6 +108,7 @@ export interface KpSemanticTransactionJournalEntry {
   readonly writeId: string;
   readonly operation: KpSemanticTransactionJournalOperation;
   readonly replacedEntityIds: readonly KpSemanticEntityId[];
+  readonly addedEntityIds: readonly KpSemanticEntityId[];
   readonly reboundSlotIds: readonly KpSemanticSlotId[];
 }
 
@@ -106,7 +129,8 @@ export type KpSemanticTransactionErrorCode =
   | "duplicate-write"
   | "reentrant-operation"
   | "nondeterministic-update"
-  | "invalid-bind";
+  | "invalid-bind"
+  | "invalid-copy";
 
 export class KpSemanticTransactionError extends Error {
   readonly code: KpSemanticTransactionErrorCode;
@@ -319,6 +343,72 @@ export class KpSemanticTransaction {
     }));
   }
 
+  bindCopy(
+    scope: KpSemanticTransactionScope,
+    input: KpSemanticTransactionBindCopyInput
+  ): void {
+    this.#assertOpenScope(scope);
+    requireWriteId(input.id);
+    requireWriteId(input.sourceId);
+    if (input.sourceSlotId === input.targetSlotId) {
+      throw new KpSemanticTransactionError(
+        "invalid-copy",
+        `Semantic copy ${input.id} requires distinct source and target roles.`
+      );
+    }
+    if (this.#working.entityIndex[input.newEntityId] !== undefined) {
+      throw new KpSemanticTransactionError(
+        "invalid-copy",
+        `Semantic copy ${input.id} requires a new entity identity, but ${input.newEntityId} is already materialized.`
+      );
+    }
+
+    const sourceBinding = readKpSemanticSlotBinding(
+      this.#working,
+      input.sourceSlotId
+    );
+    const targetBinding = readKpSemanticSlotBinding(
+      this.#working,
+      input.targetSlotId
+    );
+    const sourceStore = readKpSnapshotEntityStore(
+      this.#working,
+      sourceBinding.entityId
+    );
+    const sourceVersion = readKpSemanticEntityVersion(
+      sourceStore,
+      sourceBinding.versionId
+    );
+    const copiedStore = createKpCopiedSemanticEntityVersionStore({
+      identities: this.#identities,
+      entityId: input.newEntityId,
+      copiedFrom: sourceVersion,
+      transformationId: this.transformationId,
+      sourceId: input.sourceId
+    });
+
+    this.#stage({
+      id: input.id,
+      entityStoreReplacements: [],
+      entityStoreAdditions: [copiedStore],
+      slotRebindings: [{
+        slotId: input.targetSlotId,
+        entityId: copiedStore.entityId,
+        versionId: copiedStore.latestVersionId
+      }]
+    }, Object.freeze({
+      kind: "bind-copy",
+      sourceId: input.sourceId,
+      sourceSlotId: input.sourceSlotId,
+      targetSlotId: input.targetSlotId,
+      copiedFromEntityId: sourceVersion.entityId,
+      copiedFromVersionId: sourceVersion.id,
+      replacedEntityId: targetBinding.entityId,
+      newEntityId: copiedStore.entityId,
+      newVersionId: copiedStore.latestVersionId
+    }));
+  }
+
   #stage(
     write: KpSemanticTransactionStagedWrite,
     operation: KpSemanticTransactionJournalOperation
@@ -338,6 +428,7 @@ export class KpSemanticTransaction {
       parent: this.#working,
       transformationId: this.transformationId,
       entityStoreReplacements: write.entityStoreReplacements,
+      entityStoreAdditions: write.entityStoreAdditions ?? [],
       slotRebindings: write.slotRebindings
     });
     const entry = Object.freeze({
@@ -346,6 +437,9 @@ export class KpSemanticTransaction {
       operation,
       replacedEntityIds: Object.freeze(
         write.entityStoreReplacements.map(({ entityId }) => entityId)
+      ),
+      addedEntityIds: Object.freeze(
+        (write.entityStoreAdditions ?? []).map(({ entityId }) => entityId)
       ),
       reboundSlotIds: Object.freeze(
         write.slotRebindings.map(({ slotId }) => slotId)

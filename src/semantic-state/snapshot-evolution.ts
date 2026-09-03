@@ -22,6 +22,7 @@ export interface KpCreateSuccessorAggregateSemanticSnapshotInput {
   readonly parent: KpAggregateSemanticSnapshot;
   readonly transformationId: KpAppliedTransformationId;
   readonly entityStoreReplacements: readonly KpSemanticEntityStoreReplacement[];
+  readonly entityStoreAdditions?: readonly KpAnySemanticEntityVersionStore[];
   readonly slotRebindings: readonly KpSemanticSlotBinding[];
 }
 
@@ -35,15 +36,20 @@ export function createKpSuccessorAggregateSemanticSnapshot(
   }
   if (
     input.entityStoreReplacements.length === 0 &&
+    (input.entityStoreAdditions?.length ?? 0) === 0 &&
     input.slotRebindings.length === 0
   ) {
     throw new Error("A semantic successor snapshot requires an explicit change.");
   }
 
   const replacements = indexReplacements(input);
-  const nextStores = Object.freeze(input.parent.entityStores.map((store) =>
-    replacements.get(store.entityId)?.store ?? store
-  ));
+  const additions = validateAdditions(input);
+  const nextStores = Object.freeze([
+    ...input.parent.entityStores.map((store) =>
+      replacements.get(store.entityId)?.store ?? store
+    ),
+    ...additions
+  ]);
   const rebindings = indexRebindings(input);
   const proposedBindings = input.parent.bindings.map((binding) =>
     rebindings.get(binding.slotId) ?? binding
@@ -70,6 +76,32 @@ export function createKpSuccessorAggregateSemanticSnapshot(
     bindings,
     entityStores: nextStores
   });
+}
+
+function validateAdditions(
+  input: KpCreateSuccessorAggregateSemanticSnapshotInput
+): readonly KpAnySemanticEntityVersionStore[] {
+  const additions = input.entityStoreAdditions ?? [];
+  const addedIds = new Set<KpSemanticEntityId>();
+  for (const store of additions) {
+    if (store.namespace !== input.identities.namespace) {
+      throw new Error(
+        `Semantic successor cannot add entity ${JSON.stringify(store.entityId)} from another scope.`
+      );
+    }
+    if (input.parent.entityIndex[store.entityId] !== undefined) {
+      throw new Error(
+        `Semantic successor cannot add already materialized entity ${JSON.stringify(store.entityId)}.`
+      );
+    }
+    if (addedIds.has(store.entityId)) {
+      throw new Error(
+        `Semantic successor adds entity ${JSON.stringify(store.entityId)} more than once.`
+      );
+    }
+    addedIds.add(store.entityId);
+  }
+  return additions;
 }
 
 function indexReplacements(

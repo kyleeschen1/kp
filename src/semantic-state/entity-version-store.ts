@@ -38,9 +38,18 @@ export interface KpSuccessorVersionProvenance {
   readonly transformationId: KpAppliedTransformationId;
 }
 
+export interface KpCopiedVersionProvenance {
+  readonly kind: "copied";
+  readonly copiedFromEntityId: KpSemanticEntityId;
+  readonly copiedFromVersionId: KpSemanticVersionId;
+  readonly transformationId: KpAppliedTransformationId;
+  readonly sourceId: string;
+}
+
 export type KpEntityVersionProvenance =
   | KpInitialVersionProvenance
-  | KpSuccessorVersionProvenance;
+  | KpSuccessorVersionProvenance
+  | KpCopiedVersionProvenance;
 
 export interface KpSemanticEntityVersion<
   Value extends KpPersistentSemanticValue
@@ -81,6 +90,16 @@ export interface KpAppendSemanticEntityVersionInput<
   readonly revisionId: string;
 }
 
+export interface KpCreateCopiedSemanticEntityVersionStoreInput<
+  Value extends KpPersistentSemanticValue
+> {
+  readonly identities: KpSemanticStateIdentityScope;
+  readonly entityId: KpSemanticEntityId;
+  readonly copiedFrom: KpSemanticEntityVersion<Value>;
+  readonly transformationId: KpAppliedTransformationId;
+  readonly sourceId: string;
+}
+
 export function createKpSemanticEntityVersionStore<
   Value extends KpPersistentSemanticValue
 >(
@@ -93,6 +112,51 @@ export function createKpSemanticEntityVersionStore<
     ordinal: 0,
     value: cloneAndFreezePersistentSemanticValue(input.value),
     provenance: Object.freeze({ kind: "initial", sourceId })
+  });
+
+  return freezeStore({
+    schemaVersion: "kp.semantic-entity-version-store.v1",
+    kind: "semantic-entity-version-store",
+    namespace: input.identities.namespace,
+    entityId: input.entityId,
+    versions: Object.freeze([version]),
+    versionIndex: Object.freeze({ [version.id]: 0 }),
+    latestVersionId: version.id
+  });
+}
+
+export function createKpCopiedSemanticEntityVersionStore<
+  Value extends KpPersistentSemanticValue
+>(
+  input: KpCreateCopiedSemanticEntityVersionStoreInput<Value>
+): KpSemanticEntityVersionStore<Value> {
+  const sourceId = requireSourceId(input.sourceId);
+  const versionId = input.identities.initialVersion(input.entityId);
+  const expectedEntityPrefix = `kp-state/${input.identities.namespace}/entity/`;
+  if (!input.copiedFrom.entityId.startsWith(expectedEntityPrefix)) {
+    throw new Error(
+      `Copied semantic source ${JSON.stringify(input.copiedFrom.entityId)} belongs to another identity scope.`
+    );
+  }
+  input.identities.successorSnapshot(input.transformationId);
+  if (input.entityId === input.copiedFrom.entityId) {
+    throw new Error("A copied semantic version requires a distinct entity identity.");
+  }
+
+  const version = freezeVersion<Value>({
+    id: versionId,
+    entityId: input.entityId,
+    ordinal: 0,
+    value: cloneAndFreezePersistentSemanticValue<Value>(
+      input.copiedFrom.value as Value
+    ),
+    provenance: Object.freeze({
+      kind: "copied",
+      copiedFromEntityId: input.copiedFrom.entityId,
+      copiedFromVersionId: input.copiedFrom.id,
+      transformationId: input.transformationId,
+      sourceId
+    })
   });
 
   return freezeStore({

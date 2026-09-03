@@ -812,6 +812,48 @@
       "scope": "s25-shared-bind-operation",
       "checkedAt": "2026-09-03T09:47:07.625Z",
       "notes": "Workspace schema and active run references validate before bind-slice completion."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "s26-copy-with-lineage-operation",
+      "checkedAt": "2026-09-03T09:52:24.161Z",
+      "notes": "46 semantic-state laws pass, including distinct copied identity, deep-cloned initial value, exact locally revised lineage, divergence, and foreign/reused identity rejection."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s26-copy-with-lineage-operation",
+      "checkedAt": "2026-09-03T09:52:25.355Z",
+      "notes": "Repository TypeScript, Svelte, and domain checks pass; bindCopy requires a nominal new entity ID."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s26-copy-with-lineage-operation",
+      "checkedAt": "2026-09-03T09:52:26.379Z",
+      "notes": "Architecture gates pass at 1987 modules with zero dependency-direction exceptions."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s26-copy-with-lineage-operation",
+      "checkedAt": "2026-09-03T09:52:27.395Z",
+      "notes": "Inference contracts pass at 100864 types and 168555 instantiations."
+    },
+    {
+      "command": "npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "s26-copy-with-lineage-operation",
+      "checkedAt": "2026-09-03T09:52:28.428Z",
+      "notes": "Exact equation reachability remains current at 68 roots."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s26-copy-with-lineage-operation",
+      "checkedAt": "2026-09-03T09:52:29.414Z",
+      "notes": "Workspace schema and active run references validate before copy-slice completion."
     }
   ],
   "expectedLearning": [
