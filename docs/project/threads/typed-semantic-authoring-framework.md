@@ -1,13 +1,12 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: persistent semantic state foundation loop active
-Last Updated: 2026-09-02
-Current Next Action: execute the approved 30-slice nonvisual persistent
-semantic state foundation at
-`../reviews/2026-09-02-persistent-semantic-state-foundation-long-loop-proposal.md`.
-It restores the closed-world ledgers, completes the bounded unit-scalar helper
-and economics-parity gates, proves the immutable state kernel, and stops at the
-mandatory architecture/API checkpoint before loop 2.
+Status: persistent semantic state foundation at mandatory human checkpoint
+Last Updated: 2026-09-03
+Current Next Action: review
+`../reviews/2026-09-03-persistent-semantic-state-foundation-closeout.md` and
+decide whether to accept the internal identity and transaction kernel plus its
+recommended statically typed facade boundary. Do not propose or begin loop 2
+until that API checkpoint is explicitly resolved.
 
 ## Goal
 
@@ -330,13 +329,14 @@ roles, aliases, display labels, state occurrences, correspondence, and
 representation.
 
 Explicit slot operations distinguish updating one persistent entity, binding
-an alias, copying with lineage, and creating a derived relationship. Derived
-values are lazy and dependency-version cached; reads and cache population do
-not enter semantic history. Applied semantic transformations own persistent
-`before` and `after` snapshots plus deterministic ephemeral `at(progress)`
-evaluation. Interpolation changes independent drivers and recomputes only the
-requested affected dependency graph. Presentation interpolation and discrete
-regime changes remain distinct modes.
+an alias, copying with lineage, and creating a derived relationship. The
+completed foundation implements the first three plus lifecycle operations and
+reserves read-only derived declarations. Lazy dependency-version caching,
+deterministic ephemeral `at(progress)` evaluation, and interpolation remain
+accepted future direction rather than current behavior. Their later design
+must keep reads and cache population out of semantic history, change declared
+independent drivers, and recompute only requested affected dependencies.
+Presentation interpolation and discrete regime changes remain distinct modes.
 
 The accepted sequence deliberately starts with executable identity laws and a
 nonvisual persistent snapshot kernel. It then adds the typed transaction
@@ -353,16 +353,35 @@ work remains focused preflight rather than a padded long loop. See
 `../reviews/2026-09-02-semantic-state-architecture-sequencing-review.md` and
 `../decisions/2026-09-02-persistent-semantic-state-architecture-direction.md`.
 
-## Active Foundation Long Loop
+## Foundation Long-Loop Outcome
 
-The approved first run contains 30 independently reversible slices. It keeps
-the test-ledger, unit-scalar helper, and economics-parity work as bounded
-opening gates, then implements only the explicit nonvisual identity, snapshot,
-role-binding, transaction, lineage, and recovery kernel. It stops at a
-mandatory architecture/API checkpoint before proxy ergonomics, lazy derived
-evaluation, interpolation, timeline, or renderer work. Its executable status
-is owned by `run-contract.kp.persistent-semantic-state-foundation-v1`; this
-thread records direction without duplicating per-slice progress.
+The approved first run completed all 30 independently reversible slices and
+is stopped at its mandatory human checkpoint. It reconciled the repository
+health ledgers, retained the bounded unit-scalar helper, proved a one-way
+exact-rational economics parity boundary, and implemented only the explicit
+nonvisual identity, snapshot, role-binding, transaction, change, lineage, and
+recovery kernel.
+
+The kernel has 65 focused laws and passes the 6,175-test repository suite,
+typecheck, architecture, inference, reachability, production-bundle, and
+Theseus gates. Its immutable values share unchanged entity, version, slot, and
+absence objects, while current snapshot arrays and indexes are rebuilt
+linearly. The 101 direct-module exports are internal seams, not a public API.
+
+The checkpoint recommendation is a narrow statically typed or generated
+property facade whose operations compile to the existing explicit kernel.
+Domain-specific update types and declared dependencies should be restored
+before lazy derivation. Runtime `Proxy` observation should not become identity
+or dependency authority; generic staged writes should remain an internal,
+non-projectable escape hatch. Storage optimization should wait for measured
+pressure from a realistic graph.
+
+The exact evidence, authoring packet, retained and rejected abstractions, and
+checkpoint questions are recorded in
+`../reviews/2026-09-03-persistent-semantic-state-foundation-closeout.md`.
+Executable slice history remains owned by
+`run-contract.kp.persistent-semantic-state-foundation-v1`; this thread does not
+duplicate it.
 
 ## Stop Conditions
 

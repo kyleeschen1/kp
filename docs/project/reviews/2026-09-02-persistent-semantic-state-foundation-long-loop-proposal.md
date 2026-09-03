@@ -1,12 +1,14 @@
 # Persistent Semantic State Foundation Long-Loop Proposal
 
 Date: 2026-09-02
-Status: PROPOSED; AWAITING EXPLICIT APPROVAL
+Status: EXECUTED; `HUMAN_CHECKPOINT`
 Proposed target: `next-action.kp.typed-authoring.persistent-semantic-state-foundation`
 Proposed contract: `run-contract.kp.persistent-semantic-state-foundation-v1`
 Active thread: `../threads/typed-semantic-authoring-framework.md`
 Source direction:
 `../decisions/2026-09-02-persistent-semantic-state-architecture-direction.md`
+Execution outcome:
+`2026-09-03-persistent-semantic-state-foundation-closeout.md`
 
 ## Recommendation
 
@@ -255,4 +257,3 @@ materialize only the target and prerequisite linkage required by the contract,
 then execute s01 through s30 with the stated context, verification, commit,
 and stop rules. Do not select any of the unrelated refill candidates. The run
 must end at the mandatory architecture/API human checkpoint before loop 2.
-

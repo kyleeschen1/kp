@@ -2,13 +2,17 @@
   "id": "next-action.kp.typed-authoring.persistent-semantic-state-foundation",
   "kind": "next-action",
   "title": "Build the persistent semantic state foundation",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-02-persistent-semantic-state-foundation-long-loop-proposal.md",
       "summary": "User-approved 30-slice foundation proposal."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-03-persistent-semantic-state-foundation-closeout.md"
     }
   ],
   "dependsOn": {
@@ -1001,8 +1005,96 @@
       "scope": "s29-provenance-correspondence-and-law-convergence",
       "checkedAt": "2026-09-03T11:34:23.017Z",
       "notes": "Workspace valid at 1,084 nodes and 26,583 events."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "s30-foundation-closeout",
+      "checkedAt": "2026-09-03T11:54:03.651Z",
+      "notes": "65 semantic-state runtime laws passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/unit-scalar-map-helper.test.ts tests/typed-linear-supply-demand-pressure.test.ts tests/typed-circle-measurement-pressure.test.ts",
+      "status": "passed",
+      "scope": "s30-foundation-closeout",
+      "checkedAt": "2026-09-03T11:54:04.747Z",
+      "notes": "10 unit-scalar helper and two-caller pressure laws passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/economics-supply-tax-authority-boundary.test.ts tests/economics-supply-tax-parity-negatives.test.ts tests/economics-supply-tax-parity-characterization.test.ts tests/economics-supply-tax-model.test.ts tests/economics-supply-tax-welfare.test.ts tests/exact-rational-cross-boundary-conformance.test.ts tests/typed-linear-supply-demand-pressure.test.ts",
+      "status": "passed",
+      "scope": "s30-foundation-closeout",
+      "checkedAt": "2026-09-03T11:54:05.772Z",
+      "notes": "28 exact-rational authority and typed-market parity laws passed."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s30-foundation-closeout",
+      "checkedAt": "2026-09-03T11:54:06.796Z",
+      "notes": "Promotion memory remains aligned with the separately tabled matrix-linear-map rank."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s30-foundation-closeout",
+      "checkedAt": "2026-09-03T11:54:07.789Z",
+      "notes": "Application, Node, test fixtures, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s30-foundation-closeout",
+      "checkedAt": "2026-09-03T11:54:08.806Z",
+      "notes": "Architecture passed over 1,989 modules with zero dependency exceptions and eight cross-domain gateway laws."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s30-foundation-closeout",
+      "checkedAt": "2026-09-03T11:54:09.819Z",
+      "notes": "Inference passed at 102,058 types and 170,776 instantiations without changing ceilings."
+    },
+    {
+      "command": "npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "s30-foundation-closeout",
+      "checkedAt": "2026-09-03T11:54:10.886Z",
+      "notes": "Generated exact equation reachability is current at 68 roots."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s30-foundation-closeout",
+      "checkedAt": "2026-09-03T11:54:11.950Z",
+      "notes": "Final independent repository run passed 6,175 tests with zero failures."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "s30-foundation-closeout",
+      "checkedAt": "2026-09-03T11:54:12.983Z",
+      "notes": "Production bundle and economics publication precheck passed; existing large-chunk advisory remains non-blocking."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s30-foundation-closeout",
+      "checkedAt": "2026-09-03T11:54:14.016Z",
+      "notes": "Closeout and project-memory edits have no whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s30-foundation-closeout",
+      "checkedAt": "2026-09-03T11:54:15.107Z",
+      "notes": "Workspace valid at 1,084 nodes and 26,594 events before closeout records."
     }
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "All 30 approved foundation slices are implemented and verified; execution is paused at the mandatory human architecture and API checkpoint before any loop-2 contract."
+  },
   "expectedLearning": [
     "Whether explicit entity, version, role, and snapshot distinctions support immutable alias, copy, branch, transaction, and direct-recovery laws without proxy or renderer authority.",
     "Whether the helper and exact-rational parity gates produce a trustworthy foundation for the later ergonomic and interpolation loops."

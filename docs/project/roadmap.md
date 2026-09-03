@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-09-02
+Last Updated: 2026-09-03
 Status: active
 Active Thread: `threads/typed-semantic-authoring-framework.md`
 Supporting Threads:
@@ -61,13 +61,13 @@ being carried forward outside this Codex thread. The Focus Deck experiment is
 preserved at its four-card human checkpoint. The typed semantic authoring
 facade completed its approved ergonomics and algebraic-representation loop and
 two structurally different unit-scalar pressure callers. The broad clock and
-inference gates are restored. The accepted next sequence first restores or
-classifies 34 stale closed-world test-ledger expectations, then uses the
-nonlinear circle evidence for one bounded internal unit-scalar
-differentiable-map helper experiment before another API checkpoint. The
-accepted successor direction proves a persistent semantic state graph and
-typed transactional facade through nonvisual market pressure before runtime or
-renderer integration. The internal
+inference gates are restored. The approved 30-slice successor run reconciled
+the stale closed-world ledgers, retained the bounded unit-scalar helper,
+preserved exact-rational economics authority, and implemented the internal
+persistent entity/version/snapshot and explicit transaction foundation. It is
+now stopped at its mandatory architecture/API checkpoint before a typed
+property facade, derived evaluation, interpolation, runtime, or renderer work.
+The internal
 Animation Catalogue remains the source and pressure lab rather than the active
 product surface. Neither proof by itself validates demand or selects a
 universal learner layout or semantic model.
@@ -389,9 +389,9 @@ Only this repository sequence is active:
    catalogue migration. See
    `decisions/2026-08-29-focus-deck-initial-portable-figure-priority.md` and
    `decisions/2026-09-01-focus-deck-shared-shell-log-exponent-pressure.md`.
-41. **Typed semantic authoring and bounded domain pressure:** semantic-state
-   direction accepted; test-ledger recovery, then bounded helper experiment,
-   next. The approved 28-slice
+41. **Typed semantic authoring and bounded domain pressure:** persistent-state
+   foundation complete at its mandatory human API checkpoint. The approved
+   28-slice
    ergonomics and algebraic-representation loop is recorded under
    `reviews/2026-09-02-typed-semantic-authoring-ergonomics-long-loop-proposal.md`.
    The prior facade checkpoint is recorded in
@@ -413,17 +413,21 @@ Only this repository sequence is active:
    seller-tax, and price-floor snapshots with unit-safe `dP/dQ`, stable source
    identity, welfare results, and an explicit floor-rationing assumption. It
    has no renderer, Article, Graph2D, animation, registry, or public facade
-   integration. A renderer-free circle caller now provides the required
-   nonlinear pressure with typed radius and area, point-dependent `dA/dr`,
-   runtime and compile-time unit rejection, stable identity, and only a small
-   focused-inference increase. Its repeated map plumbing clears the gate for
-   one internal helper experiment over only the market and circle callers;
-   derived unit products and physical-domain predicates remain separate
-   decisions. The accepted successor sequence then develops executable
-   identity laws, a persistent snapshot kernel, a typed transactional facade,
-   lazy derived evaluation, deterministic state-family interpolation, and a
-   canonical nonvisual supply-tax proof before aggregate timeline or renderer
-   work. The estimate is three long loops through that decisive semantic
+   integration. A renderer-free circle caller provided the required nonlinear
+   pressure with typed radius and area, point-dependent `dA/dr`, runtime and
+   compile-time unit rejection, and stable identity. The retained internal
+   unit-scalar helper now derives the repeated mechanical map plumbing for only
+   the market and circle callers; derived unit products and physical-domain
+   predicates remain separate decisions. The first persistent-state loop also
+   proves nominal identity, immutable entity versions, complete aggregate
+   snapshots, structural sharing and branches, direct pinned recovery,
+   explicit update/bind/copy/lifecycle transactions, declaration-only derived
+   bindings, and one-way projection into canonical change, correspondence,
+   provenance, and lineage authority. It intentionally exposes no public
+   facade, lazy evaluator, interpolation, timeline, or renderer integration.
+   Human review should decide the narrow typed facade and explicit dependency
+   boundary before loop 2 is proposed. The estimate remains three long loops
+   through the decisive semantic
    proof, five through one reviewed Graph2D/KaTeX exemplar, and seven through
    the full bounded knowledge/procedure/generation horizon. A full
    supply-demand pack, public algebra hierarchy, general CAS work, broad
@@ -447,7 +451,7 @@ The catalogue backlog and selection rationale are recorded in
 
 | Area | State | Direction |
 | --- | --- | --- |
-| Semantic/runtime spine | Strong and governed | Preserve; simplify callers around it. |
+| Semantic/runtime spine | Strong and governed; the internal persistent entity/version/snapshot and transaction foundation is complete at a mandatory API checkpoint | Preserve the existing runtime; review the typed state facade and derived-dependency boundary before any loop-2, timeline, or renderer integration. |
 | Equation animation | The generated ledger has 29 equation capabilities: 8 Direct, 3 Registered, 2 Exemplar, and 16 Missing. Exponential duality and radical inversion are Direct; root is the first family with ten generated case-level maturity rows | Preserve the converged vocabulary; require case enumeration before new Direct promotions; migrate legacy Direct ledgers when they are touched; select the next accepted family packet from explicit gaps rather than prose memory. |
 | Graph2D | Economics and physics model callers are promoted; one exact monic-quadratic right-translation exemplar is governed and executable | Preserve the bounded translation proof without claiming arbitrary formula parsing, transformation-family promotion, or a universal graph frontend. |
 | Program animation | TypeScript and Python bounded extract-helper generation are `Direct`; each has language-owned parsing, legality, identity binding, corpus, authoring, and runtime-isolation evidence over an approved canonical artifact. Scheme remains an approved specialized exemplar rather than a general frontend. | Preserve approved choreography and build-time-only compilers. Variants remain semantic-plan-only until a separately governed artifact compiler exists; arbitrary refactors and execution remain typed gaps. |
@@ -674,6 +678,12 @@ clocks, frames, and renderer ports remain outside Svelte authority.
 
 ## Current Checkpoints And Pauses
 
+- The persistent semantic state foundation completed all 30 approved slices
+  and is stopped at its mandatory nonvisual architecture/API checkpoint. Its
+  exact result and loop-2 recommendation are recorded in
+  `reviews/2026-09-03-persistent-semantic-state-foundation-closeout.md`. Do not
+  begin proxy ergonomics, derived evaluation, interpolation, timeline, or
+  renderer work without explicit approval of a new contract.
 - The normal-matrix Proof Memory implementation is preserved at its mandatory
   checkpoint. Architecture passed; attentional experience did not. Its s26-s27
   continuation is closed without hardening or release.
@@ -793,7 +803,8 @@ Future sessions should read, in order:
 
 1. this roadmap;
 2. `strategy.md` when strategic rationale is needed;
-3. `threads/architecture-convergence.md` for the active work boundary;
+3. `threads/typed-semantic-authoring-framework.md` for the active work
+   boundary;
 4. `principles/system-vocabulary.md` for terminology;
 5. the exact decision, review, principle, or source linked by the selected
    work item; and

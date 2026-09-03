@@ -2,8 +2,9 @@
   "id": "run-contract.kp.persistent-semantic-state-foundation-v1",
   "kind": "run-contract",
   "title": "Persistent semantic state foundation v1",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -238,7 +239,8 @@
     {
       "id": "s30",
       "title": "foundation-closeout-and-mandatory-checkpoint",
-      "status": "planned"
+      "summary": "Measured and documented the internal foundation, author and LLM implications, structural-sharing costs, retained and deferred abstractions, and recommended typed facade boundary; broad gates passed; mandatory human checkpoint reached.",
+      "status": "complete"
     }
   ]
 }

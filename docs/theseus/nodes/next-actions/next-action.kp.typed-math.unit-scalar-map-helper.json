@@ -2,8 +2,9 @@
   "id": "next-action.kp.typed-math.unit-scalar-map-helper",
   "kind": "next-action",
   "title": "Test the unit-scalar differentiable-map helper",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Completed inside slices s06-s12 of run-contract.kp.persistent-semantic-state-foundation-v1: helper implemented, market and circle migrated, burden and inference measured, API gate passed, and helper retained.",
   "sourceRefs": [
     {
       "kind": "file",
