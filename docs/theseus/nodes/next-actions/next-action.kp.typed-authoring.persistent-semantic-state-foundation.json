@@ -770,6 +770,48 @@
       "scope": "s24-update-operation",
       "checkedAt": "2026-09-03T09:43:23.206Z",
       "notes": "Workspace schema and active run references validate before update-slice completion."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "s25-shared-bind-operation",
+      "checkedAt": "2026-09-03T09:47:02.259Z",
+      "notes": "42 semantic-state laws pass, including exact shared identity, update-through-alias, pinned prior snapshots, cross-scope rejection, and conflicting active-version rejection."
+    },
+    {
+      "command": "npx tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s25-shared-bind-operation",
+      "checkedAt": "2026-09-03T09:47:03.462Z",
+      "notes": "Test-project typecheck passes for the bind operation and existing nominal boundaries."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s25-shared-bind-operation",
+      "checkedAt": "2026-09-03T09:47:04.521Z",
+      "notes": "Architecture gates pass at 1987 modules with zero dependency-direction exceptions."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s25-shared-bind-operation",
+      "checkedAt": "2026-09-03T09:47:05.564Z",
+      "notes": "Inference contracts pass at 100676 types and 168232 instantiations."
+    },
+    {
+      "command": "npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "s25-shared-bind-operation",
+      "checkedAt": "2026-09-03T09:47:06.612Z",
+      "notes": "Exact equation reachability remains current at 68 roots."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s25-shared-bind-operation",
+      "checkedAt": "2026-09-03T09:47:07.625Z",
+      "notes": "Workspace schema and active run references validate before bind-slice completion."
     }
   ],
   "expectedLearning": [

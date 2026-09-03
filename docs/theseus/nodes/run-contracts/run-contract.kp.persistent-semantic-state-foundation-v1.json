@@ -208,7 +208,8 @@
     {
       "id": "s25",
       "title": "shared-bind-operation",
-      "status": "planned"
+      "summary": "Implemented explicit shared binding: the target role adopts the source's exact entity/version without copying, later updates advance every alias in the scoped transaction, prior snapshots remain pinned, foreign capabilities and no-op binds fail, and snapshots reject conflicting active versions of one entity.",
+      "status": "complete"
     },
     {
       "id": "s26",

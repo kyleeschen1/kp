@@ -52,6 +52,13 @@ export interface KpSemanticTransactionUpdateInput {
   ) => KpPersistentSemanticValue;
 }
 
+export interface KpSemanticTransactionBindInput {
+  readonly id: string;
+  readonly sourceId: string;
+  readonly sourceSlotId: KpSemanticSlotId;
+  readonly targetSlotId: KpSemanticSlotId;
+}
+
 export type KpSemanticTransactionJournalOperation =
   | {
     readonly kind: "staged-write";
@@ -63,6 +70,15 @@ export type KpSemanticTransactionJournalOperation =
     readonly slotId: KpSemanticSlotId;
     readonly previousVersionId: KpSemanticEntityVersion<KpPersistentSemanticValue>["id"];
     readonly nextVersionId: KpSemanticEntityVersion<KpPersistentSemanticValue>["id"];
+  }
+  | {
+    readonly kind: "bind";
+    readonly sourceId: string;
+    readonly sourceSlotId: KpSemanticSlotId;
+    readonly targetSlotId: KpSemanticSlotId;
+    readonly sourceEntityId: KpSemanticEntityId;
+    readonly replacedEntityId: KpSemanticEntityId;
+    readonly versionId: KpSemanticEntityVersion<KpPersistentSemanticValue>["id"];
   };
 
 export interface KpSemanticTransactionJournalEntry {
@@ -89,7 +105,8 @@ export type KpSemanticTransactionErrorCode =
   | "no-staged-writes"
   | "duplicate-write"
   | "reentrant-operation"
-  | "nondeterministic-update";
+  | "nondeterministic-update"
+  | "invalid-bind";
 
 export class KpSemanticTransactionError extends Error {
   readonly code: KpSemanticTransactionErrorCode;
@@ -251,6 +268,54 @@ export class KpSemanticTransaction {
       slotId: input.slotId,
       previousVersionId: previousVersion.id,
       nextVersionId: firstSuccessor.latestVersionId
+    }));
+  }
+
+  bind(
+    scope: KpSemanticTransactionScope,
+    input: KpSemanticTransactionBindInput
+  ): void {
+    this.#assertOpenScope(scope);
+    requireWriteId(input.id);
+    requireWriteId(input.sourceId);
+    if (input.sourceSlotId === input.targetSlotId) {
+      throw new KpSemanticTransactionError(
+        "invalid-bind",
+        `Semantic bind ${input.id} requires distinct source and target roles.`
+      );
+    }
+
+    const source = readKpSemanticSlotBinding(
+      this.#working,
+      input.sourceSlotId
+    );
+    const replaced = readKpSemanticSlotBinding(
+      this.#working,
+      input.targetSlotId
+    );
+    if (source.entityId === replaced.entityId) {
+      throw new KpSemanticTransactionError(
+        "invalid-bind",
+        `Semantic bind ${input.id} cannot rebind roles that already share entity ${source.entityId}.`
+      );
+    }
+
+    this.#stage({
+      id: input.id,
+      entityStoreReplacements: [],
+      slotRebindings: [{
+        slotId: input.targetSlotId,
+        entityId: source.entityId,
+        versionId: source.versionId
+      }]
+    }, Object.freeze({
+      kind: "bind",
+      sourceId: input.sourceId,
+      sourceSlotId: input.sourceSlotId,
+      targetSlotId: input.targetSlotId,
+      sourceEntityId: source.entityId,
+      replacedEntityId: replaced.entityId,
+      versionId: source.versionId
     }));
   }
 

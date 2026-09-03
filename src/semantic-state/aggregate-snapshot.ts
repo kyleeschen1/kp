@@ -148,6 +148,7 @@ function createBindingIndex(
 ): Readonly<Record<string, number>> {
   const required = new Set(requiredSlotIds);
   const index: Record<string, number> = {};
+  const boundVersionByEntity = new Map<KpSemanticEntityId, KpSemanticVersionId>();
 
   bindings.forEach((binding, ordinal) => {
     assertPrefix(binding.slotId, slotPrefix, "Semantic binding slot");
@@ -171,6 +172,18 @@ function createBindingIndex(
       );
     }
     readKpSemanticEntityVersion(store, binding.versionId);
+    if (binding.versionId !== store.latestVersionId) {
+      throw new Error(
+        `Semantic binding ${JSON.stringify(binding.slotId)} must reference the materialized latest version of entity ${JSON.stringify(binding.entityId)}.`
+      );
+    }
+    const boundVersion = boundVersionByEntity.get(binding.entityId);
+    if (boundVersion !== undefined && boundVersion !== binding.versionId) {
+      throw new Error(
+        `Active roles sharing entity ${JSON.stringify(binding.entityId)} must share one exact version.`
+      );
+    }
+    boundVersionByEntity.set(binding.entityId, binding.versionId);
     index[binding.slotId] = ordinal;
   });
 
