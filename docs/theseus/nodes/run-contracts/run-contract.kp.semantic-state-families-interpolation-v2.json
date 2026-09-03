@@ -72,7 +72,8 @@
     {
       "id": "s01",
       "title": "Baseline and law ledger",
-      "status": "planned"
+      "summary": "Baseline-and-persistent-history-law-ledger-green",
+      "status": "complete"
     },
     {
       "id": "s02",

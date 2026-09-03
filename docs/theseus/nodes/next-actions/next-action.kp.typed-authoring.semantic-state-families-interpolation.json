@@ -33,6 +33,64 @@
     "npm run build:bundle",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "node baseline semantic state pressure tests",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T20:36:49.549Z",
+      "notes": "15 of 15 baseline, supply-tax, circle, and derived-history tests passed"
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T20:36:50.757Z",
+      "notes": "155 of 155 semantic-state tests passed"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T20:36:51.830Z",
+      "notes": "Svelte reported zero errors and warnings; domain TypeScript passed"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T20:36:52.873Z",
+      "notes": "2000 TypeScript modules; 7411 of 7462 local references; zero dependency exceptions; eight gateway tests passed"
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T20:36:53.974Z",
+      "notes": "104742 types and 176892 instantiations; no ratchet change"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T20:36:55.039Z",
+      "notes": "6265 of 6265 tests passed"
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T20:36:56.075Z",
+      "notes": "Economics publication check and 1603-module production bundle passed"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "control-plane",
+      "checkedAt": "2026-09-03T20:36:57.134Z",
+      "notes": "1091 nodes and 27029 events valid before completion records"
+    }
+  ],
   "expectedLearning": [
     "Whether persistent endpoints plus ephemeral exact-progress overlays preserve semantic authority without fake snapshots.",
     "Whether one tax driver can derive exact market consequences through canonical economics.",
