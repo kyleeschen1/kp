@@ -25,12 +25,11 @@ would include:
 - enough structured information for glossary entries to be queried or
   generated as a projection of the same object.
 
-Definitions should support parameterized invocations. For example, one common
-principle provisionally called the "triangle property" could be instantiated
-with different referenced objects while every invocation retains identity and
-provenance back to the shared principle. The exact intended principle remains
-to be clarified; do not silently equate this phrase with the triangle
-inequality.
+Definitions should support parameterized invocations. For example, the
+triangle inequality could be instantiated over different metric, normed-space,
+or geometric objects while every invocation retains identity and provenance
+back to the shared principle and records the capability evidence that makes
+that form valid.
 
 This could let KP understand that differently worded or differently bound uses
 are instances of the same definition, theorem, lemma, or property without
