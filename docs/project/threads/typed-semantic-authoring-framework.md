@@ -1,12 +1,12 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: bounded domain pressure complete; API promotion checkpoint
+Status: nonlinear unit pressure complete; bounded helper implementation next
 Last Updated: 2026-09-02
-Current Next Action: approve or revise the ordered sequence in
-`../reviews/2026-09-02-typed-authoring-post-domain-pressure-next-step-review.md`.
-The recommendation is to restore the two known broad gates, add one isolated
-nonlinear `radius -> area` unit-scalar caller, and make the helper decision from
-the resulting comparison before reconciling or rendering the economics model.
+Current Next Action: implement the internal experimental unit-scalar
+differentiable-map helper accepted in
+`../decisions/2026-09-02-unit-scalar-differentiable-map-helper-boundary.md`,
+migrate only the market and circle pressure callers, measure authoring and
+inference cost, and stop for API review.
 
 ## Goal
 
@@ -287,6 +287,37 @@ baseline repairs first, then uses a nonlinear circle-area caller to decide
 whether one optional unit-aware scalar-map builder is real. Any visible market
 inspector follows explicit parity with the canonical exact-rational supply-tax
 model so the project retains one economics source of truth.
+
+## Nonlinear Unit-Scalar Pressure Outcome
+
+The post-pressure health repairs are complete. The Focus Deck log-exponent
+timers are inventoried as scroll projection, WebKit snap restoration, and
+canonical-player hydration scheduling rather than a second semantic clock.
+The repository-wide TypeScript inference budget now records its attributed
+30-fixture closure; the dominant Native KaTeX executable-session fixture
+imports its concrete compositor owner directly and closes over no application
+framework.
+
+The isolated circle measurement caller declares radius and area units and
+authors `A(r) = pi r^2` with the point-dependent derivative
+`dA/dr = 2 pi r`. It preserves exact inferred unit IDs, deterministic semantic
+IDs, immutable objects, runtime unit guards, named derivative-law evidence,
+and renderer-neutral source. The focused typed-math closure moves from 34,176
+types and 40,254 instantiations to 34,350 and 40,573 respectively.
+
+This nonlinear caller repeats the market's scalar-default check, two tagged
+spaces, stable function and derivative IDs, three unit guards,
+differentiable/linear map wrapping, source IDs, law evidence, and derivative
+unit projection. The evidence therefore clears the prior helper gate. The
+accepted next experiment is one internal `defineKpAuthoredUnitScalarMap`
+utility that derives only this mechanical plumbing and migrates only the two
+pressure callers. It may not infer derivatives, unit products, bases,
+equalities, proofs, or domain predicates. The circle also makes the last point
+concrete: its algebraic map is a signed-coordinate extension, while a physical
+nonnegative-radius constraint would require a separate domain contract.
+
+See
+`../decisions/2026-09-02-unit-scalar-differentiable-map-helper-boundary.md`.
 
 ## Stop Conditions
 

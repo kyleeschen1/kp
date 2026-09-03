@@ -2,9 +2,9 @@
   "id": "next-action.kp.typed-math.post-domain-pressure-iteration",
   "kind": "next-action",
   "title": "Restore typed authoring health and pressure nonlinear unit maps",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Execute the approved three-slice iteration: inventory the existing Focus Deck log-exponent clock without behavior change, attribute and narrowly rebaseline the 30-fixture TypeScript inference budget, then add one renderer-free radius-to-area nonlinear unit-scalar caller and record whether repeated mechanics justify a later helper. Excludes economics parity, visible inspector work, public facade promotion, unit algebra, CAS scope, and helper implementation beyond this iteration.",
+  "summary": "Completed all three approved rollback units and queued next-action.kp.typed-math.unit-scalar-map-helper for the separately bounded helper experiment. Broad impact evidence retains 34 pre-existing stale closed-world ledger failures; no unrelated ledger repair was included.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -35,10 +35,59 @@
       "status": "passed",
       "scope": "broad",
       "checkedAt": "2026-09-02T23:55:36.442Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-circle-measurement-pressure.test.ts tests/typed-math-authoring-inference-budget.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T00:13:17.047Z",
+      "notes": "Five tests passed: typed values and IDs, point-dependent derivative, runtime unit rejection, direct math-only imports, and updated inference budget contract."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning scripts/check-typed-math-authoring-inference.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T00:13:18.230Z",
+      "notes": "Seven fixtures measured 34,350 types and 40,573 instantiations, within the existing 36,000 and 43,000 ceilings."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T00:13:19.299Z",
+      "notes": "Architecture policy and generated equation compiler checks passed after keeping the nonlinear caller test-owned."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T00:13:20.345Z",
+      "notes": "Repository inference closure passed at 98,881 types and 164,998 instantiations."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T00:13:21.404Z",
+      "notes": "App, node, test, Svelte, and domain typechecks passed after the fixture relocation."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T00:13:22.486Z",
+      "notes": "Production bundle completed successfully after the fixture relocation."
+    },
+    {
+      "command": "npm run verify:impact -- <slice-3 paths> --run",
+      "status": "failed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T00:13:23.538Z",
+      "notes": "The broad repository suite reached 3,088 passes before intentional interruption. A targeted rerun of the reported files produced 84 passes and 34 failures, all in pre-existing closed-world catalogue, import-order, roadmap-direction, renderer, source, or audit ledgers; relocating the new caller outside src did not change that failure class."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Approved iteration started. Allowed: behavior-preserving private-clock inventory, evidence-backed 30-fixture inference rebaseline, and one test-owned nonlinear radius-to-area caller plus helper decision. Disallowed: economics parity, visible UI, public promotion, inferred unit algebra, CAS expansion, and a fourth implementation slice."
+    "summary": "All three approved slices are complete: Focus Deck scheduling inventoried without behavior change, global inference closure attributed and rebaselined, and the renderer-free circle unit map proves nonlinear point-dependent derivatives. Repetition across the market and circle callers warrants the separately queued bounded helper experiment. Focused checks, architecture, inference, typecheck, and bundle pass; the unrelated repository-wide closed-world ledger drift remains explicit."
   }
 }

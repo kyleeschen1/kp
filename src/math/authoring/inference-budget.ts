@@ -2,10 +2,10 @@ export const kpTypedMathAuthoringInferenceBudget = Object.freeze({
   schemaVersion: "kp.typed-math-authoring-inference-budget.v1",
   measuredAt: "2026-09-02",
   measuredProject: "tsconfig.typed-math-authoring-inference.json",
-  fixtureCount: 6,
+  fixtureCount: 7,
   measured: Object.freeze({
-    types: 34_176,
-    instantiations: 40_254
+    types: 34_350,
+    instantiations: 40_573
   }),
   ceilings: Object.freeze({
     // Keep enough headroom for TypeScript patch releases without hiding API growth.

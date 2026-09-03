@@ -60,10 +60,10 @@ Educator product discovery remains the next product-validation gate and is
 being carried forward outside this Codex thread. The Focus Deck experiment is
 preserved at its four-card human checkpoint. The typed semantic authoring
 facade completed its approved ergonomics and algebraic-representation loop and
-one bounded supply-demand pressure caller; it now waits at an API promotion
-checkpoint with an ordered post-pressure proposal: restore the two known broad
-health gates, add one nonlinear non-economics unit-map caller, and decide from
-that evidence whether one optional helper is warranted. The internal
+two structurally different unit-scalar pressure callers. The broad clock and
+inference gates are restored, and the nonlinear circle evidence now warrants
+one bounded internal unit-scalar differentiable-map helper experiment before
+another API checkpoint. The internal
 Animation Catalogue remains the source and pressure lab rather than the active
 product surface. Neither proof by itself validates demand or selects a
 universal learner layout or semantic model.
@@ -385,9 +385,9 @@ Only this repository sequence is active:
    catalogue migration. See
    `decisions/2026-08-29-focus-deck-initial-portable-figure-priority.md` and
    `decisions/2026-09-01-focus-deck-shared-shell-log-exponent-pressure.md`.
-41. **Typed semantic authoring and bounded domain pressure:** complete at an
-   API promotion checkpoint. The approved 28-slice ergonomics and
-   algebraic-representation loop is recorded under
+41. **Typed semantic authoring and bounded domain pressure:** nonlinear
+   pressure complete; bounded helper experiment next. The approved 28-slice
+   ergonomics and algebraic-representation loop is recorded under
    `reviews/2026-09-02-typed-semantic-authoring-ergonomics-long-loop-proposal.md`.
    The prior facade checkpoint is recorded in
    `reviews/2026-09-02-typed-semantic-authoring-next-step-review.md`. The
@@ -408,12 +408,17 @@ Only this repository sequence is active:
    seller-tax, and price-floor snapshots with unit-safe `dP/dQ`, stable source
    identity, welfare results, and an explicit floor-rationing assumption. It
    has no renderer, Article, Graph2D, animation, registry, or public facade
-   integration. A second non-economics unit-scalar caller is required before
-   considering one local map builder; derived unit products require a separate
-   decision. A full supply-demand pack, public algebra hierarchy, general CAS
+   integration. A renderer-free circle caller now provides the required
+   nonlinear pressure with typed radius and area, point-dependent `dA/dr`,
+   runtime and compile-time unit rejection, stable identity, and only a small
+   focused-inference increase. Its repeated map plumbing clears the gate for
+   one internal helper experiment over only the market and circle callers;
+   derived unit products and physical-domain predicates remain separate
+   decisions. A full supply-demand pack, public algebra hierarchy, general CAS
    work, broad construct generation, animation reparameterization, and Article
    grammar changes remain out of scope. See
    `reviews/2026-09-02-typed-authoring-post-domain-pressure-next-step-review.md`,
+   `decisions/2026-09-02-unit-scalar-differentiable-map-helper-boundary.md`,
    `decisions/2026-09-02-typed-semantic-authoring-framework-goals.md` and
    `threads/typed-semantic-authoring-framework.md`.
 

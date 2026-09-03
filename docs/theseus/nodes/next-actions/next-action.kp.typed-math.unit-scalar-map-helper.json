@@ -1,0 +1,55 @@
+{
+  "id": "next-action.kp.typed-math.unit-scalar-map-helper",
+  "kind": "next-action",
+  "title": "Test the unit-scalar differentiable-map helper",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-02-unit-scalar-differentiable-map-helper-boundary.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.typed-math.post-domain-pressure-iteration"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "node --disable-warning=ExperimentalWarning --test tests/typed-linear-supply-demand-pressure.test.ts tests/typed-circle-measurement-pressure.test.ts tests/typed-math-authoring-inference-budget.test.ts",
+    "node --disable-warning=ExperimentalWarning scripts/check-typed-math-authoring-inference.ts",
+    "npm run check:architecture",
+    "npm run typecheck",
+    "npm run build:bundle"
+  ],
+  "expectedLearning": [
+    "Whether the shared unit-scalar map plumbing is stable across affine economics and nonlinear geometry without hiding authored mathematics.",
+    "Whether the helper reduces caller boilerplate without materially increasing focused TypeScript inference cost."
+  ],
+  "allowedWork": [
+    "Implement one internal experimental unit-scalar differentiable-map helper.",
+    "Migrate only the supply-demand and circle pressure callers while preserving their object shapes, IDs, values, derivatives, diagnostics, source identity, and law evidence.",
+    "Measure author-line reduction and focused inference delta, then stop for API review."
+  ],
+  "disallowedWork": [
+    "Do not add derived-unit algebra, automatic differentiation, basis or equality inference, proof inference, or physical-domain predicates.",
+    "Do not promote a public facade, reconcile economics models, add a visible inspector, or migrate any third caller."
+  ],
+  "criteria": [
+    {
+      "id": "both-callers-preserve-observable-contracts",
+      "weight": "high"
+    },
+    {
+      "id": "helper-reduces-mechanical-boilerplate",
+      "weight": "high"
+    },
+    {
+      "id": "inference-remains-within-focused-ceilings",
+      "weight": "high"
+    }
+  ]
+}
