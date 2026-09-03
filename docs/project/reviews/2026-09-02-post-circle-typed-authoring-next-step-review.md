@@ -1,7 +1,7 @@
 # Post-Circle Typed Authoring Next-Step Review
 
 Date: 2026-09-02
-Status: RECOMMENDED; AWAITING APPROVAL
+Status: ACCEPTED SEQUENCE
 Active thread: `../threads/typed-semantic-authoring-framework.md`
 
 ## Recommendation
@@ -138,8 +138,9 @@ formulas, renderer choices, geometry, or timing.
 
 ## Approval Boundary
 
-Approval authorizes one test-ledger recovery slice followed by the existing
-bounded helper experiment and its API checkpoint. Economics reconciliation,
-the visible inspector, and LLM pressure remain later independently approved
-steps. Until approval, the roadmap and Theseus queue continue to name the
-unit-scalar helper as the canonical next action.
+The user accepted this ordering on 2026-09-02. Approval authorizes one
+test-ledger recovery slice followed by the existing bounded helper experiment
+and its API checkpoint. Economics reconciliation, the visible inspector, and
+LLM pressure remain later independently approved steps. The executable Theseus
+queue remains thin until the recovery action and later run contracts are
+materialized deliberately.

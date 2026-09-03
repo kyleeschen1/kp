@@ -1,0 +1,89 @@
+{
+  "id": "conversation.kp.semantic-state-architecture-direction-20260902",
+  "kind": "conversation",
+  "title": "Accept persistent semantic state architecture direction",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "The project owner accepted the persistent semantic graph and typed transactional authoring direction. Focused ledger and helper work stays ahead of long-loop execution; later contracts remain independently reviewed.",
+  "sourceRefs": [
+    {
+      "kind": "transcript",
+      "provider": "codex",
+      "localPath": "docs/project/reviews/2026-09-02-semantic-state-architecture-sequencing-review.md",
+      "turnRange": "First-class knowledge objects through persistent state architecture synthesis and acceptance",
+      "digest": "sha256:9d53bbff02857e55e0c1e5cc553ce1a0e23db89887f2528b9e73af7382367ce7",
+      "summary": "The project owner accepted the persistent semantic graph and typed transactional authoring direction. Focused ledger and helper work stays ahead of long-loop execution; later contracts remain independently reviewed."
+    }
+  ],
+  "affects": [
+    "priority-change.kp.typed-semantic-authoring-api-review",
+    "next-action.kp.typed-math.unit-scalar-map-helper"
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Conversation captured with authority, trust, privacy, and transcript provenance."
+  },
+  "conversation": {
+    "schemaVersion": "theseus.conversation.v1",
+    "occurredAt": "2026-09-03T04:39:02Z",
+    "participants": [
+      {
+        "id": "project-owner",
+        "role": "human",
+        "displayName": "Project owner"
+      },
+      {
+        "id": "codex",
+        "role": "llm",
+        "provider": "codex"
+      }
+    ],
+    "transcriptRanges": [
+      {
+        "provider": "codex",
+        "localPath": "docs/project/reviews/2026-09-02-semantic-state-architecture-sequencing-review.md",
+        "turnRange": "First-class knowledge objects through persistent state architecture synthesis and acceptance",
+        "digest": "sha256:9d53bbff02857e55e0c1e5cc553ce1a0e23db89887f2528b9e73af7382367ce7"
+      }
+    ],
+    "summary": "The project owner accepted the persistent semantic graph and typed transactional authoring direction. Focused ledger and helper work stays ahead of long-loop execution; later contracts remain independently reviewed.",
+    "proposals": [
+      {
+        "id": "adopt-persistent-semantic-state-direction",
+        "statement": "Develop immutable aggregate snapshots, explicit identity-aware slot operations, lazy derived values, deterministic transformation state families, aggregate timeline composition, and bounded projections before broad knowledge and generation work.",
+        "proposedBy": "codex",
+        "status": "accepted",
+        "linkedEntityIds": [
+          "priority-change.kp.typed-semantic-authoring-api-review",
+          "next-action.kp.typed-math.unit-scalar-map-helper"
+        ]
+      }
+    ],
+    "objections": [],
+    "decisions": [
+      {
+        "id": "approve-persistent-semantic-state-direction",
+        "statement": "Accept the recorded sequencing plan and preserve three long loops as the nonvisual proof horizon, five as the visible exemplar horizon, and seven as the full knowledge and generation horizon, with loop-specific approval and checkpoints.",
+        "proposalId": "adopt-persistent-semantic-state-direction",
+        "decidedAt": "2026-09-03T04:39:02Z",
+        "authority": {
+          "kind": "user",
+          "actorId": "project-owner"
+        }
+      }
+    ],
+    "trust": {
+      "level": "self-reported",
+      "rationale": "The durable decision and review summarize the project owner's explicit acceptance in the active Codex thread."
+    },
+    "privacy": {
+      "classification": "project",
+      "containsSensitiveData": false,
+      "retention": "Retain with project history."
+    },
+    "linkedEntityIds": [
+      "priority-change.kp.typed-semantic-authoring-api-review",
+      "next-action.kp.typed-math.unit-scalar-map-helper"
+    ]
+  }
+}

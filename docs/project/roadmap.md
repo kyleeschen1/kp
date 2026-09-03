@@ -61,9 +61,13 @@ being carried forward outside this Codex thread. The Focus Deck experiment is
 preserved at its four-card human checkpoint. The typed semantic authoring
 facade completed its approved ergonomics and algebraic-representation loop and
 two structurally different unit-scalar pressure callers. The broad clock and
-inference gates are restored, and the nonlinear circle evidence now warrants
-one bounded internal unit-scalar differentiable-map helper experiment before
-another API checkpoint. The internal
+inference gates are restored. The accepted next sequence first restores or
+classifies 34 stale closed-world test-ledger expectations, then uses the
+nonlinear circle evidence for one bounded internal unit-scalar
+differentiable-map helper experiment before another API checkpoint. The
+accepted successor direction proves a persistent semantic state graph and
+typed transactional facade through nonvisual market pressure before runtime or
+renderer integration. The internal
 Animation Catalogue remains the source and pressure lab rather than the active
 product surface. Neither proof by itself validates demand or selects a
 universal learner layout or semantic model.
@@ -385,8 +389,9 @@ Only this repository sequence is active:
    catalogue migration. See
    `decisions/2026-08-29-focus-deck-initial-portable-figure-priority.md` and
    `decisions/2026-09-01-focus-deck-shared-shell-log-exponent-pressure.md`.
-41. **Typed semantic authoring and bounded domain pressure:** nonlinear
-   pressure complete; bounded helper experiment next. The approved 28-slice
+41. **Typed semantic authoring and bounded domain pressure:** semantic-state
+   direction accepted; test-ledger recovery, then bounded helper experiment,
+   next. The approved 28-slice
    ergonomics and algebraic-representation loop is recorded under
    `reviews/2026-09-02-typed-semantic-authoring-ergonomics-long-loop-proposal.md`.
    The prior facade checkpoint is recorded in
@@ -414,9 +419,18 @@ Only this repository sequence is active:
    focused-inference increase. Its repeated map plumbing clears the gate for
    one internal helper experiment over only the market and circle callers;
    derived unit products and physical-domain predicates remain separate
-   decisions. A full supply-demand pack, public algebra hierarchy, general CAS
-   work, broad construct generation, animation reparameterization, and Article
-   grammar changes remain out of scope. See
+   decisions. The accepted successor sequence then develops executable
+   identity laws, a persistent snapshot kernel, a typed transactional facade,
+   lazy derived evaluation, deterministic state-family interpolation, and a
+   canonical nonvisual supply-tax proof before aggregate timeline or renderer
+   work. The estimate is three long loops through that decisive semantic
+   proof, five through one reviewed Graph2D/KaTeX exemplar, and seven through
+   the full bounded knowledge/procedure/generation horizon. A full
+   supply-demand pack, public algebra hierarchy, general CAS work, broad
+   construct generation, automatic animation reparameterization rollout, and
+   Article grammar changes remain out of scope. See
+   `reviews/2026-09-02-semantic-state-architecture-sequencing-review.md`,
+   `decisions/2026-09-02-persistent-semantic-state-architecture-direction.md`,
    `reviews/2026-09-02-typed-authoring-post-domain-pressure-next-step-review.md`,
    `decisions/2026-09-02-unit-scalar-differentiable-map-helper-boundary.md`,
    `decisions/2026-09-02-typed-semantic-authoring-framework-goals.md` and

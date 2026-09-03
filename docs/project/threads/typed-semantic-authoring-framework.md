@@ -1,9 +1,10 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: nonlinear unit pressure complete; bounded helper implementation next
+Status: semantic-state direction accepted; test-ledger recovery next
 Last Updated: 2026-09-02
-Current Next Action: implement the internal experimental unit-scalar
-differentiable-map helper accepted in
+Current Next Action: restore or explicitly classify the 34 stale
+repository-wide closed-world ledger failures, then implement the internal
+experimental unit-scalar differentiable-map helper accepted in
 `../decisions/2026-09-02-unit-scalar-differentiable-map-helper-boundary.md`,
 migrate only the market and circle pressure callers, measure authoring and
 inference cost, and stop for API review.
@@ -318,6 +319,39 @@ nonnegative-radius constraint would require a separate domain contract.
 
 See
 `../decisions/2026-09-02-unit-scalar-differentiable-map-helper-boundary.md`.
+
+## Accepted Semantic State Architecture Direction
+
+The user accepted a persistent semantic graph with a scoped typed
+transactional authoring facade as the next architectural direction after the
+test-ledger, helper, and economics-parity checkpoints. The model separates
+semantic entity identity, immutable versions, aggregate snapshots, contextual
+roles, aliases, display labels, state occurrences, correspondence, and
+representation.
+
+Explicit slot operations distinguish updating one persistent entity, binding
+an alias, copying with lineage, and creating a derived relationship. Derived
+values are lazy and dependency-version cached; reads and cache population do
+not enter semantic history. Applied semantic transformations own persistent
+`before` and `after` snapshots plus deterministic ephemeral `at(progress)`
+evaluation. Interpolation changes independent drivers and recomputes only the
+requested affected dependency graph. Presentation interpolation and discrete
+regime changes remain distinct modes.
+
+The accepted sequence deliberately starts with executable identity laws and a
+nonvisual persistent snapshot kernel. It then adds the typed transaction
+facade, derived graph, transformation state families, the canonical
+supply-tax pressure proof, aggregate timeline composition, and one reviewed
+Graph2D/KaTeX projection. First-class knowledge declarations, compositional
+procedures, semantic macros, generated plumbing, and LLM pressure follow only
+after those state/runtime seams pass their checkpoints.
+
+The estimate is three long loops through the decisive nonvisual market proof,
+five through a visible production-shaped exemplar, and seven for the full
+recorded knowledge/procedure/generation horizon. The current ledger and helper
+work remains focused preflight rather than a padded long loop. See
+`../reviews/2026-09-02-semantic-state-architecture-sequencing-review.md` and
+`../decisions/2026-09-02-persistent-semantic-state-architecture-direction.md`.
 
 ## Stop Conditions
 

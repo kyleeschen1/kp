@@ -1,16 +1,16 @@
 # Semantic State Architecture Sequencing Review
 
 Date: 2026-09-02
-Status: EXPLORATORY RECOMMENDATION; NOT APPROVED IMPLEMENTATION SCOPE
+Status: ACCEPTED DIRECTION; EXECUTION REQUIRES LOOP-SPECIFIC APPROVAL
 Active thread: `../threads/typed-semantic-authoring-framework.md`
 
 ## Context
 
 This review synthesizes the authoring and semantic-state discussion after the
-nonlinear circle-area pressure implementation. It extends the accepted typed
-semantic authoring direction but does not replace the currently accepted
-unit-scalar differentiable-map helper experiment, authorize renderer changes,
-or alter the Theseus queue.
+nonlinear circle-area pressure implementation. The user accepted its direction
+on 2026-09-02. It extends the typed semantic authoring program but does not
+replace the currently accepted unit-scalar differentiable-map helper
+experiment, authorize renderer changes, or by itself start a Theseus run.
 
 The central proposal is a persistent semantic object graph with a scoped,
 typed transactional authoring facade. Authors should be able to write concise,
@@ -286,10 +286,32 @@ identity, evidence, timing, geometry, or domain truth.
 
 ## Current Recommendation
 
-Preserve the current test-ledger and unit-scalar-helper sequence. If the user
-approves the new state direction after that checkpoint, begin with the state
-contract and executable identity laws, followed by an explicit nonvisual
-snapshot kernel. The first major continuation decision belongs after the
-canonical supply-tax transformation demonstrates concise authoring,
-deterministic interpolation, exact recovery, and coherent derived values.
+Preserve the accepted test-ledger and unit-scalar-helper sequence. After that
+checkpoint, begin with the state contract and executable identity laws,
+followed by an explicit nonvisual snapshot kernel. The first major continuation
+decision belongs after the canonical supply-tax transformation demonstrates
+concise authoring, deterministic interpolation, exact recovery, and coherent
+derived values.
 
+## Long-Loop Estimate
+
+The stale-ledger recovery and unit-scalar helper should remain one or two
+focused short iterations; padding them into a long loop would increase scope
+without improving evidence. After that preflight, the accepted direction has
+three useful completion horizons:
+
+- **Three long loops** reach the decisive nonvisual semantic proof: persistent
+  state laws and kernel; transactional facade and derivation graph; then state
+  families, interpolation, and the canonical market pressure caller.
+- **Five long loops** reach a visible production-shaped exemplar: the first
+  three, followed by aggregate composition and timeline addressing, then one
+  Graph2D/KaTeX projection with a mandatory human checkpoint.
+- **Seven long loops** cover the full recorded horizon: the first five,
+  followed by bounded knowledge objects/procedures/macros, then generated
+  plumbing and LLM authoring pressure.
+
+This is an architecture-risk estimate rather than a duration promise. Each
+loop should contain roughly 20-30 independently verifiable slices and stop at
+its stated API, semantic, or human checkpoint. Do not materialize all seven
+contracts in advance: later loop contents must respond to the evidence and API
+shape produced by the preceding checkpoint.
