@@ -1101,11 +1101,74 @@
       "scope": "standard",
       "checkedAt": "2026-09-03T18:25:22.493Z",
       "notes": "workspace-valid-1088-nodes-26906-events-after-v3-s15-closeout"
+    },
+    {
+      "command": "node-test-semantic-state-derived-history",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T18:39:14.124Z",
+      "notes": "two-exact-inventory-and-pinned-recovery-laws-passed"
+    },
+    {
+      "command": "npm-run-test-semantic-state",
+      "status": "passed",
+      "scope": "broad-history-gate",
+      "checkedAt": "2026-09-03T18:39:15.324Z",
+      "notes": "143-semantic-state-laws-passed"
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "broad-history-gate",
+      "checkedAt": "2026-09-03T18:39:16.366Z",
+      "notes": "all-type-projects-and-svelte-check-pass"
+    },
+    {
+      "command": "npm-run-check-architecture",
+      "status": "passed",
+      "scope": "broad-history-gate",
+      "checkedAt": "2026-09-03T18:39:17.384Z",
+      "notes": "zero-dependency-direction-exceptions"
+    },
+    {
+      "command": "npm-run-check-inference",
+      "status": "passed",
+      "scope": "broad-history-gate",
+      "checkedAt": "2026-09-03T18:39:18.429Z",
+      "notes": "types-103188-instantiations-172704"
+    },
+    {
+      "command": "npm-run-test-equation-reachability",
+      "status": "passed",
+      "scope": "generated-scan",
+      "checkedAt": "2026-09-03T18:39:19.453Z",
+      "notes": "scan-count-4120-and-twelve-laws-passed"
+    },
+    {
+      "command": "npm-test",
+      "status": "passed",
+      "scope": "broad-history-gate",
+      "checkedAt": "2026-09-03T18:39:20.478Z",
+      "notes": "6253-tests-passed"
+    },
+    {
+      "command": "npm-run-build-bundle",
+      "status": "passed",
+      "scope": "broad-history-gate",
+      "checkedAt": "2026-09-03T18:39:21.495Z",
+      "notes": "production-bundle-passed-with-existing-large-chunk-advisory"
+    },
+    {
+      "command": "theseus-workspace-validate",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T18:39:36.403Z",
+      "notes": "workspace-valid-1088-nodes-26920-events-after-v3-s16-closeout"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "v3-s15-complete-absence-removal-stale-compute-and-invalid-failures-are-local-retryable-and-never-cached"
+    "summary": "v3-s16-complete-derived-evaluation-and-caller-cache-add-no-semantic-history-and-pinned-recovery-needs-no-compute"
   },
   "expectedLearning": [
     "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",

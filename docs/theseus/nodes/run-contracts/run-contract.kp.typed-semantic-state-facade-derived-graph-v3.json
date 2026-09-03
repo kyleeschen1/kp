@@ -150,7 +150,8 @@
     {
       "id": "s16",
       "title": "Prove history and recovery laws",
-      "status": "planned"
+      "summary": "exact-snapshot-version-journal-change-correspondence-provenance-and-lineage-inventories-remain-stable-across-direct-and-cached-evaluation",
+      "status": "complete"
     },
     {
       "id": "s17",
