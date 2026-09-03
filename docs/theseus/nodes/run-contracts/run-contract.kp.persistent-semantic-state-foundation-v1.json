@@ -106,7 +106,8 @@
     {
       "id": "s08",
       "title": "runtime-guards-and-map-wrapping",
-      "status": "planned"
+      "summary": "Wrapped explicit unit-scalar definitions in the existing differentiable and pointwise linear-map contracts with three caller-named runtime unit guards and unchanged diagnostics.",
+      "status": "complete"
     },
     {
       "id": "s09",

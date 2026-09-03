@@ -259,6 +259,34 @@
       "scope": "focused",
       "checkedAt": "2026-09-03T07:19:03.802Z",
       "notes": "Both unmigrated callers and their 33441 type / 39168 instantiation baseline remain unchanged."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/unit-scalar-map-helper-core.test.ts tests/unit-scalar-map-helper-binding.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T07:23:23.572Z",
+      "notes": "Six core and wrapper tests passed, including evaluation, point, and change unit guards, finite output failures, exact map wrapping, and caller-local diagnostics."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T07:23:24.755Z",
+      "notes": "Test type fixtures and wrapper implementation compile with nominal unit identities intact."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T07:23:25.778Z",
+      "notes": "Application, Node, tests, Svelte, and domain typechecks pass with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run check:unit-scalar-helper-baseline",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T07:23:26.842Z",
+      "notes": "Unmigrated caller authoring and focused inference baseline remains exact."
     }
   ],
   "expectedLearning": [
