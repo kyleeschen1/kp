@@ -100,7 +100,8 @@
     {
       "id": "s07",
       "title": "unit-scalar-helper-core",
-      "status": "planned"
+      "summary": "Added the internal unit-scalar definition core: authored map and derivative magnitude rules remain explicit, while stable function, derivative, and unit-space identities follow the scoped context convention.",
+      "status": "complete"
     },
     {
       "id": "s08",

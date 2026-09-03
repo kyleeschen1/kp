@@ -231,6 +231,34 @@
       "scope": "broad",
       "checkedAt": "2026-09-03T07:15:38.861Z",
       "notes": "Repository TypeScript, Svelte, and domain checks passed after adding the baseline measurement tooling."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/unit-scalar-map-helper-core.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T07:19:00.234Z",
+      "notes": "Three helper-core tests passed for deterministic IDs and spaces, custom unit descriptors, authored nonlinear rules, scalar-default failure, and invalid paths."
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T07:19:01.523Z",
+      "notes": "The test type project accepted exact domain/codomain unit inference and all negative unit and callback signature expectations."
+    },
+    {
+      "command": "npm run check:dependency-direction",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T07:19:02.642Z",
+      "notes": "Dependency direction passed with the internal authoring helper importing only math authoring and algebra owners."
+    },
+    {
+      "command": "npm run check:unit-scalar-helper-baseline",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T07:19:03.802Z",
+      "notes": "Both unmigrated callers and their 33441 type / 39168 instantiation baseline remain unchanged."
     }
   ],
   "expectedLearning": [
