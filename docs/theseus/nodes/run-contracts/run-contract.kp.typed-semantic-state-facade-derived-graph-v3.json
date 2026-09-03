@@ -180,7 +180,8 @@
     {
       "id": "s21",
       "title": "Run graph scale and compiler attribution",
-      "status": "planned"
+      "summary": "scale-probe-and-compiler-attribution-confirm-bounded-behavior-without-storage-redesign-or-budget-increase",
+      "status": "complete"
     },
     {
       "id": "s22",

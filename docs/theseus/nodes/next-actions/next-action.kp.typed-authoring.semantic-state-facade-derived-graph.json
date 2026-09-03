@@ -1444,11 +1444,102 @@
       "scope": "standard",
       "checkedAt": "2026-09-03T19:04:34.795Z",
       "notes": "workspace-valid-1088-nodes-26980-events-after-v3-s20-closeout"
+    },
+    {
+      "command": "node-test-semantic-state-scale-probe",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T19:27:23.905Z",
+      "notes": "128-concrete-64-derived-184-edge-16-change-probe-passed-with-127-of-128-store-and-binding-sharing-120-misses-one-hit-and-no-untouched-recompute"
+    },
+    {
+      "command": "npm-run-measure-inference-attribution",
+      "status": "passed",
+      "scope": "diagnostic",
+      "checkedAt": "2026-09-03T19:27:25.223Z",
+      "notes": "43-fixtures-overall-types-104742-instantiations-176892-scale-fixture-types-32616-incremental-4669-instantiations-36966-zero-public-barrel-imports"
+    },
+    {
+      "command": "npm-run-check-inference",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T19:27:26.573Z",
+      "notes": "types-104742-instantiations-176892-leave-1558-type-and-4508-instantiation-headroom-without-ratchet-change"
+    },
+    {
+      "command": "npm-run-test-semantic-state",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T19:27:27.885Z",
+      "notes": "153-semantic-state-laws-passed-including-exact-scale-sharing-and-selective-cache-counts"
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T19:27:29.292Z",
+      "notes": "all-app-node-test-svelte-and-domain-type-projects-pass-with-dedicated-scale-fixture"
+    },
+    {
+      "command": "npm-run-check-architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T19:27:30.540Z",
+      "notes": "framework-neutral-semantic-state-and-equation-authority-boundaries-pass-at-2001-source-files"
+    },
+    {
+      "command": "npm-run-test-equation-reachability",
+      "status": "passed",
+      "scope": "generated-scan",
+      "checkedAt": "2026-09-03T19:27:31.819Z",
+      "notes": "scan-count-4129-and-twelve-reachability-laws-passed"
+    },
+    {
+      "command": "npm-run-test-equation-surface-preservation",
+      "status": "passed",
+      "scope": "impact-router",
+      "checkedAt": "2026-09-03T19:27:33.064Z",
+      "notes": "eleven-authority-and-preservation-laws-passed"
+    },
+    {
+      "command": "npm-run-verify-impact-contract",
+      "status": "passed",
+      "scope": "routing",
+      "checkedAt": "2026-09-03T19:27:34.230Z",
+      "notes": "high-risk-generated-scan-selection-reviewed-broad-nonvisual-contract-gates-executed-and-browser-check-excluded-by-run-scope"
+    },
+    {
+      "command": "npm-run-build-bundle",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T19:27:35.400Z",
+      "notes": "production-bundle-passed-with-existing-large-chunk-advisories-only"
+    },
+    {
+      "command": "git-diff-check",
+      "status": "passed",
+      "scope": "hygiene",
+      "checkedAt": "2026-09-03T19:27:36.583Z",
+      "notes": "no-whitespace-errors"
+    },
+    {
+      "command": "npm-test",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T19:31:49.881Z",
+      "notes": "6263-tests-passed-with-zero-failures-in-560929ms"
+    },
+    {
+      "command": "theseus-workspace-validate",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T19:32:02.602Z",
+      "notes": "workspace-valid-1088-nodes-26998-events-after-v3-s21-closeout"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "v3-s20-complete-fixed-llm-shaped-corpus-is-deterministic-local-and-explicit-about-typed-repair"
+    "summary": "v3-s21-complete-representative-scale-remains-selective-shared-caller-cached-and-within-frozen-inference-ratchets"
   },
   "expectedLearning": [
     "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",
