@@ -1,0 +1,203 @@
+{
+  "id": "run-contract.kp.semantic-state-families-interpolation-v2",
+  "kind": "run-contract",
+  "title": "Semantic state families and ephemeral interpolation v2",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.typed-authoring.semantic-state-families-interpolation.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-03-semantic-state-families-interpolation-long-loop-proposal.md",
+      "summary": "Canonical user-approved 26-slice proposal with exact risks checks rollback units scope inference allowance stop conditions and deferrals."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-03-typed-semantic-state-facade-derived-graph-closeout.md",
+      "summary": "Accepted Loop 2 boundary and Loop 3 recommendation."
+    }
+  ],
+  "verification": [
+    "npm run test:semantic-state",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run check:inference",
+    "npm test",
+    "npm run build:bundle",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Internal semantic-state progress family application ephemeral source evaluator fingerprint and bounded cache modules.",
+    "Compatible extensions to current transforms handles derived resolution fingerprints and caches that preserve snapshot behavior.",
+    "One canonical exact-rational parameterized-tax economics seam plus internal supply-tax and test-owned circle pressure fixtures.",
+    "Focused runtime and type laws authoring metrics history instrumentation inference attribution and durable Theseus evidence.",
+    "At most one measured s16 inference refresh using the exact formula approved in the source proposal.",
+    "Closeout and project-memory updates required by this run."
+  ],
+  "disallowedWork": [
+    "Aggregate timelines clocks URL addressing navigation playback controls or numeric-clock quantization.",
+    "Graph2D KaTeX SVG Canvas WebGL DOM CSS browser Catalogue Focus Deck Article publication or public-route integration.",
+    "Migration or rewrite of existing KaTeX transformations economics frames visual adapters public facades or compatibility paths.",
+    "Persistent arbitrary samples transient tokens caches compute closures or evaluator lifecycle.",
+    "Floating progress as exact economics authority independently interpolated derived values or renderer-derived semantic truth.",
+    "Runtime Proxy implicit assignment ambient state global registries import-order authority or filesystem generation.",
+    "Broad reactive state storage unit economics knowledge procedure macro CAS theorem-prover HKT or live-LLM systems.",
+    "More than the single bounded s16 inference refresh or any unexplained ceiling increase."
+  ],
+  "goal": "Implement nonvisual applied semantic state families with persistent endpoints and pure ephemeral exact-progress sampling, pressure canonical supply-tax and nonlinear circle callers, and stop before aggregate timelines or renderers.",
+  "target": "next-action.kp.typed-authoring.semantic-state-families-interpolation",
+  "runMode": "run",
+  "maxSlices": 26,
+  "commitCadence": "Commit implementation tests and completed Theseus evidence after every independently reversible verified slice while preserving unrelated user work.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if an interior sample must become an aggregate snapshot semantic entity version recovery entry or transaction event.",
+    "Stop if equivalent exact progress does not normalize identically or exact economics depends on floating progress.",
+    "Stop if interpolation writes an undeclared driver or independently interpolates a derived market or circle value.",
+    "Stop if presentation metadata mutates semantics discrete thresholds are guessed or statement order becomes transition order.",
+    "Stop if endpoint application bypasses current transaction change correspondence provenance lineage or recovery authority.",
+    "Stop if graph definitions vary per sample dependencies come from observed reads or an invalid partial result escapes.",
+    "Stop if transient tokens become semantic identity caches become unbounded global or durable or sample order changes results.",
+    "Stop if reparameterization mutates an application endpoint parameters provenance or evaluator cache.",
+    "Stop if economics formulas fork unit inference weakens or a caller-specific evaluator branch is required.",
+    "Stop if Proxy ambient registration generation storage redesign deferred visual public timeline or live-model work becomes necessary.",
+    "Stop if inference needs more than the single bounded s16 refresh or any broad gate cannot be repaired inside the named slice.",
+    "Always stop after s26 at a mandatory human architecture and API checkpoint before aggregate timeline work."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Baseline and law ledger",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Exact semantic progress",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Transition-mode declarations",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Typed family definition and application records",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Persistent endpoint application",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Declared-driver write gate",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Ephemeral sample-source contract",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Exact endpoint short-circuit",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Typed semantic-driver interpolation",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Discrete and presentation-only semantics",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Generalized concrete resolution",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Transient derivation fingerprints",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Derived evaluation over a sample source",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Bounded caller-owned evaluator cache",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Seek rewind repeat and retry laws",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Authority and compiler checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Immutable reparameterization",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Canonical parameterized-tax economics seam",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Supply-tax family and one-driver endpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Exact supply-tax intermediate samples",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Supply-tax sample-status and cache pressure",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Supply-tax reparameterization branches",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Circle state-family fixture",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Nonlinear circle sampling and unit repairs",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Cross-caller API scale and compiler pressure",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Closeout and mandatory API checkpoint",
+      "status": "planned"
+    }
+  ]
+}

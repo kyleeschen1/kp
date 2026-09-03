@@ -1,0 +1,69 @@
+{
+  "id": "next-action.kp.typed-authoring.semantic-state-families-interpolation",
+  "kind": "next-action",
+  "title": "Implement semantic state families and ephemeral interpolation",
+  "status": "ready",
+  "domain": "typed-authoring",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-03-semantic-state-families-interpolation-long-loop-proposal.md",
+      "summary": "User-approved rationale exact slice table scope checks stop conditions and deferrals."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-03-typed-semantic-state-facade-derived-graph-closeout.md",
+      "summary": "Accepted Loop 2 checkpoint and bounded Loop 3 recommendation."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.typed-authoring.semantic-state-facade-derived-graph"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:semantic-state",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run check:inference",
+    "npm test",
+    "npm run build:bundle",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether persistent endpoints plus ephemeral exact-progress overlays preserve semantic authority without fake snapshots.",
+    "Whether one tax driver can derive exact market consequences through canonical economics.",
+    "Whether the same family seam supports a nonlinear unit-tagged circle without caller-specific evaluation."
+  ],
+  "allowedWork": [
+    "Implement the exact internal nonvisual Loop 3 proposal and its tests measurements evidence and closeout."
+  ],
+  "disallowedWork": [
+    "Do not begin aggregate timeline renderer KaTeX Graph2D public facade Article Focus Deck or live LLM work."
+  ],
+  "criteria": [
+    {
+      "id": "ephemeral-samples-create-no-durable-authority",
+      "weight": "high"
+    },
+    {
+      "id": "endpoints-reuse-exact-committed-snapshots",
+      "weight": "high"
+    },
+    {
+      "id": "supply-tax-derives-from-one-exact-driver",
+      "weight": "high"
+    },
+    {
+      "id": "nonlinear-circle-reuses-generic-family",
+      "weight": "high"
+    },
+    {
+      "id": "broad-gates-pass-at-checkpoint",
+      "weight": "high"
+    }
+  ]
+}

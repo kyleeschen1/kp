@@ -1,10 +1,9 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: Loop 2 complete at mandatory architecture/API checkpoint
+Status: Loop 3 approved and active
 Last Updated: 2026-09-03
-Current Next Action: review the Loop 2 closeout and decide whether to approve a
-separate Loop 3 proposal for one nonvisual applied state family and pure
-`at(progress)` boundary.
+Current Next Action: execute the approved nonvisual applied-state-family and
+pure `at(progress)` contract through its mandatory architecture/API checkpoint.
 
 ## Goal
 
@@ -446,6 +445,25 @@ and checkpoint questions are recorded in
 `../reviews/2026-09-03-typed-semantic-state-facade-derived-graph-closeout.md`.
 Executable history remains owned by
 `run-contract.kp.typed-semantic-state-facade-derived-graph-v3`.
+
+## State Family And Interpolation Run
+
+The user approved the separate Loop 3 proposal on 2026-09-03. The active
+26-slice contract adds persistent family endpoints and a pure ephemeral
+`at(progress)` boundary, with explicit semantic, discrete, and
+presentation-only transition modes. It pressures one canonical exact-rational
+tax driver and a structurally different renderer-free circle family while
+keeping samples out of snapshots, versions, history, recovery, and durable
+cache authority.
+
+The approved run remains internal and nonvisual. Aggregate composition,
+timeline and clock policy, URL addressing, Graph2D, KaTeX, renderer work,
+public facade promotion, compatibility migration, and live-model evaluation
+remain separate decisions. The reviewed scope and exact slice sequence live in
+`../reviews/2026-09-03-semantic-state-families-interpolation-long-loop-proposal.md`.
+Executable progress lives only in
+`run-contract.kp.semantic-state-families-interpolation-v2`; the
+metadata-incomplete v1 record was superseded before implementation.
 
 ## Stop Conditions
 

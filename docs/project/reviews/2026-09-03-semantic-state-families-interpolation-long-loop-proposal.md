@@ -1,10 +1,12 @@
 # Semantic State Families And Ephemeral Interpolation Long-Loop Proposal
 
 Date: 2026-09-03
-Status: PROPOSED; AWAITING EXPLICIT APPROVAL
-Proposed target:
+Status: APPROVED; V2 ACTIVE
+Target:
 `next-action.kp.typed-authoring.semantic-state-families-interpolation`
-Proposed contract:
+Active contract:
+`run-contract.kp.semantic-state-families-interpolation-v2`
+Superseded preflight contract:
 `run-contract.kp.semantic-state-families-interpolation-v1`
 Active thread: `../threads/typed-semantic-authoring-framework.md`
 Source checkpoint:
@@ -372,22 +374,15 @@ After this loop, separate reviewed contracts would still be required for:
 10. live LLM generation, repair-rate measurement, and prompt-independent
     evaluation.
 
-## Approval Effect
+## Approval And Contract Outcome
 
-The current Theseus ready queue is empty, and its generic delivery frontier
-still references the older gold-equation visual checkpoint. None of the four
-bounded refill candidates represents this accepted semantic-state sequence.
-This proposal therefore does not select or materialize a refill candidate.
-
-Explicit approval authorizes creation of
-`next-action.kp.typed-authoring.semantic-state-families-interpolation` and
-`run-contract.kp.semantic-state-families-interpolation-v1` with these exact 26
+The user explicitly approved this proposal on 2026-09-03. The initial v1
+contract was superseded before implementation because its first materialized
+record omitted required typed-autonomy metadata. V2 preserves the reviewed 26
 slices, allowed and disallowed work, verification cadence, commit cadence,
-single conditional inference refresh, and stop conditions. It then authorizes
-autonomous execution until the mandatory s26 `HUMAN_CHECKPOINT` or an earlier
-named stop condition.
+single conditional inference refresh, and stop conditions while recording the
+complete run metadata required by the autonomy gate.
 
-Invocation of `$theseus-long-loop`, review of this proposal, or approval of a
-prior loop does not approve this contract. No implementation, Theseus
-selection, or contract creation begins until the user explicitly approves this
-proposal.
+The generic delivery frontier and its older gold-equation visual checkpoint
+were not selected. V2 is authorized for autonomous execution through the
+mandatory s26 `HUMAN_CHECKPOINT` or an earlier named stop condition.
