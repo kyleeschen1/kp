@@ -681,9 +681,12 @@ clocks, frames, and renderer ports remain outside Svelte authority.
 - The persistent semantic state foundation completed all 30 approved slices
   and is stopped at its mandatory nonvisual architecture/API checkpoint. Its
   exact result and loop-2 recommendation are recorded in
-  `reviews/2026-09-03-persistent-semantic-state-foundation-closeout.md`. Do not
-  begin proxy ergonomics, derived evaluation, interpolation, timeline, or
-  renderer work without explicit approval of a new contract.
+  `reviews/2026-09-03-persistent-semantic-state-foundation-closeout.md`. A new
+  26-slice statically typed facade and explicit derived-graph proposal is now
+  awaiting approval at
+  `reviews/2026-09-03-typed-semantic-state-facade-derived-graph-long-loop-proposal.md`.
+  Do not create or execute its run contract, or begin interpolation, timeline,
+  renderer, or public-promotion work, without that explicit approval.
 - The normal-matrix Proof Memory implementation is preserved at its mandatory
   checkpoint. Architecture passed; attentional experience did not. Its s26-s27
   continuation is closed without hardening or release.

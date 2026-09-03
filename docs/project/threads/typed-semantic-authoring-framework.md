@@ -1,12 +1,10 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: persistent semantic state foundation at mandatory human checkpoint
+Status: Loop 2 typed state facade and derived graph proposal awaiting approval
 Last Updated: 2026-09-03
-Current Next Action: review
-`../reviews/2026-09-03-persistent-semantic-state-foundation-closeout.md` and
-decide whether to accept the internal identity and transaction kernel plus its
-recommended statically typed facade boundary. Do not propose or begin loop 2
-until that API checkpoint is explicitly resolved.
+Current Next Action: review and explicitly approve or reject
+`../reviews/2026-09-03-typed-semantic-state-facade-derived-graph-long-loop-proposal.md`.
+Do not create or execute its Theseus run contract without approval.
 
 ## Goal
 
@@ -382,6 +380,27 @@ checkpoint questions are recorded in
 Executable slice history remains owned by
 `run-contract.kp.persistent-semantic-state-foundation-v1`; this thread does not
 duplicate it.
+
+## Typed Facade And Derived Graph Proposal
+
+The foundation checkpoint recommendation has been converted into a separately
+reviewable 26-slice Loop 2 proposal. It chooses a descriptor-driven, statically
+typed property facade made of ordinary nested handle objects. Explicit handles
+remain dependency authority; runtime `Proxy` observation, ambient assignment,
+generic staged writes, global registries, and filesystem code generation are
+excluded.
+
+The proposed loop restores domain-specific leaf types before enabling derived
+evaluation, compiles all named operations into the existing transaction kernel,
+adds a definition-scoped explicit dependency graph and caller-owned lazy cache,
+then pressures the result with one exact-rationally checked supply-tax example,
+a fixed LLM-shaped corpus, and a representative graph scale probe. It retains
+an internal boundary and stops before interpolation, timeline, renderer,
+Article, public facade, or broad domain work.
+
+The human-readable scope and exact slice proposal live in
+`../reviews/2026-09-03-typed-semantic-state-facade-derived-graph-long-loop-proposal.md`.
+No executable run contract exists until the user approves that proposal.
 
 ## Stop Conditions
 
