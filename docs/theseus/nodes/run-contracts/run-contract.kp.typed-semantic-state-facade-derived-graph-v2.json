@@ -92,7 +92,8 @@
     {
       "id": "s06",
       "title": "Transformation definition and application shell",
-      "status": "planned"
+      "summary": "Added the transformation lifecycle shell around the existing transaction kernel; callback and statement order do not mint identity, and mutation APIs remain absent until their slices.",
+      "status": "complete"
     },
     {
       "id": "s07",

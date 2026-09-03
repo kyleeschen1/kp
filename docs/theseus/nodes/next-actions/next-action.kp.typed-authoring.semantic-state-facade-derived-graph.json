@@ -178,11 +178,32 @@
       "scope": "standard",
       "checkedAt": "2026-09-03T13:07:06.631Z",
       "notes": "Impact-directed architecture gates pass with zero dependency-direction exceptions."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T13:11:16.379Z",
+      "notes": "84 of 84 laws pass; deterministic transform definitions, empty-transform rejection, author-error abort, callback-result rejection, and scoped handle expiry are covered."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T13:11:17.390Z",
+      "notes": "Transform callbacks receive exact typed read handles and no mutation or low-level staging surface."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T13:11:18.423Z",
+      "notes": "Impact-directed architecture gates pass with zero dependency-direction exceptions."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s05 builds ordinary frozen nested reference objects and pinned views. Reads close over one validated snapshot, stable refs survive across views, exact leaf types remain inferred, and descriptor disposition mismatches fail before read."
+    "summary": "s06 adds deterministic transform definitions with explicit application IDs, typed transaction-local reads, automatic commit-or-abort cleanup, empty-transform diagnostics, and expired captured handles."
   },
   "expectedLearning": [
     "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",
