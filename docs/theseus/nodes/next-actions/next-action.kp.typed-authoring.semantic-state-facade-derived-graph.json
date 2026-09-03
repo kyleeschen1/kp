@@ -157,11 +157,32 @@
       "scope": "standard",
       "checkedAt": "2026-09-03T13:00:47.533Z",
       "notes": "Impact-directed architecture verification passes with zero dependency-direction exceptions."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T13:07:04.499Z",
+      "notes": "80 of 80 laws pass; stable reference objects are reused across pinned initial and successor views, while absence and deferred-derived reads retain typed kernel diagnostics."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T13:07:05.635Z",
+      "notes": "Pinned nested reads retain exact domain interfaces and readonly values; stable dependency references expose no ambient read method."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T13:07:06.631Z",
+      "notes": "Impact-directed architecture gates pass with zero dependency-direction exceptions."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s04 materializes compiled required values, optional absences, and derived declarations solely through existing kernel constructors. Initial values remain frozen, plans are schema-scoped, and missing or invalid derived plans fail locally."
+    "summary": "s05 builds ordinary frozen nested reference objects and pinned views. Reads close over one validated snapshot, stable refs survive across views, exact leaf types remain inferred, and descriptor disposition mismatches fail before read."
   },
   "expectedLearning": [
     "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",

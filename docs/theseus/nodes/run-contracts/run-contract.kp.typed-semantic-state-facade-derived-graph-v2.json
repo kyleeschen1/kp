@@ -86,7 +86,8 @@
     {
       "id": "s05",
       "title": "Typed read and pinned-view handles",
-      "status": "planned"
+      "summary": "Added typed stable handle trees and explicitly pinned read views with historical recovery, exact domain types, schema validation, and no runtime property interception.",
+      "status": "complete"
     },
     {
       "id": "s06",
