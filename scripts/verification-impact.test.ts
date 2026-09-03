@@ -12,6 +12,34 @@ test("Theseus-only changes keep verification focused", () => {
   assert.deepEqual(ids(result), ["theseus-validate"]);
 });
 
+test("semantic state changes select the internal law and boundary gates", () => {
+  for (const path of [
+    "src/semantic-state/entity-version-store.ts",
+    "tests/semantic-state-identity.test.ts"
+  ]) {
+    const result = selectKpVerificationImpact([path], { mode: "contract" });
+    assert.deepEqual(ids(result), [
+      "semantic-state-unit",
+      "typecheck",
+      "architecture"
+    ]);
+    assert.deepEqual(result.unmatchedPaths, []);
+  }
+
+  const fixture = selectKpVerificationImpact([
+    "tests/type-fixtures/semantic-entity-version-store.ts"
+  ], { mode: "contract" });
+  assert.deepEqual(ids(fixture), [
+    "semantic-state-unit",
+    "typecheck",
+    "architecture",
+    "inference-contracts",
+    "inference-budget-unit",
+    "typecheck-app"
+  ]);
+  assert.deepEqual(fixture.unmatchedPaths, []);
+});
+
 test("review service changes select unit, type, and production-closure checks", () => {
   const result = selectKpVerificationImpact(["server/dev-review-store.ts"]);
   assert.deepEqual(ids(result), [

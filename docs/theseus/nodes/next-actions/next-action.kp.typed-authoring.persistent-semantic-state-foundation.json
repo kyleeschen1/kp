@@ -504,6 +504,48 @@
       "scope": "s17-state-identity-contract",
       "checkedAt": "2026-09-03T08:50:07.852Z",
       "notes": "Workspace schema and active run references validate."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "s18-immutable-entity-version-store",
+      "checkedAt": "2026-09-03T08:59:01.268Z",
+      "notes": "Eight identity and store laws pass: defensive isolation, deep freeze, immutable succession, explicit provenance, direct indexed recovery, and invalid executable or foreign inputs."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s18-immutable-entity-version-store",
+      "checkedAt": "2026-09-03T08:59:02.531Z",
+      "notes": "All TypeScript, Svelte, and domain checks pass; deep-readonly and structural-data negative fixtures are enforced."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s18-immutable-entity-version-store",
+      "checkedAt": "2026-09-03T08:59:03.646Z",
+      "notes": "Framework-neutral and dependency-direction gates pass with 1,982 modules and zero exceptions."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s18-immutable-entity-version-store",
+      "checkedAt": "2026-09-03T08:59:04.797Z",
+      "notes": "Inference contracts pass at 99,978 types and 166,877 instantiations."
+    },
+    {
+      "command": "npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "s18-immutable-entity-version-store",
+      "checkedAt": "2026-09-03T08:59:05.930Z",
+      "notes": "Generated 68-root inventory is current after adding the store and law files; no root changed."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s18-immutable-entity-version-store",
+      "checkedAt": "2026-09-03T08:59:07.105Z",
+      "notes": "Workspace and run-contract state validate."
     }
   ],
   "expectedLearning": [

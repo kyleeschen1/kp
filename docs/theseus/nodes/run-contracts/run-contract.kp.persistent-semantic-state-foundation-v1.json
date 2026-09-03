@@ -166,7 +166,8 @@
     {
       "id": "s18",
       "title": "immutable-entity-version-store",
-      "status": "planned"
+      "summary": "Added a persistent immutable entity/version store over structural semantic data: values are defensively cloned and deeply frozen, successors keep one entity identity with explicit transformation provenance, previous stores remain unchanged, and exact versions resolve from a committed index without replay.",
+      "status": "complete"
     },
     {
       "id": "s19",

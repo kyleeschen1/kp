@@ -134,6 +134,12 @@ const checks = {
     "Protect measured inference headroom and lightweight type ownership.",
     "discovery"
   ),
+  semanticStateUnit: check(
+    "semantic-state-unit",
+    ["npm", "run", "test:semantic-state"],
+    "medium",
+    "Exercise persistent identity, version, snapshot, and transaction laws."
+  ),
   architecture: check(
     "architecture",
     ["npm", "run", "check:architecture"],
@@ -385,6 +391,17 @@ interface KpVerificationRule {
 }
 
 const rules: readonly KpVerificationRule[] = [
+  {
+    id: "semantic-state-kernel",
+    matches: (path) =>
+      path.startsWith("src/semantic-state/") ||
+      path.startsWith("tests/semantic-state-") ||
+      path === "tests/semantic-entity-version-store.test.ts" ||
+      path.startsWith("tests/type-fixtures/semantic-state-") ||
+      path === "tests/type-fixtures/semantic-entity-version-store.ts",
+    checks: [checks.semanticStateUnit, checks.typecheck, checks.architecture],
+    reason: "The internal persistent semantic-state kernel or its laws changed."
+  },
   {
     id: "browser-test-host",
     matches: (path) =>
