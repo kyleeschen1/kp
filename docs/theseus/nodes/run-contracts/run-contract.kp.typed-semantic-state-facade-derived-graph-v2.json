@@ -80,7 +80,8 @@
     {
       "id": "s04",
       "title": "Initial snapshot materialization",
-      "status": "planned"
+      "summary": "Added exact schema-to-foundation initial snapshot materialization with complete slot closure, immutable values, internal derived-plan validation, and no parallel state model.",
+      "status": "complete"
     },
     {
       "id": "s05",

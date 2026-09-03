@@ -136,11 +136,32 @@
       "scope": "standard",
       "checkedAt": "2026-09-03T12:56:26.880Z",
       "notes": "Impact-directed architecture gates pass with zero dependency-direction exceptions."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T13:00:45.224Z",
+      "notes": "76 of 76 laws pass; materialized snapshots are exactly equal to direct foundation construction and close required, optional-absence, and derived slot state."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T13:00:46.417Z",
+      "notes": "Schema-to-foundation materialization compiles through all TypeScript projects without weakening descriptor inference."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T13:00:47.533Z",
+      "notes": "Impact-directed architecture verification passes with zero dependency-direction exceptions."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s03 deterministically flattens sorted nested paths, uses injective per-segment encoding, and mints distinct scoped slot, initial-entity, derivation, source, and named-operation defaults through the existing identity factory."
+    "summary": "s04 materializes compiled required values, optional absences, and derived declarations solely through existing kernel constructors. Initial values remain frozen, plans are schema-scoped, and missing or invalid derived plans fail locally."
   },
   "expectedLearning": [
     "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",
