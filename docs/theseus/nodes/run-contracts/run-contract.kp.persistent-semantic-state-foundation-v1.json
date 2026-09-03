@@ -64,7 +64,8 @@
     {
       "id": "s01",
       "title": "broad-failure-baseline",
-      "status": "planned"
+      "summary": "Captured and routed all 49 client failures: 16 catalogue/asset to s02, 14 generated order/direction to s03, and 19 renderer/source/architecture to s04; no behavior change or deferral required.",
+      "status": "complete"
     },
     {
       "id": "s02",

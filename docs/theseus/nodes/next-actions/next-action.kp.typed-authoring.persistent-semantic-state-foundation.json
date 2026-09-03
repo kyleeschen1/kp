@@ -28,6 +28,43 @@
     "npm run build:bundle",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T06:13:16.195Z",
+      "notes": "Expected s01 baseline: prerequisites passed; 6080 tests, 6031 passed, 49 failed. All failures are assigned to s02-s04 and are not represented as passing."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T06:13:17.470Z",
+      "notes": "Dependency direction, framework-neutral boundaries, compiler authority, and eight cross-domain gateway tests passed."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T06:13:18.623Z",
+      "notes": "Inference contracts passed with 98881 types and 164998 instantiations."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T06:13:19.784Z",
+      "notes": "Application, Node, tests, Svelte, and domains typechecks passed."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-03T06:13:20.927Z",
+      "notes": "Workspace valid before s01 completion."
+    }
+  ],
   "expectedLearning": [
     "Whether explicit entity, version, role, and snapshot distinctions support immutable alias, copy, branch, transaction, and direct-recovery laws without proxy or renderer authority.",
     "Whether the helper and exact-rational parity gates produce a trustworthy foundation for the later ergonomic and interpolation loops."
