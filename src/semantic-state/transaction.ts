@@ -5,6 +5,7 @@ import {
   type KpSemanticSlotBinding
 } from "./aggregate-snapshot.ts";
 import {
+  appendKpSemanticEntityVersion,
   readKpSemanticEntityVersion,
   type KpPersistentSemanticValue,
   type KpSemanticEntityVersion
@@ -41,9 +42,33 @@ export interface KpSemanticTransactionStagedWrite {
   readonly slotRebindings: readonly KpSemanticSlotBinding[];
 }
 
+export interface KpSemanticTransactionUpdateInput {
+  readonly id: string;
+  readonly sourceId: string;
+  readonly revisionId: string;
+  readonly slotId: KpSemanticSlotId;
+  readonly update: (
+    previous: KpPersistentSemanticValue
+  ) => KpPersistentSemanticValue;
+}
+
+export type KpSemanticTransactionJournalOperation =
+  | {
+    readonly kind: "staged-write";
+  }
+  | {
+    readonly kind: "update";
+    readonly sourceId: string;
+    readonly revisionId: string;
+    readonly slotId: KpSemanticSlotId;
+    readonly previousVersionId: KpSemanticEntityVersion<KpPersistentSemanticValue>["id"];
+    readonly nextVersionId: KpSemanticEntityVersion<KpPersistentSemanticValue>["id"];
+  };
+
 export interface KpSemanticTransactionJournalEntry {
   readonly sequence: number;
   readonly writeId: string;
+  readonly operation: KpSemanticTransactionJournalOperation;
   readonly replacedEntityIds: readonly KpSemanticEntityId[];
   readonly reboundSlotIds: readonly KpSemanticSlotId[];
 }
@@ -62,7 +87,9 @@ export type KpSemanticTransactionErrorCode =
   | "foreign-scope"
   | "scope-expired"
   | "no-staged-writes"
-  | "duplicate-write";
+  | "duplicate-write"
+  | "reentrant-operation"
+  | "nondeterministic-update";
 
 export class KpSemanticTransactionError extends Error {
   readonly code: KpSemanticTransactionErrorCode;
@@ -88,6 +115,7 @@ export class KpSemanticTransaction {
   #journal: KpSemanticTransactionJournalEntry[] = [];
   #writeIds = new Set<string>();
   #status: "open" | "committed" | "aborted" = "open";
+  #evaluatingUpdate = false;
 
   constructor(
     authority: typeof kpSemanticTransactionConstructorAuthority,
@@ -140,6 +168,96 @@ export class KpSemanticTransaction {
     write: KpSemanticTransactionStagedWrite
   ): void {
     this.#assertOpenScope(scope);
+    this.#stage(write, Object.freeze({ kind: "staged-write" }));
+  }
+
+  update(
+    scope: KpSemanticTransactionScope,
+    input: KpSemanticTransactionUpdateInput
+  ): void {
+    this.#assertOpenScope(scope);
+    requireWriteId(input.id);
+    requireWriteId(input.sourceId);
+    requireWriteId(input.revisionId);
+
+    const previousBinding = readKpSemanticSlotBinding(
+      this.#working,
+      input.slotId
+    );
+    const previousStore = readKpSnapshotEntityStore(
+      this.#working,
+      previousBinding.entityId
+    );
+    const previousVersion = readKpSemanticEntityVersion(
+      previousStore,
+      previousBinding.versionId
+    );
+
+    this.#evaluatingUpdate = true;
+    let firstResult: KpPersistentSemanticValue;
+    let secondResult: KpPersistentSemanticValue;
+    try {
+      firstResult = input.update(previousVersion.value);
+      secondResult = input.update(previousVersion.value);
+    } finally {
+      this.#evaluatingUpdate = false;
+    }
+
+    const firstSuccessor = appendKpSemanticEntityVersion(previousStore, {
+      value: firstResult,
+      transformationId: this.transformationId,
+      revisionId: input.revisionId
+    });
+    const secondSuccessor = appendKpSemanticEntityVersion(previousStore, {
+      value: secondResult,
+      transformationId: this.transformationId,
+      revisionId: input.revisionId
+    });
+    const firstValue = readKpSemanticEntityVersion(
+      firstSuccessor,
+      firstSuccessor.latestVersionId
+    ).value;
+    const secondValue = readKpSemanticEntityVersion(
+      secondSuccessor,
+      secondSuccessor.latestVersionId
+    ).value;
+    if (!arePersistentValuesEqual(firstValue, secondValue)) {
+      throw new KpSemanticTransactionError(
+        "nondeterministic-update",
+        `Semantic update ${input.id} produced different results for the same pinned previous value.`
+      );
+    }
+
+    // Every role already sharing this entity advances together. This makes
+    // entity identity, rather than the slot used to address it, authoritative.
+    const slotRebindings = this.#working.bindings
+      .filter(({ entityId }) => entityId === previousBinding.entityId)
+      .map(({ slotId, entityId }) => Object.freeze({
+        slotId,
+        entityId,
+        versionId: firstSuccessor.latestVersionId
+      }));
+    this.#stage({
+      id: input.id,
+      entityStoreReplacements: [{
+        entityId: firstSuccessor.entityId,
+        store: firstSuccessor
+      }],
+      slotRebindings
+    }, Object.freeze({
+      kind: "update",
+      sourceId: input.sourceId,
+      revisionId: input.revisionId,
+      slotId: input.slotId,
+      previousVersionId: previousVersion.id,
+      nextVersionId: firstSuccessor.latestVersionId
+    }));
+  }
+
+  #stage(
+    write: KpSemanticTransactionStagedWrite,
+    operation: KpSemanticTransactionJournalOperation
+  ): void {
     requireWriteId(write.id);
     if (this.#writeIds.has(write.id)) {
       throw new KpSemanticTransactionError(
@@ -160,6 +278,7 @@ export class KpSemanticTransaction {
     const entry = Object.freeze({
       sequence: this.#journal.length,
       writeId: write.id,
+      operation,
       replacedEntityIds: Object.freeze(
         write.entityStoreReplacements.map(({ entityId }) => entityId)
       ),
@@ -203,6 +322,12 @@ export class KpSemanticTransaction {
   }
 
   #assertOpenScope(scope: KpSemanticTransactionScope): void {
+    if (this.#evaluatingUpdate) {
+      throw new KpSemanticTransactionError(
+        "reentrant-operation",
+        `Semantic transaction ${this.transactionId} cannot be used from inside an update callback.`
+      );
+    }
     if (scope !== this.scope) {
       throw new KpSemanticTransactionError(
         "foreign-scope",
@@ -232,4 +357,37 @@ function requireWriteId(value: string): void {
       `Semantic transaction write id ${JSON.stringify(value)} must be lowercase and scoped.`
     );
   }
+}
+
+function arePersistentValuesEqual(
+  left: KpPersistentSemanticValue,
+  right: KpPersistentSemanticValue
+): boolean {
+  if (Object.is(left, right)) {
+    return true;
+  }
+  if (left === null || right === null ||
+      typeof left !== "object" || typeof right !== "object") {
+    return false;
+  }
+  const leftIsArray = Array.isArray(left);
+  if (leftIsArray !== Array.isArray(right)) {
+    return false;
+  }
+  if (leftIsArray) {
+    const leftItems = left as readonly KpPersistentSemanticValue[];
+    const rightItems = right as readonly KpPersistentSemanticValue[];
+    return leftItems.length === rightItems.length && leftItems.every(
+      (item, index) => arePersistentValuesEqual(item, rightItems[index]!)
+    );
+  }
+
+  const leftRecord = left as Readonly<Record<string, KpPersistentSemanticValue>>;
+  const rightRecord = right as Readonly<Record<string, KpPersistentSemanticValue>>;
+  const leftKeys = Object.getOwnPropertyNames(leftRecord).sort();
+  const rightKeys = Object.getOwnPropertyNames(rightRecord).sort();
+  return leftKeys.length === rightKeys.length && leftKeys.every(
+    (key, index) => key === rightKeys[index] &&
+      arePersistentValuesEqual(leftRecord[key]!, rightRecord[key]!)
+  );
 }

@@ -202,7 +202,8 @@
     {
       "id": "s24",
       "title": "update-operation",
-      "status": "planned"
+      "summary": "Implemented explicit update(previous => next): callbacks receive the pinned frozen value, yield same-entity successor versions with source and revision identity, advance every local alias, reject reentrant transaction effects and output nondeterminism, and leave no partial state on failure.",
+      "status": "complete"
     },
     {
       "id": "s25",

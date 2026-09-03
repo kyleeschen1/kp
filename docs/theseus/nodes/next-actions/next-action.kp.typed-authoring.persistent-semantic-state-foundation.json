@@ -728,6 +728,48 @@
       "scope": "s23-explicit-transaction-lifecycle",
       "checkedAt": "2026-09-03T09:37:06.391Z",
       "notes": "Workspace schema and active run references validate before slice completion."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T09:43:08.403Z",
+      "notes": "37 semantic-state laws pass, including six update laws for same-entity succession, pinned inputs, deterministic replay, immutable callbacks, reentrancy rejection, and equal-value revisions."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s24-update-operation",
+      "checkedAt": "2026-09-03T09:43:09.574Z",
+      "notes": "Repository TypeScript, Svelte, and domain checks pass; update source identity and synchronous return shape are enforced by negative fixtures."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s24-update-operation",
+      "checkedAt": "2026-09-03T09:43:10.623Z",
+      "notes": "Architecture gates pass at 1987 modules with zero dependency-direction exceptions."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s24-update-operation",
+      "checkedAt": "2026-09-03T09:43:11.669Z",
+      "notes": "Inference contracts pass at 100650 types and 168157 instantiations."
+    },
+    {
+      "command": "npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "s24-update-operation",
+      "checkedAt": "2026-09-03T09:43:12.698Z",
+      "notes": "Exact equation reachability remains current at 68 roots."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s24-update-operation",
+      "checkedAt": "2026-09-03T09:43:23.206Z",
+      "notes": "Workspace schema and active run references validate before update-slice completion."
     }
   ],
   "expectedLearning": [
