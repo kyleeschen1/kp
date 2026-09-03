@@ -172,7 +172,8 @@
     {
       "id": "s19",
       "title": "role-bindings-and-aggregate-snapshots",
-      "status": "planned"
+      "summary": "Added a complete immutable aggregate snapshot root that binds contextual slot IDs to exact entity/version references and materialized stores; aliases and labels remain outside snapshot identity, required slots cannot be omitted, and foreign or missing references fail locally.",
+      "status": "complete"
     },
     {
       "id": "s20",

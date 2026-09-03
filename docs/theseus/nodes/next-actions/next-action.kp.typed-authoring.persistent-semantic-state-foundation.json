@@ -546,6 +546,41 @@
       "scope": "s18-immutable-entity-version-store",
       "checkedAt": "2026-09-03T08:59:07.105Z",
       "notes": "Workspace and run-contract state validate."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "s19-role-bindings-and-aggregate-snapshots",
+      "checkedAt": "2026-09-03T09:04:08.655Z",
+      "notes": "Twelve focused identity, version, and aggregate laws pass, including complete required slots, exact binding closure, alias-independent roles, immutable roots, and foreign or missing-reference rejection."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s19-role-bindings-and-aggregate-snapshots",
+      "checkedAt": "2026-09-03T09:04:09.700Z",
+      "notes": "Repository TypeScript, Svelte, and domain checks pass; aliases and entity IDs cannot type-check as slot or version IDs."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s19-role-bindings-and-aggregate-snapshots",
+      "checkedAt": "2026-09-03T09:04:10.743Z",
+      "notes": "All architecture gates pass at 1,983 modules with zero dependency exceptions."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s19-role-bindings-and-aggregate-snapshots",
+      "checkedAt": "2026-09-03T09:04:11.784Z",
+      "notes": "Inference contracts pass at 100,164 types and 167,256 instantiations."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s19-role-bindings-and-aggregate-snapshots",
+      "checkedAt": "2026-09-03T09:04:12.830Z",
+      "notes": "Workspace schema and run references validate."
     }
   ],
   "expectedLearning": [
