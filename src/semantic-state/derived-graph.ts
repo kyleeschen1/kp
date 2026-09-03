@@ -73,7 +73,8 @@ export type KpSemanticDerivedGraphDiagnosticCode =
   | "missing-derived-definition"
   | "missing-derived-dependency"
   | "missing-derived-compute-capability"
-  | "self-derived-dependency";
+  | "self-derived-dependency"
+  | "cyclic-derived-dependency";
 
 export interface KpSemanticDerivedGraphDiagnostic {
   readonly schemaVersion: "kp.semantic-derived-graph-diagnostic.v1";
@@ -85,6 +86,8 @@ export interface KpSemanticDerivedGraphDiagnostic {
   readonly dependencySlotId?: KpSemanticSlotId;
   readonly targetPath: readonly string[] | null;
   readonly dependencyPath: readonly string[] | null;
+  readonly cycleSlotIds?: readonly KpSemanticSlotId[];
+  readonly cyclePaths?: readonly (readonly string[] | null)[];
   readonly message: string;
 }
 
@@ -319,6 +322,9 @@ export function validateKpSemanticDerivedGraphInput(
     }
   }
 
+  if (diagnostics.length === 0) {
+    diagnostics.push(...detectCycles(input));
+  }
   if (diagnostics.length > 0) {
     throw new KpSemanticDerivedGraphValidationError(diagnostics);
   }
@@ -367,6 +373,7 @@ function createDiagnostic(input: {
   readonly sourceId: string;
   readonly target: KpSemanticDerivedGraphLeafReference;
   readonly dependency?: KpSemanticDerivedGraphLeafReference;
+  readonly cycle?: readonly KpSemanticDerivedGraphLeafReference[];
   readonly message: string;
 }): KpSemanticDerivedGraphDiagnostic {
   return Object.freeze({
@@ -381,6 +388,12 @@ function createDiagnostic(input: {
       : { dependencySlotId: input.dependency.slotId }),
     targetPath: input.target.path,
     dependencyPath: input.dependency?.path ?? null,
+    ...(input.cycle === undefined
+      ? {}
+      : {
+          cycleSlotIds: Object.freeze(input.cycle.map(({ slotId }) => slotId)),
+          cyclePaths: Object.freeze(input.cycle.map(({ path }) => path))
+        }),
     message: input.message
   });
 }
@@ -398,4 +411,83 @@ function hasComputeCapability(
 
 function isRecord(value: unknown): value is Readonly<Record<string, unknown>> {
   return value !== null && typeof value === "object";
+}
+
+function detectCycles(
+  input: KpSemanticDerivedGraphInput
+): readonly KpSemanticDerivedGraphDiagnostic[] {
+  const definitions = new Map(input.definitions.map((definition) => [
+    definition.target.slotId,
+    definition
+  ]));
+  const visitState = new Map<KpSemanticSlotId, "visiting" | "complete">();
+  const stack: KpSemanticDerivedGraphDefinitionInput[] = [];
+  const diagnostics: KpSemanticDerivedGraphDiagnostic[] = [];
+  const recordedCycles = new Set<string>();
+
+  const visit = (definition: KpSemanticDerivedGraphDefinitionInput): void => {
+    visitState.set(definition.target.slotId, "visiting");
+    stack.push(definition);
+    const dependencies = definition.dependencies
+      .map(({ dependency }) => definitions.get(dependency.slotId))
+      .filter((candidate) => candidate !== undefined)
+      .sort((left, right) =>
+        left.target.slotId.localeCompare(right.target.slotId)
+      );
+    for (const dependency of dependencies) {
+      const state = visitState.get(dependency.target.slotId);
+      if (state === "visiting") {
+        const start = stack.findIndex(({ target }) =>
+          target.slotId === dependency.target.slotId
+        );
+        const cycle = canonicalizeCycle([
+          ...stack.slice(start).map(({ target }) => target),
+          dependency.target
+        ]);
+        const key = cycle.map(({ slotId }) => slotId).join("->");
+        if (!recordedCycles.has(key)) {
+          recordedCycles.add(key);
+          const owner = definitions.get(cycle[0]!.slotId)!;
+          diagnostics.push(createDiagnostic({
+            code: "cyclic-derived-dependency",
+            derivationId: owner.id,
+            sourceId: owner.sourceId,
+            target: owner.target,
+            dependency: cycle[1]!,
+            cycle,
+            message: `Derived dependency cycle ${cycle.map(({ path }) =>
+              formatPath(path)).join(" -> ")} is not evaluable.`
+          }));
+        }
+      } else if (state === undefined) {
+        visit(dependency);
+      }
+    }
+    stack.pop();
+    visitState.set(definition.target.slotId, "complete");
+  };
+
+  for (const definition of input.definitions) {
+    if (visitState.get(definition.target.slotId) === undefined) {
+      visit(definition);
+    }
+  }
+  return Object.freeze(diagnostics);
+}
+
+function canonicalizeCycle(
+  closedCycle: readonly KpSemanticDerivedGraphLeafReference[]
+): readonly KpSemanticDerivedGraphLeafReference[] {
+  const openCycle = closedCycle.slice(0, -1);
+  let firstIndex = 0;
+  for (let index = 1; index < openCycle.length; index += 1) {
+    if (openCycle[index]!.slotId.localeCompare(
+      openCycle[firstIndex]!.slotId
+    ) < 0) firstIndex = index;
+  }
+  const rotated = [
+    ...openCycle.slice(firstIndex),
+    ...openCycle.slice(0, firstIndex)
+  ];
+  return Object.freeze([...rotated, rotated[0]!]);
 }

@@ -625,11 +625,46 @@
       "scope": "standard",
       "checkedAt": "2026-09-03T17:34:49.601Z",
       "notes": "workspace valid with 1088 nodes and 26783 events after v3 s04 closeout"
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T17:39:22.821Z",
+      "notes": "117 laws pass including direct two-node and long cycles with zero callback calls"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T17:39:23.992Z",
+      "notes": "all TypeScript Svelte and domain projects pass after cycle diagnostics"
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T17:39:25.040Z",
+      "notes": "inference remains green at 103192 types and 172704 instantiations"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T17:39:26.160Z",
+      "notes": "all architecture and gateway gates pass"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T17:39:40.820Z",
+      "notes": "workspace valid with 1088 nodes and 26793 events after v3 s05 closeout"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "v3-s04-complete-schema-boundaries-and-executable-capability-fail-locally-while-types-preserve-result-and-dependency-values"
+    "summary": "v3-s05-complete-direct-and-indirect-cycles-fail-with-canonical-paths-before-any-compute-call"
   },
   "expectedLearning": [
     "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",

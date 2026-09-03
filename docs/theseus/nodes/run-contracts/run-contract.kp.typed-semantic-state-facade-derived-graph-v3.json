@@ -84,7 +84,8 @@
     {
       "id": "s05",
       "title": "Detect dependency cycles",
-      "status": "planned"
+      "summary": "detected-self-two-node-and-long-derived-cycles-deterministically-before-compute-execution",
+      "status": "complete"
     },
     {
       "id": "s06",

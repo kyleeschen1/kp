@@ -353,6 +353,55 @@ test("durable declarations cannot replace definition-local compute capability", 
   assert.equal(fixture.computeCalls(), 0);
 });
 
+test("direct cycles fail before their compute callback", () => {
+  const fixture = createCycleFixture(({ alpha }) => ({
+    alpha: [alpha],
+    beta: [],
+    gamma: []
+  }));
+  const diagnostics = validationDiagnostics(fixture.graph);
+
+  assert.equal(diagnostics[0]?.code, "self-derived-dependency");
+  assert.equal(fixture.computeCalls(), 0);
+});
+
+test("two-node dependency cycles report one exact closed path", () => {
+  const fixture = createCycleFixture(({ alpha, beta }) => ({
+    alpha: [beta],
+    beta: [alpha],
+    gamma: []
+  }));
+  const diagnostics = validationDiagnostics(fixture.graph);
+
+  assert.equal(diagnostics.length, 1);
+  assert.equal(diagnostics[0]?.code, "cyclic-derived-dependency");
+  assert.deepEqual(diagnostics[0]?.cyclePaths, [
+    ["alpha"],
+    ["beta"],
+    ["alpha"]
+  ]);
+  assert.equal(fixture.computeCalls(), 0);
+});
+
+test("long dependency cycles canonicalize independently of definition order", () => {
+  const fixture = createCycleFixture(({ alpha, beta, gamma }) => ({
+    alpha: [beta],
+    beta: [gamma],
+    gamma: [alpha]
+  }), true);
+  const diagnostics = validationDiagnostics(fixture.graph);
+
+  assert.equal(diagnostics.length, 1);
+  assert.equal(diagnostics[0]?.code, "cyclic-derived-dependency");
+  assert.deepEqual(diagnostics[0]?.cyclePaths, [
+    ["alpha"],
+    ["beta"],
+    ["gamma"],
+    ["alpha"]
+  ]);
+  assert.equal(fixture.computeCalls(), 0);
+});
+
 function createFixture(
   namespace = "lesson.derived-graph-normalization"
 ) {
@@ -401,12 +450,80 @@ function createFixture(
   };
 }
 
+function createCycleFixture(
+  dependencies: (slots: Readonly<{
+    alpha: KpSemanticSlotId;
+    beta: KpSemanticSlotId;
+    gamma: KpSemanticSlotId;
+    seed: KpSemanticSlotId;
+  }>) => Readonly<{
+    alpha: readonly KpSemanticSlotId[];
+    beta: readonly KpSemanticSlotId[];
+    gamma: readonly KpSemanticSlotId[];
+  }>,
+  reverseDefinitions = false
+) {
+  let computeCalls = 0;
+  const compiled = compileKpSemanticStateSchema(
+    "lesson.derived-cycle",
+    kpStateGroup({
+      seed: kpStateValue(1),
+      alpha: kpStateDerived<number>(),
+      beta: kpStateDerived<number>(),
+      gamma: kpStateDerived<number>()
+    })
+  );
+  const handles = createKpSemanticStateHandleSet(compiled);
+  const slots = Object.freeze({
+    alpha: handles.refs.alpha.slotId,
+    beta: handles.refs.beta.slotId,
+    gamma: handles.refs.gamma.slotId,
+    seed: handles.refs.seed.slotId
+  });
+  const dependencySlots = dependencies(slots);
+  const definitionFor = (
+    encodedPath: "alpha" | "beta" | "gamma",
+    dependencySlotIds: readonly KpSemanticSlotId[]
+  ) => {
+    const ordinal = compiled.leafIndex[encodedPath];
+    if (ordinal === undefined) {
+      throw new Error(`Missing cycle fixture path ${encodedPath}.`);
+    }
+    const leaf = compiled.leaves[ordinal]!;
+    return createDefinitionSource({
+      derivationId: leaf.identities.derivationId,
+      targetSlotId: leaf.identities.slotId,
+      dependencySlotIds: dependencySlotIds.length === 0
+        ? [slots.seed]
+        : dependencySlotIds,
+      sourceId: leaf.identities.sourceIds.derivation,
+      compute: () => {
+        computeCalls += 1;
+        return 1;
+      }
+    });
+  };
+  const definitions = [
+    definitionFor("alpha", dependencySlots.alpha),
+    definitionFor("beta", dependencySlots.beta),
+    definitionFor("gamma", dependencySlots.gamma)
+  ];
+  return {
+    graph: normalizeKpSemanticDerivedGraphInput(
+      compiled,
+      reverseDefinitions ? [...definitions].reverse() : definitions
+    ),
+    computeCalls: () => computeCalls
+  };
+}
+
 function createDefinitionSource(input: {
   readonly derivationId: KpSemanticDerivationId;
   readonly targetSlotId: KpSemanticSlotId;
   readonly dependencySlotIds: readonly KpSemanticSlotId[];
   readonly sourceId: string;
   readonly computeCapability?: false;
+  readonly compute?: () => unknown;
 }): KpSemanticStateDerivationDefinitionSource {
   const definition = Object.freeze({
     schemaVersion: "kp.semantic-state-derivation-definition.v1",
@@ -427,9 +544,9 @@ function createDefinitionSource(input: {
     }),
     ...(input.computeCapability === false
       ? {}
-      : { compute: () => {
-          throw new Error("Validation must not invoke compute capability.");
-        } })
+      : { compute: input.compute ?? (() => {
+            throw new Error("Validation must not invoke compute capability.");
+          }) })
   });
   return definition;
 }
