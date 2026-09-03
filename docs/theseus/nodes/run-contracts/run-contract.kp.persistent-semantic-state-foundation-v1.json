@@ -232,7 +232,8 @@
     {
       "id": "s29",
       "title": "provenance-correspondence-and-law-convergence",
-      "status": "planned"
+      "summary": "Projected transaction commits into canonical semantic change sets, correspondence, entity registries, and lineage; rejects opaque or ambiguous staging; all focused and broad gates passed.",
+      "status": "complete"
     },
     {
       "id": "s30",

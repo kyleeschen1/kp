@@ -5,6 +5,7 @@ import {
 import {
   createKpSemanticStateIdentityScope,
   type KpAppliedTransformationId,
+  type KpSemanticDerivationId,
   type KpSemanticSlotId
 } from "./identity.ts";
 import type { KpPinnedVersionReference } from "./pinned-recovery.ts";
@@ -45,6 +46,7 @@ export interface KpRemovedSemanticChange extends KpSemanticChangeRecordBase {
 export interface KpCopiedSemanticChange extends KpSemanticChangeRecordBase {
   readonly kind: "copied";
   readonly source: KpSemanticChangeEndpoint;
+  readonly replaced?: KpSemanticChangeEndpoint;
   readonly target: KpSemanticChangeEndpoint;
 }
 
@@ -57,7 +59,7 @@ export interface KpBoundSemanticChange extends KpSemanticChangeRecordBase {
 
 export interface KpDerivedSemanticChange extends KpSemanticChangeRecordBase {
   readonly kind: "derived";
-  readonly derivationId: string;
+  readonly derivationId: KpSemanticDerivationId;
   readonly sources: readonly KpSemanticChangeEndpoint[];
   readonly target: KpSemanticChangeEndpoint;
 }
@@ -176,10 +178,19 @@ function validateRecord(
       return;
     case "copied":
       validateEndpoint(record.source, before, `${record.id} source`);
+      if (record.replaced !== undefined) {
+        validateEndpoint(record.replaced, before, `${record.id} replaced`);
+        requireSameSlot(record.replaced, record.target, record.id);
+      }
       validateEndpoint(record.target, after, `${record.id} target`);
       if (record.source.reference.entityId === record.target.reference.entityId) {
         throw new Error(
           `Copied change ${record.id} requires a distinct target entity.`
+        );
+      }
+      if (record.replaced?.reference.entityId === record.target.reference.entityId) {
+        throw new Error(
+          `Copied change ${record.id} must replace a distinct prior entity.`
         );
       }
       return;
@@ -203,7 +214,13 @@ function validateRecord(
       }
       return;
     case "derived":
-      requireRecordId(record.derivationId);
+      if (!record.derivationId.startsWith(
+        `kp-state/${before.namespace}/derivation/`
+      )) {
+        throw new Error(
+          `Derived change ${record.id} has a foreign derivation identity.`
+        );
+      }
       if (record.sources.length === 0) {
         throw new Error(`Derived change ${record.id} requires source dependencies.`);
       }
@@ -284,10 +301,18 @@ function freezeRecord(record: KpSemanticChangeRecord): KpSemanticChangeRecord {
       });
     case "persisted":
     case "revised":
+      return Object.freeze({
+        ...record,
+        source: freezeEndpoint(record.source),
+        target: freezeEndpoint(record.target)
+      });
     case "copied":
       return Object.freeze({
         ...record,
         source: freezeEndpoint(record.source),
+        ...(record.replaced === undefined
+          ? {}
+          : { replaced: freezeEndpoint(record.replaced) }),
         target: freezeEndpoint(record.target)
       });
     case "introduced":

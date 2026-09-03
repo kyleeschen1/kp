@@ -938,6 +938,69 @@
       "scope": "s28-derived-binding-declaration-boundary",
       "checkedAt": "2026-09-03T10:06:56.621Z",
       "notes": "Workspace schema and active run references validate before derived-boundary completion."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-state-authority-adapter.test.ts tests/semantic-state-change-set.test.ts tests/semantic-scene-protocol.test.ts tests/semantic-entity-provenance.test.ts tests/semantic-lineage-graph.test.ts tests/correspondence-composition.test.ts",
+      "status": "passed",
+      "scope": "s29-provenance-correspondence-and-law-convergence",
+      "checkedAt": "2026-09-03T11:34:14.540Z",
+      "notes": "35 focused authority, correspondence, provenance, lineage, and composition laws passed."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "s29-provenance-correspondence-and-law-convergence",
+      "checkedAt": "2026-09-03T11:34:15.700Z",
+      "notes": "65 semantic-state laws passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s29-provenance-correspondence-and-law-convergence",
+      "checkedAt": "2026-09-03T11:34:16.736Z",
+      "notes": "Application, Node, test, Svelte, and domain typechecks passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s29-provenance-correspondence-and-law-convergence",
+      "checkedAt": "2026-09-03T11:34:17.873Z",
+      "notes": "Architecture check passed over 1,989 modules with zero exceptions."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s29-provenance-correspondence-and-law-convergence",
+      "checkedAt": "2026-09-03T11:34:18.907Z",
+      "notes": "Inference budget passed at 102,058 types and 170,776 instantiations."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s29-provenance-correspondence-and-law-convergence",
+      "checkedAt": "2026-09-03T11:34:19.944Z",
+      "notes": "Full repository suite passed: 6,175 tests, zero failures."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "s29-provenance-correspondence-and-law-convergence",
+      "checkedAt": "2026-09-03T11:34:20.954Z",
+      "notes": "Production bundle and economics publication precheck passed."
+    },
+    {
+      "command": "npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "s29-provenance-correspondence-and-law-convergence",
+      "checkedAt": "2026-09-03T11:34:21.992Z",
+      "notes": "Generated equation reachability stayed current at 68 roots."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s29-provenance-correspondence-and-law-convergence",
+      "checkedAt": "2026-09-03T11:34:23.017Z",
+      "notes": "Workspace valid at 1,084 nodes and 26,583 events."
     }
   ],
   "expectedLearning": [

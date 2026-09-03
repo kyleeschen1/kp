@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 4084,
+  "scannedFileCount": 4087,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -1077,6 +1077,7 @@
         "src/semantic/python-refactor-operations.ts",
         "src/semantic/radical-fragment-semantics.ts",
         "src/semantic/semantic-scene-protocol.ts",
+        "src/semantic/semantic-state-authority-adapter.ts",
         "src/semantic/transformation-definition-binding.ts",
         "src/semantic/typescript-refactor-operations.ts"
       ],
@@ -1099,6 +1100,7 @@
         "tests/semantic-glyph-reconciliation-fraction-split.test.ts",
         "tests/semantic-glyph-reconciliation-radical.test.ts",
         "tests/semantic-motion-correspondence-validator.test.ts",
+        "tests/semantic-state-authority-adapter.test.ts",
         "tests/typescript-refactor-operations.test.ts"
       ],
       "scriptCallers": [],

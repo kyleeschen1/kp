@@ -104,7 +104,7 @@ function changeFixture() {
     { kind: "removed", id: "change.removed", source: endpoint(before, slots.removed) },
     { kind: "copied", id: "change.copied", source: endpoint(before, slots.template), target: endpoint(after, slots.copied) },
     { kind: "bound", id: "change.bound", source: endpoint(before, slots.shared), replaced: endpoint(before, slots.bindTarget), target: endpoint(after, slots.bindTarget) },
-    { kind: "derived", id: "change.derived", derivationId: "derivation.output", sources: [endpoint(before, slots.dependency)], target: endpoint(after, slots.derived) }
+    { kind: "derived", id: "change.derived", derivationId: identities.derivation("output"), sources: [endpoint(before, slots.dependency)], target: endpoint(after, slots.derived) }
   ];
   return { identities, transformationId, before, after, slots, endpoint, records };
 }
@@ -166,7 +166,7 @@ test("change sets reject missing derivation sources and crossed snapshots", () =
     records: [{
       kind: "derived",
       id: "invalid.derived",
-      derivationId: "derivation.empty",
+      derivationId: fixture.identities.derivation("empty"),
       sources: [],
       target: fixture.endpoint(fixture.after, fixture.slots.derived)
     }]
