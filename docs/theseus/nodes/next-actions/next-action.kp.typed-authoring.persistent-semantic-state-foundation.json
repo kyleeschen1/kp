@@ -392,6 +392,13 @@
       "scope": "s12-helper-api-gate",
       "checkedAt": "2026-09-03T07:58:34.720Z",
       "notes": "Workspace valid before helper API gate closeout."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/economics-supply-tax-parity-characterization.test.ts tests/economics-supply-tax-model.test.ts tests/economics-supply-tax-welfare.test.ts tests/typed-linear-supply-demand-pressure.test.ts",
+      "status": "passed",
+      "scope": "s13-economics-parity-characterization",
+      "checkedAt": "2026-09-03T08:01:20.862Z",
+      "notes": "14 tests passed; exact and typed baseline/tax cases expose matching equilibrium, incidence, welfare, explicit units, and distinct source identities without changing either authority."
     }
   ],
   "expectedLearning": [

@@ -136,7 +136,8 @@
     {
       "id": "s13",
       "title": "economics-parity-characterization",
-      "status": "planned"
+      "summary": "Characterized canonical exact-rational and typed pressure results for baseline and seller tax: equilibrium, buyer/seller incidence, welfare, units, and each model's distinct source identities now have exact expected evidence; neither implementation changed.",
+      "status": "complete"
     },
     {
       "id": "s14",
