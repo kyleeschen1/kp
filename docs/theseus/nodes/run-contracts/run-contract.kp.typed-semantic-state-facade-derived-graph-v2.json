@@ -74,7 +74,8 @@
     {
       "id": "s03",
       "title": "Deterministic schema paths and identities",
-      "status": "planned"
+      "summary": "Added deterministic schema compilation with stable identity defaults and typed local diagnostics; descriptor references and enumeration order carry no semantic identity authority.",
+      "status": "complete"
     },
     {
       "id": "s04",
