@@ -72,7 +72,8 @@
     {
       "id": "s03",
       "title": "Validate missing duplicate and self dependencies",
-      "status": "planned"
+      "summary": "added-local-missing-duplicate-and-self-dependency-diagnostics-with-zero-compute-execution",
+      "status": "complete"
     },
     {
       "id": "s04",
