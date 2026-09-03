@@ -94,6 +94,7 @@ export const kpNativeKatexCompositorOwnership = Object.freeze([
     targetEffect: "none",
     evidence: [
       evidence("src/rendering/native-katex-fragment-observer.ts", "bindKpNativeKatexFragmentsWithinSemanticLineage"),
+      evidence("src/rendering/native-katex-endpoint-ownership.ts", "createKpNativeKatexEndpointOwnershipView"),
       evidence("src/animation/lineage-constrained-glyph-matcher.ts", "matchKpGlyphsWithinSemanticLineage"),
       evidence("src/rendering/native-katex-base-scene-plan.ts", "reconcileKpNativeKatexScenes")
     ],

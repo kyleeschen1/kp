@@ -88,7 +88,8 @@
     {
       "id": "s05",
       "title": "repository-health-gate",
-      "status": "planned"
+      "summary": "Closed the pre-kernel repository health gate: reconciled downstream ledgers, passed 6080 tests, full TypeScript and Svelte checks, production bundle, and Theseus validation.",
+      "status": "complete"
     },
     {
       "id": "s06",

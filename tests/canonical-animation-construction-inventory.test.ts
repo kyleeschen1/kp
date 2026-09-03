@@ -85,7 +85,7 @@ test("clone authority sanitation is already one shared browser contract", async 
 });
 
 test("escaping inventory ratchets the selected context consolidation", async () => {
-  assert.equal(kpHtmlEncodingOwners.length, 46);
+  assert.equal(kpHtmlEncodingOwners.length, 49);
   assert.deepEqual(
     kpHtmlEncodingConsolidations.map(({ sourceFile }) => sourceFile),
     [
