@@ -74,9 +74,11 @@ test("optional absence stays an explicit pinned snapshot diagnostic", () => {
   const fixture = createFixture();
   assert.throws(
     () => resolve(fixture, fixture.shared, "optional"),
-    (error) => error instanceof KpSemanticSlotAccessError &&
-      error.code === "slot-absent" &&
-      error.slotId === fixture.handles.refs.optional.slotId
+    (error) => error instanceof KpSemanticDerivedEvaluationError &&
+      error.code === "derived-dependency-absent" &&
+      error.slotId === fixture.handles.refs.optional.slotId &&
+      error.cause instanceof KpSemanticSlotAccessError &&
+      error.cause.code === "slot-absent"
   );
 });
 

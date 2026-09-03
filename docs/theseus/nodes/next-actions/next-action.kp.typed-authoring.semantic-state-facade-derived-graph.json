@@ -1059,11 +1059,53 @@
       "scope": "standard",
       "checkedAt": "2026-09-03T18:20:33.732Z",
       "notes": "workspace-valid-1088-nodes-26895-events-after-v3-s14-closeout"
+    },
+    {
+      "command": "node-test-semantic-state-derived-cache-and-evaluator",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-03T18:24:25.259Z",
+      "notes": "seventeen-laws-pass-for-absence-removal-stale-compute-invalid-retry-and-no-failure-cache"
+    },
+    {
+      "command": "npm-run-typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T18:24:26.473Z",
+      "notes": "all-type-projects-pass-with-distinct-dependency-failure-codes"
+    },
+    {
+      "command": "npm-run-test-semantic-state",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T18:24:27.530Z",
+      "notes": "141-semantic-state-laws-passed"
+    },
+    {
+      "command": "npm-run-check-architecture",
+      "status": "passed",
+      "scope": "impact-router",
+      "checkedAt": "2026-09-03T18:24:28.562Z",
+      "notes": "evaluator-failure-semantics-architecture-gates-passed"
+    },
+    {
+      "command": "npm-run-check-inference",
+      "status": "passed",
+      "scope": "diagnostic",
+      "checkedAt": "2026-09-03T18:24:29.630Z",
+      "notes": "types-103188-instantiations-172704"
+    },
+    {
+      "command": "theseus-workspace-validate",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T18:25:22.493Z",
+      "notes": "workspace-valid-1088-nodes-26906-events-after-v3-s15-closeout"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "v3-s14-complete-per-node-cache-recomputes-only-requested-descendants-with-changed-authority"
+    "summary": "v3-s15-complete-absence-removal-stale-compute-and-invalid-failures-are-local-retryable-and-never-cached"
   },
   "expectedLearning": [
     "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",

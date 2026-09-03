@@ -1,8 +1,10 @@
 import {
+  KpSemanticSlotAccessError,
   readKpSemanticDerivedBinding,
   readKpSemanticSlotBinding,
   readKpSnapshotEntityStore,
-  type KpAggregateSemanticSnapshot
+  type KpAggregateSemanticSnapshot,
+  type KpSemanticSlotBinding
 } from "./aggregate-snapshot.ts";
 import type {
   KpDerivedSemanticStateLeafHandle
@@ -45,7 +47,9 @@ export interface KpSemanticDerivedEvaluationMemo {
 
 export type KpSemanticDerivedEvaluationErrorCode =
   | "derived-compute-failed"
+  | "derived-dependency-absent"
   | "derived-dependency-not-concrete"
+  | "derived-dependency-removed"
   | "derived-target-not-found"
   | "foreign-derived-dependency"
   | "foreign-derived-snapshot"
@@ -113,10 +117,29 @@ export function resolveKpSemanticConcreteDependency(input: {
     });
   }
 
-  const binding = readKpSemanticSlotBinding(
-    input.snapshot,
-    input.dependency.slotId
-  );
+  let binding: KpSemanticSlotBinding;
+  try {
+    binding = readKpSemanticSlotBinding(
+      input.snapshot,
+      input.dependency.slotId
+    );
+  } catch (cause) {
+    if (cause instanceof KpSemanticSlotAccessError &&
+        cause.code === "slot-absent") {
+      const removed = cause.absence?.reason === "removed";
+      throw new KpSemanticDerivedEvaluationError({
+        code: removed
+          ? "derived-dependency-removed"
+          : "derived-dependency-absent",
+        slotId: input.dependency.slotId,
+        snapshotId: input.snapshot.id,
+        path: input.dependency.path,
+        cause,
+        message: `Derived dependency ${JSON.stringify(input.dependency.path)} is ${removed ? "removed" : "not introduced"} in snapshot ${JSON.stringify(input.snapshot.id)}.`
+      });
+    }
+    throw cause;
+  }
   const store = readKpSnapshotEntityStore(input.snapshot, binding.entityId);
   const version = readKpSemanticEntityVersion(store, binding.versionId);
   return Object.freeze({

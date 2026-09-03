@@ -144,7 +144,8 @@
     {
       "id": "s15",
       "title": "Define absence stale and retry semantics",
-      "status": "planned"
+      "summary": "complete-typed-failure-inventory-preserves-causes-supports-valid-successor-retry-and-excludes-failed-values",
+      "status": "complete"
     },
     {
       "id": "s16",

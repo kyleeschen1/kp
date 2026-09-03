@@ -8,6 +8,7 @@ import { compileKpSemanticStateSchema } from
 import {
   kpStateDerived,
   kpStateGroup,
+  kpStateOptional,
   kpStateValue
 } from "../src/semantic-state/authoring-schema.ts";
 import { createKpSemanticStateHandleSet } from
@@ -20,6 +21,8 @@ import {
   createKpSemanticDerivedValueCache,
   KpSemanticDerivedCacheError
 } from "../src/semantic-state/derived-cache.ts";
+import { KpSemanticDerivedEvaluationError } from
+  "../src/semantic-state/derived-evaluator.ts";
 import {
   compileKpSemanticDerivedGraph,
   normalizeKpSemanticDerivedGraphInput
@@ -198,6 +201,114 @@ test("alias updates reuse copied and unrequested derived branches", () => {
     entries: 5,
     hits: 2,
     misses: 5
+  });
+});
+
+test("absence and removal retain distinct dependency diagnostics", () => {
+  const fixture = createOptionalFixture();
+  const cache = createKpSemanticDerivedValueCache();
+
+  assert.throws(
+    () => cache.evaluate({
+      graph: fixture.graph,
+      snapshot: fixture.initial,
+      target: fixture.handles.refs.total
+    }),
+    (error) => error instanceof KpSemanticDerivedEvaluationError &&
+      error.code === "derived-dependency-absent" &&
+      error.path?.join(".") === "optional"
+  );
+  assert.equal(cache.inspect().entries, 0);
+  assert.equal(cache.evaluate({
+    graph: fixture.graph,
+    snapshot: fixture.introduced,
+    target: fixture.handles.refs.total
+  }), 6);
+  assert.throws(
+    () => cache.evaluate({
+      graph: fixture.graph,
+      snapshot: fixture.removed,
+      target: fixture.handles.refs.total
+    }),
+    (error) => error instanceof KpSemanticDerivedEvaluationError &&
+      error.code === "derived-dependency-removed" &&
+      error.path?.join(".") === "optional"
+  );
+  assert.deepEqual(cache.inspect(), {
+    schemaVersion: "kp.semantic-derived-cache-stats.v1",
+    kind: "semantic-derived-cache-stats",
+    status: "active",
+    entries: 1,
+    hits: 0,
+    misses: 1
+  });
+});
+
+test("a stale graph fails without caching and retries with current authority", () => {
+  const fixture = createStaleFixture();
+  const cache = createKpSemanticDerivedValueCache();
+
+  assert.throws(
+    () => cache.evaluate({
+      graph: fixture.oldGraph,
+      snapshot: fixture.replaced,
+      target: fixture.handles.refs.total
+    }),
+    (error) => error instanceof KpSemanticDerivedEvaluationError &&
+      error.code === "stale-derived-definition" &&
+      error.path?.join(".") === "total"
+  );
+  assert.equal(cache.inspect().entries, 0);
+  assert.equal(cache.evaluate({
+    graph: fixture.currentGraph,
+    snapshot: fixture.replaced,
+    target: fixture.handles.refs.total
+  }), 4);
+  assert.equal(cache.inspect().entries, 1);
+});
+
+test("compute and result failures do not occupy cache entries", () => {
+  const fixture = createRetryFixture();
+  const cache = createKpSemanticDerivedValueCache();
+
+  assert.throws(
+    () => cache.evaluate({
+      graph: fixture.graph,
+      snapshot: fixture.initial,
+      target: fixture.handles.refs.thrown
+    }),
+    (error) => error instanceof KpSemanticDerivedEvaluationError &&
+      error.code === "derived-compute-failed" &&
+      error.cause === fixture.failure
+  );
+  assert.throws(
+    () => cache.evaluate({
+      graph: fixture.graph,
+      snapshot: fixture.initial,
+      target: fixture.handles.refs.invalid
+    }),
+    (error) => error instanceof KpSemanticDerivedEvaluationError &&
+      error.code === "invalid-derived-result"
+  );
+  assert.equal(cache.inspect().entries, 0);
+  assert.equal(cache.evaluate({
+    graph: fixture.graph,
+    snapshot: fixture.updated,
+    target: fixture.handles.refs.thrown
+  }), 1);
+  assert.equal(cache.evaluate({
+    graph: fixture.graph,
+    snapshot: fixture.updated,
+    target: fixture.handles.refs.invalid
+  }), 1);
+  assert.deepEqual(fixture.calls, { thrown: 2, invalid: 2 });
+  assert.deepEqual(cache.inspect(), {
+    schemaVersion: "kp.semantic-derived-cache-stats.v1",
+    kind: "semantic-derived-cache-stats",
+    status: "active",
+    entries: 2,
+    hits: 0,
+    misses: 4
   });
 });
 
@@ -388,6 +499,149 @@ function createSelectiveFixture() {
     shared,
     updated,
     unrelatedBranch,
+    graph
+  };
+}
+
+function createOptionalFixture() {
+  const compiled = compileKpSemanticStateSchema(
+    "lesson.derived-optional-failure",
+    kpStateGroup({
+      optional: kpStateOptional<{ readonly amount: number }>(),
+      total: kpStateDerived<number>()
+    })
+  );
+  const handles = createKpSemanticStateHandleSet(compiled);
+  const total = defineKpSemanticStateDerivation({
+    compiled,
+    target: handles.refs.total,
+    dependencies: [handles.refs.optional],
+    compute: ([optional]) => optional.amount * 2
+  });
+  const initial = materializeKpSemanticStateInitialSnapshot(compiled, {
+    derivations: [total]
+  });
+  const introduce = defineKpSemanticStateTransform({
+    compiled,
+    handles,
+    id: "introduce-optional",
+    author(state) {
+      state.optional.introduce({ amount: 3 });
+    }
+  });
+  const introduced = introduce.apply(initial, "first").commit.after;
+  const remove = defineKpSemanticStateTransform({
+    compiled,
+    handles,
+    id: "remove-optional",
+    author(state) {
+      state.optional.remove();
+    }
+  });
+  const removed = remove.apply(introduced, "first").commit.after;
+  const graph = compileKpSemanticDerivedGraph(
+    normalizeKpSemanticDerivedGraphInput(compiled, [total])
+  );
+  return { compiled, handles, initial, introduced, removed, graph };
+}
+
+function createStaleFixture() {
+  const compiled = compileKpSemanticStateSchema(
+    "lesson.stale-derived-cache",
+    kpStateGroup({
+      first: kpStateValue(2),
+      second: kpStateValue(4),
+      total: kpStateDerived<number>()
+    })
+  );
+  const handles = createKpSemanticStateHandleSet(compiled);
+  const original = defineKpSemanticStateDerivation({
+    compiled,
+    target: handles.refs.total,
+    dependencies: [handles.refs.first],
+    compute: ([value]) => value
+  });
+  const replacement = defineKpSemanticStateDerivation({
+    compiled,
+    target: handles.refs.total,
+    dependencies: [handles.refs.second],
+    compute: ([value]) => value
+  });
+  const initial = materializeKpSemanticStateInitialSnapshot(compiled, {
+    derivations: [original]
+  });
+  const replace = defineKpSemanticStateTransform({
+    compiled,
+    handles,
+    id: "replace-total",
+    author(state) {
+      state.total.derive(replacement);
+    }
+  });
+  const replaced = replace.apply(initial, "first").commit.after;
+  const oldGraph = compileKpSemanticDerivedGraph(
+    normalizeKpSemanticDerivedGraphInput(compiled, [original])
+  );
+  const currentGraph = compileKpSemanticDerivedGraph(
+    normalizeKpSemanticDerivedGraphInput(compiled, [replacement])
+  );
+  return { compiled, handles, replaced, oldGraph, currentGraph };
+}
+
+function createRetryFixture() {
+  const compiled = compileKpSemanticStateSchema(
+    "lesson.derived-failure-retry",
+    kpStateGroup({
+      base: kpStateValue<number>(-1),
+      thrown: kpStateDerived<number>(),
+      invalid: kpStateDerived<number>()
+    })
+  );
+  const handles = createKpSemanticStateHandleSet(compiled);
+  const calls = { thrown: 0, invalid: 0 };
+  const failure = new Error("negative base");
+  const thrown = defineKpSemanticStateDerivation({
+    compiled,
+    target: handles.refs.thrown,
+    dependencies: [handles.refs.base],
+    compute: ([base]) => {
+      calls.thrown += 1;
+      if (base < 0) throw failure;
+      return base;
+    }
+  });
+  const invalid = defineKpSemanticStateDerivation({
+    compiled,
+    target: handles.refs.invalid,
+    dependencies: [handles.refs.base],
+    compute: ([base]) => {
+      calls.invalid += 1;
+      return base < 0 ? Number.NaN : base;
+    }
+  });
+  const definitions = [invalid, thrown];
+  const initial = materializeKpSemanticStateInitialSnapshot(compiled, {
+    derivations: definitions
+  });
+  const update = defineKpSemanticStateTransform({
+    compiled,
+    handles,
+    id: "make-valid",
+    author(state) {
+      state.base.update(() => 1);
+    }
+  });
+  const updated = update.apply(initial, "first").commit.after;
+  const graph = compileKpSemanticDerivedGraph(
+    normalizeKpSemanticDerivedGraphInput(compiled, definitions)
+  );
+  return {
+    compiled,
+    handles,
+    calls,
+    failure,
+    initial,
+    updated,
     graph
   };
 }
