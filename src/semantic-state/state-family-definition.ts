@@ -23,6 +23,8 @@ import type {
   KpTransformationDefinitionId
 } from "./identity.ts";
 import type { KpSemanticProgress } from "./semantic-progress.ts";
+import { validateKpSemanticStateFamilyEndpoint } from
+  "./state-family-application-validation.ts";
 import {
   compileKpSemanticStateTransitionPlan,
   type KpSemanticStateDiscreteTransitionDeclaration,
@@ -362,6 +364,10 @@ export function defineKpSemanticStateFamily<
         before,
         application.applicationId
       );
+      validateKpSemanticStateFamilyEndpoint({
+        commit: endpointApplication.commit,
+        transitionPlan: application.transitionPlan
+      });
       return Object.freeze<KpAppliedSemanticStateFamily<
         KpSemanticStateGroupDescriptor<Members>,
         Parameters
