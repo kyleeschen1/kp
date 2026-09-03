@@ -775,6 +775,90 @@
       "scope": "s14-diff",
       "checkedAt": "2026-09-03T22:53:04.501Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "s15-typecheck-initial",
+      "checkedAt": "2026-09-03T23:07:52.587Z",
+      "notes": "Runtime laws passed, but a test-only evaluator type referenced a nonexistent public definition field and two nonexistent commit fields. The law helper was narrowed to its actual returned evaluator type and the history inventory to real commit authority."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-state-family-evaluator-laws.test.ts tests/semantic-state-family-evaluator-cache.test.ts tests/semantic-state-family-derived-evaluation.test.ts",
+      "status": "passed",
+      "scope": "s15-focused",
+      "checkedAt": "2026-09-03T23:07:53.709Z",
+      "notes": "18 tests passed across bounded seek permutations, forward and rewind, equivalent progress, reset/disposal/recreation, deterministic failure isolation, cache laws, and sample-derived evaluation."
+    },
+    {
+      "command": "npm run verify:impact -- --path tests/semantic-state-family-evaluator-laws.test.ts",
+      "status": "passed",
+      "scope": "s15-impact",
+      "checkedAt": "2026-09-03T23:07:54.737Z",
+      "notes": "Promotion-sensitive high-risk semantic-state law addition; semantic-state, typecheck, and architecture gates required."
+    },
+    {
+      "command": "npm run generate:equation-reachability",
+      "status": "passed",
+      "scope": "s15-reachability",
+      "checkedAt": "2026-09-03T23:07:55.757Z",
+      "notes": "Generated exact equation reachability graph from 68 roots."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "s15-semantic-state",
+      "checkedAt": "2026-09-03T23:07:56.800Z",
+      "notes": "224 semantic-state tests passed with zero failures."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s15-typecheck",
+      "checkedAt": "2026-09-03T23:07:57.921Z",
+      "notes": "TypeScript, Svelte, and domain checks passed with zero Svelte errors or warnings."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s15-architecture",
+      "checkedAt": "2026-09-03T23:07:58.990Z",
+      "notes": "Dependency direction passed for 2006 TypeScript modules and 7449 of 7500 local references with zero retiring exceptions; all architecture and gateway checks passed."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s15-inference",
+      "checkedAt": "2026-09-03T23:08:00.024Z",
+      "notes": "Inference contracts passed at 106281 types and 179783 instantiations."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "s15-bundle",
+      "checkedAt": "2026-09-03T23:08:01.162Z",
+      "notes": "Production bundle passed for 1603 modules; existing large-chunk advisory only."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s15-full-regression",
+      "checkedAt": "2026-09-03T23:08:02.222Z",
+      "notes": "6334 tests passed with zero failures, cancellations, skips, or todos."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s15-workspace",
+      "checkedAt": "2026-09-03T23:08:03.303Z",
+      "notes": "Workspace valid with 1091 nodes and 27191 events before completion evidence."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s15-diff",
+      "checkedAt": "2026-09-03T23:08:04.367Z",
+      "notes": "No whitespace errors."
     }
   ],
   "expectedLearning": [

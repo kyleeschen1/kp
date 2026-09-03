@@ -156,7 +156,8 @@
     {
       "id": "s15",
       "title": "Seek rewind repeat and retry laws",
-      "status": "planned"
+      "summary": "Bounded permutation laws prove direct seek, forward and rewind, repeated equivalent progress, reset, disposal and recreation, and deterministic failure retries preserve exact sampled and derived values without poisoning the cache or changing persistent history.",
+      "status": "complete"
     },
     {
       "id": "s16",
