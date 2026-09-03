@@ -108,7 +108,8 @@
     {
       "id": "s09",
       "title": "Restrict evaluation to requested closure",
-      "status": "planned"
+      "summary": "requested-closure-evaluation-is-lazy-deduplicated-and-discarded-after-each-read",
+      "status": "complete"
     },
     {
       "id": "s10",

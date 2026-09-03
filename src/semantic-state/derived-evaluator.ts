@@ -143,14 +143,23 @@ export function evaluateKpSemanticDerivedValue(input: {
     input.snapshot,
     input.target.slotId
   );
-  return evaluateGraphDefinition(input.graph, input.snapshot, definition);
+  return evaluateGraphDefinition(
+    input.graph,
+    input.snapshot,
+    definition,
+    new Map()
+  );
 }
 
 function evaluateGraphDefinition(
   graph: KpSemanticDerivedGraph,
   snapshot: KpAggregateSemanticSnapshot,
-  definition: KpSemanticDerivedGraphDefinitionInput
+  definition: KpSemanticDerivedGraphDefinitionInput,
+  evaluated: Map<KpSemanticSlotId, unknown>
 ): unknown {
+  if (evaluated.has(definition.target.slotId)) {
+    return evaluated.get(definition.target.slotId);
+  }
   const declared = readKpSemanticDerivedBinding(
     snapshot,
     definition.target.slotId
@@ -172,7 +181,8 @@ function evaluateGraphDefinition(
         ? evaluateGraphDefinition(
             graph,
             snapshot,
-            readGraphDefinition(graph, snapshot, dependency.slotId)
+            readGraphDefinition(graph, snapshot, dependency.slotId),
+            evaluated
           )
         : resolveKpSemanticConcreteDependency({
             graph,
@@ -185,7 +195,15 @@ function evaluateGraphDefinition(
 
   // Graph validation proves the existential callback matches its declared
   // dependency tuple; Reflect.apply keeps that erasure inside this boundary.
-  return Reflect.apply(capability.compute, undefined, [values]);
+  const value: unknown = Reflect.apply(
+    capability.compute,
+    undefined,
+    [values]
+  );
+  // This table deduplicates one requested closure and is discarded after read;
+  // it is not the caller-owned cross-request cache introduced later.
+  evaluated.set(definition.target.slotId, value);
+  return value;
 }
 
 function readGraphDefinition(

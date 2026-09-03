@@ -130,6 +130,23 @@ test("nested derived dependencies evaluate in declared tuple order", () => {
   assert.deepEqual(fixture.calls, { doubled: 1, summary: 1 });
 });
 
+test("one requested diamond closure excludes independent definitions", () => {
+  const fixture = createDiamondFixture();
+
+  assert.equal(evaluateKpSemanticDerivedValue({
+    graph: fixture.graph,
+    snapshot: fixture.snapshot,
+    target: fixture.handles.refs.total
+  }), 12);
+  assert.deepEqual(fixture.calls, {
+    shared: 1,
+    left: 1,
+    right: 1,
+    total: 1,
+    independent: 0
+  });
+});
+
 function createFixture(namespace = "lesson.derived-evaluator") {
   const compiled = compileKpSemanticStateSchema(namespace, kpStateGroup({
     source: kpStateValue({ amount: 2 }),
@@ -252,4 +269,73 @@ function createNestedFixture(namespace: string) {
     normalizeKpSemanticDerivedGraphInput(compiled, [summary, doubled])
   );
   return { compiled, handles, calls, doubled, summary, snapshot, graph };
+}
+
+function createDiamondFixture() {
+  const compiled = compileKpSemanticStateSchema(
+    "lesson.requested-derived-closure",
+    kpStateGroup({
+      base: kpStateValue(2),
+      shared: kpStateDerived<number>(),
+      left: kpStateDerived<number>(),
+      right: kpStateDerived<number>(),
+      total: kpStateDerived<number>(),
+      independent: kpStateDerived<number>()
+    })
+  );
+  const handles = createKpSemanticStateHandleSet(compiled);
+  const calls = { shared: 0, left: 0, right: 0, total: 0, independent: 0 };
+  const shared = defineKpSemanticStateDerivation({
+    compiled,
+    target: handles.refs.shared,
+    dependencies: [handles.refs.base],
+    compute: ([base]) => {
+      calls.shared += 1;
+      return base * 2;
+    }
+  });
+  const left = defineKpSemanticStateDerivation({
+    compiled,
+    target: handles.refs.left,
+    dependencies: [handles.refs.shared],
+    compute: ([value]) => {
+      calls.left += 1;
+      return value + 1;
+    }
+  });
+  const right = defineKpSemanticStateDerivation({
+    compiled,
+    target: handles.refs.right,
+    dependencies: [handles.refs.shared],
+    compute: ([value]) => {
+      calls.right += 1;
+      return value + 3;
+    }
+  });
+  const total = defineKpSemanticStateDerivation({
+    compiled,
+    target: handles.refs.total,
+    dependencies: [handles.refs.left, handles.refs.right],
+    compute: ([leftValue, rightValue]) => {
+      calls.total += 1;
+      return leftValue + rightValue;
+    }
+  });
+  const independent = defineKpSemanticStateDerivation({
+    compiled,
+    target: handles.refs.independent,
+    dependencies: [handles.refs.base],
+    compute: ([base]) => {
+      calls.independent += 1;
+      return base * 100;
+    }
+  });
+  const definitions = [independent, total, right, left, shared];
+  const snapshot = materializeKpSemanticStateInitialSnapshot(compiled, {
+    derivations: definitions
+  });
+  const graph = compileKpSemanticDerivedGraph(
+    normalizeKpSemanticDerivedGraphInput(compiled, definitions)
+  );
+  return { compiled, handles, calls, snapshot, graph };
 }
