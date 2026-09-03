@@ -616,6 +616,48 @@
       "scope": "s20-structural-sharing-and-branches",
       "checkedAt": "2026-09-03T09:12:09.548Z",
       "notes": "Workspace schema and run references validate."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "s21-pinned-references-and-recovery",
+      "checkedAt": "2026-09-03T09:19:08.610Z",
+      "notes": "Twenty-one laws pass for exact pinned snapshot, entity, slot-version and version recovery across multiple snapshots, typed missing-reference diagnostics, immutable local indexes, and no newer-state fallback."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-scene-protocol.test.ts tests/typed-math-scene.test.ts",
+      "status": "passed",
+      "scope": "s21-pinned-references-and-recovery",
+      "checkedAt": "2026-09-03T09:19:09.901Z",
+      "notes": "Six existing semantic scene composition and typed-math direct-recovery tests pass unchanged."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s21-pinned-references-and-recovery",
+      "checkedAt": "2026-09-03T09:19:10.922Z",
+      "notes": "Repository TypeScript, Svelte, and domain checks pass; snapshot, entity, and version handle kinds cannot cross at compile time."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s21-pinned-references-and-recovery",
+      "checkedAt": "2026-09-03T09:19:11.960Z",
+      "notes": "All architecture gates pass at 1,985 modules with zero dependency exceptions; recovery has no renderer or host dependency."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s21-pinned-references-and-recovery",
+      "checkedAt": "2026-09-03T09:19:13.030Z",
+      "notes": "Inference contracts pass at 100,285 types and 167,469 instantiations."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s21-pinned-references-and-recovery",
+      "checkedAt": "2026-09-03T09:19:14.104Z",
+      "notes": "Workspace schema and run references validate."
     }
   ],
   "expectedLearning": [

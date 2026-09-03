@@ -184,7 +184,8 @@
     {
       "id": "s21",
       "title": "pinned-references-and-recovery",
-      "status": "planned"
+      "summary": "Added nominal immutable snapshot, entity, and version handles plus a caller-owned materialized recovery index. Exact historical values recover without replay or current-state lookup, missing layers have typed diagnostics, and existing semantic-scene recovery behavior remains unchanged.",
+      "status": "complete"
     },
     {
       "id": "s22",
