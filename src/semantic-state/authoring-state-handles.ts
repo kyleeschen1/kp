@@ -9,10 +9,13 @@ import {
   type KpCompiledSemanticStateSchema
 } from "./authoring-schema-compiler.ts";
 import type {
+  KpSemanticStateDerivedDescriptor,
   KpSemanticStateGroupDescriptor,
   KpSemanticStateLeafDescriptor,
   KpSemanticStateMemberMap,
-  KpSemanticStateSchemaNode
+  KpSemanticStateOptionalDescriptor,
+  KpSemanticStateSchemaNode,
+  KpSemanticStateValueDescriptor
 } from "./authoring-schema.ts";
 import { readKpSemanticEntityVersion } from "./entity-version-store.ts";
 import type {
@@ -47,6 +50,21 @@ export interface KpSemanticStateLeafHandle<Value> {
   readonly [kpSemanticStateHandleValue]?: Value;
 }
 
+export interface KpRequiredSemanticStateLeafHandle<Value>
+  extends KpSemanticStateLeafHandle<Value> {
+  readonly descriptorKind: "required-value";
+}
+
+export interface KpOptionalSemanticStateLeafHandle<Value>
+  extends KpSemanticStateLeafHandle<Value> {
+  readonly descriptorKind: "optional-value";
+}
+
+export interface KpDerivedSemanticStateLeafHandle<Value>
+  extends KpSemanticStateLeafHandle<Value> {
+  readonly descriptorKind: "derived-value";
+}
+
 export interface KpPinnedSemanticStateLeafHandle<Value> {
   readonly schemaVersion: "kp.pinned-semantic-state-leaf-handle.v1";
   readonly kind: "pinned-semantic-state-leaf-handle";
@@ -61,11 +79,19 @@ type KpSemanticStateHandleNode<
 > =
   Node extends KpSemanticStateGroupDescriptor<infer Members>
     ? KpSemanticStateHandleMembersInternal<Members, Pinned>
-    : Node extends KpSemanticStateLeafDescriptor<infer Value>
+    : Node extends KpSemanticStateValueDescriptor<infer Value>
       ? Pinned extends true
         ? KpPinnedSemanticStateLeafHandle<Value>
-        : KpSemanticStateLeafHandle<Value>
-      : never;
+        : KpRequiredSemanticStateLeafHandle<Value>
+      : Node extends KpSemanticStateOptionalDescriptor<infer Value>
+        ? Pinned extends true
+          ? KpPinnedSemanticStateLeafHandle<Value>
+          : KpOptionalSemanticStateLeafHandle<Value>
+        : Node extends KpSemanticStateDerivedDescriptor<infer Value>
+          ? Pinned extends true
+            ? KpPinnedSemanticStateLeafHandle<Value>
+            : KpDerivedSemanticStateLeafHandle<Value>
+          : never;
 
 type KpSemanticStateHandleMembersInternal<
   Members extends KpSemanticStateMemberMap,

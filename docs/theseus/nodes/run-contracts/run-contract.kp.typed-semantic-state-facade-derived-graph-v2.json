@@ -134,7 +134,8 @@
     {
       "id": "s13",
       "title": "Typed derivation definition",
-      "status": "planned"
+      "summary": "Typed derivation definitions pair stable serializable declarations with explicit typed dependency handles and definition-local compute callbacks; the market API gate now exposes zero temporary derivation slot references.",
+      "status": "complete"
     },
     {
       "id": "s14",

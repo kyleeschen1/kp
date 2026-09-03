@@ -416,11 +416,17 @@
       "scope": "hygiene",
       "checkedAt": "2026-09-03T14:36:22.603Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "npm run verify:impact -- --path src/semantic-state/authoring-derived-definition.ts --run",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-03T15:25:27.431Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s12 retains the internal descriptor/handle/transform facade after measurable burden reduction and exact type review; public promotion remains deferred, and s13 must eliminate three visible temporary derivation slot references."
+    "summary": "s13 adds typed definition-scoped derivations with explicit dependency tuples, stable serializable declarations, inferred result contracts, and zero evaluation or registry authority; impact-selected tests, typecheck, and architecture pass."
   },
   "expectedLearning": [
     "Whether a plain descriptor-driven TypeScript facade can remove low-level identity and storage boilerplate while retaining exact domain value types and the existing identity laws.",

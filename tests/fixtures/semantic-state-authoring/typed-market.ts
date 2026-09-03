@@ -1,5 +1,7 @@
 import { compileKpSemanticStateSchema } from
   "../../../src/semantic-state/authoring-schema-compiler.ts";
+import { defineKpSemanticStateDerivation } from
+  "../../../src/semantic-state/authoring-derived-definition.ts";
 import {
   kpStateDerived,
   kpStateGroup,
@@ -35,14 +37,17 @@ export function createTypedMarketAuthoringApiGate() {
   });
   const compiled = compileKpSemanticStateSchema("lesson.tax", schema);
   const handles = createKpSemanticStateHandleSet(compiled);
+  const equilibrium = defineKpSemanticStateDerivation({
+    compiled,
+    target: handles.refs.equilibrium,
+    dependencies: [handles.refs.market.demand, handles.refs.market.supply],
+    compute: ([demand, supply]) => ({
+      price: (demand.intercept + supply.intercept) / 2,
+      quantity: (demand.intercept - supply.intercept) / 2
+    })
+  });
   const initial = materializeKpSemanticStateInitialSnapshot(compiled, {
-    derived: [{
-      targetSlotId: handles.refs.equilibrium.slotId,
-      dependencySlotIds: [
-        handles.refs.market.demand.slotId,
-        handles.refs.market.supply.slotId
-      ]
-    }]
+    derivations: [equilibrium]
   });
   const addTax = defineKpSemanticStateTransform({
     compiled,
@@ -58,5 +63,12 @@ export function createTypedMarketAuthoringApiGate() {
   const applied = addTax.apply(initial, "first");
   // authoring-api-gate:end
 
-  return Object.freeze({ schema, compiled, handles, initial, applied });
+  return Object.freeze({
+    schema,
+    compiled,
+    handles,
+    equilibrium,
+    initial,
+    applied
+  });
 }

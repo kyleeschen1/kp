@@ -9,6 +9,9 @@ import type {
   KpCompiledSemanticStateSchema
 } from "./authoring-schema-compiler.ts";
 import type {
+  KpSemanticStateDerivationDefinitionSource
+} from "./authoring-derived-definition.ts";
+import type {
   KpSemanticStateGroupDescriptor,
   KpSemanticStateMemberMap
 } from "./authoring-schema.ts";
@@ -57,6 +60,7 @@ export function materializeKpSemanticStateInitialSnapshot<
   compiled: KpCompiledSemanticStateSchema<Root>,
   input: {
     readonly derived?: readonly KpInitialSemanticStateDerivationPlan[];
+    readonly derivations?: readonly KpSemanticStateDerivationDefinitionSource[];
   } = {}
 ): KpAggregateSemanticSnapshot {
   const requiredSlotIds: KpSemanticSlotId[] = [];
@@ -91,7 +95,14 @@ export function materializeKpSemanticStateInitialSnapshot<
 
   const derivedBindings = compileInitialDerivations(
     compiled,
-    input.derived ?? []
+    [
+      ...(input.derived ?? []),
+      ...(input.derivations ?? []).map(definition => ({
+        targetSlotId: definition.declaration.slotId,
+        dependencySlotIds: definition.declaration.dependencies
+          .map(dependency => dependency.slotId)
+      }))
+    ]
   );
   const absences = compiled.leaves
     .filter((leaf) => leaf.descriptor.kind === "optional-value")

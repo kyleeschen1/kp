@@ -38,8 +38,8 @@ test("the typed market packet removes ordinary kernel authoring burden", () => {
     manualKernelMetadataFields: 0,
     persistentValueNarrowings: 0,
     authorCasts: 0,
-    deferredDerivationSlotReferences: 3,
-    authoredSetupLines: 31
+    deferredDerivationSlotReferences: 0,
+    authoredSetupLines: 34
   });
 });
 
