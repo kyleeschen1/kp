@@ -24,6 +24,10 @@ const baseline = JSON.parse(readFileSync(
   "tests/fixtures/unit-scalar-map-helper-baseline.json",
   "utf8"
 )) as KpUnitScalarHelperBaseline;
+const accepted = JSON.parse(readFileSync(
+  "tests/fixtures/unit-scalar-map-helper-accepted.json",
+  "utf8"
+)) as KpUnitScalarHelperBaseline;
 
 const quantityUnit = createKpUnitDescriptor({
   id: "kp.unit.pressure.item",
@@ -76,6 +80,23 @@ test("market and circle retain the frozen before-helper comparison", () => {
       assert.equal(after.derivativeUnitProjectionCalls, 0);
     }
   }
+});
+
+test("the accepted helper API materially removes mechanical authoring", () => {
+  const current = measureKpUnitScalarAuthoringBurden();
+
+  assert.deepEqual(current, accepted.authoring);
+  assert.ok(
+    current.totals.authoredSetupLines / baseline.authoring.totals.authoredSetupLines
+      < 0.52
+  );
+  assert.ok(
+    current.totals.mechanicalStatements /
+      baseline.authoring.totals.mechanicalStatements < 0.45
+  );
+  assert.equal(current.totals.constructorCalls, 2);
+  assert.equal(current.totals.unitGuardCalls, 0);
+  assert.equal(current.totals.derivativeUnitProjectionCalls, 0);
 });
 
 test("market maps preserve exact identity spaces units rules and evidence", () => {

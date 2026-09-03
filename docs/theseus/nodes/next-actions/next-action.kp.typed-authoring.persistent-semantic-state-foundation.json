@@ -350,6 +350,48 @@
       "scope": "s11-circle-migration",
       "checkedAt": "2026-09-03T07:35:47.783Z",
       "notes": "Circle setup fell from 68 to 27 lines; combined setup is 76 lines with two helper calls, zero direct unit guards, and focused inference at 33845 types and 40058 instantiations."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typed-linear-supply-demand-pressure.test.ts tests/typed-circle-measurement-pressure.test.ts tests/unit-scalar-map-helper-baseline.test.ts tests/unit-scalar-map-helper-core.test.ts tests/unit-scalar-map-helper-binding.test.ts tests/unit-scalar-map-helper-metadata.test.ts",
+      "status": "passed",
+      "scope": "s12-helper-api-gate",
+      "checkedAt": "2026-09-03T07:58:17.736Z",
+      "notes": "24 focused caller and helper tests passed across affine and nonlinear cases, signed-space behavior, identity, local diagnostics, provenance, and law evidence."
+    },
+    {
+      "command": "npm run check:unit-scalar-helper-baseline",
+      "status": "passed",
+      "scope": "s12-helper-api-gate",
+      "checkedAt": "2026-09-03T07:58:18.776Z",
+      "notes": "Accepted after-measurement is exact at 76 setup lines, 7 mechanical statements, 2 helper calls, 33845 types, and 40058 instantiations; immutable before-evidence remains separate."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s12-helper-api-gate",
+      "checkedAt": "2026-09-03T07:58:31.561Z",
+      "notes": "Serial broad rerun passed 6095 of 6095 tests after regenerating the exact 68-root reachability graph for nine newly scanned helper files; no root or classification changed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s12-helper-api-gate",
+      "checkedAt": "2026-09-03T07:58:32.632Z",
+      "notes": "Application, Node, tests, Svelte, and domain TypeScript checks passed with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "s12-helper-api-gate",
+      "checkedAt": "2026-09-03T07:58:33.667Z",
+      "notes": "Production build passed; existing large-chunk warnings remain advisory."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s12-helper-api-gate",
+      "checkedAt": "2026-09-03T07:58:34.720Z",
+      "notes": "Workspace valid before helper API gate closeout."
     }
   ],
   "expectedLearning": [

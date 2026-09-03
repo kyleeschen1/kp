@@ -130,7 +130,8 @@
     {
       "id": "s12",
       "title": "helper-api-gate",
-      "status": "planned"
+      "summary": "Retained the internal one-call helper without revision: two distinct callers preserve mathematical visibility, exact diagnostics and identities, setup burden falls 48.6 percent, mechanical burden 56.3 percent, constructor burden 75 percent, and focused inference growth remains about 1.2/2.3 percent; all 6095 tests and broad gates pass.",
+      "status": "complete"
     },
     {
       "id": "s13",

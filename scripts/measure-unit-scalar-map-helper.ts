@@ -234,11 +234,11 @@ if (
 ) {
   const measured = measureKpUnitScalarHelperBaseline();
   if (process.argv.includes("--check")) {
-    const baselinePath = "tests/fixtures/unit-scalar-map-helper-baseline.json";
-    const expected = JSON.parse(readFileSync(baselinePath, "utf8")) as unknown;
+    const acceptedPath = "tests/fixtures/unit-scalar-map-helper-accepted.json";
+    const expected = JSON.parse(readFileSync(acceptedPath, "utf8")) as unknown;
     assert.deepEqual(measured, expected);
     process.stdout.write(
-      `unit-scalar helper baseline is current ` +
+      `unit-scalar helper accepted measurement is current ` +
       `(types=${measured.inference.types}, ` +
       `instantiations=${measured.inference.instantiations})\n`
     );
