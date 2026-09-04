@@ -192,7 +192,8 @@
     {
       "id": "s21",
       "title": "Supply-tax sample-status and cache pressure",
-      "status": "planned"
+      "summary": "Added generic exact-progress-derived sampleStatus metadata and proved on supply-tax that it is not semantic state; requested closures remain selective, unchanged model dependencies retain persistent tokens, and the caller-owned sample cache stays bounded and disposable.",
+      "status": "complete"
     },
     {
       "id": "s22",

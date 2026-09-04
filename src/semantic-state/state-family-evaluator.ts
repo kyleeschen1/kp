@@ -49,6 +49,7 @@ export interface KpPersistentSemanticStateFamilySample<
 > {
   readonly schemaVersion: "kp.semantic-state-family-sample.v1";
   readonly kind: "persistent-endpoint";
+  readonly sampleStatus: "baseline" | "target";
   readonly endpoint: "before" | "after";
   readonly progress: KpSemanticProgress;
   readonly source: KpPersistentSemanticStateReadSource;
@@ -79,6 +80,7 @@ export interface KpSemanticStateFamilyEvaluatorStats {
 export interface KpEphemeralSemanticStateFamilySample {
   readonly schemaVersion: "kp.semantic-state-family-sample.v1";
   readonly kind: "ephemeral-interior";
+  readonly sampleStatus: "intermediate";
   readonly progress: KpSemanticProgress;
   readonly source: KpEphemeralSemanticStateReadSource;
   readonly presentationTransitions:
@@ -241,6 +243,7 @@ export function createKpSemanticStateFamilyEvaluator<
       const sample = Object.freeze({
         schemaVersion: "kp.semantic-state-family-sample.v1" as const,
         kind: "ephemeral-interior" as const,
+        sampleStatus: "intermediate" as const,
         progress,
         source,
         presentationTransitions
@@ -512,6 +515,7 @@ function createEndpointSample<
   return Object.freeze({
     schemaVersion: "kp.semantic-state-family-sample.v1",
     kind: "persistent-endpoint",
+    sampleStatus: input.endpoint === "before" ? "baseline" : "target",
     ...input
   });
 }

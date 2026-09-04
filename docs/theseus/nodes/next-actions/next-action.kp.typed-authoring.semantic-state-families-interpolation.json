@@ -1237,6 +1237,41 @@
       "scope": "s20-diff",
       "checkedAt": "2026-09-04T00:57:45.418Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-state-supply-tax-cache-status.test.ts tests/semantic-state-supply-tax-sampling.test.ts tests/semantic-state-family-discrete-presentation.test.ts tests/semantic-state-family-evaluator-cache.test.ts",
+      "status": "passed",
+      "scope": "s21-focused",
+      "checkedAt": "2026-09-04T01:02:16.979Z",
+      "notes": "21 tests passed for status separation, one driver, selective requested closures, persistent versus transient tokens, bounded cache lifecycle, exact economics, and discrete-mode preservation."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "s21-standard",
+      "checkedAt": "2026-09-04T01:02:18.158Z",
+      "notes": "243 semantic-state tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s21-standard",
+      "checkedAt": "2026-09-04T01:02:19.243Z",
+      "notes": "TypeScript, Svelte, and domain checks passed with zero errors and warnings after explicit test callback annotations."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s21-standard",
+      "checkedAt": "2026-09-04T01:02:20.316Z",
+      "notes": "Architecture, equation-governance, and cross-domain boundary gates passed after the bounded sample metadata addition."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/exact-equation-reachability-graph.test.ts tests/semantic-state-supply-tax-cache-status.test.ts",
+      "status": "passed",
+      "scope": "s21-generated",
+      "checkedAt": "2026-09-04T01:02:21.363Z",
+      "notes": "7 tests passed after deterministic reachability regeneration."
     }
   ],
   "expectedLearning": [
