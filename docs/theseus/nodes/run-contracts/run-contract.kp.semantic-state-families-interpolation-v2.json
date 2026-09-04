@@ -180,7 +180,8 @@
     {
       "id": "s19",
       "title": "Supply-tax family and one-driver endpoint",
-      "status": "planned"
+      "summary": "Added a dedicated internal supply-tax state family with one exact market.taxAmount update; buyer-facing supply, equilibrium, incidence, and government revenue remain explicit derived nodes backed by canonical parameterized economics.",
+      "status": "complete"
     },
     {
       "id": "s20",

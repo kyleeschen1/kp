@@ -1139,6 +1139,48 @@
       "scope": "s18-diff",
       "checkedAt": "2026-09-04T00:10:56.846Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-state-supply-tax-family.test.ts tests/semantic-state-supply-tax-authoring.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-04T00:28:46.101Z",
+      "notes": "10 tests passed; exact one-driver authoring, canonical endpoint parity, dependency graph, and compact authoring laws."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-04T00:28:47.228Z",
+      "notes": "234 semantic-state tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-04T00:28:48.207Z",
+      "notes": "TypeScript domains and Svelte checks passed with zero errors and warnings."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-09-04T00:28:49.223Z",
+      "notes": "All dependency, boundary, governance, and cross-domain conformance gates passed."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "build",
+      "checkedAt": "2026-09-04T00:28:50.257Z",
+      "notes": "Production Vite bundle completed successfully."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "full",
+      "checkedAt": "2026-09-04T00:28:51.269Z",
+      "notes": "6349 tests passed with zero failures."
     }
   ],
   "expectedLearning": [
