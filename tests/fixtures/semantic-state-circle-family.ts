@@ -110,7 +110,7 @@ export function createKpSemanticStateCircleFamilyFixture() {
     parameters: kpStateFamilyParameters<KpCircleStateFamilyParameters>(),
     transitions: builder => [builder.interpolate(
       radiusTransition,
-      ({ before, after, progress }) => interpolateRadius(
+      ({ before, after, progress }) => interpolateApproximateRadiusMagnitude(
         before,
         after,
         progress
@@ -146,14 +146,18 @@ export function createKpSemanticStateCircleFamilyFixture() {
   });
 }
 
-function interpolateRadius(
+function interpolateApproximateRadiusMagnitude(
   before: KpUnitValue<typeof kpCircleRadiusUnit.id>,
   after: KpUnitValue<typeof kpCircleRadiusUnit.id>,
   progress: KpSemanticProgress
 ): KpUnitValue<typeof kpCircleRadiusUnit.id> {
-  const exactProgress = Number(progress.numerator) / Number(progress.denominator);
+  // The existing circle map owns number-valued magnitudes. Exact progress is
+  // approximated only at this caller boundary and never labels its output exact.
+  const approximateProgress =
+    Number(progress.numerator) / Number(progress.denominator);
   return createKpUnitValue(
     kpCircleRadiusUnit,
-    before.magnitude + (after.magnitude - before.magnitude) * exactProgress
+    before.magnitude +
+      (after.magnitude - before.magnitude) * approximateProgress
   );
 }

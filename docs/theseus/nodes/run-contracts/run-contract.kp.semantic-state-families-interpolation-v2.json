@@ -210,7 +210,8 @@
     {
       "id": "s24",
       "title": "Nonlinear circle sampling and unit repairs",
-      "status": "planned"
+      "summary": "Certified nonlinear circle-family sampling across nonmonotonic exact progress, with derived area and point response recomputed from one unit-tagged radius and no durable history growth.",
+      "status": "complete"
     },
     {
       "id": "s25",

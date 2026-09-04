@@ -1363,6 +1363,62 @@
       "scope": "s23-diff",
       "checkedAt": "2026-09-04T02:00:52.432Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-state-circle-sampling.test.ts tests/semantic-state-circle-family.test.ts tests/typed-circle-measurement-pressure.test.ts",
+      "status": "passed",
+      "scope": "slice-s24-focused",
+      "checkedAt": "2026-09-04T02:17:27.306Z",
+      "notes": "15 focused tests pass, including nonmonotonic exact seeks, nonlinear recomputation, lifecycle neutrality, and runtime unit forgery rejection."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s24-types",
+      "checkedAt": "2026-09-04T02:17:28.486Z",
+      "notes": "All application, node, test, Svelte, and domain type checks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-s24-architecture",
+      "checkedAt": "2026-09-04T02:17:29.511Z",
+      "notes": "All dependency, framework-neutral, semantic, equation, and cross-domain gates pass."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice-s24-inference",
+      "checkedAt": "2026-09-04T02:17:30.537Z",
+      "notes": "Inference contracts pass at types=107053 and instantiations=181758."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "slice-s24-full",
+      "checkedAt": "2026-09-04T02:17:31.599Z",
+      "notes": "Full repository suite passes 6372 tests."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice-s24-build",
+      "checkedAt": "2026-09-04T02:17:32.640Z",
+      "notes": "Production typecheck and Vite bundle complete successfully."
+    },
+    {
+      "command": "npm run theseus -- workspace validate",
+      "status": "passed",
+      "scope": "slice-s24-workspace",
+      "checkedAt": "2026-09-04T02:17:33.688Z",
+      "notes": "Workspace validates with 1091 nodes and 27310 events before slice completion."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice-s24-diff",
+      "checkedAt": "2026-09-04T02:17:38.648Z",
+      "notes": "No whitespace errors."
     }
   ],
   "expectedLearning": [
