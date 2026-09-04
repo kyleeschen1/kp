@@ -1419,6 +1419,69 @@
       "scope": "slice-s24-diff",
       "checkedAt": "2026-09-04T02:17:38.648Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-state-family-cross-caller-scale.test.ts tests/semantic-state-supply-tax-sampling.test.ts tests/semantic-state-circle-sampling.test.ts",
+      "status": "passed",
+      "scope": "slice-s25-focused",
+      "checkedAt": "2026-09-04T14:53:54.787Z",
+      "notes": "14 focused tests pass; two independent probes each sample 257 exact positions with deterministic immediate repeats and a fixed 16-entry cache ceiling."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "slice-s25-semantic-state",
+      "checkedAt": "2026-09-04T14:53:55.956Z",
+      "notes": "All 260 semantic-state tests pass, including cross-caller scale, author packet, compute selectivity, and durable-inventory laws."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s25-types",
+      "checkedAt": "2026-09-04T14:53:56.968Z",
+      "notes": "Application, node, test, Svelte, and domain type checks pass with no errors."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-s25-architecture",
+      "checkedAt": "2026-09-04T14:53:57.993Z",
+      "notes": "Dependency direction, neutral entrypoints, semantic boundaries, equation governance, and cross-domain conformance pass."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice-s25-inference",
+      "checkedAt": "2026-09-04T14:53:59.041Z",
+      "notes": "Inference remains within the approved ratchet at types=107053 and instantiations=181758; no new refresh used."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "slice-s25-full",
+      "checkedAt": "2026-09-04T14:54:00.082Z",
+      "notes": "Full repository suite passes 6375 tests."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "slice-s25-bundle",
+      "checkedAt": "2026-09-04T14:54:01.165Z",
+      "notes": "Economics publication check and production Vite bundle pass."
+    },
+    {
+      "command": "npm run theseus -- workspace validate",
+      "status": "passed",
+      "scope": "slice-s25-workspace",
+      "checkedAt": "2026-09-04T14:54:02.233Z",
+      "notes": "Workspace validates with 1091 nodes and 27322 events before closeout records."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice-s25-diff",
+      "checkedAt": "2026-09-04T14:54:03.260Z",
+      "notes": "No whitespace errors."
     }
   ],
   "expectedLearning": [

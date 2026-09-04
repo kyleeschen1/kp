@@ -216,7 +216,8 @@
     {
       "id": "s25",
       "title": "Cross-caller API scale and compiler pressure",
-      "status": "planned"
+      "summary": "Certified one unchanged shared family/evaluator API across exact supply-tax and approximate-unit circle callers: two deterministic 257-position probes each stayed within a 16-entry cache, preserved one durable operation per application, evaluated only requested derived closures, and required no API or inference-ratchet change.",
+      "status": "complete"
     },
     {
       "id": "s26",
