@@ -1328,6 +1328,41 @@
       "scope": "s22-diff",
       "checkedAt": "2026-09-04T01:56:48.146Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-state-circle-family.test.ts tests/typed-circle-measurement-pressure.test.ts tests/unit-scalar-map-helper-core.test.ts tests/exact-equation-reachability-graph.test.ts",
+      "status": "passed",
+      "scope": "s23-focused",
+      "checkedAt": "2026-09-04T02:00:48.219Z",
+      "notes": "16 tests passed for one radius driver, exact unit IDs, area and point-response endpoints, stable semantic IDs, compact 70-line author packet, renderer neutrality, existing circle laws, and generated reachability."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "s23-standard",
+      "checkedAt": "2026-09-04T02:00:49.363Z",
+      "notes": "251 semantic-state tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s23-standard",
+      "checkedAt": "2026-09-04T02:00:50.362Z",
+      "notes": "TypeScript, Svelte, domain, and negative unit-ID fixtures passed with zero errors and warnings."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s23-control-plane",
+      "checkedAt": "2026-09-04T02:00:51.393Z",
+      "notes": "Workspace valid at 1091 nodes and 27302 events before closeout records."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s23-diff",
+      "checkedAt": "2026-09-04T02:00:52.432Z",
+      "notes": "No whitespace errors."
     }
   ],
   "expectedLearning": [

@@ -204,7 +204,8 @@
     {
       "id": "s23",
       "title": "Circle state-family fixture",
-      "status": "planned"
+      "summary": "Added a compact test-owned circle state family with one exact unit-ID radius driver and explicit derived area and point-dependent response slots; executable math authority remains in the existing renderer-free differentiable map and outside persistent snapshots.",
+      "status": "complete"
     },
     {
       "id": "s24",
