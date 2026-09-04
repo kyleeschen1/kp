@@ -1272,6 +1272,62 @@
       "scope": "s21-generated",
       "checkedAt": "2026-09-04T01:02:21.363Z",
       "notes": "7 tests passed after deterministic reachability regeneration."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-state-supply-tax-reparameterization.test.ts tests/semantic-state-family-reparameterization.test.ts tests/semantic-state-supply-tax-cache-status.test.ts",
+      "status": "passed",
+      "scope": "s22-focused",
+      "checkedAt": "2026-09-04T01:56:40.213Z",
+      "notes": "13 tests passed for alternate-tax branches, exact interleaved results, distinct fingerprints, immediate-source provenance, endpoint recovery, frozen source records, and cache isolation."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s22-broad",
+      "checkedAt": "2026-09-04T01:56:41.481Z",
+      "notes": "TypeScript, Svelte, and domain checks passed with zero errors and warnings."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s22-broad",
+      "checkedAt": "2026-09-04T01:56:42.704Z",
+      "notes": "Inference passed at 107053 types and 181758 instantiations within the approved ceilings."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s22-broad",
+      "checkedAt": "2026-09-04T01:56:43.832Z",
+      "notes": "All architecture, governance, and cross-domain gates passed."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "s22-broad",
+      "checkedAt": "2026-09-04T01:56:44.905Z",
+      "notes": "Production Vite bundle completed successfully."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s22-full",
+      "checkedAt": "2026-09-04T01:56:46.009Z",
+      "notes": "6358 tests passed with zero failures."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s22-control-plane",
+      "checkedAt": "2026-09-04T01:56:47.067Z",
+      "notes": "Workspace valid at 1091 nodes and 27290 events before closeout records."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s22-diff",
+      "checkedAt": "2026-09-04T01:56:48.146Z",
+      "notes": "No whitespace errors."
     }
   ],
   "expectedLearning": [
