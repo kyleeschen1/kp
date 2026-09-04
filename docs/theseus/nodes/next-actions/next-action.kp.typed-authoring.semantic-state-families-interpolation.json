@@ -1181,6 +1181,62 @@
       "scope": "full",
       "checkedAt": "2026-09-04T00:28:51.269Z",
       "notes": "6349 tests passed with zero failures."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-state-supply-tax-sampling.test.ts tests/semantic-state-supply-tax-family.test.ts tests/economics-parameterized-per-unit-tax.test.ts",
+      "status": "passed",
+      "scope": "s20-focused",
+      "checkedAt": "2026-09-04T00:57:38.089Z",
+      "notes": "14 tests passed across two markets, five exact progress points, endpoint and derived parity, direct seek, and no-formula-fork source laws."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s20-broad",
+      "checkedAt": "2026-09-04T00:57:39.272Z",
+      "notes": "TypeScript, Svelte, and domain checks passed with zero errors and warnings."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s20-broad",
+      "checkedAt": "2026-09-04T00:57:40.294Z",
+      "notes": "Inference passed at 107048 types and 181747 instantiations, within the sole approved s16 ceilings."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s20-broad",
+      "checkedAt": "2026-09-04T00:57:41.301Z",
+      "notes": "All architecture, governance, and cross-domain gates passed."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "s20-broad",
+      "checkedAt": "2026-09-04T00:57:42.346Z",
+      "notes": "Production Vite bundle completed successfully."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s20-full",
+      "checkedAt": "2026-09-04T00:57:43.369Z",
+      "notes": "6354 tests passed with zero failures after the deterministic reachability graph was regenerated for the added test file; the first run exposed only that stale generated file count."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s20-control-plane",
+      "checkedAt": "2026-09-04T00:57:44.389Z",
+      "notes": "Workspace valid at 1091 nodes and 27269 events before closeout records."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s20-diff",
+      "checkedAt": "2026-09-04T00:57:45.418Z",
+      "notes": "No whitespace errors."
     }
   ],
   "expectedLearning": [

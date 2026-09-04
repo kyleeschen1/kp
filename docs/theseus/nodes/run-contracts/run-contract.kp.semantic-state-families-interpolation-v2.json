@@ -186,7 +186,8 @@
     {
       "id": "s20",
       "title": "Exact supply-tax intermediate samples",
-      "status": "planned"
+      "summary": "Proved exact five-point supply-tax sampling across two markets: only tax is interpolated, while equilibrium, incidence, and revenue are recomputed through canonical economics with endpoint and direct-seek parity and no numeric progress conversion.",
+      "status": "complete"
     },
     {
       "id": "s21",
