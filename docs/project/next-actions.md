@@ -1,21 +1,30 @@
 # KP Next Actions
 
-Last Updated: 2026-09-02
+Last Updated: 2026-09-04
 
 These are human-readable candidates. Theseus stores the executable versions
 with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
 
-The governed animation and publication foundation is preserved. There is one
-active next action:
+The governed animation and publication foundation is preserved. There is no
+authorized implementation action while the completed state-family loop waits
+at its mandatory architecture/API checkpoint:
 
-1. Execute the approved persistent semantic state foundation in 30 reversible
-   slices. Restore trustworthy repository health, decide the bounded
-   unit-scalar helper, preserve exact-rational economics authority, and prove
-   the internal immutable state and transaction laws. Stop at the mandatory
-   architecture/API checkpoint before proxy ergonomics, lazy derivation,
-   interpolation, timeline, or renderer integration.
+1. Review the Loop 3 closeout and decide whether to accept persistent family
+   endpoints plus pure ephemeral `at(progress)` as the internal boundary.
+2. If accepted, draft and review a separate nonvisual Loop 4 proposal for
+   aggregate transformation composition, conflict diagnostics, coherent
+   recovery, and logical timeline addressing. Drafting does not authorize its
+   execution.
+3. Keep Graph2D and KaTeX integration for Loop 5 after the aggregate
+   checkpoint. Migrate selected existing KaTeX transformations only after one
+   canonical exemplar passes human visual and API review.
+
+The approved persistent semantic state foundation, typed facade and derived
+graph, and state-family/interpolation loop are complete internal evidence.
+None of them by itself authorizes a public facade, renderer migration, or a
+catalogue-wide rollout.
 
 Everything else is frozen reference or parked horizon:
 

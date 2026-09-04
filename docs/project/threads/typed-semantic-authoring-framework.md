@@ -1,9 +1,10 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: Loop 3 approved and active
-Last Updated: 2026-09-03
-Current Next Action: execute the approved nonvisual applied-state-family and
-pure `at(progress)` contract through its mandatory architecture/API checkpoint.
+Status: Loop 3 complete at mandatory human checkpoint
+Last Updated: 2026-09-04
+Current Next Action: review the Loop 3 state-family boundary and decide whether
+to authorize a separate nonvisual Loop 4 proposal for aggregate composition and
+logical timeline addressing.
 
 ## Goal
 
@@ -328,12 +329,12 @@ representation.
 Explicit slot operations distinguish updating one persistent entity, binding
 an alias, copying with lineage, and creating a derived relationship. The
 completed foundation implements the first three plus lifecycle operations and
-reserves read-only derived declarations. Lazy dependency-version caching,
-deterministic ephemeral `at(progress)` evaluation, and interpolation remain
-accepted future direction rather than current behavior. Their later design
-must keep reads and cache population out of semantic history, change declared
-independent drivers, and recompute only requested affected dependencies.
-Presentation interpolation and discrete regime changes remain distinct modes.
+reserves read-only derived declarations. Loop 2 implements explicit derived
+dependencies, lazy requested-closure evaluation, exact version fingerprints,
+and caller-owned caching. Loop 3 implements deterministic ephemeral
+`at(progress)` over declared independent drivers while keeping reads, samples,
+and cache population out of semantic history. Presentation-only interpolation
+and discrete regime changes remain distinct declared modes.
 
 The accepted sequence deliberately starts with executable identity laws and a
 nonvisual persistent snapshot kernel. It then adds the typed transaction
@@ -446,23 +447,47 @@ and checkpoint questions are recorded in
 Executable history remains owned by
 `run-contract.kp.typed-semantic-state-facade-derived-graph-v3`.
 
-## State Family And Interpolation Run
+## State Family And Interpolation Outcome
 
-The user approved the separate Loop 3 proposal on 2026-09-03. The active
-26-slice contract adds persistent family endpoints and a pure ephemeral
-`at(progress)` boundary, with explicit semantic, discrete, and
-presentation-only transition modes. It pressures one canonical exact-rational
-tax driver and a structurally different renderer-free circle family while
-keeping samples out of snapshots, versions, history, recovery, and durable
-cache authority.
+Loop 3 completed all 26 approved slices and is stopped at its mandatory human
+architecture/API checkpoint. Applied families now retain ordinary persistent
+transaction endpoints and expose a pure ephemeral `at(progress)` evaluator
+with exact endpoint short-circuiting, explicit semantic, discrete, and
+presentation-only transition declarations, overlay-aware derived evaluation,
+transient fingerprints, deterministic reparameterization, and bounded
+application-local caching.
 
-The approved run remains internal and nonvisual. Aggregate composition,
-timeline and clock policy, URL addressing, Graph2D, KaTeX, renderer work,
-public facade promotion, compatibility migration, and live-model evaluation
-remain separate decisions. The reviewed scope and exact slice sequence live in
-`../reviews/2026-09-03-semantic-state-families-interpolation-long-loop-proposal.md`.
-Executable progress lives only in
-`run-contract.kp.semantic-state-families-interpolation-v2`; the
+The canonical supply-tax family changes one exact-rational tax driver and
+recomputes market evaluation, buyer-facing supply, equilibrium, incidence,
+and government revenue through domain-owned economics. The structurally
+different circle fixture changes one unit-tagged radius and recomputes
+nonlinear area and point-dependent response through the existing number-valued
+map. Both callers share the same family and evaluator API with no low-level
+identity/store/transaction construction or author casts.
+
+Two independent 257-position probes per caller retain only 16 cached interior
+samples, return 255 immediate repeat hits, evaluate only the requested derived
+closure, and leave each application's one-operation persistent inventory
+unchanged. The final repository gates pass at 260 semantic-state tests, 6,375
+total tests, 107,053 types, and 181,758 instantiations. The one formula-derived
+inference refresh permitted by the run was used at slice 16; no later ratchet
+change was needed.
+
+The result remains internal and nonvisual. The recommended next decision is a
+separately reviewed Loop 4 proposal for aggregate transformation composition,
+conflict rules, coherent recovery, and logical timeline addressing. Graph2D,
+KaTeX, and renderer integration remain Loop 5 work after that checkpoint. Any
+migration of existing KaTeX transformations follows a reviewed Loop 5
+exemplar in its own bounded compatibility contract; no bulk migration is
+authorized.
+
+The exact outcome, retained and rejected abstractions, measurements, proposed
+Loop 4 boundary, and KaTeX migration gate are recorded in
+`../reviews/2026-09-04-semantic-state-families-interpolation-closeout.md`.
+The reviewed scope lives in
+`../reviews/2026-09-03-semantic-state-families-interpolation-long-loop-proposal.md`,
+and executable history remains owned by
+`run-contract.kp.semantic-state-families-interpolation-v2`. The
 metadata-incomplete v1 record was superseded before implementation.
 
 ## Stop Conditions

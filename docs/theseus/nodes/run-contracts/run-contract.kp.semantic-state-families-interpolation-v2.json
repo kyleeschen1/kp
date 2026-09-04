@@ -2,8 +2,9 @@
   "id": "run-contract.kp.semantic-state-families-interpolation-v2",
   "kind": "run-contract",
   "title": "Semantic state families and ephemeral interpolation v2",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -222,7 +223,8 @@
     {
       "id": "s26",
       "title": "Closeout and mandatory API checkpoint",
-      "status": "planned"
+      "summary": "Published the canonical Loop 3 closeout and project-memory handoff, retained the internal nonvisual API, rejected premature public/renderer migration, recommended a separately reviewed aggregate Loop 4, placed the first Graph2D/KaTeX integration in Loop 5, and passed the complete verification matrix before the mandatory human checkpoint.",
+      "status": "complete"
     }
   ]
 }

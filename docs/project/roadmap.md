@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-09-03
+Last Updated: 2026-09-04
 Status: active
 Active Thread: `threads/typed-semantic-authoring-framework.md`
 Supporting Threads:
@@ -68,10 +68,12 @@ entity/version/snapshot and explicit transaction foundation. The completed
 Loop 2 adds a typed property facade, explicit dependency graph, lazy pinned
 evaluation, exact version fingerprints, caller-owned caching, supply-tax
 pressure, a fixed generation-shaped corpus, and representative scale evidence.
-Its mandatory architecture/API checkpoint passed human review, and the
-approved third loop is now executing the bounded internal state-family and
-ephemeral-interpolation layer. Public promotion, aggregate timeline, runtime,
-and renderer work remain outside that contract. The internal
+Its mandatory architecture/API checkpoint passed human review. Loop 3 now
+completes the bounded internal applied-state-family and pure ephemeral
+`at(progress)` layer across exact supply-tax and nonlinear unit-tagged circle
+callers, and is stopped at its mandatory architecture/API checkpoint. Public
+promotion, aggregate timeline, runtime, and renderer work remain outside that
+result. The internal
 Animation Catalogue remains the source and pressure lab rather than the active
 product surface. Neither proof by itself validates demand or selects a
 universal learner layout or semantic model.
@@ -431,14 +433,18 @@ Only this repository sequence is active:
    descriptor and typed-handle facade, named operations, explicit derived
    dependency graph, lazy pinned evaluator, version fingerprints,
    caller-owned cache, failure and history laws, canonical supply-tax pressure,
-   fixed generation-shaped corpus, and representative scale probe. It exposes
-   no public facade, interpolation, timeline, or renderer integration. The
-   approved nonvisual Loop 3 is now executing applied state families and pure
-   ephemeral `at(progress)` over one independent tax driver, with a
-   renderer-free circle family as structural pressure. The estimate remains
-   three long loops through
-   the decisive semantic proof, five through one reviewed Graph2D/KaTeX
-   exemplar, and seven through the full bounded
+   fixed generation-shaped corpus, and representative scale probe. Loop 3 now
+   adds persistent applied-family endpoints, explicit transition modes, pure
+   ephemeral `at(progress)`, transient fingerprints, bounded
+   application-local caches, exact supply-tax reparameterization, and
+   nonlinear unit-tagged circle pressure. It exposes no public facade,
+   aggregate timeline, or renderer integration and is stopped at its mandatory
+   human checkpoint. The recommended next proposal is nonvisual Loop 4
+   aggregate composition and logical timeline addressing; Loop 5 remains the
+   first reviewed Graph2D/KaTeX integration. Existing KaTeX transformation
+   migration follows that exemplar rather than preceding it. The estimate
+   remains three long loops through the decisive semantic proof, five through
+   one reviewed Graph2D/KaTeX exemplar, and seven through the full bounded
    knowledge/procedure/generation horizon. A full
    supply-demand pack, public algebra hierarchy, general CAS work, broad
    construct generation, automatic animation reparameterization rollout, and
@@ -461,7 +467,7 @@ The catalogue backlog and selection rationale are recorded in
 
 | Area | State | Direction |
 | --- | --- | --- |
-| Semantic/runtime spine | Strong and governed; the internal persistent foundation, typed state facade, explicit derived graph, lazy evaluator, and caller-owned cache are complete, and the approved state-family loop is active | Execute the bounded nonvisual family and pure ephemeral `at(progress)` contract through its API checkpoint before aggregate timeline, public facade, or renderer integration. |
+| Semantic/runtime spine | Strong and governed; the persistent foundation, typed facade, explicit derived graph, applied state families, pure ephemeral sampling, transient fingerprints, and bounded caller-owned caches are complete internally across supply-tax and circle pressure | Review the Loop 3 API checkpoint. If accepted, propose nonvisual aggregate composition and logical timeline addressing before public or renderer integration. |
 | Equation animation | The generated ledger has 29 equation capabilities: 8 Direct, 3 Registered, 2 Exemplar, and 16 Missing. Exponential duality and radical inversion are Direct; root is the first family with ten generated case-level maturity rows | Preserve the converged vocabulary; require case enumeration before new Direct promotions; migrate legacy Direct ledgers when they are touched; select the next accepted family packet from explicit gaps rather than prose memory. |
 | Graph2D | Economics and physics model callers are promoted; one exact monic-quadratic right-translation exemplar is governed and executable | Preserve the bounded translation proof without claiming arbitrary formula parsing, transformation-family promotion, or a universal graph frontend. |
 | Program animation | TypeScript and Python bounded extract-helper generation are `Direct`; each has language-owned parsing, legality, identity binding, corpus, authoring, and runtime-isolation evidence over an approved canonical artifact. Scheme remains an approved specialized exemplar rather than a general frontend. | Preserve approved choreography and build-time-only compilers. Variants remain semantic-plan-only until a separately governed artifact compiler exists; arbitrary refactors and execution remain typed gaps. |
@@ -702,9 +708,13 @@ clocks, frames, and renderer ports remain outside Svelte authority.
   Its closeout and Loop 3 recommendation are recorded in
   `reviews/2026-09-03-typed-semantic-state-facade-derived-graph-closeout.md`.
   The user approved the separate 26-slice nonvisual Loop 3 contract on
-  2026-09-03. It is active under
-  `run-contract.kp.semantic-state-families-interpolation-v2`; timeline,
-  renderer, and public-promotion work remain outside its boundary.
+  2026-09-03. It completed on 2026-09-04 under
+  `run-contract.kp.semantic-state-families-interpolation-v2` and is stopped at
+  its mandatory human architecture/API checkpoint. Its exact result and Loop
+  4 recommendation are recorded in
+  `reviews/2026-09-04-semantic-state-families-interpolation-closeout.md`.
+  Aggregate timeline, renderer, KaTeX, and public-promotion work remain
+  outside the completed boundary.
 - The normal-matrix Proof Memory implementation is preserved at its mandatory
   checkpoint. Architecture passed; attentional experience did not. Its s26-s27
   continuation is closed without hardening or release.
