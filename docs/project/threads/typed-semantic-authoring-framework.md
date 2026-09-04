@@ -1,10 +1,10 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: Loop 3 complete at mandatory human checkpoint
+Status: Loop 3 checkpoint accepted; Loop 4 proposal awaiting approval
 Last Updated: 2026-09-04
-Current Next Action: review the Loop 3 state-family boundary and decide whether
-to authorize a separate nonvisual Loop 4 proposal for aggregate composition and
-logical timeline addressing.
+Current Next Action: review the exact 26-slice nonvisual Loop 4 proposal for
+aggregate composition and logical timeline addressing; do not execute it
+without explicit approval.
 
 ## Goal
 
@@ -449,8 +449,8 @@ Executable history remains owned by
 
 ## State Family And Interpolation Outcome
 
-Loop 3 completed all 26 approved slices and is stopped at its mandatory human
-architecture/API checkpoint. Applied families now retain ordinary persistent
+Loop 3 completed all 26 approved slices, and the user accepted its mandatory
+human architecture/API checkpoint on 2026-09-04. Applied families now retain ordinary persistent
 transaction endpoints and expose a pure ephemeral `at(progress)` evaluator
 with exact endpoint short-circuiting, explicit semantic, discrete, and
 presentation-only transition declarations, overlay-aware derived evaluation,
@@ -473,17 +473,23 @@ total tests, 107,053 types, and 181,758 instantiations. The one formula-derived
 inference refresh permitted by the run was used at slice 16; no later ratchet
 change was needed.
 
-The result remains internal and nonvisual. The recommended next decision is a
-separately reviewed Loop 4 proposal for aggregate transformation composition,
-conflict rules, coherent recovery, and logical timeline addressing. Graph2D,
-KaTeX, and renderer integration remain Loop 5 work after that checkpoint. Any
-migration of existing KaTeX transformations follows a reviewed Loop 5
-exemplar in its own bounded compatibility contract; no bulk migration is
-authorized.
+The result remains internal and nonvisual. The accepted next sequence is a
+separately reviewed Loop 4 for aggregate transformation composition, conflict
+rules, coherent recovery, and logical timeline addressing. Its exact 26-slice
+proposal now awaits execution approval. It pressures independently owned
+demand-intercept and per-unit-tax changes in one exact-rational market
+aggregate. Graph2D, KaTeX, and renderer integration remain Loop 5 work after
+that checkpoint. Any migration of existing KaTeX transformations follows a
+reviewed Loop 5 exemplar in its own bounded compatibility contract; no bulk
+migration is authorized.
 
 The exact outcome, retained and rejected abstractions, measurements, proposed
 Loop 4 boundary, and KaTeX migration gate are recorded in
 `../reviews/2026-09-04-semantic-state-families-interpolation-closeout.md`.
+The accepted checkpoint is recorded in
+`../decisions/2026-09-04-semantic-state-family-checkpoint-and-next-sequence.md`,
+and the proposed successor lives in
+`../reviews/2026-09-04-semantic-state-aggregate-composition-logical-timeline-long-loop-proposal.md`.
 The reviewed scope lives in
 `../reviews/2026-09-03-semantic-state-families-interpolation-long-loop-proposal.md`,
 and executable history remains owned by

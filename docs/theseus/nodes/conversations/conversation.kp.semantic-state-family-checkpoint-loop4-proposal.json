@@ -1,0 +1,117 @@
+{
+  "id": "conversation.kp.semantic-state-family-checkpoint-loop4-proposal",
+  "kind": "conversation",
+  "title": "Accept state-family checkpoint and authorize Loop 4 proposal",
+  "status": "resolved",
+  "domain": "typed-authoring",
+  "summary": "The project owner accepted all six Loop 3 checkpoint recommendations and authorized drafting a separate nonvisual Loop 4 aggregate-composition and logical-timeline proposal. The exact new 26-slice proposal still requires review before execution.",
+  "sourceRefs": [
+    {
+      "kind": "transcript",
+      "provider": "codex",
+      "localPath": "docs/project/decisions/2026-09-04-semantic-state-family-checkpoint-and-next-sequence.md",
+      "turnRange": "Loop 3 checkpoint acceptance and Loop 4 long-loop request",
+      "digest": "sha256:5b5ccbd50085916d8f9ad02aa44633f8cd1c24cd5040621fed4164f2c8f5c060",
+      "summary": "The project owner accepted all six Loop 3 checkpoint recommendations and authorized drafting a separate nonvisual Loop 4 aggregate-composition and logical-timeline proposal. The exact new 26-slice proposal still requires review before execution."
+    }
+  ],
+  "affects": [
+    "next-action.kp.typed-authoring.semantic-state-families-interpolation",
+    "workflow.kp.delivery"
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Conversation captured with authority, trust, privacy, and transcript provenance."
+  },
+  "conversation": {
+    "schemaVersion": "theseus.conversation.v1",
+    "occurredAt": "2026-09-04T15:51:50Z",
+    "participants": [
+      {
+        "id": "project-owner",
+        "role": "human",
+        "displayName": "Project owner"
+      },
+      {
+        "id": "codex",
+        "role": "llm",
+        "provider": "codex"
+      }
+    ],
+    "transcriptRanges": [
+      {
+        "provider": "codex",
+        "localPath": "docs/project/decisions/2026-09-04-semantic-state-family-checkpoint-and-next-sequence.md",
+        "turnRange": "Loop 3 checkpoint acceptance and Loop 4 long-loop request",
+        "digest": "sha256:5b5ccbd50085916d8f9ad02aa44633f8cd1c24cd5040621fed4164f2c8f5c060"
+      }
+    ],
+    "summary": "The project owner accepted all six Loop 3 checkpoint recommendations and authorized drafting a separate nonvisual Loop 4 aggregate-composition and logical-timeline proposal. The exact new 26-slice proposal still requires review before execution.",
+    "proposals": [
+      {
+        "id": "accept-loop-three-boundary",
+        "statement": "Accept persistent family endpoints, pure ephemeral exact-progress sampling, internal-only API status, caller-owned typed interpolation, and the recorded KaTeX sequencing gate.",
+        "proposedBy": "codex",
+        "status": "accepted",
+        "linkedEntityIds": [
+          "next-action.kp.typed-authoring.semantic-state-families-interpolation",
+          "workflow.kp.delivery"
+        ]
+      },
+      {
+        "id": "draft-loop-four-proposal",
+        "statement": "Draft a separately reviewed nonvisual Loop 4 proposal for aggregate composition, conflict diagnostics, coherent recovery, and logical timeline addressing.",
+        "proposedBy": "codex",
+        "status": "accepted",
+        "linkedEntityIds": [
+          "workflow.kp.delivery"
+        ]
+      },
+      {
+        "id": "execute-loop-four-contract",
+        "statement": "Execute the newly drafted exact 26-slice Loop 4 contract after explicit review and approval.",
+        "proposedBy": "codex",
+        "status": "proposed",
+        "linkedEntityIds": [
+          "workflow.kp.delivery"
+        ]
+      }
+    ],
+    "objections": [],
+    "decisions": [
+      {
+        "id": "approve-loop-three-boundary",
+        "statement": "Accept all six Loop 3 checkpoint recommendations, keep KaTeX integration in Loop 5, and defer selected migration until after the reviewed exemplar.",
+        "proposalId": "accept-loop-three-boundary",
+        "decidedAt": "2026-09-04T15:51:50Z",
+        "authority": {
+          "kind": "user",
+          "actorId": "project-owner"
+        }
+      },
+      {
+        "id": "authorize-loop-four-draft",
+        "statement": "Use Theseus long-loop mode to draft the next aggregate-composition and logical-timeline proposal, while retaining the exact-contract approval gate.",
+        "proposalId": "draft-loop-four-proposal",
+        "decidedAt": "2026-09-04T15:51:50Z",
+        "authority": {
+          "kind": "user",
+          "actorId": "project-owner"
+        }
+      }
+    ],
+    "trust": {
+      "level": "self-reported",
+      "rationale": "The durable decision summarizes the project owner's explicit approval in the active Codex thread."
+    },
+    "privacy": {
+      "classification": "project",
+      "containsSensitiveData": false,
+      "retention": "Retain with project history."
+    },
+    "linkedEntityIds": [
+      "next-action.kp.typed-authoring.semantic-state-families-interpolation",
+      "workflow.kp.delivery"
+    ]
+  }
+}

@@ -71,9 +71,11 @@ pressure, a fixed generation-shaped corpus, and representative scale evidence.
 Its mandatory architecture/API checkpoint passed human review. Loop 3 now
 completes the bounded internal applied-state-family and pure ephemeral
 `at(progress)` layer across exact supply-tax and nonlinear unit-tagged circle
-callers, and is stopped at its mandatory architecture/API checkpoint. Public
-promotion, aggregate timeline, runtime, and renderer work remain outside that
-result. The internal
+callers, and its mandatory architecture/API checkpoint was accepted on
+2026-09-04. A separate 26-slice nonvisual Loop 4 proposal for aggregate
+composition and logical timeline addressing now awaits exact execution
+approval. Public promotion, runtime, and renderer work remain outside that
+proposal. The internal
 Animation Catalogue remains the source and pressure lab rather than the active
 product surface. Neither proof by itself validates demand or selects a
 universal learner layout or semantic model.
@@ -437,12 +439,13 @@ Only this repository sequence is active:
    adds persistent applied-family endpoints, explicit transition modes, pure
    ephemeral `at(progress)`, transient fingerprints, bounded
    application-local caches, exact supply-tax reparameterization, and
-   nonlinear unit-tagged circle pressure. It exposes no public facade,
-   aggregate timeline, or renderer integration and is stopped at its mandatory
-   human checkpoint. The recommended next proposal is nonvisual Loop 4
-   aggregate composition and logical timeline addressing; Loop 5 remains the
-   first reviewed Graph2D/KaTeX integration. Existing KaTeX transformation
-   migration follows that exemplar rather than preceding it. The estimate
+   nonlinear unit-tagged circle pressure. Its checkpoint is accepted; it
+   exposes no public facade, aggregate timeline, or renderer integration. The
+   exact nonvisual Loop 4 aggregate-composition and logical-address proposal
+   now awaits approval. It uses separate demand-intercept and tax families in
+   one exact-rational market aggregate, while Loop 5 remains the first reviewed
+   Graph2D/KaTeX integration. Existing KaTeX transformation migration follows
+   that exemplar rather than preceding it. The estimate
    remains three long loops through the decisive semantic proof, five through
    one reviewed Graph2D/KaTeX exemplar, and seven through the full bounded
    knowledge/procedure/generation horizon. A full
@@ -451,6 +454,8 @@ Only this repository sequence is active:
    Article grammar changes remain out of scope. See
    `reviews/2026-09-02-semantic-state-architecture-sequencing-review.md`,
    `decisions/2026-09-02-persistent-semantic-state-architecture-direction.md`,
+   `decisions/2026-09-04-semantic-state-family-checkpoint-and-next-sequence.md`,
+   `reviews/2026-09-04-semantic-state-aggregate-composition-logical-timeline-long-loop-proposal.md`,
    `reviews/2026-09-02-typed-authoring-post-domain-pressure-next-step-review.md`,
    `decisions/2026-09-02-unit-scalar-differentiable-map-helper-boundary.md`,
    `decisions/2026-09-02-typed-semantic-authoring-framework-goals.md` and
@@ -467,7 +472,7 @@ The catalogue backlog and selection rationale are recorded in
 
 | Area | State | Direction |
 | --- | --- | --- |
-| Semantic/runtime spine | Strong and governed; the persistent foundation, typed facade, explicit derived graph, applied state families, pure ephemeral sampling, transient fingerprints, and bounded caller-owned caches are complete internally across supply-tax and circle pressure | Review the Loop 3 API checkpoint. If accepted, propose nonvisual aggregate composition and logical timeline addressing before public or renderer integration. |
+| Semantic/runtime spine | Strong and governed; the persistent foundation, typed facade, explicit derived graph, applied state families, pure ephemeral sampling, transient fingerprints, and bounded caller-owned caches are complete internally across supply-tax and circle pressure | Loop 3 is accepted. Review the exact nonvisual aggregate-composition and logical-address proposal before any public or renderer integration. |
 | Equation animation | The generated ledger has 29 equation capabilities: 8 Direct, 3 Registered, 2 Exemplar, and 16 Missing. Exponential duality and radical inversion are Direct; root is the first family with ten generated case-level maturity rows | Preserve the converged vocabulary; require case enumeration before new Direct promotions; migrate legacy Direct ledgers when they are touched; select the next accepted family packet from explicit gaps rather than prose memory. |
 | Graph2D | Economics and physics model callers are promoted; one exact monic-quadratic right-translation exemplar is governed and executable | Preserve the bounded translation proof without claiming arbitrary formula parsing, transformation-family promotion, or a universal graph frontend. |
 | Program animation | TypeScript and Python bounded extract-helper generation are `Direct`; each has language-owned parsing, legality, identity binding, corpus, authoring, and runtime-isolation evidence over an approved canonical artifact. Scheme remains an approved specialized exemplar rather than a general frontend. | Preserve approved choreography and build-time-only compilers. Variants remain semantic-plan-only until a separately governed artifact compiler exists; arbitrary refactors and execution remain typed gaps. |

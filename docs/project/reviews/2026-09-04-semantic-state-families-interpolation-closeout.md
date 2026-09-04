@@ -4,6 +4,9 @@ Date: 2026-09-04
 
 Status: `HUMAN_CHECKPOINT`
 
+Disposition: accepted by the user on 2026-09-04; the separately reviewed
+Loop 4 proposal is not yet approved for execution.
+
 Run: `run-contract.kp.semantic-state-families-interpolation-v2`
 
 Source proposal:
@@ -315,6 +318,13 @@ reviewed exemplar rather than from this internal API alone.
 
 Recommended disposition: approve all six. Then draft and review Loop 4; do not
 begin it from this closeout alone.
+
+The user approved all six recommendations on 2026-09-04. The resulting
+decision is recorded in
+`../decisions/2026-09-04-semantic-state-family-checkpoint-and-next-sequence.md`.
+The exact Loop 4 proposal lives in
+`2026-09-04-semantic-state-aggregate-composition-logical-timeline-long-loop-proposal.md`
+and still requires explicit execution approval.
 
 ## Verification
 

@@ -7,16 +7,16 @@ with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
 
-The governed animation and publication foundation is preserved. There is no
-authorized implementation action while the completed state-family loop waits
-at its mandatory architecture/API checkpoint:
+The governed animation and publication foundation is preserved. Loop 3's
+architecture/API checkpoint is accepted. There is no authorized implementation
+action while the exact Loop 4 proposal waits for review:
 
-1. Review the Loop 3 closeout and decide whether to accept persistent family
-   endpoints plus pure ephemeral `at(progress)` as the internal boundary.
-2. If accepted, draft and review a separate nonvisual Loop 4 proposal for
-   aggregate transformation composition, conflict diagnostics, coherent
-   recovery, and logical timeline addressing. Drafting does not authorize its
-   execution.
+1. Review the proposed 26-slice nonvisual Loop 4 for aggregate transformation
+   composition, conflict diagnostics, coherent recovery, and logical timeline
+   addressing. Its production pressure composes independent exact demand-
+   intercept and per-unit-tax changes in one market aggregate.
+2. On explicit approval, create the matching Theseus run contract and execute
+   only those slices through the mandatory architecture/API checkpoint.
 3. Keep Graph2D and KaTeX integration for Loop 5 after the aggregate
    checkpoint. Migrate selected existing KaTeX transformations only after one
    canonical exemplar passes human visual and API review.
