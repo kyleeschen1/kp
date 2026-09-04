@@ -174,7 +174,8 @@
     {
       "id": "s18",
       "title": "Canonical parameterized-tax economics seam",
-      "status": "planned"
+      "summary": "Added a domain-owned exact-rational explicit-tax evaluation seam that delegates market clearing and welfare to existing constructors, preserves exact endpoints for two markets, and reports malformed, negative, and out-of-axis inputs without importing semantic state.",
+      "status": "complete"
     },
     {
       "id": "s19",
