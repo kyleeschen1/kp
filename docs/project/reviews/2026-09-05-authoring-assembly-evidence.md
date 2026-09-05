@@ -279,3 +279,26 @@ inspector, not an approved final authoring layout.
 The scoped browser command passes three tests. The exact scan adds only the new
 unit test (4,240 to 4,241); the stylesheet is outside that scan. Roots, edges, and
 budgets remain unchanged.
+
+## Bounded Article companion
+
+The opt-in companion compiles the existing Article and lock once, obtains the
+existing pedagogical/Scroll Score, and binds each of its eight phrases to its
+resolved Article reference, actual tax-member settled address, and existing
+semantic scene projection. The host consumes those compiled instructions; it
+does not compile a second Article or invent another attention store. Instructions
+from a different asset instance are rejected before mounting.
+
+The current Scroll Score still owns its fixed phrase order. The companion checks
+that the Article reference order agrees and returns a typed repair gap for
+unsupported reordering or missing references. Ordinary prose edits use edited
+labels and word counts while retaining exact addresses and scene bindings.
+`modelRevisionId` explicitly identifies model authority, not a prose-edit revision.
+Binding semantic references does not certify arbitrary prose or replace the
+pending explicit fact-binding work.
+
+The companion tests cover canonical score/scene parity, exact phase recovery,
+deterministic scene projection after unrelated seeks, missing/unknown/reordered
+bindings, and ordinary wording edits. The existing three browser checks pass
+through the companion-backed host. The exact scan adds only its module and test
+(4,241 to 4,243), with roots and caller edges unchanged.

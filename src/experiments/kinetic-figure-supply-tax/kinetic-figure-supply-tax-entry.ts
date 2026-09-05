@@ -155,17 +155,23 @@ export function mountKpSupplyTaxKineticFigure(input: {
   readonly source?: {
     readonly authority: ReturnType<typeof createKpEconomicsSupplyTaxAnimationAsset>;
     readonly sampleFrame: (progress: number) => ReturnType<typeof sampleKpEconomicsSupplyTaxAnimationFrame>;
+    readonly instruction?: {
+      readonly authority: ReturnType<typeof createKpEconomicsSupplyTaxAnimationAsset>;
+      readonly score: ReturnType<typeof createKpSupplyTaxPedagogicalScore>;
+      readonly scrollScore: KpSupplyTaxScrollScoreV1;
+      readonly sceneForBeat: (beatId: string) => KpSupplyTaxSceneProjectionV1;
+    };
   };
 }): KpSupplyTaxKineticFigureSession {
   applyKpSemanticVisualDomTheme({ root: input.root, theme: "light" });
   const authority = input.source?.authority ?? createKpEconomicsSupplyTaxAnimationAsset();
-  const score = createKpSupplyTaxPedagogicalScore(authority);
-  const compiled = compileKpSupplyTaxScrollScoreArticle({
-    text: articleText,
-    lock: importLock
-  });
-  const scrollScore = createKpSupplyTaxScrollScore({
-    document: compiled.document,
+  const instruction = input.source?.instruction;
+  if (instruction !== undefined && instruction.authority !== authority) {
+    throw new Error("Supply-tax instruction must belong to this exact source authority.");
+  }
+  const score = instruction?.score ?? createKpSupplyTaxPedagogicalScore(authority);
+  const scrollScore = instruction?.scrollScore ?? createKpSupplyTaxScrollScore({
+    document: compileKpSupplyTaxScrollScoreArticle({ text: articleText, lock: importLock }).document,
     score
   });
   const scenes = createPhraseScenes(scrollScore);
@@ -232,7 +238,7 @@ export function mountKpSupplyTaxKineticFigure(input: {
     ownerWindow: window
   });
   const projections = scenes.map(({ beat }) =>
-    projectKpSupplyTaxScene({ authority, beat }));
+    instruction === undefined ? projectKpSupplyTaxScene({ authority, beat }) : instruction.sceneForBeat(beat.id));
   let settledIndex = initialIndex;
   let position = initialIndex;
   let activeEdge: SemanticEdge | undefined;

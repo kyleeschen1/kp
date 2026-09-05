@@ -225,7 +225,8 @@
     {
       "id": "s19",
       "title": "Article/order/focus binding: map current semantic beats through a bounded companion declaration into existing score and attention seams",
-      "status": "planned"
+      "summary": "Existing Article/score/focus owners bind through one companion with exact state addresses; eight canonical bindings and ordinary prose edits verified. Typed reorder/missing gaps;55 integration tests and3 browser checks pass.",
+      "status": "complete"
     },
     {
       "id": "s20",
