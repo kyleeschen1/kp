@@ -77,13 +77,15 @@ is `run-contract.kp.authoring-integration-market-preview-v1`. See
 `decisions/2026-09-05-authoring-integration-priority-and-sequence.md` and
 `reviews/2026-09-05-authoring-integration-market-preview-long-loop-proposal.md`.
 
-The source-to-preview boundary exposed a semantic-authority prerequisite:
-canonical economics does not yet supply governed operation-pack pins and total
-state-transition lineage. The run stopped pending that bounded domain-contract
-decision; the user has now approved that bounded prerequisite and resuming
-the existing run. The accepted authoring-first direction is unchanged. See
-`reviews/2026-09-05-authoring-integration-source-authority-stop.md` for executed
-evidence and the accepted prerequisite. Theseus retains live execution state.
+The approved economics operation/lifecycle prerequisite is now implemented;
+the isolated preview connects exact state, existing paint/clock owners, Article,
+and explicit fact bindings. The next architectural decision is source ownership
+at local edit/save/rebuild: existing in-app save authority covers two Markdown
+lessons, not this typed model/source specimen. The recommended bounded path is
+local-file authoring through the existing development build, with last-valid
+preview retention and no new HTTP write authority; this amendment is pending
+approval. See `reviews/2026-09-05-authoring-integration-save-boundary-stop.md`.
+The accepted authoring-first direction is unchanged. Theseus retains live state.
 
 The Focus Deck remains preserved at its four-card human checkpoint. The
 Animation Catalogue remains the source and pressure lab. No result here

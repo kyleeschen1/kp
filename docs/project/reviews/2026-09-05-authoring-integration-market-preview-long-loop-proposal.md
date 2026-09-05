@@ -16,6 +16,12 @@ verification, fixed budgets, preservation boundaries, and final checkpoint
 remain unchanged. Register only this domain's existing per-unit-tax operation;
 do not invent a universal relation or modify rendering to force a semantic fit.
 
+Pending workflow amendment, not execution authority: the existing save boundary
+does not own this experiment's typed source. See
+`2026-09-05-authoring-integration-save-boundary-stop.md` for the s21 stop and
+recommended local-file save/build/preview adapter. The original slice order and
+stop conditions remain in force until the user approves that amendment.
+
 ## Outcome And Why Now
 
 An author should be able to express the market, name its changes and

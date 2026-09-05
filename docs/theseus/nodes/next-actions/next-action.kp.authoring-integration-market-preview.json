@@ -2,9 +2,9 @@
   "id": "next-action.kp.authoring-integration-market-preview",
   "kind": "next-action",
   "title": "Integrate authoring through one market preview",
-  "status": "ready",
+  "status": "blocked",
   "domain": "kp",
-  "summary": "User approved bounded economics operation/lifecycle prerequisite and resuming s13-s28 on 2026-09-05; original scope and all verification gates retained.",
+  "summary": "STOP_CONDITION s21: source/save ownership decision. Recommend local-file typed-source rebuild with revision-tagged diagnostics and last-valid preview, without HTTP write expansion; amendment awaits user approval.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -13,6 +13,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-05-authoring-integration-source-authority-stop.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-05-authoring-integration-save-boundary-stop.md"
     }
   ],
   "dependsOn": {
@@ -238,6 +242,13 @@
       "scope": "s20",
       "checkedAt": "2026-09-05T23:13:17.864Z",
       "notes": "58 integration and 81 economics tests; 3 browser tests. Exact inventory count only. Initial erasable-syntax failure fixed without compiler changes. Plain static facts, not a published no-JavaScript Article."
+    },
+    {
+      "command": "npm run test:economics-article-source-save",
+      "status": "passed",
+      "scope": "s21-authority-diagnostic",
+      "checkedAt": "2026-09-05T23:17:12.623Z",
+      "notes": "Five existing save-boundary tests pass, including foreign-target rejection and compiler rollback. Not completion of typed-source edit/compile/preview. See save-boundary stop report."
     }
   ],
   "progress": {
