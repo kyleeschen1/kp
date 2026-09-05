@@ -36,10 +36,13 @@ export interface KpSemanticStateCompositionPreflightMember {
   readonly graph: KpSemanticDerivedGraph;
 }
 
-export interface KpSemanticStateCompositionPreflight {
+export interface KpSemanticStateCompositionPreflight<
+  Composition extends KpValidatedSemanticStateComposition =
+    KpValidatedSemanticStateComposition
+> {
   readonly schemaVersion: "kp.semantic-state-composition-preflight.v1";
   readonly kind: "semantic-state-composition-preflight";
-  readonly composition: KpValidatedSemanticStateComposition;
+  readonly composition: Composition;
   readonly base: KpAggregateSemanticSnapshot;
   readonly graphSignature: string;
   readonly members: readonly KpSemanticStateCompositionPreflightMember[];
@@ -93,12 +96,14 @@ export function bindKpSemanticStateCompositionGraph(input: {
  * callbacks do not enter this boundary, so a rejected composition cannot
  * create an endpoint, evaluate a sample, or leak a partial chain.
  */
-export function preflightKpSemanticStateComposition(input: {
-  readonly composition: KpValidatedSemanticStateComposition;
+export function preflightKpSemanticStateComposition<
+  const Composition extends KpValidatedSemanticStateComposition
+>(input: {
+  readonly composition: Composition;
   readonly base: KpAggregateSemanticSnapshot;
   readonly graphBindings:
     readonly KpSemanticStateCompositionGraphBinding[];
-}): KpSemanticStateCompositionPreflight {
+}): KpSemanticStateCompositionPreflight<Composition> {
   const diagnostics: KpSemanticStateCompositionPreflightDiagnostic[] = [];
   const report = (
     code: KpSemanticStateCompositionPreflightDiagnosticCode,

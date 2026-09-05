@@ -120,7 +120,10 @@ function fixture(input: {
     sourceId: "test.composition-confluence.beta.member",
     application: betaApplication
   });
-  const compile = (members: readonly [typeof alpha, typeof beta]) => {
+  const compile = (members: readonly [
+    typeof alpha | typeof beta,
+    typeof alpha | typeof beta
+  ]) => {
     const declaration = declareKpSemanticStateComposition({
       namespace: compiled.namespace,
       localId: "lesson-change",

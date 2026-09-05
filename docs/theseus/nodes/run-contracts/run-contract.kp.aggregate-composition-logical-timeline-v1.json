@@ -137,7 +137,8 @@
     {
       "id": "s12",
       "title": "Generated boundary and member handles",
-      "status": "planned"
+      "summary": "Compiled plans now preserve declaration literal types through validation and preflight and generate frozen serializable composition, before/after boundary, complete settled-boundary, nested group, and member handles; static paths and parameter inference require no author-supplied semantic IDs or casts.",
+      "status": "complete"
     },
     {
       "id": "s13",

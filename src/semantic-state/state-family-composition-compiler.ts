@@ -88,7 +88,12 @@ export interface KpCompiledSemanticStateCompositionStep {
   readonly afterBoundaryId: KpSemanticCompositionBoundaryId;
 }
 
-export interface KpCompiledSemanticStateComposition {
+declare const kpCompiledCompositionDeclarationRoot: unique symbol;
+
+export interface KpCompiledSemanticStateComposition<
+  DeclarationRoot extends KpSemanticStateCompositionNodeDeclaration =
+    KpSemanticStateCompositionNodeDeclaration
+> {
   readonly schemaVersion: "kp.compiled-semantic-state-composition.v1";
   readonly kind: "compiled-semantic-state-composition";
   readonly id: KpSemanticStateCompositionPreflight["composition"]["id"];
@@ -106,6 +111,7 @@ export interface KpCompiledSemanticStateComposition {
   readonly steps: readonly KpCompiledSemanticStateCompositionStep[];
   readonly boundaries:
     readonly KpSemanticStateCompositionBoundarySpecification[];
+  readonly [kpCompiledCompositionDeclarationRoot]?: DeclarationRoot;
 }
 
 export type KpSemanticStateCompositionCompileErrorCode =
@@ -128,10 +134,14 @@ export class KpSemanticStateCompositionCompileError extends Error {
   }
 }
 
-export function compileKpSemanticStateComposition(input: {
+export function compileKpSemanticStateComposition<
+  const Preflight extends KpSemanticStateCompositionPreflight
+>(input: {
   readonly identities: KpSemanticStateIdentityScope;
-  readonly preflight: KpSemanticStateCompositionPreflight;
-}): KpCompiledSemanticStateComposition {
+  readonly preflight: Preflight;
+}): KpCompiledSemanticStateComposition<
+  Preflight["composition"]["declaration"]["root"]
+> {
   const composition = input.preflight.composition;
   if (input.identities.namespace !== composition.namespace ||
     input.identities.composition(composition.declaration.localId) !==

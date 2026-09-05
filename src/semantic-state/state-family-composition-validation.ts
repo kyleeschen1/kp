@@ -46,22 +46,27 @@ export class KpSemanticStateCompositionValidationError extends Error {
   }
 }
 
-export interface KpValidatedSemanticStateComposition {
+export interface KpValidatedSemanticStateComposition<
+  Declaration extends KpSemanticStateCompositionDeclaration =
+    KpSemanticStateCompositionDeclaration
+> {
   readonly schemaVersion: "kp.validated-semantic-state-composition.v1";
   readonly kind: "validated-semantic-state-composition";
   readonly id: KpSemanticCompositionId;
   readonly namespace: string;
-  readonly declaration: KpSemanticStateCompositionDeclaration;
+  readonly declaration: Declaration;
   readonly scopePaths: readonly string[];
   readonly memberCount: number;
 }
 
-export function validateKpSemanticStateComposition(input: {
+export function validateKpSemanticStateComposition<
+  const Declaration extends KpSemanticStateCompositionDeclaration
+>(input: {
   readonly identities: KpSemanticStateIdentityScope;
-  readonly declaration: KpSemanticStateCompositionDeclaration;
+  readonly declaration: Declaration;
   readonly definitions:
     readonly KpSemanticStateFamilyDefinitionDeclaration[];
-}): KpValidatedSemanticStateComposition {
+}): KpValidatedSemanticStateComposition<Declaration> {
   const diagnostics: KpSemanticStateCompositionDiagnostic[] = [];
   const report = (
     code: KpSemanticStateCompositionDiagnosticCode,

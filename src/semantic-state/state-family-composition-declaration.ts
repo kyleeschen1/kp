@@ -3,29 +3,38 @@ import type {
 } from "./state-family-definition.ts";
 
 export interface KpSemanticStateCompositionMemberDeclaration<
-  Parameters = unknown
+  Parameters = unknown,
+  Name extends string = string
 > {
   readonly schemaVersion: "kp.semantic-state-composition-node.v1";
   readonly kind: "member";
-  readonly name: string;
+  readonly name: Name;
   readonly sourceId: string;
   readonly application: KpSemanticStateFamilyApplicationRecord<Parameters>;
 }
 
-export interface KpSemanticStateCompositionSequenceDeclaration {
+export interface KpSemanticStateCompositionSequenceDeclaration<
+  Members extends readonly KpSemanticStateCompositionNodeDeclaration[] =
+    readonly KpSemanticStateCompositionNodeDeclaration[],
+  Name extends string = string
+> {
   readonly schemaVersion: "kp.semantic-state-composition-node.v1";
   readonly kind: "sequence";
-  readonly name: string;
+  readonly name: Name;
   readonly sourceId: string;
-  readonly members: readonly KpSemanticStateCompositionNodeDeclaration[];
+  readonly members: Members;
 }
 
-export interface KpSemanticStateCompositionGroupDeclaration {
+export interface KpSemanticStateCompositionGroupDeclaration<
+  Body extends KpSemanticStateCompositionNodeDeclaration =
+    KpSemanticStateCompositionNodeDeclaration,
+  Name extends string = string
+> {
   readonly schemaVersion: "kp.semantic-state-composition-node.v1";
   readonly kind: "group";
-  readonly name: string;
+  readonly name: Name;
   readonly sourceId: string;
-  readonly body: KpSemanticStateCompositionNodeDeclaration;
+  readonly body: Body;
 }
 
 export interface KpSemanticStateCompositionIndependenceEvidence {
@@ -36,13 +45,17 @@ export interface KpSemanticStateCompositionIndependenceEvidence {
   readonly sourceId: string;
 }
 
-export interface KpSemanticStateCompositionIndependentDeclaration {
+export interface KpSemanticStateCompositionIndependentDeclaration<
+  Members extends readonly KpSemanticStateCompositionMemberDeclaration[] =
+    readonly KpSemanticStateCompositionMemberDeclaration[],
+  Name extends string = string
+> {
   readonly schemaVersion: "kp.semantic-state-composition-node.v1";
   readonly kind: "independent";
-  readonly name: string;
+  readonly name: Name;
   readonly sourceId: string;
   readonly evidence: KpSemanticStateCompositionIndependenceEvidence;
-  readonly members: readonly KpSemanticStateCompositionMemberDeclaration[];
+  readonly members: Members;
 }
 
 export type KpSemanticStateCompositionNodeDeclaration =
@@ -51,13 +64,16 @@ export type KpSemanticStateCompositionNodeDeclaration =
   | KpSemanticStateCompositionGroupDeclaration
   | KpSemanticStateCompositionIndependentDeclaration;
 
-export interface KpSemanticStateCompositionDeclaration {
+export interface KpSemanticStateCompositionDeclaration<
+  Root extends KpSemanticStateCompositionNodeDeclaration =
+    KpSemanticStateCompositionNodeDeclaration
+> {
   readonly schemaVersion: "kp.semantic-state-composition-declaration.v1";
   readonly kind: "semantic-state-composition-declaration";
   readonly namespace: string;
   readonly localId: string;
   readonly sourceId: string;
-  readonly root: KpSemanticStateCompositionNodeDeclaration;
+  readonly root: Root;
 }
 
 export type KpSemanticStateCompositionDeclarationErrorCode =
@@ -85,11 +101,14 @@ export class KpSemanticStateCompositionDeclarationError extends Error {
   }
 }
 
-export function declareKpSemanticStateCompositionMember<Parameters>(input: {
-  readonly name: string;
+export function declareKpSemanticStateCompositionMember<
+  Parameters,
+  const Name extends string
+>(input: {
+  readonly name: Name;
   readonly sourceId: string;
   readonly application: KpSemanticStateFamilyApplicationRecord<Parameters>;
-}): KpSemanticStateCompositionMemberDeclaration<Parameters> {
+}): KpSemanticStateCompositionMemberDeclaration<Parameters, Name> {
   return Object.freeze({
     schemaVersion: "kp.semantic-state-composition-node.v1",
     kind: "member",
@@ -99,11 +118,14 @@ export function declareKpSemanticStateCompositionMember<Parameters>(input: {
   });
 }
 
-export function declareKpSemanticStateCompositionSequence(input: {
-  readonly name: string;
+export function declareKpSemanticStateCompositionSequence<
+  const Name extends string,
+  const Members extends readonly KpSemanticStateCompositionNodeDeclaration[]
+>(input: {
+  readonly name: Name;
   readonly sourceId: string;
-  readonly members: readonly KpSemanticStateCompositionNodeDeclaration[];
-}): KpSemanticStateCompositionSequenceDeclaration {
+  readonly members: Members;
+}): KpSemanticStateCompositionSequenceDeclaration<Members, Name> {
   if (input.members.length === 0) {
     fail("empty-sequence", [input.name], "A composition sequence requires at least one member.");
   }
@@ -112,15 +134,18 @@ export function declareKpSemanticStateCompositionSequence(input: {
     kind: "sequence",
     name: requireIdentity(input.name, "sequence name", []),
     sourceId: requireSource(input.sourceId, []),
-    members: Object.freeze([...input.members])
+    members: freezeDeclarationTuple(input.members)
   });
 }
 
-export function declareKpSemanticStateCompositionGroup(input: {
-  readonly name: string;
+export function declareKpSemanticStateCompositionGroup<
+  const Name extends string,
+  const Body extends KpSemanticStateCompositionNodeDeclaration
+>(input: {
+  readonly name: Name;
   readonly sourceId: string;
-  readonly body: KpSemanticStateCompositionNodeDeclaration;
-}): KpSemanticStateCompositionGroupDeclaration {
+  readonly body: Body;
+}): KpSemanticStateCompositionGroupDeclaration<Body, Name> {
   return Object.freeze({
     schemaVersion: "kp.semantic-state-composition-node.v1",
     kind: "group",
@@ -130,15 +155,18 @@ export function declareKpSemanticStateCompositionGroup(input: {
   });
 }
 
-export function declareKpSemanticStateCompositionIndependent(input: {
-  readonly name: string;
+export function declareKpSemanticStateCompositionIndependent<
+  const Name extends string,
+  const Members extends readonly KpSemanticStateCompositionMemberDeclaration[]
+>(input: {
+  readonly name: Name;
   readonly sourceId: string;
   readonly evidence: {
     readonly id: string;
     readonly sourceId: string;
   };
-  readonly members: readonly KpSemanticStateCompositionMemberDeclaration[];
-}): KpSemanticStateCompositionIndependentDeclaration {
+  readonly members: Members;
+}): KpSemanticStateCompositionIndependentDeclaration<Members, Name> {
   if (input.members.length === 0) {
     fail(
       "empty-independent-cohort",
@@ -160,16 +188,18 @@ export function declareKpSemanticStateCompositionIndependent(input: {
     }),
     // Declaration order has no semantic authority for an independent cohort.
     // Compilation later chooses a canonical internal endpoint order.
-    members: Object.freeze([...input.members])
+    members: freezeDeclarationTuple(input.members)
   });
 }
 
-export function declareKpSemanticStateComposition(input: {
+export function declareKpSemanticStateComposition<
+  const Root extends KpSemanticStateCompositionNodeDeclaration
+>(input: {
   readonly namespace: string;
   readonly localId: string;
   readonly sourceId: string;
-  readonly root: KpSemanticStateCompositionNodeDeclaration;
-}): KpSemanticStateCompositionDeclaration {
+  readonly root: Root;
+}): KpSemanticStateCompositionDeclaration<Root> {
   const namespace = requireIdentity(input.namespace, "namespace", []);
   const localId = requireIdentity(input.localId, "composition id", []);
   const sourceId = requireSource(input.sourceId, []);
@@ -186,11 +216,11 @@ export function declareKpSemanticStateComposition(input: {
 
 const identityPattern = /^[a-z0-9]+(?:[._-][a-z0-9]+)*$/u;
 
-function requireIdentity(
-  value: string,
+function requireIdentity<const Value extends string>(
+  value: Value,
   label: string,
   path: readonly string[]
-): string {
+): Value {
   if (!identityPattern.test(value)) {
     fail(
       "invalid-declaration-identity",
@@ -199,6 +229,12 @@ function requireIdentity(
     );
   }
   return value;
+}
+
+function freezeDeclarationTuple<const Values extends readonly unknown[]>(
+  values: Values
+): Values {
+  return Object.freeze([...values]) as unknown as Values;
 }
 
 function requireSource(value: string, path: readonly string[]): string {

@@ -728,11 +728,81 @@
       "scope": "slice-s11-theseus",
       "checkedAt": "2026-09-05T04:53:00.791Z",
       "notes": "Validated 1094 nodes and 27498 events before slice completion."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-state-composition-handles.test.ts tests/semantic-state-composition-compiler.test.ts tests/semantic-state-composition-confluence.test.ts",
+      "status": "passed",
+      "scope": "slice-s12-focused",
+      "checkedAt": "2026-09-05T05:02:01.215Z",
+      "notes": "13 of 13 handle inference, boundary generation, path stability, compiler order, and confluence regression tests passed."
+    },
+    {
+      "command": "npm run generate:equation-reachability",
+      "status": "passed",
+      "scope": "slice-s12-generated-evidence",
+      "checkedAt": "2026-09-05T05:02:02.405Z",
+      "notes": "Refreshed the 68-root graph after adding composition handle source and tests."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/exact-equation-reachability-graph.test.ts",
+      "status": "passed",
+      "scope": "slice-s12-reachability",
+      "checkedAt": "2026-09-05T05:02:03.462Z",
+      "notes": "3 of 3 generated reachability ownership tests passed."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "slice-s12-semantic-state",
+      "checkedAt": "2026-09-05T05:02:04.523Z",
+      "notes": "307 of 307 semantic-state tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s12-types",
+      "checkedAt": "2026-09-05T05:02:05.583Z",
+      "notes": "All TypeScript, Svelte, and domain checks passed, including invalid-handle fixtures."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-s12-architecture",
+      "checkedAt": "2026-09-05T05:02:06.631Z",
+      "notes": "Architecture passed at 2015 TypeScript modules, 7502 of 7553 local references, and zero exact retiring exceptions."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice-s12-inference",
+      "checkedAt": "2026-09-05T05:02:07.662Z",
+      "notes": "Existing inference ceilings passed at 107104 types and 181862 instantiations; no ratchet change."
+    },
+    {
+      "command": "npm run verify:impact -- --path src/semantic-state/state-family-composition-handles.ts",
+      "status": "passed",
+      "scope": "slice-s12-impact",
+      "checkedAt": "2026-09-05T05:02:08.709Z",
+      "notes": "High-risk semantic-state impact selected semantic-state, typecheck, and architecture gates."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice-s12-diff",
+      "checkedAt": "2026-09-05T05:02:09.734Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-s12-theseus",
+      "checkedAt": "2026-09-05T05:02:10.768Z",
+      "notes": "Validated 1094 nodes and 27515 events before slice completion."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s11 complete: nested aggregate provenance is inspectable by group, member, and transformation without copying or rewriting existing semantic evidence."
+    "summary": "s12 complete: generated handles retain exact nested names, member parameter types, stable IDs, and boundary metadata without performing address resolution."
   },
   "expectedLearning": [
     "Whether sequence nesting and demonstrated-independent cohorts can reuse current family and persistent-state authority without a second kernel.",
