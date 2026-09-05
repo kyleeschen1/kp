@@ -82,3 +82,22 @@ pre-approve new budgets.
   and the mandatory author/API plus visual checkpoint remain separate obligations
   of the approved proposal. No renderer, Article, publication, or public facade
   migration follows from these measurements alone.
+
+## Bounded math storage boundary
+
+The math-owned state adapter deep-freezes structural descriptors through the
+existing aggregate value validator. It explicitly retains the existing hidden
+Hessian symmetry evidence in enumerable state data. It neither serializes
+functions nor mints new law, operation, or rendering authority.
+
+Local map/basis registrations require explicit scope, capability identity, kind,
+and version. Only their data references enter state. A typed local binding is
+required to recover the callable; missing, foreign, disposed, and stale-version
+cases fail explicitly. An existing version cannot be overwritten, and an older
+reference cannot silently resolve to the latest capability. Version assignment
+remains the author's declaration, not a hash or proof of callback semantics.
+
+The broad source-inventory check observed 16 added scanned files from the approved
+assembly/bridge modules, tests, helper, and baseline metadata. Regeneration changed
+only `scannedFileCount` from 4207 to 4223 in the exact equation reachability graph.
+Its 68 roots, callers, policy, and all budget ceilings remained unchanged.

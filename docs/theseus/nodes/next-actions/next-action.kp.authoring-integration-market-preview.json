@@ -94,6 +94,27 @@
       "scope": "s08",
       "checkedAt": "2026-09-05T19:54:44.173Z",
       "notes": "Executed frozen baseline matches immutable snapshots, journals, declaration and handles. 21 integration and 364 semantic tests pass. Cost details: docs/project/reviews/2026-09-05-authoring-assembly-evidence.md. No domain helper relocation."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "s09",
+      "checkedAt": "2026-09-05T20:23:03.840Z",
+      "notes": "Initial broad run detected stale exact reachability inventory after 16 approved new scanned files. Only scannedFileCount changed on regeneration; all 68 roots and caller lists unchanged."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s09",
+      "checkedAt": "2026-09-05T20:23:04.923Z",
+      "notes": "Full rerun passes 6512 tests, 0 failures, after inventory-only refresh. Architecture, dependency direction, fixed inference, catalog and promotion checks also pass. Inference types 110267 and instantiations 190091; no ceilings changed."
+    },
+    {
+      "command": "npm run test:authoring-integration; npm run typecheck; npm run test:equation-reachability; git diff --check",
+      "status": "passed",
+      "scope": "s09",
+      "checkedAt": "2026-09-05T20:23:05.976Z",
+      "notes": "25 integration tests and full typecheck pass. 12 reachability tests pass. Existing Jacobian, Hessian, scene and optics tests pass; hidden-callable/evidence regression passes. No function serialization or second semantic store."
     }
   ],
   "expectedLearning": [

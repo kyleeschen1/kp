@@ -163,7 +163,8 @@
     {
       "id": "s09",
       "title": "Typed-math/state value bridge: register immutable typed structure separately from local version-pinned callable capabilities",
-      "status": "planned"
+      "summary": "Math-owned data adapter preserves immutable shapes and hidden Hessian evidence; local callable bindings require exact scope identity kind and version, fail closed, and dispose explicitly.",
+      "status": "complete"
     },
     {
       "id": "s10",
