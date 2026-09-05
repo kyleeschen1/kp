@@ -160,6 +160,7 @@ export function mountKpSupplyTaxKineticFigure(input: {
       readonly score: ReturnType<typeof createKpSupplyTaxPedagogicalScore>;
       readonly scrollScore: KpSupplyTaxScrollScoreV1;
       readonly sceneForBeat: (beatId: string) => KpSupplyTaxSceneProjectionV1;
+      readonly stageFacts?: typeof kpSupplyTaxScrollScoreStageFacts;
     };
   };
 }): KpSupplyTaxKineticFigureSession {
@@ -192,6 +193,7 @@ export function mountKpSupplyTaxKineticFigure(input: {
   );
   input.root.innerHTML = renderPage({
     authority,
+    stageFacts: instruction?.stageFacts ?? kpSupplyTaxScrollScoreStageFacts,
     scenes,
     logExponentAuthority,
     logExponentInitialIndex,
@@ -1110,6 +1112,7 @@ function wheelDeltaPixels(
 
 function renderPage(input: {
   readonly authority: ReturnType<typeof createKpEconomicsSupplyTaxAnimationAsset>;
+  readonly stageFacts: typeof kpSupplyTaxScrollScoreStageFacts;
   readonly scenes: readonly KpSupplyTaxFocusPhraseScene[];
   readonly logExponentAuthority: ReturnType<
     typeof createKpLogExponentFocusCardAuthority
@@ -1135,7 +1138,7 @@ function renderPage(input: {
         id: "focus-deck.economics.supply-tax.v1",
         ariaLabel: "Per-unit tax Focus Deck",
         activeBeatSlug: scenes[0]!.beat.slug,
-        stageHtml: renderStaticStage(input.authority),
+        stageHtml: renderStaticStage(input.authority, input.stageFacts),
         beats: scenes.map((scene) => ({
           slug: scene.beat.slug,
           title: scene.beat.title,
@@ -1189,14 +1192,14 @@ function renderPage(input: {
   </main>`;
 }
 
-function renderStaticStage(authority: ReturnType<typeof createKpEconomicsSupplyTaxAnimationAsset>): string {
+function renderStaticStage(authority: ReturnType<typeof createKpEconomicsSupplyTaxAnimationAsset>, stageFacts: typeof kpSupplyTaxScrollScoreStageFacts): string {
   return `<figure class="kp-focus-deck__stage kp-supply-tax-figure kp-scroll-score-stage" data-kp-supply-tax-stage data-kp-supply-tax-stage-state="baseline-market">
     <figcaption class="kp-focus-deck__visually-hidden kp-supply-tax-visually-hidden" data-kp-supply-tax-stage-caption>Demand and original supply intersect at five units and a price of seven before the tax.</figcaption>
     <div class="kp-supply-tax-stage__visual">
       <div class="kp-supply-tax-stage__graph">
         ${renderKpSupplyTaxInteractiveSvg(authority.semantics)}
         <div class="kp-scroll-score-stage-facts" aria-hidden="true">
-          ${kpSupplyTaxScrollScoreStageFacts.map(({ id, latex }) =>
+          ${stageFacts.map(({ id, latex }) =>
             `<span data-kp-scroll-score-stage-fact="${id}" data-kp-scroll-score-stage-fact-present="false">${renderLatexToHtml(latex, { displayMode: false })}</span>`
           ).join("")}
         </div>

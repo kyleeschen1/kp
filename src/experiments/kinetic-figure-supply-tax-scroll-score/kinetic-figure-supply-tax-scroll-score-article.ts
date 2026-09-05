@@ -14,9 +14,10 @@ export const kpSupplyTaxScrollScoreArticleSourceId =
 export function compileKpSupplyTaxScrollScoreArticle(input: {
   readonly text: string;
   readonly lock: KpArticleImportLock;
+  readonly sourceId?: string;
 }): KpCompiledArticleDocument {
   const article = compileKpArticleDocument({
-    source: createKpArticleSource(kpSupplyTaxScrollScoreArticleSourceId,
+    source: createKpArticleSource(input.sourceId ?? kpSupplyTaxScrollScoreArticleSourceId,
       input.text),
     registry: kpEconomicsSupplyTaxVignetteRegistry,
     lock: input.lock

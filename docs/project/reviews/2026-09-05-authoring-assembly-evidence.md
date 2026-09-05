@@ -302,3 +302,32 @@ deterministic scene projection after unrelated seeks, missing/unknown/reordered
 bindings, and ordinary wording edits. The existing three browser checks pass
 through the companion-backed host. The exact scan adds only its module and test
 (4,241 to 4,243), with roots and caller edges unchanged.
+
+## Explicit revision-owned facts and author source
+
+The opt-in host now uses `authoring-market-article-source.ts`, a separate ordinary
+TypeScript author-source specimen. Literal wording remains authored; explicitly
+named fact slots bind exact values. It emits existing Article v1 syntax, not a new
+Markdown expression language. The canonical Markdown lesson is unchanged. Source
+maps identify the generated Article projection, with its author source recorded
+separately; generated line numbers are not represented as original Markdown lines.
+
+Fact values come from the same state-derived tax endpoints and carry their model
+revision and settled addresses. Unknown names and missing, cloned, or foreign
+reference capabilities produce typed gaps. Accessible claims and existing stage
+formulas consume explicit bindings, including separate consumer/producer surplus
+when they differ. No free prose is verified, scanned, or rewritten. A supplied
+bound Article from another model revision is rejected.
+
+The exact endpoint inspector includes plain HTML facts that can be rendered
+without motion, KaTeX, or a clock. This is meaningful static **fact output**, not a
+claim that the experiment's physical HTML has become a published no-JavaScript
+Article. The latter remains a publication/review boundary.
+
+The integration suite passes 58 tests, including canonical tax-four formula
+parity, capability failures, unchanged literal wording, and demand-14/tax-2 values
+(quantity 5, prices 9/7, revenue 10, total 35). All three scoped browser checks
+pass. An initial parameter-property declaration failed the repository's erasable
+TypeScript constraint and was corrected without changing compiler settings.
+The exact inventory adds only the two modules and test (4,243 to 4,246), with
+roots, edges, and fixed budgets unchanged.

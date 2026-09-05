@@ -4,15 +4,19 @@ import { createKpAuthoringMarketFrameSession } from "./authoring-market-frame.ts
 import { encodeKpSemanticStateCompositionLogicalAddress } from "../../semantic-state/state-family-composition-address.ts";
 import { renderKpSupplyTaxWelfareLedger } from "../kinetic-figure-supply-tax/kinetic-figure-supply-tax-svg.ts";
 import "./authoring-market.css";
-import articleText from "../../../content/lessons/economics-supply-tax-scroll-score.kp.md?raw";
 import importLock from "../../../content/lessons/economics-supply-tax-scroll-score.kp.lock.json" with { type: "json" };
 import type { KpArticleImportLock } from "../../article/kp-article-import-lock.ts";
 import { createKpAuthoringMarketCompanion } from "./authoring-market-companion.ts";
+import { createKpAuthoringMarketFacts, renderKpAuthoringMarketStaticFacts } from "./authoring-market-facts.ts";
+import { authorKpMarketArticle } from "./authoring-market-article-source.ts";
 
 /** Opt-in composition only: the existing figure still owns paint and clocks. */
 export function mountKpAuthoringMarket(input: { readonly root: HTMLElement }) {
   const authored = createKpAuthoredMarketSource({ kind: "impose-per-unit-tax" });
-  const companion = createKpAuthoringMarketCompanion({ authored, text: articleText, lock: importLock as KpArticleImportLock });
+  const facts = createKpAuthoringMarketFacts(authored);
+  const boundArticle = authorKpMarketArticle(facts);
+  const companion = createKpAuthoringMarketCompanion({ authored, text: boundArticle.text,
+    boundArticle, lock: importLock as KpArticleImportLock });
   const frames = createKpAuthoringMarketFrameSession(authored, { cacheCapacity: 2 });
   let session: ReturnType<typeof mountKpSupplyTaxKineticFigure>;
   try {
@@ -32,12 +36,14 @@ export function mountKpAuthoringMarket(input: { readonly root: HTMLElement }) {
   // sample. Keep it explicitly labelled and outside the reader's focal stage.
   const comparison = document.createElement("details");
   comparison.dataset["kpAuthoringMarketComparison"] = "endpoints";
-  comparison.innerHTML = `<summary>Exact before/after accounting</summary>${renderKpSupplyTaxWelfareLedger(authored.source.canonical.semantics)}`;
+  comparison.innerHTML = `<summary>Exact before/after accounting</summary>${renderKpSupplyTaxWelfareLedger(authored.source.canonical.semantics)}${renderKpAuthoringMarketStaticFacts(facts)}`;
   input.root.querySelector("[data-kp-supply-tax-focus-deck]")!.after(comparison);
   let disposed = false;
   return Object.freeze({
     authored,
     companion,
+    facts,
+    boundArticle,
     frames,
     dispose() {
       if (disposed) return;

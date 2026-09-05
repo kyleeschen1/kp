@@ -231,11 +231,18 @@
       "scope": "s19",
       "checkedAt": "2026-09-05T22:59:10.976Z",
       "notes": "55 integration and81 economics tests pass; three Chromium preservation/exact-label tests pass. Eight reference/state/scene bindings, missing/reordered gaps and prose edits verified. Types clean; architecture2038modules zero exceptions; inventory count4243 only."
+    },
+    {
+      "command": "npm run test:authoring-integration; npm run test:economics-supply-tax; npm run typecheck; npm run check:architecture; npm run check:equation-reachability; npm run visual:authoring-market; git diff --check",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-05T23:13:17.864Z",
+      "notes": "58 integration and 81 economics tests; 3 browser tests. Exact inventory count only. Initial erasable-syntax failure fixed without compiler changes. Plain static facts, not a published no-JavaScript Article."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s01-s19 verified: bounded assembly, domain-authorized lowering, isolated state-driven tax preview, native exact labels, endpoint ledger and Article companion. Remaining approved work covers facts, editing, variant and final checkpoint."
+    "summary": "s01-s20 complete: explicit model-revision fact slots feed prose, accessible claims, existing stage formulas and plain static facts. Local save/compile lifecycle remains next."
   },
   "expectedLearning": [
     "Whether internal assembly and a bounded math bridge make one exact market explanation authorable without duplicate semantics or renderer authority."

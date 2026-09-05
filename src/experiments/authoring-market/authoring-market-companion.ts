@@ -5,6 +5,7 @@ import { createKpSupplyTaxPedagogicalScore } from "../kinetic-figure-supply-tax/
 import { projectKpSupplyTaxScene } from "../kinetic-figure-supply-tax/kinetic-figure-supply-tax-scene.ts";
 import type { createKpAuthoredMarketSource } from "../typed-linear-supply-demand/authoring-market-source.ts";
 import { projectKpAuthoringMarketClockAddress } from "./authoring-market-clock-address.ts";
+import type { authorKpMarketArticle } from "./authoring-market-article-source.ts";
 
 export class KpAuthoringMarketCompanionError extends Error {
   readonly code = "kp.authoring.market-companion-gap";
@@ -19,13 +20,25 @@ export function createKpAuthoringMarketCompanion(input: {
   readonly authored: ReturnType<typeof createKpAuthoredMarketSource>;
   readonly text: string;
   readonly lock: KpArticleImportLock;
+  readonly boundArticle?: ReturnType<typeof authorKpMarketArticle>;
 }) {
   const authority = input.authored.source.canonical;
   let compiled: ReturnType<typeof compileKpSupplyTaxScrollScoreArticle>;
   let scrollScore: ReturnType<typeof createKpSupplyTaxScrollScore>;
-  const score = createKpSupplyTaxPedagogicalScore(authority);
+  const bound = input.boundArticle;
+  if (bound !== undefined && (bound.modelRevisionId !== input.authored.source.authority.revisionId || bound.text !== input.text)) {
+    throw new KpAuthoringMarketCompanionError("boundArticle", "Facts, Article text and model must share one explicit revision.");
+  }
+  const originalScore = createKpSupplyTaxPedagogicalScore(authority);
+  const score = bound === undefined ? originalScore : Object.freeze({ ...originalScore,
+    beats: Object.freeze(originalScore.beats.map(beat => {
+      const claim = bound.claims[beat.slug as keyof typeof bound.claims];
+      if (claim === undefined) throw new KpAuthoringMarketCompanionError(beat.slug, "Missing explicit claim binding.");
+      return Object.freeze({ ...beat, claim });
+    })) });
   try {
-    compiled = compileKpSupplyTaxScrollScoreArticle(input);
+    compiled = compileKpSupplyTaxScrollScoreArticle({ text: input.text, lock: input.lock,
+      ...(bound === undefined ? {} : { sourceId: bound.sourceId }) });
     scrollScore = createKpSupplyTaxScrollScore({ document: compiled.document, score });
   } catch (cause) {
     throw new KpAuthoringMarketCompanionError("article", "Repair the current Article references and import lock.", cause);
@@ -47,6 +60,7 @@ export function createKpAuthoringMarketCompanion(input: {
     return stop;
   };
   return Object.freeze({ authority, compiled, score, scrollScore, stops,
+    ...(bound === undefined ? {} : { stageFacts: bound.facts.stageFacts }),
     modelRevisionId: input.authored.source.authority.revisionId,
     forBeat, sceneForBeat: (beatId: string) => forBeat(beatId).scene });
 }

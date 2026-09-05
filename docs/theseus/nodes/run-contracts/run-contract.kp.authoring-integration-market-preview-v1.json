@@ -231,7 +231,8 @@
     {
       "id": "s20",
       "title": "Explicit typed fact/formula bindings: supply prose values and meaningful static facts from model revision without rewriting authored prose",
-      "status": "planned"
+      "summary": "Explicit typed endpoint bindings, author-controlled literal prose, formula projection and static fact output pass focused, type, architecture and browser checks.",
+      "status": "complete"
     },
     {
       "id": "s21",
