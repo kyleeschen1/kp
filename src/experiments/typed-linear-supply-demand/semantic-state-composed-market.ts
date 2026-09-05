@@ -22,44 +22,22 @@ import {
   type NormalizedExactRational
 } from "../../../protocols/exact-rational.ts";
 import type { ExactRationalDto } from "../../../protocols/public-api.ts";
-import { defineKpSemanticStateDerivation } from
-  "../../semantic-state/authoring-derived-definition.ts";
-import { compileKpSemanticStateSchema } from
-  "../../semantic-state/authoring-schema-compiler.ts";
-import { createKpSemanticStateHandleSet } from
-  "../../semantic-state/authoring-state-handles.ts";
-import { materializeKpSemanticStateInitialSnapshot } from
-  "../../semantic-state/authoring-state-materializer.ts";
+import { assembleKpSemanticStateModel } from
+  "../../semantic-state/authoring-model-assembly.ts";
+import {
+  assembleKpSemanticStateExplanation,
+  bindKpSemanticStateExplanationMember,
+  defineKpSemanticStateModelFamily
+} from "../../semantic-state/authoring-explanation-assembly.ts";
 import { kpStateDerived, kpStateGroup, kpStateValue } from
   "../../semantic-state/authoring-schema.ts";
-import {
-  compileKpSemanticDerivedGraph,
-  normalizeKpSemanticDerivedGraphInput
-} from "../../semantic-state/derived-graph.ts";
 import type { KpSemanticProgress } from
   "../../semantic-state/semantic-progress.ts";
-import { compileKpSemanticStateComposition } from
-  "../../semantic-state/state-family-composition-compiler.ts";
 import {
-  declareKpSemanticStateComposition,
   declareKpSemanticStateCompositionGroup,
-  declareKpSemanticStateCompositionMember,
   declareKpSemanticStateCompositionSequence
 } from "../../semantic-state/state-family-composition-declaration.ts";
 import {
-  assembleKpSemanticStateCompositionEndpointChain,
-  bindKpSemanticStateCompositionEndpoint
-} from "../../semantic-state/state-family-composition-endpoints.ts";
-import { createKpSemanticStateCompositionHandleSet } from
-  "../../semantic-state/state-family-composition-handles.ts";
-import {
-  bindKpSemanticStateCompositionGraph,
-  preflightKpSemanticStateComposition
-} from "../../semantic-state/state-family-composition-preflight.ts";
-import { validateKpSemanticStateComposition } from
-  "../../semantic-state/state-family-composition-validation.ts";
-import {
-  defineKpSemanticStateFamily,
   kpStateFamilyParameters
 } from "../../semantic-state/state-family-definition.ts";
 import { declareKpSemanticStateInterpolation } from
@@ -98,45 +76,38 @@ export function createKpSemanticStateComposedMarketPacket(
       accounting: kpStateDerived<KpPerUnitTaxWelfareStateV1>()
     })
   });
-  const compiled = compileKpSemanticStateSchema(
-    "economics.composed-market",
-    schema
-  );
-  const stateHandles = createKpSemanticStateHandleSet(compiled);
-  const evaluation = defineKpSemanticStateDerivation({
-    compiled,
-    target: stateHandles.refs.outcomes.evaluation,
-    dependencies: [
-      stateHandles.refs.source.model,
-      stateHandles.refs.drivers.demandPriceIntercept,
-      stateHandles.refs.drivers.taxAmount
-    ],
-    compute: ([modelInput, demandPriceIntercept, taxAmount]) =>
-      evaluateKpParameterizedDemandInterceptAndPerUnitTax({
-        model: createKpPerUnitTaxWelfareModel(modelInput),
-        demandPriceIntercept,
-        taxAmount
-      })
+  const model = assembleKpSemanticStateModel({
+    namespace: "economics.composed-market",
+    schema,
+    derive: ({ refs, derive }) => {
+      const evaluation = derive({
+        target: refs.outcomes.evaluation,
+        dependencies: [
+          refs.source.model,
+          refs.drivers.demandPriceIntercept,
+          refs.drivers.taxAmount
+        ],
+        compute: ([modelInput, demandPriceIntercept, taxAmount]) =>
+          evaluateKpParameterizedDemandInterceptAndPerUnitTax({
+            model: createKpPerUnitTaxWelfareModel(modelInput),
+            demandPriceIntercept,
+            taxAmount
+          })
+      });
+      const equilibrium = derive({
+        target: refs.outcomes.equilibrium,
+        dependencies: [refs.outcomes.evaluation],
+        compute: ([evaluated]) => evaluated.market
+      });
+      const accounting = derive({
+        target: refs.outcomes.accounting,
+        dependencies: [refs.outcomes.evaluation],
+        compute: ([evaluated]) => evaluated.accounting
+      });
+      return [evaluation, equilibrium, accounting];
+    }
   });
-  const equilibrium = defineKpSemanticStateDerivation({
-    compiled,
-    target: stateHandles.refs.outcomes.equilibrium,
-    dependencies: [stateHandles.refs.outcomes.evaluation],
-    compute: ([evaluated]) => evaluated.market
-  });
-  const accounting = defineKpSemanticStateDerivation({
-    compiled,
-    target: stateHandles.refs.outcomes.accounting,
-    dependencies: [stateHandles.refs.outcomes.evaluation],
-    compute: ([evaluated]) => evaluated.accounting
-  });
-  const derivations = Object.freeze([evaluation, equilibrium, accounting]);
-  const initial = materializeKpSemanticStateInitialSnapshot(compiled, {
-    derivations
-  });
-  const graph = compileKpSemanticDerivedGraph(
-    normalizeKpSemanticDerivedGraphInput(compiled, derivations)
-  );
+  const stateHandles = model.handles;
   const demandTransition = declareKpSemanticStateInterpolation({
     id: "demand-intercept-interpolation",
     sourceId: "economics.composed-market.demand-intercept",
@@ -147,9 +118,7 @@ export function createKpSemanticStateComposedMarketPacket(
     sourceId: "economics.composed-market.tax-amount",
     target: stateHandles.refs.drivers.taxAmount
   });
-  const demandFamily = defineKpSemanticStateFamily({
-    compiled,
-    handles: stateHandles,
+  const demandFamily = defineKpSemanticStateModelFamily(model, {
     id: "set-demand-intercept",
     sourceId: "economics.composed-market.set-demand-intercept",
     parameters: kpStateFamilyParameters<KpComposedMarketDemandParameters>(),
@@ -173,9 +142,7 @@ export function createKpSemanticStateComposedMarketPacket(
       );
     }
   });
-  const taxFamily = defineKpSemanticStateFamily({
-    compiled,
-    handles: stateHandles,
+  const taxFamily = defineKpSemanticStateModelFamily(model, {
     id: "set-per-unit-tax",
     sourceId: "economics.composed-market.set-per-unit-tax",
     parameters: kpStateFamilyParameters<KpComposedMarketTaxParameters>(),
@@ -209,105 +176,75 @@ export function createKpSemanticStateComposedMarketPacket(
     parameters: { taxAmount: { numerator: "2", denominator: "1" } },
     sourceId: "economics.composed-market.add-tax"
   });
-  const demandMember = declareKpSemanticStateCompositionMember({
+  const demandMember = bindKpSemanticStateExplanationMember({
     name: "raise-demand",
     sourceId: "economics.composed-market.member.raise-demand",
-    application: demandApplication
+    application: demandApplication,
+    definition: demandFamily
   });
-  const taxMember = declareKpSemanticStateCompositionMember({
+  const taxMember = bindKpSemanticStateExplanationMember({
     name: "add-tax",
     sourceId: "economics.composed-market.member.add-tax",
-    application: taxApplication
+    application: taxApplication,
+    definition: taxFamily
   });
-  const declaration = declareKpSemanticStateComposition({
-    namespace: compiled.namespace,
+  const root = declareKpSemanticStateCompositionGroup({
+    name: "market-policy",
+    sourceId: "economics.composed-market.group.market-policy",
+    body: declareKpSemanticStateCompositionSequence({
+      name: "timeline",
+      sourceId: "economics.composed-market.sequence.timeline",
+      members: [
+        declareKpSemanticStateCompositionGroup({
+          name: "demand-shift",
+          sourceId: "economics.composed-market.group.demand-shift",
+          body: demandMember.member
+        }),
+        declareKpSemanticStateCompositionGroup({
+          name: "tax-policy",
+          sourceId: "economics.composed-market.group.tax-policy",
+          body: taxMember.member
+        })
+      ]
+    })
+  });
+  const explanation = assembleKpSemanticStateExplanation({
+    model,
     localId: "demand-then-tax",
     sourceId: "economics.composed-market.composition",
-    root: declareKpSemanticStateCompositionGroup({
-      name: "market-policy",
-      sourceId: "economics.composed-market.group.market-policy",
-      body: declareKpSemanticStateCompositionSequence({
-        name: "timeline",
-        sourceId: "economics.composed-market.sequence.timeline",
-        members: [
-          declareKpSemanticStateCompositionGroup({
-            name: "demand-shift",
-            sourceId: "economics.composed-market.group.demand-shift",
-            body: demandMember
-          }),
-          declareKpSemanticStateCompositionGroup({
-            name: "tax-policy",
-            sourceId: "economics.composed-market.group.tax-policy",
-            body: taxMember
-          })
-        ]
-      })
-    })
+    root,
+    members: [demandMember, taxMember]
   });
-  const validated = validateKpSemanticStateComposition({
-    identities: compiled.identityScope,
-    declaration,
-    definitions: [demandFamily.declaration, taxFamily.declaration]
-  });
-  const preflight = preflightKpSemanticStateComposition({
-    composition: validated,
-    base: initial,
-    graphBindings: [
-      bindKpSemanticStateCompositionGraph({
-        definitionId: demandFamily.id,
-        graph
-      }),
-      bindKpSemanticStateCompositionGraph({
-        definitionId: taxFamily.id,
-        graph
-      })
-    ]
-  });
-  const composition = compileKpSemanticStateComposition({
-    identities: compiled.identityScope,
-    preflight
-  });
-  const endpointBindings = Object.freeze([
-    bindKpSemanticStateCompositionEndpoint({
-      definition: demandFamily,
-      application: demandApplication
-    }),
-    bindKpSemanticStateCompositionEndpoint({
-      definition: taxFamily,
-      application: taxApplication
-    })
-  ]);
-  const chain = assembleKpSemanticStateCompositionEndpointChain({
-    composition,
-    base: initial,
-    bindings: endpointBindings
-  });
-  const compositionHandles =
-    createKpSemanticStateCompositionHandleSet(composition);
   // composed-market-packet:end
 
   return Object.freeze({
     sourceModel,
     schema,
-    compiled,
+    model,
+    explanation,
+    compiled: model.compiled,
     stateHandles,
-    derivations: Object.freeze({ evaluation, equilibrium, accounting }),
-    graph,
-    initial,
+    derivations: Object.freeze({
+      evaluation: model.derivations[0]!,
+      equilibrium: model.derivations[1]!,
+      accounting: model.derivations[2]!
+    }),
+    graph: model.graph,
+    initial: model.initial,
     transitions: Object.freeze({ demand: demandTransition, tax: taxTransition }),
     families: Object.freeze({ demand: demandFamily, tax: taxFamily }),
     applications: Object.freeze({
       demand: demandApplication,
       tax: taxApplication
     }),
-    members: Object.freeze({ demand: demandMember, tax: taxMember }),
-    declaration,
-    validated,
-    preflight,
-    composition,
-    endpointBindings,
-    chain,
-    compositionHandles
+    members: Object.freeze({ demand: demandMember.member, tax: taxMember.member }),
+    declaration: explanation.declaration,
+    validated: explanation.validated,
+    preflight: explanation.preflight,
+    composition: explanation.composition,
+    endpointBindings: explanation.endpointBindings,
+    chain: explanation.chain,
+    compositionHandles: explanation.handles
   });
 }
 

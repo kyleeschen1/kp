@@ -87,6 +87,13 @@
       "scope": "s07",
       "checkedAt": "2026-09-05T19:48:00.674Z",
       "notes": "19 integration tests pass. Real malformed author fixtures cover missing graph definitions, stale dependencies, foreign targets and undeclared endpoint write; original cause and immutable initial state retained."
+    },
+    {
+      "command": "npm run test:authoring-integration; npm run test:semantic-state; npm run typecheck; git diff --check; theseus workspace validate",
+      "status": "passed",
+      "scope": "s08",
+      "checkedAt": "2026-09-05T19:54:44.173Z",
+      "notes": "Executed frozen baseline matches immutable snapshots, journals, declaration and handles. 21 integration and 364 semantic tests pass. Cost details: docs/project/reviews/2026-09-05-authoring-assembly-evidence.md. No domain helper relocation."
     }
   ],
   "expectedLearning": [

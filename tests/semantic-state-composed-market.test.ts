@@ -157,7 +157,7 @@ test("the composed market packet stays compact and delegates economics", () => {
   const authoring = readAuthoringRegion();
   const metrics = {
     familyDefinitions: countMatches(authoring,
-      /defineKpSemanticStateFamily\(/gu),
+      /defineKpSemanticStateModelFamily\(/gu),
     lowLevelConstructionCalls: countMatches(
       authoring,
       /(?:createKpSemanticStateIdentityScope|createKpSemanticEntityVersionStore|createKpSemanticSlotAbsence|createKpAggregateSemanticSnapshot|beginKpSemanticTransaction)\(/gu
@@ -179,7 +179,7 @@ test("the composed market packet stays compact and delegates economics", () => {
     manualKernelMetadataFields: 0,
     authorCasts: 0,
     endpointUpdateCalls: 2,
-    authoredSetupLines: 205
+    authoredSetupLines: 158
   });
   assert.match(authoring,
     /evaluateKpParameterizedDemandInterceptAndPerUnitTax/u);

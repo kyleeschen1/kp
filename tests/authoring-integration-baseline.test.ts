@@ -47,9 +47,13 @@ test("frozen market baseline counts all 205 setup lines without hiding plumbing"
   assert.match(source, /function parseExact/);
 });
 
-test("slice-one snapshot reproduces the unchanged live author specimen", () => {
-  assert.equal(readFileSync(baseline.source, "utf8"),
-    readFileSync(baseline.snapshot, "utf8"));
+test("manual baseline stays frozen while the live specimen uses internal assembly", () => {
+  const frozen = readFileSync(baseline.snapshot, "utf8");
+  const live = readFileSync(baseline.source, "utf8");
+  assert.match(frozen, /compileKpSemanticStateSchema\(/);
+  assert.match(live, /assembleKpSemanticStateModel\(/);
+  assert.match(live, /assembleKpSemanticStateExplanation\(/);
+  assert.notEqual(live, frozen);
 });
 
 test("authoring source map names the actual host and its canonical owners", () => {
