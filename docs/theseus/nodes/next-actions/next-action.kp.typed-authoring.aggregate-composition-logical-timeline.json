@@ -1610,11 +1610,77 @@
       "status": "passed",
       "scope": "s24 durable control-plane validation: 1094 nodes and 27703 events",
       "checkedAt": "2026-09-05T08:20:30.233Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-state-composed-market.test.ts tests/semantic-state-composed-market-pressure.test.ts",
+      "status": "passed",
+      "scope": "s25 market packet and pressure laws: 8/8 pass",
+      "checkedAt": "2026-09-05T08:36:37.125Z"
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "s25 semantic-state suite: 357/357 pass",
+      "checkedAt": "2026-09-05T08:36:38.329Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s25 repository TypeScript boundary: 0 errors and 0 warnings",
+      "checkedAt": "2026-09-05T08:36:39.348Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s25 architecture gates: 2024 modules and all authority checks pass",
+      "checkedAt": "2026-09-05T08:36:40.361Z"
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s25 inference ratchet unchanged: 110237 types and 190072 instantiations",
+      "checkedAt": "2026-09-05T08:36:41.389Z"
+    },
+    {
+      "command": "npm run generate:equation-reachability",
+      "status": "passed",
+      "scope": "s25 refreshed exact 68-root graph for new pressure test",
+      "checkedAt": "2026-09-05T08:36:42.410Z"
+    },
+    {
+      "command": "npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "s25 exact reachability graph current: 68 roots",
+      "checkedAt": "2026-09-05T08:36:43.452Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s25 complete repository suite: 6479/6479 pass in 554334ms",
+      "checkedAt": "2026-09-05T08:36:44.479Z"
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "s25 production bundle: 1603 modules transformed",
+      "checkedAt": "2026-09-05T08:36:45.509Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s25 patch whitespace integrity",
+      "checkedAt": "2026-09-05T08:36:46.546Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s25 durable control-plane validation: 1094 nodes and 27719 events",
+      "checkedAt": "2026-09-05T08:36:58.017Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s24 complete: one production-shaped nested composition combines exact demand-intercept and tax families over a shared schema, graph, and immutable endpoint chain without market-specific core code or renderer authority."
+    "summary": "s25 complete: production pressure proves independent confluence and ordered parity, exact joint economics over 257 forward and reverse addresses, zero-call overlap rejection, seven-entry cache bounds, immutable retained history, and coherent middle-boundary branching."
   },
   "expectedLearning": [
     "Whether sequence nesting and demonstrated-independent cohorts can reuse current family and persistent-state authority without a second kernel.",
