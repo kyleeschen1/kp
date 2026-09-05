@@ -145,7 +145,8 @@
     {
       "id": "s06",
       "title": "Assembly queries and lifecycle: expose pinned recovery/evaluation with explicit cache reset/dispose ownership",
-      "status": "planned"
+      "summary": "Caller-owned sessions provide logical-address queries and exact pinned recovery; bounded existing evaluator caches never become history, with explicit reset/dispose.",
+      "status": "complete"
     },
     {
       "id": "s07",

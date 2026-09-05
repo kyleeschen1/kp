@@ -73,6 +73,13 @@
       "scope": "s05",
       "checkedAt": "2026-09-05T19:39:17.729Z",
       "notes": "12 integration and 364 semantic tests pass. Nested handle and parameter inference retained; repeated family identities distinct; conflicts rejected before callbacks. Focused typecheck required cache write access and passed escalated."
+    },
+    {
+      "command": "npm run test:authoring-integration; npm run typecheck; node_modules/.bin/tsc --project tsconfig.test.json --noEmit; git diff --check; theseus workspace validate",
+      "status": "passed",
+      "scope": "s06",
+      "checkedAt": "2026-09-05T19:43:52.253Z",
+      "notes": "15 integration tests pass: seeks/reverse, zero and bounded cache parity, eviction/reset/disposal, branch isolation, no replay or sample-history growth, pair private endpoints excluded."
     }
   ],
   "expectedLearning": [

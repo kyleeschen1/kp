@@ -25,10 +25,17 @@ import { compileKpSemanticStateComposition } from
 import {
   assembleKpSemanticStateCompositionEndpointChain,
   bindKpSemanticStateCompositionEndpoint,
+  type KpSemanticStateCompositionAppliedMember,
   type KpSemanticStateCompositionEndpointBinding
 } from "./state-family-composition-endpoints.ts";
-import { createKpSemanticStateCompositionHandleSet } from
-  "./state-family-composition-handles.ts";
+import {
+  createKpSemanticStateCompositionHandleSet,
+  type KpSemanticStateCompositionMemberHandle
+} from "./state-family-composition-handles.ts";
+import {
+  bindKpSemanticStateCompositionMemberEvaluator,
+  type KpSemanticStateCompositionMemberEvaluatorBinding
+} from "./state-family-composition-member-resolver.ts";
 
 export function defineKpSemanticStateModelFamily<
   const Members extends KpSemanticStateMemberMap,
@@ -53,6 +60,10 @@ export interface KpSemanticStateBoundExplanationMember<
   readonly member: KpSemanticStateCompositionMemberDeclaration<FamilyParameters, Name>;
   readonly definition: KpSemanticStateFamilyDefinitionDeclaration;
   readonly endpoint: KpSemanticStateCompositionEndpointBinding<Root>;
+  bindEvaluator(
+    handle: KpSemanticStateCompositionMemberHandle<FamilyParameters>,
+    applied: KpSemanticStateCompositionAppliedMember<Root>
+  ): KpSemanticStateCompositionMemberEvaluatorBinding<Root>;
 }
 
 export function bindKpSemanticStateExplanationMember<
@@ -66,10 +77,15 @@ export function bindKpSemanticStateExplanationMember<
   readonly definition: KpSemanticStateFamilyDefinition<Root, FamilyParameters, Transitions>;
   readonly application: KpSemanticStateFamilyApplicationRecord<NoInfer<FamilyParameters>>;
 }): KpSemanticStateBoundExplanationMember<Root, FamilyParameters, Name> {
-  return Object.freeze({
+  return Object.freeze<KpSemanticStateBoundExplanationMember<Root, FamilyParameters, Name>>({
     member: declareKpSemanticStateCompositionMember(input),
     definition: input.definition.declaration,
-    endpoint: bindKpSemanticStateCompositionEndpoint(input)
+    endpoint: bindKpSemanticStateCompositionEndpoint(input),
+    bindEvaluator(handle, applied) {
+      return bindKpSemanticStateCompositionMemberEvaluator({
+        definition: input.definition, handle, applied
+      });
+    }
   });
 }
 
