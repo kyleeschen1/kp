@@ -168,11 +168,25 @@
       "scope": "stop-memory-closure",
       "checkedAt": "2026-09-05T20:53:34.357Z",
       "notes": "Exact inventory current with68 unchanged roots and4 diagnostic test edges;3 direction ratchets pass. Run and target blocked; s13 planned; receipt failed, no open slice."
+    },
+    {
+      "command": "npm run test:authoring-integration; npm run test:economics-supply-tax; npm run typecheck; npm run check:equation-reachability; npm run test:equation-reachability; git diff --check",
+      "status": "passed",
+      "scope": "s13",
+      "checkedAt": "2026-09-05T22:08:15.799Z",
+      "notes": "42 integration, 81 economics and 12 reachability tests pass; full typecheck clean; exact inventory current. Full npm test still running."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s13-broad",
+      "checkedAt": "2026-09-05T22:10:49.041Z",
+      "notes": "6529 tests pass, zero failures; architecture and dependency gates pass with zero exceptions; inference111257 types192271 instantiations below unchanged ceilings."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "STOP_CONDITION after 12 of 28 slices: unresolved canonical economics operation-pack and rich lifecycle authority. s13 returned to planned; s14-s28 untouched. Approval required for bounded domain contract prerequisite."
+    "summary": "Approved economics prerequisite verified within s13. Source lowering complete; remaining work is the isolated host and existing reader integrations, followed by the required human checkpoint."
   },
   "expectedLearning": [
     "Whether internal assembly and a bounded math bridge make one exact market explanation authorable without duplicate semantics or renderer authority."

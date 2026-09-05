@@ -52,7 +52,8 @@ export interface KpComposedMarketTaxParameters {
 }
 
 export function createKpSemanticStateComposedMarketPacket(
-  input?: KpPerUnitTaxWelfareInputV1
+  input?: KpPerUnitTaxWelfareInputV1,
+  parameters?: { readonly demandPriceIntercept: ExactRationalDto; readonly taxAmount: ExactRationalDto }
 ) {
   const sourceModel = createKpPerUnitTaxWelfareModel(input);
 
@@ -167,13 +168,13 @@ export function createKpSemanticStateComposedMarketPacket(
   const demandApplication = demandFamily.prepareApplication({
     applicationId: "raise-demand",
     parameters: {
-      demandPriceIntercept: { numerator: "14", denominator: "1" }
+      demandPriceIntercept: parameters?.demandPriceIntercept ?? { numerator: "14", denominator: "1" }
     },
     sourceId: "economics.composed-market.raise-demand"
   });
   const taxApplication = taxFamily.prepareApplication({
     applicationId: "add-tax",
-    parameters: { taxAmount: { numerator: "2", denominator: "1" } },
+    parameters: { taxAmount: parameters?.taxAmount ?? { numerator: "2", denominator: "1" } },
     sourceId: "economics.composed-market.add-tax"
   });
   const demandMember = bindKpSemanticStateExplanationMember({

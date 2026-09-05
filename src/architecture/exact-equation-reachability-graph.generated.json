@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 4229,
+  "scannedFileCount": 4232,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -1039,6 +1039,7 @@
         "src/domain-ir/semantic-motion-source-authority.ts",
         "src/domain-ir/terminal-equation-migration-v2.ts",
         "src/editor/diagram-svg-adapter.ts",
+        "src/experiments/typed-linear-supply-demand/economics-supply-tax-governed-source.ts",
         "src/math/equation-transform.ts",
         "src/math/typed-semantic-math.ts",
         "src/math/typed-semantic-optics.ts",
@@ -1084,6 +1085,7 @@
       ],
       "testCallers": [
         "tests/authoring-integration-lowering-gap.test.ts",
+        "tests/authoring-integration-lowering.test.ts",
         "tests/cancellation-pressure-contract.test.ts",
         "tests/carrier-preserving-simplification-semantic.test.ts",
         "tests/correspondence-composition.test.ts",
@@ -1165,6 +1167,7 @@
         "src/animation/runtime-sampler.ts",
         "src/animation/verified-linear-problem-animation-compiler.ts",
         "src/authoring/transform-fixture-contract.ts",
+        "src/experiments/typed-linear-supply-demand/economics-supply-tax-governed-source.ts",
         "src/public/semantic.ts",
         "src/reader/renderers/equation-presentation-catalog-conformance.ts",
         "src/rendering/graph-transitions.ts",
@@ -1376,6 +1379,7 @@
         "src/editor/solve-x-shared-player.ts",
         "src/editor/svelte-catalogue/svelte-catalogue-host-state.ts",
         "src/experiments/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card.ts",
+        "src/experiments/typed-linear-supply-demand/economics-supply-tax-governed-source.ts",
         "src/project-dashboard/generated-algebra-catalog.ts",
         "src/reader/app/canonical-equation-frame-plan.ts",
         "src/reader/app/chrome-free-canonical-equation-session.ts",
@@ -1817,6 +1821,7 @@
         "src/animation/runtime-sampler.ts",
         "src/animation/verified-linear-problem-animation-compiler.ts",
         "src/authoring/transform-fixture-contract.ts",
+        "src/experiments/typed-linear-supply-demand/economics-supply-tax-governed-source.ts",
         "src/public/semantic.ts",
         "src/reader/renderers/equation-presentation-catalog-conformance.ts",
         "src/rendering/graph-transitions.ts",
@@ -2226,6 +2231,7 @@
         "src/editor/solve-x-shared-player.ts",
         "src/editor/svelte-catalogue/svelte-catalogue-host-state.ts",
         "src/experiments/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card.ts",
+        "src/experiments/typed-linear-supply-demand/economics-supply-tax-governed-source.ts",
         "src/project-dashboard/generated-algebra-catalog.ts",
         "src/reader/app/canonical-equation-frame-plan.ts",
         "src/reader/app/chrome-free-canonical-equation-session.ts",

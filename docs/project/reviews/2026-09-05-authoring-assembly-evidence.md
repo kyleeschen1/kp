@@ -37,7 +37,7 @@ not compressed tokens or claims about elapsed authoring time.
 | Semantic declarations | 153 | 143 |
 | Compatibility return | 23 | 29 |
 | Charged orchestration, including added compatibility glue | 52 | 21 |
-| Entire specimen module | 330 | 267 |
+| Entire specimen module | 330 | 268 |
 | Import modules | 22 | 14 |
 | Import lines | 66 | 44 |
 
@@ -76,8 +76,8 @@ shared abstraction cost without approving new budgets.
   source/declaration/target metadata. Missing, stale, foreign, and invalid-operation
   fixtures return repair gaps without partial authored values. Unknown codes are
   unclassified, never invented support or certification evidence.
-- This remains a nonvisual internal specimen. Canonical asset lowering,
-  author edit/preview behavior, cross-view reader integration,
+- This remains a nonvisual internal specimen. Author edit/preview behavior,
+  cross-view reader integration,
   and the mandatory author/API plus visual checkpoint remain separate obligations
   of the approved proposal. No renderer, Article, publication, or public facade
   migration follows from these measurements alone.
@@ -129,3 +129,44 @@ state assembly imports, math/state-only bridge imports, and no new public-barrel
 exports. It separately discloses 307 nonblank math-bridge lines: structural data
 32, local capabilities 118, and pinned optics 157. These are additional shared
 costs, not excluded caller-specific glue or a claim of public API readiness.
+
+## Bounded economics source authority
+
+The accepted economics prerequisite is implemented by the domain-owned
+`domains/economics/per-unit-tax-operation.ts` verifier and an experiment-local
+governed-source adapter. The verifier executes the existing model and accounting
+owners and compares exact before/after evidence; supplied truth flags are not
+proof. The local operation registration pins the project pack and version without
+changing the populated equation registry or exporting a new public facade.
+
+The applied tax-family instance is a session-local lowering capability. Copied,
+foreign, and generic update applications cannot replace it. The adapter reads
+the actual committed snapshots, retains their pins, and includes verified model
+inputs in source revisions because aggregate IDs alone are session-local.
+
+Rich correspondence covers each source and target selector exactly once.
+Unchanged curves retain identity; the domain-declared price split uses fan-out.
+Changed values end their old occurrences and introduce computed successors,
+retaining causal succession separately from equality. Original supply remains
+marginal-cost evidence. The compiler-only projection has no render targets; the
+separate canonical paint asset is structurally identical for canonical inputs.
+
+`tests/authoring-integration-lowering.test.ts` covers executed domain verification,
+complete lifecycle and rewind laws, copied/foreign application rejection, exact
+pack pins, and cross-model stale revisions. The earlier lowering-gap fixtures
+remain intact: the unadapted canonical asset and legacy pair normalization do
+not acquire governed authority automatically.
+
+The initial architecture check rejected placing the integration in neutral
+animation, and the authoring boundary rejected deep domain imports. The adapter
+therefore stays inside the existing typed-market experiment, where this internal
+integration belongs. No exception or public export was added. Architecture now
+passes with 2,033 modules and zero retiring exceptions. Inference remains
+111,257 types / 192,271 instantiations under unchanged ceilings.
+
+The exact source inventory increases from 4,229 to 4,232 scanned files (the domain
+directory is outside that scanner): two experiment modules and one test. The
+audited diff adds only their direct caller edges for existing asset, semantic
+tree, and correspondence owners; roots, policy, and numerical ceilings remain
+unchanged. One additional parameter-signature line raises the specimen module
+count to 268; setup and charged-orchestration measurements remain unchanged.
