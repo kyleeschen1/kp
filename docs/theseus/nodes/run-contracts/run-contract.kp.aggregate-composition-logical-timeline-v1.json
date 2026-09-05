@@ -155,7 +155,8 @@
     {
       "id": "s15",
       "title": "Single-member transition seek",
-      "status": "planned"
+      "summary": "Ordered member addresses now resolve at exact progress through the existing family evaluator from each member own adjacent retained boundaries; endpoints preserve persistent identity, interiors remain ephemeral, nonmonotonic seeks are deterministic, prior state remains settled, and later writes stay absent.",
+      "status": "complete"
     },
     {
       "id": "s16",

@@ -938,11 +938,88 @@
       "scope": "slice-s14-workspace",
       "checkedAt": "2026-09-05T05:25:42.051Z",
       "notes": "Workspace valid with 1094 nodes and 27544 events before slice close."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-state-composition-member-resolver.test.ts tests/semantic-state-composition-address.test.ts tests/semantic-state-composition-settled-resolver.test.ts tests/semantic-state-family-interpolation.test.ts tests/semantic-state-family-derived-evaluation.test.ts",
+      "status": "passed",
+      "scope": "slice-s15-focused",
+      "checkedAt": "2026-09-05T05:46:54.196Z",
+      "notes": "22/22 focused tests passed for exact endpoints, per-member boundaries, nonmonotonic seeks, later-write absence, selective derivation, and authority rejection."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s15-typecheck",
+      "checkedAt": "2026-09-05T05:46:55.356Z",
+      "notes": "Application, node, tests, Svelte, and domain typechecks passed with zero diagnostics."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-s15-architecture",
+      "checkedAt": "2026-09-05T05:46:56.387Z",
+      "notes": "Architecture gates passed across 2018 TypeScript modules and 7517 of 7568 local references."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice-s15-inference",
+      "checkedAt": "2026-09-05T05:46:57.413Z",
+      "notes": "Inference contracts remained at 107104 types and 181862 instantiations."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "slice-s15-semantic",
+      "checkedAt": "2026-09-05T05:46:58.420Z",
+      "notes": "318/318 semantic-state tests passed."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "slice-s15-bundle",
+      "checkedAt": "2026-09-05T05:46:59.476Z",
+      "notes": "Production bundle completed with 1603 transformed modules and only the established chunk warning."
+    },
+    {
+      "command": "npm run test:equation-reachability",
+      "status": "passed",
+      "scope": "slice-s15-reachability",
+      "checkedAt": "2026-09-05T05:47:00.501Z",
+      "notes": "12/12 reachability and caller-ledger tests passed after graph regeneration."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "slice-s15-complete",
+      "checkedAt": "2026-09-05T05:47:01.605Z",
+      "notes": "6433/6433 repository tests passed in 549 seconds."
+    },
+    {
+      "command": "npm run verify:impact -- --path src/semantic-state/state-family-composition-member-resolver.ts",
+      "status": "passed",
+      "scope": "slice-s15-impact",
+      "checkedAt": "2026-09-05T05:47:02.652Z",
+      "notes": "High-risk semantic-state impact was fully covered by its required semantic, typecheck, and architecture gates plus inference, bundle, reachability, and the complete suite."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice-s15-diff",
+      "checkedAt": "2026-09-05T05:47:03.679Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-s15-workspace",
+      "checkedAt": "2026-09-05T05:47:17.255Z",
+      "notes": "Workspace valid with 1094 nodes after all slice implementation and evidence mutations."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s14 complete: every settled logical address directly resolves to exact retained snapshot authority and pinned typed handles without replay or cache mutation."
+    "summary": "s15 complete: ordered leaf transitions seek through existing family evaluators from exact adjacent boundaries with persistent endpoints, ephemeral interiors, and no future-state leakage."
   },
   "expectedLearning": [
     "Whether sequence nesting and demonstrated-independent cohorts can reuse current family and persistent-state authority without a second kernel.",
