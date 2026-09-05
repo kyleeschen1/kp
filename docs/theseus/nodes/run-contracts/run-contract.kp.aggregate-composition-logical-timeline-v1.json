@@ -203,7 +203,8 @@
     {
       "id": "s23",
       "title": "Canonical demand-intercept-plus-tax economics seam",
-      "status": "planned"
+      "summary": "Added one exact-rational domain adapter for independently authored demand intercept and per-unit tax, preserving canonical endpoint identity, rebuilding interior model input, and delegating clearing, wedge, incidence, revenue, and welfare truth to existing constructors across two exact markets with typed parameter and axis failures.",
+      "status": "complete"
     },
     {
       "id": "s24",

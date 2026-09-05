@@ -16,11 +16,24 @@ import {
 
 export const kpParameterizedPerUnitTaxEvaluationSchemaVersion =
   "kp.economics.parameterized-per-unit-tax-evaluation.v1" as const;
+export const kpParameterizedDemandInterceptAndTaxEvaluationSchemaVersion =
+  "kp.economics.parameterized-demand-intercept-and-tax-evaluation.v1" as const;
 
 export interface KpParameterizedPerUnitTaxEvaluationV1 {
   readonly schemaVersion:
     typeof kpParameterizedPerUnitTaxEvaluationSchemaVersion;
   readonly sourceModelId: string;
+  readonly taxAmount: ExactRationalDto;
+  readonly model: KpPerUnitTaxWelfareModelV1;
+  readonly market: KpPerUnitTaxMarketStateV1;
+  readonly accounting: KpPerUnitTaxWelfareStateV1;
+}
+
+export interface KpParameterizedDemandInterceptAndTaxEvaluationV1 {
+  readonly schemaVersion:
+    typeof kpParameterizedDemandInterceptAndTaxEvaluationSchemaVersion;
+  readonly sourceModelId: string;
+  readonly demandPriceIntercept: ExactRationalDto;
   readonly taxAmount: ExactRationalDto;
   readonly model: KpPerUnitTaxWelfareModelV1;
   readonly market: KpPerUnitTaxMarketStateV1;
@@ -64,29 +77,96 @@ export function evaluateKpParameterizedPerUnitTax(input: {
   });
 }
 
+/**
+ * Rebuilds canonical input for the two independently authored parameters.
+ * Market clearing and welfare remain delegated to their existing exact
+ * constructors, so this adapter owns parameter substitution but no formulas.
+ */
+export function evaluateKpParameterizedDemandInterceptAndPerUnitTax(input: {
+  readonly model: KpPerUnitTaxWelfareModelV1;
+  readonly demandPriceIntercept: ExactRationalDto;
+  readonly taxAmount: ExactRationalDto;
+}): KpParameterizedDemandInterceptAndTaxEvaluationV1 {
+  const demandPriceIntercept = normalizeExactParameter(
+    input.demandPriceIntercept,
+    "demandPriceIntercept"
+  );
+  const taxAmount = normalizeTaxAmount(input.taxAmount);
+  const initialAmount = normalizeTaxAmount(input.model.input.tax.initialAmount);
+  const finalAmount = normalizeTaxAmount(input.model.input.tax.finalAmount);
+  const sourceDemandPriceIntercept = normalizeExactParameter(
+    input.model.input.demand.priceIntercept,
+    "model.input.demand.priceIntercept"
+  );
+  const usesInitialEndpoint = equalKpRationals(taxAmount, initialAmount);
+  const usesFinalEndpoint = equalKpRationals(taxAmount, finalAmount);
+  const usesSourceDemand = equalKpRationals(
+    demandPriceIntercept,
+    sourceDemandPriceIntercept
+  );
+  const model = usesSourceDemand &&
+    (usesInitialEndpoint || usesFinalEndpoint)
+    ? input.model
+    : createKpPerUnitTaxWelfareModel({
+      ...input.model.input,
+      demand: {
+        ...input.model.input.demand,
+        priceIntercept: toDto(demandPriceIntercept)
+      },
+      tax: {
+        ...input.model.input.tax,
+        // The canonical model keeps a positive taxed endpoint even when this
+        // evaluation selects its zero-tax endpoint.
+        finalAmount: usesInitialEndpoint
+          ? input.model.input.tax.finalAmount
+          : toDto(taxAmount)
+      }
+    });
+  const accounting = createKpPerUnitTaxWelfareAccounting(model);
+  const phase = usesInitialEndpoint ? "untaxed" : "taxed";
+  const market = model.states[phase];
+
+  return Object.freeze({
+    schemaVersion:
+      kpParameterizedDemandInterceptAndTaxEvaluationSchemaVersion,
+    sourceModelId: input.model.id,
+    demandPriceIntercept: model.input.demand.priceIntercept,
+    taxAmount: market.taxAmount,
+    model,
+    market,
+    accounting: accounting.states[phase]
+  });
+}
+
 function normalizeTaxAmount(value: ExactRationalDto): KpNormalizedRational {
+  const normalized = normalizeExactParameter(value, "taxAmount");
+  if (normalized.numerator < 0n) {
+    throw new RangeError("taxAmount must be nonnegative.");
+  }
+  return normalized;
+}
+
+function normalizeExactParameter(
+  value: ExactRationalDto,
+  path: string
+): KpNormalizedRational {
   if (!/^-?\d+$/.test(value.numerator) || !/^-?\d+$/.test(value.denominator)) {
     throw new Error(
-      "taxAmount must use integer numerator and denominator strings."
+      `${path} must use integer numerator and denominator strings.`
     );
   }
-  let normalized;
   try {
-    normalized = createKpRational(
+    return createKpRational(
       BigInt(value.numerator),
       BigInt(value.denominator)
     );
   } catch (error) {
     throw new Error(
-      `taxAmount is invalid: ${
+      `${path} is invalid: ${
         error instanceof Error ? error.message : "unknown rational error"
       }`
     );
   }
-  if (normalized.numerator < 0n) {
-    throw new RangeError("taxAmount must be nonnegative.");
-  }
-  return normalized;
 }
 
 function toDto(

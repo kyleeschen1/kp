@@ -1508,6 +1508,54 @@
       "status": "passed",
       "scope": "s22 durable control-plane validation",
       "checkedAt": "2026-09-05T07:46:34.254Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/economics-parameterized-demand-tax.test.ts tests/economics-parameterized-per-unit-tax.test.ts",
+      "status": "passed",
+      "scope": "s23 joint and prior parameter seams: 12/12 pass",
+      "checkedAt": "2026-09-05T07:51:49.785Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/economics-*.test.ts",
+      "status": "passed",
+      "scope": "s23 existing economics unit cohort: 191/191 pass",
+      "checkedAt": "2026-09-05T07:51:50.893Z"
+    },
+    {
+      "command": "npm run --silent typecheck",
+      "status": "passed",
+      "scope": "s23 repository TypeScript boundary: 0 errors and 0 warnings",
+      "checkedAt": "2026-09-05T07:51:51.947Z"
+    },
+    {
+      "command": "npm run --silent check:architecture",
+      "status": "passed",
+      "scope": "s23 domain boundary and repository architecture gates",
+      "checkedAt": "2026-09-05T07:51:53.024Z"
+    },
+    {
+      "command": "npm run --silent check:equation-reachability",
+      "status": "passed",
+      "scope": "s23 exact reachability graph current: 68 roots",
+      "checkedAt": "2026-09-05T07:51:54.065Z"
+    },
+    {
+      "command": "npm run verify:impact -- --path domains/economics/per-unit-tax-parameterized.ts",
+      "status": "passed",
+      "scope": "s23 high-risk domain impact declaration satisfied",
+      "checkedAt": "2026-09-05T07:51:55.146Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s23 patch whitespace integrity",
+      "checkedAt": "2026-09-05T07:51:56.147Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s23 durable control-plane validation",
+      "checkedAt": "2026-09-05T07:51:57.180Z"
     }
   ],
   "progress": {
