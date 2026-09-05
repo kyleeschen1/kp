@@ -181,7 +181,8 @@
     {
       "id": "s12",
       "title": "Assembly boundary review fixture: lock author import direction, inferred signatures, cost accounting, and capability gaps",
-      "status": "planned"
+      "summary": "Internal author workflow inference, import closure, capability gaps and fair cost gate locked without public exports or budget increases.",
+      "status": "complete"
     },
     {
       "id": "s13",

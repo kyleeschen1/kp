@@ -136,6 +136,13 @@
       "scope": "s11",
       "checkedAt": "2026-09-05T20:39:33.617Z",
       "notes": "32 integration tests and 9 focused calculus/bridge tests pass; static dimension negatives compile as expected; Svelte reports zero errors and warnings."
+    },
+    {
+      "command": "npm run test:authoring-integration; npm run check:inference; npm run check:dependency-direction; npm run typecheck; git diff --check; theseus workspace validate",
+      "status": "passed",
+      "scope": "s12",
+      "checkedAt": "2026-09-05T20:43:39.131Z",
+      "notes": "34 tests pass; inference types111257 instantiations192271 under112500/195800; dependency2031modules zero exceptions; full typecheck clean. Shared assembly387 and math307 lines disclosed."
     }
   ],
   "expectedLearning": [

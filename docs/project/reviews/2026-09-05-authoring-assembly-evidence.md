@@ -60,9 +60,8 @@ New shared source cost, including imports and type declarations:
 | Total | 387 |
 
 This is reduced caller orchestration at the cost of additional shared code, not
-a net code-size reduction. The later fixed inference/import gate must assess
-whether that shared abstraction cost remains acceptable; this report does not
-pre-approve new budgets.
+a net code-size reduction. The fixed inference/import gate below measures the
+shared abstraction cost without approving new budgets.
 
 ## Preserved boundaries and remaining product work
 
@@ -77,8 +76,8 @@ pre-approve new budgets.
   source/declaration/target metadata. Missing, stale, foreign, and invalid-operation
   fixtures return repair gaps without partial authored values. Unknown codes are
   unclassified, never invented support or certification evidence.
-- This remains a nonvisual internal specimen. Typed-math integration, canonical
-  asset lowering, author edit/preview behavior, cross-view reader integration,
+- This remains a nonvisual internal specimen. Canonical asset lowering,
+  author edit/preview behavior, cross-view reader integration,
   and the mandatory author/API plus visual checkpoint remain separate obligations
   of the approved proposal. No renderer, Article, publication, or public facade
   migration follows from these measurements alone.
@@ -101,3 +100,32 @@ The broad source-inventory check observed 16 added scanned files from the approv
 assembly/bridge modules, tests, helper, and baseline metadata. Regeneration changed
 only `scannedFileCount` from 4207 to 4223 in the exact equation reachability graph.
 Its 68 roots, callers, policy, and all budget ceilings remained unchanged.
+
+## Pinned math and internal boundary evidence
+
+Selections recover exact aggregate snapshot/entity/version pins. Same-cardinality
+rewrites retain root identity and existing math-owned correspondence; stale pins,
+foreign handles, structural cardinality changes, and nondeterministic callbacks
+fail without publishing a successor. Existing scene timelines are projections of
+supplied aggregate history, not a second history authority. Correspondence remains
+declared provenance: state mutation does not certify mathematical equivalence.
+
+The affine Jacobian and quadratic Hessian fixtures retain exact values, macro
+descriptors, expansion correspondence, and named symmetry evidence through state.
+Literal dimensions stay literal, while runtime matrix dimensions remain
+existential. Recovered callable calculus maps still require their existing explicit
+bases before coordinate projection. Compile-time negative cases guard both claims.
+
+`npm run check:inference` includes the new owner-local assembly fixture with
+inferred dependency tuples, named members, application parameters, and query
+results. It measured 111,257 types and 192,271 instantiations, below the unchanged
+112,500 / 195,800 ceilings. The previous checkpoint measured 110,267 / 190,091;
+the increase is 990 types and 2,180 instantiations. The budget's 45-fixture count
+remains historical baseline metadata, not a claim about the current fixture count.
+
+`npm run check:dependency-direction` passes with 2,031 TypeScript modules and
+zero retiring exceptions. The integration boundary fixture requires owner-local
+state assembly imports, math/state-only bridge imports, and no new public-barrel
+exports. It separately discloses 307 nonblank math-bridge lines: structural data
+32, local capabilities 118, and pinned optics 157. These are additional shared
+costs, not excluded caller-specific glue or a claim of public API readiness.
