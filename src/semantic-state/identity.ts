@@ -19,6 +19,14 @@ export type KpTransformationDefinitionId =
 export type KpAppliedTransformationId =
   KpSemanticStateId<"applied-transformation">;
 export type KpSemanticDerivationId = KpSemanticStateId<"derivation">;
+export type KpSemanticCompositionId =
+  KpSemanticStateId<"composition">;
+export type KpSemanticCompositionGroupId =
+  KpSemanticStateId<"composition-group">;
+export type KpSemanticCompositionMemberId =
+  KpSemanticStateId<"composition-member">;
+export type KpSemanticCompositionBoundaryId =
+  KpSemanticStateId<"composition-boundary">;
 
 export type KpAnySemanticStateId =
   | KpSemanticEntityId
@@ -31,7 +39,11 @@ export type KpAnySemanticStateId =
   | KpSemanticRepresentationId
   | KpTransformationDefinitionId
   | KpAppliedTransformationId
-  | KpSemanticDerivationId;
+  | KpSemanticDerivationId
+  | KpSemanticCompositionId
+  | KpSemanticCompositionGroupId
+  | KpSemanticCompositionMemberId
+  | KpSemanticCompositionBoundaryId;
 
 export interface KpSemanticStateIdentityScope {
   readonly namespace: string;
@@ -57,6 +69,19 @@ export interface KpSemanticStateIdentityScope {
     applicationId: string
   ): KpAppliedTransformationId;
   derivation(localId: string): KpSemanticDerivationId;
+  composition(localId: string): KpSemanticCompositionId;
+  compositionGroup(
+    compositionId: KpSemanticCompositionId,
+    scopedName: string
+  ): KpSemanticCompositionGroupId;
+  compositionMember(
+    compositionId: KpSemanticCompositionId,
+    scopedName: string
+  ): KpSemanticCompositionMemberId;
+  compositionBoundary(
+    compositionId: KpSemanticCompositionId,
+    scopedName: string
+  ): KpSemanticCompositionBoundaryId;
 }
 
 const semanticIdPartPattern = /^[a-z0-9]+(?:[._-][a-z0-9]+)*$/u;
@@ -95,6 +120,7 @@ export function createKpSemanticStateIdentityScope(
   const entityPrefix = `${prefix}/entity/`;
   const transformationPrefix = `${prefix}/transformation/`;
   const derivationPrefix = `${prefix}/derivation/`;
+  const compositionPrefix = `${prefix}/composition/`;
 
   const scope: KpSemanticStateIdentityScope = {
     namespace: validNamespace,
@@ -165,6 +191,25 @@ export function createKpSemanticStateIdentityScope(
     derivation(localId) {
       return `${derivationPrefix}${requireSemanticIdPart(localId, "derivation id")}` as
         KpSemanticDerivationId;
+    },
+    composition(localId) {
+      return `${compositionPrefix}${requireSemanticIdPart(localId, "composition id")}` as
+        KpSemanticCompositionId;
+    },
+    compositionGroup(compositionId, scopedName) {
+      assertOwnedId(compositionId, compositionPrefix, "composition id");
+      return `${compositionId}/group/${requireSemanticIdPart(scopedName, "composition group name")}` as
+        KpSemanticCompositionGroupId;
+    },
+    compositionMember(compositionId, scopedName) {
+      assertOwnedId(compositionId, compositionPrefix, "composition id");
+      return `${compositionId}/member/${requireSemanticIdPart(scopedName, "composition member name")}` as
+        KpSemanticCompositionMemberId;
+    },
+    compositionBoundary(compositionId, scopedName) {
+      assertOwnedId(compositionId, compositionPrefix, "composition id");
+      return `${compositionId}/boundary/${requireSemanticIdPart(scopedName, "composition boundary name")}` as
+        KpSemanticCompositionBoundaryId;
     }
   };
 

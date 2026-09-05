@@ -77,7 +77,8 @@
     {
       "id": "s02",
       "title": "Aggregate identity and stable scoped names",
-      "status": "planned"
+      "summary": "Extended the existing deterministic identity scope with nominal composition, group, member, and settled-boundary identities; reconstruction, sibling insertion, invalid names, and foreign scopes are covered.",
+      "status": "complete"
     },
     {
       "id": "s03",
