@@ -191,7 +191,8 @@
     {
       "id": "s21",
       "title": "Coherent branch continuation",
-      "status": "planned"
+      "summary": "Added immutable coherent continuation from root, middle, or final settled boundaries with exact retained source lineage, distinct branch identity and history, direct endpoint recovery, and isolated evaluator caches; ephemeral or identity-reusing continuations fail closed.",
+      "status": "complete"
     },
     {
       "id": "s22",
