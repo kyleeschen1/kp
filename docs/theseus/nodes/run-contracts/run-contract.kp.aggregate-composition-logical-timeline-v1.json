@@ -179,7 +179,8 @@
     {
       "id": "s19",
       "title": "Bounded aggregate evaluator lifecycle",
-      "status": "planned"
+      "summary": "One internal composition evaluator now dispatches settled, ordered-member, and independent-cohort logical addresses while retaining only in-transition resolutions in a caller-sized deterministic LRU keyed by composition, canonical address, exact progress, and member endpoint identities; stats, reset, failed-sample exclusion, idempotent disposal, cross-composition isolation, and zero-capacity member evaluator independence are executable laws.",
+      "status": "complete"
     },
     {
       "id": "s20",
