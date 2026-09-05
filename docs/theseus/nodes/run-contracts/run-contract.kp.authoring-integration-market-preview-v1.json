@@ -133,7 +133,8 @@
     {
       "id": "s04",
       "title": "Internal assembly construction over current schemas/handles: define concrete and derived properties once and build the existing graph",
-      "status": "planned"
+      "summary": "Internal assembly constructs existing graph and immutable initial snapshot from schema plus inferred explicit derivations. Compiler-only negative rejects result widening.",
+      "status": "complete"
     },
     {
       "id": "s05",

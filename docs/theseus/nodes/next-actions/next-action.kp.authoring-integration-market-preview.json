@@ -59,6 +59,13 @@
       "scope": "s03",
       "checkedAt": "2026-09-05T19:29:04.579Z",
       "notes": "364 tests pass; 0 Svelte errors or warnings. Alias rejection before callbacks, lifecycle journal rejection, hidden read base-specific pressure."
+    },
+    {
+      "command": "npm run test:authoring-integration; npm run typecheck; git diff --check; theseus workspace validate",
+      "status": "passed",
+      "scope": "s04",
+      "checkedAt": "2026-09-05T19:33:16.488Z",
+      "notes": "8 tests pass including snapshot parity, tuple/result inference, cycle-before-compute, missing definition paths and empty dependency rejection. No new state authority."
     }
   ],
   "expectedLearning": [
