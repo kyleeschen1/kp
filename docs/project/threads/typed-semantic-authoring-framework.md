@@ -1,9 +1,9 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: authoring-first integration; typed source/save workflow decision pending
+Status: authoring-first integration; local-file preview workflow approved
 Last Updated: 2026-09-05
-Current Next Action: resolve the bounded local-file save/build/preview amendment
-in `../reviews/2026-09-05-authoring-integration-save-boundary-stop.md`, then resume
+Current Next Action: implement the approved local-file save/build/preview amendment
+in `../reviews/2026-09-05-authoring-integration-save-boundary-stop.md` within
 the existing `run-contract.kp.authoring-integration-market-preview-v1`.
 Theseus owns current slice, verification, commits, and stop state.
 
@@ -20,9 +20,10 @@ record is Theseus; this thread does not duplicate per-slice status.
 The approved economics prerequisite is implemented. Exact state now reaches the
 existing paint, clock, Article/scene, and explicit fact-binding owners in the
 opt-in market host. Existing in-app save authority does not cover its typed
-source. The proposed local-file rebuild workflow preserves that source and the
+source. The approved local-file rebuild workflow preserves that source and the
 last valid preview without adding browser code evaluation or HTTP write targets;
-it is a pending workflow amendment, not a change to the accepted direction.
+the user approved this bounded workflow on 2026-09-05 without changing the
+accepted direction or authorizing new HTTP write targets.
 
 Repair the reproduced greater-than-two-member independence gap first. Then
 reduce low-level assembly plumbing, connect typed math/optics to the existing

@@ -2,9 +2,9 @@
   "id": "run-contract.kp.authoring-integration-market-preview-v1",
   "kind": "run-contract",
   "title": "Authoring integration to market preview",
-  "status": "blocked",
+  "status": "ready",
   "domain": "kp",
-  "summary": "STOP_CONDITION at s21; 20/28 complete. Existing save authority excludes typed source. Await approval of bounded local-file build/preview amendment; remaining order and human checkpoint unchanged.",
+  "summary": "User approved s21 local-file save/build/preview adapter on 2026-09-05; trusted local source, existing build tooling, revision diagnostics, stale-result rejection and last-valid preview. Remaining scope and gates unchanged.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -240,8 +240,8 @@
     },
     {
       "id": "s21",
-      "title": "Local edit/compile/preview lifecycle: use existing dev save/rebuild boundary, revision-tag diagnostics, and last-valid preview",
-      "summary": "STOP_CONDITION: existing save authority excludes typed market source. Pending approval of local-file save/build/preview adapter; no new write authority introduced.",
+      "title": "Local-file edit/build/preview lifecycle: trusted typed inputs through existing dev tooling, revision diagnostics and last-valid preview",
+      "summary": "Approved workflow amendment: no HTTP writer, arbitrary browser evaluation or replacement editor; actual rebuild verification required.",
       "status": "planned"
     },
     {

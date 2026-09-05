@@ -83,8 +83,10 @@ and explicit fact bindings. The next architectural decision is source ownership
 at local edit/save/rebuild: existing in-app save authority covers two Markdown
 lessons, not this typed model/source specimen. The recommended bounded path is
 local-file authoring through the existing development build, with last-valid
-preview retention and no new HTTP write authority; this amendment is pending
-approval. See `reviews/2026-09-05-authoring-integration-save-boundary-stop.md`.
+preview retention and no new HTTP write authority. The user approved this bounded
+amendment on 2026-09-05. See
+`reviews/2026-09-05-authoring-integration-save-boundary-stop.md` and
+`decisions/2026-09-05-authoring-local-file-preview-lifecycle.md`.
 The accepted authoring-first direction is unchanged. Theseus retains live state.
 
 The Focus Deck remains preserved at its four-card human checkpoint. The

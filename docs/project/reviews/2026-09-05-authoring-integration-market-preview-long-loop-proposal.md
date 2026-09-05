@@ -16,11 +16,13 @@ verification, fixed budgets, preservation boundaries, and final checkpoint
 remain unchanged. Register only this domain's existing per-unit-tax operation;
 do not invent a universal relation or modify rendering to force a semantic fit.
 
-Pending workflow amendment, not execution authority: the existing save boundary
-does not own this experiment's typed source. See
-`2026-09-05-authoring-integration-save-boundary-stop.md` for the s21 stop and
-recommended local-file save/build/preview adapter. The original slice order and
-stop conditions remain in force until the user approves that amendment.
+Workflow amendment approved 2026-09-05: s21 uses a local-file save/build/preview
+adapter for trusted typed model and Article-template inputs. Use existing dev
+build tooling; preserve edited source and last valid preview on failure, tag
+diagnostics by source revision, and reject stale results. No new HTTP write
+authority, arbitrary browser evaluation, or replacement editor is permitted.
+See `2026-09-05-authoring-integration-save-boundary-stop.md`. Remaining slice
+order, verification, budgets, and final human checkpoint are unchanged.
 
 ## Outcome And Why Now
 

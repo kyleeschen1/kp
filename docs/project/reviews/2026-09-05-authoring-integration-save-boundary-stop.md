@@ -1,7 +1,8 @@
 # Authoring Integration — Typed Source Save Boundary
 
 Date: 2026-09-05
-Outcome: STOP_CONDITION — save/source ownership decision required
+Outcome: historical STOP_CONDITION — local-file amendment approved by the user
+with "approve" on 2026-09-05. Resume s21; implementation and proof remain required.
 Run: `run-contract.kp.authoring-integration-market-preview-v1`
 Scope: s21 incomplete; the approved proposal still owns scope and Theseus owns
 live execution. No new save endpoint, file-write target, editor, or evaluator
@@ -62,7 +63,7 @@ save authority.” The assumed existing end-to-end save path does not cover this
 source. Stop for an explicit workflow decision rather than silently expanding
 the in-app write surface or representing prose-only editing as typed authoring.
 
-## Recommended amendment — NOT YET APPROVED
+## Accepted amendment — approved 2026-09-05
 
 Keep typed authoring in the local source editor for this exemplar. Explicitly
 make s21 a **local-file save/build/preview adapter**, not a browser source editor:
@@ -101,6 +102,6 @@ tested, but a complete ordered demand/tax reader, lifecycle/deep-link checks,
 final author-cost audit, capture matrix, and human review remain ahead.
 
 Run `theseus work resume` from `/Users/kyleeschen/Code/kp` to recover the gate.
-That command does not grant the amendment. After user approval, record the
-approved local-file workflow in the existing proposal/contract and resume s21;
+The user has approved the amendment. Record the accepted local-file workflow
+in the existing proposal/contract and resume s21;
 do not create a second plan or claim this run complete.

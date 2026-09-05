@@ -2,9 +2,9 @@
   "id": "next-action.kp.authoring-integration-market-preview",
   "kind": "next-action",
   "title": "Integrate authoring through one market preview",
-  "status": "blocked",
+  "status": "ready",
   "domain": "kp",
-  "summary": "STOP_CONDITION s21: source/save ownership decision. Recommend local-file typed-source rebuild with revision-tagged diagnostics and last-valid preview, without HTTP write expansion; amendment awaits user approval.",
+  "summary": "User approved local-file save/build/preview amendment on 2026-09-05. Resume s21 without HTTP write expansion or editor replacement, then unchanged s22-s28.",
   "sourceRefs": [
     {
       "kind": "file",
