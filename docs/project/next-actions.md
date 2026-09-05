@@ -1,32 +1,31 @@
 # KP Next Actions
 
-Last Updated: 2026-09-04
+Last Updated: 2026-09-05
 
 These are human-readable candidates. Theseus stores the executable versions
 with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
 
-The governed animation and publication foundation is preserved. Loop 3's
-architecture/API checkpoint is accepted. The exact Loop 4 proposal is approved
-and active:
+The governed animation and publication foundation is preserved. Loop 4 has
+completed all 26 approved nonvisual slices and is stopped at its mandatory
+architecture/API checkpoint for human review:
 
-1. Execute the 26-slice nonvisual Loop 4 for aggregate transformation
-   composition, conflict diagnostics, coherent recovery, and logical timeline
-   addressing under
-   `run-contract.kp.aggregate-composition-logical-timeline-v1`. Its production
-   pressure composes independent exact demand-intercept and per-unit-tax changes
-   in one market aggregate.
-2. Complete only the approved slices through the mandatory architecture/API checkpoint;
-   the Theseus contract owns order, evidence, and stop state.
-3. Keep Graph2D and KaTeX integration for Loop 5 after the aggregate
-   checkpoint. Migrate selected existing KaTeX transformations only after one
-   canonical exemplar passes human visual and API review.
+1. Review the completed internal aggregate-composition, exact logical-address,
+   conflict, recovery, branch, market, and API evidence recorded in
+   `reviews/2026-09-05-semantic-state-aggregate-composition-logical-timeline-closeout.md`.
+2. If accepted, draft and separately review one bounded Loop 5 proposal that
+   connects an isolated production-shaped supply-tax exemplar to the existing
+   Graph2D and KaTeX paint owners through one sampled semantic state. Do not
+   implement it from this queue entry alone.
+3. Keep the direct-module surface internal. Migrate selected existing KaTeX
+   transformations only after the Loop 5 exemplar passes human visual and API
+   review and a separate compatibility contract is approved.
 
 The approved persistent semantic state foundation, typed facade and derived
-graph, and state-family/interpolation loop are complete internal evidence.
-None of them by itself authorizes a public facade, renderer migration, or a
-catalogue-wide rollout.
+graph, state-family/interpolation loop, and aggregate logical timeline are
+complete internal evidence. None of them by itself authorizes a public facade,
+renderer migration, or a catalogue-wide rollout.
 
 Everything else is frozen reference or parked horizon:
 

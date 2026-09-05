@@ -1,7 +1,7 @@
 # Semantic State Aggregate Composition And Logical Timeline Long-Loop Proposal
 
 Date: 2026-09-04
-Status: APPROVED; ACTIVE
+Status: COMPLETE; `HUMAN_CHECKPOINT`
 Proposed target:
 `next-action.kp.typed-authoring.aggregate-composition-logical-timeline`
 Active run contract:
@@ -388,10 +388,13 @@ After this loop, separate reviewed contracts would still be required for:
 10. live LLM generation, typed repair-rate measurement, and prompt-independent
     evaluation.
 
-## Approval Required
+## Execution Outcome
 
-The user has accepted the Loop 3 checkpoint and authorized this Loop 4
-proposal. The exact 26 slices above have not yet been approved for execution.
-No run contract or implementation may begin until the user explicitly accepts
-this proposal. After approval, Theseus will own executable slice order,
-progress, verification evidence, commits, and the mandatory s26 stop state.
+The user approved this exact proposal on 2026-09-04. All 26 slices completed
+under `run-contract.kp.aggregate-composition-logical-timeline-v1`, and the run
+stopped at its mandatory human architecture/API checkpoint on 2026-09-05.
+Exact results, metrics, retained and rejected abstractions, and the bounded
+Loop 5 recommendation are recorded in
+`2026-09-05-semantic-state-aggregate-composition-logical-timeline-closeout.md`.
+No Loop 5 implementation or KaTeX compatibility migration is authorized by
+this proposal or its closeout.

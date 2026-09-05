@@ -2,8 +2,9 @@
   "id": "run-contract.kp.aggregate-composition-logical-timeline-v1",
   "kind": "run-contract",
   "title": "Aggregate semantic composition and logical timeline",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -221,7 +222,8 @@
     {
       "id": "s26",
       "title": "Closeout and mandatory architecture API checkpoint",
-      "status": "planned"
+      "summary": "Published the closeout and project-memory checkpoint, audited the internal API boundary, documented the bounded Graph2D and KaTeX exemplar sequence, and passed 357 semantic-state tests, 6479 full tests, typecheck, architecture, inference, reachability, bundle, and Theseus validation.",
+      "status": "complete"
     }
   ]
 }

@@ -1,11 +1,11 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: Loop 4 approved and active
-Last Updated: 2026-09-04
-Current Next Action: execute the exact 26-slice nonvisual Loop 4 for aggregate
-composition and logical timeline addressing under
-`run-contract.kp.aggregate-composition-logical-timeline-v1`, stopping at its
-mandatory architecture/API checkpoint.
+Status: Loop 4 complete; mandatory human architecture/API checkpoint
+Last Updated: 2026-09-05
+Current Next Action: review the completed aggregate-composition and logical-
+address boundary. If accepted, draft and separately review one bounded Loop 5
+supply-tax Graph2D/KaTeX adapter exemplar; do not begin renderer integration or
+existing-transformation migration from this thread alone.
 
 ## Goal
 
@@ -496,6 +496,46 @@ The reviewed scope lives in
 and executable history remains owned by
 `run-contract.kp.semantic-state-families-interpolation-v2`. The
 metadata-incomplete v1 record was superseded before implementation.
+
+## Aggregate Composition And Logical Timeline Outcome
+
+Loop 4 completed all 26 approved slices and is stopped at its mandatory human
+architecture/API checkpoint. Explicit ordered sequences, named nested groups,
+and demonstrated-independent cohorts now compile into one immutable logical
+timeline over the existing persistent snapshot, transaction, family,
+derived-graph, correspondence, provenance, lineage, and recovery authorities.
+
+Settled logical addresses recover exact retained snapshots without replay.
+In-transition addresses sample one member or one independent cohort at
+canonical exact progress without creating durable history. Independent
+cohorts combine only declared drivers over one shared boundary, evaluate one
+requested derived closure, and must pass executed two-order value confluence.
+Historical local reads are inspections; continuation requires an explicit
+coherent branch from a settled boundary, and partial object-version splices
+fail closed.
+
+The production-shaped market packet composes separate exact demand-intercept
+and per-unit-tax families through one shared graph and the existing canonical
+economics constructors. Ordered and independent forms reach the same final
+market truth; a second tax writer fails before either family applies; a
+257-address forward/reverse corpus preserves exact economics with bounded
+caller-owned caching and zero persistent history growth; and a middle-boundary
+branch recovers an alternate exact tax outcome.
+
+The direct-module surface remains internal. The implementation is coherent,
+but its explicit declaration, validation, preflight, compilation, endpoint,
+address, resolver, and evaluator stages have not yet earned a public facade.
+The recommended successor is a separately reviewed Loop 5 contract for one
+isolated production-shaped supply-tax Graph2D/KaTeX adapter exemplar. Existing
+KaTeX transformations stay on their current canonical paths until that
+exemplar passes human visual/API review and a later bounded compatibility
+contract is approved.
+
+The exact metrics, conflict and recovery laws, retained and rejected
+abstractions, API review, and Loop 5 recommendation are recorded in
+`../reviews/2026-09-05-semantic-state-aggregate-composition-logical-timeline-closeout.md`.
+Executable history remains owned by
+`run-contract.kp.aggregate-composition-logical-timeline-v1`.
 
 ## Stop Conditions
 

@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-09-04
+Last Updated: 2026-09-05
 Status: active
 Active Thread: `threads/typed-semantic-authoring-framework.md`
 Supporting Threads:
@@ -73,9 +73,15 @@ completed the bounded internal applied-state-family and pure ephemeral
 `at(progress)` layer across exact supply-tax and nonlinear unit-tagged circle
 callers, and its mandatory architecture/API checkpoint was accepted on
 2026-09-04. The exact 26-slice nonvisual Loop 4 for aggregate composition and
-logical timeline addressing is approved and active under
-`run-contract.kp.aggregate-composition-logical-timeline-v1`. Public promotion,
-runtime, and renderer work remain outside that contract. The internal
+logical timeline addressing is complete and stopped at its mandatory
+architecture/API checkpoint under
+`run-contract.kp.aggregate-composition-logical-timeline-v1`. The result keeps
+its direct-module surface internal. If the checkpoint is accepted, the next
+recommendation is a separately reviewed Loop 5 proposal for one isolated
+production-shaped supply-tax Graph2D/KaTeX adapter exemplar. Existing KaTeX
+transformation migration remains a later compatibility contract after that
+exemplar passes human review. Public promotion and broader runtime or renderer
+work remain unauthorized. The internal
 Animation Catalogue remains the source and pressure lab rather than the active
 product surface. Neither proof by itself validates demand or selects a
 universal learner layout or semantic model.
@@ -439,13 +445,15 @@ Only this repository sequence is active:
    adds persistent applied-family endpoints, explicit transition modes, pure
    ephemeral `at(progress)`, transient fingerprints, bounded
    application-local caches, exact supply-tax reparameterization, and
-   nonlinear unit-tagged circle pressure. Its checkpoint is accepted; it
-   exposes no public facade, aggregate timeline, or renderer integration. The
-   exact nonvisual Loop 4 aggregate-composition and logical-address proposal
-   now awaits approval. It uses separate demand-intercept and tax families in
-   one exact-rational market aggregate, while Loop 5 remains the first reviewed
-   Graph2D/KaTeX integration. Existing KaTeX transformation migration follows
-   that exemplar rather than preceding it. The estimate
+   nonlinear unit-tagged circle pressure. Its checkpoint is accepted. The
+   exact nonvisual Loop 4 aggregate-composition and logical-address run is now
+   complete at its mandatory architecture/API checkpoint. Separate
+   demand-intercept and tax families compose in one exact-rational market
+   aggregate with ordered and independent forms, exact logical addresses,
+   conflict-before-apply, dense seek/rewind, and coherent branching. The
+   direct-module surface remains internal. If accepted, Loop 5 remains the
+   first reviewed Graph2D/KaTeX integration. Existing KaTeX transformation
+   migration follows that exemplar rather than preceding it. The estimate
    remains three long loops through the decisive semantic proof, five through
    one reviewed Graph2D/KaTeX exemplar, and seven through the full bounded
    knowledge/procedure/generation horizon. A full
@@ -456,6 +464,7 @@ Only this repository sequence is active:
    `decisions/2026-09-02-persistent-semantic-state-architecture-direction.md`,
    `decisions/2026-09-04-semantic-state-family-checkpoint-and-next-sequence.md`,
    `reviews/2026-09-04-semantic-state-aggregate-composition-logical-timeline-long-loop-proposal.md`,
+   `reviews/2026-09-05-semantic-state-aggregate-composition-logical-timeline-closeout.md`,
    `reviews/2026-09-02-typed-authoring-post-domain-pressure-next-step-review.md`,
    `decisions/2026-09-02-unit-scalar-differentiable-map-helper-boundary.md`,
    `decisions/2026-09-02-typed-semantic-authoring-framework-goals.md` and
@@ -472,7 +481,7 @@ The catalogue backlog and selection rationale are recorded in
 
 | Area | State | Direction |
 | --- | --- | --- |
-| Semantic/runtime spine | Strong and governed; the persistent foundation, typed facade, explicit derived graph, applied state families, pure ephemeral sampling, transient fingerprints, and bounded caller-owned caches are complete internally across supply-tax and circle pressure | Loop 3 is accepted. Review the exact nonvisual aggregate-composition and logical-address proposal before any public or renderer integration. |
+| Semantic/runtime spine | Strong and governed; persistent state, typed facade, explicit derived graph, applied families, ephemeral sampling, aggregate sequence/nesting/independence, exact logical addresses, direct recovery, coherent branching, and bounded caller-owned caches are complete internally | Review the Loop 4 architecture/API checkpoint. If accepted, draft one isolated production-shaped supply-tax Graph2D/KaTeX adapter proposal; do not promote a public facade or migrate existing transformations yet. |
 | Equation animation | The generated ledger has 29 equation capabilities: 8 Direct, 3 Registered, 2 Exemplar, and 16 Missing. Exponential duality and radical inversion are Direct; root is the first family with ten generated case-level maturity rows | Preserve the converged vocabulary; require case enumeration before new Direct promotions; migrate legacy Direct ledgers when they are touched; select the next accepted family packet from explicit gaps rather than prose memory. |
 | Graph2D | Economics and physics model callers are promoted; one exact monic-quadratic right-translation exemplar is governed and executable | Preserve the bounded translation proof without claiming arbitrary formula parsing, transformation-family promotion, or a universal graph frontend. |
 | Program animation | TypeScript and Python bounded extract-helper generation are `Direct`; each has language-owned parsing, legality, identity binding, corpus, authoring, and runtime-isolation evidence over an approved canonical artifact. Scheme remains an approved specialized exemplar rather than a general frontend. | Preserve approved choreography and build-time-only compilers. Variants remain semantic-plan-only until a separately governed artifact compiler exists; arbitrary refactors and execution remain typed gaps. |
@@ -718,8 +727,14 @@ clocks, frames, and renderer ports remain outside Svelte authority.
   its mandatory human architecture/API checkpoint. Its exact result and Loop
   4 recommendation are recorded in
   `reviews/2026-09-04-semantic-state-families-interpolation-closeout.md`.
-  Aggregate timeline, renderer, KaTeX, and public-promotion work remain
-  outside the completed boundary.
+  Loop 4 completed all 26 approved slices on 2026-09-05 under
+  `run-contract.kp.aggregate-composition-logical-timeline-v1` and is stopped at
+  its mandatory human architecture/API checkpoint. Its exact aggregate,
+  address, recovery, conflict, market, and compiler evidence plus the bounded
+  Loop 5 recommendation are recorded in
+  `reviews/2026-09-05-semantic-state-aggregate-composition-logical-timeline-closeout.md`.
+  Clock adaptation, renderer integration, existing KaTeX migration, and public
+  promotion remain outside the completed boundary.
 - The normal-matrix Proof Memory implementation is preserved at its mandatory
   checkpoint. Architecture passed; attentional experience did not. Its s26-s27
   continuation is closed without hardening or release.

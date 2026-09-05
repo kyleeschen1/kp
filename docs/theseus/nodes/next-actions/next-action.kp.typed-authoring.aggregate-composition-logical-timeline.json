@@ -2,8 +2,9 @@
   "id": "next-action.kp.typed-authoring.aggregate-composition-logical-timeline",
   "kind": "next-action",
   "title": "Implement aggregate semantic composition and logical timeline",
-  "status": "ready",
+  "status": "resolved",
   "domain": "typed-authoring",
+  "summary": "Loop 4 implementation is complete and all approved verification passed. Stop at HUMAN_CHECKPOINT for acceptance of the internal architecture and approval to draft, but not execute, the bounded Loop 5 Graph2D and KaTeX exemplar proposal.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -1676,11 +1677,74 @@
       "status": "passed",
       "scope": "s25 durable control-plane validation: 1094 nodes and 27719 events",
       "checkedAt": "2026-09-05T08:36:58.017Z"
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-05T09:03:38.732Z",
+      "notes": "Aggregate composition and logical-timeline semantic-state suite passed 357 of 357."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-state-aggregate-composition-demand-tax.test.ts tests/semantic-state-aggregate-composition-market.test.ts tests/semantic-state-aggregate-composition-parameterized-demand-tax.test.ts tests/semantic-state-aggregate-composition-pressure.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-05T09:03:39.757Z",
+      "notes": "Independent market, demand-tax, parameterized, and pressure cohort passed 20 of 20."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-09-05T09:03:40.782Z",
+      "notes": "TypeScript and Svelte checks passed with zero Svelte errors and zero warnings."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-09-05T09:03:41.816Z",
+      "notes": "Architecture check passed across 2024 modules and 7579 of 7630 references with no exceptions."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-09-05T09:03:42.862Z",
+      "notes": "Inference check passed at 110237 and 190072 against ceilings 112500 and 195800."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-09-05T09:03:43.892Z",
+      "notes": "Production bundle completed across 1603 modules; the existing chunk-size notice remained advisory."
+    },
+    {
+      "command": "npm run test:equation-reachability",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-05T09:03:44.937Z",
+      "notes": "Equation reachability and caller ledger passed 12 of 12."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "full",
+      "checkedAt": "2026-09-05T09:03:45.984Z",
+      "notes": "Full repository suite passed 6479 of 6479 after the documentation checkpoint correction."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "durable-state",
+      "checkedAt": "2026-09-05T09:03:47.009Z",
+      "notes": "Theseus workspace validated at 1094 nodes and 27724 events before final evidence recording."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "s25 complete: production pressure proves independent confluence and ordered parity, exact joint economics over 257 forward and reverse addresses, zero-call overlap rejection, seven-entry cache bounds, immutable retained history, and coherent middle-boundary branching."
+    "state": "complete",
+    "summary": "Loop 4 completed all 26 approved slices: aggregate composition, exact logical addressing, retained recovery, coherent branching, and the independent demand-tax market pressure packet passed every focused and broad gate; work stops at the mandatory human architecture and API checkpoint."
   },
   "expectedLearning": [
     "Whether sequence nesting and demonstrated-independent cohorts can reuse current family and persistent-state authority without a second kernel.",
