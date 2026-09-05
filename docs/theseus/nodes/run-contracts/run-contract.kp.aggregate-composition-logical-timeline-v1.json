@@ -101,7 +101,8 @@
     {
       "id": "s06",
       "title": "Conflict and hazard diagnostics",
-      "status": "planned"
+      "summary": "A pure data-only preflight now rejects foreign bases, duplicate graph or application authority, graph incompatibility, unresolved footprints, and semantic or discrete collisions inside independent cohorts before any family apply or endpoint exists.",
+      "status": "complete"
     },
     {
       "id": "s07",

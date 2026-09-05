@@ -280,11 +280,102 @@
       "scope": "slice-s05-diff",
       "checkedAt": "2026-09-05T03:26:34.722Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "slice-s06-types-initial",
+      "checkedAt": "2026-09-05T03:55:09.281Z",
+      "notes": "The first typecheck exposed test-only literal-zero inference in the numeric fixture; widening the fixture descriptor to number repaired it without production behavior change."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/exact-equation-reachability-graph.test.ts tests/semantic-state-composition-preflight.test.ts",
+      "status": "passed",
+      "scope": "slice-s06-focused",
+      "checkedAt": "2026-09-05T03:55:10.500Z",
+      "notes": "7 of 7 preflight and regenerated reachability tests passed; conflict diagnostics remain scoped and apply-call counts stay zero."
+    },
+    {
+      "command": "npm run verify:impact -- --path src/semantic-state/state-family-composition-preflight.ts",
+      "status": "passed",
+      "scope": "slice-s06-impact",
+      "checkedAt": "2026-09-05T03:55:11.523Z",
+      "notes": "High-risk semantic-state impact selected semantic-state, typecheck, and architecture gates."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s06-types",
+      "checkedAt": "2026-09-05T03:55:12.531Z",
+      "notes": "All TypeScript, Svelte, and domain checks passed after the local fixture correction."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "slice-s06-semantic-state",
+      "checkedAt": "2026-09-05T03:55:13.549Z",
+      "notes": "282 of 282 passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-s06-architecture",
+      "checkedAt": "2026-09-05T03:55:14.677Z",
+      "notes": "Architecture passed at 2011 TypeScript modules, 7479 of 7530 local references, and zero exact retiring exceptions."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice-s06-inference",
+      "checkedAt": "2026-09-05T03:55:15.689Z",
+      "notes": "Inference passed at 107086 types, 181782 instantiations, and 7.02 seconds without a ceiling change."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "slice-s06-complete-initial",
+      "checkedAt": "2026-09-05T03:55:16.696Z",
+      "notes": "6396 of 6397 passed; the sole failure was the deterministic equation reachability scan count after adding the new source and test."
+    },
+    {
+      "command": "npm run generate:equation-reachability",
+      "status": "passed",
+      "scope": "slice-s06-generated-evidence",
+      "checkedAt": "2026-09-05T03:55:17.713Z",
+      "notes": "Regenerated the 68-root exact equation reachability graph after the source inventory changed."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "slice-s06-complete",
+      "checkedAt": "2026-09-05T03:55:18.840Z",
+      "notes": "6397 of 6397 passed after deterministic reachability evidence refresh."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "slice-s06-bundle",
+      "checkedAt": "2026-09-05T03:55:19.869Z",
+      "notes": "Production bundle completed with 1603 modules transformed; existing large-chunk advisory only."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice-s06-diff",
+      "checkedAt": "2026-09-05T03:55:20.875Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-s06-theseus",
+      "checkedAt": "2026-09-05T03:55:21.887Z",
+      "notes": "Validated 1094 nodes and 27421 events before slice completion."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s05 complete: conflict analysis can use declared exact slot footprints without runtime writes, object diffs, or renderer inspection."
+    "summary": "s06 complete: whole-composition hazards are typed, path-scoped, and failure-atomic before endpoint work."
   },
   "expectedLearning": [
     "Whether sequence nesting and demonstrated-independent cohorts can reuse current family and persistent-state authority without a second kernel.",
