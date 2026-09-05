@@ -151,7 +151,8 @@
     {
       "id": "s07",
       "title": "Assembly diagnostics: carry declaration/source paths and typed missing, stale, foreign, invalid-operation gaps",
-      "status": "planned"
+      "summary": "Explicit repair-gap boundary projects source/declaration/target locations and known failure categories; original exceptions retained, unknowns unclassified, no output fallback.",
+      "status": "complete"
     },
     {
       "id": "s08",

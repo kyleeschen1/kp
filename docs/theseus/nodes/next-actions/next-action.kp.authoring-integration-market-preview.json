@@ -80,6 +80,13 @@
       "scope": "s06",
       "checkedAt": "2026-09-05T19:43:52.253Z",
       "notes": "15 integration tests pass: seeks/reverse, zero and bounded cache parity, eviction/reset/disposal, branch isolation, no replay or sample-history growth, pair private endpoints excluded."
+    },
+    {
+      "command": "npm run test:authoring-integration; npm run typecheck; git diff --check; theseus workspace validate",
+      "status": "passed",
+      "scope": "s07",
+      "checkedAt": "2026-09-05T19:48:00.674Z",
+      "notes": "19 integration tests pass. Real malformed author fixtures cover missing graph definitions, stale dependencies, foreign targets and undeclared endpoint write; original cause and immutable initial state retained."
     }
   ],
   "expectedLearning": [
