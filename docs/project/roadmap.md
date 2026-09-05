@@ -68,14 +68,14 @@ entity/version/snapshot and explicit transaction foundation. The completed
 Loop 2 adds a typed property facade, explicit dependency graph, lazy pinned
 evaluation, exact version fingerprints, caller-owned caching, supply-tax
 pressure, a fixed generation-shaped corpus, and representative scale evidence.
-Its mandatory architecture/API checkpoint passed human review. Loop 3 now
-completes the bounded internal applied-state-family and pure ephemeral
+Its mandatory architecture/API checkpoint passed human review. Loop 3
+completed the bounded internal applied-state-family and pure ephemeral
 `at(progress)` layer across exact supply-tax and nonlinear unit-tagged circle
 callers, and its mandatory architecture/API checkpoint was accepted on
-2026-09-04. A separate 26-slice nonvisual Loop 4 proposal for aggregate
-composition and logical timeline addressing now awaits exact execution
-approval. Public promotion, runtime, and renderer work remain outside that
-proposal. The internal
+2026-09-04. The exact 26-slice nonvisual Loop 4 for aggregate composition and
+logical timeline addressing is approved and active under
+`run-contract.kp.aggregate-composition-logical-timeline-v1`. Public promotion,
+runtime, and renderer work remain outside that contract. The internal
 Animation Catalogue remains the source and pressure lab rather than the active
 product surface. Neither proof by itself validates demand or selects a
 universal learner layout or semantic model.

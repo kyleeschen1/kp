@@ -1,0 +1,144 @@
+{
+  "id": "next-action.kp.typed-authoring.aggregate-composition-logical-timeline",
+  "kind": "next-action",
+  "title": "Implement aggregate semantic composition and logical timeline",
+  "status": "ready",
+  "domain": "typed-authoring",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-04-semantic-state-aggregate-composition-logical-timeline-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-04-semantic-state-family-checkpoint-and-next-sequence.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-04-semantic-state-families-interpolation-closeout.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.typed-authoring.semantic-state-families-interpolation"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:semantic-state",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run check:inference",
+    "npm test",
+    "npm run build:bundle",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run verify:impact -- --path tests/semantic-state-aggregate-baseline.test.ts",
+      "status": "passed",
+      "scope": "slice-s01-impact",
+      "checkedAt": "2026-09-05T03:06:09.620Z",
+      "notes": "Selected semantic-state, typecheck, and architecture coverage."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "slice-s01-semantic-state",
+      "checkedAt": "2026-09-05T03:06:11.125Z",
+      "notes": "261 of 261 tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s01-types",
+      "checkedAt": "2026-09-05T03:06:12.124Z",
+      "notes": "Svelte and domain TypeScript checks passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-s01-architecture",
+      "checkedAt": "2026-09-05T03:06:13.138Z",
+      "notes": "2007 modules; 7464 of 7515 local references; zero exceptions."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice-s01-inference",
+      "checkedAt": "2026-09-05T03:06:14.153Z",
+      "notes": "107053 types and 181758 instantiations."
+    },
+    {
+      "command": "npm run test:equation-reachability",
+      "status": "passed",
+      "scope": "slice-s01-reachability",
+      "checkedAt": "2026-09-05T03:06:15.135Z",
+      "notes": "12 of 12 passed after stable graph regeneration; 68 roots and 4168 scanned files."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "slice-s01-complete",
+      "checkedAt": "2026-09-05T03:06:16.090Z",
+      "notes": "6376 of 6376 passed."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "slice-s01-bundle",
+      "checkedAt": "2026-09-05T03:06:17.071Z",
+      "notes": "Production bundle passed with 1603 transformed modules and only the established chunk-size warning."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-s01-control-plane",
+      "checkedAt": "2026-09-05T03:06:28.608Z",
+      "notes": "Valid 1094 nodes and 27370 events before slice completion."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "s01 froze the Loop 3 metrics, characterized the exact absence of aggregate composition and logical-address APIs, aligned active project memory, and passed all broad gates."
+  },
+  "expectedLearning": [
+    "Whether sequence nesting and demonstrated-independent cohorts can reuse current family and persistent-state authority without a second kernel.",
+    "Whether settled and in-transition logical addresses preserve direct recovery without a mutable cursor or replay.",
+    "Whether independently owned exact demand-intercept and tax changes compose through one domain-owned market evaluator."
+  ],
+  "allowedWork": [
+    "Execute the exact approved nonvisual 26-slice Loop 4 proposal and its tests metrics evidence and closeout."
+  ],
+  "disallowedWork": [
+    "Do not begin clocks sampled-frame renderers Graph2D KaTeX public APIs compatibility migration Article Focus Deck Catalogue or live-model work."
+  ],
+  "criteria": [
+    {
+      "id": "aggregate-composition-reuses-existing-authority",
+      "weight": "high"
+    },
+    {
+      "id": "conflicts-diagnosed-before-exposure",
+      "weight": "high"
+    },
+    {
+      "id": "logical-addresses-separate-settled-and-transition",
+      "weight": "high"
+    },
+    {
+      "id": "history-and-branch-recovery-remain-coherent",
+      "weight": "high"
+    },
+    {
+      "id": "two-family-market-pressure-remains-exact",
+      "weight": "high"
+    },
+    {
+      "id": "broad-gates-pass-at-checkpoint",
+      "weight": "high"
+    }
+  ]
+}

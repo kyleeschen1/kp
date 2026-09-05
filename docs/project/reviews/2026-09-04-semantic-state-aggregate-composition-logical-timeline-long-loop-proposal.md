@@ -1,9 +1,11 @@
 # Semantic State Aggregate Composition And Logical Timeline Long-Loop Proposal
 
 Date: 2026-09-04
-Status: PROPOSED; AWAITING APPROVAL
+Status: APPROVED; ACTIVE
 Proposed target:
 `next-action.kp.typed-authoring.aggregate-composition-logical-timeline`
+Active run contract:
+`run-contract.kp.aggregate-composition-logical-timeline-v1`
 Active thread: `../threads/typed-semantic-authoring-framework.md`
 Source checkpoint:
 `2026-09-04-semantic-state-families-interpolation-closeout.md`
@@ -11,6 +13,10 @@ Accepted direction:
 `../decisions/2026-09-04-semantic-state-family-checkpoint-and-next-sequence.md`
 
 ## Recommendation
+
+The user approved this exact 26-slice proposal on 2026-09-04. The active
+Theseus run contract owns slice order, live status, verification evidence, and
+the final stop state; this proposal remains the rationale and approved scope.
 
 Approve a 26-slice, nonvisual Loop 4 that composes several internal semantic
 state-family applications into one immutable logical timeline. The timeline

@@ -1,0 +1,203 @@
+{
+  "id": "run-contract.kp.aggregate-composition-logical-timeline-v1",
+  "kind": "run-contract",
+  "title": "Aggregate semantic composition and logical timeline",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.typed-authoring.aggregate-composition-logical-timeline.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-04-semantic-state-aggregate-composition-logical-timeline-long-loop-proposal.md",
+      "summary": "User-approved exact 26-slice Loop 4 proposal with risks checks rollback units stop conditions inference allowance and deferrals."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-04-semantic-state-family-checkpoint-and-next-sequence.md",
+      "summary": "Accepted Loop 3 boundary and approved Loop 4 then Loop 5 sequencing."
+    }
+  ],
+  "verification": [
+    "npm run test:semantic-state",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run check:inference",
+    "npm test",
+    "npm run build:bundle",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Internal aggregate composition declarations compilation diagnostics scoped identities handles logical addresses sample sources evaluators and tests under src/semantic-state.",
+    "Compatible extensions to existing family transition derived fingerprint cache and recovery seams that preserve current callers.",
+    "One canonical exact-rational demand-intercept-plus-tax adapter and one internal two-family market pressure packet.",
+    "Focused law and type tests authoring and allocation metrics dense seek pressure inference attribution and durable Theseus evidence.",
+    "At most one measured s18 inference refresh using the exact formula approved in the source proposal.",
+    "Closeout and project-memory updates required by the approved run."
+  ],
+  "disallowedWork": [
+    "Runtime clocks duration easing frame cadence sampled-frame motion-plan playback navigation browser history URL routing or input gesture policy.",
+    "Graph2D KaTeX SVG Canvas WebGL DOM CSS browser Catalogue Focus Deck Article publication public-route or code-renderer integration.",
+    "Migration or rewrite of existing KaTeX transformations compositor sessions native endpoints economics frames animation assets or visual adapters.",
+    "Public semantic-state facade root namespace broad barrel compatibility layer package promotion or catalogue rollout.",
+    "Synthetic merged snapshots copied stores alternate transactions derived graphs global state caches Proxy ambient assignment registration generation or persistent-storage redesign.",
+    "Broad economics ontology unit algebra CAS theorem prover knowledge procedure macro HKT or live-LLM systems.",
+    "More than the single bounded s18 inference refresh or any unexplained ceiling increase."
+  ],
+  "goal": "Implement nonvisual aggregate semantic state-family composition with conflict-safe sequence nesting and independent cohorts, disjoint settled and in-transition logical addresses, coherent history and branching, and exact two-change market pressure; stop before clocks renderers Graph2D KaTeX public APIs or migration.",
+  "target": "next-action.kp.typed-authoring.aggregate-composition-logical-timeline",
+  "runMode": "run",
+  "maxSlices": 26,
+  "commitCadence": "Commit implementation tests and completed Theseus evidence after every independently reversible verified slice while preserving unrelated user work.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if composition requires a second snapshot entity-version transaction derived-graph identity correspondence provenance lineage or recovery implementation.",
+    "Stop if any composition conflict is discovered after an endpoint logical address or evaluator escapes.",
+    "Stop if an independent cohort overlaps writes has unresolved hazards or produces order-dependent semantic values.",
+    "Stop if sequence order is implicit nesting hides order or last-writer-wins resolves a conflict.",
+    "Stop if settled resolution replays state in-transition samples become durable or exact progress becomes floating authority.",
+    "Stop if aggregate sampling merges derived outputs changes persistent history or evaluates unrequested graph nodes.",
+    "Stop if local history mutates current aggregate state or branches without explicit transformation and lineage.",
+    "Stop if stable scopes or addresses depend on payload identity randomness wall time duration renderer nodes or URL state.",
+    "Stop if economics formulas fork or production pressure needs domain-specific core composition.",
+    "Stop if Proxy ambient registration generation storage redesign or deferred visual public knowledge or live-model work becomes necessary.",
+    "Stop if inference needs more than the single bounded s18 refresh or any required broad gate cannot be repaired inside the named slice.",
+    "Always stop after s26 at a mandatory human architecture and API checkpoint before clocks renderers or KaTeX integration."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Baseline and aggregate-law ledger",
+      "summary": "Baseline ledger committed with 261 semantic-state tests, 6376 repository tests, unchanged inference metrics, exact API-absence characterization, and regenerated reachability evidence.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "Aggregate identity and stable scoped names",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Composition declaration grammar",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Structural composition validation",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Declared transition footprints",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Conflict and hazard diagnostics",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Deterministic composition compilation",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Persistent ordered endpoint chain",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Independent-cohort confluence and endpoint order",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Explicit overlapping-write sequence",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Nested group ownership and aggregate provenance",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Generated boundary and member handles",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Disjoint logical address protocol",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Settled direct seek and pinned inspection",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Single-member transition seek",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Independent-cohort aggregate overlays",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Aggregate requested derived evaluation",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Mode authority and compiler checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Bounded aggregate evaluator lifecycle",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Seek rewind nesting and local-inspection laws",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Coherent branch continuation",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Historical local restore contract",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Canonical demand-intercept-plus-tax economics seam",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Production-shaped two-family market packet",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Market cohort conflict branch and scale pressure",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Closeout and mandatory architecture API checkpoint",
+      "status": "planned"
+    }
+  ]
+}

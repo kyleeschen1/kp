@@ -8,15 +8,17 @@ with source refs, verification, run-contract slices, and completion evidence.
 ## Current Queue
 
 The governed animation and publication foundation is preserved. Loop 3's
-architecture/API checkpoint is accepted. There is no authorized implementation
-action while the exact Loop 4 proposal waits for review:
+architecture/API checkpoint is accepted. The exact Loop 4 proposal is approved
+and active:
 
-1. Review the proposed 26-slice nonvisual Loop 4 for aggregate transformation
+1. Execute the 26-slice nonvisual Loop 4 for aggregate transformation
    composition, conflict diagnostics, coherent recovery, and logical timeline
-   addressing. Its production pressure composes independent exact demand-
-   intercept and per-unit-tax changes in one market aggregate.
-2. On explicit approval, create the matching Theseus run contract and execute
-   only those slices through the mandatory architecture/API checkpoint.
+   addressing under
+   `run-contract.kp.aggregate-composition-logical-timeline-v1`. Its production
+   pressure composes independent exact demand-intercept and per-unit-tax changes
+   in one market aggregate.
+2. Complete only the approved slices through the mandatory architecture/API checkpoint;
+   the Theseus contract owns order, evidence, and stop state.
 3. Keep Graph2D and KaTeX integration for Loop 5 after the aggregate
    checkpoint. Migrate selected existing KaTeX transformations only after one
    canonical exemplar passes human visual and API review.

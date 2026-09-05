@@ -1,10 +1,11 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: Loop 3 checkpoint accepted; Loop 4 proposal awaiting approval
+Status: Loop 4 approved and active
 Last Updated: 2026-09-04
-Current Next Action: review the exact 26-slice nonvisual Loop 4 proposal for
-aggregate composition and logical timeline addressing; do not execute it
-without explicit approval.
+Current Next Action: execute the exact 26-slice nonvisual Loop 4 for aggregate
+composition and logical timeline addressing under
+`run-contract.kp.aggregate-composition-logical-timeline-v1`, stopping at its
+mandatory architecture/API checkpoint.
 
 ## Goal
 
