@@ -83,7 +83,8 @@
     {
       "id": "s03",
       "title": "Composition declaration grammar",
-      "status": "planned"
+      "summary": "Added the closed serializable declaration grammar: explicit sequence order, one-body named groups, leaf-only demonstrated-independent cohorts with evidence, and typed prepared-family members; empty, recursive, ambiguous, and closure-shaped inputs fail.",
+      "status": "complete"
     },
     {
       "id": "s04",
