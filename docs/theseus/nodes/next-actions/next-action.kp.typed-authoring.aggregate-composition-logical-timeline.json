@@ -1556,11 +1556,65 @@
       "status": "passed",
       "scope": "s23 durable control-plane validation",
       "checkedAt": "2026-09-05T07:51:57.180Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-05T08:19:59.330Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-state-composed-market.test.ts",
+      "status": "passed",
+      "scope": "s24 composed market packet: 4/4 pass",
+      "checkedAt": "2026-09-05T08:20:11.842Z"
+    },
+    {
+      "command": "npm test initial",
+      "status": "failed",
+      "scope": "s24 initial broad run: 6473/6475 passed; only expected reachability count and provisional metric drift",
+      "checkedAt": "2026-09-05T08:20:12.910Z"
+    },
+    {
+      "command": "npm run generate:equation-reachability",
+      "status": "passed",
+      "scope": "s24 refreshed exact 68-root graph for 4206 scanned files",
+      "checkedAt": "2026-09-05T08:20:13.950Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s24 repository TypeScript boundary: 0 errors and 0 warnings",
+      "checkedAt": "2026-09-05T08:20:14.967Z"
+    },
+    {
+      "command": "npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "s24 exact reachability graph current: 68 roots",
+      "checkedAt": "2026-09-05T08:20:16.007Z"
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "s24 production bundle: 1603 modules transformed",
+      "checkedAt": "2026-09-05T08:20:17.076Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s24 patch whitespace integrity",
+      "checkedAt": "2026-09-05T08:20:18.095Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s24 durable control-plane validation: 1094 nodes and 27703 events",
+      "checkedAt": "2026-09-05T08:20:30.233Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s19 complete: aggregate evaluation has a bounded caller-owned cache lifecycle that accelerates canonical resolution without entering persistent history or controlling member evaluators."
+    "summary": "s24 complete: one production-shaped nested composition combines exact demand-intercept and tax families over a shared schema, graph, and immutable endpoint chain without market-specific core code or renderer authority."
   },
   "expectedLearning": [
     "Whether sequence nesting and demonstrated-independent cohorts can reuse current family and persistent-state authority without a second kernel.",
