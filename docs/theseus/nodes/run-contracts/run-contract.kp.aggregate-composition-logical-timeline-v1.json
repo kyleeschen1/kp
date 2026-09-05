@@ -95,7 +95,8 @@
     {
       "id": "s05",
       "title": "Declared transition footprints",
-      "status": "planned"
+      "summary": "Existing transition plans now project immutable exact target footprints with distinct semantic-write, discrete-write, and presentation-only sets; exact repeats normalize and competing, derived, or foreign writes fail.",
+      "status": "complete"
     },
     {
       "id": "s06",
