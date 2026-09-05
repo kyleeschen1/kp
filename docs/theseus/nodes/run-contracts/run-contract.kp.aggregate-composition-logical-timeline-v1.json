@@ -143,7 +143,8 @@
     {
       "id": "s13",
       "title": "Disjoint logical address protocol",
-      "status": "planned"
+      "summary": "Logical addresses are now a closed serializable union: settled values retain one canonical boundary handle and no progress, while in-transition values retain one member or demonstrated-independent cohort handle plus canonical exact progress; equality and JSON encoding round-trip and all foreign, mixed, malformed, or noncanonical forms fail closed.",
+      "status": "complete"
     },
     {
       "id": "s14",
