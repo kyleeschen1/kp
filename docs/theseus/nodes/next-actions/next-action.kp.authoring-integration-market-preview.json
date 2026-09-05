@@ -115,6 +115,20 @@
       "scope": "s09",
       "checkedAt": "2026-09-05T20:23:05.976Z",
       "notes": "25 integration tests and full typecheck pass. 12 reachability tests pass. Existing Jacobian, Hessian, scene and optics tests pass; hidden-callable/evidence regression passes. No function serialization or second semantic store."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "s10",
+      "checkedAt": "2026-09-05T20:33:55.023Z",
+      "notes": "Initial optic signature inferred persistent narrowed optional fields as the domain root; corrected inference to take the optic root and require its persistent projection at the state handle."
+    },
+    {
+      "command": "npm run test:authoring-integration; typed math scene and optics tests; npm run typecheck; git diff --check; theseus workspace validate",
+      "status": "passed",
+      "scope": "s10",
+      "checkedAt": "2026-09-05T20:35:53.044Z",
+      "notes": "29 authoring tests plus 5 compatibility tests pass; final focused optics 4 pass; full typecheck clean. Initial type failure retained and fixed without casts at callers."
     }
   ],
   "expectedLearning": [

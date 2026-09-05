@@ -169,7 +169,8 @@
     {
       "id": "s10",
       "title": "Pinned typed-optics bridge: recover selections and apply supported immutable same-cardinality rewrites through aggregate authority",
-      "status": "planned"
+      "summary": "Aggregate-pinned same-cardinality math rewrites and legacy scene projection preserve exact history; typed stale, foreign, cardinality and nondeterminism rejection verified.",
+      "status": "complete"
     },
     {
       "id": "s11",
