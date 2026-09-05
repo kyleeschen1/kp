@@ -139,7 +139,8 @@
     {
       "id": "s05",
       "title": "Assembly transformation/composition binding: infer existing handles and bind named applied families, ordered/nested groups, and bounded independent pairs",
-      "status": "planned"
+      "summary": "Internal named explanation assembly delegates ordered/nested and bounded pair preparation; endpoint snapshots and operation journals equal direct family applications.",
+      "status": "complete"
     },
     {
       "id": "s06",

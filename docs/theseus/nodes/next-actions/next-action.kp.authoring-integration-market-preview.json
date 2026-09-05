@@ -66,6 +66,13 @@
       "scope": "s04",
       "checkedAt": "2026-09-05T19:33:16.488Z",
       "notes": "8 tests pass including snapshot parity, tuple/result inference, cycle-before-compute, missing definition paths and empty dependency rejection. No new state authority."
+    },
+    {
+      "command": "npm run test:authoring-integration; npm run test:semantic-state; npm run typecheck; node_modules/.bin/tsc --project tsconfig.test.json --noEmit; git diff --check; theseus workspace validate",
+      "status": "passed",
+      "scope": "s05",
+      "checkedAt": "2026-09-05T19:39:17.729Z",
+      "notes": "12 integration and 364 semantic tests pass. Nested handle and parameter inference retained; repeated family identities distinct; conflicts rejected before callbacks. Focused typecheck required cache write access and passed escalated."
     }
   ],
   "expectedLearning": [
