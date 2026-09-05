@@ -210,3 +210,27 @@ The clock fixture checks 10,008 off-grid samples for monotonicity and error,
 endpoint neighborhoods, invalid input, and forward/reverse/direct query equality.
 Only three public settled snapshots remain through all samples, with bounded
 query-cache entries. This adapter is pure and not yet attached to host painting.
+
+## State-derived economics frame
+
+The frame session evaluates the existing derived graph once per requested tax
+address. It projects that result into `KpPerUnitTaxWelfareFrameV1`, retaining the
+source revision alongside the frame. Clearing, incidence, and welfare are read
+from the evaluation; the existing domain curve evaluator supplies the buyer-facing
+intercept. There is no second sampler, interpolation function, market solve, or
+welfare calculator in the adapter.
+
+The domain's parameterized demand/tax result now retains its already-computed
+deadweight loss. At the untaxed endpoint it reports exact zero, rather than the
+positive final model's prospective loss. This prevents a downstream projection
+from recomputing accounting or presenting final loss during an untaxed sample.
+
+`tests/authoring-integration-frame.test.ts` compares complete frames with the
+unchanged canonical sampler at 257 positions, then checks variant endpoints,
+reverse/direct equality, cache reset and disposal. The variant remains quantity 5
+and total surplus 35, with zero loss before tax. These are semantic projection
+checks; host painting and narrative integration remain subsequent obligations.
+
+The frame slice retains the 111,257 / 192,271 inference measurement and zero
+dependency exceptions. Its exact scan adds only two files (4,238 to 4,240), with
+no root or caller-edge changes.

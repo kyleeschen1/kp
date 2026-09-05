@@ -38,6 +38,7 @@ export interface KpParameterizedDemandInterceptAndTaxEvaluationV1 {
   readonly model: KpPerUnitTaxWelfareModelV1;
   readonly market: KpPerUnitTaxMarketStateV1;
   readonly accounting: KpPerUnitTaxWelfareStateV1;
+  readonly deadweightLoss: ExactRationalDto;
 }
 
 /**
@@ -134,7 +135,10 @@ export function evaluateKpParameterizedDemandInterceptAndPerUnitTax(input: {
     taxAmount: market.taxAmount,
     model,
     market,
-    accounting: accounting.states[phase]
+    accounting: accounting.states[phase],
+    // Keep the evaluated loss with this result so frame projections do not
+    // recompute accounting. The zero-tax sample selects the untaxed endpoint.
+    deadweightLoss: usesInitialEndpoint ? toDto(createKpRational(0n)) : accounting.deadweightLoss
   });
 }
 

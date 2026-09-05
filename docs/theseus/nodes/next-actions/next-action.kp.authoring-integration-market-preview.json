@@ -203,6 +203,13 @@
       "scope": "s15",
       "checkedAt": "2026-09-05T22:28:56.698Z",
       "notes": "47 integration and364 semantic tests pass; final3 clock checks pass after test-only ES target correction. Typecheck clean; architecture2036modules zero exceptions. Inventory4236to4238 count only."
+    },
+    {
+      "command": "npm run test:authoring-integration; npm run test:economics-supply-tax; npm run test:semantic-state; npm run typecheck; npm run check:architecture; npm run check:inference; npm run check:equation-reachability; git diff --check",
+      "status": "passed",
+      "scope": "s16",
+      "checkedAt": "2026-09-05T22:33:47.277Z",
+      "notes": "50 integration,81 economics,364 state tests pass;257 complete canonical frame comparisons and variant/cache pressure. Types clean; inference111257/192271 unchanged; architecture2037modules zero exceptions; inventory count only4240."
     }
   ],
   "progress": {

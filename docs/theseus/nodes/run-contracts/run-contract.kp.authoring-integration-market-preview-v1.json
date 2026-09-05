@@ -207,7 +207,8 @@
     {
       "id": "s16",
       "title": "One sampled economics frame: project state-derived curves, clearing, incidence, and welfare without a second interpolation/evaluation authority",
-      "status": "planned"
+      "summary": "One evaluated economics result supplies full existing frame shape;257 canonical samples match exactly. Domain result retains computed loss. All scoped suites, types, architecture and fixed inference pass.",
+      "status": "complete"
     },
     {
       "id": "s17",
