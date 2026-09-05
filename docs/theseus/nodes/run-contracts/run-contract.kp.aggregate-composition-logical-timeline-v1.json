@@ -173,7 +173,8 @@
     {
       "id": "s18",
       "title": "Mode authority and compiler checkpoint",
-      "status": "planned"
+      "summary": "Aggregate cohort resolutions now preserve exact transition declarations as frozen member authority; interpolation and discrete modes alone produce semantic drivers, presentation-only metadata cannot substitute semantic state, every direct seek leaves retained boundaries and application history reference-exact, and the one approved compiler ratchet is directly attributed and formula-bounded.",
+      "status": "complete"
     },
     {
       "id": "s19",

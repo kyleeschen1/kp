@@ -15,7 +15,7 @@ test("inference ceilings retain measured, narrow structural headroom", () => {
     ceilings.instantiations,
     ceilHundred(measuredProject.instantiations * 1.03)
   );
-  assert.equal(typescriptInferenceBudget.fixtureCount, 44);
+  assert.equal(typescriptInferenceBudget.fixtureCount, 45);
 
   const config = JSON.parse(readFileSync("tsconfig.inference.json", "utf8")) as {
     readonly compilerOptions?: { readonly skipLibCheck?: boolean };
@@ -30,6 +30,7 @@ test("owner-local inference laws avoid broad public barrels", () => {
     ["concept-manifest-inference.ts", "../../src/authoring/concept-manifest.ts"],
     ["concept-room-state-inference.ts", "../../src/kernel/concept-room-state.ts"],
     ["native-katex-executable-scene.ts", "../../src/rendering/native-katex-scene-compositor.ts"],
+    ["semantic-state-composition-inference.ts", "../../src/semantic-state/state-family-composition-cohort-resolver.ts"],
     ["semantic-state-family-inference.ts", "../../src/semantic-state/state-family-evaluator.ts"]
   ]);
 

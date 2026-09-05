@@ -1169,11 +1169,95 @@
       "scope": "slice-s17-workspace",
       "checkedAt": "2026-09-05T06:14:04.595Z",
       "notes": "Workspace valid with 1094 nodes after all slice implementation and evidence mutations."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-state-composition-cohort-resolver.test.ts tests/typescript-inference-budget.test.ts",
+      "status": "passed",
+      "scope": "slice-s18-focused",
+      "checkedAt": "2026-09-05T06:40:56.296Z",
+      "notes": "10/10 mode-authority, history, recovery, and formula-ratchet tests passed."
+    },
+    {
+      "command": "npm run measure:inference-attribution",
+      "status": "passed",
+      "scope": "slice-s18-attribution",
+      "checkedAt": "2026-09-05T06:40:57.444Z",
+      "notes": "45-fixture report measured the project at 110237 types and 190072 instantiations; the direct-owner aggregate fixture added no public-barrel import and ranked fourth by isolated type closure."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice-s18-inference",
+      "checkedAt": "2026-09-05T06:40:58.470Z",
+      "notes": "The single approved s18 refresh passed at 110237 types and 190072 instantiations under exact formula ceilings 112500 and 195800."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s18-typecheck",
+      "checkedAt": "2026-09-05T06:40:59.498Z",
+      "notes": "Application, node, test, Svelte, and domain typechecks passed with zero diagnostics or warnings."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "slice-s18-semantic",
+      "checkedAt": "2026-09-05T06:41:00.525Z",
+      "notes": "330/330 semantic-state tests passed, including exact mode separation and unchanged persistent history."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-s18-architecture",
+      "checkedAt": "2026-09-05T06:41:01.574Z",
+      "notes": "Architecture passed at 2020 TypeScript modules and 7531 of 7582 local references with zero exact retiring exceptions."
+    },
+    {
+      "command": "npm run generate:equation-reachability",
+      "status": "passed",
+      "scope": "slice-s18-generated-evidence",
+      "checkedAt": "2026-09-05T06:41:02.629Z",
+      "notes": "Refreshed the exact 68-root reachability graph after adding the aggregate inference fixture."
+    },
+    {
+      "command": "npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "slice-s18-reachability",
+      "checkedAt": "2026-09-05T06:41:03.654Z",
+      "notes": "Exact equation reachability graph remained current at 68 roots."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "slice-s18-bundle",
+      "checkedAt": "2026-09-05T06:41:04.705Z",
+      "notes": "Production bundle completed with 1603 transformed modules and only the existing large-chunk advisory."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "slice-s18-complete",
+      "checkedAt": "2026-09-05T06:41:05.745Z",
+      "notes": "6445/6445 repository tests passed in 665 seconds."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice-s18-diff",
+      "checkedAt": "2026-09-05T06:41:06.784Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-s18-theseus",
+      "checkedAt": "2026-09-05T06:41:07.800Z",
+      "notes": "Workspace validated at 1094 nodes and 27608 events before slice completion."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s17 complete: combined cohort sources support typed request-scoped derived views through current graph authority with selective closures, fresh retry memos, and no merged derived state."
+    "summary": "s18 complete: aggregate mode authority, direct historical recovery, immutable seek behavior, and the single attributable formula-based TypeScript inference checkpoint all pass broad verification."
   },
   "expectedLearning": [
     "Whether sequence nesting and demonstrated-independent cohorts can reuse current family and persistent-state authority without a second kernel.",

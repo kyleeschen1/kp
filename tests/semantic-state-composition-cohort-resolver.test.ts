@@ -25,6 +25,11 @@ import {
   compileKpSemanticDerivedGraph,
   normalizeKpSemanticDerivedGraphInput
 } from "../src/semantic-state/derived-graph.ts";
+import {
+  createKpSemanticSnapshotRecoveryIndex,
+  pinKpAggregateSemanticSnapshot,
+  recoverKpPinnedSnapshot
+} from "../src/semantic-state/pinned-recovery.ts";
 import { createKpSemanticProgress } from
   "../src/semantic-state/semantic-progress.ts";
 import { createKpInTransitionSemanticStateCompositionAddress } from
@@ -62,8 +67,11 @@ import {
   defineKpSemanticStateFamily,
   kpStateFamilyParameters
 } from "../src/semantic-state/state-family-definition.ts";
-import { declareKpSemanticStateInterpolation } from
-  "../src/semantic-state/state-family-transition.ts";
+import {
+  declareKpSemanticStateDiscreteTransition,
+  declareKpSemanticStateInterpolation,
+  declareKpSemanticStatePresentationTransition
+} from "../src/semantic-state/state-family-transition.ts";
 
 test("independent drivers share one aggregate ephemeral base", () => {
   const data = fixture();
@@ -169,6 +177,109 @@ test("equivalent progress cannot grow persistent history", () => {
   assert.equal(first.sample.source.drivers.some(
     ({ targetSlotId }) => targetSlotId === data.stateHandles.refs.total.slotId
   ), false);
+});
+
+test("cohort mode authority stays distinct from semantic state and history", () => {
+  const data = modeFixture();
+  const boundaries = data.chain.boundaries;
+  const applications = data.chain.applications;
+  const boundaryReferences = data.chain.boundaries.map(boundary =>
+    boundary.snapshot
+  );
+  const applicationReferences = data.chain.applications.map(({ application }) =>
+    application
+  );
+  const serializedHistory = JSON.stringify({
+    boundaries: data.chain.boundaries,
+    applications: data.chain.applications
+  });
+  const resolve = (numerator: bigint, denominator: bigint) =>
+    data.resolver.resolveCohort(
+      data.compositionHandles.root,
+      createKpSemanticProgress(numerator, denominator)
+    );
+  const quarter = resolve(1n, 4n);
+  const half = resolve(1n, 2n);
+  const threeQuarters = resolve(3n, 4n);
+
+  assert.deepEqual(
+    half.transitionAuthority.map(({ declaration }) => declaration.transitionMode)
+      .sort(),
+    ["discrete", "presentation-only", "semantic-interpolation"]
+  );
+  const presentationAuthority = half.transitionAuthority.find(
+    ({ declaration }) => declaration.transitionMode === "presentation-only"
+  );
+  assert.equal(presentationAuthority?.declaration, data.presentation);
+  assert.equal(Object.isFrozen(half.transitionAuthority), true);
+  assert.equal(half.transitionAuthority.every(Object.isFrozen), true);
+  assert.equal(half.sample.kind, "ephemeral-interior");
+  if (half.sample.kind !== "ephemeral-interior" ||
+    quarter.sample.kind !== "ephemeral-interior" ||
+    threeQuarters.sample.kind !== "ephemeral-interior") {
+    throw new Error("Expected aggregate interior mode samples.");
+  }
+
+  assert.deepEqual(
+    half.sample.source.drivers.map(({ targetSlotId }) => targetSlotId).sort(),
+    [data.stateHandles.refs.amount.slotId, data.stateHandles.refs.phase.slotId]
+      .sort()
+  );
+  assert.equal(half.sample.source.drivers.some(({ targetSlotId }) =>
+    targetSlotId === data.stateHandles.refs.label.slotId), false);
+  assert.equal(data.stateHandles.pin(half.sample.source.base.snapshot).label.read(),
+    "stable label");
+  assert.deepEqual(
+    half.sample.presentationTransitions,
+    presentationAuthority === undefined ? [] : [presentationAuthority]
+  );
+  assert.equal(Object.isFrozen(half.sample.presentationTransitions), true);
+  assert.equal("progress" in data.presentation, false);
+  assert.equal("duration" in data.presentation, false);
+  assert.equal("easing" in data.presentation, false);
+
+  assert.equal(readDriverValue(
+    quarter.sample.source.drivers,
+    data.stateHandles.refs.phase.slotId
+  ), "before");
+  assert.equal(readDriverValue(
+    half.sample.source.drivers,
+    data.stateHandles.refs.phase.slotId
+  ), "middle");
+  assert.equal(readDriverValue(
+    threeQuarters.sample.source.drivers,
+    data.stateHandles.refs.phase.slotId
+  ), "after");
+  assert.deepEqual(data.discrete.changePoints.map(({ id, at }) => ({ id, at })), [
+    { id: "middle", at: "1/3" },
+    { id: "after", at: "2/3" }
+  ]);
+
+  data.resolver.resolveCohort(
+    data.compositionHandles.root,
+    createKpSemanticProgress(1n, 1n)
+  );
+  data.resolver.resolveCohort(
+    data.compositionHandles.root,
+    createKpSemanticProgress(0n, 1n)
+  );
+  assert.equal(data.chain.boundaries, boundaries);
+  assert.equal(data.chain.applications, applications);
+  assert.equal(data.chain.boundaries.every((boundary, index) =>
+    boundary.snapshot === boundaryReferences[index]), true);
+  assert.equal(data.chain.applications.every(({ application }, index) =>
+    application === applicationReferences[index]), true);
+  assert.equal(JSON.stringify({
+    boundaries: data.chain.boundaries,
+    applications: data.chain.applications
+  }), serializedHistory);
+  const recovery = createKpSemanticSnapshotRecoveryIndex(boundaryReferences);
+  for (const snapshot of boundaryReferences) {
+    assert.equal(recoverKpPinnedSnapshot(
+      recovery,
+      pinKpAggregateSemanticSnapshot(snapshot)
+    ), snapshot);
+  }
 });
 
 test("aggregate source rejects duplicate applications and driver targets", () => {
@@ -384,4 +495,191 @@ function fixture(
     resolver,
     stateHandles
   };
+}
+
+function modeFixture() {
+  const namespace = "lesson.composition-cohort-modes";
+  const schema = compileKpSemanticStateSchema(namespace, kpStateGroup({
+    amount: kpStateValue<number>(0),
+    phase: kpStateValue<"before" | "middle" | "after">("before"),
+    label: kpStateValue("stable label")
+  }));
+  const stateHandles = createKpSemanticStateHandleSet(schema);
+  const initial = materializeKpSemanticStateInitialSnapshot(schema);
+  const graph = compileKpSemanticDerivedGraph(
+    normalizeKpSemanticDerivedGraphInput(schema, [])
+  );
+  const interpolation = declareKpSemanticStateInterpolation({
+    id: "amount-interpolation",
+    sourceId: `${namespace}.amount.transition`,
+    target: stateHandles.refs.amount
+  });
+  const discrete = declareKpSemanticStateDiscreteTransition({
+    id: "phase-change",
+    sourceId: `${namespace}.phase.transition`,
+    target: stateHandles.refs.phase,
+    changePoints: [
+      {
+        id: "after",
+        at: createKpSemanticProgress(2n, 3n),
+        valueSourceId: `${namespace}.phase.after`
+      },
+      {
+        id: "middle",
+        at: createKpSemanticProgress(1n, 3n),
+        valueSourceId: `${namespace}.phase.middle`
+      }
+    ]
+  });
+  const presentation = declareKpSemanticStatePresentationTransition({
+    id: "label-emphasis",
+    sourceId: `${namespace}.label.transition`,
+    target: stateHandles.refs.label
+  });
+  const amountDefinition = defineKpSemanticStateFamily({
+    compiled: schema,
+    handles: stateHandles,
+    id: "change-amount",
+    sourceId: `${namespace}.amount.family`,
+    parameters: kpStateFamilyParameters<{ readonly amount: number }>(),
+    transitions: builder => [builder.interpolate(
+      interpolation,
+      ({ before, after, progress }) =>
+        before + (after - before) * Number(progress.numerator) /
+          Number(progress.denominator)
+    )] as const,
+    author(parameters, draft) {
+      draft.amount.update(() => parameters.amount);
+    }
+  });
+  const phaseDefinition = defineKpSemanticStateFamily({
+    compiled: schema,
+    handles: stateHandles,
+    id: "change-phase",
+    sourceId: `${namespace}.phase.family`,
+    parameters: kpStateFamilyParameters<{ readonly phase: "after" }>(),
+    transitions: builder => [
+      builder.discrete(discrete, ({ changePointId }) =>
+        changePointId === "middle" ? "middle" : "after"
+      ),
+      builder.presentation(presentation)
+    ] as const,
+    author(parameters, draft) {
+      draft.phase.update(() => parameters.phase);
+    }
+  });
+  const amountApplication = amountDefinition.prepareApplication({
+    applicationId: "amount",
+    parameters: { amount: 8 },
+    sourceId: `${namespace}.amount.application`
+  });
+  const phaseApplication = phaseDefinition.prepareApplication({
+    applicationId: "phase",
+    parameters: { phase: "after" },
+    sourceId: `${namespace}.phase.application`
+  });
+  const declaration = declareKpSemanticStateComposition({
+    namespace,
+    localId: "mode-change",
+    sourceId: `${namespace}.composition`,
+    root: declareKpSemanticStateCompositionIndependent({
+      name: "cohort",
+      sourceId: `${namespace}.cohort`,
+      evidence: {
+        id: "mode-writes-are-disjoint",
+        sourceId: `${namespace}.evidence`
+      },
+      members: [
+        declareKpSemanticStateCompositionMember({
+          name: "amount",
+          sourceId: `${namespace}.amount.member`,
+          application: amountApplication
+        }),
+        declareKpSemanticStateCompositionMember({
+          name: "phase",
+          sourceId: `${namespace}.phase.member`,
+          application: phaseApplication
+        })
+      ]
+    })
+  });
+  const validated = validateKpSemanticStateComposition({
+    identities: schema.identityScope,
+    declaration,
+    definitions: [amountDefinition.declaration, phaseDefinition.declaration]
+  });
+  const preflight = preflightKpSemanticStateComposition({
+    composition: validated,
+    base: initial,
+    graphBindings: [amountDefinition, phaseDefinition].map(definition =>
+      bindKpSemanticStateCompositionGraph({ definitionId: definition.id, graph })
+    )
+  });
+  const composition = compileKpSemanticStateComposition({
+    identities: schema.identityScope,
+    preflight
+  });
+  const compositionHandles = createKpSemanticStateCompositionHandleSet(
+    composition
+  );
+  const chain = assembleKpSemanticStateCompositionEndpointChain({
+    composition,
+    base: initial,
+    graph,
+    bindings: [
+      bindKpSemanticStateCompositionEndpoint({
+        definition: amountDefinition,
+        application: amountApplication
+      }),
+      bindKpSemanticStateCompositionEndpoint({
+        definition: phaseDefinition,
+        application: phaseApplication
+      })
+    ]
+  });
+  const evaluatorBinding = (
+    definition: typeof amountDefinition | typeof phaseDefinition
+  ) => {
+    const handle = compositionHandles.members.find(
+      candidate => candidate.definitionId === definition.id
+    );
+    const applied = chain.applications.find(
+      candidate => candidate.application.definitionId === definition.id
+    );
+    if (handle === undefined || applied === undefined) {
+      throw new Error("Missing mode cohort member authority.");
+    }
+    return { handle, applied };
+  };
+  const amountEvaluator = evaluatorBinding(amountDefinition);
+  const phaseEvaluator = evaluatorBinding(phaseDefinition);
+  const evaluatorBindings = [
+    bindKpSemanticStateCompositionMemberEvaluator({
+      ...amountEvaluator,
+      definition: amountDefinition
+    }),
+    bindKpSemanticStateCompositionMemberEvaluator({
+      ...phaseEvaluator,
+      definition: phaseDefinition
+    })
+  ];
+  return {
+    chain,
+    compositionHandles,
+    discrete,
+    presentation,
+    resolver: createKpSemanticStateCompositionCohortResolver({
+      chain,
+      handles: compositionHandles,
+      bindings: evaluatorBindings
+    }),
+    stateHandles
+  };
+}
+
+function readDriverValue(
+  drivers: readonly { readonly targetSlotId: string; readonly value: unknown }[],
+  targetSlotId: string
+) {
+  return drivers.find(driver => driver.targetSlotId === targetSlotId)?.value;
 }

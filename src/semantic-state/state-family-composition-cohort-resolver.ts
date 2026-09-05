@@ -34,6 +34,35 @@ import {
 import type {
   KpSemanticStateFamilyEvaluator
 } from "./state-family-evaluator.ts";
+import type {
+  KpSemanticStatePresentationTransitionDeclaration,
+  KpSemanticStateTransitionDeclaration
+} from "./state-family-transition.ts";
+
+export interface KpSemanticStateCompositionTransitionAuthority<
+  Declaration extends KpSemanticStateTransitionDeclaration =
+    KpSemanticStateTransitionDeclaration
+> {
+  readonly schemaVersion:
+    "kp.semantic-state-composition-transition-authority.v1";
+  readonly kind: "semantic-state-composition-transition-authority";
+  readonly memberId: KpSemanticStateCompositionAppliedMember<
+    KpSemanticStateGroupDescriptor<KpSemanticStateMemberMap>
+  >["memberId"];
+  readonly definitionId: KpSemanticStateCompositionAppliedMember<
+    KpSemanticStateGroupDescriptor<KpSemanticStateMemberMap>
+  >["application"]["definitionId"];
+  readonly transformationId: KpSemanticStateCompositionAppliedMember<
+    KpSemanticStateGroupDescriptor<KpSemanticStateMemberMap>
+  >["application"]["transformationId"];
+  readonly applicationId: string;
+  readonly declaration: Declaration;
+}
+
+export type KpSemanticStateCompositionPresentationTransitionAuthority =
+  KpSemanticStateCompositionTransitionAuthority<
+    KpSemanticStatePresentationTransitionDeclaration<unknown>
+  >;
 
 export interface KpPersistentSemanticStateCompositionCohortSample {
   readonly schemaVersion:
@@ -50,6 +79,8 @@ export interface KpEphemeralSemanticStateCompositionCohortSample {
   readonly kind: "ephemeral-interior";
   readonly progress: KpSemanticProgress;
   readonly source: KpAggregateEphemeralSemanticStateReadSource;
+  readonly presentationTransitions:
+    readonly KpSemanticStateCompositionPresentationTransitionAuthority[];
 }
 
 export type KpSemanticStateCompositionCohortSample =
@@ -66,6 +97,8 @@ export interface KpSemanticStateCompositionCohortResolution<
   readonly handle: KpSemanticStateCompositionGroupHandle<"independent">;
   readonly applications:
     readonly KpSemanticStateCompositionAppliedMember<Root>[];
+  readonly transitionAuthority:
+    readonly KpSemanticStateCompositionTransitionAuthority[];
   readonly beforeBoundary: KpSemanticStateCompositionSettledBoundary;
   readonly afterBoundary: KpSemanticStateCompositionSettledBoundary;
   readonly progress: KpSemanticProgress;
@@ -171,9 +204,23 @@ export function createKpSemanticStateCompositionCohortResolver<
         evaluator: binding.createEvaluator({ sampleCacheCapacity: 0 })
       });
     });
+    const transitionAuthority = Object.freeze(members.flatMap(({ applied }) =>
+      applied.application.transitionPlan.declarations.map(declaration =>
+        Object.freeze({
+          schemaVersion:
+            "kp.semantic-state-composition-transition-authority.v1" as const,
+          kind: "semantic-state-composition-transition-authority" as const,
+          memberId: applied.memberId,
+          definitionId: applied.application.definitionId,
+          transformationId: applied.application.transformationId,
+          applicationId: applied.application.applicationId,
+          declaration
+        }))
+    ));
     entries.set(canonicalHandle.id, Object.freeze({
       handle: canonicalHandle,
       members: Object.freeze(members),
+      transitionAuthority,
       beforeBoundary,
       afterBoundary
     }));
@@ -231,6 +278,7 @@ export function createKpSemanticStateCompositionCohortResolver<
       address: canonicalAddress,
       handle: entry.handle,
       applications: Object.freeze(entry.members.map(({ applied }) => applied)),
+      transitionAuthority: entry.transitionAuthority,
       beforeBoundary: entry.beforeBoundary,
       afterBoundary: entry.afterBoundary,
       progress,
@@ -272,6 +320,8 @@ interface KpIndependentCohortEntry<
 > {
   readonly handle: KpSemanticStateCompositionGroupHandle<"independent">;
   readonly members: readonly KpIndependentCohortMember<Root>[];
+  readonly transitionAuthority:
+    readonly KpSemanticStateCompositionTransitionAuthority[];
   readonly beforeBoundary: KpSemanticStateCompositionSettledBoundary;
   readonly afterBoundary: KpSemanticStateCompositionSettledBoundary;
 }
@@ -305,7 +355,7 @@ function sampleCohort<
       )
     });
   }
-  const sources = input.entry.members.map(({ evaluator }) => {
+  const samples = input.entry.members.map(({ evaluator }) => {
     const sample = evaluator.at(input.progress);
     if (sample.kind !== "ephemeral-interior") {
       fail(
@@ -313,8 +363,10 @@ function sampleCohort<
         "Interior cohort progress unexpectedly resolved to a persistent member endpoint."
       );
     }
-    return sample.source;
-  }) as readonly KpEphemeralSemanticStateReadSource[];
+    return sample;
+  });
+  const sources: readonly KpEphemeralSemanticStateReadSource[] =
+    samples.map(({ source }) => source);
   return Object.freeze({
     schemaVersion: "kp.semantic-state-composition-cohort-sample.v1",
     kind: "ephemeral-interior",
@@ -325,8 +377,19 @@ function sampleCohort<
       progress: input.progress,
       base: input.entry.beforeBoundary.snapshot,
       sources
-    })
+    }),
+    presentationTransitions: Object.freeze(
+      input.entry.transitionAuthority.filter(
+        hasPresentationTransitionAuthority
+      )
+    )
   });
+}
+
+function hasPresentationTransitionAuthority(
+  authority: KpSemanticStateCompositionTransitionAuthority
+): authority is KpSemanticStateCompositionPresentationTransitionAuthority {
+  return authority.declaration.transitionMode === "presentation-only";
 }
 
 function validateHandleAlignment<
