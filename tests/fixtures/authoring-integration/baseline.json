@@ -1,0 +1,189 @@
+{
+  "schemaVersion": "kp.authoring-integration-baseline.v1",
+  "capturedFromCommit": "3477d4a25",
+  "source": "src/experiments/typed-linear-supply-demand/semantic-state-composed-market.ts",
+  "snapshot": "tests/fixtures/authoring-integration/composed-market-baseline.ts.txt",
+  "region": {
+    "start": "// composed-market-packet:start",
+    "end": "// composed-market-packet:end"
+  },
+  "metrics": {
+    "authoredSetupLines": 205,
+    "orchestrationLines": 52,
+    "semanticDeclarationLines": 153
+  },
+  "classificationRule": "Count every nonblank line in each top-level declaration exactly once. Orchestration is compile/handle/graph/materialization/endpoint wiring; model, domain derivations, operations, named applications and explanation content remain author declarations. Caller-specific glue relocated to helpers still counts as orchestration; report shared helpers and imports separately.",
+  "bindings": [
+    {
+      "name": "schema",
+      "lines": 19,
+      "category": "semantic-declaration"
+    },
+    {
+      "name": "compiled",
+      "lines": 4,
+      "category": "orchestration"
+    },
+    {
+      "name": "stateHandles",
+      "lines": 1,
+      "category": "orchestration"
+    },
+    {
+      "name": "evaluation",
+      "lines": 15,
+      "category": "semantic-declaration"
+    },
+    {
+      "name": "equilibrium",
+      "lines": 6,
+      "category": "semantic-declaration"
+    },
+    {
+      "name": "accounting",
+      "lines": 6,
+      "category": "semantic-declaration"
+    },
+    {
+      "name": "derivations",
+      "lines": 1,
+      "category": "orchestration"
+    },
+    {
+      "name": "initial",
+      "lines": 3,
+      "category": "orchestration"
+    },
+    {
+      "name": "graph",
+      "lines": 3,
+      "category": "orchestration"
+    },
+    {
+      "name": "demandTransition",
+      "lines": 5,
+      "category": "semantic-declaration"
+    },
+    {
+      "name": "taxTransition",
+      "lines": 5,
+      "category": "semantic-declaration"
+    },
+    {
+      "name": "demandFamily",
+      "lines": 26,
+      "category": "semantic-declaration"
+    },
+    {
+      "name": "taxFamily",
+      "lines": 24,
+      "category": "semantic-declaration"
+    },
+    {
+      "name": "demandApplication",
+      "lines": 7,
+      "category": "semantic-declaration"
+    },
+    {
+      "name": "taxApplication",
+      "lines": 5,
+      "category": "semantic-declaration"
+    },
+    {
+      "name": "demandMember",
+      "lines": 5,
+      "category": "semantic-declaration"
+    },
+    {
+      "name": "taxMember",
+      "lines": 5,
+      "category": "semantic-declaration"
+    },
+    {
+      "name": "declaration",
+      "lines": 25,
+      "category": "semantic-declaration"
+    },
+    {
+      "name": "validated",
+      "lines": 5,
+      "category": "orchestration"
+    },
+    {
+      "name": "preflight",
+      "lines": 14,
+      "category": "orchestration"
+    },
+    {
+      "name": "composition",
+      "lines": 4,
+      "category": "orchestration"
+    },
+    {
+      "name": "endpointBindings",
+      "lines": 10,
+      "category": "orchestration"
+    },
+    {
+      "name": "chain",
+      "lines": 5,
+      "category": "orchestration"
+    },
+    {
+      "name": "compositionHandles",
+      "lines": 2,
+      "category": "orchestration"
+    }
+  ],
+  "canonical": {
+    "hostPath": "/experiments/kinetic-figure/supply-tax/",
+    "entry": "src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-entry.ts",
+    "artifact": "src/animation/economics-supply-tax-asset.ts",
+    "semantics": "domains/economics/per-unit-tax-welfare-model.ts",
+    "parameterSemantics": "domains/economics/per-unit-tax-parameterized.ts",
+    "clock": "src/reader/runtime/timeline-playback-clock.ts",
+    "paint": "src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-svg.ts",
+    "article": "content/lessons/economics-supply-tax-scroll-score.kp.md",
+    "articleLock": "content/lessons/economics-supply-tax-scroll-score.kp.lock.json",
+    "score": "src/experiments/kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-score.ts",
+    "publication": "src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-publication.ts"
+  },
+  "tasks": [
+    {
+      "id": "parameter-edit",
+      "status": "integration-gap",
+      "evidence": "tests/semantic-state-supply-tax-reparameterization.test.ts",
+      "gap": "State parameter edits are tested without a state-driven canonical preview."
+    },
+    {
+      "id": "demand-tax-composition",
+      "status": "integration-gap",
+      "evidence": "tests/semantic-state-composed-market.test.ts",
+      "gap": "The two-family packet has no host/score lowering."
+    },
+    {
+      "id": "selected-rewrite",
+      "status": "integration-gap",
+      "evidence": "tests/typed-math-scene.test.ts",
+      "gap": "Typed math scene selection does not yet recover from aggregate state authority."
+    },
+    {
+      "id": "historical-selection",
+      "status": "integration-gap",
+      "evidence": "tests/semantic-state-composition-branch.test.ts",
+      "gap": "Aggregate history and typed math selections are separate proofs."
+    },
+    {
+      "id": "prose-focus-binding",
+      "status": "integration-gap",
+      "evidence": "tests/economics-supply-tax-scroll-score.test.ts",
+      "gap": "Existing Article focus is not compiled from the composed state specimen."
+    },
+    {
+      "id": "publication",
+      "status": "integration-gap",
+      "evidence": "tests/economics-supply-tax-publication.test.ts",
+      "gap": "Canonical Article publication exists; an integrated author-model-to-publication workflow does not."
+    }
+  ]
+}

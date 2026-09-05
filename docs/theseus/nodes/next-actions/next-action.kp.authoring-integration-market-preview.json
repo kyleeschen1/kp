@@ -24,6 +24,22 @@
     "npm run typecheck",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:authoring-integration",
+      "status": "passed",
+      "scope": "s01",
+      "checkedAt": "2026-09-05T19:12:46.655Z",
+      "notes": "4 baseline authority and task-gap checks pass."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-state-composed-market.test.ts",
+      "status": "passed",
+      "scope": "s01",
+      "checkedAt": "2026-09-05T19:12:47.776Z",
+      "notes": "4 existing market characterization tests pass unchanged."
+    }
+  ],
   "expectedLearning": [
     "Whether internal assembly and a bounded math bridge make one exact market explanation authorable without duplicate semantics or renderer authority."
   ],

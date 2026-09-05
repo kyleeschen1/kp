@@ -115,7 +115,8 @@
     {
       "id": "s01",
       "title": "Author-task fixtures and source map: freeze current model/renderer/score authority, 205-line baseline, task classification, and add the integration test command",
-      "status": "planned"
+      "summary": "Frozen complete source baseline, 205 setup lines (52 orchestration), actual canonical ownership map, six honest integration gaps, and scoped test runner; all eight focused checks pass.",
+      "status": "complete"
     },
     {
       "id": "s02",
