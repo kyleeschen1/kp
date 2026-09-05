@@ -167,7 +167,8 @@
     {
       "id": "s17",
       "title": "Aggregate requested derived evaluation",
-      "status": "planned"
+      "summary": "Aggregate cohort interiors now evaluate one requested typed derived closure through the current existing graph and request-local memo, freeze the completed handle view, retain unaffected persistent dependency authority, share diamond work once, and publish no partial result or cross-request cache.",
+      "status": "complete"
     },
     {
       "id": "s18",
