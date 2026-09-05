@@ -149,7 +149,8 @@
     {
       "id": "s14",
       "title": "Settled direct seek and pinned inspection",
-      "status": "planned"
+      "summary": "Settled handles and addresses now resolve directly to exact retained persistent snapshots and typed pinned state trees through an immutable ordinal index, with no replay, evaluator calls, cache mutation, or mutable cursor.",
+      "status": "complete"
     },
     {
       "id": "s15",

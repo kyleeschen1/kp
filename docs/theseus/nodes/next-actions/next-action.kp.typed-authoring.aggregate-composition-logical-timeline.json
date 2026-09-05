@@ -861,11 +861,88 @@
       "scope": "slice-s13-theseus",
       "checkedAt": "2026-09-05T05:08:48.546Z",
       "notes": "Validated 1094 nodes and 27530 events before slice completion."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-state-composition-settled-resolver.test.ts tests/semantic-state-composition-address.test.ts tests/semantic-state-composition-endpoints.test.ts",
+      "status": "passed",
+      "scope": "slice-s14-focused",
+      "checkedAt": "2026-09-05T05:25:31.510Z",
+      "notes": "15/15 focused tests passed; exact snapshot identity, pinned reads, zero author calls, and foreign authority rejection."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s14-typecheck",
+      "checkedAt": "2026-09-05T05:25:32.719Z",
+      "notes": "Application, node, tests, Svelte, and domain typechecks passed with zero diagnostics."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-s14-architecture",
+      "checkedAt": "2026-09-05T05:25:33.777Z",
+      "notes": "Architecture gates passed across 2017 TypeScript modules and 7510 of 7561 local references."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice-s14-inference",
+      "checkedAt": "2026-09-05T05:25:34.812Z",
+      "notes": "Inference contracts passed at 107104 types and 181862 instantiations."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "slice-s14-semantic",
+      "checkedAt": "2026-09-05T05:25:35.836Z",
+      "notes": "314/314 semantic-state tests passed."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "slice-s14-bundle",
+      "checkedAt": "2026-09-05T05:25:36.864Z",
+      "notes": "Production bundle completed with 1603 transformed modules."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "slice-s14-complete",
+      "checkedAt": "2026-09-05T05:25:37.904Z",
+      "notes": "6429/6429 repository tests passed in 551 seconds."
+    },
+    {
+      "command": "npm run verify:impact -- --path src/semantic-state/state-family-composition-settled-resolver.ts",
+      "status": "passed",
+      "scope": "slice-s14-impact",
+      "checkedAt": "2026-09-05T05:25:38.933Z",
+      "notes": "High-risk semantic-state impact was fully covered by semantic, typecheck, architecture, inference, bundle, and complete-suite gates."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/exact-equation-reachability-graph.test.ts",
+      "status": "passed",
+      "scope": "slice-s14-reachability",
+      "checkedAt": "2026-09-05T05:25:39.973Z",
+      "notes": "Generated reachability graph remained exact after adding source and test modules."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice-s14-diff",
+      "checkedAt": "2026-09-05T05:25:41.022Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-s14-workspace",
+      "checkedAt": "2026-09-05T05:25:42.051Z",
+      "notes": "Workspace valid with 1094 nodes and 27544 events before slice close."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s13 complete: canonical settled and in-transition address values are disjoint, exact, transport-neutral, and contain no snapshot, clock, duration, or URL authority."
+    "summary": "s14 complete: every settled logical address directly resolves to exact retained snapshot authority and pinned typed handles without replay or cache mutation."
   },
   "expectedLearning": [
     "Whether sequence nesting and demonstrated-independent cohorts can reuse current family and persistent-state authority without a second kernel.",
