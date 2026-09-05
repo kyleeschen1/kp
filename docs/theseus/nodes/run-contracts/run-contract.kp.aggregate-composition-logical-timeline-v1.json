@@ -125,7 +125,8 @@
     {
       "id": "s10",
       "title": "Explicit overlapping-write sequence",
-      "status": "planned"
+      "summary": "Repeated writes are proven legal only through explicit authored sequence order: both ordinary transactions execute, the middle and final snapshots recover directly, reversed order changes inspectable meaning, and the same pair fails independent preflight.",
+      "status": "complete"
     },
     {
       "id": "s11",
