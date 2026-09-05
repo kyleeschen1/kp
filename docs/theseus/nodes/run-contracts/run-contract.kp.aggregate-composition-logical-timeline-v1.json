@@ -185,7 +185,8 @@
     {
       "id": "s20",
       "title": "Seek rewind nesting and local-inspection laws",
-      "status": "planned"
+      "summary": "Deterministic nested logical-address access now passes arbitrary seek permutations, equivalent progress, direct deep access, retries, disposal recreation, and historical local inspection while the newest aggregate boundary remains reference-exact.",
+      "status": "complete"
     },
     {
       "id": "s21",
