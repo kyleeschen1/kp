@@ -129,6 +129,13 @@
       "scope": "s10",
       "checkedAt": "2026-09-05T20:35:53.044Z",
       "notes": "29 authoring tests plus 5 compatibility tests pass; final focused optics 4 pass; full typecheck clean. Initial type failure retained and fixed without casts at callers."
+    },
+    {
+      "command": "npm run test:authoring-integration; existing Jacobian and Hessian projection tests; npm run typecheck; git diff --check; theseus workspace validate",
+      "status": "passed",
+      "scope": "s11",
+      "checkedAt": "2026-09-05T20:39:33.617Z",
+      "notes": "32 integration tests and 9 focused calculus/bridge tests pass; static dimension negatives compile as expected; Svelte reports zero errors and warnings."
     }
   ],
   "expectedLearning": [

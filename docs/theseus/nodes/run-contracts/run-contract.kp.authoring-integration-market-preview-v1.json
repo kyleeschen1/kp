@@ -175,7 +175,8 @@
     {
       "id": "s11",
       "title": "Existing affine Jacobian and quadratic Hessian pressure: prove macro descriptors, static shapes, and honest dynamic dimensions through bridge",
-      "status": "planned"
+      "summary": "Nonvisual J/H pressure proves existing macro, correspondence, exact history, static shape and honest dynamic dimension behavior without new math authority.",
+      "status": "complete"
     },
     {
       "id": "s12",
