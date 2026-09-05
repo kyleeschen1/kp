@@ -2,9 +2,9 @@
   "id": "run-contract.kp.authoring-integration-market-preview-v1",
   "kind": "run-contract",
   "title": "Authoring integration to market preview",
-  "status": "blocked",
+  "status": "ready",
   "domain": "kp",
-  "summary": "STOP_CONDITION after12/28 complete. s13 remains planned; no later slice started. Await explicit bounded economics operation/lifecycle prerequisite approval.",
+  "summary": "User approved bounded economics operation/lifecycle prerequisite and resuming s13-s28 on 2026-09-05; original scope and all verification gates retained.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -65,7 +65,8 @@
     "s25 | Risk: Medium: ceremony remains hidden | Verification: S plus inference: at least 50% orchestration reduction with helper cost disclosed; unchanged task scope | Commit: Reviewable specimen and measured report",
     "s26 | Risk: High: functional pass mistaken for visual approval | Verification: B plus stable sparse visual commands; accessibility and preservation smoke | Commit: Review harness checkpoints and durable command references",
     "s27 | Risk: High: local proof hides integration debt | Verification: B plus full test, inference, build and existing canonical browser preservation suites | Commit: Gate evidence and only in-scope regression repairs",
-    "s28 | Risk: Low: inaccurate completion/promotion | Verification: F plus Theseus validation/status and evidence audit | Commit: Closeout docs and completed contract evidence"
+    "s28 | Risk: Low: inaccurate completion/promotion | Verification: F plus Theseus validation/status and evidence audit | Commit: Closeout docs and completed contract evidence",
+    "Approved 2026-09-05 amendment within s13: register the bounded economics per-unit-tax operation and exact pack pin, explicit immutable before/after lifecycle, total coverage and forged-update rejection as described in docs/project/reviews/2026-09-05-authoring-integration-source-authority-stop.md; then resume unchanged s13-s28. No universal relation or renderer expansion."
   ],
   "disallowedWork": [
     "No arbitrary-cohort read-tracking architecture, second state/transaction/graph authority, serialized functions, generic update granting verified operation authority, or arbitrary browser source execution.",

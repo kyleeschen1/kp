@@ -2,9 +2,9 @@
   "id": "next-action.kp.authoring-integration-market-preview",
   "kind": "next-action",
   "title": "Integrate authoring through one market preview",
-  "status": "blocked",
+  "status": "ready",
   "domain": "kp",
-  "summary": "STOP_CONDITION: unresolved economics governed operation-pack and state/lifecycle authority; approve bounded prerequisite in source-authority stop report before resuming s13.",
+  "summary": "User approved bounded economics operation/lifecycle prerequisite and resuming s13-s28 on 2026-09-05; original scope and all verification gates retained.",
   "sourceRefs": [
     {
       "kind": "file",

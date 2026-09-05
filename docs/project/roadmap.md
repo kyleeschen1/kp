@@ -79,10 +79,11 @@ is `run-contract.kp.authoring-integration-market-preview-v1`. See
 
 The source-to-preview boundary exposed a semantic-authority prerequisite:
 canonical economics does not yet supply governed operation-pack pins and total
-state-transition lineage. The run is stopped pending that bounded domain-contract
-decision; the accepted authoring-first direction is unchanged. See
+state-transition lineage. The run stopped pending that bounded domain-contract
+decision; the user has now approved that bounded prerequisite and resuming
+the existing run. The accepted authoring-first direction is unchanged. See
 `reviews/2026-09-05-authoring-integration-source-authority-stop.md` for executed
-evidence and the proposed prerequisite. Theseus retains live execution state.
+evidence and the accepted prerequisite. Theseus retains live execution state.
 
 The Focus Deck remains preserved at its four-card human checkpoint. The
 Animation Catalogue remains the source and pressure lab. No result here

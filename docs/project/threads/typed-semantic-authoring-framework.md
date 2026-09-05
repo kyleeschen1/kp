@@ -1,10 +1,10 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: authoring-first integration; source-authority decision required
+Status: authoring-first integration; economics prerequisite approved
 Last Updated: 2026-09-05
-Current Next Action: resolve the bounded economics operation/lifecycle contract
+Current Next Action: implement the approved bounded economics operation/lifecycle contract
 prerequisite in `../reviews/2026-09-05-authoring-integration-source-authority-stop.md`
-before resuming `run-contract.kp.authoring-integration-market-preview-v1`.
+within s13, then continue `run-contract.kp.authoring-integration-market-preview-v1`.
 Theseus owns current slice, verification, commits, and stop state.
 
 ## Current Accepted Direction

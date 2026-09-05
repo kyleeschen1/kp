@@ -8,6 +8,14 @@ Active thread: `../threads/typed-semantic-authoring-framework.md`
 Run ID: `run-contract.kp.authoring-integration-market-preview-v1`
 Executable contract: Theseus owns live status, evidence, and stop state.
 
+Amendment approved 2026-09-05: s13 includes the bounded economics operation-pack
+and explicit before/after lifecycle prerequisite in
+`2026-09-05-authoring-integration-source-authority-stop.md`. The user approved
+that prerequisite and resuming s13–s28. Existing order, 28-slice limit, broad
+verification, fixed budgets, preservation boundaries, and final checkpoint
+remain unchanged. Register only this domain's existing per-unit-tax operation;
+do not invent a universal relation or modify rendering to force a semantic fit.
+
 ## Outcome And Why Now
 
 An author should be able to express the market, name its changes and

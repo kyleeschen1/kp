@@ -2,6 +2,9 @@
 
 Date: 2026-09-05
 Outcome: STOP_CONDITION — unresolved semantic authority
+Disposition: historical stop; user approved the bounded amendment and resuming
+s13–s28 with "approve" on 2026-09-05. Approval resolves the decision gate, not
+the implementation or verification obligations below.
 Run: `run-contract.kp.authoring-integration-market-preview-v1`
 Scope: s13 source-authority lowering; s01–s12 complete, s13 incomplete.
 The [approved proposal](2026-09-05-authoring-integration-market-preview-long-loop-proposal.md)
@@ -47,7 +50,7 @@ These tests characterize missing support, not a successfully shipped lowering.
 The canonical asset, renderer, compiler, and registry are unchanged. No alternate
 host, animation, browser code evaluation, or public facade has been introduced.
 
-## Recommended bounded amendment — approval required
+## Accepted bounded amendment — approved 2026-09-05
 
 Resolve the domain contract before resuming source-to-preview integration:
 
@@ -68,9 +71,10 @@ Resolve the domain contract before resuming source-to-preview integration:
    the canonical route, reader clock, SVG/KaTeX owners, Article semantics, fixed
    budgets, and mandatory human exemplar checkpoint unchanged.
 
-This is a proposed prerequisite, not an approved queue refill or a second run
-plan. No new operation registration or lifecycle interpretation was implemented
-under the original adapter-only assumption.
+This prerequisite is now approved within s13 of the existing run, not a queue
+refill or second run plan. No new operation registration or lifecycle
+interpretation was implemented under the original adapter-only assumption;
+the resumed slice owns that work. The original stop evidence remains intact.
 
 ## Verification and handoff
 
