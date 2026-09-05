@@ -231,6 +231,7 @@ export function projectKpSupplyTaxTransitSvgDom(input: {
   readonly root: SVGSVGElement;
   readonly semantics: KpPerUnitTaxWelfareAssetV1;
   readonly frame: KpPerUnitTaxWelfareFrameV1;
+  readonly exactLabels?: boolean;
 }): void {
   const projection = projectKpSupplyTaxTransitSvg(input);
   const original = requiredSvgGroup(input.root, projection.originalSupply.entityId);
@@ -245,7 +246,7 @@ export function projectKpSupplyTaxTransitSvgDom(input: {
   if (label === null) throw new Error("Missing buyer-facing supply KaTeX label.");
   label.setAttribute("x", format(projection.buyerFacingSupply.end.x - 68));
   label.setAttribute("y", format(projection.buyerFacingSupply.end.y - 31));
-  projectTaxedMarketDom(input.root, projection.market);
+  projectTaxedMarketDom(input.root, projection.market, input.exactLabels ? input.frame.market : undefined);
   const title = input.root.querySelector<SVGTitleElement>("title");
   const description = input.root.querySelector<SVGDescElement>("desc");
   if (title === null || description === null) {
@@ -256,7 +257,10 @@ export function projectKpSupplyTaxTransitSvgDom(input: {
     : projection.phase === "taxed"
       ? "Taxed supply and demand equilibrium"
       : "A per-unit tax changes market equilibrium";
-  description.textContent = projection.phase === "untaxed"
+  description.textContent = input.exactLabels
+    ? projection.phase === "untaxed" ? describeBaseline(input.semantics)
+      : `A tax of ${exactDtoSpoken(input.frame.market.taxAmount)} shifts buyer-facing supply while original supply remains visible. Quantity is ${exactDtoSpoken(input.frame.market.quantity)}, consumers pay ${exactDtoSpoken(input.frame.market.consumerPrice)}, and producers receive ${exactDtoSpoken(input.frame.market.producerPrice)}.`
+    : projection.phase === "untaxed"
     ? "Demand P equals 12 minus Q and supply P equals 2 plus Q intersect at quantity 5 and price 7."
     : `A tax of ${exactLatex(projection.market.priceWedge)} shifts buyer-facing supply while original supply remains visible. Quantity is ${exactLatex(projection.market.quantity)}, consumers pay ${exactLatex(projection.market.consumerPrice)}, and producers receive ${exactLatex(projection.market.producerPrice)}.`;
   input.root.dataset["kpSupplyTaxSvgPhase"] = projection.phase;
@@ -291,7 +295,7 @@ function renderKpSupplyTaxSvg(
 
   return `<svg class="kp-supply-tax-graph" viewBox="0 0 ${kpSupplyTaxGraphViewport.width} ${kpSupplyTaxGraphViewport.height}" role="img" aria-labelledby="kp-supply-tax-graph-title kp-supply-tax-graph-description" data-kp-supply-tax-svg-state="baseline-market">
     <title id="kp-supply-tax-graph-title">Untaxed supply and demand equilibrium</title>
-    <desc id="kp-supply-tax-graph-description">Demand P equals 12 minus Q and supply P equals 2 plus Q intersect at quantity 5 and price 7.</desc>
+    <desc id="kp-supply-tax-graph-description">${escapeAttribute(describeBaseline(semantics))}</desc>
     <defs>
       <marker id="kp-supply-tax-axis-arrow" data-kp-supply-tax-axis-arrow viewBox="0 0 10 10" refX="8.25" refY="5" markerUnits="strokeWidth" markerWidth="5.5" markerHeight="5.5" orient="auto">
         <path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/>
@@ -330,7 +334,7 @@ function renderKpSupplyTaxSvg(
       <line class="kp-supply-tax-graph__guide" x1="${format(plotLeft)}" y1="${format(equilibrium.y)}" x2="${format(equilibrium.x)}" y2="${format(equilibrium.y)}"/>
       <line class="kp-supply-tax-graph__guide" x1="${format(equilibrium.x)}" y1="${format(equilibrium.y)}" x2="${format(equilibrium.x)}" y2="${format(plotBottom)}"/>
       <circle cx="${format(equilibrium.x)}" cy="${format(equilibrium.y)}" r="4"/>
-      ${mathLabel("E_0=(5,7)", equilibrium.x + 8, equilibrium.y - 34, 104, 32, "untaxed-equilibrium", requiredPriceId(semantics, "untaxed-market"))}
+      ${mathLabel(`E_0=(${exactDtoLatex(semantics.model.states.untaxed.quantity)},${exactDtoLatex(semantics.model.states.untaxed.consumerPrice)})`, equilibrium.x + 8, equilibrium.y - 34, 104, 32, "untaxed-equilibrium", requiredPriceId(semantics, "untaxed-market"))}
     </g>
     ${includeTransitLayer ? `<g class="kp-supply-tax-graph__taxed-market" data-kp-supply-tax-entity="${escapeAttribute(taxed.id)}" data-kp-presence="false" style="opacity:0">
       <line class="kp-supply-tax-graph__guide" data-kp-supply-tax-market-mark="consumer-price-guide" x1="${format(plotLeft)}" y1="${format(taxedEquilibrium.y)}" x2="${format(taxedEquilibrium.x)}" y2="${format(taxedEquilibrium.y)}"/>
@@ -340,14 +344,14 @@ function renderKpSupplyTaxSvg(
         <line data-kp-supply-tax-market-mark="wedge" x1="${format(taxedEquilibrium.x)}" y1="${format(taxedEquilibrium.y)}" x2="${format(taxedProducerPoint.x)}" y2="${format(taxedProducerPoint.y)}"/>
         <line data-kp-supply-tax-market-mark="wedge-cap-consumer" x1="${format(taxedEquilibrium.x - 5)}" y1="${format(taxedEquilibrium.y)}" x2="${format(taxedEquilibrium.x + 5)}" y2="${format(taxedEquilibrium.y)}"/>
         <line data-kp-supply-tax-market-mark="wedge-cap-producer" x1="${format(taxedProducerPoint.x - 5)}" y1="${format(taxedProducerPoint.y)}" x2="${format(taxedProducerPoint.x + 5)}" y2="${format(taxedProducerPoint.y)}"/>
-        ${mathLabel("t=P_c-P_p=4", taxedEquilibrium.x + 8, (taxedEquilibrium.y + taxedProducerPoint.y) / 2 - 15, 126, 30, "tax-wedge")}
+        ${mathLabel(`t=P_c-P_p=${exactDtoLatex(taxed.priceWedge)}`, taxedEquilibrium.x + 8, (taxedEquilibrium.y + taxedProducerPoint.y) / 2 - 15, 126, 30, "tax-wedge")}
       </g>
       <circle data-kp-supply-tax-market-mark="taxed-equilibrium-point" cx="${format(taxedEquilibrium.x)}" cy="${format(taxedEquilibrium.y)}" r="4"/>
       <circle class="kp-supply-tax-graph__producer-point" data-kp-supply-tax-market-mark="producer-point" cx="${format(taxedProducerPoint.x)}" cy="${format(taxedProducerPoint.y)}" r="3.25"/>
       ${mathLabel("E_t", taxedEquilibrium.x + 8, taxedEquilibrium.y - 30, 44, 30, "taxed-equilibrium")}
-      ${mathLabel("P_c=9", plotLeft - 59, taxedEquilibrium.y - 14, 58, 28, "consumer-price", requiredPriceId(semantics, "consumer"))}
-      ${mathLabel("P_p=5", plotLeft - 59, taxedProducerPoint.y - 14, 58, 28, "producer-price", requiredPriceId(semantics, "producer"))}
-      ${mathLabel("Q_t=3", taxedEquilibrium.x - 28, plotBottom + 8, 62, 28, "taxed-quantity")}
+      ${mathLabel(`P_c=${exactDtoLatex(taxed.consumerPrice)}`, plotLeft - 59, taxedEquilibrium.y - 14, 58, 28, "consumer-price", requiredPriceId(semantics, "consumer"))}
+      ${mathLabel(`P_p=${exactDtoLatex(taxed.producerPrice)}`, plotLeft - 59, taxedProducerPoint.y - 14, 58, 28, "producer-price", requiredPriceId(semantics, "producer"))}
+      ${mathLabel(`Q_t=${exactDtoLatex(taxed.quantity)}`, taxedEquilibrium.x - 28, plotBottom + 8, 62, 28, "taxed-quantity")}
     </g>` : ""}
   </svg>`;
 }
@@ -430,7 +434,8 @@ function pointPair(point: KpSupplyTaxSvgPointV1): string {
 
 function projectTaxedMarketDom(
   root: SVGSVGElement,
-  market: KpSupplyTaxTransitSvgProjectionV1["market"]
+  market: KpSupplyTaxTransitSvgProjectionV1["market"],
+  exact?: KpPerUnitTaxWelfareFrameV1["market"]
 ): void {
   const group = requiredSvgGroup(root, market.entityId);
   group.dataset["kpPresence"] = String(market.present);
@@ -448,13 +453,13 @@ function projectTaxedMarketDom(
   setCircle(group, "producer-point", market.producerPoint);
   setMathLabel(group, "taxed-equilibrium", "E_t",
     market.equilibriumPoint.x + 8, market.equilibriumPoint.y - 30);
-  setMathLabel(group, "consumer-price", `P_c=${exactLatex(market.consumerPrice)}`,
+  setMathLabel(group, "consumer-price", `P_c=${exact ? exactDtoLatex(exact.consumerPrice) : exactLatex(market.consumerPrice)}`,
     kpSupplyTaxGraphViewport.left - 59, market.consumerPriceAxisPoint.y - 14);
-  setMathLabel(group, "producer-price", `P_p=${exactLatex(market.producerPrice)}`,
+  setMathLabel(group, "producer-price", `P_p=${exact ? exactDtoLatex(exact.producerPrice) : exactLatex(market.producerPrice)}`,
     kpSupplyTaxGraphViewport.left - 59, market.producerPriceAxisPoint.y - 14);
-  setMathLabel(group, "taxed-quantity", `Q_t=${exactLatex(market.quantity)}`,
+  setMathLabel(group, "taxed-quantity", `Q_t=${exact ? exactDtoLatex(exact.quantity) : exactLatex(market.quantity)}`,
     market.quantityAxisPoint.x - 28, market.quantityAxisPoint.y + 8);
-  setMathLabel(group, "tax-wedge", `t=P_c-P_p=${exactLatex(market.priceWedge)}`,
+  setMathLabel(group, "tax-wedge", `t=P_c-P_p=${exact ? exactDtoLatex(exact.priceWedge) : exactLatex(market.priceWedge)}`,
     market.equilibriumPoint.x + 8,
     (market.equilibriumPoint.y + market.producerPoint.y) / 2 - 15);
 }
@@ -541,6 +546,13 @@ function exactLatex(value: number): string {
   const doubled = value * 2;
   if (Number.isInteger(doubled)) return `\\frac{${doubled}}{2}`;
   return format(value);
+}
+
+function describeBaseline(semantics: KpPerUnitTaxWelfareAssetV1): string {
+  const { input, states } = semantics.model;
+  const coefficient = (value: ExactRationalDto) => value.numerator === value.denominator
+    ? "" : `${exactDtoSpoken(value)} times `;
+  return `Demand P equals ${exactDtoSpoken(input.demand.priceIntercept)} minus ${coefficient(input.demand.priceChangePerQuantity)}Q and supply P equals ${exactDtoSpoken(input.supply.priceIntercept)} plus ${coefficient(input.supply.priceChangePerQuantity)}Q intersect at quantity ${exactDtoSpoken(states.untaxed.quantity)} and price ${exactDtoSpoken(states.untaxed.consumerPrice)}.`;
 }
 
 function graphPoint(semantics: KpPerUnitTaxWelfareAssetV1, quantity: number, price: number): KpSupplyTaxSvgPointV1 {

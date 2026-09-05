@@ -217,6 +217,13 @@
       "scope": "s17",
       "checkedAt": "2026-09-05T22:38:53.443Z",
       "notes": "50 integration and81 economics tests pass; full types and final test-project types clean; architecture2037modules zero exceptions. Two Chromium tests compare10 exact SVG checkpoints, disposal and3 snapshots. Midpoint inspected; generated inventory unchanged."
+    },
+    {
+      "command": "npm run test:authoring-integration; npm run test:economics-supply-tax; npm run typecheck; npm run check:architecture; npm run visual:authoring-market; npm run check:equation-reachability; git diff --check",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-05T22:50:05.540Z",
+      "notes": "52 integration and81 economics tests pass; full types clean; architecture2037modules zero exceptions. Three Chromium tests verify exact HTML-only KaTeX, spoken fractions, endpoint ledger and10 paint checkpoints. Initial annotation assumption and inherited hidden ledger corrected; ledger inspected."
     }
   ],
   "progress": {

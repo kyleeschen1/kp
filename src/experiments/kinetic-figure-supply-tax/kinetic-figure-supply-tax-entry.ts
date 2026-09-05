@@ -260,7 +260,8 @@ export function mountKpSupplyTaxKineticFigure(input: {
     projectKpSupplyTaxTransitSvgDom({
       root: graph,
       semantics: authority.semantics,
-      frame
+      frame,
+      exactLabels: input.source !== undefined
     });
     projectedModelProgress = modelProgress;
     deck.dataset["kpSupplyTaxModelProgress"] = modelProgress.toFixed(4);

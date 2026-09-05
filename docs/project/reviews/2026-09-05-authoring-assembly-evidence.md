@@ -251,3 +251,31 @@ three snapshots, and the inspected midpoint preserves the canonical treatment.
 Disposal closes both the figure and bounded frame session. The host now reports
 `state-driven-tax`; Article/fact bindings and local author editing are still
 separate, unfinished integrations. This does not claim human approval.
+
+## Native label and endpoint ledger integration
+
+Initial graph labels now format the supplied semantic baseline and taxed values,
+not fixed canonical numbers. The opt-in live path passes exact rational frame
+values to the existing KaTeX helper; numeric geometry projection is not label
+authority. Canonical callers retain their existing live-formatting default.
+No new native compositor mechanism, label paint owner, offsets, or timing exists.
+
+The opt-in SVG description speaks fractions as values, not raw LaTeX commands.
+The browser preservation comparison now excludes only `desc` wording and tests
+that wording separately against exact current values; its ten paint checkpoints
+still match. The new off-grid test compares actual native HTML with the existing
+renderer applied to independently queried exact values, including settled output.
+An initial test incorrectly assumed MathML annotations; the existing renderer is
+HTML-only by default, so tests now exercise that actual contract.
+
+The author-only native disclosure displays the existing before/after welfare
+ledger. Its labels explicitly describe endpoint comparison, not current sampled
+welfare. Unit tests prove every ledger value equals this revision's frame
+endpoints for canonical and variant input. The ledger's old beat-dependent hidden
+style required one scoped presence rule for this disclosure; reader styling is
+unchanged. The opened ledger capture was inspected. This remains an internal
+inspector, not an approved final authoring layout.
+
+The scoped browser command passes three tests. The exact scan adds only the new
+unit test (4,240 to 4,241); the stylesheet is outside that scan. Roots, edges, and
+budgets remain unchanged.

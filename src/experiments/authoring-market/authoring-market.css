@@ -1,0 +1,5 @@
+/* This endpoint inspector is controlled by native details presence, not by
+   the reader deck's beat-dependent ledger visibility. */
+[data-kp-authoring-market-comparison] > .kp-supply-tax-ledger {
+  display: block;
+}

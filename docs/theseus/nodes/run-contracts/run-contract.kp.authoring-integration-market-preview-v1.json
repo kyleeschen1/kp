@@ -219,7 +219,8 @@
     {
       "id": "s18",
       "title": "Existing KaTeX label/ledger integration: derive exact math and accessible values from the same revision/frame",
-      "status": "planned"
+      "summary": "Exact native live labels, derived baseline labels and explicit endpoint ledger agree with model/frame authority. Three browser checks,52 integration tests,81 economics tests, types and architecture pass.",
+      "status": "complete"
     },
     {
       "id": "s19",

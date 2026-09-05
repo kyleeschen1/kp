@@ -2,6 +2,8 @@ import { mountKpSupplyTaxKineticFigure } from "../kinetic-figure-supply-tax/kine
 import { createKpAuthoredMarketSource } from "../typed-linear-supply-demand/authoring-market-source.ts";
 import { createKpAuthoringMarketFrameSession } from "./authoring-market-frame.ts";
 import { encodeKpSemanticStateCompositionLogicalAddress } from "../../semantic-state/state-family-composition-address.ts";
+import { renderKpSupplyTaxWelfareLedger } from "../kinetic-figure-supply-tax/kinetic-figure-supply-tax-svg.ts";
+import "./authoring-market.css";
 
 /** Opt-in composition only: the existing figure still owns paint and clocks. */
 export function mountKpAuthoringMarket(input: { readonly root: HTMLElement }) {
@@ -20,6 +22,12 @@ export function mountKpAuthoringMarket(input: { readonly root: HTMLElement }) {
     } });
   } catch (error) { frames.dispose(); throw error; }
   input.root.dataset["kpAuthoringMarket"] = "state-driven-tax";
+  // Before/after comparison is a revision-owned endpoint view, not the live
+  // sample. Keep it explicitly labelled and outside the reader's focal stage.
+  const comparison = document.createElement("details");
+  comparison.dataset["kpAuthoringMarketComparison"] = "endpoints";
+  comparison.innerHTML = `<summary>Exact before/after accounting</summary>${renderKpSupplyTaxWelfareLedger(authored.source.canonical.semantics)}`;
+  input.root.querySelector("[data-kp-supply-tax-focus-deck]")!.after(comparison);
   let disposed = false;
   return Object.freeze({
     authored,
