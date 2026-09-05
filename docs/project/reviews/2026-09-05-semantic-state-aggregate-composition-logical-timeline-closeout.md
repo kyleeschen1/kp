@@ -11,6 +11,23 @@ Source proposal:
 
 Active thread: `../threads/typed-semantic-authoring-framework.md`
 
+## Post-Closeout Review Qualification
+
+The user accepted the revised authoring-first integration direction on
+2026-09-05; see
+`../decisions/2026-09-05-authoring-integration-priority-and-sequence.md`.
+It supersedes the successor recommendation below with correctness repair,
+internal authoring assembly, a bounded typed-math/state bridge, and one
+isolated market preview. The new exact proposal still requires approval.
+
+Review reproduced an independence counterexample: for three members,
+authored and reversed order can agree while another permutation differs.
+The current validator's comparison does not certify arbitrary cohorts.
+Repair this by rejecting cohorts larger than two before integration, and
+retain honest bounded claims for supported pairs. The completed 26 slices
+and their executed evidence remain history; this note does not repair code
+or convert previous tests into a general confluence proof.
+
 ## Recommendation
 
 Accept the Loop 4 aggregate-composition and logical-address boundary as a

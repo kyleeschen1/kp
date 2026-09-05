@@ -4,7 +4,7 @@
   "title": "Kinetic Press delivery",
   "status": "active",
   "domain": "kp",
-  "summary": "Clarity-first delivery frontier: perfect the gold equation reader and stop for visual review.",
+  "summary": "User approved exact 28-slice authoring integration run on 2026-09-05. Continue run-contract.kp.authoring-integration-market-preview-v1 through its named stops and mandatory human checkpoint. Current source proposal supersedes historical workflow successor constraints.",
   "sourceRefs": [
     {
       "kind": "user-intent",
@@ -22,6 +22,14 @@
     {
       "kind": "file",
       "path": "docs/project/decisions/2026-08-22-kp-symbolic-materiality-experiment.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-05-authoring-integration-priority-and-sequence.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-05-authoring-integration-market-preview-long-loop-proposal.md"
     }
   ],
   "decisions": [],
@@ -662,7 +670,7 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "Implemented v6 candidate with one fixed-syntax owner, slot-only matching, delayed transform-only fraction contraction, and focused cross-browser evidence. Slice 18 remains at human visual checkpoint."
+    "summary": "Authoring-first integration direction accepted on 2026-09-05. Next: approve the exact 28-slice authoring-integration-market-preview proposal. No active run or implementation authorization. Current decision supersedes historical Focus Deck-only successor sequencing; Loops 1-4 remain completed evidence with independence qualification."
   },
   "allowedWork": [
     "The semantic reader matches the accepted x + 3 = 7 animation card at named forward and reverse frames without typography changes, collisions, or discontinuities.",

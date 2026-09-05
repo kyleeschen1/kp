@@ -7,27 +7,32 @@ with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
 
-The governed animation and publication foundation is preserved. Loop 4 has
-completed all 26 approved nonvisual slices and is stopped at its mandatory
-architecture/API checkpoint for human review:
+The authoring-first integration direction is accepted in
+`decisions/2026-09-05-authoring-integration-priority-and-sequence.md`.
+Loops 1–4 remain completed evidence; the exact next run is approved:
 
-1. Review the completed internal aggregate-composition, exact logical-address,
-   conflict, recovery, branch, market, and API evidence recorded in
-   `reviews/2026-09-05-semantic-state-aggregate-composition-logical-timeline-closeout.md`.
-2. If accepted, draft and separately review one bounded Loop 5 proposal that
-   connects an isolated production-shaped supply-tax exemplar to the existing
-   Graph2D and KaTeX paint owners through one sampled semantic state. Do not
-   implement it from this queue entry alone.
-3. Keep the direct-module surface internal. Migrate selected existing KaTeX
-   transformations only after the Loop 5 exemplar passes human visual and API
-   review and a separate compatibility contract is approved.
+1. Execute the approved contract sourced from
+   `reviews/2026-09-05-authoring-integration-market-preview-long-loop-proposal.md`.
+   Its 28 slices repair bounded independence, reduce assembly plumbing, bridge
+   typed math/state, and prove one isolated supply-tax author-to-preview path.
+2. Continue `run-contract.kp.authoring-integration-market-preview-v1` with verified
+   per-slice commits. Stop at the mandatory architecture/API checkpoint and
+   integrated authoring/visual review; stop earlier if new subjective visual
+   choices arise.
+3. After that review, propose structural distribution/simplification pressure
+   through existing native equation authority. Require this second structural
+   proof before public promotion or family-sized compatibility migration.
+4. Continue the roadmap's authoring/publication, knowledge/procedure, and
+   frontend/domain milestones through separately reviewed contracts. External
+   reader discovery is not an architecture prerequisite.
 
 The approved persistent semantic state foundation, typed facade and derived
 graph, state-family/interpolation loop, and aggregate logical timeline are
-complete internal evidence. None of them by itself authorizes a public facade,
-renderer migration, or a catalogue-wide rollout.
+complete internal evidence, with the greater-than-two-member independence
+claim qualified by a reproduced counterexample pending repair. None of them
+by itself authorizes a public facade, renderer migration, or catalogue rollout.
 
-Everything else is frozen reference or parked horizon:
+Outside that accepted integration sequence, these remain preserved or parked:
 
 - the Focus Deck remains preserved at its four-card human checkpoint;
 - the catalogue remains the supporting internal laboratory and inventory;
@@ -48,8 +53,8 @@ Everything else is frozen reference or parked horizon:
   linear algebra/SICP, advanced CodeMirror, LLM tutoring, SRS scheduling,
   Public Web, Public Editor, accounts, and curriculum work are not in the
   active queue; and
-- further compatibility or architecture work requires a named measured
-  blocker rather than another broad cleanup pass.
+- architecture or compatibility work beyond the accepted integration
+  sequence requires a named measured blocker rather than a broad cleanup pass.
 
 Keep `Apply a 2 × 2 matrix to a vector` tabled in the animation-promotion
 ledger; this queue does not reactivate or rerank it.

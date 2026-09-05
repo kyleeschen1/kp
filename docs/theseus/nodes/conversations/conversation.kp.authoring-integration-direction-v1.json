@@ -1,0 +1,117 @@
+{
+  "id": "conversation.kp.authoring-integration-direction-v1",
+  "kind": "conversation",
+  "title": "Accept authoring-first integration direction; propose bounded market-preview loop",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "The user accepted authoring-first architecture integration: correctness, internal assembly, typed-math/state bridge, one supply-tax preview, then structural-equation pressure, everyday authoring/publication, bounded knowledge/procedures, frontend convergence, and narrow promotion. Reader discovery does not gate architecture. The exact new 28-slice proposal awaits approval; no new executable run is created.",
+  "sourceRefs": [
+    {
+      "kind": "transcript",
+      "provider": "codex",
+      "localPath": "docs/project/decisions/2026-09-05-authoring-integration-priority-and-sequence.md",
+      "turnRange": "Local User-Message Excerpt, items 1-2; numbering local to this capture",
+      "digest": "sha256:0969857053cebe5c25038ed5db46c8e583d10c798a6c9959d877153e02720dbf",
+      "summary": "The user accepted authoring-first architecture integration: correctness, internal assembly, typed-math/state bridge, one supply-tax preview, then structural-equation pressure, everyday authoring/publication, bounded knowledge/procedures, frontend convergence, and narrow promotion. Reader discovery does not gate architecture. The exact new 28-slice proposal awaits approval; no new executable run is created."
+    }
+  ],
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/current-direction-authoring-ratchet.test.ts",
+      "status": "passed",
+      "scope": "project-memory",
+      "checkedAt": "2026-09-05T18:17:44.930Z",
+      "notes": "All 3 direction and preservation tests pass; this verifies project memory, not implementation of the proposed run."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "project-memory",
+      "checkedAt": "2026-09-05T18:17:45.882Z",
+      "notes": "Existing promotion ledger remains aligned; no new implementation contract is active."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "project-memory",
+      "checkedAt": "2026-09-05T18:17:46.861Z",
+      "notes": "Tracked documentation, test, and Theseus edits have no whitespace errors. New decision/proposal no-index checks emitted no whitespace diagnostics."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Conversation captured with authority, trust, privacy, and transcript provenance."
+  },
+  "conversation": {
+    "schemaVersion": "theseus.conversation.v1",
+    "occurredAt": "2026-09-05T18:11:54.000Z",
+    "participants": [
+      {
+        "id": "project-owner",
+        "role": "human",
+        "displayName": "Project owner"
+      },
+      {
+        "id": "planning-agent",
+        "role": "llm",
+        "provider": "codex"
+      }
+    ],
+    "transcriptRanges": [
+      {
+        "provider": "codex",
+        "localPath": "docs/project/decisions/2026-09-05-authoring-integration-priority-and-sequence.md",
+        "turnRange": "Local User-Message Excerpt, items 1-2; numbering local to this capture",
+        "digest": "sha256:0969857053cebe5c25038ed5db46c8e583d10c798a6c9959d877153e02720dbf"
+      }
+    ],
+    "summary": "The user accepted authoring-first architecture integration: correctness, internal assembly, typed-math/state bridge, one supply-tax preview, then structural-equation pressure, everyday authoring/publication, bounded knowledge/procedures, frontend convergence, and narrow promotion. Reader discovery does not gate architecture. The exact new 28-slice proposal awaits approval; no new executable run is created.",
+    "proposals": [
+      {
+        "id": "authoring-first-integration",
+        "statement": "Adopt the authoring-first outcome sequence and preserve existing domain, state, compiler, clock, renderer, and publication authority.",
+        "proposedBy": "planning-agent",
+        "status": "accepted",
+        "linkedEntityIds": [
+          "workflow.kp.delivery"
+        ]
+      },
+      {
+        "id": "market-preview-long-loop",
+        "statement": "Execute the exact 28-slice proposal in docs/project/reviews/2026-09-05-authoring-integration-market-preview-long-loop-proposal.md after separate approval.",
+        "proposedBy": "planning-agent",
+        "status": "proposed",
+        "linkedEntityIds": [
+          "workflow.kp.delivery"
+        ]
+      }
+    ],
+    "objections": [],
+    "decisions": [
+      {
+        "id": "accept-direction-and-request-proposal",
+        "statement": "The project owner accepted the new direction and asked to record it and prepare a Theseus long-loop proposal. This does not approve the newly specified 28-slice contract.",
+        "proposalId": "authoring-first-integration",
+        "decidedAt": "2026-09-05T18:11:54.000Z",
+        "authority": {
+          "kind": "user",
+          "actorId": "project-owner"
+        }
+      }
+    ],
+    "trust": {
+      "level": "self-reported",
+      "rationale": "Agent-captured local excerpt of two visible user messages, not a full provider export. Digest covers the complete local decision document; timestamp is capture time, not a claimed original-message timestamp."
+    },
+    "privacy": {
+      "classification": "project",
+      "containsSensitiveData": false
+    },
+    "linkedEntityIds": [
+      "workflow.kp.delivery"
+    ]
+  }
+}

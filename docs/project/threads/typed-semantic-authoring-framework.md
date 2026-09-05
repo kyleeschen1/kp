@@ -1,11 +1,38 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: Loop 4 complete; mandatory human architecture/API checkpoint
+Status: authoring-first integration; exact 28-slice run approved
 Last Updated: 2026-09-05
-Current Next Action: review the completed aggregate-composition and logical-
-address boundary. If accepted, draft and separately review one bounded Loop 5
-supply-tax Graph2D/KaTeX adapter exemplar; do not begin renderer integration or
-existing-transformation migration from this thread alone.
+Current Next Action: execute the approved
+`run-contract.kp.authoring-integration-market-preview-v1` through its mandatory
+checkpoint. Theseus owns current slice, verification, commits, and stop state.
+
+## Current Accepted Direction
+
+The user accepted architecture progress through the authoring experience on
+2026-09-05. Canonical direction and full milestone rationale:
+`../decisions/2026-09-05-authoring-integration-priority-and-sequence.md`.
+The sole next-run proposal is
+`../reviews/2026-09-05-authoring-integration-market-preview-long-loop-proposal.md`.
+The user approved its exact 28-slice scope on 2026-09-05. Its live execution
+record is Theseus; this thread does not duplicate per-slice status.
+
+Repair the reproduced greater-than-two-member independence gap first. Then
+reduce low-level assembly plumbing, connect typed math/optics to the existing
+aggregate recovery authority, and prove one isolated supply-tax author-to-
+preview path. Preserve canonical economics, verified operations, compiler,
+clock, SVG, KaTeX, Article, and attention ownership. Generic state updates do
+not grant mathematical or animation authority.
+
+The run stops for authoring/API and visual review. Structural equation
+pressure follows under a separate contract before public API promotion or
+migration waves. Everyday authoring/publication, bounded knowledge/procedures,
+and LaTeX/TypeScript/model convergence remain the accepted later sequence.
+External reader discovery does not gate these architecture milestones.
+
+Loops 1–4 remain completed internal evidence. Historical successor estimates
+below are provenance, superseded by the current decision. The Loop 4
+independence claim is qualified by the reproduced counterexample; the
+implementation is not repaired merely by recording this direction.
 
 ## Goal
 
@@ -525,11 +552,12 @@ branch recovers an alternate exact tax outcome.
 The direct-module surface remains internal. The implementation is coherent,
 but its explicit declaration, validation, preflight, compilation, endpoint,
 address, resolver, and evaluator stages have not yet earned a public facade.
-The recommended successor is a separately reviewed Loop 5 contract for one
-isolated production-shaped supply-tax Graph2D/KaTeX adapter exemplar. Existing
-KaTeX transformations stay on their current canonical paths until that
-exemplar passes human visual/API review and a later bounded compatibility
-contract is approved.
+The closeout originally recommended a separately reviewed Loop 5 adapter.
+The accepted 2026-09-05 authoring-integration decision now places correctness
+repair, internal assembly, and a bounded typed-math/state bridge before that
+isolated supply-tax Graph2D/KaTeX preview. Existing KaTeX transformations stay
+on their current paths; structural equation pressure and any subsequent
+compatibility migration require separately approved contracts.
 
 The exact metrics, conflict and recovery laws, retained and rejected
 abstractions, API review, and Loop 5 recommendation are recorded in

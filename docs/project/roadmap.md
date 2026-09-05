@@ -50,45 +50,41 @@ verified meaning
 -> retrieval, variation, compression, and reuse
 ```
 
-The engine is no longer the project's largest unknown. KP has canonical
-semantic traces, deterministic seek and rewind, native KaTeX and SVG renderers,
-an interpreter-grounded program trace, static publication, Article v1,
-whole-file editing, semantic navigation, review capture, accessibility, route
-budgets, and a native catalogue.
+KP has substantial canonical semantics, deterministic playback, native
+renderers, Article editing, and publication infrastructure. The immediate
+architecture question is how these pieces become one coherent authoring
+workflow. On 2026-09-05 the user accepted an authoring-first integration
+sequence: define a model, apply verified changes, compose an explanation,
+bind prose and attention, inspect history, preview, and eventually publish
+from the same source. Reader delivery remains the destination; external
+educator discovery does not gate this architecture work.
 
-Educator product discovery remains the next product-validation gate and is
-being carried forward outside this Codex thread. The Focus Deck experiment is
-preserved at its four-card human checkpoint. The typed semantic authoring
-facade completed its approved ergonomics and algebraic-representation loop and
-two structurally different unit-scalar pressure callers. The broad clock and
-inference gates are restored. The first persistent-state loop reconciled the
-stale closed-world ledgers, retained the bounded unit-scalar helper, preserved
-exact-rational economics authority, and implemented the internal immutable
-entity/version/snapshot and explicit transaction foundation. The completed
-Loop 2 adds a typed property facade, explicit dependency graph, lazy pinned
-evaluation, exact version fingerprints, caller-owned caching, supply-tax
-pressure, a fixed generation-shaped corpus, and representative scale evidence.
-Its mandatory architecture/API checkpoint passed human review. Loop 3
-completed the bounded internal applied-state-family and pure ephemeral
-`at(progress)` layer across exact supply-tax and nonlinear unit-tagged circle
-callers, and its mandatory architecture/API checkpoint was accepted on
-2026-09-04. The exact 26-slice nonvisual Loop 4 for aggregate composition and
-logical timeline addressing is complete and stopped at its mandatory
-architecture/API checkpoint under
-`run-contract.kp.aggregate-composition-logical-timeline-v1`. The result keeps
-its direct-module surface internal. If the checkpoint is accepted, the next
-recommendation is a separately reviewed Loop 5 proposal for one isolated
-production-shaped supply-tax Graph2D/KaTeX adapter exemplar. Existing KaTeX
-transformation migration remains a later compatibility contract after that
-exemplar passes human review. Public promotion and broader runtime or renderer
-work remain unauthorized. The internal
-Animation Catalogue remains the source and pressure lab rather than the active
-product surface. Neither proof by itself validates demand or selects a
-universal learner layout or semantic model.
+Loops 1–4 remain completed internal evidence: immutable state and transactions,
+typed properties and derived graphs, applied families and ephemeral sampling,
+then aggregate composition and exact logical addresses. The 26-slice Loop 4
+closeout remains preserved under
+`run-contract.kp.aggregate-composition-logical-timeline-v1`. Review found that
+checking authored and reversed order is insufficient for independent cohorts
+larger than two. Repair that bounded correctness gap before integration;
+neither the closeout nor this direction certifies arbitrary confluence.
+
+The accepted sequence now puts internal authoring assembly and a bounded
+typed-math/optics/state bridge before the isolated production-shaped
+supply-tax Graph2D/KaTeX preview. A separately reviewed structural-equation
+caller follows before narrow public API promotion or migration waves.
+The user approved the exact 28-slice run on 2026-09-05. Its executable authority
+is `run-contract.kp.authoring-integration-market-preview-v1`. See
+`decisions/2026-09-05-authoring-integration-priority-and-sequence.md` and
+`reviews/2026-09-05-authoring-integration-market-preview-long-loop-proposal.md`.
+
+The Focus Deck remains preserved at its four-card human checkpoint. The
+Animation Catalogue remains the source and pressure lab. No result here
+validates learner demand, chooses a universal layout or semantic model, or
+authorizes a catalogue-wide renderer migration.
 
 The catalogue contains a mixture of teaching animations, fixtures, and
 diagnostic proofs. The supported equation domain has completed its narrow-core
-convergence. The new active priority is to make that capability boundary
+convergence. The accepted generation horizon is to make that capability boundary
 visible and authorable: accept natural-language intent or ordered semantic
 states, beginning with LaTeX, resolve verified operations to canonical motifs,
 compose them into one deterministic sequence, and retain typed gaps when KP
@@ -131,8 +127,8 @@ through binding, one canonical native RHS owns the fraction from instantiation
 through settlement, and existing ink knots retain reduction authority. This is
 an exemplar checkpoint, not a shared-family promotion or the active lane. The
 Focus Deck projection and flashcards remain preserved sibling projections
-while the typed semantic authoring facade waits at its post-domain-pressure
-API checkpoint. See
+while authoring integration proceeds through its separately approved
+contracts. See
 `decisions/2026-08-29-focus-deck-initial-portable-figure-priority.md`,
 `decisions/2026-08-25-rule-application-visual-grammar.md`.
 See
@@ -142,7 +138,37 @@ See
 ## One Active Lane
 
 The repository contains a large evidence portfolio, not a large active queue.
-Only this repository sequence is active:
+The accepted authoring-first outcome sequence is:
+
+1. Repair the bounded independence gap and freeze author-task/cost baselines.
+2. Build internal authoring assembly over the existing state authorities.
+3. Bridge typed math and optics into pinned aggregate recovery.
+4. Prove one model-to-preview supply-tax path through existing compiler,
+   clock, SVG, KaTeX, Article, and attention owners; stop for human review.
+5. Pressure the seam with reviewed distribution and carrier-preserving
+   simplification before public promotion or compatibility migration.
+6. Complete everyday authoring, diagnostics, last-valid previews, source
+   navigation, and versioned static publication from coherent source.
+7. Add bounded referable knowledge, evidence-bearing claims, formula schemas,
+   and nested procedures without a universal ontology or CAS.
+8. Converge TypeScript, bounded LaTeX, and model-authored inputs; pressure
+   existing code and Graph3D frontends one domain at a time.
+9. Promote only demonstrated public tiers and retire old authority beside
+   each migrated caller. Proved tiers may advance after the second structural
+   caller without waiting for all later knowledge/domain breadth.
+
+Direction and the exact next run are accepted; implementation is scoped by
+`run-contract.kp.authoring-integration-market-preview-v1` and
+`reviews/2026-09-05-authoring-integration-market-preview-long-loop-proposal.md`.
+Its 28 slices cover correctness, assembly, the bounded math bridge, and one
+market preview, not the entire horizon above. Theseus owns live execution;
+this roadmap does not track per-slice progress.
+
+### Completed Foundation Sequence — Provenance
+
+The following completed sequence preserves historical evidence, not a second
+queue. Its former successor estimates are superseded by
+`decisions/2026-09-05-authoring-integration-priority-and-sequence.md`.
 
 1. **Reconcile the backlog:** complete. Distinguish existing assets, partial
    or diagnostic implementations, and genuinely missing transformations.
@@ -451,12 +477,11 @@ Only this repository sequence is active:
    demand-intercept and tax families compose in one exact-rational market
    aggregate with ordered and independent forms, exact logical addresses,
    conflict-before-apply, dense seek/rewind, and coherent branching. The
-   direct-module surface remains internal. If accepted, Loop 5 remains the
-   first reviewed Graph2D/KaTeX integration. Existing KaTeX transformation
-   migration follows that exemplar rather than preceding it. The estimate
-   remains three long loops through the decisive semantic proof, five through
-   one reviewed Graph2D/KaTeX exemplar, and seven through the full bounded
-   knowledge/procedure/generation horizon. A full
+   direct-module surface remains internal. Subsequent review qualified the
+   independent-cohort certificate and accepted authoring assembly plus a
+   bounded math/state bridge before the first Graph2D/KaTeX integration.
+   The former three/five/seven-loop estimate is superseded by the active
+   outcome sequence above; existing evidence is preserved. A full
    supply-demand pack, public algebra hierarchy, general CAS work, broad
    construct generation, automatic animation reparameterization rollout, and
    Article grammar changes remain out of scope. See
@@ -481,13 +506,13 @@ The catalogue backlog and selection rationale are recorded in
 
 | Area | State | Direction |
 | --- | --- | --- |
-| Semantic/runtime spine | Strong and governed; persistent state, typed facade, explicit derived graph, applied families, ephemeral sampling, aggregate sequence/nesting/independence, exact logical addresses, direct recovery, coherent branching, and bounded caller-owned caches are complete internally | Review the Loop 4 architecture/API checkpoint. If accepted, draft one isolated production-shaped supply-tax Graph2D/KaTeX adapter proposal; do not promote a public facade or migrate existing transformations yet. |
+| Semantic/runtime spine | Loops 1–4 complete internally; arbitrary-cohort independence certification has a reproduced correctness gap | Bound and repair independence first; assemble authoring over existing state and bridge typed math before the isolated market preview. No public promotion or transformation migration in the proposed run. |
 | Equation animation | The generated ledger has 29 equation capabilities: 8 Direct, 3 Registered, 2 Exemplar, and 16 Missing. Exponential duality and radical inversion are Direct; root is the first family with ten generated case-level maturity rows | Preserve the converged vocabulary; require case enumeration before new Direct promotions; migrate legacy Direct ledgers when they are touched; select the next accepted family packet from explicit gaps rather than prose memory. |
 | Graph2D | Economics and physics model callers are promoted; one exact monic-quadratic right-translation exemplar is governed and executable | Preserve the bounded translation proof without claiming arbitrary formula parsing, transformation-family promotion, or a universal graph frontend. |
 | Program animation | TypeScript and Python bounded extract-helper generation are `Direct`; each has language-owned parsing, legality, identity binding, corpus, authoring, and runtime-isolation evidence over an approved canonical artifact. Scheme remains an approved specialized exemplar rather than a general frontend. | Preserve approved choreography and build-time-only compilers. Variants remain semantic-plan-only until a separately governed artifact compiler exists; arbitrary refactors and execution remain typed gaps. |
 | Graph3D | The internal mesh-to-donut host proof and one governed fixed-camera saddle denominator-change exemplar are executable | Preserve semantic camera/model separation, stable topology, resource leases, SVG fallback, and deterministic seek; arbitrary formulas and camera requests remain typed gaps. |
-| Article and publication | `kp.article.v1` frozen; economics and algebra are real callers | Do not reopen grammar without demonstrated friction. |
-| Authoring | Whole-file CodeMirror/Vim editing and no-reload saving work | Defer advanced tooling until a real session exposes a need. |
+| Article and publication | `kp.article.v1` frozen; economics and algebra are real callers | Bind verified facts/focus through bounded companions and derive score inputs; retain grammar until concrete friction justifies change. Complete versioned publication workflow in the later accepted milestone. |
+| Authoring | Whole-file editing exists; low-level semantic-state assembly remains burdensome | Primary integration UX: model, verified change, explanation, prose/focus, history, preview, publication. Measure orchestration reduction; preserve source and last-valid preview. |
 | Catalogue | One persistent lazy host spans equation, graph, code, and 3D without iframes; a default-off curated cross-domain collection exposes four executable cases and one honest typed gap | Preserve it as the pressure lab and conformance surface; keep gallery provenance opt-in so it does not replace the ordinary asset-first Catalogue. |
 | Layout | Supply-tax is the approved Focus Deck reference; log-exponent, repaired surface-to-contour, and the canonical TypeScript extract-helper are bounded second, third, and fourth callers through one shared projection shell. Browser-specific equation repairs remain at their shared seams, while the code card preserves its Article, score, native source projections, token theater, and clock. | Review the four-card composition, including 3D motion, mobile fit, Safari equation cadence, TypeScript code density and canonical refactor motion, and attention hierarchy. Share only card chrome, stage/passage geometry, and navigation hooks; retain domain-owned semantic and renderer authority and stop before automatic generation or catalogue-wide rollout. |
 | Public product | Engine and routes are research-ready; educator demand is unvalidated | Test whether a compact document-backed Focus Deck remains useful under real representational complexity while educator discovery continues; do not infer validation from the exemplar. |
@@ -730,9 +755,12 @@ clocks, frames, and renderer ports remain outside Svelte authority.
   Loop 4 completed all 26 approved slices on 2026-09-05 under
   `run-contract.kp.aggregate-composition-logical-timeline-v1` and is stopped at
   its mandatory human architecture/API checkpoint. Its exact aggregate,
-  address, recovery, conflict, market, and compiler evidence plus the bounded
+  address, recovery, conflict, market, and compiler evidence plus its original
   Loop 5 recommendation are recorded in
   `reviews/2026-09-05-semantic-state-aggregate-composition-logical-timeline-closeout.md`.
+  The post-closeout independence qualification and accepted successor
+  sequence are recorded in
+  `decisions/2026-09-05-authoring-integration-priority-and-sequence.md`.
   Clock adaptation, renderer integration, existing KaTeX migration, and public
   promotion remain outside the completed boundary.
 - The normal-matrix Proof Memory implementation is preserved at its mandatory

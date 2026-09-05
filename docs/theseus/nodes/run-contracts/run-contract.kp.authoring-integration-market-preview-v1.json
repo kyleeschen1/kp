@@ -1,0 +1,256 @@
+{
+  "id": "run-contract.kp.authoring-integration-market-preview-v1",
+  "kind": "run-contract",
+  "title": "Authoring integration to market preview",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.authoring-integration-market-preview.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-05-authoring-integration-market-preview-long-loop-proposal.md",
+      "summary": "Exact 28-slice scope explicitly approved by the user with approve on 2026-09-05; F/S/B tiers, canonical reference, acceptance, preservation, rollback, promotion and deferrals remain authoritative."
+    }
+  ],
+  "verification": [
+    "npm run test:authoring-integration",
+    "npm run test:semantic-state",
+    "npm run test:economics-supply-tax",
+    "npm run typecheck",
+    "npm run check:dependency-direction",
+    "npm run check:architecture",
+    "npm run check:inference",
+    "npm test",
+    "npm run build",
+    "npm run visual:authoring-market",
+    "npm run test:browser:economics-supply-tax",
+    "theseus workspace validate",
+    "git diff --check"
+  ],
+  "allowedWork": [
+    "Execute only the exact 28 approved proposal rows; each row owns its target change risk verification commit boundary and local stop condition.",
+    "Correct independent cohort bounds; internal authoring assembly; bounded typed-math data/capability and optics bridge over existing aggregate state.",
+    "One opt-in supply-tax author-to-preview host using existing verified economics compiler clock SVG native KaTeX Article and attention authorities; preserve canonical route.",
+    "Local edit compile last-valid-preview lifecycle, exact fact bindings, deterministic history, fair author-cost measurement, tests and required project-memory evidence.",
+    "Commit each verified slice with its evidence; brief tracked context per slice, widen only for a named missing dependency; no parallel agents authorized.",
+    "s01 | Risk: Low: moving measurement goalposts | Verification: F: repeatable unchanged baseline; identify unsupported tasks as gaps, not passing workflows | Commit: Baseline fixtures, runner, and provenance",
+    "s02 | Risk: High: overbroad certification | Verification: S: counterexample rejected; two-member, ordered, nested, and no-side-effect negatives | Commit: Bounded correctness repair and tests",
+    "s03 | Risk: High: unsound promise survives cap | Verification: S: canonical/reverse comparison, overlap/read negatives, composition suite | Commit: Bounded evidence/diagnostic corrections",
+    "s04 | Risk: Medium: parallel state authority | Verification: S: inference, cycle/missing-dependency diagnostics, same immutable snapshots | Commit: Model assembly plus contracts",
+    "s05 | Risk: High: hidden assumptions | Verification: S: same plans/endpoints/operation provenance; preflight before apply | Commit: Named explanation assembly",
+    "s06 | Risk: Medium: stale reads or memory retention | Verification: S: history, branching, cache-isolation/eviction laws; no persistent sample growth | Commit: Recovery/evaluator assembly",
+    "s07 | Risk: Medium: errors become opaque | Verification: S: malformed-author fixtures and stable source-target mapping | Commit: Diagnostic surface and fixtures",
+    "s08 | Risk: Medium: fake ergonomics via domain shortcut | Verification: S: identical exact market states/composition; author-cost report | Commit: Market assembly specimen and parity tests",
+    "s09 | Risk: High: serialization/identity confusion | Verification: B: round-trip value records, missing capability/version diagnostics, existing map behavior | Commit: Data/capability bridge and ownership checks",
+    "s10 | Risk: High: path mistaken for identity | Verification: S: historic selections, stable correspondence, stale/foreign handles; scene compatibility | Commit: Optics/recovery adapter",
+    "s11 | Risk: Medium: shape widening | Verification: S: J/H values, compile-time negatives, unsupported cardinality/capability gaps | Commit: Nonvisual math pressure fixtures",
+    "s12 | Risk: Medium: premature facade | Verification: S plus inference/dependency gates: no renderer imports into state; fixed ceilings | Commit: Internal facade/closure contracts",
+    "s13 | Risk: High: bypassed verification | Verification: B plus economics suite: forged update rejected, exact source/operation pins, same asset semantics | Commit: Bounded domain lowering adapter",
+    "s14 | Risk: High: routing/host duplication | Verification: B: lazy loading, host disposal, stable visual command, baseline mount | Commit: Host entrypoint, route, and harness",
+    "s15 | Risk: High: discontinuity or time split | Verification: B: exact endpoints/boundaries, monotonicity, error bound, direct seek/rewind | Commit: Clock-to-address adapter",
+    "s16 | Risk: High: model and paint disagree | Verification: B plus economics suite: canonical numeric parity at sparse/dense semantic samples | Commit: Shared sampled-frame projection",
+    "s17 | Risk: High: paint or viewport regression | Verification: B plus scoped visual smoke: canonical phase/geometry and endpoint parity | Commit: SVG input adapter only",
+    "s18 | Risk: High: stale labels/native ownership | Verification: B plus scoped visual smoke: graph/label/ledger agreement, native settled paint | Commit: Label/ledger input adapter",
+    "s19 | Risk: High: competing source lists/store | Verification: B: source refs resolve; playhead focus deterministic; canonical score parity | Commit: Companion-to-score/attention adapter",
+    "s20 | Risk: High: mathematically stale explanation | Verification: B: tax-4 facts, invalid refs, missing capabilities, static fallback; no arbitrary Markdown JS | Commit: Fact-binding projection and tests",
+    "s21 | Risk: High: stale or lost work | Verification: B: invalid edit preserves source/preview; out-of-order result ignored; no browser code execution | Commit: Narrow authoring revision lifecycle",
+    "s22 | Risk: Medium: plausible but false reuse | Verification: B plus economics and scoped visual: Q=5, prices 9/7, revenue=10, total=35; same assembly no engine edit | Commit: Separately identified variation specimen",
+    "s23 | Risk: High: history-dependent output | Verification: B: fixed-playhead equality, last-valid revision isolation, no snapshot growth | Commit: End-to-end deterministic-state tests/repairs",
+    "s24 | Risk: High: route/resource leaks | Verification: B plus scoped runtime: repeated mounts, restored endpoints, no inactive sampling | Commit: Lifecycle/address hardening",
+    "s25 | Risk: Medium: ceremony remains hidden | Verification: S plus inference: at least 50% orchestration reduction with helper cost disclosed; unchanged task scope | Commit: Reviewable specimen and measured report",
+    "s26 | Risk: High: functional pass mistaken for visual approval | Verification: B plus stable sparse visual commands; accessibility and preservation smoke | Commit: Review harness checkpoints and durable command references",
+    "s27 | Risk: High: local proof hides integration debt | Verification: B plus full test, inference, build and existing canonical browser preservation suites | Commit: Gate evidence and only in-scope regression repairs",
+    "s28 | Risk: Low: inaccurate completion/promotion | Verification: F plus Theseus validation/status and evidence audit | Commit: Closeout docs and completed contract evidence"
+  ],
+  "disallowedWork": [
+    "No arbitrary-cohort read-tracking architecture, second state/transaction/graph authority, serialized functions, generic update granting verified operation authority, or arbitrary browser source execution.",
+    "No public facade, structural-equation migration, universal CAS/model/renderer, new visual motif, new Article grammar, complete Studio rewrite, publication platform migration, accounts/SRS, broad code generation, live LLM benchmarks or domain/catalogue expansion.",
+    "No numerical budget increases, waived semantic laws, silent repair fallback, unrelated dirty-worktree changes, or automatic post-checkpoint generalization."
+  ],
+  "goal": "Execute the user-approved 28-slice authoring integration proposal through one preserved supply-tax preview and stop at the mandatory authoring/API and visual checkpoint.",
+  "target": "next-action.kp.authoring-integration-market-preview",
+  "runMode": "run",
+  "maxSlices": 28,
+  "commitCadence": "Commit implementation tests and completed Theseus evidence after every independently reversible verified slice; checkpoint approved planning changes before implementation.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop on absent approval, unresolved semantic authority, failed preserved law not repairable within the slice, required numerical budget increase, unrelated worktree overlap, or scope expansion.",
+    "Stop early for HUMAN_CHECKPOINT if a new subjective visual treatment or choreography decision is required; preserve current canonical supply-tax phases and paint ownership.",
+    "Always stop after s28 at HUMAN_CHECKPOINT for authoring/API and visual review. Public promotion requires separately approved structural-equation pressure; no generalization slices are included.",
+    "Each slice is one reversible commit; isolated host/adapters remain removable without rolling back semantic models. Target at least 50 percent measured orchestration reduction with helper cost disclosed.",
+    "s01: Cannot reproduce baseline or identify canonical host",
+    "s02: Repair requires arbitrary-cohort inference or breaks retained two-member laws",
+    "s03: Safe retained scope cannot be specified without new read/write capability architecture",
+    "s04: New transaction engine, proxy tracking, or second graph authority needed",
+    "s05: Semantics disappear behind unverified generic update",
+    "s06: Unbounded application cache required or eviction affects truth",
+    "s07: Silent fallback or fabricated operation evidence required",
+    "s08: Caller-specific glue merely moves outside measured boundary",
+    "s09: Serializing functions or a second semantic object store becomes necessary",
+    "s10: Structural rewrite needs invented correspondence or old scene becomes co-authority",
+    "s11: Requires new differentiation/CAS or equation renderer work",
+    "s12: Existing budget cannot be met without a new approved ceiling",
+    "s13: Generic state mutation would grant equivalence or animation authority",
+    "s14: Default cutover, second clock, or copied canonical paint implementation needed",
+    "s15: Requires wall-clock semantic state or per-frame commits",
+    "s16: Adapter duplicates authoritative economics calculations",
+    "s17: New graph renderer or motif-specific offsets needed",
+    "s18: New compositor mechanism, second label truth, or glyph-specific fix needed",
+    "s19: New Article grammar or global salience store required",
+    "s20: Needs free-prose verification or uncontrolled source replacement",
+    "s21: Requires replacing editor/session system or expanding save authority",
+    "s22: Variant needs hardcoded canonical facts or new choreography",
+    "s23: Restore requires replaying intermediate motion",
+    "s24: Existing public URLs or unrelated routes must change",
+    "s25: Target missed; requires new facade semantics rather than bounded assembly",
+    "s26: Any material new treatment or legibility regression requires earlier human judgment",
+    "s27: Fixed budget/law fails or repair exceeds scope",
+    "s28: Missing proof: do not mark successful; otherwise mandatory HUMAN_CHECKPOINT"
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Author-task fixtures and source map: freeze current model/renderer/score authority, 205-line baseline, task classification, and add the integration test command",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Composition declaration/endpoints: add the A/B/C regression and reject independent cohorts larger than two before apply",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Existing two-member independence boundaries: pressure aliases, hidden reads, dependencies, conflict detection, and honest certificate terminology",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Internal assembly construction over current schemas/handles: define concrete and derived properties once and build the existing graph",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Assembly transformation/composition binding: infer existing handles and bind named applied families, ordered/nested groups, and bounded independent pairs",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Assembly queries and lifecycle: expose pinned recovery/evaluation with explicit cache reset/dispose ownership",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Assembly diagnostics: carry declaration/source paths and typed missing, stale, foreign, invalid-operation gaps",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Migrate the internal market specimen through assembly while retaining old characterization as comparison evidence",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Typed-math/state value bridge: register immutable typed structure separately from local version-pinned callable capabilities",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Pinned typed-optics bridge: recover selections and apply supported immutable same-cardinality rewrites through aggregate authority",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Existing affine Jacobian and quadratic Hessian pressure: prove macro descriptors, static shapes, and honest dynamic dimensions through bridge",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Assembly boundary review fixture: lock author import direction, inferred signatures, cost accounting, and capability gaps",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Economics source-authority lowering: adapt verified state/model operations into the existing canonical asset/compiler entrance",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Isolated opt-in authoring-market host and committed scoped visual harness; leave canonical route unchanged",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Exact clock adapter: map existing reader time into bounded rational logical addresses with documented quantization and endpoint rules",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "One sampled economics frame: project state-derived curves, clearing, incidence, and welfare without a second interpolation/evaluation authority",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Existing SVG integration: feed sampled curves/regions through current Graph2D paint owner",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Existing KaTeX label/ledger integration: derive exact math and accessible values from the same revision/frame",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Article/order/focus binding: map current semantic beats through a bounded companion declaration into existing score and attention seams",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Explicit typed fact/formula bindings: supply prose values and meaningful static facts from model revision without rewriting authored prose",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Local edit/compile/preview lifecycle: use existing dev save/rebuild boundary, revision-tag diagnostics, and last-valid preview",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Authored parameter variation: demand 14/tax 2 and ordered demand/tax explanation, with independently recomputed narrative, baseline, and bounds",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Cross-view history/interrupt pressure: align state, formulas, prose and attention for reverse, branch inspection, direct jumps and cache eviction",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Host lifecycle and local address restoration: disposal, re-entry, resize, bounded resources, and isolated deep links",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Final author-source specimen and fair ergonomics measurement: demonstrate everyday input/order/query edits with the internal surface",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Prepare canonical/variant human-review captures: desktop, phone, reduced motion, static output, forward/reverse and direct jumps",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "Broad checkpoint gate and regression closure across state, math, economics, host and build boundaries",
+      "status": "planned"
+    },
+    {
+      "id": "s28",
+      "title": "Closeout with exact authored example, ownership map, measurements, gaps and review questions; stop before generalization",
+      "status": "planned"
+    }
+  ]
+}

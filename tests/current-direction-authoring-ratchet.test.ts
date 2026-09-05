@@ -92,3 +92,44 @@ test("supporting threads cannot restart deferred tutorial or runtime work", asyn
   assert.match(runtime.slice(0, runtime.indexOf("## Goal")), /TypeScript caller/);
   assert.match(attention.slice(0, attention.indexOf("## Goal")), /Status: paused/);
 });
+
+test("authoring integration executes only its explicitly approved contract", async () => {
+  const decisionName =
+    "2026-09-05-authoring-integration-priority-and-sequence.md";
+  const proposalName =
+    "2026-09-05-authoring-integration-market-preview-long-loop-proposal.md";
+  const [roadmap, thread, nextActions, strategy, entrypoint, decision, proposal] =
+    await Promise.all([
+      readFile("docs/project/roadmap.md", "utf8"),
+      readFile("docs/project/threads/typed-semantic-authoring-framework.md", "utf8"),
+      readFile("docs/project/next-actions.md", "utf8"),
+      readFile("docs/project/strategy.md", "utf8"),
+      readFile("docs/project/authoring/llm-generation-entrypoint.md", "utf8"),
+      readFile(`docs/project/decisions/${decisionName}`, "utf8"),
+      readFile(`docs/project/reviews/${proposalName}`, "utf8")
+    ]);
+
+  // Accepted strategy must be recoverable without treating proposed APIs as shipped.
+  for (const source of [roadmap, thread, nextActions, strategy, entrypoint]) {
+    assert.ok(source.includes(decisionName));
+  }
+  for (const source of [roadmap, thread, nextActions]) {
+    assert.ok(source.includes(proposalName));
+  }
+  assert.match(decision, /Status: ACCEPTED DIRECTION/);
+  assert.match(strategy, /authoring-first architecture integration/);
+  assert.match(entrypoint, /active thread named by that roadmap/);
+  assert.match(entrypoint, /proposed work, not callable/);
+  assert.match(decision, /does not gate this\s+architecture integration sequence/);
+  assert.match(decision, /Generic state updates do not establish mathematical equivalence/);
+  assert.match(decision, /checking|comparison is insufficient/);
+  assert.match(decision, /reject cohorts larger than two/);
+  assert.match(proposal, /Status: APPROVED; exact 28-slice execution authorized/);
+  assert.match(proposal, /Executable contract: Theseus owns live status/);
+  assert.match(proposal, /same revision\/frame/);
+  assert.match(proposal, /mandatory HUMAN_CHECKPOINT/);
+
+  const sliceNumbers = [...proposal.matchAll(/^\| (\d{2}) \|/gm)]
+    .map((match) => Number(match[1]));
+  assert.deepEqual(sliceNumbers, Array.from({ length: 28 }, (_, index) => index + 1));
+});

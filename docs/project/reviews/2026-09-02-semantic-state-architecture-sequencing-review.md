@@ -4,6 +4,15 @@ Date: 2026-09-02
 Status: ACCEPTED DIRECTION; EXECUTION REQUIRES LOOP-SPECIFIC APPROVAL
 Active thread: `../threads/typed-semantic-authoring-framework.md`
 
+## Successor Sequencing Update — 2026-09-05
+
+The accepted authoring-first direction in
+`../decisions/2026-09-05-authoring-integration-priority-and-sequence.md`
+supersedes this review's successor order and three/five/seven-loop estimate.
+Completed evidence and semantic principles remain provenance. Consult the
+roadmap and active thread for current work; this historical sequence is not
+a parallel execution queue.
+
 ## Context
 
 This review synthesizes the authoring and semantic-state discussion after the

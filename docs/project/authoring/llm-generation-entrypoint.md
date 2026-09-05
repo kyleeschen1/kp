@@ -1,7 +1,7 @@
 # KP LLM Generation Entrypoint
 
 Status: canonical routing guide
-Updated: 2026-08-13
+Updated: 2026-09-05
 
 ## Purpose
 
@@ -12,7 +12,8 @@ animation object graph from prose.
 ## Context Loading Order
 
 1. `../roadmap.md`
-2. `../threads/architecture-convergence.md`
+2. the active thread named by that roadmap (currently
+   `../threads/typed-semantic-authoring-framework.md`)
 3. `../principles/system-vocabulary.md`
 4. the exact task source and its canonical exemplar
 5. one relevant authoring contract or renderer guide
@@ -26,6 +27,15 @@ timing table.
 
 Retrieve historical decisions only to answer a named provenance question.
 Older experiments are evidence, not default implementation authority.
+
+The authoring-first integration direction is accepted in
+`../decisions/2026-09-05-authoring-integration-priority-and-sequence.md`.
+Its assembly/math/state-to-preview APIs are proposed work, not callable
+generation entrances yet. Until their executable contracts and evidence land,
+use the existing governed APIs below. A generic state update cannot supply
+verified mathematical operation or animation authority; unsupported lowering
+must return a typed repair gap. Handwritten generation-shaped state fixtures
+must not be reported as a live-model benchmark.
 
 ## Route The Task Before Generating
 

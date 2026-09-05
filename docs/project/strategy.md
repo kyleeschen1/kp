@@ -1,6 +1,6 @@
 # KP Strategy
 
-Last Updated: 2026-08-29
+Last Updated: 2026-09-05
 
 ## North Star
 
@@ -60,8 +60,8 @@ visual treatments are proved through reviewed exemplars before promotion.
 KP is learner-facing in the long term. The first learner product should deepen
 understanding for people who have already encountered the notation rather than
 claim to be a complete curriculum. The internal Animation Catalogue remains
-the source and pressure lab; the bounded Focus Deck experiment is now the
-immediate learner-facing projection question. It should reveal whether one
+the source and pressure lab; the bounded Focus Deck experiment remains a
+preserved learner-facing projection question. It should reveal whether one
 approved executable figure can become a clear, portable, directly navigable
 artifact without duplicating the Article or animation source.
 
@@ -82,14 +82,23 @@ Chat discovers an explanation; KP crystallizes it; practice internalizes it.
 
 ## Current Strategic Stage
 
-KP is in **bounded Focus Deck product discovery over the governed animation
-and publication foundation, alongside external educator discovery**. The
-semantic/runtime engine is sufficiently capable to test a concrete learner
-artifact: a compact, document-backed sequence of semantic attentional beats
-with executable Kinetic Figures. The first experiment projects an approved
-log-product asset into a Focus Deck without changing Article, animation,
-clock, renderer, or semantic authority. The Animation Catalogue and governed
-generation pipeline remain the source and production foundation.
+KP is in **authoring-first architecture integration over the governed
+animation and publication foundation**. The immediate experience to improve
+is authoring: define a typed model, apply verified operations, compose its
+explanation, bind prose and attention, inspect history, preview, and publish.
+The user accepted this emphasis on 2026-09-05. Reader delivery remains the
+destination, but external educator discovery does not gate the repository's
+architecture sequence.
+
+The next bounded proof repairs the independent-cohort correctness gap, reduces
+state-assembly plumbing, joins typed math/optics to aggregate recovery, and
+drives one isolated supply-tax preview through existing compiler, clock,
+SVG, KaTeX, Article, and attention boundaries. It stops for human authoring/API
+and visual review. Structural equation pressure must precede public promotion;
+complete authoring/publication UX and bounded knowledge/procedures follow.
+The roadmap owns ordering and Theseus owns approved execution, not this
+rationale document. See
+`decisions/2026-09-05-authoring-integration-priority-and-sequence.md`.
 
 The deck is the initial format for testing the vision of interoperable,
 executable teaching artifacts, not a universal layout. Flashcards remain a
@@ -130,23 +139,28 @@ send a KP artifact because its inspectable, manipulable, directly retrievable
 semantic state preserves conceptual machinery better than their ordinary
 explanation, video link, diagram, or worksheet.
 
-The immediate repository question is whether the Focus Deck can make one
-approved Kinetic Figure clear, portable, searchable, and directly navigable
-without duplicating its source or runtime. Capability readiness and case
+The immediate repository question is whether authors can assemble and revise
+one coherent explanation without coordinating duplicate state, model, score,
+and renderer authorities. The preserved Focus Deck is a reference for clear,
+portable, directly navigable output, not an alternative execution queue.
+Capability readiness and case
 maturity still come from generated evidence rather than narrative memory;
 future Direct promotion must include a typed case ledger. Human visual review
-remains the promotion gate. This is a bounded projection experiment, not a
-universal graph, code, diagram, 3D, curriculum, or slide compiler.
+remains the promotion gate. Integration preserves domain-owned semantics and
+renderers; it is not a universal graph, code, diagram, 3D, curriculum, or slide
+compiler.
 
 The convergence phase should reduce historical representations, implicit
 registration, compatibility paths, terminology drift, and model retrieval
 cost. The TypeScript/Python comparison and bounded Scheme pressure have now
 proved marginal reuse without flattening language-specific pedagogy. The
 normal-matrix proof has now pressure-tested Article, native KaTeX, semantic
-addresses, deterministic seek, and prompt projection. The next boundary is
-behavioral evidence from real educator-learner use. Pause presentation
-refinement until a session exposes a specific obstacle; then permit only the
-smallest correction needed to test the product hypothesis.
+addresses, deterministic seek, and prompt projection. Behavioral evidence
+from real educator-learner use remains necessary for product validation, but
+it is not a prerequisite for accepted authoring integration. Keep unrelated
+presentation refinement paused. For this architecture work, preserve reviewed
+choreography and use bounded human checkpoints when a new visual decision
+actually arises.
 
 ## Strategic Architecture
 

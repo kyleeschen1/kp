@@ -1,0 +1,54 @@
+{
+  "id": "next-action.kp.authoring-integration-market-preview",
+  "kind": "next-action",
+  "title": "Integrate authoring through one market preview",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Explicitly approved exact 28-slice execution; contract run-contract.kp.authoring-integration-market-preview-v1 owns live progress.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-05-authoring-integration-market-preview-long-loop-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.typed-authoring.aggregate-composition-logical-timeline"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:authoring-integration",
+    "npm run typecheck",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether internal assembly and a bounded math bridge make one exact market explanation authorable without duplicate semantics or renderer authority."
+  ],
+  "allowedWork": [
+    "Execute only the exact 28 user-approved rows of the linked proposal through existing domain/state/compiler/clock/paint authorities, with per-slice checks and commits."
+  ],
+  "disallowedWork": [
+    "No scope expansion, public promotion, structural equation migration, arbitrary cohort architecture, new visual motif, numerical budget increase, or automatic continuation after human checkpoint."
+  ],
+  "criteria": [
+    {
+      "id": "canonical-authoring-preview",
+      "weight": "high"
+    },
+    {
+      "id": "preserved-authority-and-choreography",
+      "weight": "high"
+    },
+    {
+      "id": "fair-orchestration-reduction",
+      "weight": "high"
+    },
+    {
+      "id": "typed-gaps-and-determinism",
+      "weight": "high"
+    }
+  ]
+}
