@@ -189,11 +189,60 @@
       "scope": "slice-s03-diff",
       "checkedAt": "2026-09-05T03:16:00.150Z",
       "notes": "No whitespace errors."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-state-composition-validation.test.ts tests/semantic-state-composition-declaration.test.ts",
+      "status": "passed",
+      "scope": "slice-s04-focused",
+      "checkedAt": "2026-09-05T03:22:20.530Z",
+      "notes": "9 of 9 structural and declaration tests passed; final validation-only rerun passed 4 of 4."
+    },
+    {
+      "command": "npm run verify:impact -- --path src/semantic-state/state-family-composition-validation.ts",
+      "status": "passed",
+      "scope": "slice-s04-impact",
+      "checkedAt": "2026-09-05T03:22:21.748Z",
+      "notes": "High-risk semantic-state impact selected semantic-state, typecheck, and architecture gates."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "slice-s04-types-initial",
+      "checkedAt": "2026-09-05T03:22:22.727Z",
+      "notes": "The first typecheck found one unused test import; it was removed without production behavior change."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s04-types",
+      "checkedAt": "2026-09-05T03:22:23.720Z",
+      "notes": "All TypeScript, Svelte, and domain checks passed after the local fixture cleanup."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "slice-s04-semantic-state",
+      "checkedAt": "2026-09-05T03:22:24.722Z",
+      "notes": "274 of 274 passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-s04-architecture",
+      "checkedAt": "2026-09-05T03:22:25.729Z",
+      "notes": "Architecture passed at 2009 TypeScript modules, 7470 of 7521 local refs, zero exceptions."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice-s04-diff",
+      "checkedAt": "2026-09-05T03:22:26.708Z",
+      "notes": "No whitespace errors."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s03 complete: composition structure is expressible without execution, clock, renderer, or implicit-order authority."
+    "summary": "s04 complete: a validated composition is the first aggregate artifact, and invalid trees expose only typed diagnostics."
   },
   "expectedLearning": [
     "Whether sequence nesting and demonstrated-independent cohorts can reuse current family and persistent-state authority without a second kernel.",
