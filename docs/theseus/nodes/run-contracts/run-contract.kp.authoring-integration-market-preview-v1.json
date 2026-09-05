@@ -201,7 +201,8 @@
     {
       "id": "s15",
       "title": "Exact clock adapter: map existing reader time into bounded rational logical addresses with documented quantization and endpoint rules",
-      "status": "planned"
+      "summary": "Exact bounded reader-progress projection verified across10008 off-grid samples, shared member endpoints and reverse/direct history checks. Full types and architecture pass; no semantic clock or per-frame writes.",
+      "status": "complete"
     },
     {
       "id": "s16",

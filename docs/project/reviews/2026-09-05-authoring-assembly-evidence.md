@@ -190,3 +190,23 @@ UX. Typed prose/static facts, editing, and state-driven painting remain pending.
 
 The exact source scan moves from 4,232 to 4,236 for two host modules and two tests.
 Its generated diff changes only that count, with all 68 roots and edges intact.
+
+## Clock-to-address boundary
+
+The internal clock adapter accepts the existing reader's normalized progress,
+rounds to the nearest millionth (positive ties upward), and normalizes through
+the semantic rational constructor. Absolute progress error is at most 0.5e-6
+plus floating-point rounding. Values outside [0, 1], including non-finite input,
+are typed gaps rather than silently clamped. No wall-clock time enters state.
+
+Quantized zero/one resolve the selected member's actual settled boundaries;
+interior values use its existing transition address. Thus a near-endpoint value
+within half a tick can settle, matching the canonical figure's quantization.
+The shared demand-end/tax-start boundary is selected from compiled endpoint
+authority, not an independent timing table. Reverse takes the reader's decreasing
+progress directly; it does not apply a second direction reversal.
+
+The clock fixture checks 10,008 off-grid samples for monotonicity and error,
+endpoint neighborhoods, invalid input, and forward/reverse/direct query equality.
+Only three public settled snapshots remain through all samples, with bounded
+query-cache entries. This adapter is pure and not yet attached to host painting.
