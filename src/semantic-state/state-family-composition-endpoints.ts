@@ -29,8 +29,10 @@ import type {
   KpCompiledSemanticStateCompositionMember,
   KpSemanticStateCompositionBoundarySpecification
 } from "./state-family-composition-compiler.ts";
-import { projectKpSemanticStateCompositionGraphSignature } from
-  "./state-family-composition-preflight.ts";
+import {
+  findKpSemanticStateCompositionAliasedWrite,
+  projectKpSemanticStateCompositionGraphSignature
+} from "./state-family-composition-preflight.ts";
 import { areKpSemanticStateTransitionPlansEqual } from
   "./state-family-transition.ts";
 import { kpSemanticStateIndependentCohortMaximumMembers } from
@@ -70,6 +72,10 @@ export interface KpSemanticStateCompositionSettledBoundary {
   readonly snapshot: KpAggregateSemanticSnapshot;
 }
 
+/**
+ * Value equivalence of the prepared pair's two orders at this pinned base.
+ * This is not a universal read-independence or arbitrary-base proof.
+ */
 export interface KpSemanticStateCompositionConfluenceCertificate {
   readonly schemaVersion:
     "kp.semantic-state-composition-confluence-certificate.v1";
@@ -105,11 +111,13 @@ export type KpSemanticStateCompositionEndpointErrorCode =
   | "duplicate-endpoint-binding"
   | "foreign-composition-base"
   | "independent-confluence-failed"
+  | "independent-alias-hazard"
   | "incompatible-confluence-graph"
   | "missing-endpoint-binding"
   | "missing-confluence-graph"
   | "unexpected-endpoint-binding"
-  | "unsupported-independent-cohort-size";
+  | "unsupported-independent-cohort-size"
+  | "unsupported-independent-write";
 
 export class KpSemanticStateCompositionEndpointError extends Error {
   readonly code: KpSemanticStateCompositionEndpointErrorCode;
@@ -206,18 +214,31 @@ export function assembleKpSemanticStateCompositionEndpointChain<
       applications.push(...executed.applications);
       cursor = executed.after;
     } else {
+      // Earlier ordered members may have changed bindings since pure preflight.
+      const alias = findKpSemanticStateCompositionAliasedWrite(
+        cursor, step.members.map(member => member.footprint)
+      );
+      if (alias !== undefined) {
+        fail({
+          code: "independent-alias-hazard", stepIndex: step.stepIndex,
+          slotId: alias.target.slotId,
+          message: "Independent sampling cannot preserve an aliased driver."
+        });
+      }
       const canonical = applyMembers({
         members: step.members,
         before: cursor,
         stepIndex: step.stepIndex,
-        bindingByTransformation
+        bindingByTransformation,
+        independent: true
       });
       const oppositeMembers = [...step.members].reverse();
       const opposite = applyMembers({
         members: oppositeMembers,
         before: cursor,
         stepIndex: step.stepIndex,
-        bindingByTransformation
+        bindingByTransformation,
+        independent: true
       });
       const graph = input.graph!;
       const comparison = assertSnapshotsValueEquivalent({
@@ -276,6 +297,7 @@ function applyMembers<
     KpAppliedTransformationId,
     KpSemanticStateCompositionEndpointBinding<Root>
   >;
+  readonly independent?: boolean;
 }): {
   readonly after: KpAggregateSemanticSnapshot;
   readonly applications:
@@ -288,6 +310,15 @@ function applyMembers<
       member.application.transformationId
     )!;
     const applied = binding.apply(cursor);
+    if (input.independent && applied.commit.journal.some(
+      entry => entry.operation.kind !== "update"
+    )) {
+      fail({
+        code: "unsupported-independent-write",
+        stepIndex: input.stepIndex, memberId: member.id,
+        message: "Independent cohorts support value updates only; binding and lifecycle changes require an explicit ordered sequence."
+      });
+    }
     if (applied.commit.before !== cursor) {
       fail({
         code: "discontinuous-endpoint-chain",

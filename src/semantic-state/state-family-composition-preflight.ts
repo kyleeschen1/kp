@@ -15,7 +15,8 @@ import type {
 import {
   KpSemanticStateTransitionFootprintError,
   projectKpSemanticStateTransitionFootprint,
-  type KpSemanticStateTransitionFootprint
+  type KpSemanticStateTransitionFootprint,
+  type KpSemanticStateTransitionFootprintEntry
 } from "./state-family-transition-footprint.ts";
 
 export interface KpSemanticStateCompositionGraphBinding {
@@ -54,6 +55,7 @@ export type KpSemanticStateCompositionPreflightDiagnosticCode =
   | "foreign-base-snapshot"
   | "incompatible-derived-graph"
   | "independent-write-conflict"
+  | "independent-alias-hazard"
   | "unresolved-transition-hazard";
 
 export interface KpSemanticStateCompositionPreflightDiagnostic {
@@ -168,6 +170,18 @@ export function preflightKpSemanticStateComposition<
         if (prepared !== undefined) cohortMembers.push(prepared);
       }
       diagnoseIndependentConflicts(path, cohortMembers, report);
+      for (const member of cohortMembers) {
+        const alias = findKpSemanticStateCompositionAliasedWrite(
+          input.base, [member.footprint]
+        );
+        if (alias !== undefined) {
+          report(
+            "independent-alias-hazard", path,
+            [member.member.application.transformationId],
+            `Independent driver ${JSON.stringify(alias.target.encodedPath)} aliases another role; alias-aware sampling is not supported.`
+          );
+        }
+      }
     }
   };
 
@@ -313,6 +327,27 @@ function diagnoseIndependentConflicts(
       );
     }
   }
+}
+
+/** Slot-disjoint writes are not entity-disjoint when another role aliases them. */
+export function findKpSemanticStateCompositionAliasedWrite(
+  snapshot: KpAggregateSemanticSnapshot,
+  footprints: readonly KpSemanticStateTransitionFootprint[]
+): KpSemanticStateTransitionFootprintEntry | undefined {
+  const aliasedEntities = new Set<string>();
+  const seen = new Set<string>();
+  for (const binding of snapshot.bindings) {
+    if (seen.has(binding.entityId)) aliasedEntities.add(binding.entityId);
+    seen.add(binding.entityId);
+  }
+  for (const footprint of footprints) {
+    for (const entry of [...footprint.semanticWrites, ...footprint.discreteWrites]) {
+      const index = snapshot.bindingIndex[entry.target.slotId];
+      const binding = index === undefined ? undefined : snapshot.bindings[index];
+      if (binding !== undefined && aliasedEntities.has(binding.entityId)) return entry;
+    }
+  }
+  return undefined;
 }
 
 function doesGraphMatchSnapshot(

@@ -46,15 +46,23 @@ import {
 } from "../src/semantic-state/state-family-definition.ts";
 import { declareKpSemanticStateInterpolation } from
   "../src/semantic-state/state-family-transition.ts";
+import { beginKpSemanticTransaction } from
+  "../src/semantic-state/transaction.ts";
+import { KpSemanticStateCompositionPreflightError } from
+  "../src/semantic-state/state-family-composition-preflight.ts";
 
 function fixture(input: {
   readonly hiddenBetaRead?: boolean;
+  readonly aliasedDrivers?: boolean;
+  readonly bindBetaToAlpha?: boolean;
+  readonly endpointNeutralBetaRead?: boolean;
+  readonly initialAlpha?: number;
   readonly onAuthor?: (name: "alpha" | "beta") => void;
 } = {}) {
   const compiled = compileKpSemanticStateSchema(
     "lesson.composition-confluence",
     kpStateGroup({
-      alpha: kpStateValue<number>(0),
+      alpha: kpStateValue<number>(input.initialAlpha ?? 0),
       beta: kpStateValue<number>(0),
       stable: kpStateValue("unchanged"),
       sum: kpStateDerived<number>()
@@ -67,9 +75,24 @@ function fixture(input: {
     dependencies: [handles.refs.alpha, handles.refs.beta],
     compute: ([alpha, beta]) => alpha + beta
   });
-  const initial = materializeKpSemanticStateInitialSnapshot(compiled, {
+  let initial = materializeKpSemanticStateInitialSnapshot(compiled, {
     derivations: [sum]
   });
+  if (input.aliasedDrivers) {
+    const transaction = beginKpSemanticTransaction({
+      identities: compiled.identityScope,
+      before: initial,
+      transformationId: compiled.identityScope.appliedTransformation(
+        compiled.identityScope.transformation("prepare-alias"), "initial"
+      )
+    });
+    transaction.bind(transaction.scope, {
+      id: "prepare.alias", sourceId: "test.alias",
+      sourceSlotId: handles.refs.alpha.slotId,
+      targetSlotId: handles.refs.beta.slotId
+    });
+    initial = transaction.commit(transaction.scope).after;
+  }
   const graph = compileKpSemanticDerivedGraph(
     normalizeKpSemanticDerivedGraphInput(compiled, [sum])
   );
@@ -91,10 +114,19 @@ function fixture(input: {
       )] as const,
       author(parameters, state) {
         input.onAuthor?.(name);
-        const hiddenAlpha = name === "beta" && input.hiddenBetaRead
+        if (name === "beta" && input.bindBetaToAlpha) {
+          state.beta.bind(state.alpha);
+          return;
+        }
+        const readAlpha = name === "beta" &&
+          (input.hiddenBetaRead || input.endpointNeutralBetaRead)
           ? state.alpha.read()
           : 0;
-        state[name].update(() => parameters.value + hiddenAlpha);
+        const hiddenAlpha = input.endpointNeutralBetaRead
+          ? readAlpha * (readAlpha - 4)
+          : readAlpha;
+        state[name].update(previous => (input.aliasedDrivers ? previous : 0) +
+          parameters.value + hiddenAlpha);
       }
     });
   };
@@ -314,6 +346,58 @@ test("a hidden cross-member read fails executed confluence", () => {
       "independent-confluence-failed");
   assert.equal(escaped, undefined);
   assert.deepEqual(authored, ["alpha", "beta", "beta", "alpha"]);
+  assert.equal(data.handles.pin(data.initial).alpha.read(), 0);
+  assert.equal(data.handles.pin(data.initial).beta.read(), 0);
+});
+
+test("distinct slots that alias one entity are not independent drivers", () => {
+  const authored: string[] = [];
+  const data = fixture({ aliasedDrivers: true, onAuthor: name => authored.push(name) });
+  assert.throws(() => data.compile([data.alpha, data.beta]),
+    (error: unknown) => error instanceof KpSemanticStateCompositionPreflightError
+      && error.diagnostics.some(item => item.code === "independent-alias-hazard"));
+  assert.deepEqual(authored, []);
+});
+
+test("endpoint-time alias validation protects reconstructed composition bases", () => {
+  const authored: string[] = [];
+  const data = fixture({ onAuthor: name => authored.push(name) });
+  const aliased = fixture({ aliasedDrivers: true });
+  const compiled = data.compile([data.alpha, data.beta]);
+  assert.throws(() => assembleKpSemanticStateCompositionEndpointChain({
+    composition: { ...compiled, baseSnapshotId: aliased.initial.id },
+    base: aliased.initial, bindings: data.bindings, graph: data.graph
+  }), (error: unknown) => (error as KpSemanticStateCompositionEndpointError).code ===
+    "independent-alias-hazard");
+  assert.deepEqual(authored, []);
+});
+
+test("endpoint checking is pinned-base evidence, not a proof of absent reads", () => {
+  const data = fixture({ endpointNeutralBetaRead: true });
+  const chain = assembleKpSemanticStateCompositionEndpointChain({
+    composition: data.compile([data.alpha, data.beta]),
+    base: data.initial, bindings: data.bindings, graph: data.graph
+  });
+  assert.equal(chain.confluence[0]?.valueEquivalent, true);
+  const otherBase = fixture({ endpointNeutralBetaRead: true, initialAlpha: 2 });
+  assert.throws(() => assembleKpSemanticStateCompositionEndpointChain({
+    composition: otherBase.compile([otherBase.alpha, otherBase.beta]),
+    base: otherBase.initial, bindings: otherBase.bindings, graph: otherBase.graph
+  }), (error: unknown) => (error as KpSemanticStateCompositionEndpointError).code ===
+    "independent-confluence-failed");
+});
+
+test("endpoint equality cannot certify a cohort that creates an alias", () => {
+  const data = fixture({ bindBetaToAlpha: true });
+  let escaped: unknown;
+  assert.throws(() => {
+    escaped = assembleKpSemanticStateCompositionEndpointChain({
+      composition: data.compile([data.alpha, data.beta]),
+      base: data.initial, bindings: data.bindings, graph: data.graph
+    });
+  }, (error: unknown) => (error as KpSemanticStateCompositionEndpointError).code ===
+    "unsupported-independent-write");
+  assert.equal(escaped, undefined);
   assert.equal(data.handles.pin(data.initial).alpha.read(), 0);
   assert.equal(data.handles.pin(data.initial).beta.read(), 0);
 });

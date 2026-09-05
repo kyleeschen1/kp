@@ -52,6 +52,13 @@
       "scope": "s02",
       "checkedAt": "2026-09-05T19:18:12.908Z",
       "notes": "Full app/node/test/Svelte/domain typecheck passes after correcting three baseline-test index-signature accesses."
+    },
+    {
+      "command": "npm run test:semantic-state; npm run typecheck; git diff --check; theseus workspace validate",
+      "status": "passed",
+      "scope": "s03",
+      "checkedAt": "2026-09-05T19:29:04.579Z",
+      "notes": "364 tests pass; 0 Svelte errors or warnings. Alias rejection before callbacks, lifecycle journal rejection, hidden read base-specific pressure."
     }
   ],
   "expectedLearning": [

@@ -127,7 +127,8 @@
     {
       "id": "s03",
       "title": "Existing two-member independence boundaries: pressure aliases, hidden reads, dependencies, conflict detection, and honest certificate terminology",
-      "status": "planned"
+      "summary": "Retained pair certificate is pinned-base value equivalence only. Shared entity writes and binding/lifecycle changes return typed gaps; existing ordered scope retained.",
+      "status": "complete"
     },
     {
       "id": "s04",
