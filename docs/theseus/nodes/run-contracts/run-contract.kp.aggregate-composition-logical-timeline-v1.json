@@ -107,7 +107,8 @@
     {
       "id": "s07",
       "title": "Deterministic composition compilation",
-      "status": "planned"
+      "summary": "Validated preflight data now compiles into frozen nested nodes, stable scoped member and group identities, canonical independent-cohort order, authored sequence order, and one deterministic settled boundary specification per executable step.",
+      "status": "complete"
     },
     {
       "id": "s08",
