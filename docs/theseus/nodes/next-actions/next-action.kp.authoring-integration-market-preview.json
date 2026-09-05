@@ -2,13 +2,17 @@
   "id": "next-action.kp.authoring-integration-market-preview",
   "kind": "next-action",
   "title": "Integrate authoring through one market preview",
-  "status": "ready",
+  "status": "blocked",
   "domain": "kp",
-  "summary": "Explicitly approved exact 28-slice execution; contract run-contract.kp.authoring-integration-market-preview-v1 owns live progress.",
+  "summary": "STOP_CONDITION: unresolved economics governed operation-pack and state/lifecycle authority; approve bounded prerequisite in source-authority stop report before resuming s13.",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-05-authoring-integration-market-preview-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-05-authoring-integration-source-authority-stop.md"
     }
   ],
   "dependsOn": {
@@ -143,8 +147,33 @@
       "scope": "s12",
       "checkedAt": "2026-09-05T20:43:39.131Z",
       "notes": "34 tests pass; inference types111257 instantiations192271 under112500/195800; dependency2031modules zero exceptions; full typecheck clean. Shared assembly387 and math307 lines disclosed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/authoring-integration-lowering-gap.test.ts",
+      "status": "failed",
+      "scope": "s13-lowering-acceptance",
+      "checkedAt": "2026-09-05T20:52:37.695Z",
+      "notes": "The diagnostic tests pass by reproducing unsupported lowering: missing governed pack/lineage and seven complete-lifecycle failures after legacy normalization. Required s13 successful lowering is NOT implemented or verified."
+    },
+    {
+      "command": "npm run test:authoring-integration; npm run test:economics-supply-tax; npm run typecheck; npm run check:architecture; npm run test:equation-reachability; git diff --check",
+      "status": "passed",
+      "scope": "s13-stop-preservation",
+      "checkedAt": "2026-09-05T20:52:38.840Z",
+      "notes": "37 authoring tests,81 economics tests,12 reachability tests pass; full typecheck and architecture clean. Only a diagnostic test and durable stop records added, no runtime lowering or renderer changes."
+    },
+    {
+      "command": "npm run check:equation-reachability; node --disable-warning=ExperimentalWarning --test tests/current-direction-authoring-ratchet.test.ts; theseus workspace validate",
+      "status": "passed",
+      "scope": "stop-memory-closure",
+      "checkedAt": "2026-09-05T20:53:34.357Z",
+      "notes": "Exact inventory current with68 unchanged roots and4 diagnostic test edges;3 direction ratchets pass. Run and target blocked; s13 planned; receipt failed, no open slice."
     }
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "STOP_CONDITION after 12 of 28 slices: unresolved canonical economics operation-pack and rich lifecycle authority. s13 returned to planned; s14-s28 untouched. Approval required for bounded domain contract prerequisite."
+  },
   "expectedLearning": [
     "Whether internal assembly and a bounded math bridge make one exact market explanation authorable without duplicate semantics or renderer authority."
   ],

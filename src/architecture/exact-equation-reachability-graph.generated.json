@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 4223,
+  "scannedFileCount": 4229,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -830,6 +830,7 @@
         "src/semantic/typescript-refactor-operations.ts"
       ],
       "testCallers": [
+        "tests/authoring-integration-lowering-gap.test.ts",
         "tests/distribution-area-exemplar-trace.test.ts",
         "tests/distribution-factoring-presentation-plan.test.ts",
         "tests/divide-both-sides-equation-asset.test.ts",
@@ -1082,6 +1083,7 @@
         "src/semantic/typescript-refactor-operations.ts"
       ],
       "testCallers": [
+        "tests/authoring-integration-lowering-gap.test.ts",
         "tests/cancellation-pressure-contract.test.ts",
         "tests/carrier-preserving-simplification-semantic.test.ts",
         "tests/correspondence-composition.test.ts",
@@ -1725,6 +1727,7 @@
         "src/semantic/typescript-refactor-operations.ts"
       ],
       "testCallers": [
+        "tests/authoring-integration-lowering-gap.test.ts",
         "tests/distribution-area-exemplar-trace.test.ts",
         "tests/distribution-factoring-presentation-plan.test.ts",
         "tests/divide-both-sides-equation-asset.test.ts",
@@ -2397,6 +2400,7 @@
         "src/domain-ir/equation-grammar-v2-operation-resolution.ts"
       ],
       "testCallers": [
+        "tests/authoring-integration-lowering-gap.test.ts",
         "tests/balanced-operation-caller-inventory.test.ts",
         "tests/cancellation-witness.test.ts",
         "tests/canonical-operation-registry.test.ts",

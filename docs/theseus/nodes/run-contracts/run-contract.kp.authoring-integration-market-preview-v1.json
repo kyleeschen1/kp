@@ -2,8 +2,9 @@
   "id": "run-contract.kp.authoring-integration-market-preview-v1",
   "kind": "run-contract",
   "title": "Authoring integration to market preview",
-  "status": "ready",
+  "status": "blocked",
   "domain": "kp",
+  "summary": "STOP_CONDITION after12/28 complete. s13 remains planned; no later slice started. Await explicit bounded economics operation/lifecycle prerequisite approval.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -187,6 +188,7 @@
     {
       "id": "s13",
       "title": "Economics source-authority lowering: adapt verified state/model operations into the existing canonical asset/compiler entrance",
+      "summary": "STOP_CONDITION: unresolved economics operation-pack and lifecycle authority; no lowering shipped. Reopen only after approval of the bounded prerequisite in the source-authority stop report.",
       "status": "planned"
     },
     {

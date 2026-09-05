@@ -1,10 +1,11 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: authoring-first integration; exact 28-slice run approved
+Status: authoring-first integration; source-authority decision required
 Last Updated: 2026-09-05
-Current Next Action: execute the approved
-`run-contract.kp.authoring-integration-market-preview-v1` through its mandatory
-checkpoint. Theseus owns current slice, verification, commits, and stop state.
+Current Next Action: resolve the bounded economics operation/lifecycle contract
+prerequisite in `../reviews/2026-09-05-authoring-integration-source-authority-stop.md`
+before resuming `run-contract.kp.authoring-integration-market-preview-v1`.
+Theseus owns current slice, verification, commits, and stop state.
 
 ## Current Accepted Direction
 
