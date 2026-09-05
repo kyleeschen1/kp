@@ -161,7 +161,8 @@
     {
       "id": "s16",
       "title": "Independent-cohort aggregate overlays",
-      "status": "planned"
+      "summary": "Independent cohort addresses now resolve all member drivers at one exact progress over one shared retained before boundary, preserve member-specific transient tokens, return exact persistent endpoints, reject collisions, and expose no aggregate snapshot, version, copied store, or derived-value interpolation.",
+      "status": "complete"
     },
     {
       "id": "s17",

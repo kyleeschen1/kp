@@ -36,9 +36,9 @@ import {
   type KpSemanticProgressEncoding
 } from "./semantic-progress.ts";
 import type {
-  KpEphemeralSemanticStateReadSource,
   KpPersistentSemanticStateReadSource,
-  KpSemanticStateReadSource
+  KpSemanticStateReadSource,
+  KpTransientSemanticStateReadSource
 } from "./state-family-sample-source.ts";
 
 export interface KpResolvedSemanticConcreteDependency {
@@ -87,7 +87,7 @@ export interface KpSemanticDerivedEvaluationMemo {
 export interface KpSemanticStateSampleView<Result> {
   readonly schemaVersion: "kp.semantic-state-sample-view.v1";
   readonly kind: "semantic-state-sample-view";
-  readonly source: KpEphemeralSemanticStateReadSource;
+  readonly source: KpTransientSemanticStateReadSource;
   readonly reference: KpDerivedSemanticStateLeafHandle<Result>;
   read(): Result;
 }
@@ -144,7 +144,7 @@ export function resolveKpSemanticConcreteDependency(input: {
 }): KpResolvedSemanticConcreteDependency;
 export function resolveKpSemanticConcreteDependency(input: {
   readonly graph: KpSemanticDerivedGraph;
-  readonly source: KpEphemeralSemanticStateReadSource;
+  readonly source: KpTransientSemanticStateReadSource;
   readonly dependency: KpSemanticDerivedGraphLeafReference;
 }): KpResolvedSemanticDependency;
 export function resolveKpSemanticConcreteDependency(input: {
@@ -194,7 +194,8 @@ export function resolveKpSemanticConcreteDependency(input: {
     });
   }
 
-  if (source?.kind === "ephemeral-driver-overlay") {
+  if (source?.kind === "ephemeral-driver-overlay" ||
+    source?.kind === "ephemeral-aggregate-driver-overlay") {
     const transient = resolveTransientDependency(source, input.dependency);
     if (transient !== undefined) return transient;
   }
@@ -236,14 +237,19 @@ export function resolveKpSemanticConcreteDependency(input: {
 }
 
 function resolveTransientDependency(
-  source: KpEphemeralSemanticStateReadSource,
+  source: KpTransientSemanticStateReadSource,
   dependency: KpSemanticDerivedGraphLeafReference
 ): KpResolvedSemanticTransientDependency | undefined {
   const ordinal = source.driverIndex[dependency.slotId];
-  const driver = ordinal === undefined ? undefined : source.drivers[ordinal];
+  if (ordinal === undefined) return undefined;
+  const driver = source.drivers[ordinal];
   if (driver === undefined || driver.targetSlotId !== dependency.slotId) {
     return undefined;
   }
+  const application = source.kind === "ephemeral-driver-overlay"
+    ? source.application
+    : source.drivers[ordinal]?.application;
+  if (application === undefined) return undefined;
   return Object.freeze({
     schemaVersion: "kp.resolved-semantic-transient-dependency.v1",
     kind: "resolved-semantic-transient-dependency",
@@ -252,9 +258,9 @@ function resolveTransientDependency(
     token: Object.freeze({
       schemaVersion: "kp.semantic-transient-dependency-token.v1",
       kind: "semantic-transient-dependency-token",
-      definitionId: source.application.definitionId,
-      transformationId: source.application.transformationId,
-      applicationId: source.application.applicationId,
+      definitionId: application.definitionId,
+      transformationId: application.transformationId,
+      applicationId: application.applicationId,
       declarationId: driver.declarationId,
       slotId: dependency.slotId,
       beforeEntityId: driver.endpoints.before.entityId,
@@ -365,7 +371,7 @@ export function evaluateKpSemanticDerivedValueWithMemo(input: {
 
 export function createKpSemanticStateSampleView<const Result>(input: {
   readonly graph: KpSemanticDerivedGraph;
-  readonly source: KpEphemeralSemanticStateReadSource;
+  readonly source: KpTransientSemanticStateReadSource;
   readonly target: KpDerivedSemanticStateLeafHandle<Result>;
 }): KpSemanticStateSampleView<Result> {
   const value = evaluateKpSemanticDerivedValue(input);

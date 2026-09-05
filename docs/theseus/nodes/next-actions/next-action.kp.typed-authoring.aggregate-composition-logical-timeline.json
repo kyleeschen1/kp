@@ -1015,11 +1015,88 @@
       "scope": "slice-s15-workspace",
       "checkedAt": "2026-09-05T05:47:17.255Z",
       "notes": "Workspace valid with 1094 nodes after all slice implementation and evidence mutations."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-state-composition-cohort-resolver.test.ts tests/semantic-state-composition-confluence.test.ts tests/semantic-state-composition-preflight.test.ts tests/semantic-state-family-source-resolution.test.ts tests/semantic-state-family-derived-evaluation.test.ts",
+      "status": "passed",
+      "scope": "slice-s16-focused",
+      "checkedAt": "2026-09-05T05:56:46.731Z",
+      "notes": "25/25 focused tests passed for simultaneous drivers, unique member tokens, exact endpoints, equivalent progress, no history growth, confluence, and collision rejection."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "slice-s16-semantic",
+      "checkedAt": "2026-09-05T05:56:47.765Z",
+      "notes": "324/324 semantic-state tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s16-typecheck",
+      "checkedAt": "2026-09-05T05:56:48.790Z",
+      "notes": "Application, node, tests, Svelte, and domain typechecks passed with zero diagnostics."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-s16-architecture",
+      "checkedAt": "2026-09-05T05:56:49.829Z",
+      "notes": "Architecture gates passed across 2019 TypeScript modules and 7525 of 7576 local references."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice-s16-inference",
+      "checkedAt": "2026-09-05T05:56:50.873Z",
+      "notes": "Measured inference remained within existing ceilings at 107195 types and 182049 instantiations; no ceiling refresh."
+    },
+    {
+      "command": "npm run test:equation-reachability",
+      "status": "passed",
+      "scope": "slice-s16-reachability",
+      "checkedAt": "2026-09-05T05:56:51.889Z",
+      "notes": "12/12 reachability and caller-ledger tests passed after graph regeneration."
+    },
+    {
+      "command": "npm run verify:impact -- --path src/semantic-state/state-family-composition-cohort-resolver.ts",
+      "status": "passed",
+      "scope": "slice-s16-impact-cohort",
+      "checkedAt": "2026-09-05T05:56:52.920Z",
+      "notes": "High-risk cohort resolver impact selected semantic-state, typecheck, and architecture gates; all passed."
+    },
+    {
+      "command": "npm run verify:impact -- --path src/semantic-state/state-family-sample-source.ts",
+      "status": "passed",
+      "scope": "slice-s16-impact-source",
+      "checkedAt": "2026-09-05T05:56:53.958Z",
+      "notes": "High-risk sample-source impact selected semantic-state, typecheck, and architecture gates; all passed."
+    },
+    {
+      "command": "npm run verify:impact -- --path src/semantic-state/derived-evaluator.ts",
+      "status": "passed",
+      "scope": "slice-s16-impact-derived",
+      "checkedAt": "2026-09-05T05:56:54.990Z",
+      "notes": "High-risk derived-evaluator impact selected semantic-state, typecheck, and architecture gates; all passed."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice-s16-diff",
+      "checkedAt": "2026-09-05T05:56:56.013Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-s16-workspace",
+      "checkedAt": "2026-09-05T05:57:08.030Z",
+      "notes": "Workspace valid with 1094 nodes after all slice implementation and evidence mutations."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s15 complete: ordered leaf transitions seek through existing family evaluators from exact adjacent boundaries with persistent endpoints, ephemeral interiors, and no future-state leakage."
+    "summary": "s16 complete: demonstrated-independent cohorts produce one frozen multi-driver ephemeral source over a shared retained base with distinct member provenance and exact persistent endpoints."
   },
   "expectedLearning": [
     "Whether sequence nesting and demonstrated-independent cohorts can reuse current family and persistent-state authority without a second kernel.",

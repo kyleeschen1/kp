@@ -8,12 +8,15 @@ import {
 } from "./entity-version-store.ts";
 import type {
   KpAppliedTransformationId,
+  KpSemanticCompositionGroupId,
+  KpSemanticCompositionId,
   KpSemanticEntityId,
   KpSemanticSlotId,
   KpSemanticVersionId,
   KpTransformationDefinitionId
 } from "./identity.ts";
 import {
+  encodeKpSemanticProgress,
   isKpSemanticProgressOne,
   isKpSemanticProgressZero,
   type KpSemanticProgress
@@ -86,9 +89,33 @@ export interface KpEphemeralSemanticStateReadSource {
   readonly driverIndex: Readonly<Record<KpSemanticSlotId, number>>;
 }
 
+export interface KpAggregateEphemeralSemanticStateDriverOverlay extends
+  KpEphemeralSemanticStateDriverOverlay<KpPersistentSemanticValue> {
+  readonly application: KpEphemeralSemanticStateApplicationReference;
+}
+
+export interface KpAggregateEphemeralSemanticStateReadSource {
+  readonly schemaVersion: "kp.semantic-state-read-source.v1";
+  readonly kind: "ephemeral-aggregate-driver-overlay";
+  readonly namespace: string;
+  readonly compositionId: KpSemanticCompositionId;
+  readonly cohortId: KpSemanticCompositionGroupId;
+  readonly progress: KpSemanticProgress;
+  readonly base: KpPersistentSemanticStateReadSource;
+  readonly applications:
+    readonly KpEphemeralSemanticStateApplicationReference[];
+  readonly drivers:
+    readonly KpAggregateEphemeralSemanticStateDriverOverlay[];
+  readonly driverIndex: Readonly<Record<KpSemanticSlotId, number>>;
+}
+
+export type KpTransientSemanticStateReadSource =
+  | KpEphemeralSemanticStateReadSource
+  | KpAggregateEphemeralSemanticStateReadSource;
+
 export type KpSemanticStateReadSource =
   | KpPersistentSemanticStateReadSource
-  | KpEphemeralSemanticStateReadSource;
+  | KpTransientSemanticStateReadSource;
 
 export interface KpEphemeralSemanticStateDriverInput<Value> {
   readonly declaration:
@@ -98,7 +125,11 @@ export interface KpEphemeralSemanticStateDriverInput<Value> {
 }
 
 export type KpSemanticStateSampleSourceErrorCode =
+  | "aggregate-base-mismatch"
+  | "aggregate-progress-mismatch"
+  | "duplicate-aggregate-application"
   | "duplicate-overlay-driver"
+  | "empty-aggregate-overlay"
   | "endpoint-overlay-progress"
   | "foreign-overlay-driver"
   | "invalid-overlay-value"
@@ -251,6 +282,110 @@ export function createKpEphemeralSemanticStateReadSource<
     base: adaptKpSnapshotToSemanticStateReadSource(
       input.application.commit.before
     ),
+    drivers: Object.freeze(drivers),
+    driverIndex: Object.freeze(driverIndex)
+  });
+}
+
+/**
+ * An independent cohort shares one persistent base while retaining each
+ * member application's transient-token provenance on its own driver.
+ */
+export function createKpAggregateEphemeralSemanticStateReadSource(input: {
+  readonly compositionId: KpSemanticCompositionId;
+  readonly cohortId: KpSemanticCompositionGroupId;
+  readonly progress: KpSemanticProgress;
+  readonly base: KpAggregateSemanticSnapshot;
+  readonly sources: readonly KpEphemeralSemanticStateReadSource[];
+}): KpAggregateEphemeralSemanticStateReadSource {
+  if (isKpSemanticProgressZero(input.progress) ||
+    isKpSemanticProgressOne(input.progress)) {
+    throw new KpSemanticStateSampleSourceError({
+      code: "endpoint-overlay-progress",
+      message: "Aggregate semantic driver overlays require interior progress; exact endpoints retain their persistent snapshot source."
+    });
+  }
+  if (input.sources.length === 0) {
+    throw new KpSemanticStateSampleSourceError({
+      code: "empty-aggregate-overlay",
+      message: "An aggregate semantic driver overlay requires at least one family source."
+    });
+  }
+  const progressKey = encodeKpSemanticProgress(input.progress);
+  const applicationIds = new Set<KpAppliedTransformationId>();
+  const applications: KpEphemeralSemanticStateApplicationReference[] = [];
+  const drivers: KpAggregateEphemeralSemanticStateDriverOverlay[] = [];
+  const driverIndex: Record<KpSemanticSlotId, number> = {};
+
+  for (const source of input.sources) {
+    if (source.namespace !== input.base.namespace) {
+      throw new KpSemanticStateSampleSourceError({
+        code: "aggregate-base-mismatch",
+        message: `Aggregate source belongs to ${JSON.stringify(source.namespace)}, not shared base ${JSON.stringify(input.base.namespace)}.`
+      });
+    }
+    if (encodeKpSemanticProgress(source.progress) !== progressKey) {
+      throw new KpSemanticStateSampleSourceError({
+        code: "aggregate-progress-mismatch",
+        message: "Every independent family source must use the aggregate exact progress."
+      });
+    }
+    if (applicationIds.has(source.application.transformationId)) {
+      throw new KpSemanticStateSampleSourceError({
+        code: "duplicate-aggregate-application",
+        message: `Aggregate source repeats application ${JSON.stringify(source.application.transformationId)}.`
+      });
+    }
+    applicationIds.add(source.application.transformationId);
+    applications.push(source.application);
+
+    for (const driver of source.drivers) {
+      if (driverIndex[driver.targetSlotId] !== undefined) {
+        throw new KpSemanticStateSampleSourceError({
+          code: "duplicate-overlay-driver",
+          declarationId: driver.declarationId,
+          targetSlotId: driver.targetSlotId,
+          message: `Aggregate semantic source repeats driver slot ${JSON.stringify(driver.targetSlotId)}.`
+        });
+      }
+      let baseBinding;
+      try {
+        baseBinding = readKpSemanticSlotBinding(input.base, driver.targetSlotId);
+      } catch (cause) {
+        throw new KpSemanticStateSampleSourceError({
+          code: "aggregate-base-mismatch",
+          declarationId: driver.declarationId,
+          targetSlotId: driver.targetSlotId,
+          cause,
+          message: `Aggregate driver ${JSON.stringify(driver.declarationId)} has no concrete slot in its shared base.`
+        });
+      }
+      if (baseBinding.entityId !== driver.endpoints.before.entityId ||
+        baseBinding.versionId !== driver.endpoints.before.versionId) {
+        throw new KpSemanticStateSampleSourceError({
+          code: "aggregate-base-mismatch",
+          declarationId: driver.declarationId,
+          targetSlotId: driver.targetSlotId,
+          message: `Aggregate driver ${JSON.stringify(driver.declarationId)} does not begin at the shared cohort boundary.`
+        });
+      }
+      driverIndex[driver.targetSlotId] = drivers.length;
+      drivers.push(Object.freeze({
+        ...driver,
+        application: source.application
+      }));
+    }
+  }
+
+  return Object.freeze({
+    schemaVersion: "kp.semantic-state-read-source.v1",
+    kind: "ephemeral-aggregate-driver-overlay",
+    namespace: input.base.namespace,
+    compositionId: input.compositionId,
+    cohortId: input.cohortId,
+    progress: input.progress,
+    base: adaptKpSnapshotToSemanticStateReadSource(input.base),
+    applications: Object.freeze(applications),
     drivers: Object.freeze(drivers),
     driverIndex: Object.freeze(driverIndex)
   });
