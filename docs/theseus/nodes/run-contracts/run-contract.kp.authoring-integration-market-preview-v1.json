@@ -195,7 +195,8 @@
     {
       "id": "s14",
       "title": "Isolated opt-in authoring-market host and committed scoped visual harness; leave canonical route unchanged",
-      "status": "planned"
+      "summary": "Opt-in authoring-market baseline host and stable visual command verified; actual SVG equals canonical route. 6531 tests, full types and Chromium disposal pass; no new clock or paint implementation.",
+      "status": "complete"
     },
     {
       "id": "s15",

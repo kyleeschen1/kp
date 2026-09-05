@@ -182,6 +182,20 @@
       "scope": "s13-broad",
       "checkedAt": "2026-09-05T22:10:49.041Z",
       "notes": "6529 tests pass, zero failures; architecture and dependency gates pass with zero exceptions; inference111257 types192271 instantiations below unchanged ceilings."
+    },
+    {
+      "command": "npm run test:authoring-integration; npm run typecheck; npm run visual:authoring-market; npm run check:equation-reachability; git diff --check",
+      "status": "passed",
+      "scope": "s14",
+      "checkedAt": "2026-09-05T22:16:38.928Z",
+      "notes": "44 integration tests and Chromium host baseline/disposal/parity pass; full typecheck clean and browser test-project typecheck passes. Exact inventory adds4 scanned files only. Full npm test still running."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s14-broad",
+      "checkedAt": "2026-09-05T22:23:58.002Z",
+      "notes": "6531 tests pass, zero failures; architecture2035modules zero retiring exceptions; inference111257 types192271 instantiations under unchanged ceilings."
     }
   ],
   "progress": {

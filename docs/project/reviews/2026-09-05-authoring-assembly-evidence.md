@@ -170,3 +170,23 @@ audited diff adds only their direct caller edges for existing asset, semantic
 tree, and correspondence owners; roots, policy, and numerical ceilings remain
 unchanged. One additional parameter-signature line raises the specimen module
 count to 268; setup and charged-orchestration measurements remain unchanged.
+
+## Isolated baseline host
+
+`/experiments/authoring-market/` is a physical opt-in development document with
+a lazy host import. It does not enter default bootstrap, public build entries,
+or the canonical route. Its removable wrapper delegates to the existing
+`mountKpSupplyTaxKineticFigure`; it owns no new clock, SVG, or KaTeX renderer.
+It prepares verified authored source but is explicitly marked `canonical-baseline`
+until the following state/frame integration slices connect those inputs.
+
+`npm run visual:authoring-market` runs a committed Chromium check for actual
+mount, the 27 existing KaTeX graph labels, disposal/re-entry, and exact baseline
+SVG markup parity with `/experiments/kinetic-figure/supply-tax/`. The inspected
+capture retains canonical baseline quantity 5 and price 7. Captures remain
+disposable under `tmp/codex/`; the command, not an ephemeral PNG, owns evidence.
+This is preservation evidence, not human visual approval or completed authoring
+UX. Typed prose/static facts, editing, and state-driven painting remain pending.
+
+The exact source scan moves from 4,232 to 4,236 for two host modules and two tests.
+Its generated diff changes only that count, with all 68 roots and edges intact.
