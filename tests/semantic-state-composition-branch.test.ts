@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
+import { projectKpSemanticTransactionToExistingAuthority } from
+  "../src/semantic/semantic-state-authority-adapter.ts";
 import { compileKpSemanticStateSchema } from
   "../src/semantic-state/authoring-schema-compiler.ts";
 import { createKpSemanticStateHandleSet } from
@@ -49,6 +51,11 @@ import {
 } from "../src/semantic-state/state-family-composition-preflight.ts";
 import { createKpSettledSemanticStateCompositionResolver } from
   "../src/semantic-state/state-family-composition-settled-resolver.ts";
+import {
+  inspectKpSemanticStateCompositionHistoricalLocal,
+  KpSemanticStateCompositionRestoreError,
+  requestKpSemanticStateCompositionHistoricalLocalRestore
+} from "../src/semantic-state/state-family-composition-restore.ts";
 import { validateKpSemanticStateComposition } from
   "../src/semantic-state/state-family-composition-validation.ts";
 import {
@@ -160,10 +167,117 @@ test("ephemeral sources and reused composition identities cannot branch", () => 
       error.code === "branch-composition-id-reused");
 });
 
+test("historical local inspection retains old and current aggregate authority", () => {
+  const data = fixture();
+  const boundaryReferences = data.source.chain.boundaries.map(
+    boundary => boundary.snapshot
+  );
+  const applicationReferences = [...data.source.chain.applications];
+  const inspection = inspectKpSemanticStateCompositionHistoricalLocal({
+    chain: data.source.chain,
+    compositionHandles: data.source.handles,
+    stateHandles: data.stateHandles,
+    address: data.source.settledAddress(1),
+    target: data.stateHandles.refs.value
+  });
+
+  assert.equal(inspection.historical.snapshot, boundaryReferences[1]);
+  assert.equal(inspection.currentSnapshot, data.source.chain.after);
+  assert.equal(inspection.historical.state.value.read(), 1);
+  assert.equal(inspection.currentState.value.read(), 3);
+  assert.equal(
+    inspection.historicalBinding.entityId,
+    inspection.currentBinding.entityId
+  );
+  assert.notEqual(
+    inspection.historicalBinding.versionId,
+    inspection.currentBinding.versionId
+  );
+  assert.equal(Object.isFrozen(inspection), true);
+  assert.equal(data.source.chain.boundaries.every((boundary, ordinal) =>
+    boundary.snapshot === boundaryReferences[ordinal]), true);
+  assert.equal(data.source.chain.applications.every((application, ordinal) =>
+    application === applicationReferences[ordinal]), true);
+});
+
+test("partial local restore fails with exact inspection and branch guidance", () => {
+  const data = fixture();
+  const inspection = inspectKpSemanticStateCompositionHistoricalLocal({
+    chain: data.source.chain,
+    compositionHandles: data.source.handles,
+    stateHandles: data.stateHandles,
+    address: data.source.settledAddress(1),
+    target: data.stateHandles.refs.value
+  });
+  const finalSnapshot = data.source.chain.after;
+  const boundaryCount = data.source.chain.boundaries.length;
+  const applicationCount = data.source.chain.applications.length;
+
+  assert.throws(
+    () => requestKpSemanticStateCompositionHistoricalLocalRestore(inspection),
+    (error: unknown) => {
+      assert.equal(error instanceof KpSemanticStateCompositionRestoreError,
+        true);
+      if (!(error instanceof KpSemanticStateCompositionRestoreError)) {
+        return false;
+      }
+      assert.equal(error.code, "partial-local-restore-forbidden");
+      assert.equal(error.guidance?.sourceAddress,
+        inspection.historical.address);
+      assert.equal(error.guidance?.sourceBoundary,
+        inspection.historical.boundary);
+      assert.equal(error.guidance?.sourceSnapshot,
+        inspection.historical.snapshot);
+      assert.deepEqual(error.guidance?.alternatives, [
+        "historical-inspection",
+        "explicit-authored-branch"
+      ]);
+      assert.equal(error.guidance?.branchFunction,
+        "continueKpSemanticStateCompositionFromBoundary");
+      return true;
+    }
+  );
+  assert.equal(data.source.chain.after, finalSnapshot);
+  assert.equal(data.source.chain.boundaries.length, boundaryCount);
+  assert.equal(data.source.chain.applications.length, applicationCount);
+});
+
+test("a historical continuation requires an authored branch transaction", () => {
+  const data = fixture();
+  const sourceBoundary = data.source.chain.boundaries[1]!;
+  const branch = data.branch(1, "authored-continuation", 8);
+  const applied = branch.chain.applications[0]!.application;
+  const projection = projectKpSemanticTransactionToExistingAuthority({
+    commit: applied.commit,
+    entityDescriptors: data.entityDescriptors
+  });
+
+  assert.equal(branch.lineage.sourceBoundary, sourceBoundary);
+  assert.equal(branch.lineage.sourceSnapshot, sourceBoundary.snapshot);
+  assert.equal(applied.commit.before, sourceBoundary.snapshot);
+  assert.equal(applied.commit.after, branch.chain.after);
+  assert.notEqual(branch.chain.after, data.source.chain.after);
+  assert.deepEqual(
+    projection.changeSet.records.map(record => record.kind),
+    ["revised"]
+  );
+  assert.equal(projection.correspondenceMap.records.length, 1);
+  assert.equal(projection.lineageGraph.edges.length, 1);
+});
+
 function fixture() {
   const namespace = "lesson.composition-branch";
   const schema = compileKpSemanticStateSchema(namespace, kpStateGroup({
     value: kpStateValue<number>(0)
+  }));
+  const entityDescriptors = schema.leaves.map(leaf => ({
+    entityId: leaf.identities.initialEntityId,
+    semanticKind: "composition-restore-value",
+    label: leaf.encodedPath,
+    provenance: {
+      kind: "authored" as const,
+      sourceId: leaf.identities.sourceIds.initialValue
+    }
   }));
   const stateHandles = createKpSemanticStateHandleSet(schema);
   const initial = materializeKpSemanticStateInitialSnapshot(schema);
@@ -299,6 +413,7 @@ function fixture() {
   return {
     branch,
     evaluator,
+    entityDescriptors,
     halfAddress: (candidate: Branch) =>
       createKpInTransitionSemanticStateCompositionAddress({
         handles: candidate.handles,

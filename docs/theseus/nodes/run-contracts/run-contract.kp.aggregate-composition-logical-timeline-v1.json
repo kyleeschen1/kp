@@ -197,7 +197,8 @@
     {
       "id": "s22",
       "title": "Historical local restore contract",
-      "status": "planned"
+      "summary": "Historical local access now pins exact old and current aggregate authority for read-only inspection; partial object-version splices fail with a typed diagnostic that permits only continued inspection or an explicitly authored branch transformation, whose existing transaction correspondence and lineage remain authoritative.",
+      "status": "complete"
     },
     {
       "id": "s23",
