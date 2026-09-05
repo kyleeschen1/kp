@@ -131,7 +131,8 @@
     {
       "id": "s11",
       "title": "Nested group ownership and aggregate provenance",
-      "status": "planned"
+      "summary": "Nested group and member ownership now forms one frozen read-only evidence index over exact compiled source references, endpoint applications, commits, and existing change, provenance, correspondence, and lineage authorities; reparameterized branch provenance remains intact and incomplete projection ownership fails closed.",
+      "status": "complete"
     },
     {
       "id": "s12",

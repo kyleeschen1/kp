@@ -22,6 +22,7 @@ import { compileKpSemanticStateComposition } from
   "../src/semantic-state/state-family-composition-compiler.ts";
 import {
   declareKpSemanticStateComposition,
+  declareKpSemanticStateCompositionGroup,
   declareKpSemanticStateCompositionIndependent,
   declareKpSemanticStateCompositionMember,
   declareKpSemanticStateCompositionSequence,
@@ -33,6 +34,12 @@ import {
   type KpSemanticStateCompositionEndpointChain,
   type KpSemanticStateCompositionEndpointError
 } from "../src/semantic-state/state-family-composition-endpoints.ts";
+import {
+  createKpSemanticStateCompositionEvidenceIndex,
+  readKpSemanticStateCompositionEvidenceGroup,
+  readKpSemanticStateCompositionEvidenceMember,
+  KpSemanticStateCompositionEvidenceError
+} from "../src/semantic-state/state-family-composition-evidence.ts";
 import {
   bindKpSemanticStateCompositionGraph,
   preflightKpSemanticStateComposition
@@ -240,6 +247,220 @@ test("ordered endpoint assembly retains every existing family snapshot", () => {
       pinKpAggregateSemanticSnapshot(boundary.snapshot)
     ), boundary.snapshot);
   }
+});
+
+test("nested composition evidence indexes exact member authority without rewriting it", () => {
+  const data = fixture();
+  const inner = declareKpSemanticStateCompositionSequence({
+    name: "inner",
+    sourceId: "test.composition-endpoints.inner",
+    members: [data.alpha, declareKpSemanticStateCompositionGroup({
+      name: "beta-wrapper",
+      sourceId: "test.composition-endpoints.beta-wrapper",
+      body: data.beta
+    })]
+  });
+  const root = declareKpSemanticStateCompositionGroup({
+    name: "lesson",
+    sourceId: "test.composition-endpoints.lesson",
+    body: inner
+  });
+  const composition = data.compile(root);
+  const chain = assembleKpSemanticStateCompositionEndpointChain({
+    composition,
+    base: data.initial,
+    bindings: data.bindings()
+  });
+  const descriptors = data.compiled.leaves.map(leaf => ({
+    entityId: leaf.identities.initialEntityId,
+    semanticKind: "composition-evidence-value",
+    label: leaf.encodedPath,
+    provenance: {
+      kind: "authored" as const,
+      sourceId: leaf.identities.sourceIds.initialValue
+    }
+  }));
+  const authorities = chain.applications.map(({ application }) =>
+    projectKpSemanticTransactionToExistingAuthority({
+      commit: application.commit,
+      entityDescriptors: descriptors
+    }));
+  const evidence = createKpSemanticStateCompositionEvidenceIndex({
+    chain,
+    authorities
+  });
+
+  assert.equal(evidence.chain, chain);
+  assert.equal(evidence.compositionId, composition.id);
+  assert.equal(evidence.groups.length, 3);
+  assert.equal(evidence.members.length, 2);
+  for (const compiledMember of composition.members) {
+    const record = readKpSemanticStateCompositionEvidenceMember(
+      evidence,
+      compiledMember.id
+    );
+    const applied = chain.applications.find(
+      candidate => candidate.memberId === compiledMember.id
+    )!;
+    const authority = authorities.find(candidate =>
+      candidate.transactionId === applied.application.commit.transactionId)!;
+    assert.equal(record.member, compiledMember);
+    assert.equal(record.applied, applied);
+    assert.equal(record.commit, applied.application.commit);
+    assert.equal(record.authority, authority);
+    assert.equal(record.changeSet, authority.changeSet);
+    assert.equal(record.sourceRegistry, authority.sourceRegistry);
+    assert.equal(record.targetRegistry, authority.targetRegistry);
+    assert.equal(record.correspondenceMap, authority.correspondenceMap);
+    assert.equal(record.lineageGraph, authority.lineageGraph);
+    assert.equal(record.ancestorGroupIds.length >= 2, true);
+  }
+
+  const rootGroup = composition.groups.find(group =>
+    group.sourceId === "test.composition-endpoints.lesson")!;
+  const innerGroup = composition.groups.find(group =>
+    group.sourceId === "test.composition-endpoints.inner")!;
+  const wrapperGroup = composition.groups.find(group =>
+    group.sourceId === "test.composition-endpoints.beta-wrapper")!;
+  const rootEvidence = readKpSemanticStateCompositionEvidenceGroup(
+    evidence,
+    rootGroup.id
+  );
+  const innerEvidence = readKpSemanticStateCompositionEvidenceGroup(
+    evidence,
+    innerGroup.id
+  );
+  const wrapperEvidence = readKpSemanticStateCompositionEvidenceGroup(
+    evidence,
+    wrapperGroup.id
+  );
+  assert.equal(rootEvidence.group, rootGroup);
+  assert.deepEqual(rootEvidence.memberIds, composition.members.map(({ id }) => id));
+  assert.equal(innerEvidence.parentGroupId, rootGroup.id);
+  assert.equal(wrapperEvidence.parentGroupId, innerGroup.id);
+  assert.deepEqual(wrapperEvidence.memberIds, [
+    composition.members.find(member =>
+      member.sourceId === "test.composition-endpoints.beta.member")!.id
+  ]);
+  assert.equal(Object.isFrozen(evidence), true);
+  assert.equal(Object.isFrozen(evidence.groups), true);
+  assert.equal(Object.isFrozen(evidence.members), true);
+  assert.equal(Object.isFrozen(evidence.groupIndex), true);
+});
+
+test("composition evidence retains reparameterized branch provenance by identity", () => {
+  const data = fixture();
+  const original = data.alphaFamily.apply(data.initial, {
+    applicationId: "branch-source",
+    parameters: { value: 2 },
+    sourceId: "test.composition-endpoints.branch-source"
+  });
+  const branch = data.alphaFamily.reparameterize(original, {
+    applicationId: "branch-target",
+    parameters: { value: 9 },
+    sourceId: "test.composition-endpoints.branch-target"
+  });
+  const branchApplication = Object.freeze({
+    schemaVersion: "kp.semantic-state-family-application-record.v1" as const,
+    kind: "semantic-state-family-application-record" as const,
+    definitionId: branch.definitionId,
+    transformationId: branch.transformationId,
+    applicationId: branch.applicationId,
+    parameters: branch.parameters,
+    source: branch.source,
+    transitionPlan: branch.transitionPlan
+  });
+  const member = declareKpSemanticStateCompositionMember({
+    name: "branch",
+    sourceId: "test.composition-endpoints.branch.member",
+    application: branchApplication
+  });
+  const composition = data.compile(member);
+  const chain = assembleKpSemanticStateCompositionEndpointChain({
+    composition,
+    base: data.initial,
+    bindings: [bindKpSemanticStateCompositionEndpoint({
+      definition: data.alphaFamily,
+      application: branchApplication
+    })]
+  });
+  const authority = projectKpSemanticTransactionToExistingAuthority({
+    commit: chain.applications[0]!.application.commit,
+    entityDescriptors: data.compiled.leaves.map(leaf => ({
+      entityId: leaf.identities.initialEntityId,
+      semanticKind: "composition-evidence-value",
+      label: leaf.encodedPath,
+      provenance: {
+        kind: "authored" as const,
+        sourceId: leaf.identities.sourceIds.initialValue
+      }
+    }))
+  });
+  const evidence = createKpSemanticStateCompositionEvidenceIndex({
+    chain,
+    authorities: [authority]
+  });
+  const record = evidence.members[0]!;
+
+  assert.equal(record.member.application, branchApplication);
+  assert.equal(record.applied.application.source, branch.source);
+  assert.equal(record.member.sourceId, "test.composition-endpoints.branch.member");
+  assert.equal(record.member.application.source.kind, "reparameterized");
+  if (record.member.application.source.kind !== "reparameterized") {
+    throw new Error("Expected branch provenance.");
+  }
+  assert.equal(
+    record.member.application.source.sourceApplication.transformationId,
+    original.transformationId
+  );
+});
+
+test("composition evidence rejects missing, duplicate, and mismatched authority", () => {
+  const data = fixture();
+  const composition = data.compile(data.alpha);
+  const chain = assembleKpSemanticStateCompositionEndpointChain({
+    composition,
+    base: data.initial,
+    bindings: [data.bindings()[0]]
+  });
+  const descriptors = data.compiled.leaves.map(leaf => ({
+    entityId: leaf.identities.initialEntityId,
+    semanticKind: "composition-evidence-value",
+    label: leaf.encodedPath,
+    provenance: {
+      kind: "authored" as const,
+      sourceId: leaf.identities.sourceIds.initialValue
+    }
+  }));
+  const authority = projectKpSemanticTransactionToExistingAuthority({
+    commit: chain.applications[0]!.application.commit,
+    entityDescriptors: descriptors
+  });
+  assert.throws(() => createKpSemanticStateCompositionEvidenceIndex({
+    chain,
+    authorities: []
+  }), (error: unknown) =>
+    (error as KpSemanticStateCompositionEvidenceError).code ===
+      "missing-authority-projection");
+  assert.throws(() => createKpSemanticStateCompositionEvidenceIndex({
+    chain,
+    authorities: [authority, authority]
+  }), (error: unknown) =>
+    (error as KpSemanticStateCompositionEvidenceError).code ===
+      "duplicate-authority-projection");
+  const mismatched = Object.freeze({
+    ...authority,
+    changeSet: Object.freeze({
+      ...authority.changeSet,
+      beforeSnapshotId: chain.after.id
+    })
+  });
+  assert.throws(() => createKpSemanticStateCompositionEvidenceIndex({
+    chain,
+    authorities: [mismatched]
+  }), (error: unknown) =>
+    (error as KpSemanticStateCompositionEvidenceError).code ===
+      "authority-projection-mismatch");
 });
 
 test("the complete binding set is validated before any family applies", () => {
