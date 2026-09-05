@@ -194,7 +194,9 @@ export function preflightKpSemanticStateComposition(input: {
     }
 
     const graph = graphBinding.graph;
-    const graphSignature = projectGraphSignature(graph);
+    const graphSignature = projectKpSemanticStateCompositionGraphSignature(
+      graph
+    );
     if (graph.namespace !== input.composition.namespace ||
       !doesGraphMatchSnapshot(graph, input.base)) {
       report(
@@ -329,7 +331,9 @@ function doesGraphMatchSnapshot(
   });
 }
 
-function projectGraphSignature(graph: KpSemanticDerivedGraph): string {
+export function projectKpSemanticStateCompositionGraphSignature(
+  graph: KpSemanticDerivedGraph
+): string {
   const definitions = graph.input.definitions.map(definition => ({
     id: definition.id,
     sourceId: definition.sourceId,

@@ -119,7 +119,8 @@
     {
       "id": "s09",
       "title": "Independent-cohort confluence and endpoint order",
-      "status": "planned"
+      "summary": "Independent cohorts now retain compiler-canonical ordinary endpoints only after privately executing the reverse legal order and proving every concrete, absent, and derived slot value-equivalent; hidden cross-member reads and graph drift fail before a chain escapes.",
+      "status": "complete"
     },
     {
       "id": "s10",

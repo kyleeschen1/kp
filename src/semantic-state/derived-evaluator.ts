@@ -290,6 +290,25 @@ export function evaluateKpSemanticDerivedValue(input: {
     : evaluateKpSemanticDerivedValueWithMemo({ ...input, memo });
 }
 
+export function evaluateKpSemanticDerivedGraphTargetValue(input: {
+  readonly graph: KpSemanticDerivedGraph;
+  readonly snapshot: KpAggregateSemanticSnapshot;
+  readonly targetSlotId: KpSemanticSlotId;
+}): KpPersistentSemanticValue {
+  const definition = readGraphDefinition(
+    input.graph,
+    input.snapshot,
+    input.targetSlotId
+  );
+  return evaluateGraphDefinition(
+    input.graph,
+    input.snapshot,
+    undefined,
+    definition,
+    createRequestMemo()
+  );
+}
+
 export function evaluateKpSemanticDerivedValueWithMemo<const Result>(input: {
   readonly graph: KpSemanticDerivedGraph;
   readonly snapshot: KpAggregateSemanticSnapshot;

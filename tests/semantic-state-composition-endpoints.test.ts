@@ -316,7 +316,7 @@ test("mid-chain author failure exposes no partial chain or input mutation", () =
   ), true);
 });
 
-test("independent cohorts remain closed until confluence certification", () => {
+test("independent cohorts require confluence graph authority", () => {
   const authored: string[] = [];
   const data = fixture({ onAuthor: name => authored.push(name) });
   const composition = data.compile(
@@ -337,6 +337,6 @@ test("independent cohorts remain closed until confluence certification", () => {
     bindings: data.bindings()
   }), (error: unknown) =>
     (error as KpSemanticStateCompositionEndpointError).code ===
-      "independent-endpoint-unsupported");
+      "missing-confluence-graph");
   assert.deepEqual(authored, []);
 });
