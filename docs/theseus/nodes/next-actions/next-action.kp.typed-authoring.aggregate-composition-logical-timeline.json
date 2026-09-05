@@ -434,11 +434,88 @@
       "scope": "slice-s07-theseus",
       "checkedAt": "2026-09-05T04:00:53.017Z",
       "notes": "Workspace validation passed before completion."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-state-composition-endpoints.test.ts",
+      "status": "passed",
+      "scope": "slice-s08-focused",
+      "checkedAt": "2026-09-05T04:21:56.370Z",
+      "notes": "5 of 5 endpoint retention, prevalidation, mismatch, mid-chain failure isolation, and independent-cohort closure tests passed."
+    },
+    {
+      "command": "npm run generate:equation-reachability",
+      "status": "passed",
+      "scope": "slice-s08-generated-evidence",
+      "checkedAt": "2026-09-05T04:21:57.358Z",
+      "notes": "Refreshed the 68-root exact reachability graph after adding the endpoint source and test."
+    },
+    {
+      "command": "npm run test:semantic-state",
+      "status": "passed",
+      "scope": "slice-s08-semantic-state",
+      "checkedAt": "2026-09-05T04:21:58.349Z",
+      "notes": "292 of 292 passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s08-types",
+      "checkedAt": "2026-09-05T04:21:59.363Z",
+      "notes": "All TypeScript, Svelte, and domain checks passed after the final prepared-application prevalidation seam."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "slice-s08-architecture",
+      "checkedAt": "2026-09-05T04:22:00.365Z",
+      "notes": "Architecture passed at 2013 TypeScript modules, 7490 of 7541 local references, and zero exact retiring exceptions."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "slice-s08-inference",
+      "checkedAt": "2026-09-05T04:22:01.353Z",
+      "notes": "Inference passed at 107103 types, 181862 instantiations, and 8.17 seconds without a ceiling change."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "slice-s08-complete",
+      "checkedAt": "2026-09-05T04:22:02.340Z",
+      "notes": "6407 of 6407 repository tests passed."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "slice-s08-bundle",
+      "checkedAt": "2026-09-05T04:22:03.310Z",
+      "notes": "Production bundle completed with 1603 modules transformed; existing large-chunk advisory only."
+    },
+    {
+      "command": "npm run verify:impact -- --path src/semantic-state/state-family-composition-endpoints.ts",
+      "status": "passed",
+      "scope": "slice-s08-impact",
+      "checkedAt": "2026-09-05T04:22:04.313Z",
+      "notes": "High-risk semantic-state impact selected semantic-state, typecheck, and architecture gates."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "slice-s08-diff",
+      "checkedAt": "2026-09-05T04:22:05.278Z",
+      "notes": "No whitespace errors."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-s08-theseus",
+      "checkedAt": "2026-09-05T04:22:06.276Z",
+      "notes": "Validated 1094 nodes and 27452 events before slice completion."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s07 complete: the aggregate has a deterministic endpoint-free compiled plan with retained nesting and explicit logical boundaries."
+    "summary": "s08 complete: explicit sequences now have a persistent ordinary endpoint chain with complete binding prevalidation and failure-atomic result exposure."
   },
   "expectedLearning": [
     "Whether sequence nesting and demonstrated-independent cohorts can reuse current family and persistent-state authority without a second kernel.",

@@ -113,7 +113,8 @@
     {
       "id": "s08",
       "title": "Persistent ordered endpoint chain",
-      "status": "planned"
+      "summary": "Ordered members now execute only through validated prepared applications on existing family and transaction authority; the immutable result retains every exact member commit and settled snapshot, preserves sharing, correspondence, recovery, and identity, and exposes no partial chain on failure.",
+      "status": "complete"
     },
     {
       "id": "s09",

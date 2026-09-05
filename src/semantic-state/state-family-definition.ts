@@ -218,6 +218,9 @@ export interface KpSemanticStateFamilyDefinition<
     >;
     readonly sourceId: string;
   }): KpSemanticStateFamilyApplicationRecord<Parameters>;
+  validatePreparedApplication(
+    application: KpSemanticStateFamilyApplicationRecord<Parameters>
+  ): void;
   apply(
     before: KpAggregateSemanticSnapshot,
     input: {
@@ -227,6 +230,10 @@ export interface KpSemanticStateFamilyDefinition<
       >;
       readonly sourceId: string;
     }
+  ): KpAppliedSemanticStateFamily<Root, Parameters>;
+  applyPreparedApplication(
+    before: KpAggregateSemanticSnapshot,
+    application: KpSemanticStateFamilyApplicationRecord<Parameters>
   ): KpAppliedSemanticStateFamily<Root, Parameters>;
   reparameterize(
     source: KpAppliedSemanticStateFamily<Root, Parameters>,
@@ -242,6 +249,7 @@ export interface KpSemanticStateFamilyDefinition<
 
 export type KpSemanticStateFamilyErrorCode =
   | "foreign-reparameterization-source"
+  | "foreign-prepared-application"
   | "invalid-family-parameters"
   | "invalid-family-source"
   | "invalid-transition-capabilities"
@@ -422,6 +430,24 @@ export function defineKpSemanticStateFamily<
     });
   };
 
+  const validatePreparedApplication = (
+    application: KpSemanticStateFamilyApplicationRecord<Parameters>
+  ): void => {
+    const expectedTransformationId = input.compiled.identityScope
+      .appliedTransformation(definitionId, application.applicationId);
+    if (application.definitionId !== definitionId ||
+      application.transformationId !== expectedTransformationId ||
+      !areKpSemanticStateTransitionPlansEqual(
+        application.transitionPlan,
+        transitionPlan
+      )) {
+      throw new KpSemanticStateFamilyError(
+        "foreign-prepared-application",
+        `Semantic state family ${JSON.stringify(input.id)} cannot apply foreign prepared application ${JSON.stringify(application.applicationId)}.`
+      );
+    }
+  };
+
   return Object.freeze<KpSemanticStateFamilyDefinition<
     KpSemanticStateGroupDescriptor<Members>,
     Parameters,
@@ -434,8 +460,13 @@ export function defineKpSemanticStateFamily<
     declaration,
     capabilities,
     prepareApplication,
+    validatePreparedApplication,
     apply(before, applicationInput) {
       const application = prepareApplication(applicationInput);
+      return applyApplication(before, application);
+    },
+    applyPreparedApplication(before, application) {
+      validatePreparedApplication(application);
       return applyApplication(before, application);
     },
     reparameterize(source, applicationInput) {
