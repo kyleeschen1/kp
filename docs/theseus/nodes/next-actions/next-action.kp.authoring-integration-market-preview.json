@@ -210,6 +210,13 @@
       "scope": "s16",
       "checkedAt": "2026-09-05T22:33:47.277Z",
       "notes": "50 integration,81 economics,364 state tests pass;257 complete canonical frame comparisons and variant/cache pressure. Types clean; inference111257/192271 unchanged; architecture2037modules zero exceptions; inventory count only4240."
+    },
+    {
+      "command": "npm run test:authoring-integration; npm run test:economics-supply-tax; npm run typecheck; npm run check:architecture; npm run visual:authoring-market; npm run check:equation-reachability; git diff --check",
+      "status": "passed",
+      "scope": "s17",
+      "checkedAt": "2026-09-05T22:38:53.443Z",
+      "notes": "50 integration and81 economics tests pass; full types and final test-project types clean; architecture2037modules zero exceptions. Two Chromium tests compare10 exact SVG checkpoints, disposal and3 snapshots. Midpoint inspected; generated inventory unchanged."
     }
   ],
   "progress": {

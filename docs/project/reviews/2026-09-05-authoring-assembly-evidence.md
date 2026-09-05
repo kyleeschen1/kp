@@ -234,3 +234,20 @@ checks; host painting and narrative integration remain subsequent obligations.
 The frame slice retains the 111,257 / 192,271 inference measurement and zero
 dependency exceptions. Its exact scan adds only two files (4,238 to 4,240), with
 no root or caller-edge changes.
+
+## Existing SVG input integration
+
+The figure mount now accepts one optional source containing an asset and its
+sampler. Default canonical callers retain the original constructor and sampler.
+The opt-in authoring host supplies its verified asset and state-derived frame
+session; sampling errors propagate rather than invoking a fallback sampler.
+The existing stage renderer and `projectKpSupplyTaxTransitSvgDom` still own every
+curve, region, coordinate, and paint decision. No timing or visual policy changed.
+
+The scoped Chromium command compares exact SVG markup between the canonical and
+state-driven hosts at ten ordered checkpoints, including transit, taxed/welfare
+endpoints, reverse and direct jumps. Both browser tests pass, history remains at
+three snapshots, and the inspected midpoint preserves the canonical treatment.
+Disposal closes both the figure and bounded frame session. The host now reports
+`state-driven-tax`; Article/fact bindings and local author editing are still
+separate, unfinished integrations. This does not claim human approval.

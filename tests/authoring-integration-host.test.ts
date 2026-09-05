@@ -11,7 +11,8 @@ test("authoring-market is an isolated lazy document reusing the canonical host",
   assert.match(page, /await import\("\.\/authoring-market-host\.ts"\)/);
   assert.match(page, /pagehide/);
   const host = read("src/experiments/authoring-market/authoring-market-host.ts");
-  assert.match(host, /mountKpSupplyTaxKineticFigure\(input\)/);
+  assert.match(host, /mountKpSupplyTaxKineticFigure\(\{ root: input.root, source:/);
+  assert.match(host, /frames.sample\(progress\)/);
   assert.doesNotMatch(host, /requestAnimationFrame|createKpReaderTimelinePlaybackClock|<svg|renderLatex/);
   assert.doesNotMatch(read("src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-entry.ts"), /authoring-market/);
   assert.doesNotMatch(read("src/dev-toolbar/development-page-build-entries.ts"), /authoring-market/);

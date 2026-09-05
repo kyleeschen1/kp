@@ -213,7 +213,8 @@
     {
       "id": "s17",
       "title": "Existing SVG integration: feed sampled curves/regions through current Graph2D paint owner",
-      "status": "planned"
+      "summary": "State-driven tax frames feed the existing SVG owner through one optional source. Exact canonical SVG parity across10 checkpoints, three-snapshot preservation, types and scoped suites pass.",
+      "status": "complete"
     },
     {
       "id": "s18",
