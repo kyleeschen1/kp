@@ -10,10 +10,11 @@ import type {
 import {
   areKpSemanticStateTransitionPlansEqual
 } from "./state-family-transition.ts";
-import type {
-  KpSemanticStateCompositionDeclaration,
-  KpSemanticStateCompositionMemberDeclaration,
-  KpSemanticStateCompositionNodeDeclaration
+import {
+  kpSemanticStateIndependentCohortMaximumMembers,
+  type KpSemanticStateCompositionDeclaration,
+  type KpSemanticStateCompositionMemberDeclaration,
+  type KpSemanticStateCompositionNodeDeclaration
 } from "./state-family-composition-declaration.ts";
 
 export type KpSemanticStateCompositionDiagnosticCode =
@@ -26,7 +27,8 @@ export type KpSemanticStateCompositionDiagnosticCode =
   | "invalid-composition-node"
   | "missing-source-metadata"
   | "recursive-composition"
-  | "unknown-family-definition";
+  | "unknown-family-definition"
+  | "unsupported-independent-cohort-size";
 
 export interface KpSemanticStateCompositionDiagnostic {
   readonly schemaVersion: "kp.semantic-state-composition-diagnostic.v1";
@@ -176,6 +178,12 @@ export function validateKpSemanticStateComposition<
       requireSource(node.evidence?.sourceId, path, report);
       if (!Array.isArray(node.members) || node.members.length === 0) {
         report("invalid-composition-node", path, "An independent cohort requires members.");
+      } else if (node.members.length > kpSemanticStateIndependentCohortMaximumMembers) {
+        report(
+          "unsupported-independent-cohort-size",
+          path,
+          "Independent cohorts support at most two members under endpoint-order checking; author a sequence for larger groups."
+        );
       } else {
         node.members.forEach((member) => visit(
           member,

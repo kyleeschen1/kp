@@ -33,6 +33,8 @@ import { projectKpSemanticStateCompositionGraphSignature } from
   "./state-family-composition-preflight.ts";
 import { areKpSemanticStateTransitionPlansEqual } from
   "./state-family-transition.ts";
+import { kpSemanticStateIndependentCohortMaximumMembers } from
+  "./state-family-composition-declaration.ts";
 
 export interface KpSemanticStateCompositionEndpointBinding<
   Root extends KpSemanticStateGroupDescriptor<KpSemanticStateMemberMap>
@@ -106,7 +108,8 @@ export type KpSemanticStateCompositionEndpointErrorCode =
   | "incompatible-confluence-graph"
   | "missing-endpoint-binding"
   | "missing-confluence-graph"
-  | "unexpected-endpoint-binding";
+  | "unexpected-endpoint-binding"
+  | "unsupported-independent-cohort-size";
 
 export class KpSemanticStateCompositionEndpointError extends Error {
   readonly code: KpSemanticStateCompositionEndpointErrorCode;
@@ -328,6 +331,18 @@ function validateExecutionInput<
   const hasIndependentStep = input.composition.steps.some(
     ({ kind }) => kind === "independent-step"
   );
+  // Reconstructed executable records must not bypass the declaration bound.
+  // Check the complete plan before any endpoint callback is invoked.
+  for (const step of input.composition.steps) {
+    if (step.kind === "independent-step" &&
+        step.members.length > kpSemanticStateIndependentCohortMaximumMembers) {
+      fail({
+        code: "unsupported-independent-cohort-size",
+        stepIndex: step.stepIndex,
+        message: "Independent endpoint-order checking supports at most two members."
+      });
+    }
+  }
   if (hasIndependentStep && input.graph === undefined) {
     fail({
       code: "missing-confluence-graph",

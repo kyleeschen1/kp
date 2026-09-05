@@ -2,6 +2,10 @@ import type {
   KpSemanticStateFamilyApplicationRecord
 } from "./state-family-definition.ts";
 
+// Canonical/reverse endpoint comparison covers every order only for a pair.
+// Larger cohorts need a separately verified read/write capability contract.
+export const kpSemanticStateIndependentCohortMaximumMembers = 2;
+
 export interface KpSemanticStateCompositionMemberDeclaration<
   Parameters = unknown,
   Name extends string = string
@@ -83,7 +87,8 @@ export type KpSemanticStateCompositionDeclarationErrorCode =
   | "invalid-declaration-identity"
   | "invalid-declaration-shape"
   | "invalid-declaration-source"
-  | "recursive-declaration";
+  | "recursive-declaration"
+  | "unsupported-independent-cohort-size";
 
 export class KpSemanticStateCompositionDeclarationError extends Error {
   readonly code: KpSemanticStateCompositionDeclarationErrorCode;
@@ -174,6 +179,7 @@ export function declareKpSemanticStateCompositionIndependent<
       "A demonstrated-independent cohort requires at least one member."
     );
   }
+  requireSupportedIndependentSize(input.members.length, [input.name]);
   return Object.freeze({
     schemaVersion: "kp.semantic-state-composition-node.v1",
     kind: "independent",
@@ -283,6 +289,7 @@ function validateNodeShape(
     if (!Array.isArray(node.members) || node.members.length === 0) {
       fail("empty-independent-cohort", nodePath, "A demonstrated-independent cohort requires at least one member.");
     }
+    requireSupportedIndependentSize(node.members.length, nodePath);
     for (const member of node.members) {
       if (member.kind !== "member") {
         fail("invalid-declaration-shape", nodePath, "An independent cohort contains only transition members.");
@@ -293,6 +300,19 @@ function validateNodeShape(
     fail("invalid-declaration-shape", nodePath, "A composition node has an unknown kind.");
   }
   ancestors.delete(node);
+}
+
+function requireSupportedIndependentSize(
+  size: number,
+  path: readonly string[]
+): void {
+  if (size > kpSemanticStateIndependentCohortMaximumMembers) {
+    fail(
+      "unsupported-independent-cohort-size",
+      path,
+      "Independent cohorts support at most two members under endpoint-order checking; use an explicit ordered sequence for larger groups."
+    );
+  }
 }
 
 function rejectShapeExtras(

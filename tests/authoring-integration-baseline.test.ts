@@ -56,14 +56,14 @@ test("authoring source map names the actual host and its canonical owners", () =
   for (const [role, path] of Object.entries(baseline.canonical)) {
     if (role !== "hostPath") assert.ok(existsSync(path), role + ": " + path);
   }
-  const entry = readFileSync(baseline.canonical.entry!, "utf8");
+  const entry = readFileSync(baseline.canonical["entry"]!, "utf8");
   assert.match(entry, /economics-supply-tax-scroll-score\.kp\.md\?raw/);
   assert.match(entry, /createKpEconomicsSupplyTaxAnimationAsset/);
   assert.match(entry, /createKpReaderTimelinePlaybackClock/);
   assert.match(entry, /kinetic-figure-supply-tax-svg/);
-  const paint = readFileSync(baseline.canonical.paint!, "utf8");
+  const paint = readFileSync(baseline.canonical["paint"]!, "utf8");
   assert.match(paint, /renderLatexToHtml/);
-  assert.equal(baseline.canonical.hostPath, "/experiments/kinetic-figure/supply-tax/");
+  assert.equal(baseline.canonical["hostPath"], "/experiments/kinetic-figure/supply-tax/");
 });
 
 test("author tasks distinguish component evidence from completed integration", () => {

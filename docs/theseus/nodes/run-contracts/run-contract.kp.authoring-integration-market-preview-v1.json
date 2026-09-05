@@ -121,7 +121,8 @@
     {
       "id": "s02",
       "title": "Composition declaration/endpoints: add the A/B/C regression and reject independent cohorts larger than two before apply",
-      "status": "planned"
+      "summary": "Bound independent cohorts to two with typed unsupported-size diagnostics before apply, including reconstructed executable records; real three-member counterexample and all 360 state tests plus full typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "s03",
