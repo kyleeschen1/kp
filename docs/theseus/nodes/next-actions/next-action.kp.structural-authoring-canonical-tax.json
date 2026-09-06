@@ -96,6 +96,13 @@
       "scope": "s09",
       "checkedAt": "2026-09-06T03:47:13.775Z",
       "notes": "16 structural tests, full types and architecture pass; named logical queries retain only two settled states. Existing authoring integration suite passes."
+    },
+    {
+      "command": "npm run test:authoring-structural; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "s10",
+      "checkedAt": "2026-09-06T03:51:21.739Z",
+      "notes": "18 tests, full types and architecture pass. Aggregate-derived endpoints exactly preserve canonical bundle, timeline, lineage, metadata and remaining steps. Existing pinned registry supplies omitted definition reference. Strip-only syntax error fixed locally."
     }
   ],
   "progress": {

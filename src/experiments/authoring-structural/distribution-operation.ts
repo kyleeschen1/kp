@@ -71,7 +71,8 @@ function prepareEvidence(input: {
   }
   const resolution = resolveKpCanonicalOperation({ operationId: requested,
     pins: createKpCanonicalOperationProjectPins(requestedPacks) });
-  if (resolution.status !== "resolved" || resolution.entry.sourceTransformType !== "distributeMultiplication") {
+  if (resolution.status !== "resolved" || resolution.entry.sourceTransformType !== "distributeMultiplication" ||
+      resolution.entry.sourceDefinitionId === undefined) {
     throw new KpAuthoredDistributionOperationError("kp.authoring.structural-operation-gap",
       "The pinned distribution capability is unavailable.");
   }
@@ -95,6 +96,6 @@ function prepareEvidence(input: {
   // constructor omits absent fields. Validate the actual data and retain that
   // constructor's type without weakening the generic state descriptor contract.
   const transformation = requireAndFreezeKpPersistentSemanticValue(declared) as unknown as typeof declared;
-  return Object.freeze({ operationId, operationPacks: packs, source, target,
+  return Object.freeze({ operationId, definitionId: resolution.entry.sourceDefinitionId, operationPacks: packs, source, target,
     transformation, selection, verification: canonical.verification, model });
 }

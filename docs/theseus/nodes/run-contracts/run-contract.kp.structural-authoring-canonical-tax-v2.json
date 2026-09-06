@@ -172,7 +172,8 @@
     {
       "id": "s10",
       "title": "Governed projection: lower the authored distribution into existing operation-specific animation authority",
-      "status": "planned"
+      "summary": "Governed projection consumes exact local application and aggregate endpoints; canonical presentation retained, existing definition reference bound, 18 tests and type/architecture checks pass.",
+      "status": "complete"
     },
     {
       "id": "s11",
