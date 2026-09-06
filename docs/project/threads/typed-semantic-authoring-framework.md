@@ -1,9 +1,12 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: G0 and G1 accepted; carrier-preserving simplification is next
+Status: G0 and G1 accepted; second caller integrated; compiler-cost gate stopped
 Last Updated: 2026-09-06
-Current Next Action: continue the simplification caller after accepted G1 in
-`../reviews/2026-09-06-structural-authoring-g1-distribution-checkpoint.md`, through
+Current Next Action: review the bounded compiler-cost repair recommendation in
+`../reviews/2026-09-06-structural-authoring-two-caller-cost-stop.md`.
+Simplification is integrated through its existing native carrier owner and a
+Focus Card; the actual two-caller inference fixture exceeds unchanged budgets.
+G2 release and canonical migration have not begun. The approved scope remains
 `../reviews/2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md`.
 The completed source workflow and market specimen passed G0 review; evidence is in
 `../reviews/2026-09-05-authoring-integration-market-preview-closeout.md` and

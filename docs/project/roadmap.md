@@ -210,6 +210,12 @@ G1 product review destination; the log card is not evidence of this integration.
 The user approved the repaired whole-fraction motion and requested continuation
 with carrier-preserving simplification. Firefox handoff cost remains a measured
 limitation; this acceptance does not promote a universal fraction motion rule.
+The second caller now reaches its existing native carrier renderer in an authored
+Focus Card, but the real two-caller consumer fixture exceeds the unchanged
+inference budgets. Execution stops at the API/cost gate before G2 release or
+canonical migration. See
+`reviews/2026-09-06-structural-authoring-two-caller-cost-stop.md` for the measured
+costs and bounded repair recommendation; no budget increase is authorized.
 
 The preceding direction and completed integration run were accepted and scoped by
 `run-contract.kp.authoring-integration-market-preview-v1` and

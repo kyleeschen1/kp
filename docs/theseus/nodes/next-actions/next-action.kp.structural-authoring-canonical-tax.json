@@ -2,9 +2,9 @@
   "id": "next-action.kp.structural-authoring-canonical-tax",
   "kind": "next-action",
   "title": "Structural authoring proof and canonical supply-tax adoption",
-  "status": "in-progress",
+  "status": "blocked",
   "domain": "kp",
-  "summary": "G1 accepted; implement existing simplification caller before G2.",
+  "summary": "G1 accepted and simplification integrated; STOP_CONDITION at s17 inference cost. Recommend bounded cost attribution/repair without raising ceilings before G2 release.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -33,6 +33,10 @@
     {
       "kind": "file",
       "path": "docs/project/decisions/2026-09-06-focus-card-performance-acceptance.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-06-structural-authoring-two-caller-cost-stop.md"
     }
   ],
   "dependsOn": {
@@ -225,6 +229,13 @@
       "scope": "s16",
       "checkedAt": "2026-09-06T20:30:06.766Z",
       "notes": "18 fraction/browser cache checks, three integrated simplification browser checks, 31 structural tests and full types pass."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "s17",
+      "checkedAt": "2026-09-06T20:34:33.613Z",
+      "notes": "Real two-caller consumer fixture raises baseline 111313 types / 192390 instantiations to 118158 / 205487, exceeding unchanged 112500 / 195800 ceilings. Full typecheck passes; no budget update or fixture exclusion."
     }
   ],
   "progress": {

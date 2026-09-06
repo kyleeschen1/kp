@@ -2,9 +2,9 @@
   "id": "run-contract.kp.structural-authoring-canonical-tax-v2",
   "kind": "run-contract",
   "title": "Structural authoring proof and canonical tax adoption",
-  "status": "in-progress",
+  "status": "blocked",
   "domain": "kp",
-  "summary": "G1 accepted; resume approved s13 through G2.",
+  "summary": "STOP_CONDITION s17/X: two-caller inference cost exceeds unchanged budgets. 16/28 complete. Keep fixture; no budget increase, release or migration.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -218,6 +218,7 @@
     {
       "id": "s17",
       "title": "Authoring cost and API review: compare both callers, retain only demonstrated shared helpers, measure import/type costs",
+      "summary": "Incomplete: consumer/API inventory implemented but inference cost exceeds fixed ceilings. Contract stopped under s17/X pending bounded cost repair; fixture retained as failing evidence.",
       "status": "planned"
     },
     {
