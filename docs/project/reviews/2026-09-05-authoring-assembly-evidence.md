@@ -448,3 +448,38 @@ Session state is disposed, history remains three snapshots, and browser errors
 remain empty. Existing ownership was sufficient; no new URL parser, resource
 registry, clock, or lifecycle implementation was added. This is bounded runtime
 evidence, not an exhaustive heap-leak or long-duration soak certification.
+
+## Final gate: native-gesture harness diagnosis
+
+The first canonical browser run passed eight of ten checks; a repeat passed
+seven. Failures moved between welfare opacity/settlement, fractional resize
+and wheel intent. The synthetic scroll helper held browser `scrollend` but did
+not hold the runtime's 220 ms idle fallback; remote assertion round trips could
+finish the gesture being inspected. A subsequent sample could also arrive
+before the previous corrective scroll restored native snapping.
+
+Only those three synthetic native-gesture checks now install Playwright's
+controlled clock before page load, allow fonts/loading to finish, and advance
+the real timer/RAF callbacks at named sample and settlement boundaries. The
+helper waits for existing snap restoration before another synthetic gesture.
+The focused fractional-resize test passes with all original geometry, opacity,
+and endpoint assertions retained. No runtime timing, choreography, semantic
+authority, or acceptance threshold changed; real mouse drag and programmatic
+playback checks still use ordinary browser time.
+
+The complete canonical Chromium command then passes all ten checks in 39.6 s.
+`npm run build` passes full typecheck, the economics-demand-shift publication
+freshness check and the Vite production bundle (1,603 transformed modules).
+Its large-chunk warnings remain warnings; no size limit was changed. A scan of
+emitted JavaScript finds none of the opt-in preview endpoint/specimen/gap markers.
+The physical authoring experiment remains a local-development workflow, not a
+new production publication route. Exact reachability remains current at all
+68 roots.
+
+The final `npm test` gate passes **6,555 tests, zero failures**, in
+605,388.661 ms. Architecture, dependency direction, catalog/promotion memory and
+fixed inference (111,257 types / 192,271 instantiations) pass within that command.
+Together with full build/typecheck, eight authoring Chromium checks, ten
+canonical Chromium checks and current exact reachability, this is the s27
+release-boundary evidence. It is not cross-browser certification or human
+approval of a new motif, facade, or publication workflow.

@@ -1,4 +1,4 @@
-import { expect, test, type Locator } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 
 const path = "/experiments/kinetic-figure/supply-tax/";
 
@@ -148,7 +148,7 @@ test("supply-tax deck navigates exact semantic stops and one domain-motion edge"
 test("the welfare edge is scrubbed with the prose before it snaps", async ({
   page
 }) => {
-  await page.goto(`${path}#beat.quantity-contraction`);
+  await openControlledNativeGesture(page, `${path}#beat.quantity-contraction`);
   const deck = page.locator("[data-kp-supply-tax-focus-deck]");
   const viewport = deck.locator("[data-kp-supply-tax-card-viewport]");
   const beforeConsumer = deck.locator(
@@ -335,7 +335,7 @@ test("the compact card keeps a protected stage and reading-size prose on a phone
 test("native scroll sampling and Safari correction land on exact page geometry", async ({
   page
 }) => {
-  await page.goto(path);
+  await openControlledNativeGesture(page, path);
   const deck = page.locator("[data-kp-supply-tax-focus-deck]");
   const viewport = deck.locator("[data-kp-supply-tax-card-viewport]");
   await expect(viewport).toHaveCSS("overflow-x", "auto");
@@ -412,6 +412,7 @@ test("native scroll sampling and Safari correction land on exact page geometry",
     "data-kp-supply-tax-deck-position"
   ))).toBeCloseTo(3.25, 1);
   await page.setViewportSize({ width: 930, height: 780 });
+  await page.clock.runFor(32);
   await expect.poll(async () => Number(await deck.getAttribute(
     "data-kp-supply-tax-deck-position"
   ))).toBeCloseTo(3.25, 1);
@@ -462,19 +463,21 @@ test("a mouse drag swipes the native viewport and settles in either direction", 
 test("a horizontal trackpad gesture reaches the native snap viewport", async ({
   page
 }) => {
-  await page.goto(path);
+  await openControlledNativeGesture(page, path);
   const deck = page.locator("[data-kp-supply-tax-focus-deck]");
   const viewport = deck.locator("[data-kp-supply-tax-card-viewport]");
   const box = await viewport.boundingBox();
   expect(box).not.toBeNull();
   await dispatchHorizontalWheelIntent(viewport, box!.width * 0.015);
   await dispatchHorizontalWheelIntent(viewport, box!.width * 0.015);
+  await page.clock.runFor(500);
   await expect(deck).toHaveAttribute("data-kp-focus-deck-active-beat",
     "tax-input", { timeout: 5_000 });
   await expectPanelAligned(deck, viewport, "tax-input");
 
   await dispatchHorizontalWheelIntent(viewport, box!.width * -0.015);
   await dispatchHorizontalWheelIntent(viewport, box!.width * -0.015);
+  await page.clock.runFor(500);
   await expect(deck).toHaveAttribute("data-kp-focus-deck-active-beat",
     "baseline-market", { timeout: 5_000 });
   await expectPanelAligned(deck, viewport, "baseline-market");
@@ -515,6 +518,17 @@ test("supply-tax visual checkpoint captures all eight states and phone", async (
   });
 });
 
+async function openControlledNativeGesture(page: Page, url: string): Promise<void> {
+  // Holding scrollend alone cannot hold the runtime's idle fallback. Own test
+  // time so remote assertion latency cannot silently finish an in-flight drag.
+  // Real timers/RAF still execute, but only at the checkpoints below.
+  await page.clock.install({ time: "2026-01-01T00:00:00Z" });
+  await page.goto(url);
+  await page.evaluate(() => document.fonts.ready.then(() => undefined));
+  await page.clock.pauseAt("2026-01-01T01:00:00Z");
+  await page.clock.runFor(48);
+}
+
 async function setNativeScrollPosition(
   viewport: Locator,
   position: number
@@ -536,6 +550,7 @@ async function setNativeScrollPosition(
     element.scrollLeft = element.clientWidth * nextPosition;
     element.dispatchEvent(new Event("scroll"));
   }, position);
+  await viewport.page().clock.runFor(32);
 }
 
 async function setScrubberPosition(
@@ -572,6 +587,14 @@ async function finishNativeScroll(viewport: Locator): Promise<void> {
     delete element.dataset["kpSupplyTaxHoldScrollEnd"];
     element.dispatchEvent(new Event("scrollend"));
   });
+  // Browser scrollend from the corrective scroll can arrive after the first
+  // timer batch. Finish that exact endpoint's snap restoration before starting
+  // another gesture; do not write into the runtime's correcting phase.
+  await viewport.page().clock.runFor(500);
+  await expect.poll(async () => {
+    await viewport.page().clock.runFor(32);
+    return viewport.getAttribute("data-kp-supply-tax-snap-disabled");
+  }).toBeNull();
 }
 
 async function expectPanelAligned(

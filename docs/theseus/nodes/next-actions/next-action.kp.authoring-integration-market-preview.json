@@ -295,11 +295,18 @@
       "scope": "s26",
       "checkedAt": "2026-09-06T00:50:08.873Z",
       "notes": "Eight browser tests; bounded reference/variant desktop/phone review captures, reduced-motion settlement and no-script fact projection. No human approval inferred."
+    },
+    {
+      "command": "npm test; npm run build; npm run test:browser:economics-supply-tax; npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "s27",
+      "checkedAt": "2026-09-06T01:10:23.225Z",
+      "notes": "6555 tests,zero failures,605389ms; full build/types; inference111257/192271;10 canonical Chromium checks;68 reachability roots current. Initial native timing failures repaired in test harness only."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s26 review harness ready; source and canonical paint preserved. Broad final gate remains."
+    "summary": "s27 broad gates pass; only s28 evidence audit and mandatory human checkpoint remain."
   },
   "expectedLearning": [
     "Whether internal assembly and a bounded math bridge make one exact market explanation authorable without duplicate semantics or renderer authority."

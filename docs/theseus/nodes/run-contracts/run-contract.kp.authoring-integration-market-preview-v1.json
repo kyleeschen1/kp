@@ -277,7 +277,8 @@
     {
       "id": "s27",
       "title": "Broad checkpoint gate and regression closure across state, math, economics, host and build boundaries",
-      "status": "planned"
+      "summary": "6555 full tests,build,types,fixed inference and10 canonical browser checks pass. Native gesture harness timing repaired; no runtime or acceptance-law change.",
+      "status": "complete"
     },
     {
       "id": "s28",
