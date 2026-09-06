@@ -271,7 +271,8 @@
     {
       "id": "s26",
       "title": "Prepare canonical/variant human-review captures: desktop, phone, reduced motion, static output, forward/reverse and direct jumps",
-      "status": "planned"
+      "summary": "Stable sparse review captures cover both specimens,desktop/phone,reverse/direct,accounting,reduced motion and static facts. Eight browser tests and types pass; mandatory human review remains.",
+      "status": "complete"
     },
     {
       "id": "s27",

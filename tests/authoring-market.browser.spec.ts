@@ -1,4 +1,4 @@
-import { expect, test, type Locator, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page, type TestInfo } from "@playwright/test";
 import { readFile, writeFile } from "node:fs/promises";
 
 test("opt-in authoring host preserves canonical baseline and disposes cleanly", async ({ page }, info) => {
@@ -13,6 +13,7 @@ test("opt-in authoring host preserves canonical baseline and disposes cleanly", 
   await expect(deck.locator('[data-kp-supply-tax-entity="curve.economics.tax.supply"]')).toBeVisible();
   const baselineSvg = await deck.locator("svg").first().evaluate(element => element.outerHTML);
   await deck.screenshot({ path: info.outputPath("canonical-baseline.png") });
+  await captureAuthorReview(page, info, "reference");
   await page.evaluate(async modulePath => {
     window.dispatchEvent(new PageTransitionEvent("pagehide", { persisted: false }));
     const { mountKpAuthoringMarket } = await import(modulePath);
@@ -193,11 +194,45 @@ test("named demand-then-tax variant shows recomputed history, prose, native labe
     await history.screenshot({ path: info.outputPath("variant-history.png") });
     await seek(deck.locator("[data-kp-supply-tax-state-scrubber]"), 0);
     expect(await deck.locator('[data-kp-supply-tax-math-label="untaxed-equilibrium"] > div').innerHTML()).toBe(await nativePaint(page, "E_0=(6,8)"));
+    await captureAuthorReview(page, info, "variation");
   } finally {
     if (await readFile(modelPath, "utf8") === variation) await writeFile(modelPath, original);
     await expect(page.locator("#app")).toHaveAttribute("data-kp-authoring-market-specimen", "specimen.market.reference");
   }
 });
+
+async function captureAuthorReview(page: Page, info: TestInfo, name: string) {
+  const deck = page.locator("[data-kp-supply-tax-focus-deck]");
+  const scrubber = deck.locator("[data-kp-supply-tax-state-scrubber]");
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const [label, position] of [["baseline", 0], ["transit", 1.5], ["accounting", 5], ["final", 7], ["reverse-baseline", 0]] as const) {
+      await seek(scrubber, position);
+      await deck.screenshot({ path: info.outputPath(`${name}-${width}-${label}.png`) });
+    }
+  }
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await seek(scrubber, 7);
+  // Input previews a drag; change completes the existing navigation gesture.
+  await scrubber.dispatchEvent("change");
+  await expect(deck.locator("[data-kp-focus-deck-next]")).toBeDisabled();
+  await expect(scrubber).toHaveAttribute("aria-valuetext", /Step 8 of 8/);
+  await deck.screenshot({ path: info.outputPath(`${name}-reduced-motion.png`) });
+  const staticHtml = await page.locator("[data-kp-authoring-market-static-facts]").evaluate(element => element.outerHTML);
+  const staticContext = await page.context().browser()!.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 900 } });
+  try {
+    const staticPage = await staticContext.newPage();
+    // Inspect the existing plain fact projection without scripts, not a claim
+    // that the dev-only route now provides a static publication artifact.
+    await staticPage.setContent(`<html lang="en"><title>Exact market facts</title><main>${staticHtml}</main></html>`);
+    await expect(staticPage.locator("dt:has-text('after.revenue') + dd")).toHaveText(name === "reference" ? "12" : "10");
+    await expect(staticPage.locator("script")).toHaveCount(0);
+    await staticPage.locator("main").screenshot({ path: info.outputPath(`${name}-static-facts.png`) });
+  } finally { await staticContext.close(); }
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await seek(scrubber, 0);
+}
 
 async function seek(scrubber: Locator, position: number) {
   await scrubber.evaluate((element, value) => {

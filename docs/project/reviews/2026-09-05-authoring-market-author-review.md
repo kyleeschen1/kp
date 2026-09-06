@@ -91,3 +91,24 @@ useful enough to justify the remaining declaration ceremony? Does settled demand
 history explain the variant adequately, or should a separately governed demand
 motion be proposed? The visual checkpoint must answer readability and motion
 questions before any cross-family promotion.
+
+## Reproduce the visual review
+
+Run `npm run visual:authoring-market`. Its committed browser entrypoint emits
+disposable reference/variation captures at desktop 1280 and phone 390 widths:
+baseline, mid-tax transit, surplus accounting, final loss and reverse baseline,
+plus reduced-motion settlement and plain static facts with JavaScript disabled.
+Images live under `tmp/codex/playwright-test-results/`; they are not adopted
+goldens. The command and named checkpoints, not scratch paths, are durable proof.
+
+Baseline/final phone prose and graph captures were inspected without a new
+material treatment. Mid-transit prose is intentionally split by the preserved
+horizontal-card scroll; endpoint prose is the readability checkpoint. Reduced
+motion uses the existing settled navigation path. A scrubber `input` previews a
+gesture, and `change` settles it before checking disabled navigation and its
+accessible step label. Static facts are a model-bound plain projection, not a
+claim that the dev-only preview URL now serves a no-JavaScript publication.
+
+Automated preservation and these agent-inspected captures do not replace human
+visual approval. The long loop must stop at the authoring/API checkpoint before
+generalization; exact treatment values and new demand motion are not promoted.

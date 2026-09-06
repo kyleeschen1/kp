@@ -288,11 +288,18 @@
       "scope": "s25",
       "checkedAt": "2026-09-06T00:44:29.894Z",
       "notes": "68 tests; charged orchestration reduction59.6 percent; preview inventory897 lines; inference111257/192271 unchanged."
+    },
+    {
+      "command": "npm run visual:authoring-market; npm run typecheck",
+      "status": "passed",
+      "scope": "s26",
+      "checkedAt": "2026-09-06T00:50:08.873Z",
+      "notes": "Eight browser tests; bounded reference/variant desktop/phone review captures, reduced-motion settlement and no-script fact projection. No human approval inferred."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s25 author specimen and honest costs ready for review; no public facade promotion."
+    "summary": "s26 review harness ready; source and canonical paint preserved. Broad final gate remains."
   },
   "expectedLearning": [
     "Whether internal assembly and a bounded math bridge make one exact market explanation authorable without duplicate semantics or renderer authority."
