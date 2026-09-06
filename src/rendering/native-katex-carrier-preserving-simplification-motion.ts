@@ -45,6 +45,7 @@ export function compileKpNativeKatexCarrierPreservingSimplificationMotion(
     readonly binding: KpNativeKatexCarrierPreservingSimplificationBinding;
     readonly opticalProfile?:
       KpNativeKatexCarrierPreservingSimplificationOpticalProfile | undefined;
+    readonly identityInkShrinkReview?: boolean | undefined;
   }
 ): KpNativeKatexCarrierPreservingSimplificationMotionPlan {
   const { binding } = input;
@@ -121,15 +122,22 @@ export function compileKpNativeKatexCarrierPreservingSimplificationMotion(
           removedSyntaxTrackIds.push(track.id);
           return Object.freeze({
             ...track,
-            // Identity syntax contributes no result paint. Holding its measured
-            // pose while opacity withdraws is the literal visual claim.
+            // Removed syntax owns no result paint. The review treatment reuses
+            // native evaluation's measured-ink material scaling, but does not
+            // fuse or replace the persistent carrier. Both removals share time.
             endRect: Object.freeze({ ...track.startRect }),
             endPaintRect: Object.freeze({ ...track.startPaintRect }),
             timingGroupId: REMOVED_SYNTAX_COHORT_ID,
             opacityScheduleAuthority: "semantic-choreography" as const,
             sampleProgress: () => 0,
             sampleOpacityProgress: (progress: number) =>
-              optics(progress, profile).removedSyntaxCohort.withdrawalProgress
+              input.identityInkShrinkReview
+                ? Number(optics(progress, profile).removedSyntaxCohort.withdrawalProgress === 1)
+                : optics(progress, profile).removedSyntaxCohort.withdrawalProgress,
+            ...(input.identityInkShrinkReview ? {
+              sampleMaterialScale: (progress: number) => Math.max(Number.EPSILON,
+                1 - optics(progress, profile).removedSyntaxCohort.withdrawalProgress)
+            } : {})
           });
         }
         if (track.lifecycle === "persist") {

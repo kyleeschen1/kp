@@ -56,7 +56,7 @@ test("authored simplification Focus Card uses the canonical carrier owner forwar
     await expect(stage).toHaveAttribute("data-kp-carrier-preserving-simplification-progress", String(progress));
   };
   await expect(stage).toHaveAttribute("data-kp-carrier-preserving-simplification-removed-track-count", "2");
-  await expect(stage).toHaveAttribute("data-kp-carrier-preserving-simplification-treatment", "identity-withdrawal");
+  await expect(stage).toHaveAttribute("data-kp-carrier-preserving-simplification-treatment", "identity-ink-shrink-review");
   let first = "";
   for (const p of [0, .2, .42, .7, 1, .42, 0]) {
     await sample(p);
@@ -85,6 +85,35 @@ test("authored simplification Focus Card uses the canonical carrier owner forwar
   }
   expect(modules.some(url => url.includes("/src/semantic-state/"))).toBe(false);
   expect(errors).toEqual([]);
+});
+
+test("identity syntax shrinks as opaque ink while its carrier keeps its native size", async ({ page }, info) => {
+  await page.goto("/experiments/authoring-simplification-focus-card/");
+  const card = page.locator('[data-kp-authoring-simplification-card="ready"]');
+  await expect(card).toBeVisible();
+  const samples = [];
+  for (const progress of [.17, .3, .42, .44, .42, .3, .17]) {
+    await card.locator("[data-kp-focus-deck-scrubber]").fill(String(progress));
+    const paint = await card.locator('[data-kp-equation-material-owner-id]').evaluateAll(nodes => nodes.map(node => {
+      const style = getComputedStyle(node); const matrix = new DOMMatrix(style.transform);
+      return { id: node.getAttribute("data-kp-equation-material-semantic-entity-id")!,
+        scale: matrix.a, opacity: Number(style.opacity) };
+    }));
+    const carrier = paint.find(owner => owner.id.endsWith(".source.carrier"))!;
+    expect(carrier.scale).toBeCloseTo(1, 5); expect(carrier.opacity).toBe(1);
+    const removed = paint.filter(owner => !owner.id.endsWith(".source.carrier"));
+    expect(removed).toHaveLength(2);
+    for (const owner of removed) {
+      expect(owner.scale).toBeLessThan(1);
+      expect(owner.opacity).toBe(progress === .44 ? 0 : 1);
+    }
+    expect(removed[0]!.scale).toBeCloseTo(removed[1]!.scale, 5);
+    samples.push(removed[0]!.scale);
+    await card.screenshot({ path: info.outputPath(`identity-ink-shrink-${progress}.png`) });
+  }
+  expect(samples[0]).toBeGreaterThan(samples[1]!);
+  expect(samples[1]).toBeGreaterThan(samples[2]!);
+  expect(samples.slice(0, 3)).toEqual(samples.slice(4).reverse());
 });
 
 // The canonical reference is measured first. Subsequent integration slices must

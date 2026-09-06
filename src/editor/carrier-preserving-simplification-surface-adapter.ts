@@ -80,6 +80,7 @@ type NativeEndpoints = readonly [
 ];
 
 interface KpCarrierPreservingSimplificationSurfaceDefinition {
+  readonly identityInkShrinkReview?: boolean;
   readonly animationId: string;
   readonly recipe: KpCarrierPreservingSimplificationRecipe;
   readonly governance: KpEquationEvaluationMigrationV2;
@@ -122,15 +123,17 @@ const surfaceDefinitions = createSurfaceDefinitions();
 export const kpEditorCarrierPreservingSimplificationSurfaceAdapter =
   createSurfaceAdapter(surfaceDefinitions);
 
-/** Bounded prepared-source entrance: keep the existing native owner and
- * choreography, but compile its recipe from the supplied authored asset. */
+/** Bounded prepared-source entrance: retain native ownership and verified
+ * recipe authority. A caller may explicitly opt into the removal-paint review. */
 export function createKpPreparedCarrierPreservingSimplificationSurfaceAdapter(
-  animation: import("../animation/asset.ts").KpAnimationAsset
+  animation: import("../animation/asset.ts").KpAnimationAsset,
+  options: { readonly identityInkShrinkReview?: boolean } = {}
 ): KpEditorAnimationSurfaceAdapter {
   if (JSON.stringify(animation) !== JSON.stringify(createKpTwoTimesOneCarrierAnimationAsset())) {
     throw new Error("kp.authoring.simplification-surface-source-gap");
   }
-  return createSurfaceAdapter(createSurfaceDefinitions(animation).slice(0, 1));
+  return createSurfaceAdapter(createSurfaceDefinitions(animation).slice(0, 1)
+    .map(definition => ({ ...definition, identityInkShrinkReview: options.identityInkShrinkReview ?? false })));
 }
 
 function createSurfaceAdapter(definitions: readonly KpCarrierPreservingSimplificationSurfaceDefinition[]) {
@@ -412,7 +415,7 @@ async function prepareSurface(
       targetHandle
     });
     const motion = compileKpNativeKatexCarrierPreservingSimplificationMotion({
-      binding
+      binding, identityInkShrinkReview: session.definition.identityInkShrinkReview
     });
     const measuredRevisions = Object.freeze({
       source: sourceHandle.revision,
@@ -436,7 +439,8 @@ async function prepareSurface(
       session.stage.dataset["kpCarrierPreservingSimplificationProfileId"] =
         session.definition.recipe.profileId;
       session.stage.dataset["kpCarrierPreservingSimplificationTreatment"] =
-        kpNativeKatexCarrierPreservingSimplificationOpticalProfile.treatment;
+        session.definition.identityInkShrinkReview ? "identity-ink-shrink-review" :
+          kpNativeKatexCarrierPreservingSimplificationOpticalProfile.treatment;
       session.stage.dataset["kpCarrierPreservingSimplificationCarrierTrackId"] =
         motion.carrierTrackId;
       session.stage.dataset[

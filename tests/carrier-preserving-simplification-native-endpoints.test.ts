@@ -248,6 +248,19 @@ test("motion has one opaque carrier and one synchronized removal cohort", () => 
   );
   assert.equal(carrierFrame?.opacity, 1);
   assert.equal(carrierFrame?.materialScale, undefined);
+  const review = compileKpNativeKatexCarrierPreservingSimplificationMotion({ binding, identityInkShrinkReview: true });
+  const reviewFrame = sampleKpNativeKatexSceneTrackFrames(review.rendererPlan.tracks, .3, false);
+  for (const frame of reviewFrame) {
+    assert.equal(frame.opacity, 1);
+    if (frame.trackId === review.carrierTrackId) assert.equal(frame.materialScale, undefined);
+    else {
+      assert.ok(frame.materialScale! > 0 && frame.materialScale! < 1);
+      assert.ok(frame.expectedPaintRect!.width < frame.paintAlignmentRect!.width);
+    }
+  }
+  const withdrawn = sampleKpNativeKatexSceneTrackFrames(review.rendererPlan.tracks, .44, false);
+  assert.deepEqual(withdrawn.filter(frame => review.removedSyntaxTrackIds.includes(frame.trackId)).map(frame => frame.opacity), [0, 0]);
+  assert.deepEqual(sampleKpNativeKatexSceneTrackFrames(review.rendererPlan.tracks, .3, false), reviewFrame);
   assert.equal(removedFrames.length, 2);
   assert.equal(removedFrames[0]?.opacity, removedFrames[1]?.opacity);
   assert.deepEqual(removedFrames.map(({ materialScale }) => materialScale), [

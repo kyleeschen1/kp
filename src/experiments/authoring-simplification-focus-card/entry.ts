@@ -17,7 +17,7 @@ async function mount() {
   if (!response.ok) throw new Error("Prepared simplification is unavailable.");
   const data = restoreKpReaderAuthoringSimplificationPreview(await response.json());
   const { animation } = data;
-  const adapter = createKpPreparedCarrierPreservingSimplificationSurfaceAdapter(animation);
+  const adapter = createKpPreparedCarrierPreservingSimplificationSurfaceAdapter(animation, { identityInkShrinkReview: true });
   const descriptor = createKpEditorAnimationDescriptor({ animationId: animation.id,
     title: animation.title, summary: "Verified carrier-preserving simplification", renderTargetKinds: ["equation"] });
   root.innerHTML = '<h1>Multiplying by one</h1><p class="source-label">Authoring-backed Focus Card · carrier-preserving simplification</p>' + renderKpAuthoredFocusCard("simplification", '<div class="kp-focus-deck__stage" data-carrier-slot></div>');
@@ -55,6 +55,7 @@ async function mount() {
   });
   import.meta.hot?.dispose(controller.dispose);
   card.dataset["kpAuthoringSimplificationCard"] = "ready";
+  card.dataset["kpFocusCardEnhancement"] = "ready";
 }
 void mount().catch(error => {
   root.dataset["kpSimplificationRepairGap"] = "true";
