@@ -1491,6 +1491,8 @@ export function createKpCanonicalNativeKatexSceneSession(
   });
 }
 
+const fractionReviewTypographyPlans = new WeakMap<HTMLElement, Map<string, KpNativeKatexTypographyStylePlan>>();
+
 export function createKpCanonicalNativeKatexCarrierSceneSession(
   plan: KpNativeKatexRendererReadyScenePlan,
   options: KpNativeKatexSceneSessionOptions = {}
@@ -1534,7 +1536,15 @@ export function createKpCanonicalNativeKatexCarrierSceneSession(
     : (() => {
         const microscope = 1 - plan.endpointDwellFraction;
         const ownership = playback.apply(microscope);
-        const compiled = compileKpNativeKatexTypographyStylePlan({
+        // This review card already supplies a total paint/geometry generation.
+        // Reuse calibration only within that exact revision, never across an
+        // arbitrary theme, font, layout, host or retired session boundary.
+        const revision = source.stage.dataset["kpFractionCoherentTransportReview"] === "true" &&
+          source.stage.dataset["kpEquationMaterialVisualCache"] === "dual-revision"
+          ? source.stage.dataset["kpEquationMaterialPaintRevision"] : undefined;
+        let cachedPlans = fractionReviewTypographyPlans.get(source.stage);
+        if (revision && !cachedPlans) { cachedPlans = new Map(); fractionReviewTypographyPlans.set(source.stage, cachedPlans); }
+        const compiled = (revision ? cachedPlans?.get(revision) : undefined) ?? compileKpNativeKatexTypographyStylePlan({
           telemetry: measureKpNativeKatexCorrelatedHandoff({
             stage: source.stage,
             reconciliation,
@@ -1548,6 +1558,10 @@ export function createKpCanonicalNativeKatexCarrierSceneSession(
           maximumTranslationPx: 2,
           maximumScaleRatio: 1.1
         });
+        if (revision && cachedPlans) {
+          cachedPlans.set(revision, compiled);
+          if (cachedPlans.size > 4) cachedPlans.delete(cachedPlans.keys().next().value!);
+        }
         typographyWarmup = sampleKpNativeKatexTypographyStylePlan(
           compiled,
           microscope,

@@ -126,3 +126,30 @@ test("card paint cache preserves uncached native material pixels", async ({ page
     expect((await stage.screenshot()).equals(cached[index]!)).toBe(true);
   }
 });
+
+test("coherent fraction copies retain native internal arrangement through forward and reverse", async ({ page }, info) => {
+  for (const width of [1100, 390]) {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto(route);
+    const card = page.locator('[data-kp-authoring-distribution-card="ready"]');
+    await expect(card).toBeVisible();
+    const shapes = [];
+    for (const progress of [.12, .3, .5, .7, .88, .7, .3, .12]) {
+      await card.locator("[data-kp-focus-deck-scrubber]").fill(String(progress));
+      shapes.push(await card.evaluate(node => ["x", "6"].map(branch => {
+        const rects = ["numerator", "fraction-rule", "denominator"].map(part => {
+          const owner = node.querySelector<HTMLElement>(`[data-kp-equation-material-semantic-entity-id="fraction-fan-out.target.factor.${branch}.${part}"]`)!;
+          const rect = owner.getBoundingClientRect();
+          return { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
+        });
+        return rects.map(rect => ({ dx: rect.x - rects[0]!.x, dy: rect.y - rects[0]!.y, width: rect.width, height: rect.height }));
+      })));
+      if (progress === .5) await card.screenshot({ path: info.outputPath(`coherent-fraction-${width}.png`) });
+    }
+    for (const shape of shapes) for (const branch of [0, 1]) for (const part of [0, 1, 2]) {
+      for (const key of ["dx", "dy", "width", "height"] as const) {
+        expect(Math.abs(shape[branch]![part]![key] - shapes[0]![branch]![part]![key]), `${width}: ${branch}/${part}/${key}`).toBeLessThan(1);
+      }
+    }
+  }
+});

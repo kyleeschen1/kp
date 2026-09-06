@@ -3,6 +3,7 @@ import type {
   KpCanonicalNativeKatexSceneInput,
   KpNativeKatexRendererSession
 } from "../../rendering/native-katex-scene-compositor.ts";
+import { createKpFractionDistributionCoherentMotion } from "../../rendering/fraction-distribution-coherent-motion.ts";
 import type {
   KpNativeKatexSemanticPaintRelation
 } from "../../rendering/native-katex-base-scene-plan.ts";
@@ -449,6 +450,13 @@ function dispatchReaderEquationPresentation(input: {
           : undefined
       );
     case "distribution":
+      if (input.source.stage.dataset["kpFractionCoherentTransportReview"] === "true") {
+        return { planKind: plan.planKind, canonicalInput: {
+          ...input.base,
+          trackProjection: createKpFractionDistributionCoherentMotion(plan.distributionOperationPlans),
+          horizontalAxisSemanticEntityIds: persistentOperatorAxisIds(input.renderTransition)
+        }, motionProfile: "default", successorSynthesisCount: 0 };
+      }
       return routedDispatch(
         plan.planKind,
         input.base,

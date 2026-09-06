@@ -152,6 +152,49 @@ Rollback units are the card's host/navigation/preparation changes and the opt-in
 renderer measurement/template reuse. Neither changes semantic schemas, source
 operations, exact native endpoints, default tax wiring, or the approved run order.
 
+### Follow-up: coherent fraction transport (2026-09-06)
+
+The user approved implementing the recommendation to transport an unchanged
+fraction as a whole. The governing principle for this exemplar is: preserve an
+expression's internal arrangement during transport; separate its constituents
+when the operation or explanation acts on those constituents. This is not yet a
+globally enforced rule for all fractions or distribution callers.
+
+The Focus Card explicitly opts its first transition into a bounded projection
+requiring the exact verified fraction-factor presentation plan. Existing source
+and target semantic bundles become shared timing and collision-routing units.
+Primitive identities, correspondence records, and the six destination paint
+tracks remain separate; the fraction is not flattened into a bitmap or a new
+semantic token. Existing copy-fan-out timing and native endpoint geometry are
+reused, without per-glyph offsets. The generic fan-out sampler is unchanged.
+
+The same card also reuses typography calibration within its existing exact
+paint/geometry revision, only when dual-revision caching is enabled. The cache
+is bounded to four revisions per stage; other callers retain their existing
+calibration path. Cached-versus-uncached pixel checks remain in the scoped suite.
+Local Chromium attention-boundary scrub samples decreased from roughly 20–23 ms
+to 12–16 ms. Firefox still showed roughly 49–71 ms boundary samples: this is not
+a claim of uniformly smooth playback across browsers or devices.
+
+Verification: `npm run test:authoring-structural` passes 25 tests, including
+primitive-identity preservation, shared motion-unit sampling forward/reverse,
+and rejection of missing authority or incomplete native bundles.
+`npm run visual:authoring-distribution-card` passes 18 Chromium/Firefox tests,
+including actual material-owner arrangement at desktop and phone widths in both
+directions, existing navigation/lifecycle checks, and cache pixel parity.
+Typechecking, architecture checks, and generated reachability checks also pass.
+`npm run visual:authoring-structural` passes all four ordinary-reader preservation
+checks, including realized canonical paint and exclusive ownership.
+Synthetic unit geometry is law evidence; the scoped browser checks exercise the
+real compositor but do not constitute catalog-wide certification.
+
+Human review remains necessary, particularly for the close passage of the two
+intact copies on phone layouts. The card opt-in, projection, and dispatch form
+one bounded rollback unit; calibration reuse can be reverted independently.
+No semantic schema, default lesson route, or ordinary distribution caller is
+migrated. G1 remains the human checkpoint before a structurally different caller
+or shared-rule promotion.
+
 ### Existing preservation contract
 
 Preserve semantic trees, stable identities, operation authority, native ownership,

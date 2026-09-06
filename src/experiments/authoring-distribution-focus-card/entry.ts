@@ -58,6 +58,8 @@ async function mount() {
   shell.transitions.forEach(transition => {
     transition.querySelector<HTMLElement>("[data-kp-reader-fit-surface]")!.dataset["kpEquationMaterialVisualCache"] = "dual-revision";
   });
+  // Human-review opt-in: never change another distribution caller by asset ID.
+  shell.transitions[0]!.querySelector<HTMLElement>("[data-kp-reader-fit-surface]")!.dataset["kpFractionCoherentTransportReview"] = "true";
   const session = await createKpChromeFreeCanonicalEquationSession({ shell, animation, descriptor: fractionCompositionDescriptor,
     prewarmAdjacentTransitions: false,
     equationPresentationProfile: resolveKpReaderEquationPresentationProfile("standard"), linkRoot: card,
