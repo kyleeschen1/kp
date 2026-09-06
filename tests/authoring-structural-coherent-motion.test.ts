@@ -3,6 +3,7 @@ import test from "node:test";
 import { createKpAuthoredDistributionProjection, requireKpAuthoredDistributionNativeAnimation } from "../src/experiments/authoring-structural/distribution-projection.ts";
 import { findKpRegisteredOperationPresentationPlan, type KpVerifiedDistributionPresentationPlan } from "../src/animation/operation-presentation-plan-types.ts";
 import { createKpFractionDistributionCoherentMotion } from "../src/rendering/fraction-distribution-coherent-motion.ts";
+import { sampleKpCanonicalNativeKatexCopyFanOutMotion } from "../src/animation/copy-fan-out-motion-profile.ts";
 import { sampleKpNativeKatexSceneTrackFrames } from "../src/rendering/native-katex-scene-track-sampling.ts";
 
 function fixture() {
@@ -25,6 +26,23 @@ function fixture() {
   const input = { source, target, tracks } as unknown as Parameters<typeof projection.project>[0];
   return { projection, input };
 }
+
+test("separation treatment is monotone, rejoins the original profile and retains endpoint velocity", () => {
+  const { projection, input } = fixture();
+  const sample = projection.project(input)[0]!.sampleProgress!;
+  const baseline = (progress: number) => sampleKpCanonicalNativeKatexCopyFanOutMotion(progress).leaderProgress;
+  let previous = 0;
+  for (let i = 0; i <= 1000; i++) {
+    const progress = i / 1000;
+    const value = sample(progress);
+    assert.ok(value >= previous && value <= 1);
+    if (baseline(progress) >= .42) assert.equal(value, baseline(progress));
+    previous = value;
+  }
+  assert.ok(sample(.1) > baseline(.1));
+  assert.ok(sample(1e-6) / 1e-6 < .001, "departure still begins at rest");
+  assert.equal(sample(0), 0); assert.equal(sample(1), 1);
+});
 
 test("coherent factor transport preserves primitive identity, local shape and reverse samples", () => {
   const { projection, input } = fixture();

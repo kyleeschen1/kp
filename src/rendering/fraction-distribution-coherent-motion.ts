@@ -3,6 +3,16 @@ import { sampleKpCanonicalNativeKatexCopyFanOutMotion } from "../animation/copy-
 import { createKpNativeKatexTrackProjection } from "./native-katex-track-projection.ts";
 import { sampleKpNativeKatexCopyFanOutTrack } from "./native-katex-copy-fan-out-motion.ts";
 
+/** Review treatment: shorten ambiguous near-overlap, not the attention phrase.
+ * The bump has zero value and slope at both ends, retaining the slow start and
+ * rejoining the existing motion before follower departure and settlement. */
+function sampleKpFractionSeparationProgress(progress: number): number {
+  const end = 0.42;
+  if (progress <= 0 || progress >= end) return progress;
+  const t = progress / end;
+  return progress + 0.045 * 16 * t * t * (1 - t) * (1 - t);
+}
+
 /** Review-only lowering of verified factor bundles. Primitive identities stay
  * intact; one timing/routing unit transports each unchanged factor. */
 export function createKpFractionDistributionCoherentMotion(plans: readonly KpVerifiedDistributionPresentationPlan[]) {
@@ -38,7 +48,7 @@ export function createKpFractionDistributionCoherentMotion(plans: readonly KpVer
         // each follower onto a separate primitive leader's centre.
         sampleProgress: (progress: number) => {
           const motion = sampleKpCanonicalNativeKatexCopyFanOutMotion(progress);
-          return unit.ordinal === 0 ? motion.leaderProgress : motion.followerProgress;
+          return unit.ordinal === 0 ? sampleKpFractionSeparationProgress(motion.leaderProgress) : motion.followerProgress;
         }
       });
     });

@@ -56,6 +56,21 @@ strokes, antialiasing, outlines, and shadows. Motion may use layout bounds for
 alignment, but a visual clone must not clip to them unless the notation
 explicitly requires a structural crop.
 
+## Ease attention without prolonging ambiguous overlap
+
+Slow starts can orient attention; they are not themselves a defect. When one
+object branches into copies, distinguish preparation, perceptually clear
+separation, travel, and arrival. Avoid lingering with independently moving ink
+almost coincident, where antialiased contours read as a smear instead of two
+objects. Shorten that ambiguous interval while preserving continuous position
+and velocity, meaningful grouping, and eased arrival. Reverse must sample the
+same treatment, not introduce a second choreography.
+
+This is a diagnostic principle, not a universal easing curve or permission to
+fade semantic continuants. Exact departures remain motif-owned and subject to
+exemplar review. The fraction Focus Card tests a bounded early departure
+adjustment; generic copy/fan-out timing and semantic authoring remain unchanged.
+
 ## Critique Sentence
 
 Use this form:
