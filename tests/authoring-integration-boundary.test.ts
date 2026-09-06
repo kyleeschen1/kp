@@ -3,7 +3,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import test from "node:test";
 import ts from "typescript";
-import { measureKpAuthoringIntegrationCost } from "./helpers/authoring-integration-cost.ts";
+import { measureKpAuthoringIntegrationCost, measureKpAuthoringPreviewImplementation } from "./helpers/authoring-integration-cost.ts";
 
 const assembly = ["authoring-model-assembly", "authoring-explanation-assembly",
   "authoring-query-session", "authoring-diagnostics"].map(name => `src/semantic-state/${name}.ts`);
@@ -48,4 +48,13 @@ test("boundary review charges author glue and discloses math bridge implementati
     imports: imports(path).length }));
   assert.ok(mathBridge.every(item => item.nonblankLines > 0));
   console.log("AUTHORING_BOUNDARY_COST", JSON.stringify({ assembly: cost.shared, mathBridge }));
+});
+
+test("preview author sources and all owner-local integration helpers are disclosed separately", () => {
+  const inventory = measureKpAuthoringPreviewImplementation();
+  assert.ok(inventory.files.some(file => file.path.endsWith("authoring-market-model-source.ts")));
+  assert.ok(inventory.files.some(file => file.path.endsWith("authoring-market-article-source.ts")));
+  assert.ok(inventory.files.some(file => file.path.endsWith("vite-authoring-market-preview.ts")));
+  assert.ok(inventory.files.every(file => file.nonblankLines > 0));
+  console.log("AUTHORING_PREVIEW_IMPLEMENTATION", JSON.stringify(inventory));
 });

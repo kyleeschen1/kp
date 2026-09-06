@@ -17,6 +17,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-05-authoring-integration-save-boundary-stop.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-05-authoring-market-author-review.md"
     }
   ],
   "dependsOn": {
@@ -277,11 +281,18 @@
       "scope": "s24",
       "checkedAt": "2026-09-06T00:41:09.876Z",
       "notes": "Eight browser tests including three deep links,reloads,resize and repeated retirement;66 integration;zero type errors."
+    },
+    {
+      "command": "npm run test:authoring-integration; npm run check:inference; npm run typecheck",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-06T00:44:29.894Z",
+      "notes": "68 tests; charged orchestration reduction59.6 percent; preview inventory897 lines; inference111257/192271 unchanged."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s24 lifecycle and local address restoration verified through existing canonical ownership."
+    "summary": "s25 author specimen and honest costs ready for review; no public facade promotion."
   },
   "expectedLearning": [
     "Whether internal assembly and a bounded math bridge make one exact market explanation authorable without duplicate semantics or renderer authority."

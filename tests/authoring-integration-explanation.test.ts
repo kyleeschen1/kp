@@ -18,6 +18,8 @@ import {
 } from "../src/semantic-state/state-family-composition-declaration.ts";
 import { KpSemanticStateCompositionPreflightError } from
   "../src/semantic-state/state-family-composition-preflight.ts";
+import { createKpSemanticStateQuerySession } from "../src/semantic-state/authoring-query-session.ts";
+import { createKpSettledSemanticStateCompositionAddress } from "../src/semantic-state/state-family-composition-address.ts";
 
 function fixture(overlap = false) {
   const model = assembleKpSemanticStateModel({
@@ -131,3 +133,21 @@ function rejectInvalidParameters(): void {
   });
 }
 void rejectInvalidParameters;
+
+test("editing declared order changes historical queries without changing member meaning", () => {
+  const data = fixture();
+  const run = (reverse: boolean) => assembleKpSemanticStateExplanation({
+    model: data.model, localId: reverse ? "b-then-a" : "a-then-b", sourceId: "test.author-order",
+    root: declareKpSemanticStateCompositionSequence({ name: "ordered", sourceId: "test.author-order.sequence",
+      members: reverse ? [data.b.member, data.a.member] : [data.a.member, data.b.member] }),
+    members: [data.a, data.b]
+  });
+  const totals = [false, true].map(reverse => {
+    const explanation = run(reverse);
+    const query = createKpSemanticStateQuerySession(explanation);
+    try { return explanation.handles.boundaries.map(boundary => query.evaluate(
+      createKpSettledSemanticStateCompositionAddress({ handles: explanation.handles, boundary }), data.model.handles.refs.sum)); }
+    finally { query.dispose(); }
+  });
+  assert.deepEqual(totals, [[0, 4, 10], [0, 6, 10]]);
+});
