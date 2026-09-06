@@ -1,6 +1,6 @@
 import { spawnSync } from "node:child_process";
 import { writeFileSync } from "node:fs";
-import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, unlink, writeFile } from "node:fs/promises";
 import { basename, join } from "node:path";
 
 interface DiagnosticSample {
@@ -44,6 +44,28 @@ const overall = compileProject("tsconfig.inference.json");
 const fixtureNames = (await readdir(fixtureRoot))
   .filter((name) => name.endsWith(".ts"))
   .sort();
+if (process.argv.includes("--structural")) {
+  // Attribute the real two-caller gate without removing its fixture or
+  // changing budgets. Import-only variants distinguish closure cost from
+  // instantiation at the consumer's query calls.
+  const baselineFiles = fixtureNames.filter(name => name !== "authoring-structural-callers.ts")
+    .map(name => join(fixtureRoot, name));
+  const baseline = compileFiles("structural-baseline", baselineFiles);
+  const samples = [];
+  for (const kind of ["distribution", "simplification"] as const) {
+    const path = join(scratchRoot, `structural-${kind}.ts`);
+    await writeFile(path, `import "../../../src/experiments/authoring-structural/${kind}-explanation.ts";\n`);
+    const sample = compileFiles(`structural-${kind}`, [...baselineFiles, path]);
+    samples.push({ kind, ...sample, incrementalTypes: sample.types - baseline.types,
+      incrementalInstantiations: sample.instantiations - baseline.instantiations });
+  }
+  console.log(JSON.stringify({ measuredProject: "tsconfig.inference.json", baseline, overall, samples }, null, 2));
+  await Promise.all(["empty.ts", "library-baseline.json", "structural-baseline.json",
+    "structural-distribution.ts", "structural-distribution.json",
+    "structural-simplification.ts", "structural-simplification.json"]
+    .map(name => unlink(join(scratchRoot, name))));
+  process.exit(0);
+}
 const fixtures: FixtureSample[] = [];
 
 for (const fixtureName of fixtureNames) {

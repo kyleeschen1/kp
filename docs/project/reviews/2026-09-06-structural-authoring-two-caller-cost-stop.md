@@ -116,7 +116,7 @@ simplification certification. Its G2 release cohort, full tests/build and human
 review remain unexecuted. The new simplification card has not been visually
 approved by the user. No canonical supply-tax migration has begun.
 
-Recommended next step: authorize a bounded compiler-cost attribution and repair
+The user subsequently approved bounded compiler-cost attribution and repair
 at these two internal entrances, preserving the current ceilings and all source,
 identity, query and visual laws. Do not broaden into API publication or remove
 the realistic consumer pressure. After that repair, resume the existing s17–s18
@@ -125,3 +125,45 @@ review sequence; G2 still precedes canonical migration.
 Resume context with `theseus work resume next-action.kp.structural-authoring-canonical-tax`.
 If its known brief-budget error recurs, use `theseus work start
 next-action.kp.structural-authoring-canonical-tax --mode brief` and this report.
+
+## Resumed investigation after the Focus Card repairs
+
+The animation and card-form amendment is recorded in
+`../decisions/2026-09-06-focus-card-form-and-separation.md`. Motion is committed
+separately from the shared shell/content/controller repair. The repair passes
+32 structural tests, 26 Chromium/Firefox card checks, seven integrated structural
+browser checks, full typecheck and architecture checks. Static card captures
+show both verified native equations and both passages without JavaScript;
+interactive cards retain their domain renderers. These are dev-route and
+shared-render-function proofs, not a completed production publication feature.
+
+`npm run measure:inference-attribution -- --structural` now reproduces a bounded
+comparison without changing the real fixture or inference configuration:
+
+| Compilation | Types | Instantiations |
+| --- | ---: | ---: |
+| Other existing fixtures | 111,313 | 192,390 |
+| Other fixtures + distribution implementation import | 115,949 | 200,076 |
+| Other fixtures + simplification implementation import | 114,061 | 199,139 |
+| Unmodified complete two-caller gate | 118,158 | 205,487 |
+| Unchanged ceilings | 112,500 | 195,800 |
+
+The import-only cases still typecheck implementation bodies. They show that
+either implementation closure already exceeds the gate; the final consumer
+expressions are not the sole cause. They do not yet identify the hottest
+generic instantiation inside those closures, and their costs are not additive
+because they share dependencies.
+
+A bounded experiment explicitly typing both receipt-preserving family wrappers
+with their existing family types produced 118,141 types / 205,507
+instantiations: only 17 fewer types and 20 more instantiations. It was reverted;
+there is no benefit worth retaining or claim that annotation solves this gate.
+No public type hierarchy, semantic contract, budget, or consumer assertion was
+changed. The repeatable attribution command is retained as useful evidence.
+
+Outcome remains **STOP_CONDITION**, s17 incomplete, before s18/G2 and migration.
+The next technical investigation should profile generic instantiations within
+the two implementation closures, then propose a measured internal boundary
+repair. Do not remove the realistic fixture or use presentation success to
+claim compiler-cost release readiness. Revised fraction departure and the new
+simplification card still require human visual judgment before promotion.

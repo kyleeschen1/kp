@@ -247,11 +247,18 @@
       "scope": "approved-card-repair",
       "checkedAt": "2026-09-06T21:28:22.874Z",
       "notes": "26 Chromium and Firefox checks pass: shared serif typography, static endpoints and unclipped passages, native coherence, frame and scrub budgets, reduced motion, BFcache and teardown. Also 7 structural browser checks, 32 unit tests, full typecheck and architecture pass."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "s17-resumed",
+      "checkedAt": "2026-09-06T21:32:09.558Z",
+      "notes": "118158 types / 205487 instantiations versus unchanged 112500 / 195800 ceilings. Structural attribution command passes and shows each implementation import independently exceeds baseline headroom. Wrapper annotation experiment reverted as ineffective."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "9 of 28 slices complete. Structural model, receipts, transactions, derived/history and explanation implemented. Governed semantic candidate exists, but s10 reopened after multipart native presenter gap; s11 hook removed. Await bounded repair approval."
+    "summary": "16 of 28 complete. User-approved motion and shared card repairs committed. Resumed s17 attribution and bounded annotation experiment; inference still fails unchanged ceilings. Retain fixture; profile implementation generics before G2."
   },
   "expectedLearning": [
     "Whether two structural equation callers justify canonical economics adoption without parallel state or presentation authority."

@@ -218,7 +218,7 @@
     {
       "id": "s17",
       "title": "Authoring cost and API review: compare both callers, retain only demonstrated shared helpers, measure import/type costs",
-      "summary": "Incomplete: consumer/API inventory implemented but inference cost exceeds fixed ceilings. Contract stopped under s17/X pending bounded cost repair; fixture retained as failing evidence.",
+      "summary": "STOP_CONDITION: resumed attribution shows either implementation import exceeds unchanged ceilings. Wrapper annotation experiment did not help and was reverted. Real fixture retained; no G2 release or migration.",
       "status": "planned"
     },
     {
