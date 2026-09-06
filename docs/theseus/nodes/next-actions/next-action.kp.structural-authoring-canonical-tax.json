@@ -204,6 +204,13 @@
       "scope": "s13",
       "checkedAt": "2026-09-06T20:15:18.671Z",
       "notes": "27 tests and full typecheck pass; exact source, carrier/removal lineage and non-copyable receipt authority."
+    },
+    {
+      "command": "npm run test:authoring-structural",
+      "status": "passed",
+      "scope": "s14",
+      "checkedAt": "2026-09-06T20:19:00.448Z",
+      "notes": "29 structural plus 29 carrier tests; full typecheck and architecture pass. Runtime remains next."
     }
   ],
   "progress": {

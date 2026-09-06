@@ -200,7 +200,8 @@
     {
       "id": "s14",
       "title": "Second structural caller: compose simplification state, selection, transaction and historical query using the proved seam",
-      "status": "planned"
+      "summary": "Carrier source and target retained in existing aggregate, discrete family and bounded historical queries; exact selection and negative authority tests pass. 29 structural, 29 carrier, types and architecture pass.",
+      "status": "complete"
     },
     {
       "id": "s15",
