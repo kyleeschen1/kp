@@ -20,6 +20,7 @@ interface KpEquationMaterialLayerState {
 
 const materialLayerStates =
   new WeakMap<HTMLElement, KpEquationMaterialLayerState>();
+const paintTemplates = new WeakMap<HTMLElement, Map<string, WeakMap<Element, HTMLElement | SVGElement>>>();
 const materialVisualCaches = new WeakMap<
   HTMLElement,
   Map<string, {
@@ -370,7 +371,27 @@ export function setKpEquationMaterialOwnerVisual(input: {
     cached.visual.remove();
     cache.delete(input.revisionKey);
   }
-  const visual = cloneKpEquationMaterialVisual(input.sourceElement);
+  const stage = input.owner.closest<HTMLElement>("[data-kp-equation-material-paint-revision]");
+  const revision = stage?.dataset["kpEquationMaterialPaintRevision"];
+  let templates: WeakMap<Element, HTMLElement | SVGElement> | undefined;
+  if (stage && revision) {
+    let revisions = paintTemplates.get(stage);
+    if (!revisions) { revisions = new Map(); paintTemplates.set(stage, revisions); }
+    templates = revisions.get(revision);
+    if (!templates) {
+      templates = new WeakMap();
+      revisions.set(revision, templates);
+      // Retain only a bounded pair of attention states plus endpoint revisions.
+      if (revisions.size > 4) revisions.delete(revisions.keys().next().value!);
+    }
+  }
+  let template = templates?.get(input.sourceElement);
+  if (!template) {
+    template = cloneKpEquationMaterialVisual(input.sourceElement);
+    templates?.set(input.sourceElement, template);
+  }
+  // Templates never enter paint; each live owner receives its own mutable copy.
+  const visual = templates ? template.cloneNode(true) as HTMLElement | SVGElement : template;
   cache.set(input.revisionKey, {
     sourceElement: input.sourceElement,
     visual

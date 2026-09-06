@@ -69,6 +69,9 @@ export interface KpReaderCanonicalEquationSessionInspection {
   readonly adjacentPrewarmEnabled: boolean;
 }
 
+// A replacement session on the same DOM must not inherit retired paint templates.
+let nextPaintGeneration = 0;
+
 export function createKpReaderCanonicalEquationSession(input: {
   readonly transitionIds: readonly string[];
   readonly createSession: KpReaderEquationSceneCompositorFactory;
@@ -95,6 +98,7 @@ export function createKpReaderCanonicalEquationSession(input: {
   let materialLayer: HTMLElement | undefined;
   let activeTransitionId: string | undefined;
   let disposed = false;
+  let paintGeneration = nextPaintGeneration++;
   const purePlanCache = createKpReaderCompositorPurePlanCache<
     ReturnType<KpReaderEquationPureScenePlanCompiler>
   >();
@@ -202,6 +206,9 @@ export function createKpReaderCanonicalEquationSession(input: {
     recordKpReaderPurePlanCompilation(ownerWindow);
     recordKpReaderProtectedTransitCompilation(ownerWindow);
   };
+  // Measured endpoint snapshots are immutable for an exact paint/layout key.
+  // Keep this opt-in and session-local; native DOM mutations must invalidate.
+  const measuredScenes = new Map<string, ReturnType<typeof purePlanInputFor>>();
 
   return {
     transitionIds,
@@ -271,7 +278,21 @@ export function createKpReaderCanonicalEquationSession(input: {
         );
         materialLayer = createMaterialLayer(frame.fitSurface);
         const geometryIdentity = geometryIdentityFor(frame, transitionId);
-        const sceneInput = purePlanInputFor(frame, transitionId, false);
+        const cachePaint = frame.fitSurface.dataset["kpEquationMaterialVisualCache"] === "dual-revision";
+        // Only cache-enabled rebuilds publish a new paint key; ordinary
+        // animation samples must not add geometry reads or attribute churn.
+        if (cachePaint) frame.fitSurface.dataset["kpEquationMaterialPaintRevision"] = JSON.stringify([
+          paintGeneration, geometryIdentity.key
+        ]);
+        let sceneInput = cachePaint ? measuredScenes.get(geometryIdentity.key) : undefined;
+        if (sceneInput?.source.stage !== frame.fitSurface) sceneInput = undefined;
+        if (sceneInput === undefined) {
+          sceneInput = purePlanInputFor(frame, transitionId, false);
+          if (cachePaint) {
+            measuredScenes.set(geometryIdentity.key, sceneInput);
+            if (measuredScenes.size > 4) measuredScenes.delete(measuredScenes.keys().next().value!);
+          }
+        }
         let purePlan = input.enablePurePlanCache === true
           ? purePlanCache.get(geometryIdentity)
           : undefined;
@@ -398,6 +419,8 @@ export function createKpReaderCanonicalEquationSession(input: {
       if (disposed) return;
       sessionHandoff.invalidate();
       prewarmQueue?.cancel();
+      measuredScenes.clear();
+      paintGeneration = nextPaintGeneration++;
       releaseCurrentSession("measurement-invalidated");
     },
     dispose() {
@@ -407,6 +430,7 @@ export function createKpReaderCanonicalEquationSession(input: {
       prewarmQueue?.dispose();
       releaseCurrentSession("surface-disposed");
       purePlanCache.clear();
+      measuredScenes.clear();
     },
     inspect() {
       return Object.freeze({

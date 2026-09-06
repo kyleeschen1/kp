@@ -124,6 +124,8 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
   readonly descriptor: KpReaderEquationLessonDescriptor;
   readonly equationPresentationProfile: KpReaderEquationPresentationProfile;
   readonly linkRoot: ParentNode;
+  /** Single-operation hosts must not schedule unrelated compilation during playback. */
+  readonly prewarmAdjacentTransitions?: boolean;
   readonly createStageLayoutIntent: (input: {
     readonly viewport: "wide" | "phone";
   }) => KpEquationStageLayoutIntent;
@@ -197,7 +199,7 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
     createSession: adapter.createKpReaderEquationSceneCompositorSession,
     compilePurePlan: adapter.compileKpReaderEquationPureScenePlan,
     observeScene: adapter.observeKpNativeKatexRenderedScene,
-    enableAdjacentPrewarm: true,
+    enableAdjacentPrewarm: input.prewarmAdjacentTransitions !== false,
     enablePurePlanCache: true,
     requireAppliedStageLayout: input.descriptor.stageLayoutCompiler !== undefined
   });

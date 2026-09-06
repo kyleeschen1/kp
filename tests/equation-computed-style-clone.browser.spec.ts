@@ -1,5 +1,35 @@
 import { expect, test } from "@playwright/test";
 
+test("material templates reuse exact revisions without sharing mutable paint", async ({ page }) => {
+  await page.goto("/");
+  const result = await page.evaluate(async () => {
+    const modulePath = "/src/rendering/equation-material-layer-dom.ts";
+    const { setKpEquationMaterialOwnerVisual } = await import(modulePath);
+    const stage = document.createElement("div");
+    stage.dataset["kpEquationMaterialVisualCache"] = "dual-revision";
+    stage.dataset["kpEquationMaterialPaintRevision"] = "layout0:paint0";
+    const source = document.createElement("span");
+    source.id = "native-authority";
+    source.style.color = "rgb(23, 45, 67)";
+    stage.append(source);
+    document.body.append(stage);
+    const sample = () => {
+      const owner = document.createElement("span"); stage.append(owner);
+      return setKpEquationMaterialOwnerVisual({ owner, sourceElement: source, revisionKey: "source:one" });
+    };
+    const first = sample();
+    first.style.color = "red";
+    const second = sample();
+    source.style.color = "rgb(90, 80, 70)";
+    stage.dataset["kpEquationMaterialPaintRevision"] = "layout0:paint1";
+    const changed = sample();
+    const result = { second: second.style.color, changed: changed.style.color, separate: first !== second, noAuthority: second.id === "" };
+    stage.remove();
+    return result;
+  });
+  expect(result).toEqual({ second: "rgb(23, 45, 67)", changed: "rgb(90, 80, 70)", separate: true, noAuthority: true });
+});
+
 test("computed-style clone preserves inherited and nested equation typography", async ({ page }) => {
   await page.goto("/");
   const result = await page.evaluate(async () => {
