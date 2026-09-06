@@ -47,6 +47,13 @@
       "scope": "s02",
       "checkedAt": "2026-09-06T03:19:55.410Z",
       "notes": "6 reference/planning tests and 29 carrier preservation tests pass. Exact source, host, first transition, fan-out and removal records pinned. Not new runtime certification."
+    },
+    {
+      "command": "npm run test:authoring-structural; npm run visual:authoring-structural; npm run typecheck; git diff --check",
+      "status": "passed",
+      "scope": "s03",
+      "checkedAt": "2026-09-06T03:22:53.741Z",
+      "notes": "3 focused checks, 1 real canonical-session Chromium canary, full typecheck pass. Stable commands now committed; baseline is explicitly reference-only pending aggregate adapter."
     }
   ],
   "progress": {

@@ -130,7 +130,8 @@
     {
       "id": "s03",
       "title": "Structural test seam: add stable focused and runtime commands with one reusable browser harness",
-      "status": "planned"
+      "summary": "Stable structural commands and canonical runtime baseline pass 3 focused tests, Chromium canary and full types. Later slices must exercise aggregate-backed path.",
+      "status": "complete"
     },
     {
       "id": "s04",
