@@ -1,9 +1,9 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: G0 accepted; approved native-boundary repair executing toward G1
+Status: G0 accepted; native-boundary repair verified; G1 visual review pending
 Last Updated: 2026-09-06
-Current Next Action: execute the approved bounded repair in
-`../reviews/2026-09-05-structural-authoring-native-boundary-stop.md` and resume
+Current Next Action: review
+`../reviews/2026-09-06-structural-authoring-g1-distribution-checkpoint.md` before continuing
 `../reviews/2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md`.
 The completed source workflow and market specimen passed G0 review; evidence is in
 `../reviews/2026-09-05-authoring-integration-market-preview-closeout.md` and
@@ -19,15 +19,14 @@ human visual gates and required safety, authority, and verification constraints.
 
 The bounded equation adapter now connects retained semantic trees, exact version
 selections, verified distribution receipts, atomic transactions, derived reads,
-and named explanation queries. Governed semantic construction also compiles,
-but actual canonical-host execution exposed a separate presentation gap:
-the registered distribution presenter requires one fan-out transfer while the
-fraction exemplar declares three. Equal values and preserved timeline data did
-not prove equivalent runtime routing. The attempted reader-to-experiment import
-also violated dependency direction; that unshippable hook was removed. The
-canonical fraction and supply-tax pages remain unchanged. See the linked stop
-report for evidence and the proposed repair; no new motif or authority bypass
-is approved by this record.
+and named explanation queries. The approved repair groups the canonical fraction's
+three primitive transfers into explicit verified material bundles while retaining
+their correspondence records. A serve-only prepared-data endpoint and independently
+validated reader restoration avoid importing authoring internals into the reader.
+The opt-in authored distribution now traverses the canonical native session with
+bounded measured paint and raster parity. Default fraction and supply-tax sources
+remain unchanged. This is an exemplar proof, not generalized multipart support,
+a production authoring service, or human visual acceptance.
 
 Execution branch: `feature/20260905-structural-authoring-canonical-tax`, created
 from the clean reviewed integration branch. The repo no longer exposes the Git

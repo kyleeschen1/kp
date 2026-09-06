@@ -44,11 +44,11 @@ for (const source of ["canonical", "authored"] as const) test(`${source} distrib
   // that an authored-state adapter exists before its implementation slice.
   await seek(page, 38);
   const reference = await page.locator("body").getAttribute("data-kp-reader-review-frame");
-  await stage.screenshot({ path: info.outputPath("canonical-distribution-transit.png") });
+  await stage.screenshot({ path: info.outputPath(`${source}-distribution-transit.png`) });
   await seek(page, 0);
-  await stage.screenshot({ path: info.outputPath("canonical-distribution-source.png") });
-  await seek(page, 77);
-  await stage.screenshot({ path: info.outputPath("canonical-distribution-target-boundary.png") });
+  await stage.screenshot({ path: info.outputPath(`${source}-distribution-source.png`) });
+  await seek(page, 1000 / 13);
+  await stage.screenshot({ path: info.outputPath(`${source}-distribution-target-boundary.png`) });
   await seek(page, 38);
   await expect(active).toHaveAttribute("data-kp-reader-transition", "fraction-solve.step.distribute");
   expect(await page.locator("body").getAttribute("data-kp-reader-review-frame")).toBe(reference);
@@ -58,6 +58,31 @@ for (const source of ["canonical", "authored"] as const) test(`${source} distrib
     const rejected = await page.request.post("/api/dev/authoring-structural/distribution");
     expect(rejected.status()).toBe(405);
   }
+});
+
+test("authored distribution preserves phone reduced-motion truth and direct URL reload", async ({ page }, info) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await page.goto(referenceRoute.replace("kpMotion=full", "kpMotion=reduced") + "&kpAuthoringStructural=distribution");
+  const stage = page.locator("[data-kp-reader-equation-stage]");
+  let originalFrame: string | null = null;
+  for (const reload of [false, true]) {
+    if (reload) await page.reload();
+    await expect(page.locator("body")).toHaveAttribute("data-kp-reader-hydrated", "true");
+    await expect(page.locator("body")).toHaveAttribute("data-kp-reader-motion-mode", "essential");
+    await expect(page.locator("body")).toHaveAttribute("data-kp-authoring-structural-source", "distribution");
+    await expect(stage).toHaveAttribute("data-kp-reader-canonical-equation-session-active", "true");
+    await expect(stage.locator("[data-kp-reader-accessible-equation-state][aria-current='step'][role='math'][aria-label]")).toHaveCount(1);
+    await expect(page.locator("[data-kp-reader-equation-material-layer]")).toHaveAttribute("aria-hidden", "true");
+    await expect(page.locator("[data-kp-reader-equation-material-layer]")).toHaveAttribute("inert", "");
+    const frame = await page.locator("body").getAttribute("data-kp-reader-review-frame");
+    if (!reload) originalFrame = frame;
+    else expect(frame).toBe(originalFrame);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  }
+  await stage.screenshot({ path: info.outputPath("authored-distribution-phone-reduced.png") });
+  expect(errors).toEqual([]);
 });
 
 async function paintEvidence(page: Page) {

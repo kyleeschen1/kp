@@ -186,14 +186,17 @@ successor proposal is
 the user subsequently approved its exact execution scope. The active contract is
 `run-contract.kp.structural-authoring-canonical-tax-v2`. Review gates remain
 mandatory. The user explicitly accepted G0 of the existing market preview;
-the successor has since stopped at a reproduced native presentation authority
-gap. The canonical fraction's multipart fan-out is not supported by the
-definition-pinned single-transfer presenter. Review
+the successor reproduced and then repaired a native presentation authority
+gap through explicit bounded fraction bundles, without relaxing the
+single-transfer presenter. Review
 `reviews/2026-09-05-structural-authoring-native-boundary-stop.md` for the evidence.
 On 2026-09-06 the user approved its bounded repair and preapproved future
 non-visual checkpoints; see
 `decisions/2026-09-06-nonvisual-preapproval-and-structural-repair.md`.
-Resume toward G1. Human visual gates, required verification and safety
+The authored distribution now reaches the canonical native reader in a dev-only
+opt-in preview; G1 visual review is pending. See
+`reviews/2026-09-06-structural-authoring-g1-distribution-checkpoint.md`.
+Human visual gates, required verification and safety
 constraints remain; G2 is still required before canonical migration. The
 accepted ordering is unchanged.
 

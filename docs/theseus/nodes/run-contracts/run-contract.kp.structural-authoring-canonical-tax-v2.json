@@ -2,9 +2,9 @@
   "id": "run-contract.kp.structural-authoring-canonical-tax-v2",
   "kind": "run-contract",
   "title": "Structural authoring proof and canonical tax adoption",
-  "status": "ready",
+  "status": "blocked",
   "domain": "kp",
-  "summary": "2026-09-06 user approved native-boundary amendment and resume. Existing s10-s11 may repair grouped multipart distribution and allowed preview delivery. Non-visual checkpoints preapproved going forward; G1/G2/G3 visual gates, verification and safety remain mandatory.",
+  "summary": "HUMAN_CHECKPOINT: G1 distribution visual review required before s13; routine non-visual approvals are preapproved.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -188,7 +188,8 @@
     {
       "id": "s12",
       "title": "Distribution checkpoint: capture source/transit/target, seek/reverse, reduced-motion and preserved reference comparison",
-      "status": "planned"
+      "summary": "G1 evidence complete; human visual acceptance pending. No second caller or migration started.",
+      "status": "complete"
     },
     {
       "id": "s13",

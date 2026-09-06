@@ -2,9 +2,9 @@
   "id": "next-action.kp.structural-authoring-canonical-tax",
   "kind": "next-action",
   "title": "Structural authoring proof and canonical supply-tax adoption",
-  "status": "ready",
+  "status": "blocked",
   "domain": "kp",
-  "summary": "User approved bounded multipart distribution authority and dependency-safe preview repair; resume existing 28-slice plan. Future non-visual checkpoints preapproved; visual gates and safety checks retained.",
+  "summary": "HUMAN_CHECKPOINT: review G1 authored distribution in canonical host. Await visual approval before simplification.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -25,6 +25,10 @@
     {
       "kind": "file",
       "path": "docs/project/decisions/2026-09-06-nonvisual-preapproval-and-structural-repair.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-06-structural-authoring-g1-distribution-checkpoint.md"
     }
   ],
   "dependsOn": {
@@ -140,6 +144,13 @@
       "scope": "s11",
       "checkedAt": "2026-09-06T15:31:47.461Z",
       "notes": "23 structural, 68 integration and 3 Chromium checks pass. Actual authored canonical session matches measured paint and raster at bounded checkpoints with exclusive ownership and exact shared-boundary settlement. No author-state browser imports; GET-only endpoint rejects POST. Types/architecture pass; generated reachability refreshed without budget changes."
+    },
+    {
+      "command": "npm run visual:authoring-structural; npm run test:authoring-structural; npm run typecheck; git diff --check",
+      "status": "passed",
+      "scope": "s12",
+      "checkedAt": "2026-09-06T15:37:56.549Z",
+      "notes": "Four Chromium checks and 23 focused tests pass. Exact endpoint, reverse, phone reduced motion, reload, accessible truth and bounded canonical paint parity. Human G1 pending."
     }
   ],
   "progress": {
