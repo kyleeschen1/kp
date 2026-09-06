@@ -1,10 +1,11 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: authoring-first integration; local-file preview workflow approved
+Status: authoring integration at mandatory human authoring/API and visual checkpoint
 Last Updated: 2026-09-05
-Current Next Action: implement the approved local-file save/build/preview amendment
-in `../reviews/2026-09-05-authoring-integration-save-boundary-stop.md` within
-the existing `run-contract.kp.authoring-integration-market-preview-v1`.
+Current Next Action: review the completed source workflow and market specimen in
+`../reviews/2026-09-05-authoring-integration-market-preview-closeout.md` and
+`../reviews/2026-09-05-authoring-market-author-review.md` before proposing a
+separate structural-equation pressure contract.
 Theseus owns current slice, verification, commits, and stop state.
 
 ## Current Accepted Direction
@@ -25,12 +26,20 @@ last valid preview without adding browser code evaluation or HTTP write targets;
 the user approved this bounded workflow on 2026-09-05 without changing the
 accepted direction or authorizing new HTTP write targets.
 
-Repair the reproduced greater-than-two-member independence gap first. Then
-reduce low-level assembly plumbing, connect typed math/optics to the existing
-aggregate recovery authority, and prove one isolated supply-tax author-to-
-preview path. Preserve canonical economics, verified operations, compiler,
-clock, SVG, KaTeX, Article, and attention ownership. Generic state updates do
-not grant mathematical or animation authority.
+The reproduced greater-than-two-member independence gap is now rejected before
+application. Internal assembly reduces charged orchestration by 59.6%; the
+bounded math/optics bridge retains existing aggregate recovery authority.
+One isolated supply-tax author-to-preview path now preserves canonical economics,
+verified operations, compiler, clock, SVG, KaTeX, Article and attention ownership.
+Generic state updates do not grant mathematical or animation authority.
+The named variant explains demand through explicit settled history and retains
+tax motion; demand animation remains a typed gap.
+
+The review branch `feature/20260905-authoring-integration-market-preview` is
+intentionally retained at this human checkpoint. The final release gate passes
+6,555 tests, build/typecheck and scoped authoring/canonical browser checks;
+exact proof, costs and limitations are linked from the closeout, not duplicated
+as a per-slice queue here.
 
 The run stops for authoring/API and visual review. Structural equation
 pressure follows under a separate contract before public API promotion or
@@ -40,8 +49,8 @@ External reader discovery does not gate these architecture milestones.
 
 Loops 1–4 remain completed internal evidence. Historical successor estimates
 below are provenance, superseded by the current decision. The Loop 4
-independence claim is qualified by the reproduced counterexample; the
-implementation is not repaired merely by recording this direction.
+independence claim is qualified by the reproduced counterexample and the executed
+two-member bound; no arbitrary-cohort inference architecture was introduced.
 
 ## Goal
 

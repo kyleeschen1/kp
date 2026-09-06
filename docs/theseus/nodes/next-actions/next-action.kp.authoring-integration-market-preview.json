@@ -2,9 +2,9 @@
   "id": "next-action.kp.authoring-integration-market-preview",
   "kind": "next-action",
   "title": "Integrate authoring through one market preview",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "User approved local-file save/build/preview amendment on 2026-09-05. Resume s21 without HTTP write expansion or editor replacement, then unchanged s22-s28.",
+  "summary": "HUMAN_CHECKPOINT: approved28-slice integration complete.6555 tests,build and scoped browser gates pass. Human authoring/API and visual review precedes separately approved structural equation pressure.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -21,6 +21,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-05-authoring-market-author-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-05-authoring-integration-market-preview-closeout.md"
     }
   ],
   "dependsOn": {
@@ -302,11 +306,18 @@
       "scope": "s27",
       "checkedAt": "2026-09-06T01:10:23.225Z",
       "notes": "6555 tests,zero failures,605389ms; full build/types; inference111257/192271;10 canonical Chromium checks;68 reachability roots current. Initial native timing failures repaired in test harness only."
+    },
+    {
+      "command": "theseus workspace validate; git diff --check; npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s28",
+      "checkedAt": "2026-09-06T01:15:41.293Z",
+      "notes": "Evidence/source audit and project-memory links complete. Full release proof remains s27; no implementation beyond checkpoint authorized."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "s27 broad gates pass; only s28 evidence audit and mandatory human checkpoint remain."
+    "state": "complete",
+    "summary": "HUMAN_CHECKPOINT: all28 approved slices complete with release evidence. Review authoring/API and visuals before structural-equation proposal or promotion."
   },
   "expectedLearning": [
     "Whether internal assembly and a bounded math bridge make one exact market explanation authorable without duplicate semantics or renderer authority."

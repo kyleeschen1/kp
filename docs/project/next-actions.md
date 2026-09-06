@@ -9,16 +9,15 @@ with source refs, verification, run-contract slices, and completion evidence.
 
 The authoring-first integration direction is accepted in
 `decisions/2026-09-05-authoring-integration-priority-and-sequence.md`.
-Loops 1–4 remain completed evidence; the exact next run is approved:
+Loops 1–4 and the bounded integration remain internal evidence. The current
+decision gate is review, not another automatically authorized run:
 
-1. Execute the approved contract sourced from
-   `reviews/2026-09-05-authoring-integration-market-preview-long-loop-proposal.md`.
-   Its 28 slices repair bounded independence, reduce assembly plumbing, bridge
-   typed math/state, and prove one isolated supply-tax author-to-preview path.
-2. Continue `run-contract.kp.authoring-integration-market-preview-v1` with verified
-   per-slice commits. Stop at the mandatory architecture/API checkpoint and
-   integrated authoring/visual review; stop earlier if new subjective visual
-   choices arise.
+1. Review the completed source workflow, exact parameter variation, costs and
+   limitations in `reviews/2026-09-05-authoring-integration-market-preview-closeout.md`
+   and `reviews/2026-09-05-authoring-market-author-review.md`.
+2. Resolve the mandatory authoring/API and visual checkpoint for
+   `run-contract.kp.authoring-integration-market-preview-v1`. Demand is explicitly
+   settled history, not new motion. No public facade or migration is promoted.
 3. After that review, propose structural distribution/simplification pressure
    through existing native equation authority. Require this second structural
    proof before public promotion or family-sized compatibility migration.
@@ -29,7 +28,8 @@ Loops 1–4 remain completed evidence; the exact next run is approved:
 The approved persistent semantic state foundation, typed facade and derived
 graph, state-family/interpolation loop, and aggregate logical timeline are
 complete internal evidence, with the greater-than-two-member independence
-claim qualified by a reproduced counterexample pending repair. None of them
+claim qualified by a reproduced counterexample and the implemented two-member
+bound. None of them
 by itself authorizes a public facade, renderer migration, or catalogue rollout.
 
 Outside that accepted integration sequence, these remain preserved or parked:

@@ -2,9 +2,9 @@
   "id": "run-contract.kp.authoring-integration-market-preview-v1",
   "kind": "run-contract",
   "title": "Authoring integration to market preview",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "User approved s21 local-file save/build/preview adapter on 2026-09-05; trusted local source, existing build tooling, revision diagnostics, stale-result rejection and last-valid preview. Remaining scope and gates unchanged.",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -283,7 +283,8 @@
     {
       "id": "s28",
       "title": "Closeout with exact authored example, ownership map, measurements, gaps and review questions; stop before generalization",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: exact source workflow,ownership map,59.6 percent cost reduction,release proof,gaps and review questions recorded. No generalization or new run authorized.",
+      "status": "complete"
     }
   ]
 }

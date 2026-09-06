@@ -65,8 +65,9 @@ then aggregate composition and exact logical addresses. The 26-slice Loop 4
 closeout remains preserved under
 `run-contract.kp.aggregate-composition-logical-timeline-v1`. Review found that
 checking authored and reversed order is insufficient for independent cohorts
-larger than two. Repair that bounded correctness gap before integration;
-neither the closeout nor this direction certifies arbitrary confluence.
+larger than two. The authoring-integration run now rejects those cohorts before
+application. Retained pair evidence is pinned-base value confluence, not
+arbitrary read independence or general cohort certification.
 
 The accepted sequence now puts internal authoring assembly and a bounded
 typed-math/optics/state bridge before the isolated production-shaped
@@ -77,16 +78,20 @@ is `run-contract.kp.authoring-integration-market-preview-v1`. See
 `decisions/2026-09-05-authoring-integration-priority-and-sequence.md` and
 `reviews/2026-09-05-authoring-integration-market-preview-long-loop-proposal.md`.
 
-The approved economics operation/lifecycle prerequisite is now implemented;
-the isolated preview connects exact state, existing paint/clock owners, Article,
-and explicit fact bindings. The next architectural decision is source ownership
-at local edit/save/rebuild: existing in-app save authority covers two Markdown
-lessons, not this typed model/source specimen. The recommended bounded path is
-local-file authoring through the existing development build, with last-valid
-preview retention and no new HTTP write authority. The user approved this bounded
-amendment on 2026-09-05. See
+The approved economics operation/lifecycle and local-file preview prerequisites
+are implemented. The isolated preview connects exact state, existing paint/clock
+owners, Article and explicit fact bindings; trusted local saves rebuild a
+revision-tagged preview while invalid drafts retain the last valid mount.
+Existing in-app save authority remains unchanged, with no new HTTP write target.
+The user approved that bounded amendment on 2026-09-05. See
 `reviews/2026-09-05-authoring-integration-save-boundary-stop.md` and
 `decisions/2026-09-05-authoring-local-file-preview-lifecycle.md`.
+The run has reached its mandatory authoring/API and visual checkpoint. Review
+the source workflow, measured costs and named demand-14/tax-2 specimen in
+`reviews/2026-09-05-authoring-integration-market-preview-closeout.md` and
+`reviews/2026-09-05-authoring-market-author-review.md` before proposing structural
+equation pressure. Demand remains explicit settled history; only tax is animated.
+No public facade, publication workflow or cross-family migration is promoted.
 The accepted authoring-first direction is unchanged. Theseus retains live state.
 
 The Focus Deck remains preserved at its four-card human checkpoint. The
