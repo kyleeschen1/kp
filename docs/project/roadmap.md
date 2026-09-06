@@ -164,17 +164,29 @@ The accepted authoring-first outcome sequence is:
    clock, SVG, KaTeX, Article, and attention owners; stop for human review.
 5. Pressure the seam with reviewed distribution and carrier-preserving
    simplification before public promotion or compatibility migration.
-6. Complete everyday authoring, diagnostics, last-valid previews, source
+6. Migrate the canonical supply-tax page to framework-derived source after
+   structural review, retiring its superseded live wiring while preserving
+   URL, rendering, interaction, and ordinary build delivery.
+7. Complete everyday authoring, diagnostics, last-valid previews, source
    navigation, and versioned static publication from coherent source.
-7. Add bounded referable knowledge, evidence-bearing claims, formula schemas,
+8. Add bounded referable knowledge, evidence-bearing claims, formula schemas,
    and nested procedures without a universal ontology or CAS.
-8. Converge TypeScript, bounded LaTeX, and model-authored inputs; pressure
+9. Converge TypeScript, bounded LaTeX, and model-authored inputs; pressure
    existing code and Graph3D frontends one domain at a time.
-9. Promote only demonstrated public tiers and retire old authority beside
+10. Promote only demonstrated public tiers and retire old authority beside
    each migrated caller. Proved tiers may advance after the second structural
    caller without waiting for all later knowledge/domain breadth.
 
-Direction and the exact next run are accepted; implementation is scoped by
+The user accepted explicit canonical adoption immediately after structural
+pressure on 2026-09-05. See
+`decisions/2026-09-05-canonical-supply-tax-migration-order.md`. The 28-slice
+successor proposal is
+`reviews/2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md`;
+the user subsequently approved its exact execution scope. The active contract is
+`run-contract.kp.structural-authoring-canonical-tax-v1`. Review gates remain
+mandatory, beginning with explicit G0 review of the existing market preview.
+
+The preceding direction and completed integration run were accepted and scoped by
 `run-contract.kp.authoring-integration-market-preview-v1` and
 `reviews/2026-09-05-authoring-integration-market-preview-long-loop-proposal.md`.
 Its 28 slices cover correctness, assembly, the bounded math bridge, and one

@@ -1,0 +1,246 @@
+{
+  "id": "run-contract.kp.structural-authoring-canonical-tax-v1",
+  "kind": "run-contract",
+  "title": "Structural authoring proof and canonical tax adoption",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.structural-authoring-canonical-tax.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md",
+      "summary": "Exact 28-slice proposal approved by user. Approval does not waive G0 after s01, G1 after s12, G2 after s18 or G3 after s28. Proposal owns canonical sources, tiers, checks, preservation and rollback."
+    }
+  ],
+  "verification": [
+    "npm run test:authoring-integration",
+    "npm run visual:authoring-market",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run check:dependency-direction",
+    "npm run check:inference",
+    "npm run check:equation-reachability",
+    "npm run test:carrier-preserving-simplification",
+    "npm run visual:carrier-preserving-simplification",
+    "npm run test:browser:economics-supply-tax",
+    "npm test",
+    "npm run build",
+    "theseus workspace validate",
+    "git diff --check"
+  ],
+  "allowedWork": [
+    "s01 | Risk: Medium: mistaking order acceptance for visual approval | Verification: B + H: authoring 68-test baseline, visual:authoring-market, source/prose review | Commit: Market checkpoint evidence",
+    "s02 | Risk: Medium: wrong canonical path | Verification: F: source-map assertions, existing canonical tests, phase-by-phase baseline | Commit: Reference and preservation manifest",
+    "s03 | Risk: Medium: testing a parallel path | Verification: S: harness smoke and actual session instrumentation | Commit: Scoped committed test entrypoints",
+    "s04 | Risk: High: duplicate AST authority | Verification: S: round-trip, immutable identity and callable/data tests | Commit: Bounded state adapter",
+    "s05 | Risk: Medium: selector becoming identity | Verification: S: historical recovery, stale selection and exact entity tests | Commit: Structural selection binding",
+    "s06 | Risk: High: update granting proof | Verification: S: rejected forged/mismatched authority, operation parity | Commit: Distribution authority adapter",
+    "s07 | Risk: High: partial publication | Verification: B: abort, determinism, immutable predecessor and aggregate tests | Commit: Distribution transaction integration",
+    "s08 | Risk: Medium: stale computed values | Verification: S: invalidation, direct historical query, cache/history bounds | Commit: Structural query coverage",
+    "s09 | Risk: Medium: second timeline | Verification: S: settled/transition address and reference identity tests | Commit: Distribution explanation binding",
+    "s10 | Risk: High: accidental new presentation semantics | Verification: B: lifecycle completeness, exact source/target, legality and dependency checks | Commit: Governed distribution projection",
+    "s11 | Risk: High: paint ownership regression | Verification: B: structural runtime canary, realized continuity, exclusive ownership, native endpoints | Commit: Reversible distribution runtime adapter",
+    "s12 | Risk: High: machine proof mistaken for visual approval | Verification: B + H: visual:authoring-structural and human phase review | Commit: Distribution checkpoint evidence",
+    "s13 | Risk: High: wrong carrier lineage | Verification: S: retained/removed entities, legality and typed-gap tests | Commit: Simplification authority binding",
+    "s14 | Risk: High: false genericity | Verification: B: structural suite plus carrier-preserving suite; no first-caller special cases | Commit: Simplification assembly integration",
+    "s15 | Risk: High: ownership/topology mismatch | Verification: B: integrated runtime continuity and existing simplification browser checks | Commit: Simplification runtime adapter",
+    "s16 | Risk: Medium: state leakage | Verification: B: bounded runtime corpus, history/cache counts, source revision isolation | Commit: Cross-caller preservation tests",
+    "s17 | Risk: Medium: hiding complexity | Verification: S: consumer fixtures, negative types, unchanged inference/closure gates, charged cost inventory | Commit: Two-caller API/cost evidence",
+    "s18 | Risk: High: premature promotion | Verification: B + H: npm test, build, reachability, integrated supported-browser representative cohort | Commit: Structural closeout evidence",
+    "s19 | Risk: Medium: deleting shared owners | Verification: S: consumer inventory, canonical economics tests and parity manifest | Commit: Migration preservation manifest",
+    "s20 | Risk: High: dev service in reader | Verification: B: ordinary build, import closure, no SSR author-module execution or preview endpoint dependency in reader | Commit: Build-safe source preparation",
+    "s21 | Risk: Medium: semantic or narrative drift | Verification: S: exact economics/claims, beat order, shared revision and accessibility text tests | Commit: Canonical instruction preparation",
+    "s22 | Risk: High: hidden second sampler | Verification: B: canonical scoped browser checks, deterministic sample and source ownership tests | Commit: Cutover parity harness",
+    "s23 | Risk: High: route regression | Verification: B: canonical browser checks, authoring integration, build/import closure and single-path assertions | Commit: Route switch plus adjacent wiring retirement",
+    "s24 | Risk: High: shared host regressions | Verification: B: canonical browser suite and scoped Focus Deck preservation checks | Commit: Canonical lifecycle evidence/repairs",
+    "s25 | Risk: High: development-only success | Verification: B: built-site runtime check, no preview requests, exact facts and accessibility smoke | Commit: Build-delivery runtime evidence",
+    "s26 | Risk: Medium: diverging copies | Verification: B: visual:authoring-market, save/error/repair, revision isolation and canonical baseline | Commit: Shared-source convergence evidence",
+    "s27 | Risk: High: incomplete certification | Verification: B: npm test, build, reachability, scoped economics/structural/browser checks, Theseus validation | Commit: Release verification evidence",
+    "s28 | Risk: Medium: overstated completion | Verification: H + F: human canonical-page parity review, docs consistency and Theseus validation | Commit: Migration closeout and review evidence",
+    "Only exact approved proposal scope; 28 slices maximum; one verified slice and evidence per commit.",
+    "Use existing domain/state/compiler/clock/native paint authorities; maintain previous review branch and user changes.",
+    "Brief tracked context per slice; working only for named missing authority; no parallel agents.",
+    "F focused laws; S adds repository typecheck; B adds affected architecture closure integration and runtime checks; full test and build at s18 and s27.",
+    "Exemplar gates are mandatory. Stop after s01 until explicit market authoring/API/visual approval; after s12 before second caller; after s18 before migration; after s28 before merge or generalization."
+  ],
+  "disallowedWork": [
+    "s01 STOP: G0 approval absent",
+    "s02 STOP: Canonical source/host or reviewed treatment cannot be established",
+    "s03 STOP: Harness cannot reach the real compositor",
+    "s04 STOP: Requires a universal AST or second store",
+    "s05 STOP: Selection requires renderer nodes",
+    "s06 STOP: New rewrite mathematics is required",
+    "s07 STOP: General cardinality safety must be disabled",
+    "s08 STOP: Replay or mutable global current state is needed",
+    "s09 STOP: New clock or arbitrary branch editor is needed",
+    "s10 STOP: Missing canonical operation/motif support",
+    "s11 STOP: Requires glyph offsets, duplicate paint, or new choreography",
+    "s12 STOP: G1 approval absent",
+    "s13 STOP: Different mathematical or visual operation required",
+    "s14 STOP: Needs another state engine or broad abstraction",
+    "s15 STOP: Existing reviewed mechanism cannot express operation",
+    "s16 STOP: Tests only exercise legacy rather than integrated paths",
+    "s17 STOP: Public hierarchy or budget increase is needed",
+    "s18 STOP: G2 approval absent or required release evidence missing",
+    "s19 STOP: Unrelated callers depend on proposed retirement",
+    "s20 STOP: Requires new publication platform or untrusted execution",
+    "s21 STOP: New prose/choreography decision is necessary",
+    "s22 STOP: Source-driven host cannot preserve existing behavior",
+    "s23 STOP: Another live caller still needs removed wiring; no blanket domain deletion",
+    "s24 STOP: Repair changes reader clock or approved interaction design",
+    "s25 STOP: Normal build cannot deliver the page within existing infrastructure",
+    "s26 STOP: Preview lifecycle leaks into normal reader delivery",
+    "s27 STOP: Any mandatory gate unavailable or failing",
+    "s28 STOP: G3 approval absent; no merge/generalization",
+    "STOP X: unsafe or absent authority, unrepairable required checks, dirty-worktree collision, changed review assumptions, unsupported paint mechanisms, budget increase or scope expansion.",
+    "No universal AST/store/CAS/registry, new clock/renderer, new choreography, animated demand, untrusted execution, HTTP writes, public API breadth, publication platform, new domains or external deployment.",
+    "No merge or branch deletion. Canonical switch and obsolete default wiring retire together, preserving shared economics and unmigrated consumers."
+  ],
+  "goal": "Execute the exact approved 28 slices: review market; prove distribution and carrier-preserving simplification; migrate canonical supply-tax source; preserve G0 G1 G2 G3 human gates.",
+  "target": "next-action.kp.structural-authoring-canonical-tax",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Current market checkpoint: reproduce the author edit/error/repair and settled-demand workflow; record explicit review disposition",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Structural references: pin exact distribution and simplification sources, canonical hosts, lifecycle mechanisms and preservation manifest",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Structural test seam: add stable focused and runtime commands with one reusable browser harness",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Equation state value: adapt existing immutable semantic structure into aggregate storage without erasing IDs or evidence",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Structural selection: pin existing expression selections and reject stale/foreign versions",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Operation receipt: connect registered distribution legality to explicit before/after and lifecycle evidence",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Atomic structural commit: publish the supported distribution successor through existing transactions",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Derived/history integration: ensure derived results and pinned reads follow structural version changes",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Explanation assembly: compose the bounded distribution step with logical addresses and semantic references",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Governed projection: lower the authored distribution into existing operation-specific animation authority",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Native runtime integration: execute that projection through the real canonical source-native/material/target-native path",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Distribution checkpoint: capture source/transit/target, seek/reverse, reduced-motion and preserved reference comparison",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Simplification authority: map the reviewed carrier-preserving operation into the same structural receipt boundary",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Second structural caller: compose simplification state, selection, transaction and historical query using the proved seam",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Second native caller: execute simplification through its existing canonical paint owner and shared integration",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Cross-caller pressure: test direct seek, reverse, interruption, disposal, recovery and typed failures across both callers",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Authoring cost and API review: compare both callers, retain only demonstrated shared helpers, measure import/type costs",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Structural release and checkpoint: run broad gates and present two-caller evidence for migration readiness",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Canonical migration inventory: audit route consumers, default source wiring, baseline labels/URL/interaction and sibling preservation",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Build-delivery boundary: factor the minimum framework-derived source preparation for ordinary page builds",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Instructional parity: prepare bound prose, facts and score for the canonical reference revision",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Cutover contract tests: exercise original URL behavior against the prepared source and verify single evaluator ownership",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Canonical cutover: inject framework source at existing URL and retire its superseded default wiring in the same rollback unit",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Navigation and lifecycle: pressure canonical deep links, reverse, resize, interruption, disposal and sibling cards",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Build-served delivery: verify canonical page works without the authoring dev plugin and preserves static/reduced-motion content",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Authoring-preview convergence: ensure local preview and canonical page consume the same source preparation with separate delivery lifecycles",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "Migration release: run full repository gates, supported-browser representative cohort and unchanged budgets",
+      "status": "planned"
+    },
+    {
+      "id": "s28",
+      "title": "Canonical adoption checkpoint: document retired wiring, preserved contracts, source workflow, costs and remaining publication work",
+      "status": "planned"
+    }
+  ]
+}

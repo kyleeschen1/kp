@@ -1,0 +1,13 @@
+{
+  "id": "next-action.kp.structural-authoring-canonical-tax",
+  "kind": "next-action",
+  "title": "Structural authoring proof and canonical supply-tax adoption",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md"
+    }
+  ]
+}

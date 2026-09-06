@@ -1,11 +1,13 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: authoring integration at mandatory human authoring/API and visual checkpoint
+Status: structural proof and canonical migration contract approved; G0 market review pending
 Last Updated: 2026-09-05
-Current Next Action: review the completed source workflow and market specimen in
+Current Next Action: execute the approved structural-proof/canonical-adoption loop in
+`../reviews/2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md`.
+The completed source workflow and market specimen still require review in
 `../reviews/2026-09-05-authoring-integration-market-preview-closeout.md` and
 `../reviews/2026-09-05-authoring-market-author-review.md` before proposing a
-separate structural-equation pressure contract.
+structural-equation implementation. Order acceptance does not waive visual review.
 Theseus owns current slice, verification, commits, and stop state.
 
 ## Current Accepted Direction
@@ -13,10 +15,21 @@ Theseus owns current slice, verification, commits, and stop state.
 The user accepted architecture progress through the authoring experience on
 2026-09-05. Canonical direction and full milestone rationale:
 `../decisions/2026-09-05-authoring-integration-priority-and-sequence.md`.
-The sole next-run proposal is
+The completed integration proposal is
 `../reviews/2026-09-05-authoring-integration-market-preview-long-loop-proposal.md`.
 The user approved its exact 28-slice scope on 2026-09-05. Its live execution
 record is Theseus; this thread does not duplicate per-slice status.
+
+The user subsequently accepted canonical supply-tax migration immediately
+after structural equation proof and before broader authoring/publication or
+knowledge work. See
+`../decisions/2026-09-05-canonical-supply-tax-migration-order.md`.
+The user approved the exact successor proposal linked above; execution is owned
+by `run-contract.kp.structural-authoring-canonical-tax-v1`.
+It preserves the prior market checkpoint, adds structural
+review gates, and makes canonical route adoption plus adjacent obsolete-wiring
+retirement explicit. The existing supply-tax page still uses its original
+default source today; only the opt-in authoring-market page uses the new path.
 
 The approved economics prerequisite is implemented. Exact state now reaches the
 existing paint, clock, Article/scene, and explicit fact-binding owners in the

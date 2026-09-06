@@ -30,6 +30,14 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-05-authoring-integration-market-preview-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-05-canonical-supply-tax-migration-order.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md"
     }
   ],
   "decisions": [],
@@ -670,7 +678,7 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "Authoring-first integration direction accepted on 2026-09-05. Next: approve the exact 28-slice authoring-integration-market-preview proposal. No active run or implementation authorization. Current decision supersedes historical Focus Deck-only successor sequencing; Loops 1-4 remain completed evidence with independence qualification."
+    "summary": "Previous authoring integration completed 28 slices at HUMAN_CHECKPOINT. User accepted review then structural equation proof then canonical supply-tax migration before broader authoring, publication and knowledge work. New 28-slice structural-authoring-canonical-tax proposal awaits exact execution approval; no active successor contract and no visual checkpoint waiver. Current source decision supersedes older successor ordering."
   },
   "allowedWork": [
     "The semantic reader matches the accepted x + 3 = 7 animation card at named forward and reverse frames without typography changes, collisions, or discontinuities.",
