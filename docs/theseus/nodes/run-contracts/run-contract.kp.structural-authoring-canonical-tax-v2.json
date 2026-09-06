@@ -136,7 +136,8 @@
     {
       "id": "s04",
       "title": "Equation state value: adapt existing immutable semantic structure into aggregate storage without erasing IDs or evidence",
-      "status": "planned"
+      "summary": "Bounded distribution model stores existing structured equation values;6 tests,full types and unchanged inference pass. No math optics safety changes.",
+      "status": "complete"
     },
     {
       "id": "s05",

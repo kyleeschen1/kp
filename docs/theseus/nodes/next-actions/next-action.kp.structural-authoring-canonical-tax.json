@@ -54,6 +54,13 @@
       "scope": "s03",
       "checkedAt": "2026-09-06T03:22:53.741Z",
       "notes": "3 focused checks, 1 real canonical-session Chromium canary, full typecheck pass. Stable commands now committed; baseline is explicitly reference-only pending aggregate adapter."
+    },
+    {
+      "command": "npm run test:authoring-structural; npm run typecheck; npm run check:inference",
+      "status": "passed",
+      "scope": "s04",
+      "checkedAt": "2026-09-06T03:25:38.803Z",
+      "notes": "Test-first missing module observed before implementation; now 6 tests pass. Existing structured trees and immutable state IDs retained, JSON data round-trip and callable rejection pass. Full types pass; inference111257/192271 unchanged."
     }
   ],
   "progress": {
