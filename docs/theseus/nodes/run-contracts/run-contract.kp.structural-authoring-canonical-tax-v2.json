@@ -148,7 +148,8 @@
     {
       "id": "s06",
       "title": "Operation receipt: connect registered distribution legality to explicit before/after and lifecycle evidence",
-      "status": "planned"
+      "summary": "Operation receipt, exact pack/source checks and canonical lifecycle bound;11 tests and full types pass. Authority remains distinct from state updates.",
+      "status": "complete"
     },
     {
       "id": "s07",
