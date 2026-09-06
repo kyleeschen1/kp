@@ -35,6 +35,37 @@ const compilerPath = join(
   "node_modules/typescript/bin/tsc"
 );
 
+if (process.argv.includes("--implementation")) {
+  const ts = await import("typescript");
+  const configPath = join(projectRoot, "tsconfig.inference.json");
+  const config = ts.readConfigFile(configPath, ts.sys.readFile);
+  if (config.error) throw new Error(ts.flattenDiagnosticMessageText(config.error.messageText, "\n"));
+  const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, projectRoot);
+  const program = ts.createProgram(parsed.fileNames, parsed.options);
+  const diagnostics = [...parsed.errors, ...program.getOptionsDiagnostics(),
+    ...program.getGlobalDiagnostics(), ...program.getSyntacticDiagnostics()];
+  const samples = [];
+  // These are first-check costs in compiler source order, not additive isolated
+  // import costs: an earlier file may instantiate types owned by a later one.
+  for (const file of program.getSourceFiles()) {
+    const types = program.getTypeCount();
+    const instantiations = program.getInstantiationCount();
+    diagnostics.push(...program.getSemanticDiagnostics(file));
+    samples.push({ file: file.fileName.replace(`${projectRoot}/`, ""),
+      types: program.getTypeCount() - types,
+      instantiations: program.getInstantiationCount() - instantiations });
+  }
+  if (diagnostics.length) throw new Error(ts.formatDiagnosticsWithColorAndContext(diagnostics, {
+    getCanonicalFileName: path => path, getCurrentDirectory: () => projectRoot,
+    getNewLine: () => "\n"
+  }));
+  console.log(JSON.stringify({ measuredProject: "tsconfig.inference.json",
+    types: program.getTypeCount(), instantiations: program.getInstantiationCount(),
+    files: samples.length,
+    largestFirstCheckCosts: samples.sort((a, b) => b.instantiations - a.instantiations).slice(0,30) }, null, 2));
+  process.exit(0);
+}
+
 await mkdir(scratchRoot, { recursive: true });
 
 const emptyFixture = join(scratchRoot, "empty.ts");

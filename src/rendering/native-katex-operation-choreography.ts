@@ -113,6 +113,8 @@ function applySemanticRoleTransfer(
   ));
   let matchedTransfer = false;
   let matchedContext = false;
+  // Freeze against the existing track contract at each return. Otherwise each
+  // spread creates another large lifecycle-union expansion for downstream maps.
   const tracks = input.tracks.map((track) => {
     const sourceEntityId = track.sourceAtomId === undefined
       ? undefined
@@ -126,7 +128,7 @@ function applySemanticRoleTransfer(
       targetEntityId === transferTargetId
     ) {
       matchedTransfer = true;
-      return Object.freeze({
+      return Object.freeze<KpNativeKatexPaintMeasuredSceneTrack>({
         ...track,
         timingGroupId: `${choreography.id}.role-transfer`,
         opacityScheduleAuthority: "semantic-choreography" as const
@@ -228,7 +230,7 @@ function applyHomomorphicFusion(
       const nativePaintRect = forward
         ? track.startPaintRect
         : track.endPaintRect;
-      return Object.freeze({
+      return Object.freeze<KpNativeKatexPaintMeasuredSceneTrack>({
         ...track,
         startRect: Object.freeze({ ...nativeRect }),
         endRect: Object.freeze({ ...nativeRect }),
@@ -261,7 +263,7 @@ function applyHomomorphicFusion(
       const nativePaintRect = forward
         ? track.endPaintRect
         : track.startPaintRect;
-      return Object.freeze({
+      return Object.freeze<KpNativeKatexPaintMeasuredSceneTrack>({
         ...track,
         startRect: Object.freeze({ ...nativeRect }),
         endRect: Object.freeze({ ...nativeRect }),
@@ -295,7 +297,7 @@ function applyHomomorphicFusion(
           variants: [transfer.route],
           clearance: localInkHeight * 0.9
         }).selected;
-        return Object.freeze({
+        return Object.freeze<KpNativeKatexPaintMeasuredSceneTrack>({
           ...track,
           motionPath: path,
           motionPathSampling: "planned-curve" as const,
@@ -336,7 +338,7 @@ function applyHomomorphicFusion(
       const fixedPaintRect = forward
         ? track.startPaintRect
         : track.endPaintRect;
-      return Object.freeze({
+      return Object.freeze<KpNativeKatexPaintMeasuredSceneTrack>({
         ...track,
         startRect: Object.freeze({ ...fixedRect }),
         endRect: Object.freeze({ ...fixedRect }),
@@ -380,7 +382,7 @@ function applyHomomorphicFusion(
           ? collapseToCenteredHairline(nativeRect)
           : nativeRect
       );
-      return Object.freeze({
+      return Object.freeze<KpNativeKatexPaintMeasuredSceneTrack>({
         ...track,
         startRect: Object.freeze({ ...startRect }),
         endRect: Object.freeze({ ...endRect }),
@@ -496,7 +498,7 @@ function applyCanonicalFunctionWrap(
           );
     if (argumentBranch !== undefined && track.lifecycle === "persist") {
       argumentPaintByBranch.add(argumentBranch);
-      return Object.freeze({
+      return Object.freeze<KpNativeKatexPaintMeasuredSceneTrack>({
         ...track,
         timingGroupId: `${choreography.id}.${argumentBranch}.argument`,
         opacityScheduleAuthority: "semantic-choreography" as const,
@@ -562,7 +564,7 @@ function applyCanonicalFunctionWrap(
         }
       });
     }
-    return Object.freeze({
+    return Object.freeze<KpNativeKatexPaintMeasuredSceneTrack>({
       ...track,
       timingGroupId: choreography.id,
       intentionalContactGroupId: wrapperReceptionContactGroupId,
@@ -623,7 +625,7 @@ function applyCausalStructuralIntroduction(
     matched.add(atom.semanticEntityId);
     const collapseRule = atom.paintKind === "rule" &&
       choreography.direction === "forward";
-    return Object.freeze({
+    return Object.freeze<KpNativeKatexPaintMeasuredSceneTrack>({
       ...track,
       timingGroupId: choreography.id,
       opacityScheduleAuthority: "semantic-choreography" as const,
@@ -682,7 +684,7 @@ function applySynchronizedIntroduction(
     matchedEntityIds.add(entityId);
     const sample = (progress: number) =>
       sampleBalancedBranchProgress(choreography, branchId, progress);
-    return Object.freeze({
+    return Object.freeze<KpNativeKatexPaintMeasuredSceneTrack>({
       ...track,
       timingGroupId: choreography.id,
       // The verified together schedule owns entry opacity. Without this
@@ -813,7 +815,7 @@ function applyCounterOrbit(
       sampleCounterOrbitProgress(choreography, progress, "meet");
     const sampleOpacityProgress = (progress: number) =>
       sampleCounterOrbitProgress(choreography, progress, "collapse");
-    return Object.freeze({
+    return Object.freeze<KpNativeKatexPaintMeasuredSceneTrack>({
       ...track,
       ...(choreography.direction === "forward"
         ? {
@@ -1001,7 +1003,7 @@ function applyRoleCompleteCounterOrbit(
             Math.max(originalPaint.width, originalPaint.height) / 2,
           clearance: route.clearance
         }).selected;
-        return Object.freeze({
+        return Object.freeze<KpNativeKatexPaintMeasuredSceneTrack>({
           ...track,
           ...(choreography.direction === "forward"
             ? {
@@ -1035,7 +1037,7 @@ function applyRoleCompleteCounterOrbit(
         // Continuants wait until the retiring cohort has collapsed. This
         // semantic phase boundary prevents survivor reflow from crossing the
         // very material being cancelled, independent of viewport geometry.
-        return Object.freeze({
+        return Object.freeze<KpNativeKatexPaintMeasuredSceneTrack>({
           ...track,
           timingGroupId: `${plan.id}.continuants`,
           verifiedOperationCohortId: operationCohortId,
@@ -1053,7 +1055,7 @@ function applyRoleCompleteCounterOrbit(
       );
       // Catalysts and artifacts retire on the shared collapse clock but never
       // influence orbit direction or borrow an inverse bundle's curved path.
-      return Object.freeze({
+      return Object.freeze<KpNativeKatexPaintMeasuredSceneTrack>({
         ...track,
         ...(choreography.direction === "forward"
           ? {

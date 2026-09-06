@@ -6,18 +6,17 @@ import {
 
 declare const kpSemanticStateDescriptorValue: unique symbol;
 
+// One homomorphic map preserves readonly arrays and tuples as well as objects;
+// a separate array branch repeats recursive compiler work on structural values.
 export type KpSemanticStateDataShape<Value> =
   Value extends (...args: never[]) => unknown
     ? never
     : Value extends KpPersistentSemanticScalar
     ? Value
-    : Value extends readonly unknown[]
-      ? { readonly [Index in keyof Value]:
-          KpSemanticStateDataShape<Value[Index]> }
-      : Value extends object
-        ? { readonly [Key in keyof Value]:
-            KpSemanticStateDataShape<Value[Key]> }
-        : never;
+    : Value extends object
+      ? { readonly [Key in keyof Value]:
+          KpSemanticStateDataShape<Value[Key]> }
+      : never;
 
 export type KpSemanticStateReadonlyValue<Value> =
   KpSemanticStateDataShape<Value>;

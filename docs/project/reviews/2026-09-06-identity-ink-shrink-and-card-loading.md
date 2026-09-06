@@ -1,6 +1,10 @@
 # Identity ink shrink and Focus Card loading
 
-Status: bounded implementation; identity shrink awaits visual review
+Status: user visually approved; existing compiler-cost loop resumed
+
+The user accepted the result ("Excellent!") and explicitly approved continuation.
+This accepts the bounded identity ink-shrink exemplar and shared loading repair,
+not catalogue-wide motion promotion or the still-pending G2 release checkpoint.
 
 The user accepted the previous fraction separation/card-form repair, then
 approved replacing identity-syntax fading with the familiar evaluation ink

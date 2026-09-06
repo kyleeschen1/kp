@@ -4,7 +4,7 @@
   "title": "Structural authoring proof and canonical supply-tax adoption",
   "status": "blocked",
   "domain": "kp",
-  "summary": "G1 accepted and simplification integrated; STOP_CONDITION at s17 inference cost. Recommend bounded cost attribution/repair without raising ceilings before G2 release.",
+  "summary": "Verified compiler-only repair saves 949 types and 5688 instantiations, but mandatory fixed ceilings still fail. Broader implementation/import-boundary review is next; visual follow-ups accepted, G2 remains pending.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -265,11 +265,25 @@
       "scope": "identity-shrink-loading-repair",
       "checkedAt": "2026-09-06T22:50:21.812Z",
       "notes": "30 Chromium/Firefox checks pass, including delayed data, zero unprepared paint, stable card bounds and no-JS content. Eight authored structural and five existing carrier browser checks pass; 29 carrier and 82 compositor tests, full types and architecture pass."
+    },
+    {
+      "command": "npm run test:semantic-state; npm run test:authoring-structural; npm run test:operation-presentation-plans; npm run test:real-katex-glyph-compositor; npm run test:canonical-equation-renderer; npm run visual:authoring-structural; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "s17 bounded compiler-only repair preservation",
+      "checkedAt": "2026-09-06T23:36:35.808Z",
+      "notes": "364,32,192,82,28 unit checks and 8 Chromium checks pass; full types and architecture pass. Separate inference cost gate remains failing."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "s17 unchanged consumer compiler-cost gate",
+      "checkedAt": "2026-09-06T23:36:37.053Z",
+      "notes": "Type correctness passes; 117209 types exceeds 112500 and 199799 instantiations exceeds 195800. Improved from 118158/205487 without fixture or budget changes."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "16 of 28 complete. User-approved motion and shared card repairs committed. Resumed s17 attribution and bounded annotation experiment; inference still fails unchanged ceilings. Retain fixture; profile implementation generics before G2."
+    "summary": "Visual follow-ups approved. Compiler profiling and two verified type-only repairs remove 949 types/5688 instantiations. Mandatory cost gate still fails; s17 incomplete, s18/G2 and migration untouched. Broader implementation/import-boundary work needs scoped review."
   },
   "expectedLearning": [
     "Whether two structural equation callers justify canonical economics adoption without parallel state or presentation authority."

@@ -4,7 +4,7 @@
   "title": "Structural authoring proof and canonical tax adoption",
   "status": "blocked",
   "domain": "kp",
-  "summary": "STOP_CONDITION s17/X: two-caller inference cost exceeds unchanged budgets. 16/28 complete. Keep fixture; no budget increase, release or migration.",
+  "summary": "STOP_CONDITION: mandatory s17 compiler-cost gate still fails after measured internal cleanup. 16/28 complete. No G2 release or canonical migration; review broader compiler/import boundaries without increasing budgets.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -218,7 +218,7 @@
     {
       "id": "s17",
       "title": "Authoring cost and API review: compare both callers, retain only demonstrated shared helpers, measure import/type costs",
-      "summary": "STOP_CONDITION: resumed attribution shows either implementation import exceeds unchanged ceilings. Wrapper annotation experiment did not help and was reverted. Real fixture retained; no G2 release or migration.",
+      "summary": "Bounded type-only repair verified and retained; unchanged inference cost gate still fails at 117209 types/199799 instantiations. Slice remains incomplete; broader boundary review precedes another repair.",
       "status": "planned"
     },
     {

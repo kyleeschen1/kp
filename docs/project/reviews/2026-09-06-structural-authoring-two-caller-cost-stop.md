@@ -3,6 +3,12 @@
 Status: STOP_CONDITION at the two-caller API/cost gate; G2 is not reached
 Contract: `run-contract.kp.structural-authoring-canonical-tax-v2`
 
+Latest disposition: the user approved the fraction/card-form and identity
+ink-shrink/loading follow-ups and resumed the loop. The compiler-only repair
+below reduces real gate cost, but does not yet pass either fixed ceiling.
+Earlier pending visual-review statements are historical; G2 release is still
+pending and canonical migration remains untouched.
+
 ## What is now integrated
 
 The user accepted the coherent fraction Focus Card after `c6aeedb8e`, then
@@ -167,3 +173,63 @@ the two implementation closures, then propose a measured internal boundary
 repair. Do not remove the realistic fixture or use presentation success to
 claim compiler-cost release readiness. Revised fraction departure and the new
 simplification card still require human visual judgment before promotion.
+
+## Compiler profiling and bounded repair after visual approval
+
+`npm run measure:inference-attribution -- --implementation` now checks the real,
+unchanged inference project in compiler source order and reports its largest
+first-check costs. These are diagnostic attribution, not isolated/additive
+module costs or a replacement for `npm run check:inference`.
+
+The original source-order profile assigned only 29 types / 90 instantiations
+to the new consumer fixture itself. Major added implementation costs included
+simplification explanation (1,008 / 3,087), distribution operation (851 / 2,406),
+and distribution model (599 / 2,206). Their imported registry and semantic asset
+implementations also contribute. The existing native choreography dependency
+accounted for 2,481 / 10,003 before the repair.
+
+Two measured, type-only changes are retained:
+
+- One homomorphic persistent-data map replaces identical array/object recursion
+  branches. Additional full-typecheck contracts preserve tuple cardinality,
+  readonly arrays, deep element immutability and callable rejection.
+- Fourteen native choreography returns explicitly freeze against their existing
+  measured-track contract. This avoids repeatedly expanding large lifecycle
+  unions; no values, branches, timing, ownership or exported signature change.
+
+| Real unchanged consumer gate | Types | Instantiations |
+| --- | ---: | ---: |
+| Before repair | 118,158 | 205,487 |
+| Shared data-map cleanup | 117,947 | 204,959 |
+| Plus existing native-track return boundaries | 117,209 | 199,799 |
+| Fixed ceiling | 112,500 | 195,800 |
+
+This removes 949 types and 5,688 instantiations. The remaining overage is
+4,709 types and 3,999 instantiations. A named equation-descriptor annotation
+saved only one type/two instantiations; a tuple-array clone annotation increased
+cost. Both experiments were reverted. The two retained production files emit
+identical JavaScript to `591ac2f17` with TypeScript ES2022/ESNext transpilation
+and comments removed. No fixture, configuration, budget, dependency or authority
+was removed to obtain the savings.
+
+Verification for the retained repair:
+
+- `npm run test:semantic-state`: 364 passed.
+- `npm run test:authoring-structural`: 32 passed.
+- `npm run test:operation-presentation-plans`: 192 passed.
+- `npm run test:real-katex-glyph-compositor`: 82 passed.
+- `npm run test:canonical-equation-renderer`: 28 passed.
+- `npm run visual:authoring-structural`: eight Chromium checks passed, including
+  both real native paths, reverse, exclusive paint ownership and identity shrink.
+- Full typecheck, the expanded test-type project, and architecture checks pass.
+- `npm run check:inference`: correctness passes; both cost ceilings still fail.
+
+Outcome: **STOP_CONDITION** at the mandatory cost gate, not a completed s17.
+The bounded cleanup is useful but insufficient. The next decision is whether
+to broaden compiler-cost work into the heavyweight implementation/import
+boundaries exposed by the profile. That review must retain the real consumer
+fixture and charge all costs; moving tests to a cheaper substitute port is not
+evidence of a cheaper unchanged consumer. No budget increase, public hierarchy,
+G2 release, canonical migration, or global visual promotion is authorized by
+this result. This is an unfinished compiler-cost problem, not evidence that the
+semantic authoring integration or smooth motion is infeasible.

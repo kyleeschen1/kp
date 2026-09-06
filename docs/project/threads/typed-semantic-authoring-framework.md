@@ -2,8 +2,11 @@
 
 Status: G0 and G1 accepted; second caller integrated; compiler-cost gate stopped
 Last Updated: 2026-09-06
-Current Next Action: execute the approved bounded compiler-cost investigation in
+Current Next Action: review broader implementation/import-boundary cost work
+after the measured cleanup in
 `../reviews/2026-09-06-structural-authoring-two-caller-cost-stop.md`.
+The retained type-only repair removes 949 types and 5,688 instantiations with
+unchanged emitted JavaScript; the fixed consumer ceilings still fail.
 Simplification is integrated through its existing native carrier owner and a
 Focus Card; the actual two-caller inference fixture exceeds unchanged budgets.
 G2 release and canonical migration have not begun. The approved scope remains
@@ -19,8 +22,11 @@ before resuming that gate. Shared passage typography, two-endpoint interaction
 enhancement, and static/browser content now have common owners; native domain
 renderers and semantic schemas remain intact. See
 `../decisions/2026-09-06-focus-card-form-and-separation.md`.
-The revised motion remains an exemplar treatment awaiting visual review, not a
-catalogue-wide curve. Static files inherit future changes through rebuilds.
+The user accepted the revised fraction motion, shared card repair, and subsequent
+identity ink-shrink/loading follow-up, then resumed the compiler-cost gate. See
+`../reviews/2026-09-06-identity-ink-shrink-and-card-loading.md`. These are bounded
+exemplar approvals, not catalogue-wide motion promotion or G2 release approval.
+Static files inherit future changes through rebuilds.
 
 Focus Cards are the canonical product acceptance target, per the user's
 2026-09-06 clarification. The fractional reader proves structural integration,

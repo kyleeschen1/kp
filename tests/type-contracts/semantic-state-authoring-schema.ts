@@ -64,3 +64,17 @@ kpStateGroup({ invalid: { intercept: 2, slope: 1 } });
 
 // @ts-expect-error Descriptor values are immutable after declaration.
 schema.members.market.members.supply.initialValue.intercept = 4;
+
+const nestedArray = kpStateValue([{ amount: 2 }]).initialValue;
+const arrayRead: number = nestedArray[0]!.amount;
+void arrayRead;
+// @ts-expect-error Homomorphic mapping keeps ordinary arrays readonly.
+nestedArray.push({ amount: 3 });
+// @ts-expect-error Array element data remains deeply readonly.
+nestedArray[0]!.amount = 3;
+// @ts-expect-error Tuple cardinality remains exact, not a widened array.
+schema.members.policyPair.initialValue[2];
+// @ts-expect-error Tuple positions remain readonly.
+schema.members.policyPair.initialValue[0] = "baseline";
+// @ts-expect-error Callable array entries cannot enter persistent data.
+kpStateValue([() => 1]);
