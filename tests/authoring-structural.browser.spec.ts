@@ -2,6 +2,52 @@ import { expect, test, type Page } from "@playwright/test";
 
 const referenceRoute = "/reader/fraction-composition/?kpLesson=lesson.algebra.fraction-composition&kpVersion=1&kpProgress=38&kpMotion=full&kpProfile=standard&kpFoldMode=expanded";
 
+test("authored simplification Focus Card uses the canonical carrier owner forward and reverse", async ({ page }, info) => {
+  const errors: string[] = [];
+  const modules: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  page.on("request", request => modules.push(request.url()));
+  await page.goto("/experiments/authoring-simplification-focus-card/");
+  const card = page.locator("[data-kp-authoring-simplification-card]");
+  await expect(card).toHaveAttribute("data-kp-authoring-simplification-card", "ready");
+  const stage = card.locator("[data-kp-carrier-preserving-simplification-stage]");
+  const slider = card.locator("[data-kp-focus-deck-scrubber]");
+  const sample = async (progress: number) => {
+    await slider.fill(String(progress));
+    await expect(stage).toHaveAttribute("data-kp-carrier-preserving-simplification-progress", String(progress));
+  };
+  await expect(stage).toHaveAttribute("data-kp-carrier-preserving-simplification-removed-track-count", "2");
+  await expect(stage).toHaveAttribute("data-kp-carrier-preserving-simplification-treatment", "identity-withdrawal");
+  let first = "";
+  for (const p of [0, .2, .42, .7, 1, .42, 0]) {
+    await sample(p);
+    await expect(stage.locator('[data-kp-carrier-preserving-simplification-endpoint][aria-hidden="false"]')).toHaveCount(1);
+    expect(await stage.evaluate(root => {
+      const native = [...root.querySelectorAll<HTMLElement>('[data-kp-carrier-preserving-simplification-endpoint]')]
+        .filter(node => Number(getComputedStyle(node).opacity) > 0).length;
+      const material = [...root.querySelectorAll<HTMLElement>('[data-kp-equation-material-owner-id]')]
+        .some(node => Number(getComputedStyle(node).opacity) > 0);
+      return native + Number(material);
+    })).toBe(1);
+    if (p === 0 || p === 1) await expect(stage).toHaveAttribute("data-kp-carrier-preserving-simplification-visual-owner", p === 0 ? "source-native" : "target-native");
+    if (p === .42) {
+      await expect(stage).toHaveAttribute("data-kp-carrier-preserving-simplification-visual-owner", "material-scene");
+      const carrier = stage.locator('[data-kp-equation-material-semantic-entity-id$=".source.carrier"]');
+      await expect(carrier).toHaveCount(1);
+      const paint = await carrier.evaluate(node => {
+        const style = getComputedStyle(node); const matrix = new DOMMatrix(style.transform);
+        return { opacity: Number(style.opacity), x: matrix.a, y: matrix.d };
+      });
+      expect(paint.opacity).toBe(1); expect(paint.x).toBeCloseTo(1, 5); expect(paint.y).toBeCloseTo(1, 5);
+      const signature = await stage.locator('[data-kp-editor-equation-material-layer]').innerHTML();
+      if (!first) first = signature; else expect(signature).toEqual(first);
+      await stage.screenshot({ path: info.outputPath("authored-carrier-transit.png") });
+    }
+  }
+  expect(modules.some(url => url.includes("/src/semantic-state/"))).toBe(false);
+  expect(errors).toEqual([]);
+});
+
 // The canonical reference is measured first. Subsequent integration slices must
 // compare their aggregate-backed path against this session, not replace it with
 // screenshots of a different distribution demo.

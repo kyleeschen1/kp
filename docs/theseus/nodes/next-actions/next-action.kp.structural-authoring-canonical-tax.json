@@ -211,6 +211,13 @@
       "scope": "s14",
       "checkedAt": "2026-09-06T20:19:00.448Z",
       "notes": "29 structural plus 29 carrier tests; full typecheck and architecture pass. Runtime remains next."
+    },
+    {
+      "command": "npm run visual:authoring-structural",
+      "status": "passed",
+      "scope": "s15",
+      "checkedAt": "2026-09-06T20:27:12.770Z",
+      "notes": "Five integrated browser checks plus strengthened carrier ownership canary pass. Five existing carrier browser checks, 30 structural tests, typecheck, architecture and reachability pass."
     }
   ],
   "progress": {

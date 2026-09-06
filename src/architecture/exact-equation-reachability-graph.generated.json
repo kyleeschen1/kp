@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 4279,
+  "scannedFileCount": 4287,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -62,6 +62,7 @@
       "authorityId": "compiler.carrier-preserving-recipe",
       "sourceCallers": [
         "src/editor/carrier-preserving-simplification-surface-adapter.ts",
+        "src/experiments/authoring-structural/simplification-operation.ts",
         "src/rendering/native-katex-carrier-preserving-simplification-alignment.ts",
         "src/rendering/native-katex-carrier-preserving-simplification-binding.ts"
       ],
@@ -362,7 +363,8 @@
       "sourcePath": "src/editor/carrier-preserving-simplification-surface-adapter.ts",
       "authorityId": "fallback.carrier-preserving-source",
       "sourceCallers": [
-        "src/editor/carrier-preserving-simplification-surface-capability.ts"
+        "src/editor/carrier-preserving-simplification-surface-capability.ts",
+        "src/experiments/authoring-simplification-focus-card/entry.ts"
       ],
       "testCallers": [
         "tests/carrier-preserving-simplification-catalogue.test.ts"
@@ -1382,10 +1384,12 @@
         "src/editor/solve-x-shared-player.ts",
         "src/editor/svelte-catalogue/svelte-catalogue-host-state.ts",
         "src/experiments/authoring-structural/distribution-projection.ts",
+        "src/experiments/authoring-structural/simplification-preview-build.ts",
         "src/experiments/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card.ts",
         "src/experiments/typed-linear-supply-demand/economics-supply-tax-governed-source.ts",
         "src/project-dashboard/generated-algebra-catalog.ts",
         "src/reader/app/authoring-distribution-preview.ts",
+        "src/reader/app/authoring-simplification-preview.ts",
         "src/reader/app/canonical-equation-frame-plan.ts",
         "src/reader/app/chrome-free-canonical-equation-session.ts",
         "src/reader/app/equation-lesson-descriptor.ts",
@@ -2240,10 +2244,12 @@
         "src/editor/solve-x-shared-player.ts",
         "src/editor/svelte-catalogue/svelte-catalogue-host-state.ts",
         "src/experiments/authoring-structural/distribution-projection.ts",
+        "src/experiments/authoring-structural/simplification-preview-build.ts",
         "src/experiments/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card.ts",
         "src/experiments/typed-linear-supply-demand/economics-supply-tax-governed-source.ts",
         "src/project-dashboard/generated-algebra-catalog.ts",
         "src/reader/app/authoring-distribution-preview.ts",
+        "src/reader/app/authoring-simplification-preview.ts",
         "src/reader/app/canonical-equation-frame-plan.ts",
         "src/reader/app/chrome-free-canonical-equation-session.ts",
         "src/reader/app/equation-lesson-descriptor.ts",

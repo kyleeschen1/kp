@@ -206,7 +206,8 @@
     {
       "id": "s15",
       "title": "Second native caller: execute simplification through its existing canonical paint owner and shared integration",
-      "status": "planned"
+      "summary": "Authored aggregate endpoints reach the existing carrier recipe and native paint owner in a Focus Card. Integrated/legacy runtime, reverse, opaque carrier and exclusive ownership checks pass; no optical change.",
+      "status": "complete"
     },
     {
       "id": "s16",

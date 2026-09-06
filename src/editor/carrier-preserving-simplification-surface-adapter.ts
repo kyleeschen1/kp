@@ -120,13 +120,27 @@ const sessions = new WeakMap<HTMLElement,
 const surfaceDefinitions = createSurfaceDefinitions();
 
 export const kpEditorCarrierPreservingSimplificationSurfaceAdapter =
-  Object.freeze({
+  createSurfaceAdapter(surfaceDefinitions);
+
+/** Bounded prepared-source entrance: keep the existing native owner and
+ * choreography, but compile its recipe from the supplied authored asset. */
+export function createKpPreparedCarrierPreservingSimplificationSurfaceAdapter(
+  animation: import("../animation/asset.ts").KpAnimationAsset
+): KpEditorAnimationSurfaceAdapter {
+  if (JSON.stringify(animation) !== JSON.stringify(createKpTwoTimesOneCarrierAnimationAsset())) {
+    throw new Error("kp.authoring.simplification-surface-source-gap");
+  }
+  return createSurfaceAdapter(createSurfaceDefinitions(animation).slice(0, 1));
+}
+
+function createSurfaceAdapter(definitions: readonly KpCarrierPreservingSimplificationSurfaceDefinition[]) {
+  return Object.freeze({
     id:
       "editor-animation-surface.operation-evaluation.carrier-preserving-simplification",
     slotKind: "equation" as const,
     priority: 142,
     supports(state) {
-      return surfaceDefinitions.some(
+      return definitions.some(
         ({ animationId }) => animationId === state.animationId
       );
     },
@@ -137,7 +151,7 @@ export const kpEditorCarrierPreservingSimplificationSurfaceAdapter =
           player,
           slot,
           state,
-          requiredSurfaceDefinition(state.animationId)
+          requiredSurfaceDefinition(state.animationId, definitions)
         );
         sessions.set(player, session);
         player.addEventListener(
@@ -152,11 +166,13 @@ export const kpEditorCarrierPreservingSimplificationSurfaceAdapter =
       if (session.playback !== undefined) applyFrame(session, state);
     }
   } satisfies KpEditorAnimationSurfaceAdapter);
+}
 
-function createSurfaceDefinitions():
+function createSurfaceDefinitions(prepared?: import("../animation/asset.ts").KpAnimationAsset):
 readonly KpCarrierPreservingSimplificationSurfaceDefinition[] {
-  const exemplar = createKpTwoTimesOneCarrierExemplar();
-  const exemplarAnimation = createKpTwoTimesOneCarrierAnimationAsset();
+  const exemplarAnimation = prepared ?? createKpTwoTimesOneCarrierAnimationAsset();
+  const exemplar = prepared ? { bundle: prepared.bundle, transformation: prepared.transformations[0]! }
+    : createKpTwoTimesOneCarrierExemplar();
   const generatedAddZero = createKpGeneratedAddZeroCarrierSource();
   const exemplarRecipe = compileRecipe({
     candidate: createKpTwoTimesOneCarrierEvidenceCandidate(),
@@ -258,9 +274,10 @@ function compileRecipe(input: {
 }
 
 function requiredSurfaceDefinition(
-  animationId: string
+  animationId: string,
+  definitions: readonly KpCarrierPreservingSimplificationSurfaceDefinition[]
 ): KpCarrierPreservingSimplificationSurfaceDefinition {
-  const definition = surfaceDefinitions.find((candidate) =>
+  const definition = definitions.find((candidate) =>
     candidate.animationId === animationId
   );
   if (definition === undefined) {
