@@ -2,8 +2,9 @@
   "id": "next-action.kp.structural-authoring-canonical-tax",
   "kind": "next-action",
   "title": "Structural authoring proof and canonical supply-tax adoption",
-  "status": "ready",
+  "status": "blocked",
   "domain": "kp",
+  "summary": "STOP_CONDITION: registered distribution presenter cannot consume canonical fraction multipart fan-out; preview also exposed and then removed a reader-to-experiment inversion. Review bounded native-boundary amendment before resuming. Canonical pages unchanged.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -16,6 +17,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-05-authoring-structural-reference-manifest.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-05-structural-authoring-native-boundary-stop.md"
     }
   ],
   "dependsOn": {
@@ -103,11 +108,25 @@
       "scope": "s10",
       "checkedAt": "2026-09-06T03:51:21.739Z",
       "notes": "18 tests, full types and architecture pass. Aggregate-derived endpoints exactly preserve canonical bundle, timeline, lineage, metadata and remaining steps. Existing pinned registry supplies omitted definition reference. Strip-only syntax error fixed locally."
+    },
+    {
+      "command": "npm run visual:authoring-structural; npm run check:architecture",
+      "status": "failed",
+      "scope": "s11",
+      "checkedAt": "2026-09-06T04:21:33.563Z",
+      "notes": "Attempted integration: canonical reference passed, authored native session failed because registered distribution requires exactly one fan-out ownership transfer; fraction has three. Reader-to-experiment import also rejected. Hook removed; failure retained as deterministic typed-gap unit regression."
+    },
+    {
+      "command": "npm run test:authoring-structural; npm run visual:authoring-structural; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "stop-preservation",
+      "checkedAt": "2026-09-06T05:02:28.728Z",
+      "notes": "After removing unshippable preview hook: 19 structural tests pass including typed native gap; canonical-only Chromium canary, full types and architecture pass. No integrated native certification or full release claim."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT G0: s01 review preparation complete, 1 of 28 slices. Explicit acceptance of current market authoring/API/visual specimen required before s02. No canonical migration performed."
+    "summary": "9 of 28 slices complete. Structural model, receipts, transactions, derived/history and explanation implemented. Governed semantic candidate exists, but s10 reopened after multipart native presenter gap; s11 hook removed. Await bounded repair approval."
   },
   "expectedLearning": [
     "Whether two structural equation callers justify canonical economics adoption without parallel state or presentation authority."

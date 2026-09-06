@@ -6,6 +6,7 @@ import { createKpAssetBundle, createKpSemanticAssetObject } from "../../semantic
 import { createKpSemanticTransformation } from "../../semantic/asset-transformation.ts";
 import { createKpStructuredEquationEndpointSpec } from "../../semantic/structured-equation-endpoint-spec.ts";
 import { pinKpSemanticSlotVersion } from "../../semantic-state/pinned-recovery.ts";
+import { compileKpDistributionFactoringPresentationPlan } from "../../animation/distribution-factoring-presentation-plan.ts";
 import { compileKpGovernedCanonicalConstruction, createKpGovernedCanonicalConstructionRequest,
   planKpGovernedConstructionRepairs, type KpGovernedConstructionRepair } from "../../authoring/canonical-animation-public-api.ts";
 
@@ -19,7 +20,9 @@ export class KpAuthoredDistributionProjectionError extends Error {
   }
 }
 
-/** Bounded fixture integration, not a public arbitrary-equation generator. */
+/** Semantic construction candidate only. Runtime readiness is a separate,
+ * fail-closed check: matching endpoint values do not certify paint routing.
+ */
 export function createKpAuthoredDistributionProjection(namespace?: string) {
   const data = createKpAuthoredDistributionExplanation(namespace);
   const operation = readKpAuthoredDistributionOperation(data.receipt);
@@ -61,7 +64,36 @@ export function createKpAuthoredDistributionProjection(namespace?: string) {
     const repairs = planKpGovernedConstructionRepairs({ request, authority });
     if (repairs.length > 0) throw new KpAuthoredDistributionProjectionError(repairs);
     const governed = compileKpGovernedCanonicalConstruction({ request, authority });
-    return Object.freeze({ animation, governed, request, authority, before, after });
+    return Object.freeze({ animationCandidate: animation, governed, request, authority, before, after });
   };
   return Object.freeze({ data, application, projection: lower(application), lower });
+}
+
+export class KpAuthoredDistributionNativeGap extends Error {
+  readonly code = "kp.authoring.structural-native-presentation-gap";
+  readonly owner = "compiler-authority-review";
+  constructor(cause: unknown) {
+    super("The registered single-transfer distribution presenter cannot yet certify the canonical fraction's multipart fan-out. Preserve the canonical reader and repair the authority binding before integration.", { cause });
+    this.name = "KpAuthoredDistributionNativeGap";
+  }
+}
+
+export function requireKpAuthoredDistributionNativeAnimation(
+  projection: ReturnType<typeof createKpAuthoredDistributionProjection>["projection"]
+) {
+  const animation = projection.animationCandidate;
+  const transformation = animation.transformations[0]!;
+  const selectors = (ids: readonly string[]) => animation.bundle.objects
+    .filter(object => ids.includes(object.id)).flatMap(object => object.selectors.map(selector => selector.id));
+  try {
+    const plan = compileKpDistributionFactoringPresentationPlan({ transformation,
+      sourceSelectorIds: selectors(transformation.sourceObjectIds),
+      targetSelectorIds: selectors(transformation.targetObjectIds) });
+    if (plan === undefined) throw new Error("No registered distribution presentation plan resolved.");
+  } catch (cause) {
+    // Do not remove the definition to re-enter legacy routing, combine unrelated
+    // transfers, or weaken cardinality checks to manufacture runtime support.
+    throw new KpAuthoredDistributionNativeGap(cause);
+  }
+  return animation;
 }

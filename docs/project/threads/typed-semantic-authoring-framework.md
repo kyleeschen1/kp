@@ -1,14 +1,27 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: G0 accepted; structural proof executing before canonical migration
+Status: G0 accepted; structural proof stopped at native presentation authority gap
 Last Updated: 2026-09-05
-Current Next Action: execute the approved structural-proof/canonical-adoption loop in
+Current Next Action: review the bounded repair recommendation in
+`../reviews/2026-09-05-structural-authoring-native-boundary-stop.md` before resuming
 `../reviews/2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md`.
 The completed source workflow and market specimen passed G0 review; evidence is in
 `../reviews/2026-09-05-authoring-integration-market-preview-closeout.md` and
-`../reviews/2026-09-05-authoring-market-author-review.md` before proposing a
-structural-equation implementation. G1, G2 and G3 remain mandatory.
+`../reviews/2026-09-05-authoring-market-author-review.md`.
+G1, G2 and G3 remain mandatory; no integrated structural visual approval is claimed.
 Theseus owns current slice, verification, commits, and stop state.
+
+The bounded equation adapter now connects retained semantic trees, exact version
+selections, verified distribution receipts, atomic transactions, derived reads,
+and named explanation queries. Governed semantic construction also compiles,
+but actual canonical-host execution exposed a separate presentation gap:
+the registered distribution presenter requires one fan-out transfer while the
+fraction exemplar declares three. Equal values and preserved timeline data did
+not prove equivalent runtime routing. The attempted reader-to-experiment import
+also violated dependency direction; that unshippable hook was removed. The
+canonical fraction and supply-tax pages remain unchanged. See the linked stop
+report for evidence and the proposed repair; no new motif or authority bypass
+is approved by this record.
 
 Execution branch: `feature/20260905-structural-authoring-canonical-tax`, created
 from the clean reviewed integration branch. The repo no longer exposes the Git
@@ -60,9 +73,10 @@ intentionally retained at this human checkpoint. The final release gate passes
 exact proof, costs and limitations are linked from the closeout, not duplicated
 as a per-slice queue here.
 
-The run stops for authoring/API and visual review. Structural equation
-pressure follows under a separate contract before public API promotion or
-migration waves. Everyday authoring/publication, bounded knowledge/procedures,
+That preceding run reached authoring/API and visual review, now accepted as G0.
+Structural equation pressure is active under the successor contract, subject to
+the native-boundary stop above, before public API promotion or migration waves.
+Everyday authoring/publication, bounded knowledge/procedures,
 and LaTeX/TypeScript/model convergence remain the accepted later sequence.
 External reader discovery does not gate these architecture milestones.
 

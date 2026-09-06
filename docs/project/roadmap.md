@@ -86,11 +86,12 @@ Existing in-app save authority remains unchanged, with no new HTTP write target.
 The user approved that bounded amendment on 2026-09-05. See
 `reviews/2026-09-05-authoring-integration-save-boundary-stop.md` and
 `decisions/2026-09-05-authoring-local-file-preview-lifecycle.md`.
-The run has reached its mandatory authoring/API and visual checkpoint. Review
-the source workflow, measured costs and named demand-14/tax-2 specimen in
+The preceding run reached its mandatory authoring/API and visual checkpoint,
+subsequently accepted as G0. The source workflow, measured costs and named
+demand-14/tax-2 specimen are recorded in
 `reviews/2026-09-05-authoring-integration-market-preview-closeout.md` and
-`reviews/2026-09-05-authoring-market-author-review.md` before proposing structural
-equation pressure. Demand remains explicit settled history; only tax is animated.
+`reviews/2026-09-05-authoring-market-author-review.md`.
+Demand remains explicit settled history; only tax is animated.
 No public facade, publication workflow or cross-family migration is promoted.
 The accepted authoring-first direction is unchanged. Theseus retains live state.
 
@@ -185,7 +186,12 @@ successor proposal is
 the user subsequently approved its exact execution scope. The active contract is
 `run-contract.kp.structural-authoring-canonical-tax-v2`. Review gates remain
 mandatory. The user explicitly accepted G0 of the existing market preview;
-structural work may proceed to G1, with G2 required before canonical migration.
+the successor has since stopped at a reproduced native presentation authority
+gap. The canonical fraction's multipart fan-out is not supported by the
+definition-pinned single-transfer presenter. Review
+`reviews/2026-09-05-structural-authoring-native-boundary-stop.md` before resuming;
+G1 is not ready, and G2 remains required before canonical migration. The accepted
+ordering is unchanged.
 
 The preceding direction and completed integration run were accepted and scoped by
 `run-contract.kp.authoring-integration-market-preview-v1` and

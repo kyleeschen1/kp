@@ -2,9 +2,9 @@
   "id": "run-contract.kp.structural-authoring-canonical-tax-v2",
   "kind": "run-contract",
   "title": "Structural authoring proof and canonical tax adoption",
-  "status": "ready",
+  "status": "blocked",
   "domain": "kp",
-  "summary": "User explicitly approved G0 market authoring/API/visual checkpoint. Resume s02 under unchanged exact 28-slice contract; G1 G2 G3 remain mandatory.",
+  "summary": "STOP_CONDITION at s10 discovered during s11: missing canonical multipart distribution presentation support. 9/28 complete; s10 and s11 returned to planned. G0 accepted, G1 not ready. Await explicit bounded repair approval in native-boundary stop report; G2/G3 unchanged.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -172,12 +172,13 @@
     {
       "id": "s10",
       "title": "Governed projection: lower the authored distribution into existing operation-specific animation authority",
-      "summary": "Governed projection consumes exact local application and aggregate endpoints; canonical presentation retained, existing definition reference bound, 18 tests and type/architecture checks pass.",
-      "status": "complete"
+      "summary": "Reopened: real runtime disproved native readiness. Semantic construction exists, but registered presenter requires one fan-out and canonical fraction has three. Compiler-authority review required; no native certification.",
+      "status": "planned"
     },
     {
       "id": "s11",
       "title": "Native runtime integration: execute that projection through the real canonical source-native/material/target-native path",
+      "summary": "Attempted canonical-host preview failed native presentation and dependency-direction checks. Unshippable hook removed; canonical entry restored exactly. Resume only after bounded authority and delivery repair approval.",
       "status": "planned"
     },
     {
