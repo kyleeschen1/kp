@@ -7,6 +7,10 @@ export const kpAuthoringMarketArticleSourceId = "projection.authoring-market.art
  */
 export function authorKpMarketArticle(facts: ReturnType<typeof createKpAuthoringMarketFacts>) {
   const { latex: math, text: value } = facts;
+  // This explicitly compares settled history; it does not ask the tax scene to
+  // animate a demand operation that its governed projection does not support.
+  const demandContext = value("initial.demandIntercept") === value("before.demandIntercept") ? "" :
+    `First, demand's price intercept changes from $${math("initial.demandIntercept")}$ to $${math("before.demandIntercept")}$; the original market cleared at $Q=${math("initial.quantity")}$ and $P=${math("initial.price")}$, before the demand change. `;
   const text = `---
 kp:
   schema: kp.article.v1
@@ -21,7 +25,7 @@ kp:
 :::
 
 :::kp-passage{#market-adjustment intent=causal-comparison}
-[Before the tax, demand and supply meet at $Q_0=${math("before.quantity")}$ and $P_0=${math("before.price")}$](kp-ref:tax-market/untaxed-equilibrium).
+[${demandContext}Before the tax, demand and supply meet at $Q_0=${math("before.quantity")}$ and $P_0=${math("before.price")}$](kp-ref:tax-market/untaxed-equilibrium).
 [A tax of ${value("after.tax")} dollars per unit creates a wedge between the price consumers pay and the price producers receive: $P_c=P_p+${math("after.tax")}$](kp-ref:tax-market/tax).
 [On a graph whose vertical axis is the consumer price, demand stays put because willingness to pay has not changed; buyer-facing supply rises by ${value("after.tax")} dollars](kp-ref:tax-market/taxed-supply).
 [Their new intersection has consumers paying $P_c=${math("after.consumerPrice")}$ while producers receive $P_p=${math("after.producerPrice")}$](kp-ref:tax-market/wedge),

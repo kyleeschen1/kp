@@ -166,6 +166,39 @@ test("actual local-file rebuild retains invalid drafts and last valid preview wi
   }
 });
 
+test("named demand-then-tax variant shows recomputed history, prose, native labels and welfare", async ({ page }, info) => {
+  const modelPath = new URL("../src/experiments/authoring-market/authoring-market-model-source.ts", import.meta.url);
+  const original = await readFile(modelPath, "utf8");
+  const variation = original.replace('= "reference";', '= "variation";');
+  expect(variation).not.toBe(original);
+  await page.goto("/experiments/authoring-market/");
+  await expect(page.locator("#app")).toHaveAttribute("data-kp-authoring-market-specimen", "specimen.market.reference");
+  try {
+    await writeFile(modelPath, variation);
+    await expect(page.locator("#app")).toHaveAttribute("data-kp-authoring-market-specimen", "specimen.market.demand-then-tax");
+    const deck = page.locator("[data-kp-supply-tax-focus-deck]");
+    await expect(deck.locator("[data-kp-focus-deck-phrase]").first()).toContainText("First, demand's price intercept changes");
+    expect(await deck.locator('[data-kp-supply-tax-math-label="untaxed-equilibrium"] > div').innerHTML()).toBe(await nativePaint(page, "E_0=(6,8)"));
+    await deck.screenshot({ path: info.outputPath("variant-baseline.png") });
+    await seek(deck.locator("[data-kp-supply-tax-state-scrubber]"), 2);
+    expect(await deck.locator('[data-kp-supply-tax-math-label="consumer-price"] > div').innerHTML()).toBe(await nativePaint(page, "P_c=9"));
+    expect(await deck.locator('[data-kp-supply-tax-math-label="producer-price"] > div').innerHTML()).toBe(await nativePaint(page, "P_p=7"));
+    const history = page.locator("[data-kp-authoring-market-history]");
+    const comparison = page.locator("[data-kp-authoring-market-comparison]");
+    await comparison.locator("summary").click();
+    await expect(history.locator("tbody tr")).toHaveCount(3);
+    expect(await history.locator("tbody tr").evaluateAll(rows => rows.map(row => [...row.querySelectorAll("td")].map(cell => cell.textContent))))
+      .toEqual([["5", "7", "7", "0", "25"], ["6", "8", "8", "0", "36"], ["5", "9", "7", "2", "35"]]);
+    await expect(comparison.locator('[data-kp-supply-tax-ledger-role="government-revenue"] [data-kp-exact-value]').last()).toHaveAttribute("data-kp-exact-value", "10/1");
+    await history.screenshot({ path: info.outputPath("variant-history.png") });
+    await seek(deck.locator("[data-kp-supply-tax-state-scrubber]"), 0);
+    expect(await deck.locator('[data-kp-supply-tax-math-label="untaxed-equilibrium"] > div').innerHTML()).toBe(await nativePaint(page, "E_0=(6,8)"));
+  } finally {
+    if (await readFile(modelPath, "utf8") === variation) await writeFile(modelPath, original);
+    await expect(page.locator("#app")).toHaveAttribute("data-kp-authoring-market-specimen", "specimen.market.reference");
+  }
+});
+
 async function seek(scrubber: Locator, position: number) {
   await scrubber.evaluate((element, value) => {
     const input = element as HTMLInputElement;

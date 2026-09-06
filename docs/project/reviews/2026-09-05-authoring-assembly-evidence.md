@@ -389,3 +389,29 @@ At this dev-server boundary the full `npm test` gate passes 6,549 tests in
 563,982 ms, including architecture and fixed inference (111,257 types /
 192,271 instantiations). This is current s21 boundary evidence, not the final
 s27 publication/build/release gate.
+
+## Named demand-then-tax specimen
+
+The same local model source now names a reference specimen and a separately
+identified demand-14/tax-2 specimen. Change `kpAuthoringMarketSelectedSpecimen`
+from `reference` to `variation` and save to select it. No engine edit is needed.
+Both explicitly declare `demandPresentation: "settled-history"`: demand is
+explained through model-derived before/after context; tax retains the existing
+single motion. Requesting demand `motion` returns the typed
+`kp.authoring.market-demand-motion-gap`, not a reused tax animation.
+
+The three actual pinned checkpoints independently evaluate to quantity,
+buyer price, seller price, tax, and total surplus respectively:
+`[5,7,7,0,25]`, `[6,8,8,0,36]`, and `[5,9,7,2,35]`.
+Tax revenue is 10. Explicit fact slots recompute narrative and baseline labels;
+all baseline/region points remain inside the declared existing viewport.
+The native history comparison is outside the focal stage and does not add a
+clock, score beat, semantic store, renderer, or demand-motion authority.
+
+`npm run test:authoring-integration` passes 65 tests; economics passes 81.
+`npm run visual:authoring-market` passes all five browser checks, including an
+actual source-file specimen switch, exact native labels, three history rows,
+revenue, reverse seek and restoration of the author's original source.
+The variant baseline/history captures were inspected: the graph and narrative
+show the recomputed values. These are review evidence, not human visual approval.
+Architecture passes; reachability changes only scanned count 4,252 to 4,253.

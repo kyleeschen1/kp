@@ -247,7 +247,8 @@
     {
       "id": "s22",
       "title": "Authored parameter variation: demand 14/tax 2 and ordered demand/tax explanation, with independently recomputed narrative, baseline, and bounds",
-      "status": "planned"
+      "summary": "Named demand14/tax2 specimen recomputes exact history, prose and native baseline;65 integration,81 economics and five browser checks pass. Demand motion remains a typed gap.",
+      "status": "complete"
     },
     {
       "id": "s23",

@@ -1,6 +1,8 @@
 import type { createKpAuthoredMarketSource } from "../typed-linear-supply-demand/authoring-market-source.ts";
 import type { KpSupplyTaxScrollScoreStageFactV1 } from "../kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-stage-lens.ts";
 import { createKpAuthoringMarketFrameSession } from "./authoring-market-frame.ts";
+import { createKpSemanticStateQuerySession } from "../../semantic-state/authoring-query-session.ts";
+import { projectKpAuthoringMarketClockAddress } from "./authoring-market-clock-address.ts";
 
 export class KpAuthoringMarketFactGap extends Error {
   readonly code = "kp.authoring.market-fact-gap";
@@ -15,7 +17,22 @@ export function createKpAuthoringMarketFacts(authored: ReturnType<typeof createK
     try { return { before: session.sample(0), after: session.sample(1) }; }
     finally { session.dispose(); }
   })();
+  const initialAddress = projectKpAuthoringMarketClockAddress({ packet: authored.packet, member: "demand", progress: 0 }).address;
+  const initial = (() => {
+    const query = createKpSemanticStateQuerySession(authored.packet.explanation);
+    try { return query.evaluate(initialAddress, authored.packet.stateHandles.refs.outcomes.evaluation); }
+    finally { query.dispose(); }
+  })();
+  const checkpoints = Object.freeze([
+    Object.freeze({ label: "Initial market", address: initialAddress, evaluation: initial }),
+    Object.freeze({ label: "After demand change / before tax", address: before.address, evaluation: before.evaluation }),
+    Object.freeze({ label: "After tax", address: after.address, evaluation: after.evaluation })
+  ]);
   const values = Object.freeze({
+    "initial.demandIntercept": initial.model.input.demand.priceIntercept,
+    "initial.quantity": initial.market.quantity,
+    "initial.price": initial.market.consumerPrice,
+    "before.demandIntercept": before.evaluation.model.input.demand.priceIntercept,
     "before.quantity": before.frame.market.quantity,
     "before.price": before.frame.market.consumerPrice,
     "before.consumerSurplus": before.frame.welfare.consumerSurplus,
@@ -34,7 +51,7 @@ export function createKpAuthoringMarketFacts(authored: ReturnType<typeof createK
   type Name = keyof typeof values;
   const references = Object.freeze(Object.fromEntries(Object.keys(values).map(name => [name, Object.freeze({
     name: name as Name, modelRevisionId: after.revisionId,
-    address: name.startsWith("before.") ? before.address : after.address
+    address: name.startsWith("initial.") ? initialAddress : name.startsWith("before.") ? before.address : after.address
   })])) as { readonly [Key in Name]: { readonly name: Key; readonly modelRevisionId: string; readonly address: typeof before.address } });
   type Reference = (typeof references)[Name];
   const ref = (name: Name): Reference => {
@@ -68,7 +85,7 @@ export function createKpAuthoringMarketFacts(authored: ReturnType<typeof createK
     { id: "government-revenue", latex: `GR=tQ_t=${latex("after.tax")}\\cdot${latex("after.quantity")}=${latex("after.revenue")}` },
     { id: "deadweight-loss", latex: `DWL=${latex("after.loss")}` }
   ].map(item => Object.freeze(item)) as KpSupplyTaxScrollScoreStageFactV1[]);
-  return Object.freeze({ modelRevisionId: after.revisionId, values, references, ref, read, text, latex, stageFacts });
+  return Object.freeze({ modelRevisionId: after.revisionId, checkpoints, values, references, ref, read, text, latex, stageFacts });
 }
 
 /** Plain HTML facts remain meaningful without animation, KaTeX or a clock. */

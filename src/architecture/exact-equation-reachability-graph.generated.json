@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 4252,
+  "scannedFileCount": 4253,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",

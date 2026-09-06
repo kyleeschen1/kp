@@ -256,11 +256,18 @@
       "scope": "s21",
       "checkedAt": "2026-09-06T00:17:41.168Z",
       "notes": "6549 full tests in 563982ms; fixed inference 111257 types and192271 instantiations. 62 authoring tests, four real browser checks. Syntax-error log is an intentional retained-draft fixture. Final types clean; no HTTP write expansion."
+    },
+    {
+      "command": "npm run test:authoring-integration; npm run test:economics-supply-tax; npm run visual:authoring-market; npm run check:architecture",
+      "status": "passed",
+      "scope": "s22",
+      "checkedAt": "2026-09-06T00:32:19.744Z",
+      "notes": "65 integration,81 economics,five browser checks; explicit demand history and typed unsupported-motion gap."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s01-s21 complete. Trusted local-file typed source builds via existing Vite server tooling; browser receives data-only revisions with last-valid retention and stale-result rejection. Demand14/tax2 ordered variant next."
+    "summary": "s22 variant verified; demand remains explicitly settled history and tax uses existing motion."
   },
   "expectedLearning": [
     "Whether internal assembly and a bounded math bridge make one exact market explanation authorable without duplicate semantics or renderer authority."

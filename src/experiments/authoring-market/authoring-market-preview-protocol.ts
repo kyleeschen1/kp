@@ -4,6 +4,7 @@ import type { authorKpMarketArticle } from "./authoring-market-article-source.ts
 export const kpAuthoringMarketPreviewEndpoint = "/__kp/authoring-market/revision";
 export const kpAuthoringMarketPreviewEvent = "kp:authoring-market-revision";
 export interface KpAuthoringMarketPreviewData {
+  readonly specimen: { readonly id: string; readonly title: string; readonly demandPresentation: "settled-history" };
   readonly parameters: NonNullable<Parameters<typeof createKpAuthoredMarketSource>[0]["parameters"]>;
   readonly article: Omit<ReturnType<typeof authorKpMarketArticle>, "facts">;
 }
