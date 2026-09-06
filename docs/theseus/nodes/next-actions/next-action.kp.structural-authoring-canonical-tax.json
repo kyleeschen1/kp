@@ -2,9 +2,9 @@
   "id": "next-action.kp.structural-authoring-canonical-tax",
   "kind": "next-action",
   "title": "Structural authoring proof and canonical supply-tax adoption",
-  "status": "blocked",
+  "status": "in-progress",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: review G1 authored distribution in canonical host. Await visual approval before simplification.",
+  "summary": "G1 accepted; implement existing simplification caller before G2.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -197,6 +197,13 @@
       "scope": "coherent-fraction-review",
       "checkedAt": "2026-09-06T19:03:37.788Z",
       "notes": "18 Chromium and Firefox checks passed; coherent fraction transport at desktop and phone widths, reverse sampling and cache pixel parity. Structural unit suite 25 passed; typecheck and architecture passed. G1 visual approval still required; no global promotion."
+    },
+    {
+      "command": "npm run test:authoring-structural",
+      "status": "passed",
+      "scope": "s13",
+      "checkedAt": "2026-09-06T20:15:18.671Z",
+      "notes": "27 tests and full typecheck pass; exact source, carrier/removal lineage and non-copyable receipt authority."
     }
   ],
   "progress": {

@@ -1,14 +1,14 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: G0 accepted; native-boundary repair verified; G1 visual review pending
+Status: G0 and G1 accepted; carrier-preserving simplification is next
 Last Updated: 2026-09-06
-Current Next Action: review
-`../reviews/2026-09-06-structural-authoring-g1-distribution-checkpoint.md` before continuing
+Current Next Action: continue the simplification caller after accepted G1 in
+`../reviews/2026-09-06-structural-authoring-g1-distribution-checkpoint.md`, through
 `../reviews/2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md`.
 The completed source workflow and market specimen passed G0 review; evidence is in
 `../reviews/2026-09-05-authoring-integration-market-preview-closeout.md` and
 `../reviews/2026-09-05-authoring-market-author-review.md`.
-G1, G2 and G3 remain mandatory; no integrated structural visual approval is claimed.
+G1 is accepted for the fraction Focus Card; G2 and G3 remain mandatory.
 Theseus owns current slice, verification, commits, and stop state.
 
 Focus Cards are the canonical product acceptance target, per the user's
@@ -21,8 +21,9 @@ The user-approved actual fraction Focus Card is now available on the shared dev
 server at `http://127.0.0.1:8000/experiments/authoring-distribution-focus-card/`.
 It consumes verified authored distribution through the existing native session
 and clock, not the log example. This replaces the reader-only URL as the G1
-product review destination. First-play hitch and inherited overlapping fraction
-choreography remain unresolved; no performance or visual acceptance is claimed.
+product review destination. The user visually approved the repaired, coherent
+whole-fraction motion and requested continuation. Firefox handoff cost remains
+a measured limitation; approval does not establish a universal motion rule.
 
 The user approved the repair and preapproved future non-visual checkpoints on
 2026-09-06. See
@@ -39,7 +40,7 @@ validated reader restoration avoid importing authoring internals into the reader
 The opt-in authored distribution now traverses the canonical native session with
 bounded measured paint and raster parity. Default fraction and supply-tax sources
 remain unchanged. This is an exemplar proof, not generalized multipart support,
-a production authoring service, or human visual acceptance.
+a production authoring service, or approval of other callers.
 
 Execution branch: `feature/20260905-structural-authoring-canonical-tax`, created
 from the clean reviewed integration branch. The repo no longer exposes the Git

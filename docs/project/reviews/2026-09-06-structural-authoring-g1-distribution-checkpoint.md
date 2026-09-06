@@ -195,6 +195,15 @@ No semantic schema, default lesson route, or ordinary distribution caller is
 migrated. G1 remains the human checkpoint before a structurally different caller
 or shared-rule promotion.
 
+### G1 human disposition
+
+Following commit `c6aeedb8e`, the user said “it looks great!” and then “go”
+after confirmation that simplification was the next caller. G1 is accepted for
+the actual fraction Focus Card, including coherent whole-fraction transport.
+Earlier pending-review statements above describe the evidence chronology.
+Continue the existing approved contract through its two-caller G2 checkpoint;
+do not infer global motion promotion or canonical tax adoption approval.
+
 ### Existing preservation contract
 
 Preserve semantic trees, stable identities, operation authority, native ownership,

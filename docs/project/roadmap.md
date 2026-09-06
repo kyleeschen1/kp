@@ -194,7 +194,7 @@ On 2026-09-06 the user approved its bounded repair and preapproved future
 non-visual checkpoints; see
 `decisions/2026-09-06-nonvisual-preapproval-and-structural-repair.md`.
 The authored distribution now reaches the canonical native reader in a dev-only
-opt-in preview; G1 visual review is pending. See
+opt-in preview; G1 fraction Focus Card visual review is now accepted. See
 `reviews/2026-09-06-structural-authoring-g1-distribution-checkpoint.md`.
 Human visual gates, required verification and safety
 constraints remain; G2 is still required before canonical migration. The
@@ -207,7 +207,9 @@ See `decisions/2026-09-06-focus-card-performance-acceptance.md`.
 The approved authoring-backed fraction now has its own dev-only Focus Card at
 `/experiments/authoring-distribution-focus-card/` on the shared server. It is the
 G1 product review destination; the log card is not evidence of this integration.
-Existing first-play hitch and fraction choreography remain review limitations.
+The user approved the repaired whole-fraction motion and requested continuation
+with carrier-preserving simplification. Firefox handoff cost remains a measured
+limitation; this acceptance does not promote a universal fraction motion rule.
 
 The preceding direction and completed integration run were accepted and scoped by
 `run-contract.kp.authoring-integration-market-preview-v1` and

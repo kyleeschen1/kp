@@ -2,9 +2,9 @@
   "id": "run-contract.kp.structural-authoring-canonical-tax-v2",
   "kind": "run-contract",
   "title": "Structural authoring proof and canonical tax adoption",
-  "status": "blocked",
+  "status": "in-progress",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: G1 distribution visual review required before s13; routine non-visual approvals are preapproved.",
+  "summary": "G1 accepted; resume approved s13 through G2.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -188,13 +188,14 @@
     {
       "id": "s12",
       "title": "Distribution checkpoint: capture source/transit/target, seek/reverse, reduced-motion and preserved reference comparison",
-      "summary": "G1 evidence complete; human visual acceptance pending. No second caller or migration started.",
+      "summary": "G1 accepted by the user after coherent fraction card commit c6aeedb8e; user requested continuation. Preserve approved exemplar and proceed to simplification, not global motion promotion.",
       "status": "complete"
     },
     {
       "id": "s13",
       "title": "Simplification authority: map the reviewed carrier-preserving operation into the same structural receipt boundary",
-      "status": "planned"
+      "summary": "Existing carrier verifier and recipe bound to exact trusted source with nominal local receipt. 27 structural tests and full typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "s14",
