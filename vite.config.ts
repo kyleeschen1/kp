@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import { defineConfig } from "vite";
+import { kpViteAuthoringMarketPreview } from "./scripts/vite-authoring-market-preview.ts";
 
 import {
   kpProductionDevelopmentErasurePlugin
@@ -151,6 +152,7 @@ export default defineConfig({
     __KP_DEV_REVIEW_BUILD__: JSON.stringify(reviewBuildIdentity)
   },
   plugins: [
+    kpViteAuthoringMarketPreview(),
     kpProductionDevelopmentErasurePlugin({ projectRoot }),
     // Svelte owns only catalogue application composition; animation assets,
     // clocks, sampled frames, and renderer ports remain plain TypeScript.

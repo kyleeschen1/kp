@@ -249,11 +249,18 @@
       "scope": "s21-authority-diagnostic",
       "checkedAt": "2026-09-05T23:17:12.623Z",
       "notes": "Five existing save-boundary tests pass, including foreign-target rejection and compiler rollback. Not completion of typed-source edit/compile/preview. See save-boundary stop report."
+    },
+    {
+      "command": "npm test; npm run typecheck; npm run check:equation-reachability; npm run visual:authoring-market; git diff --check",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-06T00:17:41.168Z",
+      "notes": "6549 full tests in 563982ms; fixed inference 111257 types and192271 instantiations. 62 authoring tests, four real browser checks. Syntax-error log is an intentional retained-draft fixture. Final types clean; no HTTP write expansion."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s01-s20 complete: explicit model-revision fact slots feed prose, accessible claims, existing stage formulas and plain static facts. Local save/compile lifecycle remains next."
+    "summary": "s01-s21 complete. Trusted local-file typed source builds via existing Vite server tooling; browser receives data-only revisions with last-valid retention and stale-result rejection. Demand14/tax2 ordered variant next."
   },
   "expectedLearning": [
     "Whether internal assembly and a bounded math bridge make one exact market explanation authorable without duplicate semantics or renderer authority."

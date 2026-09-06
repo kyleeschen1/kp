@@ -241,8 +241,8 @@
     {
       "id": "s21",
       "title": "Local-file edit/build/preview lifecycle: trusted typed inputs through existing dev tooling, revision diagnostics and last-valid preview",
-      "summary": "Approved workflow amendment: no HTTP writer, arbitrary browser evaluation or replacement editor; actual rebuild verification required.",
-      "status": "planned"
+      "summary": "Real local model/prose saves, syntax and reference errors, repair and fresh invalid load verified. Existing host handoff respects exclusive adapters; full suite6549 and four Chromium checks pass.",
+      "status": "complete"
     },
     {
       "id": "s22",

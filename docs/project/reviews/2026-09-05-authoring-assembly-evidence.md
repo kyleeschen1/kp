@@ -331,3 +331,61 @@ pass. An initial parameter-property declaration failed the repository's erasable
 TypeScript constraint and was corrected without changing compiler settings.
 The exact inventory adds only the two modules and test (4,243 to 4,246), with
 roots, edges, and fixed budgets unchanged.
+
+## Local-file save/build/preview lifecycle
+
+The approved local-file adapter watches exactly
+`src/experiments/authoring-market/authoring-market-model-source.ts` and
+`src/experiments/authoring-market/authoring-market-article-source.ts`.
+Run `npm run dev`, open `/experiments/authoring-market/`, and save those files in
+the local source editor. The model file declares exact demand/tax inputs; the
+Article-template file owns literal wording and explicit fact slots.
+
+The serve-only Vite plugin lazily builds trusted local modules on its server
+module path. A read-only GET and existing Vite custom events carry JSON preview
+data, a source-content fingerprint, sequence, and typed build diagnostics.
+There is no new write endpoint, arbitrary path input, Markdown code evaluator,
+or replacement Article editor. Browser request coverage confirms the model,
+template, and server build module are not loaded by the page.
+
+The browser reconstructs local model capabilities from explicit data, validates
+the bound Article/model revision, and only then hands off the mounted host.
+Old asynchronous results cannot replace newer revisions, invalid drafts retain
+the same mounted preview, and disposal rejects pending completions. Source files
+are never repaired or overwritten by the build adapter. Model/Article compilation
+errors retain their source fingerprint. Full TypeScript checking remains a
+separate gate; Vite transformation plus domain/Article validation is not claimed
+to run the whole repository's typechecker on every keystroke.
+
+An executed rebuild test exposed the canonical host's exclusive sibling-card
+adapter registrations. Overlapping old and new hosts was rejected. The corrected
+handoff prepares before retirement, disposes the old host before mounting the
+new one, and restores its existing scrubber position. It does not bypass or rename
+the registry. Unexpected mount failures attempt to restore the prior prepared
+revision; this is not a claim that every possible renderer exception has been
+made transactional.
+
+`npm run visual:authoring-market` passes four tests, including actual valid model
+and prose file saves, a TypeScript syntax failure, an unknown Article reference,
+repair, unchanged document identity, retained exact SVG paint during invalid
+drafts, no browser author-code request, and rejection of POST to the read-only
+endpoint. The intentional syntax error is expected test evidence, not a remaining
+build failure. Fixture writes are restored only when they still equal the test's
+own text, protecting concurrent author edits.
+
+The authoring suite passes 62 tests, including data round trips, missing-input
+rejection without default substitution, mixed model authority, out-of-order
+preparation, disposal, and prepare/mount failure reporting. Full typecheck and
+architecture checks pass. Exact reachability changes only scanned count
+(4,246 to 4,252); all 68 roots, edges, and budgets are unchanged.
+
+The server retains current build metadata; last-valid mounted preview retention
+is owned by the live browser session, not a new durable publication store.
+Opening the experiment without a previously valid revision can show a build gap,
+not an invented fallback. Whole-publication static delivery and release-shaped
+browser coverage remain later gates.
+
+At this dev-server boundary the full `npm test` gate passes 6,549 tests in
+563,982 ms, including architecture and fixed inference (111,257 types /
+192,271 instantiations). This is current s21 boundary evidence, not the final
+s27 publication/build/release gate.

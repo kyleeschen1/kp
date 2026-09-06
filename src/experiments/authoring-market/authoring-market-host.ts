@@ -1,22 +1,15 @@
 import { mountKpSupplyTaxKineticFigure } from "../kinetic-figure-supply-tax/kinetic-figure-supply-tax-entry.ts";
-import { createKpAuthoredMarketSource } from "../typed-linear-supply-demand/authoring-market-source.ts";
 import { createKpAuthoringMarketFrameSession } from "./authoring-market-frame.ts";
 import { encodeKpSemanticStateCompositionLogicalAddress } from "../../semantic-state/state-family-composition-address.ts";
 import { renderKpSupplyTaxWelfareLedger } from "../kinetic-figure-supply-tax/kinetic-figure-supply-tax-svg.ts";
 import "./authoring-market.css";
-import importLock from "../../../content/lessons/economics-supply-tax-scroll-score.kp.lock.json" with { type: "json" };
-import type { KpArticleImportLock } from "../../article/kp-article-import-lock.ts";
-import { createKpAuthoringMarketCompanion } from "./authoring-market-companion.ts";
-import { createKpAuthoringMarketFacts, renderKpAuthoringMarketStaticFacts } from "./authoring-market-facts.ts";
-import { authorKpMarketArticle } from "./authoring-market-article-source.ts";
+import { renderKpAuthoringMarketStaticFacts } from "./authoring-market-facts.ts";
+import type { prepareKpAuthoringMarketPreview } from "./authoring-market-preview-prepare.ts";
 
 /** Opt-in composition only: the existing figure still owns paint and clocks. */
-export function mountKpAuthoringMarket(input: { readonly root: HTMLElement }) {
-  const authored = createKpAuthoredMarketSource({ kind: "impose-per-unit-tax" });
-  const facts = createKpAuthoringMarketFacts(authored);
-  const boundArticle = authorKpMarketArticle(facts);
-  const companion = createKpAuthoringMarketCompanion({ authored, text: boundArticle.text,
-    boundArticle, lock: importLock as KpArticleImportLock });
+export function mountKpAuthoringMarket(input: { readonly root: HTMLElement;
+  readonly prepared: ReturnType<typeof prepareKpAuthoringMarketPreview> }) {
+  const { authored, facts, boundArticle, companion } = input.prepared;
   const frames = createKpAuthoringMarketFrameSession(authored, { cacheCapacity: 2 });
   let session: ReturnType<typeof mountKpSupplyTaxKineticFigure>;
   try {

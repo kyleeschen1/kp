@@ -1,4 +1,5 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
+import { readFile, writeFile } from "node:fs/promises";
 
 test("opt-in authoring host preserves canonical baseline and disposes cleanly", async ({ page }, info) => {
   const errors: string[] = [];
@@ -15,8 +16,10 @@ test("opt-in authoring host preserves canonical baseline and disposes cleanly", 
   await page.evaluate(async modulePath => {
     window.dispatchEvent(new PageTransitionEvent("pagehide", { persisted: false }));
     const { mountKpAuthoringMarket } = await import(modulePath);
+    const { prepareKpAuthoringMarketPreview } = await import(modulePath.replace("authoring-market-host", "authoring-market-preview-prepare"));
+    const revision = await fetch("/__kp/authoring-market/revision").then(response => response.json());
     const root = document.querySelector<HTMLElement>("#app")!;
-    const session = mountKpAuthoringMarket({ root });
+    const session = mountKpAuthoringMarket({ root, prepared: prepareKpAuthoringMarketPreview(revision.preview) });
     session.dispose();
     session.dispose();
   }, "/src/experiments/authoring-market/authoring-market-host.ts");
@@ -96,6 +99,72 @@ async function nativePaint(page: Page, latex: string) {
     return element.innerHTML;
   }, { path: "/src/rendering/katex-adapter.ts", latex });
 }
+
+test("actual local-file rebuild retains invalid drafts and last valid preview without page reload", async ({ page }) => {
+  const modelPath = new URL("../src/experiments/authoring-market/authoring-market-model-source.ts", import.meta.url);
+  const articlePath = new URL("../src/experiments/authoring-market/authoring-market-article-source.ts", import.meta.url);
+  const originalModel = await readFile(modelPath, "utf8");
+  const originalArticle = await readFile(articlePath, "utf8");
+  let writtenModel = originalModel;
+  let writtenArticle = originalArticle;
+  const requests: string[] = [];
+  page.on("request", request => requests.push(new URL(request.url()).pathname));
+  await page.goto("/experiments/authoring-market/");
+  const status = page.locator("[data-kp-authoring-market-build-status]");
+  await expect(status).toHaveAttribute("data-kp-authoring-market-build-status", "valid");
+  await expect(page.locator("#app")).toHaveAttribute("data-kp-authoring-market", "state-driven-tax");
+  await page.evaluate(() => { document.body.dataset["localBuildDocument"] = "retained"; });
+  const initialRevision = await page.locator("#app").getAttribute("data-kp-authoring-market-preview-revision");
+  expect((await page.request.post("/__kp/authoring-market/revision")).status()).toBe(405);
+  try {
+    writtenModel = originalModel.replace('numerator: "4"', 'numerator: "2"');
+    expect(writtenModel).not.toBe(originalModel);
+    await writeFile(modelPath, writtenModel);
+    await expect(page.locator("#app")).not.toHaveAttribute("data-kp-authoring-market-preview-revision", initialRevision!);
+    await expect(page.locator('[data-kp-authoring-market-static-facts] dt:has-text("after.revenue") + dd')).toHaveText("8");
+    const validRevision = await page.locator("#app").getAttribute("data-kp-authoring-market-preview-revision");
+    const validPaint = await page.locator("[data-kp-supply-tax-focus-deck] svg").first().evaluate(element => element.outerHTML);
+    writtenModel = "export const kpAuthoringMarketModelInput = ;\n";
+    await writeFile(modelPath, writtenModel);
+    await expect(status).toHaveAttribute("data-kp-authoring-market-build-status", "invalid");
+    await expect(page.locator("#app")).toHaveAttribute("data-kp-authoring-market-preview-revision", validRevision!);
+    expect(await page.locator("[data-kp-supply-tax-focus-deck] svg").first().evaluate(element => element.outerHTML)).toBe(validPaint);
+    expect(await readFile(modelPath, "utf8")).toBe(writtenModel);
+    expect(await status.getAttribute("data-kp-authoring-market-source-revision")).not.toBe(validRevision);
+    const fresh = await page.context().newPage();
+    try {
+      await fresh.goto("/experiments/authoring-market/");
+      await expect(fresh.locator("[data-kp-authoring-market-build-status]")).toContainText("No valid preview is available yet.");
+      await expect(fresh.locator("[data-kp-supply-tax-focus-deck]")).toHaveCount(0);
+    } finally { await fresh.close(); }
+    writtenModel = originalModel;
+    await writeFile(modelPath, writtenModel);
+    await expect(page.locator("#app")).toHaveAttribute("data-kp-authoring-market-preview-revision", initialRevision!);
+    writtenArticle = originalArticle.replace("Before the tax, demand", "Observe first: demand");
+    await writeFile(articlePath, writtenArticle);
+    await expect(page.locator("[data-kp-focus-deck-phrase]").first()).toContainText("Observe first");
+    const proseRevision = await page.locator("#app").getAttribute("data-kp-authoring-market-preview-revision");
+    writtenArticle = writtenArticle.replace("kp-ref:tax-market/tax", "kp-ref:tax-market/missing");
+    await writeFile(articlePath, writtenArticle);
+    await expect(status).toHaveAttribute("data-kp-authoring-market-build-status", "invalid");
+    await expect(page.locator("#app")).toHaveAttribute("data-kp-authoring-market-preview-revision", proseRevision!);
+    expect(await readFile(articlePath, "utf8")).toBe(writtenArticle);
+    await expect(page.locator("body")).toHaveAttribute("data-local-build-document", "retained");
+    expect(requests.some(path => /authoring-market-(model-source|article-source|preview-build)\.ts/.test(path))).toBe(false);
+  } catch (error) {
+    console.error("LOCAL_BUILD_FAILURE", {
+      server: await page.request.get("/__kp/authoring-market/revision").then(response => response.json()),
+      status: await status.textContent(),
+      retainedDocument: await page.locator("body").getAttribute("data-local-build-document")
+    });
+    throw error;
+  } finally {
+    // Restore only our exact fixture writes; never overwrite a concurrent author edit.
+    if (await readFile(modelPath, "utf8") === writtenModel) await writeFile(modelPath, originalModel);
+    if (await readFile(articlePath, "utf8") === writtenArticle) await writeFile(articlePath, originalArticle);
+    await expect(page.locator("#app")).toHaveAttribute("data-kp-authoring-market-preview-revision", initialRevision!);
+  }
+});
 
 async function seek(scrubber: Locator, position: number) {
   await scrubber.evaluate((element, value) => {
