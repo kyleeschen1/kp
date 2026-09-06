@@ -166,7 +166,13 @@ const equationPresentationProfile = equationPresentationSelection.profile;
 document.body.dataset["kpReaderEquationProfile"] = equationPresentationProfile.id;
 document.body.dataset["kpReaderEquationProfileSource"] =
   equationPresentationSelection.source;
-const animation = lessonDescriptor.createAnimation(equationPresentationProfile);
+// The isolated authoring proof changes prepared source only. It retains this
+// canonical host, clock and compositor, and is erased from production output.
+const structuralPreview = import.meta.env.DEV && lessonVariant === "fraction-composition" &&
+  new URL(window.location.href).searchParams.get("kpAuthoringStructural") === "distribution";
+const animation = structuralPreview
+  ? await (await import("./authoring-distribution-preview.ts")).loadKpReaderAuthoringDistributionPreview(document.body)
+  : lessonDescriptor.createAnimation(equationPresentationProfile);
 const phaseCohorts = compileKpAnimationTransformationPhaseCohorts(animation);
 const presentationProfile = kpEquationPresentationProfile(animation);
 const linearRearrangementBindings = createKpEquationLinearRearrangementBindings(

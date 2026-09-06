@@ -1,23 +1,38 @@
 import { expect, test, type Page } from "@playwright/test";
 
+const referenceRoute = "/reader/fraction-composition/?kpLesson=lesson.algebra.fraction-composition&kpVersion=1&kpProgress=38&kpMotion=full&kpProfile=standard&kpFoldMode=expanded";
+
 // The canonical reference is measured first. Subsequent integration slices must
 // compare their aggregate-backed path against this session, not replace it with
 // screenshots of a different distribution demo.
 async function seek(page: Page, progress: number) {
   await page.locator("[data-kp-reader-attention-scrubber]").evaluate((element, value) => {
     const input = element as HTMLInputElement;
+    // The existing reader clock accepts exact progress; integer range steps
+    // otherwise skip the shared boundary between adjacent operations.
+    input.step = "any";
     input.value = String(value);
     input.dispatchEvent(new Event("input", { bubbles: true }));
   }, progress);
-  await expect(page.locator("body")).toHaveAttribute("data-kp-reader-progress", String(progress));
+  await expect(page.locator("body")).toHaveAttribute("data-kp-reader-progress", String(Math.round(progress)));
   await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
 }
 
-test("canonical distribution reference traverses the real native session and restores on reverse", async ({ page }, info) => {
+for (const source of ["canonical", "authored"] as const) test(`${source} distribution traverses the real native session and restores on reverse`, async ({ page }, info) => {
   const errors: string[] = [];
+  const requestedModules: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
-  await page.goto("/reader/fraction-composition/?kpLesson=lesson.algebra.fraction-composition&kpVersion=1&kpProgress=38&kpMotion=full&kpProfile=standard&kpFoldMode=expanded");
+  page.on("request", request => requestedModules.push(request.url()));
+  await page.goto("/reader/fraction-composition/?kpLesson=lesson.algebra.fraction-composition&kpVersion=1&kpProgress=38&kpMotion=full&kpProfile=standard&kpFoldMode=expanded" +
+    (source === "authored" ? "&kpAuthoringStructural=distribution" : ""));
   await expect(page.locator("body")).toHaveAttribute("data-kp-reader-hydrated", "true");
+  if (source === "authored") {
+    await expect(page.locator("body")).toHaveAttribute("data-kp-authoring-structural-source", "distribution");
+    const pins = await page.locator("body").evaluate(body => [body.dataset["kpAuthoringStructuralBefore"], body.dataset["kpAuthoringStructuralAfter"]]);
+    expect(pins[0]).toBeTruthy();
+    expect(pins[1]).toBeTruthy();
+    expect(pins[0]).not.toBe(pins[1]);
+  } else await expect(page.locator("body")).not.toHaveAttribute("data-kp-authoring-structural-source");
   await page.evaluate(() => document.fonts.ready);
   const stage = page.locator("[data-kp-reader-equation-stage]");
   await expect(stage).toHaveAttribute("data-kp-reader-canonical-equation-session-active", "true");
@@ -38,4 +53,77 @@ test("canonical distribution reference traverses the real native session and res
   await expect(active).toHaveAttribute("data-kp-reader-transition", "fraction-solve.step.distribute");
   expect(await page.locator("body").getAttribute("data-kp-reader-review-frame")).toBe(reference);
   expect(errors).toEqual([]);
+  expect(requestedModules.filter(url => /\/src\/(?:experiments\/authoring-structural|semantic-state)\//.test(url))).toEqual([]);
+  if (source === "authored") {
+    const rejected = await page.request.post("/api/dev/authoring-structural/distribution");
+    expect(rejected.status()).toBe(405);
+  }
+});
+
+async function paintEvidence(page: Page) {
+  return page.locator("[data-kp-reader-transition-active='true']").evaluate(async transition => {
+    const modulePath = "/src/rendering/native-katex-paint-geometry.ts";
+    const { measureKpNativeKatexSubtreePaintRect } = await import(modulePath);
+    const stage = document.querySelector<HTMLElement>("[data-kp-reader-equation-viewport]")!;
+    const opacity = (element: Element) => {
+      let result = 1;
+      for (let current: Element | null = element; current !== null; current = current.parentElement) {
+        result *= Number(getComputedStyle(current).opacity);
+        if (current === stage) break;
+      }
+      return result;
+    };
+    const native = [...transition.querySelectorAll<HTMLElement>("[data-kp-reader-native]")];
+    const material = [...transition.querySelectorAll<HTMLElement>("[data-kp-equation-material-owner-id]")];
+    const source = opacity(native.find(element => element.dataset["kpReaderNative"] === "source")!);
+    const target = opacity(native.find(element => element.dataset["kpReaderNative"] === "target")!);
+    const visibleMaterial = material.filter(element => opacity(element) > 0);
+    const nodes = [
+      ...native.flatMap(root => [...root.querySelectorAll<HTMLElement>("[data-kp-reader-equation-anchor-id]")]
+        .filter(element => element.dataset["kpFoldableEnvelopeId"] === undefined)
+        .map(element => ({ id: `native:${root.dataset["kpReaderNative"]}:${element.dataset["kpReaderEquationAnchorId"]}`, element }))),
+      ...material.map(element => ({ id: element.dataset["kpEquationMaterialOwnerId"]!, element: element.firstElementChild as HTMLElement }))
+    ].filter(({ element }) => element !== null && opacity(element) > 0);
+    return { transition: transition.getAttribute("data-kp-reader-transition"), source, target,
+      semanticState: document.querySelector<HTMLElement>("[data-kp-reader-equation-stage]")!.dataset["kpReaderAccessibleEquationState"],
+      authorityCount: Number(source > 0) + Number(target > 0) + Number(visibleMaterial.length > 0),
+      materialCount: visibleMaterial.length,
+      paint: nodes.map(({ id, element }) => ({ id, opacity: opacity(element),
+        rect: measureKpNativeKatexSubtreePaintRect(stage, element) })).sort((a, b) => a.id.localeCompare(b.id)) };
+  });
+}
+
+test("authored distribution preserves realized canonical paint and exclusive ownership at bounded checkpoints", async ({ page }, info) => {
+  test.setTimeout(60_000);
+  const checkpoints = [0, 1, 25, 38, 65, 75, 76, 1000 / 13, 77, 38];
+  const references: Awaited<ReturnType<typeof paintEvidence>>[] = [];
+  const images: Buffer[] = [];
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  for (const authored of [false, true]) {
+    await page.goto(referenceRoute + (authored ? "&kpAuthoringStructural=distribution" : ""));
+    await expect(page.locator("[data-kp-reader-equation-stage]")).toHaveAttribute("data-kp-reader-canonical-equation-session-active", "true");
+    await page.evaluate(() => document.fonts.ready);
+    for (const [index, progress] of checkpoints.entries()) {
+      await seek(page, progress);
+      const evidence = await paintEvidence(page);
+      expect(evidence.authorityCount, `${authored ? "authored" : "canonical"} at ${progress}`).toBe(1);
+      expect(evidence.paint.length).toBeGreaterThan(0);
+      if (!authored) references.push(evidence);
+      else expect(evidence, `realized paint parity at ${progress}`).toEqual(references[index]);
+      if ([0, 38, 76].includes(progress)) {
+        const capture = await page.locator("[data-kp-reader-equation-stage]").screenshot();
+        if (!authored) images.push(capture);
+        else expect(capture.equals(images.shift()!), `raster parity at ${progress}`).toBe(true);
+      }
+    }
+  }
+  expect(references.some(frame => frame.source === 1)).toBe(true);
+  // At a shared chain boundary the settled target is the next operation's
+  // source-native root. Test semantic state and native ownership, not DOM side.
+  expect(references.some(frame => frame.semanticState === "fraction-solve.state.distributed" &&
+    (frame.source === 1 || frame.target === 1))).toBe(true);
+  expect(references.some(frame => frame.materialCount > 0)).toBe(true);
+  expect(errors).toEqual([]);
+  await info.attach("bounded-native-paint-evidence", { body: JSON.stringify({ checkpoints, references }, null, 2), contentType: "application/json" });
 });

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 4253,
+  "scannedFileCount": 4274,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -730,6 +730,7 @@
         "src/animation/finite-product-expansion-exemplar.ts",
         "src/animation/finite-sum-expansion-exemplar.ts",
         "src/animation/fraction-composition-cancellation-presentation.ts",
+        "src/animation/fraction-composition-distribution-presentation-plan.ts",
         "src/animation/fraction-equivalence-exemplar.ts",
         "src/animation/fraction-material-presentation-plan.ts",
         "src/animation/fractional-linear-transfer-comparison-adapter.ts",
@@ -776,6 +777,8 @@
         "src/domain-ir/semantic-equation-transition-compiler.ts",
         "src/domain-ir/terminal-equation-migration-v2.ts",
         "src/editor/carrier-preserving-simplification-surface-adapter.ts",
+        "src/experiments/authoring-structural/distribution-projection.ts",
+        "src/reader/app/authoring-distribution-preview.ts",
         "src/reader/renderers/equation-operation-choreography-compiler.ts",
         "src/rendering/equation-linear-rearrangement-bindings.ts",
         "src/rendering/equation-witnessed-annihilation-runtime.ts",
@@ -1378,9 +1381,11 @@
         "src/editor/semantic-animation-workbench-acceptance.ts",
         "src/editor/solve-x-shared-player.ts",
         "src/editor/svelte-catalogue/svelte-catalogue-host-state.ts",
+        "src/experiments/authoring-structural/distribution-projection.ts",
         "src/experiments/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card.ts",
         "src/experiments/typed-linear-supply-demand/economics-supply-tax-governed-source.ts",
         "src/project-dashboard/generated-algebra-catalog.ts",
+        "src/reader/app/authoring-distribution-preview.ts",
         "src/reader/app/canonical-equation-frame-plan.ts",
         "src/reader/app/chrome-free-canonical-equation-session.ts",
         "src/reader/app/equation-lesson-descriptor.ts",
@@ -1409,6 +1414,7 @@
       "testCallers": [
         "tests/animation-authoring-public-api.test.ts",
         "tests/animation-presentation-constraints.test.ts",
+        "tests/authoring-structural-projection.test.ts",
         "tests/canonical-animation-construction-round-trip.test.ts",
         "tests/compound-root-carrier-catalogue-integration.test.ts",
         "tests/economics-supply-tax-animation-asset.test.ts",
@@ -1631,6 +1637,7 @@
         "src/animation/finite-product-expansion-exemplar.ts",
         "src/animation/finite-sum-expansion-exemplar.ts",
         "src/animation/fraction-composition-cancellation-presentation.ts",
+        "src/animation/fraction-composition-distribution-presentation-plan.ts",
         "src/animation/fraction-equivalence-exemplar.ts",
         "src/animation/fraction-material-presentation-plan.ts",
         "src/animation/fractional-linear-transfer-comparison-adapter.ts",
@@ -1677,6 +1684,8 @@
         "src/domain-ir/semantic-equation-transition-compiler.ts",
         "src/domain-ir/terminal-equation-migration-v2.ts",
         "src/editor/carrier-preserving-simplification-surface-adapter.ts",
+        "src/experiments/authoring-structural/distribution-projection.ts",
+        "src/reader/app/authoring-distribution-preview.ts",
         "src/reader/renderers/equation-operation-choreography-compiler.ts",
         "src/rendering/equation-linear-rearrangement-bindings.ts",
         "src/rendering/equation-witnessed-annihilation-runtime.ts",
@@ -2230,9 +2239,11 @@
         "src/editor/semantic-animation-workbench-acceptance.ts",
         "src/editor/solve-x-shared-player.ts",
         "src/editor/svelte-catalogue/svelte-catalogue-host-state.ts",
+        "src/experiments/authoring-structural/distribution-projection.ts",
         "src/experiments/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card.ts",
         "src/experiments/typed-linear-supply-demand/economics-supply-tax-governed-source.ts",
         "src/project-dashboard/generated-algebra-catalog.ts",
+        "src/reader/app/authoring-distribution-preview.ts",
         "src/reader/app/canonical-equation-frame-plan.ts",
         "src/reader/app/chrome-free-canonical-equation-session.ts",
         "src/reader/app/equation-lesson-descriptor.ts",
@@ -2261,6 +2272,7 @@
       "testCallers": [
         "tests/animation-authoring-public-api.test.ts",
         "tests/animation-presentation-constraints.test.ts",
+        "tests/authoring-structural-projection.test.ts",
         "tests/canonical-animation-construction-round-trip.test.ts",
         "tests/compound-root-carrier-catalogue-integration.test.ts",
         "tests/economics-supply-tax-animation-asset.test.ts",
@@ -2403,7 +2415,8 @@
         "src/authoring/equation-series-operation-declarations.ts",
         "src/authoring/governed-semantic-compiler.ts",
         "src/domain-ir/equation-asset-migration-v2.ts",
-        "src/domain-ir/equation-grammar-v2-operation-resolution.ts"
+        "src/domain-ir/equation-grammar-v2-operation-resolution.ts",
+        "src/experiments/authoring-structural/distribution-operation.ts"
       ],
       "testCallers": [
         "tests/authoring-integration-lowering-gap.test.ts",
@@ -2569,7 +2582,8 @@
       "sourcePath": "src/authoring/canonical-animation-public-api.ts",
       "authorityId": "facade.canonical-animation-construction",
       "sourceCallers": [
-        "src/article/vignettes/typescript-free-shipping-vignette.ts"
+        "src/article/vignettes/typescript-free-shipping-vignette.ts",
+        "src/experiments/authoring-structural/distribution-projection.ts"
       ],
       "testCallers": [
         "tests/canonical-animation-construction-request.test.ts",

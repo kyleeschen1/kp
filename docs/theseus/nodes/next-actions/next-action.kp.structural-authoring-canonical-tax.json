@@ -133,6 +133,13 @@
       "scope": "s10",
       "checkedAt": "2026-09-06T15:20:17.014Z",
       "notes": "20 structural and 17 adjacent presentation tests pass, full types and architecture pass. Explicit canonical factor bundles retain three primitive transfers; scalar validation unchanged. Native visual certification still belongs to s11-s12."
+    },
+    {
+      "command": "npm run test:authoring-structural; npm run visual:authoring-structural; npm run test:authoring-integration; npm run typecheck; npm run check:architecture; npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "s11",
+      "checkedAt": "2026-09-06T15:31:47.461Z",
+      "notes": "23 structural, 68 integration and 3 Chromium checks pass. Actual authored canonical session matches measured paint and raster at bounded checkpoints with exclusive ownership and exact shared-boundary settlement. No author-state browser imports; GET-only endpoint rejects POST. Types/architecture pass; generated reachability refreshed without budget changes."
     }
   ],
   "progress": {
