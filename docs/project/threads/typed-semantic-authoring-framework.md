@@ -1,14 +1,19 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: structural proof and canonical migration contract approved; G0 market review pending
+Status: G0 accepted; structural proof executing before canonical migration
 Last Updated: 2026-09-05
 Current Next Action: execute the approved structural-proof/canonical-adoption loop in
 `../reviews/2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md`.
-The completed source workflow and market specimen still require review in
+The completed source workflow and market specimen passed G0 review; evidence is in
 `../reviews/2026-09-05-authoring-integration-market-preview-closeout.md` and
 `../reviews/2026-09-05-authoring-market-author-review.md` before proposing a
-structural-equation implementation. Order acceptance does not waive visual review.
+structural-equation implementation. G1, G2 and G3 remain mandatory.
 Theseus owns current slice, verification, commits, and stop state.
+
+Execution branch: `feature/20260905-structural-authoring-canonical-tax`, created
+from the clean reviewed integration branch. The repo no longer exposes the Git
+skill's branch helper; the predecessor branch is preserved without merge or
+deletion, and the successor retains its required implementation ancestry.
 
 ## Current Accepted Direction
 

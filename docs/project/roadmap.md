@@ -184,7 +184,8 @@ successor proposal is
 `reviews/2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md`;
 the user subsequently approved its exact execution scope. The active contract is
 `run-contract.kp.structural-authoring-canonical-tax-v2`. Review gates remain
-mandatory, beginning with explicit G0 review of the existing market preview.
+mandatory. The user explicitly accepted G0 of the existing market preview;
+structural work may proceed to G1, with G2 required before canonical migration.
 
 The preceding direction and completed integration run were accepted and scoped by
 `run-contract.kp.authoring-integration-market-preview-v1` and

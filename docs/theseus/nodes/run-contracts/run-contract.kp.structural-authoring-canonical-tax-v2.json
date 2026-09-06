@@ -2,9 +2,9 @@
   "id": "run-contract.kp.structural-authoring-canonical-tax-v2",
   "kind": "run-contract",
   "title": "Structural authoring proof and canonical tax adoption",
-  "status": "blocked",
+  "status": "ready",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT G0 after s01. User approved execution proposal, not existing market visual/API review. Resume s02 only after explicit G0 acceptance.",
+  "summary": "User explicitly approved G0 market authoring/API/visual checkpoint. Resume s02 under unchanged exact 28-slice contract; G1 G2 G3 remain mandatory.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -124,7 +124,8 @@
     {
       "id": "s02",
       "title": "Structural references: pin exact distribution and simplification sources, canonical hosts, lifecycle mechanisms and preservation manifest",
-      "status": "planned"
+      "summary": "Exact references and preservation manifest pinned; 6 canonical/reference and 29 carrier tests pass. Source trees and paint remain unchanged.",
+      "status": "complete"
     },
     {
       "id": "s03",

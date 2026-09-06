@@ -12,6 +12,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-05-structural-authoring-g0-market-checkpoint.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-05-authoring-structural-reference-manifest.md"
     }
   ],
   "dependsOn": {
@@ -36,6 +40,13 @@
       "scope": "s01",
       "checkedAt": "2026-09-06T02:55:15.636Z",
       "notes": "68 integration tests and 8 Chromium checks pass; full types and architecture pass. Intentional syntax-error fixture restored original sources. Human G0 review remains pending."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/authoring-structural-references.test.ts tests/fraction-composition-canonical-session-dry-run.test.ts; npm run test:carrier-preserving-simplification",
+      "status": "passed",
+      "scope": "s02",
+      "checkedAt": "2026-09-06T03:19:55.410Z",
+      "notes": "6 reference/planning tests and 29 carrier preservation tests pass. Exact source, host, first transition, fan-out and removal records pinned. Not new runtime certification."
     }
   ],
   "progress": {

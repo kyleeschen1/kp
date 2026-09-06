@@ -1,8 +1,13 @@
 # G0: economics authoring review ready
 
-Outcome: HUMAN_CHECKPOINT
+Outcome: G0 accepted by the user; structural-reference work unlocked
 Contract: `run-contract.kp.structural-authoring-canonical-tax-v2`
 Target: `next-action.kp.structural-authoring-canonical-tax`
+
+The user explicitly approved this G0 authoring/API/visual checkpoint after its
+review handoff, including settled demand history with tax-only animation.
+G1, G2 and G3 remain mandatory. The evidence below is the original checkpoint
+record; its references to pending approval describe the state at that handoff.
 
 The exact 28-slice proposal is approved. Slice 1 prepares the existing market
 authoring/API/visual review; explicit G0 acceptance is still absent. Machine
