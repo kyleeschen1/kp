@@ -154,7 +154,8 @@
     {
       "id": "s07",
       "title": "Atomic structural commit: publish the supported distribution successor through existing transactions",
-      "status": "planned"
+      "summary": "Verified receipt publishes one atomic equation successor through existing typed state transform. 13 structural and 364 core tests plus full types pass.",
+      "status": "complete"
     },
     {
       "id": "s08",

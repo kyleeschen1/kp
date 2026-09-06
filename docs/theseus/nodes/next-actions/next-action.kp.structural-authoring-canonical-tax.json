@@ -75,6 +75,13 @@
       "scope": "s06",
       "checkedAt": "2026-09-06T03:35:01.765Z",
       "notes": "11 tests and full types pass. RED missing module followed by local legacy optional-field TS2379 repair; generic update, mismatched pack, copied receipt and changed target rejected. Shared schema unchanged."
+    },
+    {
+      "command": "npm run test:authoring-structural; npm run test:semantic-state; npm run typecheck",
+      "status": "passed",
+      "scope": "s07",
+      "checkedAt": "2026-09-06T03:41:37.421Z",
+      "notes": "13 structural and 364 semantic-state tests pass; full typecheck clean. Atomic immutable publication, deterministic replay, stale and forged receipt rejection."
     }
   ],
   "progress": {
