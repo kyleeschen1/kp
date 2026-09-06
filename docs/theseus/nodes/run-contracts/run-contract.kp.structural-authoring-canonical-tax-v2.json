@@ -160,7 +160,8 @@
     {
       "id": "s08",
       "title": "Derived/history integration: ensure derived results and pinned reads follow structural version changes",
-      "status": "planned"
+      "summary": "Accessible equation derived from canonical tree through existing graph; structural version invalidation and history recovery verified.",
+      "status": "complete"
     },
     {
       "id": "s09",

@@ -82,6 +82,13 @@
       "scope": "s07",
       "checkedAt": "2026-09-06T03:41:37.421Z",
       "notes": "13 structural and 364 semantic-state tests pass; full typecheck clean. Atomic immutable publication, deterministic replay, stale and forged receipt rejection."
+    },
+    {
+      "command": "npm run test:authoring-structural; npm run typecheck",
+      "status": "passed",
+      "scope": "s08",
+      "checkedAt": "2026-09-06T03:44:07.708Z",
+      "notes": "14 structural tests and full types pass; derived accessible equation invalidates by version, cached and uncached reads agree, recovery survives cache reset and disposal."
     }
   ],
   "progress": {
