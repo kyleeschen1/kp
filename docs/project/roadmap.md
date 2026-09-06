@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-09-05
+Last Updated: 2026-09-06
 Status: active
 Active Thread: `threads/typed-semantic-authoring-framework.md`
 Supporting Threads:
@@ -189,9 +189,13 @@ mandatory. The user explicitly accepted G0 of the existing market preview;
 the successor has since stopped at a reproduced native presentation authority
 gap. The canonical fraction's multipart fan-out is not supported by the
 definition-pinned single-transfer presenter. Review
-`reviews/2026-09-05-structural-authoring-native-boundary-stop.md` before resuming;
-G1 is not ready, and G2 remains required before canonical migration. The accepted
-ordering is unchanged.
+`reviews/2026-09-05-structural-authoring-native-boundary-stop.md` for the evidence.
+On 2026-09-06 the user approved its bounded repair and preapproved future
+non-visual checkpoints; see
+`decisions/2026-09-06-nonvisual-preapproval-and-structural-repair.md`.
+Resume toward G1. Human visual gates, required verification and safety
+constraints remain; G2 is still required before canonical migration. The
+accepted ordering is unchanged.
 
 The preceding direction and completed integration run were accepted and scoped by
 `run-contract.kp.authoring-integration-market-preview-v1` and

@@ -2,9 +2,9 @@
   "id": "next-action.kp.structural-authoring-canonical-tax",
   "kind": "next-action",
   "title": "Structural authoring proof and canonical supply-tax adoption",
-  "status": "blocked",
+  "status": "ready",
   "domain": "kp",
-  "summary": "STOP_CONDITION: registered distribution presenter cannot consume canonical fraction multipart fan-out; preview also exposed and then removed a reader-to-experiment inversion. Review bounded native-boundary amendment before resuming. Canonical pages unchanged.",
+  "summary": "User approved bounded multipart distribution authority and dependency-safe preview repair; resume existing 28-slice plan. Future non-visual checkpoints preapproved; visual gates and safety checks retained.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -21,6 +21,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-05-structural-authoring-native-boundary-stop.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-06-nonvisual-preapproval-and-structural-repair.md"
     }
   ],
   "dependsOn": {

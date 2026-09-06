@@ -1,15 +1,21 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: G0 accepted; structural proof stopped at native presentation authority gap
-Last Updated: 2026-09-05
-Current Next Action: review the bounded repair recommendation in
-`../reviews/2026-09-05-structural-authoring-native-boundary-stop.md` before resuming
+Status: G0 accepted; approved native-boundary repair executing toward G1
+Last Updated: 2026-09-06
+Current Next Action: execute the approved bounded repair in
+`../reviews/2026-09-05-structural-authoring-native-boundary-stop.md` and resume
 `../reviews/2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md`.
 The completed source workflow and market specimen passed G0 review; evidence is in
 `../reviews/2026-09-05-authoring-integration-market-preview-closeout.md` and
 `../reviews/2026-09-05-authoring-market-author-review.md`.
 G1, G2 and G3 remain mandatory; no integrated structural visual approval is claimed.
 Theseus owns current slice, verification, commits, and stop state.
+
+The user approved the repair and preapproved future non-visual checkpoints on
+2026-09-06. See
+`../decisions/2026-09-06-nonvisual-preapproval-and-structural-repair.md`.
+Continue bounded technical work without routine approval requests; retain
+human visual gates and required safety, authority, and verification constraints.
 
 The bounded equation adapter now connects retained semantic trees, exact version
 selections, verified distribution receipts, atomic transactions, derived reads,

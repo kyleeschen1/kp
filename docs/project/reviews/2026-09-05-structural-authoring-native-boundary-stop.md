@@ -96,7 +96,12 @@ architecture. It does disprove the assumption that the registered scalar
 distribution definition is immediately interchangeable with the canonical
 multipart fraction presentation.
 
-## Recommended amendment — awaiting approval
+## Recommended amendment — approved 2026-09-06
+
+The user approved this repair and requested resumption. Non-visual checkpoints
+are now preapproved under
+`../decisions/2026-09-06-nonvisual-preapproval-and-structural-repair.md`;
+visual gates remain mandatory. The stop evidence above remains historical truth.
 
 Keep the existing 28-slice plan and all human gates. Rework its existing governed
 projection and native integration slices rather than adding a parallel plan:
