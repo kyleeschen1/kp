@@ -2,6 +2,45 @@ import { expect, test, type Page } from "@playwright/test";
 
 const referenceRoute = "/reader/fraction-composition/?kpLesson=lesson.algebra.fraction-composition&kpVersion=1&kpProgress=38&kpMotion=full&kpProfile=standard&kpFoldMode=expanded";
 
+test("authored simplification preserves phone links, interrupted playback, reduced motion and disposal", async ({ page }, info) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/experiments/authoring-simplification-focus-card/#beat.authoring-simplification.target");
+  const card = page.locator("[data-kp-authoring-simplification-card]");
+  await expect(card).toHaveAttribute("data-kp-authoring-simplification-card", "ready");
+  const stage = card.locator("[data-kp-carrier-preserving-simplification-stage]");
+  const slider = card.locator("[data-kp-focus-deck-scrubber]");
+  await expect(stage).toHaveAttribute("data-kp-carrier-preserving-simplification-visual-owner", "target-native");
+  await page.reload();
+  await expect(card).toHaveAttribute("data-kp-authoring-simplification-card", "ready");
+  await expect(stage).toHaveAttribute("data-kp-carrier-preserving-simplification-progress", "1");
+  await slider.fill("0");
+  await card.locator("[data-kp-focus-deck-next]").click();
+  await expect.poll(async () => Number(await stage.getAttribute("data-kp-carrier-preserving-simplification-progress"))).toBeGreaterThan(0);
+  await slider.fill("0.36");
+  await expect(stage).toHaveAttribute("data-kp-carrier-preserving-simplification-progress", "0.36");
+  await page.setViewportSize({ width: 420, height: 844 });
+  await expect(stage).toHaveAttribute("data-kp-carrier-preserving-simplification-stage", "ready");
+  await expect(stage).toHaveAttribute("data-kp-carrier-preserving-simplification-progress", "0.36");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await stage.screenshot({ path: info.outputPath("authored-carrier-phone.png") });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await slider.fill("0.75");
+  await expect(stage).toHaveAttribute("data-kp-carrier-preserving-simplification-visual-owner", "target-native");
+  await slider.fill("0.25");
+  await expect(stage).toHaveAttribute("data-kp-carrier-preserving-simplification-visual-owner", "source-native");
+  await page.evaluate(() => dispatchEvent(new PageTransitionEvent("pagehide", { persisted: false })));
+  await expect(stage.locator("[data-kp-equation-material-owner-id]")).toHaveCount(0);
+});
+
+test("authored simplification rejects malformed prepared source without a fallback", async ({ page }) => {
+  await page.route("**/api/dev/authoring-structural/simplification", route => route.fulfill({
+    contentType: "application/json", body: JSON.stringify({ status: "valid", animation: {} })
+  }));
+  await page.goto("/experiments/authoring-simplification-focus-card/");
+  await expect(page.locator("[data-kp-simplification-repair-gap]")).toBeVisible();
+  await expect(page.locator("[data-kp-carrier-preserving-simplification-stage]")).toHaveCount(0);
+});
+
 test("authored simplification Focus Card uses the canonical carrier owner forward and reverse", async ({ page }, info) => {
   const errors: string[] = [];
   const modules: string[] = [];

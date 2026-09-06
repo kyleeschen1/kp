@@ -218,6 +218,13 @@
       "scope": "s15",
       "checkedAt": "2026-09-06T20:27:12.770Z",
       "notes": "Five integrated browser checks plus strengthened carrier ownership canary pass. Five existing carrier browser checks, 30 structural tests, typecheck, architecture and reachability pass."
+    },
+    {
+      "command": "npm run visual:authoring-distribution-card",
+      "status": "passed",
+      "scope": "s16",
+      "checkedAt": "2026-09-06T20:30:06.766Z",
+      "notes": "18 fraction/browser cache checks, three integrated simplification browser checks, 31 structural tests and full types pass."
     }
   ],
   "progress": {
