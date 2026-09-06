@@ -444,7 +444,6 @@ function applyFrame(
   // prevents a session used earlier in the sequence from retaining paint.
   session.endpointRoots.forEach((root) => {
     root.style.opacity = "0";
-    setAccessibleEndpoint(root, false);
   });
   let ownership: ReturnType<KpLogExponentTransitSession["apply"]>;
   try {
@@ -466,7 +465,10 @@ function applyFrame(
   const accessibleIndex = ownership.visualOwner === "source-native"
     ? frame.operationIndex
     : frame.operationIndex + 1;
-  setAccessibleEndpoint(session.endpointRoots[accessibleIndex]!, true);
+  // Resolve accessible ownership once after visual ownership is known. Hiding
+  // then re-exposing the same endpoint churned the accessibility tree per frame.
+  session.endpointRoots.forEach((root, index) =>
+    setAccessibleEndpoint(root, index === accessibleIndex));
   session.stage.dataset["kpLogExponentOperationIndex"] =
     String(frame.operationIndex);
   session.stage.dataset["kpLogExponentOperationId"] = frame.operationId;
@@ -527,9 +529,10 @@ function publishSurfaceReadinessIfChanged(
 }
 
 function setAccessibleEndpoint(root: HTMLElement, active: boolean): void {
-  root.setAttribute("aria-hidden", active ? "false" : "true");
-  if (active) root.removeAttribute("inert");
-  else root.setAttribute("inert", "");
+  const hidden = active ? "false" : "true";
+  if (root.getAttribute("aria-hidden") !== hidden) root.setAttribute("aria-hidden", hidden);
+  if (active && root.hasAttribute("inert")) root.removeAttribute("inert");
+  else if (!active && !root.hasAttribute("inert")) root.setAttribute("inert", "");
 }
 
 function failSurface(

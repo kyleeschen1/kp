@@ -200,6 +200,11 @@ Human visual gates, required verification and safety
 constraints remain; G2 is still required before canonical migration. The
 accepted ordering is unchanged.
 
+On 2026-09-06 the user clarified that Focus Cards are the canonical product
+format and approved same-asset host performance comparisons plus passage/stage
+verification. Standalone reader evidence is supporting, not product acceptance.
+See `decisions/2026-09-06-focus-card-performance-acceptance.md`.
+
 The preceding direction and completed integration run were accepted and scoped by
 `run-contract.kp.authoring-integration-market-preview-v1` and
 `reviews/2026-09-05-authoring-integration-market-preview-long-loop-proposal.md`.

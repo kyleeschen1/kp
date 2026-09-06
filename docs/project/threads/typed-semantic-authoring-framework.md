@@ -11,6 +11,12 @@ The completed source workflow and market specimen passed G0 review; evidence is 
 G1, G2 and G3 remain mandatory; no integrated structural visual approval is claimed.
 Theseus owns current slice, verification, commits, and stop state.
 
+Focus Cards are the canonical product acceptance target, per the user's
+2026-09-06 clarification. The fractional reader proves structural integration,
+not Focus Card host performance. Same-asset host comparison and passage/stage
+checks now accompany review; see
+`../decisions/2026-09-06-focus-card-performance-acceptance.md`.
+
 The user approved the repair and preapproved future non-visual checkpoints on
 2026-09-06. See
 `../decisions/2026-09-06-nonvisual-preapproval-and-structural-repair.md`.

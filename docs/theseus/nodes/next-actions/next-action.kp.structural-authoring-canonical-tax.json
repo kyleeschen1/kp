@@ -29,6 +29,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-06-structural-authoring-g1-distribution-checkpoint.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-06-focus-card-performance-acceptance.md"
     }
   ],
   "dependsOn": {
@@ -151,6 +155,20 @@
       "scope": "s12",
       "checkedAt": "2026-09-06T15:37:56.549Z",
       "notes": "Four Chromium checks and 23 focused tests pass. Exact endpoint, reverse, phone reduced motion, reload, accessible truth and bounded canonical paint parity. Human G1 pending."
+    },
+    {
+      "command": "npm run perf:focus-card-hosts; npm run test:focus-deck-multi-card; npm run test:log-exponent; npm run check:architecture",
+      "status": "passed",
+      "scope": "focus-card-performance",
+      "checkedAt": "2026-09-06T16:40:27.292Z",
+      "notes": "Four Firefox host/performance checks, 18 card tests and 63 log-exponent tests pass. Same-asset endpoint mutations reduced from 600 to 8 per 60 frames. No schema change or general FPS claim. Cross-browser preservation still running."
+    },
+    {
+      "command": "npm run perf:focus-card-hosts; npm run test:browser:focus-deck-multi-card; npm run typecheck; git diff --check",
+      "status": "passed",
+      "scope": "focus-card-performance-closeout",
+      "checkedAt": "2026-09-06T16:43:36.388Z",
+      "notes": "Final four Firefox performance checks and 57 Chromium/Firefox/WebKit card preservation checks pass. Explicit stable-passage and per-frame accessible ownership assertions. Schema and fraction renderer unchanged; G1 remains pending."
     }
   ],
   "progress": {

@@ -1,7 +1,7 @@
 # Focus Deck Thread
 
 Status: checkpoint-preserved; four-card composition ready for human review
-Last Updated: 2026-09-02
+Last Updated: 2026-09-06
 Current Next Action: after the active typed semantic authoring proof, review
 the preserved four-card composition at
 `/experiments/kinetic-figure/supply-tax/`, with particular attention to the
@@ -9,6 +9,12 @@ TypeScript card's code density, helper fusion, call-site propagation, phone
 fit, Safari controls, and handoff between Article prose and source motion.
 Preserve every domain-owned semantic trace, renderer, and clock plus the
 shared Focus Deck shell.
+
+The user reaffirmed Focus Cards as the canonical current product format on
+2026-09-06. Performance acceptance must exercise this host and its passage/stage
+coordination, not substitute a standalone equation reader. The same-asset Firefox
+comparison and bounded accessibility-work reduction are recorded in
+`../decisions/2026-09-06-focus-card-performance-acceptance.md`.
 
 ## Goal
 
