@@ -8,6 +8,65 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-05-structural-authoring-g0-market-checkpoint.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.authoring-integration-market-preview"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:authoring-integration",
+    "npm run typecheck",
+    "npm run visual:authoring-market",
+    "npm test",
+    "npm run build"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:authoring-integration; npm run visual:authoring-market; npm run typecheck; npm run check:architecture; npm run check:dependency-direction",
+      "status": "passed",
+      "scope": "s01",
+      "checkedAt": "2026-09-06T02:55:15.636Z",
+      "notes": "68 integration tests and 8 Chromium checks pass; full types and architecture pass. Intentional syntax-error fixture restored original sources. Human G0 review remains pending."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT G0: s01 review preparation complete, 1 of 28 slices. Explicit acceptance of current market authoring/API/visual specimen required before s02. No canonical migration performed."
+  },
+  "expectedLearning": [
+    "Whether two structural equation callers justify canonical economics adoption without parallel state or presentation authority."
+  ],
+  "allowedWork": [
+    "Only the exact 28 approved proposal rows with G0 G1 G2 G3 gates, scoped verification and per-slice commits."
+  ],
+  "disallowedWork": [
+    "No visual checkpoint waiver, new choreography, broad migration, universal AST, publication platform, budget increase, merge or branch deletion."
+  ],
+  "criteria": [
+    {
+      "id": "structural-authority-history-paint",
+      "weight": "high"
+    },
+    {
+      "id": "canonical-source-adoption",
+      "weight": "high"
+    },
+    {
+      "id": "preserved-reader-behavior",
+      "weight": "high"
+    },
+    {
+      "id": "human-review-gates",
+      "weight": "high"
     }
   ]
 }

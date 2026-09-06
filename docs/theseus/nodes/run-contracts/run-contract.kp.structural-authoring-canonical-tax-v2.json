@@ -1,9 +1,10 @@
 {
-  "id": "run-contract.kp.structural-authoring-canonical-tax-v1",
+  "id": "run-contract.kp.structural-authoring-canonical-tax-v2",
   "kind": "run-contract",
   "title": "Structural authoring proof and canonical tax adoption",
-  "status": "superseded",
-  "summary": "Metadata-incomplete creation: replace with exact same approved 28 slices in v2 with typed run mode, max slices, cadence, verification level and stop conditions. No scope change.",
+  "status": "blocked",
+  "domain": "kp",
+  "summary": "HUMAN_CHECKPOINT G0 after s01. User approved execution proposal, not existing market visual/API review. Resume s02 only after explicit G0 acceptance.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -13,7 +14,7 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md",
-      "summary": "Exact 28-slice proposal approved by user. Approval does not waive G0 after s01, G1 after s12, G2 after s18 or G3 after s28. Proposal owns canonical sources, tiers, checks, preservation and rollback."
+      "summary": "Exact approved 28 slices unchanged from v1; metadata-complete replacement. G0 G1 G2 G3 remain mandatory."
     }
   ],
   "verification": [
@@ -102,12 +103,23 @@
   ],
   "goal": "Execute the exact approved 28 slices: review market; prove distribution and carrier-preserving simplification; migrate canonical supply-tax source; preserve G0 G1 G2 G3 human gates.",
   "target": "next-action.kp.structural-authoring-canonical-tax",
+  "runMode": "run",
+  "maxSlices": 28,
+  "commitCadence": "Commit each verified independently reversible slice with evidence; planning checkpoint before work; no merge.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "G0 after s01: explicit market authoring/API/visual approval absent.",
+    "G1 after s12: distribution visual approval absent.",
+    "G2 after s18: structural two-caller approval absent before migration.",
+    "G3 after s28: canonical parity review; no merge or generalization.",
+    "Per-slice stop and X in approved proposal: failed mandatory checks, absent authority, scope expansion, unsupported paint, dirty conflict or required budget increase."
+  ],
   "slices": [
     {
       "id": "s01",
       "title": "Current market checkpoint: reproduce the author edit/error/repair and settled-demand workflow; record explicit review disposition",
-      "summary": "No implementation changed. Verification work continues under identical-scope v2 because CLI creation omitted typed run metadata; preserve context receipt on unchanged target.",
-      "status": "planned"
+      "summary": "Review evidence complete: 68 integration and 8 browser checks, types and architecture pass. G0 disposition pending human acceptance; this is not visual approval. Stop before s02.",
+      "status": "complete"
     },
     {
       "id": "s02",

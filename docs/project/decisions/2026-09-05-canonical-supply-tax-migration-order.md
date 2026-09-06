@@ -45,7 +45,7 @@ waiver of exemplar review, or approval to execute a newly proposed long loop.
 The next proposal is
 `../reviews/2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md`.
 The user subsequently approved that exact proposal. Theseus contract
-`run-contract.kp.structural-authoring-canonical-tax-v1` owns execution and
+`run-contract.kp.structural-authoring-canonical-tax-v2` owns execution and
 progress; G0 visual/API approval remains outstanding.
 
 The prior integration run remains completed at its human checkpoint. Earlier

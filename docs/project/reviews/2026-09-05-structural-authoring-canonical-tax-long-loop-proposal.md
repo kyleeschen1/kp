@@ -3,7 +3,7 @@
 Date: 2026-09-05
 Status: exact 28-slice proposal approved; Theseus owns execution
 Mode: long, explicitly requested through theseus-long-loop
-Contract: `run-contract.kp.structural-authoring-canonical-tax-v1`
+Contract: `run-contract.kp.structural-authoring-canonical-tax-v2`
 Target: `next-action.kp.structural-authoring-canonical-tax`
 
 ## Outcome and why now
@@ -172,6 +172,16 @@ domain frontends, framework upgrades, performance rewrites without pressure,
 branch merge/deletion, and deployment to external infrastructure.
 
 ## Planning diagnostics
+
+Execution setup correction: v1 retained the approved text and slice order but
+omitted typed run mode, maximum slices, cadence, verification level and stop
+fields because the CLI short help did not list them. V1 is superseded, not
+deleted. V2 preserves the exact approved scope and supplies those fields;
+`theseus plan run` passes its autonomy gate. The target also now has explicit
+done criteria. This is metadata repair, not new execution authority.
+
+The following thin-queue diagnostic describes pre-approval planning, not the
+current active contract:
 
 `theseus plan run` reports a thin queue and no active contract. The prescribed
 bounded refill query failed with `action-plan token count 810 exceeds budget

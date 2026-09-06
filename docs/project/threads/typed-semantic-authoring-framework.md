@@ -25,7 +25,8 @@ after structural equation proof and before broader authoring/publication or
 knowledge work. See
 `../decisions/2026-09-05-canonical-supply-tax-migration-order.md`.
 The user approved the exact successor proposal linked above; execution is owned
-by `run-contract.kp.structural-authoring-canonical-tax-v1`.
+by `run-contract.kp.structural-authoring-canonical-tax-v2` (v1 was superseded
+for missing typed execution metadata; approved scope is unchanged).
 It preserves the prior market checkpoint, adds structural
 review gates, and makes canonical route adoption plus adjacent obsolete-wiring
 retirement explicit. The existing supply-tax page still uses its original
