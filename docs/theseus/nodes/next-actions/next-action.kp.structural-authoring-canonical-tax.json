@@ -61,6 +61,13 @@
       "scope": "s04",
       "checkedAt": "2026-09-06T03:25:38.803Z",
       "notes": "Test-first missing module observed before implementation; now 6 tests pass. Existing structured trees and immutable state IDs retained, JSON data round-trip and callable rejection pass. Full types pass; inference111257/192271 unchanged."
+    },
+    {
+      "command": "npm run test:authoring-structural; npm run typecheck; git diff --check",
+      "status": "passed",
+      "scope": "s05",
+      "checkedAt": "2026-09-06T03:28:57.961Z",
+      "notes": "8 tests and full types pass. RED missing implementation observed first. Exact version recovery, stale/no-op successor rejection, foreign model and missing subtree typed gaps verified."
     }
   ],
   "progress": {

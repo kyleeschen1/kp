@@ -142,7 +142,8 @@
     {
       "id": "s05",
       "title": "Structural selection: pin existing expression selections and reject stale/foreign versions",
-      "status": "planned"
+      "summary": "Pinned structural selections and typed stale/foreign/missing gaps implemented;8 tests and full types pass. Inspection remains separate from operation authority.",
+      "status": "complete"
     },
     {
       "id": "s06",
