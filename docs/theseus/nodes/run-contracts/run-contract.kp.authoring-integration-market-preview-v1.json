@@ -259,7 +259,8 @@
     {
       "id": "s24",
       "title": "Host lifecycle and local address restoration: disposal, re-entry, resize, bounded resources, and isolated deep links",
-      "status": "planned"
+      "summary": "Three deep links survive reload/resize; repeated disposal releases exclusive adapters and prevents inactive sampling. Eight browser,66 integration and full types pass.",
+      "status": "complete"
     },
     {
       "id": "s25",

@@ -432,3 +432,19 @@ comparison now retains every property value and priority while ignoring order.
 No renderer or semantic repair was necessary. The existing real-file invalid
 revision and asynchronous receiver tests retain last-valid revision isolation.
 All sessions retain exactly three persistent snapshots.
+
+## Host lifecycle and address restoration
+
+Eight scoped Chromium checks pass. The opt-in route reuses existing
+`#beat.baseline-market`, `#beat.supply-translation`, and `#beat.deadweight-loss`
+addresses. Each restores the same exact model boundary after reload and
+390/1280-pixel viewport changes. The canonical government-revenue deep link
+still resolves through its unchanged public route, without authoring markers.
+
+Three repeated mounts acquire and release the actual exclusive adapters.
+After double disposal, detached scrubber events, resize/hash events and two
+animation frames neither revive the DOM nor sample the retired frame session.
+Session state is disposed, history remains three snapshots, and browser errors
+remain empty. Existing ownership was sufficient; no new URL parser, resource
+registry, clock, or lifecycle implementation was added. This is bounded runtime
+evidence, not an exhaustive heap-leak or long-duration soak certification.

@@ -270,11 +270,18 @@
       "scope": "s23",
       "checkedAt": "2026-09-06T00:37:28.668Z",
       "notes": "66 integration,six browser,zero type errors; CSS declaration order normalized without dropping values."
+    },
+    {
+      "command": "npm run visual:authoring-market; npm run typecheck; npm run test:authoring-integration",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-09-06T00:41:09.876Z",
+      "notes": "Eight browser tests including three deep links,reloads,resize and repeated retirement;66 integration;zero type errors."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s23 deterministic cross-view and revision isolation checks pass; no runtime repair required."
+    "summary": "s24 lifecycle and local address restoration verified through existing canonical ownership."
   },
   "expectedLearning": [
     "Whether internal assembly and a bounded math bridge make one exact market explanation authorable without duplicate semantics or renderer authority."

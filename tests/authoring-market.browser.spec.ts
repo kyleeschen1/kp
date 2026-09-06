@@ -235,3 +235,59 @@ test("fixed playhead restores identical graph, native labels, prose and attentio
     await expect(page.locator("#app")).toHaveAttribute("data-kp-authoring-market-snapshot-count", "3");
   }
 });
+
+test("isolated deep links restore endpoints through reload and resize without changing canonical URLs", async ({ page }) => {
+  for (const [beat, progress] of [["baseline-market", "0.0000"], ["supply-translation", "1.0000"], ["deadweight-loss", "1.0000"]]) {
+    const path = `/experiments/authoring-market/#beat.${beat}`;
+    await page.goto(path);
+    const deck = page.locator("[data-kp-supply-tax-focus-deck]");
+    await expect(deck).toHaveAttribute("data-kp-focus-deck-active-beat", beat!);
+    await expect(deck).toHaveAttribute("data-kp-supply-tax-model-progress", progress!);
+    const address = await page.locator("#app").getAttribute("data-kp-authoring-market-address");
+    for (const width of [390, 1280]) {
+      await page.setViewportSize({ width, height: 900 });
+      await expect(deck).toHaveAttribute("data-kp-focus-deck-active-beat", beat!);
+      await expect(page.locator("#app")).toHaveAttribute("data-kp-authoring-market-address", address!);
+    }
+    await page.reload();
+    await expect(page.locator("#app")).toHaveAttribute("data-kp-authoring-market-address", address!);
+    expect(new URL(page.url()).pathname + new URL(page.url()).hash).toBe(path);
+  }
+  await page.goto("/experiments/kinetic-figure/supply-tax/#beat.government-revenue");
+  await expect(page.locator("[data-kp-supply-tax-focus-deck]")).toHaveAttribute("data-kp-focus-deck-active-beat", "government-revenue");
+  await expect(page.locator("#app")).not.toHaveAttribute("data-kp-authoring-market");
+});
+
+test("repeated host retirement cancels inactive sampling and releases exclusive adapters", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await page.goto("/experiments/authoring-market/");
+  await expect(page.locator("#app")).toHaveAttribute("data-kp-authoring-market", "state-driven-tax");
+  const results = await page.evaluate(async modulePath => {
+    window.dispatchEvent(new PageTransitionEvent("pagehide", { persisted: false }));
+    const { mountKpAuthoringMarket } = await import(modulePath);
+    const { prepareKpAuthoringMarketPreview } = await import(modulePath.replace("authoring-market-host", "authoring-market-preview-prepare"));
+    const revision = await fetch("/__kp/authoring-market/revision").then(response => response.json());
+    const prepared = prepareKpAuthoringMarketPreview(revision.preview);
+    const root = document.querySelector<HTMLElement>("#app")!;
+    const checks = [];
+    for (let index = 0; index < 3; index++) {
+      const mounted = mountKpAuthoringMarket({ root, prepared });
+      const scrubber = root.querySelector<HTMLInputElement>("[data-kp-supply-tax-state-scrubber]")!;
+      scrubber.value = "1.371";
+      scrubber.dispatchEvent(new Event("input", { bubbles: true }));
+      mounted.dispose(); mounted.dispose();
+      root.dataset["kpAuthoringMarketAddress"] = "retired";
+      scrubber.value = "1.8";
+      scrubber.dispatchEvent(new Event("input", { bubbles: true }));
+      window.dispatchEvent(new Event("resize"));
+      window.dispatchEvent(new Event("hashchange"));
+      await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+      checks.push({ state: mounted.frames.inspect().status, count: mounted.frames.history.snapshots.length,
+        children: root.childElementCount, address: root.dataset["kpAuthoringMarketAddress"] });
+    }
+    return checks;
+  }, "/src/experiments/authoring-market/authoring-market-host.ts");
+  expect(results).toEqual(Array.from({ length: 3 }, () => ({ state: "disposed", count: 3, children: 0, address: "retired" })));
+  expect(errors).toEqual([]);
+});
