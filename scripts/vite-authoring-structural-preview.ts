@@ -18,9 +18,9 @@ export function kpViteAuthoringStructuralPreview(): Plugin {
             if (card || simplificationCard) {
               const kind = card ? "distribution" : "simplification";
               const module = await server.ssrLoadModule("/src/experiments/authoring-structural/focus-card-static-build.ts") as {
-                buildKpAuthoredFocusCardStatic: (kind: "distribution" | "simplification") => string };
+                buildKpAuthoredFocusCardInitial: (kind: "distribution" | "simplification") => string };
               const title = card ? "Fraction distribution" : "Multiplying by one";
-              const html = await server.transformIndexHtml(request.url!, `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} · Kinetic Press</title><link rel="stylesheet" href="/src/experiments/authored-focus-card.css"><link rel="stylesheet" href="/node_modules/katex/dist/katex.min.css"></head><body><main id="authored-focus-card"><h1>${title}</h1>${module.buildKpAuthoredFocusCardStatic(kind)}</main><script type="module" src="/src/experiments/authoring-${kind}-focus-card/entry.ts"></script></body></html>`);
+              const html = await server.transformIndexHtml(request.url!, `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} · Kinetic Press</title><link rel="stylesheet" href="/src/experiments/authored-focus-card.css"><link rel="stylesheet" href="/node_modules/katex/dist/katex.min.css"></head><body><main id="authored-focus-card"><h1>${title}</h1>${module.buildKpAuthoredFocusCardInitial(kind)}</main><script type="module" src="/src/experiments/authoring-${kind}-focus-card/entry.ts"></script></body></html>`);
               response.writeHead(200, { "content-type": "text/html", "cache-control": "no-store" }).end(html);
               return;
             }

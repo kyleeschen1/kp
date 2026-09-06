@@ -5,5 +5,14 @@
 #authored-focus-card { max-width: 780px; margin: 3rem auto; padding: 0 1rem; }
 #authored-focus-card h1 { margin-bottom: .25rem; font-family: var(--kp-serif); }
 .source-label, .review-help { color: var(--kp-muted); font-size: .9rem; }
+/* Preparation measures real native DOM, but must not expose its intermediate
+   endpoint layers. The reserved stage stays full-sized until one owner is ready. */
+[data-kp-focus-card-enhancement="preparing"] .kp-focus-deck__stage > * { opacity: 0 !important; }
+[data-kp-focus-card-enhancement="preparing"] .kp-focus-deck__stage::after {
+  content: "Preparing figure…";
+  position: absolute; inset: 0; display: grid; place-items: center;
+  color: var(--kp-st-muted); font: .9rem/1.5 ui-sans-serif, system-ui, sans-serif;
+}
+[data-kp-focus-card-enhancement="preparing"] .kp-focus-deck__navigation { visibility: hidden; }
 #authored-focus-card dd { overflow-wrap: anywhere; margin-left: 0; }
 @media (max-width: 46rem) { #authored-focus-card { margin: 1rem auto; padding: 0 .5rem; } }

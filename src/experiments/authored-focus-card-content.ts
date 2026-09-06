@@ -19,6 +19,7 @@ export function renderKpAuthoredFocusCard(kind: "distribution" | "simplification
     activeBeatSlug: beats[0].slug, beats, stageHtml, replayHidden: false,
     headerTrailingHtml: distribution ? "<span>One factor · two terms</span>" : "",
     rootAttributes: { [`data-kp-authoring-${kind}-card`]: staticOutput ? "static" : "preparing",
+      "data-kp-focus-card-enhancement": staticOutput ? "static" : "preparing",
       "data-kp-focus-deck-static": String(staticOutput) }
   });
 }

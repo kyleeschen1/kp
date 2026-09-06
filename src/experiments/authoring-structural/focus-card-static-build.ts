@@ -18,3 +18,12 @@ export function buildKpAuthoredFocusCardStatic(kind: "distribution" | "simplific
   });
   return renderKpAuthoredFocusCard(kind, `<div class="kp-focus-deck__stage" data-kp-static-equation-endpoints>${endpoints.join("")}</div>`, true);
 }
+
+/** A static comparison is a no-JS projection, not an intermediate animation
+ * frame. Keep it out of first paint when enhancement will prepare native DOM. */
+export function buildKpAuthoredFocusCardInitial(kind: "distribution" | "simplification") {
+  const label = kind === "distribution" ? "verified distribution" : "carrier-preserving simplification";
+  return `<p class="source-label">Authoring-backed Focus Card · ${label}</p>` +
+    `<div data-kp-focus-card-loading>${renderKpAuthoredFocusCard(kind, '<div class="kp-focus-deck__stage" aria-label="Preparing figure"></div>')}</div>` +
+    `<noscript><style>[data-kp-focus-card-loading]{display:none}</style>${buildKpAuthoredFocusCardStatic(kind)}</noscript>`;
+}

@@ -1,6 +1,42 @@
 import { expect, test } from "@playwright/test";
 
 const route = "/experiments/authoring-distribution-focus-card/";
+for (const kind of ["distribution", "simplification"] as const) test(`loading never paints the static comparison or unprepared native layers: ${kind}`, async ({ page }, info) => {
+  let release!: () => void;
+  const gate = new Promise<void>(resolve => { release = resolve; });
+  await page.route(`**/api/dev/authoring-structural/${kind === "distribution" ? "distribution-focus-card" : "simplification"}`, async route => {
+    await gate; await route.continue();
+  });
+  await page.addInitScript(() => {
+    const evidence = { unpreparedPaint: 0, ready: false };
+    (window as typeof window & { preparationEvidence: typeof evidence }).preparationEvidence = evidence;
+    const sample = () => {
+      const card = document.querySelector<HTMLElement>("[data-kp-focus-card-enhancement]");
+      if (card?.dataset["kpFocusCardEnhancement"] === "ready") { evidence.ready = true; return; }
+      for (const child of card?.querySelector(".kp-focus-deck__stage")?.children ?? []) {
+        if (Number(getComputedStyle(child).opacity) > 0) evidence.unpreparedPaint++;
+      }
+      requestAnimationFrame(sample);
+    };
+    requestAnimationFrame(sample);
+  });
+  const target = kind === "distribution" ? "distributed" : "target";
+  await page.goto(`/experiments/authoring-${kind}-focus-card/#beat.authoring-${kind}.${target}`, { waitUntil: "domcontentloaded" });
+  await expect(page.locator("[data-kp-focus-card-loading]")).toBeVisible();
+  await expect(page.locator(".katex")).toHaveCount(0);
+  const before = await page.locator("[data-kp-focus-deck]").boundingBox();
+  await page.locator("[data-kp-focus-deck]").screenshot({ path: info.outputPath(`loading-${kind}.png`) });
+  release();
+  const card = page.locator('[data-kp-focus-card-enhancement="ready"]');
+  await expect(card).toBeVisible();
+  await expect(card).toHaveAttribute("data-kp-focus-deck-active-beat", target);
+  await expect(page.locator("[data-kp-static-equation-endpoints]")).toHaveCount(0);
+  const after = await card.boundingBox();
+  for (const key of ["x", "y", "width", "height"] as const) expect(Math.abs(after![key] - before![key])).toBeLessThan(2);
+  await expect.poll(() => page.evaluate(() => (window as typeof window & { preparationEvidence: { ready: boolean } }).preparationEvidence.ready)).toBe(true);
+  expect(await page.evaluate(() => (window as typeof window & { preparationEvidence: { unpreparedPaint: number } }).preparationEvidence.unpreparedPaint)).toBe(0);
+});
+
 for (const width of [1100, 390]) test(`authored fraction Focus Card preserves native motion and passage at ${width}`, async ({ page }, info) => {
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));

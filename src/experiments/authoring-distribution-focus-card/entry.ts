@@ -99,7 +99,10 @@ async function mount() {
     disposeSurface: () => session.dispose()
   });
   import.meta.hot?.dispose(controller.dispose);
-  if (!root.dataset["kpDistributionRepairGap"]) card.dataset["kpAuthoringDistributionCard"] = "ready";
+  if (!root.dataset["kpDistributionRepairGap"]) {
+    card.dataset["kpAuthoringDistributionCard"] = "ready";
+    card.dataset["kpFocusCardEnhancement"] = "ready";
+  }
 }
 
 void mount().catch(reportGap);

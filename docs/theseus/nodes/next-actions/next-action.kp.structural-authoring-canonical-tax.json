@@ -41,6 +41,10 @@
     {
       "kind": "file",
       "path": "docs/project/decisions/2026-09-06-focus-card-form-and-separation.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-06-identity-ink-shrink-and-card-loading.md"
     }
   ],
   "dependsOn": {
@@ -254,6 +258,13 @@
       "scope": "s17-resumed",
       "checkedAt": "2026-09-06T21:32:09.558Z",
       "notes": "118158 types / 205487 instantiations versus unchanged 112500 / 195800 ceilings. Structural attribution command passes and shows each implementation import independently exceeds baseline headroom. Wrapper annotation experiment reverted as ineffective."
+    },
+    {
+      "command": "npm run visual:authoring-distribution-card",
+      "status": "passed",
+      "scope": "identity-shrink-loading-repair",
+      "checkedAt": "2026-09-06T22:50:21.812Z",
+      "notes": "30 Chromium/Firefox checks pass, including delayed data, zero unprepared paint, stable card bounds and no-JS content. Eight authored structural and five existing carrier browser checks pass; 29 carrier and 82 compositor tests, full types and architecture pass."
     }
   ],
   "progress": {
