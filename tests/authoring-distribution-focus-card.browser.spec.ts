@@ -14,6 +14,9 @@ for (const width of [1100, 390]) test(`authored fraction Focus Card preserves na
   const pins = await card.evaluate(node => [node.getAttribute("data-kp-authoring-structural-before"), node.getAttribute("data-kp-authoring-structural-after")]);
   expect(pins[0]).toBeTruthy(); expect(pins[1]).toBeTruthy(); expect(pins[0]).not.toBe(pins[1]);
   await card.screenshot({ path: info.outputPath("authored-fraction-source.png") });
+  const profiler = process.env["KP_PROFILE_AUTHORED_CARD"] === "1" && info.project.name === "chromium" ? await page.context().newCDPSession(page) : undefined;
+  await profiler?.send("Profiler.enable");
+  await profiler?.send("Profiler.start");
   const evidence = await card.evaluate(async node => {
     const card = node as HTMLElement;
     const deltas: number[] = [];
@@ -29,7 +32,9 @@ for (const width of [1100, 390]) test(`authored fraction Focus Card preserves na
     const sorted = [...deltas].sort((a, b) => a - b);
     return { material, samples: deltas.length, p50: sorted[Math.floor(sorted.length * .5)], p95: sorted[Math.floor(sorted.length * .95)], max: sorted.at(-1) };
   });
-  expect(evidence.material).toBeGreaterThan(0);
+  // A correct endpoint plus one intermediate frame can still look instantaneous.
+  expect(evidence.material).toBeGreaterThan(20);
+  expect(evidence.max).toBeLessThan(180);
   await expect(card).toHaveAttribute("data-kp-focus-deck-active-beat", "distributed");
   await card.screenshot({ path: info.outputPath("authored-fraction-target.png") });
   await card.locator("[data-kp-focus-deck-previous]").click();
@@ -37,15 +42,53 @@ for (const width of [1100, 390]) test(`authored fraction Focus Card preserves na
   await card.locator("[data-kp-focus-deck-scrubber]").fill("0.5");
   await expect(card).toHaveAttribute("data-kp-distribution-progress", "0.5");
   await card.screenshot({ path: info.outputPath("authored-fraction-transit.png") });
+  const scrubCosts = await card.evaluate(async node => {
+    const range = node.querySelector<HTMLInputElement>("[data-kp-focus-deck-scrubber]")!;
+    const costs: number[] = [];
+    for (let i = 0; i < 40; i++) {
+      await new Promise(requestAnimationFrame);
+      range.value = String((i % 20 + 1) / 22);
+      const start = performance.now();
+      range.dispatchEvent(new Event("input", { bubbles: true }));
+      costs.push(performance.now() - start);
+    }
+    return costs;
+  });
+  console.log(JSON.stringify({ scrubCosts, browser: info.project.name, width }));
+  expect(Math.max(...scrubCosts)).toBeLessThan(140);
+  if (profiler) {
+    const { profile } = await profiler.send("Profiler.stop");
+    await info.attach("native-card-cpu-profile", { body: JSON.stringify(profile), contentType: "application/json" });
+    const weights = new Map<number, number>();
+    profile.samples?.forEach((id, i) => weights.set(id, (weights.get(id) ?? 0) + (profile.timeDeltas?.[i] ?? 0)));
+    console.log(JSON.stringify(profile.nodes.map(node => ({ name: node.callFrame.functionName, url: node.callFrame.url, ms: (weights.get(node.id) ?? 0) / 1000 })).sort((a,b) => b.ms-a.ms).slice(0,20)));
+  }
   await page.goto(route + "#beat.authoring-distribution.distributed");
   await expect(card).toHaveAttribute("data-kp-authoring-distribution-card", "ready");
   await expect(card).toHaveAttribute("data-kp-distribution-state", "fraction-solve.state.distributed");
   await page.setViewportSize({ width: width === 390 ? 430 : 1000, height: 850 });
   await expect(card).toHaveAttribute("data-kp-distribution-progress", "1");
-  await card.locator("[data-kp-focus-deck-viewport]").evaluate(node => { node.scrollLeft = 0; });
+  const swipeProgresses = await card.evaluate(async node => {
+    const card = node as HTMLElement;
+    const viewport = card.querySelector<HTMLElement>("[data-kp-focus-deck-viewport]")!;
+    viewport.scrollLeft = 0;
+    const samples: number[] = [];
+    for (let i = 0; i < 120; i++) {
+      await new Promise(requestAnimationFrame);
+      const progress = Number(card.dataset["kpDistributionProgress"]);
+      samples.push(progress);
+      if (progress === 0) break;
+    }
+    return samples;
+  });
+  expect(swipeProgresses.filter(progress => progress > 0 && progress < 1).length).toBeGreaterThan(20);
   await expect(card).toHaveAttribute("data-kp-distribution-progress", "0");
   await card.locator("[data-kp-focus-deck-replay]").click();
   await expect(card).toHaveAttribute("data-kp-distribution-progress", "1");
+  await card.locator("[data-kp-focus-deck-scrubber]").fill("0.3");
+  await card.locator("[data-kp-focus-deck-next]").click();
+  await card.locator("[data-kp-focus-deck-previous]").click();
+  await expect(card).toHaveAttribute("data-kp-distribution-progress", "0");
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   expect(errors).toEqual([]);
   console.log(JSON.stringify({ width, browser: info.project.name, ...evidence }));
@@ -64,4 +107,22 @@ test("authored card honors reduced motion and fails closed when prepared source 
   await page.reload();
   await expect(page.locator('[role="alert"]')).toContainText("preparation-gap");
   await expect(page.locator('[data-kp-authoring-distribution-card="ready"]')).toHaveCount(0);
+});
+
+test("card paint cache preserves uncached native material pixels", async ({ page }) => {
+  await page.goto(route);
+  const card = page.locator('[data-kp-authoring-distribution-card="ready"]');
+  await expect(card).toBeVisible();
+  const stage = card.locator("[data-distribution-stage]");
+  const scrub = async (value: number) => card.evaluate((node, value) => {
+    const range = node.querySelector<HTMLInputElement>("[data-kp-focus-deck-scrubber]")!;
+    range.value = String(value); range.dispatchEvent(new Event("input", { bubbles: true }));
+  }, value);
+  const cached = [];
+  for (const progress of [.25, .75]) { await scrub(progress); cached.push(await stage.screenshot()); }
+  await card.evaluate(node => node.querySelectorAll<HTMLElement>("[data-kp-equation-material-visual-cache]").forEach(surface => { delete surface.dataset["kpEquationMaterialVisualCache"]; }));
+  for (const [index, progress] of [.25, .75].entries()) {
+    await scrub(progress);
+    expect((await stage.screenshot()).equals(cached[index]!)).toBe(true);
+  }
 });

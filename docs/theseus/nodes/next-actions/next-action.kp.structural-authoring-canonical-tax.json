@@ -183,6 +183,13 @@
       "scope": "authoring-distribution-focus-card",
       "checkedAt": "2026-09-06T17:36:27.692Z",
       "notes": "Six Chromium and Firefox desktop/phone cases pass: real native distribution, rewind, scrub, replay, passage navigation, resize, exact URL restoration, reduced motion and fail-closed data. Existing first-play stalls remain; not visual acceptance."
+    },
+    {
+      "command": "npm run visual:authoring-distribution-card",
+      "status": "passed",
+      "scope": "swipe-and-stutter-repair",
+      "checkedAt": "2026-09-06T18:41:39.272Z",
+      "notes": "16 Chromium/Firefox cases pass, including perceptible swipe and playback, post-resize navigation, interruption, bounded scrub, cached/uncached pixels and clone authority. Largest observed playback gap improved from 567 to 18 ms Chromium and 950 to 83 ms Firefox; remaining Firefox attention handoff cost is documented, not declared solved."
     }
   ],
   "progress": {

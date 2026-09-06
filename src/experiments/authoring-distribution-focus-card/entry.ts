@@ -53,19 +53,40 @@ async function mount() {
   const shell = mountKpCanonicalEquationStageShell({ target: card.querySelector<HTMLElement>("[data-distribution-stage]")!, template,
     bindStructuralAnchors: root => bindKpReaderEquationLessonStructuralAnchors({ root, animation, descriptor: fractionCompositionDescriptor }) });
   const salience = createKpFractionCompositionSalienceReaderCapability({ root: card, href: location.href, theme: "light" });
+  // Reuse the renderer's existing source/target typography cache rather than
+  // replacing computed-style clones on every late-transit sample.
+  shell.transitions.forEach(transition => {
+    transition.querySelector<HTMLElement>("[data-kp-reader-fit-surface]")!.dataset["kpEquationMaterialVisualCache"] = "dual-revision";
+  });
   const session = await createKpChromeFreeCanonicalEquationSession({ shell, animation, descriptor: fractionCompositionDescriptor,
+    prewarmAdjacentTransitions: false,
     equationPresentationProfile: resolveKpReaderEquationPresentationProfile("standard"), linkRoot: card,
     createStageLayoutIntent: planKpFractionCompositionLayout, renderSalience: frame => salience.render(frame) });
   const clock = createKpReaderTimelinePlaybackClock({ id: "reader.focus-card.authored-distribution", durationMs, ownerWindow: window });
+  // Compile the bounded card's native endpoint and attention revisions before
+  // opening interaction. Compilation must not consume the playback clock.
+  let preparedRevision = "";
+  let sampledRevision = "";
+  const prepare = () => {
+    for (const progress of [0, end / 2, end, 0]) {
+      const sample = session.seek(progress);
+      preparedRevision = `${sample.layoutRevision}:${sample.fontRevision}`;
+    }
+  };
+  await document.fonts.ready;
+  prepare();
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const scrubber = card.querySelector<HTMLInputElement>("[data-kp-focus-deck-scrubber]")!;
   const viewport = card.querySelector<HTMLElement>("[data-kp-focus-deck-viewport]")!;
   const previous = card.querySelector<HTMLButtonElement>("[data-kp-focus-deck-previous]")!;
   const next = card.querySelector<HTMLButtonElement>("[data-kp-focus-deck-next]")!;
   let destination = 0;
+  let passageIndex = -1;
   let disposed = false;
   const showPassage = (index: number) => {
     destination = index;
+    if (passageIndex === index) return;
+    passageIndex = index;
     card.dataset["kpFocusDeckActiveBeat"] = beats[index]!.slug;
     viewport.scrollLeft = index * viewport.clientWidth;
     card.querySelectorAll<HTMLElement>("[data-kp-focus-deck-beat]").forEach((node, i) => {
@@ -81,6 +102,7 @@ async function mount() {
     try {
       const sample = clock.getSnapshot();
       const result = session.sample({ clock: sample, motionMode: reduced.matches ? "essential" : "continuous" });
+      sampledRevision = `${result.layoutRevision}:${result.fontRevision}`;
       card.dataset["kpDistributionProgress"] = String(sample.progress / end);
       card.dataset["kpDistributionState"] = result.accessibleEquationState;
       card.dataset["kpDistributionTransition"] = clock.getStatus() === "playing" ? "active" : "settled";
@@ -96,6 +118,10 @@ async function mount() {
   const select = (index: number, animate: boolean) => {
     if (disposed) return;
     clock.pause();
+    // Font/layout invalidation can arrive after the window resize callback.
+    // Pay that setup cost before the wall-clock animation starts advancing.
+    render();
+    if (sampledRevision !== preparedRevision) { prepare(); render(); }
     showPassage(index);
     history.replaceState(null, "", `#beat.authoring-distribution.${beats[index]!.slug}`);
     if (!animate || reduced.matches) clock.seek(index * end);
@@ -105,15 +131,14 @@ async function mount() {
   next.onclick = () => select(1, true);
   card.querySelector<HTMLButtonElement>("[data-kp-focus-deck-replay]")!.onclick = () => { clock.seek(0); select(1, true); };
   scrubber.oninput = () => { clock.seek(Number(scrubber.value) * end); showPassage(Number(scrubber.value) >= .5 ? 1 : 0); };
-  // Passage navigation selects an endpoint; programmatic passage alignment must
+  // Passage navigation plays the same range as arrows; programmatic alignment must
   // not take the playhead back from the shared animation clock.
   viewport.onscroll = () => {
-    if (clock.getStatus() === "playing") return;
     const index = Math.round(viewport.scrollLeft / Math.max(1, viewport.clientWidth));
-    if ((index === 0 || index === 1) && index !== destination) select(index, false);
+    if ((index === 0 || index === 1) && index !== destination) select(index, true);
   };
   const restore = () => select(location.hash.endsWith(".distributed") ? 1 : 0, false);
-  const resize = () => { session.invalidate(); showPassage(destination); render(); };
+  const resize = () => { clock.pause(); session.invalidate(); prepare(); passageIndex = -1; showPassage(destination); render(); };
   const visibility = () => { if (!disposed && document.hidden) { clock.pause(); render(); } };
   const motionChange = () => { if (reduced.matches) clock.seek(destination * end); else render(); };
   window.addEventListener("hashchange", restore);

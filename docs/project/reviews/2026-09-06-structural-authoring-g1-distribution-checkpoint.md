@@ -98,6 +98,62 @@ Screenshots are disposable outputs of the committed scoped command, not goldens.
 
 ## Preservation, rollback and next step
 
+### Follow-up: swipe and stutter repair (2026-09-06)
+
+The user reported that prose swipes jumped immediately while arrows and scrubbing
+stuttered, then approved the recommended repair. The card's scroll handler had
+explicitly selected a non-animated seek. Swipes now use the same playback range
+as arrows, including interruption; URL restoration remains a direct seek.
+
+Profiling identified protected-plan preparation and material paint reconstruction,
+not authored semantic mutation, on the interaction path. The card now prepares its
+bounded native endpoint/attention revisions before starting the clock, checks late
+font/layout invalidation, disables unrelated adjacent-operation prewarming, and
+uses the renderer's existing dual-revision typography cache. Repeated prose
+alignment is skipped within the same beat. Timing and choreography are unchanged.
+
+Opt-in renderer repair retains at most four exact-revision endpoint snapshots and
+detached paint-template revisions. Keys retain geometry, font, presentation and
+surface authority; explicit invalidation clears measurements and advances paint
+generation. Each live owner receives a separate mutable clone; native semantics
+and interaction are still stripped from material. Ordinary uncached callers retain
+their existing path. A bulk CSS-copy experiment did not improve performance and
+was discarded.
+
+The scoped command `npm run visual:authoring-distribution-card` now executes 16
+Chromium/Firefox tests: desktop/phone motion, post-resize swipe, reverse, scrub,
+arrow interruption, replay, direct link, reduced motion, fail-closed source,
+cached-versus-uncached pixel parity at two attention states, and material cache
+isolation/revision/typography/SVG/authority checks. Playback and swipe require more
+than 20 intermediate material/progress samples; the previous one-frame criterion
+could accept nearly instantaneous motion. A Firefox post-resize failure caught by
+that stronger test drove pre-play invalidation checks. Optional CPU profiling is
+available through `KP_PROFILE_AUTHORED_CARD=1` on the same command.
+
+Observed desktop baseline versus final run (local development machine, not a
+cross-device guarantee):
+
+| Measurement | Before | After |
+| --- | --- | --- |
+| Chromium first-play largest frame gap | 567 ms | 18 ms |
+| Firefox first-play largest frame gap | 950 ms | 83 ms |
+| Chromium ordinary scrub sample | about 4–6 ms | about 1–2 ms |
+| Firefox attention-boundary scrub sample | about 100–113 ms | about 66–78 ms |
+
+The final phone run showed largest playback gaps of about 18 ms in Chromium and
+83 ms in Firefox. These are material improvements, not a claim of uniformly smooth
+60 fps: Firefox still has a perceptible attention-handoff rebuild cost. Preparation
+now costs readiness time rather than consuming the short playback interval. Further
+work should profile that remaining rebuild/calibration boundary, not slow the
+animation, discard salience, weaken collision verification, or change semantic
+authoring. G1 remains unapproved until human review on the actual Focus Card.
+
+Rollback units are the card's host/navigation/preparation changes and the opt-in
+renderer measurement/template reuse. Neither changes semantic schemas, source
+operations, exact native endpoints, default tax wiring, or the approved run order.
+
+### Existing preservation contract
+
 Preserve semantic trees, stable identities, operation authority, native ownership,
 clock, existing timing and default lesson routes. The reader opt-in delivery seam
 is independently reversible from the bounded presentation compiler and aggregate
