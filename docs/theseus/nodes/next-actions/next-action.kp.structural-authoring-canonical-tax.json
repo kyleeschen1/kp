@@ -89,6 +89,13 @@
       "scope": "s08",
       "checkedAt": "2026-09-06T03:44:07.708Z",
       "notes": "14 structural tests and full types pass; derived accessible equation invalidates by version, cached and uncached reads agree, recovery survives cache reset and disposal."
+    },
+    {
+      "command": "npm run test:authoring-structural; npm run typecheck; npm run check:architecture; npm run test:authoring-integration",
+      "status": "passed",
+      "scope": "s09",
+      "checkedAt": "2026-09-06T03:47:13.775Z",
+      "notes": "16 structural tests, full types and architecture pass; named logical queries retain only two settled states. Existing authoring integration suite passes."
     }
   ],
   "progress": {

@@ -166,7 +166,8 @@
     {
       "id": "s09",
       "title": "Explanation assembly: compose the bounded distribution step with logical addresses and semantic references",
-      "status": "planned"
+      "summary": "Named distribution explanation, discrete settlement and bounded session queries verified; shared family preserves exact receipt pins.",
+      "status": "complete"
     },
     {
       "id": "s10",
