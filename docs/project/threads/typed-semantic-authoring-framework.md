@@ -17,6 +17,13 @@ not Focus Card host performance. Same-asset host comparison and passage/stage
 checks now accompany review; see
 `../decisions/2026-09-06-focus-card-performance-acceptance.md`.
 
+The user-approved actual fraction Focus Card is now available on the shared dev
+server at `http://127.0.0.1:8000/experiments/authoring-distribution-focus-card/`.
+It consumes verified authored distribution through the existing native session
+and clock, not the log example. This replaces the reader-only URL as the G1
+product review destination. First-play hitch and inherited overlapping fraction
+choreography remain unresolved; no performance or visual acceptance is claimed.
+
 The user approved the repair and preapproved future non-visual checkpoints on
 2026-09-06. See
 `../decisions/2026-09-06-nonvisual-preapproval-and-structural-repair.md`.

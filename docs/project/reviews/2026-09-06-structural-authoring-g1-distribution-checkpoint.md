@@ -11,7 +11,8 @@ derived equation reads, named explanation queries, governed animation constructi
 and the existing canonical native reader. No second AST, renderer, or clock was added.
 
 Canonical artifact: `animation.fraction-composition.two-thirds-solve`.
-Canonical host: `/reader/fraction-composition/`.
+Product review host: `/experiments/authoring-distribution-focus-card/`.
+Supporting canonical reader: `/reader/fraction-composition/`.
 Renderer: the existing native KaTeX session and copy-fan-out material compositor.
 Semantic authority: existing fractional solve macro, endpoint specifications and
 registered distribution operation; aggregate versions retain authored before/after
@@ -28,6 +29,23 @@ not transport an operation receipt or nominal plan authority. Invalid input fail
 with a typed gap; there is no fallback animation or HTTP source-writing endpoint.
 
 ## Review
+
+The user approved putting the actual authored fraction into the Focus Card shell.
+Open **http://127.0.0.1:8000/experiments/authoring-distribution-focus-card/**
+with the shared development server running. This is the G1 product checkpoint,
+not the existing logarithm card. Next distributes, Previous rewinds, Replay
+restarts, and the slider inspects the first operation. Passage navigation and
+the distributed beat hash select exact endpoints. The disclosure shows retained
+before/after version pins.
+
+This bounded, dev-only host uses the existing Focus Deck scaffold, canonical
+equation-template compiler, validated prepared authoring data, native equation
+session, fraction layout/salience adapters, and shared timeline clock. Its range
+is the first canonical operation, without changing timing or claiming the later
+operations are authored. No iframe, replacement renderer, production migration,
+or new semantic model is introduced.
+
+The supporting reader comparison remains available:
 
 Run `npm run dev` in the repository, then open the dev server's displayed origin with:
 
@@ -46,6 +64,16 @@ approving G1. Automated parity cannot make that aesthetic or instructional decis
 
 ## Executed evidence and limits
 
+- `npm run visual:authoring-distribution-card`: six Chromium/Firefox cases across
+  desktop and phone widths, native material traversal, endpoints, rewind, scrub,
+  replay, passage navigation, resize, direct-link restoration, reduced motion,
+  accessible math, and fail-closed preparation. Source, target, and phone transit
+  captures were inspected. This is functional evidence, not visual approval.
+- First-play frame observations still show a substantial stall (roughly
+  0.4–0.8 seconds in the initial run), despite mostly 16.7 ms steady frames.
+  This host integration does not fix that performance issue or establish its
+  historical cause. Mid-transition copies overlap and phone layout wraps;
+  existing native choreography remains subject to human review.
 - `npm run test:authoring-structural`: 23 tests, including forged/stale authority,
   lineage, version recovery, transport validation and dependency boundaries.
 - `npm run visual:authoring-structural`: four Chromium tests; canonical and authored
@@ -75,6 +103,12 @@ clock, existing timing and default lesson routes. The reader opt-in delivery sea
 is independently reversible from the bounded presentation compiler and aggregate
 authoring proof. A presentation objection does not authorize rolling back semantic
 contracts or changing other families.
+
+The Focus Card entry/style, its serve-only route/template payload, and scoped
+browser check are a separately reversible host integration. They do not replace
+the existing log Focus Card or change the default fraction/tax pages. The former
+reader-only review URL is supporting evidence, superseded as the primary G1
+product destination; the approved implementation order is unchanged.
 
 After human G1 acceptance, continue the reviewed proposal with simplification as
 the structurally different caller. G2 still precedes canonical supply-tax migration;

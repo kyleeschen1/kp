@@ -169,6 +169,20 @@
       "scope": "focus-card-performance-closeout",
       "checkedAt": "2026-09-06T16:43:36.388Z",
       "notes": "Final four Firefox performance checks and 57 Chromium/Firefox/WebKit card preservation checks pass. Explicit stable-passage and per-frame accessible ownership assertions. Schema and fraction renderer unchanged; G1 remains pending."
+    },
+    {
+      "command": "npm run test:authoring-structural",
+      "status": "passed",
+      "scope": "authoring-distribution-focus-card",
+      "checkedAt": "2026-09-06T17:36:06.263Z",
+      "notes": "23 structural authoring tests pass; existing verified data transport and nominal authority preserved."
+    },
+    {
+      "command": "npm run visual:authoring-distribution-card",
+      "status": "passed",
+      "scope": "authoring-distribution-focus-card",
+      "checkedAt": "2026-09-06T17:36:27.692Z",
+      "notes": "Six Chromium and Firefox desktop/phone cases pass: real native distribution, rewind, scrub, replay, passage navigation, resize, exact URL restoration, reduced motion and fail-closed data. Existing first-play stalls remain; not visual acceptance."
     }
   ],
   "progress": {

@@ -1,0 +1,15 @@
+@import "../../reader/app/exemplar.css";
+@import "../focus-deck-scaffold.css";
+
+:root { --kp-st-paper: #fffdf8; --kp-st-header: #506779; --kp-st-header-ink: #fffdf8; --kp-st-rule: #d4d5cf; --kp-st-strong: #20252b; --kp-st-muted: #59645e; --kp-st-focus: #167a80; --kp-st-ink: #20252b; }
+#distribution-card { max-width: 780px; margin: 3rem auto; padding: 0 1rem; }
+#distribution-card h1 { margin-bottom: .25rem; font-family: var(--kp-serif); }
+.source-label, .review-help { color: var(--kp-muted); font-size: .9rem; }
+#distribution-card dd { overflow-wrap: anywhere; margin-left: 0; }
+[data-distribution-stage] .kp-reader-equation-stage { min-height: 0; height: 100%; padding: 0; border: 0; border-radius: 0; box-shadow: none; background: transparent; }
+[data-distribution-stage] .kp-reader-equation-viewport { min-height: 0; height: 100%; }
+[data-distribution-stage] .kp-reader-equation-stage-heading,
+[data-distribution-stage] .kp-reader-focus-stepper,
+[data-distribution-stage] .kp-reader-equation-hint,
+[data-distribution-stage] .kp-reader-equation-progress { display: none; }
+@media (max-width: 46rem) { #distribution-card { margin: 1rem auto; padding: 0 .5rem; } }
