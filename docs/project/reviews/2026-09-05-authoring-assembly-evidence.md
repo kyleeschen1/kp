@@ -415,3 +415,20 @@ revenue, reverse seek and restoration of the author's original source.
 The variant baseline/history captures were inspected: the graph and narrative
 show the recomputed values. These are review evidence, not human visual approval.
 Architecture passes; reachability changes only scanned count 4,252 to 4,253.
+
+## Cross-view deterministic-state pressure
+
+The integration suite now passes 66 tests. Both prepared specimens retain the
+same sampled model/frame, formula projection, bound prose and scene attention
+after interleaved inspection, single-entry cache eviction, and explicit reset.
+Existing branch tests retain exact branch source pins and reject recovery of a
+foreign branch; these do not claim an author-facing branch editor.
+
+All six `npm run visual:authoring-market` checks pass. A fixed fractional
+playhead compares complete SVG attributes, native label markup, phrase markup,
+active beat and logical address after seven reverse/direct interruptions.
+The first check exposed CSS declaration insertion order differences only; the
+comparison now retains every property value and priority while ignoring order.
+No renderer or semantic repair was necessary. The existing real-file invalid
+revision and asynchronous receiver tests retain last-valid revision isolation.
+All sessions retain exactly three persistent snapshots.

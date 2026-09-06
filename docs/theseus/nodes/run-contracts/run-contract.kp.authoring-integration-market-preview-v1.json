@@ -253,7 +253,8 @@
     {
       "id": "s23",
       "title": "Cross-view history/interrupt pressure: align state, formulas, prose and attention for reverse, branch inspection, direct jumps and cache eviction",
-      "status": "planned"
+      "summary": "Fixed-playhead graph/native labels/prose/attention equality, cache eviction and branch isolation verified.66 integration,six browser and full types pass.",
+      "status": "complete"
     },
     {
       "id": "s24",

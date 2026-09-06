@@ -206,3 +206,32 @@ async function seek(scrubber: Locator, position: number) {
     input.dispatchEvent(new Event("input", { bubbles: true }));
   }, position);
 }
+
+test("fixed playhead restores identical graph, native labels, prose and attention after interruption", async ({ page }) => {
+  await page.goto("/experiments/authoring-market/");
+  const deck = page.locator("[data-kp-supply-tax-focus-deck]");
+  await expect(deck).toHaveAttribute("data-kp-focus-deck-active-beat", "baseline-market");
+  const scrubber = deck.locator("[data-kp-supply-tax-state-scrubber]");
+  const capture = () => deck.evaluate(element => ({
+    // Attribute insertion order is not paint or semantic state; retain every
+    // value while making the equality failure identify the actual changed node.
+    svg: [...element.querySelectorAll("svg, svg *")].map(node => ({ tag: node.tagName,
+      attributes: Object.fromEntries([...node.attributes].map(attribute => [attribute.name,
+        attribute.name === "style" ? [...(node as SVGElement).style].sort().map(property =>
+          [property, (node as SVGElement).style.getPropertyValue(property), (node as SVGElement).style.getPropertyPriority(property)])
+          : attribute.value]).sort()),
+      text: node.children.length === 0 ? node.textContent : null })),
+    labels: [...element.querySelectorAll("[data-kp-supply-tax-math-label]")].map(node => node.outerHTML),
+    prose: [...element.querySelectorAll("[data-kp-focus-deck-phrase]")].map(node => node.outerHTML),
+    beat: element.getAttribute("data-kp-focus-deck-active-beat"),
+    address: document.querySelector<HTMLElement>("#app")!.dataset["kpAuthoringMarketAddress"]
+  }));
+  await seek(scrubber, 1.371);
+  const fixed = await capture();
+  for (const position of [7, 0, 4, 1.8, 1.1, 2, 0]) {
+    await seek(scrubber, position);
+    await seek(scrubber, 1.371);
+    expect(await capture()).toEqual(fixed);
+    await expect(page.locator("#app")).toHaveAttribute("data-kp-authoring-market-snapshot-count", "3");
+  }
+});

@@ -4,6 +4,33 @@ import test from "node:test";
 import { createKpAuthoredMarketSource } from "../src/experiments/typed-linear-supply-demand/authoring-market-source.ts";
 import { createKpAuthoringMarketFrameSession } from "../src/experiments/authoring-market/authoring-market-frame.ts";
 import { sampleKpEconomicsSupplyTaxAnimationFrame } from "../src/animation/economics-supply-tax-asset.ts";
+import { buildKpAuthoringMarketPreview } from "../src/experiments/authoring-market/authoring-market-preview-build.ts";
+import { prepareKpAuthoringMarketPreview } from "../src/experiments/authoring-market/authoring-market-preview-prepare.ts";
+import { projectKpSupplyTaxSceneTransition } from "../src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-scene.ts";
+
+test("revision-owned model, formulas, prose and attention survive eviction and other specimen inspection", () => {
+  const prepared = ["reference", "variation"].map(name => prepareKpAuthoringMarketPreview(
+    buildKpAuthoringMarketPreview(name as "reference" | "variation")));
+  const sessions = prepared.map(item => createKpAuthoringMarketFrameSession(item.authored, { cacheCapacity: 1 }));
+  const view = (index: number, progress: number) => {
+    const item = prepared[index]!;
+    return { sampled: sessions[index]!.sample(progress), text: item.boundArticle.text,
+      formulas: item.companion.stageFacts,
+      attention: projectKpSupplyTaxSceneTransition({ from: item.companion.stops[1]!.scene,
+        to: item.companion.stops[2]!.scene, progress, profile: "scrub" }) };
+  };
+  try {
+    const baseline = prepared.map((_, index) => view(index, 0.371));
+    for (const progress of [1, 0, 0.8, 0.2, 0.9, 0.1]) {
+      view(1, progress); view(0, 1 - progress);
+      sessions.forEach(session => session.reset());
+      assert.deepEqual(view(0, 0.371), baseline[0]);
+      assert.deepEqual(view(1, 0.371), baseline[1]);
+    }
+    assert.notEqual(baseline[0]!.sampled.revisionId, baseline[1]!.sampled.revisionId);
+    for (const session of sessions) assert.equal(session.history.snapshots.length, 3);
+  } finally { sessions.forEach(session => session.dispose()); }
+});
 
 test("state-derived frames exactly match canonical tax sampling across dense progress", () => {
   const authored = createKpAuthoredMarketSource({ kind: "impose-per-unit-tax" });

@@ -263,11 +263,18 @@
       "scope": "s22",
       "checkedAt": "2026-09-06T00:32:19.744Z",
       "notes": "65 integration,81 economics,five browser checks; explicit demand history and typed unsupported-motion gap."
+    },
+    {
+      "command": "npm run test:authoring-integration; npm run visual:authoring-market; npm run typecheck",
+      "status": "passed",
+      "scope": "s23",
+      "checkedAt": "2026-09-06T00:37:28.668Z",
+      "notes": "66 integration,six browser,zero type errors; CSS declaration order normalized without dropping values."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s22 variant verified; demand remains explicitly settled history and tax uses existing motion."
+    "summary": "s23 deterministic cross-view and revision isolation checks pass; no runtime repair required."
   },
   "expectedLearning": [
     "Whether internal assembly and a bounded math bridge make one exact market explanation authorable without duplicate semantics or renderer authority."
