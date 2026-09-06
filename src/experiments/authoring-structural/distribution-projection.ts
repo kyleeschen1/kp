@@ -6,7 +6,8 @@ import { createKpAssetBundle, createKpSemanticAssetObject } from "../../semantic
 import { createKpSemanticTransformation } from "../../semantic/asset-transformation.ts";
 import { createKpStructuredEquationEndpointSpec } from "../../semantic/structured-equation-endpoint-spec.ts";
 import { pinKpSemanticSlotVersion } from "../../semantic-state/pinned-recovery.ts";
-import { compileKpDistributionFactoringPresentationPlan } from "../../animation/distribution-factoring-presentation-plan.ts";
+import { compileKpFractionCompositionDistributionPresentationPlan } from "../../animation/fraction-composition-distribution-presentation-plan.ts";
+import { registerKpOperationPresentationPlan } from "../../animation/operation-presentation-plan-types.ts";
 import { compileKpGovernedCanonicalConstruction, createKpGovernedCanonicalConstructionRequest,
   planKpGovernedConstructionRepairs, type KpGovernedConstructionRepair } from "../../authoring/canonical-animation-public-api.ts";
 
@@ -73,7 +74,7 @@ export class KpAuthoredDistributionNativeGap extends Error {
   readonly code = "kp.authoring.structural-native-presentation-gap";
   readonly owner = "compiler-authority-review";
   constructor(cause: unknown) {
-    super("The registered single-transfer distribution presenter cannot yet certify the canonical fraction's multipart fan-out. Preserve the canonical reader and repair the authority binding before integration.", { cause });
+    super("The candidate does not satisfy the canonical fractional distribution presentation binding. Preserve the canonical reader and repair the authority binding before integration.", { cause });
     this.name = "KpAuthoredDistributionNativeGap";
   }
 }
@@ -86,10 +87,10 @@ export function requireKpAuthoredDistributionNativeAnimation(
   const selectors = (ids: readonly string[]) => animation.bundle.objects
     .filter(object => ids.includes(object.id)).flatMap(object => object.selectors.map(selector => selector.id));
   try {
-    const plan = compileKpDistributionFactoringPresentationPlan({ transformation,
+    const plan = compileKpFractionCompositionDistributionPresentationPlan({ transformation,
       sourceSelectorIds: selectors(transformation.sourceObjectIds),
       targetSelectorIds: selectors(transformation.targetObjectIds) });
-    if (plan === undefined) throw new Error("No registered distribution presentation plan resolved.");
+    registerKpOperationPresentationPlan(transformation, plan);
   } catch (cause) {
     // Do not remove the definition to re-enter legacy routing, combine unrelated
     // transfers, or weaken cardinality checks to manufacture runtime support.

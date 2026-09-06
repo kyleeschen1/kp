@@ -126,6 +126,13 @@
       "scope": "stop-preservation",
       "checkedAt": "2026-09-06T05:02:28.728Z",
       "notes": "After removing unshippable preview hook: 19 structural tests pass including typed native gap; canonical-only Chromium canary, full types and architecture pass. No integrated native certification or full release claim."
+    },
+    {
+      "command": "npm run test:authoring-structural; node --disable-warning=ExperimentalWarning --test tests/distribution-factoring-presentation-plan.test.ts tests/operation-presentation-laws.test.ts tests/operation-presentation-plan-validator.test.ts tests/fraction-composition-canonical-session-dry-run.test.ts; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "s10",
+      "checkedAt": "2026-09-06T15:20:17.014Z",
+      "notes": "20 structural and 17 adjacent presentation tests pass, full types and architecture pass. Explicit canonical factor bundles retain three primitive transfers; scalar validation unchanged. Native visual certification still belongs to s11-s12."
     }
   ],
   "progress": {

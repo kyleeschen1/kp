@@ -3,6 +3,8 @@ import test from "node:test";
 import { createKpAuthoredDistributionProjection, requireKpAuthoredDistributionNativeAnimation, KpAuthoredDistributionNativeGap } from "../src/experiments/authoring-structural/distribution-projection.ts";
 import { createKpFractionCompositionEquationAnimationAsset } from "../src/animation/fraction-composition-equation-adapter.ts";
 import { validateKpAnimationAsset } from "../src/animation/asset.ts";
+import { compileKpDistributionFactoringPresentationPlan } from "../src/animation/distribution-factoring-presentation-plan.ts";
+import { findKpRegisteredOperationPresentationPlan } from "../src/animation/operation-presentation-plan-types.ts";
 
 test("governed distribution projects exact canonical values without claiming runtime certification", () => {
   const result = createKpAuthoredDistributionProjection();
@@ -23,17 +25,36 @@ test("governed distribution projects exact canonical values without claiming run
   assert.deepEqual(governed.mathematicalVerification.operations[0]!.targetTruth.objectIds, ["fraction-solve.state.distributed"]);
 });
 
-test("multipart fraction fan-out fails closed at the registered native presentation boundary", () => {
+test("explicit fraction grouping preserves primitive lineage without relaxing scalar distribution", () => {
   const result = createKpAuthoredDistributionProjection();
-  assert.throws(() => requireKpAuthoredDistributionNativeAnimation(result.projection), error => {
+  const animation = requireKpAuthoredDistributionNativeAnimation(result.projection);
+  const transformation = animation.transformations[0]!;
+  const plan = findKpRegisteredOperationPresentationPlan(transformation)!;
+  assert.equal(plan.planKind, "distribution");
+  const material = plan.roles.bundles.filter(bundle => bundle.role.endsWith("material"));
+  assert.deepEqual(material.map(bundle => [bundle.role, bundle.semanticEntityIds.length]),
+    [["source-material", 3], ["target-material", 3], ["target-material", 3]]);
+  assert.equal(transformation.correspondenceMap!.records.filter(record => record.relation === "fan-out").length, 3);
+  assert.throws(() => compileKpDistributionFactoringPresentationPlan({ transformation,
+    sourceSelectorIds: [], targetSelectorIds: [] }), /requires exactly one total fan-out ownership transfer/);
+  assert.equal(createKpFractionCompositionEquationAnimationAsset().transformations[0]!.definitionId, undefined);
+});
+
+test("modified multipart lineage still fails closed before native registration", () => {
+  const { projection } = createKpAuthoredDistributionProjection();
+  const animation = projection.animationCandidate;
+  const transformation = animation.transformations[0]!;
+  const altered = { ...transformation, correspondenceMap: { ...transformation.correspondenceMap!,
+    records: transformation.correspondenceMap!.records.slice(1) } };
+  assert.throws(() => requireKpAuthoredDistributionNativeAnimation({ ...projection,
+    animationCandidate: { ...animation, transformations: [altered, ...animation.transformations.slice(1)] } }), error => {
     assert.ok(error instanceof KpAuthoredDistributionNativeGap);
     assert.equal(error.code, "kp.authoring.structural-native-presentation-gap");
     assert.equal(error.owner, "compiler-authority-review");
-    assert.match(String(error.cause), /requires exactly one total fan-out ownership transfer/);
+    assert.match(String(error.cause), /complete primitive lineage/);
     return true;
   });
-  // The supported canonical reference is not modified by the failed bridge.
-  assert.equal(createKpFractionCompositionEquationAnimationAsset().transformations[0]!.definitionId, undefined);
+  assert.equal(findKpRegisteredOperationPresentationPlan(altered), undefined);
 });
 
 test("copied and foreign applications cannot mint governed projection authority", () => {
