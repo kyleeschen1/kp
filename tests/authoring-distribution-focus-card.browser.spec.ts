@@ -8,6 +8,7 @@ for (const width of [1100, 390]) test(`authored fraction Focus Card preserves na
   await page.goto(route);
   const card = page.locator("[data-kp-authoring-distribution-card]");
   await expect(card).toHaveAttribute("data-kp-authoring-distribution-card", "ready");
+  await expect(card.locator(".kp-focus-deck__narrative p").first()).toHaveCSS("font-family", 'Georgia, "Times New Roman", serif');
   await expect(page.locator("iframe")).toHaveCount(0);
   await expect(page.locator("[data-kp-log-exponent-stage]")).toHaveCount(0);
   await expect(card).toHaveAttribute("data-kp-distribution-state", "fraction-solve.state.factored");
@@ -144,7 +145,7 @@ test("coherent fraction copies retain native internal arrangement through forwar
         });
         return rects.map(rect => ({ dx: rect.x - rects[0]!.x, dy: rect.y - rects[0]!.y, width: rect.width, height: rect.height }));
       })));
-      if (progress === .5) await card.screenshot({ path: info.outputPath(`coherent-fraction-${width}.png`) });
+      if (progress === .12 || progress === .3 || progress === .5) await card.screenshot({ path: info.outputPath(`coherent-fraction-${width}-${progress}.png`) });
     }
     for (const shape of shapes) for (const branch of [0, 1]) for (const part of [0, 1, 2]) {
       for (const key of ["dx", "dy", "width", "height"] as const) {
@@ -152,4 +153,47 @@ test("coherent fraction copies retain native internal arrangement through forwar
       }
     }
   }
+});
+
+for (const kind of ["distribution", "simplification"]) test(`shared card stays legible without JavaScript: ${kind}`, async ({ browser }, info) => {
+  const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 800 } });
+  const page = await context.newPage();
+  await page.goto(`/experiments/authoring-${kind}-focus-card/`);
+  const card = page.locator('[data-kp-focus-deck-static="true"]');
+  await expect(card).toBeVisible();
+  await expect(card.locator(".katex")).toHaveCount(2);
+  const passages = card.locator(".kp-focus-deck__narrative p");
+  await expect(passages).toHaveCount(2);
+  for (const passage of await passages.all()) {
+    await expect(passage).toBeVisible();
+    await expect(passage).toHaveCSS("font-family", 'Georgia, "Times New Roman", serif');
+    expect(await passage.evaluate(node => node.getBoundingClientRect().bottom <= node.closest("[data-kp-focus-deck]")!.getBoundingClientRect().bottom)).toBe(true);
+  }
+  await expect(card.locator("[data-kp-focus-deck-next]")).toBeHidden();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await card.screenshot({ path: info.outputPath(`static-${kind}.png`) });
+  await context.close();
+});
+
+for (const kind of ["distribution", "simplification"]) test(`shared card disposes and restores its lifecycle: ${kind}`, async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await page.goto(`/experiments/authoring-${kind}-focus-card/`);
+  const card = page.locator(`[data-kp-authoring-${kind}-card="ready"]`);
+  await expect(card).toBeVisible();
+  await expect(card.locator(".kp-focus-deck__narrative p").first()).toHaveCSS("font-family", 'Georgia, "Times New Roman", serif');
+  await page.evaluate(() => {
+    dispatchEvent(new PageTransitionEvent("pagehide", { persisted: true }));
+    dispatchEvent(new PageTransitionEvent("pageshow", { persisted: true }));
+  });
+  await card.locator("[data-kp-focus-deck-next]").click();
+  await expect(card).toHaveAttribute(kind === "distribution" ? "data-kp-distribution-progress" : "data-kp-simplification-progress", "1");
+  await page.evaluate(() => {
+    dispatchEvent(new PageTransitionEvent("pagehide", { persisted: false }));
+    dispatchEvent(new Event("resize"));
+    document.dispatchEvent(new Event("visibilitychange"));
+    dispatchEvent(new PageTransitionEvent("pagehide", { persisted: true }));
+    document.querySelector<HTMLButtonElement>("[data-kp-focus-deck-replay]")!.click();
+  });
+  expect(errors).toEqual([]);
 });

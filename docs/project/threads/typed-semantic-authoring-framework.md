@@ -2,7 +2,7 @@
 
 Status: G0 and G1 accepted; second caller integrated; compiler-cost gate stopped
 Last Updated: 2026-09-06
-Current Next Action: review the bounded compiler-cost repair recommendation in
+Current Next Action: execute the approved bounded compiler-cost investigation in
 `../reviews/2026-09-06-structural-authoring-two-caller-cost-stop.md`.
 Simplification is integrated through its existing native carrier owner and a
 Focus Card; the actual two-caller inference fixture exceeds unchanged budgets.
@@ -13,6 +13,14 @@ The completed source workflow and market specimen passed G0 review; evidence is 
 `../reviews/2026-09-05-authoring-market-author-review.md`.
 G1 is accepted for the fraction Focus Card; G2 and G3 remain mandatory.
 Theseus owns current slice, verification, commits, and stop state.
+
+The user approved the fraction separation refinement and shared Focus Card repair
+before resuming that gate. Shared passage typography, two-endpoint interaction
+enhancement, and static/browser content now have common owners; native domain
+renderers and semantic schemas remain intact. See
+`../decisions/2026-09-06-focus-card-form-and-separation.md`.
+The revised motion remains an exemplar treatment awaiting visual review, not a
+catalogue-wide curve. Static files inherit future changes through rebuilds.
 
 Focus Cards are the canonical product acceptance target, per the user's
 2026-09-06 clarification. The fractional reader proves structural integration,

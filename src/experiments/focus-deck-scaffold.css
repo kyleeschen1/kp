@@ -68,6 +68,9 @@
 }
 
 .kp-focus-deck__narrative {
+  /* Passage typography belongs to the card, not the surrounding application.
+     Math, code and navigation retain their own renderer/type contracts. */
+  font-family: var(--kp-focus-card-passage-font, Georgia, "Times New Roman", serif);
   position: relative;
   z-index: 2;
   display: flex;
@@ -130,6 +133,14 @@
   color: inherit;
   text-decoration-color: var(--kp-st-focus);
 }
+
+/* Static publication is readable without a controller. Enhancement replaces
+   this projection with the same shell and enables its navigation. */
+.kp-focus-deck[data-kp-focus-deck-static="true"] .kp-focus-deck__navigation { display: none; }
+.kp-focus-deck[data-kp-focus-deck-static="true"] .kp-focus-deck__card { display: block; height: auto; }
+.kp-focus-deck[data-kp-focus-deck-static="true"] .kp-focus-deck__narrative { display: block; overflow: visible; }
+.kp-focus-deck[data-kp-focus-deck-static="true"] .kp-focus-deck__narrative > section { height: auto; }
+.kp-focus-deck[data-kp-focus-deck-static="true"] .kp-focus-deck__stage { min-height: 12rem; align-content: center; }
 
 .kp-focus-deck__navigation {
   display: grid;

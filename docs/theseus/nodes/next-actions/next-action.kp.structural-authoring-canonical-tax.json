@@ -37,6 +37,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-06-structural-authoring-two-caller-cost-stop.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-06-focus-card-form-and-separation.md"
     }
   ],
   "dependsOn": {
@@ -236,6 +240,13 @@
       "scope": "s17",
       "checkedAt": "2026-09-06T20:34:33.613Z",
       "notes": "Real two-caller consumer fixture raises baseline 111313 types / 192390 instantiations to 118158 / 205487, exceeding unchanged 112500 / 195800 ceilings. Full typecheck passes; no budget update or fixture exclusion."
+    },
+    {
+      "command": "npm run visual:authoring-distribution-card",
+      "status": "passed",
+      "scope": "approved-card-repair",
+      "checkedAt": "2026-09-06T21:28:22.874Z",
+      "notes": "26 Chromium and Firefox checks pass: shared serif typography, static endpoints and unclipped passages, native coherence, frame and scrub budgets, reduced motion, BFcache and teardown. Also 7 structural browser checks, 32 unit tests, full typecheck and architecture pass."
     }
   ],
   "progress": {

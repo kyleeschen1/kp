@@ -15,19 +15,18 @@ export function kpViteAuthoringStructuralPreview(): Plugin {
         if (request.method !== "GET") { response.writeHead(405).end(); return; }
         void (async () => {
           try {
-            if (simplificationCard) {
-              const html = await server.transformIndexHtml(request.url!, '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Authoring-backed simplification · Kinetic Press</title></head><body><main id="distribution-card"><h1>Multiplying by one</h1><p>Preparing the authoring-backed Focus Card…</p></main><script type="module" src="/src/experiments/authoring-simplification-focus-card/entry.ts"></script></body></html>');
+            if (card || simplificationCard) {
+              const kind = card ? "distribution" : "simplification";
+              const module = await server.ssrLoadModule("/src/experiments/authoring-structural/focus-card-static-build.ts") as {
+                buildKpAuthoredFocusCardStatic: (kind: "distribution" | "simplification") => string };
+              const title = card ? "Fraction distribution" : "Multiplying by one";
+              const html = await server.transformIndexHtml(request.url!, `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} · Kinetic Press</title><link rel="stylesheet" href="/src/experiments/authored-focus-card.css"><link rel="stylesheet" href="/node_modules/katex/dist/katex.min.css"></head><body><main id="authored-focus-card"><h1>${title}</h1>${module.buildKpAuthoredFocusCardStatic(kind)}</main><script type="module" src="/src/experiments/authoring-${kind}-focus-card/entry.ts"></script></body></html>`);
               response.writeHead(200, { "content-type": "text/html", "cache-control": "no-store" }).end(html);
               return;
             }
             if (simplificationData) {
               const module = await server.ssrLoadModule("/src/experiments/authoring-structural/simplification-preview-build.ts") as { buildKpAuthoredSimplificationPreview: () => unknown };
               response.writeHead(200, { "content-type": "application/json", "cache-control": "no-store" }).end(JSON.stringify(module.buildKpAuthoredSimplificationPreview()));
-              return;
-            }
-            if (card) {
-              const html = await server.transformIndexHtml(request.url!, `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Authoring-backed fraction distribution · Kinetic Press</title></head><body><main id="distribution-card"><h1>Fraction distribution</h1><p>Preparing the authoring-backed Focus Card…</p></main><script type="module" src="/src/experiments/authoring-distribution-focus-card/entry.ts"></script></body></html>`);
-              response.writeHead(200, { "content-type": "text/html", "cache-control": "no-store" }).end(html);
               return;
             }
             const module = await server.ssrLoadModule("/src/experiments/authoring-structural/distribution-preview-build.ts") as {
