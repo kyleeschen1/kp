@@ -4,6 +4,10 @@ Outcome: STOP_CONDITION at s25; canonical development migration is preserved.
 Resolution: the user accepted the recommended bounded production-adoption repair
 and requested resumption on 2026-09-07. The stop below is historical evidence;
 execute the amendment in the approved proposal without weakening G3 or budgets.
+Implementation resolution: the exact route now passes ordinary build delivery,
+compiler isolation and supported-browser checks. Current review authority is
+`2026-09-07-canonical-tax-g3-checkpoint.md`; the observations below describe the
+original stop, not the repaired release.
 Contract: `run-contract.kp.structural-authoring-canonical-tax-v2`.
 Scope authority: `2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md`.
 

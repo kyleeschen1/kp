@@ -1,13 +1,15 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: bounded four-card production-adoption repair approved; loop resumed
+Status: canonical production adoption verified; G3 visual parity review pending
 Last Updated: 2026-09-07
-Current Next Action: execute the accepted bounded four-card production-adoption
-repair recorded in `../reviews/2026-09-07-canonical-tax-production-boundary-stop.md`,
-then continue ordinary delivery, preview convergence, release and mandatory G3.
-The canonical URL consumes the new source and passes 39 browser lifecycle checks;
-the ordinary build does not ship that URL. Including it exposes 36 forbidden
-experiment-owned modules, including sibling cards. No erasure guard was weakened.
+Current Next Action: review canonical-page parity at mandatory G3; see
+`../reviews/2026-09-07-canonical-tax-g3-checkpoint.md` for the working URL,
+source workflow, production ownership, release evidence and remaining work.
+The ordinary build now ships the exact four-card route, with shared source
+preparation and build-time Article instructions. Full tests, build, fixed budgets
+and the supported-browser release cohort pass. No erasure guard was weakened.
+The prior ownership stop is resolved implementation history in
+`../reviews/2026-09-07-canonical-tax-production-boundary-stop.md`.
 See `../decisions/2026-09-06-distribution-direct-arc-review.md`; prior release
 evidence predates this visual amendment; explicit approve/resume accepts the
 revised motion and G2, without waiving the remaining release checks or G3.

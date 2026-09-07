@@ -1,6 +1,6 @@
 # KP Next Actions
 
-Last Updated: 2026-09-06
+Last Updated: 2026-09-07
 
 These are human-readable candidates. Theseus stores the executable versions
 with source refs, verification, run-contract slices, and completion evidence.
@@ -16,16 +16,19 @@ The approved successor is
 `reviews/2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md`,
 executed only through `run-contract.kp.structural-authoring-canonical-tax-v2`.
 
-1. Complete structural release verification for the authored distribution and
-   carrier-preserving simplification callers. Preserve fixed budgets, semantic
-   authority, native paint, and the approved Focus Card treatments.
-2. The mandatory authoring/API and visual checkpoint G2 is now explicitly
-   approved, including the revised direct-arc distribution. Routine nonvisual preapproval does not waive G2;
-   this boundary was satisfied by human approval, not automated checks.
-3. After G2, migrate the canonical source through ordinary build delivery while
-   preserving economics, prose, URLs, interaction, and domain-owned renderers.
-   G3 remains required before merge or further generalization.
-4. Continue the roadmap's authoring/publication, knowledge/procedure, and
+The mandatory authoring/API and visual checkpoint G2 was explicitly accepted,
+including the revised direct-arc distribution. Routine nonvisual preapproval does not waive G2;
+that boundary was satisfied by human approval. G3 remains required before merge
+or further generalization; this contract does not itself authorize a merge.
+
+1. Review mandatory G3 canonical-page parity. Structural integration, canonical
+   migration, ordinary four-card build delivery and release checks are verified;
+   G0, G1 and G2 are accepted. See
+   `reviews/2026-09-07-canonical-tax-g3-checkpoint.md` for the working URL and
+   review criteria. Human approval remains separate from automated evidence.
+2. After G3, close the approved contract without merge or deployment. Preserve
+   fixed budgets, semantic authority, native paint and the shared Focus Card form.
+3. Continue the roadmap's authoring/publication, knowledge/procedure, and
    frontend/domain milestones through separately reviewed contracts. External
    reader discovery is not an architecture prerequisite.
 

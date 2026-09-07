@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-09-06
+Last Updated: 2026-09-07
 Status: active
 Active Thread: `threads/typed-semantic-authoring-framework.md`
 Supporting Threads:
@@ -237,16 +237,18 @@ See `reviews/2026-09-06-structural-authoring-g2-checkpoint.md` and
 `reviews/2026-09-06-structural-authoring-two-caller-cost-stop.md` for the measured
 costs and resolved compiler repair evidence; no budget increase is authorized.
 
-The canonical development page now uses the framework-derived reference source;
-its default sampler wiring is retired and supported-browser lifecycle checks pass.
-Ordinary delivery exposed a distinct production ownership boundary: the build
-excludes the route, and including it rejects the experiment-owned four-card
-runtime. No production guard was relaxed. The bounded scope decision is recorded
-in `reviews/2026-09-07-canonical-tax-production-boundary-stop.md`; G3 readiness and
-shipped delivery are not claimed. The user accepted that bounded production
-repair and requested resume on 2026-09-07. Promote only this four-card runtime
-closure and its build-time Article boundary; preserve erasure checks, fixed
-budgets and G3. Theseus owns execution under the amended original proposal.
+The canonical page now uses the framework-derived reference source; its default
+sampler wiring is retired. The user-approved bounded production repair is
+implemented: the exact four-card runtime has production ownership, Article
+instructions compile at build time, and the ordinary build ships the same URL.
+Preview and reader share source preparation with isolated revision lifetimes.
+Full tests/build and the supported-browser release cohort pass with unchanged
+production guards and budgets. Mandatory G3 visual parity review is now pending;
+see `reviews/2026-09-07-canonical-tax-g3-checkpoint.md` for source workflow,
+delivery costs, review URL and deferred publication work. The resolved ownership
+stop remains historical in `reviews/2026-09-07-canonical-tax-production-boundary-stop.md`.
+Theseus owns execution under the amended original proposal; no merge or
+deployment is authorized by this checkpoint.
 
 The preceding direction and completed integration run were accepted and scoped by
 `run-contract.kp.authoring-integration-market-preview-v1` and

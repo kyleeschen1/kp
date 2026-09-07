@@ -2,9 +2,9 @@
   "id": "next-action.kp.structural-authoring-canonical-tax",
   "kind": "next-action",
   "title": "Structural authoring proof and canonical supply-tax adoption",
-  "status": "in-progress",
+  "status": "blocked",
   "domain": "kp",
-  "summary": "Production ownership scope approved explicitly; resume exact four-card repair and remaining loop.",
+  "summary": "G3 visual approval required. Canonical production adoption, shared preparation, isolated revisions and full release verified; review existing port 8000 four-card page.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -61,6 +61,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-07-canonical-tax-production-boundary-stop.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-07-canonical-tax-g3-checkpoint.md"
     }
   ],
   "dependsOn": {
@@ -1177,11 +1181,32 @@
       "scope": "s27",
       "checkedAt": "2026-09-07T16:25:28.033Z",
       "notes": "39 pass across all three engines for 12 existing built reader routes and direct narrow multiplication prewarm regression."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/current-direction-authoring-ratchet.test.ts",
+      "status": "failed",
+      "scope": "s28",
+      "checkedAt": "2026-09-07T16:29:31.384Z",
+      "notes": "Queue refresh omitted explicit historical G2 non-waiver wording. Runtime unchanged; restore accepted gate history rather than weaken documentation guard."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/current-direction-authoring-ratchet.test.ts",
+      "status": "passed",
+      "scope": "s28",
+      "checkedAt": "2026-09-07T16:30:00.453Z",
+      "notes": "All three direction checks pass after restoring explicit accepted G2 non-waiver history. G3 remains current and mandatory; no test guard changed."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s28",
+      "checkedAt": "2026-09-07T16:30:01.663Z",
+      "notes": "Promotion ledger remains aligned and matrix remains tabled; current checkpoint does not activate parked scope."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Canonical supply-tax URL now consumes framework-derived source, bound unchanged reference instruction and one query sampler; superseded default wiring retired. All 11 canonical browser checks, 75 authoring tests, 81 economics tests and build pass. Continue lifecycle/build-delivery/preview convergence and release to mandatory G3."
+    "summary": "Canonical four-card ordinary delivery and preview convergence verified. Full release passed; G3 human parity review pending at shared port 8000. No merge or deployment. See canonical-tax G3 checkpoint report."
   },
   "expectedLearning": [
     "Whether two structural equation callers justify canonical economics adoption without parallel state or presentation authority."

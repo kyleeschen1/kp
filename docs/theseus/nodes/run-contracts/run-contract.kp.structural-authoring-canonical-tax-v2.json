@@ -2,9 +2,9 @@
   "id": "run-contract.kp.structural-authoring-canonical-tax-v2",
   "kind": "run-contract",
   "title": "Structural authoring proof and canonical tax adoption",
-  "status": "in-progress",
+  "status": "blocked",
   "domain": "kp",
-  "summary": "User accepted bounded four-card production adoption amendment and resumed. Execute s25 ownership and build-time Article repair, then s26-s28. Fixed gates and G3 remain.",
+  "summary": "HUMAN_CHECKPOINT at G3: 27 of 28 slices complete, machine release passed. Await human parity review of canonical four-card route; no merge or deployment.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -292,7 +292,8 @@
     {
       "id": "s28",
       "title": "Canonical adoption checkpoint: document retired wiring, preserved contracts, source workflow, costs and remaining publication work",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: closeout report, source workflow, costs, retired wiring and release evidence recorded. G3 canonical visual parity approval absent; retain this slice incomplete until human review.",
+      "status": "in-progress"
     }
   ]
 }
