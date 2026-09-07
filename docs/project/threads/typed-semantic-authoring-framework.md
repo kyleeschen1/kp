@@ -5,9 +5,12 @@ Last Updated: 2026-09-07
 Implementation is explicitly paused for strategic brainstorm. Resume from
 `2026-09-07-canonical-tax-resume-point.md`; do not infer a new implementation
 direction from unapproved discussion.
-The proposed strategic review is
+The user accepted the tax-then-Bayesian flagship sequence and confirmed
+McKeon's probability-tree pedagogy as its reference; see
+`../decisions/2026-09-07-tax-integration-then-bayesian-flagship.md`.
+This does not resume implementation or accept G3. The broader proposed review is
 `../reviews/2026-09-07-composable-explanation-medium-next-step-review.md`;
-it does not supersede the accepted sequence or authorize successor work.
+its detailed work packets remain proposals, not authorized successor work.
 Current Next Action: clarify the remaining code-card behavior and review the
 repaired whole-step slider keyboard navigation at mandatory G3; see
 `../reviews/2026-09-07-canonical-tax-g3-checkpoint.md` for the working URL,

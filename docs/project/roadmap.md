@@ -59,6 +59,15 @@ bind prose and attention, inspect history, preview, and eventually publish
 from the same source. Reader delivery remains the destination; external
 educator discovery does not gate this architecture work.
 
+On 2026-09-07 the user accepted using tax to prove the authoring workflow,
+then Bayesian updating as the first new flagship. Scott McKeon's probability
+tree construction, collapsing and flipping are the confirmed pedagogical
+reference to investigate. See
+`decisions/2026-09-07-tax-integration-then-bayesian-flagship.md`.
+This selects a direction, not a new runtime schema or approved loop.
+Implementation remains explicitly paused for research/brainstorm; the existing
+G3/code-card resume task and domain-pressure requirements remain intact.
+
 Loops 1–4 remain completed internal evidence: immutable state and transactions,
 typed properties and derived graphs, applied families and ephemeral sampling,
 then aggregate composition and exact logical addresses. The 26-slice Loop 4

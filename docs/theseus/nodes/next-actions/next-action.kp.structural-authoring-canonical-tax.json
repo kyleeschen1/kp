@@ -69,6 +69,10 @@
     {
       "kind": "file",
       "path": "docs/project/threads/2026-09-07-canonical-tax-resume-point.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-07-tax-integration-then-bayesian-flagship.md"
     }
   ],
   "dependsOn": {

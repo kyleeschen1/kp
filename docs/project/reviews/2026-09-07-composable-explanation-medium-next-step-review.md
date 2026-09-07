@@ -4,6 +4,12 @@ Date: 2026-09-07
 Status: PROPOSED — strategic brainstorm and implementation handoff, not an
 accepted direction, executable run contract, or permission to resume work.
 
+Subsequent selection: the user accepted tax integration followed by a Bayesian
+flagship, using McKeon's probability-tree pedagogy as a reference. See
+[the bounded acceptance decision](../decisions/2026-09-07-tax-integration-then-bayesian-flagship.md).
+This resolves the flagship-selection question below; the detailed work packets
+and other design proposals in this review are not thereby approved.
+
 The user paused implementation to examine the most productive path toward a
 medium for transmitting the salient structure of complex ideas: composable,
 semantically rigorous, authorable by humans and LLMs, and useful across scales.

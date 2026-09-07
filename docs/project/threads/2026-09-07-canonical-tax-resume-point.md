@@ -57,5 +57,9 @@ The deeper brainstorm is recorded in
 [the composable explanation medium review](../reviews/2026-09-07-composable-explanation-medium-next-step-review.md).
 It proposes a coherent authoring-to-publication round trip and one expandable
 supporting explanation, with bounded implementation packets for later work.
-It is not accepted direction or execution authority. Keep it separate from
-the approved G3 resume task until the user chooses a direction.
+The user subsequently accepted the tax-then-Bayesian flagship selection; see
+[the decision and McKeon reference findings](../decisions/2026-09-07-tax-integration-then-bayesian-flagship.md).
+That accepts the exemplar direction, not the full implementation packet or G3.
+Keep the proposed successor work separate from the approved G3 resume task.
+The user's later confirmation of tree collapsing/flipping is not code-card
+feedback or an instruction to resume implementation.
