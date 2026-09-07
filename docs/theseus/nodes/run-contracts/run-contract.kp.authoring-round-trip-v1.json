@@ -221,7 +221,8 @@
     {
       "id": "s21",
       "title": "Bounded review feedback and approved-behavior regression tests",
-      "status": "planned"
+      "summary": "Approved-behavior regression covers newest valid draft, invalid supersession, restore and disposal; readiness reporting repaired. Three browser checks, 88 integration and full types pass.",
+      "status": "complete"
     },
     {
       "id": "s22",

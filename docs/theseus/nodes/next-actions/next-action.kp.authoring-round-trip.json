@@ -208,11 +208,32 @@
       "scope": "s20",
       "checkedAt": "2026-09-07T23:44:32.003Z",
       "notes": "Three canonical compositor checks pass after repairing test asset-readiness race; native paint invariants unchanged."
+    },
+    {
+      "command": "npm run visual:authoring-market -- --grep 'equation authoring'",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-07T23:47:52.658Z",
+      "notes": "Three real browser checks pass, including deterministic rapid valid/invalid/restore/dispose cancellation."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-07T23:47:53.727Z",
+      "notes": "Full type gate passes."
+    },
+    {
+      "command": "npm run test:authoring-integration",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-07T23:47:54.804Z",
+      "notes": "88 tests pass; existing market source/lifecycle boundaries preserved."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT at s20. Nineteen slices complete; shared server on port 8000 serves bounded equation authoring and source-verified reading edition. Await visual/interaction acceptance; then continue approved s21-s26 without routine check-ins. Live LLM trial and full release remain undone."
+    "summary": "Appearance accepted and numeric JSON-to-ink repaired. Approved-behavior cancellation regressions pass. Continue second-variant publication, live trial and release; no routine human gate remains."
   },
   "expectedLearning": [
     "Whether supported author tasks can be completed without renderer glue and with coherent revisions and useful repair."

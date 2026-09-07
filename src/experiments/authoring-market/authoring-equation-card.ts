@@ -27,6 +27,7 @@ export function mountKpAuthoringEquationCard(root: HTMLElement) {
   let progress = 0;
   let expectedScroll = 0;
   let pending: AbortController | undefined;
+  const lifetime = new AbortController();
   root.dataset["kpAuthoringEquation"] = "preparing";
   root.innerHTML = `<h2>Equation authoring · change of base</h2>
     <p>Edit the numeric base and argument in both LaTeX states, then compile. The base must be positive and not one; the argument must be positive. Leave semanticArguments empty: the compiler verifies and binds the deduction. Motion uses the canonical native-KaTeX renderer.</p>
@@ -179,7 +180,7 @@ export function mountKpAuthoringEquationCard(root: HTMLElement) {
       compilation = candidate;
       displayedText = draftText;
       root.dataset["kpAuthoringEquation"] = "compiled";
-      status.textContent = "Draft compiled and displayed. Verified change-of-base semantics; author narration is preserved, not certified as pedagogically correct.";
+      status.textContent = "Draft compiled and displayed. Verified change-of-base semantics; author narration is preserved, not certified as pedagogically correct. Review wording after numeric edits.";
     } catch (error) {
       if (disposed || attempt.signal.aborted) return;
       root.dataset["kpAuthoringEquation"] = "repair-required";
@@ -198,11 +199,13 @@ export function mountKpAuthoringEquationCard(root: HTMLElement) {
     root.dataset["kpAuthoringEquation"] = "compiled";
     status.textContent = "Restored the displayed valid request into the editor; no source file changed.";
   });
-  void hydrateKpPreparedEditorAnimationPlayer({ player, animation, descriptor }).then(() => {
+  const initialPlayer = player;
+  void hydrateKpPreparedEditorAnimationPlayer({ player: initialPlayer, animation, descriptor }).then(async () => {
+    await waitForSurface(initialPlayer, lifetime.signal);
     if (disposed) { disposeKpEditorAnimationPlayers(deck); return; }
     if (root.dataset["kpAuthoringEquation"] === "preparing") {
       root.dataset["kpAuthoringEquation"] = "compiled";
-      status.textContent = "Verified example displayed. Edit narration or test a repair; source files are unchanged.";
+      status.textContent = "Verified example displayed. Edit numeric operands or narration and compile; source files are unchanged.";
     }
   }).catch(error => {
     if (disposed) return;
@@ -221,7 +224,7 @@ export function mountKpAuthoringEquationCard(root: HTMLElement) {
     },
     dispose() {
       if (disposed) return;
-      disposed = true; pending?.abort(); resize.disconnect();
+      disposed = true; lifetime.abort(); pending?.abort(); resize.disconnect();
       player.removeEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, onFrame);
       disposeKpEditorAnimationPlayers(deck); unregister(); root.replaceChildren();
     }

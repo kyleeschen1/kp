@@ -121,6 +121,49 @@ test("equation authoring numeric JSON replaces verified native ink and retains i
   expect(errors).toEqual([]);
 });
 
+test("equation authoring superseded preparation cannot revive stale paint or a disposed card", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await page.goto("/experiments/authoring-market/#equation-authoring");
+  const editor = page.locator("[data-kp-authoring-equation]");
+  await expect(editor).toHaveAttribute("data-kp-authoring-equation", "compiled");
+  const request = JSON.parse(await editor.locator("textarea").inputValue());
+  const race = async (mode: "valid" | "invalid" | "restore" | "dispose") => editor.evaluate((root, { request, mode }) => {
+    const textarea = root.querySelector("textarea")!;
+    const compile = root.querySelector<HTMLButtonElement>("[data-kp-equation-compile]")!;
+    const edit = (argument: number) => {
+      const changed = structuredClone(request);
+      changed.states[0].latex = `\\log_{2} ${argument}`;
+      changed.states[1].latex = `\\frac{\\ln ${argument}}{\\ln 2}`;
+      textarea.value = JSON.stringify(changed);
+      textarea.dispatchEvent(new Event("input", { bubbles: true }));
+      compile.click();
+    };
+    edit(9);
+    if (mode === "valid") edit(11);
+    if (mode === "invalid") { textarea.value = "{"; textarea.dispatchEvent(new Event("input")); compile.click(); }
+    if (mode === "restore") root.querySelector<HTMLButtonElement>("[data-kp-equation-restore]")!.click();
+    if (mode === "dispose") window.dispatchEvent(new PageTransitionEvent("pagehide", { persisted: false }));
+  }, { request, mode });
+  await race("valid");
+  await expect(editor).toHaveAttribute("data-kp-authoring-equation", "compiled");
+  const stage = editor.locator("[data-kp-logarithm-change-of-base-stage]");
+  await expect(stage).toHaveCount(1);
+  await expect(stage.locator("annotation").first()).toContainText("11");
+  await race("invalid");
+  await expect(editor).toHaveAttribute("data-kp-authoring-equation", "repair-required");
+  await expect(editor.locator(".kp-authoring-equation-staging")).toHaveCount(0);
+  await expect(stage.locator("annotation").first()).toContainText("11");
+  await race("restore");
+  await expect(editor).toHaveAttribute("data-kp-authoring-equation", "compiled");
+  await expect(editor.locator(".kp-authoring-equation-staging")).toHaveCount(0);
+  await expect(stage.locator("annotation").first()).toContainText("11");
+  expect(JSON.parse(await editor.locator("textarea").inputValue()).states[0].latex).toContain("11");
+  await race("dispose");
+  await expect(editor).toBeEmpty();
+  expect(errors).toEqual([]);
+});
+
 test("bounded static readings remain meaningful with JavaScript disabled", async ({ browser }, info) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   try {
