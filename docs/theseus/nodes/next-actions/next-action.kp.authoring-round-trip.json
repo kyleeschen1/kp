@@ -147,6 +147,13 @@
       "scope": "s16",
       "checkedAt": "2026-09-07T22:36:03.988Z",
       "notes": "6 passed and full types passed. Actual compilation and serialization verify payload bytes, selected source bytes/path and deterministic recompilation; rehashed inconsistent payload and forged compiler identity fail."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/authoring-integration-canonical-build.test.ts tests/authoring-round-trip-static-reading.test.ts tests/authoring-round-trip-publication.test.ts",
+      "status": "passed",
+      "scope": "s17",
+      "checkedAt": "2026-09-07T22:43:06.732Z",
+      "notes": "13 passed; scoped no-JavaScript Chromium reading test passed and output inspected; full types passed. Exact variant facts, authored title/prose, live reference anchors and native equation MathML; no stale reference SVG or graphical completeness claim."
     }
   ],
   "expectedLearning": [

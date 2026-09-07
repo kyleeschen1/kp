@@ -192,7 +192,8 @@
     {
       "id": "s17",
       "title": "Meaningful static/accessibility output for bounded specimens",
-      "status": "planned"
+      "summary": "Bounded market and equation reading output implemented; 13 focused checks, no-JavaScript browser and full types pass. Canonical defaults preserved; graphical publication remains explicitly outside this edition.",
+      "status": "complete"
     },
     {
       "id": "s18",

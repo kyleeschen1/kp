@@ -59,6 +59,14 @@ that someone reviewed its prose. `readKpAuthoringMarketSourceBranch` validates
 identity and reuses existing preparation, including mixed-revision rejection.
 The publication-selection command is a later R1 integration step.
 
+Selected publications carry an explicit `text-and-exact-facts` reading edition:
+authored title and prose, stable reference links, native HTML/MathML and exact
+market facts. It deliberately excludes the imported vignette's fixed reference
+SVG, which would be stale for a parameter variant. This is not a full graphical
+vignette publication or a promotion of all Focus Cards to no-JavaScript output.
+The supported equation chain also has a governed ordered-math reading projection;
+invalid equation drafts cannot become a static fallback.
+
 ## Governed equation-chain edit
 
 Use the complete executable pair `{ value, source }` from

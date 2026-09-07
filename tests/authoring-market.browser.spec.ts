@@ -1,5 +1,25 @@
 import { expect, test, type Locator, type Page, type TestInfo } from "@playwright/test";
 import { readFile, writeFile } from "node:fs/promises";
+import { buildKpAuthoringMarketPreview } from "../src/experiments/authoring-market/authoring-market-preview-build.ts";
+import { compileKpAuthoredTaxSource } from "../scripts/compile-canonical-tax-source.ts";
+import { compileKpAuthoringMarketStaticReading, compileKpAuthoringEquationStaticReading } from "../src/experiments/authoring-market/authoring-market-static-reading.ts";
+import { createKpEquationSeriesLogarithmBaseExample } from "../src/authoring/equation-series-logarithm-base-example.ts";
+
+test("bounded static readings remain meaningful with JavaScript disabled", async ({ browser }, info) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    const page = await context.newPage();
+    const market = compileKpAuthoringMarketStaticReading(compileKpAuthoredTaxSource(buildKpAuthoringMarketPreview("variation")));
+    const equation = compileKpAuthoringEquationStaticReading(createKpEquationSeriesLogarithmBaseExample().value);
+    await page.setContent(`<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Bounded reading edition</title><base href="http://127.0.0.1:4173/"><link rel="stylesheet" href="/node_modules/katex/dist/katex.min.css"></head><body>${market.html}${equation}</body></html>`);
+    await expect(page.getByRole("heading", { name: "How does a tax reshape a market?" })).toBeVisible();
+    await expect(page.locator('dt:has-text("after.revenue") + dd')).toHaveText("10");
+    await expect(page.locator("[data-kp-authoring-equation-static] math")).toHaveCount(2);
+    await expect(page.locator("[data-kp-authoring-equation-static] .katex-html")).toHaveCount(2);
+    await expect(page.locator("script, img, canvas, iframe")).toHaveCount(0);
+    await page.screenshot({ path: info.outputPath("bounded-no-js-reading.png"), fullPage: true });
+  } finally { await context.close(); }
+});
 
 test("opt-in authoring host preserves canonical baseline and disposes cleanly", async ({ page }, info) => {
   const errors: string[] = [];
