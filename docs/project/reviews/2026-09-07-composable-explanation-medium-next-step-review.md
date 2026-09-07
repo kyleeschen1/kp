@@ -10,6 +10,12 @@ flagship, using McKeon's probability-tree pedagogy as a reference. See
 This resolves the flagship-selection question below; the detailed work packets
 and other design proposals in this review are not thereby approved.
 
+Scope clarification: the user subsequently specified standard mathematical
+motifs through lower-undergraduate applied mathematics and LaTeX-to-reusable-
+explanation authoring. See the [accepted goal](../decisions/2026-09-07-lower-undergraduate-math-authoring-horizon.md)
+and [source-based readiness assessment](2026-09-07-lower-undergraduate-math-authoring-readiness.md).
+Bayes remains the first new flagship, not the limit of the mathematical scope.
+
 The user paused implementation to examine the most productive path toward a
 medium for transmitting the salient structure of complex ideas: composable,
 semantically rigorous, authorable by humans and LLMs, and useful across scales.

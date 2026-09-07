@@ -63,3 +63,8 @@ That accepts the exemplar direction, not the full implementation packet or G3.
 Keep the proposed successor work separate from the approved G3 resume task.
 The user's later confirmation of tree collapsing/flipping is not code-card
 feedback or an instruction to resume implementation.
+
+The subsequent [lower-undergraduate math authoring goal](../decisions/2026-09-07-lower-undergraduate-math-authoring-horizon.md)
+and [source-based readiness review](../reviews/2026-09-07-lower-undergraduate-math-authoring-readiness.md)
+broaden the durable mathematical horizon beyond the Bayes flagship. They do
+not change this resume point, accept G3, or approve a successor loop.

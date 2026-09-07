@@ -11,6 +11,15 @@ McKeon's probability-tree pedagogy as its reference; see
 This does not resume implementation or accept G3. The broader proposed review is
 `../reviews/2026-09-07-composable-explanation-medium-next-step-review.md`;
 its detailed work packets remain proposals, not authorized successor work.
+The user also clarified the durable lower-undergraduate mathematical authoring
+horizon: LaTeX deductions and LLM collaboration yielding governed motifs,
+reusable explanatory units, flashcards, and whole/part readings. See
+`../decisions/2026-09-07-lower-undergraduate-math-authoring-horizon.md` and
+`../reviews/2026-09-07-lower-undergraduate-math-authoring-readiness.md`.
+This supplements the tax/Bayes direction without resuming implementation.
+The source-based review found working sequence/planner and flashcard foundations,
+but uneven mathematical coverage and a coverage-report evidence-wiring gap;
+do not treat its proposed roadmap or readiness labels as new execution authority.
 Current Next Action: clarify the remaining code-card behavior and review the
 repaired whole-step slider keyboard navigation at mandatory G3; see
 `../reviews/2026-09-07-canonical-tax-g3-checkpoint.md` for the working URL,

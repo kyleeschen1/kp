@@ -68,6 +68,17 @@ This selects a direction, not a new runtime schema or approved loop.
 Implementation remains explicitly paused for research/brainstorm; the existing
 G3/code-card resume task and domain-pressure requirements remain intact.
 
+The user further clarified the mathematical authoring horizon: standard motifs
+through lower-undergraduate applied mathematics, with human/LLM collaboration
+starting from LaTeX deductions and reusing the explanation as Focus Cards,
+atomic units, flashcards, and part/whole readings. Bayes is a flagship within
+that broader programme, not a restriction of it. See
+`decisions/2026-09-07-lower-undergraduate-math-authoring-horizon.md` and
+`reviews/2026-09-07-lower-undergraduate-math-authoring-readiness.md`.
+The existing equation-series compiler and flashcard projections are foundations
+to integrate, not absent systems to rebuild. The review's implementation order
+is proposed; the active queue and paused G3 boundary remain unchanged.
+
 Loops 1–4 remain completed internal evidence: immutable state and transactions,
 typed properties and derived graphs, applied families and ephemeral sampling,
 then aggregate composition and exact logical addresses. The 26-slice Loop 4
