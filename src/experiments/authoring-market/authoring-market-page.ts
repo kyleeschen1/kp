@@ -1,5 +1,6 @@
 import { prepareKpAuthoringMarketPreview } from "./authoring-market-preview-prepare.ts";
 import { projectKpAuthoringMarketPreviewStatus } from "./authoring-market-preview-status.ts";
+import { projectKpAuthoringMarketRevisionReview } from "./authoring-market-revision-review.ts";
 import { createKpAuthoringMarketRevisionReceiver, kpAuthoringMarketPreviewEndpoint,
   kpAuthoringMarketPreviewEvent, type KpAuthoringMarketBuildRevision } from "./authoring-market-preview-protocol.ts";
 
@@ -16,6 +17,14 @@ const status = document.createElement("p");
 status.setAttribute("role", "status");
 status.dataset["kpAuthoringMarketBuildStatus"] = "building";
 root.before(status);
+const review = document.createElement("details");
+review.dataset["kpAuthoringMarketRevisionReview"] = "";
+review.hidden = true;
+const reviewSummary = document.createElement("summary");
+reviewSummary.textContent = "Parameter edit: review refreshed facts and claims";
+const reviewText = document.createElement("p");
+review.append(reviewSummary, reviewText);
+status.after(review);
 const reportStatus = (revision: KpAuthoringMarketBuildRevision) => {
   const projected = projectKpAuthoringMarketPreviewStatus(revision,
     root.dataset["kpAuthoringMarketPreviewRevision"]);
@@ -28,6 +37,7 @@ const receiver = createKpAuthoringMarketRevisionReceiver({
   prepare: prepareKpAuthoringMarketPreview,
   report: reportStatus,
   commit(prepared, revision) {
+    const changes = projectKpAuthoringMarketRevisionReview(lastPrepared, prepared);
     const candidate = document.createElement("div");
     const position = root.querySelector<HTMLInputElement>("[data-kp-supply-tax-state-scrubber]")?.value;
     const restorePosition = (target: HTMLElement) => {
@@ -58,6 +68,9 @@ const receiver = createKpAuthoringMarketRevisionReceiver({
     session = next;
     lastPrepared = prepared;
     restorePosition(root);
+    review.hidden = changes === undefined;
+    reviewText.textContent = changes === undefined ? "" :
+      `Changed facts: ${changes.changedFacts.join(", ") || "none"}. Refreshed bound claims: ${changes.changedClaims.join(", ") || "none"}. ${changes.editorialReview}`;
     reportStatus(revision);
   }
 });
@@ -85,5 +98,6 @@ if (import.meta.hot !== undefined) {
     window.removeEventListener("pagehide", onPageHide);
     dispose();
     status.remove();
+    review.remove();
   });
 }

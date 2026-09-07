@@ -150,7 +150,8 @@
     {
       "id": "s10",
       "title": "Supported parameter edits refresh facts and flag affected assertions",
-      "status": "planned"
+      "summary": "Supported parameter refresh exposes affected facts and bound claims with explicit editorial review warning; focused, browser and full type checks pass.",
+      "status": "complete"
     },
     {
       "id": "s11",

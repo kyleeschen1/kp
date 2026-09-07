@@ -123,6 +123,11 @@ test("actual local-file rebuild retains invalid drafts and last valid preview wi
     await writeFile(modelPath, writtenModel);
     await expect(page.locator("#app")).not.toHaveAttribute("data-kp-authoring-market-preview-revision", initialRevision!);
     await expect(page.locator('[data-kp-authoring-market-static-facts] dt:has-text("after.revenue") + dd')).toHaveText("8");
+    const revisionReview = page.locator("[data-kp-authoring-market-revision-review]");
+    await expect(revisionReview).toBeVisible();
+    await revisionReview.locator("summary").click();
+    await expect(revisionReview).toContainText("after.revenue");
+    await expect(revisionReview).toContainText("Review free prose for stale assertions");
     const validRevision = await page.locator("#app").getAttribute("data-kp-authoring-market-preview-revision");
     const validPaint = await page.locator("[data-kp-supply-tax-focus-deck] svg").first().evaluate(element => element.outerHTML);
     writtenModel = "export const kpAuthoringMarketModelInput = ;\n";

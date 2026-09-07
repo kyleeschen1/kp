@@ -98,6 +98,13 @@
       "scope": "s09",
       "checkedAt": "2026-09-07T22:04:54.283Z",
       "notes": "11 passed; actual local-file browser smoke passed preserving fractional position 1.5 and exact SVG across wording edits. Full typecheck passed after a test-only indexed claim annotation repair."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/authoring-round-trip-parameter-review.test.ts tests/authoring-integration-facts.test.ts tests/authoring-integration-variation.test.ts",
+      "status": "passed",
+      "scope": "s10",
+      "checkedAt": "2026-09-07T22:08:01.036Z",
+      "notes": "8 passed; real local-file browser smoke passed showing changed facts and editorial warning. Full npm run typecheck passed. Model/Article mixed-revision rejection preserved."
     }
   ],
   "expectedLearning": [
