@@ -42,6 +42,20 @@
       "scope": "s02",
       "checkedAt": "2026-09-07T21:38:25.974Z",
       "notes": "Three reproducible tasks pass; local timings recorded, not browser or human-effort claims. Governed equation source requirement remains explicit."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/authoring-round-trip-corpus.test.ts",
+      "status": "passed",
+      "scope": "s03",
+      "checkedAt": "2026-09-07T21:43:25.880Z",
+      "notes": "25 checks cover 24 tasks. Two bound positives, five malformed or missing authority cases, 17 unbound requests. No curriculum coverage claim."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s03",
+      "checkedAt": "2026-09-07T21:43:26.936Z",
+      "notes": "Full app node test Svelte domain types pass after immutable negative-fixture construction fixed two test typing errors; no weakened guards."
     }
   ],
   "expectedLearning": [

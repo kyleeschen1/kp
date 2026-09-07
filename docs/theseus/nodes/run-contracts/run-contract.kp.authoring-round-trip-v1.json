@@ -108,7 +108,8 @@
     {
       "id": "s03",
       "title": "Assemble approximately 24 representative deduction chains including failures",
-      "status": "planned"
+      "summary": "24 diagnostic author tasks, 25 passing checks, full types; corpus explicitly distinguishes bound proof from unbound requests.",
+      "status": "complete"
     },
     {
       "id": "s04",
