@@ -119,6 +119,13 @@
       "scope": "s12",
       "checkedAt": "2026-09-07T22:19:01.882Z",
       "notes": "14 passed; full typecheck passed. Five successive invalid edits retain candidate identity and deterministic samples, initial failure has no fallback, repaired draft clears errors. CLI reports source path."
+    },
+    {
+      "command": "npm run test:authoring-integration",
+      "status": "passed",
+      "scope": "s13",
+      "checkedAt": "2026-09-07T22:25:15.528Z",
+      "notes": "88 passed; 14 focused revision/status checks, real local-file browser smoke and full types pass. Browser-exposed inspection-to-live status bug repaired; source files restored."
     }
   ],
   "expectedLearning": [

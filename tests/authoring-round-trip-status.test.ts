@@ -30,3 +30,10 @@ test("invalid draft reports exact details and retained display separately", () =
   assert.doesNotMatch(project(invalid).text, /Last valid preview retained/);
   assert.equal(project(draft, "draft.2").phase, "valid");
 });
+
+test("explicit historical inspection does not pretend an older display is still preparing", () => {
+  const state = project(draft, "draft.1", true);
+  assert.equal(state.phase, "historical");
+  assert.match(state.text, /Draft draft.2: valid/);
+  assert.match(state.text, /Inspecting displayed revision draft.1 \(read only\)/);
+});

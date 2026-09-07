@@ -160,3 +160,47 @@ test("disposal suppresses a late preparation rejection and every later event", a
   await receiver.receive(revision(2));
   assert.equal(reports.length, 1);
 });
+
+test("four immutable retained builds support read-only inspection without changing latest draft", async () => {
+  const committed: number[] = [];
+  const reports: KpAuthoringMarketBuildRevision[] = [];
+  const receiver = createKpAuthoringMarketRevisionReceiver({
+    prepare: () => 1, commit(_value, event) { committed.push(event.sequence); },
+    report(value) { reports.push(value); }
+  });
+  for (let sequence = 1; sequence <= 5; sequence++) await receiver.receive(revision(sequence));
+  const history = receiver.retainedRevisions();
+  assert.deepEqual(history.map(({ sequence }) => sequence), [2, 3, 4, 5]);
+  assert.ok(Object.isFrozen(history));
+  assert.ok(Object.isFrozen(history[0]!.preview!.article));
+  assert.notEqual(history[0]!.preview, data);
+  assert.equal((await receiver.inspectRevision("source.1")).status, "unavailable");
+  assert.equal((await receiver.inspectRevision("source.2")).status, "displayed");
+  assert.equal(committed.at(-1), 2);
+  assert.equal(reports.at(-1)?.sourceRevision, "source.5");
+  assert.deepEqual(receiver.retainedRevisions(), history);
+  await receiver.receive(revision(6));
+  assert.equal(committed.at(-1), 6);
+  receiver.dispose();
+  assert.deepEqual(receiver.retainedRevisions(), []);
+  assert.equal((await receiver.inspectRevision("source.6")).status, "unavailable");
+});
+
+test("a new source build supersedes asynchronous historical inspection", async () => {
+  let resolve!: (value: number) => void;
+  let delay = false;
+  const committed: number[] = [];
+  const receiver = createKpAuthoringMarketRevisionReceiver({
+    prepare: () => delay ? new Promise<number>(yes => { resolve = yes; }) : 1,
+    commit(_value, event) { committed.push(event.sequence); }, report() {}
+  });
+  await receiver.receive(revision(1));
+  delay = true;
+  const inspection = receiver.inspectRevision("source.1");
+  delay = false;
+  await receiver.receive(revision(2));
+  resolve(1);
+  assert.equal((await inspection).status, "superseded");
+  assert.deepEqual(committed, [1, 2]);
+  receiver.dispose();
+});

@@ -25,9 +25,26 @@ reviewSummary.textContent = "Parameter edit: review refreshed facts and claims";
 const reviewText = document.createElement("p");
 review.append(reviewSummary, reviewText);
 status.after(review);
+let inspecting = false;
+let lastReported: KpAuthoringMarketBuildRevision | undefined;
+const historyControls = document.createElement("details");
+historyControls.dataset["kpAuthoringMarketSourceHistory"] = "";
+const historySummary = document.createElement("summary");
+historySummary.textContent = "Inspect recent source builds (read only)";
+const historyLabel = document.createElement("label");
+historyLabel.textContent = "Retained revision ";
+const historySelect = document.createElement("select");
+historyLabel.append(historySelect);
+const inspectButton = document.createElement("button");
+inspectButton.type = "button"; inspectButton.textContent = "Inspect selected revision";
+const historyNotice = document.createElement("p");
+historyNotice.textContent = "Last four successful builds in this tab; source files are unchanged.";
+historyControls.append(historySummary, historyLabel, inspectButton, historyNotice);
+review.after(historyControls);
 const reportStatus = (revision: KpAuthoringMarketBuildRevision) => {
+  lastReported = revision;
   const projected = projectKpAuthoringMarketPreviewStatus(revision,
-    root.dataset["kpAuthoringMarketPreviewRevision"]);
+    root.dataset["kpAuthoringMarketPreviewRevision"], inspecting);
   status.dataset["kpAuthoringMarketBuildStatus"] = projected.phase;
   status.dataset["kpAuthoringMarketSourceRevision"] = projected.draftRevision;
   status.dataset["kpAuthoringMarketDisplayedRevision"] = projected.displayedRevision ?? "";
@@ -67,6 +84,7 @@ const receiver = createKpAuthoringMarketRevisionReceiver({
     root = candidate;
     session = next;
     lastPrepared = prepared;
+    inspecting = false;
     restorePosition(root);
     review.hidden = changes === undefined;
     reviewText.textContent = changes === undefined ? "" :
@@ -74,12 +92,35 @@ const receiver = createKpAuthoringMarketRevisionReceiver({
     reportStatus(revision);
   }
 });
-const onRevision = (revision: KpAuthoringMarketBuildRevision) => { void receiver.receive(revision); };
+const refreshHistory = () => {
+  historySelect.replaceChildren(...receiver.retainedRevisions().map(revision => {
+    const option = document.createElement("option");
+    option.value = revision.sourceRevision;
+    option.textContent = `Build ${revision.sequence}: ${revision.sourceRevision.slice(0, 12)}`;
+    return option;
+  }));
+  historySelect.value = root.dataset["kpAuthoringMarketPreviewRevision"] ?? "";
+  inspectButton.disabled = historySelect.options.length === 0;
+};
+inspectButton.addEventListener("click", () => {
+  void receiver.inspectRevision(historySelect.value).then(result => {
+    if (result.status === "displayed") {
+      inspecting = true;
+      if (lastReported !== undefined) reportStatus(lastReported);
+    } else if (result.status === "unavailable") historyNotice.textContent = result.message;
+    refreshHistory();
+  });
+});
+const onRevision = (revision: KpAuthoringMarketBuildRevision) => {
+  if (revision.sequence > (lastReported?.sequence ?? -1)) inspecting = false;
+  void receiver.receive(revision).then(refreshHistory);
+};
 import.meta.hot?.on(kpAuthoringMarketPreviewEvent, onRevision);
 try {
   const response = await fetch(kpAuthoringMarketPreviewEndpoint, { cache: "no-store" });
   if (!response.ok) throw new Error(`Local preview build unavailable (${response.status}).`);
   await receiver.receive(await response.json() as KpAuthoringMarketBuildRevision);
+  refreshHistory();
 } catch (error) {
   status.dataset["kpAuthoringMarketBuildStatus"] = "invalid";
   status.textContent = error instanceof Error ? error.message : String(error);
@@ -99,5 +140,6 @@ if (import.meta.hot !== undefined) {
     dispose();
     status.remove();
     review.remove();
+    historyControls.remove();
   });
 }

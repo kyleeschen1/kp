@@ -129,6 +129,17 @@ test("actual local-file rebuild retains invalid drafts and last valid preview wi
     await expect(revisionReview).toContainText("after.revenue");
     await expect(revisionReview).toContainText("Review free prose for stale assertions");
     const validRevision = await page.locator("#app").getAttribute("data-kp-authoring-market-preview-revision");
+    const sourceHistory = page.locator("[data-kp-authoring-market-source-history]");
+    await sourceHistory.locator("summary").click();
+    await sourceHistory.locator("select").selectOption(initialRevision!);
+    await sourceHistory.getByRole("button", { name: "Inspect selected revision" }).click();
+    await expect(status).toHaveAttribute("data-kp-authoring-market-build-status", "historical");
+    await expect(page.locator("#app")).toHaveAttribute("data-kp-authoring-market-preview-revision", initialRevision!);
+    await expect(page.locator('[data-kp-authoring-market-static-facts] dt:has-text("after.revenue") + dd')).toHaveText("12");
+    expect(await readFile(modelPath, "utf8")).toBe(writtenModel);
+    await sourceHistory.locator("select").selectOption(validRevision!);
+    await sourceHistory.getByRole("button", { name: "Inspect selected revision" }).click();
+    await expect(page.locator("#app")).toHaveAttribute("data-kp-authoring-market-preview-revision", validRevision!);
     const validPaint = await page.locator("[data-kp-supply-tax-focus-deck] svg").first().evaluate(element => element.outerHTML);
     writtenModel = "export const kpAuthoringMarketModelInput = ;\n";
     await writeFile(modelPath, writtenModel);

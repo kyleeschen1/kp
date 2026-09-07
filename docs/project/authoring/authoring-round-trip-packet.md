@@ -43,6 +43,13 @@ selection alone does not select a publication revision. Do not hand-edit
 generated JSON/HTML; the existing `npm run compile:canonical-tax-source` and
 `npm run check:canonical-tax-source` own generated canonical artifacts.
 
+The preview's **Inspect recent source builds** control retains the last four
+successful builds in the current tab. Select a revision and inspect it without
+changing source files. The current draft and inspected display remain separately
+labeled; a new source save returns to live draft reporting. Reload/disposal
+clears this disposable cache. It is not durable source history or a new semantic
+snapshot authority; use the existing source files/version control for durable work.
+
 ## Governed equation-chain edit
 
 Use the complete executable pair `{ value, source }` from

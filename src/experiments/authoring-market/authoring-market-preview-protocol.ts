@@ -53,7 +53,27 @@ export function createKpAuthoringMarketRevisionReceiver<T>(input: {
   let latest: KpAuthoringMarketBuildRevision | undefined;
   let disposed = false;
   let acceptedSequence = -1;
+  let generation = 0;
+  let retained: readonly KpAuthoringMarketBuildRevision[] = [];
   return Object.freeze({
+    retainedRevisions() { return Object.freeze([...retained]); },
+    async inspectRevision(sourceRevision: string) {
+      const revision = retained.find(item => item.sourceRevision === sourceRevision);
+      if (disposed || revision?.preview === undefined) return { status: "unavailable" as const,
+        message: "This revision is no longer retained in this preview tab." };
+      const ticket = ++generation;
+      try {
+        const prepared = await input.prepare(revision.preview);
+        if (disposed || ticket !== generation) return { status: "superseded" as const };
+        input.commit(prepared, revision);
+        if (latest !== undefined) input.report(latest);
+        return { status: "displayed" as const };
+      } catch (error) {
+        if (disposed || ticket !== generation) return { status: "superseded" as const };
+        return { status: "unavailable" as const,
+          message: error instanceof Error ? error.message : String(error) };
+      }
+    },
     async receive(revision: KpAuthoringMarketBuildRevision) {
       if (disposed || revision.schemaVersion !== "kp.authoring-market-build.v1" ||
           !Number.isSafeInteger(revision.sequence) || revision.sequence < 0 ||
@@ -61,19 +81,31 @@ export function createKpAuthoringMarketRevisionReceiver<T>(input: {
           (latest !== undefined && (revision.sequence < latest.sequence ||
             (revision.sequence === latest.sequence && latest.status !== "building")))) return;
       latest = revision;
+      const ticket = ++generation;
       input.report(revision);
       if (revision.status !== "valid" || revision.preview === undefined) return;
       try {
         const prepared = await input.prepare(revision.preview);
-        if (disposed || latest !== revision) return;
+        if (disposed || latest !== revision || ticket !== generation) return;
+        const snapshot = freezeRevision(structuredClone(revision));
         input.commit(prepared, revision);
         acceptedSequence = revision.sequence;
+        // Disposable verified-build cache, not source history or a semantic store.
+        // Clone before retaining so later caller mutation cannot rewrite a snapshot.
+        retained = Object.freeze([...retained.filter(item => item.sourceRevision !== revision.sourceRevision),
+          snapshot].slice(-4));
       } catch (error) {
-        if (disposed || latest !== revision) return;
+        if (disposed || latest !== revision || ticket !== generation) return;
         input.report({ ...revision, status: "invalid",
           diagnostic: createKpAuthoringMarketBuildDiagnostic(error) });
       }
     },
-    dispose() { disposed = true; latest = undefined; }
+    dispose() { disposed = true; latest = undefined; retained = []; ++generation; }
   });
+}
+
+function freezeRevision<T>(value: T): T {
+  if (typeof value !== "object" || value === null || Object.isFrozen(value)) return value;
+  Object.values(value).forEach(freezeRevision);
+  return Object.freeze(value);
 }

@@ -168,7 +168,8 @@
     {
       "id": "s13",
       "title": "Bounded historical inspection through existing owners",
-      "status": "planned"
+      "summary": "Bounded read-only source-build inspection implemented and verified; latest draft stays separate and new builds supersede inspection. 88 integration, focused, browser and full types pass.",
+      "status": "complete"
     },
     {
       "id": "s14",
