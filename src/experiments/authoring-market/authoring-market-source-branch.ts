@@ -1,6 +1,6 @@
 import { prepareKpAuthoringMarketPreview } from "./authoring-market-preview-prepare.ts";
 import type { KpAuthoringMarketBuildRevision, KpAuthoringMarketPreviewData } from "./authoring-market-preview-protocol.ts";
-import { compileKpEquationSeriesLogarithmBaseExample } from "../../authoring/equation-series-logarithm-base-example.ts";
+import { compileKpEquationSeriesLogarithmBaseDraft } from "../../authoring/equation-series-logarithm-base-draft.ts";
 import type { KpEquationTransformSeriesRequest } from "../../authoring/equation-transform-series-request.ts";
 
 /** An editable source packet, not a publication artifact or durable history engine. */
@@ -39,7 +39,7 @@ export function readKpAuthoringMarketSourceBranch(value: unknown): KpAuthoringMa
   }
   prepareKpAuthoringMarketPreview(branch.data);
   if (branch.equationRequest !== undefined) {
-    const equation = compileKpEquationSeriesLogarithmBaseExample(branch.equationRequest);
+    const equation = compileKpEquationSeriesLogarithmBaseDraft(branch.equationRequest);
     if (equation.status !== "compiled") throw Object.assign(new Error("Repair the selected equation request before building this source branch."), {
       code: "kp.authoring.equation-source-gap", path: "$.equationRequest", repairs: equation.repairs
     });

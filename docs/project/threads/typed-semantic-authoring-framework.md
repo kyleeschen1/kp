@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: R1 at combined visual checkpoint; prior G3 complete
+Status: R1 resumed after accepted appearance and numeric JSON binding repair; prior G3 complete
 Last Updated: 2026-09-07
 Current successor reference: `../reviews/2026-09-07-reconciled-authoring-loop-horizon.md`.
 It preserves the original architectural obligations and the tax/Bayes direction;
@@ -10,8 +10,9 @@ Theseus contract: `run-contract.kp.authoring-round-trip-v1`.
 Current review packet: `../reviews/2026-09-07-authoring-round-trip-checkpoint.md`.
 It names the working shared-server authoring card and selected reading edition,
 the actual source/renderer authority, verified repairs and visual acceptance
-script. Await this checkpoint's visual/interaction approval, then continue the
-remaining approved R1 work without another routine resume. Theseus owns counts.
+script. The user accepted the appearance, identified the fixed equation binding,
+and authorized parameterizing the existing verified change-of-base path. Continue
+the remaining approved R1 work without another routine resume. Theseus owns counts.
 Standing minimal-check-in
 policy: `../decisions/2026-09-07-reconciled-horizon-and-minimal-check-ins.md`.
 The user requested recording the recommendations and finishing the existing
@@ -39,7 +40,7 @@ The user clarified the remaining code issue as missing gradual passage swiping.
 The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
 Current Next Action: execute the next approved R1 slice in Theseus and stop at
-its combined visual checkpoint s20; do not restart the completed G3 loop. See
+any new named stop condition; do not restart the completed G3 loop. See
 `../reviews/2026-09-07-canonical-tax-g3-checkpoint.md` for the working URL,
 source workflow, production ownership, release evidence and remaining work.
 The ordinary build now ships the exact four-card route, with shared source

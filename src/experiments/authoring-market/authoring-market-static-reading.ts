@@ -2,7 +2,7 @@ import { compileKpArticleStaticHtml, compileKpArticleMarkdownFragmentHtml } from
 import { prepareKpAuthoredMarketSource } from "../../tutorial/authoring-market/authoring-market-prepare.ts";
 import { renderKpAuthoringMarketStaticFacts } from "../../tutorial/authoring-market/authoring-market-facts.ts";
 import type { KpAuthoredMarketSourceData, KpAuthoredMarketArticleProjection } from "../../tutorial/authoring-market/authoring-market-source-data.ts";
-import { compileKpEquationSeriesLogarithmBaseExample } from "../../authoring/equation-series-logarithm-base-example.ts";
+import { compileKpEquationSeriesLogarithmBaseDraft } from "../../authoring/equation-series-logarithm-base-draft.ts";
 import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
 
 export function compileKpAuthoringMarketStaticReading(input: {
@@ -31,7 +31,7 @@ export function compileKpAuthoringMarketStaticReading(input: {
 }
 
 export function compileKpAuthoringEquationStaticReading(value: unknown) {
-  const result = compileKpEquationSeriesLogarithmBaseExample(value);
+  const result = compileKpEquationSeriesLogarithmBaseDraft(value);
   if (result.status !== "compiled" || result.active === undefined) {
     throw Object.assign(new Error("Repair the equation draft before publishing its reading output."), {
       code: "kp.authoring.equation-static-gap", repairs: result.repairs

@@ -2,9 +2,9 @@
   "id": "next-action.kp.authoring-round-trip",
   "kind": "next-action",
   "title": "Reliable authoring round trip",
-  "status": "blocked",
+  "status": "ready",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: mandatory s20 user visual/interaction approval is pending; no implementation blocker and no s21 before acceptance.",
+  "summary": "User accepted appearance, identified missing JSON-to-animation binding, and authorized the recommended parameterized change-of-base repair with resume. Resolve functional checkpoint before proceeding.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -180,6 +180,34 @@
       "scope": "s20",
       "checkedAt": "2026-09-07T23:20:15.102Z",
       "notes": "Selected combined edition freshness passes. Existing shared server PID 405 on port 8000 serves authoring HTML, valid source revision, reading HTML and CSS with browser Accept header. Human visual approval is pending, not inferred from automated checks."
+    },
+    {
+      "command": "npm run test:authoring-round-trip",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-07T23:44:16.905Z",
+      "notes": "48 tests pass, including bounded numeric semantics and strict invalid-draft retention."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-07T23:44:18.010Z",
+      "notes": "Full app, node, test, Svelte and domain checks pass."
+    },
+    {
+      "command": "npm run visual:authoring-market -- --grep 'equation authoring'",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-07T23:44:19.001Z",
+      "notes": "Both browser tests pass: numeric edits replace actual material/native ink, preserve semantic position, invalid drafts retain paint, and existing controls/resize remain working."
+    },
+    {
+      "command": "npm run test:browser:logarithm-change-of-base",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-07T23:44:32.003Z",
+      "notes": "Three canonical compositor checks pass after repairing test asset-readiness race; native paint invariants unchanged."
     }
   ],
   "progress": {

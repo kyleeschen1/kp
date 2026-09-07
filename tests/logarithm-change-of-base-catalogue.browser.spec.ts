@@ -158,6 +158,9 @@ test("accepted choreography survives multi-glyph base and argument paint", async
   page
 }) => {
   await page.goto(`/?artifact=${animationId}&playhead=0`);
+  // The isolated pressure stage reuses catalogue-loaded KaTeX CSS. Measuring
+  // before the lazy surface is ready can mistake an unstyled rule for no ink.
+  await expect(page.locator("[data-kp-logarithm-change-of-base-stage]")).toHaveAttribute("data-kp-logarithm-change-of-base-stage", "ready");
   const result = await page.evaluate(async () => {
     const paths = {
       corpus: "/src/semantic/logarithm-change-of-base-corpus.ts",

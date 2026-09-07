@@ -123,8 +123,19 @@ Card scaffold at `/experiments/authoring-market/#equation-authoring`. It uses
 and the canonical native-KaTeX change-of-base surface/transit session. This is
 not the different log/exponent-solving sibling on the supply-tax page.
 
+The browser draft uses `createKpEquationSeriesLogarithmBaseDraft` and its bounded
+compiler. Edit the numeric base and argument in **both** LaTeX states, leaving
+`semanticArguments: {}`. Positive finite numeric literals are supported; the
+base cannot equal one. The existing verifier supplies domain/correspondence
+authority, and the renderer receives that exact verified instance. This is not
+arbitrary LaTeX animation. The older CLI example above remains explicitly pinned
+to its reference specimen; do not hand-forge its proof metadata to vary it.
+
 Edit the request JSON and compile. State `narration` is optional Markdown;
-successful edits update passages without replacing the equation compositor.
+narration-only edits update passages without replacing the equation compositor.
+Numeric edits prepare replacement ink before changing the displayed card and
+preserve its semantic position. Free prose is retained, not automatically fixed
+when a numeric edit makes its wording stale.
 Dirty, malformed or unsupported drafts remain in the editor and retain the
 last valid card. **Restore displayed request** explicitly restores the editor
 to that valid request; neither action writes a source file. This draft is
@@ -144,8 +155,8 @@ exports that selected pair, and verifies a real local filesystem build with
 JavaScript disabled. Run `npm run visual:authoring-market`; focused filters
 are `-- --grep 'actual local-file rebuild'` and
 `-- --grep 'equation authoring Focus Card'`.
-The new authoring card and workflow still require the R1 human checkpoint;
-compilation/browser checks alone do not grant visual or catalogue promotion.
+The user accepted the card's appearance and resumed after requesting the numeric
+binding repair. This does not grant other-family or catalogue-wide promotion.
 
 ```sh
 node --disable-warning=ExperimentalWarning --test tests/authoring-round-trip-corpus.test.ts

@@ -6,7 +6,7 @@ import {
   createKpCanonicalBalancedSolveEquationPresentationProfileV1
 } from "./equation-presentation-profile.ts";
 import {
-  kpCanonicalLogarithmChangeOfBasePresentationPlan
+  kpCanonicalLogarithmChangeOfBasePresentationPlan, compileKpLogarithmChangeOfBasePresentationPlan
 } from "./logarithm-change-of-base-presentation-plan.ts";
 import {
   createKpAssetBundle,
@@ -27,30 +27,33 @@ import {
 export const kpLogarithmChangeOfBaseExemplarId =
   "animation.equation.logarithm-change-of-base.v1" as const;
 
-export function createKpLogarithmChangeOfBaseExemplarAsset(): KpAnimationAsset {
-  const semantic = kpCanonicalLogarithmChangeOfBase;
-  const presentation = kpCanonicalLogarithmChangeOfBasePresentationPlan;
+export function createKpLogarithmChangeOfBaseExemplarAsset(semantic = kpCanonicalLogarithmChangeOfBase): KpAnimationAsset {
+  const presentation = semantic === kpCanonicalLogarithmChangeOfBase ? kpCanonicalLogarithmChangeOfBasePresentationPlan : compileKpLogarithmChangeOfBasePresentationPlan(semantic);
+  const atoms = [semantic.source.base, semantic.source.argument, semantic.target.numerator.argument, semantic.target.denominator.argument];
+  const label = (id: string) => { const atom = atoms.find(item => item.entityId === id); return atom === undefined ? selectorLabel(id) : atom.kind === "number" ? String(atom.value) : atom.symbol; };
+  const sourceLatex = `\\log_{${label(semantic.source.base.entityId)}} ${label(semantic.source.argument.entityId)}`;
+  const targetLatex = `\\frac{\\ln ${label(semantic.source.argument.entityId)}}{\\ln ${label(semantic.source.base.entityId)}}`;
   const sourceSelectors = presentation.sourceSelectorIds.map((id) => ({
     id,
     kind: selectorKind(id),
-    label: selectorLabel(id),
+    label: label(id),
     metadata: { representation: "native-katex" }
   }));
   const targetSelectors = presentation.targetSelectorIds.map((id) => ({
     id,
     kind: selectorKind(id),
-    label: selectorLabel(id),
+    label: label(id),
     metadata: { representation: "native-katex" }
   }));
   const objects = [
     createKpSemanticAssetObject({
       id: semantic.source.stateId,
       objectType: "equation",
-      title: "Logarithm in base two",
-      value: Object.freeze({ latex: "\\log_{2} 7", stateKind: "source" }),
+      title: semantic === kpCanonicalLogarithmChangeOfBase ? "Logarithm in base two" : "Original logarithm",
+      value: Object.freeze({ latex: sourceLatex, stateKind: "source" }),
       selectors: sourceSelectors,
       metadata: {
-        latex: "\\log_{2} 7",
+        latex: sourceLatex,
         settledEndpointAuthority: "native-katex"
       }
     }),
@@ -59,12 +62,12 @@ export function createKpLogarithmChangeOfBaseExemplarAsset(): KpAnimationAsset {
       objectType: "equation",
       title: "Natural-log quotient",
       value: Object.freeze({
-        latex: "\\frac{\\ln 7}{\\ln 2}",
+        latex: targetLatex,
         stateKind: "target"
       }),
       selectors: targetSelectors,
       metadata: {
-        latex: "\\frac{\\ln 7}{\\ln 2}",
+        latex: targetLatex,
         settledEndpointAuthority: "native-katex"
       }
     })
@@ -72,12 +75,12 @@ export function createKpLogarithmChangeOfBaseExemplarAsset(): KpAnimationAsset {
   const transformation = createKpSemanticTransformation({
     id: semantic.id,
     transformType: "changeLogarithmBase",
-    title: "Rewrite a base-two logarithm using natural logarithms",
+    title: semantic === kpCanonicalLogarithmChangeOfBase ? "Rewrite a base-two logarithm using natural logarithms" : "Rewrite a logarithm using natural logarithms",
     sourceObjectIds: [semantic.source.stateId],
     targetObjectIds: [semantic.target.stateId],
     preserves: ["identity", "value", "role"],
     correspondenceMap: {
-      id: "correspondence.logarithm.change-of-base.two-seven-natural",
+      id: semantic === kpCanonicalLogarithmChangeOfBase ? "correspondence.logarithm.change-of-base.two-seven-natural" : `correspondence.${semantic.id}`,
       records: [
         ...semantic.correspondence
           .filter((record) =>
@@ -123,8 +126,8 @@ export function createKpLogarithmChangeOfBaseExemplarAsset(): KpAnimationAsset {
     id: kpLogarithmChangeOfBaseExemplarId,
     title: "Change logarithm base",
     bundle: createKpAssetBundle({
-      id: "asset.logarithm.change-of-base.two-seven-natural",
-      title: "Change log base two of seven to natural logarithms",
+      id: semantic === kpCanonicalLogarithmChangeOfBase ? "asset.logarithm.change-of-base.two-seven-natural" : `asset.${semantic.id}`,
+      title: semantic === kpCanonicalLogarithmChangeOfBase ? "Change log base two of seven to natural logarithms" : "Change logarithm base to natural logarithms",
       objects
     }),
     transformations: [transformation],

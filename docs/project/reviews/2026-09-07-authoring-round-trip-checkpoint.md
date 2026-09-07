@@ -1,14 +1,15 @@
 # R1 combined authoring checkpoint
 
-Status: HUMAN_CHECKPOINT — visual/interaction approval required, not granted
+Status: Appearance accepted; numeric JSON binding repaired under user-approved resume
 Date: 2026-09-07
 Implementation: `68013ccd3` on `feature/20260907-authoring-round-trip`
 Authority: `2026-09-07-authoring-round-trip-long-loop-proposal.md`
 Execution: `run-contract.kp.authoring-round-trip-v1`; Theseus owns live progress.
-The contract and target are blocked specifically on human acceptance. The
-generic status command therefore reports no active loop. After approval,
-reactivate this existing contract/target, record s20 acceptance and continue;
-do not create a replacement plan or skip to another roadmap lane.
+The user accepted the appearance, reported that JSON mathematics did not update
+the animation, and accepted the bounded repair with “got it. resume”. The fixed
+specimen binding was an integration omission, not a new semantic-schema defect.
+The existing contract is active; continue its remaining work without another
+routine approval. Theseus owns current verification and progress.
 
 ## Working review destinations
 
@@ -67,8 +68,15 @@ existing editor player clock, and the canonical change-of-base native-KaTeX
 surface/transit session. Native formatting remains canonical, not a promise to
 preserve every equivalent lexical LaTeX spelling.
 
-Narration edits change authored passages; unsupported mathematical changes
-return repairs. The optional source packet `equationRequest` is included only
+Numeric base/argument edits now use `compileKpEquationSeriesLogarithmBaseDraft`
+to bind the existing verifier, source compiler, native endpoints and compositor.
+The default remains the canonical 2/7 specimen. Matching numeric edits in both
+states prepare replacement paint before swapping the player, preserve semantic
+position, and retain the last valid card on failure. Empty `semanticArguments`
+means compiler-owned binding; explicit legacy pins remain strictly validated.
+Symbolic/compound operands and other families still return typed repairs.
+Narration edits change authored passages without replacing the compositor.
+The optional source packet `equationRequest` is included only
 by explicit selection and revalidated during publication. Dirty or invalid
 equation drafts cannot silently export the retained valid request.
 

@@ -19,7 +19,7 @@ import {
 import { sampleKpSynchronizedModelProjectionProgress } from "../animation/synchronized-model-projection.ts";
 import {
   bindKpLogarithmChangeOfBaseNativeEndpointOwnership,
-  kpCanonicalLogarithmChangeOfBaseNativeEndpoints,
+  createKpLogarithmChangeOfBaseNativeEndpoints,
   settleAndObserveKpLogarithmChangeOfBaseNativeEndpoint
 } from "../rendering/logarithm-change-of-base-native-endpoints.ts";
 import {
@@ -36,7 +36,12 @@ import type {
   KpEditorAnimationSurfaceAdapter
 } from "./animation-surface-adapter-registry.ts";
 
+import { kpCanonicalLogarithmChangeOfBase } from "../semantic/logarithm-change-of-base.ts";
+import { publishKpEditorAnimationSurfaceReadiness } from "./animation-surface-readiness.ts";
+
 interface KpLogarithmChangeOfBaseSurfaceSession {
+  readonly semantic: typeof kpCanonicalLogarithmChangeOfBase;
+  readonly endpoints: ReturnType<typeof createKpLogarithmChangeOfBaseNativeEndpoints>;
   readonly governance: KpEquationAssetMigrationV2;
   readonly player: HTMLElement;
   readonly stage: HTMLElement;
@@ -52,11 +57,8 @@ interface KpLogarithmChangeOfBaseSurfaceSession {
 
 const sessions = new WeakMap<HTMLElement,
   KpLogarithmChangeOfBaseSurfaceSession>();
-const canonicalGovernance = compileKpLogarithmChangeOfBaseMigrationV2(
-  createKpLogarithmChangeOfBaseExemplarAsset()
-);
-
-export const kpEditorLogarithmChangeOfBaseSurfaceAdapter = Object.freeze({
+export function createKpEditorLogarithmChangeOfBaseSurfaceAdapter(semantic = kpCanonicalLogarithmChangeOfBase) {
+return Object.freeze({
   id: "editor-animation-surface.logarithm-change-of-base.canonical-native-katex",
   slotKind: "equation" as const,
   priority: 132,
@@ -66,7 +68,7 @@ export const kpEditorLogarithmChangeOfBaseSurfaceAdapter = Object.freeze({
   render({ player, slot, state }) {
     let session = sessions.get(player);
     if (session === undefined) {
-      session = mountSurface(player, slot, state);
+      session = mountSurface(player, slot, state, semantic);
       sessions.set(player, session);
       player.addEventListener(
         KP_EDITOR_ANIMATION_DISPOSE_EVENT,
@@ -80,21 +82,27 @@ export const kpEditorLogarithmChangeOfBaseSurfaceAdapter = Object.freeze({
     if (session.transit !== undefined) applyFrame(session, state);
   }
 } satisfies KpEditorAnimationSurfaceAdapter);
+}
+export const kpEditorLogarithmChangeOfBaseSurfaceAdapter = createKpEditorLogarithmChangeOfBaseSurfaceAdapter();
 
 function mountSurface(
   player: HTMLElement,
   slot: HTMLElement,
-  state: KpEditorAnimationPlayerState
+  state: KpEditorAnimationPlayerState,
+  semantic: typeof kpCanonicalLogarithmChangeOfBase
 ): KpLogarithmChangeOfBaseSurfaceSession {
+  const endpoints = createKpLogarithmChangeOfBaseNativeEndpoints(semantic);
+  const governance = compileKpLogarithmChangeOfBaseMigrationV2(createKpLogarithmChangeOfBaseExemplarAsset(semantic), semantic);
   const document = player.ownerDocument;
   const stage = document.createElement("section");
   stage.className = "kp-logarithm-change-of-base-stage";
   stage.dataset["kpLogarithmChangeOfBaseStage"] = "preparing";
   stage.dataset["kpEquationPresentationPlanId"] =
-    canonicalGovernance.presentationPlan.id;
+    governance.presentationPlan.id;
+  stage.dataset["kpLogarithmChangeOfBaseSemanticId"] = semantic.id;
   stage.setAttribute("aria-label", "Change logarithm base");
   const createRoot = (
-    endpoint: typeof kpCanonicalLogarithmChangeOfBaseNativeEndpoints[number],
+    endpoint: typeof endpoints[number],
     active: boolean
   ): HTMLElement => {
     const root = document.createElement("div");
@@ -107,8 +115,8 @@ function mountSurface(
     return root;
   };
   const roots: [HTMLElement, HTMLElement] = [
-    createRoot(kpCanonicalLogarithmChangeOfBaseNativeEndpoints[0]!, true),
-    createRoot(kpCanonicalLogarithmChangeOfBaseNativeEndpoints[1]!, false)
+    createRoot(endpoints[0]!, true),
+    createRoot(endpoints[1]!, false)
   ];
   const materialLayer = document.createElement("div");
   materialLayer.className =
@@ -119,11 +127,11 @@ function mountSurface(
   status.className = "kp-logarithm-change-of-base-stage__status";
   status.dataset["kpLogarithmChangeOfBaseStatus"] = "true";
   status.setAttribute("aria-live", "polite");
-  status.textContent = "Log base two of seven ready.";
+  status.textContent = endpoints[0]!.accessibleText;
   stage.append(...roots, materialLayer, status);
   slot.replaceChildren(stage);
   const session: KpLogarithmChangeOfBaseSurfaceSession = {
-    governance: canonicalGovernance,
+    governance, semantic, endpoints,
     player,
     stage,
     endpointRoots: Object.freeze(roots) as readonly [HTMLElement, HTMLElement],
@@ -133,6 +141,7 @@ function mountSurface(
     disposed: false
   };
   observeSurfaceGeometry(session);
+  publishKpEditorAnimationSurfaceReadiness({ player, readiness: "preparing" });
   return session;
 }
 
@@ -145,14 +154,14 @@ async function prepareSurface(
       endpointSide: "source",
       stage: session.stage,
       root: session.endpointRoots[0],
-      endpoint: kpCanonicalLogarithmChangeOfBaseNativeEndpoints[0]!,
+      endpoint: session.endpoints[0]!,
       fontReadiness: session.fontReadiness
     });
     const target = await settleAndObserveKpLogarithmChangeOfBaseNativeEndpoint({
       endpointSide: "target",
       stage: session.stage,
       root: session.endpointRoots[1],
-      endpoint: kpCanonicalLogarithmChangeOfBaseNativeEndpoints[1]!,
+      endpoint: session.endpoints[1]!,
       fontReadiness: session.fontReadiness
     });
     if (session.disposed || session.generation !== generation) return;
@@ -163,7 +172,8 @@ async function prepareSurface(
     if (previous !== undefined) syncKpEquationMaterialLayer({ stage: session.stage, owners: [] });
     const replacement = createKpLogarithmChangeOfBaseTransitSession({
       source,
-      target
+      target,
+      semantic: session.semantic
     });
     const sourceEntities = new Map(source.atoms.map((atom) => [
       atom.id,
@@ -196,11 +206,13 @@ async function prepareSurface(
     session.stage.dataset["kpLogarithmChangeOfBaseGeometryState"] = "ready";
     session.stage.dataset["kpLogarithmChangeOfBaseGeometryRevision"] = String(generation);
     delete session.stage.dataset["kpLogarithmChangeOfBaseError"];
+    publishKpEditorAnimationSurfaceReadiness({ player: session.player, readiness: "ready" });
   } catch (error: unknown) {
     if (session.disposed || session.generation !== generation) return;
     session.stage.dataset["kpLogarithmChangeOfBaseStage"] = "failed";
     session.stage.dataset["kpLogarithmChangeOfBaseError"] =
       error instanceof Error ? error.message : String(error);
+    publishKpEditorAnimationSurfaceReadiness({ player: session.player, readiness: "failed", error: String(error) });
     if (session.transit !== undefined) {
       session.stage.dataset["kpLogarithmChangeOfBaseGeometryState"] = "stale";
       applyFrame(session, session.pendingState);
@@ -260,9 +272,9 @@ function applyFrame(
   );
   if (status !== null) {
     status.textContent = progress === 0
-      ? "Log base two of seven ready."
+      ? session.endpoints[0]!.accessibleText
       : progress === 1
-        ? "Natural log of seven divided by natural log of two."
+        ? session.endpoints[1]!.accessibleText
         : "Moving the argument and base into a natural-log quotient.";
   }
 }

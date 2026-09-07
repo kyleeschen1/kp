@@ -11,9 +11,9 @@ import {
 } from "./equation-asset-migration-role-bindings-v2.ts";
 
 export function compileKpLogarithmChangeOfBaseMigrationV2(
-  animation: KpAnimationAsset
+  animation: KpAnimationAsset,
+  semantic = kpCanonicalLogarithmChangeOfBase
 ): KpEquationAssetMigrationV2 {
-  const semantic = kpCanonicalLogarithmChangeOfBase;
   const transformation = requireKpEquationMigrationTransformation(
     animation,
     semantic.id

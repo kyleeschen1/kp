@@ -84,6 +84,43 @@ test("equation authoring Focus Card retains paint on repairs and shares one cont
   expect(errors).toEqual([]);
 });
 
+test("equation authoring numeric JSON replaces verified native ink and retains it on invalid edits", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await page.goto("/experiments/authoring-market/#equation-authoring");
+  const editor = page.locator("[data-kp-authoring-equation]");
+  const stage = editor.locator("[data-kp-logarithm-change-of-base-stage]");
+  await expect(stage).toHaveAttribute("data-kp-logarithm-change-of-base-stage", "ready");
+  const request = JSON.parse(await editor.locator("textarea").inputValue());
+  const scrubber = editor.locator("[data-kp-focus-deck-scrubber]");
+  await seek(scrubber, 0.37);
+  for (const [base, argument] of [[2, 9], [10, 100]]) {
+    request.states[0].latex = `\\log_{${base}} ${argument}`;
+    request.states[1].latex = `\\frac{\\ln ${argument}}{\\ln ${base}}`;
+    await editor.locator("textarea").fill(JSON.stringify(request));
+    await editor.getByRole("button", { name: "Compile equation draft" }).click();
+    await expect(editor).toHaveAttribute("data-kp-authoring-equation", "compiled");
+    await expect(stage).toHaveCount(1);
+    await expect(stage).toHaveAttribute("data-kp-logarithm-change-of-base-progress", "0.37");
+    await expect(stage.locator("annotation").first()).toContainText(String(argument));
+    await expect(stage.locator('[data-kp-equation-material-semantic-entity-id="source.logarithm.argument"]')).toContainText(String(argument));
+    await seek(scrubber, 1);
+    await expect(stage).toHaveAttribute("data-kp-logarithm-change-of-base-visual-owner", "target-native");
+    await expect(stage.locator("annotation").last()).toContainText(String(base));
+    await seek(scrubber, 0.37);
+    expect(JSON.parse(await editor.locator("textarea").inputValue()).adjacencies[0].intent.semanticArguments).toEqual({});
+  }
+  await stage.evaluate(element => element.setAttribute("data-retained-stage", "numeric"));
+  request.states[0].latex = "\\log_{1} 100";
+  await editor.locator("textarea").fill(JSON.stringify(request));
+  await editor.getByRole("button", { name: "Compile equation draft" }).click();
+  await expect(editor).toHaveAttribute("data-kp-authoring-equation", "repair-required");
+  await expect(stage).toHaveAttribute("data-retained-stage", "numeric");
+  await seek(scrubber, 0.6);
+  await expect(stage).toHaveAttribute("data-kp-logarithm-change-of-base-progress", "0.6");
+  expect(errors).toEqual([]);
+});
+
 test("bounded static readings remain meaningful with JavaScript disabled", async ({ browser }, info) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   try {
