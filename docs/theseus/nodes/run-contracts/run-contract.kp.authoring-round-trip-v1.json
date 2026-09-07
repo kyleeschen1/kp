@@ -198,7 +198,8 @@
     {
       "id": "s18",
       "title": "Reviewed source selection to reproducible local build",
-      "status": "planned"
+      "summary": "Selected source produces reproducible local text-and-facts edition with local KaTeX assets and byte-verified freshness; no deployment or graphical publication promotion.",
+      "status": "complete"
     },
     {
       "id": "s19",

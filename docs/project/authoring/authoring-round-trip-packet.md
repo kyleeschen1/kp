@@ -57,7 +57,22 @@ through ordinary file authoring; the live TypeScript sources are not overwritten
 This is an editable source packet, not a published edition or a verified claim
 that someone reviewed its prose. `readKpAuthoringMarketSourceBranch` validates
 identity and reuses existing preparation, including mixed-revision rejection.
-The publication-selection command is a later R1 integration step.
+Build the selected branch explicitly from the repository root:
+
+```sh
+npm run author:market-publication -- --source path/to/draft.market.json
+npm run author:market-publication -- --source path/to/draft.market.json --check
+```
+
+Output is confined to `tmp/codex/authoring-market-editions/<branch-name>/`:
+`index.html`, verified `publication.json`, and local KaTeX CSS/fonts. `--check`
+is read-only and rejects stale source, payload, HTML or dependency bytes.
+The command does not deploy or overwrite canonical source/publication files.
+An optional `--name` selects another generated edition directory, not a source.
+
+The concrete review source is `content/authoring/market-round-trip.market.json`;
+its build name is `round-trip-review`. Run the same command with that path for
+a reproducible example. The selected source stays outside generated output.
 
 Selected publications carry an explicit `text-and-exact-facts` reading edition:
 authored title and prose, stable reference links, native HTML/MathML and exact

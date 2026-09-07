@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "kp.authoring-market-source-branch.v1",
+  "name": "round-trip-review",
+  "parentSourceRevision": "c2455993ff7c456c3c2d6ab0369df078a2202bb474c7dd21fa1655e331c4ecee",
+  "data": {
+    "parameters": {
+      "demandPriceIntercept": {
+        "numerator": "12",
+        "denominator": "1"
+      },
+      "taxAmount": {
+        "numerator": "4",
+        "denominator": "1"
+      }
+    },
+    "specimen": {
+      "id": "specimen.market.reference",
+      "title": "Reference market",
+      "demandPresentation": "settled-history"
+    },
+    "article": {
+      "text": "---\nkp:\n  schema: kp.article.v1\n  id: lesson.economics.supply-tax-scroll-score\n  imports:\n    supplyTax: vignette.economics.supply-tax-welfare@1\n---\n\n# How does a tax reshape a market?\n\n:::kp-stage{#tax-market use=supplyTax}\n:::\n\n:::kp-passage{#market-adjustment intent=causal-comparison}\n[Before the tax, demand and supply meet at $Q_0=5$ and $P_0=7$](kp-ref:tax-market/untaxed-equilibrium).\n[A tax of 4 dollars per unit creates a wedge between the price consumers pay and the price producers receive: $P_c=P_p+4$](kp-ref:tax-market/tax).\n[On a graph whose vertical axis is the consumer price, demand stays put because willingness to pay has not changed; buyer-facing supply rises by 4 dollars](kp-ref:tax-market/taxed-supply).\n[Their new intersection has consumers paying $P_c=9$ while producers receive $P_p=5$](kp-ref:tax-market/wedge),\n[and trade contracts from $Q_0=5$ units to $Q_t=3$](kp-ref:tax-market/taxed-equilibrium).\n:::\n\n:::kp-passage{#welfare-accounting intent=causal-accounting}\n[Before the tax, consumer surplus is $\\frac{25}{2}$ and producer surplus is $\\frac{25}{2}$; afterward, their surviving portions are $\\frac{9}{2}$ and $\\frac{9}{2}$](kp-ref:tax-market/consumer-surplus-taxed).\n[One part of the missing private surplus becomes government revenue: the 4-dollar wedge across 3 traded units is $4\\cdot3=12$](kp-ref:tax-market/government-revenue).\n[The remaining triangle is not transferred to anyone: the prevented trades between $Q_t=3$ and $Q_0=5$ leave $4$ of deadweight loss](kp-ref:tax-market/deadweight-loss).\n:::\n",
+      "claims": {
+        "baseline-market": "Demand and original supply clear at 5 units and a price of 7.",
+        "tax-input": "A tax of 4 dollars is imposed on each unit traded.",
+        "supply-translation": "The tax lifts buyer-facing supply by 4 while original supply remains marginal-cost evidence.",
+        "price-wedge": "Consumers pay 9, producers receive 5, and the difference equals the tax of 4.",
+        "quantity-contraction": "The quantity traded contracts from 5 units to 3.",
+        "surplus-redistribution": "Consumer surplus falls from 25/2 to 9/2; producer surplus falls from 25/2 to 9/2.",
+        "government-revenue": "The tax of 4 on 3 traded units becomes 12 dollars of government revenue.",
+        "deadweight-loss": "Prevented trades leave 4 of deadweight loss."
+      },
+      "sourceId": "projection.authoring-market.branch.round-trip-review",
+      "authoredSourcePath": "round-trip-review.market.json",
+      "modelRevisionId": "[{\"schemaVersion\":\"kp.economics.per-unit-tax-welfare.v1\",\"id\":\"economics.supply-demand.per-unit-tax\",\"title\":\"A per-unit tax in a competitive market\",\"axes\":{\"quantity\":{\"id\":\"axis.economics.tax.quantity\",\"symbol\":\"Q\",\"label\":\"Quantity\",\"orientation\":\"horizontal\",\"minimum\":{\"numerator\":\"0\",\"denominator\":\"1\"},\"maximum\":{\"numerator\":\"8\",\"denominator\":\"1\"},\"tickStep\":{\"numerator\":\"1\",\"denominator\":\"1\"}},\"price\":{\"id\":\"axis.economics.tax.price\",\"symbol\":\"P\",\"label\":\"Price\",\"orientation\":\"vertical\",\"minimum\":{\"numerator\":\"0\",\"denominator\":\"1\"},\"maximum\":{\"numerator\":\"14\",\"denominator\":\"1\"},\"tickStep\":{\"numerator\":\"1\",\"denominator\":\"1\"}}},\"supply\":{\"id\":\"curve.economics.tax.supply\",\"taxedId\":\"curve.economics.tax.supply-with-tax\",\"label\":\"Supply\",\"taxedLabel\":\"Supply plus tax\",\"direction\":\"upward\",\"equationForm\":\"price-intercept-plus-slope-times-quantity\",\"priceIntercept\":{\"numerator\":\"2\",\"denominator\":\"1\"},\"priceChangePerQuantity\":{\"numerator\":\"1\",\"denominator\":\"1\"}},\"demand\":{\"id\":\"curve.economics.tax.demand\",\"label\":\"Demand\",\"direction\":\"downward\",\"equationForm\":\"price-intercept-minus-slope-times-quantity\",\"priceIntercept\":{\"numerator\":\"12\",\"denominator\":\"1\"},\"priceChangePerQuantity\":{\"numerator\":\"1\",\"denominator\":\"1\"}},\"tax\":{\"id\":\"parameter.economics.per-unit-tax\",\"label\":\"Per-unit tax\",\"application\":\"buyer-facing-supply-intercept\",\"initialAmount\":{\"numerator\":\"0\",\"denominator\":\"1\"},\"finalAmount\":{\"numerator\":\"4\",\"denominator\":\"1\"}},\"equilibriumIds\":{\"untaxed\":\"equilibrium.economics.tax.untaxed\",\"taxed\":\"equilibrium.economics.tax.taxed\"},\"wedgeId\":\"wedge.economics.tax\",\"preservation\":[\"demand-curve-identity\",\"original-supply-as-marginal-cost\",\"tax-as-vertical-price-wedge\",\"buyer-facing-tax-shifted-supply\",\"consumer-producer-price-distinction\",\"exact-rational-economic-truth\"]},{\"schemaVersion\":\"kp.pinned-semantic-state-reference.v1\",\"kind\":\"snapshot\",\"snapshotId\":\"kp-state/economics.composed-market/snapshot/from/set-demand-intercept/application/raise-demand\"},{\"schemaVersion\":\"kp.pinned-semantic-state-reference.v1\",\"kind\":\"snapshot\",\"snapshotId\":\"kp-state/economics.composed-market/snapshot/from/set-per-unit-tax/application/add-tax\"}]"
+    }
+  }
+}

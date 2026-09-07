@@ -154,6 +154,13 @@
       "scope": "s17",
       "checkedAt": "2026-09-07T22:43:06.732Z",
       "notes": "13 passed; scoped no-JavaScript Chromium reading test passed and output inspected; full types passed. Exact variant facts, authored title/prose, live reference anchors and native equation MathML; no stale reference SVG or graphical completeness claim."
+    },
+    {
+      "command": "npm run test:authoring-round-trip; npm run typecheck; npm run author:market-publication -- --source content/authoring/market-round-trip.market.json --check",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T22:56:21.154Z",
+      "notes": "45 tests pass; full types pass. Actual named edition built twice with identical source and payload digests, 63 local files. Filesystem tamper, stale source, unsafe names and dangling symlinks rejected."
     }
   ],
   "expectedLearning": [

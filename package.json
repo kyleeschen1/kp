@@ -7,6 +7,8 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
+    "author:market-publication": "node --disable-warning=ExperimentalWarning scripts/build-authoring-market-edition.ts",
+    "test:authoring-round-trip": "node --disable-warning=ExperimentalWarning --test tests/authoring-round-trip-*.test.ts",
     "dev": "node --disable-warning=ExperimentalWarning scripts/dev.ts",
     "dev:browser-test": "node --disable-warning=ExperimentalWarning scripts/dev.ts --browser-test",
     "dev:authoring-save-test": "node --disable-warning=ExperimentalWarning scripts/dev.ts --authoring-save-test",
