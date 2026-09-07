@@ -101,6 +101,31 @@ async function nativePaint(page: Page, latex: string) {
   }, { path: "/src/rendering/katex-adapter.ts", latex });
 }
 
+test("source branch export records the selected predecessor without writing live author files", async ({ page }) => {
+  const modelPath = new URL("../src/experiments/authoring-market/authoring-market-model-source.ts", import.meta.url);
+  const original = await readFile(modelPath, "utf8");
+  await page.goto("/experiments/authoring-market/");
+  await expect(page.locator("#app")).toHaveAttribute("data-kp-authoring-market", "state-driven-tax");
+  const parent = await page.locator("#app").getAttribute("data-kp-authoring-market-preview-revision");
+  const history = page.locator("[data-kp-authoring-market-source-history]");
+  await history.locator("summary").click();
+  await history.getByLabel("New source branch name").fill("reviewed-copy");
+  const pending = page.waitForEvent("download");
+  await history.getByRole("button", { name: "Export selected source as branch" }).click();
+  const download = await pending;
+  expect(download.suggestedFilename()).toBe("reviewed-copy.market.json");
+  const stream = await download.createReadStream();
+  if (stream === null) throw new Error("Expected branch download stream");
+  const chunks: Buffer[] = [];
+  for await (const chunk of stream) chunks.push(Buffer.from(chunk));
+  const branch = JSON.parse(Buffer.concat(chunks).toString("utf8"));
+  expect(branch.parentSourceRevision).toBe(parent);
+  expect(branch.data.article.sourceId).toBe("projection.authoring-market.branch.reviewed-copy");
+  expect(branch.data.article.text).toContain("kp.article.v1");
+  expect(await readFile(modelPath, "utf8")).toBe(original);
+  await expect(page.locator("#app")).toHaveAttribute("data-kp-authoring-market-preview-revision", parent!);
+});
+
 test("actual local-file rebuild retains invalid drafts and last valid preview without page reload", async ({ page }) => {
   const modelPath = new URL("../src/experiments/authoring-market/authoring-market-model-source.ts", import.meta.url);
   const articlePath = new URL("../src/experiments/authoring-market/authoring-market-article-source.ts", import.meta.url);

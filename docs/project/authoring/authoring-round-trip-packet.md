@@ -50,6 +50,15 @@ labeled; a new source save returns to live draft reporting. Reload/disposal
 clears this disposable cache. It is not durable source history or a new semantic
 snapshot authority; use the existing source files/version control for durable work.
 
+**Export selected source as branch** creates a separately named `.market.json`
+download. It records the selected predecessor, preserves prose and model inputs,
+and gives the branch its own Article source identity. Edit the downloaded copy
+through ordinary file authoring; the live TypeScript sources are not overwritten.
+This is an editable source packet, not a published edition or a verified claim
+that someone reviewed its prose. `readKpAuthoringMarketSourceBranch` validates
+identity and reuses existing preparation, including mixed-revision rejection.
+The publication-selection command is a later R1 integration step.
+
 ## Governed equation-chain edit
 
 Use the complete executable pair `{ value, source }` from

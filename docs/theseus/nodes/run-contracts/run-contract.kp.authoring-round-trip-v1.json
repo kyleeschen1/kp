@@ -174,7 +174,8 @@
     {
       "id": "s14",
       "title": "Explicit source branch/variant from selected revision",
-      "status": "planned"
+      "summary": "Explicit source variant export and validation implemented; predecessor and independent edits preserved. Unit, browser download and full types pass.",
+      "status": "complete"
     },
     {
       "id": "s15",

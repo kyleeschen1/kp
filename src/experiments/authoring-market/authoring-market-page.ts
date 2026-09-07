@@ -1,6 +1,7 @@
 import { prepareKpAuthoringMarketPreview } from "./authoring-market-preview-prepare.ts";
 import { projectKpAuthoringMarketPreviewStatus } from "./authoring-market-preview-status.ts";
 import { projectKpAuthoringMarketRevisionReview } from "./authoring-market-revision-review.ts";
+import { createKpAuthoringMarketSourceBranch } from "./authoring-market-source-branch.ts";
 import { createKpAuthoringMarketRevisionReceiver, kpAuthoringMarketPreviewEndpoint,
   kpAuthoringMarketPreviewEvent, type KpAuthoringMarketBuildRevision } from "./authoring-market-preview-protocol.ts";
 
@@ -40,6 +41,14 @@ inspectButton.type = "button"; inspectButton.textContent = "Inspect selected rev
 const historyNotice = document.createElement("p");
 historyNotice.textContent = "Last four successful builds in this tab; source files are unchanged.";
 historyControls.append(historySummary, historyLabel, inspectButton, historyNotice);
+const branchLabel = document.createElement("label");
+branchLabel.textContent = "New source branch name ";
+const branchName = document.createElement("input");
+branchName.value = "draft";
+branchLabel.append(branchName);
+const branchButton = document.createElement("button");
+branchButton.type = "button"; branchButton.textContent = "Export selected source as branch";
+historyControls.append(branchLabel, branchButton);
 review.after(historyControls);
 const reportStatus = (revision: KpAuthoringMarketBuildRevision) => {
   lastReported = revision;
@@ -101,7 +110,20 @@ const refreshHistory = () => {
   }));
   historySelect.value = root.dataset["kpAuthoringMarketPreviewRevision"] ?? "";
   inspectButton.disabled = historySelect.options.length === 0;
+  branchButton.disabled = historySelect.options.length === 0;
 };
+branchButton.addEventListener("click", () => {
+  try {
+    const selected = receiver.retainedRevisions().find(item => item.sourceRevision === historySelect.value);
+    if (selected === undefined) throw new Error("Select a retained valid source revision first.");
+    const branch = createKpAuthoringMarketSourceBranch(selected, branchName.value);
+    const link = document.createElement("a");
+    link.href = `data:application/json;charset=utf-8,${encodeURIComponent(`${JSON.stringify(branch, null, 2)}\n`)}`;
+    link.download = `${branch.name}.market.json`;
+    link.click();
+    historyNotice.textContent = `Exported ${link.download} from ${branch.parentSourceRevision.slice(0, 12)}. Edit this independent file; live source files are unchanged.`;
+  } catch (error) { historyNotice.textContent = error instanceof Error ? error.message : String(error); }
+});
 inspectButton.addEventListener("click", () => {
   void receiver.inspectRevision(historySelect.value).then(result => {
     if (result.status === "displayed") {

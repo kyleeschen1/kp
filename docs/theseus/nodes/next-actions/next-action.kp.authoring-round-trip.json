@@ -126,6 +126,13 @@
       "scope": "s13",
       "checkedAt": "2026-09-07T22:25:15.528Z",
       "notes": "88 passed; 14 focused revision/status checks, real local-file browser smoke and full types pass. Browser-exposed inspection-to-live status bug repaired; source files restored."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/authoring-round-trip-source-branch.test.ts",
+      "status": "passed",
+      "scope": "s14",
+      "checkedAt": "2026-09-07T22:29:02.736Z",
+      "notes": "2 passed; actual source-branch download browser test passed; full typecheck passed. Independent source identity, predecessor, exact prose, unsafe-name and mixed-revision rejection verified."
     }
   ],
   "expectedLearning": [
