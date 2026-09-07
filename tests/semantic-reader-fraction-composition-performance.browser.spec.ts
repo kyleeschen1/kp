@@ -3,6 +3,16 @@ import {
   test
 } from "@playwright/test";
 
+test("settled reader still warms adjacent canonical plans", async ({ page }) => {
+  await page.setViewportSize({ width: 1100, height: 800 });
+  await page.goto(readerRoute(), { waitUntil: "networkidle" });
+  await expect.poll(() => page.evaluate(async () => {
+    const metricsUrl = "/src/reader/runtime/reader-runtime-metrics.ts";
+    const metrics = await import(/* @vite-ignore */ metricsUrl);
+    return metrics.inspectKpReaderRuntimeMetrics(window).adjacentPrewarmCompilations;
+  })).toBeGreaterThan(0);
+});
+
 test("rapid bidirectional scroll emits canonical reader runtime evidence", async ({
   page
 }, testInfo) => {

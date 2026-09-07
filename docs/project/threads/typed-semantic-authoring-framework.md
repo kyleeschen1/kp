@@ -1,11 +1,11 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: payload budgets pass; shared reader visual-preservation repair needs approval
+Status: shared reader repairs verified; HUMAN_CHECKPOINT G2 before canonical migration
 Last Updated: 2026-09-06
-Current Next Action: obtain approval for the bounded mixed-reader typography
-and certified native-member continuity repair before completing s18 and G2.
+Current Next Action: obtain G2 visual approval of the two authored Focus Cards
+before starting the already-approved canonical supply-tax migration.
 All reader payload budgets now pass unchanged. See
-`../reviews/2026-09-06-reader-release-visual-boundary.md` for the exact pending
+`../reviews/2026-09-06-reader-release-visual-boundary.md` for the completed
 repair, executed tests and working authoring review URLs.
 See `../reviews/2026-09-06-structural-authoring-g2-checkpoint.md`.
 The prior browser stop remains historical evidence in
@@ -17,7 +17,7 @@ after isolating existing geometry and frame-sampling responsibilities from legac
 implementation dependencies. Consumer fixtures and all budgets remain unchanged.
 Simplification is integrated through its existing native carrier owner and a
 Focus Card; both callers remain in the actual inference fixture.
-Release verification ran but is not green; G2 and canonical migration remain
+Release verification passes; G2 and canonical migration remain
 pending. The approved scope remains
 `../reviews/2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md`.
 The completed source workflow and market specimen passed G0 review; evidence is in
@@ -28,7 +28,7 @@ Theseus owns current slice, verification, commits, and stop state.
 
 Standing continuation rule: repair nonvisual release failures and continue the
 approved loop until visual judgment is required, across sessions. S18 payload
-work is resumed under this rule; no budget increases or G2 waiver. See
+work completed under this rule; no budget increases or G2 waiver. See
 `../decisions/2026-09-06-persistent-loop-continuation.md`.
 
 The user approved the fraction separation refinement and shared Focus Card repair

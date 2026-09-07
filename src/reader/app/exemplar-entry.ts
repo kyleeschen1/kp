@@ -394,6 +394,17 @@ const canonicalTransitionPolicy =
   });
 const canonicalTransitionIds =
   canonicalTransitionPolicy?.transitionIds ?? [];
+// Compositor selection must not resize an endpoint shared with a legacy phase.
+// All-canonical hosts retain their own approved typography.
+if (canonicalTransitionIds.length < phaseCohorts.length) {
+  for (const transition of transitionElements) {
+    requireDescendant<HTMLElement>(transition, "[data-kp-reader-fit-surface]")
+      .style.setProperty(
+        "--kp-canonical-equation-type-size",
+        "var(--kp-equation-type-size)"
+      );
+  }
+}
 for (const transitionId of canonicalTransitionIds) {
   const transition = transitionElements.find((candidate) =>
     requiredData(candidate, "kpReaderTransition") === transitionId

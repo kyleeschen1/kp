@@ -1,6 +1,8 @@
 import type {
   KpAnimationTransformationPhaseCohort
 } from "../../animation/transformation-phase-cohorts.ts";
+import { measureKpNativeKatexSubtreePaintRect } from
+  "../../rendering/native-katex-paint-geometry.ts";
 import {
   applyKpReaderEquationResponsiveFit,
   measureKpReaderAppliedEquationStageLayoutSnapshot,
@@ -197,10 +199,19 @@ export function measureKpCanonicalEquationStageLayout(input: {
     animationId: input.animationId,
     revision: input.revision
   });
+  // Keep the existing complete-anchor measurement path. Only operation subsets
+  // require a sequence-wide projection from the certified native member set.
+  const usesOperationSubset = input.phaseCohorts.length > 1 && preliminary.some(
+    (context) => context.appliedStageLayout?.nativeRows.some((row) =>
+      row.members.some((member) => !context.layout.anchors.some((anchor) =>
+        anchor.selectorId === member.ownerId
+      ))
+    )
+  );
   const corrections = planKpCanonicalEquationTransitionCorrections({
     cohorts: input.phaseCohorts,
     contexts: new Map(preliminary.map((context) => [context.id, {
-      layout: context.layout,
+      layout: measureContinuityLayout(context, usesOperationSubset),
       ...(context.appliedStageLayout === undefined
         ? {}
         : { stageLayout: context.appliedStageLayout.certificate })
@@ -234,6 +245,10 @@ export function measureKpCanonicalEquationStageLayout(input: {
     animationId: input.animationId,
     revision: input.revision
   });
+  // Snapshot native paint before fit writes; certification applies the fit once.
+  const continuityLayouts = new Map(measured.map((context) =>
+    [context.id, measureContinuityLayout(context, usesOperationSubset)] as const
+  ));
   const sequenceFit = planKpReaderEquationSequenceResponsiveFit({
     id: `${input.animationId}.r${input.revision}`,
     alignments: measured.map((context) => context.alignment),
@@ -274,13 +289,57 @@ export function measureKpCanonicalEquationStageLayout(input: {
   const transitionContinuity =
     certifyKpCanonicalEquationTransitionContinuity({
       cohorts: input.phaseCohorts,
-      contexts
+      contexts: new Map([...contexts].map(([id, context]) =>
+        [id, { ...context, layout: continuityLayouts.get(id)! }]
+      ))
     });
   return Object.freeze({
     contexts,
     baselineAlignment,
     transitionContinuity
   });
+}
+
+function measureContinuityLayout(context: {
+  readonly layout: KpReaderEquationLayoutSnapshot;
+  readonly measurementRoot: HTMLElement;
+  readonly appliedStageLayout?: KpAppliedEquationStageLayout<
+    KpCorridorCertifiedEquationStageLayout
+  > | undefined;
+}, usesOperationSubset: boolean): KpReaderEquationLayoutSnapshot {
+  const applied = context.appliedStageLayout;
+  if (applied === undefined || !usesOperationSubset) return context.layout;
+  // Operation anchors may switch between a compound and its children. Certified
+  // native members preserve complete endpoint identity across that switch.
+  const sides = new Map(context.layout.anchors.map((anchor) =>
+    [anchor.objectId, anchor.side] as const
+  ));
+  const anchors = applied.nativeRows.flatMap((row) => row.members).map(
+    (member, selectorIndex) => {
+      const envelopes = applied.certificate.measuredInput.envelopes.filter(
+        (envelope) => envelope.memberOwnerIds.includes(member.ownerId)
+      );
+      const objectIds = new Set(envelopes.map((envelope) => envelope.endpointObjectId));
+      const objectId = envelopes[0]?.endpointObjectId;
+      const side = objectId === undefined ? undefined : sides.get(objectId);
+      if (objectIds.size !== 1 || objectId === undefined || side === undefined) {
+        throw new Error(`Native continuity member ${member.ownerId} lacks unique endpoint authority.`);
+      }
+      const rect = measureKpNativeKatexSubtreePaintRect(
+        context.measurementRoot, member.element
+      );
+      if (rect === undefined) {
+        throw new Error(`Native continuity member ${member.ownerId} has no paint.`);
+      }
+      return {
+        id: `continuity.${side}.${member.ownerId}`,
+        objectId, side, selectorId: member.ownerId, selectorIndex,
+        anchorKind: "ink-center" as const, focused: false, rect,
+        center: { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 }
+      };
+    }
+  );
+  return { ...context.layout, anchors };
 }
 
 function measureTransitionLayouts(input: {

@@ -54,7 +54,9 @@ export interface KpReaderCanonicalEquationSession {
   readonly transitionIds: readonly string[];
   readonly apply: (input: KpReaderCanonicalEquationFrame) => boolean;
   readonly prewarm: (
-    frames: readonly KpReaderCanonicalEquationFrame[]
+    frames: readonly KpReaderCanonicalEquationFrame[],
+    // The host owns revisions that can become stale before deferred DOM work.
+    isMeasurementCurrent?: () => boolean
   ) => void;
   readonly invalidate: () => void;
   readonly dispose: () => void;
@@ -364,7 +366,7 @@ export function createKpReaderCanonicalEquationSession(input: {
       activeTransitionId = transitionId;
       return true;
     },
-    prewarm(frames) {
+    prewarm(frames, isMeasurementCurrent) {
       // Prewarming is promoted exemplar-by-exemplar because presentation
       // style is part of a pure plan. Unreviewed families retain safe
       // synchronous cache misses rather than speculatively sharing styles.
@@ -403,6 +405,10 @@ export function createKpReaderCanonicalEquationSession(input: {
         return [{
           id: geometryIdentity.key,
           run: () => {
+            if (isMeasurementCurrent?.() === false) return;
+            // Resize/font changes can precede observer-driven cancellation.
+            // Never combine newly observed paint with a queued old certificate.
+            if (geometryIdentityFor(frame, transitionId).key !== geometryIdentity.key) return;
             if (purePlanCache.get(geometryIdentity) !== undefined) return;
             const sceneInput = purePlanInputFor(frame, transitionId, true);
             purePlanCache.set(

@@ -51,6 +51,35 @@ test("adjacent canonical transitions reject visible endpoint jumps", () => {
   }), /1\.000px residual/);
 });
 
+test("native endpoint continuity rejects missing members instead of intersecting closures", () => {
+  const input = contexts(0);
+  const second = input.get("second")!;
+  input.set("second", { ...second, layout: { ...second.layout, anchors: [] } });
+  assert.throws(() => planKpCanonicalEquationTransitionCorrections({
+    cohorts, contexts: input
+  }), /changed its endpoint closure/);
+  assert.throws(() => certifyKpCanonicalEquationTransitionContinuity({
+    cohorts, contexts: input
+  }), /changes the selector closure/);
+});
+
+test("endpoint typography changes cannot masquerade as a rigid row correction", () => {
+  const input = contexts(0);
+  const second = input.get("second")!;
+  input.set("second", {
+    ...second,
+    layout: {
+      ...second.layout,
+      anchors: second.layout.anchors.map((anchor) => ({
+        ...anchor, rect: { ...anchor.rect, width: anchor.rect.width * 1.6 }
+      }))
+    }
+  });
+  assert.throws(() => planKpCanonicalEquationTransitionCorrections({
+    cohorts, contexts: input
+  }), /changed paint shape/);
+});
+
 test("adjacent rigid offsets compile to one phase correction", () => {
   const corrections = planKpCanonicalEquationTransitionCorrections({
     cohorts,

@@ -1,11 +1,17 @@
 # Structural authoring: two-caller G2 checkpoint
 
-Status: payload stop repaired; visual-preservation repair approval pending; G2 not ready
+Status: HUMAN_CHECKPOINT G2 — technical release proof passes; visual approval pending
 Contract: `run-contract.kp.structural-authoring-canonical-tax-v2`
 
-Continuation evidence and the current approval request are in
+Continuation evidence and the approved repair are in
 `2026-09-06-reader-release-visual-boundary.md`. The payload failures below are
 historical measurements, now repaired without changing budgets.
+
+Final continuation evidence: 6,597 unit tests, 39 built-reader browser checks,
+24 authored Focus Card browser checks and 17 development-reader checks pass.
+Build, typechecking, native preservation and unchanged payload budgets pass.
+Review the two Focus Cards below before authorizing the migration boundary;
+automated evidence does not stand in for visual approval.
 
 ## What the proof establishes
 
@@ -60,7 +66,11 @@ as provenance and the approved structural/migration successor as current scope.
 Its tests retain explicit G2/G3 and nonvisual-preapproval boundaries. This is
 memory reconciliation, not new execution authority.
 
-## Executed verification
+## Historical executed verification — superseded by continuation report
+
+The results in this section predate the approved reader repair. The linked
+continuation report owns final verification, including the full-suite rerun and
+unchanged payload budgets; the failures below are retained as provenance.
 
 - Structural supported-browser cohort: 24 passed across Chromium, Firefox and
   WebKit, including same-task invalidation/seek pressure.
@@ -95,7 +105,7 @@ The entire suite was not rerun after that test-only repair, so this is not a
 claim of a completely green full-suite run.
 Theseus owns live progress; this report is not a second slice-status table.
 
-## Remaining release stop: reader payload budgets
+## Historical release stop: reader payload budgets — resolved
 
 The impact-selected reader budget check fails for the ten equation routes;
 the two non-equation reader routes pass. Their shared built JS/CSS closure is
@@ -118,12 +128,14 @@ classification is broader than the intended KaTeX runtime-parser exclusion.
 Correcting that classifier would not erase any numeric overage; no predicate,
 baseline or ceiling was changed in this repair.
 
-The next bounded task is built-payload attribution and reduction, including HTML
+At that historical stop, the next bounded task was built-payload attribution and reduction, including HTML
 generation and shared-chunk import boundaries, while retaining real consumers,
 ordinary build delivery, semantics and native paint. Do not reduce measured scope,
 rename a forbidden dependency, omit CSS, or refresh baselines to manufacture a
 pass. This exceeds the specific browser-measurement defect repair resumed here;
-the s18 required-release-evidence stop remains active before G2 or migration.
+the s18 required-release-evidence stop remained active before G2 or migration.
+The continuation report linked above supersedes that task and its failed budgets;
+it records the implemented delivery, handoff and lifecycle repairs.
 
 ## Review destination and remaining boundary
 

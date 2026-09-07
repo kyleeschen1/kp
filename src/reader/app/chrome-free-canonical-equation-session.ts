@@ -482,7 +482,10 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
         measurementIdentity: adjacent.fit.measurementIdentity,
         appliedStageLayout: adjacent.appliedStageLayout
       }];
-    }));
+    }), () => !layoutInvalidated && layout === measured &&
+      viewport.clientWidth === context.fit.viewportWidth &&
+      viewport.clientHeight === context.fit.viewportHeight
+    );
     syncAnnihilationWitness({
       stage,
       witness: annihilationWitness,

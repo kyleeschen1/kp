@@ -4,7 +4,7 @@
   "title": "Structural authoring proof and canonical supply-tax adoption",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: approve bounded shared reader typography and native-member continuity repair described in current report. Payload checks pass; rejected visual edits not applied. No G2 or migration approval inferred.",
+  "summary": "HUMAN_CHECKPOINT G2: technical release proof passes; human review of both authored Focus Cards required before canonical supply-tax migration.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -413,11 +413,130 @@
       "scope": "s18",
       "checkedAt": "2026-09-07T01:39:23.876Z",
       "notes": "8 pass, 9 fail: same four reader routes plus five associated motion assertions. Confirms failures are not production-only chunk delivery. Requires approved visual-preservation repair; guards not weakened."
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T03:22:33.562Z",
+      "notes": "17 passed after the approved mixed-host typography and certified native-member repair. Initial overbroad member observation failed the complete-anchor fraction reader; final policy preserves that path and all original failures pass."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/canonical-equation-transition-continuity.test.ts",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T03:22:35.209Z",
+      "notes": "6 passed including missing-member and typography-shape rejection. Exact closure, semantic row and 0.5px checks remain unchanged."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T03:22:36.705Z",
+      "notes": "Final production build and complete typecheck pass. No Svelte diagnostics. Existing large-chunk warning remains advisory."
+    },
+    {
+      "command": "npm run visual:authoring-structural -- --project=firefox --project=webkit",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T03:22:38.657Z",
+      "notes": "24 passed across Chromium Firefox WebKit; approved Focus Card form, native ownership, identity shrink, reverse, reduced motion and disposal preserved."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T03:22:40.951Z",
+      "notes": "All 12 routes pass unchanged budgets. Shared equation startup 138042 gzip bytes versus 145000 ceiling; HTML headroom 16 bytes split-merge and 17 radical."
+    },
+    {
+      "command": "npm run check:reader-production; npm run check:dev-review-production; npm run check:equation-reachability; npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T03:22:43.163Z",
+      "notes": "12 routes, 442 files and 12 forbidden markers pass; exact reachability current 68 roots; 11 preservation tests pass."
+    },
+    {
+      "command": "npm run visual:reader-production -- --project=firefox --project=webkit",
+      "status": "failed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T03:30:55.673Z",
+      "notes": "35 passed, one WebKit full-fraction resize/prewarm collision. Repeated focused five-case WebKit probe failed twice. Trace shows queued prewarm compilation after viewport resize with old stage authority."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T03:30:57.569Z",
+      "notes": "6591 passed before the final prewarm freshness repair. Full final rerun with five additional adapter regressions is in progress."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/reader-idle-prewarm-queue.test.ts",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T03:30:59.091Z",
+      "notes": "6 pass. Four stale geometry cases fail before repair and pass after; fresh observation errors still propagate. Current identity checked before deferred paint work, no collision waiver."
+    },
+    {
+      "command": "npm run visual:reader-production -- --project=firefox --project=webkit",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T03:45:20.485Z",
+      "notes": "39 passed on the final built site: all 12 routes plus exact direct narrow multiplication across Chromium Firefox WebKit. Earlier prewarm failures remain historical evidence."
+    },
+    {
+      "command": "npm run visual:reader-production -- --project=webkit --grep 'built /reader/fraction-composition/' --repeat-each=5",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T03:45:22.640Z",
+      "notes": "10 passed after host-layout freshness guard; the same repeated probe previously failed WebKit. Current measurement validity checked before deferred paint work."
+    },
+    {
+      "command": "npm run perf:fraction-composition-scroll -- --grep 'settled reader'",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T03:45:24.356Z",
+      "notes": "3 passed across all supported browsers. Actual adjacent prewarm compilation metrics remain positive on settled layouts; optimization was not globally disabled."
+    },
+    {
+      "command": "npm run test:browser:native-katex-compositor-conformance; npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T03:45:25.956Z",
+      "notes": "2 real-compositor Chromium canaries pass; stable linear visual command captured 39 states. Supporting capture, not new human approval."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T03:45:28.120Z",
+      "notes": "All 12 final routes pass unchanged budgets at 138041 shared equation startup gzip bytes. No ceiling changes."
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T03:53:42.092Z",
+      "notes": "Final shared development reader run: 17 passed after all production repairs."
+    },
+    {
+      "command": "npm run visual:authoring-structural -- --project=firefox --project=webkit",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T03:53:43.453Z",
+      "notes": "Final canonical authored Focus Card cohort: 24 passed across Chromium, Firefox and WebKit. Appearance remains subject to G2 human review."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T03:56:50.335Z",
+      "notes": "Final repaired code: 6597 passed; zero failures, cancelled or skipped. Full suite includes preflights and final host-revision regression."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Persistent nonvisual continuation recorded; payload gate repaired. HUMAN_CHECKPOINT: explicit approval needed for shared visual-preservation repair rejected by execution safety review. Authoring cards pass; s18 and G2 remain incomplete."
+    "summary": "Approved mixed-host typography, certified native-member continuity and deferred prewarm freshness repairs complete. All required technical release gates pass. HUMAN_CHECKPOINT G2: review both authored Focus Cards before s19 migration. No visual approval inferred."
   },
   "expectedLearning": [
     "Whether two structural equation callers justify canonical economics adoption without parallel state or presentation authority."

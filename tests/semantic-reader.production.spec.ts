@@ -5,6 +5,20 @@ import {
   createKpSemanticReaderConformanceDescriptor
 } from "./support/semantic-reader-conformance.ts";
 
+test("built fraction reader preserves direct narrow multiplication without prewarm history", async ({ page }) => {
+  const failures: string[] = [];
+  page.on("pageerror", error => failures.push(error.message));
+  await page.setViewportSize({ width: 360, height: 760 });
+  await page.goto("/reader/fraction-composition/?kpLesson=lesson.algebra.fraction-composition&kpVersion=1&kpProgress=575&kpMotion=full", {
+    waitUntil: "networkidle"
+  });
+  await expect(page.locator("body")).toHaveAttribute("data-kp-reader-progress", "575");
+  await expect(page.locator('[data-kp-reader-transition-active="true"]')).toHaveAttribute(
+    "data-kp-reader-transition", /multiply-by-three/
+  );
+  expect(failures).toEqual([]);
+});
+
 for (const route of kpReaderRouteManifest) {
   test(`built ${route.route} preserves reader behavior without development services`, async ({ page, browser }) => {
     const failures: string[] = [];

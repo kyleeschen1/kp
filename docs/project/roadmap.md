@@ -225,7 +225,10 @@ failures, now repaired at their shared owners. Supported-browser checks pass,
 and built equation-reader payloads now pass unchanged budgets after import
 and chunk-delivery repair. The new built-reader gate exposed mixed-host
 typography and operation-selector/native-member continuity failures in older
-readers. Their bounded visual-preservation repair needs explicit approval;
+readers. The user explicitly approved their bounded visual-preservation repair;
+the mixed-host and certified-member fixes now pass development reader conformance.
+The final full suite and supported-browser release cohort pass, including the
+deferred-prewarm freshness repair. G2 visual approval is now the next boundary;
 see `reviews/2026-09-06-reader-release-visual-boundary.md`. Canonical migration
 still requires G2. See `reviews/2026-09-06-structural-authoring-g2-checkpoint.md` and
 `reviews/2026-09-06-structural-authoring-two-caller-cost-stop.md` for the measured

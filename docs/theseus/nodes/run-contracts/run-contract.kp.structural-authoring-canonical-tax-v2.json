@@ -4,7 +4,7 @@
   "title": "Structural authoring proof and canonical tax adoption",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT at visual-preservation repair approval, not a routine nonvisual stop. 17 of 28 complete; s18 incomplete. Execution safety review rejected shared visible repair pending explicit user approval.",
+  "summary": "HUMAN_CHECKPOINT G2. Approved repairs verified; s18 awaits human visual acceptance, s19 migration not started. Persistent nonvisual continuation remains in force.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -232,7 +232,7 @@
     {
       "id": "s18",
       "title": "Structural release and checkpoint: run broad gates and present two-caller evidence for migration readiness",
-      "summary": "Payload recovery complete with unchanged budgets. Pending approval of mixed-reader typography and certified-member continuity repair; visual edits not applied. G2 and migration remain pending.",
+      "summary": "Technical release proof complete; required G2 human approval pending. 6597 unit tests, 39 built-reader, 24 authored-card and 17 development-reader checks pass; budgets unchanged. Stop before s19.",
       "status": "planned"
     },
     {
