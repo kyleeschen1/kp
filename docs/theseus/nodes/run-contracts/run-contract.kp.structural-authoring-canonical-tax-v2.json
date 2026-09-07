@@ -244,7 +244,8 @@
     {
       "id": "s20",
       "title": "Build-delivery boundary: factor the minimum framework-derived source preparation for ordinary page builds",
-      "status": "planned"
+      "summary": "Shared source preparer and checked-in deterministic canonical data artifact work through ordinary build. Browser bundle excludes author templates and preview transport; canonical route remains unchanged until s23.",
+      "status": "complete"
     },
     {
       "id": "s21",

@@ -655,6 +655,48 @@
       "scope": "s19",
       "checkedAt": "2026-09-07T05:22:40.819Z",
       "notes": "All TypeScript, Svelte and domain checks pass; zero Svelte errors or warnings."
+    },
+    {
+      "command": "npm run test:authoring-integration",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-07T05:28:34.324Z",
+      "notes": "71 pass, including deterministic checked-in canonical data, JSON restoration through the same preparer, and executed browser bundle closure excluding author templates and preview transport."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-07T05:28:35.441Z",
+      "notes": "Ordinary production build and full typecheck pass; build checks canonical artifact freshness without SSR or preview HTTP."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-07T05:28:36.437Z",
+      "notes": "Final test-file changes also pass full TypeScript/Svelte/domain checks."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-07T05:28:37.462Z",
+      "notes": "All dependency, framework-neutral, semantic reader/animation, compiler and cross-domain gates pass."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-07T05:28:38.444Z",
+      "notes": "Unchanged 112090 types / 191101 instantiations; no threshold change."
+    },
+    {
+      "command": "npm run visual:authoring-market -- --grep 'opt-in authoring host'",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-07T05:28:39.454Z",
+      "notes": "One canonical baseline/preview lifecycle browser smoke passes after shared preparation extraction."
     }
   ],
   "progress": {
