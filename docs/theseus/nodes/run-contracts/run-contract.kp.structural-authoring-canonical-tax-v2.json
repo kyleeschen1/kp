@@ -4,7 +4,7 @@
   "title": "Structural authoring proof and canonical tax adoption",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT G2. Approved repairs verified; s18 awaits human visual acceptance, s19 migration not started. Persistent nonvisual continuation remains in force.",
+  "summary": "HUMAN_CHECKPOINT G2 after approved direct-arc amendment. 17 of 28 slices complete; s18 awaits visual approval then affected release refresh. Stop before s19.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -232,7 +232,7 @@
     {
       "id": "s18",
       "title": "Structural release and checkpoint: run broad gates and present two-caller evidence for migration readiness",
-      "summary": "Technical release proof complete; required G2 human approval pending. 6597 unit tests, 39 built-reader, 24 authored-card and 17 development-reader checks pass; budgets unchanged. Stop before s19.",
+      "summary": "Direct-arc candidate complete and focused checks recorded. Required human review of revised distribution motion and G2 remain pending. Refresh affected release evidence after approval, before s19.",
       "status": "planned"
     },
     {

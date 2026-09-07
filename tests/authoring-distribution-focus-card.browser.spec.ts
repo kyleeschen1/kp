@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { buildKpVisualContactSheetHtml, type KpVisualContactSheetItem } from "../scripts/capture-visual-contact-sheet.ts";
 
 const route = "/experiments/authoring-distribution-focus-card/";
 for (const kind of ["distribution", "simplification"] as const) test(`loading never paints the static comparison or unprepared native layers: ${kind}`, async ({ page }, info) => {
@@ -165,23 +166,35 @@ test("card paint cache preserves uncached native material pixels", async ({ page
 });
 
 test("coherent fraction copies retain native internal arrangement through forward and reverse", async ({ page }, info) => {
+  const captures: KpVisualContactSheetItem[] = [];
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
   for (const width of [1100, 390]) {
     await page.setViewportSize({ width, height: 800 });
     await page.goto(route);
     const card = page.locator('[data-kp-authoring-distribution-card="ready"]');
     await expect(card).toBeVisible();
     const shapes = [];
-    for (const progress of [.12, .3, .5, .7, .88, .7, .3, .12]) {
+    for (const progress of [.06, .12, .3, .5, .7, .88, .7, .3, .12, .06]) {
       await card.locator("[data-kp-focus-deck-scrubber]").fill(String(progress));
       shapes.push(await card.evaluate(node => ["x", "6"].map(branch => {
+        const stage = node.querySelector(".kp-focus-deck__stage")!.getBoundingClientRect();
         const rects = ["numerator", "fraction-rule", "denominator"].map(part => {
           const owner = node.querySelector<HTMLElement>(`[data-kp-equation-material-semantic-entity-id="fraction-fan-out.target.factor.${branch}.${part}"]`)!;
           const rect = owner.getBoundingClientRect();
+          if (rect.top < stage.top - 1 || rect.bottom > stage.bottom + 1 || rect.left < stage.left - 1 || rect.right > stage.right + 1) {
+            throw new Error(`Fraction ${branch}/${part} leaves the visible stage: ink=${JSON.stringify(rect.toJSON())}, stage=${JSON.stringify(stage.toJSON())}.`);
+          }
           return { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
         });
         return rects.map(rect => ({ dx: rect.x - rects[0]!.x, dy: rect.y - rects[0]!.y, width: rect.width, height: rect.height }));
       })));
-      if (progress === .12 || progress === .3 || progress === .5) await card.screenshot({ path: info.outputPath(`coherent-fraction-${width}-${progress}.png`) });
+      if ([.06, .12, .3, .5].includes(progress) && !captures.some(item => item.id === `${width}-${progress}`)) {
+        const file = info.outputPath(`coherent-fraction-${width}-${progress}.png`);
+        const capture = await card.screenshot({ path: file });
+        captures.push({ id: `${width}-${progress}`, label: `${width}px · paired arc departure`, progress,
+          viewport: { width, height: 800 }, file, dataUrl: `data:image/png;base64,${capture.toString("base64")}` });
+      }
     }
     for (const shape of shapes) for (const branch of [0, 1]) for (const part of [0, 1, 2]) {
       for (const key of ["dx", "dy", "width", "height"] as const) {
@@ -189,6 +202,14 @@ test("coherent fraction copies retain native internal arrangement through forwar
       }
     }
   }
+  expect(errors).toEqual([]);
+  const sheet = await page.context().newPage();
+  await sheet.setViewportSize({ width: 1400, height: 1000 });
+  await sheet.setContent(buildKpVisualContactSheetHtml(captures, {
+    title: "Authored fraction · direct arc departure", columns: 4, imageFit: "contain", imageHeightPx: 360
+  }));
+  await sheet.screenshot({ path: info.outputPath("direct-arc-contact-sheet.png"), fullPage: true });
+  await sheet.close();
 });
 
 for (const kind of ["distribution", "simplification"]) test(`shared card stays legible without JavaScript: ${kind}`, async ({ browser }, info) => {

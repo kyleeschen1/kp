@@ -1,7 +1,13 @@
 # Structural authoring: two-caller G2 checkpoint
 
-Status: HUMAN_CHECKPOINT G2 — technical release proof passes; visual approval pending
+Status: HUMAN_CHECKPOINT G2 — direct-arc amendment needs visual review
 Contract: `run-contract.kp.structural-authoring-canonical-tax-v2`
+
+The user subsequently requested direct arc departure without the distribution
+peel-off beat. Its bounded candidate and focused checks are recorded in
+`../decisions/2026-09-06-distribution-direct-arc-review.md`. The release evidence
+below predates that visual amendment. Review the revised distribution card, then
+refresh impact-selected release evidence before beginning canonical migration.
 
 Continuation evidence and the approved repair are in
 `2026-09-06-reader-release-visual-boundary.md`. The payload failures below are

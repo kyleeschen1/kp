@@ -1,9 +1,12 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: shared reader repairs verified; HUMAN_CHECKPOINT G2 before canonical migration
+Status: direct-arc distribution candidate implemented; G2 visual review before migration
 Last Updated: 2026-09-06
-Current Next Action: obtain G2 visual approval of the two authored Focus Cards
+Current Next Action: obtain visual acceptance of the direct-arc distribution
+revision and G2 approval of the two authored Focus Cards
 before starting the already-approved canonical supply-tax migration.
+See `../decisions/2026-09-06-distribution-direct-arc-review.md`; prior release
+evidence predates this visual amendment and is not approval of the new motion.
 All reader payload budgets now pass unchanged. See
 `../reviews/2026-09-06-reader-release-visual-boundary.md` for the completed
 repair, executed tests and working authoring review URLs.

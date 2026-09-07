@@ -27,19 +27,20 @@ function fixture() {
   return { projection, input };
 }
 
-test("separation treatment is monotone, rejoins the original profile and retains endpoint velocity", () => {
+test("both fraction copies depart together with continuous eased travel and exact endpoints", () => {
   const { projection, input } = fixture();
-  const sample = projection.project(input)[0]!.sampleProgress!;
-  const baseline = (progress: number) => sampleKpCanonicalNativeKatexCopyFanOutMotion(progress).leaderProgress;
+  const tracks = projection.project(input);
+  const sample = tracks[0]!.sampleProgress!;
   let previous = 0;
   for (let i = 0; i <= 1000; i++) {
     const progress = i / 1000;
     const value = sample(progress);
     assert.ok(value >= previous && value <= 1);
-    if (baseline(progress) >= .42) assert.equal(value, baseline(progress));
+    for (const track of tracks) assert.equal(track.sampleProgress!(progress), value);
     previous = value;
   }
-  assert.ok(sample(.1) > baseline(.1));
+  assert.ok(tracks[3]!.sampleProgress!(.1) > 0, "the second fraction cannot wait for a peel-off beat");
+  assert.equal(sampleKpCanonicalNativeKatexCopyFanOutMotion(.1).followerProgress, 0, "the generic motif remains staggered");
   assert.ok(sample(1e-6) / 1e-6 < .001, "departure still begins at rest");
   assert.equal(sample(0), 0); assert.equal(sample(1), 1);
 });

@@ -4,7 +4,7 @@
   "title": "Structural authoring proof and canonical supply-tax adoption",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT G2: technical release proof passes; human review of both authored Focus Cards required before canonical supply-tax migration.",
+  "summary": "HUMAN_CHECKPOINT G2: review direct-arc distribution candidate including below-expression phone route. No migration started; nonvisual continuation rule remains persistent.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -53,6 +53,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-06-reader-release-visual-boundary.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-06-distribution-direct-arc-review.md"
     }
   ],
   "dependsOn": {
@@ -532,11 +536,67 @@
       "scope": "s18",
       "checkedAt": "2026-09-07T03:56:50.335Z",
       "notes": "Final repaired code: 6597 passed; zero failures, cancelled or skipped. Full suite includes preflights and final host-revision regression."
+    },
+    {
+      "command": "npm run test:authoring-structural",
+      "status": "passed",
+      "scope": "s18-direct-arc",
+      "checkedAt": "2026-09-07T04:50:28.345Z",
+      "notes": "32 tests pass on the direct-arc candidate; semantic state, authority, primitive identity and reverse shape remain intact."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s18-direct-arc",
+      "checkedAt": "2026-09-07T04:50:30.105Z",
+      "notes": "Final direct-arc candidate passes all TypeScript and Svelte checks, zero Svelte errors or warnings."
+    },
+    {
+      "command": "npm run visual:authoring-distribution-card -- --grep 'coherent fraction'",
+      "status": "passed",
+      "scope": "s18-direct-arc",
+      "checkedAt": "2026-09-07T04:50:31.337Z",
+      "notes": "Final candidate: 2 passed across Chromium and Firefox, both 1100px and 390px, native paint, visible stage containment, reverse shape and inspected contact sheets."
+    },
+    {
+      "command": "npm run visual:authoring-distribution-card",
+      "status": "failed",
+      "scope": "s18-direct-arc",
+      "checkedAt": "2026-09-07T04:50:32.560Z",
+      "notes": "29 passed, 1 failed: Firefox phone scrub 190ms exceeds unchanged 140ms limit while typechecking also ran. Isolated repeated phone verification follows; no limit change."
+    },
+    {
+      "command": "npm run visual:authoring-distribution-card -- --grep 'coherent fraction'",
+      "status": "failed",
+      "scope": "s18-direct-arc",
+      "checkedAt": "2026-09-07T04:50:34.755Z",
+      "notes": "Earlier discarded candidates: simultaneous timing exposed Chromium late contact; large arcs clipped phones; timing-only and asymmetric-route trials exposed early or late contacts. Final 1.6 bundle-height control lift and 0.75 forward control position passed both browsers. Guards unchanged."
+    },
+    {
+      "command": "npm run visual:authoring-distribution-card -- --grep coherent",
+      "status": "passed",
+      "scope": "s18-direct-arc",
+      "checkedAt": "2026-09-07T04:51:51.401Z",
+      "notes": "Final direct-arc coherent cohort passed Chromium and Firefox, both widths, native paint, containment and reversal; contact sheets inspected. Supersedes discarded routing trials, not human visual approval."
+    },
+    {
+      "command": "npm run visual:authoring-distribution-card -- --grep \"native motion and passage at 390\" --repeat-each=2",
+      "status": "passed",
+      "scope": "s18-direct-arc",
+      "checkedAt": "2026-09-07T04:51:57.873Z",
+      "notes": "All 4 isolated repeats passed after typecheck finished, no code or threshold change. Firefox max scrubs 80ms and 50ms under 140ms; playback max frames 83.44ms and 49.98ms remain visible limitations."
+    },
+    {
+      "command": "npm run visual:authoring-distribution-card -- --grep \"coherent fraction\"",
+      "status": "passed",
+      "scope": "s18-direct-arc",
+      "checkedAt": "2026-09-07T04:53:02.157Z",
+      "notes": "Exact executed focused command: final 2 browser cases passed, both desktop and phone layouts; contact sheets inspected and visible containment verified. Earlier failed candidates were removed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Approved mixed-host typography, certified native-member continuity and deferred prewarm freshness repairs complete. All required technical release gates pass. HUMAN_CHECKPOINT G2: review both authored Focus Cards before s19 migration. No visual approval inferred."
+    "summary": "Direct-arc amendment implemented in the existing fraction projection. Both bundles depart together; no peel-off beat. Scoped shape/containment checks and isolated interaction repeats pass; typecheck and 32 structural tests pass. HUMAN_CHECKPOINT G2 before migration; broad release refresh follows visual approval."
   },
   "expectedLearning": [
     "Whether two structural equation callers justify canonical economics adoption without parallel state or presentation authority."
