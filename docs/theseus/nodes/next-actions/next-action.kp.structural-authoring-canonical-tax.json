@@ -4,7 +4,7 @@
   "title": "Structural authoring proof and canonical supply-tax adoption",
   "status": "blocked",
   "domain": "kp",
-  "summary": "G3 pending: keyboard repair verified; need code-card failure description and user visual review. On-card code button/seek checks pass; passage swiping was already disabled.",
+  "summary": "G3 visual review pending after gradual code passage repair; failure description is resolved. Existing native input now samples the code playhead continuously; machine release passes.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -73,6 +73,10 @@
     {
       "kind": "file",
       "path": "docs/project/decisions/2026-09-07-tax-integration-then-bayesian-flagship.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-07-code-card-gradual-passage-input.md"
     }
   ],
   "dependsOn": {
@@ -1308,11 +1312,74 @@
       "scope": "focused G3 resumption",
       "checkedAt": "2026-09-07T18:54:41.767Z",
       "notes": "21 checks passed across Chromium, Firefox, and WebKit. All four slider keyboard paths and TypeScript button/interruption/direct-seek paths pass. This is not human visual approval."
+    },
+    {
+      "command": "npm run test:focus-deck-multi-card",
+      "status": "passed",
+      "scope": "G3 passage input",
+      "checkedAt": "2026-09-07T19:16:48.973Z",
+      "notes": "19 pass. Exactly one finite gesture-settlement timeout permitted; recurring timer playback remains forbidden."
+    },
+    {
+      "command": "npm run visual:canonical-tax-production -- --project=firefox --project=webkit",
+      "status": "passed",
+      "scope": "G3 passage input built delivery",
+      "checkedAt": "2026-09-07T19:16:50.194Z",
+      "notes": "18 pass across Chromium Firefox WebKit, including phone-width normal/reduced-motion passage input, sibling controls and no-JavaScript reading."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "G3 passage input",
+      "checkedAt": "2026-09-07T19:16:51.407Z",
+      "notes": "Final app Node test Svelte and domain typechecks pass; zero Svelte errors or warnings."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "G3 passage input",
+      "checkedAt": "2026-09-07T19:16:52.625Z",
+      "notes": "Ordinary production build and canonical source freshness pass. Existing large-chunk advisory unchanged."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "G3 passage input",
+      "checkedAt": "2026-09-07T19:16:53.839Z",
+      "notes": "12 manifest routes retain production isolation."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "G3 passage input",
+      "checkedAt": "2026-09-07T19:16:55.036Z",
+      "notes": "Fixed reader budgets pass unchanged; equation startup remains 138001 gzip bytes."
+    },
+    {
+      "command": "npm run report:canonical-tax-delivery",
+      "status": "passed",
+      "scope": "G3 passage input",
+      "checkedAt": "2026-09-07T19:16:56.249Z",
+      "notes": "Canonical static JS/CSS is 367933 gzip bytes, plus 411. HTML is 24029 raw and 3203 gzip bytes. Not full wire transfer or frame-rate evidence."
+    },
+    {
+      "command": "npm run test:browser:focus-deck-multi-card -- --grep 'slider keyboard|TypeScript|one route'",
+      "status": "passed",
+      "scope": "G3 gradual code passage",
+      "checkedAt": "2026-09-07T19:17:36.301Z",
+      "notes": "Final combined cohort: 27 pass across Chromium Firefox WebKit. Baseline new regressions failed in all engines; initial repair exposed Chromium scrollend ordering, repaired before this final pass. Existing controls and native wheel intermediate frames pass."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "G3 gradual passage release",
+      "checkedAt": "2026-09-07T19:24:33.580Z",
+      "notes": "6611 tests pass, zero failures cancellations or skips. Architecture and fixed inference gates pass; full run after code-card passage repair."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: user ended brainstorm pause and requested finishing the existing loop. Fresh 21 browser checks and 3 direction checks pass; shared review server returns HTTP 200. Only G3 visual acceptance and unresolved code-card feedback remain. Recommendations are recorded for successor planning, not a new approved run."
+    "summary": "Gradual code-card passage swiping implemented from clarified user feedback. 6611 tests, 27 dev browser checks, 18 built checks, types/build and fixed gates pass. Only G3 human visual acceptance remains."
   },
   "expectedLearning": [
     "Whether two structural equation callers justify canonical economics adoption without parallel state or presentation authority."

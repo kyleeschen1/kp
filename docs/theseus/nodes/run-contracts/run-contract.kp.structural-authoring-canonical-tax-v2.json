@@ -4,7 +4,7 @@
   "title": "Structural authoring proof and canonical tax adoption",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: 27/28 complete. Resumption requested; fresh keyboard and TypeScript browser checks pass. Explicit G3 visual acceptance remains absent; no merge, deployment, or successor execution.",
+  "summary": "HUMAN_CHECKPOINT: 27/28 complete. Clarified code-card gradual swiping is implemented and release verified. Await G3 visual acceptance; no merge deployment or successor loop.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -292,7 +292,7 @@
     {
       "id": "s28",
       "title": "Canonical adoption checkpoint: document retired wiring, preserved contracts, source workflow, costs and remaining publication work",
-      "summary": "HUMAN_CHECKPOINT: checkpoint documentation and fresh 21 browser checks are available. Await explicit G3 visual approval or actionable code-card feedback; no implementation is currently running. The user resumed the existing contract, not a successor loop.",
+      "summary": "HUMAN_CHECKPOINT: gradual code passage request repaired; 6611 tests, 27 dev browser and 18 built checks, types/build and fixed budgets pass. Final visual acceptance remains required; no implementation currently running.",
       "status": "planned"
     }
   ]

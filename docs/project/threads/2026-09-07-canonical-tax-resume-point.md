@@ -27,17 +27,15 @@ The measured canonical static JS/CSS closure is 367,522 gzip bytes (+130).
 
 ## Exact next action
 
-1. Clarify the user report: "All but the code example work well. Arrows only
-   work on the supply-demand card." Slider keyboard failure was reproduced
-   and repaired. Ask whether "arrows" instead meant visible buttons, and what
-   specifically fails in the code example.
-2. Do not assume code swiping is a regression: its prior implementation
-   explicitly disables passage swiping. Button-driven code animation,
-   interruption and direct-seek tests passed before and after the repair.
-   The actual reported code failure is still unconfirmed.
-3. Reproduce the clarified behavior through the existing scoped browser
-   commands before further edits. Preserve working cards and all fixed gates.
-4. Return to G3 human review. Do not merge, deploy, mark s28 complete or launch
+1. The user clarified the code issue: gradual passage swiping was absent.
+   The prior deliberate restriction is now replaced by the requested bounded
+   input path through the existing fractional sampler. See
+   [the repair boundary](../decisions/2026-09-07-code-card-gradual-passage-input.md).
+   Do not ask again which interaction was failing.
+2. Review slow horizontal passage travel, reversing mid-step and release
+   settlement on the code card. Preserve the working buttons, slider, keyboard
+   navigation, other cards, renderer, and semantic score.
+3. Return to G3 human review. Do not merge, deploy, mark s28 complete or launch
    a new implementation contract without the required authority.
 
 Review URL: <http://127.0.0.1:8000/experiments/kinetic-figure/supply-tax/>.

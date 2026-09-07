@@ -48,11 +48,9 @@
   white-space: nowrap;
 }
 
-/* The code caller uses the shared semantic controls; horizontal prose
-   dragging remains outside this pressure slice so it cannot reopen the
-   reviewed Safari scroll-ownership boundary. */
+/* Passage travel samples the existing code clock continuously. The host
+   settles after the gesture; native snap must not round intermediate frames. */
 .kp-typescript-focus-card [data-kp-focus-deck-viewport] {
-  overflow-x: hidden;
   scroll-snap-type: none;
 }
 

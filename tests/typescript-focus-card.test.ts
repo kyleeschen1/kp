@@ -107,6 +107,10 @@ test("TypeScript card is a projection over the existing code renderer and clock"
   assert.match(source, /renderKpTypeScriptRefactorCodeHtml\(/u);
   assert.match(source, /renderKpTypeScriptRefactorDomFrame\(/u);
   assert.match(source, /createKpReaderTimelinePlaybackClock\(/u);
-  assert.doesNotMatch(source, /setInterval|setTimeout/u);
+  assert.doesNotMatch(source, /setInterval/u);
+  // A bounded input-quiet fallback settles a swipe; it must not become an
+  // independent code-animation clock. Playback remains the shared clock.
+  assert.equal((source.match(/setTimeout\(/gu) ?? []).length, 1);
+  assert.match(source, /setTimeout\(settleNativePassage, 180\)/u);
   assert.doesNotMatch(source, /shippingCost\s*\(/u);
 });

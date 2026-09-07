@@ -285,6 +285,82 @@ test("TypeScript slider and direct hash seek canonical code endpoints", async ({
   );
 });
 
+test("TypeScript passage swiping scrubs gradually and reversibly through the existing playhead", async ({ page }) => {
+  await page.goto(`${path}#beat.typescript.move-shared-rule`);
+  const code = page.locator("[data-kp-typescript-focus-card]");
+  const viewport = code.locator("[data-kp-focus-deck-viewport]");
+  const slider = code.locator("[data-kp-focus-deck-scrubber]");
+  await expect(viewport).toHaveCSS("overflow-x", "auto");
+  await slider.evaluate(element => {
+    (element as HTMLInputElement).value = "3.5";
+    element.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  const sliderProgress = Number(await code.getAttribute(
+    "data-kp-typescript-focus-card-timeline-progress"));
+  await slider.evaluate(element => {
+    (element as HTMLInputElement).value = "3";
+    element.dispatchEvent(new Event("input", { bubbles: true }));
+    element.dispatchEvent(new Event("change", { bubbles: true }));
+  });
+  await viewport.dispatchEvent("pointerdown", {
+    isPrimary: true, pointerId: 1, pointerType: "touch"
+  });
+  for (const position of [3.25, 3.5, 3.75, 3.5]) {
+    await viewport.evaluate((element, value) => {
+      element.scrollLeft = element.clientWidth * value;
+      element.dispatchEvent(new Event("scroll"));
+    }, position);
+    await expect.poll(async () => Number(await slider.inputValue()))
+      .toBeCloseTo(position, 2);
+    if (position === 3.5) expect(Number(await code.getAttribute(
+      "data-kp-typescript-focus-card-timeline-progress")))
+      .toBeCloseTo(sliderProgress, 3);
+  }
+  // A held gesture must not be rounded by a scrollend event or quiet timer.
+  await viewport.dispatchEvent("scrollend");
+  await page.waitForTimeout(300);
+  await expect.poll(async () => viewport.evaluate(element =>
+    element.scrollLeft / element.clientWidth)).toBeCloseTo(3.5, 2);
+  await viewport.dispatchEvent("pointerup", {
+    isPrimary: true, pointerId: 1, pointerType: "touch"
+  });
+  await viewport.dispatchEvent("scrollend");
+  await expect(code).toHaveAttribute("data-kp-focus-deck-active-beat", "replace-cost-call");
+  await expect(code).toHaveAttribute("data-kp-typescript-focus-card-transition", "settled");
+  await expect(page).toHaveURL(/#beat.typescript.replace-cost-call$/);
+  // Late programmatic scroll corrections must not reopen the semantic clock.
+  await viewport.evaluate(element => {
+    element.scrollLeft = element.clientWidth * 2;
+    element.dispatchEvent(new Event("scroll"));
+  });
+  await expect.poll(async () => viewport.evaluate(element =>
+    element.scrollLeft / element.clientWidth)).toBeCloseTo(4, 2);
+  await expect(code).toHaveAttribute("data-kp-typescript-focus-card-timeline-progress", "0.680000");
+});
+
+test("TypeScript native horizontal wheel produces intermediate frames", async ({ page }) => {
+  await page.goto(`${path}#beat.typescript.move-shared-rule`);
+  const code = page.locator("[data-kp-typescript-focus-card]");
+  const viewport = code.locator("[data-kp-focus-deck-viewport]");
+  await viewport.scrollIntoViewIfNeeded();
+  await code.evaluate(element => {
+    const observer = new MutationObserver(() => {
+      const position = Number(element.getAttribute("data-kp-typescript-focus-card-deck-position"));
+      if (position > 3.01 && position < 3.99) {
+        element.setAttribute("data-test-saw-native-intermediate", "true");
+        observer.disconnect();
+      }
+    });
+    observer.observe(element, { attributes: true,
+      attributeFilter: ["data-kp-typescript-focus-card-deck-position"] });
+  });
+  const box = (await viewport.boundingBox())!;
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.wheel(box.width * 0.3, 0);
+  await expect(code).toHaveAttribute("data-test-saw-native-intermediate", "true");
+  await expect(code).toHaveAttribute("data-kp-typescript-focus-card-transition", "settled");
+});
+
 test("equation beats separate attention stops from canonical rewrite motion", async ({
   page
 }) => {

@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: G3 keyboard-navigation repair verified locally; code-card feedback unresolved
+Status: G3 code-card gradual passage input implemented; visual review pending
 Last Updated: 2026-09-07
 The user requested recording the recommendations and finishing the existing
 loop. The strategic pause is lifted; G3 visual acceptance remains required.
@@ -22,8 +22,11 @@ This supplements the tax/Bayes direction; only the existing contract is resumed.
 The source-based review found working sequence/planner and flashcard foundations,
 but uneven mathematical coverage and a coverage-report evidence-wiring gap;
 do not treat its proposed roadmap or readiness labels as new execution authority.
-Current Next Action: clarify the remaining code-card behavior and review the
-repaired whole-step slider keyboard navigation at mandatory G3; see
+The user clarified the remaining code issue as missing gradual passage swiping.
+The bounded repair enables physical passage travel through the existing code
+playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
+Current Next Action: review gradual code-card swiping and the preserved
+whole-step slider keyboard navigation at mandatory G3; see
 `../reviews/2026-09-07-canonical-tax-g3-checkpoint.md` for the working URL,
 source workflow, production ownership, release evidence and remaining work.
 The ordinary build now ships the exact four-card route, with shared source

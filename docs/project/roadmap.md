@@ -81,6 +81,9 @@ to integrate, not absent systems to rebuild. The recommendations are retained
 for successor planning; no new execution queue is approved. The existing loop
 still requires G3 visual acceptance. See
 `decisions/2026-09-07-math-recommendations-and-loop-resumption.md`.
+The remaining code-card complaint is now clarified: gradual passage swiping.
+Its bounded input repair is recorded in
+`decisions/2026-09-07-code-card-gradual-passage-input.md`; G3 review remains open.
 
 Loops 1–4 remain completed internal evidence: immutable state and transactions,
 typed properties and derived graphs, applied families and ephemeral sampling,

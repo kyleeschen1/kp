@@ -7,7 +7,33 @@ replace its slice table. Scope is the original
 `2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md`, including
 the explicitly accepted bounded four-card production-adoption amendment.
 
-## G3 feedback follow-up — keyboard navigation
+## Current G3 follow-up — gradual code-card passage input
+
+The user clarified the code-card issue as missing gradual swiping. The caller
+had explicitly disabled passage overflow and never wired passage input into
+its already fractional code timeline. The requested bounded repair enables
+that path, preserves held and reverse intermediate positions, settles to a beat
+after release, and guards against stale programmatic scroll corrections.
+See [the repair boundary and verification commands](../decisions/2026-09-07-code-card-gradual-passage-input.md).
+
+The older statement below that code swiping is intentionally disabled is
+historical. The failure description is now resolved; visual acceptance of the
+new input behavior remains pending. Review the code card at the same shared
+URL, especially slow horizontal touch/trackpad passage travel through the
+helper extraction and call-replacement steps.
+
+The full post-swipe `npm test` release passes 6,611 tests with no failures,
+cancellations or skips, including architecture and unchanged inference gates.
+The final combined development cohort passes 27 checks across Chromium,
+Firefox, and WebKit; built delivery passes 18, including phone-width input
+and reduced motion. The 19 Focus Deck unit checks, final typecheck, ordinary
+bundle build, production closure and fixed reader budgets pass. The canonical
+static JS/CSS closure is now 367,933 gzip bytes (+411 from the keyboard repair);
+HTML is 24,029 raw / 3,203 gzip bytes. These are delivery-size measurements,
+not a frame-rate or full-transfer claim. Theseus records release verification;
+the older counts below describe their respective historical checkpoints.
+
+## Earlier G3 feedback — keyboard navigation
 
 The user reports that all but the code example work well, and arrows work only
 on supply-demand. This is not complete G3 approval. A regression test reproduces
