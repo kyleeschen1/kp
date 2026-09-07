@@ -19,8 +19,9 @@ executed only through `run-contract.kp.structural-authoring-canonical-tax-v2`.
 1. Complete structural release verification for the authored distribution and
    carrier-preserving simplification callers. Preserve fixed budgets, semantic
    authority, native paint, and the approved Focus Card treatments.
-2. Resolve the mandatory authoring/API and visual checkpoint G2 before canonical
-   supply-tax migration. Routine nonvisual preapproval does not waive G2.
+2. The mandatory authoring/API and visual checkpoint G2 is now explicitly
+   approved, including the revised direct-arc distribution. Routine nonvisual preapproval does not waive G2;
+   this boundary was satisfied by human approval, not automated checks.
 3. After G2, migrate the canonical source through ordinary build delivery while
    preserving economics, prose, URLs, interaction, and domain-owned renderers.
    G3 remains required before merge or further generalization.

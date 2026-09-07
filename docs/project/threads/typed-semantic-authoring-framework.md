@@ -1,12 +1,13 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: direct-arc distribution candidate implemented; G2 visual review before migration
+Status: direct-arc distribution and G2 approved; canonical migration authorized
 Last Updated: 2026-09-06
-Current Next Action: obtain visual acceptance of the direct-arc distribution
-revision and G2 approval of the two authored Focus Cards
-before starting the already-approved canonical supply-tax migration.
+Current Next Action: refresh affected release evidence for the accepted direct-arc
+distribution, then execute the approved canonical supply-tax migration through
+the mandatory G3 visual parity checkpoint.
 See `../decisions/2026-09-06-distribution-direct-arc-review.md`; prior release
-evidence predates this visual amendment and is not approval of the new motion.
+evidence predates this visual amendment; explicit approve/resume accepts the
+revised motion and G2, without waiving the remaining release checks or G3.
 All reader payload budgets now pass unchanged. See
 `../reviews/2026-09-06-reader-release-visual-boundary.md` for the completed
 repair, executed tests and working authoring review URLs.
@@ -20,13 +21,13 @@ after isolating existing geometry and frame-sampling responsibilities from legac
 implementation dependencies. Consumer fixtures and all budgets remain unchanged.
 Simplification is integrated through its existing native carrier owner and a
 Focus Card; both callers remain in the actual inference fixture.
-Release verification passes; G2 and canonical migration remain
-pending. The approved scope remains
+The prior release passed; refresh it after the accepted motion amendment before
+canonical migration. The approved scope remains
 `../reviews/2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md`.
 The completed source workflow and market specimen passed G0 review; evidence is in
 `../reviews/2026-09-05-authoring-integration-market-preview-closeout.md` and
 `../reviews/2026-09-05-authoring-market-author-review.md`.
-G1 is accepted for the fraction Focus Card; G2 and G3 remain mandatory.
+G1 and G2 are accepted; G3 remains mandatory.
 Theseus owns current slice, verification, commits, and stop state.
 
 Standing continuation rule: repair nonvisual release failures and continue the

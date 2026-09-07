@@ -228,11 +228,12 @@ typography and operation-selector/native-member continuity failures in older
 readers. The user explicitly approved their bounded visual-preservation repair;
 the mixed-host and certified-member fixes now pass development reader conformance.
 The final full suite and supported-browser release cohort pass, including the
-deferred-prewarm freshness repair. G2 visual approval is now the next boundary;
-the user requested a bounded direct-arc departure revision to the distribution
-card before that review. See `decisions/2026-09-06-distribution-direct-arc-review.md`.
-see `reviews/2026-09-06-reader-release-visual-boundary.md`. Canonical migration
-still requires G2. See `reviews/2026-09-06-structural-authoring-g2-checkpoint.md` and
+deferred-prewarm freshness repair. The user has now explicitly approved the
+bounded direct-arc distribution revision and G2 and requested resume. Refresh
+affected release evidence, then continue canonical migration to the mandatory G3
+visual parity checkpoint. See `decisions/2026-09-06-distribution-direct-arc-review.md`
+and `reviews/2026-09-06-reader-release-visual-boundary.md`.
+See `reviews/2026-09-06-structural-authoring-g2-checkpoint.md` and
 `reviews/2026-09-06-structural-authoring-two-caller-cost-stop.md` for the measured
 costs and resolved compiler repair evidence; no budget increase is authorized.
 

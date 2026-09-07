@@ -1,10 +1,12 @@
 # Distribution: direct arc departure
 
-Status: direct-arc candidate implemented; revised exemplar awaiting visual review
+Status: direct-arc exemplar and G2 approved; release refresh before migration
 
 The user requested removal of the separate peel-off beat, accepted the explained
 bounded repair, and requested continuation of the existing loop. This amends the
-distribution exemplar at G2; it does not approve G2 or canonical migration.
+distribution exemplar at G2. The subsequent explicit approve/resume accepts the
+revised exemplar and G2 and authorizes the existing canonical migration slices.
+G3 visual parity review remains required before merge or generalization.
 
 Canonical artifact: `animation.fraction-composition.two-thirds-solve`, hosted at
 `http://127.0.0.1:8000/experiments/authoring-distribution-focus-card/`. Semantic
@@ -53,9 +55,9 @@ preservation evidence, not a universal smooth-frame claim or a green rerun of th
 entire release matrix. Future timing checks should run without competing heavy
 verification. Theseus retains both the failed run and successful isolated checks.
 
-HUMAN_CHECKPOINT: review simultaneous departure, arc shape, and the below-expression
-phone route at the canonical URL. G2 remains pending. After approval, refresh the
-affected release evidence and proceed to the approved canonical migration slices.
+Accepted checkpoint: simultaneous departure, arc shape, and the below-expression
+phone route at the canonical URL. Refresh the affected release evidence and
+proceed to the approved canonical migration slices; Theseus owns live progress.
 
 This supersedes the exemplar's earlier separation bump, not the general principle
 that slow starts can support attention. Focused unit laws and the existing scoped

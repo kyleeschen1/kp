@@ -2,9 +2,9 @@
   "id": "next-action.kp.structural-authoring-canonical-tax",
   "kind": "next-action",
   "title": "Structural authoring proof and canonical supply-tax adoption",
-  "status": "blocked",
+  "status": "in-progress",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT G2: review direct-arc distribution candidate including below-expression phone route. No migration started; nonvisual continuation rule remains persistent.",
+  "summary": "User explicitly approved revised direct-arc distribution and G2, then requested resume. Refresh s18 release evidence and continue canonical migration; G3 remains required.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -592,11 +592,60 @@
       "scope": "s18-direct-arc",
       "checkedAt": "2026-09-07T04:53:02.157Z",
       "notes": "Exact executed focused command: final 2 browser cases passed, both desktop and phone layouts; contact sheets inspected and visible containment verified. Earlier failed candidates were removed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T05:09:07.895Z",
+      "notes": "Accepted direct-arc refresh: production build and full TypeScript/Svelte checks pass; existing large-chunk warning remains advisory."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T05:09:09.198Z",
+      "notes": "All 12 routes pass unchanged; shared equation payload 138039 gzip bytes versus 145000 ceiling."
+    },
+    {
+      "command": "npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T05:09:10.390Z",
+      "notes": "Generated graph current, 68 roots."
+    },
+    {
+      "command": "npm run visual:authoring-structural -- --project=firefox --project=webkit",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T05:11:48.647Z",
+      "notes": "24 checks pass on Chromium, Firefox and WebKit: both structural callers, real native paint and exclusive ownership, interruption, malformed source, reduced motion, direct restoration and disposal."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T05:14:15.865Z",
+      "notes": "Accepted direct-arc release refresh passes all architecture/inference/catalog preflights and 6597 tests, zero failures/skips; suite duration 609306 ms."
+    },
+    {
+      "command": "npm run visual:authoring-distribution-card -- --project=webkit",
+      "status": "failed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T05:16:59.564Z",
+      "notes": "39/45 pass. All six WebKit failures are exact font-family serialization: unquoted Times New Roman versus quoted equivalent. Motion checks in two affected tests were not reached. Repair only CSS serialization assertion; preserve fonts, order and timing budgets."
+    },
+    {
+      "command": "npm run visual:authoring-distribution-card -- --project=webkit",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T05:19:51.930Z",
+      "notes": "Full rerun passes 45/45 Chromium Firefox WebKit after CSS serialization assertion repair. Unchanged motion/scrub budgets. Firefox max scrub 61/51ms desktop/phone; max playback frame 83.34/33.32ms. WebKit max scrub 25/31ms and max frame 35/36ms."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Direct-arc amendment implemented in the existing fraction projection. Both bundles depart together; no peel-off beat. Scoped shape/containment checks and isolated interaction repeats pass; typecheck and 32 structural tests pass. HUMAN_CHECKPOINT G2 before migration; broad release refresh follows visual approval."
+    "summary": "G2 and direct-arc treatment explicitly approved. S18 release refresh passed: 6597 tests, full build, 24 structural browser and 45 card/browser checks, reachability and unchanged budgets. Proceed to canonical migration inventory; G3 remains required."
   },
   "expectedLearning": [
     "Whether two structural equation callers justify canonical economics adoption without parallel state or presentation authority."

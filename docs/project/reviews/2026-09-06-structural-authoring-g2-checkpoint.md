@@ -1,12 +1,17 @@
 # Structural authoring: two-caller G2 checkpoint
 
-Status: HUMAN_CHECKPOINT G2 — direct-arc amendment needs visual review
+Status: G2 approved — release refresh and canonical migration authorized
 Contract: `run-contract.kp.structural-authoring-canonical-tax-v2`
 
-The user subsequently requested direct arc departure without the distribution
+The user explicitly approved the revised direct-arc distribution and G2, then
+requested resume after clarification of the long-loop outcome. Refresh the
+affected release evidence before migration. G3 remains a mandatory visual
+checkpoint; this approval does not authorize merge or general motion promotion.
+
+The user previously requested direct arc departure without the distribution
 peel-off beat. Its bounded candidate and focused checks are recorded in
 `../decisions/2026-09-06-distribution-direct-arc-review.md`. The release evidence
-below predates that visual amendment. Review the revised distribution card, then
+below predates that visual amendment. With the revised distribution accepted,
 refresh impact-selected release evidence before beginning canonical migration.
 
 Continuation evidence and the approved repair are in
@@ -16,10 +21,40 @@ historical measurements, now repaired without changing budgets.
 Final continuation evidence: 6,597 unit tests, 39 built-reader browser checks,
 24 authored Focus Card browser checks and 17 development-reader checks pass.
 Build, typechecking, native preservation and unchanged payload budgets pass.
-Review the two Focus Cards below before authorizing the migration boundary;
-automated evidence does not stand in for visual approval.
+The two Focus Cards have now passed the human migration-readiness boundary;
+automated evidence does not replace the remaining canonical parity review.
 
-## What the proof establishes
+## Post-approval release refresh
+
+After explicit G2 approval, `npm test` passed all 6,597 tests with zero failures
+or skips, including architecture and unchanged inference preflights. `npm run
+build` passed full typechecking and production bundling. `npm run
+check:equation-reachability` reports 68 current roots; `npm run
+check:reader-budgets` passes all 12 routes with shared equation runtime at
+138,039 gzip bytes against the unchanged 145,000 ceiling.
+
+`npm run visual:authoring-structural -- --project=firefox --project=webkit`
+passed 24 Chromium/Firefox/WebKit checks through the real native compositor,
+including both structural callers, exclusive paint ownership, interruption,
+reduced motion, direct restoration and disposal. The current-direction ratchet
+passes three checks. Theseus owns the remaining refresh evidence and live status.
+
+The expanded distribution-card cohort initially passed 39/45: all six WebKit
+failures compared quoted versus unquoted `Times New Roman` in computed CSS.
+The assertion now accepts those two equivalent serializations only, preserving
+the exact font stack and order. No production CSS, motion, thresholds or budgets
+changed. The affected motion tests had stopped at typography before sampling;
+they require a complete rerun rather than inference from the other browsers.
+
+The complete rerun of `npm run visual:authoring-distribution-card --
+--project=webkit` passed 45/45 across Chromium, Firefox and WebKit. All original
+motion, scrub, loading, typography, static, cache and lifecycle checks ran.
+Firefox maximum scrub was 61/51 ms at desktop/phone widths; its maximum playback
+frame was 83.34/33.32 ms. WebKit measured 25/31 ms scrub and 35/36 ms maximum
+frames. Budgets remain unchanged; isolated long frames remain an honest limit,
+not evidence of universal smooth pacing. G2 is satisfied and migration may start.
+
+## Integration proof
 
 Distribution and carrier-preserving simplification now connect retained semantic
 state, exact version selections, verified operation receipts, atomic successors,

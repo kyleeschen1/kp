@@ -2,6 +2,8 @@ import { expect, test } from "@playwright/test";
 import { buildKpVisualContactSheetHtml, type KpVisualContactSheetItem } from "../scripts/capture-visual-contact-sheet.ts";
 
 const route = "/experiments/authoring-distribution-focus-card/";
+// CSSOM may omit optional family-name quotes; font identity and order must agree.
+const passageFontStack = /^Georgia, (?:"Times New Roman"|Times New Roman), serif$/;
 for (const kind of ["distribution", "simplification"] as const) test(`loading never paints the static comparison or unprepared native layers: ${kind}`, async ({ page }, info) => {
   let release!: () => void;
   const gate = new Promise<void>(resolve => { release = resolve; });
@@ -45,7 +47,7 @@ for (const width of [1100, 390]) test(`authored fraction Focus Card preserves na
   await page.goto(route);
   const card = page.locator("[data-kp-authoring-distribution-card]");
   await expect(card).toHaveAttribute("data-kp-authoring-distribution-card", "ready");
-  await expect(card.locator(".kp-focus-deck__narrative p").first()).toHaveCSS("font-family", 'Georgia, "Times New Roman", serif');
+  await expect(card.locator(".kp-focus-deck__narrative p").first()).toHaveCSS("font-family", passageFontStack);
   await expect(page.locator("iframe")).toHaveCount(0);
   await expect(page.locator("[data-kp-log-exponent-stage]")).toHaveCount(0);
   await expect(card).toHaveAttribute("data-kp-distribution-state", "fraction-solve.state.factored");
@@ -223,7 +225,7 @@ for (const kind of ["distribution", "simplification"]) test(`shared card stays l
   await expect(passages).toHaveCount(2);
   for (const passage of await passages.all()) {
     await expect(passage).toBeVisible();
-    await expect(passage).toHaveCSS("font-family", 'Georgia, "Times New Roman", serif');
+    await expect(passage).toHaveCSS("font-family", passageFontStack);
     expect(await passage.evaluate(node => node.getBoundingClientRect().bottom <= node.closest("[data-kp-focus-deck]")!.getBoundingClientRect().bottom)).toBe(true);
   }
   await expect(card.locator("[data-kp-focus-deck-next]")).toBeHidden();
@@ -238,7 +240,7 @@ for (const kind of ["distribution", "simplification"]) test(`shared card dispose
   await page.goto(`/experiments/authoring-${kind}-focus-card/`);
   const card = page.locator(`[data-kp-authoring-${kind}-card="ready"]`);
   await expect(card).toBeVisible();
-  await expect(card.locator(".kp-focus-deck__narrative p").first()).toHaveCSS("font-family", 'Georgia, "Times New Roman", serif');
+  await expect(card.locator(".kp-focus-deck__narrative p").first()).toHaveCSS("font-family", passageFontStack);
   await page.evaluate(() => {
     dispatchEvent(new PageTransitionEvent("pagehide", { persisted: true }));
     dispatchEvent(new PageTransitionEvent("pageshow", { persisted: true }));
