@@ -17,7 +17,7 @@ import {
   createKpSupplyTaxPedagogicalScore,
   type KpSupplyTaxPedagogicalBeatV1,
   type KpSupplyTaxPedagogicalScoreV1
-} from "./kinetic-figure-supply-tax-score.ts";
+} from "../../tutorial/kinetic-figure-supply-tax/kinetic-figure-supply-tax-score.ts";
 
 export const kpEconomicsSupplyTaxArticleSourceId =
   "content/lessons/economics-supply-tax.kp.md" as const;

@@ -7,8 +7,6 @@ import "../kinetic-figure-typescript-focus-card/kinetic-figure-typescript-focus-
 import "../kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score.css";
 import "./kinetic-figure-supply-tax.css";
 
-import { compileKpArticleMarkdownFragmentHtml } from
-  "../../article/kp-article-static-html.ts";
 import type { KpEconomicsSupplyTaxAnimationAsset } from "../../animation/economics-supply-tax-asset.ts";
 import type { KpPerUnitTaxWelfareFrameV1 } from "../../../domains/economics/per-unit-tax-welfare-frame.ts";
 import { applyKpSemanticVisualDomTheme } from
@@ -148,6 +146,7 @@ export function mountKpSupplyTaxKineticFigure(input: {
       readonly scrollScore: KpSupplyTaxScrollScoreV1;
       readonly sceneForBeat: (beatId: string) => KpSupplyTaxSceneProjectionV1;
       readonly stageFacts: typeof kpSupplyTaxScrollScoreStageFacts;
+      readonly phraseHtml: Readonly<Record<string, string>>;
     };
   };
 }): KpSupplyTaxKineticFigureSession {
@@ -176,6 +175,7 @@ export function mountKpSupplyTaxKineticFigure(input: {
   input.root.innerHTML = renderPage({
     authority,
     stageFacts: instruction.stageFacts,
+    phraseHtml: instruction.phraseHtml,
     scenes,
     logExponentAuthority,
     logExponentInitialIndex,
@@ -1100,6 +1100,7 @@ function wheelDeltaPixels(
 function renderPage(input: {
   readonly authority: KpEconomicsSupplyTaxAnimationAsset;
   readonly stageFacts: typeof kpSupplyTaxScrollScoreStageFacts;
+  readonly phraseHtml: Readonly<Record<string, string>>;
   readonly scenes: readonly KpSupplyTaxFocusPhraseScene[];
   readonly logExponentAuthority: ReturnType<
     typeof createKpLogExponentFocusCardAuthority
@@ -1129,7 +1130,7 @@ function renderPage(input: {
         beats: scenes.map((scene) => ({
           slug: scene.beat.slug,
           title: scene.beat.title,
-          html: compileKpArticleMarkdownFragmentHtml(scene.phrase.label),
+          html: input.phraseHtml[scene.phrase.referenceAddress]!,
           domId: `phrase.${scene.phrase.id}`,
           attributes: {
             "data-kp-focus-deck-phrase": scene.phrase.id

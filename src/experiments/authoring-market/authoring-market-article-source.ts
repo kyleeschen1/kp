@@ -1,4 +1,4 @@
-import type { createKpAuthoringMarketFacts } from "./authoring-market-facts.ts";
+import type { createKpAuthoringMarketFacts } from "../../tutorial/authoring-market/authoring-market-facts.ts";
 
 export const kpAuthoringMarketArticleSourceId: string = "projection.authoring-market.article.v1";
 const authoredSourcePath: string = "src/experiments/authoring-market/authoring-market-article-source.ts";

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { buildKpAuthoringMarketPreview } from "../src/experiments/authoring-market/authoring-market-preview-build.ts";
 import { prepareKpAuthoringMarketPreview, KpAuthoringMarketPresentationGap } from "../src/experiments/authoring-market/authoring-market-preview-prepare.ts";
-import { projectKpSupplyTaxBaselineSvg, projectKpSupplyTaxWelfareRegionsSvg, kpSupplyTaxGraphViewport } from "../src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-svg.ts";
+import { projectKpSupplyTaxBaselineSvg, projectKpSupplyTaxWelfareRegionsSvg, kpSupplyTaxGraphViewport } from "../src/tutorial/kinetic-figure-supply-tax/kinetic-figure-supply-tax-svg.ts";
 import { createKpSemanticStateQuerySession } from "../src/semantic-state/authoring-query-session.ts";
 import { encodeKpSemanticStateCompositionLogicalAddress } from "../src/semantic-state/state-family-composition-address.ts";
 

@@ -1,4 +1,4 @@
-import { renderKpFocusDeckScaffold } from "./focus-deck-scaffold.ts";
+import { renderKpFocusDeckScaffold } from "../tutorial/focus-deck-scaffold.ts";
 
 // Presentation content is shared by static output and browser enhancement;
 // verified equation state is supplied separately by the domain build path.

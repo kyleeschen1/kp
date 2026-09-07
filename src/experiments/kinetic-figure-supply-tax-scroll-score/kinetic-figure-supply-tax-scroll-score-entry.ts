@@ -1,7 +1,7 @@
 import "katex/dist/katex.min.css";
 import "../../styles.css";
-import "../kinetic-figure-supply-tax/kinetic-figure-supply-tax.css";
-import "./kinetic-figure-supply-tax-scroll-score.css";
+import "../../tutorial/kinetic-figure-supply-tax/kinetic-figure-supply-tax.css";
+import "../../tutorial/kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score.css";
 
 import articleText from
   "../../../content/lessons/economics-supply-tax-scroll-score.kp.md?raw";
@@ -22,7 +22,7 @@ import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
 import { createKpReaderTimelinePlaybackClock } from
   "../../reader/runtime/timeline-playback-clock.ts";
 import { compileKpSupplyTaxScrollScoreArticle } from
-  "./kinetic-figure-supply-tax-scroll-score-article.ts";
+  "../../tutorial/kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-article.ts";
 import {
   projectKpSupplyTaxScrollScoreCoverageUnits,
   projectKpSupplyTaxScrollScorePhraseAttention,
@@ -39,26 +39,26 @@ import {
   type KpSupplyTaxScrollScorePassageV1,
   type KpSupplyTaxScrollScorePhraseV1,
   type KpSupplyTaxScrollScoreV1
-} from "./kinetic-figure-supply-tax-scroll-score-score.ts";
+} from "../../tutorial/kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-score.ts";
 import {
   kpSupplyTaxScrollScoreStageFacts,
   projectKpSupplyTaxScrollScoreStageLens
-} from "./kinetic-figure-supply-tax-scroll-score-stage-lens.ts";
+} from "../../tutorial/kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-stage-lens.ts";
 import { projectKpSupplyTaxScrollScoreStageLensDom } from
-  "./kinetic-figure-supply-tax-scroll-score-stage-lens-dom.ts";
+  "../../tutorial/kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-stage-lens-dom.ts";
 import {
   projectKpSupplyTaxScene,
   projectKpSupplyTaxSceneDom,
   projectKpSupplyTaxSceneTransitionDom,
   type KpSupplyTaxSceneProjectionV1
 } from
-  "../kinetic-figure-supply-tax/kinetic-figure-supply-tax-scene.ts";
+  "../../tutorial/kinetic-figure-supply-tax/kinetic-figure-supply-tax-scene.ts";
 import { createKpSupplyTaxPedagogicalScore } from
-  "../kinetic-figure-supply-tax/kinetic-figure-supply-tax-score.ts";
+  "../../tutorial/kinetic-figure-supply-tax/kinetic-figure-supply-tax-score.ts";
 import {
   projectKpSupplyTaxTransitSvgDom,
   renderKpSupplyTaxInteractiveSvg
-} from "../kinetic-figure-supply-tax/kinetic-figure-supply-tax-svg.ts";
+} from "../../tutorial/kinetic-figure-supply-tax/kinetic-figure-supply-tax-svg.ts";
 
 const importLock = importLockValue as KpArticleImportLock;
 const stationTopPx = 0;

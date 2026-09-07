@@ -1,12 +1,12 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
-import { createKpAuthoredMarketSource } from "../src/experiments/typed-linear-supply-demand/authoring-market-source.ts";
-import { createKpAuthoringMarketFrameSession } from "../src/experiments/authoring-market/authoring-market-frame.ts";
+import { createKpAuthoredMarketSource } from "../src/tutorial/typed-linear-supply-demand/authoring-market-source.ts";
+import { createKpAuthoringMarketFrameSession } from "../src/tutorial/authoring-market/authoring-market-frame.ts";
 import { sampleKpEconomicsSupplyTaxAnimationFrame } from "../src/animation/economics-supply-tax-asset.ts";
 import { buildKpAuthoringMarketPreview } from "../src/experiments/authoring-market/authoring-market-preview-build.ts";
 import { prepareKpAuthoringMarketPreview } from "../src/experiments/authoring-market/authoring-market-preview-prepare.ts";
-import { projectKpSupplyTaxSceneTransition } from "../src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-scene.ts";
+import { projectKpSupplyTaxSceneTransition } from "../src/tutorial/kinetic-figure-supply-tax/kinetic-figure-supply-tax-scene.ts";
 
 test("revision-owned model, formulas, prose and attention survive eviction and other specimen inspection", () => {
   const prepared = ["reference", "variation"].map(name => prepareKpAuthoringMarketPreview(
@@ -68,7 +68,7 @@ test("frame projection preserves variant truth, reverse seeks and cache independ
 });
 
 test("frame adapter projects evaluated economics without another sampler or calculator", () => {
-  const source = readFileSync(new URL("../src/experiments/authoring-market/authoring-market-frame.ts", import.meta.url), "utf8");
+  const source = readFileSync(new URL("../src/tutorial/authoring-market/authoring-market-frame.ts", import.meta.url), "utf8");
   assert.doesNotMatch(source, /sampleKpEconomics|sampleKpPerUnitTax|createKpPerUnitTaxWelfareAccounting|createKpPerUnitTaxWelfareModel|addKpRationals|multiplyKpRationals|divideKpRationals/);
   assert.equal(source.match(/query\.evaluate\(/g)?.length, 1);
 });

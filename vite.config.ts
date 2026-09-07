@@ -161,7 +161,7 @@ export default defineConfig({
           if (context.filename !== resolve(projectRoot, "experiments/kinetic-figure/supply-tax/index.html")) return html;
           // Delivery reads a checked artifact; author code runs only in the explicit compiler.
           return html.replace("<!-- kp:canonical-tax-static -->", readFileSync(resolve(projectRoot,
-            "src/experiments/kinetic-figure-supply-tax/canonical-tax-static.generated.html"), "utf8"));
+            "src/tutorial/kinetic-figure-supply-tax/canonical-tax-static.generated.html"), "utf8"));
         }
       }
     },
@@ -332,6 +332,7 @@ export default defineConfig({
     // All supported publication targets implement modulepreload. Shipping the
     // legacy polyfill would add a startup request to every route.
     entries: {
+      canonicalSupplyTax: resolve(projectRoot, "experiments/kinetic-figure/supply-tax/index.html"),
       ...Object.fromEntries(kpProductionCompatibilityBuildEntries.map((entry) => [
         entry.name,
         resolve(projectRoot, entry.htmlPath)

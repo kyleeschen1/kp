@@ -1,14 +1,6 @@
 /// <reference types="vite/client" />
 
-import articleText from
-  "../../../content/lessons/typescript-free-shipping.kp.md?raw";
-import importLockValue from
-  "../../../content/lessons/typescript-free-shipping.kp.lock.json" with { type: "json" };
-
-import type { KpArticleImportLock } from
-  "../../article/kp-article-import-lock.ts";
-import { compileKpArticleMarkdownFragmentHtml } from
-  "../../article/kp-article-static-html.ts";
+import instruction from "./typescript-instruction.generated.json" with { type: "json" };
 import { sampleKpTypeScriptRefactorMotionFrame } from
   "../../animation/typescript-refactor-motion-frame.ts";
 import {
@@ -21,16 +13,12 @@ import { renderKpTypeScriptRefactorCodeHtml } from
   "../../rendering/typescript-refactor-code-html.ts";
 import { renderKpTypeScriptRefactorDomFrame } from
   "../../rendering/typescript-refactor-dom-session.ts";
-import {
-  compileKpTypeScriptFreeShippingPublicLesson
-} from "../../public-web/typescript-free-shipping-publication.ts";
 import { kpTypeScriptFreeShippingPublicPath } from
   "../../public-web/typescript-free-shipping-route.ts";
 import { createKpTypeScriptFreeShippingRuntimeProjection } from
   "../../public-web/typescript-free-shipping-runtime.ts";
 import { renderKpFocusDeckScaffold } from "../focus-deck-scaffold.ts";
 import {
-  createKpTypeScriptFocusCardScore,
   findKpTypeScriptFocusCardBeatIndexFromHash,
   kpTypeScriptFocusCardBeatHash,
   readKpTypeScriptFocusCardBeatIndexFromHash,
@@ -39,7 +27,6 @@ import {
   type KpTypeScriptFocusCardScoreV1
 } from "./kinetic-figure-typescript-focus-card-model.ts";
 
-const importLock = importLockValue as KpArticleImportLock;
 const progressTolerance = 0.0001;
 
 export interface KpTypeScriptFocusCardAuthority {
@@ -65,16 +52,9 @@ type CursorMotion = "immediate" | "transition";
 export function createKpTypeScriptFocusCardAuthority():
 KpTypeScriptFocusCardAuthority {
   const runtime = createKpTypeScriptFreeShippingRuntimeProjection();
-  const lesson = compileKpTypeScriptFreeShippingPublicLesson({
-    text: articleText,
-    lock: importLock
-  });
   return Object.freeze({
     runtime,
-    score: createKpTypeScriptFocusCardScore({
-      article: lesson.article.document,
-      score: runtime.score
-    })
+    score: instruction.score as KpTypeScriptFocusCardScoreV1
   });
 }
 
@@ -118,7 +98,7 @@ export function renderKpTypeScriptFocusCard(input: {
       beats: score.beats.map((beat) => ({
         slug: beat.slug,
         title: beat.title,
-        html: compileKpArticleMarkdownFragmentHtml(beat.label),
+        html: (instruction.phraseHtml as Readonly<Record<string, string>>)[beat.id]!,
         domId: beat.id,
         attributes: {
           "data-kp-typescript-focus-card-beat": beat.slug,

@@ -4,7 +4,7 @@ import test from "node:test";
 import { createKpEconomicsSupplyTaxAnimationAsset } from
   "../src/animation/economics-supply-tax-asset.ts";
 import { createKpSupplyTaxPedagogicalScore } from
-  "../src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-score.ts";
+  "../src/tutorial/kinetic-figure-supply-tax/kinetic-figure-supply-tax-score.ts";
 import {
   projectKpSupplyTaxScene,
   projectKpSupplyTaxSceneTransition,
@@ -13,7 +13,7 @@ import {
   resolveKpSupplyTaxNavigationDisposition,
   resolveKpSupplyTaxNavigationMotion
 } from
-  "../src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-scene.ts";
+  "../src/tutorial/kinetic-figure-supply-tax/kinetic-figure-supply-tax-scene.ts";
 
 test("every score beat resolves one deterministic semantic scene", () => {
   const authority = createKpEconomicsSupplyTaxAnimationAsset();

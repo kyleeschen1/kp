@@ -1,0 +1,76 @@
+{
+  "score": {
+    "schemaVersion": "kp.log-exponent-focus-card.v1",
+    "id": "score.algebra.log-exponent-focus-card.v1",
+    "beats": [
+      {
+        "id": "beat.algebra.log-exponent.locate-the-unknown",
+        "slug": "locate-the-unknown",
+        "ordinal": 1,
+        "title": "Locate the unknown",
+        "referenceAddress": "log-solve/source-equation",
+        "label": "The unknown is not a term we can collect: in $2^x=7$, $x$ is held in the exponent",
+        "timelineProgress": 0,
+        "ownsMotionFromPrevious": false
+      },
+      {
+        "id": "beat.algebra.log-exponent.choose-logarithms",
+        "slug": "choose-logarithms",
+        "ordinal": 2,
+        "title": "Choose a reversible operation",
+        "referenceAddress": "log-solve/source-exponent",
+        "label": "Because the natural logarithm is one-to-one on positive numbers, applying it to both sides preserves the equality while giving us access to that exponent",
+        "timelineProgress": 0,
+        "ownsMotionFromPrevious": false
+      },
+      {
+        "id": "beat.algebra.log-exponent.apply-logarithms",
+        "slug": "apply-logarithms",
+        "ordinal": 3,
+        "title": "Apply logarithms to both sides",
+        "referenceAddress": "log-solve/logged-equation",
+        "label": "The whole equation becomes $\\ln(2^x)=\\ln 7$",
+        "timelineProgress": 0.28,
+        "ownsMotionFromPrevious": true
+      },
+      {
+        "id": "beat.algebra.log-exponent.match-the-power-law",
+        "slug": "match-the-power-law",
+        "ordinal": 4,
+        "title": "Recognize the power-law structure",
+        "referenceAddress": "log-solve/logged-power",
+        "label": "Now the left side has the structure $\\ln(a^x)$, so the power law $\\ln(a^x)=x\\ln a$ applies with $a=2$",
+        "timelineProgress": 0.28,
+        "ownsMotionFromPrevious": false
+      },
+      {
+        "id": "beat.algebra.log-exponent.extract-the-exponent",
+        "slug": "extract-the-exponent",
+        "ordinal": 5,
+        "title": "Rewrite the logarithmic power",
+        "referenceAddress": "log-solve/extracted-equation",
+        "label": "That rewrite gives $x\\ln 2=\\ln 7$; the exponent has become an ordinary coefficient",
+        "timelineProgress": 0.7,
+        "ownsMotionFromPrevious": true
+      },
+      {
+        "id": "beat.algebra.log-exponent.isolate-x",
+        "slug": "isolate-x",
+        "ordinal": 6,
+        "title": "Divide to isolate x",
+        "referenceAddress": "log-solve/solved-equation",
+        "label": "Since $\\ln 2\\ne0$, divide both sides by $\\ln 2$ to isolate $x=\\frac{\\ln 7}{\\ln 2}$",
+        "timelineProgress": 1,
+        "ownsMotionFromPrevious": true
+      }
+    ]
+  },
+  "phraseHtml": {
+    "beat.algebra.log-exponent.locate-the-unknown": "<p>The unknown is not a term we can collect: in <span class=\"kp-article-math kp-article-math--inline\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><msup><mn>2</mn><mi>x</mi></msup><mo>=</mo><mn>7</mn></mrow><annotation encoding=\"application/x-tex\">2^x=7</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.6644em;\"></span><span class=\"mord\"><span class=\"mord\">2</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.6644em;\"><span style=\"top:-3.063em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mathnormal mtight\">x</span></span></span></span></span></span></span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.6444em;\"></span><span class=\"mord\">7</span></span></span></span></span>, <span class=\"kp-article-math kp-article-math--inline\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>x</mi></mrow><annotation encoding=\"application/x-tex\">x</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.4306em;\"></span><span class=\"mord mathnormal\">x</span></span></span></span></span> is held in the exponent</p>",
+    "beat.algebra.log-exponent.choose-logarithms": "<p>Because the natural logarithm is one-to-one on positive numbers, applying it to both sides preserves the equality while giving us access to that exponent</p>",
+    "beat.algebra.log-exponent.apply-logarithms": "<p>The whole equation becomes <span class=\"kp-article-math kp-article-math--inline\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>ln</mi><mo>⁡</mo><mo stretchy=\"false\">(</mo><msup><mn>2</mn><mi>x</mi></msup><mo stretchy=\"false\">)</mo><mo>=</mo><mi>ln</mi><mo>⁡</mo><mn>7</mn></mrow><annotation encoding=\"application/x-tex\">\\ln(2^x)=\\ln 7</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"mop\">ln</span><span class=\"mopen\">(</span><span class=\"mord\"><span class=\"mord\">2</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.6644em;\"><span style=\"top:-3.063em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mathnormal mtight\">x</span></span></span></span></span></span></span></span><span class=\"mclose\">)</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.6944em;\"></span><span class=\"mop\">ln</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">7</span></span></span></span></span></p>",
+    "beat.algebra.log-exponent.match-the-power-law": "<p>Now the left side has the structure <span class=\"kp-article-math kp-article-math--inline\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>ln</mi><mo>⁡</mo><mo stretchy=\"false\">(</mo><msup><mi>a</mi><mi>x</mi></msup><mo stretchy=\"false\">)</mo></mrow><annotation encoding=\"application/x-tex\">\\ln(a^x)</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"mop\">ln</span><span class=\"mopen\">(</span><span class=\"mord\"><span class=\"mord mathnormal\">a</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.6644em;\"><span style=\"top:-3.063em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mathnormal mtight\">x</span></span></span></span></span></span></span></span><span class=\"mclose\">)</span></span></span></span></span>, so the power law <span class=\"kp-article-math kp-article-math--inline\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>ln</mi><mo>⁡</mo><mo stretchy=\"false\">(</mo><msup><mi>a</mi><mi>x</mi></msup><mo stretchy=\"false\">)</mo><mo>=</mo><mi>x</mi><mi>ln</mi><mo>⁡</mo><mi>a</mi></mrow><annotation encoding=\"application/x-tex\">\\ln(a^x)=x\\ln a</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:1em;vertical-align:-0.25em;\"></span><span class=\"mop\">ln</span><span class=\"mopen\">(</span><span class=\"mord\"><span class=\"mord mathnormal\">a</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.6644em;\"><span style=\"top:-3.063em;margin-right:0.05em;\"><span class=\"pstrut\" style=\"height:2.7em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mathnormal mtight\">x</span></span></span></span></span></span></span></span><span class=\"mclose\">)</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.6944em;\"></span><span class=\"mord mathnormal\">x</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mop\">ln</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord mathnormal\">a</span></span></span></span></span> applies with <span class=\"kp-article-math kp-article-math--inline\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>a</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding=\"application/x-tex\">a=2</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.4306em;\"></span><span class=\"mord mathnormal\">a</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.6444em;\"></span><span class=\"mord\">2</span></span></span></span></span></p>",
+    "beat.algebra.log-exponent.extract-the-exponent": "<p>That rewrite gives <span class=\"kp-article-math kp-article-math--inline\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>x</mi><mi>ln</mi><mo>⁡</mo><mn>2</mn><mo>=</mo><mi>ln</mi><mo>⁡</mo><mn>7</mn></mrow><annotation encoding=\"application/x-tex\">x\\ln 2=\\ln 7</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.6944em;\"></span><span class=\"mord mathnormal\">x</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mop\">ln</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">2</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.6944em;\"></span><span class=\"mop\">ln</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">7</span></span></span></span></span>; the exponent has become an ordinary coefficient</p>",
+    "beat.algebra.log-exponent.isolate-x": "<p>Since <span class=\"kp-article-math kp-article-math--inline\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>ln</mi><mo>⁡</mo><mn>2</mn><mo mathvariant=\"normal\">≠</mo><mn>0</mn></mrow><annotation encoding=\"application/x-tex\">\\ln 2\\ne0</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.8889em;vertical-align:-0.1944em;\"></span><span class=\"mop\">ln</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">2</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\"><span class=\"mrel\"><span class=\"mord vbox\"><span class=\"thinbox\"><span class=\"rlap\"><span class=\"strut\" style=\"height:0.8889em;vertical-align:-0.1944em;\"></span><span class=\"inner\"><span class=\"mord\"><span class=\"mrel\"></span></span></span><span class=\"fix\"></span></span></span></span></span><span class=\"mspace nobreak\"></span><span class=\"mrel\">=</span></span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:0.6444em;\"></span><span class=\"mord\">0</span></span></span></span></span>, divide both sides by <span class=\"kp-article-math kp-article-math--inline\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>ln</mi><mo>⁡</mo><mn>2</mn></mrow><annotation encoding=\"application/x-tex\">\\ln 2</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.6944em;\"></span><span class=\"mop\">ln</span><span class=\"mspace\" style=\"margin-right:0.1667em;\"></span><span class=\"mord\">2</span></span></span></span></span> to isolate <span class=\"kp-article-math kp-article-math--inline\"><span class=\"katex\"><span class=\"katex-mathml\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\"><semantics><mrow><mi>x</mi><mo>=</mo><mfrac><mrow><mi>ln</mi><mo>⁡</mo><mn>7</mn></mrow><mrow><mi>ln</mi><mo>⁡</mo><mn>2</mn></mrow></mfrac></mrow><annotation encoding=\"application/x-tex\">x=\\frac{\\ln 7}{\\ln 2}</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"strut\" style=\"height:0.4306em;\"></span><span class=\"mord mathnormal\">x</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span><span class=\"mrel\">=</span><span class=\"mspace\" style=\"margin-right:0.2778em;\"></span></span><span class=\"base\"><span class=\"strut\" style=\"height:1.2251em;vertical-align:-0.345em;\"></span><span class=\"mord\"><span class=\"mopen nulldelimiter\"></span><span class=\"mfrac\"><span class=\"vlist-t vlist-t2\"><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.8801em;\"><span style=\"top:-2.655em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mop mtight\"><span class=\"mtight\">l</span><span class=\"mtight\">n</span></span><span class=\"mspace mtight\" style=\"margin-right:0.1952em;\"></span><span class=\"mord mtight\">2</span></span></span></span><span style=\"top:-3.23em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"frac-line\" style=\"border-bottom-width:0.04em;\"></span></span><span style=\"top:-3.394em;\"><span class=\"pstrut\" style=\"height:3em;\"></span><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\"><span class=\"mop mtight\"><span class=\"mtight\">l</span><span class=\"mtight\">n</span></span><span class=\"mspace mtight\" style=\"margin-right:0.1952em;\"></span><span class=\"mord mtight\">7</span></span></span></span></span><span class=\"vlist-s\">​</span></span><span class=\"vlist-r\"><span class=\"vlist\" style=\"height:0.345em;\"><span></span></span></span></span></span><span class=\"mclose nulldelimiter\"></span></span></span></span></span></span></p>"
+  }
+}

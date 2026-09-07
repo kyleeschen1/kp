@@ -13,7 +13,7 @@ import {
   renderKpSupplyTaxInteractiveSvg,
   renderKpSupplyTaxBaselineSvg,
   renderKpSupplyTaxWelfareLedger
-} from "../src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-svg.ts";
+} from "../src/tutorial/kinetic-figure-supply-tax/kinetic-figure-supply-tax-svg.ts";
 
 test("baseline SVG geometry projects exact semantic curves and equilibrium", () => {
   const semantics = createKpPerUnitTaxWelfareAsset();

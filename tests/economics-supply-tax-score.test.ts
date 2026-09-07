@@ -7,7 +7,7 @@ import {
   createKpSupplyTaxPedagogicalScore,
   validateKpSupplyTaxPedagogicalScore,
   type KpSupplyTaxPedagogicalScoreV1
-} from "../src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-score.ts";
+} from "../src/tutorial/kinetic-figure-supply-tax/kinetic-figure-supply-tax-score.ts";
 
 test("supply-tax score defines eight ordered semantic stops", () => {
   const authority = createKpEconomicsSupplyTaxAnimationAsset();

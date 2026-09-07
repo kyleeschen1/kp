@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
-import { createKpCanonicalTaxReaderSource } from "../src/experiments/kinetic-figure-supply-tax/canonical-tax-source.ts";
+import { createKpCanonicalTaxReaderSource } from "../src/tutorial/kinetic-figure-supply-tax/canonical-tax-source.ts";
 import { sampleKpEconomicsSupplyTaxAnimationFrame } from "../src/animation/economics-supply-tax-asset.ts";
 
 test("canonical reader source owns one query session and matches exact domain sampling", () => {
@@ -21,7 +21,7 @@ test("canonical reader source owns one query session and matches exact domain sa
 });
 
 test("canonical reader source does not call a second sampler or preview service", () => {
-  const source = readFileSync(new URL("../src/experiments/kinetic-figure-supply-tax/canonical-tax-source.ts", import.meta.url), "utf8");
+  const source = readFileSync(new URL("../src/tutorial/kinetic-figure-supply-tax/canonical-tax-source.ts", import.meta.url), "utf8");
   assert.equal(source.match(/createKpAuthoringMarketFrameSession\(/g)?.length, 1);
   assert.equal(source.match(/frames\.sample\(/g)?.length, 1);
   assert.doesNotMatch(source, /sampleKpEconomics|sampleKpPerUnitTax|fetch\(|preview-build|article-source|model-source|requestAnimationFrame/);

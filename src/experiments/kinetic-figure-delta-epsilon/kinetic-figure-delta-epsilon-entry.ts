@@ -10,7 +10,7 @@ import { createKpReaderTimelinePlaybackClock } from
 import {
   projectKpFocusDeckControl,
   renderKpFocusDeckControlIcon
-} from "../focus-deck-control-icons.ts";
+} from "../../tutorial/focus-deck-control-icons.ts";
 import {
   adjacentKpDeltaEpsilonFocusDeckBeat,
   kpDeltaEpsilonEntityIds,

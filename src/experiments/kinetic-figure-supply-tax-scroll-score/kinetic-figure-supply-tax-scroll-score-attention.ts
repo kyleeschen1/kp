@@ -1,7 +1,7 @@
 import type {
   KpSupplyTaxScrollScoreSampleV1,
   KpSupplyTaxScrollScoreV1
-} from "./kinetic-figure-supply-tax-scroll-score-score.ts";
+} from "../../tutorial/kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-score.ts";
 
 export type KpSupplyTaxScrollScorePhraseAttentionRole =
   "focus" | "releasing" | "context";

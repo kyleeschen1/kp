@@ -7,7 +7,7 @@ import type { KpArticleImportLock } from
 import { kpCanonicalLogExponentSequenceTimeline } from
   "../src/animation/log-exponent-timeline.ts";
 import { compileKpLogExponentFocusCardArticle } from
-  "../src/experiments/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card-article.ts";
+  "../src/tutorial/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card-article.ts";
 import {
   createKpLogExponentFocusCardScore,
   kpLogExponentFocusCardBeatHash,
@@ -15,7 +15,7 @@ import {
   sampleKpLogExponentFocusCardPlayback,
   sampleKpLogExponentFocusCardPosition
 } from
-  "../src/experiments/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card-model.ts";
+  "../src/tutorial/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card-model.ts";
 
 const articleText = readFileSync(
   "content/lessons/algebra-log-exponent-focus-card.kp.md",
@@ -131,7 +131,7 @@ test("automatic playback gives card travel to the visible rewrite phase", () => 
 
 test("equation Focus Deck reuses the shared shell and canonical player seam", () => {
   const source = readFileSync(
-    "src/experiments/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card.ts",
+    "src/tutorial/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card.ts",
     "utf8"
   );
   assert.match(source, /renderKpFocusDeckScaffold\(/u);

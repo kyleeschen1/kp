@@ -1,14 +1,6 @@
 /// <reference types="vite/client" />
 
-import articleText from
-  "../../../content/lessons/algebra-log-exponent-focus-card.kp.md?raw";
-import importLockValue from
-  "../../../content/lessons/algebra-log-exponent-focus-card.kp.lock.json" with { type: "json" };
-
-import type { KpArticleImportLock } from
-  "../../article/kp-article-import-lock.ts";
-import { compileKpArticleMarkdownFragmentHtml } from
-  "../../article/kp-article-static-html.ts";
+import instruction from "./log-exponent-instruction.generated.json" with { type: "json" };
 import {
   createKpLogExponentAnimationAsset,
   kpLogExponentAnimationId
@@ -39,10 +31,7 @@ import { registerKpEditorLogExponentSurfaceCapability } from
 import { kpCanonicalLogExponentNativeEndpoints } from
   "../../rendering/log-exponent-native-endpoints.ts";
 import { renderKpFocusDeckScaffold } from "../focus-deck-scaffold.ts";
-import { compileKpLogExponentFocusCardArticle } from
-  "./kinetic-figure-log-exponent-focus-card-article.ts";
 import {
-  createKpLogExponentFocusCardScore,
   kpLogExponentFocusCardBeatHash,
   readKpLogExponentFocusCardBeatIndexFromHash,
   sampleKpLogExponentFocusCardPlayback,
@@ -51,7 +40,6 @@ import {
   type KpLogExponentFocusCardScoreV1
 } from "./kinetic-figure-log-exponent-focus-card-model.ts";
 
-const importLock = importLockValue as KpArticleImportLock;
 const progressTolerance = 0.004;
 
 export interface KpLogExponentFocusCardAuthority {
@@ -96,14 +84,10 @@ KpLogExponentFocusCardAuthority {
   if (descriptor === undefined) {
     throw new Error("Missing canonical log-exponent animation descriptor.");
   }
-  const compiled = compileKpLogExponentFocusCardArticle({
-    text: articleText,
-    lock: importLock
-  });
   return Object.freeze({
     animation,
     descriptor,
-    score: createKpLogExponentFocusCardScore(compiled.document)
+    score: instruction.score as KpLogExponentFocusCardScoreV1
   });
 }
 
@@ -136,7 +120,7 @@ export function renderKpLogExponentFocusCard(input: {
       beats: score.beats.map((beat) => ({
         slug: beat.slug,
         title: beat.title,
-        html: compileKpArticleMarkdownFragmentHtml(beat.label),
+        html: (instruction.phraseHtml as Readonly<Record<string, string>>)[beat.id]!,
         domId: `beat.log-exponent.${beat.slug}`,
         attributes: {
           "data-kp-log-exponent-focus-card-beat": beat.slug,

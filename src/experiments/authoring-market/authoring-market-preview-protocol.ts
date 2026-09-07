@@ -1,13 +1,8 @@
-import type { createKpAuthoredMarketSource } from "../typed-linear-supply-demand/authoring-market-source.ts";
-import type { authorKpMarketArticle } from "./authoring-market-article-source.ts";
+import type { KpAuthoredMarketSourceData } from "../../tutorial/authoring-market/authoring-market-source-data.ts";
 
 export const kpAuthoringMarketPreviewEndpoint = "/__kp/authoring-market/revision";
 export const kpAuthoringMarketPreviewEvent = "kp:authoring-market-revision";
-export interface KpAuthoringMarketPreviewData {
-  readonly specimen: { readonly id: string; readonly title: string; readonly demandPresentation: "settled-history" };
-  readonly parameters: NonNullable<Parameters<typeof createKpAuthoredMarketSource>[0]["parameters"]>;
-  readonly article: Omit<ReturnType<typeof authorKpMarketArticle>, "facts">;
-}
+export type KpAuthoringMarketPreviewData = KpAuthoredMarketSourceData;
 export interface KpAuthoringMarketBuildRevision {
   readonly schemaVersion: "kp.authoring-market-build.v1";
   readonly sequence: number;

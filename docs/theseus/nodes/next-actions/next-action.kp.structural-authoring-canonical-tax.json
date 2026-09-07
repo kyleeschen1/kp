@@ -939,6 +939,118 @@
       "scope": "s25-restoration",
       "checkedAt": "2026-09-07T07:43:49.482Z",
       "notes": "All 12 existing routes pass fixed budgets; shared equation startup 138039 gzip bytes versus 145000 ceiling."
+    },
+    {
+      "command": "npm run check:dependency-direction",
+      "status": "failed",
+      "scope": "s25",
+      "checkedAt": "2026-09-07T15:52:47.400Z",
+      "notes": "Initial ownership move exposed three type-only inversions into author templates/preview protocol. Introduced shared source-data declarations, leaving author and delivery code separate; subsequent architecture check passes."
+    },
+    {
+      "command": "npm run test:authoring-integration",
+      "status": "failed",
+      "scope": "s25",
+      "checkedAt": "2026-09-07T15:52:51.224Z",
+      "notes": "Intermediate failures identified old source paths and new required compiled-Article arguments in tests. Frozen historical fixtures preserved. DOM source regex corrected to distinguish article.document data from global document. Current 80 checks pass."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "failed",
+      "scope": "s25",
+      "checkedAt": "2026-09-07T15:52:52.596Z",
+      "notes": "First promoted build retained TypeScript sibling Article compiler. Moved that compilation and all sibling prose HTML to generated build artifacts; current 12-route closure and full canonical bundle-module checks pass without exceptions."
+    },
+    {
+      "command": "npm run check:equation-reachability",
+      "status": "failed",
+      "scope": "s25",
+      "checkedAt": "2026-09-07T15:52:54.325Z",
+      "notes": "Generated source inventory stale after exact ownership moves; regenerated same 68 roots, no budgets or authority rules changed."
+    },
+    {
+      "command": "npm run test:authoring-integration",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-07T15:55:06.367Z",
+      "notes": "80 pass including full canonical page module closure, sibling artifact parity and negative Article identity/prose checks. Both shared and preview implementation costs remain charged."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-07T15:55:07.615Z",
+      "notes": "All application, Node, test, Svelte and domain checks pass. Intermediate stale test signatures were corrected without production type weakening."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-07T15:55:08.642Z",
+      "notes": "Dependency, framework-neutral, semantic, compiler authority and cross-domain gates pass; no experiment inversions or new exceptions."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-07T15:55:09.678Z",
+      "notes": "Exact canonical URL now builds with unchanged production erasure. All four cards retain source-owned prose via build artifacts; no Article compiler in canonical bundle."
+    },
+    {
+      "command": "npm run test:browser:economics-supply-tax -- --project=firefox --project=webkit",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-07T15:55:10.701Z",
+      "notes": "39 pass across all three engines on promoted canonical entry, including lifecycle race and native gestures."
+    },
+    {
+      "command": "npm run visual:canonical-tax-production -- --project=firefox --project=webkit",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-07T15:55:11.754Z",
+      "notes": "Final 9 pass across all three engines; ordinary build, reduced motion, four cards and no-JavaScript exact reading."
+    },
+    {
+      "command": "npm run test:focus-deck-multi-card",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-07T15:55:12.791Z",
+      "notes": "18 focused sibling/scaffold tests pass."
+    },
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-07T15:55:13.843Z",
+      "notes": "81 domain, Article, route, score and paint tests pass."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-07T15:55:14.903Z",
+      "notes": "12 declared reader routes and all emitted artifact markers pass, including canonical emitted bundle."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-07T15:55:15.942Z",
+      "notes": "453 artifacts and 12 forbidden markers pass."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-07T15:55:16.967Z",
+      "notes": "All 12 fixed budgets pass; shared equation startup 138001 gzip bytes under 145000."
+    },
+    {
+      "command": "npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-07T15:55:18.021Z",
+      "notes": "Regenerated and checked inventory current, same 68 roots; only ownership paths and scanned count change."
     }
   ],
   "progress": {

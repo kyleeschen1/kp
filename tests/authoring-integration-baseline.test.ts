@@ -49,7 +49,7 @@ test("frozen market baseline counts all 205 setup lines without hiding plumbing"
 
 test("manual baseline stays frozen while the live specimen uses internal assembly", () => {
   const frozen = readFileSync(baseline.snapshot, "utf8");
-  const live = readFileSync(baseline.source, "utf8");
+  const live = readFileSync("src/tutorial/typed-linear-supply-demand/semantic-state-composed-market.ts", "utf8");
   assert.match(frozen, /compileKpSemanticStateSchema\(/);
   assert.match(live, /assembleKpSemanticStateModel\(/);
   assert.match(live, /assembleKpSemanticStateExplanation\(/);
@@ -57,17 +57,19 @@ test("manual baseline stays frozen while the live specimen uses internal assembl
 });
 
 test("authoring source map names the actual host and its canonical owners", () => {
+  // Historical cost/source evidence stays frozen; promoted runtime ownership is explicit.
+  const current = (path: string) => path.replace("src/experiments/kinetic-figure-supply-tax", "src/tutorial/kinetic-figure-supply-tax");
   for (const [role, path] of Object.entries(baseline.canonical)) {
-    if (role !== "hostPath") assert.ok(existsSync(path), role + ": " + path);
+    if (role !== "hostPath") assert.ok(existsSync(role === "publication" ? path : current(path)), role + ": " + path);
   }
-  const entry = readFileSync(baseline.canonical["entry"]!, "utf8");
+  const entry = readFileSync(current(baseline.canonical["entry"]!), "utf8");
   assert.doesNotMatch(entry, /economics-supply-tax-scroll-score\.kp\.md\?raw|createKpEconomicsSupplyTaxAnimationAsset/);
   assert.match(entry, /input\.source\.sampleFrame\(modelProgress\)/);
   const compiler = readFileSync("scripts/compile-canonical-tax-source.ts", "utf8");
   assert.match(compiler, /economics-supply-tax-scroll-score\.kp\.md/);
   assert.match(entry, /createKpReaderTimelinePlaybackClock/);
   assert.match(entry, /kinetic-figure-supply-tax-svg/);
-  const paint = readFileSync(baseline.canonical["paint"]!, "utf8");
+  const paint = readFileSync(current(baseline.canonical["paint"]!), "utf8");
   assert.match(paint, /renderLatexToHtml/);
   assert.equal(baseline.canonical["hostPath"], "/experiments/kinetic-figure/supply-tax/");
 });

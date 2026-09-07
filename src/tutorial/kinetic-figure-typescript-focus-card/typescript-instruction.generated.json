@@ -1,0 +1,113 @@
+{
+  "score": {
+    "schemaVersion": "kp.typescript-focus-card.v1",
+    "id": "score.focus-deck.typescript.free-shipping.v1",
+    "articleId": "lesson.programming.typescript-free-shipping",
+    "animationId": "animation.programming.typescript-free-shipping-refactor",
+    "beats": [
+      {
+        "id": "beat.typescript.orient",
+        "slug": "orient",
+        "stageId": "stage.orient",
+        "title": "See the repeated decision",
+        "label": "A duplicated rule can quietly become two different rules.",
+        "sourceBlockId": "markdown:163",
+        "timelineProgress": 0,
+        "focusSelectorIds": [
+          "selector.typescript.program.before"
+        ],
+        "ownsMotionFromPrevious": false
+      },
+      {
+        "id": "beat.typescript.compare-duplicates",
+        "slug": "compare-duplicates",
+        "stageId": "stage.compare-duplicates",
+        "title": "Compare the two rules",
+        "label": "The two conditions currently agree. That visual repetition is the warning:\nchanging only one threshold could make the price and message contradict each\nother.",
+        "sourceBlockId": "find-duplication",
+        "timelineProgress": 0.16,
+        "focusSelectorIds": [
+          "selector.typescript.rule.shipping-cost.before",
+          "selector.typescript.rule.shipping-message.before"
+        ],
+        "ownsMotionFromPrevious": false
+      },
+      {
+        "id": "beat.typescript.introduce-helper",
+        "slug": "introduce-helper",
+        "stageId": "stage.introduce-helper",
+        "title": "Name the helper",
+        "label": "Name the shared decision before editing either caller. The duplicated\nconditions now have an explicit destination.",
+        "sourceBlockId": "extract-rule",
+        "timelineProgress": 0.34,
+        "focusSelectorIds": [
+          "selector.typescript.function.qualifies.after"
+        ],
+        "ownsMotionFromPrevious": true
+      },
+      {
+        "id": "beat.typescript.move-shared-rule",
+        "slug": "move-shared-rule",
+        "stageId": "stage.move-shared-rule",
+        "title": "Move the threshold once",
+        "label": "The helper owns the threshold. The callers can now ask a question whose name\nexplains the business rule.",
+        "sourceBlockId": "extract-rule",
+        "timelineProgress": 0.5,
+        "focusSelectorIds": [
+          "selector.typescript.rule.shipping-cost.before",
+          "selector.typescript.rule.shipping-message.before",
+          "selector.typescript.rule.qualifies.after"
+        ],
+        "ownsMotionFromPrevious": true
+      },
+      {
+        "id": "beat.typescript.replace-cost-call",
+        "slug": "replace-cost-call",
+        "stageId": "stage.replace-cost-call",
+        "title": "Update the price",
+        "label": "Checkout cost now uses the named rule, while the message still shows the last\nremaining duplicate.",
+        "sourceBlockId": "update-price",
+        "timelineProgress": 0.68,
+        "focusSelectorIds": [
+          "selector.typescript.call.shipping-cost.after"
+        ],
+        "ownsMotionFromPrevious": true
+      },
+      {
+        "id": "beat.typescript.replace-message-call",
+        "slug": "replace-message-call",
+        "stageId": "stage.replace-message-call",
+        "title": "Update the message",
+        "label": "Both outcomes now depend on one decision. A future threshold change has one\nplace to happen.",
+        "sourceBlockId": "update-message",
+        "timelineProgress": 0.84,
+        "focusSelectorIds": [
+          "selector.typescript.call.shipping-message.after"
+        ],
+        "ownsMotionFromPrevious": true
+      },
+      {
+        "id": "beat.typescript.verify-parity",
+        "slug": "verify-parity",
+        "stageId": "stage.verify-parity",
+        "title": "Verify the behavior",
+        "label": "The structure is clearer, but a refactor must also preserve behavior. Orders\nbelow, at, and above the threshold still produce the same shipping cost and\nmessage as before. The program changed shape without changing its answer.",
+        "sourceBlockId": "verify-behavior",
+        "timelineProgress": 1,
+        "focusSelectorIds": [
+          "selector.typescript.program.after"
+        ],
+        "ownsMotionFromPrevious": false
+      }
+    ]
+  },
+  "phraseHtml": {
+    "beat.typescript.orient": "<p>A duplicated rule can quietly become two different rules.</p>",
+    "beat.typescript.compare-duplicates": "<p>The two conditions currently agree. That visual repetition is the warning:\nchanging only one threshold could make the price and message contradict each\nother.</p>",
+    "beat.typescript.introduce-helper": "<p>Name the shared decision before editing either caller. The duplicated\nconditions now have an explicit destination.</p>",
+    "beat.typescript.move-shared-rule": "<p>The helper owns the threshold. The callers can now ask a question whose name\nexplains the business rule.</p>",
+    "beat.typescript.replace-cost-call": "<p>Checkout cost now uses the named rule, while the message still shows the last\nremaining duplicate.</p>",
+    "beat.typescript.replace-message-call": "<p>Both outcomes now depend on one decision. A future threshold change has one\nplace to happen.</p>",
+    "beat.typescript.verify-parity": "<p>The structure is clearer, but a refactor must also preserve behavior. Orders\nbelow, at, and above the threshold still produce the same shipping cost and\nmessage as before. The program changed shape without changing its answer.</p>"
+  }
+}

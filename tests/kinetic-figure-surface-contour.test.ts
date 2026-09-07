@@ -14,12 +14,12 @@ import {
   kpSurfaceContourIdentityId,
   projectKpSurfaceContourBeat,
   sampleKpSurfaceContourLevelSet
-} from "../src/experiments/kinetic-figure-surface-contour/kinetic-figure-surface-contour-model.ts";
+} from "../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-model.ts";
 import {
   createKpSurfaceContourStageAuthority,
   kpSurfaceContourFitContract,
   renderKpSurfaceContourStage
-} from "../src/experiments/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts";
+} from "../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts";
 import { kpStageFitRectContains } from
   "../src/rendering/stage-fit-contract.ts";
 import {
@@ -150,7 +150,7 @@ test("surface-contour route is standalone and slash-stable", async () => {
 
 test("surface-contour standalone and embedded hosts share one Focus Deck card", () => {
   const source = readFileSync(
-    "src/experiments/kinetic-figure-surface-contour/kinetic-figure-surface-contour-entry.ts",
+    "src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-entry.ts",
     "utf8"
   );
   assert.match(source, /export function renderKpSurfaceContourFocusCard/u);

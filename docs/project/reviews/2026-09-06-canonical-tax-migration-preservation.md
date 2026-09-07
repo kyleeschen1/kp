@@ -9,7 +9,8 @@ not another slice queue. Baseline: `ac2be16ee`, after explicit G2 acceptance.
 The actual reader URL is `/experiments/kinetic-figure/supply-tax/`, not the
 similarly named source directory. Its physical document is
 `experiments/kinetic-figure/supply-tax/index.html`; it loads
-`src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-page.ts`.
+`src/tutorial/kinetic-figure-supply-tax/kinetic-figure-supply-tax-page.ts`
+after the approved production ownership move (previously under `src/experiments/`).
 At the audited baseline, that page called `mountKpSupplyTaxKineticFigure` without a source.
 The host is `kinetic-figure-supply-tax-entry.ts` beside it. Existing SVG and
 native KaTeX adapters own paint; the existing reader timeline clock owns time.
@@ -115,9 +116,9 @@ neither test adjustment changes production interaction semantics.
 
 ## Ordinary delivery and bounded static reading
 
-Status: partial implementation, blocked at the production ownership boundary.
-The generated reading and its freshness/unit checks pass; the built-browser
-probe does not. Do not infer shipped delivery from the implementation below.
+The original production ownership stop was explicitly accepted for repair.
+The canonical input now builds under the unchanged production erasure guard;
+the previous failed probe is historical evidence, not the current build result.
 
 `compile:canonical-tax-source` emits both checked reference data and a separate
 no-JavaScript reading artifact. The latter uses the same prepared eight prose
@@ -144,8 +145,39 @@ host, shared scaffold, authored market preparation, and all three sibling cards.
 The input addition was removed; no erasure exception was introduced. The earlier
 successful ordinary builds did not certify this page's delivery.
 
-This fires the approved s25 stop: normal build cannot deliver the page within
+This fired the approved s25 stop: normal build could not deliver the page within
 the existing infrastructure. See `2026-09-07-canonical-tax-production-boundary-stop.md`
 for the exact evidence and proposed scope decision. Canonical development source
 adoption and the 39-browser lifecycle proof remain valid; production delivery,
-release completion and G3 readiness are not claimed.
+release completion and G3 readiness were not claimed at that stop.
+
+## Approved production ownership repair
+
+The exact four-card runtime, scaffold and market adapters now live under the
+existing `src/tutorial/` experience zone. Experiment hosts import these owners;
+no production module imports an experiment, even for types. The 37 relocated
+files comprise the 36 audited rendered modules plus the generated static reading.
+Existing clock-exception and HTML-encoding inventories follow their moved owners;
+no exception count, dependency policy, erasure prefix or budget was relaxed.
+
+`authoring-market-source-data.ts` separates source/projection data from author
+templates and preview revision transport. Both delivery paths call
+`prepareKpAuthoredMarketSource(data, articleProjection)` to reconstruct local
+domain capabilities, facts, score and query ownership. Preview compilation stays
+in its delivery adapter. The canonical build emits a v2 data artifact with checked
+Article IR and phrase HTML, using a portable source identity rather than a local
+filesystem path. Source maps and parsing remain build/authoring responsibilities.
+The reference-model guard and literal Article source remain unchanged.
+
+The same compiler command derives the existing log/exponent and TypeScript scores
+and prose HTML, plus the surface/contour prose HTML. Their runtime models,
+semantic stops, clocks and paint adapters are unchanged. A full canonical-page
+bundle inspection rejects experiment modules, author templates, transport and
+Article compiler implementations. Artifact tests compare all sibling outputs to
+their existing source owners, not newly written prose or substitute animations.
+Cost inventory includes both moved shared market helpers and preview code.
+
+The ordinary build now includes only the exact existing supply-tax URL, not the
+experiment directory. Its no-JavaScript fallback is bounded tax prose/facts, not
+a claim of complete static publication of all four figures. The existing 12
+reader budgets and production closure checks remain release requirements.

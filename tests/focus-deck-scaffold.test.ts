@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { renderKpFocusDeckScaffold } from
-  "../src/experiments/focus-deck-scaffold.ts";
+  "../src/tutorial/focus-deck-scaffold.ts";
 
 const beats = Object.freeze([
   Object.freeze({ slug: "identify", title: "Identify", html: "<p>Look.</p>" }),

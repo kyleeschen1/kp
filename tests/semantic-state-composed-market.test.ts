@@ -6,10 +6,10 @@ import { evaluateKpSemanticDerivedValue } from
   "../src/semantic-state/derived-evaluator.ts";
 import {
   createKpSemanticStateComposedMarketPacket
-} from "../src/experiments/typed-linear-supply-demand/semantic-state-composed-market.ts";
+} from "../src/tutorial/typed-linear-supply-demand/semantic-state-composed-market.ts";
 
 const SOURCE =
-  "src/experiments/typed-linear-supply-demand/semantic-state-composed-market.ts";
+  "src/tutorial/typed-linear-supply-demand/semantic-state-composed-market.ts";
 
 test("two market families author distinct exact drivers", () => {
   const packet = createKpSemanticStateComposedMarketPacket();

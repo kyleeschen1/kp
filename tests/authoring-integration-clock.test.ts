@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { KpAuthoringMarketClockError, kpAuthoringMarketClockResolution, projectKpAuthoringMarketClockAddress, quantizeKpAuthoringMarketProgress } from "../src/experiments/authoring-market/authoring-market-clock-address.ts";
-import { createKpAuthoredMarketSource } from "../src/experiments/typed-linear-supply-demand/authoring-market-source.ts";
+import { KpAuthoringMarketClockError, kpAuthoringMarketClockResolution, projectKpAuthoringMarketClockAddress, quantizeKpAuthoringMarketProgress } from "../src/tutorial/authoring-market/authoring-market-clock-address.ts";
+import { createKpAuthoredMarketSource } from "../src/tutorial/typed-linear-supply-demand/authoring-market-source.ts";
 import { createKpSemanticStateQuerySession } from "../src/semantic-state/authoring-query-session.ts";
 import { encodeKpSemanticStateCompositionLogicalAddress } from "../src/semantic-state/state-family-composition-address.ts";
 

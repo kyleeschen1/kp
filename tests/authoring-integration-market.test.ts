@@ -5,7 +5,7 @@ import { resolve } from "node:path";
 import test from "node:test";
 import ts from "typescript";
 import { createKpSemanticStateComposedMarketPacket } from
-  "../src/experiments/typed-linear-supply-demand/semantic-state-composed-market.ts";
+  "../src/tutorial/typed-linear-supply-demand/semantic-state-composed-market.ts";
 import { createKpSemanticStateQuerySession } from "../src/semantic-state/authoring-query-session.ts";
 import { createKpSettledSemanticStateCompositionAddress } from
   "../src/semantic-state/state-family-composition-address.ts";
@@ -13,7 +13,7 @@ import { measureKpAuthoringIntegrationCost } from "./helpers/authoring-integrati
 
 test("assembled market exactly matches the executed frozen manual pipeline", async () => {
   const source = readFileSync("tests/fixtures/authoring-integration/composed-market-baseline.ts.txt", "utf8");
-  const sourceUrl = pathToFileURL(resolve("src/experiments/typed-linear-supply-demand/semantic-state-composed-market.ts"));
+  const sourceUrl = pathToFileURL(resolve("src/tutorial/typed-linear-supply-demand/semantic-state-composed-market.ts"));
   // This is committed characterization source, evaluated only by the Node test;
   // it does not establish any browser or user-source evaluation capability.
   const javascript = ts.transpileModule(source, { compilerOptions: {
@@ -47,7 +47,7 @@ test("market author cost charges wrapper and compatibility glue and discloses sh
   assert.ok(cost.current.importModules < cost.previous.importModules);
   assert.ok(cost.shared.every(item => item.sourceLines > 0));
   const frozen = readFileSync("tests/fixtures/authoring-integration/composed-market-baseline.ts.txt", "utf8");
-  const live = readFileSync("src/experiments/typed-linear-supply-demand/semantic-state-composed-market.ts", "utf8");
+  const live = readFileSync("src/tutorial/typed-linear-supply-demand/semantic-state-composed-market.ts", "utf8");
   assert.equal(live.slice(live.indexOf("function interpolateExact")),
     frozen.slice(frozen.indexOf("function interpolateExact")));
   for (const helper of cost.shared) {

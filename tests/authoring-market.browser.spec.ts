@@ -72,7 +72,7 @@ test("native KaTeX uses exact live values and an explicitly separate endpoint le
     const frame = query.sample(numerator / denominator).frame;
     query.dispose();
     return frame;
-  }, "/src/experiments/authoring-market/authoring-market-frame.ts");
+  }, "/src/tutorial/authoring-market/authoring-market-frame.ts");
   const latex = (value: { numerator: string; denominator: string }) => value.denominator === "1"
     ? value.numerator : `\\frac{${value.numerator}}{${value.denominator}}`;
   const expectedPaint = await nativePaint(page, `P_c=${latex(exact.market.consumerPrice)}`);

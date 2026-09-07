@@ -15,7 +15,7 @@ import {
   KP_DELTA_EPSILON_KINETIC_FIGURE_PATH
 } from "../src/experiments/kinetic-figure-delta-epsilon/kinetic-figure-delta-epsilon-route.ts";
 import { renderKpFocusDeckControlIcon } from
-  "../src/experiments/focus-deck-control-icons.ts";
+  "../src/tutorial/focus-deck-control-icons.ts";
 
 test("delta-epsilon deck follows one hermeneutic cycle", () => {
   assert.deepEqual(kpDeltaEpsilonFocusDeckBeatIds, [

@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { createKpAuthoredMarketSource, KpAuthoringMarketSourceError } from "../src/experiments/typed-linear-supply-demand/authoring-market-source.ts";
+import { createKpAuthoredMarketSource, KpAuthoringMarketSourceError } from "../src/tutorial/typed-linear-supply-demand/authoring-market-source.ts";
 import { createKpEconomicsSupplyTaxAnimationAsset } from "../src/animation/economics-supply-tax-asset.ts";
-import { kpSupplyTaxOperationRegistration, resolveKpSupplyTaxOperation } from "../src/experiments/typed-linear-supply-demand/economics-supply-tax-governed-source.ts";
+import { kpSupplyTaxOperationRegistration, resolveKpSupplyTaxOperation } from "../src/tutorial/typed-linear-supply-demand/economics-supply-tax-governed-source.ts";
 import { verifyKpPerUnitTaxOperation, KpPerUnitTaxOperationError } from "../domains/economics/per-unit-tax-operation.ts";
 import { validateCorrespondenceMap, checkCorrespondenceMapRewindLaw } from "../src/semantic/correspondence.ts";
 import { compileKpGovernedCanonicalConstruction } from "../src/authoring/governed-canonical-construction-compiler.ts";

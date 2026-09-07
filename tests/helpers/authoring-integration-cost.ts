@@ -1,7 +1,7 @@
 import { readFileSync, readdirSync } from "node:fs";
 import ts from "typescript";
 
-const sourcePath = "src/experiments/typed-linear-supply-demand/semantic-state-composed-market.ts";
+const sourcePath = "src/tutorial/typed-linear-supply-demand/semantic-state-composed-market.ts";
 const baselinePath = "tests/fixtures/authoring-integration/composed-market-baseline.ts.txt";
 const sharedPaths = [
   "src/semantic-state/authoring-model-assembly.ts",
@@ -14,10 +14,12 @@ const lines = (text: string) => text.split("\n").filter(line => line.trim()).len
 /** Whole-file inventory: disclosed beside, never subtracted from, author cost. */
 export function measureKpAuthoringPreviewImplementation() {
   const directory = "src/experiments/authoring-market";
+  const sharedDirectory = "src/tutorial/authoring-market";
   const paths = [...readdirSync(directory).map(name => `${directory}/${name}`),
+    ...readdirSync(sharedDirectory).map(name => `${sharedDirectory}/${name}`),
     "scripts/vite-authoring-market-preview.ts",
-    "src/experiments/typed-linear-supply-demand/authoring-market-source.ts",
-    "src/experiments/typed-linear-supply-demand/economics-supply-tax-governed-source.ts",
+    "src/tutorial/typed-linear-supply-demand/authoring-market-source.ts",
+    "src/tutorial/typed-linear-supply-demand/economics-supply-tax-governed-source.ts",
     "domains/economics/per-unit-tax-operation.ts",
     "experiments/authoring-market/index.html"].sort();
   const files = paths.map(path => ({ path, nonblankLines: lines(readFileSync(path, "utf8")) }));

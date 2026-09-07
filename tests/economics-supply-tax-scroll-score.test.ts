@@ -7,7 +7,7 @@ import type { KpArticleImportLock } from
 import { createKpEconomicsSupplyTaxAnimationAsset } from
   "../src/animation/economics-supply-tax-asset.ts";
 import { compileKpSupplyTaxScrollScoreArticle } from
-  "../src/experiments/kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-article.ts";
+  "../src/tutorial/kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-article.ts";
 import {
   projectKpSupplyTaxScrollScoreCoverageUnits,
   projectKpSupplyTaxScrollScorePhraseAttention,
@@ -22,16 +22,16 @@ import {
   readKpSupplyTaxScrollScorePhraseFromHash,
   sampleKpSupplyTaxScrollScore
 } from
-  "../src/experiments/kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-score.ts";
+  "../src/tutorial/kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-score.ts";
 import { projectKpSupplyTaxScrollScoreStageLens } from
-  "../src/experiments/kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-stage-lens.ts";
+  "../src/tutorial/kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-stage-lens.ts";
 import {
   projectKpSupplyTaxScene,
   projectKpSupplyTaxSceneTransition
 } from
-  "../src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-scene.ts";
+  "../src/tutorial/kinetic-figure-supply-tax/kinetic-figure-supply-tax-scene.ts";
 import { createKpSupplyTaxPedagogicalScore } from
-  "../src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-score.ts";
+  "../src/tutorial/kinetic-figure-supply-tax/kinetic-figure-supply-tax-score.ts";
 import {
   isKpSupplyTaxScrollScoreRoute,
   KP_SUPPLY_TAX_SCROLL_SCORE_PATH

@@ -1,9 +1,7 @@
-import importLock from "../../../content/lessons/economics-supply-tax-scroll-score.kp.lock.json" with { type: "json" };
-import type { KpArticleImportLock } from "../../article/kp-article-import-lock.ts";
 import { createKpAuthoredMarketSource } from "../typed-linear-supply-demand/authoring-market-source.ts";
 import { createKpAuthoringMarketFacts } from "./authoring-market-facts.ts";
-import { createKpAuthoringMarketCompanion } from "./authoring-market-companion.ts";
-import type { KpAuthoringMarketPreviewData } from "./authoring-market-preview-protocol.ts";
+import { restoreKpAuthoringMarketCompanion, KpAuthoringMarketCompanionError } from "./authoring-market-companion-runtime.ts";
+import type { KpAuthoredMarketSourceData, KpAuthoredMarketArticleProjection } from "./authoring-market-source-data.ts";
 
 export class KpAuthoringMarketPresentationGap extends Error {
   readonly code = "kp.authoring.market-demand-motion-gap";
@@ -12,7 +10,7 @@ export class KpAuthoringMarketPresentationGap extends Error {
 }
 
 /** Both delivery paths reconstruct local capabilities from data before DOM work. */
-export function prepareKpAuthoredMarketSource(data: KpAuthoringMarketPreviewData) {
+export function prepareKpAuthoredMarketSource(data: KpAuthoredMarketSourceData, article: KpAuthoredMarketArticleProjection) {
   if (data?.parameters == null || typeof data.parameters !== "object" ||
       !Object.hasOwn(data.parameters, "demandPriceIntercept") || !Object.hasOwn(data.parameters, "taxAmount")) {
     throw new Error("The local preview requires explicit demand and tax inputs; missing source is not a canonical default.");
@@ -24,9 +22,15 @@ export function prepareKpAuthoredMarketSource(data: KpAuthoringMarketPreviewData
   const authored = createKpAuthoredMarketSource({ kind: "impose-per-unit-tax", parameters: data.parameters });
   const facts = createKpAuthoringMarketFacts(authored);
   const boundArticle = Object.freeze({ ...data.article, facts });
-  const companion = createKpAuthoringMarketCompanion({ authored, text: boundArticle.text,
-    boundArticle, lock: importLock as KpArticleImportLock });
+  if (article.document.id !== "lesson.economics.supply-tax-scroll-score" || article.document.sourceId !== boundArticle.sourceId) {
+    throw new KpAuthoringMarketCompanionError("article.identity", "Compiled Article must belong to this explicit source.");
+  }
+  const companion = restoreKpAuthoringMarketCompanion({ authored, text: boundArticle.text,
+    boundArticle, compiled: { document: article.document } });
+  for (const phrase of companion.scrollScore.phrases) {
+    if (typeof article.phraseHtml[phrase.referenceAddress] !== "string") throw new Error(`Missing compiled phrase HTML: ${phrase.id}.`);
+  }
   return Object.freeze({ authored, facts, boundArticle,
-    companion: Object.freeze({ ...companion, stageFacts: facts.stageFacts }),
+    companion: Object.freeze({ ...companion, stageFacts: facts.stageFacts, phraseHtml: article.phraseHtml }),
     specimen: Object.freeze({ ...data.specimen }) });
 }

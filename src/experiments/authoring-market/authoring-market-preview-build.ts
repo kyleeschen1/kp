@@ -1,5 +1,5 @@
-import { createKpAuthoredMarketSource } from "../typed-linear-supply-demand/authoring-market-source.ts";
-import { createKpAuthoringMarketFacts } from "./authoring-market-facts.ts";
+import { createKpAuthoredMarketSource } from "../../tutorial/typed-linear-supply-demand/authoring-market-source.ts";
+import { createKpAuthoringMarketFacts } from "../../tutorial/authoring-market/authoring-market-facts.ts";
 import { authorKpMarketArticle } from "./authoring-market-article-source.ts";
 import { kpAuthoringMarketSpecimens, kpAuthoringMarketSelectedSpecimen } from "./authoring-market-model-source.ts";
 import { prepareKpAuthoringMarketPreview } from "./authoring-market-preview-prepare.ts";

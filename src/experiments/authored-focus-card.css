@@ -1,5 +1,5 @@
 @import "../reader/app/exemplar.css";
-@import "./focus-deck-scaffold.css";
+@import "../tutorial/focus-deck-scaffold.css";
 
 :root { --kp-st-paper: #fffdf8; --kp-st-header: #506779; --kp-st-header-ink: #fffdf8; --kp-st-rule: #d4d5cf; --kp-st-strong: #20252b; --kp-st-muted: #59645e; --kp-st-focus: #167a80; --kp-st-ink: #20252b; }
 #authored-focus-card { max-width: 780px; margin: 3rem auto; padding: 0 1rem; }

@@ -11,11 +11,11 @@ import {
 } from "../../animation/salience-plan.ts";
 import {
   compileKpCrossViewAttentionPlan
-} from "../../tutorial/cross-view-attention.ts";
+} from "../cross-view-attention.ts";
 import {
   validateKpCrossViewCorrespondenceMap,
   type KpCrossViewCorrespondenceMap
-} from "../../tutorial/cross-view-correspondence.ts";
+} from "../cross-view-correspondence.ts";
 
 export const KP_SURFACE_CONTOUR_MODEL_SCHEMA =
   "kp.calculus.surface-contour-model.v1" as const;

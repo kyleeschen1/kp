@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 4295,
+  "scannedFileCount": 4310,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -629,9 +629,9 @@
         "src/editor/selected-surface-capability-declarations.ts",
         "src/editor/selected-surface-capability-host.ts",
         "src/editor/typescript-refactor-surface-adapter.ts",
-        "src/experiments/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card.ts",
         "src/experiments/kinetic-figure-log-product/kinetic-figure-log-product-entry.ts",
-        "src/main.ts"
+        "src/main.ts",
+        "src/tutorial/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card.ts"
       ],
       "testCallers": [
         "tests/animation-catalogue-health.test.ts",
@@ -1045,7 +1045,6 @@
         "src/domain-ir/semantic-motion-source-authority.ts",
         "src/domain-ir/terminal-equation-migration-v2.ts",
         "src/editor/diagram-svg-adapter.ts",
-        "src/experiments/typed-linear-supply-demand/economics-supply-tax-governed-source.ts",
         "src/math/equation-transform.ts",
         "src/math/typed-semantic-math.ts",
         "src/math/typed-semantic-optics.ts",
@@ -1087,7 +1086,8 @@
         "src/semantic/semantic-scene-protocol.ts",
         "src/semantic/semantic-state-authority-adapter.ts",
         "src/semantic/transformation-definition-binding.ts",
-        "src/semantic/typescript-refactor-operations.ts"
+        "src/semantic/typescript-refactor-operations.ts",
+        "src/tutorial/typed-linear-supply-demand/economics-supply-tax-governed-source.ts"
       ],
       "testCallers": [
         "tests/authoring-integration-lowering-gap.test.ts",
@@ -1173,7 +1173,6 @@
         "src/animation/runtime-sampler.ts",
         "src/animation/verified-linear-problem-animation-compiler.ts",
         "src/authoring/transform-fixture-contract.ts",
-        "src/experiments/typed-linear-supply-demand/economics-supply-tax-governed-source.ts",
         "src/public/semantic.ts",
         "src/reader/renderers/equation-presentation-catalog-conformance.ts",
         "src/rendering/graph-transitions.ts",
@@ -1189,7 +1188,8 @@
         "src/semantic/typescript-free-shipping-animation-asset.ts",
         "src/tutorial/card-manifest.ts",
         "src/tutorial/card-runtime.ts",
-        "src/tutorial/dependency-planner.ts"
+        "src/tutorial/dependency-planner.ts",
+        "src/tutorial/typed-linear-supply-demand/economics-supply-tax-governed-source.ts"
       ],
       "testCallers": [
         "tests/equation-motion-player.test.ts",
@@ -1386,8 +1386,6 @@
         "src/editor/svelte-catalogue/svelte-catalogue-host-state.ts",
         "src/experiments/authoring-structural/distribution-projection.ts",
         "src/experiments/authoring-structural/simplification-preview-build.ts",
-        "src/experiments/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card.ts",
-        "src/experiments/typed-linear-supply-demand/economics-supply-tax-governed-source.ts",
         "src/project-dashboard/generated-algebra-catalog.ts",
         "src/reader/app/authoring-distribution-preview.ts",
         "src/reader/app/authoring-simplification-preview.ts",
@@ -1412,8 +1410,10 @@
         "src/semantic/scheme-factorial-animation-asset.ts",
         "src/semantic/typescript-free-shipping-animation-asset.ts",
         "src/tutorial/economics-demand-shift/KpEconomicsDemandShiftTutorial.svelte",
+        "src/tutorial/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card.ts",
         "src/tutorial/lisp-function-application/lisp-function-application-motion-controller.ts",
         "src/tutorial/static-step-checkpoints.ts",
+        "src/tutorial/typed-linear-supply-demand/economics-supply-tax-governed-source.ts",
         "src/tutorial/verified-linear-problem-explanation-compiler.ts"
       ],
       "testCallers": [
@@ -1835,7 +1835,6 @@
         "src/animation/runtime-sampler.ts",
         "src/animation/verified-linear-problem-animation-compiler.ts",
         "src/authoring/transform-fixture-contract.ts",
-        "src/experiments/typed-linear-supply-demand/economics-supply-tax-governed-source.ts",
         "src/public/semantic.ts",
         "src/reader/renderers/equation-presentation-catalog-conformance.ts",
         "src/rendering/graph-transitions.ts",
@@ -1851,7 +1850,8 @@
         "src/semantic/typescript-free-shipping-animation-asset.ts",
         "src/tutorial/card-manifest.ts",
         "src/tutorial/card-runtime.ts",
-        "src/tutorial/dependency-planner.ts"
+        "src/tutorial/dependency-planner.ts",
+        "src/tutorial/typed-linear-supply-demand/economics-supply-tax-governed-source.ts"
       ],
       "testCallers": [
         "tests/equation-motion-player.test.ts",
@@ -1879,7 +1879,6 @@
         "src/editor/graph-3d-editor-controller.ts",
         "src/editor/graph-3d-surface-contract.ts",
         "src/editor/state.ts",
-        "src/experiments/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts",
         "src/main.ts",
         "src/rendering/default-latex.ts",
         "src/rendering/graph-2d-scene.ts",
@@ -1890,7 +1889,8 @@
         "src/rendering/graph-webgl.ts",
         "src/semantic/computation-protocols.ts",
         "src/semantic/derive-protocols.ts",
-        "src/semantic/validation.ts"
+        "src/semantic/validation.ts",
+        "src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts"
       ],
       "testCallers": [
         "tests/editor-graph-3d-host-contract.test.ts",
@@ -2246,8 +2246,6 @@
         "src/editor/svelte-catalogue/svelte-catalogue-host-state.ts",
         "src/experiments/authoring-structural/distribution-projection.ts",
         "src/experiments/authoring-structural/simplification-preview-build.ts",
-        "src/experiments/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card.ts",
-        "src/experiments/typed-linear-supply-demand/economics-supply-tax-governed-source.ts",
         "src/project-dashboard/generated-algebra-catalog.ts",
         "src/reader/app/authoring-distribution-preview.ts",
         "src/reader/app/authoring-simplification-preview.ts",
@@ -2272,8 +2270,10 @@
         "src/semantic/scheme-factorial-animation-asset.ts",
         "src/semantic/typescript-free-shipping-animation-asset.ts",
         "src/tutorial/economics-demand-shift/KpEconomicsDemandShiftTutorial.svelte",
+        "src/tutorial/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card.ts",
         "src/tutorial/lisp-function-application/lisp-function-application-motion-controller.ts",
         "src/tutorial/static-step-checkpoints.ts",
+        "src/tutorial/typed-linear-supply-demand/economics-supply-tax-governed-source.ts",
         "src/tutorial/verified-linear-problem-explanation-compiler.ts"
       ],
       "testCallers": [
@@ -2360,7 +2360,7 @@
         "src/animation/log-exponent-timeline.ts",
         "src/animation/radical-succession-choreography.ts",
         "src/editor/animation-gestalt-inspector.ts",
-        "src/experiments/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card-model.ts"
+        "src/tutorial/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card-model.ts"
       ],
       "testCallers": [
         "tests/kp-choreography-timeline.test.ts"

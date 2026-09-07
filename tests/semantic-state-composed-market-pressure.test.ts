@@ -58,7 +58,7 @@ import { declareKpSemanticStateInterpolation } from
   "../src/semantic-state/state-family-transition.ts";
 import {
   createKpSemanticStateComposedMarketPacket
-} from "../src/experiments/typed-linear-supply-demand/semantic-state-composed-market.ts";
+} from "../src/tutorial/typed-linear-supply-demand/semantic-state-composed-market.ts";
 
 test("independent and ordered market composition reach the same exact truth", () => {
   const packet = createKpSemanticStateComposedMarketPacket();

@@ -2,10 +2,10 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import type { KpArticleImportLock } from "../src/article/kp-article-import-lock.ts";
-import { createKpAuthoredMarketSource } from "../src/experiments/typed-linear-supply-demand/authoring-market-source.ts";
-import { createKpAuthoringMarketCompanion, KpAuthoringMarketCompanionError } from "../src/experiments/authoring-market/authoring-market-companion.ts";
-import { createKpSupplyTaxPedagogicalScore } from "../src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-score.ts";
-import { projectKpSupplyTaxScene, projectKpSupplyTaxSceneTransition } from "../src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-scene.ts";
+import { createKpAuthoredMarketSource } from "../src/tutorial/typed-linear-supply-demand/authoring-market-source.ts";
+import { createKpAuthoringMarketCompanion, KpAuthoringMarketCompanionError } from "../src/tutorial/authoring-market/authoring-market-companion.ts";
+import { createKpSupplyTaxPedagogicalScore } from "../src/tutorial/kinetic-figure-supply-tax/kinetic-figure-supply-tax-score.ts";
+import { projectKpSupplyTaxScene, projectKpSupplyTaxSceneTransition } from "../src/tutorial/kinetic-figure-supply-tax/kinetic-figure-supply-tax-scene.ts";
 import { createKpSemanticStateQuerySession } from "../src/semantic-state/authoring-query-session.ts";
 
 const text = readFileSync(new URL("../content/lessons/economics-supply-tax-scroll-score.kp.md", import.meta.url), "utf8");

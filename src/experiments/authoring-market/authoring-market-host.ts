@@ -1,9 +1,9 @@
-import { mountKpSupplyTaxKineticFigure } from "../kinetic-figure-supply-tax/kinetic-figure-supply-tax-entry.ts";
-import { createKpAuthoringMarketFrameSession } from "./authoring-market-frame.ts";
+import { mountKpSupplyTaxKineticFigure } from "../../tutorial/kinetic-figure-supply-tax/kinetic-figure-supply-tax-entry.ts";
+import { createKpAuthoringMarketFrameSession } from "../../tutorial/authoring-market/authoring-market-frame.ts";
 import { encodeKpSemanticStateCompositionLogicalAddress } from "../../semantic-state/state-family-composition-address.ts";
-import { renderKpSupplyTaxWelfareLedger } from "../kinetic-figure-supply-tax/kinetic-figure-supply-tax-svg.ts";
+import { renderKpSupplyTaxWelfareLedger } from "../../tutorial/kinetic-figure-supply-tax/kinetic-figure-supply-tax-svg.ts";
 import "./authoring-market.css";
-import { renderKpAuthoringMarketStaticFacts } from "./authoring-market-facts.ts";
+import { renderKpAuthoringMarketStaticFacts } from "../../tutorial/authoring-market/authoring-market-facts.ts";
 import type { prepareKpAuthoringMarketPreview } from "./authoring-market-preview-prepare.ts";
 
 /** Opt-in composition only: the existing figure still owns paint and clocks. */

@@ -1,12 +1,13 @@
 import artifact from "./canonical-tax-source.generated.json" with { type: "json" };
 import { prepareKpAuthoredMarketSource } from "../authoring-market/authoring-market-prepare.ts";
 import { createKpAuthoringMarketFrameSession } from "../authoring-market/authoring-market-frame.ts";
-import type { KpAuthoringMarketPreviewData } from "../authoring-market/authoring-market-preview-protocol.ts";
+import type { KpAuthoredMarketSourceData, KpAuthoredMarketArticleProjection } from "../authoring-market/authoring-market-source-data.ts";
 
 /** One revision and one query session supply the reader; no default sampler. */
 export function createKpCanonicalTaxReaderSource() {
-  if (artifact.schemaVersion !== "kp.canonical-tax-source.v1") throw new Error("Unsupported canonical tax source schema.");
-  const prepared = prepareKpAuthoredMarketSource(artifact.data as KpAuthoringMarketPreviewData);
+  if (artifact.schemaVersion !== "kp.canonical-tax-source.v2") throw new Error("Unsupported canonical tax source schema.");
+  const prepared = prepareKpAuthoredMarketSource(artifact.data as KpAuthoredMarketSourceData,
+    artifact.article as KpAuthoredMarketArticleProjection);
   const frames = createKpAuthoringMarketFrameSession(prepared.authored, { cacheCapacity: 2 });
   return Object.freeze({
     sourceRevision: artifact.sourceRevision,

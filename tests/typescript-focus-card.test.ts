@@ -10,7 +10,7 @@ import {
   readKpTypeScriptFocusCardBeatIndexFromHash,
   sampleKpTypeScriptFocusCardPosition
 } from
-  "../src/experiments/kinetic-figure-typescript-focus-card/kinetic-figure-typescript-focus-card-model.ts";
+  "../src/tutorial/kinetic-figure-typescript-focus-card/kinetic-figure-typescript-focus-card-model.ts";
 import {
   compileKpTypeScriptFreeShippingPublicLesson
 } from "../src/public-web/typescript-free-shipping-publication.ts";
@@ -98,7 +98,7 @@ test("TypeScript Focus Deck hashes restore exact score checkpoints", () => {
 
 test("TypeScript card is a projection over the existing code renderer and clock", () => {
   const source = readFileSync(
-    "src/experiments/kinetic-figure-typescript-focus-card/kinetic-figure-typescript-focus-card.ts",
+    "src/tutorial/kinetic-figure-typescript-focus-card/kinetic-figure-typescript-focus-card.ts",
     "utf8"
   );
 

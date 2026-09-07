@@ -3,8 +3,7 @@ import "../../styles.css";
 import "../focus-deck-scaffold.css";
 import "./kinetic-figure-surface-contour.css";
 
-import { compileKpArticleMarkdownFragmentHtml } from
-  "../../article/kp-article-static-html.ts";
+import prose from "./surface-contour-prose.generated.json" with { type: "json" };
 import { applyKpSemanticVisualDomTheme } from
   "../../rendering/semantic-visual-dom-theme.ts";
 import { createKpReaderTimelinePlaybackClock } from
@@ -507,7 +506,7 @@ export function renderKpSurfaceContourFocusCard(input: {
       beats: score.beats.map((beat, index) => ({
         slug: beat.slug,
         title: beat.title,
-        html: compileKpArticleMarkdownFragmentHtml(beat.passage),
+        html: (prose as Readonly<Record<string, string>>)[beat.id]!,
         domId: `beat.${beat.slug}`,
         attributes: {
           "data-kp-surface-contour-beat": beat.slug,

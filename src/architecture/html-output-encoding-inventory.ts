@@ -117,7 +117,7 @@ export const kpHtmlEncodingOwners = [
     "html-text",
     "html-attribute"
   ]),
-  retain("src/experiments/focus-deck-scaffold.ts", "review-tool", [
+  retain("src/tutorial/focus-deck-scaffold.ts", "tutorial", [
     "html-text",
     "html-attribute"
   ]),

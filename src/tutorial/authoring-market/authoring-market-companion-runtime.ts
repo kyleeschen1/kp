@@ -1,11 +1,11 @@
-import type { KpArticleImportLock } from "../../article/kp-article-import-lock.ts";
-import { compileKpSupplyTaxScrollScoreArticle } from "../kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-article.ts";
+import type { KpArticleDocument } from "../../article/kp-article-document.ts";
 import { createKpSupplyTaxScrollScore } from "../kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-score.ts";
 import { createKpSupplyTaxPedagogicalScore } from "../kinetic-figure-supply-tax/kinetic-figure-supply-tax-score.ts";
 import { projectKpSupplyTaxScene } from "../kinetic-figure-supply-tax/kinetic-figure-supply-tax-scene.ts";
 import type { createKpAuthoredMarketSource } from "../typed-linear-supply-demand/authoring-market-source.ts";
 import { projectKpAuthoringMarketClockAddress } from "./authoring-market-clock-address.ts";
-import type { authorKpMarketArticle } from "./authoring-market-article-source.ts";
+import type { KpAuthoredMarketSourceData } from "./authoring-market-source-data.ts";
+import type { createKpAuthoringMarketFacts } from "./authoring-market-facts.ts";
 
 export class KpAuthoringMarketCompanionError extends Error {
   readonly code = "kp.authoring.market-companion-gap";
@@ -16,14 +16,14 @@ export class KpAuthoringMarketCompanionError extends Error {
 }
 
 /** Bind the current Article/score contract, without another authored beat list. */
-export function createKpAuthoringMarketCompanion(input: {
+export function restoreKpAuthoringMarketCompanion(input: {
   readonly authored: ReturnType<typeof createKpAuthoredMarketSource>;
   readonly text: string;
-  readonly lock: KpArticleImportLock;
-  readonly boundArticle?: ReturnType<typeof authorKpMarketArticle>;
+  readonly compiled: { readonly document: KpArticleDocument };
+  readonly boundArticle?: KpAuthoredMarketSourceData["article"] & { readonly facts: ReturnType<typeof createKpAuthoringMarketFacts> };
 }) {
   const authority = input.authored.source.canonical;
-  let compiled: ReturnType<typeof compileKpSupplyTaxScrollScoreArticle>;
+  const compiled = input.compiled;
   let scrollScore: ReturnType<typeof createKpSupplyTaxScrollScore>;
   const bound = input.boundArticle;
   if (bound !== undefined && (bound.modelRevisionId !== input.authored.source.authority.revisionId || bound.text !== input.text)) {
@@ -37,8 +37,6 @@ export function createKpAuthoringMarketCompanion(input: {
       return Object.freeze({ ...beat, claim });
     })) });
   try {
-    compiled = compileKpSupplyTaxScrollScoreArticle({ text: input.text, lock: input.lock,
-      ...(bound === undefined ? {} : { sourceId: bound.sourceId }) });
     scrollScore = createKpSupplyTaxScrollScore({ document: compiled.document, score });
   } catch (cause) {
     throw new KpAuthoringMarketCompanionError("article", "Repair the current Article references and import lock.", cause);

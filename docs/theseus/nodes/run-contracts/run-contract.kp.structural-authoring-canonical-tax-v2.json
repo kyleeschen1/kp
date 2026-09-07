@@ -274,8 +274,8 @@
     {
       "id": "s25",
       "title": "Build-served delivery: verify canonical page works without the authoring dev plugin and preserves static/reduced-motion content",
-      "summary": "Incomplete at explicit normal-delivery scope stop. Missing canonical build entry; including it rejects 36 development-owned modules across four cards. Contract blocked pending bounded production-adoption scope decision; no guard change.",
-      "status": "in-progress"
+      "summary": "Approved four-card production adoption complete. Exact runtime moved to existing experience ownership; shared data restored without Article compiler or preview imports. Ordinary canonical delivery, static reading, all three engines, types and fixed closure/budgets pass.",
+      "status": "complete"
     },
     {
       "id": "s26",

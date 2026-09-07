@@ -1,8 +1,8 @@
 import { createKpPerUnitTaxWelfareModel } from "../../../domains/economics/per-unit-tax-welfare-model.ts";
-import { prepareKpAuthoredMarketSource } from "../authoring-market/authoring-market-prepare.ts";
+import { prepareKpAuthoringMarketPreview as prepareKpAuthoredMarketSource } from "../authoring-market/authoring-market-preview-prepare.ts";
 import type { KpAuthoringMarketPreviewData } from "../authoring-market/authoring-market-preview-protocol.ts";
-import { createKpSupplyTaxPedagogicalScore } from "./kinetic-figure-supply-tax-score.ts";
-import { kpSupplyTaxScrollScoreArticleSourceId } from "../kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-article.ts";
+import { createKpSupplyTaxPedagogicalScore } from "../../tutorial/kinetic-figure-supply-tax/kinetic-figure-supply-tax-score.ts";
+import { kpSupplyTaxScrollScoreArticleSourceId } from "../../tutorial/kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-article.ts";
 
 export class KpCanonicalTaxInstructionGap extends Error {
   readonly code = "kp.authoring.canonical-tax-instruction-gap";

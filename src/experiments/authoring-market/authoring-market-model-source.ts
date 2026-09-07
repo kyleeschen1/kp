@@ -1,4 +1,4 @@
-import type { createKpAuthoredMarketSource } from "../typed-linear-supply-demand/authoring-market-source.ts";
+import type { createKpAuthoredMarketSource } from "../../tutorial/typed-linear-supply-demand/authoring-market-source.ts";
 import type { KpAuthoringMarketPreviewData } from "./authoring-market-preview-protocol.ts";
 
 type MarketParameters = NonNullable<Parameters<typeof createKpAuthoredMarketSource>[0]["parameters"]>;

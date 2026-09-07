@@ -1,5 +1,5 @@
 import { mountKpSurfaceContourKineticFigure } from
-  "./kinetic-figure-surface-contour-entry.ts";
+  "../../tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-entry.ts";
 
 const root = document.querySelector<HTMLElement>("#app");
 if (root === null) throw new Error("Expected #app for the surface-contour figure.");

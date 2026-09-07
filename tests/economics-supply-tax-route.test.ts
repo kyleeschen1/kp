@@ -27,11 +27,11 @@ test("a standalone experiment page owns the route without application inversion"
     "utf8"
   );
   const entry = readFileSync(
-    "src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-entry.ts",
+    "src/tutorial/kinetic-figure-supply-tax/kinetic-figure-supply-tax-entry.ts",
     "utf8"
   );
   const pageModule = readFileSync(
-    "src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-page.ts",
+    "src/tutorial/kinetic-figure-supply-tax/kinetic-figure-supply-tax-page.ts",
     "utf8"
   );
 
@@ -61,7 +61,7 @@ test("a standalone experiment page owns the route without application inversion"
 
 test("static host exposes eight semantic scene containers and one Article source", () => {
   const entry = readFileSync(
-    "src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-entry.ts",
+    "src/tutorial/kinetic-figure-supply-tax/kinetic-figure-supply-tax-entry.ts",
     "utf8"
   );
 

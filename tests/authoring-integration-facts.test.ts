@@ -2,11 +2,11 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import type { KpArticleImportLock } from "../src/article/kp-article-import-lock.ts";
-import { createKpAuthoredMarketSource } from "../src/experiments/typed-linear-supply-demand/authoring-market-source.ts";
-import { createKpAuthoringMarketFacts, KpAuthoringMarketFactGap, renderKpAuthoringMarketStaticFacts } from "../src/experiments/authoring-market/authoring-market-facts.ts";
+import { createKpAuthoredMarketSource } from "../src/tutorial/typed-linear-supply-demand/authoring-market-source.ts";
+import { createKpAuthoringMarketFacts, KpAuthoringMarketFactGap, renderKpAuthoringMarketStaticFacts } from "../src/tutorial/authoring-market/authoring-market-facts.ts";
 import { authorKpMarketArticle } from "../src/experiments/authoring-market/authoring-market-article-source.ts";
-import { createKpAuthoringMarketCompanion, KpAuthoringMarketCompanionError } from "../src/experiments/authoring-market/authoring-market-companion.ts";
-import { kpSupplyTaxScrollScoreStageFacts } from "../src/experiments/kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-stage-lens.ts";
+import { createKpAuthoringMarketCompanion, KpAuthoringMarketCompanionError } from "../src/tutorial/authoring-market/authoring-market-companion.ts";
+import { kpSupplyTaxScrollScoreStageFacts } from "../src/tutorial/kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-stage-lens.ts";
 
 const lock = JSON.parse(readFileSync(new URL("../content/lessons/economics-supply-tax-scroll-score.kp.lock.json", import.meta.url), "utf8")) as KpArticleImportLock;
 const canonical = () => createKpAuthoredMarketSource({ kind: "impose-per-unit-tax" });

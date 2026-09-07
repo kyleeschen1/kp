@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { createKpAuthoredMarketSource } from "../src/experiments/typed-linear-supply-demand/authoring-market-source.ts";
-import { createKpAuthoringMarketFrameSession } from "../src/experiments/authoring-market/authoring-market-frame.ts";
-import { renderKpSupplyTaxInteractiveSvg, renderKpSupplyTaxWelfareLedger } from "../src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-svg.ts";
+import { createKpAuthoredMarketSource } from "../src/tutorial/typed-linear-supply-demand/authoring-market-source.ts";
+import { createKpAuthoringMarketFrameSession } from "../src/tutorial/authoring-market/authoring-market-frame.ts";
+import { renderKpSupplyTaxInteractiveSvg, renderKpSupplyTaxWelfareLedger } from "../src/tutorial/kinetic-figure-supply-tax/kinetic-figure-supply-tax-svg.ts";
 import { renderLatexToHtml } from "../src/rendering/katex-adapter.ts";
 
 test("existing native labels derive baseline and target values from the authored revision", () => {
