@@ -48,6 +48,15 @@ reference instruction explicitly and preserve its label policy during cutover;
 do not attach preview specimen labels, history tables or comparison UI to the
 reader. Preview revision replacement and reader page lifetime stay separate.
 
+Canonical instruction preparation reuses the existing literal Article file and
+score claims, binds them to the framework-derived reference revision, and checks
+that revision against the reviewed domain input before publishing. A different
+model returns `kp.authoring.canonical-tax-instruction-gap`; it cannot silently
+inherit the reference lesson. This is a bounded parity migration, not automatic
+truth verification or parameterization of free prose. The existing parameter-bound
+preview remains the place to explore variants. Explicitly authored future
+canonical variants need matching instruction and their own review.
+
 The existing physical document has only an empty `#app` before enhancement.
 Build-served verification must distinguish that baseline from any newly supplied
 meaningful static source; neither a successful dev endpoint nor a no-JS preview

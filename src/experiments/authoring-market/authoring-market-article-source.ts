@@ -1,6 +1,7 @@
 import type { createKpAuthoringMarketFacts } from "./authoring-market-facts.ts";
 
-export const kpAuthoringMarketArticleSourceId = "projection.authoring-market.article.v1";
+export const kpAuthoringMarketArticleSourceId: string = "projection.authoring-market.article.v1";
+const authoredSourcePath: string = "src/experiments/authoring-market/authoring-market-article-source.ts";
 
 /** Ordinary build-time TypeScript, not executable syntax embedded in Markdown.
  * Literal wording belongs to the author; only explicitly named slots bind data.
@@ -39,7 +40,7 @@ kp:
 :::
 `;
   // Accessible claims use plain rational text, never raw TeX commands.
-  const claims = Object.freeze({
+  const claimText = Object.freeze({
     "baseline-market": `Demand and original supply clear at ${value("before.quantity")} units and a price of ${value("before.price")}.`,
     "tax-input": `A tax of ${value("after.tax")} dollars is imposed on each unit traded.`,
     "supply-translation": `The tax lifts buyer-facing supply by ${value("after.tax")} while original supply remains marginal-cost evidence.`,
@@ -49,7 +50,9 @@ kp:
     "government-revenue": `The tax of ${value("after.tax")} on ${value("after.quantity")} traded units becomes ${value("after.revenue")} dollars of government revenue.`,
     "deadweight-loss": `Prevented trades leave ${value("after.loss")} of deadweight loss.`
   });
+  // Bind exact claim keys, not one template's literal wording as a type contract.
+  const claims: { readonly [Key in keyof typeof claimText]: string } = claimText;
   return Object.freeze({ text, claims, facts, sourceId: kpAuthoringMarketArticleSourceId,
-    authoredSourcePath: "src/experiments/authoring-market/authoring-market-article-source.ts",
+    authoredSourcePath,
     modelRevisionId: facts.modelRevisionId });
 }

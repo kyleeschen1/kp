@@ -697,6 +697,34 @@
       "scope": "s20",
       "checkedAt": "2026-09-07T05:28:39.454Z",
       "notes": "One canonical baseline/preview lifecycle browser smoke passes after shared preparation extraction."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "s21",
+      "checkedAt": "2026-09-07T05:32:08.210Z",
+      "notes": "Canonical Article source ID rejected because shared data shape inherited one preview literal ID. Repair widens prose metadata and claim text values to strings while retaining exact claim keys; no semantic identity or reference checks removed."
+    },
+    {
+      "command": "npm run test:authoring-integration",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-07T05:33:39.214Z",
+      "notes": "73 pass: canonical compiled Article, score claims, eight stops and native formulas equal original; facts and instruction share exact revision; variant model and foreign revision rejected."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-07T05:33:40.378Z",
+      "notes": "Final full TypeScript/Svelte/domain checks pass after retaining closed claim keys but allowing ordinary prose and source metadata strings."
+    },
+    {
+      "command": "npm run check:canonical-tax-source",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-07T05:33:41.395Z",
+      "notes": "Generated canonical artifact current, includes unchanged canonical Article and claims with explicit reference revision binding."
     }
   ],
   "progress": {

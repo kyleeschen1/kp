@@ -250,7 +250,8 @@
     {
       "id": "s21",
       "title": "Instructional parity: prepare bound prose, facts and score for the canonical reference revision",
-      "status": "planned"
+      "summary": "Unchanged canonical Article and score bind to prepared reference revision. Different models return typed instruction gap rather than stale literal prose. Exact parity and accessibility-text tests pass; route not yet changed.",
+      "status": "complete"
     },
     {
       "id": "s22",
