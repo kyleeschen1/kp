@@ -124,7 +124,9 @@ test("authoring integration executes only its explicitly approved contract", asy
   assert.match(decision, /Status: ACCEPTED DIRECTION/);
   assert.match(strategy, /authoring-first architecture integration/);
   assert.match(entrypoint, /active thread named by that roadmap/);
-  assert.match(entrypoint, /proposed work, not callable/);
+  assert.match(entrypoint, /bounded market source\/Article\/preview integration is implemented/);
+  assert.match(entrypoint, /not universal public generation APIs/);
+  assert.match(entrypoint, /authoring-round-trip-packet\.md/);
   assert.match(decision, /does not gate this\s+architecture integration sequence/);
   assert.match(decision, /Generic state updates do not establish mathematical equivalence/);
   assert.match(decision, /checking|comparison is insufficient/);

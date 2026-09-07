@@ -63,6 +63,13 @@
       "scope": "s04",
       "checkedAt": "2026-09-07T21:50:25.905Z",
       "notes": "21 passed; two exact registration repairs, Direct count unchanged. Compiler/runtime/governed authoring cohort also passed 35 tests; full typecheck and generated freshness passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/current-direction-authoring-ratchet.test.ts tests/authoring-round-trip-baseline.test.ts tests/authoring-round-trip-corpus.test.ts",
+      "status": "passed",
+      "scope": "s05",
+      "checkedAt": "2026-09-07T21:52:23.710Z",
+      "notes": "31 passed. Packet names exact source files, internal compiler source binding, shared server, rejected input, and publication boundary."
     }
   ],
   "expectedLearning": [

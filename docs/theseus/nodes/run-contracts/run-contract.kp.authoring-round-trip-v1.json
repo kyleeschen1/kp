@@ -120,7 +120,8 @@
     {
       "id": "s05",
       "title": "Minimal human/LLM packet through existing entrypoints",
-      "status": "planned"
+      "summary": "Added human/LLM packet through existing entrypoints; 31 example and direction checks pass.",
+      "status": "complete"
     },
     {
       "id": "s06",

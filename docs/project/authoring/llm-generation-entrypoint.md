@@ -1,7 +1,7 @@
 # KP LLM Generation Entrypoint
 
 Status: canonical routing guide
-Updated: 2026-09-05
+Updated: 2026-09-07
 
 ## Purpose
 
@@ -30,9 +30,9 @@ Older experiments are evidence, not default implementation authority.
 
 The authoring-first integration direction is accepted in
 `../decisions/2026-09-05-authoring-integration-priority-and-sequence.md`.
-Its assembly/math/state-to-preview APIs are proposed work, not callable
-generation entrances yet. Until their executable contracts and evidence land,
-use the existing governed APIs below. A generic state update cannot supply
+Its bounded market source/Article/preview integration is implemented; use
+`authoring-round-trip-packet.md` for executable examples and exact owners.
+These internal entrypoints are not universal public generation APIs. A generic state update cannot supply
 verified mathematical operation or animation authority; unsupported lowering
 must return a typed repair gap. Handwritten generation-shaped state fixtures
 must not be reported as a live-model benchmark.
