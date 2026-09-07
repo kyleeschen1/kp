@@ -398,6 +398,7 @@
     "preview:reader-production": "vite preview --host 127.0.0.1 --port 4173 --strictPort",
     "visual:reader-production": "playwright test --config=playwright.reader-production.config.ts --project=chromium --workers=1",
     "visual:canonical-tax-production": "playwright test --config=playwright.canonical-tax-production.config.ts --project=chromium --workers=1",
+    "report:canonical-tax-delivery": "node --disable-warning=ExperimentalWarning scripts/report-canonical-tax-delivery.ts",
     "check:algebra-fraction-composition-budgets": "node --disable-warning=ExperimentalWarning scripts/check-algebra-fraction-composition-budgets.ts",
     "check:canonical-animation-budgets": "node --disable-warning=ExperimentalWarning scripts/check-canonical-animation-construction-budgets.ts",
     "test:canonical-animation-budgets": "node --disable-warning=ExperimentalWarning --test scripts/check-canonical-animation-construction-budgets.test.ts",

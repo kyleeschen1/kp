@@ -1100,6 +1100,83 @@
       "scope": "s26",
       "checkedAt": "2026-09-07T16:01:31.508Z",
       "notes": "Canonical and sibling build artifacts remain fresh after actual preview file save/repair tests."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s27",
+      "checkedAt": "2026-09-07T16:09:19.536Z",
+      "notes": "Full app, Node, test, Svelte and domain typechecks pass; ordinary Vite build ships exact canonical URL with unchanged production erasure guard. Existing large-chunk warnings remain, not suppressed."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "s27",
+      "checkedAt": "2026-09-07T16:09:20.985Z",
+      "notes": "12 manifest routes and forbidden production markers pass."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "s27",
+      "checkedAt": "2026-09-07T16:09:22.316Z",
+      "notes": "453 artifacts and 12 forbidden markers pass."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "s27",
+      "checkedAt": "2026-09-07T16:09:23.644Z",
+      "notes": "All 12 route budgets pass unchanged; shared equation static startup 138001 gzip bytes against 145000 ceiling."
+    },
+    {
+      "command": "npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "s27",
+      "checkedAt": "2026-09-07T16:09:24.948Z",
+      "notes": "Current generated graph retains 68 roots after report entrypoint addition."
+    },
+    {
+      "command": "npm run report:canonical-tax-delivery",
+      "status": "passed",
+      "scope": "s27",
+      "checkedAt": "2026-09-07T16:09:26.195Z",
+      "notes": "Exact route: HTML 24029 raw / 3206 gzip bytes; static JS/CSS closure 367392 gzip bytes across 69 files, 19 discoverable dynamic roots. Excludes fonts/images and later activation; measurement only, no new budget or frame-rate claim."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s27",
+      "checkedAt": "2026-09-07T16:18:25.594Z",
+      "notes": "Full architecture, inference, concept and promotion gates plus 6610 tests pass; zero failures, cancelled or skipped. Inference remains 112090 types and 191101 instantiations. Observed complete rerun replaces an earlier run whose completion output was unavailable after context recovery."
+    },
+    {
+      "command": "npm run visual:authoring-structural -- --project=firefox --project=webkit",
+      "status": "passed",
+      "scope": "s27",
+      "checkedAt": "2026-09-07T16:20:28.138Z",
+      "notes": "24 pass across Chromium, Firefox and WebKit: both real native structural callers, continuity, exclusive ownership, phone links, reverse, interruption, disposal and reduced motion."
+    },
+    {
+      "command": "npm run test:browser:economics-supply-tax -- --project=firefox --project=webkit",
+      "status": "passed",
+      "scope": "s27",
+      "checkedAt": "2026-09-07T16:22:49.172Z",
+      "notes": "39 pass across all three engines on canonical framework source: eight stops, direct links, native gestures, scrubber, phone fit, interruption, retained lifecycle and deferred snap race."
+    },
+    {
+      "command": "npm run visual:canonical-tax-production -- --project=firefox --project=webkit",
+      "status": "passed",
+      "scope": "s27",
+      "checkedAt": "2026-09-07T16:23:31.044Z",
+      "notes": "9 pass across all three engines against ordinary built route without authoring service: normal/reduced motion endpoints, four siblings and no-JavaScript eight-phrase exact-fact fallback."
+    },
+    {
+      "command": "npm run visual:reader-production -- --project=firefox --project=webkit",
+      "status": "passed",
+      "scope": "s27",
+      "checkedAt": "2026-09-07T16:25:28.033Z",
+      "notes": "39 pass across all three engines for 12 existing built reader routes and direct narrow multiplication prewarm regression."
     }
   ],
   "progress": {

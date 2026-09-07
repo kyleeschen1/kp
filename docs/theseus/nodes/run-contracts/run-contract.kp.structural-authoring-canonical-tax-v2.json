@@ -286,7 +286,8 @@
     {
       "id": "s27",
       "title": "Migration release: run full repository gates, supported-browser representative cohort and unchanged budgets",
-      "status": "planned"
+      "summary": "Full release passed: 6610 tests; full build/types; 24 structural, 39 tax, 9 built tax and 39 built reader browser checks; fixed budgets and production isolation unchanged. Proceed to mandatory G3.",
+      "status": "complete"
     },
     {
       "id": "s28",
