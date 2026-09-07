@@ -103,10 +103,13 @@ export async function runKpEquationTransformSeriesCli(
 
   const result = example === undefined ? compileKpEquationTransformSeries({ value: request })
     : compileKpEquationSeriesLogarithmBaseExample(request);
+  const sourcePath = options.requestPath === "-" ? "<stdin>" : options.requestPath ??
+    (example === undefined ? "<stdin>" : "src/authoring/equation-series-logarithm-base-example.ts");
   if (result.status === "repair-required" || result.active === undefined) {
     writeJson(dependencies, {
       schemaVersion: "kp.equation-transform-series-cli-response.v1",
       status: "repair-required",
+      sourcePath,
       repairs: result.repairs
     });
     return 2;
@@ -115,6 +118,7 @@ export async function runKpEquationTransformSeriesCli(
   writeJson(dependencies, {
     schemaVersion: "kp.equation-transform-series-cli-response.v1",
     status: "compiled",
+    sourcePath,
     request: result.active.request,
     normalizedStates: result.active.normalizedStates,
     runtime: result.active.runtime

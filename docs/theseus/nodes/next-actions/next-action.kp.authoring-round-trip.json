@@ -112,6 +112,13 @@
       "scope": "s11",
       "checkedAt": "2026-09-07T22:15:19.627Z",
       "notes": "43 passed, full typecheck passed, real author:equation-series named-example invocation compiled. UI-free closure preserved; example refuses unrelated registered operations and false endpoints."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/authoring-round-trip-equation-repair.test.ts tests/compile-equation-transform-series-cli.test.ts tests/equation-series-logarithm-base-authoring.test.ts",
+      "status": "passed",
+      "scope": "s12",
+      "checkedAt": "2026-09-07T22:19:01.882Z",
+      "notes": "14 passed; full typecheck passed. Five successive invalid edits retain candidate identity and deterministic samples, initial failure has no fallback, repaired draft clears errors. CLI reports source path."
     }
   ],
   "expectedLearning": [

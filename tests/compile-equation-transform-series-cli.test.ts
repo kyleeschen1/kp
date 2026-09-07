@@ -16,6 +16,7 @@ import { createKpEquationSeriesLogarithmBaseExample } from
 
 interface CliResponse {
   readonly status: string;
+  readonly sourcePath?: string;
   readonly requestSchemaVersion?: string | undefined;
   readonly operations?: readonly Readonly<{
     operationId: string;
@@ -48,6 +49,7 @@ test("named example binds real source authority and rejects edited false endpoin
   const rejected = cliHarness(JSON.stringify(changed));
   assert.equal(await runKpEquationTransformSeriesCli(["--example", "logarithm-change-of-base", "--request", "-"], rejected.dependencies), 2);
   assert.equal(rejected.output().status, "repair-required");
+  assert.equal(rejected.output().sourcePath, "<stdin>");
   assert.equal(rejected.output().runtime, undefined);
   const unrelated = cliHarness(JSON.stringify(validRequest()));
   assert.equal(await runKpEquationTransformSeriesCli(["--example", "logarithm-change-of-base", "--request", "-"], unrelated.dependencies), 2);

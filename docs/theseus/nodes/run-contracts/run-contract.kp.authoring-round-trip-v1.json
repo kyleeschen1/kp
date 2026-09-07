@@ -162,7 +162,8 @@
     {
       "id": "s12",
       "title": "Actionable equation repair with last-valid preview retention",
-      "status": "planned"
+      "summary": "Actionable source-tagged equation repair and retained runtime candidate verified; 14 focused tests and full types pass. Rendered combined workflow remains s19.",
+      "status": "complete"
     },
     {
       "id": "s13",
