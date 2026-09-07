@@ -1,10 +1,10 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: canonical development source adopted; production ownership scope stop
+Status: bounded four-card production-adoption repair approved; loop resumed
 Last Updated: 2026-09-07
-Current Next Action: resolve the bounded four-card production-adoption scope in
-`../reviews/2026-09-07-canonical-tax-production-boundary-stop.md`, then resume
-ordinary delivery, preview convergence, release and mandatory G3 review.
+Current Next Action: execute the accepted bounded four-card production-adoption
+repair recorded in `../reviews/2026-09-07-canonical-tax-production-boundary-stop.md`,
+then continue ordinary delivery, preview convergence, release and mandatory G3.
 The canonical URL consumes the new source and passes 39 browser lifecycle checks;
 the ordinary build does not ship that URL. Including it exposes 36 forbidden
 experiment-owned modules, including sibling cards. No erasure guard was weakened.

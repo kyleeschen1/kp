@@ -2,9 +2,9 @@
   "id": "run-contract.kp.structural-authoring-canonical-tax-v2",
   "kind": "run-contract",
   "title": "Structural authoring proof and canonical tax adoption",
-  "status": "blocked",
+  "status": "in-progress",
   "domain": "kp",
-  "summary": "s25 explicit normal-delivery scope stop; 24 slices complete. No G3 claim, no merge, no guard relaxation.",
+  "summary": "User accepted bounded four-card production adoption amendment and resumed. Execute s25 ownership and build-time Article repair, then s26-s28. Fixed gates and G3 remain.",
   "sourceRefs": [
     {
       "kind": "file",

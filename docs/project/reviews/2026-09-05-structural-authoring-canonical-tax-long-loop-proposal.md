@@ -19,6 +19,22 @@ Theseus retains slice order and live execution status.
 
 ## Outcome and why now
 
+### Approved production-adoption amendment — 2026-09-07
+
+The user accepted the recommendation in
+`2026-09-07-canonical-tax-production-boundary-stop.md` and requested resume.
+Within s25, promote only the complete runtime and type-only dependency set of
+the existing canonical four-card page into existing production ownership zones;
+retain experiment entrypoints as callers, not production dependencies. Separate
+Article compilation from reader execution, preserve shared source preparation,
+exact economics, all four card appearances and interactions, and include only
+the existing canonical URL in the ordinary build. Preserve erasure checks and
+all budgets. No new public API family, catalogue rollout, renderer, clock,
+general publication platform, deployment, merge or G3 waiver is authorized.
+The source-move/build-boundary repair is one reversible adoption unit. Verify
+dependency/type ownership, source revision and prose parity, canonical built
+delivery, no-JavaScript/reduced motion, then continue s26–s28 unchanged.
+
 Make the new authoring architecture earn canonical adoption: first exercise
 structure-changing equation operations, then make the existing supply-tax URL
 consume the framework-derived model, samples, and bound prose. The previous

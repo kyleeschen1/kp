@@ -243,7 +243,10 @@ Ordinary delivery exposed a distinct production ownership boundary: the build
 excludes the route, and including it rejects the experiment-owned four-card
 runtime. No production guard was relaxed. The bounded scope decision is recorded
 in `reviews/2026-09-07-canonical-tax-production-boundary-stop.md`; G3 readiness and
-shipped delivery are not claimed. Theseus owns the paused execution position.
+shipped delivery are not claimed. The user accepted that bounded production
+repair and requested resume on 2026-09-07. Promote only this four-card runtime
+closure and its build-time Article boundary; preserve erasure checks, fixed
+budgets and G3. Theseus owns execution under the amended original proposal.
 
 The preceding direction and completed integration run were accepted and scoped by
 `run-contract.kp.authoring-integration-market-preview-v1` and

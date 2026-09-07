@@ -1,6 +1,9 @@
 # Canonical tax: production ownership stop
 
 Outcome: STOP_CONDITION at s25; canonical development migration is preserved.
+Resolution: the user accepted the recommended bounded production-adoption repair
+and requested resumption on 2026-09-07. The stop below is historical evidence;
+execute the amendment in the approved proposal without weakening G3 or budgets.
 Contract: `run-contract.kp.structural-authoring-canonical-tax-v2`.
 Scope authority: `2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md`.
 
