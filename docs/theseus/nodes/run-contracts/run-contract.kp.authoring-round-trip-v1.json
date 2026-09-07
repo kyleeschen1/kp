@@ -96,7 +96,8 @@
     {
       "id": "s01",
       "title": "Pin canonical artifacts, source owners, behavior and rollback boundaries",
-      "status": "planned"
+      "summary": "Reference and rollback manifest committed with 11 passing canonical source/build preservation tests; existing state and paint unchanged.",
+      "status": "complete"
     },
     {
       "id": "s02",

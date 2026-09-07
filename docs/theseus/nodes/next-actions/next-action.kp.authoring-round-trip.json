@@ -8,6 +8,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-07-authoring-round-trip-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-07-authoring-round-trip-reference.md"
     }
   ],
   "dependsOn": {
@@ -23,6 +27,15 @@
     "npm run typecheck",
     "npm test",
     "npm run build"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/authoring-integration-canonical-source.test.ts tests/authoring-integration-canonical-build.test.ts",
+      "status": "passed",
+      "scope": "s01",
+      "checkedAt": "2026-09-07T21:35:20.295Z",
+      "notes": "11 tests pass: deterministic build, real shared preparation, revision isolation, domain sampling parity and production import closure."
+    }
   ],
   "expectedLearning": [
     "Whether supported author tasks can be completed without renderer glue and with coherent revisions and useful repair."
