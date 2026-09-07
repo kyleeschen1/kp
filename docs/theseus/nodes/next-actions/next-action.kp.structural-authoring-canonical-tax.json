@@ -641,6 +641,20 @@
       "scope": "s18",
       "checkedAt": "2026-09-07T05:19:51.930Z",
       "notes": "Full rerun passes 45/45 Chromium Firefox WebKit after CSS serialization assertion repair. Unchanged motion/scrub budgets. Firefox max scrub 61/51ms desktop/phone; max playback frame 83.34/33.32ms. WebKit max scrub 25/31ms and max frame 35/36ms."
+    },
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "s19",
+      "checkedAt": "2026-09-07T05:22:39.575Z",
+      "notes": "81 domain Article score scene route SVG and accounting checks pass. Audited host has only canonical page and already-injected authoring preview consumers."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s19",
+      "checkedAt": "2026-09-07T05:22:40.819Z",
+      "notes": "All TypeScript, Svelte and domain checks pass; zero Svelte errors or warnings."
     }
   ],
   "progress": {

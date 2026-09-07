@@ -238,7 +238,8 @@
     {
       "id": "s19",
       "title": "Canonical migration inventory: audit route consumers, default source wiring, baseline labels/URL/interaction and sibling preservation",
-      "status": "planned"
+      "summary": "Preservation manifest pins actual canonical URL, two host callers, domain owners retained, exact prose/labels, eight stops and sibling lifecycle. No unrelated consumer needs default branch retirement.",
+      "status": "complete"
     },
     {
       "id": "s20",
