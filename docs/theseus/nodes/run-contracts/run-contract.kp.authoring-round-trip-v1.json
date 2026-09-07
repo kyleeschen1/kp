@@ -233,7 +233,8 @@
     {
       "id": "s23",
       "title": "Small live LLM authoring-and-repair trial using existing machinery",
-      "status": "planned"
+      "summary": "Actual model trial completed with 4 of 6 stored expectations passing; diagnosed two stale corpus expectations against current operation owners. Failures preserved for approved s24 repair, not reported as successful certification.",
+      "status": "complete"
     },
     {
       "id": "s24",
