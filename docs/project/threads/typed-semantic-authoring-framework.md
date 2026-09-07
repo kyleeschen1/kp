@@ -5,6 +5,9 @@ Last Updated: 2026-09-07
 Implementation is explicitly paused for strategic brainstorm. Resume from
 `2026-09-07-canonical-tax-resume-point.md`; do not infer a new implementation
 direction from unapproved discussion.
+The proposed strategic review is
+`../reviews/2026-09-07-composable-explanation-medium-next-step-review.md`;
+it does not supersede the accepted sequence or authorize successor work.
 Current Next Action: clarify the remaining code-card behavior and review the
 repaired whole-step slider keyboard navigation at mandatory G3; see
 `../reviews/2026-09-07-canonical-tax-g3-checkpoint.md` for the working URL,
@@ -109,8 +112,10 @@ by `run-contract.kp.structural-authoring-canonical-tax-v2` (v1 was superseded
 for missing typed execution metadata; approved scope is unchanged).
 It preserves the prior market checkpoint, adds structural
 review gates, and makes canonical route adoption plus adjacent obsolete-wiring
-retirement explicit. The existing supply-tax page still uses its original
-default source today; only the opt-in authoring-market page uses the new path.
+retirement explicit. At the proposal's starting baseline, the supply-tax page
+used its original default source; that baseline is historical.
+Canonical source adoption is now implemented through the ordinary build, with
+G3 still unaccepted; use the current checkpoint above for live integration state.
 
 The approved economics prerequisite is implemented. Exact state now reaches the
 existing paint, clock, Article/scene, and explicit fact-binding owners in the
@@ -136,8 +141,9 @@ exact proof, costs and limitations are linked from the closeout, not duplicated
 as a per-slice queue here.
 
 That preceding run reached authoring/API and visual review, now accepted as G0.
-Structural equation pressure is active under the successor contract, subject to
-the native-boundary stop above, before public API promotion or migration waves.
+The successor completed structural equation pressure and canonical source
+adoption; its remaining G3 review is paused as recorded above. This does not
+promote a public authoring API or authorize further migration waves.
 Everyday authoring/publication, bounded knowledge/procedures,
 and LaTeX/TypeScript/model convergence remain the accepted later sequence.
 External reader discovery does not gate these architecture milestones.

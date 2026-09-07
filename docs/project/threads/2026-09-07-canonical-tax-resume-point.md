@@ -50,3 +50,12 @@ progress with `npm run --silent loop:status`; when the contract is blocked that
 command reports no active loop, so inspect the named contract's slice state.
 The prior receipt `event.context-run-issued.next-action.kp.structural-authoring-canonical-tax.20260907164747168.im8.1`
 was closed; start a new receipt rather than re-closing it.
+
+## Proposed strategy discussion
+
+The deeper brainstorm is recorded in
+[the composable explanation medium review](../reviews/2026-09-07-composable-explanation-medium-next-step-review.md).
+It proposes a coherent authoring-to-publication round trip and one expandable
+supporting explanation, with bounded implementation packets for later work.
+It is not accepted direction or execution authority. Keep it separate from
+the approved G3 resume task until the user chooses a direction.
