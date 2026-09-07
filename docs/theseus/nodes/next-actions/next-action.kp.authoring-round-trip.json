@@ -35,6 +35,13 @@
       "scope": "s01",
       "checkedAt": "2026-09-07T21:35:20.295Z",
       "notes": "11 tests pass: deterministic build, real shared preparation, revision isolation, domain sampling parity and production import closure."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/authoring-round-trip-baseline.test.ts",
+      "status": "passed",
+      "scope": "s02",
+      "checkedAt": "2026-09-07T21:38:25.974Z",
+      "notes": "Three reproducible tasks pass; local timings recorded, not browser or human-effort claims. Governed equation source requirement remains explicit."
     }
   ],
   "expectedLearning": [
