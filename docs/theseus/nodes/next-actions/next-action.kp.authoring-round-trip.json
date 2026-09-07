@@ -2,8 +2,9 @@
   "id": "next-action.kp.authoring-round-trip",
   "kind": "next-action",
   "title": "Reliable authoring round trip",
-  "status": "ready",
+  "status": "blocked",
   "domain": "kp",
+  "summary": "HUMAN_CHECKPOINT: mandatory s20 user visual/interaction approval is pending; no implementation blocker and no s21 before acceptance.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -12,6 +13,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-07-authoring-round-trip-reference.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-07-authoring-round-trip-checkpoint.md"
     }
   ],
   "dependsOn": {
@@ -168,8 +173,19 @@
       "scope": "s19",
       "checkedAt": "2026-09-07T23:15:49.586Z",
       "notes": "11 authoring browser checks passed, then focused equation smoke and three canonical compositor checks reran after resize repair. 46 round-trip, 88 integration and 19 shared-card tests pass; full types and canonical freshness pass. Actual combined exported source builds reproducibly with no-JS reading. Desktop/mobile screenshots inspected; real ink-bound assertions now catch stale geometry. Canonical rewind projection and responsive native calibration repaired without new choreography."
+    },
+    {
+      "command": "npm run author:market-publication -- --source content/authoring/market-round-trip.market.json --check; theseus workspace validate",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-07T23:20:15.102Z",
+      "notes": "Selected combined edition freshness passes. Existing shared server PID 405 on port 8000 serves authoring HTML, valid source revision, reading HTML and CSS with browser Accept header. Human visual approval is pending, not inferred from automated checks."
     }
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT at s20. Nineteen slices complete; shared server on port 8000 serves bounded equation authoring and source-verified reading edition. Await visual/interaction acceptance; then continue approved s21-s26 without routine check-ins. Live LLM trial and full release remain undone."
+  },
   "expectedLearning": [
     "Whether supported author tasks can be completed without renderer glue and with coherent revisions and useful repair."
   ],

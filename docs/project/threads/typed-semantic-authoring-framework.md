@@ -1,17 +1,23 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: R1 reliable authoring round trip approved and active; prior G3 complete
+Status: R1 at combined visual checkpoint; prior G3 complete
 Last Updated: 2026-09-07
 Current successor reference: `../reviews/2026-09-07-reconciled-authoring-loop-horizon.md`.
 It preserves the original architectural obligations and the tax/Bayes direction;
 the exact R1 26-slice proposal is now approved for implementation:
 `../reviews/2026-09-07-authoring-round-trip-long-loop-proposal.md`.
 Theseus contract: `run-contract.kp.authoring-round-trip-v1`.
+Current review packet: `../reviews/2026-09-07-authoring-round-trip-checkpoint.md`.
+It names the working shared-server authoring card and selected reading edition,
+the actual source/renderer authority, verified repairs and visual acceptance
+script. Await this checkpoint's visual/interaction approval, then continue the
+remaining approved R1 work without another routine resume. Theseus owns counts.
 Standing minimal-check-in
 policy: `../decisions/2026-09-07-reconciled-horizon-and-minimal-check-ins.md`.
 The user requested recording the recommendations and finishing the existing
 loop, then approved G3 after the gradual code-card passage repair. The existing
-loop is complete; successor implementation is not authorized. Current closeout:
+loop is complete; its closeout did not itself authorize successor implementation.
+The later R1 approval above supplies that authority. Prior closeout:
 `../decisions/2026-09-07-canonical-tax-g3-approval-and-closeout.md`. See also
 `../decisions/2026-09-07-math-recommendations-and-loop-resumption.md`.
 The user accepted the tax-then-Bayesian flagship sequence and confirmed

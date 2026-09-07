@@ -2,8 +2,9 @@
   "id": "run-contract.kp.authoring-round-trip-v1",
   "kind": "run-contract",
   "title": "R1 Reliable authoring round trip",
-  "status": "ready",
+  "status": "blocked",
   "domain": "kp",
+  "summary": "HUMAN_CHECKPOINT: s20 combined authoring review pending; preserve remaining approved scope and resume after visual acceptance.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -13,6 +14,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-07-authoring-round-trip-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-07-authoring-round-trip-checkpoint.md"
     }
   ],
   "verification": [
@@ -210,7 +215,8 @@
     {
       "id": "s20",
       "title": "Combined authoring/preview/static-output exemplar review",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: combined authoring, last-valid repair, canonical Focus Card and selected reading edition await user visual/interaction approval. Review packet names live shared-server URLs and source identities.",
+      "status": "in-progress"
     },
     {
       "id": "s21",
