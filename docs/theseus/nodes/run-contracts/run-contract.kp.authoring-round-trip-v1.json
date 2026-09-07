@@ -138,7 +138,8 @@
     {
       "id": "s08",
       "title": "Preserve newest-revision wins through asynchronous preparation",
-      "status": "planned"
+      "summary": "Preserved newest-revision wins with late-failure and duplicate-event regressions; 86 integration, 8 browser and full typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "s09",

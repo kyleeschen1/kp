@@ -104,3 +104,59 @@ test("browser entry consumes revision data without importing trusted author-sour
     assert.doesNotMatch(source, /eval\(|new Function|writeFile/);
   }
 });
+
+test("newer invalid draft suppresses a pending older success and older failure", async () => {
+  for (const outcome of ["resolve", "reject"] as const) {
+    let resolve!: (value: number) => void;
+    let reject!: (error: Error) => void;
+    const reports: KpAuthoringMarketBuildRevision[] = [];
+    const committed: number[] = [];
+    const receiver = createKpAuthoringMarketRevisionReceiver({
+      prepare: () => new Promise<number>((yes, no) => { resolve = yes; reject = no; }),
+      commit(value) { committed.push(value); }, report(value) { reports.push(value); }
+    });
+    const pending = receiver.receive(revision(1));
+    await receiver.receive({ ...revision(2), status: "building" });
+    await receiver.receive({ ...revision(2), status: "invalid", diagnostic: {
+      code: "kp.authoring.market-build-gap", message: "new draft invalid"
+    } });
+    if (outcome === "resolve") resolve(1); else reject(new Error("old failure"));
+    await pending;
+    assert.deepEqual(committed, []);
+    assert.equal(reports.at(-1)?.sourceRevision, "source.2");
+    assert.equal(reports.at(-1)?.diagnostic?.message, "new draft invalid");
+    receiver.dispose();
+  }
+});
+
+test("building admits one terminal result and duplicate terminal events cannot remount", async () => {
+  const committed: number[] = [];
+  const reports: KpAuthoringMarketBuildRevision[] = [];
+  const receiver = createKpAuthoringMarketRevisionReceiver({
+    prepare: () => 1, commit(_value, event) { committed.push(event.sequence); },
+    report(value) { reports.push(value); }
+  });
+  await receiver.receive({ ...revision(1), status: "building" });
+  await receiver.receive(revision(1));
+  await receiver.receive(revision(1));
+  await receiver.receive({ ...revision(1), status: "building" });
+  await receiver.receive({ ...revision(0), status: "invalid" });
+  assert.deepEqual(committed, [1]);
+  assert.deepEqual(reports.map(({ status }) => status), ["building", "valid"]);
+  receiver.dispose();
+});
+
+test("disposal suppresses a late preparation rejection and every later event", async () => {
+  let reject!: (error: Error) => void;
+  const reports: KpAuthoringMarketBuildRevision[] = [];
+  const receiver = createKpAuthoringMarketRevisionReceiver({
+    prepare: () => new Promise<never>((_resolve, no) => { reject = no; }),
+    commit() { assert.fail("Disposed receiver cannot mount"); },
+    report(value) { reports.push(value); }
+  });
+  const pending = receiver.receive(revision(1));
+  receiver.dispose(); receiver.dispose();
+  reject(new Error("late failure")); await pending;
+  await receiver.receive(revision(2));
+  assert.equal(reports.length, 1);
+});
