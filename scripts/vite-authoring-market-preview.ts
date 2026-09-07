@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import type { Plugin, ViteDevServer } from "vite";
-import { kpAuthoringMarketPreviewEndpoint, kpAuthoringMarketPreviewEvent,
+import { createKpAuthoringMarketBuildDiagnostic, kpAuthoringMarketPreviewEndpoint, kpAuthoringMarketPreviewEvent,
   type KpAuthoringMarketBuildRevision } from "../src/experiments/authoring-market/authoring-market-preview-protocol.ts";
 import type { buildKpAuthoringMarketPreview } from "../src/experiments/authoring-market/authoring-market-preview-build.ts";
 
@@ -51,10 +51,8 @@ export function kpViteAuthoringMarketPreview(): Plugin {
         publish({ ...base, status: "valid", preview: JSON.parse(JSON.stringify(preview)) });
       } catch (error) {
         publish({ schemaVersion: "kp.authoring-market-build.v1", sequence: ticket, sourceRevision,
-          sourcePaths: kpAuthoringMarketLocalInputs, status: "invalid", diagnostic: {
-            code: "kp.authoring.market-build-gap", message: error instanceof Error ? error.message : String(error),
-            ...(typeof error === "object" && error !== null && "id" in error && typeof error.id === "string" ? { file: error.id } : {})
-          } });
+          sourcePaths: kpAuthoringMarketLocalInputs, status: "invalid",
+          diagnostic: createKpAuthoringMarketBuildDiagnostic(error) });
       }
     });
     return queue;

@@ -3,12 +3,47 @@ import test from "node:test";
 import { readFileSync } from "node:fs";
 import { buildKpAuthoringMarketPreview } from "../src/experiments/authoring-market/authoring-market-preview-build.ts";
 import { prepareKpAuthoringMarketPreview } from "../src/experiments/authoring-market/authoring-market-preview-prepare.ts";
-import { createKpAuthoringMarketRevisionReceiver, type KpAuthoringMarketBuildRevision } from "../src/experiments/authoring-market/authoring-market-preview-protocol.ts";
+import { createKpAuthoringMarketBuildDiagnostic, createKpAuthoringMarketRevisionReceiver, type KpAuthoringMarketBuildRevision } from "../src/experiments/authoring-market/authoring-market-preview-protocol.ts";
 
 const data = buildKpAuthoringMarketPreview();
 const revision = (sequence: number): KpAuthoringMarketBuildRevision => ({
   schemaVersion: "kp.authoring-market-build.v1", sequence, sourceRevision: `source.${sequence}`,
   sourcePaths: ["local-model.ts", "local-article.ts"], status: "valid", preview: data
+});
+
+test("source diagnostics preserve exact supplied locations and typed paths without guessing", () => {
+  const error = Object.assign(new Error("Invalid source"), {
+    id: "fallback.ts", loc: { file: "article.ts", line: 12, column: 0 },
+    code: "article.reference.invalid", path: "article.references[2]"
+  });
+  assert.deepEqual(createKpAuthoringMarketBuildDiagnostic(error), {
+    code: "kp.authoring.market-build-gap", message: "Invalid source",
+    file: "article.ts", line: 12, column: 0,
+    sourceCode: "article.reference.invalid", path: "article.references[2]"
+  });
+  assert.deepEqual(createKpAuthoringMarketBuildDiagnostic("unlocated"), {
+    code: "kp.authoring.market-build-gap", message: "unlocated"
+  });
+  const invalid = createKpAuthoringMarketBuildDiagnostic({ loc: { line: -1, column: NaN } });
+  assert.equal(invalid.line, undefined);
+  assert.equal(invalid.column, undefined);
+});
+
+test("receiver carries source diagnostic and identity through preparation failure", async () => {
+  const reports: KpAuthoringMarketBuildRevision[] = [];
+  const receiver = createKpAuthoringMarketRevisionReceiver({
+    prepare() { throw Object.assign(new Error("Unsupported presentation"), {
+      code: "kp.authoring.market-demand-motion-gap", path: "specimen.demandPresentation"
+    }); },
+    commit() { assert.fail("Invalid source must not commit"); },
+    report(value) { reports.push(value); }
+  });
+  await receiver.receive(revision(7));
+  const result = reports.at(-1)!;
+  assert.equal(result.sourceRevision, "source.7");
+  assert.deepEqual(result.sourcePaths, revision(7).sourcePaths);
+  assert.equal(result.diagnostic?.sourceCode, "kp.authoring.market-demand-motion-gap");
+  assert.equal(result.diagnostic?.path, "specimen.demandPresentation");
 });
 
 test("data-only build reconstructs exact local capabilities and rejects mixed model authority", () => {

@@ -126,7 +126,8 @@
     {
       "id": "s06",
       "title": "Consistent source locations and revision identity in diagnostics",
-      "status": "planned"
+      "summary": "Consistent source diagnostics and revision identity; 6 focused tests and full types pass.",
+      "status": "complete"
     },
     {
       "id": "s07",

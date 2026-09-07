@@ -3,13 +3,42 @@ import type { KpAuthoredMarketSourceData } from "../../tutorial/authoring-market
 export const kpAuthoringMarketPreviewEndpoint = "/__kp/authoring-market/revision";
 export const kpAuthoringMarketPreviewEvent = "kp:authoring-market-revision";
 export type KpAuthoringMarketPreviewData = KpAuthoredMarketSourceData;
+export interface KpAuthoringMarketBuildDiagnostic {
+  readonly code: "kp.authoring.market-build-gap";
+  readonly message: string;
+  readonly file?: string;
+  readonly line?: number;
+  readonly column?: number;
+  readonly sourceCode?: string;
+  readonly path?: string;
+}
+
+/** Preserve supplied locations, never guess a file or derive authority from text. */
+export function createKpAuthoringMarketBuildDiagnostic(error: unknown): KpAuthoringMarketBuildDiagnostic {
+  const detail = typeof error === "object" && error !== null
+    ? error as Record<string, unknown> : {};
+  const loc = typeof detail["loc"] === "object" && detail["loc"] !== null
+    ? detail["loc"] as Record<string, unknown> : {};
+  const file = typeof loc["file"] === "string" ? loc["file"] : detail["id"];
+  const line = loc["line"];
+  const column = loc["column"];
+  return Object.freeze({
+    code: "kp.authoring.market-build-gap",
+    message: error instanceof Error ? error.message : String(error),
+    ...(typeof file === "string" ? { file } : {}),
+    ...(typeof line === "number" && Number.isSafeInteger(line) && line > 0 ? { line } : {}),
+    ...(typeof column === "number" && Number.isSafeInteger(column) && column >= 0 ? { column } : {}),
+    ...(typeof detail["code"] === "string" ? { sourceCode: detail["code"] } : {}),
+    ...(typeof detail["path"] === "string" ? { path: detail["path"] } : {})
+  });
+}
 export interface KpAuthoringMarketBuildRevision {
   readonly schemaVersion: "kp.authoring-market-build.v1";
   readonly sequence: number;
   readonly sourceRevision: string;
   readonly sourcePaths: readonly string[];
   readonly status: "building" | "valid" | "invalid";
-  readonly diagnostic?: { readonly code: "kp.authoring.market-build-gap"; readonly message: string; readonly file?: string };
+  readonly diagnostic?: KpAuthoringMarketBuildDiagnostic;
   readonly preview?: KpAuthoringMarketPreviewData;
 }
 
@@ -41,9 +70,8 @@ export function createKpAuthoringMarketRevisionReceiver<T>(input: {
         acceptedSequence = revision.sequence;
       } catch (error) {
         if (disposed || latest !== revision) return;
-        input.report({ ...revision, status: "invalid", diagnostic: {
-          code: "kp.authoring.market-build-gap", message: error instanceof Error ? error.message : String(error)
-        } });
+        input.report({ ...revision, status: "invalid",
+          diagnostic: createKpAuthoringMarketBuildDiagnostic(error) });
       }
     },
     dispose() { disposed = true; latest = undefined; }

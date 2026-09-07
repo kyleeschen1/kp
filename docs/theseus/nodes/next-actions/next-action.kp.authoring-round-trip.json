@@ -70,6 +70,13 @@
       "scope": "s05",
       "checkedAt": "2026-09-07T21:52:23.710Z",
       "notes": "31 passed. Packet names exact source files, internal compiler source binding, shared server, rejected input, and publication boundary."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/authoring-integration-revisions.test.ts",
+      "status": "passed",
+      "scope": "s06",
+      "checkedAt": "2026-09-07T21:55:24.796Z",
+      "notes": "6 passed; full npm run typecheck passed with zero Svelte errors or warnings. Shared diagnostic projection preserves supplied file/line/column and typed code/path alongside unchanged revision identity."
     }
   ],
   "expectedLearning": [
