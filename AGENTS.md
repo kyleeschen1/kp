@@ -62,6 +62,15 @@ collaboration experiment, not a learner-facing editorial voice standard.
   cannot be resolved within the approved work. See
   `docs/project/decisions/2026-09-06-persistent-loop-continuation.md`.
 
+- Standing user refinement (2026-09-07): minimize check-ins, mainly for visuals.
+  Batch independent visual decisions into one canonical exemplar review packet
+  with a working shared-server URL and concrete inspection instructions. Do not
+  request routine phase approvals, unchanged-visual reapproval, or a redundant
+  resume after visual acceptance when approved work remains. Preserve prerequisite
+  visual gates and genuine scope/safety/authority stops; new long-run scope still
+  needs approval. See
+  `docs/project/decisions/2026-09-07-reconciled-horizon-and-minimal-check-ins.md`.
+
 - Prefer direct commands that can match audited execution rules. Do not add `zsh -lc`, environment assignments, pipes, redirection, substitutions, or wrapper scripts when the same check has a direct invocation.
 - Do not request or accumulate blanket approval for `node`, shell interpreters, changing `tmp/codex/` filenames, destructive Git commands, or deletion commands. Promote recurring checks into a committed `scripts/` or `tests/` entrypoint and expose them through a stable `npm run` command.
 - During an active Theseus run, derive the progress counter with `npm run --silent loop:status` when available and emit it at slice starts, completions, commit boundaries, and before a stop or final response.

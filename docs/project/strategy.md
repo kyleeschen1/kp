@@ -1,6 +1,6 @@
 # KP Strategy
 
-Last Updated: 2026-09-05
+Last Updated: 2026-09-07
 
 ## North Star
 
@@ -90,12 +90,15 @@ The user accepted this emphasis on 2026-09-05. Reader delivery remains the
 destination, but external educator discovery does not gate the repository's
 architecture sequence.
 
-The next bounded proof repairs the independent-cohort correctness gap, reduces
-state-assembly plumbing, joins typed math/optics to aggregate recovery, and
-drives one isolated supply-tax preview through existing compiler, clock,
-SVG, KaTeX, Article, and attention boundaries. It stops for human authoring/API
-and visual review. Structural equation pressure must precede public promotion;
-complete authoring/publication UX and bounded knowledge/procedures follow.
+The bounded integration proof repaired the independent-cohort correctness gap,
+reduced state-assembly plumbing, joined typed math/optics to aggregate recovery,
+and drove supply-tax through existing compiler, clock, SVG, KaTeX, Article and
+attention boundaries. Structural pressure and canonical adoption passed their
+human checkpoints. The next emphasis is reliable everyday authoring and reusable
+reasoning, then Bayes as the first new flagship, frontend convergence and earned
+promotion. The reconciled horizon is
+`reviews/2026-09-07-reconciled-authoring-loop-horizon.md`; mathematical expansion
+remains a measured programme, not a replacement architecture.
 The roadmap owns ordering and Theseus owns approved execution, not this
 rationale document. See
 `decisions/2026-09-05-authoring-integration-priority-and-sequence.md`.

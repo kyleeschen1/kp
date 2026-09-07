@@ -2,6 +2,10 @@
 
 Status: G3 approved; structural authoring and canonical adoption loop complete
 Last Updated: 2026-09-07
+Current successor reference: `../reviews/2026-09-07-reconciled-authoring-loop-horizon.md`.
+It preserves the original architectural obligations and the tax/Bayes direction;
+only a bounded R1 proposal is next, not implementation. Standing minimal-check-in
+policy: `../decisions/2026-09-07-reconciled-horizon-and-minimal-check-ins.md`.
 The user requested recording the recommendations and finishing the existing
 loop, then approved G3 after the gradual code-card passage repair. The existing
 loop is complete; successor implementation is not authorized. Current closeout:
@@ -18,15 +22,15 @@ horizon: LaTeX deductions and LLM collaboration yielding governed motifs,
 reusable explanatory units, flashcards, and whole/part readings. See
 `../decisions/2026-09-07-lower-undergraduate-math-authoring-horizon.md` and
 `../reviews/2026-09-07-lower-undergraduate-math-authoring-readiness.md`.
-This supplements the tax/Bayes direction; only the existing contract is resumed.
+This supplements the tax/Bayes direction; the existing contract is now complete.
 The source-based review found working sequence/planner and flashcard foundations,
 but uneven mathematical coverage and a coverage-report evidence-wiring gap;
 do not treat its proposed roadmap or readiness labels as new execution authority.
 The user clarified the remaining code issue as missing gradual passage swiping.
 The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
-Current Next Action: prepare a separately reviewed authoring round trip using
-tax, then the accepted Bayesian flagship; do not restart the completed loop. See
+Current Next Action: draft the bounded R1 authoring round-trip proposal from
+the reconciled horizon; do not restart the completed loop. See
 `../reviews/2026-09-07-canonical-tax-g3-checkpoint.md` for the working URL,
 source workflow, production ownership, release evidence and remaining work.
 The ordinary build now ships the exact four-card route, with shared source
@@ -132,7 +136,7 @@ review gates, and makes canonical route adoption plus adjacent obsolete-wiring
 retirement explicit. At the proposal's starting baseline, the supply-tax page
 used its original default source; that baseline is historical.
 Canonical source adoption is now implemented through the ordinary build, with
-G3 still unaccepted; use the current checkpoint above for live integration state.
+G3 accepted; use the current checkpoint above for live integration state.
 
 The approved economics prerequisite is implemented. Exact state now reaches the
 existing paint, clock, Article/scene, and explicit fact-binding owners in the
@@ -159,7 +163,7 @@ as a per-slice queue here.
 
 That preceding run reached authoring/API and visual review, now accepted as G0.
 The successor completed structural equation pressure and canonical source
-adoption; its remaining G3 review is paused as recorded above. This does not
+adoption; G3 is accepted and the contract is complete. This does not
 promote a public authoring API or authorize further migration waves.
 Everyday authoring/publication, bounded knowledge/procedures,
 and LaTeX/TypeScript/model convergence remain the accepted later sequence.

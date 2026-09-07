@@ -26,12 +26,14 @@ The canonical adoption contract is complete. See
 `reviews/2026-09-07-canonical-tax-g3-checkpoint.md`. No implementation queue is
 newly authorized by closeout.
 
-1. Prepare a separately reviewed authoring-to-publication round trip with tax,
-   integrating existing sequence/compiler and flashcard foundations.
-2. Pressure that workflow with the accepted Bayesian probability-tree flagship;
-   keep the broader mathematical horizon and domain work in the roadmap.
-3. Preserve fixed budgets, semantic authority, native paint and the shared Focus
-   Card form. External reader discovery is not an architecture prerequisite.
+Current high-level order and checkpoint policy live in
+`reviews/2026-09-07-reconciled-authoring-loop-horizon.md`; this queue does not
+duplicate its milestone table. Next: draft the bounded R1 authoring round-trip
+proposal, with the early capability baseline and actual author/LLM tasks.
+Reusable knowledge/procedures, Bayes, frontend convergence/promotion and later
+mathematical waves remain explicit successor milestones, not approved runs.
+Use the standing minimal-check-in policy in
+`decisions/2026-09-07-reconciled-horizon-and-minimal-check-ins.md`.
 
 The approved persistent semantic state foundation, typed facade and derived
 graph, state-family/interpolation loop, and aggregate logical timeline are

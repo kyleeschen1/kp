@@ -1,5 +1,9 @@
 # Next-step review: a composable explanation medium
 
+Successor-order update: [the reconciled horizon](2026-09-07-reconciled-authoring-loop-horizon.md)
+now owns planning order. G3 is complete; pause/stop descriptions below are
+historical. Retain the analysis and proposed work packets as supporting evidence.
+
 Date: 2026-09-07
 Status: PROPOSED — strategic brainstorm and implementation handoff, not an
 accepted direction, executable run contract, or permission to resume work.

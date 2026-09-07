@@ -5,9 +5,10 @@ Status: PROPOSED implementation direction; accepted user goal is recorded separa
 Inspected baseline: `3d25d4f3e`, clean working tree before these documentation edits
 
 Subsequent instruction: [recommendations recorded; existing loop resumed](../decisions/2026-09-07-math-recommendations-and-loop-resumption.md).
-This assessment remains the successor-planning recommendation, not a new
-executable contract. Its paused-baseline descriptions are historical; G3 human
-acceptance is still required to finish the existing loop.
+The [reconciled horizon](2026-09-07-reconciled-authoring-loop-horizon.md) now owns
+successor ordering. This assessment retains capability evidence and mathematical
+scope, not an executable contract. Its paused-baseline descriptions are
+historical; G3 is accepted and the existing loop is complete.
 
 This is an independent source-and-test assessment, not a Theseus-generated
 report card. It supplements the [composable explanation review](2026-09-07-composable-explanation-medium-next-step-review.md)

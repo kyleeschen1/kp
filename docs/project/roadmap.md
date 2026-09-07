@@ -24,6 +24,14 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+Current successor planning reference:
+`reviews/2026-09-07-reconciled-authoring-loop-horizon.md`. It reconciles everyday
+authoring, reusable knowledge/procedures, Bayes, frontend convergence/promotion
+and mathematical expansion without opening an implementation queue. Next is a
+bounded R1 authoring-round-trip proposal. Minimal check-ins, mainly canonical
+visual reviews, are a standing preference; see
+`decisions/2026-09-07-reconciled-horizon-and-minimal-check-ins.md`.
+
 > **Kinetic Press turns explanations into reusable mental machinery.**
 
 The current product emphasis is domain-specific literacy: help learners see,
@@ -191,7 +199,9 @@ all fixed gates; repair failures instead of treating them as automatic handoffs.
 See `decisions/2026-09-06-persistent-loop-continuation.md`.
 
 The repository contains a large evidence portfolio, not a large active queue.
-The accepted authoring-first outcome sequence is:
+The architectural dependency sequence below is retained for rationale; items
+1–6 are completed evidence. The linked reconciled horizon owns successor
+grouping and checkpoint policy, not a duplicate executable queue:
 
 1. Repair the bounded independence gap and freeze author-task/cost baselines.
 2. Build internal authoring assembly over the existing state authorities.
@@ -218,7 +228,7 @@ pressure on 2026-09-05. See
 `decisions/2026-09-05-canonical-supply-tax-migration-order.md`. The 28-slice
 successor proposal is
 `reviews/2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md`;
-the user subsequently approved its exact execution scope. The active contract is
+the user subsequently approved its exact execution scope. The completed contract is
 `run-contract.kp.structural-authoring-canonical-tax-v2`. Review gates remain
 mandatory. The user explicitly accepted G0 of the existing market preview;
 the successor reproduced and then repaired a native presentation authority

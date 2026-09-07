@@ -42,6 +42,14 @@
     {
       "kind": "file",
       "path": "docs/project/decisions/2026-09-07-math-recommendations-and-loop-resumption.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-07-reconciled-authoring-loop-horizon.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-07-reconciled-horizon-and-minimal-check-ins.md"
     }
   ],
   "decisions": [],
@@ -678,11 +686,18 @@
       "scope": "preservation",
       "checkedAt": "2026-08-27T06:28:36.971Z",
       "notes": "Existing equation-surface contracts remain intact."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/current-direction-authoring-ratchet.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-07T21:12:16.011Z",
+      "notes": "Three direction checks pass after documentation-only reconciliation; no runtime release claim."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Previous authoring integration completed 28 slices at HUMAN_CHECKPOINT. User accepted review then structural equation proof then canonical supply-tax migration before broader authoring, publication and knowledge work. New 28-slice structural-authoring-canonical-tax proposal awaits exact execution approval; no active successor contract and no visual checkpoint waiver. Current source decision supersedes older successor ordering."
+    "summary": "Canonical adoption complete with G3 accepted. User requested reconciled horizon and minimal check-ins. Next: draft bounded R1 authoring-round-trip proposal; no active implementation contract. Preserve knowledge/procedures, Bayes, frontend convergence and earned promotion."
   },
   "allowedWork": [
     "The semantic reader matches the accepted x + 3 = 7 animation card at named forward and reverse frames without typography changes, collisions, or discontinuities.",
