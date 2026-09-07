@@ -280,7 +280,8 @@
     {
       "id": "s26",
       "title": "Authoring-preview convergence: ensure local preview and canonical page consume the same source preparation with separate delivery lifecycles",
-      "status": "planned"
+      "summary": "Preview and canonical source converge on shared preparation with separate revision lifetimes. Live invalid-save/last-valid/repair and 81 integration checks pass; same-document sibling remount passes in all three engines.",
+      "status": "complete"
     },
     {
       "id": "s27",

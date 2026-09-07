@@ -594,7 +594,7 @@ test("disposing an active card and remounting in the same document preserves bot
   );
   await page.evaluate(async () => {
     const modulePath =
-      "/src/experiments/kinetic-figure-log-exponent-focus-card/" +
+      "/src/tutorial/kinetic-figure-log-exponent-focus-card/" +
       "kinetic-figure-log-exponent-focus-card.ts";
     const module = await import(/* @vite-ignore */ modulePath) as typeof import(
       "../src/tutorial/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card.ts"

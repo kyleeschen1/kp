@@ -1051,6 +1051,55 @@
       "scope": "s25",
       "checkedAt": "2026-09-07T15:55:18.021Z",
       "notes": "Regenerated and checked inventory current, same 68 roots; only ownership paths and scanned count change."
+    },
+    {
+      "command": "npm run test:browser:focus-deck-multi-card -- --grep one-route-and-remount",
+      "status": "failed",
+      "scope": "s26",
+      "checkedAt": "2026-09-07T15:59:34.146Z",
+      "notes": "Scoped 9-check run used actual grep one route hosts, semantic navigation changes and disposing an active card. Three remount tests retained an assembled old dynamic module URL; two live fixture stylesheet paths were also corrected. Production route checks passed. Re-running same scoped command after test-fixture ownership repair."
+    },
+    {
+      "command": "npm run test:browser:focus-deck-multi-card -- --grep \"one route hosts|semantic navigation changes|disposing an active card\"",
+      "status": "failed",
+      "scope": "s26",
+      "checkedAt": "2026-09-07T16:00:17.519Z",
+      "notes": "Exact executed command for prior failure: six route/navigation checks passed; three remount checks failed on obsolete dynamic module URL. Previous one-route-and-remount label was shorthand, not an executable invocation. Dynamic URL and fixture styles now point to promoted runtime; same check rerunning."
+    },
+    {
+      "command": "npm run visual:authoring-market",
+      "status": "passed",
+      "scope": "s26",
+      "checkedAt": "2026-09-07T16:01:27.035Z",
+      "notes": "8 pass including actual invalid-file save, last-valid retention, repair, exact variation history and repeated retirement. Expected deliberate parse diagnostic is test evidence, not a remaining failure. Author files restored."
+    },
+    {
+      "command": "npm run test:authoring-integration",
+      "status": "passed",
+      "scope": "s26",
+      "checkedAt": "2026-09-07T16:01:28.288Z",
+      "notes": "81 pass; new canonical/reference/variation interleaving proves equal reference frames with isolated authority, history, reset, disposal and failed draft lifetimes."
+    },
+    {
+      "command": "npm run test:browser:focus-deck-multi-card -- --grep \"one route hosts|semantic navigation changes|disposing an active card\"",
+      "status": "passed",
+      "scope": "s26",
+      "checkedAt": "2026-09-07T16:01:29.363Z",
+      "notes": "Final 9 pass across all three engines after remount fixture URL/style paths follow moved owners."
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s26",
+      "checkedAt": "2026-09-07T16:01:30.420Z",
+      "notes": "Test types pass on final fixture and isolation checks; full production typecheck passed at s25."
+    },
+    {
+      "command": "npm run check:canonical-tax-source",
+      "status": "passed",
+      "scope": "s26",
+      "checkedAt": "2026-09-07T16:01:31.508Z",
+      "notes": "Canonical and sibling build artifacts remain fresh after actual preview file save/repair tests."
     }
   ],
   "progress": {
