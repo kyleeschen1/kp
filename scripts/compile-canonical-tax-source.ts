@@ -13,6 +13,7 @@ import { compileKpTypeScriptFreeShippingPublicLesson } from "../src/public-web/t
 import { createKpTypeScriptFreeShippingRuntimeProjection } from "../src/public-web/typescript-free-shipping-runtime.ts";
 import { createKpTypeScriptFocusCardScore } from "../src/tutorial/kinetic-figure-typescript-focus-card/kinetic-figure-typescript-focus-card-model.ts";
 import { createKpSurfaceContourModel, createKpSurfaceContourScore } from "../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-model.ts";
+import type { KpAuthoredMarketSourceData } from "../src/tutorial/authoring-market/authoring-market-source-data.ts";
 
 const output = new URL("../src/tutorial/kinetic-figure-supply-tax/canonical-tax-source.generated.json", import.meta.url);
 const staticOutput = new URL("../src/tutorial/kinetic-figure-supply-tax/canonical-tax-static.generated.html", import.meta.url);
@@ -63,6 +64,12 @@ export function compileKpCanonicalTaxSource() {
   // remains with the canonical source/build rather than leaking into the reader.
   const sourceId = "article.economics.supply-tax.reference";
   const data = { ...bound, article: { ...bound.article, sourceId, authoredSourcePath: sourceId } };
+  return compileKpAuthoredTaxSource(data);
+}
+
+/** Explicit selected-source builds share preparation, not the canonical default's selection policy. */
+export function compileKpAuthoredTaxSource(input: KpAuthoredMarketSourceData) {
+  const data: KpAuthoredMarketSourceData = structuredClone(input);
   const prepared = prepareKpAuthoringMarketPreview(data);
   const article = { document: prepared.companion.compiled.document, phraseHtml: prepared.companion.phraseHtml };
   return {

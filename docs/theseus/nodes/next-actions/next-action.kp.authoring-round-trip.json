@@ -133,6 +133,13 @@
       "scope": "s14",
       "checkedAt": "2026-09-07T22:29:02.736Z",
       "notes": "2 passed; actual source-branch download browser test passed; full typecheck passed. Independent source identity, predecessor, exact prose, unsafe-name and mixed-revision rejection verified."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/authoring-round-trip-publication.test.ts tests/authoring-integration-canonical-build.test.ts",
+      "status": "passed",
+      "scope": "s15",
+      "checkedAt": "2026-09-07T22:32:36.761Z",
+      "notes": "10 passed; full types and canonical-source freshness pass. Existing publication envelope and canonical-tax payload bind selected source text/model/Article while default canonical artifacts and reader import isolation remain unchanged."
     }
   ],
   "expectedLearning": [

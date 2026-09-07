@@ -180,7 +180,8 @@
     {
       "id": "s15",
       "title": "Publication inputs bind one source/model/Article revision",
-      "status": "planned"
+      "summary": "Coherent selected publication inputs implemented; mixed revisions rejected, default canonical output unchanged. 10 focused, full type and freshness checks pass.",
+      "status": "complete"
     },
     {
       "id": "s16",
