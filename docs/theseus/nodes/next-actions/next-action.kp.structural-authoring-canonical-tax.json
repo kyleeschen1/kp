@@ -725,6 +725,34 @@
       "scope": "s21",
       "checkedAt": "2026-09-07T05:33:41.395Z",
       "notes": "Generated canonical artifact current, includes unchanged canonical Article and claims with explicit reference revision binding."
+    },
+    {
+      "command": "npm run test:authoring-integration",
+      "status": "passed",
+      "scope": "s22",
+      "checkedAt": "2026-09-07T05:38:24.849Z",
+      "notes": "75 pass, including actual canonical source session exact-frame parity, one query owner, cache reset, bounded history, idempotent disposal and no second sampler."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s22",
+      "checkedAt": "2026-09-07T05:38:26.025Z",
+      "notes": "Full TypeScript, Svelte and domain checks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s22",
+      "checkedAt": "2026-09-07T05:38:27.064Z",
+      "notes": "All architecture/compiler and cross-domain gates pass with new internal source and mount owners."
+    },
+    {
+      "command": "npm run test:browser:economics-supply-tax -- --grep prepared",
+      "status": "passed",
+      "scope": "s22",
+      "checkedAt": "2026-09-07T05:38:28.085Z",
+      "notes": "Executed grep prepared canonical source: real original URL and test-injected prepared source produce identical graph markup, prose, accessible labels and progress across all eight stops and nonmonotonic transit samples. No author templates or preview service requests; no page errors."
     }
   ],
   "progress": {

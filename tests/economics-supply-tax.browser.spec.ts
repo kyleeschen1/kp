@@ -2,6 +2,43 @@ import { expect, test, type Locator, type Page } from "@playwright/test";
 
 const path = "/experiments/kinetic-figure/supply-tax/";
 
+test("prepared canonical source matches the original URL through all tax stops and reverse samples", async ({ page }) => {
+  const errors: string[] = [];
+  const requests: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  page.on("request", request => requests.push(request.url()));
+  const capture = async () => {
+    await page.goto(path);
+    const deck = page.locator("[data-kp-supply-tax-focus-deck]");
+    await expect(deck).toBeVisible();
+    const states = [];
+    for (const position of [0, 1, 1.371, 2, 3, 4, 5, 6, 7, 1.371, 0]) {
+      await setScrubberPosition(deck.locator("[data-kp-supply-tax-state-scrubber]"), position, false);
+      states.push(await deck.evaluate(root => ({
+        graph: root.querySelector(".kp-supply-tax-graph")!.innerHTML,
+        prose: [...root.querySelectorAll(".kp-supply-tax-narrative__page")].map(node => node.textContent),
+        label: root.querySelector("[data-kp-supply-tax-state-scrubber]")!.getAttribute("aria-valuetext"),
+        progress: root.getAttribute("data-kp-supply-tax-model-progress")
+      })));
+    }
+    return states;
+  };
+  const original = await capture();
+  // Test-only entry substitution exercises the actual URL and host before the
+  // atomic production cutover; it is not a shipped flag or alternate reader.
+  await page.route("**/src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-page.ts", route => route.fulfill({
+    contentType: "application/javascript", body: `
+      import { mountKpCanonicalTaxReader } from "/src/experiments/kinetic-figure-supply-tax/canonical-tax-reader.ts";
+      const session = mountKpCanonicalTaxReader({ root: document.querySelector("#app") });
+      addEventListener("pagehide", event => { if (!event.persisted) session.dispose(); });
+    `
+  }));
+  expect(await capture()).toEqual(original);
+  await expect(page.locator("#app")).toHaveAttribute("data-kp-canonical-tax-source", "framework-reference");
+  expect(requests.filter(url => /authoring-market-(?:article-source|model-source|preview-build)\.ts|\/__kp\/authoring-market\//.test(url))).toEqual([]);
+  expect(errors).toEqual([]);
+});
+
 test("supply-tax deck navigates exact semantic stops and one domain-motion edge", async ({
   page
 }) => {

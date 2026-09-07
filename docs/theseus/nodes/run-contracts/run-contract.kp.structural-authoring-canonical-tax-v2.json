@@ -256,7 +256,8 @@
     {
       "id": "s22",
       "title": "Cutover contract tests: exercise original URL behavior against the prepared source and verify single evaluator ownership",
-      "status": "planned"
+      "summary": "Prepared reader source and existing host pass original-URL parity before cutover, preserving native label policy. One query owner and disposal verified. Test-only interception is not a production flag; old route still intact until s23.",
+      "status": "complete"
     },
     {
       "id": "s23",

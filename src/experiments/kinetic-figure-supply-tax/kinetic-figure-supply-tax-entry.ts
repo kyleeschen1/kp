@@ -155,6 +155,7 @@ export function mountKpSupplyTaxKineticFigure(input: {
   readonly source?: {
     readonly authority: ReturnType<typeof createKpEconomicsSupplyTaxAnimationAsset>;
     readonly sampleFrame: (progress: number) => ReturnType<typeof sampleKpEconomicsSupplyTaxAnimationFrame>;
+    readonly exactLabels?: boolean;
     readonly instruction?: {
       readonly authority: ReturnType<typeof createKpEconomicsSupplyTaxAnimationAsset>;
       readonly score: ReturnType<typeof createKpSupplyTaxPedagogicalScore>;
@@ -269,7 +270,7 @@ export function mountKpSupplyTaxKineticFigure(input: {
       root: graph,
       semantics: authority.semantics,
       frame,
-      exactLabels: input.source !== undefined
+      exactLabels: input.source?.exactLabels ?? input.source !== undefined
     });
     projectedModelProgress = modelProgress;
     deck.dataset["kpSupplyTaxModelProgress"] = modelProgress.toFixed(4);
