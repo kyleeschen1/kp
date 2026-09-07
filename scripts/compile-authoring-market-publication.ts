@@ -1,12 +1,40 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { basename } from "node:path";
-import { createKpCompiledPublicationArtifact } from "../src/tutorial/kp-compiled-publication-artifact.ts";
+import { assertKpCompiledPublicationArtifact, createKpCompiledPublicationArtifact } from "../src/tutorial/kp-compiled-publication-artifact.ts";
 import { readKpAuthoringMarketSourceBranch } from "../src/experiments/authoring-market/authoring-market-source-branch.ts";
 import { compileKpAuthoredTaxSource } from "./compile-canonical-tax-source.ts";
 
 /** A selected data source uses the existing publication envelope and tax payload. */
 export function compileKpAuthoringMarketPublication(input: { readonly sourceText: string; readonly sourcePath: string }) {
+  const artifact = buildPublication(input);
+  verifyKpAuthoringMarketPublication(artifact, input);
+  return artifact;
+}
+
+export function verifyKpAuthoringMarketPublication(value: unknown,
+  input: { readonly sourceText: string; readonly sourcePath: string }) {
+  assertKpCompiledPublicationArtifact(value);
+  if (value.payloadSha256 !== digest(JSON.stringify(value.payload))) {
+    throw new Error("Publication payload digest does not match its actual bytes.");
+  }
+  if (value.source.sha256 !== digest(input.sourceText) || value.source.path !== basename(input.sourcePath)) {
+    throw new Error("Publication source identity does not match the selected source bytes and path.");
+  }
+  // A recomputed attacker-supplied digest is not evidence that payload and
+  // source agree. Rebuild through the same governed source/Article compiler.
+  if (JSON.stringify(value) !== JSON.stringify(buildPublication(input))) {
+    throw new Error("Publication payload or compiler identity does not reproduce from the selected source.");
+  }
+}
+
+export function serializeKpAuthoringMarketPublication(value: unknown,
+  input: { readonly sourceText: string; readonly sourcePath: string }): string {
+  verifyKpAuthoringMarketPublication(value, input);
+  return `${JSON.stringify(value, null, 2)}\n`;
+}
+
+function buildPublication(input: { readonly sourceText: string; readonly sourcePath: string }) {
   const branch = readKpAuthoringMarketSourceBranch(JSON.parse(input.sourceText));
   const tax = compileKpAuthoredTaxSource(branch.data);
   const payload = { parentSourceRevision: branch.parentSourceRevision, tax };

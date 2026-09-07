@@ -186,7 +186,8 @@
     {
       "id": "s16",
       "title": "Verify actual payload digests in build/verification path",
-      "status": "planned"
+      "summary": "Actual payload/source verification enforced in selected publication build and serialization; tamper and rehashed mismatch regressions pass with full types.",
+      "status": "complete"
     },
     {
       "id": "s17",

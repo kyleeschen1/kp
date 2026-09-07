@@ -3,7 +3,7 @@ import { createHash } from "node:crypto";
 import test from "node:test";
 import { buildKpAuthoringMarketPreview } from "../src/experiments/authoring-market/authoring-market-preview-build.ts";
 import { createKpAuthoringMarketSourceBranch } from "../src/experiments/authoring-market/authoring-market-source-branch.ts";
-import { compileKpAuthoringMarketPublication as compile } from "../scripts/compile-authoring-market-publication.ts";
+import { compileKpAuthoringMarketPublication as compile, serializeKpAuthoringMarketPublication as serialize } from "../scripts/compile-authoring-market-publication.ts";
 import { prepareKpAuthoredMarketSource } from "../src/tutorial/authoring-market/authoring-market-prepare.ts";
 
 function source() {
@@ -38,4 +38,18 @@ test("publication rejects a selected source whose Article belongs to another mod
     parameters: buildKpAuthoringMarketPreview("variation").parameters } };
   assert.throws(() => compile({ sourceText: JSON.stringify(mismatched), sourcePath: "selected.market.json" }), /revision/);
   assert.throws(() => compile({ sourceText: "{}", sourcePath: "selected.market.json" }), /identity/);
+});
+
+test("real publication serialization checks payload bytes and selected source rather than digest shape", () => {
+  const input = { sourceText: JSON.stringify(source()), sourcePath: "selected.market.json" };
+  const artifact = compile(input);
+  assert.deepEqual(JSON.parse(serialize(artifact, input)), artifact);
+  const tampered = JSON.parse(JSON.stringify(artifact));
+  tampered.payload.tax.data.article.text += "\nTampered editorial content\n";
+  assert.throws(() => serialize(tampered, input), /payload digest/);
+  tampered.payloadSha256 = `sha256:${createHash("sha256").update(JSON.stringify(tampered.payload)).digest("hex")}`;
+  assert.throws(() => serialize(tampered, input), /does not reproduce/);
+  assert.throws(() => serialize(artifact, { ...input, sourceText: `${input.sourceText}\n` }), /source identity/);
+  assert.throws(() => serialize(artifact, { ...input, sourcePath: "different.market.json" }), /source identity/);
+  assert.throws(() => serialize({ ...artifact, compiler: { ...artifact.compiler, version: "forged" } }, input), /compiler identity/);
 });

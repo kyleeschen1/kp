@@ -140,6 +140,13 @@
       "scope": "s15",
       "checkedAt": "2026-09-07T22:32:36.761Z",
       "notes": "10 passed; full types and canonical-source freshness pass. Existing publication envelope and canonical-tax payload bind selected source text/model/Article while default canonical artifacts and reader import isolation remain unchanged."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/authoring-round-trip-publication.test.ts tests/kp-compiled-publication-artifact.test.ts",
+      "status": "passed",
+      "scope": "s16",
+      "checkedAt": "2026-09-07T22:36:03.988Z",
+      "notes": "6 passed and full types passed. Actual compilation and serialization verify payload bytes, selected source bytes/path and deterministic recompilation; rehashed inconsistent payload and forged compiler identity fail."
     }
   ],
   "expectedLearning": [
