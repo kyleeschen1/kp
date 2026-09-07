@@ -386,10 +386,13 @@ test("actual local-file rebuild retains invalid drafts and last valid preview wi
     await expect(status).toHaveAttribute("data-kp-authoring-market-build-status", "valid");
     const equationEditor = page.locator("[data-kp-authoring-equation]");
     const equation = JSON.parse(await equationEditor.locator("textarea").inputValue());
+    equation.states[0].latex = "\\log_{10} 100";
+    equation.states[1].latex = "\\frac{\\ln 100}{\\ln 10}";
     equation.states[1].narration = "The argument stays upstairs; the base supplies the denominator.";
     await equationEditor.locator("textarea").fill(JSON.stringify(equation));
     await equationEditor.getByRole("button", { name: "Compile equation draft" }).click();
     await expect(equationEditor).toHaveAttribute("data-kp-authoring-equation", "compiled");
+    await expect(equationEditor.locator("[data-kp-logarithm-change-of-base-stage] annotation").first()).toContainText("100");
     await sourceHistory.getByLabel("Include displayed, compiled equation in this edition").check();
     const editionName = `browser-${randomUUID()}`;
     await sourceHistory.getByLabel("New source branch name").fill(editionName);
@@ -402,6 +405,8 @@ test("actual local-file rebuild retains invalid drafts and last valid preview wi
     for await (const chunk of stream) chunks.push(Buffer.from(chunk));
     const sourceText = Buffer.concat(chunks).toString("utf8");
     expect(JSON.parse(sourceText).equationRequest.states[1].narration).toBe(equation.states[1].narration);
+    expect(JSON.parse(sourceText).equationRequest.states).toEqual(equation.states);
+    expect(JSON.parse(sourceText).equationRequest.adjacencies[0].intent.semanticArguments).toEqual({});
     await mkdir(kpAuthoringMarketEditionRoot, { recursive: true });
     const sourceDirectory = await mkdtemp(join(kpAuthoringMarketEditionRoot, "browser-source-"));
     const editionDirectory = join(kpAuthoringMarketEditionRoot, editionName);
@@ -420,6 +425,8 @@ test("actual local-file rebuild retains invalid drafts and last valid preview wi
         const readingPage = await noJs.newPage();
         await readingPage.setContent(html.replace("<head>", `<head><base href="http://127.0.0.1:4173/tmp/codex/authoring-market-editions/${editionName}/">`));
         await expect(readingPage.locator("[data-kp-authoring-equation-static] math")).toHaveCount(2);
+        await expect(readingPage.locator("[data-kp-authoring-equation-static] annotation").first()).toHaveText(equation.states[0].latex);
+        await expect(readingPage.locator("[data-kp-authoring-equation-static] annotation").last()).toHaveText(equation.states[1].latex);
         await expect(readingPage.locator('dt:has-text("after.revenue") + dd')).toHaveText("12");
       } finally { await noJs.close(); }
     } finally {

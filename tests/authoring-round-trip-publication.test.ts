@@ -6,6 +6,33 @@ import { createKpAuthoringMarketSourceBranch } from "../src/experiments/authorin
 import { compileKpAuthoringMarketPublication as compile, serializeKpAuthoringMarketPublication as serialize } from "../scripts/compile-authoring-market-publication.ts";
 import { prepareKpAuthoredMarketSource } from "../src/tutorial/authoring-market/authoring-market-prepare.ts";
 import { createKpEquationSeriesLogarithmBaseExample } from "../src/authoring/equation-series-logarithm-base-example.ts";
+import { createKpEquationSeriesLogarithmBaseDraft } from "../src/authoring/equation-series-logarithm-base-draft.ts";
+
+test("independent numeric and market variants reproduce exact source without changing their predecessor", () => {
+  const equationRequest = createKpEquationSeriesLogarithmBaseDraft();
+  const firstBranch = { ...source(), equationRequest };
+  const firstInput = { sourceText: JSON.stringify(firstBranch), sourcePath: "first.market.json" };
+  const first = compile(firstInput);
+  const secondBranch = { ...createKpAuthoringMarketSourceBranch({ schemaVersion: "kp.authoring-market-build.v1",
+    sourceRevision: first.source.sha256, sequence: 3, sourcePaths: ["model.ts", "article.ts"],
+    status: "valid", preview: buildKpAuthoringMarketPreview("variation") }, "second"), equationRequest: structuredClone(equationRequest) };
+  secondBranch.equationRequest.states[0]!.latex = "\\log_{10} 100";
+  secondBranch.equationRequest.states[1]!.latex = "\\frac{\\ln 100}{\\ln 10}";
+  const secondInput = { sourceText: JSON.stringify(secondBranch), sourcePath: "second.market.json" };
+  const second = compile(secondInput);
+  assert.notEqual(first.source.sha256, second.source.sha256);
+  assert.notEqual(first.payloadSha256, second.payloadSha256);
+  assert.equal(second.payload.parentSourceRevision, first.source.sha256);
+  assert.ok(second.math.sourceLatex.includes(secondBranch.equationRequest.states[0]!.latex));
+  assert.ok(second.math.sourceLatex.includes(secondBranch.equationRequest.states[1]!.latex));
+  assert.deepEqual(compile(firstInput), first);
+  assert.deepEqual(compile(secondInput), second);
+  assert.equal(prepareKpAuthoredMarketSource(first.payload.tax.data, first.payload.tax.article).facts.text("after.revenue"), "12");
+  assert.equal(prepareKpAuthoredMarketSource(second.payload.tax.data, second.payload.tax.article).facts.text("after.revenue"), "10");
+  assert.throws(() => serialize(second, firstInput), /source identity/);
+  secondBranch.equationRequest.states[1]!.latex = firstBranch.equationRequest.states[1]!.latex;
+  assert.throws(() => compile({ ...secondInput, sourceText: JSON.stringify(secondBranch) }), /Repair the selected equation/);
+});
 
 test("only explicitly included and governed equations enter the selected reading edition", () => {
   const market = source();

@@ -227,7 +227,8 @@
     {
       "id": "s22",
       "title": "Second supported variant pressures same workflow",
-      "status": "planned"
+      "summary": "Distinct numeric and market variant traverses existing authoring/export/build/read workflow; source isolation, exact MathML and real publication reproduction verified. No new family or choreography.",
+      "status": "complete"
     },
     {
       "id": "s23",

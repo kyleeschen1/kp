@@ -229,6 +229,27 @@
       "scope": "s21",
       "checkedAt": "2026-09-07T23:47:54.804Z",
       "notes": "88 tests pass; existing market source/lifecycle boundaries preserved."
+    },
+    {
+      "command": "npm run visual:authoring-market",
+      "status": "passed",
+      "scope": "s22",
+      "checkedAt": "2026-09-07T23:52:35.553Z",
+      "notes": "13 browser checks pass including numeric JSON to material/native ink, browser export, real filesystem build and exact no-JavaScript MathML. Source files restored."
+    },
+    {
+      "command": "npm run test:authoring-round-trip",
+      "status": "passed",
+      "scope": "s22",
+      "checkedAt": "2026-09-07T23:52:36.626Z",
+      "notes": "49 tests pass including separate numeric/market variant source and payload identity, reproducibility and predecessor isolation."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s22",
+      "checkedAt": "2026-09-07T23:52:37.595Z",
+      "notes": "Full type gate passes before browser source-edit checks."
     }
   ],
   "progress": {

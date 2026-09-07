@@ -61,8 +61,9 @@ For hands-on source work and explicit equation inclusion in a branch, use
 ## Identity and preservation boundaries
 
 The equation is `animation.equation.logarithm-change-of-base.v1`, not the
-log/exponent-solving sibling. Trusted semantics remain
-`kpCanonicalLogarithmChangeOfBase`, bound by the existing governed compiler.
+log/exponent-solving sibling. The default trusted instance remains
+`kpCanonicalLogarithmChangeOfBase`; numeric edits pass through the same
+`verifyKpLogarithmChangeOfBase` authority and existing governed compiler.
 The preview composes its two states through `renderKpFocusDeckScaffold`, the
 existing editor player clock, and the canonical change-of-base native-KaTeX
 surface/transit session. Native formatting remains canonical, not a promise to
@@ -124,7 +125,14 @@ Executed evidence is recorded in Theseus:
 - Full `npm run typecheck`, canonical source freshness, edition freshness and
   `theseus workspace validate` pass.
 
-This is not full R1 release certification or an actual live LLM trial. After
-approval, continue the already-approved feedback, second-variant pressure,
+The post-approval second-variant checks also cover independent numeric/market
+source identity and reproduction: base 10 / argument 100 passes through browser
+export to exact native MathML in a real local no-JavaScript edition. The
+predecessor's source, market facts and publication remain unchanged; mixing its
+equation endpoint into the new request is rejected. Theseus records executed
+commands rather than treating matching IDs as evidence.
+
+This is not full R1 release certification or an actual live LLM trial. Continue
+the already-approved feedback, second-variant pressure,
 live-model trial, measured-friction repair and release/closeout work. Do not
 ask for another routine resume; stop only at a named contract condition.
