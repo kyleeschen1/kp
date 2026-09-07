@@ -1,14 +1,15 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: G0 and G1 accepted; second caller integrated; compiler-cost gate stopped
+Status: G0 and G1 accepted; second caller integrated; compiler-cost gate repaired
 Last Updated: 2026-09-06
-Current Next Action: review broader implementation/import-boundary cost work
-after the measured cleanup in
+Current Next Action: verify structural release before the G2 human checkpoint.
+The user approved broader implementation/import-boundary cost work; see
 `../reviews/2026-09-06-structural-authoring-two-caller-cost-stop.md`.
-The retained type-only repair removes 949 types and 5,688 instantiations with
-unchanged emitted JavaScript; the fixed consumer ceilings still fail.
+The real consumer gate now passes at 112,087 types / 191,096 instantiations
+after isolating existing geometry and frame-sampling responsibilities from legacy
+implementation dependencies. Consumer fixtures and all budgets remain unchanged.
 Simplification is integrated through its existing native carrier owner and a
-Focus Card; the actual two-caller inference fixture exceeds unchanged budgets.
+Focus Card; both callers remain in the actual inference fixture.
 G2 release and canonical migration have not begun. The approved scope remains
 `../reviews/2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md`.
 The completed source workflow and market specimen passed G0 review; evidence is in

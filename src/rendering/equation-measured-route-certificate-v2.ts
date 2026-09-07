@@ -2,7 +2,7 @@ import {
   isKpCompiledEquationTransitObligationsV2,
   type KpCompiledEquationTransitObligationsV2
 } from "../domain-ir/equation-transit-obligations-v2.ts";
-import type { KpEquationLayoutRect } from "./equation-layout-plan.ts";
+import type { KpEquationLayoutRect } from "./equation-layout-types.ts";
 import {
   sampleKpEquationMotionTrackPaintRect,
   type KpEquationCollisionTrack,

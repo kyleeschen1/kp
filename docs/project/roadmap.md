@@ -211,11 +211,13 @@ The user approved the repaired whole-fraction motion and requested continuation
 with carrier-preserving simplification. Firefox handoff cost remains a measured
 limitation; this acceptance does not promote a universal fraction motion rule.
 The second caller now reaches its existing native carrier renderer in an authored
-Focus Card, but the real two-caller consumer fixture exceeds the unchanged
-inference budgets. Execution stops at the API/cost gate before G2 release or
-canonical migration. See
+Focus Card. The user approved broader implementation/import-boundary repair;
+the real two-caller consumer fixture now passes unchanged inference budgets.
+Existing geometry and frame-sampling owners no longer pull legacy token/DOM
+implementation into the native consumer closure. G2 release verification is
+next; canonical migration still requires its human checkpoint. See
 `reviews/2026-09-06-structural-authoring-two-caller-cost-stop.md` for the measured
-costs and bounded repair recommendation; no budget increase is authorized.
+costs and resolved repair evidence; no budget increase is authorized.
 
 The preceding direction and completed integration run were accepted and scoped by
 `run-contract.kp.authoring-integration-market-preview-v1` and

@@ -23,7 +23,7 @@ import {
   sampleKpEquationMotionTrackPaintRect,
   type KpEquationMotionPathVariantId
 } from "./equation-motion-path-planner.ts";
-import type { KpEquationLayoutRect } from "./equation-layout-plan.ts";
+import type { KpEquationLayoutRect } from "./equation-layout-types.ts";
 import {
   invalidateKpNativeKatexMotionPath,
   measureKpNativeKatexSubtreePaintRect

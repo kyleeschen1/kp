@@ -21,6 +21,12 @@ import {
   createKpWitnessedAnnihilationPlan
 } from "../src/animation/witnessed-annihilation.ts";
 import "../src/rendering/equation-witnessed-annihilation-register.ts";
+import { sampleKpEquationLinearRearrangementFrame as sampleSharedFrame } from
+  "../src/rendering/equation-linear-rearrangement-frame.ts";
+
+test("native and legacy rearrangement callers retain one progress sampler", () => {
+  assert.equal(sampleSharedFrame, sampleKpEquationLinearRearrangementFrame);
+});
 
 const choreography = createKpLinearRearrangementChoreography(
   createLinearSolveAnimationAsset()

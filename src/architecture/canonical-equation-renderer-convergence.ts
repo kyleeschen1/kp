@@ -61,6 +61,8 @@ export const kpCanonicalEquationRendererConvergence = Object.freeze({
     "src/animation/lineage-constrained-glyph-matcher.ts",
     "src/animation/structural-succession-presentation.ts",
     "src/animation/symbol-motion-contract.ts",
+    "src/rendering/equation-layout-types.ts",
+    "src/rendering/equation-linear-rearrangement-frame.ts",
     "src/rendering/equation-motion-path-planner.ts",
     "src/rendering/native-katex-base-scene-plan.ts",
     "src/rendering/native-katex-factoring-choreography.ts",

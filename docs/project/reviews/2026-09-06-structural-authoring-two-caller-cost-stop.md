@@ -1,13 +1,38 @@
 # Structural authoring: second caller and compiler-cost stop
 
-Status: STOP_CONDITION at the two-caller API/cost gate; G2 is not reached
+Status: compiler-cost stop resolved; G2 release verification is next
 Contract: `run-contract.kp.structural-authoring-canonical-tax-v2`
 
-Latest disposition: the user approved the fraction/card-form and identity
-ink-shrink/loading follow-ups and resumed the loop. The compiler-only repair
-below reduces real gate cost, but does not yet pass either fixed ceiling.
-Earlier pending visual-review statements are historical; G2 release is still
-pending and canonical migration remains untouched.
+Latest disposition: the user approved broader implementation/import-boundary
+repair after the initial compiler-only cleanup. The unchanged gate now passes
+at **112,087 types / 191,096 instantiations**, below ceilings of 112,500 / 195,800.
+Earlier stop and pending exemplar-review statements below are historical. G2
+release is still pending and canonical migration remains untouched.
+
+## Approved boundary repair and resolution
+
+The native consumer pulled legacy DOM/token implementation into its compiler
+closure through geometry declarations and a shared frame sampler. Geometry
+types now live in `equation-layout-types.ts`; the existing pure sampler lives
+in `equation-linear-rearrangement-frame.ts`. The original modules re-export
+their existing APIs. This is one sampler, not a parallel timing authority;
+its sampling logic and curves are unchanged. Repeated native choreography
+geometry projection was consolidated without changing endpoints or ownership.
+
+Both extracted modules are charged to the canonical source inventory and its
+existing ownership responsibilities. No source ceiling, inference budget,
+consumer fixture, semantic schema, receipt, or renderer authority was relaxed.
+A transitive closure regression follows the real native consumer into the
+concrete compositor and rejects the four formerly reached legacy modules.
+A strict identity assertion verifies the old sampler export is the new owner.
+
+Executed evidence: `npm run check:inference`, `npm run typecheck`,
+`npm run test:operation-presentation-plans` (192 tests),
+`npm run test:canonical-equation-renderer` (29 tests, including source budgets),
+and `npm run check:architecture` pass. Compiler headroom is still modest:
+413 types and 4,704 instantiations. These are compile-cost improvements, not a
+claim of faster browser animation. The bounded rollback unit is this module
+boundary extraction and geometry deduplication; the authored callers stay intact.
 
 ## What is now integrated
 

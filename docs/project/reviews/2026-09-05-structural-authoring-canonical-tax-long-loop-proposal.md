@@ -6,6 +6,17 @@ Mode: long, explicitly requested through theseus-long-loop
 Contract: `run-contract.kp.structural-authoring-canonical-tax-v2`
 Target: `next-action.kp.structural-authoring-canonical-tax`
 
+## Approved cost-repair amendment — 2026-09-06
+
+The user approved expanding s17 beyond type-only cleanup to implementation and
+import boundaries. Extract the existing geometry declarations and pure frame
+sampler from legacy implementation dependencies; preserve existing exports,
+sampling behavior, real consumer fixtures, source accounting, all fixed budgets,
+and semantic/runtime authority. No new public hierarchy or caller migration is
+authorized by this amendment. G2 remains required before canonical tax migration.
+Resolution evidence is in `2026-09-06-structural-authoring-two-caller-cost-stop.md`.
+Theseus retains slice order and live execution status.
+
 ## Outcome and why now
 
 Make the new authoring architecture earn canonical adoption: first exercise

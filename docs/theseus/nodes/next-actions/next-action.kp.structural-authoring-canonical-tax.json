@@ -2,9 +2,9 @@
   "id": "next-action.kp.structural-authoring-canonical-tax",
   "kind": "next-action",
   "title": "Structural authoring proof and canonical supply-tax adoption",
-  "status": "blocked",
+  "status": "in-progress",
   "domain": "kp",
-  "summary": "Verified compiler-only repair saves 949 types and 5688 instantiations, but mandatory fixed ceilings still fail. Broader implementation/import-boundary review is next; visual follow-ups accepted, G2 remains pending.",
+  "summary": "Approved broader compiler implementation/import-boundary repair; resume s17 with unchanged cost and consumer gates.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -279,11 +279,25 @@
       "scope": "s17 unchanged consumer compiler-cost gate",
       "checkedAt": "2026-09-06T23:36:37.053Z",
       "notes": "Type correctness passes; 117209 types exceeds 112500 and 199799 instantiations exceeds 195800. Improved from 118158/205487 without fixture or budget changes."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s17",
+      "checkedAt": "2026-09-07T00:15:30.204Z",
+      "notes": "Unchanged real consumer gate passes: 112087 types and 191096 instantiations; ceilings unchanged."
+    },
+    {
+      "command": "npm run typecheck; npm run check:architecture; npm run test:canonical-equation-renderer; npm run test:operation-presentation-plans; npm run test:authoring-structural; npm run test:authoring-integration; npm run visual:authoring-structural",
+      "status": "passed",
+      "scope": "s17",
+      "checkedAt": "2026-09-07T00:15:31.461Z",
+      "notes": "Executed separately: full types clean; architecture and source ceilings pass; 29,192,32,68 unit checks and 8 Chromium browser checks pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Visual follow-ups approved. Compiler profiling and two verified type-only repairs remove 949 types/5688 instantiations. Mandatory cost gate still fails; s17 incomplete, s18/G2 and migration untouched. Broader implementation/import-boundary work needs scoped review."
+    "summary": "S17 complete: unchanged inference and source budgets pass with actual two-caller fixtures. Approved boundary extraction preserves runtime and API owners. Proceed to s18 release checks before G2; migration untouched."
   },
   "expectedLearning": [
     "Whether two structural equation callers justify canonical economics adoption without parallel state or presentation authority."

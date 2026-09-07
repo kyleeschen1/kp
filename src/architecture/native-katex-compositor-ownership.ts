@@ -124,6 +124,7 @@ export const kpNativeKatexCompositorOwnership = Object.freeze([
       evidence("src/rendering/native-katex-base-scene-plan.ts", "compileKpNativeKatexProjectedTracks"),
       evidence("src/rendering/native-katex-symbol-motion.ts", "applyKpNativeKatexSymbolMotionContract"),
       evidence("src/rendering/native-katex-track-projection.ts", "applyKpNativeKatexTrackProjection"),
+      evidence("src/rendering/equation-layout-types.ts", "KpEquationLayoutPlan"),
       evidence("src/rendering/equation-motion-path-planner.ts", "planKpEquationMotionPath")
     ],
     forbiddenAuthority: noDomAuthority
@@ -139,6 +140,7 @@ export const kpNativeKatexCompositorOwnership = Object.freeze([
       evidence("src/rendering/native-katex-base-scene-plan.ts", "compileKpCollisionSafeReorderTracks"),
       evidence("src/rendering/native-katex-base-scene-plan.ts", "compileKpQualityBoundedFanInTracks"),
       evidence("src/rendering/native-katex-operation-choreography.ts", "applyKpNativeKatexOperationChoreography"),
+      evidence("src/rendering/equation-linear-rearrangement-frame.ts", "sampleKpEquationLinearRearrangementFrame"),
       evidence("src/rendering/native-katex-factoring-choreography.ts", "compileKpNativeKatexFactoringScenePlan"),
       evidence("src/rendering/native-katex-fan-in-motion.ts", "compileKpQualityBoundedFanInTracks")
     ],

@@ -100,6 +100,8 @@ const directSamplerPaths = paths([
   "src/rendering/equation-dot-product-traversal.ts",
   "src/rendering/equation-enclosure-choreography.ts",
   "src/rendering/equation-independent-zero-witness.ts",
+  // Existing shared sampler extracted from the legacy token implementation.
+  "src/rendering/equation-linear-rearrangement-frame.ts",
   "src/rendering/equation-linear-rearrangement-owner-motion.ts",
   "src/rendering/equation-linear-rearrangement.ts",
   "src/rendering/equation-material-owner.ts",

@@ -4,56 +4,24 @@ import type {
   KpMeasuredEquationTransitionRelationGeometry
 } from "./equation-motion-dom.ts";
 
-export interface KpEquationLayoutRect {
-  readonly left: number;
-  readonly top: number;
-  readonly width: number;
-  readonly height: number;
-}
+import type {
+  KpEquationLayoutRect,
+  KpEquationLayoutPoint,
+  KpEquationLayoutSnapshot,
+  KpEquationLayoutReservation,
+  KpEquationSemanticWaypoint,
+  KpEquationLayoutPlan
+} from "./equation-layout-types.ts";
 
-export interface KpEquationLayoutPoint {
-  readonly x: number;
-  readonly y: number;
-}
-
-export interface KpEquationLayoutTokenSnapshot {
-  readonly motionId: string;
-  readonly text: string;
-  readonly bounds: KpEquationLayoutRect;
-}
-
-export interface KpEquationLayoutSnapshot {
-  readonly side: "source" | "target";
-  readonly tokens: readonly KpEquationLayoutTokenSnapshot[];
-}
-
-export interface KpEquationLayoutReservation {
-  readonly id: string;
-  readonly kind: "destination" | "transit";
-  readonly relationRecordId: string;
-  readonly motionId?: string | undefined;
-  readonly bounds: KpEquationLayoutRect;
-}
-
-export interface KpEquationSemanticWaypoint {
-  readonly id: string;
-  readonly relationRecordId: string;
-  readonly role: "source" | "clearance" | "target";
-  readonly ordinal: number;
-  readonly point: KpEquationLayoutPoint;
-}
-
-export interface KpEquationLayoutPlan {
-  readonly kind: "equation-layout-plan";
-  readonly id: string;
-  readonly transitionId: string;
-  readonly revision: number;
-  readonly source: KpEquationLayoutSnapshot;
-  readonly target: KpEquationLayoutSnapshot;
-  readonly reservations: readonly KpEquationLayoutReservation[];
-  readonly waypoints: readonly KpEquationSemanticWaypoint[];
-  readonly geometryPolicy: "measure-once-per-step";
-}
+export type {
+  KpEquationLayoutRect,
+  KpEquationLayoutPoint,
+  KpEquationLayoutTokenSnapshot,
+  KpEquationLayoutSnapshot,
+  KpEquationLayoutReservation,
+  KpEquationSemanticWaypoint,
+  KpEquationLayoutPlan
+} from "./equation-layout-types.ts";
 
 export function createKpEquationLayoutPlan(input: {
   readonly id: string;

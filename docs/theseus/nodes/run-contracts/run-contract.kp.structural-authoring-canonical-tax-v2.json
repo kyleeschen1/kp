@@ -2,9 +2,9 @@
   "id": "run-contract.kp.structural-authoring-canonical-tax-v2",
   "kind": "run-contract",
   "title": "Structural authoring proof and canonical tax adoption",
-  "status": "blocked",
+  "status": "in-progress",
   "domain": "kp",
-  "summary": "STOP_CONDITION: mandatory s17 compiler-cost gate still fails after measured internal cleanup. 16/28 complete. No G2 release or canonical migration; review broader compiler/import boundaries without increasing budgets.",
+  "summary": "User approved broader implementation/import-boundary compiler-cost investigation and repair within s17. Keep budgets, real consumer tests, runtime behavior, semantic authority and G2 migration gate unchanged.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -218,8 +218,8 @@
     {
       "id": "s17",
       "title": "Authoring cost and API review: compare both callers, retain only demonstrated shared helpers, measure import/type costs",
-      "summary": "Bounded type-only repair verified and retained; unchanged inference cost gate still fails at 117209 types/199799 instantiations. Slice remains incomplete; broader boundary review precedes another repair.",
-      "status": "planned"
+      "summary": "Approved implementation boundary repair passes fixed compiler and source budgets with both real callers retained. Existing geometry and sampler owners isolated from legacy implementations; no authority or timing changes.",
+      "status": "complete"
     },
     {
       "id": "s18",

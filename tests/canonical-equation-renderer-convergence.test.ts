@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { dirname, relative, resolve } from "node:path";
 import test from "node:test";
+import { preProcessFile } from "typescript";
 
 import {
   kpCanonicalEquationRendererConvergence,
@@ -26,6 +27,32 @@ test("canonical equation rendering has one default and no permanent query target
   assert.equal(policy.maximumDefaultReaderRenderers, 1);
   assert.equal(policy.maximumTemporaryQueryRenderers, 0);
   assert.equal(policy.targetTemporaryQueryRenderers, 0);
+});
+
+test("the actual native consumer closure excludes legacy DOM and token implementations", async () => {
+  const pending = [resolve("tests/type-fixtures/native-katex-executable-scene.ts")];
+  const closure = new Set<string>();
+  while (pending.length) {
+    const path = pending.pop()!;
+    if (closure.has(path)) continue;
+    closure.add(path);
+    const source = await readFile(path, "utf8");
+    // Include type imports and re-exports: they cost compiler work even when
+    // the bundler erases them. Start at the unchanged real consumer fixture.
+    for (const { fileName } of preProcessFile(source).importedFiles) {
+      if (fileName.startsWith(".") && fileName.endsWith(".ts")) {
+        pending.push(resolve(dirname(path), fileName));
+      }
+    }
+  }
+  for (const owner of ["native-katex-scene-compositor", "equation-layout-types",
+    "equation-linear-rearrangement-frame"]) {
+    assert.ok(closure.has(resolve(`src/rendering/${owner}.ts`)), owner);
+  }
+  for (const legacy of ["equation-layout-plan", "equation-motion-dom",
+    "equation-linear-rearrangement", "semantic-equation-token-renderer"]) {
+    assert.equal(closure.has(resolve(`src/rendering/${legacy}.ts`)), false, legacy);
+  }
 });
 
 test("canonical scene vocabulary stays at five paint kinds and six lifecycles", () => {

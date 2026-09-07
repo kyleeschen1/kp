@@ -2,7 +2,7 @@ import type {
   KpEquationLayoutPlan,
   KpEquationLayoutPoint,
   KpEquationLayoutRect
-} from "./equation-layout-plan.ts";
+} from "./equation-layout-types.ts";
 import {
   evaluateKpEquationMotionClearanceSequence
 } from "./equation-motion-clearance.ts";
