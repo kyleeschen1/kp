@@ -28,8 +28,10 @@ newly authorized by closeout.
 
 Current high-level order and checkpoint policy live in
 `reviews/2026-09-07-reconciled-authoring-loop-horizon.md`; this queue does not
-duplicate its milestone table. Next: draft the bounded R1 authoring round-trip
-proposal, with the early capability baseline and actual author/LLM tasks.
+duplicate its milestone table. The user approved the exact 26-slice R1 proposal:
+`reviews/2026-09-07-authoring-round-trip-long-loop-proposal.md`.
+Execute only `run-contract.kp.authoring-round-trip-v1`, with the early capability
+baseline, actual author/LLM tasks, and combined human visual gate s20.
 Reusable knowledge/procedures, Bayes, frontend convergence/promotion and later
 mathematical waves remain explicit successor milestones, not approved runs.
 Use the standing minimal-check-in policy in

@@ -27,8 +27,10 @@ nor its evidence. The ledger remains retrievable at
 Current successor planning reference:
 `reviews/2026-09-07-reconciled-authoring-loop-horizon.md`. It reconciles everyday
 authoring, reusable knowledge/procedures, Bayes, frontend convergence/promotion
-and mathematical expansion without opening an implementation queue. Next is a
-bounded R1 authoring-round-trip proposal. Minimal check-ins, mainly canonical
+and mathematical expansion. The user approved the exact R1 26-slice run:
+`reviews/2026-09-07-authoring-round-trip-long-loop-proposal.md`, executed through
+`run-contract.kp.authoring-round-trip-v1`. R2 and later remain unapproved scope.
+Minimal check-ins, mainly canonical
 visual reviews, are a standing preference; see
 `decisions/2026-09-07-reconciled-horizon-and-minimal-check-ins.md`.
 

@@ -4,7 +4,7 @@
   "title": "Kinetic Press delivery",
   "status": "active",
   "domain": "kp",
-  "summary": "User approved exact 28-slice authoring integration run on 2026-09-05. Continue run-contract.kp.authoring-integration-market-preview-v1 through its named stops and mandatory human checkpoint. Current source proposal supersedes historical workflow successor constraints.",
+  "summary": "User approved R1 26-slice authoring round trip. Execute run-contract.kp.authoring-round-trip-v1 until s20 visual checkpoint; prior canonical adoption complete.",
   "sourceRefs": [
     {
       "kind": "user-intent",
@@ -50,6 +50,10 @@
     {
       "kind": "file",
       "path": "docs/project/decisions/2026-09-07-reconciled-horizon-and-minimal-check-ins.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-07-authoring-round-trip-long-loop-proposal.md"
     }
   ],
   "decisions": [],

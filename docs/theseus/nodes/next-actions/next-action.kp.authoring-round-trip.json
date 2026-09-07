@@ -1,0 +1,54 @@
+{
+  "id": "next-action.kp.authoring-round-trip",
+  "kind": "next-action",
+  "title": "Reliable authoring round trip",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-07-authoring-round-trip-long-loop-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.structural-authoring-canonical-tax"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:authoring-integration",
+    "npm run typecheck",
+    "npm test",
+    "npm run build"
+  ],
+  "expectedLearning": [
+    "Whether supported author tasks can be completed without renderer glue and with coherent revisions and useful repair."
+  ],
+  "allowedWork": [
+    "Only exact approved R1 26 slices with human gate s20."
+  ],
+  "disallowedWork": [
+    "No new domains math families renderer clock writes merge deployment or budget increase."
+  ],
+  "criteria": [
+    {
+      "id": "authoring-repair",
+      "weight": "high"
+    },
+    {
+      "id": "coherent-revisions",
+      "weight": "high"
+    },
+    {
+      "id": "reproducible-publication",
+      "weight": "high"
+    },
+    {
+      "id": "human-checkpoint",
+      "weight": "high"
+    }
+  ]
+}

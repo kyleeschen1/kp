@@ -1,10 +1,13 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: G3 approved; structural authoring and canonical adoption loop complete
+Status: R1 reliable authoring round trip approved and active; prior G3 complete
 Last Updated: 2026-09-07
 Current successor reference: `../reviews/2026-09-07-reconciled-authoring-loop-horizon.md`.
 It preserves the original architectural obligations and the tax/Bayes direction;
-only a bounded R1 proposal is next, not implementation. Standing minimal-check-in
+the exact R1 26-slice proposal is now approved for implementation:
+`../reviews/2026-09-07-authoring-round-trip-long-loop-proposal.md`.
+Theseus contract: `run-contract.kp.authoring-round-trip-v1`.
+Standing minimal-check-in
 policy: `../decisions/2026-09-07-reconciled-horizon-and-minimal-check-ins.md`.
 The user requested recording the recommendations and finishing the existing
 loop, then approved G3 after the gradual code-card passage repair. The existing
@@ -29,8 +32,8 @@ do not treat its proposed roadmap or readiness labels as new execution authority
 The user clarified the remaining code issue as missing gradual passage swiping.
 The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
-Current Next Action: draft the bounded R1 authoring round-trip proposal from
-the reconciled horizon; do not restart the completed loop. See
+Current Next Action: execute the next approved R1 slice in Theseus and stop at
+its combined visual checkpoint s20; do not restart the completed G3 loop. See
 `../reviews/2026-09-07-canonical-tax-g3-checkpoint.md` for the working URL,
 source workflow, production ownership, release evidence and remaining work.
 The ordinary build now ships the exact four-card route, with shared source

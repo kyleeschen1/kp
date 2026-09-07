@@ -1,0 +1,227 @@
+{
+  "id": "run-contract.kp.authoring-round-trip-v1",
+  "kind": "run-contract",
+  "title": "R1 Reliable authoring round trip",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.authoring-round-trip.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-07-authoring-round-trip-long-loop-proposal.md"
+    }
+  ],
+  "verification": [
+    "npm run test:authoring-integration",
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "npm run check:reader-production",
+    "npm run check:reader-budgets",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "s01: Pin canonical artifacts, source owners, behavior and rollback boundaries; risk Low; verification F: source/host inventory and preservation tests; one commit unit.",
+    "s02: Measure wording, parameter and equation-step authoring tasks; risk Low; verification F: reproducible transcripts and baseline costs; one commit unit.",
+    "s03: Assemble approximately 24 representative deduction chains including failures; risk Medium; verification F: corpus schema and classifications; one commit unit.",
+    "s04: Reconcile capability reporting with executable evidence; repair confirmed wiring gaps; risk Medium; verification S: coverage and negative evidence tests; one commit unit.",
+    "s05: Minimal human/LLM packet through existing entrypoints; risk Low; verification F: accepted/rejected examples and commands; one commit unit.",
+    "s06: Consistent source locations and revision identity in diagnostics; risk Medium; verification S: diagnostics/reference tests; one commit unit.",
+    "s07: Distinguish current draft from last-valid displayed revision; risk Medium; verification S: valid-invalid-repair tests; one commit unit.",
+    "s08: Preserve newest-revision wins through asynchronous preparation; risk High; verification B: out-of-order/dispose/mount-failure tests; one commit unit.",
+    "s09: Wording-only edits preserve unrelated domain state and authored prose; risk Medium; verification S: Article/companion tests; one commit unit.",
+    "s10: Supported parameter edits refresh facts and flag affected assertions; risk High; verification S: facts/variation/stale binding tests; one commit unit.",
+    "s11: Connect supported equation chain through governed compiler; risk High; verification S: request/authority/runtime/rejection tests; one commit unit.",
+    "s12: Actionable equation repair with last-valid preview retention; risk Medium; verification S: ambiguity/assumptions/unsupported tests; one commit unit.",
+    "s13: Bounded historical inspection through existing owners; risk Medium; verification S: historical selection/stale reference tests; one commit unit.",
+    "s14: Explicit source branch/variant from selected revision; risk High; verification S: predecessor preservation/branch isolation; one commit unit.",
+    "s15: Publication inputs bind one source/model/Article revision; risk High; verification S: mixed revision/stale generated rejection; one commit unit.",
+    "s16: Verify actual payload digests in build/verification path; risk High; verification S: tamper/mismatched identity tests; one commit unit.",
+    "s17: Meaningful static/accessibility output for bounded specimens; risk High; verification B: publication/no-JS/native math checks; one commit unit.",
+    "s18: Reviewed source selection to reproducible local build; risk High; verification B: freshness/import identity/repeated build; one commit unit.",
+    "s19: End-to-end edit-break-repair-inspect-build workflow; risk High; verification B: scoped browser smoke/source-publication agreement; one commit unit.",
+    "s20: Combined authoring/preview/static-output exemplar review; risk Subjective; verification H and focused preservation: actual edit script; one commit unit.",
+    "s21: Bounded review feedback and approved-behavior regression tests; risk Medium; verification S: exemplar checks; one commit unit.",
+    "s22: Second supported variant pressures same workflow; risk High; verification B: revision isolation/source/publication parity; one commit unit.",
+    "s23: Small live LLM authoring-and-repair trial using existing machinery; risk Medium; verification F plus actual model run: output/diagnostics/repair; one commit unit.",
+    "s24: Repair demonstrated friction; rerun held-out author tasks; risk Medium; verification S: authoring tests/measured outcomes; one commit unit.",
+    "s25: Release verification and in-scope failure repairs; risk High; verification B: full tests/types/build/browser/closure/fixed budgets; one commit unit.",
+    "s26: Measured results, gaps and R2 handoff; close contract; risk Low; verification F: docs/Theseus/clean diff; one commit unit.",
+    "Brief receipts per slice; fixed context budgets; no parallel agents. Preserve semantic compiler renderer clock and Focus Card owners."
+  ],
+  "disallowedWork": [
+    "s01 STOP: Canonical authority unavailable",
+    "s02 STOP: Unsupported math required",
+    "s03 STOP: New-family implementation required",
+    "s04 STOP: Unearned promotion",
+    "s05 STOP: Hidden specialist steps",
+    "s06 STOP: Universal diagnostic framework required",
+    "s07 STOP: Another authoritative history required",
+    "s08 STOP: Existing lifecycle ownership cannot be retained",
+    "s09 STOP: Free prose treated as machine-proved",
+    "s10 STOP: New economics operations required",
+    "s11 STOP: New motif or semantic authority required",
+    "s12 STOP: Generic visual fallback required",
+    "s13 STOP: Unbounded persistence service required",
+    "s14 STOP: Collaboration or new history engine required",
+    "s15 STOP: Replacement publication format required",
+    "s16 STOP: Digest-shape-only verification",
+    "s17 STOP: All-family graphical publication required",
+    "s18 STOP: Deployment or new write authority required",
+    "s19 STOP: Handwritten renderer glue still required",
+    "s20 STOP: Wait for user visual/interaction approval",
+    "s21 STOP: Materially different treatment needs review",
+    "s22 STOP: Beyond approved generalization",
+    "s23 STOP: Missing access or new spending",
+    "s24 STOP: New architecture or math breadth required",
+    "s25 STOP: Gates need scope expansion",
+    "s26 STOP: Required evidence or approval absent",
+    "No new math families ontology renderer clock HTTP writes untrusted execution merge deployment or budget increases."
+  ],
+  "goal": "Execute approved R1 authoring repair history and reproducible publication through existing owners; mandatory visual gate s20.",
+  "target": "next-action.kp.authoring-round-trip",
+  "runMode": "run",
+  "maxSlices": 26,
+  "commitCadence": "One verified reversible slice and evidence per commit; no merge.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "s20 HUMAN_CHECKPOINT: combined authoring preview static output review; no s21 before user acceptance.",
+    "Material scope expansion missing authority safety or genuinely unrepairable external blocker; routine in-scope failures must be repaired."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Pin canonical artifacts, source owners, behavior and rollback boundaries",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Measure wording, parameter and equation-step authoring tasks",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Assemble approximately 24 representative deduction chains including failures",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Reconcile capability reporting with executable evidence; repair confirmed wiring gaps",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Minimal human/LLM packet through existing entrypoints",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Consistent source locations and revision identity in diagnostics",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Distinguish current draft from last-valid displayed revision",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Preserve newest-revision wins through asynchronous preparation",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Wording-only edits preserve unrelated domain state and authored prose",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Supported parameter edits refresh facts and flag affected assertions",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Connect supported equation chain through governed compiler",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Actionable equation repair with last-valid preview retention",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Bounded historical inspection through existing owners",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Explicit source branch/variant from selected revision",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Publication inputs bind one source/model/Article revision",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Verify actual payload digests in build/verification path",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Meaningful static/accessibility output for bounded specimens",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Reviewed source selection to reproducible local build",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "End-to-end edit-break-repair-inspect-build workflow",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Combined authoring/preview/static-output exemplar review",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Bounded review feedback and approved-behavior regression tests",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Second supported variant pressures same workflow",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Small live LLM authoring-and-repair trial using existing machinery",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Repair demonstrated friction; rerun held-out author tasks",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Release verification and in-scope failure repairs",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Measured results, gaps and R2 handoff; close contract",
+      "status": "planned"
+    }
+  ]
+}
