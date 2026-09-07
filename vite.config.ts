@@ -153,6 +153,18 @@ export default defineConfig({
     __KP_DEV_REVIEW_BUILD__: JSON.stringify(reviewBuildIdentity)
   },
   plugins: [
+    {
+      name: "kp-canonical-tax-static-reading",
+      transformIndexHtml: {
+        order: "pre",
+        handler(html, context) {
+          if (context.filename !== resolve(projectRoot, "experiments/kinetic-figure/supply-tax/index.html")) return html;
+          // Delivery reads a checked artifact; author code runs only in the explicit compiler.
+          return html.replace("<!-- kp:canonical-tax-static -->", readFileSync(resolve(projectRoot,
+            "src/experiments/kinetic-figure-supply-tax/canonical-tax-static.generated.html"), "utf8"));
+        }
+      }
+    },
     kpViteAuthoringMarketPreview(),
     kpViteAuthoringStructuralPreview(),
     kpProductionDevelopmentErasurePlugin({ projectRoot }),

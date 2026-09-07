@@ -10,7 +10,7 @@ The actual reader URL is `/experiments/kinetic-figure/supply-tax/`, not the
 similarly named source directory. Its physical document is
 `experiments/kinetic-figure/supply-tax/index.html`; it loads
 `src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-page.ts`.
-That page currently calls `mountKpSupplyTaxKineticFigure` without a source.
+At the audited baseline, that page called `mountKpSupplyTaxKineticFigure` without a source.
 The host is `kinetic-figure-supply-tax-entry.ts` beside it. Existing SVG and
 native KaTeX adapters own paint; the existing reader timeline clock owns time.
 The migration changes the source to retained semantic-state assembly and verified
@@ -57,7 +57,7 @@ truth verification or parameterization of free prose. The existing parameter-bou
 preview remains the place to explore variants. Explicitly authored future
 canonical variants need matching instruction and their own review.
 
-The existing physical document has only an empty `#app` before enhancement.
+The baseline physical document had only an empty `#app` before enhancement.
 Build-served verification must distinguish that baseline from any newly supplied
 meaningful static source; neither a successful dev endpoint nor a no-JS preview
 fact fixture proves ordinary reader delivery.
@@ -112,3 +112,40 @@ including the new race, phone interruption/resize, retained-page restoration,
 disposal and all prior route checks. The lifecycle fixture uses the existing
 hundredth-step slider and holds native scrollend until its explicit checkpoint;
 neither test adjustment changes production interaction semantics.
+
+## Ordinary delivery and bounded static reading
+
+Status: partial implementation, blocked at the production ownership boundary.
+The generated reading and its freshness/unit checks pass; the built-browser
+probe does not. Do not infer shipped delivery from the implementation below.
+
+`compile:canonical-tax-source` emits both checked reference data and a separate
+no-JavaScript reading artifact. The latter uses the same prepared eight prose
+phrases, existing build-time Markdown/KaTeX renderer, and exact fact table. It
+does not invent a graph, animation, editor, or general publication format.
+The Vite HTML adapter reads only that generated artifact; it never executes
+author code or calls the authoring service. Keeping HTML separate avoids adding
+fallback markup to the reader's JavaScript data payload. With JavaScript enabled,
+the `noscript` content is not painted and the existing card host still owns layout.
+
+`visual:canonical-tax-production` starts Vite preview against the ordinary build,
+not the development server. It checks normal and reduced-motion endpoints,
+four-card preservation, accessible slider text, no development/preview requests,
+and meaningful no-JavaScript prose, MathML and exact facts. Bundle inspection also
+checks the canonical source closure, excluding trusted templates, build-time
+instruction binding and preview transport. This is bounded static reading, not
+complete static figure publication or durable last-valid publication storage.
+
+The existing default build excludes the canonical URL. Its first built-browser
+cohort failed all nine cases because Vite preview served the catalogue fallback.
+Adding only that physical input then failed the unchanged production erasure
+guard: 36 rendered modules remain development-owned, including the canonical
+host, shared scaffold, authored market preparation, and all three sibling cards.
+The input addition was removed; no erasure exception was introduced. The earlier
+successful ordinary builds did not certify this page's delivery.
+
+This fires the approved s25 stop: normal build cannot deliver the page within
+the existing infrastructure. See `2026-09-07-canonical-tax-production-boundary-stop.md`
+for the exact evidence and proposed scope decision. Canonical development source
+adoption and the 39-browser lifecycle proof remain valid; production delivery,
+release completion and G3 readiness are not claimed.

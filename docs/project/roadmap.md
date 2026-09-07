@@ -237,6 +237,14 @@ See `reviews/2026-09-06-structural-authoring-g2-checkpoint.md` and
 `reviews/2026-09-06-structural-authoring-two-caller-cost-stop.md` for the measured
 costs and resolved compiler repair evidence; no budget increase is authorized.
 
+The canonical development page now uses the framework-derived reference source;
+its default sampler wiring is retired and supported-browser lifecycle checks pass.
+Ordinary delivery exposed a distinct production ownership boundary: the build
+excludes the route, and including it rejects the experiment-owned four-card
+runtime. No production guard was relaxed. The bounded scope decision is recorded
+in `reviews/2026-09-07-canonical-tax-production-boundary-stop.md`; G3 readiness and
+shipped delivery are not claimed. Theseus owns the paused execution position.
+
 The preceding direction and completed integration run were accepted and scoped by
 `run-contract.kp.authoring-integration-market-preview-v1` and
 `reviews/2026-09-05-authoring-integration-market-preview-long-loop-proposal.md`.

@@ -1,10 +1,13 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: direct-arc distribution and G2 approved; canonical migration authorized
-Last Updated: 2026-09-06
-Current Next Action: refresh affected release evidence for the accepted direct-arc
-distribution, then execute the approved canonical supply-tax migration through
-the mandatory G3 visual parity checkpoint.
+Status: canonical development source adopted; production ownership scope stop
+Last Updated: 2026-09-07
+Current Next Action: resolve the bounded four-card production-adoption scope in
+`../reviews/2026-09-07-canonical-tax-production-boundary-stop.md`, then resume
+ordinary delivery, preview convergence, release and mandatory G3 review.
+The canonical URL consumes the new source and passes 39 browser lifecycle checks;
+the ordinary build does not ship that URL. Including it exposes 36 forbidden
+experiment-owned modules, including sibling cards. No erasure guard was weakened.
 See `../decisions/2026-09-06-distribution-direct-arc-review.md`; prior release
 evidence predates this visual amendment; explicit approve/resume accepts the
 revised motion and G2, without waiving the remaining release checks or G3.
@@ -21,8 +24,7 @@ after isolating existing geometry and frame-sampling responsibilities from legac
 implementation dependencies. Consumer fixtures and all budgets remain unchanged.
 Simplification is integrated through its existing native carrier owner and a
 Focus Card; both callers remain in the actual inference fixture.
-The prior release passed; refresh it after the accepted motion amendment before
-canonical migration. The approved scope remains
+The refreshed structural release passed before canonical migration. The approved scope remains
 `../reviews/2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md`.
 The completed source workflow and market specimen passed G0 review; evidence is in
 `../reviews/2026-09-05-authoring-integration-market-preview-closeout.md` and

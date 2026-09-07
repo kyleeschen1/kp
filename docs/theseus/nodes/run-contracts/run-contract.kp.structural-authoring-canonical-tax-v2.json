@@ -2,9 +2,9 @@
   "id": "run-contract.kp.structural-authoring-canonical-tax-v2",
   "kind": "run-contract",
   "title": "Structural authoring proof and canonical tax adoption",
-  "status": "in-progress",
+  "status": "blocked",
   "domain": "kp",
-  "summary": "G2 human approval accepted from explicit approve/resume after outcome clarification. Execute remaining approved slices; no merge or G3 waiver.",
+  "summary": "s25 explicit normal-delivery scope stop; 24 slices complete. No G3 claim, no merge, no guard relaxation.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -274,7 +274,8 @@
     {
       "id": "s25",
       "title": "Build-served delivery: verify canonical page works without the authoring dev plugin and preserves static/reduced-motion content",
-      "status": "planned"
+      "summary": "Incomplete at explicit normal-delivery scope stop. Missing canonical build entry; including it rejects 36 development-owned modules across four cards. Contract blocked pending bounded production-adoption scope decision; no guard change.",
+      "status": "in-progress"
     },
     {
       "id": "s26",

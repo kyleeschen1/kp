@@ -2,9 +2,9 @@
   "id": "next-action.kp.structural-authoring-canonical-tax",
   "kind": "next-action",
   "title": "Structural authoring proof and canonical supply-tax adoption",
-  "status": "in-progress",
+  "status": "blocked",
   "domain": "kp",
-  "summary": "User explicitly approved revised direct-arc distribution and G2, then requested resume. Refresh s18 release evidence and continue canonical migration; G3 remains required.",
+  "summary": "Canonical development source and lifecycle proof complete; ordinary production delivery requires bounded four-card ownership and build-time Article scope decision. See production-boundary stop report.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -57,6 +57,10 @@
     {
       "kind": "file",
       "path": "docs/project/decisions/2026-09-06-distribution-direct-arc-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-07-canonical-tax-production-boundary-stop.md"
     }
   ],
   "dependsOn": {
@@ -879,6 +883,62 @@
       "scope": "s24",
       "checkedAt": "2026-09-07T06:01:27.298Z",
       "notes": "All architecture/compiler and cross-domain gates pass."
+    },
+    {
+      "command": "npm run build",
+      "status": "failed",
+      "scope": "s25",
+      "checkedAt": "2026-09-07T06:48:00.321Z",
+      "notes": "New built-browser fixture passed possibly undefined baseURL into exact optional context options. Added explicit required-origin guard; no runtime contract changed. Re-running build."
+    },
+    {
+      "command": "npm run visual:canonical-tax-production -- --project=firefox --project=webkit",
+      "status": "failed",
+      "scope": "s25",
+      "checkedAt": "2026-09-07T07:37:01.551Z",
+      "notes": "9 checks exposed missing canonical build entry: preview served catalogue fallback because the actual URL was absent from dist. Added only the explicitly approved canonical URL to existing Vite inputs; experiment directory remains unpromoted. Rebuilding and repeating."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "failed",
+      "scope": "s25",
+      "checkedAt": "2026-09-07T07:43:17.928Z",
+      "notes": "Adding the canonical route input fails unchanged production erasure: 36 experiment-owned modules include shared scaffold and all three sibling card implementations. Source audit also finds runtime Article compilation. Input attempt removed; build passes again. Exact evidence and proposed production-adoption scope are in the stop report."
+    },
+    {
+      "command": "npm run test:authoring-integration",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-07T07:43:19.204Z",
+      "notes": "77 passed, including separate static reading freshness and actual canonical/shared preparation bundle closure. This does not establish built-page delivery."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "s25-restoration",
+      "checkedAt": "2026-09-07T07:43:20.215Z",
+      "notes": "Passes after removing the attempted canonical input. Existing production roots preserved; canonical URL remains excluded. Earlier full build passed including all typechecks."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "s25-restoration",
+      "checkedAt": "2026-09-07T07:43:47.472Z",
+      "notes": "All 12 existing routes pass; this excludes the undelivered canonical experiment URL."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "s25-restoration",
+      "checkedAt": "2026-09-07T07:43:48.469Z",
+      "notes": "442 artifacts and 12 forbidden markers pass unchanged."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "s25-restoration",
+      "checkedAt": "2026-09-07T07:43:49.482Z",
+      "notes": "All 12 existing routes pass fixed budgets; shared equation startup 138039 gzip bytes versus 145000 ceiling."
     }
   ],
   "progress": {
