@@ -11,6 +11,20 @@ import {
 import { kpAnimationCapabilityPlan } from
   "../src/architecture/cross-domain-animation-capability-plan.ts";
 
+test("ordered-series requirement evidence is scoped and removable without promotion", () => {
+  const evidence = createKpAnimationCapabilityCompilerEvidence();
+  for (const suffix of ["normalizer", "runtime", "corpus"]) {
+    const id = `requirement.equation.transform-series.${suffix}`;
+    const match = evidence.requirements.find(row => row.requirementId === id);
+    assert.equal(match?.status, "matched", id);
+    const removed = compileKpAnimationCapabilityCompilerEvidence({
+      plan: kpAnimationCapabilityPlan,
+      authorities: evidence.authorities.filter(row => row.authorityId !== match?.authorityId)
+    });
+    assert.equal(removed.requirements.find(row => row.requirementId === id)?.status, "missing");
+  }
+});
+
 test("compiler evidence projects exact extension-pack registrations", () => {
   const projection = createKpAnimationCapabilityCompilerEvidence();
   const expected = new Map([

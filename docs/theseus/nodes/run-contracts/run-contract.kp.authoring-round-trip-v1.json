@@ -114,7 +114,8 @@
     {
       "id": "s04",
       "title": "Reconcile capability reporting with executable evidence; repair confirmed wiring gaps",
-      "status": "planned"
+      "summary": "Reconciled exact compiler evidence and regenerated report. 56 focused checks, full types and freshness pass; series authoring and fraction family gaps remain explicit.",
+      "status": "complete"
     },
     {
       "id": "s05",

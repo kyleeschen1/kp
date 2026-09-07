@@ -14,9 +14,9 @@
     "total": 38,
     "byStatus": {
       "Direct": 11,
-      "Registered": 4,
+      "Registered": 6,
       "Exemplar": 8,
-      "Missing": 15
+      "Missing": 13
     }
   },
   "symbolicMathematics": {
@@ -81,9 +81,9 @@
         ],
         "byStatus": {
           "Direct": 8,
-          "Registered": 3,
+          "Registered": 5,
           "Exemplar": 2,
-          "Missing": 5
+          "Missing": 3
         }
       },
       {
@@ -561,23 +561,27 @@
         "kind": "transform-series",
         "authorityId": "series.equation.transform.v1"
       },
-      "status": "Missing",
+      "status": "Registered",
       "requirements": [
         {
           "id": "requirement.equation.transform-series.normalizer",
           "kind": "endpoint-normalizer",
           "authorityId": "normalizer.equation.native-latex.v1",
           "summary": "Supported native-LaTeX endpoints normalize into semantic shapes or typed syntax gaps.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "normalizer.equation.native-latex.v1"
+          ]
         },
         {
           "id": "requirement.equation.transform-series.runtime",
           "kind": "series-runtime",
           "authorityId": "runtime.equation.transform-series.v1",
           "summary": "One deterministic clock composes one accepted semantic operation per adjacency.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "runtime.equation.transform-series.v1"
+          ]
         },
         {
           "id": "requirement.equation.transform-series.authoring",
@@ -592,20 +596,19 @@
           "kind": "generation-corpus",
           "authorityId": "corpus.equation.transform-series.v1",
           "summary": "Positive and repair fixtures cover seek, rewind, ambiguity, and unsupported syntax.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "corpus.equation.transform-series.v1"
+          ]
         }
       ],
       "gaps": [],
       "remainingRequirementIds": [
-        "requirement.equation.transform-series.normalizer",
-        "requirement.equation.transform-series.runtime",
-        "requirement.equation.transform-series.authoring",
-        "requirement.equation.transform-series.corpus"
+        "requirement.equation.transform-series.authoring"
       ],
       "exemplarLinks": [],
       "evidenceTensions": [
-        "planned-capability-without-exact-asset"
+        "registered-without-direct-generation"
       ],
       "caseCoverage": {
         "status": "not-declared",
@@ -799,15 +802,17 @@
         "kind": "transformation-family",
         "authorityId": "family.equation.fraction-equivalence.v1"
       },
-      "status": "Missing",
+      "status": "Registered",
       "requirements": [
         {
           "id": "requirement.equation.fraction-equivalence.operation",
           "kind": "semantic-operation",
           "authorityId": "operation.equation.fraction-equivalence.v1",
           "summary": "A typed equivalence owns numerator/denominator scaling and repartition.",
-          "status": "missing",
-          "evidenceSourceIds": []
+          "status": "satisfied",
+          "evidenceSourceIds": [
+            "operation.equation.fraction-equivalence.v1"
+          ]
         },
         {
           "id": "requirement.equation.fraction-equivalence.recipe",
@@ -836,14 +841,13 @@
       ],
       "gaps": [],
       "remainingRequirementIds": [
-        "requirement.equation.fraction-equivalence.operation",
         "requirement.equation.fraction-equivalence.recipe",
         "requirement.equation.fraction-equivalence.exemplar",
         "requirement.equation.fraction-equivalence.corpus"
       ],
       "exemplarLinks": [],
       "evidenceTensions": [
-        "planned-capability-without-exact-asset"
+        "registered-without-direct-generation"
       ],
       "caseCoverage": {
         "status": "not-declared",

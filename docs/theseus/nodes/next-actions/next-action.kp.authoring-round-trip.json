@@ -56,6 +56,13 @@
       "scope": "s03",
       "checkedAt": "2026-09-07T21:43:26.936Z",
       "notes": "Full app node test Svelte domain types pass after immutable negative-fixture construction fixed two test typing errors; no weakened guards."
+    },
+    {
+      "command": "npm run test:animation-transformation-coverage",
+      "status": "passed",
+      "scope": "s04",
+      "checkedAt": "2026-09-07T21:50:25.905Z",
+      "notes": "21 passed; two exact registration repairs, Direct count unchanged. Compiler/runtime/governed authoring cohort also passed 35 tests; full typecheck and generated freshness passed."
     }
   ],
   "expectedLearning": [

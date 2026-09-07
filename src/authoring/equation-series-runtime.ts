@@ -12,6 +12,9 @@ import type {
 import type { KpEquationTransformSeriesRequest } from
   "./equation-transform-series-request.ts";
 
+export const KP_EQUATION_TRANSFORM_SERIES_RUNTIME_AUTHORITY =
+  "runtime.equation.transform-series.v1" as const;
+
 export interface KpEquationSeriesCheckpoint {
   readonly id: string;
   readonly index: number;

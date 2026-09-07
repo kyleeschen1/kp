@@ -63,10 +63,30 @@ test("Calc BC planning starts from an exact equation coverage baseline", () => {
   );
   assert.deepEqual(live.byStatus, {
     Direct: 9,
-    Registered: 3,
+    Registered: 5,
     Exemplar: 3,
-    Missing: 14
+    Missing: 12
   });
+});
+
+test("series and fraction evidence repairs reporting without general authoring promotion", () => {
+  const entries = createKpAnimationTransformationCoverage().entries;
+  const series = entries.find(({ capabilityId }) =>
+    capabilityId === "capability.equation.transform-series");
+  assert.equal(series?.status, "Registered");
+  assert.deepEqual(series?.remainingRequirementIds, [
+    "requirement.equation.transform-series.authoring"
+  ]);
+  const fraction = entries.find(({ capabilityId }) =>
+    capabilityId === "capability.equation.fraction-equivalence");
+  assert.equal(fraction?.status, "Registered");
+  assert.deepEqual(fraction?.remainingRequirementIds, [
+    "requirement.equation.fraction-equivalence.recipe",
+    "requirement.equation.fraction-equivalence.exemplar",
+    "requirement.equation.fraction-equivalence.corpus"
+  ]);
+  assert.deepEqual(series?.exemplarLinks, []);
+  assert.deepEqual(fraction?.exemplarLinks, []);
 });
 
 test("integration projects the exact governed exemplar without promotion", () => {

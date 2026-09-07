@@ -22,8 +22,12 @@ import {
   KP_TYPESCRIPT_EXTRACT_HELPER_OPERATION_AUTHORITY
 } from "../domain-ir/code-extract-helper-authorities.ts";
 import {
+  KP_EQUATION_LATEX_ENDPOINT_NORMALIZER,
   KP_EQUATION_LOGARITHM_BASE_SYNTAX_NORMALIZER
 } from "../authoring/equation-latex-endpoint-normalizer.ts";
+import { KP_EQUATION_TRANSFORM_SERIES_RUNTIME_AUTHORITY } from "../authoring/equation-series-runtime.ts";
+import { kpEquationTransformSeriesCorpus } from "../authoring/equation-transform-series-corpus.ts";
+import { KP_FRACTION_EQUIVALENCE_OPERATION_AUTHORITY } from "../semantic/fraction-equivalence.ts";
 import {
   KP_BOTH_SIDES_CAUSAL_RECIPE_AUTHORITY
 } from "../animation/both-sides-causal-recipe.ts";
@@ -97,6 +101,7 @@ export type KpAnimationCapabilityCompilerRequirementKind = Extract<
   | "motion-motif"
   | "generation-corpus"
   | "renderer-capability"
+  | "series-runtime"
 >;
 
 export type KpAnimationCapabilityCompilerAuthoritySource =
@@ -280,6 +285,15 @@ readonly KpAnimationCapabilityCompilerAuthority[] {
     sourcePath
   });
   return Object.freeze([
+    // Requirement-level evidence is not Direct authoring or compositor certification.
+    verified(KP_EQUATION_LATEX_ENDPOINT_NORMALIZER,
+      "endpoint-normalizer", "src/authoring/equation-latex-endpoint-normalizer.ts"),
+    verified(KP_EQUATION_TRANSFORM_SERIES_RUNTIME_AUTHORITY,
+      "series-runtime", "src/authoring/equation-series-runtime.ts"),
+    verified(kpEquationTransformSeriesCorpus.id,
+      "generation-corpus", "src/authoring/equation-transform-series-corpus.ts"),
+    verified(KP_FRACTION_EQUIVALENCE_OPERATION_AUTHORITY,
+      "semantic-operation", "src/semantic/fraction-equivalence.ts"),
     verified(KP_TYPESCRIPT_EXTRACT_HELPER_OPERATION_AUTHORITY,
       "semantic-operation",
       "scripts/typescript-code-generation-frontend.ts"),
@@ -444,5 +458,6 @@ function isCompilerRequirementKind(
     kind === "canonical-recipe" ||
     kind === "motion-motif" ||
     kind === "generation-corpus" ||
-    kind === "renderer-capability";
+    kind === "renderer-capability" ||
+    kind === "series-runtime";
 }
