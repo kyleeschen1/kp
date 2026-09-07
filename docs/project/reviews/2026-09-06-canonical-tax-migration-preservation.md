@@ -95,3 +95,20 @@ CSS declaration ordering and equivalent numeric serialization, retaining every
 property and value. Exact frames, revision ownership and bounded history remain
 covered by the 75-test authoring integration suite. Ordinary build and the 81-test
 economics suite pass. Final lifecycle, built-delivery and release checks precede G3.
+
+## Native correction ownership
+
+Supported-browser lifecycle pressure exposed an older deferred snap-restoration
+callback overwriting a newer native viewport movement. Instrumented execution
+observed snap disabled and position `0.8995`, followed by the old callback restoring
+mandatory snap and position `1`. A same-task regression reproduced this before
+repair. The existing host now checks whether the viewport still occupies its
+settled target before restoring snap; a newer movement continues through the
+existing native projection and idle-settlement paths. No clock, gesture threshold,
+animation curve or semantic model changed. Temporary trace logging was removed.
+
+The final canonical cohort passes 39/39 across Chromium, Firefox and WebKit,
+including the new race, phone interruption/resize, retained-page restoration,
+disposal and all prior route checks. The lifecycle fixture uses the existing
+hundredth-step slider and holds native scrollend until its explicit checkpoint;
+neither test adjustment changes production interaction semantics.

@@ -268,7 +268,8 @@
     {
       "id": "s24",
       "title": "Navigation and lifecycle: pressure canonical deep links, reverse, resize, interruption, disposal and sibling cards",
-      "status": "planned"
+      "summary": "Canonical lifecycle and sibling preservation pass. Repaired proved deferred snap-restoration race at existing host owner; new viewport motion supersedes old correction. No clock, threshold, choreography or semantic change.",
+      "status": "complete"
     },
     {
       "id": "s25",

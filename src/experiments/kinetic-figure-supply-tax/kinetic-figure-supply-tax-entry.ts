@@ -395,6 +395,15 @@ export function mountKpSupplyTaxKineticFigure(input: {
     cancelSnapRestore();
     restoreSnapFrame = window.requestAnimationFrame(() => {
       restoreSnapFrame = undefined;
+      // A native gesture can move the viewport before this deferred correction
+      // runs. Restoring the old snap target would steal that newer input.
+      const settledOffset = settledIndex * Math.max(1, viewport.clientWidth);
+      if (Math.abs(viewport.scrollLeft - settledOffset) > endpointTolerancePx) {
+        navigationMode = "native";
+        scheduleNativeProjection();
+        scheduleScrollEndFallback();
+        return;
+      }
       delete viewport.dataset["kpSupplyTaxSnapDisabled"];
       navigationMode = "idle";
     });

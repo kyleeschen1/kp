@@ -2,6 +2,69 @@ import { expect, test, type Locator, type Page } from "@playwright/test";
 
 const path = "/experiments/kinetic-figure/supply-tax/";
 
+test("a queued snap restoration cannot reclaim a newer native gesture", async ({ page }) => {
+  await openControlledNativeGesture(page, path);
+  const deck = page.locator("[data-kp-supply-tax-focus-deck]");
+  const viewport = deck.locator("[data-kp-supply-tax-card-viewport]");
+  // Keep the new gesture in flight until its explicit settlement checkpoint.
+  await setNativeScrollPosition(viewport, 0);
+  await deck.evaluate(root => {
+    const input = root.querySelector<HTMLInputElement>("[data-kp-supply-tax-state-scrubber]")!;
+    input.value = "1";
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+    // Enter the next native gesture before the previous correction's RAF.
+    const viewport = root.querySelector<HTMLElement>("[data-kp-supply-tax-card-viewport]")!;
+    viewport.scrollLeft = viewport.clientWidth * .9;
+    viewport.dispatchEvent(new Event("scroll"));
+  });
+  await page.clock.runFor(48);
+  await expect.poll(async () => Number(await deck.getAttribute("data-kp-supply-tax-deck-position"))).toBeCloseTo(.9, 1);
+  await finishNativeScroll(viewport);
+  await expect(deck).toHaveAttribute("data-kp-focus-deck-active-beat", "baseline-market");
+});
+
+test("canonical source survives deep-link reload, interruption, resize and retained-page lifecycle", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(path + "#beat.deadweight-loss");
+  const app = page.locator("#app");
+  const deck = page.locator("[data-kp-supply-tax-focus-deck]");
+  const scrubber = deck.locator("[data-kp-supply-tax-state-scrubber]");
+  await expect(deck).toHaveAttribute("data-kp-focus-deck-active-beat", "deadweight-loss");
+  const revision = await app.getAttribute("data-kp-canonical-tax-source-revision");
+  expect(revision).toMatch(/^[a-f0-9]{64}$/);
+  await page.reload();
+  await expect(deck).toHaveAttribute("data-kp-focus-deck-active-beat", "deadweight-loss");
+  await setScrubberPosition(scrubber, 1, true);
+  await expect(deck).toHaveAttribute("data-kp-focus-deck-active-beat", "tax-input");
+  await deck.locator("[data-kp-focus-deck-next]").click();
+  await setScrubberPosition(scrubber, 1.37, false);
+  await page.setViewportSize({ width: 430, height: 844 });
+  await setScrubberPosition(scrubber, 1.37, false);
+  await expect(deck).toHaveAttribute("data-kp-supply-tax-model-progress", "0.3700");
+  await page.evaluate(() => {
+    dispatchEvent(new PageTransitionEvent("pagehide", { persisted: true }));
+    dispatchEvent(new PageTransitionEvent("pageshow", { persisted: true }));
+  });
+  await setScrubberPosition(scrubber, 0, true);
+  await expect(deck).toHaveAttribute("data-kp-focus-deck-active-beat", "baseline-market");
+  await expect(app).toHaveAttribute("data-kp-canonical-tax-source-revision", revision!);
+  await expect(page.locator("[data-kp-focus-deck]")).toHaveCount(4);
+  await page.evaluate(() => dispatchEvent(new PageTransitionEvent("pagehide", { persisted: false })));
+  await expect(app).toHaveAttribute("data-kp-canonical-tax-source", "disposed");
+  const progress = await deck.getAttribute("data-kp-supply-tax-model-progress");
+  await setScrubberPosition(scrubber, 7, false);
+  await page.evaluate(() => {
+    dispatchEvent(new Event("resize"));
+    document.dispatchEvent(new Event("visibilitychange"));
+    dispatchEvent(new PageTransitionEvent("pagehide", { persisted: false }));
+  });
+  await expect(deck).toHaveAttribute("data-kp-supply-tax-model-progress", progress!);
+  expect(errors).toEqual([]);
+});
+
 test("canonical framework source restores all tax stops and reverse samples without preview requests", async ({ page }) => {
   const errors: string[] = [];
   const requests: string[] = [];

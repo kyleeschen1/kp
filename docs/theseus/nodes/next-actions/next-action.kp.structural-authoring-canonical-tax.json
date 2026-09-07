@@ -809,6 +809,76 @@
       "scope": "s23",
       "checkedAt": "2026-09-07T05:45:37.598Z",
       "notes": "11/11 pass at production canonical URL, including all original navigation/phone/visual checks and exact repeated/reverse state comparison; no preview or author-template requests."
+    },
+    {
+      "command": "npm run test:browser:economics-supply-tax -- --project=firefox --project=webkit",
+      "status": "failed",
+      "scope": "s24",
+      "checkedAt": "2026-09-07T05:51:28.745Z",
+      "notes": "32/36 pass. New lifecycle test requested 1.371 despite existing 0.01 slider step; actual 1.37 is correct in all browsers. Use supported input/expectation. Existing WebKit controlled native-scroll test also observed settled 1 instead of in-flight 0.9; reproducing in isolated repeats without changing its assertion."
+    },
+    {
+      "command": "npm run test:browser:economics-supply-tax -- --project=webkit --grep 'native scroll sampling' --repeat-each=2",
+      "status": "failed",
+      "scope": "s24",
+      "checkedAt": "2026-09-07T05:55:46.077Z",
+      "notes": "3/4 pass; WebKit failure reproduces settled 1 instead of new native 0.9 without heavy concurrent verification."
+    },
+    {
+      "command": "npm run test:browser:economics-supply-tax -- --project=webkit --grep 'native scroll sampling' --repeat-each=3",
+      "status": "failed",
+      "scope": "s24",
+      "checkedAt": "2026-09-07T05:55:48.459Z",
+      "notes": "Instrumented repeats 3/6 pass. Trace shows before left .8995 and snap none, then older callback restores mandatory snap and left 1. Temporary diagnostic logging removed."
+    },
+    {
+      "command": "npm run test:browser:economics-supply-tax -- --grep 'queued snap restoration'",
+      "status": "failed",
+      "scope": "s24",
+      "checkedAt": "2026-09-07T05:55:50.783Z",
+      "notes": "Deterministic red reproduction: same-task new native gesture before prior correction RAF returns 1 instead of .9. Repair guards deferred restoration against changed viewport position; no clock or timing redesign."
+    },
+    {
+      "command": "npm run test:browser:economics-supply-tax -- --project=firefox --project=webkit",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-09-07T06:01:21.524Z",
+      "notes": "Final 39/39 pass across all three engines including deterministic queued-correction race, deep-link reload, interruption/resize, bfcache-style retention, disposal and all prior checks."
+    },
+    {
+      "command": "npm run test:browser:focus-deck-multi-card -- --grep 'one route hosts|semantic navigation changes|disposing an active card'",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-09-07T06:01:23.094Z",
+      "notes": "9/9 pass across three browsers: all four cards, independent URL ownership, active equation disposal/remount and final native rewrites."
+    },
+    {
+      "command": "npm run test:focus-deck-multi-card",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-09-07T06:01:24.145Z",
+      "notes": "18 shared scaffold, equation, TypeScript and 3D caller tests pass."
+    },
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-09-07T06:01:25.208Z",
+      "notes": "81 exact economics and preserved route/renderer tests pass after deferred-snap guard."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-09-07T06:01:26.261Z",
+      "notes": "Full typecheck passed after runtime repair; final test-only edit checked separately with test project tsc."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-09-07T06:01:27.298Z",
+      "notes": "All architecture/compiler and cross-domain gates pass."
     }
   ],
   "progress": {
