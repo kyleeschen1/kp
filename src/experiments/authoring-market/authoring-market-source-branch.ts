@@ -1,5 +1,7 @@
 import { prepareKpAuthoringMarketPreview } from "./authoring-market-preview-prepare.ts";
 import type { KpAuthoringMarketBuildRevision, KpAuthoringMarketPreviewData } from "./authoring-market-preview-protocol.ts";
+import { compileKpEquationSeriesLogarithmBaseExample } from "../../authoring/equation-series-logarithm-base-example.ts";
+import type { KpEquationTransformSeriesRequest } from "../../authoring/equation-transform-series-request.ts";
 
 /** An editable source packet, not a publication artifact or durable history engine. */
 export interface KpAuthoringMarketSourceBranch {
@@ -7,6 +9,7 @@ export interface KpAuthoringMarketSourceBranch {
   readonly name: string;
   readonly parentSourceRevision: string;
   readonly data: KpAuthoringMarketPreviewData;
+  readonly equationRequest?: KpEquationTransformSeriesRequest;
 }
 
 export function createKpAuthoringMarketSourceBranch(revision: KpAuthoringMarketBuildRevision, name: string): KpAuthoringMarketSourceBranch {
@@ -35,5 +38,11 @@ export function readKpAuthoringMarketSourceBranch(value: unknown): KpAuthoringMa
     throw new Error("Invalid market source branch identity or predecessor.");
   }
   prepareKpAuthoringMarketPreview(branch.data);
+  if (branch.equationRequest !== undefined) {
+    const equation = compileKpEquationSeriesLogarithmBaseExample(branch.equationRequest);
+    if (equation.status !== "compiled") throw Object.assign(new Error("Repair the selected equation request before building this source branch."), {
+      code: "kp.authoring.equation-source-gap", path: "$.equationRequest", repairs: equation.repairs
+    });
+  }
   return branch;
 }

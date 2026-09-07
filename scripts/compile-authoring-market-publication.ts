@@ -4,7 +4,7 @@ import { basename } from "node:path";
 import { assertKpCompiledPublicationArtifact, createKpCompiledPublicationArtifact } from "../src/tutorial/kp-compiled-publication-artifact.ts";
 import { readKpAuthoringMarketSourceBranch } from "../src/experiments/authoring-market/authoring-market-source-branch.ts";
 import { compileKpAuthoredTaxSource } from "./compile-canonical-tax-source.ts";
-import { compileKpAuthoringMarketStaticReading } from "../src/experiments/authoring-market/authoring-market-static-reading.ts";
+import { compileKpAuthoringMarketStaticReading, compileKpAuthoringEquationStaticReading } from "../src/experiments/authoring-market/authoring-market-static-reading.ts";
 
 /** A selected data source uses the existing publication envelope and tax payload. */
 export function compileKpAuthoringMarketPublication(input: { readonly sourceText: string; readonly sourcePath: string }) {
@@ -38,7 +38,8 @@ export function serializeKpAuthoringMarketPublication(value: unknown,
 function buildPublication(input: { readonly sourceText: string; readonly sourcePath: string }) {
   const branch = readKpAuthoringMarketSourceBranch(JSON.parse(input.sourceText));
   const tax = compileKpAuthoredTaxSource(branch.data);
-  const reading = compileKpAuthoringMarketStaticReading(tax);
+  const marketReading = compileKpAuthoringMarketStaticReading(tax);
+  const reading = { ...marketReading, html: marketReading.html + (branch.equationRequest === undefined ? "" : `\n${compileKpAuthoringEquationStaticReading(branch.equationRequest)}`) };
   const payload = { parentSourceRevision: branch.parentSourceRevision, tax, reading };
   const html = reading.html;
   const mathSources = [...html.matchAll(/<annotation encoding="application\/x-tex">([\s\S]*?)<\/annotation>/g)]

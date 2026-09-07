@@ -1,0 +1,8 @@
+[data-kp-authoring-equation] { width: min(100% - 2rem, 48rem); margin: 2rem auto; }
+[data-kp-authoring-equation] textarea { display: block; width: 100%; margin-block: 0.5rem; font: 0.8rem/1.45 ui-monospace, monospace; }
+[data-kp-equation-status] { white-space: pre-wrap; overflow-wrap: anywhere; }
+[data-kp-authoring-equation] .editor-animation-player,
+[data-kp-authoring-equation] .editor-animation-player__stage,
+[data-kp-authoring-equation] .editor-animation-player__surface,
+[data-kp-authoring-equation] .kp-logarithm-change-of-base-stage { height: 100%; min-height: 0; padding: 0; border: 0; }
+[data-kp-authoring-equation] .editor-animation-player__controls[hidden] { display: none; }

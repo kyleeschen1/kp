@@ -5,6 +5,24 @@ import { buildKpAuthoringMarketPreview } from "../src/experiments/authoring-mark
 import { createKpAuthoringMarketSourceBranch } from "../src/experiments/authoring-market/authoring-market-source-branch.ts";
 import { compileKpAuthoringMarketPublication as compile, serializeKpAuthoringMarketPublication as serialize } from "../scripts/compile-authoring-market-publication.ts";
 import { prepareKpAuthoredMarketSource } from "../src/tutorial/authoring-market/authoring-market-prepare.ts";
+import { createKpEquationSeriesLogarithmBaseExample } from "../src/authoring/equation-series-logarithm-base-example.ts";
+
+test("only explicitly included and governed equations enter the selected reading edition", () => {
+  const market = source();
+  const equationRequest = createKpEquationSeriesLogarithmBaseExample().value;
+  const branch = { ...market, equationRequest: { ...equationRequest, states: equationRequest.states.map(state => ({ ...state, narration: "Preserve the value." })) } };
+  const plain = compile({ sourceText: JSON.stringify(market), sourcePath: "selected.market.json" });
+  const combined = compile({ sourceText: JSON.stringify(branch), sourcePath: "selected.market.json" });
+  assert.doesNotMatch(plain.payload.reading.html, /data-kp-authoring-equation-static/);
+  assert.match(combined.payload.reading.html, /data-kp-authoring-equation-static/);
+  assert.match(combined.payload.reading.html, /Preserve the value/);
+  assert.equal(combined.math.fragmentCount, plain.math.fragmentCount + 2);
+  assert.deepEqual(combined.payload.tax, plain.payload.tax);
+  branch.equationRequest.states[1]!.latex = "x+1";
+  assert.throws(() => compile({ sourceText: JSON.stringify(branch), sourcePath: "selected.market.json" }), error => {
+    assert.equal((error as { code: string }).code, "kp.authoring.equation-source-gap"); return true;
+  });
+});
 
 function source() {
   return createKpAuthoringMarketSourceBranch({ schemaVersion: "kp.authoring-market-build.v1",

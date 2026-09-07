@@ -161,6 +161,13 @@
       "scope": "s18",
       "checkedAt": "2026-09-07T22:56:21.154Z",
       "notes": "45 tests pass; full types pass. Actual named edition built twice with identical source and payload digests, 63 local files. Filesystem tamper, stale source, unsafe names and dangling symlinks rejected."
+    },
+    {
+      "command": "npm run visual:authoring-market; npm run test:browser:logarithm-change-of-base; npm run test:authoring-round-trip; npm run test:authoring-integration; npm run test:focus-deck-multi-card; npm run typecheck; npm run check:canonical-tax-source",
+      "status": "passed",
+      "scope": "s19",
+      "checkedAt": "2026-09-07T23:15:49.586Z",
+      "notes": "11 authoring browser checks passed, then focused equation smoke and three canonical compositor checks reran after resize repair. 46 round-trip, 88 integration and 19 shared-card tests pass; full types and canonical freshness pass. Actual combined exported source builds reproducibly with no-JS reading. Desktop/mobile screenshots inspected; real ink-bound assertions now catch stale geometry. Canonical rewind projection and responsive native calibration repaired without new choreography."
     }
   ],
   "expectedLearning": [

@@ -2,6 +2,7 @@ import { prepareKpAuthoringMarketPreview } from "./authoring-market-preview-prep
 import { projectKpAuthoringMarketPreviewStatus } from "./authoring-market-preview-status.ts";
 import { projectKpAuthoringMarketRevisionReview } from "./authoring-market-revision-review.ts";
 import { createKpAuthoringMarketSourceBranch } from "./authoring-market-source-branch.ts";
+import { mountKpAuthoringEquationCard } from "./authoring-equation-card.ts";
 import { createKpAuthoringMarketRevisionReceiver, kpAuthoringMarketPreviewEndpoint,
   kpAuthoringMarketPreviewEvent, type KpAuthoringMarketBuildRevision } from "./authoring-market-preview-protocol.ts";
 
@@ -12,6 +13,10 @@ let root: HTMLElement = initialRoot;
 // The experiment is reached only through its physical opt-in document; no
 // default reader/bootstrap dependency pulls this integration into other pages.
 const { mountKpAuthoringMarket } = await import("./authoring-market-host.ts");
+const equationRoot = document.createElement("section");
+equationRoot.id = "equation-authoring";
+root.after(equationRoot);
+const equationSession = mountKpAuthoringEquationCard(equationRoot);
 let session: ReturnType<typeof mountKpAuthoringMarket> | undefined;
 let lastPrepared: ReturnType<typeof prepareKpAuthoringMarketPreview> | undefined;
 const status = document.createElement("p");
@@ -49,6 +54,11 @@ branchLabel.append(branchName);
 const branchButton = document.createElement("button");
 branchButton.type = "button"; branchButton.textContent = "Export selected source as branch";
 historyControls.append(branchLabel, branchButton);
+const includeEquationLabel = document.createElement("label");
+const includeEquation = document.createElement("input");
+includeEquation.type = "checkbox";
+includeEquationLabel.append(includeEquation, " Include displayed, compiled equation in this edition");
+historyControls.append(includeEquationLabel);
 review.after(historyControls);
 const reportStatus = (revision: KpAuthoringMarketBuildRevision) => {
   lastReported = revision;
@@ -116,7 +126,8 @@ branchButton.addEventListener("click", () => {
   try {
     const selected = receiver.retainedRevisions().find(item => item.sourceRevision === historySelect.value);
     if (selected === undefined) throw new Error("Select a retained valid source revision first.");
-    const branch = createKpAuthoringMarketSourceBranch(selected, branchName.value);
+    const branch = { ...createKpAuthoringMarketSourceBranch(selected, branchName.value),
+      ...(includeEquation.checked ? { equationRequest: equationSession.reviewedRequest() } : {}) };
     const link = document.createElement("a");
     link.href = `data:application/json;charset=utf-8,${encodeURIComponent(`${JSON.stringify(branch, null, 2)}\n`)}`;
     link.download = `${branch.name}.market.json`;
@@ -151,6 +162,7 @@ const dispose = () => {
   receiver.dispose();
   import.meta.hot?.off(kpAuthoringMarketPreviewEvent, onRevision);
   session?.dispose();
+  equationSession.dispose();
 };
 const onPageHide = (event: PageTransitionEvent) => {
   if (!event.persisted) dispose();
@@ -163,5 +175,6 @@ if (import.meta.hot !== undefined) {
     status.remove();
     review.remove();
     historyControls.remove();
+    equationRoot.remove();
   });
 }

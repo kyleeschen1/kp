@@ -16,6 +16,7 @@ import {
 import {
   syncKpEquationMaterialLayer
 } from "../rendering/equation-material-layer-dom.ts";
+import { sampleKpSynchronizedModelProjectionProgress } from "../animation/synchronized-model-projection.ts";
 import {
   bindKpLogarithmChangeOfBaseNativeEndpointOwnership,
   kpCanonicalLogarithmChangeOfBaseNativeEndpoints,
@@ -41,6 +42,8 @@ interface KpLogarithmChangeOfBaseSurfaceSession {
   readonly stage: HTMLElement;
   readonly endpointRoots: readonly [HTMLElement, HTMLElement];
   readonly fontReadiness: ReturnType<typeof createKpEquationFontReadiness>;
+  resizeObserver?: ResizeObserver | undefined;
+  observedGeometryKey?: string | undefined;
   generation: number;
   pendingState: KpEditorAnimationPlayerState;
   transit?: KpLogarithmChangeOfBaseTransitSession | undefined;
@@ -119,7 +122,7 @@ function mountSurface(
   status.textContent = "Log base two of seven ready.";
   stage.append(...roots, materialLayer, status);
   slot.replaceChildren(stage);
-  return {
+  const session: KpLogarithmChangeOfBaseSurfaceSession = {
     governance: canonicalGovernance,
     player,
     stage,
@@ -129,6 +132,8 @@ function mountSurface(
     pendingState: state,
     disposed: false
   };
+  observeSurfaceGeometry(session);
+  return session;
 }
 
 async function prepareSurface(
@@ -151,7 +156,12 @@ async function prepareSurface(
       fontReadiness: session.fontReadiness
     });
     if (session.disposed || session.generation !== generation) return;
-    session.transit = createKpLogarithmChangeOfBaseTransitSession({
+    const previous = session.transit;
+    // The canonical factory calibrates native handoff during construction.
+    // Retire frozen typography before that calibration, not only before the
+    // first public frame. Replacement remains one synchronous paint commit.
+    if (previous !== undefined) syncKpEquationMaterialLayer({ stage: session.stage, owners: [] });
+    const replacement = createKpLogarithmChangeOfBaseTransitSession({
       source,
       target
     });
@@ -164,7 +174,7 @@ async function prepareSurface(
       atom.semanticEntityId
     ]));
     session.stage.dataset["kpLogarithmChangeOfBaseTrackSummary"] =
-      JSON.stringify(session.transit.canonical.session.tracks.map((track) => ({
+      JSON.stringify(replacement.canonical.session.tracks.map((track) => ({
         id: track.id,
         lifecycle: track.lifecycle,
         sourceEntityId: track.sourceAtomId === undefined
@@ -178,18 +188,47 @@ async function prepareSurface(
           ? "default"
           : "semantic-role-change"
       })));
+    session.transit = replacement;
+    try { applyFrame(session, session.pendingState); }
+    catch (error) { session.transit = previous; replacement.retire(); throw error; }
+    previous?.retire();
     session.stage.dataset["kpLogarithmChangeOfBaseStage"] = "ready";
-    applyFrame(session, session.pendingState);
+    session.stage.dataset["kpLogarithmChangeOfBaseGeometryState"] = "ready";
+    session.stage.dataset["kpLogarithmChangeOfBaseGeometryRevision"] = String(generation);
+    delete session.stage.dataset["kpLogarithmChangeOfBaseError"];
   } catch (error: unknown) {
     if (session.disposed || session.generation !== generation) return;
     session.stage.dataset["kpLogarithmChangeOfBaseStage"] = "failed";
     session.stage.dataset["kpLogarithmChangeOfBaseError"] =
       error instanceof Error ? error.message : String(error);
+    if (session.transit !== undefined) {
+      session.stage.dataset["kpLogarithmChangeOfBaseGeometryState"] = "stale";
+      applyFrame(session, session.pendingState);
+      return;
+    }
     session.endpointRoots.forEach((root, index) => {
       root.style.opacity = index === 0 ? "1" : "0";
       setAccessibleEndpoint(root, index === 0);
     });
   }
+}
+
+function observeSurfaceGeometry(session: KpLogarithmChangeOfBaseSurfaceSession): void {
+  const Observer = session.stage.ownerDocument.defaultView?.ResizeObserver;
+  if (Observer === undefined) return;
+  session.resizeObserver = new Observer(entries => {
+    const entry = entries.find(item => item.target === session.stage);
+    if (entry === undefined || session.disposed) return;
+    const key = [entry.contentRect.width, entry.contentRect.height].map(value => Math.round(value * 2) / 2).join("x");
+    const previous = session.observedGeometryKey;
+    session.observedGeometryKey = key;
+    if (previous === undefined || previous === key) return;
+    // As in the log-product surface, resize invalidates measurements, not the
+    // semantic clock. Keep current owners until replacement paint is ready.
+    session.stage.dataset["kpLogarithmChangeOfBaseGeometryState"] = "preparing";
+    void prepareSurface(session, ++session.generation);
+  });
+  session.resizeObserver.observe(session.stage);
 }
 
 function applyFrame(
@@ -200,10 +239,12 @@ function applyFrame(
   const accessibilityMode =
     session.player.dataset["kpEditorAnimationAccessibilityMode"] ??
     "full-motion";
+  // Rewind's clock advances from zero too; paint follows semantic position.
+  const position = sampleKpSynchronizedModelProjectionProgress(state.runtimeFrame.clock).presentationProgress;
   const progress = accessibilityMode === "reduced-motion" ||
       accessibilityMode === "static"
-    ? state.progress < 0.5 ? 0 : 1
-    : state.progress;
+    ? position < 0.5 ? 0 : 1
+    : position;
   session.endpointRoots.forEach((root) => {
     root.style.opacity = "0";
     setAccessibleEndpoint(root, false);
@@ -239,6 +280,7 @@ function disposeSurface(
   if (session.disposed) return;
   session.disposed = true;
   session.generation += 1;
+  session.resizeObserver?.disconnect();
   session.transit?.retire();
   syncKpEquationMaterialLayer({ stage: session.stage, owners: [] });
   session.fontReadiness.dispose();

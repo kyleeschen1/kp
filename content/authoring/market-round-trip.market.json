@@ -1,6 +1,63 @@
 {
   "schemaVersion": "kp.authoring-market-source-branch.v1",
   "name": "round-trip-review",
+  "equationRequest": {
+    "schemaVersion": "kp.equation-transform-series-request.v1",
+    "kind": "equation-transform-series-request",
+    "id": "series.round-trip.log-base",
+    "states": [
+      {
+        "id": "state.logarithm.change-base.source",
+        "latex": "\\log_2(7)",
+        "narration": "Read the logarithm in base two. The argument is seven."
+      },
+      {
+        "id": "state.logarithm.change-base.target",
+        "latex": "\\frac{\\ln(7)}{\\ln(2)}",
+        "narration": "Express the same value as the natural log of seven divided by the natural log of two."
+      }
+    ],
+    "adjacencies": [
+      {
+        "id": "adjacency.round-trip.log-base",
+        "fromStateId": "state.logarithm.change-base.source",
+        "toStateId": "state.logarithm.change-base.target",
+        "intent": {
+          "mode": "explicit",
+          "operationId": "kp.algebra.change-logarithm-base",
+          "semanticArguments": {
+            "schemaVersion": "kp.equation-series.logarithm-base-intent.v1",
+            "sourcePin": {
+              "sourceId": "source.round-trip.log-base",
+              "revisionId": "revision.round-trip.log-base.v1"
+            },
+            "operationPin": {
+              "packId": "kp.logarithm-change-of-base",
+              "version": "1.0.0"
+            },
+            "semanticBindings": {
+              "sourceBaseSemanticId": "semantic.logarithm.base.two",
+              "sourceArgumentSemanticId": "semantic.logarithm.argument.seven",
+              "targetLogarithmFunction": "natural-logarithm"
+            },
+            "domainEvidenceIds": {
+              "sourceBasePositiveEvidenceId": "evidence.logarithm.base.two-positive",
+              "sourceBaseNotOneEvidenceId": "evidence.logarithm.base.two-not-one",
+              "sourceArgumentPositiveEvidenceId": "evidence.logarithm.argument.seven-positive",
+              "naturalLogarithmTargetEvidenceId": "evidence.logarithm.target.natural-valid"
+            },
+            "correspondenceIds": [
+              "correspondence.change-of-base.argument",
+              "correspondence.change-of-base.base",
+              "correspondence.change-of-base.operators",
+              "correspondence.change-of-base.quotient",
+              "correspondence.change-of-base.division"
+            ]
+          }
+        }
+      }
+    ]
+  },
   "parentSourceRevision": "c2455993ff7c456c3c2d6ab0369df078a2202bb474c7dd21fa1655e331c4ecee",
   "data": {
     "parameters": {

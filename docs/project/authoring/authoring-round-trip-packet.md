@@ -117,8 +117,35 @@ and run the second command. No file is written by this CLI. Without `--example`,
 matching source pins alone do not bind source authority. Unknown examples,
 false endpoints and missing assumptions return repairs with exit code 2.
 `npm run author:equation-series -- --list` inventories operations and examples.
-Compilation is not a claim that this new authoring
-workflow has a canonical rendered Focus Card or passed visual review.
+The development preview now mounts the verified equation in the shared Focus
+Card scaffold at `/experiments/authoring-market/#equation-authoring`. It uses
+`animation.equation.logarithm-change-of-base.v1`, the existing player clock,
+and the canonical native-KaTeX change-of-base surface/transit session. This is
+not the different log/exponent-solving sibling on the supply-tax page.
+
+Edit the request JSON and compile. State `narration` is optional Markdown;
+successful edits update passages without replacing the equation compositor.
+Dirty, malformed or unsupported drafts remain in the editor and retain the
+last valid card. **Restore displayed request** explicitly restores the editor
+to that valid request; neither action writes a source file. This draft is
+tab-local and must be exported for durable work.
+
+To include it in an edition, explicitly check **Include displayed, compiled
+equation in this edition** beside source-branch export. An uncompiled/invalid
+draft blocks that export instead of silently publishing the retained equation.
+The downloaded source's optional `equationRequest` is validated again by the
+same bounded compiler during the local build. Its ordered native MathML and
+authored narration join the market reading; unrelated equations are never
+appended implicitly. The checked-in review source includes this equation.
+
+The combined executable browser workflow edits a real market source, breaks
+and repairs it, inspects a retained revision, compiles equation narration,
+exports that selected pair, and verifies a real local filesystem build with
+JavaScript disabled. Run `npm run visual:authoring-market`; focused filters
+are `-- --grep 'actual local-file rebuild'` and
+`-- --grep 'equation authoring Focus Card'`.
+The new authoring card and workflow still require the R1 human checkpoint;
+compilation/browser checks alone do not grant visual or catalogue promotion.
 
 ```sh
 node --disable-warning=ExperimentalWarning --test tests/authoring-round-trip-corpus.test.ts

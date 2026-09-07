@@ -1,9 +1,88 @@
 import { expect, test, type Locator, type Page, type TestInfo } from "@playwright/test";
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile, writeFile, mkdir, mkdtemp, rm } from "node:fs/promises";
+import { randomUUID } from "node:crypto";
+import { join } from "node:path";
+import { buildKpAuthoringMarketEdition, kpAuthoringMarketEditionRoot } from "../scripts/build-authoring-market-edition.ts";
 import { buildKpAuthoringMarketPreview } from "../src/experiments/authoring-market/authoring-market-preview-build.ts";
 import { compileKpAuthoredTaxSource } from "../scripts/compile-canonical-tax-source.ts";
 import { compileKpAuthoringMarketStaticReading, compileKpAuthoringEquationStaticReading } from "../src/experiments/authoring-market/authoring-market-static-reading.ts";
 import { createKpEquationSeriesLogarithmBaseExample } from "../src/authoring/equation-series-logarithm-base-example.ts";
+
+test("equation authoring Focus Card retains paint on repairs and shares one continuous semantic playhead", async ({ page }, info) => {
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await page.goto("/experiments/authoring-market/#equation-authoring");
+  const editor = page.locator("[data-kp-authoring-equation]");
+  const deck = editor.locator("[data-kp-focus-deck]");
+  const stage = deck.locator("[data-kp-logarithm-change-of-base-stage]");
+  await expect(stage).toHaveAttribute("data-kp-logarithm-change-of-base-stage", "ready");
+  await expect(page).toHaveURL(/#equation-authoring$/);
+  await expect(deck.locator('[data-kp-editor-animation-surface-slot="equation"]')).toHaveAttribute("data-kp-editor-animation-adapter-id", "editor-animation-surface.logarithm-change-of-base.canonical-native-katex");
+  await seek(deck.locator("[data-kp-focus-deck-scrubber]"), 0.37);
+  await expect(stage).toHaveAttribute("data-kp-logarithm-change-of-base-progress", "0.37");
+  await page.evaluate(() => { document.querySelector("[data-kp-logarithm-change-of-base-stage]")!.setAttribute("data-retained-stage", "yes"); });
+  const request = JSON.parse(await editor.locator("textarea").inputValue());
+  request.states[1].narration = "Keep the value; rewrite the base using **natural logarithms**.";
+  await editor.locator("textarea").fill(JSON.stringify(request, null, 2));
+  await editor.getByRole("button", { name: "Compile equation draft" }).click();
+  await expect(editor).toHaveAttribute("data-kp-authoring-equation", "compiled");
+  await expect(deck.locator(".kp-focus-deck__passage-page").nth(1)).toContainText("Keep the value");
+  for (const bad of ["{", JSON.stringify({ ...request, states: [request.states[0], { ...request.states[1], latex: "x+1" }] })]) {
+    await editor.locator("textarea").fill(bad);
+    await editor.getByRole("button", { name: "Compile equation draft" }).click();
+    await expect(editor).toHaveAttribute("data-kp-authoring-equation", "repair-required");
+    await expect(editor.locator("[data-kp-equation-status]")).toContainText("Last valid equation retained");
+    await expect(stage).toHaveAttribute("data-retained-stage", "yes");
+    await expect(stage).toHaveAttribute("data-kp-logarithm-change-of-base-progress", "0.37");
+  }
+  const history = page.locator("[data-kp-authoring-market-source-history]");
+  await history.locator("summary").click();
+  await history.getByLabel("Include displayed, compiled equation in this edition").check();
+  await history.getByRole("button", { name: "Export selected source as branch" }).click();
+  await expect(history).toContainText("Compile and inspect a valid equation before including it");
+  await editor.getByRole("button", { name: "Restore displayed request" }).click();
+  await expect(editor).toHaveAttribute("data-kp-authoring-equation", "compiled");
+  expect(JSON.parse(await editor.locator("textarea").inputValue())).toEqual(request);
+  const viewport = deck.locator("[data-kp-focus-deck-viewport]");
+  for (const position of [0.23, 0.64, 0.41]) {
+    await viewport.evaluate((element, position) => { element.scrollLeft = element.clientWidth * position; }, position);
+    await expect.poll(async () => Number(await stage.getAttribute("data-kp-logarithm-change-of-base-progress"))).toBeCloseTo(position, 2);
+  }
+  await seek(deck.locator("[data-kp-focus-deck-scrubber]"), 0.8);
+  await deck.getByRole("button", { name: "Previous step" }).click();
+  await expect.poll(async () => Number(await stage.getAttribute("data-kp-logarithm-change-of-base-progress"))).toBeLessThan(0.7);
+  await expect(stage).toHaveAttribute("data-kp-logarithm-change-of-base-progress", "0", { timeout: 10000 });
+  await deck.getByRole("button", { name: "Next step" }).click();
+  await expect.poll(async () => Number(await stage.getAttribute("data-kp-logarithm-change-of-base-progress"))).toBeGreaterThan(0.1);
+  await expect(stage).toHaveAttribute("data-kp-logarithm-change-of-base-progress", "1", { timeout: 10000 });
+  await expect(stage).toHaveAttribute("data-kp-logarithm-change-of-base-visual-owner", "target-native");
+  for (const width of [1280, 390]) {
+    const geometryRevision = await stage.getAttribute("data-kp-logarithm-change-of-base-geometry-revision");
+    await page.setViewportSize({ width, height: 900 });
+    await seek(deck.locator("[data-kp-focus-deck-scrubber]"), 0.5);
+    if (width === 390) await expect(stage).not.toHaveAttribute("data-kp-logarithm-change-of-base-geometry-revision", geometryRevision!);
+    await expect(stage).toHaveAttribute("data-kp-logarithm-change-of-base-geometry-state", "ready");
+    await expect.poll(() => stage.evaluate(element => {
+      const bounds = element.getBoundingClientRect();
+      const ink = [...element.querySelectorAll('[data-kp-equation-material-semantic-entity-id="source.log-base-two.argument-seven"], [data-kp-equation-material-semantic-entity-id="source.log-base-two.base"]')];
+      return ink.length === 2 && ink.every(owner => {
+        const box = owner.getBoundingClientRect();
+        return box.width > 5 && box.height > 5 && box.left >= bounds.left - 1 && box.right <= bounds.right + 1 && box.top >= bounds.top - 1 && box.bottom <= bounds.bottom + 1;
+      });
+    })).toBe(true);
+    await deck.screenshot({ path: info.outputPath(`equation-authoring-${width}-midpoint.png`) });
+    expect(await deck.evaluate(element => element.scrollWidth <= element.clientWidth + 1)).toBe(true);
+  }
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await deck.getByRole("button", { name: "Previous step" }).click();
+  await expect(stage).toHaveAttribute("data-kp-logarithm-change-of-base-progress", "0");
+  await deck.locator("[data-kp-focus-deck-scrubber]").focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(stage).toHaveAttribute("data-kp-logarithm-change-of-base-progress", "1");
+  await page.keyboard.press("ArrowLeft");
+  await expect(stage).toHaveAttribute("data-kp-logarithm-change-of-base-progress", "0");
+  expect(errors).toEqual([]);
+});
 
 test("bounded static readings remain meaningful with JavaScript disabled", async ({ browser }, info) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
@@ -220,6 +299,53 @@ test("actual local-file rebuild retains invalid drafts and last valid preview wi
     expect(await readFile(articlePath, "utf8")).toBe(writtenArticle);
     await expect(page.locator("body")).toHaveAttribute("data-local-build-document", "retained");
     expect(requests.some(path => /authoring-market-(model-source|article-source|preview-build)\.ts/.test(path))).toBe(false);
+    // Complete the same edit/break/repair/inspect run with the reviewed equation
+    // and a real filesystem build of the browser-exported source bytes.
+    writtenArticle = writtenArticle.replace("kp-ref:tax-market/missing", "kp-ref:tax-market/tax");
+    await writeFile(articlePath, writtenArticle);
+    await expect(status).toHaveAttribute("data-kp-authoring-market-build-status", "valid");
+    const equationEditor = page.locator("[data-kp-authoring-equation]");
+    const equation = JSON.parse(await equationEditor.locator("textarea").inputValue());
+    equation.states[1].narration = "The argument stays upstairs; the base supplies the denominator.";
+    await equationEditor.locator("textarea").fill(JSON.stringify(equation));
+    await equationEditor.getByRole("button", { name: "Compile equation draft" }).click();
+    await expect(equationEditor).toHaveAttribute("data-kp-authoring-equation", "compiled");
+    await sourceHistory.getByLabel("Include displayed, compiled equation in this edition").check();
+    const editionName = `browser-${randomUUID()}`;
+    await sourceHistory.getByLabel("New source branch name").fill(editionName);
+    const pending = page.waitForEvent("download");
+    await sourceHistory.getByRole("button", { name: "Export selected source as branch" }).click();
+    const download = await pending;
+    const stream = await download.createReadStream();
+    if (stream === null) throw new Error("Expected combined source download");
+    const chunks: Buffer[] = [];
+    for await (const chunk of stream) chunks.push(Buffer.from(chunk));
+    const sourceText = Buffer.concat(chunks).toString("utf8");
+    expect(JSON.parse(sourceText).equationRequest.states[1].narration).toBe(equation.states[1].narration);
+    await mkdir(kpAuthoringMarketEditionRoot, { recursive: true });
+    const sourceDirectory = await mkdtemp(join(kpAuthoringMarketEditionRoot, "browser-source-"));
+    const editionDirectory = join(kpAuthoringMarketEditionRoot, editionName);
+    await mkdir(editionDirectory);
+    try {
+      const sourcePath = join(sourceDirectory, `${editionName}.market.json`);
+      await writeFile(sourcePath, sourceText);
+      const built = buildKpAuthoringMarketEdition({ sourcePath });
+      expect(buildKpAuthoringMarketEdition({ sourcePath, check: true }).payloadRevision).toBe(built.payloadRevision);
+      const html = await readFile(join(editionDirectory, "index.html"), "utf8");
+      expect(html).toContain("Observe first");
+      expect(html).toContain(equation.states[1].narration);
+      expect(html).not.toContain("<script");
+      const noJs = await page.context().browser()!.newContext({ javaScriptEnabled: false });
+      try {
+        const readingPage = await noJs.newPage();
+        await readingPage.setContent(html.replace("<head>", `<head><base href="http://127.0.0.1:4173/tmp/codex/authoring-market-editions/${editionName}/">`));
+        await expect(readingPage.locator("[data-kp-authoring-equation-static] math")).toHaveCount(2);
+        await expect(readingPage.locator('dt:has-text("after.revenue") + dd')).toHaveText("12");
+      } finally { await noJs.close(); }
+    } finally {
+      await rm(editionDirectory, { recursive: true });
+      await rm(sourceDirectory, { recursive: true });
+    }
   } catch (error) {
     console.error("LOCAL_BUILD_FAILURE", {
       server: await page.request.get("/__kp/authoring-market/revision").then(response => response.json()),
