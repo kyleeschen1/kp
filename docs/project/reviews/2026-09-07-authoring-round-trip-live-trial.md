@@ -34,6 +34,30 @@ initial failure as provenance, adds a genuinely unsupported deduction, and
 performs a fresh live run. Changing the prompt/corpus invalidates comparison
 to the old fingerprint; replay cannot count as new live evidence.
 
+## Fresh run after bounded evaluation repair
+
+The same command/model/access ran a fresh seven-case corpus, not a replay.
+The existing registered fraction operation remains covered as a governance
+repair; `ln(x*y) → ln(x)*ln(y)` is the new genuinely invalid held-out deduction.
+The response schema now derives result count from the actual corpus.
+
+- Seven of seven case-runs passed; exit 0.
+- Prompt fingerprint: `fnv1a64:7a93c124158f0234`.
+- Raw-response fingerprint: `fnv1a64:2eb2ab2404d6eb2e`.
+- All six positive cases selected exact operations and preserved adjacency IDs.
+- Three compiled directly; three correctly required governed-source evidence.
+- The false identity was explicitly declined, with repair/abstention guidance
+  present for all four noncompiled cases.
+- Zero authority attempts, compiled-selection mismatches, silent fallbacks,
+  or provider errors. This is one repetition, not a stability estimate.
+- Twenty offline benchmark/schema/planner checks and full types pass.
+
+Separately, the 50-test authoring round-trip suite passes. Held-out numeric
+drafts `(base, argument) = (8,64), (0.5,16), (3,27)` compile without author-written
+proof pins, retain exact narration, and preserve their active candidate when
+the target quotient is inverted. This is compiler evidence, not a new visual
+mechanism certification or an LLM repair-response measurement.
+
 ## Limits
 
 This measures constrained operation proposals followed by compiler diagnostics.

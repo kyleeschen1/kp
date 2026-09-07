@@ -268,6 +268,34 @@
       "scope": "s23",
       "checkedAt": "2026-09-07T23:55:34.371Z",
       "notes": "19 offline checks pass; fixture agreement did not detect stale expectations exposed by actual model."
+    },
+    {
+      "command": "npm run benchmark:equation-series:live -- --model gpt-5.6-sol --repetitions 1 --check",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-09-07T23:59:02.968Z",
+      "notes": "Fresh seven-case live run passes: six exact positive selections, three governance repairs, one explicit false-identity abstention; no authority violations, silent fallbacks or provider errors. Fingerprints in live-trial record."
+    },
+    {
+      "command": "npm run test:equation-series-live-model-benchmark",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-09-07T23:59:04.031Z",
+      "notes": "20 checks pass; corrected existing operation semantics, kept governed fraction coverage and added invalid identity negative."
+    },
+    {
+      "command": "npm run test:authoring-round-trip",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-09-07T23:59:05.033Z",
+      "notes": "50 tests pass including held-out numeric drafts with no hand-authored proof pins, exact prose retention and inverted-target repair."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-09-07T23:59:06.040Z",
+      "notes": "Full app, node, test, Svelte and domain types pass."
     }
   ],
   "progress": {

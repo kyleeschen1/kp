@@ -8,6 +8,7 @@ import { resolve } from "node:path";
 
 import {
   fingerprintKpEquationSeriesBenchmarkPayload,
+  kpEquationSeriesLiveModelBenchmarkCases,
   runKpEquationSeriesLiveModelBenchmark,
   type KpEquationSeriesLiveModelBatchResult,
   type KpEquationSeriesLiveModelBatchPort
@@ -31,7 +32,7 @@ writeFileSync(
   schemaPath,
   `${JSON.stringify(createKpEquationSeriesLiveModelBatchResponseSchema({
     plannerId,
-    resultCount: 6
+    resultCount: kpEquationSeriesLiveModelBenchmarkCases.length
   }), null, 2)}\n`,
   "utf8"
 );

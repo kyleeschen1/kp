@@ -158,7 +158,7 @@ export const kpEquationSeriesLiveModelBenchmarkCases = deepFreeze([
       kind: "governance-repair",
       operationIds: [
         "kp.algebra.apply-natural-log-both-sides",
-        "kp.algebra.lower-exponent",
+        "kp.algebra.extract-log-power-exponent",
         "kp.algebra.divide-both-sides-by-log-base"
       ],
       repairSourceCodes: [
@@ -179,13 +179,26 @@ export const kpEquationSeriesLiveModelBenchmarkCases = deepFreeze([
     }
   }),
   benchmarkCase({
-    id: "benchmark.equation.live.unsupported-fraction-equivalence",
+    id: "benchmark.equation.live.fraction-equivalence",
     intent:
       "Multiply a fraction's numerator and denominator by the same nonzero factor.",
     states: ["\\frac{a}{b}", "\\frac{2*a}{2*b}"],
     instructions: [
       "Use an exact registered operation only; otherwise declare unsupported."
     ],
+    expectation: {
+      kind: "governance-repair",
+      operationIds: ["kp.algebra.scale-fraction-equivalently"],
+      repairSourceCodes: ["equation-series.governance.arguments.invalid"]
+    }
+  }),
+  benchmarkCase({
+    id: "benchmark.equation.live.unsupported-false-log-product",
+    intent: "Rewrite the logarithm of a product as a product of logarithms.",
+    states: ["\\ln(x*y)", "\\ln(x)*\\ln(y)"],
+    instructions: ["Use an exact registered operation only; otherwise declare unsupported."],
+    // A false identity stays a negative even when more legitimate families are
+    // registered. Do not confuse missing source evidence with no operation.
     expectation: { kind: "unsupported" }
   })
 ] satisfies readonly KpEquationSeriesLiveModelBenchmarkCase[]);

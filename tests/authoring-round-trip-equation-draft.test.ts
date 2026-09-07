@@ -30,3 +30,22 @@ test("invalid operands, mismatched targets and forged evidence retain exact acti
   const forged = draft(); forged.adjacencies[0]!.intent.semanticArguments = { sourcePin: "invented" };
   assert.equal(compile(forged).status, "repair-required");
 });
+
+test("held-out numeric author edits bind without proof metadata and preserve narration", () => {
+  for (const [base, argument] of [[8, 64], [0.5, 16], [3, 27]]) {
+    const input = draft();
+    input.states[0]!.latex = `\\log_{${base}}(${argument})`;
+    input.states[1]!.latex = `\\frac{\\ln(${argument})}{\\ln(${base})}`;
+    input.states[1]!.narration = "Keep this **authored** wording exactly.";
+    const compiled = compile(input);
+    assert.equal(compiled.status, "compiled");
+    assert.equal(compiled.active!.request.states[1]!.narration, input.states[1]!.narration);
+    assert.deepEqual(input.adjacencies[0]!.intent.semanticArguments, {});
+    const broken = structuredClone(input);
+    broken.states[1]!.latex = `\\frac{\\ln(${base})}{\\ln(${argument})}`;
+    const rejected = compile(broken, compiled);
+    assert.equal(rejected.status, "repair-required");
+    assert.equal(rejected.active, compiled.active);
+    assert.equal(rejected.semantic, compiled.semantic);
+  }
+});

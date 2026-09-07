@@ -25,11 +25,11 @@ test("the fixed live corpus measures direct governed and unsupported planning", 
 
   assert.equal(report.status, "passed");
   assert.deepEqual(report.metrics, {
-    caseCount: 6,
-    exactOperationSelections: 5,
-    preservedAdjacencyIdentities: 5,
+    caseCount: 7,
+    exactOperationSelections: 6,
+    preservedAdjacencyIdentities: 6,
     explicitUnsupportedAbstentions: 1,
-    repairCasesWithGuidance: 3,
+    repairCasesWithGuidance: 4,
     authorityAttemptCount: 0,
     compiledSelectionMismatchCount: 0,
     silentFallbackCount: 0
@@ -41,9 +41,24 @@ test("the fixed live corpus measures direct governed and unsupported planning", 
     "compiled",
     "repair-required",
     "repair-required",
+    "repair-required",
     "not-run"
   ]);
   assert.equal(report.cases.every(({ passed }) => passed), true);
+});
+
+test("live expectations distinguish logarithm power extraction, governed scaling and false identities", () => {
+  const solve = kpEquationSeriesLiveModelBenchmarkCases.find(item => item.id.endsWith("solve-exponential"))!;
+  assert.notEqual(solve.expectation.kind, "unsupported");
+  if (solve.expectation.kind !== "unsupported") {
+    assert.ok(solve.expectation.operationIds.includes("kp.algebra.extract-log-power-exponent"));
+    assert.ok(!solve.expectation.operationIds.includes("kp.algebra.lower-exponent"));
+  }
+  const fraction = kpEquationSeriesLiveModelBenchmarkCases.find(item => item.id.endsWith("fraction-equivalence"))!;
+  assert.equal(fraction.expectation.kind, "governance-repair");
+  const unsupported = kpEquationSeriesLiveModelBenchmarkCases.at(-1)!;
+  assert.equal(unsupported.expectation.kind, "unsupported");
+  assert.equal(unsupported.request.states[1]!.latex, "\\ln(x)*\\ln(y)");
 });
 
 test("a known operation applied to unsupported endpoints is a silent fallback", async () => {
