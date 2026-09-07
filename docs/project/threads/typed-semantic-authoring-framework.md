@@ -1,8 +1,10 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: G0 and G1 accepted; second caller integrated; compiler-cost gate repaired
+Status: compiler-cost gate repaired; structural release browser checks stopped
 Last Updated: 2026-09-06
-Current Next Action: verify structural release before the G2 human checkpoint.
+Current Next Action: repair the reproduced Firefox measurement-invalidation and
+WebKit fraction-rule continuity failures before rerunning structural release.
+See `../reviews/2026-09-06-structural-authoring-release-stop.md`.
 The user approved broader implementation/import-boundary cost work; see
 `../reviews/2026-09-06-structural-authoring-two-caller-cost-stop.md`.
 The real consumer gate now passes at 112,087 types / 191,096 instantiations
@@ -10,7 +12,8 @@ after isolating existing geometry and frame-sampling responsibilities from legac
 implementation dependencies. Consumer fixtures and all budgets remain unchanged.
 Simplification is integrated through its existing native carrier owner and a
 Focus Card; both callers remain in the actual inference fixture.
-G2 release and canonical migration have not begun. The approved scope remains
+Release verification ran but is not green; G2 and canonical migration remain
+pending. The approved scope remains
 `../reviews/2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md`.
 The completed source workflow and market specimen passed G0 review; evidence is in
 `../reviews/2026-09-05-authoring-integration-market-preview-closeout.md` and

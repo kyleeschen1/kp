@@ -2,9 +2,9 @@
   "id": "run-contract.kp.structural-authoring-canonical-tax-v2",
   "kind": "run-contract",
   "title": "Structural authoring proof and canonical tax adoption",
-  "status": "in-progress",
+  "status": "blocked",
   "domain": "kp",
-  "summary": "User approved broader implementation/import-boundary compiler-cost investigation and repair within s17. Keep budgets, real consumer tests, runtime behavior, semantic authority and G2 migration gate unchanged.",
+  "summary": "STOP_CONDITION at s18 required release evidence: Firefox carrier stale viewport and WebKit nonrigid fraction-rule seams reproduced. S17 compiler gate resolved;17 of28 complete. Repair measurement lifecycle and reconcile stale direction tests before G2.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -224,6 +224,7 @@
     {
       "id": "s18",
       "title": "Structural release and checkpoint: run broad gates and present two-caller evidence for migration readiness",
+      "summary": "Incomplete; STOP_CONDITION recorded on contract. Required release browser checks fail reproducibly and current-direction tests remain stale. See structural-authoring-release-stop report; repair before G2.",
       "status": "planned"
     },
     {

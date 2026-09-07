@@ -1,13 +1,15 @@
 # Structural authoring: second caller and compiler-cost stop
 
-Status: compiler-cost stop resolved; G2 release verification is next
+Status: compiler-cost stop resolved; subsequent release checks stopped
 Contract: `run-contract.kp.structural-authoring-canonical-tax-v2`
 
 Latest disposition: the user approved broader implementation/import-boundary
 repair after the initial compiler-only cleanup. The unchanged gate now passes
 at **112,087 types / 191,096 instantiations**, below ceilings of 112,500 / 195,800.
 Earlier stop and pending exemplar-review statements below are historical. G2
-release is still pending and canonical migration remains untouched.
+release is still pending and canonical migration remains untouched. Subsequent
+browser failures are recorded in `2026-09-06-structural-authoring-release-stop.md`;
+they do not reopen the resolved compiler-cost gate.
 
 ## Approved boundary repair and resolution
 

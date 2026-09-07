@@ -214,8 +214,11 @@ The second caller now reaches its existing native carrier renderer in an authore
 Focus Card. The user approved broader implementation/import-boundary repair;
 the real two-caller consumer fixture now passes unchanged inference budgets.
 Existing geometry and frame-sampling owners no longer pull legacy token/DOM
-implementation into the native consumer closure. G2 release verification is
-next; canonical migration still requires its human checkpoint. See
+implementation into the native consumer closure. Release verification then
+reproduced Firefox carrier invalidation and WebKit fraction-rule continuity
+failures; see `reviews/2026-09-06-structural-authoring-release-stop.md`.
+Repair those measurement/lifecycle boundaries before G2; canonical migration
+still requires its human checkpoint. See
 `reviews/2026-09-06-structural-authoring-two-caller-cost-stop.md` for the measured
 costs and resolved repair evidence; no budget increase is authorized.
 

@@ -33,7 +33,8 @@ test("governed construction has one explicit public authoring seam", () => {
   const surface = record("facade.canonical-animation-construction");
   assert.equal(surface.disposition, "retain-public-boundary");
   assert.deepEqual(surface.sourceCallers, [
-    "src/article/vignettes/typescript-free-shipping-vignette.ts"
+    "src/article/vignettes/typescript-free-shipping-vignette.ts",
+    "src/experiments/authoring-structural/distribution-projection.ts"
   ]);
   assert.deepEqual(surface.scriptCallers, []);
   assert.deepEqual(surface.otherCallers, []);
@@ -80,6 +81,7 @@ test("typed equation presentation policy has one neutral owner and bounded calle
     "src/rendering/cancellation-presentation-conformance.ts",
     "src/rendering/equation-cross-surface-frame.ts",
     "src/rendering/equation-linear-rearrangement-bindings.ts",
+    "src/rendering/equation-linear-rearrangement-frame.ts",
     "src/rendering/equation-linear-rearrangement-owner-motion.ts",
     "src/rendering/equation-linear-rearrangement.ts",
     "src/rendering/equation-motion-dom.ts",
