@@ -2,7 +2,7 @@ import { expect, test, type Locator, type Page } from "@playwright/test";
 
 const path = "/experiments/kinetic-figure/supply-tax/";
 
-test("prepared canonical source matches the original URL through all tax stops and reverse samples", async ({ page }) => {
+test("canonical framework source restores all tax stops and reverse samples without preview requests", async ({ page }) => {
   const errors: string[] = [];
   const requests: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
@@ -14,26 +14,35 @@ test("prepared canonical source matches the original URL through all tax stops a
     const states = [];
     for (const position of [0, 1, 1.371, 2, 3, 4, 5, 6, 7, 1.371, 0]) {
       await setScrubberPosition(deck.locator("[data-kp-supply-tax-state-scrubber]"), position, false);
-      states.push(await deck.evaluate(root => ({
-        graph: root.querySelector(".kp-supply-tax-graph")!.innerHTML,
+      states.push(await deck.evaluate(root => {
+        const graph = root.querySelector(".kp-supply-tax-graph")!.cloneNode(true) as SVGSVGElement;
+        // Reverse visits may insert equivalent CSS declarations in another
+        // order. Compare every current value, not incidental CSSOM serialization.
+        for (const node of graph.querySelectorAll<HTMLElement | SVGElement>("[style]")) {
+          const style = [...node.style].sort().map(property => {
+            const raw = node.style.getPropertyValue(property).trim();
+            const value = /^-?\d+(?:\.\d+)?%?$/.test(raw)
+              ? `${parseFloat(raw)}${raw.endsWith("%") ? "%" : ""}` : raw;
+            return `${property}:${value}${node.style.getPropertyPriority(property) ? "!important" : ""}`;
+          }).join(";");
+          node.setAttribute("style", style);
+        }
+        return {
+        graph: graph.innerHTML,
         prose: [...root.querySelectorAll(".kp-supply-tax-narrative__page")].map(node => node.textContent),
         label: root.querySelector("[data-kp-supply-tax-state-scrubber]")!.getAttribute("aria-valuetext"),
         progress: root.getAttribute("data-kp-supply-tax-model-progress")
-      })));
+      }; }));
     }
     return states;
   };
-  const original = await capture();
-  // Test-only entry substitution exercises the actual URL and host before the
-  // atomic production cutover; it is not a shipped flag or alternate reader.
-  await page.route("**/src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-page.ts", route => route.fulfill({
-    contentType: "application/javascript", body: `
-      import { mountKpCanonicalTaxReader } from "/src/experiments/kinetic-figure-supply-tax/canonical-tax-reader.ts";
-      const session = mountKpCanonicalTaxReader({ root: document.querySelector("#app") });
-      addEventListener("pagehide", event => { if (!event.persisted) session.dispose(); });
-    `
-  }));
-  expect(await capture()).toEqual(original);
+  // Pre-cutover comparison against the retired source is recorded in s22.
+  // After adoption, exercise the production entry directly, not a self-comparison
+  // disguised as old/new parity or a retained compatibility entry.
+  const first = await capture();
+  expect(first[2]).toEqual(first[9]);
+  expect(first[0]).toEqual(first[10]);
+  expect(await capture()).toEqual(first);
   await expect(page.locator("#app")).toHaveAttribute("data-kp-canonical-tax-source", "framework-reference");
   expect(requests.filter(url => /authoring-market-(?:article-source|model-source|preview-build)\.ts|\/__kp\/authoring-market\//.test(url))).toEqual([]);
   expect(errors).toEqual([]);

@@ -76,3 +76,22 @@ delivery checks for the final reader boundary.
 Rollback unit: route source injection plus adjacent default wiring retirement.
 The preserved domain constructors and sibling cards are outside that rollback.
 G3 remains required before merge or further generalization.
+
+## Adopted source boundary
+
+The canonical page now mounts `canonical-tax-reader.ts`, which owns the existing
+host and one revision-local query session from `canonical-tax-source.ts`.
+The host requires a supplied source/instruction and no longer imports the raw
+Article or constructs a default score, asset, sampler or local progress fraction.
+The original domain constructors remain for other callers. Canonical labels
+retain their prior formatting; preview labels retain their exact-value policy.
+
+Before cutover, the s22 browser check compared original and prepared paths at the
+actual URL across eight stops and reverse/transit samples, with identical graph
+markup, prose, accessible labels and progress. After cutover, the same browser
+owner exercises the production entry directly; no old/new test flag remains.
+All 11 canonical browser checks pass. Reverse-state comparison normalizes only
+CSS declaration ordering and equivalent numeric serialization, retaining every
+property and value. Exact frames, revision ownership and bounded history remain
+covered by the 75-test authoring integration suite. Ordinary build and the 81-test
+economics suite pass. Final lifecycle, built-delivery and release checks precede G3.

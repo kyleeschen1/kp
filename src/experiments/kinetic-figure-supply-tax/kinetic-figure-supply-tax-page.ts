@@ -1,9 +1,9 @@
-import { mountKpSupplyTaxKineticFigure } from
-  "./kinetic-figure-supply-tax-entry.ts";
+import { mountKpCanonicalTaxReader } from
+  "./canonical-tax-reader.ts";
 
 const root = document.querySelector<HTMLElement>("#app");
 if (root === null) throw new Error("Expected #app for the supply-tax figure.");
-const session = mountKpSupplyTaxKineticFigure({ root });
+const session = mountKpCanonicalTaxReader({ root });
 
 const handlePageHide = (event: PageTransitionEvent): void => {
   if (!event.persisted) session.dispose();

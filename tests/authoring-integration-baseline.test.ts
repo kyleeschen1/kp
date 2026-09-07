@@ -61,8 +61,10 @@ test("authoring source map names the actual host and its canonical owners", () =
     if (role !== "hostPath") assert.ok(existsSync(path), role + ": " + path);
   }
   const entry = readFileSync(baseline.canonical["entry"]!, "utf8");
-  assert.match(entry, /economics-supply-tax-scroll-score\.kp\.md\?raw/);
-  assert.match(entry, /createKpEconomicsSupplyTaxAnimationAsset/);
+  assert.doesNotMatch(entry, /economics-supply-tax-scroll-score\.kp\.md\?raw|createKpEconomicsSupplyTaxAnimationAsset/);
+  assert.match(entry, /input\.source\.sampleFrame\(modelProgress\)/);
+  const compiler = readFileSync("scripts/compile-canonical-tax-source.ts", "utf8");
+  assert.match(compiler, /economics-supply-tax-scroll-score\.kp\.md/);
   assert.match(entry, /createKpReaderTimelinePlaybackClock/);
   assert.match(entry, /kinetic-figure-supply-tax-svg/);
   const paint = readFileSync(baseline.canonical["paint"]!, "utf8");

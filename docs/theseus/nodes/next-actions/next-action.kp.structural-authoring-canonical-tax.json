@@ -753,11 +753,67 @@
       "scope": "s22",
       "checkedAt": "2026-09-07T05:38:28.085Z",
       "notes": "Executed grep prepared canonical source: real original URL and test-injected prepared source produce identical graph markup, prose, accessible labels and progress across all eight stops and nonmonotonic transit samples. No author templates or preview service requests; no page errors."
+    },
+    {
+      "command": "npm run build",
+      "status": "failed",
+      "scope": "s23",
+      "checkedAt": "2026-09-07T05:43:42.750Z",
+      "notes": "Initial typecheck caught unused score local left by default assembly retirement; local removed before rerun."
+    },
+    {
+      "command": "npm run test:authoring-integration",
+      "status": "failed",
+      "scope": "s23",
+      "checkedAt": "2026-09-07T05:43:44.455Z",
+      "notes": "74/75 pass initially; frozen-baseline source-map check still asserted removed raw Article/default constructor wiring. Updated live-owner assertions, frozen cost fixture untouched."
+    },
+    {
+      "command": "npm run test:browser:economics-supply-tax",
+      "status": "failed",
+      "scope": "s23",
+      "checkedAt": "2026-09-07T05:43:45.999Z",
+      "notes": "10/11 pass initially. Added reverse comparison saw CSS declaration order and equivalent numeric serialization differences; normalize CSSOM serialization only, retain all values and prior exact pre-cutover evidence."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s23",
+      "checkedAt": "2026-09-07T05:45:33.247Z",
+      "notes": "Final ordinary build, generated source freshness and full typecheck pass; superseded unused score local removed."
+    },
+    {
+      "command": "npm run test:economics-supply-tax",
+      "status": "passed",
+      "scope": "s23",
+      "checkedAt": "2026-09-07T05:45:34.432Z",
+      "notes": "81 pass; route assertions now require framework mount and absence of default source wiring; economics and renderer tests unchanged."
+    },
+    {
+      "command": "npm run test:authoring-integration",
+      "status": "passed",
+      "scope": "s23",
+      "checkedAt": "2026-09-07T05:45:35.490Z",
+      "notes": "75 pass after live source-map assertions reflect intended cutover. Frozen author-cost baseline untouched."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s23",
+      "checkedAt": "2026-09-07T05:45:36.540Z",
+      "notes": "All architecture and compiler gates pass after route switch and adjacent default retirement."
+    },
+    {
+      "command": "npm run test:browser:economics-supply-tax",
+      "status": "passed",
+      "scope": "s23",
+      "checkedAt": "2026-09-07T05:45:37.598Z",
+      "notes": "11/11 pass at production canonical URL, including all original navigation/phone/visual checks and exact repeated/reverse state comparison; no preview or author-template requests."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "G2 and direct-arc treatment explicitly approved. S18 release refresh passed: 6597 tests, full build, 24 structural browser and 45 card/browser checks, reachability and unchanged budgets. Proceed to canonical migration inventory; G3 remains required."
+    "summary": "Canonical supply-tax URL now consumes framework-derived source, bound unchanged reference instruction and one query sampler; superseded default wiring retired. All 11 canonical browser checks, 75 authoring tests, 81 economics tests and build pass. Continue lifecycle/build-delivery/preview convergence and release to mandatory G3."
   },
   "expectedLearning": [
     "Whether two structural equation callers justify canonical economics adoption without parallel state or presentation authority."

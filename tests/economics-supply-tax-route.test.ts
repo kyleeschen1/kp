@@ -38,9 +38,10 @@ test("a standalone experiment page owns the route without application inversion"
   assert.match(bootstrap, /case "kinetic-figure-supply-tax"/u);
   assert.doesNotMatch(bootstrap, /loadKpSupplyTaxKineticFigure/u);
   assert.match(page, /kinetic-figure-supply-tax-page\.ts/u);
-  assert.match(entry, /economics-supply-tax-scroll-score\.kp\.md\?raw/u);
-  assert.match(entry, /compileKpSupplyTaxScrollScoreArticle/u);
-  assert.match(entry, /createKpSupplyTaxScrollScore/u);
+  assert.match(pageModule, /mountKpCanonicalTaxReader/u);
+  assert.doesNotMatch(entry, /compileKpSupplyTaxScrollScoreArticle|createKpSupplyTaxScrollScore|createKpEconomicsSupplyTaxAnimationAsset|sampleKpEconomicsSupplyTaxAnimationFrame|exactProgress/u);
+  assert.doesNotMatch(entry, /readonly source\?|source === undefined/u);
+  assert.match(entry, /input\.source\.sampleFrame\(modelProgress\)/u);
   assert.equal((entry.match(/createKpReaderTimelinePlaybackClock/g) ?? []).length, 2);
   assert.match(entry, /clock\.play\(\{/u);
   assert.match(entry, /const forward = targetProgress > currentProgress/u);

@@ -26,5 +26,7 @@ export function prepareKpAuthoredMarketSource(data: KpAuthoringMarketPreviewData
   const boundArticle = Object.freeze({ ...data.article, facts });
   const companion = createKpAuthoringMarketCompanion({ authored, text: boundArticle.text,
     boundArticle, lock: importLock as KpArticleImportLock });
-  return Object.freeze({ authored, facts, boundArticle, companion, specimen: Object.freeze({ ...data.specimen }) });
+  return Object.freeze({ authored, facts, boundArticle,
+    companion: Object.freeze({ ...companion, stageFacts: facts.stageFacts }),
+    specimen: Object.freeze({ ...data.specimen }) });
 }

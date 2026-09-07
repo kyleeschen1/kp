@@ -262,7 +262,8 @@
     {
       "id": "s23",
       "title": "Canonical cutover: inject framework source at existing URL and retire its superseded default wiring in the same rollback unit",
-      "status": "planned"
+      "summary": "Atomic cutover complete: original page mounts framework source and host default Article/score/asset/sampler/progress wiring retired together. Preserved domain constructors, both label policies and sibling hosts. Required checks pass.",
+      "status": "complete"
     },
     {
       "id": "s24",

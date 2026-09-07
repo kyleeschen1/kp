@@ -7,19 +7,10 @@ import "../kinetic-figure-typescript-focus-card/kinetic-figure-typescript-focus-
 import "../kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score.css";
 import "./kinetic-figure-supply-tax.css";
 
-import articleText from
-  "../../../content/lessons/economics-supply-tax-scroll-score.kp.md?raw";
-import importLockValue from
-  "../../../content/lessons/economics-supply-tax-scroll-score.kp.lock.json" with { type: "json" };
-
-import type { KpArticleImportLock } from
-  "../../article/kp-article-import-lock.ts";
 import { compileKpArticleMarkdownFragmentHtml } from
   "../../article/kp-article-static-html.ts";
-import {
-  createKpEconomicsSupplyTaxAnimationAsset,
-  sampleKpEconomicsSupplyTaxAnimationFrame
-} from "../../animation/economics-supply-tax-asset.ts";
+import type { KpEconomicsSupplyTaxAnimationAsset } from "../../animation/economics-supply-tax-asset.ts";
+import type { KpPerUnitTaxWelfareFrameV1 } from "../../../domains/economics/per-unit-tax-welfare-frame.ts";
 import { applyKpSemanticVisualDomTheme } from
   "../../rendering/semantic-visual-dom-theme.ts";
 import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
@@ -48,31 +39,27 @@ import {
   renderKpTypeScriptFocusCard
 } from
   "../kinetic-figure-typescript-focus-card/kinetic-figure-typescript-focus-card.ts";
-import { compileKpSupplyTaxScrollScoreArticle } from
-  "../kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-article.ts";
 import {
-  createKpSupplyTaxScrollScore,
   readKpSupplyTaxScrollScorePhraseFromHash,
   type KpSupplyTaxScrollScorePhraseV1,
   type KpSupplyTaxScrollScoreV1
 } from
   "../kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-score.ts";
 import {
-  kpSupplyTaxScrollScoreStageFacts,
+  type kpSupplyTaxScrollScoreStageFacts,
   projectKpSupplyTaxScrollScoreStageLens
 } from
   "../kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-stage-lens.ts";
 import { projectKpSupplyTaxScrollScoreStageLensDom } from
   "../kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score-stage-lens-dom.ts";
 import {
-  projectKpSupplyTaxScene,
   projectKpSupplyTaxSceneDom,
   projectKpSupplyTaxSceneTransitionDom,
   kpSupplyTaxBeatHash,
   type KpSupplyTaxSceneProjectionV1
 } from "./kinetic-figure-supply-tax-scene.ts";
 import {
-  createKpSupplyTaxPedagogicalScore,
+  type KpSupplyTaxPedagogicalScoreV1,
   type KpSupplyTaxPedagogicalBeatV1
 } from "./kinetic-figure-supply-tax-score.ts";
 import {
@@ -80,7 +67,6 @@ import {
   renderKpSupplyTaxInteractiveSvg
 } from "./kinetic-figure-supply-tax-svg.ts";
 
-const importLock = importLockValue as KpArticleImportLock;
 const focusDeckAttentionTransitionDurationMs = 480;
 const scrollEndFallbackMs = 220;
 const wheelQuietWindowMs = 140;
@@ -152,30 +138,25 @@ export interface KpSupplyTaxKineticFigureSession {
  */
 export function mountKpSupplyTaxKineticFigure(input: {
   readonly root: HTMLElement;
-  readonly source?: {
-    readonly authority: ReturnType<typeof createKpEconomicsSupplyTaxAnimationAsset>;
-    readonly sampleFrame: (progress: number) => ReturnType<typeof sampleKpEconomicsSupplyTaxAnimationFrame>;
+  readonly source: {
+    readonly authority: KpEconomicsSupplyTaxAnimationAsset;
+    readonly sampleFrame: (progress: number) => KpPerUnitTaxWelfareFrameV1;
     readonly exactLabels?: boolean;
-    readonly instruction?: {
-      readonly authority: ReturnType<typeof createKpEconomicsSupplyTaxAnimationAsset>;
-      readonly score: ReturnType<typeof createKpSupplyTaxPedagogicalScore>;
+    readonly instruction: {
+      readonly authority: KpEconomicsSupplyTaxAnimationAsset;
+      readonly score: KpSupplyTaxPedagogicalScoreV1;
       readonly scrollScore: KpSupplyTaxScrollScoreV1;
       readonly sceneForBeat: (beatId: string) => KpSupplyTaxSceneProjectionV1;
-      readonly stageFacts?: typeof kpSupplyTaxScrollScoreStageFacts;
+      readonly stageFacts: typeof kpSupplyTaxScrollScoreStageFacts;
     };
   };
 }): KpSupplyTaxKineticFigureSession {
   applyKpSemanticVisualDomTheme({ root: input.root, theme: "light" });
-  const authority = input.source?.authority ?? createKpEconomicsSupplyTaxAnimationAsset();
-  const instruction = input.source?.instruction;
-  if (instruction !== undefined && instruction.authority !== authority) {
+  const { authority, instruction } = input.source;
+  if (instruction.authority !== authority) {
     throw new Error("Supply-tax instruction must belong to this exact source authority.");
   }
-  const score = instruction?.score ?? createKpSupplyTaxPedagogicalScore(authority);
-  const scrollScore = instruction?.scrollScore ?? createKpSupplyTaxScrollScore({
-    document: compileKpSupplyTaxScrollScoreArticle({ text: articleText, lock: importLock }).document,
-    score
-  });
+  const scrollScore = instruction.scrollScore;
   const scenes = createPhraseScenes(scrollScore);
   const logExponentAuthority = createKpLogExponentFocusCardAuthority();
   const logExponentInitialIndex = readKpLogExponentFocusCardInitialIndex(
@@ -194,7 +175,7 @@ export function mountKpSupplyTaxKineticFigure(input: {
   );
   input.root.innerHTML = renderPage({
     authority,
-    stageFacts: instruction?.stageFacts ?? kpSupplyTaxScrollScoreStageFacts,
+    stageFacts: instruction.stageFacts,
     scenes,
     logExponentAuthority,
     logExponentInitialIndex,
@@ -240,8 +221,7 @@ export function mountKpSupplyTaxKineticFigure(input: {
     initialProgress: 1,
     ownerWindow: window
   });
-  const projections = scenes.map(({ beat }) =>
-    instruction === undefined ? projectKpSupplyTaxScene({ authority, beat }) : instruction.sceneForBeat(beat.id));
+  const projections = scenes.map(({ beat }) => instruction.sceneForBeat(beat.id));
   let settledIndex = initialIndex;
   let position = initialIndex;
   let activeEdge: SemanticEdge | undefined;
@@ -262,15 +242,12 @@ export function mountKpSupplyTaxKineticFigure(input: {
         Math.abs(projectedModelProgress - modelProgress) < 0.000001) return;
     // A supplied source owns its samples; never run a second interpolation
     // or silently fall back after an authored sampling failure.
-    const frame = input.source === undefined ? sampleKpEconomicsSupplyTaxAnimationFrame({
-      asset: authority,
-      progress: exactProgress(modelProgress)
-    }) : input.source.sampleFrame(modelProgress);
+    const frame = input.source.sampleFrame(modelProgress);
     projectKpSupplyTaxTransitSvgDom({
       root: graph,
       semantics: authority.semantics,
       frame,
-      exactLabels: input.source?.exactLabels ?? input.source !== undefined
+      exactLabels: input.source.exactLabels ?? true
     });
     projectedModelProgress = modelProgress;
     deck.dataset["kpSupplyTaxModelProgress"] = modelProgress.toFixed(4);
@@ -1112,7 +1089,7 @@ function wheelDeltaPixels(
 }
 
 function renderPage(input: {
-  readonly authority: ReturnType<typeof createKpEconomicsSupplyTaxAnimationAsset>;
+  readonly authority: KpEconomicsSupplyTaxAnimationAsset;
   readonly stageFacts: typeof kpSupplyTaxScrollScoreStageFacts;
   readonly scenes: readonly KpSupplyTaxFocusPhraseScene[];
   readonly logExponentAuthority: ReturnType<
@@ -1193,7 +1170,7 @@ function renderPage(input: {
   </main>`;
 }
 
-function renderStaticStage(authority: ReturnType<typeof createKpEconomicsSupplyTaxAnimationAsset>, stageFacts: typeof kpSupplyTaxScrollScoreStageFacts): string {
+function renderStaticStage(authority: KpEconomicsSupplyTaxAnimationAsset, stageFacts: typeof kpSupplyTaxScrollScoreStageFacts): string {
   return `<figure class="kp-focus-deck__stage kp-supply-tax-figure kp-scroll-score-stage" data-kp-supply-tax-stage data-kp-supply-tax-stage-state="baseline-market">
     <figcaption class="kp-focus-deck__visually-hidden kp-supply-tax-visually-hidden" data-kp-supply-tax-stage-caption>Demand and original supply intersect at five units and a price of seven before the tax.</figcaption>
     <div class="kp-supply-tax-stage__visual">
@@ -1216,14 +1193,4 @@ function requiredElement<T extends Element>(
   const element = root.querySelector<T>(selector);
   if (element === null) throw new Error(`Missing supply-tax element ${selector}.`);
   return element;
-}
-
-function exactProgress(value: number): { numerator: string; denominator: string } {
-  if (value <= 0) return { numerator: "0", denominator: "1" };
-  if (value >= 1) return { numerator: "1", denominator: "1" };
-  const denominator = 1_000_000;
-  return {
-    numerator: String(Math.round(value * denominator)),
-    denominator: String(denominator)
-  };
 }
