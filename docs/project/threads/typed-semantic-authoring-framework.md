@@ -1,11 +1,11 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: G3 code-card gradual passage input implemented; visual review pending
+Status: G3 approved; structural authoring and canonical adoption loop complete
 Last Updated: 2026-09-07
 The user requested recording the recommendations and finishing the existing
-loop. The strategic pause is lifted; G3 visual acceptance remains required.
-Resume from `2026-09-07-canonical-tax-resume-point.md`; successor implementation
-is not authorized. See
+loop, then approved G3 after the gradual code-card passage repair. The existing
+loop is complete; successor implementation is not authorized. Current closeout:
+`../decisions/2026-09-07-canonical-tax-g3-approval-and-closeout.md`. See also
 `../decisions/2026-09-07-math-recommendations-and-loop-resumption.md`.
 The user accepted the tax-then-Bayesian flagship sequence and confirmed
 McKeon's probability-tree pedagogy as its reference; see
@@ -25,8 +25,8 @@ do not treat its proposed roadmap or readiness labels as new execution authority
 The user clarified the remaining code issue as missing gradual passage swiping.
 The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
-Current Next Action: review gradual code-card swiping and the preserved
-whole-step slider keyboard navigation at mandatory G3; see
+Current Next Action: prepare a separately reviewed authoring round trip using
+tax, then the accepted Bayesian flagship; do not restart the completed loop. See
 `../reviews/2026-09-07-canonical-tax-g3-checkpoint.md` for the working URL,
 source workflow, production ownership, release evidence and remaining work.
 The ordinary build now ships the exact four-card route, with shared source
@@ -55,7 +55,7 @@ The refreshed structural release passed before canonical migration. The approved
 The completed source workflow and market specimen passed G0 review; evidence is in
 `../reviews/2026-09-05-authoring-integration-market-preview-closeout.md` and
 `../reviews/2026-09-05-authoring-market-author-review.md`.
-G1 and G2 are accepted; G3 remains mandatory.
+G1, G2 and G3 are accepted. Earlier checkpoint descriptions below are provenance.
 Theseus owns current slice, verification, commits, and stop state.
 
 Standing continuation rule: repair nonvisual release failures and continue the

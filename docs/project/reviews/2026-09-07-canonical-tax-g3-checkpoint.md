@@ -1,7 +1,8 @@
 # Canonical supply-tax adoption: G3 checkpoint
 
-Outcome: HUMAN_CHECKPOINT. Machine release passed; canonical visual parity
-requires human approval. Theseus owns live progress under
+Outcome: COMPLETE. The user approved G3 after the gradual code-card repair
+in `60b8cd90c`. See [the approval and closeout](../decisions/2026-09-07-canonical-tax-g3-approval-and-closeout.md).
+Machine release and human acceptance are both recorded. Theseus owns progress under
 `run-contract.kp.structural-authoring-canonical-tax-v2`; this report does not
 replace its slice table. Scope is the original
 `2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md`, including
@@ -17,10 +18,10 @@ after release, and guards against stale programmatic scroll corrections.
 See [the repair boundary and verification commands](../decisions/2026-09-07-code-card-gradual-passage-input.md).
 
 The older statement below that code swiping is intentionally disabled is
-historical. The failure description is now resolved; visual acceptance of the
-new input behavior remains pending. Review the code card at the same shared
-URL, especially slow horizontal touch/trackpad passage travel through the
-helper extraction and call-replacement steps.
+historical. The failure description is resolved and the user has accepted the
+new input behavior. The reviewed artifact remains at the same shared URL.
+Earlier review requests and resume instructions below are historical; they do
+not reopen G3 or authorize a successor loop.
 
 The full post-swipe `npm test` release passes 6,611 tests with no failures,
 cancellations or skips, including architecture and unchanged inference gates.

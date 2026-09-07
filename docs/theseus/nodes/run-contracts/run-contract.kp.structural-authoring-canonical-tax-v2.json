@@ -2,9 +2,9 @@
   "id": "run-contract.kp.structural-authoring-canonical-tax-v2",
   "kind": "run-contract",
   "title": "Structural authoring proof and canonical tax adoption",
-  "status": "blocked",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: 27/28 complete. Clarified code-card gradual swiping is implemented and release verified. Await G3 visual acceptance; no merge deployment or successor loop.",
+  "summary": "COMPLETE: 28/28 slices and all required human checkpoints accepted. Final release retained at 60b8cd90c; documentation closeout passes focused checks.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -27,6 +27,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-06-reader-release-visual-boundary.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-07-canonical-tax-g3-approval-and-closeout.md"
     }
   ],
   "verification": [
@@ -45,6 +49,10 @@
     "theseus workspace validate",
     "git diff --check"
   ],
+  "progress": {
+    "state": "complete",
+    "summary": "COMPLETE: 28/28 slices; user approved G3 after verified code passage repair. No merge deployment or successor loop authorized."
+  },
   "allowedWork": [
     "s01 | Risk: Medium: mistaking order acceptance for visual approval | Verification: B + H: authoring 68-test baseline, visual:authoring-market, source/prose review | Commit: Market checkpoint evidence",
     "s02 | Risk: Medium: wrong canonical path | Verification: F: source-map assertions, existing canonical tests, phase-by-phase baseline | Commit: Reference and preservation manifest",
@@ -292,8 +300,8 @@
     {
       "id": "s28",
       "title": "Canonical adoption checkpoint: document retired wiring, preserved contracts, source workflow, costs and remaining publication work",
-      "summary": "HUMAN_CHECKPOINT: gradual code passage request repaired; 6611 tests, 27 dev browser and 18 built checks, types/build and fixed budgets pass. Final visual acceptance remains required; no implementation currently running.",
-      "status": "planned"
+      "summary": "User approved G3 after 60b8cd90c gradual code passage repair. Closeout and successor planning boundary recorded; direction checks pass. No merge deployment or successor run.",
+      "status": "complete"
     }
   ]
 }

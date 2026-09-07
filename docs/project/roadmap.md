@@ -67,7 +67,9 @@ reference to investigate. See
 This selects a direction, not a new runtime schema or approved loop.
 The user subsequently requested recording the recommendations and finishing
 the previously stopped loop. The brainstorm pause is lifted for the existing
-contract; G3/code-card review and domain-pressure requirements remain intact.
+contract. The subsequent code-card repair passed release checks and the user
+approved G3; the existing loop is now complete. Domain-pressure requirements
+remain intact for successor work.
 
 The user further clarified the mathematical authoring horizon: standard motifs
 through lower-undergraduate applied mathematics, with human/LLM collaboration
@@ -79,11 +81,13 @@ that broader programme, not a restriction of it. See
 The existing equation-series compiler and flashcard projections are foundations
 to integrate, not absent systems to rebuild. The recommendations are retained
 for successor planning; no new execution queue is approved. The existing loop
-still requires G3 visual acceptance. See
+has received G3 visual acceptance. See
 `decisions/2026-09-07-math-recommendations-and-loop-resumption.md`.
 The remaining code-card complaint is now clarified: gradual passage swiping.
 Its bounded input repair is recorded in
-`decisions/2026-09-07-code-card-gradual-passage-input.md`; G3 review remains open.
+`decisions/2026-09-07-code-card-gradual-passage-input.md`. Current closeout and
+next planning boundary:
+`decisions/2026-09-07-canonical-tax-g3-approval-and-closeout.md`.
 
 Loops 1–4 remain completed internal evidence: immutable state and transactions,
 typed properties and derived graphs, applied families and ephemeral sampling,
@@ -255,9 +259,9 @@ readers. The user explicitly approved their bounded visual-preservation repair;
 the mixed-host and certified-member fixes now pass development reader conformance.
 The final full suite and supported-browser release cohort pass, including the
 deferred-prewarm freshness repair. The user has now explicitly approved the
-bounded direct-arc distribution revision and G2 and requested resume. Refresh
-affected release evidence, then continue canonical migration to the mandatory G3
-visual parity checkpoint. See `decisions/2026-09-06-distribution-direct-arc-review.md`
+bounded direct-arc distribution revision and G2 and requested resume. Affected
+release evidence was refreshed and canonical migration subsequently reached
+the now-approved G3 checkpoint. See `decisions/2026-09-06-distribution-direct-arc-review.md`
 and `reviews/2026-09-06-reader-release-visual-boundary.md`.
 See `reviews/2026-09-06-structural-authoring-g2-checkpoint.md` and
 `reviews/2026-09-06-structural-authoring-two-caller-cost-stop.md` for the measured
@@ -269,7 +273,7 @@ implemented: the exact four-card runtime has production ownership, Article
 instructions compile at build time, and the ordinary build ships the same URL.
 Preview and reader share source preparation with isolated revision lifetimes.
 Full tests/build and the supported-browser release cohort pass with unchanged
-production guards and budgets. Mandatory G3 visual parity review is now pending;
+production guards and budgets. Mandatory G3 visual parity review is accepted;
 see `reviews/2026-09-07-canonical-tax-g3-checkpoint.md` for source workflow,
 delivery costs, review URL and deferred publication work. The resolved ownership
 stop remains historical in `reviews/2026-09-07-canonical-tax-production-boundary-stop.md`.
@@ -277,8 +281,9 @@ Theseus owns execution under the amended original proposal; no merge or
 deployment is authorized by this checkpoint.
 G3 feedback subsequently identified inconsistent slider keyboard steps, now
 repaired through shared control intent with domain owners preserved. The code
-card report still needs disambiguation; G3 is not accepted. See the checkpoint
-report follow-up rather than treating prior machine release as visual approval.
+card complaint was clarified as gradual passage swiping, repaired and release
+verified in `60b8cd90c`. The user then approved G3; the existing contract is
+complete. Successor scope still requires separate review, not automatic execution.
 
 The preceding direction and completed integration run were accepted and scoped by
 `run-contract.kp.authoring-integration-market-preview-v1` and

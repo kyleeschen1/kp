@@ -60,7 +60,9 @@ test("current project direction advances semantic state and preserves Focus Deck
   assert.match(nextActions, /mandatory\s+authoring\/API and visual checkpoint G2/i);
   assert.match(nextActions, /Routine nonvisual preapproval does not waive G2/);
   assert.match(nextActions, /run-contract\.kp\.structural-authoring-canonical-tax-v2/);
-  assert.match(nextActions, /G3 remains required before merge/);
+  assert.match(nextActions, /G3 is now accepted/);
+  assert.match(nextActions, /does not itself authorize a merge/);
+  assert.match(nextActions, /No implementation queue is\s+newly authorized by closeout/);
   assert.match(nextActions, /Focus Deck remains preserved/i);
   assert.match(focusDecision, /The Focus Deck is a projection/i);
   assert.match(focusDecision, /existing `kp\.article-deck\.v1` derivation/i);

@@ -1,5 +1,15 @@
 # Resume point: canonical adoption / G3
 
+Status: SUPERSEDED RESUME INSTRUCTION — G3 approved; loop COMPLETE.
+The user approved the repaired code-card checkpoint after `60b8cd90c`.
+Do not restart this action or repeat G3 review. See
+[the closeout and next planning boundary](../decisions/2026-09-07-canonical-tax-g3-approval-and-closeout.md).
+No merge, deployment or successor implementation is authorized.
+
+## Historical pre-approval resume packet
+
+Everything below preserves the former checkpoint, not current execution advice.
+
 Status: HUMAN_CHECKPOINT. The user ended the strategic-brainstorm pause on
 2026-09-07 and requested finishing the existing loop; G3 approval is still
 absent. See [the resumption instruction](../decisions/2026-09-07-math-recommendations-and-loop-resumption.md).

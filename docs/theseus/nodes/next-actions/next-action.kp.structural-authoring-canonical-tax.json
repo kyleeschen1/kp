@@ -2,9 +2,9 @@
   "id": "next-action.kp.structural-authoring-canonical-tax",
   "kind": "next-action",
   "title": "Structural authoring proof and canonical supply-tax adoption",
-  "status": "blocked",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "G3 visual review pending after gradual code passage repair; failure description is resolved. Existing native input now samples the code playhead continuously; machine release passes.",
+  "summary": "COMPLETE: user approved G3 after gradual code passage repair; existing scope finished. Successor requires separate review.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -77,6 +77,10 @@
     {
       "kind": "file",
       "path": "docs/project/decisions/2026-09-07-code-card-gradual-passage-input.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-07-canonical-tax-g3-approval-and-closeout.md"
     }
   ],
   "dependsOn": {
@@ -1375,11 +1379,18 @@
       "scope": "G3 gradual passage release",
       "checkedAt": "2026-09-07T19:24:33.580Z",
       "notes": "6611 tests pass, zero failures cancellations or skips. Architecture and fixed inference gates pass; full run after code-card passage repair."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/current-direction-authoring-ratchet.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-07T19:50:38.415Z",
+      "notes": "Three direction checks pass after G3 approval; runtime unchanged from 60b8cd90c and its recorded release evidence."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "Gradual code-card passage swiping implemented from clarified user feedback. 6611 tests, 27 dev browser checks, 18 built checks, types/build and fixed gates pass. Only G3 human visual acceptance remains."
+    "state": "complete",
+    "summary": "COMPLETE: G0 G1 G2 G3 accepted; structural authoring and canonical production adoption verified. Final code passage repair approved; no remaining approved implementation."
   },
   "expectedLearning": [
     "Whether two structural equation callers justify canonical economics adoption without parallel state or presentation authority."

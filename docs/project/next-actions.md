@@ -18,19 +18,20 @@ executed only through `run-contract.kp.structural-authoring-canonical-tax-v2`.
 
 The mandatory authoring/API and visual checkpoint G2 was explicitly accepted,
 including the revised direct-arc distribution. Routine nonvisual preapproval does not waive G2;
-that boundary was satisfied by human approval. G3 remains required before merge
-or further generalization; this contract does not itself authorize a merge.
+that boundary was satisfied by human approval. G3 is now accepted after the
+gradual code passage repair; this contract does not itself authorize a merge.
 
-1. Review mandatory G3 canonical-page parity. Structural integration, canonical
-   migration, ordinary four-card build delivery and release checks are verified;
-   G0, G1 and G2 are accepted. See
-   `reviews/2026-09-07-canonical-tax-g3-checkpoint.md` for the working URL and
-   review criteria. Human approval remains separate from automated evidence.
-2. After G3, close the approved contract without merge or deployment. Preserve
-   fixed budgets, semantic authority, native paint and the shared Focus Card form.
-3. Continue the roadmap's authoring/publication, knowledge/procedure, and
-   frontend/domain milestones through separately reviewed contracts. External
-   reader discovery is not an architecture prerequisite.
+The canonical adoption contract is complete. See
+`decisions/2026-09-07-canonical-tax-g3-approval-and-closeout.md` and
+`reviews/2026-09-07-canonical-tax-g3-checkpoint.md`. No implementation queue is
+newly authorized by closeout.
+
+1. Prepare a separately reviewed authoring-to-publication round trip with tax,
+   integrating existing sequence/compiler and flashcard foundations.
+2. Pressure that workflow with the accepted Bayesian probability-tree flagship;
+   keep the broader mathematical horizon and domain work in the roadmap.
+3. Preserve fixed budgets, semantic authority, native paint and the shared Focus
+   Card form. External reader discovery is not an architecture prerequisite.
 
 The approved persistent semantic state foundation, typed facade and derived
 graph, state-family/interpolation loop, and aggregate logical timeline are
