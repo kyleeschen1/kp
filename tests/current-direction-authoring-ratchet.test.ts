@@ -57,7 +57,10 @@ test("current project direction advances semantic state and preserves Focus Deck
   assert.match(catalogueThread, /Status: supporting/i);
   assert.match(catalogueThread, /indefinite-integration power-rule exemplar/i);
   assert.match(nextActions, /approved persistent semantic state foundation/i);
-  assert.match(nextActions, /mandatory\s+architecture\/API checkpoint/i);
+  assert.match(nextActions, /mandatory\s+authoring\/API and visual checkpoint G2/i);
+  assert.match(nextActions, /Routine nonvisual preapproval does not waive G2/);
+  assert.match(nextActions, /run-contract\.kp\.structural-authoring-canonical-tax-v2/);
+  assert.match(nextActions, /G3 remains required before merge/);
   assert.match(nextActions, /Focus Deck remains preserved/i);
   assert.match(focusDecision, /The Focus Deck is a projection/i);
   assert.match(focusDecision, /existing `kp\.article-deck\.v1` derivation/i);

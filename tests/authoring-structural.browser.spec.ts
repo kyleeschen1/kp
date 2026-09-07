@@ -3,6 +3,8 @@ import { expect, test, type Page } from "@playwright/test";
 const referenceRoute = "/reader/fraction-composition/?kpLesson=lesson.algebra.fraction-composition&kpVersion=1&kpProgress=38&kpMotion=full&kpProfile=standard&kpFoldMode=expanded";
 
 test("authored simplification preserves phone links, interrupted playback, reduced motion and disposal", async ({ page }, info) => {
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/experiments/authoring-simplification-focus-card/#beat.authoring-simplification.target");
   const card = page.locator("[data-kp-authoring-simplification-card]");
@@ -18,6 +20,17 @@ test("authored simplification preserves phone links, interrupted playback, reduc
   await expect.poll(async () => Number(await stage.getAttribute("data-kp-carrier-preserving-simplification-progress"))).toBeGreaterThan(0);
   await slider.fill("0.36");
   await expect(stage).toHaveAttribute("data-kp-carrier-preserving-simplification-progress", "0.36");
+  // Force invalidation and seek in one task, before ResizeObserver delivery.
+  await card.evaluate(root => {
+    const surface = root.querySelector<HTMLElement>("[data-kp-carrier-preserving-simplification-stage]")!;
+    const input = root.querySelector<HTMLInputElement>("[data-kp-focus-deck-scrubber]")!;
+    surface.style.width = "95%";
+    input.value = "0.41";
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await expect(stage).toHaveAttribute("data-kp-carrier-preserving-simplification-progress", "0.41");
+  await stage.evaluate(surface => surface.style.removeProperty("width"));
+  await slider.fill("0.36");
   await page.setViewportSize({ width: 420, height: 844 });
   await expect(stage).toHaveAttribute("data-kp-carrier-preserving-simplification-stage", "ready");
   await expect(stage).toHaveAttribute("data-kp-carrier-preserving-simplification-progress", "0.36");
@@ -30,6 +43,7 @@ test("authored simplification preserves phone links, interrupted playback, reduc
   await expect(stage).toHaveAttribute("data-kp-carrier-preserving-simplification-visual-owner", "source-native");
   await page.evaluate(() => dispatchEvent(new PageTransitionEvent("pagehide", { persisted: false })));
   await expect(stage.locator("[data-kp-equation-material-owner-id]")).toHaveCount(0);
+  expect(errors).toEqual([]);
 });
 
 test("authored simplification rejects malformed prepared source without a fallback", async ({ page }) => {
@@ -160,6 +174,31 @@ for (const source of ["canonical", "authored"] as const) test(`${source} distrib
   const reference = await page.locator("body").getAttribute("data-kp-reader-review-frame");
   await stage.screenshot({ path: info.outputPath(`${source}-distribution-transit.png`) });
   await seek(page, 0);
+  const observation = await stage.evaluate(async surface => {
+    if (!(surface instanceof HTMLElement)) throw new Error("Expected an HTML equation stage.");
+    const scenePath = "/src/rendering/native-katex-rendered-scene.ts";
+    const fontPath = "/src/rendering/equation-font-readiness.ts";
+    const scene = await import(scenePath) as typeof import("../src/rendering/native-katex-rendered-scene.ts");
+    const fonts = await import(fontPath) as typeof import("../src/rendering/equation-font-readiness.ts");
+    const root = surface.querySelector<HTMLElement>("[data-kp-reader-equation-state]")!;
+    const fontReadiness = fonts.createKpEquationFontReadiness(document);
+    await fontReadiness.whenReady();
+    const owners = [...root.querySelectorAll<HTMLElement>("[data-kp-presentation-group-id]")];
+    const before = owners.map(owner => owner.getBoundingClientRect().toJSON());
+    try {
+      const measured = scene.observeKpNativeKatexRenderedScene({
+        endpoint: "source", stage: surface, root, semanticEntityId: "test.endpoint",
+        presentationGroupId: "test.endpoint", fontReadiness, includeHiddenPaint: true
+      });
+      const structural = measured.groups.filter(group => group.atomIds.every(id =>
+        measured.atoms.find(atom => atom.id === id)!.paintKind !== "glyph"));
+      return { count: structural.length, baselines: structural.map(group => group.baselineY),
+        before, after: owners.map(owner => owner.getBoundingClientRect().toJSON()) };
+    } finally { fontReadiness.dispose(); }
+  });
+  expect(observation.count).toBeGreaterThan(0);
+  expect(observation.baselines.every(baseline => baseline === null)).toBe(true);
+  expect(observation.after).toEqual(observation.before);
   await stage.screenshot({ path: info.outputPath(`${source}-distribution-source.png`) });
   await seek(page, 1000 / 13);
   await stage.screenshot({ path: info.outputPath(`${source}-distribution-target-boundary.png`) });

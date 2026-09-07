@@ -1,7 +1,12 @@
 # Structural authoring release verification stop
 
-Status: STOP_CONDITION; required release evidence fails; G2 not reached
+Status: historical browser stop resolved; reader payload gate still blocks G2
 Contract: `run-contract.kp.structural-authoring-canonical-tax-v2`
+
+The resumed browser repair passes the supported-browser cohort. Current evidence
+and the separate reader payload-budget stop are recorded in
+`2026-09-06-structural-authoring-g2-checkpoint.md`. The failures below are preserved
+as provenance, not an instruction to repeat completed browser repairs.
 
 The approved compiler-boundary repair is committed as `1da51de31`. The actual
 consumer gate passes at 112,087 types / 191,096 instantiations with unchanged

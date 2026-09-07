@@ -4,7 +4,7 @@
   "title": "Structural authoring proof and canonical supply-tax adoption",
   "status": "blocked",
   "domain": "kp",
-  "summary": "Compiler cost repaired; structural release fails reproducible Firefox/WebKit measurement checks. Follow release-stop report; no canonical tax migration or G2 approval.",
+  "summary": "STOP_CONDITION at required reader payload release gate. Next bounded task is payload attribution and reduction; no budget refresh or migration authorized by this stop.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -314,11 +314,53 @@
       "scope": "s18",
       "checkedAt": "2026-09-07T00:24:25.026Z",
       "notes": "Preflight gates passed; unit assertions failed for caller ledger and stale current direction. Caller ledger corrected and all9 focused tests pass. Two direction assertions remain. Full run intentionally interrupted after release browser failures reproduced; not a complete suite result."
+    },
+    {
+      "command": "npm run visual:authoring-structural -- --project=firefox --project=webkit",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T01:09:23.743Z",
+      "notes": "24 passed across three browsers; strengthened native observation subset subsequently passed 6 checks. Shared stale-measurement and structural-only baseline repairs preserve compositor guards."
+    },
+    {
+      "command": "npm run visual:authoring-distribution-card",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T01:09:24.970Z",
+      "notes": "30 passed across Chromium and Firefox. Separate legacy carrier cohort passed 5 and native compositor canary passed 2."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T01:09:26.024Z",
+      "notes": "Full typecheck and production build pass; inference 112090 types and 191101 instantiations below unchanged ceilings. Canonical renderer 29, carrier 29, surface preservation 11, direction ratchet 3 pass. Reader production 12 routes and dev-review production 448 files pass."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T01:09:27.177Z",
+      "notes": "Completed 6589 tests: 6588 pass, one stale legacy-policy source inventory fails. Fixed test accounting to include extracted frame sampler without changing frozen baseline; focused four-test suite passes. Full suite not rerun after test-only repair."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-glyph-reconciliation-experiment.test.ts",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T01:09:28.258Z",
+      "notes": "4 passed after charging two relocated policy references to the existing frozen inventory baseline."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "failed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T01:09:29.333Z",
+      "notes": "Ten equation routes share 175703 gzip bytes versus unchanged 145000 ceiling, 30703 over. All ten exceed HTML gzip and six raw HTML ceilings. Broad KaTeX filename classifier separately flags native paint helper; fixing classification cannot erase numeric overage. No baseline changes. See docs/project/reviews/2026-09-06-structural-authoring-g2-checkpoint.md."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "S17 complete and committed 1da51de31. S18 release stopped: build and compiler gates pass; reproduced Firefox stale carrier viewport and WebKit nonrigid fraction seams; current-direction ratchets need reconciliation. G2 and migration untouched."
+    "summary": "Browser release defects repaired at shared lifecycle and observer owners; fixed-budget reader payload gate remains STOP_CONDITION before G2. Next bounded work is payload attribution and reduction, not migration or budget refresh."
   },
   "expectedLearning": [
     "Whether two structural equation callers justify canonical economics adoption without parallel state or presentation authority."

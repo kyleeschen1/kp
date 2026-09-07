@@ -645,7 +645,11 @@ export function observeKpNativeKatexRenderedScene(input: {
       styleFingerprint: fingerprintKpNativeKatexPaintStyle(
         getComputedStyle(owner)
       ),
-      baselineY: measureKpNativeKatexBaselineY(input.stage, owner)
+      // Structural paint has no text baseline; probing an empty CSS rule
+      // changes its native inline placement in WebKit.
+      baselineY: groupAtoms.some(atom => atom.paintKind === "glyph")
+        ? measureKpNativeKatexBaselineY(input.stage, owner)
+        : null
     };
   });
   const stageRect = input.stage.getBoundingClientRect();

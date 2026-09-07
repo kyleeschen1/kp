@@ -485,6 +485,13 @@ function applyFrame(
     session.playback === undefined ||
     session.stage.dataset["kpCarrierPreservingSimplificationStage"] !== "ready"
   ) return;
+  // A seek or media change can arrive before ResizeObserver. Replace stale
+  // measurements outside sampling, retaining the latest pending playhead.
+  if (session.measuredRevisions !== undefined &&
+    currentEndpointRevisions(session, session.measuredRevisions) !== session.measuredRevisions) {
+    scheduleMeasurementReplacement(session);
+    return;
+  }
   const directedProgress = state.direction === "rewind"
     ? 1 - state.progress
     : state.progress;

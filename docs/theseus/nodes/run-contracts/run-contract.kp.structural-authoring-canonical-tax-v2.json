@@ -4,7 +4,7 @@
   "title": "Structural authoring proof and canonical tax adoption",
   "status": "blocked",
   "domain": "kp",
-  "summary": "STOP_CONDITION at s18 required release evidence: Firefox carrier stale viewport and WebKit nonrigid fraction-rule seams reproduced. S17 compiler gate resolved;17 of28 complete. Repair measurement lifecycle and reconcile stale direction tests before G2.",
+  "summary": "STOP_CONDITION: required s18 reader payload gate exceeds unchanged runtime and HTML budgets. Browser defects repaired; 17 of 28 slices complete. G2 and migration remain pending.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -224,7 +224,7 @@
     {
       "id": "s18",
       "title": "Structural release and checkpoint: run broad gates and present two-caller evidence for migration readiness",
-      "summary": "Incomplete; STOP_CONDITION recorded on contract. Required release browser checks fail reproducibly and current-direction tests remain stale. See structural-authoring-release-stop report; repair before G2.",
+      "summary": "Incomplete: browser and build gates pass, required reader payload gate fails. G2 not ready; preserve unchanged budgets and address shared closure plus HTML costs.",
       "status": "planned"
     },
     {

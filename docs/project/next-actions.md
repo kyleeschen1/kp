@@ -1,6 +1,6 @@
 # KP Next Actions
 
-Last Updated: 2026-09-05
+Last Updated: 2026-09-06
 
 These are human-readable candidates. Theseus stores the executable versions
 with source refs, verification, run-contract slices, and completion evidence.
@@ -9,18 +9,21 @@ with source refs, verification, run-contract slices, and completion evidence.
 
 The authoring-first integration direction is accepted in
 `decisions/2026-09-05-authoring-integration-priority-and-sequence.md`.
-Loops 1–4 and the bounded integration remain internal evidence. The current
-decision gate is review, not another automatically authorized run:
+Loops 1–4 and the bounded integration remain internal evidence. The market
+checkpoint is accepted as G0; its completed scope is preserved in
+`reviews/2026-09-05-authoring-integration-market-preview-long-loop-proposal.md`.
+The approved successor is
+`reviews/2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md`,
+executed only through `run-contract.kp.structural-authoring-canonical-tax-v2`.
 
-1. Review the completed source workflow, exact parameter variation, costs and
-   limitations in `reviews/2026-09-05-authoring-integration-market-preview-closeout.md`
-   and `reviews/2026-09-05-authoring-market-author-review.md`.
-2. Resolve the mandatory authoring/API and visual checkpoint for
-   `run-contract.kp.authoring-integration-market-preview-v1`. Demand is explicitly
-   settled history, not new motion. No public facade or migration is promoted.
-3. After that review, propose structural distribution/simplification pressure
-   through existing native equation authority. Require this second structural
-   proof before public promotion or family-sized compatibility migration.
+1. Complete structural release verification for the authored distribution and
+   carrier-preserving simplification callers. Preserve fixed budgets, semantic
+   authority, native paint, and the approved Focus Card treatments.
+2. Resolve the mandatory authoring/API and visual checkpoint G2 before canonical
+   supply-tax migration. Routine nonvisual preapproval does not waive G2.
+3. After G2, migrate the canonical source through ordinary build delivery while
+   preserving economics, prose, URLs, interaction, and domain-owned renderers.
+   G3 remains required before merge or further generalization.
 4. Continue the roadmap's authoring/publication, knowledge/procedure, and
    frontend/domain milestones through separately reviewed contracts. External
    reader discovery is not an architecture prerequisite.

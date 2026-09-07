@@ -148,7 +148,8 @@ export function planKpCanonicalEquationTransitionCorrections(input: {
       if (nonRigid !== undefined) {
         throw new Error(
           `Canonical equation seam ${cohort.id} -> ${next.id} is non-rigid ` +
-          `inside row ${targetGroup.role} at ${nonRigid.key}; renderer geometry ` +
+          `inside row ${targetGroup.role} at ${nonRigid.key} ` +
+          `(residual ${nonRigid.x - correction.x}, ${nonRigid.y - correction.y}px); renderer geometry ` +
           "must not be patched per glyph."
         );
       }

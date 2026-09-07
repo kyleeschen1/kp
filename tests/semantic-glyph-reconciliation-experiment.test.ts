@@ -51,7 +51,12 @@ test("legacy scheduling policy references decrease from the frozen baseline", ()
     policyBaseline.scheduleModeIds.join("|"),
     "g"
   );
-  const referenceCount = policyBaseline.sourceFiles.reduce(
+  // Extraction must not make surviving policy references disappear from the count.
+  const currentSourceFiles = [
+    ...policyBaseline.sourceFiles,
+    "src/rendering/equation-linear-rearrangement-frame.ts"
+  ];
+  const referenceCount = currentSourceFiles.reduce(
     (total, path) =>
       total + (readFileSync(path, "utf8").match(schedulePattern)?.length ?? 0),
     0

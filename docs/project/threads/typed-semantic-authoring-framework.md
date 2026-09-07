@@ -1,13 +1,15 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: compiler-cost gate repaired; structural release browser checks stopped
+Status: compiler and browser repairs pass; reader payload budgets block release
 Last Updated: 2026-09-06
-Current Next Action: repair the reproduced Firefox measurement-invalidation and
-WebKit fraction-rule continuity failures before rerunning structural release.
-See `../reviews/2026-09-06-structural-authoring-release-stop.md`.
+Current Next Action: attribute and reduce the built equation-reader payload
+within unchanged budgets before G2. Browser measurement failures are repaired.
+See `../reviews/2026-09-06-structural-authoring-g2-checkpoint.md`.
+The prior browser stop remains historical evidence in
+`../reviews/2026-09-06-structural-authoring-release-stop.md`.
 The user approved broader implementation/import-boundary cost work; see
 `../reviews/2026-09-06-structural-authoring-two-caller-cost-stop.md`.
-The real consumer gate now passes at 112,087 types / 191,096 instantiations
+The real consumer gate now passes at 112,090 types / 191,101 instantiations
 after isolating existing geometry and frame-sampling responsibilities from legacy
 implementation dependencies. Consumer fixtures and all budgets remain unchanged.
 Simplification is integrated through its existing native carrier owner and a

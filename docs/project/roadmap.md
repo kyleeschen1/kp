@@ -216,11 +216,12 @@ the real two-caller consumer fixture now passes unchanged inference budgets.
 Existing geometry and frame-sampling owners no longer pull legacy token/DOM
 implementation into the native consumer closure. Release verification then
 reproduced Firefox carrier invalidation and WebKit fraction-rule continuity
-failures; see `reviews/2026-09-06-structural-authoring-release-stop.md`.
-Repair those measurement/lifecycle boundaries before G2; canonical migration
-still requires its human checkpoint. See
+failures, now repaired at their shared owners. Supported-browser checks pass,
+but built equation-reader payloads exceed unchanged budgets. Attribute and
+reduce that closure before G2; canonical migration still requires its human
+checkpoint. See `reviews/2026-09-06-structural-authoring-g2-checkpoint.md` and
 `reviews/2026-09-06-structural-authoring-two-caller-cost-stop.md` for the measured
-costs and resolved repair evidence; no budget increase is authorized.
+costs and resolved compiler repair evidence; no budget increase is authorized.
 
 The preceding direction and completed integration run were accepted and scoped by
 `run-contract.kp.authoring-integration-market-preview-v1` and
