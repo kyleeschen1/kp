@@ -45,8 +45,9 @@ generated JSON/HTML; the existing `npm run compile:canonical-tax-source` and
 
 ## Governed equation-chain edit
 
-Use the complete executable pair `{ value, source }` in
-`tests/helpers/authoring-round-trip-log-request.ts`. It binds the verified
+Use the complete executable pair `{ value, source }` from
+`createKpEquationSeriesLogarithmBaseExample` in
+`src/authoring/equation-series-logarithm-base-example.ts`. It binds the verified
 `kpCanonicalLogarithmChangeOfBase` through
 `createKpEquationSeriesLogarithmBaseSemanticSource`; the model does not invent
 that authority. Call the existing internal TypeScript compiler:
@@ -64,9 +65,20 @@ timing, or renderer glue. A missing source or inverted target fraction returns
 valid candidate. Correct the input/authority mismatch, then compile again.
 Do not remove a required assumption to make a request pass.
 
-`npm run author:equation-series -- --list` inventories declarations; the generic
-JSON CLI does not inject this governed source. Use the TypeScript entrypoint
-above for this bound example. Compilation is not a claim that this new authoring
+The existing CLI now explicitly selects the same trusted source:
+
+```sh
+npm run author:equation-series -- --example logarithm-change-of-base
+npm run author:equation-series -- --example logarithm-change-of-base --request draft.json
+```
+
+The first command emits a compiled response containing the editable `request`.
+Save that request object (not the entire response) as `draft.json`, edit it,
+and run the second command. No file is written by this CLI. Without `--example`,
+matching source pins alone do not bind source authority. Unknown examples,
+false endpoints and missing assumptions return repairs with exit code 2.
+`npm run author:equation-series -- --list` inventories operations and examples.
+Compilation is not a claim that this new authoring
 workflow has a canonical rendered Focus Card or passed visual review.
 
 ```sh

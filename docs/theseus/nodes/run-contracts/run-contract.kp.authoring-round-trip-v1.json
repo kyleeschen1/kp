@@ -156,7 +156,8 @@
     {
       "id": "s11",
       "title": "Connect supported equation chain through governed compiler",
-      "status": "planned"
+      "summary": "Supported chain now compiles through explicit named-source CLI and shared bound example; 43 focused and full types pass. Canonical renderer pinned, combined display remains later integration.",
+      "status": "complete"
     },
     {
       "id": "s12",

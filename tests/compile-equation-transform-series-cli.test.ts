@@ -11,6 +11,8 @@ import { collectKpRuntimeImportClosure } from
   "../scripts/runtime-import-closure.ts";
 import { kpEquationSeriesOperationRegistry } from
   "../src/authoring/equation-series-operation-declarations.ts";
+import { createKpEquationSeriesLogarithmBaseExample } from
+  "../src/authoring/equation-series-logarithm-base-example.ts";
 
 interface CliResponse {
   readonly status: string;
@@ -34,6 +36,25 @@ interface CliResponse {
     path: string;
   }>[] | undefined;
 }
+
+test("named example binds real source authority and rejects edited false endpoints", async () => {
+  const accepted = cliHarness();
+  assert.equal(await runKpEquationTransformSeriesCli(["--example", "logarithm-change-of-base"], accepted.dependencies), 0);
+  assert.equal(accepted.output().runtime?.plans.length, 1);
+  const { value } = createKpEquationSeriesLogarithmBaseExample();
+  const missing = cliHarness(JSON.stringify(value));
+  assert.equal(await runKpEquationTransformSeriesCli([], missing.dependencies), 2);
+  const changed = { ...value, states: [value.states[0], { ...value.states[1], latex: "\\frac{\\ln(2)}{\\ln(7)}" }] };
+  const rejected = cliHarness(JSON.stringify(changed));
+  assert.equal(await runKpEquationTransformSeriesCli(["--example", "logarithm-change-of-base", "--request", "-"], rejected.dependencies), 2);
+  assert.equal(rejected.output().status, "repair-required");
+  assert.equal(rejected.output().runtime, undefined);
+  const unrelated = cliHarness(JSON.stringify(validRequest()));
+  assert.equal(await runKpEquationTransformSeriesCli(["--example", "logarithm-change-of-base", "--request", "-"], unrelated.dependencies), 2);
+  assert.equal(unrelated.output().runtime, undefined);
+  const unknown = cliHarness();
+  assert.equal(await runKpEquationTransformSeriesCli(["--example", "invented"], unknown.dependencies), 2);
+});
 
 test("list mode exposes deterministic series capabilities", async () => {
   const harness = cliHarness();

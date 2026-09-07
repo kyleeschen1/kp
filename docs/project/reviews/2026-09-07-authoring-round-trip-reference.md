@@ -55,7 +55,26 @@ tests. Do not roll back semantics, clocks or native paint to fix authoring UX.
 Do not overwrite user source files for demonstrations without capture/restore
 and a scoped test owner. No route or renderer replacement is authorized.
 
-Before s11, pin the particular already-supported equation chain and its actual
-canonical host/renderer from the generation entrance and executed evidence.
-This reference does not invent an equation artifact or claim that every series
-compiler result is already a canonical Focus Card.
+## Bounded equation source and canonical presentation
+
+The selected chain is `log_2(7)` to `ln(7)/ln(2)`, one governed change-of-base
+adjacency. Semantic truth is `kpCanonicalLogarithmChangeOfBase` in
+`src/semantic/logarithm-change-of-base.ts`; the source binder owns its exact
+assumptions, correspondence IDs and operation pin. The request can change
+narration but cannot supply replacement mathematical proof.
+
+The existing canonical asset is
+`animation.equation.logarithm-change-of-base.v1`, hosted in the catalogue at
+`/?artifact=animation.equation.logarithm-change-of-base.v1&playhead=0`.
+`src/editor/logarithm-change-of-base-surface-adapter.ts` owns its native-KaTeX
+endpoint/material/endpoint route through the existing editor player clock and
+`src/rendering/logarithm-change-of-base-transit-session.ts`.
+`tests/logarithm-change-of-base-catalogue.browser.spec.ts` exercises that route.
+It is not the log/exponent sibling on the supply-tax Focus Deck.
+
+The authoring command's explicit `--example logarithm-change-of-base` binds
+this trusted source through the existing series compiler. This is a bounded
+compiler entrance, not general source inference, a new motif, or a claim that
+the series result is already mounted in a canonical Focus Card. Later host
+integration must retain these exact source and paint owners. Its rollback unit
+is the authoring binding/host integration, never the mathematics or compositor.

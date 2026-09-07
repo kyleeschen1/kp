@@ -105,6 +105,13 @@
       "scope": "s10",
       "checkedAt": "2026-09-07T22:08:01.036Z",
       "notes": "8 passed; real local-file browser smoke passed showing changed facts and editorial warning. Full npm run typecheck passed. Model/Article mixed-revision rejection preserved."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/compile-equation-transform-series-cli.test.ts tests/authoring-round-trip-corpus.test.ts tests/equation-series-logarithm-base-authoring.test.ts tests/equation-series-runtime.test.ts",
+      "status": "passed",
+      "scope": "s11",
+      "checkedAt": "2026-09-07T22:15:19.627Z",
+      "notes": "43 passed, full typecheck passed, real author:equation-series named-example invocation compiled. UI-free closure preserved; example refuses unrelated registered operations and false endpoints."
     }
   ],
   "expectedLearning": [

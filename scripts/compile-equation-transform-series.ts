@@ -8,6 +8,8 @@ import { kpEquationSeriesOperationRegistry } from
   "../src/authoring/equation-series-operation-declarations.ts";
 import { KP_EQUATION_TRANSFORM_SERIES_REQUEST_SCHEMA } from
   "../src/authoring/equation-transform-series-request.ts";
+import { compileKpEquationSeriesLogarithmBaseExample, createKpEquationSeriesLogarithmBaseExample } from
+  "../src/authoring/equation-series-logarithm-base-example.ts";
 
 export interface KpEquationTransformSeriesCliDependencies {
   readonly readFile: (path: string) => Promise<string>;
@@ -43,6 +45,7 @@ export async function runKpEquationTransformSeriesCli(
       schemaVersion: "kp.equation-transform-series-cli-response.v1",
       status: "catalogue",
       requestSchemaVersion: KP_EQUATION_TRANSFORM_SERIES_REQUEST_SCHEMA,
+      sourceExamples: ["logarithm-change-of-base"],
       operations: kpEquationSeriesOperationRegistry.declarations.map(
         (declaration) => ({
           operationId: declaration.operationId,
@@ -68,8 +71,11 @@ export async function runKpEquationTransformSeriesCli(
   }
 
   let source: string;
+  const example = options.example === undefined ? undefined : createKpEquationSeriesLogarithmBaseExample();
   try {
-    source = options.requestPath === undefined || options.requestPath === "-"
+    source = example !== undefined && options.requestPath === undefined
+      ? JSON.stringify(example.value)
+      : options.requestPath === undefined || options.requestPath === "-"
       ? await dependencies.readStdin()
       : await dependencies.readFile(options.requestPath);
   } catch (error) {
@@ -95,7 +101,8 @@ export async function runKpEquationTransformSeriesCli(
     return 2;
   }
 
-  const result = compileKpEquationTransformSeries({ value: request });
+  const result = example === undefined ? compileKpEquationTransformSeries({ value: request })
+    : compileKpEquationSeriesLogarithmBaseExample(request);
   if (result.status === "repair-required" || result.active === undefined) {
     writeJson(dependencies, {
       schemaVersion: "kp.equation-transform-series-cli-response.v1",
@@ -119,6 +126,7 @@ function parseCliOptions(argv: readonly string[]): {
   readonly help: boolean;
   readonly list: boolean;
   readonly requestPath: string | undefined;
+  readonly example: string | undefined;
 } {
   const { values } = parseArgs({
     args: [...argv],
@@ -126,16 +134,21 @@ function parseCliOptions(argv: readonly string[]): {
     options: {
       help: { type: "boolean", short: "h", default: false },
       list: { type: "boolean", default: false },
-      request: { type: "string" }
+      request: { type: "string" },
+      example: { type: "string" }
     }
   });
-  if (values.list && values.request !== undefined) {
-    throw new Error("--list and --request are mutually exclusive.");
+  if (values.list && (values.request !== undefined || values.example !== undefined)) {
+    throw new Error("--list cannot combine with --request or --example.");
+  }
+  if (values.example !== undefined && values.example !== "logarithm-change-of-base") {
+    throw new Error("Unknown source example; supported: logarithm-change-of-base.");
   }
   return {
     help: values.help,
     list: values.list,
-    requestPath: values.request
+    requestPath: values.request,
+    example: values.example
   };
 }
 
@@ -184,6 +197,8 @@ Compile one tool-neutral JSON equation-transform series from stdin by default.
 TypeScript authors may import compileKpEquationTransformSeries directly.
 
   --request <path|->  Read JSON from a file or stdin (-)
+  --example logarithm-change-of-base
+                      Bind the existing verified example; optional --request edits it
   --list              Print registered semantic operation capabilities
   --help, -h          Show this help
 `;
