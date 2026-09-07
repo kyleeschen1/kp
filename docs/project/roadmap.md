@@ -65,8 +65,9 @@ tree construction, collapsing and flipping are the confirmed pedagogical
 reference to investigate. See
 `decisions/2026-09-07-tax-integration-then-bayesian-flagship.md`.
 This selects a direction, not a new runtime schema or approved loop.
-Implementation remains explicitly paused for research/brainstorm; the existing
-G3/code-card resume task and domain-pressure requirements remain intact.
+The user subsequently requested recording the recommendations and finishing
+the previously stopped loop. The brainstorm pause is lifted for the existing
+contract; G3/code-card review and domain-pressure requirements remain intact.
 
 The user further clarified the mathematical authoring horizon: standard motifs
 through lower-undergraduate applied mathematics, with human/LLM collaboration
@@ -76,8 +77,10 @@ that broader programme, not a restriction of it. See
 `decisions/2026-09-07-lower-undergraduate-math-authoring-horizon.md` and
 `reviews/2026-09-07-lower-undergraduate-math-authoring-readiness.md`.
 The existing equation-series compiler and flashcard projections are foundations
-to integrate, not absent systems to rebuild. The review's implementation order
-is proposed; the active queue and paused G3 boundary remain unchanged.
+to integrate, not absent systems to rebuild. The recommendations are retained
+for successor planning; no new execution queue is approved. The existing loop
+still requires G3 visual acceptance. See
+`decisions/2026-09-07-math-recommendations-and-loop-resumption.md`.
 
 Loops 1–4 remain completed internal evidence: immutable state and transactions,
 typed properties and derived graphs, applied families and ephemeral sampling,

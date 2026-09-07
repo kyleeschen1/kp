@@ -3,6 +3,12 @@
 Date: 2026-09-07
 Status: accepted user goal / scope clarification; implementation proposals remain unapproved
 
+Subsequent instruction: the user requested recording the recommendations and
+finishing the previously stopped loop. See
+[the resumption decision](2026-09-07-math-recommendations-and-loop-resumption.md).
+The pause described below is historical; G3 and successor-approval boundaries
+remain in force.
+
 ## User direction
 
 The user confirmed the probability-tree reference and clarified that KP must

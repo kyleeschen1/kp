@@ -1301,11 +1301,18 @@
       "scope": "s28",
       "checkedAt": "2026-09-07T16:58:36.847Z",
       "notes": "Canonical static JS/CSS 367522 gzip bytes, +130; 69 files, 19 dynamic roots. HTML 24029 raw / 3202 gzip. Excludes fonts/images and later activation."
+    },
+    {
+      "command": "npm run test:browser:focus-deck-multi-card -- --grep 'slider keyboard|TypeScript|one route'",
+      "status": "passed",
+      "scope": "focused G3 resumption",
+      "checkedAt": "2026-09-07T18:54:41.767Z",
+      "notes": "21 checks passed across Chromium, Firefox, and WebKit. All four slider keyboard paths and TypeScript button/interruption/direct-seek paths pass. This is not human visual approval."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "USER_PAUSED for strategic brainstorm. Verified keyboard repair checkpointed; remaining code behavior and G3 review unresolved. Resume from docs/project/threads/2026-09-07-canonical-tax-resume-point.md; no new implementation authority."
+    "summary": "HUMAN_CHECKPOINT: user ended brainstorm pause and requested finishing the existing loop. Fresh 21 browser checks and 3 direction checks pass; shared review server returns HTTP 200. Only G3 visual acceptance and unresolved code-card feedback remain. Recommendations are recorded for successor planning, not a new approved run."
   },
   "expectedLearning": [
     "Whether two structural equation callers justify canonical economics adoption without parallel state or presentation authority."

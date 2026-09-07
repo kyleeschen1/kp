@@ -1,7 +1,8 @@
 # Resume point: canonical adoption / G3
 
-Status: USER_PAUSED on 2026-09-07 for strategic brainstorm. Do not resume
-implementation automatically during that discussion.
+Status: HUMAN_CHECKPOINT. The user ended the strategic-brainstorm pause on
+2026-09-07 and requested finishing the existing loop; G3 approval is still
+absent. See [the resumption instruction](../decisions/2026-09-07-math-recommendations-and-loop-resumption.md).
 
 Execution authority remains
 `run-contract.kp.structural-authoring-canonical-tax-v2`, with 27/28 slices
@@ -43,7 +44,7 @@ Review URL: <http://127.0.0.1:8000/experiments/kinetic-figure/supply-tax/>.
 The shared server answered HTTP 200 during the repair; verify it when resuming.
 Do not start another persistent server unnecessarily.
 
-Tracked entry after the user resumes:
+Tracked entry for the resumed work:
 `theseus work start next-action.kp.structural-authoring-canonical-tax --mode brief`.
 The larger resume packet exceeded its fixed budget; do not raise it. Derive
 progress with `npm run --silent loop:status`; when the contract is blocked that
@@ -68,3 +69,6 @@ The subsequent [lower-undergraduate math authoring goal](../decisions/2026-09-07
 and [source-based readiness review](../reviews/2026-09-07-lower-undergraduate-math-authoring-readiness.md)
 broaden the durable mathematical horizon beyond the Bayes flagship. They do
 not change this resume point, accept G3, or approve a successor loop.
+The later request to finish the previous loop lifts the brainstorm pause only;
+the recommendations are recorded for successor planning and G3 remains a human
+gate, not an automatic closeout.

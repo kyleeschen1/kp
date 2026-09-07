@@ -2,13 +2,15 @@
 
 Status: G3 keyboard-navigation repair verified locally; code-card feedback unresolved
 Last Updated: 2026-09-07
-Implementation is explicitly paused for strategic brainstorm. Resume from
-`2026-09-07-canonical-tax-resume-point.md`; do not infer a new implementation
-direction from unapproved discussion.
+The user requested recording the recommendations and finishing the existing
+loop. The strategic pause is lifted; G3 visual acceptance remains required.
+Resume from `2026-09-07-canonical-tax-resume-point.md`; successor implementation
+is not authorized. See
+`../decisions/2026-09-07-math-recommendations-and-loop-resumption.md`.
 The user accepted the tax-then-Bayesian flagship sequence and confirmed
 McKeon's probability-tree pedagogy as its reference; see
 `../decisions/2026-09-07-tax-integration-then-bayesian-flagship.md`.
-This does not resume implementation or accept G3. The broader proposed review is
+That earlier selection did not accept G3. The broader proposed review is
 `../reviews/2026-09-07-composable-explanation-medium-next-step-review.md`;
 its detailed work packets remain proposals, not authorized successor work.
 The user also clarified the durable lower-undergraduate mathematical authoring
@@ -16,7 +18,7 @@ horizon: LaTeX deductions and LLM collaboration yielding governed motifs,
 reusable explanatory units, flashcards, and whole/part readings. See
 `../decisions/2026-09-07-lower-undergraduate-math-authoring-horizon.md` and
 `../reviews/2026-09-07-lower-undergraduate-math-authoring-readiness.md`.
-This supplements the tax/Bayes direction without resuming implementation.
+This supplements the tax/Bayes direction; only the existing contract is resumed.
 The source-based review found working sequence/planner and flashcard foundations,
 but uneven mathematical coverage and a coverage-report evidence-wiring gap;
 do not treat its proposed roadmap or readiness labels as new execution authority.

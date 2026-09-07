@@ -4,7 +4,7 @@
   "title": "Structural authoring proof and canonical tax adoption",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: 27/28 complete. Confirm repaired keyboard behavior and clarify remaining code-card failure. Do not infer complete G3 approval from passing automation.",
+  "summary": "HUMAN_CHECKPOINT: 27/28 complete. Resumption requested; fresh keyboard and TypeScript browser checks pass. Explicit G3 visual acceptance remains absent; no merge, deployment, or successor execution.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -292,8 +292,8 @@
     {
       "id": "s28",
       "title": "Canonical adoption checkpoint: document retired wiring, preserved contracts, source workflow, costs and remaining publication work",
-      "summary": "G3 follow-up: reproduced and repaired slider arrow-step inconsistency across four cards. 21 dev and 12 built browser checks pass, types/build and fixed gates pass. Remaining code-card report needs clarification; visual approval absent.",
-      "status": "in-progress"
+      "summary": "HUMAN_CHECKPOINT: checkpoint documentation and fresh 21 browser checks are available. Await explicit G3 visual approval or actionable code-card feedback; no implementation is currently running. The user resumed the existing contract, not a successor loop.",
+      "status": "planned"
     }
   ]
 }

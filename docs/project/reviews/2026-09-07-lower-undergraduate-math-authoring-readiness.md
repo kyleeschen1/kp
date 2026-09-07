@@ -4,6 +4,11 @@ Date: 2026-09-07
 Status: PROPOSED implementation direction; accepted user goal is recorded separately
 Inspected baseline: `3d25d4f3e`, clean working tree before these documentation edits
 
+Subsequent instruction: [recommendations recorded; existing loop resumed](../decisions/2026-09-07-math-recommendations-and-loop-resumption.md).
+This assessment remains the successor-planning recommendation, not a new
+executable contract. Its paused-baseline descriptions are historical; G3 human
+acceptance is still required to finish the existing loop.
+
 This is an independent source-and-test assessment, not a Theseus-generated
 report card. It supplements the [composable explanation review](2026-09-07-composable-explanation-medium-next-step-review.md)
 and the [accepted scope clarification](../decisions/2026-09-07-lower-undergraduate-math-authoring-horizon.md).

@@ -38,6 +38,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-07-math-recommendations-and-loop-resumption.md"
     }
   ],
   "decisions": [],
