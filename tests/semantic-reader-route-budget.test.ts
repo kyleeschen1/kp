@@ -20,6 +20,7 @@ test("semantic reader route accepts its isolated equation closure", () => {
     asset("semantic-equation-token-renderer-current.js", 18_000),
     asset("reader-solve-x-current.css", 11_000, "css"),
     asset("katex-current.css", 8_000, "css"),
+    asset("assets/native-katex-paint-geometry-current.js", 2_000),
     asset("KaTeX_Main-Regular-current.woff2", 26_000, "font")
   ]), []);
 });
@@ -29,6 +30,9 @@ test("semantic reader route rejects editor, WebGL, parser, and unrelated family 
     "equation-surface-adapter-current.js",
     "graph-webgl-three-current.js",
     "katex-runtime-current.js",
+    "assets/katex-current.js",
+    "assets/katex.js",
+    "assets/katex.min.js",
     "micromark-current.js",
     "linear-rearrangement-choreography-current.js",
     "ftc-surface-current.js",

@@ -1,9 +1,12 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: compiler and browser repairs pass; reader payload budgets block release
+Status: payload budgets pass; shared reader visual-preservation repair needs approval
 Last Updated: 2026-09-06
-Current Next Action: attribute and reduce the built equation-reader payload
-within unchanged budgets before G2. Browser measurement failures are repaired.
+Current Next Action: obtain approval for the bounded mixed-reader typography
+and certified native-member continuity repair before completing s18 and G2.
+All reader payload budgets now pass unchanged. See
+`../reviews/2026-09-06-reader-release-visual-boundary.md` for the exact pending
+repair, executed tests and working authoring review URLs.
 See `../reviews/2026-09-06-structural-authoring-g2-checkpoint.md`.
 The prior browser stop remains historical evidence in
 `../reviews/2026-09-06-structural-authoring-release-stop.md`.
@@ -22,6 +25,11 @@ The completed source workflow and market specimen passed G0 review; evidence is 
 `../reviews/2026-09-05-authoring-market-author-review.md`.
 G1 is accepted for the fraction Focus Card; G2 and G3 remain mandatory.
 Theseus owns current slice, verification, commits, and stop state.
+
+Standing continuation rule: repair nonvisual release failures and continue the
+approved loop until visual judgment is required, across sessions. S18 payload
+work is resumed under this rule; no budget increases or G2 waiver. See
+`../decisions/2026-09-06-persistent-loop-continuation.md`.
 
 The user approved the fraction separation refinement and shared Focus Card repair
 before resuming that gate. Shared passage typography, two-endpoint interaction

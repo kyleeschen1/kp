@@ -131,7 +131,10 @@ test("public-looking facades remain separated by authority", () => {
   assert.deepEqual(record("facade.reader-compiler").sourceCallers, [
     "src/reader/compiler/reader-route-manifest.ts"
   ]);
-  assert.equal(record("facade.reader-runtime").sourceCallers.length, 20);
+  assert.equal(record("facade.reader-runtime").sourceCallers.length, 19);
+  assert.ok(!record("facade.reader-runtime").sourceCallers.includes(
+    "src/reader/app/canonical-equation-frame-plan.ts"
+  ));
   assert.ok(record("facade.reader-runtime").sourceCallers.every((path) =>
     path.startsWith("src/reader/") ||
     path === "src/editor/operation-evaluation-surface-adapter.ts"
@@ -145,6 +148,7 @@ test("public-looking facades remain separated by authority", () => {
     "src/reader/app/reader-canonical-equation-session.ts"
   ]);
   assert.deepEqual(record("facade.reader-runtime-learner").sourceCallers, [
+    "src/reader/app/canonical-equation-frame-plan.ts",
     "src/reader/app/canonical-equation-stage-layout.ts",
     "src/reader/app/canonical-equation-transition-continuity.ts",
     "src/reader/app/exemplar-entry.ts",

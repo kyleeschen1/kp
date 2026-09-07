@@ -155,6 +155,11 @@ See
 
 ## One Active Lane
 
+Approved loops continue through routine nonvisual checkpoints and repairable
+verification failures across sessions until required visual approval. Preserve
+all fixed gates; repair failures instead of treating them as automatic handoffs.
+See `decisions/2026-09-06-persistent-loop-continuation.md`.
+
 The repository contains a large evidence portfolio, not a large active queue.
 The accepted authoring-first outcome sequence is:
 
@@ -217,9 +222,12 @@ Existing geometry and frame-sampling owners no longer pull legacy token/DOM
 implementation into the native consumer closure. Release verification then
 reproduced Firefox carrier invalidation and WebKit fraction-rule continuity
 failures, now repaired at their shared owners. Supported-browser checks pass,
-but built equation-reader payloads exceed unchanged budgets. Attribute and
-reduce that closure before G2; canonical migration still requires its human
-checkpoint. See `reviews/2026-09-06-structural-authoring-g2-checkpoint.md` and
+and built equation-reader payloads now pass unchanged budgets after import
+and chunk-delivery repair. The new built-reader gate exposed mixed-host
+typography and operation-selector/native-member continuity failures in older
+readers. Their bounded visual-preservation repair needs explicit approval;
+see `reviews/2026-09-06-reader-release-visual-boundary.md`. Canonical migration
+still requires G2. See `reviews/2026-09-06-structural-authoring-g2-checkpoint.md` and
 `reviews/2026-09-06-structural-authoring-two-caller-cost-stop.md` for the measured
 costs and resolved compiler repair evidence; no budget increase is authorized.
 

@@ -336,6 +336,13 @@ export default defineConfig({
         // readers inherit the entire Svelte/tutorial closure just to preload
         // their own runtime capability.
         if (id.includes("vite/preload-helper")) return "kp-preload-helper";
+        // Reader clocks and frame scheduling are consumed together. One chunk
+        // avoids a request and HTML dependency tag for each small primitive.
+        if (
+          id.endsWith("/src/reader/runtime/playback-clock.ts") ||
+          id.endsWith("/src/reader/runtime/timeline-playback-clock.ts") ||
+          id.endsWith("/src/reader/runtime/frame-scheduler.ts")
+        ) return "kp-reader-clock";
         // Both tutorial routes should pay for one lazy platform seam, not a
         // request per extracted primitive. Domain assets remain separately
         // lazy and the catalogue entry does not eagerly import this chunk.

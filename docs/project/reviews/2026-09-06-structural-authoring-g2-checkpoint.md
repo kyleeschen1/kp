@@ -1,7 +1,11 @@
 # Structural authoring: two-caller G2 checkpoint
 
-Status: STOP_CONDITION at reader payload budgets; G2 not ready
+Status: payload stop repaired; visual-preservation repair approval pending; G2 not ready
 Contract: `run-contract.kp.structural-authoring-canonical-tax-v2`
+
+Continuation evidence and the current approval request are in
+`2026-09-06-reader-release-visual-boundary.md`. The payload failures below are
+historical measurements, now repaired without changing budgets.
 
 ## What the proof establishes
 

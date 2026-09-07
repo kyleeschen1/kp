@@ -53,6 +53,15 @@ collaboration experiment, not a learner-facing editorial voice standard.
 
 ## Codex execution reliability
 
+- Standing user direction (2026-09-06): during an approved loop, continue across
+  routine nonvisual checkpoints and repairable verification failures until a
+  required visual approval is needed. This rule persists across sessions.
+  Record evidence and repair failing gates; never waive checks or raise budgets
+  to continue. Stop only for visual judgment, completion/exhausted approved scope,
+  user pause, or a genuine safety, authority, scope, or external blocker that
+  cannot be resolved within the approved work. See
+  `docs/project/decisions/2026-09-06-persistent-loop-continuation.md`.
+
 - Prefer direct commands that can match audited execution rules. Do not add `zsh -lc`, environment assignments, pipes, redirection, substitutions, or wrapper scripts when the same check has a direct invocation.
 - Do not request or accumulate blanket approval for `node`, shell interpreters, changing `tmp/codex/` filenames, destructive Git commands, or deletion commands. Promote recurring checks into a committed `scripts/` or `tests/` entrypoint and expose them through a stable `npm run` command.
 - During an active Theseus run, derive the progress counter with `npm run --silent loop:status` when available and emit it at slice starts, completions, commit boundaries, and before a stop or final response.

@@ -393,6 +393,8 @@
     "test:production-development-erasure": "node --disable-warning=ExperimentalWarning --test scripts/vite-production-development-erasure.test.ts tests/kp-application-entry-ownership.test.ts",
     "check:reader-production": "node --disable-warning=ExperimentalWarning scripts/check-reader-production-closure.ts",
     "check:reader-budgets": "node --disable-warning=ExperimentalWarning scripts/check-reader-route-budgets.ts",
+    "preview:reader-production": "vite preview --host 127.0.0.1 --port 4173 --strictPort",
+    "visual:reader-production": "playwright test --config=playwright.reader-production.config.ts --project=chromium --workers=1",
     "check:algebra-fraction-composition-budgets": "node --disable-warning=ExperimentalWarning scripts/check-algebra-fraction-composition-budgets.ts",
     "check:canonical-animation-budgets": "node --disable-warning=ExperimentalWarning scripts/check-canonical-animation-construction-budgets.ts",
     "test:canonical-animation-budgets": "node --disable-warning=ExperimentalWarning --test scripts/check-canonical-animation-construction-budgets.test.ts",

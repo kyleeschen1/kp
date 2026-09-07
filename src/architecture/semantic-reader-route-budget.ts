@@ -71,7 +71,7 @@ export function isKpSemanticReaderForbiddenAsset(name: string): boolean {
     || /(?:^|[/.-])three(?:[/.-]|$)/i.test(name)
     || /(?:^|[/.-])webgl(?:[/.-]|$)/i.test(name)
     || /equation-surface-adapter|animation-player/i.test(name)
-    || /katex-.*\.js/i.test(name)
+    || /(?:^|\/)katex(?:[.-].*)?\.js$/i.test(name)
     || /mdast|micromark/i.test(name)
     || /choreography-compiler|linear-rearrangement-choreography/i.test(name)
     || /(?:^|[/.-])ftc(?:[/.-]|$)/i.test(name)

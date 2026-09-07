@@ -4,7 +4,7 @@
   "title": "Structural authoring proof and canonical tax adoption",
   "status": "blocked",
   "domain": "kp",
-  "summary": "STOP_CONDITION: required s18 reader payload gate exceeds unchanged runtime and HTML budgets. Browser defects repaired; 17 of 28 slices complete. G2 and migration remain pending.",
+  "summary": "HUMAN_CHECKPOINT at visual-preservation repair approval, not a routine nonvisual stop. 17 of 28 complete; s18 incomplete. Execution safety review rejected shared visible repair pending explicit user approval.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -19,6 +19,14 @@
     {
       "kind": "file",
       "path": "docs/project/decisions/2026-09-06-nonvisual-preapproval-and-structural-repair.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-06-persistent-loop-continuation.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-06-reader-release-visual-boundary.md"
     }
   ],
   "verification": [
@@ -224,7 +232,7 @@
     {
       "id": "s18",
       "title": "Structural release and checkpoint: run broad gates and present two-caller evidence for migration readiness",
-      "summary": "Incomplete: browser and build gates pass, required reader payload gate fails. G2 not ready; preserve unchanged budgets and address shared closure plus HTML costs.",
+      "summary": "Payload recovery complete with unchanged budgets. Pending approval of mixed-reader typography and certified-member continuity repair; visual edits not applied. G2 and migration remain pending.",
       "status": "planned"
     },
     {

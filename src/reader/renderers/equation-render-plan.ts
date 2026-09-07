@@ -9,7 +9,7 @@ import type {
 import {
   compileKpSemanticEquationTransitionResult,
   type KpSemanticEquationTransitionCompileDiagnostic
-} from "../../domain-ir/public-api.ts";
+} from "../../domain-ir/semantic-equation-transition-compiler.ts";
 import {
   resolveDefaultEquationTransformVisualMotifRule
 } from "../../animation/motifs/equation-visual-motif-defaults.ts";

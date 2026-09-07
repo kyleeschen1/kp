@@ -4,7 +4,7 @@
   "title": "Structural authoring proof and canonical supply-tax adoption",
   "status": "blocked",
   "domain": "kp",
-  "summary": "STOP_CONDITION at required reader payload release gate. Next bounded task is payload attribution and reduction; no budget refresh or migration authorized by this stop.",
+  "summary": "HUMAN_CHECKPOINT: approve bounded shared reader typography and native-member continuity repair described in current report. Payload checks pass; rejected visual edits not applied. No G2 or migration approval inferred.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -45,6 +45,14 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-06-identity-ink-shrink-and-card-loading.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-06-persistent-loop-continuation.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-06-reader-release-visual-boundary.md"
     }
   ],
   "dependsOn": {
@@ -356,11 +364,60 @@
       "scope": "s18",
       "checkedAt": "2026-09-07T01:09:29.333Z",
       "notes": "Ten equation routes share 175703 gzip bytes versus unchanged 145000 ceiling, 30703 over. All ten exceed HTML gzip and six raw HTML ceilings. Broad KaTeX filename classifier separately flags native paint helper; fixing classification cannot erase numeric overage. No baseline changes. See docs/project/reviews/2026-09-06-structural-authoring-g2-checkpoint.md."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T01:39:17.536Z",
+      "notes": "All 12 unchanged raw HTML, gzip HTML and runtime JS/CSS budgets pass. Shared equation startup closure falls from 175703 to 137654 gzip bytes, ceiling 145000. Actual import repair plus cohesive existing clock chunk; no budget changes."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T01:39:18.596Z",
+      "notes": "Build and final separate typecheck pass. Architecture and inference preflight pass at 112090 types and 191101 instantiations. Reader production 12 routes and dev-review production 442 files pass; canonical renderer 29 and preservation 11 pass."
+    },
+    {
+      "command": "npm run visual:authoring-structural -- --project=firefox --project=webkit",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T01:39:19.645Z",
+      "notes": "24 pass across Chromium Firefox WebKit. Approved authored Focus Card native paint, seek, reverse, identity and disposal preserved."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T01:39:20.709Z",
+      "notes": "6589 completed; 6587 pass, two inventory failures. Updated facade caller ledger and regenerated exact reachability; focused 20-test rerun passes. Full suite not rerun after inventory repairs."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-api-caller-ledger.test.ts tests/exact-equation-reachability-graph.test.ts tests/reader-canonical-equation-frame-plan.test.ts tests/semantic-reader-route-budget.test.ts",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T01:39:21.766Z",
+      "notes": "20 pass with exact narrower facade caller accounting, 68-root regenerated reachability, frame parity and unchanged budgets."
+    },
+    {
+      "command": "npm run visual:reader-production",
+      "status": "failed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T01:39:22.808Z",
+      "notes": "8 pass, 4 fail. Mixed legacy/native typography gives the same retained endpoint different sizes; foldable operation selectors differ despite retained certified native members. Exact measurements in current report. Proposed shared visual repair rejected by execution safety review pending approval; not applied."
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "failed",
+      "scope": "s18",
+      "checkedAt": "2026-09-07T01:39:23.876Z",
+      "notes": "8 pass, 9 fail: same four reader routes plus five associated motion assertions. Confirms failures are not production-only chunk delivery. Requires approved visual-preservation repair; guards not weakened."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Browser release defects repaired at shared lifecycle and observer owners; fixed-budget reader payload gate remains STOP_CONDITION before G2. Next bounded work is payload attribution and reduction, not migration or budget refresh."
+    "summary": "Persistent nonvisual continuation recorded; payload gate repaired. HUMAN_CHECKPOINT: explicit approval needed for shared visual-preservation repair rejected by execution safety review. Authoring cards pass; s18 and G2 remain incomplete."
   },
   "expectedLearning": [
     "Whether two structural equation callers justify canonical economics adoption without parallel state or presentation authority."

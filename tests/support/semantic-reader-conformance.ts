@@ -51,6 +51,7 @@ export async function assertKpSemanticReaderConformance(input: {
   readonly page: Page;
   readonly browser: Browser;
   readonly descriptor: KpSemanticReaderConformanceDescriptor;
+  readonly delivery?: "development" | "production";
 }): Promise<void> {
   const { page, browser, descriptor } = input;
   const expectedProgress = String(descriptor.progress);
@@ -66,21 +67,26 @@ export async function assertKpSemanticReaderConformance(input: {
   } else {
     await expect.poll(() => page.evaluate(() => document.fonts.status)).toBe("loaded");
   }
-  await expect(page.locator("body")).toHaveAttribute("data-kp-dev-review-ready", "true");
-  // The shell is the readiness authority; a body flag alone can mask a route
-  // that never mounted the standard review integration.
-  const reviewShell = page.locator("[data-kp-dev-review-shell]");
-  await expect(reviewShell).toHaveCount(1);
-  await expect(reviewShell.locator("button.launcher")).toBeHidden();
-  const toolbar = page.getByRole("complementary", {
-    name: "Development tools"
-  });
-  await expect(toolbar).toHaveCount(1);
-  await expect(toolbar.getByRole("button", { name: "Review" })).toBeVisible();
-  await expect(reviewShell).toHaveAttribute(
-    "data-kp-dev-review-placement",
-    /^(left-prose-rail|captured-moment-sheet)$/
-  );
+  if (input.delivery === "production") {
+    await expect(page.locator("[data-kp-dev-review-shell]")).toHaveCount(0);
+    await expect(page.getByRole("complementary", { name: "Development tools" })).toHaveCount(0);
+  } else {
+    await expect(page.locator("body")).toHaveAttribute("data-kp-dev-review-ready", "true");
+    // The shell is the readiness authority; a body flag alone can mask a route
+    // that never mounted the standard review integration.
+    const reviewShell = page.locator("[data-kp-dev-review-shell]");
+    await expect(reviewShell).toHaveCount(1);
+    await expect(reviewShell.locator("button.launcher")).toBeHidden();
+    const toolbar = page.getByRole("complementary", {
+      name: "Development tools"
+    });
+    await expect(toolbar).toHaveCount(1);
+    await expect(toolbar.getByRole("button", { name: "Review" })).toBeVisible();
+    await expect(reviewShell).toHaveAttribute(
+      "data-kp-dev-review-placement",
+      /^(left-prose-rail|captured-moment-sheet)$/
+    );
+  }
   await expectProgress(page, descriptor.progressEvidence, expectedProgress);
 
   const toc = page.locator(".kp-lesson-toc");

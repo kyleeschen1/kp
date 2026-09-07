@@ -7,7 +7,7 @@ import {
   sampleKpReaderAnimationFrame,
   type KpReaderAnimationFrame,
   type KpReaderClockSample
-} from "../runtime/public-api.ts";
+} from "../runtime/learner-public-api.ts";
 
 export interface KpReaderCanonicalEquationFramePlan {
   readonly animationProgress: number;

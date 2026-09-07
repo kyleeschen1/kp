@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 4294,
+  "scannedFileCount": 4295,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -10,7 +10,8 @@
       "authorityId": "compiler.generic-semantic-transition",
       "sourceCallers": [
         "src/animation/choreography-compiler.ts",
-        "src/domain-ir/public-api.ts"
+        "src/domain-ir/public-api.ts",
+        "src/reader/renderers/equation-render-plan.ts"
       ],
       "testCallers": [],
       "scriptCallers": [],
@@ -2738,7 +2739,6 @@
       "authorityId": "facade.reader-runtime",
       "sourceCallers": [
         "src/editor/operation-evaluation-surface-adapter.ts",
-        "src/reader/app/canonical-equation-frame-plan.ts",
         "src/reader/app/canonical-equation-semantic-focus.ts",
         "src/reader/app/canonical-equation-stage-layout.ts",
         "src/reader/app/chrome-free-canonical-equation-session.ts",
@@ -2789,6 +2789,7 @@
       "sourcePath": "src/reader/runtime/learner-public-api.ts",
       "authorityId": "facade.reader-runtime-learner",
       "sourceCallers": [
+        "src/reader/app/canonical-equation-frame-plan.ts",
         "src/reader/app/canonical-equation-stage-layout.ts",
         "src/reader/app/canonical-equation-transition-continuity.ts",
         "src/reader/app/exemplar-entry.ts",
