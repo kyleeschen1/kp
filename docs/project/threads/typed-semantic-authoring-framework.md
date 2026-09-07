@@ -1,8 +1,12 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: canonical production adoption verified; G3 visual parity review pending
+Status: G3 keyboard-navigation repair verified locally; code-card feedback unresolved
 Last Updated: 2026-09-07
-Current Next Action: review canonical-page parity at mandatory G3; see
+Implementation is explicitly paused for strategic brainstorm. Resume from
+`2026-09-07-canonical-tax-resume-point.md`; do not infer a new implementation
+direction from unapproved discussion.
+Current Next Action: clarify the remaining code-card behavior and review the
+repaired whole-step slider keyboard navigation at mandatory G3; see
 `../reviews/2026-09-07-canonical-tax-g3-checkpoint.md` for the working URL,
 source workflow, production ownership, release evidence and remaining work.
 The ordinary build now ships the exact four-card route, with shared source

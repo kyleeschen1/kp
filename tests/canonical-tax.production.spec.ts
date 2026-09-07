@@ -2,6 +2,21 @@ import { expect, test } from "@playwright/test";
 
 const path = "/experiments/kinetic-figure/supply-tax/";
 
+test("built sibling sliders retain whole-step keyboard navigation", async ({ page }) => {
+  await page.goto(path);
+  const decks = page.locator("[data-kp-focus-deck]");
+  await expect(decks).toHaveCount(4);
+  for (const deck of await decks.all()) {
+    const beats = await deck.locator("[data-kp-focus-deck-beat]")
+      .evaluateAll(elements => elements.map(element => element.getAttribute("data-kp-focus-deck-beat")));
+    await deck.locator("[data-kp-focus-deck-scrubber]").focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(deck).toHaveAttribute("data-kp-focus-deck-active-beat", beats[1]!);
+    await page.keyboard.press("ArrowLeft");
+    await expect(deck).toHaveAttribute("data-kp-focus-deck-active-beat", beats[0]!);
+  }
+});
+
 for (const reducedMotion of ["no-preference", "reduce"] as const) {
   test(`built canonical reader preserves endpoints and siblings (${reducedMotion})`, async ({ page }) => {
     const errors: string[] = [];

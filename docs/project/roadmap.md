@@ -249,6 +249,10 @@ delivery costs, review URL and deferred publication work. The resolved ownership
 stop remains historical in `reviews/2026-09-07-canonical-tax-production-boundary-stop.md`.
 Theseus owns execution under the amended original proposal; no merge or
 deployment is authorized by this checkpoint.
+G3 feedback subsequently identified inconsistent slider keyboard steps, now
+repaired through shared control intent with domain owners preserved. The code
+card report still needs disambiguation; G3 is not accepted. See the checkpoint
+report follow-up rather than treating prior machine release as visual approval.
 
 The preceding direction and completed integration run were accepted and scoped by
 `run-contract.kp.authoring-integration-market-preview-v1` and

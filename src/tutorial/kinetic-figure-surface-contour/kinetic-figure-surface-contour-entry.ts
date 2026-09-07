@@ -8,7 +8,7 @@ import { applyKpSemanticVisualDomTheme } from
   "../../rendering/semantic-visual-dom-theme.ts";
 import { createKpReaderTimelinePlaybackClock } from
   "../../reader/runtime/timeline-playback-clock.ts";
-import { renderKpFocusDeckScaffold } from
+import { renderKpFocusDeckScaffold, readKpFocusDeckScrubberKeyTarget } from
   "../focus-deck-scaffold.ts";
 import {
   createKpSurfaceContourModel,
@@ -335,6 +335,13 @@ export function mountKpSurfaceContourFocusCard(input: {
     }
   };
 
+  const handleStateKeydown = (event: KeyboardEvent): void => {
+    const target = readKpFocusDeckScrubberKeyTarget(event, Number(stateSlider.value), score.beats.length);
+    if (target === undefined) return;
+    event.preventDefault();
+    navigateTo(target);
+  };
+
   const handleStateInput = (): void => {
     clock.pause();
     activeEdge = undefined;
@@ -448,6 +455,7 @@ export function mountKpSurfaceContourFocusCard(input: {
   settleAt(settledIndex, "none");
   deck.addEventListener("click", handleClick);
   deck.addEventListener("keydown", handleKeydown);
+  stateSlider.addEventListener("keydown", handleStateKeydown);
   stateSlider.addEventListener("input", handleStateInput);
   stateSlider.addEventListener("change", handleStateChange);
   levelSlider.addEventListener("input", handleLevelInput);
@@ -465,6 +473,7 @@ export function mountKpSurfaceContourFocusCard(input: {
       disposed = true;
       deck.removeEventListener("click", handleClick);
       deck.removeEventListener("keydown", handleKeydown);
+      stateSlider.removeEventListener("keydown", handleStateKeydown);
       stateSlider.removeEventListener("input", handleStateInput);
       stateSlider.removeEventListener("change", handleStateChange);
       levelSlider.removeEventListener("input", handleLevelInput);

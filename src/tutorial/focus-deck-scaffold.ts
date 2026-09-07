@@ -1,5 +1,26 @@
 import { renderKpFocusDeckControlIcon } from "./focus-deck-control-icons.ts";
 
+/** Pointer scrubbing stays continuous; keyboard navigation selects semantic
+ * steps instead of the range input's fractional paint-sampling increment.
+ * This resolves intent only: each card retains its own navigation and clock.
+ */
+export function readKpFocusDeckScrubberKeyTarget(
+  event: Pick<KeyboardEvent, "key" | "defaultPrevented" | "altKey" | "ctrlKey" | "metaKey">,
+  position: number,
+  beatCount: number
+): number | undefined {
+  if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) return;
+  let target: number;
+  switch (event.key) {
+    case "ArrowLeft": case "ArrowDown": target = position - 1; break;
+    case "ArrowRight": case "ArrowUp": target = position + 1; break;
+    case "Home": target = 0; break;
+    case "End": target = beatCount - 1; break;
+    default: return;
+  }
+  return Math.max(0, Math.min(beatCount - 1, Math.round(target)));
+}
+
 export interface KpFocusDeckScaffoldBeat {
   readonly slug: string;
   readonly title: string;

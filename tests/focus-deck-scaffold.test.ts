@@ -1,13 +1,32 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { renderKpFocusDeckScaffold } from
+import { renderKpFocusDeckScaffold, readKpFocusDeckScrubberKeyTarget } from
   "../src/tutorial/focus-deck-scaffold.ts";
 
 const beats = Object.freeze([
   Object.freeze({ slug: "identify", title: "Identify", html: "<p>Look.</p>" }),
   Object.freeze({ slug: "transform", title: "Transform", html: "<p>Change.</p>" })
 ]);
+
+test("shared slider keys select bounded semantic steps without taking modified keys", () => {
+  const event = { key: "ArrowRight", defaultPrevented: false, altKey: false, ctrlKey: false, metaKey: false };
+  for (const key of ["ArrowRight", "ArrowUp"]) {
+    assert.equal(readKpFocusDeckScrubberKeyTarget({ ...event, key }, 1, 4), 2);
+    assert.equal(readKpFocusDeckScrubberKeyTarget({ ...event, key }, 3, 4), 3);
+  }
+  for (const key of ["ArrowLeft", "ArrowDown"]) {
+    assert.equal(readKpFocusDeckScrubberKeyTarget({ ...event, key }, 1, 4), 0);
+    assert.equal(readKpFocusDeckScrubberKeyTarget({ ...event, key }, 0, 4), 0);
+  }
+  assert.equal(readKpFocusDeckScrubberKeyTarget({ ...event, key: "Home" }, 2, 4), 0);
+  assert.equal(readKpFocusDeckScrubberKeyTarget({ ...event, key: "End" }, 0, 4), 3);
+  assert.equal(readKpFocusDeckScrubberKeyTarget(event, 1.25, 4), 2);
+  assert.equal(readKpFocusDeckScrubberKeyTarget({ ...event, key: "Tab" }, 1, 4), undefined);
+  for (const flag of ["defaultPrevented", "altKey", "ctrlKey", "metaKey"] as const) {
+    assert.equal(readKpFocusDeckScrubberKeyTarget({ ...event, [flag]: true }, 1, 4), undefined);
+  }
+});
 
 test("shared Focus Deck scaffold supplies one projection shell to unlike callers", () => {
   const graph = renderKpFocusDeckScaffold({

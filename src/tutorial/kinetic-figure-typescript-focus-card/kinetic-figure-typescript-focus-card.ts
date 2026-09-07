@@ -17,7 +17,7 @@ import { kpTypeScriptFreeShippingPublicPath } from
   "../../public-web/typescript-free-shipping-route.ts";
 import { createKpTypeScriptFreeShippingRuntimeProjection } from
   "../../public-web/typescript-free-shipping-runtime.ts";
-import { renderKpFocusDeckScaffold } from "../focus-deck-scaffold.ts";
+import { renderKpFocusDeckScaffold, readKpFocusDeckScrubberKeyTarget } from "../focus-deck-scaffold.ts";
 import {
   findKpTypeScriptFocusCardBeatIndexFromHash,
   kpTypeScriptFocusCardBeatHash,
@@ -392,12 +392,19 @@ export function mountKpTypeScriptFocusCard(input: {
     cursorMotion: "immediate"
   });
   const handleKeydown = (event: KeyboardEvent): void => {
+    if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) return;
     if (event.target instanceof HTMLInputElement ||
         event.target instanceof HTMLButtonElement ||
         event.target instanceof HTMLAnchorElement) return;
     if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
     event.preventDefault();
     select(activeIndex + (event.key === "ArrowRight" ? 1 : -1));
+  };
+  const handleScrubberKeydown = (event: KeyboardEvent): void => {
+    const target = readKpFocusDeckScrubberKeyTarget(event, Number(scrubber.value), score.beats.length);
+    if (target === undefined) return;
+    event.preventDefault();
+    select(target);
   };
   const handleLocation = (): void => {
     const index = findKpTypeScriptFocusCardBeatIndexFromHash(
@@ -433,6 +440,7 @@ export function mountKpTypeScriptFocusCard(input: {
   replay.addEventListener("click", handleReplay);
   scrubber.addEventListener("input", handleScrubberInput);
   scrubber.addEventListener("change", finishScrubber);
+  scrubber.addEventListener("keydown", handleScrubberKeydown);
   deck.addEventListener("keydown", handleKeydown);
   ownerWindow.addEventListener("popstate", handleLocation);
   ownerWindow.addEventListener("hashchange", handleLocation);
@@ -454,6 +462,7 @@ export function mountKpTypeScriptFocusCard(input: {
       replay.removeEventListener("click", handleReplay);
       scrubber.removeEventListener("input", handleScrubberInput);
       scrubber.removeEventListener("change", finishScrubber);
+      scrubber.removeEventListener("keydown", handleScrubberKeydown);
       deck.removeEventListener("keydown", handleKeydown);
       ownerWindow.removeEventListener("popstate", handleLocation);
       ownerWindow.removeEventListener("hashchange", handleLocation);

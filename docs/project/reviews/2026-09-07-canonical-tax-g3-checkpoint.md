@@ -7,6 +7,40 @@ replace its slice table. Scope is the original
 `2026-09-05-structural-authoring-canonical-tax-long-loop-proposal.md`, including
 the explicitly accepted bounded four-card production-adoption amendment.
 
+## G3 feedback follow-up — keyboard navigation
+
+The user reports that all but the code example work well, and arrows work only
+on supply-demand. This is not complete G3 approval. A regression test reproduces
+one concrete interpretation across all three browsers: with the state slider
+focused, tax moves a whole step while log/exponent, surface/contour and code do
+not. The baseline is three tax passes and nine sibling failures. Their native
+range increment was `0.01`, while tax alone translated keys into semantic steps.
+The earlier release tests exercised buttons and scripted slider input, missing
+this keyboard path. This is a control inconsistency, not a semantic-schema fault.
+
+The repair shares only the key-to-step intent resolver in the Focus Deck shell.
+All four cards retain their own navigation, timeline and renderer. Arrow keys
+now select whole steps; Home/End select endpoints; pointer scrubbing remains
+continuous. Focused checks pass: 21 browser tests across Chromium/Firefox/WebKit,
+19 Focus Deck unit tests and 81 authoring integration tests.
+The full typecheck/build and architecture gates also pass. The expanded
+`npm run visual:canonical-tax-production -- --project=firefox --project=webkit`
+passes 12 checks, now exercising keyboard navigation on every built card.
+Reader closure/budgets and 68-root reachability remain unchanged. The bounded
+repair adds 130 gzip bytes to the canonical static JS/CSS closure (367,522 total);
+HTML is 24,029 raw / 3,202 gzip bytes. Measurement exclusions below still apply.
+
+The separate code-card report remains unresolved pending clarification. Existing
+button-driven code animation/interruption and direct-seek tests pass in all
+three engines, but that is not proof of the reported visual experience. The
+code card explicitly disables passage swiping in its earlier implementation
+(`5a4426158`), rather than losing it during production adoption. No swipe feature
+or new choreography was silently added. Ask whether the remaining problem is
+passage swiping, on-card buttons, or the animation/rendering itself; review the
+repaired keyboard behavior at the same URL. The s27 release record below is
+historical evidence before this bounded control repair, not a fresh full-suite
+claim for the changed code.
+
 ## What to review
 
 Open the existing shared server:

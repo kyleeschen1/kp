@@ -4,7 +4,7 @@
   "title": "Structural authoring proof and canonical supply-tax adoption",
   "status": "blocked",
   "domain": "kp",
-  "summary": "G3 visual approval required. Canonical production adoption, shared preparation, isolated revisions and full release verified; review existing port 8000 four-card page.",
+  "summary": "G3 pending: keyboard repair verified; need code-card failure description and user visual review. On-card code button/seek checks pass; passage swiping was already disabled.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -65,6 +65,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-07-canonical-tax-g3-checkpoint.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-07-canonical-tax-resume-point.md"
     }
   ],
   "dependsOn": {
@@ -1202,11 +1206,102 @@
       "scope": "s28",
       "checkedAt": "2026-09-07T16:30:01.663Z",
       "notes": "Promotion ledger remains aligned and matrix remains tabled; current checkpoint does not activate parked scope."
+    },
+    {
+      "command": "npm run test:browser:focus-deck-multi-card -- --grep \"slider keyboard arrows\"",
+      "status": "failed",
+      "scope": "s28",
+      "checkedAt": "2026-09-07T16:54:49.508Z",
+      "notes": "Reproduced baseline exactly across all engines: tax 3 pass, sibling log/surface/code 9 fail. Native range increment is 0.01; only tax translated keyboard input into semantic steps."
+    },
+    {
+      "command": "npm run test:focus-deck-multi-card",
+      "status": "passed",
+      "scope": "s28",
+      "checkedAt": "2026-09-07T16:54:52.109Z",
+      "notes": "19 pass including shared whole-step key mapping, bounds, Home/End and ignored modified/prevented events. Existing semantic models and renderer contracts unchanged."
+    },
+    {
+      "command": "npm run test:browser:focus-deck-multi-card -- --grep \"TypeScript|semantic navigation changes\"",
+      "status": "passed",
+      "scope": "s28",
+      "checkedAt": "2026-09-07T16:54:53.158Z",
+      "notes": "Pre-repair existing checks: 9 pass across three engines. Button-driven code animation, interruption and direct-seek endpoints work; user code failure is not yet disambiguated. Code swipe is explicitly disabled in prior implementation."
+    },
+    {
+      "command": "npm run test:browser:focus-deck-multi-card -- --grep \"slider keyboard arrows|TypeScript|semantic navigation changes\"",
+      "status": "passed",
+      "scope": "s28",
+      "checkedAt": "2026-09-07T16:57:19.967Z",
+      "notes": "21 pass across Chromium, Firefox and WebKit. New real-keyboard checks reproduce-to-repair all four cards; existing TypeScript button animation, interruption and direct seek preserved."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s28",
+      "checkedAt": "2026-09-07T16:57:21.401Z",
+      "notes": "Full app/Node/test/Svelte/domain typechecks and production build pass after keyboard repair; no compiler/source changes or suppressed chunk warnings."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s28",
+      "checkedAt": "2026-09-07T16:57:22.867Z",
+      "notes": "Architecture and governance gates pass; shared helper resolves control intent only, preserving renderer and semantic owners."
+    },
+    {
+      "command": "npm run test:authoring-integration",
+      "status": "passed",
+      "scope": "s28",
+      "checkedAt": "2026-09-07T16:57:24.032Z",
+      "notes": "81 pass including full canonical browser bundle compiler isolation and source revision independence."
+    },
+    {
+      "command": "npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "s28",
+      "checkedAt": "2026-09-07T16:57:25.325Z",
+      "notes": "Graph remains fresh with 68 roots; no inventory regeneration or new ownership exception."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/current-direction-authoring-ratchet.test.ts",
+      "status": "passed",
+      "scope": "s28",
+      "checkedAt": "2026-09-07T16:57:26.792Z",
+      "notes": "3 pass after recording G3 feedback without accepting checkpoint or reactivating parked scope."
+    },
+    {
+      "command": "npm run visual:canonical-tax-production -- --project=firefox --project=webkit",
+      "status": "passed",
+      "scope": "s28",
+      "checkedAt": "2026-09-07T16:58:33.550Z",
+      "notes": "12 pass: new actual whole-step keyboard input on all four built cards, normal/reduced endpoints and no-JavaScript tax reading, all three engines."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "s28",
+      "checkedAt": "2026-09-07T16:58:34.760Z",
+      "notes": "12 manifest routes and production markers pass after keyboard repair."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "s28",
+      "checkedAt": "2026-09-07T16:58:35.810Z",
+      "notes": "All fixed budgets pass unchanged; equation startup remains 138001 gzip bytes."
+    },
+    {
+      "command": "npm run report:canonical-tax-delivery",
+      "status": "passed",
+      "scope": "s28",
+      "checkedAt": "2026-09-07T16:58:36.847Z",
+      "notes": "Canonical static JS/CSS 367522 gzip bytes, +130; 69 files, 19 dynamic roots. HTML 24029 raw / 3202 gzip. Excludes fonts/images and later activation."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Canonical four-card ordinary delivery and preview convergence verified. Full release passed; G3 human parity review pending at shared port 8000. No merge or deployment. See canonical-tax G3 checkpoint report."
+    "summary": "USER_PAUSED for strategic brainstorm. Verified keyboard repair checkpointed; remaining code behavior and G3 review unresolved. Resume from docs/project/threads/2026-09-07-canonical-tax-resume-point.md; no new implementation authority."
   },
   "expectedLearning": [
     "Whether two structural equation callers justify canonical economics adoption without parallel state or presentation authority."

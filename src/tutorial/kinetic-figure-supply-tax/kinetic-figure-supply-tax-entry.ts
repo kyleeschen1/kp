@@ -14,7 +14,7 @@ import { applyKpSemanticVisualDomTheme } from
 import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
 import { createKpReaderTimelinePlaybackClock } from
   "../../reader/runtime/timeline-playback-clock.ts";
-import { renderKpFocusDeckScaffold } from
+import { renderKpFocusDeckScaffold, readKpFocusDeckScrubberKeyTarget } from
   "../focus-deck-scaffold.ts";
 import {
   createKpLogExponentFocusCardAuthority,
@@ -823,17 +823,7 @@ export function mountKpSupplyTaxKineticFigure(input: {
   };
 
   const handleScrubberKeydown = (event: KeyboardEvent): void => {
-    if (event.altKey || event.ctrlKey || event.metaKey) return;
-    let target: number | undefined;
-    if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
-      target = boundedIndex(position - 1, scenes.length);
-    } else if (event.key === "ArrowRight" || event.key === "ArrowUp") {
-      target = boundedIndex(position + 1, scenes.length);
-    } else if (event.key === "Home") {
-      target = 0;
-    } else if (event.key === "End") {
-      target = scenes.length - 1;
-    }
+    const target = readKpFocusDeckScrubberKeyTarget(event, position, scenes.length);
     if (target === undefined) return;
     event.preventDefault();
     requestIndex(target);

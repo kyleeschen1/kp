@@ -30,7 +30,7 @@ import { registerKpEditorLogExponentSurfaceCapability } from
   "../../editor/log-exponent-surface-capability.ts";
 import { kpCanonicalLogExponentNativeEndpoints } from
   "../../rendering/log-exponent-native-endpoints.ts";
-import { renderKpFocusDeckScaffold } from "../focus-deck-scaffold.ts";
+import { renderKpFocusDeckScaffold, readKpFocusDeckScrubberKeyTarget } from "../focus-deck-scaffold.ts";
 import {
   kpLogExponentFocusCardBeatHash,
   readKpLogExponentFocusCardBeatIndexFromHash,
@@ -630,6 +630,13 @@ export function mountKpLogExponentFocusCard(input: {
     }
   };
 
+  const handleScrubberKeydown = (event: KeyboardEvent): void => {
+    const target = readKpFocusDeckScrubberKeyTarget(event, Number(scrubber.value), score.beats.length);
+    if (target === undefined) return;
+    event.preventDefault();
+    select(target);
+  };
+
   const handleScrubberInput = (): void => {
     const sample = sampleKpLogExponentFocusCardPosition(
       score,
@@ -756,6 +763,7 @@ export function mountKpLogExponentFocusCard(input: {
   deck.addEventListener("keydown", handleKeydown);
   scrubber.addEventListener("input", handleScrubberInput);
   scrubber.addEventListener("change", handleScrubberChange);
+  scrubber.addEventListener("keydown", handleScrubberKeydown);
   viewport.addEventListener("scroll", handlePassageScroll, { passive: true });
   viewport.addEventListener("scrollend", handlePassageScrollEnd);
   viewport.addEventListener("pointerdown", handlePassagePointerDown,
@@ -805,6 +813,7 @@ export function mountKpLogExponentFocusCard(input: {
       deck.removeEventListener("keydown", handleKeydown);
       scrubber.removeEventListener("input", handleScrubberInput);
       scrubber.removeEventListener("change", handleScrubberChange);
+      scrubber.removeEventListener("keydown", handleScrubberKeydown);
       viewport.removeEventListener("scroll", handlePassageScroll);
       viewport.removeEventListener("scrollend", handlePassageScrollEnd);
       viewport.removeEventListener("pointerdown", handlePassagePointerDown);

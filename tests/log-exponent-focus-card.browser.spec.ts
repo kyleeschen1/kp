@@ -2,6 +2,29 @@ import { expect, test, type Page } from "@playwright/test";
 
 const path = "/experiments/kinetic-figure/supply-tax/";
 
+for (const card of [
+  "[data-kp-supply-tax-focus-deck]",
+  "[data-kp-log-exponent-focus-card]",
+  "[data-kp-surface-contour-deck]",
+  "[data-kp-typescript-focus-card]"
+]) test(`slider keyboard arrows select whole semantic steps: ${card}`, async ({ page }) => {
+  await page.goto(path);
+  const deck = page.locator(card);
+  const slider = deck.locator("[data-kp-focus-deck-scrubber]");
+  const beats = await deck.locator("[data-kp-focus-deck-beat]")
+    .evaluateAll(elements => elements.map(element => element.getAttribute("data-kp-focus-deck-beat")));
+  await slider.focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(deck).toHaveAttribute("data-kp-focus-deck-active-beat", beats[1]!);
+  await expect(slider).toHaveValue(/^(?:1|1\.0+)$/);
+  await page.keyboard.press("ArrowLeft");
+  await expect(deck).toHaveAttribute("data-kp-focus-deck-active-beat", beats[0]!);
+  await page.keyboard.press("End");
+  await expect(deck).toHaveAttribute("data-kp-focus-deck-active-beat", beats.at(-1)!);
+  await page.keyboard.press("Home");
+  await expect(deck).toHaveAttribute("data-kp-focus-deck-active-beat", beats[0]!);
+});
+
 test("one route hosts graph, equation, 3D, and code cards through the same shell", async ({
   page
 }) => {
