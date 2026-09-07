@@ -1,4 +1,5 @@
 import { prepareKpAuthoringMarketPreview } from "./authoring-market-preview-prepare.ts";
+import { projectKpAuthoringMarketPreviewStatus } from "./authoring-market-preview-status.ts";
 import { createKpAuthoringMarketRevisionReceiver, kpAuthoringMarketPreviewEndpoint,
   kpAuthoringMarketPreviewEvent, type KpAuthoringMarketBuildRevision } from "./authoring-market-preview-protocol.ts";
 
@@ -15,15 +16,17 @@ const status = document.createElement("p");
 status.setAttribute("role", "status");
 status.dataset["kpAuthoringMarketBuildStatus"] = "building";
 root.before(status);
+const reportStatus = (revision: KpAuthoringMarketBuildRevision) => {
+  const projected = projectKpAuthoringMarketPreviewStatus(revision,
+    root.dataset["kpAuthoringMarketPreviewRevision"]);
+  status.dataset["kpAuthoringMarketBuildStatus"] = projected.phase;
+  status.dataset["kpAuthoringMarketSourceRevision"] = projected.draftRevision;
+  status.dataset["kpAuthoringMarketDisplayedRevision"] = projected.displayedRevision ?? "";
+  status.textContent = projected.text;
+};
 const receiver = createKpAuthoringMarketRevisionReceiver({
   prepare: prepareKpAuthoringMarketPreview,
-  report(revision) {
-    status.dataset["kpAuthoringMarketBuildStatus"] = revision.status;
-    status.dataset["kpAuthoringMarketSourceRevision"] = revision.sourceRevision;
-    status.textContent = revision.status === "invalid"
-      ? `Source ${revision.sourceRevision}: ${revision.diagnostic?.message ?? "Preview could not compile."} ${session === undefined ? "No valid preview is available yet." : "Last valid preview retained."}`
-      : `${revision.status === "building" ? "Building" : "Preview ready"}: ${revision.sourceRevision.slice(0, 12)}`;
-  },
+  report: reportStatus,
   commit(prepared, revision) {
     const candidate = document.createElement("div");
     const position = root.querySelector<HTMLInputElement>("[data-kp-supply-tax-state-scrubber]")?.value;
@@ -55,6 +58,7 @@ const receiver = createKpAuthoringMarketRevisionReceiver({
     session = next;
     lastPrepared = prepared;
     restorePosition(root);
+    reportStatus(revision);
   }
 });
 const onRevision = (revision: KpAuthoringMarketBuildRevision) => { void receiver.receive(revision); };

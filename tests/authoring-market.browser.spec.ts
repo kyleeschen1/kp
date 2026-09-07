@@ -129,6 +129,9 @@ test("actual local-file rebuild retains invalid drafts and last valid preview wi
     await writeFile(modelPath, writtenModel);
     await expect(status).toHaveAttribute("data-kp-authoring-market-build-status", "invalid");
     await expect(page.locator("#app")).toHaveAttribute("data-kp-authoring-market-preview-revision", validRevision!);
+    await expect(status).toHaveAttribute("data-kp-authoring-market-displayed-revision", validRevision!);
+    await expect(status).toContainText(`Displayed revision: ${validRevision!.slice(0, 12)}`);
+    await expect(status).toContainText("Last valid preview retained.");
     expect(await page.locator("[data-kp-supply-tax-focus-deck] svg").first().evaluate(element => element.outerHTML)).toBe(validPaint);
     expect(await readFile(modelPath, "utf8")).toBe(writtenModel);
     expect(await status.getAttribute("data-kp-authoring-market-source-revision")).not.toBe(validRevision);

@@ -77,6 +77,13 @@
       "scope": "s06",
       "checkedAt": "2026-09-07T21:55:24.796Z",
       "notes": "6 passed; full npm run typecheck passed with zero Svelte errors or warnings. Shared diagnostic projection preserves supplied file/line/column and typed code/path alongside unchanged revision identity."
+    },
+    {
+      "command": "npm run visual:authoring-market -- --grep actual",
+      "status": "passed",
+      "scope": "s07",
+      "checkedAt": "2026-09-07T21:58:17.842Z",
+      "notes": "1 real local-file browser workflow passed. Exact executed filter was actual local-file rebuild. Eight focused status/revision checks and full typecheck pass; source fixture files restored."
     }
   ],
   "expectedLearning": [

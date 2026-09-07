@@ -132,7 +132,8 @@
     {
       "id": "s07",
       "title": "Distinguish current draft from last-valid displayed revision",
-      "status": "planned"
+      "summary": "Draft and displayed revisions explicitly separated with no history owner added; unit, browser smoke and full types pass.",
+      "status": "complete"
     },
     {
       "id": "s08",
