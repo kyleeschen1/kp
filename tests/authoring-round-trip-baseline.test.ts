@@ -29,6 +29,33 @@ test("R1 parameter baseline updates bound values and rejects mixed revisions", (
   assert.match(prepared.boundArticle.text, /2 dollars per unit/);
 });
 
+test("wording-only passage edits preserve facts, semantic stops and unrelated prose", () => {
+  const data = buildKpAuthoringMarketPreview("reference");
+  const original = prepareKpAuthoringMarketPreview(data);
+  const text = data.article.text.replace("Before the tax, demand and supply meet", "First observe where demand and supply meet");
+  assert.notEqual(text, data.article.text);
+  const edited = prepareKpAuthoringMarketPreview({ ...data, article: { ...data.article, text } });
+  assert.equal(edited.boundArticle.text, text);
+  assert.deepEqual(edited.facts.values, original.facts.values);
+  assert.deepEqual(edited.boundArticle.claims, original.boundArticle.claims);
+  assert.deepEqual(edited.companion.stops.map(({ address, scene }) => ({ address, scene })),
+    original.companion.stops.map(({ address, scene }) => ({ address, scene })));
+  assert.deepEqual(edited.companion.stops.map(({ reference }) => reference.address),
+    original.companion.stops.map(({ reference }) => reference.address));
+  assert.notEqual(edited.companion.stops[0]!.phrase.label, original.companion.stops[0]!.phrase.label);
+  assert.deepEqual(edited.companion.stops.slice(1).map(({ phrase }) => phrase.label),
+    original.companion.stops.slice(1).map(({ phrase }) => phrase.label));
+});
+
+test("free prose remains exact author content, not a silently repaired truth claim", () => {
+  const data = buildKpAuthoringMarketPreview("reference");
+  const text = data.article.text.replace("How does a tax reshape a market?", "Editorial draft: the revenue is 999 (review required).");
+  const prepared = prepareKpAuthoringMarketPreview({ ...data, article: { ...data.article, text } });
+  assert.equal(prepared.boundArticle.text, text);
+  assert.equal(prepared.facts.text("after.revenue"), "12");
+  assert.match(prepared.boundArticle.claims["government-revenue"]!, /12 dollars/);
+});
+
 test("R1 equation edit baseline requires verified source and repairs a mismatched endpoint", () => {
   const source = createKpEquationSeriesLogarithmBaseSemanticSource({
     sourceId: "source.round-trip.log-base", revisionId: "revision.round-trip.log-base.v1",

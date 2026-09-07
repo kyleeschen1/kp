@@ -144,9 +144,13 @@ test("actual local-file rebuild retains invalid drafts and last valid preview wi
     writtenModel = originalModel;
     await writeFile(modelPath, writtenModel);
     await expect(page.locator("#app")).toHaveAttribute("data-kp-authoring-market-preview-revision", initialRevision!);
+    await seek(page.locator("[data-kp-supply-tax-state-scrubber]"), 1.5);
+    const wordingPaint = await page.locator("[data-kp-supply-tax-focus-deck] svg").first().evaluate(element => element.outerHTML);
     writtenArticle = originalArticle.replace("Before the tax, demand", "Observe first: demand");
     await writeFile(articlePath, writtenArticle);
     await expect(page.locator("[data-kp-focus-deck-phrase]").first()).toContainText("Observe first");
+    await expect(page.locator("[data-kp-supply-tax-state-scrubber]")).toHaveValue("1.5");
+    expect(await page.locator("[data-kp-supply-tax-focus-deck] svg").first().evaluate(element => element.outerHTML)).toBe(wordingPaint);
     const proseRevision = await page.locator("#app").getAttribute("data-kp-authoring-market-preview-revision");
     writtenArticle = writtenArticle.replace("kp-ref:tax-market/tax", "kp-ref:tax-market/missing");
     await writeFile(articlePath, writtenArticle);

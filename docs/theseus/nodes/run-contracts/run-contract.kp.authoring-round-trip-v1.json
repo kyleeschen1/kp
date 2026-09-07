@@ -144,7 +144,8 @@
     {
       "id": "s09",
       "title": "Wording-only edits preserve unrelated domain state and authored prose",
-      "status": "planned"
+      "summary": "Prose preservation covered through real author source, companion and browser path; 11 focused, browser smoke and full types pass.",
+      "status": "complete"
     },
     {
       "id": "s10",
