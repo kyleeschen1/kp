@@ -94,7 +94,8 @@
     {
       "id": "s01",
       "title": "Freeze exemplar owners and author-task baseline",
-      "status": "planned"
+      "summary": "Canonical baseline and author-task gaps recorded; 3 unit and 2 Chromium/Firefox native-host checks pass; no visual changes.",
+      "status": "complete"
     },
     {
       "id": "s02",

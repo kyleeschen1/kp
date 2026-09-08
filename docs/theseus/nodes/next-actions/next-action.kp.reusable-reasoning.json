@@ -16,6 +16,9 @@
       "next-action.kp.authoring-round-trip"
     ]
   },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
   "verification": [
     "npm run test:reusable-reasoning",
     "npm run typecheck",
@@ -23,6 +26,22 @@
     "npm run build",
     "npm run visual:reusable-reasoning",
     "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:reusable-reasoning",
+      "status": "passed",
+      "scope": "s01",
+      "checkedAt": "2026-09-08T01:14:53.558Z",
+      "notes": "Three baseline checks pass: verified prefix adjacency, authored/native source parity and existing prompt kinds."
+    },
+    {
+      "command": "npm run visual:authoring-distribution-card -- --grep 'authored fraction Focus Card preserves native motion and passage at 1100' --project=chromium",
+      "status": "passed",
+      "scope": "s01",
+      "checkedAt": "2026-09-08T01:14:54.810Z",
+      "notes": "Two tests pass Chromium and Firefox; native material spans 39 and 37 frames, max frame 17.5 and 50 ms; accepted host reproduced."
+    }
   ],
   "expectedLearning": [
     "Measure whether one authored reason yields consistent full compact and retrieval projections through existing owners and reduces second-caller glue."
