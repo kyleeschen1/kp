@@ -118,7 +118,8 @@
     {
       "id": "s05",
       "title": "Bind one supported formula application",
-      "status": "planned"
+      "summary": "Authored semantic operand pins bind exactly one verified distribution law; invalid substitutions reject. Seventeen tests and full types pass.",
+      "status": "complete"
     },
     {
       "id": "s06",

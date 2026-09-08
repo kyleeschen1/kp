@@ -59,6 +59,7 @@ export function bindKpReasoningEvidence(value: unknown) {
   });
   const evidence = Object.freeze({
     source, revisionId, traceId: trace.id, states, steps, assumptions, definitions, claimAuthority,
+    distribution: trace.composition.normalization.fanOut,
     editorial: Object.freeze({
       status: "editorial" as const, parent: source.parent.statement,
       reason: source.reason.explanation, compact: source.compact

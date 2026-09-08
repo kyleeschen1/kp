@@ -3,6 +3,11 @@ export interface KpReasoningSource {
   readonly schemaVersion: "kp.reasoning-example.v1";
   readonly id: string;
   readonly title: string;
+  readonly formula: {
+    readonly lawId: string;
+    readonly commonFactorId: string;
+    readonly addendIds: readonly string[];
+  };
   readonly parent: {
     readonly id: string;
     readonly statement: string;
@@ -36,6 +41,11 @@ export function createKpReasoningSource(): KpReasoningSource {
     schemaVersion: "kp.reasoning-example.v1",
     id: "lesson.reasoning.distribute-evaluate",
     title: "Make the constant visible",
+    formula: {
+      lawId: "kp.algebra.distribute.v1",
+      commonFactorId: "fraction-fan-out.source.factor",
+      addendIds: ["fraction-fan-out.source.addend.x", "fraction-fan-out.source.addend.6"]
+    },
     parent: {
       id: "claim.expand-and-evaluate",
       statement: "Distribute the fraction, then evaluate the constant term.",
@@ -57,10 +67,15 @@ export function createKpReasoningSource(): KpReasoningSource {
 
 /** Shape validation alone supplies no proof. Binding to the trusted trace is separate. */
 export function readKpReasoningSource(value: unknown): KpReasoningSource {
-  const root = record(value, "$", ["schemaVersion", "id", "title", "parent", "reason", "compact"]);
+  const root = record(value, "$", ["schemaVersion", "id", "title", "formula", "parent", "reason", "compact"]);
   if (root.schemaVersion !== "kp.reasoning-example.v1") gap("$.schemaVersion", "Use kp.reasoning-example.v1.");
   const parent = record(root.parent, "$.parent", ["id", "statement", "sourceStateId", "targetStateId"]);
   const reason = record(root.reason, "$.reason", ["id", "title", "operationIds", "explanation"]);
+  const formula = record(root.formula, "$.formula", ["lawId", "commonFactorId", "addendIds"]);
+  if (!Array.isArray(formula.addendIds) || formula.addendIds.length !== 2) {
+    gap("$.formula.addendIds", "Bind exactly two addends for this distribution exemplar.");
+  }
+  const addendIds = formula.addendIds.map((id: unknown, index: number) => text(id, `$.formula.addendIds[${index}]`));
   const operations = reason.operationIds;
   if (!Array.isArray(operations) || operations.length < 1 || operations.length > 13) {
     gap("$.reason.operationIds", "Select between one and thirteen existing operations.");
@@ -71,6 +86,11 @@ export function readKpReasoningSource(value: unknown): KpReasoningSource {
     schemaVersion: "kp.reasoning-example.v1",
     id: text(root.id, "$.id"),
     title: text(root.title, "$.title"),
+    formula: Object.freeze({
+      lawId: text(formula.lawId, "$.formula.lawId"),
+      commonFactorId: text(formula.commonFactorId, "$.formula.commonFactorId"),
+      addendIds: Object.freeze(addendIds)
+    }),
     parent: Object.freeze({
       id: text(parent.id, "$.parent.id"), statement: text(parent.statement, "$.parent.statement"),
       sourceStateId: text(parent.sourceStateId, "$.parent.sourceStateId"),

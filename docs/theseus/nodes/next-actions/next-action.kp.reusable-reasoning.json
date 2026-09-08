@@ -90,6 +90,20 @@
       "scope": "s04",
       "checkedAt": "2026-09-08T01:28:56.565Z",
       "notes": "Full app node test Svelte domain types pass."
+    },
+    {
+      "command": "npm run test:reusable-reasoning",
+      "status": "passed",
+      "scope": "s05",
+      "checkedAt": "2026-09-08T01:32:45.698Z",
+      "notes": "Seventeen checks pass; semantic formula operands, immutable lineage, explicit assumptions and wrong-law/copy/reorder rejection."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s05",
+      "checkedAt": "2026-09-08T01:32:46.797Z",
+      "notes": "Full types pass."
     }
   ],
   "expectedLearning": [
