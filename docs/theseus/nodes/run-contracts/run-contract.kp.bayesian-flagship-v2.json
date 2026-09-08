@@ -193,7 +193,8 @@
     {
       "id": "s15",
       "title": "Add validated revision-pinned URL/history restoration and disposal/bfcache behavior through existing lifecycle mechanisms",
-      "status": "planned"
+      "summary": "Revision-pinned URL/history and denominator return restore paused; edited refresh/back/forward recompile retained history source, invalid addresses retain last-valid with visible repair, lifecycle clears stale preparation.",
+      "status": "complete"
     },
     {
       "id": "s16",

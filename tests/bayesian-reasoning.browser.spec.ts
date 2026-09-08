@@ -1,5 +1,39 @@
 import { test, expect } from "@playwright/test";
 
+test("Bayes addresses restore direct positions, edited revision refresh, Back and Forward", async ({ page }) => {
+  await page.goto("/experiments/bayesian-reasoning/");
+  const card = page.locator("[data-bayes-display] [data-bayes-card]");
+  await expect(card).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+  await expect.poll(() => page.url()).toContain("bayes=");
+  const original = await card.getAttribute("data-bayes-revision");
+  const url = await page.evaluate(() => {
+    const params = new URLSearchParams(location.hash.slice(1)); const state = JSON.parse(params.get("bayes")!);
+    state.position.step = 4; state.position.reference.id = state.position.reference.id.replace(/population$/, "conditioned");
+    return `${location.pathname}#${new URLSearchParams({ bayes: JSON.stringify(state) })}`;
+  });
+  await page.goto(url); await expect(card).toHaveAttribute("data-bayes-position", "4");
+  await page.locator(".bayes-author summary").click();
+  const editor = page.locator("[data-bayes-draft]");
+  const source = JSON.parse(await editor.inputValue()); source.model.events[0].label = "History edit";
+  await editor.fill(JSON.stringify(source)); await page.locator("[data-bayes-apply]").click();
+  await expect(card.locator(".bayes-legend")).toContainText("History edit");
+  const edited = await card.getAttribute("data-bayes-revision"); expect(edited).not.toBe(original);
+  await page.reload(); await expect(card).toHaveAttribute("data-bayes-revision", edited!);
+  await expect(card).toHaveAttribute("data-bayes-position", "4");
+  await page.goBack(); await expect(card).toHaveAttribute("data-bayes-revision", original!);
+  await page.goForward(); await expect(card).toHaveAttribute("data-bayes-revision", edited!);
+  await expect(card.locator(".bayes-legend")).toContainText("History edit");
+  await page.evaluate(() => { location.hash = "bayes=%7B"; });
+  await expect(page.locator("[data-bayes-author-status]")).toContainText("Address not restored");
+  await expect(page.locator("[data-bayes-error]")).toBeVisible();
+  await expect(card).toHaveAttribute("data-bayes-revision", edited!);
+  await page.evaluate(() => {
+    dispatchEvent(new PageTransitionEvent("pagehide", { persisted: true }));
+    dispatchEvent(new PageTransitionEvent("pageshow", { persisted: true }));
+  });
+  await expect(card).toHaveAttribute("data-bayes-position", "4");
+});
+
 test("Bayes denominator disclosure returns to the exact interrupted shared-clock position", async ({ page }) => {
   await page.goto("/experiments/bayesian-reasoning/");
   const card = page.locator("[data-bayes-display] [data-bayes-card]");
@@ -15,6 +49,11 @@ test("Bayes denominator disclosure returns to the exact interrupted shared-clock
   await expect(card).toHaveAttribute("data-bayes-position", "5.45");
   await expect(page.locator("[data-bayes-reason]")).toBeHidden();
   await expect(page.locator("[data-bayes-explain]")).toBeFocused();
+  await page.goBack();
+  await expect(page.locator("[data-bayes-reason]")).toBeVisible();
+  await expect(card).toHaveAttribute("data-bayes-position", "3");
+  await page.locator("[data-bayes-return]").click();
+  await expect(card).toHaveAttribute("data-bayes-position", "5.45");
 });
 
 test("Bayes author apply replaces every projection together and retains last-valid on repair", async ({ page }, info) => {

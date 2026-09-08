@@ -480,6 +480,34 @@
       "scope": "s14",
       "checkedAt": "2026-09-08T20:30:38.355Z",
       "notes": "Full typecheck passes after population-evidence field correction."
+    },
+    {
+      "command": "npm run test:bayesian-reasoning",
+      "status": "passed",
+      "scope": "s15",
+      "checkedAt": "2026-09-08T20:36:45.877Z",
+      "notes": "25 tests pass including bounded location codec, exact semantic references, required reason return and stale/forged address rejection."
+    },
+    {
+      "command": "npm run visual:bayesian-reasoning:shared",
+      "status": "passed",
+      "scope": "s15",
+      "checkedAt": "2026-09-08T20:36:46.949Z",
+      "notes": "Eight Chromium checks pass: edited refresh, Back/Forward, denominator reason history and exact return, direct address, malformed visible repair, synthetic persisted page lifecycle and existing motion/editor preservation."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s15",
+      "checkedAt": "2026-09-08T20:36:47.925Z",
+      "notes": "Full typecheck passes; final visible-message/test additions also pass focused app and test typechecks."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s15",
+      "checkedAt": "2026-09-08T20:36:48.896Z",
+      "notes": "All architecture/governance/conformance gates pass with Article integration."
     }
   ],
   "expectedLearning": [
