@@ -104,6 +104,20 @@
       "scope": "s05",
       "checkedAt": "2026-09-08T01:32:46.797Z",
       "notes": "Full types pass."
+    },
+    {
+      "command": "npm run test:reusable-reasoning",
+      "status": "passed",
+      "scope": "s06",
+      "checkedAt": "2026-09-08T01:36:25.702Z",
+      "notes": "Twenty checks pass; nested existing tree, exact handoffs, immutable checkpoints, prefix variants and illegal reorder/skip rejection."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s06",
+      "checkedAt": "2026-09-08T01:36:26.885Z",
+      "notes": "Full types pass."
     }
   ],
   "expectedLearning": [

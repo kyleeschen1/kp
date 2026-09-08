@@ -124,7 +124,8 @@
     {
       "id": "s06",
       "title": "Compose distribution then evaluation",
-      "status": "planned"
+      "summary": "Nested distribute-normalize-evaluate tree preserves exact verified adjacency and supports only bounded prefixes; twenty checks and full types pass.",
+      "status": "complete"
     },
     {
       "id": "s07",

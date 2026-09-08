@@ -65,7 +65,7 @@ export function bindKpReasoningEvidence(value: unknown) {
       reason: source.reason.explanation, compact: source.compact
     })
   });
-  freezeOwnedProjection(evidence);
+  freezeKpReasoningOwnedProjection(evidence);
   issued.add(evidence);
   return evidence;
 }
@@ -74,9 +74,9 @@ export type KpReasoningEvidence = ReturnType<typeof bindKpReasoningEvidence>;
 
 // Endpoint specs freeze their containers, not every segment. This constructor
 // owns these projections; freeze descendants before issuing the capability.
-function freezeOwnedProjection(value: unknown): void {
+export function freezeKpReasoningOwnedProjection(value: unknown): void {
   if (typeof value !== "object" || value === null) return;
-  Object.values(value).forEach(freezeOwnedProjection);
+  Object.values(value).forEach(freezeKpReasoningOwnedProjection);
   Object.freeze(value);
 }
 
