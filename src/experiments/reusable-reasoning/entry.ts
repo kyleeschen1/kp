@@ -2,7 +2,7 @@ import "../authoring-distribution-focus-card/style.css";
 import "./style.css";
 import { createKpReasoningSource } from "./source.ts";
 import { bindKpReasoningEvidence } from "./evidence.ts";
-import { createKpReasoningNavigator } from "./navigation.ts";
+import { createKpReasoningNavigator, type KpReasoningScrub } from "./navigation.ts";
 import { renderReasoningCard, renderReasoningPage, reasoningBeats, escapeReasoningText } from "./scaffold.ts";
 import { mountReasoningNativeSurface } from "./native-surface.ts";
 import { readKpFocusDeckScrubberKeyTarget, renderKpFocusDeckScaffold } from "../../tutorial/focus-deck-scaffold.ts";
@@ -43,6 +43,44 @@ async function mount() {
   let semanticBeats = reasoningBeats(evidence, "reason", "full");
   let alignedScroll = 0;
   let disposed = false;
+  let input: { kind: "idle" } | { kind: "slider"; session: KpReasoningScrub }
+    | { kind: "passage"; session: KpReasoningScrub; phase: "contact" | "coasting" | "resting-with-contact" } = { kind: "idle" };
+  let quietTimer: number | undefined;
+  const clearQuiet = () => {
+    if (quietTimer !== undefined) window.clearTimeout(quietTimer);
+    quietTimer = undefined;
+  };
+  const cancelInput = () => {
+    clearQuiet();
+    if (input.kind !== "idle") input.session.cancel();
+    input = { kind: "idle" };
+  };
+  const beginInput = (kind: "slider" | "passage", contact = false) => {
+    if (disposed || practice) return;
+    if (input.kind === kind) return;
+    cancelInput();
+    const session = navigation.beginScrub();
+    input = kind === "slider" ? { kind, session } : { kind, session, phase: contact ? "contact" : "coasting" };
+  };
+  const finishInput = (kind: "slider" | "passage") => {
+    if (input.kind !== kind) return;
+    clearQuiet();
+    const session = input.session;
+    input = { kind: "idle" };
+    session.finish(!reduced.matches);
+  };
+  const scheduleQuiet = () => {
+    clearQuiet();
+    if (input.kind !== "passage") return;
+    const session = input.session;
+    // Same 180ms input-quiescence policy as the existing TypeScript Focus Card.
+    // Firefox can omit wheel scrollend; other engines can deliver it early.
+    // This detects gesture completion only: the native clock still owns motion.
+    quietTimer = window.setTimeout(() => {
+      quietTimer = undefined;
+      if (input.kind === "passage" && input.session === session) scrollEnd();
+    }, 180);
+  };
   let practiceReturn: ReturnType<typeof navigation.capture> | undefined;
   let practice: (typeof prompts)[number] | undefined;
   const practicePanel = root.querySelector<HTMLElement>("[data-reasoning-practice-panel]")!;
@@ -67,14 +105,16 @@ async function mount() {
       item.dataset["kpFocusDeckBeatActive"] = String(active);
       if (active) item.setAttribute("aria-current", "page"); else item.removeAttribute("aria-current");
     });
-    if (align && !practice) { alignedScroll = passagePosition * Math.max(1, viewport.clientWidth); viewport.scrollLeft = alignedScroll; }
+    if (align && !practice && input.kind !== "passage") { alignedScroll = passagePosition * Math.max(1, viewport.clientWidth); viewport.scrollLeft = alignedScroll; }
     root.dataset["kpReasoningView"] = navigation.getView();
   };
   const navigate = (index: number) => {
+    cancelInput();
     clock.pause(); surface.prepare();
     navigation.seekStep(index, !reduced.matches);
   };
   const updateView = () => {
+    cancelInput();
     const view = navigation.getView();
     const template = document.createElement("div");
     template.innerHTML = renderReasoningCard(evidence, view, mode);
@@ -91,10 +131,17 @@ async function mount() {
     render();
   };
   const unsubscribe = clock.subscribe(() => render());
-  previous.onclick = () => { surface.prepare(); navigation.step("rewind", !reduced.matches); };
-  next.onclick = () => { surface.prepare(); navigation.step("forward", !reduced.matches); };
+  previous.onclick = () => { cancelInput(); surface.prepare(); navigation.step("rewind", !reduced.matches); };
+  next.onclick = () => { cancelInput(); surface.prepare(); navigation.step("forward", !reduced.matches); };
   replay.onclick = () => { navigation.seekStep(0); navigate(navigation.stepCount); };
-  slider.oninput = () => { navigation.seekStep(Number(slider.value)); };
+  slider.oninput = () => {
+    beginInput("slider");
+    if (input.kind === "slider") input.session.update(Number(slider.value));
+  };
+  slider.onchange = () => finishInput("slider");
+  slider.onpointerup = () => finishInput("slider");
+  slider.onpointercancel = () => finishInput("slider");
+  slider.onblur = () => finishInput("slider");
   slider.onkeydown = event => {
     const target = readKpFocusDeckScrubberKeyTarget(event, Number(slider.value), navigation.stepCount + 1);
     if (target === undefined) return;
@@ -107,8 +154,32 @@ async function mount() {
     // Physical passage travel drives the existing clock continuously. The
     // resulting paint must not snap the viewport back to a chosen destination.
     const actual = position / passageFactor();
-    clock.seek(actual);
+    if (input.kind === "passage") {
+      if (input.phase === "resting-with-contact") input.phase = "contact";
+      input.session.update(actual / navigation.end * navigation.stepCount);
+      scheduleQuiet();
+    }
   };
+  viewport.onpointerdown = () => { if (!practice) { cancelInput(); beginInput("passage", true); } };
+  viewport.onwheel = event => {
+    if (!practice && (event.deltaX !== 0 || event.shiftKey)) { beginInput("passage"); scheduleQuiet(); }
+  };
+  // Native scrollend includes touch/trackpad momentum. A release handler on
+  // touchend would settle too early while the browser was still scrolling.
+  const scrollEnd = () => {
+    if (input.kind !== "passage") return;
+    if (input.phase === "coasting") finishInput("passage");
+    else input.phase = "resting-with-contact";
+  };
+  const releasePassage = () => {
+    if (input.kind !== "passage") return;
+    if (input.phase === "resting-with-contact") finishInput("passage");
+    else { input.phase = "coasting"; scheduleQuiet(); }
+  };
+  viewport.addEventListener("scrollend", scheduleQuiet);
+  window.addEventListener("pointerup", releasePassage);
+  window.addEventListener("touchend", releasePassage);
+  window.addEventListener("touchcancel", releasePassage);
   open.onclick = () => { navigation.open(); updateView(); back.focus(); };
   back.onclick = () => { navigation.returnToParent(); updateView(); open.focus(); };
   reading.onchange = () => {
@@ -116,6 +187,7 @@ async function mount() {
     updateView(); root.dataset["kpReasoningReading"] = mode;
   };
   const setPractice = (active: boolean) => {
+    cancelInput();
     card.querySelector<HTMLElement>(".kp-focus-deck__navigation")!.inert = active;
     root.querySelector<HTMLElement>("[data-reasoning-context] details")!.hidden = active;
     root.querySelector<HTMLElement>(".reasoning-toolbar")!.hidden = active;
@@ -180,7 +252,8 @@ async function mount() {
       draftStatus.dataset["status"] = "repair-gap";
       return;
     }
-    clock.pause(); navigation.dispose();
+    cancelInput(); clock.pause(); navigation.dispose();
+    clock.seek(0);
     evidence = result.current.evidence; prompts = result.current.prompts;
     navigation = createKpReasoningNavigator(evidence, clock);
     practice = undefined; practiceReturn = undefined; setPractice(false);
@@ -194,13 +267,17 @@ async function mount() {
     draftStatus.textContent = "Applied to full/compact readings, reason, native endpoint and both practice answers. Reading reset to the beginning of the new revision. Draft remains local to this page.";
     draftStatus.dataset["status"] = "applied";
   };
-  const resize = () => { if (!disposed) { clock.pause(); surface.resize(); render(); } };
-  const motion = () => { clock.pause(); render(); };
-  const visibility = () => { if (document.hidden) clock.pause(); };
+  const resize = () => { if (!disposed) { cancelInput(); clock.pause(); surface.resize(); render(); } };
+  const motion = () => { cancelInput(); clock.pause(); render(); };
+  const visibility = () => { if (document.hidden) { cancelInput(); clock.pause(); } };
   const dispose = () => {
     if (disposed) return;
-    disposed = true; unsubscribe(); navigation.dispose(); surface.dispose();
+    cancelInput(); disposed = true; unsubscribe(); navigation.dispose(); surface.dispose();
     window.removeEventListener("resize", resize); window.removeEventListener("pagehide", dispose);
+    viewport.removeEventListener("scrollend", scheduleQuiet);
+    window.removeEventListener("pointerup", releasePassage);
+    window.removeEventListener("touchend", releasePassage);
+    window.removeEventListener("touchcancel", releasePassage);
     reduced.removeEventListener("change", motion); document.removeEventListener("visibilitychange", visibility);
   };
   window.addEventListener("resize", resize); window.addEventListener("pagehide", dispose);

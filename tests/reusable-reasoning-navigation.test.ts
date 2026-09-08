@@ -4,6 +4,48 @@ import { createKpReaderTimelinePlaybackClock } from "../src/reader/runtime/timel
 import { createKpReasoningSource, KpReasoningRepairGap } from "../src/experiments/reusable-reasoning/source.ts";
 import { bindKpReasoningEvidence } from "../src/experiments/reusable-reasoning/evidence.ts";
 import { createKpReasoningNavigator } from "../src/experiments/reusable-reasoning/navigation.ts";
+import type { KpReasoningScrub } from "../src/experiments/reusable-reasoning/navigation.ts";
+
+if (false) {
+  // @ts-expect-error Only the navigator can issue scrub authority.
+  const forged: KpReasoningScrub = { update() {}, finish() {}, cancel() {} };
+  void forged;
+}
+
+test("gesture release settles through the existing clock without owning a second scheduler", () => {
+  const { navigation, clock, advance, pending } = fixture();
+  for (const [from, to] of [[.2, 0], [.7, 1], [1.49, 1], [1.51, 2], [3.8, 4]]) {
+    const drag = navigation.beginScrub();
+    drag.update(from!);
+    assert.equal(clock.getSnapshot().progress, from! / 13);
+    assert.equal(pending.size, 0);
+    drag.finish(); advance(100_000);
+    assert.equal(clock.getSnapshot().progress, to! / 13);
+    assert.equal(pending.size, 0);
+    drag.update(.3); drag.finish();
+    assert.equal(clock.getSnapshot().progress, to! / 13, "completed gesture cannot mutate the clock");
+  }
+  clock.dispose();
+});
+
+test("stale gesture releases cannot snap restored, superseded or disposed positions", () => {
+  const { navigation, clock } = fixture();
+  const stale = navigation.beginScrub(); stale.update(.37);
+  navigation.open(); navigation.returnToParent();
+  stale.finish(false);
+  assert.equal(clock.getSnapshot().progress, .37 / 13);
+  const old = navigation.beginScrub(); old.update(.8);
+  const current = navigation.beginScrub(); current.update(1.7);
+  old.finish(false);
+  assert.equal(clock.getSnapshot().progress, 1.7 / 13);
+  current.finish(false);
+  assert.equal(clock.getSnapshot().progress, 2 / 13);
+  const cancelled = navigation.beginScrub(); cancelled.update(.42); cancelled.cancel(); cancelled.finish(false);
+  assert.equal(clock.getSnapshot().progress, .42 / 13);
+  const disposed = navigation.beginScrub(); disposed.update(.23); navigation.dispose(); disposed.finish(false);
+  assert.equal(clock.getSnapshot().progress, .23 / 13);
+  clock.dispose();
+});
 
 function fixture(source = createKpReasoningSource()) {
   let now = 0, next = 0;

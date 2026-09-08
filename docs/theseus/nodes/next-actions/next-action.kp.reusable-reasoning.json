@@ -241,11 +241,25 @@
       "scope": "s14-step-repair",
       "checkedAt": "2026-09-08T02:35:51.029Z",
       "notes": "39 reasoning tests, 4 scaffold tests, 4 shared-server Chromium integrations, full types plus final test types, architecture and build pass. Navigator derives adjacent stops from verified procedure, not prose count. All parent/reason full/compact combinations and edited lengths preserve each native step; shared keyboard fractional boundary law covers 2-15 checkpoints. Normal motion stops at first checkpoint. Existing chunk warnings unchanged."
+    },
+    {
+      "command": "npm run visual:reusable-reasoning:shared -- --grep release --project=firefox",
+      "status": "failed",
+      "scope": "s14-release-repair",
+      "checkedAt": "2026-09-08T03:03:11.529Z",
+      "notes": "Chromium release and stale-event test passed; Firefox wheel release remained fractional. Investigating native event ordering before claiming completion."
+    },
+    {
+      "command": "npm run test:reusable-reasoning; npm run typecheck; npm run check:architecture; npm run visual:reusable-reasoning:shared; npm run visual:reusable-reasoning:shared -- --grep release --project=firefox",
+      "status": "passed",
+      "scope": "s14-release-repair",
+      "checkedAt": "2026-09-08T03:09:27.125Z",
+      "notes": "41 unit tests, full types with negative forged-handle fixture, architecture, five Chromium integrations and focused Chromium/Firefox release checks pass. Slider/touch/wheel settle through native clock; stale releases and delayed idle callbacks cannot resnap restored positions. Firefox omitted wheel scrollend; existing 180ms input-quiescence pattern repairs detection without new motion ownership. Repo AGENTS records durable type-first bug prevention."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT retained at 14/24. User-confirmed editing; reported whole-chain Next repaired with semantic checkpoint authority and regression tests. Await combined visual acceptance before s15."
+    "summary": "HUMAN_CHECKPOINT retained at 14/24. Release-to-settle repaired and verified in Chromium/Firefox; type-first durable bug prevention is now a repo-wide AGENTS rule. Await visual acceptance before s15."
   },
   "expectedLearning": [
     "Measure whether one authored reason yields consistent full compact and retrieval projections through existing owners and reduces second-caller glue."

@@ -76,6 +76,26 @@ collaboration experiment, not a learner-facing editorial voice standard.
 - During an active Theseus run, derive the progress counter with `npm run --silent loop:status` when available and emit it at slice starts, completions, commit boundaries, and before a stop or final response.
 - Before finalizing an approved run, check durable progress again. Continue while an approved slice remains unless a named contract stop condition fired; otherwise report one explicit outcome: `COMPLETE`, `HUMAN_CHECKPOINT`, `STOP_CONDITION`, `BLOCKED`, `USER_PAUSED`, `CONTRACT_EXHAUSTED`, or `SESSION_INTERRUPTED`.
 
+## Durable bug prevention
+
+- For every bug fix, identify the violated invariant and its owning boundary;
+  repair the class of invalid states, not only the reported example.
+- Prefer static types and constrained APIs that make invalid states
+  unrepresentable: discriminated unions, validated constructors, explicit
+  ownership and lifecycle capabilities. Do not bypass these with casts or
+  replace them with comments asking callers to be careful.
+- Where types cannot prove correctness (external data, browser events, timing,
+  geometry), enforce runtime invariants at the boundary and add executable
+  regression/property tests that reproduce the failure and pressure adjacent
+  cases, including interruption, reversal, cancellation and disposal as relevant.
+- Keep the prevention proportional and in scope. Reuse the responsible shared
+  mechanism; do not introduce an unrelated framework, broad migration or
+  caller-specific exception merely to claim a general fix.
+- Explain what is now prevented structurally, what is guarded at runtime or by
+  tests, and what remains uncertain. Never claim that all future bugs are
+  impossible. A fix is incomplete without a durable programmatic safeguard,
+  or an explicit explanation of why one cannot yet be added.
+
 ## Exemplar-first collaboration
 
 Apply this protocol to subjective visual, motion, interaction, and LLM-generated-output work. Do not add its review ceremony to objective maintenance or exact bug fixes with deterministic acceptance tests.

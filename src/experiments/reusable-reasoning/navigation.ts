@@ -17,6 +17,14 @@ export interface KpReasoningNavigationSnapshot {
   readonly returnTo?: KpReasoningPosition;
 }
 
+const scrubAuthority: unique symbol = Symbol("reasoning-scrub");
+export interface KpReasoningScrub {
+  readonly [scrubAuthority]: true;
+  update(step: number): void;
+  finish(animate?: boolean): void;
+  cancel(): void;
+}
+
 /** Disclosure borrows the existing clock; it does not sample, schedule or retime motion. */
 export function createKpReasoningNavigator(
   evidence: KpReasoningEvidence, clock: KpReaderTimelinePlaybackClock
@@ -27,6 +35,7 @@ export function createKpReasoningNavigator(
   let view: "parent" | "reason" = "parent";
   let returnTo: KpReasoningPosition | undefined;
   let disposed = false;
+  let scrub: object | undefined;
   const assertLive = () => {
     if (disposed) throw new KpReasoningRepairGap("kp.reasoning.navigation-disposed", "$.navigation", "Mount a live navigation instance.");
   };
@@ -63,6 +72,7 @@ export function createKpReasoningNavigator(
   const checkpoints = Object.freeze(support.procedure.checkpoints.map((_ref, index) => index / count));
   const go = (progress: number, animate: boolean) => {
     assertLive(); position(progress);
+    scrub = undefined;
     clock.pause();
     if (!animate) clock.seek(progress);
     else clock.play({ direction: progress >= clock.getSnapshot().progress ? "forward" : "rewind", stopAt: progress });
@@ -71,6 +81,26 @@ export function createKpReasoningNavigator(
     end,
     stepCount: checkpoints.length - 1,
     getStepPosition: () => clock.getSnapshot().progress * count,
+    beginScrub(): KpReasoningScrub {
+      assertLive(); clock.pause();
+      const token = {};
+      scrub = token;
+      // Browser releases can arrive after disclosure, interruption or disposal.
+      // Only the currently issued gesture owns permission to settle the clock.
+      const live = () => !disposed && scrub === token;
+      return Object.freeze({
+        [scrubAuthority]: true as const,
+        update(step: number) {
+          if (!live()) return;
+          position(step / count); clock.seek(step / count);
+        },
+        finish(animate = true) {
+          if (!live()) return;
+          go(checkpoints[Math.round(clock.getSnapshot().progress * count)]!, animate);
+        },
+        cancel() { if (live()) scrub = undefined; }
+      });
+    },
     seekStep(step: number, animate = false) {
       go(step / count, animate);
     },
@@ -86,6 +116,7 @@ export function createKpReasoningNavigator(
     capture,
     open() {
       assertLive();
+      scrub = undefined;
       if (view === "reason") return capture();
       const saved = position(clock.getSnapshot().progress);
       clock.pause();
@@ -96,6 +127,7 @@ export function createKpReasoningNavigator(
     },
     returnToParent() {
       assertLive();
+      scrub = undefined;
       if (view === "parent") return capture();
       const saved = validatePosition(returnTo!);
       clock.pause();
@@ -117,12 +149,13 @@ export function createKpReasoningNavigator(
       if (snapshot.view === "parent" && snapshot.returnTo !== undefined) throw new KpReasoningRepairGap(
         "kp.reasoning.navigation-return", "$.returnTo", "A parent view cannot carry an active child return frame.");
       // Validate the entire request before touching the last valid clock/view.
+      scrub = undefined;
       clock.pause();
       view = snapshot.view;
       returnTo = saved;
       clock.seek(next.progress, "url");
       return capture();
     },
-    dispose() { disposed = true; }
+    dispose() { scrub = undefined; disposed = true; }
   });
 }

@@ -95,6 +95,34 @@ release certification. The native phone layout retains its stacked equation form
 
 ## Resume boundary
 
+### Checkpoint repair: release-to-settle and standing prevention rule
+
+The user subsequently identified missing release-to-snap and requested durable,
+preferably static-type prevention for bug fixes. `AGENTS.md` now carries that
+repo-wide standing instruction: repair the invariant at its owner, prefer
+unrepresentable invalid states and constrained APIs, supplement browser/external
+boundaries with runtime guards and executable regression laws, and state limits.
+
+Fractional sampling is valid only during interaction or intentional restoration;
+gesture completion now settles to the nearest verified checkpoint through the
+existing native clock (ties choose the upper checkpoint). Slider input and commit
+are distinct. Passage contact, momentum and rest are represented explicitly.
+A privately branded scrub capability is issued only by the navigator; stale,
+cancelled, superseded or disposed gestures cannot move or settle the clock.
+Static types prevent callers from manufacturing a structurally similar handle;
+runtime identity checks enforce the temporal/linear ownership that TypeScript
+alone cannot prove. Open/return and source replacement invalidate gesture rights.
+
+The release browser test found Firefox advertised `scrollend` but omitted it for
+the tested wheel event. The host therefore uses the existing Focus Card pattern
+of 180ms input quiescence alongside native scrollend, and waits while contact is
+held. This is gesture-end detection, not a second animation clock. Timers are
+cancelled with interaction ownership and cannot resnap restored positions.
+The scoped browser entrypoint now tests actual mouse slider release, wheel
+settlement in Chromium and Firefox, touch settlement in Chromium, delayed stale
+events and reduced motion. Unit laws cover exact settlement and stale authority;
+typechecking includes a rejected forged-handle fixture.
+
 ### Checkpoint repair: semantic stepping (2026-09-07)
 
 User confirmed editing but reported that Next traversed the whole argument.
