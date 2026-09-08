@@ -43,7 +43,7 @@ export function renderReasoningPage(evidence: KpReasoningEvidence) {
   return `<h1 data-reasoning-title>${escapeReasoningText(evidence.source.title)}</h1>
     <p class="source-label">One argument · inspect its reason · return to your place</p>
     <div class="reasoning-toolbar" aria-label="Reasoning navigation">
-      <button type="button" data-reasoning-open>Why does this step work?</button>
+      <button type="button" data-reasoning-open>${escapeReasoningText(evidence.source.reason.title)}</button>
       <button type="button" data-reasoning-return hidden>← Return to the argument</button>
       <span data-reasoning-location>Argument</span>
       <label>Reading <select data-reasoning-reading><option value="full">Full</option><option value="compact">Compact</option></select></label>

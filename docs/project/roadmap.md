@@ -34,8 +34,10 @@ R1 is complete with release verification; see
 `reviews/2026-09-07-authoring-round-trip-closeout.md`. The user confirmed the repair
 works and approved R2's exact 24-slice proposal:
 `reviews/2026-09-07-reusable-reasoning-long-loop-proposal.md`.
-Execute `run-contract.kp.reusable-reasoning-v1` through its s14 visual checkpoint;
-Theseus owns progress. R3/Bayes and later execution remain unapproved scope.
+`run-contract.kp.reusable-reasoning-v1` has reached its required combined visual
+checkpoint; see `reviews/2026-09-07-reusable-reasoning-visual-checkpoint.md`.
+Wait for that visual acceptance before promotion; Theseus owns progress and the
+resume state. R3/Bayes and later execution remain unapproved scope.
 Minimal check-ins, mainly canonical
 visual reviews, are a standing preference; see
 `decisions/2026-09-07-reconciled-horizon-and-minimal-check-ins.md`.

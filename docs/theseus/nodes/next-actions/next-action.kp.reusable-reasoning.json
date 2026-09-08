@@ -9,6 +9,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-07-reusable-reasoning-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-07-reusable-reasoning-visual-checkpoint.md"
     }
   ],
   "dependsOn": {
@@ -216,8 +220,19 @@
       "scope": "s13",
       "checkedAt": "2026-09-08T02:13:28.766Z",
       "notes": "38 tests, full types, two Chromium integrations, architecture and build pass. Three-step draft changes actual visible native ink to numerator 12 over 3, both answers, passage and revision; invalid JSON retains exact prior position. Inspected endpoint capture. Existing build chunk-size warnings remain, no budgets changed."
+    },
+    {
+      "command": "npm run test:reusable-reasoning; npm run typecheck; npm run visual:reusable-reasoning; npm run visual:reusable-reasoning:shared",
+      "status": "passed",
+      "scope": "s14",
+      "checkedAt": "2026-09-08T02:24:14.612Z",
+      "notes": "38 tests, full types plus final app/test incremental checks, three Chromium integration checks on isolated and actual shared port 8000 hosts pass. Inspected phone reason/practice and native captures. Keyboard, five intermediate scroll positions, real emulated touch, accessible endpoint, source edits and last-valid retention checked. Human aesthetic approval still required; no cross-browser release claim."
     }
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT: s01-s14 implemented and verified; combined exemplar awaits user visual acceptance. Do not start s15-s24 until acceptance. Review packet records working URL, limits and resume boundary."
+  },
   "expectedLearning": [
     "Measure whether one authored reason yields consistent full compact and retrieval projections through existing owners and reduces second-caller glue."
   ],

@@ -1,5 +1,7 @@
 import { test, expect } from "@playwright/test";
 
+const route = "/experiments/reusable-reasoning/";
+
 test("reasoning exemplar mounts canonical native ink and returns to interrupted parent position", async ({ page }, info) => {
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
@@ -42,6 +44,67 @@ test("reasoning exemplar mounts canonical native ink and returns to interrupted 
   expect(errors).toEqual([]);
 });
 
+test("combined checkpoint preserves keyboard and continuous passage travel at phone width", async ({ page, browserName }, info) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(route);
+  const root = page.locator("#authored-focus-card");
+  const card = page.locator("[data-kp-reasoning-card]");
+  await expect(root).toHaveAttribute("data-kp-reasoning-status", "ready");
+  await page.getByRole("button", { name: "Why does this step work?" }).focus();
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("button", { name: "Return to the argument" })).toBeFocused();
+  const slider = page.locator("[data-kp-focus-deck-scrubber]");
+  await slider.focus(); await page.keyboard.press("ArrowRight");
+  await expect(card).toHaveAttribute("data-kp-reasoning-state", "fraction-solve.state.distributed");
+  await slider.focus(); await page.keyboard.press("Home");
+  await expect(card).toHaveAttribute("data-kp-reasoning-progress", "0");
+  const samples = await card.evaluate(async node => {
+    const card = node as HTMLElement;
+    const viewport = card.querySelector<HTMLElement>("[data-kp-focus-deck-viewport]")!;
+    const samples: number[] = [];
+    for (const fraction of [.1, .25, .5, .75, .9]) {
+      viewport.scrollLeft = viewport.clientWidth * fraction;
+      await new Promise(requestAnimationFrame); await new Promise(requestAnimationFrame);
+      samples.push(Number(card.dataset["kpReasoningProgress"]));
+    }
+    return samples;
+  });
+  expect(samples.every(value => value > 0 && value < 1 / 13)).toBe(true);
+  expect(new Set(samples).size).toBe(5);
+  expect(samples).toEqual([...samples].sort((a, b) => a - b));
+  await slider.fill("0");
+  const viewport = card.locator("[data-kp-focus-deck-viewport]");
+  await viewport.scrollIntoViewIfNeeded();
+  const box = (await viewport.boundingBox())!;
+  if (browserName === "chromium") {
+  const touch = await page.context().newCDPSession(page);
+  await touch.send("Emulation.setTouchEmulationEnabled", { enabled: true });
+  const x = box.x + box.width * .85;
+  const y = box.y + box.height * .5;
+  await touch.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x, y }] });
+  const touchSamples: number[] = [];
+  for (const distance of [35, 70, 105, 140]) {
+    await touch.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ x: x - distance, y }] });
+    await page.evaluate(() => new Promise(requestAnimationFrame));
+    touchSamples.push(Number(await card.getAttribute("data-kp-reasoning-progress")));
+  }
+  await touch.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+  await touch.detach();
+  expect(new Set(touchSamples.filter(value => value > 0 && value < 1 / 13)).size).toBeGreaterThanOrEqual(3);
+  }
+  await slider.fill("4");
+  await expect(card.locator('[data-kp-reader-accessible-equation-state][aria-current="step"]')).toHaveCount(1);
+  await page.screenshot({ path: info.outputPath("phone-reason.png"), fullPage: true });
+  await page.locator("[data-reasoning-reading]").selectOption("compact");
+  await expect(page.getByText("The denominator 3 is nonzero.", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Reconstruct", exact: true }).click();
+  await expect(card.locator('[data-kp-reader-accessible-equation-state][aria-current="step"]')).toHaveCount(1);
+  await page.screenshot({ path: info.outputPath("phone-practice.png"), fullPage: true });
+  await page.getByRole("button", { name: "Return to reading", exact: true }).click();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+
 test("source edit reaches native ink, both readings and practice while invalid drafts retain last valid state", async ({ page }, info) => {
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
@@ -70,8 +133,9 @@ test("source edit reaches native ink, both readings and practice while invalid d
     await page.getByRole("button", { name, exact: true }).click();
     await page.getByRole("button", { name: "Compare with the verified answer" }).click();
     await expect(card).toHaveAttribute("data-kp-reasoning-state", "fraction-solve.state.constant-product");
-    await expect(page.locator("[data-reasoning-answer]")).toContainText("fraction-solve.step.constant-product");
-    await expect(page.locator("[data-reasoning-answer]")).not.toContainText("constant-quotient");
+    await expect(page.locator("[data-reasoning-answer]")).toContainText("Evaluate the constant product");
+    await expect(page.locator("[data-reasoning-answer]")).toHaveAttribute("data-reasoning-answer-operations", /fraction-solve.step.constant-product/);
+    await expect(page.locator("[data-reasoning-answer]")).not.toHaveAttribute("data-reasoning-answer-operations", /constant-quotient/);
     await page.getByRole("button", { name: "Return to reading", exact: true }).click();
   }
   await page.locator("[data-kp-focus-deck-scrubber]").fill("1.37");

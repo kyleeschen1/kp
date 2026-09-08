@@ -5,7 +5,7 @@ import { bindKpReasoningEvidence } from "./evidence.ts";
 import { createKpReasoningNavigator } from "./navigation.ts";
 import { renderReasoningCard, renderReasoningPage, reasoningBeats, escapeReasoningText } from "./scaffold.ts";
 import { mountReasoningNativeSurface } from "./native-surface.ts";
-import { readKpFocusDeckScrubberKeyTarget } from "../../tutorial/focus-deck-scaffold.ts";
+import { readKpFocusDeckScrubberKeyTarget, renderKpFocusDeckScaffold } from "../../tutorial/focus-deck-scaffold.ts";
 import type { ReasoningReading } from "./readings.ts";
 import type { ReasoningPromptKind } from "./prompts.ts";
 import { createReasoningAuthoringSession } from "./authoring.ts";
@@ -54,12 +54,15 @@ async function mount() {
     const index = Math.max(0, Math.min(beats.length - 1, Math.round(position)));
     slider.value = String(position);
     slider.setAttribute("aria-valuetext", beats[index]!.title);
-    previous.disabled = position <= 0; next.disabled = position >= beats.length - 1;
+    previous.disabled = Boolean(practice) || position <= 0;
+    next.disabled = Boolean(practice) || position >= beats.length - 1;
+    slider.disabled = Boolean(practice); replay.disabled = Boolean(practice);
     card.dataset["kpFocusDeckActiveBeat"] = beats[index]!.slug;
     card.querySelector<HTMLOutputElement>("[data-kp-focus-deck-position]")!.value = beats[index]!.title;
     viewport.querySelectorAll<HTMLElement>("[data-kp-focus-deck-beat]").forEach((item, i) => {
-      item.dataset["kpFocusDeckBeatActive"] = String(i === index);
-      if (i === index) item.setAttribute("aria-current", "page"); else item.removeAttribute("aria-current");
+      const active = practice ? i === 0 : i === index;
+      item.dataset["kpFocusDeckBeatActive"] = String(active);
+      if (active) item.setAttribute("aria-current", "page"); else item.removeAttribute("aria-current");
     });
     if (align && !practice) { alignedScroll = position * Math.max(1, viewport.clientWidth); viewport.scrollLeft = alignedScroll; }
     root.dataset["kpReasoningView"] = navigation.getView();
@@ -123,7 +126,11 @@ async function mount() {
       root.querySelector<HTMLElement>("[data-reasoning-prompt]")!.textContent = practice.card.prompt;
       root.querySelector<HTMLTextAreaElement>("[data-reasoning-working]")!.value = "";
       answer.hidden = true; answer.textContent = "";
-      viewport.innerHTML = `<p>${escapeReasoningText(practice.card.prompt)}</p>`;
+      const template = document.createElement("div");
+      template.innerHTML = renderKpFocusDeckScaffold({ id: "reasoning-practice", ariaLabel: practice.card.title,
+        stageHtml: "", activeBeatSlug: "question", beats: [{ slug: "question", title: practice.card.title,
+          html: `<p>${escapeReasoningText(practice.card.prompt)}</p>` }] });
+      viewport.innerHTML = template.querySelector("[data-kp-focus-deck-viewport]")!.innerHTML;
       viewport.scrollLeft = 0;
       setPractice(true); clock.seek(practice.startProgress);
       root.querySelector<HTMLTextAreaElement>("[data-reasoning-working]")!.focus();
@@ -134,12 +141,15 @@ async function mount() {
     // Disclosure changes presentation only; the immutable prompt carries the
     // same revision and verified answer before and after comparison.
     clock.seek(practice.answerProgress); answer.hidden = false;
-    answer.textContent = `Verified sequence: ${practice.answerOperations.map(item => item.id).join(" → ")}. Compare the equation above; your wording is not automatically graded.`;
+    const steps = reasoningBeats(evidence, "reason", "full");
+    answer.dataset["reasoningAnswerOperations"] = practice.answerOperations.map(item => item.id).join(" ");
+    answer.textContent = `Verified sequence: ${practice.answerOperations.map(item =>
+      steps[evidence.steps.findIndex(step => step.id === item.id) + 1]!.title).join(" → ")}. Compare the equation above; your wording is not automatically graded.`;
   };
   root.querySelector<HTMLButtonElement>("[data-reasoning-practice-return]")!.onclick = () => {
     if (!practiceReturn) return;
     navigation.restore(practiceReturn); practice = undefined; practiceReturn = undefined;
-    setPractice(false); updateView(); open.focus();
+    setPractice(false); updateView(); (navigation.getView() === "reason" ? back : open).focus();
   };
   const editor = root.querySelector<HTMLTextAreaElement>("[data-reasoning-json]")!;
   const draftStatus = root.querySelector<HTMLElement>("[data-reasoning-draft-status]")!;
@@ -174,6 +184,7 @@ async function mount() {
     template.innerHTML = renderReasoningPage(evidence);
     root.querySelector<HTMLElement>("[data-reasoning-context]")!.innerHTML = template.querySelector("[data-reasoning-context]")!.innerHTML;
     root.querySelector<HTMLElement>("[data-reasoning-title]")!.textContent = evidence.source.title;
+    open.textContent = evidence.source.reason.title;
     card.setAttribute("aria-label", evidence.source.title);
     updateView(); clock.seek(0); stampRevision();
     draftStatus.textContent = "Applied to full/compact readings, reason, native endpoint and both practice answers. Reading reset to the beginning of the new revision. Draft remains local to this page.";

@@ -2,9 +2,9 @@
   "id": "run-contract.kp.reusable-reasoning-v1",
   "kind": "run-contract",
   "title": "R2 Reusable reasoning at multiple scales",
-  "status": "ready",
+  "status": "deferred",
   "domain": "kp",
-  "summary": "Approved R2 execution with s14 visual gate and no parallel agents.",
+  "summary": "HUMAN_CHECKPOINT: mandatory s14 visual review; s15 onward requires explicit acceptance of the combined reusable reasoning exemplar.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -172,7 +172,8 @@
     {
       "id": "s14",
       "title": "Prepare combined visual checkpoint",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: combined native reasoning review ready at http://localhost:8000/experiments/reusable-reasoning/; await explicit acceptance before s15.",
+      "status": "complete"
     },
     {
       "id": "s15",
