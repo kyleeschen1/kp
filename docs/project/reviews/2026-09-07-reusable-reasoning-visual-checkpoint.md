@@ -61,11 +61,11 @@ commit; the new visible host and its GET route are isolated.
 
 Repeatable commands:
 
-- `npm run test:reusable-reasoning`: 47 tests through source/authority/reference,
+- `npm run test:reusable-reasoning`: 48 tests through source/authority/reference,
   formula/procedure/support/extraction, real-clock navigation, reading equivalence,
   existing flashcard projections and atomic last-valid drafts.
 - `npm run visual:reusable-reasoning`: isolated native browser integration.
-- `npm run visual:reusable-reasoning:shared`: nine integrated Chromium
+- `npm run visual:reusable-reasoning:shared`: twelve integrated Chromium
   checks against the human's port-8000 URL, without starting another server.
   Captures include the distributed state, exact return, changed native endpoint,
   phone reason and phone practice. The phone check includes keyboard operation,
@@ -96,6 +96,47 @@ Phone-width Chromium and emulated touch are not physical-device or cross-browser
 release certification. The native phone layout retains its stacked equation form.
 
 ## Resume boundary
+
+### Current repair: visible button playback and first command generalization
+
+User reported that buttons skipped the animation and approved fixing this before
+starting control generalization. The missing playback was reproduced with
+`prefers-reduced-motion` explicitly off, so reduced motion was not assumed to be
+the cause. An older RAF timestamp could precede `play()` after costly native
+preparation. The clock moved its baseline backward to that timestamp, then
+charged preparation time to the next frame. Firefox's captured normal-motion
+trace went from the initial state to the endpoint without an intermediate
+sample; Chromium lost a substantial portion of the reverse transition.
+
+The existing timeline clock now maintains a monotonic time baseline. A fake
+scheduler reproduces a 700ms preparation interval followed by an older frame:
+the next sample advances only the actual 16ms, in either direction. Existing
+long-frame endpoint and release-settlement behavior remains covered. Reasoning
+prepares native layouts/materials once per layout/font revision instead of
+repainting all four operations on every button click. Resize/font changes still
+invalidate preparation. No authored duration, ink choreography, semantic model
+or source was changed, following the visual-salience preservation boundary.
+
+`src/tutorial/focus-deck-playback.ts` is the first shared command layer:
+`play-transition`, `settle-gesture`, and `restore-position` are explicit variants.
+A button-play request cannot take a gesture settlement duration; a negative
+TypeScript fixture enforces that boundary. Normal playback uses authored time,
+reduced motion reaches the static endpoint, and restoration does not replay.
+Reasoning and the existing range controller for authored distribution and
+carrier-preserving simplification consume it. Remaining tax/code/log controller
+migration is not claimed. The shared clock repair itself benefits its existing
+consumers without replacing their domain-specific control policies.
+
+Verification: 48 reasoning unit tests, seven timeline-clock tests, full typecheck
+and architecture gate passed. Nine targeted browser checks passed across
+Chromium, Firefox and WebKit: each of the three cards must show more than five
+distinct intermediate progress samples and changing equation paint in forward
+and reverse playback. The two additional callers also check reduced-motion
+endpoints. This closes the earlier endpoint-only button-test gap; it does not
+certify all card controllers or physical devices. Canonical review remains
+`/experiments/reusable-reasoning/`, with the authored distribution and
+simplification routes as the first generalization callers. Rollback unit: this
+button-playback repair/generalization commit. HUMAN_CHECKPOINT remains 14/24.
 
 ### Checkpoint refinement: continuous gestures with predictable settlement
 

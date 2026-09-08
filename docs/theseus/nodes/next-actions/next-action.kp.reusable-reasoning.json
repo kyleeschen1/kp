@@ -311,11 +311,25 @@
       "scope": "s14-native-control-convergence",
       "checkedAt": "2026-09-08T04:55:42.889Z",
       "notes": "Final sustained native travel and fresh vertical input pass in Chromium, Firefox and WebKit. Other integrated cases passed across full run and targeted reruns; an HMR reload invalidated one earlier run. Immediate axis switching after a horizontal Firefox transaction remains a physical-browser review limitation, not certified."
+    },
+    {
+      "command": "npm run visual:reusable-reasoning:shared -- --grep \"buttons visibly|shared playback\" --project=webkit --project=firefox",
+      "status": "passed",
+      "scope": "s14-button-playback",
+      "checkedAt": "2026-09-08T05:11:36.072Z",
+      "notes": "Nine tests pass: normal-motion progress and realized paint forward/reverse in reasoning, authored distribution and simplification across Chromium, Firefox and WebKit. Reduced-motion endpoints retained. Before repair Firefox showed zero intermediate samples with reduced motion off."
+    },
+    {
+      "command": "npm run test:reusable-reasoning",
+      "status": "passed",
+      "scope": "s14-button-playback",
+      "checkedAt": "2026-09-08T05:12:04.028Z",
+      "notes": "48 reasoning tests pass; 19 focused clock/range/authority tests pass, including the old-RAF-timestamp reproduction. Full typecheck and architecture gate pass. Typed play requests reject settlement-only duration fields."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT retained at 14/24. Approved control convergence removes continuous-travel clamp, shares tax settlement policy and uses native passage scrolling. Await visual acceptance before s15."
+    "summary": "HUMAN_CHECKPOINT 14/24: fixed non-monotonic RAF clock baseline and redundant button preparation; started approved generalization with shared typed playback commands in reasoning, distribution and simplification. Await visible-playback acceptance before further controller promotion."
   },
   "expectedLearning": [
     "Measure whether one authored reason yields consistent full compact and retrieval projections through existing owners and reduces second-caller glue."

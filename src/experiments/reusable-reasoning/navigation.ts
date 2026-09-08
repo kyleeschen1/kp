@@ -5,6 +5,7 @@ import { pinKpReasoningReference, type KpReasoningReference } from "./references
 import { KpReasoningRepairGap } from "./source.ts";
 import { reasoningGestureTarget } from "./gesture.ts";
 import { boundKpFocusDeckTravel } from "../../tutorial/focus-deck-continuous-navigation.ts";
+import { navigateKpFocusDeckPlayback } from "../../tutorial/focus-deck-playback.ts";
 
 export interface KpReasoningPosition {
   readonly reference: KpReasoningReference;
@@ -81,11 +82,11 @@ export function createKpReasoningNavigator(
   const go = (progress: number, animate: boolean, settle = false) => {
     assertLive(); position(progress);
     scrub = undefined;
-    clock.pause();
-    if (!animate) clock.seek(progress);
-    else clock.play({ direction: progress >= clock.getSnapshot().progress ? "forward" : "rewind", stopAt: progress,
-      ...(settle ? { settlement: { durationMs: Math.max(160, Math.min(380,
-        Math.abs(progress - clock.getSnapshot().progress) * clock.durationMs)) } } : {}) });
+    navigateKpFocusDeckPlayback(clock, settle
+      ? { kind: "settle-gesture", target: progress, motion: animate ? "full" : "reduced",
+          durationMs: Math.max(160, Math.min(380, Math.abs(progress - clock.getSnapshot().progress) * clock.durationMs)) }
+      : animate ? { kind: "play-transition", target: progress, motion: "full" }
+        : { kind: "restore-position", target: progress });
   };
   return Object.freeze({
     end,

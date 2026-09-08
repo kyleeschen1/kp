@@ -52,6 +52,23 @@ test("timeline clock advances global progress and settles at an exact stop", () 
   assert.equal(fake.pending(), 0);
 });
 
+test("a frame timestamp before playback cannot charge preparation time to the next frame", () => {
+  for (const direction of ["forward", "rewind"] as const) {
+    const fake = fakeScheduler();
+    fake.step(700); // Costly preparation has finished; playback starts now.
+    const from = direction === "forward" ? 0 : 1;
+    const clock = createKpReaderTimelinePlaybackClock({ id: "late-frame", durationMs: 1000,
+      initialProgress: from, scheduler: fake.scheduler });
+    clock.play({ direction, stopAt: .5 });
+    fake.step(0); // The already-open browser frame carries its older timestamp.
+    assert.equal(clock.getSnapshot().progress, from);
+    fake.step(716);
+    assert.ok(Math.abs(clock.getSnapshot().progress - (from + (direction === "forward" ? .016 : -.016))) < 1e-10);
+    assert.equal(clock.getStatus(), "playing");
+    clock.dispose();
+  }
+});
+
 test("timeline clock clamps a long final frame to the exact endpoint", () => {
   const fake = fakeScheduler();
   const clock = createKpReaderTimelinePlaybackClock({

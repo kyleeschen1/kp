@@ -83,7 +83,10 @@ export function createKpReaderTimelinePlaybackClock(input: {
     frameHandle = undefined;
     if (disposed || status !== "playing") return;
     const elapsedMs = Math.max(0, nowMs - previousNowMs);
-    previousNowMs = nowMs;
+    // A RAF timestamp can predate play() when preparation ran in that frame.
+    // Moving the baseline backward would charge preparation time on the next
+    // tick, potentially consuming a complete short transition without paint.
+    previousNowMs = Math.max(previousNowMs, nowMs);
     const delta = elapsedMs / input.durationMs *
       (direction === "forward" ? 1 : -1);
     const fraction = settlement === undefined ? 0 : Math.min(1, Math.max(0,

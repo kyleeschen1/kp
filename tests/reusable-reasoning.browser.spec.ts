@@ -11,6 +11,65 @@ async function previewSlider(slider: Locator, value: string) {
 
 const route = "/experiments/reusable-reasoning/";
 
+for (const family of ["distribution", "simplification"]) test(`shared playback shows authored ${family} motion and preserves reduced motion`, async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto(`/experiments/authoring-${family}-focus-card/`);
+  const card = page.locator("[data-kp-focus-deck]");
+  await expect(card).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+  const attribute = `data-kp-${family}-progress`;
+  for (const direction of ["next", "previous"]) {
+    const result = await card.evaluate(async (card, { direction, attribute }) => {
+      const progress = new Set<number>(), paint = new Set<string>();
+      const target = direction === "next" ? 1 : 0;
+      const started = performance.now();
+      card.querySelector<HTMLButtonElement>(`[data-kp-focus-deck-${direction}]`)!.click();
+      do {
+        await new Promise(requestAnimationFrame);
+        const value = Number(card.getAttribute(attribute));
+        if (value > 0 && value < 1) {
+          progress.add(value);
+          paint.add(Array.from(card.querySelectorAll<HTMLElement>(".kp-focus-deck__stage [style]"))
+            .map(node => node.style.cssText).join("|"));
+        }
+        if (value === target) break;
+      } while (performance.now() - started < 6000);
+      return { progress: progress.size, paint: paint.size };
+    }, { direction, attribute });
+    expect(result.progress, direction).toBeGreaterThan(5);
+    expect(result.paint, direction).toBeGreaterThan(5);
+    await expect(card).toHaveAttribute(attribute, direction === "next" ? "1" : "0");
+  }
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await card.locator("[data-kp-focus-deck-next]").click();
+  await expect(card).toHaveAttribute(attribute, "1");
+});
+
+test("buttons visibly sample forward and reverse equation motion", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto(route);
+  await expect(page.locator("#authored-focus-card")).toHaveAttribute("data-kp-reasoning-status", "ready");
+  for (const direction of ["next", "previous"]) {
+    const result = await page.locator("[data-kp-reasoning-card]").evaluate(async (card, direction) => {
+      const samples: { progress: number; paint: string; at: number }[] = [];
+      const started = performance.now();
+      card.querySelector<HTMLButtonElement>(`[data-kp-focus-deck-${direction}]`)!.click();
+      while (performance.now() - started < 1800) {
+        await new Promise(requestAnimationFrame);
+        samples.push({ at: performance.now() - started, progress: Number((card as HTMLElement).dataset["kpReasoningProgress"]),
+          paint: Array.from(card.querySelectorAll<HTMLElement>("[data-kp-equation-material-fragment-role]"))
+            .map(node => `${node.style.transform}/${node.style.opacity}/${node.style.visibility}`).join("|") });
+      }
+      return { reduced: matchMedia("(prefers-reduced-motion: reduce)").matches, samples };
+    }, direction);
+    const intermediate = result.samples.filter(sample => sample.progress > 0 && sample.progress < 1 / 13);
+    expect(result.reduced).toBe(false);
+    const diagnostic = JSON.stringify({ direction, samples: result.samples.slice(0, 12).map(({ progress, at }) => ({ progress, at })) });
+    expect(new Set(intermediate.map(sample => sample.progress)).size, diagnostic).toBeGreaterThan(5);
+    expect(new Set(intermediate.map(sample => sample.paint)).size, diagnostic).toBeGreaterThan(5);
+    await expect(page.locator("[data-kp-reasoning-card]")).toHaveAttribute("data-kp-reasoning-progress", String(direction === "next" ? 1 / 13 : 0));
+  }
+});
+
 test("live beat and renewed card gestures respond synchronously while settling", async ({ page }) => {
   await page.goto(route);
   await expect(page.locator("#authored-focus-card")).toHaveAttribute("data-kp-reasoning-status", "ready");

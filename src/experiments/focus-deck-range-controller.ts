@@ -1,4 +1,5 @@
 import type { KpReaderTimelinePlaybackClock } from "../reader/runtime/timeline-playback-clock.ts";
+import { navigateKpFocusDeckPlayback } from "../tutorial/focus-deck-playback.ts";
 
 /** Shared enhancement for the two-endpoint authored cards. The caller retains
  * semantic endpoints, native preparation and paint; this owns only navigation
@@ -51,8 +52,9 @@ export function bindKpFocusDeckRangeController(input: {
     input.prepareNavigation?.();
     show(index);
     history.replaceState(null, "", `#${input.hashPrefix}.${beats[index]!.slug}`);
-    if (!animate || reduced.matches) clock.seek(index * end);
-    else clock.play({ direction: index * end >= clock.getSnapshot().progress ? "forward" : "rewind", stopAt: index * end });
+    navigateKpFocusDeckPlayback(clock, animate
+      ? { kind: "play-transition", target: index * end, motion: reduced.matches ? "reduced" : "full" }
+      : { kind: "restore-position", target: index * end });
   };
   previous.onclick = () => select(0);
   next.onclick = () => select(1);

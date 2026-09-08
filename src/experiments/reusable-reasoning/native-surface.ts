@@ -58,10 +58,15 @@ export async function mountReasoningNativeSurface(card: HTMLElement, evidence: K
   const clock = createKpReaderTimelinePlaybackClock({
     id: "reader.reasoning.fraction", durationMs, ownerWindow: window
   });
+  let preparedRevision = "";
   const prepare = () => {
     const saved = clock.getSnapshot().progress;
+    const current = session.seek(saved);
+    const revision = `${current.layoutRevision}:${current.fontRevision}`;
+    if (revision === preparedRevision) return;
     for (let index = 0; index <= 8; index++) session.seek(index / (2 * cohorts.length));
-    session.seek(saved);
+    const restored = session.seek(saved);
+    preparedRevision = `${restored.layoutRevision}:${restored.fontRevision}`;
   };
   await document.fonts.ready;
   prepare();
