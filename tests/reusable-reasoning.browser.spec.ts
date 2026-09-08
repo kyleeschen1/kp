@@ -24,5 +24,10 @@ test("reasoning exemplar mounts canonical native ink and returns to interrupted 
   await expect(root).toHaveAttribute("data-kp-reasoning-view", "parent");
   await expect(card).toHaveAttribute("data-kp-reasoning-progress", before!);
   await card.screenshot({ path: info.outputPath("parent-return.png") });
+  await page.locator("[data-reasoning-reading]").selectOption("compact");
+  await expect(card).toHaveAttribute("data-kp-reasoning-progress", before!);
+  await expect(page.getByText("The denominator 3 is nonzero.", { exact: true })).toBeVisible();
+  await page.locator("[data-reasoning-reading]").selectOption("full");
+  await expect(card).toHaveAttribute("data-kp-reasoning-progress", before!);
   expect(errors).toEqual([]);
 });

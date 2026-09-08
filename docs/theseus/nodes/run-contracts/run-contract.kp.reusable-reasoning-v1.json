@@ -154,7 +154,8 @@
     {
       "id": "s11",
       "title": "Add full and compact readings",
-      "status": "planned"
+      "summary": "Full and compact readings preserve claim, revision, qualifications and interrupted position.",
+      "status": "complete"
     },
     {
       "id": "s12",

@@ -181,6 +181,20 @@
       "scope": "s10",
       "checkedAt": "2026-09-08T01:59:31.947Z",
       "notes": "32 unit tests, full types, architecture, production build and Chromium native host smoke pass. Inspected native distribution capture; shared Georgia passage and exact interrupted return preserved. Initial CSS snapping and optional-duration failures repaired."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "s11",
+      "checkedAt": "2026-09-08T02:02:37.879Z",
+      "notes": "Extraction field typo caught by types; changed claims access to claimReferences and strengthened runtime test to require nine claims, not merely equality."
+    },
+    {
+      "command": "npm run test:reusable-reasoning; npm run typecheck; npm run visual:reusable-reasoning",
+      "status": "passed",
+      "scope": "s11",
+      "checkedAt": "2026-09-08T02:03:39.932Z",
+      "notes": "34 tests, full types and Chromium pass. Full/compact retain nine claims, both conditions, exact revision and playhead; authored markup escaped."
     }
   ],
   "expectedLearning": [

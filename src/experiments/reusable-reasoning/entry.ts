@@ -6,6 +6,7 @@ import { createKpReasoningNavigator } from "./navigation.ts";
 import { renderReasoningCard, reasoningBeats } from "./scaffold.ts";
 import { mountReasoningNativeSurface } from "./native-surface.ts";
 import { readKpFocusDeckScrubberKeyTarget } from "../../tutorial/focus-deck-scaffold.ts";
+import type { ReasoningReading } from "./readings.ts";
 
 const root = document.querySelector<HTMLElement>("#authored-focus-card")!;
 const report = (error: unknown) => {
@@ -31,6 +32,8 @@ async function mount() {
   const replay = card.querySelector<HTMLButtonElement>("[data-kp-focus-deck-replay]")!;
   const open = root.querySelector<HTMLButtonElement>("[data-reasoning-open]")!;
   const back = root.querySelector<HTMLButtonElement>("[data-reasoning-return]")!;
+  const reading = root.querySelector<HTMLSelectElement>("[data-reasoning-reading]")!;
+  let mode: ReasoningReading = "full";
   let beats = reasoningBeats(evidence, "parent");
   let alignedScroll = 0;
   let disposed = false;
@@ -61,13 +64,12 @@ async function mount() {
   const updateView = () => {
     const view = navigation.getView();
     const template = document.createElement("div");
-    template.innerHTML = renderReasoningCard(evidence, view);
-    beats = reasoningBeats(evidence, view);
+    template.innerHTML = renderReasoningCard(evidence, view, mode);
+    beats = reasoningBeats(evidence, view, mode);
     viewport.innerHTML = template.querySelector("[data-kp-focus-deck-viewport]")!.innerHTML;
     card.querySelector(".kp-focus-deck__ticks")!.innerHTML = template.querySelector(".kp-focus-deck__ticks")!.innerHTML;
     slider.max = String(beats.length - 1);
     open.hidden = view === "reason"; back.hidden = view === "parent";
-    root.querySelector<HTMLElement>("[data-reasoning-context]")!.hidden = view === "parent";
     root.querySelector<HTMLElement>("[data-reasoning-location]")!.textContent = view === "parent" ? "Argument" : "Supporting reason";
     card.querySelector<HTMLElement>("[data-reasoning-view-label]")!.textContent = view === "parent" ? "Argument" : "Supporting reason";
     render();
@@ -93,6 +95,10 @@ async function mount() {
   };
   open.onclick = () => { navigation.open(); updateView(); back.focus(); };
   back.onclick = () => { navigation.returnToParent(); updateView(); open.focus(); };
+  reading.onchange = () => {
+    clock.pause(); mode = reading.value === "compact" ? "compact" : "full";
+    updateView(); root.dataset["kpReasoningReading"] = mode;
+  };
   const resize = () => { if (!disposed) { clock.pause(); surface.resize(); render(); } };
   const motion = () => { clock.pause(); render(); };
   const visibility = () => { if (document.hidden) clock.pause(); };

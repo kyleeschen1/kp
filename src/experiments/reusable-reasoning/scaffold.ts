@@ -1,6 +1,7 @@
 import { renderKpFocusDeckScaffold, type KpFocusDeckScaffoldBeat } from "../../tutorial/focus-deck-scaffold.ts";
 import { bindKpReasoningSupport } from "./support.ts";
 import type { KpReasoningEvidence } from "./evidence.ts";
+import { projectReasoningReading, type ReasoningReading } from "./readings.ts";
 
 const titles = ["Before distribution", "Distribute to both terms", "Normalize the fractions",
   "Evaluate the constant product", "Evaluate the constant quotient"];
@@ -12,21 +13,22 @@ const descriptions = [
   "Evaluate the constant quotient; the variable term is retained."
 ];
 
-export function reasoningBeats(evidence: KpReasoningEvidence, view: "parent" | "reason"): readonly KpFocusDeckScaffoldBeat[] {
+export function reasoningBeats(evidence: KpReasoningEvidence, view: "parent" | "reason", mode: ReasoningReading = "full"): readonly KpFocusDeckScaffoldBeat[] {
   const support = bindKpReasoningSupport(evidence);
   const count = support.procedure.operations.length;
-  const checkpoints = view === "parent" ? [0, count] : Array.from({ length: count + 1 }, (_, index) => index);
+  const reading = projectReasoningReading(evidence, mode);
+  const checkpoints = view === "parent" || mode === "compact" ? [0, count] : Array.from({ length: count + 1 }, (_, index) => index);
   return checkpoints.map((index, position) => ({
     slug: `checkpoint-${index}`, title: titles[index]!,
-    html: `<p>${escapeReasoningText(view === "parent"
+    html: `<p>${escapeReasoningText(mode === "compact" ? reading.text : view === "parent"
       ? position === 0 ? evidence.source.parent.statement : evidence.source.reason.explanation
       : position === 0 ? evidence.source.reason.explanation : descriptions[index]!)}</p>`,
     attributes: { "data-reasoning-state": evidence.states[index]!.stateId }
   }));
 }
 
-export function renderReasoningCard(evidence: KpReasoningEvidence, view: "parent" | "reason" = "parent") {
-  const beats = reasoningBeats(evidence, view);
+export function renderReasoningCard(evidence: KpReasoningEvidence, view: "parent" | "reason" = "parent", mode: ReasoningReading = "full") {
+  const beats = reasoningBeats(evidence, view, mode);
   return renderKpFocusDeckScaffold({
     id: "reusable-reasoning", ariaLabel: evidence.source.title, activeBeatSlug: beats[0]!.slug,
     beats, stageHtml: '<div class="kp-focus-deck__stage" data-distribution-stage aria-label="Verified equation"></div>',
@@ -44,9 +46,10 @@ export function renderReasoningPage(evidence: KpReasoningEvidence) {
       <button type="button" data-reasoning-open>Why does this step work?</button>
       <button type="button" data-reasoning-return hidden>← Return to the argument</button>
       <span data-reasoning-location>Argument</span>
+      <label>Reading <select data-reasoning-reading><option value="full">Full</option><option value="compact">Compact</option></select></label>
     </div>
     <div data-reasoning-reader>${renderReasoningCard(evidence)}</div>
-    <section data-reasoning-context hidden aria-label="Reason assumptions and evidence">
+    <section data-reasoning-context aria-label="Reason assumptions and evidence">
       <h2>The rule and its context</h2>
       <p>${escapeReasoningText(support.procedure.formula.notation)} — the common factor applies to both addends.</p>
       <ul>${evidence.assumptions.map(item => `<li>${escapeReasoningText(item.statement)}</li>`).join("")}</ul>
