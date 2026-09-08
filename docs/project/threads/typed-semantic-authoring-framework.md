@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: R3 Bayesian flagship at first mandatory human visual checkpoint
+Status: R3 first visual checkpoint accepted; executing approved authoring integration
 Last Updated: 2026-09-08
 Current successor reference: `../reviews/2026-09-07-reconciled-authoring-loop-horizon.md`.
 It preserves the original architectural obligations and the tax/Bayes direction;
@@ -28,8 +28,8 @@ Execute `run-contract.kp.bayesian-flagship-v2` through its first visual gate.
 That gate is now ready: `../reviews/2026-09-08-bayesian-flagship-visual-checkpoint.md`.
 The running `/experiments/bayesian-reasoning/` host joins exact probability
 truth, governed operations, persistent SVG outcomes, native ratio evaluation
-and shared seven-stop input. Its new tree treatment is not yet accepted or
-promoted. Probability editing, readings and publication remain after acceptance;
+and shared seven-stop input. The user accepted the repaired treatment with
+“looks good!” on 2026-09-08. Continue probability editing, readings and publication;
 Theseus owns the exact continuation and stop state.
 The unstarted metadata-incomplete v1 record is superseded, not another queue.
 Branch: `feature/20260907-reusable-reasoning`, retaining completed R1 ancestry.
@@ -61,7 +61,7 @@ do not treat its proposed roadmap or readiness labels as new execution authority
 The user clarified the remaining code issue as missing gradual passage swiping.
 The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
-Current Next Action: obtain R3 exemplar visual acceptance, then resume Theseus;
+Current Next Action: resume approved R3 post-acceptance work through Theseus;
 do not restart the completed R1, R2 or G3 loops. See
 `../reviews/2026-09-07-canonical-tax-g3-checkpoint.md` for the working URL,
 source workflow, production ownership, release evidence and remaining work.

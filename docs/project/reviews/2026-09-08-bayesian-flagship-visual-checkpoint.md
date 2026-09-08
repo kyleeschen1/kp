@@ -1,9 +1,15 @@
 # R3 Bayesian flagship — first visual checkpoint
 
 Date: 2026-09-08
-Status: HUMAN_CHECKPOINT — awaiting visual acceptance, not promoted
+Status: ACCEPTED — user said “looks good!” after notation-overlap repair on 2026-09-08
 Contract: `run-contract.kp.bayesian-flagship-v2`
 Scope: first coherent exemplar; s09 delivers this packet, not invented approval.
+
+The first visual gate is satisfied for the repaired exemplar at `66f28f676`.
+Resume the existing approved contract at s10; no additional routine approval
+is needed. The earlier pending-review descriptions below are checkpoint history.
+This accepts the bounded treatment, not universal probability support or new
+visual families. Later material visual changes remain review gates.
 
 ## Checkpoint feedback: notation overlap repair
 

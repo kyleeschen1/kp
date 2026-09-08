@@ -43,10 +43,10 @@ The user approved the exact 26-slice R3/Bayes proposal with “go”:
 Execute `run-contract.kp.bayesian-flagship-v2` until its first coherent tree
 visual checkpoint before authoring/projection hardening. The unstarted v1
 record was superseded for missing execution metadata; scope is unchanged.
-The first coherent exemplar is now at its required human visual checkpoint:
+The user accepted the repaired first coherent exemplar with “looks good!”:
 `reviews/2026-09-08-bayesian-flagship-visual-checkpoint.md` links the running
-port-8000 page and defines what to review. Do not begin post-checkpoint
-authoring/publication work before visual acceptance. Theseus owns live progress.
+port-8000 page and records acceptance. Continue the exact approved R3
+authoring/publication scope through Theseus; it owns live progress.
 Do not restart R1 or R2. Later horizon loops remain unapproved.
 Minimal check-ins, mainly canonical
 visual reviews, are a standing preference; see

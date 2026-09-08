@@ -2,8 +2,8 @@
   "id": "run-contract.kp.bayesian-flagship-v2",
   "kind": "run-contract",
   "title": "R3 Bayesian flagship",
-  "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: s09 packet delivered; awaiting visual acceptance of the canonical Bayesian tree before s10. Resume this same approved contract after actual user acceptance, with no routine nonvisual approval.",
+  "status": "in-progress",
+  "summary": "User accepted the repaired Bayesian exemplar with looks good on 2026-09-08. Visual gate after s09 satisfied; resume exact approved s10-s26 scope, preserving accepted treatment and stopping only for named conditions.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -163,7 +163,8 @@
     {
       "id": "s10",
       "title": "Encode accepted motif regressions without globalizing provisional choices",
-      "status": "planned"
+      "summary": "Accepted repaired exemplar recorded; 18 tests, full types and five Chromium preservation cases pass. Local regression contract retained without global promotion.",
+      "status": "complete"
     },
     {
       "id": "s11",

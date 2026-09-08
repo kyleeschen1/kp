@@ -34,3 +34,24 @@ test("tree sampling preserves four semantic owners, exact masses and explicit po
   assert.equal((html.match(/data-bayes-outcome=/g) ?? []).length, 4);
   assert.match(html, /role="img"/);
 });
+
+test("accepted Bayes motif keeps endpoints, collision clearance and named attention at every sample", () => {
+  const plan = createBayesTreePlan(compileBinaryProbabilityTrace(BinaryJointModel.from(createFlaggedTicketSource())));
+  const initial = sampleBayesTree(plan, 0), joint = sampleBayesTree(plan, 2), gathered = sampleBayesTree(plan, 3), flipped = sampleBayesTree(plan, 6);
+  assert.equal(initial.rootX, 350);
+  assert.equal(joint.rootX, 60);
+  assert.equal(joint.branchPresence, 1);
+  assert.equal(gathered.branchPresence, 0);
+  assert.equal(gathered.gather, 1);
+  assert.equal(flipped.targetPresence, 1);
+  assert.equal(flipped.branchPresence, 0);
+  const known = new Set(plan.scene.registry.entities.map(entity => entity.id));
+  for (let sample = 0; sample <= 600; sample++) {
+    const frame = sampleBayesTree(plan, sample / 100);
+    assert.ok(frame.hierarchy.every(entity => known.has(entity.id)));
+    assert.ok(frame.hierarchy.some(entity => entity.salience === "focus"));
+    for (const [index, left] of frame.leaves.entries()) for (const right of frame.leaves.slice(index + 1))
+      assert.ok(Math.abs(left.x - right.x) >= 170 || Math.abs(left.y - right.y) >= 58, `collision at ${frame.position}`);
+    assert.deepEqual(frame, sampleBayesTree(plan, sample / 100));
+  }
+});
