@@ -119,7 +119,8 @@
     {
       "id": "s04",
       "title": "Derive both binary tree orders and explicit construction/collapse/condition/reorder operations with occurrence correspondence",
-      "status": "planned"
+      "summary": "Both tree orders preserve exact joint masses with explicit unreachable branches; seven-state trace separates construction marginalization conditioning restoration reorder. Eleven tests full types pass.",
+      "status": "complete"
     },
     {
       "id": "s05",

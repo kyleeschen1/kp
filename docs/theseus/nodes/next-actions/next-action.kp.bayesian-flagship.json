@@ -82,6 +82,26 @@
       "status": "passed",
       "scope": "s03",
       "checkedAt": "2026-09-08T18:52:32.713Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "s04-initial",
+      "checkedAt": "2026-09-08T18:57:13.786Z",
+      "notes": "Trace authority literal widened to boolean; corrected constructor literal without casts."
+    },
+    {
+      "command": "npm run test:bayesian-reasoning",
+      "status": "passed",
+      "scope": "s04",
+      "checkedAt": "2026-09-08T18:57:14.897Z",
+      "notes": "Eleven tests including 35 exact joint distributions across both tree orders and zero-support branches."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s04",
+      "checkedAt": "2026-09-08T18:57:15.942Z"
     }
   ],
   "expectedLearning": [
