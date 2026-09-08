@@ -5,6 +5,7 @@ import { renderBayesTreeSvg, formatBayesMass } from "./tree-svg.ts";
 import { checkBayesDraft, createBayesDraft, type PreparedBayesDraft } from "./draft.ts";
 import { encodeKpHtmlText as escape } from "../../rendering/html-output-encoding.ts";
 import { projectBayesReading } from "./readings.ts";
+import { projectBayesPrompts } from "./prompts.ts";
 
 export function renderBayesCardRevision(draft: PreparedBayesDraft) {
   const { score: beats, notation, model } = draft;
@@ -18,7 +19,9 @@ export function renderBayesCardRevision(draft: PreparedBayesDraft) {
     ${compileKpEquationExemplarTemplate(notation.animation, annotateBayesQuotient)}
     <p><button type="button" data-bayes-explain>Why this denominator?</button> <button type="button" data-bayes-return hidden>Return to my position</button></p>
     <section data-bayes-reason hidden aria-label="Denominator reasoning"><h2>Why divide by P(B)?</h2><p>The denominator includes every B outcome: A ∩ B and not A ∩ B. Their combined mass is ${formatBayesMass(draft.tree.query.denominator)} of the original population. Within that population, the A-and-B share is ${formatBayesMass(draft.tree.query.numerator)} / ${formatBayesMass(draft.tree.query.denominator)} = ${formatBayesMass(draft.tree.query.value)}. Gathering B and conditioning on B are distinct steps.</p></section>
-    ${(["full", "compact"] as const).map(mode => `<details data-bayes-reading="${mode}" data-bayes-reading-revision="${draft.revisionId}"><summary>${mode === "full" ? "Full" : "Compact"} reading</summary>${projectBayesReading(draft, mode).html}</details>`).join("")}</div>`;
+    ${(["full", "compact"] as const).map(mode => `<details data-bayes-reading="${mode}" data-bayes-reading-revision="${draft.revisionId}"><summary>${mode === "full" ? "Full" : "Compact"} reading</summary>${projectBayesReading(draft, mode).html}</details>`).join("")}
+    <p data-bayes-practice-choices>${projectBayesPrompts(draft).map(prompt => `<button type="button" data-bayes-practice="${prompt.kind}">${escape(prompt.card.title)}</button>`).join(" ")}</p>
+    <section data-bayes-practice-panel hidden aria-label="Probability self-check"><h2 data-bayes-prompt-title></h2><p data-bayes-prompt-text></p><p data-bayes-prompt-context></p><p>Make your prediction or explanation before revealing. This is a self-check, not automatic grading.</p><button type="button" data-bayes-reveal>Reveal answer</button><p data-bayes-answer hidden></p><button type="button" data-bayes-practice-return>Return to the card</button></section></div>`;
 }
 
 export function buildBayesPage() {

@@ -199,7 +199,8 @@
     {
       "id": "s16",
       "title": "Derive prediction and reconstruction prompts from the same conditional query and extraction; preserve explicit answers/context",
-      "status": "planned"
+      "summary": "Exact higher/lower/unchanged prediction and denominator reconstruction preserve context; practice hides answer-bearing views until reveal and returns precisely.",
+      "status": "complete"
     },
     {
       "id": "s17",

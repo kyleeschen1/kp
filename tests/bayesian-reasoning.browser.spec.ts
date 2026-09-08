@@ -1,5 +1,24 @@
 import { test, expect } from "@playwright/test";
 
+test("Bayes practice hides live answers until reveal and returns to the interrupted card", async ({ page }) => {
+  await page.goto("/experiments/bayesian-reasoning/");
+  const card = page.locator("[data-bayes-display] [data-bayes-card]");
+  await expect(card).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+  await card.locator("[data-kp-focus-deck-scrubber]").evaluate(node => {
+    (node as HTMLInputElement).value = "4"; node.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  for (const kind of ["prediction", "reconstruction"]) {
+    await page.locator(`[data-bayes-practice="${kind}"]`).click();
+    await expect(card).toBeHidden(); await expect(page.locator("[data-bayes-answer]")).toBeHidden();
+    await expect(page.locator("[data-bayes-reading=full]")).toBeHidden();
+    await expect(page.locator("[data-bayes-prompt-context]")).toContainText("no independence");
+    await page.locator("[data-bayes-reveal]").click();
+    await expect(page.locator("[data-bayes-answer]")).toContainText("2/3");
+    await page.locator("[data-bayes-practice-return]").click();
+    await expect(card).toBeVisible(); await expect(card).toHaveAttribute("data-bayes-position", "4");
+  }
+});
+
 test("Bayes addresses restore direct positions, edited revision refresh, Back and Forward", async ({ page }) => {
   await page.goto("/experiments/bayesian-reasoning/");
   const card = page.locator("[data-bayes-display] [data-bayes-card]");

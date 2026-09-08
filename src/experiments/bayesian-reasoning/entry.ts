@@ -5,6 +5,7 @@ import { createBayesAuthoringSession } from "./authoring.ts";
 import { renderBayesCardRevision } from "./page.ts";
 import { extractBayesDenominator, resolveBayesDenominatorReturn, type BayesDisclosure } from "./extraction.ts";
 import { captureBayesLocation, validateBayesLocation, encodeBayesLocation, readBayesLocation, type BayesLocation } from "./location.ts";
+import { projectBayesPrompts } from "./prompts.ts";
 import { mountBayesNativeSurface } from "./native-surface.ts";
 import { createKpFocusDeckCheckpointPlayback } from "../../tutorial/focus-deck-checkpoint-playback.ts";
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
@@ -35,6 +36,9 @@ async function mountCard(root: HTMLElement, evidence: PreparedBayesDraft) {
   let disclosure: BayesDisclosure = { view: "parent" };
   let onChange: ((push: boolean) => void) | undefined;
   let changingView = false;
+  const prompts = projectBayesPrompts(evidence), practicePanel = root.querySelector<HTMLElement>("[data-bayes-practice-panel]")!;
+  const practiceAnswer = root.querySelector<HTMLElement>("[data-bayes-answer]")!;
+  let practiceReturn: BayesLocation | undefined;
   let disposed = false, visible = 0;
   let passage: ReturnType<typeof mountKpFocusDeckNativeInput> | undefined;
   let scrub: ReturnType<typeof navigation.begin> | undefined;
@@ -70,6 +74,27 @@ async function mountCard(root: HTMLElement, evidence: PreparedBayesDraft) {
     if (!changingView && clock.getStatus() !== "playing" && !passage?.ownsTravel() && !scrub) onChange?.(false);
   };
   const seek = (step: number) => { cancel(); navigation.seek(step, !reduced.matches); };
+  const practiceVisibility = (open: boolean) => {
+    card.hidden = open; practicePanel.hidden = !open;
+    root.querySelectorAll<HTMLElement>("[data-bayes-reading], [data-bayes-practice-choices]").forEach(node => { node.hidden = open; });
+    explain.hidden = open || disclosure.view === "reason";
+    reason.hidden = open || disclosure.view !== "reason"; returnButton.hidden = reason.hidden;
+  };
+  root.querySelectorAll<HTMLButtonElement>("[data-bayes-practice]").forEach(button => { button.onclick = () => {
+    cancel(); clock.pause(); practiceReturn = captureBayesLocation(evidence, navigation.position(), disclosure);
+    const prompt = prompts.find(item => item.kind === button.dataset["bayesPractice"])!;
+    root.querySelector("[data-bayes-prompt-title]")!.textContent = prompt.card.title;
+    root.querySelector("[data-bayes-prompt-text]")!.textContent = prompt.card.prompt;
+    root.querySelector("[data-bayes-prompt-context]")!.textContent = `${prompt.context.definitions.map(event => `${event.symbol}: ${event.label}`).join("; ")}. ${prompt.context.jointMasses.join(", ")}. ${prompt.context.assumptions.join(" ")}`;
+    practiceAnswer.textContent = prompt.card.answer!.value; practiceAnswer.hidden = true;
+    practiceVisibility(true); root.querySelector<HTMLButtonElement>("[data-bayes-reveal]")!.focus();
+  }; });
+  root.querySelector<HTMLButtonElement>("[data-bayes-reveal]")!.onclick = () => { practiceAnswer.hidden = false; };
+  root.querySelector<HTMLButtonElement>("[data-bayes-practice-return]")!.onclick = () => {
+    if (!practiceReturn) return;
+    const saved = validateBayesLocation(evidence, practiceReturn); practiceReturn = undefined;
+    practiceVisibility(false); native.invalidate(); navigation.seek(saved.position.step); render(); card.focus();
+  };
   explain.onclick = () => {
     changingView = true;
     cancel(); clock.pause();
@@ -110,6 +135,7 @@ async function mountCard(root: HTMLElement, evidence: PreparedBayesDraft) {
       cancel(); clock.pause();
       disclosure = saved.view === "parent" ? { view: "parent" }
         : { view: "reason", extraction: extractBayesDenominator(evidence, saved.returnTo.step) };
+      practiceReturn = undefined; practiceVisibility(false);
       reason.hidden = disclosure.view !== "reason"; returnButton.hidden = reason.hidden; explain.hidden = !reason.hidden;
       navigation.seek(saved.position.step); render();
     } };
