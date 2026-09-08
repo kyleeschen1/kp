@@ -1,6 +1,6 @@
 import type {
   KpEquationOperationPlanRecipeId
-} from "../domain-ir/equation-surface-family-declarations.ts";
+} from "../domain-ir/equation-operation-plan-recipe-types.ts";
 
 export type KpEquationLinearRearrangementKind =
   | "balanced-introduction"

@@ -235,7 +235,7 @@ export function validateKpGovernedCanonicalConstructionCompilation(input: {
       });
     }
   });
-  return Object.freeze(issues);
+  return Object.freeze<readonly KpGovernedConstructionVerificationIssue[]>(issues);
 }
 
 export function compileKpGovernedCanonicalConstruction(input: {
@@ -341,7 +341,7 @@ export function compileKpGovernedCanonicalConstruction(input: {
       lineageIds: Object.freeze(operation.lineage.map(({ id }) => id))
     });
   });
-  return Object.freeze({
+  return Object.freeze<KpVerifiedGovernedCanonicalConstruction>({
     kind: "verified-governed-canonical-construction" as const,
     requestId: request.id,
     construction,
@@ -445,5 +445,5 @@ function issue(
   path: string,
   message: string
 ): KpGovernedConstructionVerificationIssue {
-  return Object.freeze({ code, path, message });
+  return Object.freeze<KpGovernedConstructionVerificationIssue>({ code, path, message });
 }

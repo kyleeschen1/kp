@@ -1,3 +1,6 @@
+import type { KpNativeKatexFactoringSceneBinding } from "./native-katex-factoring-binding-types.ts";
+export type { KpNativeKatexFactoringSceneBinding } from "./native-katex-factoring-binding-types.ts";
+
 import {
   compileKpFactoringFusionPlan,
   sampleKpFactoringAddendCompactionProgress
@@ -48,16 +51,6 @@ export interface KpNativeKatexFactoringScenePlan {
   readonly pathsByEntityId: ReadonlyMap<string, KpEquationMotionPathCandidate>;
   readonly claimedSourceAtomIds: ReadonlySet<string>;
   readonly claimedTargetAtomIds: ReadonlySet<string>;
-}
-
-export interface KpNativeKatexFactoringSceneBinding {
-  readonly claimTracks:
-    (tracks: readonly KpNativeKatexSceneTrack[]) =>
-      readonly KpNativeKatexSceneTrack[];
-  readonly claimedTargetAtomIds: ReadonlySet<string>;
-  readonly sampleMaterialOwners:
-    (progress: number) => readonly KpEquationMaterialLayerOwnerFrame[];
-  readonly recordEvidence: () => void;
 }
 
 export function bindKpNativeKatexFactoringScene(input: {

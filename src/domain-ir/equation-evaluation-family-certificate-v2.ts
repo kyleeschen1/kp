@@ -109,7 +109,7 @@ export function compileKpEquationEvaluationFamilyCertificateV2(input: {
     operationId: input.authority.operationId
   });
   if (topology.status !== "verified") {
-    return Object.freeze({
+    return Object.freeze<KpEquationEvaluationFamilyCertificateCompilationV2>({
       status: "repair-required" as const,
       diagnostics: Object.freeze(topology.diagnostics.map((diagnostic) =>
         Object.freeze({ ...diagnostic })))
@@ -135,7 +135,7 @@ export function compileKpEquationEvaluationFamilyCertificateV2(input: {
     familyProfile: applicability.profile,
     releaseMaturity: governance.releaseMaturity
   });
-  return Object.freeze({
+  return Object.freeze<KpEquationEvaluationFamilyCertificateCompilationV2>({
     status: "certified" as const,
     certificate,
     diagnostics: Object.freeze([]) as readonly []
@@ -154,7 +154,7 @@ export function compileKpEquationEvaluationFamilyCohortCertificatesV2(input: {
 }): KpEquationEvaluationFamilyCohortCertificateCompilationV2 {
   const governance = resolveFamilyGovernance(input);
   if (governance.status === "repair-required") {
-    return Object.freeze({
+    return Object.freeze<KpEquationEvaluationFamilyCohortCertificateCompilationV2>({
       status: "repair-required" as const,
       diagnostics: governance.diagnostics
     });
@@ -165,7 +165,7 @@ export function compileKpEquationEvaluationFamilyCohortCertificatesV2(input: {
     operationId: input.authority.operationId
   });
   if (topology.status !== "verified") {
-    return Object.freeze({
+    return Object.freeze<KpEquationEvaluationFamilyCohortCertificateCompilationV2>({
       status: "repair-required" as const,
       diagnostics: Object.freeze(topology.diagnostics.map((diagnostic) =>
         Object.freeze({ ...diagnostic })))
@@ -195,13 +195,13 @@ export function compileKpEquationEvaluationFamilyCohortCertificatesV2(input: {
     }));
   });
   if (diagnostics.length > 0 || certificates.length < 2) {
-    return Object.freeze({
+    return Object.freeze<KpEquationEvaluationFamilyCohortCertificateCompilationV2>({
       status: "repair-required" as const,
       diagnostics: Object.freeze(diagnostics.map((diagnostic) =>
         Object.freeze(diagnostic)))
     });
   }
-  return Object.freeze({
+  return Object.freeze<KpEquationEvaluationFamilyCohortCertificateCompilationV2>({
     status: "certified" as const,
     certificates: Object.freeze(certificates) as readonly [
       KpVerifiedEquationEvaluationFamilyCertificateV2,
@@ -266,7 +266,7 @@ function resolveFamilyGovernance(input: {
         `Authority claims ${authority.presentationAuthority.familyProfileId}, but ${transformation.transformType} is registered to ${release.familyProfileId}.`
     });
   }
-  return Object.freeze({
+  return Object.freeze<KpEquationEvaluationFamilyGovernanceResolutionV2>({
     status: "resolved" as const,
     familyProfileId: release.familyProfileId,
     releaseMaturity: release.maturity
@@ -298,7 +298,7 @@ function mintFamilyCertificate(input: {
 function repair(
   diagnostic: KpEquationEvaluationFamilyCertificateDiagnosticV2
 ): KpEquationEvaluationFamilyCertificateCompilationV2 {
-  return Object.freeze({
+  return Object.freeze<KpEquationEvaluationFamilyCertificateCompilationV2>({
     status: "repair-required" as const,
     diagnostics: Object.freeze([Object.freeze(diagnostic)])
   });
@@ -307,7 +307,7 @@ function repair(
 function governanceRepair(
   diagnostic: KpEquationEvaluationFamilyCertificateDiagnosticV2
 ): KpEquationEvaluationFamilyGovernanceResolutionV2 {
-  return Object.freeze({
+  return Object.freeze<KpEquationEvaluationFamilyGovernanceResolutionV2>({
     status: "repair-required" as const,
     diagnostics: Object.freeze([Object.freeze(diagnostic)])
   });

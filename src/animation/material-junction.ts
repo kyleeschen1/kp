@@ -1,9 +1,5 @@
-export interface KpMaterialJunctionRect {
-  readonly left: number;
-  readonly top: number;
-  readonly width: number;
-  readonly height: number;
-}
+import type { KpMaterialJunctionRect } from "./material-junction-types.ts";
+export type { KpMaterialJunctionRect } from "./material-junction-types.ts";
 
 export interface KpMaterialJunctionAnnotation {
   readonly id: string;

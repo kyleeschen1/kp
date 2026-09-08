@@ -142,7 +142,7 @@ export function compileKpEquationPresentationPlanV2<
       input.evaluationFamilyCertificates ?? []
     );
   if (evaluationFamilyCertificateDiagnostics.length > 0) {
-    return Object.freeze({
+    return Object.freeze<KpEquationPresentationPlanCompilationV2<Payload>>({
       status: "repair-required" as const,
       diagnostics: Object.freeze(evaluationFamilyCertificateDiagnostics)
     });
@@ -175,7 +175,7 @@ export function compileKpEquationPresentationPlanV2<
     input.domainPayloads ?? []
   );
   if (diagnostics.length > 0) {
-    return Object.freeze({
+    return Object.freeze<KpEquationPresentationPlanCompilationV2<Payload>>({
       status: "repair-required" as const,
       diagnostics: Object.freeze(diagnostics)
     });
@@ -251,7 +251,7 @@ export function compileKpEquationPresentationPlanV2<
     transitions: Object.freeze(transitions)
   }) as unknown as KpCompiledEquationPresentationPlanV2<Payload>;
   compiledPlans.add(plan);
-  return Object.freeze({
+  return Object.freeze<KpEquationPresentationPlanCompilationV2<Payload>>({
     status: "compiled" as const,
     plan,
     diagnostics: Object.freeze([]) as readonly []
@@ -345,7 +345,7 @@ export function consumeKpEquationPresentationPlanV2<
   if (!compiledPlans.has(input.plan)) {
     throw new Error("Equation adapters require a nominal presentation plan.");
   }
-  return Object.freeze(input.plan.transitions.map((transition) => {
+  return Object.freeze<readonly Output[]>(input.plan.transitions.map((transition) => {
     if (input.adapter.kind === "generic-equation-adapter-v2") {
       return input.adapter.compile(transition);
     }
@@ -420,7 +420,7 @@ function repair<Payload extends KpEquationPresentationDomainPayloadV2>(
   code: KpEquationPresentationPlanDiagnosticV2["code"],
   message: string
 ): KpEquationPresentationPlanCompilationV2<Payload> {
-  return Object.freeze({
+  return Object.freeze<KpEquationPresentationPlanCompilationV2<Payload>>({
     status: "repair-required" as const,
     diagnostics: Object.freeze([{ code, message }])
   });

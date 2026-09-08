@@ -1,3 +1,6 @@
+import type { KpEquationOperationPlanRecipeId } from "./equation-operation-plan-recipe-types.ts";
+export type { KpEquationOperationPlanRecipeId } from "./equation-operation-plan-recipe-types.ts";
+
 export type KpEquationSelectedSurfaceCapability =
   | "carrier-preserving-simplification"
   | "equation-katex"
@@ -47,15 +50,6 @@ export type KpEquationPresentationRoute =
   | "declared-diagnostic-transition"
   | "retirement-negative-fixture"
   | "unsupported-static-hold";
-
-export type KpEquationOperationPlanRecipeId =
-  | "recipe.operation-plan.carrier-preserving-simplification.v1"
-  | "recipe.operation-plan.identity-absorption.v1"
-  | "recipe.operation-plan.inverse-cancellation.v1"
-  | "recipe.operation-plan.distribution.v1"
-  | "recipe.operation-plan.factoring.v1"
-  | "recipe.operation-plan.linear-rearrangement.v1"
-  | "recipe.operation-plan.successor-synthesis.v1";
 
 export type KpEquationStructuralRecipeId =
   | "recipe.equation.exponent-expansion.v1"

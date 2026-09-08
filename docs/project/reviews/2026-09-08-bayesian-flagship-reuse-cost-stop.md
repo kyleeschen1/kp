@@ -1,7 +1,9 @@
 # R3 Bayesian flagship: reuse audit and budget stop
 
 Date: 2026-09-08
-Outcome: **STOP_CONDITION**, not release completion.
+Outcome: **RESOLVED by the user-authorized shared-compiler cost repair**.
+The stop reports below remain historical evidence, not the current execution state.
+Theseus owns the remaining R3 work; this is not release completion.
 Authority: [approved R3 proposal](2026-09-08-bayesian-flagship-long-loop-proposal.md),
 `run-contract.kp.bayesian-flagship-v2`. Theseus owns live slice status.
 
@@ -191,3 +193,47 @@ Final reuse, architecture and unchanged inference-gate outcomes are recorded
 in Theseus against s21. No new visual treatment was introduced, so the prior
 accepted visual checkpoint remains in force; no new browser release claim is
 made by this diagnostic slice.
+
+## Shared-compiler repair: fixed gate restored
+
+The user accepted shared-compiler cost optimization with “implement the rec,
+and resume”. This authorizes internal contract/implementation separation while
+preserving public APIs, validation, fixtures, budgets and runtime behavior; no
+renderer redesign, new budget, merge or deployment is authorized.
+
+The final real-fixture gate passes at **112,278 types / 192,161 instantiations**,
+down 6,482 / 11,496 from the stopped state. Ceilings remain 112,500 / 195,800.
+Only 222 types of headroom remain; this is a repaired gate, not unlimited
+capacity for subsequent features.
+
+The decisive finding refines the earlier closure attribution: mandatory Bayes
+notation compilation was expensive, but the combined graph also contained
+avoidable implementation imports used solely to name types. The retained cuts:
+
+- Recipe IDs no longer pull the surface-family exemplar declarations into the
+  linear-rearrangement compiler.
+- Opaque exact-fraction successor bindings have one nominal type owner, no
+  longer pulling the full symbolic publication projection into successor code.
+- Junction rectangle data no longer imports junction planning.
+- Factoring scene bindings no longer import the factoring implementation into
+  general operation choreography.
+- Solid-mask easing imports its existing easing owner, not the equation-motion
+  compiler that reexports that type.
+
+Original modules retain the same type exports. The nominal brand remains
+private and unconstructible. Three shared compilation files also use their
+already-declared return types at freeze boundaries; no validation is removed.
+The broader annotation experiment was trimmed before retention.
+
+All 12 changed implementation files emit identical JavaScript to the pre-repair
+commit with comments removed. The four new contract modules emit no runtime
+code. `tests/compiler-type-boundaries.test.ts` guards the corrected imports,
+legacy exports and absence of runtime/minting code. Both Bayes publication
+payload hashes above remain identical. No fixture or compiler option changed.
+
+Preservation checks executed: 32 Bayes tests; 61 reusable-reasoning tests;
+11 equation-surface tests; 29 canonical-renderer tests; 82 real-KaTeX tests;
+12 Chromium Bayes browser checks; two new boundary tests; full typecheck;
+architecture; reuse measurement; unchanged inference gate. Theseus records
+their final outcomes. R3 continues in its existing order from s21; remaining
+model-trial, performance, supported-browser and release obligations still apply.

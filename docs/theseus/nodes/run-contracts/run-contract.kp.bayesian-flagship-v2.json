@@ -2,8 +2,8 @@
   "id": "run-contract.kp.bayesian-flagship-v2",
   "kind": "run-contract",
   "title": "R3 Bayesian flagship",
-  "status": "blocked",
-  "summary": "STOP_CONDITION at s21 after authorized probability-local cost investigation. Full real fixture remains over fixed limits; candidate rejected. Broader shared equation/governed compiler cost work requires scope decision. Resume same contract at s21; no budget waiver.",
+  "status": "in-progress",
+  "summary": "User approved shared equation and governed compiler cost optimization and resume. Preserve public APIs, validation behavior, all fixtures, output hashes and fixed ceilings. Continue s21 then existing approved order.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -39,7 +39,7 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "20 of 26 complete. Authorized s21 local cost investigation completed without effective repair. STOP_CONDITION persists; shared compiler cost scope proposed, fixture and limits intact."
+    "summary": "s21 budget stop resolved; continue existing approved order at s22. No budget waiver or new visual treatment."
   },
   "allowedWork": [
     "s01: Freeze owner/capability and author-task baseline; pin original problem, preservation URLs and exact commands; reconcile stale delivery summary; risk Low; F: source/ref audit, exact fixture arithmetic, unchanged worktree baseline; one commit.",
@@ -233,7 +233,8 @@
     {
       "id": "s21",
       "title": "Measure both callers and extract only duplicated mechanical plumbing demonstrated by them, within probability",
-      "status": "in-progress"
+      "summary": "Shared type-owner separation restores fixed gate: 112278 types and 192161 instantiations. Source-only second caller, identical outputs, durable boundary regressions and full preservation verification. User-authorized shared cost scope complete.",
+      "status": "complete"
     },
     {
       "id": "s22",

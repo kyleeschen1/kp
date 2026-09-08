@@ -2,9 +2,9 @@
   "id": "next-action.kp.bayesian-flagship",
   "kind": "next-action",
   "title": "R3 Bayesian flagship",
-  "status": "blocked",
+  "status": "in-progress",
   "domain": "kp",
-  "summary": "R3 20 of 26 complete. Local compiler-cost investigation complete, budget repair incomplete. Repeatable attribution identifies required canonical compiler closure; shared compiler cost scope proposed. See reuse-cost-stop report follow-up.",
+  "summary": "User approved shared equation and governed compiler cost optimization and resume. Preserve public APIs, validation behavior, all fixtures, output hashes and fixed ceilings. Continue s21 then existing approved order.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -743,11 +743,88 @@
       "scope": "s21",
       "checkedAt": "2026-09-08T22:09:46.443Z",
       "notes": "Unchanged final counts 118760 types and 203657 instantiations exceed fixed 112500 and 195800. Local explicit-interface candidate saved only 17 types and added 58 instantiations; fully removed. No probability-local repair found; shared compiler cost scope proposed."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-08T22:23:56.759Z",
+      "notes": "Final retained repair passes unchanged ceilings at 112278 types and 192161 instantiations. All fixtures remain."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-08T22:23:58.089Z",
+      "notes": "Full app/node/test/Svelte/domain pass; zero Svelte warnings."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-08T22:23:59.154Z",
+      "notes": "All architecture gates and 8 cross-domain tests pass."
+    },
+    {
+      "command": "npm run check:bayesian-reuse",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-08T22:24:00.187Z",
+      "notes": "Both source revisions and publication hashes unchanged."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/compiler-type-boundaries.test.ts",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-08T22:24:01.263Z",
+      "notes": "2 regression tests protect data-owner imports, legacy exports and zero runtime code in new contracts."
+    },
+    {
+      "command": "npm run test:bayesian-reasoning",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-08T22:24:02.340Z",
+      "notes": "32 pass."
+    },
+    {
+      "command": "npm run test:reusable-reasoning",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-08T22:24:03.379Z",
+      "notes": "61 pass."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-08T22:24:04.646Z",
+      "notes": "11 pass."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-08T22:24:05.819Z",
+      "notes": "29 pass."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-08T22:24:07.043Z",
+      "notes": "82 pass."
+    },
+    {
+      "command": "npm run visual:bayesian-reasoning:shared",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-08T22:24:08.219Z",
+      "notes": "12 Chromium tests pass on canonical host; no new visual treatment."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s21 local investigation produced executable attribution; not a budget repair. No runtime changes. 20 of 26 complete; remaining release work unstarted."
+    "summary": "Shared compiler cost repair complete with fixed gates intact. Continue R3 authoring trial and remaining performance/release work."
   },
   "expectedLearning": [
     "Measure whether one domain-owned probability source yields coherent tree equation reading retrieval and publication with source-only second-caller reuse."

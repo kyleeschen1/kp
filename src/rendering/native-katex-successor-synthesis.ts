@@ -17,7 +17,7 @@ import type {
 } from "../animation/paint-continuity-plan-types.ts";
 import type {
   KpExactOpaqueSuccessorSynthesisBinding
-} from "./exact-fraction-quantity-symbolic-projection.ts";
+} from "./exact-fraction-successor-binding-types.ts";
 import type {
   KpEquationMaterialLayerOwnerFrame
 } from "./equation-material-layer-types.ts";

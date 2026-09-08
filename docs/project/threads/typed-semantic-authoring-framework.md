@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: R3 visual checkpoint accepted; paused at s21 fixed inference-budget stop
+Status: R3 visual accepted; shared-compiler cost stop resolved; approved loop continuing
 Last Updated: 2026-09-08
 Current successor reference: `../reviews/2026-09-07-reconciled-authoring-loop-horizon.md`.
 It preserves the original architectural obligations and the tax/Bayes direction;
@@ -61,13 +61,11 @@ do not treat its proposed roadmap or readiness labels as new execution authority
 The user clarified the remaining code issue as missing gradual passage swiping.
 The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
-Current Next Action: resolve the R3 s21 fixed inference-budget stop before resuming;
-see `../reviews/2026-09-08-bayesian-flagship-reuse-cost-stop.md` for the measured
-boundary and recommended bounded investigation. Theseus owns live progress;
-The authorized local investigation is now recorded in that report: no effective
-probability-local repair was found; shared-compiler cost scope is the next
-explicit decision. The real fixture and fixed ceilings remain unchanged.
-do not restart the completed R1, R2 or G3 loops. See
+Current Next Action: continue the approved R3 order through Theseus. The
+user-authorized shared-compiler repair resolved the s21 fixed-budget stop;
+see `../reviews/2026-09-08-bayesian-flagship-reuse-cost-stop.md` for preserved
+history and final measurements. Public APIs, runtime behavior, all real fixtures
+and fixed ceilings remain unchanged. Do not restart completed R1, R2 or G3. See
 `../reviews/2026-09-07-canonical-tax-g3-checkpoint.md` for the working URL,
 source workflow, production ownership, release evidence and remaining work.
 The ordinary build now ships the exact four-card route, with shared source

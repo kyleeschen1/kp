@@ -1,4 +1,4 @@
-import type { KpMaterialJunctionRect } from "./material-junction.ts";
+import type { KpMaterialJunctionRect } from "./material-junction-types.ts";
 import type { KpAssetBundle } from "../semantic/asset.ts";
 import type { KpSemanticTransformation } from "../semantic/asset-transformation.ts";
 import type { SelectorCorrespondenceRecord } from "../semantic/correspondence.ts";

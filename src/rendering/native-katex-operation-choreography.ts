@@ -20,7 +20,7 @@ export type {
 } from "../animation/balanced-introduction-presentation-plan.ts";
 export type {
   KpNativeKatexFactoringSceneBinding
-} from "./native-katex-factoring-choreography.ts";
+} from "./native-katex-factoring-binding-types.ts";
 import {
   sampleKpEquationLinearRearrangementFrame
 } from "./equation-linear-rearrangement-frame.ts";

@@ -1,4 +1,4 @@
-import type { EasingName } from "./equation-motion-plan.ts";
+import type { EasingName } from "../animation/easing.ts";
 import type {
   KatexAtlasRegion,
   KatexTextureAtlas,

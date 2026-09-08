@@ -45,14 +45,12 @@ visual checkpoint before authoring/projection hardening. The unstarted v1
 record was superseded for missing execution metadata; scope is unchanged.
 The user accepted the repaired first coherent exemplar with “looks good!”:
 `reviews/2026-09-08-bayesian-flagship-visual-checkpoint.md` links the running
-port-8000 page and records acceptance. The accepted continuation now pauses at
-the s21 fixed inference-budget stop; see
-`reviews/2026-09-08-bayesian-flagship-reuse-cost-stop.md` for delivered integration,
-measurements and the bounded resume recommendation. The user-authorized local
-cost investigation reproduced the failure and rejected an ineffective interface
-refactor; its appended evidence proposes shared-compiler cost scope next.
-Theseus owns live progress;
-do not advance past this stop or raise budgets implicitly.
+port-8000 page and records acceptance. The user-authorized shared-compiler cost
+repair resolves the s21 fixed inference-budget stop without changing fixtures,
+limits or executable behavior. See
+`reviews/2026-09-08-bayesian-flagship-reuse-cost-stop.md` for the historical stops
+and resolved measurements. Continue the existing R3 order through Theseus;
+it owns live progress. No new visual treatment or budget waiver was introduced.
 Do not restart R1 or R2. Later horizon loops remain unapproved.
 Minimal check-ins, mainly canonical
 visual reviews, are a standing preference; see

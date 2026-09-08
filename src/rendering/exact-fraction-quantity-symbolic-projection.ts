@@ -18,15 +18,13 @@ import type {
   KpStructuredEquationGroupEnvelope,
   KpStructuredEquationStructuralAnchor
 } from "./structured-equation-selector-annotated-latex.ts";
-import type {
-  KpSuccessorSynthesisBinding
-} from "../animation/successor-synthesis.ts";
+import type { KpExactOpaqueSuccessorSynthesisBinding } from "./exact-fraction-successor-binding-types.ts";
+import type { KpSuccessorSynthesisBinding } from "../animation/successor-synthesis.ts";
+export type { KpExactOpaqueSuccessorSynthesisBinding } from "./exact-fraction-successor-binding-types.ts";
 import {
   compileKpRegisteredSuccessorSynthesisPresentation,
   type KpRegisteredSuccessorSynthesisBinding
 } from "../animation/successor-synthesis-presentation-plan.ts";
-
-declare const kpExactFractionLegacySuccessorAuthority: unique symbol;
 
 export type KpExactFractionSymbolicLifecycle =
   | "persist"
@@ -50,12 +48,6 @@ export interface KpExactFractionSymbolicMotionSegment {
   readonly successorSyntheses:
     readonly KpExactFractionSuccessorSynthesisBinding[];
 }
-
-export type KpExactOpaqueSuccessorSynthesisBinding =
-  KpSuccessorSynthesisBinding & {
-    readonly motif: "successor-synthesis";
-    readonly [kpExactFractionLegacySuccessorAuthority]: true;
-  };
 
 export type KpExactOperationEvaluationSynthesisBinding =
   KpRegisteredSuccessorSynthesisBinding & {
