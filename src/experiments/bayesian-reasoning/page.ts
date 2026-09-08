@@ -16,6 +16,8 @@ export function renderBayesCardRevision(draft: PreparedBayesDraft) {
       stageHtml: `<figure class="kp-focus-deck__stage bayes-stage"><div class="bayes-tree-panel"><p class="bayes-legend">A = ${escape(a.label)} · B = ${escape(b.label)} · ¬ = not · Ω = all</p><p data-bayes-population-label>Reference: whole population</p><div data-bayes-tree-host>${renderBayesTreeSvg(draft.tree)}</div></div>
         <div class="bayes-notation" data-bayes-notation-phase="question"><p data-bayes-question>Among ${escape(b.label)},<br>how common is ${escape(a.label)}?</p><span data-bayes-formula-label></span><div data-bayes-native-host aria-hidden="true"></div></div></figure>` })}
     ${compileKpEquationExemplarTemplate(notation.animation, annotateBayesQuotient)}
+    <p><button type="button" data-bayes-explain>Why this denominator?</button> <button type="button" data-bayes-return hidden>Return to my position</button></p>
+    <section data-bayes-reason hidden aria-label="Denominator reasoning"><h2>Why divide by P(B)?</h2><p>The denominator includes every B outcome: A ∩ B and not A ∩ B. Their combined mass is ${formatBayesMass(draft.tree.query.denominator)} of the original population. Within that population, the A-and-B share is ${formatBayesMass(draft.tree.query.numerator)} / ${formatBayesMass(draft.tree.query.denominator)} = ${formatBayesMass(draft.tree.query.value)}. Gathering B and conditioning on B are distinct steps.</p></section>
     ${(["full", "compact"] as const).map(mode => `<details data-bayes-reading="${mode}" data-bayes-reading-revision="${draft.revisionId}"><summary>${mode === "full" ? "Full" : "Compact"} reading</summary>${projectBayesReading(draft, mode).html}</details>`).join("")}</div>`;
 }
 

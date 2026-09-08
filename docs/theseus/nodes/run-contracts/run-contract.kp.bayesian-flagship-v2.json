@@ -187,7 +187,8 @@
     {
       "id": "s14",
       "title": "Add one bounded parent/reason/return path and context-preserving extraction for the denominator reasoning",
-      "status": "planned"
+      "summary": "One denominator reason retains exact population and source context, rejects stale/forged return authority, and returns to the interrupted shared-clock position.",
+      "status": "complete"
     },
     {
       "id": "s15",

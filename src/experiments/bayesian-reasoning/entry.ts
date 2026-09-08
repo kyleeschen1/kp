@@ -3,6 +3,7 @@ import "./style.css";
 import { checkBayesDraft, createBayesDraft, type PreparedBayesDraft } from "./draft.ts";
 import { createBayesAuthoringSession } from "./authoring.ts";
 import { renderBayesCardRevision } from "./page.ts";
+import { extractBayesDenominator, resolveBayesDenominatorReturn, type BayesDisclosure } from "./extraction.ts";
 import { mountBayesNativeSurface } from "./native-surface.ts";
 import { createKpFocusDeckCheckpointPlayback } from "../../tutorial/focus-deck-checkpoint-playback.ts";
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
@@ -27,6 +28,10 @@ async function mountCard(root: HTMLElement, evidence: PreparedBayesDraft) {
   const next = card.querySelector<HTMLButtonElement>("[data-kp-focus-deck-next]")!;
   const replay = card.querySelector<HTMLButtonElement>("[data-kp-focus-deck-replay]")!;
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+  const explain = root.querySelector<HTMLButtonElement>("[data-bayes-explain]")!;
+  const returnButton = root.querySelector<HTMLButtonElement>("[data-bayes-return]")!;
+  const reason = root.querySelector<HTMLElement>("[data-bayes-reason]")!;
+  let disclosure: BayesDisclosure = { view: "parent" };
   let disposed = false, visible = 0;
   let passage: ReturnType<typeof mountKpFocusDeckNativeInput> | undefined;
   let scrub: ReturnType<typeof navigation.begin> | undefined;
@@ -61,6 +66,18 @@ async function mountCard(root: HTMLElement, evidence: PreparedBayesDraft) {
     card.querySelector("#bayes-tree-description")!.textContent = `${beats[Math.min(6, Math.floor(position))]!.title}. Reference population: ${frame.referencePopulationId === treePlan.marginalId ? "B" : "whole population"}. Joint outcomes remain ${treePlan.trace.model.outcomes.map(outcome => `${outcome.key}: ${formatBayesMass(outcome.mass)}`).join(", ")}. P(A given B) = ${formatBayesMass(treePlan.query.value)}.`;
   };
   const seek = (step: number) => { cancel(); navigation.seek(step, !reduced.matches); };
+  explain.onclick = () => {
+    cancel(); clock.pause();
+    disclosure = { view: "reason", extraction: extractBayesDenominator(evidence, navigation.position()) };
+    reason.hidden = false; returnButton.hidden = false; explain.hidden = true;
+    seek(3); returnButton.focus();
+  };
+  returnButton.onclick = () => {
+    if (disclosure.view !== "reason") return;
+    const position = resolveBayesDenominatorReturn(evidence, disclosure.extraction);
+    cancel(); navigation.seek(position.step); disclosure = { view: "parent" };
+    reason.hidden = true; returnButton.hidden = true; explain.hidden = false; explain.focus();
+  };
   previous.onclick = () => seek(Math.max(0, Math.ceil(navigation.position()) - 1));
   next.onclick = () => seek(Math.min(navigation.last, Math.floor(navigation.position()) + 1));
   replay.onclick = () => { cancel(); navigation.seek(0); seek(navigation.last); };

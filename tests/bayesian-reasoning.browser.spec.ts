@@ -1,5 +1,22 @@
 import { test, expect } from "@playwright/test";
 
+test("Bayes denominator disclosure returns to the exact interrupted shared-clock position", async ({ page }) => {
+  await page.goto("/experiments/bayesian-reasoning/");
+  const card = page.locator("[data-bayes-display] [data-bayes-card]");
+  await expect(card).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+  await card.locator("[data-kp-focus-deck-scrubber]").evaluate(node => {
+    (node as HTMLInputElement).value = "5.45"; node.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await page.locator("[data-bayes-explain]").click();
+  await expect(page.locator("[data-bayes-reason]")).toBeVisible();
+  await expect(page.locator("[data-bayes-reason]")).toContainText("Gathering B and conditioning on B are distinct");
+  await expect(card).toHaveAttribute("data-bayes-position", "3");
+  await page.locator("[data-bayes-return]").click();
+  await expect(card).toHaveAttribute("data-bayes-position", "5.45");
+  await expect(page.locator("[data-bayes-reason]")).toBeHidden();
+  await expect(page.locator("[data-bayes-explain]")).toBeFocused();
+});
+
 test("Bayes author apply replaces every projection together and retains last-valid on repair", async ({ page }, info) => {
   await page.goto("/experiments/bayesian-reasoning/");
   const display = page.locator("[data-bayes-display]"), card = display.locator("[data-bayes-card]");
