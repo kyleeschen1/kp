@@ -2,8 +2,8 @@
   "id": "run-contract.kp.bayesian-flagship-v2",
   "kind": "run-contract",
   "title": "R3 Bayesian flagship",
-  "status": "in-progress",
-  "summary": "Exact approved 26-slice R3 proposal; replaces unstarted metadata-incomplete v1.",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT: s09 packet delivered; awaiting visual acceptance of the canonical Bayesian tree before s10. Resume this same approved contract after actual user acceptance, with no routine nonvisual approval.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -13,6 +13,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-08-bayesian-flagship-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-08-bayesian-flagship-visual-checkpoint.md"
     }
   ],
   "verification": [
@@ -29,6 +33,10 @@
     "npm run visual:canonical-tax-production",
     "theseus workspace validate"
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT: first Bayesian tree exemplar awaits user visual acceptance. See 2026-09-08-bayesian-flagship-visual-checkpoint.md; s10 and later remain gated. No new technical or scope approval needed after visual acceptance."
+  },
   "allowedWork": [
     "s01: Freeze owner/capability and author-task baseline; pin original problem, preservation URLs and exact commands; reconcile stale delivery summary; risk Low; F: source/ref audit, exact fixture arithmetic, unchanged worktree baseline; one commit.",
     "s02: Add bounded probability source constructors and canonical immutable joint model over existing rational arithmetic; risk Medium; S: malformed JSON/numbers, duplicate IDs, negative/bad totals, exact normalization of representation only, immutability and negative type tests; one commit.",
@@ -149,7 +157,8 @@
     {
       "id": "s09",
       "title": "Produce coherent exemplar review packet and runnable URL; commit checkpoint evidence",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: review packet and runnable port-8000 exemplar delivered. Four Chromium cases and browser-test types pass. Seven semantic stops. Human visual acceptance is pending and s10 must not start until accepted.",
+      "status": "complete"
     },
     {
       "id": "s10",

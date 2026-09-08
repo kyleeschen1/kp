@@ -1,5 +1,18 @@
 import { test, expect } from "@playwright/test";
 
+test("Bayes initial population is readable without JavaScript or exposed measurement equations", async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    const page = await context.newPage();
+    await page.goto("http://localhost:8000/experiments/bayesian-reasoning/");
+    await expect(page.locator("[data-bayes-root]")).toBeVisible();
+    await expect(page.locator("[data-bayes-count]")).toHaveText("1 / 7");
+    await expect(page.locator("[data-bayes-population-label]")).toHaveText("Reference: whole population");
+    expect(await page.locator("[data-bayes-native-host] .katex").count()).toBe(0);
+    await expect(page.locator("[data-kp-focus-deck-beat-active=true]")).toContainText("The model specifies four disjoint joint outcomes");
+  } finally { await context.close(); }
+});
+
 test("Bayes reversible tree retains owners and supplies an exemplar contact sheet", async ({ page }, info) => {
   await page.goto("/experiments/bayesian-reasoning/");
   const card = page.locator("[data-bayes-card]");

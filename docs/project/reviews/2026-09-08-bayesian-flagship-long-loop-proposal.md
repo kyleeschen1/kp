@@ -7,6 +7,8 @@ Target: `next-action.kp.bayesian-flagship`
 Execution contract: `run-contract.kp.bayesian-flagship-v2`
 The unstarted v1 omitted execution metadata and was superseded without scope change.
 The proposal-era descriptions below are retained rationale; Theseus owns live state.
+The implemented first exemplar and its required visual review are now linked in
+[the checkpoint packet](2026-09-08-bayesian-flagship-visual-checkpoint.md).
 
 ## Outcome and why now
 

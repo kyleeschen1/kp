@@ -13,6 +13,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-08-bayesian-flagship-baseline.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-08-bayesian-flagship-visual-checkpoint.md"
     }
   ],
   "dependsOn": {
@@ -259,6 +263,27 @@
       "scope": "s08",
       "checkedAt": "2026-09-08T19:42:11.198Z",
       "notes": "17 deterministic Bayes tests, full types zero errors, architecture gates, and three Chromium discovery cases pass as applicable. Actual captures inspected; seven-stop contact sheet, desktop and narrow reduced motion. No human approval or motif promotion claimed."
+    },
+    {
+      "command": "npm run visual:bayesian-reasoning:shared",
+      "status": "passed",
+      "scope": "s09",
+      "checkedAt": "2026-09-08T19:46:40.872Z",
+      "notes": "Final checkpoint: four Chromium checks pass including no-JS first frame and renewed desktop/narrow/contact-sheet captures; browser-test types and whitespace checks pass. Exact shared URL also returned HTTP 200."
+    },
+    {
+      "command": "npm exec -- tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s09",
+      "checkedAt": "2026-09-08T19:46:42.503Z",
+      "notes": "Final checkpoint: four Chromium checks pass including no-JS first frame and renewed desktop/narrow/contact-sheet captures; browser-test types and whitespace checks pass. Exact shared URL also returned HTTP 200."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s09",
+      "checkedAt": "2026-09-08T19:46:43.601Z",
+      "notes": "Final checkpoint: four Chromium checks pass including no-JS first frame and renewed desktop/narrow/contact-sheet captures; browser-test types and whitespace checks pass. Exact shared URL also returned HTTP 200."
     }
   ],
   "expectedLearning": [
