@@ -42,6 +42,11 @@ For the accepted equation/code parent–reason–return exemplars, use
 checker, exact supported edits and typed repair examples. It does not expand
 either domain's semantic or generation authority.
 
+For the accepted binary-probability exemplar, use `bayesian-reasoning-packet.md`.
+Exact joint masses or prior/likelihoods enter the probability-owned checker,
+then existing governed construction, card, readings, practice and edition paths.
+This does not authorize arbitrary probability trees, geometry, or new motifs.
+
 ## Route The Task Before Generating
 
 | Intended change | Canonical target |

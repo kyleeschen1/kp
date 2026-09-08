@@ -51,6 +51,9 @@ limits or executable behavior. See
 `reviews/2026-09-08-bayesian-flagship-reuse-cost-stop.md` for the historical stops
 and resolved measurements. Continue the existing R3 order through Theseus;
 it owns live progress. No new visual treatment or budget waiver was introduced.
+The continuation has reached s22: the local authoring packet is ready, but the
+live trial needs specific external payload/destination approval from the
+execution reviewer. See `reviews/2026-09-08-bayesian-authoring-live-permission-stop.md`.
 Do not restart R1 or R2. Later horizon loops remain unapproved.
 Minimal check-ins, mainly canonical
 visual reviews, are a standing preference; see

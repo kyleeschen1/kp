@@ -2,8 +2,8 @@
   "id": "run-contract.kp.bayesian-flagship-v2",
   "kind": "run-contract",
   "title": "R3 Bayesian flagship",
-  "status": "in-progress",
-  "summary": "User approved shared equation and governed compiler cost optimization and resume. Preserve public APIs, validation behavior, all fixtures, output hashes and fixed ceilings. Continue s21 then existing approved order.",
+  "status": "blocked",
+  "summary": "BLOCKED at s22: reviewer requires explicit permission to send bounded Bayes packet, synthetic starter/task and generated JSON/checker feedback to OpenAI Codex gpt-5.6-sol for at most two calls. s21 fixed inference stop resolved. No live calls occurred.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -21,6 +21,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-08-bayesian-flagship-reuse-cost-stop.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-08-bayesian-authoring-live-permission-stop.md"
     }
   ],
   "verification": [
@@ -39,7 +43,7 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "s21 budget stop resolved; continue existing approved order at s22. No budget waiver or new visual treatment."
+    "summary": "21 of 26 complete; s21 fixed budget repaired. s22 packet and local checks complete, live trial not run due external payload approval rejection. See live-permission-stop report."
   },
   "allowedWork": [
     "s01: Freeze owner/capability and author-task baseline; pin original problem, preservation URLs and exact commands; reconcile stale delivery summary; risk Low; F: source/ref audit, exact fixture arithmetic, unchanged worktree baseline; one commit.",
@@ -239,7 +243,8 @@
     {
       "id": "s22",
       "title": "Publish bounded human/LLM packet and run one actual generation-plus-repair trial through existing access",
-      "status": "planned"
+      "summary": "Start bounded human and LLM packet with one two-call live trial using existing access.",
+      "status": "in-progress"
     },
     {
       "id": "s23",

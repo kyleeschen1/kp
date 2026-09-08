@@ -2,9 +2,9 @@
   "id": "next-action.kp.bayesian-flagship",
   "kind": "next-action",
   "title": "R3 Bayesian flagship",
-  "status": "in-progress",
+  "status": "blocked",
   "domain": "kp",
-  "summary": "User approved shared equation and governed compiler cost optimization and resume. Preserve public APIs, validation behavior, all fixtures, output hashes and fixed ceilings. Continue s21 then existing approved order.",
+  "summary": "21 of 26 complete. Specific external payload/destination approval required for s22 actual trial. Local packet and tests complete, compiler budgets pass. Resume exact existing contract at s22 after approval.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -21,6 +21,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-08-bayesian-flagship-reuse-cost-stop.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-08-bayesian-authoring-live-permission-stop.md"
     }
   ],
   "dependsOn": {
@@ -820,11 +824,32 @@
       "scope": "s21",
       "checkedAt": "2026-09-08T22:24:08.219Z",
       "notes": "12 Chromium tests pass on canonical host; no new visual treatment."
+    },
+    {
+      "command": "npm run test:bayesian-reasoning",
+      "status": "passed",
+      "scope": "s22",
+      "checkedAt": "2026-09-08T22:33:49.247Z",
+      "notes": "34 tests pass including local packet task fulfillment and typed repair cases. Deterministic fixtures, not live-model evidence."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s22",
+      "checkedAt": "2026-09-08T22:33:50.373Z",
+      "notes": "Full app, node, test, Svelte and domain checks pass; no external model call."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s22",
+      "checkedAt": "2026-09-08T22:33:51.385Z",
+      "notes": "Fixed inference gate still passes after local packet and assessor. Fixtures and budgets unchanged."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Shared compiler cost repair complete with fixed gates intact. Continue R3 authoring trial and remaining performance/release work."
+    "summary": "Local Bayes authoring packet and assessor ready. Live model trial unavailable pending specific external payload/destination approval; no calls made."
   },
   "expectedLearning": [
     "Measure whether one domain-owned probability source yields coherent tree equation reading retrieval and publication with source-only second-caller reuse."
