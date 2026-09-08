@@ -69,6 +69,19 @@
       "status": "passed",
       "scope": "s02",
       "checkedAt": "2026-09-08T18:49:16.748Z"
+    },
+    {
+      "command": "npm run test:bayesian-reasoning",
+      "status": "passed",
+      "scope": "s03",
+      "checkedAt": "2026-09-08T18:52:31.674Z",
+      "notes": "Eight tests; exact ratio and complement, zero conditioning gaps, stale and forged population rejection."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s03",
+      "checkedAt": "2026-09-08T18:52:32.713Z"
     }
   ],
   "expectedLearning": [

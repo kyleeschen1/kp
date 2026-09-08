@@ -113,7 +113,8 @@
     {
       "id": "s03",
       "title": "Add typed marginal and conditional query evidence with positive-reference-population capability",
-      "status": "planned"
+      "summary": "Exact marginal/conditional evidence and model-bound positive-population capability; eight tests and full types pass.",
+      "status": "complete"
     },
     {
       "id": "s04",
