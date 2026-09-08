@@ -4,6 +4,97 @@ import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { buildBayesEdition } from "../scripts/build-bayesian-edition.ts";
 
+test("Bayes performance: idle and offscreen cards stop work and preserve interrupted position", async ({ page }, info) => {
+  await page.goto("/experiments/bayesian-reasoning/");
+  const card = page.locator("[data-bayes-display] [data-bayes-card]");
+  await expect(card).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+  const idle = await card.evaluate(async node => {
+    let mutations = 0;
+    const observer = new MutationObserver(records => { mutations += records.length; });
+    observer.observe(node, { subtree: true, attributes: true, childList: true, characterData: true });
+    await new Promise(resolve => setTimeout(resolve, 200)); observer.disconnect(); return mutations;
+  });
+  expect(idle).toBe(0);
+  const treeOnlyNativeMutations = await card.evaluate(async node => {
+    let mutations = 0;
+    const observer = new MutationObserver(records => { mutations += records.length; });
+    observer.observe(node.querySelector("[data-bayes-native-host] .kp-reader-exemplar") ?? node.querySelector("[data-bayes-native-host]")!.firstElementChild!,
+      { subtree: true, attributes: true, childList: true, characterData: true });
+    const slider = node.querySelector<HTMLInputElement>("[data-kp-focus-deck-scrubber]")!;
+    for (const step of [.1, .5, 1, 2, 0]) {
+      slider.value = String(step); slider.dispatchEvent(new Event("input", { bubbles: true }));
+      await new Promise(requestAnimationFrame);
+    }
+    observer.disconnect(); return mutations;
+  });
+  expect(treeOnlyNativeMutations).toBe(0);
+  await card.locator("[data-kp-focus-deck-replay]").click();
+  await expect.poll(async () => Number(await card.getAttribute("data-bayes-position"))).toBeGreaterThan(0);
+  // Supply real page travel even when all reading disclosures are collapsed.
+  await page.evaluate(() => { const spacer = document.createElement("div"); spacer.style.height = "200vh"; document.body.append(spacer); scrollTo(0, document.body.scrollHeight); });
+  await expect.poll(() => card.evaluate(node => node.getBoundingClientRect().bottom)).toBeLessThan(0);
+  await page.waitForTimeout(250);
+  const paused = await card.getAttribute("data-bayes-position");
+  await page.waitForTimeout(250);
+  await expect(card).toHaveAttribute("data-bayes-position", paused!);
+  await card.scrollIntoViewIfNeeded(); await page.waitForTimeout(150);
+  await expect(card).toHaveAttribute("data-bayes-position", paused!);
+  await info.attach("inactive-work", { body: JSON.stringify({ idleMutations: idle, paused }), contentType: "application/json" });
+});
+
+test("Bayes performance: exact forward/reverse sampling and source preparation are measured", async ({ page }, info) => {
+  await page.goto("/experiments/bayesian-reasoning/");
+  const card = page.locator("[data-bayes-display] [data-bayes-card]");
+  await expect(card).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+  const evidence = await card.evaluate(async card => {
+    const slider = card.querySelector<HTMLInputElement>("[data-kp-focus-deck-scrubber]")!;
+    const samples: number[] = [], intervals: number[] = [];
+    let previous = await new Promise<number>(requestAnimationFrame);
+    for (let i = 0; i <= 120; i++) {
+      const position = i <= 60 ? i / 10 : (120 - i) / 10;
+      const start = performance.now();
+      slider.value = String(position); slider.dispatchEvent(new Event("input", { bubbles: true }));
+      samples.push(performance.now() - start);
+      if (Math.abs(Number((card as HTMLElement).dataset["bayesPosition"]) - position) > 1e-8) throw new Error("Sample drift");
+      const now = await new Promise<number>(requestAnimationFrame); intervals.push(now - previous); previous = now;
+    }
+    const stats = (values: number[]) => { values.sort((a, b) => a - b); return { p50: values[Math.floor(values.length * .5)], p95: values[Math.floor(values.length * .95)], max: values.at(-1) }; };
+    return { samples: samples.length, dispatchMs: stats(samples), frameMs: stats(intervals) };
+  });
+  await page.locator(".bayes-author summary").click();
+  await page.locator("[data-bayes-load-urn]").click();
+  const started = performance.now(); await page.locator("[data-bayes-apply]").click();
+  await expect(page.locator("[data-bayes-author-status]")).toHaveAttribute("data-bayes-apply-status", "applied");
+  const result = { ...evidence, prepareAndApplyMs: performance.now() - started, browser: info.project.name };
+  expect(await page.locator(".bayes-staging").count()).toBe(0);
+  console.log(JSON.stringify(result));
+  await info.attach("bayes-runtime-cost", { body: JSON.stringify(result), contentType: "application/json" });
+});
+
+test("Bayes performance: replacement mounts two revisions but disposes the old owner", async ({ page }) => {
+  await page.goto("/experiments/bayesian-reasoning/");
+  const card = page.locator("[data-bayes-display] [data-bayes-card]");
+  await expect(card).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+  const old = await card.elementHandle();
+  await page.evaluate(() => {
+    const observer = new MutationObserver(() => {
+      const count = document.querySelectorAll("[data-bayes-card]").length;
+      document.documentElement.dataset["bayesPeakCards"] = String(Math.max(count, Number(document.documentElement.dataset["bayesPeakCards"] ?? 0)));
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+    addEventListener("pagehide", () => observer.disconnect(), { once: true });
+  });
+  await page.locator(".bayes-author summary").click(); await page.locator("[data-bayes-load-urn]").click();
+  await page.locator("[data-bayes-apply]").click();
+  await expect(page.locator("[data-bayes-author-status]")).toHaveAttribute("data-bayes-apply-status", "applied");
+  await expect(page.locator("html")).toHaveAttribute("data-bayes-peak-cards", "2");
+  expect(await old!.evaluate(node => node.isConnected)).toBe(false);
+  const before = await old!.evaluate(node => node.outerHTML);
+  await card.locator("[data-kp-focus-deck-next]").click(); await page.waitForTimeout(150);
+  expect(await old!.evaluate(node => node.outerHTML)).toBe(before);
+  expect(await page.locator("[data-bayes-card]").count()).toBe(1);
+});
+
 test("Bayes zero outcomes retain native zero evaluation while impossible conditioning preserves last-valid", async ({ page }) => {
   await page.goto("/experiments/bayesian-reasoning/");
   const card = page.locator("[data-bayes-display] [data-bayes-card]");

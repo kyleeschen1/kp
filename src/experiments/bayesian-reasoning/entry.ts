@@ -41,12 +41,16 @@ async function mountCard(root: HTMLElement, evidence: PreparedBayesDraft) {
   const practiceAnswer = root.querySelector<HTMLElement>("[data-bayes-answer]")!;
   let practiceReturn: BayesLocation | undefined;
   let disposed = false, visible = 0;
+  let nativeProgress: number | undefined;
+  const invalidateNative = () => { nativeProgress = undefined; native.invalidate(); };
   let passage: ReturnType<typeof mountKpFocusDeckNativeInput> | undefined;
   let scrub: ReturnType<typeof navigation.begin> | undefined;
   const cancel = () => { passage?.cancel(); scrub?.cancel(); scrub = undefined; navigation.cancel(); };
   const render = () => {
     if (disposed) return;
     const position = navigation.position();
+    // Read passage geometry before frame writes, not after dirtying its styles.
+    const passageWidth = viewport.clientWidth;
     visible = resolveKpFocusDeckVisibleBeat(position, visible, navigation.last);
     card.dataset["bayesPosition"] = String(position); card.dataset["bayesRevision"] = evidence.revisionId;
     card.dataset["kpFocusDeckActiveBeat"] = beats[visible]!.slug;
@@ -58,12 +62,15 @@ async function mountCard(root: HTMLElement, evidence: PreparedBayesDraft) {
       beat.dataset["kpFocusDeckBeatActive"] = String(index === visible);
       if (index === visible) beat.setAttribute("aria-current", "page"); else beat.removeAttribute("aria-current");
     });
-    if (!passage?.ownsTravel()) viewport.scrollLeft = position * viewport.clientWidth;
+    if (!passage?.ownsTravel()) viewport.scrollLeft = position * passageWidth;
     const notationPhase = position >= 3 ? "ratio" : "question";
     notationPanel.dataset["bayesNotationPhase"] = notationPhase;
     nativeHost.setAttribute("aria-hidden", String(notationPhase === "question"));
     card.querySelector("[data-bayes-formula-label]")!.textContent = position >= 3 ? "P(A | B) =" : "";
-    native.seek(Math.max(0, Math.min(1, position - 3)));
+    const nextNativeProgress = Math.max(0, Math.min(1, position - 3));
+    // Tree-only travel must not repeatedly repaint an unchanged equation.
+    // Layout/font invalidation explicitly clears this revision-local cache.
+    if (nextNativeProgress !== nativeProgress) { native.seek(nextNativeProgress); nativeProgress = nextNativeProgress; }
     const frame = sampleBayesTree(treePlan, position); tree.paint(frame);
     card.querySelector<HTMLElement>("[data-bayes-tree-host]")!.dataset["semanticState"] = frame.stateId;
     card.querySelector("[data-bayes-population-label]")!.textContent = position === 4
@@ -94,7 +101,7 @@ async function mountCard(root: HTMLElement, evidence: PreparedBayesDraft) {
   root.querySelector<HTMLButtonElement>("[data-bayes-practice-return]")!.onclick = () => {
     if (!practiceReturn) return;
     const saved = validateBayesLocation(evidence, practiceReturn); practiceReturn = undefined;
-    practiceVisibility(false); native.invalidate(); navigation.seek(saved.position.step); render(); card.focus();
+    practiceVisibility(false); invalidateNative(); navigation.seek(saved.position.step); render(); card.focus();
   };
   explain.onclick = () => {
     changingView = true;
@@ -119,13 +126,21 @@ async function mountCard(root: HTMLElement, evidence: PreparedBayesDraft) {
   const keys = bindKpFocusDeckKeyboard({ card, slider, enabled: () => !disposed, position: navigation.position, checkpointCount: () => beats.length, navigate: seek });
   passage = mountKpFocusDeckNativeInput({ viewport, region: card, enabled: () => !disposed, position: navigation.position,
     begin: navigation.begin, reduced: () => reduced.matches, interrupt: cancel });
-  const resize = () => { cancel(); clock.pause(); native.invalidate(); render(); };
+  const resize = () => { cancel(); clock.pause(); invalidateNative(); render(); };
   const visibility = () => { if (document.hidden) { cancel(); clock.pause(); } };
+  // Offscreen cards retain their exact position, but never consume playback
+  // frames. Returning to view requires explicit intent; do not auto-resume.
+  const intersections = new IntersectionObserver(entries => {
+    if (!disposed && entries.some(entry => entry.target === card && !entry.isIntersecting)) { cancel(); clock.pause(); }
+  });
+  intersections.observe(card);
   const unsubscribe = clock.subscribe(render);
   const dispose = () => { if (disposed) return; cancel(); disposed = true; passage?.dispose(); keys(); unsubscribe(); navigation.dispose(); clock.dispose(); native.dispose();
+    intersections.disconnect(); document.fonts.removeEventListener("loadingdone", resize);
     window.removeEventListener("resize", resize); window.removeEventListener("pagehide", pagehide); document.removeEventListener("visibilitychange", visibility); reduced.removeEventListener("change", resize); };
   const pagehide = (event: PageTransitionEvent) => { cancel(); clock.pause(); if (!event.persisted) dispose(); };
   window.addEventListener("resize", resize); window.addEventListener("pagehide", pagehide); document.addEventListener("visibilitychange", visibility); reduced.addEventListener("change", resize);
+  document.fonts.addEventListener("loadingdone", resize);
   render(); card.dataset["kpFocusCardEnhancement"] = "ready";
   return { dispose, pause: () => { cancel(); clock.pause(); },
     restore: (position: number) => { cancel(); navigation.seek(position); render(); }, position: navigation.position,

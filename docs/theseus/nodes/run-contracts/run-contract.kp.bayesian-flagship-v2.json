@@ -253,7 +253,8 @@
     {
       "id": "s23",
       "title": "Profile multi-card mounting, inactive work, source preparation and frame cost; repair owning seams within fixed budgets",
-      "status": "planned"
+      "summary": "Host-local native no-op cache with explicit invalidation, prewrite layout read and offscreen clock pause. 15 Bayes, 18 R2, 6 tax browser tests pass; full types and fixed inference pass.",
+      "status": "complete"
     },
     {
       "id": "s24",

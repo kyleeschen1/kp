@@ -845,6 +845,41 @@
       "scope": "s22",
       "checkedAt": "2026-09-08T22:33:51.385Z",
       "notes": "Fixed inference gate still passes after local packet and assessor. Fixtures and budgets unchanged."
+    },
+    {
+      "command": "npm run visual:bayesian-reasoning:shared",
+      "status": "passed",
+      "scope": "s23",
+      "checkedAt": "2026-09-08T22:50:38.171Z",
+      "notes": "15 pass; idle/native-noop/offscreen/replacement and performance evidence in runtime-cost report."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s23",
+      "checkedAt": "2026-09-08T22:50:39.492Z",
+      "notes": "Full typecheck passes."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s23",
+      "checkedAt": "2026-09-08T22:50:40.508Z",
+      "notes": "112278 types and 192161 instantiations; limits unchanged."
+    },
+    {
+      "command": "npm run visual:reusable-reasoning:shared",
+      "status": "passed",
+      "scope": "s23",
+      "checkedAt": "2026-09-08T22:50:41.516Z",
+      "notes": "18 pass."
+    },
+    {
+      "command": "npm run visual:canonical-tax-production",
+      "status": "passed",
+      "scope": "s23",
+      "checkedAt": "2026-09-08T22:50:42.585Z",
+      "notes": "6 production preservation tests pass."
     }
   ],
   "progress": {
