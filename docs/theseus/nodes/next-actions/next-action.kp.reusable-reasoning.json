@@ -146,6 +146,27 @@
       "scope": "s08",
       "checkedAt": "2026-09-08T01:42:54.747Z",
       "notes": "Full types pass."
+    },
+    {
+      "command": "npm run test:reusable-reasoning",
+      "status": "passed",
+      "scope": "s09",
+      "checkedAt": "2026-09-08T01:47:15.821Z",
+      "notes": "Thirty-two tests pass; real existing clock interruption, exact return, direct restore without replay, atomic invalid restore and disposal."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s09",
+      "checkedAt": "2026-09-08T01:47:17.053Z",
+      "notes": "Full types pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s09",
+      "checkedAt": "2026-09-08T01:47:18.092Z",
+      "notes": "All architecture and eight conformance gateway checks pass; no private clock, new renderer or authority exception."
     }
   ],
   "expectedLearning": [

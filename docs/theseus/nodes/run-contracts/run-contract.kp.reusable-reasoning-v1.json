@@ -142,7 +142,8 @@
     {
       "id": "s09",
       "title": "Implement bounded open and return navigation",
-      "status": "planned"
+      "summary": "Open-return/direct restoration integrate with existing clock; exact interrupted progress and no private schedule. Thirty-two tests, full types and architecture pass.",
+      "status": "complete"
     },
     {
       "id": "s10",
