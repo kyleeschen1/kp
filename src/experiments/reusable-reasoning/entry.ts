@@ -46,6 +46,25 @@ async function mount() {
   let semanticBeats = reasoningBeats(evidence, "reason", "full");
   let visibleBeat = 0;
   let disposed = false;
+  let restoringHistory = true;
+  const readLocation = (): unknown => {
+    const encoded = new URLSearchParams(location.hash.slice(1)).get("reasoning");
+    if (encoded === null) return history.state?.kpReasoning;
+    try {
+      if (encoded.length > 10_000) throw new Error("Reasoning location exceeds its bounded size.");
+      return JSON.parse(encoded);
+    } catch { return { navigation: null }; }
+  };
+  const savedHistory = readLocation();
+  const remember = (push = false) => {
+    if (disposed || restoringHistory || practice) return;
+    const state = { ...history.state, kpReasoning: { navigation: navigation.capture(), mode } };
+    // The revision-pinned address survives reload even if a browser drops its
+    // opaque history state. It is transport only, validated again on restore.
+    const url = new URL(location.href);
+    url.hash = new URLSearchParams({ reasoning: JSON.stringify(state.kpReasoning) }).toString();
+    if (push) history.pushState(state, "", url); else history.replaceState(state, "", url);
+  };
   let input: { kind: "idle" } | { kind: "slider"; session: KpReasoningScrub } = { kind: "idle" };
   let passageInput: ReturnType<typeof mountReasoningPassageInput> | undefined;
   const cancelInput = () => {
@@ -100,6 +119,7 @@ async function mount() {
     });
     if (align && !practice && !passageInput?.ownsTravel()) viewport.scrollLeft = passagePosition * Math.max(1, viewport.clientWidth);
     root.dataset["kpReasoningView"] = navigation.getView();
+    if (clock.getStatus() !== "playing" && input.kind === "idle" && !passageInput?.ownsTravel()) remember();
   };
   const navigate = (index: number) => {
     cancelInput();
@@ -149,8 +169,13 @@ async function mount() {
     reduced: () => reduced.matches,
     interrupt: cancelInput
   });
-  open.onclick = () => { navigation.open(); updateView(); back.focus(); };
-  back.onclick = () => { navigation.returnToParent(); updateView(); open.focus(); };
+  const disclose = (action: () => unknown) => {
+    remember(); restoringHistory = true;
+    try { action(); updateView(); } finally { restoringHistory = false; }
+    remember(true);
+  };
+  open.onclick = () => { disclose(() => navigation.open()); back.focus(); };
+  back.onclick = () => { disclose(() => navigation.returnToParent()); open.focus(); };
   reading.onchange = () => {
     clock.pause(); mode = reading.value === "compact" ? "compact" : "full";
     updateView(); root.dataset["kpReasoningReading"] = mode;
@@ -221,6 +246,7 @@ async function mount() {
       draftStatus.dataset["status"] = "repair-gap";
       return;
     }
+    restoringHistory = true;
     cancelInput(); clock.pause(); navigation.dispose();
     clock.seek(0);
     evidence = result.current.evidence; prompts = result.current.prompts;
@@ -233,25 +259,55 @@ async function mount() {
     open.textContent = evidence.source.reason.title;
     card.setAttribute("aria-label", evidence.source.title);
     updateView(); clock.seek(0); stampRevision();
+    restoringHistory = false; remember();
     draftStatus.textContent = "Applied to full/compact readings, reason, native endpoint and both practice answers. Reading reset to the beginning of the new revision. Draft remains local to this page.";
     draftStatus.dataset["status"] = "applied";
   };
   const resize = () => { if (!disposed) { cancelInput(); clock.pause(); surface.resize(); render(); } };
   const motion = () => { cancelInput(); clock.pause(); render(); };
   const visibility = () => { if (document.hidden) { cancelInput(); clock.pause(); } };
+  const restoreHistory = (value: unknown) => {
+    if (!value || typeof value !== "object") return;
+    const saved = value as { navigation?: unknown; mode?: unknown };
+    restoringHistory = true;
+    try {
+      // History is untrusted transport; the navigator validates revision and
+      // semantic anchors atomically before replacing the last valid position.
+      navigation.restore(saved.navigation);
+      practice = undefined; practiceReturn = undefined; setPractice(false);
+      mode = saved.mode === "compact" ? "compact" : "full"; reading.value = mode;
+      root.dataset["kpReasoningReading"] = mode;
+      updateView();
+    } catch (error) {
+      draftStatus.textContent = `Cannot restore this historical revision: ${error instanceof Error ? error.message : String(error)}`;
+      draftStatus.dataset["status"] = "repair-gap";
+    } finally { restoringHistory = false; }
+  };
+  const popstate = () => restoreHistory(readLocation());
+  const pagehide = (event: PageTransitionEvent) => {
+    cancelInput(); clock.pause(); remember();
+    // A bfcache document retains its owners; disposing it would revive a dead
+    // card on browser Back. Freeze playback but leave restoration possible.
+    if (!event.persisted) dispose();
+  };
   const dispose = () => {
     if (disposed) return;
     cancelInput(); disposed = true; unsubscribe(); navigation.dispose(); surface.dispose();
-    window.removeEventListener("resize", resize); window.removeEventListener("pagehide", dispose);
+    window.removeEventListener("resize", resize); window.removeEventListener("pagehide", pagehide);
+    window.removeEventListener("popstate", popstate);
     passageInput?.dispose(); unbindKeyboard();
     reduced.removeEventListener("change", motion); document.removeEventListener("visibilitychange", visibility);
   };
-  window.addEventListener("resize", resize); window.addEventListener("pagehide", dispose);
+  window.addEventListener("resize", resize); window.addEventListener("pagehide", pagehide);
+  window.addEventListener("popstate", popstate);
   reduced.addEventListener("change", motion); document.addEventListener("visibilitychange", visibility);
   import.meta.hot?.dispose(dispose);
   card.dataset["kpFocusCardEnhancement"] = "ready";
   root.dataset["kpReasoningStatus"] = "ready";
   stampRevision();
   updateView();
+  restoringHistory = false;
+  restoreHistory(savedHistory);
+  remember();
 }
 void mount().catch(report);

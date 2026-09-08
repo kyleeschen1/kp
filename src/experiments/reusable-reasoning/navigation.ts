@@ -11,14 +11,16 @@ export interface KpReasoningPosition {
   readonly reference: KpReasoningReference;
   readonly progress: number;
 }
-export interface KpReasoningNavigationSnapshot {
+interface KpReasoningNavigationIdentity {
   readonly sourceId: string;
   readonly revisionId: string;
   readonly parentId: string;
-  readonly view: "parent" | "reason";
   readonly position: KpReasoningPosition;
-  readonly returnTo?: KpReasoningPosition;
 }
+export type KpReasoningNavigationSnapshot = KpReasoningNavigationIdentity & (
+  | { readonly view: "parent"; readonly returnTo?: never }
+  | { readonly view: "reason"; readonly returnTo: KpReasoningPosition }
+);
 
 const scrubAuthority: unique symbol = Symbol("reasoning-scrub");
 export interface KpReasoningScrub {
@@ -72,7 +74,8 @@ export function createKpReasoningNavigator(
     assertLive();
     return Object.freeze({
       sourceId: evidence.source.id, revisionId: evidence.revisionId, parentId: support.parentId,
-      view, position: position(clock.getSnapshot().progress), ...(returnTo ? { returnTo } : {})
+      position: position(clock.getSnapshot().progress),
+      ...(view === "reason" ? { view, returnTo: validatePosition(returnTo!) } : { view })
     });
   };
   position(clock.getSnapshot().progress);

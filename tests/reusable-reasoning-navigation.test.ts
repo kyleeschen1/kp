@@ -4,12 +4,18 @@ import { createKpReaderTimelinePlaybackClock } from "../src/reader/runtime/timel
 import { createKpReasoningSource, KpReasoningRepairGap } from "../src/experiments/reusable-reasoning/source.ts";
 import { bindKpReasoningEvidence } from "../src/experiments/reusable-reasoning/evidence.ts";
 import { createKpReasoningNavigator } from "../src/experiments/reusable-reasoning/navigation.ts";
-import type { KpReasoningScrub } from "../src/experiments/reusable-reasoning/navigation.ts";
+import type { KpReasoningScrub, KpReasoningNavigationSnapshot } from "../src/experiments/reusable-reasoning/navigation.ts";
 
 if (false) {
   // @ts-expect-error Only the navigator can issue scrub authority.
   const forged: KpReasoningScrub = { update() {}, finish() {}, cancel() {} };
   void forged;
+  const identity = { sourceId: "source", revisionId: "revision", parentId: "parent", position: {} as KpReasoningNavigationSnapshot["position"] };
+  // @ts-expect-error A reason cannot be constructed without an exact return frame.
+  const missingReturn: KpReasoningNavigationSnapshot = { ...identity, view: "reason" };
+  // @ts-expect-error A parent cannot retain a child return frame.
+  const orphanReturn: KpReasoningNavigationSnapshot = { ...identity, view: "parent", returnTo: identity.position };
+  void missingReturn; void orphanReturn;
 }
 
 test("gesture release settles through the existing clock without owning a second scheduler", () => {

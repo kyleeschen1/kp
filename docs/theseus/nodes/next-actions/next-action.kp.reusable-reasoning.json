@@ -346,6 +346,12 @@
       "scope": "s15",
       "checkedAt": "2026-09-08T16:13:30.051Z",
       "notes": "Exact executed command: three Chromium cases passed."
+    },
+    {
+      "command": "npm run visual:reusable-reasoning:shared -- --grep \"history refresh\" --project=firefox --project=webkit",
+      "status": "passed",
+      "scope": "s16",
+      "checkedAt": "2026-09-08T16:23:35.879Z"
     }
   ],
   "progress": {

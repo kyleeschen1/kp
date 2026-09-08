@@ -99,6 +99,23 @@ release certification. The native phone layout retains its stacked equation form
 
 ## Resume boundary
 
+### Accepted lifecycle preservation
+
+Browser Back/Forward, refresh and direct entry restore a revision-pinned
+navigation snapshot carried in the URL. Its exact semantic anchor and return
+position are revalidated by the existing navigator; malformed or foreign-revision
+locations retain the last valid view and expose a repair gap. Browser history
+state alone lost reload state in the executed Firefox case; URL-backed transport
+passes Chromium, Firefox and WebKit. A cached page pauses rather than disposing
+its live owners. Edited source and learner working remain page-local: a stale
+link does not silently apply a different revision. Publication is separate work.
+
+The snapshot type requires a return frame for a reason and forbids one on a
+parent. Runtime validation remains necessary for untrusted history/URL data.
+Evidence: the `history refresh` case in
+`npm run visual:reusable-reasoning:shared` covers exact fractional return,
+compact mode, refresh, resize, cached-page lifecycle and rejected forged history.
+
 ### Current repair: shared semantic keyboard routing
 
 User accepted the other visible behavior but reported arrow keys moving only

@@ -11,6 +11,43 @@ async function previewSlider(slider: Locator, value: string) {
 
 const route = "/experiments/reusable-reasoning/";
 
+test("history refresh and lifecycle retain exact semantic return without replay", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(route);
+  const root = page.locator("#authored-focus-card");
+  const card = page.locator("[data-kp-reasoning-card]");
+  const slider = card.locator("[data-kp-focus-deck-scrubber]");
+  await expect(root).toHaveAttribute("data-kp-reasoning-status", "ready");
+  await previewSlider(slider, "1.37");
+  await page.locator("[data-reasoning-open]").click();
+  await slider.fill("3");
+  await page.locator("[data-reasoning-reading]").selectOption("compact");
+  await page.goBack();
+  await expect(root).toHaveAttribute("data-kp-reasoning-view", "parent");
+  await expect(card).toHaveAttribute("data-kp-reasoning-progress", String(1.37 / 13));
+  await page.goForward();
+  await expect(root).toHaveAttribute("data-kp-reasoning-view", "reason");
+  await expect(slider).toHaveValue("3");
+  await expect.poll(() => page.evaluate(() => history.state?.kpReasoning?.mode)).toBe("compact");
+  await page.reload();
+  await expect(root).toHaveAttribute("data-kp-reasoning-status", "ready");
+  await expect(root).toHaveAttribute("data-kp-reasoning-reading", "compact");
+  await expect(slider).toHaveValue("3");
+  await page.setViewportSize({ width: 700, height: 850 });
+  await page.locator("[data-reasoning-return]").click();
+  await expect(card).toHaveAttribute("data-kp-reasoning-progress", String(1.37 / 13));
+  await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent("pagehide", { persisted: true })));
+  await card.focus(); await card.press("ArrowRight");
+  await expect(slider).toHaveValue("2");
+  const prior = await card.getAttribute("data-kp-reasoning-progress");
+  await page.evaluate(() => {
+    history.replaceState({ kpReasoning: { navigation: { revisionId: "forged" } } }, "", location.pathname);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  });
+  await expect(card).toHaveAttribute("data-kp-reasoning-progress", prior!);
+  await expect(page.locator("[data-reasoning-draft-status]")).toHaveAttribute("data-status", "repair-gap");
+});
+
 for (const family of ["reasoning", "distribution", "simplification"]) test(`card keyboard keeps ${family} passage and controls on semantic steps`, async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto(family === "reasoning" ? route : `/experiments/authoring-${family}-focus-card/`);

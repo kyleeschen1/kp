@@ -184,7 +184,8 @@
     {
       "id": "s16",
       "title": "Harden navigation and lifecycle",
-      "status": "planned"
+      "summary": "Revision-validated URL history, exact interrupted return, refresh, compact reading, resize and bfcache lifecycle pass Chromium Firefox WebKit; source edits retained. Typed snapshots disallow absent or orphan return frames. 48 unit tests, types and architecture pass.",
+      "status": "complete"
     },
     {
       "id": "s17",
