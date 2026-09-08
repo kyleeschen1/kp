@@ -1,6 +1,6 @@
 import { ProbabilityRepairGap } from "../../../domains/probability/binary-joint-model.ts";
 import { requirePreparedBayesDraft, type PreparedBayesDraft } from "./draft.ts";
-import { projectBayesReading } from "./readings.ts";
+import { projectBayesContext } from "./context.ts";
 
 export function pinBayesPosition(draft: PreparedBayesDraft, step: number) {
   requirePreparedBayesDraft(draft);
@@ -25,7 +25,7 @@ export function resolveBayesPosition(draft: PreparedBayesDraft, value: unknown):
 }
 
 export function extractBayesDenominator(draft: PreparedBayesDraft, returnStep: number) {
-  const returnTo = pinBayesPosition(draft, returnStep), reading = projectBayesReading(draft, "compact");
+  const returnTo = pinBayesPosition(draft, returnStep), reading = projectBayesContext(draft);
   const query = draft.tree.query;
   return Object.freeze({ schemaVersion: "kp.bayes-denominator-extraction.v1" as const,
     sourceId: draft.model.sourceId, revisionId: draft.revisionId,

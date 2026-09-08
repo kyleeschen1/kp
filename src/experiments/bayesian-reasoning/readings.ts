@@ -3,7 +3,7 @@ import { createKpArticleSource } from "../../article/kp-article-source.ts";
 import { compileKpArticleDocument } from "../../article/kp-article-document.ts";
 import { resolveKpArticleImports } from "../../article/kp-article-import-lock.ts";
 import { compileKpArticleStaticHtml } from "../../article/kp-article-static-html.ts";
-import { formatBayesMass as mass } from "./tree-svg.ts";
+import { projectBayesContext } from "./context.ts";
 
 /** Labels are data, not Article directives, links, Markdown or TeX. Numeric
  * character references keep Markdown punctuation literal. Dollar signs use
@@ -13,17 +13,8 @@ const literal = (text: string) => text.split(/(\$+)/).map(part => part.startsWit
 
 export function projectBayesReading(draft: PreparedBayesDraft, mode: "full" | "compact") {
   requirePreparedBayesDraft(draft);
-  const { model, tree, trace } = draft, query = tree.query;
-  const definitions = Object.freeze(model.events.map((event, index) => Object.freeze({ id: event.id,
-    symbol: index === 0 ? "A" : "B", label: event.label, complementLabel: event.complementLabel })));
-  const assumptions = Object.freeze([
-    "Four disjoint, exhaustive joint outcomes describe one stipulated population; no independence assumption is made.",
-    `Conditioning uses B as its reference population; P(B) = ${mass(query.denominator)} is positive.`,
-    "Tree order changes factorization, not joint probabilities or causal direction."
-  ]);
-  const facts = Object.freeze({ jointMasses: Object.freeze(model.outcomes.map(outcome => Object.freeze({
-    outcomeId: outcome.id, mass: mass(outcome.mass) }))), numerator: mass(query.numerator),
-    denominator: mass(query.denominator), posterior: mass(query.value), referencePopulationId: tree.marginalId });
+  const { model, tree } = draft;
+  const { definitions, assumptions, facts, references } = projectBayesContext(draft);
   const context = `${definitions.map(event => `${event.symbol} means ${literal(event.label)}; not ${event.symbol} means ${literal(event.complementLabel)}.`).join("\n\n")}\n\n${assumptions.join("\n\n")}\n\nJoint masses (A ∩ B, A ∩ not B, not A ∩ B, not A ∩ not B): ${facts.jointMasses.map(fact => fact.mass).join(", ")}.`;
   const answer = `P(A | B) = P(A ∩ B) / P(B) = (${facts.numerator}) / (${facts.denominator}) = ${facts.posterior}.`;
   const first = tree.initial.first === 0 ? "A" : "B", second = tree.initial.second === 0 ? "A" : "B";
@@ -38,6 +29,6 @@ export function projectBayesReading(draft: PreparedBayesDraft, mode: "full" | "c
   const { document } = compileKpArticleDocument({ source, registry: [], lock });
   const html = compileKpArticleStaticHtml(document, { headingIdPrefix: documentId }).articleHtml;
   return Object.freeze({ mode, revisionId: draft.revisionId, source, document, html, definitions, assumptions, facts,
-    references: Object.freeze([...trace.states.map(state => state.id), ...trace.operations.map(operation => operation.id)]),
+    references,
     editorialStatus: "editorial" as const });
 }

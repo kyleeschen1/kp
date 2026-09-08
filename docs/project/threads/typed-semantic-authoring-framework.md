@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: R3 first visual checkpoint accepted; executing approved authoring integration
+Status: R3 visual checkpoint accepted; paused at s21 fixed inference-budget stop
 Last Updated: 2026-09-08
 Current successor reference: `../reviews/2026-09-07-reconciled-authoring-loop-horizon.md`.
 It preserves the original architectural obligations and the tax/Bayes direction;
@@ -61,7 +61,9 @@ do not treat its proposed roadmap or readiness labels as new execution authority
 The user clarified the remaining code issue as missing gradual passage swiping.
 The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
-Current Next Action: resume approved R3 post-acceptance work through Theseus;
+Current Next Action: resolve the R3 s21 fixed inference-budget stop before resuming;
+see `../reviews/2026-09-08-bayesian-flagship-reuse-cost-stop.md` for the measured
+boundary and recommended bounded investigation. Theseus owns live progress;
 do not restart the completed R1, R2 or G3 loops. See
 `../reviews/2026-09-07-canonical-tax-g3-checkpoint.md` for the working URL,
 source workflow, production ownership, release evidence and remaining work.

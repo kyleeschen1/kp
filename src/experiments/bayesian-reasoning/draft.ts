@@ -1,4 +1,4 @@
-import { BinaryJointModel, createFlaggedTicketSource, ProbabilityRepairGap } from "../../../domains/probability/binary-joint-model.ts";
+import { BinaryJointModel, createFlaggedTicketSource, ProbabilityRepairGap, type ProbabilityRepairDiagnostic } from "../../../domains/probability/binary-joint-model.ts";
 import { compileBinaryProbabilityTrace } from "../../../domains/probability/binary-probability-trace.ts";
 import { sha256 } from "../../kernel/sha256.ts";
 import { createBayesSourceAuthority, createBayesConstructionRequest, compileBayesConstruction } from "./evidence.ts";
@@ -63,7 +63,9 @@ export type PreparedBayesDraft = ReturnType<typeof compileDraft>;
 export function requirePreparedBayesDraft(draft: PreparedBayesDraft): void {
   if (!preparedDrafts.has(draft)) throw new ProbabilityRepairGap("probability.reference", "$.draft", "Compile the source; serialized or copied projection fields do not establish revision authority.");
 }
-export function checkBayesDraft(json: string) {
+export type BayesDraftCheck = { readonly status: "compiled"; readonly draft: PreparedBayesDraft }
+  | { readonly status: "repair-gap"; readonly diagnostic: ProbabilityRepairDiagnostic };
+export function checkBayesDraft(json: string): BayesDraftCheck {
   try { return { status: "compiled" as const, draft: compileDraft(json) }; }
   catch (error) {
     if (error instanceof ProbabilityRepairGap) return { status: "repair-gap" as const, diagnostic: error.diagnostic };
