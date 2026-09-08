@@ -6,6 +6,7 @@ import { renderBayesCardRevision } from "./page.ts";
 import { extractBayesDenominator, resolveBayesDenominatorReturn, type BayesDisclosure } from "./extraction.ts";
 import { captureBayesLocation, validateBayesLocation, encodeBayesLocation, readBayesLocation, type BayesLocation } from "./location.ts";
 import { projectBayesPrompts } from "./prompts.ts";
+import { createUrnBayesDraft } from "./urn-source.ts";
 import { mountBayesNativeSurface } from "./native-surface.ts";
 import { createKpFocusDeckCheckpointPlayback } from "../../tutorial/focus-deck-checkpoint-playback.ts";
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
@@ -147,6 +148,7 @@ async function mount() {
   const apply = document.querySelector<HTMLButtonElement>("[data-bayes-apply]")!;
   const restore = document.querySelector<HTMLButtonElement>("[data-bayes-restore]")!;
   const download = document.querySelector<HTMLButtonElement>("[data-bayes-download]")!;
+  const loadUrn = document.querySelector<HTMLButtonElement>("[data-bayes-load-urn]")!;
   const status = document.querySelector<HTMLElement>("[data-bayes-author-status]")!;
   const errorOutput = document.querySelector<HTMLElement>("[data-bayes-error]")!;
   const initial = checkBayesDraft(JSON.stringify(createBayesDraft()));
@@ -194,6 +196,8 @@ async function mount() {
   };
   restore.onclick = () => { cancelHistory(); textarea.value = session.current().sourceText;
     status.textContent = "Restored the displayed source. No source file changed."; };
+  loadUrn.onclick = () => { cancelHistory(); textarea.value = JSON.stringify(createUrnBayesDraft(), null, 2);
+    status.textContent = "Loaded the urn source into the draft. Apply to prepare it through the same card, notation and publication paths."; };
   download.onclick = () => {
     const current = session.current(), blob = new Blob([current.sourceText], { type: "application/json" });
     const url = URL.createObjectURL(blob), link = document.createElement("a");
@@ -201,7 +205,7 @@ async function mount() {
     window.setTimeout(() => URL.revokeObjectURL(url), 0);
     status.textContent = "Downloaded the displayed valid source, not the draft. Build and verify the selected file locally.";
   };
-  apply.disabled = false; restore.disabled = false; download.disabled = false; status.textContent = "Displayed source is valid. Edit and apply to update the whole card.";
+  apply.disabled = false; restore.disabled = false; download.disabled = false; loadUrn.disabled = false; status.textContent = "Displayed source is valid. Edit and apply to update the whole card.";
   active.onChange(remember);
   const restoreHistory = async () => {
     const ticket = ++restoreSequence; restoring = true; session.invalidate(); active.pause();
@@ -232,7 +236,7 @@ async function mount() {
   const pageshow = (event: PageTransitionEvent) => { if (event.persisted) onHistory(); };
   window.addEventListener("popstate", onHistory); window.addEventListener("hashchange", onHistory); window.addEventListener("pageshow", pageshow);
   const dispose = () => { if (disposed) return; disposed = true; session.dispose(); active.dispose();
-    apply.onclick = null; restore.onclick = null; download.onclick = null; textarea.oninput = null; window.removeEventListener("pagehide", pagehide);
+    apply.onclick = null; restore.onclick = null; download.onclick = null; loadUrn.onclick = null; textarea.oninput = null; window.removeEventListener("pagehide", pagehide);
     window.removeEventListener("popstate", onHistory); window.removeEventListener("hashchange", onHistory); window.removeEventListener("pageshow", pageshow); };
   const pagehide = (event: PageTransitionEvent) => { session.invalidate(); active.pause(); remember(); if (!event.persisted) dispose(); };
   window.addEventListener("pagehide", pagehide); import.meta.hot?.dispose(dispose);

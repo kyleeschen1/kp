@@ -4,6 +4,27 @@ import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { buildBayesEdition } from "../scripts/build-bayesian-edition.ts";
 
+test("Bayes urn source reuses the accepted seven-stop card and opposite-order tree", async ({ page }, info) => {
+  await page.goto("/experiments/bayesian-reasoning/");
+  const card = page.locator("[data-bayes-display] [data-bayes-card]");
+  await expect(card).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+  await page.locator(".bayes-author summary").click(); await page.locator("[data-bayes-load-urn]").click();
+  await page.locator("[data-bayes-apply]").click();
+  await expect(card.locator(".bayes-legend")).toContainText("Selected urn A");
+  for (const step of [2, 2.5, 3, 3.5, 4, 5, 5.5, 6, 2]) {
+    await card.locator("[data-kp-focus-deck-scrubber]").evaluate((node, step) => {
+      (node as HTMLInputElement).value = String(step); node.dispatchEvent(new Event("input", { bubbles: true }));
+    }, step);
+    if (Number.isInteger(step)) await expect(card).toHaveAttribute("data-bayes-position", String(step));
+    else await expect.poll(async () => Number(await card.getAttribute("data-bayes-position"))).toBeCloseTo(step, 9);
+    expect(await card.locator("[data-bayes-outcome]").count()).toBe(4);
+    await expect(card.locator("#bayes-tree-description")).toContainText("P(A given B) = 1/4");
+    if ([2, 4, 6].includes(step)) await card.screenshot({ path: info.outputPath(`urn-stop-${step}.png`) });
+  }
+  await expect(card.locator("[data-kp-focus-deck-beat]").nth(1)).toContainText("into B and not B");
+  await expect(page.locator("[data-bayes-reading=compact]")).toHaveAttribute("data-bayes-reading-revision", (await card.getAttribute("data-bayes-revision"))!);
+});
+
 test("Bayes applied-source download builds a verified no-JS edition with local shared styles", async ({ page, browser }, info) => {
   let edition: string | undefined;
   const staticContext = await browser.newContext({ javaScriptEnabled: false });

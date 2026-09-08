@@ -606,6 +606,34 @@
       "scope": "s18",
       "checkedAt": "2026-09-08T20:56:10.739Z",
       "notes": "All architecture and conformance gates pass."
+    },
+    {
+      "command": "npm run visual:bayesian-reasoning:shared",
+      "status": "failed",
+      "scope": "s19",
+      "checkedAt": "2026-09-08T21:01:44.636Z",
+      "notes": "New second-source test compared fractional floating-point position strings exactly. Aligned continuous positions with existing nine-digit numeric tolerance; integer stops remain exact."
+    },
+    {
+      "command": "npm run test:bayesian-reasoning",
+      "status": "passed",
+      "scope": "s19",
+      "checkedAt": "2026-09-08T21:01:45.755Z",
+      "notes": "29 tests pass; ordinary prior/likelihood urn source yields exact 1/4 posterior, lower direction, reverse tree order and same publication revision."
+    },
+    {
+      "command": "npm run visual:bayesian-reasoning:shared",
+      "status": "passed",
+      "scope": "s19",
+      "checkedAt": "2026-09-08T21:01:46.761Z",
+      "notes": "Eleven Chromium checks pass, including urn source through same seven-stop native/tree card. Screenshot inspected; equivalent but inconsistent display units identified for bounded s20 repair."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s19",
+      "checkedAt": "2026-09-08T21:01:47.758Z",
+      "notes": "Full typecheck passes; final fractional browser assertion also passes test types."
     }
   ],
   "expectedLearning": [

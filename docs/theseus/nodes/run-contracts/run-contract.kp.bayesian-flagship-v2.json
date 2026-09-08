@@ -217,7 +217,8 @@
     {
       "id": "s19",
       "title": "Add a second original binary problem primarily as source: opposite posterior direction and asymmetric joint masses",
-      "status": "planned"
+      "summary": "Source-only urn example, opposite posterior direction and reversed initial tree order use same rendering/input. General question no longer assumes grammatical form of labels.",
+      "status": "complete"
     },
     {
       "id": "s20",

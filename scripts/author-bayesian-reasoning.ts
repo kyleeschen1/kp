@@ -2,10 +2,12 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { checkBayesDraft, createBayesDraft } from "../src/experiments/bayesian-reasoning/draft.ts";
+import { createUrnBayesDraft } from "../src/experiments/bayesian-reasoning/urn-source.ts";
 
 /** Read-only CLI: renderer preparation and publication remain separate steps. */
 export function runBayesAuthoringCli(args: readonly string[]) {
   if (args.length === 1 && args[0] === "--example") return createBayesDraft();
+  if (args.length === 2 && args[0] === "--example" && args[1] === "urn") return createUrnBayesDraft();
   if (args.length !== 2 || args[0] !== "--request") return { status: "repair-gap", diagnostic: {
     code: "probability.cli", path: "$", expected: "Use --example or --request path|- (stdin)." } };
   let json: string;
