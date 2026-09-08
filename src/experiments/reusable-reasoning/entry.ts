@@ -11,7 +11,7 @@ import type { ReasoningReading } from "./readings.ts";
 import type { ReasoningPromptKind } from "./prompts.ts";
 import { createReasoningAuthoringSession } from "./authoring.ts";
 import { mountReasoningPassageInput } from "./passage-input.ts";
-import { reasoningVisibleBeat } from "./gesture.ts";
+import { resolveKpFocusDeckVisibleBeat as reasoningVisibleBeat } from "../../tutorial/focus-deck-beat-navigation.ts";
 
 const root = document.querySelector<HTMLElement>("#authored-focus-card")!;
 const report = (error: unknown) => {

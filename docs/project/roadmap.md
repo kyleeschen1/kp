@@ -39,7 +39,7 @@ checkpoint; see `reviews/2026-09-07-reusable-reasoning-visual-checkpoint.md`.
 The user accepted the repaired exemplar on September 8 and resumed the remaining
 approved R2 slices. Preserve its accepted motion and interaction; Theseus owns
 progress and the resume state. The second code caller now has its own visual
-checkpoint before shared promotion; see
+checkpoint, accepted by the user on September 8 before resuming shared promotion; see
 `reviews/2026-09-08-reusable-reasoning-code-checkpoint.md`.
 R3/Bayes and later execution remain unapproved scope.
 Minimal check-ins, mainly canonical

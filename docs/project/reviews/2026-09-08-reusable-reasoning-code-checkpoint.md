@@ -1,7 +1,7 @@
 # R2 code reasoning visual checkpoint
 
 Date: 2026-09-08
-Outcome: HUMAN_CHECKPOINT — review the second caller before shared promotion.
+Outcome: ACCEPTED — user approved the second caller and explicitly resumed on September 8.
 Authority: `2026-09-07-reusable-reasoning-long-loop-proposal.md` and
 `run-contract.kp.reusable-reasoning-v1`. Theseus owns progress and stop state.
 

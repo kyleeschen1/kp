@@ -23,7 +23,9 @@ test("gesture release settles through the existing clock without owning a second
   for (const [from, to] of [[.2, 0], [.7, 1], [1.49, 1], [1.51, 2], [3.8, 4]]) {
     const drag = navigation.beginScrub();
     drag.update(from!);
-    assert.equal(clock.getSnapshot().progress, from! / 13);
+    // Piecewise interpolation may round differently from direct division.
+    // Exact semantic endpoints and captured return values remain strict below.
+    assert.ok(Math.abs(clock.getSnapshot().progress - from! / 13) < 1e-15);
     assert.equal(pending.size, 0);
     drag.finish(); advance(100_000);
     assert.equal(clock.getSnapshot().progress, to! / 13);
@@ -89,8 +91,10 @@ test("passage gestures distinguish intent, pauses, reversal and bounded destinat
   }
   navigation.seekStep(2);
   const stale = navigation.beginPassageGesture(0); stale.update(2.37, 20);
+  const saved = clock.getSnapshot().progress;
+  assert.ok(Math.abs(saved - 2.37 / 13) < 1e-15);
   navigation.open(); navigation.returnToParent(); stale.finish(30);
-  assert.equal(clock.getSnapshot().progress, 2.37 / 13);
+  assert.equal(clock.getSnapshot().progress, saved, "return is bit-exact, not approximate");
   clock.dispose();
 });
 

@@ -374,6 +374,32 @@
       "status": "passed",
       "scope": "s19",
       "checkedAt": "2026-09-08T16:48:17.192Z"
+    },
+    {
+      "command": "npm run test:reusable-reasoning",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-08T17:14:09.076Z",
+      "notes": "55 tests; uniform and unequal mapping, immutable checkpoints, exact restoration."
+    },
+    {
+      "command": "npm run visual:reusable-reasoning:shared -- --grep 'code reasoning reuses|card keyboard'",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-08T17:14:10.239Z",
+      "notes": "Four Chromium preservation cases passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-08T17:14:11.246Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-08T17:14:12.257Z"
     }
   ],
   "progress": {

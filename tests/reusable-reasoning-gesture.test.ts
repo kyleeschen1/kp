@@ -1,7 +1,28 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { reasoningVisibleBeat } from "../src/experiments/reusable-reasoning/gesture.ts";
+import { createKpFocusDeckCheckpointMap, resolveKpFocusDeckVisibleBeat as reasoningVisibleBeat } from "../src/tutorial/focus-deck-beat-navigation.ts";
 import { boundKpFocusDeckTravel, settleKpFocusDeckTravel } from "../src/tutorial/focus-deck-continuous-navigation.ts";
+
+test("shared checkpoints preserve uniform subranges and unequal authored scores without owning a clock", () => {
+  for (const values of [[0, 1/13, 2/13, 3/13, 4/13], [0, .16, .34, .5, .68, .84, 1]]) {
+    const map = createKpFocusDeckCheckpointMap(values);
+    for (let index = 0; index <= map.last; index++) {
+      assert.equal(map.progressAt(index), values[index]);
+      assert.equal(map.positionAt(values[index]!), index);
+    }
+    for (let sample = 0; sample <= 1000; sample++) {
+      const position = sample / 1000 * map.last;
+      assert.ok(Math.abs(map.positionAt(map.progressAt(position)) - position) < 1e-12);
+    }
+    values[0] = .9;
+    assert.equal(map.checkpoints[0], 0, "external mutation cannot invalidate the mapping");
+    for (const value of [NaN, Infinity, -1, map.last + 1]) assert.throws(() => map.progressAt(value));
+    for (const value of [NaN, Infinity, -1, 2]) assert.throws(() => map.positionAt(value));
+  }
+  for (const values of [[], [0], [0, 0], [.2, .1], [0, NaN], [-.1, 1], [0, 1.1]]) {
+    assert.throws(() => createKpFocusDeckCheckpointMap(values));
+  }
+});
 
 test("shared settlement preserves supply-tax policy and never erases visible multi-beat travel", () => {
   for (let origin = 0; origin <= 4; origin++) {

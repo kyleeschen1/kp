@@ -4,7 +4,7 @@ import "../../rendering/typescript-refactor.css";
 import "../../tutorial/kinetic-figure-typescript-focus-card/kinetic-figure-typescript-focus-card.css";
 import { bindCodeReasoningEvidence } from "./code-evidence.ts";
 import { createCodeReasoningNavigator } from "./code-navigation.ts";
-import { reasoningVisibleBeat } from "./gesture.ts";
+import { resolveKpFocusDeckVisibleBeat as reasoningVisibleBeat } from "../../tutorial/focus-deck-beat-navigation.ts";
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
 import { bindKpFocusDeckKeyboard } from "../../tutorial/focus-deck-keyboard.ts";
 import { mountKpFocusDeckNativeInput } from "../../tutorial/focus-deck-native-input.ts";

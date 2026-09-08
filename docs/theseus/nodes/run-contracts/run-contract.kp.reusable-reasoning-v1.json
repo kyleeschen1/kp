@@ -2,9 +2,9 @@
   "id": "run-contract.kp.reusable-reasoning-v1",
   "kind": "run-contract",
   "title": "R2 Reusable reasoning at multiple scales",
-  "status": "deferred",
+  "status": "in-progress",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT at 19/24: material code caller visual review required under s19 before s20 promotion. Working URL http://localhost:8000/experiments/reusable-reasoning-code/. Resume remaining five approved slices after acceptance.",
+  "summary": "User approved the code visual exemplar and explicitly resumed; continue approved s20-s24 preserving both accepted callers.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -208,7 +208,8 @@
     {
       "id": "s20",
       "title": "Extract only the two-caller common seam",
-      "status": "planned"
+      "summary": "Accepted two-caller checkpoint mapping and gesture policy now shared. Domain proof and return pins remain separate. 55 unit tests, four Chromium checks, types and architecture pass.",
+      "status": "complete"
     },
     {
       "id": "s21",

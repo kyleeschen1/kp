@@ -3,7 +3,7 @@ import type { KpReasoningEvidence } from "./evidence.ts";
 import { bindKpReasoningSupport } from "./support.ts";
 import { pinKpReasoningReference, type KpReasoningReference } from "./references.ts";
 import { KpReasoningRepairGap } from "./source.ts";
-import { reasoningGestureTarget } from "./gesture.ts";
+import { createKpFocusDeckCheckpointMap, resolveKpFocusDeckGestureTarget } from "../../tutorial/focus-deck-beat-navigation.ts";
 import { boundKpFocusDeckTravel } from "../../tutorial/focus-deck-continuous-navigation.ts";
 import { navigateKpFocusDeckPlayback } from "../../tutorial/focus-deck-playback.ts";
 
@@ -81,7 +81,8 @@ export function createKpReasoningNavigator(
   position(clock.getSnapshot().progress);
   // Semantic checkpoints own control destinations. Prose pagination is not an
   // input: compressing a reading cannot collapse several operations into Next.
-  const checkpoints = Object.freeze(support.procedure.checkpoints.map((_ref, index) => index / count));
+  const stops = createKpFocusDeckCheckpointMap(support.procedure.checkpoints.map((_ref, index) => index / count));
+  const { checkpoints } = stops;
   const go = (progress: number, animate: boolean, settle = false) => {
     assertLive(); position(progress);
     scrub = undefined;
@@ -94,7 +95,7 @@ export function createKpReasoningNavigator(
   return Object.freeze({
     end,
     stepCount: checkpoints.length - 1,
-    getStepPosition: () => clock.getSnapshot().progress * count,
+    getStepPosition: () => stops.positionAt(clock.getSnapshot().progress),
     beginScrub(): KpReasoningScrub {
       assertLive(); clock.pause();
       const token = {};
@@ -106,11 +107,11 @@ export function createKpReasoningNavigator(
         [scrubAuthority]: true as const,
         update(step: number) {
           if (!live()) return;
-          position(step / count); clock.seek(step / count);
+          const progress = stops.progressAt(step); position(progress); clock.seek(progress);
         },
         finish(animate = true) {
           if (!live()) return;
-          go(checkpoints[Math.round(clock.getSnapshot().progress * count)]!, animate, true);
+          go(checkpoints[Math.round(stops.positionAt(clock.getSnapshot().progress))]!, animate, true);
         },
         cancel() { if (live()) scrub = undefined; }
       });
@@ -121,8 +122,8 @@ export function createKpReasoningNavigator(
       clock.pause();
       const token = {}; scrub = token;
       const live = () => !disposed && scrub === token;
-      const anchor = Math.round(clock.getSnapshot().progress * count);
-      let last = clock.getSnapshot().progress * count, at = nowMs, velocity = 0, moved = false;
+      const anchor = Math.round(stops.positionAt(clock.getSnapshot().progress));
+      let last = stops.positionAt(clock.getSnapshot().progress), at = nowMs, velocity = 0, moved = false;
       return Object.freeze({
         [scrubAuthority]: true as const,
         update(step: number, now: number) {
@@ -133,12 +134,12 @@ export function createKpReasoningNavigator(
           moved ||= Math.abs(bounded - last) > 1e-8;
           velocity = elapsed > 0 && elapsed <= 100 ? (bounded - last) / elapsed : 0;
           last = bounded; at = now;
-          clock.seek(bounded / count);
+          clock.seek(stops.progressAt(bounded));
         },
         finish(now: number, animate = true) {
           if (!live()) return;
           if (!Number.isFinite(now) || now < at) throw new Error("Invalid gesture release.");
-          const target = moved ? reasoningGestureTarget(anchor, last, now - at <= 100 ? velocity : 0, checkpoints.length - 1)
+          const target = moved ? resolveKpFocusDeckGestureTarget(anchor, last, now - at <= 100 ? velocity : 0, checkpoints.length - 1)
             : Math.round(last);
           go(checkpoints[target]!, animate, true);
         },
@@ -146,7 +147,9 @@ export function createKpReasoningNavigator(
       });
     },
     seekStep(step: number, animate = false) {
-      go(step / count, animate);
+      // Keep this domain's typed diagnostic before entering the shared mapper.
+      position(step / count);
+      go(stops.progressAt(step), animate);
     },
     step(direction: "forward" | "rewind", animate = true) {
       assertLive();

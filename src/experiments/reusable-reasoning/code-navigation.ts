@@ -1,25 +1,14 @@
 import type { KpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
 import { navigateKpFocusDeckPlayback } from "../../tutorial/focus-deck-playback.ts";
-import { reasoningGestureTarget } from "./gesture.ts";
+import { createKpFocusDeckCheckpointMap, resolveKpFocusDeckGestureTarget } from "../../tutorial/focus-deck-beat-navigation.ts";
 import { captureCodeReasoningReturn, restoreCodeReasoningReturn, type KpCodeReasoningEvidence } from "./code-evidence.ts";
 
 export function createCodeReasoningNavigator(evidence: KpCodeReasoningEvidence, clock: KpReaderTimelinePlaybackClock) {
-  const checkpoints = evidence.context.steps.map(step => step.timelineProgress);
-  const last = checkpoints.length - 1;
+  const { last, positionAt, progressAt } = createKpFocusDeckCheckpointMap(evidence.context.steps.map(step => step.timelineProgress));
   let view: { kind: "parent" } | { kind: "reason"; returnTo: ReturnType<typeof captureCodeReasoningReturn> } = { kind: "parent" };
   let disposed = false, active: object | undefined;
   const live = () => { if (disposed) throw new Error("Code reasoning navigator is disposed."); };
-  const position = () => {
-    const progress = clock.getSnapshot().progress;
-    let lower = 0;
-    for (let index = 1; index < checkpoints.length; index++) if (checkpoints[index]! <= progress) lower = index;
-    return lower === last ? last : lower + (progress - checkpoints[lower]!) / (checkpoints[lower + 1]! - checkpoints[lower]!);
-  };
-  const progressAt = (step: number) => {
-    if (!Number.isFinite(step) || step < 0 || step > last) throw new Error("Code step is outside the supported score.");
-    const lower = Math.floor(step), upper = Math.ceil(step);
-    return checkpoints[lower]! + (checkpoints[upper]! - checkpoints[lower]!) * (step - lower);
-  };
+  const position = () => positionAt(clock.getSnapshot().progress);
   const seek = (step: number, animate = false, settle = false) => {
     live(); const target = progressAt(step); active = undefined;
     navigateKpFocusDeckPlayback(clock, settle
@@ -45,7 +34,7 @@ export function createCodeReasoningNavigator(evidence: KpCodeReasoningEvidence, 
         finish(time: number, animate = true) {
           if (disposed || active !== token) return;
           if (!Number.isFinite(time) || time < at) throw new Error("Code input release time must be monotonic.");
-          const target = reasoningGestureTarget(origin, position(), time - at <= 100 ? velocity : 0, last);
+          const target = resolveKpFocusDeckGestureTarget(origin, position(), time - at <= 100 ? velocity : 0, last);
           seek(target, animate, true);
         },
         cancel() { if (active === token) active = undefined; }
