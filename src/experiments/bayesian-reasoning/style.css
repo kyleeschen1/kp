@@ -29,7 +29,11 @@
 [data-bayes-outcome] rect { stroke-opacity: calc(1 - var(--bayes-context, 0) * .6); }
 [data-bayes-outcome][data-bayes-membership="excluded"] text { opacity: calc(1 - var(--bayes-context, 0) * .2); }
 [data-bayes-question] { position: absolute; inset: 0; display: grid; place-content: center; margin: 0; text-align: center; font: 1.35rem/1.6 var(--kp-serif); }
-[data-bayes-question][hidden] { display: none; }
+/* Native endpoints explicitly own child visibility. A composited parent gate
+   keeps preparation measurable without letting those children paint through
+   the question. One phase owns both surfaces, including reverse traversal. */
+[data-bayes-notation-phase="question"] [data-bayes-native-host] { opacity: 0; pointer-events: none; }
+[data-bayes-notation-phase="ratio"] [data-bayes-question] { display: none; }
 @media (min-width: 46rem) {
   .kp-focus-deck .bayes-stage { grid-template-columns: minmax(0, 1fr) 170px; grid-template-rows: auto; }
   .bayes-notation { grid-template-columns: minmax(0, 1fr); grid-template-rows: 40px 220px; align-content: center; padding: 0 .4rem; border-top: 0; border-left: 1px solid var(--kp-st-rule); text-align: center; }

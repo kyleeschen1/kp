@@ -15,7 +15,7 @@ export function buildBayesPage() {
       rootAttributes: { "data-bayes-card": true }, viewportAttributes: { "data-kp-focus-deck-snap-disabled": "true" },
       headerTrailingHtml: '<span data-bayes-count>1 / 7</span>', replayHidden: false, beats,
       stageHtml: `<figure class="kp-focus-deck__stage bayes-stage"><div class="bayes-tree-panel"><p class="bayes-legend">A = urgent · B = flagged · ¬ = not · Ω = all</p><p data-bayes-population-label>Reference: whole population</p><div data-bayes-tree-host>${renderBayesTreeSvg(createBayesTreePlan(evidence.trace))}</div></div>
-        <div class="bayes-notation"><p data-bayes-question>Among flagged tickets,<br>how many are urgent?</p><span data-bayes-formula-label></span><div data-bayes-native-host></div></div></figure>` })}
+        <div class="bayes-notation" data-bayes-notation-phase="question"><p data-bayes-question>Among flagged tickets,<br>how many are urgent?</p><span data-bayes-formula-label></span><div data-bayes-native-host aria-hidden="true"></div></div></figure>` })}
     <p class="review-help">Swipe across the figure or passage; release to settle. Arrows animate one semantic step. Seven stops, one shared playhead.</p>
     <details><summary>Exact model and scope</summary><p>The four joint masses are 16/100, 4/100, 8/100 and 72/100. This is stipulated data, not a claim about a real classifier. Reordering a probability tree is not reversing causation.</p></details>
     <p data-bayes-error role="alert" hidden></p>${compileKpEquationExemplarTemplate(notation.animation, annotateBayesQuotient)}`;

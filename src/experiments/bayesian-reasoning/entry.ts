@@ -20,7 +20,7 @@ async function mount() {
   const treePlan = createBayesTreePlan(evidence.trace);
   const tree = mountBayesTreeSvg(card.querySelector<HTMLElement>("[data-bayes-tree-host]")!, treePlan);
   const nativeHost = card.querySelector<HTMLElement>("[data-bayes-native-host]")!;
-  nativeHost.style.visibility = "hidden";
+  const notationPanel = card.querySelector<HTMLElement>("[data-bayes-notation-phase]")!;
   const native = await mountBayesNativeSurface(nativeHost, document.querySelector<HTMLTemplateElement>("template[data-kp-reader-exemplar-template]")!, notation);
   const clock = createKpReaderTimelinePlaybackClock({ id: "clock.bayesian-reasoning", durationMs: 10800, ownerWindow: window });
   const navigation = createKpFocusDeckCheckpointPlayback(clock, beats.map(beat => beat.progress));
@@ -49,9 +49,10 @@ async function mount() {
       if (index === visible) beat.setAttribute("aria-current", "page"); else beat.removeAttribute("aria-current");
     });
     if (!passage?.ownsTravel()) viewport.scrollLeft = position * viewport.clientWidth;
-    nativeHost.style.visibility = position >= 3 ? "visible" : "hidden";
+    const notationPhase = position >= 3 ? "ratio" : "question";
+    notationPanel.dataset["bayesNotationPhase"] = notationPhase;
+    nativeHost.setAttribute("aria-hidden", String(notationPhase === "question"));
     card.querySelector("[data-bayes-formula-label]")!.textContent = position >= 3 ? "P(A | B) =" : "";
-    card.querySelector<HTMLElement>("[data-bayes-question]")!.hidden = position >= 3;
     native.seek(Math.max(0, Math.min(1, position - 3)));
     const frame = sampleBayesTree(treePlan, position); tree.paint(frame);
     card.querySelector<HTMLElement>("[data-bayes-tree-host]")!.dataset["semanticState"] = frame.stateId;

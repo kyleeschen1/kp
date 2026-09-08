@@ -284,6 +284,55 @@
       "scope": "s09",
       "checkedAt": "2026-09-08T19:46:43.601Z",
       "notes": "Final checkpoint: four Chromium checks pass including no-JS first frame and renewed desktop/narrow/contact-sheet captures; browser-test types and whitespace checks pass. Exact shared URL also returned HTTP 200."
+    },
+    {
+      "command": "npm run visual:bayesian-reasoning:shared -- --grep 'prepared fraction'",
+      "status": "failed",
+      "scope": "checkpoint-overlap-repair",
+      "checkedAt": "2026-09-08T19:59:38.101Z",
+      "notes": "Reproduced native text painting over question: descendant visibility overrode the hidden host."
+    },
+    {
+      "command": "npm run visual:bayesian-reasoning:shared",
+      "status": "passed",
+      "scope": "checkpoint-overlap-repair",
+      "checkedAt": "2026-09-08T19:59:39.401Z",
+      "notes": "All five Chromium checks; phase-exclusive actual text paint and label/panel separation forward/reverse desktop/narrow."
+    },
+    {
+      "command": "npm run visual:bayesian-reasoning:shared -- --project=firefox --grep 'prepared fraction'",
+      "status": "passed",
+      "scope": "checkpoint-overlap-repair",
+      "checkedAt": "2026-09-08T19:59:40.482Z",
+      "notes": "Two focused cases pass in Chromium and Firefox; inspected actual Firefox desktop screenshot."
+    },
+    {
+      "command": "npm run test:bayesian-reasoning",
+      "status": "passed",
+      "scope": "checkpoint-overlap-repair",
+      "checkedAt": "2026-09-08T19:59:41.640Z",
+      "notes": "17 tests; probability and operation semantics unchanged."
+    },
+    {
+      "command": "npm exec -- tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "checkpoint-overlap-repair",
+      "checkedAt": "2026-09-08T19:59:42.820Z",
+      "notes": "Application types pass."
+    },
+    {
+      "command": "npm exec -- tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "checkpoint-overlap-repair",
+      "checkedAt": "2026-09-08T19:59:43.911Z",
+      "notes": "Test types pass."
+    },
+    {
+      "command": "theseus work resume",
+      "status": "failed",
+      "scope": "checkpoint-context",
+      "checkedAt": "2026-09-08T20:00:32.334Z",
+      "notes": "Resume-delta exceeded its fixed 1200-token budget. Used targeted work start brief successfully; no budget or Theseus package change."
     }
   ],
   "expectedLearning": [

@@ -1,5 +1,50 @@
 import { test, expect } from "@playwright/test";
 
+test("Bayes notation does not paint its prepared fraction over the question", async ({ page }, info) => {
+  await page.goto("/experiments/bayesian-reasoning/");
+  const card = page.locator("[data-bayes-card]");
+  await expect(card).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+  const paintedText = () => card.locator("[data-bayes-native-host]").evaluate(host => {
+    const walker = document.createTreeWalker(host, NodeFilter.SHOW_TEXT);
+    const texts: string[] = [];
+    for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+      if (!node.textContent?.trim()) continue;
+      const element = node.parentElement!;
+      if (getComputedStyle(element).visibility !== "visible") continue;
+      let opacity = 1;
+      for (let ancestor: Element | null = element; ancestor; ancestor = ancestor.parentElement) {
+        const style = getComputedStyle(ancestor);
+        opacity *= Number(style.opacity);
+        if (style.display === "none") opacity = 0;
+      }
+      const range = document.createRange(); range.selectNodeContents(node);
+      if (opacity > 0 && [...range.getClientRects()].some(rect => rect.width > 1 && rect.height > 1)) texts.push(node.textContent);
+    }
+    return texts;
+  });
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 844 });
+    for (const position of [0, 2.9, 3, 3.5, 4, 6, 2, 0]) {
+      await card.locator("[data-kp-focus-deck-scrubber]").evaluate((node, position) => {
+        (node as HTMLInputElement).value = String(position); node.dispatchEvent(new Event("input", { bubbles: true }));
+      }, position);
+      if (position < 3) {
+        await expect(card.locator("[data-bayes-question]")).toBeVisible();
+        expect(await paintedText()).toEqual([]);
+        await expect(card.locator("[data-bayes-native-host]")).toHaveAttribute("aria-hidden", "true");
+      } else {
+        await expect(card.locator("[data-bayes-question]")).toBeHidden();
+        expect((await paintedText()).length).toBeGreaterThan(0);
+        await expect(card.locator("[data-bayes-native-host]")).toHaveAttribute("aria-hidden", "false");
+        const label = (await card.locator("[data-bayes-formula-label]").boundingBox())!;
+        const native = (await card.locator("[data-bayes-native-host]").boundingBox())!;
+        expect(label.y + label.height <= native.y + 1 || label.x + label.width <= native.x + 1).toBe(true);
+      }
+    }
+    await card.screenshot({ path: info.outputPath(`notation-question-${width}.png`) });
+  }
+});
+
 test("Bayes initial population is readable without JavaScript or exposed measurement equations", async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   try {

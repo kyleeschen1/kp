@@ -5,6 +5,25 @@ Status: HUMAN_CHECKPOINT — awaiting visual acceptance, not promoted
 Contract: `run-contract.kp.bayesian-flagship-v2`
 Scope: first coherent exemplar; s09 delivers this packet, not invented approval.
 
+## Checkpoint feedback: notation overlap repair
+
+The user confirmed the mechanics work but reported text/fraction overlap in the
+right column. This is not acceptance of the remaining visual treatment.
+The overlap was reproduced: the native renderer's children explicitly set
+`visibility: visible`, overriding the host's `visibility: hidden` during the
+question phase. The prepared 16/24 therefore painted over the question.
+
+The host now uses one question/ratio phase for reciprocal presence. Parent
+opacity suppresses native paint during preparation without disabling geometry
+measurement; child visibility cannot override it. Accessibility presence follows
+the same phase. No domain, timing, native compositor or control logic changed.
+The new browser regression failed before repair and passes afterward, checking
+actual text paint, the opposite phase, forward/reverse traversal, desktop/narrow
+layout and label/native-panel separation. The complete five-case Chromium suite,
+17 probability tests, application/test types and the focused Firefox overlap
+check pass. The corrected Firefox screenshot was inspected. The visual gate
+stays pending.
+
 ## What to open and what to approve
 
 Open [the Bayesian Focus Card](http://localhost:8000/experiments/bayesian-reasoning/).
