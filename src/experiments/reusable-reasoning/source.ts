@@ -13,12 +13,14 @@ export interface KpReasoningSource {
     readonly statement: string;
     readonly sourceStateId: string;
     readonly targetStateId: string;
+    readonly assumptionIds: readonly string[];
   };
   readonly reason: {
     readonly id: string;
     readonly title: string;
     readonly operationIds: readonly string[];
     readonly explanation: string;
+    readonly assumptionIds: readonly string[];
   };
   readonly compact: string;
 }
@@ -50,7 +52,8 @@ export function createKpReasoningSource(): KpReasoningSource {
       id: "claim.expand-and-evaluate",
       statement: "Distribute the fraction, then evaluate the constant term.",
       sourceStateId: "fraction-solve.state.factored",
-      targetStateId: "fraction-solve.state.constant-quotient"
+      targetStateId: "fraction-solve.state.constant-quotient",
+      assumptionIds: ["assumption.real-scalar-x", "assumption.nonzero-denominator"]
     },
     reason: {
       id: "reason.distribute-evaluate",
@@ -59,7 +62,8 @@ export function createKpReasoningSource(): KpReasoningSource {
         "fraction-solve.step.distribute", "fraction-solve.step.normalize",
         "fraction-solve.step.constant-product", "fraction-solve.step.constant-quotient"
       ],
-      explanation: "The same factor multiplies both terms. Rewrite the products as fractions, then evaluate the constant product and quotient."
+      explanation: "The same factor multiplies both terms. Rewrite the products as fractions, then evaluate the constant product and quotient.",
+      assumptionIds: ["assumption.real-scalar-x", "assumption.nonzero-denominator"]
     },
     compact: "Distribute to both terms; evaluate the constant."
   });
@@ -69,8 +73,8 @@ export function createKpReasoningSource(): KpReasoningSource {
 export function readKpReasoningSource(value: unknown): KpReasoningSource {
   const root = record(value, "$", ["schemaVersion", "id", "title", "formula", "parent", "reason", "compact"]);
   if (root.schemaVersion !== "kp.reasoning-example.v1") gap("$.schemaVersion", "Use kp.reasoning-example.v1.");
-  const parent = record(root.parent, "$.parent", ["id", "statement", "sourceStateId", "targetStateId"]);
-  const reason = record(root.reason, "$.reason", ["id", "title", "operationIds", "explanation"]);
+  const parent = record(root.parent, "$.parent", ["id", "statement", "sourceStateId", "targetStateId", "assumptionIds"]);
+  const reason = record(root.reason, "$.reason", ["id", "title", "operationIds", "explanation", "assumptionIds"]);
   const formula = record(root.formula, "$.formula", ["lawId", "commonFactorId", "addendIds"]);
   if (!Array.isArray(formula.addendIds) || formula.addendIds.length !== 2) {
     gap("$.formula.addendIds", "Bind exactly two addends for this distribution exemplar.");
@@ -94,11 +98,13 @@ export function readKpReasoningSource(value: unknown): KpReasoningSource {
     parent: Object.freeze({
       id: text(parent.id, "$.parent.id"), statement: text(parent.statement, "$.parent.statement"),
       sourceStateId: text(parent.sourceStateId, "$.parent.sourceStateId"),
-      targetStateId: text(parent.targetStateId, "$.parent.targetStateId")
+      targetStateId: text(parent.targetStateId, "$.parent.targetStateId"),
+      assumptionIds: assumptionIds(parent.assumptionIds, "$.parent.assumptionIds")
     }),
     reason: Object.freeze({
       id: text(reason.id, "$.reason.id"), title: text(reason.title, "$.reason.title"),
-      operationIds: Object.freeze(ids), explanation: text(reason.explanation, "$.reason.explanation")
+      operationIds: Object.freeze(ids), explanation: text(reason.explanation, "$.reason.explanation"),
+      assumptionIds: assumptionIds(reason.assumptionIds, "$.reason.assumptionIds")
     }),
     compact: text(root.compact, "$.compact")
   };
@@ -121,6 +127,13 @@ function text(value: unknown, path: string): string {
     gap(path, "Expected nonempty text of at most 8000 characters.");
   }
   return value;
+}
+
+function assumptionIds(value: unknown, path: string): readonly string[] {
+  if (!Array.isArray(value) || value.length > 8) gap(path, "Supply a bounded list of assumption references.");
+  const ids = value.map((id: unknown, index: number) => text(id, `${path}[${index}]`));
+  if (new Set(ids).size !== ids.length) gap(path, "Assumption references must be unique.");
+  return Object.freeze(ids);
 }
 
 function gap(path: string, expected: string): never {
