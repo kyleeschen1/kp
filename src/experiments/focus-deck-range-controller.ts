@@ -1,5 +1,6 @@
 import type { KpReaderTimelinePlaybackClock } from "../reader/runtime/timeline-playback-clock.ts";
 import { navigateKpFocusDeckPlayback } from "../tutorial/focus-deck-playback.ts";
+import { bindKpFocusDeckKeyboard } from "../tutorial/focus-deck-keyboard.ts";
 
 /** Shared enhancement for the two-endpoint authored cards. The caller retains
  * semantic endpoints, native preparation and paint; this owns only navigation
@@ -59,6 +60,10 @@ export function bindKpFocusDeckRangeController(input: {
   previous.onclick = () => select(0);
   next.onclick = () => select(1);
   replay.onclick = () => { clock.seek(0); select(1); };
+  const unbindKeyboard = bindKpFocusDeckKeyboard({ card, slider,
+    enabled: () => !disposed,
+    position: () => clock.getSnapshot().progress / end,
+    checkpointCount: () => beats.length, navigate: select });
   slider.oninput = () => {
     const progress = Number(slider.value);
     show(progress >= .5 ? 1 : 0);
@@ -81,7 +86,7 @@ export function bindKpFocusDeckRangeController(input: {
   const pageshow = (event: PageTransitionEvent) => { if (event.persisted) resize(); };
   const dispose = () => {
     if (disposed) return;
-    disposed = true; unsubscribe(); clock.dispose(); input.disposeSurface();
+    disposed = true; unbindKeyboard(); unsubscribe(); clock.dispose(); input.disposeSurface();
     previous.onclick = null; next.onclick = null; replay.onclick = null;
     slider.oninput = null; viewport.onscroll = null;
     window.removeEventListener("hashchange", restore); window.removeEventListener("resize", resize);

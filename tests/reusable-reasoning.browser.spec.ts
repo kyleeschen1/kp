@@ -11,6 +11,45 @@ async function previewSlider(slider: Locator, value: string) {
 
 const route = "/experiments/reusable-reasoning/";
 
+for (const family of ["reasoning", "distribution", "simplification"]) test(`card keyboard keeps ${family} passage and controls on semantic steps`, async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto(family === "reasoning" ? route : `/experiments/authoring-${family}-focus-card/`);
+  const card = page.locator("[data-kp-focus-deck]");
+  await expect(card).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+  const attribute = family === "reasoning" ? "data-kp-reasoning-progress" : `data-kp-${family}-progress`;
+  const end = family === "reasoning" ? 1 / 13 : 1;
+  const viewport = card.locator("[data-kp-focus-deck-viewport]");
+  const slider = card.locator("[data-kp-focus-deck-scrubber]");
+  const untouched = await card.evaluate(card => {
+    const input = document.createElement("input"); card.append(input);
+    const editable = document.createElement("span"); editable.contentEditable = "true"; card.append(editable);
+    const events = [
+      [input, new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true, cancelable: true })],
+      [editable, new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true, cancelable: true })],
+      [card, new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true, cancelable: true })],
+      [card, new KeyboardEvent("keydown", { key: "ArrowRight", ctrlKey: true, bubbles: true, cancelable: true })],
+      [card, new KeyboardEvent("keydown", { key: "ArrowRight", shiftKey: true, bubbles: true, cancelable: true })],
+    ] as const;
+    const allowed = events.map(([target, event]) => target.dispatchEvent(event));
+    input.remove(); editable.remove(); return allowed;
+  });
+  expect(untouched).toEqual([true, true, true, true, true]);
+  for (const focus of [viewport, slider, card]) {
+    await focus.focus(); await focus.press("ArrowRight");
+    await expect(card).toHaveAttribute(attribute, String(end));
+    await expect(slider).toHaveValue("1");
+    await expect(card.locator('[data-kp-focus-deck-beat][aria-current="page"]')).toHaveCount(1);
+    await expect(card.locator("[data-kp-focus-deck-beat]").nth(1)).toHaveAttribute("aria-current", "page");
+    await expect.poll(() => viewport.evaluate(node => Math.abs(node.scrollLeft - node.clientWidth))).toBeLessThan(2);
+    if (family === "reasoning") await expect(card.locator("[data-reasoning-beat-count]")).toHaveText("2 / 5");
+    await focus.press("ArrowLeft");
+    await expect(card).toHaveAttribute(attribute, "0");
+    await expect(slider).toHaveValue("0");
+    await expect(card.locator("[data-kp-focus-deck-beat]").first()).toHaveAttribute("aria-current", "page");
+    await expect.poll(() => viewport.evaluate(node => node.scrollLeft)).toBeLessThan(2);
+  }
+});
+
 for (const family of ["distribution", "simplification"]) test(`shared playback shows authored ${family} motion and preserves reduced motion`, async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto(`/experiments/authoring-${family}-focus-card/`);

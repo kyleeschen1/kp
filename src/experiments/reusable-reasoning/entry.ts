@@ -5,7 +5,8 @@ import { bindKpReasoningEvidence } from "./evidence.ts";
 import { createKpReasoningNavigator, type KpReasoningScrub } from "./navigation.ts";
 import { renderReasoningCard, renderReasoningPage, reasoningBeats, escapeReasoningText } from "./scaffold.ts";
 import { mountReasoningNativeSurface } from "./native-surface.ts";
-import { readKpFocusDeckScrubberKeyTarget, renderKpFocusDeckScaffold } from "../../tutorial/focus-deck-scaffold.ts";
+import { renderKpFocusDeckScaffold } from "../../tutorial/focus-deck-scaffold.ts";
+import { bindKpFocusDeckKeyboard } from "../../tutorial/focus-deck-keyboard.ts";
 import type { ReasoningReading } from "./readings.ts";
 import type { ReasoningPromptKind } from "./prompts.ts";
 import { createReasoningAuthoringSession } from "./authoring.ts";
@@ -137,11 +138,10 @@ async function mount() {
   slider.onpointerup = () => finishInput("slider");
   slider.onpointercancel = () => finishInput("slider");
   slider.onblur = () => finishInput("slider");
-  slider.onkeydown = event => {
-    const target = readKpFocusDeckScrubberKeyTarget(event, Number(slider.value), navigation.stepCount + 1);
-    if (target === undefined) return;
-    event.preventDefault(); navigate(target);
-  };
+  const unbindKeyboard = bindKpFocusDeckKeyboard({ card, slider,
+    enabled: () => !disposed && !practice,
+    position: () => navigation.getStepPosition(),
+    checkpointCount: () => navigation.stepCount + 1, navigate });
   passageInput = mountReasoningPassageInput({ viewport, region: card,
     enabled: () => !disposed && !practice,
     position: () => navigation.getStepPosition(),
@@ -243,7 +243,7 @@ async function mount() {
     if (disposed) return;
     cancelInput(); disposed = true; unsubscribe(); navigation.dispose(); surface.dispose();
     window.removeEventListener("resize", resize); window.removeEventListener("pagehide", dispose);
-    passageInput?.dispose();
+    passageInput?.dispose(); unbindKeyboard();
     reduced.removeEventListener("change", motion); document.removeEventListener("visibilitychange", visibility);
   };
   window.addEventListener("resize", resize); window.addEventListener("pagehide", dispose);

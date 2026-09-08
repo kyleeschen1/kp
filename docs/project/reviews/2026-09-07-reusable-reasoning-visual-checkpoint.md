@@ -65,7 +65,7 @@ Repeatable commands:
   formula/procedure/support/extraction, real-clock navigation, reading equivalence,
   existing flashcard projections and atomic last-valid drafts.
 - `npm run visual:reusable-reasoning`: isolated native browser integration.
-- `npm run visual:reusable-reasoning:shared`: twelve integrated Chromium
+- `npm run visual:reusable-reasoning:shared`: fifteen integrated Chromium
   checks against the human's port-8000 URL, without starting another server.
   Captures include the distributed state, exact return, changed native endpoint,
   phone reason and phone practice. The phone check includes keyboard operation,
@@ -96,6 +96,34 @@ Phone-width Chromium and emulated touch are not physical-device or cross-browser
 release certification. The native phone layout retains its stacked equation form.
 
 ## Resume boundary
+
+### Current repair: shared semantic keyboard routing
+
+User accepted the other visible behavior but reported arrow keys moving only
+the animation gradually. Reproduction distinguished two gaps: reasoning bound
+semantic keys only on its slider, leaving its focusable passage to native pixel
+scrolling; the authored range controller had no semantic key handler, so its
+range input advanced by 0.01 while the rest of the card stayed on the same beat.
+
+`focus-deck-keyboard.ts` now binds one card-scoped handler for reasoning,
+authored distribution and simplification. Left/Right and Home/End resolve through
+the existing semantic checkpoint helper and invoke the existing playback path.
+The card itself is focusable; passage and slider events reach the same owner.
+Slider Up/Down also step semantically, while passage Up/Down, editing fields,
+modified shortcuts and nested cards retain native ownership. Disposal removes
+the listener and any tab stop it added. No global keyboard listener, new clock,
+renderer change, or motion retiming was introduced, preserving the accepted
+button fix under the visual-salience skill's presentation boundary.
+
+All three new browser cases failed before the repair. Nine final checks pass
+across Chromium, Firefox and WebKit, using normal-motion Left/Right from the
+passage, slider and card. They assert exact semantic endpoint, slider value,
+active passage, physical passage alignment, and reasoning's n/total counter;
+editing and vertical/modified keys remain uncancelled. Full typecheck,
+architecture gate, 48 reasoning unit tests and four scaffold/key-policy tests
+pass. Rollback unit: this keyboard-routing commit. This repairs the three
+already-shared consumers, not every legacy card controller. R2 remains at its
+14/24 checkpoint; prior motion acceptance is preserved, not reopened.
 
 ### Current repair: visible button playback and first command generalization
 

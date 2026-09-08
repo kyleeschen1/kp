@@ -325,11 +325,18 @@
       "scope": "s14-button-playback",
       "checkedAt": "2026-09-08T05:12:04.028Z",
       "notes": "48 reasoning tests pass; 19 focused clock/range/authority tests pass, including the old-RAF-timestamp reproduction. Full typecheck and architecture gate pass. Typed play requests reject settlement-only duration fields."
+    },
+    {
+      "command": "npm run visual:reusable-reasoning:shared -- --grep \"card keyboard\" --project=webkit --project=firefox",
+      "status": "passed",
+      "scope": "s14-keyboard-routing",
+      "checkedAt": "2026-09-08T05:19:56.656Z",
+      "notes": "Nine normal-motion tests pass across three browsers and three cards: passage, slider and card focus; exact state, slider, active prose and alignment; reasoning counter; native editing and vertical/modified keys. Typecheck, architecture, 48 reasoning and four scaffold tests pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT 14/24: fixed non-monotonic RAF clock baseline and redundant button preparation; started approved generalization with shared typed playback commands in reasoning, distribution and simplification. Await visible-playback acceptance before further controller promotion."
+    "summary": "14/24 checkpoint: user accepted other visible behavior; repaired remaining arrow-key routing through shared semantic navigation in three cards. Nine browser checks pass. Preserve accepted motion; no broader loop execution resumed."
   },
   "expectedLearning": [
     "Measure whether one authored reason yields consistent full compact and retrieval projections through existing owners and reduces second-caller glue."
