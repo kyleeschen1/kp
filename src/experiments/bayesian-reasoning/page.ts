@@ -4,6 +4,7 @@ import { renderKpFocusDeckScaffold } from "../../tutorial/focus-deck-scaffold.ts
 import { renderBayesTreeSvg, formatBayesMass } from "./tree-svg.ts";
 import { checkBayesDraft, createBayesDraft, type PreparedBayesDraft } from "./draft.ts";
 import { encodeKpHtmlText as escape } from "../../rendering/html-output-encoding.ts";
+import { projectBayesReading } from "./readings.ts";
 
 export function renderBayesCardRevision(draft: PreparedBayesDraft) {
   const { score: beats, notation, model } = draft;
@@ -14,7 +15,8 @@ export function renderBayesCardRevision(draft: PreparedBayesDraft) {
       headerTrailingHtml: '<span data-bayes-count>1 / 7</span>', replayHidden: false, beats,
       stageHtml: `<figure class="kp-focus-deck__stage bayes-stage"><div class="bayes-tree-panel"><p class="bayes-legend">A = ${escape(a.label)} · B = ${escape(b.label)} · ¬ = not · Ω = all</p><p data-bayes-population-label>Reference: whole population</p><div data-bayes-tree-host>${renderBayesTreeSvg(draft.tree)}</div></div>
         <div class="bayes-notation" data-bayes-notation-phase="question"><p data-bayes-question>Among ${escape(b.label)},<br>how common is ${escape(a.label)}?</p><span data-bayes-formula-label></span><div data-bayes-native-host aria-hidden="true"></div></div></figure>` })}
-    ${compileKpEquationExemplarTemplate(notation.animation, annotateBayesQuotient)}</div>`;
+    ${compileKpEquationExemplarTemplate(notation.animation, annotateBayesQuotient)}
+    ${(["full", "compact"] as const).map(mode => `<details data-bayes-reading="${mode}" data-bayes-reading-revision="${draft.revisionId}"><summary>${mode === "full" ? "Full" : "Compact"} reading</summary>${projectBayesReading(draft, mode).html}</details>`).join("")}</div>`;
 }
 
 export function buildBayesPage() {

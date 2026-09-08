@@ -6,6 +6,9 @@ import { compileBayesNotation } from "./notation.ts";
 import { createBayesScore } from "./score.ts";
 import { createBayesTreePlan } from "./tree-frame.ts";
 
+const preparedDrafts = new WeakSet<object>();
+const preparedBrand = Symbol("compiled Bayesian author draft");
+
 export function createBayesDraft() {
   const model = createFlaggedTicketSource();
   return { schemaVersion: "kp.bayes-source.v1", model,
@@ -50,11 +53,16 @@ function compileDraft(json: string) {
   // Evidence pins describe domain operations. The authored revision also pins
   // explanation detail; whitespace or JSON key order is not a semantic edit.
   const revisionId = `sha256:${sha256(JSON.stringify({ evidence: authority.revisionId, detailLevel: detail }))}`;
-  return Object.freeze({ model, trace, authority, construction, notation, score, tree, revisionId,
+  const draft = Object.freeze({ [preparedBrand]: true as const, model, trace, authority, construction, notation, score, tree, revisionId,
     teaching: Object.freeze({ firstEventId: model.events[first].id, detailLevel: detail }),
     sourceText: JSON.stringify(source, null, 2) });
+  preparedDrafts.add(draft);
+  return draft;
 }
 export type PreparedBayesDraft = ReturnType<typeof compileDraft>;
+export function requirePreparedBayesDraft(draft: PreparedBayesDraft): void {
+  if (!preparedDrafts.has(draft)) throw new ProbabilityRepairGap("probability.reference", "$.draft", "Compile the source; serialized or copied projection fields do not establish revision authority.");
+}
 export function checkBayesDraft(json: string) {
   try { return { status: "compiled" as const, draft: compileDraft(json) }; }
   catch (error) {

@@ -181,7 +181,8 @@
     {
       "id": "s13",
       "title": "Derive full and compact readings through existing Article/projection contracts with mandatory definitions and population context",
-      "status": "planned"
+      "summary": "Both readings use existing Article pipeline, retain mandatory definitions and positive reference population, and travel atomically with their source revision.",
+      "status": "complete"
     },
     {
       "id": "s14",
