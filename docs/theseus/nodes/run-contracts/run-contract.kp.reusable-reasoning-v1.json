@@ -106,7 +106,8 @@
     {
       "id": "s03",
       "title": "Bind definitions claims assumptions and evidence",
-      "status": "planned"
+      "summary": "Trusted evidence and referable definitions with explicit assumptions; revision hash is not proof; immutable capability checked. Ten tests and full types pass.",
+      "status": "complete"
     },
     {
       "id": "s04",

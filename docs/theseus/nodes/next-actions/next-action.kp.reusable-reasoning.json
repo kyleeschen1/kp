@@ -62,6 +62,20 @@
       "scope": "s02",
       "checkedAt": "2026-09-08T01:19:07.132Z",
       "notes": "Full app node test Svelte domain typecheck passes after erasable syntax and exact-key correction."
+    },
+    {
+      "command": "npm run test:reusable-reasoning",
+      "status": "passed",
+      "scope": "s03",
+      "checkedAt": "2026-09-08T01:25:11.463Z",
+      "notes": "Ten tests pass; trusted evidence, explicit assumptions, immutable native descendants, forged capability and editorial revision cases."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s03",
+      "checkedAt": "2026-09-08T01:25:12.613Z",
+      "notes": "Full types pass after final evidence immutability correction."
     }
   ],
   "expectedLearning": [
