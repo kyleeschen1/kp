@@ -234,7 +234,6 @@ export function mountKpAuthoringEquationCard(root: HTMLElement) {
 function waitForSurface(player: HTMLElement, signal: AbortSignal): Promise<void> {
   return new Promise((resolve, reject) => {
     const finish = (error?: Error) => {
-      clearTimeout(timeout);
       player.removeEventListener(KP_EDITOR_ANIMATION_SURFACE_READINESS_EVENT, check);
       signal.removeEventListener("abort", abort);
       if (error === undefined) resolve(); else reject(error);
@@ -246,8 +245,8 @@ function waitForSurface(player: HTMLElement, signal: AbortSignal): Promise<void>
       if (readiness === "ready") finish();
       else if (readiness === "failed") finish(new Error(player.dataset["kpEditorAnimationSurfaceError"] ?? "Equation surface failed."));
     };
-    // This bounds resource preparation only; motion remains owned by the player.
-    const timeout = setTimeout(() => finish(new Error("Equation preparation timed out.")), 15_000);
+    // Surface lifecycle owns readiness/failure; editor changes and disposal own
+    // cancellation. The authoring host introduces no timer or animation clock.
     player.addEventListener(KP_EDITOR_ANIMATION_SURFACE_READINESS_EVENT, check);
     signal.addEventListener("abort", abort, { once: true });
     check();

@@ -33,10 +33,10 @@ test("invalid operands, mismatched targets and forged evidence retain exact acti
 
 test("held-out numeric author edits bind without proof metadata and preserve narration", () => {
   for (const [base, argument] of [[8, 64], [0.5, 16], [3, 27]]) {
-    const input = draft();
+    const original = draft();
+    const input = { ...original, states: original.states.map(state => ({ ...state, narration: "Keep this **authored** wording exactly." })) };
     input.states[0]!.latex = `\\log_{${base}}(${argument})`;
     input.states[1]!.latex = `\\frac{\\ln(${argument})}{\\ln(${base})}`;
-    input.states[1]!.narration = "Keep this **authored** wording exactly.";
     const compiled = compile(input);
     assert.equal(compiled.status, "compiled");
     assert.equal(compiled.active!.request.states[1]!.narration, input.states[1]!.narration);

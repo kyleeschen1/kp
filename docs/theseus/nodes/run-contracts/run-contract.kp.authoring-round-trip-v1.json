@@ -245,7 +245,8 @@
     {
       "id": "s25",
       "title": "Release verification and in-scope failure repairs",
-      "status": "planned"
+      "summary": "Full release gates pass: 6672 tests, types/build, unchanged reader budgets/closure and supported-browser cohorts. Bounded timer/resize and stale inventory/fixture repairs verified; no new motifs, clocks or authority exceptions.",
+      "status": "complete"
     },
     {
       "id": "s26",

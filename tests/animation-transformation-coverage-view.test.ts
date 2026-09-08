@@ -30,9 +30,9 @@ test("coverage view is one ordered evidence-derived list", () => {
   assert.equal(view.total, 38);
   assert.deepEqual(view.statusCounts, [
     { status: "Direct", count: 11 },
-    { status: "Registered", count: 4 },
+    { status: "Registered", count: 6 },
     { status: "Exemplar", count: 8 },
-    { status: "Missing", count: 15 }
+    { status: "Missing", count: 13 }
   ]);
   assert.deepEqual(
     view.rows.map(({ order }) => order),
@@ -50,6 +50,12 @@ test("coverage view is one ordered evidence-derived list", () => {
     "capability.equation.alternative-logarithm-bases");
   assert.equal(logarithmBases?.status, "Direct");
   assert.deepEqual(logarithmBases?.remaining, []);
+  // R1 repaired evidence reporting for these rows, not general authoring support.
+  for (const capabilityId of ["capability.equation.transform-series", "capability.equation.fraction-equivalence"]) {
+    const row = view.rows.find(item => item.capabilityId === capabilityId)!;
+    assert.equal(row.status, "Registered");
+    assert.ok(row.remaining.length > 0);
+  }
   const roots = view.rows.find(({ capabilityId }) => capabilityId ===
     "capability.equation.radical-inversion");
   assert.equal(roots?.caseCoverage?.status, "tracked");

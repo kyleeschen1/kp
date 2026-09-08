@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 4311,
+  "scannedFileCount": 4332,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -108,13 +108,18 @@
         "src/architecture/animation-capability-compiler-evidence.ts",
         "src/authoring/equation-series-governed-source-binding.ts",
         "src/authoring/equation-series-logarithm-base-authoring.ts",
+        "src/authoring/equation-series-logarithm-base-draft.ts",
+        "src/authoring/equation-series-logarithm-base-example.ts",
         "src/authoring/logarithm-base-authoring-evidence.ts",
         "src/domain-ir/logarithm-change-of-base-migration-v2.ts",
+        "src/editor/logarithm-change-of-base-surface-adapter.ts",
         "src/rendering/logarithm-change-of-base-native-endpoints.ts",
         "src/rendering/logarithm-change-of-base-transit-session.ts",
         "src/semantic/logarithm-change-of-base-corpus.ts"
       ],
       "testCallers": [
+        "tests/authoring-round-trip-baseline.test.ts",
+        "tests/authoring-round-trip-equation-draft.test.ts",
         "tests/compile-natural-language-equation-series.test.ts",
         "tests/equation-series-logarithm-base-authoring.test.ts",
         "tests/logarithm-change-of-base-exemplar.test.ts",
@@ -629,6 +634,7 @@
         "src/editor/selected-surface-capability-declarations.ts",
         "src/editor/selected-surface-capability-host.ts",
         "src/editor/typescript-refactor-surface-adapter.ts",
+        "src/experiments/authoring-market/authoring-equation-card.ts",
         "src/experiments/kinetic-figure-log-product/kinetic-figure-log-product-entry.ts",
         "src/main.ts",
         "src/tutorial/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card.ts"

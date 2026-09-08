@@ -79,7 +79,8 @@ return Object.freeze({
       void prepareSurface(session, generation);
     }
     session.pendingState = state;
-    if (session.transit !== undefined) applyFrame(session, state);
+    refreshSurfaceGeometry(session);
+    if (session.transit !== undefined && session.stage.dataset["kpLogarithmChangeOfBaseGeometryState"] === "ready") applyFrame(session, state);
   }
 } satisfies KpEditorAnimationSurfaceAdapter);
 }
@@ -165,6 +166,7 @@ async function prepareSurface(
       fontReadiness: session.fontReadiness
     });
     if (session.disposed || session.generation !== generation) return;
+    if (refreshSurfaceGeometry(session)) return;
     const previous = session.transit;
     // The canonical factory calibrates native handoff during construction.
     // Retire frozen typography before that calibration, not only before the
@@ -215,7 +217,6 @@ async function prepareSurface(
     publishKpEditorAnimationSurfaceReadiness({ player: session.player, readiness: "failed", error: String(error) });
     if (session.transit !== undefined) {
       session.stage.dataset["kpLogarithmChangeOfBaseGeometryState"] = "stale";
-      applyFrame(session, session.pendingState);
       return;
     }
     session.endpointRoots.forEach((root, index) => {
@@ -228,19 +229,29 @@ async function prepareSurface(
 function observeSurfaceGeometry(session: KpLogarithmChangeOfBaseSurfaceSession): void {
   const Observer = session.stage.ownerDocument.defaultView?.ResizeObserver;
   if (Observer === undefined) return;
-  session.resizeObserver = new Observer(entries => {
-    const entry = entries.find(item => item.target === session.stage);
-    if (entry === undefined || session.disposed) return;
-    const key = [entry.contentRect.width, entry.contentRect.height].map(value => Math.round(value * 2) / 2).join("x");
-    const previous = session.observedGeometryKey;
-    session.observedGeometryKey = key;
-    if (previous === undefined || previous === key) return;
-    // As in the log-product surface, resize invalidates measurements, not the
-    // semantic clock. Keep current owners until replacement paint is ready.
-    session.stage.dataset["kpLogarithmChangeOfBaseGeometryState"] = "preparing";
-    void prepareSurface(session, ++session.generation);
-  });
+  session.resizeObserver = new Observer(() => { refreshSurfaceGeometry(session); });
+  refreshSurfaceGeometry(session);
   session.resizeObserver.observe(session.stage);
+  // Responsive type can change while the bounded card's outer width does not.
+  for (const root of session.endpointRoots) {
+    const display = root.querySelector(".katex-display");
+    if (display !== null) session.resizeObserver.observe(display);
+  }
+}
+
+function refreshSurfaceGeometry(session: KpLogarithmChangeOfBaseSurfaceSession): boolean {
+  if (session.disposed) return false;
+  const fontSize = session.stage.ownerDocument.defaultView?.getComputedStyle(session.endpointRoots[0]).fontSize;
+  const key = `${session.stage.clientWidth}x${session.stage.clientHeight}:${fontSize}`;
+  const previous = session.observedGeometryKey;
+  session.observedGeometryKey = key;
+  if (previous === undefined || previous === key) return false;
+  // A seek can precede ResizeObserver delivery. Check the same layout key at
+  // the paint boundary, and retain existing owners until current measurements
+  // can project the latest semantic position. Never replay stale typography.
+  session.stage.dataset["kpLogarithmChangeOfBaseGeometryState"] = "preparing";
+  void prepareSurface(session, ++session.generation);
+  return true;
 }
 
 function applyFrame(

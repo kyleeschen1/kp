@@ -56,11 +56,11 @@ test("equation authoring Focus Card retains paint on repairs and shares one cont
   await expect.poll(async () => Number(await stage.getAttribute("data-kp-logarithm-change-of-base-progress"))).toBeGreaterThan(0.1);
   await expect(stage).toHaveAttribute("data-kp-logarithm-change-of-base-progress", "1", { timeout: 10000 });
   await expect(stage).toHaveAttribute("data-kp-logarithm-change-of-base-visual-owner", "target-native");
-  for (const width of [1280, 390]) {
+  for (const width of [1280, 900, 800, 390]) {
     const geometryRevision = await stage.getAttribute("data-kp-logarithm-change-of-base-geometry-revision");
     await page.setViewportSize({ width, height: 900 });
     await seek(deck.locator("[data-kp-focus-deck-scrubber]"), 0.5);
-    if (width === 390) await expect(stage).not.toHaveAttribute("data-kp-logarithm-change-of-base-geometry-revision", geometryRevision!);
+    if (width !== 1280) await expect(stage).not.toHaveAttribute("data-kp-logarithm-change-of-base-geometry-revision", geometryRevision!);
     await expect(stage).toHaveAttribute("data-kp-logarithm-change-of-base-geometry-state", "ready");
     await expect.poll(() => stage.evaluate(element => {
       const bounds = element.getBoundingClientRect();

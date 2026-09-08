@@ -21,6 +21,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-07-authoring-round-trip-live-trial.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-07-authoring-round-trip-release.md"
     }
   ],
   "dependsOn": {
@@ -296,6 +300,111 @@
       "scope": "s24",
       "checkedAt": "2026-09-07T23:59:06.040Z",
       "notes": "Full app, node, test, Svelte and domain types pass."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T00:10:30.877Z",
+      "notes": "Initial release attempt stopped at private-clock ratchet for unnecessary authoring loading timeout. Removed timer, preserved existing event/cancellation owners, no exception added; full rerun ongoing."
+    },
+    {
+      "command": "npm run visual:authoring-market -- --grep 'equation authoring' --project=firefox --project=webkit",
+      "status": "failed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T00:10:32.086Z",
+      "notes": "Initial cohort 7/9: Firefox and WebKit exposed resize-before-observer stale typography. Repaired existing surface paint boundary and font-size invalidation; no paint assertion weakened."
+    },
+    {
+      "command": "npm run visual:authoring-market -- --grep 'equation authoring' --project=firefox --project=webkit",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T00:10:33.304Z",
+      "notes": "Final cohort 9/9 passes in Chromium, Firefox and WebKit, including four widths, fixed-card-width font changes, actual ink bounds, numeric replacement and cancellation."
+    },
+    {
+      "command": "npm run test:browser:logarithm-change-of-base",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T00:10:34.377Z",
+      "notes": "Three canonical compositor and multi-glyph pressure checks pass after lifecycle repair."
+    },
+    {
+      "command": "npm run check:canonical-tax-source",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T00:10:35.527Z",
+      "notes": "Canonical generated reference remains current."
+    },
+    {
+      "command": "npm run author:market-publication -- --source content/authoring/market-round-trip.market.json --check",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T00:10:36.677Z",
+      "notes": "Actual 63-file reviewed edition reproduces unchanged source and payload digests."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T00:22:07.210Z",
+      "notes": "Fresh full app/node/test/Svelte/domain types and production build pass after test-fixture typing repair. Existing generic large-chunk warning remains; budgets checked separately."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T00:22:09.203Z",
+      "notes": "All 12 manifest reader routes pass production closure."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T00:22:10.971Z",
+      "notes": "All routes pass unchanged 5-percent growth limits; no budget baseline or limit changed."
+    },
+    {
+      "command": "npm run visual:canonical-tax-production -- --project=firefox --project=webkit",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T00:22:12.837Z",
+      "notes": "18 built-reader checks pass across Chromium, Firefox and WebKit; four-card arrows, gradual phone code swipes, reduced motion and no-JavaScript exact facts preserved."
+    },
+    {
+      "command": "npm run test:equation-reachability",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T00:22:14.813Z",
+      "notes": "12 checks pass after existing generator refreshes exact scanned count and six caller edges. All 68 roots and fallback classifications preserved."
+    },
+    {
+      "command": "npm run test:animation-transformation-coverage-view",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T00:22:16.742Z",
+      "notes": "19 checks pass. Updated stale UI counts to earlier s04 evidence truth: Registered 6, Missing 13; direct support unchanged and series/fraction gaps remain explicit."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T00:35:01.333Z",
+      "notes": "Final clean full run: 6672 tests pass, zero failures/cancellations/skips, 771952 ms. Architecture/conformance/inference/catalog/promotion preflights pass. Earlier inventory and UI-fixture failures repaired without authority or budget changes."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T00:35:03.167Z",
+      "notes": "Final app/node/test/Svelte/domain gate passes, including last coverage-view fixture correction."
+    },
+    {
+      "command": "npm run visual:authoring-market",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T00:37:03.460Z",
+      "notes": "Final post-repair combined cohort: all 13 checks pass, including actual source break/repair/export/filesystem-build/no-JS numeric math. Test-owned source writes restored."
     }
   ],
   "progress": {
