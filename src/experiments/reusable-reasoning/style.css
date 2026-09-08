@@ -1,4 +1,16 @@
 .reasoning-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; margin: 1.2rem 0; }
+/* Only this exemplar owns horizontal gestures. Native vertical pan and zoom
+   remain available; browser momentum and rubber-band offsets cannot drive math. */
+[data-kp-reasoning-card] [data-kp-focus-deck-viewport] {
+  overflow-x: hidden;
+  touch-action: pan-y pinch-zoom;
+  overscroll-behavior-x: none;
+}
+/* Long passages may scroll internally, but their boundaries must release
+   vertical input to the article instead of trapping the reader in the card. */
+[data-kp-reasoning-card] [data-kp-focus-deck-viewport] > section {
+  overscroll-behavior-block: auto;
+}
 .reasoning-toolbar button { border: 1px solid var(--kp-st-rule); border-radius: .35rem; background: var(--kp-st-paper); color: var(--kp-st-strong); padding: .65rem .85rem; font: inherit; cursor: pointer; }
 .reasoning-toolbar [hidden] { display: none; }
 .reasoning-toolbar span { color: var(--kp-st-muted); font-size: .85rem; }

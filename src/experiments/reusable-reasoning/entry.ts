@@ -9,6 +9,7 @@ import { readKpFocusDeckScrubberKeyTarget, renderKpFocusDeckScaffold } from "../
 import type { ReasoningReading } from "./readings.ts";
 import type { ReasoningPromptKind } from "./prompts.ts";
 import { createReasoningAuthoringSession } from "./authoring.ts";
+import { mountReasoningPassageInput } from "./passage-input.ts";
 
 const root = document.querySelector<HTMLElement>("#authored-focus-card")!;
 const report = (error: unknown) => {
@@ -41,45 +42,27 @@ async function mount() {
   let mode: ReasoningReading = "full";
   let beats = reasoningBeats(evidence, "parent");
   let semanticBeats = reasoningBeats(evidence, "reason", "full");
-  let alignedScroll = 0;
+  let settledBeat = 0;
   let disposed = false;
-  let input: { kind: "idle" } | { kind: "slider"; session: KpReasoningScrub }
-    | { kind: "passage"; session: KpReasoningScrub; phase: "contact" | "coasting" | "resting-with-contact" } = { kind: "idle" };
-  let quietTimer: number | undefined;
-  const clearQuiet = () => {
-    if (quietTimer !== undefined) window.clearTimeout(quietTimer);
-    quietTimer = undefined;
-  };
+  let input: { kind: "idle" } | { kind: "slider"; session: KpReasoningScrub } = { kind: "idle" };
+  let passageInput: ReturnType<typeof mountReasoningPassageInput> | undefined;
   const cancelInput = () => {
-    clearQuiet();
+    passageInput?.cancel();
     if (input.kind !== "idle") input.session.cancel();
     input = { kind: "idle" };
   };
-  const beginInput = (kind: "slider" | "passage", contact = false) => {
+  const beginInput = (kind: "slider") => {
     if (disposed || practice) return;
     if (input.kind === kind) return;
     cancelInput();
     const session = navigation.beginScrub();
-    input = kind === "slider" ? { kind, session } : { kind, session, phase: contact ? "contact" : "coasting" };
+    input = { kind, session };
   };
-  const finishInput = (kind: "slider" | "passage") => {
+  const finishInput = (kind: "slider") => {
     if (input.kind !== kind) return;
-    clearQuiet();
     const session = input.session;
     input = { kind: "idle" };
     session.finish(!reduced.matches);
-  };
-  const scheduleQuiet = () => {
-    clearQuiet();
-    if (input.kind !== "passage") return;
-    const session = input.session;
-    // Same 180ms input-quiescence policy as the existing TypeScript Focus Card.
-    // Firefox can omit wheel scrollend; other engines can deliver it early.
-    // This detects gesture completion only: the native clock still owns motion.
-    quietTimer = window.setTimeout(() => {
-      quietTimer = undefined;
-      if (input.kind === "passage" && input.session === session) scrollEnd();
-    }, 180);
   };
   let practiceReturn: ReturnType<typeof navigation.capture> | undefined;
   let practice: (typeof prompts)[number] | undefined;
@@ -102,17 +85,20 @@ async function mount() {
     card.querySelector<HTMLOutputElement>("[data-kp-focus-deck-position]")!.value = label;
     const counter = card.querySelector<HTMLElement>("[data-reasoning-beat-count]")!;
     counter.hidden = Boolean(practice);
-    const countText = `${index + 1} / ${beats.length}`;
+    if (input.kind === "idle" && !viewport.dataset["reasoningGesture"] &&
+        Math.abs(position - Math.round(position)) < 1e-8) settledBeat = Math.round(position);
+    settledBeat = Math.min(settledBeat, beats.length - 1);
+    const countText = `${settledBeat + 1} / ${beats.length}`;
     if (counter.textContent !== countText) {
       counter.textContent = countText;
-      counter.setAttribute("aria-label", `Beat ${index + 1} of ${beats.length}`);
+      counter.setAttribute("aria-label", `Beat ${settledBeat + 1} of ${beats.length}`);
     }
     viewport.querySelectorAll<HTMLElement>("[data-kp-focus-deck-beat]").forEach((item, i) => {
       const active = practice ? i === 0 : i === index;
       item.dataset["kpFocusDeckBeatActive"] = String(active);
       if (active) item.setAttribute("aria-current", "page"); else item.removeAttribute("aria-current");
     });
-    if (align && !practice && input.kind !== "passage") { alignedScroll = passagePosition * Math.max(1, viewport.clientWidth); viewport.scrollLeft = alignedScroll; }
+    if (align && !practice) viewport.scrollLeft = passagePosition * Math.max(1, viewport.clientWidth);
     root.dataset["kpReasoningView"] = navigation.getView();
   };
   const navigate = (index: number) => {
@@ -122,6 +108,9 @@ async function mount() {
   };
   const updateView = () => {
     cancelInput();
+    // A restored intermediate view has no active gesture origin. Orient its
+    // count to the nearest beat without quantizing the exact saved playhead.
+    settledBeat = Math.round(navigation.getStepPosition());
     const view = navigation.getView();
     const template = document.createElement("div");
     template.innerHTML = renderReasoningCard(evidence, view, mode);
@@ -154,39 +143,13 @@ async function mount() {
     if (target === undefined) return;
     event.preventDefault(); navigate(target);
   };
-  viewport.onscroll = () => {
-    if (disposed || practice || Math.abs(viewport.scrollLeft - alignedScroll) < 2) return;
-    const position = Math.max(0, Math.min(beats.length - 1, viewport.scrollLeft / Math.max(1, viewport.clientWidth)));
-    alignedScroll = viewport.scrollLeft;
-    // Physical passage travel drives the existing clock continuously. The
-    // resulting paint must not snap the viewport back to a chosen destination.
-    const actual = position / passageFactor();
-    if (input.kind === "passage") {
-      if (input.phase === "resting-with-contact") input.phase = "contact";
-      input.session.update(actual / navigation.end * navigation.stepCount);
-      scheduleQuiet();
-    }
-  };
-  viewport.onpointerdown = () => { if (!practice) { cancelInput(); beginInput("passage", true); } };
-  viewport.onwheel = event => {
-    if (!practice && (event.deltaX !== 0 || event.shiftKey)) { beginInput("passage"); scheduleQuiet(); }
-  };
-  // Native scrollend includes touch/trackpad momentum. A release handler on
-  // touchend would settle too early while the browser was still scrolling.
-  const scrollEnd = () => {
-    if (input.kind !== "passage") return;
-    if (input.phase === "coasting") finishInput("passage");
-    else input.phase = "resting-with-contact";
-  };
-  const releasePassage = () => {
-    if (input.kind !== "passage") return;
-    if (input.phase === "resting-with-contact") finishInput("passage");
-    else { input.phase = "coasting"; scheduleQuiet(); }
-  };
-  viewport.addEventListener("scrollend", scheduleQuiet);
-  window.addEventListener("pointerup", releasePassage);
-  window.addEventListener("touchend", releasePassage);
-  window.addEventListener("touchcancel", releasePassage);
+  passageInput = mountReasoningPassageInput({ viewport,
+    enabled: () => !disposed && !practice,
+    position: () => navigation.getStepPosition(),
+    begin: now => navigation.beginPassageGesture(now),
+    reduced: () => reduced.matches,
+    interrupt: cancelInput
+  });
   open.onclick = () => { navigation.open(); updateView(); back.focus(); };
   back.onclick = () => { navigation.returnToParent(); updateView(); open.focus(); };
   reading.onchange = () => {
@@ -281,10 +244,7 @@ async function mount() {
     if (disposed) return;
     cancelInput(); disposed = true; unsubscribe(); navigation.dispose(); surface.dispose();
     window.removeEventListener("resize", resize); window.removeEventListener("pagehide", dispose);
-    viewport.removeEventListener("scrollend", scheduleQuiet);
-    window.removeEventListener("pointerup", releasePassage);
-    window.removeEventListener("touchend", releasePassage);
-    window.removeEventListener("touchcancel", releasePassage);
+    passageInput?.dispose();
     reduced.removeEventListener("change", motion); document.removeEventListener("visibilitychange", visibility);
   };
   window.addEventListener("resize", resize); window.addEventListener("pagehide", dispose);

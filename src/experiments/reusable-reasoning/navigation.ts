@@ -3,6 +3,7 @@ import type { KpReasoningEvidence } from "./evidence.ts";
 import { bindKpReasoningSupport } from "./support.ts";
 import { pinKpReasoningReference, type KpReasoningReference } from "./references.ts";
 import { KpReasoningRepairGap } from "./source.ts";
+import { reasoningGestureTarget } from "./gesture.ts";
 
 export interface KpReasoningPosition {
   readonly reference: KpReasoningReference;
@@ -22,6 +23,12 @@ export interface KpReasoningScrub {
   readonly [scrubAuthority]: true;
   update(step: number): void;
   finish(animate?: boolean): void;
+  cancel(): void;
+}
+export interface KpReasoningPassageGesture {
+  readonly [scrubAuthority]: true;
+  update(step: number, nowMs: number): void;
+  finish(nowMs: number, animate?: boolean): void;
   cancel(): void;
 }
 
@@ -70,12 +77,14 @@ export function createKpReasoningNavigator(
   // Semantic checkpoints own control destinations. Prose pagination is not an
   // input: compressing a reading cannot collapse several operations into Next.
   const checkpoints = Object.freeze(support.procedure.checkpoints.map((_ref, index) => index / count));
-  const go = (progress: number, animate: boolean) => {
+  const go = (progress: number, animate: boolean, settle = false) => {
     assertLive(); position(progress);
     scrub = undefined;
     clock.pause();
     if (!animate) clock.seek(progress);
-    else clock.play({ direction: progress >= clock.getSnapshot().progress ? "forward" : "rewind", stopAt: progress });
+    else clock.play({ direction: progress >= clock.getSnapshot().progress ? "forward" : "rewind", stopAt: progress,
+      ...(settle ? { settlement: { durationMs: Math.max(160, Math.min(380,
+        Math.abs(progress - clock.getSnapshot().progress) * clock.durationMs)) } } : {}) });
   };
   return Object.freeze({
     end,
@@ -96,7 +105,37 @@ export function createKpReasoningNavigator(
         },
         finish(animate = true) {
           if (!live()) return;
-          go(checkpoints[Math.round(clock.getSnapshot().progress * count)]!, animate);
+          go(checkpoints[Math.round(clock.getSnapshot().progress * count)]!, animate, true);
+        },
+        cancel() { if (live()) scrub = undefined; }
+      });
+    },
+    beginPassageGesture(nowMs: number): KpReasoningPassageGesture {
+      assertLive();
+      if (!Number.isFinite(nowMs)) throw new Error("Gesture time must be finite.");
+      clock.pause();
+      const token = {}; scrub = token;
+      const live = () => !disposed && scrub === token;
+      const anchor = Math.round(clock.getSnapshot().progress * count);
+      let last = clock.getSnapshot().progress * count, at = nowMs, velocity = 0, moved = false;
+      return Object.freeze({
+        [scrubAuthority]: true as const,
+        update(step: number, now: number) {
+          if (!live()) return;
+          if (!Number.isFinite(step) || !Number.isFinite(now) || now < at) throw new Error("Invalid gesture sample.");
+          const bounded = Math.max(0, Math.min(checkpoints.length - 1, Math.max(anchor - 1, Math.min(anchor + 1, step))));
+          const elapsed = now - at;
+          moved ||= Math.abs(bounded - last) > 1e-8;
+          velocity = elapsed > 0 && elapsed <= 100 ? (bounded - last) / elapsed : 0;
+          last = bounded; at = now;
+          clock.seek(bounded / count);
+        },
+        finish(now: number, animate = true) {
+          if (!live()) return;
+          if (!Number.isFinite(now) || now < at) throw new Error("Invalid gesture release.");
+          const target = moved ? reasoningGestureTarget(anchor, last, now - at <= 100 ? velocity : 0, checkpoints.length - 1)
+            : Math.round(last);
+          go(checkpoints[target]!, animate, true);
         },
         cancel() { if (live()) scrub = undefined; }
       });

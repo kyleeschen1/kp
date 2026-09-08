@@ -25,6 +25,7 @@ export interface KpReaderTimelinePlaybackClock
   play(input: {
     readonly direction: "forward" | "rewind";
     readonly stopAt: number;
+    readonly settlement?: { readonly durationMs: number };
   }): void;
   pause(): KpReaderClockSample;
 }
@@ -60,6 +61,7 @@ export function createKpReaderTimelinePlaybackClock(input: {
   let direction: "forward" | "rewind" = "forward";
   let stopAt = snapshot.progress;
   let previousNowMs = scheduler.now();
+  let settlement: { from: number; startedAt: number; durationMs: number } | undefined;
   let frameHandle: number | undefined;
   let disposed = false;
 
@@ -84,7 +86,12 @@ export function createKpReaderTimelinePlaybackClock(input: {
     previousNowMs = nowMs;
     const delta = elapsedMs / input.durationMs *
       (direction === "forward" ? 1 : -1);
-    const candidate = snapshot.progress + delta;
+    const fraction = settlement === undefined ? 0 : Math.min(1, Math.max(0,
+      (nowMs - settlement.startedAt) / settlement.durationMs));
+    // Release deceleration uses this same scheduler and semantic sample path;
+    // it never overshoots or introduces a CSS-owned second playhead.
+    const candidate = settlement === undefined ? snapshot.progress + delta
+      : fraction === 1 ? stopAt : settlement.from + (stopAt - settlement.from) * (1 - (1 - fraction) ** 3);
     const reachedStop = direction === "forward"
       ? candidate >= stopAt
       : candidate <= stopAt;
@@ -134,9 +141,13 @@ export function createKpReaderTimelinePlaybackClock(input: {
     play(next: {
       readonly direction: "forward" | "rewind";
       readonly stopAt: number;
+      readonly settlement?: { readonly durationMs: number };
     }) {
       assertLive();
       const target = boundedProgress(next.stopAt);
+      if (next.settlement !== undefined && (!Number.isFinite(next.settlement.durationMs) || next.settlement.durationMs <= 0)) {
+        throw new Error("Timeline settlement duration must be positive.");
+      }
       if (
         (next.direction === "forward" && target < snapshot.progress) ||
         (next.direction === "rewind" && target > snapshot.progress)
@@ -145,6 +156,9 @@ export function createKpReaderTimelinePlaybackClock(input: {
       }
       direction = next.direction;
       stopAt = target;
+      settlement = next.settlement === undefined ? undefined : {
+        from: snapshot.progress, startedAt: scheduler.now(), durationMs: next.settlement.durationMs
+      };
       if (stopAt === snapshot.progress) {
         status = "paused";
         sequence += 1;

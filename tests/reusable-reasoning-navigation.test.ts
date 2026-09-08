@@ -59,6 +59,35 @@ function fixture(source = createKpReasoningSource()) {
     advance(ms: number) { now += ms; const work = [...pending.values()]; pending.clear(); work.forEach(callback => callback(now)); } };
 }
 
+test("passage gestures distinguish intent, pauses, reversal and bounded destinations", () => {
+  const { navigation, clock, advance } = fixture();
+  for (const [amount, release, target] of [[.1, 20, 1], [.1, 300, 0], [.3, 300, 1], [.02, 20, 0], [8, 300, 1]]) {
+    navigation.seekStep(0);
+    const gesture = navigation.beginPassageGesture(0);
+    gesture.update(amount!, 20);
+    assert.ok(navigation.getStepPosition() <= 1, "one gesture cannot scrub through later operations");
+    gesture.finish(release!); advance(1000);
+    assert.equal(navigation.getStepPosition(), target);
+  }
+  navigation.seekStep(2);
+  const reverse = navigation.beginPassageGesture(0);
+  reverse.update(2.6, 100); reverse.update(2.2, 160); reverse.finish(160); advance(1000);
+  assert.equal(navigation.getStepPosition(), 2, "reversing an exploratory drag can cancel the advance");
+  navigation.seekStep(.4);
+  const tap = navigation.beginPassageGesture(0); tap.finish(20); advance(1000);
+  assert.equal(navigation.getStepPosition(), 0, "catch and release without dragging settles to the nearest beat");
+  for (const [start, outside] of [[0, -100], [4, 100]]) {
+    navigation.seekStep(start!);
+    const edge = navigation.beginPassageGesture(0); edge.update(outside!, 20); edge.finish(20); advance(1000);
+    assert.equal(navigation.getStepPosition(), start);
+  }
+  navigation.seekStep(2);
+  const stale = navigation.beginPassageGesture(0); stale.update(2.37, 20);
+  navigation.open(); navigation.returnToParent(); stale.finish(30);
+  assert.equal(clock.getSnapshot().progress, 2.37 / 13);
+  clock.dispose();
+});
+
 test("open and return preserve exact interrupted progress through the real existing clock", () => {
   const { clock, navigation, advance, pending } = fixture();
   clock.play({ direction: "forward", stopAt: navigation.end });

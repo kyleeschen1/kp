@@ -122,3 +122,24 @@ test("direct URL seeks publish once without replaying intermediate frames", () =
   assert.deepEqual(samples, [0.8]);
   assert.equal(fake.pending(), 0);
 });
+
+test("release settlement decelerates monotonically, lands exactly and remains interruptible", () => {
+  for (const direction of ["forward", "rewind"] as const) {
+    const fake = fakeScheduler();
+    const from = direction === "forward" ? .2 : .8, to = direction === "forward" ? .8 : .2;
+    const clock = createKpReaderTimelinePlaybackClock({ id: "release", durationMs: 1000,
+      initialProgress: from, scheduler: fake.scheduler });
+    clock.play({ direction, stopAt: to, settlement: { durationMs: 200 } });
+    const points = [from];
+    for (const now of [50, 100, 150, 200]) { fake.step(now); points.push(clock.getSnapshot().progress); }
+    const distances = points.slice(1).map((point, index) => Math.abs(point - points[index]!));
+    assert.ok(distances.every((distance, index) => index === 0 || distance < distances[index - 1]!));
+    assert.equal(points.at(-1), to); assert.equal(fake.pending(), 0);
+    assert.ok(points.every(point => point >= .2 && point <= .8));
+    clock.seek(from); clock.play({ direction, stopAt: to, settlement: { durationMs: 200 } });
+    fake.step(250); clock.seek(.37); fake.step(1000);
+    assert.equal(clock.getSnapshot().progress, .37); assert.equal(fake.pending(), 0);
+    assert.throws(() => clock.play({ direction: "forward", stopAt: .8, settlement: { durationMs: NaN } }));
+    clock.dispose();
+  }
+});

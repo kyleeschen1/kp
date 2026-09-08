@@ -61,11 +61,11 @@ commit; the new visible host and its GET route are isolated.
 
 Repeatable commands:
 
-- `npm run test:reusable-reasoning`: 43 tests through source/authority/reference,
+- `npm run test:reusable-reasoning`: 44 tests through source/authority/reference,
   formula/procedure/support/extraction, real-clock navigation, reading equivalence,
   existing flashcard projections and atomic last-valid drafts.
 - `npm run visual:reusable-reasoning`: isolated native browser integration.
-- `npm run visual:reusable-reasoning:shared`: six integrated Chromium
+- `npm run visual:reusable-reasoning:shared`: seven integrated Chromium
   checks against the human's port-8000 URL, without starting another server.
   Captures include the distributed state, exact return, changed native endpoint,
   phone reason and phone practice. The phone check includes keyboard operation,
@@ -96,6 +96,49 @@ Phone-width Chromium and emulated touch are not physical-device or cross-browser
 release certification. The native phone layout retains its stacked equation form.
 
 ## Resume boundary
+
+### Checkpoint refinement: continuous gestures with predictable settlement
+
+The user approved the design recommendation and explicitly required attention
+to Safari's scroll semantics. Horizontal passage input now drives the semantic
+playhead directly, rather than reading native scroll offsets or waiting for
+`scrollend`. The browser owns vertical pan and pinch zoom; CSS snapping is off.
+This separation is consistent with WebKit's distinction between platform
+scrolling/momentum and engine snap behavior; see
+[WebKit scrolling architecture](https://trac.webkit.org/wiki/Scrolling).
+
+Passage gesture authority is a private capability distinct from slider scrub
+authority. One gesture explores at most the adjacent checkpoints. Its release
+destination combines distance and recent velocity; a paused small exploration
+returns, a decisive flick advances, and reversal can cancel an advance. Release
+uses a monotonic deceleration on the existing clock, not a second RAF loop or
+CSS animation. Arrow playback and ink motifs are unchanged. The visible counter
+holds the prior settled beat during input; explicit intermediate restoration
+orients the count to the nearest beat without rounding the saved playhead.
+
+Touch/pointer release settles immediately. Trackpads have no portable physical
+finger-up signal: the local treatment uses 90ms of wheel quiet and a 180ms
+quiet tail fence. Cancellation preserves that fence across disclosure/return;
+late inertial input cannot immediately claim a new gesture. Those numbers and
+the distance/velocity policy are provisional exemplar tuning, not global laws.
+A sufficiently long event gap can be indistinguishable from a new gesture;
+do not claim perfect physical trackpad classification.
+
+Executed checks cover real mouse passage drags at phone width, emulated
+Chromium touch, continuous intermediate values, release, native snap events,
+overscroll offsets, wheel tails, exact interrupted return and vertical page
+scrolling. The bounded three-test cohort passed in Chromium, Firefox and WebKit
+(nine checks). The vertical test exposed a real inherited `overscroll-behavior`
+trap in nested passage sections; the exemplar now allows vertical scroll to
+chain to the page. Deterministic unit laws cover flick/hold/reversal, bounded
+destinations, stale authority and interruptible no-overshoot deceleration.
+
+WebKit automation is not physical iPhone/iPad or installed Safari certification.
+The human should review touch/trackpad feel at the same port-8000 URL, especially
+short flicks, exploratory reversals, repeated gestures and vertical scrolling.
+Rollback unit: this gesture-refinement commit. No semantic source, authoring
+schema, equation renderer, or other card family is replaced. The run remains
+deferred at **14/24**, pending this exemplar's visual acceptance before s15.
 
 ### Checkpoint refinement: semantic slots, progress fraction and ink evaluation
 

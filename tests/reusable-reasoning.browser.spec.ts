@@ -76,14 +76,19 @@ test("release settles slider and passage gestures but cannot resnap restored pos
   await previewSlider(slider, "0.37");
   // Begin another modality, then interrupt it with disclosure. A late
   // scrollend must not settle the exact parent return address.
-  await passage.dispatchEvent("pointerdown");
   await passage.dispatchEvent("wheel", { deltaX: 1, deltaY: 0 });
-  await page.getByRole("button", { name: "Why does this step work?" }).click();
+  // Capture at the actual disclosure instant; a release may legitimately
+  // advance while an automation command is travelling to the browser.
+  const interrupted = await page.getByRole("button", { name: "Why does this step work?" }).evaluate(node => {
+    if (!(node instanceof HTMLButtonElement)) throw new Error("Expected disclosure button.");
+    const progress = document.querySelector<HTMLElement>("[data-kp-reasoning-card]")!.dataset["kpReasoningProgress"]!;
+    node.click(); return progress;
+  });
   await page.getByRole("button", { name: "Return to the argument" }).click();
   await passage.dispatchEvent("scrollend");
   await slider.dispatchEvent("change");
   await page.evaluate(async () => { for (let i = 0; i < 40; i++) await new Promise(requestAnimationFrame); });
-  await expect(card).toHaveAttribute("data-kp-reasoning-progress", String(.37 / 13));
+  await expect(card).toHaveAttribute("data-kp-reasoning-progress", interrupted!);
   await page.emulateMedia({ reducedMotion: "reduce" });
   await previewSlider(slider, "1.7");
   await slider.dispatchEvent("change");
@@ -196,23 +201,26 @@ test("combined checkpoint preserves keyboard and continuous passage travel at ph
   await expect(card).toHaveAttribute("data-kp-reasoning-state", "fraction-solve.state.distributed");
   await slider.focus(); await page.keyboard.press("Home");
   await expect(card).toHaveAttribute("data-kp-reasoning-progress", "0");
-  const samples = await card.evaluate(async node => {
-    const card = node as HTMLElement;
-    const viewport = card.querySelector<HTMLElement>("[data-kp-focus-deck-viewport]")!;
-    viewport.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
-    const samples: number[] = [];
-    for (const fraction of [.1, .25, .5, .75, .9]) {
-      viewport.scrollLeft = viewport.clientWidth * fraction;
-      await new Promise(requestAnimationFrame); await new Promise(requestAnimationFrame);
-      samples.push(Number(card.dataset["kpReasoningProgress"]));
-    }
-    return samples;
-  });
+  const viewport = card.locator("[data-kp-focus-deck-viewport]");
+  await viewport.scrollIntoViewIfNeeded();
+  const initialBox = (await viewport.boundingBox())!;
+  const startX = initialBox.x + initialBox.width * .95, dragY = initialBox.y + initialBox.height * .8;
+  await page.mouse.move(startX, dragY); await page.mouse.down();
+  const samples: number[] = [];
+  for (const fraction of [.1, .25, .5, .75, .9]) {
+    await page.mouse.move(startX - initialBox.width * fraction, dragY);
+    samples.push(Number(await card.getAttribute("data-kp-reasoning-progress")));
+  }
   expect(samples.every(value => value > 0 && value < 1 / 13)).toBe(true);
   expect(new Set(samples).size).toBe(5);
   expect(samples).toEqual([...samples].sort((a, b) => a - b));
+  await expect(card.locator("[data-reasoning-beat-count]")).toHaveText("1 / 5");
+  await page.mouse.up();
+  await expect(card).toHaveAttribute("data-kp-reasoning-progress", String(1 / 13));
+  await previewSlider(slider, ".4");
+  await viewport.click({ position: { x: initialBox.width * .5, y: initialBox.height * .8 } });
+  await expect(card).toHaveAttribute("data-kp-reasoning-progress", "0");
   await slider.fill("0");
-  const viewport = card.locator("[data-kp-focus-deck-viewport]");
   await viewport.scrollIntoViewIfNeeded();
   const box = (await viewport.boundingBox())!;
   if (browserName === "chromium") {
@@ -245,6 +253,50 @@ test("combined checkpoint preserves keyboard and continuous passage travel at ph
   await page.screenshot({ path: info.outputPath("phone-practice.png"), fullPage: true });
   await page.getByRole("button", { name: "Return to reading", exact: true }).click();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test("gesture ownership ignores native snap events and wheel tails, preserves vertical scrolling", async ({ page }) => {
+  await page.goto(route);
+  const card = page.locator("[data-kp-reasoning-card]");
+  await expect(page.locator("#authored-focus-card")).toHaveAttribute("data-kp-reasoning-status", "ready");
+  const viewport = card.locator("[data-kp-focus-deck-viewport]");
+  const slider = card.locator("[data-kp-focus-deck-scrubber]");
+  await expect(viewport).toHaveCSS("scroll-snap-type", "none");
+  await expect(viewport).toHaveCSS("overflow-x", "hidden");
+  await previewSlider(slider, ".37");
+  await viewport.evaluate(node => {
+    node.scrollLeft = -100; node.dispatchEvent(new Event("scroll"));
+    node.scrollLeft = 100000; node.dispatchEvent(new Event("scrollend"));
+  });
+  await expect(card).toHaveAttribute("data-kp-reasoning-progress", String(.37 / 13));
+  await slider.fill("0");
+  await viewport.evaluate(async node => {
+    node.dispatchEvent(new WheelEvent("wheel", { deltaX: node.clientWidth * .6, cancelable: true }));
+    await new Promise(resolve => setTimeout(resolve, 130));
+    for (let i = 0; i < 5; i++) {
+      node.dispatchEvent(new WheelEvent("wheel", { deltaX: node.clientWidth, cancelable: true }));
+      await new Promise(resolve => setTimeout(resolve, 30));
+    }
+  });
+  await expect(card).toHaveAttribute("data-kp-reasoning-progress", String(1 / 13));
+  await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 200)));
+  await slider.fill("0");
+  const restored = await viewport.evaluate(node => {
+    node.dispatchEvent(new WheelEvent("wheel", { deltaX: node.clientWidth * .4, cancelable: true }));
+    const card = document.querySelector<HTMLElement>("[data-kp-reasoning-card]")!;
+    const position = card.dataset["kpReasoningProgress"]!;
+    document.querySelector<HTMLButtonElement>("[data-reasoning-open]")!.click();
+    document.querySelector<HTMLButtonElement>("[data-reasoning-return]")!.click();
+    node.dispatchEvent(new WheelEvent("wheel", { deltaX: node.clientWidth, cancelable: true }));
+    return position;
+  });
+  await expect(card).toHaveAttribute("data-kp-reasoning-progress", restored);
+  await slider.fill("1");
+  await viewport.scrollIntoViewIfNeeded(); await viewport.hover();
+  const before = await page.evaluate(() => scrollY);
+  await page.mouse.wheel(0, 160);
+  await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(before);
+  await expect(card).toHaveAttribute("data-kp-reasoning-progress", String(1 / 13));
 });
 
 
