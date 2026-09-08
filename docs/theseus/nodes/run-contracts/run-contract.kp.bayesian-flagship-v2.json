@@ -169,7 +169,8 @@
     {
       "id": "s11",
       "title": "Add bounded author draft/checker with both declared input forms, semantic edit diagnostics and unknown-operation gaps",
-      "status": "planned"
+      "summary": "Bounded draft/checker supports two exact input forms, labels, semantic order and detail; geometry timing and unsupported operations produce located repairs.",
+      "status": "complete"
     },
     {
       "id": "s12",

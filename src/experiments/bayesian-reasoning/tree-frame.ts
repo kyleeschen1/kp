@@ -49,15 +49,16 @@ export function sampleBayesTree(plan: BayesTreePlan, position: number) {
   const focus = intent.kind === "transmit" ? [...intent.sourceEntityIds, ...intent.targetEntityIds]
     : intent.kind === "notice" ? intent.targetEntityIds : [];
   const hierarchy = plan.scene.registry.entities.map(entity => ({ id: entity.id, salience: focus.includes(entity.id) ? "focus" as const : "context" as const }));
-  const leaves = plan.trace.model.outcomes.map((outcome, ordinal) => {
-    const firstRow = ordinal, reorderedRow = (outcome.values[1] ? 0 : 2) + (outcome.values[0] ? 0 : 1);
-    const groupedRow = reorderedRow;
+  const leaves = plan.trace.model.outcomes.map(outcome => {
+    const row = (first: 0 | 1) => (outcome.values[first] ? 0 : 2) + (outcome.values[first === 0 ? 1 : 0] ? 0 : 1);
+    const firstRow = row(plan.initial.first), reorderedRow = row(plan.reordered.first);
+    const groupedRow = row(1);
     const y = mix(mix(75 + firstRow * 90, 75 + groupedRow * 90, gather), 75 + reorderedRow * 90, flip);
     // Opposite lateral lanes prevent the middle two semantic owners colliding
     // while their ordering changes. Curvature serves correspondence, not flourish.
     const lane = outcome.key === "tf" ? 1 : outcome.key === "ft" ? -1 : 0;
     const clearance = (progress: number) => smooth(Math.min(progress / .15, (1 - progress) / .15));
-    const x = 540 + lane * 90 * (clearance(gather) + clearance(flip));
+    const x = 540 + lane * 90 * ((firstRow === groupedRow ? 0 : clearance(gather)) + clearance(flip));
     return { id: outcome.id, key: outcome.key, x, y, presence: smooth(position - 1),
       inReferencePopulation: outcome.values[1], context: outcome.values[1] ? 0 : conditioned,
       mass: outcome.mass };

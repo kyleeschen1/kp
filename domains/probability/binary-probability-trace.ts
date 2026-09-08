@@ -69,9 +69,9 @@ export function requireBinaryProbabilityTrace(trace: BinaryProbabilityTrace): vo
 
 /** This score returns to the retained full population before refactoring it.
  * The joint model is never overwritten with a conditional projection. */
-export function compileBinaryProbabilityTrace(model: BinaryJointModel): BinaryProbabilityTrace {
+export function compileBinaryProbabilityTrace(model: BinaryJointModel, first: BinaryAxis = 0): BinaryProbabilityTrace {
   BinaryJointModel.require(model);
-  const tree = factorBinaryTree(model, 0), flipped = factorBinaryTree(model, 1);
+  const tree = factorBinaryTree(model, first), flipped = factorBinaryTree(model, first === 0 ? 1 : 0);
   const condition = PositiveProbabilityPopulation.from(model, { eventId: model.events[1].id, occurs: true });
   if (condition.status === "repair-gap") throw new ProbabilityRepairGap(condition.diagnostic.code, condition.diagnostic.path, condition.diagnostic.expected);
   const population = condition.population;

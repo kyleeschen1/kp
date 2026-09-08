@@ -19,6 +19,7 @@ export function createBayesSourceAuthority(trace: BinaryProbabilityTrace): KpGov
   const { model } = trace;
   const serializeMass = (mass: { numerator: bigint; denominator: bigint }) => `${mass.numerator}/${mass.denominator}`;
   const source = { sourceId: model.sourceId, events: model.events,
+    treeOrder: trace.states.map(state => state.kind === "population" ? null : state.tree.first),
     outcomes: model.outcomes.map(outcome => ({ id: outcome.id, key: outcome.key, mass: serializeMass(outcome.mass) })) };
   const revisionId = `sha256:${sha256(JSON.stringify(source))}`;
   const builder = createKpAnimationAssetBuilder({ id: bayesArtifactId, title: "Build a probability model; change the question" });
@@ -53,7 +54,7 @@ export function createBayesSourceAuthority(trace: BinaryProbabilityTrace): KpGov
   return result;
 }
 
-export function createBayesConstructionRequest(authority: KpGovernedConstructionSourceAuthority) {
+export function createBayesConstructionRequest(authority: KpGovernedConstructionSourceAuthority, detailLevel: "complete" | "key-steps" = "complete") {
   requireBayesAuthority(authority);
   return createKpGovernedCanonicalConstructionRequest({ schemaVersion: "kp.governed-semantic-authoring-request.v2",
     id: `request.${authority.sourceId}`, source: { kind: "verified-semantic-source", sourceId: authority.sourceId,
@@ -61,7 +62,7 @@ export function createBayesConstructionRequest(authority: KpGovernedConstruction
     approvedObjectIds: authority.animation.bundle.objects.map(object => object.id),
     approvedOperationIds: authority.animation.transformations.map(operation => operation.id),
     explanationPurpose: { kind: "compare", objectIds: authority.animation.bundle.objects.map(object => object.id), operationIds: [] },
-    detailLevel: "complete", compositionIntent: { kind: "sequence", operationIds: authority.animation.transformations.map(operation => operation.id) } });
+    detailLevel, compositionIntent: { kind: "sequence", operationIds: authority.animation.transformations.map(operation => operation.id) } });
 }
 
 export function compileBayesConstruction(authority: KpGovernedConstructionSourceAuthority, request: unknown = createBayesConstructionRequest(authority)) {
