@@ -211,7 +211,8 @@
     {
       "id": "s18",
       "title": "Join applied-source download, immutable edition creation and verification; reject stale draft publication",
-      "status": "planned"
+      "summary": "Displayed-source download excludes dirty drafts; immutable local edition preserves exact source and shared styles, verifies bytes and opens offline without JS. Ten browser checks pass.",
+      "status": "complete"
     },
     {
       "id": "s19",

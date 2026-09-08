@@ -36,6 +36,8 @@ export function buildBayesPage() {
       <label for="bayes-draft">Bounded probability source (JSON)</label>
       <textarea id="bayes-draft" data-bayes-draft spellcheck="false">${escape(sourceText)}</textarea>
       <button type="button" data-bayes-apply disabled>Apply draft</button> <button type="button" data-bayes-restore disabled>Restore displayed source</button>
+      <button type="button" data-bayes-download disabled>Download displayed source</button>
+      <p>Build a local immutable edition from that file: <code>npm run author:bayesian-publication -- --source path/to/bayes.json</code>. Add <code>--check</code> to verify it. Download never exports an unapplied draft.</p>
       <p data-bayes-author-status role="status">Preparing the initial card.</p>
     </details><p data-bayes-error role="alert" hidden></p>`;
 }

@@ -1,5 +1,8 @@
 import { createHash } from "node:crypto";
-import { basename } from "node:path";
+import { basename, dirname, join, relative, resolve } from "node:path";
+import { existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, rmSync, writeFileSync } from "node:fs";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import { parseArgs } from "node:util";
 import katex from "katex";
 import { checkBayesDraft } from "../src/experiments/bayesian-reasoning/draft.ts";
 import { projectBayesReading } from "../src/experiments/bayesian-reasoning/readings.ts";
@@ -9,7 +12,9 @@ import { renderBayesTreeSvg } from "../src/experiments/bayesian-reasoning/tree-s
 import { encodeKpHtmlText as escape } from "../src/rendering/html-output-encoding.ts";
 import { createKpCompiledPublicationArtifact, assertKpCompiledPublicationArtifact } from "../src/tutorial/kp-compiled-publication-artifact.ts";
 
-const digest = (text: string): `sha256:${string}` => `sha256:${createHash("sha256").update(text).digest("hex")}`;
+const digest = (text: string | Uint8Array): `sha256:${string}` => `sha256:${createHash("sha256").update(text).digest("hex")}`;
+const repo = fileURLToPath(new URL("..", import.meta.url));
+export const bayesEditionRoot = join(repo, "tmp/codex/bayesian-editions");
 
 /** Compilation owns source verification; the artifact envelope pins bytes,
  * not mathematical truth. No editor, browser session or playback is emitted. */
@@ -43,4 +48,53 @@ export function verifyBayesPublication(value: unknown, sourceText: string, sourc
   assertKpCompiledPublicationArtifact(value);
   if (JSON.stringify(value) !== JSON.stringify(compileBayesPublication(sourceText, sourcePath)))
     throw new Error("Publication does not reproduce from the selected probability source and trusted compiler.");
+}
+
+/** An immutable local edition snapshots the shared CSS too: rebuilding after a
+ * template/style change creates new bytes, never rewrites a distributed edition. */
+export function buildBayesEdition(sourcePath: string, check = false) {
+  const selected = resolve(sourcePath);
+  if (selected.startsWith(`${bayesEditionRoot}/`)) throw new Error("Keep authored source outside generated editions.");
+  const sourceText = readFileSync(selected, "utf8"), artifact = compileBayesPublication(sourceText, selected);
+  const katexRoot = join(repo, "node_modules/katex/dist");
+  const files = new Map<string, string | Buffer>([
+    ["source.json", sourceText], ["publication.json", JSON.stringify(artifact, null, 2) + "\n"],
+    ["katex.min.css", readFileSync(join(katexRoot, "katex.min.css"))],
+    ...readdirSync(join(katexRoot, "fonts")).sort().map(file => [`fonts/${file}`, readFileSync(join(katexRoot, "fonts", file))] as [string, Buffer]),
+    ["index.html", `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Bayesian probability reading</title><link rel="stylesheet" href="./styles/experiments/authored-focus-card.css"><link rel="stylesheet" href="./styles/experiments/bayesian-reasoning/style.css"></head><body><main id="authored-focus-card">${artifact.payload.reading.html}</main></body></html>`]
+  ]);
+  for (const path of ["experiments/authored-focus-card.css", "experiments/bayesian-reasoning/style.css",
+    "reader/app/exemplar.css", "rendering/canonical-equation-stage.css", "tutorial/focus-deck-scaffold.css"]) {
+    const source = readFileSync(join(repo, "src", path), "utf8");
+    files.set(`styles/${path}`, path === "reader/app/exemplar.css"
+      ? source.replace('@import "katex/dist/katex.min.css";', '@import "../../../katex.min.css";') : source);
+  }
+  const manifest = { schemaVersion: "kp.bayes-edition-files.v1", revisionId: artifact.payload.revisionId,
+    files: Object.fromEntries([...files].sort(([a], [b]) => a.localeCompare(b)).map(([name, bytes]) => [name, digest(bytes)])) };
+  const directory = join(bayesEditionRoot, digest(JSON.stringify(manifest)).slice(7));
+  files.set("edition.json", JSON.stringify(manifest, null, 2) + "\n");
+  for (const name of files.keys()) {
+    let current = repo;
+    for (const part of relative(repo, join(directory, name)).split("/")) {
+      current = join(current, part);
+      if (lstatSync(current, { throwIfNoEntry: false })?.isSymbolicLink()) throw new Error("Edition output cannot traverse symlinks.");
+    }
+  }
+  if (check || existsSync(directory)) {
+    for (const [name, bytes] of files) if (!readFileSync(join(directory, name)).equals(Buffer.from(bytes)))
+      throw new Error(`Edition is stale or altered: ${name}`);
+  } else {
+    mkdirSync(bayesEditionRoot, { recursive: true });
+    const staging = mkdtempSync(join(bayesEditionRoot, ".building-"));
+    try {
+      for (const [name, bytes] of files) { const target = join(staging, name); mkdirSync(dirname(target), { recursive: true }); writeFileSync(target, bytes, { flag: "wx" }); }
+      renameSync(staging, directory);
+    } finally { rmSync(staging, { recursive: true, force: true }); }
+  }
+  return { directory, revisionId: artifact.payload.revisionId, sourceRevision: artifact.source.sha256, checked: check };
+}
+if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
+  const { values } = parseArgs({ options: { source: { type: "string" }, check: { type: "boolean", default: false } } });
+  if (!values.source) throw new Error("Use --source <bayes.json>; source selection is explicit.");
+  console.log(JSON.stringify(buildBayesEdition(values.source, values.check), null, 2));
 }

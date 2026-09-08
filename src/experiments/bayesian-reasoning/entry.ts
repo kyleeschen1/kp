@@ -146,6 +146,7 @@ async function mount() {
   const textarea = document.querySelector<HTMLTextAreaElement>("[data-bayes-draft]")!;
   const apply = document.querySelector<HTMLButtonElement>("[data-bayes-apply]")!;
   const restore = document.querySelector<HTMLButtonElement>("[data-bayes-restore]")!;
+  const download = document.querySelector<HTMLButtonElement>("[data-bayes-download]")!;
   const status = document.querySelector<HTMLElement>("[data-bayes-author-status]")!;
   const errorOutput = document.querySelector<HTMLElement>("[data-bayes-error]")!;
   const initial = checkBayesDraft(JSON.stringify(createBayesDraft()));
@@ -193,7 +194,14 @@ async function mount() {
   };
   restore.onclick = () => { cancelHistory(); textarea.value = session.current().sourceText;
     status.textContent = "Restored the displayed source. No source file changed."; };
-  apply.disabled = false; restore.disabled = false; status.textContent = "Displayed source is valid. Edit and apply to update the whole card.";
+  download.onclick = () => {
+    const current = session.current(), blob = new Blob([current.sourceText], { type: "application/json" });
+    const url = URL.createObjectURL(blob), link = document.createElement("a");
+    link.href = url; link.download = `bayes-${current.revisionId.slice(7, 19)}.json`; link.click();
+    window.setTimeout(() => URL.revokeObjectURL(url), 0);
+    status.textContent = "Downloaded the displayed valid source, not the draft. Build and verify the selected file locally.";
+  };
+  apply.disabled = false; restore.disabled = false; download.disabled = false; status.textContent = "Displayed source is valid. Edit and apply to update the whole card.";
   active.onChange(remember);
   const restoreHistory = async () => {
     const ticket = ++restoreSequence; restoring = true; session.invalidate(); active.pause();
@@ -224,7 +232,7 @@ async function mount() {
   const pageshow = (event: PageTransitionEvent) => { if (event.persisted) onHistory(); };
   window.addEventListener("popstate", onHistory); window.addEventListener("hashchange", onHistory); window.addEventListener("pageshow", pageshow);
   const dispose = () => { if (disposed) return; disposed = true; session.dispose(); active.dispose();
-    apply.onclick = null; restore.onclick = null; textarea.oninput = null; window.removeEventListener("pagehide", pagehide);
+    apply.onclick = null; restore.onclick = null; download.onclick = null; textarea.oninput = null; window.removeEventListener("pagehide", pagehide);
     window.removeEventListener("popstate", onHistory); window.removeEventListener("hashchange", onHistory); window.removeEventListener("pageshow", pageshow); };
   const pagehide = (event: PageTransitionEvent) => { session.invalidate(); active.pause(); remember(); if (!event.persisted) dispose(); };
   window.addEventListener("pagehide", pagehide); import.meta.hot?.dispose(dispose);

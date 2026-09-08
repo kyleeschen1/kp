@@ -578,6 +578,34 @@
       "scope": "s17",
       "checkedAt": "2026-09-08T20:50:20.893Z",
       "notes": "All architecture, authority and conformance gates pass."
+    },
+    {
+      "command": "npm run test:bayesian-reasoning",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-08T20:56:07.489Z",
+      "notes": "28 tests pass including immutable local source/style snapshots, separate edited editions and refusal to overwrite stale output."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-08T20:56:08.674Z",
+      "notes": "Full types pass; final browser edition check also passes focused test typecheck."
+    },
+    {
+      "command": "npm run visual:bayesian-reasoning:shared",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-08T20:56:09.703Z",
+      "notes": "Ten Chromium checks pass including applied source download despite invalid draft, build/check/open no-JS edition, all-local CSS/font requests, canonical serif/stroke and seven visible static SVG states. Conditioned screenshot inspected."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-08T20:56:10.739Z",
+      "notes": "All architecture and conformance gates pass."
     }
   ],
   "expectedLearning": [

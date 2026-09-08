@@ -1,4 +1,46 @@
 import { test, expect } from "@playwright/test";
+import { readFileSync, rmSync } from "node:fs";
+import { join } from "node:path";
+import { pathToFileURL } from "node:url";
+import { buildBayesEdition } from "../scripts/build-bayesian-edition.ts";
+
+test("Bayes applied-source download builds a verified no-JS edition with local shared styles", async ({ page, browser }, info) => {
+  let edition: string | undefined;
+  const staticContext = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    await page.goto("/experiments/bayesian-reasoning/");
+    const card = page.locator("[data-bayes-display] [data-bayes-card]");
+    await expect(card).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+    await page.locator(".bayes-author summary").click();
+    const editor = page.locator("[data-bayes-draft]"), source = JSON.parse(await editor.inputValue());
+    source.model.events[0].label = `Static edition ${Date.now()}`;
+    source.model.masses = ["1/8", "3/8", "3/8", "1/8"];
+    await editor.fill(JSON.stringify(source)); await page.locator("[data-bayes-apply]").click();
+    await expect(card.locator(".bayes-legend")).toContainText(source.model.events[0].label);
+    const revision = await card.getAttribute("data-bayes-revision");
+    await editor.fill("{");
+    const pending = page.waitForEvent("download"); await page.locator("[data-bayes-download]").click();
+    const download = await pending, selected = info.outputPath("displayed-source.json"); await download.saveAs(selected);
+    expect(JSON.parse(readFileSync(selected, "utf8"))).toEqual(source);
+    const built = buildBayesEdition(selected); edition = built.directory;
+    expect(built.revisionId).toBe(revision); expect(buildBayesEdition(selected, true).checked).toBe(true);
+    const reading = await staticContext.newPage(), requests: string[] = [];
+    reading.on("request", request => requests.push(request.url()));
+    await reading.goto(pathToFileURL(join(edition, "index.html")).href);
+    await expect(reading.locator("[data-bayes-publication-revision]")).toHaveAttribute("data-bayes-publication-revision", revision!);
+    expect(await reading.locator("svg.bayes-tree").count()).toBe(7);
+    await expect(reading.locator("#bayes-static-4-description")).toHaveText(/B reference population/);
+    await expect(reading.locator(".bayes-tree").nth(4).locator("[data-bayes-outcome]").first()).toBeVisible();
+    expect(await reading.locator("script").count()).toBe(0);
+    expect(requests.every(url => url.startsWith(pathToFileURL(edition + "/").href))).toBe(true);
+    const paint = await reading.locator(".bayes-tree").nth(4).evaluate(svg => {
+      const text = svg.querySelector("text")!, rule = svg.querySelector("rect")!;
+      return { family: getComputedStyle(text).fontFamily, stroke: getComputedStyle(rule).stroke, width: svg.getBoundingClientRect().width };
+    });
+    expect(paint.family).toContain("Iowan Old Style"); expect(paint.stroke).not.toBe("none"); expect(paint.width).toBeGreaterThan(300);
+    await reading.locator(".bayes-tree").nth(4).screenshot({ path: info.outputPath("bayes-static-conditioned.png") });
+  } finally { await staticContext.close(); if (edition) rmSync(edition, { recursive: true, force: true }); }
+});
 
 test("Bayes practice hides live answers until reveal and returns to the interrupted card", async ({ page }) => {
   await page.goto("/experiments/bayesian-reasoning/");

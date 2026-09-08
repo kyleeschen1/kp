@@ -12,6 +12,7 @@
     "test:reusable-reasoning": "node --disable-warning=ExperimentalWarning --test tests/reusable-reasoning-*.test.ts",
     "author:reasoning": "node --disable-warning=ExperimentalWarning scripts/author-reasoning.ts",
     "author:bayesian-reasoning": "node --disable-warning=ExperimentalWarning scripts/author-bayesian-reasoning.ts",
+    "author:bayesian-publication": "node --disable-warning=ExperimentalWarning scripts/build-bayesian-edition.ts",
     "benchmark:reasoning:live": "node --disable-warning=ExperimentalWarning scripts/run-reasoning-authoring-trial.ts",
     "author:reasoning-publication": "node --disable-warning=ExperimentalWarning scripts/build-reasoning-edition.ts",
     "visual:reusable-reasoning": "playwright test tests/reusable-reasoning.browser.spec.ts --project=chromium --workers=1",
