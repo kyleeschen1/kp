@@ -880,6 +880,27 @@
       "scope": "s23",
       "checkedAt": "2026-09-08T22:50:42.585Z",
       "notes": "6 production preservation tests pass."
+    },
+    {
+      "command": "npm run visual:bayesian-reasoning:cohort",
+      "status": "failed",
+      "scope": "s24-initial",
+      "checkedAt": "2026-09-08T23:00:59.044Z",
+      "notes": "47 of 48 pass; Firefox driver reload loses history.state. Browser DOM reload passes all three history cases; final cohort rerunning."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "failed",
+      "scope": "s25-preflight",
+      "checkedAt": "2026-09-08T23:01:04.085Z",
+      "notes": "Eight existing routes exceed HTML budgets after R3 mandatory accessible endpoints added duplicated visual markup. Preserve accessibility and repair encoding; no budget waiver."
+    },
+    {
+      "command": "npm run visual:bayesian-reasoning:cohort",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-09-08T23:02:48.698Z",
+      "notes": "48 pass in Chromium Firefox WebKit. DOM reload retains exact source; driver reload limitation recorded. No new treatment."
     }
   ],
   "progress": {

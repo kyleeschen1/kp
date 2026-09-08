@@ -259,7 +259,8 @@
     {
       "id": "s24",
       "title": "Run responsive/theme/accessibility and supported-browser integration cohort after accepted two-caller treatment",
-      "status": "planned"
+      "summary": "48 browser cases pass; responsive/preferences/accessibility/input/history/native/static coverage and limits recorded.",
+      "status": "complete"
     },
     {
       "id": "s25",

@@ -4,6 +4,40 @@ import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { buildBayesEdition } from "../scripts/build-bayesian-edition.ts";
 
+test("Bayes release: responsive preferences retain accessible stops and reversible stage drag", async ({ page }, info) => {
+  await page.goto("/experiments/bayesian-reasoning/");
+  const card = page.locator("[data-bayes-card]");
+  await expect(card).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+  for (const colorScheme of ["light", "dark"] as const) {
+    for (const width of [1280, 390]) {
+      await page.setViewportSize({ width, height: 844 });
+      await page.emulateMedia({ colorScheme, reducedMotion: "reduce" });
+      const slider = card.locator("[data-kp-focus-deck-scrubber]");
+      await slider.focus(); await page.keyboard.press("End");
+      await expect(card).toHaveAttribute("data-bayes-position", "6");
+      await expect(slider).toHaveAttribute("aria-valuetext", /^7 \/ 7:/);
+      await expect(card.locator('[aria-current="page"]')).toHaveCount(1);
+      await page.keyboard.press("Home"); await expect(card).toHaveAttribute("data-bayes-position", "0");
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+      await card.screenshot({ path: info.outputPath(`release-${colorScheme}-${width}.png`) });
+    }
+  }
+  await page.setViewportSize({ width: 1280, height: 844 });
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  const stage = card.locator("svg.bayes-tree"); await stage.scrollIntoViewIfNeeded();
+  const box = (await stage.boundingBox())!;
+  const x = box.x + box.width * .8, y = box.y + box.height * .8;
+  await page.mouse.move(x, y); await page.mouse.down();
+  await page.mouse.move(x - box.width * .5, y, { steps: 8 });
+  const outward = Number(await card.getAttribute("data-bayes-position"));
+  expect(outward).toBeGreaterThan(0); expect(outward).toBeLessThan(1);
+  await page.mouse.move(x - box.width * .2, y, { steps: 8 });
+  expect(Number(await card.getAttribute("data-bayes-position"))).toBeLessThan(outward);
+  await page.mouse.up();
+  await expect.poll(async () => { const p = Number(await card.getAttribute("data-bayes-position")); return Math.abs(p - Math.round(p)); }).toBeLessThan(1e-8);
+  await expect(page.locator("[data-bayes-error]")).toBeHidden();
+});
+
 test("Bayes performance: idle and offscreen cards stop work and preserve interrupted position", async ({ page }, info) => {
   await page.goto("/experiments/bayesian-reasoning/");
   const card = page.locator("[data-bayes-display] [data-bayes-card]");
@@ -216,7 +250,16 @@ test("Bayes addresses restore direct positions, edited revision refresh, Back an
   await editor.fill(JSON.stringify(source)); await page.locator("[data-bayes-apply]").click();
   await expect(card.locator(".bayes-legend")).toContainText("History edit");
   const edited = await card.getAttribute("data-bayes-revision"); expect(edited).not.toBe(original);
-  await page.reload(); await expect(card).toHaveAttribute("data-bayes-revision", edited!);
+  // History must contain the applied source before navigation, not merely a
+  // freshly painted card whose commit has not yet been published.
+  await expect.poll(() => page.evaluate(() => history.state?.kpBayes?.navigation?.position?.revisionId)).toBe(edited);
+  const storedSource = await page.evaluate(() => history.state.kpBayes.sourceText);
+  // Exercise browser reload. In this Firefox automation build page.reload()
+  // clears history.state; location.reload() retains it like ordinary refresh.
+  // Neither path may synthesize an unavailable revision from a URL hash.
+  await Promise.all([page.waitForEvent("load"), page.evaluate(() => location.reload())]);
+  await expect(card).toHaveAttribute("data-bayes-revision", edited!);
+  expect(await page.evaluate(() => history.state.kpBayes.sourceText)).toBe(storedSource);
   await expect(card).toHaveAttribute("data-bayes-position", "4");
   await page.goBack(); await expect(card).toHaveAttribute("data-bayes-revision", original!);
   await page.goForward(); await expect(card).toHaveAttribute("data-bayes-revision", edited!);
