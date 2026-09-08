@@ -1,0 +1,10 @@
+{
+  "kind": "captured-live-response",
+  "model": "gpt-5.6-sol",
+  "responseHashBothRounds": "d6e79c3791a2b09c4fcc46f3e304833880f5dced71e9a5b4e81e1b94479362ea",
+  "repairInputKind": "injected-binding-faults",
+  "drafts": {
+    "equationJson": "{\"schemaVersion\":\"kp.reasoning-example.v1\",\"id\":\"lesson.reasoning.distribute-evaluate\",\"title\":\"See both products\",\"formula\":{\"lawId\":\"kp.algebra.distribute.v1\",\"commonFactorId\":\"fraction-fan-out.source.factor\",\"addendIds\":[\"fraction-fan-out.source.addend.x\",\"fraction-fan-out.source.addend.6\"]},\"parent\":{\"id\":\"claim.expand-and-evaluate\",\"statement\":\"Distribute the fraction, then normalize both products as fractions.\",\"sourceStateId\":\"fraction-solve.state.factored\",\"targetStateId\":\"fraction-solve.state.normalized\",\"assumptionIds\":[\"assumption.real-scalar-x\",\"assumption.nonzero-denominator\"]},\"reason\":{\"id\":\"reason.distribute-evaluate\",\"title\":\"Why does this step work?\",\"operationIds\":[\"fraction-solve.step.distribute\",\"fraction-solve.step.normalize\"],\"explanation\":\"The same factor multiplies both terms. Distribute it to show both products, then normalize those products as fractions without evaluating the constant.\",\"assumptionIds\":[\"assumption.real-scalar-x\",\"assumption.nonzero-denominator\"]},\"compact\":\"Distribute to both terms, then normalize both products.\"}",
+    "codeJson": "{\"title\":\"One threshold, preserved behavior\",\"statement\":\"The named threshold helper preserves the behavior of both callers for the three declared threshold cases.\",\"explanation\":\"Name the helper, move the threshold decision, then replace each caller. Verify preservation at the three declared threshold cases; this does not establish arbitrary TypeScript equivalence.\",\"sourceRevisionId\":\"free-shipping.before.v1\",\"targetRevisionId\":\"free-shipping.after.v1\",\"stageIds\":[\"stage.orient\",\"stage.compare-duplicates\",\"stage.introduce-helper\",\"stage.move-shared-rule\",\"stage.replace-cost-call\",\"stage.replace-message-call\",\"stage.verify-parity\"]}"
+  }
+}

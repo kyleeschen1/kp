@@ -413,6 +413,26 @@
       "status": "passed",
       "scope": "s21",
       "checkedAt": "2026-09-08T17:18:39.032Z"
+    },
+    {
+      "command": "npm run test:reusable-reasoning",
+      "status": "passed",
+      "scope": "s22",
+      "checkedAt": "2026-09-08T17:25:06.209Z",
+      "notes": "61 tests including held-out endpoints, zero fallback, exact captured model revisions and diagnostic replay."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s22",
+      "checkedAt": "2026-09-08T17:25:07.411Z"
+    },
+    {
+      "command": "npm run benchmark:reasoning:live -- --model gpt-5.6-sol",
+      "status": "passed",
+      "scope": "s22",
+      "checkedAt": "2026-09-08T17:25:08.452Z",
+      "notes": "Two actual calls through existing access: two first-pass edits and two labelled fault-injection repairs pass. Durable captured outputs and limits in September 8 live-trial review."
     }
   ],
   "progress": {
