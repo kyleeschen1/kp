@@ -358,6 +358,12 @@
       "status": "passed",
       "scope": "s17",
       "checkedAt": "2026-09-08T16:31:06.740Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typescript-refactor-behavior-proof.test.ts tests/typescript-extract-helper-semantic-binder.test.ts tests/typescript-focus-card.test.ts",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-08T16:36:03.039Z"
     }
   ],
   "progress": {

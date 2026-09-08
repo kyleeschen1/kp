@@ -196,7 +196,8 @@
     {
       "id": "s18",
       "title": "Pressure with existing extract-helper code",
-      "status": "planned"
+      "summary": "Bounded TypeScript reasoning retains exact source identities, language-owned operations and declared-case behavior proof; all seven stage handoffs and fractional return pins verified without math semantics. 53 reasoning tests, 11 code tests, full types pass.",
+      "status": "complete"
     },
     {
       "id": "s19",
