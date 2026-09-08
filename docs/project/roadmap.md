@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-09-07
+Last Updated: 2026-09-08
 Status: active
 Active Thread: `threads/typed-semantic-authoring-framework.md`
 Supporting Threads:
@@ -34,14 +34,12 @@ R1 is complete with release verification; see
 `reviews/2026-09-07-authoring-round-trip-closeout.md`. The user confirmed the repair
 works and approved R2's exact 24-slice proposal:
 `reviews/2026-09-07-reusable-reasoning-long-loop-proposal.md`.
-`run-contract.kp.reusable-reasoning-v1` has reached its required combined visual
-checkpoint; see `reviews/2026-09-07-reusable-reasoning-visual-checkpoint.md`.
-The user accepted the repaired exemplar on September 8 and resumed the remaining
-approved R2 slices. Preserve its accepted motion and interaction; Theseus owns
-progress and the resume state. The second code caller now has its own visual
-checkpoint, accepted by the user on September 8 before resuming shared promotion; see
-`reviews/2026-09-08-reusable-reasoning-code-checkpoint.md`.
-R3/Bayes and later execution remain unapproved scope.
+R2 is now complete under `run-contract.kp.reusable-reasoning-v1`; both equation
+and code visual checkpoints were accepted. Preserve their accepted motion and
+interaction. The results, measured costs, complete release evidence and limits
+are in `reviews/2026-09-08-reusable-reasoning-closeout.md`.
+The next planning action is one bounded R3/Bayes proposal using that handoff;
+R3/Bayes and later execution remain unapproved scope. Do not restart R1 or R2.
 Minimal check-ins, mainly canonical
 visual reviews, are a standing preference; see
 `decisions/2026-09-07-reconciled-horizon-and-minimal-check-ins.md`.

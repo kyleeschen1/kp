@@ -2,9 +2,9 @@
   "id": "next-action.kp.reusable-reasoning",
   "kind": "next-action",
   "title": "R2 Reusable reasoning at multiple scales",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "User approved the exact 24-slice R2 proposal; visual checkpoint at s14.",
+  "summary": "Completed approved R2 with accepted equation/code exemplars, coherent authoring projections, shared navigation, actual repair trial and passing release. Bayes handoff is planning only.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -17,6 +17,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-08-reusable-reasoning-code-checkpoint.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-08-reusable-reasoning-closeout.md"
     }
   ],
   "dependsOn": {
@@ -495,11 +499,18 @@
       "scope": "s23-final",
       "checkedAt": "2026-09-08T17:55:17.951Z",
       "notes": "Two Chromium preservation cases pass; real source file restored after fault injection."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-09-08T17:59:21.490Z",
+      "notes": "Closeout and canonical memory reconciled with executed release, actual trial and preserved scope; no R3 execution."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "Both visual callers accepted. Shared extraction and authoring packet complete; continue existing held-out trial, release and closeout."
+    "state": "complete",
+    "summary": "COMPLETE: all 24 approved R2 slices and both accepted visual callers. Release passed; next is a bounded Bayes proposal, not authorized execution."
   },
   "expectedLearning": [
     "Measure whether one authored reason yields consistent full compact and retrieval projections through existing owners and reduces second-caller glue."

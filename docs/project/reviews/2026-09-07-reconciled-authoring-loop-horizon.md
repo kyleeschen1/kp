@@ -3,6 +3,10 @@
 Date: 2026-09-07
 Status: CURRENT PLANNING SYNTHESIS — requested reconciliation, not execution approval
 
+September 8 checkpoint: R1 and R2 are complete. Their execution authority and
+results remain in the roadmap and linked closeouts. The next planning boundary
+is R3; this horizon does not authorize its implementation.
+
 ## Authority and reconciliation
 
 The user requested reconciliation of the earlier architectural milestones and
@@ -191,8 +195,9 @@ total loop count or completion date before measuring R1 and new family costs.
 
 ## Handoff
 
-Next action: draft the R1 bounded long-run proposal, using this document as the
-horizon reference. Do not detail ten speculative execution contracts. Theseus
+Next action: draft the R3 bounded long-run proposal, using the R2 closeout and
+this document as the horizon reference. Do not restart completed R1/R2 or detail
+ten speculative execution contracts. Theseus
 owns live status once an exact run is approved. Earlier milestone/review texts
 retain architectural rationale and source evidence but no longer own successor
 ordering; completed G3 must never be restarted from their historical stop text.

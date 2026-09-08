@@ -1,29 +1,29 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: R2 equation and code accepted; approved post-checkpoint work resumed
+Status: R2 complete with accepted equation/code callers; next is bounded R3 planning
 Last Updated: 2026-09-08
 Current successor reference: `../reviews/2026-09-07-reconciled-authoring-loop-horizon.md`.
 It preserves the original architectural obligations and the tax/Bayes direction;
-the exact R1 26-slice proposal is now approved for implementation:
+the exact R1 26-slice proposal was approved and is now completed evidence:
 `../reviews/2026-09-07-authoring-round-trip-long-loop-proposal.md`.
 Theseus contract: `run-contract.kp.authoring-round-trip-v1`.
-Current closeout: `../reviews/2026-09-07-authoring-round-trip-closeout.md`.
+R1 closeout: `../reviews/2026-09-07-authoring-round-trip-closeout.md`.
 It records the working authoring/reading URLs, numeric JSON-to-native-ink repair,
 source/publication coherence, full release evidence, actual live planner trial and
 remaining limitations. R1 has no remaining execution. The user confirmed its
 repair works and explicitly approved the 24-slice R2 parent/reason/return and
 retrieval proposal: `../reviews/2026-09-07-reusable-reasoning-long-loop-proposal.md`.
-Active contract: `run-contract.kp.reusable-reasoning-v1`; mandatory visual gate s14.
+Completed contract: `run-contract.kp.reusable-reasoning-v1`; both visual gates accepted.
 Review packet and working shared URL:
 `../reviews/2026-09-07-reusable-reasoning-visual-checkpoint.md`.
 The user confirmed the repaired keyboard interaction works and resumed on
-September 8. Continue the approved post-checkpoint slices while preserving the
-accepted equation motion and interaction. Materially different code visuals
-still require their own review; routine nonvisual checks do not.
-The isolated code caller has now reached that review boundary:
+September 8, then accepted the isolated code caller:
 `../reviews/2026-09-08-reusable-reasoning-code-checkpoint.md`.
-The user accepted the code caller and explicitly resumed on September 8.
-Continue the existing contract; do not restart completed integration.
+Current closeout: `../reviews/2026-09-08-reusable-reasoning-closeout.md`.
+It records shared navigation, bounded authoring/repair, immutable equation editions,
+an actual two-round model trial, full release evidence and honest code parity gaps.
+No R2 work remains. Propose the bounded R3 Bayesian flagship next; do not execute
+it without its consolidated scope approval or restart completed integration.
 Branch: `feature/20260907-reusable-reasoning`, retaining completed R1 ancestry.
 Theseus owns counts and terminal state; R3 remains future scope.
 Standing minimal-check-in

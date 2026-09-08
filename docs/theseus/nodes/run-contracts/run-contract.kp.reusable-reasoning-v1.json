@@ -2,9 +2,9 @@
   "id": "run-contract.kp.reusable-reasoning-v1",
   "kind": "run-contract",
   "title": "R2 Reusable reasoning at multiple scales",
-  "status": "in-progress",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "User approved the code visual exemplar and explicitly resumed; continue approved s20-s24 preserving both accepted callers.",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -232,7 +232,8 @@
     {
       "id": "s24",
       "title": "Record results and Bayes handoff",
-      "status": "planned"
+      "summary": "COMPLETE: R2 results, qualified costs and limits, actual model trial, release evidence and Bayes proposal boundary recorded. Roadmap/thread/horizon reconciled; no new execution, merge or deployment.",
+      "status": "complete"
     }
   ]
 }
