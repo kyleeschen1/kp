@@ -112,7 +112,8 @@
     {
       "id": "s04",
       "title": "Resolve revision-pinned references and local bindings",
-      "status": "planned"
+      "summary": "Exact revision-pinned reference resolution with explicit rebind and wrong-kind/label rejection; fourteen tests and full types pass.",
+      "status": "complete"
     },
     {
       "id": "s05",

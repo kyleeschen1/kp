@@ -76,6 +76,20 @@
       "scope": "s03",
       "checkedAt": "2026-09-08T01:25:12.613Z",
       "notes": "Full types pass after final evidence immutability correction."
+    },
+    {
+      "command": "npm run test:reusable-reasoning",
+      "status": "passed",
+      "scope": "s04",
+      "checkedAt": "2026-09-08T01:28:55.376Z",
+      "notes": "Fourteen checks pass including serialized references, stale revisions, wrong kind, labels, forged evidence and playback authority rejection."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s04",
+      "checkedAt": "2026-09-08T01:28:56.565Z",
+      "notes": "Full app node test Svelte domain types pass."
     }
   ],
   "expectedLearning": [
