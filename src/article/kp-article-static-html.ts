@@ -34,6 +34,7 @@ export interface KpArticleStaticHtmlArtifact {
 }
 
 interface RenderContext {
+  headingIdPrefix?: string;
   inlineMathCount: number;
   displayMathCount: number;
   readonly headingIds: Map<string, number>;
@@ -46,17 +47,29 @@ interface RenderContext {
  * runtime or a framework renderer.
  */
 export function compileKpArticleStaticHtml(
-  document: KpArticleDocument
+  document: KpArticleDocument,
+  options: { readonly headingIdPrefix?: string } = {}
 ): KpArticleStaticHtmlArtifact {
+  if (options.headingIdPrefix !== undefined && !/^[A-Za-z][A-Za-z0-9._-]*$/.test(options.headingIdPrefix))
+    throw new Error("Article heading namespace must be an explicit safe identity.");
   const staticMarkdown = compileKpArticleStaticMarkdown(document);
   const root = fromMarkdown(staticMarkdown.markdown);
   const context: RenderContext = {
+    ...(options.headingIdPrefix === undefined ? {} : { headingIdPrefix: options.headingIdPrefix }),
     inlineMathCount: 0,
     displayMathCount: 0,
     headingIds: new Map(),
     headings: []
   };
-  const content = renderRoot(root.children, context);
+  let content = renderRoot(root.children, context);
+  if (options.headingIdPrefix !== undefined) {
+    // Resolve links after all headings exist, including forward references.
+    // Semantic anchors and other fragment namespaces are left untouched.
+    for (const heading of context.headings) {
+      const localId = heading.id.slice(options.headingIdPrefix.length + 1);
+      content = content.replaceAll(`href="#${escapeAttribute(localId)}"`, `href="#${escapeAttribute(heading.id)}"`);
+    }
+  }
   const articleHtml = [
     `<article data-kp-article="${escapeAttribute(document.id)}">`,
     content,
@@ -141,7 +154,9 @@ function renderBlock(node: RootContent, context: RenderContext): string {
 
 function renderHeading(node: Heading, context: RenderContext): string {
   const label = phrasingText(node.children);
-  const baseId = slug(label) || "section";
+  // An embedded Article may share a host with another reading. Namespace
+  // generated headings and their TOC together; standalone legacy IDs stay stable.
+  const baseId = `${context.headingIdPrefix === undefined ? "" : `${context.headingIdPrefix}.`}${slug(label) || "section"}`;
   const occurrence = context.headingIds.get(baseId) ?? 0;
   context.headingIds.set(baseId, occurrence + 1);
   const id = occurrence === 0 ? baseId : `${baseId}-${occurrence + 1}`;

@@ -35,7 +35,7 @@ export function projectBayesReading(draft: PreparedBayesDraft, mode: "full" | "c
   // second interactive stage. Domain references remain explicitly pinned.
   const lock = resolveKpArticleImports(source, []).lock;
   const { document } = compileKpArticleDocument({ source, registry: [], lock });
-  const html = compileKpArticleStaticHtml(document).articleHtml;
+  const html = compileKpArticleStaticHtml(document, { headingIdPrefix: documentId }).articleHtml;
   return Object.freeze({ mode, revisionId: draft.revisionId, source, document, html, definitions, assumptions, facts,
     references: Object.freeze([...trace.states.map(state => state.id), ...trace.operations.map(operation => operation.id)]),
     editorialStatus: "editorial" as const });

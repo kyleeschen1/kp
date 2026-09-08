@@ -205,7 +205,8 @@
     {
       "id": "s17",
       "title": "Compile selected Bayes source into existing publication artifact envelope with static SVG/native math/full context",
-      "status": "planned"
+      "summary": "Deterministic source-verified static publication includes seven SVG states, native math and context; shared Article namespace repair prevents composed heading collisions without legacy changes.",
+      "status": "complete"
     },
     {
       "id": "s18",

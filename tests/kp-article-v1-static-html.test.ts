@@ -8,6 +8,21 @@ import type { KpArticleImportLock } from "../src/article/kp-article-import-lock.
 import { createKpArticleSource } from "../src/article/kp-article-source.ts";
 import { kpArticleVignetteRegistry } from "../src/article/vignettes/economics-demand-shift-vignette.ts";
 
+test("embedded Articles namespace generated headings and forward links without changing legacy or semantic anchors", () => {
+  const source = createKpArticleSource("embedded.md", "---\nkp:\n  schema: kp.article.v1\n  id: lesson.embedded\n  imports:\n---\n\n[Forward](#shared-heading)\n\n# Shared heading\n\n# Shared heading\n");
+  const document = compileKpArticleDocument({ source, registry: [], lock: { schemaVersion: "kp.article-import-lock.v1", documentId: "lesson.embedded", entries: [] } }).document;
+  const legacy = compileKpArticleStaticHtml(document);
+  assert.match(legacy.articleHtml, /id="shared-heading"/);
+  for (const prefix of ["reading.full", "reading.compact"]) {
+    const embedded = compileKpArticleStaticHtml(document, { headingIdPrefix: prefix });
+    assert.ok(embedded.articleHtml.includes(`id="${prefix}.shared-heading"`));
+    assert.ok(embedded.articleHtml.includes(`id="${prefix}.shared-heading-2"`));
+    assert.ok(embedded.articleHtml.includes(`href="#${prefix}.shared-heading"`));
+    assert.ok(embedded.tocHtml.includes(`href="#${prefix}.shared-heading-2"`));
+  }
+  assert.throws(() => compileKpArticleStaticHtml(document, { headingIdPrefix: 'bad"namespace' }), /safe identity/);
+});
+
 test("static HTML is semantic and keeps the complete economics explanation searchable", () => {
   const artifact = compileStatic();
   const text = artifact.articleHtml.replace(/<[^>]*>/gu, " ").replace(/\s+/gu, " ");
