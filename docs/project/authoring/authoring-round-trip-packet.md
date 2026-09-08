@@ -125,8 +125,10 @@ not the different log/exponent-solving sibling on the supply-tax page.
 
 The browser draft uses `createKpEquationSeriesLogarithmBaseDraft` and its bounded
 compiler. Edit the numeric base and argument in **both** LaTeX states, leaving
-`semanticArguments: {}`. Positive finite numeric literals are supported; the
-base cannot equal one. The existing verifier supplies domain/correspondence
+`semanticArguments: {}`. The bounded path uses numeric literals supported by the
+existing parser and native renderer; the base must be positive and cannot equal
+one, and the argument must be positive. It does not add arbitrary-precision or
+symbolic algebra support. The existing verifier supplies domain/correspondence
 authority, and the renderer receives that exact verified instance. This is not
 arbitrary LaTeX animation. The older CLI example above remains explicitly pinned
 to its reference specimen; do not hand-forge its proof metadata to vary it.

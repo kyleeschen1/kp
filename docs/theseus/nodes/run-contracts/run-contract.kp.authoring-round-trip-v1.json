@@ -2,9 +2,9 @@
   "id": "run-contract.kp.authoring-round-trip-v1",
   "kind": "run-contract",
   "title": "R1 Reliable authoring round trip",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Resume existing R1 contract for approved same-family parameterized JSON-to-animation repair; no new motif or clock.",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -251,7 +251,8 @@
     {
       "id": "s26",
       "title": "Measured results, gaps and R2 handoff; close contract",
-      "status": "planned"
+      "summary": "Recorded measured R1 results, preserved architecture, real live-trial limits and R2 handoff. All 26 approved slices complete; R2 requires its own scope approval. No merge or deployment.",
+      "status": "complete"
     }
   ]
 }

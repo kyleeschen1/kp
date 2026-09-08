@@ -30,6 +30,9 @@ authoring, reusable knowledge/procedures, Bayes, frontend convergence/promotion
 and mathematical expansion. The user approved the exact R1 26-slice run:
 `reviews/2026-09-07-authoring-round-trip-long-loop-proposal.md`, executed through
 `run-contract.kp.authoring-round-trip-v1`. R2 and later remain unapproved scope.
+R1 is complete with release verification; see
+`reviews/2026-09-07-authoring-round-trip-closeout.md`. The next action is an R2
+scope proposal, not another R1 resume or an automatic successor implementation.
 Minimal check-ins, mainly canonical
 visual reviews, are a standing preference; see
 `decisions/2026-09-07-reconciled-horizon-and-minimal-check-ins.md`.

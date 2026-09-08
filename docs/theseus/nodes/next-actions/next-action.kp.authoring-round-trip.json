@@ -2,7 +2,7 @@
   "id": "next-action.kp.authoring-round-trip",
   "kind": "next-action",
   "title": "Reliable authoring round trip",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
   "summary": "User accepted appearance, identified missing JSON-to-animation binding, and authorized the recommended parameterized change-of-base repair with resume. Resolve functional checkpoint before proceeding.",
   "sourceRefs": [
@@ -25,6 +25,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-07-authoring-round-trip-release.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-07-authoring-round-trip-closeout.md"
     }
   ],
   "dependsOn": {
@@ -405,6 +409,13 @@
       "scope": "s25",
       "checkedAt": "2026-09-08T00:37:03.460Z",
       "notes": "Final post-repair combined cohort: all 13 checks pass, including actual source break/repair/export/filesystem-build/no-JS numeric math. Test-owned source writes restored."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s26",
+      "checkedAt": "2026-09-08T00:41:13.572Z",
+      "notes": "Canonical roadmap/thread/packet and closeout agree on completed R1, existing owners, measured limits and unapproved R2. Shared authoring URL rechecked HTTP 200."
     }
   ],
   "progress": {
