@@ -116,6 +116,29 @@ Evidence: the `history refresh` case in
 `npm run visual:reusable-reasoning:shared` covers exact fractional return,
 compact mode, refresh, resize, cached-page lifecycle and rejected forged history.
 
+### Revision-pinned local publication
+
+In the source editor, **Download applied source** exports the current valid
+source even if the textarea contains an unapplied or broken draft. Build it with:
+
+```sh
+npm run author:reasoning-publication -- --source /absolute/path/reasoning.json
+```
+
+The command prints an immutable local edition directory under
+`tmp/codex/reasoning-editions/`. Open its `index.html`; it includes local KaTeX
+fonts, all verified steps, full/compact prose, assumptions, definitions,
+evidence, parent/reason anchors, and prediction/reconstruction answers without
+JavaScript. `source.json` retains the exact input bytes and `publication.json`
+uses the existing compiled-publication envelope. `--check` verifies generated
+files against a fresh trusted compilation. Changed revisions get new directories;
+altered existing files are rejected, never silently overwritten. No deployment,
+new publication schema, or interactive static-page enhancement is implied.
+
+The `downloaded applied` browser case exercises the real download, filesystem
+build and JavaScript-disabled reading. Publication unit tests additionally
+reject forged evidence even when the payload digest is recomputed.
+
 ### Current repair: shared semantic keyboard routing
 
 User accepted the other visible behavior but reported arrow keys moving only

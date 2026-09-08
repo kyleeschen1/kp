@@ -224,6 +224,13 @@ async function mount() {
   const editor = root.querySelector<HTMLTextAreaElement>("[data-reasoning-json]")!;
   const draftStatus = root.querySelector<HTMLElement>("[data-reasoning-draft-status]")!;
   editor.value = JSON.stringify(evidence.source, null, 2);
+  root.querySelector<HTMLButtonElement>("[data-reasoning-download]")!.onclick = () => {
+    // Export the applied source, never a broken editor draft or serialized proof.
+    const url = URL.createObjectURL(new Blob([JSON.stringify(evidence.source, null, 2) + "\n"], { type: "application/json" }));
+    const link = document.createElement("a");
+    link.href = url; link.download = "reasoning.json"; link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 0);
+  };
   const stampRevision = () => {
     root.dataset["kpReasoningRevision"] = evidence.revisionId;
     root.querySelector<HTMLElement>("[data-reasoning-revision]")!.textContent = evidence.revisionId;

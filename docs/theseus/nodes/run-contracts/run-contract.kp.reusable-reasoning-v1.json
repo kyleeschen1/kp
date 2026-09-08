@@ -190,7 +190,8 @@
     {
       "id": "s17",
       "title": "Integrate revision-pinned export and static reading",
-      "status": "planned"
+      "summary": "Immutable revision-pinned filesystem export retains exact source bytes, references, assumptions, steps and prompts. Trusted reproduction rejects digest-forged payloads. 50 tests, types, architecture and no-JS browser integration pass.",
+      "status": "complete"
     },
     {
       "id": "s18",

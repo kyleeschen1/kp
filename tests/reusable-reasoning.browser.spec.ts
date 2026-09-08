@@ -11,6 +11,53 @@ async function previewSlider(slider: Locator, value: string) {
 
 const route = "/experiments/reusable-reasoning/";
 
+test("downloaded applied source builds a complete no-JavaScript local reading", async ({ page, browser }) => {
+  const { readFileSync, mkdtempSync, mkdirSync, writeFileSync, rmSync } = await import("node:fs");
+  const { fileURLToPath, pathToFileURL } = await import("node:url");
+  const { join } = await import("node:path");
+  const { buildReasoningEdition } = await import("../scripts/build-reasoning-edition.ts");
+  await page.goto(route);
+  await expect(page.locator("#authored-focus-card")).toHaveAttribute("data-kp-reasoning-status", "ready");
+  await page.locator("[data-reasoning-editor] summary").click();
+  await page.locator("[data-reasoning-short-draft]").click();
+  await page.locator("[data-reasoning-apply]").click();
+  await expect(page.locator("[data-reasoning-draft-status]")).toHaveAttribute("data-status", "applied");
+  const revision = await page.locator("#authored-focus-card").getAttribute("data-kp-reasoning-revision");
+  await page.locator("[data-reasoning-json]").fill("{");
+  const downloadPromise = page.waitForEvent("download");
+  await page.locator("[data-reasoning-download]").click();
+  const download = await downloadPromise;
+  const bytes = readFileSync((await download.path())!, "utf8");
+  expect(JSON.parse(bytes).reason.operationIds).toHaveLength(3);
+  const scratch = fileURLToPath(new URL("../tmp/codex/", import.meta.url));
+  mkdirSync(scratch, { recursive: true });
+  const fixture = mkdtempSync(join(scratch, "reasoning-browser-export-"));
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  let edition: string | undefined;
+  try {
+    const sourcePath = join(fixture, `${fixture.split("/").at(-1)}.json`);
+    writeFileSync(sourcePath, bytes);
+    const built = buildReasoningEdition(sourcePath); edition = built.directory;
+    expect(built.revisionId).toBe(revision);
+    const reading = await context.newPage();
+    await reading.goto(pathToFileURL(join(edition, "index.html")).href);
+    await expect(reading.locator("article")).toHaveAttribute("data-reasoning-revision", revision!);
+    await expect(reading.locator("#reason > section")).toHaveCount(4);
+    await expect(reading.getByText("The denominator 3 is nonzero.", { exact: true })).toBeVisible();
+    await expect(reading.locator("#parent annotation")).toHaveText(/12/);
+    expect(await reading.locator("script").count()).toBe(0);
+    await reading.getByRole("link", { name: "Inspect the supporting reason" }).click();
+    await expect(reading).toHaveURL(/#reason$/);
+    await reading.getByRole("link", { name: "Return to the argument" }).click();
+    await expect(reading).toHaveURL(/#parent$/);
+  } finally {
+    await context.close();
+    if (edition) rmSync(edition, { recursive: true, force: true });
+    rmSync(fixture, { recursive: true, force: true });
+    await download.delete();
+  }
+});
+
 test("history refresh and lifecycle retain exact semantic return without replay", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto(route);

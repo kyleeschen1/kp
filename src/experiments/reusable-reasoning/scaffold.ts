@@ -73,9 +73,11 @@ export function renderReasoningPage(evidence: KpReasoningEvidence) {
       <p>Edit the draft, then choose Apply source. This example supports the first one to four verified operations, with a matching parent target. It does not support arbitrary coefficients or new algebra rules.</p>
       <label>Reasoning source JSON<textarea data-reasoning-json rows="20" spellcheck="false"></textarea></label>
       <div class="reasoning-toolbar"><button type="button" data-reasoning-apply>Apply source</button>
+      <button type="button" data-reasoning-download>Download applied source</button>
       <button type="button" data-reasoning-short-draft>Load three-step draft</button>
       <button type="button" data-reasoning-reset-draft>Load original draft</button></div>
       <p data-reasoning-draft-status role="status">Drafts are local to this page; reload restores the original example.</p>
+      <p>Build a reading-only local edition from the downloaded file with <code>npm run author:reasoning-publication -- --source &lt;reasoning.json&gt;</code>. It preserves source, references and assumptions without deploying anything.</p>
       <p class="review-help">Active revision: <code data-reasoning-revision>${escapeReasoningText(evidence.revisionId)}</code></p>
     </details>
     <p data-reasoning-error role="alert" hidden></p>`;

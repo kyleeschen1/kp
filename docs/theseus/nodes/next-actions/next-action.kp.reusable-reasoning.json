@@ -352,6 +352,12 @@
       "status": "passed",
       "scope": "s16",
       "checkedAt": "2026-09-08T16:23:35.879Z"
+    },
+    {
+      "command": "npm run visual:reusable-reasoning:shared -- --grep \"downloaded applied\"",
+      "status": "passed",
+      "scope": "s17",
+      "checkedAt": "2026-09-08T16:31:06.740Z"
     }
   ],
   "progress": {
