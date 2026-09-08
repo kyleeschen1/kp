@@ -64,6 +64,9 @@ playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
 Current Next Action: resolve the R3 s21 fixed inference-budget stop before resuming;
 see `../reviews/2026-09-08-bayesian-flagship-reuse-cost-stop.md` for the measured
 boundary and recommended bounded investigation. Theseus owns live progress;
+The authorized local investigation is now recorded in that report: no effective
+probability-local repair was found; shared-compiler cost scope is the next
+explicit decision. The real fixture and fixed ceilings remain unchanged.
 do not restart the completed R1, R2 or G3 loops. See
 `../reviews/2026-09-07-canonical-tax-g3-checkpoint.md` for the working URL,
 source workflow, production ownership, release evidence and remaining work.

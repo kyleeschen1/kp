@@ -48,7 +48,10 @@ The user accepted the repaired first coherent exemplar with “looks good!”:
 port-8000 page and records acceptance. The accepted continuation now pauses at
 the s21 fixed inference-budget stop; see
 `reviews/2026-09-08-bayesian-flagship-reuse-cost-stop.md` for delivered integration,
-measurements and the bounded resume recommendation. Theseus owns live progress;
+measurements and the bounded resume recommendation. The user-authorized local
+cost investigation reproduced the failure and rejected an ineffective interface
+refactor; its appended evidence proposes shared-compiler cost scope next.
+Theseus owns live progress;
 do not advance past this stop or raise budgets implicitly.
 Do not restart R1 or R2. Later horizon loops remain unapproved.
 Minimal check-ins, mainly canonical

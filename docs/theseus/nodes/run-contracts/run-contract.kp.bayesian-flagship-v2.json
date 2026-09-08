@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "R3 Bayesian flagship",
   "status": "blocked",
-  "summary": "STOP_CONDITION at s21 fixed inference budget after 20 completed slices. No budget waiver or fixture exclusion. See docs/project/reviews/2026-09-08-bayesian-flagship-reuse-cost-stop.md. Resume same contract at s21 after authorized bounded cost investigation.",
+  "summary": "STOP_CONDITION at s21 after authorized probability-local cost investigation. Full real fixture remains over fixed limits; candidate rejected. Broader shared equation/governed compiler cost work requires scope decision. Resume same contract at s21; no budget waiver.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -39,7 +39,7 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "STOP_CONDITION: visual approved and s01-s20 complete. s21 retains partial implementation; fixed inference ceiling fails after bounded repair. Contract blocked, later slices unstarted. See reuse-cost-stop report."
+    "summary": "20 of 26 complete. Authorized s21 local cost investigation completed without effective repair. STOP_CONDITION persists; shared compiler cost scope proposed, fixture and limits intact."
   },
   "allowedWork": [
     "s01: Freeze owner/capability and author-task baseline; pin original problem, preservation URLs and exact commands; reconcile stale delivery summary; risk Low; F: source/ref audit, exact fixture arithmetic, unchanged worktree baseline; one commit.",

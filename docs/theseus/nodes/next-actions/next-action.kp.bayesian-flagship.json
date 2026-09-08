@@ -4,7 +4,7 @@
   "title": "R3 Bayesian flagship",
   "status": "blocked",
   "domain": "kp",
-  "summary": "R3 visual accepted; 20 of 26 slices complete. s21 fixed inference-budget STOP_CONDITION. Authoring, readings, practice, immutable editions and second source integrated; release work unfinished. Bounded compiler-cost decision needed before resuming.",
+  "summary": "R3 20 of 26 complete. Local compiler-cost investigation complete, budget repair incomplete. Repeatable attribution identifies required canonical compiler closure; shared compiler cost scope proposed. See reuse-cost-stop report follow-up.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -708,11 +708,46 @@
       "scope": "s21",
       "checkedAt": "2026-09-08T21:20:33.141Z",
       "notes": "STOP_CONDITION: real Bayes fixture typechecks but costs 118760 types and 203657 instantiations versus unchanged 112500 and 195800 ceilings. Bounded context extraction saved 3693 types and 6101 instantiations; fixture and ceilings retained."
+    },
+    {
+      "command": "npm exec -- tsc --project tsconfig.node.json --noEmit",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-08T22:09:42.157Z",
+      "notes": "New read-only attribution tool typechecks."
+    },
+    {
+      "command": "npm run profile:bayesian-inference",
+      "status": "failed",
+      "scope": "s21",
+      "checkedAt": "2026-09-08T22:09:43.254Z",
+      "notes": "Attribution executed seven closures and intentionally exits 1 on the final unchanged gate failure. Baseline 112090 types; trace adds 711; notation adds 4517; full 118760 types and 203657 instantiations. Counterfactual deltas overlap, never replace gate."
+    },
+    {
+      "command": "npm run check:bayesian-reuse",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-08T22:09:44.296Z",
+      "notes": "Both publication payload hashes and import closures unchanged after rejected local interface experiment was removed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-08T22:09:45.387Z",
+      "notes": "All architecture and authority gates plus 8 cross-domain tests passed."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "s21",
+      "checkedAt": "2026-09-08T22:09:46.443Z",
+      "notes": "Unchanged final counts 118760 types and 203657 instantiations exceed fixed 112500 and 195800. Local explicit-interface candidate saved only 17 types and added 58 instantiations; fully removed. No probability-local repair found; shared compiler cost scope proposed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "20 of 26 approved R3 slices complete; integration implemented through second-source boundary pressure. Fixed inference-cost STOP_CONDITION at s21, not another visual gate and not release complete."
+    "summary": "s21 local investigation produced executable attribution; not a budget repair. No runtime changes. 20 of 26 complete; remaining release work unstarted."
   },
   "expectedLearning": [
     "Measure whether one domain-owned probability source yields coherent tree equation reading retrieval and publication with source-only second-caller reuse."

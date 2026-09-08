@@ -111,6 +111,10 @@ rollout, merge, or deployment is authorized by this stop report.
 
 ## Recommended next decision
 
+The investigation recommended in this section was authorized by “implement the
+rec, and resume” and executed below. This recommendation is now historical;
+the fixed gate remains failing. Do not repeat the same local-interface experiment.
+
 Authorize a bounded compiler-cost investigation before resuming s21. Measure
 which Bayes declaration dependencies and inferred return surfaces account for
 the added cost; prefer explicit probability-local data interfaces and narrower
@@ -119,3 +123,71 @@ hashes. Stop if the reduction needs a public API/renderer redesign or a budget
 waiver. Do not silently raise ceilings, exclude the real caller, or claim the
 remaining reduction is already understood. Once the unchanged gate passes,
 resume the same contract at s21 and proceed in its approved order.
+
+## Authorized follow-up: attributed cost, rejected local repair
+
+The resumed investigation added `npm run profile:bayesian-inference`, a read-only
+compiler-API attribution command. It loads the existing inference configuration,
+requires the real Bayes fixture to be present, and checks independent
+baseline-plus-entry programs before checking the complete, unchanged fixture
+set. Counterfactual programs are measurements, not replacement gates. The
+command exits unsuccessfully when the complete configuration exceeds the fixed
+ceilings. It changes no compiler options, fixture files, or budgets.
+
+| Independent closure over the pre-Bayes baseline | Types | Instantiations | Added types | Added instantiations |
+| --- | ---: | ---: | ---: | ---: |
+| Pre-Bayes counterfactual | 112,090 | 191,101 | 0 | 0 |
+| Joint model | 112,305 | 191,365 | 215 | 264 |
+| Probability trace | 112,801 | 192,424 | 711 | 1,323 |
+| Governed probability evidence | 114,016 | 194,970 | 1,926 | 3,869 |
+| Canonical notation compilation | 116,607 | 199,769 | 4,517 | 8,668 |
+| Tree plan | 113,114 | 192,801 | 1,024 | 1,700 |
+| Complete unchanged fixture set | 118,760 | 203,657 | 6,670 | 12,556 |
+
+These deltas overlap; **do not sum them**. They measure checked implementation
+and declaration closures, not isolated function execution or browser performance.
+Only 410 types of headroom existed before registering the real Bayes caller.
+The probability trace closure alone exceeds that headroom. The largest measured
+individual added closure is notation: it executes the canonical arithmetic
+adapter, equation grammar/migration, presentation-plan and family-certificate
+compilers. This is required validation, not an accidentally imported Article
+or browser host. Removing that validation to reduce the count is not a repair.
+
+A reversible experiment replaced inferred conditional evidence, binary tree,
+and prepared draft return shapes with explicit readonly local interfaces and
+contextually typed freezes. The real gate measured 118,743 types / 203,715
+instantiations: 17 fewer types but 58 more instantiations. It remained over both
+ceilings. The candidate was fully removed; no speculative API changes or
+runtime changes remain from this investigation. Existing negative type tests
+are intact. Both publication hashes remain unchanged.
+
+The measurements do not prove that no optimization exists. They do show that
+the proposed local interface repair does not address the dominant cost, and
+that treating this as one accidental import has insufficient evidence. No
+safe probability-local implementation change found in this investigation meets
+the remaining 6,260-type / 7,857-instantiation reduction.
+
+### Current stop and proposed scope decision
+
+**STOP_CONDITION remains at s21, 20/26 complete.** The Theseus loop has not
+advanced to s22. The retained change is repeatable diagnostic tooling and
+evidence, not a claimed budget repair. The current canonical card and its
+semantic, rendering and authoring behavior are unchanged.
+
+Recommended next authorization: bounded **shared equation/governed compiler
+cost work**, rather than another probability-only interface pass. Profile the
+responsible compiler closures, then permit internal contract/implementation
+separation or implementation simplification where measurements demonstrate a
+real saving. Keep public APIs, all real caller fixtures, validation behavior,
+publication hashes and fixed ceilings unchanged. Do not authorize renderer
+redesign or replace runtime validation with trusted casts. Require existing
+equation, R1/R2 and Bayes preservation checks for any shared-owner change.
+This is broader than the local probability data-boundary repair just tested;
+it should be authorized explicitly before changing those shared owners.
+
+Follow-up verification: the attribution command reproduced all rows above;
+`npm exec -- tsc --project tsconfig.node.json --noEmit` passed for the new tool.
+Final reuse, architecture and unchanged inference-gate outcomes are recorded
+in Theseus against s21. No new visual treatment was introduced, so the prior
+accepted visual checkpoint remains in force; no new browser release claim is
+made by this diagnostic slice.
