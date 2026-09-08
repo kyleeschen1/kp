@@ -22,7 +22,7 @@ export function createCodeReasoningSource() {
 export function bindCodeReasoningEvidence(value: unknown = createCodeReasoningSource()) {
   if (!value || typeof value !== "object" || Array.isArray(value)) throw new KpCodeReasoningRepairGap("$", "Provide a bounded code reasoning source.");
   const input = value as Record<string, unknown>, expected = createCodeReasoningSource();
-  for (const key of Object.keys(input)) if (!(key in expected)) throw new KpCodeReasoningRepairGap(`$.${key}`, "Author prose and existing source/stage pins, not semantic or renderer authority.");
+  for (const key of Object.keys(input)) if (!Object.hasOwn(expected, key)) throw new KpCodeReasoningRepairGap(`$.${key}`, "Author prose and existing source/stage pins, not semantic or renderer authority.");
   for (const key of ["title", "statement", "explanation"] as const) {
     if (typeof input[key] !== "string" || input[key].trim().length === 0 || input[key].length > 4000) {
       throw new KpCodeReasoningRepairGap(`$.${key}`, "Provide nonempty bounded editorial prose.");

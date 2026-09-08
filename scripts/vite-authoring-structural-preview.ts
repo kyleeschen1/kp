@@ -7,6 +7,17 @@ export function kpViteAuthoringStructuralPreview(): Plugin {
     configureServer(server) {
       server.middlewares.use((request, response, next) => {
         const path = request.url?.split("?")[0];
+        if (path === "/experiments/reusable-reasoning-code/") {
+          if (request.method !== "GET") { response.writeHead(405).end(); return; }
+          void (async () => {
+            try {
+              const module = await server.ssrLoadModule("/src/experiments/reusable-reasoning/code-page.ts") as { buildCodeReasoningPage: () => string };
+              const html = await server.transformIndexHtml(request.url!, `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Code reasoning · Kinetic Press</title><link rel="stylesheet" href="/src/experiments/authored-focus-card.css"><link rel="stylesheet" href="/src/experiments/reusable-reasoning/style.css"><link rel="stylesheet" href="/src/rendering/typescript-refactor.css"><link rel="stylesheet" href="/src/tutorial/kinetic-figure-typescript-focus-card/kinetic-figure-typescript-focus-card.css"></head><body><main id="authored-focus-card">${module.buildCodeReasoningPage()}</main><script type="module" src="/src/experiments/reusable-reasoning/code-entry.ts"></script></body></html>`);
+              response.writeHead(200, { "content-type": "text/html", "cache-control": "no-store" }).end(html);
+            } catch (error) { response.writeHead(422, { "content-type": "text/plain" }).end(error instanceof Error ? error.message : String(error)); }
+          })();
+          return;
+        }
         if (path === "/experiments/reusable-reasoning/") {
           if (request.method !== "GET") { response.writeHead(405).end(); return; }
           void (async () => {

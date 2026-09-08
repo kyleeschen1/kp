@@ -2,9 +2,9 @@
   "id": "run-contract.kp.reusable-reasoning-v1",
   "kind": "run-contract",
   "title": "R2 Reusable reasoning at multiple scales",
-  "status": "in-progress",
+  "status": "deferred",
   "domain": "kp",
-  "summary": "User accepted the repaired s14 exemplar and resumed approved s15-s24; preserve motion. Use executable in-progress lifecycle status.",
+  "summary": "HUMAN_CHECKPOINT at 19/24: material code caller visual review required under s19 before s20 promotion. Working URL http://localhost:8000/experiments/reusable-reasoning-code/. Resume remaining five approved slices after acceptance.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -202,7 +202,8 @@
     {
       "id": "s19",
       "title": "Reuse approved interaction for code caller",
-      "status": "planned"
+      "summary": "Code exemplar ready at shared port 8000 with canonical token motion, seven semantic stops, native continuous input and exact parent return. 54 tests, full types, architecture and focused Chromium preservation pass; material code visual review required before s20.",
+      "status": "complete"
     },
     {
       "id": "s20",

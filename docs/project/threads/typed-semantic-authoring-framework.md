@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: R2 combined visual checkpoint accepted; approved continuation active
+Status: R2 equation accepted; code reasoning at visual checkpoint before promotion
 Last Updated: 2026-09-08
 Current successor reference: `../reviews/2026-09-07-reconciled-authoring-loop-horizon.md`.
 It preserves the original architectural obligations and the tax/Bayes direction;
@@ -20,6 +20,9 @@ The user confirmed the repaired keyboard interaction works and resumed on
 September 8. Continue the approved post-checkpoint slices while preserving the
 accepted equation motion and interaction. Materially different code visuals
 still require their own review; routine nonvisual checks do not.
+The isolated code caller has now reached that review boundary:
+`../reviews/2026-09-08-reusable-reasoning-code-checkpoint.md`.
+On acceptance resume the existing contract; do not restart completed integration.
 Branch: `feature/20260907-reusable-reasoning`, retaining completed R1 ancestry.
 Theseus owns counts and terminal state; R3 remains future scope.
 Standing minimal-check-in

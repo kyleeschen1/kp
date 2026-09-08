@@ -11,6 +11,67 @@ async function previewSlider(slider: Locator, value: string) {
 
 const route = "/experiments/reusable-reasoning/";
 
+test("code reasoning reuses visible motion, continuous passage and exact parent return", async ({ page }, info) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/experiments/reusable-reasoning-code/");
+  const card = page.locator("[data-code-reasoning-card]");
+  await expect(card).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+  const slider = card.locator("[data-kp-focus-deck-scrubber]");
+  await slider.fill("1");
+  await expect(card).toHaveAttribute("data-code-reasoning-progress", "0.16");
+  const sampled = await card.evaluate(async card => {
+    const progress = new Set<string>(), paint = new Set<string>();
+    card.querySelector<HTMLButtonElement>("[data-kp-focus-deck-next]")!.click();
+    const began = performance.now();
+    while (performance.now() - began < 4000) {
+      await new Promise(requestAnimationFrame);
+      const value = Number((card as HTMLElement).dataset["codeReasoningProgress"]);
+      if (value > .16 && value < .34) {
+        progress.add(String(value));
+        paint.add(Array.from(card.querySelectorAll<HTMLElement>(".kp-typescript-refactor [style]")).map(node => node.style.cssText).join("|"));
+      }
+      if (value === .34) break;
+    }
+    return { progress: progress.size, paint: paint.size };
+  });
+  expect(sampled.progress).toBeGreaterThan(5); expect(sampled.paint).toBeGreaterThan(5);
+  await expect(slider).toHaveValue("2");
+  await previewSlider(slider, "2.37");
+  const saved = await card.getAttribute("data-code-reasoning-progress");
+  await page.locator("[data-code-reasoning-open]").click();
+  await expect(card).toHaveAttribute("data-code-reasoning-view", "reason");
+  await expect(slider).toHaveValue("0");
+  await expect(card.locator("[data-kp-focus-deck-beat]").first()).toContainText("Name the helper, move the decision");
+  await page.locator("[data-code-reasoning-return]").click();
+  await expect(card).toHaveAttribute("data-code-reasoning-progress", saved!);
+  await expect(card.locator(".kp-focus-deck__passage-page")).toHaveCount(7);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  const viewport = card.locator("[data-kp-focus-deck-viewport]");
+  await viewport.focus(); await viewport.press("End");
+  await expect(slider).toHaveValue("6");
+  await expect(card.locator("[data-code-reasoning-count]")).toHaveText("7 / 7");
+  await viewport.press("Home"); await expect(slider).toHaveValue("0");
+  await card.screenshot({ path: info.outputPath("code-reasoning-initial.png") });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.locator("[data-code-reasoning-open]").click();
+  const values = await viewport.evaluate(async viewport => {
+    const values: number[] = [];
+    viewport.dispatchEvent(new WheelEvent("wheel", { deltaX: 1, bubbles: true }));
+    for (const step of [.25, .5, .75, 1.25, 1.6]) {
+      viewport.scrollLeft = viewport.clientWidth * step;
+      viewport.dispatchEvent(new Event("scroll"));
+      await new Promise(requestAnimationFrame); await new Promise(requestAnimationFrame);
+      values.push(Number(viewport.closest<HTMLElement>("[data-code-reasoning-card]")!.dataset["codeReasoningProgress"]));
+    }
+    viewport.dispatchEvent(new Event("scrollend"));
+    return values;
+  });
+  expect(new Set(values).size).toBeGreaterThan(3);
+  await expect(slider).toHaveValue("2");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+  await card.screenshot({ path: info.outputPath("code-reasoning-phone.png") });
+});
+
 test("downloaded applied source builds a complete no-JavaScript local reading", async ({ page, browser }) => {
   const { readFileSync, mkdtempSync, mkdirSync, writeFileSync, rmSync } = await import("node:fs");
   const { fileURLToPath, pathToFileURL } = await import("node:url");

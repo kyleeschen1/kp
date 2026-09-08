@@ -28,3 +28,5 @@
 [data-reasoning-json] { display: block; width: 100%; box-sizing: border-box; margin-block: .7rem; padding: .8rem; font: .8rem/1.5 monospace; }
 [data-reasoning-revision] { overflow-wrap: anywhere; font-size: .75rem; }
 [data-reasoning-draft-status][data-status="repair-gap"] { border-left: 3px solid #922f25; padding-left: .8rem; }
+[data-code-reasoning-card] [data-kp-focus-deck-viewport] { overflow-x: auto; touch-action: auto; overscroll-behavior-x: none; }
+[data-code-reasoning-card] .kp-focus-deck__stage { touch-action: pan-y pinch-zoom; }

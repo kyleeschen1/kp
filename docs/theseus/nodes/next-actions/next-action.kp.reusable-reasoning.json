@@ -13,6 +13,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-07-reusable-reasoning-visual-checkpoint.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-08-reusable-reasoning-code-checkpoint.md"
     }
   ],
   "dependsOn": {
@@ -364,11 +368,17 @@
       "status": "passed",
       "scope": "s18",
       "checkedAt": "2026-09-08T16:36:03.039Z"
+    },
+    {
+      "command": "npm run visual:reusable-reasoning:shared -- --grep \"code reasoning reuses\"",
+      "status": "passed",
+      "scope": "s19",
+      "checkedAt": "2026-09-08T16:48:17.192Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "14/24 checkpoint: user accepted other visible behavior; repaired remaining arrow-key routing through shared semantic navigation in three cards. Nine browser checks pass. Preserve accepted motion; no broader loop execution resumed."
+    "summary": "19/24 complete. Equation approved; lifecycle, static export and code pressure implemented. HUMAN_CHECKPOINT: review isolated code reasoning before shared promotion. Resume existing s20-s24 after acceptance."
   },
   "expectedLearning": [
     "Measure whether one authored reason yields consistent full compact and retrieval projections through existing owners and reduces second-caller glue."
