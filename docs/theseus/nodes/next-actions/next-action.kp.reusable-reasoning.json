@@ -433,6 +433,68 @@
       "scope": "s22",
       "checkedAt": "2026-09-08T17:25:08.452Z",
       "notes": "Two actual calls through existing access: two first-pass edits and two labelled fault-injection repairs pass. Durable captured outputs and limits in September 8 live-trial review."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "s23-initial",
+      "checkedAt": "2026-09-08T17:55:08.305Z",
+      "notes": "6735 passed; one stale reachability inventory failure. Regenerated through existing owner before fresh full rerun."
+    },
+    {
+      "command": "npm run visual:reusable-reasoning:shared -- --project=firefox --project=webkit",
+      "status": "failed",
+      "scope": "s23-initial",
+      "checkedAt": "2026-09-08T17:55:09.830Z",
+      "notes": "51 passed; same float-bit intermediate assertion failed in all three engines. Exact stops and return were not weakened."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s23-final",
+      "checkedAt": "2026-09-08T17:55:10.935Z",
+      "notes": "Fresh full rerun: 6736 passed, zero failed or skipped; architecture and inference preflights passed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s23-final",
+      "checkedAt": "2026-09-08T17:55:12.019Z",
+      "notes": "Final full types and production build passed; no fixed budget increases."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "s23-final",
+      "checkedAt": "2026-09-08T17:55:13.112Z",
+      "notes": "12 manifest routes."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "s23-final",
+      "checkedAt": "2026-09-08T17:55:14.143Z"
+    },
+    {
+      "command": "npm run visual:reusable-reasoning:shared -- --project=firefox --project=webkit",
+      "status": "passed",
+      "scope": "s23-final",
+      "checkedAt": "2026-09-08T17:55:15.224Z",
+      "notes": "Fresh full cohort: 54 passed across all three browsers."
+    },
+    {
+      "command": "npm run visual:canonical-tax-production -- --project=firefox --project=webkit",
+      "status": "passed",
+      "scope": "s23-final",
+      "checkedAt": "2026-09-08T17:55:16.462Z",
+      "notes": "18 passed against final production build."
+    },
+    {
+      "command": "npm run visual:authoring-market -- --grep 'equation authoring numeric|actual local-file rebuild'",
+      "status": "passed",
+      "scope": "s23-final",
+      "checkedAt": "2026-09-08T17:55:17.951Z",
+      "notes": "Two Chromium preservation cases pass; real source file restored after fault injection."
     }
   ],
   "progress": {

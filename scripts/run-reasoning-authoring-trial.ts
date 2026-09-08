@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { sha256 } from "../src/kernel/sha256.ts";
@@ -30,8 +30,11 @@ export function injectReasoningTrialFaults(drafts: TrialDrafts): TrialDrafts {
 }
 
 function run(model: string) {
-  const output = resolve("tmp/codex/reasoning-authoring-trial");
-  mkdirSync(output, { recursive: true });
+  const root = resolve("tmp/codex/reasoning-authoring-trial");
+  mkdirSync(root, { recursive: true });
+  // A successful child exit without a new response must fail, never read an
+  // earlier run's file and mislabel replayed bytes as fresh model evidence.
+  const output = mkdtempSync(resolve(root, "run-"));
   const schemaPath = resolve(output, "response.schema.json");
   writeFileSync(schemaPath, JSON.stringify({ type: "object", additionalProperties: false,
     properties: { equationJson: { type: "string" }, codeJson: { type: "string" } }, required: ["equationJson", "codeJson"] }));

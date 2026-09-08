@@ -226,7 +226,8 @@
     {
       "id": "s23",
       "title": "Release verification",
-      "status": "planned"
+      "summary": "Final release: 6736 tests, 54 reasoning and 18 built tax browser checks, R1 authoring preservation, types/build/closure and unchanged budgets pass. Evidence and qualified limits recorded in September 8 release review.",
+      "status": "complete"
     },
     {
       "id": "s24",

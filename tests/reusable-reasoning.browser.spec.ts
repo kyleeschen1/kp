@@ -342,7 +342,9 @@ test("release settles slider and passage gestures but cannot resnap restored pos
   const passage = card.locator("[data-kp-focus-deck-viewport]");
   await expect(root).toHaveAttribute("data-kp-reasoning-status", "ready");
   await previewSlider(slider, "0.7");
-  await expect(card).toHaveAttribute("data-kp-reasoning-progress", String(.7 / 13));
+  // Shared piecewise mapping and direct division can differ by one float bit.
+  // Only this interpolated sample is approximate; stops and saved returns below remain exact.
+  await expect.poll(async () => Number(await card.getAttribute("data-kp-reasoning-progress"))).toBeCloseTo(.7 / 13, 14);
   await slider.dispatchEvent("change");
   await expect(card).toHaveAttribute("data-kp-reasoning-progress", String(1 / 13));
   await slider.fill("0");

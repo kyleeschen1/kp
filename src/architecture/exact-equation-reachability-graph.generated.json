@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 4332,
+  "scannedFileCount": 4381,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -1179,6 +1179,7 @@
         "src/animation/runtime-sampler.ts",
         "src/animation/verified-linear-problem-animation-compiler.ts",
         "src/authoring/transform-fixture-contract.ts",
+        "src/experiments/reusable-reasoning/procedure.ts",
         "src/public/semantic.ts",
         "src/reader/renderers/equation-presentation-catalog-conformance.ts",
         "src/rendering/graph-transitions.ts",
@@ -1392,6 +1393,9 @@
         "src/editor/svelte-catalogue/svelte-catalogue-host-state.ts",
         "src/experiments/authoring-structural/distribution-projection.ts",
         "src/experiments/authoring-structural/simplification-preview-build.ts",
+        "src/experiments/reusable-reasoning/authoring.ts",
+        "src/experiments/reusable-reasoning/evaluation.ts",
+        "src/experiments/reusable-reasoning/prompts.ts",
         "src/project-dashboard/generated-algebra-catalog.ts",
         "src/reader/app/authoring-distribution-preview.ts",
         "src/reader/app/authoring-simplification-preview.ts",
@@ -1841,6 +1845,7 @@
         "src/animation/runtime-sampler.ts",
         "src/animation/verified-linear-problem-animation-compiler.ts",
         "src/authoring/transform-fixture-contract.ts",
+        "src/experiments/reusable-reasoning/procedure.ts",
         "src/public/semantic.ts",
         "src/reader/renderers/equation-presentation-catalog-conformance.ts",
         "src/rendering/graph-transitions.ts",
@@ -2252,6 +2257,9 @@
         "src/editor/svelte-catalogue/svelte-catalogue-host-state.ts",
         "src/experiments/authoring-structural/distribution-projection.ts",
         "src/experiments/authoring-structural/simplification-preview-build.ts",
+        "src/experiments/reusable-reasoning/authoring.ts",
+        "src/experiments/reusable-reasoning/evaluation.ts",
+        "src/experiments/reusable-reasoning/prompts.ts",
         "src/project-dashboard/generated-algebra-catalog.ts",
         "src/reader/app/authoring-distribution-preview.ts",
         "src/reader/app/authoring-simplification-preview.ts",
@@ -2519,6 +2527,7 @@
         "src/animation/flashcard-preview-renderer-data.ts",
         "src/animation/fraction-composition-cloze.ts",
         "src/animation/semantic-glyph-reconciliation-cloze.ts",
+        "src/experiments/reusable-reasoning/prompts.ts",
         "src/project-dashboard/generated-algebra-catalog.ts"
       ],
       "testCallers": [
