@@ -93,15 +93,14 @@ export function compileKpEquationExemplarTemplate(
       cohort
     ] as const)
   )).values()];
-  const accessibleStateIds =
-    options?.readerControls !== undefined
-      ? compileKpAnimationTransformationPhaseCohorts(
+  // Accessible endpoint truth is mandatory even in chrome-free hosts. Optional
+  // lesson-specific controls must not decide whether the compositor has it.
+  const accessibleStateIds = compileKpAnimationTransformationPhaseCohorts(
           animation
         ).flatMap((cohort, index) => [
           ...(index === 0 ? cohort.sourceObjectIds : []),
           ...cohort.targetObjectIds
-        ]).filter((id, index, ids) => ids.indexOf(id) === index)
-      : [];
+        ]).filter((id, index, ids) => ids.indexOf(id) === index);
   const accessibleStates = accessibleStateIds.map((objectId, index) => {
     const object = objects.get(objectId);
     if (object === undefined) {

@@ -1,0 +1,6 @@
+[data-bayes-native-host] .kp-reader-equation-stage { min-height: 0; height: 100%; padding: 0; border: 0; background: transparent; box-shadow: none; }
+[data-bayes-native-host] .kp-reader-equation-viewport { min-height: 0; height: 100%; }
+[data-bayes-native-host] .kp-reader-equation-stage-heading,
+[data-bayes-native-host] .kp-reader-focus-stepper,
+[data-bayes-native-host] .kp-reader-equation-hint,
+[data-bayes-native-host] .kp-reader-equation-progress { display: none; }

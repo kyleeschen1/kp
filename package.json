@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test:bayesian-reasoning": "node --disable-warning=ExperimentalWarning --test tests/bayesian-reasoning-*.test.ts",
+    "visual:bayesian-reasoning:shared": "playwright test --config playwright.bayesian-reasoning-review.config.ts --project=chromium --workers=1",
     "test:reusable-reasoning": "node --disable-warning=ExperimentalWarning --test tests/reusable-reasoning-*.test.ts",
     "author:reasoning": "node --disable-warning=ExperimentalWarning scripts/author-reasoning.ts",
     "benchmark:reasoning:live": "node --disable-warning=ExperimentalWarning scripts/run-reasoning-authoring-trial.ts",

@@ -121,6 +121,46 @@
       "status": "passed",
       "scope": "s05",
       "checkedAt": "2026-09-08T19:00:56.562Z"
+    },
+    {
+      "command": "npm run visual:bayesian-reasoning:shared",
+      "status": "failed",
+      "scope": "s06-initial",
+      "checkedAt": "2026-09-08T19:09:29.576Z",
+      "notes": "Real compositor exposed accessible states coupled to optional family controls. Shared template repaired and regression added. A second attempt hit HMR empty response; server readiness rechecked."
+    },
+    {
+      "command": "npm run visual:bayesian-reasoning:shared",
+      "status": "passed",
+      "scope": "s06",
+      "checkedAt": "2026-09-08T19:09:30.771Z",
+      "notes": "Actual canonical native source/material/target and reverse canary passes Chromium for domain-derived 16/24 to 2/3."
+    },
+    {
+      "command": "npm run test:bayesian-reasoning",
+      "status": "passed",
+      "scope": "s06",
+      "checkedAt": "2026-09-08T19:09:31.839Z",
+      "notes": "15 tests; exact notation source and certificate; accessible endpoints without family controls."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s06",
+      "checkedAt": "2026-09-08T19:09:32.917Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s06",
+      "checkedAt": "2026-09-08T19:09:33.907Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/linear-equation-exemplar-presentation.test.ts tests/semantic-reader-page-shell.test.ts",
+      "status": "passed",
+      "scope": "s06",
+      "checkedAt": "2026-09-08T19:09:34.909Z",
+      "notes": "Four shared page preservation checks pass."
     }
   ],
   "expectedLearning": [
