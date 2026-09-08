@@ -102,6 +102,25 @@
       "status": "passed",
       "scope": "s04",
       "checkedAt": "2026-09-08T18:57:15.942Z"
+    },
+    {
+      "command": "npm run test:bayesian-reasoning",
+      "status": "passed",
+      "scope": "s05",
+      "checkedAt": "2026-09-08T19:00:53.937Z",
+      "notes": "Fourteen tests; actual governed compilation, law/role closure, forged source and unsupported requests rejected; numeric and label edits repin revisions."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s05",
+      "checkedAt": "2026-09-08T19:00:55.411Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s05",
+      "checkedAt": "2026-09-08T19:00:56.562Z"
     }
   ],
   "expectedLearning": [

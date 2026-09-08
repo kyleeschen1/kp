@@ -125,7 +125,8 @@
     {
       "id": "s05",
       "title": "Bind bounded probability evidence into existing asset/operation/governed construction seams; explicit unsupported cases",
-      "status": "planned"
+      "summary": "Probability trace bound to existing governed asset construction with immutable issued authority and exact source revisions. Fourteen tests types and architecture pass.",
+      "status": "complete"
     },
     {
       "id": "s06",
