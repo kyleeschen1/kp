@@ -1,0 +1,8 @@
+.reasoning-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; margin: 1.2rem 0; }
+.reasoning-toolbar button { border: 1px solid var(--kp-st-rule); border-radius: .35rem; background: var(--kp-st-paper); color: var(--kp-st-strong); padding: .65rem .85rem; font: inherit; cursor: pointer; }
+.reasoning-toolbar [hidden] { display: none; }
+.reasoning-toolbar span { color: var(--kp-st-muted); font-size: .85rem; }
+[data-reasoning-context] { margin-block: 1.4rem; padding: 1rem 1.2rem; border-left: 3px solid var(--kp-st-rule); font-family: Georgia, "Times New Roman", serif; line-height: 1.6; }
+[data-reasoning-context] h2 { font-size: 1.1rem; margin-top: 0; }
+[data-reasoning-context] code { overflow-wrap: anywhere; font-size: .8rem; }
+[data-reasoning-error] { color: #922f25; white-space: pre-wrap; }

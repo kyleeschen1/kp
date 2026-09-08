@@ -167,6 +167,20 @@
       "scope": "s09",
       "checkedAt": "2026-09-08T01:47:18.092Z",
       "notes": "All architecture and eight conformance gateway checks pass; no private clock, new renderer or authority exception."
+    },
+    {
+      "command": "npm run typecheck; npm run visual:reusable-reasoning",
+      "status": "failed",
+      "scope": "s10",
+      "checkedAt": "2026-09-08T01:57:31.971Z",
+      "notes": "Initial host checks caught optional timeline duration typing and CSS passage snapping overwriting exact interrupted return position; repairing the host input boundary without changing semantic contracts."
+    },
+    {
+      "command": "npm run test:reusable-reasoning; npm run typecheck; npm run check:architecture; npm run build; npm run visual:reusable-reasoning",
+      "status": "passed",
+      "scope": "s10",
+      "checkedAt": "2026-09-08T01:59:31.947Z",
+      "notes": "32 unit tests, full types, architecture, production build and Chromium native host smoke pass. Inspected native distribution capture; shared Georgia passage and exact interrupted return preserved. Initial CSS snapping and optional-duration failures repaired."
     }
   ],
   "expectedLearning": [

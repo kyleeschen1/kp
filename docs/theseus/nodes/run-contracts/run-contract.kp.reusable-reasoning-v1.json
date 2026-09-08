@@ -148,7 +148,8 @@
     {
       "id": "s10",
       "title": "Mount reversible Focus Card exemplar",
-      "status": "planned"
+      "summary": "Native host, shared scaffold, continuous input and exact open-return pass; no shared renderer or semantic changes.",
+      "status": "complete"
     },
     {
       "id": "s11",

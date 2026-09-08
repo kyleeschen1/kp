@@ -7,6 +7,19 @@ export function kpViteAuthoringStructuralPreview(): Plugin {
     configureServer(server) {
       server.middlewares.use((request, response, next) => {
         const path = request.url?.split("?")[0];
+        if (path === "/experiments/reusable-reasoning/") {
+          if (request.method !== "GET") { response.writeHead(405).end(); return; }
+          void (async () => {
+            try {
+              const module = await server.ssrLoadModule("/src/experiments/reusable-reasoning/page-build.ts") as { buildKpReasoningInitialPage: () => string };
+              const html = await server.transformIndexHtml(request.url!, `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Reusable reasoning · Kinetic Press</title><link rel="stylesheet" href="/src/experiments/authoring-distribution-focus-card/style.css"><link rel="stylesheet" href="/src/experiments/reusable-reasoning/style.css"><link rel="stylesheet" href="/node_modules/katex/dist/katex.min.css"></head><body><main id="authored-focus-card">${module.buildKpReasoningInitialPage()}</main><script type="module" src="/src/experiments/reusable-reasoning/entry.ts"></script></body></html>`);
+              response.writeHead(200, { "content-type": "text/html", "cache-control": "no-store" }).end(html);
+            } catch (error) {
+              response.writeHead(422, { "content-type": "text/plain" }).end(error instanceof Error ? error.message : String(error));
+            }
+          })();
+          return;
+        }
         const card = path === "/experiments/authoring-distribution-focus-card/";
         const cardData = path === "/api/dev/authoring-structural/distribution-focus-card";
         const simplificationCard = path === "/experiments/authoring-simplification-focus-card/";
