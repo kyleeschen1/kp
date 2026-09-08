@@ -136,7 +136,8 @@
     {
       "id": "s08",
       "title": "Extract self-contained reason context",
-      "status": "planned"
+      "summary": "Self-contained extraction retains referents assumptions evidence source revision and exact parent checkpoint; twenty-eight tests and full types pass.",
+      "status": "complete"
     },
     {
       "id": "s09",
