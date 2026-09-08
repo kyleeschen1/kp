@@ -10,3 +10,7 @@
 [data-reasoning-practice-panel] { margin-block: 1.2rem; }
 [data-reasoning-practice-panel] textarea { display: block; box-sizing: border-box; width: 100%; margin-top: .5rem; font: inherit; }
 [data-reasoning-answer] { overflow-wrap: anywhere; line-height: 1.6; }
+[data-reasoning-editor] { margin-block: 2rem; line-height: 1.5; }
+[data-reasoning-json] { display: block; width: 100%; box-sizing: border-box; margin-block: .7rem; padding: .8rem; font: .8rem/1.5 monospace; }
+[data-reasoning-revision] { overflow-wrap: anywhere; font-size: .75rem; }
+[data-reasoning-draft-status][data-status="repair-gap"] { border-left: 3px solid #922f25; padding-left: .8rem; }

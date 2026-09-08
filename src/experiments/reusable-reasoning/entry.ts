@@ -3,11 +3,12 @@ import "./style.css";
 import { createKpReasoningSource } from "./source.ts";
 import { bindKpReasoningEvidence } from "./evidence.ts";
 import { createKpReasoningNavigator } from "./navigation.ts";
-import { renderReasoningCard, reasoningBeats, escapeReasoningText } from "./scaffold.ts";
+import { renderReasoningCard, renderReasoningPage, reasoningBeats, escapeReasoningText } from "./scaffold.ts";
 import { mountReasoningNativeSurface } from "./native-surface.ts";
 import { readKpFocusDeckScrubberKeyTarget } from "../../tutorial/focus-deck-scaffold.ts";
 import type { ReasoningReading } from "./readings.ts";
-import { projectReasoningPrompts, type ReasoningPromptKind } from "./prompts.ts";
+import type { ReasoningPromptKind } from "./prompts.ts";
+import { createReasoningAuthoringSession } from "./authoring.ts";
 
 const root = document.querySelector<HTMLElement>("#authored-focus-card")!;
 const report = (error: unknown) => {
@@ -17,11 +18,13 @@ const report = (error: unknown) => {
 };
 
 async function mount() {
-  const evidence = bindKpReasoningEvidence(createKpReasoningSource());
+  let evidence = bindKpReasoningEvidence(createKpReasoningSource());
   const card = root.querySelector<HTMLElement>("[data-kp-reasoning-card]")!;
   const surface = await mountReasoningNativeSurface(card, evidence);
-  const navigation = createKpReasoningNavigator(evidence, surface.clock);
-  const prompts = projectReasoningPrompts(evidence, surface.animation);
+  const authoring = createReasoningAuthoringSession(surface.animation);
+  evidence = authoring.getCurrent().evidence;
+  let navigation = createKpReasoningNavigator(evidence, surface.clock);
+  let prompts = authoring.getCurrent().prompts;
   const clock = surface.clock;
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const viewport = card.querySelector<HTMLElement>("[data-kp-focus-deck-viewport]")!;
@@ -138,6 +141,44 @@ async function mount() {
     navigation.restore(practiceReturn); practice = undefined; practiceReturn = undefined;
     setPractice(false); updateView(); open.focus();
   };
+  const editor = root.querySelector<HTMLTextAreaElement>("[data-reasoning-json]")!;
+  const draftStatus = root.querySelector<HTMLElement>("[data-reasoning-draft-status]")!;
+  editor.value = JSON.stringify(evidence.source, null, 2);
+  const stampRevision = () => {
+    root.dataset["kpReasoningRevision"] = evidence.revisionId;
+    root.querySelector<HTMLElement>("[data-reasoning-revision]")!.textContent = evidence.revisionId;
+  };
+  const loadDraft = (short: boolean) => {
+    const source = createKpReasoningSource();
+    editor.value = JSON.stringify(short ? { ...source,
+      title: "Stop before the final quotient",
+      parent: { ...source.parent, statement: "Distribute, normalize, and evaluate the constant numerator.", targetStateId: "fraction-solve.state.constant-product" },
+      reason: { ...source.reason, operationIds: source.reason.operationIds.slice(0, 3), explanation: "Distribute to both terms, normalize, then multiply the constant numerator. Leave the quotient unevaluated." },
+      compact: "Distribute and evaluate the numerator; retain the quotient." } : source, null, 2);
+    draftStatus.textContent = "Draft loaded, not applied. Choose Apply source to update all views.";
+  };
+  root.querySelector<HTMLButtonElement>("[data-reasoning-short-draft]")!.onclick = () => loadDraft(true);
+  root.querySelector<HTMLButtonElement>("[data-reasoning-reset-draft]")!.onclick = () => loadDraft(false);
+  root.querySelector<HTMLButtonElement>("[data-reasoning-apply]")!.onclick = () => {
+    const result = authoring.apply(editor.value);
+    if (result.status === "repair-gap") {
+      draftStatus.textContent = `${result.diagnostic.code} at ${result.diagnostic.path}: ${result.diagnostic.expected} Last valid lesson retained.`;
+      draftStatus.dataset["status"] = "repair-gap";
+      return;
+    }
+    clock.pause(); navigation.dispose();
+    evidence = result.current.evidence; prompts = result.current.prompts;
+    navigation = createKpReasoningNavigator(evidence, clock);
+    practice = undefined; practiceReturn = undefined; setPractice(false);
+    const template = document.createElement("div");
+    template.innerHTML = renderReasoningPage(evidence);
+    root.querySelector<HTMLElement>("[data-reasoning-context]")!.innerHTML = template.querySelector("[data-reasoning-context]")!.innerHTML;
+    root.querySelector<HTMLElement>("[data-reasoning-title]")!.textContent = evidence.source.title;
+    card.setAttribute("aria-label", evidence.source.title);
+    updateView(); clock.seek(0); stampRevision();
+    draftStatus.textContent = "Applied to full/compact readings, reason, native endpoint and both practice answers. Reading reset to the beginning of the new revision. Draft remains local to this page.";
+    draftStatus.dataset["status"] = "applied";
+  };
   const resize = () => { if (!disposed) { clock.pause(); surface.resize(); render(); } };
   const motion = () => { clock.pause(); render(); };
   const visibility = () => { if (document.hidden) clock.pause(); };
@@ -152,6 +193,7 @@ async function mount() {
   import.meta.hot?.dispose(dispose);
   card.dataset["kpFocusCardEnhancement"] = "ready";
   root.dataset["kpReasoningStatus"] = "ready";
+  stampRevision();
   render();
 }
 void mount().catch(report);

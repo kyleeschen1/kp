@@ -209,6 +209,13 @@
       "scope": "s12",
       "checkedAt": "2026-09-08T02:09:30.008Z",
       "notes": "36 tests and Chromium prediction/reconstruction disclosure-return pass; full types plus final app/test types pass. Incremental npx checks needed repository cache write permission; escalated rerun passed. Native answer endpoints and exact reading return retained."
+    },
+    {
+      "command": "npm run test:reusable-reasoning; npm run typecheck; npm run visual:reusable-reasoning; npm run check:architecture; npm run build:bundle",
+      "status": "passed",
+      "scope": "s13",
+      "checkedAt": "2026-09-08T02:13:28.766Z",
+      "notes": "38 tests, full types, two Chromium integrations, architecture and build pass. Three-step draft changes actual visible native ink to numerator 12 over 3, both answers, passage and revision; invalid JSON retains exact prior position. Inspected endpoint capture. Existing build chunk-size warnings remain, no budgets changed."
     }
   ],
   "expectedLearning": [

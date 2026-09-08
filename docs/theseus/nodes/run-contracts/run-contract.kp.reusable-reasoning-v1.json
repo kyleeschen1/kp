@@ -166,7 +166,8 @@
     {
       "id": "s13",
       "title": "Connect source editing to all projections",
-      "status": "planned"
+      "summary": "JSON apply updates all projections and actual native endpoint atomically; invalid drafts retain last-valid lesson.",
+      "status": "complete"
     },
     {
       "id": "s14",
