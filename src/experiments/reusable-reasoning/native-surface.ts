@@ -11,6 +11,7 @@ import { compileKpAnimationTransformationPhaseCohorts } from "../../animation/tr
 import type { KpReasoningEvidence } from "./evidence.ts";
 import { bindKpReasoningSupport } from "./support.ts";
 import { KpReasoningRepairGap } from "./source.ts";
+import { compileReasoningEvaluationCertificates } from "./evaluation.ts";
 
 export async function mountReasoningNativeSurface(card: HTMLElement, evidence: KpReasoningEvidence) {
   bindKpReasoningSupport(evidence);
@@ -48,6 +49,7 @@ export async function mountReasoningNativeSurface(card: HTMLElement, evidence: K
   shell.transitions[0]!.querySelector<HTMLElement>("[data-kp-reader-fit-surface]")!.dataset["kpFractionCoherentTransportReview"] = "true";
   const session = await createKpChromeFreeCanonicalEquationSession({
     shell, animation, descriptor: fractionCompositionDescriptor, prewarmAdjacentTransitions: false,
+    evaluationCertificates: compileReasoningEvaluationCertificates(animation),
     equationPresentationProfile: resolveKpReaderEquationPresentationProfile("standard"), linkRoot: card,
     createStageLayoutIntent: planKpFractionCompositionLayout, renderSalience: frame => salience.render(frame)
   });

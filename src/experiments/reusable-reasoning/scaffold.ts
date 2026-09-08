@@ -17,12 +17,14 @@ export function reasoningBeats(evidence: KpReasoningEvidence, view: "parent" | "
   const support = bindKpReasoningSupport(evidence);
   const count = support.procedure.operations.length;
   const reading = projectReasoningReading(evidence, mode);
-  const checkpoints = view === "parent" || mode === "compact" ? [0, count] : Array.from({ length: count + 1 }, (_, index) => index);
-  return checkpoints.map((index, position) => ({
+  // Reading density changes prose, never the semantic slots or their spacing.
+  const checkpoints = Array.from({ length: count + 1 }, (_, index) => index);
+  return checkpoints.map(index => ({
     slug: `checkpoint-${index}`, title: titles[index]!,
-    html: `<p>${escapeReasoningText(mode === "compact" ? reading.text : view === "parent"
-      ? position === 0 ? evidence.source.parent.statement : evidence.source.reason.explanation
-      : position === 0 ? evidence.source.reason.explanation : descriptions[index]!)}</p>`,
+    html: `<p>${escapeReasoningText(index === 0
+      ? mode === "compact" ? reading.text : view === "parent"
+        ? evidence.source.parent.statement : evidence.source.reason.explanation
+      : descriptions[index]!)}</p>`,
     attributes: { "data-reasoning-state": evidence.states[index]!.stateId }
   }));
 }
@@ -33,7 +35,7 @@ export function renderReasoningCard(evidence: KpReasoningEvidence, view: "parent
     id: "reusable-reasoning", ariaLabel: evidence.source.title, activeBeatSlug: beats[0]!.slug,
     beats, stageHtml: '<div class="kp-focus-deck__stage" data-distribution-stage aria-label="Verified equation"></div>',
     replayHidden: false,
-    headerTrailingHtml: `<span data-reasoning-view-label>${view === "parent" ? "Argument" : "Supporting reason"}</span>`,
+    headerTrailingHtml: `<span data-reasoning-view-label>${view === "parent" ? "Argument" : "Supporting reason"}</span><span data-reasoning-beat-count aria-label="Beat 1 of ${beats.length}">1 / ${beats.length}</span>`,
     rootAttributes: { "data-kp-focus-card-enhancement": "preparing", "data-kp-reasoning-card": true }
   });
 }

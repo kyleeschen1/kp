@@ -5,6 +5,8 @@ import {
   createKpWitnessedAnnihilationBinding
 } from "../../animation/witnessed-annihilation.ts";
 import type { KpAnimationAsset } from "../../animation/asset.ts";
+import { isKpVerifiedEquationEvaluationFamilyCertificateV2, type KpVerifiedEquationEvaluationFamilyCertificateV2 } from "../../domain-ir/equation-evaluation-family-certificate-v2.ts";
+import { createKpCertifiedNativeKatexContributorFusionPlayback } from "../../rendering/native-katex-operation-evaluation-contributor-fusion.ts";
 import {
   compileKpAnimationTransformationPhaseCohorts
 } from "../../animation/transformation-phase-cohorts.ts";
@@ -126,6 +128,8 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
   readonly linkRoot: ParentNode;
   /** Single-operation hosts must not schedule unrelated compilation during playback. */
   readonly prewarmAdjacentTransitions?: boolean;
+  /** Opt-in compiler authority for the existing certified ink treatment. */
+  readonly evaluationCertificates?: readonly KpVerifiedEquationEvaluationFamilyCertificateV2[];
   readonly createStageLayoutIntent: (input: {
     readonly viewport: "wide" | "phone";
   }) => KpEquationStageLayoutIntent;
@@ -135,6 +139,18 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
 }): Promise<KpChromeFreeCanonicalEquationSession> {
   const { stage, viewport, materialFitSurface } = input.shell;
   const cohorts = compileKpAnimationTransformationPhaseCohorts(input.animation);
+  const evaluationCertificates = new Map<string, KpVerifiedEquationEvaluationFamilyCertificateV2>();
+  for (const certificate of input.evaluationCertificates ?? []) {
+    // An opt-in certificate must be consumed exactly once; a typo must not
+    // silently leave the caller on the legacy treatment.
+    if (!isKpVerifiedEquationEvaluationFamilyCertificateV2(certificate) ||
+        certificate.familyProfile.family !== "contributor-fusion" ||
+        !cohorts.some(cohort => cohort.id === certificate.transformationId) ||
+        evaluationCertificates.has(certificate.transformationId)) {
+      throw new Error("Chrome-free evaluation requires unique, matching, compiler-minted contributor-fusion certificates.");
+    }
+    evaluationCertificates.set(certificate.transformationId, certificate);
+  }
   const presentation = kpEquationPresentationProfile(input.animation);
   const transitionElements = input.shell.transitions.filter((element) =>
     cohorts.some((cohort) =>
@@ -196,7 +212,14 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
   const adapter = await loadKpReaderEquationSceneCompositorAdapter();
   const compositor = createKpReaderCanonicalEquationSession({
     transitionIds: transitionPolicy.transitionIds,
-    createSession: adapter.createKpReaderEquationSceneCompositorSession,
+    createSession: scene => {
+      const certificate = evaluationCertificates.get(scene.transitionId);
+      const base = adapter.createKpReaderEquationSceneCompositorSession({ ...scene,
+        ...(certificate ? { certifiedExternalMotionCertificate: certificate } : {}) });
+      return certificate ? createKpCertifiedNativeKatexContributorFusionPlayback({
+        stage: scene.source.stage, base, certificate
+      }) : base;
+    },
     compilePurePlan: adapter.compileKpReaderEquationPureScenePlan,
     observeScene: adapter.observeKpNativeKatexRenderedScene,
     enableAdjacentPrewarm: input.prewarmAdjacentTransitions !== false,

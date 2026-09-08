@@ -16,8 +16,10 @@ from the repository root; do not use the production preview for this dev host.
    work?**, inspect its four intermediate operations, then return. An interrupted
    parent position should be preserved exactly.
 2. Switch **Full / Compact**. The shorter reading keeps the same equation range,
-   references, assumptions and revision. The reason's compact reading hides
-   intermediate prose pages, not the underlying verified operations or motion.
+   references, assumptions and revision. Every reading has one passage slot per
+   semantic checkpoint; compact changes the introductory prose, not step spacing.
+   The header counts beat slots from **1 / 5** to **5 / 5** (initial state plus
+   four operations), or **1 / 4** through **4 / 4** for the three-step draft.
 3. Try **Predict** and **Reconstruct**. Write an attempt, compare with the native
    equation answer, and return to reading. Working is a local self-check, not
    automatic grading. Required assumptions remain available during practice.
@@ -59,11 +61,11 @@ commit; the new visible host and its GET route are isolated.
 
 Repeatable commands:
 
-- `npm run test:reusable-reasoning`: 38 tests through source/authority/reference,
+- `npm run test:reusable-reasoning`: 43 tests through source/authority/reference,
   formula/procedure/support/extraction, real-clock navigation, reading equivalence,
   existing flashcard projections and atomic last-valid drafts.
 - `npm run visual:reusable-reasoning`: isolated native browser integration.
-- `npm run visual:reusable-reasoning:shared`: the same three integrated Chromium
+- `npm run visual:reusable-reasoning:shared`: six integrated Chromium
   checks against the human's port-8000 URL, without starting another server.
   Captures include the distributed state, exact return, changed native endpoint,
   phone reason and phone practice. The phone check includes keyboard operation,
@@ -94,6 +96,43 @@ Phone-width Chromium and emulated touch are not physical-device or cross-browser
 release certification. The native phone layout retains its stacked equation form.
 
 ## Resume boundary
+
+### Checkpoint refinement: semantic slots, progress fraction and ink evaluation
+
+The user requested actual step-beat slots, a visible n/total counter, and the
+crisper ink-glyph evaluation treatment. Every parent/reason and full/compact
+reading now maps one passage page to each verified checkpoint. Controls retain
+their navigator-owned semantic authority; CSS snap and page count do not become
+another clock. The counter counts states, not completed operations, and is hidden
+during practice. Source replacement updates both its numerator and denominator.
+
+The prior host used the legacy successor-synthesis compositor treatment. The
+promoted contributor-fusion ink-knot primitive existed, but this chrome-free host
+did not mount its certified playback wrapper. The bounded product and quotient
+now use that existing wrapper and its unchanged optical profile. No new motion
+curve, glyph geometry, equation source, evaluation rule or timeline was authored.
+
+Certificates are compiled through the existing grammar, evaluation registry and
+topology verifier. An operation-specific projection adds operation identity to
+existing contributor roles without mutating the shared source: a result such as
+12 can legitimately be the next operation's operand. The migration input type
+now names only the semantic fields it consumes, avoiding a fabricated playback
+asset for single-transition certification. The chrome-free host accepts nominal
+certificates as an opt-in capability and rejects forged, duplicate or unmatched
+bindings; existing callers retain their treatment. This is not catalogue-wide
+promotion or a claim that every legacy host has migrated.
+
+Unit checks prove nominal family authority, source immutability and fail-closed
+missing contributor roles. Browser checks execute source compression, opaque
+paint, exclusive source/target ownership, rewind and both native endpoints.
+The bounded ink and release tests passed in Chromium and Firefox; screenshots
+were inspected, not adopted as goldens. The full shared-server suite also covers
+phone interaction and source edits. Human review still owns the aesthetic
+acceptance; the run remains deferred at **14/24**, before s15.
+
+Rollback unit: this checkpoint refinement commit. Preservation boundary:
+accepted distribution arc, normalization, verified fraction trace, shared
+scaffold typography, single clock, and exact interrupted return.
 
 ### Checkpoint repair: release-to-settle and standing prevention rule
 

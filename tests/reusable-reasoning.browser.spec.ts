@@ -11,6 +11,43 @@ async function previewSlider(slider: Locator, value: string) {
 
 const route = "/experiments/reusable-reasoning/";
 
+test("embedded product and quotient realize opaque ink compression through the canonical family", async ({ page }, info) => {
+  await page.goto(route);
+  const card = page.locator("[data-kp-reasoning-card]");
+  await expect(page.locator("#authored-focus-card")).toHaveAttribute("data-kp-reasoning-status", "ready");
+  const slider = card.locator("[data-kp-focus-deck-scrubber]");
+  for (const step of [2, 3]) {
+    for (const phase of [.4, .49, .55, .7, .49]) {
+      await previewSlider(slider, String(step + phase));
+      const stage = card.locator("[data-kp-reader-fit-surface]:visible").last();
+      await expect(stage).toHaveAttribute("data-kp-operation-evaluation-realized-primitive-id",
+        "kp.rendering.native-katex.primitive.ink-knot.v1");
+      const source = stage.locator('[data-kp-equation-material-fragment-role^="successor-source:"]');
+      const target = stage.locator('[data-kp-equation-material-fragment-role^="successor-target:"]');
+      expect(await source.count()).toBeGreaterThan(0);
+      expect(await target.count()).toBeGreaterThan(0);
+      const owners = phase < .52 ? source : target;
+      const retired = phase < .52 ? target : source;
+      for (const owner of await owners.all()) {
+        await expect(owner).toHaveCSS("opacity", "1");
+        await expect(owner).toHaveCSS("visibility", "visible");
+      }
+      for (const owner of await retired.all()) await expect(owner).toHaveCSS("visibility", "hidden");
+      if (phase === .49) {
+        const scales = await source.evaluateAll(elements => elements.map(element => {
+          const matrix = new DOMMatrix(getComputedStyle(element).transform);
+          return Math.hypot(matrix.a, matrix.b);
+        }));
+        expect(scales.every(scale => scale > 0 && scale < 1)).toBe(true);
+      }
+    }
+    await card.screenshot({ path: info.outputPath(`evaluation-${step}-ink-kernel.png`) });
+    await slider.fill(String(step + 1));
+    await expect(card).toHaveAttribute("data-kp-reasoning-state",
+      `fraction-solve.state.${step === 2 ? "constant-product" : "constant-quotient"}`);
+  }
+});
+
 test("release settles slider and passage gestures but cannot resnap restored positions", async ({ page }) => {
   await page.goto(route);
   const root = page.locator("#authored-focus-card");
@@ -34,7 +71,7 @@ test("release settles slider and passage gestures but cannot resnap restored pos
   await slider.fill("0");
   await passage.hover();
   const width = (await passage.boundingBox())!.width;
-  await page.mouse.wheel(width * .18, 0);
+  await page.mouse.wheel(width * .7, 0);
   await expect(card).toHaveAttribute("data-kp-reasoning-progress", String(1 / 13));
   await previewSlider(slider, "0.37");
   // Begin another modality, then interrupt it with disclosure. A late
@@ -74,11 +111,15 @@ test("Next and Previous mean one semantic operation regardless of reading densit
         await page.locator("[data-reasoning-reading]").selectOption(mode);
         await expect(slider).toHaveAttribute("max", String(count));
         await expect(card.locator(".kp-focus-deck__ticks span")).toHaveCount(count + 1);
+        await expect(card.locator("[data-kp-focus-deck-beat]")).toHaveCount(count + 1);
         await slider.fill("0");
         for (let index = 1; index <= count; index++) {
           await card.locator("[data-kp-focus-deck-next]").click();
           await expect(card).toHaveAttribute("data-kp-reasoning-progress", String(index / 13));
           await expect(card).toHaveAttribute("data-kp-reasoning-state", `fraction-solve.state.${states[index]}`);
+          await expect(card.locator("[data-reasoning-beat-count]")).toHaveText(`${index + 1} / ${count + 1}`);
+          await expect(card.locator('[data-kp-focus-deck-beat][aria-current="page"]'))
+            .toHaveAttribute("data-reasoning-state", `fraction-solve.state.${states[index]}`);
         }
         for (let index = count - 1; index >= 0; index--) {
           await card.locator("[data-kp-focus-deck-previous]").click();

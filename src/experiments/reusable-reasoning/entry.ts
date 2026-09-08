@@ -100,6 +100,13 @@ async function mount() {
     slider.disabled = Boolean(practice); replay.disabled = Boolean(practice);
     card.dataset["kpFocusDeckActiveBeat"] = beats[index]!.slug;
     card.querySelector<HTMLOutputElement>("[data-kp-focus-deck-position]")!.value = label;
+    const counter = card.querySelector<HTMLElement>("[data-reasoning-beat-count]")!;
+    counter.hidden = Boolean(practice);
+    const countText = `${index + 1} / ${beats.length}`;
+    if (counter.textContent !== countText) {
+      counter.textContent = countText;
+      counter.setAttribute("aria-label", `Beat ${index + 1} of ${beats.length}`);
+    }
     viewport.querySelectorAll<HTMLElement>("[data-kp-focus-deck-beat]").forEach((item, i) => {
       const active = practice ? i === 0 : i === index;
       item.dataset["kpFocusDeckBeatActive"] = String(active);

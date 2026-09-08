@@ -255,11 +255,32 @@
       "scope": "s14-release-repair",
       "checkedAt": "2026-09-08T03:09:27.125Z",
       "notes": "41 unit tests, full types with negative forged-handle fixture, architecture, five Chromium integrations and focused Chromium/Firefox release checks pass. Slider/touch/wheel settle through native clock; stale releases and delayed idle callbacks cannot resnap restored positions. Firefox omitted wheel scrollend; existing 180ms input-quiescence pattern repairs detection without new motion ownership. Repo AGENTS records durable type-first bug prevention."
+    },
+    {
+      "command": "npm run test:reusable-reasoning",
+      "status": "passed",
+      "scope": "s14-beat-evaluation-refinement",
+      "checkedAt": "2026-09-08T03:51:31.059Z",
+      "notes": "43 passing tests, including certified evaluation authority, unchanged semantic source and missing-role rejection. Shared chrome-free and scaffold checks also pass."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s14-beat-evaluation-refinement",
+      "checkedAt": "2026-09-08T03:51:32.370Z",
+      "notes": "Full typechecks and production build pass; architecture gate also passes. Existing large-chunk warnings remain."
+    },
+    {
+      "command": "npm run visual:reusable-reasoning:shared",
+      "status": "passed",
+      "scope": "s14-beat-evaluation-refinement",
+      "checkedAt": "2026-09-08T03:52:04.147Z",
+      "notes": "Six Chromium checks pass on port 8000. Bounded ink compression and release checks also pass in Firefox. Captures inspected; not human aesthetic approval."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT retained at 14/24. Release-to-settle repaired and verified in Chromium/Firefox; type-first durable bug prevention is now a repo-wide AGENTS rule. Await visual acceptance before s15."
+    "summary": "HUMAN_CHECKPOINT retained at 14/24. Semantic slots, beat count and certified ink evaluations implemented and checked; await combined exemplar visual acceptance before s15."
   },
   "expectedLearning": [
     "Measure whether one authored reason yields consistent full compact and retrieval projections through existing owners and reduces second-caller glue."

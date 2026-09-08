@@ -15,7 +15,13 @@ test("full and compact keep exactly the same revision, claims and required conte
   assert.equal(compact.claims.length, 9);
   assert.equal(compact.editorialStatus, "editorial");
   assert.equal(reasoningBeats(evidence, "reason", "full").length, 5);
-  assert.equal(reasoningBeats(evidence, "reason", "compact").length, 2);
+  for (const view of ["parent", "reason"] as const)
+    for (const mode of ["full", "compact"] as const) {
+      const beats = reasoningBeats(evidence, view, mode);
+      assert.equal(beats.length, 5);
+      assert.deepEqual(beats.map(beat => beat.attributes?.["data-reasoning-state"]),
+        evidence.states.slice(0, 5).map(state => state.stateId));
+    }
   assert.ok(Object.isFrozen(compact));
 });
 

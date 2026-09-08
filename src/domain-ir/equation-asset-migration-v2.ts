@@ -49,7 +49,7 @@ export class KpEquationAssetMigrationV2Error extends Error {
  * This boundary deliberately owns no renderer, timing, path, or family profile.
  */
 export function compileKpEquationAssetMigrationV2(input: {
-  readonly animation: KpAnimationAsset;
+  readonly animation: Pick<KpAnimationAsset, "id" | "version" | "bundle" | "transformations">;
   readonly operations: readonly KpEquationAssetMigrationOperationV2[];
 }): KpEquationAssetMigrationV2 {
   const transformationsById = new Map(
@@ -273,7 +273,7 @@ function collectOperationPack(
 }
 
 function objectsById(
-  animation: KpAnimationAsset,
+  animation: Pick<KpAnimationAsset, "id" | "bundle">,
   ids: readonly string[],
   endpoint: string
 ) {
