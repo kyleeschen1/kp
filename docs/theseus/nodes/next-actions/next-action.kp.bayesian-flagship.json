@@ -9,6 +9,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-08-bayesian-flagship-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-08-bayesian-flagship-baseline.md"
     }
   ],
   "dependsOn": {
@@ -23,6 +27,22 @@
     "npm run test:bayesian-reasoning",
     "npm run typecheck",
     "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:bayesian-reasoning",
+      "status": "passed",
+      "scope": "s01",
+      "checkedAt": "2026-09-08T18:44:00.865Z",
+      "notes": "Two exact probability and shared-checkpoint baseline tests pass."
+    },
+    {
+      "command": "npm run test:reusable-reasoning",
+      "status": "passed",
+      "scope": "s01",
+      "checkedAt": "2026-09-08T18:44:01.897Z",
+      "notes": "61 existing reasoning tests pass."
+    }
   ],
   "expectedLearning": [
     "Measure whether one domain-owned probability source yields coherent tree equation reading retrieval and publication with source-only second-caller reuse."

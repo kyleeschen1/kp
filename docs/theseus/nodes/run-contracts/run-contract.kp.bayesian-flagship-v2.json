@@ -101,7 +101,8 @@
     {
       "id": "s01",
       "title": "Freeze owner/capability and author-task baseline; pin original problem, preservation URLs and exact commands; reconcile stale delivery summary",
-      "status": "planned"
+      "summary": "Owner and author-task baseline frozen; 2 exact/shared-map and 61 R2 tests pass; shared server retained.",
+      "status": "complete"
     },
     {
       "id": "s02",
