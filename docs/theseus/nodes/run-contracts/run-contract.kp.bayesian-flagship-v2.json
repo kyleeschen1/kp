@@ -175,7 +175,8 @@
     {
       "id": "s12",
       "title": "Apply edits atomically to prepared tree, notation, prose bindings and navigation; retain complete last-valid revision on failure",
-      "status": "planned"
+      "summary": "Prepared full revision swaps atomically at current position; collapsible JSON editor, precise repair and source restore; no source-file writes or competing playback policy.",
+      "status": "complete"
     },
     {
       "id": "s13",

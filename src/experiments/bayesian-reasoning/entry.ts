@@ -1,27 +1,24 @@
 import "../authored-focus-card.css";
 import "./style.css";
-import { createFlaggedTicketSource } from "../../../domains/probability/binary-joint-model.ts";
-import { bindBayesEvidence } from "./evidence.ts";
-import { compileBayesNotation } from "./notation.ts";
-import { createBayesScore } from "./score.ts";
+import { checkBayesDraft, createBayesDraft, type PreparedBayesDraft } from "./draft.ts";
+import { createBayesAuthoringSession } from "./authoring.ts";
+import { renderBayesCardRevision } from "./page.ts";
 import { mountBayesNativeSurface } from "./native-surface.ts";
 import { createKpFocusDeckCheckpointPlayback } from "../../tutorial/focus-deck-checkpoint-playback.ts";
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
 import { resolveKpFocusDeckVisibleBeat } from "../../tutorial/focus-deck-beat-navigation.ts";
 import { bindKpFocusDeckKeyboard } from "../../tutorial/focus-deck-keyboard.ts";
 import { mountKpFocusDeckNativeInput } from "../../tutorial/focus-deck-native-input.ts";
-import { createBayesTreePlan, sampleBayesTree } from "./tree-frame.ts";
+import { sampleBayesTree } from "./tree-frame.ts";
 import { mountBayesTreeSvg, formatBayesMass } from "./tree-svg.ts";
 
-async function mount() {
-  const card = document.querySelector<HTMLElement>("[data-bayes-card]")!;
-  const evidence = bindBayesEvidence(createFlaggedTicketSource()), beats = createBayesScore(evidence.trace);
-  const notation = compileBayesNotation(evidence.trace);
-  const treePlan = createBayesTreePlan(evidence.trace);
+async function mountCard(root: HTMLElement, evidence: PreparedBayesDraft) {
+  const card = root.querySelector<HTMLElement>("[data-bayes-card]")!;
+  const { score: beats, notation, tree: treePlan } = evidence;
   const tree = mountBayesTreeSvg(card.querySelector<HTMLElement>("[data-bayes-tree-host]")!, treePlan);
   const nativeHost = card.querySelector<HTMLElement>("[data-bayes-native-host]")!;
   const notationPanel = card.querySelector<HTMLElement>("[data-bayes-notation-phase]")!;
-  const native = await mountBayesNativeSurface(nativeHost, document.querySelector<HTMLTemplateElement>("template[data-kp-reader-exemplar-template]")!, notation);
+  const native = await mountBayesNativeSurface(nativeHost, root.querySelector<HTMLTemplateElement>("template[data-kp-reader-exemplar-template]")!, notation);
   const clock = createKpReaderTimelinePlaybackClock({ id: "clock.bayesian-reasoning", durationMs: 10800, ownerWindow: window });
   const navigation = createKpFocusDeckCheckpointPlayback(clock, beats.map(beat => beat.progress));
   const viewport = card.querySelector<HTMLElement>("[data-kp-focus-deck-viewport]")!;
@@ -57,7 +54,7 @@ async function mount() {
     const frame = sampleBayesTree(treePlan, position); tree.paint(frame);
     card.querySelector<HTMLElement>("[data-bayes-tree-host]")!.dataset["semanticState"] = frame.stateId;
     card.querySelector("[data-bayes-population-label]")!.textContent = position === 4
-      ? `Reference: B only · ${notation.denominatorUnits} of ${notation.unit} tickets; boxes retain joint masses`
+      ? `Reference: B only · ${notation.denominatorUnits} of ${notation.unit} units; boxes retain joint masses`
       : position > 3 && position < 4 ? "Restricting the reference to B…"
       : position > 4 && position < 5 ? "Restoring the whole population…" : "Reference: whole population";
     nativeHost.dataset["bayesSalience"] = frame.hierarchy.find(entity => entity.id === treePlan.ratioId)!.salience;
@@ -80,7 +77,55 @@ async function mount() {
     window.removeEventListener("resize", resize); window.removeEventListener("pagehide", pagehide); document.removeEventListener("visibilitychange", visibility); reduced.removeEventListener("change", resize); };
   const pagehide = (event: PageTransitionEvent) => { cancel(); clock.pause(); if (!event.persisted) dispose(); };
   window.addEventListener("resize", resize); window.addEventListener("pagehide", pagehide); document.addEventListener("visibilitychange", visibility); reduced.addEventListener("change", resize);
-  import.meta.hot?.dispose(dispose);
   render(); card.dataset["kpFocusCardEnhancement"] = "ready";
+  return { dispose, pause: () => { cancel(); clock.pause(); },
+    restore: (position: number) => { cancel(); navigation.seek(position); render(); }, position: navigation.position };
+}
+
+async function mount() {
+  const display = document.querySelector<HTMLElement>("[data-bayes-display]")!;
+  const textarea = document.querySelector<HTMLTextAreaElement>("[data-bayes-draft]")!;
+  const apply = document.querySelector<HTMLButtonElement>("[data-bayes-apply]")!;
+  const restore = document.querySelector<HTMLButtonElement>("[data-bayes-restore]")!;
+  const status = document.querySelector<HTMLElement>("[data-bayes-author-status]")!;
+  const initial = checkBayesDraft(JSON.stringify(createBayesDraft()));
+  if (initial.status !== "compiled") throw new Error(initial.diagnostic.expected);
+  let active = await mountCard(display, initial.draft), disposed = false;
+  const session = createBayesAuthoringSession({ initial: initial.draft,
+    prepare: async draft => {
+      const staging = document.createElement("div");
+      staging.className = "bayes-staging"; staging.inert = true; staging.setAttribute("aria-hidden", "true");
+      staging.style.width = `${display.getBoundingClientRect().width}px`;
+      staging.innerHTML = renderBayesCardRevision(draft); display.after(staging);
+      try {
+        const surface = await mountCard(staging, draft);
+        return { staging, surface, dispose: () => { surface.dispose(); staging.remove(); } };
+      } catch (error) { staging.remove(); throw error; }
+    },
+    commit: prepared => {
+      // Restore before acquiring display authority. No await is permitted in
+      // this commit: prose, SVG, native ink and controls enter together.
+      const position = active.position(); prepared.surface.restore(position);
+      const previous = active;
+      display.replaceChildren(...prepared.staging.childNodes);
+      active = prepared.surface; prepared.staging.remove(); previous.dispose();
+    }
+  });
+  textarea.oninput = () => { session.invalidate(); status.textContent = "Unapplied draft. The complete last valid card remains displayed."; };
+  apply.onclick = async () => {
+    active.pause(); status.textContent = "Preparing all projections; the last valid card remains displayed.";
+    const result = await session.apply(textarea.value);
+    if (disposed || result.status === "superseded") return;
+    status.textContent = result.status === "applied" ? "Applied all seven steps together. No source file changed."
+      : `Last valid card retained. ${result.diagnostic.path}: ${result.diagnostic.expected}`;
+    status.dataset["bayesApplyStatus"] = result.status;
+  };
+  restore.onclick = () => { session.invalidate(); textarea.value = session.current().sourceText;
+    status.textContent = "Restored the displayed source. No source file changed."; };
+  apply.disabled = false; restore.disabled = false; status.textContent = "Displayed source is valid. Edit and apply to update the whole card.";
+  const dispose = () => { if (disposed) return; disposed = true; session.dispose(); active.dispose();
+    apply.onclick = null; restore.onclick = null; textarea.oninput = null; window.removeEventListener("pagehide", pagehide); };
+  const pagehide = (event: PageTransitionEvent) => { session.invalidate(); if (!event.persisted) dispose(); };
+  window.addEventListener("pagehide", pagehide); import.meta.hot?.dispose(dispose);
 }
 void mount().catch(error => { const output = document.querySelector<HTMLElement>("[data-bayes-error]")!; output.hidden = false; output.textContent = error instanceof Error ? error.message : String(error); });

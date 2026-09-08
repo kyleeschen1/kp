@@ -1,5 +1,56 @@
 import { test, expect } from "@playwright/test";
 
+test("Bayes author apply replaces every projection together and retains last-valid on repair", async ({ page }, info) => {
+  await page.goto("/experiments/bayesian-reasoning/");
+  const display = page.locator("[data-bayes-display]"), card = display.locator("[data-bayes-card]");
+  await expect(card).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+  await page.locator(".bayes-author summary").click();
+  const editor = page.locator("[data-bayes-draft]"), status = page.locator("[data-bayes-author-status]");
+  const source = JSON.parse(await editor.inputValue());
+  source.model.masses = ["8/100", "12/100", "16/100", "64/100"];
+  source.model.events[0].label = "Needs review";
+  source.teaching.firstEventId = "flagged";
+  const oldRevision = await card.getAttribute("data-bayes-revision");
+  await editor.fill(JSON.stringify(source));
+  await card.locator("[data-kp-focus-deck-replay]").click();
+  await expect.poll(async () => Number(await card.getAttribute("data-bayes-position"))).toBeGreaterThan(0);
+  await page.locator("[data-bayes-apply]").click();
+  await expect(status).toHaveAttribute("data-bayes-apply-status", "applied");
+  await expect(card).not.toHaveAttribute("data-bayes-revision", oldRevision!);
+  const revision = await card.getAttribute("data-bayes-revision");
+  await expect(display.locator("[data-bayes-display-revision]")).toHaveAttribute("data-bayes-display-revision", revision!);
+  await expect(display.locator(".bayes-legend")).toContainText("Needs review");
+  await expect(display.locator("[data-kp-focus-deck-beat]").nth(1)).toContainText("into B and not B");
+  await expect(display.locator("[data-bayes-model-summary]")).toContainText("tt = 2/25");
+  await card.locator("[data-kp-focus-deck-scrubber]").evaluate(node => {
+    (node as HTMLInputElement).value = "4"; node.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await expect(card.locator("[data-bayes-count]")).toHaveText("5 / 7");
+  await expect(card.locator("#bayes-tree-description")).toContainText("P(A given B) = 1/3");
+  await expect(card.locator("[data-bayes-native-host]")).toContainText("1");
+  const oldCard = await card.elementHandle();
+  await editor.fill("{"); await page.locator("[data-bayes-apply]").click();
+  await expect(status).toHaveAttribute("data-bayes-apply-status", "repair-gap");
+  expect(await oldCard!.evaluate(node => node.isConnected)).toBe(true);
+  await expect(card).toHaveAttribute("data-bayes-revision", revision!);
+  await expect(card).toHaveAttribute("data-bayes-position", "4");
+  await page.locator("[data-bayes-restore]").click();
+  expect(JSON.parse(await editor.inputValue()).model.events[0].label).toBe("Needs review");
+  // Apply during an unfinished continuous scrub; the old token cannot move
+  // the replacement and the exact interrupted position is retained.
+  await card.locator("[data-kp-focus-deck-scrubber]").evaluate(node => {
+    (node as HTMLInputElement).value = "2.35"; node.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  source.model.events[1].label = "Signal";
+  await editor.fill(JSON.stringify(source)); await page.locator("[data-bayes-apply]").click();
+  await expect(card.locator(".bayes-legend")).toContainText("Signal");
+  await expect(card).toHaveAttribute("data-bayes-position", "2.35");
+  expect(await page.locator(".bayes-staging").count()).toBe(0);
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+  await page.screenshot({ path: info.outputPath("bayes-editor-mobile.png"), fullPage: true });
+});
+
 test("Bayes notation does not paint its prepared fraction over the question", async ({ page }, info) => {
   await page.goto("/experiments/bayesian-reasoning/");
   const card = page.locator("[data-bayes-card]");
