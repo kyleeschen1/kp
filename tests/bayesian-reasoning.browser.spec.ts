@@ -1,5 +1,46 @@
 import { test, expect } from "@playwright/test";
 
+test("Bayes reversible tree retains owners and supplies an exemplar contact sheet", async ({ page }, info) => {
+  await page.goto("/experiments/bayesian-reasoning/");
+  const card = page.locator("[data-bayes-card]");
+  await expect(card).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+  const originals = await page.locator("[data-bayes-outcome]").elementHandles();
+  const frames: { position: number; svg: string }[] = [];
+  for (const position of [0, 1, 2, 2.5, 3, 3.5, 4, 5, 5.5, 6, 2]) {
+    await card.locator("[data-kp-focus-deck-scrubber]").evaluate((node, value) => {
+      (node as HTMLInputElement).value = String(value); node.dispatchEvent(new Event("input", { bubbles: true }));
+    }, position);
+    await expect.poll(async () => Number(await card.getAttribute("data-bayes-position"))).toBeCloseTo(position, 9);
+    expect(await page.locator("[data-bayes-outcome]").count()).toBe(4);
+    for (const owner of originals) expect(await owner.evaluate(node => node.isConnected)).toBe(true);
+    if (Number.isInteger(position)) frames.push({ position, svg: await card.locator("svg.bayes-tree").evaluate(node => node.outerHTML) });
+    if ([2, 3, 4, 6].includes(position)) {
+      const stage = await card.locator(".bayes-stage").boundingBox(), tree = await card.locator("svg.bayes-tree").boundingBox();
+      expect(tree!.y + tree!.height).toBeLessThanOrEqual(stage!.y + stage!.height + 1);
+      await card.screenshot({ path: info.outputPath(`bayes-step-${position + 1}.png`) });
+    }
+  }
+  expect(frames[2]!.svg).toBe(frames.at(-1)!.svg);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await card.locator("[data-kp-focus-deck-scrubber]").focus();
+  await page.keyboard.press("End");
+  await expect(card).toHaveAttribute("data-bayes-position", "6");
+  await expect(card.locator("[data-bayes-count]")).toHaveText("7 / 7");
+  await expect(page.locator("[data-bayes-error]")).toBeHidden();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+  await card.screenshot({ path: info.outputPath("bayes-phone-reduced.png") });
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.evaluate(frames => {
+    const sheet = document.createElement("section"); sheet.id = "bayes-contact-sheet";
+    sheet.style.cssText = "display:grid;grid-template-columns:repeat(2,700px);background:#fffdf8;color:#20252b;gap:12px;padding:12px";
+    for (const frame of frames.slice(0, 7)) { const cell = document.createElement("section");
+      cell.innerHTML = `<h2>Stop ${frame.position + 1} / 7</h2>${frame.svg}`; sheet.append(cell); }
+    document.body.replaceChildren(sheet);
+  }, frames);
+  await page.locator("#bayes-contact-sheet").screenshot({ path: info.outputPath("bayes-contact-sheet.png") });
+});
+
 test("Bayes card uses seven shared semantic stops and animated keyboard traversal", async ({ page }) => {
   await page.goto("/experiments/bayesian-reasoning/");
   const card = page.locator("[data-bayes-card]");

@@ -10,11 +10,15 @@ import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeli
 import { resolveKpFocusDeckVisibleBeat } from "../../tutorial/focus-deck-beat-navigation.ts";
 import { bindKpFocusDeckKeyboard } from "../../tutorial/focus-deck-keyboard.ts";
 import { mountKpFocusDeckNativeInput } from "../../tutorial/focus-deck-native-input.ts";
+import { createBayesTreePlan, sampleBayesTree } from "./tree-frame.ts";
+import { mountBayesTreeSvg, formatBayesMass } from "./tree-svg.ts";
 
 async function mount() {
   const card = document.querySelector<HTMLElement>("[data-bayes-card]")!;
   const evidence = bindBayesEvidence(createFlaggedTicketSource()), beats = createBayesScore(evidence.trace);
   const notation = compileBayesNotation(evidence.trace);
+  const treePlan = createBayesTreePlan(evidence.trace);
+  const tree = mountBayesTreeSvg(card.querySelector<HTMLElement>("[data-bayes-tree-host]")!, treePlan);
   const nativeHost = card.querySelector<HTMLElement>("[data-bayes-native-host]")!;
   nativeHost.style.visibility = "hidden";
   const native = await mountBayesNativeSurface(nativeHost, document.querySelector<HTMLTemplateElement>("template[data-kp-reader-exemplar-template]")!, notation);
@@ -46,9 +50,17 @@ async function mount() {
     });
     if (!passage?.ownsTravel()) viewport.scrollLeft = position * viewport.clientWidth;
     nativeHost.style.visibility = position >= 3 ? "visible" : "hidden";
-    card.querySelector("[data-bayes-formula-label]")!.textContent = position >= 3 ? "P(A | B) =" : "A = urgent · B = flagged";
+    card.querySelector("[data-bayes-formula-label]")!.textContent = position >= 3 ? "P(A | B) =" : "";
+    card.querySelector<HTMLElement>("[data-bayes-question]")!.hidden = position >= 3;
     native.seek(Math.max(0, Math.min(1, position - 3)));
-    card.querySelector<HTMLElement>("[data-bayes-tree-host]")!.dataset["semanticState"] = evidence.trace.states[visible]!.id;
+    const frame = sampleBayesTree(treePlan, position); tree.paint(frame);
+    card.querySelector<HTMLElement>("[data-bayes-tree-host]")!.dataset["semanticState"] = frame.stateId;
+    card.querySelector("[data-bayes-population-label]")!.textContent = position === 4
+      ? `Reference: B only · ${notation.denominatorUnits} of ${notation.unit} tickets; boxes retain joint masses`
+      : position > 3 && position < 4 ? "Restricting the reference to B…"
+      : position > 4 && position < 5 ? "Restoring the whole population…" : "Reference: whole population";
+    nativeHost.dataset["bayesSalience"] = frame.hierarchy.find(entity => entity.id === treePlan.ratioId)!.salience;
+    card.querySelector("#bayes-tree-description")!.textContent = `${beats[Math.min(6, Math.floor(position))]!.title}. Reference population: ${frame.referencePopulationId === treePlan.marginalId ? "B" : "whole population"}. Joint outcomes remain ${treePlan.trace.model.outcomes.map(outcome => `${outcome.key}: ${formatBayesMass(outcome.mass)}`).join(", ")}. P(A given B) = ${formatBayesMass(treePlan.query.value)}.`;
   };
   const seek = (step: number) => { cancel(); navigation.seek(step, !reduced.matches); };
   previous.onclick = () => seek(Math.max(0, Math.ceil(navigation.position()) - 1));

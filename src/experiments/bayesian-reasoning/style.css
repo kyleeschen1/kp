@@ -4,8 +4,36 @@
 [data-bayes-native-host] .kp-reader-focus-stepper,
 [data-bayes-native-host] .kp-reader-equation-hint,
 [data-bayes-native-host] .kp-reader-equation-progress { display: none; }
-.bayes-stage { display: grid; grid-template-rows: minmax(250px, 1fr) 220px; min-height: 470px; margin: 0; }
+/* This two-surface exemplar needs intrinsic tree height; the default equation
+   card's fixed stage would clip the lower outcomes and denominator panel. */
+[data-bayes-card] .kp-focus-deck__card { height: auto; grid-template-rows: auto 145px; }
+.kp-focus-deck .bayes-stage { display: grid; height: auto; grid-template-rows: auto 220px; margin: 0; padding: 0; touch-action: pan-y pinch-zoom; }
 [data-bayes-tree-host] { display: grid; place-items: center; min-width: 0; }
-.bayes-notation { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; padding: 0 1rem; }
+.bayes-notation { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; padding: 0 1rem; border-top: 1px solid var(--kp-st-rule); }
 .bayes-notation [data-bayes-native-host] { height: 220px; min-width: 0; }
 [data-bayes-formula-label] { font: 1.1rem var(--kp-serif); }
+.bayes-tree-panel { min-width: 0; padding-top: .8rem; }
+.bayes-legend, [data-bayes-population-label] { margin: .15rem .7rem; text-align: center; font: .9rem/1.4 var(--kp-serif); color: var(--kp-st-ink); }
+[data-bayes-population-label] { min-height: 2.8em; }
+.bayes-tree { display: block; width: 100%; height: auto; overflow: visible; color: var(--kp-st-ink); font: 26px var(--kp-serif); }
+.bayes-tree text { fill: currentColor; }
+.bayes-tree path { stroke: currentColor; stroke-width: 1.4; fill: none; }
+.bayes-tree circle, .bayes-tree rect { fill: none; stroke: currentColor; stroke-width: 1.3; vector-effect: non-scaling-stroke; }
+.bayes-tree .bayes-probability { font-size: 23px; }
+.bayes-tree .bayes-small { font-size: 20px; }
+[data-bayes-reference] { color: var(--kp-st-focus); }
+[data-bayes-reference] rect { stroke-width: calc(1.5px + var(--bayes-reference-strength, 0) * 1.5px); stroke-dasharray: 4 3; }
+[data-bayes-outcome] { color: var(--kp-st-ink); }
+.bayes-tree [data-bayes-salience="focus"] { color: var(--kp-st-focus); }
+.bayes-notation:has([data-bayes-salience="focus"]) [data-bayes-formula-label] { color: var(--kp-st-focus); }
+[data-bayes-outcome] rect { stroke-opacity: calc(1 - var(--bayes-context, 0) * .6); }
+[data-bayes-outcome][data-bayes-membership="excluded"] text { opacity: calc(1 - var(--bayes-context, 0) * .2); }
+[data-bayes-question] { position: absolute; inset: 0; display: grid; place-content: center; margin: 0; text-align: center; font: 1.35rem/1.6 var(--kp-serif); }
+[data-bayes-question][hidden] { display: none; }
+@media (min-width: 46rem) {
+  .kp-focus-deck .bayes-stage { grid-template-columns: minmax(0, 1fr) 170px; grid-template-rows: auto; }
+  .bayes-notation { grid-template-columns: minmax(0, 1fr); grid-template-rows: 40px 220px; align-content: center; padding: 0 .4rem; border-top: 0; border-left: 1px solid var(--kp-st-rule); text-align: center; }
+  [data-bayes-question] { font-size: 1.05rem; padding: .5rem; }
+}
+@media (max-width: 46rem) { .bayes-tree { font-size: 30px; } .bayes-tree .bayes-probability { font-size: 28px; } .bayes-tree .bayes-small { font-size: 24px; } }
+@media (forced-colors: active) { .bayes-tree { color: CanvasText; } [data-bayes-reference], [data-bayes-outcome][data-bayes-salience="focus"] { color: Highlight; } }

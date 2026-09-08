@@ -217,6 +217,48 @@
       "scope": "s07",
       "checkedAt": "2026-09-08T19:25:26.542Z",
       "notes": "Executed successfully; 16 Bayes tests, 61 reasoning tests, full types, architecture gates, or four scoped Chromium preservation cases as applicable."
+    },
+    {
+      "command": "npm run visual:bayesian-reasoning:shared",
+      "status": "failed",
+      "scope": "s08",
+      "checkedAt": "2026-09-08T19:39:54.324Z",
+      "notes": "First capture assertion compared a fractional floating value as an exact string; changed to numeric tolerance. Actual screenshot inspection exposed fixed-stage clipping and marginal label overlap; repaired local intrinsic layout, explicit group label placement and whole-box transit clearance. No shared type or budget weakened."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "s08",
+      "checkedAt": "2026-09-08T19:40:57.747Z",
+      "notes": "New test used toSorted beyond the configured library target; changed to a copied array plus sort, retaining the existing target and test coverage."
+    },
+    {
+      "command": "npm run test:bayesian-reasoning",
+      "status": "passed",
+      "scope": "s08",
+      "checkedAt": "2026-09-08T19:42:08.121Z",
+      "notes": "17 deterministic Bayes tests, full types zero errors, architecture gates, and three Chromium discovery cases pass as applicable. Actual captures inspected; seven-stop contact sheet, desktop and narrow reduced motion. No human approval or motif promotion claimed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s08",
+      "checkedAt": "2026-09-08T19:42:09.191Z",
+      "notes": "17 deterministic Bayes tests, full types zero errors, architecture gates, and three Chromium discovery cases pass as applicable. Actual captures inspected; seven-stop contact sheet, desktop and narrow reduced motion. No human approval or motif promotion claimed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s08",
+      "checkedAt": "2026-09-08T19:42:10.188Z",
+      "notes": "17 deterministic Bayes tests, full types zero errors, architecture gates, and three Chromium discovery cases pass as applicable. Actual captures inspected; seven-stop contact sheet, desktop and narrow reduced motion. No human approval or motif promotion claimed."
+    },
+    {
+      "command": "npm run visual:bayesian-reasoning:shared",
+      "status": "passed",
+      "scope": "s08",
+      "checkedAt": "2026-09-08T19:42:11.198Z",
+      "notes": "17 deterministic Bayes tests, full types zero errors, architecture gates, and three Chromium discovery cases pass as applicable. Actual captures inspected; seven-stop contact sheet, desktop and narrow reduced motion. No human approval or motif promotion claimed."
     }
   ],
   "expectedLearning": [
