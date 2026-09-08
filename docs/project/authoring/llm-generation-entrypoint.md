@@ -37,6 +37,11 @@ verified mathematical operation or animation authority; unsupported lowering
 must return a typed repair gap. Handwritten generation-shaped state fixtures
 must not be reported as a live-model benchmark.
 
+For the accepted equation/code parent–reason–return exemplars, use
+`reusable-reasoning-packet.md`. It supplies complete starter JSON, a read-only
+checker, exact supported edits and typed repair examples. It does not expand
+either domain's semantic or generation authority.
+
 ## Route The Task Before Generating
 
 | Intended change | Canonical target |

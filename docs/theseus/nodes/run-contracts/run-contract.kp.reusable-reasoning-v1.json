@@ -214,7 +214,8 @@
     {
       "id": "s21",
       "title": "Provide human and LLM authoring packet",
-      "status": "planned"
+      "summary": "Human/LLM packet and read-only source checker cover both bounded domains with executable repair examples. 58 tests and full types pass; no new generation authority.",
+      "status": "complete"
     },
     {
       "id": "s22",

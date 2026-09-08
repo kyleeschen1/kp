@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test:reusable-reasoning": "node --disable-warning=ExperimentalWarning --test tests/reusable-reasoning-*.test.ts",
+    "author:reasoning": "node --disable-warning=ExperimentalWarning scripts/author-reasoning.ts",
     "author:reasoning-publication": "node --disable-warning=ExperimentalWarning scripts/build-reasoning-edition.ts",
     "visual:reusable-reasoning": "playwright test tests/reusable-reasoning.browser.spec.ts --project=chromium --workers=1",
     "visual:reusable-reasoning:shared": "playwright test --config playwright.reusable-reasoning-review.config.ts --project=chromium --workers=1",
