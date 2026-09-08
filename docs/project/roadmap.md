@@ -40,23 +40,21 @@ interaction. The results, measured costs, complete release evidence and limits
 are in `reviews/2026-09-08-reusable-reasoning-closeout.md`.
 The user approved the exact 26-slice R3/Bayes proposal with “go”:
 `reviews/2026-09-08-bayesian-flagship-long-loop-proposal.md`.
-Execute `run-contract.kp.bayesian-flagship-v2` until its first coherent tree
-visual checkpoint before authoring/projection hardening. The unstarted v1
-record was superseded for missing execution metadata; scope is unchanged.
-The user accepted the repaired first coherent exemplar with “looks good!”:
-`reviews/2026-09-08-bayesian-flagship-visual-checkpoint.md` links the running
-port-8000 page and records acceptance. The user-authorized shared-compiler cost
-repair resolves the s21 fixed inference-budget stop without changing fixtures,
-limits or executable behavior. See
-`reviews/2026-09-08-bayesian-flagship-reuse-cost-stop.md` for the historical stops
-and resolved measurements. Continue the existing R3 order through Theseus;
-it owns live progress. No new visual treatment or budget waiver was introduced.
+R3 is complete under `run-contract.kp.bayesian-flagship-v2`; the unstarted v1
+record remains superseded. The accepted tree treatment now joins coherent
+authoring, readings, exact return, practice and immutable local publication,
+with a source-only second problem. Results, costs, release evidence and limits:
+`reviews/2026-09-08-bayesian-flagship-closeout.md`.
+The shared-compiler and accessibility-ownership repairs preserve fixed gates
+and accepted visuals; their earlier stop reports remain historical evidence.
 The user accepted deferring the synthetic live trial until the next real
-authoring task. Keep the local packet and deterministic assessment; continue
-performance, browser and release verification. No live model evidence is claimed.
+authoring task. Keep the local packet and deterministic assessment; performance,
+browser and release verification are complete. No live model evidence is claimed.
 See `decisions/2026-09-08-bayesian-live-trial-deferral.md`; the earlier permission
 stop is historical, not an outstanding requirement in this amended run.
-Do not restart R1 or R2. Later horizon loops remain unapproved.
+Next: one bounded R4 frontend-convergence/earned-promotion proposal grounded in
+a real author task and measured R1–R3 costs. Do not execute R4 automatically or
+restart R1–R3. Later horizon loops remain unapproved.
 Minimal check-ins, mainly canonical
 visual reviews, are a standing preference; see
 `decisions/2026-09-07-reconciled-horizon-and-minimal-check-ins.md`.

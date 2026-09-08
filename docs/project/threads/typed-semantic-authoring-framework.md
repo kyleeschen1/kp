@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: R3 live trial explicitly deferred; continue performance and release verification
+Status: R3 complete; next boundary is a bounded R4 proposal, not execution
 Last Updated: 2026-09-08
 Current successor reference: `../reviews/2026-09-07-reconciled-authoring-loop-horizon.md`.
 It preserves the original architectural obligations and the tax/Bayes direction;
@@ -24,13 +24,15 @@ It records shared navigation, bounded authoring/repair, immutable equation editi
 an actual two-round model trial, full release evidence and honest code parity gaps.
 No R2 work remains. The user approved the 26-slice R3 proposal with “go”:
 `../reviews/2026-09-08-bayesian-flagship-long-loop-proposal.md`.
-Execute `run-contract.kp.bayesian-flagship-v2` through its first visual gate.
-That gate is now ready: `../reviews/2026-09-08-bayesian-flagship-visual-checkpoint.md`.
+Completed contract: `run-contract.kp.bayesian-flagship-v2`.
+Accepted gate: `../reviews/2026-09-08-bayesian-flagship-visual-checkpoint.md`.
 The running `/experiments/bayesian-reasoning/` host joins exact probability
 truth, governed operations, persistent SVG outcomes, native ratio evaluation
 and shared seven-stop input. The user accepted the repaired treatment with
-“looks good!” on 2026-09-08. Continue probability editing, readings and publication;
-Theseus owns the exact continuation and stop state.
+“looks good!” on 2026-09-08. Probability editing, readings, exact return, practice,
+immutable local publication and a source-only second problem now pass release.
+Closeout: `../reviews/2026-09-08-bayesian-flagship-closeout.md`.
+Theseus owns final completion and evidence; do not restart this run.
 The unstarted metadata-incomplete v1 record is superseded, not another queue.
 Branch: `feature/20260907-reusable-reasoning`, retaining completed R1 ancestry.
 Theseus owns counts and terminal state. Retain this branch: no branch helper is
@@ -61,11 +63,14 @@ do not treat its proposed roadmap or readiness labels as new execution authority
 The user clarified the remaining code issue as missing gradual passage swiping.
 The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
-Current Next Action: continue the approved R3 performance/browser/release order
-through Theseus. The user accepted deferring the synthetic live trial until the
+Current Next Action: propose one bounded R4 frontend-convergence/earned-promotion
+run from real author tasks and measured R1–R3 costs. R4 execution is not approved.
+The user accepted deferring the synthetic live trial until the
 next real authoring task; see `../decisions/2026-09-08-bayesian-live-trial-deferral.md`.
 The local packet and deterministic assessment are ready; no model call occurred.
 The earlier permission stop is historical, not an outstanding run requirement.
+R3 performance/browser/release work is complete; physical-device behavior and
+learning outcomes remain qualified in its closeout.
 The user-authorized shared-compiler repair resolved the s21 fixed-budget stop;
 see `../reviews/2026-09-08-bayesian-flagship-reuse-cost-stop.md` for preserved
 history and final measurements. Public APIs, runtime behavior, all real fixtures

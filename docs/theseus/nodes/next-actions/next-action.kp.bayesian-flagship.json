@@ -2,9 +2,9 @@
   "id": "next-action.kp.bayesian-flagship",
   "kind": "next-action",
   "title": "R3 Bayesian flagship",
-  "status": "in-progress",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Accepted live-trial deferral removes s22 external prerequisite; continue performance and release gates.",
+  "summary": "R3 complete with verified release and explicit live-trial deferral; R4 is the next planning boundary, not authorized implementation.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -29,6 +29,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-08-bayesian-release-repair.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-08-bayesian-flagship-closeout.md"
     }
   ],
   "dependsOn": {
@@ -1031,11 +1035,32 @@
       "scope": "s25",
       "checkedAt": "2026-09-08T23:43:14.825Z",
       "notes": "Clean final-state release: 6774 tests passed, zero failed, skipped or cancelled; architecture, inference, concept-catalog and promotion-memory preflights pass. Earlier failures repaired without changing assertions or budgets."
+    },
+    {
+      "command": "npm run check:bayesian-reuse",
+      "status": "passed",
+      "scope": "s26",
+      "checkedAt": "2026-09-08T23:47:51.234Z",
+      "notes": "Closeout counts and payload hashes reproduced: two 362-byte sources, zero second-source runtime imports; source-graph and timing qualifications retained."
+    },
+    {
+      "command": "npm run check:promotion-memory",
+      "status": "passed",
+      "scope": "s26",
+      "checkedAt": "2026-09-08T23:47:52.213Z",
+      "notes": "Planning handoff does not activate R4 or the tabled matrix promotion item."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s26",
+      "checkedAt": "2026-09-08T23:47:53.220Z",
+      "notes": "Closeout, roadmap, active thread and horizon audited; linked evidence files exist. Full release results retained from s25."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "25 of 26 complete; release gates pass after ownership repair. Only evidence closeout and R4 planning handoff remain; live trial explicitly deferred."
+    "state": "complete",
+    "summary": "R3 complete: 26 of 26 approved amended slices. Two exact-source Bayes examples integrate authoring, motion, reading, return, practice and local editions. Release passes; no live-model or learner-outcome claim."
   },
   "expectedLearning": [
     "Measure whether one domain-owned probability source yields coherent tree equation reading retrieval and publication with source-only second-caller reuse."

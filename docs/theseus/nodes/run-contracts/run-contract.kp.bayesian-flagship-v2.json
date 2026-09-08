@@ -2,8 +2,8 @@
   "id": "run-contract.kp.bayesian-flagship-v2",
   "kind": "run-contract",
   "title": "R3 Bayesian flagship",
-  "status": "in-progress",
-  "summary": "User accepted live-trial deferral; resume unchanged s23-26 after local s22 assessment. No external calls authorized or executed.",
+  "status": "resolved",
+  "summary": "COMPLETE: approved amended R3 delivered and release verified; final closeout owns conclusions, with R4 planning only.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -29,6 +29,10 @@
     {
       "kind": "file",
       "path": "docs/project/decisions/2026-09-08-bayesian-live-trial-deferral.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-08-bayesian-flagship-closeout.md"
     }
   ],
   "verification": [
@@ -46,8 +50,8 @@
     "theseus workspace validate"
   ],
   "progress": {
-    "state": "partial",
-    "summary": "25 of 26 complete; release verified. s26 closeout remains; accepted s22 live-trial deferral retained."
+    "state": "complete",
+    "summary": "COMPLETE 26 of 26 amended slices; accepted visual treatment, verified release and closed context receipts. No R4 activation, merge or deployment."
   },
   "allowedWork": [
     "s01: Freeze owner/capability and author-task baseline; pin original problem, preservation URLs and exact commands; reconcile stale delivery summary; risk Low; F: source/ref audit, exact fixture arithmetic, unchanged worktree baseline; one commit.",
@@ -271,7 +275,8 @@
     {
       "id": "s26",
       "title": "Record costs, author-task outcomes, capability limits and R4 handoff; close receipts/target/contract and commit closeout",
-      "status": "planned"
+      "summary": "Closeout records exact costs, author outcomes, 6774-test release, browser scope and limitations. Roadmap/thread/horizon point to unapproved R4 planning; all R3 receipts closed.",
+      "status": "complete"
     }
   ]
 }
