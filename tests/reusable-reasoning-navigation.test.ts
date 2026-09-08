@@ -5,13 +5,13 @@ import { createKpReasoningSource, KpReasoningRepairGap } from "../src/experiment
 import { bindKpReasoningEvidence } from "../src/experiments/reusable-reasoning/evidence.ts";
 import { createKpReasoningNavigator } from "../src/experiments/reusable-reasoning/navigation.ts";
 
-function fixture() {
+function fixture(source = createKpReasoningSource()) {
   let now = 0, next = 0;
   const pending = new Map<number, (now: number) => void>();
   const clock = createKpReaderTimelinePlaybackClock({ id: "test.reasoning", durationMs: 13000,
     scheduler: { now: () => now, request: callback => { pending.set(++next, callback); return next; },
       cancel: id => { pending.delete(id); } } });
-  const evidence = bindKpReasoningEvidence(createKpReasoningSource());
+  const evidence = bindKpReasoningEvidence(source);
   const navigation = createKpReasoningNavigator(evidence, clock);
   return { clock, evidence, navigation, pending,
     advance(ms: number) { now += ms; const work = [...pending.values()]; pending.clear(); work.forEach(callback => callback(now)); } };
@@ -35,6 +35,39 @@ test("open and return preserve exact interrupted progress through the real exist
   assert.equal(navigation.getView(), "parent");
   assert.equal(navigation.capture().returnTo, undefined);
   clock.dispose();
+});
+
+test("step controls traverse every verified checkpoint for every supported procedure length", () => {
+  const source = createKpReasoningSource();
+  const targets = ["distributed", "normalized", "constant-product", "constant-quotient"];
+  for (let count = 1; count <= 4; count++) {
+    const { clock, navigation, advance, pending } = fixture({ ...source,
+      parent: { ...source.parent, targetStateId: `fraction-solve.state.${targets[count - 1]}` },
+      reason: { ...source.reason, operationIds: source.reason.operationIds.slice(0, count) } });
+    assert.equal(navigation.stepCount, count);
+    for (const view of ["parent", "reason"]) {
+      if (view === "reason") navigation.open();
+      navigation.seekStep(0);
+      for (let index = 1; index <= count; index++) {
+        navigation.step("forward"); advance(100_000);
+        assert.equal(clock.getSnapshot().progress, index / 13);
+        assert.equal(pending.size, 0, "must stop, not merely pass through the checkpoint");
+      }
+      for (let index = count - 1; index >= 0; index--) {
+        navigation.step("rewind"); advance(100_000);
+        assert.equal(clock.getSnapshot().progress, index / 13);
+      }
+      navigation.seekStep(.7);
+      navigation.step("forward", false);
+      assert.equal(clock.getSnapshot().progress, 1 / 13);
+      navigation.seekStep(.7);
+      navigation.step("rewind", false);
+      assert.equal(clock.getSnapshot().progress, 0);
+      assert.throws(() => navigation.seekStep(count + 1), KpReasoningRepairGap);
+      assert.throws(() => navigation.seekStep(NaN), KpReasoningRepairGap);
+    }
+    clock.dispose();
+  }
 });
 
 test("navigation direct restoration has no replay or private scheduled work", () => {

@@ -227,11 +227,25 @@
       "scope": "s14",
       "checkedAt": "2026-09-08T02:24:14.612Z",
       "notes": "38 tests, full types plus final app/test incremental checks, three Chromium integration checks on isolated and actual shared port 8000 hosts pass. Inspected phone reason/practice and native captures. Keyboard, five intermediate scroll positions, real emulated touch, accessible endpoint, source edits and last-valid retention checked. Human aesthetic approval still required; no cross-browser release claim."
+    },
+    {
+      "command": "npm run visual:reusable-reasoning:shared",
+      "status": "failed",
+      "scope": "s14-step-repair",
+      "checkedAt": "2026-09-08T02:33:25.333Z",
+      "notes": "New coverage stopped at Playwright range-fill syntax .7; browser requires 0.7. Corrected fixture spelling without changing expected adjacent checkpoints. Other three integration tests passed."
+    },
+    {
+      "command": "npm run test:reusable-reasoning; node --disable-warning=ExperimentalWarning --test tests/focus-deck-scaffold.test.ts; npm run visual:reusable-reasoning:shared; npm run typecheck; npm run check:architecture; npm run build:bundle",
+      "status": "passed",
+      "scope": "s14-step-repair",
+      "checkedAt": "2026-09-08T02:35:51.029Z",
+      "notes": "39 reasoning tests, 4 scaffold tests, 4 shared-server Chromium integrations, full types plus final test types, architecture and build pass. Navigator derives adjacent stops from verified procedure, not prose count. All parent/reason full/compact combinations and edited lengths preserve each native step; shared keyboard fractional boundary law covers 2-15 checkpoints. Normal motion stops at first checkpoint. Existing chunk warnings unchanged."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: s01-s14 implemented and verified; combined exemplar awaits user visual acceptance. Do not start s15-s24 until acceptance. Review packet records working URL, limits and resume boundary."
+    "summary": "HUMAN_CHECKPOINT retained at 14/24. User-confirmed editing; reported whole-chain Next repaired with semantic checkpoint authority and regression tests. Await combined visual acceptance before s15."
   },
   "expectedLearning": [
     "Measure whether one authored reason yields consistent full compact and retrieval projections through existing owners and reduces second-caller glue."

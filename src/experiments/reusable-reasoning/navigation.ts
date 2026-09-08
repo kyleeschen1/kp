@@ -58,8 +58,30 @@ export function createKpReasoningNavigator(
     });
   };
   position(clock.getSnapshot().progress);
+  // Semantic checkpoints own control destinations. Prose pagination is not an
+  // input: compressing a reading cannot collapse several operations into Next.
+  const checkpoints = Object.freeze(support.procedure.checkpoints.map((_ref, index) => index / count));
+  const go = (progress: number, animate: boolean) => {
+    assertLive(); position(progress);
+    clock.pause();
+    if (!animate) clock.seek(progress);
+    else clock.play({ direction: progress >= clock.getSnapshot().progress ? "forward" : "rewind", stopAt: progress });
+  };
   return Object.freeze({
     end,
+    stepCount: checkpoints.length - 1,
+    getStepPosition: () => clock.getSnapshot().progress * count,
+    seekStep(step: number, animate = false) {
+      go(step / count, animate);
+    },
+    step(direction: "forward" | "rewind", animate = true) {
+      assertLive();
+      const progress = clock.getSnapshot().progress;
+      const target = direction === "forward"
+        ? checkpoints.find(value => value > progress) ?? end
+        : [...checkpoints].reverse().find(value => value < progress) ?? 0;
+      go(target, animate);
+    },
     getView: () => view,
     capture,
     open() {

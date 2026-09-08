@@ -9,6 +9,21 @@ const beats = Object.freeze([
   Object.freeze({ slug: "transform", title: "Transform", html: "<p>Change.</p>" })
 ]);
 
+test("shared arrow keys cannot skip a boundary after fractional scrubbing", () => {
+  const event = { key: "ArrowRight", defaultPrevented: false, altKey: false, ctrlKey: false, metaKey: false };
+  for (let count = 2; count <= 15; count++) {
+    for (let interval = 0; interval < count - 1; interval++) {
+      for (const fraction of [.01, .2, .49, .51, .7, .99]) {
+        const position = interval + fraction;
+        for (const key of ["ArrowRight", "ArrowUp"])
+          assert.equal(readKpFocusDeckScrubberKeyTarget({ ...event, key }, position, count), interval + 1);
+        for (const key of ["ArrowLeft", "ArrowDown"])
+          assert.equal(readKpFocusDeckScrubberKeyTarget({ ...event, key }, position, count), interval);
+      }
+    }
+  }
+});
+
 test("shared slider keys select bounded semantic steps without taking modified keys", () => {
   const event = { key: "ArrowRight", defaultPrevented: false, altKey: false, ctrlKey: false, metaKey: false };
   for (const key of ["ArrowRight", "ArrowUp"]) {

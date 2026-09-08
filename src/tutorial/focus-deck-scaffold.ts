@@ -2,23 +2,26 @@ import { renderKpFocusDeckControlIcon } from "./focus-deck-control-icons.ts";
 
 /** Pointer scrubbing stays continuous; keyboard navigation selects semantic
  * steps instead of the range input's fractional paint-sampling increment.
+ * Counts must describe semantic checkpoints, not compressed prose pages.
  * This resolves intent only: each card retains its own navigation and clock.
  */
 export function readKpFocusDeckScrubberKeyTarget(
   event: Pick<KeyboardEvent, "key" | "defaultPrevented" | "altKey" | "ctrlKey" | "metaKey">,
   position: number,
-  beatCount: number
+  checkpointCount: number
 ): number | undefined {
   if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) return;
   let target: number;
   switch (event.key) {
-    case "ArrowLeft": case "ArrowDown": target = position - 1; break;
-    case "ArrowRight": case "ArrowUp": target = position + 1; break;
+    // Choose the adjacent boundary, not a rounded unit offset: from 0.7,
+    // Right must reach 1 (not 2), and from 1.2 Left must reach 1 (not 0).
+    case "ArrowLeft": case "ArrowDown": target = Math.ceil(position) - 1; break;
+    case "ArrowRight": case "ArrowUp": target = Math.floor(position) + 1; break;
     case "Home": target = 0; break;
-    case "End": target = beatCount - 1; break;
+    case "End": target = checkpointCount - 1; break;
     default: return;
   }
-  return Math.max(0, Math.min(beatCount - 1, Math.round(target)));
+  return Math.max(0, Math.min(checkpointCount - 1, Math.round(target)));
 }
 
 export interface KpFocusDeckScaffoldBeat {

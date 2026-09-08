@@ -40,59 +40,63 @@ async function mount() {
   const reading = root.querySelector<HTMLSelectElement>("[data-reasoning-reading]")!;
   let mode: ReasoningReading = "full";
   let beats = reasoningBeats(evidence, "parent");
+  let semanticBeats = reasoningBeats(evidence, "reason", "full");
   let alignedScroll = 0;
   let disposed = false;
   let practiceReturn: ReturnType<typeof navigation.capture> | undefined;
   let practice: (typeof prompts)[number] | undefined;
   const practicePanel = root.querySelector<HTMLElement>("[data-reasoning-practice-panel]")!;
   const answer = root.querySelector<HTMLElement>("[data-reasoning-answer]")!;
-  const factor = () => (beats.length - 1) / navigation.end;
+  const passageFactor = () => (beats.length - 1) / navigation.end;
   const render = (align = true) => {
     if (disposed) return;
     surface.render(reduced.matches);
-    const position = clock.getSnapshot().progress * factor();
-    const index = Math.max(0, Math.min(beats.length - 1, Math.round(position)));
+    const position = navigation.getStepPosition();
+    const passagePosition = clock.getSnapshot().progress * passageFactor();
+    const index = Math.max(0, Math.min(beats.length - 1, Math.round(passagePosition)));
+    const label = semanticBeats[Math.min(navigation.stepCount, Math.round(position))]!.title;
     slider.value = String(position);
-    slider.setAttribute("aria-valuetext", beats[index]!.title);
+    slider.setAttribute("aria-valuetext", label);
     previous.disabled = Boolean(practice) || position <= 0;
-    next.disabled = Boolean(practice) || position >= beats.length - 1;
+    next.disabled = Boolean(practice) || position >= navigation.stepCount;
     slider.disabled = Boolean(practice); replay.disabled = Boolean(practice);
     card.dataset["kpFocusDeckActiveBeat"] = beats[index]!.slug;
-    card.querySelector<HTMLOutputElement>("[data-kp-focus-deck-position]")!.value = beats[index]!.title;
+    card.querySelector<HTMLOutputElement>("[data-kp-focus-deck-position]")!.value = label;
     viewport.querySelectorAll<HTMLElement>("[data-kp-focus-deck-beat]").forEach((item, i) => {
       const active = practice ? i === 0 : i === index;
       item.dataset["kpFocusDeckBeatActive"] = String(active);
       if (active) item.setAttribute("aria-current", "page"); else item.removeAttribute("aria-current");
     });
-    if (align && !practice) { alignedScroll = position * Math.max(1, viewport.clientWidth); viewport.scrollLeft = alignedScroll; }
+    if (align && !practice) { alignedScroll = passagePosition * Math.max(1, viewport.clientWidth); viewport.scrollLeft = alignedScroll; }
     root.dataset["kpReasoningView"] = navigation.getView();
   };
   const navigate = (index: number) => {
-    const target = Math.max(0, Math.min(beats.length - 1, index)) / factor();
     clock.pause(); surface.prepare();
-    if (reduced.matches) clock.seek(target);
-    else clock.play({ direction: target >= clock.getSnapshot().progress ? "forward" : "rewind", stopAt: target });
+    navigation.seekStep(index, !reduced.matches);
   };
   const updateView = () => {
     const view = navigation.getView();
     const template = document.createElement("div");
     template.innerHTML = renderReasoningCard(evidence, view, mode);
     beats = reasoningBeats(evidence, view, mode);
+    semanticBeats = reasoningBeats(evidence, "reason", "full");
     viewport.innerHTML = template.querySelector("[data-kp-focus-deck-viewport]")!.innerHTML;
-    card.querySelector(".kp-focus-deck__ticks")!.innerHTML = template.querySelector(".kp-focus-deck__ticks")!.innerHTML;
-    slider.max = String(beats.length - 1);
+    // Timeline controls expose operations even when the prose has fewer pages.
+    card.querySelector(".kp-focus-deck__ticks")!.innerHTML = Array.from({ length: navigation.stepCount + 1 },
+      (_, index) => `<span style="left:${index / navigation.stepCount * 100}%"></span>`).join("");
+    slider.max = String(navigation.stepCount);
     open.hidden = view === "reason"; back.hidden = view === "parent";
     root.querySelector<HTMLElement>("[data-reasoning-location]")!.textContent = view === "parent" ? "Argument" : "Supporting reason";
     card.querySelector<HTMLElement>("[data-reasoning-view-label]")!.textContent = view === "parent" ? "Argument" : "Supporting reason";
     render();
   };
   const unsubscribe = clock.subscribe(() => render());
-  previous.onclick = () => navigate(Math.ceil(clock.getSnapshot().progress * factor()) - 1);
-  next.onclick = () => navigate(Math.floor(clock.getSnapshot().progress * factor()) + 1);
-  replay.onclick = () => { clock.seek(0); navigate(beats.length - 1); };
-  slider.oninput = () => { clock.seek(Number(slider.value) / factor()); };
+  previous.onclick = () => { surface.prepare(); navigation.step("rewind", !reduced.matches); };
+  next.onclick = () => { surface.prepare(); navigation.step("forward", !reduced.matches); };
+  replay.onclick = () => { navigation.seekStep(0); navigate(navigation.stepCount); };
+  slider.oninput = () => { navigation.seekStep(Number(slider.value)); };
   slider.onkeydown = event => {
-    const target = readKpFocusDeckScrubberKeyTarget(event, Number(slider.value), beats.length);
+    const target = readKpFocusDeckScrubberKeyTarget(event, Number(slider.value), navigation.stepCount + 1);
     if (target === undefined) return;
     event.preventDefault(); navigate(target);
   };
@@ -102,7 +106,7 @@ async function mount() {
     alignedScroll = viewport.scrollLeft;
     // Physical passage travel drives the existing clock continuously. The
     // resulting paint must not snap the viewport back to a chosen destination.
-    const actual = position / factor();
+    const actual = position / passageFactor();
     clock.seek(actual);
   };
   open.onclick = () => { navigation.open(); updateView(); back.focus(); };
@@ -205,6 +209,6 @@ async function mount() {
   card.dataset["kpFocusCardEnhancement"] = "ready";
   root.dataset["kpReasoningStatus"] = "ready";
   stampRevision();
-  render();
+  updateView();
 }
 void mount().catch(report);

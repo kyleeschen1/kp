@@ -2,6 +2,45 @@ import { test, expect } from "@playwright/test";
 
 const route = "/experiments/reusable-reasoning/";
 
+test("Next and Previous mean one semantic operation regardless of reading density or edited length", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(route);
+  const root = page.locator("#authored-focus-card");
+  await expect(root).toHaveAttribute("data-kp-reasoning-status", "ready");
+  const card = page.locator("[data-kp-reasoning-card]");
+  const slider = card.locator("[data-kp-focus-deck-scrubber]");
+  const states = ["factored", "distributed", "normalized", "constant-product", "constant-quotient"];
+  for (const count of [4, 3]) {
+    if (count === 3) {
+      await page.getByText("Edit source JSON", { exact: true }).click();
+      await page.getByRole("button", { name: "Load three-step draft", exact: true }).click();
+      await page.getByRole("button", { name: "Apply source", exact: true }).click();
+    }
+    for (const view of ["parent", "reason"]) {
+      if (view === "reason") await page.getByRole("button", { name: "Why does this step work?" }).click();
+      for (const mode of ["full", "compact"]) {
+        await page.locator("[data-reasoning-reading]").selectOption(mode);
+        await expect(slider).toHaveAttribute("max", String(count));
+        await expect(card.locator(".kp-focus-deck__ticks span")).toHaveCount(count + 1);
+        await slider.fill("0");
+        for (let index = 1; index <= count; index++) {
+          await card.locator("[data-kp-focus-deck-next]").click();
+          await expect(card).toHaveAttribute("data-kp-reasoning-progress", String(index / 13));
+          await expect(card).toHaveAttribute("data-kp-reasoning-state", `fraction-solve.state.${states[index]}`);
+        }
+        for (let index = count - 1; index >= 0; index--) {
+          await card.locator("[data-kp-focus-deck-previous]").click();
+          await expect(card).toHaveAttribute("data-kp-reasoning-progress", String(index / 13));
+        }
+        await slider.fill("0.7"); await slider.press("ArrowRight");
+        await expect(card).toHaveAttribute("data-kp-reasoning-progress", String(1 / 13));
+        await slider.fill("1.2"); await slider.press("ArrowLeft");
+        await expect(card).toHaveAttribute("data-kp-reasoning-progress", String(1 / 13));
+      }
+    }
+  }
+});
+
 test("reasoning exemplar mounts canonical native ink and returns to interrupted parent position", async ({ page }, info) => {
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
@@ -13,6 +52,12 @@ test("reasoning exemplar mounts canonical native ink and returns to interrupted 
   await expect(page.locator("iframe")).toHaveCount(0);
   await expect(card.locator(".kp-focus-deck__narrative p").first()).toHaveCSS("font-family", /^Georgia,/);
   const slider = card.locator("[data-kp-focus-deck-scrubber]");
+  await card.locator("[data-kp-focus-deck-next]").click();
+  await expect(card).toHaveAttribute("data-kp-reasoning-progress", String(1 / 13));
+  await page.evaluate(async () => { for (let i = 0; i < 6; i++) await new Promise(requestAnimationFrame); });
+  await expect(card).toHaveAttribute("data-kp-reasoning-progress", String(1 / 13));
+  await card.locator("[data-kp-focus-deck-previous]").click();
+  await expect(card).toHaveAttribute("data-kp-reasoning-progress", "0");
   await slider.fill("0.37");
   const before = await card.getAttribute("data-kp-reasoning-progress");
   await page.getByRole("button", { name: "Why does this step work?" }).click();
@@ -120,7 +165,7 @@ test("source edit reaches native ink, both readings and practice while invalid d
   await expect(root).not.toHaveAttribute("data-kp-reasoning-revision", revision!);
   await expect(page.locator("[data-reasoning-title]")).toHaveText("Stop before the final quotient");
   const applied = await root.getAttribute("data-kp-reasoning-revision");
-  await page.locator("[data-kp-focus-deck-scrubber]").fill("1");
+  await page.locator("[data-kp-focus-deck-scrubber]").fill("3");
   await expect(card).toHaveAttribute("data-kp-reasoning-state", "fraction-solve.state.constant-product");
   await expect(card.locator(".katex-html:visible").filter({ hasText: "12" }).first()).toBeVisible();
   await card.screenshot({ path: info.outputPath("edited-native-endpoint.png") });

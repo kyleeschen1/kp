@@ -95,6 +95,35 @@ release certification. The native phone layout retains its stacked equation form
 
 ## Resume boundary
 
+### Checkpoint repair: semantic stepping (2026-09-07)
+
+User confirmed editing but reported that Next traversed the whole argument.
+Cause: the host used `(visible prose pages - 1) / range end` for both prose
+pagination and animation controls. Parent/full and compact views had two prose
+pages, so one increment targeted all operations. Detailed reason/full happened
+to have a page per checkpoint. This was introduced by the R2 host integration,
+not KaTeX rendering, the verified algebra schema, or the existing motion motifs.
+Earlier browser checks tested Next only inside the detailed reason and missed
+the default parent control contract.
+
+The navigator now derives adjacent step destinations exclusively from verified
+procedure checkpoints; its step API cannot receive prose-page counts. Sliders,
+ticks, accessible labels and keyboard limits use semantic steps in every reading.
+Prose travel keeps its separate continuous projection. Replay and explicit End
+remain whole-range actions. The shared keyboard helper also now uses directional
+floor/ceiling, rather than rounding a unit offset that skipped boundaries from
+fractional positions.
+
+Regression laws cover every supported procedure length, parent/reason traversal,
+forward/backward exact stops, interrupted positions and invalid seeks. Browser
+coverage crosses full/compact with parent/reason before and after a source edit,
+checks exact native states, and verifies normal-motion Next stops instead of
+merely passing through an intermediate state. The shared keyboard test checks
+fractional positions across 2–15 checkpoints. These tests fail if prose density
+is allowed to retarget operation controls again. This is a checkpoint repair;
+it does not authorize post-checkpoint promotion or claim all future regressions
+are impossible.
+
 Stop here until the user explicitly accepts this combined visual checkpoint.
 Do not infer acceptance from earlier approval to execute through this checkpoint.
 After acceptance, use `theseus plan run` at the repository root, restore the
