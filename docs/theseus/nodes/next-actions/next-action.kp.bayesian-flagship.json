@@ -2,9 +2,9 @@
   "id": "next-action.kp.bayesian-flagship",
   "kind": "next-action",
   "title": "R3 Bayesian flagship",
-  "status": "blocked",
+  "status": "in-progress",
   "domain": "kp",
-  "summary": "21 of 26 complete. Specific external payload/destination approval required for s22 actual trial. Local packet and tests complete, compiler budgets pass. Resume exact existing contract at s22 after approval.",
+  "summary": "Accepted live-trial deferral removes s22 external prerequisite; continue performance and release gates.",
   "sourceRefs": [
     {
       "kind": "file",

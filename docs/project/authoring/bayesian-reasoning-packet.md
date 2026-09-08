@@ -55,8 +55,10 @@ mistakes; one two-call trial is not a model success-rate estimate.
 
 ## Live evaluation permission boundary
 
-The local packet and checker make no model calls. The planned live trial is
-currently blocked by external-payload approval. Proposed destination: OpenAI
+The local packet and checker make no model calls. The synthetic live trial is
+explicitly deferred until the next real authoring task; it is not required for
+current R3 completion. Future evaluation still needs external-payload approval.
+Previously proposed destination: OpenAI
 Codex, model `gpt-5.6-sol`, using existing access, at most two calls. Proposed
 payload: this packet, the synthetic default starter and parcel-inspection task,
 then the generated JSON plus checker diagnostics (or a labelled injected

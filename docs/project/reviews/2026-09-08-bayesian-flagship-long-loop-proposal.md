@@ -159,6 +159,12 @@ changes into another visual checkpoint before promotion.
 
 ## Ordered implementation slices
 
+Accepted amendment (2026-09-08, “resume the rec”): defer the synthetic live trial
+until the next real authoring task. S22 now delivers the local packet and
+deterministic task/repair assessment only. No live evidence is claimed and no
+external payload approval is inferred. All other slices and gates are unchanged.
+See [the decision](../decisions/2026-09-08-bayesian-live-trial-deferral.md).
+
 Each row targets the proposed Bayes next-action. File locations below name
 responsibilities, not a mandate to duplicate existing infrastructure.
 Dependencies are sequential unless a row explicitly narrows them. Every row is
@@ -195,7 +201,7 @@ below. A repairable in-scope test failure is repaired before completing the row.
 | 19 | Add a second original binary problem primarily as source: opposite posterior direction and asymmetric joint masses | Medium | S + V: exact second answer, same operation/renderer/input paths, changed labels/order/numbers, zero new timeline implementation | New topology or aesthetic treatment required; request bounded review before it |
 | 20 | Pressure conditional support boundaries with zero cells, unreachable branches, equal likelihoods, complements and bounded exact-number stress | Medium | S: property/table tests, undefined-parent omission vs typed gap, source order permutations, input size limits | Scope expands into arbitrary multi-event trees or approximate inference |
 | 21 | Measure both callers and extract only duplicated mechanical plumbing demonstrated by them, within probability | Medium | B: both unchanged outputs, actual inference/import costs, source-only second-caller edits, removal of superseded local glue | Universal renderer/public API proposal needed or fixed budget cannot be met |
-| 22 | Publish bounded human/LLM packet and run one actual generation-plus-repair trial through existing access | Medium | S: held-out valid/invalid cases; request fulfillment distinct from compilation; exact captured source/diagnostics; at most two model calls | No existing access or new paid/account authority needed; report missing live evidence honestly |
+| 22 | Publish bounded human/LLM packet and deterministic local task/repair assessment; live trial explicitly deferred | Medium | S: held-out valid/invalid cases; request fulfillment distinct from compilation; located diagnostics; no live-evidence claim | Any external evaluation requires separate payload/destination authority |
 | 23 | Profile multi-card mounting, inactive work, source preparation and frame cost; repair owning seams within fixed budgets | High | B + V: deterministic performance harness, idle/offscreen suspension, bounded layout reads/caches, accepted R2/tax preservation | Requires budget waiver, renderer rewrite or unreviewed choreography |
 | 24 | Run responsive/theme/accessibility and supported-browser integration cohort after accepted two-caller treatment | High | B + V: Chromium/Firefox/WebKit, keyboard/wheel/drag, forward/back settlement, reduced motion, light/dark, narrow, static reading | Material new visual judgment needed; physical-device behavior remains qualified |
 | 25 | Run broad release gates and fix attributable failures without weakening gates | High | B: full tests/typecheck/build, architecture/inference and unchanged reader budgets, R1/R2/tax preservation, Theseus validation | Unrelated repair, unsafe operation or architectural expansion needed |
@@ -288,7 +294,8 @@ not infer lower authoring cost from line count alone.
 
 Completion means the approved exemplar plus second source pass the declared
 semantic, authoring, retrieval, publication, interaction and release checks;
-the live trial has honest captured evidence; unsupported cases remain typed gaps;
+the local authoring assessment passes and the live-trial deferral is explicit;
+unsupported cases remain typed gaps;
 all required visual decisions are accepted; and Theseus has no open work from
 this contract. It does not mean generalized probability support or proven learning
 outcomes. Predicting posterior direction, explaining the denominator and transfer

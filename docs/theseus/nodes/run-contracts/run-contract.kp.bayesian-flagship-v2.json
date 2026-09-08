@@ -2,8 +2,8 @@
   "id": "run-contract.kp.bayesian-flagship-v2",
   "kind": "run-contract",
   "title": "R3 Bayesian flagship",
-  "status": "blocked",
-  "summary": "BLOCKED at s22: reviewer requires explicit permission to send bounded Bayes packet, synthetic starter/task and generated JSON/checker feedback to OpenAI Codex gpt-5.6-sol for at most two calls. s21 fixed inference stop resolved. No live calls occurred.",
+  "status": "in-progress",
+  "summary": "User accepted live-trial deferral; resume unchanged s23-26 after local s22 assessment. No external calls authorized or executed.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -25,6 +25,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-08-bayesian-authoring-live-permission-stop.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-08-bayesian-live-trial-deferral.md"
     }
   ],
   "verification": [
@@ -242,9 +246,9 @@
     },
     {
       "id": "s22",
-      "title": "Publish bounded human/LLM packet and run one actual generation-plus-repair trial through existing access",
-      "summary": "Start bounded human and LLM packet with one two-call live trial using existing access.",
-      "status": "in-progress"
+      "title": "Publish bounded authoring packet and local task assessment; live trial explicitly deferred",
+      "summary": "User accepted scope amendment in 2026-09-08-bayesian-live-trial-deferral.md. Local packet and 34 tests pass; existing s22 full typecheck evidence retained. No live calls or model-success claim.",
+      "status": "complete"
     },
     {
       "id": "s23",

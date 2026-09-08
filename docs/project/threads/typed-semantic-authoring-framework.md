@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: R3 compiler cost repaired; s22 local packet ready, live payload approval required
+Status: R3 live trial explicitly deferred; continue performance and release verification
 Last Updated: 2026-09-08
 Current successor reference: `../reviews/2026-09-07-reconciled-authoring-loop-horizon.md`.
 It preserves the original architectural obligations and the tax/Bayes direction;
@@ -61,10 +61,11 @@ do not treat its proposed roadmap or readiness labels as new execution authority
 The user clarified the remaining code issue as missing gradual passage swiping.
 The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
-Current Next Action: continue the approved R3 order through Theseus. The
-live s22 trial is now blocked on specific external payload/destination approval;
-see `../reviews/2026-09-08-bayesian-authoring-live-permission-stop.md`.
+Current Next Action: continue the approved R3 performance/browser/release order
+through Theseus. The user accepted deferring the synthetic live trial until the
+next real authoring task; see `../decisions/2026-09-08-bayesian-live-trial-deferral.md`.
 The local packet and deterministic assessment are ready; no model call occurred.
+The earlier permission stop is historical, not an outstanding run requirement.
 The user-authorized shared-compiler repair resolved the s21 fixed-budget stop;
 see `../reviews/2026-09-08-bayesian-flagship-reuse-cost-stop.md` for preserved
 history and final measurements. Public APIs, runtime behavior, all real fixtures

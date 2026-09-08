@@ -1,7 +1,9 @@
 # R3 s22: local authoring packet ready; live payload approval required
 
 Date: 2026-09-08
-Outcome: **BLOCKED** at s22 of `run-contract.kp.bayesian-flagship-v2`.
+Outcome: **SUPERSEDED** by the accepted [live-trial deferral](../decisions/2026-09-08-bayesian-live-trial-deferral.md).
+The blocked outcome below is historical; no call occurred and no approval was granted.
+Former stop: s22 of `run-contract.kp.bayesian-flagship-v2`.
 Completed: 21/26. This is not the former compiler-budget stop.
 
 ## Completed repair and current work
