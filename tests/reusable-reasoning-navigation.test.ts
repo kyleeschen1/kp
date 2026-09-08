@@ -61,11 +61,11 @@ function fixture(source = createKpReasoningSource()) {
 
 test("passage gestures distinguish intent, pauses, reversal and bounded destinations", () => {
   const { navigation, clock, advance } = fixture();
-  for (const [amount, release, target] of [[.1, 20, 1], [.1, 300, 0], [.3, 300, 1], [.02, 20, 0], [8, 300, 1]]) {
+  for (const [amount, release, target] of [[.1, 20, 1], [.1, 300, 0], [.3, 300, 1], [.02, 20, 0], [8, 300, 4]]) {
     navigation.seekStep(0);
     const gesture = navigation.beginPassageGesture(0);
     gesture.update(amount!, 20);
-    assert.ok(navigation.getStepPosition() <= 1, "one gesture cannot scrub through later operations");
+    assert.equal(navigation.getStepPosition(), Math.min(4, amount!), "continuous travel is bounded only by the lesson");
     gesture.finish(release!); advance(1000);
     assert.equal(navigation.getStepPosition(), target);
   }
@@ -85,6 +85,24 @@ test("passage gestures distinguish intent, pauses, reversal and bounded destinat
   const stale = navigation.beginPassageGesture(0); stale.update(2.37, 20);
   navigation.open(); navigation.returnToParent(); stale.finish(30);
   assert.equal(clock.getSnapshot().progress, 2.37 / 13);
+  clock.dispose();
+});
+
+test("one held gesture traverses every beat backward, reverses, and settles where visibly reached", () => {
+  const { navigation, clock, advance } = fixture();
+  for (const start of [0, 4]) {
+    navigation.seekStep(start);
+    const gesture = navigation.beginPassageGesture(0);
+    let time = 0;
+    const samples = start === 4 ? [3.5, 3, 2.5, 2, 1.5, 1, .5, .2, 1.2, 2.7]
+      : [.5, 1, 1.5, 2, 2.5, 3, 3.5, 3.8, 2.8, 1.3];
+    for (const requested of samples) {
+      gesture.update(requested, time += 20);
+      assert.ok(Math.abs(navigation.getStepPosition() - requested) < 1e-10);
+    }
+    gesture.finish(time + 200); advance(1000);
+    assert.equal(navigation.getStepPosition(), Math.round(samples.at(-1)!));
+  }
   clock.dispose();
 });
 

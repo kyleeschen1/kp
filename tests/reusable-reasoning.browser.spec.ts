@@ -11,6 +11,39 @@ async function previewSlider(slider: Locator, value: string) {
 
 const route = "/experiments/reusable-reasoning/";
 
+test("live beat and renewed card gestures respond synchronously while settling", async ({ page }) => {
+  await page.goto(route);
+  await expect(page.locator("#authored-focus-card")).toHaveAttribute("data-kp-reasoning-status", "ready");
+  const result = await page.locator("[data-kp-reasoning-card]").evaluate(async node => {
+    const slider = node.querySelector<HTMLInputElement>("[data-kp-focus-deck-scrubber]")!;
+    const count = () => node.querySelector("[data-reasoning-beat-count]")!.textContent;
+    const preview = (value: string) => {
+      slider.value = value; slider.dispatchEvent(new Event("input", { bubbles: true }));
+      return count();
+    };
+    const counts = [preview(".7"), preview(".49"), preview(".51"), preview(".44")];
+    preview("0"); slider.dispatchEvent(new Event("change", { bubbles: true }));
+    const width = node.querySelector<HTMLElement>("[data-kp-focus-deck-viewport]")!.clientWidth;
+    const stage = node.querySelector<HTMLElement>(".kp-focus-deck__stage .katex")!;
+    const position = () => Number((node as HTMLElement).dataset["kpReasoningProgress"]);
+    const wheel = (delta: number, vertical = 0) => stage.dispatchEvent(new WheelEvent("wheel", {
+      deltaX: width * delta, deltaY: width * vertical, bubbles: true, cancelable: true,
+    }));
+    wheel(.6);
+    await new Promise(resolve => setTimeout(resolve, 260));
+    const beforeRenewal = position(); wheel(.7); const afterRenewal = position();
+    // Active horizontal ownership survives diagonal noise.
+    wheel(.02, .1); const afterDiagonal = position();
+    await new Promise(resolve => setTimeout(resolve, 260));
+    const beforeReverse = position(); wheel(-.3); const afterReverse = position();
+    return { counts, beforeRenewal, afterRenewal, afterDiagonal, beforeReverse, afterReverse };
+  });
+  expect(result.counts).toEqual(["2 / 5", "2 / 5", "2 / 5", "1 / 5"]);
+  expect(result.afterRenewal).toBeGreaterThan(result.beforeRenewal);
+  expect(result.afterDiagonal).toBeGreaterThan(result.afterRenewal);
+  expect(result.afterReverse).toBeLessThan(result.beforeReverse);
+});
+
 test("embedded product and quotient realize opaque ink compression through the canonical family", async ({ page }, info) => {
   await page.goto(route);
   const card = page.locator("[data-kp-reasoning-card]");
@@ -96,7 +129,9 @@ test("release settles slider and passage gestures but cannot resnap restored pos
   await expect(card).toHaveAttribute("data-kp-reasoning-state", "fraction-solve.state.normalized");
 });
 
-test("Next and Previous mean one semantic operation regardless of reading density or edited length", async ({ page }) => {
+for (const count of [4, 3]) test(`Next and Previous mean one semantic operation across readings with ${count} operations`, async ({ page }) => {
+  // Split the length matrix so each browser gets a bounded independent case.
+  test.setTimeout(60_000);
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto(route);
   const root = page.locator("#authored-focus-card");
@@ -104,7 +139,6 @@ test("Next and Previous mean one semantic operation regardless of reading densit
   const card = page.locator("[data-kp-reasoning-card]");
   const slider = card.locator("[data-kp-focus-deck-scrubber]");
   const states = ["factored", "distributed", "normalized", "constant-product", "constant-quotient"];
-  for (const count of [4, 3]) {
     if (count === 3) {
       await page.getByText("Edit source JSON", { exact: true }).click();
       await page.getByRole("button", { name: "Load three-step draft", exact: true }).click();
@@ -136,7 +170,6 @@ test("Next and Previous mean one semantic operation regardless of reading densit
         await expect(card).toHaveAttribute("data-kp-reasoning-progress", String(1 / 13));
       }
     }
-  }
 });
 
 test("reasoning exemplar mounts canonical native ink and returns to interrupted parent position", async ({ page }, info) => {
@@ -214,7 +247,7 @@ test("combined checkpoint preserves keyboard and continuous passage travel at ph
   expect(samples.every(value => value > 0 && value < 1 / 13)).toBe(true);
   expect(new Set(samples).size).toBe(5);
   expect(samples).toEqual([...samples].sort((a, b) => a - b));
-  await expect(card.locator("[data-reasoning-beat-count]")).toHaveText("1 / 5");
+  await expect(card.locator("[data-reasoning-beat-count]")).toHaveText("2 / 5");
   await page.mouse.up();
   await expect(card).toHaveAttribute("data-kp-reasoning-progress", String(1 / 13));
   await previewSlider(slider, ".4");
@@ -255,48 +288,62 @@ test("combined checkpoint preserves keyboard and continuous passage travel at ph
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
-test("gesture ownership ignores native snap events and wheel tails, preserves vertical scrolling", async ({ page }) => {
+test("native passage crosses multiple beats backward, reverses and preserves restoration and vertical scroll", async ({ page }) => {
   await page.goto(route);
   const card = page.locator("[data-kp-reasoning-card]");
   await expect(page.locator("#authored-focus-card")).toHaveAttribute("data-kp-reasoning-status", "ready");
   const viewport = card.locator("[data-kp-focus-deck-viewport]");
   const slider = card.locator("[data-kp-focus-deck-scrubber]");
   await expect(viewport).toHaveCSS("scroll-snap-type", "none");
-  await expect(viewport).toHaveCSS("overflow-x", "hidden");
+  await expect(viewport).toHaveCSS("overflow-x", "auto");
+  // Check a fresh vertical gesture independently: native engines may retain
+  // a horizontal wheel transaction across synthetic direction changes.
+  await slider.fill("1");
+  await viewport.hover();
+  const before = await page.evaluate(() => scrollY);
+  await page.mouse.wheel(0, 160);
+  await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(before);
+  await expect(card).toHaveAttribute("data-kp-reasoning-progress", String(1 / 13));
   await previewSlider(slider, ".37");
   await viewport.evaluate(node => {
     node.scrollLeft = -100; node.dispatchEvent(new Event("scroll"));
     node.scrollLeft = 100000; node.dispatchEvent(new Event("scrollend"));
   });
   await expect(card).toHaveAttribute("data-kp-reasoning-progress", String(.37 / 13));
-  await slider.fill("0");
-  await viewport.evaluate(async node => {
-    node.dispatchEvent(new WheelEvent("wheel", { deltaX: node.clientWidth * .6, cancelable: true }));
-    await new Promise(resolve => setTimeout(resolve, 130));
-    for (let i = 0; i < 5; i++) {
-      node.dispatchEvent(new WheelEvent("wheel", { deltaX: node.clientWidth, cancelable: true }));
-      await new Promise(resolve => setTimeout(resolve, 30));
-    }
-  });
-  await expect(card).toHaveAttribute("data-kp-reasoning-progress", String(1 / 13));
-  await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 200)));
+  await slider.fill("4");
+  await viewport.hover();
+  const width = (await viewport.boundingBox())!.width;
+  // Native engines may cap an individual oversized delta. A sustained stream
+  // tests continuous travel without requiring identical OS wheel scaling.
+  for (let i = 0; i < 8; i++) {
+    await page.mouse.wheel(-width * .5, 0);
+    await page.evaluate(() => new Promise(requestAnimationFrame));
+  }
+  await expect.poll(async () => Number(await card.getAttribute("data-kp-reasoning-progress")) * 13).toBeLessThan(2);
+  await expect.poll(async () => {
+    const position = Number(await card.getAttribute("data-kp-reasoning-progress")) * 13;
+    return position < 2 && Math.abs(position - Math.round(position)) < 1e-8;
+  }).toBe(true);
+  for (let i = 0; i < 10; i++) {
+    await page.mouse.wheel(width * .5, 0);
+    await page.evaluate(() => new Promise(requestAnimationFrame));
+  }
+  await expect(card).toHaveAttribute("data-kp-reasoning-progress", String(4 / 13));
   await slider.fill("0");
   const restored = await viewport.evaluate(node => {
-    node.dispatchEvent(new WheelEvent("wheel", { deltaX: node.clientWidth * .4, cancelable: true }));
+    node.dispatchEvent(new WheelEvent("wheel", { deltaX: node.clientWidth * .4, cancelable: true, bubbles: true }));
+    node.scrollLeft = node.clientWidth * .4;
+    node.dispatchEvent(new Event("scroll"));
     const card = document.querySelector<HTMLElement>("[data-kp-reasoning-card]")!;
     const position = card.dataset["kpReasoningProgress"]!;
     document.querySelector<HTMLButtonElement>("[data-reasoning-open]")!.click();
     document.querySelector<HTMLButtonElement>("[data-reasoning-return]")!.click();
-    node.dispatchEvent(new WheelEvent("wheel", { deltaX: node.clientWidth, cancelable: true }));
+    // A late scroll/scrollend has no authority after disclosure. A fresh
+    // physical wheel is intentionally NOT treated as a stale callback.
+    node.dispatchEvent(new Event("scroll")); node.dispatchEvent(new Event("scrollend"));
     return position;
   });
   await expect(card).toHaveAttribute("data-kp-reasoning-progress", restored);
-  await slider.fill("1");
-  await viewport.scrollIntoViewIfNeeded(); await viewport.hover();
-  const before = await page.evaluate(() => scrollY);
-  await page.mouse.wheel(0, 160);
-  await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(before);
-  await expect(card).toHaveAttribute("data-kp-reasoning-progress", String(1 / 13));
 });
 
 

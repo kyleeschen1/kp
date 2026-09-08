@@ -67,7 +67,7 @@ export function renderReasoningPage(evidence: KpReasoningEvidence) {
       <details><summary>Inspect the bound evidence</summary><ol>${support.procedure.operations.map(item =>
         `<li><code>${escapeReasoningText(item.reference.id)}</code><br>${item.evidenceIds.map(escapeReasoningText).join("; ")}</li>`).join("")}</ol></details>
     </section>
-    <p class="review-help">Swipe the passage for one step; drag the slider to inspect the motion. Arrows move one step at a time.</p>
+    <p class="review-help">Swipe or scroll the passage to move through the argument; release to settle. Arrows move one step at a time.</p>
     <p class="review-help">Equation relationships are verified for this bounded example. Explanatory prose remains editorial.</p>
     <details data-reasoning-editor><summary>Edit source JSON</summary>
       <p>Edit the draft, then choose Apply source. This example supports the first one to four verified operations, with a matching parent target. It does not support arbitrary coefficients or new algebra rules.</p>

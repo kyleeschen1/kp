@@ -1,9 +1,11 @@
 .reasoning-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; margin: 1.2rem 0; }
-/* Only this exemplar owns horizontal gestures. Native vertical pan and zoom
-   remain available; browser momentum and rubber-band offsets cannot drive math. */
+/* Passage pan/inertia stays native. Only the non-scrollable stage proxies
+   horizontal drag. Settlement belongs to the semantic clock, not CSS snap. */
+[data-kp-reasoning-card] .kp-focus-deck__stage { touch-action: pan-y pinch-zoom; }
 [data-kp-reasoning-card] [data-kp-focus-deck-viewport] {
-  overflow-x: hidden;
-  touch-action: pan-y pinch-zoom;
+  overflow-x: auto;
+  touch-action: auto;
+  scroll-snap-type: none;
   overscroll-behavior-x: none;
 }
 /* Long passages may scroll internally, but their boundaries must release

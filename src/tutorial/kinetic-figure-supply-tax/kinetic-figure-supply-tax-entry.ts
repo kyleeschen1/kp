@@ -6,6 +6,7 @@ import "../../rendering/typescript-refactor.css";
 import "../kinetic-figure-typescript-focus-card/kinetic-figure-typescript-focus-card.css";
 import "../kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score.css";
 import "./kinetic-figure-supply-tax.css";
+import { settleKpFocusDeckTravel } from "../focus-deck-continuous-navigation.ts";
 
 import type { KpEconomicsSupplyTaxAnimationAsset } from "../../animation/economics-supply-tax-asset.ts";
 import type { KpPerUnitTaxWelfareFrameV1 } from "../../../domains/economics/per-unit-tax-welfare-frame.ts";
@@ -633,15 +634,11 @@ export function mountKpSupplyTaxKineticFigure(input: {
       gesture?.peakDisplacement ||
       gesture?.peakVelocityPagesPerMs || 0);
     const origin = wheel?.originIndex ?? gesture?.originIndex ?? settledIndex;
-    const visibleTarget = boundedIndex(nextPosition, scenes.length);
     // Intent rescues a short Safari gesture that snap resistance erased. Once
     // the reader has visibly crossed a page boundary, their observed position
     // is stronger evidence than the gesture's (possibly much older) origin.
-    const target = visibleTarget !== origin
-      ? visibleTarget
-      : (wheelCommitted || nativeCommitted) && direction !== 0
-        ? boundedIndex(origin + direction, scenes.length)
-        : visibleTarget;
+    const target = settleKpFocusDeckTravel({ position: nextPosition, origin,
+      lastCheckpoint: scenes.length - 1, committed: wheelCommitted || nativeCommitted, direction });
     const exactOffset = target * Math.max(1, viewport.clientWidth);
     const historyMode = target === settledIndex ? "none" : "push";
     if (Math.abs(viewport.scrollLeft - exactOffset) <= endpointTolerancePx &&

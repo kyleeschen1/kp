@@ -10,6 +10,7 @@ import type { ReasoningReading } from "./readings.ts";
 import type { ReasoningPromptKind } from "./prompts.ts";
 import { createReasoningAuthoringSession } from "./authoring.ts";
 import { mountReasoningPassageInput } from "./passage-input.ts";
+import { reasoningVisibleBeat } from "./gesture.ts";
 
 const root = document.querySelector<HTMLElement>("#authored-focus-card")!;
 const report = (error: unknown) => {
@@ -42,7 +43,7 @@ async function mount() {
   let mode: ReasoningReading = "full";
   let beats = reasoningBeats(evidence, "parent");
   let semanticBeats = reasoningBeats(evidence, "reason", "full");
-  let settledBeat = 0;
+  let visibleBeat = 0;
   let disposed = false;
   let input: { kind: "idle" } | { kind: "slider"; session: KpReasoningScrub } = { kind: "idle" };
   let passageInput: ReturnType<typeof mountReasoningPassageInput> | undefined;
@@ -74,8 +75,9 @@ async function mount() {
     surface.render(reduced.matches);
     const position = navigation.getStepPosition();
     const passagePosition = clock.getSnapshot().progress * passageFactor();
-    const index = Math.max(0, Math.min(beats.length - 1, Math.round(passagePosition)));
-    const label = semanticBeats[Math.min(navigation.stepCount, Math.round(position))]!.title;
+    visibleBeat = reasoningVisibleBeat(position, visibleBeat, navigation.stepCount);
+    const index = visibleBeat;
+    const label = semanticBeats[index]!.title;
     slider.value = String(position);
     slider.setAttribute("aria-valuetext", label);
     previous.disabled = Boolean(practice) || position <= 0;
@@ -85,20 +87,17 @@ async function mount() {
     card.querySelector<HTMLOutputElement>("[data-kp-focus-deck-position]")!.value = label;
     const counter = card.querySelector<HTMLElement>("[data-reasoning-beat-count]")!;
     counter.hidden = Boolean(practice);
-    if (input.kind === "idle" && !viewport.dataset["reasoningGesture"] &&
-        Math.abs(position - Math.round(position)) < 1e-8) settledBeat = Math.round(position);
-    settledBeat = Math.min(settledBeat, beats.length - 1);
-    const countText = `${settledBeat + 1} / ${beats.length}`;
+    const countText = `${index + 1} / ${beats.length}`;
     if (counter.textContent !== countText) {
       counter.textContent = countText;
-      counter.setAttribute("aria-label", `Beat ${settledBeat + 1} of ${beats.length}`);
+      counter.setAttribute("aria-label", `Beat ${index + 1} of ${beats.length}`);
     }
     viewport.querySelectorAll<HTMLElement>("[data-kp-focus-deck-beat]").forEach((item, i) => {
       const active = practice ? i === 0 : i === index;
       item.dataset["kpFocusDeckBeatActive"] = String(active);
       if (active) item.setAttribute("aria-current", "page"); else item.removeAttribute("aria-current");
     });
-    if (align && !practice) viewport.scrollLeft = passagePosition * Math.max(1, viewport.clientWidth);
+    if (align && !practice && !passageInput?.ownsTravel()) viewport.scrollLeft = passagePosition * Math.max(1, viewport.clientWidth);
     root.dataset["kpReasoningView"] = navigation.getView();
   };
   const navigate = (index: number) => {
@@ -110,7 +109,7 @@ async function mount() {
     cancelInput();
     // A restored intermediate view has no active gesture origin. Orient its
     // count to the nearest beat without quantizing the exact saved playhead.
-    settledBeat = Math.round(navigation.getStepPosition());
+    visibleBeat = Math.round(navigation.getStepPosition());
     const view = navigation.getView();
     const template = document.createElement("div");
     template.innerHTML = renderReasoningCard(evidence, view, mode);
@@ -143,7 +142,7 @@ async function mount() {
     if (target === undefined) return;
     event.preventDefault(); navigate(target);
   };
-  passageInput = mountReasoningPassageInput({ viewport,
+  passageInput = mountReasoningPassageInput({ viewport, region: card,
     enabled: () => !disposed && !practice,
     position: () => navigation.getStepPosition(),
     begin: now => navigation.beginPassageGesture(now),

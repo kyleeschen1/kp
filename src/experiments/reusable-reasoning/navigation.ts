@@ -4,6 +4,7 @@ import { bindKpReasoningSupport } from "./support.ts";
 import { pinKpReasoningReference, type KpReasoningReference } from "./references.ts";
 import { KpReasoningRepairGap } from "./source.ts";
 import { reasoningGestureTarget } from "./gesture.ts";
+import { boundKpFocusDeckTravel } from "../../tutorial/focus-deck-continuous-navigation.ts";
 
 export interface KpReasoningPosition {
   readonly reference: KpReasoningReference;
@@ -123,7 +124,7 @@ export function createKpReasoningNavigator(
         update(step: number, now: number) {
           if (!live()) return;
           if (!Number.isFinite(step) || !Number.isFinite(now) || now < at) throw new Error("Invalid gesture sample.");
-          const bounded = Math.max(0, Math.min(checkpoints.length - 1, Math.max(anchor - 1, Math.min(anchor + 1, step))));
+          const bounded = boundKpFocusDeckTravel(step, checkpoints.length - 1);
           const elapsed = now - at;
           moved ||= Math.abs(bounded - last) > 1e-8;
           velocity = elapsed > 0 && elapsed <= 100 ? (bounded - last) / elapsed : 0;

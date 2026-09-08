@@ -297,11 +297,25 @@
       "scope": "s14-continuous-gesture-refinement",
       "checkedAt": "2026-09-08T04:17:30.051Z",
       "notes": "Final full typechecks and production build pass. Architecture gate passed; existing chunk-size warnings remain unchanged."
+    },
+    {
+      "command": "npm run test:reusable-reasoning",
+      "status": "passed",
+      "scope": "s14-native-control-convergence",
+      "checkedAt": "2026-09-08T04:55:41.507Z",
+      "notes": "47 passing laws, including unrestricted held multi-beat travel, reversal, visible-position settlement parity with tax, live count and stale authority. Tax unit suite: 81 passed. Full typecheck and architecture gate passed."
+    },
+    {
+      "command": "npm run visual:reusable-reasoning:shared -- --grep \"native passage\" --project=webkit --project=firefox",
+      "status": "passed",
+      "scope": "s14-native-control-convergence",
+      "checkedAt": "2026-09-08T04:55:42.889Z",
+      "notes": "Final sustained native travel and fresh vertical input pass in Chromium, Firefox and WebKit. Other integrated cases passed across full run and targeted reruns; an HMR reload invalidated one earlier run. Immediate axis switching after a horizontal Firefox transaction remains a physical-browser review limitation, not certified."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT retained at 14/24. Direct continuous gestures, adjacent-beat intent and clock-owned settling implemented; Safari/WebKit regression cohort passes. Await exemplar visual acceptance."
+    "summary": "HUMAN_CHECKPOINT retained at 14/24. Approved control convergence removes continuous-travel clamp, shares tax settlement policy and uses native passage scrolling. Await visual acceptance before s15."
   },
   "expectedLearning": [
     "Measure whether one authored reason yields consistent full compact and retrieval projections through existing owners and reduces second-caller glue."

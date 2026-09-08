@@ -61,11 +61,11 @@ commit; the new visible host and its GET route are isolated.
 
 Repeatable commands:
 
-- `npm run test:reusable-reasoning`: 44 tests through source/authority/reference,
+- `npm run test:reusable-reasoning`: 47 tests through source/authority/reference,
   formula/procedure/support/extraction, real-clock navigation, reading equivalence,
   existing flashcard projections and atomic last-valid drafts.
 - `npm run visual:reusable-reasoning`: isolated native browser integration.
-- `npm run visual:reusable-reasoning:shared`: seven integrated Chromium
+- `npm run visual:reusable-reasoning:shared`: nine integrated Chromium
   checks against the human's port-8000 URL, without starting another server.
   Captures include the distributed state, exact return, changed native endpoint,
   phone reason and phone practice. The phone check includes keyboard operation,
@@ -98,6 +98,9 @@ release certification. The native phone layout retains its stacked equation form
 ## Resume boundary
 
 ### Checkpoint refinement: continuous gestures with predictable settlement
+
+Historical implementation; superseded by the current supply-tax convergence
+section below. The adjacent-only clamp and wheel-tail fence are no longer used.
 
 The user approved the design recommendation and explicitly required attention
 to Safari's scroll semantics. Horizontal passage input now drives the semantic
@@ -176,6 +179,70 @@ acceptance; the run remains deferred at **14/24**, before s15.
 Rollback unit: this checkpoint refinement commit. Preservation boundary:
 accepted distribution arc, normalization, verified fraction trace, shared
 scaffold typography, single clock, and exact interrupted return.
+
+### Current checkpoint repair: supply-tax control convergence and live beat count
+
+This supersedes the earlier one-gesture/one-beat clamp, wheel-tail fence and
+endpoint-only counter policy. The counter and active passage share a live projection from
+the existing semantic playhead. A narrow midpoint deadband prevents flicker;
+neither waits for gesture release or exact settlement. Endpoint and intentional
+fractional-return semantics remain unchanged.
+
+The follow-up backward-lock diagnosis reproduced an invisible wall: starting at
+beat 3, requests for 2.5 and 2 worked, but 1.5 and 1 remained at 2. A continuous
+gesture retained its original anchor and adjacent-only clamp. Recognizing fresh
+input after release did not repair that active-gesture defect. Continuous travel
+is now bounded only by the lesson; one-step restrictions remain on arrows.
+
+`focus-deck-continuous-navigation.ts` extracts supply-tax's settlement policy:
+the visibly reached checkpoint wins over an older gesture origin. Both tax and
+reasoning invoke it. Exhaustive bounded-input parity checks preserve the former
+tax calculation. Tax keeps its existing thresholds, native snap corrections,
+SVG renderer, source and lifecycle adapter; it is not wholesale rewritten.
+
+`focus-deck-native-input.ts` supplies the reasoning card's domain-neutral input
+adapter. Passage wheel/touch movement uses native scrolling and inertia, sampled
+once per frame. The equation area proxies horizontal input into that same lane.
+No momentum-tail classifier or blanket lockout remains. Only an issued active
+input session can project scroll into the semantic clock; derived scroll writes,
+late scrollend, cancelled sessions and disclosure cannot acquire those rights.
+CSS snap remains disabled in this exemplar so exact fractional restoration and
+clock-owned settlement do not compete with browser correction. Wheel quiescence
+still uses supply-tax's 140ms quiet/220ms fallback convention; it is not a claim
+of perfect physical finger-up detection. Live count feedback does not wait for it.
+
+The card is the consistent horizontal input region, including equation and
+passage surfaces. Established horizontal wheel intent tolerates diagonal noise.
+Touch retains native vertical scrolling and pinch zoom; form controls are left
+native, and mouse drags on prose/math preserve selection. Mouse blank-space
+drag, touch swipe, horizontal wheel, slider and keyboard retain their existing
+single-clock and bounded-lesson ownership. No renderer, verified source, equation
+motif or shared semantic contract changed, following the visual-salience skill's
+presentation preservation boundary.
+
+New deterministic tests cover multi-beat travel, reversal, shared settlement
+parity, live beat projection, jitter and endpoints. Browser tests execute actual
+native multi-beat wheel travel backward and forward, synchronous stage-proxy
+renewal/reversal and live count updates. Stale-capability, exact-return,
+vertical-scroll and phone continuous-control checks remain. The length/view
+matrix is split by authored length to keep independent cases bounded.
+This does not certify physical iOS Safari or catalogue-wide controller adoption.
+What is shared now is the settlement policy; the reasoning native adapter is a
+reusable module, but tax retains its proven adapter until a separate migration
+is justified. Full unification of all card lifecycle adapters is not claimed.
+
+Final evidence: 47 reasoning and 81 tax unit tests, full typecheck and the
+architecture gate passed. Integrated browser cases passed across the full run
+and focused reruns in Chromium, Firefox and WebKit. One earlier case was
+invalidated by a shared-server hot reload during file edits. The final scoped
+`native passage` cohort passed in all three engines with sustained smaller
+wheel events instead of assuming an oversized event has identical OS scaling.
+Fresh vertical scrolling passes. An immediate vertical wheel after a long
+horizontal Firefox stream did not scroll the article in automation; rapid axis
+switching remains an explicit physical-browser review item, not a passed claim.
+
+Rollback unit: this isolated control-refinement commit. HUMAN_CHECKPOINT remains
+14/24; subjective feel still requires acceptance before promotion.
 
 ### Checkpoint repair: release-to-settle and standing prevention rule
 
