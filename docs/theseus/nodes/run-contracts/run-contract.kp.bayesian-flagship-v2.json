@@ -47,7 +47,7 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "21 of 26 complete; s21 fixed budget repaired. s22 packet and local checks complete, live trial not run due external payload approval rejection. See live-permission-stop report."
+    "summary": "25 of 26 complete; release verified. s26 closeout remains; accepted s22 live-trial deferral retained."
   },
   "allowedWork": [
     "s01: Freeze owner/capability and author-task baseline; pin original problem, preservation URLs and exact commands; reconcile stale delivery summary; risk Low; F: source/ref audit, exact fixture arithmetic, unchanged worktree baseline; one commit.",
@@ -265,7 +265,8 @@
     {
       "id": "s25",
       "title": "Run broad release gates and fix attributable failures without weakening gates",
-      "status": "planned"
+      "summary": "6774 tests and exact build pass; fixed budgets, production and browser preservation pass. Shared accessibility ownership repaired and generated reachability refreshed without relaxed gates.",
+      "status": "complete"
     },
     {
       "id": "s26",

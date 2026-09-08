@@ -36,13 +36,13 @@ export interface KpEquationExemplarPageInput {
 export function compileKpEquationExemplarPage(
   input: KpEquationExemplarPageInput
 ): string {
-  const template = compileKpEquationExemplarTemplate(input.animation, input.annotateState, {
+  const template = compileEquationTemplate(input.animation, input.annotateState, {
       presentationAnimations: input.presentationAnimations,
       equationPresentation: input.equationPresentation,
       showEquationProfileControl: input.showEquationProfileControl
       ,
       readerControls: input.readerControls
-  });
+  }, input.readerControls === undefined ? "page-static" : "stage");
   return compileKpReaderPageShell({
     title: input.title,
     description: input.description,
@@ -79,6 +79,17 @@ export function compileKpEquationExemplarTemplate(
     readonly readerControls?: KpReaderEvaluationControlsKind | undefined;
   }
 ): string {
+  // Standalone canonical hosts have no page-owned accessible projection.
+  // They cannot opt out based on whether family-specific controls are present.
+  return compileEquationTemplate(animation, annotateState, options, "stage");
+}
+
+function compileEquationTemplate(
+  animation: KpAnimationAsset,
+  annotateState: KpEquationExemplarPageInput["annotateState"],
+  options: Parameters<typeof compileKpEquationExemplarTemplate>[2],
+  accessibilityOwner: "page-static" | "stage"
+): string {
   const animations = [animation, ...(options?.presentationAnimations ?? [])];
   const objects = new Map(animations.flatMap((candidate) =>
     candidate.bundle.objects.map((object) => [object.id, object] as const)
@@ -93,9 +104,10 @@ export function compileKpEquationExemplarTemplate(
       cohort
     ] as const)
   )).values()];
-  // Accessible endpoint truth is mandatory even in chrome-free hosts. Optional
-  // lesson-specific controls must not decide whether the compositor has it.
-  const accessibleStateIds = compileKpAnimationTransformationPhaseCohorts(
+  // Existing whole-page readers already own searchable static MathML. Only
+  // stage-owned accessibility belongs in this template, never a second copy
+  // of the page owner's states. Standalone callers always select stage above.
+  const accessibleStateIds = accessibilityOwner === "page-static" ? [] : compileKpAnimationTransformationPhaseCohorts(
           animation
         ).flatMap((cohort, index) => [
           ...(index === 0 ? cohort.sourceObjectIds : []),

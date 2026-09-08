@@ -25,6 +25,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-08-bayesian-authoring-live-permission-stop.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-08-bayesian-release-repair.md"
     }
   ],
   "dependsOn": {
@@ -901,11 +905,137 @@
       "scope": "s24",
       "checkedAt": "2026-09-08T23:02:48.698Z",
       "notes": "48 pass in Chromium Firefox WebKit. DOM reload retains exact source; driver reload limitation recorded. No new treatment."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T23:20:45.865Z",
+      "notes": "Final ownership repair passes all app/node/test/Svelte/domain projects; earlier default-heap failures recorded, no memory limit raised."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T23:20:47.292Z",
+      "notes": "Final bundle builds; separately executed full typecheck passes. Existing advisory chunk warnings retained."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T23:20:48.495Z",
+      "notes": "All 12 existing route budgets pass unchanged after accessibility owner repair."
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T23:20:49.622Z",
+      "notes": "17 pass after final owner repair."
+    },
+    {
+      "command": "npm run visual:bayesian-reasoning:cohort -- --grep native|notation|addresses",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T23:20:50.757Z",
+      "notes": "12 targeted cases pass across Chromium Firefox WebKit after final owner repair; full 48-case cohort passed s24."
+    },
+    {
+      "command": "npm run test:authoring-round-trip",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T23:20:51.901Z",
+      "notes": "50 pass."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T23:20:53.036Z",
+      "notes": "11 pass."
+    },
+    {
+      "command": "npm run visual:bayesian-reasoning:cohort -- --grep 'native|notation|addresses'",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T23:21:57.525Z",
+      "notes": "Exact quoted command for the final 12-case three-browser preservation run."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T23:33:29.318Z",
+      "notes": "Final built output: 455 files checked against 12 forbidden markers."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T23:33:29.861Z",
+      "notes": "All 12 manifest routes pass after the final ownership-only compiler repair."
+    },
+    {
+      "command": "npm run visual:canonical-tax-production",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T23:33:51.144Z",
+      "notes": "Six production tax preservation cases pass after final build."
+    },
+    {
+      "command": "npm run test:equation-reachability",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T23:33:52.282Z",
+      "notes": "All 12 declared-root and caller-ledger tests pass after normal metadata regeneration; 68 roots unchanged."
+    },
+    {
+      "command": "npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T23:33:53.387Z",
+      "notes": "Generated reachability graph current; 68 exact roots, 4432 scanned files."
+    },
+    {
+      "command": "npm run check:equation-fallback-audit",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T23:33:54.539Z",
+      "notes": "Nine fallback paths remain current after graph refresh."
+    },
+    {
+      "command": "npm run check:bayesian-reuse",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T23:33:55.664Z",
+      "notes": "Both 362-byte sources, zero second-source runtime imports, unchanged source and publication hashes; costs recorded without promotion claims."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T23:36:08.293Z",
+      "notes": "Second release run completed 6774 tests: 6773 passed, one stale generated reachability graph failure. Graph has since been regenerated and its 12 dedicated tests pass. A clean full rerun is in progress; no assertions or limits relaxed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T23:37:21.974Z",
+      "notes": "Exact top-level final-state build passes: full app, node, tests, Svelte and domain typechecks plus publication/source gates and Vite bundle. No heap or inference budget increase; existing large-chunk warnings advisory."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-08T23:43:14.825Z",
+      "notes": "Clean final-state release: 6774 tests passed, zero failed, skipped or cancelled; architecture, inference, concept-catalog and promotion-memory preflights pass. Earlier failures repaired without changing assertions or budgets."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Local Bayes authoring packet and assessor ready. Live model trial unavailable pending specific external payload/destination approval; no calls made."
+    "summary": "25 of 26 complete; release gates pass after ownership repair. Only evidence closeout and R4 planning handoff remain; live trial explicitly deferred."
   },
   "expectedLearning": [
     "Measure whether one domain-owned probability source yields coherent tree equation reading retrieval and publication with source-only second-caller reuse."
