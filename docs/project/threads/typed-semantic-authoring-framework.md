@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: R2 complete with accepted equation/code callers; next is bounded R3 planning
+Status: R3 Bayesian flagship approved; executing until first visual checkpoint
 Last Updated: 2026-09-08
 Current successor reference: `../reviews/2026-09-07-reconciled-authoring-loop-horizon.md`.
 It preserves the original architectural obligations and the tax/Bayes direction;
@@ -22,10 +22,13 @@ September 8, then accepted the isolated code caller:
 Current closeout: `../reviews/2026-09-08-reusable-reasoning-closeout.md`.
 It records shared navigation, bounded authoring/repair, immutable equation editions,
 an actual two-round model trial, full release evidence and honest code parity gaps.
-No R2 work remains. Propose the bounded R3 Bayesian flagship next; do not execute
-it without its consolidated scope approval or restart completed integration.
+No R2 work remains. The user approved the 26-slice R3 proposal with “go”:
+`../reviews/2026-09-08-bayesian-flagship-long-loop-proposal.md`.
+Execute `run-contract.kp.bayesian-flagship-v2` through its first visual gate.
+The unstarted metadata-incomplete v1 record is superseded, not another queue.
 Branch: `feature/20260907-reusable-reasoning`, retaining completed R1 ancestry.
-Theseus owns counts and terminal state; R3 remains future scope.
+Theseus owns counts and terminal state. Retain this branch: no branch helper is
+configured and the approved scope does not authorize merging completed ancestry.
 Standing minimal-check-in
 policy: `../decisions/2026-09-07-reconciled-horizon-and-minimal-check-ins.md`.
 The user requested recording the recommendations and finishing the existing
@@ -52,8 +55,8 @@ do not treat its proposed roadmap or readiness labels as new execution authority
 The user clarified the remaining code issue as missing gradual passage swiping.
 The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
-Current Next Action: execute approved R2 through Theseus until its visual gate;
-do not restart the completed R1 or G3 loops. See
+Current Next Action: execute approved R3 through Theseus until visual approval;
+do not restart the completed R1, R2 or G3 loops. See
 `../reviews/2026-09-07-canonical-tax-g3-checkpoint.md` for the working URL,
 source workflow, production ownership, release evidence and remaining work.
 The ordinary build now ships the exact four-card route, with shared source

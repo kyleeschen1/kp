@@ -1,0 +1,54 @@
+{
+  "id": "next-action.kp.bayesian-flagship",
+  "kind": "next-action",
+  "title": "R3 Bayesian flagship",
+  "status": "in-progress",
+  "domain": "kp",
+  "summary": "Execute approved R3 proposal through s09 visual gate; preserve completed R1 R2.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-08-bayesian-flagship-long-loop-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.reusable-reasoning"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:bayesian-reasoning",
+    "npm run typecheck",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Measure whether one domain-owned probability source yields coherent tree equation reading retrieval and publication with source-only second-caller reuse."
+  ],
+  "allowedWork": [
+    "Exact approved 26-slice R3 proposal; first visual gate after s09."
+  ],
+  "disallowedWork": [
+    "No universal schema CAS budget waiver spending merge deployment or sub-agents."
+  ],
+  "criteria": [
+    {
+      "id": "exact-probability",
+      "weight": "high"
+    },
+    {
+      "id": "coherent-revision",
+      "weight": "high"
+    },
+    {
+      "id": "visual-acceptance",
+      "weight": "high"
+    },
+    {
+      "id": "second-source-reuse",
+      "weight": "high"
+    }
+  ]
+}

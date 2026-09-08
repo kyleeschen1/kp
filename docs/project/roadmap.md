@@ -38,8 +38,12 @@ R2 is now complete under `run-contract.kp.reusable-reasoning-v1`; both equation
 and code visual checkpoints were accepted. Preserve their accepted motion and
 interaction. The results, measured costs, complete release evidence and limits
 are in `reviews/2026-09-08-reusable-reasoning-closeout.md`.
-The next planning action is one bounded R3/Bayes proposal using that handoff;
-R3/Bayes and later execution remain unapproved scope. Do not restart R1 or R2.
+The user approved the exact 26-slice R3/Bayes proposal with “go”:
+`reviews/2026-09-08-bayesian-flagship-long-loop-proposal.md`.
+Execute `run-contract.kp.bayesian-flagship-v2` until its first coherent tree
+visual checkpoint before authoring/projection hardening. The unstarted v1
+record was superseded for missing execution metadata; scope is unchanged.
+Do not restart R1 or R2. Later execution remains unapproved.
 Minimal check-ins, mainly canonical
 visual reviews, are a standing preference; see
 `decisions/2026-09-07-reconciled-horizon-and-minimal-check-ins.md`.

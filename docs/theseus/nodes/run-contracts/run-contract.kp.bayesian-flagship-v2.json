@@ -1,0 +1,232 @@
+{
+  "id": "run-contract.kp.bayesian-flagship-v2",
+  "kind": "run-contract",
+  "title": "R3 Bayesian flagship",
+  "status": "in-progress",
+  "summary": "Exact approved 26-slice R3 proposal; replaces unstarted metadata-incomplete v1.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.bayesian-flagship.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-08-bayesian-flagship-long-loop-proposal.md"
+    }
+  ],
+  "verification": [
+    "npm run test:bayesian-reasoning",
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "npm run check:architecture",
+    "npm run check:inference",
+    "npm run check:reader-production",
+    "npm run check:reader-budgets",
+    "npm run visual:bayesian-reasoning:shared",
+    "npm run visual:reusable-reasoning:shared",
+    "npm run visual:canonical-tax-production",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "s01: Freeze owner/capability and author-task baseline; pin original problem, preservation URLs and exact commands; reconcile stale delivery summary; risk Low; F: source/ref audit, exact fixture arithmetic, unchanged worktree baseline; one commit.",
+    "s02: Add bounded probability source constructors and canonical immutable joint model over existing rational arithmetic; risk Medium; S: malformed JSON/numbers, duplicate IDs, negative/bad totals, exact normalization of representation only, immutability and negative type tests; one commit.",
+    "s03: Add typed marginal and conditional query evidence with positive-reference-population capability; risk Medium; S: exact sums/ratios, complement partitions, zero masses, impossible conditioning, forged capability rejection; one commit.",
+    "s04: Derive both binary tree orders and explicit construction/collapse/condition/reorder operations with occurrence correspondence; risk High; S: same four joint masses both orders, reachable branch sums, round-trip order, unchanged source identity; one commit.",
+    "s05: Bind bounded probability evidence into existing asset/operation/governed construction seams; explicit unsupported cases; risk High; B: law/ref/revision/role closure, forged authority and unknown operation negatives, architecture/import checks; one commit.",
+    "s06: Bind tree labels, quantity references and native equation endpoints to the same evidence; declare actual motion capability signatures; risk Medium; S: every displayed value matches exact evidence; native endpoints and named existing evaluation mechanism canary; one commit.",
+    "s07: Mount minimal proposed Focus Card with static first frame and existing clock, checkpoint mapping, keyboard, buttons and gestures; risk High; B + V: scoped Chromium smoke for stops/count, continuous intermediate frames, reverse/interruption, no initial duplicate paint; one commit.",
+    "s08: Implement one reversible SVG tree choreography and semantic attention packet for all four operations; risk High; S + V: pure sampling, identity/ownership checks, direct seek, smallest contact sheet, narrow and reduced-motion smoke; one commit.",
+    "s09: Produce coherent exemplar review packet and runnable URL; commit checkpoint evidence; risk High; V + H: inspect meaning, population change, tracking, cadence, typography, tree/equation handoff and controls; one commit.",
+    "s10: Encode accepted motif regressions without globalizing provisional choices; risk Medium; S + V: accepted source/intermediate/target checkpoints, reverse/interrupt, accessible state and stable paint owners; one commit.",
+    "s11: Add bounded author draft/checker with both declared input forms, semantic edit diagnostics and unknown-operation gaps; risk Medium; S: valid numeric/label/order/detail edits; malformed/unsupported request repair; no generated geometry or timing authority; one commit.",
+    "s12: Apply edits atomically to prepared tree, notation, prose bindings and navigation; retain complete last-valid revision on failure; risk High; B + V: edit-while-playing/gesturing; stale preparation cancellation; outputs/count all update together; failed draft retention; one commit.",
+    "s13: Derive full and compact readings through existing Article/projection contracts with mandatory definitions and population context; risk Medium; S: reference closure and same revision/facts in both readings; context cannot be dropped by compression; one commit.",
+    "s14: Add one bounded parent/reason/return path and context-preserving extraction for the denominator reasoning; risk Medium; S + V: exact interrupted return, required population/assumption refs, stale/forged revision rejection; one commit.",
+    "s15: Add validated revision-pinned URL/history restoration and disposal/bfcache behavior through existing lifecycle mechanisms; risk High; B + V: refresh, Back/Forward, direct jump, source change, untrusted hash, paused resume, listener cleanup; one commit.",
+    "s16: Derive prediction and reconstruction prompts from the same conditional query and extraction; preserve explicit answers/context; risk Medium; S: posterior direction, denominator explanation structure, answer/revision coherence and no answer leakage before reveal; one commit.",
+    "s17: Compile selected Bayes source into existing publication artifact envelope with static SVG/native math/full context; risk High; B: exact source/output pins, reproducible no-JS content, escaping, no interactive/editor imports, existing edition preservation; one commit.",
+    "s18: Join applied-source download, immutable edition creation and verification; reject stale draft publication; risk High; B + V: edit/export/build/open/rebuild selected revision, invalid draft exports last-valid source, no overwritten prior editions; one commit.",
+    "s19: Add a second original binary problem primarily as source: opposite posterior direction and asymmetric joint masses; risk Medium; S + V: exact second answer, same operation/renderer/input paths, changed labels/order/numbers, zero new timeline implementation; one commit.",
+    "s20: Pressure conditional support boundaries with zero cells, unreachable branches, equal likelihoods, complements and bounded exact-number stress; risk Medium; S: property/table tests, undefined-parent omission vs typed gap, source order permutations, input size limits; one commit.",
+    "s21: Measure both callers and extract only duplicated mechanical plumbing demonstrated by them, within probability; risk Medium; B: both unchanged outputs, actual inference/import costs, source-only second-caller edits, removal of superseded local glue; one commit.",
+    "s22: Publish bounded human/LLM packet and run one actual generation-plus-repair trial through existing access; risk Medium; S: held-out valid/invalid cases; request fulfillment distinct from compilation; exact captured source/diagnostics; at most two model calls; one commit.",
+    "s23: Profile multi-card mounting, inactive work, source preparation and frame cost; repair owning seams within fixed budgets; risk High; B + V: deterministic performance harness, idle/offscreen suspension, bounded layout reads/caches, accepted R2/tax preservation; one commit.",
+    "s24: Run responsive/theme/accessibility and supported-browser integration cohort after accepted two-caller treatment; risk High; B + V: Chromium/Firefox/WebKit, keyboard/wheel/drag, forward/back settlement, reduced motion, light/dark, narrow, static reading; one commit.",
+    "s25: Run broad release gates and fix attributable failures without weakening gates; risk High; B: full tests/typecheck/build, architecture/inference and unchanged reader budgets, R1/R2/tax preservation, Theseus validation; one commit.",
+    "s26: Record costs, author-task outcomes, capability limits and R4 handoff; close receipts/target/contract and commit closeout; risk Low; F: evidence links/actual counts, no open receipts, clean scoped worktree and final durable progress; one commit.",
+    "Brief tracked context; fixed budgets; no agents; existing clock card and semantic owners; proposal preservation boundary and done contract."
+  ],
+  "disallowedWork": [
+    "s01 STOP: Conflicting active authority or required capability outside this envelope",
+    "s02 STOP: Needs general event algebra or a second arithmetic owner",
+    "s03 STOP: Undefined conditional would be represented as a number",
+    "s04 STOP: Branch order becomes truth or causation authority",
+    "s05 STOP: Requires bypassing governance or a universal operation schema",
+    "s06 STOP: Needed new compositor mechanism exceeds bounded reuse",
+    "s07 STOP: Second clock, private input policy or accepted-card regression",
+    "s08 STOP: Unresolved correspondence or motion requires unrelated generic fallback",
+    "s09 STOP: Mandatory HUMAN_CHECKPOINT before slice 10 until accepted",
+    "s10 STOP: Requested visual revision changes accepted treatment",
+    "s11 STOP: Arbitrary probability language or parser inference is needed",
+    "s12 STOP: One projection changes revision independently",
+    "s13 STOP: Requires new universal Article grammar",
+    "s14 STOP: Probability evidence forced through equation-specific binder",
+    "s15 STOP: Needs remote persistence, hidden revision store or replay-to-restore",
+    "s16 STOP: Claims automated grading of unrestricted explanatory prose",
+    "s17 STOP: New publication authority or public delivery mutation required",
+    "s18 STOP: Browser gains filesystem writes or old distributed bytes are mutated",
+    "s19 STOP: New topology or aesthetic treatment required; request bounded review before it",
+    "s20 STOP: Scope expands into arbitrary multi-event trees or approximate inference",
+    "s21 STOP: Universal renderer/public API proposal needed or fixed budget cannot be met",
+    "s22 STOP: No existing access or new paid/account authority needed; report missing live evidence honestly",
+    "s23 STOP: Requires budget waiver, renderer rewrite or unreviewed choreography",
+    "s24 STOP: Material new visual judgment needed; physical-device behavior remains qualified",
+    "s25 STOP: Unrelated repair, unsafe operation or architectural expansion needed",
+    "s26 STOP: Any required slice or proof remains incomplete",
+    "No universal schema CAS extra domains renderer rewrite accounts browser writes spending merge deployment budget waiver or automatic R4."
+  ],
+  "goal": "Exact authored probability drives tree equations reading retrieval and publication with a second original caller.",
+  "target": "next-action.kp.bayesian-flagship",
+  "runMode": "run",
+  "maxSlices": 26,
+  "commitCadence": "One verified independently reversible slice and Theseus evidence per commit; no merge.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Mandatory human visual approval after s09 before s10.",
+    "Stop for material new visual judgment, scope expansion, unsafe authority, unavailable required evidence, user pause or completed scope. Repair routine failures without budget waivers."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Freeze owner/capability and author-task baseline; pin original problem, preservation URLs and exact commands; reconcile stale delivery summary",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Add bounded probability source constructors and canonical immutable joint model over existing rational arithmetic",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Add typed marginal and conditional query evidence with positive-reference-population capability",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Derive both binary tree orders and explicit construction/collapse/condition/reorder operations with occurrence correspondence",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Bind bounded probability evidence into existing asset/operation/governed construction seams; explicit unsupported cases",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Bind tree labels, quantity references and native equation endpoints to the same evidence; declare actual motion capability signatures",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Mount minimal proposed Focus Card with static first frame and existing clock, checkpoint mapping, keyboard, buttons and gestures",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Implement one reversible SVG tree choreography and semantic attention packet for all four operations",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Produce coherent exemplar review packet and runnable URL; commit checkpoint evidence",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Encode accepted motif regressions without globalizing provisional choices",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Add bounded author draft/checker with both declared input forms, semantic edit diagnostics and unknown-operation gaps",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Apply edits atomically to prepared tree, notation, prose bindings and navigation; retain complete last-valid revision on failure",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Derive full and compact readings through existing Article/projection contracts with mandatory definitions and population context",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Add one bounded parent/reason/return path and context-preserving extraction for the denominator reasoning",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Add validated revision-pinned URL/history restoration and disposal/bfcache behavior through existing lifecycle mechanisms",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Derive prediction and reconstruction prompts from the same conditional query and extraction; preserve explicit answers/context",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Compile selected Bayes source into existing publication artifact envelope with static SVG/native math/full context",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Join applied-source download, immutable edition creation and verification; reject stale draft publication",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Add a second original binary problem primarily as source: opposite posterior direction and asymmetric joint masses",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Pressure conditional support boundaries with zero cells, unreachable branches, equal likelihoods, complements and bounded exact-number stress",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Measure both callers and extract only duplicated mechanical plumbing demonstrated by them, within probability",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Publish bounded human/LLM packet and run one actual generation-plus-repair trial through existing access",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Profile multi-card mounting, inactive work, source preparation and frame cost; repair owning seams within fixed budgets",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Run responsive/theme/accessibility and supported-browser integration cohort after accepted two-caller treatment",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Run broad release gates and fix attributable failures without weakening gates",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Record costs, author-task outcomes, capability limits and R4 handoff; close receipts/target/contract and commit closeout",
+      "status": "planned"
+    }
+  ]
+}
