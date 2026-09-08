@@ -4,3 +4,8 @@
 [data-bayes-native-host] .kp-reader-focus-stepper,
 [data-bayes-native-host] .kp-reader-equation-hint,
 [data-bayes-native-host] .kp-reader-equation-progress { display: none; }
+.bayes-stage { display: grid; grid-template-rows: minmax(250px, 1fr) 220px; min-height: 470px; margin: 0; }
+[data-bayes-tree-host] { display: grid; place-items: center; min-width: 0; }
+.bayes-notation { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; padding: 0 1rem; }
+.bayes-notation [data-bayes-native-host] { height: 220px; min-width: 0; }
+[data-bayes-formula-label] { font: 1.1rem var(--kp-serif); }

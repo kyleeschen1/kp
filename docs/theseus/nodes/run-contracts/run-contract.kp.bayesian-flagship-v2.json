@@ -137,7 +137,8 @@
     {
       "id": "s07",
       "title": "Mount minimal proposed Focus Card with static first frame and existing clock, checkpoint mapping, keyboard, buttons and gestures",
-      "status": "planned"
+      "summary": "Shared-clock seven-stop host and accepted code playback extraction verified by unit types architecture and scoped browser preservation; static population first frame.",
+      "status": "complete"
     },
     {
       "id": "s08",

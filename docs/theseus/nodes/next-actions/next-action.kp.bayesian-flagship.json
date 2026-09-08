@@ -161,6 +161,62 @@
       "scope": "s06",
       "checkedAt": "2026-09-08T19:09:34.909Z",
       "notes": "Four shared page preservation checks pass."
+    },
+    {
+      "command": "npm run visual:bayesian-reasoning:shared",
+      "status": "failed",
+      "scope": "s07",
+      "checkedAt": "2026-09-08T19:22:45.131Z",
+      "notes": "Initial host height violated the existing native readable scale floor; increased reserved height, without relaxing the floor. First reverse harness supplied only one wheel event and settled during its synthetic stream; corrected to dispatch each input."
+    },
+    {
+      "command": "npm run visual:bayesian-reasoning:shared",
+      "status": "passed",
+      "scope": "s07",
+      "checkedAt": "2026-09-08T19:24:55.427Z",
+      "notes": "Two Chromium checks pass: seven stops, visible keyboard travel, continuous reverse gesture and interruption, canonical native endpoints. Actual rounding cause was bare snap-disabled attribute versus CSS true selector; fixed explicit value and added static regression."
+    },
+    {
+      "command": "npm run test:reusable-reasoning; npm run typecheck; npm run check:architecture; npm run visual:reusable-reasoning:shared -- --grep code-reasoning-and-card-keyboard",
+      "status": "passed",
+      "scope": "s07",
+      "checkedAt": "2026-09-08T19:24:56.479Z",
+      "notes": "61 reasoning tests; full typecheck zero errors; architecture gates; four existing code and card-keyboard Chromium preservation cases. Actual browser grep was code reasoning reuses or card keyboard."
+    },
+    {
+      "command": "npm run test:bayesian-reasoning",
+      "status": "passed",
+      "scope": "s07",
+      "checkedAt": "2026-09-08T19:25:22.464Z",
+      "notes": "Executed successfully; 16 Bayes tests, 61 reasoning tests, full types, architecture gates, or four scoped Chromium preservation cases as applicable."
+    },
+    {
+      "command": "npm run test:reusable-reasoning",
+      "status": "passed",
+      "scope": "s07",
+      "checkedAt": "2026-09-08T19:25:23.518Z",
+      "notes": "Executed successfully; 16 Bayes tests, 61 reasoning tests, full types, architecture gates, or four scoped Chromium preservation cases as applicable."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s07",
+      "checkedAt": "2026-09-08T19:25:24.515Z",
+      "notes": "Executed successfully; 16 Bayes tests, 61 reasoning tests, full types, architecture gates, or four scoped Chromium preservation cases as applicable."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s07",
+      "checkedAt": "2026-09-08T19:25:25.536Z",
+      "notes": "Executed successfully; 16 Bayes tests, 61 reasoning tests, full types, architecture gates, or four scoped Chromium preservation cases as applicable."
+    },
+    {
+      "command": "npm run visual:reusable-reasoning:shared -- --grep 'code reasoning reuses|card keyboard'",
+      "status": "passed",
+      "scope": "s07",
+      "checkedAt": "2026-09-08T19:25:26.542Z",
+      "notes": "Executed successfully; 16 Bayes tests, 61 reasoning tests, full types, architecture gates, or four scoped Chromium preservation cases as applicable."
     }
   ],
   "expectedLearning": [

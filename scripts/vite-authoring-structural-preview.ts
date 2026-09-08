@@ -7,6 +7,17 @@ export function kpViteAuthoringStructuralPreview(): Plugin {
     configureServer(server) {
       server.middlewares.use((request, response, next) => {
         const path = request.url?.split("?")[0];
+        if (path === "/experiments/bayesian-reasoning/") {
+          if (request.method !== "GET") { response.writeHead(405).end(); return; }
+          void (async () => {
+            try {
+              const module = await server.ssrLoadModule("/src/experiments/bayesian-reasoning/page.ts") as { buildBayesPage: () => string };
+              const html = await server.transformIndexHtml(request.url!, `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Bayesian reasoning · Kinetic Press</title><link rel="stylesheet" href="/src/experiments/authored-focus-card.css"><link rel="stylesheet" href="/src/experiments/bayesian-reasoning/style.css"><link rel="stylesheet" href="/node_modules/katex/dist/katex.min.css"></head><body><main id="authored-focus-card">${module.buildBayesPage()}</main><script type="module" src="/src/experiments/bayesian-reasoning/entry.ts"></script></body></html>`);
+              response.writeHead(200, { "content-type": "text/html", "cache-control": "no-store" }).end(html);
+            } catch (error) { response.writeHead(422, { "content-type": "text/plain" }).end(error instanceof Error ? error.message : String(error)); }
+          })();
+          return;
+        }
         if (path === "/experiments/bayesian-reasoning-native-probe/") {
           if (request.method !== "GET") { response.writeHead(405).end(); return; }
           void (async () => {
