@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: R1 complete with release verification; R2 scope proposal next
+Status: R2 approved; execute through combined visual checkpoint
 Last Updated: 2026-09-07
 Current successor reference: `../reviews/2026-09-07-reconciled-authoring-loop-horizon.md`.
 It preserves the original architectural obligations and the tax/Bayes direction;
@@ -10,9 +10,12 @@ Theseus contract: `run-contract.kp.authoring-round-trip-v1`.
 Current closeout: `../reviews/2026-09-07-authoring-round-trip-closeout.md`.
 It records the working authoring/reading URLs, numeric JSON-to-native-ink repair,
 source/publication coherence, full release evidence, actual live planner trial and
-remaining limitations. R1 has no remaining execution. Propose R2's bounded
-parent/reason/return and retrieval workflow for scope approval; R2 is not silently
-authorized by R1 completion. Theseus owns counts and terminal state.
+remaining limitations. R1 has no remaining execution. The user confirmed its
+repair works and explicitly approved the 24-slice R2 parent/reason/return and
+retrieval proposal: `../reviews/2026-09-07-reusable-reasoning-long-loop-proposal.md`.
+Active contract: `run-contract.kp.reusable-reasoning-v1`; mandatory visual gate s14.
+Branch: `feature/20260907-reusable-reasoning`, retaining completed R1 ancestry.
+Theseus owns counts and terminal state; R3 remains future scope.
 Standing minimal-check-in
 policy: `../decisions/2026-09-07-reconciled-horizon-and-minimal-check-ins.md`.
 The user requested recording the recommendations and finishing the existing
@@ -39,8 +42,8 @@ do not treat its proposed roadmap or readiness labels as new execution authority
 The user clarified the remaining code issue as missing gradual passage swiping.
 The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
-Current Next Action: propose the R2 scope from the reconciled horizon and R1
-closeout; do not restart the completed R1 or G3 loops. See
+Current Next Action: execute approved R2 through Theseus until its visual gate;
+do not restart the completed R1 or G3 loops. See
 `../reviews/2026-09-07-canonical-tax-g3-checkpoint.md` for the working URL,
 source workflow, production ownership, release evidence and remaining work.
 The ordinary build now ships the exact four-card route, with shared source

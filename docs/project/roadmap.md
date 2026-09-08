@@ -29,10 +29,13 @@ Current successor planning reference:
 authoring, reusable knowledge/procedures, Bayes, frontend convergence/promotion
 and mathematical expansion. The user approved the exact R1 26-slice run:
 `reviews/2026-09-07-authoring-round-trip-long-loop-proposal.md`, executed through
-`run-contract.kp.authoring-round-trip-v1`. R2 and later remain unapproved scope.
+`run-contract.kp.authoring-round-trip-v1`.
 R1 is complete with release verification; see
-`reviews/2026-09-07-authoring-round-trip-closeout.md`. The next action is an R2
-scope proposal, not another R1 resume or an automatic successor implementation.
+`reviews/2026-09-07-authoring-round-trip-closeout.md`. The user confirmed the repair
+works and approved R2's exact 24-slice proposal:
+`reviews/2026-09-07-reusable-reasoning-long-loop-proposal.md`.
+Execute `run-contract.kp.reusable-reasoning-v1` through its s14 visual checkpoint;
+Theseus owns progress. R3/Bayes and later execution remain unapproved scope.
 Minimal check-ins, mainly canonical
 visual reviews, are a standing preference; see
 `decisions/2026-09-07-reconciled-horizon-and-minimal-check-ins.md`.

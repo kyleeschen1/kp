@@ -1,0 +1,54 @@
+{
+  "id": "next-action.kp.reusable-reasoning",
+  "kind": "next-action",
+  "title": "R2 Reusable reasoning at multiple scales",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "User approved the exact 24-slice R2 proposal; visual checkpoint at s14.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-07-reusable-reasoning-long-loop-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.authoring-round-trip"
+    ]
+  },
+  "verification": [
+    "npm run test:reusable-reasoning",
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "npm run visual:reusable-reasoning",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Measure whether one authored reason yields consistent full compact and retrieval projections through existing owners and reduces second-caller glue."
+  ],
+  "allowedWork": [
+    "Approved R2 24-slice proposal only; one parent-reason procedure and code pressure after s14 visual acceptance."
+  ],
+  "disallowedWork": [
+    "No Article schema change, new renderer/clock, universal ontology, budget increase, merge, deployment or sub-agents."
+  ],
+  "criteria": [
+    {
+      "id": "coherent-revision",
+      "weight": "high"
+    },
+    {
+      "id": "evidence-and-assumptions",
+      "weight": "high"
+    },
+    {
+      "id": "context-preserving-return",
+      "weight": "high"
+    },
+    {
+      "id": "visual-acceptance",
+      "weight": "high"
+    }
+  ]
+}

@@ -1,0 +1,215 @@
+{
+  "id": "run-contract.kp.reusable-reasoning-v1",
+  "kind": "run-contract",
+  "title": "R2 Reusable reasoning at multiple scales",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Approved R2 execution with s14 visual gate and no parallel agents.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.reusable-reasoning.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-07-reusable-reasoning-long-loop-proposal.md"
+    }
+  ],
+  "verification": [
+    "npm run test:reusable-reasoning",
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "npm run check:reader-production",
+    "npm run check:reader-budgets",
+    "npm run visual:reusable-reasoning",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "s01: Freeze exemplar owners and author-task baseline; risk Low; focused: source-to-host inventory and preservation tests; one commit.",
+    "s02: Define bounded parent/reason authoring packet; risk Medium; standard: valid and invalid fixtures; existing identity reuse; one commit.",
+    "s03: Bind definitions claims assumptions and evidence; risk Medium; standard: missing evidence and editorial/verified distinction; one commit.",
+    "s04: Resolve revision-pinned references and local bindings; risk Medium; standard: unknown foreign-revision ambiguous-reference rejection; one commit.",
+    "s05: Bind one supported formula application; risk Medium; standard: explicit operands assumptions forged-proof rejection; one commit.",
+    "s06: Compose distribution then evaluation; risk Medium; standard: exact intermediate handoff and endpoint parity; one commit.",
+    "s07: Connect child reason to parent conclusion; risk Medium; standard: conclusion and assumption compatibility; one commit.",
+    "s08: Extract self-contained reason context; risk Medium; standard: referents evidence assumptions revision and return retained; one commit.",
+    "s09: Implement bounded open and return navigation; risk High; broad: round-trip identity interruption direct entry; one commit.",
+    "s10: Mount reversible Focus Card exemplar; risk High; broad: native endpoint ownership smoke; preserve motion and typography; one commit.",
+    "s11: Add full and compact readings; risk Medium; standard: same claims references and required qualifications; one commit.",
+    "s12: Derive prediction and reconstruction prompts; risk Medium; standard: existing flashcard machinery and answer isolation; one commit.",
+    "s13: Connect source editing to all projections; risk High; broad: changed source reaches ink and answers; last-valid retention; one commit.",
+    "s14: Prepare combined visual checkpoint; risk Medium; broad: working shared URL; keyboard phone open-return compact prompts; one commit.",
+    "s15: Encode accepted interaction regressions; risk Medium; standard: approved behavior tests; one commit.",
+    "s16: Harden navigation and lifecycle; risk High; broad: Back refresh rapid disclosure resize disposal reduced motion; one commit.",
+    "s17: Integrate revision-pinned export and static reading; risk High; broad: real filesystem build references assumptions no-JS truth; one commit.",
+    "s18: Pressure with existing extract-helper code; risk Medium; standard: language-owned semantics exact handoff source identity; one commit.",
+    "s19: Reuse approved interaction for code caller; risk High; broad: continuous navigation and context-preserving return; one commit.",
+    "s20: Extract only the two-caller common seam; risk High; broad: dependency authority checks both callers domain isolation; one commit.",
+    "s21: Provide human and LLM authoring packet; risk Medium; standard: valid drafts broken bindings repairs unsupported requests; one commit.",
+    "s22: Held-out edits and bounded live repair trial; risk Medium; standard: first output diagnostics repaired output zero fallback; one commit.",
+    "s23: Release verification; risk High; broad: full tests types build fixed budgets closure browsers R1 tax preservation; one commit.",
+    "s24: Record results and Bayes handoff; risk Low; standard: durable evidence cost comparison limits completed contract; one commit.",
+    "Brief tracked receipts per slice; fixed context budgets; no agents; preserve domain semantic, reference, flashcard, renderer, clock and shared Focus Card owners."
+  ],
+  "disallowedWork": [
+    "s01 STOP: Canonical reference cannot be reproduced",
+    "s02 STOP: Universal knowledge schema required",
+    "s03 STOP: Free prose treated as verified truth",
+    "s04 STOP: New identity authority required",
+    "s05 STOP: New algebra or inferred authority required",
+    "s06 STOP: New algebra family required",
+    "s07 STOP: Unproved parent-child equivalence",
+    "s08 STOP: Runtime prose transclusion required",
+    "s09 STOP: Private playback clock required",
+    "s10 STOP: Canonical renderer cannot be reused",
+    "s11 STOP: Compact view loses required context",
+    "s12 STOP: Prompt answers mutate semantic truth",
+    "s13 STOP: Handwritten renderer glue per edit",
+    "s14 STOP: HUMAN_CHECKPOINT: wait for user visual approval before s15",
+    "s15 STOP: Materially different treatment needs review",
+    "s16 STOP: New runtime owner required",
+    "s17 STOP: New publication format or authority required",
+    "s18 STOP: Language semantics flattened into math",
+    "s19 STOP: Material visual differences require review",
+    "s20 STOP: Generalization beyond demonstrated reuse",
+    "s21 STOP: Hidden specialist steps or new generation authority",
+    "s22 STOP: New spending/access; unavailable access recorded as evidence gap",
+    "s23 STOP: Unrepairable in-scope gates or budget increase required",
+    "s24 STOP: Required evidence absent",
+    "No new Article schema, universal ontology/CAS, renderer, clock, HTTP write, untrusted execution, catalogue migration, accounts, scheduler, merge, deployment or budget increase."
+  ],
+  "goal": "Execute approved 24-slice parent/reason/return authoring and projection integration; mandatory visual gate s14.",
+  "target": "next-action.kp.reusable-reasoning",
+  "runMode": "run",
+  "maxSlices": 24,
+  "commitCadence": "One verified reversible slice and completed evidence per commit; no merge.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "s14 HUMAN_CHECKPOINT: combined parent reason return and projections; no s15 until user visual acceptance.",
+    "Missing authority, material scope expansion, safety or genuinely unrepairable external blocker; repair routine in-scope failures."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Freeze exemplar owners and author-task baseline",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Define bounded parent/reason authoring packet",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Bind definitions claims assumptions and evidence",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Resolve revision-pinned references and local bindings",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Bind one supported formula application",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Compose distribution then evaluation",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Connect child reason to parent conclusion",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Extract self-contained reason context",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Implement bounded open and return navigation",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Mount reversible Focus Card exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Add full and compact readings",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Derive prediction and reconstruction prompts",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Connect source editing to all projections",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Prepare combined visual checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Encode accepted interaction regressions",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Harden navigation and lifecycle",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Integrate revision-pinned export and static reading",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Pressure with existing extract-helper code",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Reuse approved interaction for code caller",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Extract only the two-caller common seam",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Provide human and LLM authoring packet",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Held-out edits and bounded live repair trial",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Release verification",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Record results and Bayes handoff",
+      "status": "planned"
+    }
+  ]
+}
