@@ -29,5 +29,15 @@ test("reasoning exemplar mounts canonical native ink and returns to interrupted 
   await expect(page.getByText("The denominator 3 is nonzero.", { exact: true })).toBeVisible();
   await page.locator("[data-reasoning-reading]").selectOption("full");
   await expect(card).toHaveAttribute("data-kp-reasoning-progress", before!);
+  for (const name of ["Predict", "Reconstruct"]) {
+    await page.getByRole("button", { name, exact: true }).click();
+    await expect(page.locator("[data-reasoning-answer]")).toBeHidden();
+    await page.locator("[data-reasoning-working]").fill("My attempt stays local.");
+    await page.getByRole("button", { name: "Compare with the verified answer" }).click();
+    await expect(card).toHaveAttribute("data-kp-reasoning-state", "fraction-solve.state.constant-quotient");
+    await expect(page.locator("[data-reasoning-answer]")).toBeVisible();
+    await page.getByRole("button", { name: "Return to reading", exact: true }).click();
+    await expect(card).toHaveAttribute("data-kp-reasoning-progress", before!);
+  }
   expect(errors).toEqual([]);
 });

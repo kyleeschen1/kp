@@ -6,3 +6,7 @@
 [data-reasoning-context] h2 { font-size: 1.1rem; margin-top: 0; }
 [data-reasoning-context] code { overflow-wrap: anywhere; font-size: .8rem; }
 [data-reasoning-error] { color: #922f25; white-space: pre-wrap; }
+.reasoning-toolbar[hidden], [data-reasoning-practice-panel][hidden] { display: none; }
+[data-reasoning-practice-panel] { margin-block: 1.2rem; }
+[data-reasoning-practice-panel] textarea { display: block; box-sizing: border-box; width: 100%; margin-top: .5rem; font: inherit; }
+[data-reasoning-answer] { overflow-wrap: anywhere; line-height: 1.6; }

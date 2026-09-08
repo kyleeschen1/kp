@@ -195,6 +195,20 @@
       "scope": "s11",
       "checkedAt": "2026-09-08T02:03:39.932Z",
       "notes": "34 tests, full types and Chromium pass. Full/compact retain nine claims, both conditions, exact revision and playhead; authored markup escaped."
+    },
+    {
+      "command": "npm run test:reusable-reasoning",
+      "status": "failed",
+      "scope": "s12",
+      "checkedAt": "2026-09-08T02:07:39.460Z",
+      "notes": "Negative prompt test correctly rejected altered native ink but asserted error-message regex instead of typed code; corrected to exact code assertion."
+    },
+    {
+      "command": "npm run test:reusable-reasoning; npm run typecheck; npm run visual:reusable-reasoning; npx tsc --project tsconfig.app.json --noEmit; npx tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s12",
+      "checkedAt": "2026-09-08T02:09:30.008Z",
+      "notes": "36 tests and Chromium prediction/reconstruction disclosure-return pass; full types plus final app/test types pass. Incremental npx checks needed repository cache write permission; escalated rerun passed. Native answer endpoints and exact reading return retained."
     }
   ],
   "expectedLearning": [

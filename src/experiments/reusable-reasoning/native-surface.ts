@@ -64,7 +64,7 @@ export async function mountReasoningNativeSurface(card: HTMLElement, evidence: K
   await document.fonts.ready;
   prepare();
   return {
-    clock, prepare,
+    clock, prepare, animation,
     render(reduced: boolean) {
       const sample = session.sample({ clock: clock.getSnapshot(), motionMode: reduced ? "essential" : "continuous" });
       card.dataset["kpReasoningState"] = sample.accessibleEquationState;

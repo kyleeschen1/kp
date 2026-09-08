@@ -3,10 +3,11 @@ import "./style.css";
 import { createKpReasoningSource } from "./source.ts";
 import { bindKpReasoningEvidence } from "./evidence.ts";
 import { createKpReasoningNavigator } from "./navigation.ts";
-import { renderReasoningCard, reasoningBeats } from "./scaffold.ts";
+import { renderReasoningCard, reasoningBeats, escapeReasoningText } from "./scaffold.ts";
 import { mountReasoningNativeSurface } from "./native-surface.ts";
 import { readKpFocusDeckScrubberKeyTarget } from "../../tutorial/focus-deck-scaffold.ts";
 import type { ReasoningReading } from "./readings.ts";
+import { projectReasoningPrompts, type ReasoningPromptKind } from "./prompts.ts";
 
 const root = document.querySelector<HTMLElement>("#authored-focus-card")!;
 const report = (error: unknown) => {
@@ -20,6 +21,7 @@ async function mount() {
   const card = root.querySelector<HTMLElement>("[data-kp-reasoning-card]")!;
   const surface = await mountReasoningNativeSurface(card, evidence);
   const navigation = createKpReasoningNavigator(evidence, surface.clock);
+  const prompts = projectReasoningPrompts(evidence, surface.animation);
   const clock = surface.clock;
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const viewport = card.querySelector<HTMLElement>("[data-kp-focus-deck-viewport]")!;
@@ -37,6 +39,10 @@ async function mount() {
   let beats = reasoningBeats(evidence, "parent");
   let alignedScroll = 0;
   let disposed = false;
+  let practiceReturn: ReturnType<typeof navigation.capture> | undefined;
+  let practice: (typeof prompts)[number] | undefined;
+  const practicePanel = root.querySelector<HTMLElement>("[data-reasoning-practice-panel]")!;
+  const answer = root.querySelector<HTMLElement>("[data-reasoning-answer]")!;
   const factor = () => (beats.length - 1) / navigation.end;
   const render = (align = true) => {
     if (disposed) return;
@@ -52,7 +58,7 @@ async function mount() {
       item.dataset["kpFocusDeckBeatActive"] = String(i === index);
       if (i === index) item.setAttribute("aria-current", "page"); else item.removeAttribute("aria-current");
     });
-    if (align) { alignedScroll = position * Math.max(1, viewport.clientWidth); viewport.scrollLeft = alignedScroll; }
+    if (align && !practice) { alignedScroll = position * Math.max(1, viewport.clientWidth); viewport.scrollLeft = alignedScroll; }
     root.dataset["kpReasoningView"] = navigation.getView();
   };
   const navigate = (index: number) => {
@@ -85,7 +91,7 @@ async function mount() {
     event.preventDefault(); navigate(target);
   };
   viewport.onscroll = () => {
-    if (disposed || Math.abs(viewport.scrollLeft - alignedScroll) < 2) return;
+    if (disposed || practice || Math.abs(viewport.scrollLeft - alignedScroll) < 2) return;
     const position = Math.max(0, Math.min(beats.length - 1, viewport.scrollLeft / Math.max(1, viewport.clientWidth)));
     alignedScroll = viewport.scrollLeft;
     // Physical passage travel drives the existing clock continuously. The
@@ -98,6 +104,39 @@ async function mount() {
   reading.onchange = () => {
     clock.pause(); mode = reading.value === "compact" ? "compact" : "full";
     updateView(); root.dataset["kpReasoningReading"] = mode;
+  };
+  const setPractice = (active: boolean) => {
+    card.querySelector<HTMLElement>(".kp-focus-deck__navigation")!.inert = active;
+    root.querySelector<HTMLElement>("[data-reasoning-context] details")!.hidden = active;
+    root.querySelector<HTMLElement>(".reasoning-toolbar")!.hidden = active;
+    practicePanel.hidden = !active;
+    root.dataset["kpReasoningPractice"] = active ? practice!.kind : "none";
+  };
+  root.querySelectorAll<HTMLButtonElement>("[data-reasoning-practice]").forEach(button => {
+    button.onclick = () => {
+      practiceReturn = navigation.capture(); clock.pause();
+      practice = prompts.find(item => item.kind === button.dataset["reasoningPractice"] as ReasoningPromptKind)!;
+      root.querySelector<HTMLElement>("[data-reasoning-prompt-title]")!.textContent = practice.card.title;
+      root.querySelector<HTMLElement>("[data-reasoning-prompt]")!.textContent = practice.card.prompt;
+      root.querySelector<HTMLTextAreaElement>("[data-reasoning-working]")!.value = "";
+      answer.hidden = true; answer.textContent = "";
+      viewport.innerHTML = `<p>${escapeReasoningText(practice.card.prompt)}</p>`;
+      viewport.scrollLeft = 0;
+      setPractice(true); clock.seek(practice.startProgress);
+      root.querySelector<HTMLTextAreaElement>("[data-reasoning-working]")!.focus();
+    };
+  });
+  root.querySelector<HTMLButtonElement>("[data-reasoning-reveal]")!.onclick = () => {
+    if (!practice) return;
+    // Disclosure changes presentation only; the immutable prompt carries the
+    // same revision and verified answer before and after comparison.
+    clock.seek(practice.answerProgress); answer.hidden = false;
+    answer.textContent = `Verified sequence: ${practice.answerOperations.map(item => item.id).join(" → ")}. Compare the equation above; your wording is not automatically graded.`;
+  };
+  root.querySelector<HTMLButtonElement>("[data-reasoning-practice-return]")!.onclick = () => {
+    if (!practiceReturn) return;
+    navigation.restore(practiceReturn); practice = undefined; practiceReturn = undefined;
+    setPractice(false); updateView(); open.focus();
   };
   const resize = () => { if (!disposed) { clock.pause(); surface.resize(); render(); } };
   const motion = () => { clock.pause(); render(); };

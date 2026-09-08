@@ -160,7 +160,8 @@
     {
       "id": "s12",
       "title": "Derive prediction and reconstruction prompts",
-      "status": "planned"
+      "summary": "Prediction and reconstruction use existing projections with native answers and reversible practice disclosure.",
+      "status": "complete"
     },
     {
       "id": "s13",

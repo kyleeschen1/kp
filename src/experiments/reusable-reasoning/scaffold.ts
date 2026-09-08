@@ -47,8 +47,17 @@ export function renderReasoningPage(evidence: KpReasoningEvidence) {
       <button type="button" data-reasoning-return hidden>← Return to the argument</button>
       <span data-reasoning-location>Argument</span>
       <label>Reading <select data-reasoning-reading><option value="full">Full</option><option value="compact">Compact</option></select></label>
+      <button type="button" data-reasoning-practice="prediction">Predict</button>
+      <button type="button" data-reasoning-practice="reconstruction">Reconstruct</button>
     </div>
     <div data-reasoning-reader>${renderReasoningCard(evidence)}</div>
+    <section data-reasoning-practice-panel hidden aria-label="Retrieval practice">
+      <h2 data-reasoning-prompt-title></h2><p data-reasoning-prompt></p>
+      <label>Your working (self-check, not automatically graded)<textarea data-reasoning-working rows="3"></textarea></label>
+      <div class="reasoning-toolbar"><button type="button" data-reasoning-reveal>Compare with the verified answer</button>
+      <button type="button" data-reasoning-practice-return>Return to reading</button></div>
+      <p data-reasoning-answer hidden></p>
+    </section>
     <section data-reasoning-context aria-label="Reason assumptions and evidence">
       <h2>The rule and its context</h2>
       <p>${escapeReasoningText(support.procedure.formula.notation)} — the common factor applies to both addends.</p>
