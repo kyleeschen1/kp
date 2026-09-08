@@ -2,9 +2,9 @@
   "id": "run-contract.kp.reusable-reasoning-v1",
   "kind": "run-contract",
   "title": "R2 Reusable reasoning at multiple scales",
-  "status": "deferred",
+  "status": "in-progress",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: mandatory s14 visual review; s15 onward requires explicit acceptance of the combined reusable reasoning exemplar.",
+  "summary": "User accepted the repaired s14 exemplar and resumed approved s15-s24; preserve motion. Use executable in-progress lifecycle status.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -178,7 +178,8 @@
     {
       "id": "s15",
       "title": "Encode accepted interaction regressions",
-      "status": "planned"
+      "summary": "Accepted interaction regression coverage includes semantic endpoint keys across three cards; 48 unit tests, full types and three Chromium cases pass. No visual changes.",
+      "status": "complete"
     },
     {
       "id": "s16",

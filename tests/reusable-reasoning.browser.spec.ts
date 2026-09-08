@@ -48,6 +48,16 @@ for (const family of ["reasoning", "distribution", "simplification"]) test(`card
     await expect(card.locator("[data-kp-focus-deck-beat]").first()).toHaveAttribute("aria-current", "page");
     await expect.poll(() => viewport.evaluate(node => node.scrollLeft)).toBeLessThan(2);
   }
+  // Endpoint keys must use the same semantic lane, not native pixel/range steps.
+  await viewport.focus();
+  await viewport.press("End");
+  const last = family === "reasoning" ? 4 : 1;
+  await expect(slider).toHaveValue(String(last));
+  await expect(card.locator("[data-kp-focus-deck-beat]").nth(last)).toHaveAttribute("aria-current", "page");
+  await expect.poll(() => viewport.evaluate((node, last) => Math.abs(node.scrollLeft - node.clientWidth * last), last)).toBeLessThan(2);
+  await viewport.press("Home");
+  await expect(slider).toHaveValue("0");
+  await expect(card).toHaveAttribute(attribute, "0");
 });
 
 for (const family of ["distribution", "simplification"]) test(`shared playback shows authored ${family} motion and preserves reduced motion`, async ({ page }) => {

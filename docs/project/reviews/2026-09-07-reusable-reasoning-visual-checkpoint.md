@@ -1,7 +1,9 @@
 # R2 reusable reasoning: combined visual checkpoint
 
 Date: 2026-09-07 (local; execution evidence crosses into September 8 UTC)
-Outcome: HUMAN_CHECKPOINT — visual acceptance required before promotion.
+Outcome: ACCEPTED — user confirmed the repaired exemplar works and resumed on
+2026-09-08. Remaining R2 execution is authorized within the existing contract;
+materially different code visuals still require review.
 Authority: approved `2026-09-07-reusable-reasoning-long-loop-proposal.md`;
 live execution remains solely in `run-contract.kp.reusable-reasoning-v1`.
 

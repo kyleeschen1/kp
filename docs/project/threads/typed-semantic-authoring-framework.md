@@ -1,7 +1,7 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: R2 at mandatory combined visual checkpoint; await visual acceptance
-Last Updated: 2026-09-07
+Status: R2 combined visual checkpoint accepted; approved continuation active
+Last Updated: 2026-09-08
 Current successor reference: `../reviews/2026-09-07-reconciled-authoring-loop-horizon.md`.
 It preserves the original architectural obligations and the tax/Bayes direction;
 the exact R1 26-slice proposal is now approved for implementation:
@@ -16,7 +16,10 @@ retrieval proposal: `../reviews/2026-09-07-reusable-reasoning-long-loop-proposal
 Active contract: `run-contract.kp.reusable-reasoning-v1`; mandatory visual gate s14.
 Review packet and working shared URL:
 `../reviews/2026-09-07-reusable-reasoning-visual-checkpoint.md`.
-Do not start post-checkpoint promotion until this exemplar is accepted.
+The user confirmed the repaired keyboard interaction works and resumed on
+September 8. Continue the approved post-checkpoint slices while preserving the
+accepted equation motion and interaction. Materially different code visuals
+still require their own review; routine nonvisual checks do not.
 Branch: `feature/20260907-reusable-reasoning`, retaining completed R1 ancestry.
 Theseus owns counts and terminal state; R3 remains future scope.
 Standing minimal-check-in

@@ -36,8 +36,9 @@ works and approved R2's exact 24-slice proposal:
 `reviews/2026-09-07-reusable-reasoning-long-loop-proposal.md`.
 `run-contract.kp.reusable-reasoning-v1` has reached its required combined visual
 checkpoint; see `reviews/2026-09-07-reusable-reasoning-visual-checkpoint.md`.
-Wait for that visual acceptance before promotion; Theseus owns progress and the
-resume state. R3/Bayes and later execution remain unapproved scope.
+The user accepted the repaired exemplar on September 8 and resumed the remaining
+approved R2 slices. Preserve its accepted motion and interaction; Theseus owns
+progress and the resume state. R3/Bayes and later execution remain unapproved scope.
 Minimal check-ins, mainly canonical
 visual reviews, are a standing preference; see
 `decisions/2026-09-07-reconciled-horizon-and-minimal-check-ins.md`.

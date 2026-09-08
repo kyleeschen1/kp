@@ -332,6 +332,20 @@
       "scope": "s14-keyboard-routing",
       "checkedAt": "2026-09-08T05:19:56.656Z",
       "notes": "Nine normal-motion tests pass across three browsers and three cards: passage, slider and card focus; exact state, slider, active prose and alignment; reasoning counter; native editing and vertical/modified keys. Typecheck, architecture, 48 reasoning and four scaffold tests pass."
+    },
+    {
+      "command": "npm run test:reusable-reasoning; npm run typecheck; npm run visual:reusable-reasoning:shared -- --grep card-keyboard",
+      "status": "passed",
+      "scope": "s15",
+      "checkedAt": "2026-09-08T16:13:00.780Z",
+      "notes": "Browser command actually used grep phrase card keyboard; three Chromium cases passed, including Home and End."
+    },
+    {
+      "command": "npm run visual:reusable-reasoning:shared -- --grep \"card keyboard\"",
+      "status": "passed",
+      "scope": "s15",
+      "checkedAt": "2026-09-08T16:13:30.051Z",
+      "notes": "Exact executed command: three Chromium cases passed."
     }
   ],
   "progress": {
