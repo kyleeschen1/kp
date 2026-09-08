@@ -41,6 +41,27 @@
       "scope": "s01",
       "checkedAt": "2026-09-08T01:14:54.810Z",
       "notes": "Two tests pass Chromium and Firefox; native material spans 39 and 37 frames, max frame 17.5 and 50 ms; accepted host reproduced."
+    },
+    {
+      "command": "npm run test:reusable-reasoning",
+      "status": "failed",
+      "scope": "s02",
+      "checkedAt": "2026-09-08T01:19:04.915Z",
+      "notes": "Initial parser used non-erasable constructor properties; corrected before final checks."
+    },
+    {
+      "command": "npm run test:reusable-reasoning",
+      "status": "passed",
+      "scope": "s02",
+      "checkedAt": "2026-09-08T01:19:06.112Z",
+      "notes": "Seven tests pass; strict unknown-field and malformed-input repairs; immutable caller-isolated source."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s02",
+      "checkedAt": "2026-09-08T01:19:07.132Z",
+      "notes": "Full app node test Svelte domain typecheck passes after erasable syntax and exact-key correction."
     }
   ],
   "expectedLearning": [

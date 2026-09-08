@@ -100,7 +100,8 @@
     {
       "id": "s02",
       "title": "Define bounded parent/reason authoring packet",
-      "status": "planned"
+      "summary": "Strict immutable source packet with path-specific repair gaps; no shape-as-proof claim; seven tests and full types pass.",
+      "status": "complete"
     },
     {
       "id": "s03",
