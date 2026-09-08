@@ -4,7 +4,6 @@ import { encodeKpHtmlText as escape } from "../../rendering/html-output-encoding
 import { sampleBayesTree, type BayesTreePlan, type BayesTreeFrame } from "./tree-frame.ts";
 
 export const formatBayesMass = (mass: KpNormalizedRational) => mass.denominator === 1n ? String(mass.numerator) : `${mass.numerator}/${mass.denominator}`;
-const jointLabel = (mass: KpNormalizedRational) => 100n % mass.denominator === 0n ? `${mass.numerator * (100n / mass.denominator)}/100` : formatBayesMass(mass);
 const path = (x1: number, y1: number, x2: number, y2: number) => `M${x1},${y1} L${x2},${y2}`;
 const eventName = (axis: number, occurs: boolean) => `${occurs ? "" : "¬"}${axis === 0 ? "A" : "B"}`;
 const draw = (d: string, role: string) => `<path d="${d}" data-bayes-edge="${role}" pathLength="1" vector-effect="non-scaling-stroke"/>`;
@@ -25,6 +24,7 @@ function renderBranches(tree: BinaryTree, side: "initial" | "reordered", first: 
 }
 
 export function renderBayesTreeSvg(plan: BayesTreePlan, position = 0, id = "bayes-tree") {
+  const jointLabel = plan.display.label;
   const frame = sampleBayesTree(plan, position);
   const visibility = (value: number, style = "") => `visibility="${value === 0 ? "hidden" : "visible"}" style="opacity: ${value};${style}"`;
   const salience = (id: string) => frame.hierarchy.find(entity => entity.id === id)?.salience ?? "context";

@@ -8,7 +8,8 @@ import { formatBayesMass as mass } from "./tree-svg.ts";
 /** Labels are data, not Article directives, links, Markdown or TeX. Numeric
  * character references keep Markdown punctuation literal. Dollar signs use
  * Article's literal-code boundary so its later math pass cannot reinterpret them. */
-const literal = (text: string) => Array.from(text, char => char === "$" ? "`$`" : `&#${char.codePointAt(0)};`).join("");
+const literal = (text: string) => text.split(/(\$+)/).map(part => part.startsWith("$") ? `\`${part}\``
+  : Array.from(part, char => `&#${char.codePointAt(0)};`).join("")).join("");
 
 export function projectBayesReading(draft: PreparedBayesDraft, mode: "full" | "compact") {
   requirePreparedBayesDraft(draft);

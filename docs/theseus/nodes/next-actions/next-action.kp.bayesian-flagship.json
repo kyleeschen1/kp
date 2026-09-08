@@ -634,6 +634,34 @@
       "scope": "s19",
       "checkedAt": "2026-09-08T21:01:47.758Z",
       "notes": "Full typecheck passes; final fractional browser assertion also passes test types."
+    },
+    {
+      "command": "npm run test:bayesian-reasoning",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-08T21:07:23.056Z",
+      "notes": "32 tests pass: all 35 quarter-unit joint tables, both orders/complements/zero support, shared minimal exact display units, numeric capacity gaps and literal dollar runs."
+    },
+    {
+      "command": "npm run visual:bayesian-reasoning:shared",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-08T21:07:24.153Z",
+      "notes": "Twelve Chromium checks pass including native zero evaluation, impossible-condition retention and already-reduced urn ratio through canonical native compositor."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-08T21:07:25.151Z",
+      "notes": "Full types pass; added zero-support browser representative also passes focused test typecheck."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-08T21:07:26.141Z",
+      "notes": "Existing fixture baseline passes unchanged budgets: 112090 types, 191101 instantiations, 11.56 seconds. Bayesian-specific import/inference pressure remains s21."
     }
   ],
   "expectedLearning": [

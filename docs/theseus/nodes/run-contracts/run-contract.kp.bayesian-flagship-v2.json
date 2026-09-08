@@ -223,7 +223,8 @@
     {
       "id": "s20",
       "title": "Pressure conditional support boundaries with zero cells, unreachable branches, equal likelihoods, complements and bounded exact-number stress",
-      "status": "planned"
+      "summary": "Bounded edge cohort passes; one exact display-unit owner prevents independent tree/marginal/notation populations. Zero native evaluation and already-reduced ratios execute without fallback.",
+      "status": "complete"
     },
     {
       "id": "s21",

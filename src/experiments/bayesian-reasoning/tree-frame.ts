@@ -2,6 +2,7 @@ import { requireBinaryProbabilityTrace, type BinaryProbabilityTrace } from "../.
 import { createKpSemanticScene } from "../../semantic/semantic-scene-protocol.ts";
 import { createKpSemanticEntity, createKpSemanticEntityRegistry } from "../../semantic/semantic-entity-provenance.ts";
 import { createKpAnimationSaliencePlan, type KpAnimationSalienceIntent } from "../../animation/salience-plan.ts";
+import { createBayesDisplayUnits } from "./display-units.ts";
 
 /** This is the provisional binary-tree presentation, not probability truth or
  * a shared diagram grammar. Stable leaves survive changes of factorization. */
@@ -27,7 +28,8 @@ export function createBayesTreePlan(trace: BinaryProbabilityTrace) {
     { id: "bayes.reorder", kind: "notice", targetEntityIds: [...outcomeIds, ...reordered.tree.branches.map(branch => branch.occurrenceId)], summary: "Track unchanged outcomes through a new factorization." }
   ];
   const salience = createKpAnimationSaliencePlan({ id: "bayes.salience", scenes: [scene], intents });
-  return Object.freeze({ trace, initial: initial.tree, reordered: reordered.tree, query: conditioned.query, rootId, marginalId, ratioId, scene, salience });
+  return Object.freeze({ trace, initial: initial.tree, reordered: reordered.tree, query: conditioned.query, rootId, marginalId, ratioId, scene, salience,
+    display: createBayesDisplayUnits(trace.model) });
 }
 export type BayesTreePlan = ReturnType<typeof createBayesTreePlan>;
 const clamp = (value: number) => Math.max(0, Math.min(1, value));

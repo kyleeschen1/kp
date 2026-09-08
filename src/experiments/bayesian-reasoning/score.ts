@@ -13,7 +13,7 @@ export function createBayesScore(trace: BinaryProbabilityTrace) {
     ["Split on the first event", `Split the population into ${first} and not ${first}. Each first branch is a marginal probability—not an assumption that the events are independent.`],
     ["Complete the joint tree", `Split each branch into ${second} and not ${second}. Multiply along a path to obtain a joint probability. Each leaf names one outcome in the same population.`],
     ["Collapse to the evidence", `Gather A ∩ B and not A ∩ B. Their sum is P(B): the denominator we need. Gathering has not yet changed the reference population.`],
-    ["Condition: among B, how many are A?", `Now restrict the reference population to B. P(A | B) is the joint mass P(A ∩ B) divided by P(B). The ink evaluation reduces this exact ratio.`],
+    ["Condition: among B, how many are A?", `Now restrict the reference population to B. P(A | B) is the joint mass P(A ∩ B) divided by P(B). Evaluate this exact ratio; an already reduced fraction keeps its value.`],
     ["Return to the whole population", `Restore the original population before changing the tree order. The conditional answer remains valid; we have changed which population we are inspecting.`],
     ["Flip the question, not the facts", `Branch on ${second} first, then ${first}. The same joint outcomes have new tree positions. P(A | B) ${second === "B" ? "is now" : "was previously"} a branch label. This refactor does not reverse causation.`]
   ];

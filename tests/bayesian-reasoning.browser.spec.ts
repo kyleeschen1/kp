@@ -4,6 +4,31 @@ import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { buildBayesEdition } from "../scripts/build-bayesian-edition.ts";
 
+test("Bayes zero outcomes retain native zero evaluation while impossible conditioning preserves last-valid", async ({ page }) => {
+  await page.goto("/experiments/bayesian-reasoning/");
+  const card = page.locator("[data-bayes-display] [data-bayes-card]");
+  await expect(card).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+  await page.locator(".bayes-author summary").click();
+  const editor = page.locator("[data-bayes-draft]"), source = JSON.parse(await editor.inputValue());
+  source.model.masses = ["0/1", "0/1", "1/4", "3/4"];
+  await editor.fill(JSON.stringify(source)); await page.locator("[data-bayes-apply]").click();
+  await expect(page.locator("[data-bayes-author-status]")).toHaveAttribute("data-bayes-apply-status", "applied");
+  for (const step of [2, 3, 3.5, 4, 6]) {
+    await card.locator("[data-kp-focus-deck-scrubber]").evaluate((node, step) => {
+      (node as HTMLInputElement).value = String(step); node.dispatchEvent(new Event("input", { bubbles: true }));
+    }, step);
+    await expect(card.locator("#bayes-tree-description")).toContainText("P(A given B) = 0.");
+    expect(await card.locator("[data-bayes-outcome]").count()).toBe(4);
+  }
+  await expect(card.locator("[data-bayes-native-host]")).toContainText("0");
+  const revision = await card.getAttribute("data-bayes-revision"), owner = await card.elementHandle();
+  source.model.masses = ["0/1", "1/4", "0/1", "3/4"];
+  await editor.fill(JSON.stringify(source)); await page.locator("[data-bayes-apply]").click();
+  await expect(page.locator("[data-bayes-author-status]")).toHaveAttribute("data-bayes-apply-status", "repair-gap");
+  await expect(card).toHaveAttribute("data-bayes-revision", revision!);
+  expect(await owner!.evaluate(node => node.isConnected)).toBe(true);
+});
+
 test("Bayes urn source reuses the accepted seven-stop card and opposite-order tree", async ({ page }, info) => {
   await page.goto("/experiments/bayesian-reasoning/");
   const card = page.locator("[data-bayes-display] [data-bayes-card]");
