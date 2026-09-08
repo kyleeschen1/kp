@@ -107,7 +107,8 @@
     {
       "id": "s02",
       "title": "Add bounded probability source constructors and canonical immutable joint model over existing rational arithmetic",
-      "status": "planned"
+      "summary": "Exact immutable model, two input forms, strict typed/runtime source authority; five tests full types and architecture pass.",
+      "status": "complete"
     },
     {
       "id": "s03",

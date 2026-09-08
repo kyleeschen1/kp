@@ -42,6 +42,33 @@
       "scope": "s01",
       "checkedAt": "2026-09-08T18:44:01.897Z",
       "notes": "61 existing reasoning tests pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "s02-initial",
+      "checkedAt": "2026-09-08T18:49:13.509Z",
+      "notes": "Strict index-signature access rejected parser property syntax; corrected at the unknown-input boundary."
+    },
+    {
+      "command": "npm run test:bayesian-reasoning",
+      "status": "passed",
+      "scope": "s02",
+      "checkedAt": "2026-09-08T18:49:14.710Z",
+      "notes": "Five exact-model and baseline tests pass including input variants immutable authority invalid totals and zero outcomes."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s02",
+      "checkedAt": "2026-09-08T18:49:15.709Z",
+      "notes": "Full project typecheck passes after parser correction; Svelte zero errors and warnings."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s02",
+      "checkedAt": "2026-09-08T18:49:16.748Z"
     }
   ],
   "expectedLearning": [
