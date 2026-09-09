@@ -168,6 +168,13 @@
       "scope": "s16",
       "checkedAt": "2026-09-09T17:16:37.956Z",
       "notes": "47 tests and all gates pass. Core 112770/193156; combined 142329/239377. No budget change or weakened guard."
+    },
+    {
+      "command": "npm run test:bayesian-reasoning; npm run typecheck; npm run check:architecture; npm run check:inference",
+      "status": "passed",
+      "scope": "s17",
+      "checkedAt": "2026-09-09T17:19:53.980Z",
+      "notes": "57 tests and broad gates pass; both complete inference cohorts unchanged. Free-prose falsity is explicitly unverified, not silently graded."
     }
   ],
   "progress": {

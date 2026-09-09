@@ -139,7 +139,8 @@
     {
       "id": "s17",
       "title": "Add adversarial and held-out repair cases at responsible authoring boundaries",
-      "status": "planned"
+      "summary": "Adversarial and held-out checks preserve typed gaps, safe prose, exact answers and distinct intent assessment.",
+      "status": "complete"
     },
     {
       "id": "s18",
