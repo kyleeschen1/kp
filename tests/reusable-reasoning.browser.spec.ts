@@ -37,8 +37,16 @@ test("code reasoning reuses visible motion, continuous passage and exact parent 
   expect(sampled.progress).toBeGreaterThan(5); expect(sampled.paint).toBeGreaterThan(5);
   await expect(slider).toHaveValue("2");
   await previewSlider(slider, "2.37");
-  const saved = await card.getAttribute("data-code-reasoning-progress");
-  await page.locator("[data-code-reasoning-open]").click();
+  const openReason = page.locator("[data-code-reasoning-open]");
+  // A real click first blurs the focused slider, which may start settlement.
+  // Exact return owns the activation instant, not an earlier automation sample.
+  await openReason.evaluate(button => button.addEventListener("click", () => {
+    button.setAttribute("data-test-interrupted-progress", button.ownerDocument
+      .querySelector("[data-code-reasoning-card]")!.getAttribute("data-code-reasoning-progress")!);
+  }, { once: true, capture: true }));
+  await openReason.click();
+  const saved = await openReason.getAttribute("data-test-interrupted-progress");
+  expect(saved).not.toBeNull();
   await expect(card).toHaveAttribute("data-code-reasoning-view", "reason");
   await expect(slider).toHaveValue("0");
   await expect(card.locator("[data-kp-focus-deck-beat]").first()).toContainText("Name the helper, move the decision");

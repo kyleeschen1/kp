@@ -91,7 +91,7 @@ test("R4B both authored lessons propagate prose and model edits and reject inval
   }
 });
 
-test("R4B urn explanation uses source-only Apply and opposite-order seven-stop playback", async ({ page }) => {
+test("R4B urn explanation uses source-only Apply and opposite-order seven-stop playback", async ({ page, browser }) => {
   const checked = checkBayesDraft(JSON.stringify(urnExplanationSource));
   if (checked.status !== "compiled") throw new Error(checked.diagnostic.expected);
   await page.goto("/experiments/bayesian-reasoning/");
@@ -119,6 +119,27 @@ test("R4B urn explanation uses source-only Apply and opposite-order seven-stop p
     await expect(reading).toContainText(urnExplanationSource.editorial.title);
     await expect(reading).toContainText("1/7");
   }
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(391);
+  const built = buildBayesEdition("content/authoring/r4b-urn-explanation.bayes.json");
+  expect(buildBayesEdition("content/authoring/r4b-urn-explanation.bayes.json", true).checked).toBe(true);
+  const staticContext = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
+  try {
+    const reading = await staticContext.newPage();
+    await reading.goto(pathToFileURL(join(built.directory, "index.html")).href);
+    await expect(reading).toHaveTitle(urnExplanationSource.editorial.title);
+    await expect(reading.locator("script")).toHaveCount(0);
+    await expect(reading.locator("svg.bayes-tree")).toHaveCount(7);
+    await expect(reading.locator("[data-bayes-publication-revision]")).toHaveAttribute("data-bayes-publication-revision", checked.draft.revisionId);
+    await expect(reading.locator("[data-bayes-publication-reason]")).toContainText("Conditioning discards blue");
+    const answers = reading.locator("details").filter({ has: reading.locator("summary", { hasText: "Reveal answer" }) });
+    await expect(answers).toHaveCount(2);
+    for (const answer of await answers.all()) { await answer.locator("summary").click(); await expect(answer.locator("p")).toBeVisible(); }
+    const overflow = await reading.evaluate(() => [...document.querySelectorAll("p, code, svg, details")]
+      .filter(node => node.getBoundingClientRect().right > innerWidth + 1)
+      .map(node => ({ tag: node.tagName, text: node.textContent?.slice(0, 100), right: node.getBoundingClientRect().right })));
+    expect(await reading.evaluate(() => document.documentElement.scrollWidth), JSON.stringify(overflow)).toBeLessThanOrEqual(391);
+  } finally { await staticContext.close(); }
 });
 
 test("R4B checkpoint captures the canonical authored lesson at desktop and narrow widths", async ({ page, browser }, info) => {

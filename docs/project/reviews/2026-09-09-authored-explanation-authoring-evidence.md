@@ -83,3 +83,23 @@ Card and edition share one domain-local projection assembly after both callers
 passed. Pre-cleanup byte hashes protect both v2 cards and publication payloads;
 separate tests retain the original v1 outputs. Fact formatting no longer loads
 SVG paint, reducing core inference cost without deleting consumer fixtures.
+
+## Release findings
+
+The new no-JavaScript urn check at 390 px exposed a real static-layout defect:
+the page reached 566 px. Element-level browser diagnostics isolated the only
+overflowing element to the 71-character revision hash in a `code` element
+(right edge 561.89 px). The Bayes edition stylesheet now allows provenance code
+to wrap; it does not wrap mathematical ink or change the Focus Card. The same
+exact no-overflow assertion passes after repair, and retains element diagnostics
+for future failures. Old immutable editions remain unchanged; new editions
+snapshot the corrected shared stylesheet.
+
+The first supported-browser cohort also exposed a WebKit timing flaw in an
+older code-card test. It sampled expected progress before a real click blurred
+the focused slider. Blur commits slider settlement, so the navigator correctly
+captured a slightly later position at reason activation. The test now captures
+the expected value in the click's capture phase and still requires exact string
+equality on return. No tolerance, code semantics, navigation or motion changed.
+`code-navigation.ts` remains the owner of capture at `open()` and exact restore.
+The fresh cohort result is recorded by Theseus; this narrative is not a pass claim.

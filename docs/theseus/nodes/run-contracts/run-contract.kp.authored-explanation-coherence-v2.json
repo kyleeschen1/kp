@@ -163,7 +163,8 @@
     {
       "id": "s21",
       "title": "Release: full tests/build and bounded Chromium/Firefox/WebKit preservation across R1–R4A and both lessons",
-      "status": "planned"
+      "summary": "6853 tests, 69 supported-browser checks, build, full type costs and production gates pass; two bounded release findings repaired.",
+      "status": "complete"
     },
     {
       "id": "s22",

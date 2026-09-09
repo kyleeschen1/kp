@@ -42,6 +42,9 @@
 @media (max-width: 46rem) { .bayes-tree { font-size: 30px; } .bayes-tree .bayes-probability { font-size: 28px; } .bayes-tree .bayes-small { font-size: 24px; } }
 @media (forced-colors: active) { .bayes-tree { color: CanvasText; } [data-bayes-reference], [data-bayes-outcome][data-bayes-salience="focus"] { color: Highlight; } }
 .bayes-author { margin-top: 1.5rem; }
+/* Edition provenance is copyable data, not mathematical ink. Long revision
+   hashes must wrap at phone widths rather than widening the reading surface. */
+[data-bayes-publication-revision] > p code { overflow-wrap: anywhere; }
 .bayes-author textarea { display: block; box-sizing: border-box; width: 100%; min-height: 22rem; margin: .5rem 0; padding: .75rem; font: .85rem/1.5 monospace; color: var(--kp-st-ink); background: transparent; border: 1px solid var(--kp-st-rule); }
 /* Prepared native math must be laid out at the real width, but cannot paint,
    take focus or receive gestures before the complete revision commits. */

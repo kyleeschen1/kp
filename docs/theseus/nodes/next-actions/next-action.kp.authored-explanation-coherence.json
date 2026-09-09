@@ -203,6 +203,34 @@
       "scope": "s20",
       "checkedAt": "2026-09-09T17:31:24.419Z",
       "notes": "One six-swap Chromium test and three existing performance/lifecycle tests pass. Zero idle mutations; Apply 131-205ms observed. Reference 121 samples: dispatch p95 3.6ms, frame p95 18.5ms under concurrent verification load, not a device benchmark. Initial combined grep selected lifecycle only; separate owner command executed performance cases."
+    },
+    {
+      "command": "npm run visual:authoring-entrypoints:cohort",
+      "status": "failed",
+      "scope": "s21",
+      "checkedAt": "2026-09-09T17:40:21.795Z",
+      "notes": "Release exposed static urn phone overflow: 566px at 390px. Separate diagnostic run identified only the unbroken revision CODE element at right=561.89px. Scoped provenance wrapping fixes it; targeted Chromium rerun passes. Remaining original cohort and final rerun still pending."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-09T17:54:44.166Z",
+      "notes": "6853 tests passed; zero failures, skipped or cancelled. Full architecture and cost preflight retained."
+    },
+    {
+      "command": "npm run visual:authoring-entrypoints:cohort",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-09T17:54:45.467Z",
+      "notes": "Fresh release cohort: all 69 tests passed across Chromium, Firefox and WebKit. Initial cohort 66/69 exposed static provenance-hash overflow and pre-click versus activation-time test expectation; scoped CSS and exact capture-phase test repairs, no runtime motion change."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-09T17:54:46.544Z",
+      "notes": "Full build and typecheck passed; post-CSS bundle rebuild, reader budgets, reader production closure, dev-review production closure, both immutable edition checks and reachability freshness also passed. No budget waivers."
     }
   ],
   "progress": {
