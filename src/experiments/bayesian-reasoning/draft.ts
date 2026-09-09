@@ -42,7 +42,7 @@ function compileDraft(json: string) {
   const trace = compileBinaryProbabilityTrace(model, first), authority = createBayesSourceAuthority(trace);
   const request = createBayesConstructionRequest(authority, detail), construction = compileBayesConstruction(authority, request);
   const editorial = source.schemaVersion === "kp.bayes-source.v2" ? bindBayesEditorial(trace, source.editorial) : null;
-  const notation = compileBayesNotation(trace), score = createBayesScore(trace), tree = createBayesTreePlan(trace);
+  const notation = compileBayesNotation(trace), score = createBayesScore(trace, editorial), tree = createBayesTreePlan(trace);
   // Evidence pins describe domain operations. The authored revision also pins
   // explanation detail; whitespace or JSON key order is not a semantic edit.
   const identity = { evidence: authority.revisionId, detailLevel: detail };

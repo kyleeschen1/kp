@@ -1,9 +1,14 @@
 import type { BinaryProbabilityTrace } from "../../../domains/probability/binary-probability-trace.ts";
 import { requireBinaryProbabilityTrace } from "../../../domains/probability/binary-probability-trace.ts";
 import { encodeKpHtmlText as escape } from "../../rendering/html-output-encoding.ts";
+import type { BoundBayesEditorial } from "./editorial-binding.ts";
+import { ProbabilityRepairGap } from "../../../domains/probability/binary-joint-model.ts";
 
-export function createBayesScore(trace: BinaryProbabilityTrace) {
+export function createBayesScore(trace: BinaryProbabilityTrace, editorial: BoundBayesEditorial | null = null) {
   requireBinaryProbabilityTrace(trace);
+  if (editorial && (editorial.passages.length !== trace.states.length
+    || editorial.passages.some((passage, index) => passage.stateId !== trace.states[index]?.id)))
+    throw new ProbabilityRepairGap("probability.reference", "$.editorial.passages", "Bind passages to this exact trace before projecting a score.");
   const [a, b] = trace.model.events;
   const initial = trace.states[2]!;
   if (initial.kind !== "tree") throw new Error("Bayes score requires the bounded tree trace.");
@@ -18,5 +23,6 @@ export function createBayesScore(trace: BinaryProbabilityTrace) {
     ["Flip the question, not the facts", `Branch on ${second} first, then ${first}. The same joint outcomes have new tree positions. P(A | B) ${second === "B" ? "is now" : "was previously"} a branch label. This refactor does not reverse causation.`]
   ];
   return Object.freeze(trace.states.map((state, index) => Object.freeze({ id: state.id, slug: state.id.split(".").at(-1)!,
-    title: passages[index]![0]!, html: `<p>${escape(passages[index]![1]!)}</p>`, progress: index / (trace.states.length - 1) })));
+    title: editorial?.passages[index]!.title ?? passages[index]![0]!,
+    html: `<p>${escape(editorial?.passages[index]!.body ?? passages[index]![1]!)}</p>`, progress: index / (trace.states.length - 1) })));
 }

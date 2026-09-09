@@ -79,7 +79,8 @@
     {
       "id": "s07",
       "title": "Compile authored passages into the existing seven-stop score with compiler-required context retained",
-      "status": "planned"
+      "summary": "Authored literal passages share existing seven-stop score; required context stays available; v1 baseline unchanged.",
+      "status": "complete"
     },
     {
       "id": "s08",

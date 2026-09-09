@@ -2,15 +2,21 @@ import { annotateBayesQuotient } from "./notation.ts";
 import { compileKpEquationExemplarTemplate } from "../../reader/compiler/equation-exemplar-page.ts";
 import { renderKpFocusDeckScaffold } from "../../tutorial/focus-deck-scaffold.ts";
 import { renderBayesTreeSvg, formatBayesMass } from "./tree-svg.ts";
-import { checkBayesDraft, createBayesDraft, type PreparedBayesDraft } from "./draft.ts";
+import { checkBayesDraft, createBayesDraft, requirePreparedBayesDraft, type PreparedBayesDraft } from "./draft.ts";
 import { encodeKpHtmlText as escape } from "../../rendering/html-output-encoding.ts";
 import { projectBayesReading } from "./readings.ts";
 import { projectBayesPrompts } from "./prompts.ts";
+import { projectBayesContext } from "./context.ts";
 
 export function renderBayesCardRevision(draft: PreparedBayesDraft) {
+  requirePreparedBayesDraft(draft);
   const { score: beats, notation, model } = draft;
   const [a, b] = model.events;
-  return `<div data-bayes-display-revision="${draft.revisionId}"><p data-bayes-model-summary>Stipulated joint probabilities: ${model.outcomes.map(outcome => `${outcome.key} = ${formatBayesMass(outcome.mass)}`).join(", ")}. A = ${escape(a.label)}; B = ${escape(b.label)}.</p>
+  // Author prose cannot remove the compiler-owned definitions or assumptions.
+  // Keep them outside the seven passage slots so short prose does not hide them.
+  const editorialIntro = draft.editorial ? `<header data-bayes-editorial><h2>${escape(draft.editorial.title)}</h2><p>${escape(draft.editorial.setup)}</p></header>` : "";
+  const requiredContext = draft.editorial ? `<details data-bayes-required-context><summary>Required probability context</summary>${projectBayesContext(draft).assumptions.map(text => `<p>${escape(text)}</p>`).join("")}</details>` : "";
+  return `<div data-bayes-display-revision="${draft.revisionId}">${editorialIntro}<p data-bayes-model-summary>Stipulated joint probabilities: ${model.outcomes.map(outcome => `${outcome.key} = ${formatBayesMass(outcome.mass)}`).join(", ")}. A = ${escape(a.label)}; B = ${escape(b.label)}.</p>${requiredContext}
     ${renderKpFocusDeckScaffold({ id: "bayesian-reasoning", ariaLabel: "Building and reordering a probability tree", activeBeatSlug: beats[0]!.slug,
       rootAttributes: { "data-bayes-card": true }, viewportAttributes: { "data-kp-focus-deck-snap-disabled": "true" },
       headerTrailingHtml: '<span data-bayes-count>1 / 7</span>', replayHidden: false, beats,

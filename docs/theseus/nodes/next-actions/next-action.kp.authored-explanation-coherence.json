@@ -66,6 +66,13 @@
       "scope": "s06",
       "checkedAt": "2026-09-09T15:52:14.220Z",
       "notes": "43 Bayes and six budget tests passed. Corrected redundant narrowing in test helper and recorded necessary measured core compiler cost under standing approval."
+    },
+    {
+      "command": "npm run test:bayesian-reasoning; npm run typecheck; npm run check:inference",
+      "status": "passed",
+      "scope": "s07",
+      "checkedAt": "2026-09-09T15:55:32.662Z",
+      "notes": "44 tests pass, including hostile literal text, exact seven stop/progress parity and unchanged notation. Core 112736/193119; combined 142281/239312."
     }
   ],
   "expectedLearning": [
