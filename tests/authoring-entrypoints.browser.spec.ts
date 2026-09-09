@@ -43,6 +43,16 @@ test("R4B primary lesson loads as content and traverses the existing seven stops
   }
   await expect(card.locator(".kp-focus-deck__passage-page").nth(4)).toContainText("Of those 117 messages, 18 are spam");
   await card.screenshot({ path: info.outputPath("r4b-spam-conditioned.png") });
+  await card.locator("[data-kp-focus-deck-scrubber]").evaluate(node => {
+    (node as HTMLInputElement).value = "2.35"; node.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await page.locator("[data-bayes-explain]").click();
+  await expect(page.locator("[data-bayes-editorial-reason]")).toBeVisible();
+  await expect(page.locator("[data-bayes-editorial-reason]")).toContainText("A false alarm is still a flag");
+  await expect(page.locator("[data-bayes-editorial-reason]")).toContainText("all 117 flags");
+  await page.locator("[data-bayes-return]").click();
+  await expect(card).toHaveAttribute("data-bayes-position", "2.35");
+  await expect(page.locator("[data-bayes-reason]")).toBeHidden();
 });
 
 test("R4B authored Apply preserves one selected revision and rejects foreign references", async ({ page }) => {

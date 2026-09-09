@@ -103,7 +103,8 @@
     {
       "id": "s11",
       "title": "Preserve denominator extraction and exact return for the authored revision",
-      "status": "planned"
+      "summary": "Authored denominator context and exact return use existing extraction and issuer-pinned revision ownership.",
+      "status": "complete"
     },
     {
       "id": "s12",

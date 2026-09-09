@@ -7,6 +7,7 @@ import { encodeKpHtmlText as escape } from "../../rendering/html-output-encoding
 import { projectBayesReading } from "./readings.ts";
 import { projectBayesPrompts } from "./prompts.ts";
 import { projectBayesContext } from "./context.ts";
+import { extractBayesDenominator } from "./extraction.ts";
 
 export function renderBayesCardRevision(draft: PreparedBayesDraft) {
   requirePreparedBayesDraft(draft);
@@ -16,6 +17,8 @@ export function renderBayesCardRevision(draft: PreparedBayesDraft) {
   // Keep them outside the seven passage slots so short prose does not hide them.
   const editorialIntro = draft.editorial ? `<header data-bayes-editorial><h2>${escape(draft.editorial.title)}</h2><p>${escape(draft.editorial.setup)}</p></header>` : "";
   const requiredContext = draft.editorial ? `<details data-bayes-required-context><summary>Required probability context</summary>${projectBayesContext(draft).assumptions.map(text => `<p>${escape(text)}</p>`).join("")}</details>` : "";
+  const denominator = extractBayesDenominator(draft, 4);
+  const authoredReason = denominator.editorial ? `<p data-bayes-editorial-reason>${escape(denominator.editorial.text)}</p>` : "";
   return `<div data-bayes-display-revision="${draft.revisionId}">${editorialIntro}<p data-bayes-model-summary>Stipulated joint probabilities: ${model.outcomes.map(outcome => `${outcome.key} = ${formatBayesMass(outcome.mass)}`).join(", ")}. A = ${escape(a.label)}; B = ${escape(b.label)}.</p>${requiredContext}
     ${renderKpFocusDeckScaffold({ id: "bayesian-reasoning", ariaLabel: "Building and reordering a probability tree", activeBeatSlug: beats[0]!.slug,
       rootAttributes: { "data-bayes-card": true }, viewportAttributes: { "data-kp-focus-deck-snap-disabled": "true" },
@@ -24,7 +27,7 @@ export function renderBayesCardRevision(draft: PreparedBayesDraft) {
         <div class="bayes-notation" data-bayes-notation-phase="question"><p data-bayes-question>Among B,<br>what fraction is also A?</p><span data-bayes-formula-label></span><div data-bayes-native-host aria-hidden="true"></div></div></figure>` })}
     ${compileKpEquationExemplarTemplate(notation.animation, annotateBayesQuotient)}
     <p><button type="button" data-bayes-explain>Why this denominator?</button> <button type="button" data-bayes-return hidden>Return to my position</button></p>
-    <section data-bayes-reason hidden aria-label="Denominator reasoning"><h2>Why divide by P(B)?</h2><p>The denominator includes every B outcome: A ∩ B and not A ∩ B. Their combined mass is ${formatBayesMass(draft.tree.query.denominator)} of the original population. Within that population, the A-and-B share is ${formatBayesMass(draft.tree.query.numerator)} / ${formatBayesMass(draft.tree.query.denominator)} = ${formatBayesMass(draft.tree.query.value)}. Gathering B and conditioning on B are distinct steps.</p></section>
+    <section data-bayes-reason hidden aria-label="Denominator reasoning"><h2>Why divide by P(B)?</h2>${authoredReason}<p>The denominator includes every B outcome: A ∩ B and not A ∩ B. Their combined mass is ${formatBayesMass(draft.tree.query.denominator)} of the original population. Within that population, the A-and-B share is ${formatBayesMass(draft.tree.query.numerator)} / ${formatBayesMass(draft.tree.query.denominator)} = ${formatBayesMass(draft.tree.query.value)}. Gathering B and conditioning on B are distinct steps.</p></section>
     ${(["full", "compact"] as const).map(mode => `<details data-bayes-reading="${mode}" data-bayes-reading-revision="${draft.revisionId}"><summary>${mode === "full" ? "Full" : "Compact"} reading</summary>${projectBayesReading(draft, mode).html}</details>`).join("")}
     <p data-bayes-practice-choices>${projectBayesPrompts(draft).map(prompt => `<button type="button" data-bayes-practice="${prompt.kind}">${escape(prompt.card.title)}</button>`).join(" ")}</p>
     <section data-bayes-practice-panel hidden aria-label="Probability self-check"><h2 data-bayes-prompt-title></h2><p data-bayes-prompt-text></p><p data-bayes-prompt-context></p><p>Make your prediction or explanation before revealing. This is a self-check, not automatic grading.</p><button type="button" data-bayes-reveal>Reveal answer</button><p data-bayes-answer hidden></p><button type="button" data-bayes-practice-return>Return to the card</button></section></div>`;

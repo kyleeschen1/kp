@@ -94,6 +94,13 @@
       "scope": "s10",
       "checkedAt": "2026-09-09T16:12:25.752Z",
       "notes": "Six unit tests and two Chromium tests pass. Changed prior updates both readings; hostile prose remains literal; exact v1 reading/card/prompt baselines preserved."
+    },
+    {
+      "command": "node --test tests/bayesian-reasoning-editorial-extraction.test.ts tests/bayesian-reasoning-extraction.test.ts tests/bayesian-reasoning-editorial-baseline.test.ts; npm run typecheck; npm run check:inference; npm run visual:authoring-entrypoints -- --grep R4B",
+      "status": "passed",
+      "scope": "s11",
+      "checkedAt": "2026-09-09T16:16:16.899Z",
+      "notes": "Five unit tests and two Chromium tests pass; browser returns to 2.35 exactly. Transported editorial text cannot acquire return authority; v1 baselines preserved."
     }
   ],
   "expectedLearning": [

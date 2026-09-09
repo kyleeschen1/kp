@@ -35,6 +35,9 @@ export function extractBayesDenominator(draft: PreparedBayesDraft, returnStep: n
     outcomeIds: Object.freeze([...draft.tree.trace.model.outcomes.filter(outcome => outcome.values[1]).map(outcome => outcome.id)]),
     numerator: reading.facts.numerator, denominator: reading.facts.denominator, posterior: reading.facts.posterior,
     operations: Object.freeze(draft.trace.operations.slice(2, 4).map(op => op.id)),
+    // Optional editorial context is transported with the pin, never used to
+    // validate a return or replace the issuer's probability facts.
+    ...(draft.editorial ? { editorial: Object.freeze({ status: "editorial" as const, text: draft.editorial.denominator }) } : {}),
     sourceText: draft.sourceText });
 }
 export type BayesDenominatorExtraction = ReturnType<typeof extractBayesDenominator>;
