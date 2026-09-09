@@ -21,6 +21,7 @@ never serialized proof, geometry, renderer selection, timing or a new clock.
 
 | Task | Accepted scope | Preview / publication boundary |
 | --- | --- | --- |
+| `equation.common-factor` | One ordered common factor over declared single-letter real scalars; nonnegative safe integer coefficients and symbolic addends; two endpoints, one transition | Shared checker and prepared source export; opt-in preview, extraction and local edition integration remain in progress |
 | `bayes.binary` | Exact binary joint masses or prior and two likelihoods; strict v1 defaults or bounded v2 editorial explanation | Explicit Apply at `/experiments/bayesian-reasoning/`; immutable local Bayes edition |
 | `equation.logarithm-base` | Supported positive numeric base other than one, positive argument, coherent two-state change of base and narration | Explicit Compile at `/experiments/authoring-market/#equation-authoring`; export inside a selected market branch, not as a standalone edition |
 | `reasoning.equation` | Existing verified distribution-operation prefixes and editorial explanation | Explicit Apply at `/experiments/reusable-reasoning/`; context, readings, practice, exact return and immutable equation-reasoning edition |

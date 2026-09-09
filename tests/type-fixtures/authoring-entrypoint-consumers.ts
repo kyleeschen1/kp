@@ -28,6 +28,7 @@ import { normalizeKpCommonFactorEndpoints } from "../../src/authoring/common-fac
 import { verifyKpCommonFactorRewrite, type KpVerifiedCommonFactorRewrite } from "../../src/semantic/common-factor-rewrite.ts";
 import { createKpEquationSeriesCommonFactorSemanticSource } from "../../src/authoring/equation-series-common-factor-authoring.ts";
 import { prepareKpCommonFactorDraft, exportKpCommonFactorSource, type KpPreparedCommonFactorDraft } from "../../src/authoring/common-factor-draft.ts";
+import { checkKpCommonFactorAuthorSource } from "../../src/authoring/common-factor-author-check.ts";
 const factoringSyntax = readKpCommonFactorSource(undefined); void factoringSyntax;
 const factoringEndpoints = normalizeKpCommonFactorEndpoints(factoringSyntax); void factoringEndpoints;
 const factoringProof = verifyKpCommonFactorRewrite({ domain: factoringSyntax.domain, symbols: factoringSyntax.symbols,
@@ -37,6 +38,12 @@ const forgedFactoringProof: KpVerifiedCommonFactorRewrite = factoringSyntax; voi
 const factoringAuthority = createKpEquationSeriesCommonFactorSemanticSource({ sourceId: factoringSyntax.id, adjacencyId: "edge.factor", transformation: factoringProof }); void factoringAuthority;
 const factoringDraft = prepareKpCommonFactorDraft(factoringSyntax);
 const factoringExport: string = exportKpCommonFactorSource(factoringDraft); void factoringExport;
+const factoringCheck = reportAuthorCheck("equation.common-factor", checkKpCommonFactorAuthorSource(factoringExport));
+if (factoringCheck.status === "checked") {
+  const checkpoints: 2 = factoringCheck.result.checkpointCount; void checkpoints;
+  // @ts-expect-error A serial author report does not carry a prepared draft.
+  factoringCheck.result.draft;
+}
 // @ts-expect-error A compiled candidate is not a prepared factoring revision.
 const forgedFactoringDraft: KpPreparedCommonFactorDraft = factoringDraft.candidate; void forgedFactoringDraft;
 // @ts-expect-error Source export requires a fully prepared revision, not parsed syntax.

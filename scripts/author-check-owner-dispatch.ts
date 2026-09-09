@@ -6,6 +6,7 @@ import { inspectAuthorSourceLimits } from "../src/authoring/author-source-limits
 /** Fixed lazy routes, not input-selected modules or a second generation router. */
 export async function authorTaskExample(task: SupportedAuthorTask): Promise<unknown> {
   switch (task) {
+    case "equation.common-factor": return (await import("../src/authoring/common-factor-author-check.ts")).createKpCommonFactorExample();
     case "bayes.binary": return (await import("../src/experiments/bayesian-reasoning/draft.ts")).createBayesDraft();
     case "equation.logarithm-base": return (await import("../src/authoring/equation-series-logarithm-base-draft.ts")).createKpEquationSeriesLogarithmBaseDraft();
     case "reasoning.equation": return (await import("../src/experiments/reusable-reasoning/source.ts")).createKpReasoningSource();
@@ -18,6 +19,10 @@ export async function authorTaskExample(task: SupportedAuthorTask): Promise<unkn
 export async function checkAuthorTask(task: SupportedAuthorTask, json: string) {
   const limit = inspectAuthorSourceLimits(json);
   if (limit) return reportAuthorCheck(task, limit);
+  if (task === "equation.common-factor") {
+    const { checkKpCommonFactorAuthorSource } = await import("../src/authoring/common-factor-author-check.ts");
+    return reportAuthorCheck(task, checkKpCommonFactorAuthorSource(json));
+  }
   if (task === "bayes.binary") {
     const { checkBayesAuthorSource } = await import("../src/experiments/bayesian-reasoning/author-check.ts");
     return reportAuthorCheck(task, checkBayesAuthorSource(json));

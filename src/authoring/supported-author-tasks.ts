@@ -1,6 +1,13 @@
 /** Discovery metadata only. Domain checkers still own acceptance and evidence;
  * a host reference cannot certify that a draft is applied or published. */
 export const supportedAuthorTasks = {
+  "equation.common-factor": {
+    owner: "src/authoring/common-factor-author-check.ts",
+    input: "One ordered two-product common factor over declared single-letter real scalars; nonnegative safe integer coefficients and symbolic addends. Editorial prose is not proof.",
+    preview: { kind: "unsupported", reason: "Verified preparation is implemented; opt-in Focus Card integration is still in progress." },
+    extraction: { kind: "unsupported", reason: "Factoring reading and practice integration is still in progress." },
+    publication: { kind: "unsupported", reason: "Prepared source export is available; a factoring edition builder is not yet implemented." }
+  },
   "bayes.binary": {
     owner: "src/experiments/bayesian-reasoning/draft.ts",
     input: "Exact binary joint masses or prior and two likelihoods; v1 default teaching or v2 bounded editorial passages, readings and prompts. Prose is editorial, not proof.",

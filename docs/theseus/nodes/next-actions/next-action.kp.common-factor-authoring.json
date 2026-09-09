@@ -86,6 +86,13 @@
       "scope": "s09",
       "checkedAt": "2026-09-09T18:52:48.077Z",
       "notes": "Fourteen task and 23 factoring/import-closure tests pass; proof-gated paint and prepared source export reject candidate forgery; architecture, full types and fixed costs pass."
+    },
+    {
+      "command": "npm run test:common-factor-authoring and authoring-entrypoint tests and npm run typecheck and npm run check:inference",
+      "status": "passed",
+      "scope": "s10",
+      "checkedAt": "2026-09-09T18:56:36.546Z",
+      "notes": "Sixteen factoring and 47 author-entrypoint tests pass; shared CLI preserves precise repair-and-retry and report-only authority; full types and complete fixed inference gates pass."
     }
   ],
   "expectedLearning": [

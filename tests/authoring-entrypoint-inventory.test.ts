@@ -3,8 +3,8 @@ import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 import { isSupportedAuthorTask, supportedAuthorTasks } from "../src/authoring/supported-author-tasks.ts";
 
-test("inventory names the six approved tasks and existing owners without importing renderers", () => {
-  assert.deepEqual(Object.keys(supportedAuthorTasks), ["bayes.binary", "equation.logarithm-base", "reasoning.equation", "reasoning.code", "graph3d.saddle", "graph2d.supply-tax"]);
+test("inventory names the approved tasks and existing owners without importing renderers", () => {
+  assert.deepEqual(Object.keys(supportedAuthorTasks), ["equation.common-factor", "bayes.binary", "equation.logarithm-base", "reasoning.equation", "reasoning.code", "graph3d.saddle", "graph2d.supply-tax"]);
   const pkg = JSON.parse(readFileSync("package.json", "utf8"));
   for (const task of Object.values(supportedAuthorTasks)) {
     assert.ok(existsSync(task.owner), task.owner);
