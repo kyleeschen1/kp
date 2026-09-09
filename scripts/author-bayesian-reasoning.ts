@@ -4,13 +4,18 @@ import { pathToFileURL } from "node:url";
 import { createBayesDraft } from "../src/experiments/bayesian-reasoning/draft.ts";
 import { checkBayesAuthorSource } from "../src/experiments/bayesian-reasoning/author-check.ts";
 import { createUrnBayesDraft } from "../src/experiments/bayesian-reasoning/urn-source.ts";
+import spamExplanation from "../content/authoring/r4b-spam-filter.bayes.json" with { type: "json" };
+import urnExplanation from "../content/authoring/r4b-urn-explanation.bayes.json" with { type: "json" };
 
 /** Read-only CLI: renderer preparation and publication remain separate steps. */
 export function runBayesAuthoringCli(args: readonly string[]) {
   if (args.length === 1 && args[0] === "--example") return createBayesDraft();
   if (args.length === 2 && args[0] === "--example" && args[1] === "urn") return createUrnBayesDraft();
+  if (args.length === 2 && args[0] === "--example" && (args[1] === "spam-explanation" || args[1] === "urn-explanation")) {
+    return structuredClone(args[1] === "spam-explanation" ? spamExplanation : urnExplanation);
+  }
   if (args.length !== 2 || args[0] !== "--request") return { status: "repair-gap", diagnostic: {
-    code: "probability.cli", path: "$", expected: "Use --example or --request path|- (stdin)." } };
+    code: "probability.cli", path: "$", expected: "Use --example [urn|spam-explanation|urn-explanation] or --request path|- (stdin)." } };
   let json: string;
   try { json = readFileSync(args[1] === "-" ? 0 : resolve(args[1]!), "utf8"); }
   catch { return { status: "repair-gap", diagnostic: { code: "probability.cli", path: "$", expected: "Provide a readable file or stdin." } }; }

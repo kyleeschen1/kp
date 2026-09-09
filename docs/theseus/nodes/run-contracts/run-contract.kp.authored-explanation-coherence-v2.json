@@ -133,7 +133,8 @@
     {
       "id": "s16",
       "title": "Extend shared discovery/check reporting and owner packets to the proven authored form",
-      "status": "planned"
+      "summary": "Both authored forms discoverable and checked by existing owner; report explicitly distinguishes editorial prose from proof.",
+      "status": "complete"
     },
     {
       "id": "s17",

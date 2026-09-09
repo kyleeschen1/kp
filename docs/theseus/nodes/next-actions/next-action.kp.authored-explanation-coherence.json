@@ -161,6 +161,13 @@
       "scope": "s15",
       "checkedAt": "2026-09-09T17:12:26.978Z",
       "notes": "54 tests, full typecheck and one Chromium urn source-only Apply/readings/extraction/seven-stop test passed."
+    },
+    {
+      "command": "npm run test:authoring-entrypoints; npm run check:authoring-task-packet; npm run check:architecture; npm run check:inference; npm run typecheck",
+      "status": "passed",
+      "scope": "s16",
+      "checkedAt": "2026-09-09T17:16:37.956Z",
+      "notes": "47 tests and all gates pass. Core 112770/193156; combined 142329/239377. No budget change or weakened guard."
     }
   ],
   "progress": {

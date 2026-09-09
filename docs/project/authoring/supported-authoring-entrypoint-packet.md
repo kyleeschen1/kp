@@ -21,7 +21,7 @@ never serialized proof, geometry, renderer selection, timing or a new clock.
 
 | Task | Accepted scope | Preview / publication boundary |
 | --- | --- | --- |
-| `bayes.binary` | Exact binary joint masses or prior and two likelihoods; existing teaching settings | Explicit Apply at `/experiments/bayesian-reasoning/`; immutable local Bayes edition |
+| `bayes.binary` | Exact binary joint masses or prior and two likelihoods; strict v1 defaults or bounded v2 editorial explanation | Explicit Apply at `/experiments/bayesian-reasoning/`; immutable local Bayes edition |
 | `equation.logarithm-base` | Supported positive numeric base other than one, positive argument, coherent two-state change of base and narration | Explicit Compile at `/experiments/authoring-market/#equation-authoring`; export inside a selected market branch, not as a standalone edition |
 | `reasoning.equation` | Existing verified distribution-operation prefixes and editorial explanation | Explicit Apply at `/experiments/reusable-reasoning/`; context, readings, practice, exact return and immutable equation-reasoning edition |
 | `reasoning.code` | Existing TypeScript free-shipping source revisions, exact stage pins and editorial prose | `/experiments/reusable-reasoning-code/` is reference-only, not a selected-source editor; bounded context/return, no selected-source edition builder |
@@ -60,6 +60,14 @@ intent; an undefined condition or reversed quotient fails compilation.
 Editorial prose quality and the meaning of free labels remain ungraded.
 
 ## Explicit visual and edition handoff
+
+The proven authored explanations are `content/authoring/r4b-spam-filter.bayes.json`
+and `content/authoring/r4b-urn-explanation.bayes.json`. Check either with the same
+`bayes.binary` task. Retrieve them with `author:bayesian-reasoning -- --example
+spam-explanation` or `--example urn-explanation`. The original generic examples
+remain v1. See `bayesian-reasoning-packet.md` for the closed v2 slots and limits.
+Authored check summaries explicitly report `editorial-not-proof`; this does not
+grade free prose or confer prepared, applied or publication authority.
 
 Use the existing shared port-8000 server. A host URL does not load the retained
 source automatically. Paste the selected JSON and Apply/Compile, inspect all

@@ -7,5 +7,8 @@ export function checkBayesAuthorSource(json: string) {
   const { draft } = result;
   return { status: "compiled" as const, revisionId: draft.revisionId,
     evidenceRevisionId: draft.authority.revisionId,
-    checkpointCount: draft.trace.states.length, teaching: draft.teaching };
+    checkpointCount: draft.trace.states.length, teaching: draft.teaching,
+    ...(draft.editorial ? { editorial: { schemaVersion: "kp.bayes-source.v2" as const,
+      status: "editorial-not-proof" as const, title: draft.editorial.title,
+      passageCount: draft.score.length } } : {}) };
 }

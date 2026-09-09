@@ -3,7 +3,7 @@
 export const supportedAuthorTasks = {
   "bayes.binary": {
     owner: "src/experiments/bayesian-reasoning/draft.ts",
-    input: "Exact binary joint masses or prior and two likelihoods; existing teaching settings.",
+    input: "Exact binary joint masses or prior and two likelihoods; v1 default teaching or v2 bounded editorial passages, readings and prompts. Prose is editorial, not proof.",
     preview: { kind: "explicit-apply", url: "/experiments/bayesian-reasoning/" },
     extraction: { kind: "domain-owned", owner: "src/experiments/bayesian-reasoning/extraction.ts" },
     publication: { kind: "local-edition", command: "author:bayesian-publication", output: "immutable-content-addressed", input: "selected Bayes source JSON" }

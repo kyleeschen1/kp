@@ -43,6 +43,42 @@ returns `probability.undefined-condition`, never zero or an invented branch.
 
 ## Repair and limits
 
+### Opt-in authored explanation (v2)
+
+Use `--example spam-explanation` or `--example urn-explanation` for complete
+checked-in sources. Both use the same compiler and views. The latter starts
+color-first rather than urn-first; its posterior is 1/7. The original default
+and `--example urn` remain strict v1 with default prose and unchanged revisions.
+
+`kp.bayes-source.v2` adds one required `editorial` object: `title`, `setup`,
+exactly seven `passages`, `readings.full`, `readings.compact`, `denominator`, and
+`prompts.prediction`/`prompts.reconstruction`. Passages contain `stateId`, `title`,
+`body`; prompts contain `title`, `body`. Inline text is an array of nonblank
+literal strings and `{ "fact": "posterior" }` references, not Markdown or HTML.
+Keep spaces attached to neighboring words; whitespace-only pieces are rejected.
+Passage IDs must equal the compiled seven states in order: `<sourceId>.state.`
+followed by population, first-branches, joint-tree, marginal, conditioned,
+full-population and reordered. No authored duration, answer or motion fields.
+
+Closed fact names: `event.a`, `event.not-a`, `event.b`, `event.not-b`, `prior`,
+`likelihood.a`, `likelihood.not-a`, `joint.tt`, `joint.tf`, `joint.ft`, `joint.ff`,
+`numerator`, `denominator`, `posterior`, `population`, `count.tt`, `count.tf`,
+`count.ft`, `count.ff`, `count.flagged`. The historical name `count.flagged`
+means the total B count even when B is red rather than a flag. Likelihoods
+mean P(B|A) and P(B|not A); requesting one for an empty parent returns a gap.
+
+Title limit 160, passage/prompt titles 120, literal pieces 1000 characters;
+inline arrays 1–32 pieces; each reading 1–12 paragraphs. All slots are required,
+unknown fields rejected. Required definitions, assumptions and computed answers
+cannot be removed or overridden. A prose edit changes the lesson revision, not
+probability evidence. Bound numbers recompute on model edits, but free prose
+and story/parameter/tree-order compatibility still need editorial judgment.
+Compiling false prose does not certify it as true.
+
+Paste the complete urn source into the existing editor and Apply. For spam,
+the host also has a load-into-draft button; loading is not applying. Both export
+through the existing displayed-source and immutable local-edition commands.
+
 Read diagnostic `code`, `path`, `expected`; repair from the problem statement,
 then recheck. Example: `teaching.durationMs` is rejected at that path. Remove
 it; do not replace it with another timing field. Unsupported questions stay gaps.
