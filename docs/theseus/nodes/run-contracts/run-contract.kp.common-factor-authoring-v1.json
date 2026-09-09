@@ -53,8 +53,8 @@
     {
       "id": "s03",
       "title": "Add repeatable failing-authority/notation characterization and scoped unit command",
-      "summary": "Risk Low; F: valid/invalid explicit-star requests, implicit notation gaps, existing caller preservation; C / G; do not assert candidates already authorize downstream paint",
-      "status": "planned"
+      "summary": "Three characterization tests pass; scoped command pins invalid candidate acceptance without treating it as compatibility.",
+      "status": "complete"
     },
     {
       "id": "s04",

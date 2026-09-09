@@ -37,6 +37,13 @@
       "scope": "s02",
       "checkedAt": "2026-09-09T18:20:14.992Z",
       "notes": "Core112493/192595; combined143865/239977; no ceilings changed, all old consumers retained, seven cost tests pass."
+    },
+    {
+      "command": "npm run test:common-factor-authoring",
+      "status": "passed",
+      "scope": "s03",
+      "checkedAt": "2026-09-09T18:21:37.101Z",
+      "notes": "Three characterization tests pass; scoped command pins invalid candidate acceptance without treating it as compatibility."
     }
   ],
   "expectedLearning": [
