@@ -5,7 +5,7 @@ import {
 import type { KpMeasuredEquationTransitionGeometry } from "./equation-motion-dom.ts";
 import {
   planKpEquationMotionPath,
-  planKpEquationMotionPathBetweenPoints,
+  planKpCanonicalLineageBranch,
   type KpEquationMotionPathCandidate,
   type KpEquationMotionPathPlan
 } from "./equation-motion-path-planner.ts";
@@ -201,21 +201,11 @@ function lineageTokenPathPlans(
       ? derivativeBranchVariant(geometry, relation, motionId) ??
         (branchIndex % 2 === 0 ? "arc-above" : "arc-below")
       : pathPreference;
-    const variants = preferredVariant === "direct"
-      ? ["direct", "arc-above", "arc-below"] as const
-      : pathPreference.startsWith("around")
-        ? ["around-left", "around-right"] as const
-        : ["arc-above", "arc-below"] as const;
-    const path = planKpEquationMotionPathBetweenPoints({
+    const path = planKpCanonicalLineageBranch({
       id: `${planId}.lineage.${branchIndex}`,
-      start: origin,
-      end: center(token.localRect),
-      variants,
-      preferredVariant,
-      clearance: 18 + branchIndex * 3,
-      moverRadius: 0
+      origin, destination: center(token.localRect), branchIndex, preferredVariant
     });
-    return [motionId, path.selected] as const;
+    return [motionId, path] as const;
   }));
 }
 

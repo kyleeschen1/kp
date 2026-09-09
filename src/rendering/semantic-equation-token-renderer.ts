@@ -15,6 +15,8 @@ import {
 import { createKpSemanticLineageGraph } from "../semantic/semantic-lineage-graph.ts";
 import {
   planKpEquationMotionPathBetweenPoints,
+  planKpCanonicalLineageBranch,
+  canonicalFactoringGroupingEntry,
   sampleKpEquationMotionPath,
   type KpEquationMotionPathCandidate,
   type KpEquationMotionPathVariantId
@@ -1336,10 +1338,8 @@ function createFactoringChoreographyContext(
   const groupingEntryByMotionId = new Map(
     groupingTokens.map((token, semanticIndex) => [
       token.motionId,
-      {
-        x: semanticIndex < groupingTokens.length / 2 ? -6 : 6,
-        y: semanticIndex % 2 === 0 ? -4 : 4
-      }
+      canonicalFactoringGroupingEntry(semanticIndex, groupingTokens.length,
+        persistentRelations.map(relation => ({ source: relation.source!.bounds, target: relation.target!.bounds })))
     ] as const)
   );
   return {
@@ -2725,15 +2725,10 @@ function lineagePathPose(input: {
 } {
   const originCenter = rectCenter(input.origin);
   const destinationCenter = rectCenter(input.destination);
-  const path = input.precomputedPath ?? planKpEquationMotionPathBetweenPoints({
+  const path = input.precomputedPath ?? planKpCanonicalLineageBranch({
     id: `lineage.branch.${input.branchIndex}`,
-    start: originCenter,
-    end: destinationCenter,
-    variants: ["arc-above", "arc-below"],
-    preferredVariant: input.branchIndex % 2 === 0 ? "arc-above" : "arc-below",
-    clearance: 18 + input.branchIndex * 3,
-    moverRadius: 0
-  }).selected;
+    origin: originCenter, destination: destinationCenter, branchIndex: input.branchIndex
+  });
   const point = sampleKpEquationMotionPath(path, input.pathProgress);
   return {
     pose: {

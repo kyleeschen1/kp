@@ -79,7 +79,7 @@ export function syncKpEquationMaterialLayer(input: {
         setStyle(visual.style, "width", "100%");
         setStyle(visual.style, "transformOrigin", "center center");
       }
-      const focused = frame.sourceElement.classList.contains("kp-focus-group");
+      const focused = frame.focus !== undefined || frame.sourceElement.classList.contains("kp-focus-group");
       if (visual.classList.contains("kp-focus-group") !== focused) {
         visual.classList.toggle("kp-focus-group", focused);
       }
@@ -87,10 +87,12 @@ export function syncKpEquationMaterialLayer(input: {
         "--kp-focus-z",
         "--kp-focus-scale",
         "--kp-focus-outline-strength",
+        "--kp-focus-shadow-y",
+        "--kp-focus-shadow-blur",
         "--kp-focus-shadow-opacity",
         "--kp-focus-context-dimming"
       ]) {
-        const value = frame.sourceElement.style.getPropertyValue(property);
+        const value = frame.focus?.variables[property] ?? frame.sourceElement.style.getPropertyValue(property);
         if (visual.style.getPropertyValue(property) === value) continue;
         if (value === "") {
           visual.style.removeProperty(property);

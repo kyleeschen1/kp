@@ -34,6 +34,35 @@ export const kpEquationMotionPathVariantIds = [
 export type KpEquationMotionPathVariantId =
   (typeof kpEquationMotionPathVariantIds)[number];
 
+/** Canonical lineage geometry, shared by catalogue and native factoring.
+ * Coordinates are measured by each renderer; branch policy is not host-owned. */
+export function planKpCanonicalLineageBranch(input: {
+  readonly id: string;
+  readonly origin: KpEquationLayoutPoint;
+  readonly destination: KpEquationLayoutPoint;
+  readonly branchIndex: number;
+  readonly preferredVariant?: KpEquationMotionPathVariantId | undefined;
+}): KpEquationMotionPathCandidate {
+  const preferredVariant = input.preferredVariant ??
+    (input.branchIndex % 2 === 0 ? "arc-above" : "arc-below");
+  return planKpEquationMotionPathBetweenPoints({ id: input.id,
+    start: input.origin, end: input.destination,
+    variants: preferredVariant === "direct" ? ["direct", "arc-above", "arc-below"]
+      : preferredVariant.startsWith("around") ? ["around-left", "around-right"] : ["arc-above", "arc-below"],
+    preferredVariant, clearance: 18 + input.branchIndex * 3, moverRadius: 0 }).selected;
+}
+
+export function canonicalFactoringGroupingEntry(index: number, count: number,
+  context: readonly { readonly source: KpEquationLayoutRect; readonly target: KpEquationLayoutRect }[] = []): KpEquationLayoutPoint {
+  const leading = index < count / 2;
+  // Preserve the reference's small reception gesture, but reserve the full
+  // measured compaction corridor when a larger typography projects it wider.
+  const outside = context.length === 0 ? 0 : leading
+    ? Math.min(...context.map(pair => pair.target.left)) - Math.min(...context.map(pair => pair.source.left))
+    : Math.max(...context.map(pair => pair.source.left + pair.source.width)) - Math.max(...context.map(pair => pair.target.left + pair.target.width));
+  return { x: (leading ? -1 : 1) * Math.max(6, outside), y: index % 2 === 0 ? -4 : 4 };
+}
+
 export interface KpEquationMotionPathCandidate {
   readonly id: string;
   readonly variant: KpEquationMotionPathVariantId;

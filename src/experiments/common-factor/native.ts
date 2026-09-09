@@ -1,5 +1,7 @@
 import { assertKpPreparedCommonFactorDraft, type KpPreparedCommonFactorDraft } from "../../authoring/common-factor-draft.ts";
-import { commonFactorEndpoints } from "./endpoints.ts";
+import { commonFactorPresentationEndpoints } from "./endpoints.ts";
+import { assertKpCommonFactorPresentation, type KpCommonFactorPresentation } from "../../authoring/common-factor-presentation.ts";
+import { findKpRegisteredOperationPresentationPlan } from "../../animation/operation-presentation-plan-types.ts";
 import { compileKpEquationExemplarTemplate } from "../../reader/compiler/equation-exemplar-page.ts";
 import { mountKpCanonicalEquationStageShell } from "../../reader/app/canonical-equation-stage-shell.ts";
 import { createKpChromeFreeCanonicalEquationSession } from "../../reader/app/chrome-free-canonical-equation-session.ts";
@@ -12,7 +14,19 @@ import type { KpReaderEquationLessonDescriptor } from "../../reader/app/equation
 
 export async function mountCommonFactorNativeSurface(card: HTMLElement, draft: KpPreparedCommonFactorDraft) {
   assertKpPreparedCommonFactorDraft(draft);
-  const animation = draft.animation, endpoints = commonFactorEndpoints(draft);
+  return mountCanonicalFactoringPresentation(card, draft.presentation);
+}
+
+/** This owner accepts no asset, descriptor, layout or choreography override.
+ * Future hosts reuse this mount with a resolved binding, not copied setup. */
+export async function mountCanonicalFactoringPresentation(card: HTMLElement, presentation: KpCommonFactorPresentation) {
+  assertKpCommonFactorPresentation(presentation);
+  const animation = presentation.animation, endpoints = commonFactorPresentationEndpoints(presentation);
+  if (findKpRegisteredOperationPresentationPlan(animation.transformations[0]!) !== presentation.plan)
+    throw new TypeError("Factoring presentation is detached from its registered operation owner.");
+  card.dataset["canonicalPresentationOwner"] = presentation.owner;
+  card.dataset["canonicalPresentationReference"] = presentation.canonicalReference;
+  card.dataset["canonicalPresentationRevision"] = presentation.revisionId;
   const descriptor = defineKpCanonicalEquationLessonDescriptor({ id: "authored-common-factor", createAnimation: () => animation,
     compactTranscriptAvailable: true,
     bindStructuralAnchors: ({ root, state }) => {

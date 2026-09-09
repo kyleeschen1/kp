@@ -13,6 +13,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-09-m1-common-factor-authoring-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-09-canonical-presentation-routing-repair.md"
     }
   ],
   "verification": [
@@ -125,7 +129,7 @@
     {
       "id": "s15",
       "title": "Present one combined primary editorial/visual review packet with working URL and exact source",
-      "summary": "HUMAN_CHECKPOINT: primary review ready; see common-factor-primary-visual-checkpoint review dated 2026-09-09. Await explicit editorial and visual acceptance before s16; s15 is not complete.",
+      "summary": "User approved bounded complete canonical factoring choreography migration into native adapter, resolver-issued presentation binding and phase parity tests. Preserve proof APIs, prior native callers and visual checkpoint; no catalogue rollout.",
       "status": "in-progress"
     },
     {

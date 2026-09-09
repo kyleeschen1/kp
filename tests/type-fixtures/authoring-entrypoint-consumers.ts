@@ -30,7 +30,9 @@ import { createKpEquationSeriesCommonFactorSemanticSource } from "../../src/auth
 import { prepareKpCommonFactorDraft, exportKpCommonFactorSource, type KpPreparedCommonFactorDraft } from "../../src/authoring/common-factor-draft.ts";
 import { checkKpCommonFactorAuthorSource } from "../../src/authoring/common-factor-author-check.ts";
 import { createKpCommonFactorAuthoringSession } from "../../src/authoring/common-factor-session.ts";
-import { mountCommonFactorNativeSurface } from "../../src/experiments/common-factor/native.ts";
+import { mountCommonFactorNativeSurface, mountCanonicalFactoringPresentation } from "../../src/experiments/common-factor/native.ts";
+import type { KpCommonFactorPresentation } from "../../src/authoring/common-factor-presentation.ts";
+import type { KpFactoringChoreographyPlan } from "../../src/animation/factoring-choreography.ts";
 import { renderCommonFactorCard } from "../../src/experiments/common-factor/page.ts";
 import { projectCommonFactorReading } from "../../src/experiments/common-factor/readings.ts";
 import { projectCommonFactorPrompts, captureCommonFactorPosition, resolveCommonFactorPosition } from "../../src/experiments/common-factor/practice.ts";
@@ -44,6 +46,15 @@ const factoringAuthority = createKpEquationSeriesCommonFactorSemanticSource({ so
 const factoringDraft = prepareKpCommonFactorDraft(factoringSyntax);
 declare const factoringCard: HTMLElement;
 const factoringNative = mountCommonFactorNativeSurface(factoringCard, factoringDraft); void factoringNative;
+const canonicalFactoring = mountCanonicalFactoringPresentation(factoringCard, factoringDraft.presentation); void canonicalFactoring;
+// @ts-expect-error Fusion alone cannot authorize the complete factoring composition or clock.
+const fusionOnly: KpFactoringChoreographyPlan = factoringDraft.presentation.plan.choreography!.fusionPlan; void fusionOnly;
+// @ts-expect-error An asset cannot choose its own host or stand in for a resolved presentation.
+mountCanonicalFactoringPresentation(factoringCard, factoringDraft.animation);
+// @ts-expect-error A compiled mathematical candidate has no presentation authority.
+const unboundPresentation: KpCommonFactorPresentation = factoringDraft.candidate; void unboundPresentation;
+// @ts-expect-error Host callers cannot override the selected choreography.
+mountCanonicalFactoringPresentation(factoringCard, factoringDraft.presentation, { choreography: "generic-fade" });
 const factoringHtml: string = renderCommonFactorCard(factoringDraft); void factoringHtml;
 const factoringReading = projectCommonFactorReading(factoringDraft, "compact"); void factoringReading;
 const factoringPrompts = projectCommonFactorPrompts(factoringDraft); void factoringPrompts;

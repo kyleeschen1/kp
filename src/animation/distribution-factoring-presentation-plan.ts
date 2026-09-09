@@ -1,6 +1,7 @@
 import type {
   KpSemanticTransformation
 } from "../semantic/asset-transformation.ts";
+import { compileKpFactoringChoreography } from "./factoring-choreography.ts";
 import {
   compileKpOperationPresentationContextBundles
 } from "./operation-presentation-correspondence.ts";
@@ -30,6 +31,7 @@ export function compileKpDistributionFactoringPresentationPlan(input: {
   readonly transformation: KpSemanticTransformation;
   readonly sourceSelectorIds: readonly string[];
   readonly targetSelectorIds: readonly string[];
+  readonly sourceSelectorKinds?: ReadonlyMap<string, string> | undefined;
 }): KpVerifiedOperationPresentationPlan | undefined {
   const { transformation } = input;
   const operation =
@@ -119,7 +121,10 @@ export function compileKpDistributionFactoringPresentationPlan(input: {
         planKind: "factoring" as const,
         roles,
         fusionGroupId: group.id,
-        resultBundleId: targetBundles[0]!.id
+        resultBundleId: targetBundles[0]!.id,
+        choreography: !isDistribution && input.sourceSelectorKinds !== undefined &&
+          records.some(record => record.relation === "introduction")
+          ? compileCompleteFactoring() : undefined
       };
   return verifyKpOperationPresentationPlan({
     draft,
@@ -127,4 +132,19 @@ export function compileKpDistributionFactoringPresentationPlan(input: {
     targetSelectorIds: input.targetSelectorIds,
     scheduledGroupIds: [group.id]
   });
+
+  function compileCompleteFactoring() {
+    const context = records!.filter(record => record.relation === "identity");
+    const pairs = (kind: string) => context.filter(record =>
+      input.sourceSelectorKinds?.get(record.sourceSelectorIds[0]!) === kind
+    ).map((record, semanticIndex) => ({ sourceId: record.sourceSelectorIds[0]!,
+      targetId: record.targetSelectorIds[0]!, semanticIndex }));
+    const addendPairs = pairs("term"), connectorPairs = pairs("operator");
+    if (addendPairs.length + connectorPairs.length !== context.length)
+      throw new Error("Complete factoring requires declared addend and connector roles.");
+    return compileKpFactoringChoreography({ id: `${transformation.id}.factoring-choreography`,
+      factorCopyIds: transfer!.sourceSelectorIds, commonFactorId: transfer!.targetSelectorIds[0]!,
+      addendPairs, connectorPairs,
+      groupingArtifactIds: records!.filter(record => record.relation === "introduction").flatMap(record => record.targetSelectorIds) });
+  }
 }

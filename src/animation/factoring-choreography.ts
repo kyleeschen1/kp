@@ -7,6 +7,10 @@ import {
   type KpFissionFusionCapability
 } from "./fission-fusion-capability.ts";
 import { createKpSemanticLineageGraph } from "../semantic/semantic-lineage-graph.ts";
+import type { KpFocusCssBinding } from "./focus-profile.ts";
+
+const completePlanAuthority = Symbol("complete-factoring-choreography");
+const completePlans = new WeakSet<object>();
 
 export const kpFactoringChoreographyPhaseIds = [
   "focus-factor-copies",
@@ -22,6 +26,7 @@ export type KpFactoringChoreographyPhaseId =
   typeof kpFactoringChoreographyPhaseIds[number];
 
 export interface KpFactoringChoreographyPlan {
+  readonly [completePlanAuthority]: true;
   readonly kind: "factoring-choreography-plan";
   readonly id: string;
   readonly factorCopyIds: readonly string[];
@@ -152,19 +157,38 @@ KpFactoringChoreographyPlan {
     commonFactorId: input.commonFactorId,
     factorMinimumScale
   }, dependencies);
-  return {
+  const plan: KpFactoringChoreographyPlan = {
+    [completePlanAuthority]: true,
     kind: "factoring-choreography-plan",
     id: input.id,
-    factorCopyIds: [...input.factorCopyIds],
+    factorCopyIds: Object.freeze([...input.factorCopyIds]),
     commonFactorId: input.commonFactorId,
-    addendPairs: input.addendPairs.map((pair) => ({ ...pair })),
-    connectorPairs: input.connectorPairs.map((pair) => ({ ...pair })),
-    groupingArtifactIds: [...input.groupingArtifactIds],
-    phaseIds: [...kpFactoringChoreographyPhaseIds],
+    addendPairs: Object.freeze(input.addendPairs.map((pair) => Object.freeze({ ...pair }))),
+    connectorPairs: Object.freeze(input.connectorPairs.map((pair) => Object.freeze({ ...pair }))),
+    groupingArtifactIds: Object.freeze([...input.groupingArtifactIds]),
+    phaseIds: Object.freeze([...kpFactoringChoreographyPhaseIds]),
     factorMinimumScale,
     synchronization: "simultaneous",
     fusionPlan
   };
+  completePlans.add(plan);
+  return Object.freeze(plan);
+}
+
+export function assertKpCompleteFactoringChoreography(value: unknown): asserts value is KpFactoringChoreographyPlan {
+  if (typeof value !== "object" || value === null || !completePlans.has(value))
+    throw new TypeError("Complete factoring requires a compiler-issued choreography plan.");
+}
+
+/** Preserve the catalogue's accepted copy focus through each paint adapter. */
+export function sampleKpFactoringCopyFocus(frame: KpFactoringChoreographyFrame, semanticIndex: number): KpFocusCssBinding {
+  const strength = frame.focusStrength;
+  return { className: "kp-focus-group", attributes: { "data-kp-editor-factoring-role": "factor-copy",
+    "data-kp-editor-factoring-semantic-index": String(semanticIndex) }, variables: {
+    "--kp-focus-z": `${5 * strength}px`, "--kp-focus-scale": String(1 + .04 * strength),
+    "--kp-focus-outline-strength": String(strength), "--kp-focus-shadow-y": `${4 * strength}px`,
+    "--kp-focus-shadow-blur": `${12 * strength}px`, "--kp-focus-shadow-opacity": String(.2 * strength)
+  } };
 }
 
 export function sampleKpFactoringChoreography(input: {
@@ -172,6 +196,7 @@ export function sampleKpFactoringChoreography(input: {
   readonly progress: number;
 }, dependencies: KpFactoringChoreographyDependencies = defaultDependencies):
 KpFactoringChoreographyFrame {
+  assertKpCompleteFactoringChoreography(input.plan);
   const progress = clamp01(input.progress);
   const fusion = dependencies.fissionFusion.sample({
     plan: input.plan.fusionPlan,

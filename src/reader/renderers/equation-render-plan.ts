@@ -272,7 +272,9 @@ export function projectKpReaderEquationRenderPlan(input: {
         compileKpDistributionFactoringPresentationPlan({
           transformation,
           sourceSelectorIds,
-          targetSelectorIds
+          targetSelectorIds,
+          sourceSelectorKinds: new Map(compiled.ir.source.flatMap(state =>
+            state.selectors.map(selector => [selector.id, selector.semanticKind ?? ""] as const)))
         }) ??
         compileKpFractionMaterialPresentationPlan({
           transformation,

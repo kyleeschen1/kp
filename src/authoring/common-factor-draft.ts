@@ -1,8 +1,7 @@
-import { sha256 } from "../kernel/public-api.ts";
-import { createVerifiedCommonFactorAnimationAsset, KpCommonFactorPresentationGap } from "../animation/distribution-adapter.ts";
+import { KpCommonFactorPresentationGap } from "../animation/distribution-adapter.ts";
+import { resolveKpCommonFactorPresentation, explicitCommonFactorExpression as explicit, type KpCommonFactorPresentation } from "./common-factor-presentation.ts";
 import type { KpAnimationAsset } from "../animation/asset.ts";
 import { verifyKpCommonFactorRewrite, KpCommonFactorVerificationError, type KpVerifiedCommonFactorRewrite } from "../semantic/common-factor-rewrite.ts";
-import type { KpStructuredExpressionNode } from "../semantic/structured-expression.ts";
 import { readKpCommonFactorSource, KpCommonFactorRepair, type KpCommonFactorSource } from "./common-factor-source.ts";
 import { normalizeKpCommonFactorEndpoints } from "./common-factor-normalizer.ts";
 import { createKpEquationSeriesCommonFactorSemanticSource, KP_COMMON_FACTOR_OPERATION } from "./equation-series-common-factor-authoring.ts";
@@ -19,6 +18,7 @@ export interface KpPreparedCommonFactorDraft {
   readonly proof: KpVerifiedCommonFactorRewrite;
   readonly candidate: KpCompiledEquationTransformSeriesCandidate;
   readonly animation: KpAnimationAsset;
+  readonly presentation: KpCommonFactorPresentation;
 }
 
 /** Syntax, proof, governed adjacency and paint preparation all succeed before
@@ -46,14 +46,14 @@ export function prepareKpCommonFactorDraft(value: unknown): KpPreparedCommonFact
   const compiled = compileKpEquationTransformSeries({ value: binding.request, governedSources: [authority] });
   if (compiled.status !== "compiled" || compiled.active === undefined)
     throw new KpCommonFactorRepair("missing-authority", "$.states", compiled.repairs.map(r => r.message).join(" "));
-  let animation: KpAnimationAsset;
-  try { animation = createVerifiedCommonFactorAnimationAsset(proof); }
+  let presentation: KpCommonFactorPresentation;
+  try { presentation = resolveKpCommonFactorPresentation({ source, proof, candidate: compiled.active }); }
   catch (error) {
     if (error instanceof KpCommonFactorPresentationGap) throw new KpCommonFactorRepair(error.code, "$.states", error.message);
     throw error;
   }
-  const draft: KpPreparedCommonFactorDraft = Object.freeze({ [brand]: true as const, source, proof, candidate: compiled.active, animation,
-    revisionId: `sha256:${sha256(JSON.stringify({ source, proofRevision: proof.revisionId }))}` });
+  const draft: KpPreparedCommonFactorDraft = Object.freeze({ [brand]: true as const, source, proof, candidate: compiled.active,
+    presentation, animation: presentation.animation, revisionId: presentation.revisionId });
   issued.add(draft);
   return draft;
 }
@@ -66,12 +66,4 @@ export function assertKpPreparedCommonFactorDraft(value: unknown): asserts value
 export function exportKpCommonFactorSource(draft: KpPreparedCommonFactorDraft): string {
   assertKpPreparedCommonFactorDraft(draft);
   return JSON.stringify(draft.source, null, 2) + "\n";
-}
-
-function explicit(node: KpStructuredExpressionNode): string {
-  if (node.kind === "number") return String(node.value);
-  if (node.kind === "symbol") return node.name;
-  if (node.kind === "sum") return `(${node.terms.map(explicit).join("+")})`;
-  if (node.kind === "product") return `(${node.factors.map(explicit).join("*")})`;
-  throw new KpCommonFactorRepair("unsupported-shape", "$.states", "Only verified scalar sums and products can enter this frontend.");
 }

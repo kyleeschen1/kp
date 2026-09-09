@@ -2,8 +2,56 @@ import { test, expect } from "@playwright/test";
 import { buildCommonFactorEdition } from "../scripts/build-common-factor-edition.ts";
 import { relative } from "node:path";
 import { createKpCommonFactorExample } from "../src/authoring/common-factor-author-check.ts";
+import { prepareKpCommonFactorDraft } from "../src/authoring/common-factor-draft.ts";
+import { sampleKpFactoringChoreography } from "../src/animation/factoring-choreography.ts";
+
+test("canonical factoring phases survive native projection and interrupted reverse seek", async ({ page }, info) => {
+  test.setTimeout(120_000);
+  const draft = prepareKpCommonFactorDraft(createKpCommonFactorExample());
+  const reference = await page.context().newPage();
+  await reference.goto("/?view=animation-library-host&animation=editor-animation.sample.animation.factoring.factor-common-a");
+  const player = reference.locator("[data-kp-editor-animation-player]");
+  await expect(player).toHaveAttribute("data-kp-editor-animation-hydrated", "true", { timeout: 90_000 });
+  await page.goto("/experiments/reusable-reasoning/?example=common-factor");
+  const card = page.locator("[data-common-factor-card]");
+  await expect(page.locator("#authored-focus-card")).toHaveAttribute("data-common-factor-status", "ready", { timeout: 90_000 });
+  await expect(card).toHaveAttribute("data-canonical-presentation-owner", "canonical-factoring-native-v1");
+  const poses = new Map<number, unknown>();
+  const contextBaselines = new Map<string, number>();
+  for (const p of [0, .18, .37, .5, .68, .9, 1, .68, .37, 0]) {
+    await player.locator('[data-action="seek-editor-animation"]').fill(String(p));
+    await card.locator("[data-kp-focus-deck-scrubber]").evaluate((node, value) => {
+      const slider = node as HTMLInputElement; slider.value = String(value); slider.dispatchEvent(new Event("input", { bubbles: true }));
+    }, p);
+    await expect(card).toHaveAttribute("data-common-factor-progress", String(p));
+    if (p > 0 && p < 1) {
+      const expected = sampleKpFactoringChoreography({ plan: draft.presentation.plan.choreography!, progress: p });
+      const grouping = card.locator('[data-kp-equation-material-owner-id][data-kp-equation-material-semantic-entity-id$="-paren"]');
+      await expect(grouping).toHaveCount(2);
+      for (const owner of await grouping.all()) expect(Number(await owner.evaluate(node => getComputedStyle(node).opacity))).toBeCloseTo(expected.groupingOpacity, 5);
+      const referenceOpacity = await player.locator("[data-kp-editor-equation-factoring-grouping-opacity]").getAttribute("data-kp-editor-equation-factoring-grouping-opacity");
+      expect(Number(referenceOpacity)).toBeCloseTo(expected.groupingOpacity, 5);
+      for (const suffix of ["left-term", "right-term", "plus"]) {
+        const owner = card.locator(`[data-kp-equation-material-owner-id][data-kp-equation-material-semantic-entity-id$=".${suffix}"]`);
+        const y = await owner.evaluate(node => node.getBoundingClientRect().y);
+        if (contextBaselines.has(suffix)) expect(y).toBeCloseTo(contextBaselines.get(suffix)!, 1);
+        else contextBaselines.set(suffix, y);
+      }
+      const pose = await card.locator("[data-kp-equation-material-owner-id]").evaluateAll(nodes => nodes.map(node => {
+        const rect = node.getBoundingClientRect();
+        return { id: node.getAttribute("data-kp-equation-material-semantic-entity-id"),
+          opacity: getComputedStyle(node).opacity, x: Math.round(rect.x * 100), y: Math.round(rect.y * 100) };
+      }).filter(value => Number(value.opacity) > 0).sort((a, b) => String(a.id).localeCompare(String(b.id))));
+      if (poses.has(p)) expect(pose).toEqual(poses.get(p)); else poses.set(p, pose);
+    }
+    await player.screenshot({ path: info.outputPath(`canonical-${p}.png`) });
+    await card.screenshot({ path: info.outputPath(`native-${p}.png`) });
+  }
+  await reference.close();
+});
 
 test("primary factoring traverses native endpoints, direct reverse and shared controls", async ({ page }, info) => {
+  test.setTimeout(120_000);
   const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
   await page.goto("/experiments/reusable-reasoning/?example=common-factor");
   const root = page.locator("#authored-focus-card"), card = page.locator("[data-common-factor-card]");

@@ -1,3 +1,4 @@
+import { sampleKpFactoringCopyFocus } from "../animation/factoring-choreography.ts";
 import type { KpAnimationAsset } from "../animation/asset.ts";
 import { renderLatexToHtml } from "../rendering/katex-adapter.ts";
 import {
@@ -2981,33 +2982,10 @@ function applyFactoringFactorFocus(input: {
       (token) => token.motionId === motionId
     )?.element;
     if (factorCopy === undefined) return;
-    factorCopy.classList.add("kp-focus-group");
-    factorCopy.dataset["kpEditorFactoringRole"] = "factor-copy";
-    factorCopy.dataset["kpEditorFactoringSemanticIndex"] = String(semanticIndex);
-    factorCopy.style.setProperty(
-      "--kp-focus-z",
-      `${5 * input.frame.focusStrength}px`
-    );
-    factorCopy.style.setProperty(
-      "--kp-focus-scale",
-      String(1 + 0.04 * input.frame.focusStrength)
-    );
-    factorCopy.style.setProperty(
-      "--kp-focus-outline-strength",
-      String(input.frame.focusStrength)
-    );
-    factorCopy.style.setProperty(
-      "--kp-focus-shadow-y",
-      `${4 * input.frame.focusStrength}px`
-    );
-    factorCopy.style.setProperty(
-      "--kp-focus-shadow-blur",
-      `${12 * input.frame.focusStrength}px`
-    );
-    factorCopy.style.setProperty(
-      "--kp-focus-shadow-opacity",
-      String(0.2 * input.frame.focusStrength)
-    );
+    const focus = sampleKpFactoringCopyFocus(input.frame, semanticIndex);
+    factorCopy.classList.add(focus.className);
+    for (const [name, value] of Object.entries(focus.attributes)) factorCopy.setAttribute(name, value);
+    for (const [name, value] of Object.entries(focus.variables)) factorCopy.style.setProperty(name, value);
   });
   const commonFactorMotionId = factorRelation?.target?.motionIds[0];
   const commonFactor = input.geometry.targetTokens.find(

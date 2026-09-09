@@ -1,6 +1,7 @@
 import type {
   KpOperationPresentationRoles
 } from "./operation-presentation-roles.ts";
+import type { KpFactoringChoreographyPlan } from "./factoring-choreography.ts";
 import type {
   KpSemanticTransformation
 } from "../semantic/asset-transformation.ts";
@@ -45,6 +46,7 @@ export type KpOperationPresentationPlanDraft =
       readonly planKind: "factoring";
       readonly fusionGroupId: string;
       readonly resultBundleId: string;
+      readonly choreography?: KpFactoringChoreographyPlan | undefined;
     })
   | (KpOperationPresentationPlanDraftBase & {
       readonly planKind: "synchronized-balanced-introduction";

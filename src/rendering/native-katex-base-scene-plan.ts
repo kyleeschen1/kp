@@ -2,6 +2,7 @@ import type {
   KpEquationCollisionTrack,
   KpEquationProtectedTransitCertificate
 } from "./equation-motion-path-planner.ts";
+import { assertKpCompleteFactoringChoreography, type KpFactoringChoreographyPlan } from "../animation/factoring-choreography.ts";
 import type {
   KpEquationStructuralSuccessionIntent
 } from "../animation/structural-succession-presentation.ts";
@@ -142,6 +143,7 @@ export interface KpNativeKatexHandoffCorrelation {
 
 /** Measured plans live for one mounted session and never enter durable state. */
 export interface KpNativeKatexRendererReadyScenePlan {
+  readonly semanticClock?: KpFactoringChoreographyPlan | undefined;
   readonly kind: "native-katex-renderer-ready-scene-plan";
   readonly lifecycle: "renderer-session-ephemeral";
   readonly reconciliation: KpNativeKatexSceneReconciliation;
@@ -177,6 +179,7 @@ export function createKpNativeKatexRendererReadyScenePlan(
   input: KpNativeKatexRendererReadyScenePlanInput
 ): KpNativeKatexRendererReadyScenePlan {
   const { source, target } = input.reconciliation;
+  if (input.semanticClock !== undefined) assertKpCompleteFactoringChoreography(input.semanticClock);
   if (
     source.lifecycle !== "renderer-session" ||
     target.lifecycle !== "renderer-session"
@@ -218,6 +221,7 @@ export function createKpNativeKatexRendererReadyScenePlan(
     structuralSuccession: input.structuralSuccession,
     structuralMotion: input.structuralMotion,
     copyFanOut: input.copyFanOut ?? false,
+    semanticClock: input.semanticClock,
     endpointDwellFraction,
     supplementalMaterialOwners: input.supplementalMaterialOwners,
     toJSON(): never {

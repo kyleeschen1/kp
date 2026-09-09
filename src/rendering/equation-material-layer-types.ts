@@ -4,6 +4,7 @@ import type {
 import type {
   KpEquationIntentionalForegroundOcclusion
 } from "./equation-motion-occlusion-types.ts";
+import type { KpFocusCssBinding } from "../animation/focus-profile.ts";
 
 /**
  * This frame contract is intentionally independent of the DOM implementation.
@@ -11,6 +12,7 @@ import type {
  * measurement and cloning machinery in the compiler's inference graph.
  */
 export interface KpEquationMaterialLayerOwnerFrame {
+  readonly focus?: KpFocusCssBinding | undefined;
   readonly ownerId: string;
   readonly sourceElement: HTMLElement;
   readonly sourceMotionId?: string | undefined;

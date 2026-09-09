@@ -1236,6 +1236,7 @@ export function traceKpNativeKatexHandoffOwnership(input: {
 }
 
 export function createKpNativeKatexRendererSession(input: {
+  readonly semanticClock?: KpNativeKatexRendererReadyScenePlan["semanticClock"];
   readonly stage: HTMLElement;
   readonly sourceRoot: HTMLElement;
   readonly targetRoot: HTMLElement;
@@ -1319,7 +1320,7 @@ export function createKpNativeKatexRendererSession(input: {
   const sample = (progress: number) => {
     const poseProgress = sampleKpNativeKatexEndpointDwellProgress(
       progress,
-      endpointDwellFraction
+      input.semanticClock === undefined ? endpointDwellFraction : 0
     );
     return sampleKpNativeKatexSceneTracks(
       tracks,
@@ -1338,7 +1339,7 @@ export function createKpNativeKatexRendererSession(input: {
     const bounded = Math.max(0, Math.min(1, progress));
     const poseProgress = sampleKpNativeKatexEndpointDwellProgress(
       bounded,
-      endpointDwellFraction
+      input.semanticClock === undefined ? endpointDwellFraction : 0
     );
     const targetOwns = bounded === 1;
     const sourceOwns =
@@ -1453,6 +1454,9 @@ export function compileKpCanonicalNativeKatexScenePlan(
     handoffCorrelations: correlations,
     copyFanOut: input.copyFanOutRouting,
     endpointDwellFraction: input.endpointDwellFraction,
+    // The complete motif already owns orient/act/settle. A second time warp
+    // changes every phase; native-only geometry retains the existing dwell.
+    semanticClock: input.factoring?.semanticClock,
     structuralSuccession: input.structuralSuccession,
     structuralMotion: input.structuralMotion,
     supplementalMaterialOwners:
@@ -1523,6 +1527,7 @@ export function createKpCanonicalNativeKatexCarrierSceneSession(
     disposition: plan.disposition,
     copyFanOut: plan.copyFanOut,
     endpointDwellFraction: plan.endpointDwellFraction,
+    semanticClock: plan.semanticClock,
     ...(plan.supplementalMaterialOwners === undefined
       ? {}
       : { supplementalMaterialOwners: plan.supplementalMaterialOwners })
@@ -1614,7 +1619,7 @@ export function createKpCanonicalNativeKatexCarrierSceneSession(
       const bounded = Math.max(0, Math.min(1, progress));
       const poseProgress = sampleKpNativeKatexEndpointDwellProgress(
         bounded,
-        plan.endpointDwellFraction
+        plan.semanticClock === undefined ? plan.endpointDwellFraction : 0
       );
       source.stage.dataset["kpNativeKatexRawProgress"] =
         String(bounded);

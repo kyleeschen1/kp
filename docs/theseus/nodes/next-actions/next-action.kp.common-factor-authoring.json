@@ -2,9 +2,9 @@
   "id": "next-action.kp.common-factor-authoring",
   "kind": "next-action",
   "title": "M1a Verified common-factor authoring",
-  "status": "in-progress",
+  "status": "blocked",
   "domain": "authoring",
-  "summary": "User approved common-factor loop following scope and broader-path explanation; later subject waves remain proposals.",
+  "summary": "Await user decision on the measured 515000-byte renderer source-budget amendment; current gate remains failed at 512488 versus 505000. Visual acceptance still pending.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -13,6 +13,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-09-common-factor-primary-visual-checkpoint.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-09-canonical-presentation-routing-repair.md"
     }
   ],
   "dependsOn": {
@@ -125,11 +129,32 @@
       "scope": "s14",
       "checkedAt": "2026-09-09T19:34:44.250Z",
       "notes": "Verified practice, exact fractional return and immutable no-JS edition pass 24 tests, two browser checks, full types, architecture and fixed inference gates."
+    },
+    {
+      "command": "npm run test:common-factor-authoring; npm run visual:common-factor-authoring; npm run test:real-katex-glyph-compositor; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "s15-canonical-routing",
+      "checkedAt": "2026-09-09T21:56:28.611Z",
+      "notes": "26 authoring tests, three Chromium checks and 82 paint tests pass. Browser compares canonical grouping phases, baseline preservation and reverse seek; full types and layer gates pass. This is not human visual approval or full release."
+    },
+    {
+      "command": "node --test tests/canonical-equation-renderer-convergence.test.ts tests/distribution-factoring-presentation-plan.test.ts tests/kp-factoring-choreography.test.ts tests/kp-editor-distribution-factoring-visible-animations.test.ts tests/factoring-motif-binding.test.ts",
+      "status": "failed",
+      "scope": "s15-fixed-renderer-budget",
+      "checkedAt": "2026-09-09T21:56:30.502Z",
+      "notes": "30 of 31 tests pass. Aggregate source gate fails at 512488 bytes against unchanged 505000 ceiling. Proposed 515000 amendment is not applied and needs approval."
+    },
+    {
+      "command": "npm run profile:authoring-entrypoint-inference; npm run test:common-factor-authoring",
+      "status": "passed",
+      "scope": "s15-final-inference-and-authority",
+      "checkedAt": "2026-09-09T21:59:59.363Z",
+      "notes": "Complete real consumer cohort: 169961 types and 282610 instantiations; core: 113052 and 193425, unchanged ceilings. Authoring tests now 27 including early typed repair for multi-digit factors unsupported by the single-glyph native owner."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT at s15: 14 of 24 complete. Working live/static primary and source linked in review; no s16 until explicit acceptance. Resume retrieval: theseus work resume."
+    "summary": "STOP_CONDITION at s15: canonical native factoring and resolver-issued presentation binding implemented. Phase parity, native baseline, reverse seek, controls and static edition pass. Renderer source gate 512488 exceeds 505000; proposed 515000 amendment is not applied. No visual acceptance or s16."
   },
   "expectedLearning": [
     "Measure verified ordinary-LaTeX factoring authoring and source-only numeric reuse without renderer glue."

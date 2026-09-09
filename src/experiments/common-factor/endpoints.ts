@@ -1,4 +1,5 @@
 import { assertKpPreparedCommonFactorDraft, type KpPreparedCommonFactorDraft } from "../../authoring/common-factor-draft.ts";
+import { assertKpCommonFactorPresentation, type KpCommonFactorPresentation } from "../../authoring/common-factor-presentation.ts";
 import { createKpSelectorAnnotatedLatex } from "../../rendering/selector-annotated-latex.ts";
 import type { KpStructuredEquationAnnotatedEndpoint } from "../../rendering/structured-equation-selector-annotated-latex.ts";
 
@@ -6,9 +7,14 @@ import type { KpStructuredEquationAnnotatedEndpoint } from "../../rendering/stru
  * search, inferred correspondence, or independently authored endpoint text. */
 export function commonFactorEndpoints(draft: KpPreparedCommonFactorDraft): readonly KpStructuredEquationAnnotatedEndpoint[] {
   assertKpPreparedCommonFactorDraft(draft);
-  const operation = draft.animation.transformations[0]!;
+  return commonFactorPresentationEndpoints(draft.presentation);
+}
+
+export function commonFactorPresentationEndpoints(presentation: KpCommonFactorPresentation): readonly KpStructuredEquationAnnotatedEndpoint[] {
+  assertKpCommonFactorPresentation(presentation);
+  const operation = presentation.animation.transformations[0]!;
   return [operation.sourceObjectIds[0]!, operation.targetObjectIds[0]!].map((id, index) => {
-    const state = draft.animation.bundle.objects.find(s => s.id === id)!;
+    const state = presentation.animation.bundle.objects.find(s => s.id === id)!;
     const suffixes = index === 0 ? ["left-factor", "left-term", "plus", "right-factor", "right-term"]
       : ["factor", "left-paren", "left-term", "plus", "right-term", "right-paren"];
     const segments = suffixes.flatMap(suffix => {

@@ -488,11 +488,18 @@ function dispatchReaderEquationPresentation(input: {
       const factoring = bindKpNativeKatexFactoringScene({
         source: input.source,
         target: input.target,
-        intent: choreography
+        intent: choreography,
+        choreography: plan.factoringMotifBinding.operationPresentationPlan.choreography
       });
       return {
         planKind: plan.planKind,
-        canonicalInput: { ...input.base, factoring },
+        canonicalInput: { ...input.base, factoring,
+          ...(factoring.semanticClock === undefined ? {} : {
+            // Complete factoring assigns arcs to copies, not to continuants.
+            // Protect this axis through the later collision-planning pass.
+            horizontalAxisSemanticEntityIds: choreography.contextCorrespondences.flatMap(pair =>
+              [pair.sourceSelectorId, pair.targetSelectorId])
+          }) },
         motionProfile: "canonical-factoring-fission-fusion",
         successorSynthesisCount: 0,
         factoring

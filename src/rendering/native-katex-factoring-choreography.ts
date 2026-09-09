@@ -3,7 +3,12 @@ export type { KpNativeKatexFactoringSceneBinding } from "./native-katex-factorin
 
 import {
   compileKpFactoringFusionPlan,
-  sampleKpFactoringAddendCompactionProgress
+  sampleKpFactoringAddendCompactionProgress,
+  sampleKpFactoringChoreography,
+  sampleKpFactoringCopyFocus,
+  assertKpCompleteFactoringChoreography,
+  type KpFactoringChoreographyFrame,
+  type KpFactoringChoreographyPlan
 } from "../animation/factoring-choreography.ts";
 import {
   reverseKpFissionFusionPlan,
@@ -15,6 +20,9 @@ import type {
 } from "./equation-material-layer-dom.ts";
 import {
   planKpEquationMotionPathBetweenPoints,
+  planKpCanonicalLineageBranch,
+  canonicalFactoringGroupingEntry,
+  sampleKpEquationMotionPath,
   type KpEquationMotionPathCandidate
 } from "./equation-motion-path-planner.ts";
 import {
@@ -36,7 +44,7 @@ export const kpMaximumFactoringExcursionInLocalInkHeights = 3.75;
 export type KpNativeKatexFactoringChoreographyIntent =
   KpFactorCommonTermMotifBinding;
 
-interface KpNativeKatexFactoringAtomGeometry {
+interface FactoringAtomGeometry {
   readonly atom: KpNativeKatexPaintAtomObservation;
   readonly paintRect: KpNativeKatexPaintAtomObservation["rect"];
 }
@@ -46,50 +54,79 @@ export interface KpNativeKatexFactoringScenePlan {
   readonly id: string;
   readonly direction: "forward" | "rewind";
   readonly transferPlan: KpFissionFusionPlan;
-  readonly sourceFactors: readonly KpNativeKatexFactoringAtomGeometry[];
-  readonly targetFactors: readonly KpNativeKatexFactoringAtomGeometry[];
+  readonly sourceFactors: readonly FactoringAtomGeometry[];
+  readonly targetFactors: readonly FactoringAtomGeometry[];
   readonly pathsByEntityId: ReadonlyMap<string, KpEquationMotionPathCandidate>;
   readonly claimedSourceAtomIds: ReadonlySet<string>;
   readonly claimedTargetAtomIds: ReadonlySet<string>;
+  readonly complete?: {
+    readonly choreography: KpFactoringChoreographyPlan;
+    readonly grouping: readonly FactoringAtomGeometry[];
+    readonly entries: readonly { readonly x: number; readonly y: number }[];
+  } | undefined;
 }
 
 export function bindKpNativeKatexFactoringScene(input: {
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
   readonly intent: KpNativeKatexFactoringChoreographyIntent;
+  readonly choreography?: KpFactoringChoreographyPlan | undefined;
 }): KpNativeKatexFactoringSceneBinding {
   const plan = compileKpNativeKatexFactoringScenePlan(input);
+  let lastProgress = Number.NaN, lastFrame: KpFactoringChoreographyFrame | undefined;
+  const sample = (progress: number) => {
+    if (lastFrame !== undefined && progress === lastProgress) return lastFrame;
+    if (!plan.complete) throw new Error("Missing complete factoring composition.");
+    lastProgress = progress;
+    return lastFrame = sampleKpFactoringChoreography({ plan: plan.complete.choreography,
+      progress: plan.direction === "forward" ? progress : 1 - progress });
+  };
   const sampleContextProgress = (progress: number) =>
     sampleKpNativeKatexFactoringContextProgress(
       progress,
       plan.transferPlan.transferEvent.progress
     );
   return Object.freeze({
+    semanticClock: plan.complete?.choreography,
     claimTracks(tracks: readonly KpNativeKatexSceneTrack[]) {
       return Object.freeze(tracks.filter((track) =>
         !plan.claimedSourceAtomIds.has(track.sourceAtomId ?? "") &&
         !plan.claimedTargetAtomIds.has(track.targetAtomId ?? "") &&
         !plan.claimedSourceAtomIds.has(track.visualAtomId) &&
         !plan.claimedTargetAtomIds.has(track.visualAtomId)
-      ).map((track) => Object.freeze({
-        ...track,
-        sampleProgress: sampleContextProgress
-      })));
+      ).map((track) => {
+        const complete = plan.complete;
+        if (!complete) return Object.freeze({ ...track, sampleProgress: sampleContextProgress });
+        const index = complete.grouping.findIndex(g => g.atom.id === track.visualAtomId);
+        if (index < 0) return Object.freeze({ ...track, motionPath: undefined, motionProgressRange: undefined,
+          sampleProgress: (p: number) => plan.direction === "forward"
+            ? sample(p).addendCompactionProgress : 1 - sample(p).addendCompactionProgress });
+        if (track.lifecycle !== "introduce" && track.lifecycle !== "eliminate")
+          throw new Error("Grouping requires an explicit presence lifecycle.");
+        const entry = complete.entries[index]!;
+        const offset = (rect: typeof track.startRect) => ({ ...rect, left: rect.left + entry.x, top: rect.top + entry.y });
+        const forward = plan.direction === "forward";
+        const progress = (p: number) => forward ? sample(p).groupingOpacity : 1 - sample(p).groupingOpacity;
+        return Object.freeze({ ...track, opacityStepAt: undefined, motionPath: undefined, motionProgressRange: undefined,
+          startRect: forward ? offset(track.endRect) : track.startRect,
+          endRect: forward ? track.endRect : offset(track.startRect),
+          startPaintRect: forward && track.endPaintRect ? offset(track.endPaintRect) : track.startPaintRect,
+          endPaintRect: !forward && track.startPaintRect ? offset(track.startPaintRect) : track.endPaintRect,
+          sampleProgress: progress, sampleOpacityProgress: progress, opacityScheduleAuthority: "semantic-choreography" as const });
+      }));
     },
     claimedTargetAtomIds: plan.claimedTargetAtomIds,
     sampleMaterialOwners: (progress: number) =>
       sampleKpNativeKatexFactoringScenePlan({ plan, progress }),
     recordEvidence() {
-      input.source.stage.dataset["kpNativeKatexFactoringOwnership"] =
-        "atomic-fission-fusion";
-      input.source.stage.dataset["kpNativeKatexFactoringGeometry"] =
-        "paint-space";
-      input.source.stage.dataset["kpNativeKatexFactoringSynchronization"] =
-        input.intent.synchronization;
-      input.source.stage.dataset["kpNativeKatexFactoringPaintPolicy"] =
-        input.intent.fusionPaintPolicy;
-      input.source.stage.dataset["kpNativeKatexFactoringEvaluation"] =
-        input.intent.coefficientEvaluation;
+      Object.assign(input.source.stage.dataset, {
+        kpNativeKatexFactoringOwnership: "atomic-fission-fusion",
+        kpNativeKatexFactoringGeometry: "paint-space",
+        kpNativeKatexFactoringSynchronization: input.intent.synchronization,
+        kpNativeKatexFactoringPaintPolicy: input.intent.fusionPaintPolicy,
+        kpNativeKatexFactoringEvaluation: input.intent.coefficientEvaluation,
+        kpNativeKatexFactoringComposition: plan.complete ? "complete-canonical" : "existing-group"
+      });
     }
   });
 }
@@ -98,6 +135,7 @@ export function compileKpNativeKatexFactoringScenePlan(input: {
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
   readonly intent: KpNativeKatexFactoringChoreographyIntent;
+  readonly choreography?: KpFactoringChoreographyPlan | undefined;
 }): KpNativeKatexFactoringScenePlan {
   assertFactoringIntent(input.intent);
   const forwardPlan = compileKpFactoringFusionPlan({
@@ -120,6 +158,29 @@ export function compileKpNativeKatexFactoringScenePlan(input: {
   );
   assertTypographyCompatible([...sourceFactors, ...targetFactors]);
 
+  const forwardSource = input.intent.direction === "forward" ? input.source : input.target;
+  const forwardTarget = input.intent.direction === "forward" ? input.target : input.source;
+  const complete = input.intent.structuralArtifactIds.length === 0 ? undefined : (() => {
+    const choreography = input.choreography;
+    assertKpCompleteFactoringChoreography(choreography);
+    if (!choreography || choreography.commonFactorId !== input.intent.commonFactorId ||
+        JSON.stringify(choreography.factorCopyIds) !== JSON.stringify(input.intent.factorCopyIds) ||
+        JSON.stringify(choreography.groupingArtifactIds) !== JSON.stringify(input.intent.structuralArtifactIds))
+      throw new Error("Complete factoring requires its canonical composition, not fusion-only motion.");
+    const context = [...choreography.addendPairs, ...choreography.connectorPairs];
+    const grouping = choreography.groupingArtifactIds.map(id => factorGeometry(forwardTarget, id))
+      .sort((a, b) => a.atom.rect.left - b.atom.rect.left);
+    const sourceIds = new Set([...choreography.factorCopyIds, ...context.map(pair => pair.sourceId)]);
+    const targetIds = new Set([choreography.commonFactorId, ...context.map(pair => pair.targetId), ...choreography.groupingArtifactIds]);
+    if (sourceIds.size !== forwardSource.atoms.length || targetIds.size !== forwardTarget.atoms.length ||
+        forwardSource.atoms.some(atom => !sourceIds.has(atom.semanticEntityId)) || forwardTarget.atoms.some(atom => !targetIds.has(atom.semanticEntityId)))
+      throw new Error("Complete factoring composition must own every native paint atom.");
+    const corridor = context.map(pair => ({ source: factorGeometry(forwardSource, pair.sourceId).paintRect,
+      target: factorGeometry(forwardTarget, pair.targetId).paintRect }));
+    return { choreography, grouping, entries: grouping.map((_, index) =>
+      canonicalFactoringGroupingEntry(index, grouping.length, corridor)) };
+  })();
+
   const commonGeometry = input.intent.direction === "forward"
     ? targetFactors[0]!
     : sourceFactors[0]!;
@@ -131,6 +192,9 @@ export function compileKpNativeKatexFactoringScenePlan(input: {
     ...branchGeometry.map(({ paintRect }) => paintRect.height)
   );
   const pathsByEntityId = new Map(branchGeometry.map((geometry, index) => {
+    if (complete !== undefined) return [geometry.atom.semanticEntityId,
+      planKpCanonicalLineageBranch({ id: `${input.intent.id}.branch.${index}`,
+        origin: rectCenter(commonGeometry.atom.rect), destination: rectCenter(geometry.atom.rect), branchIndex: index })] as const;
     const source = input.intent.direction === "forward"
       ? rectCenter(geometry.paintRect)
       : rectCenter(commonGeometry.paintRect);
@@ -164,6 +228,7 @@ export function compileKpNativeKatexFactoringScenePlan(input: {
     kind: "native-katex-factoring-scene-plan",
     id: input.intent.id,
     direction: input.intent.direction,
+    complete,
     transferPlan,
     sourceFactors: Object.freeze(sourceFactors),
     targetFactors: Object.freeze(targetFactors),
@@ -173,93 +238,53 @@ export function compileKpNativeKatexFactoringScenePlan(input: {
   });
 }
 
-function assertFactoringIntent(
-  intent: KpNativeKatexFactoringChoreographyIntent
-): void {
-  if (
-    intent.operation !== "factorCommonTerm" ||
-    intent.motif !== "merge-fan-in" ||
-    intent.fusionPaintPolicy !== "opaque-many-to-one" ||
-    intent.synchronization !== "simultaneous" ||
-    intent.coefficientEvaluation !== "deferred" ||
-    intent.factorCopyIds.length < 2 ||
-    new Set(intent.factorCopyIds).size !== intent.factorCopyIds.length ||
-    intent.factorCopyIds.includes(intent.commonFactorId) ||
-    (
-      intent.direction === "forward"
-        ? intent.lifecycle !== "merge"
-        : intent.lifecycle !== "split"
-    )
-  ) {
+function assertFactoringIntent(intent: KpNativeKatexFactoringChoreographyIntent): void {
+  if (intent.operation !== "factorCommonTerm" || intent.motif !== "merge-fan-in" ||
+      intent.fusionPaintPolicy !== "opaque-many-to-one" || intent.synchronization !== "simultaneous" ||
+      intent.coefficientEvaluation !== "deferred" || intent.factorCopyIds.length < 2 ||
+      new Set(intent.factorCopyIds).size !== intent.factorCopyIds.length ||
+      intent.factorCopyIds.includes(intent.commonFactorId) ||
+      intent.lifecycle !== (intent.direction === "forward" ? "merge" : "split"))
     throw new Error("Factoring scene requires one coherent typed motif cohort.");
-  }
 }
 
 export function sampleKpNativeKatexFactoringScenePlan(input: {
   readonly plan: KpNativeKatexFactoringScenePlan;
   readonly progress: number;
 }): readonly KpEquationMaterialLayerOwnerFrame[] {
-  const bounded = clamp01(input.progress);
-  const frame = sampleKpFissionFusion({
-    plan: input.plan.transferPlan,
-    progress: bounded
+  const plan = input.plan, bounded = clamp01(input.progress);
+  const complete = plan.complete && sampleKpFactoringChoreography({
+    plan: plan.complete.choreography, progress: plan.direction === "forward" ? bounded : 1 - bounded
   });
-  const sourceFrameById = new Map(
-    frame.sources.map((source) => [source.entityId, source])
-  );
-  const targetFrameById = new Map(
-    frame.targets.map((target) => [target.entityId, target])
-  );
-
-  return Object.freeze([
-    ...input.plan.sourceFactors.map((geometry) => {
-      const sourceFrame = sourceFrameById.get(geometry.atom.semanticEntityId);
-      if (sourceFrame === undefined) {
-        throw new Error(
-          `Factoring scene ${input.plan.id} lacks source frame ` +
-          `${geometry.atom.semanticEntityId}.`
-        );
+  const frame = complete?.fusion ?? sampleKpFissionFusion({ plan: plan.transferPlan, progress: bounded });
+  const byId = new Map([...frame.sources, ...frame.targets].map(f => [f.entityId, f]));
+  return Object.freeze((["source", "target"] as const).flatMap(side => {
+    const geometries = side === "source" ? plan.sourceFactors : plan.targetFactors;
+    const moving = (side === "source") === (plan.direction === "forward");
+    return geometries.map(geometry => {
+      const id = geometry.atom.semanticEntityId, selected = byId.get(id);
+      if (!selected) throw new Error("Factoring material has no lineage frame.");
+      const path = moving ? requiredPath(plan, id) : undefined;
+      let paint = geometry.paintRect;
+      if (path && complete) {
+        const point = sampleKpEquationMotionPath(path, 1 - selected.junctionProgress);
+        const origin = rectCenter(geometry.atom.rect);
+        paint = { ...paint, left: paint.left + point.x - origin.x, top: paint.top + point.y - origin.y };
+      } else if (path) {
+        paint = paintRectAlongPath({ geometry, path, progress: selected.pathProgress,
+          startPaintRect: side === "target" ? plan.sourceFactors[0]!.paintRect : geometry.paintRect });
       }
-      const desiredPaintRect = input.plan.direction === "forward"
-        ? paintRectAlongPath({
-            geometry,
-            path: requiredPath(input.plan, geometry.atom.semanticEntityId),
-            progress: sourceFrame.pathProgress
-          })
-        : geometry.paintRect;
-      return ownerFrame({
-        planId: input.plan.id,
-        side: "source",
-        geometry,
-        desiredPaintRect,
-        opacity: sourceFrame.opacity
-      });
-    }),
-    ...input.plan.targetFactors.map((geometry) => {
-      const targetFrame = targetFrameById.get(geometry.atom.semanticEntityId);
-      if (targetFrame === undefined) {
-        throw new Error(
-          `Factoring scene ${input.plan.id} lacks target frame ` +
-          `${geometry.atom.semanticEntityId}.`
-        );
-      }
-      const desiredPaintRect = input.plan.direction === "rewind"
-        ? paintRectAlongPath({
-            geometry,
-            path: requiredPath(input.plan, geometry.atom.semanticEntityId),
-            progress: targetFrame.pathProgress,
-            startPaintRect: input.plan.sourceFactors[0]!.paintRect
-          })
-        : geometry.paintRect;
-      return ownerFrame({
-        planId: input.plan.id,
-        side: "target",
-        geometry,
-        desiredPaintRect,
-        opacity: targetFrame.opacity
-      });
-    })
-  ]);
+      const owner = ownerFrame({ planId: plan.id, side, geometry, desiredPaintRect: paint, opacity: selected.opacity });
+      if (!complete) return owner;
+      const index = complete.factorCopies.findIndex(copy => copy.entityId === id);
+      const focus = index < 0 ? undefined : sampleKpFactoringCopyFocus(complete, index);
+      const scale = selected.scale, visibleScale = scale * Number(focus?.variables["--kp-focus-scale"] ?? 1);
+      return { ...owner, focus, transform: "scale(" + scale + ")",
+        expectedPaintRect: { left: paint.left + paint.width * (1 - visibleScale) / 2,
+          top: paint.top + paint.height * (1 - visibleScale) / 2,
+          width: paint.width * visibleScale, height: paint.height * visibleScale } };
+    });
+  }));
 }
 
 export function sampleKpNativeKatexFactoringContextProgress(
@@ -279,7 +304,7 @@ export function sampleKpNativeKatexFactoringContextProgress(
 function factorGeometry(
   scene: KpNativeKatexRenderedSceneObservation,
   semanticEntityId: string
-): KpNativeKatexFactoringAtomGeometry {
+): FactoringAtomGeometry {
   const atoms = scene.atoms.filter((atom) =>
     atom.semanticEntityId === semanticEntityId
   );
@@ -296,7 +321,7 @@ function factorGeometry(
 }
 
 function assertTypographyCompatible(
-  geometries: readonly KpNativeKatexFactoringAtomGeometry[]
+  geometries: readonly FactoringAtomGeometry[]
 ): void {
   const reference = geometries[0];
   if (reference === undefined) {
@@ -343,7 +368,7 @@ function requiredPath(
 }
 
 function paintRectAlongPath(input: {
-  readonly geometry: KpNativeKatexFactoringAtomGeometry;
+  readonly geometry: FactoringAtomGeometry;
   readonly path: KpEquationMotionPathCandidate;
   readonly progress: number;
   readonly startPaintRect?: KpNativeKatexPaintAtomObservation["rect"] | undefined;
@@ -373,9 +398,9 @@ function paintRectAlongPath(input: {
 function ownerFrame(input: {
   readonly planId: string;
   readonly side: "source" | "target";
-  readonly geometry: KpNativeKatexFactoringAtomGeometry;
+  readonly geometry: FactoringAtomGeometry;
   readonly desiredPaintRect: KpNativeKatexPaintAtomObservation["rect"];
-  readonly opacity: 0 | 1;
+  readonly opacity: number;
 }): KpEquationMaterialLayerOwnerFrame {
   const paintOffsetX =
     input.geometry.paintRect.left - input.geometry.atom.rect.left;
