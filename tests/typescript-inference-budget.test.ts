@@ -20,7 +20,7 @@ test("both approved cohorts retain exact fixture membership and active checking"
   assert.equal(coreInferenceFixtures.length, 48);
   assert.ok(coreInferenceFixtures.includes("tests/type-fixtures/bayesian-authoring.ts"));
   assert.deepEqual(frontendInferenceFixtures, ["tests/type-fixtures/authoring-entrypoint-consumers.ts"]);
-  assert.deepEqual(typescriptInferenceBudget.ceilings, { types: 112500, instantiations: 195800 });
+  assert.deepEqual(typescriptInferenceBudget.ceilings, { types: 115000, instantiations: 198900 });
   const budget = combinedInferenceBudget;
   assert.deepEqual(budget.measuredProject, { types: 142266, instantiations: 239250 });
   assert.deepEqual(budget.ceilings, { types: 145200, instantiations: 246500 });
@@ -58,7 +58,7 @@ test("inference ceilings retain measured, narrow structural headroom", () => {
     ceilings.instantiations,
     ceilHundred(measuredProject.instantiations * 1.03)
   );
-  assert.equal(typescriptInferenceBudget.fixtureCount, 45);
+  assert.equal(typescriptInferenceBudget.fixtureCount, coreInferenceFixtures.length);
 
   const config = JSON.parse(readFileSync("tsconfig.inference.json", "utf8")) as {
     readonly compilerOptions?: { readonly skipLibCheck?: boolean };

@@ -73,7 +73,8 @@
     {
       "id": "s06",
       "title": "Separate lesson revision from probability evidence; normalize editorial inputs deterministically",
-      "status": "planned"
+      "summary": "One deterministic authored lesson revision, independent probability evidence, strict v1 parity.",
+      "status": "complete"
     },
     {
       "id": "s07",

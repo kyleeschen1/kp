@@ -19,3 +19,15 @@ ceilings to 145200 / 246500 using the existing rounded 2% type / 3% instantiatio
 policy. No fixture omission, unchecked cast, skipLibCheck or semantic/visual
 change is used to recover cost. Commands: `npm run check:inference`,
 `node --test tests/typescript-inference-budget.test.ts`, `npm run typecheck`.
+
+## Versioned compiler integration
+
+Once the actual draft compiler accepts the versioned source, the existing core
+Bayesian consumers necessarily exercise the editorial parser and binder too.
+Core measured 112727 types / 193102 instantiations, versus its prior 112500 /
+195800 ceiling. Unlike the earlier accidental import, this is the required
+consumer closure. Under the same standing approval set a fixed measured baseline
+of 112727 / 193102 and rounded ceilings 115000 / 198900. Correct the historical
+fixture-count metadata from 45 to the already enforced 48; membership itself is
+unchanged. Combined retains its separate measured ceiling. No negative case or
+real consumer is removed, and no runtime or type-safety guarantee is relaxed.
