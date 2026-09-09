@@ -55,7 +55,8 @@
     {
       "id": "s03",
       "title": "Reproduce inability to author task-specific explanation; map required slots against existing Article and fact references",
-      "status": "planned"
+      "summary": "Located gap reproduced; minimal versioned Bayes editorial boundary mapped without universal template or truth model.",
+      "status": "complete"
     },
     {
       "id": "s04",

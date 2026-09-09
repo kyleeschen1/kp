@@ -32,3 +32,15 @@ test("spam-filter task uses exact existing probability and native display mechan
   assert.equal(d.trace.states.length, 7);
   assert.deepEqual(d.score.map(s => s.slug), ["population", "first-branches", "joint-tree", "marginal", "conditioned", "full-population", "reordered"]);
 });
+
+test("v1 cannot silently acquire an editorial source or authored teaching prose", () => {
+  for (const source of [
+    { ...createBayesDraft(), editorial: { title: "Why flags can mislead" } },
+    { ...createBayesDraft(), teaching: { ...createBayesDraft().teaching, explanation: "A new explanation" } }
+  ]) {
+    const result = checkBayesDraft(JSON.stringify(source));
+    assert.equal(result.status, "repair-gap"); if (result.status !== "repair-gap") continue;
+    assert.equal(result.diagnostic.code, "probability.source");
+    assert.ok(["$.editorial", "$.teaching.explanation"].includes(result.diagnostic.path));
+  }
+});

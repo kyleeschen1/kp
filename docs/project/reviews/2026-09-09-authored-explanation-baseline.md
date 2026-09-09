@@ -35,3 +35,31 @@ cases. The Node edition compiler/builder remains covered by the existing actual
 publication test and project Node/test typechecks, not falsely attributed to the
 no-Node inference cohort. No consumers or assertions were removed, and no budget
 was amended. Cost coverage checks pin these owner references against omission.
+
+## Editorial gap and bounded slot mapping
+
+V1 rejects both a root editorial field and teaching explanation text with a
+located `probability.source` repair. This exact-key compatibility behavior stays.
+Use a versioned Bayes-local source extension; v1 continues its existing defaults.
+
+| Authored material | Existing owner / preservation |
+| --- | --- |
+| Lesson title and setup | Existing card page and static edition; escaped literal text |
+| Seven passage titles/bodies | Existing score, keyed by exact trace state IDs; no timing/order changes |
+| Full/compact explanation paragraphs | Existing reading-only Article compiler; required context and exact answer retained |
+| Denominator explanation | Existing extraction/return; mandatory outcomes, assumptions and address retained |
+| Prediction/reconstruction wording | Existing flashcard projections; compiler-owned answer and context retained |
+
+Existing market fact binding is trusted TypeScript, not a reusable untrusted JSON
+template parser. Do not import that economics owner into probability or evaluate
+authored expressions. Reuse its responsibility split: literal editorial text plus
+closed explicit fact references, resolved by the existing Bayes context/queries.
+The minimal serialized form is an array of literal strings and named fact nodes,
+not another Markdown language. Feed resolved prose through the existing escaped
+HTML or Article literal-text boundary; author-provided HTML/directives never run.
+
+Resolve references from the verified trace, not a supplied result. Keep semantic
+evidence revision independent of editorial source revision. Missing/foreign stops,
+unknown fact names, answer overrides, timing or malformed source become located
+repairs before Apply. Free literal prose remains editorial and may be wrong;
+valid references cannot certify its pedagogical or factual claims.
