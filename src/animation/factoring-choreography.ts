@@ -56,6 +56,7 @@ export interface KpFactoringChoreographyFrame {
   readonly focusStrength: number;
   readonly addendCompactionProgress: number;
   readonly groupingOpacity: number;
+  readonly groupingReceptionProgress: number;
   readonly fusion: KpFissionFusionFrame;
   readonly commonFactor: { readonly opacity: number; readonly scale: number };
   readonly factorCopies: readonly {
@@ -222,6 +223,8 @@ KpFactoringChoreographyFrame {
       phases["focus-factor-copies"] * (1 - phases["release-factor-focus"]),
     addendCompactionProgress,
     groupingOpacity: phases["introduce-grouping"],
+    // Becoming visible must not let an enclosure overtake its moving contents.
+    groupingReceptionProgress: Math.min(phases["introduce-grouping"], addendCompactionProgress),
     fusion,
     commonFactor: {
       opacity: fusion.targets[0]!.opacity,

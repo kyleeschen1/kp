@@ -1993,8 +1993,8 @@ function sampleFactoringRelation(
       };
       return frameToken(token, "target", {
         opacity: context.frame.groupingOpacity,
-        x: entry.x * (1 - context.frame.groupingOpacity),
-        y: entry.y * (1 - context.frame.groupingOpacity),
+        x: entry.x * (1 - context.frame.groupingReceptionProgress),
+        y: entry.y * (1 - context.frame.groupingReceptionProgress),
         scale: 1
       });
     });

@@ -107,12 +107,13 @@ export function bindKpNativeKatexFactoringScene(input: {
         const offset = (rect: typeof track.startRect) => ({ ...rect, left: rect.left + entry.x, top: rect.top + entry.y });
         const forward = plan.direction === "forward";
         const progress = (p: number) => forward ? sample(p).groupingOpacity : 1 - sample(p).groupingOpacity;
+        const reception = (p: number) => forward ? sample(p).groupingReceptionProgress : 1 - sample(p).groupingReceptionProgress;
         return Object.freeze({ ...track, opacityStepAt: undefined, motionPath: undefined, motionProgressRange: undefined,
           startRect: forward ? offset(track.endRect) : track.startRect,
           endRect: forward ? track.endRect : offset(track.startRect),
           startPaintRect: forward && track.endPaintRect ? offset(track.endPaintRect) : track.startPaintRect,
           endPaintRect: !forward && track.startPaintRect ? offset(track.startPaintRect) : track.endPaintRect,
-          sampleProgress: progress, sampleOpacityProgress: progress, opacityScheduleAuthority: "semantic-choreography" as const });
+          sampleProgress: reception, sampleOpacityProgress: progress, opacityScheduleAuthority: "semantic-choreography" as const });
       }));
     },
     claimedTargetAtomIds: plan.claimedTargetAtomIds,

@@ -20,6 +20,14 @@ const report = (error: unknown) => {
   const output = root.querySelector<HTMLElement>("[data-common-factor-error]")!;
   output.hidden = false; output.textContent = error instanceof Error ? error.message : String(error);
   root.dataset["commonFactorStatus"] = "repair-gap";
+  // A rejected preparation is terminal, not a figure still loading offscreen.
+  const card = root.querySelector<HTMLElement>("[data-common-factor-card]");
+  if (card) {
+    card.dataset["kpFocusCardEnhancement"] = "repair-gap";
+    const stage = card.querySelector<HTMLElement>("[data-distribution-stage]");
+    if (stage) stage.textContent = "Figure could not be prepared. See the error below.";
+    card.querySelectorAll<HTMLButtonElement | HTMLInputElement>("button, input").forEach(control => { control.disabled = true; });
+  }
 };
 
 async function mountCard(container: HTMLElement, draft: KpPreparedCommonFactorDraft) {

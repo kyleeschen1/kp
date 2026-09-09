@@ -131,3 +131,39 @@ Stop at this budget decision; do not mark s15 accepted or start numeric reuse.
 After approval, apply only the approved budget amendment, rerun the failed gate
 and final narrow checks, and obtain the combined primary visual decision.
 Full release and the supported-browser promotion matrix remain later slices.
+
+## Follow-up: reported “Preparing figure” stall
+
+The user reported that the inspection page never left preparation. Reproduced
+in Firefox and WebKit; fresh Chromium continued to pass. This was a synchronous
+preparation rejection, not a server outage or a semantic-proof/binding failure.
+The protected-transit validator found an introducing parenthesis crossing a
+persistent addend around progress .61–.73. Grouping position incorrectly followed
+its opacity schedule, which settles at .72, while addend compaction continues
+until .78. Reserving only the starting corridor did not prevent overtaking
+during transit; browser-specific measured paint exposed the defect.
+
+The shared factoring frame now separates `groupingReceptionProgress` from
+`groupingOpacity` and bounds reception by both visibility and compaction.
+Both catalogue and native adapters consume that same reception value; opacity,
+proof, authored sources, nominal binding, endpoints and existing-group native
+factoring remain unchanged. No collision exemption or browser-specific offset
+was introduced. A sampled unit law guards the ordering relation.
+
+Initial preparation errors now replace the loading stage with a visible repair
+message and disable card controls. A browser test aborts the dynamic compositor
+module to verify that failure cannot leave this loading overlay active. Readiness
+assertions report terminal errors immediately. The existing scoped
+`npm run visual:common-factor-authoring` command now includes Chromium, Firefox
+and WebKit by default because this regression escaped Chromium-only checking.
+
+The fixed source gate is still unchanged and failed: **512,619 / 505,000 bytes**
+after this repair. The proposed 515,000 amendment remains unapplied; s15 still
+requires human visual approval. This bug repair does not advance the long loop.
+
+Follow-up verification: all 12 scoped browser tests pass (four in each engine),
+including real canonical phase comparison, interrupted reverse seeks, controls,
+Apply, static editions and injected preparation failure. The eight factoring
+choreography unit tests, 82 native compositor tests, full typecheck and
+architecture checks pass. The focused source/conformance run passed 18/19;
+its sole failure is the previously pending aggregate byte ceiling above.

@@ -150,11 +150,25 @@
       "scope": "s15-final-inference-and-authority",
       "checkedAt": "2026-09-09T21:59:59.363Z",
       "notes": "Complete real consumer cohort: 169961 types and 282610 instantiations; core: 113052 and 193425, unchanged ceilings. Authoring tests now 27 including early typed repair for multi-digit factors unsupported by the single-glyph native owner."
+    },
+    {
+      "command": "node --test tests/canonical-equation-renderer-convergence.test.ts tests/kp-factoring-choreography.test.ts",
+      "status": "failed",
+      "scope": "s15-preparation-repair-source-budget",
+      "checkedAt": "2026-09-09T22:17:59.345Z",
+      "notes": "18 of 19 checks pass, including the new reception ordering law. Sole failure is unchanged aggregate source ceiling: 512619 bytes against 505000. Proposed 515000 amendment remains unapplied."
+    },
+    {
+      "command": "npm run visual:common-factor-authoring; npm run typecheck; npm run test:real-katex-glyph-compositor; npm run check:architecture",
+      "status": "passed",
+      "scope": "s15-preparation-stall-repair",
+      "checkedAt": "2026-09-09T22:18:25.450Z",
+      "notes": "Reproduced protected-transit rejection in Firefox and WebKit. Shared grouping reception now cannot overtake compaction; opacity preserved. All 12 browser tests pass across Chromium Firefox WebKit including forced preparation failure; 82 compositor tests, typecheck and architecture pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "STOP_CONDITION at s15: canonical native factoring and resolver-issued presentation binding implemented. Phase parity, native baseline, reverse seek, controls and static edition pass. Renderer source gate 512488 exceeds 505000; proposed 515000 amendment is not applied. No visual acceptance or s16."
+    "summary": "Preparation stall repaired: grouping reception cannot overtake compaction. All 12 cross-browser checks pass. STOP_CONDITION remains s15 source budget: 512619 versus unchanged 505000. Proposed 515000 not applied; visual acceptance pending, no s16."
   },
   "expectedLearning": [
     "Measure verified ordinary-LaTeX factoring authoring and source-only numeric reuse without renderer glue."

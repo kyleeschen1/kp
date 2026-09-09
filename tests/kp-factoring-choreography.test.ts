@@ -12,6 +12,19 @@ import {
   sampleKpFissionFusion
 } from "../src/animation/fission-fusion.ts";
 
+test("group reception cannot overtake compaction even after the grouping is fully visible", () => {
+  const plan = factoringPlan();
+  for (let i = 0; i <= 1000; i++) {
+    const frame = sampleKpFactoringChoreography({ plan, progress: i / 1000 });
+    assert.ok(frame.groupingReceptionProgress <= frame.addendCompactionProgress);
+    assert.ok(frame.groupingReceptionProgress <= frame.groupingOpacity);
+  }
+  const early = sampleKpFactoringChoreography({ plan, progress: .72 });
+  assert.equal(early.groupingOpacity, 1);
+  assert.ok(early.groupingReceptionProgress < 1);
+  assert.equal(sampleKpFactoringChoreography({ plan, progress: 1 }).groupingReceptionProgress, 1);
+});
+
 test("factoring previews repeated-factor focus before collection", () => {
   const preview = sampleKpFactoringChoreography({
     plan: factoringPlan(),

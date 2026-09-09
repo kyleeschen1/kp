@@ -5,6 +5,24 @@ import { createKpCommonFactorExample } from "../src/authoring/common-factor-auth
 import { prepareKpCommonFactorDraft } from "../src/authoring/common-factor-draft.ts";
 import { sampleKpFactoringChoreography } from "../src/animation/factoring-choreography.ts";
 
+async function expectPrepared(page: import("@playwright/test").Page) {
+  const root = page.locator("#authored-focus-card");
+  // Surface terminal diagnostics immediately instead of waiting out a loading timeout.
+  await expect(root).toHaveAttribute("data-common-factor-status", /^(ready|repair-gap)$/, { timeout: 90_000 });
+  expect(await root.getAttribute("data-common-factor-status"), await page.locator("[data-common-factor-error]").textContent() ?? "").toBe("ready");
+}
+
+test("preparation failure replaces the loading state with a visible repair", async ({ page }) => {
+  await page.route("**/equation-scene-compositor-adapter.ts*", route => route.abort());
+  await page.goto("/experiments/reusable-reasoning/?example=common-factor");
+  await expect(page.locator("#authored-focus-card")).toHaveAttribute("data-common-factor-status", "repair-gap");
+  const card = page.locator("[data-common-factor-card]");
+  await expect(card).toHaveAttribute("data-kp-focus-card-enhancement", "repair-gap");
+  await expect(card.locator("[data-distribution-stage]")).toHaveText("Figure could not be prepared. See the error below.");
+  await expect(page.locator("[data-common-factor-error]")).toBeVisible();
+  await expect(card.locator("[data-kp-focus-deck-next]")).toBeDisabled();
+});
+
 test("canonical factoring phases survive native projection and interrupted reverse seek", async ({ page }, info) => {
   test.setTimeout(120_000);
   const draft = prepareKpCommonFactorDraft(createKpCommonFactorExample());
@@ -14,7 +32,7 @@ test("canonical factoring phases survive native projection and interrupted rever
   await expect(player).toHaveAttribute("data-kp-editor-animation-hydrated", "true", { timeout: 90_000 });
   await page.goto("/experiments/reusable-reasoning/?example=common-factor");
   const card = page.locator("[data-common-factor-card]");
-  await expect(page.locator("#authored-focus-card")).toHaveAttribute("data-common-factor-status", "ready", { timeout: 90_000 });
+  await expectPrepared(page);
   await expect(card).toHaveAttribute("data-canonical-presentation-owner", "canonical-factoring-native-v1");
   const poses = new Map<number, unknown>();
   const contextBaselines = new Map<string, number>();
@@ -55,7 +73,7 @@ test("primary factoring traverses native endpoints, direct reverse and shared co
   const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
   await page.goto("/experiments/reusable-reasoning/?example=common-factor");
   const root = page.locator("#authored-focus-card"), card = page.locator("[data-common-factor-card]");
-  await expect(root).toHaveAttribute("data-common-factor-status", "ready", { timeout: 90_000 });
+  await expectPrepared(page);
   await expect(card).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
   const stage = card.locator("[data-kp-canonical-equation-host]");
   await expect(stage).toHaveAttribute("data-kp-reader-animation-id", /^animation.authored.common-factor\./);
