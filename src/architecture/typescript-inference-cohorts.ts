@@ -54,9 +54,10 @@ export const coreInferenceFixtures = [
 ] as const;
 export const frontendInferenceFixtures = ["tests/type-fixtures/authoring-entrypoint-consumers.ts"] as const;
 export const combinedInferenceBudget = Object.freeze({
-  measuredProject: { types: 142_266, instantiations: 239_250 },
-  // R4B adds actual view and editorial-binding consumers; retain fixed 2% / 3% headroom.
-  ceilings: { types: 145_200, instantiations: 246_500 }
+  measuredProject: { types: 169_350, instantiations: 281_200 },
+  // M1a s12 measures the actual canonical native host, not just authoring data.
+  // Standing approved amendment: retain complete consumers and 2% / 3% headroom.
+  ceilings: { types: 172_800, instantiations: 289_700 }
 } as const);
 export const inferenceCohorts = [
   { name: "core", config: "tsconfig.inference-core.json", fixtures: coreInferenceFixtures, budget: typescriptInferenceBudget },

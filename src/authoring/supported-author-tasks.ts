@@ -4,7 +4,7 @@ export const supportedAuthorTasks = {
   "equation.common-factor": {
     owner: "src/authoring/common-factor-author-check.ts",
     input: "One ordered two-product common factor over declared single-letter real scalars; nonnegative safe integer coefficients and symbolic addends. Editorial prose is not proof.",
-    preview: { kind: "unsupported", reason: "Verified preparation is implemented; opt-in Focus Card integration is still in progress." },
+    preview: { kind: "explicit-apply", url: "/experiments/reusable-reasoning/?example=common-factor" },
     extraction: { kind: "unsupported", reason: "Factoring reading and practice integration is still in progress." },
     publication: { kind: "unsupported", reason: "Prepared source export is available; a factoring edition builder is not yet implemented." }
   },

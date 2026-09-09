@@ -100,6 +100,13 @@
       "scope": "s11",
       "checkedAt": "2026-09-09T19:01:19.995Z",
       "notes": "Eighteen task and 51 Bayes/author-entrypoint tests pass; shared preparation lifecycle preserves last-valid and disposes stale resources; architecture, full types and complete fixed costs pass."
+    },
+    {
+      "command": "npm run test:common-factor-authoring and npm run typecheck and npm run check:architecture and npm run check:inference and npm run visual:common-factor-authoring and default reasoning Chromium canary",
+      "status": "passed",
+      "scope": "s12",
+      "checkedAt": "2026-09-09T19:13:09.329Z",
+      "notes": "Nineteen task tests, full types, architecture, native Chromium controls/Apply canary and default reasoning preservation pass; complete native inference coverage passes documented standing amendment."
     }
   ],
   "expectedLearning": [

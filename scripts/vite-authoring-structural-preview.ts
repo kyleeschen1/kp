@@ -7,6 +7,17 @@ export function kpViteAuthoringStructuralPreview(): Plugin {
     configureServer(server) {
       server.middlewares.use((request, response, next) => {
         const path = request.url?.split("?")[0];
+        if (path === "/experiments/reusable-reasoning/" && new URL(request.url!, "http://localhost").searchParams.get("example") === "common-factor") {
+          if (request.method !== "GET") { response.writeHead(405).end(); return; }
+          void (async () => {
+            try {
+              const module = await server.ssrLoadModule("/src/experiments/common-factor/page.ts") as { buildKpCommonFactorInitialPage: () => string };
+              const html = await server.transformIndexHtml(request.url!, `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Common factoring · Kinetic Press</title><link rel="stylesheet" href="/src/experiments/authoring-distribution-focus-card/style.css"><link rel="stylesheet" href="/src/experiments/reusable-reasoning/style.css"><link rel="stylesheet" href="/src/experiments/common-factor/style.css"><link rel="stylesheet" href="/node_modules/katex/dist/katex.min.css"></head><body><main id="authored-focus-card">${module.buildKpCommonFactorInitialPage()}</main><script type="module" src="/src/experiments/common-factor/entry.ts"></script></body></html>`);
+              response.writeHead(200, { "content-type": "text/html", "cache-control": "no-store" }).end(html);
+            } catch (error) { response.writeHead(422, { "content-type": "text/plain" }).end(error instanceof Error ? error.message : String(error)); }
+          })();
+          return;
+        }
         if (path === "/experiments/bayesian-reasoning/") {
           if (request.method !== "GET") { response.writeHead(405).end(); return; }
           void (async () => {

@@ -30,6 +30,8 @@ import { createKpEquationSeriesCommonFactorSemanticSource } from "../../src/auth
 import { prepareKpCommonFactorDraft, exportKpCommonFactorSource, type KpPreparedCommonFactorDraft } from "../../src/authoring/common-factor-draft.ts";
 import { checkKpCommonFactorAuthorSource } from "../../src/authoring/common-factor-author-check.ts";
 import { createKpCommonFactorAuthoringSession } from "../../src/authoring/common-factor-session.ts";
+import { mountCommonFactorNativeSurface } from "../../src/experiments/common-factor/native.ts";
+import { renderCommonFactorCard } from "../../src/experiments/common-factor/page.ts";
 const factoringSyntax = readKpCommonFactorSource(undefined); void factoringSyntax;
 const factoringEndpoints = normalizeKpCommonFactorEndpoints(factoringSyntax); void factoringEndpoints;
 const factoringProof = verifyKpCommonFactorRewrite({ domain: factoringSyntax.domain, symbols: factoringSyntax.symbols,
@@ -38,6 +40,11 @@ const factoringProof = verifyKpCommonFactorRewrite({ domain: factoringSyntax.dom
 const forgedFactoringProof: KpVerifiedCommonFactorRewrite = factoringSyntax; void forgedFactoringProof;
 const factoringAuthority = createKpEquationSeriesCommonFactorSemanticSource({ sourceId: factoringSyntax.id, adjacencyId: "edge.factor", transformation: factoringProof }); void factoringAuthority;
 const factoringDraft = prepareKpCommonFactorDraft(factoringSyntax);
+declare const factoringCard: HTMLElement;
+const factoringNative = mountCommonFactorNativeSurface(factoringCard, factoringDraft); void factoringNative;
+const factoringHtml: string = renderCommonFactorCard(factoringDraft); void factoringHtml;
+// @ts-expect-error A syntax candidate cannot acquire native surface authority.
+mountCommonFactorNativeSurface(factoringCard, factoringDraft.candidate);
 const factoringSession = createKpCommonFactorAuthoringSession({ initial: factoringDraft,
   prepare: async () => ({ dispose() {} }), commit: (_surface, draft) => { const id: string = draft.revisionId; void id; } }); void factoringSession;
 const factoringExport: string = exportKpCommonFactorSource(factoringDraft); void factoringExport;
