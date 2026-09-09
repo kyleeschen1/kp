@@ -11,11 +11,52 @@
       "path": "docs/project/reviews/2026-09-09-m1-common-factor-authoring-long-loop-proposal.md"
     }
   ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.authored-explanation-coherence"
+    ]
+  },
   "affects": [
     "workflow.kp.delivery"
   ],
   "verification": [
     "npm run typecheck",
     "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --test tests/kp-distribution-animation-asset.test.ts tests/distribution-factoring-presentation-plan.test.ts tests/factoring-motif-binding.test.ts",
+      "status": "passed",
+      "scope": "s01",
+      "checkedAt": "2026-09-09T18:16:45.784Z",
+      "notes": "14 passed; source-backed baseline report records typed syntax and invalid candidate boundaries, not downstream certification."
+    }
+  ],
+  "expectedLearning": [
+    "Measure verified ordinary-LaTeX factoring authoring and source-only numeric reuse without renderer glue."
+  ],
+  "allowedWork": [
+    "Exact approved M1a proposal; 24 slices with s15 combined human checkpoint and preservation boundaries."
+  ],
+  "disallowedWork": [
+    "No new motif grammar, universal CAS, broad migration, external models, subagents, merge or automatic successor."
+  ],
+  "criteria": [
+    {
+      "id": "authoring-coherence",
+      "weight": "high"
+    },
+    {
+      "id": "verified-authority",
+      "weight": "high"
+    },
+    {
+      "id": "legacy-preservation",
+      "weight": "high"
+    },
+    {
+      "id": "visual-acceptance",
+      "weight": "high"
+    }
   ]
 }
