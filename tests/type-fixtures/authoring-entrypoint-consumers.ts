@@ -6,6 +6,39 @@ import { kpGalleryGraph3DSaddleParameterFrontend, kpGalleryGraph3DSaddleParamete
 import { reportAuthorCheck } from "../../src/authoring/author-check-report.ts";
 import type { PreparedBayesDraft } from "../../src/experiments/bayesian-reasoning/draft.ts";
 import type { KpLogarithmBaseDraftCompilation } from "../../src/authoring/equation-series-logarithm-base-draft.ts";
+import { compileKpEquationSeriesLogarithmBaseText } from "../../src/authoring/equation-series-logarithm-base-draft.ts";
+import { checkBayesAuthorSource } from "../../src/experiments/bayesian-reasoning/author-check.ts";
+import { checkCodeReasoningSource } from "../../src/experiments/reusable-reasoning/code-author-check.ts";
+import { checkEquationReasoningSource } from "../../src/experiments/reusable-reasoning/equation-author-check.ts";
+import { readKpAuthoringMarketSourceBranch } from "../../src/experiments/authoring-market/authoring-market-source-branch.ts";
+import { inspectAuthorSourceLimits } from "../../src/authoring/author-source-limits.ts";
+
+// Include every selected domain owner, not only the first implementation wave.
+// Node transport is checked by tsconfig.node; this fixed cohort is platform-neutral.
+declare const selectedJson: string;
+declare const selectedMarket: unknown;
+const probabilitySummary = reportAuthorCheck("bayes.binary", checkBayesAuthorSource(selectedJson));
+if (probabilitySummary.status === "checked") {
+  const revision: string = probabilitySummary.result.revisionId; void revision;
+  // @ts-expect-error Serial summary does not carry a prepared runtime draft.
+  probabilitySummary.result.draft;
+}
+const codeSummary = reportAuthorCheck("reasoning.code", checkCodeReasoningSource(selectedJson));
+if (codeSummary.status === "checked") {
+  const checkpointKind: "pedagogical-stage" = codeSummary.result.checkpointKind; void checkpointKind;
+}
+const reasoningSummary = checkEquationReasoningSource(selectedJson);
+if (reasoningSummary.status === "compiled") {
+  const promptCount: number = reasoningSummary.promptCount; void promptCount;
+}
+const market = readKpAuthoringMarketSourceBranch(selectedMarket);
+const branchName: string = market.name; void branchName;
+const numericText = compileKpEquationSeriesLogarithmBaseText(selectedJson);
+if (numericText.status === "compiled") {
+  const stateCount: number = numericText.active.request.states.length; void stateCount;
+}
+const transportGap = inspectAuthorSourceLimits(selectedJson);
+if (transportGap) { const code: string = transportGap.diagnostic.code; void code; }
 
 // Measure the actual owner closures before a facade can hide their costs.
 const bayes = checkBayesDraft(JSON.stringify(createBayesDraft()));

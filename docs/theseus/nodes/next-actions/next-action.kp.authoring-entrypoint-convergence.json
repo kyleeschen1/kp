@@ -2,9 +2,9 @@
   "id": "next-action.kp.authoring-entrypoint-convergence",
   "kind": "next-action",
   "title": "R4A Authoring entrypoint convergence",
-  "status": "in-progress",
+  "status": "blocked",
   "domain": "kp",
-  "summary": "User approved the explicit two-cohort inference amendment; retain old core consumers and limits, add mandatory measured combined frontend gate, then resume R4A.",
+  "summary": "R4A cost-policy stop at s19; retain18 completed slices and exact complete-cohort evidence. See2026-09-09-authoring-entrypoint-complete-cohort-stop.md; no further amendment approved.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -25,6 +25,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-09-authoring-entrypoint-workflow-comparison.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-09-authoring-entrypoint-complete-cohort-stop.md"
     }
   ],
   "dependsOn": {
@@ -437,6 +441,27 @@
       "scope": "standard",
       "checkedAt": "2026-09-09T04:24:21.358Z",
       "notes": "s18: 40 author, 50 round-trip and 34 gallery tests pass; full types, architecture, canonical source pass. Core 112278/192161 and combined 127694/214993 pass fixed ceilings. Reproduced 6000-level Graph3D stack overflow is blocked before owner load; exact UTF-8/depth limits, cross-domain reports, market authority fields and order-independent Graph3D pins covered."
+    },
+    {
+      "command": "npm run check:inference; npm run profile:authoring-entrypoint-inference",
+      "status": "failed",
+      "scope": "standard",
+      "checkedAt": "2026-09-09T04:33:21.394Z",
+      "notes": "s19 complete six-owner fixture: initial 146327 types/243457 instantiations; narrow distribution imports reduce to139337/235826, still above approved130000/221300. Original core112278/192161 passes. All prior consumers retained; full owner coverage added rather than hidden. Profile executes seven programs; remaining market Article/model closure needs new cost-policy or broader refactor authority."
+    },
+    {
+      "command": "npm run test:authoring-entrypoints; npm run test:reusable-reasoning; npm run check:architecture; npm run visual:authoring-entrypoints -- --grep \"reasoning exemplar mounts canonical native ink|R4A Graph3D\"; git diff --check",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-09T04:33:22.429Z",
+      "notes": "s19 safe import repair:41 author tests,61 reusable reasoning tests,architecture and two Chromium canonical host checks pass; public compatibility exports are same functions. This is preservation evidence, not full R4A release or a passing cost gate."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-09T04:34:11.536Z",
+      "notes": "Final s19 stop checkpoint full app,Node,test,Svelte and domain typechecks pass, including new import-compatibility test. Combined inference cost gate remains explicitly failed."
     }
   ],
   "progress": {

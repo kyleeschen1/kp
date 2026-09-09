@@ -8,8 +8,10 @@ import { createKpStructuredEquationEndpointSpec } from "../../semantic/structure
 import { pinKpSemanticSlotVersion } from "../../semantic-state/pinned-recovery.ts";
 import { compileKpFractionCompositionDistributionPresentationPlan } from "../../animation/fraction-composition-distribution-presentation-plan.ts";
 import { registerKpOperationPresentationPlan } from "../../animation/operation-presentation-plan-types.ts";
-import { compileKpGovernedCanonicalConstruction, createKpGovernedCanonicalConstructionRequest,
-  planKpGovernedConstructionRepairs, type KpGovernedConstructionRepair } from "../../authoring/canonical-animation-public-api.ts";
+// This caller needs three owners, not the public barrel's unrelated exemplar cohorts.
+import { compileKpGovernedCanonicalConstruction } from "../../authoring/governed-canonical-construction-compiler.ts";
+import { createKpGovernedCanonicalConstructionRequest } from "../../authoring/governed-semantic-request.ts";
+import { planKpGovernedConstructionRepairs, type KpGovernedConstructionRepair } from "../../authoring/governed-canonical-construction-repair.ts";
 
 export class KpAuthoredDistributionProjectionError extends Error {
   readonly code = "kp.authoring.structural-projection-gap";

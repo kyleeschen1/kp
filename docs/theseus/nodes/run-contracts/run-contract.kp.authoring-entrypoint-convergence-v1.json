@@ -2,8 +2,8 @@
   "id": "run-contract.kp.authoring-entrypoint-convergence-v1",
   "kind": "run-contract",
   "title": "R4A Authoring entrypoint convergence",
-  "status": "in-progress",
-  "summary": "User approved s02 core plus combined frontend budget ownership amendment; all other scope and stops unchanged.",
+  "status": "blocked",
+  "summary": "STOP_CONDITION: s19 fixed-gate failure persists after bounded import repair; awaiting explicit complete-coverage budget or broader type-boundary scope decision.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -21,6 +21,10 @@
     {
       "kind": "file",
       "path": "docs/project/decisions/2026-09-09-inference-cost-cohorts.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-09-authoring-entrypoint-complete-cohort-stop.md"
     }
   ],
   "verification": [
@@ -35,7 +39,7 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "s02 approved amendment implemented and verified; continue ordered R4A slices."
+    "summary": "18 of24 complete; s19 useful partial work and full coverage retained. Fixed combined gate fails; no advance to s20 or release claim."
   },
   "allowedWork": [
     "s01: Pin the two author tasks, owner/host/capability map, output baselines and command names; reconcile stale workflow summary; risk Low; F: exact arithmetic, source/host refs, clean baseline; one commit.",
@@ -213,7 +217,8 @@
     {
       "id": "s19",
       "title": "Prove narrow frontend entrypoints with two structurally different consumers; retain only measured common plumbing",
-      "status": "planned"
+      "summary": "Retained partial work at STOP_CONDITION: complete six-owner fixture139337/235826 exceeds fixed130000/221300; contract blocked pending explicit cost-policy or broader refactor scope.",
+      "status": "in-progress"
     },
     {
       "id": "s20",

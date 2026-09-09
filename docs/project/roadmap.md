@@ -61,7 +61,13 @@ fails. See `reviews/2026-09-09-authoring-entrypoint-inference-stop.md` for exact
 evidence and the proposed explicit core/frontend budget-ownership amendment.
 The user approved the two-cohort amendment; preserve the original core gate and
 require the measured combined frontend gate. See
-`decisions/2026-09-09-inference-cost-cohorts.md`. Resume R4A; Theseus owns
+`decisions/2026-09-09-inference-cost-cohorts.md`. R4A subsequently reached its
+complete-coverage cost stop; see
+`reviews/2026-09-09-authoring-entrypoint-complete-cohort-stop.md`. The initial
+combined fixture omitted the later equation-reasoning and market/Article owner
+closures. Preserve the complete fixture, unchanged ceilings and verified import
+repair; another budget amendment or broader cost-reduction scope is not yet
+approved. Theseus owns
 slice order and live evidence. Preserve existing visuals and domain owners;
 stop for material new visual judgment, not routine nonvisual checkpoints.
 External model calls and broader R4 promotion remain deferred. Do not restart
