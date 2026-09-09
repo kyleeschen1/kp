@@ -171,11 +171,18 @@
       "scope": "s15-approved-budget",
       "checkedAt": "2026-09-09T22:53:18.325Z",
       "notes": "19 checks pass with exact approved 515000 ceiling; other gates unchanged. User accepted visuals after 1752d11d8."
+    },
+    {
+      "command": "npm run visual:common-factor-authoring -- --project=chromium --grep continuants; npm run test:common-factor-authoring; npm run typecheck",
+      "status": "passed",
+      "scope": "s16",
+      "checkedAt": "2026-09-09T22:58:31.364Z",
+      "notes": "Actual subtree ink, exclusive source/material/target ownership, and direct reverse identity pass. Source wrappers measured through canonical descendant observer, not inherited wrapper font."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "User visually approved repaired common-factor card after 1752d11d8: it looks good. Preserve accepted treatment. Remaining STOP_CONDITION is source budget only: 512619 versus 505000; proposed 515000 not approved or applied. No s16 yet."
+    "summary": "s15 accepted and s16 paint regression complete. Approved source ceiling passes. Next: source-only numeric reuse."
   },
   "expectedLearning": [
     "Measure verified ordinary-LaTeX factoring authoring and source-only numeric reuse without renderer glue."

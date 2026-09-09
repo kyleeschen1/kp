@@ -68,6 +68,62 @@ test("canonical factoring phases survive native projection and interrupted rever
   await reference.close();
 });
 
+test("factoring continuants preserve actual ink and exclusive ownership across both native seams", async ({ page }) => {
+  await page.goto("/experiments/reusable-reasoning/?example=common-factor");
+  await expectPrepared(page);
+  const draft = prepareKpCommonFactorDraft(createKpCommonFactorExample());
+  const plan = draft.presentation.plan.choreography!;
+  const pairs = [...plan.addendPairs, ...plan.connectorPairs];
+  const card = page.locator("[data-common-factor-card]");
+  const snapshots = new Map<number, Awaited<ReturnType<typeof capture>>>();
+  async function capture(progress: number) {
+    await card.locator("[data-kp-focus-deck-scrubber]").evaluate((node, p) => {
+      (node as HTMLInputElement).value = String(p); node.dispatchEvent(new Event("input", { bubbles: true }));
+    }, progress);
+    await expect(card).toHaveAttribute("data-common-factor-progress", String(progress));
+    return card.evaluate(async (root, input) => {
+      const path = "/src/rendering/native-katex-paint-geometry.ts";
+      const geometry = await import(/* @vite-ignore */ path) as typeof import("../src/rendering/native-katex-paint-geometry.ts");
+      const stage = root.querySelector<HTMLElement>("[data-kp-reader-fit-surface]")!;
+      const opacity = (node: HTMLElement) => {
+        let result = 1;
+        for (let current: HTMLElement | null = node; current; current = current.parentElement) {
+          const style = getComputedStyle(current);
+          if (style.display === "none" || style.visibility === "hidden") return 0;
+          result *= Number(style.opacity);
+          if (current === root) break;
+        }
+        return result;
+      };
+      return input.pairs.map(pair => {
+        const source = stage.querySelector<HTMLElement>('[data-kp-reader-native="source"] [data-kp-semantic-entity-id="' + pair.sourceId + '"]')!;
+        const target = stage.querySelector<HTMLElement>('[data-kp-reader-native="target"] [data-kp-semantic-entity-id="' + pair.targetId + '"]')!;
+        const material = stage.querySelector<HTMLElement>('[data-kp-equation-material-semantic-entity-id="' + pair.sourceId + '"]')?.firstElementChild;
+        if (!source || !target || !(material instanceof HTMLElement)) throw new Error("Missing correlated factoring paint owner");
+        const owners = [source, material, target];
+        const opacities = owners.map(opacity);
+        const active = owners[input.progress === 0 ? 0 : input.progress === 1 ? 2 : 1]!;
+        const rect = geometry.measureKpNativeKatexSubtreePaintRect(stage, active);
+        if (!rect) throw new Error("Missing realized factoring ink");
+        return { id: pair.sourceId, opacities, rect };
+      });
+    }, { pairs, progress });
+  }
+  for (const p of [0, .01, .37, .99, 1, .99, .37, .01, 0]) {
+    const sample = await capture(p);
+    for (const ink of sample) expect(ink.opacities).toEqual(p === 0 ? [1, 0, 0] : p === 1 ? [0, 0, 1] : [0, 1, 0]);
+    if (snapshots.has(p)) expect(sample).toEqual(snapshots.get(p));
+    else snapshots.set(p, sample);
+  }
+  for (const [native, material] of [[0, .01], [1, .99]]) {
+    const a = snapshots.get(native!)!, b = snapshots.get(material!)!;
+    a.forEach((ink, index) => {
+      for (const key of ["left", "top", "width", "height"] as const)
+        expect(Math.abs(ink.rect[key] - b[index]!.rect[key]), JSON.stringify({ native, key, before: ink, after: b[index] })).toBeLessThan(.1);
+    });
+  }
+});
+
 test("primary factoring traverses native endpoints, direct reverse and shared controls", async ({ page }, info) => {
   test.setTimeout(120_000);
   const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
