@@ -80,6 +80,13 @@
       "scope": "s08",
       "checkedAt": "2026-09-09T15:59:05.715Z",
       "notes": "Five unit tests, full typecheck, both inference cohorts and one R4B Chromium Apply test pass on existing port8000. No editor state machine or server added."
+    },
+    {
+      "command": "node --test tests/bayesian-reasoning-editorial-lesson.test.ts tests/bayesian-reasoning-editorial-baseline.test.ts; npm run typecheck; npm run check:inference; npm run visual:authoring-entrypoints -- --grep R4B",
+      "status": "passed",
+      "scope": "s09",
+      "checkedAt": "2026-09-09T16:08:47.629Z",
+      "notes": "Five focused tests, full canonical typecheck, inference and two Chromium tests pass. Actual source gap and test syntax repair recorded. Standalone no-cache tsc exceeded default 2GB heap; canonical cached full check passed without raising memory or weakening checks."
     }
   ],
   "expectedLearning": [

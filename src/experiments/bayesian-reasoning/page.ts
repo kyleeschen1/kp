@@ -41,6 +41,7 @@ export function buildBayesPage() {
       <p>Edit exact fractions, event labels, the first event ID or explanation detail. Apply prepares all seven steps together; this does not change a source file.</p>
       <label for="bayes-draft">Bounded probability source (JSON)</label>
       <p><button type="button" data-bayes-load-urn disabled>Load urn example into draft</button> Apply it to change the displayed card.</p>
+      <p><button type="button" data-bayes-load-spam disabled>Load spam-filter lesson into draft</button> The authored explanation uses the same seven-step card. Apply to inspect it.</p>
       <textarea id="bayes-draft" data-bayes-draft spellcheck="false">${escape(sourceText)}</textarea>
       <button type="button" data-bayes-apply disabled>Apply draft</button> <button type="button" data-bayes-restore disabled>Restore displayed source</button>
       <button type="button" data-bayes-download disabled>Download displayed source</button>

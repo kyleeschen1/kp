@@ -10,6 +10,31 @@ import { buildKpAuthoringMarketEdition } from "../scripts/build-authoring-market
 import { checkBayesAuthorSource } from "../src/experiments/bayesian-reasoning/author-check.ts";
 import { checkBayesDraft } from "../src/experiments/bayesian-reasoning/draft.ts";
 import { editorialFixture } from "./fixtures/bayes-editorial-source.ts";
+import spamFilterSource from "../content/authoring/r4b-spam-filter.bayes.json" with { type: "json" };
+
+test("R4B primary lesson loads as content and traverses the existing seven stops", async ({ page }, info) => {
+  const checked = checkBayesDraft(JSON.stringify(spamFilterSource));
+  if (checked.status !== "compiled") throw new Error(checked.diagnostic.expected);
+  await page.goto("/experiments/bayesian-reasoning/");
+  const card = page.locator("[data-bayes-display] [data-bayes-card]");
+  await expect(card).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+  await page.locator(".bayes-author summary").click();
+  await page.locator("[data-bayes-load-spam]").click();
+  expect(JSON.parse(await page.locator("[data-bayes-draft]").inputValue())).toEqual(spamFilterSource);
+  await expect(page.locator("[data-bayes-editorial]")).toHaveCount(0);
+  await page.locator("[data-bayes-apply]").click();
+  await expect(card).toHaveAttribute("data-bayes-revision", checked.draft.revisionId);
+  await expect(page.locator("[data-bayes-editorial]")).toContainText(spamFilterSource.editorial.title);
+  for (const step of [0, 1, 2, 3, 4, 5, 6, 4]) {
+    await card.locator("[data-kp-focus-deck-scrubber]").evaluate((node, step) => {
+      (node as HTMLInputElement).value = String(step); node.dispatchEvent(new Event("input", { bubbles: true }));
+    }, step);
+    await expect(card).toHaveAttribute("data-bayes-position", String(step));
+    await expect(card.locator("#bayes-tree-description")).toContainText("P(A given B) = 2/13");
+  }
+  await expect(card.locator(".kp-focus-deck__passage-page").nth(4)).toContainText("Of those 117 messages, 18 are spam");
+  await card.screenshot({ path: info.outputPath("r4b-spam-conditioned.png") });
+});
 
 test("R4B authored Apply preserves one selected revision and rejects foreign references", async ({ page }) => {
   const source = editorialFixture();

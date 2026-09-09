@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "kp.bayes-source.v1",
+  "schemaVersion": "kp.bayes-source.v2",
   "model": {
     "kind": "prior-likelihoods",
     "sourceId": "probability.spam-filter.v1",
@@ -10,5 +10,35 @@
     "prior": "1/100",
     "likelihoods": ["9/10", "1/20"]
   },
-  "teaching": { "firstEventId": "spam", "detailLevel": "complete" }
+  "teaching": { "firstEventId": "spam", "detailLevel": "complete" },
+  "editorial": {
+    "title": "Why a good spam filter can still produce many false alarms",
+    "setup": ["This is a hypothetical filter, not a claim about a real service. Spam makes up ", { "fact": "prior" }, " of messages. The filter catches ", { "fact": "likelihood.a" }, " of spam, but also flags ", { "fact": "likelihood.not-a" }, " of non-spam. If a message is flagged, how likely is it to be spam?"],
+    "passages": [
+      { "stateId": "probability.spam-filter.v1.state.population", "title": "Start before the flag", "body": ["Picture ", { "fact": "population" }, " messages. Before looking at the filter, the spam share is ", { "fact": "prior" }, ". This base rate tells us how much population enters each side of the tree."] },
+      { "stateId": "probability.spam-filter.v1.state.first-branches", "title": "A small share of a large group", "body": ["Split spam from non-spam. The filter's detection rate applies within spam; its false-alarm rate applies within non-spam. These rates start with different reference groups. Neither is yet the spam share among flagged messages."] },
+      { "stateId": "probability.spam-filter.v1.state.joint-tree", "title": "Count the two routes to a flag", "body": ["Multiplying along each path gives ", { "fact": "count.tt" }, " flagged spam messages and ", { "fact": "count.ft" }, " flagged non-spam messages. The other leaves contain ", { "fact": "count.tf" }, " unflagged spam and ", { "fact": "count.ff" }, " unflagged non-spam. Every message belongs to exactly one leaf."] },
+      { "stateId": "probability.spam-filter.v1.state.marginal", "title": "Gather every flagged message", "body": ["A flag can come from either spam or non-spam. Gather both routes: ", { "fact": "count.tt" }, " + ", { "fact": "count.ft" }, " = ", { "fact": "count.flagged" }, " flagged messages. This is the denominator's population. So far we have only collected it, not changed the question's reference group."] },
+      { "stateId": "probability.spam-filter.v1.state.conditioned", "title": "Now ask: among the flags?", "body": ["Make the flagged messages the reference population. Of those ", { "fact": "count.flagged" }, " messages, ", { "fact": "count.tt" }, " are spam. The spam share is ", { "fact": "posterior" }, ". Detection looks from spam toward flags; this question looks from flags toward spam. They are not interchangeable rates."] },
+      { "stateId": "probability.spam-filter.v1.state.full-population", "title": "A useful signal is not certainty", "body": ["The prior spam share was ", { "fact": "prior" }, "; among flags it is ", { "fact": "posterior" }, ". In this example the flag raises suspicion, yet many flags are false alarms because non-spam is so common. Return to all messages before inspecting another tree order."] },
+      { "stateId": "probability.spam-filter.v1.state.reordered", "title": "Same messages, a different first question", "body": ["Split on flagged versus unflagged first. The same four groups now sit in different places, and the spam share among flags appears directly on a branch. Reordering changes the factorization, not the messages, the probabilities, or the direction of causation."] }
+    ],
+    "readings": {
+      "full": [
+        ["A detection rate answers how often spam is flagged. Our question reverses the conditioning: how often is a flagged message spam? In this hypothetical example the detection rate is ", { "fact": "likelihood.a" }, ", the false-alarm rate is ", { "fact": "likelihood.not-a" }, ", and the prior spam share is ", { "fact": "prior" }, "."],
+        ["Use a population of ", { "fact": "population" }, " messages so the tree can be read as exact counts. Multiplying along the spam-and-flag path gives ", { "fact": "count.tt" }, " messages. The non-spam-and-flag path gives ", { "fact": "count.ft" }, ". A small false-alarm rate can still contribute many flags when its starting group is large."],
+        ["The denominator includes every flagged message, not just the correctly flagged ones: ", { "fact": "count.tt" }, " + ", { "fact": "count.ft" }, " = ", { "fact": "count.flagged" }, ". Only after gathering this group do we restrict the reference population to it. The spam share within it is ", { "fact": "posterior" }, "."],
+        ["The flag is informative in this example: the spam share rises from ", { "fact": "prior" }, " to ", { "fact": "posterior" }, ". But information is not certainty. Restoring all messages and reversing the tree order preserves all four joint groups. It changes how we read the same facts; it does not reverse causation."]
+      ],
+      "compact": [
+        ["Among ", { "fact": "population" }, " messages, ", { "fact": "count.tt" }, " spam and ", { "fact": "count.ft" }, " non-spam messages are flagged. Both groups belong in the denominator: ", { "fact": "count.flagged" }, " flags in total."],
+        ["Within those flags, the spam share is ", { "fact": "posterior" }, ", not the detection rate ", { "fact": "likelihood.a" }, ". The base rate matters because the two routes to a flag start with different-sized groups. Tree order changes the reading, not the underlying facts."]
+      ]
+    },
+    "denominator": ["A false alarm is still a flag. The reference group therefore includes ", { "fact": "count.tt" }, " flagged spam messages and ", { "fact": "count.ft" }, " flagged non-spam messages. Dropping the false alarms would answer a different question. The denominator is all ", { "fact": "count.flagged" }, " flags; the numerator counts only the ", { "fact": "count.tt" }, " that are spam."],
+    "prompts": {
+      "prediction": { "title": "What does the flag tell you?", "body": ["Before evaluating the quotient, predict whether the spam share among flags is higher, lower, or unchanged from the prior ", { "fact": "prior" }, ". Use the two routes to a flag to explain your prediction."] },
+      "reconstruction": { "title": "Rebuild the flagged population", "body": ["Which two disjoint groups belong in the denominator of the spam share among flags? Explain why a false alarm must remain in that group, then reconstruct the ratio."] }
+    }
+  }
 }

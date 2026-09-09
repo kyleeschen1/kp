@@ -1,7 +1,7 @@
 import { ProbabilityRepairGap } from "../../../domains/probability/binary-joint-model.ts";
 
 export const bayesEditorialFactNames = [
-  "event.a", "event.not-a", "event.b", "event.not-b", "prior",
+  "event.a", "event.not-a", "event.b", "event.not-b", "prior", "likelihood.a", "likelihood.not-a",
   "joint.tt", "joint.tf", "joint.ft", "joint.ff", "numerator", "denominator", "posterior",
   "population", "count.tt", "count.tf", "count.ft", "count.ff", "count.flagged"
 ] as const;

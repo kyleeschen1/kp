@@ -91,7 +91,8 @@
     {
       "id": "s09",
       "title": "Author the primary lesson as content, recording real repair attempts and specialist intervention",
-      "status": "planned"
+      "summary": "Primary authored lesson and honest repair evidence retained; no renderer edits; opt-in browser loading verified.",
+      "status": "complete"
     },
     {
       "id": "s10",
