@@ -2,9 +2,9 @@
   "id": "next-action.kp.common-factor-authoring",
   "kind": "next-action",
   "title": "M1a Verified common-factor authoring",
-  "status": "blocked",
+  "status": "in-progress",
   "domain": "authoring",
-  "summary": "Visual repair accepted by user after 1752d11d8. Await decision on renderer aggregate ceiling: measured 512619 versus 505000; proposed 515000 remains unapplied.",
+  "summary": "Visual and exact source-budget approvals resolved. Continue approved s16 through s24.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -164,6 +164,13 @@
       "scope": "s15-preparation-stall-repair",
       "checkedAt": "2026-09-09T22:18:25.450Z",
       "notes": "Reproduced protected-transit rejection in Firefox and WebKit. Shared grouping reception now cannot overtake compaction; opacity preserved. All 12 browser tests pass across Chromium Firefox WebKit including forced preparation failure; 82 compositor tests, typecheck and architecture pass."
+    },
+    {
+      "command": "node --test tests/canonical-equation-renderer-convergence.test.ts tests/kp-factoring-choreography.test.ts",
+      "status": "passed",
+      "scope": "s15-approved-budget",
+      "checkedAt": "2026-09-09T22:53:18.325Z",
+      "notes": "19 checks pass with exact approved 515000 ceiling; other gates unchanged. User accepted visuals after 1752d11d8."
     }
   ],
   "progress": {

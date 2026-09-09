@@ -66,12 +66,12 @@ playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
 Current Next Action: execute approved `run-contract.kp.common-factor-authoring-v1`
 from `../reviews/2026-09-09-m1-common-factor-authoring-long-loop-proposal.md`.
 The user visually approved the repaired common-factor card after `1752d11d8`.
-Before numeric reuse, resolve the unchanged renderer source-size gate;
+The user also approved the exact 515,000-byte renderer source-size amendment;
 see `2026-09-09-canonical-presentation-routing-repair.md` for the approved
-migration, type guarantees, evidence and pending budget decision. Working URLs,
+migration, type guarantees, evidence and approved budget decision. Working URLs,
 acceptance questions and earlier primary evidence are
 in `../reviews/2026-09-09-common-factor-primary-visual-checkpoint.md`.
-Visual acceptance is recorded; the budget gate still prevents checkpoint completion. The broader accepted
+Continue the approved post-checkpoint slices after verifying the amended gate. The broader accepted
 path and limits are in
 `../decisions/2026-09-09-mathematics-expansion-and-m1a-approval.md`.
 R4B closeout remains completed evidence; do not restart its accepted checkpoint.

@@ -176,3 +176,13 @@ Preserve that treatment during subsequent work. Earlier pending-visual statement
 above are historical; the outstanding stop is now the renderer source-size
 decision only: 512,619 bytes against 505,000, with 515,000 proposed and unapplied.
 Visual acceptance does not waive that gate or authorize a broader migration.
+
+## Approved source-budget amendment
+
+The user explicitly approved the proposed 515,000-byte aggregate ceiling after
+visual acceptance. Apply that exact ceiling, including its policy validation,
+with the other module, vocabulary, dependency, inference and behavioral gates
+unchanged. The measured renderer cohort is 512,619 bytes, leaving 2,381 bytes
+headroom. This is an explicit budget amendment, not an optimization or automatic
+budget refresh. It resolves the named size stop once the amended gate passes;
+continue the already approved s16–s24 sequence without another routine approval.
