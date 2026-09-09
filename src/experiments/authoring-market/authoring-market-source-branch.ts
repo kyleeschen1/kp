@@ -29,6 +29,10 @@ export function createKpAuthoringMarketSourceBranch(revision: KpAuthoringMarketB
 
 export function readKpAuthoringMarketSourceBranch(value: unknown): KpAuthoringMarketSourceBranch {
   if (typeof value !== "object" || value === null) throw new Error("Expected an explicit market source branch.");
+  const unknown = Object.keys(value).find(key => !["schemaVersion", "name", "parentSourceRevision", "data", "equationRequest"].includes(key));
+  if (unknown !== undefined) throw Object.assign(new Error("Author a market source branch, not host, publication or proof authority."), {
+    code: "kp.authoring.market-source-field-gap", path: `$.${unknown}`
+  });
   const branch = value as KpAuthoringMarketSourceBranch;
   if (branch.schemaVersion !== "kp.authoring-market-source-branch.v1" ||
       typeof branch.name !== "string" || !/^[a-z][a-z0-9-]{0,47}$/.test(branch.name) ||

@@ -423,6 +423,20 @@
       "scope": "standard",
       "checkedAt": "2026-09-09T04:17:10.172Z",
       "notes": "s17: 35 author tests pass and focused three rubric tests re-pass with same-posterior wrong-model case; full types pass. Equivalent joint input fulfills; unchanged starters and changed valid operands fail intent; malformed/undefined/wrong quotient fail compilation. Editorial quality explicitly not assessed."
+    },
+    {
+      "command": "npm run test:authoring-entrypoints; npm run typecheck",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-09-09T04:24:19.981Z",
+      "notes": "s18 initial checks exposed an obsolete oversized-dispatch expectation and missing unknown-result narrowing in a new test. Preserved owner size/last-valid assertions and added exact pre-owner transport diagnostic assertions; subsequent full checks pass."
+    },
+    {
+      "command": "npm run test:authoring-entrypoints; npm run test:authoring-round-trip; npm run test:cross-domain-gallery; npm run typecheck; npm run check:architecture; npm run check:inference; npm run check:canonical-tax-source",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-09T04:24:21.358Z",
+      "notes": "s18: 40 author, 50 round-trip and 34 gallery tests pass; full types, architecture, canonical source pass. Core 112278/192161 and combined 127694/214993 pass fixed ceilings. Reproduced 6000-level Graph3D stack overflow is blocked before owner load; exact UTF-8/depth limits, cross-domain reports, market authority fields and order-independent Graph3D pins covered."
     }
   ],
   "progress": {

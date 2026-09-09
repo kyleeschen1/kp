@@ -27,7 +27,14 @@ test("text failures preserve last-valid state and exact domain repair payload", 
     assert.equal(result.active, previous.active);
     assert.equal(result.semantic, previous.semantic);
     const routed = await checkAuthorTask("equation.logarithm-base", json);
-    assert.deepEqual(routed.result, { status: "repair-required", repairs: result.repairs });
+    if (json.length > 100_000) {
+      // Transport rejects before loading an owner; direct editor compilation
+      // still preserves its own size diagnostic and last complete candidate.
+      assert.equal(result.repairs[0]?.sourceCode, "equation-series.request.size");
+      assert.deepEqual(routed.result, { status: "repair-gap", diagnostic: {
+        code: "author.source-size", path: "$", expected: "Keep the source within 100,000 UTF-8 bytes."
+      } });
+    } else assert.deepEqual(routed.result, { status: "repair-required", repairs: result.repairs });
   }
 });
 

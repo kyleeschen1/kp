@@ -2,8 +2,9 @@ import { closeSync, constants, fstatSync, openSync, readSync } from "node:fs";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { isSupportedAuthorTask, supportedAuthorTasks } from "../src/authoring/supported-author-tasks.ts";
+import { authorSourceByteLimit, inspectAuthorSourceLimits } from "../src/authoring/author-source-limits.ts";
 
-export const authorSourceByteLimit = 100_000;
+export { authorSourceByteLimit } from "../src/authoring/author-source-limits.ts";
 const gap = (code: string, expected: string) => ({ kind: "author-invocation-gap" as const,
   status: "repair-gap" as const, diagnostic: { code, path: "$", expected } });
 
@@ -35,7 +36,8 @@ export async function runAuthorCheckCli(args: readonly string[], readSource = re
   if (mode === "--request") {
     try { json = readSource(path!); }
     catch (error) { return gap("author.source-read", error instanceof Error ? error.message : "Provide a readable UTF-8 source file or stdin."); }
-    if (Buffer.byteLength(json, "utf8") > authorSourceByteLimit) return gap("author.source-size", "Keep the source within 100,000 UTF-8 bytes.");
+    const limit = inspectAuthorSourceLimits(json);
+    if (limit) return gap(limit.diagnostic.code, limit.diagnostic.expected);
   }
   // Selection and input checks precede any owner load. There is no path-derived import.
   const owner = await import("./author-check-owner-dispatch.ts");

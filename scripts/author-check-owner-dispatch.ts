@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import type { SupportedAuthorTask } from "../src/authoring/supported-author-tasks.ts";
 import { reportAuthorCheck } from "../src/authoring/author-check-report.ts";
+import { inspectAuthorSourceLimits } from "../src/authoring/author-source-limits.ts";
 
 /** Fixed lazy routes, not input-selected modules or a second generation router. */
 export async function authorTaskExample(task: SupportedAuthorTask): Promise<unknown> {
@@ -15,6 +16,8 @@ export async function authorTaskExample(task: SupportedAuthorTask): Promise<unkn
 }
 
 export async function checkAuthorTask(task: SupportedAuthorTask, json: string) {
+  const limit = inspectAuthorSourceLimits(json);
+  if (limit) return reportAuthorCheck(task, limit);
   if (task === "bayes.binary") {
     const { checkBayesAuthorSource } = await import("../src/experiments/bayesian-reasoning/author-check.ts");
     return reportAuthorCheck(task, checkBayesAuthorSource(json));

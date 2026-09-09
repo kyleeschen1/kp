@@ -207,7 +207,8 @@
     {
       "id": "s18",
       "title": "Harden untrusted invocation boundaries and cross-domain spoofing cases",
-      "status": "planned"
+      "summary": "Bounded source bytes/depth before owner traversal, cross-domain and authority spoofing rejected, Graph3D key-order semantics repaired; no new execution authority.",
+      "status": "complete"
     },
     {
       "id": "s19",

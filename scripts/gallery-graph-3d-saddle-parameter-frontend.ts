@@ -187,7 +187,17 @@ function nonEmpty(
 }
 
 function equal(left: unknown, right: unknown): boolean {
-  return JSON.stringify(left) === JSON.stringify(right);
+  if (Object.is(left, right)) return true;
+  if (Array.isArray(left) || Array.isArray(right)) return Array.isArray(left) && Array.isArray(right) &&
+    left.length === right.length && left.every((value, index) => equal(value, right[index]));
+  if (!isRecord(left) || !isRecord(right)) return false;
+  // JSON object order is not a semantic edit; array order and every pin are.
+  const keys = Object.keys(right);
+  return Object.keys(left).length === keys.length && keys.every(key => Object.hasOwn(left, key) && equal(left[key], right[key]));
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
 }
 
 function deepFreeze<T>(value: T): T {

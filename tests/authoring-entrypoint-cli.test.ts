@@ -18,7 +18,7 @@ test("every declared task has an executable example and existing-owner check", a
 test("invalid selection and discovery never read a source or load an owner", async () => {
   const source = readFileSync("scripts/author-check.ts", "utf8");
   const staticImports = [...source.matchAll(/^import .+ from "([^"]+)"/gm)].map(match => match[1]!);
-  assert.ok(staticImports.every(path => path.startsWith("node:") || path.endsWith("supported-author-tasks.ts")));
+  assert.ok(staticImports.every(path => path.startsWith("node:") || path.endsWith("supported-author-tasks.ts") || path.endsWith("author-source-limits.ts")));
   const noRead = () => { throw new Error("Source must not be read"); };
   for (const args of [[], ["--task", "constructor", "--example"], ["--task", "bayes.binary", "--request"],
     ["--task", "bayes.binary", "--example", "extra"], ["--task", "../module.ts", "--request", "secret"]]) {
