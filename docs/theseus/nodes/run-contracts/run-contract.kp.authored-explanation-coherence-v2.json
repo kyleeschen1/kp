@@ -61,7 +61,8 @@
     {
       "id": "s04",
       "title": "Define minimal versioned Bayes editorial input and validated construction; retain strict v1 path",
-      "status": "planned"
+      "summary": "Versioned editorial syntax and runtime/type guards verified; v1 output unchanged.",
+      "status": "complete"
     },
     {
       "id": "s05",

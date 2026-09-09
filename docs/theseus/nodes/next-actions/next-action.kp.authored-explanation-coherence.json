@@ -45,6 +45,13 @@
       "scope": "focused",
       "checkedAt": "2026-09-09T15:32:50.527Z",
       "notes": "s03: three tests pass including located v1 editorial rejection. Existing Article/market fact responsibilities inspected; bounded literal-plus-fact nodes selected without a new Markdown interpreter or expression evaluator."
+    },
+    {
+      "command": "npm run typecheck; npm run check:inference; node --disable-warning=ExperimentalWarning --test tests/bayesian-reasoning-editorial-source.test.ts tests/bayesian-reasoning-editorial-baseline.test.ts",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-09T15:36:54.505Z",
+      "notes": "s04: five tests pass; full types pass; core unchanged 112278/192161 and combined 142141/238873 within fixed gates. Disjoint v1/v2 syntax, immutable bounded prose/fact nodes, located rejections and negative prepared-authority tests. Live compiler integration follows after binding/revision work."
     }
   ],
   "expectedLearning": [

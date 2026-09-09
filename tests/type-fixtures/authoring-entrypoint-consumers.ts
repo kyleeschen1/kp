@@ -17,11 +17,22 @@ import { projectBayesReading } from "../../src/experiments/bayesian-reasoning/re
 import { projectBayesPrompts } from "../../src/experiments/bayesian-reasoning/prompts.ts";
 import { extractBayesDenominator, resolveBayesDenominatorReturn } from "../../src/experiments/bayesian-reasoning/extraction.ts";
 import { createBayesAuthoringSession } from "../../src/experiments/bayesian-reasoning/authoring.ts";
+import { readBayesSourceEnvelope, type BayesSourceEnvelope, type BayesEditorialText } from "../../src/experiments/bayesian-reasoning/editorial-source.ts";
 
 // Include every selected domain owner, not only the first implementation wave.
 // Node transport is checked by tsconfig.node; this fixed cohort is platform-neutral.
 declare const selectedJson: string;
 declare const selectedMarket: unknown;
+const editorialEnvelope = readBayesSourceEnvelope(selectedMarket);
+if (editorialEnvelope.schemaVersion === "kp.bayes-source.v2") {
+  const title: string = editorialEnvelope.editorial.title; void title;
+}
+// @ts-expect-error A v2 source must carry its complete editorial input.
+const missingEditorial: BayesSourceEnvelope = { schemaVersion: "kp.bayes-source.v2", model: {}, teaching: { firstEventId: "a", detailLevel: "complete" } }; void missingEditorial;
+// @ts-expect-error A source fact reference cannot author proof or an arbitrary expression.
+const proofText: BayesEditorialText = [{ fact: "proof" }]; void proofText;
+// @ts-expect-error Parsed syntax cannot stand in for a compiled source with semantic authority.
+const syntaxDraft: PreparedBayesDraft = editorialEnvelope; void syntaxDraft;
 const probabilitySummary = reportAuthorCheck("bayes.binary", checkBayesAuthorSource(selectedJson));
 if (probabilitySummary.status === "checked") {
   const revision: string = probabilitySummary.result.revisionId; void revision;
