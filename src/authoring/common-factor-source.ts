@@ -1,6 +1,6 @@
 export type KpCommonFactorRepairCode =
   | "source" | "unsupported-syntax" | "ambiguous-notation" | "undeclared-symbol"
-  | "unsupported-shape" | "invalid-factorization" | "missing-authority";
+  | "unsupported-shape" | "invalid-factorization" | "missing-authority" | "unsupported-presentation";
 
 export class KpCommonFactorRepair extends Error {
   readonly code: KpCommonFactorRepairCode;

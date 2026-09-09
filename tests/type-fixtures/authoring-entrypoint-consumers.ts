@@ -27,6 +27,7 @@ import { readKpCommonFactorSource, type KpCommonFactorSource } from "../../src/a
 import { normalizeKpCommonFactorEndpoints } from "../../src/authoring/common-factor-normalizer.ts";
 import { verifyKpCommonFactorRewrite, type KpVerifiedCommonFactorRewrite } from "../../src/semantic/common-factor-rewrite.ts";
 import { createKpEquationSeriesCommonFactorSemanticSource } from "../../src/authoring/equation-series-common-factor-authoring.ts";
+import { prepareKpCommonFactorDraft, exportKpCommonFactorSource, type KpPreparedCommonFactorDraft } from "../../src/authoring/common-factor-draft.ts";
 const factoringSyntax = readKpCommonFactorSource(undefined); void factoringSyntax;
 const factoringEndpoints = normalizeKpCommonFactorEndpoints(factoringSyntax); void factoringEndpoints;
 const factoringProof = verifyKpCommonFactorRewrite({ domain: factoringSyntax.domain, symbols: factoringSyntax.symbols,
@@ -34,6 +35,12 @@ const factoringProof = verifyKpCommonFactorRewrite({ domain: factoringSyntax.dom
 // @ts-expect-error A parsed source cannot mint the private verified factoring capability.
 const forgedFactoringProof: KpVerifiedCommonFactorRewrite = factoringSyntax; void forgedFactoringProof;
 const factoringAuthority = createKpEquationSeriesCommonFactorSemanticSource({ sourceId: factoringSyntax.id, adjacencyId: "edge.factor", transformation: factoringProof }); void factoringAuthority;
+const factoringDraft = prepareKpCommonFactorDraft(factoringSyntax);
+const factoringExport: string = exportKpCommonFactorSource(factoringDraft); void factoringExport;
+// @ts-expect-error A compiled candidate is not a prepared factoring revision.
+const forgedFactoringDraft: KpPreparedCommonFactorDraft = factoringDraft.candidate; void forgedFactoringDraft;
+// @ts-expect-error Source export requires a fully prepared revision, not parsed syntax.
+exportKpCommonFactorSource(factoringSyntax);
 // @ts-expect-error Parsed syntax cannot issue a governed semantic source.
 createKpEquationSeriesCommonFactorSemanticSource({ sourceId: factoringSyntax.id, adjacencyId: "edge.factor", transformation: factoringSyntax });
 // @ts-expect-error Authoring syntax has exactly two endpoints and no partial source.

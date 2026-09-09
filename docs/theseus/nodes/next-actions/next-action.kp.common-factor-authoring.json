@@ -79,6 +79,13 @@
       "scope": "s08",
       "checkedAt": "2026-09-09T18:46:58.845Z",
       "notes": "Eleven task and 87 equation-series tests pass; exact issued factoring evidence governs pins, adjacency and endpoints; full types and complete inference gates pass."
+    },
+    {
+      "command": "npm run test:common-factor-authoring and factoring preservation tests and npm run check:architecture and npm run typecheck and npm run check:inference",
+      "status": "passed",
+      "scope": "s09",
+      "checkedAt": "2026-09-09T18:52:48.077Z",
+      "notes": "Fourteen task and 23 factoring/import-closure tests pass; proof-gated paint and prepared source export reject candidate forgery; architecture, full types and fixed costs pass."
     }
   ],
   "expectedLearning": [

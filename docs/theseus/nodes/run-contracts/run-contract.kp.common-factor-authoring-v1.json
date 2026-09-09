@@ -89,8 +89,8 @@
     {
       "id": "s09",
       "title": "Separate candidate and verified consumable authority at factoring render/export boundaries",
-      "summary": "Risk High; B: negative compile-time and runtime forgery tests; preserve unrelated candidate APIs; C / G; no catalog-wide migration",
-      "status": "planned"
+      "summary": "Fourteen task and 23 factoring/import-closure tests pass; proof-gated paint and prepared source export reject candidate forgery; architecture, full types and fixed costs pass.",
+      "status": "complete"
     },
     {
       "id": "s10",
