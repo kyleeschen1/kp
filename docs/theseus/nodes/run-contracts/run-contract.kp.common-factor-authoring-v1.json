@@ -77,8 +77,8 @@
     {
       "id": "s07",
       "title": "Construct authenticated common-factor evidence through the existing distributive-law owner",
-      "summary": "Risk High; S: exact factor/addend/occurrence correspondence, wrong-factor rejection, zero-factor validity; C / G; no sample-based proof",
-      "status": "planned"
+      "summary": "Ten task tests and full types pass; inverse distribution authenticates immutable occurrence-pinned factoring including zero; inference costs remain within fixed gates.",
+      "status": "complete"
     },
     {
       "id": "s08",

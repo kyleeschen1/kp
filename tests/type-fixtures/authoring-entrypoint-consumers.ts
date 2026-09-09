@@ -25,8 +25,13 @@ import type { KpStructuredExpressionRoleBindingSet } from "../../src/semantic/st
 import { createDistributionFactoringAnimationAsset } from "../../src/animation/distribution-adapter.ts";
 import { readKpCommonFactorSource, type KpCommonFactorSource } from "../../src/authoring/common-factor-source.ts";
 import { normalizeKpCommonFactorEndpoints } from "../../src/authoring/common-factor-normalizer.ts";
+import { verifyKpCommonFactorRewrite, type KpVerifiedCommonFactorRewrite } from "../../src/semantic/common-factor-rewrite.ts";
 const factoringSyntax = readKpCommonFactorSource(undefined); void factoringSyntax;
 const factoringEndpoints = normalizeKpCommonFactorEndpoints(factoringSyntax); void factoringEndpoints;
+const factoringProof = verifyKpCommonFactorRewrite({ domain: factoringSyntax.domain, symbols: factoringSyntax.symbols,
+  source: factoringEndpoints[0].structured, target: factoringEndpoints[1].structured }); void factoringProof;
+// @ts-expect-error A parsed source cannot mint the private verified factoring capability.
+const forgedFactoringProof: KpVerifiedCommonFactorRewrite = factoringSyntax; void forgedFactoringProof;
 // @ts-expect-error Authoring syntax has exactly two endpoints and no partial source.
 const partialFactoring: KpCommonFactorSource = { schemaVersion: "kp.common-factor-source.v1", states: [] }; void partialFactoring;
 

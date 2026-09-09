@@ -65,6 +65,13 @@
       "scope": "s06",
       "checkedAt": "2026-09-09T18:35:27.795Z",
       "notes": "Opt-in scalar juxtaposition passes eight task and sixteen parser tests; full types and fixed inference gates pass without global identifier reinterpretation."
+    },
+    {
+      "command": "npm run test:common-factor-authoring and npm run typecheck and npm run check:inference",
+      "status": "passed",
+      "scope": "s07",
+      "checkedAt": "2026-09-09T18:41:23.269Z",
+      "notes": "Ten task tests and full types pass; inverse distribution authenticates immutable occurrence-pinned factoring including zero; inference costs remain within fixed gates."
     }
   ],
   "expectedLearning": [
