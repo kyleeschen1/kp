@@ -8,6 +8,7 @@
   },
   "scripts": {
     "author:check": "node --disable-warning=ExperimentalWarning scripts/author-check.ts",
+    "visual:authoring-entrypoints": "playwright test --config playwright.authoring-entrypoints.config.ts --project=chromium --workers=1",
     "test:authoring-entrypoints": "node --disable-warning=ExperimentalWarning --test tests/authoring-entrypoint-*.test.ts",
     "test:bayesian-reasoning": "node --disable-warning=ExperimentalWarning --test tests/bayesian-reasoning-*.test.ts",
     "visual:bayesian-reasoning:shared": "playwright test --config playwright.bayesian-reasoning-review.config.ts --project=chromium --workers=1",

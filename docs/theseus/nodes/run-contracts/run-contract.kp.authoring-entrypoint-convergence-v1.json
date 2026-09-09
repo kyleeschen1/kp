@@ -153,7 +153,8 @@
     {
       "id": "s09",
       "title": "Align existing browser preparation with the shared domain boundary without changing Apply or playback ownership",
-      "status": "planned"
+      "summary": "Browser and CLI share numeric source boundary; Apply, native paint, one clock and stale-preparation protection preserved and executed.",
+      "status": "complete"
     },
     {
       "id": "s10",

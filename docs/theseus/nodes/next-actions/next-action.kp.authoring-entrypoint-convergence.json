@@ -245,6 +245,52 @@
       "scope": "focused",
       "checkedAt": "2026-09-09T03:31:02.658Z",
       "notes": "Core unchanged; combined 127668 types and 214968 instantiations."
+    },
+    {
+      "command": "npm run visual:authoring-entrypoints",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-09T03:35:56.042Z",
+      "notes": "Four Chromium tests on shared port 8000: CLI/browser agreement, continuous controls, numeric native ink and stale preparation/disposal."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-09T03:35:57.149Z",
+      "notes": "Full types pass; added browser test also passed focused test typecheck."
+    },
+    {
+      "command": "npm run test:authoring-entrypoints",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-09T03:35:58.137Z",
+      "notes": "19 tests pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-09T03:35:59.115Z",
+      "notes": "Production bundle passes; existing advisory large-chunk warnings retained, no limits raised."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-09T03:36:00.117Z"
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-09T03:36:01.129Z"
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-09T03:36:02.117Z"
     }
   ],
   "progress": {

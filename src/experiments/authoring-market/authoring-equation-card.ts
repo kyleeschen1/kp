@@ -1,4 +1,4 @@
-import { compileKpEquationSeriesLogarithmBaseDraft, createKpEquationSeriesLogarithmBaseDraft } from "../../authoring/equation-series-logarithm-base-draft.ts";
+import { compileKpEquationSeriesLogarithmBaseText, createKpEquationSeriesLogarithmBaseDraft } from "../../authoring/equation-series-logarithm-base-draft.ts";
 import { validateKpEquationTransformSeriesRequest } from "../../authoring/equation-transform-series-request.ts";
 import { KP_EDITOR_ANIMATION_SURFACE_READINESS_EVENT } from "../../editor/animation-surface-readiness.ts";
 import { sampleKpEquationSeriesRuntime } from "../../authoring/equation-series-runtime.ts";
@@ -16,12 +16,15 @@ import "./authoring-equation-card.css";
 /** One verified adjacency, composed into the shared card; not a new equation renderer. */
 export function mountKpAuthoringEquationCard(root: HTMLElement) {
   const example = createKpEquationSeriesLogarithmBaseDraft();
-  let compilation = compileKpEquationSeriesLogarithmBaseDraft(example);
-  if (compilation.active === undefined) throw new Error("Bound equation example failed validation.");
+  const initialText = `${JSON.stringify(example, null, 2)}\n`;
+  const initial = compileKpEquationSeriesLogarithmBaseText(initialText);
+  if (initial.status !== "compiled") throw new Error("Bound equation example failed validation.");
+  // Only complete successful compilations enter the displayed state. Repairs
+  // stay in the editor and cannot become a partially populated live candidate.
+  let compilation = initial;
   const animation = createKpLogarithmChangeOfBaseExemplarAsset();
   const descriptor = createKpEditorAnimationLibrary().find(item => item.animationId === animation.id);
   if (descriptor === undefined) throw new Error("Missing governed change-of-base descriptor.");
-  const initialText = `${JSON.stringify(example, null, 2)}\n`;
   let displayedText = initialText;
   let disposed = false;
   let progress = 0;
@@ -61,21 +64,21 @@ export function mountKpAuthoringEquationCard(root: HTMLElement) {
   controls.hidden = true;
   const updatePassages = (candidate = compilation) => {
     // Prepare every passage before committing any paint or active request.
-    const fragments = candidate.active!.request.states.map((state, index) => compileKpArticleMarkdownFragmentHtml(
+    const fragments = candidate.active.request.states.map((state, index) => compileKpArticleMarkdownFragmentHtml(
       state.narration ?? (index === 0 ? "Read the original logarithm and identify its base and argument." : "Express the same value as the natural log of the argument divided by the natural log of the base.")));
     fragments.forEach((html, index) => {
-      pages[index]!.dataset["kpFocusDeckBeat"] = candidate.active!.request.states[index]!.id;
+      pages[index]!.dataset["kpFocusDeckBeat"] = candidate.active.request.states[index]!.id;
       pages[index]!.querySelector(".kp-focus-deck__passage-page")!.innerHTML = html;
     });
   };
   updatePassages();
   const project = (state: KpEditorAnimationPlayerState) => {
-    const frame = sampleKpEquationSeriesRuntime(compilation.active!.runtime, state.runtimeFrame.clock);
+    const frame = sampleKpEquationSeriesRuntime(compilation.active.runtime, state.runtimeFrame.clock);
     progress = frame.presentationProgress;
     deck.dataset["kpEquationSeriesRuntime"] = frame.runtimeId;
     deck.dataset["kpEquationSeriesProgress"] = String(progress);
     const index = Math.round(progress);
-    deck.dataset["kpFocusDeckActiveBeat"] = compilation.active!.request.states[index]!.id;
+    deck.dataset["kpFocusDeckActiveBeat"] = compilation.active.request.states[index]!.id;
     pages.forEach((page, pageIndex) => {
       page.dataset["kpFocusDeckBeatActive"] = String(pageIndex === index);
       if (pageIndex === index) page.setAttribute("aria-current", "page"); else page.removeAttribute("aria-current");
@@ -133,8 +136,7 @@ export function mountKpAuthoringEquationCard(root: HTMLElement) {
     let staging: HTMLElement | undefined;
     let release: (() => void) | undefined;
     try {
-      const value: unknown = JSON.parse(draftText);
-      const candidate = compileKpEquationSeriesLogarithmBaseDraft(value, compilation);
+      const candidate = compileKpEquationSeriesLogarithmBaseText(draftText, compilation);
       if (candidate.status !== "compiled") {
         root.dataset["kpAuthoringEquation"] = "repair-required";
         status.textContent = `Last valid equation retained. ${candidate.repairs.map(repair => `${repair.path}: ${repair.message} [${repair.sourceCode}] Repair: ${JSON.stringify(repair.action)}`).join("\n")}`;
@@ -142,7 +144,7 @@ export function mountKpAuthoringEquationCard(root: HTMLElement) {
       }
       // Validate prose before preparing paint. A failed request must not partially
       // replace the card, and compiler-owned pins must not leak into the draft.
-      candidate.active!.request.states.forEach(state => compileKpArticleMarkdownFragmentHtml(state.narration ?? ""));
+      candidate.active.request.states.forEach(state => compileKpArticleMarkdownFragmentHtml(state.narration ?? ""));
       if (JSON.stringify(candidate.semantic) !== JSON.stringify(compilation.semantic)) {
         root.dataset["kpAuthoringEquation"] = "preparing";
         status.textContent = "Preparing verified replacement; the last valid equation remains displayed.";

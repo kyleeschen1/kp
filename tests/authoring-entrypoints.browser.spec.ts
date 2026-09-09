@@ -1,0 +1,43 @@
+import { expect, test } from "@playwright/test";
+import { createKpEquationSeriesLogarithmBaseDraft } from "../src/authoring/equation-series-logarithm-base-draft.ts";
+import { checkAuthorTask } from "../scripts/author-check-owner-dispatch.ts";
+
+test("R4A numeric CLI and browser agree while dirty and invalid drafts preserve active truth", async ({ page }) => {
+  const source = createKpEquationSeriesLogarithmBaseDraft();
+  const request = { ...source, states: source.states.map((state, index) => ({ ...state,
+    latex: index ? "\\frac{\\ln(9)}{\\ln(3)}" : "\\log_3(9)", narration: index ? "R4A equivalent quotient." : "R4A original logarithm." })) };
+  const json = JSON.stringify(request), checked = await checkAuthorTask("equation.logarithm-base", json);
+  expect(checked.status).toBe("checked");
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await page.goto("/experiments/authoring-market/#equation-authoring");
+  const editor = page.locator("[data-kp-authoring-equation]");
+  const stage = editor.locator("[data-kp-logarithm-change-of-base-stage]");
+  await expect(editor).toHaveAttribute("data-kp-authoring-equation", "compiled");
+  const before = await editor.locator(".kp-focus-deck__passage-page").allTextContents();
+  const scrubber = editor.locator("[data-kp-focus-deck-scrubber]");
+  await scrubber.evaluate(element => { const input = element as HTMLInputElement; input.value = "0.37"; input.dispatchEvent(new Event("input", { bubbles: true })); });
+  await editor.locator("textarea").fill(json);
+  await expect(editor).toHaveAttribute("data-kp-authoring-equation", "dirty");
+  expect(await editor.locator(".kp-focus-deck__passage-page").allTextContents()).toEqual(before);
+  await editor.getByRole("button", { name: "Compile equation draft" }).click();
+  await expect(editor).toHaveAttribute("data-kp-authoring-equation", "compiled");
+  await expect(stage).toHaveCount(1);
+  await expect(stage).toHaveAttribute("data-kp-logarithm-change-of-base-progress", "0.37");
+  await expect(stage.locator("annotation").first()).toContainText("9");
+  await expect(editor.locator(".kp-focus-deck__passage-page").nth(0)).toContainText(request.states[0]!.narration);
+  await expect(editor.locator(".kp-focus-deck__passage-page").nth(1)).toContainText(request.states[1]!.narration);
+  await expect(editor.locator("[data-kp-focus-deck-position]")).toContainText("Step 1 of 2");
+  expect(JSON.parse(await editor.locator("textarea").inputValue())).toEqual(request);
+  const invalid = "{";
+  const rejected = await checkAuthorTask("equation.logarithm-base", invalid);
+  expect(rejected.status).toBe("repair-gap");
+  await editor.locator("textarea").fill(invalid);
+  await editor.getByRole("button", { name: "Compile equation draft" }).click();
+  await expect(editor).toHaveAttribute("data-kp-authoring-equation", "repair-required");
+  await expect(editor.locator("[data-kp-equation-status]")).toContainText("equation-series.request.json");
+  await expect(stage).toHaveAttribute("data-kp-logarithm-change-of-base-progress", "0.37");
+  await expect(stage.locator("annotation").first()).toContainText("9");
+  await expect(editor.locator(".kp-authoring-equation-staging")).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
