@@ -172,6 +172,26 @@
       "scope": "focused",
       "checkedAt": "2026-09-09T03:19:51.548Z",
       "notes": "Core 112278/192161; combined 127627/214961."
+    },
+    {
+      "command": "npm run test:authoring-entrypoints",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-09T03:23:02.513Z",
+      "notes": "14 tests pass; both probability source forms, legacy parity and complete failure payloads."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/bayesian-reasoning-draft.test.ts tests/bayesian-reasoning-authoring.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-09T03:23:03.633Z",
+      "notes": "Four existing Bayes preservation tests pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-09T03:23:04.765Z"
     }
   ],
   "progress": {

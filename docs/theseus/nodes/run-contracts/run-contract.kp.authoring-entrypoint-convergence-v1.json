@@ -135,7 +135,8 @@
     {
       "id": "s06",
       "title": "Route Bayes through its existing checker; preserve both input forms, zero-condition gaps and revision pins",
-      "status": "planned"
+      "summary": "Bayes report construction has one domain owner; old/new CLI results and typed failure payloads agree without new probability grammar.",
+      "status": "complete"
     },
     {
       "id": "s07",

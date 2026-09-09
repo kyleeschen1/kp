@@ -1,7 +1,8 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
-import { checkBayesDraft, createBayesDraft } from "../src/experiments/bayesian-reasoning/draft.ts";
+import { createBayesDraft } from "../src/experiments/bayesian-reasoning/draft.ts";
+import { checkBayesAuthorSource } from "../src/experiments/bayesian-reasoning/author-check.ts";
 import { createUrnBayesDraft } from "../src/experiments/bayesian-reasoning/urn-source.ts";
 
 /** Read-only CLI: renderer preparation and publication remain separate steps. */
@@ -13,10 +14,7 @@ export function runBayesAuthoringCli(args: readonly string[]) {
   let json: string;
   try { json = readFileSync(args[1] === "-" ? 0 : resolve(args[1]!), "utf8"); }
   catch { return { status: "repair-gap", diagnostic: { code: "probability.cli", path: "$", expected: "Provide a readable file or stdin." } }; }
-  const result = checkBayesDraft(json);
-  if (result.status === "repair-gap") return result;
-  return { status: "compiled", revisionId: result.draft.revisionId, evidenceRevisionId: result.draft.authority.revisionId,
-    checkpointCount: result.draft.trace.states.length, teaching: result.draft.teaching };
+  return checkBayesAuthorSource(json);
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   const result = runBayesAuthoringCli(process.argv.slice(2));

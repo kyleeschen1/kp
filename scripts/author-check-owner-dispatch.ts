@@ -16,13 +16,8 @@ export async function authorTaskExample(task: SupportedAuthorTask): Promise<unkn
 
 export async function checkAuthorTask(task: SupportedAuthorTask, json: string) {
   if (task === "bayes.binary") {
-    const { checkBayesDraft } = await import("../src/experiments/bayesian-reasoning/draft.ts");
-    const result = checkBayesDraft(json);
-    if (result.status === "repair-gap") return reportAuthorCheck(task, result);
-    const { draft } = result;
-    return reportAuthorCheck(task, { status: "compiled" as const, revisionId: draft.revisionId,
-      evidenceRevisionId: draft.authority.revisionId, checkpointCount: draft.trace.states.length,
-      teaching: draft.teaching });
+    const { checkBayesAuthorSource } = await import("../src/experiments/bayesian-reasoning/author-check.ts");
+    return reportAuthorCheck(task, checkBayesAuthorSource(json));
   }
   if (task === "reasoning.equation" || task === "reasoning.code") {
     const { checkReasoningText } = await import("./author-reasoning.ts");
