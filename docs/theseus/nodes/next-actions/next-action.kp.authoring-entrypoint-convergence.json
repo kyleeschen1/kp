@@ -21,6 +21,10 @@
     {
       "kind": "file",
       "path": "docs/project/decisions/2026-09-09-inference-cost-cohorts.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-09-authoring-entrypoint-workflow-comparison.md"
     }
   ],
   "dependsOn": {
@@ -291,6 +295,19 @@
       "status": "passed",
       "scope": "broad",
       "checkedAt": "2026-09-09T03:36:02.117Z"
+    },
+    {
+      "command": "npm run visual:authoring-entrypoints",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-09T03:43:04.594Z",
+      "notes": "Six Chromium tests pass on shared port 8000; retained urn and numeric sources apply, export and build verified no-JS readings. Initial static-description test assertion corrected after inspecting the actual reading owner."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-09T03:43:05.592Z"
     }
   ],
   "progress": {

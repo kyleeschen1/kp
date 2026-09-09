@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "kp.equation-transform-series-request.v1",
+  "kind": "equation-transform-series-request",
+  "id": "series.round-trip.log-base",
+  "states": [
+    {
+      "id": "state.logarithm.change-base.source",
+      "latex": "\\log_3(9)",
+      "narration": "Read the logarithm of 9 in base 3. We will express the same value using natural logarithms."
+    },
+    {
+      "id": "state.logarithm.change-base.target",
+      "latex": "\\frac{\\ln(9)}{\\ln(3)}",
+      "narration": "Divide the natural logarithm of 9 by the natural logarithm of 3. Changing the base preserves the value."
+    }
+  ],
+  "adjacencies": [
+    {
+      "id": "adjacency.round-trip.log-base",
+      "fromStateId": "state.logarithm.change-base.source",
+      "toStateId": "state.logarithm.change-base.target",
+      "intent": {
+        "mode": "explicit",
+        "operationId": "kp.algebra.change-logarithm-base",
+        "semanticArguments": {}
+      }
+    }
+  ]
+}

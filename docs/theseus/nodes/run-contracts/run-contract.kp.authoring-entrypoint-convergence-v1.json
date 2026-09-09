@@ -159,7 +159,8 @@
     {
       "id": "s10",
       "title": "Run the two primary author workflows end to end and produce a compact comparison packet",
-      "status": "planned"
+      "summary": "Retained urn and numeric tasks reach exact browser exports and verified no-JS editions; comparison packet recorded. No material new visual judgment arose; continue approved scope.",
+      "status": "complete"
     },
     {
       "id": "s11",
