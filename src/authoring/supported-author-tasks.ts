@@ -3,7 +3,7 @@
 export const supportedAuthorTasks = {
   "equation.common-factor": {
     owner: "src/authoring/common-factor-author-check.ts",
-    input: "One ordered two-product common factor over declared single-letter real scalars; nonnegative safe integer coefficients and symbolic addends. Editorial prose is not proof.",
+    input: "One ordered two-product rewrite over declared single-letter real scalars; single-letter or single-digit nonnegative common factor and symbolic addends. Multi-digit factors return unsupported-presentation. Editorial prose is not proof.",
     preview: { kind: "explicit-apply", url: "/experiments/reusable-reasoning/?example=common-factor" },
     extraction: { kind: "domain-owned", owner: "src/experiments/common-factor/practice.ts", scope: "Two bounded self-checks and revision-pinned exact return; no automatic grading." },
     publication: { kind: "local-edition", command: "author:common-factor-publication", output: "immutable-content-addressed", input: "selected common-factor source JSON; static reading and self-checks, not interactive animation" }

@@ -21,7 +21,7 @@ never serialized proof, geometry, renderer selection, timing or a new clock.
 
 | Task | Accepted scope | Preview / publication boundary |
 | --- | --- | --- |
-| `equation.common-factor` | One ordered common factor over declared single-letter real scalars; nonnegative safe integer coefficients and symbolic addends; two endpoints, one transition | Explicit Apply at `/experiments/reusable-reasoning/?example=common-factor`; full/compact reading, bounded prediction/reconstruction with exact return; `author:common-factor-publication -- --source <file>` emits an immutable static reading/self-check edition, not interactive animation |
+| `equation.common-factor` | One ordered common factor: a declared single-letter scalar or a nonnegative single digit, with symbolic addends; two endpoints, one transition. Multi-digit factors return `unsupported-presentation`. | Explicit Apply at `/experiments/reusable-reasoning/?example=common-factor`; full/compact reading, bounded prediction/reconstruction with exact return; `author:common-factor-publication -- --source <file>` emits an immutable static reading/self-check edition, not interactive animation |
 | `bayes.binary` | Exact binary joint masses or prior and two likelihoods; strict v1 defaults or bounded v2 editorial explanation | Explicit Apply at `/experiments/bayesian-reasoning/`; immutable local Bayes edition |
 | `equation.logarithm-base` | Supported positive numeric base other than one, positive argument, coherent two-state change of base and narration | Explicit Compile at `/experiments/authoring-market/#equation-authoring`; export inside a selected market branch, not as a standalone edition |
 | `reasoning.equation` | Existing verified distribution-operation prefixes and editorial explanation | Explicit Apply at `/experiments/reusable-reasoning/`; context, readings, practice, exact return and immutable equation-reasoning edition |
@@ -95,6 +95,7 @@ Static reading does not imply animated-publication parity across domains.
 
 ## Deeper owner packets and compatibility
 
+- `common-factor-authoring-packet.md`: verified ordered factoring, source-only numeric reuse and presentation limits.
 - `bayesian-reasoning-packet.md`: probability context, teaching and publication.
 - `reusable-reasoning-packet.md`: equation/code assumptions, prefixes and returns.
 - `authoring-round-trip-packet.md`: market file authoring and equation inclusion.

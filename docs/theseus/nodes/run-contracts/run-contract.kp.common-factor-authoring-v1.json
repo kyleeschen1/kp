@@ -153,8 +153,8 @@
     {
       "id": "s19",
       "title": "Update discovery, author packet and examples with exact supported/unsupported capability scope",
-      "summary": "Risk Low; S: discovery/checker parity; no family-certified claim from registration alone; C / G",
-      "status": "planned"
+      "summary": "Exact common-factor author packet and discovery limits published; 47 entrypoint checks, numeric CLI and full types pass.",
+      "status": "complete"
     },
     {
       "id": "s20",

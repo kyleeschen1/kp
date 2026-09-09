@@ -16,6 +16,8 @@ test("inventory names the approved tasks and existing owners without importing r
 });
 
 test("discovery cannot imply applied revisions or cross-domain publication parity", () => {
+  assert.match(supportedAuthorTasks["equation.common-factor"].input, /single-digit/);
+  assert.match(supportedAuthorTasks["equation.common-factor"].input, /unsupported-presentation/);
   assert.equal(supportedAuthorTasks["graph2d.supply-tax"].preview.kind, "local-source-build");
   assert.equal(supportedAuthorTasks["reasoning.code"].preview.kind, "reference-only");
   assert.equal(supportedAuthorTasks["equation.logarithm-base"].publication.kind, "enclosing-source-edition");

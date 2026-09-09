@@ -192,6 +192,13 @@
       "scope": "s18",
       "checkedAt": "2026-09-09T23:03:51.198Z",
       "notes": "31 task checks plus final adversarial boundary rerun pass; all failures retain located repairs without draft authority."
+    },
+    {
+      "command": "npm run test:authoring-entrypoints; npm run author:check -- --task equation.common-factor --request src/authoring/examples/common-factor-numeric.json; npm run typecheck",
+      "status": "passed",
+      "scope": "s19",
+      "checkedAt": "2026-09-09T23:06:40.398Z",
+      "notes": "47 discovery/owner checks, selected numeric report and full types pass. Packet preserves report-only authority and explicit unsupported-presentation."
     }
   ],
   "progress": {
