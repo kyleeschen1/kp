@@ -1,12 +1,14 @@
-import { parseLatexExpression, type ParsedLatexExpression } from "../math/latex-parser.ts";
+import { LatexParseError, parseLatexScalarExpression, type ParsedLatexExpression } from "../math/latex-parser.ts";
 import { KpCommonFactorRepair, type KpCommonFactorSource } from "./common-factor-source.ts";
 
 export function normalizeKpCommonFactorEndpoints(source: KpCommonFactorSource) {
   const normalize = (index: 0 | 1) => {
     const state = source.states[index], path = `$.states[${index}].latex`;
     let expression: ParsedLatexExpression;
-    try { expression = parseLatexExpression(state.latex); }
-    catch (error) { throw new KpCommonFactorRepair("unsupported-syntax", path,
+    try { expression = parseLatexScalarExpression(state.latex, source.symbols); }
+    catch (error) { throw new KpCommonFactorRepair(error instanceof LatexParseError && error.expected === "declared scalar"
+      ? "undeclared-symbol" : error instanceof LatexParseError && error.expected === "unambiguous scalar notation"
+        ? "ambiguous-notation" : "unsupported-syntax", path,
       error instanceof Error ? error.message : "Unsupported expression notation."); }
     inspect(expression, source.symbols, path);
     return Object.freeze({ stateId: state.id, authoredLatex: state.latex, expression });

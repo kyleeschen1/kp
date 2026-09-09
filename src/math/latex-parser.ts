@@ -86,6 +86,46 @@ export function parseLatexExpression(input: string): ParsedLatexExpression {
   return expression;
 }
 
+/** An explicit scalar environment licenses juxtaposition, not a global change
+ * to identifier or function semantics. All grouping/precedence still belongs
+ * to the same parser, and inserted tokens retain original source offsets. */
+export function parseLatexScalarExpression(input: string, symbols: readonly string[]): ParsedLatexExpression {
+  if (input.length > 512 || symbols.length > 12 || new Set(symbols).size !== symbols.length ||
+      symbols.some(symbol => !/^[A-Za-z]$/.test(symbol)))
+    throw new LatexParseError("Use bounded notation and unique single-letter scalar declarations.", 0, "scalar declarations");
+  const expanded: LatexToken[] = [];
+  for (const token of tokenizeLatex(input)) {
+    if (token.kind === "identifier") {
+      if (["sin", "cos", "tan", "log", "ln", "sqrt", "exp"].includes(token.value))
+        throw new LatexParseError("Ambiguous function-like spelling; write explicit scalar products or use a function frontend.", token.offset, "unambiguous scalar notation");
+      [...token.value].forEach((symbol, index) => {
+        if (!symbols.includes(symbol)) throw new LatexParseError(`Undeclared scalar ${symbol}.`, token.offset + index, "declared scalar");
+        expanded.push({ kind: "identifier", value: symbol, offset: token.offset + index });
+      });
+    } else {
+      if (token.kind === "command" || token.kind === "subscript" || token.kind === "equals" ||
+          (token.kind === "operator" && token.value !== "+" && token.value !== "*"))
+        throw new LatexParseError("Unsupported scalar sum/product notation.", token.offset, "scalar sum or product");
+      expanded.push(token);
+    }
+  }
+  const tokens: LatexToken[] = [];
+  for (const token of expanded) {
+    const previous = tokens.at(-1);
+    const endsAtom = previous && ["identifier", "number", "rightParen", "rightBrace"].includes(previous.kind);
+    const startsAtom = ["identifier", "number", "leftParen", "leftBrace"].includes(token.kind);
+    if (endsAtom && startsAtom) {
+      if (token.kind === "number") throw new LatexParseError("Use explicit multiplication before a numeric factor.", token.offset, "unambiguous scalar notation");
+      tokens.push({ kind: "operator", value: "*", offset: token.offset });
+    }
+    tokens.push(token);
+  }
+  const parser = new LatexParser(tokens);
+  const expression = parser.parseExpression();
+  parser.expectEnd();
+  return expression;
+}
+
 export function collectLatexExpressionSelectorPaths(
   input: string,
   rootPath = "expression"

@@ -71,8 +71,8 @@
     {
       "id": "s06",
       "title": "Add bounded declared-symbol implicit multiplication without guessing identifiers/functions",
-      "summary": "Risk High; S: `ab`, `2x`, `a(b+c)`, ambiguity and unsupported negative cases; C / G; stop if a general parser rewrite is necessary",
-      "status": "planned"
+      "summary": "Opt-in scalar juxtaposition passes eight task and sixteen parser tests; full types and fixed inference gates pass without global identifier reinterpretation.",
+      "status": "complete"
     },
     {
       "id": "s07",
