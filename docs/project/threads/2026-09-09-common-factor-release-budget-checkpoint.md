@@ -5,6 +5,10 @@ implementation on 2026-09-09. The exact three HTML-gzip baseline replacements
 below are approved and applied. The 5% policy, all route coverage, raw-HTML and
 runtime limits remain unchanged. Earlier failure measurements are retained as
 history; final release verification is owned by s23 of the existing contract.
+Release subsequently passed: 6,887 tests, full build/types, all 12 reader budgets
+and production closures. This checkpoint is resolved historical evidence; see
+`../reviews/2026-09-09-common-factor-authoring-closeout.md` for completion and
+the next proposal boundary.
 
 At the checkpoint, M1a had completed the accepted primary card and numeric
 source-only reuse. The release gate could not be marked passed while three

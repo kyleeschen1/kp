@@ -63,8 +63,11 @@ do not treat its proposed roadmap or readiness labels as new execution authority
 The user clarified the remaining code issue as missing gradual passage swiping.
 The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
-Current Next Action: execute approved `run-contract.kp.common-factor-authoring-v1`
-from `../reviews/2026-09-09-m1-common-factor-authoring-long-loop-proposal.md`.
+Current Next Action: propose the next bounded composed-algebra milestone; no
+successor is approved for execution. M1a is complete under
+`run-contract.kp.common-factor-authoring-v1`; see
+`../reviews/2026-09-09-common-factor-authoring-closeout.md` for achieved author
+value, full release verification and the compound-factor/composition gap.
 The user visually approved the repaired common-factor card after `1752d11d8`.
 The user also approved the exact 515,000-byte renderer source-size amendment;
 see `2026-09-09-canonical-presentation-routing-repair.md` for the approved
@@ -72,10 +75,10 @@ migration, type guarantees, evidence and approved budget decision. Working URLs,
 acceptance questions and earlier primary evidence are
 in `../reviews/2026-09-09-common-factor-primary-visual-checkpoint.md`.
 The amended renderer-source gate passes; the accepted primary and numeric
-source-only callers pass the supported-browser cohort. Release is now held at
-the separate reader HTML-gzip budget checkpoint:
-`2026-09-09-common-factor-release-budget-checkpoint.md`. Do not reopen the visual
-checkpoint or interpret the source ceiling approval as a reader-budget waiver.
+source-only callers pass the supported-browser cohort. The user separately
+approved the three measured reader HTML-gzip baseline replacements; all release
+gates now pass. History: `2026-09-09-common-factor-release-budget-checkpoint.md`.
+Do not reopen the resolved visual or cost checkpoints.
 The broader accepted
 path and limits are in
 `../decisions/2026-09-09-mathematics-expansion-and-m1a-approval.md`.

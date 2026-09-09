@@ -82,13 +82,15 @@ and full release verification. See
 value, working inspection links, limitations and the measured next recommendation.
 The accepted visual checkpoint remains historical approval evidence, not a stop.
 The user approved M1a: verified common-factor authoring, addressing semantic
-authority and ordinary LaTeX before family promotion. Continue
+authority and ordinary LaTeX before family promotion. Completed contract:
 `run-contract.kp.common-factor-authoring-v1` from
-`reviews/2026-09-09-m1-common-factor-authoring-long-loop-proposal.md` through the
-accepted s15 visual checkpoint. Primary and numeric source-only reuse are now
-implemented and browser-verified. Release is held at the separate reader HTML-gzip
-budget checkpoint; see
-`threads/2026-09-09-common-factor-release-budget-checkpoint.md` before resuming.
+`reviews/2026-09-09-m1-common-factor-authoring-long-loop-proposal.md`.
+M1a is complete: accepted canonical factoring, numeric source-only reuse,
+coherent authoring/projections and full release verification. See
+`reviews/2026-09-09-common-factor-authoring-closeout.md` for measured value,
+inspection instructions, limits and the next composed-algebra proposal boundary.
+The explicitly approved renderer-source and three reader HTML-gzip amendments
+are resolved historical checkpoints. No successor is automatically authorized.
 The accepted broader direction is recorded in
 `decisions/2026-09-09-mathematics-expansion-and-m1a-approval.md`; it guides later
 proposals, not automatic subject expansion. R4B's measured TypeScript-cost amendments

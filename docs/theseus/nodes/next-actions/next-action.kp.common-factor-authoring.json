@@ -2,9 +2,9 @@
   "id": "next-action.kp.common-factor-authoring",
   "kind": "next-action",
   "title": "M1a Verified common-factor authoring",
-  "status": "in-progress",
+  "status": "resolved",
   "domain": "authoring",
-  "summary": "User accepted and requested implementation of exact three measured reader HTML-gzip baseline adjustments. Resume s23 release then s24 closeout; no other budget amendment.",
+  "summary": "M1a complete24/24. Accepted primary and numeric source-only reuse, authenticated canonical presentation, coherent revisions/projections and release verification. Next composed-algebra milestone requires a new proposal.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -21,6 +21,10 @@
     {
       "kind": "file",
       "path": "docs/project/threads/2026-09-09-common-factor-release-budget-checkpoint.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-09-common-factor-authoring-closeout.md"
     }
   ],
   "dependsOn": {
@@ -280,11 +284,18 @@
       "scope": "s23",
       "checkedAt": "2026-09-09T23:50:05.558Z",
       "notes": "Final full suite6887/6887 passes, zero failures/skips,681601ms; both prior stale-metadata failures now green. Architecture, complete inference, catalog and promotion-memory pregates pass. Both immutable editions reproduce pinned bytes. Earlier unchanged visual cohorts retain24 three-engine and23 prior-exemplar passes."
+    },
+    {
+      "command": "git diff --check; theseus workspace validate; npm run --silent loop:status",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-09-09T23:53:17.725Z",
+      "notes": "Roadmap, thread and closeout agree. Direct stored-contract assertion verifies resolved state and24 complete slices. No active loop or successor remains; final documentation commit pending."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "s01-s22 complete. User-approved three HTML-gzip baselines applied; rebuilt12-route budgets, production closures,4 checker tests, both workflows and both immutable editions pass. Full suite running; s24 closeout remains."
+    "state": "complete",
+    "summary": "All24 approved slices complete. Verified ordinary factoring to canonical card/readings/practice/static editions; numeric source-only reuse;6887 tests and full release gates pass. No automatic successor."
   },
   "expectedLearning": [
     "Measure verified ordinary-LaTeX factoring authoring and source-only numeric reuse without renderer glue."
