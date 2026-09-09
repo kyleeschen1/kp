@@ -1,0 +1,54 @@
+{
+  "id": "next-action.kp.authoring-entrypoint-convergence",
+  "kind": "next-action",
+  "title": "R4A Authoring entrypoint convergence",
+  "status": "in-progress",
+  "domain": "kp",
+  "summary": "User approved exact R4A proposal; execute its 24 slices with fixed gates and no external model calls.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-08-authoring-entrypoint-convergence-long-loop-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.bayesian-flagship"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Measure whether supported tasks cross CLI and browser without duplicate authority, hidden capabilities or extra renderer glue."
+  ],
+  "allowedWork": [
+    "Approved 24-slice R4A source proposal, local domain-preserving entrypoint integration and measured internal type/import repair."
+  ],
+  "disallowedWork": [
+    "No external models, new semantic families or motifs, universal schema, budget increases, merge, deployment or subagents."
+  ],
+  "criteria": [
+    {
+      "id": "author-task-coherence",
+      "weight": "high"
+    },
+    {
+      "id": "domain-authority",
+      "weight": "high"
+    },
+    {
+      "id": "fixed-costs",
+      "weight": "high"
+    },
+    {
+      "id": "preservation",
+      "weight": "high"
+    }
+  ]
+}

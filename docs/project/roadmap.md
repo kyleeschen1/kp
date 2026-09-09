@@ -52,9 +52,13 @@ authoring task. Keep the local packet and deterministic assessment; performance,
 browser and release verification are complete. No live model evidence is claimed.
 See `decisions/2026-09-08-bayesian-live-trial-deferral.md`; the earlier permission
 stop is historical, not an outstanding requirement in this amended run.
-Next: one bounded R4 frontend-convergence/earned-promotion proposal grounded in
-a real author task and measured R1–R3 costs. Do not execute R4 automatically or
-restart R1–R3. Later horizon loops remain unapproved.
+The user approved the exact 24-slice R4A local authoring-convergence proposal:
+`reviews/2026-09-08-authoring-entrypoint-convergence-long-loop-proposal.md`.
+Execute `run-contract.kp.authoring-entrypoint-convergence-v1`; Theseus owns
+slice order and live evidence. Preserve existing visuals and domain owners;
+stop for material new visual judgment, not routine nonvisual checkpoints.
+External model calls and broader R4 promotion remain deferred. Do not restart
+R1–R3 or activate later horizon work.
 Minimal check-ins, mainly canonical
 visual reviews, are a standing preference; see
 `decisions/2026-09-07-reconciled-horizon-and-minimal-check-ins.md`.

@@ -4,7 +4,7 @@
   "title": "Kinetic Press delivery",
   "status": "active",
   "domain": "kp",
-  "summary": "User approved R1 26-slice authoring round trip. Execute run-contract.kp.authoring-round-trip-v1 until s20 visual checkpoint; prior canonical adoption complete.",
+  "summary": "R1-R3 complete. User approved R4A entrypoint convergence; execute run-contract.kp.authoring-entrypoint-convergence-v1, preserving domains, visuals and fixed gates.",
   "sourceRefs": [
     {
       "kind": "user-intent",

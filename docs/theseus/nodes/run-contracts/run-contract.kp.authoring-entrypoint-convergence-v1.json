@@ -1,0 +1,213 @@
+{
+  "id": "run-contract.kp.authoring-entrypoint-convergence-v1",
+  "kind": "run-contract",
+  "title": "R4A Authoring entrypoint convergence",
+  "status": "in-progress",
+  "summary": "Exact R4A proposal approved by user; execute 24 ordered slices and conditional material-visual checkpoint.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.authoring-entrypoint-convergence.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-08-authoring-entrypoint-convergence-long-loop-proposal.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "npm run check:architecture",
+    "npm run check:inference",
+    "npm run check:reader-budgets",
+    "npm run check:reader-production",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "s01: Pin the two author tasks, owner/host/capability map, output baselines and command names; reconcile stale workflow summary; risk Low; F: exact arithmetic, source/host refs, clean baseline; one commit.",
+    "s02: Register real consumer cost fixtures and measure import/inference costs before designing shared exports; risk Medium; S: unchanged fixtures/ceilings; negative type cases; one commit.",
+    "s03: Derive the bounded task/capability inventory from existing owners; distinguish check, preview, extraction and publication; risk Medium; S: coverage matches executed capabilities; unknown task negatives; one commit.",
+    "s04: Define the smallest reporting adapter over existing results; preserve domain diagnostics and source authority; risk Medium; S: exhaustive success/gap cases, no forged prepared/publication states; one commit.",
+    "s05: Add explicit read-only example/check dispatch with exact task selection and lazy owner loading; risk Medium; B: invalid selection, missing source, size limits, import isolation; one commit.",
+    "s06: Route Bayes through its existing checker; preserve both input forms, zero-condition gaps and revision pins; risk Medium; S: old/new invocation equivalence and complete failure payloads; one commit.",
+    "s07: Expose the existing numeric equation draft compilation through the same domain-owned boundary used by the browser; risk High; B: numeric domain restrictions, exact endpoints, forged source rejection; one commit.",
+    "s08: Make the selected equation CLI path use that boundary; retain the explicitly pinned legacy example contract; risk Medium; S: reference and numeric variants, narration, typed repairs; one commit.",
+    "s09: Align existing browser preparation with the shared domain boundary without changing Apply or playback ownership; risk High; B + V: last-valid, stale preparation, atomic count/text/ink, reverse and interruption; one commit.",
+    "s10: Run the two primary author workflows end to end and produce a compact comparison packet; risk Medium; V: real CLI-to-existing-editor-to-local-edition exercise; one commit.",
+    "s11: Route existing reusable equation reasoning through its owner; preserve assumptions, extraction and exact return; risk Medium; S + V: source/revision/prompt parity and return address; one commit.",
+    "s12: Pressure the reporting/dispatch seam with existing code reasoning without claiming arbitrary-source generation; risk High; B: language authority, unsupported transformations, accepted control behavior; one commit.",
+    "s13: Pressure with the pinned Graph3D saddle frontend through the existing gallery router; risk High; B + V: trace, camera/topology pins, actual host; reject unrepresented edits; one commit.",
+    "s14: Check supply-tax/Graph2D capability reporting and preserve its current source/publication path; risk Medium; B: parameter/fact coherence and existing production route; one commit.",
+    "s15: Finalize per-task preview and projection capability reports from these actual callers; risk Medium; S: a route link cannot prove an applied revision; no implied feature parity; one commit.",
+    "s16: Verify exact source handoff to existing local edition builders; expose only currently supported publication paths; risk High; B: stale draft, immutable bytes, no-JS output and unsupported-domain gaps; one commit.",
+    "s17: Add held-out valid/invalid task cases and request-fulfillment checks separate from compilation success; risk Medium; S: untouched starter fails changed-task intent; editorial truth qualified; one commit.",
+    "s18: Harden untrusted invocation boundaries and cross-domain spoofing cases; risk High; B: size/path/read errors, wrong domain/pins, forged result/source, zero fallback; one commit.",
+    "s19: Prove narrow frontend entrypoints with two structurally different consumers; retain only measured common plumbing; risk High; B: type/import cost, public-export compatibility, domain evidence retained; one commit.",
+    "s20: Retire duplicated mechanics beside migrated callers; preserve legacy command behavior with delegation; risk Medium; B: old/new result parity, no duplicate authority, source graph checks; one commit.",
+    "s21: Update the canonical generation routing guide and executable task packet with accepted/rejected examples; risk Low; F: every example executes; supported-input distinctions remain explicit; one commit.",
+    "s22: Execute the retained author tasks and record source bytes, files touched, repair steps and specialist interventions; risk Medium; S + V: actual authored outputs, coherent preview/edition, no invented timing; one commit.",
+    "s23: Run broad release and supported-browser preservation; repair attributable failures at their owners; risk High; B + V: full tests/build, fixed budgets, R1/R2/R3/tax and selected code/Graph3D checks; one commit.",
+    "s24: Record measured benefit, remaining R4 obligations and mathematical-expansion handoff; close receipts and commit; risk Low; F: exact evidence, validated Theseus, clean scoped worktree; one commit.",
+    "Brief tracked contexts, no subagents, same port-8000 server, existing domain owners; approved exemplar and promotion policy in source proposal."
+  ],
+  "disallowedWork": [
+    "s01 STOP: Conflicting current authority",
+    "s02 STOP: Cannot fit without broader redesign or budget waiver",
+    "s03 STOP: New universal capability ontology required",
+    "s04 STOP: Loss of domain information or new truth owner",
+    "s05 STOP: Dynamic plugin loading or user-code execution needed",
+    "s06 STOP: Probability grammar expansion",
+    "s07 STOP: New algebra or motif required",
+    "s08 STOP: Silent change to legacy command meaning",
+    "s09 STOP: New host state machine or choreography needed",
+    "s10 STOP: Material new visual/editorial decision needs human review before propagation",
+    "s11 STOP: General knowledge ontology required",
+    "s12 STOP: New language/refactor topology or false publication parity",
+    "s13 STOP: New Graph3D content or equation-shaped semantics needed",
+    "s14 STOP: Economics migration beyond reporting/preservation",
+    "s15 STOP: Requires a new universal host/publication interface",
+    "s16 STOP: Browser writes, remote storage or public deployment required",
+    "s17 STOP: Requires free-prose automatic grading",
+    "s18 STOP: New execution authority or package loader required",
+    "s19 STOP: Speculative abstraction or fixed-gate failure cannot be repaired in scope",
+    "s20 STOP: Unrelated compatibility migration",
+    "s21 STOP: Packet advertises unsupported generation or model success",
+    "s22 STOP: Subjective new output needs approval; no live call implied",
+    "s23 STOP: Unrelated repairs, unsafe authority or new visual treatment",
+    "s24 STOP: Required proof or approved work incomplete",
+    "No external model calls, new domains/motifs, universal schema, budget waiver, runtime rewrite, remote/browser writes, deployment, merge or automatic successor."
+  ],
+  "goal": "Supported author tasks use consistent entrypoints while domain evidence, previews and immutable editions remain coherent.",
+  "target": "next-action.kp.authoring-entrypoint-convergence",
+  "runMode": "run",
+  "maxSlices": 24,
+  "commitCadence": "One independently reversible verified slice and its Theseus evidence per commit; no merge.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop for material new visual/editorial judgment before propagation, unsafe authority, scope expansion, unavailable required proof, user pause or completed scope. Repair attributable nonvisual failures without waiving fixed gates."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Pin the two author tasks, owner/host/capability map, output baselines and command names; reconcile stale workflow summary",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Register real consumer cost fixtures and measure import/inference costs before designing shared exports",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Derive the bounded task/capability inventory from existing owners; distinguish check, preview, extraction and publication",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Define the smallest reporting adapter over existing results; preserve domain diagnostics and source authority",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Add explicit read-only example/check dispatch with exact task selection and lazy owner loading",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Route Bayes through its existing checker; preserve both input forms, zero-condition gaps and revision pins",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Expose the existing numeric equation draft compilation through the same domain-owned boundary used by the browser",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Make the selected equation CLI path use that boundary; retain the explicitly pinned legacy example contract",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Align existing browser preparation with the shared domain boundary without changing Apply or playback ownership",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Run the two primary author workflows end to end and produce a compact comparison packet",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Route existing reusable equation reasoning through its owner; preserve assumptions, extraction and exact return",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Pressure the reporting/dispatch seam with existing code reasoning without claiming arbitrary-source generation",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Pressure with the pinned Graph3D saddle frontend through the existing gallery router",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Check supply-tax/Graph2D capability reporting and preserve its current source/publication path",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Finalize per-task preview and projection capability reports from these actual callers",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Verify exact source handoff to existing local edition builders; expose only currently supported publication paths",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Add held-out valid/invalid task cases and request-fulfillment checks separate from compilation success",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Harden untrusted invocation boundaries and cross-domain spoofing cases",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Prove narrow frontend entrypoints with two structurally different consumers; retain only measured common plumbing",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Retire duplicated mechanics beside migrated callers; preserve legacy command behavior with delegation",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Update the canonical generation routing guide and executable task packet with accepted/rejected examples",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Execute the retained author tasks and record source bytes, files touched, repair steps and specialist interventions",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Run broad release and supported-browser preservation; repair attributable failures at their owners",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Record measured benefit, remaining R4 obligations and mathematical-expansion handoff; close receipts and commit",
+      "status": "planned"
+    }
+  ]
+}

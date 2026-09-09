@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: R3 complete; next boundary is a bounded R4 proposal, not execution
+Status: R4A local authoring entrypoint convergence approved and active
 Last Updated: 2026-09-08
 Current successor reference: `../reviews/2026-09-07-reconciled-authoring-loop-horizon.md`.
 It preserves the original architectural obligations and the tax/Bayes direction;
@@ -63,8 +63,10 @@ do not treat its proposed roadmap or readiness labels as new execution authority
 The user clarified the remaining code issue as missing gradual passage swiping.
 The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
-Current Next Action: propose one bounded R4 frontend-convergence/earned-promotion
-run from real author tasks and measured R1–R3 costs. R4 execution is not approved.
+Current Next Action: execute the approved 24-slice R4A proposal
+`../reviews/2026-09-08-authoring-entrypoint-convergence-long-loop-proposal.md`
+through `run-contract.kp.authoring-entrypoint-convergence-v1`. Theseus owns live
+status. Broader R4 promotion and external model calls are not approved.
 The user accepted deferring the synthetic live trial until the
 next real authoring task; see `../decisions/2026-09-08-bayesian-live-trial-deferral.md`.
 The local packet and deterministic assessment are ready; no model call occurred.
