@@ -129,7 +129,8 @@
     {
       "id": "s05",
       "title": "Add explicit read-only example/check dispatch with exact task selection and lazy owner loading",
-      "status": "planned"
+      "summary": "Executable author:check discovery/example/check routes and bounded read-only invocation verified; preserve domain payloads and no automatic Apply/publication.",
+      "status": "complete"
     },
     {
       "id": "s06",

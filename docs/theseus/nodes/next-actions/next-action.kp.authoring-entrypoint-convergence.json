@@ -145,6 +145,33 @@
       "scope": "focused",
       "checkedAt": "2026-09-09T03:14:00.821Z",
       "notes": "Core unchanged; combined 127627 types and 214961 instantiations with real report consumer and negative type cases."
+    },
+    {
+      "command": "npm run test:authoring-entrypoints",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-09T03:19:48.012Z",
+      "notes": "12 tests pass including six actual task routes, stdin byte limits, failure exit codes and executable discovery import isolation."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-09T03:19:49.479Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-09T03:19:50.515Z",
+      "notes": "Full types passed; later test additions passed focused test typecheck with cache write permission after sandbox EPERM."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-09T03:19:51.548Z",
+      "notes": "Core 112278/192161; combined 127627/214961."
     }
   ],
   "progress": {

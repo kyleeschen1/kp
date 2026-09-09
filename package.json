@@ -7,6 +7,8 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
+    "author:check": "node --disable-warning=ExperimentalWarning scripts/author-check.ts",
+    "test:authoring-entrypoints": "node --disable-warning=ExperimentalWarning --test tests/authoring-entrypoint-*.test.ts",
     "test:bayesian-reasoning": "node --disable-warning=ExperimentalWarning --test tests/bayesian-reasoning-*.test.ts",
     "visual:bayesian-reasoning:shared": "playwright test --config playwright.bayesian-reasoning-review.config.ts --project=chromium --workers=1",
     "visual:bayesian-reasoning:cohort": "playwright test --config playwright.bayesian-reasoning-review.config.ts --project=chromium --project=firefox --project=webkit --workers=1",
