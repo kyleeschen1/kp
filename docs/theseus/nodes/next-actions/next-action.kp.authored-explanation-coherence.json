@@ -24,6 +24,15 @@
     "npm run typecheck",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/bayesian-reasoning-editorial-baseline.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-09T15:27:58.159Z",
+      "notes": "s01: two tests pin default revision and exact card/reading/prompt bytes, plus spam-filter 2000-unit counts, 2/13 posterior and seven stops. Impact selector read; broad unknown-path checks retained for release."
+    }
+  ],
   "expectedLearning": [
     "Measure whether author-owned explanation and verified facts compose across existing views without renderer glue; retain honest author effort and mathematical coverage gaps."
   ],

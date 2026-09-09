@@ -43,7 +43,8 @@
     {
       "id": "s01",
       "title": "Pin spam-filter task, actual owner/host/output baselines and existing source compatibility; reconcile workflow summary",
-      "status": "planned"
+      "summary": "Exact task and pre-extension v1 output/revision baselines passed; workflow names R4B.",
+      "status": "complete"
     },
     {
       "id": "s02",

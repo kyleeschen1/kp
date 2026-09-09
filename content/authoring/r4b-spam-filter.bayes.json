@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "kp.bayes-source.v1",
+  "model": {
+    "kind": "prior-likelihoods",
+    "sourceId": "probability.spam-filter.v1",
+    "events": [
+      { "id": "spam", "label": "Message is spam", "complementLabel": "Message is not spam" },
+      { "id": "flagged", "label": "Filter flags the message", "complementLabel": "Filter does not flag the message" }
+    ],
+    "prior": "1/100",
+    "likelihoods": ["9/10", "1/20"]
+  },
+  "teaching": { "firstEventId": "spam", "detailLevel": "complete" }
+}
