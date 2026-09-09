@@ -498,6 +498,27 @@
       "scope": "focused",
       "checkedAt": "2026-09-09T04:59:02.534Z",
       "notes": "s22: both deterministic task packets fulfilled, starter intent gaps and invalid repairs retained; two actual Chromium Apply/export/build/no-JS workflows passed. Effort audit separates source artifacts from specialist infrastructure."
+    },
+    {
+      "command": "npm test; npm run check:equation-reachability",
+      "status": "failed",
+      "scope": "broad",
+      "checkedAt": "2026-09-09T05:05:23.195Z",
+      "notes": "s23 initial run exposed stale exact caller expectation and generated reachability metadata after approved distribution import narrowing. Same compiler public identity regression retained; update observed source/test membership, not authority or runtime."
+    },
+    {
+      "command": "npm run build; npm run visual:authoring-entrypoints:cohort; npm run check:reader-budgets; npm run check:reader-production; npm run check:dev-review-production; npm run test:equation-reachability; npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-09T05:13:18.667Z",
+      "notes": "s23: full typecheck/build passed; 51 browser tests across Chromium Firefox WebKit passed on shared 8000. Fresh build reader budgets passed unchanged, 12 reader routes and 455 production files pass isolation. Twelve reachability tests and 68-root freshness check passed after exact metadata repair. Full suite rerun pending."
+    },
+    {
+      "command": "npm test; npm run check:codex-reliability",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-09T05:24:38.541Z",
+      "notes": "s23 clean final rerun: all 6823 tests passed, zero failures/skips, 600340.746584ms. Architecture, core 112278/192161 and complete combined 139337/235826 inference, concept catalogue and promotion memory passed. Reliability policy passed. Initial sole stale inventory failure repaired with exact caller metadata and unchanged public-identity regression."
     }
   ],
   "progress": {

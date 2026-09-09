@@ -11,6 +11,7 @@
     "author:assess": "node --disable-warning=ExperimentalWarning scripts/assess-authoring-task.ts",
     "check:authoring-task-packet": "node --disable-warning=ExperimentalWarning scripts/run-authoring-task-packet.ts",
     "visual:authoring-entrypoints": "playwright test --config playwright.authoring-entrypoints.config.ts --project=chromium --workers=1",
+    "visual:authoring-entrypoints:cohort": "playwright test --config playwright.authoring-entrypoints.config.ts --project=chromium --project=firefox --project=webkit --workers=1",
     "test:authoring-entrypoints": "node --disable-warning=ExperimentalWarning --test tests/authoring-entrypoint-*.test.ts",
     "test:bayesian-reasoning": "node --disable-warning=ExperimentalWarning --test tests/bayesian-reasoning-*.test.ts",
     "visual:bayesian-reasoning:shared": "playwright test --config playwright.bayesian-reasoning-review.config.ts --project=chromium --workers=1",

@@ -246,7 +246,8 @@
     {
       "id": "s23",
       "title": "Run broad release and supported-browser preservation; repair attributable failures at their owners",
-      "status": "planned"
+      "summary": "Release passed: 6823 tests, 51 browser checks, full typecheck/build, fixed inference and reader budgets, production closure. Exact caller metadata repaired and regenerated without runtime changes.",
+      "status": "complete"
     },
     {
       "id": "s24",

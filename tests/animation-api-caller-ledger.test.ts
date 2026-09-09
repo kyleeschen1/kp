@@ -32,13 +32,15 @@ test("animation API caller ledger targets live, uniquely classified surfaces", (
 test("governed construction has one explicit public authoring seam", () => {
   const surface = record("facade.canonical-animation-construction");
   assert.equal(surface.disposition, "retain-public-boundary");
+  // The internal distribution caller now imports the same narrow owners directly;
+  // authoring-entrypoint-imports.test.ts protects that cost cut and facade identity.
   assert.deepEqual(surface.sourceCallers, [
-    "src/article/vignettes/typescript-free-shipping-vignette.ts",
-    "src/experiments/authoring-structural/distribution-projection.ts"
+    "src/article/vignettes/typescript-free-shipping-vignette.ts"
   ]);
   assert.deepEqual(surface.scriptCallers, []);
   assert.deepEqual(surface.otherCallers, []);
   assert.deepEqual(surface.testCallers, [
+    "tests/authoring-entrypoint-imports.test.ts",
     "tests/canonical-animation-construction-request.test.ts",
     "tests/canonical-reader-unit-exponent-cost-proof.test.ts",
     "tests/foldable-distribution-governed-authoring-cost.test.ts",

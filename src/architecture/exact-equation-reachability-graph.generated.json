@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 4432,
+  "scannedFileCount": 4465,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -2611,10 +2611,10 @@
       "sourcePath": "src/authoring/canonical-animation-public-api.ts",
       "authorityId": "facade.canonical-animation-construction",
       "sourceCallers": [
-        "src/article/vignettes/typescript-free-shipping-vignette.ts",
-        "src/experiments/authoring-structural/distribution-projection.ts"
+        "src/article/vignettes/typescript-free-shipping-vignette.ts"
       ],
       "testCallers": [
+        "tests/authoring-entrypoint-imports.test.ts",
         "tests/canonical-animation-construction-request.test.ts",
         "tests/canonical-reader-unit-exponent-cost-proof.test.ts",
         "tests/foldable-distribution-governed-authoring-cost.test.ts",
