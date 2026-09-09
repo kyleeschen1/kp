@@ -8,6 +8,44 @@ import { pathToFileURL } from "node:url";
 import { buildBayesEdition } from "../scripts/build-bayesian-edition.ts";
 import { buildKpAuthoringMarketEdition } from "../scripts/build-authoring-market-edition.ts";
 import { checkBayesAuthorSource } from "../src/experiments/bayesian-reasoning/author-check.ts";
+import { checkBayesDraft } from "../src/experiments/bayesian-reasoning/draft.ts";
+import { editorialFixture } from "./fixtures/bayes-editorial-source.ts";
+
+test("R4B authored Apply preserves one selected revision and rejects foreign references", async ({ page }) => {
+  const source = editorialFixture();
+  source.editorial.title = "Atomic authored explanation";
+  source.editorial.passages[0]!.body = ["Authored first passage."];
+  const checked = checkBayesDraft(JSON.stringify(source));
+  if (checked.status !== "compiled") throw new Error(checked.diagnostic.expected);
+  const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
+  await page.goto("/experiments/bayesian-reasoning/");
+  const card = page.locator("[data-bayes-display] [data-bayes-card]");
+  await expect(card).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+  await page.locator(".bayes-author summary").click();
+  await card.locator("[data-kp-focus-deck-scrubber]").evaluate(node => {
+    (node as HTMLInputElement).value = "2.5"; node.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await page.locator("[data-bayes-draft]").fill(JSON.stringify(source));
+  await expect(page.locator("[data-bayes-editorial]")).toHaveCount(0);
+  await page.locator("[data-bayes-apply]").click();
+  await expect(card).toHaveAttribute("data-bayes-revision", checked.draft.revisionId);
+  await expect(card).toHaveAttribute("data-bayes-position", "2.5");
+  await expect(page.locator("[data-bayes-editorial]")).toContainText(source.editorial.title);
+  await expect(card.locator(".kp-focus-deck__passage-page").first()).toContainText("Authored first passage.");
+  await expect(card.locator(".kp-focus-deck__passage-page")).toHaveCount(7);
+  const invalid = { ...source, editorial: { ...source.editorial, passages: source.editorial.passages.map(passage => ({ ...passage, stateId: "foreign" })) } };
+  await page.locator("[data-bayes-draft]").fill(JSON.stringify(invalid));
+  await page.locator("[data-bayes-apply]").click();
+  await expect(page.locator("[data-bayes-author-status]")).toHaveAttribute("data-bayes-apply-status", "repair-gap");
+  await expect(card).toHaveAttribute("data-bayes-revision", checked.draft.revisionId);
+  await expect(card).toHaveAttribute("data-bayes-position", "2.5");
+  await expect(page.locator("[data-bayes-author-status]")).toContainText("$.editorial.passages[0].stateId");
+  await page.locator("[data-bayes-restore]").click();
+  expect(JSON.parse(await page.locator("[data-bayes-draft]").inputValue())).toEqual(source);
+  await expect(page.locator(".bayes-staging")).toHaveCount(0);
+  await expect(page.locator("[data-bayes-display-revision]")).toHaveCount(1);
+  expect(errors).toEqual([]);
+});
 
 test("R4A numeric CLI and browser agree while dirty and invalid drafts preserve active truth", async ({ page }) => {
   const source = createKpEquationSeriesLogarithmBaseDraft();

@@ -73,6 +73,13 @@
       "scope": "s07",
       "checkedAt": "2026-09-09T15:55:32.662Z",
       "notes": "44 tests pass, including hostile literal text, exact seven stop/progress parity and unchanged notation. Core 112736/193119; combined 142281/239312."
+    },
+    {
+      "command": "node --test tests/bayesian-reasoning-authoring.test.ts tests/bayesian-reasoning-editorial-baseline.test.ts; npm run typecheck; npm run check:inference; npm run visual:authoring-entrypoints -- --grep R4B",
+      "status": "passed",
+      "scope": "s08",
+      "checkedAt": "2026-09-09T15:59:05.715Z",
+      "notes": "Five unit tests, full typecheck, both inference cohorts and one R4B Chromium Apply test pass on existing port8000. No editor state machine or server added."
     }
   ],
   "expectedLearning": [

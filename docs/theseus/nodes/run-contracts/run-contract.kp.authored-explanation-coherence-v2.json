@@ -85,7 +85,8 @@
     {
       "id": "s08",
       "title": "Connect prepared authored source to existing atomic Apply and last-valid preview",
-      "status": "planned"
+      "summary": "Authored revisions use atomic Apply with exact interrupted position, invalid-reference rejection and last-valid preservation.",
+      "status": "complete"
     },
     {
       "id": "s09",

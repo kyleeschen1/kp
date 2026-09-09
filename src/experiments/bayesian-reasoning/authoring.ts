@@ -1,4 +1,4 @@
-import { checkBayesDraft, type PreparedBayesDraft } from "./draft.ts";
+import { checkBayesDraft, requirePreparedBayesDraft, type PreparedBayesDraft } from "./draft.ts";
 
 /** A local preview transaction, not a semantic store or playback clock.
  * Stale preparations own resources but never acquire display authority. */
@@ -7,6 +7,7 @@ export function createBayesAuthoringSession<Surface extends { dispose(): void }>
   readonly prepare: (draft: PreparedBayesDraft) => Promise<Surface>;
   readonly commit: (surface: Surface, draft: PreparedBayesDraft) => void;
 }) {
+  requirePreparedBayesDraft(input.initial);
   let current = input.initial, generation = 0, disposed = false;
   return Object.freeze({
     current: () => current,

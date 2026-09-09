@@ -2,9 +2,11 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createBayesAuthoringSession } from "../src/experiments/bayesian-reasoning/authoring.ts";
 import { checkBayesDraft, createBayesDraft } from "../src/experiments/bayesian-reasoning/draft.ts";
+import { editorialFixture } from "./fixtures/bayes-editorial-source.ts";
 
-test("atomic preview retains current on invalid, failed or superseded preparation and disposes stale resources", async () => {
-  const source = createBayesDraft(), initial = checkBayesDraft(JSON.stringify(source));
+for (const [version, source] of [["v1", createBayesDraft()], ["v2", editorialFixture()]] as const)
+test(`${version} atomic preview retains current on invalid, failed or superseded preparation and disposes stale resources`, async () => {
+  const initial = checkBayesDraft(JSON.stringify(source));
   assert.equal(initial.status, "compiled"); if (initial.status !== "compiled") return;
   const pending: { resolve: (surface: { dispose(): void }) => void; reject: (error: Error) => void }[] = [];
   const committed: string[] = [], released: string[] = [];
@@ -13,6 +15,7 @@ test("atomic preview retains current on invalid, failed or superseded preparatio
     commit: (_surface, draft) => { committed.push(draft.revisionId); } });
   const old = session.apply(JSON.stringify(source));
   source.model.events[0]!.label = "Edited A";
+  if ("editorial" in source) source.editorial.title = "Newest authored title";
   const newest = session.apply(JSON.stringify(source));
   pending[1]!.resolve({ dispose: () => released.push("new") });
   assert.equal((await newest).status, "applied");
@@ -22,6 +25,11 @@ test("atomic preview retains current on invalid, failed or superseded preparatio
   assert.deepEqual(released, ["old"]); assert.deepEqual(committed, [revision]);
   assert.equal((await session.apply("{")).status, "repair-gap");
   assert.equal(session.current().revisionId, revision);
+  if ("editorial" in source) {
+    const invalid = { ...source, editorial: { ...source.editorial, passages: source.editorial.passages.map(passage => ({ ...passage, stateId: "foreign" })) } };
+    assert.equal((await session.apply(JSON.stringify(invalid))).status, "repair-gap");
+    assert.equal(session.current().editorial?.title, "Newest authored title");
+  }
   const failing = session.apply(JSON.stringify(source)); pending[2]!.reject(new Error("native preparation failed"));
   assert.equal((await failing).status, "repair-gap"); assert.equal(session.current().revisionId, revision);
   const dirty = session.apply(JSON.stringify(source)); session.invalidate();
@@ -32,4 +40,6 @@ test("atomic preview retains current on invalid, failed or superseded preparatio
   assert.equal((await disposed).status, "superseded");
   assert.deepEqual(released, ["old", "dirty", "disposed"]);
   assert.deepEqual(committed, [revision]);
+  assert.throws(() => createBayesAuthoringSession({ initial: { ...initial.draft },
+    prepare: async () => ({ dispose() {} }), commit() {} }), /Compile the source/);
 });

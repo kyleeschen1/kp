@@ -5,6 +5,6 @@ import base from "./playwright.config.ts";
 export default defineConfig({ ...base, webServer: undefined,
   testMatch: ["tests/authoring-market.browser.spec.ts", "tests/authoring-entrypoints.browser.spec.ts", "tests/reusable-reasoning.browser.spec.ts", "tests/bayesian-reasoning.browser.spec.ts"],
   // Release coverage reuses owner regressions; no new choreography is approved here.
-  grep: /equation authoring|R4A|reasoning exemplar mounts canonical native ink|source edit reaches native ink|code reasoning reuses visible motion|Bayes release: responsive preferences|Bayes author apply|Bayes quotient traverses|state-driven SVG preserves canonical|native KaTeX uses exact live values|combined checkpoint preserves keyboard|buttons visibly sample forward/,
+  grep: /equation authoring|R4A|R4B|reasoning exemplar mounts canonical native ink|source edit reaches native ink|code reasoning reuses visible motion|Bayes release: responsive preferences|Bayes author apply|Bayes quotient traverses|state-driven SVG preserves canonical|native KaTeX uses exact live values|combined checkpoint preserves keyboard|buttons visibly sample forward/,
   outputDir: "tmp/codex/authoring-entrypoints-review",
   use: { ...base.use, baseURL: "http://localhost:8000" } });
