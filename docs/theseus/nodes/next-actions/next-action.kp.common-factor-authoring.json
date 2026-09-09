@@ -4,7 +4,7 @@
   "title": "M1a Verified common-factor authoring",
   "status": "blocked",
   "domain": "authoring",
-  "summary": "Await user decision on the measured 515000-byte renderer source-budget amendment; current gate remains failed at 512488 versus 505000. Visual acceptance still pending.",
+  "summary": "Visual repair accepted by user after 1752d11d8. Await decision on renderer aggregate ceiling: measured 512619 versus 505000; proposed 515000 remains unapplied.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -168,7 +168,7 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "Preparation stall repaired: grouping reception cannot overtake compaction. All 12 cross-browser checks pass. STOP_CONDITION remains s15 source budget: 512619 versus unchanged 505000. Proposed 515000 not applied; visual acceptance pending, no s16."
+    "summary": "User visually approved repaired common-factor card after 1752d11d8: it looks good. Preserve accepted treatment. Remaining STOP_CONDITION is source budget only: 512619 versus 505000; proposed 515000 not approved or applied. No s16 yet."
   },
   "expectedLearning": [
     "Measure verified ordinary-LaTeX factoring authoring and source-only numeric reuse without renderer glue."

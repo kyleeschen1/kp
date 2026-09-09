@@ -167,3 +167,12 @@ Apply, static editions and injected preparation failure. The eight factoring
 choreography unit tests, 82 native compositor tests, full typecheck and
 architecture checks pass. The focused source/conformance run passed 18/19;
 its sole failure is the previously pending aggregate byte ceiling above.
+
+## Human visual approval
+
+After the cross-browser preparation repair at `1752d11d8`, the user confirmed
+“it looks good.” This accepts the repaired common-factor card's visual treatment.
+Preserve that treatment during subsequent work. Earlier pending-visual statements
+above are historical; the outstanding stop is now the renderer source-size
+decision only: 512,619 bytes against 505,000, with 515,000 proposed and unapplied.
+Visual acceptance does not waive that gate or authorize a broader migration.

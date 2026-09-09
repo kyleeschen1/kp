@@ -65,13 +65,13 @@ The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
 Current Next Action: execute approved `run-contract.kp.common-factor-authoring-v1`
 from `../reviews/2026-09-09-m1-common-factor-authoring-long-loop-proposal.md`.
-Stop at combined s15 visual review before numeric reuse. The canonical factoring
-repair is implemented but stopped at its unchanged renderer source-size gate;
+The user visually approved the repaired common-factor card after `1752d11d8`.
+Before numeric reuse, resolve the unchanged renderer source-size gate;
 see `2026-09-09-canonical-presentation-routing-repair.md` for the approved
 migration, type guarantees, evidence and pending budget decision. Working URLs,
 acceptance questions and earlier primary evidence are
 in `../reviews/2026-09-09-common-factor-primary-visual-checkpoint.md`.
-This is pending human acceptance, not a completed checkpoint. The broader accepted
+Visual acceptance is recorded; the budget gate still prevents checkpoint completion. The broader accepted
 path and limits are in
 `../decisions/2026-09-09-mathematics-expansion-and-m1a-approval.md`.
 R4B closeout remains completed evidence; do not restart its accepted checkpoint.
