@@ -123,7 +123,8 @@
     {
       "id": "s04",
       "title": "Define the smallest reporting adapter over existing results; preserve domain diagnostics and source authority",
-      "status": "planned"
+      "summary": "Small report-only wrapper, lossless owner payloads, discriminated outcomes and negative authority consumer verified.",
+      "status": "complete"
     },
     {
       "id": "s05",

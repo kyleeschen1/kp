@@ -125,6 +125,26 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-09-09T03:10:03.891Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/authoring-entrypoint-report.test.ts tests/authoring-entrypoint-inventory.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-09T03:13:58.810Z",
+      "notes": "Five tests pass, report-only authority and lossless repairs."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-09T03:13:59.853Z"
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-09T03:14:00.821Z",
+      "notes": "Core unchanged; combined 127627 types and 214961 instantiations with real report consumer and negative type cases."
     }
   ],
   "progress": {
