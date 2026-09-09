@@ -93,6 +93,8 @@ test("R4A retained urn source checks, traverses seven stops and exports the exac
     await expect.poll(async () => Number(await card.getAttribute("data-bayes-position"))).toBeCloseTo(step, 9);
     await expect(card.locator("#bayes-tree-description")).toContainText("P(A given B) = 1/7");
   }
+  // A dirty editor must not replace the explicitly displayed export source.
+  await page.locator("[data-bayes-draft]").fill("{");
   const pending = page.waitForEvent("download"); await page.locator("[data-bayes-download]").click();
   const selected = info.outputPath(`r4a-urn-${randomUUID()}.json`);
   await (await pending).saveAs(selected);
@@ -126,6 +128,15 @@ test("R4A retained numeric source exports through its enclosing market branch to
   const name = `r4a-log-${randomUUID().slice(0, 8)}`;
   await history.getByLabel("New source branch name").fill(name);
   await history.getByLabel("Include displayed, compiled equation in this edition").check();
+  await editor.locator("textarea").fill("{");
+  const downloads: string[] = [];
+  page.on("download", download => downloads.push(download.suggestedFilename()));
+  await history.getByRole("button", { name: "Export selected source as branch" }).click();
+  await expect(history).toContainText("Compile and inspect a valid equation before including it");
+  expect(downloads).toEqual([]);
+  await editor.locator("textarea").fill(json);
+  await editor.getByRole("button", { name: "Compile equation draft" }).click();
+  await expect(editor).toHaveAttribute("data-kp-authoring-equation", "compiled");
   const pending = page.waitForEvent("download");
   await history.getByRole("button", { name: "Export selected source as branch" }).click();
   const selected = info.outputPath(`${name}.market.json`); await (await pending).saveAs(selected);

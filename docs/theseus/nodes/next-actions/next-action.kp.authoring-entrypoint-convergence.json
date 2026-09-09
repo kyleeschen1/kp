@@ -409,6 +409,13 @@
       "scope": "standard",
       "checkedAt": "2026-09-09T04:09:42.104Z",
       "notes": "s15: 30 tests pass; complete typecheck passes; core 112278 types/192161 instantiations and combined 127687/214993 remain below fixed ceilings. Handoff is explicitly not-performed with closed per-task capabilities."
+    },
+    {
+      "command": "npm run test:authoring-entrypoints; npm run typecheck; npm run check:architecture; npm run visual:authoring-entrypoints -- --grep R4A-retained; node --test tests/bayesian-reasoning-publication.test.ts tests/reusable-reasoning-publication.test.ts tests/authoring-round-trip-local-build.test.ts",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-09T04:13:47.793Z",
+      "notes": "s16: 32 author tests, five existing edition tests, architecture, full types and two retained Chromium workflows pass. Browser grep executed as R4A retained. Bayes dirty draft exports displayed source; numeric dirty draft blocks enclosing export. No-JS, exact byte reproduction and immutable-versus-rebuildable output boundaries verified."
     }
   ],
   "progress": {

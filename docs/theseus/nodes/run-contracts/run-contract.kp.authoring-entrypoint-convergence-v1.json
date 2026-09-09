@@ -195,7 +195,8 @@
     {
       "id": "s16",
       "title": "Verify exact source handoff to existing local edition builders; expose only currently supported publication paths",
-      "status": "planned"
+      "summary": "Selected checked revisions reproduce in existing publications; stale editor drafts cannot leak; unsupported domains remain explicit; output mutability accurately qualified.",
+      "status": "complete"
     },
     {
       "id": "s17",

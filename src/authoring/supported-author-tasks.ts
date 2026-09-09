@@ -6,21 +6,21 @@ export const supportedAuthorTasks = {
     input: "Exact binary joint masses or prior and two likelihoods; existing teaching settings.",
     preview: { kind: "explicit-apply", url: "/experiments/bayesian-reasoning/" },
     extraction: { kind: "domain-owned", owner: "src/experiments/bayesian-reasoning/extraction.ts" },
-    publication: { kind: "local-edition", command: "author:bayesian-publication", input: "selected Bayes source JSON" }
+    publication: { kind: "local-edition", command: "author:bayesian-publication", output: "immutable-content-addressed", input: "selected Bayes source JSON" }
   },
   "equation.logarithm-base": {
     owner: "src/authoring/equation-series-logarithm-base-draft.ts",
     input: "Two supported numeric change-of-base LaTeX states; verified by the existing binder.",
     preview: { kind: "explicit-apply", url: "/experiments/authoring-market/#equation-authoring" },
     extraction: { kind: "unsupported", reason: "This numeric editor does not expose reusable-reason extraction." },
-    publication: { kind: "enclosing-source-edition", command: "author:market-publication", input: "selected market branch JSON with equationRequest; a bare equation request is not an edition source" }
+    publication: { kind: "enclosing-source-edition", command: "author:market-publication", output: "rebuildable-named-directory", input: "selected market branch JSON with equationRequest; a bare equation request is not an edition source" }
   },
   "reasoning.equation": {
     owner: "src/experiments/reusable-reasoning/authoring.ts",
     input: "Editorial reasoning and exact existing distribution operation references, not arbitrary algebra.",
     preview: { kind: "explicit-apply", url: "/experiments/reusable-reasoning/" },
     extraction: { kind: "domain-owned", owner: "src/experiments/reusable-reasoning/extraction.ts" },
-    publication: { kind: "local-edition", command: "author:reasoning-publication", input: "selected equation reasoning JSON" }
+    publication: { kind: "local-edition", command: "author:reasoning-publication", output: "immutable-content-addressed", input: "selected equation reasoning JSON" }
   },
   "reasoning.code": {
     owner: "src/experiments/reusable-reasoning/code-evidence.ts",
@@ -41,7 +41,7 @@ export const supportedAuthorTasks = {
     input: "Existing market source branch with bounded parameters and Article fact bindings.",
     preview: { kind: "local-source-build", url: "/experiments/authoring-market/", reason: "The graph follows trusted local source builds and explicit retained-revision inspection; checking branch JSON does not apply it to this host." },
     extraction: { kind: "unsupported", reason: "No reusable-reason extraction from the market editor." },
-    publication: { kind: "local-edition", command: "author:market-publication", input: "selected market branch JSON; text and exact facts only" }
+    publication: { kind: "local-edition", command: "author:market-publication", output: "rebuildable-named-directory", input: "selected market branch JSON; text and exact facts only" }
   }
 } as const;
 
