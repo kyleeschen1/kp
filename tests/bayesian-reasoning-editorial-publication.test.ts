@@ -11,6 +11,8 @@ test("authored publication reproduces every projection under one lesson revision
   assert.equal(artifact.compiler.version, "2");
   for (const projection of [payload.full, payload.compact, payload.context, ...payload.prompts]) assert.equal(projection.revisionId, payload.revisionId);
   assert.equal(payload.editorialTitle, spam.editorial.title);
+  // One heading per self-contained full/compact Article, no third shell copy.
+  assert.equal((payload.reading.html.match(/<h1\b/g) ?? []).length, 2);
   assert.ok(payload.reading.html.includes("A false alarm is still a flag"));
   assert.ok(payload.reading.html.includes("What does the flag tell you?"));
   assert.ok(payload.reading.html.includes("Of those 117 messages, 18 are spam"));

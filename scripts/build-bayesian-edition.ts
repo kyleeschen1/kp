@@ -30,7 +30,10 @@ export function compileBayesPublication(sourceText: string, sourcePath: string) 
   });
   const math = latex.map(source => katex.renderToString(source, { displayMode: true, throwOnError: true, trust: false, output: "htmlAndMathml" }));
   const editorialReason = context.editorial ? `<section data-bayes-publication-reason><h2>Why this denominator?</h2><p>${escape(context.editorial.text)}</p></section>` : "";
-  const html = `<article data-bayes-publication-revision="${draft.revisionId}"><h1>${escape(draft.editorial?.title ?? "Change the question. Keep the facts.")}</h1>
+  // The authored full Article already owns its title. Keep the legacy shell
+  // heading only for v1 rather than duplicating a v2 learner-visible heading.
+  const heading = draft.editorial ? "" : "<h1>Change the question. Keep the facts.</h1>";
+  const html = `<article data-bayes-publication-revision="${draft.revisionId}">${heading}
     ${full.html}<details><summary>Compact reading</summary>${compact.html}</details>
     <h2>Seven semantic checkpoints</h2>${draft.score.map((beat, index) => `<section id="${escape(beat.id)}"><h3>${index + 1}. ${escape(beat.title)}</h3>${beat.html}${renderBayesTreeSvg(draft.tree, index, `bayes-static-${index}`)}${index === 3 ? math[0] : index === 4 ? math[1] : ""}</section>`).join("")}
     ${editorialReason}<h2>Self-checks</h2>${prompts.map(prompt => `<section><h3>${escape(prompt.card.title)}</h3><p>${escape(prompt.card.prompt)}</p><details><summary>Reveal answer</summary><p>${escape(prompt.card.answer!.value)}</p></details></section>`).join("")}

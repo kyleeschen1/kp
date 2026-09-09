@@ -2,13 +2,17 @@
   "id": "next-action.kp.authored-explanation-coherence",
   "kind": "next-action",
   "title": "R4B Authored explanation coherence",
-  "status": "in-progress",
+  "status": "blocked",
   "domain": "authoring",
-  "summary": "User explicitly approved the exact R4B loop; begin with task baselines, then preserve s14 human review.",
+  "summary": "HUMAN_CHECKPOINT: await explicit approval of the canonical authored spam-filter lesson and static edition in the review packet. Technical checks pass. Approval reactivates this same target and completes s14 before source-only urn reuse.",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-09-authored-explanation-coherence-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-09-authored-explanation-visual-checkpoint.md"
     }
   ],
   "dependsOn": {
@@ -129,8 +133,26 @@
       "scope": "s13",
       "checkedAt": "2026-09-09T16:27:24.767Z",
       "notes": "Three Chromium cases passed: authored seven-step/readings/reason/practice/export with no JS, invalid-reference Apply preservation and legacy urn practice/publication."
+    },
+    {
+      "command": "npm run visual:authoring-entrypoints -- --grep 'R4B|buttons visibly sample forward|combined checkpoint preserves keyboard|Bayes author apply'",
+      "status": "passed",
+      "scope": "s14",
+      "checkedAt": "2026-09-09T16:37:48.637Z",
+      "notes": "Six Chromium cases passed after heading repair. Final review-only rerun additionally asserts the Article-owned title is visible. Technical proof does not imply human visual approval."
+    },
+    {
+      "command": "npm run test:bayesian-reasoning; npm run typecheck; npm run author:bayesian-publication -- --source content/authoring/r4b-spam-filter.bayes.json --check",
+      "status": "passed",
+      "scope": "s14",
+      "checkedAt": "2026-09-09T16:37:49.628Z",
+      "notes": "53 tests and final full typecheck pass; corrected edition 6e2d8b84965e18ba23e9f4b45a41a7eaabee64feb437973beaea90e15bebd06d byte-verified. Direct Node fixture run hit sandbox EPERM; canonical authorized npm suite passed. Human acceptance remains unrecorded."
     }
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT: primary authored explanation is integrated through immutable edition; await s14 editorial/visual approval before source-only urn reuse. Preserve approved remaining scope and automatic nonvisual approvals."
+  },
   "expectedLearning": [
     "Measure whether author-owned explanation and verified facts compose across existing views without renderer glue; retain honest author effort and mathematical coverage gaps."
   ],

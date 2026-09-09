@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "R4B Authored explanation coherence",
   "status": "in-progress",
-  "summary": "User approved R4B; complete execution metadata, unchanged 22 slices and s14 checkpoint.",
+  "summary": "HUMAN_CHECKPOINT at s14: 13 verified slices complete; target blocked awaiting canonical editorial/visual approval. Scope remains approved; do not execute s15 before acceptance.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -121,7 +121,8 @@
     {
       "id": "s14",
       "title": "Present one combined canonical editorial/visual checkpoint; record acceptance or repair request",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: technical review preparation complete; exact exemplar awaits human editorial/visual approval before s15. Theseus has no blocked slice status; the target carries the wait.",
+      "status": "ready"
     },
     {
       "id": "s15",

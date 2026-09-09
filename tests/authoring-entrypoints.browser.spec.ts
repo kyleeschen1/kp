@@ -12,6 +12,46 @@ import { checkBayesDraft } from "../src/experiments/bayesian-reasoning/draft.ts"
 import { editorialFixture } from "./fixtures/bayes-editorial-source.ts";
 import spamFilterSource from "../content/authoring/r4b-spam-filter.bayes.json" with { type: "json" };
 
+test("R4B checkpoint captures the canonical authored lesson at desktop and narrow widths", async ({ page, browser }, info) => {
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/experiments/bayesian-reasoning/");
+    const card = page.locator("[data-bayes-display] [data-bayes-card]");
+    await expect(card).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+    await page.locator(".bayes-author summary").click();
+    await page.locator("[data-bayes-load-spam]").click();
+    await page.locator("[data-bayes-apply]").click();
+    await expect(page.locator("[data-bayes-editorial]")).toContainText(spamFilterSource.editorial.title);
+    await page.locator(".bayes-author summary").click();
+    for (const step of [0, 3, 4, 6]) {
+      await card.locator("[data-kp-focus-deck-scrubber]").evaluate((node, step) => {
+        (node as HTMLInputElement).value = String(step); node.dispatchEvent(new Event("input", { bubbles: true }));
+      }, step);
+      await expect(card).toHaveAttribute("data-bayes-position", String(step));
+      await card.screenshot({ path: info.outputPath(`r4b-review-${width}-step-${step}.png`) });
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width + 1);
+  }
+  // Review the same immutable content over the one shared origin as well as
+  // the file-based no-JS portability path covered by the primary scenario.
+  const built = buildBayesEdition("content/authoring/r4b-spam-filter.bayes.json");
+  expect(buildBayesEdition("content/authoring/r4b-spam-filter.bayes.json", true).checked).toBe(true);
+  const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 1100, height: 900 } });
+  try {
+    const reading = await context.newPage();
+    const editionId = built.directory.split("/").at(-1)!;
+    await reading.goto(`http://localhost:8000/tmp/codex/bayesian-editions/${editionId}/index.html`);
+    await expect(reading).toHaveTitle(spamFilterSource.editorial.title);
+    await expect(reading.locator("[data-bayes-publication-revision]")).toHaveAttribute("data-bayes-publication-revision", built.revisionId);
+    await expect(reading.locator("svg.bayes-tree")).toHaveCount(7);
+    const title = reading.locator('[data-kp-article="lesson.probability.bayes-full"] > h1');
+    await expect(title).toHaveText(spamFilterSource.editorial.title);
+    await expect(title).toBeVisible();
+    await title.scrollIntoViewIfNeeded();
+    await reading.screenshot({ path: info.outputPath("r4b-review-static-top.png") });
+  } finally { await context.close(); }
+});
+
 test("R4B primary lesson loads as content and traverses the existing seven stops", async ({ page, browser }, info) => {
   const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
   const checked = checkBayesDraft(JSON.stringify(spamFilterSource));

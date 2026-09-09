@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: R4B approved and active; R1–R4A remain complete
+Status: R4B at required combined human checkpoint; R1–R4A remain complete
 Last Updated: 2026-09-09
 Current successor reference: `../reviews/2026-09-07-reconciled-authoring-loop-horizon.md`.
 It preserves the original architectural obligations and the tax/Bayes direction;
@@ -63,10 +63,16 @@ do not treat its proposed roadmap or readiness labels as new execution authority
 The user clarified the remaining code issue as missing gradual passage swiping.
 The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
-Current Next Action: execute the approved 22-slice R4B proposal,
+Current Next Action: obtain the required combined exemplar acceptance, then resume the approved R4B proposal,
 `../reviews/2026-09-09-authored-explanation-coherence-long-loop-proposal.md`, through
 `run-contract.kp.authored-explanation-coherence-v2`. The spam-filter explanation
-is the canonical editorial exemplar; stop at s14 before second-lesson reuse.
+is the canonical editorial exemplar; s14 awaits approval before second-lesson reuse.
+Review links, exact applied source/revision and preservation evidence:
+`../reviews/2026-09-09-authored-explanation-visual-checkpoint.md`.
+One bounded source now feeds card, readings, extraction, practice and immutable
+edition; authored prose remains editorial rather than probability proof.
+Current measured cost amendments under standing approval:
+`../decisions/2026-09-09-editorial-consumer-typescript-cost.md`.
 R4A remains complete. The complete-coverage policy remains
 `../decisions/2026-09-09-typescript-cost-repair-autonomy.md`; the s19 stop
 report is historical measurement evidence. Preserve all six owner consumers,

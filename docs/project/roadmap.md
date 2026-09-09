@@ -79,6 +79,12 @@ Theseus owns completion and per-slice evidence. The supported author packet is
 lesson through existing Bayes views and editions; stop at s14 for combined
 editorial/visual approval before urn reuse. Preserve existing visuals and domain owners;
 stop for material new visual judgment, not routine nonvisual checkpoints.
+The combined exemplar is now ready for that required human review:
+`reviews/2026-09-09-authored-explanation-visual-checkpoint.md` has the working
+shared-server links, exact source/revision, review instructions and evidence.
+Do not begin urn reuse before acceptance. R4B's measured TypeScript-cost amendments
+are recorded in `decisions/2026-09-09-editorial-consumer-typescript-cost.md`;
+all core and frontend consumer coverage remains mandatory.
 External model calls and broader R4 promotion remain deferred. Do not restart
 R1–R4A or activate later horizon work.
 Minimal check-ins, mainly canonical
