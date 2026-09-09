@@ -119,8 +119,8 @@
     {
       "id": "s14",
       "title": "Connect bounded reconstruction/prediction, exact return and local static edition for the primary",
-      "summary": "Risk High; B + V: verified answer, interrupted return, source-to-edition reproduction, no-JS endpoints; C / G; no independent practice/editor framework",
-      "status": "planned"
+      "summary": "Verified practice, exact fractional return and immutable no-JS edition pass 24 tests, two browser checks, full types, architecture and fixed inference gates.",
+      "status": "complete"
     },
     {
       "id": "s15",

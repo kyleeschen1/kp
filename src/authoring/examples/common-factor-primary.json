@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "kp.common-factor-source.v1",
+  "id": "lesson.common-factor.primary",
+  "domain": "real-scalars",
+  "symbols": ["a", "b", "c"],
+  "states": [
+    { "id": "state.common-factor.expanded", "latex": "ab+ac", "narration": "Each product contains the same factor, a. Keep b and c in their original order." },
+    { "id": "state.common-factor.factored", "latex": "a(b+c)", "narration": "Write a once outside the group. Distributing it again would recover both original products." }
+  ],
+  "editorial": {
+    "title": "Find the shared factor",
+    "setup": "Two products can share one piece of structure. Watch the repeated factor become the factor of a whole sum.",
+    "summary": "Factoring is distribution read in the other direction. We did not divide by a, so this also works when a is zero."
+  }
+}

@@ -33,6 +33,7 @@ import { createKpCommonFactorAuthoringSession } from "../../src/authoring/common
 import { mountCommonFactorNativeSurface } from "../../src/experiments/common-factor/native.ts";
 import { renderCommonFactorCard } from "../../src/experiments/common-factor/page.ts";
 import { projectCommonFactorReading } from "../../src/experiments/common-factor/readings.ts";
+import { projectCommonFactorPrompts, captureCommonFactorPosition, resolveCommonFactorPosition } from "../../src/experiments/common-factor/practice.ts";
 const factoringSyntax = readKpCommonFactorSource(undefined); void factoringSyntax;
 const factoringEndpoints = normalizeKpCommonFactorEndpoints(factoringSyntax); void factoringEndpoints;
 const factoringProof = verifyKpCommonFactorRewrite({ domain: factoringSyntax.domain, symbols: factoringSyntax.symbols,
@@ -45,6 +46,11 @@ declare const factoringCard: HTMLElement;
 const factoringNative = mountCommonFactorNativeSurface(factoringCard, factoringDraft); void factoringNative;
 const factoringHtml: string = renderCommonFactorCard(factoringDraft); void factoringHtml;
 const factoringReading = projectCommonFactorReading(factoringDraft, "compact"); void factoringReading;
+const factoringPrompts = projectCommonFactorPrompts(factoringDraft); void factoringPrompts;
+const factoringPosition = captureCommonFactorPosition(factoringDraft, .37);
+const factoringReturn: number = resolveCommonFactorPosition(factoringDraft, factoringPosition); void factoringReturn;
+// @ts-expect-error Practice requires authenticated prepared authority, not a compiled candidate.
+projectCommonFactorPrompts(factoringDraft.candidate);
 // @ts-expect-error Reading output cannot replace a prepared source revision.
 renderCommonFactorCard(factoringReading);
 // @ts-expect-error A syntax candidate cannot acquire native surface authority.

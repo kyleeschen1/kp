@@ -5,8 +5,8 @@ export const supportedAuthorTasks = {
     owner: "src/authoring/common-factor-author-check.ts",
     input: "One ordered two-product common factor over declared single-letter real scalars; nonnegative safe integer coefficients and symbolic addends. Editorial prose is not proof.",
     preview: { kind: "explicit-apply", url: "/experiments/reusable-reasoning/?example=common-factor" },
-    extraction: { kind: "unsupported", reason: "Factoring reading and practice integration is still in progress." },
-    publication: { kind: "unsupported", reason: "Prepared source export is available; a factoring edition builder is not yet implemented." }
+    extraction: { kind: "domain-owned", owner: "src/experiments/common-factor/practice.ts", scope: "Two bounded self-checks and revision-pinned exact return; no automatic grading." },
+    publication: { kind: "local-edition", command: "author:common-factor-publication", output: "immutable-content-addressed", input: "selected common-factor source JSON; static reading and self-checks, not interactive animation" }
   },
   "bayes.binary": {
     owner: "src/experiments/bayesian-reasoning/draft.ts",

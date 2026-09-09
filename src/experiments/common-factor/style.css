@@ -1,6 +1,9 @@
 /* Measurable preparation is outside the displayed/accessibility ownership tree. */
 .common-factor-staging { position: fixed; top: 0; left: 0; opacity: 0; pointer-events: none; z-index: -1; }
 [data-common-factor-error] { color: #922f25; white-space: pre-wrap; }
-[data-common-factor-reading-output] { font-family: var(--kp-st-serif, Georgia, serif); line-height: 1.65; }
+[data-common-factor-reading-output], [data-common-factor-publication-revision] { font-family: var(--kp-st-serif, Georgia, serif); line-height: 1.65; }
+[data-common-factor-publication-revision] code { overflow-wrap: anywhere; }
 [data-common-factor-reading-output] h2 { font-size: 1.35rem; }
 [data-common-factor-reading-output] h3 { font-size: 1.1rem; }
+[data-common-factor-practice-panel][hidden], [data-common-factor-reading-toolbar][hidden] { display: none; }
+[data-common-factor-working] { display: block; width: 100%; box-sizing: border-box; margin-top: .5rem; font: inherit; }

@@ -114,6 +114,13 @@
       "scope": "s13",
       "checkedAt": "2026-09-09T19:17:14.604Z",
       "notes": "Twenty-one factoring and eleven Bayes reading/publication tests pass; full and compact Article views preserve facts and revision; full types, inference and desktop/phone Chromium smoke pass."
+    },
+    {
+      "command": "npm run test:common-factor-authoring; npm run visual:common-factor-authoring; npm run typecheck; npm run check:architecture; npm run check:inference; node --disable-warning=ExperimentalWarning --test tests/bayesian-reasoning-publication.test.ts; npm run author:common-factor-publication -- --source src/authoring/examples/common-factor-primary.json --check",
+      "status": "passed",
+      "scope": "s14",
+      "checkedAt": "2026-09-09T19:34:44.250Z",
+      "notes": "Verified practice, exact fractional return and immutable no-JS edition pass 24 tests, two browser checks, full types, architecture and fixed inference gates."
     }
   ],
   "expectedLearning": [

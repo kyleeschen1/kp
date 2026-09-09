@@ -27,13 +27,20 @@ export function renderCommonFactorPage(draft: KpPreparedCommonFactorDraft) {
     <div data-common-factor-reader>${renderCommonFactorCard(draft)}</div>
     <p class="review-help">Swipe or scroll horizontally to control the transformation. Release to settle; arrows play one complete step.</p>
     <p data-common-factor-summary>${escape(draft.source.editorial.summary)}</p>
-    <div class="reasoning-toolbar"><label>Reading <select data-common-factor-reading><option value="full">Full</option><option value="compact">Compact</option></select></label></div>
+    <div class="reasoning-toolbar" data-common-factor-reading-toolbar><label>Reading <select data-common-factor-reading><option value="full">Full</option><option value="compact">Compact</option></select></label>
+    <button type="button" data-common-factor-practice="prediction">Predict</button><button type="button" data-common-factor-practice="reconstruction">Reconstruct</button></div>
+    <section data-common-factor-practice-panel hidden aria-label="Factoring self-check"><h2 data-common-factor-prompt-title></h2><p data-common-factor-prompt></p>
+    <p>All symbols are real scalars. Preserve the order of the products and addends.</p>
+    <label>Your working (self-check, not automatic grading)<textarea data-common-factor-working rows="3"></textarea></label>
+    <div class="reasoning-toolbar"><button type="button" data-common-factor-reveal>Compare with the verified answer</button><button type="button" data-common-factor-return>Return to reading</button></div>
+    <p data-common-factor-answer hidden></p></section>
     <section data-common-factor-reading-output data-revision="${escape(draft.revisionId)}" aria-label="Verified factoring reading">${projectCommonFactorReading(draft, "full").html}</section>
     <details data-reasoning-editor><summary>Edit source JSON</summary>
     <p>Declare single-letter real scalars. This task preserves product and addend order; it does not solve general polynomial factoring. Prose is editorial, not proof.</p>
     <label>Factoring source JSON<textarea data-reasoning-json rows="20" spellcheck="false"></textarea></label>
     <div class="reasoning-toolbar"><button type="button" data-common-factor-apply>Apply source</button><button type="button" data-common-factor-download>Download displayed source</button></div>
     <p data-reasoning-draft-status role="status">Only successfully prepared revisions replace the displayed card.</p>
+    <p>Build a local static edition from the downloaded source with <code>npm run author:common-factor-publication -- --source &lt;common-factor.json&gt;</code>. Existing edition bytes are immutable; template changes affect new builds.</p>
     <p>Displayed revision: <code data-reasoning-revision>${escape(draft.revisionId)}</code></p></details>
     <p data-common-factor-error role="alert" hidden></p>`;
 }

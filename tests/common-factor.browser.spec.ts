@@ -1,4 +1,7 @@
 import { test, expect } from "@playwright/test";
+import { buildCommonFactorEdition } from "../scripts/build-common-factor-edition.ts";
+import { relative } from "node:path";
+import { createKpCommonFactorExample } from "../src/authoring/common-factor-author-check.ts";
 
 test("primary factoring traverses native endpoints, direct reverse and shared controls", async ({ page }, info) => {
   const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
@@ -50,9 +53,50 @@ test("primary factoring traverses native endpoints, direct reverse and shared co
   await expect(reading).toHaveAttribute("data-revision", (await root.getAttribute("data-common-factor-revision"))!);
   await expect(reading).toContainText("common factor may be zero");
   await expect(reading.locator("math")).toHaveCount(2);
+  for (const kind of ["prediction", "reconstruction"]) {
+    await card.locator("[data-kp-focus-deck-scrubber]").evaluate(node => {
+      const input = node as HTMLInputElement; input.value = "0.37"; input.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+    await expect(card).toHaveAttribute("data-common-factor-progress", "0.37");
+    const origin = page.locator(`[data-common-factor-practice="${kind}"]`);
+    await origin.click();
+    await expect(page.locator("[data-common-factor-practice-panel]")).toBeVisible();
+    await expect(page.locator("[data-reasoning-editor]")).toBeHidden();
+    await expect(page.locator("[data-common-factor-answer]")).toBeHidden();
+    await expect(card).toHaveAttribute("data-common-factor-progress", "0");
+    await page.locator("[data-common-factor-working]").fill("Distribute to check; no division required.");
+    await page.locator("[data-common-factor-reveal]").click();
+    await expect.poll(async () => Number(await card.getAttribute("data-common-factor-progress"))).toBeGreaterThan(0);
+    expect(Number(await card.getAttribute("data-common-factor-progress"))).toBeLessThan(1);
+    await expect(card).toHaveAttribute("data-common-factor-progress", "1", { timeout: 10_000 });
+    await expect(page.locator("[data-common-factor-answer]")).toContainText("no division");
+    await page.locator("[data-common-factor-return]").click();
+    await expect(card).toHaveAttribute("data-common-factor-progress", "0.37");
+    await expect(origin).toBeFocused();
+    await expect(reading.locator("h2")).toHaveText("Compact reading");
+  }
   await page.setViewportSize({ width: 390, height: 844 });
   await card.scrollIntoViewIfNeeded();
   await expect(card.locator("[data-kp-canonical-equation-host]")).toHaveAttribute("data-kp-reader-canonical-paint-owner", "true");
   await card.screenshot({ path: info.outputPath("primary-phone.png") });
   expect(errors).toEqual([]);
+});
+
+test("primary local edition renders math and self-checks with JavaScript disabled", async ({ browser }, info) => {
+  const edition = buildCommonFactorEdition("src/authoring/examples/common-factor-primary.json");
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    const page = await context.newPage();
+    const response = await page.goto(`http://localhost:8000/${relative(process.cwd(), edition.directory)}/index.html`);
+    expect(response?.ok()).toBe(true);
+    await expect(page.locator("h1")).toHaveText(createKpCommonFactorExample().editorial.title);
+    await expect(page.locator("math")).toHaveCount(6);
+    await expect(page.locator("[data-common-factor-publication-revision]")).toHaveAttribute("data-common-factor-publication-revision", edition.revisionId);
+    await page.getByText("Compact reading", { exact: true }).first().click();
+    await page.getByText("Compare with the verified answer", { exact: true }).first().click();
+    await expect(page.getByText("Distributing the common factor recovers both ordered products.", { exact: false }).first()).toBeVisible();
+    await page.screenshot({ path: info.outputPath("static-edition.png"), fullPage: true });
+    await page.setViewportSize({ width: 390, height: 844 });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  } finally { await context.close(); }
 });

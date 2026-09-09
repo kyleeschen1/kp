@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
-import { basename, dirname, join, relative, resolve } from "node:path";
-import { existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, rmSync, writeFileSync } from "node:fs";
+import { basename, join, resolve } from "node:path";
+import { readFileSync, readdirSync } from "node:fs";
+import { writeKpImmutableLocalEdition } from "./immutable-local-edition.ts";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
 import katex from "katex";
@@ -71,28 +72,8 @@ export function buildBayesEdition(sourcePath: string, check = false) {
     files.set(`styles/${path}`, path === "reader/app/exemplar.css"
       ? source.replace('@import "katex/dist/katex.min.css";', '@import "../../../katex.min.css";') : source);
   }
-  const manifest = { schemaVersion: "kp.bayes-edition-files.v1", revisionId: artifact.payload.revisionId,
-    files: Object.fromEntries([...files].sort(([a], [b]) => a.localeCompare(b)).map(([name, bytes]) => [name, digest(bytes)])) };
-  const directory = join(bayesEditionRoot, digest(JSON.stringify(manifest)).slice(7));
-  files.set("edition.json", JSON.stringify(manifest, null, 2) + "\n");
-  for (const name of files.keys()) {
-    let current = repo;
-    for (const part of relative(repo, join(directory, name)).split("/")) {
-      current = join(current, part);
-      if (lstatSync(current, { throwIfNoEntry: false })?.isSymbolicLink()) throw new Error("Edition output cannot traverse symlinks.");
-    }
-  }
-  if (check || existsSync(directory)) {
-    for (const [name, bytes] of files) if (!readFileSync(join(directory, name)).equals(Buffer.from(bytes)))
-      throw new Error(`Edition is stale or altered: ${name}`);
-  } else {
-    mkdirSync(bayesEditionRoot, { recursive: true });
-    const staging = mkdtempSync(join(bayesEditionRoot, ".building-"));
-    try {
-      for (const [name, bytes] of files) { const target = join(staging, name); mkdirSync(dirname(target), { recursive: true }); writeFileSync(target, bytes, { flag: "wx" }); }
-      renameSync(staging, directory);
-    } finally { rmSync(staging, { recursive: true, force: true }); }
-  }
+  const directory = writeKpImmutableLocalEdition({ repo, editionRoot: bayesEditionRoot, schemaVersion: "kp.bayes-edition-files.v1",
+    revisionId: artifact.payload.revisionId, files, check });
   return { directory, revisionId: artifact.payload.revisionId, sourceRevision: artifact.source.sha256, checked: check };
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {

@@ -11,6 +11,9 @@ import { mountKpFocusDeckNativeInput } from "../../tutorial/focus-deck-native-in
 import { bindKpFocusDeckKeyboard } from "../../tutorial/focus-deck-keyboard.ts";
 import { resolveKpFocusDeckVisibleBeat } from "../../tutorial/focus-deck-beat-navigation.ts";
 import { projectCommonFactorReading } from "./readings.ts";
+import { projectCommonFactorPrompts, captureCommonFactorPosition, resolveCommonFactorPosition } from "./practice.ts";
+import { renderKpFocusDeckScaffold } from "../../tutorial/focus-deck-scaffold.ts";
+import { escapeCommonFactorText } from "./page.ts";
 
 const root = document.querySelector<HTMLElement>("#authored-focus-card")!;
 const report = (error: unknown) => {
@@ -30,13 +33,15 @@ async function mountCard(container: HTMLElement, draft: KpPreparedCommonFactorDr
   const replay = card.querySelector<HTMLButtonElement>("[data-kp-focus-deck-replay]")!;
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const beats = commonFactorBeats(draft);
-  let disposed = false, visible = 0;
+  let disposed = false, visible = 0, practicing = false;
+  const originalPassage = viewport.innerHTML;
   let input: ReturnType<typeof mountKpFocusDeckNativeInput> | undefined;
   viewport.dataset["kpFocusDeckSnapDisabled"] = "true";
   const cancel = () => { input?.cancel(); playback.cancel(); };
   const render = () => {
     if (disposed) return;
     surface.render(reduced.matches);
+    if (practicing) return;
     const position = playback.position();
     visible = resolveKpFocusDeckVisibleBeat(position, visible, playback.last);
     slider.value = String(position); slider.setAttribute("aria-valuetext", beats[visible]!.title);
@@ -58,9 +63,9 @@ async function mountCard(container: HTMLElement, draft: KpPreparedCommonFactorDr
   slider.oninput = () => { cancel(); clock.pause(); clock.seek(Number(slider.value)); };
   const release = () => playback.seek(Math.round(playback.position()), !reduced.matches, true);
   slider.onchange = release; slider.onpointerup = release; slider.onpointercancel = release;
-  const unbindKeyboard = bindKpFocusDeckKeyboard({ card, slider, enabled: () => !disposed,
+  const unbindKeyboard = bindKpFocusDeckKeyboard({ card, slider, enabled: () => !disposed && !practicing,
     position: playback.position, checkpointCount: () => 2, navigate });
-  input = mountKpFocusDeckNativeInput({ viewport, region: card, enabled: () => !disposed,
+  input = mountKpFocusDeckNativeInput({ viewport, region: card, enabled: () => !disposed && !practicing,
     position: playback.position, begin: playback.begin, reduced: () => reduced.matches, interrupt: cancel });
   const resize = () => { if (!disposed) { cancel(); clock.pause(); surface.resize(); render(); } };
   const visibility = () => { if (document.hidden) { cancel(); clock.pause(); } };
@@ -70,7 +75,19 @@ async function mountCard(container: HTMLElement, draft: KpPreparedCommonFactorDr
     window.removeEventListener("resize", resize); document.removeEventListener("visibilitychange", visibility); reduced.removeEventListener("change", resize); };
   window.addEventListener("resize", resize); document.addEventListener("visibilitychange", visibility); reduced.addEventListener("change", resize);
   render(); card.dataset["kpFocusCardEnhancement"] = "ready";
-  return { card, clock, dispose, render, cancel };
+  return { card, clock, dispose, render, cancel, reveal: () => navigate(1),
+    practice(prompt?: string) {
+      cancel(); clock.pause(); practicing = prompt !== undefined;
+      card.querySelector<HTMLElement>(".kp-focus-deck__navigation")!.inert = practicing;
+      card.querySelector<HTMLElement>("[data-common-factor-count]")!.hidden = practicing;
+      if (prompt !== undefined) {
+        const template = document.createElement("div");
+        template.innerHTML = renderKpFocusDeckScaffold({ id: "common-factor-question", ariaLabel: "Practice", stageHtml: "", activeBeatSlug: "question",
+          beats: [{ slug: "question", title: "Your turn", html: `<p>${escapeCommonFactorText(prompt)}</p>` }] });
+        viewport.innerHTML = template.querySelector<HTMLElement>("[data-kp-focus-deck-viewport]")!.innerHTML;
+        viewport.scrollLeft = 0; clock.seek(0);
+      } else { viewport.innerHTML = originalPassage; render(); }
+    } };
 }
 
 async function mount() {
@@ -85,10 +102,12 @@ async function mount() {
   const reading = root.querySelector<HTMLSelectElement>("[data-common-factor-reading]")!;
   const readingOutput = root.querySelector<HTMLElement>("[data-common-factor-reading-output]")!;
   let mode: "full" | "compact" = "full";
+  let practice: { prompt: ReturnType<typeof projectCommonFactorPrompts>[number]; position: ReturnType<typeof captureCommonFactorPosition>; scrollY: number; origin: HTMLButtonElement } | undefined;
   let active = await mountCard(display, initial), disposed = false;
   const session = createKpCommonFactorAuthoringSession({ initial,
     prepare: async draft => {
       const full = projectCommonFactorReading(draft, "full"), compact = projectCommonFactorReading(draft, "compact");
+      projectCommonFactorPrompts(draft);
       const staging = document.createElement("div"); staging.className = "common-factor-staging";
       staging.inert = true; staging.setAttribute("aria-hidden", "true"); staging.style.width = `${display.getBoundingClientRect().width}px`;
       staging.innerHTML = renderCommonFactorCard(draft); display.after(staging);
@@ -108,6 +127,33 @@ async function mount() {
   editor.value = exportKpCommonFactorSource(initial);
   reading.onchange = () => { mode = reading.value === "compact" ? "compact" : "full";
     readingOutput.innerHTML = projectCommonFactorReading(session.current(), mode).html; };
+  const panel = root.querySelector<HTMLElement>("[data-common-factor-practice-panel]")!;
+  const answer = root.querySelector<HTMLElement>("[data-common-factor-answer]")!;
+  const togglePractice = (enabled: boolean) => {
+    for (const node of [readingOutput, summary, setup, root.querySelector<HTMLElement>("[data-reasoning-editor]")!, root.querySelector<HTMLElement>("[data-common-factor-reading-toolbar]")!]) node.hidden = enabled;
+    panel.hidden = !enabled;
+  };
+  root.querySelectorAll<HTMLButtonElement>("[data-common-factor-practice]").forEach(button => { button.onclick = () => {
+    session.invalidate(); active.cancel(); active.clock.pause();
+    const prompt = projectCommonFactorPrompts(session.current()).find(p => p.kind === button.dataset["commonFactorPractice"]);
+    if (!prompt) throw new Error("Unknown factoring practice mode.");
+    practice = { prompt, position: captureCommonFactorPosition(session.current(), active.clock.getSnapshot().progress), scrollY: window.scrollY, origin: button };
+    root.querySelector<HTMLElement>("[data-common-factor-prompt-title]")!.textContent = prompt.card.title;
+    root.querySelector<HTMLElement>("[data-common-factor-prompt]")!.textContent = prompt.card.prompt;
+    root.querySelector<HTMLTextAreaElement>("[data-common-factor-working]")!.value = "";
+    answer.hidden = true; answer.textContent = ""; togglePractice(true); active.practice(prompt.card.prompt);
+    root.querySelector<HTMLTextAreaElement>("[data-common-factor-working]")!.focus();
+  }; });
+  root.querySelector<HTMLButtonElement>("[data-common-factor-reveal]")!.onclick = () => {
+    if (!practice) return; answer.hidden = false;
+    answer.textContent = `${practice.prompt.answerLatex}. ${practice.prompt.answerExplanation}`; active.reveal();
+  };
+  root.querySelector<HTMLButtonElement>("[data-common-factor-return]")!.onclick = () => {
+    if (!practice) return;
+    const progress = resolveCommonFactorPosition(session.current(), practice.position), { scrollY, origin } = practice;
+    practice = undefined; togglePractice(false); active.practice(); active.clock.seek(progress);
+    origin.focus({ preventScroll: true }); window.scrollTo({ top: scrollY, behavior: "instant" });
+  };
   editor.oninput = () => { session.invalidate(); status.textContent = "Draft changed. Apply to prepare a new displayed revision."; };
   root.querySelector<HTMLButtonElement>("[data-common-factor-apply]")!.onclick = async () => {
     status.textContent = "Checking and preparing…";
