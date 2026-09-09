@@ -227,6 +227,13 @@
       "scope": "s21",
       "checkedAt": "2026-09-09T23:12:22.949Z",
       "notes": "Scripted evidence only, not model/comprehension evidence. Primary816/numeric744 source bytes; exact revisions, repair counts and host-owned surface disposal verified;32 tests pass."
+    },
+    {
+      "command": "npm run visual:common-factor-authoring:cohort; npm run typecheck; npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "s22",
+      "checkedAt": "2026-09-09T23:18:01.162Z",
+      "notes": "24 browser checks and82 compositor checks pass. Bounded200ms observations show zero idle and disposed-card mutations after three swaps. Not physical-device or long-duration performance certification."
     }
   ],
   "progress": {

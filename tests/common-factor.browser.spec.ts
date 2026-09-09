@@ -227,14 +227,55 @@ test("numeric source reuses the same card without renderer glue", async ({ page 
   await expect(page.locator(".common-factor-staging")).toHaveCount(0);
 });
 
-test("primary local edition renders math and self-checks with JavaScript disabled", async ({ browser }, info) => {
-  const edition = buildCommonFactorEdition("src/authoring/examples/common-factor-primary.json");
+test("repeated Apply disposes old card owners and reduced motion preserves endpoints without idle paint", async ({ page }, info) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/experiments/reusable-reasoning/?example=common-factor");
+  await expectPrepared(page);
+  await page.locator("[data-reasoning-editor] summary").click();
+  const card = page.locator("[data-common-factor-card]");
+  const counts = [];
+  for (const source of [numericSource, createKpCommonFactorExample(), numericSource]) {
+    const old = await card.elementHandle();
+    await page.locator("[data-reasoning-json]").fill(JSON.stringify(source));
+    await page.locator("[data-common-factor-apply]").click();
+    await expect(page.locator("[data-reasoning-draft-status]")).toHaveText("Displayed revision updated.");
+    expect(await old!.evaluate(node => node.isConnected)).toBe(false);
+    await expect(card).toHaveCount(1);
+    await expect(page.locator(".common-factor-staging")).toHaveCount(0);
+    await card.locator("[data-kp-focus-deck-next]").click();
+    await expect(card).toHaveAttribute("data-common-factor-progress", "1");
+    await card.locator("[data-kp-focus-deck-previous]").click();
+    await expect(card).toHaveAttribute("data-common-factor-progress", "0");
+    const staleMutations = await old!.evaluate(async node => {
+      let count = 0;
+      const observer = new MutationObserver(records => { count += records.length; });
+      observer.observe(node, { subtree: true, attributes: true, childList: true, characterData: true });
+      window.dispatchEvent(new Event("resize"));
+      await new Promise(resolve => setTimeout(resolve, 200)); observer.disconnect(); return count;
+    });
+    expect(staleMutations).toBe(0);
+    await old!.dispose();
+    const idleMutations = await card.evaluate(async node => {
+      let count = 0;
+      const observer = new MutationObserver(records => { count += records.length; });
+      observer.observe(node, { subtree: true, attributes: true, childList: true, characterData: true });
+      await new Promise(resolve => setTimeout(resolve, 200)); observer.disconnect(); return count;
+    });
+    expect(idleMutations).toBe(0);
+    counts.push({ staleMutations, idleMutations });
+  }
+  await info.attach("bounded-idle-and-disposal", { body: JSON.stringify(counts), contentType: "application/json" });
+});
+
+for (const example of ["primary", "numeric"] as const) test(example + " local edition renders math and self-checks with JavaScript disabled", async ({ browser }, info) => {
+  const edition = buildCommonFactorEdition("src/authoring/examples/common-factor-" + example + ".json");
   const context = await browser.newContext({ javaScriptEnabled: false });
   try {
     const page = await context.newPage();
     const response = await page.goto(`http://localhost:8000/${relative(process.cwd(), edition.directory)}/index.html`);
     expect(response?.ok()).toBe(true);
-    await expect(page.locator("h1")).toHaveText(createKpCommonFactorExample().editorial.title);
+    await expect(page.locator("h1")).toHaveText((example === "primary" ? createKpCommonFactorExample() : numericSource).editorial.title);
     await expect(page.locator("math")).toHaveCount(6);
     await expect(page.locator("[data-common-factor-publication-revision]")).toHaveAttribute("data-common-factor-publication-revision", edition.revisionId);
     await page.getByText("Compact reading", { exact: true }).first().click();

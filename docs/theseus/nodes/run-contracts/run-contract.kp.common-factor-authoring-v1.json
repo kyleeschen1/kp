@@ -171,8 +171,8 @@
     {
       "id": "s22",
       "title": "Run bounded promotion cohort and lifecycle/performance preservation",
-      "summary": "Risk High; B: stable Chromium/Firefox/WebKit command; gestures, keyboard, buttons, phone, reduced motion, repeated Apply/disposal, zero idle ownership leaks; C / G; repair in scope without weakening checks",
-      "status": "planned"
+      "summary": "24 cross-browser cohort tests, full typecheck and82 compositor tests pass; both editions and bounded lifecycle/idle preservation verified.",
+      "status": "complete"
     },
     {
       "id": "s23",
