@@ -92,7 +92,8 @@
     {
       "id": "s01",
       "title": "Pin the two author tasks, owner/host/capability map, output baselines and command names; reconcile stale workflow summary",
-      "status": "planned"
+      "summary": "Two author-task baseline tests and fixed inference pass; retained source, owners and command names recorded; stale workflow reconciled.",
+      "status": "complete"
     },
     {
       "id": "s02",

@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "kp.bayes-source.v1",
+  "model": {
+    "kind": "prior-likelihoods",
+    "sourceId": "probability.two-urns-prior-third.v1",
+    "events": [
+      { "id": "urn-a", "label": "Selected urn A", "complementLabel": "Selected urn B" },
+      { "id": "red", "label": "Drew red", "complementLabel": "Drew blue" }
+    ],
+    "prior": "1/3",
+    "likelihoods": ["1/4", "3/4"]
+  },
+  "teaching": { "firstEventId": "red", "detailLevel": "key-steps" }
+}

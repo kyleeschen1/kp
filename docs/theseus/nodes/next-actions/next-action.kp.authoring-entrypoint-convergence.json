@@ -9,6 +9,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-08-authoring-entrypoint-convergence-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-09-authoring-entrypoint-baseline.md"
     }
   ],
   "dependsOn": {
@@ -23,6 +27,22 @@
     "npm run typecheck",
     "npm test",
     "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/authoring-entrypoint-baseline.test.ts",
+      "status": "passed",
+      "scope": "s01",
+      "checkedAt": "2026-09-09T02:37:19.819Z",
+      "notes": "Two exact author-task baselines pass; no runtime or choreography change."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s01",
+      "checkedAt": "2026-09-09T02:37:20.882Z",
+      "notes": "Preconsumer baseline unchanged: 112278 types, 192161 instantiations."
+    }
   ],
   "expectedLearning": [
     "Measure whether supported tasks cross CLI and browser without duplicate authority, hidden capabilities or extra renderer glue."
