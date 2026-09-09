@@ -141,7 +141,8 @@
     {
       "id": "s07",
       "title": "Expose the existing numeric equation draft compilation through the same domain-owned boundary used by the browser",
-      "status": "planned"
+      "summary": "Existing shared numeric domain boundary statically guarantees candidate and verified semantic evidence on success; no new algebra, motif or semantic authority.",
+      "status": "complete"
     },
     {
       "id": "s08",

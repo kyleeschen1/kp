@@ -1,4 +1,4 @@
-import { compileKpEquationTransformSeries, type KpEquationTransformSeriesCompilationState } from "./compile-equation-transform-series.ts";
+import { compileKpEquationTransformSeries, type KpEquationTransformSeriesCompilationState, type KpCompiledEquationTransformSeriesCandidate } from "./compile-equation-transform-series.ts";
 import { compileKpEquationSeriesLogarithmBaseExample, createKpEquationSeriesLogarithmBaseExample } from "./equation-series-logarithm-base-example.ts";
 import { createKpEquationSeriesLogarithmBaseSemanticSource, KP_LOGARITHM_BASE_AUTHORING_OPERATION_ID } from "./equation-series-logarithm-base-authoring.ts";
 import { bindKpEquationSeriesGovernedRequest } from "./equation-series-governed-source-binding.ts";
@@ -6,9 +6,13 @@ import { normalizeKpEquationTransformSeriesEndpoints } from "./equation-latex-en
 import { validateKpEquationTransformSeriesRequest } from "./equation-transform-series-request.ts";
 import { kpCanonicalLogarithmChangeOfBase, verifyKpLogarithmChangeOfBase, type KpVerifiedLogarithmChangeOfBase, type KpLogarithmChangeOfBaseDraft } from "../semantic/logarithm-change-of-base.ts";
 
-export type KpLogarithmBaseDraftCompilation = KpEquationTransformSeriesCompilationState & {
+type DraftAttempt = KpEquationTransformSeriesCompilationState & {
   readonly semantic?: KpVerifiedLogarithmChangeOfBase | undefined;
 };
+export type KpLogarithmBaseDraftCompilation =
+  | (DraftAttempt & { readonly status: "compiled"; readonly active: KpCompiledEquationTransformSeriesCandidate;
+      readonly semantic: KpVerifiedLogarithmChangeOfBase })
+  | (DraftAttempt & { readonly status: "repair-required" });
 
 export function createKpEquationSeriesLogarithmBaseDraft() {
   const example = createKpEquationSeriesLogarithmBaseExample().value;
@@ -20,6 +24,15 @@ export function createKpEquationSeriesLogarithmBaseDraft() {
  * law, domain evidence and correspondence. Explicit legacy pins stay strict. */
 export function compileKpEquationSeriesLogarithmBaseDraft(value: unknown,
   previous?: KpLogarithmBaseDraftCompilation): KpLogarithmBaseDraftCompilation {
+  const result = compileDraft(value, previous);
+  if (result.status === "repair-required") return { ...result, status: "repair-required" };
+  // CLI and browser share this boundary. Success cannot expose a partial
+  // candidate; the upstream compiler still owns every mathematical check.
+  if (!result.active || !result.semantic) throw new Error("Compiled logarithm draft requires its candidate and verified semantic source.");
+  return { ...result, status: "compiled", active: result.active, semantic: result.semantic };
+}
+
+function compileDraft(value: unknown, previous?: KpLogarithmBaseDraftCompilation): DraftAttempt {
   const fail = (message: string, path = "$.states", code = "equation-series.logarithm-base.draft") => ({
     ...compileKpEquationTransformSeries({ value, previous, externalDiagnostics: [{ code, path, message,
       repair: "Use two matching numeric log-base and natural-log quotient states, with a positive base other than one and a positive argument. Leave semanticArguments empty for compiler-owned binding." }] }),

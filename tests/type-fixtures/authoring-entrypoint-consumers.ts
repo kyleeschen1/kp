@@ -5,6 +5,7 @@ import { routeKpCrossDomainGalleryGeneration } from "../../scripts/cross-domain-
 import { kpGalleryGraph3DSaddleParameterFrontend, kpGalleryGraph3DSaddleParameterRequest } from "../../scripts/gallery-graph-3d-saddle-parameter-frontend.ts";
 import { reportAuthorCheck } from "../../src/authoring/author-check-report.ts";
 import type { PreparedBayesDraft } from "../../src/experiments/bayesian-reasoning/draft.ts";
+import type { KpLogarithmBaseDraftCompilation } from "../../src/authoring/equation-series-logarithm-base-draft.ts";
 
 // Measure the actual owner closures before a facade can hide their costs.
 const bayes = checkBayesDraft(JSON.stringify(createBayesDraft()));
@@ -24,8 +25,11 @@ if (bayes.status === "compiled") {
 }
 const equation = compileKpEquationSeriesLogarithmBaseDraft(createKpEquationSeriesLogarithmBaseDraft());
 if (equation.status === "compiled") {
-  const active = equation.active; void active;
+  const count: number = equation.active.request.states.length; void count;
+  const semanticId: string = equation.semantic.id; void semanticId;
 }
+// @ts-expect-error A compiled numeric result requires active candidate and semantic evidence.
+const partialEquation: KpLogarithmBaseDraftCompilation = { status: "compiled", repairs: [] }; void partialEquation;
 const code = bindCodeReasoningEvidence(createCodeReasoningSource());
 const kind: "pedagogical-stage" = code.context.checkpointKind; void kind;
 // @ts-expect-error Code evidence does not have mathematical semantic stops.

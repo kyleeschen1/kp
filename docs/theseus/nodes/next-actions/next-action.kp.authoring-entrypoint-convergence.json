@@ -192,6 +192,39 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-09-09T03:23:04.765Z"
+    },
+    {
+      "command": "npm run test:authoring-entrypoints",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-09T03:26:44.259Z",
+      "notes": "16 tests pass; compiled numeric state complete and invalid domains retain prior truth."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/authoring-round-trip-equation-draft.test.ts tests/authoring-round-trip-equation-repair.test.ts tests/equation-series-logarithm-base-authoring.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-09T03:26:45.748Z",
+      "notes": "11 existing equation preservation tests pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-09T03:26:47.185Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-09T03:26:48.315Z"
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-09T03:26:49.398Z",
+      "notes": "Core unchanged; combined 127646 types and 214967 instantiations."
     }
   ],
   "progress": {
