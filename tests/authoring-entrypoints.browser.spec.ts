@@ -13,6 +13,49 @@ import { editorialFixture } from "./fixtures/bayes-editorial-source.ts";
 import spamFilterSource from "../content/authoring/r4b-spam-filter.bayes.json" with { type: "json" };
 import urnExplanationSource from "../content/authoring/r4b-urn-explanation.bayes.json" with { type: "json" };
 
+test("R4B lifecycle repeated lesson swaps dispose old owners and leave idle paint unchanged", async ({ page }, info) => {
+  const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
+  await page.goto("/experiments/bayesian-reasoning/");
+  const card = page.locator("[data-bayes-display] [data-bayes-card]");
+  await expect(card).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+  await page.locator(".bayes-author summary").click();
+  const measurements: { lesson: string; applyMs: number; idleMutations: number }[] = [];
+  for (let i = 0; i < 6; i++) {
+    const source = i % 2 === 0 ? spamFilterSource : urnExplanationSource;
+    const checked = checkBayesDraft(JSON.stringify(source));
+    if (checked.status !== "compiled") throw new Error(checked.diagnostic.expected);
+    const old = (await card.elementHandle())!;
+    await page.locator("[data-bayes-draft]").fill(JSON.stringify(source));
+    const start = performance.now();
+    await page.locator("[data-bayes-apply]").click();
+    await expect(card).toHaveAttribute("data-bayes-revision", checked.draft.revisionId);
+    const applyMs = performance.now() - start;
+    expect(await old.evaluate(node => node.isConnected)).toBe(false);
+    const detached = await old.evaluate(node => node.outerHTML);
+    await expect(page.locator(".bayes-staging")).toHaveCount(0);
+    await expect(page.locator("[data-bayes-card]")).toHaveCount(1);
+    await card.locator("[data-kp-focus-deck-scrubber]").evaluate(node => {
+      (node as HTMLInputElement).value = "0"; node.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+    await card.locator("[data-kp-focus-deck-next]").click();
+    await expect(card).toHaveAttribute("data-bayes-position", "1");
+    expect(await old.evaluate(node => node.outerHTML)).toBe(detached);
+    await old.dispose();
+    const idleMutations = await card.evaluate(async node => {
+      await new Promise(requestAnimationFrame);
+      let count = 0;
+      const observer = new MutationObserver(records => { count += records.length; });
+      observer.observe(node, { subtree: true, attributes: true, childList: true, characterData: true });
+      await new Promise(resolve => setTimeout(resolve, 200)); observer.disconnect(); return count;
+    });
+    expect(idleMutations).toBe(0);
+    measurements.push({ lesson: source.model.sourceId, applyMs, idleMutations });
+  }
+  expect(errors).toEqual([]);
+  console.log(JSON.stringify({ browser: info.project.name, measurements }));
+  await info.attach("r4b-lifecycle", { body: JSON.stringify(measurements), contentType: "application/json" });
+});
+
 test("R4B both authored lessons propagate prose and model edits and reject invalid replacement", async ({ page }) => {
   await page.goto("/experiments/bayesian-reasoning/");
   const card = page.locator("[data-bayes-display] [data-bayes-card]");

@@ -3,8 +3,11 @@ import assert from "node:assert/strict";
 import { createBayesAuthoringSession } from "../src/experiments/bayesian-reasoning/authoring.ts";
 import { checkBayesDraft, createBayesDraft } from "../src/experiments/bayesian-reasoning/draft.ts";
 import { editorialFixture } from "./fixtures/bayes-editorial-source.ts";
+import spam from "../content/authoring/r4b-spam-filter.bayes.json" with { type: "json" };
+import urn from "../content/authoring/r4b-urn-explanation.bayes.json" with { type: "json" };
 
-for (const [version, source] of [["v1", createBayesDraft()], ["v2", editorialFixture()]] as const)
+for (const [version, source] of [["v1", createBayesDraft()], ["v2", editorialFixture()],
+  ["authored spam", structuredClone(spam)], ["authored urn", structuredClone(urn)]] as const)
 test(`${version} atomic preview retains current on invalid, failed or superseded preparation and disposes stale resources`, async () => {
   const initial = checkBayesDraft(JSON.stringify(source));
   assert.equal(initial.status, "compiled"); if (initial.status !== "compiled") return;

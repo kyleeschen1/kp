@@ -157,7 +157,8 @@
     {
       "id": "s20",
       "title": "Pressure lifecycle and cost boundaries across both lessons; repair measured TypeScript costs autonomously",
-      "status": "planned"
+      "summary": "Repeated real lesson lifecycle and fixed cost/production gates pass with no budget waiver.",
+      "status": "complete"
     },
     {
       "id": "s21",
