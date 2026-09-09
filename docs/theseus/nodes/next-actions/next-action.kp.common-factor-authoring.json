@@ -72,6 +72,13 @@
       "scope": "s07",
       "checkedAt": "2026-09-09T18:41:23.269Z",
       "notes": "Ten task tests and full types pass; inverse distribution authenticates immutable occurrence-pinned factoring including zero; inference costs remain within fixed gates."
+    },
+    {
+      "command": "npm run test:common-factor-authoring and equation-series tests and npm run typecheck and npm run check:inference",
+      "status": "passed",
+      "scope": "s08",
+      "checkedAt": "2026-09-09T18:46:58.845Z",
+      "notes": "Eleven task and 87 equation-series tests pass; exact issued factoring evidence governs pins, adjacency and endpoints; full types and complete inference gates pass."
     }
   ],
   "expectedLearning": [

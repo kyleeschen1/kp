@@ -1,3 +1,4 @@
+import { KP_COMMON_FACTOR_OPERATION, bindKpEquationSeriesCommonFactorSource } from "./equation-series-common-factor-authoring.ts";
 import {
   kpEquationSeriesBothSidesAuthoringByOperationId,
   type KpEquationSeriesBothSidesSemanticArguments
@@ -160,6 +161,7 @@ const likeDenominatorBinder: KpEquationSeriesGovernedSourceBinder =
 
 export const kpEquationSeriesGovernedSourceBindingRegistry =
   createKpEquationSeriesGovernedSourceBindingRegistry([
+    { id: "binding.equation-series.common-factor.v1", operationIds: [KP_COMMON_FACTOR_OPERATION], bind: bindKpEquationSeriesCommonFactorSource },
     bothSidesBinder,
     logarithmBaseBinder,
     fractionEquivalenceBinder,

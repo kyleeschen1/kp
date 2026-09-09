@@ -60,6 +60,7 @@ test("prompt creation exposes only source states adjacencies and registered oper
     "kp.algebra.apply-natural-log-both-sides",
     "kp.algebra.divide-both-sides-by-log-base",
     "kp.algebra.change-logarithm-base",
+    "kp.algebra.factor-common-term",
     "kp.algebra.scale-fraction-equivalently",
     "kp.algebra.align-common-denominator",
     "kp.algebra.combine-like-denominator-fractions"

@@ -10,13 +10,12 @@ function request(before: string, after: string) {
       intent: { mode: "explicit", operationId: "kp.algebra.factor-common-term", semanticArguments: {} } }] };
 }
 
-test("baseline: an explicit factoring label compiles a candidate, not a verified deduction", () => {
-  // s08 replaces this characterization with fail-closed governed-family tests.
-  // Do not preserve invalid candidate acceptance as a compatibility requirement.
+test("an explicit factoring label without proof fails closed for valid and invalid deductions", () => {
   for (const [before, after] of [["a*b+a*c", "a*(b+c)"], ["a*b+a*c", "a*(b+d)"], ["2*x+2*y", "3*(x+y)"]]) {
     const result = compileKpEquationTransformSeries({ value: request(before!, after!) });
-    assert.equal(result.status, "compiled");
-    assert.equal(result.active?.runtime.plans[0]?.authority, "explicit-request");
+    assert.equal(result.status, "repair-required");
+    assert.equal(result.active, undefined);
+    assert.ok(result.repairs.some(r => r.sourceCode === "equation-series.governance.source.unresolved"));
   }
 });
 

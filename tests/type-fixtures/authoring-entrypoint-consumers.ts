@@ -26,12 +26,16 @@ import { createDistributionFactoringAnimationAsset } from "../../src/animation/d
 import { readKpCommonFactorSource, type KpCommonFactorSource } from "../../src/authoring/common-factor-source.ts";
 import { normalizeKpCommonFactorEndpoints } from "../../src/authoring/common-factor-normalizer.ts";
 import { verifyKpCommonFactorRewrite, type KpVerifiedCommonFactorRewrite } from "../../src/semantic/common-factor-rewrite.ts";
+import { createKpEquationSeriesCommonFactorSemanticSource } from "../../src/authoring/equation-series-common-factor-authoring.ts";
 const factoringSyntax = readKpCommonFactorSource(undefined); void factoringSyntax;
 const factoringEndpoints = normalizeKpCommonFactorEndpoints(factoringSyntax); void factoringEndpoints;
 const factoringProof = verifyKpCommonFactorRewrite({ domain: factoringSyntax.domain, symbols: factoringSyntax.symbols,
   source: factoringEndpoints[0].structured, target: factoringEndpoints[1].structured }); void factoringProof;
 // @ts-expect-error A parsed source cannot mint the private verified factoring capability.
 const forgedFactoringProof: KpVerifiedCommonFactorRewrite = factoringSyntax; void forgedFactoringProof;
+const factoringAuthority = createKpEquationSeriesCommonFactorSemanticSource({ sourceId: factoringSyntax.id, adjacencyId: "edge.factor", transformation: factoringProof }); void factoringAuthority;
+// @ts-expect-error Parsed syntax cannot issue a governed semantic source.
+createKpEquationSeriesCommonFactorSemanticSource({ sourceId: factoringSyntax.id, adjacencyId: "edge.factor", transformation: factoringSyntax });
 // @ts-expect-error Authoring syntax has exactly two endpoints and no partial source.
 const partialFactoring: KpCommonFactorSource = { schemaVersion: "kp.common-factor-source.v1", states: [] }; void partialFactoring;
 

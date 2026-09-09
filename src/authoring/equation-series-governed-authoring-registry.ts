@@ -1,3 +1,4 @@
+import { KP_COMMON_FACTOR_OPERATION, validateKpEquationSeriesCommonFactorAuthoring } from "./equation-series-common-factor-authoring.ts";
 import {
   kpEquationSeriesBothSidesAuthoringDeclarations,
   validateKpEquationSeriesBothSidesAuthoring
@@ -65,6 +66,10 @@ export function createKpEquationSeriesGovernedAuthoringRegistry(
 
 export const kpEquationSeriesGovernedAuthoringRegistry =
   createKpEquationSeriesGovernedAuthoringRegistry([{
+    id: "governance.equation-series.common-factor.v1",
+    operationIds: [KP_COMMON_FACTOR_OPERATION],
+    validate: validateKpEquationSeriesCommonFactorAuthoring
+  }, {
     id: "governance.equation-series.both-sides.v1",
     operationIds: kpEquationSeriesBothSidesAuthoringDeclarations.map(
       ({ operationId }) => operationId

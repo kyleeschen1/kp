@@ -1,3 +1,4 @@
+import { KP_COMMON_FACTOR_OPERATION, kpCommonFactorGovernance } from "./equation-series-common-factor-authoring.ts";
 import {
   kpFunctionWrapOperationRegistration
 } from "../animation/equation-extension-packs/function-wrap.ts";
@@ -200,6 +201,7 @@ export const kpEquationSeriesOperationRegistry =
     ...existingOperationDeclarations
       .filter(({ operationId }) => !specializedGovernedIds.has(operationId))
       .map((entry) => {
+      if (entry.operationId === KP_COMMON_FACTOR_OPERATION) return { ...entry, governed: kpCommonFactorGovernance };
       const bothSides = bothSidesByOperationId.get(entry.operationId);
       return bothSides === undefined ? entry : {
         ...entry,
