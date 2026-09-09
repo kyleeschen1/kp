@@ -177,7 +177,8 @@
     {
       "id": "s13",
       "title": "Pressure with the pinned Graph3D saddle frontend through the existing gallery router",
-      "status": "planned"
+      "summary": "Pinned Graph3D caller pressures shared reporting through existing router; camera, topology, trace, renderer and supported parameter scope preserved.",
+      "status": "complete"
     },
     {
       "id": "s14",

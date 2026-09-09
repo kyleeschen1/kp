@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { createKpEquationSeriesLogarithmBaseDraft } from "../src/authoring/equation-series-logarithm-base-draft.ts";
-import { checkAuthorTask } from "../scripts/author-check-owner-dispatch.ts";
+import { checkAuthorTask, authorTaskExample } from "../scripts/author-check-owner-dispatch.ts";
 import { readFileSync, rmSync } from "node:fs";
 import { randomUUID } from "node:crypto";
 import { join } from "node:path";
@@ -47,6 +47,30 @@ test("R4A numeric CLI and browser agree while dirty and invalid drafts preserve 
   await expect(stage.locator("annotation").first()).toContainText("9");
   await expect(editor.locator(".kp-authoring-equation-staging")).toHaveCount(0);
   expect(errors).toEqual([]);
+});
+
+test("R4A Graph3D checked route reaches its actual pinned host and retained fixed-camera paint", async ({ page }) => {
+  const source = await authorTaskExample("graph3d.saddle");
+  const checked = await checkAuthorTask("graph3d.saddle", JSON.stringify(source));
+  expect(checked.status).toBe("checked");
+  if (checked.status !== "checked" || !("artifact" in checked.result)) throw new Error("Graph3D check lost its artifact reference");
+  const artifact = checked.result.artifact;
+  await page.goto(artifact.directUrl);
+  const catalogue = page.locator("[data-kp-animation-catalogue]");
+  await expect(catalogue).toHaveAttribute("data-kp-animation-catalogue-selection", artifact.artifactId);
+  await expect(catalogue).toHaveAttribute("data-kp-animation-catalogue-host-outcome", "painted");
+  const player = catalogue.locator("[data-kp-editor-animation-player]");
+  const slot = player.locator('[data-kp-editor-animation-surface-slot="graph"]');
+  await expect(slot).toHaveAttribute("data-kp-editor-animation-adapter-id", artifact.rendererId);
+  const stage = slot.locator("[data-kp-graph-3d-saddle-paint]");
+  await expect(stage).toHaveAttribute("data-kp-camera-state", "camera.graph-3d.saddle-parameter.fixed");
+  await expect(stage.locator(".graph-webgl")).toHaveAttribute("data-kp-webgl-status", "ready");
+  for (const [progress, denominator] of [[0, 4], [0.5, 6], [1, 8], [0, 4]]) {
+    await player.locator('[data-action="seek-editor-animation"]').fill(String(progress));
+    await expect(stage).toHaveAttribute("data-kp-saddle-denominator", String(denominator));
+    await expect(stage).toHaveAttribute("data-kp-camera-state", "camera.graph-3d.saddle-parameter.fixed");
+    await expect(stage.locator("canvas")).toHaveCount(1);
+  }
 });
 
 test("R4A retained urn source checks, traverses seven stops and exports the exact local edition", async ({ page, browser }, info) => {

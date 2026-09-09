@@ -368,6 +368,33 @@
       "scope": "broad",
       "checkedAt": "2026-09-09T03:53:40.334Z",
       "notes": "One Chromium preservation test passes for motion, passage and exact return."
+    },
+    {
+      "command": "npm run test:authoring-entrypoints",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-09T03:58:26.719Z",
+      "notes": "26 tests pass, including exact Graph3D router parity and unsupported camera/topology/parameter/pin gaps."
+    },
+    {
+      "command": "npm run test:cross-domain-gallery",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-09T03:58:27.792Z",
+      "notes": "34 tests pass; retained conformance packet byte-identical."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-09T03:58:28.776Z"
+    },
+    {
+      "command": "npm run visual:authoring-entrypoints -- --grep \"R4A Graph3D\"",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-09T03:58:29.738Z",
+      "notes": "Actual result URL paints correct adapter with fixed camera and denominator 4,6,8,4."
     }
   ],
   "progress": {
