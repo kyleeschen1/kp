@@ -165,7 +165,8 @@
     {
       "id": "s11",
       "title": "Route existing reusable equation reasoning through its owner; preserve assumptions, extraction and exact return",
-      "status": "planned"
+      "summary": "Reusable equation routing retains semantic support and exact return; migrated legacy checking delegates to domain owner without initializing an unused lesson.",
+      "status": "complete"
     },
     {
       "id": "s12",

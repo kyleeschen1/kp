@@ -308,6 +308,33 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-09-09T03:43:05.592Z"
+    },
+    {
+      "command": "npm run test:authoring-entrypoints",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-09T03:47:55.326Z",
+      "notes": "21 tests pass including equation editor/checker evidence and diagnostic parity."
+    },
+    {
+      "command": "npm run test:reusable-reasoning",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-09T03:47:56.394Z",
+      "notes": "61 preservation tests pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-09T03:47:57.359Z"
+    },
+    {
+      "command": "npm run visual:authoring-entrypoints -- --grep \"reasoning exemplar|source edit reaches\"",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-09T03:47:58.357Z",
+      "notes": "Two Chromium tests pass; corrected full-title selection after initial no-tests-found."
     }
   ],
   "progress": {

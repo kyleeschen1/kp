@@ -19,9 +19,13 @@ export async function checkAuthorTask(task: SupportedAuthorTask, json: string) {
     const { checkBayesAuthorSource } = await import("../src/experiments/bayesian-reasoning/author-check.ts");
     return reportAuthorCheck(task, checkBayesAuthorSource(json));
   }
-  if (task === "reasoning.equation" || task === "reasoning.code") {
+  if (task === "reasoning.equation") {
+    const { checkEquationReasoningSource } = await import("../src/experiments/reusable-reasoning/equation-author-check.ts");
+    return reportAuthorCheck(task, checkEquationReasoningSource(json));
+  }
+  if (task === "reasoning.code") {
     const { checkReasoningText } = await import("./author-reasoning.ts");
-    return reportAuthorCheck(task, checkReasoningText(task === "reasoning.equation" ? "equation" : "code", json));
+    return reportAuthorCheck(task, checkReasoningText("code", json));
   }
   if (task === "equation.logarithm-base") {
     const { compileKpEquationSeriesLogarithmBaseText } = await import("../src/authoring/equation-series-logarithm-base-draft.ts");
