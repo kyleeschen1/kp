@@ -182,6 +182,13 @@
       "scope": "s18",
       "checkedAt": "2026-09-09T17:23:38.239Z",
       "notes": "59 unit tests, full types, both inference cohorts and scoped primary/urn Chromium workflows pass. Core reduced to 112493/192595; combined 142340/239402. Browser invocation selected urn explanation and primary lesson only."
+    },
+    {
+      "command": "npm run check:authored-bayes-workflows; node --disable-warning=ExperimentalWarning --test tests/bayesian-reasoning-editorial-workflows.test.ts; npm run typecheck; npm run visual:authoring-entrypoints -- --grep R4B.both.authored",
+      "status": "passed",
+      "scope": "s19",
+      "checkedAt": "2026-09-09T17:27:11.310Z",
+      "notes": "Two source replays, six verified publication variants, one test and one Chromium scenario passed. Sources 6607/6273 bytes; one file each; deliberate injected faults separated from observed drafting repairs."
     }
   ],
   "progress": {

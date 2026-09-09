@@ -10,6 +10,7 @@
     "author:check": "node --disable-warning=ExperimentalWarning scripts/author-check.ts",
     "author:assess": "node --disable-warning=ExperimentalWarning scripts/assess-authoring-task.ts",
     "check:authoring-task-packet": "node --disable-warning=ExperimentalWarning scripts/run-authoring-task-packet.ts",
+    "check:authored-bayes-workflows": "node --disable-warning=ExperimentalWarning scripts/check-authored-bayes-workflows.ts",
     "visual:authoring-entrypoints": "playwright test --config playwright.authoring-entrypoints.config.ts --project=chromium --workers=1",
     "visual:authoring-entrypoints:cohort": "playwright test --config playwright.authoring-entrypoints.config.ts --project=chromium --project=firefox --project=webkit --workers=1",
     "test:authoring-entrypoints": "node --disable-warning=ExperimentalWarning --test tests/authoring-entrypoint-*.test.ts",

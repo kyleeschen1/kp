@@ -52,3 +52,34 @@ regressions exercise post-Apply practice/reveal/return for the authored lesson a
 the existing v1 urn source. The authored scenario was observed failing before
 repair; the legacy risk was identified by shared-path inspection, not a claimed
 separate pre-repair legacy browser run.
+
+## Accepted exemplar and second lesson
+
+The user accepted the primary exemplar with “approve, and resume” on September 9.
+The urn explanation is `content/authoring/r4b-urn-explanation.bayes.json`: 6,273
+UTF-8 bytes in one source file, compared with the spam lesson's 6,607 bytes.
+Both have seven passages, two readings, denominator wording and two prompts.
+The urn uses the already supported sampling model, red-first order and 1/7
+posterior. Its first authored-source test and first Chromium Apply workflow
+passed: no source-repair turn or new fact was needed. Commit `8eddb9b22` adds
+only source, tests and execution evidence—zero runtime/renderer files or
+caller-specific branches. The shared CLI later adds named examples, not paint.
+
+The primary required the previously described vocabulary intervention and
+host-practice repair. The urn is cheaper in this observed implementation, but
+the author also implemented the framework and knew its constraints. No claim
+of independent first-pass generation, time-to-author, or learner benefit follows.
+
+`npm run check:authored-bayes-workflows` replays both actual sources, prose-only
+revisioning, prior edits to 1/2 (posteriors 18/19 and 1/4), an explicitly injected
+unknown-fact rejection and one repair, and three byte-reproduced publication
+variants per lesson. Its injected repairs are not historical model mistakes.
+The R4B browser edit/replacement scenario additionally verifies real Apply,
+readings, invalid-replacement preservation and displayed-source download/restore.
+Bound numbers update; free prose may need revision when parameters change.
+
+The v1 default remains intentional compatibility, not a duplicate new lesson.
+Card and edition share one domain-local projection assembly after both callers
+passed. Pre-cleanup byte hashes protect both v2 cards and publication payloads;
+separate tests retain the original v1 outputs. Fact formatting no longer loads
+SVG paint, reducing core inference cost without deleting consumer fixtures.

@@ -13,6 +13,41 @@ import { editorialFixture } from "./fixtures/bayes-editorial-source.ts";
 import spamFilterSource from "../content/authoring/r4b-spam-filter.bayes.json" with { type: "json" };
 import urnExplanationSource from "../content/authoring/r4b-urn-explanation.bayes.json" with { type: "json" };
 
+test("R4B both authored lessons propagate prose and model edits and reject invalid replacement", async ({ page }) => {
+  await page.goto("/experiments/bayesian-reasoning/");
+  const card = page.locator("[data-bayes-display] [data-bayes-card]");
+  await expect(card).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+  await page.locator(".bayes-author summary").click();
+  for (const source of [spamFilterSource, urnExplanationSource]) {
+    const raw = structuredClone(source);
+    raw.editorial.title = `Revised: ${raw.editorial.title}`;
+    raw.model.prior = "1/2";
+    const checked = checkBayesDraft(JSON.stringify(raw));
+    if (checked.status !== "compiled") throw new Error(checked.diagnostic.expected);
+    await page.locator("[data-bayes-draft]").fill(JSON.stringify(raw));
+    await page.locator("[data-bayes-apply]").click();
+    await expect(card).toHaveAttribute("data-bayes-revision", checked.draft.revisionId);
+    await expect(page.locator("[data-bayes-editorial]")).toContainText(raw.editorial.title);
+    for (const mode of ["full", "compact"]) {
+      const reading = page.locator(`[data-bayes-reading="${mode}"]`);
+      await reading.locator("summary").click();
+      await expect(reading).toContainText(source === spamFilterSource ? "18/19" : "1/4");
+      await expect(reading).toContainText(raw.editorial.title);
+    }
+    await page.locator("[data-bayes-draft]").fill(JSON.stringify({ ...raw, editorial: { ...raw.editorial, setup: [{ fact: "foreign" }] } }));
+    await page.locator("[data-bayes-apply]").click();
+    await expect(page.locator("[data-bayes-author-status]")).toHaveAttribute("data-bayes-apply-status", "repair-gap");
+    await expect(card).toHaveAttribute("data-bayes-revision", checked.draft.revisionId);
+    const downloadPromise = page.waitForEvent("download");
+    await page.locator("[data-bayes-download]").click();
+    const download = await downloadPromise;
+    const downloaded = readFileSync((await download.path())!, "utf8");
+    expect(JSON.parse(downloaded)).toEqual(raw);
+    await page.locator("[data-bayes-restore]").click();
+    expect(JSON.parse(await page.locator("[data-bayes-draft]").inputValue())).toEqual(raw);
+  }
+});
+
 test("R4B urn explanation uses source-only Apply and opposite-order seven-stop playback", async ({ page }) => {
   const checked = checkBayesDraft(JSON.stringify(urnExplanationSource));
   if (checked.status !== "compiled") throw new Error(checked.diagnostic.expected);

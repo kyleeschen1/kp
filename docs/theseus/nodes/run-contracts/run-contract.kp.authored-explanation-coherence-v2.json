@@ -151,7 +151,8 @@
     {
       "id": "s19",
       "title": "Replay author/edit/repair/export workflows; report source bytes/files, repair turns and glue",
-      "status": "planned"
+      "summary": "Actual two-lesson source/edit/repair/export evidence recorded; no model, human timing or comprehension claims.",
+      "status": "complete"
     },
     {
       "id": "s20",
