@@ -1,0 +1,162 @@
+{
+  "id": "run-contract.kp.common-factor-authoring-v1",
+  "kind": "run-contract",
+  "title": "M1a Verified common-factor authoring",
+  "status": "in-progress",
+  "summary": "Approved exact 24 slices; proceed to combined s15 human checkpoint, then approved reuse and release.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.common-factor-authoring.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-09-m1-common-factor-authoring-long-loop-proposal.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Execute the exact approved 24-slice proposal. Two-product common factoring over declared real scalars and exact coefficients; bounded notation, authenticated domain evidence, existing native mechanism and opt-in host adapter. Preserve legacy sources, motion and complete inference consumers. Standing measured TypeScript cost repairs approved."
+  ],
+  "disallowedWork": [
+    "No universal parser or CAS, new motif grammar, global renderer or salience changes, unrelated math families, catalog migration, external models, subagents, merge, deployment, budget waivers or automatic successor."
+  ],
+  "goal": "Ordinary LaTeX to verified factoring card, readings, practice and edition; two callers without renderer glue.",
+  "target": "next-action.kp.common-factor-authoring",
+  "runMode": "run",
+  "maxSlices": 24,
+  "commitCadence": "One scoped commit per verified slice, including closed brief-context receipts and evidence.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "s15 combined human editorial and visual approval before s16 or second caller.",
+    "Stop for lost semantic or safety authority, unavailable required proof within scope, material expansion, user pause or completion. Repair ordinary in-scope failures without weakening gates."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Pin task, artifact/host/renderer ownership, ordinary-notation probes and preserved caller baselines [Risk Medium; F: reproduce positive/invalid candidate results; map actual proof-to-paint and publication consumers; C / G; stop if required integration exceeds bounded host adapter]",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Register complete affected inference consumers and capture baseline costs before new exports [Risk Medium; S: inference gates, all real frontend consumers, negative type fixtures; C / G]",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Add repeatable failing-authority/notation characterization and scoped unit command [Risk Low; F: valid/invalid explicit-star requests, implicit notation gaps, existing caller preservation; C / G; do not assert candidates already authorize downstream paint]",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Define minimal validated factoring input, symbol environment and located repair vocabulary [Risk Medium; S: schema round-trip, unknown fields, limits, version separation, forbidden presentation data; C / G]",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Normalize explicit multiplication and grouping through the existing parser owner [Risk Medium; S: explicit notation, precedence, original spelling, non-factoring parser regression; C / G]",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Add bounded declared-symbol implicit multiplication without guessing identifiers/functions [Risk High; S: `ab`, `2x`, `a(b+c)`, ambiguity and unsupported negative cases; C / G; stop if a general parser rewrite is necessary]",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Construct authenticated common-factor evidence through the existing distributive-law owner [Risk High; S: exact factor/addend/occurrence correspondence, wrong-factor rejection, zero-factor validity; C / G; no sample-based proof]",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Register family governance and require matching revision, endpoints and adjacency evidence [Risk High; S: forged law labels, stale revisions, foreign roles, absent proof all fail closed; C / G]",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Separate candidate and verified consumable authority at factoring render/export boundaries [Risk High; B: negative compile-time and runtime forgery tests; preserve unrelated candidate APIs; C / G; no catalog-wide migration]",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Connect ordinary source to the existing author checker with precise repair-and-retry behavior [Risk Medium; S: shared CLI/domain checker agreement; failed edit cannot mint verified output; C / G]",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Prepare a factoring revision through existing atomic Apply/lifecycle ownership [Risk High; B: last-valid, supersession, interruption, disposal and old distribution source compatibility; C / G]",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Mount one opt-in primary card through existing scaffold, clock and native factoring mechanism; add stable visual command [Risk High; B + V: two exact native endpoints, one transition, direct seek/reverse and exclusive ownership canary; C / G; typed gap if existing mechanism cannot support task without new visual grammar]",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Bind primary explanatory prose and full/compact readings to verified IDs/revision [Risk Medium; S + V: numbers/claims from evidence, safe editorial prose, accessible required context, no duplicate headings; C / G]",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Connect bounded reconstruction/prediction, exact return and local static edition for the primary [Risk High; B + V: verified answer, interrupted return, source-to-edition reproduction, no-JS endpoints; C / G; no independent practice/editor framework]",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Present one combined primary editorial/visual review packet with working URL and exact source [Risk Medium; V + human: inspect factoring convergence, controls, passage/position, readings, practice and static view at desktop/phone; C after accepted review / HUMAN_CHECKPOINT before s16]",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "After approval, encode motif-specific regression laws for the actual exercised mechanism [Risk Medium; S + V: realized paint ownership/continuity, interruption and rewind; no spelling-specific offsets; C / G]",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Author numeric-factor second caller through the approved seam, targeting source-only reuse [Risk Medium; S + V: `2x+2y` → `2(x+y)`, exact verified evidence, same controls and revisions; C / G; new visual judgment stops, narrow nonvisual shared repair allowed and measured]",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Pressure adjacent valid/invalid cases at the semantic and notation boundaries [Risk Medium; S: zero factor, repeated symbols, wrong coefficients, changed addends, ambiguity, malicious/oversized input; C / G; unsupported classes stay typed gaps]",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Update discovery, author packet and examples with exact supported/unsupported capability scope [Risk Low; S: discovery/checker parity; no family-certified claim from registration alone; C / G]",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Remove only duplication demonstrated by both callers; preserve explicit legacy paths [Risk Medium; B: revision/output parity and complete consumer cost checks; C / G; no generalized framework without second-caller evidence]",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Replay author/edit/repair/export workflows and report actual source bytes, repair turns and glue [Risk Medium; S: committed workflow command for both sources; honest provenance, no independent LLM or learning claims; C / G]",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Run bounded promotion cohort and lifecycle/performance preservation [Risk High; B: stable Chromium/Firefox/WebKit command; gestures, keyboard, buttons, phone, reduced motion, repeated Apply/disposal, zero idle ownership leaks; C / G; repair in scope without weakening checks]",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Release full tests, build, cost gates, production closure and earlier exemplar preservation [Risk High; B: `npm test`, full typecheck/build, reader budgets/closure, dev-review closure, both static editions and affected R1–R4B browser cohort; C / G]",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Close receipts and reconcile roadmap/thread with measured author value and next family gap [Risk Low; F: Theseus validation, exact 24/24 state, evidence links, diff check and clean scoped commit; C / COMPLETE; no automatic successor]",
+      "status": "planned"
+    }
+  ]
+}

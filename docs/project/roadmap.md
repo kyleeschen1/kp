@@ -81,9 +81,13 @@ and full release verification. See
 `reviews/2026-09-09-authored-explanation-coherence-closeout.md` for achieved author
 value, working inspection links, limitations and the measured next recommendation.
 The accepted visual checkpoint remains historical approval evidence, not a stop.
-Next planning recommendation: one verified common-factor authoring task in M1,
-addressing semantic authority and ordinary LaTeX before family promotion. This is
-not an approved successor contract. R4B's measured TypeScript-cost amendments
+The user approved M1a: verified common-factor authoring, addressing semantic
+authority and ordinary LaTeX before family promotion. Execute
+`run-contract.kp.common-factor-authoring-v1` from
+`reviews/2026-09-09-m1-common-factor-authoring-long-loop-proposal.md` through the
+combined s15 visual checkpoint. The accepted broader direction is recorded in
+`decisions/2026-09-09-mathematics-expansion-and-m1a-approval.md`; it guides later
+proposals, not automatic subject expansion. R4B's measured TypeScript-cost amendments
 are recorded in `decisions/2026-09-09-editorial-consumer-typescript-cost.md`;
 all core and frontend consumer coverage remains mandatory.
 External model calls and broader R4 promotion remain deferred. Do not restart

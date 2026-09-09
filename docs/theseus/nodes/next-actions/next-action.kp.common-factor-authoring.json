@@ -1,0 +1,21 @@
+{
+  "id": "next-action.kp.common-factor-authoring",
+  "kind": "next-action",
+  "title": "M1a Verified common-factor authoring",
+  "status": "in-progress",
+  "domain": "authoring",
+  "summary": "User approved common-factor loop following scope and broader-path explanation; later subject waves remain proposals.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-09-m1-common-factor-authoring-long-loop-proposal.md"
+    }
+  ],
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "theseus workspace validate"
+  ]
+}
