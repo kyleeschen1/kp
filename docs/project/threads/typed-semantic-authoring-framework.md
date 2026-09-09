@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: R4A complete; remaining R4 work is a planning boundary, not an active run
+Status: R4B approved and active; R1–R4A remain complete
 Last Updated: 2026-09-09
 Current successor reference: `../reviews/2026-09-07-reconciled-authoring-loop-horizon.md`.
 It preserves the original architectural obligations and the tax/Bayes direction;
@@ -63,11 +63,11 @@ do not treat its proposed roadmap or readiness labels as new execution authority
 The user clarified the remaining code issue as missing gradual passage swiping.
 The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
-Current Next Action: plan a real supported author task and remaining bounded R4
-evidence/promotion work using
-`../reviews/2026-09-09-authoring-entrypoint-convergence-closeout.md` and
-`../authoring/supported-authoring-entrypoint-packet.md`. R4A is complete; no
-successor implementation is approved. The complete-coverage policy remains
+Current Next Action: execute the approved 22-slice R4B proposal,
+`../reviews/2026-09-09-authored-explanation-coherence-long-loop-proposal.md`, through
+`run-contract.kp.authored-explanation-coherence-v2`. The spam-filter explanation
+is the canonical editorial exemplar; stop at s14 before second-lesson reuse.
+R4A remains complete. The complete-coverage policy remains
 `../decisions/2026-09-09-typescript-cost-repair-autonomy.md`; the s19 stop
 report is historical measurement evidence. Preserve all six owner consumers,
 the original core gate, Graph3D identity repair and narrow distribution compiler

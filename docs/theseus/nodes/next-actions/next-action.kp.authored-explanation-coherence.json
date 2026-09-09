@@ -1,0 +1,54 @@
+{
+  "id": "next-action.kp.authored-explanation-coherence",
+  "kind": "next-action",
+  "title": "R4B Authored explanation coherence",
+  "status": "in-progress",
+  "domain": "authoring",
+  "summary": "User explicitly approved the exact R4B loop; begin with task baselines, then preserve s14 human review.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-09-authored-explanation-coherence-long-loop-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.authoring-entrypoint-convergence"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:bayesian-reasoning",
+    "npm run typecheck",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Measure whether author-owned explanation and verified facts compose across existing views without renderer glue; retain honest author effort and mathematical coverage gaps."
+  ],
+  "allowedWork": [
+    "Execute the exact approved 22-slice R4B proposal; Bayes-local editorial authoring through existing Article, fact context, seven-stop score, Apply, readings, extraction, prompts and immutable edition. Preserve strict v1 output/revisions, domain truth, existing SVG/native KaTeX motion and shared input. Human checkpoint s14 before second-lesson reuse. One scoped commit per verified slice; brief receipts; focused discovery and broad release. All TypeScript cost repairs automatically approved with measured documented amendments and all consumers/negative tests preserved."
+  ],
+  "disallowedWork": [
+    "No new mathematical operations, probability models, renderer, clock, motif, salience treatment, universal schema/template language/CAS, editor rewrite, external model calls, remote writes, public deployment, accounts/SRS, blanket API migration, Theseus package repair, subagents, merge or automatic successor. Stop for s14 visual judgment, lost semantic authority, unsafe action, unavailable required proof, material scope expansion, user pause or completion. No non-TypeScript budget waivers, fixture omissions, type erasure or weakened validation."
+  ],
+  "criteria": [
+    {
+      "id": "authoring-coherence",
+      "weight": "high"
+    },
+    {
+      "id": "semantic-authority",
+      "weight": "high"
+    },
+    {
+      "id": "v1-preservation",
+      "weight": "high"
+    },
+    {
+      "id": "visual-acceptance",
+      "weight": "high"
+    }
+  ]
+}

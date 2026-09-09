@@ -72,9 +72,12 @@ fixture, original core gate and verified import repairs. R4A is now complete;
 see `reviews/2026-09-09-authoring-entrypoint-convergence-closeout.md` for measured
 author value, full release evidence, limitations and the next planning boundary.
 Theseus owns completion and per-slice evidence. The supported author packet is
-`authoring/supported-authoring-entrypoint-packet.md`. Plan one real supported
-author task and evidence-earned remaining R4 work before broader math expansion;
-no successor implementation is approved. Preserve existing visuals and domain owners;
+`authoring/supported-authoring-entrypoint-packet.md`. The user approved the exact
+22-slice R4B authored-explanation loop; see
+`reviews/2026-09-09-authored-explanation-coherence-long-loop-proposal.md` and
+`run-contract.kp.authored-explanation-coherence-v2`. Author the bounded spam-filter
+lesson through existing Bayes views and editions; stop at s14 for combined
+editorial/visual approval before urn reuse. Preserve existing visuals and domain owners;
 stop for material new visual judgment, not routine nonvisual checkpoints.
 External model calls and broader R4 promotion remain deferred. Do not restart
 R1–R4A or activate later horizon work.

@@ -4,7 +4,7 @@
   "title": "Kinetic Press delivery",
   "status": "active",
   "domain": "kp",
-  "summary": "R1-R3 complete. User approved R4A entrypoint convergence; execute run-contract.kp.authoring-entrypoint-convergence-v1, preserving domains, visuals and fixed gates.",
+  "summary": "R1–R4A complete. Execute approved R4B through run-contract.kp.authored-explanation-coherence-v2; author coherent Bayes explanations, stop at s14 before reuse, no external model calls or new math.",
   "sourceRefs": [
     {
       "kind": "user-intent",

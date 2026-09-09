@@ -1,0 +1,154 @@
+{
+  "id": "run-contract.kp.authored-explanation-coherence-v2",
+  "kind": "run-contract",
+  "title": "R4B Authored explanation coherence",
+  "status": "in-progress",
+  "summary": "User approved R4B; complete execution metadata, unchanged 22 slices and s14 checkpoint.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.authored-explanation-coherence.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-09-authored-explanation-coherence-long-loop-proposal.md"
+    }
+  ],
+  "verification": [
+    "npm run test:bayesian-reasoning",
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "npm run visual:authoring-entrypoints:cohort",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Execute the exact approved 22-slice R4B proposal; Bayes-local editorial authoring through existing Article, fact context, seven-stop score, Apply, readings, extraction, prompts and immutable edition. Preserve strict v1 output/revisions, domain truth, existing SVG/native KaTeX motion and shared input. Human checkpoint s14 before second-lesson reuse. One scoped commit per verified slice; brief receipts; focused discovery and broad release. All TypeScript cost repairs automatically approved with measured documented amendments and all consumers/negative tests preserved."
+  ],
+  "disallowedWork": [
+    "No new mathematical operations, probability models, renderer, clock, motif, salience treatment, universal schema/template language/CAS, editor rewrite, external model calls, remote writes, public deployment, accounts/SRS, blanket API migration, Theseus package repair, subagents, merge or automatic successor. Stop for s14 visual judgment, lost semantic authority, unsafe action, unavailable required proof, material scope expansion, user pause or completion. No non-TypeScript budget waivers, fixture omissions, type erasure or weakened validation."
+  ],
+  "goal": "Author coherent spam-filter and urn explanations through existing verified Bayes views and local editions, preserving v1 and approved mechanics.",
+  "target": "next-action.kp.authored-explanation-coherence",
+  "runMode": "run",
+  "maxSlices": 22,
+  "commitCadence": "One scoped commit per verified slice with brief receipts and durable evidence.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Human editorial and visual checkpoint at s14 before reuse; pause for user judgment.",
+    "Stop for unsafe action, lost semantic authority, unavailable required evidence, material scope expansion, user pause, or completed approved scope."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Pin spam-filter task, actual owner/host/output baselines and existing source compatibility; reconcile workflow summary",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Register complete affected author/browser/edition consumers and measure costs before new exports",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Reproduce inability to author task-specific explanation; map required slots against existing Article and fact references",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Define minimal versioned Bayes editorial input and validated construction; retain strict v1 path",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Bind only demonstrated existing facts and semantic stop IDs through the owning context/Article mechanisms",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Separate lesson revision from probability evidence; normalize editorial inputs deterministically",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Compile authored passages into the existing seven-stop score with compiler-required context retained",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Connect prepared authored source to existing atomic Apply and last-valid preview",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Author the primary lesson as content, recording real repair attempts and specialist intervention",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Project authored explanation into full/compact readings through existing Article ownership",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Preserve denominator extraction and exact return for the authored revision",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Connect bounded authored prompt wording to existing prediction/reconstruction projections",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Build/export the exact authored lesson through the existing immutable edition owner",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Present one combined canonical editorial/visual checkpoint; record acceptance or repair request",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "After approval, author the urn explanation through the same bounded source seam",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Extend shared discovery/check reporting and owner packets to the proven authored form",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Add adversarial and held-out repair cases at responsible authoring boundaries",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Retire adjacent duplicated editorial assembly; retain explicit v1 default policy",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Replay author/edit/repair/export workflows; report source bytes/files, repair turns and glue",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Pressure lifecycle and cost boundaries across both lessons; repair measured TypeScript costs autonomously",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Release: full tests/build and bounded Chromium/Firefox/WebKit preservation across R1–R4A and both lessons",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Close receipts and record achieved author value, remaining R4 evidence, and one measured M1 gap for the next proposal",
+      "status": "planned"
+    }
+  ]
+}
