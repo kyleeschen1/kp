@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: R4A stopped at s02 fixed inference ceiling; budget-ownership decision needed
+Status: R4A resumed with approved two-cohort inference ownership
 Last Updated: 2026-09-08
 Current successor reference: `../reviews/2026-09-07-reconciled-authoring-loop-horizon.md`.
 It preserves the original architectural obligations and the tax/Bayes direction;
@@ -65,7 +65,8 @@ The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
 Current Next Action: resolve the s02 fixed-cost stop recorded in
 `../reviews/2026-09-09-authoring-entrypoint-inference-stop.md`; its proposed
-core/frontend cost-cohort amendment needs explicit approval. Preserve the
+core/frontend cost-cohort amendment is now approved; see
+`../decisions/2026-09-09-inference-cost-cohorts.md`. Enforce both gates and resume. Preserve the
 verified Graph3D identity import repair and the complete real-consumer fixture.
 The approved 24-slice R4A proposal remains
 `../reviews/2026-09-08-authoring-entrypoint-convergence-long-loop-proposal.md`

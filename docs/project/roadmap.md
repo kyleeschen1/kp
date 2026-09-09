@@ -59,7 +59,9 @@ stop after measuring the real existing frontend consumers. The bounded Graph3D
 identity import repair is verified, but the old combined inference ceiling still
 fails. See `reviews/2026-09-09-authoring-entrypoint-inference-stop.md` for exact
 evidence and the proposed explicit core/frontend budget-ownership amendment.
-That amendment is not approved; do not advance or waive the gate. Theseus owns
+The user approved the two-cohort amendment; preserve the original core gate and
+require the measured combined frontend gate. See
+`decisions/2026-09-09-inference-cost-cohorts.md`. Resume R4A; Theseus owns
 slice order and live evidence. Preserve existing visuals and domain owners;
 stop for material new visual judgment, not routine nonvisual checkpoints.
 External model calls and broader R4 promotion remain deferred. Do not restart

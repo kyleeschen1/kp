@@ -101,3 +101,9 @@ budget increases/fixture omissions without new authority, so approval of the
 original run cannot authorize this reclassification. Theseus retains the stop;
 do not advance to s03 or mark s02 complete. Resume after the user selects the
 budget-ownership amendment or a bounded compiler-work alternative.
+# Resolution
+
+The user subsequently approved the explicit two-cohort amendment. See
+`../decisions/2026-09-09-inference-cost-cohorts.md`. The stop and unapproved
+recommendation below are historical evidence, not current blocking authority.
+No original core ceiling or fixture is removed.

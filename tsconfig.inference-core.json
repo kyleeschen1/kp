@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.inference.json",
+  "exclude": [
+    "tests/type-fixtures/authoring-entrypoint-consumers.ts"
+  ]
+}

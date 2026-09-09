@@ -2,9 +2,9 @@
   "id": "next-action.kp.authoring-entrypoint-convergence",
   "kind": "next-action",
   "title": "R4A Authoring entrypoint convergence",
-  "status": "blocked",
+  "status": "in-progress",
   "domain": "kp",
-  "summary": "STOP_CONDITION s02: fixed inference ceiling still fails after bounded import repair; no authorized budget-policy amendment or broader compiler tranche.",
+  "summary": "User approved the explicit two-cohort inference amendment; retain old core consumers and limits, add mandatory measured combined frontend gate, then resume R4A.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -17,6 +17,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-09-authoring-entrypoint-inference-stop.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-09-inference-cost-cohorts.md"
     }
   ],
   "dependsOn": {
@@ -88,6 +92,26 @@
       "scope": "s02",
       "checkedAt": "2026-09-09T02:46:11.692Z",
       "notes": "All architecture gates and eight cross-domain tests pass."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-09T03:04:03.012Z",
+      "notes": "Both gates passed: core 112278/192161; combined 127387/214823. Explicit disk and config membership enforced."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-09T03:04:04.013Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/typescript-inference-budget.test.ts tests/compiler-type-boundaries.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-09T03:04:05.041Z",
+      "notes": "8 tests passed."
     }
   ],
   "progress": {

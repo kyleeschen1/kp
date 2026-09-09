@@ -2,8 +2,8 @@
   "id": "run-contract.kp.authoring-entrypoint-convergence-v1",
   "kind": "run-contract",
   "title": "R4A Authoring entrypoint convergence",
-  "status": "blocked",
-  "summary": "STOP_CONDITION: s02 fixed gate cannot be declared passed. Await explicit cost-cohort amendment or bounded broader compiler-work direction.",
+  "status": "in-progress",
+  "summary": "User approved s02 core plus combined frontend budget ownership amendment; all other scope and stops unchanged.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -17,6 +17,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-09-authoring-entrypoint-inference-stop.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-09-inference-cost-cohorts.md"
     }
   ],
   "verification": [
@@ -31,11 +35,11 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "1 of 24 complete; stopped at s02. Real fixture remains in gate; no weakened budgets or advanced slices."
+    "summary": "s02 approved amendment implemented and verified; continue ordered R4A slices."
   },
   "allowedWork": [
     "s01: Pin the two author tasks, owner/host/capability map, output baselines and command names; reconcile stale workflow summary; risk Low; F: exact arithmetic, source/host refs, clean baseline; one commit.",
-    "s02: Register real consumer cost fixtures and measure import/inference costs before designing shared exports; risk Medium; S: unchanged fixtures/ceilings; negative type cases; one commit.",
+    "s02: Register real consumer cost fixtures and measure import/inference costs before designing shared exports; risk Medium; S: original core fixtures/ceilings plus approved mandatory combined frontend cohort; negative type cases; one commit.",
     "s03: Derive the bounded task/capability inventory from existing owners; distinguish check, preview, extraction and publication; risk Medium; S: coverage matches executed capabilities; unknown task negatives; one commit.",
     "s04: Define the smallest reporting adapter over existing results; preserve domain diagnostics and source authority; risk Medium; S: exhaustive success/gap cases, no forged prepared/publication states; one commit.",
     "s05: Add explicit read-only example/check dispatch with exact task selection and lazy owner loading; risk Medium; B: invalid selection, missing source, size limits, import isolation; one commit.",
@@ -58,11 +62,12 @@
     "s22: Execute the retained author tasks and record source bytes, files touched, repair steps and specialist interventions; risk Medium; S + V: actual authored outputs, coherent preview/edition, no invented timing; one commit.",
     "s23: Run broad release and supported-browser preservation; repair attributable failures at their owners; risk High; B + V: full tests/build, fixed budgets, R1/R2/R3/tax and selected code/Graph3D checks; one commit.",
     "s24: Record measured benefit, remaining R4 obligations and mathematical-expansion handoff; close receipts and commit; risk Low; F: exact evidence, validated Theseus, clean scoped worktree; one commit.",
-    "Brief tracked contexts, no subagents, same port-8000 server, existing domain owners; approved exemplar and promotion policy in source proposal."
+    "Brief tracked contexts, no subagents, same port-8000 server, existing domain owners; approved exemplar and promotion policy in source proposal.",
+    "Accepted two-cohort amendment: docs/project/decisions/2026-09-09-inference-cost-cohorts.md. Core remains 112500 types and 195800 instantiations; combined fixed ceilings 130000 and 221300; exact fixture membership mandatory."
   ],
   "disallowedWork": [
     "s01 STOP: Conflicting current authority",
-    "s02 STOP: Cannot fit without broader redesign or budget waiver",
+    "s02 STOP: Cannot fit approved core and combined cohorts without broader redesign or further budget waiver",
     "s03 STOP: New universal capability ontology required",
     "s04 STOP: Loss of domain information or new truth owner",
     "s05 STOP: Dynamic plugin loading or user-code execution needed",
@@ -85,7 +90,7 @@
     "s22 STOP: Subjective new output needs approval; no live call implied",
     "s23 STOP: Unrelated repairs, unsafe authority or new visual treatment",
     "s24 STOP: Required proof or approved work incomplete",
-    "No external model calls, new domains/motifs, universal schema, budget waiver, runtime rewrite, remote/browser writes, deployment, merge or automatic successor."
+    "No external model calls, new domains/motifs, universal schema, further budget waiver, runtime rewrite, remote/browser writes, deployment, merge or automatic successor."
   ],
   "goal": "Supported author tasks use consistent entrypoints while domain evidence, previews and immutable editions remain coherent.",
   "target": "next-action.kp.authoring-entrypoint-convergence",
@@ -106,8 +111,8 @@
     {
       "id": "s02",
       "title": "Register real consumer cost fixtures and measure import/inference costs before designing shared exports",
-      "summary": "STOP_CONDITION: useful partial fixture, attribution and identity repair retained. 127387 types and 214823 instantiations exceed fixed ceilings. Proposed cost-cohort policy needs approval; not complete.",
-      "status": "in-progress"
+      "summary": "Real consumer costs measured; identity import repaired; approved two-cohort gates and coverage guards pass. Core 112278/192161; combined 127387/214823.",
+      "status": "complete"
     },
     {
       "id": "s03",

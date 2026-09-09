@@ -5,6 +5,12 @@ Status: APPROVED — user accepted with “approve”; Theseus owns execution
 Contract: `run-contract.kp.authoring-entrypoint-convergence-v1`
 Target: `next-action.kp.authoring-entrypoint-convergence`
 
+Accepted s02 amendment: `../decisions/2026-09-09-inference-cost-cohorts.md`.
+The original core fixtures and ceilings stay fixed; a mandatory combined
+frontend cohort has separately measured fixed ceilings. This is the sole
+exception to the original no-budget-increases stop below. All other scope and
+stops remain unchanged; no live model call is authorized.
+
 ## Outcome and why now
 
 Make supported KP authoring easier to enter, check, repair and hand off to the

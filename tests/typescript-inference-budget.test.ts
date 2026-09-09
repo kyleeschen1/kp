@@ -2,6 +2,38 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import { typescriptInferenceBudget } from "../src/architecture/typescript-inference-budget.ts";
+import ts from "typescript";
+import { relative } from "node:path";
+import { assertInferenceMembership, inferenceCohorts, coreInferenceFixtures, frontendInferenceFixtures, combinedInferenceBudget } from "../src/architecture/typescript-inference-cohorts.ts";
+
+test("both approved cohorts retain exact fixture membership and active checking", () => {
+  assertInferenceMembership(ts.sys.readDirectory("tests/type-fixtures", [".ts"]), inferenceCohorts[1].fixtures);
+  for (const cohort of inferenceCohorts) {
+    const config = ts.readConfigFile(cohort.config, ts.sys.readFile);
+    assert.equal(config.error, undefined);
+    const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, process.cwd());
+    assert.deepEqual(parsed.errors, []);
+    assert.notEqual(parsed.options.skipLibCheck, true);
+    assert.notEqual(parsed.options.noCheck, true);
+    assertInferenceMembership(parsed.fileNames.map(path => relative(process.cwd(), path)), cohort.fixtures);
+  }
+  assert.equal(coreInferenceFixtures.length, 48);
+  assert.ok(coreInferenceFixtures.includes("tests/type-fixtures/bayesian-authoring.ts"));
+  assert.deepEqual(frontendInferenceFixtures, ["tests/type-fixtures/authoring-entrypoint-consumers.ts"]);
+  assert.deepEqual(typescriptInferenceBudget.ceilings, { types: 112500, instantiations: 195800 });
+  const budget = combinedInferenceBudget;
+  assert.equal(budget.ceilings.types, Math.ceil(budget.measuredProject.types * 1.02 / 100) * 100);
+  assert.equal(budget.ceilings.instantiations, Math.ceil(budget.measuredProject.instantiations * 1.03 / 100) * 100);
+});
+
+test("membership rejects omissions, unassigned fixtures, duplicates and cohort transfers", () => {
+  const core = [...coreInferenceFixtures];
+  assert.throws(() => assertInferenceMembership(core.slice(1), core), /missing=/);
+  assert.throws(() => assertInferenceMembership([...core, "new-fixture.ts"], core), /unexpected=/);
+  assert.throws(() => assertInferenceMembership([...core, core[0]!], core), /Duplicate/);
+  assert.throws(() => assertInferenceMembership(core, [...core, core[0]!]), /Duplicate/);
+  assert.throws(() => assertInferenceMembership([...core.slice(1), ...frontendInferenceFixtures], core), /drift/);
+});
 
 test("inference ceilings retain measured, narrow structural headroom", () => {
   const { measuredProject, ceilings } = typescriptInferenceBudget;
