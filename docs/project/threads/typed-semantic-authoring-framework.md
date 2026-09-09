@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: R4B exemplar accepted; source-only reuse and release active; R1–R4A remain complete
+Status: R4B complete; next M1 task is a planning recommendation only; R1–R4A remain complete
 Last Updated: 2026-09-09
 Current successor reference: `../reviews/2026-09-07-reconciled-authoring-loop-horizon.md`.
 It preserves the original architectural obligations and the tax/Bayes direction;
@@ -63,12 +63,13 @@ do not treat its proposed roadmap or readiness labels as new execution authority
 The user clarified the remaining code issue as missing gradual passage swiping.
 The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
-Current Next Action: user accepted the combined exemplar; resume the approved R4B proposal,
-`../reviews/2026-09-09-authored-explanation-coherence-long-loop-proposal.md`, through
-`run-contract.kp.authored-explanation-coherence-v2`. The spam-filter explanation
-is the accepted canonical editorial exemplar; second-lesson reuse is now authorized.
-Review links, exact applied source/revision and preservation evidence:
-`../reviews/2026-09-09-authored-explanation-visual-checkpoint.md`.
+Current Next Action: R4B is complete; no approved slices remain in
+`run-contract.kp.authored-explanation-coherence-v2`. Read
+`../reviews/2026-09-09-authored-explanation-coherence-closeout.md` before proposing
+the next bounded M1 common-factor task. Its measured gaps concern ordinary LaTeX
+and verified operation authority, not an absent factoring operation. Do not
+activate successor implementation without approval. The accepted spam-filter
+checkpoint and source-only urn release are completed evidence.
 One bounded source now feeds card, readings, extraction, practice and immutable
 edition; authored prose remains editorial rather than probability proof.
 Current measured cost amendments under standing approval:

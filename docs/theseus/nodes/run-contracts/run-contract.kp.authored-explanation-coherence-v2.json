@@ -2,8 +2,8 @@
   "id": "run-contract.kp.authored-explanation-coherence-v2",
   "kind": "run-contract",
   "title": "R4B Authored explanation coherence",
-  "status": "in-progress",
-  "summary": "Human checkpoint accepted. Continue s15-s22 inside approved source-only reuse, validation and release scope.",
+  "status": "resolved",
+  "summary": "COMPLETE 22/22. All approved slices and receipts closed; 6853 tests and 69 browser checks pass. Stop at completed scope; no automatic successor.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -169,7 +169,8 @@
     {
       "id": "s22",
       "title": "Close receipts and record achieved author value, remaining R4 evidence, and one measured M1 gap for the next proposal",
-      "status": "planned"
+      "summary": "Closeout records achieved author value, source-only reuse, full release, remaining R4 evidence and measured M1 recommendation; canonical memory reconciled.",
+      "status": "complete"
     }
   ]
 }

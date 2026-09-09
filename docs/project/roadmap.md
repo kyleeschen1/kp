@@ -75,14 +75,15 @@ Theseus owns completion and per-slice evidence. The supported author packet is
 `authoring/supported-authoring-entrypoint-packet.md`. The user approved the exact
 22-slice R4B authored-explanation loop; see
 `reviews/2026-09-09-authored-explanation-coherence-long-loop-proposal.md` and
-`run-contract.kp.authored-explanation-coherence-v2`. Author the bounded spam-filter
-lesson through existing Bayes views and editions; stop at s14 for combined
-editorial/visual approval before urn reuse. Preserve existing visuals and domain owners;
-stop for material new visual judgment, not routine nonvisual checkpoints.
-The user accepted the combined exemplar with “approve, and resume”:
-`reviews/2026-09-09-authored-explanation-visual-checkpoint.md` has the working
-shared-server links, exact source/revision, review instructions and evidence.
-Continue source-only urn reuse and the remaining approved release work. R4B's measured TypeScript-cost amendments
+`run-contract.kp.authored-explanation-coherence-v2`. R4B is complete: accepted
+spam-filter explanation, source-only urn reuse, shared projections and editions,
+and full release verification. See
+`reviews/2026-09-09-authored-explanation-coherence-closeout.md` for achieved author
+value, working inspection links, limitations and the measured next recommendation.
+The accepted visual checkpoint remains historical approval evidence, not a stop.
+Next planning recommendation: one verified common-factor authoring task in M1,
+addressing semantic authority and ordinary LaTeX before family promotion. This is
+not an approved successor contract. R4B's measured TypeScript-cost amendments
 are recorded in `decisions/2026-09-09-editorial-consumer-typescript-cost.md`;
 all core and frontend consumer coverage remains mandatory.
 External model calls and broader R4 promotion remain deferred. Do not restart

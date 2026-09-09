@@ -2,9 +2,9 @@
   "id": "next-action.kp.authored-explanation-coherence",
   "kind": "next-action",
   "title": "R4B Authored explanation coherence",
-  "status": "in-progress",
+  "status": "resolved",
   "domain": "authoring",
-  "summary": "User approved the combined spam-filter exemplar: approve, and resume. Continue the same approved contract through urn reuse and release.",
+  "summary": "R4B complete: two authored explanations through existing verified Bayes projections and immutable editions; release passed; no successor authorized.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -13,6 +13,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-09-authored-explanation-visual-checkpoint.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-09-authored-explanation-coherence-closeout.md"
     }
   ],
   "dependsOn": {
@@ -231,11 +235,18 @@
       "scope": "s21",
       "checkedAt": "2026-09-09T17:54:46.544Z",
       "notes": "Full build and typecheck passed; post-CSS bundle rebuild, reader budgets, reader production closure, dev-review production closure, both immutable edition checks and reachability freshness also passed. No budget waivers."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s22",
+      "checkedAt": "2026-09-09T17:58:39.794Z",
+      "notes": "Closeout and canonical memory checked. Read-only common-factor compiler probes distinguish syntax support, explicit compiled candidates and unproven equality; no math implementation changed."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: primary authored explanation is integrated through immutable edition; await s14 editorial/visual approval before source-only urn reuse. Preserve approved remaining scope and automatic nonvisual approvals."
+    "state": "complete",
+    "summary": "COMPLETE 22/22: accepted exemplar, source-only urn reuse and full release passed. Next M1 common-factor authoring is a recommendation only."
   },
   "expectedLearning": [
     "Measure whether author-owned explanation and verified facts compose across existing views without renderer glue; retain honest author effort and mathematical coverage gaps."

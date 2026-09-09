@@ -4,7 +4,7 @@
   "title": "Kinetic Press delivery",
   "status": "active",
   "domain": "kp",
-  "summary": "R1–R4A complete. Execute approved R4B through run-contract.kp.authored-explanation-coherence-v2; author coherent Bayes explanations, stop at s14 before reuse, no external model calls or new math.",
+  "summary": "R1-R4B complete. Review R4B closeout and propose bounded M1 verified common-factor authoring next; recommendation only, no approved successor or external model calls.",
   "sourceRefs": [
     {
       "kind": "user-intent",
