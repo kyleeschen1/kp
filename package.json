@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test:common-factor-authoring": "node --disable-warning=ExperimentalWarning --test tests/common-factor-*.test.ts",
+    "check:common-factor-workflow": "node --disable-warning=ExperimentalWarning scripts/check-common-factor-workflow.ts",
     "visual:common-factor-authoring": "playwright test --config playwright.common-factor-review.config.ts --workers=1",
     "author:common-factor-publication": "node --disable-warning=ExperimentalWarning scripts/build-common-factor-edition.ts",
     "author:check": "node --disable-warning=ExperimentalWarning scripts/author-check.ts",

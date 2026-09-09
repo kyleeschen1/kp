@@ -165,8 +165,8 @@
     {
       "id": "s21",
       "title": "Replay author/edit/repair/export workflows and report actual source bytes, repair turns and glue",
-      "summary": "Risk Medium; S: committed workflow command for both sources; honest provenance, no independent LLM or learning claims; C / G",
-      "status": "planned"
+      "summary": "Repeatable scripted authoring workflow and byte/repair report implemented; both sources,32 task tests and full types pass.",
+      "status": "complete"
     },
     {
       "id": "s22",

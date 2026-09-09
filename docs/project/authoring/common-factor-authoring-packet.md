@@ -65,3 +65,9 @@ Use the emitted directory for the static reading and self-check edition. Add
 `--check` to verify its existing bytes. Editions are immutable and content-addressed;
 new shared-template builds do not silently rewrite earlier editions. Static
 publication does not yet contain the live animation, and nothing is deployed.
+
+`npm run check:common-factor-workflow` replays both retained sources through
+checking, one scripted invalid edit and repair, revision replacement, export and
+publication verification. It reports actual source bytes and scripted repair
+turns; it is not a live-LLM benchmark. Use the separate
+`npm run visual:common-factor-authoring` for actual browser behavior.
