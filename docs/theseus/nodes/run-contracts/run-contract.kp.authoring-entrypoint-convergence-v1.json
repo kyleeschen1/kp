@@ -201,7 +201,8 @@
     {
       "id": "s17",
       "title": "Add held-out valid/invalid task cases and request-fulfillment checks separate from compilation success",
-      "status": "planned"
+      "summary": "Held-out equivalent, wrong-intent and invalid cases distinguish fulfillment from compilation without free-prose grading.",
+      "status": "complete"
     },
     {
       "id": "s18",

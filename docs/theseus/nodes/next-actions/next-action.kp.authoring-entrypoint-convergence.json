@@ -416,6 +416,13 @@
       "scope": "standard",
       "checkedAt": "2026-09-09T04:13:47.793Z",
       "notes": "s16: 32 author tests, five existing edition tests, architecture, full types and two retained Chromium workflows pass. Browser grep executed as R4A retained. Bayes dirty draft exports displayed source; numeric dirty draft blocks enclosing export. No-JS, exact byte reproduction and immutable-versus-rebuildable output boundaries verified."
+    },
+    {
+      "command": "npm run test:authoring-entrypoints; node --disable-warning=ExperimentalWarning --test tests/authoring-entrypoint-fulfillment.test.ts; npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-09T04:17:10.172Z",
+      "notes": "s17: 35 author tests pass and focused three rubric tests re-pass with same-posterior wrong-model case; full types pass. Equivalent joint input fulfills; unchanged starters and changed valid operands fail intent; malformed/undefined/wrong quotient fail compilation. Editorial quality explicitly not assessed."
     }
   ],
   "progress": {
