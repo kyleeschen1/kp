@@ -4,6 +4,7 @@ import { relative } from "node:path";
 import { createKpCommonFactorExample } from "../src/authoring/common-factor-author-check.ts";
 import { prepareKpCommonFactorDraft } from "../src/authoring/common-factor-draft.ts";
 import { sampleKpFactoringChoreography } from "../src/animation/factoring-choreography.ts";
+import numericSource from "../src/authoring/examples/common-factor-numeric.json" with { type: "json" };
 
 async function expectPrepared(page: import("@playwright/test").Page) {
   const root = page.locator("#authored-focus-card");
@@ -202,6 +203,28 @@ test("primary factoring traverses native endpoints, direct reverse and shared co
   await expect(card.locator("[data-kp-canonical-equation-host]")).toHaveAttribute("data-kp-reader-canonical-paint-owner", "true");
   await card.screenshot({ path: info.outputPath("primary-phone.png") });
   expect(errors).toEqual([]);
+});
+
+test("numeric source reuses the same card without renderer glue", async ({ page }, info) => {
+  await page.goto("/experiments/reusable-reasoning/?example=common-factor");
+  await expectPrepared(page);
+  const expected = prepareKpCommonFactorDraft(numericSource);
+  await page.locator("[data-reasoning-editor] summary").click();
+  await page.locator("[data-reasoning-json]").fill(JSON.stringify(numericSource));
+  await page.locator("[data-common-factor-apply]").click();
+  await expect(page.locator("[data-reasoning-draft-status]")).toHaveText("Displayed revision updated.");
+  const card = page.locator("[data-common-factor-card]");
+  await expect(card).toHaveAttribute("data-canonical-presentation-owner", expected.presentation.owner);
+  await expect(card).toHaveAttribute("data-canonical-presentation-revision", expected.revisionId);
+  await expect(page.locator("[data-common-factor-title]")).toHaveText(numericSource.editorial.title);
+  for (const p of [0, .18, .37, .68, 1, .68, 0]) {
+    await card.locator("[data-kp-focus-deck-scrubber]").evaluate((node, value) => {
+      (node as HTMLInputElement).value = String(value); node.dispatchEvent(new Event("input", { bubbles: true }));
+    }, p);
+    await expect(card).toHaveAttribute("data-common-factor-progress", String(p));
+    await card.screenshot({ path: info.outputPath("numeric-" + p + ".png") });
+  }
+  await expect(page.locator(".common-factor-staging")).toHaveCount(0);
 });
 
 test("primary local edition renders math and self-checks with JavaScript disabled", async ({ browser }, info) => {

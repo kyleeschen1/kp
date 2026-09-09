@@ -141,8 +141,8 @@
     {
       "id": "s17",
       "title": "Author numeric-factor second caller through the approved seam, targeting source-only reuse",
-      "summary": "Risk Medium; S + V: `2x+2y` → `2(x+y)`, exact verified evidence, same controls and revisions; C / G; new visual judgment stops, narrow nonvisual shared repair allowed and measured",
-      "status": "planned"
+      "summary": "Numeric 2x+2y source reuses canonical host via Apply without production glue; unit, browser and types pass.",
+      "status": "complete"
     },
     {
       "id": "s18",

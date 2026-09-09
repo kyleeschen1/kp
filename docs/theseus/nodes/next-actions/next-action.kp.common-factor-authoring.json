@@ -178,6 +178,13 @@
       "scope": "s16",
       "checkedAt": "2026-09-09T22:58:31.364Z",
       "notes": "Actual subtree ink, exclusive source/material/target ownership, and direct reverse identity pass. Source wrappers measured through canonical descendant observer, not inherited wrapper font."
+    },
+    {
+      "command": "npm run test:common-factor-authoring; npm run visual:common-factor-authoring -- --project=chromium --grep numeric; npm run typecheck",
+      "status": "passed",
+      "scope": "s17",
+      "checkedAt": "2026-09-09T23:01:19.324Z",
+      "notes": "28 unit tests and numeric real-host Apply/phase captures pass. Same owner and complete plan; zero production TypeScript added."
     }
   ],
   "progress": {

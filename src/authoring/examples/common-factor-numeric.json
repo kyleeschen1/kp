@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "kp.common-factor-source.v1",
+  "id": "lesson.common-factor.numeric",
+  "domain": "real-scalars",
+  "symbols": ["x", "y"],
+  "states": [
+    { "id": "state.numeric.expanded", "latex": "2x+2y", "narration": "Both products contain a factor of 2. Keep x and y in their original order." },
+    { "id": "state.numeric.factored", "latex": "2(x+y)", "narration": "Collect the two copies of 2 into one factor of the sum. Distributing recovers 2x and 2y." }
+  ],
+  "editorial": {
+    "title": "Twice each, or twice the sum",
+    "setup": "Two copies of x plus two copies of y can be grouped as twice their sum.",
+    "summary": "Factoring changes the grouping, not the value. Distribute the 2 to check each original product."
+  }
+}
