@@ -186,3 +186,20 @@ unchanged. The measured renderer cohort is 512,619 bytes, leaving 2,381 bytes
 headroom. This is an explicit budget amendment, not an optimization or automatic
 budget refresh. It resolves the named size stop once the amended gate passes;
 continue the already approved s16–s24 sequence without another routine approval.
+
+## Two-caller consolidation finding
+
+The primary and `src/authoring/examples/common-factor-numeric.json` now traverse
+the same prepared-draft resolver, nominal presentation binding, native mount,
+atomic Apply owner, endpoint projection, readings, practice and publication
+compiler. The numeric caller required zero production TypeScript and no second
+renderer or host. There is no demonstrated caller-specific duplicate to remove
+in s20; retain those seams and explicit historical callers rather than introduce
+another abstraction. The phase/geometry/focus duplication removed by the earlier
+approved repair remains the actual consolidation work.
+
+The complete real-consumer inference profile measures 169,965 types and 282,610
+instantiations across 747 local files; original core remains 113,052 / 193,425.
+Both are within unchanged ceilings. This measures overlapping checked-source
+closures, not runtime performance or bundle bytes. No consumer or negative
+type fixture was removed to obtain those results.

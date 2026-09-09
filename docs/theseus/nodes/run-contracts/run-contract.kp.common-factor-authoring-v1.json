@@ -159,8 +159,8 @@
     {
       "id": "s20",
       "title": "Remove only duplication demonstrated by both callers; preserve explicit legacy paths",
-      "summary": "Risk Medium; B: revision/output parity and complete consumer cost checks; C / G; no generalized framework without second-caller evidence",
-      "status": "planned"
+      "summary": "Authorized final parity/publication run17/17; architecture and complete cost gates pass. No additional duplicate production code justified extraction.",
+      "status": "complete"
     },
     {
       "id": "s21",

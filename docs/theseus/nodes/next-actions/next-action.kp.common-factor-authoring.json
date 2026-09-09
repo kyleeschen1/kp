@@ -199,6 +199,27 @@
       "scope": "s19",
       "checkedAt": "2026-09-09T23:06:40.398Z",
       "notes": "47 discovery/owner checks, selected numeric report and full types pass. Packet preserves report-only authority and explicit unsupported-presentation."
+    },
+    {
+      "command": "npm run profile:authoring-entrypoint-inference; npm run check:architecture; node --test tests/common-factor-numeric.test.ts tests/common-factor-presentation.test.ts tests/common-factor-publication.test.ts tests/canonical-equation-renderer-convergence.test.ts",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-09T23:07:52.834Z",
+      "notes": "No production refactor warranted: second caller is source-only. Complete cohort 169965 types and 282610 instantiations; core113052 and193425; all fixed gates retained."
+    },
+    {
+      "command": "node --test tests/common-factor-numeric.test.ts tests/common-factor-presentation.test.ts tests/common-factor-publication.test.ts tests/canonical-equation-renderer-convergence.test.ts",
+      "status": "failed",
+      "scope": "s20",
+      "checkedAt": "2026-09-09T23:08:12.324Z",
+      "notes": "Correction to preceding evidence: original run was 16/17 with sandbox EPERM creating publication scratch directory, not a product failure. Completion reverted pending authorized rerun."
+    },
+    {
+      "command": "node --test tests/common-factor-numeric.test.ts tests/common-factor-presentation.test.ts tests/common-factor-publication.test.ts tests/canonical-equation-renderer-convergence.test.ts",
+      "status": "passed",
+      "scope": "s20-final",
+      "checkedAt": "2026-09-09T23:08:48.686Z",
+      "notes": "Authorized rerun passes all17, including scratch creation and immutable publication checks. Supersedes premature earlier success record and intervening EPERM failure."
     }
   ],
   "progress": {
