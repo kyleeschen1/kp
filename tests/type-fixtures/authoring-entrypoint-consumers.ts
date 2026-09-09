@@ -23,6 +23,10 @@ import { compileKpEquationTransformSeries } from "../../src/authoring/compile-eq
 import { verifyKpDistributionRewrite } from "../../src/semantic/structured-expression-rewrite.ts";
 import type { KpStructuredExpressionRoleBindingSet } from "../../src/semantic/structured-expression-role-binding.ts";
 import { createDistributionFactoringAnimationAsset } from "../../src/animation/distribution-adapter.ts";
+import { readKpCommonFactorSource, type KpCommonFactorSource } from "../../src/authoring/common-factor-source.ts";
+const factoringSyntax = readKpCommonFactorSource(undefined); void factoringSyntax;
+// @ts-expect-error Authoring syntax has exactly two endpoints and no partial source.
+const partialFactoring: KpCommonFactorSource = { schemaVersion: "kp.common-factor-source.v1", states: [] }; void partialFactoring;
 
 // M1a pins the actual pre-extension series, proof and asset closures. Add each
 // new authoring consumer here as it lands; a registry count is not cost coverage.

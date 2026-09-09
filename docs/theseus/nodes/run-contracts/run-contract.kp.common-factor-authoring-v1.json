@@ -59,8 +59,8 @@
     {
       "id": "s04",
       "title": "Define minimal validated factoring input, symbol environment and located repair vocabulary",
-      "summary": "Risk Medium; S: schema round-trip, unknown fields, limits, version separation, forbidden presentation data; C / G",
-      "status": "planned"
+      "summary": "Bounded source syntax, exact endpoint tuple and located repairs pass five tests and full types; combined143972/240116 fits fixed gates.",
+      "status": "complete"
     },
     {
       "id": "s05",

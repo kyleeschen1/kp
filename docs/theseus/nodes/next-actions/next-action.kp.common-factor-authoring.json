@@ -44,6 +44,13 @@
       "scope": "s03",
       "checkedAt": "2026-09-09T18:21:37.101Z",
       "notes": "Three characterization tests pass; scoped command pins invalid candidate acceptance without treating it as compatibility."
+    },
+    {
+      "command": "npm run test:common-factor-authoring; npm run typecheck; npm run check:inference",
+      "status": "passed",
+      "scope": "s04",
+      "checkedAt": "2026-09-09T18:27:07.136Z",
+      "notes": "Bounded source syntax, exact endpoint tuple and located repairs pass five tests and full types; combined143972/240116 fits fixed gates."
     }
   ],
   "expectedLearning": [
