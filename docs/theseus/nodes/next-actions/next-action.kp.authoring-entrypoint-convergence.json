@@ -491,6 +491,13 @@
       "scope": "standard",
       "checkedAt": "2026-09-09T04:50:22.104Z",
       "notes": "s21:46 tests pass; executable task packet and both assessor CLIs pass; full types pass. Canonical guide routes six supported tasks without universal construction wrapping or model-success claims."
+    },
+    {
+      "command": "npm run check:authoring-task-packet; npm run visual:authoring-entrypoints -- --grep \"R4A retained\"",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-09T04:59:02.534Z",
+      "notes": "s22: both deterministic task packets fulfilled, starter intent gaps and invalid repairs retained; two actual Chromium Apply/export/build/no-JS workflows passed. Effort audit separates source artifacts from specialist infrastructure."
     }
   ],
   "progress": {

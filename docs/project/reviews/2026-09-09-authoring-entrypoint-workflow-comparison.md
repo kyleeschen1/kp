@@ -62,3 +62,42 @@ policy therefore permits continuation without a ceremonial visual checkpoint.
 Browser-cohort release verification remains later in R4A. No external model
 call, measured human authoring time, physical Safari certification or learning
 outcome is claimed.
+
+## Retained-task effort audit (s22)
+
+`npm run check:authoring-task-packet` executes both retained source checks,
+their task-specific intent rubrics, valid-but-wrong starter checks, and invalid
+input repair checks. `npm run visual:authoring-entrypoints -- --grep 'R4A retained'`
+executes both real Apply/export/build/no-JavaScript reading workflows.
+
+| Measured author artifact | Urn task | Numeric task |
+| --- | --- | --- |
+| UTF-8 source bytes | 460 | 946 |
+| Source files per task | 1 | 1 |
+| Repairs needed by the retained valid input in this replay | 0 | 0 |
+| Task-specific renderer or motif changes | 0 | 0 |
+| Publication handoff | Export standalone Bayes source | Export enclosing market branch |
+
+The urn source was committed in baseline slice s01 (`29e4972b0`); the numeric
+source was added subsequently. Comparing that baseline to `5b448b335` changes
+only the numeric file under `content/authoring`. This is a repository artifact
+count, not a measured human editing session. The packet reports source hashes
+to distinguish retained evidence from an unrecorded replacement.
+
+Zero repair rounds describes these already-valid retained inputs, not first-try
+LLM generation success. Each untouched starter is valid but fails the requested
+changed-intent rubric; each deliberately invalid input receives a domain-owned
+repair report. Those probes are separate from the valid-input repair count.
+
+Integration required specialist engineering: domain adapters for the common
+report/CLI, the numeric text-compiler and complete-success boundary, explicit
+publication handoff metadata, bounded input transport, import-cost repairs,
+and executable task/browser regressions. That work is shared infrastructure,
+not an invisible claim that the two JSON files alone implemented R4A. Neither
+task required a new mathematical model, animation motif, or renderer. Existing
+domain owners still perform all semantic checking and rendering.
+
+No elapsed authoring time, LLM repair efficiency, comprehension gain, or cost
+per newly supported mathematical operation was measured. The evidence supports
+repeatable authoring of these two tasks through existing owners, not broad
+lower-undergraduate mathematical coverage.
