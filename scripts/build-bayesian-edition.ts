@@ -29,18 +29,20 @@ export function compileBayesPublication(sourceText: string, sourcePath: string) 
     return value.latex;
   });
   const math = latex.map(source => katex.renderToString(source, { displayMode: true, throwOnError: true, trust: false, output: "htmlAndMathml" }));
-  const html = `<article data-bayes-publication-revision="${draft.revisionId}"><h1>Change the question. Keep the facts.</h1>
+  const editorialReason = context.editorial ? `<section data-bayes-publication-reason><h2>Why this denominator?</h2><p>${escape(context.editorial.text)}</p></section>` : "";
+  const html = `<article data-bayes-publication-revision="${draft.revisionId}"><h1>${escape(draft.editorial?.title ?? "Change the question. Keep the facts.")}</h1>
     ${full.html}<details><summary>Compact reading</summary>${compact.html}</details>
     <h2>Seven semantic checkpoints</h2>${draft.score.map((beat, index) => `<section id="${escape(beat.id)}"><h3>${index + 1}. ${escape(beat.title)}</h3>${beat.html}${renderBayesTreeSvg(draft.tree, index, `bayes-static-${index}`)}${index === 3 ? math[0] : index === 4 ? math[1] : ""}</section>`).join("")}
-    <h2>Self-checks</h2>${prompts.map(prompt => `<section><h3>${escape(prompt.card.title)}</h3><p>${escape(prompt.card.prompt)}</p><details><summary>Reveal answer</summary><p>${escape(prompt.card.answer!.value)}</p></details></section>`).join("")}
+    ${editorialReason}<h2>Self-checks</h2>${prompts.map(prompt => `<section><h3>${escape(prompt.card.title)}</h3><p>${escape(prompt.card.prompt)}</p><details><summary>Reveal answer</summary><p>${escape(prompt.card.answer!.value)}</p></details></section>`).join("")}
     <p>Explanatory prose is editorial. Self-checks do not automatically grade unrestricted explanations. Tree order does not reverse causation.</p>
     <p>Revision: <code>${draft.revisionId}</code>. <a href="./source.json">Exact authored source</a></p></article>`;
   const payload = { revisionId: draft.revisionId, evidenceRevisionId: draft.authority.revisionId,
+    ...(draft.editorial ? { editorialTitle: draft.editorial.title } : {}),
     source: JSON.parse(sourceText) as unknown, full, compact, context,
     prompts: prompts.map(prompt => ({ kind: prompt.kind, revisionId: prompt.revisionId, card: prompt.card, context: prompt.context })),
     reading: { html }, checkpoints: draft.score.map(beat => ({ id: beat.id, title: beat.title })) };
   return createKpCompiledPublicationArtifact({ artifactId: "publication.bayesian-reasoning",
-    source: { path: basename(sourcePath), sha256: digest(sourceText) }, compiler: { id: "kp.bayesian-reasoning-publication", version: "1" },
+    source: { path: basename(sourcePath), sha256: digest(sourceText) }, compiler: { id: "kp.bayesian-reasoning-publication", version: draft.editorial ? "2" : "1" },
     math: { engine: "katex", engineVersion: katex.version, rendering: "build-time", output: "htmlAndMathml", trust: false,
       fragmentCount: math.length, sourceLatex: [...new Set(latex)].sort() }, payloadSha256: digest(JSON.stringify(payload)), payload });
 }
@@ -61,7 +63,7 @@ export function buildBayesEdition(sourcePath: string, check = false) {
     ["source.json", sourceText], ["publication.json", JSON.stringify(artifact, null, 2) + "\n"],
     ["katex.min.css", readFileSync(join(katexRoot, "katex.min.css"))],
     ...readdirSync(join(katexRoot, "fonts")).sort().map(file => [`fonts/${file}`, readFileSync(join(katexRoot, "fonts", file))] as [string, Buffer]),
-    ["index.html", `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Bayesian probability reading</title><link rel="stylesheet" href="./styles/experiments/authored-focus-card.css"><link rel="stylesheet" href="./styles/experiments/bayesian-reasoning/style.css"></head><body><main id="authored-focus-card">${artifact.payload.reading.html}</main></body></html>`]
+    ["index.html", `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escape(artifact.payload.editorialTitle ?? "Bayesian probability reading")}</title><link rel="stylesheet" href="./styles/experiments/authored-focus-card.css"><link rel="stylesheet" href="./styles/experiments/bayesian-reasoning/style.css"></head><body><main id="authored-focus-card">${artifact.payload.reading.html}</main></body></html>`]
   ]);
   for (const path of ["experiments/authored-focus-card.css", "experiments/bayesian-reasoning/style.css",
     "reader/app/exemplar.css", "rendering/canonical-equation-stage.css", "tutorial/focus-deck-scaffold.css"]) {

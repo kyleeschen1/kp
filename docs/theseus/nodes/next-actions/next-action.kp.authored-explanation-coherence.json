@@ -115,6 +115,20 @@
       "scope": "s12",
       "checkedAt": "2026-09-09T16:23:51.621Z",
       "notes": "Exact runnable browser command: three cases passed. Earlier combined evidence line paraphrased the grep selection; use this correctly quoted command. Additional complete Bayes suite passed 51 tests."
+    },
+    {
+      "command": "npm run test:bayesian-reasoning; npm run typecheck; npm run check:inference; npm run check:architecture; npm run author:bayesian-publication -- --source content/authoring/r4b-spam-filter.bayes.json --check",
+      "status": "passed",
+      "scope": "s13",
+      "checkedAt": "2026-09-09T16:27:23.756Z",
+      "notes": "53 Bayes tests and architecture gates pass; full typecheck and both inference cohorts pass. Built and byte-verified canonical edition dbea9e61b8a0ba04fdb6d20ebb91758b79ee68a71122f4f2e32cddf35dc347da; existing port8000 serves its index with HTTP200."
+    },
+    {
+      "command": "npm run visual:authoring-entrypoints -- --grep 'R4B|R4A retained urn'",
+      "status": "passed",
+      "scope": "s13",
+      "checkedAt": "2026-09-09T16:27:24.767Z",
+      "notes": "Three Chromium cases passed: authored seven-step/readings/reason/practice/export with no JS, invalid-reference Apply preservation and legacy urn practice/publication."
     }
   ],
   "expectedLearning": [

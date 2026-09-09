@@ -115,7 +115,8 @@
     {
       "id": "s13",
       "title": "Build/export the exact authored lesson through the existing immutable edition owner",
-      "status": "planned"
+      "summary": "Immutable authored edition built and verified; all projections share lesson revision; dirty drafts cannot replace exported valid source.",
+      "status": "complete"
     },
     {
       "id": "s14",

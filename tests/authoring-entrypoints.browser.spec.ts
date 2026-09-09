@@ -12,7 +12,7 @@ import { checkBayesDraft } from "../src/experiments/bayesian-reasoning/draft.ts"
 import { editorialFixture } from "./fixtures/bayes-editorial-source.ts";
 import spamFilterSource from "../content/authoring/r4b-spam-filter.bayes.json" with { type: "json" };
 
-test("R4B primary lesson loads as content and traverses the existing seven stops", async ({ page }, info) => {
+test("R4B primary lesson loads as content and traverses the existing seven stops", async ({ page, browser }, info) => {
   const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
   const checked = checkBayesDraft(JSON.stringify(spamFilterSource));
   if (checked.status !== "compiled") throw new Error(checked.diagnostic.expected);
@@ -66,6 +66,29 @@ test("R4B primary lesson loads as content and traverses the existing seven stops
     await expect(card).toHaveAttribute("data-bayes-position", "2.35");
   }
   expect(errors).toEqual([]);
+  await page.locator("[data-bayes-draft]").fill("{");
+  const pending = page.waitForEvent("download"); await page.locator("[data-bayes-download]").click();
+  const selected = info.outputPath(`r4b-spam-${randomUUID()}.json`);
+  await (await pending).saveAs(selected);
+  expect(JSON.parse(readFileSync(selected, "utf8"))).toEqual(spamFilterSource);
+  const built = buildBayesEdition(selected), context = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    expect(built.revisionId).toBe(checked.draft.revisionId);
+    expect(buildBayesEdition(selected, true).checked).toBe(true);
+    const reading = await context.newPage();
+    await reading.goto(pathToFileURL(join(built.directory, "index.html")).href);
+    await expect(reading).toHaveTitle(spamFilterSource.editorial.title);
+    await expect(reading.locator("[data-bayes-publication-revision]")).toHaveAttribute("data-bayes-publication-revision", checked.draft.revisionId);
+    await expect(reading.locator("svg.bayes-tree")).toHaveCount(7);
+    await expect(reading.locator("script")).toHaveCount(0);
+    await expect(reading.locator("[data-bayes-publication-reason]")).toContainText("A false alarm is still a flag");
+    const practice = reading.locator("section").filter({ has: reading.getByRole("heading", { name: spamFilterSource.editorial.prompts.prediction.title, exact: true }) });
+    await expect(practice.locator("details > p")).toBeHidden();
+    await practice.locator("summary").click();
+    await expect(practice.locator("details > p")).toBeVisible();
+    await expect(practice.locator("details > p")).toContainText("2/13");
+    await reading.screenshot({ path: info.outputPath("r4b-spam-static-reading.png"), fullPage: true });
+  } finally { await context.close(); rmSync(built.directory, { recursive: true, force: true }); }
 });
 
 test("R4B authored Apply preserves one selected revision and rejects foreign references", async ({ page }) => {
