@@ -10,6 +10,7 @@ import { createKpFocusDeckCheckpointPlayback } from "../../tutorial/focus-deck-c
 import { mountKpFocusDeckNativeInput } from "../../tutorial/focus-deck-native-input.ts";
 import { bindKpFocusDeckKeyboard } from "../../tutorial/focus-deck-keyboard.ts";
 import { resolveKpFocusDeckVisibleBeat } from "../../tutorial/focus-deck-beat-navigation.ts";
+import { projectCommonFactorReading } from "./readings.ts";
 
 const root = document.querySelector<HTMLElement>("#authored-focus-card")!;
 const report = (error: unknown) => {
@@ -81,13 +82,17 @@ async function mount() {
   const setup = root.querySelector<HTMLElement>("[data-common-factor-setup]")!;
   const summary = root.querySelector<HTMLElement>("[data-common-factor-summary]")!;
   const revision = root.querySelector<HTMLElement>("[data-reasoning-revision]")!;
+  const reading = root.querySelector<HTMLSelectElement>("[data-common-factor-reading]")!;
+  const readingOutput = root.querySelector<HTMLElement>("[data-common-factor-reading-output]")!;
+  let mode: "full" | "compact" = "full";
   let active = await mountCard(display, initial), disposed = false;
   const session = createKpCommonFactorAuthoringSession({ initial,
     prepare: async draft => {
+      const full = projectCommonFactorReading(draft, "full"), compact = projectCommonFactorReading(draft, "compact");
       const staging = document.createElement("div"); staging.className = "common-factor-staging";
       staging.inert = true; staging.setAttribute("aria-hidden", "true"); staging.style.width = `${display.getBoundingClientRect().width}px`;
       staging.innerHTML = renderCommonFactorCard(draft); display.after(staging);
-      try { const surface = await mountCard(staging, draft); return { staging, surface, dispose() { surface.dispose(); staging.remove(); } }; }
+      try { const surface = await mountCard(staging, draft); return { staging, surface, full, compact, dispose() { surface.dispose(); staging.remove(); } }; }
       catch (error) { staging.remove(); throw error; }
     },
     commit: (prepared, draft) => {
@@ -97,9 +102,12 @@ async function mount() {
       title.textContent = draft.source.editorial.title; setup.textContent = draft.source.editorial.setup;
       summary.textContent = draft.source.editorial.summary; revision.textContent = draft.revisionId;
       root.dataset["commonFactorRevision"] = draft.revisionId;
+      readingOutput.innerHTML = prepared[mode].html; readingOutput.dataset["revision"] = draft.revisionId;
     }
   });
   editor.value = exportKpCommonFactorSource(initial);
+  reading.onchange = () => { mode = reading.value === "compact" ? "compact" : "full";
+    readingOutput.innerHTML = projectCommonFactorReading(session.current(), mode).html; };
   editor.oninput = () => { session.invalidate(); status.textContent = "Draft changed. Apply to prepare a new displayed revision."; };
   root.querySelector<HTMLButtonElement>("[data-common-factor-apply]")!.onclick = async () => {
     status.textContent = "Checking and preparing…";
@@ -112,7 +120,7 @@ async function mount() {
     const url = URL.createObjectURL(new Blob([exportKpCommonFactorSource(session.current())], { type: "application/json" }));
     const link = document.createElement("a"); link.href = url; link.download = "common-factor.json"; link.click(); URL.revokeObjectURL(url);
   };
-  const dispose = () => { if (disposed) return; disposed = true; session.dispose(); active.dispose(); editor.oninput = null; window.removeEventListener("pagehide", pagehide); };
+  const dispose = () => { if (disposed) return; disposed = true; session.dispose(); active.dispose(); editor.oninput = null; reading.onchange = null; window.removeEventListener("pagehide", pagehide); };
   const pagehide = (event: PageTransitionEvent) => { if (event.persisted) { active.cancel(); active.clock.pause(); } else dispose(); };
   window.addEventListener("pagehide", pagehide); import.meta.hot?.dispose(dispose);
   root.dataset["commonFactorStatus"] = "ready"; root.dataset["commonFactorRevision"] = initial.revisionId;

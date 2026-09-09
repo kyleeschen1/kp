@@ -44,5 +44,15 @@ test("primary factoring traverses native endpoints, direct reverse and shared co
   await expect(root).not.toHaveAttribute("data-common-factor-revision", oldRevision!);
   await expect(card).toHaveCount(1); await expect(page.locator(".common-factor-staging")).toHaveCount(0);
   await expect(page.locator("[data-common-factor-title]")).toHaveText(source.editorial.title);
+  await page.locator("[data-common-factor-reading]").selectOption("compact");
+  const reading = page.locator("[data-common-factor-reading-output]");
+  await expect(reading.locator("h2")).toHaveText("Compact reading");
+  await expect(reading).toHaveAttribute("data-revision", (await root.getAttribute("data-common-factor-revision"))!);
+  await expect(reading).toContainText("common factor may be zero");
+  await expect(reading.locator("math")).toHaveCount(2);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await card.scrollIntoViewIfNeeded();
+  await expect(card.locator("[data-kp-canonical-equation-host]")).toHaveAttribute("data-kp-reader-canonical-paint-owner", "true");
+  await card.screenshot({ path: info.outputPath("primary-phone.png") });
   expect(errors).toEqual([]);
 });

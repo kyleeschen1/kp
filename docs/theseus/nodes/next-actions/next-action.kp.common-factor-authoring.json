@@ -107,6 +107,13 @@
       "scope": "s12",
       "checkedAt": "2026-09-09T19:13:09.329Z",
       "notes": "Nineteen task tests, full types, architecture, native Chromium controls/Apply canary and default reasoning preservation pass; complete native inference coverage passes documented standing amendment."
+    },
+    {
+      "command": "npm run test:common-factor-authoring and Bayes reading/publication preservation tests and npm run typecheck and npm run check:inference and npm run visual:common-factor-authoring",
+      "status": "passed",
+      "scope": "s13",
+      "checkedAt": "2026-09-09T19:17:14.604Z",
+      "notes": "Twenty-one factoring and eleven Bayes reading/publication tests pass; full and compact Article views preserve facts and revision; full types, inference and desktop/phone Chromium smoke pass."
     }
   ],
   "expectedLearning": [

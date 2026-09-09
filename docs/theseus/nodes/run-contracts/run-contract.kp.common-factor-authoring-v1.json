@@ -113,8 +113,8 @@
     {
       "id": "s13",
       "title": "Bind primary explanatory prose and full/compact readings to verified IDs/revision",
-      "summary": "Risk Medium; S + V: numbers/claims from evidence, safe editorial prose, accessible required context, no duplicate headings; C / G",
-      "status": "planned"
+      "summary": "Twenty-one factoring and eleven Bayes reading/publication tests pass; full and compact Article views preserve facts and revision; full types, inference and desktop/phone Chromium smoke pass.",
+      "status": "complete"
     },
     {
       "id": "s14",

@@ -3,6 +3,7 @@ import { renderKpFocusDeckScaffold } from "../../tutorial/focus-deck-scaffold.ts
 import { assertKpPreparedCommonFactorDraft, prepareKpCommonFactorDraft, type KpPreparedCommonFactorDraft } from "../../authoring/common-factor-draft.ts";
 import { createKpCommonFactorExample } from "../../authoring/common-factor-author-check.ts";
 import { commonFactorEndpoints } from "./endpoints.ts";
+import { projectCommonFactorReading } from "./readings.ts";
 
 export const escapeCommonFactorText = (value: string) => value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
 export function commonFactorBeats(draft: KpPreparedCommonFactorDraft) {
@@ -26,6 +27,8 @@ export function renderCommonFactorPage(draft: KpPreparedCommonFactorDraft) {
     <div data-common-factor-reader>${renderCommonFactorCard(draft)}</div>
     <p class="review-help">Swipe or scroll horizontally to control the transformation. Release to settle; arrows play one complete step.</p>
     <p data-common-factor-summary>${escape(draft.source.editorial.summary)}</p>
+    <div class="reasoning-toolbar"><label>Reading <select data-common-factor-reading><option value="full">Full</option><option value="compact">Compact</option></select></label></div>
+    <section data-common-factor-reading-output data-revision="${escape(draft.revisionId)}" aria-label="Verified factoring reading">${projectCommonFactorReading(draft, "full").html}</section>
     <details data-reasoning-editor><summary>Edit source JSON</summary>
     <p>Declare single-letter real scalars. This task preserves product and addend order; it does not solve general polynomial factoring. Prose is editorial, not proof.</p>
     <label>Factoring source JSON<textarea data-reasoning-json rows="20" spellcheck="false"></textarea></label>

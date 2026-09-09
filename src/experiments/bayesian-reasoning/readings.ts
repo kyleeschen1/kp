@@ -4,12 +4,7 @@ import { compileKpArticleDocument } from "../../article/kp-article-document.ts";
 import { resolveKpArticleImports } from "../../article/kp-article-import-lock.ts";
 import { compileKpArticleStaticHtml } from "../../article/kp-article-static-html.ts";
 import { projectBayesContext } from "./context.ts";
-
-/** Labels are data, not Article directives, links, Markdown or TeX. Numeric
- * character references keep Markdown punctuation literal. Dollar signs use
- * Article's literal-code boundary so its later math pass cannot reinterpret them. */
-const literal = (text: string) => text.split(/(\$+)/).map(part => part.startsWith("$") ? `\`${part}\``
-  : Array.from(part, char => `&#${char.codePointAt(0)};`).join("")).join("");
+import { encodeKpArticleLiteralProse as literal } from "../../article/literal-prose.ts";
 
 export function projectBayesReading(draft: PreparedBayesDraft, mode: "full" | "compact") {
   requirePreparedBayesDraft(draft);
