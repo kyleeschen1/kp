@@ -2,9 +2,9 @@
   "id": "next-action.kp.authoring-entrypoint-convergence",
   "kind": "next-action",
   "title": "R4A Authoring entrypoint convergence",
-  "status": "blocked",
+  "status": "in-progress",
   "domain": "kp",
-  "summary": "R4A cost-policy stop at s19; retain18 completed slices and exact complete-cohort evidence. See2026-09-09-authoring-entrypoint-complete-cohort-stop.md; no further amendment approved.",
+  "summary": "User approved complete six-owner baseline and persistent TypeScript cost-repair autonomy; resume original R4A remaining slices with all semantic, visual and safety boundaries preserved.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -29,6 +29,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-09-authoring-entrypoint-complete-cohort-stop.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-09-typescript-cost-repair-autonomy.md"
     }
   ],
   "dependsOn": {
@@ -462,6 +466,13 @@
       "scope": "standard",
       "checkedAt": "2026-09-09T04:34:11.536Z",
       "notes": "Final s19 stop checkpoint full app,Node,test,Svelte and domain typechecks pass, including new import-compatibility test. Combined inference cost gate remains explicitly failed."
+    },
+    {
+      "command": "npm run check:inference; node --disable-warning=ExperimentalWarning --test tests/typescript-inference-budget.test.ts; npm run typecheck; npm run check:architecture; npm run test:authoring-entrypoints",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-09T04:42:51.915Z",
+      "notes": "s19 amended complete-cohort gate passes: core112278/192161; combined139337/235826 within142200/243000. Five budget tests and41 author tests pass; full types and architecture pass. Persistent automatic TypeScript cost-repair policy recorded without removing checks or consumers."
     }
   ],
   "progress": {
@@ -472,10 +483,11 @@
     "Measure whether supported tasks cross CLI and browser without duplicate authority, hidden capabilities or extra renderer glue."
   ],
   "allowedWork": [
-    "Approved 24-slice R4A source proposal, local domain-preserving entrypoint integration and measured internal type/import repair."
+    "Approved 24-slice R4A source proposal, local domain-preserving entrypoint integration and measured internal type/import repair.",
+    "Standing user approval: all TypeScript cost repairs, including measured and recorded baseline/cohort corrections, per docs/project/decisions/2026-09-09-typescript-cost-repair-autonomy.md. Preserve semantic and visual behavior, complete consumers and negative tests; no disabled checking or automatic ceiling refresh."
   ],
   "disallowedWork": [
-    "No external models, new semantic families or motifs, universal schema, budget increases, merge, deployment or subagents."
+    "No external models, new semantic families or motifs, universal schema, unrecorded budget changes, merge, deployment or subagents."
   ],
   "criteria": [
     {

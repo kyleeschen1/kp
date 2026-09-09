@@ -56,8 +56,9 @@ collaboration experiment, not a learner-facing editorial voice standard.
 - Standing user direction (2026-09-06): during an approved loop, continue across
   routine nonvisual checkpoints and repairable verification failures until a
   required visual approval is needed. This rule persists across sessions.
-  Record evidence and repair failing gates; never waive checks or raise budgets
-  to continue. Stop only for visual judgment, completion/exhausted approved scope,
+  Record evidence and repair failing gates; never waive checks. TypeScript cost
+  policy corrections follow the standing approval below; other budgets cannot
+  be raised merely to continue. Stop only for visual judgment, completion/exhausted approved scope,
   user pause, or a genuine safety, authority, scope, or external blocker that
   cannot be resolved within the approved work. See
   `docs/project/decisions/2026-09-06-persistent-loop-continuation.md`.
@@ -70,6 +71,19 @@ collaboration experiment, not a learner-facing editorial voice standard.
   visual gates and genuine scope/safety/authority stops; new long-run scope still
   needs approval. See
   `docs/project/decisions/2026-09-07-reconciled-horizon-and-minimal-check-ins.md`.
+
+- Standing user direction (2026-09-09): all TypeScript cost repairs are
+  automatically approved across sessions. Diagnose and repair measured import,
+  inference and compiler-cost problems without another approval checkpoint.
+  This includes evidence-backed cost-baseline/cohort corrections, recorded as
+  explicit policy amendments rather than disguised optimization. Preserve all
+  real consumers, negative type tests, semantic guarantees and visual behavior;
+  never disable checking, erase types, omit fixtures or automatically refresh a
+  failing ceiling. Measure before/after, prefer responsible-boundary repairs,
+  retain bounded headroom, record the reason and continue the approved loop.
+  This approval does not extend to semantic/product changes, unrelated budgets,
+  external writes, destructive actions or new visual treatments. See
+  `docs/project/decisions/2026-09-09-typescript-cost-repair-autonomy.md`.
 
 - Prefer direct commands that can match audited execution rules. Do not add `zsh -lc`, environment assignments, pipes, redirection, substitutions, or wrapper scripts when the same check has a direct invocation.
 - Do not request or accumulate blanket approval for `node`, shell interpreters, changing `tmp/codex/` filenames, destructive Git commands, or deletion commands. Promote recurring checks into a committed `scripts/` or `tests/` entrypoint and expose them through a stable `npm run` command.

@@ -22,6 +22,8 @@ test("both approved cohorts retain exact fixture membership and active checking"
   assert.deepEqual(frontendInferenceFixtures, ["tests/type-fixtures/authoring-entrypoint-consumers.ts"]);
   assert.deepEqual(typescriptInferenceBudget.ceilings, { types: 112500, instantiations: 195800 });
   const budget = combinedInferenceBudget;
+  assert.deepEqual(budget.measuredProject, { types: 139337, instantiations: 235826 });
+  assert.deepEqual(budget.ceilings, { types: 142200, instantiations: 243000 });
   assert.equal(budget.ceilings.types, Math.ceil(budget.measuredProject.types * 1.02 / 100) * 100);
   assert.equal(budget.ceilings.instantiations, Math.ceil(budget.measuredProject.instantiations * 1.03 / 100) * 100);
 });

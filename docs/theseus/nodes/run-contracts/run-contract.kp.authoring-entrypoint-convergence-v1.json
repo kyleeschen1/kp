@@ -2,8 +2,8 @@
   "id": "run-contract.kp.authoring-entrypoint-convergence-v1",
   "kind": "run-contract",
   "title": "R4A Authoring entrypoint convergence",
-  "status": "blocked",
-  "summary": "STOP_CONDITION: s19 fixed-gate failure persists after bounded import repair; awaiting explicit complete-coverage budget or broader type-boundary scope decision.",
+  "status": "in-progress",
+  "summary": "User approved complete six-owner baseline and persistent TypeScript cost-repair autonomy; resume original R4A remaining slices with all semantic, visual and safety boundaries preserved.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -25,6 +25,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-09-authoring-entrypoint-complete-cohort-stop.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-09-typescript-cost-repair-autonomy.md"
     }
   ],
   "verification": [
@@ -67,11 +71,12 @@
     "s23: Run broad release and supported-browser preservation; repair attributable failures at their owners; risk High; B + V: full tests/build, fixed budgets, R1/R2/R3/tax and selected code/Graph3D checks; one commit.",
     "s24: Record measured benefit, remaining R4 obligations and mathematical-expansion handoff; close receipts and commit; risk Low; F: exact evidence, validated Theseus, clean scoped worktree; one commit.",
     "Brief tracked contexts, no subagents, same port-8000 server, existing domain owners; approved exemplar and promotion policy in source proposal.",
-    "Accepted two-cohort amendment: docs/project/decisions/2026-09-09-inference-cost-cohorts.md. Core remains 112500 types and 195800 instantiations; combined fixed ceilings 130000 and 221300; exact fixture membership mandatory."
+    "Accepted two-cohort amendment: docs/project/decisions/2026-09-09-inference-cost-cohorts.md. Core remains 112500 types and 195800 instantiations; combined fixed ceilings 142200 and 243000; exact fixture membership mandatory.",
+    "Standing user approval: all TypeScript cost repairs, including measured and recorded baseline/cohort corrections, per docs/project/decisions/2026-09-09-typescript-cost-repair-autonomy.md. Preserve semantic and visual behavior, complete consumers and negative tests; no disabled checking or automatic ceiling refresh."
   ],
   "disallowedWork": [
     "s01 STOP: Conflicting current authority",
-    "s02 STOP: Cannot fit approved core and combined cohorts without broader redesign or further budget waiver",
+    "s02 STOP: Cannot fit approved core and combined cohorts without broader redesign or unrecorded budget waiver",
     "s03 STOP: New universal capability ontology required",
     "s04 STOP: Loss of domain information or new truth owner",
     "s05 STOP: Dynamic plugin loading or user-code execution needed",
@@ -94,7 +99,7 @@
     "s22 STOP: Subjective new output needs approval; no live call implied",
     "s23 STOP: Unrelated repairs, unsafe authority or new visual treatment",
     "s24 STOP: Required proof or approved work incomplete",
-    "No external model calls, new domains/motifs, universal schema, further budget waiver, runtime rewrite, remote/browser writes, deployment, merge or automatic successor."
+    "No external model calls, new domains/motifs, universal schema, unrecorded budget waiver, runtime rewrite, remote/browser writes, deployment, merge or automatic successor."
   ],
   "goal": "Supported author tasks use consistent entrypoints while domain evidence, previews and immutable editions remain coherent.",
   "target": "next-action.kp.authoring-entrypoint-convergence",
@@ -217,8 +222,8 @@
     {
       "id": "s19",
       "title": "Prove narrow frontend entrypoints with two structurally different consumers; retain only measured common plumbing",
-      "summary": "Retained partial work at STOP_CONDITION: complete six-owner fixture139337/235826 exceeds fixed130000/221300; contract blocked pending explicit cost-policy or broader refactor scope.",
-      "status": "in-progress"
+      "summary": "All six owner consumers remain measured; approved combined gate passes, original core unchanged; narrow import repair and public compatibility verified.",
+      "status": "complete"
     },
     {
       "id": "s20",

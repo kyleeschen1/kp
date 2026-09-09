@@ -65,9 +65,10 @@ require the measured combined frontend gate. See
 complete-coverage cost stop; see
 `reviews/2026-09-09-authoring-entrypoint-complete-cohort-stop.md`. The initial
 combined fixture omitted the later equation-reasoning and market/Article owner
-closures. Preserve the complete fixture, unchanged ceilings and verified import
-repair; another budget amendment or broader cost-reduction scope is not yet
-approved. Theseus owns
+closures. The user approved the complete six-owner baseline correction and
+persistent automatic approval for TypeScript cost repairs; see
+`decisions/2026-09-09-typescript-cost-repair-autonomy.md`. Preserve the complete
+fixture, original core gate and verified import repairs; resume R4A. Theseus owns
 slice order and live evidence. Preserve existing visuals and domain owners;
 stop for material new visual judgment, not routine nonvisual checkpoints.
 External model calls and broader R4 promotion remain deferred. Do not restart

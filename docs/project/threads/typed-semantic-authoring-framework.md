@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: R4A complete-coverage cost stop; further amendment not approved
+Status: R4A resumed; complete-cohort amendment and TypeScript cost-repair autonomy approved
 Last Updated: 2026-09-08
 Current successor reference: `../reviews/2026-09-07-reconciled-authoring-loop-horizon.md`.
 It preserves the original architectural obligations and the tax/Bayes direction;
@@ -63,13 +63,12 @@ do not treat its proposed roadmap or readiness labels as new execution authority
 The user clarified the remaining code issue as missing gradual passage swiping.
 The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
-Current Next Action: resolve the complete-coverage cost stop recorded in
-`../reviews/2026-09-09-authoring-entrypoint-complete-cohort-stop.md`.
-The earlier s02 two-cohort amendment is approved, but its initial fixture did not
-cover the later reusable-equation and market/Article owner closures. Preserve all
-six owner consumers and both unchanged ceilings. The report recommends an explicit
-complete-coverage baseline amendment; it is not yet approved. Preserve both the
-Graph3D identity repair and the narrow distribution compiler imports.
+Current Next Action: resume R4A after the approved complete-coverage amendment;
+see `../decisions/2026-09-09-typescript-cost-repair-autonomy.md`. The s19 stop
+report remains historical measurement evidence. Preserve all six owner consumers,
+the original core gate, Graph3D identity repair and narrow distribution compiler
+imports. TypeScript cost repairs now have persistent automatic approval, with
+measurement, regression protection and explicit policy records still required.
 The approved 24-slice R4A proposal remains
 `../reviews/2026-09-08-authoring-entrypoint-convergence-long-loop-proposal.md`
 through `run-contract.kp.authoring-entrypoint-convergence-v1`. Theseus owns live

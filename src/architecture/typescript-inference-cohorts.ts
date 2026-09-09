@@ -54,9 +54,9 @@ export const coreInferenceFixtures = [
 ] as const;
 export const frontendInferenceFixtures = ["tests/type-fixtures/authoring-entrypoint-consumers.ts"] as const;
 export const combinedInferenceBudget = Object.freeze({
-  measuredProject: { types: 127_387, instantiations: 214_823 },
-  // Approved two-cohort amendment: same 2% / 3% rounding policy as core.
-  ceilings: { types: 130_000, instantiations: 221_300 }
+  measuredProject: { types: 139_337, instantiations: 235_826 },
+  // Approved complete six-owner baseline; same 2% / 3% rounding policy as core.
+  ceilings: { types: 142_200, instantiations: 243_000 }
 } as const);
 export const inferenceCohorts = [
   { name: "core", config: "tsconfig.inference-core.json", fixtures: coreInferenceFixtures, budget: typescriptInferenceBudget },

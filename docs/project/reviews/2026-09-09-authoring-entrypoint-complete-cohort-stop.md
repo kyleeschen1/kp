@@ -1,5 +1,10 @@
 # R4A: complete frontend coverage cost stop
 
+Resolution: the user approved the recommendation and persistent TypeScript
+cost-repair autonomy. See
+`../decisions/2026-09-09-typescript-cost-repair-autonomy.md`. The stop and pending
+approval language below are historical evidence; Theseus owns resumed execution.
+
 Date: 2026-09-09
 Outcome: STOP_CONDITION — 18/24 slices complete; s19 retains partial work.
 Contract: `run-contract.kp.authoring-entrypoint-convergence-v1`.

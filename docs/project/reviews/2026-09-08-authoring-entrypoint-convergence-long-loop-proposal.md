@@ -6,6 +6,9 @@ Contract: `run-contract.kp.authoring-entrypoint-convergence-v1`
 Target: `next-action.kp.authoring-entrypoint-convergence`
 
 Accepted s02 amendment: `../decisions/2026-09-09-inference-cost-cohorts.md`.
+Accepted s19 amendment and persistent TypeScript cost-repair approval:
+`../decisions/2026-09-09-typescript-cost-repair-autonomy.md`. It supersedes only
+the older TypeScript cost-approval/budget restrictions; all other scope remains.
 The original core fixtures and ceilings stay fixed; a mandatory combined
 frontend cohort has separately measured fixed ceilings. This is the sole
 exception to the original no-budget-increases stop below. All other scope and
