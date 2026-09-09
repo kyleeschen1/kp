@@ -189,7 +189,8 @@
     {
       "id": "s15",
       "title": "Finalize per-task preview and projection capability reports from these actual callers",
-      "status": "planned"
+      "summary": "Every report carries existing task capabilities and not-performed handoff status; no universal host or publication authority.",
+      "status": "complete"
     },
     {
       "id": "s16",

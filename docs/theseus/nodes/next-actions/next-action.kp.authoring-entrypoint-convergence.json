@@ -402,6 +402,13 @@
       "scope": "standard",
       "checkedAt": "2026-09-09T04:06:50.387Z",
       "notes": "s14: 28 author tests and 50 round-trip tests pass; canonical tax bytes current; 12 production routes preserved; full types pass. Corrected Graph2D preview to local-source-build, not JSON Apply."
+    },
+    {
+      "command": "npm run test:authoring-entrypoints; npm run typecheck; npm run check:inference",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-09T04:09:42.104Z",
+      "notes": "s15: 30 tests pass; complete typecheck passes; core 112278 types/192161 instantiations and combined 127687/214993 remain below fixed ceilings. Handoff is explicitly not-performed with closed per-task capabilities."
     }
   ],
   "progress": {

@@ -10,6 +10,10 @@ import type { KpLogarithmBaseDraftCompilation } from "../../src/authoring/equati
 // Measure the actual owner closures before a facade can hide their costs.
 const bayes = checkBayesDraft(JSON.stringify(createBayesDraft()));
 const bayesReport = reportAuthorCheck("bayes.binary", bayes);
+// @ts-expect-error A preview link is not an applied host revision.
+const applied: "applied" = bayesReport.handoff.execution; void applied;
+// @ts-expect-error The check report cannot issue a publication revision.
+bayesReport.handoff.publishedRevision;
 if (bayesReport.status === "repair-gap") {
   const expected: string = bayesReport.result.diagnostic.expected; void expected;
   // @ts-expect-error A rejected report cannot contain a prepared draft.

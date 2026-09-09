@@ -1,4 +1,4 @@
-import { isSupportedAuthorTask, type SupportedAuthorTask } from "./supported-author-tasks.ts";
+import { isSupportedAuthorTask, supportedAuthorTasks, type SupportedAuthorTask } from "./supported-author-tasks.ts";
 
 type AcceptedOutcome = { readonly status: "compiled" | "compiled-artifact" | "existing-artifact" | "semantic-plan-only" };
 type RejectedOutcome = { readonly status: "repair-gap" | "repair-required" };
@@ -7,6 +7,10 @@ type ReportBase = {
   readonly kind: "author-check-report";
   readonly task: SupportedAuthorTask;
   readonly authority: "report-only";
+  readonly handoff: {
+    readonly execution: "not-performed";
+    readonly capabilities: (typeof supportedAuthorTasks)[SupportedAuthorTask];
+  };
 };
 export type AuthorCheckReport<T extends OwnerOutcome = OwnerOutcome> = ReportBase & (
   | { readonly status: "checked"; readonly result: T & AcceptedOutcome }
@@ -16,7 +20,8 @@ export type AuthorCheckReport<T extends OwnerOutcome = OwnerOutcome> = ReportBas
 export function reportAuthorCheck<T extends OwnerOutcome>(task: SupportedAuthorTask, result: T): AuthorCheckReport<T>;
 export function reportAuthorCheck(task: SupportedAuthorTask, result: OwnerOutcome): AuthorCheckReport {
   if (!isSupportedAuthorTask(task)) throw new Error("Unknown author task; select a supported task before checking.");
-  const base = { kind: "author-check-report", task, authority: "report-only" } as const;
+  const base = { kind: "author-check-report", task, authority: "report-only",
+    handoff: Object.freeze({ execution: "not-performed", capabilities: supportedAuthorTasks[task] }) } as const;
   // Preserve the owner's payload verbatim. The wrapper classifies a check; it
   // neither validates serialized proof nor issues host/publication authority.
   switch (result.status) {
