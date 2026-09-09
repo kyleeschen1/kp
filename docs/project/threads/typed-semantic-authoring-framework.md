@@ -71,7 +71,12 @@ see `2026-09-09-canonical-presentation-routing-repair.md` for the approved
 migration, type guarantees, evidence and approved budget decision. Working URLs,
 acceptance questions and earlier primary evidence are
 in `../reviews/2026-09-09-common-factor-primary-visual-checkpoint.md`.
-Continue the approved post-checkpoint slices after verifying the amended gate. The broader accepted
+The amended renderer-source gate passes; the accepted primary and numeric
+source-only callers pass the supported-browser cohort. Release is now held at
+the separate reader HTML-gzip budget checkpoint:
+`2026-09-09-common-factor-release-budget-checkpoint.md`. Do not reopen the visual
+checkpoint or interpret the source ceiling approval as a reader-budget waiver.
+The broader accepted
 path and limits are in
 `../decisions/2026-09-09-mathematics-expansion-and-m1a-approval.md`.
 R4B closeout remains completed evidence; do not restart its accepted checkpoint.

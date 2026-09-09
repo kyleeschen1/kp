@@ -2,9 +2,9 @@
   "id": "next-action.kp.common-factor-authoring",
   "kind": "next-action",
   "title": "M1a Verified common-factor authoring",
-  "status": "in-progress",
+  "status": "blocked",
   "domain": "authoring",
-  "summary": "Visual and exact source-budget approvals resolved. Continue approved s16 through s24.",
+  "summary": "s23 fixed reader HTML-gzip gate exceeds three limits by 10-26 bytes. Separate budget decision needed; primary and numeric source-only reuse plus browser cohorts passed. Resume s23 then s24, not a new visual loop.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -17,6 +17,10 @@
     {
       "kind": "file",
       "path": "docs/project/threads/2026-09-09-canonical-presentation-routing-repair.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-09-common-factor-release-budget-checkpoint.md"
     }
   ],
   "dependsOn": {
@@ -234,11 +238,39 @@
       "scope": "s22",
       "checkedAt": "2026-09-09T23:18:01.162Z",
       "notes": "24 browser checks and82 compositor checks pass. Bounded200ms observations show zero idle and disposed-card mutations after three swaps. Not physical-device or long-duration performance certification."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "failed",
+      "scope": "s23",
+      "checkedAt": "2026-09-09T23:27:03.625Z",
+      "notes": "Three compiled-HTML gzip limits exceeded: divide-both-sides 4381 vs 4371, split-merge-fractions 4161 vs 4135, radical-succession 4392 vs 4373. Shared equation runtime 141933 is 3067 below its unchanged limit. No budget changed; source-size approval does not authorize reader-budget amendment."
+    },
+    {
+      "command": "npm run build; npm run visual:authoring-entrypoints; npm run check:reader-production; npm run check:dev-review-production; npm run check:native-katex-compositor-conformance-production",
+      "status": "passed",
+      "scope": "s23",
+      "checkedAt": "2026-09-09T23:27:04.818Z",
+      "notes": "Production build with full typechecks passes; existing large-chunk advisory remains. Earlier-exemplar Chromium cohort 23 passed. Reader closure 12 routes; dev-review closure 457 files and 12 forbidden markers; compositor diagnostic closure 9 forbidden markers. These successes do not waive failed reader gzip gate."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "s23",
+      "checkedAt": "2026-09-09T23:34:02.491Z",
+      "notes": "Full run: 6885 passed, 2 failed, 6887 total, 762950ms. Failures were stale generated equation discovery catalog and exact reachability graph. Pre-suite architecture, inference, concept-catalog and promotion-memory gates passed."
+    },
+    {
+      "command": "npm run generate:equation-operation-discovery-catalog; npm run generate:equation-reachability; npm run test:equation-operation-discovery-api; npm run test:equation-reachability",
+      "status": "passed",
+      "scope": "s23",
+      "checkedAt": "2026-09-09T23:34:03.704Z",
+      "notes": "Refreshed only stale generated metadata through owning generators. All20 affected tests pass, including both full-suite failures. No freshness assertion weakened. Full release rerun remains required after separate reader-budget decision."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s15 accepted and s16 paint regression complete. Approved source ceiling passes. Next: source-only numeric reuse."
+    "summary": "s01-s22 complete. Accepted canonical primary, source-only numeric reuse, author packet, workflow and three-engine cohort complete. s23 release found three fixed reader HTML-gzip overages; s24 closeout remains. No reader budget changed."
   },
   "expectedLearning": [
     "Measure verified ordinary-LaTeX factoring authoring and source-only numeric reuse without renderer glue."

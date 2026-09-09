@@ -2,8 +2,8 @@
   "id": "run-contract.kp.common-factor-authoring-v1",
   "kind": "run-contract",
   "title": "M1a Verified common-factor authoring",
-  "status": "in-progress",
-  "summary": "Approved exact 24 slices; proceed to combined s15 human checkpoint, then approved reuse and release.",
+  "status": "blocked",
+  "summary": "STOP_CONDITION at s23: reader HTML-gzip amendment needs separate authority. s01-s22 complete; s23 release and s24 closeout remain. Accepted visuals and approved source ceiling are resolved.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -17,6 +17,10 @@
     {
       "kind": "file",
       "path": "docs/project/threads/2026-09-09-canonical-presentation-routing-repair.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-09-common-factor-release-budget-checkpoint.md"
     }
   ],
   "verification": [
@@ -177,7 +181,7 @@
     {
       "id": "s23",
       "title": "Release full tests, build, cost gates, production closure and earlier exemplar preservation",
-      "summary": "Risk High; B: `npm test`, full typecheck/build, reader budgets/closure, dev-review closure, both static editions and affected R1–R4B browser cohort; C / G",
+      "summary": "STOP_CONDITION: release partially verified; three unchanged reader HTML-gzip limits fail by 10-26 bytes. Resume this slice after the separately scoped budget decision; do not mark complete.",
       "status": "planned"
     },
     {

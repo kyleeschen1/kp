@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 4484,
+  "scannedFileCount": 4522,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -50,6 +50,7 @@
       ],
       "testCallers": [
         "tests/canonical-equation-semantic-focus.test.ts",
+        "tests/common-factor-presentation.test.ts",
         "tests/operation-evaluation-exemplar.test.ts"
       ],
       "scriptCallers": [],
@@ -926,6 +927,7 @@
       "testCallers": [
         "tests/animation-catalogue-solve-x-preservation.test.ts",
         "tests/canonical-animation-construction-round-trip.test.ts",
+        "tests/common-factor-presentation.test.ts",
         "tests/distribution-factoring-presentation-plan.test.ts",
         "tests/editor-graph-3d-host-contract.test.ts",
         "tests/editor-graph-3d-saddle-host-contract.test.ts",
@@ -1348,6 +1350,8 @@
         "src/architecture/operation-evaluation-caller-conformance.ts",
         "src/architecture/place-value-addition-promotion-certificate.ts",
         "src/authoring/canonical-animation-construction-compiler.ts",
+        "src/authoring/common-factor-draft.ts",
+        "src/authoring/common-factor-presentation.ts",
         "src/authoring/governed-canonical-construction-compiler.ts",
         "src/domain-ir/antiderivative-power-migration-v2.ts",
         "src/domain-ir/derivative-power-migration-v2.ts",
@@ -1548,6 +1552,7 @@
       "testCallers": [
         "tests/animation-catalogue-solve-x-preservation.test.ts",
         "tests/canonical-animation-construction-round-trip.test.ts",
+        "tests/common-factor-presentation.test.ts",
         "tests/distribution-factoring-presentation-plan.test.ts",
         "tests/editor-graph-3d-host-contract.test.ts",
         "tests/editor-graph-3d-saddle-host-contract.test.ts",
@@ -1988,6 +1993,7 @@
       "testCallers": [
         "tests/animation-catalogue-solve-x-preservation.test.ts",
         "tests/canonical-animation-construction-round-trip.test.ts",
+        "tests/common-factor-presentation.test.ts",
         "tests/distribution-factoring-presentation-plan.test.ts",
         "tests/editor-graph-3d-host-contract.test.ts",
         "tests/editor-graph-3d-saddle-host-contract.test.ts",
@@ -2215,6 +2221,8 @@
         "src/architecture/operation-evaluation-caller-conformance.ts",
         "src/architecture/place-value-addition-promotion-certificate.ts",
         "src/authoring/canonical-animation-construction-compiler.ts",
+        "src/authoring/common-factor-draft.ts",
+        "src/authoring/common-factor-presentation.ts",
         "src/authoring/governed-canonical-construction-compiler.ts",
         "src/domain-ir/antiderivative-power-migration-v2.ts",
         "src/domain-ir/derivative-power-migration-v2.ts",
@@ -2534,6 +2542,7 @@
         "src/animation/fraction-composition-cloze.ts",
         "src/animation/semantic-glyph-reconciliation-cloze.ts",
         "src/experiments/bayesian-reasoning/prompts.ts",
+        "src/experiments/common-factor/practice.ts",
         "src/experiments/reusable-reasoning/prompts.ts",
         "src/project-dashboard/generated-algebra-catalog.ts"
       ],

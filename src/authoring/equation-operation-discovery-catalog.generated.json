@@ -704,9 +704,7 @@
         "Do not select this operation when its declared roles or required evidence are absent."
       ],
       "requiredEvidenceIds": [
-        "definition.generated.distribution.factor-common-term",
-        "law.algebra.distributive-property",
-        "kp.algebra"
+        "kp.semantic-contract.common-factor.v1"
       ],
       "supportState": "available"
     },
