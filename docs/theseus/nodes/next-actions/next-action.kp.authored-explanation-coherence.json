@@ -52,6 +52,13 @@
       "scope": "standard",
       "checkedAt": "2026-09-09T15:36:54.505Z",
       "notes": "s04: five tests pass; full types pass; core unchanged 112278/192161 and combined 142141/238873 within fixed gates. Disjoint v1/v2 syntax, immutable bounded prose/fact nodes, located rejections and negative prepared-authority tests. Live compiler integration follows after binding/revision work."
+    },
+    {
+      "command": "node --test tests/typescript-inference-budget.test.ts tests/bayesian-reasoning-editorial-binding.test.ts tests/bayesian-reasoning-editorial-baseline.test.ts; npm run typecheck; npm run check:inference",
+      "status": "passed",
+      "scope": "s05",
+      "checkedAt": "2026-09-09T15:47:01.719Z",
+      "notes": "11 tests pass, full typecheck passes. Initial synthetic source variant repaired; initial cost overage repaired and documented with all fixtures retained. Impact selector recommends broad release checks; deferred to approved release boundary."
     }
   ],
   "expectedLearning": [

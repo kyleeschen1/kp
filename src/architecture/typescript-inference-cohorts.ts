@@ -54,9 +54,9 @@ export const coreInferenceFixtures = [
 ] as const;
 export const frontendInferenceFixtures = ["tests/type-fixtures/authoring-entrypoint-consumers.ts"] as const;
 export const combinedInferenceBudget = Object.freeze({
-  measuredProject: { types: 139_337, instantiations: 235_826 },
-  // Approved complete six-owner baseline; same 2% / 3% rounding policy as core.
-  ceilings: { types: 142_200, instantiations: 243_000 }
+  measuredProject: { types: 142_266, instantiations: 239_250 },
+  // R4B adds actual view and editorial-binding consumers; retain fixed 2% / 3% headroom.
+  ceilings: { types: 145_200, instantiations: 246_500 }
 } as const);
 export const inferenceCohorts = [
   { name: "core", config: "tsconfig.inference-core.json", fixtures: coreInferenceFixtures, budget: typescriptInferenceBudget },

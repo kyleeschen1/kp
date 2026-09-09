@@ -18,6 +18,7 @@ import { projectBayesPrompts } from "../../src/experiments/bayesian-reasoning/pr
 import { extractBayesDenominator, resolveBayesDenominatorReturn } from "../../src/experiments/bayesian-reasoning/extraction.ts";
 import { createBayesAuthoringSession } from "../../src/experiments/bayesian-reasoning/authoring.ts";
 import { readBayesSourceEnvelope, type BayesSourceEnvelope, type BayesEditorialText } from "../../src/experiments/bayesian-reasoning/editorial-source.ts";
+import { bindBayesEditorial } from "../../src/experiments/bayesian-reasoning/editorial-binding.ts";
 
 // Include every selected domain owner, not only the first implementation wave.
 // Node transport is checked by tsconfig.node; this fixed cohort is platform-neutral.
@@ -71,6 +72,10 @@ if (bayesReport.status === "repair-gap") {
 // @ts-expect-error A checked report never supplies host preparation authority.
 const prepared: PreparedBayesDraft = bayesReport; void prepared;
 if (bayes.status === "compiled") {
+  const editorial = bindBayesEditorial(bayes.draft.trace, selectedMarket);
+  const resolvedBody: string = editorial.passages[0]!.body; void resolvedBody;
+  // @ts-expect-error Parsed source does not establish verified trace authority.
+  bindBayesEditorial(editorialEnvelope, selectedMarket);
   const revision: string = bayes.draft.revisionId; void revision;
   // R4B measures all affected view owners before adding editorial source types.
   const card: string = renderBayesCardRevision(bayes.draft); void card;

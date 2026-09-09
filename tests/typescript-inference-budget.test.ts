@@ -22,8 +22,8 @@ test("both approved cohorts retain exact fixture membership and active checking"
   assert.deepEqual(frontendInferenceFixtures, ["tests/type-fixtures/authoring-entrypoint-consumers.ts"]);
   assert.deepEqual(typescriptInferenceBudget.ceilings, { types: 112500, instantiations: 195800 });
   const budget = combinedInferenceBudget;
-  assert.deepEqual(budget.measuredProject, { types: 139337, instantiations: 235826 });
-  assert.deepEqual(budget.ceilings, { types: 142200, instantiations: 243000 });
+  assert.deepEqual(budget.measuredProject, { types: 142266, instantiations: 239250 });
+  assert.deepEqual(budget.ceilings, { types: 145200, instantiations: 246500 });
   assert.equal(budget.ceilings.types, Math.ceil(budget.measuredProject.types * 1.02 / 100) * 100);
   assert.equal(budget.ceilings.instantiations, Math.ceil(budget.measuredProject.instantiations * 1.03 / 100) * 100);
 });
@@ -39,7 +39,7 @@ test("membership rejects omissions, unassigned fixtures, duplicates and cohort t
 
 test("editorial cost coverage retains actual author, card, reading, prompt and extraction consumers", () => {
   const fixture = readFileSync("tests/type-fixtures/authoring-entrypoint-consumers.ts", "utf8");
-  for (const owner of ["page", "readings", "prompts", "extraction", "authoring"])
+  for (const owner of ["page", "readings", "prompts", "extraction", "authoring", "editorial-binding"])
     assert.ok(fixture.includes(`/bayesian-reasoning/${owner}.ts`), owner);
   const publication = readFileSync("tests/bayesian-reasoning-publication.test.ts", "utf8");
   assert.ok(publication.includes("buildBayesEdition(path)"));

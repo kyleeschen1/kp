@@ -67,7 +67,8 @@
     {
       "id": "s05",
       "title": "Bind only demonstrated existing facts and semantic stop IDs through the owning context/Article mechanisms",
-      "status": "planned"
+      "summary": "Verified fact binding, exact seven-stop references, shared trace context and full consumer cost evidence.",
+      "status": "complete"
     },
     {
       "id": "s06",
