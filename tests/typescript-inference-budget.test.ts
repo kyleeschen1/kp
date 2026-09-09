@@ -66,6 +66,14 @@ test("inference ceilings retain measured, narrow structural headroom", () => {
   assert.notEqual(config.compilerOptions?.skipLibCheck, true);
 });
 
+test("factoring cost coverage retains series, structured proof and real asset consumers", () => {
+  const fixture = readFileSync("tests/type-fixtures/authoring-entrypoint-consumers.ts", "utf8");
+  for (const owner of ["compile-equation-transform-series", "structured-expression-rewrite", "distribution-adapter"])
+    assert.ok(fixture.includes(`/${owner}.ts`), owner);
+  assert.ok(fixture.includes("verifyKpDistributionRewrite(factoringBindings)"));
+  assert.ok(fixture.includes("createDistributionFactoringAnimationAsset()"));
+});
+
 test("owner-local inference laws avoid broad public barrels", () => {
   const imports = new Map([
     ["concept-room-theme-inference.ts", "../../src/app-adapters/concept-room-theme.ts"],

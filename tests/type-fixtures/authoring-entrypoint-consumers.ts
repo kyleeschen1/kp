@@ -19,6 +19,25 @@ import { extractBayesDenominator, resolveBayesDenominatorReturn } from "../../sr
 import { createBayesAuthoringSession } from "../../src/experiments/bayesian-reasoning/authoring.ts";
 import { readBayesSourceEnvelope, type BayesSourceEnvelope, type BayesEditorialText } from "../../src/experiments/bayesian-reasoning/editorial-source.ts";
 import { bindBayesEditorial } from "../../src/experiments/bayesian-reasoning/editorial-binding.ts";
+import { compileKpEquationTransformSeries } from "../../src/authoring/compile-equation-transform-series.ts";
+import { verifyKpDistributionRewrite } from "../../src/semantic/structured-expression-rewrite.ts";
+import type { KpStructuredExpressionRoleBindingSet } from "../../src/semantic/structured-expression-role-binding.ts";
+import { createDistributionFactoringAnimationAsset } from "../../src/animation/distribution-adapter.ts";
+
+// M1a pins the actual pre-extension series, proof and asset closures. Add each
+// new authoring consumer here as it lands; a registry count is not cost coverage.
+declare const factoringRequest: unknown;
+declare const factoringBindings: KpStructuredExpressionRoleBindingSet;
+const factoringCandidate = compileKpEquationTransformSeries({ value: factoringRequest });
+const factoringRewrite = verifyKpDistributionRewrite(factoringBindings);
+const factoringAsset = createDistributionFactoringAnimationAsset();
+void [factoringCandidate, factoringAsset];
+if (factoringRewrite.ok) {
+  const law: "kp.algebra.distribute.v1" = factoringRewrite.verification.lawId; void law;
+} else {
+  // @ts-expect-error Rejected structure cannot carry a verified rewrite.
+  factoringRewrite.verification;
+}
 
 // Include every selected domain owner, not only the first implementation wave.
 // Node transport is checked by tsconfig.node; this fixed cohort is platform-neutral.

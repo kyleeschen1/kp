@@ -47,8 +47,8 @@
     {
       "id": "s02",
       "title": "Register complete affected inference consumers and capture baseline costs before new exports",
-      "summary": "Risk Medium; S: inference gates, all real frontend consumers, negative type fixtures; C / G",
-      "status": "planned"
+      "summary": "Complete current factoring consumer cost baseline fits fixed gates; full typecheck and seven guards pass.",
+      "status": "complete"
     },
     {
       "id": "s03",

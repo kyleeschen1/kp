@@ -50,3 +50,13 @@ Execution metadata correction: slice risk/check details were moved from long
 titles into stored summaries after the 1,000-token status report rejected 1,037
 tokens. No budget raised. The target's done contract and completed R4B dependency
 were explicitly attached through Theseus; progress now reports zero blockers.
+
+## Complete pre-extension cost coverage
+
+s02 adds actual equation-series, structured rewrite and factoring asset consumers
+to the existing combined frontend fixture, preserving all 48 core fixtures and
+all previous frontend callers. An executable membership guard protects the new
+owner coverage. Before extension, core remains 112,493 types / 192,595
+instantiations; combined is 143,865 / 239,977 (previously 142,340 / 239,402).
+Both fit unchanged ceilings. New source/proof/host consumers must be exercised
+in this fixture as they land; this baseline is not future consumer coverage.

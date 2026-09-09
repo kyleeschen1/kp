@@ -30,6 +30,13 @@
       "scope": "s01",
       "checkedAt": "2026-09-09T18:16:45.784Z",
       "notes": "14 passed; source-backed baseline report records typed syntax and invalid candidate boundaries, not downstream certification."
+    },
+    {
+      "command": "npm run check:inference; npm run typecheck; node --test tests/typescript-inference-budget.test.ts",
+      "status": "passed",
+      "scope": "s02",
+      "checkedAt": "2026-09-09T18:20:14.992Z",
+      "notes": "Core112493/192595; combined143865/239977; no ceilings changed, all old consumers retained, seven cost tests pass."
     }
   ],
   "expectedLearning": [
