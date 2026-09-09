@@ -147,8 +147,8 @@
     {
       "id": "s18",
       "title": "Pressure adjacent valid/invalid cases at the semantic and notation boundaries",
-      "summary": "Risk Medium; S: zero factor, repeated symbols, wrong coefficients, changed addends, ambiguity, malicious/oversized input; C / G; unsupported classes stay typed gaps",
-      "status": "planned"
+      "summary": "Bounded coefficient, occurrence, notation and hostile-source pressure checks pass with full types; no capability expansion.",
+      "status": "complete"
     },
     {
       "id": "s19",

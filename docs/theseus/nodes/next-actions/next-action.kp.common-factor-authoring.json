@@ -185,6 +185,13 @@
       "scope": "s17",
       "checkedAt": "2026-09-09T23:01:19.324Z",
       "notes": "28 unit tests and numeric real-host Apply/phase captures pass. Same owner and complete plan; zero production TypeScript added."
+    },
+    {
+      "command": "npm run test:common-factor-authoring; node --test tests/common-factor-boundaries.test.ts; npm run typecheck",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-09T23:03:51.198Z",
+      "notes": "31 task checks plus final adversarial boundary rerun pass; all failures retain located repairs without draft authority."
     }
   ],
   "progress": {
