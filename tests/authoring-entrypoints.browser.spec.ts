@@ -25,6 +25,15 @@ test("R4B primary lesson loads as content and traverses the existing seven stops
   await page.locator("[data-bayes-apply]").click();
   await expect(card).toHaveAttribute("data-bayes-revision", checked.draft.revisionId);
   await expect(page.locator("[data-bayes-editorial]")).toContainText(spamFilterSource.editorial.title);
+  for (const mode of ["full", "compact"]) {
+    const reading = page.locator(`[data-bayes-reading="${mode}"]`);
+    await reading.locator("summary").click();
+    await expect(reading).toHaveAttribute("data-bayes-reading-revision", checked.draft.revisionId);
+    await expect(reading).toContainText(spamFilterSource.editorial.title);
+    await expect(reading).toContainText(mode === "full" ? "Our question reverses the conditioning" : "Both groups belong in the denominator");
+    await expect(reading).toContainText("= 2/13.");
+    await reading.locator("summary").click();
+  }
   for (const step of [0, 1, 2, 3, 4, 5, 6, 4]) {
     await card.locator("[data-kp-focus-deck-scrubber]").evaluate((node, step) => {
       (node as HTMLInputElement).value = String(step); node.dispatchEvent(new Event("input", { bubbles: true }));

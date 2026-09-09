@@ -18,11 +18,16 @@ export function projectBayesReading(draft: PreparedBayesDraft, mode: "full" | "c
   const context = `${definitions.map(event => `${event.symbol} means ${literal(event.label)}; not ${event.symbol} means ${literal(event.complementLabel)}.`).join("\n\n")}\n\n${assumptions.join("\n\n")}\n\nJoint masses (A ∩ B, A ∩ not B, not A ∩ B, not A ∩ not B): ${facts.jointMasses.map(fact => fact.mass).join(", ")}.`;
   const answer = `P(A | B) = P(A ∩ B) / P(B) = (${facts.numerator}) / (${facts.denominator}) = ${facts.posterior}.`;
   const first = tree.initial.first === 0 ? "A" : "B", second = tree.initial.second === 0 ? "A" : "B";
-  const explanation = mode === "compact"
+  const defaultExplanation = mode === "compact"
     ? `Gather the two B outcomes, then divide the A-and-B joint mass by their sum. ${answer} Restore the full population before reordering the tree.`
     : `Start with the whole population. Split first on ${first}, then on ${second}. Multiply along each path to recover its joint mass.\n\nGather A ∩ B and not A ∩ B. Their sum, ${facts.denominator}, is still a share of the whole population.\n\nNow restrict the reference population to B. ${answer}\n\nRestore the whole population. Reorder the branches to ${second} first, then ${first}; all four original joint masses survive.`;
   const documentId = `lesson.probability.bayes-${mode}`;
-  const source = createKpArticleSource(`${model.sourceId}.${mode}.${draft.revisionId.slice(7)}`, `---\nkp:\n  schema: kp.article.v1\n  id: ${documentId}\n  imports:\n---\n\n# ${mode === "full" ? "Full" : "Compact"} probability reading\n\n## Required context\n\n${context}\n\n## Reasoning\n\n${explanation}\n`);
+  // Editorial slots enter Article as literal prose, never as a second Markdown
+  // program. Required definitions, assumptions and answer remain compiler-owned.
+  const explanation = draft.editorial ? `${draft.editorial.readings[mode].map(literal).join("\n\n")}\n\n${answer}` : defaultExplanation;
+  const heading = draft.editorial ? `${literal(draft.editorial.title)}\n\n${literal(draft.editorial.setup)}`
+    : `${mode === "full" ? "Full" : "Compact"} probability reading`;
+  const source = createKpArticleSource(`${model.sourceId}.${mode}.${draft.revisionId.slice(7)}`, `---\nkp:\n  schema: kp.article.v1\n  id: ${documentId}\n  imports:\n---\n\n# ${heading}\n\n## Required context\n\n${context}\n\n## Reasoning\n\n${explanation}\n`);
   // This is a reading-only Article, not a fabricated vignette release or a
   // second interactive stage. Domain references remain explicitly pinned.
   const lock = resolveKpArticleImports(source, []).lock;

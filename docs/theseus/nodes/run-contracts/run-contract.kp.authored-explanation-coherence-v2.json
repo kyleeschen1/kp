@@ -97,7 +97,8 @@
     {
       "id": "s10",
       "title": "Project authored explanation into full/compact readings through existing Article ownership",
-      "status": "planned"
+      "summary": "Both authored reading modes compile through Article with shared revision, mandatory context, exact answer and safe prose.",
+      "status": "complete"
     },
     {
       "id": "s11",
