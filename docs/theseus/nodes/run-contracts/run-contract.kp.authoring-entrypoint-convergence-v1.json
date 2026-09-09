@@ -228,7 +228,8 @@
     {
       "id": "s20",
       "title": "Retire duplicated mechanics beside migrated callers; preserve legacy command behavior with delegation",
-      "status": "planned"
+      "summary": "Migrated legacy commands delegate domain checks; duplicate size mechanics removed and full result parity protected.",
+      "status": "complete"
     },
     {
       "id": "s21",

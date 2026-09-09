@@ -473,6 +473,13 @@
       "scope": "standard",
       "checkedAt": "2026-09-09T04:42:51.915Z",
       "notes": "s19 amended complete-cohort gate passes: core112278/192161; combined139337/235826 within142200/243000. Five budget tests and41 author tests pass; full types and architecture pass. Persistent automatic TypeScript cost-repair policy recorded without removing checks or consumers."
+    },
+    {
+      "command": "npm run test:authoring-entrypoints; npm run test:reusable-reasoning; npm run typecheck; npm run check:architecture; npm run check:inference",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-09T04:46:07.806Z",
+      "notes": "s20:44 author tests and61 reasoning tests pass; full types, architecture and both fixed cohorts pass. Legacy size diagnostic delegates to exact same owner; examples, command grammar and domain repair payloads preserved."
     }
   ],
   "progress": {

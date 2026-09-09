@@ -11,11 +11,7 @@ const repair = (code: string, path: string, expected: string) => ({ status: "rep
 
 /** A read-only authoring adapter, not another compiler or proof authority. */
 export function checkReasoningText(domain: ReasoningDomain, json: string) {
-  if (json.length > 100_000) return repair("kp.reasoning.draft-size", "$", "Keep the source under 100,000 characters.");
-  if (domain === "equation") {
-    return checkEquationReasoningSource(json);
-  }
-  return checkCodeReasoningSource(json);
+  return domain === "equation" ? checkEquationReasoningSource(json) : checkCodeReasoningSource(json);
 }
 
 export function runReasoningAuthoringCli(args: readonly string[]) {
