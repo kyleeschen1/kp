@@ -23,6 +23,13 @@ export async function checkAuthorTask(task: SupportedAuthorTask, json: string) {
     const { checkReasoningText } = await import("./author-reasoning.ts");
     return reportAuthorCheck(task, checkReasoningText(task === "reasoning.equation" ? "equation" : "code", json));
   }
+  if (task === "equation.logarithm-base") {
+    const { compileKpEquationSeriesLogarithmBaseText } = await import("../src/authoring/equation-series-logarithm-base-draft.ts");
+    const result = compileKpEquationSeriesLogarithmBaseText(json);
+    if (result.status === "repair-required") return reportAuthorCheck(task, { status: "repair-required" as const, repairs: result.repairs });
+    return reportAuthorCheck(task, { status: "compiled" as const, request: result.active.request,
+      semantic: result.semantic, checkpointCount: result.active.request.states.length });
+  }
   let value: unknown;
   try { value = JSON.parse(json); }
   catch (error) {
@@ -31,14 +38,6 @@ export async function checkAuthorTask(task: SupportedAuthorTask, json: string) {
       diagnostic: { code: "author.json", path: "$", expected: "Provide valid JSON for the selected task." } });
   }
   switch (task) {
-    case "equation.logarithm-base": {
-      const { compileKpEquationSeriesLogarithmBaseDraft } = await import("../src/authoring/equation-series-logarithm-base-draft.ts");
-      const result = compileKpEquationSeriesLogarithmBaseDraft(value);
-      if (result.status === "repair-required") return reportAuthorCheck(task, { status: "repair-required" as const, repairs: result.repairs });
-      if (!result.active || !result.semantic) throw new Error("Compiled numeric equation lost its candidate or verified semantic source.");
-      return reportAuthorCheck(task, { status: "compiled" as const, request: result.active.request,
-        semantic: result.semantic, checkpointCount: result.active.request.states.length });
-    }
     case "graph3d.saddle": {
       const { routeKpCrossDomainGalleryGeneration } = await import("./cross-domain-gallery-generation-router.ts");
       const { kpGalleryGraph3DSaddleParameterFrontend } = await import("./gallery-graph-3d-saddle-parameter-frontend.ts");

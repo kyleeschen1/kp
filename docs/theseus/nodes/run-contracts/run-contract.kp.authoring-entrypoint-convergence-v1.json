@@ -147,7 +147,8 @@
     {
       "id": "s08",
       "title": "Make the selected equation CLI path use that boundary; retain the explicitly pinned legacy example contract",
-      "status": "planned"
+      "summary": "Shared numeric text boundary and selected CLI parity verified; malformed text preserves last-valid truth; legacy pinned command meaning unchanged.",
+      "status": "complete"
     },
     {
       "id": "s09",

@@ -225,6 +225,26 @@
       "scope": "focused",
       "checkedAt": "2026-09-09T03:26:49.398Z",
       "notes": "Core unchanged; combined 127646 types and 214967 instantiations."
+    },
+    {
+      "command": "npm run test:authoring-entrypoints",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-09T03:31:00.460Z",
+      "notes": "19 tests pass including numeric CLI/domain equality, preserved narration, last-valid text repairs and strict legacy example."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-09T03:31:01.629Z"
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-09T03:31:02.658Z",
+      "notes": "Core unchanged; combined 127668 types and 214968 instantiations."
     }
   ],
   "progress": {

@@ -20,6 +20,25 @@ export function createKpEquationSeriesLogarithmBaseDraft() {
     intent: { ...adjacency.intent, semanticArguments: {} } })) };
 }
 
+/** Untrusted text enters the same compiler in CLI and browser. Parse failures
+ * use the existing repair taxonomy and preserve the last valid candidate. */
+export function compileKpEquationSeriesLogarithmBaseText(json: string,
+  previous?: KpLogarithmBaseDraftCompilation): KpLogarithmBaseDraftCompilation {
+  const fail = (code: string, message: string): KpLogarithmBaseDraftCompilation => ({
+    ...compileKpEquationTransformSeries({ value: undefined, previous, externalDiagnostics: [{
+      code, path: "$.request", message, repair: "Provide one valid numeric logarithm-base request within 100,000 characters."
+    }] }), status: "repair-required", semantic: previous?.semantic
+  });
+  if (json.length > 100_000) return fail("equation-series.request.size", "The equation source exceeds 100,000 characters.");
+  let value: unknown;
+  try { value = JSON.parse(json); }
+  catch (error) {
+    if (!(error instanceof SyntaxError)) throw error;
+    return fail("equation-series.request.json", "Provide valid JSON before compiling the equation draft.");
+  }
+  return compileKpEquationSeriesLogarithmBaseDraft(value, previous);
+}
+
 /** Numeric notation proposes operands; the existing verifier and binder own
  * law, domain evidence and correspondence. Explicit legacy pins stay strict. */
 export function compileKpEquationSeriesLogarithmBaseDraft(value: unknown,
