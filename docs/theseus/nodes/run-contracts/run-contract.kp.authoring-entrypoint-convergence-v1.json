@@ -117,7 +117,8 @@
     {
       "id": "s03",
       "title": "Derive the bounded task/capability inventory from existing owners; distinguish check, preview, extraction and publication",
-      "status": "planned"
+      "summary": "Bounded six-task inventory and exact capability limits verified; no renderer imports or applied/publication authority claimed.",
+      "status": "complete"
     },
     {
       "id": "s04",

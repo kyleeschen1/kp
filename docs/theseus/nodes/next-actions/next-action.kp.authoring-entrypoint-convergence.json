@@ -112,6 +112,19 @@
       "scope": "focused",
       "checkedAt": "2026-09-09T03:04:05.041Z",
       "notes": "8 tests passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/authoring-entrypoint-inventory.test.ts tests/authoring-entrypoint-baseline.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-09T03:10:02.709Z",
+      "notes": "Four tests pass; exact tasks, owners, publication restrictions and unknown task rejection."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-09T03:10:03.891Z"
     }
   ],
   "progress": {
