@@ -51,6 +51,13 @@
       "scope": "s04",
       "checkedAt": "2026-09-09T18:27:07.136Z",
       "notes": "Bounded source syntax, exact endpoint tuple and located repairs pass five tests and full types; combined143972/240116 fits fixed gates."
+    },
+    {
+      "command": "npm run test:common-factor-authoring; npm run test:equation-latex-endpoint-normalizer; node --test tests/latex-tokenizer.test.ts; npm run typecheck; npm run check:inference",
+      "status": "passed",
+      "scope": "s05",
+      "checkedAt": "2026-09-09T18:30:38.215Z",
+      "notes": "Explicit multiplication uses shared parser; seven task, sixteen endpoint and three tokenizer tests pass; full types and fixed costs pass."
     }
   ],
   "expectedLearning": [

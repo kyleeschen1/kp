@@ -24,7 +24,9 @@ import { verifyKpDistributionRewrite } from "../../src/semantic/structured-expre
 import type { KpStructuredExpressionRoleBindingSet } from "../../src/semantic/structured-expression-role-binding.ts";
 import { createDistributionFactoringAnimationAsset } from "../../src/animation/distribution-adapter.ts";
 import { readKpCommonFactorSource, type KpCommonFactorSource } from "../../src/authoring/common-factor-source.ts";
+import { normalizeKpCommonFactorEndpoints } from "../../src/authoring/common-factor-normalizer.ts";
 const factoringSyntax = readKpCommonFactorSource(undefined); void factoringSyntax;
+const factoringEndpoints = normalizeKpCommonFactorEndpoints(factoringSyntax); void factoringEndpoints;
 // @ts-expect-error Authoring syntax has exactly two endpoints and no partial source.
 const partialFactoring: KpCommonFactorSource = { schemaVersion: "kp.common-factor-source.v1", states: [] }; void partialFactoring;
 

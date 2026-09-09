@@ -65,8 +65,8 @@
     {
       "id": "s05",
       "title": "Normalize explicit multiplication and grouping through the existing parser owner",
-      "summary": "Risk Medium; S: explicit notation, precedence, original spelling, non-factoring parser regression; C / G",
-      "status": "planned"
+      "summary": "Explicit multiplication uses shared parser; seven task, sixteen endpoint and three tokenizer tests pass; full types and fixed costs pass.",
+      "status": "complete"
     },
     {
       "id": "s06",

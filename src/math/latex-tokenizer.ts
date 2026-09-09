@@ -88,7 +88,11 @@ export function tokenizeLatex(input: string): readonly LatexToken[] {
 
     if (character === "\\") {
       const command = readCommand(input, offset);
-      tokens.push({
+      // Explicit scalar multiplication is notation, not a function call. Keep
+      // the authored offset so diagnostics still point into original LaTeX.
+      tokens.push(command.value === "cdot" ? {
+        kind: "operator", value: "*", offset
+      } : {
         kind: "command",
         value: command.value,
         offset
