@@ -2,9 +2,9 @@
   "id": "next-action.kp.authored-explanation-coherence",
   "kind": "next-action",
   "title": "R4B Authored explanation coherence",
-  "status": "blocked",
+  "status": "in-progress",
   "domain": "authoring",
-  "summary": "HUMAN_CHECKPOINT: await explicit approval of the canonical authored spam-filter lesson and static edition in the review packet. Technical checks pass. Approval reactivates this same target and completes s14 before source-only urn reuse.",
+  "summary": "User approved the combined spam-filter exemplar: approve, and resume. Continue the same approved contract through urn reuse and release.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -147,6 +147,13 @@
       "scope": "s14",
       "checkedAt": "2026-09-09T16:37:49.628Z",
       "notes": "53 tests and final full typecheck pass; corrected edition 6e2d8b84965e18ba23e9f4b45a41a7eaabee64feb437973beaea90e15bebd06d byte-verified. Direct Node fixture run hit sandbox EPERM; canonical authorized npm suite passed. Human acceptance remains unrecorded."
+    },
+    {
+      "command": "Human review: approve, and resume",
+      "status": "passed",
+      "scope": "s14",
+      "checkedAt": "2026-09-09T17:08:05.324Z",
+      "notes": "Accepted exact canonical spam-filter editorial and visual checkpoint; remaining approved slices resume without routine check-ins."
     }
   ],
   "progress": {

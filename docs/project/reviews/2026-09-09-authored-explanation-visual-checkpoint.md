@@ -1,11 +1,11 @@
 # R4B authored explanation: combined human checkpoint
 
 Date: 2026-09-09
-Outcome: HUMAN_CHECKPOINT — awaiting editorial/visual approval, not a completed run.
+Outcome: ACCEPTED — user: “approve, and resume” on 2026-09-09. This is not a completed run.
 Contract: `run-contract.kp.authored-explanation-coherence-v2`
 Proposal: `2026-09-09-authored-explanation-coherence-long-loop-proposal.md`
 Theseus owns live counts and slice state. This packet records the review artifact,
-not a second implementation queue. Second-lesson reuse remains gated.
+not a second implementation queue. Acceptance clears second-lesson reuse in the same approved contract.
 
 ## Open and select the lesson
 
