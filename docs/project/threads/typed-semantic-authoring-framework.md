@@ -65,7 +65,10 @@ The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
 Current Next Action: execute approved `run-contract.kp.common-factor-authoring-v1`
 from `../reviews/2026-09-09-m1-common-factor-authoring-long-loop-proposal.md`.
-Stop at combined s15 visual review before numeric reuse. The broader accepted
+Stop at combined s15 visual review before numeric reuse. The primary is ready
+for that decision; working URLs, acceptance questions and executed evidence are
+in `../reviews/2026-09-09-common-factor-primary-visual-checkpoint.md`.
+This is pending human acceptance, not a completed checkpoint. The broader accepted
 path and limits are in
 `../decisions/2026-09-09-mathematics-expansion-and-m1a-approval.md`.
 R4B closeout remains completed evidence; do not restart its accepted checkpoint.

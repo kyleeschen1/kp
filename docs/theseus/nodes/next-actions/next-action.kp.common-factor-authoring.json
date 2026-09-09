@@ -9,6 +9,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-09-m1-common-factor-authoring-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-09-common-factor-primary-visual-checkpoint.md"
     }
   ],
   "dependsOn": {
@@ -123,6 +127,10 @@
       "notes": "Verified practice, exact fractional return and immutable no-JS edition pass 24 tests, two browser checks, full types, architecture and fixed inference gates."
     }
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT at s15: 14 of 24 complete. Working live/static primary and source linked in review; no s16 until explicit acceptance. Resume retrieval: theseus work resume."
+  },
   "expectedLearning": [
     "Measure verified ordinary-LaTeX factoring authoring and source-only numeric reuse without renderer glue."
   ],

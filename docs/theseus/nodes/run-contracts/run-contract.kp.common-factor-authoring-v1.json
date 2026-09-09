@@ -125,8 +125,8 @@
     {
       "id": "s15",
       "title": "Present one combined primary editorial/visual review packet with working URL and exact source",
-      "summary": "Risk Medium; V + human: inspect factoring convergence, controls, passage/position, readings, practice and static view at desktop/phone; C after accepted review / HUMAN_CHECKPOINT before s16",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: primary review ready; see common-factor-primary-visual-checkpoint review dated 2026-09-09. Await explicit editorial and visual acceptance before s16; s15 is not complete.",
+      "status": "in-progress"
     },
     {
       "id": "s16",
