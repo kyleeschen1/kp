@@ -1,14 +1,21 @@
 # Common-factor release budget checkpoint
 
-M1a has completed the accepted primary card and numeric source-only reuse. The
-remaining release gate cannot be marked passed while three existing reader
-routes exceed their fixed compressed-HTML limits. Theseus owns live slice state;
+Decision resolved: the user accepted the recommendation and requested
+implementation on 2026-09-09. The exact three HTML-gzip baseline replacements
+below are approved and applied. The 5% policy, all route coverage, raw-HTML and
+runtime limits remain unchanged. Earlier failure measurements are retained as
+history; final release verification is owned by s23 of the existing contract.
+
+At the checkpoint, M1a had completed the accepted primary card and numeric
+source-only reuse. The release gate could not be marked passed while three
+existing reader routes exceeded their fixed compressed-HTML limits. Theseus owns live slice state;
 this is not a new implementation plan or a completed-loop report.
 
 ## What the current approval delivered
 
 The exact renderer source-size ceiling is now 515,000 bytes; measured source is
-512,619 bytes. No reader-budget or other non-TypeScript ceiling was raised.
+512,619 bytes. At that checkpoint no reader-budget or other non-TypeScript
+ceiling had been raised; the subsequent explicit HTML-budget approval is above.
 The visually accepted native factoring pipeline is shared by the primary
 `ab + ac` → `a(b + c)` and numeric `2x + 2y` → `2(x + y)` examples. The numeric
 caller adds source JSON, not production TypeScript or renderer glue.
@@ -22,7 +29,7 @@ workflows; these are deterministic scripted fixtures, not live LLM evidence.
 
 ## Release measurements
 
-`npm run check:reader-budgets` fails on the current production build:
+`npm run check:reader-budgets` failed on the checkpoint production build:
 
 | Reader route | HTML gzip bytes | Fixed allowed bytes | Excess |
 | --- | ---: | ---: | ---: |
@@ -68,14 +75,13 @@ release-budget decision; this is not a claim of a green final full-suite run.
 
 ## Decision and exact continuation
 
-Recommendation: approve a bounded amendment for these three HTML-gzip baselines,
+Accepted recommendation: a bounded amendment for these three HTML-gzip baselines,
 retaining the 5% policy, all routes, raw-HTML and runtime limits, and executable
 checks: divide-both-sides 4,162 → 4,381; split-merge-fractions 3,938 → 4,161;
-radical-succession 4,164 → 4,392. These would be measured-baseline replacements,
-not changes already made. Alternatively authorize a separately scoped
-build-output optimization.
-Neither follows from the already approved 515,000-byte renderer-source ceiling.
-No automatic budget waiver is applied.
+radical-succession 4,164 → 4,392. These measured-baseline replacements were
+subsequently explicitly approved and applied, instead of a separately scoped
+build-output optimization. Authority comes from that new approval, not the
+earlier 515,000-byte renderer-source ceiling. No automatic budget waiver applies.
 
 After the decision, resume `run-contract.kp.common-factor-authoring-v1` at s23,
 rerun the release gate, and finish s24 documentation/closeout. No new family or

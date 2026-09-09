@@ -337,7 +337,9 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       label: "Cancel the coefficient",
       progressPermille: 667
     }),
-    budget: routeBudget(33_781, 4_162, sharedEquationRuntimeGzipBaseline)
+    // Measured HTML-gzip amendment approved for M1a release; preserve raw/runtime
+    // gates and the shared 5% policy. See the common-factor release checkpoint.
+    budget: routeBudget(33_781, 4_381, sharedEquationRuntimeGzipBaseline)
   }),
   defineKpReaderRoute({
     route: "/reader/split-merge-fractions/",
@@ -369,7 +371,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
     // The typed factoring/contact proof is intentionally a separate preload;
     // this release baseline preserves that boundary instead of hiding it by
     // folding operation authority back into the generic renderer chunk.
-    budget: routeBudget(30_526, 3_938, sharedEquationRuntimeGzipBaseline)
+    budget: routeBudget(30_526, 4_161, sharedEquationRuntimeGzipBaseline)
   }),
   defineKpReaderRoute({
     route: "/reader/radical-succession/",
@@ -398,7 +400,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
         }))
       )
     },
-    budget: routeBudget(22_307, 4_164, sharedEquationRuntimeGzipBaseline)
+    budget: routeBudget(22_307, 4_392, sharedEquationRuntimeGzipBaseline)
   }),
   defineKpReaderRoute({
     route: "/reader/fraction-composition/",

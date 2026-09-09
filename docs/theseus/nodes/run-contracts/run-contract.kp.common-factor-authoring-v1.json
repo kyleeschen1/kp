@@ -2,8 +2,8 @@
   "id": "run-contract.kp.common-factor-authoring-v1",
   "kind": "run-contract",
   "title": "M1a Verified common-factor authoring",
-  "status": "blocked",
-  "summary": "STOP_CONDITION at s23: reader HTML-gzip amendment needs separate authority. s01-s22 complete; s23 release and s24 closeout remain. Accepted visuals and approved source ceiling are resolved.",
+  "status": "in-progress",
+  "summary": "Reader HTML-gzip decision explicitly approved. Resume final release and closeout within original24 slices.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -181,8 +181,8 @@
     {
       "id": "s23",
       "title": "Release full tests, build, cost gates, production closure and earlier exemplar preservation",
-      "summary": "STOP_CONDITION: release partially verified; three unchanged reader HTML-gzip limits fail by 10-26 bytes. Resume this slice after the separately scoped budget decision; do not mark complete.",
-      "status": "planned"
+      "summary": "Explicit three-route HTML-gzip amendment applied; final6887 tests, build/types, all12 budgets/closures, both editions and retained browser preservation evidence pass.",
+      "status": "complete"
     },
     {
       "id": "s24",

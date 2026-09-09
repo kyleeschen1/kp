@@ -2,9 +2,9 @@
   "id": "next-action.kp.common-factor-authoring",
   "kind": "next-action",
   "title": "M1a Verified common-factor authoring",
-  "status": "blocked",
+  "status": "in-progress",
   "domain": "authoring",
-  "summary": "s23 fixed reader HTML-gzip gate exceeds three limits by 10-26 bytes. Separate budget decision needed; primary and numeric source-only reuse plus browser cohorts passed. Resume s23 then s24, not a new visual loop.",
+  "summary": "User accepted and requested implementation of exact three measured reader HTML-gzip baseline adjustments. Resume s23 release then s24 closeout; no other budget amendment.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -266,11 +266,25 @@
       "scope": "s23",
       "checkedAt": "2026-09-09T23:34:03.704Z",
       "notes": "Refreshed only stale generated metadata through owning generators. All20 affected tests pass, including both full-suite failures. No freshness assertion weakened. Full release rerun remains required after separate reader-budget decision."
+    },
+    {
+      "command": "npm run build; npm run check:reader-budgets; npm run check:reader-production; npm run check:dev-review-production; npm run check:native-katex-compositor-conformance-production; node --test scripts/check-reader-route-budgets.test.ts; npm run check:common-factor-workflow",
+      "status": "passed",
+      "scope": "s23",
+      "checkedAt": "2026-09-09T23:40:08.524Z",
+      "notes": "Exact user-approved HTML baselines4381/4161/4392 applied; all12 route budgets and unchanged5percent policy pass. Runtime141933 remains3067 below limit. Full build/types, all3 production closures,4 budget tests and both scripted authoring workflows pass. Prior failing budget record is resolved by explicit amendment, not optimization."
+    },
+    {
+      "command": "npm test; npm run author:common-factor-publication -- --source src/authoring/examples/common-factor-primary.json --check; npm run author:common-factor-publication -- --source src/authoring/examples/common-factor-numeric.json --check",
+      "status": "passed",
+      "scope": "s23",
+      "checkedAt": "2026-09-09T23:50:05.558Z",
+      "notes": "Final full suite6887/6887 passes, zero failures/skips,681601ms; both prior stale-metadata failures now green. Architecture, complete inference, catalog and promotion-memory pregates pass. Both immutable editions reproduce pinned bytes. Earlier unchanged visual cohorts retain24 three-engine and23 prior-exemplar passes."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s01-s22 complete. Accepted canonical primary, source-only numeric reuse, author packet, workflow and three-engine cohort complete. s23 release found three fixed reader HTML-gzip overages; s24 closeout remains. No reader budget changed."
+    "summary": "s01-s22 complete. User-approved three HTML-gzip baselines applied; rebuilt12-route budgets, production closures,4 checker tests, both workflows and both immutable editions pass. Full suite running; s24 closeout remains."
   },
   "expectedLearning": [
     "Measure verified ordinary-LaTeX factoring authoring and source-only numeric reuse without renderer glue."
