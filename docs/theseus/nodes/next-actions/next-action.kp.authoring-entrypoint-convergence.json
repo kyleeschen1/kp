@@ -2,9 +2,9 @@
   "id": "next-action.kp.authoring-entrypoint-convergence",
   "kind": "next-action",
   "title": "R4A Authoring entrypoint convergence",
-  "status": "in-progress",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "User approved complete six-owner baseline and persistent TypeScript cost-repair autonomy; resume original R4A remaining slices with all semantic, visual and safety boundaries preserved.",
+  "summary": "R4A authoring entrypoint convergence complete; remaining horizon requires a bounded successor proposal.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -37,6 +37,10 @@
     {
       "kind": "file",
       "path": "docs/project/authoring/supported-authoring-entrypoint-packet.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-09-authoring-entrypoint-convergence-closeout.md"
     }
   ],
   "dependsOn": {
@@ -519,11 +523,18 @@
       "scope": "broad",
       "checkedAt": "2026-09-09T05:24:38.541Z",
       "notes": "s23 clean final rerun: all 6823 tests passed, zero failures/skips, 600340.746584ms. Architecture, core 112278/192161 and complete combined 139337/235826 inference, concept catalogue and promotion memory passed. Reliability policy passed. Initial sole stale inventory failure repaired with exact caller metadata and unchanged public-identity regression."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/current-direction-authoring-ratchet.test.ts tests/authoring-entrypoint-packet.test.ts tests/typescript-inference-budget.test.ts; git diff --check; theseus workspace validate",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-09T05:28:29.729Z",
+      "notes": "s24: ten closeout policy/packet/direction tests passed; roadmap, active thread and horizon identify completed R4A and unapproved successor boundary. Full release evidence preserved in closeout and prior verification."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "1 of 24 complete; s02 partial measured repair retained. All ordinary types and focused preservation pass, fixed cost gate fails. Explicit budget-ownership decision required."
+    "state": "complete",
+    "summary": "All 24 approved R4A slices complete with full release verification, author packet and durable closeout."
   },
   "expectedLearning": [
     "Measure whether supported tasks cross CLI and browser without duplicate authority, hidden capabilities or extra renderer glue."

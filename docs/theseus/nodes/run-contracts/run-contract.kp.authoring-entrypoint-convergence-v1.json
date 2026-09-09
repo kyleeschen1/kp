@@ -2,8 +2,8 @@
   "id": "run-contract.kp.authoring-entrypoint-convergence-v1",
   "kind": "run-contract",
   "title": "R4A Authoring entrypoint convergence",
-  "status": "in-progress",
-  "summary": "User approved complete six-owner baseline and persistent TypeScript cost-repair autonomy; resume original R4A remaining slices with all semantic, visual and safety boundaries preserved.",
+  "status": "resolved",
+  "summary": "COMPLETE: 24 of 24 approved slices verified and recorded; no automatic successor run.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -29,6 +29,10 @@
     {
       "kind": "file",
       "path": "docs/project/decisions/2026-09-09-typescript-cost-repair-autonomy.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-09-authoring-entrypoint-convergence-closeout.md"
     }
   ],
   "verification": [
@@ -42,8 +46,8 @@
     "theseus workspace validate"
   ],
   "progress": {
-    "state": "partial",
-    "summary": "18 of24 complete; s19 useful partial work and full coverage retained. Fixed combined gate fails; no advance to s20 or release claim."
+    "state": "complete",
+    "summary": "All 24 slices verified. Preserve domain authority, existing visuals, complete fixture coverage and persistent TypeScript cost-repair autonomy."
   },
   "allowedWork": [
     "s01: Pin the two author tasks, owner/host/capability map, output baselines and command names; reconcile stale workflow summary; risk Low; F: exact arithmetic, source/host refs, clean baseline; one commit.",
@@ -252,7 +256,8 @@
     {
       "id": "s24",
       "title": "Record measured benefit, remaining R4 obligations and mathematical-expansion handoff; close receipts and commit",
-      "status": "planned"
+      "summary": "Closeout recorded; R4A local convergence complete. All checks and amendments retained; remaining R4/live-model/math horizon is planning only, no new implementation authorized.",
+      "status": "complete"
     }
   ]
 }

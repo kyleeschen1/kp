@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-09-08
+Last Updated: 2026-09-09
 Status: active
 Active Thread: `threads/typed-semantic-authoring-framework.md`
 Supporting Threads:
@@ -54,11 +54,11 @@ See `decisions/2026-09-08-bayesian-live-trial-deferral.md`; the earlier permissi
 stop is historical, not an outstanding requirement in this amended run.
 The user approved the exact 24-slice R4A local authoring-convergence proposal:
 `reviews/2026-09-08-authoring-entrypoint-convergence-long-loop-proposal.md`.
-`run-contract.kp.authoring-entrypoint-convergence-v1` reached its s02 fixed-cost
-stop after measuring the real existing frontend consumers. The bounded Graph3D
-identity import repair is verified, but the old combined inference ceiling still
-fails. See `reviews/2026-09-09-authoring-entrypoint-inference-stop.md` for exact
-evidence and the proposed explicit core/frontend budget-ownership amendment.
+`run-contract.kp.authoring-entrypoint-convergence-v1` previously reached an s02
+fixed-cost stop after measuring the real frontend consumers. The verified
+Graph3D identity import repair alone did not fit the old combined ceiling.
+Historical evidence is in
+`reviews/2026-09-09-authoring-entrypoint-inference-stop.md`.
 The user approved the two-cohort amendment; preserve the original core gate and
 require the measured combined frontend gate. See
 `decisions/2026-09-09-inference-cost-cohorts.md`. R4A subsequently reached its
@@ -68,11 +68,16 @@ combined fixture omitted the later equation-reasoning and market/Article owner
 closures. The user approved the complete six-owner baseline correction and
 persistent automatic approval for TypeScript cost repairs; see
 `decisions/2026-09-09-typescript-cost-repair-autonomy.md`. Preserve the complete
-fixture, original core gate and verified import repairs; resume R4A. Theseus owns
-slice order and live evidence. Preserve existing visuals and domain owners;
+fixture, original core gate and verified import repairs. R4A is now complete;
+see `reviews/2026-09-09-authoring-entrypoint-convergence-closeout.md` for measured
+author value, full release evidence, limitations and the next planning boundary.
+Theseus owns completion and per-slice evidence. The supported author packet is
+`authoring/supported-authoring-entrypoint-packet.md`. Plan one real supported
+author task and evidence-earned remaining R4 work before broader math expansion;
+no successor implementation is approved. Preserve existing visuals and domain owners;
 stop for material new visual judgment, not routine nonvisual checkpoints.
 External model calls and broader R4 promotion remain deferred. Do not restart
-R1–R3 or activate later horizon work.
+R1–R4A or activate later horizon work.
 Minimal check-ins, mainly canonical
 visual reviews, are a standing preference; see
 `decisions/2026-09-07-reconciled-horizon-and-minimal-check-ins.md`.

@@ -1,7 +1,7 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: R4A resumed; complete-cohort amendment and TypeScript cost-repair autonomy approved
-Last Updated: 2026-09-08
+Status: R4A complete; remaining R4 work is a planning boundary, not an active run
+Last Updated: 2026-09-09
 Current successor reference: `../reviews/2026-09-07-reconciled-authoring-loop-horizon.md`.
 It preserves the original architectural obligations and the tax/Bayes direction;
 the exact R1 26-slice proposal was approved and is now completed evidence:
@@ -63,16 +63,20 @@ do not treat its proposed roadmap or readiness labels as new execution authority
 The user clarified the remaining code issue as missing gradual passage swiping.
 The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
-Current Next Action: resume R4A after the approved complete-coverage amendment;
-see `../decisions/2026-09-09-typescript-cost-repair-autonomy.md`. The s19 stop
-report remains historical measurement evidence. Preserve all six owner consumers,
+Current Next Action: plan a real supported author task and remaining bounded R4
+evidence/promotion work using
+`../reviews/2026-09-09-authoring-entrypoint-convergence-closeout.md` and
+`../authoring/supported-authoring-entrypoint-packet.md`. R4A is complete; no
+successor implementation is approved. The complete-coverage policy remains
+`../decisions/2026-09-09-typescript-cost-repair-autonomy.md`; the s19 stop
+report is historical measurement evidence. Preserve all six owner consumers,
 the original core gate, Graph3D identity repair and narrow distribution compiler
 imports. TypeScript cost repairs now have persistent automatic approval, with
 measurement, regression protection and explicit policy records still required.
 The approved 24-slice R4A proposal remains
 `../reviews/2026-09-08-authoring-entrypoint-convergence-long-loop-proposal.md`
 through `run-contract.kp.authoring-entrypoint-convergence-v1`. Theseus owns live
-status. Broader R4 promotion and external model calls are not approved.
+completion and evidence. Broader R4 promotion and external model calls are not approved.
 The user accepted deferring the synthetic live trial until the
 next real authoring task; see `../decisions/2026-09-08-bayesian-live-trial-deferral.md`.
 The local packet and deterministic assessment are ready; no model call occurred.

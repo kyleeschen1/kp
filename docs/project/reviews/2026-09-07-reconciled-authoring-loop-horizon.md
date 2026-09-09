@@ -3,10 +3,14 @@
 Date: 2026-09-07
 Status: CURRENT PLANNING SYNTHESIS — requested reconciliation, not execution approval
 
-September 8 checkpoint: R1, R2 and R3 are complete. Their execution authority and
+September 9 checkpoint: R1, R2, R3 and local convergence R4A are complete. Their execution authority and
 results remain in the roadmap and linked closeouts, most recently
-`2026-09-08-bayesian-flagship-closeout.md`. The next planning boundary is R4;
-this horizon does not authorize its implementation. R3's synthetic live trial
+`2026-09-09-authoring-entrypoint-convergence-closeout.md`. The next planning boundary is
+the remaining bounded R4 obligations; this horizon does not authorize implementation.
+Persistent automatic TypeScript cost-repair approval is recorded in
+`../decisions/2026-09-09-typescript-cost-repair-autonomy.md`; it supersedes older
+TypeScript-only budget approval stops, not other scope or safety constraints.
+R3's synthetic live trial
 was explicitly deferred to the next real author task, not counted as live evidence.
 
 ## Authority and reconciliation
@@ -197,8 +201,9 @@ total loop count or completion date before measuring R1 and new family costs.
 
 ## Handoff
 
-Next action: draft a bounded R4 proposal, using the R1–R3 closeouts and
-this document as the horizon reference. Do not restart completed R1–R3 or detail
+Next action: use the completed R4A packet for a real supported author task and
+draft only the next bounded remaining-R4 proposal. Use the R1–R4A closeouts and
+this document as the horizon reference. Do not restart completed R1–R4A or detail
 ten speculative execution contracts. Theseus
 owns live status once an exact run is approved. Earlier milestone/review texts
 retain architectural rationale and source evidence but no longer own successor
