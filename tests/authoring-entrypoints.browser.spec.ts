@@ -11,6 +11,37 @@ import { checkBayesAuthorSource } from "../src/experiments/bayesian-reasoning/au
 import { checkBayesDraft } from "../src/experiments/bayesian-reasoning/draft.ts";
 import { editorialFixture } from "./fixtures/bayes-editorial-source.ts";
 import spamFilterSource from "../content/authoring/r4b-spam-filter.bayes.json" with { type: "json" };
+import urnExplanationSource from "../content/authoring/r4b-urn-explanation.bayes.json" with { type: "json" };
+
+test("R4B urn explanation uses source-only Apply and opposite-order seven-stop playback", async ({ page }) => {
+  const checked = checkBayesDraft(JSON.stringify(urnExplanationSource));
+  if (checked.status !== "compiled") throw new Error(checked.diagnostic.expected);
+  await page.goto("/experiments/bayesian-reasoning/");
+  const card = page.locator("[data-bayes-display] [data-bayes-card]");
+  await expect(card).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+  await page.locator(".bayes-author summary").click();
+  await page.locator("[data-bayes-draft]").fill(JSON.stringify(urnExplanationSource));
+  await page.locator("[data-bayes-apply]").click();
+  await expect(card).toHaveAttribute("data-bayes-revision", checked.draft.revisionId);
+  await expect(page.locator("[data-bayes-editorial]")).toContainText(urnExplanationSource.editorial.title);
+  for (const step of [0, 1, 2, 3, 4, 5, 6, 2.35]) {
+    await card.locator("[data-kp-focus-deck-scrubber]").evaluate((node, step) => {
+      (node as HTMLInputElement).value = String(step); node.dispatchEvent(new Event("input", { bubbles: true }));
+    }, step);
+    await expect(card).toHaveAttribute("data-bayes-position", String(step));
+    await expect(card.locator("#bayes-tree-description")).toContainText("P(A given B) = 1/7");
+  }
+  await page.locator("[data-bayes-explain]").click();
+  await expect(page.locator("[data-bayes-editorial-reason]")).toContainText("Conditioning discards blue");
+  await page.locator("[data-bayes-return]").click();
+  await expect(card).toHaveAttribute("data-bayes-position", "2.35");
+  for (const mode of ["full", "compact"]) {
+    const reading = page.locator(`[data-bayes-reading="${mode}"]`);
+    await reading.locator("summary").click();
+    await expect(reading).toContainText(urnExplanationSource.editorial.title);
+    await expect(reading).toContainText("1/7");
+  }
+});
 
 test("R4B checkpoint captures the canonical authored lesson at desktop and narrow widths", async ({ page, browser }, info) => {
   for (const width of [1280, 390]) {

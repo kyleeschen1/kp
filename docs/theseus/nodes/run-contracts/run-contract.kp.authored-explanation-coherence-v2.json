@@ -127,7 +127,8 @@
     {
       "id": "s15",
       "title": "After approval, author the urn explanation through the same bounded source seam",
-      "status": "planned"
+      "summary": "Source-only authored urn explanation reuses existing model, opposite tree order and exact 1/7; no runtime glue.",
+      "status": "complete"
     },
     {
       "id": "s16",

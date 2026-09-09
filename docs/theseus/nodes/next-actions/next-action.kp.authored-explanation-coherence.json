@@ -154,6 +154,13 @@
       "scope": "s14",
       "checkedAt": "2026-09-09T17:08:05.324Z",
       "notes": "Accepted exact canonical spam-filter editorial and visual checkpoint; remaining approved slices resume without routine check-ins."
+    },
+    {
+      "command": "npm run test:bayesian-reasoning; npm run typecheck; npm run visual:authoring-entrypoints -- --grep R4B.urn.explanation",
+      "status": "passed",
+      "scope": "s15",
+      "checkedAt": "2026-09-09T17:12:26.978Z",
+      "notes": "54 tests, full typecheck and one Chromium urn source-only Apply/readings/extraction/seven-stop test passed."
     }
   ],
   "progress": {

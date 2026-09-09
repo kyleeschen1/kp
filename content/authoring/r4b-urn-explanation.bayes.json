@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "kp.bayes-source.v2",
+  "model": {
+    "kind": "prior-likelihoods",
+    "sourceId": "probability.two-urns-prior-third.v1",
+    "events": [
+      { "id": "urn-a", "label": "Selected urn A", "complementLabel": "Selected urn B" },
+      { "id": "red", "label": "Drew red", "complementLabel": "Drew blue" }
+    ],
+    "prior": "1/3",
+    "likelihoods": ["1/4", "3/4"]
+  },
+  "teaching": { "firstEventId": "red", "detailLevel": "key-steps" },
+  "editorial": {
+    "title": "A red draw: which urn probably supplied it?",
+    "setup": ["In this stipulated experiment, choose urn A with probability ", { "fact": "prior" }, ", otherwise choose urn B. Draw one ball: the red share is ", { "fact": "likelihood.a" }, " in A and ", { "fact": "likelihood.not-a" }, " in B. You see red but not the selected urn. What is the chance it was A?"],
+    "passages": [
+      { "stateId": "probability.two-urns-prior-third.v1.state.population", "title": "Keep the whole experiment in view", "body": ["Use ", { "fact": "population" }, " equally weighted outcome units to represent the joint distribution. These are probability units, not a promise about the counts in a small real sample. Each unit records both the selected urn and the drawn color."] },
+      { "stateId": "probability.two-urns-prior-third.v1.state.first-branches", "title": "Read the observation first", "body": ["This tree starts with red versus blue, even though the experiment selects an urn first. A probability tree may organize information in a different order from the physical procedure. Red has total probability ", { "fact": "denominator" }, "."] },
+      { "stateId": "probability.two-urns-prior-third.v1.state.joint-tree", "title": "Recover the hidden urn within each color", "body": ["Within red, ", { "fact": "count.tt" }, " outcome units came from A and ", { "fact": "count.ft" }, " from B. The blue leaves contain ", { "fact": "count.tf" }, " from A and ", { "fact": "count.ff" }, " from B. These four disjoint groups account for the whole experiment."] },
+      { "stateId": "probability.two-urns-prior-third.v1.state.marginal", "title": "Gather both ways to draw red", "body": ["Red does not identify its source. Keep both A-and-red and B-and-red: ", { "fact": "count.tt" }, " + ", { "fact": "count.ft" }, " = ", { "fact": "count.flagged" }, " red outcome units. The display gathers the same red group already visible in the color-first tree."] },
+      { "stateId": "probability.two-urns-prior-third.v1.state.conditioned", "title": "Change the reference population", "body": ["Now restrict attention to red draws. Of the ", { "fact": "count.flagged" }, " red units, ", { "fact": "count.tt" }, " came from A, so the conditional share is ", { "fact": "posterior" }, ". This asks which urn supplied red, not how often A produces red."] },
+      { "stateId": "probability.two-urns-prior-third.v1.state.full-population", "title": "Compare the belief before and after red", "body": ["Before observing color, A's share was ", { "fact": "prior" }, ". Among red draws it is ", { "fact": "posterior" }, ". In this experiment red favors B because B produces red more often. Restore all outcomes before changing how the tree is read."] },
+      { "stateId": "probability.two-urns-prior-third.v1.state.reordered", "title": "Read the physical procedure first", "body": ["The reordered tree selects A or B before color, matching the sampling procedure. Multiplying prior and red likelihood along each route recovers the same joint masses. Rearranging a tree does not change the experiment or turn inference into a causal intervention."] }
+    ],
+    "readings": {
+      "full": [
+        ["The hidden choice is an urn; the observed evidence is a color. The selection prior is ", { "fact": "prior" }, " for A. Red is produced with probability ", { "fact": "likelihood.a" }, " from A and ", { "fact": "likelihood.not-a" }, " from B. These are stipulated properties of a one-draw experiment."],
+        ["The color-first tree answers an inference question directly. It is not a chronological account of selecting an urn and drawing a ball. Its four leaves still describe exactly the same joint outcomes as the urn-first tree."],
+        ["In ", { "fact": "population" }, " exact probability units, the red leaves contribute ", { "fact": "count.tt" }, " from A and ", { "fact": "count.ft" }, " from B. Add both for the denominator ", { "fact": "count.flagged" }, ", then restrict the reference population to red. The share from A is ", { "fact": "posterior" }, ". These units describe a distribution, not guaranteed empirical counts."],
+        ["Compare that posterior with the prior ", { "fact": "prior" }, ". Here red shifts belief away from A. Restoring the whole population and reading urn-first exposes the prior-times-likelihood calculation without changing any outcome or probability."]
+      ],
+      "compact": [
+        ["Red can come from either urn. Its reference population contains ", { "fact": "count.tt" }, " A-and-red units plus ", { "fact": "count.ft" }, " B-and-red units. The share from A among all red units is ", { "fact": "posterior" }, "."],
+        ["The color-first and urn-first trees factor the same distribution. Only the latter follows the experiment's chronology; neither changes its probabilities."]
+      ]
+    },
+    "denominator": ["Seeing red does not reveal which urn was selected. Both red leaves belong in the reference group: ", { "fact": "count.tt" }, " units from A and ", { "fact": "count.ft" }, " from B. Conditioning discards blue, not the competing red explanation. Divide the A-and-red mass ", { "fact": "numerator" }, " by all-red mass ", { "fact": "denominator" }, "."],
+    "prompts": {
+      "prediction": { "title": "Which way should red shift belief?", "body": ["Before evaluating, compare red's likelihood in the two urns. Should observing red raise, lower, or leave unchanged the chance of A relative to its prior ", { "fact": "prior" }, "? Explain without confusing selection order with tree order."] },
+      "reconstruction": { "title": "Reconstruct the red reference group", "body": ["Name both disjoint routes to red. Which is the numerator when asking for A given red, and why must the other red route remain in the denominator?"] }
+    }
+  }
+}
