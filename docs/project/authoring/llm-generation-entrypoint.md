@@ -1,7 +1,7 @@
 # KP LLM Generation Entrypoint
 
 Status: canonical routing guide
-Updated: 2026-09-07
+Updated: 2026-09-09
 
 ## Purpose
 
@@ -27,6 +27,13 @@ timing table.
 
 Retrieve historical decisions only to answer a named provenance question.
 Older experiments are evidence, not default implementation authority.
+
+For an existing supported task, begin with
+`supported-authoring-entrypoint-packet.md` and `npm run author:check -- --list`.
+This read-only discovery/check layer covers six bounded callers, preserving
+their distinct schemas, diagnostics and host/publication capabilities. It does
+not replace their semantic authorities or provide arbitrary generation. Use
+the domain packet only after selecting the exact task.
 
 The authoring-first integration direction is accepted in
 `../decisions/2026-09-05-authoring-integration-priority-and-sequence.md`.
@@ -61,6 +68,11 @@ This does not authorize arbitrary probability trees, geometry, or new motifs.
 | Import a verified problem or execution | Deterministic solver/interpreter trace, then governed semantic operations |
 
 ## Required Generation Sequence
+
+For supported source-edit tasks, follow the selected domain compiler and explicit
+host Apply/Compile workflow in the entrypoint packet. The sequence below applies
+to governed construction requests; do not wrap every domain source in a second
+universal construction schema merely to match this list.
 
 1. Identify the canonical artifact, host, renderer, and accepted reference.
 2. State the semantic source of truth and exact operation/capability pins.

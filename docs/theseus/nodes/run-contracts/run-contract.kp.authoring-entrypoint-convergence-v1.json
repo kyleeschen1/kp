@@ -234,7 +234,8 @@
     {
       "id": "s21",
       "title": "Update the canonical generation routing guide and executable task packet with accepted/rejected examples",
-      "status": "planned"
+      "summary": "Canonical generation entrypoint links executed six-task packet, retained examples and explicit owner/host/publication limits.",
+      "status": "complete"
     },
     {
       "id": "s22",

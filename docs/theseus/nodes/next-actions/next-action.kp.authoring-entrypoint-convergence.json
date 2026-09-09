@@ -33,6 +33,10 @@
     {
       "kind": "file",
       "path": "docs/project/decisions/2026-09-09-typescript-cost-repair-autonomy.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/authoring/supported-authoring-entrypoint-packet.md"
     }
   ],
   "dependsOn": {
@@ -480,6 +484,13 @@
       "scope": "standard",
       "checkedAt": "2026-09-09T04:46:07.806Z",
       "notes": "s20:44 author tests and61 reasoning tests pass; full types, architecture and both fixed cohorts pass. Legacy size diagnostic delegates to exact same owner; examples, command grammar and domain repair payloads preserved."
+    },
+    {
+      "command": "npm run check:authoring-task-packet; npm run author:assess -- --task urn-prior-third --request content/authoring/r4a-urn-prior.bayes.json; npm run author:assess -- --task log-base-three --request content/authoring/r4a-logarithm-base.json; npm run test:authoring-entrypoints; npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-09T04:50:22.104Z",
+      "notes": "s21:46 tests pass; executable task packet and both assessor CLIs pass; full types pass. Canonical guide routes six supported tasks without universal construction wrapping or model-success claims."
     }
   ],
   "progress": {
