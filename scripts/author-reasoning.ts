@@ -3,7 +3,8 @@ import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { checkEquationReasoningSource } from "../src/experiments/reusable-reasoning/equation-author-check.ts";
 import { createKpReasoningSource } from "../src/experiments/reusable-reasoning/source.ts";
-import { bindCodeReasoningEvidence, createCodeReasoningSource, KpCodeReasoningRepairGap } from "../src/experiments/reusable-reasoning/code-evidence.ts";
+import { createCodeReasoningSource } from "../src/experiments/reusable-reasoning/code-evidence.ts";
+import { checkCodeReasoningSource } from "../src/experiments/reusable-reasoning/code-author-check.ts";
 
 export type ReasoningDomain = "equation" | "code";
 const repair = (code: string, path: string, expected: string) => ({ status: "repair-gap" as const, diagnostic: { code, path, expected } });
@@ -14,16 +15,7 @@ export function checkReasoningText(domain: ReasoningDomain, json: string) {
   if (domain === "equation") {
     return checkEquationReasoningSource(json);
   }
-  try {
-    const evidence = bindCodeReasoningEvidence(JSON.parse(json));
-    return { status: "compiled" as const, domain, source: evidence.source, revisionId: evidence.revisionId,
-      checkpointCount: evidence.context.steps.length, checkpointKind: evidence.context.checkpointKind,
-      assumptions: evidence.context.assumptions, editorialStatus: evidence.context.editorialStatus };
-  } catch (error) {
-    if (error instanceof KpCodeReasoningRepairGap) return repair(error.code, error.path, error.expected);
-    if (error instanceof SyntaxError) return repair("kp.reasoning.json", "$", "Provide valid JSON.");
-    throw error;
-  }
+  return checkCodeReasoningSource(json);
 }
 
 export function runReasoningAuthoringCli(args: readonly string[]) {

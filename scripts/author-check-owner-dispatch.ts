@@ -24,8 +24,8 @@ export async function checkAuthorTask(task: SupportedAuthorTask, json: string) {
     return reportAuthorCheck(task, checkEquationReasoningSource(json));
   }
   if (task === "reasoning.code") {
-    const { checkReasoningText } = await import("./author-reasoning.ts");
-    return reportAuthorCheck(task, checkReasoningText("code", json));
+    const { checkCodeReasoningSource } = await import("../src/experiments/reusable-reasoning/code-author-check.ts");
+    return reportAuthorCheck(task, checkCodeReasoningSource(json));
   }
   if (task === "equation.logarithm-base") {
     const { compileKpEquationSeriesLogarithmBaseText } = await import("../src/authoring/equation-series-logarithm-base-draft.ts");

@@ -171,7 +171,8 @@
     {
       "id": "s12",
       "title": "Pressure the reporting/dispatch seam with existing code reasoning without claiming arbitrary-source generation",
-      "status": "planned"
+      "summary": "Code-owned checker and lazy isolation proved; no arbitrary-source generation, mathematical-stage claim or publication parity introduced.",
+      "status": "complete"
     },
     {
       "id": "s13",

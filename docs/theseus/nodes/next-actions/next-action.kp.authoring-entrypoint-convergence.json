@@ -335,6 +335,39 @@
       "scope": "broad",
       "checkedAt": "2026-09-09T03:47:58.357Z",
       "notes": "Two Chromium tests pass; corrected full-title selection after initial no-tests-found."
+    },
+    {
+      "command": "npm run test:authoring-entrypoints",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-09T03:53:36.040Z",
+      "notes": "24 tests pass; code owner parity and executable equation-load exclusion."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-09T03:53:37.200Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-09T03:53:38.277Z"
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-09T03:53:39.305Z",
+      "notes": "Core unchanged; combined 127668/214968."
+    },
+    {
+      "command": "npm run visual:authoring-entrypoints -- --grep \"code reasoning reuses\"",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-09T03:53:40.334Z",
+      "notes": "One Chromium preservation test passes for motion, passage and exact return."
     }
   ],
   "progress": {

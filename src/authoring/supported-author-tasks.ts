@@ -26,7 +26,7 @@ export const supportedAuthorTasks = {
     owner: "src/experiments/reusable-reasoning/code-evidence.ts",
     input: "Editorial prose with exact TypeScript free-shipping source revisions and pedagogical stage pins.",
     preview: { kind: "reference-only", url: "/experiments/reusable-reasoning-code/", reason: "No selected-source JSON editor; the route shows the reference caller." },
-    extraction: { kind: "unsupported", reason: "Code supports exact return, not equation-style extraction parity." },
+    extraction: { kind: "domain-owned", owner: "src/experiments/reusable-reasoning/code-evidence.ts", scope: "Bounded language context and exact return; not equation procedure or flashcard parity." },
     publication: { kind: "unsupported", reason: "No selected-source code reasoning edition builder." }
   },
   "graph3d.saddle": {
