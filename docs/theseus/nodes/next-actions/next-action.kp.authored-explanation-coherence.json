@@ -175,6 +175,13 @@
       "scope": "s17",
       "checkedAt": "2026-09-09T17:19:53.980Z",
       "notes": "57 tests and broad gates pass; both complete inference cohorts unchanged. Free-prose falsity is explicitly unverified, not silently graded."
+    },
+    {
+      "command": "npm run test:bayesian-reasoning; npm run typecheck; npm run check:inference; npm run visual:authoring-entrypoints -- --grep R4B",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-09T17:23:38.239Z",
+      "notes": "59 unit tests, full types, both inference cohorts and scoped primary/urn Chromium workflows pass. Core reduced to 112493/192595; combined 142340/239402. Browser invocation selected urn explanation and primary lesson only."
     }
   ],
   "progress": {

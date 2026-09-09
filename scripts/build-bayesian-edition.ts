@@ -5,9 +5,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
 import katex from "katex";
 import { checkBayesDraft } from "../src/experiments/bayesian-reasoning/draft.ts";
-import { projectBayesReading } from "../src/experiments/bayesian-reasoning/readings.ts";
-import { projectBayesPrompts } from "../src/experiments/bayesian-reasoning/prompts.ts";
-import { extractBayesDenominator } from "../src/experiments/bayesian-reasoning/extraction.ts";
+import { projectBayesLessonViews } from "../src/experiments/bayesian-reasoning/lesson-views.ts";
 import { renderBayesTreeSvg } from "../src/experiments/bayesian-reasoning/tree-svg.ts";
 import { encodeKpHtmlText as escape } from "../src/rendering/html-output-encoding.ts";
 import { createKpCompiledPublicationArtifact, assertKpCompiledPublicationArtifact } from "../src/tutorial/kp-compiled-publication-artifact.ts";
@@ -21,8 +19,7 @@ export const bayesEditionRoot = join(repo, "tmp/codex/bayesian-editions");
 export function compileBayesPublication(sourceText: string, sourcePath: string) {
   const result = checkBayesDraft(sourceText);
   if (result.status !== "compiled") throw new Error(`${result.diagnostic.path}: ${result.diagnostic.expected}`);
-  const draft = result.draft, full = projectBayesReading(draft, "full"), compact = projectBayesReading(draft, "compact");
-  const context = extractBayesDenominator(draft, 4), prompts = projectBayesPrompts(draft);
+  const draft = result.draft, { full, compact, context, prompts } = projectBayesLessonViews(draft);
   const latex = draft.notation.animation.bundle.objects.map(object => {
     const value = object.value as { latex?: unknown };
     if (typeof value.latex !== "string") throw new Error("Native equation endpoint must retain its exact LaTeX.");

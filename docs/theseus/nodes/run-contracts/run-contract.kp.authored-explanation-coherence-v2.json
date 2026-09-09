@@ -145,7 +145,8 @@
     {
       "id": "s18",
       "title": "Retire adjacent duplicated editorial assembly; retain explicit v1 default policy",
-      "status": "planned"
+      "summary": "One domain-local view assembly; paint-independent fact formatting; exact v1/v2 output preservation.",
+      "status": "complete"
     },
     {
       "id": "s19",

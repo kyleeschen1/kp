@@ -1,6 +1,9 @@
 import { BinaryJointModel, ProbabilityRepairGap } from "../../../domains/probability/binary-joint-model.ts";
 import { createKpRational, type KpNormalizedRational } from "../../../domains/math/exact-rational.ts";
 
+// Textual facts and SVG share formatting without making fact binding load paint.
+export const formatBayesMass = (mass: KpNormalizedRational) => mass.denominator === 1n ? String(mass.numerator) : `${mass.numerator}/${mass.denominator}`;
+
 /** One presentation unit for every joint/marginal quantity and its quotient.
  * Preserve the accepted hundred-ticket reading when exact; otherwise use the
  * smallest exact common population, not a product that inflates operands. */

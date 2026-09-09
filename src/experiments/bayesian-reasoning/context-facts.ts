@@ -1,6 +1,6 @@
 import { requireBinaryProbabilityTrace, type BinaryProbabilityTrace } from "../../../domains/probability/binary-probability-trace.ts";
 import { ProbabilityRepairGap } from "../../../domains/probability/binary-joint-model.ts";
-import { formatBayesMass as mass } from "./tree-svg.ts";
+import { formatBayesMass as mass } from "./display-units.ts";
 
 /** Domain facts are available before lesson revisioning or Article compilation.
  * Editorial binding and downstream context share this owner, not prose parsing. */

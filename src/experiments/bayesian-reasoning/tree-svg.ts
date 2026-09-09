@@ -1,9 +1,9 @@
 import type { BinaryTree } from "../../../domains/probability/binary-probability-trace.ts";
-import type { KpNormalizedRational } from "../../../domains/math/exact-rational.ts";
+import { formatBayesMass } from "./display-units.ts";
+export { formatBayesMass } from "./display-units.ts";
 import { encodeKpHtmlText as escape } from "../../rendering/html-output-encoding.ts";
 import { sampleBayesTree, type BayesTreePlan, type BayesTreeFrame } from "./tree-frame.ts";
 
-export const formatBayesMass = (mass: KpNormalizedRational) => mass.denominator === 1n ? String(mass.numerator) : `${mass.numerator}/${mass.denominator}`;
 const path = (x1: number, y1: number, x2: number, y2: number) => `M${x1},${y1} L${x2},${y2}`;
 const eventName = (axis: number, occurs: boolean) => `${occurs ? "" : "¬"}${axis === 0 ? "A" : "B"}`;
 const draw = (d: string, role: string) => `<path d="${d}" data-bayes-edge="${role}" pathLength="1" vector-effect="non-scaling-stroke"/>`;

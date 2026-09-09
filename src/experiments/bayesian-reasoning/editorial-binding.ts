@@ -2,8 +2,7 @@ import { type BinaryProbabilityTrace } from "../../../domains/probability/binary
 import { ProbabilityRepairGap } from "../../../domains/probability/binary-joint-model.ts";
 import { marginalProbability, conditionalProbability, PositiveProbabilityPopulation } from "../../../domains/probability/binary-probability-queries.ts";
 import { projectBayesTraceContext } from "./context-facts.ts";
-import { formatBayesMass as mass } from "./tree-svg.ts";
-import { createBayesDisplayUnits } from "./display-units.ts";
+import { createBayesDisplayUnits, formatBayesMass as mass } from "./display-units.ts";
 import { readBayesEditorialSource, type BayesEditorialText, type BayesEditorialPrompt, type BayesEditorialFactName } from "./editorial-source.ts";
 
 export function projectBayesEditorialFacts(trace: BinaryProbabilityTrace): Readonly<Record<BayesEditorialFactName, string | undefined>> {
