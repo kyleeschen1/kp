@@ -101,8 +101,8 @@
     {
       "id": "s11",
       "title": "Prepare a factoring revision through existing atomic Apply/lifecycle ownership",
-      "summary": "Risk High; B: last-valid, supersession, interruption, disposal and old distribution source compatibility; C / G",
-      "status": "planned"
+      "summary": "Eighteen task and 51 Bayes/author-entrypoint tests pass; shared preparation lifecycle preserves last-valid and disposes stale resources; architecture, full types and complete fixed costs pass.",
+      "status": "complete"
     },
     {
       "id": "s12",
