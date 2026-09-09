@@ -16,6 +16,7 @@
     "author:bayesian-publication": "node --disable-warning=ExperimentalWarning scripts/build-bayesian-edition.ts",
     "check:bayesian-reuse": "node --disable-warning=ExperimentalWarning scripts/check-bayesian-reuse.ts",
     "profile:bayesian-inference": "node --disable-warning=ExperimentalWarning scripts/profile-bayesian-inference.ts",
+    "profile:authoring-entrypoint-inference": "node --disable-warning=ExperimentalWarning scripts/profile-authoring-entrypoint-inference.ts",
     "benchmark:reasoning:live": "node --disable-warning=ExperimentalWarning scripts/run-reasoning-authoring-trial.ts",
     "author:reasoning-publication": "node --disable-warning=ExperimentalWarning scripts/build-reasoning-edition.ts",
     "visual:reusable-reasoning": "playwright test tests/reusable-reasoning.browser.spec.ts --project=chromium --workers=1",

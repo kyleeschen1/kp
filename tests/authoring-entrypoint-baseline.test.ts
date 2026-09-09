@@ -20,8 +20,12 @@ test("R4A numeric equation task retains compiler-owned binding and rejects rever
     latex: index === 0 ? "\\log_3(9)" : "\\frac{\\ln(9)}{\\ln(3)}" })) };
   const result = compileKpEquationSeriesLogarithmBaseDraft(source);
   assert.equal(result.status, "compiled");
-  assert.equal(result.semantic?.source.base.value, 3);
-  assert.equal(result.semantic?.source.argument.value, 9);
+  const base = result.semantic?.source.base, argument = result.semantic?.source.argument;
+  assert.equal(base?.kind, "number");
+  assert.equal(argument?.kind, "number");
+  if (base?.kind !== "number" || argument?.kind !== "number") return;
+  assert.equal(base.value, 3);
+  assert.equal(argument.value, 9);
   const invalid = compileKpEquationSeriesLogarithmBaseDraft({ ...source,
     states: source.states.map((state, index) => index === 1 ? { ...state, latex: "\\frac{\\ln(3)}{\\ln(9)}" } : state)
   }, result);

@@ -2,9 +2,9 @@
   "id": "next-action.kp.authoring-entrypoint-convergence",
   "kind": "next-action",
   "title": "R4A Authoring entrypoint convergence",
-  "status": "in-progress",
+  "status": "blocked",
   "domain": "kp",
-  "summary": "User approved exact R4A proposal; execute its 24 slices with fixed gates and no external model calls.",
+  "summary": "STOP_CONDITION s02: fixed inference ceiling still fails after bounded import repair; no authorized budget-policy amendment or broader compiler tranche.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -13,6 +13,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-09-authoring-entrypoint-baseline.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-09-authoring-entrypoint-inference-stop.md"
     }
   ],
   "dependsOn": {
@@ -42,8 +46,54 @@
       "scope": "s01",
       "checkedAt": "2026-09-09T02:37:20.882Z",
       "notes": "Preconsumer baseline unchanged: 112278 types, 192161 instantiations."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "failed",
+      "scope": "s02",
+      "checkedAt": "2026-09-09T02:46:06.699Z",
+      "notes": "Real consumers initially 296358 types and 813152 instantiations; retained identity repair yields 127387 and 214823, still above fixed 112500 and 195800. No limits or fixtures changed."
+    },
+    {
+      "command": "npm run profile:authoring-entrypoint-inference",
+      "status": "failed",
+      "scope": "s02",
+      "checkedAt": "2026-09-09T02:46:07.795Z",
+      "notes": "All five attribution programs executed; final complete gate fails. Individual totals and checked-source qualifications recorded in stop report."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s02",
+      "checkedAt": "2026-09-09T02:46:08.781Z",
+      "notes": "Final full app/node/test/Svelte/domain typecheck passes; numeric baseline assertions use discriminant narrowing."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/compiler-type-boundaries.test.ts tests/authoring-entrypoint-baseline.test.ts tests/gallery-graph-3d-saddle-parameter-generation.test.ts tests/graph-3d-saddle-parameter-paint.test.ts",
+      "status": "passed",
+      "scope": "s02",
+      "checkedAt": "2026-09-09T02:46:09.759Z",
+      "notes": "14 pass; existing ID/export and exact behavior preserved."
+    },
+    {
+      "command": "npm run test:cross-domain-gallery",
+      "status": "passed",
+      "scope": "s02",
+      "checkedAt": "2026-09-09T02:46:10.728Z",
+      "notes": "34 pass including byte-for-byte conformance packet after identity owner repair."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s02",
+      "checkedAt": "2026-09-09T02:46:11.692Z",
+      "notes": "All architecture gates and eight cross-domain tests pass."
     }
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "1 of 24 complete; s02 partial measured repair retained. All ordinary types and focused preservation pass, fixed cost gate fails. Explicit budget-ownership decision required."
+  },
   "expectedLearning": [
     "Measure whether supported tasks cross CLI and browser without duplicate authority, hidden capabilities or extra renderer glue."
   ],

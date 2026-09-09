@@ -41,8 +41,8 @@ const sessions = new WeakMap<
   KpEditorGraph3DSaddleSurfaceSession
 >();
 
-export const KP_EDITOR_GRAPH_3D_SADDLE_ADAPTER_ID =
-  "editor-animation-surface.graph.webgl-3d-saddle" as const;
+import { KP_EDITOR_GRAPH_3D_SADDLE_ADAPTER_ID } from "./graph-3d-saddle-adapter-identity.ts";
+export { KP_EDITOR_GRAPH_3D_SADDLE_ADAPTER_ID } from "./graph-3d-saddle-adapter-identity.ts";
 
 export const kpEditorGraph3DSaddleSurfaceAdapter = Object.freeze({
   id: KP_EDITOR_GRAPH_3D_SADDLE_ADAPTER_ID,

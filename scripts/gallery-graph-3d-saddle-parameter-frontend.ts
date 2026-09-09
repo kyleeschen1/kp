@@ -24,7 +24,7 @@ import {
 } from "../src/semantic/graph-3d-saddle-parameter-trace.ts";
 import {
   KP_EDITOR_GRAPH_3D_SADDLE_ADAPTER_ID
-} from "../src/editor/graph-3d-saddle-parameter-surface-adapter.ts";
+} from "../src/editor/graph-3d-saddle-adapter-identity.ts";
 import { writeKpAnimationCatalogueRoute } from
   "../src/editor/animation-catalogue-route.ts";
 

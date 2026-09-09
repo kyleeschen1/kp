@@ -43,3 +43,15 @@ test("new contract modules emit no runtime code or minting authority", () => {
     assert.equal(output, "export {};", boundary.owner);
   }
 });
+
+test("build-time Graph3D identity does not load the live editor adapter", () => {
+  const owner = "src/editor/graph-3d-saddle-adapter-identity.ts";
+  const legacy = "src/editor/graph-3d-saddle-parameter-surface-adapter.ts";
+  const refs = references("scripts/gallery-graph-3d-saddle-parameter-frontend.ts");
+  assert.ok(refs.some(ref => ref.target === resolve(owner)));
+  assert.ok(!refs.some(ref => ref.target === resolve(legacy)));
+  assert.deepEqual(references(owner), []);
+  assert.ok(references(legacy).some(ref => ref.target === resolve(owner) &&
+    ref.names.includes("KP_EDITOR_GRAPH_3D_SADDLE_ADAPTER_ID")));
+  assert.match(readFileSync(owner, "utf8"), /editor-animation-surface\.graph\.webgl-3d-saddle/);
+});

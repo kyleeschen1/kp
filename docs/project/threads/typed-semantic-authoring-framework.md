@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: R4A local authoring entrypoint convergence approved and active
+Status: R4A stopped at s02 fixed inference ceiling; budget-ownership decision needed
 Last Updated: 2026-09-08
 Current successor reference: `../reviews/2026-09-07-reconciled-authoring-loop-horizon.md`.
 It preserves the original architectural obligations and the tax/Bayes direction;
@@ -63,7 +63,11 @@ do not treat its proposed roadmap or readiness labels as new execution authority
 The user clarified the remaining code issue as missing gradual passage swiping.
 The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
-Current Next Action: execute the approved 24-slice R4A proposal
+Current Next Action: resolve the s02 fixed-cost stop recorded in
+`../reviews/2026-09-09-authoring-entrypoint-inference-stop.md`; its proposed
+core/frontend cost-cohort amendment needs explicit approval. Preserve the
+verified Graph3D identity import repair and the complete real-consumer fixture.
+The approved 24-slice R4A proposal remains
 `../reviews/2026-09-08-authoring-entrypoint-convergence-long-loop-proposal.md`
 through `run-contract.kp.authoring-entrypoint-convergence-v1`. Theseus owns live
 status. Broader R4 promotion and external model calls are not approved.

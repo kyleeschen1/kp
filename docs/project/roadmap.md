@@ -54,7 +54,12 @@ See `decisions/2026-09-08-bayesian-live-trial-deferral.md`; the earlier permissi
 stop is historical, not an outstanding requirement in this amended run.
 The user approved the exact 24-slice R4A local authoring-convergence proposal:
 `reviews/2026-09-08-authoring-entrypoint-convergence-long-loop-proposal.md`.
-Execute `run-contract.kp.authoring-entrypoint-convergence-v1`; Theseus owns
+`run-contract.kp.authoring-entrypoint-convergence-v1` reached its s02 fixed-cost
+stop after measuring the real existing frontend consumers. The bounded Graph3D
+identity import repair is verified, but the old combined inference ceiling still
+fails. See `reviews/2026-09-09-authoring-entrypoint-inference-stop.md` for exact
+evidence and the proposed explicit core/frontend budget-ownership amendment.
+That amendment is not approved; do not advance or waive the gate. Theseus owns
 slice order and live evidence. Preserve existing visuals and domain owners;
 stop for material new visual judgment, not routine nonvisual checkpoints.
 External model calls and broader R4 promotion remain deferred. Do not restart

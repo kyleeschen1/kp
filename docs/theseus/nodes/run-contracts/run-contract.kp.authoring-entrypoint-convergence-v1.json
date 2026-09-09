@@ -2,8 +2,8 @@
   "id": "run-contract.kp.authoring-entrypoint-convergence-v1",
   "kind": "run-contract",
   "title": "R4A Authoring entrypoint convergence",
-  "status": "in-progress",
-  "summary": "Exact R4A proposal approved by user; execute 24 ordered slices and conditional material-visual checkpoint.",
+  "status": "blocked",
+  "summary": "STOP_CONDITION: s02 fixed gate cannot be declared passed. Await explicit cost-cohort amendment or bounded broader compiler-work direction.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -13,6 +13,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-08-authoring-entrypoint-convergence-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-09-authoring-entrypoint-inference-stop.md"
     }
   ],
   "verification": [
@@ -25,6 +29,10 @@
     "npm run check:reader-production",
     "theseus workspace validate"
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "1 of 24 complete; stopped at s02. Real fixture remains in gate; no weakened budgets or advanced slices."
+  },
   "allowedWork": [
     "s01: Pin the two author tasks, owner/host/capability map, output baselines and command names; reconcile stale workflow summary; risk Low; F: exact arithmetic, source/host refs, clean baseline; one commit.",
     "s02: Register real consumer cost fixtures and measure import/inference costs before designing shared exports; risk Medium; S: unchanged fixtures/ceilings; negative type cases; one commit.",
@@ -98,7 +106,8 @@
     {
       "id": "s02",
       "title": "Register real consumer cost fixtures and measure import/inference costs before designing shared exports",
-      "status": "planned"
+      "summary": "STOP_CONDITION: useful partial fixture, attribution and identity repair retained. 127387 types and 214823 instantiations exceed fixed ceilings. Proposed cost-cohort policy needs approval; not complete.",
+      "status": "in-progress"
     },
     {
       "id": "s03",
