@@ -49,7 +49,8 @@
     {
       "id": "s02",
       "title": "Register complete affected author/browser/edition consumers and measure costs before new exports",
-      "status": "planned"
+      "summary": "Complete affected cost coverage fits unchanged gates; full types and real edition tests pass.",
+      "status": "complete"
     },
     {
       "id": "s03",

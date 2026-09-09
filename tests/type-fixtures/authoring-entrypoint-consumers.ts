@@ -12,6 +12,11 @@ import { checkCodeReasoningSource } from "../../src/experiments/reusable-reasoni
 import { checkEquationReasoningSource } from "../../src/experiments/reusable-reasoning/equation-author-check.ts";
 import { readKpAuthoringMarketSourceBranch } from "../../src/experiments/authoring-market/authoring-market-source-branch.ts";
 import { inspectAuthorSourceLimits } from "../../src/authoring/author-source-limits.ts";
+import { renderBayesCardRevision } from "../../src/experiments/bayesian-reasoning/page.ts";
+import { projectBayesReading } from "../../src/experiments/bayesian-reasoning/readings.ts";
+import { projectBayesPrompts } from "../../src/experiments/bayesian-reasoning/prompts.ts";
+import { extractBayesDenominator, resolveBayesDenominatorReturn } from "../../src/experiments/bayesian-reasoning/extraction.ts";
+import { createBayesAuthoringSession } from "../../src/experiments/bayesian-reasoning/authoring.ts";
 
 // Include every selected domain owner, not only the first implementation wave.
 // Node transport is checked by tsconfig.node; this fixed cohort is platform-neutral.
@@ -56,6 +61,19 @@ if (bayesReport.status === "repair-gap") {
 const prepared: PreparedBayesDraft = bayesReport; void prepared;
 if (bayes.status === "compiled") {
   const revision: string = bayes.draft.revisionId; void revision;
+  // R4B measures all affected view owners before adding editorial source types.
+  const card: string = renderBayesCardRevision(bayes.draft); void card;
+  const reading = projectBayesReading(bayes.draft, "compact");
+  const prompts = projectBayesPrompts(bayes.draft);
+  const extraction = extractBayesDenominator(bayes.draft, 2.5);
+  const position = resolveBayesDenominatorReturn(bayes.draft, extraction);
+  const session = createBayesAuthoringSession({ initial: bayes.draft,
+    prepare: async () => ({ dispose() {} }), commit: (_surface, selected) => { const id: string = selected.revisionId; void id; } });
+  void [reading, prompts, position, session];
+  // @ts-expect-error A report has no authority to render a selected Bayes revision.
+  renderBayesCardRevision(bayesReport);
+  // @ts-expect-error Published reading output cannot replace a prepared source.
+  projectBayesPrompts(reading);
 } else {
   // @ts-expect-error Invalid input never carries a partial prepared draft.
   bayes.draft;

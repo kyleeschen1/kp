@@ -21,3 +21,17 @@ The workflow summary now names approved R4B. The metadata-incomplete, unstarted
 v1 Theseus setup record remains superseded by v2; this does not change approved
 scope. Neither baseline creation nor executing fixtures is an independent model
 trial or an author-time/comprehension measurement.
+
+## Complete affected consumer measurement
+
+R4A combined baseline was 139,337 types / 235,826 instantiations. Adding actual
+Bayes card, reading, prompt, extraction/return and authoring-session consumers
+measures 141,855 / 238,486, inside existing 142,200 / 243,000 ceilings. Original
+core remains 112,278 / 192,161 with all 48 paths unchanged. These overlapping
+compiler costs are not runtime or bundle measurements.
+
+The browser-neutral fixture calls each owner and retains negative authority
+cases. The Node edition compiler/builder remains covered by the existing actual
+publication test and project Node/test typechecks, not falsely attributed to the
+no-Node inference cohort. No consumers or assertions were removed, and no budget
+was amended. Cost coverage checks pin these owner references against omission.

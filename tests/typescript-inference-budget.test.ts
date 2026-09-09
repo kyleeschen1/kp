@@ -37,6 +37,15 @@ test("membership rejects omissions, unassigned fixtures, duplicates and cohort t
   assert.throws(() => assertInferenceMembership([...core.slice(1), ...frontendInferenceFixtures], core), /drift/);
 });
 
+test("editorial cost coverage retains actual author, card, reading, prompt and extraction consumers", () => {
+  const fixture = readFileSync("tests/type-fixtures/authoring-entrypoint-consumers.ts", "utf8");
+  for (const owner of ["page", "readings", "prompts", "extraction", "authoring"])
+    assert.ok(fixture.includes(`/bayesian-reasoning/${owner}.ts`), owner);
+  const publication = readFileSync("tests/bayesian-reasoning-publication.test.ts", "utf8");
+  assert.ok(publication.includes("buildBayesEdition(path)"));
+  assert.ok(publication.includes("compileBayesPublication(bytes"));
+});
+
 test("inference ceilings retain measured, narrow structural headroom", () => {
   const { measuredProject, ceilings } = typescriptInferenceBudget;
   const ceilHundred = (value: number) => Math.ceil(value / 100) * 100;

@@ -31,6 +31,13 @@
       "scope": "focused",
       "checkedAt": "2026-09-09T15:27:58.159Z",
       "notes": "s01: two tests pin default revision and exact card/reading/prompt bytes, plus spam-filter 2000-unit counts, 2/13 posterior and seven stops. Impact selector read; broad unknown-path checks retained for release."
+    },
+    {
+      "command": "npm run check:inference; npm run typecheck; node --disable-warning=ExperimentalWarning --test tests/typescript-inference-budget.test.ts tests/bayesian-reasoning-publication.test.ts",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-09T15:30:50.462Z",
+      "notes": "s02: original core 112278/192161; complete affected view/author closure 141855/238486 within unchanged gates. Full typecheck passed. Eight cost/real Node publication checks passed; no removed consumers or budget amendment."
     }
   ],
   "expectedLearning": [
