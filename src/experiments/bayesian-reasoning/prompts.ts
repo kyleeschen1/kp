@@ -14,12 +14,15 @@ export function projectBayesPrompts(draft: PreparedBayesDraft) {
   const animation = draft.authority.animation, target = draft.trace.states[4]!;
   return Object.freeze((["prediction", "reconstruction"] as const).map(kind => {
     const prediction = kind === "prediction";
-    const prompt = prediction ? `Before evaluating: is P(A | B) higher, lower or unchanged from P(A) = ${mass(prior)}? Explain which evidence supports your prediction.`
-      : "Reconstruct P(A | B). Which disjoint outcomes make up the denominator, and why is B—not the whole population—the reference?";
+    const authored = draft.editorial?.prompts[kind];
+    const prompt = authored?.body ?? (prediction ? `Before evaluating: is P(A | B) higher, lower or unchanged from P(A) = ${mass(prior)}? Explain which evidence supports your prediction.`
+      : "Reconstruct P(A | B). Which disjoint outcomes make up the denominator, and why is B—not the whole population—the reference?");
+    // Wording is editorial. Neither authored prose nor fact interpolation may
+    // issue an answer, selector, operation or grading authority.
     const answer = prediction ? `${direction}. P(A | B) = ${mass(query.value)}, compared with P(A) = ${mass(prior)}.`
       : `B consists of A ∩ B and not A ∩ B. Sum their joint masses to obtain P(B) = ${mass(query.denominator)}. Restrict to B, then divide P(A ∩ B) = ${mass(query.numerator)} by that positive denominator: ${mass(query.value)}.`;
     const card = createKpFlashcardSpec({ id: `${draft.model.sourceId}.${kind}`, kind: prediction ? "predict-next" : "cloze",
-      title: prediction ? "Predict the evidence's effect" : "Reconstruct the denominator", assetId: animation.bundle.id, prompt,
+      title: authored?.title ?? (prediction ? "Predict the evidence's effect" : "Reconstruct the denominator"), assetId: animation.bundle.id, prompt,
       objectIds: [draft.trace.states[2]!.id, target.id], transformationIds: extraction.operations,
       ...(prediction ? {} : { selectorIds: draft.model.outcomes.map(outcome => `${target.id}.${outcome.key}`) }),
       answer: { kind: "text", value: answer } });

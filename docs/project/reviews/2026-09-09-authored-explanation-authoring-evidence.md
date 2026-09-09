@@ -36,3 +36,19 @@ empirical filter performance. Human editorial/visual review remains required.
 Repeatable evidence: `tests/bayesian-reasoning-editorial-lesson.test.ts` and
 `npm run visual:authoring-entrypoints -- --grep R4B`. Screenshots are disposable;
 source and executable checks, not captured pixels, own durable evidence.
+
+## Post-Apply practice ownership repair
+
+The authored browser scenario first failed when opening practice after Apply:
+the prompt title stayed empty. Inspection found that delayed practice handlers
+queried the preparation wrapper after its children had moved into the live host.
+This was an existing shared lifecycle defect, not new probability semantics;
+the same code path serves v1 source edits.
+
+The repair resolves and validates the retained revision element at the mount
+boundary, then passes only that element into a separate runtime scope. Event
+handlers cannot capture the disposable outer container in that scope. Browser
+regressions exercise post-Apply practice/reveal/return for the authored lesson and
+the existing v1 urn source. The authored scenario was observed failing before
+repair; the legacy risk was identified by shared-path inspection, not a claimed
+separate pre-repair legacy browser run.

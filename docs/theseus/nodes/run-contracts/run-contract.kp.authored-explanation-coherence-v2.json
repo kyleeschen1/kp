@@ -109,7 +109,8 @@
     {
       "id": "s12",
       "title": "Connect bounded authored prompt wording to existing prediction/reconstruction projections",
-      "status": "planned"
+      "summary": "Authored questions reuse verified answers; retained-owner lifecycle repair makes post-Apply practice work for v1 and v2.",
+      "status": "complete"
     },
     {
       "id": "s13",

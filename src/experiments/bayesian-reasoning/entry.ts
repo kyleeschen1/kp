@@ -17,7 +17,16 @@ import { mountKpFocusDeckNativeInput } from "../../tutorial/focus-deck-native-in
 import { sampleBayesTree } from "./tree-frame.ts";
 import { mountBayesTreeSvg, formatBayesMass } from "./tree-svg.ts";
 
-async function mountCard(root: HTMLElement, evidence: PreparedBayesDraft) {
+async function mountCard(container: HTMLElement, evidence: PreparedBayesDraft) {
+  const root = container.querySelector<HTMLElement>("[data-bayes-display-revision]");
+  if (!root || root.dataset["bayesDisplayRevision"] !== evidence.revisionId)
+    throw new Error("Mount the rendered element for this exact Bayesian revision.");
+  return mountRevision(root, evidence);
+}
+
+/** This scope cannot capture the disposable preparation container. All delayed
+ * queries belong to the revision element that moves intact into the live host. */
+async function mountRevision(root: HTMLElement, evidence: PreparedBayesDraft) {
   const card = root.querySelector<HTMLElement>("[data-bayes-card]")!;
   const { score: beats, notation, tree: treePlan } = evidence;
   const tree = mountBayesTreeSvg(card.querySelector<HTMLElement>("[data-bayes-tree-host]")!, treePlan);

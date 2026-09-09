@@ -13,6 +13,7 @@ import { editorialFixture } from "./fixtures/bayes-editorial-source.ts";
 import spamFilterSource from "../content/authoring/r4b-spam-filter.bayes.json" with { type: "json" };
 
 test("R4B primary lesson loads as content and traverses the existing seven stops", async ({ page }, info) => {
+  const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
   const checked = checkBayesDraft(JSON.stringify(spamFilterSource));
   if (checked.status !== "compiled") throw new Error(checked.diagnostic.expected);
   await page.goto("/experiments/bayesian-reasoning/");
@@ -53,6 +54,18 @@ test("R4B primary lesson loads as content and traverses the existing seven stops
   await page.locator("[data-bayes-return]").click();
   await expect(card).toHaveAttribute("data-bayes-position", "2.35");
   await expect(page.locator("[data-bayes-reason]")).toBeHidden();
+  for (const kind of ["prediction", "reconstruction"] as const) {
+    await page.locator(`[data-bayes-practice="${kind}"]`).click();
+    await expect(page.locator("[data-bayes-prompt-title]")).toHaveText(spamFilterSource.editorial.prompts[kind].title);
+    await expect(page.locator("[data-bayes-prompt-text]")).toContainText(kind === "prediction" ? "Before evaluating the quotient" : "Which two disjoint groups");
+    await expect(page.locator("[data-bayes-answer]")).toBeHidden();
+    await page.locator("[data-bayes-reveal]").click();
+    await expect(page.locator("[data-bayes-answer]")).toBeVisible();
+    await expect(page.locator("[data-bayes-answer]")).toContainText("2/13");
+    await page.locator("[data-bayes-practice-return]").click();
+    await expect(card).toHaveAttribute("data-bayes-position", "2.35");
+  }
+  expect(errors).toEqual([]);
 });
 
 test("R4B authored Apply preserves one selected revision and rejects foreign references", async ({ page }) => {
@@ -175,6 +188,13 @@ test("R4A retained urn source checks, traverses seven stops and exports the exac
     await expect.poll(async () => Number(await card.getAttribute("data-bayes-position"))).toBeCloseTo(step, 9);
     await expect(card.locator("#bayes-tree-description")).toContainText("P(A given B) = 1/7");
   }
+  // Practice must query the retained revision, not the discarded Apply staging wrapper.
+  await page.locator('[data-bayes-practice="prediction"]').click();
+  await expect(page.locator("[data-bayes-prompt-title]")).toHaveText("Predict the evidence's effect");
+  await page.locator("[data-bayes-reveal]").click();
+  await expect(page.locator("[data-bayes-answer]")).toContainText("1/7");
+  await page.locator("[data-bayes-practice-return]").click();
+  await expect(card).toHaveAttribute("data-bayes-position", "2");
   // A dirty editor must not replace the explicitly displayed export source.
   await page.locator("[data-bayes-draft]").fill("{");
   const pending = page.waitForEvent("download"); await page.locator("[data-bayes-download]").click();

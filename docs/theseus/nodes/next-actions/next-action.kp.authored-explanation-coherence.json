@@ -101,6 +101,20 @@
       "scope": "s11",
       "checkedAt": "2026-09-09T16:16:16.899Z",
       "notes": "Five unit tests and two Chromium tests pass; browser returns to 2.35 exactly. Transported editorial text cannot acquire return authority; v1 baselines preserved."
+    },
+    {
+      "command": "node --test tests/bayesian-reasoning-editorial-prompts.test.ts tests/bayesian-reasoning-prompts.test.ts tests/bayesian-reasoning-editorial-baseline.test.ts; npm run typecheck; npm run check:inference; npm run visual:authoring-entrypoints -- --grep R4B|R4A-retained-urn",
+      "status": "passed",
+      "scope": "s12",
+      "checkedAt": "2026-09-09T16:21:56.305Z",
+      "notes": "Five focused tests, full typecheck, inference and three Chromium cases pass. Initial R4B practice failure diagnosed as delayed query against discarded staging wrapper; repaired retained-root scope and tested legacy post-Apply path. Browser grep selects R4B and R4A retained urn."
+    },
+    {
+      "command": "npm run visual:authoring-entrypoints -- --grep 'R4B|R4A retained urn'",
+      "status": "passed",
+      "scope": "s12",
+      "checkedAt": "2026-09-09T16:23:51.621Z",
+      "notes": "Exact runnable browser command: three cases passed. Earlier combined evidence line paraphrased the grep selection; use this correctly quoted command. Additional complete Bayes suite passed 51 tests."
     }
   ],
   "expectedLearning": [
