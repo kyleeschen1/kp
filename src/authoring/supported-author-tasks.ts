@@ -39,7 +39,7 @@ export const supportedAuthorTasks = {
   "graph2d.supply-tax": {
     owner: "src/experiments/authoring-market/authoring-market-preview-prepare.ts",
     input: "Existing market source branch with bounded parameters and Article fact bindings.",
-    preview: { kind: "explicit-apply", url: "/experiments/authoring-market/" },
+    preview: { kind: "local-source-build", url: "/experiments/authoring-market/", reason: "The graph follows trusted local source builds and explicit retained-revision inspection; checking branch JSON does not apply it to this host." },
     extraction: { kind: "unsupported", reason: "No reusable-reason extraction from the market editor." },
     publication: { kind: "local-edition", command: "author:market-publication", input: "selected market branch JSON; text and exact facts only" }
   }

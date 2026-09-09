@@ -183,7 +183,8 @@
     {
       "id": "s14",
       "title": "Check supply-tax/Graph2D capability reporting and preserve its current source/publication path",
-      "status": "planned"
+      "summary": "Accurate local-source-build capability; both market parameter cohorts and stale bindings tested; canonical source and production route preserved.",
+      "status": "complete"
     },
     {
       "id": "s15",

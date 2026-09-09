@@ -16,6 +16,7 @@ test("inventory names the six approved tasks and existing owners without importi
 });
 
 test("discovery cannot imply applied revisions or cross-domain publication parity", () => {
+  assert.equal(supportedAuthorTasks["graph2d.supply-tax"].preview.kind, "local-source-build");
   assert.equal(supportedAuthorTasks["reasoning.code"].preview.kind, "reference-only");
   assert.equal(supportedAuthorTasks["equation.logarithm-base"].publication.kind, "enclosing-source-edition");
   for (const task of ["reasoning.code", "graph3d.saddle"] as const)

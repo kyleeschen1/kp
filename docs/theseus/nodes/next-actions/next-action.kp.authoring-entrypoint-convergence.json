@@ -395,6 +395,13 @@
       "scope": "broad",
       "checkedAt": "2026-09-09T03:58:29.738Z",
       "notes": "Actual result URL paints correct adapter with fixed camera and denominator 4,6,8,4."
+    },
+    {
+      "command": "npm run test:authoring-entrypoints; npm run test:authoring-round-trip; npm run check:canonical-tax-source; npm run check:reader-production; npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-09T04:06:50.387Z",
+      "notes": "s14: 28 author tests and 50 round-trip tests pass; canonical tax bytes current; 12 production routes preserved; full types pass. Corrected Graph2D preview to local-source-build, not JSON Apply."
     }
   ],
   "progress": {
