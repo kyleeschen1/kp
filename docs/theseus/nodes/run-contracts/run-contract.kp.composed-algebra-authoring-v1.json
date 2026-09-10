@@ -71,7 +71,8 @@
     {
       "id": "s06",
       "title": "Extend distributive proof to explicit left/right orientation",
-      "status": "planned"
+      "summary": "Explicit orientation proof implemented with legacy left-only contract preserved and complete subtree/order negatives.",
+      "status": "complete"
     },
     {
       "id": "s07",

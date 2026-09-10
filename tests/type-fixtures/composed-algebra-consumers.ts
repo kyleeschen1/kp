@@ -26,3 +26,12 @@ const lastExpression = endpoints[2].structured;
 // @ts-expect-error normalized endpoints remain syntax, not authenticated proof
 const normalizedProof: KpVerifiedCommonFactorRewrite = lastExpression;
 void normalizedProof;
+import { verifyKpOrientedDistributionRewrite, type KpDistributionOrientation } from "../../src/semantic/structured-expression-rewrite.ts";
+import type { KpStructuredExpressionRoleBindingSet } from "../../src/semantic/structured-expression-role-binding.ts";
+declare const bindings: KpStructuredExpressionRoleBindingSet;
+const oriented = verifyKpOrientedDistributionRewrite({ bindings, orientation: "right" });
+if (oriented.ok) { const orientation: KpDistributionOrientation = oriented.verification.orientation; void orientation; }
+// @ts-expect-error orientation must be explicit, not guessed
+verifyKpOrientedDistributionRewrite({ bindings });
+// @ts-expect-error only ordered left or right distribution is supported
+verifyKpOrientedDistributionRewrite({ bindings, orientation: "commute" });

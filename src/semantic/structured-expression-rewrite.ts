@@ -76,6 +76,38 @@ export const kpDistributionRewriteRoleSpecs: readonly KpStructuredExpressionRole
 export function verifyKpDistributionRewrite(
   bindings: KpStructuredExpressionRoleBindingSet
 ): KpStructuredExpressionRewriteResult {
+  return verifyDistribution(bindings, "left");
+}
+
+export type KpDistributionOrientation = "left" | "right";
+
+export type KpOrientedDistributionRewriteResult =
+  | { readonly ok: true; readonly diagnostics: readonly [];
+      readonly verification: KpVerifiedStructuredExpressionRewrite & { readonly orientation: KpDistributionOrientation } }
+  | Extract<KpStructuredExpressionRewriteResult, { ok: false }>;
+
+/** Orientation is a law input, not permission to commute the authored tree.
+ * The legacy entrypoint keeps its left-only contract and result shape. */
+export function verifyKpOrientedDistributionRewrite(input: {
+  readonly bindings: KpStructuredExpressionRoleBindingSet;
+  readonly orientation: KpDistributionOrientation;
+}): KpOrientedDistributionRewriteResult {
+  if (input.orientation !== "left" && input.orientation !== "right") {
+    return Object.freeze({ ok: false as const, diagnostics: Object.freeze([Object.freeze({
+      code: "source-pattern-mismatch" as const, path: "orientation", message: "Declare left or right distribution explicitly."
+    })]) });
+  }
+  const result = verifyDistribution(input.bindings, input.orientation);
+  return result.ok ? Object.freeze({ ...result,
+    verification: Object.freeze({ ...result.verification, orientation: input.orientation }) }) : result;
+}
+
+function verifyDistribution(
+  bindings: KpStructuredExpressionRoleBindingSet,
+  orientation: KpDistributionOrientation
+): KpStructuredExpressionRewriteResult {
+  const factorIndex = orientation === "left" ? 0 : 1;
+  const addendIndex = orientation === "left" ? 1 : 0;
   const diagnostics: KpStructuredExpressionRewriteDiagnostic[] = [];
   const sourceRoot = one(bindings, kpDistributionRewriteRoleIds.sourceRoot);
   const commonFactor = one(bindings, kpDistributionRewriteRoleIds.commonFactor);
@@ -103,13 +135,15 @@ export function verifyKpDistributionRewrite(
     commonFactor === undefined ||
     sourceGroupedSum?.kind !== "sum" ||
     sourceRoot.factors.length !== 2 ||
-    sourceRoot.factors[0]?.id !== commonFactor.id ||
-    sourceRoot.factors[1]?.id !== sourceGroupedSum.id
+    sourceRoot.factors[factorIndex]?.id !== commonFactor.id ||
+    sourceRoot.factors[addendIndex]?.id !== sourceGroupedSum.id
   ) {
     diagnostics.push({
       code: "source-pattern-mismatch",
       path: "roles.source-root",
-      message: "Distribution source must be an ordered product of the common factor and grouped sum."
+      message: orientation === "left"
+        ? "Distribution source must be an ordered product of the common factor and grouped sum."
+        : "Distribution source must retain the common factor on the right of the grouped sum."
     });
   }
   if (
@@ -158,13 +192,15 @@ export function verifyKpDistributionRewrite(
     if (
       distributedTerm.kind !== "product" ||
       distributedTerm.factors.length !== 2 ||
-      distributedTerm.factors[0]?.id !== factorCopy.id ||
-      distributedTerm.factors[1]?.id !== distributedAddend.id
+      distributedTerm.factors[factorIndex]?.id !== factorCopy.id ||
+      distributedTerm.factors[addendIndex]?.id !== distributedAddend.id
     ) {
       diagnostics.push({
         code: "target-pattern-mismatch",
         path: `roles.distributed-terms[${index}]`,
-        message: "Each distributed term must be an ordered product of its factor copy and addend."
+        message: orientation === "left"
+          ? "Each distributed term must be an ordered product of its factor copy and addend."
+          : "Each distributed term must retain its factor copy on the right of its addend."
       });
     }
     if (commonFactor === undefined || !sameSemanticTree(commonFactor, factorCopy)) {

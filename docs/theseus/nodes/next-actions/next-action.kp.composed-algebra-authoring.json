@@ -62,6 +62,13 @@
       "scope": "s05",
       "checkedAt": "2026-09-10T00:19:59.865Z",
       "notes": "9 composed and 32 preservation tests pass. Full typecheck passes. Core 113052 types/193425 instantiations unchanged; combined 170069/282807 within fixed ceilings."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring; npm run test:common-factor-authoring; node --test tests/structured-expression-rewrite.test.ts tests/composed-algebra-distribution.test.ts; npm run typecheck; npm run check:inference",
+      "status": "passed",
+      "scope": "s06",
+      "checkedAt": "2026-09-10T00:24:22.589Z",
+      "notes": "Explicit ordered left/right complete-tree proof; swapped, changed, commuted and unknown-orientation negatives. Core113113/193558 combined170141/282940 within unchanged budgets."
     }
   ],
   "expectedLearning": [
