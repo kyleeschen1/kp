@@ -1,5 +1,8 @@
 import { assertKpPreparedCommonFactorDraft, type KpPreparedCommonFactorDraft } from "../../authoring/common-factor-draft.ts";
-import { commonFactorPresentationEndpoints } from "./endpoints.ts";
+import { commonFactorPresentationEndpoints, composedAlgebraOperationEndpoints } from "./endpoints.ts";
+import { assertKpComposedAlgebraPresentation, type KpComposedAlgebraPresentation } from "../../authoring/composed-algebra-presentation.ts";
+import type { KpAnimationAsset } from "../../animation/asset.ts";
+import type { KpStructuredEquationAnnotatedEndpoint } from "../../rendering/structured-equation-selector-annotated-latex.ts";
 import { assertKpCommonFactorPresentation, type KpCommonFactorPresentation } from "../../authoring/common-factor-presentation.ts";
 import { findKpRegisteredOperationPresentationPlan } from "../../animation/operation-presentation-plan-types.ts";
 import { compileKpEquationExemplarTemplate } from "../../reader/compiler/equation-exemplar-page.ts";
@@ -24,6 +27,19 @@ export async function mountCanonicalFactoringPresentation(card: HTMLElement, pre
   const animation = presentation.animation, endpoints = commonFactorPresentationEndpoints(presentation);
   if (findKpRegisteredOperationPresentationPlan(animation.transformations[0]!) !== presentation.plan)
     throw new TypeError("Factoring presentation is detached from its registered operation owner.");
+  return mountResolvedCanonicalOperation(card, presentation, animation, endpoints);
+}
+
+export async function mountCanonicalComposedAlgebraOperation(card: HTMLElement, presentation: KpComposedAlgebraPresentation, step: 0 | 1) {
+  assertKpComposedAlgebraPresentation(presentation);
+  return mountResolvedCanonicalOperation(card, { ...presentation, canonicalReference: presentation.steps[step].canonicalReference },
+    presentation.steps[step].animation, composedAlgebraOperationEndpoints(presentation, step));
+}
+
+// Only the authenticated public mounts select these arguments; hosts cannot
+// pair an unrelated animation, annotation or plan with a checked source.
+async function mountResolvedCanonicalOperation(card: HTMLElement, presentation: { owner: string; canonicalReference: string; revisionId: string },
+  animation: KpAnimationAsset, endpoints: readonly KpStructuredEquationAnnotatedEndpoint[]) {
   card.dataset["canonicalPresentationOwner"] = presentation.owner;
   card.dataset["canonicalPresentationReference"] = presentation.canonicalReference;
   card.dataset["canonicalPresentationRevision"] = presentation.revisionId;

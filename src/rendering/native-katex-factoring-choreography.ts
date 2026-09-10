@@ -25,9 +25,9 @@ import {
   sampleKpEquationMotionPath,
   type KpEquationMotionPathCandidate
 } from "./equation-motion-path-planner.ts";
-import {
-  measureKpNativeKatexTextInkRect
-} from "./native-katex-paint-geometry.ts";
+import { normalizeKpStageRelativeRect } from "./native-katex-fragment-observer.ts";
+import { measureKpNativeKatexPaintAtomRect } from "./native-katex-paint-geometry.ts";
+import { unionKpStageRelativeRects } from "./native-katex-rendered-scene.ts";
 import type {
   KpNativeKatexPaintAtomObservation,
   KpNativeKatexRenderedSceneObservation
@@ -44,9 +44,52 @@ export const kpMaximumFactoringExcursionInLocalInkHeights = 3.75;
 export type KpNativeKatexFactoringChoreographyIntent =
   KpFactorCommonTermMotifBinding;
 
+type PaintRect = KpNativeKatexPaintAtomObservation["rect"];
 interface FactoringAtomGeometry {
-  readonly atom: KpNativeKatexPaintAtomObservation;
-  readonly paintRect: KpNativeKatexPaintAtomObservation["rect"];
+  readonly id: string;
+  readonly semanticEntityId: string;
+  readonly sourceElement: HTMLElement;
+  readonly rect: PaintRect;
+  readonly paintRect: PaintRect;
+  readonly members: readonly { readonly atom: KpNativeKatexPaintAtomObservation; readonly paintRect: PaintRect }[];
+}
+
+/** A compound keeps its real native wrapper and every member's geometry.
+ * It is neither a synthetic glyph nor independently moving member ink. */
+function factorGeometry(scene: KpNativeKatexRenderedSceneObservation, semanticEntityId: string): FactoringAtomGeometry {
+  const atoms = scene.atoms.filter(atom => atom.semanticEntityId === semanticEntityId);
+  if (!atoms.length || atoms.some(atom => atom.paintKind !== "glyph"))
+    throw new Error(`Factoring entity ${semanticEntityId} requires a bounded text-paint group.`);
+  const members = atoms.map(atom => ({ atom, paintRect: measureKpNativeKatexPaintAtomRect(scene.stage, atom) })), first = atoms[0]!;
+  if (atoms.length === 1) return Object.freeze({ id: first.id, semanticEntityId, sourceElement: first.sourceElement,
+    rect: first.rect, paintRect: members[0]!.paintRect, members: Object.freeze(members) });
+  const groups = scene.groups.filter(group => group.semanticEntityId === semanticEntityId && group.atomIds.length === atoms.length &&
+    atoms.every(atom => group.atomIds.includes(atom.id)) && group.sourceElement && atoms.every(atom => group.sourceElement!.contains(atom.sourceElement)));
+  if (groups.length !== 1) throw new Error(`Factoring entity ${semanticEntityId} requires one exact native group owner.`);
+  const group = groups[0]!, sourceElement = group.sourceElement!, stageRect = scene.stage.getBoundingClientRect();
+  // Wrapper layout and member ink union are separate measurement authorities.
+  const rect = normalizeKpStageRelativeRect({ stageClientRect: stageRect,
+    stageLayoutWidth: scene.stage.offsetWidth || stageRect.width, stageLayoutHeight: scene.stage.offsetHeight || stageRect.height,
+    fragmentClientRect: sourceElement.getBoundingClientRect() });
+  return Object.freeze({ id: group.id, semanticEntityId, sourceElement, rect,
+    paintRect: unionKpStageRelativeRects(members.map(member => member.paintRect)), members: Object.freeze(members) });
+}
+
+function assertTypographyCompatible(geometries: readonly FactoringAtomGeometry[]): void {
+  const reference = geometries[0];
+  if (!reference) throw new Error("Factoring scene requires measured factor paint.");
+  const fingerprint = (atom: KpNativeKatexPaintAtomObservation) => atom.styleFingerprint.split("|")
+    .filter(entry => ["font-family:", "font-size:", "font-style:", "font-weight:"].some(property => entry.startsWith(property))).join("|");
+  for (const geometry of geometries) {
+    if (geometry.members.length !== reference.members.length || geometry.members.some((member, i) => {
+      const other = reference.members[i]!;
+      return member.atom.visualKey !== other.atom.visualKey || member.atom.fontRevision !== other.atom.fontRevision ||
+        fingerprint(member.atom) !== fingerprint(other.atom) ||
+        Math.abs(member.paintRect.width - other.paintRect.width) > .75 || Math.abs(member.paintRect.height - other.paintRect.height) > .75 ||
+        Math.abs((member.paintRect.left - geometry.paintRect.left) - (other.paintRect.left - reference.paintRect.left)) > .75 ||
+        Math.abs((member.paintRect.top - geometry.paintRect.top) - (other.paintRect.top - reference.paintRect.top)) > .75;
+    })) throw new Error(`Factoring fusion cannot atomically transfer typography-incompatible paint ${geometry.semanticEntityId}.`);
+  }
 }
 
 export interface KpNativeKatexFactoringScenePlan {
@@ -97,7 +140,7 @@ export function bindKpNativeKatexFactoringScene(input: {
       ).map((track) => {
         const complete = plan.complete;
         if (!complete) return Object.freeze({ ...track, sampleProgress: sampleContextProgress });
-        const index = complete.grouping.findIndex(g => g.atom.id === track.visualAtomId);
+        const index = complete.grouping.findIndex(g => g.members.some(member => member.atom.id === track.visualAtomId));
         if (index < 0) return Object.freeze({ ...track, motionPath: undefined, motionProgressRange: undefined,
           sampleProgress: (p: number) => plan.direction === "forward"
             ? sample(p).addendCompactionProgress : 1 - sample(p).addendCompactionProgress });
@@ -170,10 +213,11 @@ export function compileKpNativeKatexFactoringScenePlan(input: {
       throw new Error("Complete factoring requires its canonical composition, not fusion-only motion.");
     const context = [...choreography.addendPairs, ...choreography.connectorPairs];
     const grouping = choreography.groupingArtifactIds.map(id => factorGeometry(forwardTarget, id))
-      .sort((a, b) => a.atom.rect.left - b.atom.rect.left);
+      .sort((a, b) => a.rect.left - b.rect.left);
     const sourceIds = new Set([...choreography.factorCopyIds, ...context.map(pair => pair.sourceId)]);
     const targetIds = new Set([choreography.commonFactorId, ...context.map(pair => pair.targetId), ...choreography.groupingArtifactIds]);
-    if (sourceIds.size !== forwardSource.atoms.length || targetIds.size !== forwardTarget.atoms.length ||
+    if ([...sourceIds].some(id => !forwardSource.atoms.some(atom => atom.semanticEntityId === id)) ||
+        [...targetIds].some(id => !forwardTarget.atoms.some(atom => atom.semanticEntityId === id)) ||
         forwardSource.atoms.some(atom => !sourceIds.has(atom.semanticEntityId)) || forwardTarget.atoms.some(atom => !targetIds.has(atom.semanticEntityId)))
       throw new Error("Complete factoring composition must own every native paint atom.");
     const corridor = context.map(pair => ({ source: factorGeometry(forwardSource, pair.sourceId).paintRect,
@@ -193,9 +237,12 @@ export function compileKpNativeKatexFactoringScenePlan(input: {
     ...branchGeometry.map(({ paintRect }) => paintRect.height)
   );
   const pathsByEntityId = new Map(branchGeometry.map((geometry, index) => {
-    if (complete !== undefined) return [geometry.atom.semanticEntityId,
+    if (complete !== undefined) return [geometry.semanticEntityId,
       planKpCanonicalLineageBranch({ id: `${input.intent.id}.branch.${index}`,
-        origin: rectCenter(commonGeometry.atom.rect), destination: rectCenter(geometry.atom.rect), branchIndex: index })] as const;
+        origin: rectCenter(commonGeometry.rect), destination: rectCenter(geometry.rect), branchIndex: index,
+        // Wide rigid paint needs room around the compacting row. Preserve the
+        // accepted atomic path; reserve a measured group footprint, not a glyph offset.
+        minimumClearance: geometry.members.length > 1 ? geometry.paintRect.width + localInkHeight : undefined })] as const;
     const source = input.intent.direction === "forward"
       ? rectCenter(geometry.paintRect)
       : rectCenter(commonGeometry.paintRect);
@@ -213,9 +260,9 @@ export function compileKpNativeKatexFactoringScenePlan(input: {
       throw new Error("Factoring paint path exceeds its local ink corridor.");
     }
     return [
-      geometry.atom.semanticEntityId,
+      geometry.semanticEntityId,
       planKpEquationMotionPathBetweenPoints({
-        id: `${input.intent.id}.paint-path.${geometry.atom.semanticEntityId}`,
+        id: `${input.intent.id}.paint-path.${geometry.semanticEntityId}`,
         start: source,
         end: target,
         variants: ["arc-above"],
@@ -234,8 +281,8 @@ export function compileKpNativeKatexFactoringScenePlan(input: {
     sourceFactors: Object.freeze(sourceFactors),
     targetFactors: Object.freeze(targetFactors),
     pathsByEntityId,
-    claimedSourceAtomIds: new Set(sourceFactors.map(({ atom }) => atom.id)),
-    claimedTargetAtomIds: new Set(targetFactors.map(({ atom }) => atom.id))
+    claimedSourceAtomIds: new Set(sourceFactors.flatMap(g => g.members.map(({ atom }) => atom.id))),
+    claimedTargetAtomIds: new Set(targetFactors.flatMap(g => g.members.map(({ atom }) => atom.id)))
   });
 }
 
@@ -263,13 +310,13 @@ export function sampleKpNativeKatexFactoringScenePlan(input: {
     const geometries = side === "source" ? plan.sourceFactors : plan.targetFactors;
     const moving = (side === "source") === (plan.direction === "forward");
     return geometries.map(geometry => {
-      const id = geometry.atom.semanticEntityId, selected = byId.get(id);
+      const id = geometry.semanticEntityId, selected = byId.get(id);
       if (!selected) throw new Error("Factoring material has no lineage frame.");
       const path = moving ? requiredPath(plan, id) : undefined;
       let paint = geometry.paintRect;
       if (path && complete) {
         const point = sampleKpEquationMotionPath(path, 1 - selected.junctionProgress);
-        const origin = rectCenter(geometry.atom.rect);
+        const origin = rectCenter(geometry.rect);
         paint = { ...paint, left: paint.left + point.x - origin.x, top: paint.top + point.y - origin.y };
       } else if (path) {
         paint = paintRectAlongPath({ geometry, path, progress: selected.pathProgress,
@@ -302,61 +349,6 @@ export function sampleKpNativeKatexFactoringContextProgress(
   );
 }
 
-function factorGeometry(
-  scene: KpNativeKatexRenderedSceneObservation,
-  semanticEntityId: string
-): FactoringAtomGeometry {
-  const atoms = scene.atoms.filter((atom) =>
-    atom.semanticEntityId === semanticEntityId
-  );
-  if (atoms.length !== 1 || atoms[0]!.paintKind !== "glyph") {
-    throw new Error(
-      `Factoring entity ${semanticEntityId} must own exactly one glyph atom.`
-    );
-  }
-  const atom = atoms[0]!;
-  return Object.freeze({
-    atom,
-    paintRect: measureKpNativeKatexTextInkRect(scene.stage, atom.sourceElement)
-  });
-}
-
-function assertTypographyCompatible(
-  geometries: readonly FactoringAtomGeometry[]
-): void {
-  const reference = geometries[0];
-  if (reference === undefined) {
-    throw new Error("Factoring scene requires measured factor paint.");
-  }
-  const incompatible = geometries.find(({ atom, paintRect }) =>
-    atom.paintKind !== reference.atom.paintKind ||
-    atom.visualKey !== reference.atom.visualKey ||
-    typographyFingerprint(atom) !== typographyFingerprint(reference.atom) ||
-    atom.fontRevision !== reference.atom.fontRevision ||
-    Math.abs(paintRect.width - reference.paintRect.width) > 0.75 ||
-    Math.abs(paintRect.height - reference.paintRect.height) > 0.75
-  );
-  if (incompatible !== undefined) {
-    throw new Error(
-      "Factoring fusion cannot atomically transfer typography-incompatible " +
-      `paint ${incompatible.atom.semanticEntityId}.`
-    );
-  }
-}
-
-function typographyFingerprint(
-  atom: KpNativeKatexPaintAtomObservation
-): string {
-  return atom.styleFingerprint.split("|").filter((entry) =>
-    [
-      "font-family:",
-      "font-size:",
-      "font-style:",
-      "font-weight:"
-    ].some((property) => entry.startsWith(property))
-  ).join("|");
-}
-
 function requiredPath(
   plan: KpNativeKatexFactoringScenePlan,
   entityId: string
@@ -372,8 +364,8 @@ function paintRectAlongPath(input: {
   readonly geometry: FactoringAtomGeometry;
   readonly path: KpEquationMotionPathCandidate;
   readonly progress: number;
-  readonly startPaintRect?: KpNativeKatexPaintAtomObservation["rect"] | undefined;
-}): KpNativeKatexPaintAtomObservation["rect"] {
+  readonly startPaintRect?: PaintRect | undefined;
+}): PaintRect {
   const p = clamp01(input.progress);
   const lift = smoothstep(interval(p, 0, 0.18));
   const traverse = smoothstep(interval(p, 0.22, 0.8));
@@ -400,35 +392,35 @@ function ownerFrame(input: {
   readonly planId: string;
   readonly side: "source" | "target";
   readonly geometry: FactoringAtomGeometry;
-  readonly desiredPaintRect: KpNativeKatexPaintAtomObservation["rect"];
+  readonly desiredPaintRect: PaintRect;
   readonly opacity: number;
 }): KpEquationMaterialLayerOwnerFrame {
   const paintOffsetX =
-    input.geometry.paintRect.left - input.geometry.atom.rect.left;
+    input.geometry.paintRect.left - input.geometry.rect.left;
   const paintOffsetY =
-    input.geometry.paintRect.top - input.geometry.atom.rect.top;
+    input.geometry.paintRect.top - input.geometry.rect.top;
   return Object.freeze({
     ownerId:
       `native-factoring-owner.${input.planId}.${input.side}.` +
-      input.geometry.atom.id,
-    sourceElement: input.geometry.atom.sourceElement,
-    semanticEntityId: input.geometry.atom.semanticEntityId,
+      input.geometry.id,
+    sourceElement: input.geometry.sourceElement,
+    semanticEntityId: input.geometry.semanticEntityId,
     rect: Object.freeze({
       // The path is paint-space authority; wrapper geometry is reconstructed.
       left: input.desiredPaintRect.left - paintOffsetX,
       top: input.desiredPaintRect.top - paintOffsetY,
-      width: input.geometry.atom.rect.width,
-      height: input.geometry.atom.rect.height
+      width: input.geometry.rect.width,
+      height: input.geometry.rect.height
     }),
     paintAlignmentRect: input.desiredPaintRect,
     expectedPaintRect: input.desiredPaintRect,
     opacity: input.opacity,
     transform: "none",
-    fragmentRole: `glyph:factoring-${input.side}`
+    fragmentRole: `${input.geometry.members.length === 1 ? "glyph" : "group"}:factoring-${input.side}`
   });
 }
 
-function rectCenter(rect: KpNativeKatexPaintAtomObservation["rect"]): {
+function rectCenter(rect: PaintRect): {
   readonly x: number;
   readonly y: number;
 } {

@@ -42,6 +42,7 @@ export function planKpCanonicalLineageBranch(input: {
   readonly destination: KpEquationLayoutPoint;
   readonly branchIndex: number;
   readonly preferredVariant?: KpEquationMotionPathVariantId | undefined;
+  readonly minimumClearance?: number | undefined;
 }): KpEquationMotionPathCandidate {
   const preferredVariant = input.preferredVariant ??
     (input.branchIndex % 2 === 0 ? "arc-above" : "arc-below");
@@ -49,7 +50,7 @@ export function planKpCanonicalLineageBranch(input: {
     start: input.origin, end: input.destination,
     variants: preferredVariant === "direct" ? ["direct", "arc-above", "arc-below"]
       : preferredVariant.startsWith("around") ? ["around-left", "around-right"] : ["arc-above", "arc-below"],
-    preferredVariant, clearance: 18 + input.branchIndex * 3, moverRadius: 0 }).selected;
+    preferredVariant, clearance: Math.max(18 + input.branchIndex * 3, input.minimumClearance ?? 0), moverRadius: 0 }).selected;
 }
 
 export function canonicalFactoringGroupingEntry(index: number, count: number,

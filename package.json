@@ -11,6 +11,7 @@
     "test:composed-algebra-authoring": "node --disable-warning=ExperimentalWarning --test tests/composed-algebra-*.test.ts",
     "check:common-factor-workflow": "node --disable-warning=ExperimentalWarning scripts/check-common-factor-workflow.ts",
     "visual:common-factor-authoring": "playwright test --config playwright.common-factor-review.config.ts --workers=1",
+    "visual:composed-algebra": "playwright test --config playwright.composed-algebra-review.config.ts --project=chromium --workers=1",
     "visual:common-factor-authoring:cohort": "npm run visual:common-factor-authoring",
     "author:common-factor-publication": "node --disable-warning=ExperimentalWarning scripts/build-common-factor-edition.ts",
     "author:check": "node --disable-warning=ExperimentalWarning scripts/author-check.ts",

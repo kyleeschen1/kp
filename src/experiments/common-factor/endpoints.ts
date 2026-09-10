@@ -2,6 +2,25 @@ import { assertKpPreparedCommonFactorDraft, type KpPreparedCommonFactorDraft } f
 import { assertKpCommonFactorPresentation, type KpCommonFactorPresentation } from "../../authoring/common-factor-presentation.ts";
 import { createKpSelectorAnnotatedLatex } from "../../rendering/selector-annotated-latex.ts";
 import type { KpStructuredEquationAnnotatedEndpoint } from "../../rendering/structured-equation-selector-annotated-latex.ts";
+import { assertKpComposedAlgebraPresentation, type KpComposedAlgebraPresentation } from "../../authoring/composed-algebra-presentation.ts";
+
+export function composedAlgebraOperationEndpoints(presentation: KpComposedAlgebraPresentation, step: 0 | 1): readonly KpStructuredEquationAnnotatedEndpoint[] {
+  assertKpComposedAlgebraPresentation(presentation);
+  return presentation.steps[step].animation.bundle.objects.map(state => {
+    const segments = state.selectors.flatMap(selector => {
+      if (selector.label === undefined) throw new Error("Canonical algebra selector has no native notation.");
+      const token = { kind: "selector" as const, selectorId: selector.id, latex: selector.label };
+      return selector.kind === "operator" ? [{ kind: "latex" as const, latex: " " }, token, { kind: "latex" as const, latex: " " }] : [token];
+    });
+    const annotated = createKpSelectorAnnotatedLatex({ id: state.id, expectedSelectorIds: state.selectors.map(s => s.id), segments });
+    const value = state.value;
+    if (!value || typeof value !== "object" || !("latex" in value) || value.latex !== annotated.rawLatex)
+      throw new Error("Algebra annotation must preserve the exact canonical endpoint source.");
+    return Object.freeze({ stateId: state.id, label: state.title, annotated,
+      groupEnvelopes: Object.freeze([{ id: `${state.id}.whole-expression`, memberSelectorIds: Object.freeze(state.selectors.map(s => s.id)) }]),
+      structuralAnchors: Object.freeze([]) });
+  });
+}
 
 /** Project the established factoring fixture's ordered selector roles. No glyph
  * search, inferred correspondence, or independently authored endpoint text. */

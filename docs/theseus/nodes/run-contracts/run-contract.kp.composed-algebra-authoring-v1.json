@@ -101,7 +101,8 @@
     {
       "id": "s11",
       "title": "Prototype compound-group factoring through native compositor",
-      "status": "planned"
+      "summary": "Compound native paint uses one real wrapper per factor and all member atom claims, existing factoring clock and canonical arcs with measured footprint clearance. Chromium group seam/reverse canary and two atomic preservation checks pass; type/architecture/inference and fixed source ceiling pass.",
+      "status": "complete"
     },
     {
       "id": "s12",
