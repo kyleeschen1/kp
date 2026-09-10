@@ -34,6 +34,13 @@
       "scope": "s01",
       "checkedAt": "2026-09-10T00:02:49.644Z",
       "notes": "11 pass; atomic left-factor and two-state M1a contracts preserved. Parsing compound expressions is not verification or compositor certification."
+    },
+    {
+      "command": "npm run check:inference; npm run typecheck; node --test tests/typescript-inference-budget.test.ts",
+      "status": "passed",
+      "scope": "s02",
+      "checkedAt": "2026-09-10T00:06:57.223Z",
+      "notes": "7 guards and full types pass. Added10 types, no instantiation growth; ceilings unchanged and48 core fixtures retained. Future M1b exports must join dedicated real-consumer fixture."
     }
   ],
   "expectedLearning": [

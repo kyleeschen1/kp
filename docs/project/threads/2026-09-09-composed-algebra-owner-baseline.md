@@ -34,3 +34,18 @@ orientation; do not silently commute products. New compound-group paint and
 contextual evaluation need bounded executable representatives before promotion.
 The opt-in M1b presentation is the visual rollback unit; proof safeguards survive
 any presentation repair. This baseline does not certify the new mechanism.
+
+## Inference baseline
+
+The dedicated `tests/type-fixtures/composed-algebra-consumers.ts` is explicitly
+assigned to the complete frontend cohort and excluded only from the frozen core
+cohort. Its current calls cover existing scalar parsing, structured expressions,
+factoring proof and evaluation identity; negative assignments reject notation and
+operation descriptors as proof. Add every new source/proof/host/projection consumer
+here as it lands. This initial fixture does not claim coverage of future code.
+Keep the original complete authoring fixture and all 48 core fixtures.
+
+Before registration: core 113,052 types / 193,425 instantiations; combined
+169,965 / 282,610. After registration: core unchanged; combined 169,975 / 282,610.
+Existing ceilings remain unchanged. `npm run check:inference` and seven exact
+membership/cost guards pass. No cost amendment is needed for this baseline.

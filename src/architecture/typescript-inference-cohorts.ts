@@ -52,7 +52,10 @@ export const coreInferenceFixtures = [
   "tests/type-fixtures/typed-math-unit-tagged-economics.ts",
   "tests/type-fixtures/unit-scalar-map-helper-core.ts"
 ] as const;
-export const frontendInferenceFixtures = ["tests/type-fixtures/authoring-entrypoint-consumers.ts"] as const;
+export const frontendInferenceFixtures = [
+  "tests/type-fixtures/authoring-entrypoint-consumers.ts",
+  "tests/type-fixtures/composed-algebra-consumers.ts"
+] as const;
 export const combinedInferenceBudget = Object.freeze({
   measuredProject: { types: 169_350, instantiations: 281_200 },
   // M1a s12 measures the actual canonical native host, not just authoring data.

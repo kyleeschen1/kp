@@ -19,7 +19,7 @@ test("both approved cohorts retain exact fixture membership and active checking"
   }
   assert.equal(coreInferenceFixtures.length, 48);
   assert.ok(coreInferenceFixtures.includes("tests/type-fixtures/bayesian-authoring.ts"));
-  assert.deepEqual(frontendInferenceFixtures, ["tests/type-fixtures/authoring-entrypoint-consumers.ts"]);
+  assert.deepEqual(frontendInferenceFixtures, ["tests/type-fixtures/authoring-entrypoint-consumers.ts", "tests/type-fixtures/composed-algebra-consumers.ts"]);
   assert.deepEqual(typescriptInferenceBudget.ceilings, { types: 115000, instantiations: 198900 });
   const budget = combinedInferenceBudget;
   assert.deepEqual(budget.measuredProject, { types: 169350, instantiations: 281200 });

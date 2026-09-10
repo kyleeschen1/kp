@@ -47,7 +47,8 @@
     {
       "id": "s02",
       "title": "Register affected inference consumers and capture fixed-cost baselines",
-      "status": "planned"
+      "summary": "Dedicated complete-cohort chain fixture and measured baseline registered; fixed costs,7 guards and full types pass.",
+      "status": "complete"
     },
     {
       "id": "s03",
