@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: compositor extension-participation complete; unfamiliar supported-authoring trial proposed; M1b, R1–R4B and M1a remain complete
+Status: unfamiliar supported-authoring trial approved and active; compositor participation, M1b, R1–R4B and M1a remain complete
 Last Updated: 2026-09-10
 Standing budget policy: recommended engineering-budget repairs, including
 explicit bounded policy amendments, are automatically approved across sessions.
@@ -69,9 +69,11 @@ do not treat its proposed roadmap or readiness labels as new execution authority
 The user clarified the remaining code issue as missing gradual passage swiping.
 The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
-Current Next Action: review
-`../reviews/2026-09-10-unfamiliar-supported-authoring-trial-proposal.md` and select
-the useful explanation before executing another loop. The compositor migration
+Current Next Action: execute the approved 20-slice
+`../reviews/2026-09-10-unfamiliar-supported-authoring-trial-proposal.md` under
+`run-contract.kp.unfamiliar-supported-authoring-v1`. The repeated-groups lesson
+and one fresh-context local author agent are approved; s17 requires one batched
+visual/pedagogical review. Source-only trial, not engine expansion. The compositor migration
 is complete under `run-contract.kp.compositor-extension-occupancy-v2`; see
 `../reviews/2026-09-10-compositor-extension-occupancy-closeout.md` for achieved
 integration, release evidence and remaining limits. The unstarted v1 is superseded.

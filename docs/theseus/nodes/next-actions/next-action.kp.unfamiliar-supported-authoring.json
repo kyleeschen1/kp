@@ -1,0 +1,57 @@
+{
+  "id": "next-action.kp.unfamiliar-supported-authoring",
+  "kind": "next-action",
+  "title": "Measure unfamiliar supported authoring leverage",
+  "status": "ready",
+  "domain": "authoring",
+  "summary": "Approved 20-slice source-only trial, repeated-groups lesson and one local fresh-context author agent; s17 human checkpoint.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-10-unfamiliar-supported-authoring-trial-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.compositor-extension-occupancy"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:composed-algebra-authoring",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "git diff --check; theseus workspace validate",
+      "status": "passed",
+      "scope": "s01",
+      "checkedAt": "2026-09-10T18:52:17.081Z"
+    }
+  ],
+  "expectedLearning": [
+    "Measure marginal authoring effort and intervention requirements without engine edits; distinguish source-only success from completed investigation."
+  ],
+  "allowedWork": [
+    "Exact approved 20-slice proposal with one fresh-context local author agent, bounded source attempts, scoped tests and evidenced packet repairs."
+  ],
+  "disallowedWork": [
+    "No engine, schema, renderer, clock, motif, external API, merge, deployment or automatic successor; s17 human review required."
+  ],
+  "criteria": [
+    {
+      "id": "source-only-evidence",
+      "weight": "high"
+    },
+    {
+      "id": "canonical-preservation",
+      "weight": "high"
+    },
+    {
+      "id": "honest-attempts",
+      "weight": "high"
+    }
+  ]
+}

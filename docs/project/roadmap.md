@@ -112,10 +112,12 @@ participation for factoring and canonical successor plans, retired unchecked
 callbacks, preserved motifs and complete release verification. The unstarted v1
 is superseded; do not restart it or the completed migration. The implemented
 extension guide and explicit assurance gaps are linked from that closeout.
-Next reviewable work is
-`reviews/2026-09-10-unfamiliar-supported-authoring-trial-proposal.md`: select a
-useful explanation and measure five unfamiliar source-only variants before
-further capability expansion. This is proposed, not automatic successor execution.
+Active approved work is the 20-slice
+`reviews/2026-09-10-unfamiliar-supported-authoring-trial-proposal.md` under
+`run-contract.kp.unfamiliar-supported-authoring-v1`: measure five unfamiliar
+source-only repeated-group variants before capability expansion. One fresh-context
+local author agent is approved; stop at the batched s17 visual/pedagogical review.
+No engine expansion or automatic successor is authorized.
 Recommended engineering-budget repairs now have persistent automatic approval:
 `decisions/2026-09-10-engineering-budget-repair-autonomy.md`. Keep complete
 accounting, bounded explicit amendments and verification; preserve other gates.

@@ -1,0 +1,144 @@
+{
+  "id": "run-contract.kp.unfamiliar-supported-authoring-v1",
+  "kind": "run-contract",
+  "title": "Unfamiliar supported authoring",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.unfamiliar-supported-authoring.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-10-unfamiliar-supported-authoring-trial-proposal.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run test:composed-algebra-authoring",
+    "npm run visual:composed-algebra:cohort",
+    "npm test",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Exact approved 20 slices; trial sources, evidence, scoped tests and evidenced packet corrections. One fresh-context local author agent, no inherited history, no model override or subdelegation. Standing measured budget repairs within scope."
+  ],
+  "disallowedWork": [
+    "No production schema, semantic engine, renderer, layout, clock, motif, external API, new math family, merge, deployment or automatic successor. Do not hide failed cases or specialist intervention."
+  ],
+  "goal": "Measure five unfamiliar repeated-group authoring variants through existing canonical integration, with honest failures and zero engine edits.",
+  "target": "next-action.kp.unfamiliar-supported-authoring",
+  "runMode": "run",
+  "maxSlices": 20,
+  "commitCadence": "One scoped commit per verified slice including closed receipt and evidence.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Human review at s17 before promotion; preserve canonical exemplars, three stops and shared revision. Source-only review refinements are allowed; changed motion or layout is outside scope.",
+    "Stop for missing authority, unsafe action, user pause, unrecoverable evidence loss or blocked remaining independent work. Local case failures are observations; record them and continue unaffected work. Finish at s20."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Freeze lesson briefs and measurement rules",
+      "summary": "Approved task and fresh-author conditions frozen before attempts; canonical roadmap and contract aligned.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "Record canonical baseline and packet revision",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Add minimal attempt ledger and case runner",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Author changed-coefficient compound sum",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Author opposite sum orientation",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Author compound product",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Author opposite product orientation",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Author unit coefficient case",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Capture wrong-factorization repair",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Capture wrong-sum repair",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Capture valid unsupported input",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Freeze results and rank friction",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Correct evidenced packet ambiguity and replay",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Verify Apply preservation and export",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Verify readings prompts and exact return",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Reproduce immutable editions",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Present batched visual pedagogical checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Pressure accepted content across browsers",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Run release preservation gate",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Close measured trial and rank follow-up",
+      "status": "planned"
+    }
+  ]
+}
