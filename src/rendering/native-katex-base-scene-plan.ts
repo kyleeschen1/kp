@@ -2,6 +2,9 @@ import type {
   KpEquationCollisionTrack,
   KpEquationProtectedTransitCertificate
 } from "./equation-motion-path-planner.ts";
+import type { KpNativeKatexSceneAssembly } from "./native-katex-scene-assembly.ts";
+export { createKpNativeKatexSceneAssembly } from "./native-katex-scene-assembly.ts";
+export type { KpNativeKatexSceneAssembly } from "./native-katex-scene-assembly.ts";
 import { assertKpCompleteFactoringChoreography, type KpFactoringChoreographyPlan } from "../animation/factoring-choreography.ts";
 import type {
   KpEquationStructuralSuccessionIntent
@@ -37,7 +40,7 @@ import {
 export type {
   KpCompiledSymbolMotionContract
 } from "../animation/symbol-motion-contract.ts";
-export { composeKpNativeKatexMaterialSamplers, assertKpNativeKatexContributionMeasurement } from "./native-katex-scene-contribution.ts";
+export { assertKpNativeKatexContributionMeasurement } from "./native-katex-scene-contribution.ts";
 export type {
   KpNativeKatexTrackProjection
 } from "./native-katex-track-projection.ts";
@@ -144,6 +147,7 @@ export interface KpNativeKatexHandoffCorrelation {
 
 /** Measured plans live for one mounted session and never enter durable state. */
 export interface KpNativeKatexRendererReadyScenePlan {
+  readonly sceneAssembly?: KpNativeKatexSceneAssembly | undefined;
   readonly semanticClock?: KpFactoringChoreographyPlan | undefined;
   readonly kind: "native-katex-renderer-ready-scene-plan";
   readonly lifecycle: "renderer-session-ephemeral";
@@ -209,6 +213,7 @@ export function createKpNativeKatexRendererReadyScenePlan(
     );
   }
   const plan = Object.freeze({
+    sceneAssembly: input.sceneAssembly,
     kind: "native-katex-renderer-ready-scene-plan" as const,
     lifecycle: "renderer-session-ephemeral" as const,
     reconciliation: input.reconciliation,

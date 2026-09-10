@@ -1,6 +1,7 @@
 import type { KpNativeKatexFactoringSceneBinding } from "./native-katex-factoring-binding-types.ts";
-import { projectKpNativeKatexMaterialOccupancy, createKpNativeKatexSceneContribution,
+import { createKpNativeKatexSceneContribution,
   requireKpNativeKatexMeasuredMaterialFrame } from "./native-katex-scene-contribution.ts";
+import { requireKpNativeKatexContributionInspection } from "./native-katex-scene-assembly.ts";
 import { kpEquationSettlementTolerancePx } from "../animation/equation-shared-presentation-policy.ts";
 export type { KpNativeKatexFactoringSceneBinding } from "./native-katex-factoring-binding-types.ts";
 
@@ -23,9 +24,7 @@ import {
   planKpEquationMotionPathBetweenPoints,
   planKpCanonicalLineageBranch,
   canonicalFactoringGroupingEntry,
-  inspectKpEquationProtectedTransitTracks,
   sampleKpEquationMotionPath,
-  type KpProtectedTransitAudit,
   type KpEquationMotionPathCandidate
 } from "./equation-motion-path-planner.ts";
 import { normalizeKpStageRelativeRect } from "./native-katex-fragment-observer.ts";
@@ -114,7 +113,6 @@ export function bindKpNativeKatexFactoringScene(input: {
   readonly choreography?: KpFactoringChoreographyPlan | undefined;
 }): KpNativeKatexFactoringSceneBinding {
   const plan = compileKpNativeKatexFactoringScenePlan(input);
-  let transit: KpProtectedTransitAudit | undefined;
   let lastProgress = Number.NaN, lastFrame: KpFactoringChoreographyFrame | undefined;
   const sample = (progress: number) => {
     if (lastFrame !== undefined && progress === lastProgress) return lastFrame;
@@ -135,6 +133,15 @@ export function bindKpNativeKatexFactoringScene(input: {
     sample: progress => sampleOwners(progress).map(requireKpNativeKatexMeasuredMaterialFrame)
   });
   const material = (progress: number) => contribution.sample(progress).owners;
+  // Fusion pose is a motif invariant; final-scene inspection does not replace it.
+  if (plan.complete) {
+    const p = plan.transferPlan.transferEvent.progress;
+    const poses = [...material(p - 1e-7), ...material(p + 1e-7)]
+      .filter(owner => owner.opacity === 1).map(owner => owner.expectedPaintRect);
+    if (poses.some(rect => (["left", "top", "width", "height"] as const)
+      .some(key => Math.abs(rect[key] - poses[0]![key]) > kpEquationSettlementTolerancePx)))
+      throw new Error("Factoring fusion requires a shared native paint pose.");
+  }
   return Object.freeze<KpNativeKatexFactoringSceneBinding>({
     semanticClock: plan.complete?.choreography,
     claimTracks(tracks) {
@@ -167,30 +174,8 @@ export function bindKpNativeKatexFactoringScene(input: {
     },
     claimedTargetAtomIds: plan.claimedTargetAtomIds,
     contribution,
-    inspectTransit(tracks, sampleFrames) {
-      if (plan.complete) {
-        const p = plan.transferPlan.transferEvent.progress;
-        const poses = [...material(p - 1e-7), ...material(p + 1e-7)]
-          .filter(owner => owner.opacity === 1).map(owner => owner.expectedPaintRect!);
-        if (poses.some(rect => (["left", "top", "width", "height"] as const)
-          .some(key => Math.abs(rect[key] - poses[0]![key]) > kpEquationSettlementTolerancePx)))
-          throw new Error("Factoring fusion requires a shared native paint pose.");
-      }
-      // Fusion contact is declared by the cohort. Other intersections remain
-      // visible diagnostics, not authority to inflate a canonical trajectory.
-      const endpoints = material(1);
-      const factors = material(0).map((owner, index) => ({
-        id: owner.ownerId, componentId: plan.id, lifecycle: "merge",
-        startRect: owner.expectedPaintRect!, endRect: endpoints[index]!.expectedPaintRect!
-      }));
-      return transit = inspectKpEquationProtectedTransitTracks({
-        tracks: [...tracks, ...factors],
-        sampleFrames: (_, progress) => [...sampleFrames(tracks, progress),
-          ...projectKpNativeKatexMaterialOccupancy(material(progress), plan.id)]
-      });
-    },
-    recordEvidence() {
-      if (!transit) throw new Error("Factoring paint requires scene occupancy inspection before publication.");
+    recordEvidence(assembly) {
+      const transit = requireKpNativeKatexContributionInspection(assembly, contribution);
       Object.assign(input.source.stage.dataset, {
         kpNativeKatexFactoringTransitContacts: String(transit.intersections.length),
         kpNativeKatexFactoringContactPolicy: plan.complete?.choreography.composition.transitContact ?? "diagnostic",

@@ -286,7 +286,8 @@ export function createKpReaderEquationSceneCompositorSession(
     ? input.nativeKatex.compose.createSession(rendererReadyPlan)
     : input.nativeKatex.compose.createCarrierSession(rendererReadyPlan);
   if (dispatch.planKind === "factoring") {
-    dispatch.factoring.recordEvidence();
+    if (!rendererReadyPlan.sceneAssembly) throw new Error("Factoring requires final-scene inspection.");
+    dispatch.factoring.recordEvidence(rendererReadyPlan.sceneAssembly);
   }
   if (dispatch.planKind === "structural-succession") {
     const reducedMotion =

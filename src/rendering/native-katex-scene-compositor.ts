@@ -48,8 +48,9 @@ import type {
 } from "./native-katex-scene-track-contract.ts";
 import {
   compileKpCollisionSafeReorderTracks,
-  composeKpNativeKatexMaterialSamplers,
   assertKpNativeKatexContributionMeasurement,
+  createKpNativeKatexSceneAssembly,
+  type KpNativeKatexSceneAssembly,
   compileKpCollisionSafeTransitTracks,
   compileKpNativeKatexHierarchicalScenePlan,
   compileKpNativeKatexOperationTracks,
@@ -1239,6 +1240,7 @@ export function traceKpNativeKatexHandoffOwnership(input: {
 }
 
 export function createKpNativeKatexRendererSession(input: {
+  readonly sceneAssembly?: KpNativeKatexSceneAssembly | undefined;
   readonly semanticClock?: KpNativeKatexRendererReadyScenePlan["semanticClock"];
   readonly stage: HTMLElement;
   readonly sourceRoot: HTMLElement;
@@ -1304,7 +1306,7 @@ export function createKpNativeKatexRendererSession(input: {
     source: input.reconciliation.source,
     target: input.reconciliation.target
   });
-  const nativeCompatible = input.supplementalMaterialOwners === undefined &&
+  const nativeCompatible = input.sceneAssembly === undefined && input.supplementalMaterialOwners === undefined &&
     tracks.every((track) => {
     const source = sourceById.get(track.sourceAtomId ?? "");
     const target = targetById.get(track.targetAtomId ?? "");
@@ -1325,6 +1327,8 @@ export function createKpNativeKatexRendererSession(input: {
       progress,
       input.semanticClock === undefined ? endpointDwellFraction : 0
     );
+    if (input.sceneAssembly) return input.sceneAssembly.sample(
+      mode === "checkpoint-settlement" && progress < 1 ? 0 : poseProgress).frames;
     return sampleKpNativeKatexSceneTracks(
       tracks,
       mode === "checkpoint-settlement" && progress < 1
@@ -1362,7 +1366,7 @@ export function createKpNativeKatexRendererSession(input: {
             sourceAtoms: sourceById,
             targetAtoms: targetById,
             supplementalOwners:
-              input.supplementalMaterialOwners?.(poseProgress) ?? [],
+              input.sceneAssembly?.sample(poseProgress).owners ?? input.supplementalMaterialOwners?.(poseProgress) ?? [],
             visible: materialOwns
           })
         : []
@@ -1434,6 +1438,12 @@ export function compileKpCanonicalNativeKatexScenePlan(
     ownership
   } = prepared;
   const tracks = protectedTransit.tracks;
+  const measuredTracks = attachKpNativeKatexTrackPaintGeometry({ tracks, source: resolved.source, target: resolved.target });
+  const sceneAssembly = input.factoring === undefined ? undefined : createKpNativeKatexSceneAssembly({
+    source: resolved.source, target: resolved.target, tracks: measuredTracks,
+    contributions: [input.factoring.contribution], copyFanOut: input.copyFanOutRouting
+  });
+  if (sceneAssembly && syntheses.length) throw new Error("Mixed contributions require complete final-scene migration.");
   const correlations = correlateKpNativeKatexSceneHandoff({
     reconciliation,
     tracks: allTracks
@@ -1444,11 +1454,8 @@ export function compileKpCanonicalNativeKatexScenePlan(
   return createKpNativeKatexRendererReadyScenePlan({
     reconciliation,
     hierarchy,
-    tracks: attachKpNativeKatexTrackPaintGeometry({
-      tracks,
-      source: resolved.source,
-      target: resolved.target
-    }),
+    tracks: measuredTracks,
+    sceneAssembly,
     protectedTransit: protectedTransit.certificate,
     disposition: decideKpNativeKatexRendererDisposition({
       ambiguityIds: [],
@@ -1463,12 +1470,9 @@ export function compileKpCanonicalNativeKatexScenePlan(
     structuralSuccession: input.structuralSuccession,
     structuralMotion: input.structuralMotion,
     supplementalMaterialOwners:
-      syntheses.length === 0 && input.factoring === undefined
+      syntheses.length === 0
         ? undefined
-        : composeKpNativeKatexMaterialSamplers([
-            progress => sampleKpNativeKatexSuccessorSynthesisScenePlans({ plans: syntheses, progress }),
-            ...(input.factoring ? [(p: number) => input.factoring!.contribution.sample(p).owners] : [])
-          ])
+        : progress => sampleKpNativeKatexSuccessorSynthesisScenePlans({ plans: syntheses, progress })
   });
 }
 
@@ -1520,6 +1524,7 @@ export function createKpCanonicalNativeKatexCarrierSceneSession(
     targetAtoms.get(correlation.targetAtomId ?? "")?.paintKind === "glyph"
   );
   const playback = createKpNativeKatexRendererSession({
+    sceneAssembly: plan.sceneAssembly,
     stage: source.stage,
     sourceRoot: source.root,
     targetRoot: target.root,
@@ -1829,7 +1834,6 @@ function compileKpCanonicalNativeKatexProtectedPlan(
         sampleFrames
       })
     : { tracks: cached.tracks, certificate: cached.protectedTransit };
-  input.factoring?.inspectTransit(protectedTransit.tracks, sampleFrames);
   return { prepared, protectedTransit };
 }
 

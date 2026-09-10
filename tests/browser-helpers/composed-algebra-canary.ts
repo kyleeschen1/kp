@@ -7,6 +7,7 @@ import { createKpEquationFontReadiness } from "../../src/rendering/equation-font
 import { bindKpNativeKatexFactoringScene } from "../../src/rendering/native-katex-factoring-choreography.ts";
 import { inspectKpEquationProtectedTransitTracks } from "../../src/rendering/equation-motion-path-planner.ts";
 import type { KpNativeKatexSceneTrack } from "../../src/rendering/native-katex-base-scene-plan.ts";
+import { createKpNativeKatexSceneAssembly } from "../../src/rendering/native-katex-scene-assembly.ts";
 
 /** Static imports keep verifier and consumer in one Vite module revision.
  * Importing each authority URL independently can fork its private mint on HMR. */
@@ -39,7 +40,8 @@ export async function probeOmittedFactoringOccupancy(value: unknown) {
       endpoint, stage, root: stage.querySelector<HTMLElement>(`[data-kp-reader-native="${endpoint}"]`)!,
       semanticEntityId: endpoint, presentationGroupId: endpoint, fontReadiness, includeHiddenPaint: true
     });
-    const binding = bindKpNativeKatexFactoringScene({ source: observe("source"), target: observe("target"),
+    const source = observe("source"), target = observe("target");
+    const binding = bindKpNativeKatexFactoringScene({ source, target,
       intent, choreography: intent.operationPresentationPlan.choreography });
     const material = (p: number) => binding.contribution.sample(p).owners;
     const paint = material(.35).find(owner => owner.opacity === 1)!.expectedPaintRect;
@@ -56,9 +58,11 @@ export async function probeOmittedFactoringOccupancy(value: unknown) {
     const handoff = [junction - 1e-7, junction + 1e-7].map(progress => material(progress)
       .filter(owner => owner.opacity === 1).map(owner => ({ rect: owner.expectedPaintRect, focus: owner.focus?.variables })));
     let uninspectedPublicationRejected = false;
-    try { binding.recordEvidence(); } catch { uninspectedPublicationRejected = true; }
-    const combined = binding.inspectTransit([track], sampleFrames);
-    binding.recordEvidence();
+    try { Reflect.apply(binding.recordEvidence, binding, []); } catch { uninspectedPublicationRejected = true; }
+    const assembly = createKpNativeKatexSceneAssembly({ source, target,
+      tracks: [{ ...track, startPaintRect: paint, endPaintRect: paint }], contributions: [binding.contribution] });
+    const combined = assembly.audit;
+    binding.recordEvidence(assembly);
     return { isolatedIntersections: isolated.intersections.length, combinedIntersections: combined.intersections.length,
       uninspectedPublicationRejected, handoff, before, after: material(.35).map(owner => owner.expectedPaintRect) };
   } finally { fontReadiness.dispose(); }

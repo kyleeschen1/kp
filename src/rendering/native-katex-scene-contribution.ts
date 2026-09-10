@@ -2,8 +2,6 @@ import type { KpEquationMaterialLayerOwnerFrame } from "./equation-material-laye
 import type { KpEquationProtectedTransitFrame } from "./equation-motion-path-planner.ts";
 import type { KpNativeKatexRenderedSceneObservation } from "./native-katex-rendered-scene.ts";
 
-export type KpNativeKatexMaterialSampler =
-  (progress: number) => readonly KpEquationMaterialLayerOwnerFrame[];
 
 export interface KpNativeKatexMeasuredMaterialFrame extends KpEquationMaterialLayerOwnerFrame {
   readonly expectedPaintRect: NonNullable<KpEquationMaterialLayerOwnerFrame["expectedPaintRect"]>;
@@ -121,18 +119,6 @@ export function createKpNativeKatexSceneContribution(input: {
 export function isKpNativeKatexSceneContribution(value: unknown): value is KpNativeKatexSceneContribution {
   return typeof value === "object" && value !== null &&
     liveContributions.has(value as KpNativeKatexSceneContribution);
-}
-
-/** Composition owns ordering; an operation sampler does not nest another owner. */
-export function composeKpNativeKatexMaterialSamplers(
-  samplers: readonly KpNativeKatexMaterialSampler[]
-): KpNativeKatexMaterialSampler {
-  const participants = [...samplers];
-  return progress => {
-    if (!Number.isFinite(progress)) throw new Error("Material progress must be finite.");
-    const bounded = Math.max(0, Math.min(1, progress));
-    return Object.freeze(participants.flatMap(sample => sample(bounded)));
-  };
 }
 
 /** Occupancy follows transformed measured ink, never a layout-box fallback. */

@@ -121,10 +121,9 @@ const returnPosition = captureComposedAlgebraPosition(draft, .7);
 const restored: number = resolveComposedAlgebraPosition(draft, returnPosition);
 void [reading.facts.states, prompts[0]?.projection.diagnostics, restored];
 import type { KpNativeKatexFactoringSceneBinding } from "../../src/rendering/native-katex-factoring-binding-types.ts";
-declare const unprotectedFactoring: Omit<KpNativeKatexFactoringSceneBinding, "inspectTransit">;
-// @ts-expect-error Supplemental factoring paint cannot omit its joint occupancy audit.
-const omittedOccupancy: KpNativeKatexFactoringSceneBinding = unprotectedFactoring;
-void omittedOccupancy;
+declare const protectedFactoring: KpNativeKatexFactoringSceneBinding;
+// @ts-expect-error Factoring publication cannot omit issued final-scene inspection.
+protectedFactoring.recordEvidence();
 declare const unboundFactoring: Omit<KpNativeKatexFactoringSceneBinding, "contribution">;
 // @ts-expect-error Factoring cannot provide paint without issued participant/measurement authority.
 const omittedContribution: KpNativeKatexFactoringSceneBinding = unboundFactoring;
