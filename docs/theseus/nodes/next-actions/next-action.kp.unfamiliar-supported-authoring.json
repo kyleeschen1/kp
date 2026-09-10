@@ -77,6 +77,12 @@
       "status": "passed",
       "scope": "s09",
       "checkedAt": "2026-09-10T19:10:35.543Z"
+    },
+    {
+      "command": "npm run check:unfamiliar-authoring-trial; exact evaluation probe exits 2 then 0; git diff --check",
+      "status": "passed",
+      "scope": "s10",
+      "checkedAt": "2026-09-10T19:12:35.131Z"
     }
   ],
   "expectedLearning": [

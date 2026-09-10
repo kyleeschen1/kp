@@ -96,7 +96,8 @@
     {
       "id": "s10",
       "title": "Capture wrong-sum repair",
-      "status": "planned"
+      "summary": "Deliberate wrong sum rejected at final state; one source repair compiled without intervention.",
+      "status": "complete"
     },
     {
       "id": "s11",

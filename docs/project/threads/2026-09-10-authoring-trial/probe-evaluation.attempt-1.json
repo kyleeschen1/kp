@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "kp.composed-algebra-source.v1",
+  "id": "lesson.repeated-groups.probe-evaluation",
+  "domain": "real-scalars",
+  "symbols": [
+    "x"
+  ],
+  "states": [
+    {
+      "id": "state.probe-evaluation.expanded",
+      "latex": "3(x+2)+4(x+2)",
+      "narration": "Three copies and four copies share the same group x+2."
+    },
+    {
+      "id": "state.probe-evaluation.collected",
+      "latex": "(3+4)(x+2)",
+      "narration": "Collect the original coefficients as three plus four, keeping x+2 intact."
+    },
+    {
+      "id": "state.probe-evaluation.evaluated",
+      "latex": "8(x+2)",
+      "narration": "Evaluate only the coefficient sum; the group x+2 remains unchanged."
+    }
+  ],
+  "editorial": {
+    "title": "Check the total number of copies",
+    "setup": "After collecting identical groups, check the arithmetic in their coefficient sum.",
+    "summary": "The total coefficient must equal the sum of the original counts; the variable group stays unchanged."
+  }
+}
