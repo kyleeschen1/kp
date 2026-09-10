@@ -55,7 +55,8 @@
     {
       "id": "s02",
       "title": "Map canonical semantic and compositor owners",
-      "status": "planned"
+      "summary": "Four canonical planners execute; exact endpoint and contextual-authority gaps mapped; 63 focused tests pass.",
+      "status": "complete"
     },
     {
       "id": "s03",

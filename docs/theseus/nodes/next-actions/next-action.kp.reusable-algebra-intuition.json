@@ -17,6 +17,10 @@
     {
       "kind": "file",
       "path": "docs/project/authoring/reusable-algebra-intuition-brief.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/authoring/reusable-algebra-owner-map.md"
     }
   ],
   "dependsOn": {
@@ -38,6 +42,13 @@
       "scope": "s01",
       "checkedAt": "2026-09-10T23:17:25.119Z",
       "notes": "61 tests pass. Both retained v1 workflows reproduce repairs, revisions and static publications. No production edits."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring",
+      "status": "passed",
+      "scope": "s02",
+      "checkedAt": "2026-09-10T23:20:40.489Z",
+      "notes": "63 tests pass, including four canonical planner probes and rejection of unrelated endpoint composition. This is not browser certification."
     }
   ],
   "progress": {
