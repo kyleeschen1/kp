@@ -92,6 +92,43 @@ for (const selected of unfamiliarAuthoringCases) test(`authoring trial projectio
   expect(errors).toEqual([]);
 });
 
+for (const selected of unfamiliarAuthoringCases) test(`authoring trial narrow reduced-motion reverse ${selected.name}`, async ({ page }) => {
+  test.setTimeout(120_000);
+  const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
+  await page.setViewportSize({ width: 390, height: 900 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/experiments/reusable-reasoning/?example=composed-algebra");
+  const root = page.locator("#authored-focus-card");
+  await expect(root).toHaveAttribute("data-composed-status", "ready", { timeout: 90_000 });
+  await root.locator("[data-reasoning-editor] summary").click();
+  await root.locator("[data-reasoning-json]").fill(selected.text);
+  await root.locator("[data-composed-apply]").click();
+  await expect(root.locator("[data-reasoning-draft-status]")).toHaveAttribute("data-status", "applied", { timeout: 90_000 });
+  await root.locator("[data-reasoning-editor] summary").click();
+  const card = root.locator("[data-composed-reader] [data-composed-card]");
+  const slider = card.locator("[data-kp-focus-deck-scrubber]");
+  for (const step of [1, 2, 1, 0]) {
+    await slider.focus(); await page.keyboard.press(step > Number(await card.getAttribute("data-composed-step")) ? "ArrowRight" : "ArrowLeft");
+    await expect(card).toHaveAttribute("data-composed-step", String(step));
+    await expect(card).toHaveAttribute("data-common-factor-state", selected.source.states[step]!.id);
+    await expect(card.locator("[data-composed-count]")).toHaveText(`${step + 1} / 3`);
+    const bounds = await card.evaluate(node => ({
+      headerBottom: node.querySelector(".kp-focus-deck__header")!.getBoundingClientRect().bottom,
+      passageTop: node.querySelector("[data-kp-focus-deck-viewport]")!.getBoundingClientRect().top,
+      overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    }));
+    expect(bounds.passageTop).toBeGreaterThanOrEqual(bounds.headerBottom);
+    expect(bounds.overflow).toBeLessThanOrEqual(1);
+  }
+  // Reduced motion must not disable continuous, directly controlled positions.
+  for (const position of [1.37, .37, 0]) {
+    await slider.evaluate((node, p) => { (node as HTMLInputElement).value = String(p); node.dispatchEvent(new Event("input")); }, position);
+    await expect(card).toHaveAttribute("data-composed-step", String(position));
+  }
+  await expect(root).toHaveAttribute("data-composed-revision", selected.draft.revisionId);
+  expect(errors).toEqual([]);
+});
+
 test("authoring trial editions retain exact source without JavaScript", async ({ browser }) => {
   test.setTimeout(120_000);
   const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 900 } });

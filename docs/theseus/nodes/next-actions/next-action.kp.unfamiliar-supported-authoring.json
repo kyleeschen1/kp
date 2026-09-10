@@ -2,9 +2,9 @@
   "id": "next-action.kp.unfamiliar-supported-authoring",
   "kind": "next-action",
   "title": "Measure unfamiliar supported authoring leverage",
-  "status": "deferred",
+  "status": "ready",
   "domain": "authoring",
-  "summary": "HUMAN_CHECKPOINT: review the exact repeated-groups source set and preserved motion; no engine edits. After acceptance resume existing s18-s20.",
+  "summary": "User accepted s17 with it works on 2026-09-10; resume approved s18 browser promotion, s19 release and s20 closeout. No successor scope.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -152,6 +152,12 @@
       "scope": "handoff",
       "checkedAt": "2026-09-10T19:37:30.962Z",
       "notes": "Generic resume still exceeds its capsule budget; targeted fallback documented without changing limits or clearing state."
+    },
+    {
+      "command": "npm run visual:composed-algebra:cohort",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-10T19:53:00.373Z"
     }
   ],
   "progress": {

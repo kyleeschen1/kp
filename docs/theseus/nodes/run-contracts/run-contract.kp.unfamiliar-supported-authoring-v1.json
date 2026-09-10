@@ -2,8 +2,8 @@
   "id": "run-contract.kp.unfamiliar-supported-authoring-v1",
   "kind": "run-contract",
   "title": "Unfamiliar supported authoring",
-  "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT 17/20. Required s17 visual verdict pending; do not execute s18-s20 until accepted.",
+  "status": "ready",
+  "summary": "User accepted s17 with it works on 2026-09-10; resume approved s18 browser promotion, s19 release and s20 closeout. No successor scope.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -148,7 +148,8 @@
     {
       "id": "s18",
       "title": "Pressure accepted content across browsers",
-      "status": "planned"
+      "summary": "Accepted set passes 111 browser checks, full types and 61 focused tests; production unchanged",
+      "status": "complete"
     },
     {
       "id": "s19",

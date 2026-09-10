@@ -79,6 +79,28 @@ see `../../reviews/2026-09-10-unfamiliar-authoring-visual-checkpoint.md`.
 
 ## Resume-capsule budget fallback
 
+## Accepted-set browser promotion
+
+The user accepted the s17 packet with “it works!” on 2026-09-10. Earlier
+pending-review statements above describe the evidence at those boundaries.
+`npm run visual:composed-algebra:cohort`: **111 passed**, 7.9 minutes:
+37 each in Chromium, Firefox and WebKit, zero failures. This includes 48 trial
+checks (16 per browser) and 63 retained primary/product checks. The five added
+trial checks use 390px, reduced motion, adjacent keyboard forward/reverse,
+native state/count agreement, header/passage separation, no horizontal overflow,
+and direct interior seek/reverse with unchanged source revision and no page errors.
+No new treatment or production code was needed. Automated WebKit is not a
+physical Safari touch/trackpad test or learner-comprehension evidence.
+
+Full `npm run typecheck` passes, Svelte zero errors/warnings; focused authoring
+suite passes 61 tests; all 11 original attempts replay exactly. Complete
+compositor source cost is unchanged at 562,416 / 575,000 bytes, 33 / 34 modules.
+Release preflight reports the generated reachability inventory stale after new
+test/tool files; diagnose and refresh only verified inventory bookkeeping at
+the release slice. No gate has been waived.
+
+## Resume-capsule budget fallback (historical checkpoint)
+
 Post-checkpoint handoff verification found `theseus work resume` fails with
 1,632 tokens against the package's fixed 1,200 limit. `--limit 1` still reports
 1,632; `--after event.activated.workflow.kp.delivery.20260910193356456.dj5.1`

@@ -118,10 +118,10 @@ Active approved work is the 20-slice
 source-only repeated-group variants before capability expansion. One fresh-context
 local author agent is approved; stop at the batched s17 visual/pedagogical review.
 No engine expansion or automatic successor is authorized.
-The run is now at that human checkpoint:
+The user accepted that human checkpoint with “it works!” on 2026-09-10:
 `reviews/2026-09-10-unfamiliar-authoring-visual-checkpoint.md`. Five source-only
 variants pass actual Apply, projections and immutable publication with no engine
-edits. After visual acceptance continue the same contract's promotion, release
+edits. Continue the same contract's approved promotion, release
 and closeout; do not restart authoring or the completed compositor migration.
 Recommended engineering-budget repairs now have persistent automatic approval:
 `decisions/2026-09-10-engineering-budget-repair-autonomy.md`. Keep complete

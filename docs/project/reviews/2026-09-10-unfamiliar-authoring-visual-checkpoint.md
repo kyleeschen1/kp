@@ -1,9 +1,10 @@
 # Repeated-group authoring trial — human checkpoint
 
-Date: 2026-09-10. Outcome: HUMAN_CHECKPOINT.
+Date: 2026-09-10. Outcome: accepted; former HUMAN_CHECKPOINT.
 Contract: `run-contract.kp.unfamiliar-supported-authoring-v1`.
 Target: `next-action.kp.unfamiliar-supported-authoring`.
-The s17 review packet is ready; visual/pedagogical acceptance is not assumed.
+The user accepted this s17 review packet with “it works!” on 2026-09-10.
+This accepts promotion of the bounded explanation set, not a comprehension claim.
 After acceptance, continue s18–s20 (browser promotion, release, conclusions),
 not another authoring or compositor loop. Theseus owns the exact live count.
 
