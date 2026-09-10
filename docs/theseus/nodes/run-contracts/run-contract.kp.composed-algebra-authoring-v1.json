@@ -53,7 +53,8 @@
     {
       "id": "s03",
       "title": "Characterize compound factors, orientation and mixed-chain gaps",
-      "status": "planned"
+      "summary": "Mixed-chain rejection characterization and stable scoped test command pass5 tests.",
+      "status": "complete"
     },
     {
       "id": "s04",
