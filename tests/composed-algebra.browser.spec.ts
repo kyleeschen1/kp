@@ -5,6 +5,53 @@ import { composedAlgebraPressureCases } from "./fixtures/composed-algebra-pressu
 import { kpEquationSettlementTolerancePx } from "../src/animation/equation-shared-presentation-policy.ts";
 import { buildComposedAlgebraEdition } from "../scripts/build-composed-algebra-edition.ts";
 import { fileURLToPath } from "node:url";
+import { unfamiliarAuthoringCases, unfamiliarAuthoringRejections } from "./fixtures/unfamiliar-authoring-trial.ts";
+
+for (const selected of unfamiliarAuthoringCases) test(`authoring trial Apply and controls ${selected.name}`, async ({ page }, info) => {
+  test.setTimeout(120_000);
+  const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/experiments/reusable-reasoning/?example=composed-algebra");
+  const root = page.locator("#authored-focus-card");
+  await expect(root).toHaveAttribute("data-composed-status", "ready", { timeout: 90_000 });
+  await root.locator("[data-reasoning-editor] summary").click();
+  const editor = root.locator("[data-reasoning-json]"), status = root.locator("[data-reasoning-draft-status]");
+  await editor.fill(selected.text); await root.locator("[data-composed-apply]").click();
+  await expect(status).toHaveAttribute("data-status", "applied", { timeout: 90_000 });
+  await expect(root).toHaveAttribute("data-composed-revision", selected.draft.revisionId);
+  await expect(root.locator("[data-composed-title]")).toHaveText(selected.source.editorial.title);
+  const card = root.locator("[data-composed-reader] [data-composed-card]");
+  const slider = card.locator("[data-kp-focus-deck-scrubber]");
+  await expect(slider).toHaveAttribute("max", "2");
+  await expect(card.locator("[data-kp-focus-deck-beat]")).toHaveCount(3);
+  for (const step of [1, 2]) {
+    await card.locator("[data-kp-focus-deck-next]").click();
+    await expect.poll(async () => Number(await card.getAttribute("data-composed-step"))).toBeGreaterThan(step - 1);
+    expect(Number(await card.getAttribute("data-composed-step"))).toBeLessThan(step);
+    await expect(card).toHaveAttribute("data-composed-step", String(step), { timeout: 10_000 });
+    await expect(card.locator("[data-composed-count]")).toHaveText(`${step + 1} / 3`);
+    await expect(card).toHaveAttribute("data-common-factor-state", selected.source.states[step]!.id);
+  }
+  await slider.focus(); await page.keyboard.press("ArrowLeft");
+  await expect(card).toHaveAttribute("data-composed-step", "1", { timeout: 10_000 });
+  for (const position of [0, .37, 1, 1.37, 2]) {
+    await slider.evaluate((node, p) => { (node as HTMLInputElement).value = String(p); node.dispatchEvent(new Event("input")); }, position);
+    await expect(card).toHaveAttribute("data-composed-step", String(position));
+    await card.screenshot({ path: info.outputPath(`trial-${position}.png`) });
+  }
+  for (const rejected of unfamiliarAuthoringRejections) {
+    await editor.fill(rejected.text); await root.locator("[data-composed-apply]").click();
+    await expect(status).toHaveAttribute("data-status", "repair-gap");
+    await expect(root).toHaveAttribute("data-composed-revision", selected.draft.revisionId);
+    await expect(card).toHaveAttribute("data-composed-step", "2");
+  }
+  const download = page.waitForEvent("download"); await root.locator("[data-composed-download]").click();
+  const stream = await (await download).createReadStream();
+  let bytes = ""; for await (const chunk of stream!) bytes += chunk.toString();
+  expect(JSON.parse(bytes)).toEqual(selected.source);
+  await expect(page.locator(".common-factor-staging")).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
 
 for (const width of [1280, 390]) test(`primary combined review at ${width}px`, async ({ page }, info) => {
   test.setTimeout(120_000);

@@ -120,7 +120,8 @@
     {
       "id": "s14",
       "title": "Verify Apply preservation and export",
-      "status": "planned"
+      "summary": "All five sources pass real Apply controls and invalid-draft preservation; 51 tests and full types pass.",
+      "status": "complete"
     },
     {
       "id": "s15",
