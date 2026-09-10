@@ -54,7 +54,8 @@
     {
       "id": "s03",
       "title": "Add minimal attempt ledger and case runner",
-      "status": "planned"
+      "summary": "Minimal attempt replay guard passes 51 focused tests and full typecheck; no production changes.",
+      "status": "complete"
     },
     {
       "id": "s04",

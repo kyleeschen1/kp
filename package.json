@@ -12,6 +12,7 @@
     "test:composed-algebra-authoring": "node --disable-warning=ExperimentalWarning --test tests/composed-algebra-*.test.ts",
     "check:common-factor-workflow": "node --disable-warning=ExperimentalWarning scripts/check-common-factor-workflow.ts",
     "check:composed-algebra-workflow": "node --disable-warning=ExperimentalWarning scripts/check-composed-algebra-workflow.ts",
+    "check:unfamiliar-authoring-trial": "node --disable-warning=ExperimentalWarning scripts/check-unfamiliar-authoring-trial.ts",
     "visual:common-factor-authoring": "playwright test --config playwright.common-factor-review.config.ts --workers=1",
     "visual:composed-algebra": "playwright test --config playwright.composed-algebra-review.config.ts --project=chromium --workers=1",
     "visual:composed-algebra:cohort": "playwright test --config playwright.composed-algebra-review.config.ts --workers=1",
