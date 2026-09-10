@@ -24,5 +24,19 @@ are not a new continuous-time compositor certification or physical Safari test.
 errors/warnings. `git diff --check` passed. No production `src` or `domains`
 changes relative to the frozen task commit `ba83999a5`.
 
-Readings/practice, new editions, promotion browsers and final release remain
-separate checks; do not infer those results from this Apply cohort.
+## Readings, prompts and exact return
+
+`npm run visual:composed-algebra -- --grep 'authoring trial projections'`:
+**5 passed**, Chromium, 22.5 seconds. Full and Compact preserve all three exact
+authored LaTeX strings and the displayed revision. Both prompt answers match
+the selected source; returning restores step 1.37 and keyboard focus, with no
+page errors. The paused intermediate capture intentionally contains in-flight
+ink and horizontally traveling passages; it is not a settled-state golden.
+
+`npm run test:composed-algebra-authoring`: **56 passed**, including five new
+projection checks for exact facts, source/revision references, prompt answers
+and rejection of another case's return position. Full `npm run typecheck`
+passes again, with zero Svelte errors/warnings. No production changes.
+
+New editions, promotion browsers and final release remain separate checks;
+do not infer those results from these two Chromium cohorts.

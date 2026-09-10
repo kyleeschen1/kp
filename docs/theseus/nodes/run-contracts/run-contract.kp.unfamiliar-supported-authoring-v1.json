@@ -126,7 +126,8 @@
     {
       "id": "s15",
       "title": "Verify readings prompts and exact return",
-      "status": "planned"
+      "summary": "Five browser projection cases and 56 focused tests pass with full types; exact revision and return preserved.",
+      "status": "complete"
     },
     {
       "id": "s16",

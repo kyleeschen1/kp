@@ -107,6 +107,12 @@
       "status": "passed",
       "scope": "s14",
       "checkedAt": "2026-09-10T19:21:32.515Z"
+    },
+    {
+      "command": "npm run visual:composed-algebra -- --grep 'authoring trial projections'; npm run test:composed-algebra-authoring; npm run typecheck; git diff --check",
+      "status": "passed",
+      "scope": "s15",
+      "checkedAt": "2026-09-10T19:24:58.055Z"
     }
   ],
   "expectedLearning": [

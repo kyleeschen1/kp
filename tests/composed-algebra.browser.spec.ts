@@ -53,6 +53,45 @@ for (const selected of unfamiliarAuthoringCases) test(`authoring trial Apply and
   expect(errors).toEqual([]);
 });
 
+for (const selected of unfamiliarAuthoringCases) test(`authoring trial projections ${selected.name}`, async ({ page }, info) => {
+  test.setTimeout(120_000);
+  const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
+  await page.goto("/experiments/reusable-reasoning/?example=composed-algebra");
+  const root = page.locator("#authored-focus-card");
+  await expect(root).toHaveAttribute("data-composed-status", "ready", { timeout: 90_000 });
+  await root.locator("[data-reasoning-editor] summary").click();
+  await root.locator("[data-reasoning-json]").fill(selected.text);
+  await root.locator("[data-composed-apply]").click();
+  await expect(root.locator("[data-reasoning-draft-status]")).toHaveAttribute("data-status", "applied", { timeout: 90_000 });
+  const card = root.locator("[data-composed-reader] [data-composed-card]");
+  const reading = root.locator("[data-composed-reading-output]");
+  for (const mode of ["full", "compact"]) {
+    await root.locator("[data-composed-reading]").selectOption(mode);
+    await expect(reading).toHaveAttribute("data-revision", selected.draft.revisionId);
+    await expect(reading.locator("math")).toHaveCount(3);
+    expect(await reading.locator('annotation[encoding="application/x-tex"]').allTextContents())
+      .toEqual(selected.source.states.map(state => state.latex));
+    await expect(reading).toContainText(selected.source.editorial.summary);
+  }
+  await card.locator("[data-kp-focus-deck-scrubber]").evaluate(node => {
+    (node as HTMLInputElement).value = "1.37"; node.dispatchEvent(new Event("input"));
+  });
+  for (const kind of ["prediction", "reconstruction"] as const) {
+    const origin = root.locator(`[data-composed-practice="${kind}"]`);
+    await origin.click();
+    await expect(reading).toBeHidden();
+    await expect(root.locator("[data-composed-answer]")).toBeHidden();
+    await root.locator("[data-composed-reveal]").click();
+    await expect(root.locator("[data-composed-answer]")).toContainText(selected.source.states[kind === "prediction" ? 1 : 2].latex);
+    await root.locator("[data-composed-return]").click();
+    await expect(origin).toBeFocused();
+    await expect(card).toHaveAttribute("data-composed-step", "1.37");
+    await expect(root).toHaveAttribute("data-composed-revision", selected.draft.revisionId);
+  }
+  await page.screenshot({ path: info.outputPath("trial-reading.png"), fullPage: true });
+  expect(errors).toEqual([]);
+});
+
 for (const width of [1280, 390]) test(`primary combined review at ${width}px`, async ({ page }, info) => {
   test.setTimeout(120_000);
   const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
