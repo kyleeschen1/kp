@@ -83,7 +83,8 @@
     {
       "id": "s08",
       "title": "Verify exact constant-sum evaluation inside unchanged context",
-      "status": "planned"
+      "summary": "Authenticated exact contextual coefficient evaluation with canonical successor asset and immutable evidence; failures corrected and all checks pass.",
+      "status": "complete"
     },
     {
       "id": "s09",

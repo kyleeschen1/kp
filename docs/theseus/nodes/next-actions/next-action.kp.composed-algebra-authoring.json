@@ -76,6 +76,20 @@
       "scope": "s07",
       "checkedAt": "2026-09-10T00:28:28.496Z",
       "notes": "14 tests. Zero, repeated symbols, wider coefficients, forged evidence, altered order/context and bounded direct callers covered. Core113123/193558 combined170268/283187 within fixed ceilings."
+    },
+    {
+      "command": "npx tsc --project tsconfig.test.json --noEmit",
+      "status": "failed",
+      "scope": "s08",
+      "checkedAt": "2026-09-10T00:35:24.274Z",
+      "notes": "Supplemental post-freeze check found unknown asset-value type in mutation test plus sandboxed incremental cache write. Test now narrows unknown to object; rerun approved full npm typecheck without relaxing assertion."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring; npm run typecheck; npm run check:inference; node --test tests/operation-evaluation-exemplar.test.ts tests/evaluation-authority-architecture.test.ts",
+      "status": "passed",
+      "scope": "s08",
+      "checkedAt": "2026-09-10T00:36:39.111Z",
+      "notes": "16 plus8 tests; full corrected typecheck clean. BigInt exactness, safe boundary, overflow, context/orientation, forgery and asset mutation checked. Core113123/193558 combined170333/283277 within fixed budgets."
     }
   ],
   "expectedLearning": [

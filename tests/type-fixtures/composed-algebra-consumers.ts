@@ -46,3 +46,11 @@ const legacyCompound: KpVerifiedComposedFactoring = proof;
 // @ts-expect-error the new proof cannot silently widen an M1a caller
 const compoundLegacy: KpVerifiedCommonFactorRewrite = factoring;
 void [authenticated, forgedCompound, legacyCompound, compoundLegacy];
+import { verifyKpComposedEvaluation, isKpVerifiedComposedEvaluation, type KpVerifiedComposedEvaluation } from "../../src/semantic/composed-algebra-evaluation.ts";
+const contextual = verifyKpComposedEvaluation({ factoring, target: endpoints[2].structured });
+const evaluationAuthenticated: boolean = isKpVerifiedComposedEvaluation(contextual);
+// @ts-expect-error a descriptor cannot stand in for exact contextual arithmetic
+const forgedEvaluation: KpVerifiedComposedEvaluation = evaluation;
+// @ts-expect-error parsed source is not the authenticated first deduction
+verifyKpComposedEvaluation({ factoring: source, target: endpoints[2].structured });
+void [evaluationAuthenticated, forgedEvaluation, contextual.localEvaluation];

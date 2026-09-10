@@ -266,6 +266,8 @@ function sameIds(
   return actual.length === expected.length && actual.every((node, index) => node.id === expected[index]?.id);
 }
 
+// Shared structural equality ignores occurrence IDs, never operand order.
+export { sameSemanticTree as sameKpStructuredExpressionTree };
 function sameSemanticTree(
   left: KpStructuredExpressionNode,
   right: KpStructuredExpressionNode
