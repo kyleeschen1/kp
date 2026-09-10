@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: M1b complete; compositor extension-participation proposal awaits scope approval; R1–R4B and M1a remain complete
+Status: compositor extension-participation loop approved and active; M1b, R1–R4B and M1a remain complete
 Last Updated: 2026-09-10
 Current successor reference: `../reviews/2026-09-07-reconciled-authoring-loop-horizon.md`.
 It preserves the original architectural obligations and the tax/Bayes direction;
@@ -63,11 +63,16 @@ do not treat its proposed roadmap or readiness labels as new execution authority
 The user clarified the remaining code issue as missing gradual passage swiping.
 The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
-Current Next Action: review
+Current Next Action: execute the approved scope in
 `../reviews/2026-09-10-compositor-extension-occupancy-long-loop-proposal.md` before
 starting another specialized motif. Named action:
-`next-action.kp.compositor-extension-occupancy`, deferred until explicit scope
-approval; no successor execution contract is active. M1b is complete under
+`next-action.kp.compositor-extension-occupancy`, under
+`run-contract.kp.compositor-extension-occupancy-v2`. The unstarted v1 is superseded.
+The accepted 2026-09-10 direction
+keeps this repair finite, then measures unfamiliar supported authoring before
+new capability expansion; see
+`../decisions/2026-09-10-authoring-leverage-after-bounded-compositor-repair.md`.
+The revised exact 24-slice scope is approved. M1b is complete under
 `run-contract.kp.composed-algebra-authoring-v1`; see
 `../reviews/2026-09-10-composed-algebra-authoring-closeout.md` for author capability,
 both source-only callers, full release evidence, inspection links and limits.

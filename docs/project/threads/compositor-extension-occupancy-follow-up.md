@@ -8,10 +8,10 @@ input, not authorization to execute a new loop or replace the compositor.
 
 M1b's closeout carried this recommendation forward on 2026-09-10. The explicit
 proposal is `../reviews/2026-09-10-compositor-extension-occupancy-long-loop-proposal.md`;
-the named action is `next-action.kp.compositor-extension-occupancy`, deferred
-pending scope approval. No successor execution contract is active. Keep that
-action pending until implemented or explicitly superseded; creating the proposal
-does not complete this recommendation.
+the named action is `next-action.kp.compositor-extension-occupancy`. The user
+approved the revised 24-slice scope; execution is
+`run-contract.kp.compositor-extension-occupancy-v2`. Keep the recommendation open
+until implemented or explicitly superseded; approval does not mean completion.
 Do not close the recommendation merely because factoring passes its checkpoint.
 The approved exemplar review and source-only second-chain pressure are complete;
 see `../reviews/2026-09-10-composed-algebra-authoring-closeout.md`.

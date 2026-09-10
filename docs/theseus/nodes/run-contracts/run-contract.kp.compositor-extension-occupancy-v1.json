@@ -1,0 +1,156 @@
+{
+  "id": "run-contract.kp.compositor-extension-occupancy-v1",
+  "kind": "run-contract",
+  "title": "Compositor extension participation",
+  "status": "superseded",
+  "summary": "Unstarted metadata-incomplete creation superseded by v2 with the same approved 24 slices and explicit cadence, max slices, run mode and stop conditions. No implementation ran under v1.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.compositor-extension-occupancy.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-10-compositor-extension-occupancy-long-loop-proposal.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run test:canonical-equation-renderer",
+    "npm run test:composed-algebra-authoring",
+    "npm test",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Exact approved 24-slice proposal: inventory and costed consolidation, required contribution contract, final-scene evidence, migration, preservation, release and authoring-trial successor proposal. One scoped commit and closed receipt per slice; brief context by default."
+  ],
+  "disallowedWork": [
+    "No changed motifs without review, collision optimizer, universal engine, new subject family, editor rewrite, external models, subagents, merge, deployment, automatic successor or unapproved non-TypeScript budget amendment."
+  ],
+  "goal": "Require complete current final-scene inspection participation for in-scope native KaTeX extensions while preserving accepted motifs, then hand off to measured unfamiliar authoring.",
+  "target": "next-action.kp.compositor-extension-occupancy",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Inventory final paint and inspection owners",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Measure complete costs and select useful consolidation",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Characterize contribution and stale-evidence bypasses",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Pin factoring and a different existing mechanism",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Consolidate demonstrated assembly and measurement duplication",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Require coupled sampler and occupancy contribution types",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Bind participant and measurement identity",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Migrate factoring contribution preserving choreography",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Inspect final assembled scene after routing and partitioning",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Authenticate inspection for the exact assembled sampler",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Invalidate geometry font and coordinate evidence at cache reuse",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Separate diagnostic contact from hard lifecycle invariants",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Verify accepted exemplar preservation before generalization",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Migrate a different existing mechanism through the same seam",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Execute real native material native continuity laws",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Complete inventoried in-scope caller migration",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Retire unchecked callback and metadata authority paths",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Pressure direct seek reverse and interruption",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Pressure resize fonts disposal remount and reduced motion",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Bound unsampled trajectory assurance without optimization",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Publish executed mechanism evidence and extension instructions",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Run supported-browser and retained-caller promotion",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Run full release cost isolation and edition checks",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Close out and propose unfamiliar supported-authoring trial",
+      "status": "planned"
+    }
+  ]
+}

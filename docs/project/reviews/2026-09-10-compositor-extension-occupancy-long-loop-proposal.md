@@ -1,8 +1,16 @@
 # Compositor extension participation — proposed long loop
 
-Date: 2026-09-10. Status: PROPOSED, awaiting explicit scope approval.
-Pending target: `next-action.kp.compositor-extension-occupancy`.
-No successor execution contract is activated by this document.
+Date: 2026-09-10. Status: APPROVED by the user's explicit “approve”.
+Target: `next-action.kp.compositor-extension-occupancy`.
+Execution: `run-contract.kp.compositor-extension-occupancy-v2`.
+The unstarted metadata-incomplete v1 record is superseded, not another queue.
+
+Revised after the user's agreement with
+`2026-09-10-project-value-and-next-step-review.md`: finish this finite reliability
+seam, then measure unfamiliar real authoring before further capability expansion.
+Agreement with that direction is recorded in
+`../decisions/2026-09-10-authoring-leverage-after-bounded-compositor-repair.md`;
+the user subsequently approved this exact revised execution plan.
 
 ## Recommendation and product value
 
@@ -81,13 +89,27 @@ stop with a measured non-TypeScript policy proposal before exceeding the gate.
 Approval of this plan would not itself approve that amendment. TypeScript cost
 repairs retain the standing measured, complete-consumer policy. Runtime, reader,
 source and production-isolation gates otherwise remain fixed.
+Do not minify readable source, obscure intent or distort module boundaries to
+fit the source counter. Source-size, shipped payload, TypeScript inference and
+interaction latency are separate measurements. If the small clear design needs
+a non-TypeScript amendment, report it explicitly rather than gaming accounting.
 
 On approval, materialize one Theseus contract from this proposal with the exact
 24 slices below; Theseus then owns order, status and evidence. One scoped commit
-and context receipt per slice. F = focused law/type tests and diff checks;
-S adds full affected types, architecture and Theseus validation; V adds a real
-canonical Chromium compositor canary. Broad browser/release checks happen at
-promotion, not during speculative visual discovery. Planning allowance: 6–12
+and context receipt per slice. Every row is one independently verified commit,
+including its closed receipt and evidence. Retrieve brief target context per
+slice; use working context only for a demonstrated gap, not the historical corpus.
+
+Verification levels: F (focused) = owning law/unit tests and diff checks.
+S (standard) adds `npm run typecheck`, affected architecture checks and
+`theseus workspace validate`. B (broad) adds affected integration/lifecycle tests
+and a real canonical Chromium compositor canary for runtime/paint changes.
+Use `npm run test:canonical-equation-renderer`, `npm run test:composed-algebra-authoring`
+and existing scoped browser commands as applicable; extend a committed scoped
+entrypoint for the second mechanism instead of disposable browser scripts.
+The full supported-browser matrix is s22; full tests/build, reader budgets,
+production isolation and retained edition reproduction are s23. Do not run that
+entire release battery after each small slice. Planning allowance: 6–12
 active hours, not a completion-time promise. No subagents or external model calls.
 
 Routine nonvisual checks continue automatically. The accepted M1b appearance is
@@ -97,35 +119,40 @@ treatment, stop on the reversible exemplar and present it before promotion.
 Stop also for missing authority, unsafe action, required unavailable proof,
 budget violation, material scope expansion or user pause. No merge, deployment,
 new subject family, universal compositor, host redesign or automatic successor.
+These shared stop conditions apply to every row below (G); each row may add a
+narrower stop. A routine failed check calls for an in-scope repair, not a waiver
+or automatic handoff. The initial scope approval is the only planned human
+decision if the accepted appearance remains unchanged. If a new treatment is
+necessary, provide its exact working shared-server URL and one review packet.
 
 ## Ordered slices
 
-| Slice | Bounded outcome | Verification / stop boundary |
-| --- | --- | --- |
-| s01 | Pin actual extension owners and final paint/inspection coverage inventory | F: source-backed map, uncovered paths explicit |
-| s02 | Capture complete source, runtime and inference costs; select useful consolidation | S: unchanged coverage; stop if no credible fixed-budget path |
-| s03 | Characterize bypasses with deterministic tests before changing authority | F: unchecked contribution, stale evidence and missing participant cases |
-| s04 | Pin preserved factoring exemplar and a different existing mechanism | V: actual native/material/native observation; select by topology, not glyph spelling |
-| s05 | Remove demonstrated duplicate assembly/measurement plumbing within existing owners | S: equivalent outputs, measured headroom; no accounting escape |
-| s06 | Introduce minimal required contribution shape coupling sampler and occupancy | S: missing occupancy fails type tests; no new operation switch |
-| s07 | Bind participant identity and coordinate/measurement revision at contribution creation | F: duplicate, absent and incompatible-frame rejection |
-| s08 | Integrate factoring contribution through its complete canonical binding | V: accepted arcs, grouped paint and fusion preserved |
-| s09 | Move inspection to final assembly after ownership partition and routing | F+V: no supplemental participant omitted; no duplicate audit authority |
-| s10 | Issue authenticated inspection evidence for the exact assembled sampler | S: raw flags, copied payloads and unrelated sampler rejected |
-| s11 | Enforce geometry/font/coordinate invalidation and safe cache reuse | F+V: stale measured scenes cannot retain authority |
-| s12 | Separate required contact, diagnostic transit and hard endpoint/ownership laws | F: positive fusion/contact cases and negative lifecycle cases |
-| s13 | Check exemplar preservation before generalization | V: no new treatment; human checkpoint only if materially changed |
-| s14 | Migrate the selected different existing mechanism through the same contribution seam | S+V: no caller geometry, central dispatch or inspection bypass |
-| s15 | Execute its actual source-native/material/target-native ownership and ink laws | V: real paint continuity and exclusive ownership, not synthetic certification |
-| s16 | Make discovered remaining in-scope extension callers use the mandatory path | S: inventory reconciliation, no blanket exemptions; stop for unexpected expansion |
-| s17 | Remove superseded callback/metadata authority paths in the same migration unit | S: negative type and architecture tests prevent reintroduction |
-| s18 | Pressure direct seek, reverse, interruption and shared-clock endpoints | F+V: deterministic results without replay or second timing authority |
-| s19 | Pressure resize/font invalidation, disposal/remount and reduced motion | V: bounded lifecycle and final native accessibility preserved |
-| s20 | Assess unsampled-trajectory assurance and document exact limits | F: executable bounded evidence; no inferred continuous collision proof |
-| s21 | Publish mechanism-level participation evidence and extension-author instructions | S: evidence tied to executed representatives; uncovered risks remain explicit |
-| s22 | Run supported-browser promotion and retained M1a/M1b preservation | V: scoped Chromium/Firefox/WebKit cohort, no unnecessary catalogue matrix |
-| s23 | Run full release, cost, production isolation and publication preservation | S: all fixed gates; explicit stop for non-TypeScript amendment |
-| s24 | Close receipts, reconcile coverage debt and propose the next mathematical authoring slice | F: validated Theseus state and scoped closeout; no automatic expansion |
+| Slice | Target and intended change | Risk | Level and expected checks | Stop |
+| --- | --- | --- | --- | --- |
+| s01 | Compositor owners: inventory final paint and current inspection coverage | Medium | F: source-backed participant/owner map, uncovered paths explicit | G |
+| s02 | Cost policies: measure complete closure and select useful consolidation | High | S: source/runtime/inference baseline and unchanged consumer membership | G; no credible fixed-budget path |
+| s03 | Owner tests: reproduce omitted contribution, stale evidence and missing participant failures | Medium | F: deterministic bypass characterization | G |
+| s04 | Existing mechanisms: pin factoring and one different paint/ownership topology | Medium | B: real native/material/native baseline through canonical hosts | G; no bounded existing pressure caller |
+| s05 | Assembly/measurement owners: remove demonstrated duplication | High | B: equivalent outputs, native canary, measured headroom | G; no accounting escape |
+| s06 | Contribution types: couple actual sampler and occupancy through a required contract | High | S: omitted occupancy fails negative types; no operation switch | G |
+| s07 | Contribution creation: bind participants and coordinate/measurement revision | High | S: duplicate, absent and incompatible-frame rejection | G |
+| s08 | Factoring binding: use required contribution without changing choreography | High | B: accepted arcs, complete groups and fusion preserved | G; materially different visuals |
+| s09 | Final assembly: inspect after partitioning, routing and contributions | High | B: every actual participant included once; no parallel audit authority | G |
+| s10 | Inspection issuer: authenticate evidence for the exact assembled sampler | High | S: copied payload, raw flag and unrelated sampler rejection | G |
+| s11 | Cache/lifecycle: invalidate geometry/font/frame evidence before reuse | High | B: stale scene rejection and safe measured cache reuse | G |
+| s12 | Contact policy: separate fusion contact, transit diagnostics and hard invariants | Medium | S: permitted contact passes; invalid ownership/endpoints fail | G; policy would alter motif character |
+| s13 | Exemplar gate: compare accepted factoring before generalization | Medium | B: real paint checkpoints, direct reversal and accepted treatment | G; human review if materially changed |
+| s14 | Different existing owner: migrate through the same contribution seam | High | B: canonical caller, no local geometry or inspection bypass | G; new treatment or unexpected scope |
+| s15 | Different mechanism: execute ownership and ink-continuity laws | High | B: real source-native/material/target-native representative | G; unavailable required proof |
+| s16 | Inventoried in-scope callers: complete mandatory participation migration | High | B: caller inventory reconciliation, no blanket exemptions | G; unbounded migration exposed |
+| s17 | Old authority paths: retire unchecked callback/metadata bypasses | High | B: negative types, architecture guards and preserved callers | G |
+| s18 | Shared timeline: pressure direct seek, reverse and interruption | Medium | B: deterministic endpoints with no replay/second clock | G |
+| s19 | Browser lifecycle: pressure resize/fonts, disposal/remount and reduced motion | High | B: native accessibility and measured invalidation recovery | G |
+| s20 | Assurance boundary: assess unsampled trajectories without adding an optimizer | Medium | F: bounded executable evidence; precise sampled/unsampled limits | G; continuous-proof or new-routing expansion |
+| s21 | Extension instructions: publish mechanism-level participation evidence | Low | S: docs match executed representatives and explicit gaps | G |
+| s22 | Promotion: run supported-browser and retained M1a/M1b cohorts | High | B: Chromium/Firefox/WebKit, same shared server and scoped commands | G; material visual judgment |
+| s23 | Release: full tests/build, costs, isolation and retained editions | High | B: all fixed gates and publication reproduction | G; unapproved non-TypeScript amendment |
+| s24 | Closeout: reconcile debt and propose unfamiliar supported-authoring trial | Low | F: validated Theseus, closed receipts, exact results and next task proposal | G; no automatic successor execution |
 
 ## Preservation, rollback and completion
 
@@ -145,9 +172,14 @@ is implied merely by mandatory participation. If the inventory exposes another
 materially distinct risk, execute a bounded representative or retain it as an
 explicit gap rather than claiming certification.
 
-After this migration, return to the accepted mathematical authoring horizon:
-choose a bounded assumptions/branches or symbolic–geometric example using the
-same source-to-canonical-presentation pipeline, measured by new author capability
-and marginal glue. Do not turn ongoing compositor work into an indefinite
-prerequisite for all product progress. The earlier horizon remains ordered
-context; this proposal does not supersede it or restart completed R1–R4B/M1a/M1b.
+After this migration, the next proposed milestone is an unfamiliar useful
+explanation authored through currently supported capabilities. S24 must carry
+that forward with measurements of draft/repair effort, specialist interventions,
+files touched, renderer changes and cross-projection revision consistency.
+Target five unfamiliar in-scope variants without renderer edits, plus honest
+invalid/out-of-scope cases. Preparing that next proposal is included; running an
+external model trial, choosing content on the user's behalf or implementing a
+new editor is not. The trial must precede another broad capability tranche;
+later longer-chain, assumptions/branches and symbolic–geometric work remain the
+accepted horizon. Do not turn compositor work into an indefinite prerequisite
+for product progress. This proposal does not restart completed R1–R4B/M1a/M1b.

@@ -107,12 +107,20 @@ diagnostic transit contact from hard ownership/endpoint invariants.
 The required later compositor-occupancy recommendation is recorded in
 `threads/compositor-extension-occupancy-follow-up.md`. The next proposal is
 `reviews/2026-09-10-compositor-extension-occupancy-long-loop-proposal.md`, retained
-as `next-action.kp.compositor-extension-occupancy`, deferred pending scope approval.
+as `next-action.kp.compositor-extension-occupancy`. Its revised 24-slice scope is
+approved under `run-contract.kp.compositor-extension-occupancy-v2`; the unstarted
+metadata-incomplete v1 is superseded. Theseus owns live execution and stop state.
 It requires complete extension participation and current final-scene evidence
 before further specialized motif expansion; the factoring repair does not
 complete that broader work. Start with measured consolidation: the accounted
 renderer closure has only 45 bytes of source headroom. No successor execution or
 further non-TypeScript budget amendment is automatically authorized.
+The user accepted the authoring-leverage assessment on 2026-09-10: finish this
+finite seam, then measure an unfamiliar supported authoring task before further
+capability expansion. See
+`decisions/2026-09-10-authoring-leverage-after-bounded-compositor-repair.md` and
+`reviews/2026-09-10-project-value-and-next-step-review.md`. The revised 24-slice
+proposal retains the same next target and now has explicit execution approval.
 The accepted broader direction is recorded in
 `decisions/2026-09-09-mathematics-expansion-and-m1a-approval.md`; it guides later
 proposals, not automatic subject expansion. R4B's measured TypeScript-cost amendments

@@ -2,9 +2,9 @@
   "id": "next-action.kp.compositor-extension-occupancy",
   "kind": "next-action",
   "title": "Require complete compositor extension participation before further specialized motifs",
-  "status": "deferred",
+  "status": "in-progress",
   "domain": "rendering",
-  "summary": "Pending M1b successor-planning obligation, not implemented. Await scope approval; no successor contract active. Preserve motifs and fixed non-TypeScript gates; migration must first budget complete closure.",
+  "summary": "User approved exact revised 24-slice proposal. Execute v2; preserve accepted motifs, fixed non-TypeScript gates and finite authoring-focused exit.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -21,9 +21,50 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-10-composed-algebra-authoring-closeout.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-10-authoring-leverage-after-bounded-compositor-repair.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-10-project-value-and-next-step-review.md"
     }
   ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.composed-algebra-authoring"
+    ]
+  },
+  "verification": [
+    "npm run typecheck",
+    "theseus workspace validate"
+  ],
   "revisitWhen": [
-    "User explicitly approves the linked 24-slice successor proposal."
+    "User explicitly approves the linked 24-slice successor proposal.",
+    "User approves the revised exact 24-slice proposal."
+  ],
+  "expectedLearning": [
+    "Measure one complete extension seam reused by two distinct existing mechanisms without changed choreography."
+  ],
+  "allowedWork": [
+    "Exact approved 24-slice compositor extension proposal; finite migration and authoring-trial successor planning."
+  ],
+  "disallowedWork": [
+    "No new motifs, external models, subagents, universal engine, unapproved non-TypeScript budget amendments, merge, deployment or automatic successor."
+  ],
+  "criteria": [
+    {
+      "id": "canonical-preservation",
+      "weight": "high"
+    },
+    {
+      "id": "mandatory-participation",
+      "weight": "high"
+    },
+    {
+      "id": "measured-cost",
+      "weight": "high"
+    }
   ]
 }
