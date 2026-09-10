@@ -2,9 +2,9 @@
   "id": "next-action.kp.reusable-algebra-intuition",
   "kind": "next-action",
   "title": "Author a reusable question-oriented algebra explanation",
-  "status": "ready",
+  "status": "blocked",
   "domain": "authoring",
-  "summary": "Ready to execute the approved 24 slices; question-oriented primary and s12 human review.",
+  "summary": "Scope stop, not budget: approve bounded proof-bound whole/member presentation handoff before continuing. Existing page unchanged.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -21,6 +21,10 @@
     {
       "kind": "file",
       "path": "docs/project/authoring/reusable-algebra-owner-map.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-10-reusable-algebra-selector-handoff-stop.md"
     }
   ],
   "dependsOn": {
@@ -76,11 +80,39 @@
       "status": "passed",
       "scope": "s04",
       "checkedAt": "2026-09-10T23:31:51.917Z"
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring",
+      "status": "passed",
+      "scope": "s05-diagnostic",
+      "checkedAt": "2026-09-10T23:38:43.224Z",
+      "notes": "70 tests pass. Boundary probes reject same-tree same-id selector repartition and multi-target identity. Numeric juxtaposition is not valid product authority. No browser certification claimed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "s05-diagnostic-initial",
+      "checkedAt": "2026-09-10T23:39:58.347Z",
+      "notes": "New test record omitted its required summary field. Added the summary; final full typecheck rerun is in progress. No production authority or compiler gate changed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s05-diagnostic-final",
+      "checkedAt": "2026-09-10T23:40:54.106Z",
+      "notes": "Final app, node, test, Svelte and domain checks pass after completing required test-record summary."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring",
+      "status": "passed",
+      "scope": "s05-diagnostic-final",
+      "checkedAt": "2026-09-10T23:40:55.378Z",
+      "notes": "70 tests pass on final diagnostic source. New handoff remains unsupported, not certified."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Question-oriented exemplar brief and canonical baseline pinned; extending source is next after owner mapping."
+    "summary": "Four of 24 slices complete. STOP_CONDITION at s05 for whole/member ownership handoff. Recommended bounded amendment recorded; no v2 rendered capability yet."
   },
   "expectedLearning": [
     "Demonstrate a meaningful authored chain with source-only adaptation and context-preserving recovery, without claiming comprehension efficacy."

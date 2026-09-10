@@ -2,8 +2,8 @@
   "id": "run-contract.kp.reusable-algebra-intuition-v1",
   "kind": "run-contract",
   "title": "Reusable algebra intuition",
-  "status": "ready",
-  "summary": "Approved and ready; use executable run-contract lifecycle, not workflow active status. Explicit user start and s12 human checkpoint apply.",
+  "status": "blocked",
+  "summary": "STOP_CONDITION at s05; 4/24 complete, 20 remaining. Await explicit bounded handoff amendment, then resume same run and preserve s12 human checkpoint.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -17,6 +17,10 @@
     {
       "kind": "file",
       "path": "docs/project/decisions/2026-09-10-question-oriented-focus-cards.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-10-reusable-algebra-selector-handoff-stop.md"
     }
   ],
   "verification": [
@@ -73,7 +77,8 @@
     {
       "id": "s05",
       "title": "Bind canonical distribution",
-      "status": "planned"
+      "summary": "STOP_CONDITION: ordered distribution law passes but whole/member ownership handoff needs an explicitly approved bounded mechanism. Slice remains incomplete; diagnostic tests committed, no visible mount.",
+      "status": "in-progress"
     },
     {
       "id": "s06",

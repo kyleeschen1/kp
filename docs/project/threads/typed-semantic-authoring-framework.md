@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: reusable algebra intuition 24-slice execution approved; Theseus owns progress; prior trial, compositor participation, M1b, R1–R4B and M1a remain complete
+Status: reusable algebra intuition at ownership-handoff scope stop; Theseus owns progress; prior trial, compositor participation, M1b, R1–R4B and M1a remain complete
 Last Updated: 2026-09-10
 Standing budget policy: recommended engineering-budget repairs, including
 explicit bounded policy amendments, are automatically approved across sessions.
@@ -92,6 +92,13 @@ geometry, before sustained calculus expansion; see
 contains the refinements; later exact scopes still need proposals. Current activity:
 execute the bounded algebra exemplar using a question/answer/evidence brief,
 preserving the existing shell and stopping for s12 visual review.
+The started run encountered a representation-boundary stop before that review:
+`../reviews/2026-09-10-reusable-algebra-selector-handoff-stop.md`. Existing
+factoring/evaluation preserve a whole group; distribution needs its member
+selectors. Matching the scalar tree does not authorize changing paint ownership.
+The recommended bounded handoff amendment is not yet approved. Preserve the
+completed source/prefix work and current host while Theseus records the stop;
+do not turn this into a general infrastructure successor.
 Accepted broader direction:
 `../decisions/2026-09-10-visual-repertoire-and-queryable-intuitions.md`.
 Richer algebra, a contour-adjacent geometric flagship, a small cross-domain reuse

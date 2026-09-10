@@ -27,6 +27,7 @@ function bindings(from: string, to: string, orientation: KpDistributionOrientati
 
 test("explicit distribution orientation preserves whole compound subtrees and authored order", () => {
   for (const [orientation, from, to] of [
+    ["left", "5(x+3)", "5x+5*3"],
     ["right", "(2+3)(x+3)", "2(x+3)+3(x+3)"],
     ["left", "(x+3)(2+3)", "(x+3)*2+(x+3)*3"]
   ] as const) {
