@@ -132,3 +132,18 @@ const incompleteComposition: FactoringComposition = missingContactPolicy;
 // @ts-expect-error The canonical factoring policy cannot authorize clearance-driven arc inflation.
 const inflatedGeometry: FactoringComposition["geometry"] = "automatic-clearance-detour";
 void [incompleteComposition, inflatedGeometry];
+import { checkKpComposedAlgebraAuthorSource } from "../../src/authoring/composed-algebra-author-check.ts";
+import type { KpAuthorTaskOwners } from "../../src/authoring/author-task-owner-contract.ts";
+const report = checkKpComposedAlgebraAuthorSource(exportKpComposedAlgebraSource(draft));
+if (report.status === "compiled") {
+  const stops: 3 = report.checkpointCount;
+  // @ts-expect-error a serial report cannot authorize a native presentation
+  const reportAsPresentation: KpComposedAlgebraPresentation = report;
+  void [stops, reportAsPresentation];
+}
+declare const missingComposedOwner: Omit<KpAuthorTaskOwners, "equation.composed-algebra">;
+// @ts-expect-error every discoverable task requires an executable owner
+const missingTask: KpAuthorTaskOwners = missingComposedOwner;
+// @ts-expect-error an example without a checker is not a complete extension
+const missingChecker: KpAuthorTaskOwners["equation.composed-algebra"] = { example: () => source };
+void [missingTask, missingChecker];

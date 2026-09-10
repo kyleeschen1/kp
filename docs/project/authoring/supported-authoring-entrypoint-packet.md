@@ -21,6 +21,7 @@ never serialized proof, geometry, renderer selection, timing or a new clock.
 
 | Task | Accepted scope | Preview / publication boundary |
 | --- | --- | --- |
+| `equation.composed-algebra` | Three-state compound factoring and exact coefficient evaluation; ordered left/right real-scalar sums/products, no arbitrary solver | Explicit Apply at `/experiments/reusable-reasoning/?example=composed-algebra`; shared readings, practice/exact return; immutable static reading/self-check edition via `author:composed-algebra-publication` |
 | `equation.common-factor` | One ordered common factor: a declared single-letter scalar or a nonnegative single digit, with symbolic addends; two endpoints, one transition. Multi-digit factors return `unsupported-presentation`. | Explicit Apply at `/experiments/reusable-reasoning/?example=common-factor`; full/compact reading, bounded prediction/reconstruction with exact return; `author:common-factor-publication -- --source <file>` emits an immutable static reading/self-check edition, not interactive animation |
 | `bayes.binary` | Exact binary joint masses or prior and two likelihoods; strict v1 defaults or bounded v2 editorial explanation | Explicit Apply at `/experiments/bayesian-reasoning/`; immutable local Bayes edition |
 | `equation.logarithm-base` | Supported positive numeric base other than one, positive argument, coherent two-state change of base and narration | Explicit Compile at `/experiments/authoring-market/#equation-authoring`; export inside a selected market branch, not as a standalone edition |
@@ -95,6 +96,7 @@ Static reading does not imply animated-publication parity across domains.
 
 ## Deeper owner packets and compatibility
 
+- `composed-algebra-authoring-packet.md`: complete compound-chain sources, canonical group/evaluation owners, exact repairs and three-stop projections.
 - `common-factor-authoring-packet.md`: verified ordered factoring, source-only numeric reuse and presentation limits.
 - `bayesian-reasoning-packet.md`: probability context, teaching and publication.
 - `reusable-reasoning-packet.md`: equation/code assumptions, prefixes and returns.

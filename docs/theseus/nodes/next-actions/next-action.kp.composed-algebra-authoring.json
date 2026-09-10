@@ -228,6 +228,13 @@
       "scope": "s21",
       "checkedAt": "2026-09-10T04:25:32.818Z",
       "notes": "Exact selector correction for the two executed atomic preservation canaries; both passed."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring; node --disable-warning=ExperimentalWarning --test tests/authoring-entrypoint-*.test.ts tests/common-factor-author-check.test.ts; npm run typecheck; npm run check:architecture; npm run check:inference; npm run check:authoring-task-packet",
+      "status": "passed",
+      "scope": "s22",
+      "checkedAt": "2026-09-10T04:36:34.205Z",
+      "notes": "47 composed and49 entrypoint tests pass; both retained CLI checks succeed; complete types, architecture and packet parity pass. Fixed inference core113696/194449 combined172058/286156."
     }
   ],
   "progress": {

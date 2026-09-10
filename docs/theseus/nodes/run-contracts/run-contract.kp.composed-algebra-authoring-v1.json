@@ -167,7 +167,8 @@
     {
       "id": "s22",
       "title": "Publish discovery metadata, author packet and repair examples",
-      "status": "planned"
+      "summary": "Composed task discoverable through report-only checker, linked author packet and executable repairs. Complete typed lazy task owner map preserves existing domains; negative types and fixed inference gates pass.",
+      "status": "complete"
     },
     {
       "id": "s23",

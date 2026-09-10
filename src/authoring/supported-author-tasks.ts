@@ -1,6 +1,13 @@
 /** Discovery metadata only. Domain checkers still own acceptance and evidence;
  * a host reference cannot certify that a draft is applied or published. */
 export const supportedAuthorTasks = {
+  "equation.composed-algebra": {
+    owner: "src/authoring/composed-algebra-author-check.ts",
+    input: "Exactly three states: two nonnegative integer multiples of one unchanged compound scalar sum/product, ordered left/right factoring, then exact coefficient addition. Declared real scalars; no division, commutation or arbitrary solver. Editorial prose is not proof.",
+    preview: { kind: "explicit-apply", url: "/experiments/reusable-reasoning/?example=composed-algebra" },
+    extraction: { kind: "domain-owned", owner: "src/experiments/composed-algebra/practice.ts", scope: "Prediction/reconstruction with revision-pinned exact return; no automatic grading." },
+    publication: { kind: "local-edition", command: "author:composed-algebra-publication", output: "immutable-content-addressed", input: "selected composed source JSON; static reading/self-check edition, not interactive animation" }
+  },
   "equation.common-factor": {
     owner: "src/authoring/common-factor-author-check.ts",
     input: "One ordered two-product rewrite over declared single-letter real scalars; single-letter or single-digit nonnegative common factor and symbolic addends. Multi-digit factors return unsupported-presentation. Editorial prose is not proof.",

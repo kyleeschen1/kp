@@ -30,7 +30,7 @@ Older experiments are evidence, not default implementation authority.
 
 For an existing supported task, begin with
 `supported-authoring-entrypoint-packet.md` and `npm run author:check -- --list`.
-This read-only discovery/check layer covers six bounded callers, preserving
+This read-only discovery/check layer lists bounded callers, preserving
 their distinct schemas, diagnostics and host/publication capabilities. It does
 not replace their semantic authorities or provide arbitrary generation. Use
 the domain packet only after selecting the exact task.
@@ -53,6 +53,11 @@ For the accepted binary-probability exemplar, use `bayesian-reasoning-packet.md`
 Exact joint masses or prior/likelihoods enter the probability-owned checker,
 then existing governed construction, card, readings, practice and edition paths.
 This does not authorize arbitrary probability trees, geometry, or new motifs.
+
+For the accepted three-stop compound factoring/evaluation task, use
+`composed-algebra-authoring-packet.md` and `equation.composed-algebra` discovery.
+It accepts source-only oriented chains through existing verified operation
+owners; it is not an arbitrary LaTeX deduction solver.
 
 ## Route The Task Before Generating
 
