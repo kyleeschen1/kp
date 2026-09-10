@@ -101,7 +101,8 @@
     {
       "id": "s10",
       "title": "Authenticate inspection for the exact assembled sampler",
-      "status": "planned"
+      "summary": "Exact live assembly, frozen routed tracks, unchanged sampler and fan-out policy required at rendering boundaries. Sixteen focused, thirty-two architecture, full typecheck and eight browser checks pass. Core allowance 150000 explicitly recorded; actual aggregate 529485 remains within 530000.",
+      "status": "complete"
     },
     {
       "id": "s11",

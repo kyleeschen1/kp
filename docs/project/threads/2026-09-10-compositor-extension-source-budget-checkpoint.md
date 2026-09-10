@@ -121,3 +121,16 @@ existing protected-transit inspector. New code belongs to the counted planning
 boundary; the renderer consumes the issued assembly, not another motif engine.
 The 530,000 aggregate limit now leaves 15,045 measured bytes before this work.
 Net savings are not claimed until the replacement is implemented and measured.
+
+## Authentication boundary allowance (s10)
+
+Under the accepted [engineering-budget repair authority](../decisions/2026-09-10-engineering-budget-repair-autonomy.md),
+raise the core source ceiling from 145,000 to 150,000 bytes. Exact assembly
+authentication adds required checks at both plan issuance and the raw renderer
+entrypoint; measured core was 145,104 bytes, 104 over the previous ceiling.
+The obsolete callback combiner was already removed in s09. Moving these calls
+elsewhere would not remove their responsibility, and a broad core refactor is
+not justified to avoid two guard calls. This is explicit bounded headroom, not
+a claim that 5,000 bytes are necessary. Aggregate remains 530,000, planner
+315,000, support 80,000, and every module/dependency/runtime gate is unchanged.
+Final accounting must report actual growth, including the assembly module.

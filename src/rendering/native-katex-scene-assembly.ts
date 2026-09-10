@@ -7,10 +7,18 @@ import { assertKpNativeKatexContributionMeasurement, type KpNativeKatexSceneCont
 const assemblyAuthority: unique symbol = Symbol("native-katex-scene-assembly");
 const liveAssemblies = new WeakSet<KpNativeKatexSceneAssembly>();
 
+/** Snapshot pure track/audit records; function identities remain unchanged. */
+function snapshot<T>(value: T): T {
+  if (value === null || typeof value !== "object") return value;
+  if (Array.isArray(value)) return Object.freeze(value.map(snapshot)) as T;
+  return Object.freeze(Object.fromEntries(Object.entries(value).map(([key, item]) => [key, snapshot(item)]))) as T;
+}
+
 export interface KpNativeKatexSceneAssembly {
   readonly [assemblyAuthority]: true;
   readonly tracks: readonly KpNativeKatexPaintMeasuredSceneTrack[];
   readonly contributions: readonly KpNativeKatexSceneContribution[];
+  readonly copyFanOut: boolean;
   readonly sample: ReturnType<typeof assembleKpNativeKatexScene>["sample"];
   readonly audit: KpProtectedTransitAudit;
   readonly sampleCount: number;
@@ -25,7 +33,8 @@ function assembleKpNativeKatexScene(input: {
   readonly copyFanOut?: boolean | undefined;
 }) {
   if (input.source.stage !== input.target.stage) throw new Error("Final scene endpoints require one stage.");
-  const tracks = Object.freeze([...input.tracks]);
+  const tracks = snapshot(input.tracks);
+  const copyFanOut = input.copyFanOut === true;
   const contributions = Object.freeze([...input.contributions]);
   if (new Set(contributions.map(item => item.id)).size !== contributions.length)
     throw new Error("Scene contribution identities must be unique.");
@@ -35,8 +44,8 @@ function assembleKpNativeKatexScene(input: {
     ...contributions.flatMap(item => item.participantIds)];
   if (new Set(participants).size !== participants.length)
     throw new Error("Final scene paint participants must be unique.");
-  const sample = (progress: number) => {
-    const frames = sampleKpNativeKatexSceneTrackFrames(tracks, progress, input.copyFanOut === true)
+  const sampleFrame = (progress: number) => {
+    const frames = sampleKpNativeKatexSceneTrackFrames(tracks, progress, copyFanOut)
       .map(frame => {
         if (!frame.expectedPaintRect) throw new Error(`Missing final track paint: ${frame.trackId}.`);
         return Object.freeze({ ...frame, expectedPaintRect: frame.expectedPaintRect });
@@ -48,6 +57,19 @@ function assembleKpNativeKatexScene(input: {
       ...contributionsAt.flatMap(item => item.occupancy)
     ]);
     return Object.freeze({ frames: Object.freeze(frames), owners, occupancy });
+  };
+  // Rendering ordinary and extension paint at one playhead must consume one
+  // sample, not invoke a potentially stateful extension twice per frame.
+  let previousProgress = NaN;
+  let previousFrame: ReturnType<typeof sampleFrame> | undefined;
+  const sample = (progress: number) => {
+    if (!Number.isFinite(progress)) throw new Error("Scene progress must be finite.");
+    const bounded = Math.max(0, Math.min(1, progress));
+    if (previousFrame && bounded === previousProgress) return previousFrame;
+    const frame = sampleFrame(bounded);
+    previousProgress = bounded;
+    previousFrame = frame;
+    return previousFrame;
   };
   const sourceFrame = sample(0), targetFrame = sample(1);
   const targets = new Map(targetFrame.owners.map(owner => [owner.ownerId, owner]));
@@ -62,7 +84,25 @@ function assembleKpNativeKatexScene(input: {
     tracks: [...ordinary, ...extensions], sampleCount,
     sampleFrames: (_, progress) => sample(progress).occupancy
   });
-  return { tracks, contributions, sample, audit, sampleCount };
+  return { tracks, contributions, copyFanOut, sample, audit: snapshot(audit), sampleCount };
+}
+
+export function assertKpNativeKatexSceneAssembly(input: {
+  readonly sceneAssembly?: KpNativeKatexSceneAssembly | undefined;
+  readonly reconciliation: { readonly source: KpNativeKatexRenderedSceneObservation; readonly target: KpNativeKatexRenderedSceneObservation };
+  readonly tracks: readonly object[];
+  readonly copyFanOut?: boolean | undefined;
+  readonly supplementalMaterialOwners?: unknown;
+}): void {
+  const assembly = input.sceneAssembly;
+  if (!assembly) return;
+  if (!liveAssemblies.has(assembly) || input.supplementalMaterialOwners !== undefined ||
+      assembly.copyFanOut !== (input.copyFanOut === true) ||
+      input.tracks.length !== assembly.tracks.length ||
+      input.tracks.some((track, i) => track !== assembly.tracks[i]))
+    throw new Error("Rendering requires the exact issued scene assembly and sampler.");
+  assembly.contributions.forEach(contribution => assertKpNativeKatexContributionMeasurement(
+    contribution, input.reconciliation.source, input.reconciliation.target));
 }
 
 export function createKpNativeKatexSceneAssembly(

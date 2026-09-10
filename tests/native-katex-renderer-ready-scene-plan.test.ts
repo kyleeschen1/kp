@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   createKpNativeKatexRendererReadyScenePlan,
+  createKpNativeKatexSceneAssembly,
   isKpNativeKatexRendererReadyScenePlan,
   KP_NATIVE_KATEX_TERMINAL_SETTLEMENT_FRACTION,
   type KpNativeKatexPaintMeasuredSceneTrack
@@ -60,6 +61,19 @@ test("renderer-ready plans reject durable serialization", () => {
   assert.equal("clock" in plan, false);
   assert.equal("progress" in plan, false);
   assert.equal("apply" in plan, false);
+});
+
+test("ready-plan issuance cannot replace inspected tracks with matching identities", () => {
+  const stage = {} as HTMLElement;
+  const base = createMinimalPlan(stage);
+  const original = track("x");
+  const assembly = createKpNativeKatexSceneAssembly({ ...base.reconciliation, tracks: [original], contributions: [] });
+  const ready = { ...base, tracks: assembly.tracks, sceneAssembly: assembly };
+  assert.doesNotThrow(() => createKpNativeKatexRendererReadyScenePlan(ready));
+  assert.throws(() => createKpNativeKatexRendererReadyScenePlan({ ...ready, tracks: [{ ...assembly.tracks[0]! }] }), /exact issued/);
+  assert.throws(() => createKpNativeKatexRendererReadyScenePlan({ ...ready, sceneAssembly: { ...assembly } }), /exact issued/);
+  assert.notEqual(assembly.tracks[0], original);
+  assert.equal(Object.isFrozen(assembly.tracks[0]!.startRect), true);
 });
 
 test("renderer-ready plans reject cross-stage and duplicate-track input", () => {

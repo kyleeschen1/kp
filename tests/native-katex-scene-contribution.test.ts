@@ -3,7 +3,7 @@ import test from "node:test";
 import { projectKpNativeKatexMaterialOccupancy } from "../src/rendering/native-katex-scene-contribution.ts";
 import { createKpNativeKatexSceneContribution, isKpNativeKatexSceneContribution,
   requireKpNativeKatexMeasuredMaterialFrame, assertKpNativeKatexContributionMeasurement } from "../src/rendering/native-katex-scene-contribution.ts";
-import { createKpNativeKatexSceneAssembly, requireKpNativeKatexContributionInspection } from "../src/rendering/native-katex-scene-assembly.ts";
+import { createKpNativeKatexSceneAssembly, requireKpNativeKatexContributionInspection, assertKpNativeKatexSceneAssembly } from "../src/rendering/native-katex-scene-assembly.ts";
 
 const ink = { left: 2, top: 3, width: 4, height: 5 };
 const owner = { ownerId: "paint", sourceElement: {} as HTMLElement,
@@ -15,6 +15,24 @@ const source = { kind: "native-katex-rendered-scene-observation" as const,
   stage, root: {} as HTMLElement, atoms: [], groups: [], fontRevision: 1, viewportKey: "wide" };
 const target = { ...source, endpoint: "target" as const, root: {} as HTMLElement };
 const context = { source, target, participantIds: ["paint"] };
+
+test("render authority rejects copied assemblies, replaced samplers and unchecked extra paint", () => {
+  let calls = 0;
+  const contribution = createKpNativeKatexSceneContribution({ ...context, id: "bound", sample: () => { calls++; return [owner]; } });
+  const assembly = createKpNativeKatexSceneAssembly({ source, target, tracks: [], contributions: [contribution] });
+  const input = { sceneAssembly: assembly, reconciliation: { source, target }, tracks: assembly.tracks };
+  assert.doesNotThrow(() => assertKpNativeKatexSceneAssembly(input));
+  for (const changed of [{ sceneAssembly: { ...assembly } },
+    { sceneAssembly: { ...assembly, sample: () => assembly.sample(0) } },
+    { copyFanOut: true }, { tracks: [{}] }, { supplementalMaterialOwners: () => [] }])
+    assert.throws(() => assertKpNativeKatexSceneAssembly({ ...input, ...changed }), /exact issued/);
+  const frame = assembly.sample(.371);
+  const sampled = calls;
+  assert.equal(assembly.sample(.371), frame);
+  assert.equal(calls, sampled);
+  assert.equal(Object.isFrozen(assembly.audit.intersections), true);
+  assert.throws(() => assembly.sample(NaN), /finite/);
+});
 
 test("final assembly inspects all actual contributions jointly without rewriting their paint", () => {
   const first = createKpNativeKatexSceneContribution({ ...context, id: "first", sample: () => [owner] });

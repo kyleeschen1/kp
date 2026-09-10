@@ -3,7 +3,8 @@ import type {
   KpEquationProtectedTransitCertificate
 } from "./equation-motion-path-planner.ts";
 import type { KpNativeKatexSceneAssembly } from "./native-katex-scene-assembly.ts";
-export { createKpNativeKatexSceneAssembly } from "./native-katex-scene-assembly.ts";
+import { assertKpNativeKatexSceneAssembly } from "./native-katex-scene-assembly.ts";
+export { createKpNativeKatexSceneAssembly, assertKpNativeKatexSceneAssembly } from "./native-katex-scene-assembly.ts";
 export type { KpNativeKatexSceneAssembly } from "./native-katex-scene-assembly.ts";
 import { assertKpCompleteFactoringChoreography, type KpFactoringChoreographyPlan } from "../animation/factoring-choreography.ts";
 import type {
@@ -183,6 +184,7 @@ type KpNativeKatexRendererReadyScenePlanInput = Omit<
 export function createKpNativeKatexRendererReadyScenePlan(
   input: KpNativeKatexRendererReadyScenePlanInput
 ): KpNativeKatexRendererReadyScenePlan {
+  assertKpNativeKatexSceneAssembly(input);
   const { source, target } = input.reconciliation;
   if (input.semanticClock !== undefined) assertKpCompleteFactoringChoreography(input.semanticClock);
   if (

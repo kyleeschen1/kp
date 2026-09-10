@@ -89,7 +89,7 @@ export const kpCanonicalEquationRendererConvergence = Object.freeze({
   // Hierarchical endpoint ownership adds generic routing at the one compositor
   // boundary instead of introducing an equation-specific renderer. Keep the
   // ratchet close enough that a parallel implementation still cannot hide.
-  maximumProductionSourceBytes: 145_000,
+  maximumProductionSourceBytes: 150_000,
   // Freeze direct dependencies so core reductions cannot hide in helpers.
   maximumProductionDirectDependencyModules: 15,
   maximumProductionDirectDependencySourceBytes: 295_000,
@@ -179,7 +179,7 @@ export function validateKpCanonicalEquationRendererConvergence(
     issues.push("The native scene core has an unbounded direct dependency closure.");
   }
   if (
-    policy.maximumProductionSourceBytes !== 145_000 ||
+    policy.maximumProductionSourceBytes !== 150_000 ||
     policy.maximumProductionDirectDependencyModules !== 15 ||
     policy.maximumProductionDirectDependencySourceBytes !== 295_000 ||
     policy.maximumProductionScenePlanBoundaryModules !== 20 ||

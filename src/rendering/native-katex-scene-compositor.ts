@@ -60,6 +60,7 @@ import {
   compileKpNativeKatexSuccessorSynthesisScenePlans,
   compileKpQualityBoundedFanInTracks,
   createKpNativeKatexRendererReadyScenePlan,
+  assertKpNativeKatexSceneAssembly,
   isKpNativeKatexRendererReadyScenePlan,
   partitionKpNativeKatexSuccessorOwnedTracks,
   reconcileKpNativeKatexScenes,
@@ -1253,6 +1254,7 @@ export function createKpNativeKatexRendererSession(input: {
   readonly supplementalMaterialOwners?:
     (progress: number) => readonly KpEquationMaterialLayerOwnerFrame[];
 }): KpNativeKatexRendererSession {
+  assertKpNativeKatexSceneAssembly(input);
   const endpointDwellFraction = input.endpointDwellFraction ??
     KP_NATIVE_KATEX_TERMINAL_SETTLEMENT_FRACTION;
   if (
@@ -1454,7 +1456,7 @@ export function compileKpCanonicalNativeKatexScenePlan(
   return createKpNativeKatexRendererReadyScenePlan({
     reconciliation,
     hierarchy,
-    tracks: measuredTracks,
+    tracks: sceneAssembly?.tracks ?? measuredTracks,
     sceneAssembly,
     protectedTransit: protectedTransit.certificate,
     disposition: decideKpNativeKatexRendererDisposition({
