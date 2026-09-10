@@ -117,3 +117,15 @@ rectangles on repeated forward/reverse samples, not just the equation envelope.
 The tightened interior-frame interruption assertion also passed independently.
 No second clock or production repair was needed. This is deterministic replay
 evidence at the exercised positions, not a proof over every possible gesture.
+# Supported-browser promotion (s22)
+
+`npm run visual:composed-algebra:cohort`: **63 passed**, Chromium/Firefox/WebKit,
+4.8 minutes. `npm run visual:common-factor-authoring:cohort`: **24 passed**,
+the same three engines, 2.5 minutes. Both commands use the existing shared
+port-8000 server. These 87 checks include retained M1a/M1b authoring/projections,
+native endpoints, factoring and ink-knot material ownership/continuity, controls,
+direct reverse, interruption, disposal, narrow layouts and no-JavaScript editions.
+No tolerance or test was waived. Earlier s15 wording limits the initial result
+to Chromium; the same contributor/result raster and endpoint checks have now
+executed successfully in all three engines. This still is not physical-device,
+all-font/all-theme, arbitrary-glyph or continuous-time certification.

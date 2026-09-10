@@ -357,6 +357,12 @@
       "status": "passed",
       "scope": "s21",
       "checkedAt": "2026-09-10T18:10:37.904Z"
+    },
+    {
+      "command": "npm run visual:composed-algebra:cohort; npm run visual:common-factor-authoring:cohort",
+      "status": "passed",
+      "scope": "s22",
+      "checkedAt": "2026-09-10T18:17:04.146Z"
     }
   ],
   "progress": {
