@@ -77,7 +77,8 @@
     {
       "id": "s06",
       "title": "Require coupled sampler and occupancy contribution types",
-      "status": "planned"
+      "summary": "Required measured paint and issuer-owned occupancy are coupled by construction; negative types pass. Runtime callers migrate in following slices.",
+      "status": "complete"
     },
     {
       "id": "s07",

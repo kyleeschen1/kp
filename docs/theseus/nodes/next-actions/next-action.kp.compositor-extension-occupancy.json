@@ -166,6 +166,27 @@
       "scope": "s05",
       "checkedAt": "2026-09-10T16:18:21.559Z",
       "notes": "29 counted modules, 516258 aggregate bytes, 13742 headroom; core 144274 planner 293190 support 78794. Net growth 1303, not claimed savings."
+    },
+    {
+      "command": "npm run test:compositor-extensions",
+      "status": "passed",
+      "scope": "s06",
+      "checkedAt": "2026-09-10T16:22:30.045Z",
+      "notes": "Ten pass; single sampled paint supplies occupancy, nonfinite/unmeasured paint rejected and copied issuer payload unauthenticated."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s06",
+      "checkedAt": "2026-09-10T16:22:31.498Z",
+      "notes": "Full checks pass, including negative fixtures for missing ink, raw contribution and independent occupancy."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "s06",
+      "checkedAt": "2026-09-10T16:22:32.650Z",
+      "notes": "31 pass; aggregate 518843 bytes under 530000, complete counted closure retained."
     }
   ],
   "progress": {
