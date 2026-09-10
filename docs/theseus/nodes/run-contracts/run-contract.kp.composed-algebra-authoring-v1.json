@@ -137,8 +137,8 @@
     {
       "id": "s17",
       "title": "Present combined primary visual/editorial checkpoint",
-      "summary": "HUMAN_CHECKPOINT: motif-first policy encoded; pre-repair arcs restored; complete occupancy diagnostics cannot reroute; native-ink fusion pose and emphasis continuity enforced. Automated checks pass; awaiting visual acceptance before s18.",
-      "status": "ready"
+      "summary": "User explicitly approved repaired checkpoint at 1b3a862d0 with approve and resume; continue approved s18 onward.",
+      "status": "complete"
     },
     {
       "id": "s18",

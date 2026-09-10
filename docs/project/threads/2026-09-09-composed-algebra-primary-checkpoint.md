@@ -1,6 +1,6 @@
 # Composed algebra: primary review checkpoint
 
-Outcome: **HUMAN_CHECKPOINT**. The approved run reached its combined s17 visual/editorial decision. s01–s16 are complete; Theseus owns live slice status and evidence. Do not begin s18 until human acceptance.
+Outcome: **ACCEPTED**. The user explicitly approved the repaired checkpoint at commit `1b3a862d0` with “approve and resume” on 2026-09-09 (local date). This closes the s17 visual/editorial gate and authorizes the existing post-acceptance slices, not a new successor loop. Theseus owns live slice status and evidence.
 
 - Contract: `run-contract.kp.composed-algebra-authoring-v1`
 - Target: `next-action.kp.composed-algebra-authoring`
@@ -43,7 +43,7 @@ treatment is superseded, not an approved baseline. The accepted governing
 direction is [motif-preserving composition](../principles/motif-composition-contracts.md),
 also routed from `AGENTS.md` and the roadmap.
 
-The current candidate restores the pre-repair arc envelope, keeps context yielding
+The accepted treatment restores the pre-repair arc envelope, keeps context yielding
 before reception, and prevents grouping entry from sweeping through the adjacent
 factor. Complete factor/context occupancy is a required inspection with reported
 transit contacts, not an instruction to enlarge paths. Publication without
@@ -63,6 +63,8 @@ does not promote all motif adapters. The broader required follow-up remains
 [explicitly recorded](compositor-extension-occupancy-follow-up.md) and attached to
 the existing run's closeout.
 
-Human: “Approve the composed algebra checkpoint and resume `$theseus-long-loop`.”
-
-Agent: derive `npm run --silent loop:status`; retrieve `theseus plan run`; record the human result against s17, complete that slice, then continue the existing contract at s18. Do not create a competing plan or silently treat automated checks as aesthetic acceptance.
+Approval is historical evidence, not an outstanding check-in. Resume with
+`theseus plan run` and `npm run --silent loop:status`; continue the existing
+approved contract. Preserve the accepted treatment while encoding regressions
+and exercising the second caller. A materially different treatment still needs
+human judgment.
