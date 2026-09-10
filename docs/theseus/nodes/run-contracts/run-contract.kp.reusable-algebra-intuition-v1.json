@@ -61,7 +61,8 @@
     {
       "id": "s03",
       "title": "Add bounded versioned source contract",
-      "status": "planned"
+      "summary": "Versioned four/five-state authored data contract and normalization verified; not animation authority.",
+      "status": "complete"
     },
     {
       "id": "s04",

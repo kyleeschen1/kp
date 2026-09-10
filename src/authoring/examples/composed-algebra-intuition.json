@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "kp.composed-algebra-source.v2",
+  "id": "lesson.composed-algebra.intuition",
+  "domain": "real-scalars",
+  "symbols": ["x"],
+  "states": [
+    { "id": "state.intuition.repeated", "latex": "2(x+3)+3(x+3)", "narration": "What is being counted? Both terms count copies of the same whole quantity x+3." },
+    { "id": "state.intuition.collected", "latex": "(2+3)(x+3)", "narration": "Combine the two counts while keeping their shared group intact. Nothing inside x+3 changes." },
+    { "id": "state.intuition.counted", "latex": "5(x+3)", "narration": "Two copies and three copies make five copies. Only the count has been evaluated." },
+    { "id": "state.intuition.distributed", "latex": "5x+5\\cdot3", "narration": "Where does each contribution go? Every one of the five copies contains both x and 3, so both receive the factor five." },
+    { "id": "state.intuition.evaluated", "latex": "5x+15", "narration": "The five constant contributions total fifteen. The five copies of x remain; no contribution is lost." }
+  ],
+  "editorial": {
+    "title": "How do we regroup without losing any contributions?",
+    "setup": "Read multiplication as counting copies. First count the repeated whole group, then open it to track each contribution.",
+    "summary": "Collect the counts, preserve the group, then apply the combined count to every term inside. These equalities preserve the value even when x+3 is zero."
+  }
+}

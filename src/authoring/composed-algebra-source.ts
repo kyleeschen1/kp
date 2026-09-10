@@ -44,11 +44,7 @@ export function readKpComposedAlgebraSource(value: unknown): KpComposedAlgebraSo
   }
   const states = root["states"];
   if (!Array.isArray(states) || states.length !== 3) fail("$.states", "Supply exactly three states: expanded, factored, evaluated.");
-  const state = (value: unknown, index: number): KpComposedAlgebraState => {
-    const path = `$.states[${index}]`, item = record(value, path, ["id", "latex", "narration"]);
-    return Object.freeze({ id: identifier(item["id"], `${path}.id`),
-      latex: text(item["latex"], `${path}.latex`, 512), narration: text(item["narration"], `${path}.narration`, 2000) });
-  };
+  const state = readKpComposedAlgebraState;
   const before = state(states[0], 0), middle = state(states[1], 1), after = state(states[2], 2);
   if (new Set([before.id, middle.id, after.id]).size !== 3) fail("$.states", "Use three distinct stable state IDs.");
   const editorial = record(root["editorial"], "$.editorial", ["title", "setup", "summary"]);
@@ -65,6 +61,13 @@ export function parseKpComposedAlgebraSource(json: string): KpComposedAlgebraSou
   return readKpComposedAlgebraSource(value);
 }
 
+// Versioned source readers share field validation, never widen the v1 tuple.
+export function readKpComposedAlgebraState(value: unknown, index: number): KpComposedAlgebraState {
+  const path = `$.states[${index}]`, item = record(value, path, ["id", "latex", "narration"]);
+  return Object.freeze({ id: identifier(item["id"], `${path}.id`),
+    latex: text(item["latex"], `${path}.latex`, 512), narration: text(item["narration"], `${path}.narration`, 2000) });
+}
+export { record as readKpComposedAlgebraDataRecord };
 function record(value: unknown, path: string, keys: readonly string[]): Record<string, unknown> {
   if (value === null || typeof value !== "object" || Array.isArray(value) || Object.getPrototypeOf(value) !== Object.prototype)
     fail(path, "Provide a plain source object.");

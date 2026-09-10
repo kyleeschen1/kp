@@ -49,6 +49,20 @@
       "scope": "s02",
       "checkedAt": "2026-09-10T23:20:40.489Z",
       "notes": "63 tests pass, including four canonical planner probes and rejection of unrelated endpoint composition. This is not browser certification."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring",
+      "status": "passed",
+      "scope": "s03",
+      "checkedAt": "2026-09-10T23:28:08.296Z",
+      "notes": "66 tests pass including four/five-state bounds, source injection rejection, located syntax and unchanged v1."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s03",
+      "checkedAt": "2026-09-10T23:28:09.554Z",
+      "notes": "App, node, test, Svelte and domain types pass."
     }
   ],
   "progress": {
