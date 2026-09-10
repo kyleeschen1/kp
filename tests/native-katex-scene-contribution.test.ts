@@ -54,6 +54,23 @@ test("final assembly rejects colliding participant identities across contributio
   assert.throws(() => createKpNativeKatexSceneAssembly({ source, target, tracks: [], contributions }), /participants must be unique/);
 });
 
+test("one extension cannot hide internal transit contact or convert it into a route failure", () => {
+  const contribution = createKpNativeKatexSceneContribution({ ...context, id: "fusion", participantIds: ["paint", "copy"],
+    sample: p => [owner, { ...owner, ownerId: "copy", expectedPaintRect: { ...ink, left: ink.left + 100 * Math.abs(2 * p - 1) } }] });
+  const assembly = createKpNativeKatexSceneAssembly({ source, target, tracks: [], contributions: [contribution] });
+  assert.equal(assembly.contactPolicy, "diagnostic-only");
+  assert.ok(assembly.audit.intersections.length > 0);
+  assert.deepEqual(assembly.sample(.5).owners, contribution.sample(.5).owners);
+});
+
+test("endpoint and hidden-owner malformed paint fail regardless of contact policy", () => {
+  for (const bad of [{ ...owner, opacity: 2 }, { ...owner, opacity: 0, rect: { ...ink, left: NaN } },
+    { ...owner, paintAlignmentRect: { ...ink, height: -1 } }]) {
+    const contribution = createKpNativeKatexSceneContribution({ ...context, id: "invalid", sample: p => p === 1 ? [bad] : [owner] });
+    assert.throws(() => createKpNativeKatexSceneAssembly({ source, target, tracks: [], contributions: [contribution] }), /Invalid measured/);
+  }
+});
+
 test("cached assemblies invalidate native measurement changes even without extensions", () => {
   const group = { id: "group", semanticEntityId: "g", atomIds: [], rect: { ...ink }, sourceElement: {} as HTMLElement };
   const measured = { ...source, groups: [group] };
@@ -129,8 +146,8 @@ test("issued contribution preserves paint order and uses bounded finite progress
 });
 
 test("material occupancy uses actual transformed ink and rejects absent measurements", () => {
-  assert.deepEqual(projectKpNativeKatexMaterialOccupancy([owner], "group"),
-    [{ trackId: "paint", componentId: "group", rect: ink, opacity: 1 }]);
+  assert.deepEqual(projectKpNativeKatexMaterialOccupancy([owner]),
+    [{ trackId: "paint", componentId: "paint", rect: ink, opacity: 1 }]);
   assert.throws(() => projectKpNativeKatexMaterialOccupancy(
-    [{ ...owner, expectedPaintRect: undefined }], "group"), /Missing measured material paint/);
+    [{ ...owner, expectedPaintRect: undefined }]), /Missing measured material paint/);
 });

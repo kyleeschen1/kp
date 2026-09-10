@@ -2,7 +2,7 @@ import { inspectKpEquationProtectedTransitTracks, type KpProtectedTransitAudit }
 import { sampleKpNativeKatexSceneTrackFrames } from "./native-katex-scene-track-sampling.ts";
 import type { KpNativeKatexPaintMeasuredSceneTrack } from "./native-katex-base-scene-plan.ts";
 import type { KpNativeKatexRenderedSceneObservation } from "./native-katex-rendered-scene.ts";
-import { assertKpNativeKatexContributionMeasurement, captureKpNativeKatexMeasurement, type KpNativeKatexSceneContribution } from "./native-katex-scene-contribution.ts";
+import { assertKpNativeKatexContributionMeasurement, assertKpNativeKatexMeasuredPaint, captureKpNativeKatexMeasurement, type KpNativeKatexSceneContribution } from "./native-katex-scene-contribution.ts";
 
 const assemblyAuthority: unique symbol = Symbol("native-katex-scene-assembly");
 const liveAssemblies = new WeakSet<KpNativeKatexSceneAssembly>();
@@ -22,6 +22,7 @@ export interface KpNativeKatexSceneAssembly {
   readonly copyFanOut: boolean;
   readonly sample: ReturnType<typeof assembleKpNativeKatexScene>["sample"];
   readonly audit: KpProtectedTransitAudit;
+  readonly contactPolicy: "diagnostic-only";
   readonly sampleCount: number;
 }
 
@@ -49,6 +50,7 @@ function assembleKpNativeKatexScene(input: {
     const frames = sampleKpNativeKatexSceneTrackFrames(tracks, progress, copyFanOut)
       .map(frame => {
         if (!frame.expectedPaintRect) throw new Error(`Missing final track paint: ${frame.trackId}.`);
+        assertKpNativeKatexMeasuredPaint(frame.trackId, [frame.rect, frame.expectedPaintRect], frame.opacity);
         return Object.freeze({ ...frame, expectedPaintRect: frame.expectedPaintRect });
       });
     const contributionsAt = contributions.map(item => item.sample(progress));
@@ -76,7 +78,7 @@ function assembleKpNativeKatexScene(input: {
   const targets = new Map(targetFrame.owners.map(owner => [owner.ownerId, owner]));
   const ordinary = tracks.map(track => ({ ...track, id: ownerId(track.id) }));
   const extensions = sourceFrame.owners.map(owner => ({
-    id: owner.ownerId, componentId: contributions.find(item => item.participantIds.includes(owner.ownerId))!.id,
+    id: owner.ownerId, componentId: owner.ownerId,
     lifecycle: "persist" as const, startRect: owner.expectedPaintRect,
     endRect: targets.get(owner.ownerId)!.expectedPaintRect
   }));
@@ -85,7 +87,8 @@ function assembleKpNativeKatexScene(input: {
     tracks: [...ordinary, ...extensions], sampleCount,
     sampleFrames: (_, progress) => sample(progress).occupancy
   });
-  return { tracks, contributions, copyFanOut, sample, audit: snapshot(audit), sampleCount };
+  return { tracks, contributions, copyFanOut, sample, audit: snapshot(audit), sampleCount,
+    contactPolicy: "diagnostic-only" as const };
 }
 
 export function assertKpNativeKatexSceneAssembly(input: {

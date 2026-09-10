@@ -113,7 +113,8 @@
     {
       "id": "s12",
       "title": "Separate diagnostic contact from hard lifecycle invariants",
-      "status": "planned"
+      "summary": "Diagnostic-only final contact cannot suppress an entire extension or rewrite a motif. Invalid measured endpoint/layout/ink/opacity fails, including hidden owners. Nineteen focused, twenty motif, thirty-two architecture, full types, cost and eight browser checks pass; actual aggregate 531169.",
+      "status": "complete"
     },
     {
       "id": "s13",

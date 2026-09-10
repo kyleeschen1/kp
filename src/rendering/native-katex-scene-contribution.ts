@@ -75,12 +75,21 @@ export function requireKpNativeKatexMeasuredMaterialFrame(
   owner: KpEquationMaterialLayerOwnerFrame
 ): KpNativeKatexMeasuredMaterialFrame {
   const rect = owner.expectedPaintRect;
-  if (!rect || ![rect.left, rect.top, rect.width, rect.height, owner.opacity].every(Number.isFinite) ||
-      rect.width < 0 || rect.height < 0 || owner.opacity < 0 || owner.opacity > 1) {
-    throw new Error(`Invalid measured material paint: ${owner.ownerId}.`);
-  }
+  if (!rect) throw new Error(`Invalid measured material paint: ${owner.ownerId}.`);
+  assertKpNativeKatexMeasuredPaint(owner.ownerId, [owner.rect, rect,
+    ...(owner.paintAlignmentRect ? [owner.paintAlignmentRect] : [])], owner.opacity);
   return Object.freeze({ ...owner, rect: Object.freeze({ ...owner.rect }),
+    ...(owner.paintAlignmentRect ? { paintAlignmentRect: Object.freeze({ ...owner.paintAlignmentRect }) } : {}),
     expectedPaintRect: Object.freeze({ ...rect }) });
+}
+
+/** Contact is diagnostic; malformed paint must never reach inspection or DOM. */
+export function assertKpNativeKatexMeasuredPaint(id: string,
+  rects: readonly KpEquationMaterialLayerOwnerFrame["rect"][], opacity: number): void {
+  if (!Number.isFinite(opacity) || opacity < 0 || opacity > 1 || rects.some(rect =>
+    ![rect.left, rect.top, rect.width, rect.height].every(Number.isFinite) || rect.width < 0 || rect.height < 0)) {
+    throw new Error(`Invalid measured material paint: ${id}.`);
+  }
 }
 
 export function createKpNativeKatexSceneContribution(input: {
@@ -112,7 +121,7 @@ export function createKpNativeKatexSceneContribution(input: {
           owners.some(owner => !expected.has(owner.ownerId)))
         throw new Error(`Contribution ${id} has missing, duplicate or unexpected participants.`);
       return Object.freeze({ owners,
-        occupancy: Object.freeze(projectKpNativeKatexMaterialOccupancy(owners, id)) });
+        occupancy: Object.freeze(projectKpNativeKatexMaterialOccupancy(owners)) });
     }
   });
   liveContributions.add(contribution);
@@ -127,12 +136,13 @@ export function isKpNativeKatexSceneContribution(value: unknown): value is KpNat
 
 /** Occupancy follows transformed measured ink, never a layout-box fallback. */
 export function projectKpNativeKatexMaterialOccupancy(
-  owners: readonly KpEquationMaterialLayerOwnerFrame[],
-  componentId: string
+  owners: readonly KpEquationMaterialLayerOwnerFrame[]
 ): readonly KpEquationProtectedTransitFrame[] {
   return owners.map(owner => {
     const rect = owner.expectedPaintRect;
     if (rect === undefined) throw new Error(`Missing measured material paint: ${owner.ownerId}.`);
-    return { trackId: owner.ownerId, componentId, rect, opacity: owner.opacity };
+    // One producer is not one rigid paint object: its internal contacts remain
+    // observable. Intentional fusion never needs diagnostic suppression.
+    return { trackId: owner.ownerId, componentId: owner.ownerId, rect, opacity: owner.opacity };
   });
 }
