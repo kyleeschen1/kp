@@ -41,6 +41,12 @@
       "status": "passed",
       "scope": "s03",
       "checkedAt": "2026-09-10T18:58:28.936Z"
+    },
+    {
+      "command": "npm run check:unfamiliar-authoring-trial; npm run visual:composed-algebra -- --grep 'both retained sources round-trip'; git diff --check",
+      "status": "passed",
+      "scope": "s04",
+      "checkedAt": "2026-09-10T19:01:28.418Z"
     }
   ],
   "expectedLearning": [

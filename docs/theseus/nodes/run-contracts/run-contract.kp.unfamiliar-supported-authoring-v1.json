@@ -60,7 +60,8 @@
     {
       "id": "s04",
       "title": "Author changed-coefficient compound sum",
-      "status": "planned"
+      "summary": "Case one compiled first pass; one self-directed brief correction retained as attempt two.",
+      "status": "complete"
     },
     {
       "id": "s05",

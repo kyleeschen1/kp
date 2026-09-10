@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "kp.composed-algebra-source.v1",
+  "id": "lesson.repeated-groups.case-01",
+  "domain": "real-scalars",
+  "symbols": ["x"],
+  "states": [
+    {
+      "id": "state.case-01.expanded",
+      "latex": "4(x+2)+5(x+2)",
+      "narration": "Read each x+2 as a whole group. The first term has four copies and the second has five copies of that same group."
+    },
+    {
+      "id": "state.case-01.collected",
+      "latex": "(4+5)(x+2)",
+      "narration": "Combine the two counts, in their original order. Keep the shared group x+2 on the right, with everything inside its parentheses unchanged."
+    },
+    {
+      "id": "state.case-01.evaluated",
+      "latex": "9(x+2)",
+      "narration": "Four plus five makes nine copies of x+2. Only the count was evaluated; x+2 still depends on x."
+    }
+  ],
+  "editorial": {
+    "title": "Count copies of the same group",
+    "setup": "Look inside the two pairs of parentheses: both contain x+2. Treat that repeated sum as one unit while combining its copy counts.",
+    "summary": "Four groups plus five identical groups gives nine groups. Collecting their coefficients preserves the entire sum x+2; it does not find the value of x+2."
+  }
+}
