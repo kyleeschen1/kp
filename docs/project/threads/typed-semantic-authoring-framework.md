@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: M1a common-factor authoring approved and active; R1–R4B remain complete
+Status: M1b browser promotion complete; release awaits a fixed HTML-budget decision; R1–R4B and M1a remain complete
 Last Updated: 2026-09-09
 Current successor reference: `../reviews/2026-09-07-reconciled-authoring-loop-horizon.md`.
 It preserves the original architectural obligations and the tax/Bayes direction;
@@ -63,13 +63,17 @@ do not treat its proposed roadmap or readiness labels as new execution authority
 The user clarified the remaining code issue as missing gradual passage swiping.
 The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
-Current Next Action: execute approved `run-contract.kp.composed-algebra-authoring-v1`
+Current Next Action: resolve the s25 release budget decision for
+`run-contract.kp.composed-algebra-authoring-v1`, then finish its release and closeout.
+The primary is visually accepted and both retained callers pass supported-browser
+promotion. Exact evidence and proposed bounded amendment:
+`2026-09-09-composed-algebra-release-budget-checkpoint.md`. Continue
 under the accepted motif/compositor boundary in
 `../principles/motif-composition-contracts.md`. Broader extension coverage is
 retained in `compositor-extension-occupancy-follow-up.md` as a closeout obligation.
-Continue
-from `../reviews/2026-09-09-m1b-composed-algebra-long-loop-proposal.md` through its
-s17 combined visual checkpoint. M1a remains complete under
+The approved scope remains
+`../reviews/2026-09-09-m1b-composed-algebra-long-loop-proposal.md`; its s17 checkpoint
+is resolved, not another approval gate. M1a remains complete under
 `run-contract.kp.common-factor-authoring-v1`; see
 `../reviews/2026-09-09-common-factor-authoring-closeout.md` for achieved author
 value, full release verification and the compound-factor/composition gap.

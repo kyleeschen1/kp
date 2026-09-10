@@ -93,9 +93,13 @@ The explicitly approved renderer-source and three reader HTML-gzip amendments
 are resolved historical checkpoints. The user explicitly approved the next
 26-slice M1b composed-algebra proposal:
 `reviews/2026-09-09-m1b-composed-algebra-long-loop-proposal.md`.
-Execute `run-contract.kp.composed-algebra-authoring-v1` through the combined s17
-visual checkpoint, then its approved post-acceptance slices. No later successor
-is automatically authorized.
+The combined M1b visual checkpoint is accepted. Both source-only callers and
+supported-browser promotion pass; `run-contract.kp.composed-algebra-authoring-v1`
+has reached the s25 release gate. One fixed reader HTML-gzip budget is 12 bytes
+over its limit; no amendment is applied. Resume evidence and the exact decision:
+`threads/2026-09-09-composed-algebra-release-budget-checkpoint.md`.
+Finish s25 release and s26 closeout after that decision; do not reopen the
+accepted visual checkpoint. No later successor is automatically authorized.
 `principles/motif-composition-contracts.md` establishes the accepted governing
 boundary: preserve motif character, inspect complete paint, and distinguish
 diagnostic transit contact from hard ownership/endpoint invariants.

@@ -2,8 +2,8 @@
   "id": "run-contract.kp.composed-algebra-authoring-v1",
   "kind": "run-contract",
   "title": "M1b Composed algebra authoring",
-  "status": "in-progress",
-  "summary": "Approved26 slices; canonical compound factoring and contextual evaluation, then source-only reuse and release.",
+  "status": "blocked",
+  "summary": "STOP_CONDITION at s25: non-TypeScript reader HTML-gzip amendment requires separate approval.24/26 complete; s25 release and s26 closeout remain. Accepted visual checkpoint resolved.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -13,6 +13,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-09-m1b-composed-algebra-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-09-composed-algebra-release-budget-checkpoint.md"
     }
   ],
   "verification": [
@@ -185,6 +189,7 @@
     {
       "id": "s25",
       "title": "Run full release verification and earlier-exemplar preservation",
+      "summary": "STOP_CONDITION: release partially verified; teacher-zero HTML gzip4582 exceeds4570. No budget changed. Resume this slice after explicit budget decision; full-suite result and metadata repair are in linked checkpoint.",
       "status": "planned"
     },
     {
