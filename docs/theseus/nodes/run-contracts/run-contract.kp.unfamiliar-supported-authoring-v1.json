@@ -154,7 +154,8 @@
     {
       "id": "s19",
       "title": "Run release preservation gate",
-      "status": "planned"
+      "summary": "Release passes 6972 tests, build, reader closures and nine editions; only scan-count bookkeeping changed",
+      "status": "complete"
     },
     {
       "id": "s20",

@@ -158,6 +158,40 @@
       "status": "passed",
       "scope": "s18",
       "checkedAt": "2026-09-10T19:53:00.373Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s19",
+      "checkedAt": "2026-09-10T19:56:48.127Z",
+      "notes": "Full types, publication freshness and production build pass; existing large-chunk advisory unchanged."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "s19",
+      "checkedAt": "2026-09-10T19:56:49.615Z",
+      "notes": "Twelve routes pass; shared runtime 142144 gzip bytes."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "s19",
+      "checkedAt": "2026-09-10T19:56:50.801Z",
+      "notes": "Twelve manifest routes pass."
+    },
+    {
+      "command": "npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "s19",
+      "checkedAt": "2026-09-10T19:56:52.006Z",
+      "notes": "Scanned-file bookkeeping updated by generator from 4579 to 4583; 68 roots and edges unchanged."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s19",
+      "checkedAt": "2026-09-10T20:05:55.759Z"
     }
   ],
   "progress": {

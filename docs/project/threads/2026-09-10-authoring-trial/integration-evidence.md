@@ -77,8 +77,6 @@ the canonical page/static edition URLs were exercised by the browser command.
 No code changed after the s16 full typecheck. Human acceptance remains pending;
 see `../../reviews/2026-09-10-unfamiliar-authoring-visual-checkpoint.md`.
 
-## Resume-capsule budget fallback
-
 ## Accepted-set browser promotion
 
 The user accepted the s17 packet with “it works!” on 2026-09-10. Earlier
@@ -99,7 +97,38 @@ Release preflight reports the generated reachability inventory stale after new
 test/tool files; diagnose and refresh only verified inventory bookkeeping at
 the release slice. No gate has been waived.
 
-## Resume-capsule budget fallback (historical checkpoint)
+## Release preservation checks
+
+`npm run build` passes full app/node/test/Svelte/domain types, economics/tax
+publication freshness and production bundling. The existing over-500-kB chunk
+advisory remains unchanged. Both `npm run check:reader-budgets` and
+`npm run check:reader-production` pass all twelve routes; shared equation-reader
+runtime remains 142,144 gzip bytes against 145,000. Diagnostic isolation passes
+`check:dev-review-production` (461 files, 12 markers) and
+`check:native-katex-compositor-conformance-production` (9 markers).
+
+All five sources named in `editions.json` reproduce with the exact
+`author:composed-algebra-publication -- --source <path> --check` command. The
+retained composed primary/product and common-factor primary/numeric editions
+also reproduce through their existing scoped publication commands: nine checks,
+not nine new authoring cases. `check:composed-algebra-workflow` passes both
+retained scripted callers. All eleven original reports replay unchanged.
+
+The stale reachability preflight was repaired with the existing generator:
+`npm run generate:equation-reachability`, then `npm run check:equation-reachability`.
+The sole generated delta is `scannedFileCount` 4,579 → 4,583, accounting for
+the trial runner, two test files and one test fixture. All 68 roots and graph
+edges are unchanged. This generated metadata under `src/architecture` is not
+an engine intervention; no schema, semantic, renderer, layout, clock or motif
+implementation changed. No limit or consumer set was relaxed.
+
+Full-suite pre-gates pass unchanged: core inference 114,668 types / 196,324
+instantiations; combined 173,243 / 288,463, plus architecture/catalogue/promotion
+checks. Full `npm test` passes **6,972 tests**, zero failures, cancellations,
+skips or todos; 644,822.671 ms. This is the final full execution, not a count
+assembled from repeated focused runs. `git diff --check` also passes.
+
+## Resume-capsule budget fallback (historical checkpoint detail)
 
 Post-checkpoint handoff verification found `theseus work resume` fails with
 1,632 tokens against the package's fixed 1,200 limit. `--limit 1` still reports
