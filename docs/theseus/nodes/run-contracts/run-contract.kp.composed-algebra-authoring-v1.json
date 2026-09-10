@@ -59,7 +59,8 @@
     {
       "id": "s04",
       "title": "Define bounded versioned chain source without widening M1a",
-      "status": "planned"
+      "summary": "Versioned bounded three-state source and primary JSON implemented;7 tests, full types and complete cost gates pass.",
+      "status": "complete"
     },
     {
       "id": "s05",

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "kp.composed-algebra-source.v1",
+  "id": "lesson.composed-algebra.primary",
+  "domain": "real-scalars",
+  "symbols": ["x"],
+  "states": [
+    { "id": "state.composed.expanded", "latex": "2(x+3)+3(x+3)", "narration": "Two copies and three copies of the same expression can be counted together. Keep x+3 intact." },
+    { "id": "state.composed.factored", "latex": "(2+3)(x+3)", "narration": "The common expression stays on the right. Its coefficient records the two original counts." },
+    { "id": "state.composed.evaluated", "latex": "5(x+3)", "narration": "Evaluate only the coefficient sum: two plus three is five. The expression x+3 is unchanged." }
+  ],
+  "editorial": {
+    "title": "Count copies of a whole expression",
+    "setup": "Read x+3 as one shared unit, then simplify how many copies there are.",
+    "summary": "Factoring preserves the shared structure; evaluation simplifies its coefficient. Neither step divides by x+3, so x=-3 is allowed too."
+  }
+}

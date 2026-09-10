@@ -48,6 +48,13 @@
       "scope": "s03",
       "checkedAt": "2026-09-10T00:08:33.220Z",
       "notes": "5 tests pass; valid-looking, wrong coefficient, wrong sum, changed context and disconnected candidates cannot mint active output."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring; npm run typecheck; npm run check:inference",
+      "status": "passed",
+      "scope": "s04",
+      "checkedAt": "2026-09-10T00:12:45.947Z",
+      "notes": "7 tests pass; core113052/193425 and combined170057/282762 fit fixed gates. Distinct schema, exact tuple and runtime plain-data checks preserve M1a. Source is not verified or renderable."
     }
   ],
   "expectedLearning": [

@@ -14,3 +14,9 @@ const forged: KpVerifiedCommonFactorRewrite = parsed;
 // @ts-expect-error an operation descriptor is not a verified rewrite
 const mislabeled: KpVerifiedCommonFactorRewrite = evaluation;
 void [proof, forged, mislabeled];
+import { readKpComposedAlgebraSource, type KpComposedAlgebraSource } from "../../src/authoring/composed-algebra-source.ts";
+const source = readKpComposedAlgebraSource(undefined);
+const thirdState: string = source.states[2].latex;
+// @ts-expect-error a two-state legacy tuple is not a composed chain
+const wrongCount: KpComposedAlgebraSource["states"] = [source.states[0], source.states[1]];
+void [thirdState, wrongCount];
