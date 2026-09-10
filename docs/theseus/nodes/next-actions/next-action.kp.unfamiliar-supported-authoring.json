@@ -145,6 +145,13 @@
       "scope": "s17",
       "checkedAt": "2026-09-10T19:33:53.792Z",
       "notes": "Exact shell-quoted invocation for the already recorded eleven-test combined pass."
+    },
+    {
+      "command": "theseus work context next-action.kp.unfamiliar-supported-authoring --mode brief",
+      "status": "passed",
+      "scope": "handoff",
+      "checkedAt": "2026-09-10T19:37:30.962Z",
+      "notes": "Generic resume still exceeds its capsule budget; targeted fallback documented without changing limits or clearing state."
     }
   ],
   "progress": {

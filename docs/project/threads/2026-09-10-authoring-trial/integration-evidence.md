@@ -76,3 +76,27 @@ The direct case-one JSON link on localhost:8000 was fetched successfully, and
 the canonical page/static edition URLs were exercised by the browser command.
 No code changed after the s16 full typecheck. Human acceptance remains pending;
 see `../../reviews/2026-09-10-unfamiliar-authoring-visual-checkpoint.md`.
+
+## Resume-capsule budget fallback
+
+Post-checkpoint handoff verification found `theseus work resume` fails with
+1,632 tokens against the package's fixed 1,200 limit. `--limit 1` still reports
+1,632; `--after event.activated.workflow.kp.delivery.20260910193356456.dj5.1`
+reports 1,666. The package capsule builder limits only delta events with the
+event limit, not all included capsules. These are tool-output estimates, not
+model-billed tokens. No task source or rendering failure is implicated.
+
+`theseus work resume --scope kp` exits zero but selects historical scoped v24
+state rather than this new unscoped contract; it is not an acceptable current-run
+handoff. The exact bounded alternative passes:
+
+```sh
+theseus work context next-action.kp.unfamiliar-supported-authoring --mode brief
+```
+
+Follow it with the named visual checkpoint document and existing contract. This
+retains the deferred human verdict and s18–s20 boundary without clearing history,
+omitting a critical stop, widening budgets or changing the Theseus package.
+Standing budget-repair autonomy allowed this local handoff repair. A general
+capsule/scoping fix belongs to the owning Theseus project if separately taken up;
+it is not secretly included in the KP authoring trial or treated as fixed here.

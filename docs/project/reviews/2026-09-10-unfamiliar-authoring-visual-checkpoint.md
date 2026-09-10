@@ -83,8 +83,19 @@ finished pipeline, not evidence of arbitrary LaTeX-chain support.
 
 ## Resume
 
-Fresh-session command: `theseus work resume` from the repository root, using
-`$theseus-project`. Record the user's visual verdict against this contract,
+Fresh-session command from the repository root, using `$theseus-project`:
+
+```sh
+theseus work context next-action.kp.unfamiliar-supported-authoring --mode brief
+```
+
+Then read this named checkpoint. Generic `theseus work resume` currently exceeds
+its fixed 1,200-token capsule budget (1,632 measured); reducing the event limit
+does not repair it. `--scope kp` succeeds but points to older scoped state and
+must not replace the current unscoped contract. The targeted command above
+passes and preserves the actual human boundary. No package, data or budget gate
+was changed. See the integration record's handoff note for attempted alternatives.
+Record the user's visual verdict against this contract,
 reactivate it only after acceptance, then continue s18. No further routine
 approval is required for the already approved s18–s20. Do not restart earlier
 closed runs or launch a successor beyond these three slices.
