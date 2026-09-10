@@ -59,6 +59,12 @@
       "status": "passed",
       "scope": "s06",
       "checkedAt": "2026-09-10T19:05:32.446Z"
+    },
+    {
+      "command": "npm run check:unfamiliar-authoring-trial; git diff --check",
+      "status": "passed",
+      "scope": "s07",
+      "checkedAt": "2026-09-10T19:07:09.827Z"
     }
   ],
   "expectedLearning": [

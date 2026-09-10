@@ -78,7 +78,8 @@
     {
       "id": "s07",
       "title": "Author opposite product orientation",
-      "status": "planned"
+      "summary": "Opposite product orientation checked first pass without new author references or engine edits.",
+      "status": "complete"
     },
     {
       "id": "s08",

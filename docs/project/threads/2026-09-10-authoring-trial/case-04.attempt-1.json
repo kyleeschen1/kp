@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "kp.composed-algebra-source.v1",
+  "id": "lesson.repeated-groups.case-04",
+  "domain": "real-scalars",
+  "symbols": ["x", "y"],
+  "states": [
+    {
+      "id": "state.case-04.expanded",
+      "latex": "(x*y)*3+(x*y)*4",
+      "narration": "Find the identical product x times y in each term. Its multipliers follow the group: three in the first term and four in the second."
+    },
+    {
+      "id": "state.case-04.collected",
+      "latex": "(x*y)(3+4)",
+      "narration": "Keep the shared product on the left. Collect the original multipliers on the right as three plus four, without swapping any factors."
+    },
+    {
+      "id": "state.case-04.evaluated",
+      "latex": "(x*y)*7",
+      "narration": "Three plus four is seven. Only the right-hand multiplier is evaluated; x times y remains the same product on the left."
+    }
+  ],
+  "editorial": {
+    "title": "Collect a product with multipliers after it",
+    "setup": "Treat x times y as one repeated unit. Track the multipliers to its right while keeping the two factors inside the group together.",
+    "summary": "The right-hand multipliers combine as three plus four, giving seven. Collecting the terms neither changes the product x times y nor determines its value."
+  }
+}
