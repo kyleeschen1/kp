@@ -84,7 +84,8 @@
     {
       "id": "s08",
       "title": "Author unit coefficient case",
-      "status": "planned"
+      "summary": "Unit coefficient source checks first pass; all five cases now compile with frozen packet and no engine edits.",
+      "status": "complete"
     },
     {
       "id": "s09",

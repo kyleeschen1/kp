@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "kp.composed-algebra-source.v1",
+  "id": "lesson.repeated-groups.case-05",
+  "domain": "real-scalars",
+  "symbols": ["x"],
+  "states": [
+    {
+      "id": "state.case-05.expanded",
+      "latex": "1(x+5)+3(x+5)",
+      "narration": "The coefficient one means one copy of the whole sum x+5. The second term contributes three more copies of that identical sum."
+    },
+    {
+      "id": "state.case-05.collected",
+      "latex": "(1+3)(x+5)",
+      "narration": "Collect the counts as one plus three. The one counts the entire group, so neither x nor the five inside its parentheses changes."
+    },
+    {
+      "id": "state.case-05.evaluated",
+      "latex": "4(x+5)",
+      "narration": "One plus three gives four copies of x+5. Only the count is evaluated; the group still contains x plus five."
+    }
+  ],
+  "editorial": {
+    "title": "One copy is still a whole group",
+    "setup": "Read the first term as one copy of x+5, then find the matching group in the second term. Keep the copy counts separate from the numbers inside the group.",
+    "summary": "Multiplying a group by one preserves the whole group. Combining one copy with three copies gives four copies of the same x+5, without finding the value of that variable sum."
+  }
+}

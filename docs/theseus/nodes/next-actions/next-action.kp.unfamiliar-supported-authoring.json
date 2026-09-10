@@ -65,6 +65,12 @@
       "status": "passed",
       "scope": "s07",
       "checkedAt": "2026-09-10T19:07:09.827Z"
+    },
+    {
+      "command": "npm run check:unfamiliar-authoring-trial; frozen packet SHA-256 verification; git diff --check",
+      "status": "passed",
+      "scope": "s08",
+      "checkedAt": "2026-09-10T19:08:45.702Z"
     }
   ],
   "expectedLearning": [
