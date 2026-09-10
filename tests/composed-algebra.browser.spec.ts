@@ -1,6 +1,45 @@
 import { test, expect } from "@playwright/test";
 import source from "../src/authoring/examples/composed-algebra-primary.json" with { type: "json" };
 import { kpEquationSettlementTolerancePx } from "../src/animation/equation-shared-presentation-policy.ts";
+import { buildComposedAlgebraEdition } from "../scripts/build-composed-algebra-edition.ts";
+import { fileURLToPath } from "node:url";
+
+for (const width of [1280, 390]) test(`primary combined review at ${width}px`, async ({ page }, info) => {
+  test.setTimeout(120_000);
+  const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
+  await page.setViewportSize({ width, height: 900 });
+  await page.goto("/experiments/reusable-reasoning/?example=composed-algebra");
+  const root = page.locator("#authored-focus-card");
+  await expect(root).toHaveAttribute("data-composed-status", "ready", { timeout: 90_000 });
+  const card = root.locator("[data-composed-reader] [data-composed-card]");
+  for (const position of [0, .37, 1, 1.5, 2]) {
+    await card.locator("[data-kp-focus-deck-scrubber]").evaluate((node, p) => {
+      (node as HTMLInputElement).value = String(p); node.dispatchEvent(new Event("input"));
+    }, position);
+    await expect(card).toHaveAttribute("data-composed-step", String(position));
+    const bounds = await card.evaluate(node => {
+      const header = node.querySelector(".kp-focus-deck__header")!.getBoundingClientRect();
+      const passage = node.querySelector("[data-kp-focus-deck-viewport]")!.getBoundingClientRect();
+      return { headerBottom: header.bottom, passageTop: passage.top,
+        overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth };
+    });
+    expect(bounds.passageTop).toBeGreaterThanOrEqual(bounds.headerBottom);
+    expect(bounds.overflow).toBeLessThanOrEqual(1);
+    await card.screenshot({ path: info.outputPath(`card-${position}.png`) });
+  }
+  await root.locator("[data-composed-reading]").selectOption("compact");
+  await page.screenshot({ path: info.outputPath("compact-page.png"), fullPage: true });
+  await root.locator('[data-composed-practice="prediction"]').click();
+  await page.screenshot({ path: info.outputPath("practice.png"), fullPage: true });
+  await root.locator("[data-composed-return]").click();
+  const edition = buildComposedAlgebraEdition(fileURLToPath(new URL("../src/authoring/examples/composed-algebra-primary.json", import.meta.url)));
+  const response = await page.goto(`/tmp/codex/composed-algebra-editions/${edition.directory.split("/").at(-1)}/index.html`);
+  expect(response?.status()).toBe(200);
+  await expect(page.locator("[data-composed-publication-revision]")).toHaveAttribute("data-composed-publication-revision", edition.revisionId);
+  await expect(page.locator("math")).toHaveCount(8); await expect(page.locator("[data-kp-focus-deck-scrubber]")).toHaveCount(0);
+  await page.screenshot({ path: info.outputPath("static-edition.png"), fullPage: true });
+  expect(errors).toEqual([]);
+});
 
 test("readings and practice share the displayed revision and return to exact chain position", async ({ page }) => {
   test.setTimeout(120_000);

@@ -197,15 +197,8 @@ export function measureKpNativeKatexSubtreePaintRect(
   };
 }
 
-export function measureKpNativeKatexBaselineY(
-  stage: HTMLElement,
-  element: HTMLElement
-): number {
-  const stageRect = stage.getBoundingClientRect();
-  const scaleY = stageRect.height > 0
-    ? (stage.offsetHeight || stageRect.height) / stageRect.height
-    : 1;
-  return (measureInlineBaseline(element) - stageRect.top) * scaleY;
+export function measureKpNativeKatexBaselineY(stage: HTMLElement, element: HTMLElement): number {
+  return measureInlineBaseline(element, stage);
 }
 
 function visibleDirectText(element: HTMLElement): string {
@@ -216,22 +209,17 @@ function visibleDirectText(element: HTMLElement): string {
     .replace(/[\s\u200b-\u200d\ufeff]+/g, "");
 }
 
-function measureInlineBaseline(element: HTMLElement): number {
+function measureInlineBaseline(element: HTMLElement, stage?: HTMLElement): number {
   const marker = element.ownerDocument.createElement("span");
   marker.setAttribute("aria-hidden", "true");
-  marker.style.cssText = [
-    "display:inline-block",
-    "width:0",
-    "height:0",
-    "padding:0",
-    "margin:0",
-    "border:0",
-    "line-height:0",
-    "vertical-align:baseline"
-  ].join(";");
+  marker.style.cssText = "display:inline-block;width:0;height:0;padding:0;margin:0;border:0;line-height:0;vertical-align:baseline";
   element.append(marker);
   try {
-    return marker.getBoundingClientRect().top;
+    const baseline = marker.getBoundingClientRect().top;
+    if (!stage) return baseline;
+    // Keep the probe present for both reads: scroll anchoring moves the stage.
+    const rect = stage.getBoundingClientRect();
+    return (baseline - rect.top) * (rect.height > 0 ? (stage.offsetHeight || rect.height) / rect.height : 1);
   } finally {
     marker.remove();
   }

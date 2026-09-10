@@ -137,7 +137,8 @@
     {
       "id": "s17",
       "title": "Present combined primary visual/editorial checkpoint",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: primary desktop/narrow visual/editorial review ready at same-server example=composed-algebra.8 browser cases plus2 atomic canaries and all focused gates pass. Human acceptance pending; do not start s18.",
+      "status": "ready"
     },
     {
       "id": "s18",
