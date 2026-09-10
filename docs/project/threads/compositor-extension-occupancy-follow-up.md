@@ -1,4 +1,12 @@
-# Deferred compositor extension occupancy loop
+# Compositor extension occupancy follow-up — fulfilled
+
+Completed within the inventoried native-compositor scope on 2026-09-10 under
+`run-contract.kp.compositor-extension-occupancy-v2`. See
+`../reviews/2026-09-10-compositor-extension-occupancy-closeout.md` and
+`2026-09-10-native-compositor-extension-guide.md` for executed evidence and
+explicit gaps. The planning requirements below are provenance, not another
+live queue. Next is the proposed unfamiliar supported-authoring trial, not
+indefinite compositor expansion.
 
 Accepted direction: 2026-09-09. Requested explicitly while repairing the M1b
 composed-factoring visual checkpoint. This is a required successor-planning

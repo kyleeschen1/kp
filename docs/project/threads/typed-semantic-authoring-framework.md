@@ -1,12 +1,13 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: compositor extension-participation loop approved and active; M1b, R1–R4B and M1a remain complete
+Status: compositor extension-participation complete; unfamiliar supported-authoring trial proposed; M1b, R1–R4B and M1a remain complete
 Last Updated: 2026-09-10
 Standing budget policy: recommended engineering-budget repairs, including
 explicit bounded policy amendments, are automatically approved across sessions.
 See `../decisions/2026-09-10-engineering-budget-repair-autonomy.md`.
-The compositor aggregate-only 530,000-byte amendment is accepted; the earlier
-budget-only stop is resolved. Theseus owns continuation and evidence.
+The initial compositor aggregate-only amendment and earlier budget-only stop
+are historical. Final costs and later bounded amendments are recorded in
+`2026-09-10-compositor-extension-source-budget-checkpoint.md`.
 Current successor reference: `../reviews/2026-09-07-reconciled-authoring-loop-horizon.md`.
 It preserves the original architectural obligations and the tax/Bayes direction;
 the exact R1 26-slice proposal was approved and is now completed evidence:
@@ -68,11 +69,12 @@ do not treat its proposed roadmap or readiness labels as new execution authority
 The user clarified the remaining code issue as missing gradual passage swiping.
 The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
-Current Next Action: execute the approved scope in
-`../reviews/2026-09-10-compositor-extension-occupancy-long-loop-proposal.md` before
-starting another specialized motif. Named action:
-`next-action.kp.compositor-extension-occupancy`, under
-`run-contract.kp.compositor-extension-occupancy-v2`. The unstarted v1 is superseded.
+Current Next Action: review
+`../reviews/2026-09-10-unfamiliar-supported-authoring-trial-proposal.md` and select
+the useful explanation before executing another loop. The compositor migration
+is complete under `run-contract.kp.compositor-extension-occupancy-v2`; see
+`../reviews/2026-09-10-compositor-extension-occupancy-closeout.md` for achieved
+integration, release evidence and remaining limits. The unstarted v1 is superseded.
 The accepted 2026-09-10 direction
 keeps this repair finite, then measures unfamiliar supported authoring before
 new capability expansion; see
@@ -84,9 +86,10 @@ both source-only callers, full release evidence, inspection links and limits.
 The teacher-zero HTML-gzip amendment was explicitly approved and all gates pass;
 `2026-09-09-composed-algebra-release-budget-checkpoint.md` is resolved history.
 Preserve the accepted `../principles/motif-composition-contracts.md` boundary.
-Broader extension coverage remains unimplemented in
-`compositor-extension-occupancy-follow-up.md`; its planning obligation is now
-carried into the linked proposal/action rather than lost at closeout.
+The inventoried extension-participation obligation in
+`compositor-extension-occupancy-follow-up.md` is fulfilled. This does not certify
+standalone material mounts, SVG successor ink or continuous-time clearance;
+use `2026-09-10-native-compositor-extension-guide.md` for the precise boundary.
 The approved scope remains
 `../reviews/2026-09-09-m1b-composed-algebra-long-loop-proposal.md`; its s17 checkpoint
 is resolved, not another approval gate. M1a remains complete under

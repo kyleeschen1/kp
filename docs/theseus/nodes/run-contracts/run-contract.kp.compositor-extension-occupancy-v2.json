@@ -2,8 +2,8 @@
   "id": "run-contract.kp.compositor-extension-occupancy-v2",
   "kind": "run-contract",
   "title": "Compositor extension participation",
-  "status": "ready",
-  "summary": "Budget authority stop resolved by explicit user direction recorded in engineering-budget-repair-autonomy decision. Budget-only stop clauses superseded; s02 remains continuation point, not completed migration.",
+  "status": "resolved",
+  "summary": "COMPLETE 24/24. Approved bounded migration and closeout finished; successor trial is proposed, not executing.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -185,7 +185,8 @@
     {
       "id": "s24",
       "title": "Close out and propose unfamiliar supported-authoring trial",
-      "status": "planned"
+      "summary": "Recorded bounded closeout and unfamiliar supported-authoring trial proposal; roadmap and active thread no longer restart completed migration. No successor execution.",
+      "status": "complete"
     }
   ]
 }

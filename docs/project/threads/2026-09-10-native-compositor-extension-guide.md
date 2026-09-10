@@ -1,7 +1,9 @@
 # Native KaTeX extension integration
 
-Status: implemented participation seam; final promotion/release status belongs
-to `run-contract.kp.compositor-extension-occupancy-v2`, not this guide.
+Status: implemented and release-verified under
+`run-contract.kp.compositor-extension-occupancy-v2`. See
+`../reviews/2026-09-10-compositor-extension-occupancy-closeout.md`; Theseus owns
+completion, not a duplicate execution table in this guide.
 
 ## Required path
 

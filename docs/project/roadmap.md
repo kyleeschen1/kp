@@ -104,23 +104,25 @@ the accepted visual or resolved budget checkpoint.
 `principles/motif-composition-contracts.md` establishes the accepted governing
 boundary: preserve motif character, inspect complete paint, and distinguish
 diagnostic transit contact from hard ownership/endpoint invariants.
-The required later compositor-occupancy recommendation is recorded in
-`threads/compositor-extension-occupancy-follow-up.md`. The next proposal is
-`reviews/2026-09-10-compositor-extension-occupancy-long-loop-proposal.md`, retained
-as `next-action.kp.compositor-extension-occupancy`. Its revised 24-slice scope is
-approved under `run-contract.kp.compositor-extension-occupancy-v2`; the unstarted
-metadata-incomplete v1 is superseded. Theseus owns live execution and stop state.
-It requires complete extension participation and current final-scene evidence
-before further specialized motif expansion; the factoring repair does not
-complete that broader work. Start with measured consolidation: the accounted
-renderer closure initially had only 45 bytes of source headroom. The accepted
-aggregate ceiling is now 530,000 bytes; successor execution is not authorized.
+The required compositor-occupancy recommendation is fulfilled within its
+inventoried scope under `run-contract.kp.compositor-extension-occupancy-v2`.
+Its 24-slice closeout is
+`reviews/2026-09-10-compositor-extension-occupancy-closeout.md`: issued final-scene
+participation for factoring and canonical successor plans, retired unchecked
+callbacks, preserved motifs and complete release verification. The unstarted v1
+is superseded; do not restart it or the completed migration. The implemented
+extension guide and explicit assurance gaps are linked from that closeout.
+Next reviewable work is
+`reviews/2026-09-10-unfamiliar-supported-authoring-trial-proposal.md`: select a
+useful explanation and measure five unfamiliar source-only variants before
+further capability expansion. This is proposed, not automatic successor execution.
 Recommended engineering-budget repairs now have persistent automatic approval:
 `decisions/2026-09-10-engineering-budget-repair-autonomy.md`. Keep complete
 accounting, bounded explicit amendments and verification; preserve other gates.
 The measured cost checkpoint and accepted aggregate-only amendment are in
 `threads/2026-09-10-compositor-extension-source-budget-checkpoint.md`.
-The prior budget-only stop is resolved; no production behavior has changed.
+The prior budget-only stop is historical. The cost record includes subsequent
+bounded source/accounting and inference amendments plus final measurements.
 The user accepted the authoring-leverage assessment on 2026-09-10: finish this
 finite seam, then measure an unfamiliar supported authoring task before further
 capability expansion. See
