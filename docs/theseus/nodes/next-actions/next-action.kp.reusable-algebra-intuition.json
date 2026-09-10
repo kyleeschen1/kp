@@ -108,6 +108,20 @@
       "scope": "s05-diagnostic-final",
       "checkedAt": "2026-09-10T23:40:55.378Z",
       "notes": "70 tests pass on final diagnostic source. New handoff remains unsupported, not certified."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring",
+      "status": "passed",
+      "scope": "h01",
+      "checkedAt": "2026-09-10T23:50:48.411Z",
+      "notes": "74 tests pass including partition completeness, order, nested members, copies and foreign capabilities."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "h01",
+      "checkedAt": "2026-09-10T23:50:49.538Z",
+      "notes": "Full types pass after narrowing the compound-member test fixture in a stable local variable."
     }
   ],
   "progress": {

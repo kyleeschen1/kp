@@ -77,7 +77,8 @@
     {
       "id": "h01",
       "title": "Verify whole/member endpoint partition authority",
-      "status": "planned"
+      "summary": "Issued immutable revision-bound whole/member semantic partition; incomplete, reordered, overlapping, copied and foreign evidence rejected.",
+      "status": "complete"
     },
     {
       "id": "h02",
