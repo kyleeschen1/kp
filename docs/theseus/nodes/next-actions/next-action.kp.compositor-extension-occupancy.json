@@ -291,6 +291,12 @@
       "status": "passed",
       "scope": "s12",
       "checkedAt": "2026-09-10T17:03:57.100Z"
+    },
+    {
+      "command": "npm run visual:composed-algebra; npm run test:composed-algebra-authoring; git diff --check",
+      "status": "passed",
+      "scope": "s13",
+      "checkedAt": "2026-09-10T17:06:01.165Z"
     }
   ],
   "progress": {

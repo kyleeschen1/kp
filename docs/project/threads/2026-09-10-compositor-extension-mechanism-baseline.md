@@ -39,3 +39,31 @@ No new aesthetic treatment was selected and no new visual approval is needed.
 Screenshots are disposable harness outputs, not approved goldens. Executable
 tests and this named source baseline are the durable comparison reference.
 Supported-browser promotion and complete release remain later run gates.
+
+## Pre-generalization comparison (s13)
+
+Compared against baseline commit `648576d5c` after the factoring migration and
+authentication work through `75002b9a7`:
+
+- Orientation and collection: the semantic choreography and factoring path/
+  material sampler are unchanged; whole `(x + 3)` groups remain intact.
+- Fusion: the same shared-pose invariant now runs at binding creation rather
+  than inside the old local transit audit. Its tolerance and ownership timing
+  are unchanged. Final assembly inspection cannot rewrite the pose.
+- Settlement and evaluation: native typography, shared semantic clock, both
+  authoring sources, and the optical evaluation implementation are unchanged.
+- Inspection: actual ordinary and extension paint is combined after routing;
+  internal extension contact is observable and diagnostic-only. This increases
+  coverage, not a collision-freedom or continuous-time claim.
+
+The canonical route remains the shared port-8000 composed-algebra host named
+above. The general contact-sheet command does not include this exemplar; the
+existing `npm run visual:composed-algebra` entrypoint owns its phase captures.
+Desktop settled and phone collection captures were inspected directly. No new
+choreography or visual treatment was selected. Tests cover repeatable reverse,
+native handoffs and full groups; captures are not newly approved goldens.
+
+The second-mechanism migration must preserve the existing contributor-fusion
+optical transforms, which currently run after base rendering. Replacing that
+wrapper with unmodified successor poses would not preserve the accepted motif.
+Its contributing/result ink still needs explicit realized-paint proof in s15.
