@@ -96,7 +96,8 @@ function createMinimalPlan(
   sourceStage: HTMLElement,
   targetStage = sourceStage,
   tracks: KpNativeKatexPaintMeasuredSceneTrack[] = [],
-  endpointDwellFraction?: number
+  endpointDwellFraction?: number,
+  extension: Partial<Parameters<typeof createKpNativeKatexRendererReadyScenePlan>[0]> = {}
 ) {
   const source = observation("source", sourceStage);
   const target = observation("target", targetStage);
@@ -122,9 +123,45 @@ function createMinimalPlan(
       reason: "clear",
       affectedIds: Object.freeze([])
     }),
-    ...(endpointDwellFraction === undefined ? {} : { endpointDwellFraction })
+    ...(endpointDwellFraction === undefined ? {} : { endpointDwellFraction }),
+    ...extension
   });
 }
+
+// Characterization of the pre-migration seam, not an accepted safety contract.
+// The contribution migration must turn these admitted cases into rejections.
+test("characterization: ready-plan issuance does not inspect extension paint or duplicate participants", () => {
+  const stage = {} as HTMLElement;
+  let samples = 0;
+  const owner = { ownerId: "unmeasured", sourceElement: {} as HTMLElement,
+    rect: { left: 0, top: 0, width: 10, height: 10 }, opacity: 1, transform: "none" };
+  const plan = createMinimalPlan(stage, stage, [], undefined, {
+    supplementalMaterialOwners: () => { samples++; return [owner, owner]; }
+  });
+  assert.equal(isKpNativeKatexRendererReadyScenePlan(plan), true);
+  assert.equal(samples, 0, "Issuance never samples the actual contribution.");
+  const frames = plan.supplementalMaterialOwners!(0.5);
+  assert.equal(frames[0]!.expectedPaintRect, undefined);
+  assert.equal(new Set(frames.map(frame => frame.ownerId)).size, 1);
+  assert.equal(frames.length, 2);
+});
+
+test("characterization: another sampler can reuse the same unrelated inspection payload", () => {
+  const stage = {} as HTMLElement;
+  const audit = certificate();
+  const first = createMinimalPlan(stage, stage, [], undefined, {
+    protectedTransit: audit, supplementalMaterialOwners: () => []
+  });
+  const second = createMinimalPlan(stage, stage, [], undefined, {
+    protectedTransit: audit,
+    supplementalMaterialOwners: () => [{ ownerId: "later", sourceElement: {} as HTMLElement,
+      rect: { left: 500, top: 200, width: 10, height: 10 }, opacity: 1, transform: "none" }]
+  });
+  assert.equal(first.protectedTransit, second.protectedTransit);
+  assert.notEqual(first.supplementalMaterialOwners, second.supplementalMaterialOwners);
+  assert.equal(isKpNativeKatexRendererReadyScenePlan(second), true);
+  assert.equal(second.supplementalMaterialOwners!(0.5).length, 1);
+});
 
 function observation(endpoint: "source" | "target", stage: HTMLElement) {
   return Object.freeze({

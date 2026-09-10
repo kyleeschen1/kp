@@ -59,7 +59,8 @@
     {
       "id": "s03",
       "title": "Characterize contribution and stale-evidence bypasses",
-      "status": "planned"
+      "summary": "Two deterministic tests expose current admission gaps; later migration must invert them to fail closed.",
+      "status": "complete"
     },
     {
       "id": "s04",

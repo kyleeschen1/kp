@@ -113,6 +113,13 @@
       "scope": "s02",
       "checkedAt": "2026-09-10T16:07:50.254Z",
       "notes": "Full checks pass; Svelte zero errors/warnings. Prior measured baseline and accepted aggregate amendment retained."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "s03",
+      "checkedAt": "2026-09-10T16:09:54.287Z",
+      "notes": "31 pass. Two characterization tests execute admitted duplicate/unmeasured owners and reusing an unrelated audit with a different sampler; not safety certification."
     }
   ],
   "progress": {
