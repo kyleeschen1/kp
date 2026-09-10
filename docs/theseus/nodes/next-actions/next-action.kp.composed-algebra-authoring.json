@@ -146,6 +146,13 @@
       "scope": "s14",
       "checkedAt": "2026-09-10T02:26:47.128Z",
       "notes": "Full typecheck passes; added transaction APIs to real consumer fixture. Fixed ceilings pass: combined171690 types285590 instantiations."
+    },
+    {
+      "command": "npm run visual:composed-algebra -- --grep controls; node --test tests/focus-deck-scaffold.test.ts; npm run typecheck; git diff --check",
+      "status": "passed",
+      "scope": "s15",
+      "checkedAt": "2026-09-10T02:30:32.688Z",
+      "notes": "Two selected browser controls/Apply cases pass; adjacent operations visibly animate, repeated reverse wheel settles, three slots and immediate fraction/prose share one clock. Reduced motion preserves endpoints. Four shared scaffold/key tests and full typecheck pass."
     }
   ],
   "expectedLearning": [

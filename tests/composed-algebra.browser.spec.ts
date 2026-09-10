@@ -2,6 +2,47 @@ import { test, expect } from "@playwright/test";
 import source from "../src/authoring/examples/composed-algebra-primary.json" with { type: "json" };
 import { kpEquationSettlementTolerancePx } from "../src/animation/equation-shared-presentation-policy.ts";
 
+test("three-stop controls animate adjacent operations and reverse gestures without independent prose travel", async ({ page }) => {
+  test.setTimeout(120_000);
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/experiments/reusable-reasoning/?example=composed-algebra");
+  await expect(page.locator("#authored-focus-card")).toHaveAttribute("data-composed-status", "ready", { timeout: 90_000 });
+  const card = page.locator("[data-composed-reader] [data-composed-card]"), slider = card.locator("[data-kp-focus-deck-scrubber]");
+  await expect(slider).toHaveAttribute("max", "2");
+  await expect(card.locator("[data-kp-focus-deck-beat]")).toHaveCount(3);
+  const position = async () => Number(await card.getAttribute("data-composed-step"));
+  for (const step of [1, 2]) {
+    await card.locator("[data-kp-focus-deck-next]").click();
+    await expect.poll(position).toBeGreaterThan(step - 1); expect(await position()).toBeLessThan(step);
+    await expect(card).toHaveAttribute("data-composed-step", String(step), { timeout: 10_000 });
+    await expect(card.locator("[data-composed-count]")).toHaveText(`${step + 1} / 3`);
+    await expect(card.locator('[data-kp-focus-deck-beat][aria-current="page"]')).toHaveAttribute("data-kp-focus-deck-beat", source.states[step]!.id);
+  }
+  await slider.focus(); await page.keyboard.press("ArrowLeft");
+  await expect.poll(position).toBeLessThan(2); expect(await position()).toBeGreaterThan(1);
+  await expect(card).toHaveAttribute("data-composed-step", "1", { timeout: 10_000 });
+  await card.locator("[data-distribution-stage]").hover();
+  await page.mouse.wheel(-420, 0);
+  await expect(card).toHaveAttribute("data-composed-step", "0", { timeout: 10_000 });
+  await page.mouse.wheel(420, 0);
+  await expect(card).toHaveAttribute("data-composed-step", "1", { timeout: 10_000 });
+  await page.mouse.wheel(-420, 0);
+  await expect(card).toHaveAttribute("data-composed-step", "0", { timeout: 10_000 });
+  // The fraction/prose are sampled in the same clock callback, not after settling.
+  const immediate = await slider.evaluate(node => {
+    (node as HTMLInputElement).value = "1.6"; node.dispatchEvent(new Event("input"));
+    const root = node.closest("[data-composed-card]")!;
+    return { count: root.querySelector("[data-composed-count]")!.textContent,
+      active: root.querySelector('[aria-current="page"]')!.getAttribute("data-kp-focus-deck-beat") };
+  });
+  expect(immediate).toEqual({ count: "3 / 3", active: source.states[2]!.id });
+  await slider.dispatchEvent("change"); await expect(card).toHaveAttribute("data-composed-step", "2", { timeout: 10_000 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await card.locator("[data-kp-focus-deck-previous]").click();
+  await expect(card).toHaveAttribute("data-composed-step", "1");
+  await expect(card.locator("[data-composed-count]")).toHaveText("2 / 3");
+});
+
 test("composed authoring applies one coherent prepared revision and preserves it on repair gaps", async ({ page }) => {
   test.setTimeout(120_000);
   await page.goto("/experiments/reusable-reasoning/?example=composed-algebra");

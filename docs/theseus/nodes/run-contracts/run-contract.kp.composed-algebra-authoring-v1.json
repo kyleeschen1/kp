@@ -125,7 +125,8 @@
     {
       "id": "s15",
       "title": "Expose three stops through shared controls and position text",
-      "status": "planned"
+      "summary": "Three semantic slots use existing checkpoint playback, native input and keyboard owners. Arrows animate adjacent operations; continuous scrubbing and reverse gestures settle correctly; fraction/prose update synchronously. Scoped browser and type checks pass.",
+      "status": "complete"
     },
     {
       "id": "s16",

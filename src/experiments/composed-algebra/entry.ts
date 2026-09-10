@@ -6,23 +6,32 @@ import type { KpComposedAlgebraPresentation } from "../../authoring/composed-alg
 import { mountCanonicalComposedAlgebraPresentation } from "../common-factor/native.ts";
 import { renderComposedAlgebraCard, composedAlgebraBeats } from "./page.ts";
 import { resolveKpFocusDeckVisibleBeat } from "../../tutorial/focus-deck-beat-navigation.ts";
+import { createKpFocusDeckCheckpointPlayback } from "../../tutorial/focus-deck-checkpoint-playback.ts";
+import { mountKpFocusDeckNativeInput } from "../../tutorial/focus-deck-native-input.ts";
+import { bindKpFocusDeckKeyboard } from "../../tutorial/focus-deck-keyboard.ts";
 
 const root = document.querySelector<HTMLElement>("#authored-focus-card")!;
 async function mountCard(container: HTMLElement, draft: KpComposedAlgebraPresentation) {
   const card = container.querySelector<HTMLElement>("[data-composed-card]")!;
   const surface = await mountCanonicalComposedAlgebraPresentation(card, draft), clock = surface.clock;
+  const playback = createKpFocusDeckCheckpointPlayback(clock, draft.checkpointProgress);
   const viewport = card.querySelector<HTMLElement>("[data-kp-focus-deck-viewport]")!;
   const slider = card.querySelector<HTMLInputElement>("[data-kp-focus-deck-scrubber]")!;
+  const previous = card.querySelector<HTMLButtonElement>("[data-kp-focus-deck-previous]")!;
+  const next = card.querySelector<HTMLButtonElement>("[data-kp-focus-deck-next]")!;
+  const replay = card.querySelector<HTMLButtonElement>("[data-kp-focus-deck-replay]")!;
   const reduced = matchMedia("(prefers-reduced-motion: reduce)"), beats = composedAlgebraBeats(draft);
   let disposed = false, visible = 0;
+  let input: ReturnType<typeof mountKpFocusDeckNativeInput> | undefined;
+  const cancel = () => { input?.cancel(); playback.cancel(); };
   viewport.dataset["kpFocusDeckSnapDisabled"] = "true";
-  card.querySelectorAll<HTMLButtonElement>("button").forEach(button => { button.disabled = true; });
   const render = () => {
     if (disposed) return;
     surface.render(reduced.matches);
-    const position = surface.checkpoints.positionAt(clock.getSnapshot().progress);
+    const position = playback.position();
     visible = resolveKpFocusDeckVisibleBeat(position, visible, surface.checkpoints.last);
     card.dataset["composedStep"] = String(position);
+    previous.disabled = position <= 0; next.disabled = position >= playback.last;
     slider.value = String(position); slider.setAttribute("aria-valuetext", `Step ${visible + 1} of 3: ${beats[visible]!.title}`);
     card.dataset["kpFocusDeckActiveBeat"] = beats[visible]!.slug;
     const counter = card.querySelector<HTMLElement>("[data-composed-count]")!;
@@ -32,17 +41,29 @@ async function mountCard(container: HTMLElement, draft: KpComposedAlgebraPresent
       item.dataset["kpFocusDeckBeatActive"] = String(index === visible);
       if (index === visible) item.setAttribute("aria-current", "page"); else item.removeAttribute("aria-current");
     });
-    viewport.scrollLeft = position * viewport.clientWidth;
+    if (!input?.ownsTravel()) viewport.scrollLeft = position * viewport.clientWidth;
   };
+  const navigate = (step: number) => { cancel(); clock.pause(); surface.prepare(); playback.seek(step, !reduced.matches); };
   const unsubscribe = clock.subscribe(render);
-  slider.oninput = () => { clock.pause(); clock.seek(surface.checkpoints.progressAt(Number(slider.value))); };
-  const resize = () => { if (!disposed) { clock.pause(); surface.resize(); render(); } };
-  const visibility = () => { if (document.hidden) clock.pause(); };
-  const dispose = () => { if (disposed) return; disposed = true; unsubscribe(); surface.dispose(); slider.oninput = null;
+  previous.onclick = () => navigate(Math.max(0, Math.ceil(playback.position()) - 1));
+  next.onclick = () => navigate(Math.min(playback.last, Math.floor(playback.position()) + 1));
+  replay.onclick = () => { cancel(); clock.seek(0); navigate(playback.last); };
+  slider.oninput = () => { cancel(); clock.pause(); clock.seek(surface.checkpoints.progressAt(Number(slider.value))); };
+  const release = () => playback.seek(Math.round(playback.position()), !reduced.matches, true);
+  slider.onchange = release; slider.onpointerup = release; slider.onpointercancel = release;
+  const unbindKeyboard = bindKpFocusDeckKeyboard({ card, slider, enabled: () => !disposed,
+    position: playback.position, checkpointCount: () => playback.last + 1, navigate });
+  input = mountKpFocusDeckNativeInput({ viewport, region: card, enabled: () => !disposed,
+    position: playback.position, begin: playback.begin, reduced: () => reduced.matches, interrupt: cancel });
+  const resize = () => { if (!disposed) { cancel(); clock.pause(); surface.resize(); render(); } };
+  const visibility = () => { if (document.hidden) { cancel(); clock.pause(); } };
+  const dispose = () => { if (disposed) return; disposed = true; input?.dispose(); playback.dispose(); unsubscribe(); unbindKeyboard(); surface.dispose();
+    previous.onclick = null; next.onclick = null; replay.onclick = null;
+    slider.oninput = null; slider.onchange = null; slider.onpointerup = null; slider.onpointercancel = null;
     window.removeEventListener("resize", resize); document.removeEventListener("visibilitychange", visibility); reduced.removeEventListener("change", resize); };
   window.addEventListener("resize", resize); document.addEventListener("visibilitychange", visibility); reduced.addEventListener("change", resize);
   render(); card.dataset["kpFocusCardEnhancement"] = "ready";
-  return { card, clock, dispose };
+  return { card, clock, dispose, cancel };
 }
 
 async function mount() {
@@ -62,7 +83,7 @@ async function mount() {
       catch (error) { staging.remove(); throw error; }
     },
     commit: (prepared, draft) => {
-      const previous = active; previous.clock.pause();
+      const previous = active; previous.cancel(); previous.clock.pause();
       display.replaceChildren(...prepared.staging.childNodes); active = prepared.surface;
       prepared.staging.remove(); previous.dispose();
       root.querySelector<HTMLElement>("[data-composed-title]")!.textContent = draft.checked.source.editorial.title;
@@ -86,7 +107,7 @@ async function mount() {
     const link = document.createElement("a"); link.href = url; link.download = "composed-algebra.json"; link.click(); URL.revokeObjectURL(url);
   };
   const dispose = () => { if (disposed) return; disposed = true; session.dispose(); active.dispose(); editor.oninput = null; apply.onclick = null; download.onclick = null; window.removeEventListener("pagehide", pagehide); };
-  const pagehide = (event: PageTransitionEvent) => { if (event.persisted) active.clock.pause(); else dispose(); };
+  const pagehide = (event: PageTransitionEvent) => { if (event.persisted) { active.cancel(); active.clock.pause(); } else dispose(); };
   window.addEventListener("pagehide", pagehide); import.meta.hot?.dispose(dispose);
   root.dataset["composedStatus"] = "ready"; root.dataset["composedRevision"] = initial.revisionId;
 }
