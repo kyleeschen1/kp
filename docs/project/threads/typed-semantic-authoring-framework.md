@@ -79,10 +79,14 @@ passed Apply, projections and publication with zero engine edits. The user
 accepted it with “it works!” on 2026-09-10. Promotion, release and closeout passed;
 see `../reviews/2026-09-10-unfamiliar-supported-authoring-closeout.md` for the
 five-case evidence, 111 browser checks, 6,972 full-suite tests and limits.
-No approved slices remain. Recommended next decision: a short author-start route
-exercised on a real requested explanation, then a concrete mixed-operation-chain
-capability proposal when that lesson exposes a gap. This is not successor
-execution approval and must not turn into another broad infrastructure loop.
+No approved slices remain. Current activity: brainstorm the accepted capability-led
+repertoire and queryable/composable micro-intuition direction; see
+`../decisions/2026-09-10-visual-repertoire-and-queryable-intuitions.md`.
+Richer algebra, a contour-adjacent geometric flagship, then derivative and
+accumulation are the accepted high-level path, not an approved run. Author-start
+cleanup belongs inside delivery, not a separate prerequisite. Larger FTC/SVD
+intuition units should compose smaller directly retrievable explanations.
+No new framework, implementation loop or tabled asset is activated.
 Source-only trial, not engine expansion. The compositor migration
 is complete under `run-contract.kp.compositor-extension-occupancy-v2`; see
 `../reviews/2026-09-10-compositor-extension-occupancy-closeout.md` for achieved

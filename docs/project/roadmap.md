@@ -124,10 +124,16 @@ variants pass actual Apply, projections and immutable publication with no engine
 implementation edits. Promotion, release and closeout are now complete:
 `reviews/2026-09-10-unfamiliar-supported-authoring-closeout.md` records all five
 cases, 111 browser checks, 6,972 full-suite tests, unchanged costs and honest
-measurement limits. No approved execution remains. The next recommendation is
-a bounded author-start simplification exercised on a real requested explanation;
-longer mixed-operation chains remain the next capability proposal boundary.
-Neither is automatically approved. Do not restart this trial or the completed
+measurement limits. No approved execution remains. The user accepted capability-led
+repertoire expansion and queryable, composable micro-intuitions:
+`decisions/2026-09-10-visual-repertoire-and-queryable-intuitions.md`.
+Direction: richer mixed-operation algebra, then a contour-adjacent geometric
+flagship, derivative/local linearization and accumulation, with connected
+subject expansion afterward. Author-start cleanup accompanies delivery, not
+another prerequisite loop. Intuitions, including larger FTC/SVD explanations,
+must support direct retrieval and composition rather than compulsory long-form
+viewing. Current activity is continued brainstorming; no new execution is
+approved. Do not restart this trial or the completed
 compositor migration, or manufacture another generic infrastructure loop.
 Recommended engineering-budget repairs now have persistent automatic approval:
 `decisions/2026-09-10-engineering-budget-repair-autonomy.md`. Keep complete

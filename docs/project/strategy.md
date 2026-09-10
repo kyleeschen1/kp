@@ -1,6 +1,6 @@
 # KP Strategy
 
-Last Updated: 2026-09-07
+Last Updated: 2026-09-10
 
 ## North Star
 
@@ -18,6 +18,16 @@ inspectable and executable; the compiler is core machinery, not the complete
 learner-facing product definition.
 
 ## Product Thesis
+
+Accepted clarification (2026-09-10): KP's reusable product unit is a queryable,
+composable intuition, not a fixed-length animation or documentary. Smaller
+micro-intuitions should support local learning and retention while composing
+into larger intuitions such as the fundamental theorem of calculus or singular
+value decomposition. Whole-argument gestalt remains valuable; replaying a long
+presentation must not be the necessary route to a missing idea. This is product
+intent, not a measured learning claim or a new universal schema. See
+`decisions/2026-09-10-visual-repertoire-and-queryable-intuitions.md` for the
+accepted capability-led repertoire path and open design questions.
 
 The learner-facing durable artifact is a reusable **way of seeing**. Its
 technical substrate is an executable semantic object: stable objects,

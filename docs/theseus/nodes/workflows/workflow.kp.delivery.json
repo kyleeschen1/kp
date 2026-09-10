@@ -4,7 +4,7 @@
   "title": "Kinetic Press delivery",
   "status": "active",
   "domain": "kp",
-  "summary": "Unfamiliar supported-authoring trial COMPLETE 20/20; compositor and prior loops remain closed. Read 2026-09-10 unfamiliar-supported-authoring closeout. No approved implementation remains; next bounded author-start recommendation awaits scope approval.",
+  "summary": "Accepted capability-led repertoire and queryable composable micro-intuitions; continue brainstorming, no implementation approval. Mixed algebra, contour-adjacent geometry, derivative then accumulation; author-start cleanup accompanies delivery. Prior trial COMPLETE 20/20.",
   "sourceRefs": [
     {
       "kind": "user-intent",
@@ -58,6 +58,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-10-unfamiliar-authoring-visual-checkpoint.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-10-visual-repertoire-and-queryable-intuitions.md"
     }
   ],
   "decisions": [],

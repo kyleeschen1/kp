@@ -99,6 +99,12 @@ or release boundaries. No new framework should be inferred from this closeout.
 
 ## Ranked next decision — recommendation, not execution
 
+Update: the subsequent accepted direction in
+`../decisions/2026-09-10-visual-repertoire-and-queryable-intuitions.md` supersedes
+this ordering recommendation. Author-start cleanup now accompanies capability-led
+delivery instead of preceding it as a separate task. The trial results and
+limitations above remain unchanged. Further discussion, not execution, is active.
+
 **Next: a bounded author-start simplification, exercised on one real requested
 explanation.** Keep the existing entrypoint and domain packet; make the minimum
 required context, supported notation, full-source Apply steps and repair example
