@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-09-09
+Last Updated: 2026-09-10
 Status: active
 Active Thread: `threads/typed-semantic-authoring-framework.md`
 Supporting Threads:
@@ -93,20 +93,26 @@ The explicitly approved renderer-source and three reader HTML-gzip amendments
 are resolved historical checkpoints. The user explicitly approved the next
 26-slice M1b composed-algebra proposal:
 `reviews/2026-09-09-m1b-composed-algebra-long-loop-proposal.md`.
-The combined M1b visual checkpoint is accepted. Both source-only callers and
-supported-browser promotion pass; `run-contract.kp.composed-algebra-authoring-v1`
-has reached the s25 release gate. One fixed reader HTML-gzip budget is 12 bytes
-over its limit; no amendment is applied. Resume evidence and the exact decision:
-`threads/2026-09-09-composed-algebra-release-budget-checkpoint.md`.
-Finish s25 release and s26 closeout after that decision; do not reopen the
-accepted visual checkpoint. No later successor is automatically authorized.
+M1b is complete under `run-contract.kp.composed-algebra-authoring-v1`: accepted
+compound factoring/evaluation, source-only product reuse, three-stop authoring
+and coherent projections, supported-browser promotion and full release pass.
+Closeout: `reviews/2026-09-10-composed-algebra-authoring-closeout.md`.
+The user explicitly approved the single teacher-zero HTML-gzip baseline amendment;
+the 5% policy and other gates are unchanged. Its resolved history is in
+`threads/2026-09-09-composed-algebra-release-budget-checkpoint.md`. Do not reopen
+the accepted visual or resolved budget checkpoint.
 `principles/motif-composition-contracts.md` establishes the accepted governing
 boundary: preserve motif character, inspect complete paint, and distinguish
 diagnostic transit contact from hard ownership/endpoint invariants.
 The required later compositor-occupancy recommendation is recorded in
-`threads/compositor-extension-occupancy-follow-up.md`. M1b closeout must carry it
-into a named successor proposal/action before further specialized motif expansion;
-the current factoring repair does not complete that catalogue-wide work.
+`threads/compositor-extension-occupancy-follow-up.md`. The next proposal is
+`reviews/2026-09-10-compositor-extension-occupancy-long-loop-proposal.md`, retained
+as `next-action.kp.compositor-extension-occupancy`, deferred pending scope approval.
+It requires complete extension participation and current final-scene evidence
+before further specialized motif expansion; the factoring repair does not
+complete that broader work. Start with measured consolidation: the accounted
+renderer closure has only 45 bytes of source headroom. No successor execution or
+further non-TypeScript budget amendment is automatically authorized.
 The accepted broader direction is recorded in
 `decisions/2026-09-09-mathematics-expansion-and-m1a-approval.md`; it guides later
 proposals, not automatic subject expansion. R4B's measured TypeScript-cost amendments

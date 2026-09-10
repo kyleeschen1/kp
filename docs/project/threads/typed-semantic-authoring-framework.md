@@ -1,7 +1,7 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: M1b browser promotion complete; release awaits a fixed HTML-budget decision; R1–R4B and M1a remain complete
-Last Updated: 2026-09-09
+Status: M1b complete; compositor extension-participation proposal awaits scope approval; R1–R4B and M1a remain complete
+Last Updated: 2026-09-10
 Current successor reference: `../reviews/2026-09-07-reconciled-authoring-loop-horizon.md`.
 It preserves the original architectural obligations and the tax/Bayes direction;
 the exact R1 26-slice proposal was approved and is now completed evidence:
@@ -63,14 +63,20 @@ do not treat its proposed roadmap or readiness labels as new execution authority
 The user clarified the remaining code issue as missing gradual passage swiping.
 The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
-Current Next Action: resolve the s25 release budget decision for
-`run-contract.kp.composed-algebra-authoring-v1`, then finish its release and closeout.
-The primary is visually accepted and both retained callers pass supported-browser
-promotion. Exact evidence and proposed bounded amendment:
-`2026-09-09-composed-algebra-release-budget-checkpoint.md`. Continue
-under the accepted motif/compositor boundary in
-`../principles/motif-composition-contracts.md`. Broader extension coverage is
-retained in `compositor-extension-occupancy-follow-up.md` as a closeout obligation.
+Current Next Action: review
+`../reviews/2026-09-10-compositor-extension-occupancy-long-loop-proposal.md` before
+starting another specialized motif. Named action:
+`next-action.kp.compositor-extension-occupancy`, deferred until explicit scope
+approval; no successor execution contract is active. M1b is complete under
+`run-contract.kp.composed-algebra-authoring-v1`; see
+`../reviews/2026-09-10-composed-algebra-authoring-closeout.md` for author capability,
+both source-only callers, full release evidence, inspection links and limits.
+The teacher-zero HTML-gzip amendment was explicitly approved and all gates pass;
+`2026-09-09-composed-algebra-release-budget-checkpoint.md` is resolved history.
+Preserve the accepted `../principles/motif-composition-contracts.md` boundary.
+Broader extension coverage remains unimplemented in
+`compositor-extension-occupancy-follow-up.md`; its planning obligation is now
+carried into the linked proposal/action rather than lost at closeout.
 The approved scope remains
 `../reviews/2026-09-09-m1b-composed-algebra-long-loop-proposal.md`; its s17 checkpoint
 is resolved, not another approval gate. M1a remains complete under

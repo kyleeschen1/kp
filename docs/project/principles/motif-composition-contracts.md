@@ -83,9 +83,11 @@ arc inflation. Contributors and receiver share emphasis at fusion, with release
 after material settlement. This is not a universal extension contract or
 catalogue-wide certification.
 
-Next: approve the factoring exemplar, pressure a structurally different caller,
-then extract only the shared boundary demonstrated by both. Carry broader
-extension coverage through
+The factoring exemplar is accepted and the structurally different product caller
+passes the supported-browser cohort; see
+`../reviews/2026-09-10-composed-algebra-authoring-closeout.md`.
+Next, extract only the demonstrated shared boundary through the separately
+proposed extension migration. Carry broader extension coverage through
 [the deferred loop record](../threads/compositor-extension-occupancy-follow-up.md).
 Preserve operation-owned open registration instead of central operation-name
 conditionals. New universal types and migrations need their own demonstrated

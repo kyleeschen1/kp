@@ -6,11 +6,15 @@ input, not authorization to execute a new loop or replace the compositor.
 
 ## Trigger and owner
 
-The current owner is `run-contract.kp.composed-algebra-authoring-v1`.
-Its closeout must carry this recommendation into an explicit successor proposal
-and retain a named pending action until implemented or explicitly superseded.
+M1b's closeout carried this recommendation forward on 2026-09-10. The explicit
+proposal is `../reviews/2026-09-10-compositor-extension-occupancy-long-loop-proposal.md`;
+the named action is `next-action.kp.compositor-extension-occupancy`, deferred
+pending scope approval. No successor execution contract is active. Keep that
+action pending until implemented or explicitly superseded; creating the proposal
+does not complete this recommendation.
 Do not close the recommendation merely because factoring passes its checkpoint.
-First finish the approved exemplar review and source-only second-chain pressure.
+The approved exemplar review and source-only second-chain pressure are complete;
+see `../reviews/2026-09-10-composed-algebra-authoring-closeout.md`.
 Schedule the bounded compositor work before further motif expansion that would
 introduce another specialized paint path.
 

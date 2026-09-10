@@ -2,8 +2,8 @@
   "id": "run-contract.kp.composed-algebra-authoring-v1",
   "kind": "run-contract",
   "title": "M1b Composed algebra authoring",
-  "status": "in-progress",
-  "summary": "Approved narrow reader HTML-gzip amendment resolves prior authority stop. Resume remaining s25 and s26 of approved26-slice contract.",
+  "status": "resolved",
+  "summary": "COMPLETE: 26 of 26 approved slices, accepted visuals, full release verification and durable closeout. Required successor proposal/action recorded; no automatic successor execution.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -17,6 +17,10 @@
     {
       "kind": "file",
       "path": "docs/project/threads/2026-09-09-composed-algebra-release-budget-checkpoint.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-10-composed-algebra-authoring-closeout.md"
     }
   ],
   "verification": [
@@ -195,8 +199,8 @@
     {
       "id": "s26",
       "title": "Close receipts and reconcile roadmap, limits and next proposal",
-      "summary": "Close receipts, reconcile roadmap and limits, and carry compositor-extension-occupancy-follow-up.md into an explicit successor proposal and named pending action before further specialized motif expansion. Factoring repair does not discharge this broader recommendation; successor execution requires approval.",
-      "status": "planned"
+      "summary": "Closeout and project memory reconciled; all receipts closed. Required compositor-extension proposal linked to a named deferred action. Broader implementation remains pending explicit scope approval.",
+      "status": "complete"
     }
   ]
 }

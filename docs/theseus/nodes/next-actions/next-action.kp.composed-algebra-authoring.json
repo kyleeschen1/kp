@@ -2,9 +2,9 @@
   "id": "next-action.kp.composed-algebra-authoring",
   "kind": "next-action",
   "title": "M1b Composed algebra authoring",
-  "status": "in-progress",
+  "status": "resolved",
   "domain": "authoring",
-  "summary": "User explicitly approved teacher-zero HTML-gzip baseline4352 to4582 on2026-09-10. Resume s25 release then s26 closeout; no other gate amendment or successor execution.",
+  "summary": "M1b complete with two verified source-only chains and full release evidence. Narrow teacher-zero amendment explicitly approved. Required extension-participation successor is proposed and deferred, not implemented.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -29,6 +29,14 @@
     {
       "kind": "file",
       "path": "docs/project/threads/2026-09-09-composed-algebra-release-budget-checkpoint.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-10-composed-algebra-authoring-closeout.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-10-compositor-extension-occupancy-long-loop-proposal.md"
     }
   ],
   "dependsOn": {
@@ -302,11 +310,18 @@
       "scope": "s25-final-full",
       "checkedAt": "2026-09-10T14:26:16.731Z",
       "notes": "6937 tests passed, zero failures, skips or cancellations; 726561 ms. Architecture, complete inference, catalog and promotion-memory pre-gates pass. Exact reachability freshness is green after its owning metadata repair."
+    },
+    {
+      "command": "theseus workspace validate; git diff --check",
+      "status": "passed",
+      "scope": "s26",
+      "checkedAt": "2026-09-10T14:29:34.348Z",
+      "notes": "Roadmap and active thread reconcile completed M1b. Closeout links actual release evidence and bounded limits. Required 24-slice successor proposal and named deferred action exist; no successor contract or implementation started."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "s01-s25 complete. Approved teacher-zero baseline resolves the release stop; full suite, build, budgets, isolation, editions and preservation pass. Only s26 closeout and named pending successor remain."
+    "state": "complete",
+    "summary": "All 26 approved slices complete: accepted canonical compound factoring/evaluation, source-only product reuse, coherent projections, 6937 passing release tests, build, fixed gates and preservation. Required successor proposal/action retained without execution."
   },
   "expectedLearning": [
     "Measure compound factoring plus contextual evaluation reuse without renderer glue."
