@@ -48,7 +48,8 @@
     {
       "id": "s02",
       "title": "Record canonical baseline and packet revision",
-      "status": "planned"
+      "summary": "Pinned canonical workflow baseline and author packet before unfamiliar attempts.",
+      "status": "complete"
     },
     {
       "id": "s03",
