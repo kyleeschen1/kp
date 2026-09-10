@@ -41,7 +41,8 @@
     {
       "id": "s01",
       "title": "Pin canonical factoring/evaluation paths, limitations and preserved callers",
-      "status": "planned"
+      "summary": "Canonical factoring/evaluation owner baseline and executable M1a preservation probes complete;11 tests pass.",
+      "status": "complete"
     },
     {
       "id": "s02",

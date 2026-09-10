@@ -9,6 +9,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-09-m1b-composed-algebra-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-09-composed-algebra-owner-baseline.md"
     }
   ],
   "dependsOn": {
@@ -22,6 +26,15 @@
   "verification": [
     "npm run typecheck",
     "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --test tests/composed-algebra-baseline.test.ts tests/operation-evaluation-exemplar.test.ts tests/common-factor-presentation.test.ts",
+      "status": "passed",
+      "scope": "s01",
+      "checkedAt": "2026-09-10T00:02:49.644Z",
+      "notes": "11 pass; atomic left-factor and two-state M1a contracts preserved. Parsing compound expressions is not verification or compositor certification."
+    }
   ],
   "expectedLearning": [
     "Measure compound factoring plus contextual evaluation reuse without renderer glue."
