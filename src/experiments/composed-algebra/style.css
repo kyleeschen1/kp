@@ -1,0 +1,7 @@
+[data-composed-reading-output], [data-composed-publication-revision] { font-family: var(--kp-st-serif, Georgia, serif); line-height: 1.65; }
+[data-composed-publication-revision] code { overflow-wrap: anywhere; }
+[data-composed-reading-output] h2 { font-size: 1.35rem; }
+[data-composed-reading-output] h3 { font-size: 1.1rem; }
+[data-composed-practice-panel][hidden], [data-composed-reading-toolbar][hidden] { display: none; }
+[data-composed-working] { display: block; width: 100%; box-sizing: border-box; margin-top: .5rem; font: inherit; }
+[data-composed-error] { color: #922f25; white-space: pre-wrap; }

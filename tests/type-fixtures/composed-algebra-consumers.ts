@@ -114,3 +114,9 @@ const session = createKpComposedAlgebraAuthoringSession({ initial: draft,
 // @ts-expect-error a source-bound proof still lacks canonical presentation authority
 exportKpComposedAlgebraSource(checked);
 void [draftCheck, session.current(), session.apply(exportKpComposedAlgebraSource(draft))];
+import { projectComposedAlgebraReading } from "../../src/experiments/composed-algebra/readings.ts";
+import { projectComposedAlgebraPrompts, captureComposedAlgebraPosition, resolveComposedAlgebraPosition } from "../../src/experiments/composed-algebra/practice.ts";
+const reading = projectComposedAlgebraReading(draft, "compact"), prompts = projectComposedAlgebraPrompts(draft);
+const returnPosition = captureComposedAlgebraPosition(draft, .7);
+const restored: number = resolveComposedAlgebraPosition(draft, returnPosition);
+void [reading.facts.states, prompts[0]?.projection.diagnostics, restored];

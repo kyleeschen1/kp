@@ -131,7 +131,8 @@
     {
       "id": "s16",
       "title": "Connect explanation, readings, practice, return and static edition",
-      "status": "planned"
+      "summary": "Full/compact Article readings, semantic prediction/reconstruction, canonical reveal and exact revision-pinned return connected. Immutable static edition uses shared writer and form. 35 tests, live workflow, reproducibility, type/architecture/inference pass.",
+      "status": "complete"
     },
     {
       "id": "s17",

@@ -153,6 +153,13 @@
       "scope": "s15",
       "checkedAt": "2026-09-10T02:30:32.688Z",
       "notes": "Two selected browser controls/Apply cases pass; adjacent operations visibly animate, repeated reverse wheel settles, three slots and immediate fraction/prose share one clock. Reduced motion preserves endpoints. Four shared scaffold/key tests and full typecheck pass."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring; npm run visual:composed-algebra -- --grep readings; npm run author:composed-algebra-publication -- --source src/authoring/examples/composed-algebra-primary.json --check; npm run typecheck; npm run check:architecture; npm run check:inference; git diff --check",
+      "status": "passed",
+      "scope": "s16",
+      "checkedAt": "2026-09-10T02:39:09.666Z",
+      "notes": "35 tests pass including immutable edition alteration rejection and exact source preservation. Two selected browser practice/Apply cases pass; source-pinned Article/flashcard projections return exactly. Primary edition reproduced. Full types/architecture pass; complete inference171890 types285865 instantiations under fixed ceilings."
     }
   ],
   "expectedLearning": [

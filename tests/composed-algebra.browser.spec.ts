@@ -2,6 +2,47 @@ import { test, expect } from "@playwright/test";
 import source from "../src/authoring/examples/composed-algebra-primary.json" with { type: "json" };
 import { kpEquationSettlementTolerancePx } from "../src/animation/equation-shared-presentation-policy.ts";
 
+test("readings and practice share the displayed revision and return to exact chain position", async ({ page }) => {
+  test.setTimeout(120_000);
+  await page.goto("/experiments/reusable-reasoning/?example=composed-algebra");
+  const root = page.locator("#authored-focus-card");
+  await expect(root).toHaveAttribute("data-composed-status", "ready", { timeout: 90_000 });
+  const card = root.locator("[data-composed-reader] [data-composed-card]"), reading = root.locator("[data-composed-reading-output]");
+  const revision = await root.getAttribute("data-composed-revision");
+  await expect(reading).toHaveAttribute("data-revision", revision!);
+  for (const mode of ["compact", "full"]) {
+    await root.locator("[data-composed-reading]").selectOption(mode);
+    await expect(reading.locator("math")).toHaveCount(3);
+    await expect(reading).toContainText("may be zero");
+  }
+  await card.locator("[data-kp-focus-deck-scrubber]").evaluate(node => {
+    (node as HTMLInputElement).value = "1.37"; node.dispatchEvent(new Event("input"));
+  });
+  const progress = await card.getAttribute("data-common-factor-progress");
+  for (const kind of ["prediction", "reconstruction"]) {
+    const origin = root.locator(`[data-composed-practice="${kind}"]`);
+    await origin.click();
+    await expect(root.locator("[data-composed-practice-panel]")).toBeVisible();
+    await expect(reading).toBeHidden(); await expect(root.locator("[data-reasoning-editor]")).toBeHidden();
+    await expect(root.locator("[data-composed-answer]")).toBeHidden();
+    await expect(card.locator("[data-kp-focus-deck-viewport]")).toContainText(kind === "prediction" ? "unevaluated sum" : "Reconstruct both steps");
+    await root.locator("[data-composed-reveal]").click();
+    await expect(root.locator("[data-composed-answer]")).toContainText(kind === "prediction" ? source.states[1]!.latex : source.states[2]!.latex);
+    await expect(card).toHaveAttribute("data-common-factor-state", source.states[kind === "prediction" ? 1 : 2]!.id, { timeout: 10_000 });
+    await root.locator("[data-composed-return]").click();
+    await expect(card).toHaveAttribute("data-common-factor-progress", progress!);
+    await expect(card).toHaveAttribute("data-composed-step", "1.37");
+    await expect(origin).toBeFocused(); await expect(reading).toBeVisible();
+    await expect(root).toHaveAttribute("data-composed-revision", revision!);
+  }
+  await root.locator("[data-reasoning-editor] summary").click();
+  const edited = structuredClone(source); edited.editorial.summary = "Updated editorial summary for the same verified chain.";
+  await root.locator("[data-reasoning-json]").fill(JSON.stringify(edited)); await root.locator("[data-composed-apply]").click();
+  await expect(root.locator("[data-reasoning-draft-status]")).toHaveAttribute("data-status", "applied", { timeout: 90_000 });
+  const next = await root.getAttribute("data-composed-revision"); expect(next).not.toBe(revision);
+  await expect(reading).toHaveAttribute("data-revision", next!); await expect(reading).toContainText(edited.editorial.summary);
+});
+
 test("three-stop controls animate adjacent operations and reverse gestures without independent prose travel", async ({ page }) => {
   test.setTimeout(120_000);
   await page.emulateMedia({ reducedMotion: "no-preference" });
