@@ -104,3 +104,13 @@ void missingInkCertificate;
 // @ts-expect-error a two-operation chain cannot drop its shared checkpoint
 const skippedMiddle: KpComposedAlgebraPresentation["checkpointProgress"] = [0, 1];
 void skippedMiddle;
+import { prepareKpComposedAlgebraDraft, checkKpComposedAlgebraDraft, exportKpComposedAlgebraSource,
+  createKpComposedAlgebraAuthoringSession } from "../../src/authoring/composed-algebra-session.ts";
+const draft = prepareKpComposedAlgebraDraft(source);
+const draftCheck = checkKpComposedAlgebraDraft(exportKpComposedAlgebraSource(draft));
+const session = createKpComposedAlgebraAuthoringSession({ initial: draft,
+  prepare: async value => ({ revision: value.revisionId, dispose() {} }),
+  commit: (surface, value) => { const matching: string = surface.revision + value.revisionId; void matching; } });
+// @ts-expect-error a source-bound proof still lacks canonical presentation authority
+exportKpComposedAlgebraSource(checked);
+void [draftCheck, session.current(), session.apply(exportKpComposedAlgebraSource(draft))];

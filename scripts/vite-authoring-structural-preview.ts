@@ -1,18 +1,25 @@
 import type { Plugin } from "vite";
 import type { buildKpAuthoredDistributionPreview } from "../src/experiments/authoring-structural/distribution-preview-build.ts";
 
+// Only registered local pages can choose a module; URL input is never imported.
+const algebraPages = new Map([
+  ["common-factor", { directory: "common-factor", builder: "buildKpCommonFactorInitialPage", title: "Common factoring" }],
+  ["composed-algebra", { directory: "composed-algebra", builder: "buildKpComposedAlgebraInitialPage", title: "Composed algebra" }]
+]);
+
 /** One read-only local exemplar endpoint, absent from production builds. */
 export function kpViteAuthoringStructuralPreview(): Plugin {
   return { name: "kp-authoring-structural-preview", apply: "serve",
     configureServer(server) {
       server.middlewares.use((request, response, next) => {
         const path = request.url?.split("?")[0];
-        if (path === "/experiments/reusable-reasoning/" && new URL(request.url!, "http://localhost").searchParams.get("example") === "common-factor") {
+        const algebraPage = path === "/experiments/reusable-reasoning/" ? algebraPages.get(new URL(request.url!, "http://localhost").searchParams.get("example") ?? "") : undefined;
+        if (algebraPage) {
           if (request.method !== "GET") { response.writeHead(405).end(); return; }
           void (async () => {
             try {
-              const module = await server.ssrLoadModule("/src/experiments/common-factor/page.ts") as { buildKpCommonFactorInitialPage: () => string };
-              const html = await server.transformIndexHtml(request.url!, `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Common factoring · Kinetic Press</title><link rel="stylesheet" href="/src/experiments/authoring-distribution-focus-card/style.css"><link rel="stylesheet" href="/src/experiments/reusable-reasoning/style.css"><link rel="stylesheet" href="/src/experiments/common-factor/style.css"><link rel="stylesheet" href="/node_modules/katex/dist/katex.min.css"></head><body><main id="authored-focus-card">${module.buildKpCommonFactorInitialPage()}</main><script type="module" src="/src/experiments/common-factor/entry.ts"></script></body></html>`);
+              const module = await server.ssrLoadModule(`/src/experiments/${algebraPage.directory}/page.ts`) as Record<string, () => string>;
+              const html = await server.transformIndexHtml(request.url!, `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${algebraPage.title} · Kinetic Press</title><link rel="stylesheet" href="/src/experiments/authoring-distribution-focus-card/style.css"><link rel="stylesheet" href="/src/experiments/reusable-reasoning/style.css"><link rel="stylesheet" href="/src/experiments/common-factor/style.css"><link rel="stylesheet" href="/node_modules/katex/dist/katex.min.css"></head><body><main id="authored-focus-card">${module[algebraPage.builder]!()}</main><script type="module" src="/src/experiments/${algebraPage.directory}/entry.ts"></script></body></html>`);
               response.writeHead(200, { "content-type": "text/html", "cache-control": "no-store" }).end(html);
             } catch (error) { response.writeHead(422, { "content-type": "text/plain" }).end(error instanceof Error ? error.message : String(error)); }
           })();

@@ -2,6 +2,40 @@ import { test, expect } from "@playwright/test";
 import source from "../src/authoring/examples/composed-algebra-primary.json" with { type: "json" };
 import { kpEquationSettlementTolerancePx } from "../src/animation/equation-shared-presentation-policy.ts";
 
+test("composed authoring applies one coherent prepared revision and preserves it on repair gaps", async ({ page }) => {
+  test.setTimeout(120_000);
+  await page.goto("/experiments/reusable-reasoning/?example=composed-algebra");
+  const root = page.locator("#authored-focus-card"), card = root.locator("[data-composed-reader] [data-composed-card]");
+  await expect(root).toHaveAttribute("data-composed-status", "ready", { timeout: 90_000 });
+  const first = await root.getAttribute("data-composed-revision");
+  await root.locator("summary").click();
+  const editor = root.locator("[data-reasoning-json]"), status = root.locator("[data-reasoning-draft-status]");
+  const edited = structuredClone(source); edited.editorial.title = "Count a revised shared unit";
+  edited.states[0]!.latex = "2(x+4)+3(x+4)"; edited.states[1]!.latex = "(2+3)(x+4)"; edited.states[2]!.latex = "5(x+4)";
+  await editor.fill(JSON.stringify(edited));
+  await expect(root).toHaveAttribute("data-composed-revision", first!);
+  await root.locator("[data-composed-apply]").click();
+  await expect(status).toHaveAttribute("data-status", "applied", { timeout: 90_000 });
+  await expect(root.locator("[data-composed-title]")).toHaveText(edited.editorial.title);
+  const revision = await root.getAttribute("data-composed-revision"); expect(revision).not.toBe(first);
+  await expect(root.locator("[data-reasoning-revision]")).toHaveText(revision!);
+  await expect(card).toHaveAttribute("data-canonical-presentation-revision", revision!);
+  await expect(page.locator(".common-factor-staging")).toHaveCount(0);
+  await card.locator("[data-kp-focus-deck-scrubber]").evaluate(node => {
+    (node as HTMLInputElement).value = "1"; node.dispatchEvent(new Event("input"));
+  });
+  await expect(card).toHaveAttribute("data-composed-step", "1");
+  await expect(card.locator("[data-composed-count]")).toHaveText("2 / 3");
+  await editor.fill("{}"); await root.locator("[data-composed-apply]").click();
+  await expect(status).toHaveAttribute("data-status", "repair-gap");
+  await expect(root).toHaveAttribute("data-composed-revision", revision!);
+  await expect(card).toHaveAttribute("data-composed-step", "1");
+  const downloaded = page.waitForEvent("download"); await root.locator("[data-composed-download]").click();
+  const stream = await (await downloaded).createReadStream();
+  let json = ""; for await (const chunk of stream!) json += chunk.toString();
+  expect(JSON.parse(json)).toEqual(edited);
+});
+
 async function mountCanary(page: import("@playwright/test").Page, step: 0 | 1 | "chain") {
   await page.goto("/experiments/reusable-reasoning/?example=common-factor");
   await expect(page.locator("#authored-focus-card")).toHaveAttribute("data-common-factor-status", "ready", { timeout: 90_000 });

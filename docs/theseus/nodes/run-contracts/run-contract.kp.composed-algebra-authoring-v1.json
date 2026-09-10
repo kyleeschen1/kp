@@ -119,7 +119,8 @@
     {
       "id": "s14",
       "title": "Integrate atomic Apply and coherent displayed revisions",
-      "status": "planned"
+      "summary": "Atomic Apply, source export and same-server composed page use issued presentation capability and shared transaction. Superseded/invalid/failed preparations preserve last valid. 31 tests, browser transaction, full type/architecture/inference pass.",
+      "status": "complete"
     },
     {
       "id": "s15",

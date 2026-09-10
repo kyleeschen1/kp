@@ -132,6 +132,20 @@
       "scope": "s13",
       "checkedAt": "2026-09-10T02:14:57.188Z",
       "notes": "Three Chromium canaries pass including actual composed checkpoint paint and reverse. Two selected M1a canonical phase/continuant canaries pass. 29 composed, 32 M1a, 34 evaluation authority, 29 renderer tests pass. One shared clock preserves 2400ms factoring and 1719ms evaluation via existing checkpoint map; three-stop tuple rejects omission. Found and repaired shared ink adapter re-exposing material at exact native endpoints. Realized-atom test rejects duplicated ink; geometry uses existing 0.25px settlement tolerance (observed 0.135px). Full types/architecture and fixed source/inference budgets pass; combined171565/285529."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring; npm run visual:composed-algebra -- --grep coherent; npm run check:architecture; git diff --check",
+      "status": "passed",
+      "scope": "s14",
+      "checkedAt": "2026-09-10T02:25:35.705Z",
+      "notes": "31 composed tests, live Apply/export regression and architecture gates pass. Invalid and superseded drafts preserve the displayed revision."
+    },
+    {
+      "command": "npm run typecheck; npm run check:inference",
+      "status": "passed",
+      "scope": "s14",
+      "checkedAt": "2026-09-10T02:26:47.128Z",
+      "notes": "Full typecheck passes; added transaction APIs to real consumer fixture. Fixed ceilings pass: combined171690 types285590 instantiations."
     }
   ],
   "expectedLearning": [
