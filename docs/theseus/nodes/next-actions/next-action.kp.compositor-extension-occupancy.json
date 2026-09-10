@@ -2,9 +2,9 @@
   "id": "next-action.kp.compositor-extension-occupancy",
   "kind": "next-action",
   "title": "Require complete compositor extension participation before further specialized motifs",
-  "status": "in-progress",
+  "status": "blocked",
   "domain": "rendering",
-  "summary": "User approved exact revised 24-slice proposal. Execute v2; preserve accepted motifs, fixed non-TypeScript gates and finite authoring-focused exit.",
+  "summary": "Explicit s02 source-cost stop; awaiting aggregate-only 515000 to 530000 byte policy amendment. All other gates unchanged; see source-budget checkpoint.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -33,6 +33,10 @@
     {
       "kind": "file",
       "path": "docs/project/threads/2026-09-10-compositor-extension-owner-inventory.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-10-compositor-extension-source-budget-checkpoint.md"
     }
   ],
   "dependsOn": {
@@ -51,11 +55,41 @@
       "scope": "s01",
       "checkedAt": "2026-09-10T15:43:01.557Z",
       "notes": "29 tests pass. Source-backed inventory identifies ordinary tracks, factoring and successor producers, and unchecked callback at ready-plan and renderer boundaries. No runtime change or browser certification claimed."
+    },
+    {
+      "command": "npm run check:compositor-extension-cost",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-10T15:51:43.941Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-10T15:51:44.995Z"
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-10T15:51:46.000Z"
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-10T15:51:46.998Z"
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-10T15:51:47.982Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s01 inventory complete: two supplemental producer owners, ready-plan and renderer callback seams, exact coverage gaps and preserved native/semantic boundaries."
+    "summary": "STOP_CONDITION at s02: complete baseline passes but only 45 aggregate source bytes remain; no credible fixed-budget path established from useful consolidation. Aggregate-only 530000-byte ceiling proposed, not applied. Inventory complete; cost slice awaits explicit non-TypeScript authority."
   },
   "revisitWhen": [
     "User explicitly approves the linked 24-slice successor proposal.",

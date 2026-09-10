@@ -115,6 +115,9 @@ before further specialized motif expansion; the factoring repair does not
 complete that broader work. Start with measured consolidation: the accounted
 renderer closure has only 45 bytes of source headroom. No successor execution or
 further non-TypeScript budget amendment is automatically authorized.
+The measured cost checkpoint and pending aggregate-only amendment are in
+`threads/2026-09-10-compositor-extension-source-budget-checkpoint.md`.
+No production behavior or cost policy has changed at this checkpoint.
 The user accepted the authoring-leverage assessment on 2026-09-10: finish this
 finite seam, then measure an unfamiliar supported authoring task before further
 capability expansion. See

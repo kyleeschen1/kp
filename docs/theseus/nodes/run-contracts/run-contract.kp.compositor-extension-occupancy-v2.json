@@ -2,8 +2,8 @@
   "id": "run-contract.kp.compositor-extension-occupancy-v2",
   "kind": "run-contract",
   "title": "Compositor extension participation",
-  "status": "in-progress",
-  "summary": "Explicit user approval of exact revised 24 slices. Preserve canonical motion and execute bounded contribution migration before authoring-trial proposal.",
+  "status": "blocked",
+  "summary": "STOP_CONDITION at s02; one of 24 slices complete. Await explicit aggregate source-budget authority; not a runtime or visual failure.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -49,6 +49,7 @@
     {
       "id": "s02",
       "title": "Measure complete costs and select useful consolidation",
+      "summary": "Cost assessment recorded; paused under explicit no-credible-fixed-budget-path stop. Resume this slice after approval of aggregate-only source-policy amendment; no production changes or gate relaxation.",
       "status": "planned"
     },
     {
