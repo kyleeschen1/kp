@@ -98,3 +98,6 @@ resolveKpComposedAlgebraPresentation(source);
 // @ts-expect-error a canonical evaluation cannot replace the factoring slot
 const wrongPresentation: KpComposedAlgebraPresentation["steps"] = [presentation.steps[1], presentation.steps[0]];
 void [proofAsPresentation, wrongPresentation];
+// @ts-expect-error canonical evaluation cannot silently omit its ink-glyph certificate
+const missingInkCertificate: KpComposedAlgebraPresentation["steps"][1] = { ...presentation.steps[1], evaluationCertificates: [] };
+void missingInkCertificate;

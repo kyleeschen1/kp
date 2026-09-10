@@ -8,6 +8,7 @@ import { createKpOnePlusTwoEvaluationAnimationAsset } from "../src/animation/ope
 import { sampleKpAnimationRuntimeFrame } from "../src/animation/runtime-sampler.ts";
 import { projectKpReaderEquationRenderPlan } from "../src/reader/renderers/equation-render-plan.ts";
 import { findKpRegisteredOperationPresentationPlan } from "../src/animation/operation-presentation-plan-types.ts";
+import { isKpVerifiedEquationEvaluationFamilyCertificateV2 } from "../src/domain-ir/equation-evaluation-family-certificate-v2.ts";
 
 test("composed presentation binds complete canonical factoring and evaluation rather than raw candidates", () => {
   const checked = checkKpComposedAlgebraProof(primary), binding = resolveKpComposedAlgebraPresentation(checked);
@@ -27,6 +28,11 @@ test("composed presentation binds complete canonical factoring and evaluation ra
   assert.equal(evaluation.animation.timeline!.durationMs, canonical.timeline!.durationMs);
   assert.deepEqual(factor.animation.bundle.objects[1], evaluation.animation.bundle.objects[0]);
   assert.equal(evaluation.plan.successorSyntheses[0].paintContinuityPlan.endpointSettlement, "native-source-and-target");
+  assert.deepEqual(factor.evaluationCertificates, []);
+  assert.equal(evaluation.evaluationCertificates.length, 1);
+  assert.ok(isKpVerifiedEquationEvaluationFamilyCertificateV2(evaluation.evaluationCertificates[0]));
+  assert.equal(evaluation.evaluationCertificates[0].transformationId, evaluation.animation.transformations[0]!.id);
+  assert.equal(evaluation.evaluationCertificates[0].familyProfile.family, "contributor-fusion");
 });
 
 test("source-only, forged, serialized or mutated objects cannot mount as composed presentations", () => {

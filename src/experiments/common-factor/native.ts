@@ -3,6 +3,7 @@ import { commonFactorPresentationEndpoints, composedAlgebraOperationEndpoints } 
 import { assertKpComposedAlgebraPresentation, type KpComposedAlgebraPresentation } from "../../authoring/composed-algebra-presentation.ts";
 import type { KpAnimationAsset } from "../../animation/asset.ts";
 import type { KpStructuredEquationAnnotatedEndpoint } from "../../rendering/structured-equation-selector-annotated-latex.ts";
+import type { KpVerifiedEquationEvaluationFamilyCertificateV2 } from "../../domain-ir/equation-evaluation-family-certificate-v2.ts";
 import { assertKpCommonFactorPresentation, type KpCommonFactorPresentation } from "../../authoring/common-factor-presentation.ts";
 import { findKpRegisteredOperationPresentationPlan } from "../../animation/operation-presentation-plan-types.ts";
 import { compileKpEquationExemplarTemplate } from "../../reader/compiler/equation-exemplar-page.ts";
@@ -33,13 +34,14 @@ export async function mountCanonicalFactoringPresentation(card: HTMLElement, pre
 export async function mountCanonicalComposedAlgebraOperation(card: HTMLElement, presentation: KpComposedAlgebraPresentation, step: 0 | 1) {
   assertKpComposedAlgebraPresentation(presentation);
   return mountResolvedCanonicalOperation(card, { ...presentation, canonicalReference: presentation.steps[step].canonicalReference },
-    presentation.steps[step].animation, composedAlgebraOperationEndpoints(presentation, step));
+    presentation.steps[step].animation, composedAlgebraOperationEndpoints(presentation, step), presentation.steps[step].evaluationCertificates);
 }
 
 // Only the authenticated public mounts select these arguments; hosts cannot
 // pair an unrelated animation, annotation or plan with a checked source.
 async function mountResolvedCanonicalOperation(card: HTMLElement, presentation: { owner: string; canonicalReference: string; revisionId: string },
-  animation: KpAnimationAsset, endpoints: readonly KpStructuredEquationAnnotatedEndpoint[]) {
+  animation: KpAnimationAsset, endpoints: readonly KpStructuredEquationAnnotatedEndpoint[],
+  evaluationCertificates: readonly KpVerifiedEquationEvaluationFamilyCertificateV2[] = []) {
   card.dataset["canonicalPresentationOwner"] = presentation.owner;
   card.dataset["canonicalPresentationReference"] = presentation.canonicalReference;
   card.dataset["canonicalPresentationRevision"] = presentation.revisionId;
@@ -61,6 +63,7 @@ async function mountResolvedCanonicalOperation(card: HTMLElement, presentation: 
     bindStructuralAnchors: root => bindKpReaderEquationLessonStructuralAnchors({ root, animation, descriptor }) });
   shell.transitions.forEach(t => { t.querySelector<HTMLElement>("[data-kp-reader-fit-surface]")!.dataset["kpEquationMaterialVisualCache"] = "dual-revision"; });
   const session = await createKpChromeFreeCanonicalEquationSession({ shell, animation, descriptor, prewarmAdjacentTransitions: false,
+    evaluationCertificates,
     equationPresentationProfile: resolveKpReaderEquationPresentationProfile("standard"), linkRoot: card,
     createStageLayoutIntent: () => ({ executionState: "intent", geometryAuthority: "native-measurement", operationSpecificCoordinates: false,
       phases: [{ nodeId: animation.transformations[0]!.id, policy: "single-row", rows: [{ id: "row.common-factor.expression", role: "expression",

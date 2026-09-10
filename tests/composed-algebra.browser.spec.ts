@@ -1,36 +1,21 @@
 import { test, expect } from "@playwright/test";
 import source from "../src/authoring/examples/composed-algebra-primary.json" with { type: "json" };
 
-test("compound factoring uses the canonical native compositor with one owner per compound", async ({ page }, info) => {
-  test.setTimeout(120_000);
+async function mountCanary(page: import("@playwright/test").Page, step: 0 | 1) {
   await page.goto("/experiments/reusable-reasoning/?example=common-factor");
   await expect(page.locator("#authored-focus-card")).toHaveAttribute("data-common-factor-status", "ready", { timeout: 90_000 });
   // Exercise the production mount, not a test renderer or a hand-assembled plan.
   // The opt-in canary leaves the M1a review host untouched during discovery.
-  const roles = await page.evaluate(async value => {
-    const proofPath = "/src/authoring/composed-algebra-proof.ts", presentationPath = "/src/authoring/composed-algebra-presentation.ts",
-      mountPath = "/src/experiments/common-factor/native.ts";
-    const proof = await import(/* @vite-ignore */ proofPath) as typeof import("../src/authoring/composed-algebra-proof.ts");
-    const bindings = await import(/* @vite-ignore */ presentationPath) as typeof import("../src/authoring/composed-algebra-presentation.ts");
-    const mounts = await import(/* @vite-ignore */ mountPath) as typeof import("../src/experiments/common-factor/native.ts");
-    const binding = bindings.resolveKpComposedAlgebraPresentation(proof.checkKpComposedAlgebraProof(value));
-    const scaffoldPath = "/src/tutorial/focus-deck-scaffold.ts";
-    const { renderKpFocusDeckScaffold } = await import(/* @vite-ignore */ scaffoldPath) as typeof import("../src/tutorial/focus-deck-scaffold.ts");
-    const wrapper = document.createElement("section");
-    wrapper.innerHTML = renderKpFocusDeckScaffold({ id: "composed-canary", ariaLabel: "Compound factoring", activeBeatSlug: "start",
-      beats: [{ slug: "start", title: "Two multiples", html: "<p>Factor the shared compound.</p>" }, { slug: "end", title: "One compound", html: "<p>The whole factor persists.</p>" }],
-      stageHtml: '<div class="kp-focus-deck__stage" data-distribution-stage></div>',
-      rootAttributes: { "data-kp-reasoning-card": true } });
-    document.querySelector("#authored-focus-card")!.append(wrapper);
-    const card = wrapper.firstElementChild as HTMLElement; card.id = "composed-canary";
-    const surface = await mounts.mountCanonicalComposedAlgebraOperation(card, binding, 0);
-    const slider = card.querySelector<HTMLInputElement>("[data-kp-focus-deck-scrubber]")!;
-    slider.max = "1"; slider.step = "any";
-    slider.addEventListener("input", () => { surface.clock.seek(Number(slider.value)); surface.render(false); });
-    surface.render(false);
-    window.addEventListener("pagehide", () => surface.dispose(), { once: true });
-    return binding.steps[0].plan.factoringMotifBinding;
-  }, source);
+  return page.evaluate(async ({ value, step }) => {
+    const path = "/tests/browser-helpers/composed-algebra-canary.ts";
+    const { mountComposedAlgebraCanary } = await import(/* @vite-ignore */ path) as typeof import("./browser-helpers/composed-algebra-canary.ts");
+    return mountComposedAlgebraCanary(value, step);
+  }, { value: source, step });
+}
+
+test("compound factoring uses the canonical native compositor with one owner per compound", async ({ page }, info) => {
+  test.setTimeout(120_000);
+  const roles = await mountCanary(page, 0);
   const card = page.locator("#composed-canary");
   const poses = new Map<number, unknown>();
   for (const p of [0, .01, .18, .37, .68, .99, 1, .99, .37, .01, 0]) {
@@ -84,5 +69,42 @@ test("compound factoring uses the canonical native compositor with one owner per
       for (const key of ["left", "top", "width", "height"] as const)
         expect(Math.abs(item.rect![key] - after[index]!.rect![key]), `${item.id} ${key}`).toBeLessThan(.1);
     });
+  }
+});
+
+test("contextual sum uses certified ink-glyph evaluation while compound context persists", async ({ page }, info) => {
+  await mountCanary(page, 1);
+  const card = page.locator("#composed-canary"), stage = card.locator("[data-kp-reader-fit-surface]");
+  const poses = new Map<number, unknown>();
+  let contextShape: readonly { x: number; y: number; width: number; height: number }[] | undefined;
+  for (const p of [0, .01, .25, .5, .75, .99, 1, .75, .5, .01, 0]) {
+    await card.locator("[data-kp-focus-deck-scrubber]").evaluate((node, value) => {
+      (node as HTMLInputElement).value = String(value); node.dispatchEvent(new Event("input"));
+    }, p);
+    await expect(card).toHaveAttribute("data-common-factor-progress", String(p));
+    if (p > 0 && p < 1) {
+      await expect(stage).toHaveAttribute("data-kp-operation-evaluation-family", "contributor-fusion");
+      const context = stage.locator('[data-kp-equation-material-semantic-entity-id$=".paint.factor"]');
+      const pose = await context.evaluateAll(async nodes => {
+        const path = "/src/rendering/native-katex-paint-geometry.ts";
+        const { measureKpNativeKatexSubtreePaintRect } = await import(/* @vite-ignore */ path) as typeof import("../src/rendering/native-katex-paint-geometry.ts");
+        return nodes.map(node => {
+          const stage = node.closest<HTMLElement>("[data-kp-reader-fit-surface]")!;
+          const rect = measureKpNativeKatexSubtreePaintRect(stage, node.firstElementChild as HTMLElement);
+          if (!rect) throw new Error("Missing unchanged-context ink.");
+          return { text: node.textContent, opacity: getComputedStyle(node).opacity, rect };
+        }).sort((a, b) => a.rect.left - b.rect.left);
+      });
+      expect(pose.length).toBeGreaterThan(0);
+      expect(pose.map(p => p.text).join("").replaceAll(/\s/g, "")).toBe("(x+3)");
+      expect(pose.every(item => item.opacity === "1")).toBe(true);
+      const shape = pose.map(item => ({ x: item.rect.left - pose[0]!.rect.left, y: item.rect.top - pose[0]!.rect.top,
+        width: item.rect.width, height: item.rect.height }));
+      if (contextShape) shape.forEach((item, i) => {
+        for (const key of ["x", "y", "width", "height"] as const) expect(Math.abs(item[key] - contextShape![i]![key])).toBeLessThan(.1);
+      }); else contextShape = shape;
+      if (poses.has(p)) expect(pose).toEqual(poses.get(p)); else poses.set(p, pose);
+    }
+    await card.screenshot({ path: info.outputPath(`evaluation-${p}.png`) });
   }
 });

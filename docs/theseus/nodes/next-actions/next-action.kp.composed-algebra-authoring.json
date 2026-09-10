@@ -118,6 +118,13 @@
       "scope": "s11",
       "checkedAt": "2026-09-10T01:52:40.013Z",
       "notes": "One Chromium compound canary passes coherent group ownership, repeat reverse samples and actual native/material ink seams; two selected canonical atomic phase/continuant checks pass. 29 renderer, 27 composed, 32 M1a tests pass. Types/architecture/inference pass. Source ceiling unchanged: initial 515118/515000 repaired by sharing repeated paint rectangle type. Single-glyph restriction replaced with exact measured native text group; wider paint reserves canonical branch clearance. One representative only, visual approval remains s17."
+    },
+    {
+      "command": "npm run visual:composed-algebra; npm run test:composed-algebra-authoring; npm run test:evaluation-authority-convergence; npm run typecheck; npm run check:architecture; npm run check:inference",
+      "status": "passed",
+      "scope": "s12",
+      "checkedAt": "2026-09-10T01:59:42.272Z",
+      "notes": "Two Chromium canaries pass: grouped factoring plus actual unchanged compound ink geometry through certified contributor-fusion evaluation and reverse. 27 composed and 34 evaluation authority tests pass; full type/architecture/inference pass with unchanged budgets (combined 171309 types/285049 instantiations). Empty certificate tuple typing repaired; canary static module graph fixes HMR duplicate private mint. DOM-order assertion replaced with spatial ink measurement, not production paint changes. Canonical evaluation binding requires one genuine ink certificate; s17 review remains."
     }
   ],
   "expectedLearning": [
