@@ -38,5 +38,30 @@ projection checks for exact facts, source/revision references, prompt answers
 and rejection of another case's return position. Full `npm run typecheck`
 passes again, with zero Svelte errors/warnings. No production changes.
 
-New editions, promotion browsers and final release remain separate checks;
-do not infer those results from these two Chromium cohorts.
+## Immutable local editions
+
+For each of the five exact source paths in `editions.json`, both commands pass:
+
+```sh
+npm run author:composed-algebra-publication -- --source <exact-source-path>
+npm run author:composed-algebra-publication -- --source <exact-source-path> --check
+```
+
+These ten invocations build/reproduce immutable local bytes, not deployed or
+animated editions. The manifest records source/revision digests and current
+inspection URLs; reproducible commands, not the disposable output directories,
+own durable evidence. Original primary/product editions also remain unchanged.
+
+`npm run visual:composed-algebra -- --grep 'authoring trial editions'`:
+**1 passed**, Chromium, 11.8 seconds, covering all five editions with JavaScript
+disabled at 390px. Each has the exact title and revision, eight math fragments,
+no animation scrubber, exact original source bytes and no horizontal overflow.
+
+`npm run test:composed-algebra-authoring`: **61 passed**, including five new
+publication provenance/reproduction checks and rejection of another case's
+source. Full `npm run typecheck` passes, zero Svelte errors/warnings.
+
+Supported-browser promotion and the full release suite remain after the human
+checkpoint. Eleven trial Chromium tests have passed so far: five Apply/control,
+five projection and one five-edition test. Two additional retained-caller browser
+baselines passed earlier. No production source or domain changes were needed.

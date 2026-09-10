@@ -132,7 +132,8 @@
     {
       "id": "s16",
       "title": "Reproduce immutable editions",
-      "status": "planned"
+      "summary": "All five immutable editions reproduce and pass no-JS checks; 61 focused tests and full types pass.",
+      "status": "complete"
     },
     {
       "id": "s17",

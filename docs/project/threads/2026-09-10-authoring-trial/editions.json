@@ -1,0 +1,42 @@
+{
+  "kind": "local-authoring-trial-edition-evidence",
+  "deployed": false,
+  "animated": false,
+  "results": [
+    {
+      "source": "docs/project/threads/2026-09-10-authoring-trial/case-01.attempt-2.json",
+      "revisionId": "sha256:60eba23835d2d926372175fbbdf84685f74214d02c7cb52c28da56aa4864657f",
+      "sourceRevision": "sha256:21a6dfa235cd2cdbde85ba42f9d8053d3c547c922830fbce0dd88cd4a2565334",
+      "checked": true,
+      "url": "http://localhost:8000/tmp/codex/composed-algebra-editions/30b63e2956c79076667d8c840bd2d377d04301a2c61f715193930b291d58e2c8/index.html"
+    },
+    {
+      "source": "docs/project/threads/2026-09-10-authoring-trial/case-02.attempt-1.json",
+      "revisionId": "sha256:e4ccc1ddcc36491a8974304e9725284c138c959f34dd974bb3e1da7211c04236",
+      "sourceRevision": "sha256:c51a786a0984db27d38afdb9f77d5e3f1f5f8564ce596966160c4f835e2f3e65",
+      "checked": true,
+      "url": "http://localhost:8000/tmp/codex/composed-algebra-editions/1e67a10f827785d33e26529ad37689b19d3166b150041aa6e70e54fb10d3ae66/index.html"
+    },
+    {
+      "source": "docs/project/threads/2026-09-10-authoring-trial/case-03.attempt-1.json",
+      "revisionId": "sha256:35a1bd66f4dda09b365dc38931f1a5f9660d1a9a81aa8e93fb433018f6663c72",
+      "sourceRevision": "sha256:9b730bd91fdf90abe4ba3e41dd143feb89e53ccde5f5ca504f9c0741a3bff169",
+      "checked": true,
+      "url": "http://localhost:8000/tmp/codex/composed-algebra-editions/edb0963b54382b53092d7f9743a8b636236dc82d82ad8479cc1e7188da681a0f/index.html"
+    },
+    {
+      "source": "docs/project/threads/2026-09-10-authoring-trial/case-04.attempt-1.json",
+      "revisionId": "sha256:88dacad67a6a66c70756ff00a3373799761e0f982178e4c0862bfe4046f45840",
+      "sourceRevision": "sha256:d889e79169a5bed0c182336132a6cf46bd9acb03b3b143946175c27e1b3b1e54",
+      "checked": true,
+      "url": "http://localhost:8000/tmp/codex/composed-algebra-editions/cb513be6e34be49550ea69c320b40056a05509171ad44675e9570d68d6b270ae/index.html"
+    },
+    {
+      "source": "docs/project/threads/2026-09-10-authoring-trial/case-05.attempt-1.json",
+      "revisionId": "sha256:982191e6c806fbe1e10915b04706deb70718766a10473dff3dbd68418f20ab60",
+      "sourceRevision": "sha256:cc4b4b40d80dfce44876d0cc7fa13e8b88b262cf6098957539d634f9bcaa82ef",
+      "checked": true,
+      "url": "http://localhost:8000/tmp/codex/composed-algebra-editions/d434828adaa9ff90a99b81801ae5d04c0b46081f144de916beae4ce002284da7/index.html"
+    }
+  ]
+}

@@ -113,6 +113,12 @@
       "status": "passed",
       "scope": "s15",
       "checkedAt": "2026-09-10T19:24:58.055Z"
+    },
+    {
+      "command": "ten exact publication build/check commands listed in editions.json and integration-evidence.md; npm run visual:composed-algebra -- --grep 'authoring trial editions'; npm run test:composed-algebra-authoring; npm run typecheck; git diff --check",
+      "status": "passed",
+      "scope": "s16",
+      "checkedAt": "2026-09-10T19:28:42.951Z"
     }
   ],
   "expectedLearning": [

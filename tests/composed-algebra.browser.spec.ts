@@ -92,6 +92,27 @@ for (const selected of unfamiliarAuthoringCases) test(`authoring trial projectio
   expect(errors).toEqual([]);
 });
 
+test("authoring trial editions retain exact source without JavaScript", async ({ browser }) => {
+  test.setTimeout(120_000);
+  const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 900 } });
+  try {
+    const page = await context.newPage();
+    for (const selected of unfamiliarAuthoringCases) {
+      const edition = buildComposedAlgebraEdition(selected.path, true);
+      const base = `/tmp/codex/composed-algebra-editions/${edition.directory.split("/").at(-1)}`;
+      const response = await page.goto(`${base}/index.html`);
+      expect(response?.status()).toBe(200);
+      await expect(page.locator("[data-composed-publication-revision]")).toHaveAttribute("data-composed-publication-revision", selected.draft.revisionId);
+      await expect(page.locator("h1")).toHaveText(selected.source.editorial.title);
+      await expect(page.locator("math")).toHaveCount(8);
+      await expect(page.locator("[data-kp-focus-deck-scrubber]")).toHaveCount(0);
+      const sourceResponse = await page.request.get(`${base}/source.json`);
+      expect(sourceResponse.status()).toBe(200); expect(await sourceResponse.text()).toBe(selected.text);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
+    }
+  } finally { await context.close(); }
+});
+
 for (const width of [1280, 390]) test(`primary combined review at ${width}px`, async ({ page }, info) => {
   test.setTimeout(120_000);
   const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
