@@ -17,6 +17,14 @@
     {
       "kind": "file",
       "path": "docs/project/threads/2026-09-09-composed-algebra-primary-checkpoint.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/compositor-extension-occupancy-follow-up.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/principles/motif-composition-contracts.md"
     }
   ],
   "dependsOn": {
@@ -178,11 +186,18 @@
       "scope": "s17",
       "checkedAt": "2026-09-10T02:51:50.227Z",
       "notes": "All8 composed Chromium checks and2 selected atomic phase/continuant canaries pass. Desktop baseline failure reproduced twice, repaired at shared probe coordinate owner, then passed twice and full cohort.36 composed and29 renderer tests pass; deterministic scroll-anchor probe regression added. Source ceiling preserved through equivalent formatting, not amendment. Full types/architecture and fixed inference113684/194441 core171892/285865 combined pass. Human aesthetic/editorial acceptance remains required."
+    },
+    {
+      "command": "npm run visual:composed-algebra; npm run visual:common-factor-authoring -- --project=chromium --grep factoring; npm run test:canonical-equation-renderer; npm run test:composed-algebra-authoring; node --test tests/kp-factoring-choreography.test.ts tests/equation-motion-path-planner.test.ts; npm run typecheck; npm run check:architecture; npm run check:inference; git diff --check",
+      "status": "passed",
+      "scope": "s17 motif-preserving composition",
+      "checkedAt": "2026-09-10T03:53:58.497Z",
+      "notes": "9 composed Chromium and 2 selected atomic checks pass; 36 composed,29 renderer,28 motion tests pass. Native handoff regression failed with4.298px residual before paint-center repair and passes after. Required typed inspection reports contact without rerouting; shared-pose mismatch and uninspected publication reject. Full types, architecture and unchanged source/inference gates pass. No visual approval or universal motif migration claimed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT at s17:16 of26 complete. Primary authoring, canonical grouped factoring/ink evaluation, shared controls, coherent readings/practice/static edition verified. Await visual/editorial approval; resume existing contract, no new plan."
+    "summary": "HUMAN_CHECKPOINT s17:16/26 complete. Accepted motif/compositor doctrine and bounded factoring repair implemented. Review compact arcs and common-pose reconciliation; s18 awaits visual approval. Broader extension contract retained as s26 successor-planning obligation."
   },
   "expectedLearning": [
     "Measure compound factoring plus contextual evaluation reuse without renderer glue."

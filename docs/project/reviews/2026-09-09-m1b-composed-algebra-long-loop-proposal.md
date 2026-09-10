@@ -69,6 +69,13 @@ successor. Planning allowance 10–18 active hours, not a time guarantee.
 | s25 | Run full release verification and earlier-exemplar preservation | High | B: full tests/build, budgets, production isolation and both editions |
 | s26 | Close receipts and reconcile roadmap, limits and next proposal | Low | F: validated state, evidence links and clean scoped commit |
 
+Accepted checkpoint follow-up (2026-09-09): closeout must explicitly carry
+`../threads/compositor-extension-occupancy-follow-up.md` into the successor
+proposal and retain a named pending action. Factoring-only validation does not
+discharge this broader extension-coverage recommendation. First honor s17 visual
+review and the approved second-caller pressure; do not execute a new migration
+loop without its own approval.
+
 ## Visual checkpoint and preservation
 
 ### Accepted s10 architecture refinement

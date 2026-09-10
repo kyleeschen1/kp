@@ -827,44 +827,22 @@ export function compileKpCollisionSafeTransitTracks<
   const rescheduledComponentIds = new Set<string>();
   const routedComponentIds = new Set<string>();
   const routedTrackIds = new Set<string>();
-  let audit = inspectProtectedTransit({
-    tracks,
-    sampleFrames: input.sampleFrames,
-    sampleCount
-  });
+  const inspect = (tracks: readonly Track[]) => inspectProtectedTransit({ tracks, sampleFrames: input.sampleFrames, sampleCount });
+  let audit = inspect(tracks);
 
-  const initiallyScheduled = scheduleProtectedTransitStructuralOpacity({
-    tracks,
-    audit,
-    scheduledTrackIds: opacityScheduledTrackIds
-  });
-  if (initiallyScheduled !== undefined) {
-    tracks = initiallyScheduled;
-    audit = inspectProtectedTransit({
-      tracks,
-      sampleFrames: input.sampleFrames,
-      sampleCount
-    });
-  }
-
-  while (audit.intersections.length > 0) {
+  const scheduleStructuralOpacity = () => {
     const newlyScheduled = scheduleProtectedTransitStructuralOpacity({
       tracks,
       audit,
       scheduledTrackIds: opacityScheduledTrackIds
     });
-    if (newlyScheduled !== undefined) {
-      // A newly chosen route can expose a later structural contact. Reapply
-      // the same generic visibility law after every geometry decision instead
-      // of assuming the initial audit found the final obstacle set.
-      tracks = newlyScheduled;
-      audit = inspectProtectedTransit({
-        tracks,
-        sampleFrames: input.sampleFrames,
-        sampleCount
-      });
-      continue;
-    }
+    if (newlyScheduled === undefined) return false;
+    tracks = newlyScheduled;
+    audit = inspect(tracks);
+    return true;
+  };
+  while (audit.intersections.length > 0) {
+    if (scheduleStructuralOpacity()) continue;
     let bestTiming:
       | {
           readonly tracks: readonly Track[];
@@ -882,11 +860,7 @@ export function compileKpCollisionSafeTransitTracks<
             ? Object.freeze({ ...track, motionProgressRange: range }) as Track
             : track
         ));
-        const candidateAudit = inspectProtectedTransit({
-          tracks: candidateTracks,
-          sampleFrames: input.sampleFrames,
-          sampleCount
-        });
+        const candidateAudit = inspect(candidateTracks);
         if (
           bestTiming === undefined ||
           compareProtectedTransitAudits(candidateAudit, bestTiming.audit) < 0
@@ -906,20 +880,8 @@ export function compileKpCollisionSafeTransitTracks<
 
   const attemptedRouteUnits = new Set<string>();
   while (audit.intersections.length > 0) {
-    const newlyScheduled = scheduleProtectedTransitStructuralOpacity({
-      tracks,
-      audit,
-      scheduledTrackIds: opacityScheduledTrackIds
-    });
-    if (newlyScheduled !== undefined) {
-      tracks = newlyScheduled;
-      audit = inspectProtectedTransit({
-        tracks,
-        sampleFrames: input.sampleFrames,
-        sampleCount
-      });
-      continue;
-    }
+    // New geometry can expose structural contact; reuse the same visibility law.
+    if (scheduleStructuralOpacity()) continue;
     const candidates = routeCandidateUnits(tracks, audit.intersections)
       .filter(({ id }) => !attemptedRouteUnits.has(id));
     let best:
@@ -970,11 +932,7 @@ export function compileKpCollisionSafeTransitTracks<
               stageOccupancy: input.stageOccupancy
             });
             if (candidateTracks === undefined) continue;
-            const candidateAudit = inspectProtectedTransit({
-              tracks: candidateTracks,
-              sampleFrames: input.sampleFrames,
-              sampleCount
-            });
+            const candidateAudit = inspect(candidateTracks);
             routeCandidates.push({
               tracks: candidateTracks,
               audit: candidateAudit,

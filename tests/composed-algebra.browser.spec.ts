@@ -159,6 +159,8 @@ test("composed authoring applies one coherent prepared revision and preserves it
 
 async function mountCanary(page: import("@playwright/test").Page, step: 0 | 1 | "chain") {
   await page.goto("/experiments/reusable-reasoning/?example=common-factor");
+  await expect(page.locator("#authored-focus-card")).toHaveAttribute("data-common-factor-status", /^(ready|repair-gap)$/, { timeout: 90_000 });
+  expect((await page.locator("#authored-focus-card [role=alert]").allTextContents()).filter(Boolean)).toEqual([]);
   await expect(page.locator("#authored-focus-card")).toHaveAttribute("data-common-factor-status", "ready", { timeout: 90_000 });
   // Exercise the production mount, not a test renderer or a hand-assembled plan.
   // The opt-in canary leaves the M1a review host untouched during discovery.
@@ -225,6 +227,26 @@ test("compound factoring uses the canonical native compositor with one owner per
       for (const key of ["left", "top", "width", "height"] as const)
         expect(Math.abs(item.rect![key] - after[index]!.rect![key]), `${item.id} ${key}`).toBeLessThan(.1);
     });
+  }
+});
+
+test("factoring occupancy cannot disappear with ownership partitioning", async ({ page }) => {
+  await mountCanary(page, 0);
+  const result = await page.evaluate(async value => {
+    const path = "/tests/browser-helpers/composed-algebra-canary.ts";
+    const { probeOmittedFactoringOccupancy } = await import(/* @vite-ignore */ path) as typeof import("./browser-helpers/composed-algebra-canary.ts");
+    return probeOmittedFactoringOccupancy(value);
+  }, source);
+  expect(result.isolatedIntersections).toBe(0);
+  expect(result.combinedIntersections).toBeGreaterThan(0);
+  expect(result.uninspectedPublicationRejected).toBe(true);
+  expect(result.after).toEqual(result.before); // Inspection may not rewrite the motif.
+  expect(result.handoff[0]).toHaveLength(2); expect(result.handoff[1]).toHaveLength(1);
+  const received = result.handoff[1]![0]!;
+  for (const contributor of result.handoff[0]!) {
+    expect(contributor.focus).toEqual(received.focus);
+    for (const key of ["left", "top", "width", "height"] as const)
+      expect(Math.abs(contributor.rect![key] - received.rect![key])).toBeLessThan(.1);
   }
 });
 

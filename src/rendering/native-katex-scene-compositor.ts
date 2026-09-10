@@ -1819,18 +1819,16 @@ function compileKpCanonicalNativeKatexProtectedPlan(
       "reuse tolerance."
     );
   }
+  const sampleFrames = (tracks: readonly KpNativeKatexSceneTrack[], progress: number) =>
+    sampleKpNativeKatexSceneTrackFrames(tracks, progress, input.copyFanOutRouting === true);
   const protectedTransit = cached === undefined
     ? compileKpCollisionSafeTransitTracks({
         tracks: prepared.motifRoutedTracks,
         stageOccupancy: input.stageOccupancy,
-        sampleFrames: (tracks, progress) =>
-          sampleKpNativeKatexSceneTrackFrames(
-            tracks,
-            progress,
-            input.copyFanOutRouting === true
-          )
+        sampleFrames
       })
     : { tracks: cached.tracks, certificate: cached.protectedTransit };
+  input.factoring?.inspectTransit(protectedTransit.tracks, sampleFrames);
   return { prepared, protectedTransit };
 }
 

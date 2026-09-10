@@ -64,6 +64,10 @@ The user clarified the remaining code issue as missing gradual passage swiping.
 The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
 Current Next Action: execute approved `run-contract.kp.composed-algebra-authoring-v1`
+under the accepted motif/compositor boundary in
+`../principles/motif-composition-contracts.md`. Broader extension coverage is
+retained in `compositor-extension-occupancy-follow-up.md` as a closeout obligation.
+Continue
 from `../reviews/2026-09-09-m1b-composed-algebra-long-loop-proposal.md` through its
 s17 combined visual checkpoint. M1a remains complete under
 `run-contract.kp.common-factor-authoring-v1`; see

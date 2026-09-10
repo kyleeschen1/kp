@@ -120,3 +120,15 @@ const reading = projectComposedAlgebraReading(draft, "compact"), prompts = proje
 const returnPosition = captureComposedAlgebraPosition(draft, .7);
 const restored: number = resolveComposedAlgebraPosition(draft, returnPosition);
 void [reading.facts.states, prompts[0]?.projection.diagnostics, restored];
+import type { KpNativeKatexFactoringSceneBinding } from "../../src/rendering/native-katex-factoring-binding-types.ts";
+declare const unprotectedFactoring: Omit<KpNativeKatexFactoringSceneBinding, "inspectTransit">;
+// @ts-expect-error Supplemental factoring paint cannot omit its joint occupancy audit.
+const omittedOccupancy: KpNativeKatexFactoringSceneBinding = unprotectedFactoring;
+void omittedOccupancy;
+type FactoringComposition = NonNullable<KpNativeKatexFactoringSceneBinding["semanticClock"]>["composition"];
+declare const missingContactPolicy: Omit<FactoringComposition, "transitContact">;
+// @ts-expect-error A motif cannot omit its contact policy.
+const incompleteComposition: FactoringComposition = missingContactPolicy;
+// @ts-expect-error The canonical factoring policy cannot authorize clearance-driven arc inflation.
+const inflatedGeometry: FactoringComposition["geometry"] = "automatic-clearance-detour";
+void [incompleteComposition, inflatedGeometry];

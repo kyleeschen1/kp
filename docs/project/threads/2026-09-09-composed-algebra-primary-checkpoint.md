@@ -36,6 +36,33 @@ This is exemplar evidence, not full release certification. The second source-onl
 
 ## Resume
 
+### Motif-first checkpoint repair
+
+The user rejected the subsequent zero-overlap repair's enlarged arcs. That
+treatment is superseded, not an approved baseline. The accepted governing
+direction is [motif-preserving composition](../principles/motif-composition-contracts.md),
+also routed from `AGENTS.md` and the roadmap.
+
+The current candidate restores the pre-repair arc envelope, keeps context yielding
+before reception, and prevents grouping entry from sweeping through the adjacent
+factor. Complete factor/context occupancy is a required inspection with reported
+transit contacts, not an instruction to enlarge paths. Publication without
+inspection fails; a mismatched fusion paint pose remains a hard failure.
+
+The reconciliation regression exposed a roughly 4px ink-position mismatch:
+wrapper centers were being used to align whole factors. Paths now meet at the
+common native ink center; contributors and receiver carry identical emphasis
+through the handoff. Emphasis releases after material settlement. Source JSON,
+proofs, authoring APIs, canonical renderer, shared clock and evaluation mechanism
+remain intact.
+
+Review the first step's compact arcs, coefficient yielding, merge and emphasis
+release at the live URL above. Brief transit overlap is intentional policy,
+not proof that the scene is collision-free. This bounded factoring implementation
+does not promote all motif adapters. The broader required follow-up remains
+[explicitly recorded](compositor-extension-occupancy-follow-up.md) and attached to
+the existing run's closeout.
+
 Human: “Approve the composed algebra checkpoint and resume `$theseus-long-loop`.”
 
 Agent: derive `npm run --silent loop:status`; retrieve `theseus plan run`; record the human result against s17, complete that slice, then continue the existing contract at s18. Do not create a competing plan or silently treat automated checks as aesthetic acceptance.

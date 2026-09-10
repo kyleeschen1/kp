@@ -4,6 +4,8 @@ import test from "node:test";
 
 import {
   compileKpFactoringChoreography,
+  kpFactoringCompositionPolicy,
+  sampleKpFactoringCopyFocus,
   sampleKpFactoringChoreography
 } from "../src/animation/factoring-choreography.ts";
 import {
@@ -12,7 +14,19 @@ import {
   sampleKpFissionFusion
 } from "../src/animation/fission-fusion.ts";
 
-test("group reception cannot overtake compaction even after the grouping is fully visible", () => {
+test("factoring owns contact policy and releases emphasis only after material settlement", () => {
+  const plan = factoringPlan();
+  assert.equal(plan.composition, kpFactoringCompositionPolicy);
+  assert.ok(Object.isFrozen(plan.composition));
+  for (let i = 0; i <= 100; i++) {
+    const frame = sampleKpFactoringChoreography({ plan, progress: i / 100 });
+    if (frame.phases["release-factor-focus"] > 0) assert.equal(frame.commonFactor.scale, 1);
+    assert.deepEqual(sampleKpFactoringCopyFocus(frame, 0).variables,
+      sampleKpFactoringCopyFocus(frame, 0, "common-factor").variables);
+  }
+});
+
+test("the receiving row settles before grouping reception and factor fusion", () => {
   const plan = factoringPlan();
   for (let i = 0; i <= 1000; i++) {
     const frame = sampleKpFactoringChoreography({ plan, progress: i / 1000 });
@@ -21,7 +35,9 @@ test("group reception cannot overtake compaction even after the grouping is full
   }
   const early = sampleKpFactoringChoreography({ plan, progress: .72 });
   assert.equal(early.groupingOpacity, 1);
-  assert.ok(early.groupingReceptionProgress < 1);
+  assert.equal(early.groupingReceptionProgress, 1);
+  assert.equal(sampleKpFactoringChoreography({ plan, progress: .40 }).addendCompactionProgress, 1);
+  assert.equal(sampleKpFactoringChoreography({ plan, progress: .28 }).addendCompactionProgress, 0);
   assert.equal(sampleKpFactoringChoreography({ plan, progress: 1 }).groupingReceptionProgress, 1);
 });
 
@@ -31,8 +47,7 @@ test("factoring previews repeated-factor focus before collection", () => {
     progress: 0.18
   });
   assert.ok(preview.focusStrength > 0.9);
-  assert.ok(preview.addendCompactionProgress > 0);
-  assert.ok(preview.addendCompactionProgress < 0.2);
+  assert.equal(preview.addendCompactionProgress, 0, "The row must not sweep through factors before departure clearance.");
   assert.equal(preview.groupingOpacity, 0);
   assert.equal(
     preview.factorCopies[0]!.pathProgress,

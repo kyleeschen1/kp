@@ -12,6 +12,14 @@ import type { KpFocusCssBinding } from "./focus-profile.ts";
 const completePlanAuthority = Symbol("complete-factoring-choreography");
 const completePlans = new WeakSet<object>();
 
+/** Motif-owned policy; geometry inspection cannot rewrite the visual mechanism. */
+export const kpFactoringCompositionPolicy = Object.freeze({
+  geometry: "canonical-lineage-only",
+  transitContact: "diagnostic",
+  fusion: "shared-native-pose",
+  emphasisRelease: "after-settlement"
+} as const);
+
 export const kpFactoringChoreographyPhaseIds = [
   "focus-factor-copies",
   "preview-compaction",
@@ -46,6 +54,7 @@ export interface KpFactoringChoreographyPlan {
   readonly factorMinimumScale: number;
   readonly synchronization: "simultaneous";
   readonly fusionPlan: KpFissionFusionPlan;
+  readonly composition: typeof kpFactoringCompositionPolicy;
 }
 
 export interface KpFactoringChoreographyFrame {
@@ -122,8 +131,8 @@ export function sampleKpFactoringAddendCompactionProgress(
   progress: number
 ): number {
   const bounded = clamp01(progress);
-  return 0.18 * intervalProgress(bounded, 0.08, 0.28) +
-    0.82 * intervalProgress(bounded, 0.52, 0.78);
+  // Yield the receiving row while the factors are in transit, before reception.
+  return intervalProgress(bounded, 0.28, 0.40);
 }
 
 export function compileKpFactoringChoreography(input: {
@@ -170,6 +179,7 @@ KpFactoringChoreographyPlan {
     phaseIds: Object.freeze([...kpFactoringChoreographyPhaseIds]),
     factorMinimumScale,
     synchronization: "simultaneous",
+    composition: kpFactoringCompositionPolicy,
     fusionPlan
   };
   completePlans.add(plan);
@@ -182,9 +192,10 @@ export function assertKpCompleteFactoringChoreography(value: unknown): asserts v
 }
 
 /** Preserve the catalogue's accepted copy focus through each paint adapter. */
-export function sampleKpFactoringCopyFocus(frame: KpFactoringChoreographyFrame, semanticIndex: number): KpFocusCssBinding {
+export function sampleKpFactoringCopyFocus(frame: KpFactoringChoreographyFrame, semanticIndex: number,
+  role: "factor-copy" | "common-factor" = "factor-copy"): KpFocusCssBinding {
   const strength = frame.focusStrength;
-  return { className: "kp-focus-group", attributes: { "data-kp-editor-factoring-role": "factor-copy",
+  return { className: "kp-focus-group", attributes: { "data-kp-editor-factoring-role": role,
     "data-kp-editor-factoring-semantic-index": String(semanticIndex) }, variables: {
     "--kp-focus-z": `${5 * strength}px`, "--kp-focus-scale": String(1 + .04 * strength),
     "--kp-focus-outline-strength": String(strength), "--kp-focus-shadow-y": `${4 * strength}px`,
@@ -208,9 +219,9 @@ KpFactoringChoreographyFrame {
     "preview-compaction": intervalProgress(progress, 0.08, 0.28),
     "collect-factor-copies": fusion.phases["approach-junction"],
     "introduce-grouping": intervalProgress(progress, 0.5, 0.72),
-    "compact-addends": intervalProgress(progress, 0.08, 0.78),
+    "compact-addends": sampleKpFactoringAddendCompactionProgress(progress),
     "settle-common-factor": fusion.phases["transit-material"],
-    "release-factor-focus": intervalProgress(progress, 0.72, 0.9)
+    "release-factor-focus": intervalProgress(progress, 0.9, 1)
   };
   const addendCompactionProgress =
     sampleKpFactoringAddendCompactionProgress(progress);

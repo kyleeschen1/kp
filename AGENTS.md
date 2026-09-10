@@ -174,6 +174,12 @@ canonical human checkpoint.
 
 ## Semantic visual salience
 
+For motion governance, follow `docs/project/principles/motif-composition-contracts.md`.
+Keep hard semantic/ownership/endpoint laws separate from motif-owned aesthetics
+and diagnostic transit contacts. Never inflate canonical arcs or invent a new
+treatment solely to eliminate bounding-box overlap. Require complete compositor
+participation; do not claim that participation proves visual quality.
+
 Use `.agents/skills/kp-visual-salience/SKILL.md` for salience, focus,
 highlighting, ghosting, cross-view attention, renderer adapters, or promotion
 of an attention motif.

@@ -96,6 +96,13 @@ are resolved historical checkpoints. The user explicitly approved the next
 Execute `run-contract.kp.composed-algebra-authoring-v1` through the combined s17
 visual checkpoint, then its approved post-acceptance slices. No later successor
 is automatically authorized.
+`principles/motif-composition-contracts.md` establishes the accepted governing
+boundary: preserve motif character, inspect complete paint, and distinguish
+diagnostic transit contact from hard ownership/endpoint invariants.
+The required later compositor-occupancy recommendation is recorded in
+`threads/compositor-extension-occupancy-follow-up.md`. M1b closeout must carry it
+into a named successor proposal/action before further specialized motif expansion;
+the current factoring repair does not complete that catalogue-wide work.
 The accepted broader direction is recorded in
 `decisions/2026-09-09-mathematics-expansion-and-m1a-approval.md`; it guides later
 proposals, not automatic subject expansion. R4B's measured TypeScript-cost amendments

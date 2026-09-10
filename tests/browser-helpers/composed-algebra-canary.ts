@@ -2,6 +2,11 @@ import { checkKpComposedAlgebraProof } from "../../src/authoring/composed-algebr
 import { resolveKpComposedAlgebraPresentation } from "../../src/authoring/composed-algebra-presentation.ts";
 import { mountCanonicalComposedAlgebraOperation, mountCanonicalComposedAlgebraPresentation } from "../../src/experiments/common-factor/native.ts";
 import { renderKpFocusDeckScaffold } from "../../src/tutorial/focus-deck-scaffold.ts";
+import { observeKpNativeKatexRenderedScene } from "../../src/rendering/native-katex-rendered-scene.ts";
+import { createKpEquationFontReadiness } from "../../src/rendering/equation-font-readiness.ts";
+import { bindKpNativeKatexFactoringScene } from "../../src/rendering/native-katex-factoring-choreography.ts";
+import { inspectKpEquationProtectedTransitTracks } from "../../src/rendering/equation-motion-path-planner.ts";
+import type { KpNativeKatexSceneTrack } from "../../src/rendering/native-katex-base-scene-plan.ts";
 
 /** Static imports keep verifier and consumer in one Vite module revision.
  * Importing each authority URL independently can fork its private mint on HMR. */
@@ -21,4 +26,39 @@ export async function mountComposedAlgebraCanary(value: unknown, step: 0 | 1 | "
   surface.render(false);
   window.addEventListener("pagehide", () => surface.dispose(), { once: true });
   return binding.steps[0].plan.factoringMotifBinding;
+}
+
+/** A real native factor must be an obstacle even when absent from ordinary tracks. */
+export async function probeOmittedFactoringOccupancy(value: unknown) {
+  const presentation = resolveKpComposedAlgebraPresentation(checkKpComposedAlgebraProof(value));
+  const intent = presentation.steps[0].plan.factoringMotifBinding;
+  const stage = document.querySelector<HTMLElement>("#composed-canary [data-kp-reader-fit-surface]")!;
+  const fontReadiness = createKpEquationFontReadiness(document); await fontReadiness.whenReady();
+  try {
+    const observe = (endpoint: "source" | "target") => observeKpNativeKatexRenderedScene({
+      endpoint, stage, root: stage.querySelector<HTMLElement>(`[data-kp-reader-native="${endpoint}"]`)!,
+      semanticEntityId: endpoint, presentationGroupId: endpoint, fontReadiness, includeHiddenPaint: true
+    });
+    const binding = bindKpNativeKatexFactoringScene({ source: observe("source"), target: observe("target"),
+      intent, choreography: intent.operationPresentationPlan.choreography });
+    const paint = binding.sampleMaterialOwners(.35).find(owner => owner.opacity === 1)!.expectedPaintRect!;
+    const track: KpNativeKatexSceneTrack = { id: "regression.context", componentId: "regression.context",
+      lifecycle: "persist", visualAtomId: "regression.context",
+      paintKind: "glyph", sizingMode: "rect", startRect: paint, endRect: paint, startOpacity: 1, endOpacity: 1 };
+    const sampleFrames = (_: readonly KpNativeKatexSceneTrack[], progress: number) => [{
+      trackId: track.id, componentId: track.componentId,
+      rect: binding.sampleMaterialOwners(progress).find(owner => owner.opacity === 1)!.expectedPaintRect!, opacity: 1
+    }];
+    const isolated = inspectKpEquationProtectedTransitTracks({ tracks: [track], sampleFrames });
+    const before = binding.sampleMaterialOwners(.35).map(owner => owner.expectedPaintRect);
+    const junction = binding.semanticClock!.fusionPlan.transferEvent.progress;
+    const handoff = [junction - 1e-7, junction + 1e-7].map(progress => binding.sampleMaterialOwners(progress)
+      .filter(owner => owner.opacity === 1).map(owner => ({ rect: owner.expectedPaintRect, focus: owner.focus?.variables })));
+    let uninspectedPublicationRejected = false;
+    try { binding.recordEvidence(); } catch { uninspectedPublicationRejected = true; }
+    const combined = binding.inspectTransit([track], sampleFrames);
+    binding.recordEvidence();
+    return { isolatedIntersections: isolated.intersections.length, combinedIntersections: combined.intersections.length,
+      uninspectedPublicationRejected, handoff, before, after: binding.sampleMaterialOwners(.35).map(owner => owner.expectedPaintRect) };
+  } finally { fontReadiness.dispose(); }
 }
