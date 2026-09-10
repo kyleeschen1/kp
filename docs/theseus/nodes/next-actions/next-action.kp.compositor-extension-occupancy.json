@@ -187,6 +187,34 @@
       "scope": "s06",
       "checkedAt": "2026-09-10T16:22:32.650Z",
       "notes": "31 pass; aggregate 518843 bytes under 530000, complete counted closure retained."
+    },
+    {
+      "command": "npm run test:compositor-extensions",
+      "status": "passed",
+      "scope": "s07",
+      "checkedAt": "2026-09-10T16:32:38.754Z",
+      "notes": "12 pass; duplicate, missing, unexpected participants and wrong measurement context rejected."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s07",
+      "checkedAt": "2026-09-10T16:32:39.942Z",
+      "notes": "Full typecheck passed. Final wrapper-identity addition also checked with complete cold test configuration."
+    },
+    {
+      "command": "node --max-old-space-size=4096 node_modules/typescript/bin/tsc --project tsconfig.test.json --noEmit --incremental false",
+      "status": "passed",
+      "scope": "s07",
+      "checkedAt": "2026-09-10T16:32:40.951Z",
+      "notes": "Same complete test configuration passes with bounded 4 GB heap; default roughly 2 GB cold invocation exhausted heap after disabling incremental cache writes for sandbox EPERM. No fixtures, checks or runtime budgets changed."
+    },
+    {
+      "command": "npm run check:compositor-extension-cost",
+      "status": "passed",
+      "scope": "s07",
+      "checkedAt": "2026-09-10T16:32:41.949Z",
+      "notes": "522401 aggregate source bytes; 7599 headroom; all partitions pass. Architecture suite 31 pass."
     }
   ],
   "progress": {

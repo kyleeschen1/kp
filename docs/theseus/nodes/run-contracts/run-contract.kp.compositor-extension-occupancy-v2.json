@@ -83,7 +83,8 @@
     {
       "id": "s07",
       "title": "Bind participant and measurement identity",
-      "status": "planned"
+      "summary": "Contribution participants and measured native context are bound and tested. Final optical evaluation owner added to inventory; no paint change.",
+      "status": "complete"
     },
     {
       "id": "s08",

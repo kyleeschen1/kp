@@ -75,3 +75,24 @@ source/closure accounting, live plan construction, no serialization, stage/track
 rejection, opacity, native lifecycle and responsive preservation checks. No
 production code or visible behavior changed. A browser representative is s04,
 not claimed by these source/contract tests.
+
+## Follow-through finding: evaluation's final optical owner
+
+During measurement binding, tracing the selected evaluation caller beyond base
+`apply` exposed an additional realization step. The chrome-free canonical host
+wraps its carrier with `createKpCertifiedNativeKatexContributorFusionPlayback`.
+`native-katex-operation-evaluation-contributor-fusion.ts` then changes the same
+successor owners' transforms, presence and target clipping after base paint.
+It does not add a third set of material owners, but it is final-paint authority
+that the initial callback-name inventory did not include.
+
+The evaluation migration must couple this accepted optical realization to the
+actual sampled contribution and final inspection. Inspecting only the base
+successor poses, or removing the wrapper to expose a different base animation,
+would not meet the approved preservation/participation goal. The s04 real-browser
+baseline preserves this wrapper's current appearance; its evaluation check
+measures unchanged context, not final contributing/result ink continuity.
+Retain the ink-knot profile and family certificate. Trace and pressure the final
+optical path in the existing second-mechanism and caller-migration slices; any
+additional source ownership must be explicitly counted. This correction does
+not authorize new motifs or a different renderer.
