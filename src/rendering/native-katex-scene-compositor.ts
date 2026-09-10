@@ -1120,16 +1120,17 @@ function normalizeKpNativeKatexMaterialGlyphPaint(input: {
   readonly entry: KpNativeKatexTypographyStylePlanEntry;
   readonly frame: KpNativeKatexTypographyStyleFrame["entries"][number];
 }): void {
+  const paint = input.entry.glyphPaintFrame ?? input.entry.targetGlyphPaintFrame;
   if (
-    input.entry.glyphPaintFrame === undefined ||
+    paint === undefined ||
     input.visual.dataset["kpNativeKatexPaintFrameNormalized"] === "true"
   ) {
     return;
   }
   const clonePaint = measureKpNativeKatexTextInkRect(input.stage, input.visual);
   if (input.frame.expectedPaintRect !== undefined) {
-    // Replacing a moving source clone with target-styled paint changes KaTeX's
-    // internal ink inset. Reconcile that realized paint once against the
+    // Target-styled paint, including introduced ink without a source frame,
+    // has its own clone inset. Reconcile that realized paint once against the
     // track's authoritative expected ink rather than reusing wrapper geometry.
     const correctionX =
       (input.frame.expectedPaintRect.left - clonePaint.left) /
@@ -1149,8 +1150,8 @@ function normalizeKpNativeKatexMaterialGlyphPaint(input: {
     (clonePaint.left - ownerRect.left) / input.frame.scaleX;
   const cloneInsetY =
     (clonePaint.top - ownerRect.top) / input.frame.scaleY;
-  const correctionX = input.entry.glyphPaintFrame.targetInsetX - cloneInsetX;
-  const correctionY = input.entry.glyphPaintFrame.targetInsetY - cloneInsetY;
+  const correctionX = paint.targetInsetX - cloneInsetX;
+  const correctionY = paint.targetInsetY - cloneInsetY;
   input.visual.style.translate = `${correctionX}px ${correctionY}px`;
   input.visual.dataset["kpNativeKatexPaintFrameNormalized"] = "true";
 }

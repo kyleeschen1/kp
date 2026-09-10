@@ -92,6 +92,9 @@ projection, repair and publication coherence. `npm run visual:composed-algebra`
 traverses the real native compositor for both callers, checking group ownership,
 fusion, native seams, reverse replay and controls. Finite samples are not a
 continuous-time proof or universal mathematical-animation certification.
+`npm run visual:composed-algebra:cohort` runs those checks in Chromium, Firefox
+and WebKit, including narrow layouts, reduced motion, repeated Apply and both
+static editions without JavaScript. It reuses the shared localhost:8000 server.
 Follow `../principles/motif-composition-contracts.md`: transit contacts are
 diagnostics, not permission to inflate the accepted arcs. Broader extension
 coverage remains a separate successor obligation.

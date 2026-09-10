@@ -20,6 +20,9 @@ export function projectComposedAlgebraReading(draft: KpComposedAlgebraPresentati
   const text = `---\nkp:\n  schema: kp.article.v1\n  id: ${documentId}\n  imports:\n---\n\n## ${mode === "full" ? "Full" : "Compact"} reading\n\n${paragraphs.map(literal).join("\n\n")}\n\n### Required context\n\n${assumptions.join("\n\n")}\n\n### Two verified steps\n\n$$\n${facts.states[0]!.latex}\n$$\n\nFactor the unchanged shared expression using the distributive law in reverse.\n\n$$\n${facts.states[1]!.latex}\n$$\n\nEvaluate the coefficient sum while keeping the surrounding expression unchanged.\n\n$$\n${facts.states[2]!.latex}\n$$\n\nExplanatory prose is editorial; both displayed equalities are verified for this bounded task.\n`;
   const source = createKpArticleSource(`${documentId}.${draft.revisionId.slice(7)}`, text), lock = resolveKpArticleImports(source, []).lock;
   const { document } = compileKpArticleDocument({ source, registry: [], lock });
-  const html = compileKpArticleStaticHtml(document, { headingIdPrefix: documentId }).articleHtml;
+  const rendered = compileKpArticleStaticHtml(document, { headingIdPrefix: documentId });
+  if (rendered.math.displayCount !== authored.states.length)
+    throw new Error("A composed reading must render every verified checkpoint as math.");
+  const html = rendered.articleHtml;
   return Object.freeze({ mode, revisionId: draft.revisionId, source, document, html, facts, assumptions, references, editorialStatus: "editorial" as const });
 }

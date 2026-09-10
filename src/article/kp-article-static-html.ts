@@ -34,6 +34,7 @@ export interface KpArticleStaticHtmlArtifact {
 }
 
 interface RenderContext {
+  readonly markdown: string;
   headingIdPrefix?: string;
   inlineMathCount: number;
   displayMathCount: number;
@@ -55,6 +56,7 @@ export function compileKpArticleStaticHtml(
   const staticMarkdown = compileKpArticleStaticMarkdown(document);
   const root = fromMarkdown(staticMarkdown.markdown);
   const context: RenderContext = {
+    markdown: staticMarkdown.markdown,
     ...(options.headingIdPrefix === undefined ? {} : { headingIdPrefix: options.headingIdPrefix }),
     inlineMathCount: 0,
     displayMathCount: 0,
@@ -99,6 +101,7 @@ export function compileKpArticleStaticHtml(
 export function compileKpArticleMarkdownFragmentHtml(markdown: string): string {
   const root = fromMarkdown(markdown);
   const context: RenderContext = {
+    markdown,
     inlineMathCount: 0,
     displayMathCount: 0,
     headingIds: new Map(),
@@ -128,7 +131,7 @@ function renderBlock(node: RootContent, context: RenderContext): string {
     case "heading":
       return renderHeading(node, context);
     case "paragraph": {
-      const displayMath = displayMathSource(node);
+      const displayMath = displayMathSource(node, context.markdown);
       if (displayMath !== undefined) {
         context.displayMathCount += 1;
         return `<div class="kp-article-math kp-article-math--display">${renderMath(displayMath, true)}</div>`;
@@ -264,9 +267,12 @@ function renderMath(latex: string, displayMode: boolean): string {
   });
 }
 
-function displayMathSource(node: Paragraph): string | undefined {
-  if (node.children.length !== 1 || node.children[0]?.type !== "text") return undefined;
-  const value = node.children[0].value.trim();
+function displayMathSource(node: Paragraph, markdown: string): string | undefined {
+  // CommonMark may parse multiplication or subscripts as emphasis. Delimited
+  // math belongs to KaTeX; recover its exact source before inspecting children.
+  const start = node.position?.start.offset, end = node.position?.end.offset;
+  if (start === undefined || end === undefined) return undefined;
+  const value = markdown.slice(start, end).trim();
   if (!value.startsWith("$$") || !value.endsWith("$$") || value.length < 4) return undefined;
   return value.slice(2, -2).trim();
 }

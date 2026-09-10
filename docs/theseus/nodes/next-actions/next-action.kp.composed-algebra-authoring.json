@@ -242,11 +242,25 @@
       "scope": "s23",
       "checkedAt": "2026-09-10T04:44:52.218Z",
       "notes": "48 focused tests, both-source native Apply/practice/download, full types and both immutable editions pass. Scripted repair counts are fixture evidence only; human time and comprehension not measured."
+    },
+    {
+      "command": "npm run visual:composed-algebra:cohort",
+      "status": "failed",
+      "scope": "s24-initial",
+      "checkedAt": "2026-09-10T04:56:43.208Z",
+      "notes": "Initial cohort:46 pass,2 WebKit seam failures at0.35875px. Added no-JS cohort also exposed product edition6 rather than8 math fragments: CommonMark emphasis consumed a display equation. Shared clone normalization and raw display-math boundary repaired; gates unchanged."
+    },
+    {
+      "command": "npm run visual:composed-algebra:cohort; npm run test:composed-algebra-authoring; npm run test:canonical-equation-renderer; npm run typecheck; npm run check:architecture; npm run check:inference; node --test tests/native-katex-rendered-scene.test.ts tests/kp-article-v1-static-html.test.ts tests/kp-article-v1-fraction-composition-compilation.test.ts; npm run check:composed-algebra-workflow",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-09-10T04:58:04.983Z",
+      "notes": "51 browser passes across Chromium Firefox WebKit;48 composed,29 renderer,72 shared tests. Full types and architecture pass. Core113698/194449 combined172065/286160; no gate increases. Initial failures retained; physical devices not certified."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Both retained chains complete identical owner and native authoring workflows. Proceed to supported-browser lifecycle promotion and full release gates."
+    "summary": "Supported-browser promotion passes after shared native-paint and Article repairs. Continue full release and earlier-exemplar preservation."
   },
   "expectedLearning": [
     "Measure compound factoring plus contextual evaluation reuse without renderer glue."

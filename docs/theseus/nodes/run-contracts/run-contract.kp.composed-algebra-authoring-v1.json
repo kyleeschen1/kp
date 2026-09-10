@@ -179,7 +179,8 @@
     {
       "id": "s24",
       "title": "Run supported-browser and lifecycle promotion cohort",
-      "status": "planned"
+      "summary": "51 supported-browser checks pass with both no-JS editions; shared Markdown and introduced-glyph regressions repaired without changing motifs or ceilings.",
+      "status": "complete"
     },
     {
       "id": "s25",

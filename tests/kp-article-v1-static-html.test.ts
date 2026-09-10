@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import { compileKpArticleDocument } from "../src/article/kp-article-document.ts";
-import { compileKpArticleStaticHtml } from "../src/article/kp-article-static-html.ts";
+import { compileKpArticleStaticHtml, compileKpArticleMarkdownFragmentHtml } from "../src/article/kp-article-static-html.ts";
 import type { KpArticleImportLock } from "../src/article/kp-article-import-lock.ts";
 import { createKpArticleSource } from "../src/article/kp-article-source.ts";
 import { kpArticleVignetteRegistry } from "../src/article/vignettes/economics-demand-shift-vignette.ts";
@@ -55,6 +55,20 @@ test("math is compiled once to accessible KaTeX HTML and MathML", () => {
   assert.equal(count(artifact.articleHtml, 'class="katex-html"'), 5);
   assert.match(artifact.articleHtml, /<math/u);
   assert.doesNotMatch(artifact.articleHtml, /<script|katex\.render|type="module"/iu);
+});
+
+test("display math preserves exact source when CommonMark sees emphasis or escapes", () => {
+  for (const latex of ["(x*y)*2+(x*y)*4", "x_a+y_b", String.raw`\{x\}+\{y\}`]) {
+    const markdown = `$$\n${latex}\n$$`;
+    const fragment = compileKpArticleMarkdownFragmentHtml(markdown);
+    assert.equal(count(fragment, '<math'), 1);
+    assert.ok(fragment.includes(`<annotation encoding="application/x-tex">${latex}</annotation>`));
+    assert.doesNotMatch(fragment, /<em>|<strong>/);
+    const article = compileSource(markdown);
+    assert.equal(article.math.displayCount, 2);
+    assert.ok(article.articleHtml.includes(`<annotation encoding="application/x-tex">${latex}</annotation>`));
+  }
+  assert.match(compileKpArticleMarkdownFragmentHtml("Ordinary *emphasis* stays prose."), /<em>emphasis<\/em>/);
 });
 
 test("static HTML retains real semantic links, anchors, TOC, and immutable asset requests", () => {

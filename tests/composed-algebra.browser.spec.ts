@@ -215,6 +215,22 @@ async function mountCanary(page: import("@playwright/test").Page, step: 0 | 1 | 
   }, { value, step });
 }
 
+test("both immutable editions retain complete readable math without JavaScript", async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 900 } });
+  try {
+    const page = await context.newPage();
+    for (const name of ["primary", "product"]) {
+      const edition = buildComposedAlgebraEdition(fileURLToPath(new URL(`../src/authoring/examples/composed-algebra-${name}.json`, import.meta.url)));
+      const response = await page.goto(`http://localhost:8000/tmp/codex/composed-algebra-editions/${edition.directory.split("/").at(-1)}/index.html`);
+      expect(response?.status()).toBe(200);
+      await expect(page.locator("[data-composed-publication-revision]")).toHaveAttribute("data-composed-publication-revision", edition.revisionId);
+      await expect(page.locator("math")).toHaveCount(8);
+      await expect(page.locator("[data-kp-focus-deck-scrubber]")).toHaveCount(0);
+      expect(await page.locator("body").innerText()).toContain(name === "primary" ? source.editorial.title : product.editorial.title);
+    }
+  } finally { await context.close(); }
+});
+
 test("pressure sources prepare native endpoints and bounded material in both orientations", async ({ page }) => {
   test.setTimeout(120_000);
   for (const example of composedAlgebraPressureCases) {
