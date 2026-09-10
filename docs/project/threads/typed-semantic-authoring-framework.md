@@ -63,8 +63,9 @@ do not treat its proposed roadmap or readiness labels as new execution authority
 The user clarified the remaining code issue as missing gradual passage swiping.
 The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
-Current Next Action: propose the next bounded composed-algebra milestone; no
-successor is approved for execution. M1a is complete under
+Current Next Action: execute approved `run-contract.kp.composed-algebra-authoring-v1`
+from `../reviews/2026-09-09-m1b-composed-algebra-long-loop-proposal.md` through its
+s17 combined visual checkpoint. M1a remains complete under
 `run-contract.kp.common-factor-authoring-v1`; see
 `../reviews/2026-09-09-common-factor-authoring-closeout.md` for achieved author
 value, full release verification and the compound-factor/composition gap.

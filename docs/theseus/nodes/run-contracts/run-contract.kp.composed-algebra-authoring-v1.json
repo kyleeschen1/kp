@@ -1,0 +1,172 @@
+{
+  "id": "run-contract.kp.composed-algebra-authoring-v1",
+  "kind": "run-contract",
+  "title": "M1b Composed algebra authoring",
+  "status": "in-progress",
+  "summary": "Approved26 slices; canonical compound factoring and contextual evaluation, then source-only reuse and release.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.composed-algebra-authoring.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-09-m1b-composed-algebra-long-loop-proposal.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Exact approved26 slices; bounded oriented compound factoring, contextual exact sum evaluation, authenticated chain and existing canonical host/projections. Standing measured TypeScript cost policy applies."
+  ],
+  "disallowedWork": [
+    "No universal CAS, new motif grammar, unrelated families, external models, subagents, merge, deployment, unapproved budget amendments or automatic successor."
+  ],
+  "goal": "Verified compound factoring and contextual evaluation compose into one three-stop authoring artifact with source-only second-caller reuse.",
+  "target": "next-action.kp.composed-algebra-authoring",
+  "runMode": "run",
+  "maxSlices": 26,
+  "commitCadence": "One scoped commit per verified slice with closed context receipt and evidence.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "s17 combined human visual/editorial acceptance before s18.",
+    "Stop for missing authority, unsafe action, unavailable required proof, material scope expansion, user pause or completion; repair routine failures without weakening gates."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Pin canonical factoring/evaluation paths, limitations and preserved callers",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Register affected inference consumers and capture fixed-cost baselines",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Characterize compound factors, orientation and mixed-chain gaps",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Define bounded versioned chain source without widening M1a",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Normalize supported compound expressions through existing parser",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Extend distributive proof to explicit left/right orientation",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Authenticate bounded compound-factor rewrites including zero",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Verify exact constant-sum evaluation inside unchanged context",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Authenticate chain with exact adjacent endpoint continuity",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Bind transitions to complete canonical presentation owners",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Prototype compound-group factoring through native compositor",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Connect canonical evaluation preserving surrounding expression",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Compose transitions through existing semantic clock and lifecycle",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Integrate atomic Apply and coherent displayed revisions",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Expose three stops through shared controls and position text",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Connect explanation, readings, practice, return and static edition",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Present combined primary visual/editorial checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Encode accepted group-motion and cross-transition regressions",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Add source-only second chain with different compound shape/orientation",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Pressure zero, repeated symbols, wider coefficients and invalid chains",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Consolidate only duplication demonstrated by both callers",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Publish discovery metadata, author packet and repair examples",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Replay both authoring workflows and measure marginal effort",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Run supported-browser and lifecycle promotion cohort",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Run full release verification and earlier-exemplar preservation",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Close receipts and reconcile roadmap, limits and next proposal",
+      "status": "planned"
+    }
+  ]
+}

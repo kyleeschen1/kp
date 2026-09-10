@@ -1,0 +1,53 @@
+{
+  "id": "next-action.kp.composed-algebra-authoring",
+  "kind": "next-action",
+  "title": "M1b Composed algebra authoring",
+  "status": "in-progress",
+  "domain": "authoring",
+  "summary": "User approved exact26-slice M1b proposal; proceed to s17 combined checkpoint.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-09-m1b-composed-algebra-long-loop-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.common-factor-authoring"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Measure compound factoring plus contextual evaluation reuse without renderer glue."
+  ],
+  "allowedWork": [
+    "Exact approved26-slice M1b plan with s17 combined visual checkpoint."
+  ],
+  "disallowedWork": [
+    "No universal CAS, new motif grammar, unrelated families, external models, subagents, merge, deployment or automatic successor."
+  ],
+  "criteria": [
+    {
+      "id": "authoring-coherence",
+      "weight": "high"
+    },
+    {
+      "id": "verified-authority",
+      "weight": "high"
+    },
+    {
+      "id": "legacy-preservation",
+      "weight": "high"
+    },
+    {
+      "id": "visual-acceptance",
+      "weight": "high"
+    }
+  ]
+}

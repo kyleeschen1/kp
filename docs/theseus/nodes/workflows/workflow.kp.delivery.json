@@ -84,7 +84,8 @@
     "next-action.kp.binary-log-product-checkpoint",
     "next-action.kp.operation-evaluation-family-exemplar-v0",
     "next-action.kp.supply-tax-scroll-score-station-v0",
-    "next-action.refill.experiment.plan-revision.kp.v23.bounded-proof-before-generation"
+    "next-action.refill.experiment.plan-revision.kp.v23.bounded-proof-before-generation",
+    "next-action.kp.composed-algebra-authoring"
   ],
   "verificationRecords": [
     {

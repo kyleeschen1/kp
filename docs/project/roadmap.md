@@ -90,7 +90,12 @@ coherent authoring/projections and full release verification. See
 `reviews/2026-09-09-common-factor-authoring-closeout.md` for measured value,
 inspection instructions, limits and the next composed-algebra proposal boundary.
 The explicitly approved renderer-source and three reader HTML-gzip amendments
-are resolved historical checkpoints. No successor is automatically authorized.
+are resolved historical checkpoints. The user explicitly approved the next
+26-slice M1b composed-algebra proposal:
+`reviews/2026-09-09-m1b-composed-algebra-long-loop-proposal.md`.
+Execute `run-contract.kp.composed-algebra-authoring-v1` through the combined s17
+visual checkpoint, then its approved post-acceptance slices. No later successor
+is automatically authorized.
 The accepted broader direction is recorded in
 `decisions/2026-09-09-mathematics-expansion-and-m1a-approval.md`; it guides later
 proposals, not automatic subject expansion. R4B's measured TypeScript-cost amendments
