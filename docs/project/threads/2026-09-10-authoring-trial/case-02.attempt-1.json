@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "kp.composed-algebra-source.v1",
+  "id": "lesson.repeated-groups.case-02",
+  "domain": "real-scalars",
+  "symbols": ["x"],
+  "states": [
+    {
+      "id": "state.case-02.expanded",
+      "latex": "(x+4)*2+(x+4)*5",
+      "narration": "The same sum x+4 appears in both terms. Each multiplier is written after its group: first two, then five."
+    },
+    {
+      "id": "state.case-02.collected",
+      "latex": "(x+4)(2+5)",
+      "narration": "Collect the identical group on the left and add its multipliers on the right, in the order two then five. No factor needs to switch sides."
+    },
+    {
+      "id": "state.case-02.evaluated",
+      "latex": "(x+4)*7",
+      "narration": "Evaluate two plus five as seven. The multiplier stays on the right, and the entire sum x+4 stays unchanged on the left."
+    }
+  ],
+  "editorial": {
+    "title": "Keep the multipliers on the right",
+    "setup": "Find the repeated group x+4. This time its multipliers follow the parentheses; keep that order as you collect the two terms.",
+    "summary": "The repeated sum remains x+4 while its right-hand multipliers combine as two plus five. We found their total, seven, without evaluating x+4 or swapping factors."
+  }
+}

@@ -47,6 +47,12 @@
       "status": "passed",
       "scope": "s04",
       "checkedAt": "2026-09-10T19:01:28.418Z"
+    },
+    {
+      "command": "npm run check:unfamiliar-authoring-trial; canonical primary and product publication --check; git diff --check",
+      "status": "passed",
+      "scope": "s05",
+      "checkedAt": "2026-09-10T19:03:07.816Z"
     }
   ],
   "expectedLearning": [

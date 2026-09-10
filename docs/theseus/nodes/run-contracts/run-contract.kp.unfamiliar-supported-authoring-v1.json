@@ -66,7 +66,8 @@
     {
       "id": "s05",
       "title": "Author opposite sum orientation",
-      "status": "planned"
+      "summary": "Opposite sum orientation authored and checked first pass with no repairs or engine edits.",
+      "status": "complete"
     },
     {
       "id": "s06",
