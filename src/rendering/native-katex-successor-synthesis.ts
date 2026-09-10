@@ -10,6 +10,7 @@ import {
   type KpSuccessorSynthesisFrame
 } from "../animation/successor-synthesis.ts";
 import { createKpNativeKatexSceneContribution, assertKpNativeKatexMaterialRealization,
+  requireKpNativeKatexMeasuredMaterialFrame,
   sampleKpNativeKatexEndpointDwellProgress, type KpNativeKatexMaterialRealization } from "./native-katex-scene-contribution.ts";
 import type {
   KpRegisteredSuccessorSynthesisBinding
@@ -389,19 +390,22 @@ export function createKpNativeKatexSuccessorContribution(input: {
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
   readonly plans: readonly KpNativeKatexSuccessorSynthesisScenePlan[];
-  readonly realization: KpNativeKatexMaterialRealization;
+  readonly realization?: KpNativeKatexMaterialRealization | undefined;
   readonly endpointDwellFraction: number;
 }) {
-  assertKpNativeKatexMaterialRealization(input.realization);
+  if (input.realization) assertKpNativeKatexMaterialRealization(input.realization);
   const sample = (progress: number) => sampleKpNativeKatexSuccessorSynthesisScenePlans({
     plans: input.plans, progress: sampleKpNativeKatexEndpointDwellProgress(progress, input.endpointDwellFraction)
   });
-  return createKpNativeKatexSceneContribution({
+  const common = {
     id: `successors.${input.plans.map(plan => plan.id).join("+")}`,
     source: input.source, target: input.target,
-    participantIds: sample(0).map(owner => owner.ownerId),
-    sample, realization: input.realization
-  });
+    participantIds: sample(0).map(owner => owner.ownerId)
+  };
+  return input.realization
+    ? createKpNativeKatexSceneContribution({ ...common, sample, realization: input.realization })
+    : createKpNativeKatexSceneContribution({ ...common,
+        sample: progress => sample(progress).map(requireKpNativeKatexMeasuredMaterialFrame) });
 }
 
 export function sampleKpNativeKatexSuccessorSynthesisScenePlans(input: {
@@ -1006,7 +1010,14 @@ function ownerFrames(input: {
         ? {}
         : {
             paintAlignmentRect,
-            expectedPaintRect: paintAlignmentRect
+            // The DOM painter registers native ink, then scales about its ink
+            // center. Inspection must see that final pose, not the native box.
+            expectedPaintRect: Object.freeze({
+              left: paintAlignmentRect.left + paintAlignmentRect.width * (1 - input.pose.scale) / 2 + input.pose.x,
+              top: paintAlignmentRect.top + paintAlignmentRect.height * (1 - input.pose.scale) / 2 + input.pose.y,
+              width: paintAlignmentRect.width * input.pose.scale,
+              height: paintAlignmentRect.height * input.pose.scale
+            })
           }),
       opacity: input.pose.opacity,
       transform:

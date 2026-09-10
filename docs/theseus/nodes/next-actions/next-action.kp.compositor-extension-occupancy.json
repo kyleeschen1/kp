@@ -321,6 +321,12 @@
       "status": "passed",
       "scope": "s15",
       "checkedAt": "2026-09-10T17:36:59.935Z"
+    },
+    {
+      "command": "npm run typecheck; npm run test:canonical-equation-renderer; npm run test:compositor-extensions; npm run test:real-katex-glyph-compositor; successor continuity unit tests; scoped canonical, exact-fraction, common-denominator and place-value browser checks; npm run check:compositor-extension-cost",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-10T17:50:22.658Z"
     }
   ],
   "progress": {

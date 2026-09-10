@@ -137,7 +137,8 @@
     {
       "id": "s16",
       "title": "Complete inventoried in-scope caller migration",
-      "status": "planned"
+      "summary": "All canonical successor plans now participate, preserving default and optical poses. Final-paint readiness includes identity-only motion. Full types, focused and architecture tests, twenty scoped browser checks and costs pass; aggregate 563049 bytes. Unmeasured SVG successors and standalone material mounts are not certified.",
+      "status": "complete"
     },
     {
       "id": "s17",

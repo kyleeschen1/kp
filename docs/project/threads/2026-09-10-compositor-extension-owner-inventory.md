@@ -96,3 +96,32 @@ Retain the ink-knot profile and family certificate. Trace and pressure the final
 optical path in the existing second-mechanism and caller-migration slices; any
 additional source ownership must be explicitly counted. This correction does
 not authorize new motifs or a different renderer.
+
+## Remaining-caller integration (s16)
+
+Canonical compilation now creates a contribution for every nonempty successor
+plan set, including default gather-and-recognize and identity fission/fusion.
+The certified optical caller retains its issued realization; other callers
+retain their existing poses. Native-ink registration and post-transform paint
+bounds are separate, and default successor bounds now follow the actual
+translation and ink-centered scale. Readiness includes final contribution
+motion, so identity-only scenes cannot be rejected merely because their
+remaining ordinary tracks are static.
+
+The scope is the canonical compositor's two inventoried extension producers,
+not every material-layer consumer. Standalone certified-evaluation and
+antiderivative mounts still use their own material-layer lifecycle and share
+the extracted optical math; they are not claimed as inspected canonical scene
+assemblies. Unmeasured successor paint cannot enter the contribution seam.
+SVG-path successor ink is not certified by the glyph/rule representatives;
+adding such a mechanism requires measured paint support and executed evidence,
+not a layout-box cast. Ordinary structural paths retain their existing owner.
+
+Executed caller checks: exact-fraction identity fission/fusion (six checks,
+Chromium/Firefox/WebKit), common-denominator full timeline (one Chromium
+check), and canonical composed-algebra factoring/evaluation (ten Chromium
+checks). The fraction cohort first exposed incomplete readiness accounting;
+it passes after the shared final-paint readiness repair. Pure successor tests
+also verify that occupancy is derived from transformed ink at forward and
+reverse samples. This is bounded caller preservation, not universal paint
+certification. Callback API retirement remains the next independent slice.

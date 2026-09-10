@@ -15,6 +15,7 @@ import {
 } from "../src/animation/motifs/identity-fusion-executable-program.ts";
 import {
   compileKpNativeKatexSuccessorSynthesisScenePlans,
+  createKpNativeKatexSuccessorContribution,
   kpNativeKatexSuccessorTargetSettlementProgress,
   sampleKpNativeKatexSuccessorSynthesisScenePlans
 } from "../src/rendering/native-katex-successor-synthesis.ts";
@@ -281,6 +282,38 @@ test("native successor renderer settles exact endpoints without binary policy", 
     paintPose(targets(oneMinusEpsilon)),
     paintPose(targets(end))
   );
+});
+
+test("default successor participation derives occupancy from final ink poses", () => {
+  const compilation = compileKpRegisteredSuccessorSynthesisPresentation({
+    transformationId: "transform.test.one-plus-two",
+    transformationKind: "simplifyConstantSum", binding
+  });
+  assert.equal(compilation.status, "compiled");
+  if (compilation.status !== "compiled") return;
+  const source = scene("source", [atom("source.one", "selector.one", 10, 20),
+    atom("source.plus", "selector.plus", 28, 20), atom("source.two", "selector.two", 46, 20)]);
+  const target = scene("target", [atom("target.three", "selector.three", 28, 20)]);
+  const plans = compileKpNativeKatexSuccessorSynthesisScenePlans({ source, target,
+    intents: [{ direction: "forward", motion: "full", binding: { ...binding,
+      operationPresentationPlan: compilation.operationPresentationPlan,
+      paintContinuityPlan: compilation.paintContinuityPlan, continuityProgram: compilation.continuityProgram } }] });
+  const contribution = createKpNativeKatexSuccessorContribution({ source, target, plans, endpointDwellFraction: 0 });
+  for (const progress of [0, 0.25, 0.58, 0.8, 1, 0.58, 0]) {
+    const frame = contribution.sample(progress);
+    assert.equal(frame.owners.length, 4);
+    for (const owner of frame.owners) {
+      const ink = owner.paintAlignmentRect!;
+      const pose = /translate\(([-\d.e]+)px, ([-\d.e]+)px\) scale\(([-\d.e]+)\)/u.exec(owner.transform)!;
+      const [x, y, factor] = pose.slice(1).map(Number) as [number, number, number];
+      assert.deepEqual(owner.expectedPaintRect, {
+        left: ink.left + ink.width * (1 - factor) / 2 + x,
+        top: ink.top + ink.height * (1 - factor) / 2 + y,
+        width: ink.width * factor, height: ink.height * factor
+      });
+      assert.deepEqual(frame.occupancy.find(item => item.trackId === owner.ownerId)?.rect, owner.expectedPaintRect);
+    }
+  }
 });
 
 function scene(

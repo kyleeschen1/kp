@@ -1429,7 +1429,7 @@ export function compileKpCanonicalNativeKatexScenePlan(
   const measuredTracks = attachKpNativeKatexTrackPaintGeometry({ tracks, source: resolved.source, target: resolved.target });
   const dwell = input.factoring?.semanticClock ? 0 : input.endpointDwellFraction ?? KP_NATIVE_KATEX_TERMINAL_SETTLEMENT_FRACTION;
   const contributions = [...(input.factoring ? [input.factoring.contribution] : []),
-    ...(input.successorRealization ? [createKpNativeKatexSuccessorContribution({
+    ...(syntheses.length ? [createKpNativeKatexSuccessorContribution({
       source: resolved.source, target: resolved.target, plans: syntheses,
       realization: input.successorRealization, endpointDwellFraction: dwell
     })] : [])];
@@ -1437,8 +1437,6 @@ export function compileKpCanonicalNativeKatexScenePlan(
     source: resolved.source, target: resolved.target, tracks: measuredTracks,
     contributions, copyFanOut: input.copyFanOutRouting, endpointDwellFraction: dwell
   });
-  if (sceneAssembly && syntheses.length && !input.successorRealization)
-    throw new Error("Mixed contributions require complete final-scene migration.");
   const correlations = correlateKpNativeKatexSceneHandoff({
     reconciliation,
     tracks: allTracks
@@ -1771,6 +1769,14 @@ function certifyKpNativeKatexExecutableMotion(
         materialScale: frame.materialScale
       }));
       signaturesByTrack.set(frame.trackId, signatures);
+    }
+    // Identity transfer may claim every moving atom. Readiness must inspect
+    // the same final contribution paint, not just the remaining context tracks.
+    for (const owner of playback.sceneAssembly?.sample(progress).owners ?? []) {
+      const signatures = signaturesByTrack.get(owner.ownerId) ?? new Set<string>();
+      signatures.add(JSON.stringify({ rect: owner.expectedPaintRect,
+        opacity: owner.opacity, transform: owner.transform }));
+      signaturesByTrack.set(owner.ownerId, signatures);
     }
   }
   const dynamicTrackIds = [...signaturesByTrack]
