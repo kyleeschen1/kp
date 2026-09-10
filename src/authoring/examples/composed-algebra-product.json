@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "kp.composed-algebra-source.v1",
+  "id": "lesson.composed-algebra.product",
+  "domain": "real-scalars",
+  "symbols": ["x", "y"],
+  "states": [
+    { "id": "state.product.expanded", "latex": "(x*y)*2+(x*y)*4", "narration": "The same product xy occurs twice, multiplied by two and by four. Keep that product intact." },
+    { "id": "state.product.factored", "latex": "(x*y)(2+4)", "narration": "Collect the shared product on the left. The two original multipliers form the sum on the right." },
+    { "id": "state.product.evaluated", "latex": "(x*y)*6", "narration": "Evaluate two plus four as six. The product xy and its position on the left remain unchanged." }
+  ],
+  "editorial": {
+    "title": "Collect a shared product on the left",
+    "setup": "Treat xy as one unit while combining its multipliers.",
+    "summary": "Factoring keeps the shared product intact; evaluation simplifies only its multiplier. No division occurs, so either x or y may be zero."
+  }
+}

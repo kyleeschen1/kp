@@ -115,7 +115,10 @@ export function parseLatexScalarExpression(input: string, symbols: readonly stri
     const endsAtom = previous && ["identifier", "number", "rightParen", "rightBrace"].includes(previous.kind);
     const startsAtom = ["identifier", "number", "leftParen", "leftBrace"].includes(token.kind);
     if (endsAtom && startsAtom) {
-      if (token.kind === "number") throw new LatexParseError("Use explicit multiplication before a numeric factor.", token.offset, "unambiguous scalar notation");
+      // A closed group makes the boundary explicit: (x+y)2 is an ordered
+      // product, unlike ambiguous x2 or two separately written numbers.
+      if (token.kind === "number" && previous.kind !== "rightParen" && previous.kind !== "rightBrace")
+        throw new LatexParseError("Use explicit multiplication before a numeric factor.", token.offset, "unambiguous scalar notation");
       tokens.push({ kind: "operator", value: "*", offset: token.offset });
     }
     tokens.push(token);

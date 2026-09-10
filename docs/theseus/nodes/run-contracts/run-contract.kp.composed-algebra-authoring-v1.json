@@ -149,7 +149,8 @@
     {
       "id": "s19",
       "title": "Add source-only second chain with different compound shape/orientation",
-      "status": "planned"
+      "summary": "Retained source-only product chain with left factoring; repaired unambiguous closed-group numeric round-trip at shared scalar parser. Both canonical owners and reverse browser reuse pass.",
+      "status": "complete"
     },
     {
       "id": "s20",
