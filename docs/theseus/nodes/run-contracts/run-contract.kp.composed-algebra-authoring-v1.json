@@ -65,7 +65,8 @@
     {
       "id": "s05",
       "title": "Normalize supported compound expressions through existing parser",
-      "status": "planned"
+      "summary": "Shared existing scalar parser/lowering across distinct source versions; located repairs and occurrence identities covered without granting normalization proof authority.",
+      "status": "complete"
     },
     {
       "id": "s06",

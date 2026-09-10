@@ -1,21 +1,29 @@
 import { LatexParseError, parseLatexScalarExpression, type ParsedLatexExpression } from "../math/latex-parser.ts";
-import { KpCommonFactorRepair, type KpCommonFactorSource } from "./common-factor-source.ts";
+import { KpCommonFactorRepair, type KpCommonFactorSource, type KpCommonFactorState } from "./common-factor-source.ts";
 import { createKpStructuredExpression, type KpStructuredExpressionNode } from "../semantic/structured-expression.ts";
 
 export function normalizeKpCommonFactorEndpoints(source: KpCommonFactorSource) {
   const normalize = (index: 0 | 1) => {
     const state = source.states[index], path = `$.states[${index}].latex`;
-    let expression: ParsedLatexExpression;
-    try { expression = parseLatexScalarExpression(state.latex, source.symbols); }
-    catch (error) { throw new KpCommonFactorRepair(error instanceof LatexParseError && error.expected === "declared scalar"
-      ? "undeclared-symbol" : error instanceof LatexParseError && error.expected === "unambiguous scalar notation"
-        ? "ambiguous-notation" : "unsupported-syntax", path,
-      error instanceof Error ? error.message : "Unsupported expression notation."); }
-    inspect(expression, source.symbols, path);
-    const structured = createKpStructuredExpression({ root: lower(expression, state.id) });
-    return Object.freeze({ stateId: state.id, authoredLatex: state.latex, expression, structured });
+    return normalizeKpScalarSumProductEndpoint(state, source.symbols, path);
   };
   return Object.freeze([normalize(0), normalize(1)] as const);
+}
+
+/** Shared syntax lowering only: both author tasks retain their own source shape
+ * and proof gates. Stable IDs belong to occurrences, not equal glyph strings. */
+export function normalizeKpScalarSumProductEndpoint(
+  state: Pick<KpCommonFactorState, "id" | "latex">, symbols: readonly string[], path: string
+) {
+  let expression: ParsedLatexExpression;
+  try { expression = parseLatexScalarExpression(state.latex, symbols); }
+  catch (error) { throw new KpCommonFactorRepair(error instanceof LatexParseError && error.expected === "declared scalar"
+    ? "undeclared-symbol" : error instanceof LatexParseError && error.expected === "unambiguous scalar notation"
+      ? "ambiguous-notation" : "unsupported-syntax", path,
+    error instanceof Error ? error.message : "Unsupported expression notation."); }
+  inspect(expression, symbols, path);
+  const structured = createKpStructuredExpression({ root: lower(expression, state.id) });
+  return Object.freeze({ stateId: state.id, authoredLatex: state.latex, expression, structured });
 }
 
 function lower(expression: ParsedLatexExpression, id: string): KpStructuredExpressionNode {

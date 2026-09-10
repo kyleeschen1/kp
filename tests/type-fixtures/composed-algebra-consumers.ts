@@ -20,3 +20,9 @@ const thirdState: string = source.states[2].latex;
 // @ts-expect-error a two-state legacy tuple is not a composed chain
 const wrongCount: KpComposedAlgebraSource["states"] = [source.states[0], source.states[1]];
 void [thirdState, wrongCount];
+import { normalizeKpComposedAlgebraEndpoints } from "../../src/authoring/composed-algebra-normalizer.ts";
+const endpoints = normalizeKpComposedAlgebraEndpoints(source);
+const lastExpression = endpoints[2].structured;
+// @ts-expect-error normalized endpoints remain syntax, not authenticated proof
+const normalizedProof: KpVerifiedCommonFactorRewrite = lastExpression;
+void normalizedProof;
