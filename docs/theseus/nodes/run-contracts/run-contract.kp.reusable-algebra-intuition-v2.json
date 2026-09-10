@@ -83,7 +83,8 @@
     {
       "id": "h02",
       "title": "Integrate canonical group/member presentation handoff",
-      "status": "planned"
+      "summary": "Issued two-view handoff integrated in semantic and timed composition. Default exact closure preserved; native runtime integration and certification remain h03.",
+      "status": "complete"
     },
     {
       "id": "s05",

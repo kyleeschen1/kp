@@ -1,5 +1,6 @@
 import { createKpAssetBundle, type KpAssetMetadataValue, type KpSemanticAssetObject } from "./asset.ts";
 import type { KpSemanticTransformation } from "./asset-transformation.ts";
+import { createKpEquationEndpointHandoffResolver, type KpVerifiedEquationEndpointHandoff } from "./equation-endpoint-handoff.ts";
 
 export interface KpSemanticEquationToken {
   readonly id: string;
@@ -51,22 +52,32 @@ function authenticateProjection<Proof, Result>(owner: {
   };
 }
 
-export function composeKpSemanticOperationProjections(id: string, projections: readonly KpSemanticOperationProjection[]) {
+export function composeKpSemanticOperationProjections(id: string, projections: readonly KpSemanticOperationProjection[],
+  handoffs: readonly KpVerifiedEquationEndpointHandoff[] = []) {
   if (projections.length === 0) throw new TypeError("Compose at least one verified operation projection.");
   const endpoints = [projections[0]!.endpoints[0]];
+  const objects = new Map<string, KpSemanticAssetObject>();
+  const handoffResolver = createKpEquationEndpointHandoffResolver(handoffs);
   const transformations: KpSemanticTransformation[] = [];
   for (const projection of projections) {
     const [source, target] = projection.endpoints, transform = projection.transformation;
-    if (JSON.stringify(endpoints.at(-1)) !== JSON.stringify(source))
+    if (JSON.stringify(endpoints.at(-1)) !== JSON.stringify(source) &&
+        !handoffResolver.connectProjections(endpoints.at(-1)!, source))
       throw new TypeError("Adjacent operation projections must share an exact semantic endpoint.");
     if (transform.sourceObjectIds.length !== 1 || transform.targetObjectIds.length !== 1 ||
         transform.sourceObjectIds[0] !== source.object.id || transform.targetObjectIds[0] !== target.object.id)
       throw new TypeError("Operation projection endpoints must match its transformation.");
     endpoints.push(target); transformations.push(transform);
+    for (const endpoint of [source, target]) {
+      const previous = objects.get(endpoint.object.id);
+      if (previous && JSON.stringify(previous) !== JSON.stringify(endpoint.object)) throw new TypeError("Endpoint view identity has conflicting content.");
+      objects.set(endpoint.object.id, endpoint.object);
+    }
   }
+  handoffResolver.finish();
   if (new Set(endpoints.map(e => e.object.id)).size !== endpoints.length)
     throw new TypeError("Composed operation checkpoints need distinct identities.");
   return Object.freeze({ id, title: "Composed algebra", tokens: Object.freeze(endpoints.map(e => e.tokens)),
-    bundle: createKpAssetBundle({ id: `asset.${id}`, title: "Composed algebra", objects: endpoints.map(e => e.object) }),
+    bundle: createKpAssetBundle({ id: `asset.${id}`, title: "Composed algebra", objects: [...objects.values()] }),
     transformations: Object.freeze(transformations) });
 }

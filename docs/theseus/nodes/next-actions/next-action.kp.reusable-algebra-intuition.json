@@ -122,6 +122,20 @@
       "scope": "h01",
       "checkedAt": "2026-09-10T23:50:49.538Z",
       "notes": "Full types pass after narrowing the compound-member test fixture in a stable local variable."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring",
+      "status": "passed",
+      "scope": "h02",
+      "checkedAt": "2026-09-10T23:58:28.268Z",
+      "notes": "77 tests pass. Exact handoffs add no phase or stop; rejects copied, duplicate, stale, reversed, unused and token-tampered evidence. Initial probe omitted required preserves; corrected."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "h02",
+      "checkedAt": "2026-09-10T23:58:29.448Z",
+      "notes": "Full app, node, test, Svelte and domain types pass on corrected source."
     }
   ],
   "progress": {
