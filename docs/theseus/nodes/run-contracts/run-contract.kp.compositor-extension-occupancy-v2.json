@@ -149,7 +149,8 @@
     {
       "id": "s18",
       "title": "Pressure direct seek reverse and interruption",
-      "status": "planned"
+      "summary": "Actual interior playback interruption, synchronous fraction, stable post-interruption seek and per-atom reverse replay pass. Four Chromium cases plus tightened interruption rerun, twenty-three unit tests and test types; no production changes.",
+      "status": "complete"
     },
     {
       "id": "s19",

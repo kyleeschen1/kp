@@ -93,3 +93,14 @@ over unsampled time. Other browsers, lifecycle pressure and remaining successor
 topologies retain their later gates. The source and result intentionally differ;
 the shared ink-knot handoff preserves occupied visual attention, not identical
 glyph contours across an arithmetic replacement.
+# Timeline pressure after callback retirement (s18)
+
+`npm run visual:composed-algebra -- --grep 'interrupted motion|three-stop controls|one canonical chain'`
+passes four Chromium cases. Direct seeking interrupts real interior playback
+frames on both sides of the operation boundary and remains unchanged after
+250 ms of subsequent animation-frame opportunity. The shared step fraction
+updates synchronously. Existing chain checks compare individual visible ink
+rectangles on repeated forward/reverse samples, not just the equation envelope.
+The tightened interior-frame interruption assertion also passed independently.
+No second clock or production repair was needed. This is deterministic replay
+evidence at the exercised positions, not a proof over every possible gesture.

@@ -133,6 +133,33 @@ test("three-stop controls animate adjacent operations and reverse gestures witho
   await expect(card.locator("[data-composed-count]")).toHaveText("2 / 3");
 });
 
+test("interrupted motion yields immediately to direct seek across both contribution mechanisms", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/experiments/reusable-reasoning/?example=composed-algebra");
+  await expect(page.locator("#authored-focus-card")).toHaveAttribute("data-composed-status", "ready");
+  const card = page.locator("[data-composed-reader] [data-composed-card]");
+  const slider = card.locator("[data-kp-focus-deck-scrubber]");
+  for (const destination of [1.37, .37]) {
+    await card.locator(destination > 1 ? "[data-kp-focus-deck-next]" : "[data-kp-focus-deck-previous]").click();
+    await expect.poll(async () => Number(await card.getAttribute("data-composed-step"))).not.toBe(destination > 1 ? 0 : 1.37);
+    const interruptedAt = Number(await card.getAttribute("data-composed-step"));
+    expect(interruptedAt).toBeGreaterThan(destination > 1 ? 0 : 1);
+    expect(interruptedAt).toBeLessThan(destination > 1 ? 1 : 1.37);
+    const direct = await slider.evaluate((node, position) => {
+      (node as HTMLInputElement).value = String(position); node.dispatchEvent(new Event("input"));
+      const card = node.closest<HTMLElement>("[data-composed-card]")!;
+      return { position: Number(card.dataset["composedStep"]), count: card.querySelector("[data-composed-count]")!.textContent };
+    }, destination);
+    expect(direct.position).toBeCloseTo(destination, 8);
+    expect(direct.count).toBe(destination > 1 ? "2 / 3" : "1 / 3");
+    // Give the interrupted RAF enough frames to expose a stale write; this
+    // assertion must not pass merely because the next animation tick is pending.
+    await page.waitForTimeout(250);
+    expect(Number(await card.getAttribute("data-composed-step"))).toBeCloseTo(destination, 8);
+    await expect(card.locator('[data-kp-reader-transition-active="true"]')).toHaveCount(1);
+  }
+});
+
 test("composed authoring applies one coherent prepared revision and preserves it on repair gaps", async ({ page }) => {
   test.setTimeout(120_000);
   await page.goto("/experiments/reusable-reasoning/?example=composed-algebra");

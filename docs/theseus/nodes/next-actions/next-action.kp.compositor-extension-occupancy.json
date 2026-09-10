@@ -333,6 +333,12 @@
       "status": "passed",
       "scope": "s17",
       "checkedAt": "2026-09-10T17:57:42.926Z"
+    },
+    {
+      "command": "npm run visual:composed-algebra -- --grep \"interrupted motion|three-stop controls|one canonical chain\"; npm run test:compositor-extensions; node node_modules/typescript/bin/tsc --project tsconfig.test.json --noEmit; git diff --check",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-10T18:01:04.745Z"
     }
   ],
   "progress": {
