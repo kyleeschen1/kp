@@ -90,6 +90,13 @@
       "scope": "s08",
       "checkedAt": "2026-09-10T00:36:39.111Z",
       "notes": "16 plus8 tests; full corrected typecheck clean. BigInt exactness, safe boundary, overflow, context/orientation, forgery and asset mutation checked. Core113123/193558 combined170333/283277 within fixed budgets."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring; npm run typecheck; npm run check:inference",
+      "status": "passed",
+      "scope": "s09",
+      "checkedAt": "2026-09-10T00:41:25.613Z",
+      "notes": "19 tests; exact intermediate identity, global occurrence disjointness, source/revision binding, foreign/reordered/copied evidence negatives. Core113123/193558 combined170462/283515 within fixed ceilings."
     }
   ],
   "expectedLearning": [

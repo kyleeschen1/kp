@@ -54,3 +54,17 @@ const forgedEvaluation: KpVerifiedComposedEvaluation = evaluation;
 // @ts-expect-error parsed source is not the authenticated first deduction
 verifyKpComposedEvaluation({ factoring: source, target: endpoints[2].structured });
 void [evaluationAuthenticated, forgedEvaluation, contextual.localEvaluation];
+import { verifyKpComposedAlgebraChain, type KpVerifiedComposedAlgebraChain } from "../../src/semantic/composed-algebra-chain.ts";
+import { checkKpComposedAlgebraProof, bindKpComposedAlgebraProof, assertKpSourceBoundComposedAlgebraProof,
+  type KpSourceBoundComposedAlgebraProof } from "../../src/authoring/composed-algebra-proof.ts";
+const chain = verifyKpComposedAlgebraChain({ factoring, evaluation: contextual });
+const bound = bindKpComposedAlgebraProof({ source, chain });
+assertKpSourceBoundComposedAlgebraProof(bound);
+const checked = checkKpComposedAlgebraProof(source);
+// @ts-expect-error the two operation kinds cannot be reordered
+verifyKpComposedAlgebraChain({ factoring: contextual, evaluation: factoring });
+// @ts-expect-error an array of valid-looking steps is not issued chain authority
+const forgedChain: KpVerifiedComposedAlgebraChain = [factoring, contextual];
+// @ts-expect-error a valid mathematical chain has not been bound to authored source
+const unbound: KpSourceBoundComposedAlgebraProof = chain;
+void [checked, forgedChain, unbound];

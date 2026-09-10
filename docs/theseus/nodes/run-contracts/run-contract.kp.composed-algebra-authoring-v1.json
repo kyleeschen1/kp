@@ -89,7 +89,8 @@
     {
       "id": "s09",
       "title": "Authenticate chain with exact adjacent endpoint continuity",
-      "status": "planned"
+      "summary": "Private two-step chain and immutable source binding prove exact adjacency and preserve distinct mathematical versus presentation authority.",
+      "status": "complete"
     },
     {
       "id": "s10",
