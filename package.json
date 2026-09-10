@@ -7,6 +7,7 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
+    "test:compositor-extensions": "node --disable-warning=ExperimentalWarning --test tests/native-katex-scene-contribution.test.ts tests/native-katex-renderer-ready-scene-plan.test.ts",
     "test:common-factor-authoring": "node --disable-warning=ExperimentalWarning --test tests/common-factor-*.test.ts",
     "test:composed-algebra-authoring": "node --disable-warning=ExperimentalWarning --test tests/composed-algebra-*.test.ts",
     "check:common-factor-workflow": "node --disable-warning=ExperimentalWarning scripts/check-common-factor-workflow.ts",

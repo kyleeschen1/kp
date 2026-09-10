@@ -71,7 +71,8 @@
     {
       "id": "s05",
       "title": "Consolidate demonstrated assembly and measurement duplication",
-      "status": "planned"
+      "summary": "One counted material composition/occupancy helper replaces nested operation-owned composition and local frame conversion; all preservation checks pass.",
+      "status": "complete"
     },
     {
       "id": "s06",

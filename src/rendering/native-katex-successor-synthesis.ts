@@ -385,9 +385,6 @@ export function compileKpNativeKatexSuccessorSynthesisScenePlans(input: {
 export function sampleKpNativeKatexSuccessorSynthesisScenePlans(input: {
   readonly plans: readonly KpNativeKatexSuccessorSynthesisScenePlan[];
   readonly progress: number;
-  readonly supplementalOwners?:
-    ((progress: number) => readonly KpEquationMaterialLayerOwnerFrame[]) |
-    undefined;
 }): readonly KpEquationMaterialLayerOwnerFrame[] {
   if (!Number.isFinite(input.progress)) {
     throw new Error("Native successor synthesis progress must be finite.");
@@ -457,10 +454,7 @@ export function sampleKpNativeKatexSuccessorSynthesisScenePlans(input: {
     ];
     return attachSuccessorSemanticContacts(sampledOwners);
   });
-  return Object.freeze([
-    ...owners,
-    ...(input.supplementalOwners?.(bounded) ?? [])
-  ]);
+  return Object.freeze(owners);
 }
 
 export const kpNativeKatexSuccessorTargetSettlementProgress =

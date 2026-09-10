@@ -131,6 +131,41 @@
       "scope": "s04",
       "checkedAt": "2026-09-10T16:12:16.618Z",
       "notes": "Six real Chromium tests pass, primary/product factoring and evaluation plus direct chain reversal; no universal certification claimed."
+    },
+    {
+      "command": "npm run test:compositor-extensions",
+      "status": "passed",
+      "scope": "s05",
+      "checkedAt": "2026-09-10T16:18:16.976Z",
+      "notes": "Eight pass. Ordered sampler composition and measured-ink occupancy conversion share one helper; no layout fallback."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s05",
+      "checkedAt": "2026-09-10T16:18:18.275Z",
+      "notes": "Full typecheck passes, Svelte zero warnings/errors."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "s05",
+      "checkedAt": "2026-09-10T16:18:19.398Z",
+      "notes": "31 pass after classifying the counted new pure-sampling helper in existing ownership ledger."
+    },
+    {
+      "command": "npm run visual:composed-algebra -- --grep 'compound factoring uses|contextual sum uses|one canonical chain'",
+      "status": "passed",
+      "scope": "s05",
+      "checkedAt": "2026-09-10T16:18:20.472Z",
+      "notes": "Six Chromium preservation checks pass after consolidation."
+    },
+    {
+      "command": "npm run check:compositor-extension-cost",
+      "status": "passed",
+      "scope": "s05",
+      "checkedAt": "2026-09-10T16:18:21.559Z",
+      "notes": "29 counted modules, 516258 aggregate bytes, 13742 headroom; core 144274 planner 293190 support 78794. Net growth 1303, not claimed savings."
     }
   ],
   "progress": {

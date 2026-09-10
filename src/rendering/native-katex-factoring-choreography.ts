@@ -1,4 +1,5 @@
 import type { KpNativeKatexFactoringSceneBinding } from "./native-katex-factoring-binding-types.ts";
+import { projectKpNativeKatexMaterialOccupancy } from "./native-katex-scene-contribution.ts";
 import { kpEquationSettlementTolerancePx } from "../animation/equation-shared-presentation-policy.ts";
 export type { KpNativeKatexFactoringSceneBinding } from "./native-katex-factoring-binding-types.ts";
 
@@ -177,9 +178,8 @@ export function bindKpNativeKatexFactoringScene(input: {
       }));
       return transit = inspectKpEquationProtectedTransitTracks({
         tracks: [...tracks, ...factors],
-        sampleFrames: (_, progress) => [...sampleFrames(tracks, progress), ...material(progress).map(owner => ({
-          trackId: owner.ownerId, componentId: plan.id, rect: owner.expectedPaintRect!, opacity: owner.opacity
-        }))]
+        sampleFrames: (_, progress) => [...sampleFrames(tracks, progress),
+          ...projectKpNativeKatexMaterialOccupancy(material(progress), plan.id)]
       });
     },
     recordEvidence() {

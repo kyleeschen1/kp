@@ -48,6 +48,7 @@ import type {
 } from "./native-katex-scene-track-contract.ts";
 import {
   compileKpCollisionSafeReorderTracks,
+  composeKpNativeKatexMaterialSamplers,
   compileKpCollisionSafeTransitTracks,
   compileKpNativeKatexHierarchicalScenePlan,
   compileKpNativeKatexOperationTracks,
@@ -1463,12 +1464,10 @@ export function compileKpCanonicalNativeKatexScenePlan(
     supplementalMaterialOwners:
       syntheses.length === 0 && input.factoring === undefined
         ? undefined
-        : (progress: number) =>
-            sampleKpNativeKatexSuccessorSynthesisScenePlans({
-              plans: syntheses,
-              progress,
-              supplementalOwners: input.factoring?.sampleMaterialOwners
-            })
+        : composeKpNativeKatexMaterialSamplers([
+            progress => sampleKpNativeKatexSuccessorSynthesisScenePlans({ plans: syntheses, progress }),
+            ...(input.factoring ? [input.factoring.sampleMaterialOwners] : [])
+          ])
   });
 }
 
