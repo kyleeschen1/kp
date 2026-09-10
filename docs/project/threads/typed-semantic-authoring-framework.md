@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: unfamiliar supported-authoring trial approved and active; compositor participation, M1b, R1–R4B and M1a remain complete
+Status: unfamiliar supported-authoring trial at human checkpoint; compositor participation, M1b, R1–R4B and M1a remain complete
 Last Updated: 2026-09-10
 Standing budget policy: recommended engineering-budget repairs, including
 explicit bounded policy amendments, are automatically approved across sessions.
@@ -73,7 +73,11 @@ Current Next Action: execute the approved 20-slice
 `../reviews/2026-09-10-unfamiliar-supported-authoring-trial-proposal.md` under
 `run-contract.kp.unfamiliar-supported-authoring-v1`. The repeated-groups lesson
 and one fresh-context local author agent are approved; s17 requires one batched
-visual/pedagogical review. Source-only trial, not engine expansion. The compositor migration
+visual/pedagogical review. That packet is ready at
+`../reviews/2026-09-10-unfamiliar-authoring-visual-checkpoint.md`; five sources
+passed Apply, projections and publication with zero engine edits. Await the
+human verdict, then resume the same contract at promotion, release and closeout.
+Source-only trial, not engine expansion. The compositor migration
 is complete under `run-contract.kp.compositor-extension-occupancy-v2`; see
 `../reviews/2026-09-10-compositor-extension-occupancy-closeout.md` for achieved
 integration, release evidence and remaining limits. The unstarted v1 is superseded.

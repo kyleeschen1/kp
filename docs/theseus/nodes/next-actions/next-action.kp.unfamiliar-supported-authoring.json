@@ -2,13 +2,25 @@
   "id": "next-action.kp.unfamiliar-supported-authoring",
   "kind": "next-action",
   "title": "Measure unfamiliar supported authoring leverage",
-  "status": "ready",
+  "status": "deferred",
   "domain": "authoring",
-  "summary": "Approved 20-slice source-only trial, repeated-groups lesson and one local fresh-context author agent; s17 human checkpoint.",
+  "summary": "HUMAN_CHECKPOINT: review the exact repeated-groups source set and preserved motion; no engine edits. After acceptance resume existing s18-s20.",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-10-unfamiliar-supported-authoring-trial-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-10-unfamiliar-authoring-visual-checkpoint.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-10-authoring-trial/initial-results.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-10-authoring-trial/integration-evidence.md"
     }
   ],
   "dependsOn": {
@@ -119,7 +131,28 @@
       "status": "passed",
       "scope": "s16",
       "checkedAt": "2026-09-10T19:28:42.951Z"
+    },
+    {
+      "command": "npm run visual:composed-algebra -- --grep authoring trial; npm run check:unfamiliar-authoring-trial -- --complete; git diff --check",
+      "status": "passed",
+      "scope": "s17",
+      "checkedAt": "2026-09-10T19:33:12.102Z",
+      "notes": "Eleven Chromium tests pass. No code changes since s16 full typecheck. Human verdict pending."
+    },
+    {
+      "command": "npm run visual:composed-algebra -- --grep 'authoring trial'",
+      "status": "passed",
+      "scope": "s17",
+      "checkedAt": "2026-09-10T19:33:53.792Z",
+      "notes": "Exact shell-quoted invocation for the already recorded eleven-test combined pass."
     }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT 17/20: five source-only cases integrated, 61 focused tests and 11 trial browser checks pass. Await visual acceptance; s18-s20 remain."
+  },
+  "revisitWhen": [
+    "User accepts docs/project/reviews/2026-09-10-unfamiliar-authoring-visual-checkpoint.md."
   ],
   "expectedLearning": [
     "Measure marginal authoring effort and intervention requirements without engine edits; distinguish source-only success from completed investigation."

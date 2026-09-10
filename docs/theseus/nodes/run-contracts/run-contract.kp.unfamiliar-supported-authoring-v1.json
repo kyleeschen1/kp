@@ -2,7 +2,8 @@
   "id": "run-contract.kp.unfamiliar-supported-authoring-v1",
   "kind": "run-contract",
   "title": "Unfamiliar supported authoring",
-  "status": "ready",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT 17/20. Required s17 visual verdict pending; do not execute s18-s20 until accepted.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -21,6 +22,9 @@
     "npm test",
     "npm run build",
     "theseus workspace validate"
+  ],
+  "revisitWhen": [
+    "User accepts the repeated-groups explanation set; then continue promotion, release and closeout without a new loop."
   ],
   "allowedWork": [
     "Exact approved 20 slices; trial sources, evidence, scoped tests and evidenced packet corrections. One fresh-context local author agent, no inherited history, no model override or subdelegation. Standing measured budget repairs within scope."
@@ -138,7 +142,8 @@
     {
       "id": "s17",
       "title": "Present batched visual pedagogical checkpoint",
-      "status": "planned"
+      "summary": "Review packet ready with working URL and exact five sources; human acceptance pending before s18 promotion.",
+      "status": "complete"
     },
     {
       "id": "s18",

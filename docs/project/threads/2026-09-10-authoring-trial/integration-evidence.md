@@ -65,3 +65,14 @@ Supported-browser promotion and the full release suite remain after the human
 checkpoint. Eleven trial Chromium tests have passed so far: five Apply/control,
 five projection and one five-edition test. Two additional retained-caller browser
 baselines passed earlier. No production source or domain changes were needed.
+
+## Batched human-review boundary
+
+The final combined `npm run visual:composed-algebra -- --grep 'authoring trial'`
+passes **11/11** in Chromium (1.1 minutes), reproducing all trial captures and
+integration assertions together. This is a rerun of the above tests, not eleven
+additional independent cases. Complete original-report replay also passes.
+The direct case-one JSON link on localhost:8000 was fetched successfully, and
+the canonical page/static edition URLs were exercised by the browser command.
+No code changed after the s16 full typecheck. Human acceptance remains pending;
+see `../../reviews/2026-09-10-unfamiliar-authoring-visual-checkpoint.md`.

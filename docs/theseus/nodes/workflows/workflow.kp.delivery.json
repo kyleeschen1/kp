@@ -4,7 +4,7 @@
   "title": "Kinetic Press delivery",
   "status": "active",
   "domain": "kp",
-  "summary": "Execute approved M1a common-factor contract through s15 checkpoint; R1-R4B complete. Broader composition and domain waves guide later proposals only.",
+  "summary": "Current delivery lane is HUMAN_CHECKPOINT: unfamiliar supported-authoring trial, 17 of 20 complete. Await the repeated-groups visual verdict, then resume existing s18-s20. Compositor and M1a-M1b remain complete; no new loop selection.",
   "sourceRefs": [
     {
       "kind": "user-intent",
@@ -54,6 +54,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-07-authoring-round-trip-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-10-unfamiliar-authoring-visual-checkpoint.md"
     }
   ],
   "decisions": [],
