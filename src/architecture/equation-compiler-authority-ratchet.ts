@@ -128,6 +128,10 @@ const directSamplerPaths = paths([
   // capability still delegates all paint and clock authority to the compositor.
   "src/rendering/native-katex-carrier-preserving-simplification-profile.ts",
   "src/rendering/native-katex-factoring-choreography.ts",
+  // Counted shared owners extracted during complete extension participation:
+  // the unchanged optical profile and shared endpoint-dwell mapping, not hosts.
+  "src/rendering/native-katex-contributor-fusion-sampling.ts",
+  "src/rendering/native-katex-scene-contribution.ts",
   "src/rendering/native-katex-scene-compositor.ts",
   "src/rendering/native-katex-scene-track-sampling.ts",
   "src/rendering/native-katex-successor-synthesis.ts",

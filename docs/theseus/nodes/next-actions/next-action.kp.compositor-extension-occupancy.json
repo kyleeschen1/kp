@@ -363,6 +363,12 @@
       "status": "passed",
       "scope": "s22",
       "checkedAt": "2026-09-10T18:17:04.146Z"
+    },
+    {
+      "command": "npm test; npm run build; npm run check:reader-budgets; npm run check:reader-production; npm run check:dev-review-production; npm run check:native-katex-compositor-conformance-production; npm run check:compositor-extension-cost; npm run check:composed-algebra-workflow; npm run check:equation-reachability; four exact edition commands in docs/project/threads/2026-09-10-compositor-extension-release-evidence.md; git diff --check",
+      "status": "passed",
+      "scope": "s23",
+      "checkedAt": "2026-09-10T18:36:27.001Z"
     }
   ],
   "progress": {

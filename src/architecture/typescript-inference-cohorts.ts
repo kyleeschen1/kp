@@ -21,6 +21,7 @@ export const coreInferenceFixtures = [
   "tests/type-fixtures/generated-cancellation-presentation.ts",
   "tests/type-fixtures/linear-problem-protocol-inference.ts",
   "tests/type-fixtures/native-katex-executable-scene.ts",
+  "tests/type-fixtures/native-katex-scene-contribution.ts",
   "tests/type-fixtures/native-katex-scene-track-opacity.ts",
   "tests/type-fixtures/operation-evaluation-presentation-registry.ts",
   "tests/type-fixtures/persistent-workspace-lifetimes.ts",
@@ -57,10 +58,11 @@ export const frontendInferenceFixtures = [
   "tests/type-fixtures/composed-algebra-consumers.ts"
 ] as const;
 export const combinedInferenceBudget = Object.freeze({
-  measuredProject: { types: 169_350, instantiations: 281_200 },
-  // M1a s12 measures the actual canonical native host, not just authoring data.
-  // Standing approved amendment: retain complete consumers and 2% / 3% headroom.
-  ceilings: { types: 172_800, instantiations: 289_700 }
+  measuredProject: { types: 173_243, instantiations: 288_463 },
+  // Compositor s23: complete core fixture membership plus actual native hosts.
+  // Standing approved type-only amendment retains about 2% headroom; the
+  // passing instantiation ceiling is unchanged. See the recorded cost checkpoint.
+  ceilings: { types: 176_800, instantiations: 289_700 }
 } as const);
 export const inferenceCohorts = [
   { name: "core", config: "tsconfig.inference-core.json", fixtures: coreInferenceFixtures, budget: typescriptInferenceBudget },

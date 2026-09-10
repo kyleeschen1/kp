@@ -7,8 +7,9 @@ The findings below preserve the pre-amendment measurement and recommendation;
 their pending-approval wording is historical, not a current stop.
 Contract: `run-contract.kp.compositor-extension-occupancy-v2`.
 Proposal: `../reviews/2026-09-10-compositor-extension-occupancy-long-loop-proposal.md`.
-Theseus owns live slice status; this record owns the cost finding and proposed
-authority amendment. No amendment or production behavior change is applied.
+Theseus owns live slice status; this record owns the cost findings and explicit
+amendments. At the initial checkpoint no amendment or production change had
+been applied; later sections record the implemented repairs and allowances.
 
 ## Measured baseline
 
@@ -171,3 +172,41 @@ Core and direct-dependency ceilings, runtime/inference/browser/payload gates
 stay unchanged. This is a bounded implementation/accounting amendment for the
 approved second mechanism, not authority for new motifs. Final cost reporting
 must distinguish accounting expansion from actual source growth.
+# Complete inference coverage and bounded type allowance (s23)
+
+The release membership gate caught the new negative contribution fixture as
+unassigned. It was already included by the inference tsconfig glob; the explicit
+cohort ledger now assigns it to core and therefore combined coverage. No consumer
+was removed or excluded. Core membership metadata advances from 48 to 49.
+
+Measured complete `npm run check:inference`: core 114,668 types / 196,324
+instantiations passes the unchanged 115,000 / 198,900 limits; combined 173,243 /
+288,463 exceeds only the 172,800 type limit, by 443. The last M1b release reported
+113,698 / 194,449 core and 172,065 / 286,160 combined; the new required seam and
+fixture increase those counts by 970 / 1,875 and 1,178 / 2,303 respectively.
+This comparison measures the complete change, not attribution to one symbol.
+
+Under standing budget-repair authority, amend **only combined types** from
+172,800 to 176,800 (approximately 2% above the measured 173,243). Keep combined
+instantiations at 289,700 and every core ceiling unchanged. Record current
+combined measurements explicitly rather than presenting this as optimization.
+Shared optical/dwell consolidation and callback retirement are already done;
+no further useful duplication repair was established for this modest increase.
+Excluding the new negative fixture, erasing issued-frame types, or broad
+unrelated compiler refactoring would undermine the proof or exceed this repair.
+Exact membership, negative tests and fixed-budget assertions remain executable.
+# Final source and reader measurements
+
+`npm run check:compositor-extension-cost` after migration: core 144,979 / 150,000
+bytes (4 modules), planner 322,467 / 330,000 (20), support 94,970 / 100,000 (9),
+direct dependencies 174,396 / 295,000 (15), aggregate 562,416 / 575,000 (33 of
+34 allowed modules). All gates pass; direct dependencies overlap the other
+cohorts and must not be added again.
+
+The aggregate is 47,461 bytes above the initial 514,955. Of that, 20,269 bytes
+are previously existing optical-owner/helper code newly included in accounting;
+the remaining 27,192 is net source growth over that expanded baseline. This
+work strengthens integration and removes bypasses; it is not a source-size
+optimization. The final rebuilt shared reader closure is 142,144 gzip bytes,
+84 above the previous 142,060 and below the unchanged 145,000 limit. All twelve
+reader route budgets pass, with unchanged HTML and growth policies.

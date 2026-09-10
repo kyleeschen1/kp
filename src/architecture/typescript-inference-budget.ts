@@ -1,7 +1,7 @@
 export const typescriptInferenceBudget = Object.freeze({
   schemaVersion: "kp.typescript-inference-budget.v1",
   measuredAt: "2026-09-09",
-  fixtureCount: 48,
+  fixtureCount: 49,
   libraryBaseline: Object.freeze({
     types: 27_947,
     instantiations: 27_046

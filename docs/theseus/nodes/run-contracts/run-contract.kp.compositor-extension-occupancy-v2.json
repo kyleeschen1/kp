@@ -179,7 +179,8 @@
     {
       "id": "s23",
       "title": "Run full release cost isolation and edition checks",
-      "status": "planned"
+      "summary": "Full release passes: 6959 tests, zero failures/skips; build and twelve reader budgets/closures; diagnostic isolation and four immutable editions. Exact inventory refresh and complete inference fixture assignment retained all guards. Combined type-only ceiling amendment recorded; current aggregate 562416, reader gzip 142144.",
+      "status": "complete"
     },
     {
       "id": "s24",

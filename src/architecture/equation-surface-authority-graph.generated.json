@@ -206,9 +206,9 @@
       "id": "timing.operation-endpoint-dwell",
       "category": "local-timing",
       "authority": "local",
-      "sourcePath": "src/rendering/native-katex-scene-compositor.ts",
+      "sourcePath": "src/rendering/native-katex-scene-contribution.ts",
       "sourceNeedle": "export function sampleKpNativeKatexEndpointDwellProgress",
-      "summary": "The native compositor currently owns operation endpoint dwell."
+      "summary": "The native contribution seam shares endpoint dwell with ordinary compositor sampling."
     },
     {
       "id": "timing.carrier-preserving-optical-profile",

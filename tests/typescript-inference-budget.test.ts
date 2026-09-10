@@ -17,15 +17,19 @@ test("both approved cohorts retain exact fixture membership and active checking"
     assert.notEqual(parsed.options.noCheck, true);
     assertInferenceMembership(parsed.fileNames.map(path => relative(process.cwd(), path)), cohort.fixtures);
   }
-  assert.equal(coreInferenceFixtures.length, 48);
+  assert.equal(coreInferenceFixtures.length, 49);
+  assert.ok(coreInferenceFixtures.includes("tests/type-fixtures/native-katex-scene-contribution.ts"));
   assert.ok(coreInferenceFixtures.includes("tests/type-fixtures/bayesian-authoring.ts"));
   assert.deepEqual(frontendInferenceFixtures, ["tests/type-fixtures/authoring-entrypoint-consumers.ts", "tests/type-fixtures/composed-algebra-consumers.ts"]);
   assert.deepEqual(typescriptInferenceBudget.ceilings, { types: 115000, instantiations: 198900 });
   const budget = combinedInferenceBudget;
-  assert.deepEqual(budget.measuredProject, { types: 169350, instantiations: 281200 });
-  assert.deepEqual(budget.ceilings, { types: 172800, instantiations: 289700 });
+  assert.deepEqual(budget.measuredProject, { types: 173243, instantiations: 288463 });
+  assert.deepEqual(budget.ceilings, { types: 176800, instantiations: 289700 });
   assert.equal(budget.ceilings.types, Math.ceil(budget.measuredProject.types * 1.02 / 100) * 100);
-  assert.equal(budget.ceilings.instantiations, Math.ceil(budget.measuredProject.instantiations * 1.03 / 100) * 100);
+  // The approved amendment changes only types, retaining the tighter passing
+  // instantiation ceiling rather than automatically restoring 3% headroom.
+  assert.ok(budget.ceilings.instantiations > budget.measuredProject.instantiations);
+  assert.ok(budget.ceilings.instantiations <= Math.ceil(budget.measuredProject.instantiations * 1.03 / 100) * 100);
 });
 
 test("membership rejects omissions, unassigned fixtures, duplicates and cohort transfers", () => {
