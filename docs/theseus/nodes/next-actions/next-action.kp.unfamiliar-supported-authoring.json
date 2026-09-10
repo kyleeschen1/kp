@@ -2,9 +2,9 @@
   "id": "next-action.kp.unfamiliar-supported-authoring",
   "kind": "next-action",
   "title": "Measure unfamiliar supported authoring leverage",
-  "status": "ready",
+  "status": "resolved",
   "domain": "authoring",
-  "summary": "User accepted s17 with it works on 2026-09-10; resume approved s18 browser promotion, s19 release and s20 closeout. No successor scope.",
+  "summary": "COMPLETE: five accepted source-only variants, 111 browser checks, 6972 full tests, build and nine editions. See 2026-09-10 unfamiliar-supported-authoring closeout. Next author-start recommendation requires scope approval.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -21,6 +21,10 @@
     {
       "kind": "file",
       "path": "docs/project/threads/2026-09-10-authoring-trial/integration-evidence.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-10-unfamiliar-supported-authoring-closeout.md"
     }
   ],
   "dependsOn": {
@@ -192,11 +196,18 @@
       "status": "passed",
       "scope": "s19",
       "checkedAt": "2026-09-10T20:05:55.759Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-10T20:09:24.734Z",
+      "notes": "Reconciled exact source sizes, implementation diff, original reports and release totals in closeout."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "HUMAN_CHECKPOINT 17/20: five source-only cases integrated, 61 focused tests and 11 trial browser checks pass. Await visual acceptance; s18-s20 remain."
+    "state": "complete",
+    "summary": "Five accepted source-only variants; full release passes; no implementation intervention. Timing and comprehension remain unmeasured. No successor execution."
   },
   "revisitWhen": [
     "User accepts docs/project/reviews/2026-09-10-unfamiliar-authoring-visual-checkpoint.md."

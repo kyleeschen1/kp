@@ -112,17 +112,23 @@ participation for factoring and canonical successor plans, retired unchecked
 callbacks, preserved motifs and complete release verification. The unstarted v1
 is superseded; do not restart it or the completed migration. The implemented
 extension guide and explicit assurance gaps are linked from that closeout.
-Active approved work is the 20-slice
+Completed trial scope is the 20-slice
 `reviews/2026-09-10-unfamiliar-supported-authoring-trial-proposal.md` under
 `run-contract.kp.unfamiliar-supported-authoring-v1`: measure five unfamiliar
 source-only repeated-group variants before capability expansion. One fresh-context
-local author agent is approved; stop at the batched s17 visual/pedagogical review.
+local author agent was approved; the batched s17 visual/pedagogical review passed.
 No engine expansion or automatic successor is authorized.
 The user accepted that human checkpoint with “it works!” on 2026-09-10:
 `reviews/2026-09-10-unfamiliar-authoring-visual-checkpoint.md`. Five source-only
 variants pass actual Apply, projections and immutable publication with no engine
-edits. Continue the same contract's approved promotion, release
-and closeout; do not restart authoring or the completed compositor migration.
+implementation edits. Promotion, release and closeout are now complete:
+`reviews/2026-09-10-unfamiliar-supported-authoring-closeout.md` records all five
+cases, 111 browser checks, 6,972 full-suite tests, unchanged costs and honest
+measurement limits. No approved execution remains. The next recommendation is
+a bounded author-start simplification exercised on a real requested explanation;
+longer mixed-operation chains remain the next capability proposal boundary.
+Neither is automatically approved. Do not restart this trial or the completed
+compositor migration, or manufacture another generic infrastructure loop.
 Recommended engineering-budget repairs now have persistent automatic approval:
 `decisions/2026-09-10-engineering-budget-repair-autonomy.md`. Keep complete
 accounting, bounded explicit amendments and verification; preserve other gates.

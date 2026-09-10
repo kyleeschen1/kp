@@ -2,8 +2,8 @@
   "id": "run-contract.kp.unfamiliar-supported-authoring-v1",
   "kind": "run-contract",
   "title": "Unfamiliar supported authoring",
-  "status": "ready",
-  "summary": "User accepted s17 with it works on 2026-09-10; resume approved s18 browser promotion, s19 release and s20 closeout. No successor scope.",
+  "status": "resolved",
+  "summary": "COMPLETE 20/20: accepted five-case source-only trial, promotion and release. No approved slices remain and no successor is authorized.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -13,6 +13,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-10-unfamiliar-supported-authoring-trial-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-10-unfamiliar-supported-authoring-closeout.md"
     }
   ],
   "verification": [
@@ -142,7 +146,7 @@
     {
       "id": "s17",
       "title": "Present batched visual pedagogical checkpoint",
-      "summary": "Review packet ready with working URL and exact five sources; human acceptance pending before s18 promotion.",
+      "summary": "Batched packet presented and accepted by user with it works on 2026-09-10; s18 promotion subsequently passed. No outstanding visual gate.",
       "status": "complete"
     },
     {
@@ -160,7 +164,8 @@
     {
       "id": "s20",
       "title": "Close measured trial and rank follow-up",
-      "status": "planned"
+      "summary": "Measured trial closeout records five accepted variants, full release, costs, limits and one ranked follow-up; no successor execution.",
+      "status": "complete"
     }
   ]
 }

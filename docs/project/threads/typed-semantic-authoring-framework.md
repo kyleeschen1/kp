@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: unfamiliar supported-authoring trial accepted for promotion and release; compositor participation, M1b, R1–R4B and M1a remain complete
+Status: unfamiliar supported-authoring trial complete; next bounded authoring task awaits scope approval; compositor participation, M1b, R1–R4B and M1a remain complete
 Last Updated: 2026-09-10
 Standing budget policy: recommended engineering-budget repairs, including
 explicit bounded policy amendments, are automatically approved across sessions.
@@ -69,15 +69,20 @@ do not treat its proposed roadmap or readiness labels as new execution authority
 The user clarified the remaining code issue as missing gradual passage swiping.
 The bounded repair enables physical passage travel through the existing code
 playhead; see `../decisions/2026-09-07-code-card-gradual-passage-input.md`.
-Current Next Action: execute the approved 20-slice
+Completed latest action: the approved 20-slice
 `../reviews/2026-09-10-unfamiliar-supported-authoring-trial-proposal.md` under
 `run-contract.kp.unfamiliar-supported-authoring-v1`. The repeated-groups lesson
-and one fresh-context local author agent are approved; s17 requires one batched
-visual/pedagogical review. That packet is ready at
+and one fresh-context local author agent were approved; the batched s17
+visual/pedagogical review was accepted. That packet is retained at
 `../reviews/2026-09-10-unfamiliar-authoring-visual-checkpoint.md`; five sources
 passed Apply, projections and publication with zero engine edits. The user
-accepted it with “it works!” on 2026-09-10; continue the same contract at
-promotion, release and closeout without another routine approval.
+accepted it with “it works!” on 2026-09-10. Promotion, release and closeout passed;
+see `../reviews/2026-09-10-unfamiliar-supported-authoring-closeout.md` for the
+five-case evidence, 111 browser checks, 6,972 full-suite tests and limits.
+No approved slices remain. Recommended next decision: a short author-start route
+exercised on a real requested explanation, then a concrete mixed-operation-chain
+capability proposal when that lesson exposes a gap. This is not successor
+execution approval and must not turn into another broad infrastructure loop.
 Source-only trial, not engine expansion. The compositor migration
 is complete under `run-contract.kp.compositor-extension-occupancy-v2`; see
 `../reviews/2026-09-10-compositor-extension-occupancy-closeout.md` for achieved
