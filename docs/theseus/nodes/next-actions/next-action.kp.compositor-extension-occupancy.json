@@ -48,6 +48,9 @@
       "next-action.kp.composed-algebra-authoring"
     ]
   },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
   "verification": [
     "npm run typecheck",
     "theseus workspace validate"
@@ -103,6 +106,13 @@
       "scope": "budget-policy",
       "checkedAt": "2026-09-10T16:02:38.219Z",
       "notes": "Source remains 514955; aggregate ceiling 530000, headroom 15045. All other cohorts and ceilings unchanged."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s02",
+      "checkedAt": "2026-09-10T16:07:50.254Z",
+      "notes": "Full checks pass; Svelte zero errors/warnings. Prior measured baseline and accepted aggregate amendment retained."
     }
   ],
   "progress": {

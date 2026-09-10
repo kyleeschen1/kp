@@ -104,3 +104,20 @@ the inventory, open a successor run, or request another unchanged-visual review.
 Entry command: `theseus plan run` from the repository root. Use the returned
 contract and the pending cost checkpoint, not an automatically suggested refill.
 No browser review is needed for the current changes: animation code is unchanged.
+
+## Selected consolidation after approval
+
+Use one measured contribution assembly upstream of renderer construction, with
+the same actual sampler supplying paint and occupancy. Replace factoring's
+separate whole-context audit and successor sampling's nested supplemental
+callback; retain the factoring fusion-pose law as an owner-specific invariant.
+Do not consolidate typography measurement or change motion-planner routing.
+Keep cache input checks and extend them to the issued contribution identity.
+The existing renderer-ready issuance boundary will consume authenticated final
+assembly rather than accept independent sampler and audit payloads.
+
+This selection is bounded to the two inventoried producers and reuses the
+existing protected-transit inspector. New code belongs to the counted planning
+boundary; the renderer consumes the issued assembly, not another motif engine.
+The 530,000 aggregate limit now leaves 15,045 measured bytes before this work.
+Net savings are not claimed until the replacement is implemented and measured.
