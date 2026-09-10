@@ -76,19 +76,22 @@ native endpoints, geometry revisions and declared adaptation limits. Finite
 sampling is not a continuous-time proof. Human review selects the visual
 language; focused regressions preserve accepted choices afterward.
 
-Current bounded implementation: the compiler-issued factoring choreography owns
-its composition policy; its native binding must inspect all factor/context paint
-before publishing evidence. Transit intersections are reported, not repaired by
-arc inflation. Contributors and receiver share emphasis at fusion, with release
-after material settlement. This is not a universal extension contract or
-catalogue-wide certification.
+Current bounded implementation: factoring and all canonical successor plan sets
+enter one issued final-scene assembly. The actual measured material sampler and
+its derived occupancy cannot be supplied independently. Both renderer boundaries
+reject unchecked supplemental callbacks, copied assemblies and stale measured
+context. Transit intersections remain diagnostic; no arc inflation follows.
+Contributors and receiver retain the accepted motif-owned fusion treatment.
+This is complete participation for the inventoried native-compositor producers,
+not universal material-layer coverage or catalogue-wide geometric certification.
 
 The factoring exemplar is accepted and the structurally different product caller
 passes the supported-browser cohort; see
 `../reviews/2026-09-10-composed-algebra-authoring-closeout.md`.
-Next, extract only the demonstrated shared boundary through the separately
-proposed extension migration. Carry broader extension coverage through
-[the deferred loop record](../threads/compositor-extension-occupancy-follow-up.md).
+The approved extension migration and remaining release status are tracked in
+[the loop record](../threads/compositor-extension-occupancy-follow-up.md).
+Use the [implemented extension guide](../threads/2026-09-10-native-compositor-extension-guide.md)
+for required APIs, executed representatives and explicit assurance limits.
 Preserve operation-owned open registration instead of central operation-name
 conditionals. New universal types and migrations need their own demonstrated
 boundary and approved loop.

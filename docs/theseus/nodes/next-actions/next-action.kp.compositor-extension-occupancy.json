@@ -351,6 +351,12 @@
       "status": "passed",
       "scope": "s20",
       "checkedAt": "2026-09-10T18:07:30.395Z"
+    },
+    {
+      "command": "npm run test:compositor-extensions; git diff --check",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-10T18:10:37.904Z"
     }
   ],
   "progress": {
