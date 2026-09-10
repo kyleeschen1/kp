@@ -41,7 +41,8 @@ import {
 export type {
   KpCompiledSymbolMotionContract
 } from "../animation/symbol-motion-contract.ts";
-export { assertKpNativeKatexContributionMeasurement } from "./native-katex-scene-contribution.ts";
+export { assertKpNativeKatexContributionMeasurement, sampleKpNativeKatexEndpointDwellProgress } from "./native-katex-scene-contribution.ts";
+export type { KpNativeKatexMaterialRealization } from "./native-katex-scene-contribution.ts";
 export type {
   KpNativeKatexTrackProjection
 } from "./native-katex-track-projection.ts";
@@ -51,6 +52,7 @@ export type {
 } from "./native-katex-operation-choreography.ts";
 export {
   compileKpNativeKatexSuccessorSynthesisScenePlans,
+  createKpNativeKatexSuccessorContribution,
   partitionKpNativeKatexSuccessorOwnedTracks
 } from "./native-katex-successor-synthesis.ts";
 export type {

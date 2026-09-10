@@ -5,56 +5,73 @@ import {
 import type {
   KpNativeKatexPaintPreservingRetirement
 } from "./native-katex-scene-track-contract.ts";
-import {
-  compileKpNativeKatexInkKnotMetrics,
-  kpNativeKatexInkKnotOpticalProfile
-} from "./native-katex-ink-knot-geometry.ts";
+import { sampleKpNativeKatexContributorFusionPaint, kpNativeKatexContributorFusionOpticalProfile,
+  kpNativeKatexContributorFusionRealizedPrimitiveId, type KpNativeKatexContributorFusionOpticalProfile } from "./native-katex-contributor-fusion-sampling.ts";
+export { kpNativeKatexContributorFusionOpticalProfile, kpNativeKatexContributorFusionRealizedPrimitiveId,
+  type KpNativeKatexContributorFusionOpticalProfile } from "./native-katex-contributor-fusion-sampling.ts";
 import {
   isKpVerifiedEquationEvaluationFamilyCertificateV2,
   type KpVerifiedEquationEvaluationFamilyCertificateV2
 } from "../domain-ir/equation-evaluation-family-certificate-v2.ts";
+import { createKpNativeKatexMaterialRealization, requireKpNativeKatexMeasuredMaterialFrame,
+  type KpNativeKatexMaterialRealization } from "./native-katex-scene-contribution.ts";
+import type { KpNativeKatexSceneAssembly } from "./native-katex-scene-assembly.ts";
+import type { KpNativeKatexRenderedSceneObservation } from "./native-katex-rendered-scene.ts";
+
+const realizedCertificates = new WeakMap<KpNativeKatexMaterialRealization, KpVerifiedEquationEvaluationFamilyCertificateV2>();
+
+export function createKpCertifiedNativeKatexContributorFusionRealization(input: {
+  readonly certificate: KpVerifiedEquationEvaluationFamilyCertificateV2;
+  readonly source: KpNativeKatexRenderedSceneObservation;
+  readonly target: KpNativeKatexRenderedSceneObservation;
+}): KpNativeKatexMaterialRealization {
+  if (!isKpVerifiedEquationEvaluationFamilyCertificateV2(input.certificate))
+    throw new Error("Ink-knot realization requires a compiler-minted family certificate.");
+  requireCompatibleProfiles(requireContributorFusionFamilyProfile(input.certificate), kpNativeKatexContributorFusionOpticalProfile);
+  const nativeRects = new Map([...input.source.atoms, ...input.target.atoms].map(atom => [atom.sourceElement, atom.rect]));
+  const realization = createKpNativeKatexMaterialRealization((owners, progress) => {
+    const source = owners.filter(owner => owner.fragmentRole?.startsWith("successor-source:"));
+    const target = owners.filter(owner => owner.fragmentRole?.startsWith("successor-target:"));
+    if (source.length + target.length !== owners.length) throw new Error("Ink-knot realization received unrelated material.");
+    const describe = (owner: typeof owners[number]) => {
+      const ink = owner.paintAlignmentRect;
+      if (!ink || !nativeRects.has(owner.sourceElement)) throw new Error("Ink-knot contribution requires measured native ink.");
+      return { rect: owner.rect, pivot: { x: ink.left + ink.width / 2, y: ink.top + ink.height / 2 }, role: owner.fragmentRole };
+    };
+    const sampled = sampleKpNativeKatexContributorFusionPaint({ source: source.map(describe), target: target.map(describe), progress });
+    const poses = new Map([...source.map((owner, i) => [owner.ownerId, sampled.source[i]!] as const),
+      ...target.map((owner, i) => [owner.ownerId, sampled.target[i]!] as const)]);
+    return owners.map(owner => {
+      const pose = poses.get(owner.ownerId)!, ink = owner.paintAlignmentRect!, native = nativeRects.get(owner.sourceElement)!;
+      const inset = pose.clipInset / 100;
+      const clipped = owner.fragmentRole?.startsWith("successor-target:");
+      const left = clipped ? Math.max(ink.left, native.left + native.width * inset) : ink.left;
+      const top = clipped ? Math.max(ink.top, native.top + native.height * inset) : ink.top;
+      const right = clipped ? Math.min(ink.left + ink.width, native.left + native.width * (1 - inset)) : ink.left + ink.width;
+      const bottom = clipped ? Math.min(ink.top + ink.height, native.top + native.height * (1 - inset)) : ink.top + ink.height;
+      const pivot = describe(owner).pivot;
+      return requireKpNativeKatexMeasuredMaterialFrame({ ...owner,
+        transform: pose.transform, opacity: pose.present ? 1 : 0,
+        ...(clipped ? { clipPath: `inset(${pose.clipInset}% ${pose.clipInset}%)` } : {}),
+        expectedPaintRect: {
+          left: pivot.x + (left - pivot.x) * pose.scale + pose.translateX,
+          top: pivot.y + (top - pivot.y) * pose.scale + pose.translateY,
+          width: Math.max(0, right - left) * pose.scale,
+          height: Math.max(0, bottom - top) * pose.scale
+        }
+      });
+    });
+  });
+  realizedCertificates.set(realization, input.certificate);
+  return realization;
+}
 
 export interface KpContributorFusionPlaybackPort<Sample, Frame> {
+  readonly sceneAssembly?: KpNativeKatexSceneAssembly | undefined;
   sample(progress: number): Sample;
   apply(progress: number): Frame;
   retire(retirement: KpNativeKatexPaintPreservingRetirement): void;
 }
-
-export interface KpNativeKatexContributorFusionOpticalProfile {
-  readonly schemaVersion:
-    "kp.native-katex-contributor-fusion-optical-profile.v1";
-  readonly id:
-    "kp.rendering.native-katex.operation-evaluation.contributor-fusion.v1";
-  readonly gatherStartsAt: number;
-  readonly compressionStartsAt: number;
-  readonly sourceKernelStartsAt: number;
-  readonly ownershipHandoffAt: number;
-  readonly targetLegibilityStartsAt: number;
-  readonly targetExpansionEndsAt: number;
-  readonly kernelAreaRatio: number;
-}
-
-export const kpNativeKatexContributorFusionRealizedPrimitiveId =
-  "kp.rendering.native-katex.primitive.ink-knot.v1" as const;
-
-/**
- * This is the single tuning surface for every Native KaTeX caller of the
- * promoted contributor-fusion family. Semantic callers select the family;
- * only this renderer profile owns optical thresholds and knot proportions.
- */
-export const kpNativeKatexContributorFusionOpticalProfile = Object.freeze({
-  schemaVersion:
-    "kp.native-katex-contributor-fusion-optical-profile.v1" as const,
-  id:
-    "kp.rendering.native-katex.operation-evaluation.contributor-fusion.v1" as const,
-  gatherStartsAt: 0.18,
-  compressionStartsAt: 0.38,
-  sourceKernelStartsAt: 0.48,
-  ownershipHandoffAt: 0.52,
-  targetLegibilityStartsAt: 0.58,
-  targetExpansionEndsAt: 0.7,
-  kernelAreaRatio: kpNativeKatexInkKnotOpticalProfile.kernelAreaRatio
-} satisfies KpNativeKatexContributorFusionOpticalProfile);
 
 export function createKpNativeKatexContributorFusionPlayback<
   Sample,
@@ -112,6 +129,16 @@ export function createKpCertifiedNativeKatexContributorFusionPlayback<
     throw new Error(
       `Native KaTeX contributor fusion cannot realize ${familyProfile.family}.`
     );
+  }
+  if (input.base.sceneAssembly?.contributions.some(contribution => contribution.realization &&
+      realizedCertificates.get(contribution.realization) === input.certificate)) {
+    // The issued contribution already paints the optical result. A legacy host
+    // wrapper may publish family telemetry, but must not apply the motion twice.
+    return Object.freeze({ ...input.base, apply(progress: number) {
+      const frame = input.base.apply(progress);
+      recordContributorFusionTelemetry(input.stage, familyProfile, kpNativeKatexContributorFusionOpticalProfile, progress);
+      return frame;
+    } }) as Session;
   }
   return createKpNativeKatexContributorFusionPlayback({
     stage: input.stage,
@@ -214,92 +241,34 @@ export function applyKpNativeKatexContributorFusion(input: {
   const sourceOwners = materialOwners(input.stage, "source", input.cohortId);
   const targetOwners = materialOwners(input.stage, "target", input.cohortId);
   if (sourceOwners.length === 0 || targetOwners.length === 0) return;
-  const sourceRects = sourceOwners.map(ownerBaseRect);
-  const targetRects = targetOwners.map(ownerBaseRect);
-  const sourcePivots = sourceOwners.map((owner, index) =>
-    ownerPaintPivot(owner, sourceRects[index]!)
-  );
-  const targetPivots = targetOwners.map((owner, index) =>
-    ownerPaintPivot(owner, targetRects[index]!)
-  );
-  const knotCenter = centerOfPointBounds(targetPivots);
-  const sourceArea = summedArea(sourceRects);
-  const targetArea = summedArea(targetRects);
-  // Endpoint ink boxes are the stable optical proxy. Exact raster sampling
-  // would couple the motif to browser paint internals and make seeks brittle.
-  const {
-    kernelSpan,
-    sourceKernelScale,
-    targetKernelScale
-  } = compileKpNativeKatexInkKnotMetrics({
-    sourceArea,
-    targetArea,
-    profile: kpNativeKatexInkKnotOpticalProfile
+  const describe = (owner: HTMLElement) => {
+    const rect = ownerBaseRect(owner);
+    return { rect, pivot: ownerPaintPivot(owner, rect), role: owner.dataset["kpEquationMaterialFragmentRole"] };
+  };
+  const sampled = sampleKpNativeKatexContributorFusionPaint({
+    source: sourceOwners.map(describe), target: targetOwners.map(describe),
+    progress: input.progress, opticalProfile: input.opticalProfile
   });
-  const gatherProgress = smoothstep(
-    input.opticalProfile.gatherStartsAt,
-    input.opticalProfile.sourceKernelStartsAt,
-    input.progress
-  );
-  const compressionProgress = smoothstep(
-    input.opticalProfile.compressionStartsAt,
-    input.opticalProfile.sourceKernelStartsAt,
-    input.progress
-  );
-  const targetExpansion = smoothstep(
-    input.opticalProfile.ownershipHandoffAt,
-    input.opticalProfile.targetExpansionEndsAt,
-    input.progress
-  );
-  const sourceOwnsPaint =
-    input.progress < input.opticalProfile.ownershipHandoffAt;
-  // Native endpoints own exact stops. The optical adapter runs after the
-  // base compositor and must not re-expose its hidden material duplicates.
-  const materialOwnsPaint = input.progress > 0 && input.progress < 1;
-  const sourceKernelOffsets = centeredOffsetsByNativeGeometry(
-    sourceOwners,
-    sourcePivots,
-    kernelSpan
-  );
-
-  sourceOwners.forEach((owner, index) => {
-    const sourceCenter = sourcePivots[index]!;
-    const slotOffset = sourceKernelOffsets[index]!;
-    setOwnerPaintPresence(owner, materialOwnsPaint && sourceOwnsPaint);
-    owner.style.transform = ownerTransform({
-      translateX:
-        (knotCenter.x - sourceCenter.x + slotOffset.x) * gatherProgress,
-      translateY:
-        (knotCenter.y - sourceCenter.y + slotOffset.y) * gatherProgress,
-      scale: lerp(1, sourceKernelScale, compressionProgress)
-    });
+  sourceOwners.forEach((owner, i) => {
+    const pose = sampled.source[i]!;
+    setOwnerPaintPresence(owner, pose.present);
+    owner.style.transform = pose.transform;
   });
-  targetOwners.forEach((owner, index) => {
-    const targetCenter = targetPivots[index]!;
-    setOwnerPaintPresence(owner, materialOwnsPaint && !sourceOwnsPaint);
+  targetOwners.forEach((owner, i) => {
+    const pose = sampled.target[i]!;
+    setOwnerPaintPresence(owner, pose.present);
     const visual = owner.firstElementChild as HTMLElement | null;
-    if (visual !== null) {
-      const reveal = smoothstep(
-        input.opticalProfile.ownershipHandoffAt,
-        input.opticalProfile.targetLegibilityStartsAt,
-        input.progress
-      );
-      const inset = 28 * (1 - reveal);
-      visual.style.clipPath = `inset(${inset}% ${inset}%)`;
-    }
-    owner.style.transform = ownerTransform({
-      translateX: (knotCenter.x - targetCenter.x) * (1 - targetExpansion),
-      translateY: (knotCenter.y - targetCenter.y) * (1 - targetExpansion),
-      scale: lerp(targetKernelScale, 1, targetExpansion)
-    });
+    if (visual) visual.style.clipPath = `inset(${pose.clipInset}% ${pose.clipInset}%)`;
+    owner.style.transform = pose.transform;
   });
+  recordContributorFusionTelemetry(input.stage, input.familyProfile, input.opticalProfile, input.progress);
+}
 
-  const legibilityState =
-    input.progress < input.opticalProfile.sourceKernelStartsAt
-      ? "source"
-      : input.progress < input.opticalProfile.targetLegibilityStartsAt
-        ? "kernel"
-        : "target";
+function recordContributorFusionTelemetry(stage: HTMLElement, familyProfile: KpContributorFusionEvaluationFamilyProfile,
+  opticalProfile: KpNativeKatexContributorFusionOpticalProfile, progress: number): void {
+  const input = { stage, familyProfile, opticalProfile };
+  const legibilityState = progress < opticalProfile.sourceKernelStartsAt ? "source"
+    : progress < opticalProfile.targetLegibilityStartsAt ? "kernel" : "target";
   input.stage.dataset["kpOperationEvaluationFamily"] =
     input.familyProfile.family;
   input.stage.dataset["kpOperationEvaluationHandoff"] =
@@ -403,101 +372,4 @@ function ownerPaintPivot(
     );
   }
   return { x: rect.left + originX!, y: rect.top + originY! };
-}
-
-function centerOfPointBounds(
-  points: readonly { readonly x: number; readonly y: number }[]
-): { readonly x: number; readonly y: number } {
-  const left = Math.min(...points.map(({ x }) => x));
-  const top = Math.min(...points.map(({ y }) => y));
-  const right = Math.max(...points.map(({ x }) => x));
-  const bottom = Math.max(...points.map(({ y }) => y));
-  return { x: (left + right) / 2, y: (top + bottom) / 2 };
-}
-
-function summedArea(rects: readonly KpInkRect[]): number {
-  return Math.max(1, rects.reduce(
-    (area, rect) => area + Math.max(0, rect.width * rect.height),
-    0
-  ));
-}
-
-function centeredOffsetsByNativeGeometry(
-  owners: readonly HTMLElement[],
-  centers: readonly { readonly x: number; readonly y: number }[],
-  span: number
-): readonly { readonly x: number; readonly y: number }[] {
-  if (centers.length <= 1) return centers.map(() => ({ x: 0, y: 0 }));
-  const spreadX = coordinateSpread(centers.map(({ x }) => x));
-  const spreadY = coordinateSpread(centers.map(({ y }) => y));
-  // Preserve the endpoint's own reading axis inside the compressed knot.
-  // This keeps horizontal operators and stacked fractions on one measured
-  // choreography without teaching the renderer quotient semantics.
-  const dominantAxis = spreadY > spreadX ? "y" : "x";
-  const offsets = centers.map(() => ({ x: 0, y: 0 }));
-  const byNativeCoordinate = (left: number, right: number) =>
-    centers[left]![dominantAxis] - centers[right]![dominantAxis] || left - right;
-  const materialIndexes = owners
-    .map((owner, index) => ({ owner, index }))
-    .filter(({ owner }) =>
-      owner.dataset["kpEquationMaterialFragmentRole"] ===
-        "successor-source:material-input"
-    )
-    .map(({ index }) => index)
-    .sort(byNativeCoordinate);
-  const catalystIndexes = owners
-    .map((owner, index) => ({ owner, index }))
-    .filter(({ owner }) =>
-      owner.dataset["kpEquationMaterialFragmentRole"] ===
-        "successor-source:catalyst"
-    )
-    .map(({ index }) => index)
-    .sort(byNativeCoordinate);
-  // Structural rules do not have interoperable browser ink centers. When the
-  // verified successor topology is infix, semantic roles place each catalyst
-  // between its native-ordered inputs; other topologies keep measured order.
-  const orderedIndexes =
-    materialIndexes.length >= 2 &&
-    catalystIndexes.length === materialIndexes.length - 1
-      ? materialIndexes.flatMap((index, rank) => [
-          index,
-          ...(catalystIndexes[rank] === undefined
-            ? []
-            : [catalystIndexes[rank]!])
-        ])
-      : centers.map((_, index) => index).sort(byNativeCoordinate);
-  orderedIndexes.forEach((sourceIndex, rank) => {
-    const offset = (rank / (centers.length - 1) - 0.5) * span;
-    offsets[sourceIndex] = dominantAxis === "x"
-      ? { x: offset, y: 0 }
-      : { x: 0, y: offset };
-  });
-  return offsets;
-}
-
-function coordinateSpread(coordinates: readonly number[]): number {
-  return Math.max(...coordinates) - Math.min(...coordinates);
-}
-
-function ownerTransform(input: {
-  readonly translateX: number;
-  readonly translateY: number;
-  readonly scale: number;
-}): string {
-  return `translate3d(${input.translateX}px, ${input.translateY}px, 0) ` +
-    `scale(${input.scale})`;
-}
-
-function lerp(start: number, end: number, progress: number): number {
-  return start + (end - start) * progress;
-}
-
-function smoothstep(start: number, end: number, value: number): number {
-  if (end <= start) return value >= end ? 1 : 0;
-  const progress = clamp01((value - start) / (end - start));
-  return progress * progress * (3 - 2 * progress);
-}
-
-function clamp01(value: number): number {
-  return Math.max(0, Math.min(1, value));
 }

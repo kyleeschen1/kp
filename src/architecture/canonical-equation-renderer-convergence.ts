@@ -70,12 +70,15 @@ export const kpCanonicalEquationRendererConvergence = Object.freeze({
     "src/rendering/native-katex-operation-choreography.ts",
     "src/rendering/native-katex-scene-contribution.ts",
     "src/rendering/native-katex-scene-assembly.ts",
+    "src/rendering/native-katex-contributor-fusion-sampling.ts",
+    "src/rendering/native-katex-ink-knot-geometry.ts",
     "src/rendering/native-katex-scene-track-contract.ts",
     "src/rendering/native-katex-successor-synthesis.ts",
     "src/rendering/native-katex-symbol-motion.ts",
     "src/rendering/native-katex-track-projection.ts"
   ]),
   productionRendererSupportSourceFiles: Object.freeze([
+    "src/rendering/native-katex-operation-evaluation-contributor-fusion.ts",
     "src/rendering/computed-style-clone.ts",
     "src/rendering/equation-font-readiness.ts",
     "src/rendering/equation-material-layer-dom.ts",
@@ -97,18 +100,18 @@ export const kpCanonicalEquationRendererConvergence = Object.freeze({
   // compositor. The aggregate ceiling, not this migration envelope, prevents
   // source from disappearing while those functions move to their true owner.
   maximumProductionScenePlanBoundaryModules: 20,
-  maximumProductionScenePlanBoundarySourceBytes: 315_000,
-  // Endpoint ownership is an explicit eighth support owner. Its bounded module
-  // and byte allocation makes the extraction visible instead of hiding it in
-  // the compositor or an unmeasured helper closure.
-  maximumProductionRendererSupportModules: 8,
-  maximumProductionRendererSupportSourceBytes: 80_000,
-  maximumProductionAggregateModules: 31,
+  maximumProductionScenePlanBoundarySourceBytes: 330_000,
+  // Count the existing optical evaluation owner as the ninth support module;
+  // it may no longer hide after base rendering outside the measured closure.
+  maximumProductionRendererSupportModules: 9,
+  maximumProductionRendererSupportSourceBytes: 100_000,
+  maximumProductionAggregateModules: 34,
   // The aggregate now counts the endpoint owner alongside the already bounded
   // plan-boundary extraction and remains tighter than the partition ceilings.
   // Approved canonical factoring composition amendment; measured 512,619 bytes.
-  // Accepted bounded extension-participation allowance; other cohorts stay fixed.
-  maximumProductionAggregateSourceBytes: 535_000,
+  // Standing budget repair authority: optical-owner accounting and integration
+  // are detailed in the compositor-extension source-budget checkpoint.
+  maximumProductionAggregateSourceBytes: 575_000,
   maximumExperimentRouteGzipGrowthBytes: 12_000,
   maximumReaderRouteRegressionRatio: 0.05,
   forbiddenProductionVocabulary: Object.freeze([
@@ -183,11 +186,11 @@ export function validateKpCanonicalEquationRendererConvergence(
     policy.maximumProductionDirectDependencyModules !== 15 ||
     policy.maximumProductionDirectDependencySourceBytes !== 295_000 ||
     policy.maximumProductionScenePlanBoundaryModules !== 20 ||
-    policy.maximumProductionScenePlanBoundarySourceBytes !== 315_000 ||
-    policy.maximumProductionRendererSupportModules !== 8 ||
-    policy.maximumProductionRendererSupportSourceBytes !== 80_000 ||
-    policy.maximumProductionAggregateModules !== 31 ||
-    policy.maximumProductionAggregateSourceBytes !== 535_000 ||
+    policy.maximumProductionScenePlanBoundarySourceBytes !== 330_000 ||
+    policy.maximumProductionRendererSupportModules !== 9 ||
+    policy.maximumProductionRendererSupportSourceBytes !== 100_000 ||
+    policy.maximumProductionAggregateModules !== 34 ||
+    policy.maximumProductionAggregateSourceBytes !== 575_000 ||
     policy.maximumExperimentRouteGzipGrowthBytes !== 12_000 ||
     policy.maximumReaderRouteRegressionRatio !== 0.05
   ) {

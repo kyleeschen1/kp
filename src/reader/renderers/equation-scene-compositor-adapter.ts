@@ -1,3 +1,4 @@
+import { createKpCertifiedNativeKatexContributorFusionRealization } from "../../rendering/native-katex-operation-evaluation-contributor-fusion.ts";
 import type {
   KpCanonicalNativeKatexPureScenePlan,
   KpCanonicalNativeKatexSceneInput,
@@ -256,14 +257,6 @@ export function createKpReaderEquationSceneCompositorSession(
     input.source.stage.dataset["kpReaderEquationStaticCheckpointReason"] =
       dispatch.staticCheckpoint.reason;
   }
-  // Compile at the reader boundary so renderer setup consumes the exact
-  // nominal plan that the exhaustive presentation dispatch authorized.
-  const rendererReadyPlan = input.nativeKatex.compose.compileScenePlan({
-    ...prepared.canonicalInput,
-    ...(input.purePlan === undefined
-      ? {}
-      : { purePlan: input.purePlan.nativePlan })
-  });
   const externalMotionCertificate =
     input.certifiedExternalMotionCertificate;
   if (externalMotionCertificate !== undefined) {
@@ -282,6 +275,20 @@ export function createKpReaderEquationSceneCompositorSession(
       );
     }
   }
+  // Compile at the reader boundary so renderer setup consumes the exact
+  // nominal plan that the exhaustive presentation dispatch authorized.
+  const rendererReadyPlan = input.nativeKatex.compose.compileScenePlan({
+    ...prepared.canonicalInput,
+    ...(externalMotionCertificate === undefined ? {} : {
+      successorRealization: createKpCertifiedNativeKatexContributorFusionRealization({
+        certificate: externalMotionCertificate,
+        source: input.source, target: input.target
+      })
+    }),
+    ...(input.purePlan === undefined
+      ? {}
+      : { purePlan: input.purePlan.nativePlan })
+  });
   const canonical = externalMotionCertificate === undefined
     ? input.nativeKatex.compose.createSession(rendererReadyPlan)
     : input.nativeKatex.compose.createCarrierSession(rendererReadyPlan);

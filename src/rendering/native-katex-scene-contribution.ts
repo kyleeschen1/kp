@@ -7,11 +7,38 @@ export interface KpNativeKatexMeasuredMaterialFrame extends KpEquationMaterialLa
   readonly expectedPaintRect: NonNullable<KpEquationMaterialLayerOwnerFrame["expectedPaintRect"]>;
 }
 
+const realizationAuthority: unique symbol = Symbol("native-katex-material-realization");
+const liveRealizations = new WeakSet<KpNativeKatexMaterialRealization>();
+export interface KpNativeKatexMaterialRealization {
+  readonly [realizationAuthority]: true;
+  readonly sample: (owners: readonly KpEquationMaterialLayerOwnerFrame[], progress: number) => readonly KpNativeKatexMeasuredMaterialFrame[];
+}
+
+/** Renderer-owned optical projection, never independent occupancy authority. */
+export function createKpNativeKatexMaterialRealization(sample: KpNativeKatexMaterialRealization["sample"]): KpNativeKatexMaterialRealization {
+  const realization = Object.freeze({ [realizationAuthority]: true as const, sample });
+  liveRealizations.add(realization);
+  return realization;
+}
+
+export function assertKpNativeKatexMaterialRealization(realization: KpNativeKatexMaterialRealization): void {
+  if (!liveRealizations.has(realization)) throw new Error("Material realization requires its issued sampler.");
+}
+
+export function sampleKpNativeKatexEndpointDwellProgress(progress: number, dwellFraction: number): number {
+  if (!Number.isFinite(progress)) throw new Error("Native KaTeX endpoint dwell progress must be finite.");
+  if (!Number.isFinite(dwellFraction) || dwellFraction < 0 || dwellFraction > 0.25)
+    throw new Error("Native KaTeX endpoint dwell ratio must be between 0 and 0.25.");
+  const bounded = Math.max(0, Math.min(1, progress));
+  return dwellFraction === 0 || bounded === 0 || bounded === 1 ? bounded : Math.min(1, bounded / (1 - dwellFraction));
+}
+
 const contributionAuthority: unique symbol = Symbol("native-katex-scene-contribution");
 export interface KpNativeKatexSceneContribution {
   readonly [contributionAuthority]: true;
   readonly id: string;
   readonly participantIds: readonly string[];
+  readonly realization?: KpNativeKatexMaterialRealization | undefined;
   readonly sample: (progress: number) => {
     readonly owners: readonly KpNativeKatexMeasuredMaterialFrame[];
     readonly occupancy: readonly KpEquationProtectedTransitFrame[];
@@ -97,24 +124,33 @@ export function createKpNativeKatexSceneContribution(input: {
   readonly source: KpNativeKatexRenderedSceneObservation;
   readonly target: KpNativeKatexRenderedSceneObservation;
   readonly participantIds: readonly string[];
+} & ({
+  readonly realization: KpNativeKatexMaterialRealization;
+  readonly sample: (progress: number) => readonly KpEquationMaterialLayerOwnerFrame[];
+} | {
+  readonly realization?: never;
   readonly sample: (progress: number) => readonly KpNativeKatexMeasuredMaterialFrame[];
-}): KpNativeKatexSceneContribution {
+})): KpNativeKatexSceneContribution {
   if (!input.id.trim()) throw new Error("A material contribution requires an identity.");
   if (input.source.stage !== input.target.stage) throw new Error("Contribution endpoints require one coordinate frame.");
   const participantIds = Object.freeze([...input.participantIds]);
   const expected = new Set(participantIds);
   if (expected.size !== participantIds.length || participantIds.some(id => !id.trim()))
     throw new Error("Contribution participant identities must be unique and nonempty.");
-  const { id, sample } = input;
+  const { id, sample, realization } = input;
+  if (realization) assertKpNativeKatexMaterialRealization(realization);
   // Only this issuer couples occupancy to actual paint; callers cannot supply
   // a second, conveniently incomplete occupancy sampler.
   const contribution = Object.freeze({
     [contributionAuthority]: true as const,
     id,
     participantIds,
+    realization,
     sample(progress: number) {
       if (!Number.isFinite(progress)) throw new Error("Material progress must be finite.");
-      const owners = Object.freeze(sample(Math.max(0, Math.min(1, progress)))
+      const bounded = Math.max(0, Math.min(1, progress));
+      const sampled = sample(bounded);
+      const owners = Object.freeze((realization ? realization.sample(sampled, bounded) : sampled)
         .map(requireKpNativeKatexMeasuredMaterialFrame));
       const actual = new Set(owners.map(owner => owner.ownerId));
       if (owners.length !== participantIds.length || actual.size !== owners.length ||

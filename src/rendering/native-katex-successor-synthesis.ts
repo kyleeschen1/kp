@@ -9,6 +9,8 @@ import {
   type KpSuccessorSynthesisPose,
   type KpSuccessorSynthesisFrame
 } from "../animation/successor-synthesis.ts";
+import { createKpNativeKatexSceneContribution, assertKpNativeKatexMaterialRealization,
+  sampleKpNativeKatexEndpointDwellProgress, type KpNativeKatexMaterialRealization } from "./native-katex-scene-contribution.ts";
 import type {
   KpRegisteredSuccessorSynthesisBinding
 } from "../animation/successor-synthesis-presentation-plan.ts";
@@ -169,6 +171,7 @@ interface KpNativeKatexSuccessorPaintAnnotation {
   readonly contribution?: "material-input" | "catalyst" | undefined;
   readonly stage: HTMLElement;
   readonly atoms: readonly KpNativeKatexPaintAtomObservation[];
+  readonly paintRects: ReadonlyMap<string, KpNativeKatexPaintAtomObservation["rect"]>;
   readonly rect: {
     readonly left: number;
     readonly top: number;
@@ -380,6 +383,25 @@ export function compileKpNativeKatexSuccessorSynthesisScenePlans(input: {
     "successor-owned target atom"
   );
   return Object.freeze(plans);
+}
+
+export function createKpNativeKatexSuccessorContribution(input: {
+  readonly source: KpNativeKatexRenderedSceneObservation;
+  readonly target: KpNativeKatexRenderedSceneObservation;
+  readonly plans: readonly KpNativeKatexSuccessorSynthesisScenePlan[];
+  readonly realization: KpNativeKatexMaterialRealization;
+  readonly endpointDwellFraction: number;
+}) {
+  assertKpNativeKatexMaterialRealization(input.realization);
+  const sample = (progress: number) => sampleKpNativeKatexSuccessorSynthesisScenePlans({
+    plans: input.plans, progress: sampleKpNativeKatexEndpointDwellProgress(progress, input.endpointDwellFraction)
+  });
+  return createKpNativeKatexSceneContribution({
+    id: `successors.${input.plans.map(plan => plan.id).join("+")}`,
+    source: input.source, target: input.target,
+    participantIds: sample(0).map(owner => owner.ownerId),
+    sample, realization: input.realization
+  });
 }
 
 export function sampleKpNativeKatexSuccessorSynthesisScenePlans(input: {
@@ -923,6 +945,9 @@ function paintAnnotation(input: {
       : { contribution: input.contribution }),
     stage: input.scene.stage,
     atoms: Object.freeze(atoms),
+    // Bind native ink once per measured plan, not once per inspection sample.
+    paintRects: new Map(atoms.filter(atom => atom.paintKind !== "path").map(atom =>
+      [atom.id, Object.freeze(successorAtomPaintRect(input.scene.stage, atom))])),
     rect: Object.freeze(unionRects(atoms.map(({ rect }) => rect)))
   });
 }
@@ -948,9 +973,7 @@ function ownerFrames(input: {
   const groupCenter = center(input.annotation.rect);
   return input.annotation.atoms.map((atom) => {
     const atomCenter = center(atom.rect);
-    const paintAlignmentRect = atom.paintKind === "path"
-      ? undefined
-      : successorAtomPaintRect(input.annotation.stage, atom);
+    const paintAlignmentRect = input.annotation.paintRects.get(atom.id);
     const scaledCenter = {
       x: groupCenter.x + (atomCenter.x - groupCenter.x) * input.pose.scale,
       y: groupCenter.y + (atomCenter.y - groupCenter.y) * input.pose.scale

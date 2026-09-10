@@ -145,3 +145,29 @@ raise aggregate to 535,000; all other gates stay unchanged. This is bounded
 headroom for the approved authentication/invalidation work, not a new feature
 allowance. Neither an unrelated refactor nor hiding this small shared guard
 outside the counted closure is warranted. Publish final actual costs.
+
+## Optical owner integration and complete accounting (s14)
+
+The final optical evaluation owner identified in s07 now participates in the
+counted closure. At baseline `2ecc4b0b6`, its wrapper was 18,358 bytes and its
+ink-knot geometry helper 1,911 bytes, both outside the prior manifests. Count
+those existing 20,269 bytes as well as the extracted pure optical sampler;
+do not describe the resulting measurement increase as all newly written code.
+After extraction and integration, the measured aggregate is 561,878 bytes:
+30,709 above s12, comprising 20,269 newly accounted existing bytes and 10,440
+net implementation growth across the expanded comparison boundary.
+
+The useful consolidation is executed: DOM and inspected contribution callers
+share one optical calculation. Endpoint dwell is also one shared function;
+native successor ink is measured once per plan, not per inspection sample.
+The wrapper remains counted while its other existing callers migrate; deleting
+it prematurely would discard their accepted behavior.
+
+Under standing engineering-budget authority, amend planner bytes to 330,000,
+support to 9 modules / 100,000 bytes, and aggregate to 34 modules / 575,000 bytes.
+Measured values at this checkpoint are planner 321,510 (20 modules), support
+94,970 (9), aggregate 561,878 (33), core 145,398 and direct dependencies 173,740.
+Core and direct-dependency ceilings, runtime/inference/browser/payload gates
+stay unchanged. This is a bounded implementation/accounting amendment for the
+approved second mechanism, not authority for new motifs. Final cost reporting
+must distinguish accounting expansion from actual source growth.

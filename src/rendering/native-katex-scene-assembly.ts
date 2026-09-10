@@ -3,6 +3,7 @@ import { sampleKpNativeKatexSceneTrackFrames } from "./native-katex-scene-track-
 import type { KpNativeKatexPaintMeasuredSceneTrack } from "./native-katex-base-scene-plan.ts";
 import type { KpNativeKatexRenderedSceneObservation } from "./native-katex-rendered-scene.ts";
 import { assertKpNativeKatexContributionMeasurement, assertKpNativeKatexMeasuredPaint, captureKpNativeKatexMeasurement, type KpNativeKatexSceneContribution } from "./native-katex-scene-contribution.ts";
+import { sampleKpNativeKatexEndpointDwellProgress } from "./native-katex-scene-contribution.ts";
 
 const assemblyAuthority: unique symbol = Symbol("native-katex-scene-assembly");
 const liveAssemblies = new WeakSet<KpNativeKatexSceneAssembly>();
@@ -33,10 +34,12 @@ function assembleKpNativeKatexScene(input: {
   readonly tracks: readonly KpNativeKatexPaintMeasuredSceneTrack[];
   readonly contributions: readonly KpNativeKatexSceneContribution[];
   readonly copyFanOut?: boolean | undefined;
+  readonly endpointDwellFraction?: number | undefined;
 }) {
   if (input.source.stage !== input.target.stage) throw new Error("Final scene endpoints require one stage.");
   const tracks = snapshot(input.tracks);
   const copyFanOut = input.copyFanOut === true;
+  const dwell = input.endpointDwellFraction ?? 0;
   const contributions = Object.freeze([...input.contributions]);
   if (new Set(contributions.map(item => item.id)).size !== contributions.length)
     throw new Error("Scene contribution identities must be unique.");
@@ -47,7 +50,7 @@ function assembleKpNativeKatexScene(input: {
   if (new Set(participants).size !== participants.length)
     throw new Error("Final scene paint participants must be unique.");
   const sampleFrame = (progress: number) => {
-    const frames = sampleKpNativeKatexSceneTrackFrames(tracks, progress, copyFanOut)
+    const frames = sampleKpNativeKatexSceneTrackFrames(tracks, sampleKpNativeKatexEndpointDwellProgress(progress, dwell), copyFanOut)
       .map(frame => {
         if (!frame.expectedPaintRect) throw new Error(`Missing final track paint: ${frame.trackId}.`);
         assertKpNativeKatexMeasuredPaint(frame.trackId, [frame.rect, frame.expectedPaintRect], frame.opacity);

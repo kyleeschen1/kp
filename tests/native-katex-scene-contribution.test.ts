@@ -2,7 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { projectKpNativeKatexMaterialOccupancy } from "../src/rendering/native-katex-scene-contribution.ts";
 import { createKpNativeKatexSceneContribution, isKpNativeKatexSceneContribution,
-  requireKpNativeKatexMeasuredMaterialFrame, assertKpNativeKatexContributionMeasurement } from "../src/rendering/native-katex-scene-contribution.ts";
+  requireKpNativeKatexMeasuredMaterialFrame, assertKpNativeKatexContributionMeasurement,
+  createKpNativeKatexMaterialRealization } from "../src/rendering/native-katex-scene-contribution.ts";
 import { createKpNativeKatexSceneAssembly, requireKpNativeKatexContributionInspection, assertKpNativeKatexSceneAssembly } from "../src/rendering/native-katex-scene-assembly.ts";
 
 const ink = { left: 2, top: 3, width: 4, height: 5 };
@@ -15,6 +16,25 @@ const source = { kind: "native-katex-rendered-scene-observation" as const,
   stage, root: {} as HTMLElement, atoms: [], groups: [], fontRevision: 1, viewportKey: "wide" };
 const target = { ...source, endpoint: "target" as const, root: {} as HTMLElement };
 const context = { source, target, participantIds: ["paint"] };
+
+test("optical realization is inside the contribution sample and cannot carry independent occupancy", () => {
+  const progress: number[] = [];
+  const realization = createKpNativeKatexMaterialRealization((owners, p) => {
+    progress.push(p);
+    return owners.map(frame => requireKpNativeKatexMeasuredMaterialFrame({ ...frame,
+      expectedPaintRect: { ...ink, left: ink.left + p * 20 } }));
+  });
+  const contribution = createKpNativeKatexSceneContribution({ ...context, id: "optical", realization, sample: () => [owner] });
+  const assembly = createKpNativeKatexSceneAssembly({ source, target, tracks: [], contributions: [contribution], endpointDwellFraction: .04 });
+  const frame = assembly.sample(.37);
+  assert.equal(progress.at(-1), .37, "Optical timing retains semantic progress, not the base dwell clock.");
+  assert.equal(frame.occupancy[0]!.rect, frame.owners[0]!.expectedPaintRect);
+  assert.equal(frame.owners[0]!.expectedPaintRect.left, ink.left + .37 * 20);
+  assert.equal(contribution.realization, realization);
+  assert.throws(() => createKpNativeKatexSceneContribution({ ...context, id: "forged", realization: { ...realization }, sample: () => [owner] }), /issued sampler/);
+  const missing = createKpNativeKatexMaterialRealization(() => []);
+  assert.throws(() => createKpNativeKatexSceneContribution({ ...context, id: "missing", realization: missing, sample: () => [owner] }).sample(.5), /participants/);
+});
 
 test("render authority rejects copied assemblies, replaced samplers and unchecked extra paint", () => {
   let calls = 0;

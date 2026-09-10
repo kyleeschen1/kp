@@ -186,6 +186,8 @@ export const kpNativeKatexCompositorOwnership = Object.freeze([
       evidence("src/rendering/native-katex-scene-contribution.ts", "createKpNativeKatexSceneContribution"),
       evidence("src/rendering/native-katex-scene-contribution.ts", "projectKpNativeKatexMaterialOccupancy"),
       evidence("src/rendering/native-katex-scene-assembly.ts", "createKpNativeKatexSceneAssembly"),
+      evidence("src/rendering/native-katex-contributor-fusion-sampling.ts", "sampleKpNativeKatexContributorFusionPaint"),
+      evidence("src/rendering/native-katex-ink-knot-geometry.ts", "compileKpNativeKatexInkKnotMetrics"),
       evidence("src/rendering/native-katex-base-scene-plan.ts", "createKpNativeKatexRendererReadyScenePlan"),
       evidence("src/rendering/native-katex-scene-compositor.ts", "sampleKpNativeKatexSceneTracks")
     ],
@@ -205,6 +207,7 @@ export const kpNativeKatexCompositorOwnership = Object.freeze([
       evidence("src/rendering/computed-style-clone.ts", "cloneElementWithComputedStyles"),
       evidence("src/rendering/native-katex-glyph-compositor.ts", "applyKpNativeKatexGlyphFrame"),
       evidence("src/rendering/equation-material-layer-dom.ts", "syncKpEquationMaterialLayer"),
+      evidence("src/rendering/native-katex-operation-evaluation-contributor-fusion.ts", "applyKpNativeKatexContributorFusion"),
       evidence("src/rendering/equation-material-owner.ts", "createKpEquationMaterialOwnerRegistry")
     ],
     forbiddenAuthority: noSemanticInference

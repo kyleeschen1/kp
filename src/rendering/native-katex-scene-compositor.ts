@@ -50,6 +50,9 @@ import {
   compileKpCollisionSafeReorderTracks,
   assertKpNativeKatexContributionMeasurement,
   createKpNativeKatexSceneAssembly,
+  createKpNativeKatexSuccessorContribution,
+  sampleKpNativeKatexEndpointDwellProgress,
+  type KpNativeKatexMaterialRealization,
   type KpNativeKatexSceneAssembly,
   compileKpCollisionSafeTransitTracks,
   compileKpNativeKatexHierarchicalScenePlan,
@@ -95,7 +98,9 @@ export type KpNativeKatexRendererDisposition =
 export interface KpNativeKatexRendererSession extends
   KpNativeKatexRendererSessionContract<KpNativeKatexRendererDisposition,
     KpNativeKatexSceneTrack, KpNativeKatexSceneTrackFrame,
-    KpNativeKatexSceneOwnershipFrame> {}
+    KpNativeKatexSceneOwnershipFrame> {
+  readonly sceneAssembly?: KpNativeKatexSceneAssembly | undefined;
+}
 
 const kpExecutableNativeKatexSceneSessionBrand: unique symbol = Symbol(
   "kp.executable-native-katex-scene-session"
@@ -162,6 +167,7 @@ export interface KpCanonicalNativeKatexPureScenePlan {
 }
 
 export interface KpCanonicalNativeKatexSceneInput {
+  readonly successorRealization?: KpNativeKatexMaterialRealization | undefined;
   readonly source: KpCanonicalNativeKatexEndpointInput;
   readonly target: KpCanonicalNativeKatexEndpointInput;
   readonly relations: readonly KpNativeKatexSemanticPaintRelation[];
@@ -195,28 +201,7 @@ type KpResolvedCanonicalNativeKatexSceneInput = Omit<
   readonly target: KpNativeKatexRenderedSceneObservation;
 };
 
-export function sampleKpNativeKatexEndpointDwellProgress(
-  progress: number,
-  dwellFraction: number
-): number {
-  if (!Number.isFinite(progress)) {
-    throw new Error("Native KaTeX endpoint dwell progress must be finite.");
-  }
-  if (
-    !Number.isFinite(dwellFraction) ||
-    dwellFraction < 0 ||
-    dwellFraction > 0.25
-  ) {
-    throw new Error(
-      "Native KaTeX endpoint dwell ratio must be between 0 and 0.25."
-    );
-  }
-  const bounded = Math.max(0, Math.min(1, progress));
-  if (dwellFraction === 0 || bounded === 0 || bounded === 1) {
-    return bounded;
-  }
-  return Math.min(1, bounded / (1 - dwellFraction));
-}
+export { sampleKpNativeKatexEndpointDwellProgress } from "./native-katex-base-scene-plan.ts";
 
 export function decideKpNativeKatexRendererDisposition(input: {
   readonly ambiguityIds: readonly string[];
@@ -1330,7 +1315,7 @@ export function createKpNativeKatexRendererSession(input: {
       input.semanticClock === undefined ? endpointDwellFraction : 0
     );
     if (input.sceneAssembly) return input.sceneAssembly.sample(
-      mode === "checkpoint-settlement" && progress < 1 ? 0 : poseProgress).frames;
+      mode === "checkpoint-settlement" && progress < 1 ? 0 : progress).frames;
     return sampleKpNativeKatexSceneTracks(
       tracks,
       mode === "checkpoint-settlement" && progress < 1
@@ -1368,7 +1353,7 @@ export function createKpNativeKatexRendererSession(input: {
             sourceAtoms: sourceById,
             targetAtoms: targetById,
             supplementalOwners:
-              input.sceneAssembly?.sample(poseProgress).owners ?? input.supplementalMaterialOwners?.(poseProgress) ?? [],
+              input.sceneAssembly?.sample(bounded).owners ?? input.supplementalMaterialOwners?.(poseProgress) ?? [],
             visible: materialOwns
           })
         : []
@@ -1392,6 +1377,7 @@ export function createKpNativeKatexRendererSession(input: {
   };
   return Object.freeze({
     kind: "native-katex-renderer-session",
+    sceneAssembly: input.sceneAssembly,
     lifecycle: "renderer-session",
     mode,
     disposition,
@@ -1441,11 +1427,18 @@ export function compileKpCanonicalNativeKatexScenePlan(
   } = prepared;
   const tracks = protectedTransit.tracks;
   const measuredTracks = attachKpNativeKatexTrackPaintGeometry({ tracks, source: resolved.source, target: resolved.target });
-  const sceneAssembly = input.factoring === undefined ? undefined : createKpNativeKatexSceneAssembly({
+  const dwell = input.factoring?.semanticClock ? 0 : input.endpointDwellFraction ?? KP_NATIVE_KATEX_TERMINAL_SETTLEMENT_FRACTION;
+  const contributions = [...(input.factoring ? [input.factoring.contribution] : []),
+    ...(input.successorRealization ? [createKpNativeKatexSuccessorContribution({
+      source: resolved.source, target: resolved.target, plans: syntheses,
+      realization: input.successorRealization, endpointDwellFraction: dwell
+    })] : [])];
+  const sceneAssembly = contributions.length === 0 ? undefined : createKpNativeKatexSceneAssembly({
     source: resolved.source, target: resolved.target, tracks: measuredTracks,
-    contributions: [input.factoring.contribution], copyFanOut: input.copyFanOutRouting
+    contributions, copyFanOut: input.copyFanOutRouting, endpointDwellFraction: dwell
   });
-  if (sceneAssembly && syntheses.length) throw new Error("Mixed contributions require complete final-scene migration.");
+  if (sceneAssembly && syntheses.length && !input.successorRealization)
+    throw new Error("Mixed contributions require complete final-scene migration.");
   const correlations = correlateKpNativeKatexSceneHandoff({
     reconciliation,
     tracks: allTracks
@@ -1472,7 +1465,7 @@ export function compileKpCanonicalNativeKatexScenePlan(
     structuralSuccession: input.structuralSuccession,
     structuralMotion: input.structuralMotion,
     supplementalMaterialOwners:
-      syntheses.length === 0
+      syntheses.length === 0 || sceneAssembly !== undefined
         ? undefined
         : progress => sampleKpNativeKatexSuccessorSynthesisScenePlans({ plans: syntheses, progress })
   });
