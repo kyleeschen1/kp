@@ -44,8 +44,10 @@ test("render authority rejects copied assemblies, replaced samplers and unchecke
   assert.doesNotThrow(() => assertKpNativeKatexSceneAssembly(input));
   for (const changed of [{ sceneAssembly: { ...assembly } },
     { sceneAssembly: { ...assembly, sample: () => assembly.sample(0) } },
-    { copyFanOut: true }, { tracks: [{}] }, { supplementalMaterialOwners: () => [] }])
+    { copyFanOut: true }, { tracks: [{}] }])
     assert.throws(() => assertKpNativeKatexSceneAssembly({ ...input, ...changed }), /exact issued/);
+  assert.throws(() => assertKpNativeKatexSceneAssembly({ ...input,
+    supplementalMaterialOwners: () => [] }), /Unchecked supplemental paint is retired/);
   const frame = assembly.sample(.371);
   const sampled = calls;
   assert.equal(assembly.sample(.371), frame);

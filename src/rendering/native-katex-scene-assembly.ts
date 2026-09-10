@@ -101,9 +101,12 @@ export function assertKpNativeKatexSceneAssembly(input: {
   readonly copyFanOut?: boolean | undefined;
   readonly supplementalMaterialOwners?: unknown;
 }): void {
+  // Reject old JavaScript/casted callers even when no assembly was supplied.
+  if (input.supplementalMaterialOwners !== undefined)
+    throw new Error("Unchecked supplemental paint is retired; use an issued scene assembly.");
   const assembly = input.sceneAssembly;
   if (!assembly) return;
-  if (!liveAssemblies.has(assembly) || input.supplementalMaterialOwners !== undefined ||
+  if (!liveAssemblies.has(assembly) ||
       assembly.copyFanOut !== (input.copyFanOut === true) ||
       input.tracks.length !== assembly.tracks.length ||
       input.tracks.some((track, i) => track !== assembly.tracks[i]))

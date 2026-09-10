@@ -16,7 +16,6 @@ import {
   type KpStageRelativeRect
 } from "./native-katex-fragment-observer.ts";
 import {
-  type KpEquationMaterialLayerOwnerFrame,
   setKpEquationMaterialOwnerVisual,
   syncKpEquationMaterialLayer
 } from "./equation-material-layer-dom.ts";
@@ -32,8 +31,7 @@ import {
   measureKpNativeKatexTextInkRect
 } from "./native-katex-paint-geometry.ts";
 import {
-  composeKpNativeKatexSceneMaterialOwners,
-  sampleKpNativeKatexSuccessorSynthesisScenePlans
+  composeKpNativeKatexSceneMaterialOwners
 } from "./native-katex-successor-synthesis.ts";
 import {
   sampleKpNativeKatexSceneTrackFrames
@@ -1236,8 +1234,7 @@ export function createKpNativeKatexRendererSession(input: {
   readonly copyFanOut?: boolean | undefined;
   readonly endpointDwellFraction?: number | undefined;
   readonly disposition?: KpNativeKatexRendererDisposition | undefined;
-  readonly supplementalMaterialOwners?:
-    (progress: number) => readonly KpEquationMaterialLayerOwnerFrame[];
+  readonly supplementalMaterialOwners?: never;
 }): KpNativeKatexRendererSession {
   assertKpNativeKatexSceneAssembly(input);
   const endpointDwellFraction = input.endpointDwellFraction ??
@@ -1293,7 +1290,7 @@ export function createKpNativeKatexRendererSession(input: {
     source: input.reconciliation.source,
     target: input.reconciliation.target
   });
-  const nativeCompatible = input.sceneAssembly === undefined && input.supplementalMaterialOwners === undefined &&
+  const nativeCompatible = input.sceneAssembly === undefined &&
     tracks.every((track) => {
     const source = sourceById.get(track.sourceAtomId ?? "");
     const target = targetById.get(track.targetAtomId ?? "");
@@ -1331,10 +1328,6 @@ export function createKpNativeKatexRendererSession(input: {
     }
     const frames = sample(progress);
     const bounded = Math.max(0, Math.min(1, progress));
-    const poseProgress = sampleKpNativeKatexEndpointDwellProgress(
-      bounded,
-      input.semanticClock === undefined ? endpointDwellFraction : 0
-    );
     const targetOwns = bounded === 1;
     const sourceOwns =
       bounded === 0 || (mode !== "atom-transit" && !targetOwns);
@@ -1353,7 +1346,7 @@ export function createKpNativeKatexRendererSession(input: {
             sourceAtoms: sourceById,
             targetAtoms: targetById,
             supplementalOwners:
-              input.sceneAssembly?.sample(bounded).owners ?? input.supplementalMaterialOwners?.(poseProgress) ?? [],
+              input.sceneAssembly?.sample(bounded).owners ?? [],
             visible: materialOwns
           })
         : []
@@ -1461,11 +1454,7 @@ export function compileKpCanonicalNativeKatexScenePlan(
     // changes every phase; native-only geometry retains the existing dwell.
     semanticClock: input.factoring?.semanticClock,
     structuralSuccession: input.structuralSuccession,
-    structuralMotion: input.structuralMotion,
-    supplementalMaterialOwners:
-      syntheses.length === 0 || sceneAssembly !== undefined
-        ? undefined
-        : progress => sampleKpNativeKatexSuccessorSynthesisScenePlans({ plans: syntheses, progress })
+    structuralMotion: input.structuralMotion
   });
 }
 
@@ -1526,10 +1515,7 @@ export function createKpCanonicalNativeKatexCarrierSceneSession(
     disposition: plan.disposition,
     copyFanOut: plan.copyFanOut,
     endpointDwellFraction: plan.endpointDwellFraction,
-    semanticClock: plan.semanticClock,
-    ...(plan.supplementalMaterialOwners === undefined
-      ? {}
-      : { supplementalMaterialOwners: plan.supplementalMaterialOwners })
+    semanticClock: plan.semanticClock
   });
   // Successor synthesis may own every target, leaving no residual handoff.
   let typographyWarmup:

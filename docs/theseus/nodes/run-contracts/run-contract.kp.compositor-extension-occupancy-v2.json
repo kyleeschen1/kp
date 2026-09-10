@@ -143,7 +143,8 @@
     {
       "id": "s17",
       "title": "Retire unchecked callback and metadata authority paths",
-      "status": "planned"
+      "summary": "Removed storage, forwarding and invocation of unchecked callbacks. Both boundaries reject old runtime callers and declare never. Twenty-three focused, thirty-three architecture, forty-eight authoring, full types and six canonical browser checks pass; source cost decreased.",
+      "status": "complete"
     },
     {
       "id": "s18",

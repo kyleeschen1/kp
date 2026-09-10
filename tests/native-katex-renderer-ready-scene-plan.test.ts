@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { createKpNativeKatexRendererSession } from "../src/rendering/native-katex-scene-compositor.ts";
 
 import {
   createKpNativeKatexRendererReadyScenePlan,
@@ -142,39 +143,41 @@ function createMinimalPlan(
   });
 }
 
-// Characterization of the pre-migration seam, not an accepted safety contract.
-// The contribution migration must turn these admitted cases into rejections.
-test("characterization: ready-plan issuance does not inspect extension paint or duplicate participants", () => {
+test("ready-plan issuance rejects unchecked extension paint before invoking it", () => {
   const stage = {} as HTMLElement;
   let samples = 0;
   const owner = { ownerId: "unmeasured", sourceElement: {} as HTMLElement,
     rect: { left: 0, top: 0, width: 10, height: 10 }, opacity: 1, transform: "none" };
-  const plan = createMinimalPlan(stage, stage, [], undefined, {
+  assert.throws(() => createMinimalPlan(stage, stage, [], undefined, {
+    // @ts-expect-error Retired callbacks cannot enter renderer-ready plans.
     supplementalMaterialOwners: () => { samples++; return [owner, owner]; }
-  });
-  assert.equal(isKpNativeKatexRendererReadyScenePlan(plan), true);
-  assert.equal(samples, 0, "Issuance never samples the actual contribution.");
-  const frames = plan.supplementalMaterialOwners!(0.5);
-  assert.equal(frames[0]!.expectedPaintRect, undefined);
-  assert.equal(new Set(frames.map(frame => frame.ownerId)).size, 1);
-  assert.equal(frames.length, 2);
+  }), /Unchecked supplemental paint is retired/);
+  assert.equal(samples, 0, "An unauthenticated callback never executes.");
 });
 
-test("characterization: another sampler can reuse the same unrelated inspection payload", () => {
+test("an ordinary-track inspection payload cannot authorize extension paint", () => {
   const stage = {} as HTMLElement;
   const audit = certificate();
-  const first = createMinimalPlan(stage, stage, [], undefined, {
-    protectedTransit: audit, supplementalMaterialOwners: () => []
-  });
-  const second = createMinimalPlan(stage, stage, [], undefined, {
+  assert.throws(() => createMinimalPlan(stage, stage, [], undefined, {
     protectedTransit: audit,
+    // @ts-expect-error Independent inspection metadata cannot authorize a sampler.
     supplementalMaterialOwners: () => [{ ownerId: "later", sourceElement: {} as HTMLElement,
       rect: { left: 500, top: 200, width: 10, height: 10 }, opacity: 1, transform: "none" }]
-  });
-  assert.equal(first.protectedTransit, second.protectedTransit);
-  assert.notEqual(first.supplementalMaterialOwners, second.supplementalMaterialOwners);
-  assert.equal(isKpNativeKatexRendererReadyScenePlan(second), true);
-  assert.equal(second.supplementalMaterialOwners!(0.5).length, 1);
+  }), /Unchecked supplemental paint is retired/);
+});
+
+test("raw renderer rejects legacy callbacks before touching DOM with or without assembly", () => {
+  const stage = {} as HTMLElement;
+  const base = createMinimalPlan(stage);
+  const assembly = createKpNativeKatexSceneAssembly({ ...base.reconciliation, tracks: [], contributions: [] });
+  for (const sceneAssembly of [undefined, assembly]) {
+    assert.throws(() => createKpNativeKatexRendererSession({ stage,
+      sourceRoot: base.reconciliation.source.root, targetRoot: base.reconciliation.target.root,
+      reconciliation: base.reconciliation, tracks: assembly.tracks, sceneAssembly,
+      // @ts-expect-error The lower-level renderer has no unchecked paint channel either.
+      supplementalMaterialOwners: () => []
+    }), /Unchecked supplemental paint is retired/);
+  }
 });
 
 function observation(endpoint: "source" | "target", stage: HTMLElement) {

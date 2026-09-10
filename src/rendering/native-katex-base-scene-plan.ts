@@ -11,9 +11,6 @@ import type {
   KpEquationStructuralSuccessionIntent
 } from "../animation/structural-succession-presentation.ts";
 import type {
-  KpEquationMaterialLayerOwnerFrame
-} from "./equation-material-layer-dom.ts";
-import type {
   KpStageRelativeRect
 } from "./native-katex-fragment-observer.ts";
 import {
@@ -165,9 +162,8 @@ export interface KpNativeKatexRendererReadyScenePlan {
   readonly structuralMotion?: "full" | "checkpoint" | undefined;
   readonly copyFanOut: boolean;
   readonly endpointDwellFraction: number;
-  readonly supplementalMaterialOwners?:
-    ((progress: number) => readonly KpEquationMaterialLayerOwnerFrame[]) |
-    undefined;
+  /** Retired: extension paint must enter through an issued scene assembly. */
+  readonly supplementalMaterialOwners?: never;
   readonly toJSON: () => never;
 }
 
@@ -233,7 +229,6 @@ export function createKpNativeKatexRendererReadyScenePlan(
     copyFanOut: input.copyFanOut ?? false,
     semanticClock: input.semanticClock,
     endpointDwellFraction,
-    supplementalMaterialOwners: input.supplementalMaterialOwners,
     toJSON(): never {
       throw new Error(
         "Renderer-ready native KaTeX plans cannot enter durable state."

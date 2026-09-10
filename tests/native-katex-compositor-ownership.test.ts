@@ -118,7 +118,8 @@ test("successor planning is upstream while measured paint realization stays loca
   assert.doesNotMatch(directImport, /compileKpNativeKatexSuccessor/);
   assert.doesNotMatch(directImport, /partitionKpNativeKatexSuccessor/);
   assert.match(directImport, /composeKpNativeKatexSceneMaterialOwners/);
-  assert.match(directImport, /sampleKpNativeKatexSuccessorSynthesisScenePlans/);
+  assert.doesNotMatch(compositor, /sampleKpNativeKatexSuccessorSynthesisScenePlans/);
+  assert.match(compositor, /createKpNativeKatexSuccessorContribution/);
   assert.match(basePlan, /compileKpNativeKatexSuccessorSynthesisScenePlans/);
   assert.match(basePlan, /partitionKpNativeKatexSuccessorOwnedTracks/);
   assert.match(successor, /export function composeKpNativeKatexSceneMaterialOwners/);

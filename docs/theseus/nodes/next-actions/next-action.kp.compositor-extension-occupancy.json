@@ -327,6 +327,12 @@
       "status": "passed",
       "scope": "broad",
       "checkedAt": "2026-09-10T17:50:22.658Z"
+    },
+    {
+      "command": "npm run typecheck; npm run test:compositor-extensions; npm run test:canonical-equation-renderer; npm run test:composed-algebra-authoring; npm run visual:composed-algebra -- --grep \"factoring occupancy|evaluation contributor and result|one canonical chain\"; git diff --check",
+      "status": "passed",
+      "scope": "s17",
+      "checkedAt": "2026-09-10T17:57:42.926Z"
     }
   ],
   "progress": {

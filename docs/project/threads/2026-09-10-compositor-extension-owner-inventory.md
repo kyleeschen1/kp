@@ -125,3 +125,15 @@ it passes after the shared final-paint readiness repair. Pure successor tests
 also verify that occupancy is derived from transformed ink at forward and
 reverse samples. This is bounded caller preservation, not universal paint
 certification. Callback API retirement remains the next independent slice.
+
+## Retired bypass (s17)
+
+The ready-plan and lower-level renderer now declare the old supplemental
+callback as `never`; neither stores, forwards nor invokes it. Their shared
+authentication boundary also rejects JavaScript/casted legacy input before
+touching DOM, whether or not an assembly was supplied. The original two
+bypass characterization tests now assert rejection, with negative TypeScript
+expectations; a third test pressures the lower-level constructor. Existing
+ordinary-track transit metadata remains routing evidence, not authority to add
+uninspected material. Actual successor sampling is owned by its contribution,
+not directly invoked by the compositor.
