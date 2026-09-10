@@ -77,7 +77,8 @@
     {
       "id": "s07",
       "title": "Authenticate bounded compound-factor rewrites including zero",
-      "status": "planned"
+      "summary": "Authenticated oriented compound factoring with exact subtree lineage, no division, private authority and bounded syntax.",
+      "status": "complete"
     },
     {
       "id": "s08",

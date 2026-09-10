@@ -35,3 +35,14 @@ if (oriented.ok) { const orientation: KpDistributionOrientation = oriented.verif
 verifyKpOrientedDistributionRewrite({ bindings });
 // @ts-expect-error only ordered left or right distribution is supported
 verifyKpOrientedDistributionRewrite({ bindings, orientation: "commute" });
+import { verifyKpComposedFactoring, isKpVerifiedComposedFactoring, type KpVerifiedComposedFactoring } from "../../src/semantic/composed-algebra-factoring.ts";
+const factoring = verifyKpComposedFactoring({ domain: source.domain, symbols: source.symbols, orientation: "right",
+  source: endpoints[0].structured, target: endpoints[1].structured });
+const authenticated: boolean = isKpVerifiedComposedFactoring(factoring);
+// @ts-expect-error a normalized expression has no private proof authority
+const forgedCompound: KpVerifiedComposedFactoring = lastExpression;
+// @ts-expect-error the legacy proof cannot authorize the new composed contract
+const legacyCompound: KpVerifiedComposedFactoring = proof;
+// @ts-expect-error the new proof cannot silently widen an M1a caller
+const compoundLegacy: KpVerifiedCommonFactorRewrite = factoring;
+void [authenticated, forgedCompound, legacyCompound, compoundLegacy];

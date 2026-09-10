@@ -69,6 +69,13 @@
       "scope": "s06",
       "checkedAt": "2026-09-10T00:24:22.589Z",
       "notes": "Explicit ordered left/right complete-tree proof; swapped, changed, commuted and unknown-orientation negatives. Core113113/193558 combined170141/282940 within unchanged budgets."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring; npm run typecheck; npm run check:inference",
+      "status": "passed",
+      "scope": "s07",
+      "checkedAt": "2026-09-10T00:28:28.496Z",
+      "notes": "14 tests. Zero, repeated symbols, wider coefficients, forged evidence, altered order/context and bounded direct callers covered. Core113123/193558 combined170268/283187 within fixed ceilings."
     }
   ],
   "expectedLearning": [
