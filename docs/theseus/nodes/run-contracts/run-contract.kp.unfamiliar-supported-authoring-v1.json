@@ -108,7 +108,8 @@
     {
       "id": "s12",
       "title": "Freeze results and rank friction",
-      "status": "planned"
+      "summary": "Frozen five-case outcomes and eleven attempts; ranked diagnostic and context friction with timing limits.",
+      "status": "complete"
     },
     {
       "id": "s13",
