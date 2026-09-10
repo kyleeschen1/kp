@@ -360,6 +360,97 @@ test(`${name}: factoring occupancy cannot disappear with ownership partitioning`
   }
 });
 
+test(`${name}: evaluation contributor and result ink preserve native handoffs and exclusive ownership`, async ({ page }) => {
+  const { evaluation } = await mountCanary(page, 1, value);
+  const card = page.locator("#composed-canary");
+  const poses = new Map<number, unknown>();
+  async function capture(p: number) {
+    await card.locator("[data-kp-focus-deck-scrubber]").evaluate((node, progress) => {
+      (node as HTMLInputElement).value = String(progress); node.dispatchEvent(new Event("input"));
+    }, p);
+    return card.evaluate(async (root, roles) => {
+      const path = "/src/rendering/native-katex-paint-geometry.ts";
+      const { measureKpNativeKatexSubtreePaintRect } = await import(/* @vite-ignore */ path) as typeof import("../src/rendering/native-katex-paint-geometry.ts");
+      const stage = root.querySelector<HTMLElement>("[data-kp-reader-fit-surface]")!;
+      const visible = (node: HTMLElement) => {
+        let opacity = 1;
+        for (let parent: HTMLElement | null = node; parent; parent = parent.parentElement) {
+          const style = getComputedStyle(parent);
+          if (style.visibility === "hidden" || style.display === "none") return false;
+          opacity *= Number(style.opacity); if (parent === root) break;
+        }
+        return opacity > .99;
+      };
+      const collect = (side: "source" | "target") => roles[side].map(role => {
+        const native = [...stage.querySelectorAll<HTMLElement>(`[data-kp-reader-native="${side}"] [data-kp-semantic-entity-id]`)]
+          .filter(node => role.selectorIds.includes(node.dataset["kpSemanticEntityId"]!) && visible(node));
+        const material = [...stage.querySelectorAll<HTMLElement>("[data-kp-equation-material-semantic-entity-id]")]
+          .filter(node => node.dataset["kpEquationMaterialSemanticEntityId"] === role.id && visible(node));
+        const nodes = [...native, ...material.map(node => node.firstElementChild as HTMLElement)];
+        const rects = nodes.map(node => measureKpNativeKatexSubtreePaintRect(stage, node));
+        if (rects.some(rect => rect === undefined)) throw new Error("Missing realized evaluation ink.");
+        const ink = rects.filter((rect): rect is NonNullable<typeof rect> => rect !== undefined);
+        const left = Math.min(...ink.map(rect => rect.left)), top = Math.min(...ink.map(rect => rect.top));
+        return { id: role.id, native: native.length, material: material.length,
+          ownerIds: material.map(node => node.dataset["kpEquationMaterialOwnerId"]!),
+          rect: ink.length ? { left, top, width: Math.max(...ink.map(rect => rect.left + rect.width)) - left,
+            height: Math.max(...ink.map(rect => rect.top + rect.height)) - top } : null };
+      });
+      return { source: collect("source"), target: collect("target") };
+    }, evaluation);
+  }
+  for (const p of [0, .000001, .25, .48, .519999, .520001, .75, .999999, 1, .75, .25, .000001, 0]) {
+    const pose = await capture(p);
+    const sourceOwns = p < .52, materialOwns = p > 0 && p < 1;
+    for (const [side, items] of Object.entries(pose)) for (const item of items) {
+      const owns = (side === "source") === sourceOwns;
+      expect(item.native > 0).toBe(owns && !materialOwns);
+      expect(item.material > 0).toBe(owns && materialOwns);
+      expect(new Set(item.ownerIds).size).toBe(item.ownerIds.length);
+    }
+    if (poses.has(p)) expect(pose).toEqual(poses.get(p)); else poses.set(p, pose);
+  }
+  for (const [nativeProgress, materialProgress, side] of [[0, .000001, "source"], [1, .999999, "target"]] as const) {
+    const native = (await capture(nativeProgress))[side], material = (await capture(materialProgress))[side];
+    for (const [i, item] of native.entries()) {
+      expect(item.rect).not.toBeNull(); expect(material[i]!.rect).not.toBeNull();
+      for (const key of ["left", "top", "width", "height"] as const)
+        expect(Math.abs(item.rect![key] - material[i]!.rect![key]), `${side} ${item.id} ${key}`).toBeLessThan(.1);
+    }
+  }
+  const original = (await capture(.000001)).source, kernel = (await capture(.48)).source;
+  original.forEach((item, i) => {
+    expect(kernel[i]!.rect!.width).toBeLessThan(item.rect!.width);
+    expect(kernel[i]!.rect!.height).toBeLessThan(item.rect!.height);
+  });
+  // DOM opacity and Range bounds alone cannot prove that the clipped kernel
+  // actually paints. Sample the browser raster on both sides of ownership.
+  for (const p of [.519999, .520001]) {
+    await card.locator("[data-kp-reader-fit-surface]").scrollIntoViewIfNeeded();
+    await capture(p);
+    const clip = await card.evaluate(root => {
+      const owners = [...root.querySelectorAll<HTMLElement>('[data-kp-equation-material-fragment-role^="successor-"]')]
+        .filter(node => getComputedStyle(node).opacity === "1");
+      const bounds = owners.map(node => node.firstElementChild!.getBoundingClientRect());
+      const x = Math.floor(Math.min(...bounds.map(rect => rect.left))), y = Math.floor(Math.min(...bounds.map(rect => rect.top)));
+      return { x, y, width: Math.ceil(Math.max(...bounds.map(rect => rect.right))) - x,
+        height: Math.ceil(Math.max(...bounds.map(rect => rect.bottom))) - y };
+    });
+    const raster = await page.screenshot({ clip, scale: "css" });
+    const inkPixels = await page.evaluate(async base64 => {
+      const image = new Image(); image.src = `data:image/png;base64,${base64}`; await image.decode();
+      const canvas = document.createElement("canvas"); canvas.width = image.width; canvas.height = image.height;
+      const context = canvas.getContext("2d")!; context.drawImage(image, 0, 0);
+      const pixels = context.getImageData(0, 0, image.width, image.height).data;
+      let ink = 0;
+      for (let i = 0; i < pixels.length; i += 4)
+        if (pixels[i + 3]! > 0 && pixels[i]! + pixels[i + 1]! + pixels[i + 2]! < 500) ink++;
+      return ink;
+    }, raster.toString("base64"));
+    expect(inkPixels, `real painted kernel at ${p}`).toBeGreaterThan(0);
+  }
+});
+
 test(`${name}: contextual sum uses certified ink-glyph evaluation while compound context persists`, async ({ page }, info) => {
   await mountCanary(page, 1, value);
   const card = page.locator("#composed-canary"), stage = card.locator("[data-kp-reader-fit-surface]");

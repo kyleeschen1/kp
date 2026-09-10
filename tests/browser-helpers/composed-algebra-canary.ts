@@ -26,7 +26,9 @@ export async function mountComposedAlgebraCanary(value: unknown, step: 0 | 1 | "
     card.dataset["composedStep"] = String(surface.checkpoints.positionAt(surface.clock.getSnapshot().progress)); });
   surface.render(false);
   window.addEventListener("pagehide", () => surface.dispose(), { once: true });
-  return binding.steps[0].plan.factoringMotifBinding;
+  const evaluation = binding.steps[1].plan.successorSyntheses[0]!;
+  return { ...binding.steps[0].plan.factoringMotifBinding,
+    evaluation: { source: evaluation.sourceAnnotations, target: evaluation.targetAnnotations } };
 }
 
 /** A real native factor must be an obstacle even when absent from ordinary tracks. */

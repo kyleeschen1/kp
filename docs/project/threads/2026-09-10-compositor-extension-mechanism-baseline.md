@@ -67,3 +67,29 @@ The second-mechanism migration must preserve the existing contributor-fusion
 optical transforms, which currently run after base rendering. Replacing that
 wrapper with unmodified successor poses would not preserve the accepted motif.
 Its contributing/result ink still needs explicit realized-paint proof in s15.
+
+## Executed contributor/result paint proof (s15)
+
+The new `evaluation contributor and result ink preserve native handoffs and
+exclusive ownership` cases in `tests/composed-algebra.browser.spec.ts` traverse
+the actual canonical mounted primary and product sources. They obtain roles
+from the registered successor binding, not glyph spellings or a family label.
+
+- At native source and target stops, only native paint owns each role; inside
+  the transition, only the correct material side owns it. Duplicate material
+  owner IDs fail the test.
+- Source-native / first-material and last-material / target-native measured ink
+  bounds agree within 0.1 px in all four rectangle dimensions for every role.
+- Source material visibly contracts; repeated forward and reverse positions
+  yield identical measured ink and ownership.
+- Browser screenshot pixels immediately before and after the 0.52 optical
+  handoff contain painted ink. This checks the actual clipped kernel, rather
+  than treating nonzero CSS opacity as proof of nonblank paint.
+
+Run with `npm run visual:composed-algebra -- --grep 'evaluation contributor and result'`.
+The raster test is a bounded light-theme Chromium nonblank check, not a pixel
+golden, aesthetic certification, identical source/result glyph claim, or proof
+over unsampled time. Other browsers, lifecycle pressure and remaining successor
+topologies retain their later gates. The source and result intentionally differ;
+the shared ink-knot handoff preserves occupied visual attention, not identical
+glyph contours across an arithmetic replacement.
