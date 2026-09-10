@@ -161,7 +161,8 @@
     {
       "id": "s20",
       "title": "Bound unsampled trajectory assurance without optimization",
-      "status": "planned"
+      "summary": "Assembly explicitly labels finite-samples-not-continuous-proof. Executable narrow continuous contact can evade the audit grid, while malformed unsampled frames fail. Twenty-five focused, thirty-three architecture, full types and costs pass; aggregate 562416. No optimizer or motion change.",
+      "status": "complete"
     },
     {
       "id": "s21",

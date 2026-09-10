@@ -24,6 +24,7 @@ export interface KpNativeKatexSceneAssembly {
   readonly sample: ReturnType<typeof assembleKpNativeKatexScene>["sample"];
   readonly audit: KpProtectedTransitAudit;
   readonly contactPolicy: "diagnostic-only";
+  readonly assurance: "finite-samples-not-continuous-proof";
   readonly sampleCount: number;
 }
 
@@ -91,7 +92,8 @@ function assembleKpNativeKatexScene(input: {
     sampleFrames: (_, progress) => sample(progress).occupancy
   });
   return { tracks, contributions, copyFanOut, sample, audit: snapshot(audit), sampleCount,
-    contactPolicy: "diagnostic-only" as const };
+    contactPolicy: "diagnostic-only" as const,
+    assurance: "finite-samples-not-continuous-proof" as const };
 }
 
 export function assertKpNativeKatexSceneAssembly(input: {

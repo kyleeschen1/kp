@@ -345,6 +345,12 @@
       "status": "passed",
       "scope": "s19",
       "checkedAt": "2026-09-10T18:04:08.501Z"
+    },
+    {
+      "command": "npm run test:compositor-extensions; npm run test:canonical-equation-renderer; npm run typecheck; npm run check:compositor-extension-cost; git diff --check",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-10T18:07:30.395Z"
     }
   ],
   "progress": {

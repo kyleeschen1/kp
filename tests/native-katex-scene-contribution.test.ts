@@ -17,6 +17,28 @@ const source = { kind: "native-katex-rendered-scene-observation" as const,
 const target = { ...source, endpoint: "target" as const, root: {} as HTMLElement };
 const context = { source, target, participantIds: ["paint"] };
 
+test("finite contact inspection cannot claim safety between its sample positions", () => {
+  const stationary = createKpNativeKatexSceneContribution({ ...context, id: "stationary", sample: () => [owner] });
+  const transient = createKpNativeKatexSceneContribution({ ...context, id: "transient", participantIds: ["transient"],
+    sample: p => [{ ...owner, ownerId: "transient", expectedPaintRect: { ...ink,
+      left: ink.left + 100 * Math.min(1, Math.abs(p - .005) / .001) } }] });
+  const assembly = createKpNativeKatexSceneAssembly({ source, target, tracks: [], contributions: [stationary, transient] });
+  assert.equal(assembly.assurance, "finite-samples-not-continuous-proof");
+  assert.equal(assembly.sampleCount, 100);
+  assert.equal(assembly.audit.intersections.length, 0);
+  const actual = assembly.sample(.005).occupancy;
+  assert.deepEqual(actual[0]!.rect, actual[1]!.rect,
+    "A narrow continuous contact between inspected positions is possible.");
+});
+
+test("hard frame invariants still reject malformed paint at previously unsampled progress", () => {
+  const contribution = createKpNativeKatexSceneContribution({ ...context, id: "late-invalid",
+    sample: p => [{ ...owner, expectedPaintRect: { ...ink, width: p === .005 ? NaN : ink.width } }] });
+  const assembly = createKpNativeKatexSceneAssembly({ source, target, tracks: [], contributions: [contribution] });
+  assert.throws(() => assembly.sample(.005), /Invalid measured material paint/);
+  assert.doesNotThrow(() => assembly.sample(.01));
+});
+
 test("optical realization is inside the contribution sample and cannot carry independent occupancy", () => {
   const progress: number[] = [];
   const realization = createKpNativeKatexMaterialRealization((owners, p) => {
