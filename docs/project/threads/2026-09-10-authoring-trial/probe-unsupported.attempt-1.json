@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "kp.composed-algebra-source.v1",
+  "id": "lesson.repeated-groups.probe-unsupported",
+  "domain": "real-scalars",
+  "symbols": [
+    "x"
+  ],
+  "states": [
+    {
+      "id": "state.probe-unsupported.expanded",
+      "latex": "(-1)(x+2)+3(x+2)",
+      "narration": "The first coefficient is negative one and the second is three. Both multiply the unchanged group x+2."
+    },
+    {
+      "id": "state.probe-unsupported.collected",
+      "latex": "(-1+3)(x+2)",
+      "narration": "Distributivity collects the two coefficients as negative one plus three, leaving the shared group intact."
+    },
+    {
+      "id": "state.probe-unsupported.evaluated",
+      "latex": "2(x+2)",
+      "narration": "Negative one plus three equals two. Only the coefficient sum is evaluated."
+    }
+  ],
+  "editorial": {
+    "title": "A valid collection beyond nonnegative coefficients",
+    "setup": "Consider a negative coefficient multiplying the same group as a positive coefficient. This probes mathematics beyond the documented source task's supported coefficient range.",
+    "summary": "Real-number distributivity gives a total coefficient of two, while x+2 remains unchanged. The supported authoring task may reject this valid negative-coefficient chain."
+  }
+}

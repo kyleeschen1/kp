@@ -83,6 +83,12 @@
       "status": "passed",
       "scope": "s10",
       "checkedAt": "2026-09-10T19:12:35.131Z"
+    },
+    {
+      "command": "npm run check:unfamiliar-authoring-trial -- --complete; exact unsupported probe exit 2; git diff --check",
+      "status": "passed",
+      "scope": "s11",
+      "checkedAt": "2026-09-10T19:14:19.468Z"
     }
   ],
   "expectedLearning": [

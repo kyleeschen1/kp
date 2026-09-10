@@ -102,7 +102,8 @@
     {
       "id": "s11",
       "title": "Capture valid unsupported input",
-      "status": "planned"
+      "summary": "Valid negative-coefficient chain rejected as unsupported syntax; all eleven preserved attempts replay.",
+      "status": "complete"
     },
     {
       "id": "s12",
