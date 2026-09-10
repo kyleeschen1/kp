@@ -1,0 +1,170 @@
+{
+  "id": "run-contract.kp.reusable-algebra-intuition-v1",
+  "kind": "run-contract",
+  "title": "Reusable algebra intuition",
+  "status": "ready",
+  "summary": "Approved and ready; use executable run-contract lifecycle, not workflow active status. Explicit user start and s12 human checkpoint apply.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.reusable-algebra-intuition.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-10-reusable-algebra-intuition-approved-loop.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-10-question-oriented-focus-cards.md"
+    }
+  ],
+  "verification": [
+    "npm run test:composed-algebra-authoring",
+    "npm run typecheck",
+    "npm run visual:composed-algebra",
+    "npm run visual:composed-algebra:cohort",
+    "npm test",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Exact approved 24 slices and accepted question-oriented refinements. F focused; S focused plus full typecheck and Theseus validation; B named canonical browser/integration/release checks. Brief per-slice context and bounded source retrieval. Existing shell and motifs; source-only second caller after s12 acceptance. Standing diagnosed budget repairs."
+  ],
+  "disallowedWork": [
+    "No new motion mechanism, arbitrary deduction, universal question/semantic schema, new renderer/clock, catalogue migration, external API, model calls, new agents, deployment, merge or automatic successor."
+  ],
+  "goal": "Author one checked question-oriented mixed-operation algebra explanation, recover its two useful sub-explanations and demonstrate source-only reuse through the canonical pipeline.",
+  "target": "next-action.kp.reusable-algebra-intuition",
+  "runMode": "run",
+  "maxSlices": 24,
+  "commitCadence": "One scoped commit per verified slice, including closed receipt and completed-slice evidence; plan checkpoint before implementation.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Human checkpoint at s12: primary whole explanation plus two independently recoverable intuitions on shared localhost:8000. Judge question, answer, grouping, canonical motion, legibility and control. No s13 generalization before acceptance.",
+    "Preserve source-v1 and canonical factoring/distribution/ink-glyph evaluation, verified proof and endpoint ownership, one sequence clock, keyboard/continuous controls and exact return. Rollback unit is the opt-in extended source and exemplar. Stop for new motion/semantic scope, unsafe authority, unrecoverable evidence loss or user pause; bounded budget repairs continue with evidence.",
+    "Finish after s24 release and closeout. Subsequent geometry and cross-domain work need separate approved scopes."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Pin question-oriented lesson and preservation baseline",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Map canonical semantic and compositor owners",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Add bounded versioned source contract",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Bind factoring and coefficient evaluation",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Bind canonical distribution",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Bind constant-product ink evaluation",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Authenticate connected operation chains",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Derive canonical presentation through extensions",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Derive beats controls and playback from one sequence",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Mount primary and coherent source Apply",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Recover two context-complete sub-explanations",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Present canonical visual pedagogical checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Pressure shorter structurally different source-only caller",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Repair demonstrated shared-owner reuse gaps",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Improve typed author repair diagnostics",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Reproduce source editing export and reload",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Adapt Full and Compact readings",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Adapt reasoning prediction and reconstruction",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Extend reproducible static publication",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Document supported human and LLM authoring",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Certify approved choreography handoffs",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Run supported-browser interaction cohort",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Run integration and release gates",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Close out capabilities limits and geometric successor",
+      "status": "planned"
+    }
+  ]
+}

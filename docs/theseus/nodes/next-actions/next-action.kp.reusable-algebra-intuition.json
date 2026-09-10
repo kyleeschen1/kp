@@ -1,0 +1,57 @@
+{
+  "id": "next-action.kp.reusable-algebra-intuition",
+  "kind": "next-action",
+  "title": "Author a reusable question-oriented algebra explanation",
+  "status": "ready",
+  "domain": "authoring",
+  "summary": "Ready to execute the approved 24 slices; question-oriented primary and s12 human review.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-10-reusable-algebra-intuition-approved-loop.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-10-question-oriented-focus-cards.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.unfamiliar-supported-authoring"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:composed-algebra-authoring",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Demonstrate a meaningful authored chain with source-only adaptation and context-preserving recovery, without claiming comprehension efficacy."
+  ],
+  "allowedWork": [
+    "Exact approved 24 slices: bounded source extension, verified operation binding, canonical composition, question-oriented primary and two extracted intuitions; source-only second caller after s12; existing projections and release gates."
+  ],
+  "disallowedWork": [
+    "No new motion mechanism, universal schema, arbitrary algebra, new renderer or clock, catalogue rollout, external model call, deployment, merge, new server or automatic successor."
+  ],
+  "criteria": [
+    {
+      "id": "question-answer-evidence",
+      "weight": "high"
+    },
+    {
+      "id": "semantic-authority",
+      "weight": "high"
+    },
+    {
+      "id": "canonical-preservation",
+      "weight": "high"
+    },
+    {
+      "id": "coherent-reuse",
+      "weight": "high"
+    }
+  ]
+}

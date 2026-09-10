@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: unfamiliar supported-authoring trial complete; next bounded authoring task awaits scope approval; compositor participation, M1b, R1–R4B and M1a remain complete
+Status: reusable algebra intuition 24-slice execution approved; Theseus owns progress; prior trial, compositor participation, M1b, R1–R4B and M1a remain complete
 Last Updated: 2026-09-10
 Standing budget policy: recommended engineering-budget repairs, including
 explicit bounded policy amendments, are automatically approved across sessions.
@@ -79,18 +79,31 @@ passed Apply, projections and publication with zero engine edits. The user
 accepted it with “it works!” on 2026-09-10. Promotion, release and closeout passed;
 see `../reviews/2026-09-10-unfamiliar-supported-authoring-closeout.md` for the
 five-case evidence, 111 browser checks, 6,972 full-suite tests and limits.
-No approved slices remain. Current activity: brainstorm the accepted capability-led
-repertoire and queryable/composable micro-intuition direction; see
+No slices remain in the completed trial. The user explicitly requested recording
+question-oriented Focus Cards and starting the approved 24-slice algebra loop;
+the prior pause is lifted. See
+`../decisions/2026-09-10-question-oriented-focus-cards.md` and the sole reviewed
+scope `2026-09-10-reusable-algebra-intuition-approved-loop.md`.
+Execution contract: `run-contract.kp.reusable-algebra-intuition-v1`.
+Scope approval need not be requested again. The user accepted
+explanation-led acceptance refinements and a small cross-domain reuse trial after
+geometry, before sustained calculus expansion; see
+`../decisions/2026-09-10-explanation-led-loop-refinements.md`. The approved plan
+contains the refinements; later exact scopes still need proposals. Current activity:
+execute the bounded algebra exemplar using a question/answer/evidence brief,
+preserving the existing shell and stopping for s12 visual review.
+Accepted broader direction:
 `../decisions/2026-09-10-visual-repertoire-and-queryable-intuitions.md`.
-Richer algebra, a contour-adjacent geometric flagship, then derivative and
-accumulation are the accepted high-level path, not an approved run. Author-start
+Richer algebra, a contour-adjacent geometric flagship, a small cross-domain reuse
+trial, then derivative and accumulation are the accepted high-level path; only the bounded algebra scope above
+has execution approval. Author-start
 cleanup belongs inside delivery, not a separate prerequisite. Larger FTC/SVD
 intuition units should compose smaller directly retrievable explanations.
 Longer animated essays remain in scope as product vision; micro-intuitions
 should be vivid, sticky, shareable and adaptable across contexts. Record and
 test the differentiation hypothesis honestly, not as a competitor capability
 absence claim. See the decision's sourced competitive caveats.
-No new framework, implementation loop or tabled asset is activated.
+No new framework or tabled asset is activated; only the named algebra run is current.
 Source-only trial, not engine expansion. The compositor migration
 is complete under `run-contract.kp.compositor-extension-occupancy-v2`; see
 `../reviews/2026-09-10-compositor-extension-occupancy-closeout.md` for achieved

@@ -128,15 +128,27 @@ measurement limits. No approved execution remains. The user accepted capability-
 repertoire expansion and queryable, composable micro-intuitions:
 `decisions/2026-09-10-visual-repertoire-and-queryable-intuitions.md`.
 Direction: richer mixed-operation algebra, then a contour-adjacent geometric
-flagship, derivative/local linearization and accumulation, with connected
-subject expansion afterward. Author-start cleanup accompanies delivery, not
+flagship, a small cross-domain reuse trial using existing capabilities, then
+derivative/local linearization and accumulation, with connected subject expansion
+afterward. The user accepted explanation-led algebra acceptance refinements and
+this successor ordering in
+`decisions/2026-09-10-explanation-led-loop-refinements.md`; later exact scopes still
+need proposals. Author-start cleanup accompanies delivery, not
 another prerequisite loop. Intuitions, including larger FTC/SVD explanations,
 must support direct retrieval and composition rather than compulsory long-form
 viewing. Longer animated essays coexist with vivid, shareable, adaptable
 "memetic" intuition units. Competitive differentiation is a hypothesis to test,
 not an established advantage; the user explicitly requests honest pushback.
-Current activity is continued brainstorming; no new execution is
-approved. Do not restart this trial or the completed
+The user explicitly requested recording question-oriented Focus Cards and starting
+the approved 24-slice reusable algebra intuition loop. The earlier pause is lifted.
+Sole reviewed proposal: `threads/2026-09-10-reusable-algebra-intuition-approved-loop.md`.
+Execution authority: `run-contract.kp.reusable-algebra-intuition-v1`; Theseus owns
+live progress. Accepted editorial direction and first-exemplar boundary:
+`decisions/2026-09-10-question-oriented-focus-cards.md`. Keep the existing shell,
+canonical motifs and semantic owners; stop at the s12 visual checkpoint. No new
+universal question schema or catalogue rollout is approved. Competitive distinctions
+remain hypotheses, not proven advantages.
+Do not restart this trial or the completed
 compositor migration, or manufacture another generic infrastructure loop.
 Recommended engineering-budget repairs now have persistent automatic approval:
 `decisions/2026-09-10-engineering-budget-repair-autonomy.md`. Keep complete
