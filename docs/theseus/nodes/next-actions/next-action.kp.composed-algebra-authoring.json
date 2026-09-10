@@ -235,11 +235,18 @@
       "scope": "s22",
       "checkedAt": "2026-09-10T04:36:34.205Z",
       "notes": "47 composed and49 entrypoint tests pass; both retained CLI checks succeed; complete types, architecture and packet parity pass. Fixed inference core113696/194449 combined172058/286156."
+    },
+    {
+      "command": "npm run check:composed-algebra-workflow; npm run test:composed-algebra-authoring; npm run visual:composed-algebra -- --grep \"both retained sources\"; npm run typecheck; npm run author:composed-algebra-publication -- --source src/authoring/examples/composed-algebra-primary.json --check; npm run author:composed-algebra-publication -- --source src/authoring/examples/composed-algebra-product.json --check",
+      "status": "passed",
+      "scope": "s23",
+      "checkedAt": "2026-09-10T04:44:52.218Z",
+      "notes": "48 focused tests, both-source native Apply/practice/download, full types and both immutable editions pass. Scripted repair counts are fixture evidence only; human time and comprehension not measured."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Primary visual checkpoint explicitly accepted at 1b3a862d0; post-acceptance regressions pass. Continue existing contract with source-only second caller, bounded pressure and release."
+    "summary": "Both retained chains complete identical owner and native authoring workflows. Proceed to supported-browser lifecycle promotion and full release gates."
   },
   "expectedLearning": [
     "Measure compound factoring plus contextual evaluation reuse without renderer glue."

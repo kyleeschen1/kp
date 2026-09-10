@@ -83,6 +83,10 @@ runtime preparation—not by trusting an LLM's labels.
 
 ## Executable evidence
 
+`npm run check:composed-algebra-workflow` reports both retained source sizes,
+scripted invalid/repair attempts, revision changes, canonical owners and static
+publication reproduction. It does not measure human time or comprehension.
+
 `npm run test:composed-algebra-authoring` covers source, proof, presentation,
 projection, repair and publication coherence. `npm run visual:composed-algebra`
 traverses the real native compositor for both callers, checking group ownership,

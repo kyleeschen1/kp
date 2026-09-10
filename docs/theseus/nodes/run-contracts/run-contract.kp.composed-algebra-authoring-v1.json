@@ -173,7 +173,8 @@
     {
       "id": "s23",
       "title": "Replay both authoring workflows and measure marginal effort",
-      "status": "planned"
+      "summary": "Retained primary and product workflows pass; source-only marginal cost and scripted repair evidence explicitly bounded.",
+      "status": "complete"
     },
     {
       "id": "s24",

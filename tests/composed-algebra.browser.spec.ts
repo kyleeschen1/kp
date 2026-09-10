@@ -167,6 +167,40 @@ test("composed authoring applies one coherent prepared revision and preserves it
   expect(JSON.parse(json)).toEqual(edited);
 });
 
+test("both retained sources round-trip native Apply practice and displayed-source download", async ({ page }) => {
+  test.setTimeout(120_000);
+  await page.goto("/experiments/reusable-reasoning/?example=composed-algebra");
+  const root = page.locator("#authored-focus-card");
+  await expect(root).toHaveAttribute("data-composed-status", "ready", { timeout: 90_000 });
+  await root.locator("[data-reasoning-editor] summary").click();
+  const editor = root.locator("[data-reasoning-json]"), status = root.locator("[data-reasoning-draft-status]");
+  for (const value of [product, source]) {
+    const previous = await root.getAttribute("data-composed-revision");
+    await editor.fill(JSON.stringify(value)); await root.locator("[data-composed-apply]").click();
+    await expect(status).toHaveAttribute("data-status", "applied", { timeout: 90_000 });
+    const revision = await root.getAttribute("data-composed-revision"); expect(revision).not.toBe(previous);
+    await expect(root.locator("[data-composed-title]")).toHaveText(value.editorial.title);
+    const card = root.locator("[data-composed-reader] [data-composed-card]");
+    await card.locator("[data-kp-focus-deck-scrubber]").evaluate(node => {
+      (node as HTMLInputElement).value = "1.37"; node.dispatchEvent(new Event("input"));
+    });
+    await root.locator('[data-composed-practice="reconstruction"]').click();
+    await root.locator("[data-composed-reveal]").click();
+    await expect(root.locator("[data-composed-answer]")).toContainText(value.states[2]!.latex);
+    await root.locator("[data-composed-return]").click();
+    await expect(card).toHaveAttribute("data-composed-step", "1.37");
+    await editor.fill("{}"); await root.locator("[data-composed-apply]").click();
+    await expect(status).toHaveAttribute("data-status", "repair-gap");
+    await expect(root).toHaveAttribute("data-composed-revision", revision!);
+    const downloaded = page.waitForEvent("download"); await root.locator("[data-composed-download]").click();
+    const stream = await (await downloaded).createReadStream();
+    let bytes = ""; for await (const chunk of stream!) bytes += chunk.toString();
+    expect(JSON.parse(bytes)).toEqual(value);
+    await expect(root.locator("[data-composed-reading-output]")).toHaveAttribute("data-revision", revision!);
+    await expect(page.locator(".common-factor-staging")).toHaveCount(0);
+  }
+});
+
 async function mountCanary(page: import("@playwright/test").Page, step: 0 | 1 | "chain", value = source) {
   await page.goto("/experiments/reusable-reasoning/?example=common-factor");
   await expect(page.locator("#authored-focus-card")).toHaveAttribute("data-common-factor-status", /^(ready|repair-gap)$/, { timeout: 90_000 });
