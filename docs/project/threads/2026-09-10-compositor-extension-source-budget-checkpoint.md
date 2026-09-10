@@ -134,3 +134,14 @@ not justified to avoid two guard calls. This is explicit bounded headroom, not
 a claim that 5,000 bytes are necessary. Aggregate remains 530,000, planner
 315,000, support 80,000, and every module/dependency/runtime gate is unchanged.
 Final accounting must report actual growth, including the assembly module.
+
+## Whole-scene measurement allowance (s11)
+
+The shared measurement capture now protects an assembly even when it has no
+extensions; contribution-only validation left that case unbound. Reusing the
+same capture removed duplicated measurement logic. Actual aggregate is 530,266
+bytes (781 above s10), exceeding 530,000 by 266. Under the same standing authority,
+raise aggregate to 535,000; all other gates stay unchanged. This is bounded
+headroom for the approved authentication/invalidation work, not a new feature
+allowance. Neither an unrelated refactor nor hiding this small shared guard
+outside the counted closure is warranted. Publish final actual costs.

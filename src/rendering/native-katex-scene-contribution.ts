@@ -19,13 +19,7 @@ export interface KpNativeKatexSceneContribution {
 }
 
 const liveContributions = new WeakSet<KpNativeKatexSceneContribution>();
-const contributionMeasurements = new WeakMap<KpNativeKatexSceneContribution, {
-  readonly stage: HTMLElement;
-  readonly sourceRoot: HTMLElement;
-  readonly targetRoot: HTMLElement;
-  readonly paintNodes: readonly HTMLElement[];
-  readonly signature: string;
-}>();
+const contributionMeasurements = new WeakMap<KpNativeKatexSceneContribution, ReturnType<typeof captureKpNativeKatexMeasurement>>();
 
 function measurementSignature(source: KpNativeKatexRenderedSceneObservation,
   target: KpNativeKatexRenderedSceneObservation): string {
@@ -47,19 +41,33 @@ function measurementNodes(source: KpNativeKatexRenderedSceneObservation,
     ...scene.groups.flatMap(group => group.sourceElement ? [group.sourceElement] : [])]);
 }
 
+/** Capture measured authority once; cache reuse compares supplied observations,
+ * never forces layout reads on the animation clock. Hosts own remeasurement. */
+export function captureKpNativeKatexMeasurement(
+  source: KpNativeKatexRenderedSceneObservation,
+  target: KpNativeKatexRenderedSceneObservation
+) {
+  const stage = source.stage, sourceRoot = source.root, targetRoot = target.root;
+  const paintNodes = measurementNodes(source, target);
+  const signature = measurementSignature(source, target);
+  return (currentSource: KpNativeKatexRenderedSceneObservation, currentTarget: KpNativeKatexRenderedSceneObservation): void => {
+    const nodes = measurementNodes(currentSource, currentTarget);
+    if (currentSource.stage !== stage || currentTarget.stage !== stage ||
+        currentSource.root !== sourceRoot || currentTarget.root !== targetRoot ||
+        nodes.length !== paintNodes.length || nodes.some((node, i) => node !== paintNodes[i]) ||
+        measurementSignature(currentSource, currentTarget) !== signature)
+      throw new Error("Scene requires its current measured endpoints and coordinate frame.");
+  };
+}
+
 export function assertKpNativeKatexContributionMeasurement(
   contribution: KpNativeKatexSceneContribution,
   source: KpNativeKatexRenderedSceneObservation,
   target: KpNativeKatexRenderedSceneObservation
 ): void {
-  const measured = contributionMeasurements.get(contribution);
-  const nodes = measurementNodes(source, target);
-  if (!measured || source.stage !== measured.stage || target.stage !== measured.stage ||
-      source.root !== measured.sourceRoot || target.root !== measured.targetRoot ||
-      nodes.length !== measured.paintNodes.length || nodes.some((node, i) => node !== measured.paintNodes[i]) ||
-      measurementSignature(source, target) !== measured.signature) {
-    throw new Error("Material contribution requires its current measured endpoints and coordinate frame.");
-  }
+  const assertCurrent = contributionMeasurements.get(contribution);
+  if (!assertCurrent) throw new Error("Contribution lacks current measured authority.");
+  assertCurrent(source, target);
 }
 
 /** Narrow legacy frame producers at the measured-paint boundary, without a cast. */
@@ -108,11 +116,7 @@ export function createKpNativeKatexSceneContribution(input: {
     }
   });
   liveContributions.add(contribution);
-  contributionMeasurements.set(contribution, {
-    stage: input.source.stage, sourceRoot: input.source.root, targetRoot: input.target.root,
-    paintNodes: Object.freeze(measurementNodes(input.source, input.target)),
-    signature: measurementSignature(input.source, input.target)
-  });
+  contributionMeasurements.set(contribution, captureKpNativeKatexMeasurement(input.source, input.target));
   return contribution;
 }
 

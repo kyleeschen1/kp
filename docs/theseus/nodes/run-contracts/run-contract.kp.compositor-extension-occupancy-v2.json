@@ -107,7 +107,8 @@
     {
       "id": "s11",
       "title": "Invalidate geometry font and coordinate evidence at cache reuse",
-      "status": "planned"
+      "summary": "Whole-scene measured identity survives no mutation: stale cache evidence fails, fresh assembly passes. No layout reads added to animation frames. Seventeen focused, thirty-two architecture, full typecheck, costs and eight browser checks passed; aggregate allowance 535000 explicitly recorded, actual 530266.",
+      "status": "complete"
     },
     {
       "id": "s12",

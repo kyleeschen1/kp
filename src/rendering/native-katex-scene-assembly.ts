@@ -2,10 +2,11 @@ import { inspectKpEquationProtectedTransitTracks, type KpProtectedTransitAudit }
 import { sampleKpNativeKatexSceneTrackFrames } from "./native-katex-scene-track-sampling.ts";
 import type { KpNativeKatexPaintMeasuredSceneTrack } from "./native-katex-base-scene-plan.ts";
 import type { KpNativeKatexRenderedSceneObservation } from "./native-katex-rendered-scene.ts";
-import { assertKpNativeKatexContributionMeasurement, type KpNativeKatexSceneContribution } from "./native-katex-scene-contribution.ts";
+import { assertKpNativeKatexContributionMeasurement, captureKpNativeKatexMeasurement, type KpNativeKatexSceneContribution } from "./native-katex-scene-contribution.ts";
 
 const assemblyAuthority: unique symbol = Symbol("native-katex-scene-assembly");
 const liveAssemblies = new WeakSet<KpNativeKatexSceneAssembly>();
+const assemblyMeasurements = new WeakMap<KpNativeKatexSceneAssembly, ReturnType<typeof captureKpNativeKatexMeasurement>>();
 
 /** Snapshot pure track/audit records; function identities remain unchanged. */
 function snapshot<T>(value: T): T {
@@ -103,6 +104,7 @@ export function assertKpNativeKatexSceneAssembly(input: {
     throw new Error("Rendering requires the exact issued scene assembly and sampler.");
   assembly.contributions.forEach(contribution => assertKpNativeKatexContributionMeasurement(
     contribution, input.reconciliation.source, input.reconciliation.target));
+  assemblyMeasurements.get(assembly)!(input.reconciliation.source, input.reconciliation.target);
 }
 
 export function createKpNativeKatexSceneAssembly(
@@ -110,6 +112,7 @@ export function createKpNativeKatexSceneAssembly(
 ): KpNativeKatexSceneAssembly {
   const assembly = Object.freeze({ [assemblyAuthority]: true as const, ...assembleKpNativeKatexScene(input) });
   liveAssemblies.add(assembly);
+  assemblyMeasurements.set(assembly, captureKpNativeKatexMeasurement(input.source, input.target));
   return assembly;
 }
 

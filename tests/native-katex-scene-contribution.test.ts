@@ -54,6 +54,26 @@ test("final assembly rejects colliding participant identities across contributio
   assert.throws(() => createKpNativeKatexSceneAssembly({ source, target, tracks: [], contributions }), /participants must be unique/);
 });
 
+test("cached assemblies invalidate native measurement changes even without extensions", () => {
+  const group = { id: "group", semanticEntityId: "g", atomIds: [], rect: { ...ink }, sourceElement: {} as HTMLElement };
+  const measured = { ...source, groups: [group] };
+  const assembly = createKpNativeKatexSceneAssembly({ source: measured, target, tracks: [], contributions: [] });
+  const check = (current = measured) => assertKpNativeKatexSceneAssembly({ sceneAssembly: assembly,
+    tracks: assembly.tracks, reconciliation: { source: current, target } });
+  check();
+  for (const changed of [{ ...measured, fontRevision: 2 }, { ...measured, viewportKey: "phone" },
+    { ...measured, stage: {} as HTMLElement }, { ...measured, root: {} as HTMLElement },
+    { ...measured, groups: [{ ...group, sourceElement: {} as HTMLElement }] },
+    { ...measured, groups: [{ ...group, rect: { ...ink, left: ink.left + .001 } }] }])
+    assert.throws(() => check(changed), /current measured/);
+  // Mutating a retained observation cannot retroactively update its receipt.
+  group.rect.width += 1;
+  assert.throws(() => check(), /current measured/);
+  const fresh = createKpNativeKatexSceneAssembly({ source: measured, target, tracks: [], contributions: [] });
+  assert.doesNotThrow(() => assertKpNativeKatexSceneAssembly({ sceneAssembly: fresh,
+    tracks: fresh.tracks, reconciliation: { source: measured, target } }));
+});
+
 test("issued contribution derives occupancy from the exact sampled paint once", () => {
   let calls = 0;
   const contribution = createKpNativeKatexSceneContribution({ ...context, id: "one",

@@ -267,6 +267,18 @@
       "status": "passed",
       "scope": "s10",
       "checkedAt": "2026-09-10T16:54:31.239Z"
+    },
+    {
+      "command": "npm run test:compositor-extensions; npm run test:canonical-equation-renderer; npm run typecheck; npm run check:compositor-extension-cost",
+      "status": "passed",
+      "scope": "s11",
+      "checkedAt": "2026-09-10T16:59:30.859Z"
+    },
+    {
+      "command": "npm run visual:composed-algebra -- --grep 'compound factoring uses|factoring occupancy|contextual sum uses|one canonical chain'",
+      "status": "passed",
+      "scope": "s11",
+      "checkedAt": "2026-09-10T16:59:31.938Z"
     }
   ],
   "progress": {
