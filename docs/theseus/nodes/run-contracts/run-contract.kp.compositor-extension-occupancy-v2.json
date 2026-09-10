@@ -65,7 +65,8 @@
     {
       "id": "s04",
       "title": "Pin factoring and a different existing mechanism",
-      "status": "planned"
+      "summary": "Real canonical baseline pinned for whole-group factoring and distinct ink-glyph evaluation; six Chromium passes with primary and product pressure.",
+      "status": "complete"
     },
     {
       "id": "s05",

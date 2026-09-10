@@ -41,6 +41,10 @@
     {
       "kind": "file",
       "path": "docs/project/decisions/2026-09-10-engineering-budget-repair-autonomy.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-10-compositor-extension-mechanism-baseline.md"
     }
   ],
   "dependsOn": {
@@ -120,6 +124,13 @@
       "scope": "s03",
       "checkedAt": "2026-09-10T16:09:54.287Z",
       "notes": "31 pass. Two characterization tests execute admitted duplicate/unmeasured owners and reusing an unrelated audit with a different sampler; not safety certification."
+    },
+    {
+      "command": "npm run visual:composed-algebra -- --grep 'compound factoring uses|contextual sum uses|one canonical chain'",
+      "status": "passed",
+      "scope": "s04",
+      "checkedAt": "2026-09-10T16:12:16.618Z",
+      "notes": "Six real Chromium tests pass, primary/product factoring and evaluation plus direct chain reversal; no universal certification claimed."
     }
   ],
   "progress": {
