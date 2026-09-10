@@ -13,6 +13,10 @@
     {
       "kind": "file",
       "path": "docs/project/decisions/2026-09-10-question-oriented-focus-cards.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/authoring/reusable-algebra-intuition-brief.md"
     }
   ],
   "dependsOn": {
@@ -27,6 +31,19 @@
     "npm run test:composed-algebra-authoring",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:composed-algebra-authoring; npm run check:composed-algebra-workflow",
+      "status": "passed",
+      "scope": "s01",
+      "checkedAt": "2026-09-10T23:17:25.119Z",
+      "notes": "61 tests pass. Both retained v1 workflows reproduce repairs, revisions and static publications. No production edits."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Question-oriented exemplar brief and canonical baseline pinned; extending source is next after owner mapping."
+  },
   "expectedLearning": [
     "Demonstrate a meaningful authored chain with source-only adaptation and context-preserving recovery, without claiming comprehension efficacy."
   ],
