@@ -1,9 +1,9 @@
 {
-  "id": "run-contract.kp.reusable-algebra-intuition-v1",
+  "id": "run-contract.kp.reusable-algebra-intuition-v2",
   "kind": "run-contract",
   "title": "Reusable algebra intuition",
-  "status": "superseded",
-  "summary": "Approved handoff amendment requires 27 slices; immutable 24-slice cap requires v2 revision. Completed s01-s04 evidence carried forward, not repeated.",
+  "status": "ready",
+  "summary": "Approved handoff amendment; continue h01 with four completed slices carried from v1. Preserve named s12 checkpoint.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -16,11 +16,11 @@
     },
     {
       "kind": "file",
-      "path": "docs/project/decisions/2026-09-10-question-oriented-focus-cards.md"
+      "path": "docs/project/reviews/2026-09-10-reusable-algebra-selector-handoff-stop.md"
     },
     {
       "kind": "file",
-      "path": "docs/project/reviews/2026-09-10-reusable-algebra-selector-handoff-stop.md"
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.reusable-algebra-intuition-v1.json"
     }
   ],
   "verification": [
@@ -41,7 +41,7 @@
   "goal": "Author one checked question-oriented mixed-operation algebra explanation, recover its two useful sub-explanations and demonstrate source-only reuse through the canonical pipeline.",
   "target": "next-action.kp.reusable-algebra-intuition",
   "runMode": "run",
-  "maxSlices": 24,
+  "maxSlices": 27,
   "commitCadence": "One scoped commit per verified slice, including closed receipt and completed-slice evidence; plan checkpoint before implementation.",
   "verificationLevel": "broad",
   "stopConditions": [
@@ -53,32 +53,41 @@
     {
       "id": "s01",
       "title": "Pin question-oriented lesson and preservation baseline",
-      "summary": "Question-oriented brief, independent subquestions and preservation baseline pinned; 61 tests and both retained workflows pass.",
+      "summary": "Carried forward from v1 committed evidence: Question-oriented brief, independent subquestions and preservation baseline pinned; 61 tests and both retained workflows pass.",
       "status": "complete"
     },
     {
       "id": "s02",
       "title": "Map canonical semantic and compositor owners",
-      "summary": "Four canonical planners execute; exact endpoint and contextual-authority gaps mapped; 63 focused tests pass.",
+      "summary": "Carried forward from v1 committed evidence: Four canonical planners execute; exact endpoint and contextual-authority gaps mapped; 63 focused tests pass.",
       "status": "complete"
     },
     {
       "id": "s03",
       "title": "Add bounded versioned source contract",
-      "summary": "Versioned four/five-state authored data contract and normalization verified; not animation authority.",
+      "summary": "Carried forward from v1 committed evidence: Versioned four/five-state authored data contract and normalization verified; not animation authority.",
       "status": "complete"
     },
     {
       "id": "s04",
       "title": "Bind factoring and coefficient evaluation",
-      "summary": "Extended prefix binds factoring and coefficient evaluation to existing issued owners; no authority claimed for later states.",
+      "summary": "Carried forward from v1 committed evidence: Extended prefix binds factoring and coefficient evaluation to existing issued owners; no authority claimed for later states.",
       "status": "complete"
+    },
+    {
+      "id": "h01",
+      "title": "Verify whole/member endpoint partition authority",
+      "status": "planned"
+    },
+    {
+      "id": "h02",
+      "title": "Integrate canonical group/member presentation handoff",
+      "status": "planned"
     },
     {
       "id": "s05",
       "title": "Bind canonical distribution",
-      "summary": "STOP_CONDITION: ordered distribution law passes but whole/member ownership handoff needs an explicitly approved bounded mechanism. Slice remains incomplete; diagnostic tests committed, no visible mount.",
-      "status": "in-progress"
+      "status": "planned"
     },
     {
       "id": "s06",
@@ -93,6 +102,11 @@
     {
       "id": "s08",
       "title": "Derive canonical presentation through extensions",
+      "status": "planned"
+    },
+    {
+      "id": "h03",
+      "title": "Execute native handoff canary",
       "status": "planned"
     },
     {

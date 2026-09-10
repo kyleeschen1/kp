@@ -142,7 +142,7 @@ not an established advantage; the user explicitly requests honest pushback.
 The user explicitly requested recording question-oriented Focus Cards and starting
 the approved 24-slice reusable algebra intuition loop. The earlier pause is lifted.
 Sole reviewed proposal: `threads/2026-09-10-reusable-algebra-intuition-approved-loop.md`.
-Execution authority: `run-contract.kp.reusable-algebra-intuition-v1`; Theseus owns
+Execution authority: `run-contract.kp.reusable-algebra-intuition-v2`; Theseus owns
 live progress. Accepted editorial direction and first-exemplar boundary:
 `decisions/2026-09-10-question-oriented-focus-cards.md`. Keep the existing shell,
 canonical motifs and semantic owners; stop at the s12 visual checkpoint. No new
@@ -150,8 +150,9 @@ universal question schema or catalogue rollout is approved. Competitive distinct
 remain hypotheses, not proven advantages.
 Execution encountered a whole-group/member-selector ownership boundary; see
 `reviews/2026-09-10-reusable-algebra-selector-handoff-stop.md`. The bounded
-handoff amendment is recommended, not approved. Preserve the completed source
-and prefix work and existing visuals; Theseus owns the stop and resume state.
+handoff amendment was subsequently approved by the user. Resume the same run
+with its three bounded handoff slices; preserve the completed source/prefix
+work and existing visuals. Theseus owns live progress and the s12 checkpoint.
 Do not restart this trial or the completed
 compositor migration, or manufacture another generic infrastructure loop.
 Recommended engineering-budget repairs now have persistent automatic approval:

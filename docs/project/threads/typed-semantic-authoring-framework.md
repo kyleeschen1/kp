@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: reusable algebra intuition at ownership-handoff scope stop; Theseus owns progress; prior trial, compositor participation, M1b, R1–R4B and M1a remain complete
+Status: reusable algebra intuition resumed with approved bounded ownership handoff; Theseus owns progress; prior completed loops remain complete
 Last Updated: 2026-09-10
 Standing budget policy: recommended engineering-budget repairs, including
 explicit bounded policy amendments, are automatically approved across sessions.
@@ -84,7 +84,9 @@ question-oriented Focus Cards and starting the approved 24-slice algebra loop;
 the prior pause is lifted. See
 `../decisions/2026-09-10-question-oriented-focus-cards.md` and the sole reviewed
 scope `2026-09-10-reusable-algebra-intuition-approved-loop.md`.
-Execution contract: `run-contract.kp.reusable-algebra-intuition-v1`.
+Execution contract: `run-contract.kp.reusable-algebra-intuition-v2`.
+V1 is superseded solely to accommodate the approved amendment's added slices;
+its completed work and evidence are carried forward, not repeated.
 Scope approval need not be requested again. The user accepted
 explanation-led acceptance refinements and a small cross-domain reuse trial after
 geometry, before sustained calculus expansion; see
@@ -96,9 +98,10 @@ The started run encountered a representation-boundary stop before that review:
 `../reviews/2026-09-10-reusable-algebra-selector-handoff-stop.md`. Existing
 factoring/evaluation preserve a whole group; distribution needs its member
 selectors. Matching the scalar tree does not authorize changing paint ownership.
-The recommended bounded handoff amendment is not yet approved. Preserve the
-completed source/prefix work and current host while Theseus records the stop;
-do not turn this into a general infrastructure successor.
+The user subsequently approved the bounded handoff amendment. The same reviewed
+plan now includes three handoff slices, with s12 retained as the named human
+checkpoint. Preserve completed source/prefix work and the existing host; do not
+turn this repair into a general infrastructure successor.
 Accepted broader direction:
 `../decisions/2026-09-10-visual-repertoire-and-queryable-intuitions.md`.
 Richer algebra, a contour-adjacent geometric flagship, a small cross-domain reuse

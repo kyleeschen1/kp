@@ -2,6 +2,7 @@
 
 Date: 2026-09-10
 Outcome: STOP_CONDITION — new ownership/handoff mechanism requires a bounded amendment
+Status: historical stop; user subsequently approved the recommended bounded repair
 Contract: `run-contract.kp.reusable-algebra-intuition-v1`
 
 ## Completed work and preserved behavior
@@ -56,7 +57,7 @@ the equality guard or fragmenting the accepted factoring motion is not allowed.
 Slice s05 is incomplete. Subsequent slices remain unexecuted, not cancelled or
 silently reprioritized. This is not a budget stop or a visual approval request.
 
-## Recommended bounded amendment (not yet approved)
+## Bounded amendment (subsequently approved)
 
 Permit one proof-bound whole/member **presentation handoff**, not a new
 mathematical operation or visible flourish. Keep the same semantic state, ink,
@@ -92,4 +93,7 @@ that this amendment does not affect.
 
 Resume inspection: `theseus work resume`, then
 `theseus work start next-action.kp.reusable-algebra-intuition --mode brief`.
-Execution remains stopped until the handoff amendment is explicitly approved.
+The subsequent user "approve" supplies amendment authority. Continue the same
+workstream under `run-contract.kp.reusable-algebra-intuition-v2`, carrying
+forward completed evidence because v1 has an immutable 24-slice cap. The sole
+reviewed loop proposal contains the three added handoff slices.

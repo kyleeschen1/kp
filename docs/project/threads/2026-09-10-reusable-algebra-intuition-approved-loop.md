@@ -15,7 +15,27 @@ editorial brief to this exemplar first; see
 `../decisions/2026-09-10-question-oriented-focus-cards.md`. This does not authorize
 a new card framework, global question schema or catalogue rollout. Preserve the
 accepted explanation-led refinements below and prior completed loops.
-Execution contract: `run-contract.kp.reusable-algebra-intuition-v1`.
+Execution contract: `run-contract.kp.reusable-algebra-intuition-v2`.
+The v1 record is superseded because its fixed 24-slice ceiling cannot hold the
+approved amendment. V2 carries forward s01-s04 and their committed evidence;
+this is the same approved workstream, not another loop or repeated execution.
+
+The user approved the bounded whole/member handoff repair after the s05 stop
+with "approve". The stop report
+`../reviews/2026-09-10-reusable-algebra-selector-handoff-stop.md` is historical
+evidence; its recommended acceptance boundary is now authorized. Insert three
+independently committed slices into this same run (27 total):
+
+| ID / position | Change | Risk / verification |
+|---|---|---|
+| h01 after s04 | Issue immutable, revision-bound whole/member partition evidence from checked scalar endpoints; reject incomplete, overlapping, reordered and foreign partitions. | High / S: negative authority and partition tests, full types, Theseus validation. |
+| h02 after h01 | Bind the partition through canonical projection/composition owners, retaining intact-group carriers and existing v1 behavior; no added beat or invented motion. | High / S: exact endpoint and ownership tests, full types, Theseus validation. |
+| h03 after s08 | Execute one real Native KaTeX handoff representative with forward/reverse/interruption and exclusive paint observations. | High / B: scoped Chromium canary before the primary mount; no broad promotion matrix. |
+
+Only this bounded presentation ownership mechanism is added to allowed work.
+The existing mathematical, motion, renderer, catalogue and external boundaries
+remain unchanged. Preserve s12 as the named human visual checkpoint (now the
+15th slice in execution order) and do not generalize before approval.
 
 On explicit start, use the Theseus long-loop workflow to materialize this reviewed
 proposal into one executable contract. This document owns rationale and approved
