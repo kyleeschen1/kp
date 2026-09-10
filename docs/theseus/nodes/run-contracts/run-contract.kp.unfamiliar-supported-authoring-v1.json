@@ -90,7 +90,8 @@
     {
       "id": "s09",
       "title": "Capture wrong-factorization repair",
-      "status": "planned"
+      "summary": "Deliberate factorization error returned a located repair; one source correction compiled.",
+      "status": "complete"
     },
     {
       "id": "s10",

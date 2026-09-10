@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "kp.composed-algebra-source.v1",
+  "id": "lesson.repeated-groups.probe-factorization",
+  "domain": "real-scalars",
+  "symbols": [
+    "x"
+  ],
+  "states": [
+    {
+      "id": "state.probe-factorization.expanded",
+      "latex": "2(x+4)+3(x+4)",
+      "narration": "There are two copies and three copies of the same group x+4."
+    },
+    {
+      "id": "state.probe-factorization.collected",
+      "latex": "(2+4)(x+4)",
+      "narration": "Collect the original counts while keeping the shared group unchanged."
+    },
+    {
+      "id": "state.probe-factorization.evaluated",
+      "latex": "6(x+4)",
+      "narration": "Evaluate only the collected coefficient sum, leaving x+4 intact."
+    }
+  ],
+  "editorial": {
+    "title": "Check the original copy counts",
+    "setup": "Keep track of both original coefficients when collecting a repeated group.",
+    "summary": "A valid collection preserves the two original counts and the whole group."
+  }
+}
