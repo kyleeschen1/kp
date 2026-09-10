@@ -2,9 +2,9 @@
   "id": "next-action.kp.composed-algebra-authoring",
   "kind": "next-action",
   "title": "M1b Composed algebra authoring",
-  "status": "blocked",
+  "status": "in-progress",
   "domain": "authoring",
-  "summary": "M1b s25 release needs explicit decision on teacher-zero HTML-gzip baseline4352 to4582. Current limit4570 exceeded12 bytes. Both canonical callers and supported-browser promotion pass; no budget amendment applied.",
+  "summary": "User explicitly approved teacher-zero HTML-gzip baseline4352 to4582 on2026-09-10. Resume s25 release then s26 closeout; no other gate amendment or successor execution.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -288,11 +288,25 @@
       "scope": "s25-full",
       "checkedAt": "2026-09-10T05:11:41.943Z",
       "notes": "6936 passed,1 failed,6937 total;705740ms; zero skips/cancellations. Only failure: stale exact equation reachability inventory. Owning generator refreshed it and all12 focused tests passed. Pre-suite gates passed; full suite must rerun after budget decision."
+    },
+    {
+      "command": "npm run build; npm run check:reader-budgets; npm run check:reader-production; npm run check:dev-review-production; npm run check:native-katex-compositor-conformance-production; node --disable-warning=ExperimentalWarning --test tests/semantic-reader-route-budget.test.ts; npm run author:composed-algebra-publication -- --source src/authoring/examples/composed-algebra-primary.json --check; npm run author:composed-algebra-publication -- --source src/authoring/examples/composed-algebra-product.json --check",
+      "status": "passed",
+      "scope": "s25-approved-release",
+      "checkedAt": "2026-09-10T14:19:07.866Z",
+      "notes": "Explicit teacher-zero baseline 4352 to 4582 approval applied; all 12 routes pass, 5 budget tests pass, shared runtime 142060 gzip. Build, full types, isolation and both editions pass. Full npm test still running; retained visual cohort evidence is unchanged."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s25-final-full",
+      "checkedAt": "2026-09-10T14:26:16.731Z",
+      "notes": "6937 tests passed, zero failures, skips or cancellations; 726561 ms. Architecture, complete inference, catalog and promotion-memory pre-gates pass. Exact reachability freshness is green after its owning metadata repair."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s01-s24 complete with accepted primary, source-only product reuse and51 browser passes. Release build and preservation pass; teacher-zero HTML gzip is12 bytes over fixed limit. Finish s25 and s26 after separate budget decision."
+    "summary": "s01-s25 complete. Approved teacher-zero baseline resolves the release stop; full suite, build, budgets, isolation, editions and preservation pass. Only s26 closeout and named pending successor remain."
   },
   "expectedLearning": [
     "Measure compound factoring plus contextual evaluation reuse without renderer glue."

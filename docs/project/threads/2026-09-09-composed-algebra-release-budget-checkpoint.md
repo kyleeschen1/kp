@@ -1,9 +1,18 @@
 # Composed-algebra release budget checkpoint
 
-Date: 2026-09-09 (local). Outcome: STOP_CONDITION; no budget change is approved
-or applied. Contract: `run-contract.kp.composed-algebra-authoring-v1`.
-Theseus owns live status: s01–s24 complete, s25 release incomplete, s26 closeout
-unstarted. This is a resume record, not a second execution plan.
+Decision resolved on 2026-09-10: the user explicitly approved and resumed.
+The single HTML-gzip baseline amendment below is approved and applied; the 5%
+policy, other routes, raw HTML and runtime limits are unchanged. Theseus owns
+release verification and live status for `run-contract.kp.composed-algebra-authoring-v1`.
+The prior stop and measurements below remain historical evidence, not an open
+approval request. This is a resume record, not a second execution plan.
+
+Final release verification on 2026-09-10: `npm test` passed all **6,937 tests**,
+zero failures/skips/cancellations, 726,561 ms. Build and all 12 reader budgets
+pass; the amended route measures 4,582 gzip bytes. Reader/dev-review/compositor
+production isolation, both immutable editions and five budget-policy tests pass.
+The earlier failing full-suite result below is historical and now superseded by
+this green run. No visual or runtime change accompanied the baseline amendment.
 
 ## Accepted work and current inspection
 
@@ -21,7 +30,7 @@ opposite-orientation product chain. See
 `../authoring/composed-algebra-authoring-packet.md` for the exact authoring scope,
 checker, repairs, projections and immutable static-edition commands.
 
-## Release budget decision
+## Historical release budget measurement
 
 `npm run check:reader-budgets` measured the current production output:
 
@@ -29,7 +38,7 @@ checker, repairs, projections and immutable static-edition commands.
 | --- | ---: | ---: | ---: |
 | `/reader/solve-x/teacher-zero/` HTML gzip | 4,582 bytes | 4,570 bytes | 12 bytes |
 
-The route's baseline remains 4,352 bytes with the existing 5% allowance. All
+At the stop, the route's baseline was 4,352 bytes with the existing 5% allowance. All
 other eleven routes, all raw-HTML budgets and all runtime budgets pass. The shared
 equation runtime is 142,060 gzip bytes, 2,940 below its limit. The HTML includes
 shared dependency URLs, so compressed size also responds to chunk boundaries
@@ -39,15 +48,16 @@ of every added compressed byte is not established.
 A read-only probe removing optional quotes from generated same-origin script
 URLs saved 98 raw bytes but increased gzip from 4,582 to 4,583. It was not applied.
 Do not change loading order, semantic content, accessibility or gzip measurement
-to hide this failure. No budget baseline, ceiling, route coverage or stylesheet
-was changed.
+to hide this failure. No baseline or output change was made before explicit
+approval; only the approved baseline is amended in the continuation.
 
-Recommendation, requiring explicit approval: replace only this route's HTML-gzip
+Accepted recommendation: replace only this route's HTML-gzip
 baseline **4,352 → 4,582**, retaining the 5% policy and every other gate. This is
 a measured policy amendment, not an optimization. Standing TypeScript-cost
-auto-approval does not authorize this non-TypeScript change.
+auto-approval did not authorize this non-TypeScript change; authority comes from
+the user's explicit 2026-09-10 approval.
 
-## Verification already complete
+## Verification at the earlier stop
 
 - `npm run visual:composed-algebra:cohort`: 51 passes across Chromium, Firefox
   and WebKit, both callers, native ownership/seams, reverse seeks, controls,
@@ -88,9 +98,9 @@ refreshed the new caller list (68 roots, 4,572 scanned files).
 formerly failing exact freshness assertion. The full suite has not been rerun
 after this metadata repair, so a green final full-suite run is not claimed.
 
-## Exact continuation and preserved limits
+## Approved continuation and preserved limits
 
-After the budget decision, resume s25, rerun the full suite, build and budget gate,
+The budget decision is resolved. Resume s25, rerun the full suite, build and budget gate,
 and finish release checks before s26. Fresh-session entry: `theseus work resume`, then
 `npm run --silent loop:status`; use `theseus plan run` and the exact contract if
 resume's own output budget blocks retrieval. Do not restart the accepted visual

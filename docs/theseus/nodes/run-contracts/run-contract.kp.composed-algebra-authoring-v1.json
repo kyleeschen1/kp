@@ -2,8 +2,8 @@
   "id": "run-contract.kp.composed-algebra-authoring-v1",
   "kind": "run-contract",
   "title": "M1b Composed algebra authoring",
-  "status": "blocked",
-  "summary": "STOP_CONDITION at s25: non-TypeScript reader HTML-gzip amendment requires separate approval.24/26 complete; s25 release and s26 closeout remain. Accepted visual checkpoint resolved.",
+  "status": "in-progress",
+  "summary": "Approved narrow reader HTML-gzip amendment resolves prior authority stop. Resume remaining s25 and s26 of approved26-slice contract.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -189,8 +189,8 @@
     {
       "id": "s25",
       "title": "Run full release verification and earlier-exemplar preservation",
-      "summary": "STOP_CONDITION: release partially verified; teacher-zero HTML gzip4582 exceeds4570. No budget changed. Resume this slice after explicit budget decision; full-suite result and metadata repair are in linked checkpoint.",
-      "status": "planned"
+      "summary": "Full suite 6937 passes; build, 12 reader budgets, isolation and both editions pass after explicit narrow HTML amendment. Retained 98 browser checks preserve accepted visuals.",
+      "status": "complete"
     },
     {
       "id": "s26",

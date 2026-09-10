@@ -299,7 +299,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       label: "Make the zero visible",
       progressPermille: 500
     }),
-    budget: routeBudget(37_489, 4_352, sharedEquationRuntimeGzipBaseline)
+    budget: routeBudget(37_489, 4_582, sharedEquationRuntimeGzipBaseline)
   }),
   defineKpReaderRoute({
     route: "/reader/solve-fractional-linear/",
