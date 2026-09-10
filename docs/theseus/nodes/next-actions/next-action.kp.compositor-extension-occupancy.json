@@ -29,6 +29,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-10-project-value-and-next-step-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-10-compositor-extension-owner-inventory.md"
     }
   ],
   "dependsOn": {
@@ -40,6 +44,19 @@
     "npm run typecheck",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:canonical-equation-renderer; git diff --check",
+      "status": "passed",
+      "scope": "s01",
+      "checkedAt": "2026-09-10T15:43:01.557Z",
+      "notes": "29 tests pass. Source-backed inventory identifies ordinary tracks, factoring and successor producers, and unchecked callback at ready-plan and renderer boundaries. No runtime change or browser certification claimed."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "s01 inventory complete: two supplemental producer owners, ready-plan and renderer callback seams, exact coverage gaps and preserved native/semantic boundaries."
+  },
   "revisitWhen": [
     "User explicitly approves the linked 24-slice successor proposal.",
     "User approves the revised exact 24-slice proposal."

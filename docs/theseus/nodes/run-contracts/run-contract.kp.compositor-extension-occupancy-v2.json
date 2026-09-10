@@ -43,7 +43,8 @@
     {
       "id": "s01",
       "title": "Inventory final paint and inspection owners",
-      "status": "planned"
+      "summary": "Actual owner/sampler inventory and 29 passing baseline tests recorded; no universal coverage or changed motion claimed.",
+      "status": "complete"
     },
     {
       "id": "s02",
