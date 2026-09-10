@@ -193,11 +193,18 @@
       "scope": "s17 motif-preserving composition",
       "checkedAt": "2026-09-10T03:53:58.497Z",
       "notes": "9 composed Chromium and 2 selected atomic checks pass; 36 composed,29 renderer,28 motion tests pass. Native handoff regression failed with4.298px residual before paint-center repair and passes after. Required typed inspection reports contact without rerouting; shared-pose mismatch and uninspected publication reject. Full types, architecture and unchanged source/inference gates pass. No visual approval or universal motif migration claimed."
+    },
+    {
+      "command": "npm run visual:composed-algebra; npm run typecheck; node --test tests/kp-factoring-choreography.test.ts tests/equation-motion-path-planner.test.ts",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-10T04:03:22.851Z",
+      "notes": "Nine browser and 28 law/planner tests pass; final strengthened chain rerun passes; full types pass after explicit missing-ink guard."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT s17:16/26 complete. Accepted motif/compositor doctrine and bounded factoring repair implemented. Review compact arcs and common-pose reconciliation; s18 awaits visual approval. Broader extension contract retained as s26 successor-planning obligation."
+    "summary": "Primary visual checkpoint explicitly accepted at 1b3a862d0; post-acceptance regressions pass. Continue existing contract with source-only second caller, bounded pressure and release."
   },
   "expectedLearning": [
     "Measure compound factoring plus contextual evaluation reuse without renderer glue."

@@ -322,11 +322,23 @@ test("one canonical chain retains native geometry across the shared checkpoint a
         height: Math.max(...rects.map(rect => rect.top + rect.height)) - top };
     });
   }
-  for (const p of [0, .37, .999999, 1, 1.000001, 1.5, 2, 1.000001, 1, .999999, 0]) {
+  // Revisit interior frames after crossing both ownership and operation boundaries.
+  // A stable outer rectangle alone can conceal displaced or duplicated inner ink.
+  for (const p of [0, .37, .68, .9, .999999, 1, 1.000001, 1.25, 1.5, 2,
+    .68, 1.25, .37, 1.5, .9, 1.000001, 1, .999999, 0]) {
     const sample = await capture(p);
     if (samples.has(p)) {
       expect(sample.text).toEqual(samples.get(p)!.text);
       for (const key of ["left", "top", "width", "height"] as const) expect(Math.abs(sample[key] - samples.get(p)![key])).toBeLessThan(.001);
+      const previous = samples.get(p)!.atoms;
+      expect(sample.atoms).toHaveLength(previous.length);
+      sample.atoms.forEach((atom, index) => {
+        expect(atom.text).toBe(previous[index]!.text);
+        const beforeRect = previous[index]!.rect;
+        if (!atom.rect || !beforeRect) throw new Error("Replay requires measured ink for every visible atom.");
+        for (const key of ["left", "top", "width", "height"] as const)
+          expect(Math.abs(atom.rect[key] - beforeRect[key]), `replay ${p} atom ${index} ${key}`).toBeLessThan(.001);
+      });
     } else samples.set(p, sample);
     await card.screenshot({ path: info.outputPath(`chain-${p}.png`) });
   }
