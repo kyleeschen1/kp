@@ -41,24 +41,25 @@ export async function probeOmittedFactoringOccupancy(value: unknown) {
     });
     const binding = bindKpNativeKatexFactoringScene({ source: observe("source"), target: observe("target"),
       intent, choreography: intent.operationPresentationPlan.choreography });
-    const paint = binding.sampleMaterialOwners(.35).find(owner => owner.opacity === 1)!.expectedPaintRect!;
+    const material = (p: number) => binding.contribution.sample(p).owners;
+    const paint = material(.35).find(owner => owner.opacity === 1)!.expectedPaintRect;
     const track: KpNativeKatexSceneTrack = { id: "regression.context", componentId: "regression.context",
       lifecycle: "persist", visualAtomId: "regression.context",
       paintKind: "glyph", sizingMode: "rect", startRect: paint, endRect: paint, startOpacity: 1, endOpacity: 1 };
     const sampleFrames = (_: readonly KpNativeKatexSceneTrack[], progress: number) => [{
       trackId: track.id, componentId: track.componentId,
-      rect: binding.sampleMaterialOwners(progress).find(owner => owner.opacity === 1)!.expectedPaintRect!, opacity: 1
+      rect: material(progress).find(owner => owner.opacity === 1)!.expectedPaintRect, opacity: 1
     }];
     const isolated = inspectKpEquationProtectedTransitTracks({ tracks: [track], sampleFrames });
-    const before = binding.sampleMaterialOwners(.35).map(owner => owner.expectedPaintRect);
+    const before = material(.35).map(owner => owner.expectedPaintRect);
     const junction = binding.semanticClock!.fusionPlan.transferEvent.progress;
-    const handoff = [junction - 1e-7, junction + 1e-7].map(progress => binding.sampleMaterialOwners(progress)
+    const handoff = [junction - 1e-7, junction + 1e-7].map(progress => material(progress)
       .filter(owner => owner.opacity === 1).map(owner => ({ rect: owner.expectedPaintRect, focus: owner.focus?.variables })));
     let uninspectedPublicationRejected = false;
     try { binding.recordEvidence(); } catch { uninspectedPublicationRejected = true; }
     const combined = binding.inspectTransit([track], sampleFrames);
     binding.recordEvidence();
     return { isolatedIntersections: isolated.intersections.length, combinedIntersections: combined.intersections.length,
-      uninspectedPublicationRejected, handoff, before, after: binding.sampleMaterialOwners(.35).map(owner => owner.expectedPaintRect) };
+      uninspectedPublicationRejected, handoff, before, after: material(.35).map(owner => owner.expectedPaintRect) };
   } finally { fontReadiness.dispose(); }
 }

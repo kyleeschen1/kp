@@ -49,6 +49,7 @@ import type {
 import {
   compileKpCollisionSafeReorderTracks,
   composeKpNativeKatexMaterialSamplers,
+  assertKpNativeKatexContributionMeasurement,
   compileKpCollisionSafeTransitTracks,
   compileKpNativeKatexHierarchicalScenePlan,
   compileKpNativeKatexOperationTracks,
@@ -1466,7 +1467,7 @@ export function compileKpCanonicalNativeKatexScenePlan(
         ? undefined
         : composeKpNativeKatexMaterialSamplers([
             progress => sampleKpNativeKatexSuccessorSynthesisScenePlans({ plans: syntheses, progress }),
-            ...(input.factoring ? [input.factoring.sampleMaterialOwners] : [])
+            ...(input.factoring ? [(p: number) => input.factoring!.contribution.sample(p).owners] : [])
           ])
   });
 }
@@ -1856,6 +1857,7 @@ function assertKpNativeKatexPaintPreservingRetirement(
 function prepareKpCanonicalNativeKatexScene(
   input: Omit<KpResolvedCanonicalNativeKatexSceneInput, "purePlan">
 ) {
+  if (input.factoring) assertKpNativeKatexContributionMeasurement(input.factoring.contribution, input.source, input.target);
   const reconciliation = reconcileKpNativeKatexScenes({
     source: input.source,
     target: input.target,

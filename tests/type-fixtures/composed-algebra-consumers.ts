@@ -125,6 +125,10 @@ declare const unprotectedFactoring: Omit<KpNativeKatexFactoringSceneBinding, "in
 // @ts-expect-error Supplemental factoring paint cannot omit its joint occupancy audit.
 const omittedOccupancy: KpNativeKatexFactoringSceneBinding = unprotectedFactoring;
 void omittedOccupancy;
+declare const unboundFactoring: Omit<KpNativeKatexFactoringSceneBinding, "contribution">;
+// @ts-expect-error Factoring cannot provide paint without issued participant/measurement authority.
+const omittedContribution: KpNativeKatexFactoringSceneBinding = unboundFactoring;
+void omittedContribution;
 type FactoringComposition = NonNullable<KpNativeKatexFactoringSceneBinding["semanticClock"]>["composition"];
 declare const missingContactPolicy: Omit<FactoringComposition, "transitContact">;
 // @ts-expect-error A motif cannot omit its contact policy.

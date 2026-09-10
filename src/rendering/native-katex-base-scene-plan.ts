@@ -37,7 +37,7 @@ import {
 export type {
   KpCompiledSymbolMotionContract
 } from "../animation/symbol-motion-contract.ts";
-export { composeKpNativeKatexMaterialSamplers } from "./native-katex-scene-contribution.ts";
+export { composeKpNativeKatexMaterialSamplers, assertKpNativeKatexContributionMeasurement } from "./native-katex-scene-contribution.ts";
 export type {
   KpNativeKatexTrackProjection
 } from "./native-katex-track-projection.ts";

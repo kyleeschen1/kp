@@ -1,5 +1,6 @@
 import type { KpNativeKatexFactoringSceneBinding } from "./native-katex-factoring-binding-types.ts";
-import { projectKpNativeKatexMaterialOccupancy } from "./native-katex-scene-contribution.ts";
+import { projectKpNativeKatexMaterialOccupancy, createKpNativeKatexSceneContribution,
+  requireKpNativeKatexMeasuredMaterialFrame } from "./native-katex-scene-contribution.ts";
 import { kpEquationSettlementTolerancePx } from "../animation/equation-shared-presentation-policy.ts";
 export type { KpNativeKatexFactoringSceneBinding } from "./native-katex-factoring-binding-types.ts";
 
@@ -127,7 +128,13 @@ export function bindKpNativeKatexFactoringScene(input: {
       progress,
       plan.transferPlan.transferEvent.progress
     );
-  const material = (progress: number) => sampleKpNativeKatexFactoringScenePlan({ plan, progress });
+  const sampleOwners = (progress: number) => sampleKpNativeKatexFactoringScenePlan({ plan, progress });
+  const contribution = createKpNativeKatexSceneContribution({
+    id: plan.id, source: input.source, target: input.target,
+    participantIds: sampleOwners(0).map(owner => owner.ownerId),
+    sample: progress => sampleOwners(progress).map(requireKpNativeKatexMeasuredMaterialFrame)
+  });
+  const material = (progress: number) => contribution.sample(progress).owners;
   return Object.freeze<KpNativeKatexFactoringSceneBinding>({
     semanticClock: plan.complete?.choreography,
     claimTracks(tracks) {
@@ -159,7 +166,7 @@ export function bindKpNativeKatexFactoringScene(input: {
       }));
     },
     claimedTargetAtomIds: plan.claimedTargetAtomIds,
-    sampleMaterialOwners: material,
+    contribution,
     inspectTransit(tracks, sampleFrames) {
       if (plan.complete) {
         const p = plan.transferPlan.transferEvent.progress;

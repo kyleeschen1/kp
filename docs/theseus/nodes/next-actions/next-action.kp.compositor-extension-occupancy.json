@@ -215,6 +215,34 @@
       "scope": "s07",
       "checkedAt": "2026-09-10T16:32:41.949Z",
       "notes": "522401 aggregate source bytes; 7599 headroom; all partitions pass. Architecture suite 31 pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s08",
+      "checkedAt": "2026-09-10T16:37:20.132Z",
+      "notes": "Full typecheck passes including required factoring-contribution negative fixture."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring",
+      "status": "passed",
+      "scope": "s08",
+      "checkedAt": "2026-09-10T16:37:21.390Z",
+      "notes": "48 pass; extension tests 12 and canonical architecture 31 also pass."
+    },
+    {
+      "command": "npm run visual:composed-algebra -- --grep 'compound factoring uses|factoring occupancy|contextual sum uses|one canonical chain'",
+      "status": "passed",
+      "scope": "s08",
+      "checkedAt": "2026-09-10T16:37:22.564Z",
+      "notes": "Eight Chromium checks pass after factoring migration; intact groups, native handoff, joint occupancy, evaluation and reverse unchanged."
+    },
+    {
+      "command": "npm run check:compositor-extension-cost",
+      "status": "passed",
+      "scope": "s08",
+      "checkedAt": "2026-09-10T16:37:23.636Z",
+      "notes": "523077 aggregate bytes, core 144470 planner 299813 support 78794; every gate passes."
     }
   ],
   "progress": {

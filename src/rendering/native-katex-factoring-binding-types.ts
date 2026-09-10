@@ -1,4 +1,4 @@
-import type { KpEquationMaterialLayerOwnerFrame } from "./equation-material-layer-dom.ts";
+import type { KpNativeKatexSceneContribution } from "./native-katex-scene-contribution.ts";
 import type { KpNativeKatexSceneTrack } from "./native-katex-base-scene-plan.ts";
 import type { KpFactoringChoreographyPlan } from "../animation/factoring-choreography.ts";
 import type { KpEquationProtectedTransitFrame, KpProtectedTransitAudit } from "./equation-motion-path-planner.ts";
@@ -10,8 +10,7 @@ export interface KpNativeKatexFactoringSceneBinding {
     (tracks: readonly KpNativeKatexSceneTrack[]) =>
       readonly KpNativeKatexSceneTrack[];
   readonly claimedTargetAtomIds: ReadonlySet<string>;
-  readonly sampleMaterialOwners:
-    (progress: number) => readonly KpEquationMaterialLayerOwnerFrame[];
+  readonly contribution: KpNativeKatexSceneContribution;
   /** Specialized paint must be audited with the final context, including cached plans. */
   readonly inspectTransit: (
     tracks: readonly KpNativeKatexSceneTrack[],
