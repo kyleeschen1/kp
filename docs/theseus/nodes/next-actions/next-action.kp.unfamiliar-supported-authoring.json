@@ -53,6 +53,12 @@
       "status": "passed",
       "scope": "s05",
       "checkedAt": "2026-09-10T19:03:07.816Z"
+    },
+    {
+      "command": "npm run check:unfamiliar-authoring-trial; npm run visual:composed-algebra -- --grep 'three-stop controls animate'; git diff --check",
+      "status": "passed",
+      "scope": "s06",
+      "checkedAt": "2026-09-10T19:05:32.446Z"
     }
   ],
   "expectedLearning": [

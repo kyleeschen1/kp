@@ -72,7 +72,8 @@
     {
       "id": "s06",
       "title": "Author compound product",
-      "status": "planned"
+      "summary": "Compound product case checked first pass; retained navigation browser baseline also passes.",
+      "status": "complete"
     },
     {
       "id": "s07",

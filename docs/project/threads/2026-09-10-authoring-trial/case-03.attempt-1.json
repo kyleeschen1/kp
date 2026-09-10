@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "kp.composed-algebra-source.v1",
+  "id": "lesson.repeated-groups.case-03",
+  "domain": "real-scalars",
+  "symbols": ["x", "y"],
+  "states": [
+    {
+      "id": "state.case-03.expanded",
+      "latex": "2(x*y)+5(x*y)",
+      "narration": "Each pair of parentheses contains the same product, x times y. Count two copies of that whole product, then five more copies."
+    },
+    {
+      "id": "state.case-03.collected",
+      "latex": "(2+5)(x*y)",
+      "narration": "Add the counts on the left, keeping two before five. The shared product stays on the right, with x still multiplied by y in that order."
+    },
+    {
+      "id": "state.case-03.evaluated",
+      "latex": "7(x*y)",
+      "narration": "Two plus five is seven. There are seven copies of the same product; we have not found the value of x times y."
+    }
+  ],
+  "editorial": {
+    "title": "Count a product as one group",
+    "setup": "A repeated group can contain multiplication. Read x times y inside the parentheses as one unit while counting its copies.",
+    "summary": "Two copies plus five copies makes seven copies of x times y. The coefficient changes, while both factors and their order inside the group remain unchanged."
+  }
+}
