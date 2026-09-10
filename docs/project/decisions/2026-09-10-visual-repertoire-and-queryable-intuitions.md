@@ -68,6 +68,52 @@ Retain the existing semantic/revision/reference foundations. This direction
 does not authorize a new ontology, universal intuition schema, renderer,
 search backend, scheduler, curriculum, or claims of comprehension efficacy.
 
+## Memetic clarification and competitive honesty
+
+The user explicitly includes longer animated essays. They identify the more
+distinctive product opportunity as micro-intuitions understood through both
+internet and Dawkins-inspired senses of "meme": sticky, replicable, composable,
+vivid, adaptable, easy to share and recoverable across contexts. This captures
+the user's design analogy, not a scholarly definition or a promise of virality.
+The user also explicitly requests honest competitive pushback, not validation
+of differentiation by assertion.
+
+Accepted intent: longer essays and independently useful intuition units coexist.
+Design for circulation and reuse of understanding, not only consumption of a
+presentation. No social platform, export feature or new implementation is approved.
+
+Competitive assessment (assistant inference, not established advantage):
+individual attributes overlap substantially with existing products. Official
+sources inspected on 2026-09-10:
+
+- [Brilliant](https://brilliant.org/science/) describes interactive, bite-sized
+  lessons and intuition-building experiences.
+- [GeoGebra](https://help.geogebra.org/hc/en-us/articles/10828122740765-Create-GeoGebra-Resources)
+  supports copying, adapting, sharing and organizing activities into books.
+- [Math Academy](https://www.mathacademy.com/how-our-ai-works) describes knowledge
+  graphs, prerequisite diagnosis and spaced repetition.
+- [Khan Academy](https://www.khanacademy.org/?hl=en) offers practice, mastery-based
+  learning, content and teacher tools.
+- [3Blue1Brown](https://3blue1brown.substack.com/p/written-versions-of-the-calculus)
+  also offers written adaptations and interactive accompaniments; do not reduce
+  it to long passive video.
+
+These are product-description checks, not a hands-on comparative benchmark or
+independent efficacy evidence. No claim that competitors cannot support KP's
+proposed combination is justified. The promising differentiation hypothesis is
+an integrated author/learner workflow: retrieve a precise intuition, inspect or
+vary it, preserve assumptions and identity when adapting it, share it, and embed
+it coherently in another explanation. KP has bounded implementation evidence,
+not demonstrated general portability, audience demand, low author cost, superior
+retention, distribution advantage or willingness to pay.
+
+Working cautions, not new universal contracts: memorable imagery may fail to
+produce transferable understanding; short fragments can lose prerequisites;
+remixing can invalidate assumptions; visual-quality work may dominate production
+cost even when source editing is cheap. "Meme" may be a useful internal lens but
+needs audience testing as public language. Sharing should not substitute for
+evidence of later retrieval, reconstruction and correct use on a changed problem.
+
 ## Open design questions for continued brainstorming
 
 - What makes a micro-intuition independently useful without losing assumptions,

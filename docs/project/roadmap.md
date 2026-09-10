@@ -132,7 +132,10 @@ flagship, derivative/local linearization and accumulation, with connected
 subject expansion afterward. Author-start cleanup accompanies delivery, not
 another prerequisite loop. Intuitions, including larger FTC/SVD explanations,
 must support direct retrieval and composition rather than compulsory long-form
-viewing. Current activity is continued brainstorming; no new execution is
+viewing. Longer animated essays coexist with vivid, shareable, adaptable
+"memetic" intuition units. Competitive differentiation is a hypothesis to test,
+not an established advantage; the user explicitly requests honest pushback.
+Current activity is continued brainstorming; no new execution is
 approved. Do not restart this trial or the completed
 compositor migration, or manufacture another generic infrastructure loop.
 Recommended engineering-budget repairs now have persistent automatic approval:

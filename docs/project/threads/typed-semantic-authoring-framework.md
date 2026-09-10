@@ -86,6 +86,10 @@ Richer algebra, a contour-adjacent geometric flagship, then derivative and
 accumulation are the accepted high-level path, not an approved run. Author-start
 cleanup belongs inside delivery, not a separate prerequisite. Larger FTC/SVD
 intuition units should compose smaller directly retrievable explanations.
+Longer animated essays remain in scope as product vision; micro-intuitions
+should be vivid, sticky, shareable and adaptable across contexts. Record and
+test the differentiation hypothesis honestly, not as a competitor capability
+absence claim. See the decision's sourced competitive caveats.
 No new framework, implementation loop or tabled asset is activated.
 Source-only trial, not engine expansion. The compositor migration
 is complete under `run-contract.kp.compositor-extension-occupancy-v2`; see

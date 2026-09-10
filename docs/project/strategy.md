@@ -29,6 +29,14 @@ intent, not a measured learning claim or a new universal schema. See
 `decisions/2026-09-10-visual-repertoire-and-queryable-intuitions.md` for the
 accepted capability-led repertoire path and open design questions.
 
+Longer animated essays remain part of the vision. The distinctive product
+hypothesis centers on vivid, sticky, replicable and adaptable intuition units
+that can be shared, composed and recovered across contexts: the user's
+"memetic" lens. Bite-sized interaction, remixing and retention are not individually
+unique; competitive advantage must be demonstrated in the combined workflow,
+authoring cost and learner outcomes. Preserve honest pushback and distinguish
+accepted aspirations from established capabilities or market evidence.
+
 The learner-facing durable artifact is a reusable **way of seeing**. Its
 technical substrate is an executable semantic object: stable objects,
 transformations, relationships, representations, attention decisions,
