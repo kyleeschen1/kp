@@ -1,4 +1,4 @@
-import { sha256 } from "../kernel/sha256.ts";
+import { sha256 } from "../kernel/public-api.ts";
 import { verifyKpComposedFactoring, KpComposedFactoringError, type KpVerifiedComposedFactoring } from "../semantic/composed-algebra-factoring.ts";
 import { verifyKpComposedEvaluation, KpComposedEvaluationError } from "../semantic/composed-algebra-evaluation.ts";
 import { verifyKpComposedAlgebraChain, isKpVerifiedComposedAlgebraChain, KpComposedChainError,

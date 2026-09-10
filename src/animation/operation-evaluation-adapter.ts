@@ -35,6 +35,17 @@ import {
 import {
   createKpAnimationPresentationConstraintsV1
 } from "./presentation-constraints.ts";
+import type { KpVerifiedComposedEvaluation } from "../semantic/composed-algebra-evaluation.ts";
+import { projectKpContextualConstantSum } from "../semantic/contextual-constant-sum-projection.ts";
+import { createKpAssetBundle } from "../semantic/asset.ts";
+
+export function createVerifiedContextualConstantSumAnimationAsset(proof: KpVerifiedComposedEvaluation): KpAnimationAsset {
+  const projection = projectKpContextualConstantSum(proof);
+  const id = `operation-evaluation.contextual.${proof.revisionId.slice(7)}`;
+  return createKpOperationEvaluationAnimationAsset({ id, title: "Evaluate a coefficient in context",
+    bundle: createKpAssetBundle({ id: `asset.${id}`, title: "Evaluate a coefficient in context", objects: projection.endpoints.map(e => e.object) }),
+    transformation: projection.transformation });
+}
 
 export const kpOnePlusTwoEvaluationAnimationId =
   "animation.operation-evaluation.one-plus-two";

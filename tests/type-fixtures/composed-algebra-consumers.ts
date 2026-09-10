@@ -68,3 +68,33 @@ const forgedChain: KpVerifiedComposedAlgebraChain = [factoring, contextual];
 // @ts-expect-error a valid mathematical chain has not been bound to authored source
 const unbound: KpSourceBoundComposedAlgebraProof = chain;
 void [checked, forgedChain, unbound];
+import { createKpComposedAlgebraSemanticAsset } from "../../src/semantic/composed-algebra-asset.ts";
+import { defineKpSemanticOperationProjector, type KpSemanticOperationProjectionHandlers } from "../../src/semantic/semantic-operation-projection.ts";
+import { projectKpIntegerMultipleFactoring } from "../../src/semantic/integer-multiple-factoring-projection.ts";
+import { projectKpContextualConstantSum } from "../../src/semantic/contextual-constant-sum-projection.ts";
+import type { KpExpressionProjectionHandlers } from "../../src/semantic/expression-node-protocol.ts";
+import type { KpStructuredExpressionNode } from "../../src/semantic/structured-expression.ts";
+const semanticAsset = createKpComposedAlgebraSemanticAsset(chain);
+// @ts-expect-error each selected proof kind requires a typed extension
+const incomplete: KpSemanticOperationProjectionHandlers<KpVerifiedComposedAlgebraChain["steps"][number]> = {
+  "verified-composed-factoring": { accepts: isKpVerifiedComposedFactoring, project: projectKpIntegerMultipleFactoring }
+};
+// @ts-expect-error expression projections cannot silently omit new node kinds
+const missingExpressionHandlers: KpExpressionProjectionHandlers<KpStructuredExpressionNode, string> = { number: { project: node => String(node.value) } };
+defineKpSemanticOperationProjector<KpVerifiedComposedFactoring>({ "verified-composed-factoring": {
+  accepts: isKpVerifiedComposedFactoring,
+  // @ts-expect-error an evaluation handler cannot receive factoring evidence
+  project: projectKpContextualConstantSum
+} });
+void [semanticAsset, incomplete, missingExpressionHandlers];
+import { resolveKpComposedAlgebraPresentation, assertKpComposedAlgebraPresentation,
+  type KpComposedAlgebraPresentation } from "../../src/authoring/composed-algebra-presentation.ts";
+const presentation = resolveKpComposedAlgebraPresentation(checked);
+assertKpComposedAlgebraPresentation(presentation);
+// @ts-expect-error mathematical authority alone is not presentation authority
+const proofAsPresentation: KpComposedAlgebraPresentation = checked;
+// @ts-expect-error raw source cannot select a canonical operation binding
+resolveKpComposedAlgebraPresentation(source);
+// @ts-expect-error a canonical evaluation cannot replace the factoring slot
+const wrongPresentation: KpComposedAlgebraPresentation["steps"] = [presentation.steps[1], presentation.steps[0]];
+void [proofAsPresentation, wrongPresentation];

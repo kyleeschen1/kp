@@ -71,6 +71,17 @@ successor. Planning allowance 10–18 active hours, not a time guarantee.
 
 ## Visual checkpoint and preservation
 
+### Accepted s10 architecture refinement
+
+On 2026-09-09 the user accepted repairing extension boundaries before resuming:
+use the existing typed expression-projection protocol for notation; keep
+operation asset/correspondence and complete presentation construction in their
+registered owners; keep chain composition ignorant of operation internals.
+Type and architecture tests must reject missing handlers, unauthorized bindings,
+and example-local dispatch machinery. Explicit proof-validation conditionals
+remain appropriate. This refines s10, not the approved mathematical scope or
+the s17 visual checkpoint.
+
 At s17 review grouped factoring, canonical evaluation, continuity at the shared
 state, native endpoints, immediate three-stop indicators, gestures/arrows/buttons,
 readings, practice/return and static view together at desktop/narrow sizes.
@@ -102,4 +113,3 @@ approved release checks pass; receipts, roadmap and exact 26/26 state are closed
 Fresh-session entry: `theseus work resume`, then `npm run --silent loop:status`.
 The Theseus refill/resume output-budget issue is known; use the exact contract
 and `theseus plan run` as bounded fallback without editing the Theseus package.
-

@@ -19,9 +19,23 @@ import {
   createKpSemanticMaterialEquationPresentationProfileV1
 } from "./equation-presentation-profile.ts";
 import { isKpVerifiedCommonFactorRewrite, type KpVerifiedCommonFactorRewrite } from "../semantic/common-factor-rewrite.ts";
+import type { KpVerifiedComposedFactoring } from "../semantic/composed-algebra-factoring.ts";
+import { projectKpIntegerMultipleFactoring } from "../semantic/integer-multiple-factoring-projection.ts";
+import { createKpAssetBundle, type KpAssetMetadataValue } from "../semantic/asset.ts";
 
 export class KpCommonFactorPresentationGap extends Error {
   readonly code = "unsupported-presentation";
+}
+
+/** New proof families enter the same asset/profile/timeline constructor. The
+ * semantic owner supplies lineage; this adapter supplies no alternate motif. */
+export function createVerifiedIntegerMultipleFactoringAnimationAsset(proof: KpVerifiedComposedFactoring): KpAnimationAsset {
+  const projection = projectKpIntegerMultipleFactoring(proof);
+  const id = `authored.integer-multiple.${proof.revisionId.slice(7)}`;
+  return createDistributionSemanticAnimation({ id, title: "Factor integer multiples",
+    bundle: createKpAssetBundle({ id: `asset.${id}`, title: "Factor integer multiples", objects: projection.endpoints.map(e => e.object) }),
+    transformations: [projection.transformation], sourceRefIds: [proof.revisionId],
+    metadata: { sourceProofRevision: proof.revisionId } });
 }
 
 /** Existing fixture consumers retain their API. Authored factoring enters the
@@ -81,6 +95,16 @@ function createDistributionAnimationAsset(
 
 function createGeneratedDistributionAnimationAsset(
   fixture: GeneratedDistributionTutorialFixture
+): KpAnimationAsset {
+  return createDistributionSemanticAnimation({ ...fixture, sourceRefIds: [fixture.id, fixture.trace.id],
+    metadata: { sourceFixtureId: fixture.id, sourceFixtureFamilyId: fixture.familyId, sourceTraceId: fixture.trace.id } });
+}
+
+function createDistributionSemanticAnimation(
+  fixture: Pick<GeneratedDistributionTutorialFixture, "id" | "title" | "bundle" | "transformations"> & {
+    readonly sourceRefIds: readonly string[];
+    readonly metadata: Readonly<Record<string, KpAssetMetadataValue>>;
+  }
 ): KpAnimationAsset {
   const animationId = `animation.${fixture.id}`;
   const timelineId = `timeline.${fixture.id}.shared`;
@@ -157,14 +181,12 @@ function createGeneratedDistributionAnimationAsset(
     dashboard: {
       rowId: `animation-${fixture.id.replaceAll(".", "-")}`,
       tags: ["animation", "equation", "distribution", "generated"],
-      sourceRefIds: [fixture.id, fixture.trace.id]
+      sourceRefIds: fixture.sourceRefIds
     },
     presentationProfile:
       createKpSemanticMaterialEquationPresentationProfileV1(),
     metadata: {
-      sourceFixtureId: fixture.id,
-      sourceFixtureFamilyId: fixture.familyId,
-      sourceTraceId: fixture.trace.id
+      ...fixture.metadata
     }
   });
 }

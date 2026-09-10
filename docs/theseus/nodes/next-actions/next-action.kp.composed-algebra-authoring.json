@@ -97,6 +97,20 @@
       "scope": "s09",
       "checkedAt": "2026-09-10T00:41:25.613Z",
       "notes": "19 tests; exact intermediate identity, global occurrence disjointness, source/revision binding, foreign/reordered/copied evidence negatives. Core113123/193558 combined170462/283515 within fixed ceilings."
+    },
+    {
+      "command": "npm run typecheck; npm run check:inference",
+      "status": "failed",
+      "scope": "s10",
+      "checkedAt": "2026-09-10T01:33:07.642Z",
+      "notes": "Initial extension-registry snapshots failed generic handler spread, variance and indexed-key checks. Replaced union erasure with authenticated typed closures and a bounded enumerated-key assertion; negative type consumers retained. Subsequent inference passes within unchanged ceilings."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring; npm run test:common-factor-authoring; npm run typecheck; npm run check:inference; npm run check:architecture; npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "s10",
+      "checkedAt": "2026-09-10T01:38:40.168Z",
+      "notes": "27 composed and 32 common-factor tests pass; 11 equation preservation tests pass. Full typecheck and architecture pass. Core 113682 types/194441 instantiations, combined 171026/284501, ceilings unchanged. Architecture initially exposed the slice-9 private kernel sha256 import; repaired through kernel public-api and reran successfully. Canonical binding is plan evidence only; actual grouped native paint remains s11."
     }
   ],
   "expectedLearning": [

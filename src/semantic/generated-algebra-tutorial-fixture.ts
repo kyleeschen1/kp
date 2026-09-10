@@ -18,6 +18,7 @@ import {
   type KpFlashcardSpec
 } from "./asset-flashcard.ts";
 import type { KpSemanticTransformation } from "./asset-transformation.ts";
+import { createKpFactoringCorrespondenceMap } from "./factoring-correspondence.ts";
 import type { AlgebraTraceFixture } from "./algebra-trace-port-fixture.ts";
 import {
   createGeneratedAlgebraSemanticTransformation
@@ -1382,16 +1383,14 @@ function createGeneratedDistributionTransformations(
               lifecycle("grouping-exits", "removal", [selectorId(ids.factored, "left-paren"), selectorId(ids.factored, "right-paren")], [], "The grouping delimiters exit after distribution.")
             ]
           }
-        : {
-            id: `${ids.transform}.correspondence`,
-            records: [
-              lifecycle("factors-merge", "fan-in", [selectorId(ids.expanded, "left-factor"), selectorId(ids.expanded, "right-factor")], [selectorId(ids.factored, "factor")], "The repeated factors merge into one shared factor."),
-              lifecycle("left-term-persists", "identity", [selectorId(ids.expanded, "left-term")], [selectorId(ids.factored, "left-term")], "The left term persists."),
-              lifecycle("right-term-persists", "identity", [selectorId(ids.expanded, "right-term")], [selectorId(ids.factored, "right-term")], "The right term persists."),
-              lifecycle("plus-persists", "identity", [selectorId(ids.expanded, "plus")], [selectorId(ids.factored, "plus")], "Addition persists."),
-              lifecycle("grouping-enters", "introduction", [], [selectorId(ids.factored, "left-paren"), selectorId(ids.factored, "right-paren")], "Grouping delimiters enter around the sum.")
-            ]
-          },
+        : createKpFactoringCorrespondenceMap(`${ids.transform}.correspondence`, {
+            factorCopies: [selectorId(ids.expanded, "left-factor"), selectorId(ids.expanded, "right-factor")],
+            commonFactor: selectorId(ids.factored, "factor"),
+            leftTerm: [selectorId(ids.expanded, "left-term"), selectorId(ids.factored, "left-term")],
+            rightTerm: [selectorId(ids.expanded, "right-term"), selectorId(ids.factored, "right-term")],
+            plus: [selectorId(ids.expanded, "plus"), selectorId(ids.factored, "plus")],
+            grouping: [selectorId(ids.factored, "left-paren"), selectorId(ids.factored, "right-paren")]
+          }),
       correspondence: distributing
         ? [
             correspondence(ids.factored, "factor", ids.expanded, "left-factor"),

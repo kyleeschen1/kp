@@ -95,7 +95,8 @@
     {
       "id": "s10",
       "title": "Bind transitions to complete canonical presentation owners",
-      "status": "planned"
+      "summary": "Canonical operation bindings now delegate through authenticated typed extensions and existing presentation constructors; shared scalar projection and factoring correspondence owner replace local dispatch. Missing/wrong handlers and forged bindings fail type/runtime checks. 27 composed, 32 M1a, 11 preservation tests; full type, architecture and fixed inference budgets pass.",
+      "status": "complete"
     },
     {
       "id": "s11",

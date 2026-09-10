@@ -4,6 +4,7 @@ import { compileKpDistributionFactoringPresentationPlan } from "../animation/dis
 import { registerKpOperationPresentationPlan, type KpVerifiedFactoringPresentationPlan } from "../animation/operation-presentation-plan-types.ts";
 import type { KpAnimationAsset } from "../animation/asset.ts";
 import type { KpStructuredExpressionNode } from "../semantic/structured-expression.ts";
+import { projectKpStructuredScalarLatex, KpScalarLatexProjectionGap } from "../semantic/structured-scalar-latex.ts";
 import { isKpVerifiedCommonFactorRewrite, type KpVerifiedCommonFactorRewrite } from "../semantic/common-factor-rewrite.ts";
 import { readKpCommonFactorSource, type KpCommonFactorSource } from "./common-factor-source.ts";
 import { normalizeKpCommonFactorEndpoints } from "./common-factor-normalizer.ts";
@@ -75,9 +76,9 @@ export function assertKpCommonFactorPresentation(value: unknown): asserts value 
 }
 
 export function explicitCommonFactorExpression(node: KpStructuredExpressionNode): string {
-  if (node.kind === "number") return String(node.value);
-  if (node.kind === "symbol") return node.name;
-  if (node.kind === "sum") return `(${node.terms.map(explicitCommonFactorExpression).join("+")})`;
-  if (node.kind === "product") return `(${node.factors.map(explicitCommonFactorExpression).join("*")})`;
-  throw new KpCommonFactorPresentationGap("Only verified scalar sums and products have this presentation.");
+  try { return projectKpStructuredScalarLatex(node, "explicit"); }
+  catch (error) {
+    if (error instanceof KpScalarLatexProjectionGap) throw new KpCommonFactorPresentationGap(error.message);
+    throw error;
+  }
 }
