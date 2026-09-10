@@ -214,6 +214,20 @@
       "scope": "s20",
       "checkedAt": "2026-09-10T04:14:01.064Z",
       "notes": "45 composed tests, six-source native pressure cohort and full types pass; no production modifications."
+    },
+    {
+      "command": "npm run visual:composed-algebra; npm run visual:common-factor-authoring -- --project=chromium --grep factoring; npm run test:composed-algebra-authoring; npm run test:canonical-equation-renderer; npm run typecheck; npm run check:architecture; npm run check:inference",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-10T04:25:06.782Z",
+      "notes": "15 composed Chromium and two selected atomic preservation canaries pass;45 composed and29 renderer tests; full type/architecture pass. Fixed core113696/194449 combined171991/286045. Collapsed viewport failed before repair and passed after."
+    },
+    {
+      "command": "npm run visual:common-factor-authoring -- --project=chromium --grep 'factoring continuants|canonical factoring phases'",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-10T04:25:32.818Z",
+      "notes": "Exact selector correction for the two executed atomic preservation canaries; both passed."
     }
   ],
   "progress": {

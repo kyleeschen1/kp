@@ -161,7 +161,8 @@
     {
       "id": "s21",
       "title": "Consolidate only duplication demonstrated by both callers",
-      "status": "planned"
+      "summary": "Consolidated identical full-paint laws across both source-only callers, preserving existing production owners. Shared host now defers collapsed-viewport preparation/paint with deterministic red-green recovery proof; fixed costs pass.",
+      "status": "complete"
     },
     {
       "id": "s22",

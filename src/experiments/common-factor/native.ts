@@ -81,15 +81,24 @@ async function mountResolvedCanonicalOperation(card: HTMLElement, presentation: 
   const durationMs = animation.timeline?.durationMs;
   if (durationMs === undefined) { session.dispose(); throw new Error("Missing factoring timeline."); }
   const clock = createKpReaderTimelinePlaybackClock({ id: `reader.${animation.id}`, durationMs, ownerWindow: window });
+  // Hidden/collapsed hosts cannot issue native geometry or paint-cache identity.
+  // Leave invalidation pending; the next measurable sample uses fresh geometry.
+  const measurable = () => shell.viewport.clientWidth > 0 && shell.viewport.clientHeight > 0;
   const prepare = () => {
+    if (!measurable()) return;
     const saved = semanticProgressAt(clock.getSnapshot().progress);
     for (let i = 0; i <= checkpoints.last * 2; i++) session.seek(i / (checkpoints.last * 2));
     session.seek(saved);
   };
-  try { await document.fonts.ready; prepare(); }
+  try {
+    await document.fonts.ready;
+    if (!measurable()) throw new Error("Canonical authoring preparation requires a measurable viewport.");
+    prepare();
+  }
   catch (error) { clock.dispose(); session.dispose(); throw error; }
   return { clock, session, prepare, checkpoints,
     render(reduced: boolean) {
+      if (!measurable()) { session.invalidate(); return; }
       // The sole scheduler advances elapsed time. The existing checkpoint map
       // projects it into semantic phase space without changing either motif's duration.
       const raw = clock.getSnapshot(), progress = semanticProgressAt(raw.progress);

@@ -9,6 +9,13 @@ import { fileURLToPath } from "node:url";
 for (const width of [1280, 390]) test(`primary combined review at ${width}px`, async ({ page }, info) => {
   test.setTimeout(120_000);
   const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
+  await page.addInitScript(() => window.addEventListener("error", () => {
+    document.documentElement.dataset["reviewLayoutFailure"] = JSON.stringify(
+      [...document.querySelectorAll<HTMLElement>('[data-composed-card], .kp-reader-equation-viewport, [data-kp-reader-equation-measurement]')].map(node => ({
+        className: node.className, rect: node.getBoundingClientRect().toJSON(), connected: node.isConnected,
+        display: getComputedStyle(node).display, visibility: getComputedStyle(node).visibility
+      })));
+  }));
   await page.setViewportSize({ width, height: 900 });
   await page.goto("/experiments/reusable-reasoning/?example=composed-algebra");
   const root = page.locator("#authored-focus-card");
@@ -33,6 +40,7 @@ for (const width of [1280, 390]) test(`primary combined review at ${width}px`, a
   await page.screenshot({ path: info.outputPath("compact-page.png"), fullPage: true });
   await root.locator('[data-composed-practice="prediction"]').click();
   await page.screenshot({ path: info.outputPath("practice.png"), fullPage: true });
+  expect(errors, await page.locator("html").getAttribute("data-review-layout-failure") ?? "live lifecycle").toEqual([]);
   await root.locator("[data-composed-return]").click();
   const edition = buildComposedAlgebraEdition(fileURLToPath(new URL("../src/authoring/examples/composed-algebra-primary.json", import.meta.url)));
   const response = await page.goto(`/tmp/codex/composed-algebra-editions/${edition.directory.split("/").at(-1)}/index.html`);
@@ -173,46 +181,6 @@ async function mountCanary(page: import("@playwright/test").Page, step: 0 | 1 | 
   }, { value, step });
 }
 
-test("source-only product caller traverses both canonical operations and reverses without glue", async ({ page }, info) => {
-  const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
-  await mountCanary(page, "chain", product);
-  const card = page.locator("#composed-canary");
-  const poses = new Map<number, { text: string | null; opacity: string; transform: string;
-    rect: { x: number; y: number; width: number; height: number } }[]>();
-  for (const position of [0, .37, .68, .99, 1, 1.5, 2, 1.5, .68, .37, 1, 0]) {
-    await card.locator("[data-kp-focus-deck-scrubber]").evaluate((node, p) => {
-      (node as HTMLInputElement).value = String(p); node.dispatchEvent(new Event("input"));
-    }, position);
-    await expect.poll(async () => Number(await card.getAttribute("data-composed-step"))).toBeCloseTo(position, 8);
-    const active = card.locator('[data-kp-reader-transition-active="true"]');
-    await expect(active).toHaveCount(1);
-    const pose = await active.locator('[data-kp-equation-material-fragment-role^="group:factoring-"]').evaluateAll(nodes =>
-      nodes.map(node => {
-        const rect = node.getBoundingClientRect(), stage = node.closest('[data-kp-reader-fit-surface]')!.getBoundingClientRect();
-        // Screenshots may scroll the document; ownership geometry is stage-local.
-        return { text: node.textContent, opacity: getComputedStyle(node).opacity,
-          transform: (node as HTMLElement).style.transform,
-          rect: { x: rect.x - stage.x, y: rect.y - stage.y, width: rect.width, height: rect.height } };
-      }));
-    if (position > 0 && position < 1) {
-      expect(pose).toHaveLength(3);
-      expect(pose.every(owner => owner.text?.includes("x") && owner.text.includes("y"))).toBe(true);
-    }
-    const previous = poses.get(position);
-    if (previous) {
-      expect(pose).toHaveLength(previous.length);
-      pose.forEach((owner, index) => {
-        const before = previous[index]!;
-        expect([owner.text, owner.opacity, owner.transform]).toEqual([before.text, before.opacity, before.transform]);
-        for (const key of ["x", "y", "width", "height"] as const)
-          expect(Math.abs(owner.rect[key] - before.rect[key])).toBeLessThan(.001);
-      });
-    } else poses.set(position, pose);
-    await card.screenshot({ path: info.outputPath(`product-${position}.png`) });
-  }
-  expect(errors).toEqual([]);
-});
-
 test("pressure sources prepare native endpoints and bounded material in both orientations", async ({ page }) => {
   test.setTimeout(120_000);
   for (const example of composedAlgebraPressureCases) {
@@ -242,9 +210,30 @@ test("pressure sources prepare native endpoints and bounded material in both ori
   }
 });
 
-test("compound factoring uses the canonical native compositor with one owner per compound", async ({ page }, info) => {
+test("a temporarily collapsed viewport defers layout certification and recovers on the next visible sample", async ({ page }) => {
+  const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
+  await page.setViewportSize({ width: 390, height: 900 });
+  await page.goto("/experiments/reusable-reasoning/?example=composed-algebra");
+  await expect(page.locator("#authored-focus-card")).toHaveAttribute("data-composed-status", "ready", { timeout: 90_000 });
+  const card = page.locator("[data-composed-reader] [data-composed-card]");
+  await card.locator(".kp-reader-equation-viewport").evaluate(node => {
+    const viewport = node as HTMLElement;
+    // Model a transient zero-sized containing block, not an invalid equation.
+    viewport.style.height = "0px";
+    window.dispatchEvent(new Event("resize"));
+    viewport.style.removeProperty("height");
+    window.dispatchEvent(new Event("resize"));
+  });
+  await card.locator("[data-kp-focus-deck-next]").click();
+  await expect(card).toHaveAttribute("data-composed-step", "1", { timeout: 10_000 });
+  expect(errors).toEqual([]);
+});
+
+// Both retained callers must traverse identical ownership and continuity laws.
+for (const [name, value, factorInk] of [["primary", source, "(x+3)"], ["product", product, "(x⋅y)"]] as const) {
+test(`${name}: compound factoring uses the canonical native compositor with one owner per compound`, async ({ page }, info) => {
   test.setTimeout(120_000);
-  const roles = await mountCanary(page, 0);
+  const roles = await mountCanary(page, 0, value);
   const card = page.locator("#composed-canary");
   const poses = new Map<number, unknown>();
   for (const p of [0, .01, .18, .37, .68, .99, 1, .99, .37, .01, 0]) {
@@ -260,7 +249,7 @@ test("compound factoring uses the canonical native compositor with one owner per
         opacity: getComputedStyle(node).opacity, transform: (node as HTMLElement).style.transform,
         x: node.getBoundingClientRect().x, y: node.getBoundingClientRect().y
       })));
-      for (const owner of pose) expect(owner.text?.replaceAll(/\s/g, "")).toBe("(x+3)");
+      for (const owner of pose) expect(owner.text?.replaceAll(/\s/g, "")).toBe(factorInk);
       if (poses.has(p)) expect(pose).toEqual(poses.get(p)); else poses.set(p, pose);
     }
     await card.screenshot({ path: info.outputPath(`compound-${p}.png`) });
@@ -301,13 +290,13 @@ test("compound factoring uses the canonical native compositor with one owner per
   }
 });
 
-test("factoring occupancy cannot disappear with ownership partitioning", async ({ page }) => {
-  await mountCanary(page, 0);
+test(`${name}: factoring occupancy cannot disappear with ownership partitioning`, async ({ page }) => {
+  await mountCanary(page, 0, value);
   const result = await page.evaluate(async value => {
     const path = "/tests/browser-helpers/composed-algebra-canary.ts";
     const { probeOmittedFactoringOccupancy } = await import(/* @vite-ignore */ path) as typeof import("./browser-helpers/composed-algebra-canary.ts");
     return probeOmittedFactoringOccupancy(value);
-  }, source);
+  }, value);
   expect(result.isolatedIntersections).toBe(0);
   expect(result.combinedIntersections).toBeGreaterThan(0);
   expect(result.uninspectedPublicationRejected).toBe(true);
@@ -321,8 +310,8 @@ test("factoring occupancy cannot disappear with ownership partitioning", async (
   }
 });
 
-test("contextual sum uses certified ink-glyph evaluation while compound context persists", async ({ page }, info) => {
-  await mountCanary(page, 1);
+test(`${name}: contextual sum uses certified ink-glyph evaluation while compound context persists`, async ({ page }, info) => {
+  await mountCanary(page, 1, value);
   const card = page.locator("#composed-canary"), stage = card.locator("[data-kp-reader-fit-surface]");
   const poses = new Map<number, unknown>();
   let contextShape: readonly { x: number; y: number; width: number; height: number }[] | undefined;
@@ -345,7 +334,7 @@ test("contextual sum uses certified ink-glyph evaluation while compound context 
         }).sort((a, b) => a.rect.left - b.rect.left);
       });
       expect(pose.length).toBeGreaterThan(0);
-      expect(pose.map(p => p.text).join("").replaceAll(/\s/g, "")).toBe("(x+3)");
+      expect(pose.map(p => p.text).join("").replaceAll(/\s/g, "")).toBe(factorInk);
       expect(pose.every(item => item.opacity === "1")).toBe(true);
       const shape = pose.map(item => ({ x: item.rect.left - pose[0]!.rect.left, y: item.rect.top - pose[0]!.rect.top,
         width: item.rect.width, height: item.rect.height }));
@@ -358,8 +347,8 @@ test("contextual sum uses certified ink-glyph evaluation while compound context 
   }
 });
 
-test("one canonical chain retains native geometry across the shared checkpoint and direct reverse", async ({ page }, info) => {
-  await mountCanary(page, "chain");
+test(`${name}: one canonical chain retains native geometry across the shared checkpoint and direct reverse`, async ({ page }, info) => {
+  await mountCanary(page, "chain", value);
   const card = page.locator("#composed-canary");
   await expect(card.locator("[data-kp-canonical-equation-host]")).toHaveCount(1);
   await expect(card.locator("[data-kp-reader-transition]")).toHaveCount(2);
@@ -419,3 +408,4 @@ test("one canonical chain retains native geometry across the shared checkpoint a
   expect(samples.get(1)!.text).toHaveLength(10);
   expect(samples.get(2)!.text).toHaveLength(6);
 });
+}
