@@ -93,6 +93,19 @@ over unsampled time. Other browsers, lifecycle pressure and remaining successor
 topologies retain their later gates. The source and result intentionally differ;
 the shared ink-knot handoff preserves occupied visual attention, not identical
 glyph contours across an arithmetic replacement.
+# Lifecycle pressure after migration (s19)
+
+`npm run visual:composed-algebra -- --grep 'composed remount|temporarily collapsed|three-stop controls'`
+passes three Chromium cases. Both source replacements detach the old card;
+resize and font events produce zero subsequent mutations in that detached tree.
+Reduced-motion endpoints retain the shared count and one active transition;
+collapsed layout recovers through fresh measurable preparation.
+`npm run visual:common-denominator-pressure -- --grep 'font and viewport'`
+also passes: actual measurement/font revisions advance, the playhead is retained,
+and reduced motion retains one accessible endpoint and paint owner. The browser
+font check dispatches a font-completion event, not an exhaustive font-download
+race matrix. No production lifecycle changes were necessary.
+
 # Timeline pressure after callback retirement (s18)
 
 `npm run visual:composed-algebra -- --grep 'interrupted motion|three-stop controls|one canonical chain'`

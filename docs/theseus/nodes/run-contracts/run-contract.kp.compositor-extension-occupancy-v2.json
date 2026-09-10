@@ -155,7 +155,8 @@
     {
       "id": "s19",
       "title": "Pressure resize fonts disposal remount and reduced motion",
-      "status": "planned"
+      "summary": "Four scoped browser cases, five geometry-cache tests, twenty-three contribution tests and test types pass. Detached cards stay inactive after resize/font events, reduced stops remain coherent, fresh measurement retains playhead. No production change; full s17 production typecheck remains applicable.",
+      "status": "complete"
     },
     {
       "id": "s20",

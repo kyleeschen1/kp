@@ -194,6 +194,45 @@ test("composed authoring applies one coherent prepared revision and preserves it
   expect(JSON.parse(json)).toEqual(edited);
 });
 
+test("composed remount releases stale owners and resize preserves the current contribution", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/experiments/reusable-reasoning/?example=composed-algebra");
+  const root = page.locator("#authored-focus-card");
+  await expect(root).toHaveAttribute("data-composed-status", "ready");
+  await root.locator("[data-reasoning-editor] summary").click();
+  for (const value of [product, source]) {
+    const card = root.locator("[data-composed-reader] [data-composed-card]");
+    const old = await card.elementHandle();
+    await root.locator("[data-reasoning-json]").fill(JSON.stringify(value));
+    await root.locator("[data-composed-apply]").click();
+    await expect(root.locator("[data-reasoning-draft-status]")).toHaveAttribute("data-status", "applied");
+    expect(await old!.evaluate(node => node.isConnected)).toBe(false);
+    await expect(card).toHaveCount(1);
+    for (const position of [1, 2, 1, 0]) {
+      await card.locator("[data-kp-focus-deck-scrubber]").evaluate((node, p) => {
+        (node as HTMLInputElement).value = String(p); node.dispatchEvent(new Event("input"));
+      }, position);
+      await expect(card).toHaveAttribute("data-composed-step", String(position));
+      await expect(card.locator("[data-composed-count]")).toHaveText(`${position + 1} / 3`);
+    }
+    await page.setViewportSize({ width: value === product ? 390 : 1280, height: 900 });
+    await expect(card).toHaveAttribute("data-composed-step", "0");
+    const staleMutations = await old!.evaluate(async node => {
+      let mutations = 0;
+      const observer = new MutationObserver(records => { mutations += records.length; });
+      observer.observe(node, { subtree: true, attributes: true, childList: true });
+      window.dispatchEvent(new Event("resize"));
+      document.fonts.dispatchEvent(new Event("loadingdone"));
+      await new Promise(resolve => setTimeout(resolve, 250));
+      observer.disconnect(); return mutations;
+    });
+    expect(staleMutations).toBe(0);
+    await old!.dispose();
+    await expect(card.locator('[data-kp-reader-transition-active="true"]')).toHaveCount(1);
+    await expect(root.locator(".common-factor-staging")).toHaveCount(0);
+  }
+});
+
 test("both retained sources round-trip native Apply practice and displayed-source download", async ({ page }) => {
   test.setTimeout(120_000);
   await page.goto("/experiments/reusable-reasoning/?example=composed-algebra");
