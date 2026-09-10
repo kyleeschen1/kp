@@ -67,7 +67,8 @@
     {
       "id": "s04",
       "title": "Bind factoring and coefficient evaluation",
-      "status": "planned"
+      "summary": "Extended prefix binds factoring and coefficient evaluation to existing issued owners; no authority claimed for later states.",
+      "status": "complete"
     },
     {
       "id": "s05",
