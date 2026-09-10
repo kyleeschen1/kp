@@ -1,6 +1,10 @@
 # Compositor extension participation: source-budget checkpoint
 
-Date: 2026-09-10. Outcome: STOP_CONDITION, not a failed runtime test.
+Date: 2026-09-10. Outcome: historical STOP_CONDITION, now resolved by user approval.
+Accepted amendment and standing authority:
+`../decisions/2026-09-10-engineering-budget-repair-autonomy.md`.
+The findings below preserve the pre-amendment measurement and recommendation;
+their pending-approval wording is historical, not a current stop.
 Contract: `run-contract.kp.compositor-extension-occupancy-v2`.
 Proposal: `../reviews/2026-09-10-compositor-extension-occupancy-long-loop-proposal.md`.
 Theseus owns live slice status; this record owns the cost finding and proposed

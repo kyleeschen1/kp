@@ -57,8 +57,8 @@ collaboration experiment, not a learner-facing editorial voice standard.
   routine nonvisual checkpoints and repairable verification failures until a
   required visual approval is needed. This rule persists across sessions.
   Record evidence and repair failing gates; never waive checks. TypeScript cost
-  policy corrections follow the standing approval below; other budgets cannot
-  be raised merely to continue. Stop only for visual judgment, completion/exhausted approved scope,
+  policy corrections follow the standing budget-repair approval below; budgets
+  cannot be raised without diagnosis and recorded rationale. Stop only for visual judgment, completion/exhausted approved scope,
   user pause, or a genuine safety, authority, scope, or external blocker that
   cannot be resolved within the approved work. See
   `docs/project/decisions/2026-09-06-persistent-loop-continuation.md`.
@@ -81,9 +81,25 @@ collaboration experiment, not a learner-facing editorial voice standard.
   never disable checking, erase types, omit fixtures or automatically refresh a
   failing ceiling. Measure before/after, prefer responsible-boundary repairs,
   retain bounded headroom, record the reason and continue the approved loop.
-  This approval does not extend to semantic/product changes, unrelated budgets,
+  This approval does not extend to semantic/product changes,
   external writes, destructive actions or new visual treatments. See
   `docs/project/decisions/2026-09-09-typescript-cost-repair-autonomy.md`.
+
+- Standing user direction (2026-09-10): recommended engineering-budget repairs
+  are automatically approved across sessions, not just TypeScript repairs.
+  This includes source/module, bundle/reader payload, runtime/resource and
+  tool-output/context budgets within otherwise approved work. Diagnose the
+  cause, prefer useful boundary/implementation repairs, and when appropriate
+  apply an explicit, bounded budget/baseline/cohort amendment without asking.
+  Record measured before/after costs, affected complete consumers, alternatives,
+  rationale and exact policy changes; distinguish estimates from measurements.
+  Keep executable gates and regression tests. Never hide cost, omit consumers,
+  minify for source accounting, erase guarantees or blindly refresh a ceiling.
+  Budget-only issues are not human checkpoints: repair, verify and continue an
+  approved loop. This supersedes older budget-only approval stops, not visual,
+  semantic, scope, safety or external-authority gates. It grants no permission
+  for spending money, paid model calls, deployment or unrelated repository work.
+  See `docs/project/decisions/2026-09-10-engineering-budget-repair-autonomy.md`.
 
 - Prefer direct commands that can match audited execution rules. Do not add `zsh -lc`, environment assignments, pipes, redirection, substitutions, or wrapper scripts when the same check has a direct invocation.
 - Do not request or accumulate blanket approval for `node`, shell interpreters, changing `tmp/codex/` filenames, destructive Git commands, or deletion commands. Promote recurring checks into a committed `scripts/` or `tests/` entrypoint and expose them through a stable `npm run` command.

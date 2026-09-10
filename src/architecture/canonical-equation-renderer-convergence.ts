@@ -105,7 +105,8 @@ export const kpCanonicalEquationRendererConvergence = Object.freeze({
   // The aggregate now counts the endpoint owner alongside the already bounded
   // plan-boundary extraction and remains tighter than the partition ceilings.
   // Approved canonical factoring composition amendment; measured 512,619 bytes.
-  maximumProductionAggregateSourceBytes: 515_000,
+  // Accepted bounded extension-participation allowance; other cohorts stay fixed.
+  maximumProductionAggregateSourceBytes: 530_000,
   maximumExperimentRouteGzipGrowthBytes: 12_000,
   maximumReaderRouteRegressionRatio: 0.05,
   forbiddenProductionVocabulary: Object.freeze([
@@ -184,7 +185,7 @@ export function validateKpCanonicalEquationRendererConvergence(
     policy.maximumProductionRendererSupportModules !== 8 ||
     policy.maximumProductionRendererSupportSourceBytes !== 80_000 ||
     policy.maximumProductionAggregateModules !== 31 ||
-    policy.maximumProductionAggregateSourceBytes !== 515_000 ||
+    policy.maximumProductionAggregateSourceBytes !== 530_000 ||
     policy.maximumExperimentRouteGzipGrowthBytes !== 12_000 ||
     policy.maximumReaderRouteRegressionRatio !== 0.05
   ) {

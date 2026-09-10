@@ -2,9 +2,9 @@
   "id": "next-action.kp.compositor-extension-occupancy",
   "kind": "next-action",
   "title": "Require complete compositor extension participation before further specialized motifs",
-  "status": "blocked",
+  "status": "ready",
   "domain": "rendering",
-  "summary": "Explicit s02 source-cost stop; awaiting aggregate-only 515000 to 530000 byte policy amendment. All other gates unchanged; see source-budget checkpoint.",
+  "summary": "User accepted aggregate-only 530000-byte allowance and persistent engineering-budget repair autonomy; prior budget-only stop resolved. Continue existing s02 then unchanged migration scope.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -37,6 +37,10 @@
     {
       "kind": "file",
       "path": "docs/project/threads/2026-09-10-compositor-extension-source-budget-checkpoint.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-10-engineering-budget-repair-autonomy.md"
     }
   ],
   "dependsOn": {
@@ -85,11 +89,25 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-09-10T15:51:47.982Z"
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "budget-policy",
+      "checkedAt": "2026-09-10T16:02:37.218Z",
+      "notes": "29 tests pass after exact aggregate-only policy amendment."
+    },
+    {
+      "command": "npm run check:compositor-extension-cost",
+      "status": "passed",
+      "scope": "budget-policy",
+      "checkedAt": "2026-09-10T16:02:38.219Z",
+      "notes": "Source remains 514955; aggregate ceiling 530000, headroom 15045. All other cohorts and ceilings unchanged."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "STOP_CONDITION at s02: complete baseline passes but only 45 aggregate source bytes remain; no credible fixed-budget path established from useful consolidation. Aggregate-only 530000-byte ceiling proposed, not applied. Inventory complete; cost slice awaits explicit non-TypeScript authority."
+    "summary": "Budget-only stop resolved. Accepted aggregate-only ceiling 530000 applied; measured source remains 514955. Standing engineering-budget repair autonomy recorded in AGENTS, roadmap and decision. Next execution remains s02 consolidation selection and then s03 bypass characterization."
   },
   "revisitWhen": [
     "User explicitly approves the linked 24-slice successor proposal.",
@@ -99,10 +117,10 @@
     "Measure one complete extension seam reused by two distinct existing mechanisms without changed choreography."
   ],
   "allowedWork": [
-    "Exact approved 24-slice compositor extension proposal; finite migration and authoring-trial successor planning."
+    "Exact approved 24-slice compositor proposal plus standing 2026-09-10 engineering-budget-repair autonomy; diagnose and apply recommended bounded budget repairs without another consultation."
   ],
   "disallowedWork": [
-    "No new motifs, external models, subagents, universal engine, unapproved non-TypeScript budget amendments, merge, deployment or automatic successor."
+    "No new motifs, external models, subagents, universal engine, merge, deployment or automatic successor; no hidden cost, omitted consumers, disabled checks or unreviewed visible changes."
   ],
   "criteria": [
     {

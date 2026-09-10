@@ -113,11 +113,14 @@ metadata-incomplete v1 is superseded. Theseus owns live execution and stop state
 It requires complete extension participation and current final-scene evidence
 before further specialized motif expansion; the factoring repair does not
 complete that broader work. Start with measured consolidation: the accounted
-renderer closure has only 45 bytes of source headroom. No successor execution or
-further non-TypeScript budget amendment is automatically authorized.
-The measured cost checkpoint and pending aggregate-only amendment are in
+renderer closure initially had only 45 bytes of source headroom. The accepted
+aggregate ceiling is now 530,000 bytes; successor execution is not authorized.
+Recommended engineering-budget repairs now have persistent automatic approval:
+`decisions/2026-09-10-engineering-budget-repair-autonomy.md`. Keep complete
+accounting, bounded explicit amendments and verification; preserve other gates.
+The measured cost checkpoint and accepted aggregate-only amendment are in
 `threads/2026-09-10-compositor-extension-source-budget-checkpoint.md`.
-No production behavior or cost policy has changed at this checkpoint.
+The prior budget-only stop is resolved; no production behavior has changed.
 The user accepted the authoring-leverage assessment on 2026-09-10: finish this
 finite seam, then measure an unfamiliar supported authoring task before further
 capability expansion. See

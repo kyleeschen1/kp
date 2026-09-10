@@ -2,8 +2,8 @@
   "id": "run-contract.kp.compositor-extension-occupancy-v2",
   "kind": "run-contract",
   "title": "Compositor extension participation",
-  "status": "blocked",
-  "summary": "STOP_CONDITION at s02; one of 24 slices complete. Await explicit aggregate source-budget authority; not a runtime or visual failure.",
+  "status": "ready",
+  "summary": "Budget authority stop resolved by explicit user direction recorded in engineering-budget-repair-autonomy decision. Budget-only stop clauses superseded; s02 remains continuation point, not completed migration.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -13,6 +13,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-10-compositor-extension-occupancy-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-10-engineering-budget-repair-autonomy.md"
     }
   ],
   "verification": [
@@ -24,10 +28,10 @@
     "theseus workspace validate"
   ],
   "allowedWork": [
-    "Exact approved 24-slice proposal: inventory and costed consolidation, required contribution contract, final-scene evidence, migration, preservation, release and authoring-trial successor proposal. One scoped commit and closed receipt per slice; brief context by default."
+    "Exact approved 24-slice proposal plus accepted 2026-09-10 engineering-budget-repair autonomy decision. Budget-only stop clauses are superseded: diagnose, repair or explicitly amend bounded policy, verify and continue without consultation. All complete accounting and other gates remain."
   ],
   "disallowedWork": [
-    "No changed motifs without review, collision optimizer, universal engine, new subject family, editor rewrite, external models, subagents, merge, deployment, automatic successor or unapproved non-TypeScript budget amendment."
+    "No changed motifs without review, collision optimizer, universal engine, new subject family, editor rewrite, external models, subagents, merge, deployment or automatic successor. No hidden cost, omitted consumers, blind ceiling refresh or disabled checks."
   ],
   "goal": "Require complete current final-scene inspection participation for in-scope native KaTeX extensions while preserving accepted motifs, then hand off to measured unfamiliar authoring.",
   "target": "next-action.kp.compositor-extension-occupancy",
@@ -49,7 +53,7 @@
     {
       "id": "s02",
       "title": "Measure complete costs and select useful consolidation",
-      "summary": "Cost assessment recorded; paused under explicit no-credible-fixed-budget-path stop. Resume this slice after approval of aggregate-only source-policy amendment; no production changes or gate relaxation.",
+      "summary": "Prior authority stop resolved; 530000 aggregate ceiling applied and baseline verified. Continue costed consolidation selection under standing budget-repair approval; other scope and visual gates remain.",
       "status": "planned"
     },
     {

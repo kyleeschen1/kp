@@ -1,6 +1,12 @@
 # Compositor extension participation — proposed long loop
 
 Date: 2026-09-10. Status: APPROVED by the user's explicit “approve”.
+Authority amendment (2026-09-10): the user accepted the 530,000-byte aggregate
+source ceiling and persistent automatic approval for recommended engineering-
+budget repairs. See `../decisions/2026-09-10-engineering-budget-repair-autonomy.md`.
+This supersedes budget-only consultation stops below; scope, visuals, complete
+accounting and verification remain required. The original agreement is retained
+as provenance; slice order and intended outcomes are unchanged.
 Target: `next-action.kp.compositor-extension-occupancy`.
 Execution: `run-contract.kp.compositor-extension-occupancy-v2`.
 The unstarted metadata-incomplete v1 record is superseded, not another queue.

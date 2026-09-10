@@ -2,6 +2,11 @@
 
 Status: compositor extension-participation loop approved and active; M1b, R1–R4B and M1a remain complete
 Last Updated: 2026-09-10
+Standing budget policy: recommended engineering-budget repairs, including
+explicit bounded policy amendments, are automatically approved across sessions.
+See `../decisions/2026-09-10-engineering-budget-repair-autonomy.md`.
+The compositor aggregate-only 530,000-byte amendment is accepted; the earlier
+budget-only stop is resolved. Theseus owns continuation and evidence.
 Current successor reference: `../reviews/2026-09-07-reconciled-authoring-loop-horizon.md`.
 It preserves the original architectural obligations and the tax/Bayes direction;
 the exact R1 26-slice proposal was approved and is now completed evidence:
