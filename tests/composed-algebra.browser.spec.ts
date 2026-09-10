@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import source from "../src/authoring/examples/composed-algebra-primary.json" with { type: "json" };
 import product from "../src/authoring/examples/composed-algebra-product.json" with { type: "json" };
+import { composedAlgebraPressureCases } from "./fixtures/composed-algebra-pressure.ts";
 import { kpEquationSettlementTolerancePx } from "../src/animation/equation-shared-presentation-policy.ts";
 import { buildComposedAlgebraEdition } from "../scripts/build-composed-algebra-edition.ts";
 import { fileURLToPath } from "node:url";
@@ -210,6 +211,35 @@ test("source-only product caller traverses both canonical operations and reverse
     await card.screenshot({ path: info.outputPath(`product-${position}.png`) });
   }
   expect(errors).toEqual([]);
+});
+
+test("pressure sources prepare native endpoints and bounded material in both orientations", async ({ page }) => {
+  test.setTimeout(120_000);
+  for (const example of composedAlgebraPressureCases) {
+    await mountCanary(page, "chain", example.source);
+    const card = page.locator("#composed-canary");
+    for (const position of [0, .37, 1, 1.5, 2, 1, 0]) {
+      await card.locator("[data-kp-focus-deck-scrubber]").evaluate((node, p) => {
+        (node as HTMLInputElement).value = String(p); node.dispatchEvent(new Event("input"));
+      }, position);
+      await expect.poll(async () => Number(await card.getAttribute("data-composed-step"))).toBeCloseTo(position, 8);
+      const dimensions = await card.locator('[data-kp-reader-transition-active="true"] [data-kp-reader-fit-surface]').evaluate(stage => {
+        const bounds = stage.getBoundingClientRect();
+        return [...stage.querySelectorAll<HTMLElement>('[data-kp-equation-material-semantic-entity-id]')]
+          .filter(owner => Number(getComputedStyle(owner).opacity) > 0)
+          .map(owner => {
+            const rect = owner.getBoundingClientRect();
+            return { finite: [rect.left, rect.top, rect.width, rect.height].every(Number.isFinite),
+              width: rect.width, height: rect.height, stageWidth: bounds.width, stageHeight: bounds.height };
+          });
+      });
+      for (const rect of dimensions) {
+        expect(rect.finite).toBe(true);
+        expect(rect.width).toBeLessThanOrEqual(rect.stageWidth);
+        expect(rect.height).toBeLessThanOrEqual(rect.stageHeight);
+      }
+    }
+  }
 });
 
 test("compound factoring uses the canonical native compositor with one owner per compound", async ({ page }, info) => {

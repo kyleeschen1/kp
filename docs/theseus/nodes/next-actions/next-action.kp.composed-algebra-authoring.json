@@ -207,6 +207,13 @@
       "scope": "s19",
       "checkedAt": "2026-09-10T04:10:51.140Z",
       "notes": "38 composed,32 legacy,7 parser,10 Chromium checks pass; full types and architecture pass. No caller renderer or motion changes."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring; npm run visual:composed-algebra -- --grep pressure; npm run typecheck",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-10T04:14:01.064Z",
+      "notes": "45 composed tests, six-source native pressure cohort and full types pass; no production modifications."
     }
   ],
   "progress": {

@@ -155,7 +155,8 @@
     {
       "id": "s20",
       "title": "Pressure zero, repeated symbols, wider coefficients and invalid chains",
-      "status": "planned"
+      "summary": "Six full-path pressure cases cover zero, repeated symbols and wider coefficients in both orientations; invalid results retain last-valid and unsupported atomic presentations return typed gaps.",
+      "status": "complete"
     },
     {
       "id": "s21",
