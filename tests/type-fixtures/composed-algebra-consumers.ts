@@ -101,3 +101,6 @@ void [proofAsPresentation, wrongPresentation];
 // @ts-expect-error canonical evaluation cannot silently omit its ink-glyph certificate
 const missingInkCertificate: KpComposedAlgebraPresentation["steps"][1] = { ...presentation.steps[1], evaluationCertificates: [] };
 void missingInkCertificate;
+// @ts-expect-error a two-operation chain cannot drop its shared checkpoint
+const skippedMiddle: KpComposedAlgebraPresentation["checkpointProgress"] = [0, 1];
+void skippedMiddle;

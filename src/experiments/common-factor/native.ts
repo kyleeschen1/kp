@@ -15,6 +15,7 @@ import { applyKpSemanticEnvelopeEquationStageLayout } from "../../reader/app/sem
 import { resolveKpReaderEquationPresentationProfile } from "../../reader/document/equation-presentation.ts";
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
 import type { KpReaderEquationLessonDescriptor } from "../../reader/app/equation-lesson-descriptor.ts";
+import { createKpFocusDeckCheckpointMap } from "../../tutorial/focus-deck-beat-navigation.ts";
 
 export async function mountCommonFactorNativeSurface(card: HTMLElement, draft: KpPreparedCommonFactorDraft) {
   assertKpPreparedCommonFactorDraft(draft);
@@ -37,11 +38,20 @@ export async function mountCanonicalComposedAlgebraOperation(card: HTMLElement, 
     presentation.steps[step].animation, composedAlgebraOperationEndpoints(presentation, step), presentation.steps[step].evaluationCertificates);
 }
 
+export async function mountCanonicalComposedAlgebraPresentation(card: HTMLElement, presentation: KpComposedAlgebraPresentation) {
+  assertKpComposedAlgebraPresentation(presentation);
+  const endpoints = [...composedAlgebraOperationEndpoints(presentation, 0), ...composedAlgebraOperationEndpoints(presentation, 1).slice(1)];
+  return mountResolvedCanonicalOperation(card, { ...presentation, canonicalReference: presentation.steps.map(step => step.canonicalReference).join(" ") },
+    presentation.animation, endpoints, presentation.steps.flatMap(step => step.evaluationCertificates), presentation.checkpointProgress);
+}
+
 // Only the authenticated public mounts select these arguments; hosts cannot
 // pair an unrelated animation, annotation or plan with a checked source.
 async function mountResolvedCanonicalOperation(card: HTMLElement, presentation: { owner: string; canonicalReference: string; revisionId: string },
   animation: KpAnimationAsset, endpoints: readonly KpStructuredEquationAnnotatedEndpoint[],
-  evaluationCertificates: readonly KpVerifiedEquationEvaluationFamilyCertificateV2[] = []) {
+  evaluationCertificates: readonly KpVerifiedEquationEvaluationFamilyCertificateV2[] = [], checkpointProgress: readonly number[] = [0, 1]) {
+  const checkpoints = createKpFocusDeckCheckpointMap(checkpointProgress);
+  const semanticProgressAt = (elapsedProgress: number) => checkpoints.positionAt(elapsedProgress) / checkpoints.last;
   card.dataset["canonicalPresentationOwner"] = presentation.owner;
   card.dataset["canonicalPresentationReference"] = presentation.canonicalReference;
   card.dataset["canonicalPresentationRevision"] = presentation.revisionId;
@@ -66,16 +76,24 @@ async function mountResolvedCanonicalOperation(card: HTMLElement, presentation: 
     evaluationCertificates,
     equationPresentationProfile: resolveKpReaderEquationPresentationProfile("standard"), linkRoot: card,
     createStageLayoutIntent: () => ({ executionState: "intent", geometryAuthority: "native-measurement", operationSpecificCoordinates: false,
-      phases: [{ nodeId: animation.transformations[0]!.id, policy: "single-row", rows: [{ id: "row.common-factor.expression", role: "expression",
-        envelopeIds: endpoints.flatMap(e => e.groupEnvelopes.map(g => g.id)) }] }] }) });
+      phases: animation.transformations.map(operation => ({ nodeId: operation.id, policy: "single-row", rows: [{ id: "row.common-factor.expression", role: "expression",
+        envelopeIds: endpoints.filter(e => [...operation.sourceObjectIds, ...operation.targetObjectIds].includes(e.stateId)).flatMap(e => e.groupEnvelopes.map(g => g.id)) }] })) }) });
   const durationMs = animation.timeline?.durationMs;
   if (durationMs === undefined) { session.dispose(); throw new Error("Missing factoring timeline."); }
   const clock = createKpReaderTimelinePlaybackClock({ id: `reader.${animation.id}`, durationMs, ownerWindow: window });
-  const prepare = () => { const saved = clock.getSnapshot().progress; for (const p of [0, .5, 1, saved]) session.seek(p); };
+  const prepare = () => {
+    const saved = semanticProgressAt(clock.getSnapshot().progress);
+    for (let i = 0; i <= checkpoints.last * 2; i++) session.seek(i / (checkpoints.last * 2));
+    session.seek(saved);
+  };
   try { await document.fonts.ready; prepare(); }
   catch (error) { clock.dispose(); session.dispose(); throw error; }
-  return { clock, session, prepare,
-    render(reduced: boolean) { const sample = session.sample({ clock: clock.getSnapshot(), motionMode: reduced ? "essential" : "continuous" });
+  return { clock, session, prepare, checkpoints,
+    render(reduced: boolean) {
+      // The sole scheduler advances elapsed time. The existing checkpoint map
+      // projects it into semantic phase space without changing either motif's duration.
+      const raw = clock.getSnapshot(), progress = semanticProgressAt(raw.progress);
+      const sample = session.sample({ clock: { ...raw, progress, progressPermille: Math.round(progress * 1000) }, motionMode: reduced ? "essential" : "continuous" });
       card.dataset["commonFactorProgress"] = String(clock.getSnapshot().progress);
       card.dataset["commonFactorState"] = sample.accessibleEquationState; },
     resize() { session.invalidate(); prepare(); }, dispose() { clock.dispose(); session.dispose(); } };

@@ -9,6 +9,8 @@ import { resolveKpFactoringOperationBinding, resolveKpEvaluationOperationBinding
 import { normalizeKpScalarSumProductEndpoint } from "./common-factor-normalizer.ts";
 import { sameKpStructuredExpressionTree } from "../semantic/structured-expression-rewrite.ts";
 import { KpComposedAlgebraRepair } from "./composed-algebra-source.ts";
+import { composeKpEquationOperationAssets } from "../animation/compose-equation-operation-assets.ts";
+import type { KpAnimationAsset } from "../animation/asset.ts";
 
 const brand = Symbol("canonical-composed-algebra-presentation");
 const issued = new WeakMap<object, string>();
@@ -18,6 +20,8 @@ export interface KpComposedAlgebraPresentation {
   readonly checked: KpSourceBoundComposedAlgebraProof;
   readonly revisionId: string;
   readonly steps: readonly [KpCanonicalFactoringOperationBinding, KpCanonicalEvaluationOperationBinding];
+  readonly animation: KpAnimationAsset;
+  readonly checkpointProgress: readonly [0, number, 1];
 }
 const resolve = defineKpSemanticOperationProjector<KpVerifiedComposedAlgebraChain["steps"][number], KpCanonicalAlgebraOperationBinding>({
   "verified-composed-factoring": { accepts: isKpVerifiedComposedFactoring, project: resolveKpFactoringOperationBinding },
@@ -46,15 +50,18 @@ function resolveCheckedPresentation(checked: KpSourceBoundComposedAlgebraProof):
     if (object.id !== checked.source.states[index]!.id || !sameKpStructuredExpressionTree(parsed.structured.root, checked.chain.endpoints[index]!.root))
       throw gap("Canonical endpoint notation does not represent this exact verified source.");
   });
-  const binding: KpComposedAlgebraPresentation = Object.freeze({ [brand]: true as const,
+  const composition = composeKpEquationOperationAssets(`animation.composed-algebra.${checked.revisionId.slice(7)}`, checked.source.editorial.title, [first.animation, second.animation]);
+  if (composition.checkpointProgress.length !== 3) throw gap("The bounded chain must expose exactly three clock stops.");
+  const binding: KpComposedAlgebraPresentation = Object.freeze({ [brand]: true as const, ...composition,
+    checkpointProgress: Object.freeze([0, composition.checkpointProgress[1]!, 1] as const),
     owner: "canonical-composed-algebra-v1", checked, revisionId: checked.revisionId, steps: Object.freeze([first, second] as const) });
-  issued.set(binding, JSON.stringify(binding.steps));
+  issued.set(binding, JSON.stringify([binding.steps, binding.animation]));
   return binding;
 }
 export function assertKpComposedAlgebraPresentation(value: unknown): asserts value is KpComposedAlgebraPresentation {
   if (!value || typeof value !== "object" || !issued.has(value)) throw new TypeError("Canonical mounting requires an issued composed presentation binding.");
   const binding = value as KpComposedAlgebraPresentation;
-  if (issued.get(binding) !== JSON.stringify(binding.steps)) throw new TypeError("Canonical presentation changed after resolution.");
+  if (issued.get(binding) !== JSON.stringify([binding.steps, binding.animation])) throw new TypeError("Canonical presentation changed after resolution.");
   assertKpSourceBoundComposedAlgebraProof(binding.checked);
 }
 function gap(message: string): KpComposedAlgebraRepair {

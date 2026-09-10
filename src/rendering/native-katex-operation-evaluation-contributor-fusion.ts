@@ -253,6 +253,9 @@ export function applyKpNativeKatexContributorFusion(input: {
   );
   const sourceOwnsPaint =
     input.progress < input.opticalProfile.ownershipHandoffAt;
+  // Native endpoints own exact stops. The optical adapter runs after the
+  // base compositor and must not re-expose its hidden material duplicates.
+  const materialOwnsPaint = input.progress > 0 && input.progress < 1;
   const sourceKernelOffsets = centeredOffsetsByNativeGeometry(
     sourceOwners,
     sourcePivots,
@@ -262,7 +265,7 @@ export function applyKpNativeKatexContributorFusion(input: {
   sourceOwners.forEach((owner, index) => {
     const sourceCenter = sourcePivots[index]!;
     const slotOffset = sourceKernelOffsets[index]!;
-    setOwnerPaintPresence(owner, sourceOwnsPaint);
+    setOwnerPaintPresence(owner, materialOwnsPaint && sourceOwnsPaint);
     owner.style.transform = ownerTransform({
       translateX:
         (knotCenter.x - sourceCenter.x + slotOffset.x) * gatherProgress,
@@ -273,7 +276,7 @@ export function applyKpNativeKatexContributorFusion(input: {
   });
   targetOwners.forEach((owner, index) => {
     const targetCenter = targetPivots[index]!;
-    setOwnerPaintPresence(owner, !sourceOwnsPaint);
+    setOwnerPaintPresence(owner, materialOwnsPaint && !sourceOwnsPaint);
     const visual = owner.firstElementChild as HTMLElement | null;
     if (visual !== null) {
       const reveal = smoothstep(

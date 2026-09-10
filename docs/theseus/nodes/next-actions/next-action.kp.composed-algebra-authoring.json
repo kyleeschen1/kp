@@ -125,6 +125,13 @@
       "scope": "s12",
       "checkedAt": "2026-09-10T01:59:42.272Z",
       "notes": "Two Chromium canaries pass: grouped factoring plus actual unchanged compound ink geometry through certified contributor-fusion evaluation and reverse. 27 composed and 34 evaluation authority tests pass; full type/architecture/inference pass with unchanged budgets (combined 171309 types/285049 instantiations). Empty certificate tuple typing repaired; canary static module graph fixes HMR duplicate private mint. DOM-order assertion replaced with spatial ink measurement, not production paint changes. Canonical evaluation binding requires one genuine ink certificate; s17 review remains."
+    },
+    {
+      "command": "npm run visual:composed-algebra; npm run test:composed-algebra-authoring; npm run test:common-factor-authoring; npm run test:evaluation-authority-convergence; npm run test:canonical-equation-renderer; npm run typecheck; npm run check:architecture; npm run check:inference",
+      "status": "passed",
+      "scope": "s13",
+      "checkedAt": "2026-09-10T02:14:57.188Z",
+      "notes": "Three Chromium canaries pass including actual composed checkpoint paint and reverse. Two selected M1a canonical phase/continuant canaries pass. 29 composed, 32 M1a, 34 evaluation authority, 29 renderer tests pass. One shared clock preserves 2400ms factoring and 1719ms evaluation via existing checkpoint map; three-stop tuple rejects omission. Found and repaired shared ink adapter re-exposing material at exact native endpoints. Realized-atom test rejects duplicated ink; geometry uses existing 0.25px settlement tolerance (observed 0.135px). Full types/architecture and fixed source/inference budgets pass; combined171565/285529."
     }
   ],
   "expectedLearning": [

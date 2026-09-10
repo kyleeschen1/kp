@@ -1,7 +1,8 @@
 import { test, expect } from "@playwright/test";
 import source from "../src/authoring/examples/composed-algebra-primary.json" with { type: "json" };
+import { kpEquationSettlementTolerancePx } from "../src/animation/equation-shared-presentation-policy.ts";
 
-async function mountCanary(page: import("@playwright/test").Page, step: 0 | 1) {
+async function mountCanary(page: import("@playwright/test").Page, step: 0 | 1 | "chain") {
   await page.goto("/experiments/reusable-reasoning/?example=common-factor");
   await expect(page.locator("#authored-focus-card")).toHaveAttribute("data-common-factor-status", "ready", { timeout: 90_000 });
   // Exercise the production mount, not a test renderer or a hand-assembled plan.
@@ -107,4 +108,54 @@ test("contextual sum uses certified ink-glyph evaluation while compound context 
     }
     await card.screenshot({ path: info.outputPath(`evaluation-${p}.png`) });
   }
+});
+
+test("one canonical chain retains native geometry across the shared checkpoint and direct reverse", async ({ page }, info) => {
+  await mountCanary(page, "chain");
+  const card = page.locator("#composed-canary");
+  await expect(card.locator("[data-kp-canonical-equation-host]")).toHaveCount(1);
+  await expect(card.locator("[data-kp-reader-transition]")).toHaveCount(2);
+  const samples = new Map<number, Awaited<ReturnType<typeof capture>>>();
+  async function capture(position: number) {
+    await card.locator("[data-kp-focus-deck-scrubber]").evaluate((node, value) => {
+      (node as HTMLInputElement).value = String(value); node.dispatchEvent(new Event("input"));
+    }, position);
+    await expect.poll(async () => Number(await card.getAttribute("data-composed-step"))).toBeCloseTo(position, 8);
+    const active = card.locator('[data-kp-reader-transition-active="true"]');
+    await expect(active).toHaveCount(1);
+    return active.evaluate(async root => {
+      const path = "/src/rendering/native-katex-paint-geometry.ts";
+      const { measureKpNativeKatexPaintAtomRect } = await import(/* @vite-ignore */ path) as typeof import("../src/rendering/native-katex-paint-geometry.ts");
+      const scenePath = "/src/rendering/native-katex-rendered-scene.ts";
+      const { observeKpNativeKatexPaintAtoms } = await import(/* @vite-ignore */ scenePath) as typeof import("../src/rendering/native-katex-rendered-scene.ts");
+      const stage = root.querySelector<HTMLElement>("[data-kp-reader-fit-surface]")!;
+      const visible = observeKpNativeKatexPaintAtoms({ stage, root: stage, endpoint: "source", semanticEntityId: "canary", presentationGroupId: "canary", fontRevision: 0 }).filter(atom => {
+        let opacity = 1;
+        for (let parent: HTMLElement | null = atom.sourceElement; parent; parent = parent.parentElement) {
+          const style = getComputedStyle(parent);
+          if (style.visibility === "hidden" || style.display === "none") return false;
+          opacity *= Number(style.opacity); if (parent === root) break;
+        }
+        return opacity > .99;
+      });
+      const rects = visible.map(atom => measureKpNativeKatexPaintAtomRect(stage, atom));
+      const left = Math.min(...rects.map(rect => rect.left)), top = Math.min(...rects.map(rect => rect.top));
+      return { text: visible.map(atom => atom.sourceElement.textContent).sort(), atoms: visible.map((atom, i) => ({ text: atom.sourceElement.textContent, rect: rects[i] })), left, top,
+        width: Math.max(...rects.map(rect => rect.left + rect.width)) - left,
+        height: Math.max(...rects.map(rect => rect.top + rect.height)) - top };
+    });
+  }
+  for (const p of [0, .37, .999999, 1, 1.000001, 1.5, 2, 1.000001, 1, .999999, 0]) {
+    const sample = await capture(p);
+    if (samples.has(p)) {
+      expect(sample.text).toEqual(samples.get(p)!.text);
+      for (const key of ["left", "top", "width", "height"] as const) expect(Math.abs(sample[key] - samples.get(p)![key])).toBeLessThan(.001);
+    } else samples.set(p, sample);
+    await card.screenshot({ path: info.outputPath(`chain-${p}.png`) });
+  }
+  for (const p of [.999999, 1.000001]) for (const key of ["left", "top", "width", "height"] as const)
+    expect(Math.abs(samples.get(p)![key] - samples.get(1)![key]), JSON.stringify({ checkpoint: p, key, before: samples.get(p), after: samples.get(1) })).toBeLessThan(kpEquationSettlementTolerancePx);
+  // Exact stops have one native owner, never native plus re-exposed ink material.
+  expect(samples.get(1)!.text).toHaveLength(10);
+  expect(samples.get(2)!.text).toHaveLength(6);
 });
