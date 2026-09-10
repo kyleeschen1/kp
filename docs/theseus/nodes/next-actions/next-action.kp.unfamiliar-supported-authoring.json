@@ -95,6 +95,12 @@
       "status": "passed",
       "scope": "s12",
       "checkedAt": "2026-09-10T19:15:23.426Z"
+    },
+    {
+      "command": "npm run check:unfamiliar-authoring-trial -- --complete; npm run check:composed-algebra-workflow; assisted author review; git diff --check",
+      "status": "passed",
+      "scope": "s13",
+      "checkedAt": "2026-09-10T19:17:36.186Z"
     }
   ],
   "expectedLearning": [

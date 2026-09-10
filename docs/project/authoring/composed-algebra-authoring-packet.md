@@ -75,6 +75,22 @@ previously exported bytes stay immutable. No deployment is performed.
 | Final changes the shared subtree | `invalid-evaluation` | Keep the original subtree unchanged |
 | Missing state, extra proof or geometry fields | `source` | Supply only the complete declared schema |
 | Valid but unsupported paint shape | `unsupported-presentation` | Select an evidenced shape; never substitute a fade |
+| Negative coefficient, e.g. `(-1)(x+2)+3(x+2)` | `unsupported-syntax` at `$.states[0].latex` for this spelling | The identity can be mathematically valid while outside this task; retain the gap, or deliberately select a different supported task/example |
+
+Do not read every repair gap as a mathematical disproof. The negative-coefficient
+example above is rejected before native presentation is considered; it does not
+exercise `unsupported-presentation`. The current message is the broader
+“Unsupported scalar sum/product notation.” The nonnegative-coefficient limit
+in this packet supplies the specific reason for that example. Do not change the
+sign merely to make a different mathematical problem pass without saying so.
+An `invalid-factorization` message mentioning `distributed-addends` asks you to
+compare the collected expression with the original ordered terms: keep each
+original coefficient and the entire shared subtree unchanged.
+
+These exact rejection/repair reports are retained in
+`../threads/2026-09-10-authoring-trial/`; replay them with
+`npm run check:unfamiliar-authoring-trial -- --complete`. This is regression
+evidence, not a new unfamiliar-author attempt or proof of pedagogical quality.
 
 Repair source and recheck. Invalid, superseded or unprepared revisions cannot
 replace displayed content. These boundaries are enforced by private proof and
@@ -96,5 +112,6 @@ continuous-time proof or universal mathematical-animation certification.
 and WebKit, including narrow layouts, reduced motion, repeated Apply and both
 static editions without JavaScript. It reuses the shared localhost:8000 server.
 Follow `../principles/motif-composition-contracts.md`: transit contacts are
-diagnostics, not permission to inflate the accepted arcs. Broader extension
-coverage remains a separate successor obligation.
+diagnostics, not permission to inflate the accepted arcs. The inventoried native
+extension-participation obligation is complete; its exact scope and remaining
+limits are in `../threads/2026-09-10-native-compositor-extension-guide.md`.

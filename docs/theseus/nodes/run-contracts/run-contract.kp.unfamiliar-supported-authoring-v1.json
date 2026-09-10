@@ -114,7 +114,8 @@
     {
       "id": "s13",
       "title": "Correct evidenced packet ambiguity and replay",
-      "status": "planned"
+      "summary": "Packet clarifies observed unsupported syntax and factoring language; unchanged reports replay and author confirms.",
+      "status": "complete"
     },
     {
       "id": "s14",
