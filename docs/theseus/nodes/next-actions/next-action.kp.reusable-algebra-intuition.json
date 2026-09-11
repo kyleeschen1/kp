@@ -136,6 +136,26 @@
       "scope": "h02",
       "checkedAt": "2026-09-10T23:58:29.448Z",
       "notes": "Full app, node, test, Svelte and domain types pass on corrected source."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring",
+      "status": "passed",
+      "scope": "s05",
+      "checkedAt": "2026-09-11T00:05:55.002Z",
+      "notes": "80 tests pass; canonical distribution plan ready, exact handoff, located invalid contribution and forgery repairs."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-distribution-animation-asset.test.ts tests/kp-distribution-canonical-operation.test.ts tests/distribution-factoring-presentation-plan.test.ts tests/distribution-semantic-latex.test.ts",
+      "status": "passed",
+      "scope": "s05-preservation",
+      "checkedAt": "2026-09-11T00:05:56.212Z",
+      "notes": "15 canonical preservation tests pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s05",
+      "checkedAt": "2026-09-11T00:05:57.233Z"
     }
   ],
   "progress": {

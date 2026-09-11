@@ -19,6 +19,7 @@ import {
 } from "./asset-flashcard.ts";
 import type { KpSemanticTransformation } from "./asset-transformation.ts";
 import { createKpFactoringCorrespondenceMap } from "./factoring-correspondence.ts";
+import { createKpDistributionCorrespondenceMap } from "./distribution-correspondence.ts";
 import type { AlgebraTraceFixture } from "./algebra-trace-port-fixture.ts";
 import {
   createGeneratedAlgebraSemanticTransformation
@@ -1373,16 +1374,14 @@ function createGeneratedDistributionTransformations(
       sourceObjectIds: [distributing ? ids.factored : ids.expanded],
       targetObjectIds: [distributing ? ids.expanded : ids.factored],
       correspondenceMap: distributing
-        ? {
-            id: `${ids.transform}.correspondence`,
-            records: [
-              lifecycle("factor-distributes", "fan-out", [selectorId(ids.factored, "factor")], [selectorId(ids.expanded, "left-factor"), selectorId(ids.expanded, "right-factor")], "The shared factor distributes to both terms."),
-              lifecycle("left-term-persists", "identity", [selectorId(ids.factored, "left-term")], [selectorId(ids.expanded, "left-term")], "The left term persists."),
-              lifecycle("right-term-persists", "identity", [selectorId(ids.factored, "right-term")], [selectorId(ids.expanded, "right-term")], "The right term persists."),
-              lifecycle("plus-persists", "identity", [selectorId(ids.factored, "plus")], [selectorId(ids.expanded, "plus")], "Addition persists."),
-              lifecycle("grouping-exits", "removal", [selectorId(ids.factored, "left-paren"), selectorId(ids.factored, "right-paren")], [], "The grouping delimiters exit after distribution.")
-            ]
-          }
+        ? createKpDistributionCorrespondenceMap(`${ids.transform}.correspondence`, {
+            commonFactor: selectorId(ids.factored, "factor"),
+            factorCopies: [selectorId(ids.expanded, "left-factor"), selectorId(ids.expanded, "right-factor")],
+            leftTerm: [selectorId(ids.factored, "left-term"), selectorId(ids.expanded, "left-term")],
+            rightTerm: [selectorId(ids.factored, "right-term"), selectorId(ids.expanded, "right-term")],
+            plus: [selectorId(ids.factored, "plus"), selectorId(ids.expanded, "plus")],
+            grouping: [selectorId(ids.factored, "left-paren"), selectorId(ids.factored, "right-paren")]
+          })
         : createKpFactoringCorrespondenceMap(`${ids.transform}.correspondence`, {
             factorCopies: [selectorId(ids.expanded, "left-factor"), selectorId(ids.expanded, "right-factor")],
             commonFactor: selectorId(ids.factored, "factor"),

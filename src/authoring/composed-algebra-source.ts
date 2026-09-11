@@ -1,6 +1,6 @@
 export type KpComposedAlgebraRepairCode =
   | "source" | "unsupported-syntax" | "ambiguous-notation" | "undeclared-symbol"
-  | "unsupported-shape" | "invalid-factorization" | "invalid-evaluation"
+  | "unsupported-shape" | "invalid-factorization" | "invalid-evaluation" | "invalid-distribution"
   | "disconnected-chain" | "missing-authority" | "unsupported-presentation";
 
 export class KpComposedAlgebraRepair extends Error {

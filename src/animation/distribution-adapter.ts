@@ -21,10 +21,19 @@ import {
 import { isKpVerifiedCommonFactorRewrite, type KpVerifiedCommonFactorRewrite } from "../semantic/common-factor-rewrite.ts";
 import type { KpVerifiedComposedFactoring } from "../semantic/composed-algebra-factoring.ts";
 import { projectKpIntegerMultipleFactoring } from "../semantic/integer-multiple-factoring-projection.ts";
+import type { KpVerifiedComposedDistribution } from "../semantic/composed-algebra-distribution.ts";
+import { projectKpComposedDistribution } from "../semantic/composed-algebra-distribution-projection.ts";
 import { createKpAssetBundle, type KpAssetMetadataValue } from "../semantic/asset.ts";
 
 export class KpCommonFactorPresentationGap extends Error {
   readonly code = "unsupported-presentation";
+}
+
+export function createVerifiedComposedDistributionAnimationAsset(proof: KpVerifiedComposedDistribution): KpAnimationAsset {
+  const projection = projectKpComposedDistribution(proof), id = `authored.distribution.${proof.revisionId.slice(7)}`;
+  return createDistributionSemanticAnimation({ id, title: "Account for every contribution",
+    bundle: createKpAssetBundle({ id: `asset.${id}`, title: "Distribute a counted group", objects: projection.endpoints.map(e => e.object) }),
+    transformations: [projection.transformation], sourceRefIds: [proof.revisionId], metadata: { sourceProofRevision: proof.revisionId } });
 }
 
 /** New proof families enter the same asset/profile/timeline constructor. The

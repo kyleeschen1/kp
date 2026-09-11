@@ -89,7 +89,8 @@
     {
       "id": "s05",
       "title": "Bind canonical distribution",
-      "status": "planned"
+      "summary": "Authored distribution binds issued ordered proof to canonical motif and shared lifecycle owner, with explicit numeric product punctuation; native handoff canary remains h03.",
+      "status": "complete"
     },
     {
       "id": "s06",
