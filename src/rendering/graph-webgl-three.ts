@@ -491,12 +491,18 @@ function renderGraph3DWebGLFrame(
   const threeScene = createGraph3DWebGLThreeScene(model, visualRoles);
   const camera = createGraph3DWebGLCamera(graph, model.camera);
 
-  if (activeRenderer.scene !== undefined) {
-    disposeGraph3DWebGLThreeScene(activeRenderer.scene);
+  // Acquire the replacement's program references before retiring the old
+  // materials. Releasing the last old reference first evicts shared shader
+  // programs, forcing even identical sampled frames to compile them again.
+  try {
+    activeRenderer.renderer.render(threeScene.scene, camera);
+  } catch (error) {
+    disposeGraph3DWebGLThreeScene(threeScene.scene);
+    throw error;
   }
-
-  activeRenderer.renderer.render(threeScene.scene, camera);
+  const previous = activeRenderer.scene;
   activeRenderer.scene = threeScene.scene;
+  if (previous !== undefined) disposeGraph3DWebGLThreeScene(previous);
 }
 
 function disposeGraph3DWebGLThreeScene(scene: Scene): void {

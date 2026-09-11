@@ -7,7 +7,86 @@ review packet, not release certification or a second execution plan.
 Review at http://localhost:8000/experiments/kinetic-figure/gradient-contour/.
 The existing shared server was verified; no second server was started.
 
-## Current revision: motivation and inspectable mechanism
+## Current revision: prepare, observe, hold the inference
+
+The user accepted the motivation/mechanism direction but reported distraction
+while learning this unfamiliar topic. They approved the recommended bounded
+attention repair with “implement the rec”. This revision is ready for G3 review,
+not approved for generalization. The exact scope remains in the delivery proposal.
+
+At **6 / 8**, read the stationary comparison, then choose **Turn toward uphill**
+or the next arrow. The cue identifies the across component before motion starts.
+The same paragraph and cue stay in place during the turn. Geometry settles before
+the interpretation appears at **7 / 8**, and the result remains inspectable.
+The replay button replays this turn inside the comparison; elsewhere it retains
+whole-explanation replay. Scrubbing, arrows, mouse dragging, wheel input and touch
+still use the existing clock and native-input owner. There are still eight
+conceptual stops, not a separate counter for presentation phases.
+
+The comparison uses `gradient-contour-attention.ts` and the existing reader
+attention projector. Only its action phase advances the comparison geometry;
+orientation and final inspection are learner-paced checkpoints, not timers that
+guess reading speed. A stationary reading projection sits over the native scroll
+lane without taking over its input state. It uses the shared Focus Card narrative
+and passage classes, not a separate typography definition. The short visual cue
+uses DOM text so it stays readable on a phone rather than shrinking with SVG.
+Its direction-neutral wording remains valid during backward inspection.
+
+Semantic target names are constrained to the comparison's existing overlay IDs.
+Pure projection and executable checks protect held geometry, stable action text,
+reference closure, exact endpoints and reversal. These guarantees do not prove
+comprehension or establish a universal four-phase authoring grammar.
+
+### Bounded renderer repair uncovered by verification
+
+Repeated comparison/replay checks exposed a stall that persisted in a clean run;
+live reload was not its full explanation. A browser CPU profile implicated native
+shader compilation. A real WebGL lifecycle regression then demonstrated **12 new
+programs and 12 deletions across three unchanged frames**: counts changed from
+8 created / 4 deleted to 20 / 16. The existing renderer disposed its old scene
+before rendering the replacement, releasing the last references to reusable
+shader programs.
+
+`graph-webgl-three.ts` now renders the replacement before disposing the old scene.
+New materials acquire program references first. Failure disposes the replacement
+and leaves the old scene owned. The real-browser regression verifies zero program
+creation/deletion across those warmed, unchanged samples after repair. Scene
+geometry, camera, semantic sources and animation are unchanged. One old/new scene
+overlaps during handoff; the old scene is still retired each successful frame.
+This does not eliminate geometry allocation or certify every WebGL mechanism.
+Preserve this separable shared repair when revising the attention treatment.
+
+### Verification and review boundary
+
+- 46 focused tests passed: attention holds and deterministic reverse/seek,
+  mathematics, the existing stage, camera alignment and Graph3D contracts.
+- `npm run typecheck` passes the app, node, tests, Svelte and domain checks.
+- `npm run visual:gradient-contour` passes five scoped Chromium checks: ordinary
+  controls, phone/reduced motion and touch in both directions, stationary prose,
+  local replay/interruption, mouse/wheel reversal, actual shader-program reuse,
+  and the original reference host. A complete post-repair run passed; the combined
+  attention interaction case took 13.8 seconds, versus earlier runs near/over
+  60 seconds. These are diagnostic observations, not a controlled performance
+  benchmark or a claim about every browser/device.
+- Discovery first caught a wrapper min-width regression; containment assertions
+  now protect the stage and reading pane. Harness repairs refresh viewport-relative
+  pointer coordinates after scrolling and keep full-page capture outside held
+  contacts. The combined motion/capture case has the same bounded 60-second ceiling
+  as the existing primary review case; it was not raised further to hide the stall.
+- Scratch profiling code was removed; durable evidence is the committed tests and
+  scoped npm command. Theseus records failures, reruns and the review stop.
+
+Please judge this one passage: before motion, is it obvious what to watch; during
+motion, can you follow the comparison without chasing text; afterward, does the
+held evidence make the maximizing inference easier to explain?
+
+The reversible attention unit is the gradient-only score/host/style treatment.
+No new dependency, clock, renderer or global attention store was added. Source-only
+editing, independent explanations, broader browser/release checks and promotion
+remain G4–G6 work after visual acceptance. No learner-efficacy claim is made.
+Resume context: `theseus work context next-action.kp.gradient-contour-intuition --mode brief`.
+
+## Previous revision: motivation and inspectable mechanism
 
 The user accepted the motivation principle and requested implementation after
 finding the first primary clear but insufficiently explanatory. Acceptance of

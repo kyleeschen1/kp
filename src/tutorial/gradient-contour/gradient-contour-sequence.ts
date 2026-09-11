@@ -1,4 +1,5 @@
 import { createGradientContourModel, gradientContourPoint, gradientUnitDirection, gradientDirectionComponents } from "./gradient-contour-model.ts";
+import { gradientComparisonReading, projectGradientComparison } from "./gradient-contour-attention.ts";
 import { createKpSurfaceContourModel, createKpSurfaceContourScore, projectKpSurfaceContourBeat,
   interpolateKpSurfaceContourProjection, withKpSurfaceContourLevel } from "../kinetic-figure-surface-contour/kinetic-figure-surface-contour-model.ts";
 
@@ -27,8 +28,8 @@ export const gradientContourBeats = Object.freeze([
   { slug: "follow", title: "Travel without climbing", html: "<p>Follow the contour around and return to the point. Your position changes, but your <strong>height stays at 1.50</strong>. The curve bends to keep you level.</p>" },
   { slug: "tangent", title: "One locally level direction", html: "<p>At this point, the contour’s direction is its <strong>tangent</strong>. It gives zero instantaneous rise. A straight tangent step eventually leaves the curved contour; we are comparing the very start of a step.</p>" },
   { slug: "ramp", title: "Look at the local ramp", html: "<p>Very near the point, replace the curved surface with its <strong>local flat approximation</strong>. On this ramp, the dotted lines are level. Sideways travel changes position without changing height; across them, the ramp rises.</p>" },
-  { slug: "components", title: "What part of your direction climbs?", html: "<p>A diagonal direction has two parts: <strong>across</strong> the level lines and <strong>along</strong> them. The dashed sideways part adds no rise. The endpoint has exactly the height gained by the across part alone—in this local model.</p>" },
-  { slug: "across", title: "Spend the whole direction on climbing", html: "<p>Keep the horizontal direction’s length fixed and turn it straight across. The sideways part shrinks to zero; the across part becomes the whole direction. <strong>No direction of that length can have a longer across part</strong>, so this gives the greatest local rise.</p>" },
+  { slug: "components", title: "What part of your direction climbs?", html: `<p>${gradientComparisonReading.prepare.lead} ${gradientComparisonReading.prepare.body}</p>` },
+  { slug: "across", title: "Spend the whole direction on climbing", html: `<p>${gradientComparisonReading.conclude.lead} ${gradientComparisonReading.conclude.body}</p>` },
   { slug: "uphill", title: "Now name it: the gradient", html: "<p>Our choice is the <strong>uphill normal</strong>, perpendicular to the contour. The gradient, ∇f = (2, 2), points this way; its length, 2.83, is the greatest instantaneous rise per unit horizontal distance. The map now tells us how to choose.</p>" }
 ]);
 export const gradientContourCheckpoints = Object.freeze(gradientContourBeats.map((_, index) => index / (gradientContourBeats.length - 1)));
@@ -40,20 +41,22 @@ const ease = (x: number) => { const t = unit(x); return t * t * (3 - 2 * t); };
 export function sampleGradientContour(progress: number) {
   if (!Number.isFinite(progress)) throw new RangeError("Gradient playhead must be finite.");
   const position = unit(progress) * (gradientContourBeats.length - 1);
-  const visible = Math.round(position);
+  const attention = projectGradientComparison(position);
+  const visible = attention?.visibleBeat ?? Math.round(position);
+  const visualPosition = attention?.visualPosition ?? position;
   const stage = interpolateKpSurfaceContourProjection({ from: surface, to: map, progress: unit(position) });
   const startAngle = Math.atan2(gradientContourModel.source.point.y * Math.sqrt(2), gradientContourModel.source.point.x);
   const point = gradientContourPoint(gradientContourModel, startAngle + Math.PI * 2 * ease(position - 1));
-  const angle = Math.PI * .75 - Math.PI * .25 * ease(position - 4) - Math.PI * .25 * ease(position - 5);
+  const angle = Math.PI * .75 - Math.PI * .25 * ease(visualPosition - 4) - Math.PI * .25 * ease(visualPosition - 5);
   const direction = gradientUnitDirection(Math.cos(angle), Math.sin(angle));
   const slope = gradientContourModel.derivative(direction);
   const components = gradientDirectionComponents(gradientContourModel, direction);
   if (components.kind !== "regular") throw new Error("The primary explanation requires a regular point.");
   const rampPresence = ease(position - 3) * (1 - ease(position - 6));
-  return Object.freeze({ position, visible, stage, point, direction, slope: Math.abs(slope) < 1e-12 ? 0 : slope,
+  return Object.freeze({ position, visible, attention, stage, point, direction, slope: Math.abs(slope) < 1e-12 ? 0 : slope,
     height: gradientContourModel.height(point), tangentPresence: ease(position - 2), directionPresence: ease(position - 4),
     components, rampPresence, componentPresence: ease(position - 4) * (1 - ease(position - 6)),
-    candidatePresence: 1 - ease(position), rightAnglePresence: ease(position - 5),
+    candidatePresence: 1 - ease(position), rightAnglePresence: ease(visualPosition - 5),
     fraction: `${visible + 1} / ${gradientContourBeats.length}`,
     accessiblePosition: `Step ${visible + 1} of ${gradientContourBeats.length}: ${gradientContourBeats[visible]!.title}` });
 }

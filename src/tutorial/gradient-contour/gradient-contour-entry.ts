@@ -13,6 +13,7 @@ import { createKpSurfaceContourStageAuthority, renderKpSurfaceContourStage, moun
 import { mountGradientContourOverlay } from "./gradient-contour-overlay.ts";
 import { gradientContourBeats as beats, gradientContourCheckpoints, gradientContourModel as model,
   gradientContourReference, gradientContourBrief, sampleGradientContour } from "./gradient-contour-sequence.ts";
+import { gradientComparisonReading } from "./gradient-contour-attention.ts";
 
 const root = document.querySelector<HTMLElement>("#app")!;
 applyKpSemanticVisualDomTheme({ root, theme: "light" });
@@ -29,18 +30,33 @@ const get = <T extends Element>(selector: string) => { const found = root.queryS
 const card = get<HTMLElement>("[data-kp-focus-deck]");
 const plot = get<HTMLElement>(".kp-surface-contour-stage__plot");
 const projectOverlay = mountGradientContourOverlay(plot, authority);
+// Keep the viewing task readable at phone sizes instead of shrinking it with SVG geometry.
+plot.insertAdjacentHTML("beforeend", `<p class="gradient-viewing-cue" id="gradient-comparison-cue" hidden></p>`);
+const viewingCue = get<HTMLElement>(".gradient-viewing-cue");
 // The exemplar fixes c to the point's height. The reference's level control
 // remains untouched on its own host; here it is replaced with derived evidence.
 const levelControl = get<HTMLElement>(".kp-surface-contour-level-control");
 levelControl.hidden = true;
 levelControl.insertAdjacentHTML("afterend", `<div class="gradient-evidence"><div><span>Starting height</span><output data-gradient-height>1.50</output></div>
   <div data-gradient-rate-panel><span>Rise per unit distance</span><output data-gradient-rate>0.00</output><div class="gradient-meter" aria-hidden="true"><i></i><b data-gradient-meter></b></div></div></div>`);
-levelControl.insertAdjacentHTML("afterend", `<div class="gradient-component-evidence" data-gradient-component-evidence><span class="gradient-across-label">Across: <output data-gradient-across>0.00</output></span><span>Sideways: <output data-gradient-along>1.00</output></span><span>Local rise = <output data-gradient-rise-rule></output></span></div>`);
+levelControl.insertAdjacentHTML("afterend", `<div class="gradient-component-evidence" data-gradient-component-evidence><span class="gradient-across-label">Across (adds rise): <output data-gradient-across>0.00</output></span><span>Sideways (no rise): <output data-gradient-along>1.00</output></span><span>Local rise = <output data-gradient-rise-rule></output></span></div>`);
 const clock = createKpReaderTimelinePlaybackClock({ id: "clock.gradient-contour.primary", durationMs: 11900 });
 const playback = createKpFocusDeckCheckpointPlayback(clock, gradientContourCheckpoints);
 const stage = mountKpSurfaceContourStage({ root: card, authority, initialProjection: sampleGradientContour(0).stage });
 const viewport = get<HTMLElement>("[data-kp-focus-deck-viewport]");
 viewport.dataset["kpFocusDeckSnapDisabled"] = "true";
+// Preserve the native scroll lane as input geometry. Only this comparison's
+// reading projection stays stationary, so touch/wheel never need a second clock
+// or compensating scroll writes that would fight the input owner.
+const passageShell = document.createElement("div"); passageShell.className = "gradient-passage-shell";
+viewport.before(passageShell); passageShell.append(viewport);
+passageShell.insertAdjacentHTML("beforeend", `<section class="gradient-guided-passage kp-focus-deck__narrative" data-gradient-guided-passage hidden aria-label="Compare equal-length directions"><div class="kp-focus-deck__passage-page">
+  <p><span data-gradient-reading-lead>${gradientComparisonReading.prepare.lead}</span> <span data-gradient-reading-body>${gradientComparisonReading.prepare.body}</span></p>
+  <button type="button" data-gradient-play-comparison aria-describedby="gradient-comparison-cue">Turn toward uphill</button>
+</div></section>`);
+const guidedPassage = get<HTMLElement>("[data-gradient-guided-passage]");
+const readingLead = get<HTMLElement>("[data-gradient-reading-lead]"), readingBody = get<HTMLElement>("[data-gradient-reading-body]");
+const playComparison = get<HTMLButtonElement>("[data-gradient-play-comparison]");
 const slider = get<HTMLInputElement>("[data-kp-focus-deck-scrubber]"); slider.step = "any";
 const previous = get<HTMLButtonElement>("[data-kp-focus-deck-previous]"), next = get<HTMLButtonElement>("[data-kp-focus-deck-next]");
 const replay = get<HTMLButtonElement>("[data-kp-focus-deck-replay]");
@@ -51,6 +67,23 @@ const cancel = () => { input?.cancel(); playback.cancel(); };
 const render = () => {
   if (disposed) return;
   const state = sampleGradientContour(clock.getSnapshot().progress), { position, visible } = state;
+  const attention = state.attention;
+  card.dataset["gradientAttentionPhase"] = attention?.phaseKind ?? "none";
+  card.dataset["gradientAttentionPrimary"] = attention?.primaryTarget ?? "none";
+  passageShell.dataset["gradientGuided"] = String(attention !== undefined);
+  if (!attention && guidedPassage.contains(document.activeElement)) viewport.focus({ preventScroll: true });
+  guidedPassage.hidden = attention === undefined;
+  viewingCue.hidden = attention === undefined;
+  if (attention) {
+    // Keeping these nodes intact also preserves selection during inspection.
+    if (readingLead.textContent !== attention.reading.lead) readingLead.textContent = attention.reading.lead;
+    if (readingBody.textContent !== attention.reading.body) readingBody.textContent = attention.reading.body;
+    if (viewingCue.textContent !== attention.cue) viewingCue.textContent = attention.cue;
+    const label = attention.readingKind === "conclude" ? "Replay this turn" : "Turn toward uphill";
+    if (playComparison.textContent !== label) playComparison.textContent = label;
+  }
+  const replayLabel = attention ? "Replay this turn" : "Replay whole explanation";
+  replay.setAttribute("aria-label", replayLabel); replay.title = replayLabel;
   stage.project(state.stage);
   projectOverlay(state);
   get<HTMLElement>(".kp-surface-contour-stage__equations").hidden = state.rampPresence > .5;
@@ -81,9 +114,14 @@ const render = () => {
 };
 const navigate = (step: number) => { cancel(); clock.pause(); playback.seek(step, !reduced.matches); };
 const unsubscribe = clock.subscribe(render);
+const replayComparison = () => { cancel(); clock.seek(gradientContourCheckpoints[5]!); navigate(6); };
+playComparison.onclick = replayComparison;
 previous.onclick = () => navigate(Math.max(0, Math.ceil(playback.position()) - 1));
 next.onclick = () => navigate(Math.min(playback.last, Math.floor(playback.position()) + 1));
-replay.onclick = () => { cancel(); clock.seek(0); navigate(playback.last); };
+replay.onclick = () => {
+  if (sampleGradientContour(clock.getSnapshot().progress).attention) { replayComparison(); return; }
+  cancel(); clock.seek(0); navigate(playback.last);
+};
 slider.oninput = () => { cancel(); clock.pause(); clock.seek(Number(slider.value) / playback.last); };
 const release = () => playback.seek(Math.round(playback.position()), !reduced.matches, true);
 slider.onchange = release; slider.onpointerup = release; slider.onpointercancel = release;

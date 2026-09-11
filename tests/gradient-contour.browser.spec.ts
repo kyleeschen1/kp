@@ -37,7 +37,7 @@ test("primary visual checkpoint: motivated question, local mechanism and coheren
   const end = await paint(page); await seek(page, 2.71); await seek(page, 7); expect(await paint(page)).toEqual(end);
   await seek(page, 5); const decomposition = await paint(page);
   await expect(page.locator(".kp-surface-contour-stage__equations")).toBeHidden();
-  await expect(page.locator(".gradient-ramp-caption")).toHaveText("Arc: equal horizontal distance");
+  await expect(page.locator(".gradient-viewing-cue")).toHaveText("Watch the across part of the step.");
   await expect(page.locator("[data-gradient-across]")).toHaveText("0.71");
   await expect(page.locator("[data-gradient-along]")).toHaveText("0.71");
   await expect(page.locator("[data-gradient-rate]")).toHaveText("2.00");
@@ -62,7 +62,7 @@ test("primary visual checkpoint: motivated question, local mechanism and coheren
   expect(errors).toEqual([]);
 });
 
-test("phone and reduced motion retain readable evidence and exact stopping points", async ({ page }, info) => {
+test("phone and reduced motion retain readable evidence and exact stopping points", async ({ page, browserName }, info) => {
   await page.setViewportSize({ width: 390, height: 844 }); await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto(route); await expect(page.locator(deck)).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
   await page.locator("[data-kp-focus-deck-scrubber]").focus(); await page.keyboard.press("End");
@@ -75,6 +75,14 @@ test("phone and reduced motion retain readable evidence and exact stopping point
   expect(overflow).toBeLessThanOrEqual(1);
   await page.screenshot({ path: info.outputPath("phone-uphill.png"), fullPage: true });
   await seek(page, 5); await expect(page.locator("[data-gradient-component-evidence]")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Turn toward uphill" })).toBeVisible();
+  const paneBox = (await page.locator("[data-gradient-guided-passage]").boundingBox())!;
+  const stageBox = (await page.locator(".kp-surface-contour-stage").boundingBox())!;
+  for (const child of [paneBox, stageBox]) {
+    expect(child.x).toBeGreaterThanOrEqual(box.x);
+    expect(child.x + child.width).toBeLessThanOrEqual(box.x + box.width);
+  }
+  expect(await page.locator("[data-gradient-guided-passage]").evaluate(e => e.scrollWidth <= e.clientWidth + 1)).toBe(true);
   await page.screenshot({ path: info.outputPath("phone-components.png"), fullPage: true });
   const inside = await page.locator(".gradient-overlay").evaluate(element => {
     const rect = element.getBoundingClientRect();
@@ -84,7 +92,127 @@ test("phone and reduced motion retain readable evidence and exact stopping point
     });
   });
   expect(inside).toBe(true);
+  await page.getByRole("button", { name: "Turn toward uphill" }).click();
+  await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", "6");
+  await expect(page.locator("[data-gradient-reading-lead]")).toHaveText("Now the whole direction contributes to climbing.");
+  expect(await page.locator("[data-gradient-guided-passage]").evaluate(e => e.scrollHeight <= e.clientHeight + 1)).toBe(true);
+  if (browserName === "chromium") {
+    // Exercise actual touch-generated pointer events over the stationary panel,
+    // not a synthetic change of the range input. Other engines need their own cohort.
+    const touch = await page.context().newCDPSession(page);
+    await touch.send("Emulation.setTouchEmulationEnabled", { enabled: true });
+    for (const [from, to] of [[5, 6], [6, 5]] as const) {
+      await seek(page, from);
+      const panel = page.locator("[data-gradient-guided-passage]"); await panel.scrollIntoViewIfNeeded();
+      const rect = (await panel.boundingBox())!, forward = to > from;
+      const x = rect.x + rect.width * (forward ? .8 : .2), y = rect.y + rect.height - 12;
+      await touch.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x, y }] });
+      await touch.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ x: rect.x + rect.width * (forward ? .2 : .8), y }] });
+      const intermediate = Number(await page.locator(deck).getAttribute("data-gradient-step"));
+      expect(intermediate).toBeGreaterThan(5); expect(intermediate).toBeLessThan(6);
+      await touch.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+      await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", String(to));
+    }
+    await touch.detach();
+  }
+  await page.locator("[data-kp-focus-deck-scrubber]").focus();
   await page.keyboard.press("Home"); await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", "0");
+});
+
+test("comparison hands reading to motion without moving prose, then holds the inference", async ({ page }, info) => {
+  // Full-motion replay, interruption and both gesture directions share this
+  // checkpoint capture; use the same bounded allowance as the primary review.
+  test.setTimeout(60000);
+  const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto(route); await expect(page.locator(deck)).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+  await seek(page, 5);
+  const pane = page.locator("[data-gradient-guided-passage]");
+  const body = await pane.locator("p").innerText();
+  const bounds = (await pane.boundingBox())!;
+  const cardBounds = (await page.locator(deck).boundingBox())!;
+  expect(bounds.x + bounds.width).toBeLessThanOrEqual(cardBounds.x + cardBounds.width);
+  const original = await paint(page);
+  await page.waitForTimeout(400);
+  expect(await paint(page)).toBe(original); // Reading is learner-paced, not a timer.
+  for (const id of ["gradient.unit-direction", "gradient.across-component", "gradient.along-component", "gradient.equal-horizontal-reach"]) {
+    await expect(page.locator(`[data-kp-semantic-entity="${id}"]`)).toHaveCount(1);
+  }
+  await page.screenshot({ path: info.outputPath("attention-prepare.png"), fullPage: true });
+  await page.getByRole("button", { name: "Turn toward uphill" }).click();
+  await expect(page.locator(deck)).toHaveAttribute("data-gradient-attention-phase", "act");
+  expect(await pane.locator("p").innerText()).toBe(body);
+  expect((await pane.boundingBox())!.x).toBe(bounds.x);
+  expect((await pane.boundingBox())!.y).toBe(bounds.y);
+  await expect(page.locator("[data-kp-focus-deck-beat=across]")).toBeHidden();
+  await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", "6");
+  await expect(page.locator("[data-gradient-reading-lead]")).toHaveText("Now the whole direction contributes to climbing.");
+  const settled = await paint(page); await page.waitForTimeout(350); expect(await paint(page)).toBe(settled);
+  await page.screenshot({ path: info.outputPath("attention-infer.png"), fullPage: true });
+  // Local replay does not revisit the camera or earlier card steps.
+  await page.locator("[data-kp-focus-deck-replay]").click();
+  await expect(page.locator(deck)).toHaveAttribute("data-gradient-attention-phase", "act");
+  expect(Number(await page.locator(deck).getAttribute("data-gradient-step"))).toBeGreaterThanOrEqual(5);
+  await page.locator("[data-kp-focus-deck-previous]").click();
+  await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", "5");
+  expect(await pane.locator("p").innerText()).toBe(body);
+  // Native input still owns travel under the stationary reading projection.
+  // Transport clicks may scroll the page; do not reuse pre-click viewport coordinates.
+  await pane.scrollIntoViewIfNeeded();
+  const dragBounds = (await pane.boundingBox())!;
+  await page.mouse.move(dragBounds.x + dragBounds.width * .9, dragBounds.y + dragBounds.height - 12); await page.mouse.down();
+  await page.mouse.move(dragBounds.x + dragBounds.width * .1, dragBounds.y + dragBounds.height - 12, { steps: 10 });
+  const middle = Number(await page.locator(deck).getAttribute("data-gradient-step"));
+  expect(middle).toBeGreaterThan(5); expect(middle).toBeLessThan(6);
+  expect(await pane.locator("p").innerText()).toBe(body);
+  expect((await pane.boundingBox())!.x).toBe(bounds.x);
+  await page.mouse.up(); await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", "6");
+  await page.mouse.move(dragBounds.x + dragBounds.width * .1, dragBounds.y + dragBounds.height - 12); await page.mouse.down();
+  await page.mouse.move(dragBounds.x + dragBounds.width * .9, dragBounds.y + dragBounds.height - 12, { steps: 10 });
+  await page.mouse.up(); await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", "5");
+  // Exact seeks restore the same text and paint without replaying intermediate phases.
+  await seek(page, 5.5); const midpoint = await paint(page);
+  // Full-page capture can resize the viewport and intentionally cancel contact;
+  // capture a directly sought pose, never change the viewport during a drag.
+  await page.screenshot({ path: info.outputPath("attention-observe.png"), fullPage: true });
+  await seek(page, 7); await expect(pane).toBeHidden();
+  await seek(page, 5.5); expect(await paint(page)).toBe(midpoint);
+  expect(await pane.locator("p").innerText()).toBe(body);
+  for (const [from, to] of [[5, 6], [6, 5]] as const) {
+    await seek(page, from); await pane.scrollIntoViewIfNeeded();
+    const rect = (await pane.boundingBox())!;
+    const laneWidth = await page.locator("[data-kp-focus-deck-viewport]").evaluate(e => e.clientWidth);
+    await page.mouse.move(rect.x + rect.width / 2, rect.y + rect.height - 12);
+    await page.mouse.wheel((to - from) * laneWidth * .65, 0);
+    await expect.poll(async () => Number(await page.locator(deck).getAttribute("data-gradient-step"))).not.toBe(from);
+    await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", String(to));
+  }
+  expect(errors).toEqual([]);
+});
+
+test("canonical Graph3D retains shader programs across sampled frames", async ({ page }) => {
+  await page.addInitScript(() => {
+    const prototype = WebGL2RenderingContext.prototype;
+    const create = prototype.createProgram, remove = prototype.deleteProgram;
+    let created = 0, deleted = 0;
+    prototype.createProgram = function (this: WebGL2RenderingContext) {
+      document.documentElement.dataset["gradientProgramsCreated"] = String(++created);
+      return create.call(this);
+    };
+    prototype.deleteProgram = function (this: WebGL2RenderingContext, program: WebGLProgram | null) {
+      document.documentElement.dataset["gradientProgramsDeleted"] = String(++deleted);
+      return remove.call(this, program);
+    };
+  });
+  await page.goto(route);
+  await expect(page.locator(".graph-webgl")).toHaveAttribute("data-kp-surface-contour-capability", "ready");
+  await seek(page, 5.2);
+  const counts = () => page.locator("html").evaluate(e => ({
+    created: Number(e.dataset["gradientProgramsCreated"]), deleted: Number(e.dataset["gradientProgramsDeleted"] ?? 0)
+  }));
+  const warm = await counts(); expect(warm.created).toBeGreaterThan(0);
+  for (const position of [5.3, 5.4, 5.5]) await seek(page, position);
+  expect(await counts()).toEqual(warm);
 });
 
 test("reference retains its own native surface, contour identity and level control", async ({ page }, info) => {

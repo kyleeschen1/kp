@@ -1,10 +1,19 @@
 # Explanation and Attention Thread
 
-Status: paused
-Last Updated: 2026-08-16
-Current Next Action: none. Preserve the eigenvector attentional-surface as a
-mixed research artifact and resume only when observed learner or educator use
-identifies one specific attention failure.
+Status: bounded gradient comparison repair under the active delivery; broader lane paused
+Last Updated: 2026-09-10
+Current work is owned by the active gradient delivery, not a parallel queue:
+`2026-09-10-gradient-contour-delivery-proposal.md`, G3 attention repair.
+The user's first-time learning exposed a specific failure: animation occurs
+before the learner knows what to observe, while sliding prose competes with it.
+The approved exemplar gives motion a perceptual question, preserves that cue
+through action, and holds the result for inference. This is an authored mental
+operation (compare a varying component against fixed total length), not merely
+an object highlight. The existing attention projector and semantic clock own
+phase and visual state; the host keeps reading stationary without replacing
+continuous input. Review packet: `2026-09-10-gradient-contour-primary-checkpoint.md`.
+No universal four-phase grammar or shared aesthetic promotion is accepted.
+Preserve the eigenvector attentional-surface as a mixed research artifact.
 
 Preserved Bounded Experiment: the demand-shift attention-stage refinement in
 `../decisions/2026-08-10-kp-stable-attention-stage-and-collaboration-tone-experiment.md`

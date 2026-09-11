@@ -85,11 +85,53 @@
       "scope": "g3-repair",
       "checkedAt": "2026-09-11T04:00:45.089Z",
       "notes": "1126 nodes and 30450 events valid. Receipt closed; revised G3 human checkpoint ready; G4-G6 not started."
+    },
+    {
+      "command": "npm run visual:gradient-contour",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-09-11T04:37:51.942Z",
+      "notes": "Initial discovery runs exposed a wrapper min-width regression, repaired with containment assertions. Harness repairs refresh pointer coordinates after scrolling and move full-page captures outside held gestures. The combined motion/capture test exceeded its 30-second limit at 35.5 seconds; it now uses the primary review's bounded 60-second allowance. A clean complete rerun is required."
+    },
+    {
+      "command": "npm run visual:gradient-contour -- --grep 'retains shader'",
+      "status": "failed",
+      "scope": "g3-attention-repair",
+      "checkedAt": "2026-09-11T04:53:24.187Z",
+      "notes": "Clean-run profiling implicated WebGL shader compilation, not only live reload. Before repair, three unchanged samples created and deleted 12 programs (8/4 to 20/16). Disposal before replacement paint evicted the last shared program references. This bounded lifecycle repair preserves scene and motion; the regression must pass through the real renderer."
+    },
+    {
+      "command": "npm run visual:gradient-contour",
+      "status": "passed",
+      "scope": "g3-attention-repair",
+      "checkedAt": "2026-09-11T04:53:25.938Z",
+      "notes": "Final complete rerun: five Chromium checks passed in 30.4 seconds. Prepared cue, stationary action prose, held inference, local replay, interrupted reverse, mouse/wheel/touch in both directions, phone/reduced motion, reference preservation, and no warmed shader-program churn. Combined attention test 10.6 seconds; diagnostic timing, not a controlled benchmark. Captures inspected. No catalogue or supported-browser promotion claimed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "g3-attention-repair",
+      "checkedAt": "2026-09-11T04:53:27.320Z",
+      "notes": "Full app/node/test/Svelte/domain checks pass after the shader ownership repair. A separate sandboxed test-only compiler check was blocked writing its incremental cache; the complete authorized typecheck rerun passed. Final subsequent cue shortening changes only text and passed the complete scoped browser gate."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/gradient-contour-attention.test.ts tests/gradient-contour-sequence.test.ts tests/gradient-contour-model.test.ts tests/semantic-reader-attention-projector.test.ts tests/graph-webgl-camera-origin.test.ts tests/graph-webgl.test.ts tests/graph-3d-runtime-protocol.test.ts tests/kinetic-figure-surface-contour.test.ts tests/stage-fit-contract.test.ts",
+      "status": "passed",
+      "scope": "g3-attention-repair",
+      "checkedAt": "2026-09-11T04:53:28.541Z",
+      "notes": "46 focused tests passed: typed semantic targets, held/action/interpretation projection, reverse/seek parity, normalized first-order mathematics, camera alignment, reference stage and Graph3D ownership. Broad default impact recommendation remains the G6 release gate; no full-suite/build claim at visual discovery."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "g3-attention-repair",
+      "checkedAt": "2026-09-11T04:54:20.847Z",
+      "notes": "1126 nodes and 30460 events validated after receipts and evidence. G3 returns to ready for the required human checkpoint; no remaining package marked complete."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT. Recorded principle and repaired motivation/why with local ramp and equal-distance component comparison. Review updated packet; G4-G6 remain gated."
+    "summary": "HUMAN_CHECKPOINT: prepared observation and held inference at steps 6/8 to 7/8. Shared attention projector, native input, typography and semantic model preserved; shader lifetime repair verified. Review current primary packet before G4-G6."
   },
   "expectedLearning": [
     "Whether contour identity plus first-order comparisons produce a reusable authorable geometric intuition."

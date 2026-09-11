@@ -8,6 +8,11 @@ owns progress; G4-G6 depend on the G3 primary visual/pedagogical acceptance.
 Primary review packet and shared-server URL:
 `2026-09-10-gradient-contour-primary-checkpoint.md`. It also records the
 reproduced shared WebGL camera-origin repair; aesthetic promotion remains gated.
+The user approved a bounded G3 attention-ordering repair after first-time learning
+exposed competition between text and motion. The diagonal-to-uphill passage now
+tests a prepared viewing question, stationary prose during action, and a held
+inference through the existing attention projector. Scope and preservation are
+in the same delivery proposal; human review still precedes generalization.
 Accepted pedagogical direction: `../decisions/2026-09-10-motivation-as-explanatory-context.md`
 and its full rationale in `2026-09-10-motivation-as-explanatory-context.md`.
 The user found the first primary clear but insufficiently motivated and explanatory,

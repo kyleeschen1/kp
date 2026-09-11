@@ -56,6 +56,19 @@ for observed structure rather than requiring a derivation before the visual.
 Exact choreography is selected at G3, not canonized in advance. No new universal
 attention or question schema is implied by this plan.
 
+### Approved G3 attention repair
+
+After the motivation/mechanism revision, the user reported that reading and
+watching still compete on this unfamiliar topic, then approved the recommended
+repair with “implement the rec”. Bound it to the diagonal-to-uphill comparison:
+prepare a perceptual question at a stationary checkpoint, retain a short stable
+cue during the user-started action, then hold evidence for interpretation.
+Reuse the existing attention projector, semantic model, renderer and controls.
+Preserve eight conceptual stops and unrestricted continuous inspection; do not
+introduce four extra clicks per beat, a reading-time estimate, or catalogue-wide
+attention enforcement. One reversible host/score treatment reaches G3 review
+before promotion. This refines G3, not the package order or G4–G6 authority.
+
 ## Bounds and completion
 
 Proposed active-work ceiling: six hours excluding human waiting, reserving the

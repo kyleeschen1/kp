@@ -57,7 +57,9 @@ export function mountGradientContourOverlay(plot: HTMLElement, authority: KpSurf
     };
     context.style.opacity = String(1 - strength); context.setAttribute("aria-hidden", String(strength === 1));
     ramp.setAttribute("opacity", String(strength));
-    caption.textContent = state.componentPresence > .5 ? "Arc: equal horizontal distance" : "Magnified local flat approximation";
+    caption.style.visibility = state.attention ? "hidden" : "visible";
+    const label = state.componentPresence > .5 ? "Arc: equal horizontal distance" : "Magnified local flat approximation";
+    if (caption.textContent !== label) caption.textContent = label;
     const origin = screen(p), d = state.direction, unitLength = 1;
     const offset = (v: Point) => ({ x: p.x + v.x * unitLength, y: p.y + v.y * unitLength });
     const tip = screen(offset(d)), across = screen(offset(state.components.acrossVector));
