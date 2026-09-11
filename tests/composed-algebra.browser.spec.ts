@@ -8,6 +8,27 @@ import { fileURLToPath } from "node:url";
 import { unfamiliarAuthoringCases, unfamiliarAuthoringRejections } from "./fixtures/unfamiliar-authoring-trial.ts";
 import intuition from "../src/authoring/examples/composed-algebra-intuition.json" with { type: "json" };
 
+test("question-oriented checkpoint stays legible at phone width", async ({ page }, info) => {
+  test.setTimeout(120_000);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/experiments/reusable-reasoning/?example=algebra-intuition");
+  const root = page.locator("#authored-focus-card"), parent = root.locator("[data-composed-reader] [data-composed-card]");
+  await expect(root).toHaveAttribute("data-composed-status", "ready", { timeout: 90_000 });
+  for (const position of [0, 1.37, 2, 2.37, 4]) {
+    await parent.locator("[data-kp-focus-deck-scrubber]").evaluate((node, p) => { (node as HTMLInputElement).value = String(p); node.dispatchEvent(new Event("input")); }, position);
+    await expect(parent).toHaveAttribute("data-composed-step", String(position));
+    const geometry = await parent.evaluate(card => ({ overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      header: card.querySelector(".kp-focus-deck__header")!.getBoundingClientRect().bottom,
+      passage: card.querySelector("[data-kp-focus-deck-viewport]")!.getBoundingClientRect().top }));
+    expect(geometry.overflow).toBeLessThanOrEqual(1); expect(geometry.passage).toBeGreaterThanOrEqual(geometry.header);
+    await parent.screenshot({ path: info.outputPath(`phone-${position}.png`) });
+  }
+  await root.locator('[data-composed-intuition="distribute"]').click();
+  await expect(root).toHaveAttribute("data-intuition-status", "ready", { timeout: 90_000 });
+  await root.locator("[data-composed-intuition-panel]").screenshot({ path: info.outputPath("phone-intuition.png") });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
+});
+
 test("independent algebra questions retain context scoped control and exact return", async ({ page }, info) => {
   test.setTimeout(120_000);
   const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));

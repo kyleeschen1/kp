@@ -2,8 +2,8 @@
   "id": "run-contract.kp.reusable-algebra-intuition-v2",
   "kind": "run-contract",
   "title": "Reusable algebra intuition",
-  "status": "ready",
-  "summary": "Approved handoff amendment; continue h01 with four completed slices carried from v1. Preserve named s12 checkpoint.",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT: required s12 visual/pedagogical acceptance of primary and two independent questions. Engineering checks pass; no generalization before approval.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -21,6 +21,10 @@
     {
       "kind": "file",
       "path": "docs/theseus/nodes/run-contracts/run-contract.kp.reusable-algebra-intuition-v1.json"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-10-reusable-algebra-intuition-visual-checkpoint.md"
     }
   ],
   "verification": [
@@ -137,7 +141,8 @@
     {
       "id": "s12",
       "title": "Present canonical visual pedagogical checkpoint",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: preparation verified and review packet committed with this boundary; awaiting user visual acceptance, not complete. No s13 until acceptance.",
+      "status": "ready"
     },
     {
       "id": "s13",

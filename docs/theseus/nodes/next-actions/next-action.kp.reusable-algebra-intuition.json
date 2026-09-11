@@ -283,6 +283,27 @@
       "scope": "s11",
       "checkedAt": "2026-09-11T01:08:37.501Z",
       "notes": "Both browser tests passed: scoped controls and direct entry for two questions, exact 2.37 return with focus, stale-link rejection, full primary editing preserved. Reviewed sub-explanation capture and removed competing parent heading/context."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring",
+      "status": "passed",
+      "scope": "s12",
+      "checkedAt": "2026-09-11T01:16:18.352Z",
+      "notes": "92 tests passed at checkpoint boundary."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s12",
+      "checkedAt": "2026-09-11T01:16:19.521Z",
+      "notes": "Full app tooling tests Svelte and domains pass; zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run visual:composed-algebra -- --grep \"question-oriented checkpoint stays|complete algebra native handoff canary|primary combined review at 1280px\"",
+      "status": "passed",
+      "scope": "s12",
+      "checkedAt": "2026-09-11T01:16:20.569Z",
+      "notes": "Three Chromium checks pass; phone layout, native ink handoff and legacy desktop preservation. Human visual judgment remains pending."
     }
   ],
   "progress": {
