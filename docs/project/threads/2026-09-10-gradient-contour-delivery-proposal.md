@@ -69,6 +69,27 @@ introduce four extra clicks per beat, a reading-time estimate, or catalogue-wide
 attention enforcement. One reversible host/score treatment reaches G3 review
 before promotion. This refines G3, not the package order or G4–G6 authority.
 
+### Approved G3 attention-location repair
+
+On 2026-09-11 the user reported that the clearer sequence still leaves them
+searching between text and motion, and approved the next recommendation with
+“implement rec”. Test one stable instruction area above the existing figure,
+explicit before/watch/result language, and direct across/along annotations
+established before the comparison moves. Keep prepared prose accessible and
+stationary; make numerical evidence optional supporting detail rather than a
+competing dashboard. The intended invariant is that readers can locate the
+relevant evidence before it changes; comprehension still requires human review.
+
+The gradient comparison, existing semantic IDs, attention projector, shared
+clock/input and Graph3D/SVG owners remain canonical. The top narrative placement
+applies consistently within this one card; new attention choreography remains
+bounded to its diagonal-to-uphill comparison. Preserve all eight stops, direct
+inspection, the original contour route and the prior WebGL program-lifetime
+repair. Rollback is this local host/attention/overlay treatment plus its tests,
+not any shared semantic or renderer change. No popups, narration, universal
+attention schema or other-card promotion. G3 remains a human checkpoint before
+G4–G6; this approval does not accept the earlier treatment or reorder the run.
+
 ## Bounds and completion
 
 Proposed active-work ceiling: six hours excluding human waiting, reserving the

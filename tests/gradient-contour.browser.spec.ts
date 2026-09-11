@@ -37,7 +37,7 @@ test("primary visual checkpoint: motivated question, local mechanism and coheren
   const end = await paint(page); await seek(page, 2.71); await seek(page, 7); expect(await paint(page)).toEqual(end);
   await seek(page, 5); const decomposition = await paint(page);
   await expect(page.locator(".kp-surface-contour-stage__equations")).toBeHidden();
-  await expect(page.locator(".gradient-viewing-cue")).toHaveText("Watch the across part of the step.");
+  await expect(page.locator(".gradient-viewing-cue")).toHaveText("Watch the across part as the direction turns.");
   await expect(page.locator("[data-gradient-across]")).toHaveText("0.71");
   await expect(page.locator("[data-gradient-along]")).toHaveText("0.71");
   await expect(page.locator("[data-gradient-rate]")).toHaveText("2.00");
@@ -74,10 +74,15 @@ test("phone and reduced motion retain readable evidence and exact stopping point
   const overflow = await page.locator("[data-kp-focus-deck-beat]").evaluateAll(elements => Math.max(...elements.map(e => e.scrollHeight - e.clientHeight)));
   expect(overflow).toBeLessThanOrEqual(1);
   await page.screenshot({ path: info.outputPath("phone-uphill.png"), fullPage: true });
-  await seek(page, 5); await expect(page.locator("[data-gradient-component-evidence]")).toBeVisible();
+  await seek(page, 5); await expect(page.locator("[data-gradient-component-evidence]")).toBeHidden();
+  await page.getByText("Inspect the numbers", { exact: true }).click();
+  await expect(page.locator("[data-gradient-component-evidence]")).toBeVisible();
+  await expect(page.locator("[data-gradient-across]")).toHaveText("0.71");
+  await page.getByText("Inspect the numbers", { exact: true }).click();
   await expect(page.getByRole("button", { name: "Turn toward uphill" })).toBeVisible();
   const paneBox = (await page.locator("[data-gradient-guided-passage]").boundingBox())!;
   const stageBox = (await page.locator(".kp-surface-contour-stage").boundingBox())!;
+  expect(paneBox.y + paneBox.height).toBeLessThanOrEqual(stageBox.y + 1);
   for (const child of [paneBox, stageBox]) {
     expect(child.x).toBeGreaterThanOrEqual(box.x);
     expect(child.x + child.width).toBeLessThanOrEqual(box.x + box.width);
@@ -92,9 +97,17 @@ test("phone and reduced motion retain readable evidence and exact stopping point
     });
   });
   expect(inside).toBe(true);
+  await expect(page.locator("[data-gradient-annotations]")).toBeVisible();
+  for (const id of ["gradient.across-component", "gradient.along-component"]) {
+    const text = page.locator(`[data-gradient-annotation-for="${id}"] text`);
+    await expect(text).toBeVisible();
+    const labelBox = (await text.boundingBox())!;
+    expect(labelBox.x).toBeGreaterThanOrEqual(stageBox.x);
+    expect(labelBox.x + labelBox.width).toBeLessThanOrEqual(stageBox.x + stageBox.width);
+  }
   await page.getByRole("button", { name: "Turn toward uphill" }).click();
   await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", "6");
-  await expect(page.locator("[data-gradient-reading-lead]")).toHaveText("Now the whole direction contributes to climbing.");
+  await expect(page.locator("[data-gradient-reading-lead]")).toHaveText("The whole step now points across the level lines.");
   expect(await page.locator("[data-gradient-guided-passage]").evaluate(e => e.scrollHeight <= e.clientHeight + 1)).toBe(true);
   if (browserName === "chromium") {
     // Exercise actual touch-generated pointer events over the stationary panel,
@@ -128,10 +141,19 @@ test("comparison hands reading to motion without moving prose, then holds the in
   await page.goto(route); await expect(page.locator(deck)).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
   await seek(page, 5);
   const pane = page.locator("[data-gradient-guided-passage]");
-  const body = await pane.locator("p").innerText();
+  const reading = pane.locator(".gradient-comparison-reading");
+  const body = await reading.innerText();
   const bounds = (await pane.boundingBox())!;
   const cardBounds = (await page.locator(deck).boundingBox())!;
   expect(bounds.x + bounds.width).toBeLessThanOrEqual(cardBounds.x + cardBounds.width);
+  const stageBounds = (await page.locator(".kp-surface-contour-stage").boundingBox())!;
+  expect(bounds.y + bounds.height).toBeLessThanOrEqual(stageBounds.y + 1);
+  await expect(page.locator("[data-gradient-instruction-role]")).toHaveText("Before the move");
+  await expect(page.locator(".gradient-viewing-cue")).toHaveCount(1);
+  await expect(page.locator("[data-gradient-annotations]")).toBeVisible();
+  await expect(page.locator('[data-kp-semantic-entity="gradient.across-component"]')).toHaveAttribute("data-gradient-salience", "focus");
+  await expect(page.locator('[data-kp-semantic-entity="gradient.along-component"]')).toHaveAttribute("data-gradient-salience", "context");
+  await expect(page.locator("[data-gradient-component-evidence]")).toBeHidden();
   const original = await paint(page);
   await page.waitForTimeout(400);
   expect(await paint(page)).toBe(original); // Reading is learner-paced, not a timer.
@@ -141,12 +163,15 @@ test("comparison hands reading to motion without moving prose, then holds the in
   await page.screenshot({ path: info.outputPath("attention-prepare.png"), fullPage: true });
   await page.getByRole("button", { name: "Turn toward uphill" }).click();
   await expect(page.locator(deck)).toHaveAttribute("data-gradient-attention-phase", "act");
-  expect(await pane.locator("p").innerText()).toBe(body);
+  expect(await reading.innerText()).toBe(body);
+  await expect(page.locator("[data-gradient-instruction-role]")).toHaveText("Watch");
   expect((await pane.boundingBox())!.x).toBe(bounds.x);
   expect((await pane.boundingBox())!.y).toBe(bounds.y);
   await expect(page.locator("[data-kp-focus-deck-beat=across]")).toBeHidden();
   await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", "6");
-  await expect(page.locator("[data-gradient-reading-lead]")).toHaveText("Now the whole direction contributes to climbing.");
+  await expect(page.locator("[data-gradient-reading-lead]")).toHaveText("The whole step now points across the level lines.");
+  await expect(page.locator("[data-gradient-instruction-role]")).toHaveText("What this shows");
+  expect(await page.locator(".kp-surface-contour-stage").boundingBox()).toEqual(stageBounds);
   const settled = await paint(page); await page.waitForTimeout(350); expect(await paint(page)).toBe(settled);
   await page.screenshot({ path: info.outputPath("attention-infer.png"), fullPage: true });
   // Local replay does not revisit the camera or earlier card steps.
@@ -155,7 +180,7 @@ test("comparison hands reading to motion without moving prose, then holds the in
   expect(Number(await page.locator(deck).getAttribute("data-gradient-step"))).toBeGreaterThanOrEqual(5);
   await page.locator("[data-kp-focus-deck-previous]").click();
   await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", "5");
-  expect(await pane.locator("p").innerText()).toBe(body);
+  expect(await reading.innerText()).toBe(body);
   // Native input still owns travel under the stationary reading projection.
   // Transport clicks may scroll the page; do not reuse pre-click viewport coordinates.
   await pane.scrollIntoViewIfNeeded();
@@ -164,7 +189,7 @@ test("comparison hands reading to motion without moving prose, then holds the in
   await page.mouse.move(dragBounds.x + dragBounds.width * .1, dragBounds.y + dragBounds.height - 12, { steps: 10 });
   const middle = Number(await page.locator(deck).getAttribute("data-gradient-step"));
   expect(middle).toBeGreaterThan(5); expect(middle).toBeLessThan(6);
-  expect(await pane.locator("p").innerText()).toBe(body);
+  expect(await reading.innerText()).toBe(body);
   expect((await pane.boundingBox())!.x).toBe(bounds.x);
   await page.mouse.up(); await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", "6");
   await page.mouse.move(dragBounds.x + dragBounds.width * .1, dragBounds.y + dragBounds.height - 12); await page.mouse.down();
@@ -177,7 +202,7 @@ test("comparison hands reading to motion without moving prose, then holds the in
   await page.screenshot({ path: info.outputPath("attention-observe.png"), fullPage: true });
   await seek(page, 7); await expect(pane).toBeHidden();
   await seek(page, 5.5); expect(await paint(page)).toBe(midpoint);
-  expect(await pane.locator("p").innerText()).toBe(body);
+  expect(await reading.innerText()).toBe(body);
   for (const [from, to] of [[5, 6], [6, 5]] as const) {
     await seek(page, from); await pane.scrollIntoViewIfNeeded();
     const rect = (await pane.boundingBox())!;

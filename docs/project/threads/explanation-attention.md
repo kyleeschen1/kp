@@ -1,7 +1,7 @@
 # Explanation and Attention Thread
 
 Status: bounded gradient comparison repair under the active delivery; broader lane paused
-Last Updated: 2026-09-10
+Last Updated: 2026-09-11
 Current work is owned by the active gradient delivery, not a parallel queue:
 `2026-09-10-gradient-contour-delivery-proposal.md`, G3 attention repair.
 The user's first-time learning exposed a specific failure: animation occurs
@@ -13,6 +13,15 @@ an object highlight. The existing attention projector and semantic clock own
 phase and visual state; the host keeps reading stationary without replacing
 continuous input. Review packet: `2026-09-10-gradient-contour-primary-checkpoint.md`.
 No universal four-phase grammar or shared aesthetic promotion is accepted.
+The next approved refinement addresses where to look: the user found the
+sequence improved but still experienced competing text/visual destinations.
+The bounded gradient comparison now tests a top instruction home, explicit
+before/watch/result roles, direct component annotations and optional numerical
+detail. Proposed governing principle: locate relevant evidence before it
+changes. Prepared text remains readable; labels are stable and the cue is
+direction-neutral for reverse inspection. This is an exemplar hypothesis,
+not global enforcement or evidence of improved comprehension. The existing
+delivery proposal and checkpoint packet own scope and review.
 Preserve the eigenvector attentional-surface as a mixed research artifact.
 
 Preserved Bounded Experiment: the demand-shift attention-stage refinement in

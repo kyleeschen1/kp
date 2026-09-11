@@ -13,21 +13,31 @@ type ComparisonPhase = Omit<KpLessonAttentionPhase, "focusRefs"> & {
 
 export const gradientComparisonReading = Object.freeze({
   prepare: Object.freeze({
-    lead: "Across the level lines adds rise. Sideways adds none on this local ramp.",
-    body: "Keep the horizontal step length fixed. Can more of it point across the level lines?"
+    lead: "Can we get more rise without taking a longer horizontal step?",
+    body: "On this local ramp, travel across the level lines adds rise; travel along them adds none."
   }),
   conclude: Object.freeze({
-    lead: "Now the whole direction contributes to climbing.",
-    body: "No equal-length direction can have a larger across part. Since sideways adds no rise, straight across gives the greatest local rise."
+    lead: "The whole step now points across the level lines.",
+    body: "Sideways travel adds no rise on this local ramp, so no equal-length direction can climb faster."
   })
 });
-const viewingCue = "Watch the across part of the step.";
+export const gradientComparisonAnnotations = Object.freeze({
+  "gradient.across-component": { label: "Across", detail: "adds rise" },
+  "gradient.along-component": { label: "Along", detail: "no rise" }
+} satisfies Partial<Record<ComparisonTarget, { readonly label: string; readonly detail: string }>>);
+// Direction-neutral wording also describes reverse playback and free scrubbing.
+const viewingCue = "Watch the across part as the direction turns.";
+const instructionRoles = {
+  orient: "Before the move", act: "Watch", settle: "Watch", inspect: "What this shows"
+} as const satisfies Record<KpLessonAttentionPhase["kind"], string>;
 const phase = (kind: KpLessonAttentionPhase["kind"], start: number, end: number): ComparisonPhase => ({
   id: `gradient.comparison.${kind}`, kind, beatId: kind === "inspect" ? "across" : "components",
   checkpointId: kind === "inspect" ? "across" : "components",
   startProgressPermille: start, endProgressPermille: end,
   cue: kind === "inspect" ? "All across: greatest local rise." : viewingCue,
-  focusRefs: gradientComparisonTargets
+  // Name the perceptual subject, not every object that remains on screen.
+  // Direction, along-part and fixed reach support the across-part comparison.
+  focusRefs: ["gradient.across-component"]
 });
 
 // One bounded passage uses the existing four-phase projector. Stops 5 and 6
@@ -51,6 +61,7 @@ export function projectGradientComparison(position: number) {
   const concluded = projection.phaseKind === "inspect";
   return Object.freeze({
     ...projection,
+    instructionRole: instructionRoles[projection.phaseKind],
     visualPosition: 5 + projection.visualProgressPermille / 1000,
     // New interpretation is only available after the motion has settled.
     reading: concluded ? gradientComparisonReading.conclude : gradientComparisonReading.prepare,

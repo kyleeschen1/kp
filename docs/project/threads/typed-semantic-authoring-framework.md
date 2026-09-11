@@ -1,7 +1,7 @@
 # Typed Semantic Authoring Framework Thread
 
 Status: algebra complete; gradient-contour delivery approved, G3 visual review required
-Last Updated: 2026-09-10
+Last Updated: 2026-09-11
 Current execution: `run-contract.kp.gradient-contour-intuition-v1` from
 `2026-09-10-gradient-contour-delivery-proposal.md`, approved with “go”. Theseus
 owns progress; G4-G6 depend on the G3 primary visual/pedagogical acceptance.
@@ -13,6 +13,11 @@ exposed competition between text and motion. The diagonal-to-uphill passage now
 tests a prepared viewing question, stationary prose during action, and a held
 inference through the existing attention projector. Scope and preservation are
 in the same delivery proposal; human review still precedes generalization.
+The subsequent approved G3 refinement tests one top instruction home, explicit
+before/watch/result roles, direct across/along annotations and optional live
+numbers. The user's remaining confusion concerns locating evidence, not only
+sequencing it. The same checkpoint packet records this local experiment and
+its preservation checks; no shared attention grammar or G3 acceptance is implied.
 Accepted pedagogical direction: `../decisions/2026-09-10-motivation-as-explanatory-context.md`
 and its full rationale in `2026-09-10-motivation-as-explanatory-context.md`.
 The user found the first primary clear but insufficiently motivated and explanatory,

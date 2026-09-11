@@ -1,5 +1,6 @@
 import { projectKpSurfaceContourPoint, type KpSurfaceContourStageAuthority } from "../kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts";
 import { gradientLocalHeight } from "./gradient-contour-model.ts";
+import { gradientComparisonAnnotations } from "./gradient-contour-attention.ts";
 import { gradientContourModel as model, type sampleGradientContour } from "./gradient-contour-sequence.ts";
 
 type Point = { readonly x: number; readonly y: number };
@@ -26,6 +27,13 @@ export function mountGradientContourOverlay(plot: HTMLElement, authority: KpSurf
     <g data-gradient-components><path class="gradient-equal-reach" data-kp-semantic-entity="gradient.equal-horizontal-reach"/><path class="gradient-across" data-kp-semantic-entity="gradient.across-component"/><path class="gradient-along" data-kp-semantic-entity="gradient.along-component"/></g>
     <circle class="gradient-origin" r="5" data-kp-semantic-entity="gradient.origin"/>
     <circle class="gradient-point" r="4.5" data-kp-semantic-entity="gradient.traveler"/>
+    <g class="gradient-annotations" data-gradient-annotations visibility="hidden">
+      <g data-gradient-annotation-for="gradient.across-component"><path class="gradient-annotation-leader"/>
+        <text x="386" y="200"><tspan class="gradient-annotation-name">${gradientComparisonAnnotations["gradient.across-component"].label}</tspan><tspan x="386" dy="24">${gradientComparisonAnnotations["gradient.across-component"].detail}</tspan></text></g>
+      <g data-gradient-annotation-for="gradient.along-component"><path class="gradient-annotation-leader"/>
+        <text x="20" y="104"><tspan class="gradient-annotation-name">${gradientComparisonAnnotations["gradient.along-component"].label}</tspan><tspan x="20" dy="24">${gradientComparisonAnnotations["gradient.along-component"].detail}</tspan></text></g>
+      <text x="260" y="290" text-anchor="middle" class="gradient-reach-label">Same horizontal length</text>
+    </g>
   </svg>`);
   const get = <T extends Element>(selector: string) => plot.querySelector<T>(selector)!;
   const ramp = get<SVGGElement>("[data-gradient-ramp]"), plane = get<SVGPathElement>(".gradient-ramp-plane"), levels = get<SVGPathElement>(".gradient-ramp-levels");
@@ -35,6 +43,13 @@ export function mountGradientContourOverlay(plot: HTMLElement, authority: KpSurf
   const componentGroup = get<SVGGElement>("[data-gradient-components]"), acrossPath = get<SVGPathElement>(".gradient-across"), alongPath = get<SVGPathElement>(".gradient-along");
   const reachPath = get<SVGPathElement>(".gradient-equal-reach"), caption = get<SVGTextElement>(".gradient-ramp-caption");
   const originCircle = get<SVGCircleElement>(".gradient-origin"), travelerCircle = get<SVGCircleElement>(".gradient-point");
+  const annotations = get<SVGGElement>("[data-gradient-annotations]");
+  const annotationBindings = Object.keys(gradientComparisonAnnotations).map(id => ({
+    id, owner: get<SVGElement>(`[data-kp-semantic-entity="${id}"]`),
+    annotation: get<SVGGElement>(`[data-gradient-annotation-for="${id}"]`)
+  }));
+  const acrossLeader = get<SVGPathElement>('[data-gradient-annotation-for="gradient.across-component"] path');
+  const alongLeader = get<SVGPathElement>('[data-gradient-annotation-for="gradient.along-component"] path');
   const p = model.source.point, at = model.atPoint;
   if (at.kind !== "regular") throw new Error("The primary overlay requires a regular point.");
   const n = at.uphill, t = at.tangent;
@@ -63,6 +78,19 @@ export function mountGradientContourOverlay(plot: HTMLElement, authority: KpSurf
     const origin = screen(p), d = state.direction, unitLength = 1;
     const offset = (v: Point) => ({ x: p.x + v.x * unitLength, y: p.y + v.y * unitLength });
     const tip = screen(offset(d)), across = screen(offset(state.components.acrossVector));
+    // Fixed labels establish where to look before motion. Only their connectors
+    // follow the actual projected components; no independent annotation clock.
+    annotations.setAttribute("visibility", state.attention ? "visible" : "hidden");
+    for (const binding of annotationBindings) {
+      const salience = !state.attention ? "normal" : state.attention.focusRefs.includes(binding.id) ? "focus" : "context";
+      binding.owner.setAttribute("data-gradient-salience", salience);
+      binding.annotation.setAttribute("data-gradient-salience", salience);
+    }
+    acrossLeader.setAttribute("d", path([{ x: 376, y: 209 }, { x: (origin.x + across.x) / 2, y: (origin.y + across.y) / 2 }]));
+    alongLeader.setAttribute("d", path([{ x: 122, y: 113 }, { x: (across.x + tip.x) / 2, y: (across.y + tip.y) / 2 }]));
+    // A zero-length component has no line to point at. Keep its definition,
+    // but do not attach an apparent label to the coincident direction tip.
+    alongLeader.setAttribute("visibility", state.components.along === 0 ? "hidden" : "inherit");
     place(originCircle, origin); place(travelerCircle, screen(state.point));
     candidatePath.setAttribute("d", [{ x: 1, y: 0 }, { x: 0, y: 1 }, n].map(v => arrow(origin, screen(offset(v)))).join(" "));
     candidates.setAttribute("opacity", String(state.candidatePresence));

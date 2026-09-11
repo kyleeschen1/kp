@@ -53,7 +53,7 @@
     {
       "id": "g3",
       "title": "Human visual and pedagogical checkpoint",
-      "summary": "HUMAN_CHECKPOINT: bounded diagonal-to-uphill attention repair ready. 46 focused tests, full types and five Chromium checks pass, including shader reuse and bidirectional inputs. Await judgment of cue, stationary prose and held inference; G4-G6 remain gated.",
+      "summary": "HUMAN_CHECKPOINT: approved attention-location repair is review-ready. Stable top instruction, explicit phase roles, direct semantic labels and optional live evidence. 46 focused tests, five Chromium checks and full types passed. Await human attention/comprehension judgment; G4-G6 remain gated.",
       "status": "ready"
     },
     {

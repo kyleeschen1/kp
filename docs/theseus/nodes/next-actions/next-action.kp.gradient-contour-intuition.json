@@ -127,11 +127,39 @@
       "scope": "g3-attention-repair",
       "checkedAt": "2026-09-11T04:54:20.847Z",
       "notes": "1126 nodes and 30460 events validated after receipts and evidence. G3 returns to ready for the required human checkpoint; no remaining package marked complete."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/gradient-contour-attention.test.ts tests/gradient-contour-sequence.test.ts tests/gradient-contour-model.test.ts tests/semantic-reader-attention-projector.test.ts tests/graph-webgl-camera-origin.test.ts tests/graph-webgl.test.ts tests/graph-3d-runtime-protocol.test.ts tests/kinetic-figure-surface-contour.test.ts tests/stage-fit-contract.test.ts",
+      "status": "passed",
+      "scope": "G3 attention-location discovery",
+      "checkedAt": "2026-09-11T16:22:07.922Z",
+      "notes": "46 focused tests passed. Known annotation IDs and phase roles, held inference, pure seek/reverse, mathematical endpoints, original stage and shared renderer contracts. No universal visual or learner-comprehension guarantee."
+    },
+    {
+      "command": "npm run visual:gradient-contour",
+      "status": "passed",
+      "scope": "G3 top instruction and annotations, Chromium discovery",
+      "checkedAt": "2026-09-11T16:22:09.255Z",
+      "notes": "Final full run: five checks passed in 27.1 seconds. Earlier phone smoke and complete browser run also passed. Desktop/phone captures inspected. Tests preserve input, endpoints, one cue, fixed comparison stage bounds, label containment, optional live numbers, reference host and warmed shader reuse. Top narrative applies to this card; phased attention stays bounded to 5..6. Human comprehension and aesthetic judgment remain pending; full release and supported-browser promotion remain G6."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "G3 attention-location final source",
+      "checkedAt": "2026-09-11T16:22:10.318Z",
+      "notes": "Full app, node, test, Svelte and domain checks passed, including a clean rerun after the direction-neutral cue and annotation connector adjustment. Svelte reported zero errors and warnings."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "G3 attention-location handoff",
+      "checkedAt": "2026-09-11T16:23:16.512Z",
+      "notes": "1126 nodes and 30470 events validated after closing the receipt and recording the ready human checkpoint. No later package marked complete. Scope and current review are preserved in the original proposal and checkpoint packet."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: prepared observation and held inference at steps 6/8 to 7/8. Shared attention projector, native input, typography and semantic model preserved; shader lifetime repair verified. Review current primary packet before G4-G6."
+    "summary": "HUMAN_CHECKPOINT: top instruction and explicit before/watch/result roles at 6/8 to 7/8; direct component labels and optional numbers. Existing model, stage, clock and inputs preserved. Current review packet is ready; G4-G6 await G3 acceptance."
   },
   "expectedLearning": [
     "Whether contour identity plus first-order comparisons produce a reusable authorable geometric intuition."

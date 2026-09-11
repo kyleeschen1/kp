@@ -7,7 +7,66 @@ review packet, not release certification or a second execution plan.
 Review at http://localhost:8000/experiments/kinetic-figure/gradient-contour/.
 The existing shared server was verified; no second server was started.
 
-## Current revision: prepare, observe, hold the inference
+## Current revision: one instruction home and visible referents (2026-09-11)
+
+The user found the earlier sequence better but still could not reliably locate
+what to watch. They approved the recommended local experiment with “implement
+rec”. This is review-ready, not G3 acceptance or a new shared-card default.
+
+Open the same URL and go to **6 / 8**, then choose **Turn toward uphill**.
+
+- The actual narrative region is now above the figure throughout this card;
+  the comparison does not add a second caption elsewhere. Its stable top band
+  explicitly says **Before the move**, **Watch**, then **What this shows**.
+- Preparation asks whether more rise is possible without a longer horizontal
+  step. The paragraph remains stationary and readable during the turn, with
+  contextual emphasis; the already-established watching cue stays foregrounded.
+  No new inference arrives until the geometry has settled at **7 / 8**.
+- Direct **Across / adds rise** and **Along / no rise** labels are visible before
+  movement. Their positions are fixed; short connectors follow the actual
+  projected components. Across is the named focus rather than every object
+  being equally selected. A zero-length along component has no connector to
+  misidentify the coincident direction tip. The watching cue remains accurate
+  during reverse inspection as well as forward playback.
+- Live numerical evidence is available under **Inspect the numbers**, outside
+  the card. Opening that supporting detail does not resize the figure. The
+  values still come from the same sampled mathematical state, not frozen UI.
+
+The artifact remains the gradient sequence/attention source at this host, with
+the existing quadratic model, shared Focus Deck input/clock and canonical
+surface-contour Graph3D/WebGL stage plus gradient-owned SVG overlay. No shared
+renderer, dependency, clock, observer or global attention store was added.
+Source growth is confined to the local instruction/annotation bindings and
+tests. There is bounded per-frame annotation attribute work; no new rendering
+or performance certification is claimed. Preserve the separately verified
+WebGL program-lifetime repair described below.
+
+Verification: **46 focused tests**, full **npm run typecheck** (including app,
+node, tests, Svelte and domains), and **five Chromium browser checks** all pass.
+The final complete `npm run visual:gradient-contour` run passed in 27.1 seconds.
+Checks cover known semantic references, pure phase/reading projection, held
+endpoints, a single cue, top narrative placement, fixed figure bounds through
+the comparison, readable phone containment, optional numerical access, forward
+and reverse gestures, touch, arrows, local replay, interruption, shader reuse
+and the original contour route. Desktop preparation/action/result and phone
+captures were inspected. The first phone smoke and both complete browser runs
+passed; no failed product gate was waived. The first sandboxed localhost probe
+could not reach the server; the permitted probe returned HTTP 200 on port 8000.
+
+Review questions: can you locate the across component before starting; can you
+follow the turn without searching other text regions; can you explain the
+maximizing conclusion from the held figure? Top placement, emphasis, spacing
+and annotation treatment remain provisional. Earlier beats have the top
+narrative placement but do not yet use this comparison's new attention motif.
+No learner-efficacy, all-beat or cross-browser promotion claim is made.
+
+The reversible unit is this gradient-only host/attention/overlay treatment and
+its checks. G4 source-only editing, G5 independent explanation/projections and
+G6 broad release remain gated on human acceptance. No new slice order or
+universal attention grammar is implied.
+Resume: `theseus work context next-action.kp.gradient-contour-intuition --mode brief`.
+
+## Previous revision: prepare, observe, hold the inference
 
 The user accepted the motivation/mechanism direction but reported distraction
 while learning this unfamiliar topic. They approved the recommended bounded

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { gradientComparisonPlan, gradientComparisonReading, gradientComparisonTargets, projectGradientComparison } from "../src/tutorial/gradient-contour/gradient-contour-attention.ts";
+import { gradientComparisonAnnotations, gradientComparisonPlan, gradientComparisonReading, gradientComparisonTargets, projectGradientComparison } from "../src/tutorial/gradient-contour/gradient-contour-attention.ts";
 import { sampleGradientContour } from "../src/tutorial/gradient-contour/gradient-contour-sequence.ts";
 
 test("comparison uses known semantic targets and the shared attention phases", () => {
@@ -9,6 +9,12 @@ test("comparison uses known semantic targets and the shared attention phases", (
     assert.ok(["components", "across"].includes(phase.beatId));
     for (const target of phase.focusRefs) assert.ok(gradientComparisonTargets.some(id => id === target));
   }
+  for (const id of Object.keys(gradientComparisonAnnotations)) assert.ok(gradientComparisonTargets.some(target => target === id));
+  assert.equal(projectGradientComparison(5)!.instructionRole, "Before the move");
+  assert.equal(projectGradientComparison(5.5)!.instructionRole, "Watch");
+  assert.equal(projectGradientComparison(5.9)!.instructionRole, "Watch");
+  assert.equal(projectGradientComparison(6)!.instructionRole, "What this shows");
+  assert.deepEqual(projectGradientComparison(5)!.focusRefs, ["gradient.across-component"]);
   assert.equal(projectGradientComparison(4.99), undefined);
   assert.equal(projectGradientComparison(6.01), undefined);
   assert.throws(() => projectGradientComparison(NaN), /finite/);

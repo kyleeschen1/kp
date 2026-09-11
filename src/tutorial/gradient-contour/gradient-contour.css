@@ -9,8 +9,9 @@
 .gradient-intro > p:first-child { font: 650 .7rem/1.4 system-ui, sans-serif; text-transform: uppercase; letter-spacing: .08em; }
 .gradient-intro h1 { font-size: clamp(1.8rem, 5vw, 2.8rem); line-height: 1.1; margin: .4rem 0; }
 .gradient-intro p { margin: .4rem 0; color: var(--kp-sc-muted); }
-.gradient-page .kp-focus-deck__card { height: clamp(32rem, 74svh, 39rem); grid-template-rows: minmax(0, 69fr) minmax(0, 31fr); }
+.gradient-page .kp-focus-deck__card { height: clamp(35rem, 74svh, 41rem); grid-template-rows: 15rem minmax(0, 1fr); }
 .gradient-page .kp-surface-contour-stage { grid-template-rows: auto minmax(0, 1fr) auto auto; }
+.gradient-page .kp-focus-deck__stage { border-top: 1px solid var(--kp-st-rule); border-bottom: 0; }
 /* The scroll lane must not contribute its eight pages to the grid's min width. */
 .gradient-passage-shell { position: relative; min-width: 0; min-height: 0; }
 .gradient-passage-shell > .kp-focus-deck__narrative { height: 100%; }
@@ -21,12 +22,9 @@
   touch-action: pan-y; background: var(--kp-st-paper);
 }
 .gradient-guided-passage[hidden] { display: none; }
-.gradient-viewing-cue {
-  position: absolute; inset: .25rem .5rem auto; z-index: 3; margin: 0;
-  color: var(--kp-sc-ink); text-align: center; pointer-events: none;
-  font: 500 .85rem/1.4 system-ui, sans-serif;
-}
-.gradient-viewing-cue[hidden] { display: none; }
+.gradient-instruction-role { margin-bottom: .4rem; color: var(--kp-st-muted); font: 650 .7rem/1.3 system-ui, sans-serif; letter-spacing: .06em; text-transform: uppercase; }
+.gradient-guided-passage .gradient-viewing-cue { margin-top: .5rem; color: var(--kp-st-focus); font: 550 .9rem/1.45 system-ui, sans-serif; }
+.gradient-comparison-reading [data-gradient-reading-lead] { font-weight: 600; }
 .gradient-guided-passage button {
   margin-top: .65rem; padding: .35rem .7rem; min-height: 2.25rem;
   border: 1px solid var(--kp-st-rule); border-radius: .25rem;
@@ -34,10 +32,11 @@
   font: 550 .8rem/1.3 system-ui, sans-serif;
 }
 .gradient-guided-passage button:focus-visible { outline: 2px solid var(--kp-st-focus); outline-offset: 2px; }
-/* The comparison is geometric. Keep numerical evidence truthful and readable,
-   but reduce its foreground emphasis while the relationship is primary. */
-[data-gradient-attention-primary="visual"] .gradient-evidence output { color: var(--kp-sc-muted); }
-[data-gradient-attention-primary="visual"] .gradient-meter b { background: var(--kp-sc-muted); }
+/* The cue was available before movement. Context remains readable and keeps
+   its geometry; only the established viewing task takes the foreground. */
+[data-gradient-attention-phase="act"] .gradient-comparison-reading,
+[data-gradient-attention-phase="settle"] .gradient-comparison-reading { color: var(--kp-st-muted); }
+[data-gradient-attention-phase="act"] .gradient-instruction-role { color: var(--kp-st-focus); }
 .gradient-stage-context { position: absolute; inset: 0; }
 .gradient-ramp-plane { fill: color-mix(in srgb, var(--kp-sc-accent) 10%, var(--kp-sc-paper)); stroke: var(--kp-sc-muted); stroke-width: 1.3; }
 .gradient-ramp-levels { fill: none; stroke: var(--kp-sc-muted); stroke-width: 1; stroke-dasharray: 3 4; }
@@ -45,6 +44,15 @@
 [data-gradient-candidates] path { fill: none; stroke: var(--kp-sc-ink); stroke-width: 1.5; }
 .gradient-across { fill: none; stroke: var(--kp-sc-accent); stroke-width: 4; stroke-linecap: round; }
 .gradient-along { fill: none; stroke: var(--kp-sc-ink); stroke-width: 2; stroke-dasharray: 5 4; }
+.gradient-across[data-gradient-salience="focus"] { stroke-width: 5; }
+.gradient-along[data-gradient-salience="context"] { stroke: var(--kp-sc-muted); }
+.gradient-annotations { fill: var(--kp-sc-ink); font: 22px/1.3 system-ui, sans-serif; }
+.gradient-annotation-name { font-weight: 650; }
+.gradient-annotations [data-gradient-salience="focus"] { fill: var(--kp-sc-accent); }
+.gradient-annotations [data-gradient-salience="context"] { fill: var(--kp-sc-muted); }
+.gradient-annotation-leader { fill: none; stroke: var(--kp-sc-muted); stroke-width: 1; }
+.gradient-annotations [data-gradient-salience="focus"] .gradient-annotation-leader { stroke: var(--kp-sc-accent); }
+.gradient-reach-label { fill: var(--kp-sc-muted); font-size: 18px; }
 .gradient-equal-reach { fill: none; stroke: var(--kp-sc-muted); stroke-width: 1.4; }
 .gradient-component-evidence { display: flex; justify-content: center; flex-wrap: wrap; gap: .25rem 1rem; font: .75rem/1.4 system-ui, sans-serif; min-height: 2.1rem; color: var(--kp-sc-ink); }
 .gradient-component-evidence output { font-variant-numeric: tabular-nums; }
@@ -65,7 +73,7 @@
 .gradient-help, .gradient-reference { color: var(--kp-sc-muted); font: .8rem/1.5 system-ui, sans-serif; }
 .gradient-page details { margin-top: 1.5rem; font-size: .9rem; line-height: 1.6; }
 @media (max-width: 520px) {
-  .gradient-page .kp-focus-deck__card { height: 33rem; grid-template-rows: minmax(0, 59fr) minmax(0, 41fr); }
+  .gradient-page .kp-focus-deck__card { height: 36rem; grid-template-rows: 18rem minmax(0, 1fr); }
   .gradient-evidence { gap: .65rem; font-size: .65rem; }
   .gradient-evidence output { font-size: 1rem; }
 }

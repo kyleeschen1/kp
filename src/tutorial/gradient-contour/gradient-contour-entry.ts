@@ -30,14 +30,11 @@ const get = <T extends Element>(selector: string) => { const found = root.queryS
 const card = get<HTMLElement>("[data-kp-focus-deck]");
 const plot = get<HTMLElement>(".kp-surface-contour-stage__plot");
 const projectOverlay = mountGradientContourOverlay(plot, authority);
-// Keep the viewing task readable at phone sizes instead of shrinking it with SVG geometry.
-plot.insertAdjacentHTML("beforeend", `<p class="gradient-viewing-cue" id="gradient-comparison-cue" hidden></p>`);
-const viewingCue = get<HTMLElement>(".gradient-viewing-cue");
 // The exemplar fixes c to the point's height. The reference's level control
 // remains untouched on its own host; here it is replaced with derived evidence.
 const levelControl = get<HTMLElement>(".kp-surface-contour-level-control");
 levelControl.hidden = true;
-levelControl.insertAdjacentHTML("afterend", `<div class="gradient-evidence"><div><span>Starting height</span><output data-gradient-height>1.50</output></div>
+levelControl.insertAdjacentHTML("afterend", `<div class="gradient-evidence" data-gradient-evidence><div><span>Starting height</span><output data-gradient-height>1.50</output></div>
   <div data-gradient-rate-panel><span>Rise per unit distance</span><output data-gradient-rate>0.00</output><div class="gradient-meter" aria-hidden="true"><i></i><b data-gradient-meter></b></div></div></div>`);
 levelControl.insertAdjacentHTML("afterend", `<div class="gradient-component-evidence" data-gradient-component-evidence><span class="gradient-across-label">Across (adds rise): <output data-gradient-across>0.00</output></span><span>Sideways (no rise): <output data-gradient-along>1.00</output></span><span>Local rise = <output data-gradient-rise-rule></output></span></div>`);
 const clock = createKpReaderTimelinePlaybackClock({ id: "clock.gradient-contour.primary", durationMs: 11900 });
@@ -50,13 +47,26 @@ viewport.dataset["kpFocusDeckSnapDisabled"] = "true";
 // or compensating scroll writes that would fight the input owner.
 const passageShell = document.createElement("div"); passageShell.className = "gradient-passage-shell";
 viewport.before(passageShell); passageShell.append(viewport);
+// Move the actual narrative owner, not a duplicate caption. Its native lane
+// and the figure retain fixed slots throughout the comparison and its replay.
+get<HTMLElement>(".kp-focus-deck__card").prepend(passageShell);
 passageShell.insertAdjacentHTML("beforeend", `<section class="gradient-guided-passage kp-focus-deck__narrative" data-gradient-guided-passage hidden aria-label="Compare equal-length directions"><div class="kp-focus-deck__passage-page">
-  <p><span data-gradient-reading-lead>${gradientComparisonReading.prepare.lead}</span> <span data-gradient-reading-body>${gradientComparisonReading.prepare.body}</span></p>
+  <div class="gradient-instruction-role" data-gradient-instruction-role>Before the move</div>
+  <p class="gradient-comparison-reading"><span data-gradient-reading-lead>${gradientComparisonReading.prepare.lead}</span> <span data-gradient-reading-body>${gradientComparisonReading.prepare.body}</span></p>
+  <p class="gradient-viewing-cue" id="gradient-comparison-cue"></p>
   <button type="button" data-gradient-play-comparison aria-describedby="gradient-comparison-cue">Turn toward uphill</button>
 </div></section>`);
 const guidedPassage = get<HTMLElement>("[data-gradient-guided-passage]");
+const viewingCue = get<HTMLElement>(".gradient-viewing-cue");
+const instructionRole = get<HTMLElement>("[data-gradient-instruction-role]");
 const readingLead = get<HTMLElement>("[data-gradient-reading-lead]"), readingBody = get<HTMLElement>("[data-gradient-reading-body]");
 const playComparison = get<HTMLButtonElement>("[data-gradient-play-comparison]");
+// Supporting numbers stay live and available, but outside the attentional
+// surface: expanding them must never shrink or move the demonstration.
+const numericalDetails = document.createElement("details"); numericalDetails.className = "gradient-numerical-details";
+numericalDetails.innerHTML = "<summary>Inspect the numbers</summary>";
+get<HTMLElement>(".gradient-help").before(numericalDetails);
+numericalDetails.append(get<HTMLElement>("[data-gradient-component-evidence]"), get<HTMLElement>("[data-gradient-evidence]"));
 const slider = get<HTMLInputElement>("[data-kp-focus-deck-scrubber]"); slider.step = "any";
 const previous = get<HTMLButtonElement>("[data-kp-focus-deck-previous]"), next = get<HTMLButtonElement>("[data-kp-focus-deck-next]");
 const replay = get<HTMLButtonElement>("[data-kp-focus-deck-replay]");
@@ -73,12 +83,12 @@ const render = () => {
   passageShell.dataset["gradientGuided"] = String(attention !== undefined);
   if (!attention && guidedPassage.contains(document.activeElement)) viewport.focus({ preventScroll: true });
   guidedPassage.hidden = attention === undefined;
-  viewingCue.hidden = attention === undefined;
   if (attention) {
     // Keeping these nodes intact also preserves selection during inspection.
     if (readingLead.textContent !== attention.reading.lead) readingLead.textContent = attention.reading.lead;
     if (readingBody.textContent !== attention.reading.body) readingBody.textContent = attention.reading.body;
     if (viewingCue.textContent !== attention.cue) viewingCue.textContent = attention.cue;
+    if (instructionRole.textContent !== attention.instructionRole) instructionRole.textContent = attention.instructionRole;
     const label = attention.readingKind === "conclude" ? "Replay this turn" : "Turn toward uphill";
     if (playComparison.textContent !== label) playComparison.textContent = label;
   }
