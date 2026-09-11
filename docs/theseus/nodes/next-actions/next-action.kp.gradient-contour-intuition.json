@@ -5,7 +5,49 @@
   "status": "ready",
   "domain": "authoring",
   "summary": "User approved six-package KP delivery proposal; G3 human review blocks G4-G6.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-10-gradient-contour-delivery-proposal.md"
+    }
+  ],
   "verification": [
     "npm run test:kinetic-figure-surface-contour"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/gradient-contour-model.test.ts tests/kinetic-figure-surface-contour.test.ts tests/stage-fit-contract.test.ts",
+      "status": "passed",
+      "scope": "g1",
+      "checkedAt": "2026-09-11T03:01:00.821Z",
+      "notes": "13 tests pass: nonradial gradient, unit direction comparisons, constant contour height versus straight tangent second-order change, stationary case, located repair inputs and unchanged reference. Broad impact default retained for G6 release; no visual promotion at G1."
+    }
+  ],
+  "expectedLearning": [
+    "Whether contour identity plus first-order comparisons produce a reusable authorable geometric intuition."
+  ],
+  "allowedWork": [
+    "Exact approved G1-G6 positive quadratic field and point, existing renderer and controls, G3 before source-only reuse and projections."
+  ],
+  "disallowedWork": [
+    "No arbitrary fields, new renderer or clock, agents, external calls, deployment, merge or automatic successor."
+  ],
+  "criteria": [
+    {
+      "id": "semantic-truth",
+      "weight": "high"
+    },
+    {
+      "id": "canonical-preservation",
+      "weight": "high"
+    },
+    {
+      "id": "visual-acceptance",
+      "weight": "high"
+    },
+    {
+      "id": "source-only-reuse",
+      "weight": "high"
+    }
   ]
 }

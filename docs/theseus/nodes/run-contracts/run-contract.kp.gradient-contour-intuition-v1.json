@@ -41,7 +41,8 @@
     {
       "id": "g1",
       "title": "Establish bounded field and first-order facts",
-      "status": "planned"
+      "summary": "13 focused math and reference tests passed; canonical model and rendering boundary pinned; no new renderer or general schema.",
+      "status": "complete"
     },
     {
       "id": "g2",
