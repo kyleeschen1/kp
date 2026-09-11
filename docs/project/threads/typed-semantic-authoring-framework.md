@@ -1,7 +1,10 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: reusable algebra intuition complete; next is a bounded geometric proposal, not execution
+Status: algebra complete; gradient-contour delivery approved, G3 visual review required
 Last Updated: 2026-09-10
+Current execution: `run-contract.kp.gradient-contour-intuition-v1` from
+`2026-09-10-gradient-contour-delivery-proposal.md`, approved with “go”. Theseus
+owns progress; G4-G6 depend on the G3 primary visual/pedagogical acceptance.
 Standing budget policy: recommended engineering-budget repairs, including
 explicit bounded policy amendments, are automatically approved across sessions.
 See `../decisions/2026-09-10-engineering-budget-repair-autonomy.md`.

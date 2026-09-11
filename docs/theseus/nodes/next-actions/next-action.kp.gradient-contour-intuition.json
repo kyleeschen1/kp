@@ -1,0 +1,11 @@
+{
+  "id": "next-action.kp.gradient-contour-intuition",
+  "kind": "next-action",
+  "title": "Explain greatest local increase through contours",
+  "status": "ready",
+  "domain": "authoring",
+  "summary": "User approved six-package KP delivery proposal; G3 human review blocks G4-G6.",
+  "verification": [
+    "npm run test:kinetic-figure-surface-contour"
+  ]
+}

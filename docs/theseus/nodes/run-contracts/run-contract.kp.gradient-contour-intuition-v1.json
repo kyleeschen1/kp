@@ -1,0 +1,72 @@
+{
+  "id": "run-contract.kp.gradient-contour-intuition-v1",
+  "kind": "run-contract",
+  "title": "Gradient contour intuition",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.gradient-contour-intuition.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-10-gradient-contour-delivery-proposal.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run build",
+    "npm test",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Exact G1-G6 proposal and standing bounded budget repairs; preserve existing contour, tax, Bayes and algebra."
+  ],
+  "disallowedWork": [
+    "No new server, agents, external model calls, deployment, merge, arbitrary fields or automatic successor."
+  ],
+  "goal": "Explain which direction is uphill with one canonical question-oriented card and source-only reuse",
+  "target": "next-action.kp.gradient-contour-intuition",
+  "runMode": "run",
+  "maxSlices": 6,
+  "commitCadence": "One verified reversible package per commit including evidence",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "G3 requires explicit human visual acceptance before G4-G6.",
+    "Six active hours excluding review wait; reserve final hour for verification. Reassess a missing mechanism after two hours on the first exemplar.",
+    "Stop for new renderer or clock, semantic families beyond positive quadratic fields, broader migration, unsafe authority or scope expansion."
+  ],
+  "slices": [
+    {
+      "id": "g1",
+      "title": "Establish bounded field and first-order facts",
+      "status": "planned"
+    },
+    {
+      "id": "g2",
+      "title": "Build reversible canonical gradient exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "g3",
+      "title": "Human visual and pedagogical checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "g4",
+      "title": "Demonstrate source-only reuse and Apply",
+      "status": "planned"
+    },
+    {
+      "id": "g5",
+      "title": "Independent tangent explanation and coherent projections",
+      "status": "planned"
+    },
+    {
+      "id": "g6",
+      "title": "Verify release and close out measured leverage",
+      "status": "planned"
+    }
+  ]
+}

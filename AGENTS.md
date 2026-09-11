@@ -223,6 +223,13 @@ of an attention motif.
 
 ## Plan and execution ownership
 
+- For KP-specific outcome-led delivery and approved away/overnight portfolios,
+  use `.agents/skills/kp-delivery-loop/SKILL.md`. It retains Theseus contracts,
+  receipts and evidence without a minimum slice count. New scope still needs
+  approval; away mode can park only local review dependencies and continue
+  independently approved work. Do not silently change an existing contract or
+  substitute this policy for an explicitly requested generic Theseus skill.
+
 - Keep one human-readable plan and one executable control record. For a
   Theseus-backed long loop, the reviewed proposal in `docs/project/` owns the
   rationale and approved scope; the Theseus run contract owns slice order,

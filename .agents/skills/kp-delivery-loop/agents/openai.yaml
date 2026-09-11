@@ -1,0 +1,4 @@
+interface:
+  display_name: "KP Delivery Loop"
+  short_description: "Outcome-led Theseus delivery, interactive or away"
+  default_prompt: "Use $kp-delivery-loop to propose the next bounded KP delivery outcome, or resume its approved contract."

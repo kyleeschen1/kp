@@ -24,6 +24,12 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+Current approved delivery: `threads/2026-09-10-gradient-contour-delivery-proposal.md`
+under `run-contract.kp.gradient-contour-intuition-v1`. User approved with “go”.
+Use the KP delivery skill: six outcome-sized packages, G3 human review before
+source-only generalization and downstream integration. Preserve the original
+surface-contour route; no new renderer, clock or automatic successor.
+
 Current successor planning reference:
 `reviews/2026-09-07-reconciled-authoring-loop-horizon.md`. It reconciles everyday
 authoring, reusable knowledge/procedures, Bayes, frontend convergence/promotion
