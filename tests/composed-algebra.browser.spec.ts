@@ -9,6 +9,46 @@ import { unfamiliarAuthoringCases, unfamiliarAuthoringRejections } from "./fixtu
 import intuition from "../src/authoring/examples/composed-algebra-intuition.json" with { type: "json" };
 import intuitionTransfer from "../src/authoring/examples/composed-algebra-intuition-transfer.json" with { type: "json" };
 
+test("extended controls settle reverse gestures and interrupt without losing semantic state", async ({ page }) => {
+  test.setTimeout(180_000);
+  for (const source of [intuition, intuitionTransfer]) {
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.goto("/experiments/reusable-reasoning/?example=algebra-intuition");
+    const root = page.locator("#authored-focus-card");
+    await expect(root).toHaveAttribute("data-composed-status", "ready", { timeout: 90_000 });
+    await root.locator("[data-reasoning-editor] summary").click();
+    await root.locator("[data-reasoning-json]").fill(JSON.stringify(source));
+    await root.locator("[data-composed-apply]").click();
+    await expect(root.locator("[data-reasoning-draft-status]")).toHaveAttribute("data-status", "applied", { timeout: 90_000 });
+    await root.locator("[data-reasoning-editor] summary").click();
+    const card = root.locator("[data-composed-reader] [data-composed-card]"), slider = card.locator("[data-kp-focus-deck-scrubber]");
+    const last = source.states.length - 1;
+    for (let step = 1; step <= last; step++) {
+      await slider.focus(); await page.keyboard.press("ArrowRight");
+      await expect.poll(async () => Number(await card.getAttribute("data-composed-step"))).toBeGreaterThan(step - 1);
+      expect(Number(await card.getAttribute("data-composed-step"))).toBeLessThan(step);
+      await expect(card).toHaveAttribute("data-composed-step", String(step), { timeout: 10_000 });
+      await expect(card.locator("[data-composed-count]")).toHaveText(`${step + 1} / ${source.states.length}`);
+    }
+    await card.locator("[data-distribution-stage]").hover();
+    for (const [delta, step] of [[-420, last - 1], [420, last], [-420, last - 1]]) {
+      await page.mouse.wheel(delta!, 0);
+      await expect(card).toHaveAttribute("data-composed-step", String(step), { timeout: 10_000 });
+      await expect(card).toHaveAttribute("data-common-factor-state", source.states[step!]!.id);
+    }
+    await card.locator("[data-kp-focus-deck-next]").click();
+    await slider.evaluate(node => { (node as HTMLInputElement).value = "1.37"; node.dispatchEvent(new Event("input")); });
+    await expect(card).toHaveAttribute("data-composed-step", "1.37");
+    await slider.dispatchEvent("change"); await expect(card).toHaveAttribute("data-composed-step", "1", { timeout: 10_000 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await slider.focus(); await page.keyboard.press("ArrowRight");
+    await expect(card).toHaveAttribute("data-composed-step", "2");
+    await expect(card.locator("[data-composed-count]")).toHaveText(`3 / ${source.states.length}`);
+    await page.setViewportSize({ width: 390, height: 900 });
+    await expect(card).toHaveAttribute("data-common-factor-state", source.states[2]!.id);
+  }
+});
+
 test("extended static editions preserve questions without JavaScript", async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 900 } });
   try {

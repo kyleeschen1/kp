@@ -444,6 +444,13 @@
       "scope": "s21",
       "checkedAt": "2026-09-11T01:54:04.419Z",
       "notes": "15 canonical ownership continuity and corridor checks pass."
+    },
+    {
+      "command": "npm run visual:composed-algebra:cohort -- --grep \"extended|shorter two-symbol|question-oriented|independent algebra|complete algebra native|primary: compound factoring uses|primary: evaluation contributor|three-stop controls\"",
+      "status": "passed",
+      "scope": "s22",
+      "checkedAt": "2026-09-11T02:02:06.646Z",
+      "notes": "39 passed in 6 minutes: 13 per engine. WebKit automated engine coverage, not physical Safari device testing."
     }
   ],
   "progress": {
