@@ -156,6 +156,19 @@
       "status": "passed",
       "scope": "s05",
       "checkedAt": "2026-09-11T00:05:57.233Z"
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring",
+      "status": "passed",
+      "scope": "s06",
+      "checkedAt": "2026-09-11T00:13:58.470Z",
+      "notes": "83 tests passed, including exact arithmetic, unchanged context, overflow, forged authority and canonical successor plan."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s06",
+      "checkedAt": "2026-09-11T00:14:36.186Z"
     }
   ],
   "progress": {

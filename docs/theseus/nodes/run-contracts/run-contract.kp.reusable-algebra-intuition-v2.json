@@ -95,7 +95,8 @@
     {
       "id": "s06",
       "title": "Bind constant-product ink evaluation",
-      "status": "planned"
+      "summary": "Exact contextual product uses canonical ink-glyph evaluation, preserves preceding contribution and rejects forged or invalid arithmetic.",
+      "status": "complete"
     },
     {
       "id": "s07",

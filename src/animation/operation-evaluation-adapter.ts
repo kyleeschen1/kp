@@ -38,6 +38,16 @@ import {
 import type { KpVerifiedComposedEvaluation } from "../semantic/composed-algebra-evaluation.ts";
 import { projectKpContextualConstantSum } from "../semantic/contextual-constant-sum-projection.ts";
 import { createKpAssetBundle } from "../semantic/asset.ts";
+import type { KpVerifiedComposedProductEvaluation } from "../semantic/composed-algebra-product-evaluation.ts";
+import { projectKpContextualConstantProduct } from "../semantic/contextual-constant-product-projection.ts";
+
+export function createVerifiedContextualConstantProductAnimationAsset(proof: KpVerifiedComposedProductEvaluation): KpAnimationAsset {
+  const projection = projectKpContextualConstantProduct(proof);
+  const id = `operation-evaluation.contextual-product.${proof.revisionId.slice(7)}`;
+  return createKpOperationEvaluationAnimationAsset({ id, title: "Evaluate one contribution in context",
+    bundle: createKpAssetBundle({ id: `asset.${id}`, title: "Evaluate one contribution in context", objects: projection.endpoints.map(e => e.object) }),
+    transformation: projection.transformation });
+}
 
 export function createVerifiedContextualConstantSumAnimationAsset(proof: KpVerifiedComposedEvaluation): KpAnimationAsset {
   const projection = projectKpContextualConstantSum(proof);
