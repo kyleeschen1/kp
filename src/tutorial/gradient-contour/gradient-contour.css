@@ -1,0 +1,33 @@
+.gradient-page {
+  --kp-st-paper: var(--kp-sc-paper); --kp-st-header: var(--kp-sc-header);
+  --kp-st-header-ink: var(--kp-sc-header-ink); --kp-st-strong: var(--kp-sc-strong);
+  --kp-st-muted: var(--kp-sc-muted); --kp-st-rule: var(--kp-sc-rule); --kp-st-focus: var(--kp-sc-accent);
+  padding: clamp(1rem, 4vw, 3rem); min-height: 100svh;
+}
+.gradient-page > article { max-width: 52rem; margin: auto; }
+.gradient-intro { margin-bottom: 1.4rem; }
+.gradient-intro > p:first-child { font: 650 .7rem/1.4 system-ui, sans-serif; text-transform: uppercase; letter-spacing: .08em; }
+.gradient-intro h1 { font-size: clamp(1.8rem, 5vw, 2.8rem); line-height: 1.1; margin: .4rem 0; }
+.gradient-intro p { margin: .4rem 0; color: var(--kp-sc-muted); }
+.gradient-page .kp-focus-deck__card { height: clamp(32rem, 74svh, 39rem); grid-template-rows: minmax(0, 69fr) minmax(0, 31fr); }
+.gradient-page .kp-surface-contour-stage { grid-template-rows: auto minmax(0, 1fr) auto; }
+.gradient-page .kp-surface-contour-level-control[hidden] { display: none; }
+.gradient-overlay { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.gradient-origin { fill: var(--kp-sc-paper); stroke: var(--kp-sc-strong); stroke-width: 1.5; }
+.gradient-point { fill: var(--kp-sc-accent); stroke: var(--kp-sc-paper); stroke-width: 1.5; }
+.gradient-tangent { stroke: var(--kp-sc-ink); stroke-width: 2; fill: none; stroke-dasharray: 4 3; }
+.gradient-direction, .gradient-arrowhead { fill: none; stroke: var(--kp-sc-accent); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.gradient-right-angle { fill: none; stroke: var(--kp-sc-ink); stroke-width: 1; }
+.gradient-evidence { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; width: min(100%, 32.5rem); margin: auto; padding: .5rem 0 .3rem; font: 500 .72rem/1.35 system-ui, sans-serif; color: var(--kp-sc-muted); }
+.gradient-evidence > div { min-width: 0; position: relative; display: flex; align-items: baseline; justify-content: space-between; gap: .5rem; padding-bottom: .55rem; }
+.gradient-evidence output { font-size: 1.15rem; font-variant-numeric: tabular-nums; color: var(--kp-sc-strong); }
+.gradient-meter { height: 4px; position: absolute; bottom: 0; left: 0; right: 0; background: var(--kp-sc-rule); }
+.gradient-meter i { position: absolute; left: 50%; height: 8px; top: -2px; width: 1px; background: var(--kp-sc-ink); }
+.gradient-meter b { position: absolute; top: 0; bottom: 0; background: var(--kp-sc-accent); }
+.gradient-help, .gradient-reference { color: var(--kp-sc-muted); font: .8rem/1.5 system-ui, sans-serif; }
+.gradient-page details { margin-top: 1.5rem; font-size: .9rem; line-height: 1.6; }
+@media (max-width: 520px) {
+  .gradient-page .kp-focus-deck__card { height: 33rem; grid-template-rows: minmax(0, 59fr) minmax(0, 41fr); }
+  .gradient-evidence { gap: .65rem; font-size: .65rem; }
+  .gradient-evidence output { font-size: 1rem; }
+}

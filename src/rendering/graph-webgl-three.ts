@@ -123,11 +123,14 @@ export function createGraph3DWebGLThreeScene(
   const axisObjects: Group[] = [];
 
   root.name = `${model.graph.id}-webgl-root`;
+  // Origin and scale belong to the sampled camera, just like its angles.
+  // Using the destination graph here detaches surfaces from SVG annotations
+  // during a fitted camera transition, even at its source endpoint.
   root.position.set(
-    (model.graph.camera.origin[0] - model.graph.width / 2) /
-      model.graph.camera.scale,
-    (model.graph.height / 2 - model.graph.camera.origin[1]) /
-      model.graph.camera.scale,
+    (model.camera.origin[0] - model.graph.width / 2) /
+      model.camera.scale,
+    (model.graph.height / 2 - model.camera.origin[1]) /
+      model.camera.scale,
     0
   );
   root.userData = {

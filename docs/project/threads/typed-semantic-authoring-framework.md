@@ -5,6 +5,9 @@ Last Updated: 2026-09-10
 Current execution: `run-contract.kp.gradient-contour-intuition-v1` from
 `2026-09-10-gradient-contour-delivery-proposal.md`, approved with “go”. Theseus
 owns progress; G4-G6 depend on the G3 primary visual/pedagogical acceptance.
+Primary review packet and shared-server URL:
+`2026-09-10-gradient-contour-primary-checkpoint.md`. It also records the
+reproduced shared WebGL camera-origin repair; aesthetic promotion remains gated.
 Standing budget policy: recommended engineering-budget repairs, including
 explicit bounded policy amendments, are automatically approved across sessions.
 See `../decisions/2026-09-10-engineering-budget-repair-autonomy.md`.

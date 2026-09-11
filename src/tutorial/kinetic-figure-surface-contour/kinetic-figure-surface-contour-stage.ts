@@ -81,6 +81,18 @@ export interface KpSurfaceContourStageSession {
   dispose(): void;
 }
 
+/** Overlay callers share the stage's exact camera; they do not reconstruct
+ * projection or fit independently from the surface they annotate. */
+export function projectKpSurfaceContourPoint(
+  authority: KpSurfaceContourStageAuthority,
+  viewProgress: number,
+  point: GraphPoint3D
+) {
+  return projectGraphPoint3DToWebGLScreen(
+    graphAtViewProgress(authority.graph3d, authority.graphTopDown, viewProgress), point
+  );
+}
+
 export function createKpSurfaceContourStageAuthority():
 KpSurfaceContourStageAuthority {
   const graphDraft = createGraph3DObject({

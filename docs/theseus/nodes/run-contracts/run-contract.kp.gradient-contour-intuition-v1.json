@@ -47,12 +47,14 @@
     {
       "id": "g2",
       "title": "Build reversible canonical gradient exemplar",
-      "status": "planned"
+      "summary": "Reversible primary with shared stage, camera, scaffold and input. 37 focused tests, full types and three browser checks pass. Shared camera-origin defect repaired; primary review packet records limits.",
+      "status": "complete"
     },
     {
       "id": "g3",
       "title": "Human visual and pedagogical checkpoint",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: review primary URL in 2026-09-10-gradient-contour-primary-checkpoint.md. Explicit acceptance required before G4-G6; no aesthetic promotion yet.",
+      "status": "ready"
     },
     {
       "id": "g4",

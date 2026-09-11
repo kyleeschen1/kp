@@ -15,7 +15,7 @@ export interface GradientUnitDirection extends GradientPoint { readonly [unitBra
 export function gradientUnitDirection(x: number, y: number): GradientUnitDirection {
   const length = Math.hypot(x, y);
   if (!Number.isFinite(length) || length === 0) throw new RangeError("A direction requires a finite nonzero vector.");
-  return Object.freeze({ x: x / length, y: y / length, [unitBrand]: true });
+  return Object.freeze({ x: x / length, y: y / length, [unitBrand]: true as const });
 }
 type GradientAtPoint =
   | { readonly kind: "stationary"; readonly gradient: GradientPoint; readonly magnitude: 0 }

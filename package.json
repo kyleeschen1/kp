@@ -7,6 +7,7 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
+    "visual:gradient-contour": "playwright test --config playwright.gradient-contour-review.config.ts --project=chromium --workers=1",
     "test:compositor-extensions": "node --disable-warning=ExperimentalWarning --test tests/native-katex-scene-contribution.test.ts tests/native-katex-renderer-ready-scene-plan.test.ts tests/native-katex-contributor-fusion-sampling.test.ts",
     "test:common-factor-authoring": "node --disable-warning=ExperimentalWarning --test tests/common-factor-*.test.ts",
     "test:composed-algebra-authoring": "node --disable-warning=ExperimentalWarning --test tests/composed-algebra-*.test.ts",

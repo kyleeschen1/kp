@@ -9,6 +9,10 @@
     {
       "kind": "file",
       "path": "docs/project/threads/2026-09-10-gradient-contour-delivery-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-10-gradient-contour-primary-checkpoint.md"
     }
   ],
   "verification": [
@@ -21,8 +25,40 @@
       "scope": "g1",
       "checkedAt": "2026-09-11T03:01:00.821Z",
       "notes": "13 tests pass: nonradial gradient, unit direction comparisons, constant contour height versus straight tangent second-order change, stationary case, located repair inputs and unchanged reference. Broad impact default retained for G6 release; no visual promotion at G1."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "g2",
+      "checkedAt": "2026-09-11T03:24:05.009Z",
+      "notes": "Complete final rerun passed after literal-brand and union-narrowing repairs and shared camera repair; Svelte zero errors and warnings."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/graph-webgl-camera-origin.test.ts tests/graph-webgl.test.ts tests/graph-3d-runtime-protocol.test.ts tests/gradient-contour-model.test.ts tests/gradient-contour-sequence.test.ts tests/kinetic-figure-surface-contour.test.ts tests/stage-fit-contract.test.ts",
+      "status": "passed",
+      "scope": "g2",
+      "checkedAt": "2026-09-11T03:24:07.708Z",
+      "notes": "37 passed. Camera-origin regression reproduced failure before shared sampled-camera fix; real Three matrix projection agrees with SVG afterward. Full release remains G6."
+    },
+    {
+      "command": "npm run visual:gradient-contour",
+      "status": "passed",
+      "scope": "g2",
+      "checkedAt": "2026-09-11T03:24:09.047Z",
+      "notes": "Three Chromium checks passed on shared port 8000: full motion and interruption, reverse gestures, six coherent stops, phone and reduced motion, original reference. Initial test preference and text-selection assumptions corrected; captures inspected."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "g2",
+      "checkedAt": "2026-09-11T03:26:07.804Z",
+      "notes": "1126 nodes and 30440 events validated; G2 complete, G3 ready for human acceptance, tracked receipt closed."
     }
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT. Primary ready on shared port 8000. Await visual and pedagogical acceptance; editing, source-only second caller, independent tangent explanation and release remain gated."
+  },
   "expectedLearning": [
     "Whether contour identity plus first-order comparisons produce a reusable authorable geometric intuition."
   ],
