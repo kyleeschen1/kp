@@ -183,6 +183,19 @@
       "scope": "s07",
       "checkedAt": "2026-09-11T00:19:20.750Z",
       "notes": "Full types passed after negative-test corrections; Svelte zero errors and warnings."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring",
+      "status": "passed",
+      "scope": "s08",
+      "checkedAt": "2026-09-11T00:25:30.076Z",
+      "notes": "87 passed. Presentation tests rerun after catalogue-reference check and negative-test type fixes."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s08",
+      "checkedAt": "2026-09-11T00:25:31.401Z"
     }
   ],
   "progress": {

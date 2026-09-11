@@ -107,7 +107,8 @@
     {
       "id": "s08",
       "title": "Derive canonical presentation through extensions",
-      "status": "planned"
+      "summary": "Complete checked chain resolves canonical factoring, sum, distribution and product through authenticated extensions with five stops and no handoff phase.",
+      "status": "complete"
     },
     {
       "id": "h03",
