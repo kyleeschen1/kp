@@ -7,15 +7,78 @@ review packet, not release certification or a second execution plan.
 Review at http://localhost:8000/experiments/kinetic-figure/gradient-contour/.
 The existing shared server was verified; no second server was started.
 
-## Current review: layout/type accepted; explanation and gestures remain (2026-09-11)
+## Current review: explaining the maximum and containing endpoint wheel input (2026-09-11)
 
 The user accepted text positioning and font policy as canonical. Record:
 `../decisions/2026-09-11-focus-card-layout-type-acceptance.md`.
-Do not request another approval of the unchanged placement/typography or treat
-this as complete G3 acceptance. The gradient's steepest-direction reasoning is
-still unclear to the reader; outward endpoint swipes sometimes invoke browser
-Back/Forward. The next implementation recommendation must preserve the accepted
-presentation and address those two issues. This turn only discusses the repairs.
+The subsequent “I agree with all of this. Implement” approved these G3 repairs.
+Do not request another approval of unchanged placement/typography or treat this
+implementation as complete G3 acceptance. Review the explanation at the URL above.
+
+The eight-stop primary now makes three links explicit:
+
+- **5 / 8:** the local ramp has a vertical segment measuring rise above starting
+  height. Its endpoint stays attached to the direction arrow during the change
+  of view. The same mathematical differential supplies both.
+- **6 → 7 / 8:** establish the overhead view, then reveal a true equal-length
+  circle. Keep the tip on it while the across projection grows to the full
+  arrow. Turning away shortens that projection; no same-length direction can
+  project farther. The existing prepare/watch/inspect choreography and fixed
+  cue remain in charge, not a second clock or timed reading assumption.
+- **8 / 8:** coordinate slopes supply the first-order change, expressed as the
+  dot product with the gradient. The optional “Why does (fₓ, fᵧ) give this
+  direction?” foldout derives the partials and projection/cosine rule in native
+  KaTeX with MathML. This is the steepest **direction at the point**, not a
+  search for a steepest point or the highest finite-step endpoint.
+
+The source model, canonical surface-contour Graph3D/WebGL owner, local SVG
+adapter, semantic attention projector, shared Focus Deck and timeline remain
+authoritative. Only this primary explanation changes; original contour/tax/code/
+algebra meaning and motifs are preserved. No new dependency, renderer, clock,
+observer or global attention store. Cost is bounded extra projection/annotation
+work and static math; no performance improvement or source-only reuse is claimed.
+The visual-salience skill kept this a reversible local treatment, with screen-space
+shared typography and deterministic replay, not a new universal motif.
+
+The input repair is shared by existing users of `focus-deck-native-input.ts`.
+Previously the passage had a passive wheel observer while the stage used an
+explicit proxy. Now one region-level non-passive owner cancels accepted horizontal
+events before clamping passage travel, including outward endpoint momentum.
+Immediate reverse travel does not pay back accumulated overshoot. Vertical-only
+scroll, zoom, controls, already-consumed events and input outside the card retain
+their defaults. Native touch/pointer handling and CSS containment are preserved;
+no global history mutation, back-button trap or page-wide gesture listener.
+
+Verification: 53 focused semantic/navigation tests and full typecheck pass.
+The complete 11-check Chromium exemplar run passes, including compact fixed
+layout, 320/390/1280 widths, enlarged text, touch/mouse/replay/reverse, native math,
+shader reuse and the original reference. Six focused checks across Chromium,
+Firefox and WebKit pass for endpoint cancellation/reversal and realized circle/
+rise geometry. The four-card desktop/phone preservation and native TypeScript
+wheel-animation checks both pass. Theseus records exact commands and reruns.
+
+Two early complete browser attempts caught the same small phone prose overflow;
+shorter wording fixed it without reducing type or changing the accepted layout.
+Screenshot inspection also caught a callback-index-as-height mistake and a
+detached rise segment during transit. Named height overrides now reject the former
+at the type boundary; realized stroke-contact checks protect the latter. Establishing
+the overhead view before showing the circle prevents intermediate clipping. Ramp
+captions withdraw before that view change rather than overlapping new geometry.
+
+These are event/geometry guarantees, **not** automated certification of Safari/
+macOS or other OS history recognition. Please try outward swipes at **1 / 8** and
+**8 / 8**, then reverse, in the browser/device that showed the problem. Browser
+and device were not identified, so this limitation remains explicit. Also judge:
+does the circle now explain why turning away gives less rise, and does the final
+step connect that result to the gradient rather than merely naming it?
+
+G3 remains HUMAN_CHECKPOINT. G4 source-only reuse, G5 independent explanation/
+projections and G6 release stay gated. Full repository build/test and broad
+release certification remain G6 work; this is not a learner-efficacy claim.
+Rollback boundaries are the shared wheel-owner repair and the local gradient
+explanation/adapter, independently of the accepted layout/type and underlying
+mathematics. Resume with
+`theseus work context next-action.kp.gradient-contour-intuition --mode brief`.
 
 ## Accepted presentation revision: inherited focus-card typography (2026-09-11)
 

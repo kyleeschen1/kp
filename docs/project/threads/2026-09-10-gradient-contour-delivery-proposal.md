@@ -128,6 +128,24 @@ preservation checks. Rollback is the typography stylesheet/helper and gradient
 annotation adapter, not the shared compositor. Exact aesthetic values remain
 reviewable; G3 still gates G4–G6.
 
+### Approved G3 explanation and endpoint-gesture repair
+
+The user approved the discussion's recommendations with “I agree with all of
+this. Implement”. Preserve the accepted compact top instruction area and shared
+typography. In the same eight-stop primary, make equal horizontal length visible
+from above, connect the across component to height on the local ramp, and explain
+why the partial-derivative vector supplies the uphill direction. Do not imply
+that component lengths add to one or confuse a directional derivative with a
+finite step on the curved surface. Keep the existing math/attention/renderer
+owners; rollback is the local explanation adapter and its tests.
+
+Repair the shared input boundary: an owned horizontal wheel stream must remain
+owned at either endpoint, including momentum. Preserve vertical scrolling, zoom,
+controls and gestures outside the card. No page-wide history traps. The separately
+reversible input repair needs event cancellation, immediate reversal and existing
+multi-card input checks. Synthetic browser events cannot certify OS-level history
+gestures; retain that explicit manual-check limitation. G3 still gates G4–G6.
+
 ## Bounds and completion
 
 Proposed active-work ceiling: six hours excluding human waiting, reserving the

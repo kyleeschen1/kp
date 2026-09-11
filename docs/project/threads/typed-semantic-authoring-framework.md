@@ -28,9 +28,13 @@ The user also approved shared typography inheritance for future focus cards.
 plain-language annotation helper, native math/code preservation and limits.
 The gradient adapter and fresh static caller pass focused/type/browser checks;
 the user has now accepted text positioning and typography as canonical defaults.
-See `../decisions/2026-09-11-focus-card-layout-type-acceptance.md`. G3 remains open:
-why the gradient is steepest is still unclear, and endpoint swipes can trigger
-browser history. The current turn is discussion, not repair implementation.
+See `../decisions/2026-09-11-focus-card-layout-type-acceptance.md`. G3 remains open.
+The user approved the explanation and endpoint-input repairs. The revised primary
+shows actual local-ramp rise, an overhead equal-length circle, the projection
+bound and the partial-derivative bridge; shared horizontal wheel ownership now
+covers passage and stage endpoints. See the current checkpoint packet for tests
+and limits. Human comprehension and real-device history gestures still need
+review; G4–G6 remain gated. Do not reopen accepted placement or typography.
 Accepted pedagogical direction: `../decisions/2026-09-10-motivation-as-explanatory-context.md`
 and its full rationale in `2026-09-10-motivation-as-explanatory-context.md`.
 The user found the first primary clear but insufficiently motivated and explanatory,

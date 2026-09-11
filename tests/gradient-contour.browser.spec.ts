@@ -33,7 +33,7 @@ test("passage handoff stays close to a fixed stage at desktop and phone widths",
     const prepared = await layout();
     expect(prepared.gap).toBeGreaterThanOrEqual(0);
     expect(prepared.gap).toBeLessThanOrEqual(16);
-    expect(prepared.overflow).toBeLessThanOrEqual(1);
+    expect(prepared.overflow, `width ${width}: ${JSON.stringify(prepared)}`).toBeLessThanOrEqual(1);
     expect(prepared.plotRatio).toBeCloseTo(520 / 300, 2);
     expect(prepared.plotGap).toBeGreaterThanOrEqual(0);
     expect(prepared.plotGap).toBeLessThanOrEqual(4);
@@ -62,7 +62,7 @@ test("primary visual checkpoint: motivated question, local mechanism and coheren
   expect(samples.some(position => position > 0 && position < 1)).toBe(true);
   await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", "1");
   await expect(page.locator("[data-gradient-count]")).toHaveText("2 / 8");
-  for (const step of [1.5, 3, 4, 5, 5.5, 6, 7]) {
+  for (const step of [1.5, 3, 4, 4.25, 4.75, 5, 5.5, 6, 7]) {
     await seek(page, step);
     await expect(page.locator("[data-gradient-height]")).toHaveText("1.50");
     await page.screenshot({ path: info.outputPath(`step-${step}.png`), fullPage: true });
@@ -142,7 +142,7 @@ test("phone and reduced motion retain readable evidence and exact stopping point
   }
   await page.getByRole("button", { name: "Turn toward uphill" }).click();
   await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", "6");
-  await expect(page.locator("[data-gradient-reading-lead]")).toHaveText("The whole step now points across the level lines.");
+  await expect(page.locator("[data-gradient-reading-lead]")).toHaveText("The across part is now the whole arrow.");
   expect(await page.locator("[data-gradient-guided-passage]").evaluate(e => e.scrollHeight <= e.clientHeight + 1)).toBe(true);
   if (browserName === "chromium") {
     // Exercise actual touch-generated pointer events over the stationary panel,
@@ -204,7 +204,7 @@ test("comparison hands reading to motion without moving prose, then holds the in
   expect((await pane.boundingBox())!.y).toBe(bounds.y);
   await expect(page.locator("[data-kp-focus-deck-beat=across]")).toBeHidden();
   await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", "6");
-  await expect(page.locator("[data-gradient-reading-lead]")).toHaveText("The whole step now points across the level lines.");
+  await expect(page.locator("[data-gradient-reading-lead]")).toHaveText("The across part is now the whole arrow.");
   await expect(page.locator("[data-gradient-instruction-role]")).toHaveText("What this shows");
   expect(await page.locator(".kp-surface-contour-stage").boundingBox()).toEqual(stageBounds);
   const settled = await paint(page); await page.waitForTimeout(350); expect(await paint(page)).toBe(settled);
@@ -273,6 +273,84 @@ test("canonical Graph3D retains shader programs across sampled frames", async ({
   const warm = await counts(); expect(warm.created).toBeGreaterThan(0);
   for (const position of [5.3, 5.4, 5.5]) await seek(page, position);
   expect(await counts()).toEqual(warm);
+});
+
+test("shared wheel owner contains endpoint streams and reverses without overshoot debt", async ({ page }) => {
+  await page.goto(route); await expect(page.locator(deck)).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+  for (const target of ["[data-kp-focus-deck-viewport] p", ".kp-surface-contour-stage__plot"]) {
+    for (const end of [0, 7]) {
+      await seek(page, end);
+      const result = await page.locator(deck).evaluate((element, { target, end }) => {
+        const lane = element.querySelector<HTMLElement>("[data-kp-focus-deck-viewport]")!;
+        const node = element.querySelector(target)!;
+        const sign = end === 0 ? -1 : 1;
+        const send = (deltaX: number) => {
+          const event = new WheelEvent("wheel", { deltaX, bubbles: true, cancelable: true });
+          node.dispatchEvent(event); return { canceled: event.defaultPrevented, position: Number((element as HTMLElement).dataset["gradientStep"]) };
+        };
+        const stream = [lane.clientWidth * 4, 120, 60, 20, 2].map(delta => send(delta * sign));
+        const reverse = send(-sign * lane.clientWidth * .2);
+        const vertical = new WheelEvent("wheel", { deltaY: 120, bubbles: true, cancelable: true });
+        node.dispatchEvent(vertical);
+        const zoom = new WheelEvent("wheel", { deltaX: 100, ctrlKey: true, bubbles: true, cancelable: true });
+        node.dispatchEvent(zoom);
+        return { stream, reverse, verticalCanceled: vertical.defaultPrevented, zoomCanceled: zoom.defaultPrevented };
+      }, { target, end });
+      expect(result.stream).toEqual(Array(5).fill({ canceled: true, position: end }));
+      expect(result.reverse.canceled).toBe(true);
+      expect(Math.abs(result.reverse.position - end)).toBeGreaterThan(.1);
+      expect(Math.abs(result.reverse.position - end)).toBeLessThan(.3);
+      expect(result.verticalCanceled).toBe(false); expect(result.zoomCanceled).toBe(false);
+    }
+  }
+  await seek(page, 5);
+  for (const target of ["[data-gradient-guided-passage]", "[data-gradient-play-comparison]", ".gradient-intro"]) {
+    const canceled = await page.locator(target).evaluate(element => {
+      const event = new WheelEvent("wheel", { deltaX: 20, bubbles: true, cancelable: true });
+      element.dispatchEvent(event); return event.defaultPrevented;
+    });
+    expect(canceled).toBe(target === "[data-gradient-guided-passage]");
+  }
+  // Event cancellation is an executable ownership law, not a simulation of
+  // Safari/macOS history recognition. That gesture still needs device review.
+});
+
+test("circle and local rise are geometric evidence, and the final explanation uses native math", async ({ page }) => {
+  await page.goto(route); await expect(page.locator(deck)).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+  for (const step of [3.5, 4, 4.25]) {
+    await seek(page, step);
+    expect(await page.locator(".gradient-overlay").evaluate(element => {
+      const rise = element.querySelector<SVGPathElement>(".gradient-height-rise")!;
+      const end = rise.getPointAtLength(rise.getTotalLength());
+      return element.querySelector<SVGPathElement>(".gradient-direction")!.isPointInStroke(end);
+    })).toBe(true);
+  }
+  await seek(page, 4);
+  const rise = await page.locator(".gradient-height-rise").evaluate(element => (element as SVGPathElement).getTotalLength());
+  expect(rise).toBeGreaterThan(20);
+  const rampFits = await page.locator(".gradient-overlay").evaluate(element => {
+    const { width, height } = (element as SVGSVGElement).viewBox.baseVal;
+    return [...element.querySelectorAll("[data-gradient-ramp] path,.gradient-height-rise,.gradient-height-baseline")].every(path => {
+      const box = (path as SVGGraphicsElement).getBBox();
+      return box.x >= 0 && box.y >= 0 && box.x + box.width <= width && box.y + box.height <= height;
+    });
+  });
+  expect(rampFits).toBe(true);
+  await expect(page.locator('[data-kp-focus-deck-annotation="gradient.local-rise"]')).toBeVisible();
+  await seek(page, 4.75);
+  await expect(page.locator('[data-kp-focus-deck-annotation="gradient.local-linearization"]')).toBeHidden();
+  await seek(page, 5);
+  const circle = await page.locator(".gradient-equal-reach").evaluate(element => {
+    const bounds = (element as SVGPathElement).getBBox(); return { width: bounds.width, height: bounds.height };
+  });
+  expect(circle.width).toBeCloseTo(circle.height, 3);
+  expect(circle.width).toBeCloseTo(192, 2);
+  await expect(page.locator('[data-kp-focus-deck-annotation="gradient.local-rise"]')).toBeHidden();
+  await seek(page, 7);
+  await expect(page.locator("[data-kp-focus-deck-beat=uphill] .katex")).toHaveCount(4);
+  await page.locator(".gradient-why summary").click();
+  await expect(page.locator(".gradient-why")).toContainText("cos");
+  await expect(page.locator(".katex-error")).toHaveCount(0);
 });
 
 test("reference retains its own native surface, contour identity and level control", async ({ page }, info) => {

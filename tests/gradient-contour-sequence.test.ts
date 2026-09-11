@@ -71,3 +71,32 @@ test("bounded overlay uses the canonical swept camera without nonfinite geometry
     assert.ok(point.x >= 0 && point.x <= 520 && point.y >= 0 && point.y <= 300);
   }
 });
+
+test("comparison is top-down before turning, with Euclidean rather than additive length", () => {
+  assert.equal(sampleGradientContour(4 / 7).localViewProgress, 0);
+  for (const position of [4, 4.2, 4.4, 4.5, 4.6, 4.8, 5]) {
+    const state = sampleGradientContour(position / 7);
+    if (state.componentPresence > 0) assert.equal(state.localViewProgress, 1);
+  }
+  const authority = createKpSurfaceContourStageAuthority();
+  const center = projectKpSurfaceContourPoint(authority, 1, { x: 1, y: .5, z: 0 });
+  const radii: number[] = [];
+  for (let index = 0; index <= 32; index++) {
+    const angle = index * Math.PI / 16;
+    const point = projectKpSurfaceContourPoint(authority, 1, { x: 1 + Math.cos(angle), y: .5 + Math.sin(angle), z: 0 });
+    radii.push(Math.hypot(point.x - center.x, point.y - center.y));
+  }
+  assert.ok(Math.max(...radii) - Math.min(...radii) < 1e-10);
+  for (const position of [5, 5.25, 5.5, 5.9, 6]) {
+    const state = sampleGradientContour(position / 7);
+    assert.equal(state.localViewProgress, 1);
+    assert.ok(state.components.across <= 1 + 1e-12);
+    assert.ok(Math.abs(state.components.across ** 2 + state.components.along ** 2 - 1) < 1e-12);
+    assert.ok(Math.abs(state.components.acrossRise - state.slope) < 1e-12);
+  }
+  const final = gradientContourBeats.at(-1)!;
+  assert.match(final.html, /dot product/);
+  assert.match(final.html, /class="katex"/);
+  assert.match(final.html, /<math/);
+  assert.doesNotMatch(final.html, /katex-error/);
+});

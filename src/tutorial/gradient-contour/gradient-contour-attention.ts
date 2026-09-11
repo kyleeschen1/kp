@@ -13,12 +13,12 @@ type ComparisonPhase = Omit<KpLessonAttentionPhase, "focusRefs"> & {
 
 export const gradientComparisonReading = Object.freeze({
   prepare: Object.freeze({
-    lead: "Can we get more rise without taking a longer horizontal step?",
-    body: "On this local ramp, travel across the level lines adds rise; travel along them adds none."
+    lead: "Keep the arrow’s tip on the circle.",
+    body: "Every radius has the same length. Only the across part adds rise. Can we lengthen it without leaving the circle?"
   }),
   conclude: Object.freeze({
-    lead: "The whole step now points across the level lines.",
-    body: "Sideways travel adds no rise on this local ramp, so no equal-length direction can climb faster."
+    lead: "The across part is now the whole arrow.",
+    body: "No same-length arrow can project farther. Turning away shortens the across part, so it gives less rise."
   })
 });
 export const gradientComparisonAnnotations = Object.freeze({

@@ -52,6 +52,9 @@
 .gradient-stage-context { position: absolute; inset: 0; }
 .gradient-ramp-plane { fill: color-mix(in srgb, var(--kp-sc-accent) 10%, var(--kp-sc-paper)); stroke: var(--kp-sc-muted); stroke-width: 1.3; }
 .gradient-ramp-levels { fill: none; stroke: var(--kp-sc-muted); stroke-width: 1; stroke-dasharray: 3 4; }
+.gradient-height-baseline { fill: none; stroke: var(--kp-sc-muted); stroke-width: 1.5; stroke-dasharray: 3 4; }
+.gradient-height-rise { fill: none; stroke: var(--kp-sc-accent); stroke-width: 4; }
+.gradient-page [data-kp-focus-deck-annotation="gradient.local-rise"] { left: 4%; top: 48%; max-width: 25%; color: var(--kp-sc-accent); }
 [data-gradient-candidates] path { fill: none; stroke: var(--kp-sc-ink); stroke-width: 1.5; }
 .gradient-across { fill: none; stroke: var(--kp-sc-accent); stroke-width: 4; stroke-linecap: round; }
 .gradient-along { fill: none; stroke: var(--kp-sc-ink); stroke-width: 2; stroke-dasharray: 5 4; }
@@ -77,6 +80,8 @@
   .gradient-annotations [data-kp-focus-deck-annotation] { position: static; width: auto; max-width: 100%; transform: none; text-align: center; }
   .gradient-annotations [data-kp-focus-deck-annotation="gradient.equal-horizontal-reach"] { grid-column: 1 / -1; }
   .gradient-overlay [data-gradient-annotation-leaders] { display: none; }
+  .gradient-page [data-kp-focus-deck-annotation="gradient.local-rise"] { top: 100%; left: 0; width: 100%; max-width: 100%; text-align: center; }
+  .gradient-overlay [data-gradient-rise-leader] { display: none; }
 }
 @container gradient-plot (max-width: 12rem) {
   .gradient-annotations:not([hidden]) { grid-template-columns: 1fr; }
