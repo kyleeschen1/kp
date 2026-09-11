@@ -2,6 +2,7 @@ import { assertKpComposedAlgebraPresentation, type KpComposedAlgebraPresentation
 import { assertKpComposedAlgebraPresentationV2, type KpComposedAlgebraPresentationV2 } from "../../authoring/composed-algebra-presentation-v2.ts";
 import { createKpFocusDeckCheckpointMap, resolveKpFocusDeckVisibleBeat } from "../../tutorial/focus-deck-beat-navigation.ts";
 import { encodeKpHtmlAttribute } from "../../rendering/html-output-encoding.ts";
+import { assertComposedAlgebraSubexplanation, type KpComposedAlgebraSubexplanation } from "./subexplanations.ts";
 
 const brand = Symbol("composed-algebra-reader-sequence");
 const issued = new WeakSet<object>();
@@ -19,6 +20,15 @@ export function composedAlgebraSequence(draft: KpComposedAlgebraPresentation): K
 export function composedAlgebraSequenceV2(draft: KpComposedAlgebraPresentationV2): KpComposedAlgebraReaderSequence {
   assertKpComposedAlgebraPresentationV2(draft);
   return bindSequence(draft, ["Recognize the repeated group", "Collect the counts", "Evaluate the count", "Track every contribution", "Evaluate the constant contribution"]);
+}
+export function composedAlgebraWindowV2(draft: KpComposedAlgebraPresentationV2, reference: KpComposedAlgebraSubexplanation): KpComposedAlgebraReaderSequence {
+  assertComposedAlgebraSubexplanation(reference, draft);
+  const full = composedAlgebraSequenceV2(draft), [start, end] = reference.range;
+  const checkpointProgress = Object.freeze(full.checkpointProgress.slice(start, end + 1));
+  const sequence: KpComposedAlgebraReaderSequence = Object.freeze({ [brand]: true as const, revisionId: full.revisionId,
+    checkpointProgress, checkpoints: createKpFocusDeckCheckpointMap(checkpointProgress), beats: Object.freeze(full.beats.slice(start, end + 1)) });
+  issued.add(sequence);
+  return sequence;
 }
 function bindSequence(draft: KpComposedAlgebraPresentation | KpComposedAlgebraPresentationV2, titles: readonly string[]): KpComposedAlgebraReaderSequence {
   if (draft.checkpointProgress.length !== draft.checked.source.states.length) throw new Error("A composed state must have exactly one beat and clock checkpoint.");

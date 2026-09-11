@@ -131,7 +131,8 @@
     {
       "id": "s11",
       "title": "Recover two context-complete sub-explanations",
-      "status": "planned"
+      "summary": "Two context-complete revision-bound intuition windows share parent motion and controls, support independent URLs, and restore exact parent position and focus.",
+      "status": "complete"
     },
     {
       "id": "s12",

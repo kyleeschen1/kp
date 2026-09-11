@@ -6,13 +6,14 @@ import { mountKpFocusDeckNativeInput } from "../../tutorial/focus-deck-native-in
 import { bindKpFocusDeckKeyboard } from "../../tutorial/focus-deck-keyboard.ts";
 import { renderKpFocusDeckScaffold } from "../../tutorial/focus-deck-scaffold.ts";
 import { encodeKpHtmlAttribute as escapeComposedAlgebraText } from "../../rendering/html-output-encoding.ts";
-import { composedAlgebraSequence, composedAlgebraSequenceV2, sampleComposedAlgebraSequence, type KpComposedAlgebraReaderSequence } from "./sequence.ts";
+import { composedAlgebraSequence, composedAlgebraSequenceV2, composedAlgebraWindowV2, sampleComposedAlgebraSequence, type KpComposedAlgebraReaderSequence } from "./sequence.ts";
+import type { KpComposedAlgebraSubexplanation } from "./subexplanations.ts";
 
 export function mountComposedAlgebraCard(container: HTMLElement, draft: KpComposedAlgebraPresentation) {
   return mountResolvedCard(container, composedAlgebraSequence(draft), card => mountCanonicalComposedAlgebraPresentation(card, draft));
 }
-export function mountComposedAlgebraCardV2(container: HTMLElement, draft: KpComposedAlgebraPresentationV2) {
-  return mountResolvedCard(container, composedAlgebraSequenceV2(draft), card => mountCanonicalComposedAlgebraPresentationV2(card, draft));
+export function mountComposedAlgebraCardV2(container: HTMLElement, draft: KpComposedAlgebraPresentationV2, reference?: KpComposedAlgebraSubexplanation) {
+  return mountResolvedCard(container, reference ? composedAlgebraWindowV2(draft, reference) : composedAlgebraSequenceV2(draft), card => mountCanonicalComposedAlgebraPresentationV2(card, draft));
 }
 
 // Both authenticated entrypoints use the same controls, scheduler and lifecycle.
@@ -21,6 +22,7 @@ async function mountResolvedCard(container: HTMLElement, sequence: KpComposedAlg
   mountNative: (card: HTMLElement) => ReturnType<typeof mountCanonicalComposedAlgebraPresentation>) {
   const card = container.querySelector<HTMLElement>("[data-composed-card]")!;
   const surface = await mountNative(card), clock = surface.clock;
+  clock.seek(sequence.checkpointProgress[0]!);
   const playback = createKpFocusDeckCheckpointPlayback(clock, sequence.checkpointProgress);
   const viewport = card.querySelector<HTMLElement>("[data-kp-focus-deck-viewport]")!;
   const slider = card.querySelector<HTMLInputElement>("[data-kp-focus-deck-scrubber]")!;
@@ -57,8 +59,8 @@ async function mountResolvedCard(container: HTMLElement, sequence: KpComposedAlg
   const unsubscribe = clock.subscribe(render);
   previous.onclick = () => navigate(Math.max(0, Math.ceil(playback.position()) - 1));
   next.onclick = () => navigate(Math.min(playback.last, Math.floor(playback.position()) + 1));
-  replay.onclick = () => { cancel(); clock.seek(0); navigate(playback.last); };
-  slider.oninput = () => { cancel(); clock.pause(); clock.seek(surface.checkpoints.progressAt(Number(slider.value))); };
+  replay.onclick = () => { cancel(); clock.seek(sequence.checkpointProgress[0]!); navigate(playback.last); };
+  slider.oninput = () => { cancel(); clock.pause(); clock.seek(sequence.checkpoints.progressAt(Number(slider.value))); };
   const release = () => playback.seek(Math.round(playback.position()), !reduced.matches, true);
   slider.onchange = release; slider.onpointerup = release; slider.onpointercancel = release;
   const unbindKeyboard = bindKpFocusDeckKeyboard({ card, slider, enabled: () => !disposed && !practicing,
@@ -83,9 +85,8 @@ async function mountResolvedCard(container: HTMLElement, sequence: KpComposedAlg
         template.innerHTML = renderKpFocusDeckScaffold({ id: "composed-question", ariaLabel: "Practice", stageHtml: "", activeBeatSlug: "question",
           beats: [{ slug: "question", title: "Your turn", html: `<p>${escapeComposedAlgebraText(prompt)}</p>` }] });
         viewport.innerHTML = template.querySelector<HTMLElement>("[data-kp-focus-deck-viewport]")!.innerHTML;
-        viewport.scrollLeft = 0; clock.seek(0);
+        viewport.scrollLeft = 0; clock.seek(sequence.checkpointProgress[0]!);
       } else { viewport.innerHTML = originalPassage; render(); }
     } };
 }
-
 

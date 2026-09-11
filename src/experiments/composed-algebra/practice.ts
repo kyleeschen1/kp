@@ -2,6 +2,7 @@ import { assertKpComposedAlgebraPresentation, type KpComposedAlgebraPresentation
 import { createKpFlashcardSpec } from "../../semantic/asset-flashcard.ts";
 import { createKpAnimationClozeProjection, createKpAnimationPredictNextProjection } from "../../animation/flashcard-projection.ts";
 import { createKpFocusDeckCheckpointMap } from "../../tutorial/focus-deck-beat-navigation.ts";
+import { assertKpComposedAlgebraPresentationV2, type KpComposedAlgebraPresentationV2 } from "../../authoring/composed-algebra-presentation-v2.ts";
 
 export function projectComposedAlgebraPrompts(draft: KpComposedAlgebraPresentation) {
   assertKpComposedAlgebraPresentation(draft);
@@ -26,6 +27,13 @@ export function projectComposedAlgebraPrompts(draft: KpComposedAlgebraPresentati
 }
 export function captureComposedAlgebraPosition(draft: KpComposedAlgebraPresentation, progress: number) {
   assertKpComposedAlgebraPresentation(draft);
+  return captureResolvedPosition(draft, progress);
+}
+export function captureComposedAlgebraPositionV2(draft: KpComposedAlgebraPresentationV2, progress: number) {
+  assertKpComposedAlgebraPresentationV2(draft);
+  return captureResolvedPosition(draft, progress);
+}
+function captureResolvedPosition(draft: KpComposedAlgebraPresentation | KpComposedAlgebraPresentationV2, progress: number) {
   if (!Number.isFinite(progress) || progress < 0 || progress > 1) throw new Error("Select a composed position between zero and one.");
   const position = createKpFocusDeckCheckpointMap(draft.checkpointProgress).positionAt(progress);
   const referenceId = Number.isInteger(position) ? draft.checked.source.states[position]!.id : draft.animation.transformations[Math.floor(position)]!.id;
@@ -34,8 +42,15 @@ export function captureComposedAlgebraPosition(draft: KpComposedAlgebraPresentat
 }
 export function resolveComposedAlgebraPosition(draft: KpComposedAlgebraPresentation, value: unknown): number {
   assertKpComposedAlgebraPresentation(draft);
+  return resolvePosition(draft, value);
+}
+export function resolveComposedAlgebraPositionV2(draft: KpComposedAlgebraPresentationV2, value: unknown): number {
+  assertKpComposedAlgebraPresentationV2(draft);
+  return resolvePosition(draft, value);
+}
+function resolvePosition(draft: KpComposedAlgebraPresentation | KpComposedAlgebraPresentationV2, value: unknown): number {
   if (typeof value !== "object" || value === null || !("progress" in value) || typeof value.progress !== "number") throw new Error("Restore a revision-pinned composed position.");
-  const expected = captureComposedAlgebraPosition(draft, value.progress);
+  const expected = captureResolvedPosition(draft, value.progress);
   if (Object.keys(value).length !== Object.keys(expected).length || Object.entries(expected).some(([key, selected]) => Reflect.get(value, key) !== selected))
     throw new Error("Return position belongs to another source, revision or semantic reference.");
   return expected.progress;

@@ -8,6 +8,55 @@ import { fileURLToPath } from "node:url";
 import { unfamiliarAuthoringCases, unfamiliarAuthoringRejections } from "./fixtures/unfamiliar-authoring-trial.ts";
 import intuition from "../src/authoring/examples/composed-algebra-intuition.json" with { type: "json" };
 
+test("independent algebra questions retain context scoped control and exact return", async ({ page }, info) => {
+  test.setTimeout(120_000);
+  const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/experiments/reusable-reasoning/?example=algebra-intuition");
+  const root = page.locator("#authored-focus-card");
+  await expect(root).toHaveAttribute("data-composed-status", "ready", { timeout: 90_000 });
+  const parent = root.locator("[data-composed-reader] [data-composed-card]");
+  await parent.locator("[data-kp-focus-deck-scrubber]").evaluate(node => { (node as HTMLInputElement).value = "2.37"; node.dispatchEvent(new Event("input")); });
+  const panel = root.locator("[data-composed-intuition-panel]");
+  const links: string[] = [];
+  for (const [kind, first, last] of [["collect", 0, 2], ["distribute", 2, 4]] as const) {
+    const origin = root.locator(`[data-composed-intuition="${kind}"]`);
+    links.push((await origin.getAttribute("href"))!);
+    await origin.click();
+    await expect(root).toHaveAttribute("data-intuition-status", "ready", { timeout: 90_000 });
+    await expect(parent).toBeHidden(); await expect(panel).toBeVisible();
+    await expect(panel.locator("[data-composed-intuition-question]")).toContainText("?");
+    await expect(panel.locator("[data-composed-intuition-setup]")).toContainText("x+3");
+    const card = panel.locator("[data-composed-card]"), slider = card.locator("[data-kp-focus-deck-scrubber]");
+    await expect(slider).toHaveAttribute("max", "2");
+    await expect(card.locator("[data-kp-focus-deck-beat]")).toHaveCount(3);
+    await expect(card.locator("[data-composed-count]")).toHaveText("1 / 3");
+    await expect(card).toHaveAttribute("data-common-factor-state", intuition.states[first]!.id);
+    await card.locator("[data-kp-focus-deck-next]").click();
+    await expect.poll(async () => Number(await card.getAttribute("data-composed-step"))).toBeGreaterThan(0);
+    expect(Number(await card.getAttribute("data-composed-step"))).toBeLessThan(1);
+    await expect(card).toHaveAttribute("data-composed-step", "1", { timeout: 10_000 });
+    await slider.evaluate(node => { (node as HTMLInputElement).value = "2"; node.dispatchEvent(new Event("input")); });
+    await expect(card).toHaveAttribute("data-common-factor-state", intuition.states[last]!.id);
+    await expect(card.locator("[data-composed-count]")).toHaveText("3 / 3");
+    await panel.screenshot({ path: info.outputPath(`intuition-${kind}.png`) });
+    await root.locator("[data-composed-intuition-return]").click();
+    await expect(parent).toBeVisible(); await expect(parent).toHaveAttribute("data-composed-step", "2.37");
+    await expect(origin).toBeFocused();
+  }
+  for (const href of links) {
+    await page.goto(`/experiments/reusable-reasoning/${href}`);
+    await expect(root).toHaveAttribute("data-intuition-status", "ready", { timeout: 90_000 });
+    await expect(panel.locator("[data-composed-count]")).toHaveText("1 / 3");
+    await expect(panel.locator("[data-composed-intuition-setup]")).toContainText("x+3");
+  }
+  await page.goto("/experiments/reusable-reasoning/?example=algebra-intuition&intuition=collect&revision=old");
+  await expect(root).toHaveAttribute("data-intuition-status", "repair-gap", { timeout: 90_000 });
+  await expect(panel).toBeHidden();
+  await expect(root.locator("[data-composed-error]")).toContainText("another source revision");
+  expect(errors).toEqual([]);
+});
+
 test("question-oriented primary edits the complete canonical revision", async ({ page }, info) => {
   test.setTimeout(120_000);
   const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
