@@ -5,12 +5,13 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { prepareKpComposedAlgebraDraft } from "../src/authoring/composed-algebra-session.ts";
 import { buildComposedAlgebraEdition } from "../scripts/build-composed-algebra-edition.ts";
+import primary from "../src/authoring/examples/composed-algebra-intuition.json" with { type: "json" };
+import transfer from "../src/authoring/examples/composed-algebra-intuition-transfer.json" with { type: "json" };
 
-test("composed editions preserve selected bytes and reject altered output without overwriting", () => {
+for (const base of [prepareKpComposedAlgebraDraft().checked.source, primary, transfer]) test(`composed editions preserve bytes and reject overwrite: ${base.id}`, () => {
   const scratch = fileURLToPath(new URL("../tmp/codex/", import.meta.url)); mkdirSync(scratch, { recursive: true });
   const fixture = mkdtempSync(join(scratch, "composed-publication-test-")), editions: string[] = [];
   try {
-    const base = prepareKpComposedAlgebraDraft().checked.source;
     const source = { ...base, editorial: { ...base.editorial, title: fixture.split("/").at(-1)! } };
     const path = join(fixture, "source.json"), bytes = JSON.stringify(source, null, 2) + "\n"; writeFileSync(path, bytes);
     const first = buildComposedAlgebraEdition(path); editions.push(first.directory);

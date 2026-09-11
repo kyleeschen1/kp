@@ -9,6 +9,22 @@ import { unfamiliarAuthoringCases, unfamiliarAuthoringRejections } from "./fixtu
 import intuition from "../src/authoring/examples/composed-algebra-intuition.json" with { type: "json" };
 import intuitionTransfer from "../src/authoring/examples/composed-algebra-intuition-transfer.json" with { type: "json" };
 
+test("extended static editions preserve questions without JavaScript", async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 900 } });
+  try {
+    const page = await context.newPage();
+    for (const [name, source] of [["intuition", intuition], ["intuition-transfer", intuitionTransfer]] as const) {
+      const edition = buildComposedAlgebraEdition(fileURLToPath(new URL(`../src/authoring/examples/composed-algebra-${name}.json`, import.meta.url)));
+      const response = await page.goto(`http://localhost:8000/tmp/codex/composed-algebra-editions/${edition.directory.split("/").at(-1)}/index.html`);
+      expect(response?.status()).toBe(200);
+      await expect(page.locator("[data-composed-publication-revision]")).toHaveAttribute("data-composed-publication-revision", edition.revisionId);
+      await expect(page.locator("math")).toHaveCount(source.states.length * 3 + 7);
+      await expect(page.locator("h2").filter({ hasText: "Where does every contribution go" })).toHaveCount(1);
+      await expect(page.locator("[data-kp-focus-deck-scrubber]")).toHaveCount(0);
+    }
+  } finally { await context.close(); }
+});
+
 test("extended practice restores exact parent and independent question positions", async ({ page }) => {
   test.setTimeout(120_000);
   await page.goto("/experiments/reusable-reasoning/?example=algebra-intuition");

@@ -388,6 +388,27 @@
       "scope": "s18",
       "checkedAt": "2026-09-11T01:40:40.361Z",
       "notes": "Two Chromium checks pass; practice returns exact saved semantic progress and source reload remains coherent."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring",
+      "status": "passed",
+      "scope": "s19",
+      "checkedAt": "2026-09-11T01:45:50.704Z",
+      "notes": "99 tests passed including all three actual edition rebuild tamper and non-overwrite cases."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s19",
+      "checkedAt": "2026-09-11T01:45:52.009Z",
+      "notes": "Full types pass; Svelte zero diagnostics."
+    },
+    {
+      "command": "npm run visual:composed-algebra -- --grep \"extended static editions\"",
+      "status": "passed",
+      "scope": "s19",
+      "checkedAt": "2026-09-11T01:45:53.066Z",
+      "notes": "Both v2 editions serve on shared host at phone width without JavaScript."
     }
   ],
   "progress": {

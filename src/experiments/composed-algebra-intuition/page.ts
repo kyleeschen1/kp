@@ -45,6 +45,7 @@ export function renderAlgebraIntuitionPage(draft: KpComposedAlgebraPresentationV
       <div class="reasoning-toolbar"><button type="button" data-composed-apply>Apply source</button><button type="button" data-composed-download>Download displayed source</button></div>
       <p data-reasoning-draft-status role="status">Only successfully prepared revisions replace the displayed card.</p>
       <p>Displayed revision: <code data-reasoning-revision>${escape(draft.revisionId)}</code></p>
+      <p>Build a static edition from the downloaded source: <code>npm run author:composed-algebra-publication -- --source &lt;source.json&gt;</code>. This exports readings and self-checks, not interactive animation. Template changes apply to newly built editions; existing edition bytes stay immutable.</p>
     </details><p data-composed-error role="alert" hidden></p>
     <p><a href="/experiments/reusable-reasoning/?example=composed-algebra">Earlier three-state exemplar</a></p>`;
 }

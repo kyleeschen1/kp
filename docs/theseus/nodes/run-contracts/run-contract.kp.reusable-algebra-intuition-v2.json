@@ -183,7 +183,8 @@
     {
       "id": "s19",
       "title": "Extend reproducible static publication",
-      "status": "planned"
+      "summary": "Versioned checked source uses existing immutable static publisher with whole/scoped readings and prompts. 99 tests types and no-JS browser pass.",
+      "status": "complete"
     },
     {
       "id": "s20",
