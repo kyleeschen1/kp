@@ -31,7 +31,7 @@ export function verifyKpComposedProductEvaluation(input: {
   const [left, right] = distribution.products[1].factors;
   if (left?.kind !== "number" || right?.kind !== "number" ||
       !Number.isSafeInteger(left.value) || !Number.isSafeInteger(right.value) || left.value < 0 || right.value < 0)
-    fail("unsupported-shape", "The final addend must be a product of two nonnegative safe integers.");
+    fail("unsupported-shape", "The final addend must be a product of two nonnegative safe integers. If it contains a symbol, stop after distribution with four states; symbolic simplification is not supported here.");
   const exact = BigInt(left.value) * BigInt(right.value);
   if (exact > BigInt(Number.MAX_SAFE_INTEGER)) fail("unsupported-shape", "The exact product must remain a safe integer.");
   const raw = input.target?.root;

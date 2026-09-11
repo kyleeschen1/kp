@@ -159,7 +159,8 @@
     {
       "id": "s15",
       "title": "Improve typed author repair diagnostics",
-      "status": "planned"
+      "summary": "Actionable owner-level repair messages retain rejection and source integrity; seven focused tests pass.",
+      "status": "complete"
     },
     {
       "id": "s16",

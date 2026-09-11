@@ -37,7 +37,7 @@ export function verifyKpComposedDistribution(input: { readonly partition: KpVeri
   const raw = input.target?.root;
   if (raw?.kind !== "sum" || raw.terms.length !== 2) fail("unsupported-shape", "Retain two ordered distributed products.");
   for (const [index, term] of raw.terms.entries()) {
-    if (term.kind !== "product" || term.factors.length !== 2) fail("unsupported-shape", "Each addend needs the full coefficient and original member.");
+    if (term.kind !== "product" || term.factors.length !== 2) fail("unsupported-shape", "Each addend needs the full coefficient and original member. Keep products unevaluated in the distribution endpoint; use a separate final endpoint for constant-product evaluation.");
     // Compare to bounded authenticated trees before cloning an untrusted target.
     if (!sameKpStructuredExpressionTree(evaluation.result, term.factors[fi]!) ||
         !sameKpStructuredExpressionTree(partition.members[index]!, term.factors[ai]!))

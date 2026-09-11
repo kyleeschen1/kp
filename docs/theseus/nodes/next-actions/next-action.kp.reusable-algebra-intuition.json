@@ -332,6 +332,13 @@
       "scope": "s14",
       "checkedAt": "2026-09-11T01:25:04.373Z",
       "notes": "Full types and zero Svelte diagnostics."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/composed-algebra-repair-v2.test.ts tests/composed-algebra-distribution-v2.test.ts tests/composed-algebra-product-v2.test.ts",
+      "status": "passed",
+      "scope": "s15",
+      "checkedAt": "2026-09-11T01:26:40.291Z",
+      "notes": "Seven checks passed including precise author repairs and recovered sources."
     }
   ],
   "progress": {
