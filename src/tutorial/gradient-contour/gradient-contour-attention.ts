@@ -1,5 +1,7 @@
 import type { KpLessonAttentionPhase, KpLessonAttentionPlan } from "../../reader/document/public-api.ts";
 import { projectKpReaderAttention } from "../../reader/runtime/attention-projector.ts";
+import { gradientComparisonBounds, gradientComparisonReading } from "./gradient-contour-story.ts";
+export { gradientComparisonReading } from "./gradient-contour-story.ts";
 
 // These are the existing overlay's semantic owners, not a second scene registry.
 export const gradientComparisonTargets = [
@@ -11,16 +13,6 @@ type ComparisonPhase = Omit<KpLessonAttentionPhase, "focusRefs"> & {
   readonly focusRefs: readonly ComparisonTarget[];
 };
 
-export const gradientComparisonReading = Object.freeze({
-  prepare: Object.freeze({
-    lead: "Keep the arrow’s tip on the circle.",
-    body: "Every radius has the same length. Only the across part adds rise. Can we lengthen it without leaving the circle?"
-  }),
-  conclude: Object.freeze({
-    lead: "The across part is now the whole arrow.",
-    body: "No same-length arrow can project farther. Turning away shortens the across part, so it gives less rise."
-  })
-});
 export const gradientComparisonAnnotations = Object.freeze({
   "gradient.across-component": { label: "Across", detail: "adds rise" },
   "gradient.along-component": { label: "Along", detail: "no rise" }
@@ -40,7 +32,7 @@ const phase = (kind: KpLessonAttentionPhase["kind"], start: number, end: number)
   focusRefs: ["gradient.across-component"]
 });
 
-// One bounded passage uses the existing four-phase projector. Stops 5 and 6
+// One bounded passage uses the existing four-phase projector. Its named stops
 // remain learner-paced; these fractions only phrase the user-started transit.
 // They are provisional presentation policy, not a universal reading timer.
 export const gradientComparisonPlan: KpLessonAttentionPlan = Object.freeze({
@@ -53,19 +45,20 @@ export const gradientComparisonPlan: KpLessonAttentionPlan = Object.freeze({
 
 export function projectGradientComparison(position: number) {
   if (!Number.isFinite(position)) throw new Error("Comparison position must be finite.");
-  if (position < 5 || position > 6) return undefined;
+  const { start, end } = gradientComparisonBounds;
+  if (position < start || position > end) return undefined;
   const projection = projectKpReaderAttention({
-    attention: gradientComparisonPlan, progressPermille: (position - 5) * 1000
+    attention: gradientComparisonPlan, progressPermille: (position - start) / (end - start) * 1000
   });
   if (!projection) throw new Error("The comparison requires its authored attention plan.");
   const concluded = projection.phaseKind === "inspect";
   return Object.freeze({
     ...projection,
     instructionRole: instructionRoles[projection.phaseKind],
-    visualPosition: 5 + projection.visualProgressPermille / 1000,
+    visualPosition: start + (end - start) * projection.visualProgressPermille / 1000,
     // New interpretation is only available after the motion has settled.
     reading: concluded ? gradientComparisonReading.conclude : gradientComparisonReading.prepare,
     readingKind: concluded ? "conclude" as const : "prepare" as const,
-    visibleBeat: concluded ? 6 : 5
+    visibleBeat: concluded ? end : start
   });
 }

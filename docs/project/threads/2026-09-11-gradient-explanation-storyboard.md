@@ -1,6 +1,6 @@
 # Gradient: explanation-first storyboard
 
-Status: candidate for pedagogical review, not an implemented score.
+Status: explanatory structure approved; primary translation awaiting rendered G3 review.
 Learner draft: `2026-09-11-gradient-explanation-draft.md`.
 Scope: G3 in `2026-09-10-gradient-contour-delivery-proposal.md`.
 Workflow: `../authoring/explanation-first-worksheet.md`.
@@ -76,5 +76,11 @@ provenance and revise the candidate where the reference supplies a better bridge
 After explanatory acceptance, translate the smallest representative passage
 through the existing pipeline and use G3's visual checkpoint. Combine reviews
 when practical; this does not create a recurring extra approval for every card.
-Source-only G4 reuse and G5/G6 integration remain gated. No runtime changed in
-this editorial pass, and no pedagogical-success claim is made.
+Source-only G4 reuse and G5/G6 integration remain gated. The approved translation
+uses 19 learner-paced passages in `gradient-contour-story.ts`, including static
+native math for coordinate contributions and generalization. Named evidence
+selections reuse the existing local ramp, projection turn and contour orbit;
+there is no new coordinate-contribution or dot-product animation capability.
+The model, canonical stage, overlay and clock remain authoritative. Required
+bridges stay on the main path; only supplemental calculation and answer checks
+are foldouts. No pedagogical-success claim is made.

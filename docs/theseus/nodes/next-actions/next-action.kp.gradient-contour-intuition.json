@@ -309,6 +309,48 @@
       "scope": "G3 explanation-first editorial pass",
       "checkedAt": "2026-09-11T22:58:10.881Z",
       "notes": "Clean whitespace check for the editorial amendment, canonical authoring route, learner draft and storyboard. New local references reviewed against created files and existing canonical sources."
+    },
+    {
+      "command": "npm run visual:gradient-contour -- --grep \"all explanation passages|passage handoff|circle and local rise\"",
+      "status": "failed",
+      "scope": "G3 translation smoke",
+      "checkedAt": "2026-09-11T23:22:11.790Z",
+      "notes": "One geometry check passed; two checks exposed phone prose overflow. Increased fixed narrow reading reserve without reducing fonts or removing reasoning."
+    },
+    {
+      "command": "npm run visual:gradient-contour",
+      "status": "failed",
+      "scope": "G3 translation first full exemplar",
+      "checkedAt": "2026-09-11T23:22:13.019Z",
+      "notes": "11 passed, one test failed from local end variable shadowing the named comparison endpoint. Corrected test binding and reran the complete cohort."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "G3 updated test bindings",
+      "checkedAt": "2026-09-11T23:22:14.062Z",
+      "notes": "Caught test endpoint shadowing and three unchecked indexed test reads; corrected both. Final full typecheck rerun passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/focus-deck-annotation.test.ts tests/focus-deck-scaffold.test.ts tests/gradient-contour-attention.test.ts tests/gradient-contour-sequence.test.ts tests/gradient-contour-model.test.ts tests/semantic-reader-attention-projector.test.ts tests/kinetic-figure-surface-contour.test.ts tests/stage-fit-contract.test.ts tests/reusable-reasoning-gesture.test.ts tests/reusable-reasoning-navigation.test.ts tests/log-exponent-focus-card.test.ts tests/typescript-focus-card.test.ts",
+      "status": "passed",
+      "scope": "G3 focused math and preservation",
+      "checkedAt": "2026-09-11T23:22:15.140Z",
+      "notes": "54 passed, including prerequisite order, held evidence, unit directions, pure reverse and seek, shared control and reference preservation."
+    },
+    {
+      "command": "npm run visual:gradient-contour",
+      "status": "passed",
+      "scope": "G3 final full Chromium exemplar",
+      "checkedAt": "2026-09-11T23:22:16.198Z",
+      "notes": "12 passed in 53.7 seconds. All 19 passages fit 1280,390,320 widths; enlarged text, gestures, replay, exact reverse, native math, realized geometry, shader reuse and original reference pass. Desktop and phone captures inspected. No learner or OS history gesture certification."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "G3 final full typecheck",
+      "checkedAt": "2026-09-11T23:22:17.275Z",
+      "notes": "App, node, test, Svelte and domain checks pass; Svelte zero errors and warnings."
     }
   ],
   "progress": {

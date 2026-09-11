@@ -12,7 +12,7 @@ import { renderKpFocusDeckScaffold } from "../focus-deck-scaffold.ts";
 import { createKpSurfaceContourStageAuthority, renderKpSurfaceContourStage, mountKpSurfaceContourStage } from "../kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts";
 import { mountGradientContourOverlay } from "./gradient-contour-overlay.ts";
 import { gradientContourBeats as beats, gradientContourCheckpoints, gradientContourModel as model,
-  gradientContourReference, gradientContourBrief, sampleGradientContour } from "./gradient-contour-sequence.ts";
+  gradientContourReference, gradientContourBrief, gradientComparisonBounds, sampleGradientContour } from "./gradient-contour-sequence.ts";
 import { gradientComparisonReading } from "./gradient-contour-attention.ts";
 import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
 
@@ -26,12 +26,14 @@ root.innerHTML = `<article><header class="gradient-intro"><p>Kinetic Press · mi
   stageHtml: renderKpSurfaceContourStage({ model: gradientContourReference, authority }), replayHidden: false
 })}<p class="gradient-help">Drag blank space or swipe the passage, scrub the rail, or use the arrows. ${beats.length} stopping points; continuous motion between them.</p>
 <details><summary>What the comparison means</summary><p>The field is f(x,y) = x² + 2y² at (1, ½). All direction comparisons are normalized. “Greatest rise” is the directional derivative at this point, not a finite-step endpoint comparison. Along a curved contour the height is constant; a straight tangent step need not stay level.</p></details>
-<details class="gradient-why"><summary>Why does (fₓ, fᵧ) give this direction?</summary>
+<details class="gradient-why"><summary>Additional notation: the projection identity</summary>
 <p>A partial derivative is the local slope when only one coordinate changes. Here ${renderLatexToHtml("f_x=2x=2", { displayMode: false, output: "htmlAndMathml" })} and ${renderLatexToHtml("f_y=4y=2", { displayMode: false, output: "htmlAndMathml" })} at the marked point. The local flat approximation adds those two contributions.</p>
 ${renderLatexToHtml("\\Delta f\\approx f_x\\Delta x+f_y\\Delta y=\\nabla f\\cdot\\Delta\\mathbf r", { output: "htmlAndMathml" })}
 <p>A dot product measures projection: only the part of the move along the gradient contributes. For a unit direction and angle θ to the gradient:</p>
 ${renderLatexToHtml("D_{\\mathbf u}f=\\nabla f\\cdot\\mathbf u=\\lVert\\nabla f\\rVert\\cos\\theta", { output: "htmlAndMathml" })}
 <p>The cosine is at most one, reached when the direction aligns with the gradient. Along the contour it is zero; in the opposite direction it is negative. Thus the gradient is perpendicular to the locally level direction and points toward greatest increase. This is a local claim, not a comparison of distant endpoints.</p></details>
+<details class="gradient-prediction"><summary>Check your reasoning</summary><p>A negative eastward slope and positive northward slope put the gradient northwest. West reverses the negative eastward change; north adds positively. Their relative magnitudes determine the exact angle. Moving east initially lowers the quantity.</p><p>A same-length move tilted away has a shorter projection along the gradient. Its perpendicular part contributes no first-order change.</p></details>
+<details class="gradient-calculation"><summary>Where did the two slopes come from?</summary><p>Our field is ${renderLatexToHtml("f(x,y)=x^2+2y^2", { displayMode: false, output: "htmlAndMathml" })} at (1, ½), with height 1.5. Expanding after a small move gives:</p>${renderLatexToHtml("f(1+\\Delta x,\\tfrac12+\\Delta y)=1.5+2\\Delta x+2\\Delta y+(\\Delta x)^2+2(\\Delta y)^2", { output: "htmlAndMathml" })}<p>The linear terms give our two slopes. The remaining terms are quadratic: halving both movements quarters those terms. This is why the local linear prediction becomes accurate close to the point.</p></details>
 <p class="gradient-reference"><a href="/experiments/kinetic-figure/surface-contour/">Original surface / contour reference</a> · Primary visual review; editing follows acceptance.</p></article>`;
 const get = <T extends Element>(selector: string) => { const found = root.querySelector<T>(selector); if (!found) throw new Error(`Gradient card requires ${selector}`); return found; };
 const card = get<HTMLElement>("[data-kp-focus-deck]");
@@ -48,7 +50,7 @@ levelControl.hidden = true;
 levelControl.insertAdjacentHTML("afterend", `<div class="gradient-evidence" data-gradient-evidence><div><span>Starting height</span><output data-gradient-height>1.50</output></div>
   <div data-gradient-rate-panel><span>Rise per unit distance</span><output data-gradient-rate>0.00</output><div class="gradient-meter" aria-hidden="true"><i></i><b data-gradient-meter></b></div></div></div>`);
 levelControl.insertAdjacentHTML("afterend", `<div class="gradient-component-evidence" data-gradient-component-evidence><span class="gradient-across-label">Across (adds rise): <output data-gradient-across>0.00</output></span><span>Sideways (no rise): <output data-gradient-along>1.00</output></span><span>Local rise = <output data-gradient-rise-rule></output></span></div>`);
-const clock = createKpReaderTimelinePlaybackClock({ id: "clock.gradient-contour.primary", durationMs: 11900 });
+const clock = createKpReaderTimelinePlaybackClock({ id: "clock.gradient-contour.primary", durationMs: 1700 * (beats.length - 1) });
 const playback = createKpFocusDeckCheckpointPlayback(clock, gradientContourCheckpoints);
 const stage = mountKpSurfaceContourStage({ root: card, authority, initialProjection: sampleGradientContour(0).stage });
 const viewport = get<HTMLElement>("[data-kp-focus-deck-viewport]");
@@ -137,7 +139,7 @@ const render = () => {
 };
 const navigate = (step: number) => { cancel(); clock.pause(); playback.seek(step, !reduced.matches); };
 const unsubscribe = clock.subscribe(render);
-const replayComparison = () => { cancel(); clock.seek(gradientContourCheckpoints[5]!); navigate(6); };
+const replayComparison = () => { cancel(); clock.seek(gradientContourCheckpoints[gradientComparisonBounds.start]!); navigate(gradientComparisonBounds.end); };
 playComparison.onclick = replayComparison;
 previous.onclick = () => navigate(Math.max(0, Math.ceil(playback.position()) - 1));
 next.onclick = () => navigate(Math.min(playback.last, Math.floor(playback.position()) + 1));

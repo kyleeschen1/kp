@@ -53,7 +53,7 @@
     {
       "id": "g3",
       "title": "Human visual and pedagogical checkpoint",
-      "summary": "HUMAN_CHECKPOINT: review docs/project/threads/2026-09-11-gradient-explanation-draft.md and its storyboard before further choreography. Provisional candidate; successful GPT reference not supplied. Live card preserved. G4-G6 remain gated.",
+      "summary": "HUMAN_CHECKPOINT: approved draft translated at http://localhost:8000/experiments/kinetic-figure/gradient-contour/ with 19 learner-paced passages. Review reasoning continuity and evidence handoff; draft approval is recorded, rendered acceptance remains. 54 focused tests, 12 Chromium checks and full types pass. G4-G6 remain gated.",
       "status": "ready"
     },
     {

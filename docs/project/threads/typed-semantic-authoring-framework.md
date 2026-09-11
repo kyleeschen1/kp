@@ -1,20 +1,22 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: algebra complete; G3 explanation-first draft review, live gradient preserved
+Status: algebra complete; G3 approved explanation translated for rendered review
 Last Updated: 2026-09-11
 Current execution: `run-contract.kp.gradient-contour-intuition-v1` from
 `2026-09-10-gradient-contour-delivery-proposal.md`, approved with “go”. Theseus
 owns progress; G4-G6 depend on the G3 primary visual/pedagogical acceptance.
 Latest accepted direction: `../decisions/2026-09-11-explanation-first-authoring.md`.
-Further gradient choreography is paused while we establish an explanation that
-works for the learner. Review `2026-09-11-gradient-explanation-draft.md` first;
+The user approved `2026-09-11-gradient-explanation-draft.md` and its storyboard
+with “approve. implement”. The live primary now follows that explanatory order;
 `2026-09-11-gradient-explanation-storyboard.md` maps its inferential bridges and
-potential visual jobs. This is a provisional candidate, not a reconstruction of
+potential visual jobs. This is our approved explanation, not a reconstruction of
 the as-yet-unprovided GPT response. The authoring entrypoint now routes new
 conceptual explanations and unclear-why repairs through the reusable worksheet.
-No runtime, card content, accepted visual policy or package order changed in
-this editorial pass. Earlier implementation history below remains preservation
-evidence, not authority to continue presentation-only refinement.
+The translation preserves the source model, canonical renderers, shared controls,
+top passage placement and typography. It adds reading space on narrow screens
+and uses named evidence/beat bindings instead of the former eight-stop ordinals.
+G3 now reviews the rendered explanation, not the already-approved draft; G4–G6
+remain gated. Earlier implementation history remains preservation evidence.
 Primary review packet and shared-server URL:
 `2026-09-10-gradient-contour-primary-checkpoint.md`. It also records the
 reproduced shared WebGL camera-origin repair; aesthetic promotion remains gated.

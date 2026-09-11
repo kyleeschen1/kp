@@ -20,7 +20,7 @@
    overlays. Do not independently translate an overlay or crop its evidence. */
 .gradient-plot-slot { container: gradient-plot / size; display: grid; min-width: 0; min-height: 0; }
 .gradient-page .kp-surface-contour-stage__plot { width: min(100cqw, calc(100cqh * 52 / 30)); height: auto; margin-inline: 0; place-self: start center; }
-/* The scroll lane must not contribute its eight pages to the grid's min width. */
+/* The scroll lane must not contribute its pages to the grid's min width. */
 .gradient-passage-shell { position: relative; min-width: 0; min-height: 0; }
 .gradient-passage-shell > .kp-focus-deck__narrative { height: 100%; }
 .gradient-passage-shell .kp-focus-deck__passage-page { display: flex; flex-direction: column; justify-content: flex-end; padding-block: .6rem .75rem; }
@@ -105,12 +105,15 @@
 .gradient-meter b { position: absolute; top: 0; bottom: 0; background: var(--kp-sc-accent); }
 .gradient-help, .gradient-reference { color: var(--kp-sc-muted); font: .8rem/1.5 system-ui, sans-serif; }
 .gradient-page details { margin-top: 1.5rem; font-size: .9rem; line-height: 1.6; }
+.gradient-page details .katex-display { overflow-x: auto; overflow-y: hidden; padding-block: .2rem; }
 @media (max-width: 520px) {
-  .gradient-page { --gradient-passage-height: 16.5rem; --gradient-card-height: 34.5rem; }
+  /* First-encounter reasoning needs room. Preserve type size and a fixed
+     handoff across beats rather than deleting bridges to fit retrieval chrome. */
+  .gradient-page { --gradient-passage-height: 20rem; --gradient-card-height: 38rem; }
   .gradient-handoff { grid-template-columns: minmax(0, 1fr); gap: .35rem; }
   .gradient-evidence { gap: .65rem; font-size: .65rem; }
   .gradient-evidence output { font-size: 1rem; }
 }
 @media (max-width: 360px) {
-  .gradient-page { --gradient-passage-height: 18rem; --gradient-card-height: 36rem; }
+  .gradient-page { --gradient-passage-height: 24rem; --gradient-card-height: 42rem; }
 }

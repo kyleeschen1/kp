@@ -1,19 +1,22 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { gradientContourBeats, gradientContourBrief, gradientContourCheckpoints, sampleGradientContour } from "../src/tutorial/gradient-contour/gradient-contour-sequence.ts";
+import { gradientContourBeats, gradientContourBrief, gradientContourCheckpoints, gradientBeatIndex, sampleGradientContour } from "../src/tutorial/gradient-contour/gradient-contour-sequence.ts";
 import { createGradientContourModel, gradientDirectionComponents, gradientLocalHeight, gradientUnitDirection } from "../src/tutorial/gradient-contour/gradient-contour-model.ts";
 import { createKpSurfaceContourStageAuthority, projectKpSurfaceContourPoint } from "../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts";
 
-test("eight semantic stops and pure sampling preserve reverse and interrupted evidence", () => {
-  assert.equal(gradientContourBeats.length, 8);
+const last = gradientContourBeats.length - 1;
+const at = (slug: Parameters<typeof gradientBeatIndex>[0]) => sampleGradientContour(gradientBeatIndex(slug) / last);
+
+test("explanation-led semantic stops and pure sampling preserve reverse and interrupted evidence", () => {
+  assert.equal(gradientContourBeats.length, 19);
   for (const [index, progress] of gradientContourCheckpoints.entries()) {
     const expected = sampleGradientContour(progress);
-    assert.equal(expected.position, index); assert.equal(expected.fraction, `${index + 1} / 8`);
+    assert.ok(Math.abs(expected.position - index) < 1e-12); assert.equal(expected.fraction, `${index + 1} / ${gradientContourBeats.length}`);
     sampleGradientContour(.91); sampleGradientContour(.08);
     assert.deepEqual(sampleGradientContour(progress), expected);
   }
   assert.throws(() => sampleGradientContour(NaN), /finite/);
-  assert.equal(sampleGradientContour(-1).position, 0); assert.equal(sampleGradientContour(2).position, 7);
+  assert.equal(sampleGradientContour(-1).position, 0); assert.equal(sampleGradientContour(2).position, last);
 });
 
 test("curve travel stays level; decomposition preserves equal unit directions", () => {
@@ -24,10 +27,10 @@ test("curve travel stays level; decomposition preserves equal unit directions", 
     assert.ok(Math.abs(state.slope) <= Math.sqrt(8) + 1e-12);
     assert.equal(state.stage.level, 1.5);
   }
-  assert.equal(sampleGradientContour(3 / 7).slope, 0);
-  assert.ok(Math.abs(sampleGradientContour(5 / 7).slope - 2) < 1e-12);
+  assert.equal(at("level").slope, 0);
+  assert.ok(Math.abs(at("components").slope - 2) < 1e-12);
   assert.ok(Math.abs(sampleGradientContour(1).slope - Math.sqrt(8)) < 1e-12);
-  assert.notDeepEqual(sampleGradientContour(1.5 / 7).point, sampleGradientContour(1 / 7).point);
+  assert.notDeepEqual(sampleGradientContour((gradientBeatIndex("contour") + .5) / last).point, at("contour").point);
 });
 
 test("local ramp has zero along-contour rise and the same differential as the surface", () => {
@@ -55,10 +58,10 @@ test("local ramp has zero along-contour rise and the same differential as the su
 test("editorial evidence resolves to beats; ramp and components are distinct from the exact contour", () => {
   for (const slug of gradientContourBrief.evidenceBeats) assert.ok(gradientContourBeats.some(beat => beat.slug === slug));
   for (const value of Object.values(gradientContourBrief)) assert.ok(value.length > 0);
-  assert.equal(sampleGradientContour(3 / 7).rampPresence, 0);
-  assert.equal(sampleGradientContour(4 / 7).rampPresence, 1);
-  assert.equal(sampleGradientContour(5 / 7).componentPresence, 1);
-  assert.equal(sampleGradientContour(6 / 7).components.along, 0);
+  assert.equal(at("height").rampPresence, 0);
+  assert.equal(at("ramp").rampPresence, 1);
+  assert.equal(at("components").componentPresence, 1);
+  assert.equal(at("across").components.along, 0);
   assert.equal(sampleGradientContour(1).rampPresence, 0);
 });
 
@@ -73,9 +76,9 @@ test("bounded overlay uses the canonical swept camera without nonfinite geometry
 });
 
 test("comparison is top-down before turning, with Euclidean rather than additive length", () => {
-  assert.equal(sampleGradientContour(4 / 7).localViewProgress, 0);
-  for (const position of [4, 4.2, 4.4, 4.5, 4.6, 4.8, 5]) {
-    const state = sampleGradientContour(position / 7);
+  assert.equal(at("ramp").localViewProgress, 0);
+  for (const position of [0, .2, .4, .5, .6, .8, 1].map(t => gradientBeatIndex("level") + t)) {
+    const state = sampleGradientContour(position / last);
     if (state.componentPresence > 0) assert.equal(state.localViewProgress, 1);
   }
   const authority = createKpSurfaceContourStageAuthority();
@@ -87,16 +90,32 @@ test("comparison is top-down before turning, with Euclidean rather than additive
     radii.push(Math.hypot(point.x - center.x, point.y - center.y));
   }
   assert.ok(Math.max(...radii) - Math.min(...radii) < 1e-10);
-  for (const position of [5, 5.25, 5.5, 5.9, 6]) {
-    const state = sampleGradientContour(position / 7);
+  for (const position of [0, .25, .5, .9, 1].map(t => gradientBeatIndex("components") + t)) {
+    const state = sampleGradientContour(position / last);
     assert.equal(state.localViewProgress, 1);
     assert.ok(state.components.across <= 1 + 1e-12);
     assert.ok(Math.abs(state.components.across ** 2 + state.components.along ** 2 - 1) < 1e-12);
     assert.ok(Math.abs(state.components.acrossRise - state.slope) < 1e-12);
   }
-  const final = gradientContourBeats.at(-1)!;
+  const final = gradientContourBeats[gradientBeatIndex("dot-product")]!;
   assert.match(final.html, /dot product/);
   assert.match(final.html, /class="katex"/);
   assert.match(final.html, /<math/);
   assert.doesNotMatch(final.html, /katex-error/);
+});
+
+test("prerequisite meanings precede their use and static reasoning holds its evidence", () => {
+  const index = gradientBeatIndex;
+  const chain = ["height", "east", "north", "linear-change", "gradient", "projection", "components", "across", "dot-product", "general-projection", "contour", "tangent"] as const;
+  for (let i = 1; i < chain.length; i++) assert.ok(index(chain[i - 1]!) < index(chain[i]!));
+  for (const slug of ["east", "north", "linear-change", "general-projection", "magnitude"] as const) {
+    const before = sampleGradientContour((index(slug) - .5) / last), endpoint = at(slug);
+    assert.deepEqual(before.direction, endpoint.direction);
+    assert.deepEqual(before.stage, endpoint.stage);
+    assert.equal(before.rampPresence, endpoint.rampPresence);
+  }
+  for (const beat of gradientContourBeats) assert.doesNotMatch(beat.html, /katex-error/);
+  assert.match(gradientContourBeats[index("linear-change")]!.html, /diagonal move is longer/);
+  assert.match(gradientContourBeats[index("projection")]!.html, /drop a perpendicular/);
+  assert.match(gradientContourBeats[index("general-projection")]!.html, /length times/);
 });

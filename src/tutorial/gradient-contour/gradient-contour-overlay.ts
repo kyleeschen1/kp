@@ -101,7 +101,7 @@ export function mountGradientContourOverlay(plot: HTMLElement, authority: KpSurf
     const tip = screen(offset(d)), across = screen(offset(state.components.acrossVector));
     const risePresence = strength * (1 - state.localViewProgress);
     rise.setAttribute("opacity", String(risePresence));
-    riseLabel.hidden = risePresence < .99;
+    riseLabel.hidden = risePresence < .99 || state.slope === 0;
     const floorTip = screen(offset(d), { z: model.level });
     baseline.setAttribute("d", path([origin, floorTip]));
     const riseTip = tip;
@@ -109,8 +109,11 @@ export function mountGradientContourOverlay(plot: HTMLElement, authority: KpSurf
     riseLeader.setAttribute("d", path([{ x: 140, y: 170 }, { x: (floorTip.x + riseTip.x) / 2, y: (floorTip.y + riseTip.y) / 2 }]));
     // Fixed labels establish where to look before motion. Only their connectors
     // follow the actual projected components; no independent annotation clock.
-    annotations.hidden = !state.attention;
-    leaders.setAttribute("visibility", state.attention ? "visible" : "hidden");
+    // The projection is introduced before the guided turn; its labels must
+    // already be available while the reader learns how to read the diagram.
+    const showComponents = state.componentPresence >= .99;
+    annotations.hidden = !showComponents;
+    leaders.setAttribute("visibility", showComponents ? "visible" : "hidden");
     for (const binding of annotationBindings) {
       const salience = !state.attention ? "normal" : state.attention.focusRefs.includes(binding.id) ? "focus" : "context";
       binding.owner.setAttribute("data-gradient-salience", salience);

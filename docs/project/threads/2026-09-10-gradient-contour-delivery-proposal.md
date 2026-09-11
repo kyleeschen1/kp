@@ -171,6 +171,25 @@ G4–G6 and the package order remain unchanged. Verify local references, existin
 mathematical evidence and Theseus state; do not rerun browser/release matrices
 for an unchanged runtime. Rollback is this editorial amendment and its guidance.
 
+### Approved G3 translation of the explanation
+
+The user approved the draft and storyboard with “approve. implement”. Translate
+their reasoning through the existing primary, not a new renderer or clock.
+The first-encounter sequence may exceed eight stops and reserve more reading
+space on phones, preserving typography and the fixed top passage-stage handoff.
+Static coordinate arithmetic is an explicit editorial choice; this does not
+certify new algebraic or dot-product motion. Keep necessary bridges on the main
+path, use named beat/evidence bindings for playback, and preserve reverse/direct
+seek, native math, original reference and the shared endpoint-input repair.
+
+Acceptance: readable motivation, introduced prerequisite meanings, gradient
+before the maximum argument, projection before the guided turn, and contours
+as a subsequent interpretation. Verify math, deterministic state, focused
+preservation, types and the scoped exemplar; full release remains G6. Rollback
+is this primary's story/score/host/adapter/layout and tests in one commit, not
+the semantic model or shared infrastructure. G3 requires rendered human review
+before G4–G6; draft approval alone does not complete it.
+
 ## Bounds and completion
 
 Proposed active-work ceiling: six hours excluding human waiting, reserving the

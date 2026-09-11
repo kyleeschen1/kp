@@ -7,30 +7,59 @@ review packet, not release certification or a second execution plan.
 Review at http://localhost:8000/experiments/kinetic-figure/gradient-contour/.
 The existing shared server was verified; no second server was started.
 
-## Current review: explanation before further choreography (2026-09-11)
+## Current review: explanation-first translation (2026-09-11)
 
-The user found the revised card better but its gradient explanation still
-insufficient, and approved an explanation-first reset. Decision:
-`../decisions/2026-09-11-explanation-first-authoring.md`.
+The user approved the learner draft and storyboard with “approve. implement”.
+The live URL now follows that structure in 19 learner-paced passages, not the
+previous eight-stop contour-first tour. G3 remains the rendered human checkpoint.
 
-Read `2026-09-11-gradient-explanation-draft.md` first, without needing to operate
-the card. Its companion `2026-09-11-gradient-explanation-storyboard.md` identifies
-the prerequisite meanings, connecting reasons, possible visual jobs and remaining
-uncertainties. The successful GPT response and prompt are still missing; this
-is our provisional candidate, not an imported or independently validated lesson.
+- Stops 1–6: the missing information, east/north local slopes, the local ramp,
+  diagonal change prediction, then the gradient as those slopes collected.
+- Stops 7–11: equal distance, cancellation along level directions, projection
+  introduced before the existing prepare/watch/result turning-arrow comparison.
+- Stops 12–14: the general change rule, dot-product/projection connection, and
+  gradient magnitude as rate rather than a commanded travel distance.
+- Stops 15–19: contour interpretation afterward, tangent perpendicularity, local
+  limits and a changed-case prediction. Supplemental calculation and answers are
+  below the card; necessary inferential bridges are on the main path.
 
-The review question is where a conclusion first stops following, especially the
-bridge from coordinate changes to the gradient's best direction. Do not treat
-acceptance of the workflow as acceptance of the draft. There is no fixed stop
-count for this draft, and no requirement that prose alone explain every relation.
-One or two optional prediction/teach-back questions support the review without
-constituting a learning-effectiveness study.
+Canonical artifact: the gradient primary. Host: the URL above. Semantic source:
+`gradient-contour-model.ts`. Rendering: existing surface-contour Graph3D/WebGL
+stage and gradient SVG overlay, native KaTeX, shared Focus Deck, attention
+projector and timeline. `gradient-contour-story.ts` selects named existing
+evidence; coordinate arithmetic/generalization are deliberately static math,
+not claims of newly supported animation mechanisms. Named beat references now
+bind comparison replay, attention and tests instead of hard-coded old ordinals.
 
-The live URL above is unchanged. The preceding implementation, its verified
-input behavior and accepted layout/type remain preserved. No new browser or
-full release evidence is claimed for this documentation-only pass. G3 remains
-HUMAN_CHECKPOINT before translation/promotion and G4–G6. Theseus owns live status
-and verification; the delivery proposal owns approved scope.
+Preserved: original reference, mathematical model, shared input repair, fonts
+and top passage-stage handoff. Narrow screens reserve more reading space at a
+fixed height across beats; stage space and readable type are not sacrificed.
+This costs additional static passages/math and one local story/pose binding,
+not a new runtime, dependency, clock, global attention store or universal schema.
+The salience skill kept semantic state deterministic and labels screen-sized,
+including during the projection's introduction before guided motion.
+
+Verification: 54 focused semantic/navigation/preservation tests pass. The full
+12-check Chromium exemplar passes, including all 19 passages at 1280/390/320
+widths, enlarged text, continuous input, exact reverse/seek, shared endpoint
+cancellation, realized rise/circle geometry, shader reuse and the reference.
+Initial smoke found phone overflow; more reserved reading space fixed it without
+cutting reasoning. The first full run found a test-variable shadowing error;
+the corrected full rerun passes. Full typecheck passes with zero Svelte errors
+or warnings; Theseus validates 1126 nodes and 30521 events. Exact commands and
+failed attempts are recorded in the run. No full release/build or new
+supported-browser matrix is claimed at G3.
+
+Please review where a conclusion first stops following, particularly the move
+from coordinate contributions to projection, and whether the held figure helps
+while reading. Nineteen passages are a first-encounter composition, not a
+canonical flashcard length. Tests establish facts and behavior, not learning.
+The successful GPT prompt/response is still unavailable; no comparison or learner
+trial is claimed. Real-device Safari/macOS history gestures remain a manual
+check, not certified by synthetic wheel cancellation. G4–G6 stay gated.
+
+Rollback: this primary's story/score, local host/overlay/layout and associated
+tests; do not roll back the source model or shared input/typography repairs.
 
 ## Previous implementation review: maximum and endpoint wheel input (2026-09-11)
 

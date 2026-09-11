@@ -29,12 +29,13 @@ under `run-contract.kp.gradient-contour-intuition-v1`. User approved with “go�
 Use the KP delivery skill: six outcome-sized packages, G3 human review before
 source-only generalization and downstream integration. Preserve the original
 surface-contour route; no new renderer, clock or automatic successor.
-Immediate G3 direction is explanation-first authoring: pause further gradient
-choreography, review a learner explanation and inferential storyboard, then
-translate the working explanation. See
+Immediate G3 direction is explanation-first authoring. The user approved the
+learner draft and storyboard with “approve. implement”; translation is now the
+rendered primary under review. See
 `decisions/2026-09-11-explanation-first-authoring.md` and
-`threads/2026-09-11-gradient-explanation-storyboard.md`. The live card is preserved;
-the GPT reference has not yet been supplied. G4–G6 remain gated.
+`threads/2026-09-11-gradient-explanation-storyboard.md` and the primary checkpoint
+packet. The model, canonical renderers and shared controls are preserved; the
+GPT reference has not yet been supplied. G4–G6 remain gated on rendered review.
 Text positioning and typography are accepted canonical focus-card defaults;
 G3 remains open for the gradient's explanatory gap and endpoint history gestures.
 See `decisions/2026-09-11-focus-card-layout-type-acceptance.md`.

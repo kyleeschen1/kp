@@ -1,8 +1,10 @@
 # What is a gradient, and why does it point uphill?
 
-Review draft, not the live card. The reported successful GPT response has not
-been supplied, so this is a candidate explanation rather than a reconstruction.
-It uses the existing hillside example; the section divisions are not slide counts.
+Explanatory draft approved by the user with “approve. implement” on 2026-09-11.
+Its translation is now on the live gradient card for rendered G3 review. The
+reported successful GPT response has not been supplied: this is our explanation,
+not a reconstruction or independently validated lesson. The section divisions
+are explanatory units, not prescribed slide counts.
 
 ## The question a height measurement cannot answer
 

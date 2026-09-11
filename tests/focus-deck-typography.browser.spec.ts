@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { renderKpFocusDeckScaffold } from "../src/tutorial/focus-deck-scaffold.ts";
 import { renderKpFocusDeckAnnotation } from "../src/tutorial/focus-deck-annotation.ts";
+import { gradientComparisonBounds } from "../src/tutorial/gradient-contour/gradient-contour-story.ts";
 import { renderLatexToHtml } from "../src/rendering/katex-adapter.ts";
 
 test("a new static focus card inherits typography without caller font CSS", async ({ page }) => {
@@ -44,7 +45,7 @@ test("gradient typography is screen-sized, contained and stable through attentio
   for (const width of [1280, 390, 320]) {
     await page.setViewportSize({ width, height: 900 });
     let prepared: unknown;
-    for (const step of [5, 5.5, 6, 5.25, 5]) {
+    for (const step of [0, .5, 1, .25, 0].map(t => gradientComparisonBounds.start + t)) {
       await page.locator("[data-kp-focus-deck-scrubber]").evaluate((element, position) => {
         (element as HTMLInputElement).value = String(position); element.dispatchEvent(new Event("input", { bubbles: true }));
       }, step);
@@ -62,7 +63,7 @@ test("gradient typography is screen-sized, contained and stable through attentio
       expect(labels).toHaveLength(3);
       for (const label of labels) { expect(label.font).toBe(label.prose); expect(label.size).toBeGreaterThanOrEqual(16); expect(label.contained).toBe(true); expect(label.overflow).toBeLessThanOrEqual(1); }
       expect(labels[0]!.size).toBe(18); expect(labels[0]!.weight).toBe(labels[1]!.weight);
-      if (step === 5 && prepared === undefined) prepared = labels;
+      if (step === gradientComparisonBounds.start && prepared === undefined) prepared = labels;
       else expect(labels).toEqual(prepared);
     }
     await page.screenshot({ path: info.outputPath(`typography-${width}.png`), fullPage: true });
@@ -72,9 +73,9 @@ test("gradient typography is screen-sized, contained and stable through attentio
 test("gradient typography retains enlarged text without clipping labels", async ({ page }, info) => {
   await page.goto("/experiments/kinetic-figure/gradient-contour/");
   await expect(page.locator("[data-kp-focus-deck]")).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
-  await page.locator("[data-kp-focus-deck-scrubber]").evaluate(element => {
-    (element as HTMLInputElement).value = "5"; element.dispatchEvent(new Event("input", { bubbles: true }));
-  });
+  await page.locator("[data-kp-focus-deck-scrubber]").evaluate((element, step) => {
+    (element as HTMLInputElement).value = String(step); element.dispatchEvent(new Event("input", { bubbles: true }));
+  }, gradientComparisonBounds.start);
   for (const width of [1280, 390, 320]) {
     await page.setViewportSize({ width, height: 900 });
     for (const size of [20, 24, 32]) {
