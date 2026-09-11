@@ -9,38 +9,34 @@ import { createKpFocusDeckCheckpointPlayback } from "../focus-deck-checkpoint-pl
 import { mountKpFocusDeckNativeInput } from "../focus-deck-native-input.ts";
 import { bindKpFocusDeckKeyboard } from "../focus-deck-keyboard.ts";
 import { renderKpFocusDeckScaffold } from "../focus-deck-scaffold.ts";
-import { createKpSurfaceContourStageAuthority, renderKpSurfaceContourStage, mountKpSurfaceContourStage,
-  projectKpSurfaceContourPoint } from "../kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts";
+import { createKpSurfaceContourStageAuthority, renderKpSurfaceContourStage, mountKpSurfaceContourStage } from "../kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts";
+import { mountGradientContourOverlay } from "./gradient-contour-overlay.ts";
 import { gradientContourBeats as beats, gradientContourCheckpoints, gradientContourModel as model,
-  gradientContourReference, sampleGradientContour } from "./gradient-contour-sequence.ts";
+  gradientContourReference, gradientContourBrief, sampleGradientContour } from "./gradient-contour-sequence.ts";
 
 const root = document.querySelector<HTMLElement>("#app")!;
 applyKpSemanticVisualDomTheme({ root, theme: "light" });
 const authority = createKpSurfaceContourStageAuthority();
 root.className = "gradient-page";
-root.innerHTML = `<article><header class="gradient-intro"><p>Kinetic Press · micro-intuition</p><h1>Which way is uphill?</h1><p>And why does that direction cross the contours?</p></header>${renderKpFocusDeckScaffold({
-  id: "gradient-contour", ariaLabel: "Which way is uphill, and why does that direction cross the contours?", activeBeatSlug: beats[0]!.slug, beats,
-  headerTrailingHtml: '<span data-gradient-count>1 / 6</span>',
+root.innerHTML = `<article><header class="gradient-intro"><p>Kinetic Press · micro-intuition</p><h1>Which way climbs fastest?</h1><p>${gradientContourBrief.question}</p></header>${renderKpFocusDeckScaffold({
+  id: "gradient-contour", ariaLabel: gradientContourBrief.question, activeBeatSlug: beats[0]!.slug, beats,
+  headerTrailingHtml: `<span data-gradient-count>1 / ${beats.length}</span>`,
   stageHtml: renderKpSurfaceContourStage({ model: gradientContourReference, authority }), replayHidden: false
-})}<p class="gradient-help">Drag or swipe the passage, scrub the rail, or use the arrows. Six stopping points; continuous motion between them.</p>
+})}<p class="gradient-help">Drag blank space or swipe the passage, scrub the rail, or use the arrows. ${beats.length} stopping points; continuous motion between them.</p>
 <details><summary>What the comparison means</summary><p>The field is f(x,y) = x² + 2y² at (1, ½). All direction comparisons are normalized. “Greatest rise” is the directional derivative at this point, not a finite-step endpoint comparison. Along a curved contour the height is constant; a straight tangent step need not stay level.</p></details>
 <p class="gradient-reference"><a href="/experiments/kinetic-figure/surface-contour/">Original surface / contour reference</a> · Primary visual review; editing follows acceptance.</p></article>`;
 const get = <T extends Element>(selector: string) => { const found = root.querySelector<T>(selector); if (!found) throw new Error(`Gradient card requires ${selector}`); return found; };
 const card = get<HTMLElement>("[data-kp-focus-deck]");
 const plot = get<HTMLElement>(".kp-surface-contour-stage__plot");
-plot.insertAdjacentHTML("beforeend", `<svg class="gradient-overlay" viewBox="0 0 520 300" aria-hidden="true">
-  <g data-gradient-tangent data-kp-semantic-entity="gradient.tangent"><path class="gradient-tangent"/><path class="gradient-right-angle"/></g>
-  <g data-gradient-direction data-kp-semantic-entity="gradient.unit-direction"><path class="gradient-direction"/><path class="gradient-arrowhead"/></g>
-  <circle class="gradient-origin" r="5" data-kp-semantic-entity="gradient.origin"/>
-  <circle class="gradient-point" r="4.5" data-kp-semantic-entity="gradient.traveler"/>
-</svg>`);
+const projectOverlay = mountGradientContourOverlay(plot, authority);
 // The exemplar fixes c to the point's height. The reference's level control
 // remains untouched on its own host; here it is replaced with derived evidence.
 const levelControl = get<HTMLElement>(".kp-surface-contour-level-control");
 levelControl.hidden = true;
-levelControl.insertAdjacentHTML("afterend", `<div class="gradient-evidence"><div><span>Height on contour</span><output data-gradient-height>1.50</output></div>
+levelControl.insertAdjacentHTML("afterend", `<div class="gradient-evidence"><div><span>Starting height</span><output data-gradient-height>1.50</output></div>
   <div data-gradient-rate-panel><span>Rise per unit distance</span><output data-gradient-rate>0.00</output><div class="gradient-meter" aria-hidden="true"><i></i><b data-gradient-meter></b></div></div></div>`);
-const clock = createKpReaderTimelinePlaybackClock({ id: "clock.gradient-contour.primary", durationMs: 8500 });
+levelControl.insertAdjacentHTML("afterend", `<div class="gradient-component-evidence" data-gradient-component-evidence><span class="gradient-across-label">Across: <output data-gradient-across>0.00</output></span><span>Sideways: <output data-gradient-along>1.00</output></span><span>Local rise = <output data-gradient-rise-rule></output></span></div>`);
+const clock = createKpReaderTimelinePlaybackClock({ id: "clock.gradient-contour.primary", durationMs: 11900 });
 const playback = createKpFocusDeckCheckpointPlayback(clock, gradientContourCheckpoints);
 const stage = mountKpSurfaceContourStage({ root: card, authority, initialProjection: sampleGradientContour(0).stage });
 const viewport = get<HTMLElement>("[data-kp-focus-deck-viewport]");
@@ -52,28 +48,20 @@ const reduced = matchMedia("(prefers-reduced-motion: reduce)");
 let disposed = false;
 let input: ReturnType<typeof mountKpFocusDeckNativeInput> | undefined;
 const cancel = () => { input?.cancel(); playback.cancel(); };
-const path = (points: readonly { x: number; y: number }[]) => points.map((p, i) => `${i ? "L" : "M"}${p.x.toFixed(3)},${p.y.toFixed(3)}`).join(" ");
 const render = () => {
   if (disposed) return;
   const state = sampleGradientContour(clock.getSnapshot().progress), { position, visible } = state;
   stage.project(state.stage);
-  const screen = (x: number, y: number) => projectKpSurfaceContourPoint(authority, state.stage.viewProgress, { x, y, z: model.level * (1 - state.stage.viewProgress) });
-  const p = model.source.point, origin = screen(p.x, p.y), traveler = screen(state.point.x, state.point.y);
-  const place = (selector: string, point: { x: number; y: number }) => { const circle = get<SVGCircleElement>(selector); circle.setAttribute("cx", String(point.x)); circle.setAttribute("cy", String(point.y)); };
-  place(".gradient-origin", origin); place(".gradient-point", traveler);
-  const atPoint = model.atPoint;
-  if (atPoint.kind !== "regular") throw new Error("The reviewed primary requires a regular point.");
-  const tangent = atPoint.tangent;
-  get<SVGPathElement>(".gradient-tangent").setAttribute("d", path([screen(p.x - tangent.x * .7, p.y - tangent.y * .7), screen(p.x + tangent.x * .7, p.y + tangent.y * .7)]));
-  get<SVGGElement>("[data-gradient-tangent]").setAttribute("opacity", String(state.tangentPresence));
-  get<SVGGElement>("[data-gradient-direction]").setAttribute("opacity", String(state.directionPresence));
-  const d = state.direction, tip = screen(p.x + d.x * .72, p.y + d.y * .72);
-  get<SVGPathElement>(".gradient-direction").setAttribute("d", path([origin, tip]));
-  const dx = tip.x - origin.x, dy = tip.y - origin.y, length = Math.hypot(dx, dy), ux = dx / length, uy = dy / length;
-  get<SVGPathElement>(".gradient-arrowhead").setAttribute("d", path([{ x: tip.x - ux * 8 - uy * 4, y: tip.y - uy * 8 + ux * 4 }, tip, { x: tip.x - ux * 8 + uy * 4, y: tip.y - uy * 8 - ux * 4 }]));
-  const uphill = atPoint.uphill;
-  get<SVGPathElement>(".gradient-right-angle").setAttribute("d", path([screen(p.x + tangent.x * .16, p.y + tangent.y * .16), screen(p.x + (tangent.x + uphill.x) * .16, p.y + (tangent.y + uphill.y) * .16), screen(p.x + uphill.x * .16, p.y + uphill.y * .16)]));
-  get<SVGPathElement>(".gradient-right-angle").setAttribute("opacity", String(Math.max(0, (position - 4.8) * 5)));
+  projectOverlay(state);
+  get<HTMLElement>(".kp-surface-contour-stage__equations").hidden = state.rampPresence > .5;
+  if (state.rampPresence > .5) get<HTMLElement>("[data-kp-surface-contour-view-label]").textContent = "Local ramp · first-order model";
+  plot.setAttribute("aria-label", state.rampPresence > .5
+    ? "Magnified first-order approximation: across-contour motion contributes rise; along-contour motion contributes none. The arc fixes horizontal distance."
+    : "Surface and contour map at height 1.50; compare horizontal directions at the marked point.");
+  get<HTMLElement>("[data-gradient-component-evidence]").style.visibility = state.componentPresence > 0 ? "visible" : "hidden";
+  get<HTMLOutputElement>("[data-gradient-across]").value = state.components.across.toFixed(2);
+  get<HTMLOutputElement>("[data-gradient-along]").value = state.components.along.toFixed(2);
+  get<HTMLOutputElement>("[data-gradient-rise-rule]").value = `${model.atPoint.magnitude.toFixed(2)} × ${state.components.across.toFixed(2)} + 0`;
   get<HTMLOutputElement>("[data-gradient-height]").value = state.height.toFixed(2);
   get<HTMLOutputElement>("[data-gradient-rate]").value = state.slope.toFixed(2);
   get<HTMLElement>("[data-gradient-rate-panel]").style.visibility = position >= 2.5 ? "visible" : "hidden";

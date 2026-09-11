@@ -8,6 +8,12 @@ owns progress; G4-G6 depend on the G3 primary visual/pedagogical acceptance.
 Primary review packet and shared-server URL:
 `2026-09-10-gradient-contour-primary-checkpoint.md`. It also records the
 reproduced shared WebGL camera-origin repair; aesthetic promotion remains gated.
+Accepted pedagogical direction: `../decisions/2026-09-10-motivation-as-explanatory-context.md`
+and its full rationale in `2026-09-10-motivation-as-explanatory-context.md`.
+The user found the first primary clear but insufficiently motivated and explanatory,
+then approved recording the principle and implementing the bounded repair.
+Record motivation as context for the governing question; proposed enforcement
+remains editorial-first, not a universal schema or permission to generalize.
 Standing budget policy: recommended engineering-budget repairs, including
 explicit bounded policy amendments, are automatically approved across sessions.
 See `../decisions/2026-09-10-engineering-budget-repair-autonomy.md`.

@@ -13,6 +13,10 @@
     {
       "kind": "file",
       "path": "docs/project/threads/2026-09-10-gradient-contour-primary-checkpoint.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-10-motivation-as-explanatory-context.md"
     }
   ],
   "verification": [
@@ -53,11 +57,39 @@
       "scope": "g2",
       "checkedAt": "2026-09-11T03:26:07.804Z",
       "notes": "1126 nodes and 30440 events validated; G2 complete, G3 ready for human acceptance, tracked receipt closed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/gradient-contour-model.test.ts tests/gradient-contour-sequence.test.ts tests/kinetic-figure-surface-contour.test.ts tests/graph-webgl-camera-origin.test.ts tests/stage-fit-contract.test.ts",
+      "status": "passed",
+      "scope": "g3-repair",
+      "checkedAt": "2026-09-11T03:59:58.242Z",
+      "notes": "19 passed: editorial references, eight-stop projection, component reconstruction, zero tangent rise, first-order surface error, stationary boundary and preserved native camera/stage."
+    },
+    {
+      "command": "npm run visual:gradient-contour",
+      "status": "passed",
+      "scope": "g3-repair",
+      "checkedAt": "2026-09-11T03:59:59.437Z",
+      "notes": "Three Chromium checks passed: local ramp and component evidence, equal-distance arc, reverse paint identity, shared inputs, phone, reduced motion and original host. Initial negative-zero display failure repaired at unit-component boundary; complete rerun passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "g3-repair",
+      "checkedAt": "2026-09-11T04:00:00.460Z",
+      "notes": "Complete final app, node, test, Svelte and domain typecheck passed; Svelte zero errors and warnings. Broad G6 release remains required."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "g3-repair",
+      "checkedAt": "2026-09-11T04:00:45.089Z",
+      "notes": "1126 nodes and 30450 events valid. Receipt closed; revised G3 human checkpoint ready; G4-G6 not started."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT. Primary ready on shared port 8000. Await visual and pedagogical acceptance; editing, source-only second caller, independent tangent explanation and release remain gated."
+    "summary": "HUMAN_CHECKPOINT. Recorded principle and repaired motivation/why with local ramp and equal-distance component comparison. Review updated packet; G4-G6 remain gated."
   },
   "expectedLearning": [
     "Whether contour identity plus first-order comparisons produce a reusable authorable geometric intuition."

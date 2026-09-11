@@ -10,7 +10,8 @@ async function seek(page: Page, step: number) {
 async function paint(page: Page) {
   return page.locator(".gradient-overlay").innerHTML();
 }
-test("primary visual checkpoint: one canonical surface, six reversible stops and coherent controls", async ({ page }, info) => {
+test("primary visual checkpoint: motivated question, local mechanism and coherent controls", async ({ page }, info) => {
+  test.setTimeout(60000);
   const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto(route); await expect(page.locator(deck)).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
@@ -26,14 +27,23 @@ test("primary visual checkpoint: one canonical surface, six reversible stops and
   });
   expect(samples.some(position => position > 0 && position < 1)).toBe(true);
   await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", "1");
-  await expect(page.locator("[data-gradient-count]")).toHaveText("2 / 6");
-  for (const step of [1.5, 3, 4, 5]) {
+  await expect(page.locator("[data-gradient-count]")).toHaveText("2 / 8");
+  for (const step of [1.5, 3, 4, 5, 5.5, 6, 7]) {
     await seek(page, step);
     await expect(page.locator("[data-gradient-height]")).toHaveText("1.50");
     await page.screenshot({ path: info.outputPath(`step-${step}.png`), fullPage: true });
   }
   await expect(page.locator("[data-gradient-rate]")).toHaveText("2.83");
-  const end = await paint(page); await seek(page, 2.71); await seek(page, 5); expect(await paint(page)).toEqual(end);
+  const end = await paint(page); await seek(page, 2.71); await seek(page, 7); expect(await paint(page)).toEqual(end);
+  await seek(page, 5); const decomposition = await paint(page);
+  await expect(page.locator(".kp-surface-contour-stage__equations")).toBeHidden();
+  await expect(page.locator(".gradient-ramp-caption")).toHaveText("Arc: equal horizontal distance");
+  await expect(page.locator("[data-gradient-across]")).toHaveText("0.71");
+  await expect(page.locator("[data-gradient-along]")).toHaveText("0.71");
+  await expect(page.locator("[data-gradient-rate]")).toHaveText("2.00");
+  await seek(page, 6); await expect(page.locator("[data-gradient-across]")).toHaveText("1.00");
+  await expect(page.locator("[data-gradient-along]")).toHaveText("0.00");
+  await seek(page, 3); await seek(page, 5); expect(await paint(page)).toEqual(decomposition);
   await seek(page, 0);
   const slider = page.locator("[data-kp-focus-deck-scrubber]");
   await slider.focus(); await page.keyboard.press("ArrowRight");
@@ -56,14 +66,24 @@ test("phone and reduced motion retain readable evidence and exact stopping point
   await page.setViewportSize({ width: 390, height: 844 }); await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto(route); await expect(page.locator(deck)).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
   await page.locator("[data-kp-focus-deck-scrubber]").focus(); await page.keyboard.press("End");
-  await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", "5");
-  await expect(page.locator("[data-gradient-count]")).toHaveText("6 / 6");
+  await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", "7");
+  await expect(page.locator("[data-gradient-count]")).toHaveText("8 / 8");
   await expect(page.locator("[data-gradient-rate]")).toHaveText("2.83");
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   const box = (await page.locator(deck).boundingBox())!; expect(box.x).toBeGreaterThanOrEqual(0); expect(box.x + box.width).toBeLessThanOrEqual(390);
   const overflow = await page.locator("[data-kp-focus-deck-beat]").evaluateAll(elements => Math.max(...elements.map(e => e.scrollHeight - e.clientHeight)));
   expect(overflow).toBeLessThanOrEqual(1);
   await page.screenshot({ path: info.outputPath("phone-uphill.png"), fullPage: true });
+  await seek(page, 5); await expect(page.locator("[data-gradient-component-evidence]")).toBeVisible();
+  await page.screenshot({ path: info.outputPath("phone-components.png"), fullPage: true });
+  const inside = await page.locator(".gradient-overlay").evaluate(element => {
+    const rect = element.getBoundingClientRect();
+    return [...element.querySelectorAll("[data-gradient-ramp] path,[data-gradient-components] path")].every(item => {
+      const bounds = item.getBoundingClientRect();
+      return bounds.x >= rect.x && bounds.right <= rect.right && bounds.y >= rect.y && bounds.bottom <= rect.bottom;
+    });
+  });
+  expect(inside).toBe(true);
   await page.keyboard.press("Home"); await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", "0");
 });
 

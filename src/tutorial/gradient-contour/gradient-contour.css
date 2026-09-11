@@ -10,7 +10,18 @@
 .gradient-intro h1 { font-size: clamp(1.8rem, 5vw, 2.8rem); line-height: 1.1; margin: .4rem 0; }
 .gradient-intro p { margin: .4rem 0; color: var(--kp-sc-muted); }
 .gradient-page .kp-focus-deck__card { height: clamp(32rem, 74svh, 39rem); grid-template-rows: minmax(0, 69fr) minmax(0, 31fr); }
-.gradient-page .kp-surface-contour-stage { grid-template-rows: auto minmax(0, 1fr) auto; }
+.gradient-page .kp-surface-contour-stage { grid-template-rows: auto minmax(0, 1fr) auto auto; }
+.gradient-stage-context { position: absolute; inset: 0; }
+.gradient-ramp-plane { fill: color-mix(in srgb, var(--kp-sc-accent) 10%, var(--kp-sc-paper)); stroke: var(--kp-sc-muted); stroke-width: 1.3; }
+.gradient-ramp-levels { fill: none; stroke: var(--kp-sc-muted); stroke-width: 1; stroke-dasharray: 3 4; }
+.gradient-ramp-caption { fill: var(--kp-sc-muted); font: 16px system-ui, sans-serif; }
+[data-gradient-candidates] path { fill: none; stroke: var(--kp-sc-ink); stroke-width: 1.5; }
+.gradient-across { fill: none; stroke: var(--kp-sc-accent); stroke-width: 4; stroke-linecap: round; }
+.gradient-along { fill: none; stroke: var(--kp-sc-ink); stroke-width: 2; stroke-dasharray: 5 4; }
+.gradient-equal-reach { fill: none; stroke: var(--kp-sc-muted); stroke-width: 1.4; }
+.gradient-component-evidence { display: flex; justify-content: center; flex-wrap: wrap; gap: .25rem 1rem; font: .75rem/1.4 system-ui, sans-serif; min-height: 2.1rem; color: var(--kp-sc-ink); }
+.gradient-component-evidence output { font-variant-numeric: tabular-nums; }
+.gradient-across-label { color: var(--kp-sc-accent); }
 .gradient-page .kp-surface-contour-level-control[hidden] { display: none; }
 .gradient-overlay { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
 .gradient-origin { fill: var(--kp-sc-paper); stroke: var(--kp-sc-strong); stroke-width: 1.5; }

@@ -86,5 +86,29 @@ export function gradientStraightStep(model: GradientContourModel, direction: Gra
   const point = Object.freeze({ x: model.source.point.x + direction.x * distance, y: model.source.point.y + direction.y * distance });
   return Object.freeze({ point, slope, firstOrderChange: slope * distance, actualChange: model.height(point) - model.level });
 }
+
+/** The tangent plane is a first-order model, not the finite-step surface.
+ * Keeping its evaluator distinct prevents an illustration from changing truth. */
+export function gradientLocalHeight(model: GradientContourModel, point: GradientPoint): number {
+  if (!finite(point.x) || !finite(point.y)) throw new RangeError("Local coordinates must be finite.");
+  const p = model.source.point, g = model.atPoint.gradient;
+  const height = model.level + g.x * (point.x - p.x) + g.y * (point.y - p.y);
+  if (!finite(height)) throw new RangeError("Local height must be finite.");
+  return height;
+}
+
+export function gradientDirectionComponents(model: GradientContourModel, direction: GradientUnitDirection) {
+  const totalRise = model.derivative(direction), at = model.atPoint;
+  if (at.kind === "stationary") return Object.freeze({ kind: "stationary" as const, totalRise });
+  // Unit-vector dot products can leave signed roundoff at exact orthogonality.
+  // Canonicalize only machine-scale zeros, before geometry and labels diverge.
+  const component = (value: number) => Math.abs(value) <= Number.EPSILON * 8 ? 0 : value;
+  const across = component(direction.x * at.uphill.x + direction.y * at.uphill.y);
+  const along = component(direction.x * at.tangent.x + direction.y * at.tangent.y);
+  const acrossVector = Object.freeze({ x: across * at.uphill.x, y: across * at.uphill.y });
+  const alongVector = Object.freeze({ x: along * at.tangent.x, y: along * at.tangent.y });
+  return Object.freeze({ kind: "regular" as const, across, along, acrossVector, alongVector,
+    acrossRise: across * at.magnitude, alongRise: 0, totalRise });
+}
 function record(value: unknown): value is Record<string, unknown> { return !!value && typeof value === "object" && !Array.isArray(value); }
 function finite(value: unknown): value is number { return typeof value === "number" && Number.isFinite(value); }

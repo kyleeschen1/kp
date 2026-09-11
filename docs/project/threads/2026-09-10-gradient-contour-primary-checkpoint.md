@@ -7,6 +7,63 @@ review packet, not release certification or a second execution plan.
 Review at http://localhost:8000/experiments/kinetic-figure/gradient-contour/.
 The existing shared server was verified; no second server was started.
 
+## Current revision: motivation and inspectable mechanism
+
+The user accepted the motivation principle and requested implementation after
+finding the first primary clear but insufficiently explanatory. Acceptance of
+the principle is not visual acceptance of this repair. G3 remains the gate.
+See `../decisions/2026-09-10-motivation-as-explanatory-context.md`.
+
+The current card has **eight** stops: choose a direction; contour map; follow
+the contour; tangent; local flat approximation; decompose a direction; turn
+straight across; name the gradient and return to the motivating choice.
+
+The opening compares equal horizontal distances, not physiological effort or
+surface walking distance. The local-ramp view is explicitly a first-order
+approximation, magnified through the canonical camera projection. It is not a
+new exact contour. The original surface equation is hidden while that approximation
+is foregrounded, and the accessible description identifies the active model.
+
+The same directional differential supplies the plane, across/along components
+and numerical evidence. The dashed along-contour part contributes zero rise;
+the solid across part supplies all the local rise. A quarter-circle in horizontal
+coordinates, projected onto the local plane, marks equal horizontal distance.
+As the direction turns along that arc, the sideways part vanishes and the
+across part reaches one. The final map view names the resulting uphill normal
+as the gradient. Point/tangent/direction owners persist across the views.
+
+An explicit lightweight editorial brief lives alongside the sequence, with
+reader context, motivating gap, precise success criterion, bridge, evidence-beat
+references, payoff and boundary. Tests check evidence references and mathematics,
+not whether this framing actually teaches well. There is no universal schema
+or catalogue enforcement; the accepted principle is discoverable from the active
+thread and its decision record.
+
+Current verification: 19 focused tests covering model, sequence, decomposition,
+first-order error, stationary behavior, camera alignment and reference-stage
+contracts; all three scoped Chromium browser checks including phone, reduced
+motion, intermediate playback, bidirectional gestures and exact reverse seeks.
+The first browser run caught signed roundoff displayed as negative zero; the
+unit-vector component boundary now canonicalizes machine-scale zeros, with a
+regression assertion. The rerun passed. Full typecheck and Theseus validation
+are recorded with the repair's execution evidence. Browser captures of the
+component and straight-across endpoints were inspected.
+
+Please judge: does the opening make the question worth asking; does the ramp
+explain why only the across part contributes; does the equal-distance arc make
+the maximizing argument visible; and are the eight stops comfortably paced?
+
+The new bounded overlay adapter is the reversible visual unit; it reuses the
+existing stage's projection mathematics and shared clock/controls. No shared
+renderer changes were needed in this revision. Source-only editing and the
+independent sub-explanation remain gated. Broad release checks remain G6.
+
+## Original six-stop checkpoint (historical evidence)
+
+The following describes the first G2 candidate, not the current eight-stop
+choreography. Preserve its shared-camera repair and verification as provenance;
+the current revision above supersedes its pedagogical sequence.
+
 ## What to judge
 
 Use the arrows for six stops, and scrub or swipe to inspect the motion between
