@@ -17,4 +17,6 @@ test("two-symbol transfer uses the canonical four-state chain and two-stop distr
   assert.equal(distribution.beats.length, 2);
   assert.equal(sampleComposedAlgebraSequence(distribution, 1, 0).fraction, "2 / 2");
   assert.match(references[1]!.setup, /x\+y/);
+  assert.doesNotMatch(references[1]!.answer, /Evaluating a constant product/);
+  assert.match(projectComposedAlgebraSubexplanations(prepareKpComposedAlgebraDraftV2())[1]!.answer, /Evaluating a constant product/);
 });

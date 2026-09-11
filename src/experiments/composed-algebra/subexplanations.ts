@@ -27,7 +27,8 @@ export function projectComposedAlgebraSubexplanations(draft: KpComposedAlgebraPr
       answer: `Add the counts, not the contents of the group. The unchanged group is counted ${count} times. No division is needed, even if the group equals zero.` },
     { kind: "distribute" as const, range: [2, source.states.length - 1] as const, question: "Where does every contribution go when we expand?",
       setup: `Begin with ${count} copies of the whole group ${group}. Each copy contains both terms inside the parentheses.`,
-      answer: `Each term receives the same count, ${count}. Expanding changes the grouping, not the total contribution; evaluating a constant product leaves the other contribution intact.` }
+      answer: `Each term receives the same count, ${count}. Expanding changes the grouping, not the total contribution.` +
+        (draft.checked.chain.extent === "evaluated" ? " Evaluating a constant product leaves the other contribution intact." : " Both distributed contributions remain explicit.") }
   ];
   return Object.freeze(definitions.map(definition => {
     const [start, end] = definition.range;

@@ -153,7 +153,8 @@
     {
       "id": "s14",
       "title": "Repair demonstrated shared-owner reuse gaps",
-      "status": "planned"
+      "summary": "Repaired only demonstrated editorial leakage; checked chain extent controls wording. 93 tests and full types pass.",
+      "status": "complete"
     },
     {
       "id": "s15",
