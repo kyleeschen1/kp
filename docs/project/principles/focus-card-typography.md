@@ -1,6 +1,8 @@
 # Focus-card typography
 
-Status: shared policy approved 2026-09-11; gradient treatment awaits G3 visual review.
+Status: canonical; text positioning and typography accepted by user 2026-09-11.
+Acceptance: `../decisions/2026-09-11-focus-card-layout-type-acceptance.md`.
+The gradient's explanatory adequacy and endpoint gestures remain separate G3 issues.
 
 ## Ownership
 
@@ -30,6 +32,20 @@ declarations. Native math labels continue through the existing math renderer
 and equation typography policy, not the plain-language helper. Canvas/WebGL
 paint does not inherit CSS automatically: use the existing renderer adapter or
 HTML annotation projection, not a claimed universal font override.
+
+## Canonical text positioning
+
+For focus cards, default to one instruction area above the figure. Keep the
+passage-to-stage handoff compact, with the current cue/action near the boundary.
+Bottom-align text within its reserved passage area so shorter readings leave
+space above, not between the instruction and its evidence. Keep the stage and
+handoff stable through playback; viewport or user text-size changes may reflow
+the composition. Preserve native overflow access for longer/enlarged prose.
+
+These accepted defaults do not require all motion passages or longer essays to
+adopt the same projection, or imply that existing cards have been migrated.
+Canonical means the reviewed starting policy, not immutable font values or
+exemplar-specific container dimensions.
 
 ## Shared controls
 

@@ -7,7 +7,17 @@ review packet, not release certification or a second execution plan.
 Review at http://localhost:8000/experiments/kinetic-figure/gradient-contour/.
 The existing shared server was verified; no second server was started.
 
-## Current revision: inherited focus-card typography (2026-09-11)
+## Current review: layout/type accepted; explanation and gestures remain (2026-09-11)
+
+The user accepted text positioning and font policy as canonical. Record:
+`../decisions/2026-09-11-focus-card-layout-type-acceptance.md`.
+Do not request another approval of the unchanged placement/typography or treat
+this as complete G3 acceptance. The gradient's steepest-direction reasoning is
+still unclear to the reader; outward endpoint swipes sometimes invoke browser
+Back/Forward. The next implementation recommendation must preserve the accepted
+presentation and address those two issues. This turn only discusses the repairs.
+
+## Accepted presentation revision: inherited focus-card typography (2026-09-11)
 
 The user explicitly approved implementing the typography recommendation so it
 applies automatically to future focus cards. The scaffold now imports one shared

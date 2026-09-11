@@ -29,6 +29,9 @@ under `run-contract.kp.gradient-contour-intuition-v1`. User approved with â€œgoâ
 Use the KP delivery skill: six outcome-sized packages, G3 human review before
 source-only generalization and downstream integration. Preserve the original
 surface-contour route; no new renderer, clock or automatic successor.
+Text positioning and typography are accepted canonical focus-card defaults;
+G3 remains open for the gradient's explanatory gap and endpoint history gestures.
+See `decisions/2026-09-11-focus-card-layout-type-acceptance.md`.
 
 Current successor planning reference:
 `reviews/2026-09-07-reconciled-authoring-loop-horizon.md`. It reconciles everyday

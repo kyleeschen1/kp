@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: algebra complete; gradient-contour delivery approved, G3 visual review required
+Status: algebra complete; gradient layout/type accepted, G3 explanation/input review remains
 Last Updated: 2026-09-11
 Current execution: `run-contract.kp.gradient-contour-intuition-v1` from
 `2026-09-10-gradient-contour-delivery-proposal.md`, approved with “go”. Theseus
@@ -27,7 +27,10 @@ The user also approved shared typography inheritance for future focus cards.
 `../principles/focus-card-typography.md` records the scaffold defaults, typed
 plain-language annotation helper, native math/code preservation and limits.
 The gradient adapter and fresh static caller pass focused/type/browser checks;
-the primary packet records the narrow/enlarged-text treatment awaiting G3 review.
+the user has now accepted text positioning and typography as canonical defaults.
+See `../decisions/2026-09-11-focus-card-layout-type-acceptance.md`. G3 remains open:
+why the gradient is steepest is still unclear, and endpoint swipes can trigger
+browser history. The current turn is discussion, not repair implementation.
 Accepted pedagogical direction: `../decisions/2026-09-10-motivation-as-explanatory-context.md`
 and its full rationale in `2026-09-10-motivation-as-explanatory-context.md`.
 The user found the first primary clear but insufficiently motivated and explanatory,
