@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: reusable algebra intuition awaits s12 human visual acceptance; Theseus owns progress; prior completed loops remain complete
+Status: reusable algebra intuition visual checkpoint accepted; post-checkpoint work resumed; Theseus owns progress
 Last Updated: 2026-09-10
 Standing budget policy: recommended engineering-budget repairs, including
 explicit bounded policy amendments, are automatically approved across sessions.
@@ -105,8 +105,9 @@ turn this repair into a general infrastructure successor.
 The repair and editable primary with two independent question readings are now
 implemented. Current inspection and resume packet:
 `../reviews/2026-09-10-reusable-algebra-intuition-visual-checkpoint.md`.
-Await visual/pedagogical acceptance before the second caller and generalization;
-do not mistake the historical scope approval for approval of this new exemplar.
+The user accepted this exemplar with “It passes!” and explicitly resumed.
+Continue the approved second caller and downstream integration, preserving the
+accepted treatment; the inspection packet is historical approval evidence.
 Accepted broader direction:
 `../decisions/2026-09-10-visual-repertoire-and-queryable-intuitions.md`.
 Richer algebra, a contour-adjacent geometric flagship, a small cross-domain reuse

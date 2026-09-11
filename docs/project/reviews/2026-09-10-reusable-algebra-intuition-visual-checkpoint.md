@@ -1,6 +1,8 @@
 # Reusable algebra intuition: visual checkpoint
 
-Outcome: HUMAN_CHECKPOINT. Contract: `run-contract.kp.reusable-algebra-intuition-v2`.
+Outcome: accepted by the user with “It passes!”, followed by “resume”.
+The HUMAN_CHECKPOINT below is historical inspection evidence, not an active stop.
+Contract: `run-contract.kp.reusable-algebra-intuition-v2`.
 Fourteen of 27 slices are complete. The fifteenth slice, s12, has prepared the
 review but awaits human acceptance. Do not begin s13 before that acceptance.
 

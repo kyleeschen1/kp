@@ -156,8 +156,9 @@ work and existing visuals. Theseus owns live progress and the s12 checkpoint.
 The handoff repair and primary/independent readings are implemented. The run is
 now at its required visual checkpoint, not a scope stop:
 `reviews/2026-09-10-reusable-algebra-intuition-visual-checkpoint.md`.
-Review the question-oriented primary and both smaller questions before s13;
-the existing approval does not bypass this human visual gate.
+The user accepted the question-oriented primary and smaller questions with
+“It passes!” and explicitly resumed. Continue the approved post-checkpoint work;
+preserve accepted motion and do not request unchanged-visual reapproval.
 Do not restart this trial or the completed
 compositor migration, or manufacture another generic infrastructure loop.
 Recommended engineering-budget repairs now have persistent automatic approval:
