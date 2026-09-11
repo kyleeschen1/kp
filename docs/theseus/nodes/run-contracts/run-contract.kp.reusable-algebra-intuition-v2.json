@@ -189,7 +189,8 @@
     {
       "id": "s20",
       "title": "Document supported human and LLM authoring",
-      "status": "planned"
+      "summary": "Executable human/LLM packet and lazy v2 task registration preserve report-only authority and document measured adaptation and limits.",
+      "status": "complete"
     },
     {
       "id": "s21",

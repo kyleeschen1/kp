@@ -59,6 +59,11 @@ For the accepted three-stop compound factoring/evaluation task, use
 It accepts source-only oriented chains through existing verified operation
 owners; it is not an arbitrary LaTeX deduction solver.
 
+For the accepted four/five-state question-oriented composition, use
+`reusable-algebra-intuition-packet.md` and `equation.algebra-intuition` discovery.
+It adds checked distribution and optional constant-product evaluation through
+the same canonical owners, plus contextual subquestions and static publication.
+
 ## Route The Task Before Generating
 
 | Intended change | Canonical target |

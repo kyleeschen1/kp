@@ -1,6 +1,13 @@
 /** Discovery metadata only. Domain checkers still own acceptance and evidence;
  * a host reference cannot certify that a draft is applied or published. */
 export const supportedAuthorTasks = {
+  "equation.algebra-intuition": {
+    owner: "src/authoring/composed-algebra-author-check-v2.ts",
+    input: "Four or five checked states: factor a repeated binary group, evaluate its integer count, distribute, optionally evaluate the final nonnegative integer product. Declared real scalars; ordered contributions; no arbitrary solver. Prose is editorial.",
+    preview: { kind: "explicit-apply", url: "/experiments/reusable-reasoning/?example=algebra-intuition" },
+    extraction: { kind: "domain-owned", owner: "src/experiments/composed-algebra/subexplanations.ts", scope: "Two contextual questions, whole/scoped self-checks and revision-pinned exact return; no automatic grading or custom-source link persistence." },
+    publication: { kind: "local-edition", command: "author:composed-algebra-publication", output: "immutable-content-addressed", input: "selected v2 source JSON; static readings questions and self-checks, not interactive animation" }
+  },
   "equation.composed-algebra": {
     owner: "src/authoring/composed-algebra-author-check.ts",
     input: "Exactly three states: two nonnegative integer multiples of one unchanged compound scalar sum/product, ordered left/right factoring, then exact coefficient addition. Declared real scalars; no division, commutation or arbitrary solver. Editorial prose is not proof.",

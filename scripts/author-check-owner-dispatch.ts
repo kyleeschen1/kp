@@ -7,6 +7,10 @@ import type { KpAuthorTaskOwners } from "../src/authoring/author-task-owner-cont
 /** Every discoverable task supplies both lazy entrypoints. Adding an owner must
  * not require mirrored switches or import another domain before selection. */
 const owners = {
+  "equation.algebra-intuition": {
+    example: async () => (await import("../src/authoring/composed-algebra-author-check-v2.ts")).createKpComposedAlgebraExampleV2(),
+    check: async (json: string) => (await import("../src/authoring/composed-algebra-author-check-v2.ts")).checkKpComposedAlgebraAuthorSourceV2(json)
+  },
   "equation.composed-algebra": {
     example: async () => (await import("../src/authoring/composed-algebra-author-check.ts")).createKpComposedAlgebraExample(),
     check: async (json: string) => (await import("../src/authoring/composed-algebra-author-check.ts")).checkKpComposedAlgebraAuthorSource(json)

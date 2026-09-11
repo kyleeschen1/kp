@@ -409,6 +409,27 @@
       "scope": "s19",
       "checkedAt": "2026-09-11T01:45:53.066Z",
       "notes": "Both v2 editions serve on shared host at phone width without JavaScript."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-11T01:50:37.011Z",
+      "notes": "100 tests passed including v2 CLI routing and report rejection as source."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-11T01:50:38.272Z",
+      "notes": "Full types pass including exhaustive owner registry."
+    },
+    {
+      "command": "npm run author:check -- --task equation.algebra-intuition --request src/authoring/examples/composed-algebra-intuition-transfer.json",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-11T01:50:39.500Z",
+      "notes": "Both packet sources checked by actual CLI; primary immutable edition check also passed."
     }
   ],
   "progress": {
