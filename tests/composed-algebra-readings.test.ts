@@ -33,6 +33,8 @@ test("static publication uses one verified revision, escapes editorial input and
   assert.equal(payload.checkpoints.length, 3);
   for (const view of [payload.full, payload.compact, ...payload.prompts]) assert.equal(view.revisionId, payload.revisionId);
   assert.equal((payload.reading.html.match(/<math/g) ?? []).length, 8);
+  // An absent optional section must not change legacy edition bytes.
+  assert.match(payload.reading.html, /<\/section>\n    <p>Two verified deductions/);
   assert.doesNotMatch(payload.reading.html, /<script|data-kp-focus-deck-scrubber|type="module"|href="https:\/\/example.com/);
   assert.match(payload.reading.html, /&lt;script&gt;/);
   const ids = [...payload.reading.html.matchAll(/\bid="([^"]+)"/g)].map(m => m[1]); assert.equal(new Set(ids).size, ids.length);

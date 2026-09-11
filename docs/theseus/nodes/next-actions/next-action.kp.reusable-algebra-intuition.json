@@ -451,6 +451,34 @@
       "scope": "s22",
       "checkedAt": "2026-09-11T02:02:06.646Z",
       "notes": "39 passed in 6 minutes: 13 per engine. WebKit automated engine coverage, not physical Safari device testing."
+    },
+    {
+      "command": "npm run visual:composed-algebra",
+      "status": "passed",
+      "scope": "s23",
+      "checkedAt": "2026-09-11T02:27:23.747Z",
+      "notes": "All 47 Chromium checks pass, including new four/five-state intuition, native handoffs, five retained authoring cases and byte-preserved static editions. Supported-engine cohort already passed 39 checks in s22."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s23",
+      "checkedAt": "2026-09-11T02:27:25.373Z",
+      "notes": "Full types, Svelte zero errors/warnings, domains, canonical tax and demand-shift publication, Vite pass. Bundle rebuilt after explicit bounded budget amendments; all 12 reader route budgets and production closure gates pass. Details in reusable algebra intuition release review."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "s23",
+      "checkedAt": "2026-09-11T02:31:10.904Z",
+      "notes": "7011 of 7012 passed; one stale exact renderer-facade caller expectation after the public-import repair. No production failure. Corrected and rerun in following evidence."
+    },
+    {
+      "command": "npm run test:equation-reachability",
+      "status": "passed",
+      "scope": "s23",
+      "checkedAt": "2026-09-11T02:31:12.656Z",
+      "notes": "All 12 passed after adding the exact native-handoff public caller; full suite was not repeated after this test-only expectation repair. Complete release accounting in docs/project/reviews/2026-09-10-reusable-algebra-intuition-release.md."
     }
   ],
   "progress": {

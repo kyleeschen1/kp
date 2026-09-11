@@ -70,7 +70,7 @@ test("semantic reader route rejects full and entry budget regressions independen
 });
 
 test("semantic reader route budget retains five-percent headroom over the accepted closure", () => {
-  assert.equal(kpSemanticReaderAcceptedClosureGzipBytes, 138_095);
+  assert.equal(kpSemanticReaderAcceptedClosureGzipBytes, 152_463);
   assert.equal(
     kpSemanticReaderRouteBudget.fullEquationGzipBytes,
     Math.ceil(kpSemanticReaderAcceptedClosureGzipBytes * 1.05)

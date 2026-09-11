@@ -207,7 +207,8 @@
     {
       "id": "s23",
       "title": "Run integration and release gates",
-      "status": "planned"
+      "summary": "Release gates and all observed failures resolved; exact full-suite plus focused-repair accounting, supported engines, build, immutable editions, production isolation and bounded costs recorded in release review.",
+      "status": "complete"
     },
     {
       "id": "s24",

@@ -1,7 +1,7 @@
 import { isKpVerifiedEquationEndpointHandoff, type KpVerifiedEquationEndpointHandoff } from "../../semantic/equation-endpoint-handoff.ts";
 import { observeKpNativeKatexPaintAtoms, type KpNativeKatexPaintAtomObservation } from "../../rendering/native-katex-rendered-scene.ts";
 import { measureKpNativeKatexPaintAtomRect } from "../../rendering/native-katex-paint-geometry.ts";
-import type { KpReaderEquationMeasuredAnchor, KpReaderEquationLayoutSnapshot } from "../renderers/equation-layout-snapshot.ts";
+import type { KpReaderEquationMeasuredAnchor, KpReaderEquationLayoutSnapshot } from "../renderers/public-api.ts";
 
 const brand = Symbol("measured-canonical-equation-handoff");
 const issued = new WeakMap<object, string>();

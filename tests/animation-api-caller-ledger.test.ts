@@ -143,6 +143,7 @@ test("public-looking facades remain separated by authority", () => {
   ));
   assert.deepEqual(record("facade.reader-renderers").sourceCallers, [
     "src/reader/app/canonical-equation-endpoint-ownership.ts",
+    "src/reader/app/canonical-equation-native-handoff.ts",
     "src/reader/app/canonical-equation-semantic-focus.ts",
     "src/reader/app/chrome-free-canonical-equation-session.ts",
     "src/reader/app/distribution-area-renderer-runtime.ts",

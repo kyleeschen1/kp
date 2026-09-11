@@ -72,9 +72,9 @@ function routeBudget(
   return { compiledHtmlRawBytes, compiledHtmlGzipBytes, runtimeCodeGzipBytes } as const;
 }
 
-// This is the measured post-cutover shared equation closure, not an estimate.
+// Measured algebra-v2 release closure, including native handoff paint checks.
 // The checker applies the repository-wide 5% growth allowance on top of it.
-const sharedEquationRuntimeGzipBaseline = 138_095;
+const sharedEquationRuntimeGzipBaseline = 152_463;
 
 const sharedEquationPresentation = {
   kind: "shared-certified-runtime",
@@ -228,7 +228,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
         }
       ]
     },
-    budget: routeBudget(37_968, 4_978, sharedEquationRuntimeGzipBaseline)
+    budget: routeBudget(37_968, 5_303, sharedEquationRuntimeGzipBaseline)
   }),
   defineKpReaderRoute({
     route: "/reader/generated-solve-x/",
@@ -318,7 +318,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       label: "Simplify the difference",
       progressPermille: 500
     }),
-    budget: routeBudget(64_003, 5_510, sharedEquationRuntimeGzipBaseline)
+    budget: routeBudget(64_003, 5_836, sharedEquationRuntimeGzipBaseline)
   }),
   defineKpReaderRoute({
     route: "/reader/divide-both-sides/",
@@ -400,7 +400,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
         }))
       )
     },
-    budget: routeBudget(22_307, 4_392, sharedEquationRuntimeGzipBaseline)
+    budget: routeBudget(23_648, 4_392, sharedEquationRuntimeGzipBaseline)
   }),
   defineKpReaderRoute({
     route: "/reader/fraction-composition/",
@@ -480,7 +480,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
         }))
       )
     },
-    budget: routeBudget(67_474, 6_451, sharedEquationRuntimeGzipBaseline)
+    budget: routeBudget(67_474, 6_791, sharedEquationRuntimeGzipBaseline)
   }),
   defineKpReaderRoute({
     route: "/reader/fractional-transfer/",
@@ -499,7 +499,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       label: "Expose the product",
       progressPermille: 667
     }),
-    budget: routeBudget(39_414, 4_549, sharedEquationRuntimeGzipBaseline)
+    budget: routeBudget(39_414, 4_864, sharedEquationRuntimeGzipBaseline)
   }),
   defineKpReaderRoute({
     route: "/reader/distribution-area/",

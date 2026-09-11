@@ -27,7 +27,7 @@ export async function mountCompleteAlgebraCanary(value: unknown) {
   // elapsed motif durations into this coordinate; do not pass elapsed stops here.
   const boundaries = binding.checkpointProgress.map((_, index) => index / (binding.checkpointProgress.length - 1)), seam = boundaries[2]!;
   const forward = boundaries.flatMap((progress, index) => index === 0 ? [progress] : [(boundaries[index - 1]! + progress) / 2, Math.max(0, progress - 1e-6), progress]);
-  const samples = [...forward, ...forward.toReversed(), seam + 1e-6, seam - 1e-6, 0].map(progress => surface.session.seek(progress));
+  const samples = [...forward, ...[...forward].reverse(), seam + 1e-6, seam - 1e-6, 0].map(progress => surface.session.seek(progress));
   const seamPaint = [seam - 1e-6, seam, seam + 1e-6, seam, seam - 1e-6].map(progress => {
     const snapshot = surface.session.seek(progress);
     const phase = card.querySelector<HTMLElement>('[data-kp-reader-transition-active="true"]')!;

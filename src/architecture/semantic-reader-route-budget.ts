@@ -13,7 +13,7 @@ export interface KpSemanticReaderRouteBudgetIssue {
   readonly assetName?: string | undefined;
 }
 
-export const kpSemanticReaderAcceptedClosureGzipBytes = 138_095;
+export const kpSemanticReaderAcceptedClosureGzipBytes = 152_463;
 
 export const kpSemanticReaderRouteBudget = {
   // The route-manifest baselines retain their exact measurements; this

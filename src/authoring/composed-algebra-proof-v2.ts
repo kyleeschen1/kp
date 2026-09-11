@@ -1,4 +1,4 @@
-import { sha256 } from "../kernel/sha256.ts";
+import { sha256 } from "../kernel/public-api.ts";
 import { checkKpComposedAlgebraPrefixV2 } from "./composed-algebra-prefix-v2.ts";
 import { checkKpComposedAlgebraDistributionV2 } from "./composed-algebra-distribution-v2.ts";
 import { normalizeKpComposedAlgebraEndpointsV2 } from "./composed-algebra-normalizer-v2.ts";

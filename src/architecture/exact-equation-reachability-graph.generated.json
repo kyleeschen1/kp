@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 4583,
+  "scannedFileCount": 4630,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -52,7 +52,10 @@
       "testCallers": [
         "tests/canonical-equation-semantic-focus.test.ts",
         "tests/common-factor-presentation.test.ts",
+        "tests/composed-algebra-distribution-v2.test.ts",
+        "tests/composed-algebra-owner-paths.test.ts",
         "tests/composed-algebra-presentation.test.ts",
+        "tests/composed-algebra-product-v2.test.ts",
         "tests/operation-evaluation-exemplar.test.ts"
       ],
       "scriptCallers": [],
@@ -810,6 +813,7 @@
         "src/semantic/constant-product-evaluation-asset.ts",
         "src/semantic/constant-quotient-evaluation-asset.ts",
         "src/semantic/constant-sum-evaluation-asset.ts",
+        "src/semantic/contextual-constant-product-projection.ts",
         "src/semantic/contextual-constant-sum-projection.ts",
         "src/semantic/derivative-power-rule-semantics.ts",
         "src/semantic/distribution-area-exemplar-trace.ts",
@@ -849,6 +853,7 @@
       ],
       "testCallers": [
         "tests/authoring-integration-lowering-gap.test.ts",
+        "tests/composed-algebra-endpoint-handoff.test.ts",
         "tests/distribution-area-exemplar-trace.test.ts",
         "tests/distribution-factoring-presentation-plan.test.ts",
         "tests/divide-both-sides-equation-asset.test.ts",
@@ -933,7 +938,10 @@
         "tests/animation-catalogue-solve-x-preservation.test.ts",
         "tests/canonical-animation-construction-round-trip.test.ts",
         "tests/common-factor-presentation.test.ts",
+        "tests/composed-algebra-distribution-v2.test.ts",
+        "tests/composed-algebra-owner-paths.test.ts",
         "tests/composed-algebra-presentation.test.ts",
+        "tests/composed-algebra-product-v2.test.ts",
         "tests/distribution-factoring-presentation-plan.test.ts",
         "tests/editor-graph-3d-host-contract.test.ts",
         "tests/editor-graph-3d-saddle-host-contract.test.ts",
@@ -1079,6 +1087,7 @@
         "src/semantic/derivative-sum-rule-semantics.ts",
         "src/semantic/diagram-scene.ts",
         "src/semantic/distribution-area-exemplar-trace.ts",
+        "src/semantic/distribution-correspondence.ts",
         "src/semantic/distribution-pressure-contract.ts",
         "src/semantic/divide-both-sides-equation-asset.ts",
         "src/semantic/evaluation-topology-certificate.ts",
@@ -1210,6 +1219,7 @@
         "src/tutorial/typed-linear-supply-demand/economics-supply-tax-governed-source.ts"
       ],
       "testCallers": [
+        "tests/composed-algebra-endpoint-handoff.test.ts",
         "tests/equation-motion-player.test.ts",
         "tests/generated-katex-fixture-contract.test.ts",
         "tests/kp-animation-asset.test.ts",
@@ -1362,6 +1372,7 @@
         "src/authoring/canonical-animation-construction-compiler.ts",
         "src/authoring/common-factor-draft.ts",
         "src/authoring/common-factor-presentation.ts",
+        "src/authoring/composed-algebra-presentation-v2.ts",
         "src/authoring/composed-algebra-presentation.ts",
         "src/authoring/governed-canonical-construction-compiler.ts",
         "src/domain-ir/antiderivative-power-migration-v2.ts",
@@ -1450,6 +1461,7 @@
         "tests/authoring-structural-projection.test.ts",
         "tests/bayesian-reasoning-evidence.test.ts",
         "tests/canonical-animation-construction-round-trip.test.ts",
+        "tests/composed-algebra-endpoint-handoff.test.ts",
         "tests/compound-root-carrier-catalogue-integration.test.ts",
         "tests/economics-supply-tax-animation-asset.test.ts",
         "tests/equation-generation-cancellation-trial.test.ts",
@@ -1566,7 +1578,10 @@
         "tests/animation-catalogue-solve-x-preservation.test.ts",
         "tests/canonical-animation-construction-round-trip.test.ts",
         "tests/common-factor-presentation.test.ts",
+        "tests/composed-algebra-distribution-v2.test.ts",
+        "tests/composed-algebra-owner-paths.test.ts",
         "tests/composed-algebra-presentation.test.ts",
+        "tests/composed-algebra-product-v2.test.ts",
         "tests/distribution-factoring-presentation-plan.test.ts",
         "tests/editor-graph-3d-host-contract.test.ts",
         "tests/editor-graph-3d-saddle-host-contract.test.ts",
@@ -1742,6 +1757,7 @@
         "src/semantic/constant-product-evaluation-asset.ts",
         "src/semantic/constant-quotient-evaluation-asset.ts",
         "src/semantic/constant-sum-evaluation-asset.ts",
+        "src/semantic/contextual-constant-product-projection.ts",
         "src/semantic/contextual-constant-sum-projection.ts",
         "src/semantic/derivative-power-rule-semantics.ts",
         "src/semantic/distribution-area-exemplar-trace.ts",
@@ -1781,6 +1797,7 @@
       ],
       "testCallers": [
         "tests/authoring-integration-lowering-gap.test.ts",
+        "tests/composed-algebra-endpoint-handoff.test.ts",
         "tests/distribution-area-exemplar-trace.test.ts",
         "tests/distribution-factoring-presentation-plan.test.ts",
         "tests/divide-both-sides-equation-asset.test.ts",
@@ -1890,6 +1907,7 @@
         "src/tutorial/typed-linear-supply-demand/economics-supply-tax-governed-source.ts"
       ],
       "testCallers": [
+        "tests/composed-algebra-endpoint-handoff.test.ts",
         "tests/equation-motion-player.test.ts",
         "tests/generated-katex-fixture-contract.test.ts",
         "tests/kp-animation-asset.test.ts",
@@ -2011,7 +2029,10 @@
         "tests/animation-catalogue-solve-x-preservation.test.ts",
         "tests/canonical-animation-construction-round-trip.test.ts",
         "tests/common-factor-presentation.test.ts",
+        "tests/composed-algebra-distribution-v2.test.ts",
+        "tests/composed-algebra-owner-paths.test.ts",
         "tests/composed-algebra-presentation.test.ts",
+        "tests/composed-algebra-product-v2.test.ts",
         "tests/distribution-factoring-presentation-plan.test.ts",
         "tests/editor-graph-3d-host-contract.test.ts",
         "tests/editor-graph-3d-saddle-host-contract.test.ts",
@@ -2243,6 +2264,7 @@
         "src/authoring/canonical-animation-construction-compiler.ts",
         "src/authoring/common-factor-draft.ts",
         "src/authoring/common-factor-presentation.ts",
+        "src/authoring/composed-algebra-presentation-v2.ts",
         "src/authoring/composed-algebra-presentation.ts",
         "src/authoring/governed-canonical-construction-compiler.ts",
         "src/domain-ir/antiderivative-power-migration-v2.ts",
@@ -2331,6 +2353,7 @@
         "tests/authoring-structural-projection.test.ts",
         "tests/bayesian-reasoning-evidence.test.ts",
         "tests/canonical-animation-construction-round-trip.test.ts",
+        "tests/composed-algebra-endpoint-handoff.test.ts",
         "tests/compound-root-carrier-catalogue-integration.test.ts",
         "tests/economics-supply-tax-animation-asset.test.ts",
         "tests/equation-generation-cancellation-trial.test.ts",
@@ -2865,6 +2888,7 @@
       "authorityId": "facade.reader-renderers",
       "sourceCallers": [
         "src/reader/app/canonical-equation-endpoint-ownership.ts",
+        "src/reader/app/canonical-equation-native-handoff.ts",
         "src/reader/app/canonical-equation-semantic-focus.ts",
         "src/reader/app/chrome-free-canonical-equation-session.ts",
         "src/reader/app/distribution-area-renderer-runtime.ts",

@@ -1,4 +1,4 @@
-import { sha256 } from "../kernel/sha256.ts";
+import { sha256 } from "../kernel/public-api.ts";
 import { checkKpComposedAlgebraProof, type KpSourceBoundComposedAlgebraProof } from "./composed-algebra-proof.ts";
 import { readKpComposedAlgebraSourceV2, type KpComposedAlgebraSourceV2 } from "./composed-algebra-source-v2.ts";
 

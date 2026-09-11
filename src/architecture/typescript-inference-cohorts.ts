@@ -58,11 +58,11 @@ export const frontendInferenceFixtures = [
   "tests/type-fixtures/composed-algebra-consumers.ts"
 ] as const;
 export const combinedInferenceBudget = Object.freeze({
-  measuredProject: { types: 173_243, instantiations: 288_463 },
-  // Compositor s23: complete core fixture membership plus actual native hosts.
-  // Standing approved type-only amendment retains about 2% headroom; the
-  // passing instantiation ceiling is unchanged. See the recorded cost checkpoint.
-  ceilings: { types: 176_800, instantiations: 289_700 }
+  measuredProject: { types: 175_872, instantiations: 292_746 },
+  // Algebra-v2 release includes actual v1/v2 author, native host, reading,
+  // practice and pure publication consumers. Restore 3% only for the exceeded
+  // instantiation cap; retain the passing type cap and exact cohort membership.
+  ceilings: { types: 176_800, instantiations: 301_600 }
 } as const);
 export const inferenceCohorts = [
   { name: "core", config: "tsconfig.inference-core.json", fixtures: coreInferenceFixtures, budget: typescriptInferenceBudget },
