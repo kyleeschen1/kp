@@ -8,6 +8,7 @@ import { renderAlgebraIntuitionCard, renderAlgebraIntuitionLinks } from "./page.
 import { projectComposedAlgebraSubexplanations } from "../composed-algebra/subexplanations.ts";
 import { captureComposedAlgebraPositionV2, resolveComposedAlgebraPositionV2 } from "../composed-algebra/practice.ts";
 import { projectComposedAlgebraReadingV2 } from "../composed-algebra/readings.ts";
+import { bindAlgebraIntuitionPractice } from "./practice.ts";
 
 const root = document.querySelector<HTMLElement>("#authored-focus-card")!;
 async function mount() {
@@ -21,6 +22,7 @@ async function mount() {
   const returnButton = root.querySelector<HTMLButtonElement>("[data-composed-intuition-return]")!;
   let subGeneration = 0;
   let exploration: { surface: Awaited<ReturnType<typeof mountComposedAlgebraCardV2>>; position: ReturnType<typeof captureComposedAlgebraPositionV2>;
+    reference: ReturnType<typeof projectComposedAlgebraSubexplanations>[number];
     scrollY: number; origin: HTMLElement | undefined; parentUrl: string } | undefined;
   const session = createKpComposedAlgebraAuthoringSessionV2({ initial,
     prepare: async draft => {
@@ -45,12 +47,14 @@ async function mount() {
       readingOutput.innerHTML = prepared[mode].html; readingOutput.dataset["revision"] = draft.revisionId;
     }
   });
+  const practice = bindAlgebraIntuitionPractice(root, () => ({ draft: session.current(), surface: exploration?.surface ?? active, reference: exploration?.reference }), () => session.invalidate());
   reading.onchange = () => { mode = reading.value === "compact" ? "compact" : "full"; readingOutput.innerHTML = projectComposedAlgebraReadingV2(session.current(), mode).html; };
   const parentElements = [display, links, readingOutput, root.querySelector<HTMLElement>("[data-composed-reading-toolbar]")!, root.querySelector<HTMLElement>("[data-composed-title]")!, root.querySelector<HTMLElement>("[data-composed-context]")!,
     root.querySelector<HTMLElement>(".review-help")!, root.querySelector<HTMLElement>("[data-composed-setup]")!,
     root.querySelector<HTMLElement>("[data-composed-summary]")!, root.querySelector<HTMLElement>("[data-reasoning-editor]")!,
     root.querySelector<HTMLElement>("[data-composed-sequence-summary]")!];
   function closeIntuition() {
+    practice.close();
     subGeneration++;
     if (!exploration) return;
     const saved = exploration; exploration = undefined; saved.surface.dispose();
@@ -77,7 +81,7 @@ async function mount() {
     try {
       const surface = await mountComposedAlgebraCardV2(staging, draft, reference);
       if (disposed || generation !== subGeneration || draft !== session.current()) { surface.dispose(); return; }
-      exploration = { surface, position, scrollY, origin, parentUrl: parentUrl.href };
+      exploration = { surface, reference, position, scrollY, origin, parentUrl: parentUrl.href };
       panel.querySelector<HTMLElement>("[data-composed-intuition-question]")!.textContent = reference.question;
       panel.querySelector<HTMLElement>("[data-composed-intuition-setup]")!.textContent = reference.setup;
       panel.querySelector<HTMLElement>("[data-composed-intuition-answer]")!.textContent = reference.answer;
@@ -113,7 +117,7 @@ async function mount() {
     const url = URL.createObjectURL(new Blob([exportKpComposedAlgebraSourceV2(session.current())], { type: "application/json" }));
     const link = document.createElement("a"); link.href = url; link.download = "composed-algebra-intuition.json"; link.click(); URL.revokeObjectURL(url);
   };
-  const dispose = () => { if (disposed) return; disposed = true; subGeneration++; exploration?.surface.dispose(); exploration = undefined;
+  const dispose = () => { if (disposed) return; disposed = true; practice.dispose(); subGeneration++; exploration?.surface.dispose(); exploration = undefined;
     session.dispose(); active.dispose(); editor.oninput = null; reading.onchange = null; apply.onclick = null; download.onclick = null; links.onclick = null; returnButton.onclick = null;
     window.removeEventListener("pagehide", pagehide); };
   const pagehide = (event: PageTransitionEvent) => { if (event.persisted) { active.cancel(); active.clock.pause(); exploration?.surface.cancel(); exploration?.surface.clock.pause(); } else dispose(); };

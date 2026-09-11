@@ -6,6 +6,7 @@ import { composedAlgebraSequenceV2, composedAlgebraWindowV2 } from "../composed-
 import { projectComposedAlgebraSubexplanations, type KpComposedAlgebraSubexplanation } from "../composed-algebra/subexplanations.ts";
 import { encodeKpHtmlAttribute as escape } from "../../rendering/html-output-encoding.ts";
 import { projectComposedAlgebraReadingV2 } from "../composed-algebra/readings.ts";
+import { algebraIntuitionPracticeButtons, algebraIntuitionPracticePanel } from "./practice.ts";
 
 export function renderAlgebraIntuitionCard(draft: KpComposedAlgebraPresentationV2, reference?: KpComposedAlgebraSubexplanation) {
   const sequence = reference ? composedAlgebraWindowV2(draft, reference) : composedAlgebraSequenceV2(draft), total = sequence.beats.length;
@@ -30,12 +31,14 @@ export function renderAlgebraIntuitionPage(draft: KpComposedAlgebraPresentationV
     <p data-composed-summary>${escape(source.editorial.summary)}</p>
     <p data-composed-context>All symbols are real scalars. No division is used, so the repeated group may equal zero. This explains preserving contributions—not a claim that collecting first is always the fastest method.</p>
     <section data-composed-subexplanations>${renderAlgebraIntuitionLinks(draft)}</section>
-    <div class="reasoning-toolbar" data-composed-reading-toolbar><label>Reading <select data-composed-reading><option value="full">Full</option><option value="compact">Compact</option></select></label></div>
+    <div class="reasoning-toolbar" data-composed-reading-toolbar><label>Reading <select data-composed-reading><option value="full">Full</option><option value="compact">Compact</option></select></label>${algebraIntuitionPracticeButtons}</div>
     <section data-composed-reading-output data-revision="${escape(draft.revisionId)}" aria-label="Verified composed algebra reading">${projectComposedAlgebraReadingV2(draft, "full").html}</section>
     <section data-composed-intuition-panel hidden aria-label="Independent intuition"><h1 data-composed-intuition-question></h1>
       <p data-composed-intuition-setup></p><div data-composed-intuition-reader></div><p data-composed-intuition-answer></p>
       <p>All symbols are real scalars. Product and addend order are preserved.</p>
+      <div class="reasoning-toolbar" data-composed-intuition-practice>${algebraIntuitionPracticeButtons}</div>
       <button type="button" data-composed-intuition-return>Return to the whole explanation</button></section>
+    ${algebraIntuitionPracticePanel}
     <details data-reasoning-editor><summary>Edit source JSON</summary>
       <p>Factor the repeated group, evaluate its count, distribute, and optionally evaluate the final constant product. Product and addend order are preserved. Prose is editorial, not proof.</p>
       <label>Algebra source JSON<textarea data-reasoning-json rows="20" spellcheck="false"></textarea></label>

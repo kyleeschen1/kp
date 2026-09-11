@@ -367,6 +367,27 @@
       "scope": "s17",
       "checkedAt": "2026-09-11T01:32:52.651Z",
       "notes": "Two Chromium checks pass with coherent Full Compact and exact return."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-11T01:40:37.707Z",
+      "notes": "96 tests pass including six whole/scoped prompt contexts."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-11T01:40:39.259Z",
+      "notes": "Full types pass after preserving complete HTMLElement hidden type."
+    },
+    {
+      "command": "npm run visual:composed-algebra -- --grep \"extended practice restores|both extended sources download\"",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-11T01:40:40.361Z",
+      "notes": "Two Chromium checks pass; practice returns exact saved semantic progress and source reload remains coherent."
     }
   ],
   "progress": {

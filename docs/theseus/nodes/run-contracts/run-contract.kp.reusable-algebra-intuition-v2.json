@@ -177,7 +177,8 @@
     {
       "id": "s18",
       "title": "Adapt reasoning prediction and reconstruction",
-      "status": "planned"
+      "summary": "Prediction reconstruction for whole and scoped questions use existing projections and canonical card controls. 96 tests full types and browser exact return pass.",
+      "status": "complete"
     },
     {
       "id": "s19",

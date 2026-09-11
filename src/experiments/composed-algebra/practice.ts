@@ -3,6 +3,35 @@ import { createKpFlashcardSpec } from "../../semantic/asset-flashcard.ts";
 import { createKpAnimationClozeProjection, createKpAnimationPredictNextProjection } from "../../animation/flashcard-projection.ts";
 import { createKpFocusDeckCheckpointMap } from "../../tutorial/focus-deck-beat-navigation.ts";
 import { assertKpComposedAlgebraPresentationV2, type KpComposedAlgebraPresentationV2 } from "../../authoring/composed-algebra-presentation-v2.ts";
+import { assertComposedAlgebraSubexplanation, type KpComposedAlgebraSubexplanation } from "./subexplanations.ts";
+
+export function projectComposedAlgebraPromptsV2(draft: KpComposedAlgebraPresentationV2, reference?: KpComposedAlgebraSubexplanation) {
+  assertKpComposedAlgebraPresentationV2(draft);
+  if (reference) assertComposedAlgebraSubexplanation(reference, draft);
+  const source = draft.checked.source, [start, end] = reference?.range ?? [0, source.states.length - 1];
+  const distribution = reference?.kind === "distribute";
+  return Object.freeze((["prediction", "reconstruction"] as const).map(kind => {
+    const prediction = kind === "prediction", answerIndex = prediction ? start + 1 : end;
+    const operations = draft.animation.transformations.slice(start, answerIndex).map(t => t.id);
+    const explanation = distribution
+      ? "Each copy contains both terms, so the same count multiplies each contribution. Distribution preserves the total value and the order of contributions."
+      : "The repeated whole group stays intact while its counts are added. No division is used, so this remains valid when the group is zero.";
+    const card = createKpFlashcardSpec({ id: `${source.id}.${reference?.kind ?? "whole"}.${kind}`, kind: prediction ? "predict-next" : "cloze",
+      title: prediction ? "Predict the preserved structure" : "Reconstruct the reasoning",
+      assetId: draft.animation.bundle.id,
+      prompt: prediction ? (distribution ? "Predict the expanded expression. Why must both terms receive the same coefficient?"
+        : "Write the shared group once with an unevaluated count. What stays intact, and why is division unnecessary?")
+        : `Reconstruct the ${end - start} moves from the starting expression. Explain what changes and what is preserved${distribution ? " as every contribution is distributed" : ", including when the repeated group is zero"}.`,
+      objectIds: source.states.slice(start, answerIndex + 1).map(s => s.id), transformationIds: operations,
+      ...(prediction ? {} : { selectorIds: draft.animation.bundle.objects.find(object => object.id === source.states[answerIndex]!.id)!.selectors.map(selector => selector.id) }),
+      answer: prediction ? { kind: "transformation", value: operations[0]! } : { kind: "text", value: source.states[answerIndex]!.latex } });
+    const projection = (prediction ? createKpAnimationPredictNextProjection : createKpAnimationClozeProjection)({ animation: draft.animation, card, progress: draft.checkpointProgress[start]! });
+    if (projection.diagnostics.length) throw new Error("Practice must reference only the checked scoped chain.");
+    return Object.freeze({ kind, revisionId: draft.revisionId, card, projection, answerStep: answerIndex - start,
+      answerLatex: source.states[answerIndex]!.latex, answerExplanation: reference?.answer ?? `${explanation} Distribution then applies the combined count to every term.`,
+      referenceId: reference?.kind ?? "whole" });
+  }));
+}
 
 export function projectComposedAlgebraPrompts(draft: KpComposedAlgebraPresentation) {
   assertKpComposedAlgebraPresentation(draft);

@@ -9,6 +9,36 @@ import { unfamiliarAuthoringCases, unfamiliarAuthoringRejections } from "./fixtu
 import intuition from "../src/authoring/examples/composed-algebra-intuition.json" with { type: "json" };
 import intuitionTransfer from "../src/authoring/examples/composed-algebra-intuition-transfer.json" with { type: "json" };
 
+test("extended practice restores exact parent and independent question positions", async ({ page }) => {
+  test.setTimeout(120_000);
+  await page.goto("/experiments/reusable-reasoning/?example=algebra-intuition");
+  const root = page.locator("#authored-focus-card");
+  await expect(root).toHaveAttribute("data-composed-status", "ready", { timeout: 90_000 });
+  for (const independent of [false, true]) {
+    if (independent) {
+      await root.locator('[data-composed-intuition="distribute"]').click();
+      await expect(root).toHaveAttribute("data-intuition-status", "ready", { timeout: 90_000 });
+    }
+    const scope = independent ? root.locator("[data-composed-intuition-panel]") : root;
+    const card = independent ? scope.locator("[data-composed-card]") : root.locator("[data-composed-reader] [data-composed-card]");
+    const toolbar = independent ? scope.locator("[data-composed-intuition-practice]") : root.locator("[data-composed-reading-toolbar]");
+    await card.locator("[data-kp-focus-deck-scrubber]").evaluate(node => { (node as HTMLInputElement).value = "1.37"; node.dispatchEvent(new Event("input")); });
+    const savedProgress = await card.getAttribute("data-common-factor-progress");
+    for (const kind of ["prediction", "reconstruction"]) {
+      await toolbar.locator(`[data-composed-practice="${kind}"]`).click();
+      const panel = root.locator("[data-composed-practice-panel]");
+      await expect(panel).toBeVisible();
+      await panel.locator("[data-composed-working]").fill("The group is preserved and each contribution receives the count.");
+      await panel.locator("[data-composed-reveal]").click();
+      await expect(panel.locator("[data-composed-answer]")).toBeVisible();
+      await panel.locator("[data-composed-return]").click();
+      await expect(panel).toBeHidden();
+      await expect(card).toHaveAttribute("data-common-factor-progress", savedProgress!);
+      expect(Number(await card.getAttribute("data-composed-step"))).toBeCloseTo(1.37, 12);
+    }
+  }
+});
+
 test("both extended sources download and reload the exact checked revision", async ({ page }) => {
   test.setTimeout(120_000);
   for (const source of [intuition, intuitionTransfer]) {
