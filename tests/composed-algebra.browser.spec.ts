@@ -34,6 +34,12 @@ test("both extended sources download and reload the exact checked revision", asy
     await expect(status).toHaveAttribute("data-status", "applied", { timeout: 90_000 });
     await expect(root).toHaveAttribute("data-composed-revision", revision!);
     await expect(root.locator("[data-composed-reader] [data-kp-focus-deck-beat]")).toHaveCount(source.states.length);
+    const reading = root.locator("[data-composed-reading-output]");
+    await expect(reading).toHaveAttribute("data-revision", revision!);
+    await expect(reading.locator(".katex-display")).toHaveCount(source.states.length);
+    await root.locator("[data-composed-reading]").selectOption("compact");
+    await expect(reading.locator(".katex-display")).toHaveCount(source.states.length);
+    await expect(reading).toContainText(source.editorial.summary);
   }
 });
 

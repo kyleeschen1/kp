@@ -171,7 +171,8 @@
     {
       "id": "s17",
       "title": "Adapt Full and Compact readings",
-      "status": "planned"
+      "summary": "Extended Full and Compact through existing Article compiler and atomic host revision; 95 tests types and two browser checks pass.",
+      "status": "complete"
     },
     {
       "id": "s18",

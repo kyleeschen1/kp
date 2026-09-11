@@ -7,6 +7,7 @@ import { mountComposedAlgebraCardV2 } from "../composed-algebra/card.ts";
 import { renderAlgebraIntuitionCard, renderAlgebraIntuitionLinks } from "./page.ts";
 import { projectComposedAlgebraSubexplanations } from "../composed-algebra/subexplanations.ts";
 import { captureComposedAlgebraPositionV2, resolveComposedAlgebraPositionV2 } from "../composed-algebra/practice.ts";
+import { projectComposedAlgebraReadingV2 } from "../composed-algebra/readings.ts";
 
 const root = document.querySelector<HTMLElement>("#authored-focus-card")!;
 async function mount() {
@@ -14,6 +15,8 @@ async function mount() {
   const editor = root.querySelector<HTMLTextAreaElement>("[data-reasoning-json]")!, status = root.querySelector<HTMLElement>("[data-reasoning-draft-status]")!;
   const apply = root.querySelector<HTMLButtonElement>("[data-composed-apply]")!, download = root.querySelector<HTMLButtonElement>("[data-composed-download]")!;
   let active = await mountComposedAlgebraCardV2(display, initial), disposed = false;
+  const reading = root.querySelector<HTMLSelectElement>("[data-composed-reading]")!, readingOutput = root.querySelector<HTMLElement>("[data-composed-reading-output]")!;
+  let mode: "full" | "compact" = "full";
   const links = root.querySelector<HTMLElement>("[data-composed-subexplanations]")!, panel = root.querySelector<HTMLElement>("[data-composed-intuition-panel]")!;
   const returnButton = root.querySelector<HTMLButtonElement>("[data-composed-intuition-return]")!;
   let subGeneration = 0;
@@ -21,10 +24,11 @@ async function mount() {
     scrollY: number; origin: HTMLElement | undefined; parentUrl: string } | undefined;
   const session = createKpComposedAlgebraAuthoringSessionV2({ initial,
     prepare: async draft => {
+      const full = projectComposedAlgebraReadingV2(draft, "full"), compact = projectComposedAlgebraReadingV2(draft, "compact");
       const staging = document.createElement("div"); staging.className = "common-factor-staging";
       staging.inert = true; staging.setAttribute("aria-hidden", "true"); staging.style.width = `${display.getBoundingClientRect().width}px`;
       staging.innerHTML = renderAlgebraIntuitionCard(draft); display.after(staging);
-      try { const surface = await mountComposedAlgebraCardV2(staging, draft); return { staging, surface, dispose() { surface.dispose(); staging.remove(); } }; }
+      try { const surface = await mountComposedAlgebraCardV2(staging, draft); return { staging, surface, full, compact, dispose() { surface.dispose(); staging.remove(); } }; }
       catch (error) { staging.remove(); throw error; }
     },
     commit: (prepared, draft) => {
@@ -38,9 +42,11 @@ async function mount() {
       root.querySelector<HTMLElement>("[data-reasoning-revision]")!.textContent = draft.revisionId;
       root.dataset["composedRevision"] = draft.revisionId;
       links.innerHTML = renderAlgebraIntuitionLinks(draft);
+      readingOutput.innerHTML = prepared[mode].html; readingOutput.dataset["revision"] = draft.revisionId;
     }
   });
-  const parentElements = [display, links, root.querySelector<HTMLElement>("[data-composed-title]")!, root.querySelector<HTMLElement>("[data-composed-context]")!,
+  reading.onchange = () => { mode = reading.value === "compact" ? "compact" : "full"; readingOutput.innerHTML = projectComposedAlgebraReadingV2(session.current(), mode).html; };
+  const parentElements = [display, links, readingOutput, root.querySelector<HTMLElement>("[data-composed-reading-toolbar]")!, root.querySelector<HTMLElement>("[data-composed-title]")!, root.querySelector<HTMLElement>("[data-composed-context]")!,
     root.querySelector<HTMLElement>(".review-help")!, root.querySelector<HTMLElement>("[data-composed-setup]")!,
     root.querySelector<HTMLElement>("[data-composed-summary]")!, root.querySelector<HTMLElement>("[data-reasoning-editor]")!,
     root.querySelector<HTMLElement>("[data-composed-sequence-summary]")!];
@@ -108,7 +114,7 @@ async function mount() {
     const link = document.createElement("a"); link.href = url; link.download = "composed-algebra-intuition.json"; link.click(); URL.revokeObjectURL(url);
   };
   const dispose = () => { if (disposed) return; disposed = true; subGeneration++; exploration?.surface.dispose(); exploration = undefined;
-    session.dispose(); active.dispose(); editor.oninput = null; apply.onclick = null; download.onclick = null; links.onclick = null; returnButton.onclick = null;
+    session.dispose(); active.dispose(); editor.oninput = null; reading.onchange = null; apply.onclick = null; download.onclick = null; links.onclick = null; returnButton.onclick = null;
     window.removeEventListener("pagehide", pagehide); };
   const pagehide = (event: PageTransitionEvent) => { if (event.persisted) { active.cancel(); active.clock.pause(); exploration?.surface.cancel(); exploration?.surface.clock.pause(); } else dispose(); };
   window.addEventListener("pagehide", pagehide); import.meta.hot?.dispose(dispose);

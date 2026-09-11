@@ -346,6 +346,27 @@
       "scope": "s16",
       "checkedAt": "2026-09-11T01:28:33.068Z",
       "notes": "Both lengths preserve exact displayed bytes revision and beat count across reapply."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring",
+      "status": "passed",
+      "scope": "s17",
+      "checkedAt": "2026-09-11T01:32:50.423Z",
+      "notes": "95 tests pass; original v1 reading preserved."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s17",
+      "checkedAt": "2026-09-11T01:32:51.617Z",
+      "notes": "Full types pass with zero Svelte diagnostics."
+    },
+    {
+      "command": "npm run visual:composed-algebra -- --grep \"both extended sources download|independent algebra questions\"",
+      "status": "passed",
+      "scope": "s17",
+      "checkedAt": "2026-09-11T01:32:52.651Z",
+      "notes": "Two Chromium checks pass with coherent Full Compact and exact return."
     }
   ],
   "progress": {
