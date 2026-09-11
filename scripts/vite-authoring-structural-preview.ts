@@ -4,6 +4,7 @@ import type { buildKpAuthoredDistributionPreview } from "../src/experiments/auth
 // Only registered local pages can choose a module; URL input is never imported.
 const algebraPages = new Map([
   ["common-factor", { directory: "common-factor", builder: "buildKpCommonFactorInitialPage", title: "Common factoring" }],
+  ["algebra-intuition", { directory: "composed-algebra-intuition", builder: "buildKpAlgebraIntuitionInitialPage", title: "Regroup without losing contributions" }],
   ["composed-algebra", { directory: "composed-algebra", builder: "buildKpComposedAlgebraInitialPage", title: "Composed algebra" }]
 ]);
 

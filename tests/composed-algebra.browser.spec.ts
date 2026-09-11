@@ -8,6 +8,51 @@ import { fileURLToPath } from "node:url";
 import { unfamiliarAuthoringCases, unfamiliarAuthoringRejections } from "./fixtures/unfamiliar-authoring-trial.ts";
 import intuition from "../src/authoring/examples/composed-algebra-intuition.json" with { type: "json" };
 
+test("question-oriented primary edits the complete canonical revision", async ({ page }, info) => {
+  test.setTimeout(120_000);
+  const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/experiments/reusable-reasoning/?example=algebra-intuition");
+  const root = page.locator("#authored-focus-card"), card = root.locator("[data-composed-card]");
+  await expect(root).toHaveAttribute("data-composed-status", "ready", { timeout: 90_000 });
+  await expect(card.locator("[data-kp-focus-deck-beat]")).toHaveCount(5);
+  const slider = card.locator("[data-kp-focus-deck-scrubber]");
+  await expect(slider).toHaveAttribute("max", "4");
+  for (const step of [1, 2, 3, 4]) {
+    await card.locator("[data-kp-focus-deck-next]").click();
+    await expect.poll(async () => Number(await card.getAttribute("data-composed-step"))).toBeGreaterThan(step - 1);
+    expect(Number(await card.getAttribute("data-composed-step"))).toBeLessThan(step);
+    await expect(card).toHaveAttribute("data-composed-step", String(step), { timeout: 10_000 });
+    await expect(card.locator("[data-composed-count]")).toHaveText(`${step + 1} / 5`);
+    await expect(card).toHaveAttribute("data-common-factor-state", intuition.states[step]!.id);
+    await card.screenshot({ path: info.outputPath(`question-state-${step}.png`) });
+  }
+  await slider.focus(); await page.keyboard.press("ArrowLeft");
+  await expect(card).toHaveAttribute("data-composed-step", "3", { timeout: 10_000 });
+  await slider.evaluate(node => { (node as HTMLInputElement).value = "2.37"; node.dispatchEvent(new Event("input")); });
+  await expect(card).toHaveAttribute("data-composed-step", "2.37");
+  const previousRevision = await root.getAttribute("data-composed-revision");
+  const edited = structuredClone(intuition);
+  edited.states.forEach((state, index) => { state.latex = ["2(x+4)+3(x+4)", "(2+3)(x+4)", "5(x+4)", "5x+5*4", "5x+20"][index]!;
+    state.narration = state.narration.replaceAll("x+3", "x+4").replaceAll("x and 3", "x and 4").replaceAll("fifteen", "twenty"); });
+  await root.locator("[data-reasoning-editor] summary").click();
+  const editor = root.locator("[data-reasoning-json]"), status = root.locator("[data-reasoning-draft-status]");
+  await editor.fill(JSON.stringify(edited)); await root.locator("[data-composed-apply]").click();
+  await expect(status).toHaveAttribute("data-status", "applied", { timeout: 90_000 });
+  expect(await root.getAttribute("data-composed-revision")).not.toBe(previousRevision);
+  await slider.evaluate(node => { (node as HTMLInputElement).value = "4"; node.dispatchEvent(new Event("input")); });
+  await expect(card).toHaveAttribute("data-composed-step", "4");
+  await expect(card.locator('[data-kp-reader-accessible-equation-state][aria-current="step"]')).toContainText("20");
+  const committed = await root.getAttribute("data-composed-revision");
+  edited.states[4]!.latex = "5x+21";
+  await editor.fill(JSON.stringify(edited)); await root.locator("[data-composed-apply]").click();
+  await expect(status).toHaveAttribute("data-status", "repair-gap");
+  await expect(root).toHaveAttribute("data-composed-revision", committed!);
+  await expect(card).toHaveAttribute("data-composed-step", "4");
+  await expect(page.locator(".common-factor-staging")).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
 test("complete algebra native handoff canary", async ({ page }, info) => {
   test.setTimeout(120_000);
   const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));

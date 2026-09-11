@@ -243,6 +243,26 @@
       "scope": "s09",
       "checkedAt": "2026-09-11T00:50:59.542Z",
       "notes": "Retained v1 card controls and combined review pass after controller extraction."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring",
+      "status": "passed",
+      "scope": "s10",
+      "checkedAt": "2026-09-11T00:58:30.923Z",
+      "notes": "90 tests passed, including prepared-revision failure preservation and source export."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s10",
+      "checkedAt": "2026-09-11T00:58:32.295Z"
+    },
+    {
+      "command": "npm run visual:composed-algebra -- --grep \"question-oriented primary edits\"",
+      "status": "passed",
+      "scope": "s10",
+      "checkedAt": "2026-09-11T00:58:33.560Z",
+      "notes": "Five stops, visible button playback, keyboard reverse, scrub, coherent source-only constant change and invalid edit preservation pass. Fixed ambiguous accessible-state test selector; observed four endpoint captures."
     }
   ],
   "progress": {

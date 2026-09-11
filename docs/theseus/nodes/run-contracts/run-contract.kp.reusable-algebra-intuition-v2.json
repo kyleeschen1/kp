@@ -125,7 +125,8 @@
     {
       "id": "s10",
       "title": "Mount primary and coherent source Apply",
-      "status": "planned"
+      "summary": "Question-oriented primary mounts at example=algebra-intuition with source-only coherent Apply and canonical five-stop interaction; legacy route retained.",
+      "status": "complete"
     },
     {
       "id": "s11",
