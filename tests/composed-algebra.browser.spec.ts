@@ -7,6 +7,30 @@ import { buildComposedAlgebraEdition } from "../scripts/build-composed-algebra-e
 import { fileURLToPath } from "node:url";
 import { unfamiliarAuthoringCases, unfamiliarAuthoringRejections } from "./fixtures/unfamiliar-authoring-trial.ts";
 import intuition from "../src/authoring/examples/composed-algebra-intuition.json" with { type: "json" };
+import intuitionTransfer from "../src/authoring/examples/composed-algebra-intuition-transfer.json" with { type: "json" };
+
+test("shorter two-symbol source applies without caller-specific motion", async ({ page }) => {
+  test.setTimeout(120_000);
+  await page.goto("/experiments/reusable-reasoning/?example=algebra-intuition");
+  const root = page.locator("#authored-focus-card");
+  await expect(root).toHaveAttribute("data-composed-status", "ready", { timeout: 90_000 });
+  await root.locator("[data-reasoning-editor] summary").click();
+  await root.locator("[data-reasoning-json]").fill(JSON.stringify(intuitionTransfer));
+  await root.locator("[data-composed-apply]").click();
+  await expect(root.locator("[data-reasoning-draft-status]")).toHaveAttribute("data-status", "applied", { timeout: 90_000 });
+  const card = root.locator("[data-composed-reader] [data-composed-card]");
+  await expect(card.locator("[data-kp-focus-deck-beat]")).toHaveCount(4);
+  for (const position of [0, 1.37, 2, 2.37, 3, 1.37, 0]) {
+    await card.locator("[data-kp-focus-deck-scrubber]").evaluate((node, p) => { (node as HTMLInputElement).value = String(p); node.dispatchEvent(new Event("input")); }, position);
+    await expect(card).toHaveAttribute("data-composed-step", String(position));
+  }
+  await root.locator('[data-composed-intuition="distribute"]').click();
+  await expect(root).toHaveAttribute("data-intuition-status", "ready", { timeout: 90_000 });
+  const panel = root.locator("[data-composed-intuition-panel]");
+  await expect(panel.locator("[data-composed-count]")).toHaveText("1 / 2");
+  await panel.locator("[data-kp-focus-deck-next]").click();
+  await expect(panel.locator("[data-composed-count]")).toHaveText("2 / 2", { timeout: 10_000 });
+});
 
 test("question-oriented checkpoint stays legible at phone width", async ({ page }, info) => {
   test.setTimeout(120_000);

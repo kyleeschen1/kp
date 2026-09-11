@@ -304,6 +304,20 @@
       "scope": "s12",
       "checkedAt": "2026-09-11T01:16:20.569Z",
       "notes": "Three Chromium checks pass; phone layout, native ink handoff and legacy desktop preservation. Human visual judgment remains pending."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/composed-algebra-transfer-v2.test.ts",
+      "status": "passed",
+      "scope": "s13",
+      "checkedAt": "2026-09-11T01:22:42.703Z",
+      "notes": "Four states three operations and two-stop subreading pass."
+    },
+    {
+      "command": "npm run visual:composed-algebra -- --grep \"shorter two-symbol source\"",
+      "status": "passed",
+      "scope": "s13",
+      "checkedAt": "2026-09-11T01:22:43.928Z",
+      "notes": "Actual Apply and reversible scrubbing pass on shared canonical host with source-only changes."
     }
   ],
   "progress": {

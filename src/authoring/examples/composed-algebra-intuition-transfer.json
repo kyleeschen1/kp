@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "kp.composed-algebra-source.v2",
+  "id": "lesson.composed-algebra.intuition-transfer",
+  "domain": "real-scalars",
+  "symbols": ["x", "y"],
+  "states": [
+    { "id": "state.transfer.repeated", "latex": "2(x+y)+4(x+y)", "narration": "Both terms count copies of the same whole quantity x+y, even though neither contribution is a known number." },
+    { "id": "state.transfer.collected", "latex": "(2+4)(x+y)", "narration": "Add the counts while preserving the shared group. Neither x nor y changes." },
+    { "id": "state.transfer.counted", "latex": "6(x+y)", "narration": "There are six copies of the whole group. Each copy contains both x and y." },
+    { "id": "state.transfer.distributed", "latex": "6x+6y", "narration": "Each contribution receives the same factor six. There is no constant product to evaluate; the reasoning ends here." }
+  ],
+  "editorial": {
+    "title": "What if both contributions are unknown?",
+    "setup": "Treat x+y as a whole quantity, then follow its two contributions as six copies are opened.",
+    "summary": "Counting the whole group and counting each contribution give the same value. Neither contribution needs a known numerical value."
+  }
+}

@@ -147,7 +147,8 @@
     {
       "id": "s13",
       "title": "Pressure shorter structurally different source-only caller",
-      "status": "planned"
+      "summary": "Source-only two-symbol four-state caller passes semantic and actual native Apply checks without engine changes; bounded editorial leakage scheduled for s14.",
+      "status": "complete"
     },
     {
       "id": "s14",
