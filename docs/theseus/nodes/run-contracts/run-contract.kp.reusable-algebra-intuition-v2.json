@@ -119,7 +119,8 @@
     {
       "id": "s09",
       "title": "Derive beats controls and playback from one sequence",
-      "status": "planned"
+      "summary": "One canonical checkpoint sequence derives beats fractions controls and continuous progress; v1/v2 share the unchanged input and scheduler owner.",
+      "status": "complete"
     },
     {
       "id": "s10",

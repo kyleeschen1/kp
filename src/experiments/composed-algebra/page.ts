@@ -4,13 +4,11 @@ import { assertKpComposedAlgebraPresentation, type KpComposedAlgebraPresentation
 import { prepareKpComposedAlgebraDraft } from "../../authoring/composed-algebra-session.ts";
 import { projectComposedAlgebraReading } from "./readings.ts";
 import { encodeKpHtmlAttribute } from "../../rendering/html-output-encoding.ts";
+import { composedAlgebraSequence } from "./sequence.ts";
 
 export const escapeComposedAlgebraText = encodeKpHtmlAttribute;
 export function composedAlgebraBeats(draft: KpComposedAlgebraPresentation) {
-  assertKpComposedAlgebraPresentation(draft);
-  const titles = ["Count the copies", "Factor the shared expression", "Evaluate the count"] as const;
-  return draft.checked.source.states.map((state, index) => ({ slug: state.id, title: titles[index]!,
-    html: `<p>${escapeComposedAlgebraText(state.narration)}</p>` }));
+  return composedAlgebraSequence(draft).beats;
 }
 export function renderComposedAlgebraCard(draft: KpComposedAlgebraPresentation) {
   const beats = composedAlgebraBeats(draft);

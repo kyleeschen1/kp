@@ -223,6 +223,26 @@
       "scope": "h03",
       "checkedAt": "2026-09-11T00:46:00.424Z",
       "notes": "Two retained canonical v1 factoring and evaluation compositor ownership tests passed."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring",
+      "status": "passed",
+      "scope": "s09",
+      "checkedAt": "2026-09-11T00:50:57.073Z",
+      "notes": "89 tests passed, including exact stops, intermediate and reverse positions for four/five states."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s09",
+      "checkedAt": "2026-09-11T00:50:58.450Z"
+    },
+    {
+      "command": "npm run visual:composed-algebra -- --grep \"primary combined review at 1280px\"",
+      "status": "passed",
+      "scope": "s09",
+      "checkedAt": "2026-09-11T00:50:59.542Z",
+      "notes": "Retained v1 card controls and combined review pass after controller extraction."
     }
   ],
   "progress": {
