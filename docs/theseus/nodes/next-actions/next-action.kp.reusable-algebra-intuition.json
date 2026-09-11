@@ -430,6 +430,20 @@
       "scope": "s20",
       "checkedAt": "2026-09-11T01:50:39.500Z",
       "notes": "Both packet sources checked by actual CLI; primary immutable edition check also passed."
+    },
+    {
+      "command": "npm run visual:composed-algebra -- --grep \"complete algebra native handoff canary|primary: compound factoring uses|primary: evaluation contributor\"",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-11T01:54:03.098Z",
+      "notes": "Four Chromium checks: both chain lengths and canonical factoring/evaluation preservation."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/composed-algebra-native-handoff.test.ts tests/canonical-equation-transition-continuity.test.ts tests/equation-stage-transit-corridor.test.ts",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-11T01:54:04.419Z",
+      "notes": "15 canonical ownership continuity and corridor checks pass."
     }
   ],
   "progress": {

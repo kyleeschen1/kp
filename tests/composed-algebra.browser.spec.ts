@@ -227,7 +227,7 @@ test("question-oriented primary edits the complete canonical revision", async ({
   expect(errors).toEqual([]);
 });
 
-test("complete algebra native handoff canary", async ({ page }, info) => {
+for (const [source, coefficient, member] of [[intuition, "5", "3"], [intuitionTransfer, "6", "y"]] as const) test(`complete algebra native handoff canary ${source.states.length} states`, async ({ page }, info) => {
   test.setTimeout(120_000);
   const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
   await page.goto("/experiments/reusable-reasoning/?example=composed-algebra");
@@ -236,8 +236,8 @@ test("complete algebra native handoff canary", async ({ page }, info) => {
     const path = "/tests/browser-helpers/composed-algebra-canary.ts";
     const helper = await import(/* @vite-ignore */ path);
     return helper.mountCompleteAlgebraCanary(value);
-  }, intuition);
-  expect(result.checkpoints).toHaveLength(5);
+  }, source);
+  expect(result.checkpoints).toHaveLength(source.states.length);
   expect(result.samples.every((sample: { canonicalPaintOwner: boolean }) => sample.canonicalPaintOwner)).toBe(true);
   expect(result.samples.every((sample: { nativeEndpointPassed: boolean }) => sample.nativeEndpointPassed)).toBe(true);
   expect(result.samples.some((sample: { accessibleEquationState: string }) => sample.accessibleEquationState.includes(".view."))).toBe(false);
@@ -249,13 +249,13 @@ test("complete algebra native handoff canary", async ({ page }, info) => {
       // Just inside distribution, two issued fan-out copies intentionally
       // occupy the same source pose; neither may retain a native duplicate.
       expect(paint).toHaveLength(7);
-      const copies = paint.filter((atom: { ink: string }) => atom.ink === "glyph:5");
+      const copies = paint.filter((atom: { ink: string }) => atom.ink === `glyph:${coefficient}`);
       expect(copies).toHaveLength(2);
       expect(copies.every((atom: { native: boolean }) => !atom.native)).toBe(true);
       expect(new Set(copies.map((atom: { owner: string }) => atom.owner)).size).toBe(2);
       paint.splice(1, 1);
     }
-    expect(paint.map((atom: { ink: string }) => atom.ink)).toEqual(["glyph:5", "glyph:(", "glyph:x", "glyph:+", "glyph:3", "glyph:)"]);
+    expect(paint.map((atom: { ink: string }) => atom.ink)).toEqual([`glyph:${coefficient}`, "glyph:(", "glyph:x", "glyph:+", `glyph:${member}`, "glyph:)"]);
     paint.forEach((atom: { rect: Record<string, number> }, index: number) => {
       for (const key of ["left", "top", "width", "height"])
         expect(Math.abs(atom.rect[key]! - result.seamPaint[0][index].rect[key]), `Leaf ${index} ${key}: ${JSON.stringify(paint)} vs ${JSON.stringify(result.seamPaint[0])}`).toBeLessThan(.5);

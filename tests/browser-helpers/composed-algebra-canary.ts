@@ -23,8 +23,12 @@ export async function mountCompleteAlgebraCanary(value: unknown) {
   document.querySelector("#authored-focus-card")!.append(wrapper);
   const card = wrapper.firstElementChild as HTMLElement; card.id = "complete-algebra-canary";
   const surface = await mountCanonicalComposedAlgebraPresentationV2(card, binding);
-  const samples = [0, .125, .25, .375, .4999, .5, .5001, .625, .75, .875, 1, .625, .4999, .5, .375, 0].map(progress => surface.session.seek(progress));
-  const seamPaint = [.499999, .5, .500001, .5, .499999].map(progress => {
+  // The native session consumes equal semantic phase intervals. The host maps
+  // elapsed motif durations into this coordinate; do not pass elapsed stops here.
+  const boundaries = binding.checkpointProgress.map((_, index) => index / (binding.checkpointProgress.length - 1)), seam = boundaries[2]!;
+  const forward = boundaries.flatMap((progress, index) => index === 0 ? [progress] : [(boundaries[index - 1]! + progress) / 2, Math.max(0, progress - 1e-6), progress]);
+  const samples = [...forward, ...forward.toReversed(), seam + 1e-6, seam - 1e-6, 0].map(progress => surface.session.seek(progress));
+  const seamPaint = [seam - 1e-6, seam, seam + 1e-6, seam, seam - 1e-6].map(progress => {
     const snapshot = surface.session.seek(progress);
     const phase = card.querySelector<HTMLElement>('[data-kp-reader-transition-active="true"]')!;
     const root = phase.querySelector<HTMLElement>("[data-kp-reader-fit-surface]")!;
@@ -49,11 +53,11 @@ export async function mountCompleteAlgebraCanary(value: unknown) {
   const previousStyle = member.getAttribute("style");
   member.style.transform = "translateX(4px)";
   let driftRejected = false;
-  try { surface.session.invalidate(); surface.session.seek(.5); }
+  try { surface.session.invalidate(); surface.session.seek(seam); }
   catch (error) { driftRejected = error instanceof Error && /non-rigid|paint shape|residual/.test(error.message); }
   finally {
     if (previousStyle === null) member.removeAttribute("style"); else member.setAttribute("style", previousStyle);
-    surface.session.invalidate(); surface.session.seek(.5);
+    surface.session.invalidate(); surface.session.seek(seam);
   }
   card.dataset["handoffCanary"] = "ready";
   window.addEventListener("pagehide", () => surface.dispose(), { once: true });
