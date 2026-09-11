@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: reusable algebra intuition visual checkpoint accepted; post-checkpoint work resumed; Theseus owns progress
+Status: reusable algebra intuition complete; next is a bounded geometric proposal, not execution
 Last Updated: 2026-09-10
 Standing budget policy: recommended engineering-budget repairs, including
 explicit bounded policy amendments, are automatically approved across sessions.
@@ -91,9 +91,8 @@ Scope approval need not be requested again. The user accepted
 explanation-led acceptance refinements and a small cross-domain reuse trial after
 geometry, before sustained calculus expansion; see
 `../decisions/2026-09-10-explanation-led-loop-refinements.md`. The approved plan
-contains the refinements; later exact scopes still need proposals. Current activity:
-execute the bounded algebra exemplar using a question/answer/evidence brief,
-preserving the existing shell and stopping for s12 visual review.
+contains the refinements; later exact scopes still need proposals. The bounded
+algebra exemplar and accepted s12 review are now completed evidence.
 The started run encountered a representation-boundary stop before that review:
 `../reviews/2026-09-10-reusable-algebra-selector-handoff-stop.md`. Existing
 factoring/evaluation preserve a whole group; distribution needs its member
@@ -106,8 +105,13 @@ The repair and editable primary with two independent question readings are now
 implemented. Current inspection and resume packet:
 `../reviews/2026-09-10-reusable-algebra-intuition-visual-checkpoint.md`.
 The user accepted this exemplar with “It passes!” and explicitly resumed.
-Continue the approved second caller and downstream integration, preserving the
-accepted treatment; the inspection packet is historical approval evidence.
+The approved second caller and downstream integration are complete, preserving
+the accepted treatment; the inspection packet is historical approval evidence.
+Closeout: `../reviews/2026-09-10-reusable-algebra-intuition-closeout.md`.
+Release accounting: `../reviews/2026-09-10-reusable-algebra-intuition-release.md`.
+Theseus owns the completed 27-slice contract and exact verification. Next is a
+separately approved contour-adjacent gradient/greatest-increase proposal, not
+automatic geometry work or another generic infrastructure loop.
 Accepted broader direction:
 `../decisions/2026-09-10-visual-repertoire-and-queryable-intuitions.md`.
 Richer algebra, a contour-adjacent geometric flagship, a small cross-domain reuse

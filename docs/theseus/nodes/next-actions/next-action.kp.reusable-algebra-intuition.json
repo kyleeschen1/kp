@@ -2,9 +2,9 @@
   "id": "next-action.kp.reusable-algebra-intuition",
   "kind": "next-action",
   "title": "Author a reusable question-oriented algebra explanation",
-  "status": "ready",
+  "status": "resolved",
   "domain": "authoring",
-  "summary": "User approved handoff amendment; resume with v2 contract revision and preserved s01-s04 evidence.",
+  "summary": "Approved algebra intuition loop complete. Preserve accepted visuals and source-v1; next is a separately reviewed contour-adjacent geometry proposal.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -25,6 +25,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-10-reusable-algebra-selector-handoff-stop.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-10-reusable-algebra-intuition-closeout.md"
     }
   ],
   "dependsOn": {
@@ -479,11 +483,18 @@
       "scope": "s23",
       "checkedAt": "2026-09-11T02:31:12.656Z",
       "notes": "All 12 passed after adding the exact native-handoff public caller; full suite was not repeated after this test-only expectation repair. Complete release accounting in docs/project/reviews/2026-09-10-reusable-algebra-intuition-release.md."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-09-11T02:34:28.831Z",
+      "notes": "Closeout links existing author packet and release evidence, preserves original pipeline and distinguishes 7011/7012 full-suite result from 12/12 focused repair; geometry remains proposal only."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "Four of 24 slices complete. STOP_CONDITION at s05 for whole/member ownership handoff. Recommended bounded amendment recorded; no v2 rendered capability yet."
+    "state": "complete",
+    "summary": "Accepted question-oriented whole and independent explanations; source-only four-state reuse; canonical handoff preservation; coherent authoring, readings, practice and immutable editions; release accounting complete. Next geometry requires separate proposal approval."
   },
   "expectedLearning": [
     "Demonstrate a meaningful authored chain with source-only adaptation and context-preserving recovery, without claiming comprehension efficacy."

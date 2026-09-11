@@ -145,20 +145,23 @@ Sole reviewed proposal: `threads/2026-09-10-reusable-algebra-intuition-approved-
 Execution authority: `run-contract.kp.reusable-algebra-intuition-v2`; Theseus owns
 live progress. Accepted editorial direction and first-exemplar boundary:
 `decisions/2026-09-10-question-oriented-focus-cards.md`. Keep the existing shell,
-canonical motifs and semantic owners; stop at the s12 visual checkpoint. No new
+canonical motifs and semantic owners; the s12 visual checkpoint is accepted. No new
 universal question schema or catalogue rollout is approved. Competitive distinctions
 remain hypotheses, not proven advantages.
 Execution encountered a whole-group/member-selector ownership boundary; see
 `reviews/2026-09-10-reusable-algebra-selector-handoff-stop.md`. The bounded
-handoff amendment was subsequently approved by the user. Resume the same run
-with its three bounded handoff slices; preserve the completed source/prefix
-work and existing visuals. Theseus owns live progress and the s12 checkpoint.
-The handoff repair and primary/independent readings are implemented. The run is
-now at its required visual checkpoint, not a scope stop:
+handoff amendment was subsequently approved and implemented in three bounded
+slices, preserving source/prefix work and existing visuals. Historical review:
 `reviews/2026-09-10-reusable-algebra-intuition-visual-checkpoint.md`.
 The user accepted the question-oriented primary and smaller questions with
-“It passes!” and explicitly resumed. Continue the approved post-checkpoint work;
-preserve accepted motion and do not request unchanged-visual reapproval.
+“It passes!” and explicitly resumed. The 27-slice run is now complete, including
+source-only four-state reuse, coherent readings/practice/immutable publication,
+supported-engine verification and bounded release repairs. Closeout and exact
+test/cost accounting: `reviews/2026-09-10-reusable-algebra-intuition-closeout.md`.
+Preserve accepted motion; no unchanged-visual reapproval is needed. Next: propose
+one contour-adjacent gradient/greatest-increase intuition, then the accepted small
+cross-domain reuse trial. Exact successor scope still needs approval; no universal
+schema, automatic expansion or new infrastructure prerequisite is authorized.
 Do not restart this trial or the completed
 compositor migration, or manufacture another generic infrastructure loop.
 Recommended engineering-budget repairs now have persistent automatic approval:
