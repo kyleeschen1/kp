@@ -165,7 +165,8 @@
     {
       "id": "s16",
       "title": "Reproduce source editing export and reload",
-      "status": "planned"
+      "summary": "Verified both source-only lengths through actual download reload reapply; invalid draft never exports. No implementation repair needed.",
+      "status": "complete"
     },
     {
       "id": "s17",

@@ -9,6 +9,34 @@ import { unfamiliarAuthoringCases, unfamiliarAuthoringRejections } from "./fixtu
 import intuition from "../src/authoring/examples/composed-algebra-intuition.json" with { type: "json" };
 import intuitionTransfer from "../src/authoring/examples/composed-algebra-intuition-transfer.json" with { type: "json" };
 
+test("both extended sources download and reload the exact checked revision", async ({ page }) => {
+  test.setTimeout(120_000);
+  for (const source of [intuition, intuitionTransfer]) {
+    await page.goto("/experiments/reusable-reasoning/?example=algebra-intuition");
+    const root = page.locator("#authored-focus-card");
+    await expect(root).toHaveAttribute("data-composed-status", "ready", { timeout: 90_000 });
+    await root.locator("[data-reasoning-editor] summary").click();
+    const editor = root.locator("[data-reasoning-json]"), status = root.locator("[data-reasoning-draft-status]");
+    await editor.fill(JSON.stringify(source)); await root.locator("[data-composed-apply]").click();
+    await expect(status).toHaveAttribute("data-status", "applied", { timeout: 90_000 });
+    const revision = await root.getAttribute("data-composed-revision");
+    // An invalid draft must not become the downloaded source.
+    await editor.fill("{}"); await root.locator("[data-composed-apply]").click();
+    await expect(status).toHaveAttribute("data-status", "repair-gap");
+    const downloaded = page.waitForEvent("download"); await root.locator("[data-composed-download]").click();
+    const stream = await (await downloaded).createReadStream();
+    let bytes = ""; for await (const chunk of stream!) bytes += chunk.toString();
+    expect(JSON.parse(bytes)).toEqual(source);
+    await page.reload();
+    await expect(root).toHaveAttribute("data-composed-status", "ready", { timeout: 90_000 });
+    await root.locator("[data-reasoning-editor] summary").click();
+    await editor.fill(bytes); await root.locator("[data-composed-apply]").click();
+    await expect(status).toHaveAttribute("data-status", "applied", { timeout: 90_000 });
+    await expect(root).toHaveAttribute("data-composed-revision", revision!);
+    await expect(root.locator("[data-composed-reader] [data-kp-focus-deck-beat]")).toHaveCount(source.states.length);
+  }
+});
+
 test("shorter two-symbol source applies without caller-specific motion", async ({ page }) => {
   test.setTimeout(120_000);
   await page.goto("/experiments/reusable-reasoning/?example=algebra-intuition");

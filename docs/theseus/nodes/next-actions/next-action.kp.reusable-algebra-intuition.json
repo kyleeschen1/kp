@@ -339,6 +339,13 @@
       "scope": "s15",
       "checkedAt": "2026-09-11T01:26:40.291Z",
       "notes": "Seven checks passed including precise author repairs and recovered sources."
+    },
+    {
+      "command": "npm run visual:composed-algebra -- --grep \"both extended sources download\"",
+      "status": "passed",
+      "scope": "s16",
+      "checkedAt": "2026-09-11T01:28:33.068Z",
+      "notes": "Both lengths preserve exact displayed bytes revision and beat count across reapply."
     }
   ],
   "progress": {
