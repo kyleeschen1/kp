@@ -169,6 +169,20 @@
       "status": "passed",
       "scope": "s06",
       "checkedAt": "2026-09-11T00:14:36.186Z"
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring",
+      "status": "passed",
+      "scope": "s07",
+      "checkedAt": "2026-09-11T00:19:19.600Z",
+      "notes": "85 passed. Dedicated chain tests rerun after fixing readonly mutation and closure narrowing in tests."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s07",
+      "checkedAt": "2026-09-11T00:19:20.750Z",
+      "notes": "Full types passed after negative-test corrections; Svelte zero errors and warnings."
     }
   ],
   "progress": {

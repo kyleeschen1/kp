@@ -101,7 +101,8 @@
     {
       "id": "s07",
       "title": "Authenticate connected operation chains",
-      "status": "planned"
+      "summary": "Exact issuance lineage and full source binding reject foreign, forged, reordered, stale and count-mismatched chains.",
+      "status": "complete"
     },
     {
       "id": "s08",
