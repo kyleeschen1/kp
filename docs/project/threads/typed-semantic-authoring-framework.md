@@ -1,10 +1,20 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: algebra complete; gradient layout/type accepted, G3 explanation/input review remains
+Status: algebra complete; G3 explanation-first draft review, live gradient preserved
 Last Updated: 2026-09-11
 Current execution: `run-contract.kp.gradient-contour-intuition-v1` from
 `2026-09-10-gradient-contour-delivery-proposal.md`, approved with “go”. Theseus
 owns progress; G4-G6 depend on the G3 primary visual/pedagogical acceptance.
+Latest accepted direction: `../decisions/2026-09-11-explanation-first-authoring.md`.
+Further gradient choreography is paused while we establish an explanation that
+works for the learner. Review `2026-09-11-gradient-explanation-draft.md` first;
+`2026-09-11-gradient-explanation-storyboard.md` maps its inferential bridges and
+potential visual jobs. This is a provisional candidate, not a reconstruction of
+the as-yet-unprovided GPT response. The authoring entrypoint now routes new
+conceptual explanations and unclear-why repairs through the reusable worksheet.
+No runtime, card content, accepted visual policy or package order changed in
+this editorial pass. Earlier implementation history below remains preservation
+evidence, not authority to continue presentation-only refinement.
 Primary review packet and shared-server URL:
 `2026-09-10-gradient-contour-primary-checkpoint.md`. It also records the
 reproduced shared WebGL camera-origin repair; aesthetic promotion remains gated.

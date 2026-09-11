@@ -66,6 +66,15 @@ the same canonical owners, plus contextual subquestions and static publication.
 
 ## Route The Task Before Generating
 
+For a new conceptual explanation or a repair of an unclear “why”, use
+`explanation-first-worksheet.md` before selecting card stops or choreography.
+Establish the reader's question, prerequisite meanings and inferential bridges;
+then give each visual a specific teaching job. Prose, sketches and conversation
+may all discover the explanation. Reuse accepted explanatory baselines for
+ordinary supported variants; this is not a new runtime schema or a mandatory
+extra human checkpoint for every card. Preserve the full connecting reasoning
+when translating it through the canonical domain and projection owners below.
+
 For focus-card presentation, follow `../principles/focus-card-typography.md`.
 Use the canonical scaffold's inherited typography and shared plain-language
 annotation helper; do not author local font/size values or scaled SVG reading

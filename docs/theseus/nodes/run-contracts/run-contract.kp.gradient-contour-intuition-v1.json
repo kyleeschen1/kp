@@ -53,7 +53,7 @@
     {
       "id": "g3",
       "title": "Human visual and pedagogical checkpoint",
-      "summary": "HUMAN_CHECKPOINT: revised local-rise and top-down projection explanation plus partial-derivative bridge ready at shared port 8000. Shared endpoint-wheel repair verified; real-device history gestures remain manual. Accepted placement/type preserved. G4-G6 still require primary pedagogical acceptance.",
+      "summary": "HUMAN_CHECKPOINT: review docs/project/threads/2026-09-11-gradient-explanation-draft.md and its storyboard before further choreography. Provisional candidate; successful GPT reference not supplied. Live card preserved. G4-G6 remain gated.",
       "status": "ready"
     },
     {

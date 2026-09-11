@@ -7,7 +7,32 @@ review packet, not release certification or a second execution plan.
 Review at http://localhost:8000/experiments/kinetic-figure/gradient-contour/.
 The existing shared server was verified; no second server was started.
 
-## Current review: explaining the maximum and containing endpoint wheel input (2026-09-11)
+## Current review: explanation before further choreography (2026-09-11)
+
+The user found the revised card better but its gradient explanation still
+insufficient, and approved an explanation-first reset. Decision:
+`../decisions/2026-09-11-explanation-first-authoring.md`.
+
+Read `2026-09-11-gradient-explanation-draft.md` first, without needing to operate
+the card. Its companion `2026-09-11-gradient-explanation-storyboard.md` identifies
+the prerequisite meanings, connecting reasons, possible visual jobs and remaining
+uncertainties. The successful GPT response and prompt are still missing; this
+is our provisional candidate, not an imported or independently validated lesson.
+
+The review question is where a conclusion first stops following, especially the
+bridge from coordinate changes to the gradient's best direction. Do not treat
+acceptance of the workflow as acceptance of the draft. There is no fixed stop
+count for this draft, and no requirement that prose alone explain every relation.
+One or two optional prediction/teach-back questions support the review without
+constituting a learning-effectiveness study.
+
+The live URL above is unchanged. The preceding implementation, its verified
+input behavior and accepted layout/type remain preserved. No new browser or
+full release evidence is claimed for this documentation-only pass. G3 remains
+HUMAN_CHECKPOINT before translation/promotion and G4–G6. Theseus owns live status
+and verification; the delivery proposal owns approved scope.
+
+## Previous implementation review: maximum and endpoint wheel input (2026-09-11)
 
 The user accepted text positioning and font policy as canonical. Record:
 `../decisions/2026-09-11-focus-card-layout-type-acceptance.md`.

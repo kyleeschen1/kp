@@ -146,6 +146,31 @@ reversible input repair needs event cancellation, immediate reversal and existin
 multi-card input checks. Synthetic browser events cannot certify OS-level history
 gestures; retain that explicit manual-check limitation. G3 still gates G4–G6.
 
+### Approved G3 explanation-first reset
+
+On 2026-09-11 the user reported that a conversational GPT explanation teaches
+the concept more effectively and accepted the recommendation to establish the
+explanation before further animation work: “i agree. implement”. The immediate
+deliverable is a learner-facing draft and inferential storyboard, plus durable
+authoring guidance. No live card or renderer changes are part of this pass.
+The successful GPT response is missing; mark the draft provisional and compare
+the actual reference when supplied rather than inventing its content.
+
+The draft is not constrained to eight stops. The existing eight-stop card remains
+unchanged until the explanatory structure is reviewed and translated. Preserve
+accepted layout/type, native math, input repairs, the source model, renderer and
+clock. The new editorial worksheet does not introduce a universal semantic type,
+a prose-only rule or extra mandatory approval for ordinary supported variants.
+Separate mathematical verification, presentation judgment and understanding.
+
+Scope and preservation are in
+`../decisions/2026-09-11-explanation-first-authoring.md`; the working draft and
+storyboard are linked from the primary checkpoint packet. These artifacts carry
+content, not a second execution plan. G3 stays the existing human checkpoint;
+G4–G6 and the package order remain unchanged. Verify local references, existing
+mathematical evidence and Theseus state; do not rerun browser/release matrices
+for an unchanged runtime. Rollback is this editorial amendment and its guidance.
+
 ## Bounds and completion
 
 Proposed active-work ceiling: six hours excluding human waiting, reserving the

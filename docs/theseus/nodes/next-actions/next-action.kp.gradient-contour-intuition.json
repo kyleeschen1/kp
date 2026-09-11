@@ -288,6 +288,27 @@
       "scope": "G3 final integration",
       "checkedAt": "2026-09-11T19:39:39.822Z",
       "notes": "Post-caption-withdrawal complete rerun: all 11 Chromium checks passed in 1.1m. Full npm run typecheck was also rerun to clean exit with zero Svelte errors/warnings. Caption now relinquishes incoming overhead geometry; all prior geometry/input laws and preservation checks remain green."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/gradient-contour-model.test.ts tests/gradient-contour-sequence.test.ts tests/gradient-contour-attention.test.ts",
+      "status": "passed",
+      "scope": "G3 explanation-first editorial pass",
+      "checkedAt": "2026-09-11T22:58:08.551Z",
+      "notes": "13 passed. Existing primary gradient, unit directions, local linearity, stationary boundary, pure sequence and attention remain valid. These checks do not establish draft comprehension."
+    },
+    {
+      "command": "git diff --exit-code -- src tests .agents",
+      "status": "passed",
+      "scope": "G3 explanation-first editorial pass",
+      "checkedAt": "2026-09-11T22:58:09.839Z",
+      "notes": "Clean exit confirms this pass did not change runtime, test implementation or skill source. No browser, full types or release rerun is claimed; impact selector has no documentation rule and defaults broad, while the approved editorial amendment uses focused verification."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "G3 explanation-first editorial pass",
+      "checkedAt": "2026-09-11T22:58:10.881Z",
+      "notes": "Clean whitespace check for the editorial amendment, canonical authoring route, learner draft and storyboard. New local references reviewed against created files and existing canonical sources."
     }
   ],
   "progress": {
