@@ -53,7 +53,7 @@
     {
       "id": "g3",
       "title": "Human visual and pedagogical checkpoint",
-      "summary": "HUMAN_CHECKPOINT: compact passage-to-stage refinement ready. 25 focused tests, full typecheck, six Chromium checks and layout in Chromium/Firefox/WebKit pass. Review spacing and text changes at6/8 to7/8; top placement already accepted. No G4-G6 acceptance inferred.",
+      "summary": "HUMAN_CHECKPOINT: review shared-font gradient annotations and narrow label area. 31 focused, full types, 9 Chromium and 9 cross-engine typography checks plus existing four-card preservation pass. Shared defaults explicitly approved; visual treatment awaits acceptance. 2/6 packages complete.",
       "status": "ready"
     },
     {

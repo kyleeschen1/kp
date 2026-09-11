@@ -1,0 +1,35 @@
+/* Every scaffold (including static publication) imports this policy. Keep
+   annotation type in screen space; a renderer owns anchors, not reading size.
+   Fallbacks let a host change one token without per-card overrides. */
+.kp-focus-deck {
+  font-family: var(--kp-focus-card-passage-font, Georgia, "Times New Roman", serif);
+}
+.kp-focus-deck :where(button, input, select) {
+  font-family: var(--kp-focus-card-ui-font, ui-sans-serif, system-ui, sans-serif);
+}
+.kp-focus-deck [data-kp-focus-deck-type] {
+  font-family: var(--kp-focus-card-passage-font, Georgia, "Times New Roman", serif);
+  line-height: 1.3;
+}
+.kp-focus-deck [data-kp-focus-deck-type="label"] {
+  font-size: var(--kp-focus-card-label-size, 1.125rem);
+  font-weight: 600;
+}
+.kp-focus-deck [data-kp-focus-deck-type="support"] {
+  font-size: var(--kp-focus-card-support-size, 1rem);
+  font-weight: 400;
+}
+.kp-focus-deck [data-kp-focus-deck-type="meta"] {
+  font-size: var(--kp-focus-card-meta-size, .875rem);
+  font-weight: 400;
+}
+/* These are HTML annotations over the plot, not text inside its scaled SVG.
+   No universal .katex, code, canvas or descendant font reset belongs here. */
+.kp-focus-deck__annotation {
+  position: absolute;
+  display: block;
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
+}
+.kp-focus-deck__annotation > [data-kp-focus-deck-type] { display: block; }
+.kp-focus-deck__annotation[hidden] { display: none; }

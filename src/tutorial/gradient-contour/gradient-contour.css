@@ -18,7 +18,7 @@
 .gradient-page .kp-surface-contour-stage__header { min-height: 1.1rem; }
 /* Fit the whole canonical plot at the top, including WebGL and both SVG
    overlays. Do not independently translate an overlay or crop its evidence. */
-.gradient-plot-slot { container-type: size; display: grid; min-width: 0; min-height: 0; }
+.gradient-plot-slot { container: gradient-plot / size; display: grid; min-width: 0; min-height: 0; }
 .gradient-page .kp-surface-contour-stage__plot { width: min(100cqw, calc(100cqh * 52 / 30)); height: auto; margin-inline: 0; place-self: start center; }
 /* The scroll lane must not contribute its eight pages to the grid's min width. */
 .gradient-passage-shell { position: relative; min-width: 0; min-height: 0; }
@@ -35,10 +35,10 @@
 .gradient-handoff { display: grid; grid-template-columns: minmax(0, 1fr) 10rem; gap: .6rem; align-items: start; flex-shrink: 0; margin-top: .5rem; }
 /* Both authored cues fit two lines at the supported narrow width. Reserving
    that space keeps the cue baseline and action fixed when the result arrives. */
-.gradient-guided-passage .gradient-viewing-cue { min-height: 2.9em; margin: 0; color: var(--kp-st-focus); font: 550 .9rem/1.45 system-ui, sans-serif; }
+.gradient-guided-passage .gradient-viewing-cue { min-height: 2.9em; margin: 0; color: var(--kp-st-focus); font-size: var(--kp-focus-card-support-size, 1rem); line-height: 1.45; }
 .gradient-comparison-reading [data-gradient-reading-lead] { font-weight: 600; }
 .gradient-guided-passage button {
-  margin: 0; padding: .35rem .7rem; min-height: 2.25rem; width: 10rem;
+  margin: 0; padding: .35rem .7rem; min-height: 2.25rem; width: 10rem; max-width: 100%;
   border: 1px solid var(--kp-st-rule); border-radius: .25rem;
   background: var(--kp-st-paper); color: var(--kp-st-strong); cursor: pointer;
   font: 550 .8rem/1.3 system-ui, sans-serif;
@@ -52,19 +52,35 @@
 .gradient-stage-context { position: absolute; inset: 0; }
 .gradient-ramp-plane { fill: color-mix(in srgb, var(--kp-sc-accent) 10%, var(--kp-sc-paper)); stroke: var(--kp-sc-muted); stroke-width: 1.3; }
 .gradient-ramp-levels { fill: none; stroke: var(--kp-sc-muted); stroke-width: 1; stroke-dasharray: 3 4; }
-.gradient-ramp-caption { fill: var(--kp-sc-muted); font: 16px system-ui, sans-serif; }
 [data-gradient-candidates] path { fill: none; stroke: var(--kp-sc-ink); stroke-width: 1.5; }
 .gradient-across { fill: none; stroke: var(--kp-sc-accent); stroke-width: 4; stroke-linecap: round; }
 .gradient-along { fill: none; stroke: var(--kp-sc-ink); stroke-width: 2; stroke-dasharray: 5 4; }
 .gradient-across[data-gradient-salience="focus"] { stroke-width: 5; }
 .gradient-along[data-gradient-salience="context"] { stroke: var(--kp-sc-muted); }
-.gradient-annotations { fill: var(--kp-sc-ink); font: 22px/1.3 system-ui, sans-serif; }
-.gradient-annotation-name { font-weight: 650; }
-.gradient-annotations [data-gradient-salience="focus"] { fill: var(--kp-sc-accent); }
-.gradient-annotations [data-gradient-salience="context"] { fill: var(--kp-sc-muted); }
+.gradient-annotations { position: absolute; inset: 0; color: var(--kp-sc-ink); pointer-events: none; }
+.gradient-annotations [data-gradient-salience="focus"] { color: var(--kp-sc-accent); }
+.gradient-annotations [data-gradient-salience="context"] { color: var(--kp-sc-muted); }
 .gradient-annotation-leader { fill: none; stroke: var(--kp-sc-muted); stroke-width: 1; }
-.gradient-annotations [data-gradient-salience="focus"] .gradient-annotation-leader { stroke: var(--kp-sc-accent); }
-.gradient-reach-label { fill: var(--kp-sc-muted); font-size: 18px; }
+.gradient-annotation-leader[data-gradient-salience="focus"] { stroke: var(--kp-sc-accent); }
+/* Anchors track the canonical plot; text remains in unscaled screen space.
+   Place equivalent labels identically across attention phases. */
+.gradient-annotations [data-kp-focus-deck-annotation="gradient.across-component"] { left: 74%; top: 70%; max-width: 25%; transform: translateY(-50%); }
+.gradient-annotations [data-kp-focus-deck-annotation="gradient.along-component"] { left: 4%; top: 37%; max-width: 25%; transform: translateY(-50%); }
+.gradient-annotations [data-kp-focus-deck-annotation="gradient.equal-horizontal-reach"] { bottom: 0; width: 100%; text-align: center; color: var(--kp-sc-muted); }
+.gradient-page [data-kp-focus-deck-annotation="gradient.local-linearization"] { top: 0; width: 100%; text-align: center; color: var(--kp-sc-muted); pointer-events: none; }
+/* At narrow reading widths (including enlarged user text), spend the reserved
+   space below the plot instead of shrinking type or clipping it at the edges.
+   Native geometry remains in the same aspect-preserving viewport. */
+@container gradient-plot (max-width: 20rem) {
+  .gradient-page .kp-surface-contour-stage__plot { overflow: visible; }
+  .gradient-annotations:not([hidden]) { inset: 100% 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: .3rem .5rem; padding-top: .4rem; }
+  .gradient-annotations [data-kp-focus-deck-annotation] { position: static; width: auto; max-width: 100%; transform: none; text-align: center; }
+  .gradient-annotations [data-kp-focus-deck-annotation="gradient.equal-horizontal-reach"] { grid-column: 1 / -1; }
+  .gradient-overlay [data-gradient-annotation-leaders] { display: none; }
+}
+@container gradient-plot (max-width: 12rem) {
+  .gradient-annotations:not([hidden]) { grid-template-columns: 1fr; }
+}
 .gradient-equal-reach { fill: none; stroke: var(--kp-sc-muted); stroke-width: 1.4; }
 .gradient-component-evidence { display: flex; justify-content: center; flex-wrap: wrap; gap: .25rem 1rem; font: .75rem/1.4 system-ui, sans-serif; min-height: 2.1rem; color: var(--kp-sc-ink); }
 .gradient-component-evidence output { font-variant-numeric: tabular-nums; }

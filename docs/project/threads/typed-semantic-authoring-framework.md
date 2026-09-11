@@ -23,6 +23,11 @@ compact handoff refinement. Its bottom-aligned passage and cue/action retain a
 fixed boundary, while one local CSS container top-fits the complete canonical
 plot without changing geometry or playback. The same packet records spacing
 review and cross-engine layout evidence; G3 remains the visual gate.
+The user also approved shared typography inheritance for future focus cards.
+`../principles/focus-card-typography.md` records the scaffold defaults, typed
+plain-language annotation helper, native math/code preservation and limits.
+The gradient adapter and fresh static caller pass focused/type/browser checks;
+the primary packet records the narrow/enlarged-text treatment awaiting G3 review.
 Accepted pedagogical direction: `../decisions/2026-09-10-motivation-as-explanatory-context.md`
 and its full rationale in `2026-09-10-motivation-as-explanatory-context.md`.
 The user found the first primary clear but insufficiently motivated and explanatory,

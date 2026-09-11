@@ -197,11 +197,53 @@
       "scope": "G3 compact handoff closeout",
       "checkedAt": "2026-09-11T17:12:17.404Z",
       "notes": "1126 nodes and 30481 events validated after closing the receipt and recording the human checkpoint. Top placement is accepted; new spacing remains review-ready. G4-G6 are not marked complete."
+    },
+    {
+      "command": "npm run visual:gradient-contour -- --grep enlarged",
+      "status": "failed",
+      "scope": "G3 shared typography discovery",
+      "checkedAt": "2026-09-11T17:50:46.598Z",
+      "notes": "125/150/200 percent text sampling reproduced a clipped Across annotation at 390px with a 24px root font. Preserve reading size and move labels into the available below-plot region at narrow reading widths; rerun the same regression before closeout."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/focus-deck-annotation.test.ts tests/focus-deck-scaffold.test.ts tests/gradient-contour-attention.test.ts tests/gradient-contour-sequence.test.ts tests/gradient-contour-model.test.ts tests/semantic-reader-attention-projector.test.ts tests/kinetic-figure-surface-contour.test.ts tests/stage-fit-contract.test.ts",
+      "status": "passed",
+      "scope": "G3 shared typography contracts",
+      "checkedAt": "2026-09-11T17:58:05.905Z",
+      "notes": "31 pass. Escaped words, role guards and negative type examples; existing semantic, scaffold, attention and fit invariants remain intact."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "G3 final shared typography",
+      "checkedAt": "2026-09-11T17:58:07.058Z",
+      "notes": "Full app/node/test/Svelte/domain typecheck passed on final source and configs. Negative annotation type examples checked; Svelte zero errors and warnings."
+    },
+    {
+      "command": "npm run visual:gradient-contour",
+      "status": "passed",
+      "scope": "G3 final typography and preservation",
+      "checkedAt": "2026-09-11T17:58:08.100Z",
+      "notes": "All 9 Chromium checks pass in 37.4s on final code: inherited static typography, screen-size stability, enlarged text, compact handoff, interactions, reduced motion, shader reuse and original reference. Final captures inspected."
+    },
+    {
+      "command": "npm run visual:gradient-contour -- --grep typography --project=firefox --project=webkit",
+      "status": "passed",
+      "scope": "G3 cross-engine typography",
+      "checkedAt": "2026-09-11T17:58:09.140Z",
+      "notes": "9 checks pass in 28.1s: script includes Chromium plus Firefox and WebKit. Fresh static caller imports actual scaffold CSS, token changes preserve native math/code fonts; 1280/390/320 widths, stable seeks, 125/150/200 percent root text, contained labels and reachable action. Narrow dock and one-column repair retain reading size; no universal accessibility certification claimed."
+    },
+    {
+      "command": "npm run visual:focus-deck-multi-card",
+      "status": "passed",
+      "scope": "G3 existing shared-card preservation",
+      "checkedAt": "2026-09-11T17:58:10.174Z",
+      "notes": "One existing checkpoint passes in 15.0s for graph, equation, 3D and code at desktop/phone, including material transit. Scoped review config now reuses current port-8000 server. No second dev server."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: compact gradient handoff ready. Top placement accepted; bottom-aligned passage, fixed cue/action and aspect-preserving top fit now await spacing review. Preserve existing model, attention phases, rendering and controls. G4-G6 remain gated."
+    "summary": "Shared typography inheritance implemented under explicit user amendment. Future canonical cards inherit defaults; native math/code unchanged. Gradient screen-space labels and narrow/enlarged-text layout ready for G3 human review. Policy linked from AGENTS and authoring entrypoint; G4-G6 remain unstarted."
   },
   "expectedLearning": [
     "Whether contour identity plus first-order comparisons produce a reusable authorable geometric intuition."

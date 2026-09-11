@@ -107,6 +107,27 @@ semantic change, renderer seam or catalogue promotion is authorized. Rollback is
 the local layout/markup and its tests. The top placement is accepted; remaining
 spacing and attention judgment stays at G3 before G4–G6.
 
+### Approved G3 shared focus-card typography
+
+On 2026-09-11 the user approved the typography recommendation and explicitly
+required automatic inheritance by future focus cards. Extend the existing
+scaffold's presentation ownership: explanatory stage words share passage
+typography, annotations use a small role-based screen-space scale, and native
+KaTeX/code keep their own font and layout contracts. Use the gradient comparison
+as the visual exemplar and a structurally different static scaffold caller to
+verify inheritance, theme overrides and native math/code isolation. A shared
+annotation helper must not accept arbitrary font/size overrides; renderer-local
+placement remains separate from semantic authority and typography policy.
+
+This explicitly permits the shared default/annotation seam before G3 acceptance,
+not a catalogue-wide relayout or changes to existing mathematical motion. Keep
+the current gradient model, attention, geometry, clock and controls. Required
+checks include narrow-screen label readability/containment, stable playback
+layout, user text enlargement, font inheritance and the existing exemplar
+preservation checks. Rollback is the typography stylesheet/helper and gradient
+annotation adapter, not the shared compositor. Exact aesthetic values remain
+reviewable; G3 still gates G4–G6.
+
 ## Bounds and completion
 
 Proposed active-work ceiling: six hours excluding human waiting, reserving the

@@ -134,7 +134,7 @@ test("phone and reduced motion retain readable evidence and exact stopping point
   expect(inside).toBe(true);
   await expect(page.locator("[data-gradient-annotations]")).toBeVisible();
   for (const id of ["gradient.across-component", "gradient.along-component"]) {
-    const text = page.locator(`[data-gradient-annotation-for="${id}"] text`);
+    const text = page.locator(`[data-kp-focus-deck-annotation="${id}"]`);
     await expect(text).toBeVisible();
     const labelBox = (await text.boundingBox())!;
     expect(labelBox.x).toBeGreaterThanOrEqual(stageBox.x);

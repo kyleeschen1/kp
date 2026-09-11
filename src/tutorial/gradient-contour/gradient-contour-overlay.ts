@@ -1,6 +1,7 @@
 import { projectKpSurfaceContourPoint, type KpSurfaceContourStageAuthority } from "../kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts";
 import { gradientLocalHeight } from "./gradient-contour-model.ts";
 import { gradientComparisonAnnotations } from "./gradient-contour-attention.ts";
+import { renderKpFocusDeckAnnotation } from "../focus-deck-annotation.ts";
 import { gradientContourModel as model, type sampleGradientContour } from "./gradient-contour-sequence.ts";
 
 type Point = { readonly x: number; readonly y: number };
@@ -19,37 +20,40 @@ export function mountGradientContourOverlay(plot: HTMLElement, authority: KpSurf
   const context = document.createElement("div"); context.className = "gradient-stage-context";
   context.append(...plot.childNodes); plot.append(context);
   plot.insertAdjacentHTML("beforeend", `<svg class="gradient-overlay" viewBox="0 0 520 300" aria-hidden="true">
-    <g data-gradient-ramp data-kp-semantic-entity="gradient.local-linearization"><path class="gradient-ramp-plane"/><path class="gradient-ramp-levels"/>
-      <text x="260" y="23" text-anchor="middle" class="gradient-ramp-caption">Magnified local flat approximation</text></g>
+    <g data-gradient-ramp data-kp-semantic-entity="gradient.local-linearization"><path class="gradient-ramp-plane"/><path class="gradient-ramp-levels"/></g>
     <g data-gradient-candidates data-kp-semantic-entity="gradient.candidate-directions"><path/></g>
     <g data-gradient-tangent data-kp-semantic-entity="gradient.tangent"><path class="gradient-tangent"/><path class="gradient-right-angle"/></g>
     <g data-gradient-direction data-kp-semantic-entity="gradient.unit-direction"><path class="gradient-direction"/></g>
     <g data-gradient-components><path class="gradient-equal-reach" data-kp-semantic-entity="gradient.equal-horizontal-reach"/><path class="gradient-across" data-kp-semantic-entity="gradient.across-component"/><path class="gradient-along" data-kp-semantic-entity="gradient.along-component"/></g>
     <circle class="gradient-origin" r="5" data-kp-semantic-entity="gradient.origin"/>
     <circle class="gradient-point" r="4.5" data-kp-semantic-entity="gradient.traveler"/>
-    <g class="gradient-annotations" data-gradient-annotations visibility="hidden">
-      <g data-gradient-annotation-for="gradient.across-component"><path class="gradient-annotation-leader"/>
-        <text x="386" y="200"><tspan class="gradient-annotation-name">${gradientComparisonAnnotations["gradient.across-component"].label}</tspan><tspan x="386" dy="24">${gradientComparisonAnnotations["gradient.across-component"].detail}</tspan></text></g>
-      <g data-gradient-annotation-for="gradient.along-component"><path class="gradient-annotation-leader"/>
-        <text x="20" y="104"><tspan class="gradient-annotation-name">${gradientComparisonAnnotations["gradient.along-component"].label}</tspan><tspan x="20" dy="24">${gradientComparisonAnnotations["gradient.along-component"].detail}</tspan></text></g>
-      <text x="260" y="290" text-anchor="middle" class="gradient-reach-label">Same horizontal length</text>
+    <g data-gradient-annotation-leaders visibility="hidden">
+      <path class="gradient-annotation-leader" data-gradient-leader-for="gradient.across-component"/>
+      <path class="gradient-annotation-leader" data-gradient-leader-for="gradient.along-component"/>
     </g>
-  </svg>`);
+  </svg>
+  ${renderKpFocusDeckAnnotation({ entityId: "gradient.local-linearization", role: "support", text: "Magnified local flat approximation" })}
+  <div class="gradient-annotations" data-gradient-annotations hidden>
+    ${Object.entries(gradientComparisonAnnotations).map(([entityId, { label, detail }]) => renderKpFocusDeckAnnotation({ entityId, text: label, detail })).join("")}
+    ${renderKpFocusDeckAnnotation({ entityId: "gradient.equal-horizontal-reach", role: "support", text: "Same horizontal length" })}
+  </div>`);
   const get = <T extends Element>(selector: string) => plot.querySelector<T>(selector)!;
   const ramp = get<SVGGElement>("[data-gradient-ramp]"), plane = get<SVGPathElement>(".gradient-ramp-plane"), levels = get<SVGPathElement>(".gradient-ramp-levels");
   const candidates = get<SVGGElement>("[data-gradient-candidates]"), candidatePath = candidates.querySelector("path")!;
   const tangentGroup = get<SVGGElement>("[data-gradient-tangent]"), tangentPath = get<SVGPathElement>(".gradient-tangent"), rightAngle = get<SVGPathElement>(".gradient-right-angle");
   const directionGroup = get<SVGGElement>("[data-gradient-direction]"), directionPath = get<SVGPathElement>(".gradient-direction");
   const componentGroup = get<SVGGElement>("[data-gradient-components]"), acrossPath = get<SVGPathElement>(".gradient-across"), alongPath = get<SVGPathElement>(".gradient-along");
-  const reachPath = get<SVGPathElement>(".gradient-equal-reach"), caption = get<SVGTextElement>(".gradient-ramp-caption");
+  const reachPath = get<SVGPathElement>(".gradient-equal-reach"), caption = get<HTMLElement>('[data-kp-focus-deck-annotation="gradient.local-linearization"]');
   const originCircle = get<SVGCircleElement>(".gradient-origin"), travelerCircle = get<SVGCircleElement>(".gradient-point");
-  const annotations = get<SVGGElement>("[data-gradient-annotations]");
+  const annotations = get<HTMLElement>("[data-gradient-annotations]");
+  const leaders = get<SVGGElement>("[data-gradient-annotation-leaders]");
   const annotationBindings = Object.keys(gradientComparisonAnnotations).map(id => ({
     id, owner: get<SVGElement>(`[data-kp-semantic-entity="${id}"]`),
-    annotation: get<SVGGElement>(`[data-gradient-annotation-for="${id}"]`)
+    annotation: get<HTMLElement>(`[data-kp-focus-deck-annotation="${id}"]`),
+    leader: get<SVGPathElement>(`[data-gradient-leader-for="${id}"]`)
   }));
-  const acrossLeader = get<SVGPathElement>('[data-gradient-annotation-for="gradient.across-component"] path');
-  const alongLeader = get<SVGPathElement>('[data-gradient-annotation-for="gradient.along-component"] path');
+  const acrossLeader = get<SVGPathElement>('[data-gradient-leader-for="gradient.across-component"]');
+  const alongLeader = get<SVGPathElement>('[data-gradient-leader-for="gradient.along-component"]');
   const p = model.source.point, at = model.atPoint;
   if (at.kind !== "regular") throw new Error("The primary overlay requires a regular point.");
   const n = at.uphill, t = at.tangent;
@@ -72,7 +76,8 @@ export function mountGradientContourOverlay(plot: HTMLElement, authority: KpSurf
     };
     context.style.opacity = String(1 - strength); context.setAttribute("aria-hidden", String(strength === 1));
     ramp.setAttribute("opacity", String(strength));
-    caption.style.visibility = state.attention ? "hidden" : "visible";
+    caption.hidden = Boolean(state.attention) || strength === 0;
+    caption.style.opacity = String(strength);
     const label = state.componentPresence > .5 ? "Arc: equal horizontal distance" : "Magnified local flat approximation";
     if (caption.textContent !== label) caption.textContent = label;
     const origin = screen(p), d = state.direction, unitLength = 1;
@@ -80,11 +85,13 @@ export function mountGradientContourOverlay(plot: HTMLElement, authority: KpSurf
     const tip = screen(offset(d)), across = screen(offset(state.components.acrossVector));
     // Fixed labels establish where to look before motion. Only their connectors
     // follow the actual projected components; no independent annotation clock.
-    annotations.setAttribute("visibility", state.attention ? "visible" : "hidden");
+    annotations.hidden = !state.attention;
+    leaders.setAttribute("visibility", state.attention ? "visible" : "hidden");
     for (const binding of annotationBindings) {
       const salience = !state.attention ? "normal" : state.attention.focusRefs.includes(binding.id) ? "focus" : "context";
       binding.owner.setAttribute("data-gradient-salience", salience);
       binding.annotation.setAttribute("data-gradient-salience", salience);
+      binding.leader.setAttribute("data-gradient-salience", salience);
     }
     acrossLeader.setAttribute("d", path([{ x: 376, y: 209 }, { x: (origin.x + across.x) / 2, y: (origin.y + across.y) / 2 }]));
     alongLeader.setAttribute("d", path([{ x: 122, y: 113 }, { x: (across.x + tip.x) / 2, y: (across.y + tip.y) / 2 }]));

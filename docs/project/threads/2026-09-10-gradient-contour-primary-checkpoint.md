@@ -7,7 +7,66 @@ review packet, not release certification or a second execution plan.
 Review at http://localhost:8000/experiments/kinetic-figure/gradient-contour/.
 The existing shared server was verified; no second server was started.
 
-## Current revision: compact, stable passage-to-stage handoff (2026-09-11)
+## Current revision: inherited focus-card typography (2026-09-11)
+
+The user explicitly approved implementing the typography recommendation so it
+applies automatically to future focus cards. The scaffold now imports one shared
+typography policy: ordinary stage words and annotations share the passage font,
+controls keep the UI family, and native KaTeX/code retain their own contracts.
+See `../principles/focus-card-typography.md`, also linked from AGENTS.md and the
+generation entrypoint. The proposal records this bounded shared-scope amendment;
+it does not grant G3 acceptance or complete G4–G6.
+
+At **6 / 8**, Across/Along use equal 18px primary type with 16px supporting text
+at the default root size. The viewing cue uses the passage family too. The new
+typed annotation helper accepts semantic identity, escaped words and text role,
+not font/size/timing overrides. HTML annotations stay in screen space while SVG
+geometry and leaders retain their existing projection. Shared defaults are
+inherited without enhancement, so newly rendered static cards participate too.
+Frozen bundled/raster exports do not retroactively change; existing custom
+renderer font declarations are not a silently completed catalogue migration.
+
+On narrow reading widths, labels move into the existing space below the plot;
+at larger text sizes they form one column. This changes only with available
+space/user font settings, never with the active beat. Narrow labels relinquish
+the side leaders instead of pointing from a misleading location. The plot keeps
+its original aspect ratio, camera, local geometry, semantic identities, eight
+stops and shared input/clock. The primary type policy adds 1,404 raw CSS bytes
+and its render helper 1,374 raw TypeScript bytes (source sizes, not bundle sizes).
+No new font asset, dependency, observer or frame-measurement loop is introduced.
+
+Verification on final code:
+
+- **31 focused tests** pass: annotation roles/escaping/negative type fixtures,
+  scaffold, gradient semantics, attention, reference model and stage fit.
+- Full **npm run typecheck** passes; Svelte reports zero errors/warnings.
+- **npm run visual:gradient-contour**: all **9 Chromium checks pass** (37.4s),
+  including the six existing layout/input/replay/shader/reference checks.
+- **npm run visual:gradient-contour -- --grep typography --project=firefox --project=webkit**:
+  **9 checks pass** (28.1s); the script also includes Chromium. All three engines
+  verify a new static caller, actual scaffold CSS import, one-token font/size
+  changes, native math/code font isolation, stable forward/reverse annotation
+  positions, 1280/390/320 widths, and 125/150/200% root-text enlargement.
+- **npm run visual:focus-deck-multi-card**: the existing **four-card desktop/phone
+  preservation checkpoint passes** (15.0s), including equation/code transit.
+  Its scoped config now uses the existing port-8000 server, not a second server.
+- Desktop, phone, narrow and enlarged-text captures were inspected. At enlarged
+  text the prose retains native overflow and its action remains reachable.
+
+The enlargement regression initially failed at 390px / 24px root size: Across
+was clipped. The below-plot layout repairs that fit boundary without shrinking
+type; one-column layout also prevents splitting the short component names.
+The failure and clean reruns are recorded in Theseus. These tests establish
+bounded layout/font behavior, not universal accessibility or renderer-wide
+certification. Full repository build/test and release gates remain G6 work.
+
+Please judge whether the passage and stage now read as one explanation and
+whether the narrow-screen label area preserves clear correspondence. Rollback
+is the shared typography/helper and local gradient annotation projection, not
+mathematical models or the compositor. G3 remains **HUMAN_CHECKPOINT**.
+Resume: `theseus work context next-action.kp.gradient-contour-intuition --mode brief`.
+
+## Previous revision: compact, stable passage-to-stage handoff (2026-09-11)
 
 The user accepted top placement as a major improvement to linear narrative,
 then approved the tighter handoff recommendation. Keep that accepted reading

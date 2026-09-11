@@ -66,6 +66,11 @@ the same canonical owners, plus contextual subquestions and static publication.
 
 ## Route The Task Before Generating
 
+For focus-card presentation, follow `../principles/focus-card-typography.md`.
+Use the canonical scaffold's inherited typography and shared plain-language
+annotation helper; do not author local font/size values or scaled SVG reading
+labels. Preserve native math/code renderers and their typography contracts.
+
 | Intended change | Canonical target |
 | --- | --- |
 | Revise learner prose or sparse semantic references | `kp.article.v1` source |

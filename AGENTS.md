@@ -190,6 +190,11 @@ canonical human checkpoint.
 
 ## Semantic visual salience
 
+For focus-card typography, follow `docs/project/principles/focus-card-typography.md`.
+Use shared scaffold defaults and the typed plain-language annotation helper;
+keep mathematical notation/code in their native renderers. Do not add local
+font/size choices or scale reading labels with SVG geometry.
+
 For motion governance, follow `docs/project/principles/motif-composition-contracts.md`.
 Keep hard semantic/ownership/endpoint laws separate from motif-owned aesthetics
 and diagnostic transit contacts. Never inflate canonical arcs or invent a new
