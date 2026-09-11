@@ -8,6 +8,57 @@ import { bindKpNativeKatexFactoringScene } from "../../src/rendering/native-kate
 import { inspectKpEquationProtectedTransitTracks } from "../../src/rendering/equation-motion-path-planner.ts";
 import type { KpNativeKatexSceneTrack } from "../../src/rendering/native-katex-base-scene-plan.ts";
 import { createKpNativeKatexSceneAssembly } from "../../src/rendering/native-katex-scene-assembly.ts";
+import { checkKpComposedAlgebraProofV2 } from "../../src/authoring/composed-algebra-proof-v2.ts";
+import { resolveKpComposedAlgebraPresentationV2 } from "../../src/authoring/composed-algebra-presentation-v2.ts";
+import { mountCanonicalComposedAlgebraPresentationV2 } from "../../src/experiments/common-factor/native.ts";
+import { observeKpNativeKatexPaintAtoms } from "../../src/rendering/native-katex-rendered-scene.ts";
+import { measureKpNativeKatexPaintAtomRect } from "../../src/rendering/native-katex-paint-geometry.ts";
+
+export async function mountCompleteAlgebraCanary(value: unknown) {
+  const binding = resolveKpComposedAlgebraPresentationV2(checkKpComposedAlgebraProofV2(value));
+  const wrapper = document.createElement("section");
+  wrapper.innerHTML = renderKpFocusDeckScaffold({ id: "complete-algebra-canary", ariaLabel: "Complete algebra", activeBeatSlug: "start",
+    beats: [{ slug: "start", title: "Before", html: "<p>Track every contribution.</p>" }, { slug: "end", title: "After", html: "<p>Only ownership changes at the view boundary.</p>" }],
+    stageHtml: '<div class="kp-focus-deck__stage" data-distribution-stage></div>', rootAttributes: { "data-kp-reasoning-card": true } });
+  document.querySelector("#authored-focus-card")!.append(wrapper);
+  const card = wrapper.firstElementChild as HTMLElement; card.id = "complete-algebra-canary";
+  const surface = await mountCanonicalComposedAlgebraPresentationV2(card, binding);
+  const samples = [0, .125, .25, .375, .4999, .5, .5001, .625, .75, .875, 1, .625, .4999, .5, .375, 0].map(progress => surface.session.seek(progress));
+  const seamPaint = [.499999, .5, .500001, .5, .499999].map(progress => {
+    const snapshot = surface.session.seek(progress);
+    const phase = card.querySelector<HTMLElement>('[data-kp-reader-transition-active="true"]')!;
+    const root = phase.querySelector<HTMLElement>("[data-kp-reader-fit-surface]")!;
+    const atoms = observeKpNativeKatexPaintAtoms({ endpoint: "source", stage: card, root, semanticEntityId: "canary", presentationGroupId: "canary", fontRevision: snapshot.fontRevision });
+    const visible = atoms.filter(atom => {
+      for (let element: HTMLElement | null = atom.sourceElement; element && element !== card; element = element.parentElement) {
+        const style = getComputedStyle(element);
+        if (style.display === "none" || style.visibility === "hidden" || Number(style.opacity) < .99) return false;
+      }
+      return true;
+    });
+    return visible.map(atom => ({ ink: atom.visualKey, rect: measureKpNativeKatexPaintAtomRect(card, atom),
+      native: atom.sourceElement.closest("[data-kp-reader-native]") !== null,
+      owner: atom.sourceElement.closest<HTMLElement>("[data-kp-equation-material-owner-id]")?.dataset["kpEquationMaterialOwnerId"] ?? "native"
+    })).sort((a, b) => a.rect.left - b.rect.left);
+  });
+  // Perturb only presentation, then require the canonical preparation boundary
+  // to reject it. Semantic proof must not excuse an internally distorted clone.
+  const handoff = binding.handoffs[0];
+  const member = [...card.querySelectorAll<HTMLElement>("[data-kp-reader-selector-id]")]
+    .find(element => element.dataset["kpReaderSelectorId"] === handoff.target.tokens[2]!.id && element.closest("[data-kp-reader-equation-measurement]"))!;
+  const previousStyle = member.getAttribute("style");
+  member.style.transform = "translateX(4px)";
+  let driftRejected = false;
+  try { surface.session.invalidate(); surface.session.seek(.5); }
+  catch (error) { driftRejected = error instanceof Error && /non-rigid|paint shape|residual/.test(error.message); }
+  finally {
+    if (previousStyle === null) member.removeAttribute("style"); else member.setAttribute("style", previousStyle);
+    surface.session.invalidate(); surface.session.seek(.5);
+  }
+  card.dataset["handoffCanary"] = "ready";
+  window.addEventListener("pagehide", () => surface.dispose(), { once: true });
+  return { samples, checkpoints: binding.checkpointProgress, seamPaint, driftRejected };
+}
 
 /** Static imports keep verifier and consumer in one Vite module revision.
  * Importing each authority URL independently can fork its private mint on HMR. */

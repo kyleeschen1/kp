@@ -38,6 +38,8 @@ import {
   planKpCanonicalEquationTransitionCorrections,
   type KpCanonicalEquationTransitionContinuityCertificate
 } from "./canonical-equation-transition-continuity.ts";
+import { measureKpCanonicalEquationNativeHandoff } from "./canonical-equation-native-handoff.ts";
+import type { KpVerifiedEquationEndpointHandoff } from "../../semantic/equation-endpoint-handoff.ts";
 
 export interface KpCanonicalEquationStaticPlan {
   readonly renderPlan: KpReaderEquationRenderPlan;
@@ -75,6 +77,7 @@ export interface KpCanonicalEquationStageLayout {
  * page layout. Hosts supply only their viewport and semantic stage intent.
  */
 export function measureKpCanonicalEquationStageLayout(input: {
+  readonly nativeHandoffs?: { readonly handoffs: readonly KpVerifiedEquationEndpointHandoff[]; readonly fontRevision: number };
   readonly animationId: string;
   readonly revision: number;
   readonly viewport: HTMLElement;
@@ -183,7 +186,7 @@ export function measureKpCanonicalEquationStageLayout(input: {
     );
   }
   const alignedCertificates = alignKpEquationStageSequence(
-    applied.map(({ certificate }) => certificate)
+    applied.map(({ certificate }) => certificate), input.nativeHandoffs?.handoffs
   );
   const alignedStaged = staged.map((context, index) => {
     if (context.appliedStageLayout === undefined) return context;
@@ -209,6 +212,7 @@ export function measureKpCanonicalEquationStageLayout(input: {
     )
   );
   const corrections = planKpCanonicalEquationTransitionCorrections({
+    handoffs: measureHandoffs(preliminary, input.phaseCohorts, input.nativeHandoffs),
     cohorts: input.phaseCohorts,
     contexts: new Map(preliminary.map((context) => [context.id, {
       layout: measureContinuityLayout(context, usesOperationSubset),
@@ -249,6 +253,7 @@ export function measureKpCanonicalEquationStageLayout(input: {
   const continuityLayouts = new Map(measured.map((context) =>
     [context.id, measureContinuityLayout(context, usesOperationSubset)] as const
   ));
+  const nativeHandoffs = measureHandoffs(measured, input.phaseCohorts, input.nativeHandoffs);
   const sequenceFit = planKpReaderEquationSequenceResponsiveFit({
     id: `${input.animationId}.r${input.revision}`,
     alignments: measured.map((context) => context.alignment),
@@ -288,6 +293,7 @@ export function measureKpCanonicalEquationStageLayout(input: {
   }));
   const transitionContinuity =
     certifyKpCanonicalEquationTransitionContinuity({
+      handoffs: nativeHandoffs,
       cohorts: input.phaseCohorts,
       contexts: new Map([...contexts].map(([id, context]) =>
         [id, { ...context, layout: continuityLayouts.get(id)! }]
@@ -300,6 +306,16 @@ export function measureKpCanonicalEquationStageLayout(input: {
   });
 }
 
+function measureHandoffs(contexts: readonly Pick<KpCanonicalEquationTransitionLayout, "id" | "measurementRoot" | "layout">[], cohorts: readonly KpAnimationTransformationPhaseCohort[],
+  input: { readonly handoffs: readonly KpVerifiedEquationEndpointHandoff[]; readonly fontRevision: number } | undefined) {
+  return (input?.handoffs ?? []).map(authority => {
+    const index = cohorts.findIndex(cohort => cohort.targetObjectIds.length === 1 && cohort.targetObjectIds[0] === authority.source.object.id);
+    const from = contexts[index], to = contexts[index + 1];
+    if (index < 0 || !from || !to || JSON.stringify(cohorts[index + 1]?.sourceObjectIds) !== JSON.stringify([authority.target.object.id]))
+      throw new Error("Native endpoint handoff is not attached to one adjacent phase boundary.");
+    return measureKpCanonicalEquationNativeHandoff({ authority, from, to, fontRevision: input!.fontRevision });
+  });
+}
 function measureContinuityLayout(context: {
   readonly layout: KpReaderEquationLayoutSnapshot;
   readonly measurementRoot: HTMLElement;

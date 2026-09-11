@@ -3,10 +3,19 @@ import { assertKpCommonFactorPresentation, type KpCommonFactorPresentation } fro
 import { createKpSelectorAnnotatedLatex } from "../../rendering/selector-annotated-latex.ts";
 import type { KpStructuredEquationAnnotatedEndpoint } from "../../rendering/structured-equation-selector-annotated-latex.ts";
 import { assertKpComposedAlgebraPresentation, type KpComposedAlgebraPresentation } from "../../authoring/composed-algebra-presentation.ts";
+import { assertKpComposedAlgebraPresentationV2, type KpComposedAlgebraPresentationV2 } from "../../authoring/composed-algebra-presentation-v2.ts";
+import type { KpSemanticAssetObject } from "../../semantic/asset.ts";
+
+export function composedAlgebraEndpointsV2(presentation: KpComposedAlgebraPresentationV2): readonly KpStructuredEquationAnnotatedEndpoint[] {
+  assertKpComposedAlgebraPresentationV2(presentation);
+  return presentation.animation.bundle.objects.map(annotateCanonicalAlgebraEndpoint);
+}
 
 export function composedAlgebraOperationEndpoints(presentation: KpComposedAlgebraPresentation, step: 0 | 1): readonly KpStructuredEquationAnnotatedEndpoint[] {
   assertKpComposedAlgebraPresentation(presentation);
-  return presentation.steps[step].animation.bundle.objects.map(state => {
+  return presentation.steps[step].animation.bundle.objects.map(annotateCanonicalAlgebraEndpoint);
+}
+function annotateCanonicalAlgebraEndpoint(state: KpSemanticAssetObject): KpStructuredEquationAnnotatedEndpoint {
     const segments = state.selectors.flatMap(selector => {
       if (selector.label === undefined) throw new Error("Canonical algebra selector has no native notation.");
       const token = { kind: "selector" as const, selectorId: selector.id, latex: selector.label };
@@ -19,8 +28,7 @@ export function composedAlgebraOperationEndpoints(presentation: KpComposedAlgebr
     return Object.freeze({ stateId: state.id, label: state.title, annotated,
       groupEnvelopes: Object.freeze([{ id: `${state.id}.whole-expression`, memberSelectorIds: Object.freeze(state.selectors.map(s => s.id)) }]),
       structuralAnchors: Object.freeze([]) });
-  });
-}
+  }
 
 /** Project the established factoring fixture's ordered selector roles. No glyph
  * search, inferred correspondence, or independently authored endpoint text. */

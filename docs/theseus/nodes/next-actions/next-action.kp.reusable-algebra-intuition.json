@@ -196,6 +196,33 @@
       "status": "passed",
       "scope": "s08",
       "checkedAt": "2026-09-11T00:25:31.401Z"
+    },
+    {
+      "command": "npm run visual:composed-algebra -- --grep \"complete algebra native handoff canary\"",
+      "status": "passed",
+      "scope": "h03",
+      "checkedAt": "2026-09-11T00:45:56.721Z",
+      "notes": "Real canonical sequence passes forward reverse interruption, native endpoints, realized ink continuity and exclusive fan-out ownership; injected 4px internal drift is rejected. Initial failures identified row-ID and accessible-state assumptions. One run failed on server connection resets. Corrected test from DOM line boxes to shared ink measurement and accounted for two intentional distribution copies."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring",
+      "status": "passed",
+      "scope": "h03",
+      "checkedAt": "2026-09-11T00:45:58.165Z",
+      "notes": "88 tests passed; 14 existing continuity and corridor tests plus native authority rejection checks pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "h03",
+      "checkedAt": "2026-09-11T00:45:59.326Z"
+    },
+    {
+      "command": "npm run visual:composed-algebra -- --grep \"primary: compound factoring uses|primary: evaluation contributor\"",
+      "status": "passed",
+      "scope": "h03",
+      "checkedAt": "2026-09-11T00:46:00.424Z",
+      "notes": "Two retained canonical v1 factoring and evaluation compositor ownership tests passed."
     }
   ],
   "progress": {

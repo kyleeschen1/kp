@@ -8,6 +8,7 @@ import type {
 import type {
   KpCorridorCertifiedEquationStageLayout
 } from "../runtime/learner-public-api.ts";
+import { assertKpMeasuredCanonicalEquationHandoff, type KpMeasuredCanonicalEquationHandoff } from "./canonical-equation-native-handoff.ts";
 
 interface KpCanonicalEquationContinuityContext {
   readonly id: string;
@@ -42,6 +43,7 @@ export interface KpCanonicalEquationTransitionContinuityCertificate {
  * repairable; shape or internal-spacing changes remain hard renderer errors.
  */
 export function planKpCanonicalEquationTransitionCorrections(input: {
+  readonly handoffs?: readonly KpMeasuredCanonicalEquationHandoff[];
   readonly cohorts: readonly KpAnimationTransformationPhaseCohort[];
   readonly contexts: ReadonlyMap<string, {
     readonly layout: KpReaderEquationLayoutSnapshot;
@@ -53,6 +55,7 @@ export function planKpCanonicalEquationTransitionCorrections(input: {
   ReadonlyMap<string, KpCanonicalEquationTransitionCorrection>
 > {
   const tolerancePx = input.tolerancePx ?? 0.5;
+  validateHandoffs(input.handoffs, input.cohorts, input.contexts);
   if (!(tolerancePx >= 0) || !Number.isFinite(tolerancePx)) {
     throw new Error("Canonical equation correction tolerance must be finite.");
   }
@@ -77,12 +80,13 @@ export function planKpCanonicalEquationTransitionCorrections(input: {
     const sharedObjectIds = cohort.targetObjectIds.filter((objectId) =>
       next.sourceObjectIds.includes(objectId)
     );
-    const sourceAnchors = endpointAnchors(
+    const handoff = resolveHandoff(input.handoffs, cohort, next);
+    const sourceAnchors = handoff?.sourceAnchors ?? endpointAnchors(
       source.layout,
       "target",
       sharedObjectIds
     );
-    const targetAnchors = endpointAnchors(
+    const targetAnchors = handoff?.targetAnchors ?? endpointAnchors(
       target.layout,
       "source",
       sharedObjectIds
@@ -208,11 +212,13 @@ function correctionGroups(context: {
  * switch. This turns a previously visual-only seam into a measured contract.
  */
 export function certifyKpCanonicalEquationTransitionContinuity(input: {
+  readonly handoffs?: readonly KpMeasuredCanonicalEquationHandoff[];
   readonly cohorts: readonly KpAnimationTransformationPhaseCohort[];
   readonly contexts: ReadonlyMap<string, KpCanonicalEquationContinuityContext>;
   readonly tolerancePx?: number | undefined;
 }): KpCanonicalEquationTransitionContinuityCertificate {
   const tolerancePx = input.tolerancePx ?? 0.5;
+  validateHandoffs(input.handoffs, input.cohorts, input.contexts);
   if (!(tolerancePx >= 0) || !Number.isFinite(tolerancePx)) {
     throw new Error("Canonical equation continuity tolerance must be finite.");
   }
@@ -223,18 +229,19 @@ export function certifyKpCanonicalEquationTransitionContinuity(input: {
     const sharedObjectIds = cohort.targetObjectIds.filter((objectId) =>
       nextCohort.sourceObjectIds.includes(objectId)
     );
-    if (sharedObjectIds.length === 0) {
+    const handoff = resolveHandoff(input.handoffs, cohort, nextCohort);
+    if (sharedObjectIds.length === 0 && handoff === undefined) {
       throw new Error(
         `Canonical equation transitions ${cohort.id} and ${nextCohort.id} ` +
         "lack a shared semantic endpoint."
       );
     }
-    const sourceAnchors = endpointAnchors(
+    const sourceAnchors = handoff?.sourceAnchors ?? endpointAnchors(
       from.layout,
       "target",
       sharedObjectIds
     );
-    const targetAnchors = endpointAnchors(
+    const targetAnchors = handoff?.targetAnchors ?? endpointAnchors(
       to.layout,
       "source",
       sharedObjectIds
@@ -275,7 +282,7 @@ export function certifyKpCanonicalEquationTransitionContinuity(input: {
     return Object.freeze({
       fromTransitionId: cohort.id,
       toTransitionId: nextCohort.id,
-      sharedObjectIds: Object.freeze([...sharedObjectIds]),
+      sharedObjectIds: Object.freeze(handoff ? [handoff.authority.semanticStateId] : [...sharedObjectIds]),
       selectorCount: sourceKeys.length,
       maximumResidualPx,
       maximumResidualAddress: maximum.address
@@ -292,6 +299,26 @@ export function certifyKpCanonicalEquationTransitionContinuity(input: {
   });
 }
 
+function validateHandoffs(handoffs: readonly KpMeasuredCanonicalEquationHandoff[] | undefined, cohorts: readonly KpAnimationTransformationPhaseCohort[],
+  contexts: ReadonlyMap<string, { readonly layout: KpReaderEquationLayoutSnapshot }>) {
+  const boundaries = new Set<string>();
+  for (const handoff of handoffs ?? []) {
+    assertKpMeasuredCanonicalEquationHandoff(handoff);
+    if (contexts.get(handoff.fromTransitionId)?.layout.measurementIdentity !== handoff.sourceMeasurementIdentity ||
+        contexts.get(handoff.toTransitionId)?.layout.measurementIdentity !== handoff.targetMeasurementIdentity)
+      throw new Error("Native handoff measurement is stale or from another layout application.");
+    const index = cohorts.findIndex(cohort => cohort.id === handoff.fromTransitionId), next = cohorts[index + 1];
+    if (index < 0 || !next || next.id !== handoff.toTransitionId || boundaries.has(handoff.fromTransitionId) ||
+        JSON.stringify(cohorts[index]!.targetObjectIds) !== JSON.stringify([handoff.authority.source.object.id]) ||
+        JSON.stringify(next.sourceObjectIds) !== JSON.stringify([handoff.authority.target.object.id]))
+      throw new Error("Native handoff must cover one exact adjacent endpoint boundary.");
+    boundaries.add(handoff.fromTransitionId);
+  }
+}
+function resolveHandoff(handoffs: readonly KpMeasuredCanonicalEquationHandoff[] | undefined,
+  from: KpAnimationTransformationPhaseCohort, to: KpAnimationTransformationPhaseCohort) {
+  return handoffs?.find(handoff => handoff.fromTransitionId === from.id && handoff.toTransitionId === to.id);
+}
 function endpointAnchors(
   layout: KpReaderEquationLayoutSnapshot,
   side: "source" | "target",

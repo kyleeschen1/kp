@@ -6,6 +6,45 @@ import { kpEquationSettlementTolerancePx } from "../src/animation/equation-share
 import { buildComposedAlgebraEdition } from "../scripts/build-composed-algebra-edition.ts";
 import { fileURLToPath } from "node:url";
 import { unfamiliarAuthoringCases, unfamiliarAuthoringRejections } from "./fixtures/unfamiliar-authoring-trial.ts";
+import intuition from "../src/authoring/examples/composed-algebra-intuition.json" with { type: "json" };
+
+test("complete algebra native handoff canary", async ({ page }, info) => {
+  test.setTimeout(120_000);
+  const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
+  await page.goto("/experiments/reusable-reasoning/?example=composed-algebra");
+  await expect(page.locator("#authored-focus-card")).toHaveAttribute("data-composed-status", "ready", { timeout: 90_000 });
+  const result = await page.evaluate(async value => {
+    const path = "/tests/browser-helpers/composed-algebra-canary.ts";
+    const helper = await import(/* @vite-ignore */ path);
+    return helper.mountCompleteAlgebraCanary(value);
+  }, intuition);
+  expect(result.checkpoints).toHaveLength(5);
+  expect(result.samples.every((sample: { canonicalPaintOwner: boolean }) => sample.canonicalPaintOwner)).toBe(true);
+  expect(result.samples.every((sample: { nativeEndpointPassed: boolean }) => sample.nativeEndpointPassed)).toBe(true);
+  expect(result.samples.some((sample: { accessibleEquationState: string }) => sample.accessibleEquationState.includes(".view."))).toBe(false);
+  expect(result.driftRejected).toBe(true);
+  await info.attach("handoff-paint", { body: JSON.stringify(result.seamPaint, null, 2), contentType: "application/json" });
+  for (const [sampleIndex, observed] of result.seamPaint.entries()) {
+    const paint = [...observed];
+    if (sampleIndex === 2) {
+      // Just inside distribution, two issued fan-out copies intentionally
+      // occupy the same source pose; neither may retain a native duplicate.
+      expect(paint).toHaveLength(7);
+      const copies = paint.filter((atom: { ink: string }) => atom.ink === "glyph:5");
+      expect(copies).toHaveLength(2);
+      expect(copies.every((atom: { native: boolean }) => !atom.native)).toBe(true);
+      expect(new Set(copies.map((atom: { owner: string }) => atom.owner)).size).toBe(2);
+      paint.splice(1, 1);
+    }
+    expect(paint.map((atom: { ink: string }) => atom.ink)).toEqual(["glyph:5", "glyph:(", "glyph:x", "glyph:+", "glyph:3", "glyph:)"]);
+    paint.forEach((atom: { rect: Record<string, number> }, index: number) => {
+      for (const key of ["left", "top", "width", "height"])
+        expect(Math.abs(atom.rect[key]! - result.seamPaint[0][index].rect[key]), `Leaf ${index} ${key}: ${JSON.stringify(paint)} vs ${JSON.stringify(result.seamPaint[0])}`).toBeLessThan(.5);
+    });
+  }
+  await page.locator("#complete-algebra-canary").screenshot({ path: info.outputPath("native-handoff.png") });
+  expect(errors).toEqual([]);
+});
 
 for (const selected of unfamiliarAuthoringCases) test(`authoring trial Apply and controls ${selected.name}`, async ({ page }, info) => {
   test.setTimeout(120_000);

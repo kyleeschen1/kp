@@ -81,6 +81,8 @@ export interface KpChromeFreeCanonicalEquationSampleInput {
   readonly presentationRevision?: string | undefined;
 }
 
+import { createKpEquationEndpointHandoffResolver, type KpVerifiedEquationEndpointHandoff } from "../../semantic/equation-endpoint-handoff.ts";
+
 export interface KpChromeFreeCanonicalEquationSnapshot {
   readonly progressPermille: number;
   readonly animationProgressPermille: number;
@@ -121,6 +123,7 @@ export interface KpChromeFreeCanonicalEquationSession {
  * timeline loop. Hosts provide samples; this session owns only stage state.
  */
 export async function createKpChromeFreeCanonicalEquationSession(input: {
+  readonly endpointHandoffs?: readonly KpVerifiedEquationEndpointHandoff[];
   readonly shell: KpCanonicalEquationStageShell;
   readonly animation: KpAnimationAsset;
   readonly descriptor: KpReaderEquationLessonDescriptor;
@@ -139,6 +142,15 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
 }): Promise<KpChromeFreeCanonicalEquationSession> {
   const { stage, viewport, materialFitSurface } = input.shell;
   const cohorts = compileKpAnimationTransformationPhaseCohorts(input.animation);
+  const handoffResolver = createKpEquationEndpointHandoffResolver(input.endpointHandoffs ?? []);
+  const semanticStateByEndpointView = new Map<string, string>();
+  for (const handoff of input.endpointHandoffs ?? []) {
+    const source = input.animation.bundle.objects.find(object => object.id === handoff.source.object.id);
+    const target = input.animation.bundle.objects.find(object => object.id === handoff.target.object.id);
+    if (!source || !target || !handoffResolver.connect(source, target)) throw new TypeError("Canonical native handoff is detached from its exact animation endpoints.");
+    semanticStateByEndpointView.set(target.id, handoff.semanticStateId);
+  }
+  handoffResolver.finish();
   const evaluationCertificates = new Map<string, KpVerifiedEquationEvaluationFamilyCertificateV2>();
   for (const certificate of input.evaluationCertificates ?? []) {
     // An opt-in certificate must be consumed exactly once; a typo must not
@@ -326,6 +338,7 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
     if (layout === undefined) {
       layoutReadCount += 1;
       layout = measureKpCanonicalEquationStageLayout({
+        ...(input.endpointHandoffs ? { nativeHandoffs: { handoffs: input.endpointHandoffs, fontRevision: fontReadiness.revision } } : {}),
         animationId: input.animation.id,
         revision: layoutRevision,
         viewport,
@@ -450,12 +463,15 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
       candidate.element.dataset["kpReaderTransitionActive"] = String(active);
     }
     applyKpReaderEquationResponsiveFit(materialFitSurface, context.fit);
-    const accessibleObjectId = framePlan.phaseProgress < 1
+    const accessibleViewId = framePlan.phaseProgress < 1
       ? transition?.source[0]?.objectId
       : transition?.target[0]?.objectId;
-    if (accessibleObjectId === undefined) {
+    if (accessibleViewId === undefined) {
       throw new Error("Canonical frame has no accessible equation endpoint.");
     }
+    // A presentation ownership exchange is not another mathematical state or
+    // screen-reader stop. Resolve it only through authenticated view authority.
+    const accessibleObjectId = semanticStateByEndpointView.get(accessibleViewId) ?? accessibleViewId;
     accessible.sync(accessibleObjectId);
     const endpointEvidence = syncKpCanonicalEquationNativeEndpointEvidence({
       stage,

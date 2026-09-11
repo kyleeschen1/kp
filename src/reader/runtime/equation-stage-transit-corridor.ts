@@ -3,6 +3,7 @@ import type {
   KpCertifiedEquationStageRow,
   KpEquationStageRect
 } from "./equation-stage-layout.ts";
+import { isKpVerifiedEquationEndpointHandoff, type KpVerifiedEquationEndpointHandoff } from "../../semantic/equation-endpoint-handoff.ts";
 
 export interface KpEquationStagePoint {
   readonly x: number;
@@ -109,9 +110,16 @@ export function certifyKpEquationStageTransitCorridor(input: {
  * propagate each shared semantic endpoint before any renderer owns motion.
  */
 export function alignKpEquationStageSequence(
-  layouts: readonly KpCorridorCertifiedEquationStageLayout[]
+  layouts: readonly KpCorridorCertifiedEquationStageLayout[],
+  handoffs: readonly KpVerifiedEquationEndpointHandoff[] = []
 ): readonly KpCorridorCertifiedEquationStageLayout[] {
-  if (layouts.length < 2) return Object.freeze([...layouts]);
+  if (!handoffs.every(isKpVerifiedEquationEndpointHandoff) || new Set(handoffs).size !== handoffs.length)
+    throw new TypeError("Stage alignment requires unique issued endpoint handoffs.");
+  const usedHandoffs = new Set<KpVerifiedEquationEndpointHandoff>();
+  if (layouts.length < 2) {
+    if (handoffs.length) throw new Error("Stage handoff has no adjacent phase.");
+    return Object.freeze([...layouts]);
+  }
   const aligned = [layouts[0]!];
   for (const layout of layouts.slice(1)) {
     const previous = aligned.at(-1)!;
@@ -128,14 +136,22 @@ export function alignKpEquationStageSequence(
       const previousRow = previousRows.get(role)!;
       const sharedEndpointIds = rowEndpointIds(previous, previousRow)
         .filter((id) => rowEndpointIds(layout, row).includes(id));
-      if (sharedEndpointIds.length !== 1) {
+      const matches = handoffs.filter(handoff => rowEndpointIds(previous, previousRow).includes(handoff.source.object.id) &&
+        rowEndpointIds(layout, row).includes(handoff.target.object.id));
+      const handoff = sharedEndpointIds.length === 0 && matches.length === 1 ? matches[0] : undefined;
+      if (sharedEndpointIds.length !== 1 && handoff === undefined) {
         throw new Error(
           `Equation stage row ${role} must share exactly one adjacent endpoint.`
         );
       }
-      const endpointId = sharedEndpointIds[0]!;
-      const previousEnvelope = endpointEnvelope(previous, previousRow, endpointId);
-      const envelope = endpointEnvelope(layout, row, endpointId);
+      if (handoff) {
+        if (usedHandoffs.has(handoff)) throw new Error("Stage handoff cannot cover multiple row boundaries.");
+        usedHandoffs.add(handoff);
+      }
+      // This only aligns declared rows. Realized leaf conformance remains a
+      // mandatory subsequent canonical reader check before any paint transfer.
+      const previousEnvelope = endpointEnvelope(previous, previousRow, handoff?.source.object.id ?? sharedEndpointIds[0]!);
+      const envelope = endpointEnvelope(layout, row, handoff?.target.object.id ?? sharedEndpointIds[0]!);
       shiftByRowId.set(
         row.id,
         {
@@ -148,6 +164,7 @@ export function alignKpEquationStageSequence(
     }
     aligned.push(shiftCorridorLayout(layout, shiftByRowId));
   }
+  if (usedHandoffs.size !== handoffs.length) throw new Error("Stage alignment received an unused endpoint handoff.");
   if (aligned[0]!.rows.length !== 2) return Object.freeze(aligned);
   const extraCorridorHeight = Math.max(0, ...aligned.map((layout, index) =>
     layouts[index]!.protectedTransitCorridor.rect.height -

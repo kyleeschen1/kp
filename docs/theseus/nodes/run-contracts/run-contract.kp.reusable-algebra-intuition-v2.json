@@ -113,7 +113,8 @@
     {
       "id": "h03",
       "title": "Execute native handoff canary",
-      "status": "planned"
+      "summary": "Bound native clone handoff to complete realized leaf paint, revision identity, row correction and accessible semantic state; canary and v1 preservation pass without new motion.",
+      "status": "complete"
     },
     {
       "id": "s09",
