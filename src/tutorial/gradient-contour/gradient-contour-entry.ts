@@ -29,6 +29,10 @@ root.innerHTML = `<article><header class="gradient-intro"><p>Kinetic Press · mi
 const get = <T extends Element>(selector: string) => { const found = root.querySelector<T>(selector); if (!found) throw new Error(`Gradient card requires ${selector}`); return found; };
 const card = get<HTMLElement>("[data-kp-focus-deck]");
 const plot = get<HTMLElement>(".kp-surface-contour-stage__plot");
+// One fitted viewport keeps native paint and semantic overlays in the same
+// aspect-preserving box. CSS owns sizing; playback never measures text/layout.
+const plotSlot = document.createElement("div"); plotSlot.className = "gradient-plot-slot";
+plot.before(plotSlot); plotSlot.append(plot);
 const projectOverlay = mountGradientContourOverlay(plot, authority);
 // The exemplar fixes c to the point's height. The reference's level control
 // remains untouched on its own host; here it is replaced with derived evidence.
@@ -53,8 +57,10 @@ get<HTMLElement>(".kp-focus-deck__card").prepend(passageShell);
 passageShell.insertAdjacentHTML("beforeend", `<section class="gradient-guided-passage kp-focus-deck__narrative" data-gradient-guided-passage hidden aria-label="Compare equal-length directions"><div class="kp-focus-deck__passage-page">
   <div class="gradient-instruction-role" data-gradient-instruction-role>Before the move</div>
   <p class="gradient-comparison-reading"><span data-gradient-reading-lead>${gradientComparisonReading.prepare.lead}</span> <span data-gradient-reading-body>${gradientComparisonReading.prepare.body}</span></p>
-  <p class="gradient-viewing-cue" id="gradient-comparison-cue"></p>
-  <button type="button" data-gradient-play-comparison aria-describedby="gradient-comparison-cue">Turn toward uphill</button>
+  <div class="gradient-handoff">
+    <p class="gradient-viewing-cue" id="gradient-comparison-cue"></p>
+    <button type="button" data-gradient-play-comparison aria-describedby="gradient-comparison-cue">Turn toward uphill</button>
+  </div>
 </div></section>`);
 const guidedPassage = get<HTMLElement>("[data-gradient-guided-passage]");
 const viewingCue = get<HTMLElement>(".gradient-viewing-cue");

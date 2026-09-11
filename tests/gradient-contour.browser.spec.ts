@@ -10,6 +10,40 @@ async function seek(page: Page, step: number) {
 async function paint(page: Page) {
   return page.locator(".gradient-overlay").innerHTML();
 }
+test("passage handoff stays close to a fixed stage at desktop and phone widths", async ({ page }, info) => {
+  await page.goto(route); await expect(page.locator(deck)).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+  for (const width of [1280, 390, 320]) {
+    await page.setViewportSize({ width, height: 900 });
+    await seek(page, 5);
+    const layout = () => page.locator(deck).evaluate(element => {
+      const get = (selector: string) => element.querySelector<HTMLElement>(selector)!;
+      const stage = get(".kp-surface-contour-stage").getBoundingClientRect();
+      const plot = get(".kp-surface-contour-stage__plot").getBoundingClientRect();
+      const header = get(".kp-surface-contour-stage__header").getBoundingClientRect();
+      const pane = get("[data-gradient-guided-passage]");
+      const end = get("[data-gradient-guided-passage] .kp-focus-deck__passage-page").lastElementChild!.getBoundingClientRect();
+      const cue = get(".gradient-viewing-cue").getBoundingClientRect();
+      const button = get("[data-gradient-play-comparison]").getBoundingClientRect();
+      const origin = get(".gradient-origin").getBoundingClientRect();
+      return { gap: stage.top - end.bottom, stageY: stage.top, stageHeight: stage.height,
+        plotY: plot.top, plotHeight: plot.height, plotRatio: plot.width / plot.height,
+        plotGap: plot.top - header.bottom, cueY: cue.top, buttonY: button.top,
+        originX: origin.x, originY: origin.y, overflow: pane.scrollHeight - pane.clientHeight };
+    });
+    const prepared = await layout();
+    expect(prepared.gap).toBeGreaterThanOrEqual(0);
+    expect(prepared.gap).toBeLessThanOrEqual(16);
+    expect(prepared.overflow).toBeLessThanOrEqual(1);
+    expect(prepared.plotRatio).toBeCloseTo(520 / 300, 2);
+    expect(prepared.plotGap).toBeGreaterThanOrEqual(0);
+    expect(prepared.plotGap).toBeLessThanOrEqual(4);
+    for (const step of [5.5, 6, 5.25, 5]) {
+      await seek(page, step);
+      expect(await layout()).toEqual(prepared);
+    }
+    await page.screenshot({ path: info.outputPath(`compact-handoff-${width}.png`), fullPage: true });
+  }
+});
 test("primary visual checkpoint: motivated question, local mechanism and coherent controls", async ({ page }, info) => {
   test.setTimeout(60000);
   const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
@@ -50,8 +84,9 @@ test("primary visual checkpoint: motivated question, local mechanism and coheren
   await expect.poll(async () => Number(await page.locator(deck).getAttribute("data-gradient-step"))).toBeGreaterThan(0);
   await page.keyboard.press("ArrowLeft"); await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", "0");
   const viewport = page.locator("[data-kp-focus-deck-viewport]"); const box = (await viewport.boundingBox())!;
-  // Mouse text selection is preserved; drag the passage's blank lower margin.
-  const dragY = box.y + box.height - 20;
+  // Content is bottom-aligned now. Keep the gesture in the small blank margin,
+  // not over the final line of selectable prose or the anchored action button.
+  const dragY = box.y + box.height - 4;
   await page.mouse.move(box.x + box.width * .8, dragY); await page.mouse.down();
   await page.mouse.move(box.x + box.width * .2, dragY, { steps: 10 });
   const middle = Number(await page.locator(deck).getAttribute("data-gradient-step")); expect(middle).toBeGreaterThan(0); expect(middle).toBeLessThan(1);
@@ -118,7 +153,7 @@ test("phone and reduced motion retain readable evidence and exact stopping point
       await seek(page, from);
       const panel = page.locator("[data-gradient-guided-passage]"); await panel.scrollIntoViewIfNeeded();
       const rect = (await panel.boundingBox())!, forward = to > from;
-      const x = rect.x + rect.width * (forward ? .8 : .2), y = rect.y + rect.height - 12;
+      const x = rect.x + rect.width * (forward ? .8 : .2), y = rect.y + rect.height - 4;
       await touch.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x, y }] });
       await touch.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ x: rect.x + rect.width * (forward ? .2 : .8), y }] });
       const intermediate = Number(await page.locator(deck).getAttribute("data-gradient-step"));
@@ -185,15 +220,15 @@ test("comparison hands reading to motion without moving prose, then holds the in
   // Transport clicks may scroll the page; do not reuse pre-click viewport coordinates.
   await pane.scrollIntoViewIfNeeded();
   const dragBounds = (await pane.boundingBox())!;
-  await page.mouse.move(dragBounds.x + dragBounds.width * .9, dragBounds.y + dragBounds.height - 12); await page.mouse.down();
-  await page.mouse.move(dragBounds.x + dragBounds.width * .1, dragBounds.y + dragBounds.height - 12, { steps: 10 });
+  await page.mouse.move(dragBounds.x + dragBounds.width * .9, dragBounds.y + dragBounds.height - 4); await page.mouse.down();
+  await page.mouse.move(dragBounds.x + dragBounds.width * .1, dragBounds.y + dragBounds.height - 4, { steps: 10 });
   const middle = Number(await page.locator(deck).getAttribute("data-gradient-step"));
   expect(middle).toBeGreaterThan(5); expect(middle).toBeLessThan(6);
   expect(await reading.innerText()).toBe(body);
   expect((await pane.boundingBox())!.x).toBe(bounds.x);
   await page.mouse.up(); await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", "6");
-  await page.mouse.move(dragBounds.x + dragBounds.width * .1, dragBounds.y + dragBounds.height - 12); await page.mouse.down();
-  await page.mouse.move(dragBounds.x + dragBounds.width * .9, dragBounds.y + dragBounds.height - 12, { steps: 10 });
+  await page.mouse.move(dragBounds.x + dragBounds.width * .1, dragBounds.y + dragBounds.height - 4); await page.mouse.down();
+  await page.mouse.move(dragBounds.x + dragBounds.width * .9, dragBounds.y + dragBounds.height - 4, { steps: 10 });
   await page.mouse.up(); await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", "5");
   // Exact seeks restore the same text and paint without replaying intermediate phases.
   await seek(page, 5.5); const midpoint = await paint(page);
@@ -207,7 +242,7 @@ test("comparison hands reading to motion without moving prose, then holds the in
     await seek(page, from); await pane.scrollIntoViewIfNeeded();
     const rect = (await pane.boundingBox())!;
     const laneWidth = await page.locator("[data-kp-focus-deck-viewport]").evaluate(e => e.clientWidth);
-    await page.mouse.move(rect.x + rect.width / 2, rect.y + rect.height - 12);
+    await page.mouse.move(rect.x + rect.width / 2, rect.y + rect.height - 4);
     await page.mouse.wheel((to - from) * laneWidth * .65, 0);
     await expect.poll(async () => Number(await page.locator(deck).getAttribute("data-gradient-step"))).not.toBe(from);
     await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", String(to));

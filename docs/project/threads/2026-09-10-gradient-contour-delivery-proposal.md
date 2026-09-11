@@ -90,6 +90,23 @@ not any shared semantic or renderer change. No popups, narration, universal
 attention schema or other-card promotion. G3 remains a human checkpoint before
 G4–G6; this approval does not accept the earlier treatment or reorder the run.
 
+### Approved G3 compact passage-to-stage handoff
+
+The user accepted top placement as a major improvement to linear reading, then
+approved bringing the passage closer to the stage with “implement the rec”.
+Keep the boundary fixed, bottom-align the passage inside a tighter responsive
+region, anchor the cue/action near its lower edge, and remove unnecessary stage
+spacing. Reserve layout by viewport, never by the active paragraph or playhead.
+Do not shrink fonts, clip required text, or move the camera/SVG geometry to make
+the layout fit. Preserve native scrolling and selection with accessible overflow.
+
+This is a gradient-only CSS/markup treatment, with browser assertions for the
+handoff gap, fixed cue/action and stage/point positions through the comparison,
+phone containment and existing input behavior. No new layout measurement loop,
+semantic change, renderer seam or catalogue promotion is authorized. Rollback is
+the local layout/markup and its tests. The top placement is accepted; remaining
+spacing and attention judgment stays at G3 before G4–G6.
+
 ## Bounds and completion
 
 Proposed active-work ceiling: six hours excluding human waiting, reserving the

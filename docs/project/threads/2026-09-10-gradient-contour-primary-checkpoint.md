@@ -7,7 +7,60 @@ review packet, not release certification or a second execution plan.
 Review at http://localhost:8000/experiments/kinetic-figure/gradient-contour/.
 The existing shared server was verified; no second server was started.
 
-## Current revision: one instruction home and visible referents (2026-09-11)
+## Current revision: compact, stable passage-to-stage handoff (2026-09-11)
+
+The user accepted top placement as a major improvement to linear narrative,
+then approved the tighter handoff recommendation. Keep that accepted reading
+order. The current treatment is ready for spacing review, not blanket G3
+acceptance or permission to generalize.
+
+At **6 / 8**, read the bottom-aligned passage and choose **Turn toward uphill**.
+The cue/action sit near the stage boundary: side by side on desktop, stacked on
+phones. Shorter passages leave space above, not between the instruction and its
+evidence. The passage area is reserved by viewport (12rem desktop, 16.5rem phone,
+18rem at the narrowest width), never resized by the active paragraph or playhead.
+Longer text retains normal font sizing and native overflow access.
+
+The stage's empty grid rows and excess spacing are removed. A local CSS size
+container fits the **whole** canonical plot to the available width/height at
+its 520:300 ratio and aligns it to the top. WebGL and both SVG layers remain in
+the same box. No camera, mathematical geometry, attention phase, source model,
+playback or input implementation changed. There is no new per-frame measurement,
+observer, clock, dependency or renderer. The added cost is two local markup
+wrappers and CSS sizing, not a new runtime layout system.
+
+Verification:
+
+- **25 focused tests** pass: semantic sampling, math, attention, stage and fit.
+- Full **npm run typecheck** passes, including app/node/test/Svelte/domains;
+  Svelte reports no errors or warnings.
+- **npm run visual:gradient-contour** passes all six Chromium checks in the final
+  complete run (30.5 seconds). Shared inputs, bidirectional gestures, replay,
+  interruption, phone/reduced motion, shader reuse and the reference survive.
+- The new layout check passes in **Chromium, Firefox and WebKit** at 1280, 390
+  and 320 pixels. It checks the small trailing gap, no comparison overflow,
+  canonical plot aspect ratio, top-aligned plot, and unchanged cue/action,
+  stage/plot and origin positions across preparation, action, inference and
+  reverse/direct seeks. Desktop and phone captures were inspected.
+
+The new regression first reproduced a **73.40625px** passage-end gap against
+the discovery ceiling of **16px**. The compact treatment passes that ceiling.
+Two simple top-alignment attempts subsequently exposed zero-sized and stretched
+plot boxes; the aspect-ratio assertion caught both. The fitted container repairs
+that sizing boundary. These failures and clean reruns remain in Theseus; no gate
+was waived. Input checks now use the remaining small blank margin instead of
+dragging through newly bottom-aligned selectable text or the action button.
+
+Please judge the reading-to-figure distance and whether new passages feel
+settled rather than jumpy. The figure and handoff stay fixed during this
+comparison, but differently sized passages intentionally start at different
+heights. Broader learner efficacy and full cross-browser interaction/release
+certification are not claimed. G4–G6 remain gated on G3 acceptance.
+Rollback is this gradient-only CSS/markup and its checks; preserve the earlier
+accepted top placement and separate renderer repairs.
+Resume: `theseus work context next-action.kp.gradient-contour-intuition --mode brief`.
+
+## Previous revision: one instruction home and visible referents (2026-09-11)
 
 The user found the earlier sequence better but still could not reliably locate
 what to watch. They approved the recommended local experiment with “implement

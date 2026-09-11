@@ -53,7 +53,7 @@
     {
       "id": "g3",
       "title": "Human visual and pedagogical checkpoint",
-      "summary": "HUMAN_CHECKPOINT: approved attention-location repair is review-ready. Stable top instruction, explicit phase roles, direct semantic labels and optional live evidence. 46 focused tests, five Chromium checks and full types passed. Await human attention/comprehension judgment; G4-G6 remain gated.",
+      "summary": "HUMAN_CHECKPOINT: compact passage-to-stage refinement ready. 25 focused tests, full typecheck, six Chromium checks and layout in Chromium/Firefox/WebKit pass. Review spacing and text changes at6/8 to7/8; top placement already accepted. No G4-G6 acceptance inferred.",
       "status": "ready"
     },
     {

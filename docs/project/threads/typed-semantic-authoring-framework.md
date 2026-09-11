@@ -18,6 +18,11 @@ before/watch/result roles, direct across/along annotations and optional live
 numbers. The user's remaining confusion concerns locating evidence, not only
 sequencing it. The same checkpoint packet records this local experiment and
 its preservation checks; no shared attention grammar or G3 acceptance is implied.
+The user accepted top placement as improving linear narrative and approved a
+compact handoff refinement. Its bottom-aligned passage and cue/action retain a
+fixed boundary, while one local CSS container top-fits the complete canonical
+plot without changing geometry or playback. The same packet records spacing
+review and cross-engine layout evidence; G3 remains the visual gate.
 Accepted pedagogical direction: `../decisions/2026-09-10-motivation-as-explanatory-context.md`
 and its full rationale in `2026-09-10-motivation-as-explanatory-context.md`.
 The user found the first primary clear but insufficiently motivated and explanatory,

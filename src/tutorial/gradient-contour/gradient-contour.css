@@ -1,4 +1,6 @@
 .gradient-page {
+  --gradient-passage-height: 12rem;
+  --gradient-card-height: clamp(32rem, calc(74svh - 3rem), 38rem);
   --kp-st-paper: var(--kp-sc-paper); --kp-st-header: var(--kp-sc-header);
   --kp-st-header-ink: var(--kp-sc-header-ink); --kp-st-strong: var(--kp-sc-strong);
   --kp-st-muted: var(--kp-sc-muted); --kp-st-rule: var(--kp-sc-rule); --kp-st-focus: var(--kp-sc-accent);
@@ -9,12 +11,19 @@
 .gradient-intro > p:first-child { font: 650 .7rem/1.4 system-ui, sans-serif; text-transform: uppercase; letter-spacing: .08em; }
 .gradient-intro h1 { font-size: clamp(1.8rem, 5vw, 2.8rem); line-height: 1.1; margin: .4rem 0; }
 .gradient-intro p { margin: .4rem 0; color: var(--kp-sc-muted); }
-.gradient-page .kp-focus-deck__card { height: clamp(35rem, 74svh, 41rem); grid-template-rows: 15rem minmax(0, 1fr); }
-.gradient-page .kp-surface-contour-stage { grid-template-rows: auto minmax(0, 1fr) auto auto; }
-.gradient-page .kp-focus-deck__stage { border-top: 1px solid var(--kp-st-rule); border-bottom: 0; }
+/* Reserve by viewport, never by the active reading. New prose may start higher
+   or lower, but the handoff and mathematical evidence do not move with it. */
+.gradient-page .kp-focus-deck__card { height: var(--gradient-card-height); grid-template-rows: var(--gradient-passage-height) minmax(0, 1fr); }
+.gradient-page .kp-surface-contour-stage { grid-template-rows: auto minmax(0, 1fr); gap: .15rem; padding-block: .3rem .4rem; border-top: 1px solid var(--kp-st-rule); border-bottom: 0; }
+.gradient-page .kp-surface-contour-stage__header { min-height: 1.1rem; }
+/* Fit the whole canonical plot at the top, including WebGL and both SVG
+   overlays. Do not independently translate an overlay or crop its evidence. */
+.gradient-plot-slot { container-type: size; display: grid; min-width: 0; min-height: 0; }
+.gradient-page .kp-surface-contour-stage__plot { width: min(100cqw, calc(100cqh * 52 / 30)); height: auto; margin-inline: 0; place-self: start center; }
 /* The scroll lane must not contribute its eight pages to the grid's min width. */
 .gradient-passage-shell { position: relative; min-width: 0; min-height: 0; }
 .gradient-passage-shell > .kp-focus-deck__narrative { height: 100%; }
+.gradient-passage-shell .kp-focus-deck__passage-page { display: flex; flex-direction: column; justify-content: flex-end; padding-block: .6rem .75rem; }
 .gradient-passage-shell[data-gradient-guided="true"] [data-kp-focus-deck-beat] { visibility: hidden; }
 .gradient-guided-passage {
   position: absolute; inset: 0; z-index: 3; display: block;
@@ -23,10 +32,13 @@
 }
 .gradient-guided-passage[hidden] { display: none; }
 .gradient-instruction-role { margin-bottom: .4rem; color: var(--kp-st-muted); font: 650 .7rem/1.3 system-ui, sans-serif; letter-spacing: .06em; text-transform: uppercase; }
-.gradient-guided-passage .gradient-viewing-cue { margin-top: .5rem; color: var(--kp-st-focus); font: 550 .9rem/1.45 system-ui, sans-serif; }
+.gradient-handoff { display: grid; grid-template-columns: minmax(0, 1fr) 10rem; gap: .6rem; align-items: start; flex-shrink: 0; margin-top: .5rem; }
+/* Both authored cues fit two lines at the supported narrow width. Reserving
+   that space keeps the cue baseline and action fixed when the result arrives. */
+.gradient-guided-passage .gradient-viewing-cue { min-height: 2.9em; margin: 0; color: var(--kp-st-focus); font: 550 .9rem/1.45 system-ui, sans-serif; }
 .gradient-comparison-reading [data-gradient-reading-lead] { font-weight: 600; }
 .gradient-guided-passage button {
-  margin-top: .65rem; padding: .35rem .7rem; min-height: 2.25rem;
+  margin: 0; padding: .35rem .7rem; min-height: 2.25rem; width: 10rem;
   border: 1px solid var(--kp-st-rule); border-radius: .25rem;
   background: var(--kp-st-paper); color: var(--kp-st-strong); cursor: pointer;
   font: 550 .8rem/1.3 system-ui, sans-serif;
@@ -73,7 +85,11 @@
 .gradient-help, .gradient-reference { color: var(--kp-sc-muted); font: .8rem/1.5 system-ui, sans-serif; }
 .gradient-page details { margin-top: 1.5rem; font-size: .9rem; line-height: 1.6; }
 @media (max-width: 520px) {
-  .gradient-page .kp-focus-deck__card { height: 36rem; grid-template-rows: 18rem minmax(0, 1fr); }
+  .gradient-page { --gradient-passage-height: 16.5rem; --gradient-card-height: 34.5rem; }
+  .gradient-handoff { grid-template-columns: minmax(0, 1fr); gap: .35rem; }
   .gradient-evidence { gap: .65rem; font-size: .65rem; }
   .gradient-evidence output { font-size: 1rem; }
+}
+@media (max-width: 360px) {
+  .gradient-page { --gradient-passage-height: 18rem; --gradient-card-height: 36rem; }
 }

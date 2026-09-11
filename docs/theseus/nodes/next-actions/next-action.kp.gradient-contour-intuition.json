@@ -155,11 +155,53 @@
       "scope": "G3 attention-location handoff",
       "checkedAt": "2026-09-11T16:23:16.512Z",
       "notes": "1126 nodes and 30470 events validated after closing the receipt and recording the ready human checkpoint. No later package marked complete. Scope and current review are preserved in the original proposal and checkpoint packet."
+    },
+    {
+      "command": "npm run visual:gradient-contour -- --grep passage",
+      "status": "failed",
+      "scope": "G3 compact-layout discovery",
+      "checkedAt": "2026-09-11T17:09:17.403Z",
+      "notes": "New handoff regression reproduced 73.40625px trailing gap before repair (ceiling16px). Passage repair passed. Subsequent simple plot-alignment attempts failed the new aspect check: auto margins collapsed the plot to zero, then stretching produced ratio2.06245 instead of520/300. Repaired at the local fitted-container boundary, without altering camera or SVG geometry. Focused rerun and Chromium/Firefox/WebKit layout cohort passed; final full Chromium suite still required."
+    },
+    {
+      "command": "npm run visual:gradient-contour",
+      "status": "passed",
+      "scope": "G3 compact handoff final Chromium",
+      "checkedAt": "2026-09-11T17:10:47.888Z",
+      "notes": "Final complete run: six checks passed in30.5 seconds. Layout regression reproduced73.40625px trailing gap before repair, now passes16px ceiling with stable cue/action and stage/point coordinates. Preserve previous controls, touch, reverse, reduced motion, shader reuse and original host. Intermediate top-alignment failures were fixed, not waived."
+    },
+    {
+      "command": "npm run visual:gradient-contour -- --project=webkit --project=firefox --grep \"passage handoff\"",
+      "status": "passed",
+      "scope": "G3 compact layout only, three engines",
+      "checkedAt": "2026-09-11T17:10:49.072Z",
+      "notes": "Three checks passed: Chromium, Firefox and WebKit at1280,390,320px, including aspect-preserving top fit, no comparison overflow and fixed handoff geometry. This is bounded layout evidence, not full cross-browser interaction or release promotion."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/gradient-contour-attention.test.ts tests/gradient-contour-sequence.test.ts tests/gradient-contour-model.test.ts tests/semantic-reader-attention-projector.test.ts tests/kinetic-figure-surface-contour.test.ts tests/stage-fit-contract.test.ts",
+      "status": "passed",
+      "scope": "G3 compact layout preservation",
+      "checkedAt": "2026-09-11T17:10:50.085Z",
+      "notes": "25 focused tests passed on final implementation. Math, semantic sampling and attention source were unchanged."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "G3 compact layout final",
+      "checkedAt": "2026-09-11T17:10:51.105Z",
+      "notes": "Full final app, node, test, Svelte and domains passed. Svelte zero errors and warnings. A subsequent test-only indentation correction changes no behavior."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "G3 compact handoff closeout",
+      "checkedAt": "2026-09-11T17:12:17.404Z",
+      "notes": "1126 nodes and 30481 events validated after closing the receipt and recording the human checkpoint. Top placement is accepted; new spacing remains review-ready. G4-G6 are not marked complete."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: top instruction and explicit before/watch/result roles at 6/8 to 7/8; direct component labels and optional numbers. Existing model, stage, clock and inputs preserved. Current review packet is ready; G4-G6 await G3 acceptance."
+    "summary": "HUMAN_CHECKPOINT: compact gradient handoff ready. Top placement accepted; bottom-aligned passage, fixed cue/action and aspect-preserving top fit now await spacing review. Preserve existing model, attention phases, rendering and controls. G4-G6 remain gated."
   },
   "expectedLearning": [
     "Whether contour identity plus first-order comparisons produce a reusable authorable geometric intuition."
