@@ -84,7 +84,7 @@ export function mountKpFocusDeckNativeInput(input: {
     sample();
   };
   const down = (event: PointerEvent) => {
-    if (!input.enabled() || blocked(event) || !event.isPrimary || event.button !== 0) return;
+    if (event.defaultPrevented || !input.enabled() || blocked(event) || !event.isPrimary || event.button !== 0) return;
     const nativeTouch = event.pointerType !== "mouse" && event.target instanceof Node && viewport.contains(event.target);
     if (nativeTouch) {
       beginNative();
@@ -92,6 +92,14 @@ export function mountKpFocusDeckNativeInput(input: {
       return;
     }
     if (event.pointerType === "mouse" && event.target instanceof Element && event.target.closest("p,.katex")) return;
+    // A blank-space mouse drag belongs to the card from contact, not only
+    // after its threshold. Otherwise Firefox can start native text dragging
+    // from a prior selection and cancel the second gesture's pointer stream.
+    // Prose, native math, controls and native touch retain their defaults.
+    if (event.pointerType === "mouse") {
+      event.preventDefault();
+      region.focus({ preventScroll: true });
+    }
     input.interrupt(); cancel();
     state = { kind: "pending", session: input.begin(now()), lastInput: now(), id: event.pointerId,
       x: event.clientX, y: event.clientY, origin: input.position(), width: width() };
@@ -124,7 +132,7 @@ export function mountKpFocusDeckNativeInput(input: {
   viewport.addEventListener("scroll", scroll, { passive: true });
   viewport.addEventListener("scrollend", finish);
   region.addEventListener("wheel", wheel, { passive: false });
-  region.addEventListener("pointerdown", down, { passive: true });
+  region.addEventListener("pointerdown", down, { passive: false });
   region.addEventListener("pointermove", move, { passive: false });
   region.addEventListener("lostpointercapture", up);
   owner.addEventListener("pointerup", up); owner.addEventListener("pointercancel", up);

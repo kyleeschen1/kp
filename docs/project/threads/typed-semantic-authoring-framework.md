@@ -1,14 +1,17 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: mechanics-from-zero outline; gradient primary accepted, G4–G6 resumed
-Last Updated: 2026-09-11
-Current execution: `run-contract.kp.gradient-contour-intuition-v1` from
+Status: mechanics-from-zero outline recorded; gradient delivery complete; architecture assessment next
+Last Updated: 2026-09-12
+Completed execution: `run-contract.kp.gradient-contour-intuition-v1` from
 `2026-09-10-gradient-contour-delivery-proposal.md`, approved with “go”. Theseus
-owns progress. The user accepted the revised primary and explicitly requested
-finishing the loop; G4–G6 are resumed, with device-gesture verification limits
-retained. The approved curriculum outline is
+owns execution evidence. Source-only reuse, standalone reading/exact return,
+shared Firefox input repair and complete release verification are recorded in
+`2026-09-12-gradient-reuse-evidence.md`; device-gesture limits are retained.
+The approved curriculum outline is
 `2026-09-11-mechanics-from-zero-curriculum.md`. Architecture assessment and bounded
-cleanup follow this loop, before new mechanics implementation.
+cleanup follow this loop, before new mechanics implementation. The first two
+priorities are complete; no successor implementation is started. Earlier G3
+gating statements below are historical, not renewed approval requests.
 Latest accepted strategic direction:
 `../decisions/2026-09-11-applied-mathematics-mechanics-priority.md`.
 Classical mechanics is the first sustained learning case; mathematical concepts

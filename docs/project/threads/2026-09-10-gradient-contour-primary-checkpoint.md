@@ -1,17 +1,20 @@
 # Gradient / contour primary review
 
-Outcome: HUMAN_CHECKPOINT. The approved proposal remains the scope authority;
+Primary accepted: the former HUMAN_CHECKPOINT is closed. The approved proposal remains the scope authority;
 `run-contract.kp.gradient-contour-intuition-v1` owns live progress. This is a
 review packet, not release certification or a second execution plan.
 
 Review at http://localhost:8000/experiments/kinetic-figure/gradient-contour/.
 The existing shared server was verified; no second server was started.
 
-## Current review: explanation-first translation (2026-09-11)
+## Accepted primary: explanation-first translation (2026-09-11)
 
 The user approved the learner draft and storyboard with “approve. implement”.
 The live URL now follows that structure in 19 learner-paced passages, not the
-previous eight-stop contour-first tour. G3 remains the rendered human checkpoint.
+previous eight-stop contour-first tour. The positive rendered review and explicit
+instruction to finish the loop accept G3. Later integration evidence is in
+`2026-09-12-gradient-reuse-evidence.md`; older checkpoint entries below are
+provenance, not renewed approval requests.
 
 - Stops 1–6: the missing information, east/north local slopes, the local ramp,
   diagonal change prediction, then the gradient as those slopes collected.

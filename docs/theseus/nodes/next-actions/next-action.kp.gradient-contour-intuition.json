@@ -2,9 +2,9 @@
   "id": "next-action.kp.gradient-contour-intuition",
   "kind": "next-action",
   "title": "Explain greatest local increase through contours",
-  "status": "ready",
+  "status": "resolved",
   "domain": "authoring",
-  "summary": "User approved six-package KP delivery proposal; G3 human review blocks G4-G6.",
+  "summary": "Accepted primary, bounded source-only reuse, independent tangent reading and exact return, coherent full reading/self-check, preserved canonical reference and verified release complete. Mechanics-from-zero outline recorded. Next is architecture assessment before new mechanics runtime; no automatic successor.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -17,6 +17,10 @@
     {
       "kind": "file",
       "path": "docs/project/decisions/2026-09-10-motivation-as-explanatory-context.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-12-gradient-reuse-evidence.md"
     }
   ],
   "verification": [
@@ -414,6 +418,104 @@
       "scope": "G5 final types",
       "checkedAt": "2026-09-12T04:46:52.429Z",
       "notes": "Complete final app, node, test, Svelte and domain rerun passed after session return API and fragment removal repair; Svelte zero errors and warnings."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "G6 final full types and production build",
+      "checkedAt": "2026-09-12T06:46:35.044Z",
+      "notes": "App, node, tests, Svelte and domains clean; 1722 production modules; existing chunk-size warnings retained."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "G6 current production reader routes",
+      "checkedAt": "2026-09-12T06:46:36.517Z",
+      "notes": "All 12 routes pass; common reader 152463 gzip bytes matches previously approved baseline. No ceilings changed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning scripts/check-reader-production-closure.ts",
+      "status": "passed",
+      "scope": "G6 production closure",
+      "checkedAt": "2026-09-12T06:46:37.564Z",
+      "notes": "12 manifest routes pass."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning scripts/check-dev-review-production-closure.ts",
+      "status": "passed",
+      "scope": "G6 development erasure",
+      "checkedAt": "2026-09-12T06:46:38.672Z",
+      "notes": "464 files, 12 forbidden markers; passed before separate opt-in build."
+    },
+    {
+      "command": "npm run build:gradient-contour",
+      "status": "passed",
+      "scope": "G6 actual opt-in production host",
+      "checkedAt": "2026-09-12T06:46:39.854Z",
+      "notes": "153 modules built using existing production helpers; no server or deployment."
+    },
+    {
+      "command": "npm run measure:gradient-contour-closure",
+      "status": "passed",
+      "scope": "G6 absolute activated closure measurement",
+      "checkedAt": "2026-09-12T06:46:40.972Z",
+      "notes": "Entry script 155259 gzip bytes; activated script 287593; CSS 26265. Emitted font-format inventory 866478 is not browser transfer. No pre-change delta or ceiling invented."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "G6 initial full suite, superseded only by clean full rerun",
+      "checkedAt": "2026-09-12T06:47:24.141Z",
+      "notes": "Initial full suite found stale supporting-thread status assertion and generated reachability scanned-file count. Repaired scope invariant and regenerated official inventory; focused six tests passed. Final full suite still running."
+    },
+    {
+      "command": "npm run check:canonical-animation-budgets",
+      "status": "failed",
+      "scope": "G6 auxiliary historical check, not current host closure",
+      "checkedAt": "2026-09-12T06:47:26.525Z",
+      "notes": "Main manifest lacks canonical-animation-review.html. Retain failure as later architecture finding; scoped actual gradient production build supplies host evidence. No check weakened."
+    },
+    {
+      "command": "npm run check:algebra-fraction-composition-budgets",
+      "status": "failed",
+      "scope": "G6 auxiliary legacy policy mismatch",
+      "checkedAt": "2026-09-12T06:47:28.673Z",
+      "notes": "Older 145000 common-reader ceiling and startup split conflict with prior approved 152463 baseline in commit 4a20b4f33. Current reader budget and closure pass unchanged; later assessment must reconcile script ownership. No ceiling changed."
+    },
+    {
+      "command": "npm run visual:gradient-contour -- --project=firefox --project=webkit",
+      "status": "passed",
+      "scope": "G6 final supported-browser cohort",
+      "checkedAt": "2026-09-12T06:47:30.658Z",
+      "notes": "42 passed in 3.9m: Chromium, Firefox and WebKit; primary, source variant, reference, readings, controls, typography and shader lifecycle. Earlier cohorts exposed native Firefox drag takeover, repaired shared ownership; occasional readiness timeout is not silently certified. Final complete cohort exits clean. Physical OS gestures remain unverified."
+    },
+    {
+      "command": "npm run visual:gradient-contour:production",
+      "status": "passed",
+      "scope": "G6 built host browser canary",
+      "checkedAt": "2026-09-12T06:48:28.115Z",
+      "notes": "1 passed: actual built assets, Apply, WebGL, revision and exact return; no dev module fallback or additional server."
+    },
+    {
+      "command": "npm run visual:focus-deck-multi-card",
+      "status": "passed",
+      "scope": "G6 shared input preservation with expanded grep and all three projects",
+      "checkedAt": "2026-09-12T06:50:28.836Z",
+      "notes": "Invocation expanded grep to visual checkpoint, native horizontal wheel and swiping scrubs gradually; Chromium Firefox WebKit. Nine passed: code gradual reversible swipe and wheel, graph equation 3D code desktop and phone fit."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "G6 final clean full repository suite",
+      "checkedAt": "2026-09-12T06:58:04.398Z",
+      "notes": "Architecture and inference prechecks passed. Node suite: 7037 tests passed, zero failures skips or cancellations, 765930.55325ms. This is a fresh full rerun after stale scope assertion and generated inventory repairs, not a focused substitution."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "G6 final durable closeout",
+      "checkedAt": "2026-09-12T06:58:37.696Z",
+      "notes": "1126 nodes and 30562 events valid after closed receipt, completed six-slice contract and resolved target. Focused direction and inventory checks rerun after final documentation; no active loop remains."
     }
   ],
   "progress": {

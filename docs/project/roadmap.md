@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-09-11
+Last Updated: 2026-09-12
 Status: active
 Active Thread: `threads/typed-semantic-authoring-framework.md`
 Supporting Threads:
@@ -39,8 +39,13 @@ retroactive repair are readiness criteria for the later assessment. Preserve
 immutable editions while regenerating affected static artifacts explicitly.
 The best-practices follow-up remains queued, not extra scope in this continuation.
 
-Current approved delivery: `threads/2026-09-10-gradient-contour-delivery-proposal.md`
-under `run-contract.kp.gradient-contour-intuition-v1`. User approved with “go”.
+Completed delivery: `threads/2026-09-10-gradient-contour-delivery-proposal.md`
+under `run-contract.kp.gradient-contour-intuition-v1`. All six packages passed;
+source-only reuse, independent reading/exact return, release evidence and limits:
+`threads/2026-09-12-gradient-reuse-evidence.md`. The mechanics-from-zero outline
+and gradient continuation complete the authorised first two priorities. Next is
+architecture assessment and bounded cleanup before new mechanics implementation;
+no automatic successor is started. User approved the gradient proposal with “go”.
 Use the KP delivery skill: six outcome-sized packages, G3 human review before
 source-only generalization and downstream integration. Preserve the original
 surface-contour route; no new renderer, clock or automatic successor.

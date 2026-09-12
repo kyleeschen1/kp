@@ -95,7 +95,10 @@ test("supporting threads cannot restart deferred tutorial or runtime work", asyn
     /Current Next Action: Build botanical Lisp/
   );
   assert.match(runtime.slice(0, runtime.indexOf("## Goal")), /TypeScript caller/);
-  assert.match(attention.slice(0, attention.indexOf("## Goal")), /Status: paused/);
+  const attentionDirection = attention.slice(0, attention.indexOf("## Goal"));
+  assert.match(attentionDirection, /broader lane paused/);
+  assert.match(attentionDirection, /active gradient delivery, not a parallel queue/);
+  assert.match(attentionDirection, /2026-09-10-gradient-contour-delivery-proposal\.md/);
 });
 
 test("authoring integration executes only its explicitly approved contract", async () => {

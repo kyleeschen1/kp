@@ -179,7 +179,13 @@ test("primary visual checkpoint: motivated question, local mechanism and coheren
   await slider.focus(); await page.keyboard.press("ArrowRight");
   await expect.poll(async () => Number(await page.locator(deck).getAttribute("data-gradient-step"))).toBeGreaterThan(0);
   await page.keyboard.press("ArrowLeft"); await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", "0");
-  const viewport = page.locator("[data-kp-focus-deck-viewport]"); const box = (await viewport.boundingBox())!;
+  const viewport = page.locator("[data-kp-focus-deck-viewport]");
+  await viewport.scrollIntoViewIfNeeded();
+  const box = (await viewport.boundingBox())!;
+  await page.locator(deck).evaluate(element => {
+    const card = element as HTMLElement; card.dataset["nativeDragStarts"] = "0";
+    card.addEventListener("dragstart", () => { card.dataset["nativeDragStarts"] = String(Number(card.dataset["nativeDragStarts"]) + 1); });
+  });
   // Content is bottom-aligned now. Keep the gesture in the small blank margin,
   // not over the final line of selectable prose or the anchored action button.
   const dragY = box.y + box.height - 4;
@@ -187,8 +193,21 @@ test("primary visual checkpoint: motivated question, local mechanism and coheren
   await page.mouse.move(box.x + box.width * .2, dragY, { steps: 10 });
   const middle = Number(await page.locator(deck).getAttribute("data-gradient-step")); expect(middle).toBeGreaterThan(0); expect(middle).toBeLessThan(1);
   await page.mouse.up(); await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", "1");
-  await page.mouse.move(box.x + box.width * .25, dragY); await page.mouse.down();
-  await page.mouse.move(box.x + box.width * .85, dragY, { steps: 10 }); await page.mouse.up();
+  const reverseBox = (await viewport.boundingBox())!;
+  const reverseY = reverseBox.y + reverseBox.height - 4;
+  await page.mouse.move(reverseBox.x + reverseBox.width * .25, reverseY); await page.mouse.down();
+  await page.mouse.move(reverseBox.x + reverseBox.width * .85, reverseY, { steps: 10 }); await page.mouse.up();
+  await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", "0");
+  await expect(page.locator(deck)).toHaveAttribute("data-native-drag-starts", "0");
+  const defaults = await page.locator(deck).evaluate(element => {
+    const dispatch = (selector: string) => element.querySelector(selector)!.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, cancelable: true, isPrimary: true, pointerType: "mouse", button: 0 }));
+    return { prose: dispatch("[data-kp-focus-deck-beat] p"), control: dispatch("[data-kp-focus-deck-next]") };
+  });
+  expect(defaults).toEqual({ prose: true, control: true });
+  await expect(page.locator(deck)).toBeFocused();
+  await page.keyboard.press("ArrowRight");
+  await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", "1");
+  await page.keyboard.press("ArrowLeft");
   await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", "0");
   expect(errors).toEqual([]);
 });
