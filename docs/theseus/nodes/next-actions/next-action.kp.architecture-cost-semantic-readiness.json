@@ -134,6 +134,13 @@
       "scope": "s14",
       "checkedAt": "2026-09-12T17:44:20.770Z",
       "notes": "Fourteen preservation cases plus new lifecycle browser case, ten unit checks, full types and scoped added-test types, production browser and six byte-acceptance cohorts passed."
+    },
+    {
+      "command": "npm run visual:architecture-cost -- --gradient-only --runtime --acceptance",
+      "status": "passed",
+      "scope": "s15",
+      "checkedAt": "2026-09-12T17:50:26.151Z",
+      "notes": "Six request cohorts and twenty-four ordinary runtime probes; nine Chromium Firefox WebKit preservation cases; full types and helper checks pass. No uniform mobile frame-rate certification."
     }
   ],
   "expectedLearning": [

@@ -31,7 +31,7 @@ export function summarizeGradientCpuProfile(profile: CpuProfile, sourceLabel: (f
 
 /** Profiles are separate from the ordinary timing cohort. Local source maps
  * explain generated frames; they are not sent to the browser or shipped policy. */
-export async function profileGradientCost(page: Page, cdp: CDPSession, output: string, cpuSlowdown: number, repeat: number) {
+export async function profileGradientCost(page: Page, cdp: CDPSession, output: string, cpuSlowdown: number, repeat: number, profileEnabled = true) {
   const maps = new Map<string, SourceMap>(), labels = new Map<string, string>();
   const label = (frame: CpuProfile["nodes"][number]["callFrame"]) => {
     if (!frame.url.startsWith("http://localhost:8000/assets/")) return frame.functionName || "(native)";
@@ -50,12 +50,14 @@ export async function profileGradientCost(page: Page, cdp: CDPSession, output: s
   };
   const comparisonStart = await page.locator("[data-kp-focus-deck-beat]").evaluateAll(elements => elements.findIndex(element => element.getAttribute("data-kp-focus-deck-beat") === "components"));
   if (comparisonStart < 0) throw new Error("Canonical comparison beat missing.");
-  for (const phase of [{ name: "idle", start: 0, move: false }, { name: "first-transition", start: 0, move: true }, { name: "comparison", start: comparisonStart, move: true }]) {
+  const cameraStart = await page.locator("[data-kp-focus-deck-beat]").evaluateAll(elements => elements.findIndex(element => element.getAttribute("data-kp-focus-deck-beat") === "magnitude"));
+  if (cameraStart < 0) throw new Error("Canonical camera departure beat missing.");
+  for (const phase of [{ name: "idle", start: 0, move: false }, { name: "first-transition", start: 0, move: true }, { name: "comparison", start: comparisonStart, move: true }, { name: "camera-transition", start: cameraStart, move: true }]) {
     await page.locator("[data-kp-focus-deck-scrubber]").evaluate((element, start) => {
       (element as HTMLInputElement).value = String(start); element.dispatchEvent(new Event("input", { bubbles: true }));
     }, phase.start);
     await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
-    await cdp.send("Profiler.enable"); await cdp.send("Profiler.start");
+    if (profileEnabled) { await cdp.send("Profiler.enable"); await cdp.send("Profiler.start"); }
     const before = await cdp.send("Performance.getMetrics");
     const gaps = await page.evaluate(async move => {
       let last = await new Promise<number>(resolve => requestAnimationFrame(resolve)); const start = last, gaps: number[] = [];
@@ -64,12 +66,13 @@ export async function profileGradientCost(page: Page, cdp: CDPSession, output: s
       return gaps.sort((a, b) => a - b);
     }, phase.move);
     const after = await cdp.send("Performance.getMetrics");
-    const { profile } = await cdp.send("Profiler.stop"); await cdp.send("Profiler.disable");
+    const attribution = profileEnabled ? summarizeGradientCpuProfile((await cdp.send("Profiler.stop")).profile, label) : {};
+    if (profileEnabled) await cdp.send("Profiler.disable");
     const delta = (name: string) => ((after.metrics as {name: string; value: number}[]).find(m => m.name === name)?.value ?? 0) - ((before.metrics as {name: string; value: number}[]).find(m => m.name === name)?.value ?? 0);
-    console.log(JSON.stringify({ kind: "cpu-profile", phase: phase.name, cpuSlowdown, repeat,
+    console.log(JSON.stringify({ kind: profileEnabled ? "cpu-profile" : "runtime-probe", phase: phase.name, cpuSlowdown, repeat,
       scriptMs: delta("ScriptDuration") * 1000, layoutMs: delta("LayoutDuration") * 1000,
       styleMs: delta("RecalcStyleDuration") * 1000, layoutCount: delta("LayoutCount"), styleCount: delta("RecalcStyleCount"),
       frames: { count: gaps.length, p50Ms: gaps[Math.floor(gaps.length * .5)], p95Ms: gaps[Math.floor(gaps.length * .95)] },
-      ...summarizeGradientCpuProfile(profile, label), caveat: "Sampling attribution; inclusive rows overlap. Instrumented frames are not the ordinary timing cohort." }));
+      ...attribution, caveat: profileEnabled ? "Sampling attribution; inclusive rows overlap. Instrumented frames are not the ordinary timing cohort." : "Ordinary production build, profiler disabled; RAF observation and CDP metric deltas only. CPU multiplier is not phone certification." }));
   }
 }

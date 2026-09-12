@@ -145,7 +145,7 @@ if (process.argv.includes("--browser")) {
             stylesheets: coverage.map(item => ({ url: item.url, total: item.text?.length ?? null,
               used: item.ranges.reduce((n, range) => n + range.end - range.start, 0) })) }));
         }
-        if (scenario.id === "gradient" && process.argv.includes("--profile")) await profileGradientCost(page, cdp, scenario.output, rate, repeat);
+        if (scenario.id === "gradient" && (process.argv.includes("--profile") || process.argv.includes("--runtime"))) await profileGradientCost(page, cdp, scenario.output, rate, repeat, process.argv.includes("--profile"));
       } finally { await context.close(); }
     }
   } finally { await browser.close(); }

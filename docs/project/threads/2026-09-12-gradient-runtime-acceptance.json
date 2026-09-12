@@ -1,0 +1,1025 @@
+{
+  "command": "npm run visual:architecture-cost -- --gradient-only --runtime --acceptance",
+  "rows": [
+    {
+      "kind": "environment",
+      "revision": "7f95485159844caed17a840a5459ee0707bc9a90",
+      "browser": "149.0.7827.55",
+      "platform": "darwin",
+      "arch": "x64",
+      "cpu": "Apple M2",
+      "viewport": "390x844 DPR1",
+      "network": "local built-file fulfillment; no network emulation",
+      "caveat": "1x/6x CPU sensitivity probe, not calibrated phone/GPU/RAM or field-performance certification"
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 1,
+      "repeat": 1,
+      "manifestSha256": "a7ef49622af112de1f2407e990e97750e45c606df2c445e1314ca935050f88d3",
+      "readyMs": 931.8000000715256,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          321,
+          88,
+          355
+        ]
+      },
+      "frames": {
+        "samples": 121,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.59999999999991,
+        "maxMs": 17.700000000000273,
+        "over50ms": 0
+      },
+      "startupScriptMs": 194.923,
+      "startupTaskMs": 870.999,
+      "interactionScriptMs": 123.52799999999998,
+      "jsHeapUsedBytes": 10274392,
+      "totals": {
+        ".js": {
+          "raw": 1050557,
+          "gzip": 287964
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 289
+        }
+      },
+      "resources": [
+        {
+          "path": "experiments/kinetic-figure/gradient-contour/index.html",
+          "raw": 401,
+          "gzip": 289,
+          "kind": ".html"
+        },
+        {
+          "path": "assets/gradientContour-BOE5Xu8F.js",
+          "raw": 520159,
+          "gzip": 155630,
+          "kind": ".js"
+        },
+        {
+          "path": "assets/gradientContour-yrMr-wI2.css",
+          "raw": 78262,
+          "gzip": 17987,
+          "kind": ".css"
+        },
+        {
+          "path": "assets/KaTeX_Math-Italic-t53AETM-.woff2",
+          "raw": 16440,
+          "gzip": 16466,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Regular-B22Nviop.woff2",
+          "raw": 26272,
+          "gzip": 26300,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Bold-Cx986IdX.woff2",
+          "raw": 25324,
+          "gzip": 25352,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/graph-webgl-three-BxZe3k0R.js",
+          "raw": 530398,
+          "gzip": 132334,
+          "kind": ".js"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "kind": "runtime-probe",
+      "phase": "idle",
+      "cpuSlowdown": 1,
+      "repeat": 1,
+      "scriptMs": 0.7889999999999842,
+      "layoutMs": 0,
+      "styleMs": 0,
+      "layoutCount": 0,
+      "styleCount": 0,
+      "frames": {
+        "count": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.5
+      },
+      "caveat": "Ordinary production build, profiler disabled; RAF observation and CDP metric deltas only. CPU multiplier is not phone certification."
+    },
+    {
+      "kind": "runtime-probe",
+      "phase": "first-transition",
+      "cpuSlowdown": 1,
+      "repeat": 1,
+      "scriptMs": 127.40099999999998,
+      "layoutMs": 37.367999999999995,
+      "styleMs": 13.894000000000004,
+      "layoutCount": 103,
+      "styleCount": 206,
+      "frames": {
+        "count": 121,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.399999999999636
+      },
+      "caveat": "Ordinary production build, profiler disabled; RAF observation and CDP metric deltas only. CPU multiplier is not phone certification."
+    },
+    {
+      "kind": "runtime-probe",
+      "phase": "comparison",
+      "cpuSlowdown": 1,
+      "repeat": 1,
+      "scriptMs": 134.876,
+      "layoutMs": 40.456999999999994,
+      "styleMs": 22.56799999999999,
+      "layoutCount": 103,
+      "styleCount": 206,
+      "frames": {
+        "count": 120,
+        "p50Ms": 16.69999999999891,
+        "p95Ms": 17.5
+      },
+      "caveat": "Ordinary production build, profiler disabled; RAF observation and CDP metric deltas only. CPU multiplier is not phone certification."
+    },
+    {
+      "kind": "runtime-probe",
+      "phase": "camera-transition",
+      "cpuSlowdown": 1,
+      "repeat": 1,
+      "scriptMs": 441.3769999999999,
+      "layoutMs": 25.213999999999988,
+      "styleMs": 38.304,
+      "layoutCount": 387,
+      "styleCount": 487,
+      "frames": {
+        "count": 118,
+        "p50Ms": 16.69999999999891,
+        "p95Ms": 17.399999999999636
+      },
+      "caveat": "Ordinary production build, profiler disabled; RAF observation and CDP metric deltas only. CPU multiplier is not phone certification."
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 1,
+      "repeat": 2,
+      "manifestSha256": "a7ef49622af112de1f2407e990e97750e45c606df2c445e1314ca935050f88d3",
+      "readyMs": 567.2999999523163,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          156
+        ]
+      },
+      "frames": {
+        "samples": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.5,
+        "maxMs": 17.700000000000045,
+        "over50ms": 0
+      },
+      "startupScriptMs": 113.743,
+      "startupTaskMs": 497.03700000000003,
+      "interactionScriptMs": 118.799,
+      "jsHeapUsedBytes": 7607984,
+      "totals": {
+        ".js": {
+          "raw": 1050557,
+          "gzip": 287964
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 289
+        }
+      },
+      "resources": [
+        {
+          "path": "experiments/kinetic-figure/gradient-contour/index.html",
+          "raw": 401,
+          "gzip": 289,
+          "kind": ".html"
+        },
+        {
+          "path": "assets/gradientContour-BOE5Xu8F.js",
+          "raw": 520159,
+          "gzip": 155630,
+          "kind": ".js"
+        },
+        {
+          "path": "assets/gradientContour-yrMr-wI2.css",
+          "raw": 78262,
+          "gzip": 17987,
+          "kind": ".css"
+        },
+        {
+          "path": "assets/KaTeX_Math-Italic-t53AETM-.woff2",
+          "raw": 16440,
+          "gzip": 16466,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Regular-B22Nviop.woff2",
+          "raw": 26272,
+          "gzip": 26300,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Bold-Cx986IdX.woff2",
+          "raw": 25324,
+          "gzip": 25352,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/graph-webgl-three-BxZe3k0R.js",
+          "raw": 530398,
+          "gzip": 132334,
+          "kind": ".js"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "kind": "runtime-probe",
+      "phase": "idle",
+      "cpuSlowdown": 1,
+      "repeat": 2,
+      "scriptMs": 0.8900000000000019,
+      "layoutMs": 0,
+      "styleMs": 0,
+      "layoutCount": 0,
+      "styleCount": 0,
+      "frames": {
+        "count": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.5
+      },
+      "caveat": "Ordinary production build, profiler disabled; RAF observation and CDP metric deltas only. CPU multiplier is not phone certification."
+    },
+    {
+      "kind": "runtime-probe",
+      "phase": "first-transition",
+      "cpuSlowdown": 1,
+      "repeat": 2,
+      "scriptMs": 132.32300000000004,
+      "layoutMs": 37.477000000000004,
+      "styleMs": 14.172000000000004,
+      "layoutCount": 103,
+      "styleCount": 206,
+      "frames": {
+        "count": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.5
+      },
+      "caveat": "Ordinary production build, profiler disabled; RAF observation and CDP metric deltas only. CPU multiplier is not phone certification."
+    },
+    {
+      "kind": "runtime-probe",
+      "phase": "comparison",
+      "cpuSlowdown": 1,
+      "repeat": 2,
+      "scriptMs": 103.61999999999999,
+      "layoutMs": 33.74599999999998,
+      "styleMs": 18.968,
+      "layoutCount": 103,
+      "styleCount": 206,
+      "frames": {
+        "count": 121,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.5
+      },
+      "caveat": "Ordinary production build, profiler disabled; RAF observation and CDP metric deltas only. CPU multiplier is not phone certification."
+    },
+    {
+      "kind": "runtime-probe",
+      "phase": "camera-transition",
+      "cpuSlowdown": 1,
+      "repeat": 2,
+      "scriptMs": 529.1039999999999,
+      "layoutMs": 39.248000000000005,
+      "styleMs": 59.47100000000001,
+      "layoutCount": 387,
+      "styleCount": 487,
+      "frames": {
+        "count": 118,
+        "p50Ms": 16.69999999999891,
+        "p95Ms": 17.600000000000364
+      },
+      "caveat": "Ordinary production build, profiler disabled; RAF observation and CDP metric deltas only. CPU multiplier is not phone certification."
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 1,
+      "repeat": 3,
+      "manifestSha256": "a7ef49622af112de1f2407e990e97750e45c606df2c445e1314ca935050f88d3",
+      "readyMs": 833.8999999761581,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          230,
+          69,
+          376
+        ]
+      },
+      "frames": {
+        "samples": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.5,
+        "maxMs": 17.600000000000023,
+        "over50ms": 0
+      },
+      "startupScriptMs": 140.246,
+      "startupTaskMs": 728.6700000000001,
+      "interactionScriptMs": 128.68499999999997,
+      "jsHeapUsedBytes": 7565992,
+      "totals": {
+        ".js": {
+          "raw": 1050557,
+          "gzip": 287964
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 289
+        }
+      },
+      "resources": [
+        {
+          "path": "experiments/kinetic-figure/gradient-contour/index.html",
+          "raw": 401,
+          "gzip": 289,
+          "kind": ".html"
+        },
+        {
+          "path": "assets/gradientContour-BOE5Xu8F.js",
+          "raw": 520159,
+          "gzip": 155630,
+          "kind": ".js"
+        },
+        {
+          "path": "assets/gradientContour-yrMr-wI2.css",
+          "raw": 78262,
+          "gzip": 17987,
+          "kind": ".css"
+        },
+        {
+          "path": "assets/KaTeX_Math-Italic-t53AETM-.woff2",
+          "raw": 16440,
+          "gzip": 16466,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Regular-B22Nviop.woff2",
+          "raw": 26272,
+          "gzip": 26300,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Bold-Cx986IdX.woff2",
+          "raw": 25324,
+          "gzip": 25352,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/graph-webgl-three-BxZe3k0R.js",
+          "raw": 530398,
+          "gzip": 132334,
+          "kind": ".js"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "kind": "runtime-probe",
+      "phase": "idle",
+      "cpuSlowdown": 1,
+      "repeat": 3,
+      "scriptMs": 0.8289999999999687,
+      "layoutMs": 0,
+      "styleMs": 0,
+      "layoutCount": 0,
+      "styleCount": 0,
+      "frames": {
+        "count": 120,
+        "p50Ms": 16.600000000000364,
+        "p95Ms": 17.5
+      },
+      "caveat": "Ordinary production build, profiler disabled; RAF observation and CDP metric deltas only. CPU multiplier is not phone certification."
+    },
+    {
+      "kind": "runtime-probe",
+      "phase": "first-transition",
+      "cpuSlowdown": 1,
+      "repeat": 3,
+      "scriptMs": 82.64700000000002,
+      "layoutMs": 24.742000000000015,
+      "styleMs": 9.238999999999997,
+      "layoutCount": 103,
+      "styleCount": 206,
+      "frames": {
+        "count": 121,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.5
+      },
+      "caveat": "Ordinary production build, profiler disabled; RAF observation and CDP metric deltas only. CPU multiplier is not phone certification."
+    },
+    {
+      "kind": "runtime-probe",
+      "phase": "comparison",
+      "cpuSlowdown": 1,
+      "repeat": 3,
+      "scriptMs": 131.69600000000003,
+      "layoutMs": 44.46600000000001,
+      "styleMs": 23.59,
+      "layoutCount": 103,
+      "styleCount": 206,
+      "frames": {
+        "count": 121,
+        "p50Ms": 16.69999999999891,
+        "p95Ms": 17.5
+      },
+      "caveat": "Ordinary production build, profiler disabled; RAF observation and CDP metric deltas only. CPU multiplier is not phone certification."
+    },
+    {
+      "kind": "runtime-probe",
+      "phase": "camera-transition",
+      "cpuSlowdown": 1,
+      "repeat": 3,
+      "scriptMs": 548.2470000000001,
+      "layoutMs": 43.63,
+      "styleMs": 61.98900000000002,
+      "layoutCount": 333,
+      "styleCount": 418,
+      "frames": {
+        "count": 102,
+        "p50Ms": 16.700000000000728,
+        "p95Ms": 33.899999999999636
+      },
+      "caveat": "Ordinary production build, profiler disabled; RAF observation and CDP metric deltas only. CPU multiplier is not phone certification."
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 6,
+      "repeat": 1,
+      "manifestSha256": "a7ef49622af112de1f2407e990e97750e45c606df2c445e1314ca935050f88d3",
+      "readyMs": 2115.2000000476837,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          1302,
+          65,
+          192,
+          321
+        ]
+      },
+      "frames": {
+        "samples": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.5,
+        "maxMs": 17.699999999999818,
+        "over50ms": 0
+      },
+      "startupScriptMs": 817.183,
+      "startupTaskMs": 2063.4579999999996,
+      "interactionScriptMs": 383.19199999999995,
+      "jsHeapUsedBytes": 13111460,
+      "totals": {
+        ".js": {
+          "raw": 1050557,
+          "gzip": 287964
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 289
+        }
+      },
+      "resources": [
+        {
+          "path": "experiments/kinetic-figure/gradient-contour/index.html",
+          "raw": 401,
+          "gzip": 289,
+          "kind": ".html"
+        },
+        {
+          "path": "assets/gradientContour-BOE5Xu8F.js",
+          "raw": 520159,
+          "gzip": 155630,
+          "kind": ".js"
+        },
+        {
+          "path": "assets/gradientContour-yrMr-wI2.css",
+          "raw": 78262,
+          "gzip": 17987,
+          "kind": ".css"
+        },
+        {
+          "path": "assets/KaTeX_Math-Italic-t53AETM-.woff2",
+          "raw": 16440,
+          "gzip": 16466,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Regular-B22Nviop.woff2",
+          "raw": 26272,
+          "gzip": 26300,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Bold-Cx986IdX.woff2",
+          "raw": 25324,
+          "gzip": 25352,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/graph-webgl-three-BxZe3k0R.js",
+          "raw": 530398,
+          "gzip": 132334,
+          "kind": ".js"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "kind": "runtime-probe",
+      "phase": "idle",
+      "cpuSlowdown": 6,
+      "repeat": 1,
+      "scriptMs": 0.4380000000001605,
+      "layoutMs": 0,
+      "styleMs": 0,
+      "layoutCount": 0,
+      "styleCount": 0,
+      "frames": {
+        "count": 121,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.5
+      },
+      "caveat": "Ordinary production build, profiler disabled; RAF observation and CDP metric deltas only. CPU multiplier is not phone certification."
+    },
+    {
+      "kind": "runtime-probe",
+      "phase": "first-transition",
+      "cpuSlowdown": 6,
+      "repeat": 1,
+      "scriptMs": 382.11300000000017,
+      "layoutMs": 103.414,
+      "styleMs": 49.00900000000002,
+      "layoutCount": 99,
+      "styleCount": 198,
+      "frames": {
+        "count": 116,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.600000000000364
+      },
+      "caveat": "Ordinary production build, profiler disabled; RAF observation and CDP metric deltas only. CPU multiplier is not phone certification."
+    },
+    {
+      "kind": "runtime-probe",
+      "phase": "comparison",
+      "cpuSlowdown": 6,
+      "repeat": 1,
+      "scriptMs": 268.5040000000001,
+      "layoutMs": 97.89799999999993,
+      "styleMs": 44.40499999999997,
+      "layoutCount": 103,
+      "styleCount": 206,
+      "frames": {
+        "count": 121,
+        "p50Ms": 16.69999999999891,
+        "p95Ms": 17.5
+      },
+      "caveat": "Ordinary production build, profiler disabled; RAF observation and CDP metric deltas only. CPU multiplier is not phone certification."
+    },
+    {
+      "kind": "runtime-probe",
+      "phase": "camera-transition",
+      "cpuSlowdown": 6,
+      "repeat": 1,
+      "scriptMs": 1176.831,
+      "layoutMs": 103.59400000000008,
+      "styleMs": 129.10500000000002,
+      "layoutCount": 120,
+      "styleCount": 151,
+      "frames": {
+        "count": 46,
+        "p50Ms": 34.100000000000364,
+        "p95Ms": 84.20000000000073
+      },
+      "caveat": "Ordinary production build, profiler disabled; RAF observation and CDP metric deltas only. CPU multiplier is not phone certification."
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 6,
+      "repeat": 2,
+      "manifestSha256": "a7ef49622af112de1f2407e990e97750e45c606df2c445e1314ca935050f88d3",
+      "readyMs": 2397.1999999284744,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          1414,
+          55,
+          209,
+          467
+        ]
+      },
+      "frames": {
+        "samples": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.5,
+        "maxMs": 17.600000000000364,
+        "over50ms": 0
+      },
+      "startupScriptMs": 834.3530000000001,
+      "startupTaskMs": 2359.983,
+      "interactionScriptMs": 273.554,
+      "jsHeapUsedBytes": 6755636,
+      "totals": {
+        ".js": {
+          "raw": 1050557,
+          "gzip": 287964
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 289
+        }
+      },
+      "resources": [
+        {
+          "path": "experiments/kinetic-figure/gradient-contour/index.html",
+          "raw": 401,
+          "gzip": 289,
+          "kind": ".html"
+        },
+        {
+          "path": "assets/gradientContour-BOE5Xu8F.js",
+          "raw": 520159,
+          "gzip": 155630,
+          "kind": ".js"
+        },
+        {
+          "path": "assets/gradientContour-yrMr-wI2.css",
+          "raw": 78262,
+          "gzip": 17987,
+          "kind": ".css"
+        },
+        {
+          "path": "assets/KaTeX_Math-Italic-t53AETM-.woff2",
+          "raw": 16440,
+          "gzip": 16466,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Regular-B22Nviop.woff2",
+          "raw": 26272,
+          "gzip": 26300,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Bold-Cx986IdX.woff2",
+          "raw": 25324,
+          "gzip": 25352,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/graph-webgl-three-BxZe3k0R.js",
+          "raw": 530398,
+          "gzip": 132334,
+          "kind": ".js"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "kind": "runtime-probe",
+      "phase": "idle",
+      "cpuSlowdown": 6,
+      "repeat": 2,
+      "scriptMs": 0.8130000000001747,
+      "layoutMs": 0,
+      "styleMs": 0,
+      "layoutCount": 0,
+      "styleCount": 0,
+      "frames": {
+        "count": 121,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.5
+      },
+      "caveat": "Ordinary production build, profiler disabled; RAF observation and CDP metric deltas only. CPU multiplier is not phone certification."
+    },
+    {
+      "kind": "runtime-probe",
+      "phase": "first-transition",
+      "cpuSlowdown": 6,
+      "repeat": 2,
+      "scriptMs": 391.597,
+      "layoutMs": 138.59400000000005,
+      "styleMs": 43.24300000000003,
+      "layoutCount": 103,
+      "styleCount": 206,
+      "frames": {
+        "count": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.599999999999454
+      },
+      "caveat": "Ordinary production build, profiler disabled; RAF observation and CDP metric deltas only. CPU multiplier is not phone certification."
+    },
+    {
+      "kind": "runtime-probe",
+      "phase": "comparison",
+      "cpuSlowdown": 6,
+      "repeat": 2,
+      "scriptMs": 328.433,
+      "layoutMs": 94.862,
+      "styleMs": 53.991000000000014,
+      "layoutCount": 97,
+      "styleCount": 194,
+      "frames": {
+        "count": 114,
+        "p50Ms": 16.69999999999891,
+        "p95Ms": 17.5
+      },
+      "caveat": "Ordinary production build, profiler disabled; RAF observation and CDP metric deltas only. CPU multiplier is not phone certification."
+    },
+    {
+      "kind": "runtime-probe",
+      "phase": "camera-transition",
+      "cpuSlowdown": 6,
+      "repeat": 2,
+      "scriptMs": 1176.934,
+      "layoutMs": 108.65799999999992,
+      "styleMs": 118.92700000000006,
+      "layoutCount": 122,
+      "styleCount": 153,
+      "frames": {
+        "count": 47,
+        "p50Ms": 49,
+        "p95Ms": 67.20000000000073
+      },
+      "caveat": "Ordinary production build, profiler disabled; RAF observation and CDP metric deltas only. CPU multiplier is not phone certification."
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 6,
+      "repeat": 3,
+      "manifestSha256": "a7ef49622af112de1f2407e990e97750e45c606df2c445e1314ca935050f88d3",
+      "readyMs": 2702.399999976158,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          1513,
+          91,
+          308,
+          504
+        ]
+      },
+      "frames": {
+        "samples": 119,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.5,
+        "maxMs": 34.19999999999982,
+        "over50ms": 0
+      },
+      "startupScriptMs": 869.069,
+      "startupTaskMs": 2652.2549999999997,
+      "interactionScriptMs": 436.42100000000005,
+      "jsHeapUsedBytes": 11230920,
+      "totals": {
+        ".js": {
+          "raw": 1050557,
+          "gzip": 287964
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 289
+        }
+      },
+      "resources": [
+        {
+          "path": "experiments/kinetic-figure/gradient-contour/index.html",
+          "raw": 401,
+          "gzip": 289,
+          "kind": ".html"
+        },
+        {
+          "path": "assets/gradientContour-BOE5Xu8F.js",
+          "raw": 520159,
+          "gzip": 155630,
+          "kind": ".js"
+        },
+        {
+          "path": "assets/gradientContour-yrMr-wI2.css",
+          "raw": 78262,
+          "gzip": 17987,
+          "kind": ".css"
+        },
+        {
+          "path": "assets/KaTeX_Math-Italic-t53AETM-.woff2",
+          "raw": 16440,
+          "gzip": 16466,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Regular-B22Nviop.woff2",
+          "raw": 26272,
+          "gzip": 26300,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Bold-Cx986IdX.woff2",
+          "raw": 25324,
+          "gzip": 25352,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/graph-webgl-three-BxZe3k0R.js",
+          "raw": 530398,
+          "gzip": 132334,
+          "kind": ".js"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "kind": "runtime-probe",
+      "phase": "idle",
+      "cpuSlowdown": 6,
+      "repeat": 3,
+      "scriptMs": 0.4550000000000942,
+      "layoutMs": 0,
+      "styleMs": 0,
+      "layoutCount": 0,
+      "styleCount": 0,
+      "frames": {
+        "count": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.599999999999454
+      },
+      "caveat": "Ordinary production build, profiler disabled; RAF observation and CDP metric deltas only. CPU multiplier is not phone certification."
+    },
+    {
+      "kind": "runtime-probe",
+      "phase": "first-transition",
+      "cpuSlowdown": 6,
+      "repeat": 3,
+      "scriptMs": 273.164,
+      "layoutMs": 81.31299999999997,
+      "styleMs": 41.60800000000003,
+      "layoutCount": 103,
+      "styleCount": 206,
+      "frames": {
+        "count": 121,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.600000000000364
+      },
+      "caveat": "Ordinary production build, profiler disabled; RAF observation and CDP metric deltas only. CPU multiplier is not phone certification."
+    },
+    {
+      "kind": "runtime-probe",
+      "phase": "comparison",
+      "cpuSlowdown": 6,
+      "repeat": 3,
+      "scriptMs": 277.8779999999999,
+      "layoutMs": 83.29799999999999,
+      "styleMs": 57.04700000000001,
+      "layoutCount": 103,
+      "styleCount": 206,
+      "frames": {
+        "count": 121,
+        "p50Ms": 16.600000000000364,
+        "p95Ms": 17.600000000000364
+      },
+      "caveat": "Ordinary production build, profiler disabled; RAF observation and CDP metric deltas only. CPU multiplier is not phone certification."
+    },
+    {
+      "kind": "runtime-probe",
+      "phase": "camera-transition",
+      "cpuSlowdown": 6,
+      "repeat": 3,
+      "scriptMs": 1177.3829999999998,
+      "layoutMs": 117.30799999999996,
+      "styleMs": 125.59900000000002,
+      "layoutCount": 122,
+      "styleCount": 153,
+      "frames": {
+        "count": 47,
+        "p50Ms": 33.70000000000073,
+        "p95Ms": 67.09999999999854
+      },
+      "caveat": "Ordinary production build, profiler disabled; RAF observation and CDP metric deltas only. CPU multiplier is not phone certification."
+    }
+  ]
+}

@@ -124,7 +124,8 @@
     {
       "id": "s15",
       "title": "Runtime acceptance",
-      "status": "planned"
+      "summary": "Material first-step improvement accepted with deterministic no-op regressions and cross-browser preservation; moving-camera CPU limit retained explicitly.",
+      "status": "complete"
     },
     {
       "id": "s16",
