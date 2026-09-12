@@ -39,6 +39,14 @@ retroactive repair are readiness criteria for the later assessment. Preserve
 immutable editions while regenerating affected static artifacts explicitly.
 The best-practices follow-up remains queued, not extra scope in this continuation.
 
+The user accepted the completed gradient result and requested continuation with
+Git hygiene. A bounded source-based architecture assessment is now recorded in
+`reviews/2026-09-12-mechanics-architecture-readiness.md`. First recommended repair:
+complete static edition stylesheet/asset dependencies, then reconcile verification
+and revision ownership before mechanics runtime. No repair loop has been started.
+Current branch: `feature/20260912-mechanics-architecture-readiness`, based on the
+verified `ac579dec5` tip; prior branch/history retained, no merge or push.
+
 Completed delivery: `threads/2026-09-10-gradient-contour-delivery-proposal.md`
 under `run-contract.kp.gradient-contour-intuition-v1`. All six packages passed;
 source-only reuse, independent reading/exact return, release evidence and limits:

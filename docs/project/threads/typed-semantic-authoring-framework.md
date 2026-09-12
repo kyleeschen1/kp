@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: mechanics-from-zero outline recorded; gradient delivery complete; architecture assessment next
+Status: gradient complete; architecture assessed; static edition dependency repair recommended first
 Last Updated: 2026-09-12
 Completed execution: `run-contract.kp.gradient-contour-intuition-v1` from
 `2026-09-10-gradient-contour-delivery-proposal.md`, approved with “go”. Theseus
@@ -12,6 +12,11 @@ The approved curriculum outline is
 cleanup follow this loop, before new mechanics implementation. The first two
 priorities are complete; no successor implementation is started. Earlier G3
 gating statements below are historical, not renewed approval requests.
+The user subsequently requested continuation and Git hygiene. Source-based
+assessment: `../reviews/2026-09-12-mechanics-architecture-readiness.md`.
+It identifies missing transitive stylesheet packaging in three edition builders;
+repair that boundary before a broader mechanics implementation. The assessment
+is complete, not a new executable repair loop or a universal-framework proposal.
 Latest accepted strategic direction:
 `../decisions/2026-09-11-applied-mathematics-mechanics-priority.md`.
 Classical mechanics is the first sustained learning case; mathematical concepts
@@ -109,9 +114,12 @@ immutable local publication and a source-only second problem now pass release.
 Closeout: `../reviews/2026-09-08-bayesian-flagship-closeout.md`.
 Theseus owns final completion and evidence; do not restart this run.
 The unstarted metadata-incomplete v1 record is superseded, not another queue.
-Branch: `feature/20260907-reusable-reasoning`, retaining completed R1 ancestry.
-Theseus owns counts and terminal state. Retain this branch: no branch helper is
-configured and the approved scope does not authorize merging completed ancestry.
+Current branch: `feature/20260912-mechanics-architecture-readiness`, created from
+verified delivery tip `ac579dec5` under the user's Git-hygiene request. Retain
+`feature/20260907-reusable-reasoning` as the prior delivery branch. No branch helper
+or dev branch is configured. No merge, push, branch deletion or worktree cleanup
+was performed; integrating the 391-commit ancestry into main is a separate decision.
+Theseus owns execution counts and terminal state.
 Standing minimal-check-in
 policy: `../decisions/2026-09-07-reconciled-horizon-and-minimal-check-ins.md`.
 The user requested recording the recommendations and finishing the existing
