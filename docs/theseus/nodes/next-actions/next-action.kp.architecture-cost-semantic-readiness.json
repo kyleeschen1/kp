@@ -1,0 +1,64 @@
+{
+  "id": "next-action.kp.architecture-cost-semantic-readiness",
+  "kind": "next-action",
+  "title": "Complete architecture cost and semantic readiness repairs",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-12-architecture-readiness-long-loop-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.gradient-contour-intuition"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run test",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s01",
+      "checkedAt": "2026-09-12T15:36:13.503Z",
+      "notes": "Full app node test Svelte and domain typechecks pass; 15 publication and gradient preservation tests also pass"
+    },
+    {
+      "command": "npm run visual:architecture-cost",
+      "status": "passed",
+      "scope": "s01",
+      "checkedAt": "2026-09-12T15:36:14.359Z",
+      "notes": "18 built-route samples completed without page errors; matched manifests and byte closures. Timing variation especially tax confirms CPU sensitivity not calibrated device certification"
+    }
+  ],
+  "expectedLearning": [
+    "Measure retired ownership, complete delivery cost and stronger semantic guarantees"
+  ],
+  "allowedWork": [
+    "Exact approved 25-slice proposal and preservation boundaries"
+  ],
+  "disallowedWork": [
+    "No new scope, lost correctness, visual redesign or waived gates"
+  ],
+  "criteria": [
+    {
+      "id": "readiness-repairs",
+      "weight": "high"
+    },
+    {
+      "id": "preservation",
+      "weight": "high"
+    },
+    {
+      "id": "measured-closeout",
+      "weight": "high"
+    }
+  ]
+}

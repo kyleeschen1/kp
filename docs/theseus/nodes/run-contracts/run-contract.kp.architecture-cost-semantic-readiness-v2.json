@@ -1,0 +1,167 @@
+{
+  "id": "run-contract.kp.architecture-cost-semantic-readiness-v2",
+  "kind": "run-contract",
+  "title": "Architecture cost and semantic readiness",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.architecture-cost-semantic-readiness.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-12-architecture-readiness-long-loop-proposal.md",
+      "summary": "Exact user-approved 25 slices; replaces issuance-only v1 without scope change"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run test",
+    "npm run visual:architecture-cost",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Exact approved proposal s01-s25 and standing bounded budget repairs; use per-slice checks and brief receipts"
+  ],
+  "disallowedWork": [
+    "No redesign, new mechanics, waived gates, unrelated migration, deployment or history rewrite"
+  ],
+  "goal": "Complete approved readiness recommendations 1-5 and report measured improvements",
+  "target": "next-action.kp.architecture-cost-semantic-readiness",
+  "runMode": "run",
+  "maxSlices": 25,
+  "commitCadence": "One verified reversible slice with evidence per commit",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop for unresolved preservation or correctness failure after bounded repair, genuine visual choice, scope expansion, unsafe authority, user pause or completion"
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Baseline and retirement ledger",
+      "summary": "Baseline and retirement ledger recorded; full types, 15 preservation tests and 18 browser probes pass; valid contract has no blockers",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "Edition dependency closure owner",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Bayesian closure adoption",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Algebra edition closure adoption",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Publication acceptance",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Deferred capability lifecycle",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Tax lazy activation",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Tax focused CSS",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Gradient focused CSS",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Budget owner reconciliation",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Loading acceptance",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Gradient CPU attribution",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Gradient hot-path repair",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Gradient invalidation and lifecycle",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Runtime acceptance",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Immutable semantic issuance",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Supported caller adoption",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Transformation law pressure",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Gradient reuse boundary",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Tax input convergence",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Code input convergence",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Verification economics",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Evidence-led test consolidation",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Revision ownership",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Release and thorough closeout",
+      "status": "planned"
+    }
+  ]
+}

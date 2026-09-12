@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: gradient complete; expanded cost/ontology audit complete; bounded readiness repairs recommended
+Status: gradient complete; approved 25-slice readiness loop active in Theseus v2
 Last Updated: 2026-09-12
 Completed execution: `run-contract.kp.gradient-contour-intuition-v1` from
 `2026-09-10-gradient-contour-delivery-proposal.md`, approved with “go”. Theseus
@@ -25,6 +25,12 @@ then evidence-led verification consolidation before mechanics runtime. Existing
 canonical motion and immutable editions are preservation boundaries. These are
 recommendations, not an approved successor repair contract; low-end physical
 device and exhaustive redundancy certification have not been performed.
+The user accepted recommendations 1–5 and invoked `theseus-long-loop`. The exact
+proposal is `2026-09-12-architecture-readiness-long-loop-proposal.md`; the user
+approved all 25 slices and requested a thorough improvement report. Active:
+`run-contract.kp.architecture-cost-semantic-readiness-v2`; v1 is issuance-only
+history. Execute with routine nonvisual checkpoints auto-approved.
+Do not resume historical algebra work or start mechanics content in this scope.
 Latest accepted strategic direction:
 `../decisions/2026-09-11-applied-mathematics-mechanics-priority.md`.
 Classical mechanics is the first sustained learning case; mathematical concepts

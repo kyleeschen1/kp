@@ -57,6 +57,14 @@ then the first mechanics unit with reusable mathematics. The 6× CPU measurement
 are sensitivity probes, not physical-device certification. No runtime repair,
 test deletion, budget increase, or successor run is implied by this audit.
 
+The user now accepts audit recommendations 1–5 and requests a Theseus long loop.
+Exact proposed scope and preservation gates:
+`threads/2026-09-12-architecture-readiness-long-loop-proposal.md` (25 slices).
+The user approved the exact proposal and requested a thorough closeout report.
+Active execution: `run-contract.kp.architecture-cost-semantic-readiness-v2`;
+v1 is issuance-only history. Mechanics content remains the next product boundary,
+not part of this readiness loop.
+
 Completed delivery: `threads/2026-09-10-gradient-contour-delivery-proposal.md`
 under `run-contract.kp.gradient-contour-intuition-v1`. All six packages passed;
 source-only reuse, independent reading/exact return, release evidence and limits:
