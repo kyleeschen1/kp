@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-09-10
+Last Updated: 2026-09-11
 Status: active
 Active Thread: `threads/typed-semantic-authoring-framework.md`
 Supporting Threads:
@@ -24,10 +24,19 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
-Accepted but deferred until the current brainstorm finishes: encode explanation
-best practices and layered checks, as recorded in
-`threads/2026-09-11-deferred-explanation-best-practices.md`. The MVC-for-physics
-dogfooding curriculum remains a proposal; no run ordering or gates change yet.
+New accepted strategic priority: question-led classical mechanics as a sustained
+student/author dogfooding case, with independently reusable mathematics across
+linear algebra, MVC, probability/statistics, differential equations and
+optimisation. Prioritise explanatory proofs, model derivations, connections and
+validity limits. Full direction, learner context and bounded recommendations:
+`decisions/2026-09-11-applied-mathematics-mechanics-priority.md`.
+
+Next planning action: reconcile the remaining gradient delivery with this priority
+and propose a bounded mechanics/math reuse pilot. Do not automatically execute
+the historical successor horizon or create a full course platform. The accepted
+best-practices/checks follow-up remains deferred until brainstorming concludes;
+see `threads/2026-09-11-deferred-explanation-best-practices.md`. This documentation
+request does not start implementation or cancel/reorder the existing contract.
 
 Current approved delivery: `threads/2026-09-10-gradient-contour-delivery-proposal.md`
 under `run-contract.kp.gradient-contour-intuition-v1`. User approved with “go”.
@@ -45,7 +54,7 @@ Text positioning and typography are accepted canonical focus-card defaults;
 G3 remains open for the gradient's explanatory gap and endpoint history gestures.
 See `decisions/2026-09-11-focus-card-layout-type-acceptance.md`.
 
-Current successor planning reference:
+Historical successor planning reference (no longer automatic priority authority):
 `reviews/2026-09-07-reconciled-authoring-loop-horizon.md`. It reconciles everyday
 authoring, reusable knowledge/procedures, Bayes, frontend convergence/promotion
 and mathematical expansion. The user approved the exact R1 26-slice run:

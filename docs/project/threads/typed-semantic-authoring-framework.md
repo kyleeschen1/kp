@@ -1,15 +1,22 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: algebra complete; G3 approved explanation translated for rendered review
+Status: applied-math/mechanics priority accepted; gradient G3 preserved for reconciliation
 Last Updated: 2026-09-11
 Current execution: `run-contract.kp.gradient-contour-intuition-v1` from
 `2026-09-10-gradient-contour-delivery-proposal.md`, approved with “go”. Theseus
 owns progress; G4-G6 depend on the G3 primary visual/pedagogical acceptance.
-Latest accepted direction: `../decisions/2026-09-11-explanation-first-authoring.md`.
+Latest accepted strategic direction:
+`../decisions/2026-09-11-applied-mathematics-mechanics-priority.md`.
+Classical mechanics is the first sustained learning case; mathematical concepts
+remain independently reusable across domains. Prioritise explanatory proofs,
+model derivations, connections and validity limits. Reconcile the remaining
+gradient work before proposing a bounded new delivery; no silent contract change.
+Explanation-first authoring remains canonical:
+`../decisions/2026-09-11-explanation-first-authoring.md`.
 Deferred accepted follow-up: encode explanation best practices and layered checks
 after the current brainstorm ends. Scope and activation boundary:
-`2026-09-11-deferred-explanation-best-practices.md`. The personal MVC-for-physics
-curriculum is an exploratory dogfooding proposal, not an approved replacement run.
+`2026-09-11-deferred-explanation-best-practices.md`. Its earlier MVC-first proposal
+is superseded by the accepted mechanics-led direction, not a new executable run.
 The user approved `2026-09-11-gradient-explanation-draft.md` and its storyboard
 with “approve. implement”. The live primary now follows that explanatory order;
 `2026-09-11-gradient-explanation-storyboard.md` maps its inferential bridges and

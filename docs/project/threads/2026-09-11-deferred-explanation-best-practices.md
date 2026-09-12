@@ -41,6 +41,12 @@ explicit about explanatory judgments; empirical about comprehension.
 
 ## Current brainstorm, not an approved curriculum build
 
+> Superseded framing: the user subsequently selected classical mechanics as the
+> first sustained case, with mathematics independently reusable across domains.
+> Accepted direction: `../decisions/2026-09-11-applied-mathematics-mechanics-priority.md`.
+> The best-practices commitment above remains accepted; this older proposal is
+> retained as provenance, not a live implementation queue.
+
 The user proposes personally learning multivariable calculus toward physics,
 with a strong single-variable calculus background, as a KP dogfooding curriculum.
 Assess benefits and costs before selecting scope. A personal learning path is

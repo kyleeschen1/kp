@@ -355,7 +355,7 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "Shared typography inheritance implemented under explicit user amendment. Future canonical cards inherit defaults; native math/code unchanged. Gradient screen-space labels and narrow/enlarged-text layout ready for G3 human review. Policy linked from AGENTS and authoring entrypoint; G4-G6 remain unstarted."
+    "summary": "New accepted priority recorded in docs/project/decisions/2026-09-11-applied-mathematics-mechanics-priority.md: mechanics-led learning, independent cross-domain applied mathematics, explanatory proofs and model derivations. Next planning must reconcile G3-G6 with this direction; no run cancelled, reordered or completed. Best-practices implementation remains deferred until brainstorm ends. Documentation only. Broad resume exceeded its output budget; brief target context succeeded. Conversation import requires JSON, so the Markdown direction is linked through this progress record instead."
   },
   "expectedLearning": [
     "Whether contour identity plus first-order comparisons produce a reusable authorable geometric intuition."

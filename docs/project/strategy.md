@@ -1,6 +1,6 @@
 # KP Strategy
 
-Last Updated: 2026-09-10
+Last Updated: 2026-09-11
 
 ## North Star
 
@@ -18,6 +18,20 @@ inspectable and executable; the compiler is core machinery, not the complete
 learner-facing product definition.
 
 ## Product Thesis
+
+Accepted priority (2026-09-11): use question-led classical mechanics as the first
+sustained student/author case for deeper applied-mathematical and modelling
+intuition. The user learns as a hobby without deadlines and alongside external
+materials; experiencing and improving KP is itself valuable. Linear algebra,
+MVC, probability/statistics, differential equations and optimisation form the
+eventual interconnected backbone, not five simultaneous build programmes.
+Mathematical ideas must be both integrated into applications and independently
+recoverable across curricula. Prioritise explanatory proofs, model derivations,
+cross-representation/domain connections and validity boundaries. Discover reuse
+boundaries through concrete callers rather than new universal infrastructure.
+See `decisions/2026-09-11-applied-mathematics-mechanics-priority.md` for the full
+accepted direction and recommendations. This supersedes the MVC-first proposal
+and the old automatic successor ordering, not existing canonical architecture.
 
 Accepted clarification (2026-09-10): KP's reusable product unit is a queryable,
 composable intuition, not a fixed-length animation or documentary. Smaller
@@ -143,8 +157,9 @@ transition. Root is the first family whose generated coverage is derived case
 by case from its typed vocabulary. Every new Direct symbolic family must now
 enumerate cases and maturity; older Direct families remain explicit migration
 debt. Additional motif families and domain frontends remain ordered gaps.
-Broader learner-facing layout, curriculum, SRS scheduling, broad tutoring, and
-public-site expansion remain paused outside the bounded Focus Deck exemplar.
+The bounded personal mechanics/mathematics curriculum is now an accepted discovery
+priority. Broad curriculum-platform work, SRS scheduling, broad tutoring and
+public-site expansion remain paused; this is not a complete curriculum product.
 
 The normal-matrix checkpoint validates searchable proof truth, semantic
 identity, direct state, prompts, native settlement, accessibility, and bounded
