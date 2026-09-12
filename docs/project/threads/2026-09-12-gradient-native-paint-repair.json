@@ -1,0 +1,852 @@
+{
+  "environment": {
+    "kind": "environment",
+    "revision": "6fb93152044a06cf589baccb7e8a801088227e21",
+    "browser": "149.0.7827.55",
+    "platform": "darwin",
+    "arch": "x64",
+    "cpu": "Apple M2",
+    "viewport": "390x844 DPR1",
+    "network": "local built-file fulfillment; no network emulation",
+    "caveat": "1x/6x CPU sensitivity probe, not calibrated phone/GPU/RAM or field-performance certification"
+  },
+  "profiles": [
+    {
+      "phase": "idle",
+      "cpuSlowdown": 1,
+      "repeat": 1,
+      "scriptMs": 1.617000000000035,
+      "layoutMs": 0,
+      "styleMs": 0,
+      "frames": {
+        "count": 121,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.59999999999991
+      }
+    },
+    {
+      "phase": "first-transition",
+      "cpuSlowdown": 1,
+      "repeat": 1,
+      "scriptMs": 204.77399999999994,
+      "layoutMs": 19.796999999999993,
+      "styleMs": 7.240999999999998,
+      "frames": {
+        "count": 121,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.600000000000364
+      }
+    },
+    {
+      "phase": "comparison",
+      "cpuSlowdown": 1,
+      "repeat": 1,
+      "scriptMs": 153.36099999999996,
+      "layoutMs": 19.796000000000006,
+      "styleMs": 11.547000000000002,
+      "frames": {
+        "count": 121,
+        "p50Ms": 16.69999999999891,
+        "p95Ms": 17.399999999999636
+      }
+    },
+    {
+      "phase": "idle",
+      "cpuSlowdown": 1,
+      "repeat": 2,
+      "scriptMs": 0.7810000000000317,
+      "layoutMs": 0,
+      "styleMs": 0,
+      "frames": {
+        "count": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.59999999999991
+      }
+    },
+    {
+      "phase": "first-transition",
+      "cpuSlowdown": 1,
+      "repeat": 2,
+      "scriptMs": 180.56500000000003,
+      "layoutMs": 19.909999999999997,
+      "styleMs": 7.723000000000001,
+      "frames": {
+        "count": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.5
+      }
+    },
+    {
+      "phase": "comparison",
+      "cpuSlowdown": 1,
+      "repeat": 2,
+      "scriptMs": 234.69300000000004,
+      "layoutMs": 26.080999999999992,
+      "styleMs": 13.891000000000007,
+      "frames": {
+        "count": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.5
+      }
+    },
+    {
+      "phase": "idle",
+      "cpuSlowdown": 1,
+      "repeat": 3,
+      "scriptMs": 0.6569999999999077,
+      "layoutMs": 0,
+      "styleMs": 0,
+      "frames": {
+        "count": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.400000000000546
+      }
+    },
+    {
+      "phase": "first-transition",
+      "cpuSlowdown": 1,
+      "repeat": 3,
+      "scriptMs": 227.41900000000004,
+      "layoutMs": 21.44,
+      "styleMs": 7.647999999999988,
+      "frames": {
+        "count": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.5
+      }
+    },
+    {
+      "phase": "comparison",
+      "cpuSlowdown": 1,
+      "repeat": 3,
+      "scriptMs": 170.172,
+      "layoutMs": 18.87700000000002,
+      "styleMs": 10.484999999999994,
+      "frames": {
+        "count": 120,
+        "p50Ms": 16.69999999999891,
+        "p95Ms": 17.600000000000364
+      }
+    },
+    {
+      "phase": "idle",
+      "cpuSlowdown": 6,
+      "repeat": 1,
+      "scriptMs": 0.04899999999996574,
+      "layoutMs": 0,
+      "styleMs": 0,
+      "frames": {
+        "count": 119,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.600000000000364
+      }
+    },
+    {
+      "phase": "first-transition",
+      "cpuSlowdown": 6,
+      "repeat": 1,
+      "scriptMs": 740.1359999999999,
+      "layoutMs": 82.40199999999997,
+      "styleMs": 30.59200000000001,
+      "frames": {
+        "count": 121,
+        "p50Ms": 16.600000000000364,
+        "p95Ms": 17.5
+      }
+    },
+    {
+      "phase": "comparison",
+      "cpuSlowdown": 6,
+      "repeat": 1,
+      "scriptMs": 668.368,
+      "layoutMs": 70.09300000000002,
+      "styleMs": 37.04799999999997,
+      "frames": {
+        "count": 120,
+        "p50Ms": 16.69999999999891,
+        "p95Ms": 17.599999999998545
+      }
+    },
+    {
+      "phase": "idle",
+      "cpuSlowdown": 6,
+      "repeat": 2,
+      "scriptMs": 0.300000000000189,
+      "layoutMs": 0,
+      "styleMs": 0,
+      "frames": {
+        "count": 121,
+        "p50Ms": 16.600000000000364,
+        "p95Ms": 17.5
+      }
+    },
+    {
+      "phase": "first-transition",
+      "cpuSlowdown": 6,
+      "repeat": 2,
+      "scriptMs": 754.3299999999997,
+      "layoutMs": 92.51799999999999,
+      "styleMs": 21.891999999999996,
+      "frames": {
+        "count": 121,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.5
+      }
+    },
+    {
+      "phase": "comparison",
+      "cpuSlowdown": 6,
+      "repeat": 2,
+      "scriptMs": 687.4359999999999,
+      "layoutMs": 86.856,
+      "styleMs": 35.11800000000001,
+      "frames": {
+        "count": 121,
+        "p50Ms": 16.600000000000364,
+        "p95Ms": 17.5
+      }
+    },
+    {
+      "phase": "idle",
+      "cpuSlowdown": 6,
+      "repeat": 3,
+      "scriptMs": 0.064000000000064,
+      "layoutMs": 0,
+      "styleMs": 0,
+      "frames": {
+        "count": 119,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.5
+      }
+    },
+    {
+      "phase": "first-transition",
+      "cpuSlowdown": 6,
+      "repeat": 3,
+      "scriptMs": 669.0640000000001,
+      "layoutMs": 74.70299999999996,
+      "styleMs": 29.649000000000036,
+      "frames": {
+        "count": 121,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.5
+      }
+    },
+    {
+      "phase": "comparison",
+      "cpuSlowdown": 6,
+      "repeat": 3,
+      "scriptMs": 676.8159999999997,
+      "layoutMs": 73.01899999999995,
+      "styleMs": 37.37299999999999,
+      "frames": {
+        "count": 120,
+        "p50Ms": 16.69999999999891,
+        "p95Ms": 17.5
+      }
+    }
+  ],
+  "ordinary": [
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 1,
+      "repeat": 1,
+      "manifestSha256": "8c0309ac88ae36bcd86d546bb8da59855e8b93cd5a319f68ff340ca495e43f2e",
+      "readyMs": 1032.3999999761581,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          366,
+          93,
+          381
+        ]
+      },
+      "frames": {
+        "samples": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.5,
+        "maxMs": 17.699999999999818,
+        "over50ms": 0
+      },
+      "startupScriptMs": 211.331,
+      "startupTaskMs": 965.8149999999999,
+      "interactionScriptMs": 244.894,
+      "jsHeapUsedBytes": 12642904,
+      "totals": {
+        ".js": {
+          "raw": 1049657,
+          "gzip": 287780
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 289
+        }
+      },
+      "resources": [
+        {
+          "path": "experiments/kinetic-figure/gradient-contour/index.html",
+          "raw": 401,
+          "gzip": 289,
+          "kind": ".html"
+        },
+        {
+          "path": "assets/gradientContour-C8EkR0UZ.js",
+          "raw": 519204,
+          "gzip": 155408,
+          "kind": ".js"
+        },
+        {
+          "path": "assets/gradientContour-yrMr-wI2.css",
+          "raw": 78262,
+          "gzip": 17987,
+          "kind": ".css"
+        },
+        {
+          "path": "assets/KaTeX_Math-Italic-t53AETM-.woff2",
+          "raw": 16440,
+          "gzip": 16466,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Regular-B22Nviop.woff2",
+          "raw": 26272,
+          "gzip": 26300,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Bold-Cx986IdX.woff2",
+          "raw": 25324,
+          "gzip": 25352,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/graph-webgl-three-DTFCNlrT.js",
+          "raw": 530453,
+          "gzip": 132372,
+          "kind": ".js"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 1,
+      "repeat": 2,
+      "manifestSha256": "8c0309ac88ae36bcd86d546bb8da59855e8b93cd5a319f68ff340ca495e43f2e",
+      "readyMs": 641.7999999523163,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          207,
+          54,
+          286
+        ]
+      },
+      "frames": {
+        "samples": 121,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.40000000000009,
+        "maxMs": 17.699999999999818,
+        "over50ms": 0
+      },
+      "startupScriptMs": 129.859,
+      "startupTaskMs": 590.114,
+      "interactionScriptMs": 234.977,
+      "jsHeapUsedBytes": 12683144,
+      "totals": {
+        ".js": {
+          "raw": 1049657,
+          "gzip": 287780
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 289
+        }
+      },
+      "resources": [
+        {
+          "path": "experiments/kinetic-figure/gradient-contour/index.html",
+          "raw": 401,
+          "gzip": 289,
+          "kind": ".html"
+        },
+        {
+          "path": "assets/gradientContour-C8EkR0UZ.js",
+          "raw": 519204,
+          "gzip": 155408,
+          "kind": ".js"
+        },
+        {
+          "path": "assets/gradientContour-yrMr-wI2.css",
+          "raw": 78262,
+          "gzip": 17987,
+          "kind": ".css"
+        },
+        {
+          "path": "assets/KaTeX_Math-Italic-t53AETM-.woff2",
+          "raw": 16440,
+          "gzip": 16466,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Regular-B22Nviop.woff2",
+          "raw": 26272,
+          "gzip": 26300,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Bold-Cx986IdX.woff2",
+          "raw": 25324,
+          "gzip": 25352,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/graph-webgl-three-DTFCNlrT.js",
+          "raw": 530453,
+          "gzip": 132372,
+          "kind": ".js"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 1,
+      "repeat": 3,
+      "manifestSha256": "8c0309ac88ae36bcd86d546bb8da59855e8b93cd5a319f68ff340ca495e43f2e",
+      "readyMs": 657.6000000238419,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          208,
+          52
+        ]
+      },
+      "frames": {
+        "samples": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.59999999999991,
+        "maxMs": 17.700000000000273,
+        "over50ms": 0
+      },
+      "startupScriptMs": 130.789,
+      "startupTaskMs": 606.336,
+      "interactionScriptMs": 223.51500000000001,
+      "jsHeapUsedBytes": 12681596,
+      "totals": {
+        ".js": {
+          "raw": 1049657,
+          "gzip": 287780
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 289
+        }
+      },
+      "resources": [
+        {
+          "path": "experiments/kinetic-figure/gradient-contour/index.html",
+          "raw": 401,
+          "gzip": 289,
+          "kind": ".html"
+        },
+        {
+          "path": "assets/gradientContour-C8EkR0UZ.js",
+          "raw": 519204,
+          "gzip": 155408,
+          "kind": ".js"
+        },
+        {
+          "path": "assets/gradientContour-yrMr-wI2.css",
+          "raw": 78262,
+          "gzip": 17987,
+          "kind": ".css"
+        },
+        {
+          "path": "assets/KaTeX_Math-Italic-t53AETM-.woff2",
+          "raw": 16440,
+          "gzip": 16466,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Regular-B22Nviop.woff2",
+          "raw": 26272,
+          "gzip": 26300,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Bold-Cx986IdX.woff2",
+          "raw": 25324,
+          "gzip": 25352,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/graph-webgl-three-DTFCNlrT.js",
+          "raw": 530453,
+          "gzip": 132372,
+          "kind": ".js"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 6,
+      "repeat": 1,
+      "manifestSha256": "8c0309ac88ae36bcd86d546bb8da59855e8b93cd5a319f68ff340ca495e43f2e",
+      "readyMs": 1839,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          1213,
+          55,
+          156,
+          276
+        ]
+      },
+      "frames": {
+        "samples": 121,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.59999999999991,
+        "maxMs": 17.700000000000273,
+        "over50ms": 0
+      },
+      "startupScriptMs": 745.029,
+      "startupTaskMs": 1812.511,
+      "interactionScriptMs": 686.09,
+      "jsHeapUsedBytes": 10807192,
+      "totals": {
+        ".js": {
+          "raw": 1049657,
+          "gzip": 287780
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 289
+        }
+      },
+      "resources": [
+        {
+          "path": "experiments/kinetic-figure/gradient-contour/index.html",
+          "raw": 401,
+          "gzip": 289,
+          "kind": ".html"
+        },
+        {
+          "path": "assets/gradientContour-C8EkR0UZ.js",
+          "raw": 519204,
+          "gzip": 155408,
+          "kind": ".js"
+        },
+        {
+          "path": "assets/gradientContour-yrMr-wI2.css",
+          "raw": 78262,
+          "gzip": 17987,
+          "kind": ".css"
+        },
+        {
+          "path": "assets/KaTeX_Math-Italic-t53AETM-.woff2",
+          "raw": 16440,
+          "gzip": 16466,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Regular-B22Nviop.woff2",
+          "raw": 26272,
+          "gzip": 26300,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Bold-Cx986IdX.woff2",
+          "raw": 25324,
+          "gzip": 25352,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/graph-webgl-three-DTFCNlrT.js",
+          "raw": 530453,
+          "gzip": 132372,
+          "kind": ".js"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 6,
+      "repeat": 2,
+      "manifestSha256": "8c0309ac88ae36bcd86d546bb8da59855e8b93cd5a319f68ff340ca495e43f2e",
+      "readyMs": 1473.5999999046326,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          887,
+          137,
+          273
+        ]
+      },
+      "frames": {
+        "samples": 121,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.5,
+        "maxMs": 17.700000000000273,
+        "over50ms": 0
+      },
+      "startupScriptMs": 678.577,
+      "startupTaskMs": 1449.546,
+      "interactionScriptMs": 688.097,
+      "jsHeapUsedBytes": 6569120,
+      "totals": {
+        ".js": {
+          "raw": 1049657,
+          "gzip": 287780
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 289
+        }
+      },
+      "resources": [
+        {
+          "path": "experiments/kinetic-figure/gradient-contour/index.html",
+          "raw": 401,
+          "gzip": 289,
+          "kind": ".html"
+        },
+        {
+          "path": "assets/gradientContour-C8EkR0UZ.js",
+          "raw": 519204,
+          "gzip": 155408,
+          "kind": ".js"
+        },
+        {
+          "path": "assets/gradientContour-yrMr-wI2.css",
+          "raw": 78262,
+          "gzip": 17987,
+          "kind": ".css"
+        },
+        {
+          "path": "assets/KaTeX_Math-Italic-t53AETM-.woff2",
+          "raw": 16440,
+          "gzip": 16466,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Regular-B22Nviop.woff2",
+          "raw": 26272,
+          "gzip": 26300,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Bold-Cx986IdX.woff2",
+          "raw": 25324,
+          "gzip": 25352,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/graph-webgl-three-DTFCNlrT.js",
+          "raw": 530453,
+          "gzip": 132372,
+          "kind": ".js"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 6,
+      "repeat": 3,
+      "manifestSha256": "8c0309ac88ae36bcd86d546bb8da59855e8b93cd5a319f68ff340ca495e43f2e",
+      "readyMs": 2192.399999976158,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          1324,
+          67,
+          278,
+          325
+        ]
+      },
+      "frames": {
+        "samples": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.5,
+        "maxMs": 17.600000000000364,
+        "over50ms": 0
+      },
+      "startupScriptMs": 788.993,
+      "startupTaskMs": 2165.92,
+      "interactionScriptMs": 682.936,
+      "jsHeapUsedBytes": 10451500,
+      "totals": {
+        ".js": {
+          "raw": 1049657,
+          "gzip": 287780
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 289
+        }
+      },
+      "resources": [
+        {
+          "path": "experiments/kinetic-figure/gradient-contour/index.html",
+          "raw": 401,
+          "gzip": 289,
+          "kind": ".html"
+        },
+        {
+          "path": "assets/gradientContour-C8EkR0UZ.js",
+          "raw": 519204,
+          "gzip": 155408,
+          "kind": ".js"
+        },
+        {
+          "path": "assets/gradientContour-yrMr-wI2.css",
+          "raw": 78262,
+          "gzip": 17987,
+          "kind": ".css"
+        },
+        {
+          "path": "assets/KaTeX_Math-Italic-t53AETM-.woff2",
+          "raw": 16440,
+          "gzip": 16466,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Regular-B22Nviop.woff2",
+          "raw": 26272,
+          "gzip": 26300,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Bold-Cx986IdX.woff2",
+          "raw": 25324,
+          "gzip": 25352,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/graph-webgl-three-DTFCNlrT.js",
+          "raw": 530453,
+          "gzip": 132372,
+          "kind": ".js"
+        }
+      ],
+      "errors": []
+    }
+  ]
+}

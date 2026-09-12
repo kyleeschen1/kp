@@ -369,7 +369,13 @@ test("canonical Graph3D retains shader programs across sampled frames", async ({
   await page.addInitScript(() => {
     const prototype = WebGL2RenderingContext.prototype;
     const create = prototype.createProgram, remove = prototype.deleteProgram;
+    const draw = prototype.drawElements;
     let created = 0, deleted = 0;
+    let draws = 0;
+    prototype.drawElements = function (mode, count, type, offset) {
+      document.documentElement.dataset["gradientDraws"] = String(++draws);
+      return draw.call(this, mode, count, type, offset);
+    };
     prototype.createProgram = function (this: WebGL2RenderingContext) {
       document.documentElement.dataset["gradientProgramsCreated"] = String(++created);
       return create.call(this);
@@ -386,8 +392,19 @@ test("canonical Graph3D retains shader programs across sampled frames", async ({
     created: Number(e.dataset["gradientProgramsCreated"]), deleted: Number(e.dataset["gradientProgramsDeleted"] ?? 0)
   }));
   const warm = await counts(); expect(warm.created).toBeGreaterThan(0);
+  const draws = () => page.locator("html").evaluate(e => Number(e.dataset["gradientDraws"]));
+  const before = await draws(); expect(before).toBeGreaterThan(0);
+  const overlay = await paint(page);
   for (const position of [start + .3, start + .4, start + .5]) await seek(page, position);
   expect(await counts()).toEqual(warm);
+  expect(await paint(page)).not.toEqual(overlay);
+  expect(await draws()).toBe(before);
+  // A real camera/representation change must still submit native paint.
+  await seek(page, last);
+  expect(await draws()).toBeGreaterThan(before);
+  const changed = await draws();
+  await seek(page, start + .2);
+  expect(await draws()).toBeGreaterThan(changed);
 });
 
 test("shared wheel owner contains endpoint streams and reverses without overshoot debt", async ({ page }) => {

@@ -112,7 +112,8 @@
     {
       "id": "s13",
       "title": "Gradient hot-path repair",
-      "status": "planned"
+      "summary": "Measured native paint deduplication at canonical stage owner; frame timing improves without changing motion.",
+      "status": "complete"
     },
     {
       "id": "s14",

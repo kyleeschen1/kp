@@ -240,6 +240,7 @@ export function mountKpSurfaceContourStage(input: {
   let client: Graph3DWebGLClient | undefined;
   let fallbackView: "3d" | "xy" = "3d";
   let disposed = false;
+  let painted: SurfaceContourRuntimeFrame | undefined;
   const fitAudit = mountSurfaceContourFitAudit(input.root, input.authority);
 
   const project = (
@@ -262,7 +263,11 @@ export function mountKpSurfaceContourStage(input: {
     shell.setAttribute("aria-label", frame.accessibility.description);
     syncFallback(shell, input.authority, next.viewProgress, fallbackView);
     fallbackView = next.viewProgress >= 0.5 ? "xy" : "3d";
-    client?.renderKpGraph3DWebGLRuntimeFrame(shell, frame);
+    // The authority and palette belong to this mount. Overlay/level changes
+    // do not change native surface paint; never rebuild its scene for them.
+    if (client && (!painted || !sameSurfaceContourNativePaint(painted, frame))) {
+      if (client.renderKpGraph3DWebGLRuntimeFrame(shell, frame)) painted = frame;
+    }
     fitAudit.schedule();
   };
 
@@ -276,6 +281,7 @@ export function mountKpSurfaceContourStage(input: {
       direction: "forward"
     });
     const outcome = loaded.hydrateKpGraph3DWebGLRuntimeFrame(shell, frame);
+    if (outcome.status === "ready") painted = frame;
     shell.dataset["kpSurfaceContourCapability"] = outcome.status;
   }).catch((error: unknown) => {
     if (disposed) return;
@@ -295,6 +301,16 @@ export function mountKpSurfaceContourStage(input: {
       fitAudit.dispose();
     }
   });
+}
+
+function sameSurfaceContourNativePaint(a: SurfaceContourRuntimeFrame, b: SurfaceContourRuntimeFrame): boolean {
+  return a.scene.source === b.scene.source && a.scene.target === b.scene.target &&
+    a.clock.visualProgress === b.clock.visualProgress &&
+    Object.entries(a.theme.roles).every(([name, role]) => {
+      const other = b.theme.roles[name as keyof KpGraph3DResolvedVisualRoles];
+      return role.color === other.color && role.opacity === other.opacity &&
+        role.apparentWidth === other.apparentWidth;
+    });
 }
 
 export function projectKpSurfaceContourStageDom(input: {
