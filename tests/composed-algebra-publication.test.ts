@@ -17,6 +17,7 @@ for (const base of [prepareKpComposedAlgebraDraft().checked.source, primary, tra
     const first = buildComposedAlgebraEdition(path); editions.push(first.directory);
     assert.equal(buildComposedAlgebraEdition(path, true).checked, true);
     assert.equal(readFileSync(join(first.directory, "source.json"), "utf8"), bytes);
+    assert.equal(readFileSync(join(first.directory, "styles/tutorial/focus-deck-typography.css"), "utf8"), readFileSync(new URL("../src/tutorial/focus-deck-typography.css", import.meta.url), "utf8"));
     assert.equal(readFileSync(join(first.directory, "styles/tutorial/focus-deck-scaffold.css"), "utf8"), readFileSync(new URL("../src/tutorial/focus-deck-scaffold.css", import.meta.url), "utf8"));
     source.editorial.title += " edited"; writeFileSync(path, JSON.stringify(source));
     const second = buildComposedAlgebraEdition(path); editions.push(second.directory);

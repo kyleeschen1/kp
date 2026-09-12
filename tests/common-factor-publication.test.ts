@@ -33,6 +33,7 @@ test("selected-source editions preserve exact bytes and never overwrite an alter
     const first = buildCommonFactorEdition(path); editions.push(first.directory);
     assert.equal(buildCommonFactorEdition(path, true).checked, true);
     assert.equal(readFileSync(join(first.directory, "source.json"), "utf8"), bytes);
+    assert.equal(readFileSync(join(first.directory, "styles/tutorial/focus-deck-typography.css"), "utf8"), readFileSync(new URL("../src/tutorial/focus-deck-typography.css", import.meta.url), "utf8"));
     assert.equal(readFileSync(join(first.directory, "styles/experiments/authored-focus-card.css"), "utf8"), readFileSync(new URL("../src/experiments/authored-focus-card.css", import.meta.url), "utf8"));
     source.editorial.title += " edited"; writeFileSync(path, JSON.stringify(source));
     const second = buildCommonFactorEdition(path); editions.push(second.directory);

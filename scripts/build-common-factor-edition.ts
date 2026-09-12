@@ -1,5 +1,5 @@
 import { basename, join, resolve } from "node:path";
-import { readFileSync, readdirSync } from "node:fs";
+import { collectFocusCardEditionStyles } from "./local-stylesheet-closure.ts";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
 import katex from "katex";
@@ -42,17 +42,11 @@ export function buildCommonFactorEdition(sourcePath: string, check = false) {
   const selected = resolve(sourcePath);
   if (selected.startsWith(`${commonFactorEditionRoot}/`)) throw new Error("Keep authored source outside generated editions.");
   const sourceText = readAuthorSource(selected), artifact = compileCommonFactorPublication(sourceText, selected);
-  const katexRoot = join(repo, "node_modules/katex/dist");
   const files = new Map<string, string | Buffer>([
     ["source.json", sourceText], ["publication.json", JSON.stringify(artifact, null, 2) + "\n"],
-    ["katex.min.css", readFileSync(join(katexRoot, "katex.min.css"))],
-    ...readdirSync(join(katexRoot, "fonts")).sort().map(file => [`fonts/${file}`, readFileSync(join(katexRoot, "fonts", file))] as [string, Buffer]),
+    ...collectFocusCardEditionStyles(repo, "experiments/common-factor/style.css"),
     ["index.html", `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escape(artifact.payload.source.editorial.title)}</title><link rel="stylesheet" href="./styles/experiments/authored-focus-card.css"><link rel="stylesheet" href="./styles/experiments/common-factor/style.css"></head><body><main id="authored-focus-card">${artifact.payload.reading.html}</main></body></html>`]
   ]);
-  for (const path of ["experiments/authored-focus-card.css", "experiments/common-factor/style.css", "reader/app/exemplar.css", "rendering/canonical-equation-stage.css", "tutorial/focus-deck-scaffold.css"]) {
-    const source = readFileSync(join(repo, "src", path), "utf8");
-    files.set(`styles/${path}`, path === "reader/app/exemplar.css" ? source.replace('@import "katex/dist/katex.min.css";', '@import "../../../katex.min.css";') : source);
-  }
   const directory = writeKpImmutableLocalEdition({ repo, editionRoot: commonFactorEditionRoot, schemaVersion: "kp.common-factor-edition-files.v1",
     revisionId: artifact.payload.revisionId, files, check });
   return { directory, revisionId: artifact.payload.revisionId, sourceRevision: artifact.source.sha256, checked: check };

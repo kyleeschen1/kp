@@ -58,7 +58,8 @@
     {
       "id": "s04",
       "title": "Algebra edition closure adoption",
-      "status": "planned"
+      "summary": "Common-factor and composed-algebra lists retired; 13 unit and six browser cases pass with full types",
+      "status": "complete"
     },
     {
       "id": "s05",

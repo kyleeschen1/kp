@@ -5,6 +5,10 @@ import { fileURLToPath } from "node:url";
 import { chromium } from "@playwright/test";
 import { createBayesDraft } from "../src/experiments/bayesian-reasoning/draft.ts";
 import { buildBayesEdition } from "./build-bayesian-edition.ts";
+import { buildCommonFactorEdition } from "./build-common-factor-edition.ts";
+import { buildComposedAlgebraEdition } from "./build-composed-algebra-edition.ts";
+import common from "../src/authoring/examples/common-factor-primary.json" with { type: "json" };
+import composed from "../src/authoring/examples/composed-algebra-intuition.json" with { type: "json" };
 
 // Test-generated editions only; never mutate or remove an author's edition.
 const repo = fileURLToPath(new URL("..", import.meta.url)), scratch = join(repo, "tmp/codex");
@@ -13,9 +17,16 @@ const fixture = mkdtempSync(join(scratch, "edition-browser-"));
 const editions: string[] = [];
 const browser = await chromium.launch();
 try {
-  const source = createBayesDraft(); source.model.events[0]!.label = fixture.split("/").at(-1)!;
-  const path = join(fixture, "source.json"); writeFileSync(path, JSON.stringify(source));
-  const edition = buildBayesEdition(path); editions.push(edition.directory);
+  const unique = fixture.split("/").at(-1)!;
+  const source = createBayesDraft(); source.model.events[0]!.label = unique;
+  const families = [
+    { id: "bayes", source, build: buildBayesEdition },
+    { id: "common-factor", source: { ...common, editorial: { ...common.editorial, title: unique } }, build: buildCommonFactorEdition },
+    { id: "composed-algebra", source: { ...composed, editorial: { ...composed.editorial, title: unique } }, build: buildComposedAlgebraEdition }
+  ];
+  for (const family of families) {
+  const path = join(fixture, `${family.id}.json`); writeFileSync(path, JSON.stringify(family.source));
+  const edition = family.build(path); editions.push(edition.directory);
   for (const width of [390, 1280]) {
     const context = await browser.newContext({ viewport: { width, height: 900 } });
     try {
@@ -44,8 +55,9 @@ try {
       assert.equal(await page.locator("script").count(), 0);
       assert.ok(await page.locator(".katex").count() > 0);
       const reading = await page.locator("main").innerText(); assert.ok(reading.length > 100);
-      console.log(JSON.stringify({ family: "bayes", width, requests: requests.size, typography: true, nativeMath: true, failures }));
+      console.log(JSON.stringify({ family: family.id, width, requests: requests.size, typography: true, nativeMath: true, failures }));
     } finally { await context.close(); }
+  }
   }
 } finally {
   await browser.close();
