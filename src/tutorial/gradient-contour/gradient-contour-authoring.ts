@@ -9,6 +9,7 @@ export interface CheckedGradientExplanation {
   readonly sequence: ReturnType<typeof createGradientContourSequence>;
   readonly authority: ReturnType<typeof createKpSurfaceContourStageAuthority>;
   readonly sourceText: string;
+  /** Checked source plus explanatory beats/readings; not a renderer byte edition. */
   readonly revisionId: string;
 }
 export type GradientExplanationCheck =

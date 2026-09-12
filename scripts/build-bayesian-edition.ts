@@ -1,8 +1,7 @@
-import { createHash } from "node:crypto";
 import { basename, join, resolve } from "node:path";
 import { readFileSync } from "node:fs";
 import { collectFocusCardEditionStyles } from "./local-stylesheet-closure.ts";
-import { writeKpImmutableLocalEdition } from "./immutable-local-edition.ts";
+import { digestEditionBytes as digest, writeKpImmutableLocalEditionReceipt } from "./immutable-local-edition.ts";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
 import katex from "katex";
@@ -12,7 +11,6 @@ import { renderBayesTreeSvg } from "../src/experiments/bayesian-reasoning/tree-s
 import { encodeKpHtmlText as escape } from "../src/rendering/html-output-encoding.ts";
 import { createKpCompiledPublicationArtifact, assertKpCompiledPublicationArtifact } from "../src/tutorial/kp-compiled-publication-artifact.ts";
 
-const digest = (text: string | Uint8Array): `sha256:${string}` => `sha256:${createHash("sha256").update(text).digest("hex")}`;
 const repo = fileURLToPath(new URL("..", import.meta.url));
 export const bayesEditionRoot = join(repo, "tmp/codex/bayesian-editions");
 
@@ -65,9 +63,10 @@ export function buildBayesEdition(sourcePath: string, check = false) {
     ...collectFocusCardEditionStyles(repo, "experiments/bayesian-reasoning/style.css"),
     ["index.html", `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escape(artifact.payload.editorialTitle ?? "Bayesian probability reading")}</title><link rel="stylesheet" href="./styles/experiments/authored-focus-card.css"><link rel="stylesheet" href="./styles/experiments/bayesian-reasoning/style.css"></head><body><main id="authored-focus-card">${artifact.payload.reading.html}</main></body></html>`]
   ]);
-  const directory = writeKpImmutableLocalEdition({ repo, editionRoot: bayesEditionRoot, schemaVersion: "kp.bayes-edition-files.v1",
+  const edition = writeKpImmutableLocalEditionReceipt({ repo, editionRoot: bayesEditionRoot, schemaVersion: "kp.bayes-edition-files.v1",
     revisionId: artifact.payload.revisionId, files, check });
-  return { directory, revisionId: artifact.payload.revisionId, sourceRevision: artifact.source.sha256, checked: check };
+  // revisionId is retained as the explanation-revision compatibility alias.
+  return { ...edition, revisionId: artifact.payload.revisionId, sourceRevision: artifact.source.sha256, checked: check };
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   const { values } = parseArgs({ options: { source: { type: "string" }, check: { type: "boolean", default: false } } });

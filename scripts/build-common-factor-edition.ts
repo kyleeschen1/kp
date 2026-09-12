@@ -3,7 +3,7 @@ import { collectFocusCardEditionStyles } from "./local-stylesheet-closure.ts";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
 import katex from "katex";
-import { digestEditionBytes as digest, writeKpImmutableLocalEdition } from "./immutable-local-edition.ts";
+import { digestEditionBytes as digest, writeKpImmutableLocalEditionReceipt } from "./immutable-local-edition.ts";
 import { readAuthorSource } from "./author-check.ts";
 import { checkKpCommonFactorDraft } from "../src/authoring/common-factor-author-check.ts";
 import { projectCommonFactorReading } from "../src/experiments/common-factor/readings.ts";
@@ -47,9 +47,10 @@ export function buildCommonFactorEdition(sourcePath: string, check = false) {
     ...collectFocusCardEditionStyles(repo, "experiments/common-factor/style.css"),
     ["index.html", `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escape(artifact.payload.source.editorial.title)}</title><link rel="stylesheet" href="./styles/experiments/authored-focus-card.css"><link rel="stylesheet" href="./styles/experiments/common-factor/style.css"></head><body><main id="authored-focus-card">${artifact.payload.reading.html}</main></body></html>`]
   ]);
-  const directory = writeKpImmutableLocalEdition({ repo, editionRoot: commonFactorEditionRoot, schemaVersion: "kp.common-factor-edition-files.v1",
+  const edition = writeKpImmutableLocalEditionReceipt({ repo, editionRoot: commonFactorEditionRoot, schemaVersion: "kp.common-factor-edition-files.v1",
     revisionId: artifact.payload.revisionId, files, check });
-  return { directory, revisionId: artifact.payload.revisionId, sourceRevision: artifact.source.sha256, checked: check };
+  // revisionId is retained as the explanation-revision compatibility alias.
+  return { ...edition, revisionId: artifact.payload.revisionId, sourceRevision: artifact.source.sha256, checked: check };
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   const { values } = parseArgs({ options: { source: { type: "string" }, check: { type: "boolean", default: false } } });

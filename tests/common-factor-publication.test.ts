@@ -31,13 +31,22 @@ test("selected-source editions preserve exact bytes and never overwrite an alter
     const source = { ...base, editorial: { ...base.editorial, title: fixture.split("/").at(-1)! } };
     const path = join(fixture, "source.json"), bytes = JSON.stringify(source, null, 2) + "\n"; writeFileSync(path, bytes);
     const first = buildCommonFactorEdition(path); editions.push(first.directory);
+    assert.equal(first.explanationRevisionId, first.revisionId);
+    assert.equal(first.byteEditionId, "sha256:" + first.directory.split("/").at(-1));
     assert.equal(buildCommonFactorEdition(path, true).checked, true);
     assert.equal(readFileSync(join(first.directory, "source.json"), "utf8"), bytes);
     assert.equal(readFileSync(join(first.directory, "styles/tutorial/focus-deck-typography.css"), "utf8"), readFileSync(new URL("../src/tutorial/focus-deck-typography.css", import.meta.url), "utf8"));
     assert.equal(readFileSync(join(first.directory, "styles/experiments/authored-focus-card.css"), "utf8"), readFileSync(new URL("../src/experiments/authored-focus-card.css", import.meta.url), "utf8"));
+    // Formatting is a source-byte change, not an explanation change.
+    writeFileSync(path, JSON.stringify(source));
+    const reformatted = buildCommonFactorEdition(path); editions.push(reformatted.directory);
+    assert.equal(reformatted.explanationRevisionId, first.explanationRevisionId);
+    assert.notEqual(reformatted.sourceRevision, first.sourceRevision);
+    assert.notEqual(reformatted.byteEditionId, first.byteEditionId);
     source.editorial.title += " edited"; writeFileSync(path, JSON.stringify(source));
     const second = buildCommonFactorEdition(path); editions.push(second.directory);
     assert.notEqual(first.directory, second.directory); assert.notEqual(first.revisionId, second.revisionId);
+    assert.notEqual(first.explanationRevisionId, second.explanationRevisionId);
     assert.equal(readFileSync(join(first.directory, "source.json"), "utf8"), bytes);
     writeFileSync(join(second.directory, "index.html"), "altered");
     assert.throws(() => buildCommonFactorEdition(path, true), /stale or altered/);

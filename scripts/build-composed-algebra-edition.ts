@@ -3,7 +3,7 @@ import { collectFocusCardEditionStyles } from "./local-stylesheet-closure.ts";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
 import katex from "katex";
-import { digestEditionBytes as digest, writeKpImmutableLocalEdition } from "./immutable-local-edition.ts";
+import { digestEditionBytes as digest, writeKpImmutableLocalEditionReceipt } from "./immutable-local-edition.ts";
 import { readAuthorSource } from "./author-check.ts";
 import { prepareComposedAlgebraPublicationSource } from "./composed-algebra-publication-source.ts";
 import { encodeKpHtmlText as escape } from "../src/rendering/html-output-encoding.ts";
@@ -45,9 +45,10 @@ export function buildComposedAlgebraEdition(sourcePath: string, check = false) {
   ]);
   // Copy the current shared form into a new content-addressed edition. Existing
   // editions remain byte-stable; the writer never edits an old publication.
-  const directory = writeKpImmutableLocalEdition({ repo, editionRoot: composedAlgebraEditionRoot, schemaVersion: "kp.composed-algebra-edition-files.v1",
+  const edition = writeKpImmutableLocalEditionReceipt({ repo, editionRoot: composedAlgebraEditionRoot, schemaVersion: "kp.composed-algebra-edition-files.v1",
     revisionId: artifact.payload.revisionId, files, check });
-  return { directory, revisionId: artifact.payload.revisionId, sourceRevision: artifact.source.sha256, checked: check };
+  // revisionId is retained as the explanation-revision compatibility alias.
+  return { ...edition, revisionId: artifact.payload.revisionId, sourceRevision: artifact.source.sha256, checked: check };
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   const { values } = parseArgs({ options: { source: { type: "string" }, check: { type: "boolean", default: false } } });

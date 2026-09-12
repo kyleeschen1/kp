@@ -14,7 +14,7 @@ export function pinGradientPosition(lesson: CheckedGradientExplanation, progress
   return Object.freeze({ revisionId: lesson.revisionId, progress, from: beats[index]!.slug,
     to: beats[Math.min(index + 1, beats.length - 1)]!.slug, timelineAuthority: "none" as const });
 }
-/** A bookmark names semantic neighbors and a source revision. The existing
+/** A bookmark names semantic neighbors and the checked explanation revision. The existing
  * clock still owns time; a detached reading cannot issue animation authority. */
 export function resolveGradientPosition(lesson: CheckedGradientExplanation, value: unknown): GradientReturnPosition {
   if (!value || typeof value !== "object") throw new TypeError("Supply a revision-pinned return position.");

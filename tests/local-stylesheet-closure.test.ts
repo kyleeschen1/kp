@@ -4,7 +4,7 @@ import { mkdirSync, mkdtempSync, writeFileSync, readFileSync, rmSync, symlinkSyn
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { collectLocalStylesheetClosure, StylesheetClosureError } from "../scripts/local-stylesheet-closure.ts";
-import { writeKpImmutableLocalEdition } from "../scripts/immutable-local-edition.ts";
+import { writeKpImmutableLocalEdition, writeKpImmutableLocalEditionReceipt, type KpByteEditionId } from "../scripts/immutable-local-edition.ts";
 
 function fixture(run: (root: string, put: (name: string, text: string) => void) => void) {
   const scratch = fileURLToPath(new URL("../tmp/codex/", import.meta.url)); mkdirSync(scratch, { recursive: true });
@@ -24,6 +24,15 @@ test("a transitive style repair changes edition identity without rewriting old b
   assert.equal(readFileSync(join(first, "styles/type.css"), "utf8"), ".text{font-size:1rem}");
   assert.equal(JSON.parse(readFileSync(join(first, "edition.json"), "utf8")).revisionId,
     JSON.parse(readFileSync(join(second, "edition.json"), "utf8")).revisionId);
+  const receipt = writeKpImmutableLocalEditionReceipt({ repo: root, editionRoot: join(root, "editions"), schemaVersion: "test.v1", revisionId: "same-semantic-source",
+    files: collectLocalStylesheetClosure({ entries: [entry(root)] }), check: true });
+  assert.equal(receipt.directory, second);
+  assert.equal(receipt.explanationRevisionId, "same-semantic-source");
+  assert.equal(receipt.byteEditionId, "sha256:" + second.split("/").at(-1));
+  assert.equal(Object.isFrozen(receipt), true);
+  // @ts-expect-error A source hash cannot substitute for an issued byte-edition identity.
+  const unissued: KpByteEditionId = "sha256:source";
+  void unissued;
 }));
 
 test("real authored card closure contains transitive typography and every KaTeX font dependency", () => {

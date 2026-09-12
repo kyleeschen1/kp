@@ -197,6 +197,13 @@
       "scope": "s23",
       "checkedAt": "2026-09-12T19:07:43.851Z",
       "notes": "Shared fixture passes gradient plus six canonical tax/code/no-JS cases; injected forbidden requests fail. 36 command/impact tests, full types and alias list equality pass; intentional no-match filters exit 1 as expected."
+    },
+    {
+      "command": "npm run visual:edition-closure",
+      "status": "passed",
+      "scope": "s24",
+      "checkedAt": "2026-09-12T19:13:23.874Z",
+      "notes": "25 publication/closure/gradient authoring and return tests, six static browser cases, built gradient Apply/WebGL/return and full types pass. Formatting-only, editorial, style-only, altered edition and stale-link distinctions preserved."
     }
   ],
   "expectedLearning": [

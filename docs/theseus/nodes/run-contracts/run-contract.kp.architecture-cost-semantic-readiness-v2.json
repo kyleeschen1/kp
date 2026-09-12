@@ -178,7 +178,8 @@
     {
       "id": "s24",
       "title": "Revision ownership",
-      "status": "planned"
+      "summary": "One writer issues typed byte-edition receipts; builders preserve compatibility revision fields and exact old bytes; preview and semantic-return limits explicit.",
+      "status": "complete"
     },
     {
       "id": "s25",
