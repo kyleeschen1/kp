@@ -1,8 +1,11 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { assertKpAlgebraFractionCompositionBudgets, kpAlgebraFractionCompositionBaseline, type KpAlgebraFractionCompositionBudgetReport } from "./check-algebra-fraction-composition-budgets.ts";
+import { kpReaderRouteManifest } from "../src/reader/compiler/reader-route-manifest.ts";
 
 import {
   checkKpReaderRouteBudget,
+  allowedKpReaderRouteBytes,
   groupKpReaderSharedRuntimeClosures,
   kpReaderRouteBudgetGrowthPermille,
   measureKpReaderRouteBudgetDeltas,
@@ -15,6 +18,26 @@ const baseline = {
   compiledHtmlGzipBytes: 2_000,
   runtimeCodeGzipBytes: 40_000
 } as const;
+
+test("algebra keeps shared policy, startup, declared activation and leakage independently enforceable", () => {
+  const reader = kpReaderRouteManifest.find(({ route }) => route === "/reader/fraction-composition/")!;
+  const commonCeiling = allowedKpReaderRouteBytes(reader.budget.runtimeCodeGzipBytes);
+  const report: KpAlgebraFractionCompositionBudgetReport = {
+    commonReaderRuntimeGzipBytes: commonCeiling, commonReaderBaselineDeltaGzipBytes: 0,
+    commonReaderCeilingGzipBytes: commonCeiling, commonReaderRoutes: [reader.route],
+    htmlGzipBytes: 10_500, startupCodeAndCssGzipBytes: 216_218,
+    activationIncrementGzipBytes: 106_587, activeCodeAndCssGzipBytes: 322_805,
+    startupFiles: [], activationFiles: [], authoringLeakage: []
+  };
+  assert.doesNotThrow(() => assertKpAlgebraFractionCompositionBudgets(report));
+  assert.throws(() => assertKpAlgebraFractionCompositionBudgets({ ...report, commonReaderRuntimeGzipBytes: commonCeiling + 1, commonReaderCeilingGzipBytes: Number.MAX_SAFE_INTEGER }), /Common reader/);
+  for (const metric of Object.keys(kpAlgebraFractionCompositionBaseline) as Array<keyof typeof kpAlgebraFractionCompositionBaseline>) {
+    assert.throws(() => assertKpAlgebraFractionCompositionBudgets({ ...report,
+      [metric]: allowedKpReaderRouteBytes(kpAlgebraFractionCompositionBaseline[metric]) + 1
+    }), new RegExp(metric));
+  }
+  assert.throws(() => assertKpAlgebraFractionCompositionBudgets({ ...report, authoringLeakage: ["editor"] }), /authoring leaked/);
+});
 
 test("reader route budget accepts every metric at the approved five-percent boundary", () => {
   assert.equal(kpReaderRouteBudgetGrowthPermille, 50);

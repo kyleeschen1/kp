@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   checkKpCanonicalAnimationConstructionBudget,
   kpCanonicalAnimationConstructionBudget,
+  findKpCanonicalDevelopmentArtifacts,
   type KpCanonicalAnimationConstructionBudgetMeasurement
 } from "./check-canonical-animation-construction-budgets.ts";
 
@@ -40,7 +41,20 @@ function measurement(
 ): KpCanonicalAnimationConstructionBudgetMeasurement {
   return {
     ...metrics,
-    reviewFiles: ["assets/canonicalAnimationReview.js"],
+    developmentArtifactLeaks: [],
     ordinaryReaderLeakFiles
   };
 }
+
+test("production review policy rejects development artifacts instead of requiring them", () => {
+  assert.deepEqual(findKpCanonicalDevelopmentArtifacts({ "index.html": { file: "assets/main.js" } }), []);
+  const leaks = findKpCanonicalDevelopmentArtifacts({
+    "canonical-animation-review.html": { file: "assets/review.js" },
+    "glyph-reconciliation-experiment.html": { file: "assets/glyph.js" }
+  });
+  assert.equal(leaks.length, 2);
+  assert.deepEqual(checkKpCanonicalAnimationConstructionBudget({
+    budget: kpCanonicalAnimationConstructionBudget,
+    measurement: { ...measurement(kpCanonicalAnimationConstructionBudget), developmentArtifactLeaks: leaks }
+  }).map(({ metric }) => metric), ["developmentArtifactLeaks"]);
+});

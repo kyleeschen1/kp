@@ -94,7 +94,8 @@
     {
       "id": "s10",
       "title": "Budget owner reconciliation",
-      "status": "planned"
+      "summary": "Two obsolete budget owners reconciled; complete declared startup/activation accounting and negative checks pass, reader policy shared, development review stays erased.",
+      "status": "complete"
     },
     {
       "id": "s11",

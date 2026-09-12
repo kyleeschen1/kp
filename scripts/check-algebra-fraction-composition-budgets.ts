@@ -5,12 +5,15 @@ import { gzipSync } from "node:zlib";
 
 import {
   measureKpBundleClosureAttribution,
+  collectKpBundleManifestFiles,
   type KpBundleFileAttribution
 } from "./bundle-closure-attribution.ts";
 import {
   groupKpReaderSharedRuntimeClosures,
-  inspectKpReaderRouteBudgets
+  inspectKpReaderRouteBudgets,
+  allowedKpReaderRouteBytes
 } from "./check-reader-route-budgets.ts";
+import { kpReaderRouteManifest } from "../src/reader/compiler/reader-route-manifest.ts";
 
 interface ManifestChunk {
   readonly file: string;
@@ -23,11 +26,15 @@ type Manifest = Readonly<Record<string, ManifestChunk>>;
 
 const algebraEntry = "tutorials/algebra/fraction-composition/index.html";
 const algebraHtml = "tutorials/algebra/fraction-composition/index.html";
-const commonReaderBaselineGzipBytes = 124_778;
-const commonReaderCeilingGzipBytes = 145_000;
-const algebraBaseline = Object.freeze({
-  htmlGzipBytes: 4_434,
-  startupCodeAndCssGzipBytes: 36_219,
+const commonReaderRoute = "/reader/fraction-composition/";
+const commonReaderBaselineGzipBytes = kpReaderRouteManifest.find(({ route }) => route === commonReaderRoute)!.budget.runtimeCodeGzipBytes;
+const commonReaderCeilingGzipBytes = allowedKpReaderRouteBytes(commonReaderBaselineGzipBytes);
+// The canonical native-reader migration retired the former lazy editor path.
+// Startup and HTML are explicitly rebaselined; activated and incremental
+// ceilings are retained independently. This amendment is not a speedup.
+export const kpAlgebraFractionCompositionBaseline = Object.freeze({
+  htmlGzipBytes: 10_500,
+  startupCodeAndCssGzipBytes: 216_218,
   activationIncrementGzipBytes: 274_397,
   activeCodeAndCssGzipBytes: 310_616
 });
@@ -64,10 +71,9 @@ export async function inspectKpAlgebraFractionCompositionBudgets(
   if (entry === undefined) {
     throw new Error("Production manifest lacks the algebra article entry.");
   }
-  const startupFiles = collectClosureFiles(manifest, [algebraEntry]);
-  const activationFiles = collectClosureFiles(
-    manifest,
-    entry.dynamicImports ?? []
+  const startupFiles = collectKpBundleManifestFiles(manifest, [algebraEntry]);
+  const activationFiles = collectKpBundleManifestFiles(
+    manifest, [algebraEntry], true
   ).filter((file) => !startupFiles.includes(file));
   const [startup, activation, readerReports, html, authoringLeakage] =
     await Promise.all([
@@ -78,9 +84,9 @@ export async function inspectKpAlgebraFractionCompositionBudgets(
       findAuthoringLeakage(distRoot)
     ]);
   const commonReader = groupKpReaderSharedRuntimeClosures(readerReports)
-    .find(({ routes }) => routes.length === 10);
+    .find(({ routes }) => routes.some(({ route }) => route === commonReaderRoute));
   if (commonReader === undefined) {
-    throw new Error("The ten-route common reader closure could not be identified.");
+    throw new Error("The canonical fraction-composition reader closure could not be identified.");
   }
   return Object.freeze({
     commonReaderRuntimeGzipBytes: commonReader.runtimeCodeGzipBytes,
@@ -96,28 +102,6 @@ export async function inspectKpAlgebraFractionCompositionBudgets(
     activeCodeAndCssGzipBytes: startup.gzipBytes + activation.gzipBytes,
     authoringLeakage
   });
-}
-
-function collectClosureFiles(
-  manifest: Manifest,
-  roots: readonly string[]
-): readonly string[] {
-  const files = new Set<string>();
-  const visited = new Set<string>();
-  const queue = [...roots];
-  while (queue.length > 0) {
-    const key = queue.pop();
-    if (key === undefined || visited.has(key)) continue;
-    visited.add(key);
-    const chunk = manifest[key];
-    if (chunk === undefined) {
-      throw new Error(`Production manifest lacks algebra closure key ${key}.`);
-    }
-    if ([".js", ".css"].includes(extname(chunk.file))) files.add(chunk.file);
-    for (const css of chunk.css ?? []) files.add(css);
-    queue.push(...(chunk.imports ?? []));
-  }
-  return Object.freeze([...files].sort());
 }
 
 async function findAuthoringLeakage(root: string): Promise<readonly string[]> {
@@ -143,9 +127,7 @@ async function collectFiles(root: string): Promise<readonly string[]> {
   }))).flat();
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
-  const report = await inspectKpAlgebraFractionCompositionBudgets();
-  console.log(JSON.stringify(report, null, 2));
+export function assertKpAlgebraFractionCompositionBudgets(report: KpAlgebraFractionCompositionBudgetReport): void {
   if (report.commonReaderRuntimeGzipBytes > commonReaderCeilingGzipBytes) {
     throw new Error(
       `Common reader closure is ${report.commonReaderRuntimeGzipBytes} gzip bytes; ` +
@@ -163,12 +145,18 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
   }
 }
 
+if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
+  const report = await inspectKpAlgebraFractionCompositionBudgets();
+  console.log(JSON.stringify(report, null, 2));
+  assertKpAlgebraFractionCompositionBudgets(report);
+}
+
 function assertWithinGrowthAllowance(
   report: KpAlgebraFractionCompositionBudgetReport,
-  metric: keyof typeof algebraBaseline
+  metric: keyof typeof kpAlgebraFractionCompositionBaseline
 ): void {
-  const baseline = algebraBaseline[metric];
-  const ceiling = Math.ceil(baseline * 1.05);
+  const baseline = kpAlgebraFractionCompositionBaseline[metric];
+  const ceiling = allowedKpReaderRouteBytes(baseline);
   if (report[metric] <= ceiling) return;
   throw new Error(
     `Algebra ${metric} is ${report[metric]} gzip bytes; ` +

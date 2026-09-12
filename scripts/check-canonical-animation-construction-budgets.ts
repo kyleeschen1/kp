@@ -1,8 +1,8 @@
 import { readFile } from "node:fs/promises";
 import { performance } from "node:perf_hooks";
-import { extname, resolve } from "node:path";
+import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
-import { gzipSync } from "node:zlib";
+import { kpApplicationEntryOwners } from "../src/architecture/kp-application-entry-ownership.ts";
 
 import {
   projectKpGovernedCanonicalConstructionCohort,
@@ -36,22 +36,19 @@ export interface KpCanonicalAnimationConstructionBudget {
   readonly verificationP95Ms: number;
   readonly compoundSampleP95Ms: number;
   readonly projectionBytes: number;
-  readonly reviewEntryGzipBytes: number;
-  readonly reviewClosureGzipBytes: number;
-  readonly reviewAndGlyphClosureGzipBytes: number;
-  readonly reviewClosureFiles: number;
 }
 
 export interface KpCanonicalAnimationConstructionBudgetMeasurement
   extends KpCanonicalAnimationConstructionBudget {
-  readonly reviewFiles: readonly string[];
+  readonly developmentArtifactLeaks: readonly string[];
   readonly ordinaryReaderLeakFiles: readonly string[];
 }
 
 export interface KpCanonicalAnimationConstructionBudgetIssue {
   readonly metric:
     | keyof KpCanonicalAnimationConstructionBudget
-    | "ordinaryReaderLeakFiles";
+    | "ordinaryReaderLeakFiles"
+    | "developmentArtifactLeaks";
   readonly measured: number;
   readonly maximum: number;
   readonly message: string;
@@ -66,13 +63,7 @@ export const kpCanonicalAnimationConstructionBudget = Object.freeze({
   constructionP95Ms: 50,
   verificationP95Ms: 10,
   compoundSampleP95Ms: 0.1,
-  projectionBytes: 48_000,
-  reviewEntryGzipBytes: 4_000,
-  reviewClosureGzipBytes: 80_000,
-  // The isolated review iframe executes the existing full KaTeX experiment.
-  // Its measured 236,565-byte closure is not shipped by any reader route.
-  reviewAndGlyphClosureGzipBytes: 250_000,
-  reviewClosureFiles: 32
+  projectionBytes: 48_000
 } satisfies KpCanonicalAnimationConstructionBudget);
 
 export function checkKpCanonicalAnimationConstructionBudget(input: {
@@ -103,7 +94,20 @@ export function checkKpCanonicalAnimationConstructionBudget(input: {
         input.measurement.ordinaryReaderLeakFiles.join(", ")
     });
   }
+  if (input.measurement.developmentArtifactLeaks.length > 0) issues.push({
+    metric: "developmentArtifactLeaks", measured: input.measurement.developmentArtifactLeaks.length,
+    maximum: 0, message: `Development-only review artifacts shipped: ${input.measurement.developmentArtifactLeaks.join(", ")}`
+  });
   return Object.freeze(issues);
+}
+
+/** Production erasure supersedes the historical review-page byte allowance.
+ * The application ownership contract, not a second list here, names the roots. */
+export function findKpCanonicalDevelopmentArtifacts(manifest: ViteManifest): readonly string[] {
+  const owner = kpApplicationEntryOwners.find(({ id }) => id === "entry-owner.development-tooling");
+  if (!owner || owner.delivery !== "development-only") throw new Error("Development review ownership must be resolved before measuring production.");
+  const forbidden = new Set<string>([...owner.hostDocuments, ...owner.entryModules]);
+  return Object.freeze(Object.entries(manifest).filter(([key, chunk]) => forbidden.has(key) || forbidden.has(chunk.file)).map(([key]) => key).sort());
 }
 
 export async function measureKpCanonicalAnimationConstructionBudget(
@@ -143,19 +147,6 @@ export async function measureKpCanonicalAnimationConstructionBudget(
   const manifest = JSON.parse(
     await readFile(resolve(distRoot, ".vite/manifest.json"), "utf8")
   ) as ViteManifest;
-  const reviewFiles = collectEntryClosure(
-    manifest,
-    "canonical-animation-review.html"
-  );
-  const glyphFiles = collectEntryClosure(
-    manifest,
-    "glyph-reconciliation-experiment.html"
-  );
-  const reviewAndGlyphFiles = [...new Set([...reviewFiles, ...glyphFiles])];
-  const reviewEntry = manifest["canonical-animation-review.html"];
-  if (reviewEntry === undefined) {
-    throw new Error("Production manifest lacks canonical animation review.");
-  }
   const readerReports = await inspectKpReaderRouteBudgets(distRoot);
   const ordinaryReaderLeakFiles = readerReports.flatMap(({ measurement }) =>
     measurement.runtimeFiles.filter((file) =>
@@ -167,12 +158,7 @@ export async function measureKpCanonicalAnimationConstructionBudget(
     verificationP95Ms,
     compoundSampleP95Ms,
     projectionBytes,
-    reviewEntryGzipBytes: await gzipFileBytes(distRoot, reviewEntry.file),
-    reviewClosureGzipBytes: await gzipFilesBytes(distRoot, reviewFiles),
-    reviewAndGlyphClosureGzipBytes:
-      await gzipFilesBytes(distRoot, reviewAndGlyphFiles),
-    reviewClosureFiles: reviewFiles.length,
-    reviewFiles: Object.freeze(reviewFiles),
+    developmentArtifactLeaks: findKpCanonicalDevelopmentArtifacts(manifest),
     ordinaryReaderLeakFiles: Object.freeze([...new Set(ordinaryReaderLeakFiles)])
   });
 }
@@ -210,40 +196,6 @@ function percentile(values: readonly number[], quantile: number): number {
     ordered.length - 1,
     Math.ceil(ordered.length * quantile) - 1
   )] ?? 0;
-}
-
-function collectEntryClosure(
-  manifest: ViteManifest,
-  entryKey: string
-): readonly string[] {
-  const visited = new Set<string>();
-  const files = new Set<string>();
-  const visit = (key: string): void => {
-    if (visited.has(key)) return;
-    visited.add(key);
-    const chunk = manifest[key];
-    if (chunk === undefined) throw new Error(`Manifest lacks ${key}.`);
-    files.add(chunk.file);
-    chunk.css?.forEach((file) => files.add(file));
-    chunk.imports?.forEach(visit);
-  };
-  visit(entryKey);
-  return [...files]
-    .filter((file) => [".js", ".css"].includes(extname(file)))
-    .sort();
-}
-
-async function gzipFileBytes(distRoot: string, file: string): Promise<number> {
-  return gzipSync(await readFile(resolve(distRoot, file)), { level: 9 }).byteLength;
-}
-
-async function gzipFilesBytes(
-  distRoot: string,
-  files: readonly string[]
-): Promise<number> {
-  return (await Promise.all(files.map((file) =>
-    gzipFileBytes(distRoot, file)
-  ))).reduce((total, bytes) => total + bytes, 0);
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {

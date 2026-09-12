@@ -99,6 +99,13 @@
       "scope": "s09",
       "checkedAt": "2026-09-12T16:58:33.966Z",
       "notes": "Full 14-case group passed after one first-run readiness timeout and three isolated shader repeats. Production source Apply/return passes; 24 unit checks and full types pass; six production probes CSS 78262 raw 17987 gzip versus audit 129942/26265. Active CPU cost remains open."
+    },
+    {
+      "command": "npm run check:algebra-fraction-composition-budgets",
+      "status": "passed",
+      "scope": "s10",
+      "checkedAt": "2026-09-12T17:11:56.048Z",
+      "notes": "Also canonical and reader budget commands, 11 negative/positive tests and full types passed. Nested activation omission repaired: 106587 incremental, 322805 declared active JS/CSS. Shared reader policy reused; startup/HTML amendment explicit; development-erased review absence replaces obsolete shipment requirement."
     }
   ],
   "expectedLearning": [

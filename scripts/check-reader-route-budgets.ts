@@ -6,6 +6,7 @@ import { gzipSync } from "node:zlib";
 import {
   kpBundleBudgetDeltaBytes,
   measureKpBundleClosureAttribution,
+  collectKpBundleManifestFiles,
   type KpBundleFileAttribution
 } from "./bundle-closure-attribution.ts";
 
@@ -218,7 +219,7 @@ export function groupKpReaderSharedRuntimeClosures(
     ));
 }
 
-function allowedKpReaderRouteBytes(baselineBytes: number): number {
+export function allowedKpReaderRouteBytes(baselineBytes: number): number {
   return Math.ceil(
     baselineBytes * (1 + kpReaderRouteBudgetGrowthPermille / 1_000)
   );
@@ -234,19 +235,12 @@ function collectRuntimeCodeFiles(
   const files = new Set<string>([...html.matchAll(
     /(?:src|href)="\/?(assets\/[^"]+\.(?:js|css))"/g
   )].map((match) => match[1] ?? "").filter(Boolean));
-  const queue = [...files];
-  while (queue.length > 0) {
-    const file = queue.pop();
-    if (file === undefined) break;
-    const record = byFile.get(file)?.chunk;
-    for (const importKey of record?.imports ?? []) {
-      const imported = viteManifest[importKey];
-      if (imported === undefined || files.has(imported.file)) continue;
-      files.add(imported.file);
-      queue.push(imported.file);
-    }
-    for (const css of record?.css ?? []) files.add(css);
-  }
+  const roots = [...files].flatMap(file => {
+    const record = byFile.get(file);
+    if (!record && extname(file) === ".js") throw new Error(`Production manifest lacks reader script ${file}.`);
+    return record ? [record.key] : [];
+  });
+  for (const file of collectKpBundleManifestFiles(viteManifest, roots)) files.add(file);
   return [...files]
     .filter((file) => extname(file) === ".js" || extname(file) === ".css")
     .sort();
