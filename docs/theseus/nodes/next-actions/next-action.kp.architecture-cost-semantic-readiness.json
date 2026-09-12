@@ -141,6 +141,13 @@
       "scope": "s15",
       "checkedAt": "2026-09-12T17:50:26.151Z",
       "notes": "Six request cohorts and twenty-four ordinary runtime probes; nine Chromium Firefox WebKit preservation cases; full types and helper checks pass. No uniform mobile frame-rate certification."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s16",
+      "checkedAt": "2026-09-12T17:59:25.153Z",
+      "notes": "Seven asset checks and negative type fixtures pass; 1000-record clone freeze cost recorded, supported data callers inventoried, legacy compatibility explicitly retained."
     }
   ],
   "expectedLearning": [

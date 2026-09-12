@@ -17,6 +17,14 @@ export {
 } from "../semantic/asset.ts";
 
 export {
+  createKpImmutableSemanticAssetObject,
+  isKpImmutableSemanticAssetObject,
+  KpSemanticDataRepairGap,
+  type KpImmutableSemanticAssetObject,
+  type KpImmutableSemanticData
+} from "../semantic/immutable-asset.ts";
+
+export {
   createSemanticObjectRef,
   createSemanticTransformationRef,
   type SemanticObjectRef,

@@ -72,6 +72,9 @@ export interface CreateKpAssetBundleInput {
   readonly objects?: readonly KpSemanticAssetObject[] | undefined;
 }
 
+/** Compatibility wrapper: the payload is aliased, not issued immutable data.
+ * Supported data authorities should use createKpImmutableSemanticAssetObject;
+ * runtime handles require their own explicit lifecycle/ownership contract. */
 export function createKpSemanticAssetObject<TValue>(
   input: CreateKpSemanticAssetObjectInput<TValue>
 ): KpSemanticAssetObject<TValue> {

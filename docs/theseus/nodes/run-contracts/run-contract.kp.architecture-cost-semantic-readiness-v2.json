@@ -130,7 +130,8 @@
     {
       "id": "s16",
       "title": "Immutable semantic issuance",
-      "status": "planned"
+      "summary": "Checked immutable plain-data issuance and exhaustive negative runtime/type boundaries verified; no arbitrary asset migration.",
+      "status": "complete"
     },
     {
       "id": "s17",

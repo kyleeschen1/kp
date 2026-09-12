@@ -8,7 +8,7 @@ import {
   validateKpAssetBundle
 } from "../src/semantic/asset.ts";
 
-test("createKpSemanticAssetObject creates an immutable semantic asset wrapper", () => {
+test("createKpSemanticAssetObject creates a serializable compatibility wrapper", () => {
   const object = createKpSemanticAssetObject({
     id: "equation.solve.initial",
     objectType: "equation",
