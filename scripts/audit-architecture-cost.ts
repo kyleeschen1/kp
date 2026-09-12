@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { extname, resolve } from "node:path";
 import { cpus, platform, arch } from "node:os";
 import { gzipSync } from "node:zlib";
+import { assertArchitectureLoadingAcceptance } from "./architecture-loading-acceptance.ts";
 
 // Measurements, not deletion candidates or automatically refreshed budgets.
 // Inventory only tracked files; browser mode executes already-built artifacts.
@@ -33,6 +34,8 @@ console.log(JSON.stringify({ kind: "inventory", revision, counts,
   caveats: ["Lines include blanks/comments/generated code.", "readFile presence is a heuristic, not a redundant-test verdict."] }));
 
 if (process.argv.includes("--browser")) {
+  const acceptance = process.argv.includes("--acceptance");
+  if (acceptance && !process.argv.includes("--gradient-only") && !process.argv.includes("--activation")) throw new Error("Tax loading acceptance requires explicit --activation accounting.");
   const { chromium } = await import("@playwright/test");
   const browser = await chromium.launch();
   console.log(JSON.stringify({ kind: "environment", revision, browser: browser.version(), platform: platform(), arch: arch(),
@@ -95,6 +98,8 @@ if (process.argv.includes("--browser")) {
         const after = await cdp.send("Performance.getMetrics");
         const metric = (data: typeof before, name: string) => data.metrics.find(m => m.name === name)?.value ?? 0;
         const resources = [...requested.entries()].map(([path, value]) => ({ path, ...value }));
+        if (errors.length) throw new Error(errors.join("\n"));
+        if (acceptance && (scenario.id === "canonical-tax" || scenario.id === "gradient")) assertArchitectureLoadingAcceptance({ scenario: scenario.id, phase: "initial", assets: resources, errors });
         const totals = Object.fromEntries([".js", ".css", ".woff2", ".woff", ".ttf", ".html"].map(kind => [kind,
           resources.filter(r => r.kind === kind).reduce((sum, r) => ({ raw: sum.raw + r.raw, gzip: sum.gzip + r.gzip }), { raw: 0, gzip: 0 })]));
         console.log(JSON.stringify({ kind: "browser", scenario: scenario.id, cpuSlowdown: rate, repeat,
@@ -120,6 +125,7 @@ if (process.argv.includes("--browser")) {
             await page.waitForFunction(({ selector, beforeBeat }) => document.querySelector(selector)?.getAttribute("data-kp-focus-deck-active-beat") !== beforeBeat, { selector, beforeBeat });
           }
           if (errors.length) throw new Error(errors.join("\n"));
+          if (acceptance) assertArchitectureLoadingAcceptance({ scenario: "canonical-tax", phase: "activated", assets: [...requested].map(([path, asset]) => ({ path, ...asset })), errors });
           console.log(JSON.stringify({ kind: "activation", scenario: scenario.id, initialStates: states,
             additional: [...requested].filter(([path]) => !initial.has(path)).map(([path, resource]) => ({ path, ...resource })), errors }));
         }

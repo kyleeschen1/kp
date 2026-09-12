@@ -1,0 +1,1046 @@
+{
+  "command": "npm run visual:architecture-cost -- --acceptance --activation",
+  "environment": {
+    "kind": "environment",
+    "revision": "09209ee5f1175bba58ed29ba83eb81f4fa558f73",
+    "browser": "149.0.7827.55",
+    "platform": "darwin",
+    "arch": "x64",
+    "cpu": "Apple M2",
+    "viewport": "390x844 DPR1",
+    "network": "local built-file fulfillment; no network emulation",
+    "caveat": "1x/6x CPU sensitivity probe, not calibrated phone/GPU/RAM or field-performance certification"
+  },
+  "cohorts": [
+    {
+      "kind": "browser",
+      "scenario": "static-quadratic-reader",
+      "cpuSlowdown": 1,
+      "repeat": 1,
+      "manifestSha256": "35c6362c279d576bf70df21b3584ba04d63e8abd33e1e414a7a228db10e1e835",
+      "readyMs": 289.7000000476837,
+      "dom": {
+        "elements": 1604,
+        "canvases": 0,
+        "styleRules": 655,
+        "longTasks": [
+          89
+        ]
+      },
+      "frames": {
+        "samples": 120,
+        "p50Ms": 16.69999999999999,
+        "p95Ms": 16.899999999999636,
+        "maxMs": 17.599999999999966,
+        "over50ms": 0
+      },
+      "startupScriptMs": 43.395,
+      "startupTaskMs": 208.52499999999998,
+      "interactionScriptMs": 0.3099999999999978,
+      "jsHeapUsedBytes": 2746400,
+      "totals": {
+        ".js": {
+          "raw": 221526,
+          "gzip": 63131
+        },
+        ".css": {
+          "raw": 83760,
+          "gzip": 21405
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 84496,
+          "gzip": 7453
+        }
+      },
+      "errors": [],
+      "resourceCount": 22
+    },
+    {
+      "kind": "browser",
+      "scenario": "static-quadratic-reader",
+      "cpuSlowdown": 1,
+      "repeat": 2,
+      "manifestSha256": "35c6362c279d576bf70df21b3584ba04d63e8abd33e1e414a7a228db10e1e835",
+      "readyMs": 96.60000002384186,
+      "dom": {
+        "elements": 1604,
+        "canvases": 0,
+        "styleRules": 655,
+        "longTasks": []
+      },
+      "frames": {
+        "samples": 121,
+        "p50Ms": 16.69999999999999,
+        "p95Ms": 16.800000000000068,
+        "maxMs": 17.600000000000136,
+        "over50ms": 0
+      },
+      "startupScriptMs": 12.639,
+      "startupTaskMs": 67.851,
+      "interactionScriptMs": 0.20900000000000085,
+      "jsHeapUsedBytes": 2739860,
+      "totals": {
+        ".js": {
+          "raw": 221526,
+          "gzip": 63131
+        },
+        ".css": {
+          "raw": 83760,
+          "gzip": 21405
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 84496,
+          "gzip": 7453
+        }
+      },
+      "errors": [],
+      "resourceCount": 22
+    },
+    {
+      "kind": "browser",
+      "scenario": "static-quadratic-reader",
+      "cpuSlowdown": 1,
+      "repeat": 3,
+      "manifestSha256": "35c6362c279d576bf70df21b3584ba04d63e8abd33e1e414a7a228db10e1e835",
+      "readyMs": 94.40000009536743,
+      "dom": {
+        "elements": 1604,
+        "canvases": 0,
+        "styleRules": 655,
+        "longTasks": []
+      },
+      "frames": {
+        "samples": 120,
+        "p50Ms": 16.69999999999999,
+        "p95Ms": 16.800000000000182,
+        "maxMs": 17.5,
+        "over50ms": 0
+      },
+      "startupScriptMs": 12.273,
+      "startupTaskMs": 68.24900000000001,
+      "interactionScriptMs": 0.2020000000000008,
+      "jsHeapUsedBytes": 2880828,
+      "totals": {
+        ".js": {
+          "raw": 221526,
+          "gzip": 63131
+        },
+        ".css": {
+          "raw": 83760,
+          "gzip": 21405
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 84496,
+          "gzip": 7453
+        }
+      },
+      "errors": [],
+      "resourceCount": 22
+    },
+    {
+      "kind": "browser",
+      "scenario": "static-quadratic-reader",
+      "cpuSlowdown": 6,
+      "repeat": 1,
+      "manifestSha256": "35c6362c279d576bf70df21b3584ba04d63e8abd33e1e414a7a228db10e1e835",
+      "readyMs": 420.40000009536743,
+      "dom": {
+        "elements": 1604,
+        "canvases": 0,
+        "styleRules": 655,
+        "longTasks": [
+          164,
+          64
+        ]
+      },
+      "frames": {
+        "samples": 121,
+        "p50Ms": 16.600000000000136,
+        "p95Ms": 17.59999999999991,
+        "maxMs": 17.700000000000045,
+        "over50ms": 0
+      },
+      "startupScriptMs": 74.92699999999999,
+      "startupTaskMs": 399.579,
+      "interactionScriptMs": 0.26400000000000035,
+      "jsHeapUsedBytes": 2735028,
+      "totals": {
+        ".js": {
+          "raw": 221526,
+          "gzip": 63131
+        },
+        ".css": {
+          "raw": 83760,
+          "gzip": 21405
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 84496,
+          "gzip": 7453
+        }
+      },
+      "errors": [],
+      "resourceCount": 22
+    },
+    {
+      "kind": "browser",
+      "scenario": "static-quadratic-reader",
+      "cpuSlowdown": 6,
+      "repeat": 2,
+      "manifestSha256": "35c6362c279d576bf70df21b3584ba04d63e8abd33e1e414a7a228db10e1e835",
+      "readyMs": 419.7999999523163,
+      "dom": {
+        "elements": 1604,
+        "canvases": 0,
+        "styleRules": 655,
+        "longTasks": [
+          161,
+          66
+        ]
+      },
+      "frames": {
+        "samples": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.59999999999991,
+        "maxMs": 17.700000000000273,
+        "over50ms": 0
+      },
+      "startupScriptMs": 73.674,
+      "startupTaskMs": 394.642,
+      "interactionScriptMs": 0.2920000000000006,
+      "jsHeapUsedBytes": 2741448,
+      "totals": {
+        ".js": {
+          "raw": 221526,
+          "gzip": 63131
+        },
+        ".css": {
+          "raw": 83760,
+          "gzip": 21405
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 84496,
+          "gzip": 7453
+        }
+      },
+      "errors": [],
+      "resourceCount": 22
+    },
+    {
+      "kind": "browser",
+      "scenario": "static-quadratic-reader",
+      "cpuSlowdown": 6,
+      "repeat": 3,
+      "manifestSha256": "35c6362c279d576bf70df21b3584ba04d63e8abd33e1e414a7a228db10e1e835",
+      "readyMs": 438.2000000476837,
+      "dom": {
+        "elements": 1604,
+        "canvases": 0,
+        "styleRules": 655,
+        "longTasks": [
+          165,
+          67
+        ]
+      },
+      "frames": {
+        "samples": 121,
+        "p50Ms": 16.699999999999932,
+        "p95Ms": 17.59999999999991,
+        "maxMs": 17.700000000000045,
+        "over50ms": 0
+      },
+      "startupScriptMs": 77.127,
+      "startupTaskMs": 408.877,
+      "interactionScriptMs": 0.5870000000000042,
+      "jsHeapUsedBytes": 2727692,
+      "totals": {
+        ".js": {
+          "raw": 221526,
+          "gzip": 63131
+        },
+        ".css": {
+          "raw": 83760,
+          "gzip": 21405
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 84496,
+          "gzip": 7453
+        }
+      },
+      "errors": [],
+      "resourceCount": 22
+    },
+    {
+      "kind": "browser",
+      "scenario": "canonical-tax",
+      "cpuSlowdown": 1,
+      "repeat": 1,
+      "manifestSha256": "35c6362c279d576bf70df21b3584ba04d63e8abd33e1e414a7a228db10e1e835",
+      "readyMs": 526.2999999523163,
+      "dom": {
+        "elements": 3854,
+        "canvases": 1,
+        "styleRules": 703,
+        "longTasks": [
+          202
+        ]
+      },
+      "frames": {
+        "samples": 119,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.59999999999991,
+        "maxMs": 32.90000000000009,
+        "over50ms": 0
+      },
+      "startupScriptMs": 165.138,
+      "startupTaskMs": 317.20599999999996,
+      "interactionScriptMs": 16.07699999999998,
+      "jsHeapUsedBytes": 10067652,
+      "totals": {
+        ".js": {
+          "raw": 1894748,
+          "gzip": 509856
+        },
+        ".css": {
+          "raw": 101733,
+          "gzip": 22520
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 21347,
+          "gzip": 2659
+        }
+      },
+      "errors": [],
+      "resourceCount": 134
+    },
+    {
+      "kind": "browser",
+      "scenario": "canonical-tax",
+      "cpuSlowdown": 1,
+      "repeat": 2,
+      "manifestSha256": "35c6362c279d576bf70df21b3584ba04d63e8abd33e1e414a7a228db10e1e835",
+      "readyMs": 396.7999999523163,
+      "dom": {
+        "elements": 3854,
+        "canvases": 1,
+        "styleRules": 703,
+        "longTasks": [
+          164
+        ]
+      },
+      "frames": {
+        "samples": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.59999999999991,
+        "maxMs": 33.40000000000009,
+        "over50ms": 0
+      },
+      "startupScriptMs": 146.34900000000002,
+      "startupTaskMs": 256.368,
+      "interactionScriptMs": 15.634999999999982,
+      "jsHeapUsedBytes": 10119776,
+      "totals": {
+        ".js": {
+          "raw": 1894748,
+          "gzip": 509856
+        },
+        ".css": {
+          "raw": 101733,
+          "gzip": 22520
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 21347,
+          "gzip": 2659
+        }
+      },
+      "errors": [],
+      "resourceCount": 134
+    },
+    {
+      "kind": "browser",
+      "scenario": "canonical-tax",
+      "cpuSlowdown": 1,
+      "repeat": 3,
+      "manifestSha256": "35c6362c279d576bf70df21b3584ba04d63e8abd33e1e414a7a228db10e1e835",
+      "readyMs": 387.60000002384186,
+      "dom": {
+        "elements": 3854,
+        "canvases": 1,
+        "styleRules": 703,
+        "longTasks": [
+          165
+        ]
+      },
+      "frames": {
+        "samples": 120,
+        "p50Ms": 16.699999999999932,
+        "p95Ms": 17.5,
+        "maxMs": 33.39999999999998,
+        "over50ms": 0
+      },
+      "startupScriptMs": 146.73600000000002,
+      "startupTaskMs": 257.327,
+      "interactionScriptMs": 15.510999999999997,
+      "jsHeapUsedBytes": 10009644,
+      "totals": {
+        ".js": {
+          "raw": 1894748,
+          "gzip": 509856
+        },
+        ".css": {
+          "raw": 101733,
+          "gzip": 22520
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 21347,
+          "gzip": 2659
+        }
+      },
+      "errors": [],
+      "resourceCount": 134
+    },
+    {
+      "kind": "browser",
+      "scenario": "canonical-tax",
+      "cpuSlowdown": 6,
+      "repeat": 1,
+      "manifestSha256": "35c6362c279d576bf70df21b3584ba04d63e8abd33e1e414a7a228db10e1e835",
+      "readyMs": 1586.3999999761581,
+      "dom": {
+        "elements": 3854,
+        "canvases": 1,
+        "styleRules": 703,
+        "longTasks": [
+          1108,
+          103
+        ]
+      },
+      "frames": {
+        "samples": 93,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 33.40000000000009,
+        "maxMs": 300,
+        "over50ms": 1
+      },
+      "startupScriptMs": 857.185,
+      "startupTaskMs": 1491.466,
+      "interactionScriptMs": 182.34800000000007,
+      "jsHeapUsedBytes": 15432244,
+      "totals": {
+        ".js": {
+          "raw": 1894748,
+          "gzip": 509856
+        },
+        ".css": {
+          "raw": 101733,
+          "gzip": 22520
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 21347,
+          "gzip": 2659
+        }
+      },
+      "errors": [],
+      "resourceCount": 134
+    },
+    {
+      "kind": "browser",
+      "scenario": "canonical-tax",
+      "cpuSlowdown": 6,
+      "repeat": 2,
+      "manifestSha256": "35c6362c279d576bf70df21b3584ba04d63e8abd33e1e414a7a228db10e1e835",
+      "readyMs": 1981.6000000238419,
+      "dom": {
+        "elements": 3854,
+        "canvases": 1,
+        "styleRules": 703,
+        "longTasks": [
+          1164,
+          137,
+          212
+        ]
+      },
+      "frames": {
+        "samples": 82,
+        "p50Ms": 16.700000000000273,
+        "p95Ms": 49.100000000000364,
+        "maxMs": 400.0999999999999,
+        "over50ms": 3
+      },
+      "startupScriptMs": 1038.694,
+      "startupTaskMs": 1881.5980000000002,
+      "interactionScriptMs": 57.163000000000075,
+      "jsHeapUsedBytes": 9723776,
+      "totals": {
+        ".js": {
+          "raw": 1894748,
+          "gzip": 509856
+        },
+        ".css": {
+          "raw": 101733,
+          "gzip": 22520
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 21347,
+          "gzip": 2659
+        }
+      },
+      "errors": [],
+      "resourceCount": 134
+    },
+    {
+      "kind": "browser",
+      "scenario": "canonical-tax",
+      "cpuSlowdown": 6,
+      "repeat": 3,
+      "manifestSha256": "35c6362c279d576bf70df21b3584ba04d63e8abd33e1e414a7a228db10e1e835",
+      "readyMs": 1954.8000000715256,
+      "dom": {
+        "elements": 3854,
+        "canvases": 1,
+        "styleRules": 703,
+        "longTasks": [
+          1181,
+          106,
+          175
+        ]
+      },
+      "frames": {
+        "samples": 93,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 34.100000000000136,
+        "maxMs": 282.4000000000001,
+        "over50ms": 1
+      },
+      "startupScriptMs": 1012.979,
+      "startupTaskMs": 1814.4260000000002,
+      "interactionScriptMs": 49.09999999999992,
+      "jsHeapUsedBytes": 15316988,
+      "totals": {
+        ".js": {
+          "raw": 1894748,
+          "gzip": 509856
+        },
+        ".css": {
+          "raw": 101733,
+          "gzip": 22520
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 21347,
+          "gzip": 2659
+        }
+      },
+      "errors": [],
+      "resourceCount": 134
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 1,
+      "repeat": 1,
+      "manifestSha256": "f345d80558e547977a72f4448d6b6f8afcc9577301515ab5330467e8a9cdcf3d",
+      "readyMs": 535.5,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          154
+        ]
+      },
+      "frames": {
+        "samples": 121,
+        "p50Ms": 16.699999999999932,
+        "p95Ms": 17.59999999999991,
+        "maxMs": 17.700000000000045,
+        "over50ms": 0
+      },
+      "startupScriptMs": 115.091,
+      "startupTaskMs": 479.829,
+      "interactionScriptMs": 416.93699999999995,
+      "jsHeapUsedBytes": 41227108,
+      "totals": {
+        ".js": {
+          "raw": 1049203,
+          "gzip": 287591
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 287
+        }
+      },
+      "errors": [],
+      "resourceCount": 7
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 1,
+      "repeat": 2,
+      "manifestSha256": "f345d80558e547977a72f4448d6b6f8afcc9577301515ab5330467e8a9cdcf3d",
+      "readyMs": 507.60000002384186,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          145
+        ]
+      },
+      "frames": {
+        "samples": 121,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.59999999999991,
+        "maxMs": 17.700000000000045,
+        "over50ms": 0
+      },
+      "startupScriptMs": 112.146,
+      "startupTaskMs": 449.57399999999996,
+      "interactionScriptMs": 389.99000000000007,
+      "jsHeapUsedBytes": 24776656,
+      "totals": {
+        ".js": {
+          "raw": 1049203,
+          "gzip": 287591
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 287
+        }
+      },
+      "errors": [],
+      "resourceCount": 7
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 1,
+      "repeat": 3,
+      "manifestSha256": "f345d80558e547977a72f4448d6b6f8afcc9577301515ab5330467e8a9cdcf3d",
+      "readyMs": 492.89999997615814,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          144,
+          246
+        ]
+      },
+      "frames": {
+        "samples": 121,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.59999999999991,
+        "maxMs": 17.700000000000273,
+        "over50ms": 0
+      },
+      "startupScriptMs": 110.516,
+      "startupTaskMs": 444.172,
+      "interactionScriptMs": 385.77,
+      "jsHeapUsedBytes": 24759676,
+      "totals": {
+        ".js": {
+          "raw": 1049203,
+          "gzip": 287591
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 287
+        }
+      },
+      "errors": [],
+      "resourceCount": 7
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 6,
+      "repeat": 1,
+      "manifestSha256": "f345d80558e547977a72f4448d6b6f8afcc9577301515ab5330467e8a9cdcf3d",
+      "readyMs": 1485.1000000238419,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          913,
+          137,
+          272
+        ]
+      },
+      "frames": {
+        "samples": 69,
+        "p50Ms": 33.19999999999982,
+        "p95Ms": 49.90000000000009,
+        "maxMs": 50.100000000000136,
+        "over50ms": 1
+      },
+      "startupScriptMs": 693.612,
+      "startupTaskMs": 1460.464,
+      "interactionScriptMs": 1304.5300000000002,
+      "jsHeapUsedBytes": 16177180,
+      "totals": {
+        ".js": {
+          "raw": 1049203,
+          "gzip": 287591
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 287
+        }
+      },
+      "errors": [],
+      "resourceCount": 7
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 6,
+      "repeat": 2,
+      "manifestSha256": "f345d80558e547977a72f4448d6b6f8afcc9577301515ab5330467e8a9cdcf3d",
+      "readyMs": 1471.3999999761581,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          893,
+          135,
+          262
+        ]
+      },
+      "frames": {
+        "samples": 69,
+        "p50Ms": 33.09999999999991,
+        "p95Ms": 49,
+        "maxMs": 50.59999999999991,
+        "over50ms": 1
+      },
+      "startupScriptMs": 676.628,
+      "startupTaskMs": 1439.663,
+      "interactionScriptMs": 1296.3210000000001,
+      "jsHeapUsedBytes": 7586712,
+      "totals": {
+        ".js": {
+          "raw": 1049203,
+          "gzip": 287591
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 287
+        }
+      },
+      "errors": [],
+      "resourceCount": 7
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 6,
+      "repeat": 3,
+      "manifestSha256": "f345d80558e547977a72f4448d6b6f8afcc9577301515ab5330467e8a9cdcf3d",
+      "readyMs": 1494.7999999523163,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          907,
+          142,
+          268
+        ]
+      },
+      "frames": {
+        "samples": 68,
+        "p50Ms": 33.29999999999973,
+        "p95Ms": 49.5,
+        "maxMs": 50.59999999999991,
+        "over50ms": 3
+      },
+      "startupScriptMs": 691.6679999999999,
+      "startupTaskMs": 1455.558,
+      "interactionScriptMs": 1315.4150000000002,
+      "jsHeapUsedBytes": 19092836,
+      "totals": {
+        ".js": {
+          "raw": 1049203,
+          "gzip": 287591
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 287
+        }
+      },
+      "errors": [],
+      "resourceCount": 7
+    }
+  ],
+  "activation": [
+    {
+      "kind": "activation",
+      "scenario": "canonical-tax",
+      "initialStates": [
+        {
+          "state": "ready",
+          "top": 810.53125,
+          "bottom": 1070.53125,
+          "viewport": 844
+        },
+        {
+          "state": "idle",
+          "top": 1442.921875,
+          "bottom": 1702.921875,
+          "viewport": 844
+        },
+        {
+          "state": "idle",
+          "top": 2096.53125,
+          "bottom": 2466.125,
+          "viewport": 844
+        }
+      ],
+      "errors": [],
+      "additionalGzip": 140662,
+      "additionalFiles": 5
+    }
+  ]
+}

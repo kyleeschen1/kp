@@ -106,6 +106,13 @@
       "scope": "s10",
       "checkedAt": "2026-09-12T17:11:56.048Z",
       "notes": "Also canonical and reader budget commands, 11 negative/positive tests and full types passed. Nested activation omission repaired: 106587 incremental, 322805 declared active JS/CSS. Shared reader policy reused; startup/HTML amendment explicit; development-erased review absence replaces obsolete shipment requirement."
+    },
+    {
+      "command": "npm run visual:architecture-cost -- --acceptance --activation",
+      "status": "passed",
+      "scope": "s11",
+      "checkedAt": "2026-09-12T17:17:26.663Z",
+      "notes": "18 fresh cohorts and deferred activations pass; tax initial total 718743 to 577801 gzip, activated718463; gradient382264 to373983. Full types/builds, eight loading/closure tests and six edition browser cases pass. Fixed cohort request limits retain savings without frame-time claims."
     }
   ],
   "expectedLearning": [

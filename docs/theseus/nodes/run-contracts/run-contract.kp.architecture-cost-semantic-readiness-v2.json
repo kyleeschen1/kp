@@ -100,7 +100,8 @@
     {
       "id": "s11",
       "title": "Loading acceptance",
-      "status": "planned"
+      "summary": "Loading acceptance: 18 cohorts plus activation, bounded request ceilings, complete totals and publication smoke all pass; runtime performance remains next.",
+      "status": "complete"
     },
     {
       "id": "s12",
