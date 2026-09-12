@@ -148,7 +148,8 @@
     {
       "id": "s19",
       "title": "Gradient reuse boundary",
-      "status": "planned"
+      "summary": "Mechanics reuse handoff records actual checked mathematics, units and approximation boundaries; new family and mechanics implementation remain deferred.",
+      "status": "complete"
     },
     {
       "id": "s20",
