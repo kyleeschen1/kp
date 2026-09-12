@@ -190,6 +190,13 @@
       "scope": "s22",
       "checkedAt": "2026-09-12T19:03:37.123Z",
       "notes": "35 selector and command tests, 31 card and 26 CSS/gradient timed checks, six isolated production tax cases, full types and main build pass. No universal redundancy percentage or full-suite timing claim."
+    },
+    {
+      "command": "npm run visual:gradient-contour:production",
+      "status": "passed",
+      "scope": "s23",
+      "checkedAt": "2026-09-12T19:07:43.851Z",
+      "notes": "Shared fixture passes gradient plus six canonical tax/code/no-JS cases; injected forbidden requests fail. 36 command/impact tests, full types and alias list equality pass; intentional no-match filters exit 1 as expected."
     }
   ],
   "expectedLearning": [

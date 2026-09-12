@@ -19,9 +19,8 @@ test("verification tiers and aliases stay executable and discoverable", () => {
     assert.ok(scripts[entry.command], entry.command);
   }
   for (const alias of verificationCommandAliases) {
-    assert.equal(scripts[alias.command], `npm run ${alias.target}`);
+    assert.equal(scripts[alias.command], `npm run ${alias.target}${alias.forwardArguments ? " --" : ""}`);
     assert.ok(scripts[alias.target], alias.target);
   }
   assert.ok(scripts["verify:commands"]?.includes("list-verification-commands.ts"));
 });
-

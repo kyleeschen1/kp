@@ -172,7 +172,8 @@
     {
       "id": "s23",
       "title": "Evidence-led test consolidation",
-      "status": "planned"
+      "summary": "Retired duplicate production fixture and two command bodies while preserving public names and all behavioral assertions; no deletion quota.",
+      "status": "complete"
     },
     {
       "id": "s24",

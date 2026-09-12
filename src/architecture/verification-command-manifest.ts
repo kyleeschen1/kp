@@ -42,7 +42,17 @@ export const canonicalVerificationCommands = Object.freeze([
 export const verificationCommandAliases = Object.freeze([
   Object.freeze({
     command: "verify:equation",
-    target: "verify:equation:inner"
+    target: "verify:equation:inner",
+    forwardArguments: false
+  }),
+  Object.freeze({
+    command: "visual:economics-demand-shift-tutorial",
+    target: "test:browser:economics-demand-shift-tutorial",
+    forwardArguments: true
+  }),
+  Object.freeze({
+    command: "visual:animation-library-display",
+    target: "test:browser:canonical-animation-review",
+    forwardArguments: true
   })
 ] as const);
-
