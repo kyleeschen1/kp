@@ -76,7 +76,7 @@ claims about every later capability.
 
 The tax host mounts the tax, equation, code and surface-contour cards up front.
 Its cost is not the economics model alone. See
-`src/experiments/kinetic-figure-supply-tax/kinetic-figure-supply-tax-entry.ts`.
+`src/tutorial/kinetic-figure-supply-tax/kinetic-figure-supply-tax-entry.ts`.
 Shared scaffolding has not made its capability graph minimal.
 
 “Static-first” also does not mean zero JavaScript: the quadratic route actually
@@ -351,4 +351,3 @@ complete dead-code reachability, and test mutation effectiveness remain unmeasur
 The generated equation reachability inventory requires its normal refresh when
 the diagnostic source file is added; this is inventory maintenance, not semantic
 or renderer change.
-

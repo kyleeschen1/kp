@@ -70,7 +70,8 @@
     {
       "id": "s06",
       "title": "Deferred capability lifecycle",
-      "status": "planned"
+      "summary": "Host-local deferred session ownership checked with four lifecycle tests and full types; no caller mounted yet, s07 integrates canonical cards",
+      "status": "complete"
     },
     {
       "id": "s07",
