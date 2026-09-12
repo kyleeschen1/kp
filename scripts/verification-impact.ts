@@ -30,6 +30,20 @@ export interface KpVerificationSelectionOptions {
 }
 
 const checks = {
+  focusInputUnit: check(
+    "focus-input-unit", ["npm", "run", "test:focus-deck-multi-card"], "medium",
+    "Exercise card models, ownership and revocable travel without a browser.", "discovery"
+  ),
+  focusInputBrowser: check(
+    "focus-input-browser",
+    ["npm", "run", "visual:focus-deck-input", "--", "--grep", "TypeScript|deferred|slider keyboard|native scroll sampling|mouse drag swipes|horizontal trackpad"],
+    "high", "Pressure the shared input owner through tax, code and deferred native callers.", "promotion"
+  ),
+  gradientInputBrowser: check(
+    "gradient-input-browser",
+    ["npm", "run", "visual:gradient-contour", "--", "--grep", "shared wheel owner|primary visual checkpoint|phone and reduced motion"],
+    "high", "Preserve the checkpoint-clock caller and endpoint history containment.", "promotion"
+  ),
   theseus: check(
     "theseus-validate",
     ["npm", "run", "theseus", "--", "workspace", "validate"],
@@ -391,6 +405,17 @@ interface KpVerificationRule {
 }
 
 const rules: readonly KpVerificationRule[] = [
+  {
+    id: "focus-input-authority",
+    matches: path => [
+      "src/tutorial/focus-deck-native-input.ts",
+      "src/tutorial/focus-deck-checkpoint-playback.ts",
+      "src/tutorial/focus-deck-beat-navigation.ts",
+      "tests/focus-deck-travel-playback.test.ts"
+    ].includes(path),
+    checks: [checks.focusInputUnit, checks.typecheck, checks.build, checks.focusInputBrowser, checks.gradientInputBrowser],
+    reason: "The bounded shared input owner changed; verify its three actual clock/projection callers."
+  },
   {
     id: "semantic-state-kernel",
     matches: (path) =>

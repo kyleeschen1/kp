@@ -187,7 +187,7 @@
     "test:economics-supply-tax": "node --disable-warning=ExperimentalWarning --test tests/economics-supply-tax-*.test.ts",
     "test:browser:economics-supply-tax": "playwright test tests/economics-supply-tax.browser.spec.ts --project=chromium --workers=1",
     "test:browser:economics-supply-tax-scroll-score": "playwright test tests/economics-supply-tax-scroll-score.browser.spec.ts --project=chromium --workers=1",
-    "test:focus-deck-multi-card": "node --disable-warning=ExperimentalWarning --test tests/focus-deck-scaffold.test.ts tests/log-exponent-focus-card.test.ts tests/kinetic-figure-surface-contour.test.ts tests/typescript-focus-card.test.ts",
+    "test:focus-deck-multi-card": "node --disable-warning=ExperimentalWarning --test tests/focus-deck-scaffold.test.ts tests/log-exponent-focus-card.test.ts tests/kinetic-figure-surface-contour.test.ts tests/typescript-focus-card.test.ts tests/focus-deck-travel-playback.test.ts tests/deferred-card-session.test.ts tests/economics-supply-tax-route.test.ts",
     "perf:focus-card-hosts": "playwright test tests/focus-card-host-performance.browser.spec.ts --project=firefox --workers=1",
     "visual:authoring-distribution-card": "playwright test tests/authoring-distribution-focus-card.browser.spec.ts tests/equation-computed-style-clone.browser.spec.ts --project=chromium --project=firefox --workers=1",
     "test:browser:focus-deck-multi-card": "playwright test tests/log-exponent-focus-card.browser.spec.ts --project=chromium --project=firefox --project=webkit --workers=1",

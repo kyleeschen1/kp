@@ -1,6 +1,11 @@
 import { expect, test } from "@playwright/test";
+import { installBuiltFocusRoute } from "./support/built-focus-route.ts";
 
 const path = "/experiments/kinetic-figure/supply-tax/";
+const output = new URL("../dist/", import.meta.url);
+test.beforeEach(async ({ context, baseURL }) => {
+  await installBuiltFocusRoute(context, { output, pathname: path, origin: new URL(baseURL!).origin });
+});
 
 test("built sibling sliders retain whole-step keyboard navigation", async ({ page }) => {
   await page.goto(path);
@@ -76,6 +81,7 @@ test("built no-JavaScript reading carries the same revision, prose and exact fac
   if (!baseURL) throw new Error("Built delivery requires an explicit preview origin.");
   const context = await browser.newContext({ javaScriptEnabled: false, baseURL });
   try {
+    await installBuiltFocusRoute(context, { output, pathname: path, origin: new URL(baseURL).origin });
     const page = await context.newPage();
     await page.goto(path);
     const reading = page.locator("[data-kp-canonical-tax-static]");

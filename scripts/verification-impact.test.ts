@@ -12,6 +12,17 @@ test("Theseus-only changes keep verification focused", () => {
   assert.deepEqual(ids(result), ["theseus-validate"]);
 });
 
+test("shared input tiers cover all actual callers without weakening unknown or release gates", () => {
+  const paths = ["src/tutorial/focus-deck-native-input.ts", "src/tutorial/focus-deck-checkpoint-playback.ts"];
+  assert.deepEqual(ids(selectKpVerificationImpact(paths, { mode: "discovery" })), ["focus-input-unit"]);
+  assert.deepEqual(ids(selectKpVerificationImpact(paths, { mode: "contract" })), ["focus-input-unit", "typecheck"]);
+  assert.deepEqual(ids(selectKpVerificationImpact(paths, { mode: "promotion" })),
+    ["focus-input-unit", "typecheck", "build", "focus-input-browser", "gradient-input-browser"]);
+  assert.ok(ids(selectKpVerificationImpact([...paths, "src/new-unclassified-owner.ts"])).includes("test"));
+  assert.deepEqual(ids(selectKpVerificationImpact(paths, { mode: "release" })),
+    ids(selectKpVerificationImpact([], { mode: "release" })));
+});
+
 test("semantic state changes select the internal law and boundary gates", () => {
   for (const path of [
     "src/semantic-state/entity-version-store.ts",

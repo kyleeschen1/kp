@@ -183,6 +183,13 @@
       "scope": "s21",
       "checkedAt": "2026-09-12T18:57:58.250Z",
       "notes": "13 Chromium code/deferred/keyboard cases, 15 representative Chromium Firefox WebKit input cases, 11 unit checks and full types pass. Original first-click failure repaired at shared activation control boundary."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test scripts/verification-impact.test.ts scripts/verify-impact.test.ts tests/pre-expansion-health-commands.test.ts",
+      "status": "passed",
+      "scope": "s22",
+      "checkedAt": "2026-09-12T19:03:37.123Z",
+      "notes": "35 selector and command tests, 31 card and 26 CSS/gradient timed checks, six isolated production tax cases, full types and main build pass. No universal redundancy percentage or full-suite timing claim."
     }
   ],
   "expectedLearning": [
