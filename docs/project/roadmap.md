@@ -24,6 +24,15 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+Current approved delivery (2026-09-12): start with **How do we describe motion?**
+and its position–time graph connection, with origin changes as a supporting beat.
+Accepted twelve-lesson trajectory: `decisions/2026-09-12-mechanics-learning-trajectory.md`.
+Executable scope: `threads/2026-09-12-mechanics-motion-delivery-proposal.md`.
+The user said “record it and then go”; proceed to the first visual checkpoint.
+The origin-only proposal is superseded. The trajectory is not permission to
+implement all twelve lessons in one run; older readiness/gradient approvals below
+are completed history, not competing current work.
+
 New accepted strategic priority: question-led classical mechanics as a sustained
 student/author dogfooding case, with independently reusable mathematics across
 linear algebra, MVC, probability/statistics, differential equations and

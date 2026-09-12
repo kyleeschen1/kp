@@ -1,7 +1,12 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: gradient and 25-slice readiness loop complete; mechanics implementation not started
+Status: readiness complete; opening motion-description delivery approved
 Last Updated: 2026-09-12
+Current scope: `2026-09-12-mechanics-motion-delivery-proposal.md`, approved with
+“record it and then go”. Twelve-lesson direction and origin-only correction:
+`../decisions/2026-09-12-mechanics-learning-trajectory.md`. Theseus owns execution;
+stop at the first visible exemplar before independent-caller promotion. Subsequent
+paragraphs retain earlier completed-run history, not a ban on this approved work.
 Completed execution: `run-contract.kp.gradient-contour-intuition-v1` from
 `2026-09-10-gradient-contour-delivery-proposal.md`, approved with “go”. Theseus
 owns execution evidence. Source-only reuse, standalone reading/exact return,

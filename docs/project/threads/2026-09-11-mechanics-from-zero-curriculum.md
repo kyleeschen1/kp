@@ -1,6 +1,9 @@
 # Classical mechanics from zero: a question-led learning map
 
 Status: initial curriculum outline, approved to start; not an implemented course.
+Opening pedagogical order refined 2026-09-12: see
+`../decisions/2026-09-12-mechanics-learning-trajectory.md`. The M00–M12 rows below
+remain a subject map, not fixed lesson sizes or the current execution order.
 Learner: assume no remembered mechanics. Retain strong single-variable calculus;
 introduce physical meanings, units, vectors and diagrams without assuming them.
 No deadlines, grades or required pace. External materials remain welcome.
