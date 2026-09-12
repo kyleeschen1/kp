@@ -69,6 +69,12 @@ test("missing nested files, cycles, escapes, symlinks and collisions fail explic
   assert.throws(() => collectLocalStylesheetClosure({ entries: [entry(root), { ...entry(root, "other.css"), output: "styles/main.css" }] }), fails("collision"));
 }));
 
+test("a file first encountered as a URL asset still traverses dependencies when later imported as CSS", () => fixture((root, put) => {
+  put("main.css", '.x{background:url(shared.css)}'); put("next.css", '@import "shared.css";');
+  put("shared.css", '@import "missing.css";');
+  assert.throws(() => collectLocalStylesheetClosure({ entries: [entry(root), entry(root, "next.css")] }), fails("missing"));
+}));
+
 test("unsupported external or escaped URLs cannot silently enter a local edition", () => fixture((root, put) => {
   for (const css of ['@import "https://example.com/a.css";', '.x{background:url(/outside.png)}', '.x{background:url(escaped%20file.png)}', '@import var(--dynamic);']) {
     put("main.css", css);

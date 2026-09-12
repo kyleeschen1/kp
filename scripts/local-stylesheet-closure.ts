@@ -27,7 +27,7 @@ export function collectLocalStylesheetClosure(input: {
   readonly entries: readonly LocalStyleSource[];
   readonly aliases?: Readonly<Record<string, LocalStyleSource>>;
 }): ReadonlyMap<string, Buffer> {
-  const files = new Map<string, Buffer>(), owners = new Map<string, string>(), active = new Set<string>();
+  const files = new Map<string, Buffer>(), owners = new Map<string, string>(), active = new Set<string>(), parsed = new Set<string>();
   function gap(code: StylesheetClosureGap, message: string): never { throw new StylesheetClosureError(code, message); }
   const bounded = (name: string) => {
     if (!name || isAbsolute(name) || name.includes("\\") || name.split("/").some(p => !p || p === "." || p === ".."))
@@ -48,7 +48,8 @@ export function collectLocalStylesheetClosure(input: {
     if (active.has(key)) gap("cycle", `Cyclic stylesheet import: ${source.output}`);
     const owner = owners.get(source.output);
     if (owner && owner !== path) gap("collision", `Conflicting edition dependency: ${source.output}`);
-    if (files.has(source.output)) return;
+    // Asset byte deduplication cannot discharge a later stylesheet traversal.
+    if (files.has(source.output) && (!stylesheet || parsed.has(key))) return;
     owners.set(source.output, path); active.add(key);
     const bytes = readFileSync(path);
     if (!stylesheet) { files.set(source.output, bytes); active.delete(key); return; }
@@ -98,7 +99,7 @@ export function collectLocalStylesheetClosure(input: {
         }
       }
     });
-    files.set(source.output, Buffer.from(css.toString())); active.delete(key);
+    files.set(source.output, Buffer.from(css.toString())); parsed.add(key); active.delete(key);
   }
   for (const entry of input.entries) visit(entry, true);
   return new Map([...files].sort(([a], [b]) => a.localeCompare(b)));

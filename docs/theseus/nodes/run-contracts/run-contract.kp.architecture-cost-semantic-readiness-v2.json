@@ -64,7 +64,8 @@
     {
       "id": "s05",
       "title": "Publication acceptance",
-      "status": "planned"
+      "summary": "Publication outcome complete: all manual lists retired, closure failure and immutable regeneration protected, 14 tests and six browser cases plus types/build pass",
+      "status": "complete"
     },
     {
       "id": "s06",
