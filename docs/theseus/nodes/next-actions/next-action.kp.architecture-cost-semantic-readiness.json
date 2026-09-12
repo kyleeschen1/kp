@@ -43,6 +43,13 @@
       "scope": "s02",
       "checkedAt": "2026-09-12T15:44:54.334Z",
       "notes": "Five checks include real typography and KaTeX closure, nested imports and fonts, explicit aliases, deterministic deduplication, missing files, cycles, unsafe paths, symlinks and collisions. Full typecheck passes after erasable syntax and narrowing fixes."
+    },
+    {
+      "command": "npm run visual:edition-closure",
+      "status": "passed",
+      "scope": "s03",
+      "checkedAt": "2026-09-12T15:50:13.609Z",
+      "notes": "Bayesian static edition loads all required packaged resources at 390 and 1280 widths; typography and native fonts present; no JS or source fallback. Eight unit tests and full typecheck pass."
     }
   ],
   "expectedLearning": [

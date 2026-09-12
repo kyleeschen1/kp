@@ -16,6 +16,7 @@ test("immutable Bayesian editions retain source bytes and shared styles; stale f
     const first = buildBayesEdition(path); editions.push(first.directory);
     assert.equal(buildBayesEdition(path, true).checked, true);
     assert.equal(readFileSync(join(first.directory, "source.json"), "utf8"), bytes);
+    assert.equal(readFileSync(join(first.directory, "styles/tutorial/focus-deck-typography.css"), "utf8"), readFileSync(new URL("../src/tutorial/focus-deck-typography.css", import.meta.url), "utf8"));
     assert.equal(readFileSync(join(first.directory, "styles/experiments/bayesian-reasoning/style.css"), "utf8"), readFileSync(new URL("../src/experiments/bayesian-reasoning/style.css", import.meta.url), "utf8"));
     source.model.events[0]!.label += " edited"; writeFileSync(path, JSON.stringify(source));
     const second = buildBayesEdition(path); editions.push(second.directory);

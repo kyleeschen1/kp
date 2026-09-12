@@ -1,9 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdirSync, mkdtempSync, writeFileSync, rmSync, symlinkSync } from "node:fs";
+import { mkdirSync, mkdtempSync, writeFileSync, readFileSync, rmSync, symlinkSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { collectLocalStylesheetClosure, StylesheetClosureError } from "../scripts/local-stylesheet-closure.ts";
+import { writeKpImmutableLocalEdition } from "../scripts/immutable-local-edition.ts";
 
 function fixture(run: (root: string, put: (name: string, text: string) => void) => void) {
   const scratch = fileURLToPath(new URL("../tmp/codex/", import.meta.url)); mkdirSync(scratch, { recursive: true });
@@ -13,6 +14,17 @@ function fixture(run: (root: string, put: (name: string, text: string) => void) 
 }
 const entry = (root: string, path = "main.css") => ({ root, path, output: `styles/${path}` });
 const fails = (code: StylesheetClosureError["code"]) => (error: unknown) => error instanceof StylesheetClosureError && error.code === code;
+
+test("a transitive style repair changes edition identity without rewriting old bytes or semantic revision", () => fixture((root, put) => {
+  put("main.css", '@import "type.css";'); put("type.css", ".text{font-size:1rem}");
+  const build = () => writeKpImmutableLocalEdition({ repo: root, editionRoot: join(root, "editions"), schemaVersion: "test.v1", revisionId: "same-semantic-source",
+    files: collectLocalStylesheetClosure({ entries: [entry(root)] }), check: false });
+  const first = build(); put("type.css", ".text{font-size:1.1rem}"); const second = build();
+  assert.notEqual(first, second);
+  assert.equal(readFileSync(join(first, "styles/type.css"), "utf8"), ".text{font-size:1rem}");
+  assert.equal(JSON.parse(readFileSync(join(first, "edition.json"), "utf8")).revisionId,
+    JSON.parse(readFileSync(join(second, "edition.json"), "utf8")).revisionId);
+}));
 
 test("real authored card closure contains transitive typography and every KaTeX font dependency", () => {
   const repo = fileURLToPath(new URL("..", import.meta.url));

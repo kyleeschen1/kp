@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { basename, join, resolve } from "node:path";
-import { readFileSync, readdirSync } from "node:fs";
+import { readFileSync } from "node:fs";
+import { collectFocusCardEditionStyles } from "./local-stylesheet-closure.ts";
 import { writeKpImmutableLocalEdition } from "./immutable-local-edition.ts";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
@@ -59,19 +60,11 @@ export function buildBayesEdition(sourcePath: string, check = false) {
   const selected = resolve(sourcePath);
   if (selected.startsWith(`${bayesEditionRoot}/`)) throw new Error("Keep authored source outside generated editions.");
   const sourceText = readFileSync(selected, "utf8"), artifact = compileBayesPublication(sourceText, selected);
-  const katexRoot = join(repo, "node_modules/katex/dist");
   const files = new Map<string, string | Buffer>([
     ["source.json", sourceText], ["publication.json", JSON.stringify(artifact, null, 2) + "\n"],
-    ["katex.min.css", readFileSync(join(katexRoot, "katex.min.css"))],
-    ...readdirSync(join(katexRoot, "fonts")).sort().map(file => [`fonts/${file}`, readFileSync(join(katexRoot, "fonts", file))] as [string, Buffer]),
+    ...collectFocusCardEditionStyles(repo, "experiments/bayesian-reasoning/style.css"),
     ["index.html", `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escape(artifact.payload.editorialTitle ?? "Bayesian probability reading")}</title><link rel="stylesheet" href="./styles/experiments/authored-focus-card.css"><link rel="stylesheet" href="./styles/experiments/bayesian-reasoning/style.css"></head><body><main id="authored-focus-card">${artifact.payload.reading.html}</main></body></html>`]
   ]);
-  for (const path of ["experiments/authored-focus-card.css", "experiments/bayesian-reasoning/style.css",
-    "reader/app/exemplar.css", "rendering/canonical-equation-stage.css", "tutorial/focus-deck-scaffold.css"]) {
-    const source = readFileSync(join(repo, "src", path), "utf8");
-    files.set(`styles/${path}`, path === "reader/app/exemplar.css"
-      ? source.replace('@import "katex/dist/katex.min.css";', '@import "../../../katex.min.css";') : source);
-  }
   const directory = writeKpImmutableLocalEdition({ repo, editionRoot: bayesEditionRoot, schemaVersion: "kp.bayes-edition-files.v1",
     revisionId: artifact.payload.revisionId, files, check });
   return { directory, revisionId: artifact.payload.revisionId, sourceRevision: artifact.source.sha256, checked: check };

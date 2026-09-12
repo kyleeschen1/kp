@@ -52,7 +52,8 @@
     {
       "id": "s03",
       "title": "Bayesian closure adoption",
-      "status": "planned"
+      "summary": "Bayesian builder migrated; eight unit checks and two packaged browser widths pass with full types; old edition bytes preserved",
+      "status": "complete"
     },
     {
       "id": "s04",

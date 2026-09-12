@@ -13,6 +13,14 @@ export interface LocalStyleSource {
   readonly output: string;
 }
 
+/** Shared edition packaging policy: callers declare entry styles only. */
+export function collectFocusCardEditionStyles(repo: string, familyStyle: string): ReadonlyMap<string, Buffer> {
+  return collectLocalStylesheetClosure({
+    entries: ["experiments/authored-focus-card.css", familyStyle].map(path => ({ root: resolve(repo, "src"), path, output: `styles/${path}` })),
+    aliases: { "katex/dist/katex.min.css": { root: resolve(repo, "node_modules/katex/dist"), path: "katex.min.css", output: "katex.min.css" } }
+  });
+}
+
 /** Build-time packaging only. The compiler still owns semantic publication and
  * the immutable writer still owns byte identity. No external resource fallback. */
 export function collectLocalStylesheetClosure(input: {
