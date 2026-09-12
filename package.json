@@ -7,6 +7,8 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
+    "audit:architecture-cost": "node --disable-warning=ExperimentalWarning scripts/audit-architecture-cost.ts",
+    "visual:architecture-cost": "npm run audit:architecture-cost -- --browser",
     "visual:gradient-contour": "playwright test --config playwright.gradient-contour-review.config.ts --project=chromium --workers=1",
     "build:gradient-contour": "vite build --config vite.gradient-contour.config.ts",
     "visual:gradient-contour:production": "playwright test --config playwright.gradient-contour-production.config.ts --project=chromium --workers=1",

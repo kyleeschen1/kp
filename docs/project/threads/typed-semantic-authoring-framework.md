@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: gradient complete; architecture assessed; static edition dependency repair recommended first
+Status: gradient complete; expanded cost/ontology audit complete; bounded readiness repairs recommended
 Last Updated: 2026-09-12
 Completed execution: `run-contract.kp.gradient-contour-intuition-v1` from
 `2026-09-10-gradient-contour-delivery-proposal.md`, approved with “go”. Theseus
@@ -17,6 +17,14 @@ assessment: `../reviews/2026-09-12-mechanics-architecture-readiness.md`.
 It identifies missing transitive stylesheet packaging in three edition builders;
 repair that boundary before a broader mechanics implementation. The assessment
 is complete, not a new executable repair loop or a universal-framework proposal.
+The user expanded the audit to tests, CSS, bundle/device cost, redundancy, and
+object/transformation ontology fidelity. Results and fresh browser measurements:
+`../reviews/2026-09-12-architecture-cost-ontology-audit.md`. Prioritise publication
+closure, eager host loading and gradient frame cost, semantic authority gaps,
+then evidence-led verification consolidation before mechanics runtime. Existing
+canonical motion and immutable editions are preservation boundaries. These are
+recommendations, not an approved successor repair contract; low-end physical
+device and exhaustive redundancy certification have not been performed.
 Latest accepted strategic direction:
 `../decisions/2026-09-11-applied-mathematics-mechanics-priority.md`.
 Classical mechanics is the first sustained learning case; mathematical concepts

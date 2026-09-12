@@ -1,0 +1,2262 @@
+{
+  "measuredAt": "2026-09-12",
+  "scope": "Source inventory and built-route CPU sensitivity; not field or physical-device certification",
+  "notes": [
+    "Baseline revision excludes new audit instrumentation and these records.",
+    "Inventory package command count includes two audit commands; baseline had 620.",
+    "Gzip sizes modeled per unique requested resource; responses fulfilled uncompressed locally.",
+    "Three repeats per scenario/rate; one next-step interaction, not all beats.",
+    "CSS coverage is a separate narrow viewport/load/one-step sample, not deletion evidence."
+  ],
+  "rows": [
+    {
+      "kind": "inventory",
+      "revision": "24d161183c0371e7355b257e641f9716dc9c0325",
+      "counts": {
+        "domains.ts": {
+          "files": 27,
+          "bytes": 175907,
+          "lines": 5047
+        },
+        "domains.json": {
+          "files": 1,
+          "bytes": 312,
+          "lines": 14
+        },
+        "scripts.ts": {
+          "files": 231,
+          "bytes": 1415442,
+          "lines": 38463
+        },
+        "src.ts": {
+          "files": 2219,
+          "bytes": 16897169,
+          "lines": 473021
+        },
+        "src.json": {
+          "files": 35,
+          "bytes": 3625835,
+          "lines": 48270
+        },
+        "src.css": {
+          "files": 75,
+          "bytes": 574529,
+          "lines": 21360
+        },
+        "src.svelte": {
+          "files": 7,
+          "bytes": 154181,
+          "lines": 4075
+        },
+        "tests.ts": {
+          "files": 2117,
+          "bytes": 11552540,
+          "lines": 319059
+        },
+        "tests.json": {
+          "files": 14,
+          "bytes": 25086,
+          "lines": 861
+        }
+      },
+      "testFiles": {
+        "unit": 1775,
+        "browser": 216,
+        "sourceReadingHeuristic": 379
+      },
+      "packageCommands": 622,
+      "css": {
+        "importantOccurrences": 61,
+        "importOccurrences": 26,
+        "largest": [
+          {
+            "path": "src/styles.css",
+            "bytes": 91107,
+            "lines": 4400
+          },
+          {
+            "path": "src/editor/animation-catalogue-shell.css",
+            "bytes": 48400,
+            "lines": 1482
+          },
+          {
+            "path": "src/experiments/kinetic-figure-log-product/kinetic-figure-log-product.css",
+            "bytes": 37776,
+            "lines": 1482
+          },
+          {
+            "path": "src/reader/app/exemplar.css",
+            "bytes": 20524,
+            "lines": 292
+          },
+          {
+            "path": "src/tutorial/economics-demand-shift/economics-demand-shift-lesson.css",
+            "bytes": 18576,
+            "lines": 613
+          },
+          {
+            "path": "src/editor/semantic-animation-workbench.css",
+            "bytes": 16516,
+            "lines": 736
+          },
+          {
+            "path": "src/experiments/glyph-reconciliation-review.css",
+            "bytes": 16153,
+            "lines": 764
+          },
+          {
+            "path": "src/experiments/kinetic-figure-delta-epsilon/kinetic-figure-delta-epsilon.css",
+            "bytes": 13513,
+            "lines": 641
+          },
+          {
+            "path": "src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour.css",
+            "bytes": 12546,
+            "lines": 434
+          },
+          {
+            "path": "src/tutorial/economics-demand-shift/economics-demand-shift-two-column.css",
+            "bytes": 12347,
+            "lines": 384
+          }
+        ]
+      },
+      "largestSource": [
+        {
+          "path": "src/editor/equation-surface-adapter.ts",
+          "bytes": 149527,
+          "lines": 3767
+        },
+        {
+          "path": "src/rendering/semantic-equation-token-renderer.ts",
+          "bytes": 105679,
+          "lines": 2876
+        },
+        {
+          "path": "src/rendering/native-katex-scene-compositor.ts",
+          "bytes": 94167,
+          "lines": 2610
+        },
+        {
+          "path": "src/rendering/equation-motion-path-planner.ts",
+          "bytes": 92295,
+          "lines": 2644
+        },
+        {
+          "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
+          "bytes": 92163,
+          "lines": 2604
+        },
+        {
+          "path": "src/project-dashboard/data.ts",
+          "bytes": 91642,
+          "lines": 2429
+        },
+        {
+          "path": "src/editor/equation-motion-demo-controller.ts",
+          "bytes": 78162,
+          "lines": 2685
+        },
+        {
+          "path": "src/editor/antiderivative-power-transit-mount.ts",
+          "bytes": 75424,
+          "lines": 1934
+        },
+        {
+          "path": "src/main.ts",
+          "bytes": 73246,
+          "lines": 2203
+        },
+        {
+          "path": "src/rendering/graph-svg.ts",
+          "bytes": 72115,
+          "lines": 2311
+        }
+      ],
+      "largestTests": [
+        {
+          "path": "tests/project-dashboard-symbolic-family-catalog.test.ts",
+          "bytes": 123314,
+          "lines": 3758
+        },
+        {
+          "path": "tests/native-katex-rendered-scene.test.ts",
+          "bytes": 101225,
+          "lines": 3191
+        },
+        {
+          "path": "tests/project-dashboard.test.ts",
+          "bytes": 65368,
+          "lines": 1946
+        },
+        {
+          "path": "tests/equation-motion-plan.test.ts",
+          "bytes": 48757,
+          "lines": 1719
+        },
+        {
+          "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
+          "bytes": 39994,
+          "lines": 1180
+        },
+        {
+          "path": "tests/economics-demand-shift-tutorial.test.ts",
+          "bytes": 39060,
+          "lines": 1172
+        },
+        {
+          "path": "tests/rendering.test.ts",
+          "bytes": 35841,
+          "lines": 918
+        },
+        {
+          "path": "tests/semantic.test.ts",
+          "bytes": 32054,
+          "lines": 1233
+        },
+        {
+          "path": "tests/editor.test.ts",
+          "bytes": 29840,
+          "lines": 769
+        },
+        {
+          "path": "tests/native-katex-operation-choreography.test.ts",
+          "bytes": 27651,
+          "lines": 813
+        }
+      ],
+      "caveats": [
+        "Lines include blanks/comments/generated code.",
+        "readFile presence is a heuristic, not a redundant-test verdict."
+      ]
+    },
+    {
+      "kind": "environment",
+      "revision": "24d161183c0371e7355b257e641f9716dc9c0325",
+      "browser": "149.0.7827.55",
+      "platform": "darwin",
+      "arch": "x64",
+      "cpu": "Apple M2",
+      "viewport": "390x844 DPR1",
+      "network": "local built-file fulfillment; no network emulation",
+      "caveat": "1x/6x CPU sensitivity probe, not calibrated phone/GPU/RAM or field-performance certification"
+    },
+    {
+      "kind": "browser",
+      "scenario": "static-quadratic-reader",
+      "cpuSlowdown": 1,
+      "repeat": 1,
+      "manifestSha256": "cd96ed41a4356ff360da978e38c508e0f8ca39942ef76115c53007d83a815127",
+      "readyMs": 411.2999999523163,
+      "dom": {
+        "elements": 1604,
+        "canvases": 0,
+        "styleRules": 655,
+        "longTasks": [
+          184
+        ]
+      },
+      "frames": {
+        "samples": 121,
+        "p50Ms": 16.699999999999932,
+        "p95Ms": 17.5,
+        "maxMs": 17.699999999999818,
+        "over50ms": 0
+      },
+      "startupScriptMs": 54.271,
+      "startupTaskMs": 332.36,
+      "interactionScriptMs": 0.7419999999999995,
+      "jsHeapUsedBytes": 2732016,
+      "totals": {
+        ".js": {
+          "raw": 221527,
+          "gzip": 63133
+        },
+        ".css": {
+          "raw": 83760,
+          "gzip": 21405
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 84496,
+          "gzip": 7456
+        }
+      },
+      "errors": []
+    },
+    {
+      "kind": "browser",
+      "scenario": "static-quadratic-reader",
+      "cpuSlowdown": 1,
+      "repeat": 2,
+      "manifestSha256": "cd96ed41a4356ff360da978e38c508e0f8ca39942ef76115c53007d83a815127",
+      "readyMs": 101.59999990463257,
+      "dom": {
+        "elements": 1604,
+        "canvases": 0,
+        "styleRules": 655,
+        "longTasks": []
+      },
+      "frames": {
+        "samples": 121,
+        "p50Ms": 16.69999999999999,
+        "p95Ms": 17.59999999999991,
+        "maxMs": 17.700000000000045,
+        "over50ms": 0
+      },
+      "startupScriptMs": 12.127,
+      "startupTaskMs": 70.628,
+      "interactionScriptMs": 0.7329999999999993,
+      "jsHeapUsedBytes": 2738588,
+      "totals": {
+        ".js": {
+          "raw": 221527,
+          "gzip": 63133
+        },
+        ".css": {
+          "raw": 83760,
+          "gzip": 21405
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 84496,
+          "gzip": 7456
+        }
+      },
+      "errors": []
+    },
+    {
+      "kind": "browser",
+      "scenario": "static-quadratic-reader",
+      "cpuSlowdown": 1,
+      "repeat": 3,
+      "manifestSha256": "cd96ed41a4356ff360da978e38c508e0f8ca39942ef76115c53007d83a815127",
+      "readyMs": 86.09999990463257,
+      "dom": {
+        "elements": 1604,
+        "canvases": 0,
+        "styleRules": 655,
+        "longTasks": []
+      },
+      "frames": {
+        "samples": 121,
+        "p50Ms": 16.69999999999999,
+        "p95Ms": 17.59999999999991,
+        "maxMs": 17.700000000000045,
+        "over50ms": 0
+      },
+      "startupScriptMs": 12.373000000000001,
+      "startupTaskMs": 65.35100000000001,
+      "interactionScriptMs": 0.6969999999999997,
+      "jsHeapUsedBytes": 2870288,
+      "totals": {
+        ".js": {
+          "raw": 221527,
+          "gzip": 63133
+        },
+        ".css": {
+          "raw": 83760,
+          "gzip": 21405
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 84496,
+          "gzip": 7456
+        }
+      },
+      "errors": []
+    },
+    {
+      "kind": "css-coverage",
+      "scenario": "static-quadratic-reader",
+      "caveat": "UTF-16 code units used over load plus one next step at 390px, not all states/themes/widths or a deletion proof",
+      "stylesheets": [
+        {
+          "url": "http://localhost:8000/assets/reader-quadratic-branching-zUDEBPRY.css",
+          "total": 54925,
+          "used": 12425
+        },
+        {
+          "url": "http://localhost:8000/assets/katex-CYlHEDRF.css",
+          "total": 28835,
+          "used": 1100
+        }
+      ]
+    },
+    {
+      "kind": "browser",
+      "scenario": "static-quadratic-reader",
+      "cpuSlowdown": 6,
+      "repeat": 1,
+      "manifestSha256": "cd96ed41a4356ff360da978e38c508e0f8ca39942ef76115c53007d83a815127",
+      "readyMs": 429,
+      "dom": {
+        "elements": 1604,
+        "canvases": 0,
+        "styleRules": 655,
+        "longTasks": [
+          163,
+          66
+        ]
+      },
+      "frames": {
+        "samples": 120,
+        "p50Ms": 16.700000000000045,
+        "p95Ms": 17.59999999999991,
+        "maxMs": 17.600000000000136,
+        "over50ms": 0
+      },
+      "startupScriptMs": 77.17999999999999,
+      "startupTaskMs": 415.95799999999997,
+      "interactionScriptMs": 0.2580000000000082,
+      "jsHeapUsedBytes": 2730864,
+      "totals": {
+        ".js": {
+          "raw": 221527,
+          "gzip": 63133
+        },
+        ".css": {
+          "raw": 83760,
+          "gzip": 21405
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 84496,
+          "gzip": 7456
+        }
+      },
+      "errors": []
+    },
+    {
+      "kind": "browser",
+      "scenario": "static-quadratic-reader",
+      "cpuSlowdown": 6,
+      "repeat": 2,
+      "manifestSha256": "cd96ed41a4356ff360da978e38c508e0f8ca39942ef76115c53007d83a815127",
+      "readyMs": 363.2000000476837,
+      "dom": {
+        "elements": 1604,
+        "canvases": 0,
+        "styleRules": 655,
+        "longTasks": [
+          126,
+          63
+        ]
+      },
+      "frames": {
+        "samples": 121,
+        "p50Ms": 16.699999999999932,
+        "p95Ms": 17.59999999999991,
+        "maxMs": 17.700000000000045,
+        "over50ms": 0
+      },
+      "startupScriptMs": 69.643,
+      "startupTaskMs": 352.50399999999996,
+      "interactionScriptMs": 0.3550000000000081,
+      "jsHeapUsedBytes": 2721044,
+      "totals": {
+        ".js": {
+          "raw": 221527,
+          "gzip": 63133
+        },
+        ".css": {
+          "raw": 83760,
+          "gzip": 21405
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 84496,
+          "gzip": 7456
+        }
+      },
+      "errors": []
+    },
+    {
+      "kind": "browser",
+      "scenario": "static-quadratic-reader",
+      "cpuSlowdown": 6,
+      "repeat": 3,
+      "manifestSha256": "cd96ed41a4356ff360da978e38c508e0f8ca39942ef76115c53007d83a815127",
+      "readyMs": 392.39999997615814,
+      "dom": {
+        "elements": 1604,
+        "canvases": 0,
+        "styleRules": 655,
+        "longTasks": [
+          149,
+          63
+        ]
+      },
+      "frames": {
+        "samples": 121,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.600000000000023,
+        "maxMs": 17.700000000000045,
+        "over50ms": 0
+      },
+      "startupScriptMs": 67.776,
+      "startupTaskMs": 371.11899999999997,
+      "interactionScriptMs": 0.11799999999999311,
+      "jsHeapUsedBytes": 2725628,
+      "totals": {
+        ".js": {
+          "raw": 221527,
+          "gzip": 63133
+        },
+        ".css": {
+          "raw": 83760,
+          "gzip": 21405
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 84496,
+          "gzip": 7456
+        }
+      },
+      "errors": []
+    },
+    {
+      "kind": "browser",
+      "scenario": "canonical-tax",
+      "cpuSlowdown": 1,
+      "repeat": 1,
+      "manifestSha256": "cd96ed41a4356ff360da978e38c508e0f8ca39942ef76115c53007d83a815127",
+      "readyMs": 1008.8999999761581,
+      "dom": {
+        "elements": 3852,
+        "canvases": 1,
+        "styleRules": 1136,
+        "longTasks": [
+          223,
+          120,
+          348
+        ]
+      },
+      "frames": {
+        "samples": 119,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.59999999999991,
+        "maxMs": 33.299999999999955,
+        "over50ms": 0
+      },
+      "startupScriptMs": 182.42600000000002,
+      "startupTaskMs": 800.198,
+      "interactionScriptMs": 20.383999999999986,
+      "jsHeapUsedBytes": 15039748,
+      "totals": {
+        ".js": {
+          "raw": 2437593,
+          "gzip": 642444
+        },
+        ".css": {
+          "raw": 153370,
+          "gzip": 30307
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 24122,
+          "gzip": 3226
+        }
+      },
+      "errors": []
+    },
+    {
+      "kind": "browser",
+      "scenario": "canonical-tax",
+      "cpuSlowdown": 1,
+      "repeat": 2,
+      "manifestSha256": "cd96ed41a4356ff360da978e38c508e0f8ca39942ef76115c53007d83a815127",
+      "readyMs": 848.5,
+      "dom": {
+        "elements": 3852,
+        "canvases": 1,
+        "styleRules": 1136,
+        "longTasks": [
+          222,
+          295
+        ]
+      },
+      "frames": {
+        "samples": 119,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.59999999999991,
+        "maxMs": 32.30000000000007,
+        "over50ms": 0
+      },
+      "startupScriptMs": 191.626,
+      "startupTaskMs": 627.4499999999999,
+      "interactionScriptMs": 15.086000000000016,
+      "jsHeapUsedBytes": 12829396,
+      "totals": {
+        ".js": {
+          "raw": 2437593,
+          "gzip": 642444
+        },
+        ".css": {
+          "raw": 153370,
+          "gzip": 30307
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 24122,
+          "gzip": 3226
+        }
+      },
+      "errors": []
+    },
+    {
+      "kind": "browser",
+      "scenario": "canonical-tax",
+      "cpuSlowdown": 1,
+      "repeat": 3,
+      "manifestSha256": "cd96ed41a4356ff360da978e38c508e0f8ca39942ef76115c53007d83a815127",
+      "readyMs": 718.1000000238419,
+      "dom": {
+        "elements": 3852,
+        "canvases": 1,
+        "styleRules": 1136,
+        "longTasks": [
+          191,
+          263
+        ]
+      },
+      "frames": {
+        "samples": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.59999999999991,
+        "maxMs": 33.5,
+        "over50ms": 0
+      },
+      "startupScriptMs": 162.683,
+      "startupTaskMs": 557.731,
+      "interactionScriptMs": 14.589000000000018,
+      "jsHeapUsedBytes": 14978520,
+      "totals": {
+        ".js": {
+          "raw": 2437593,
+          "gzip": 642444
+        },
+        ".css": {
+          "raw": 153370,
+          "gzip": 30307
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 24122,
+          "gzip": 3226
+        }
+      },
+      "errors": []
+    },
+    {
+      "kind": "css-coverage",
+      "scenario": "canonical-tax",
+      "caveat": "UTF-16 code units used over load plus one next step at 390px, not all states/themes/widths or a deletion proof",
+      "stylesheets": [
+        {
+          "url": "http://localhost:8000/assets/canonicalSupplyTax-D2SGB6fT.css",
+          "total": 42711,
+          "used": 23455
+        },
+        {
+          "url": "http://localhost:8000/assets/log-exponent-surface-capability-BH9WK__K.css",
+          "total": 667,
+          "used": 666
+        },
+        {
+          "url": "http://localhost:8000/assets/katex-CYlHEDRF.css",
+          "total": 28835,
+          "used": 2122
+        },
+        {
+          "url": "http://localhost:8000/assets/styles-CDLur3nn.css",
+          "total": 75266,
+          "used": 2662
+        },
+        {
+          "url": "http://localhost:8000/assets/typescript-refactor-dom-session-Bsox_oho.css",
+          "total": 5891,
+          "used": 4601
+        }
+      ]
+    },
+    {
+      "kind": "browser",
+      "scenario": "canonical-tax",
+      "cpuSlowdown": 6,
+      "repeat": 1,
+      "manifestSha256": "cd96ed41a4356ff360da978e38c508e0f8ca39942ef76115c53007d83a815127",
+      "readyMs": 2147.399999976158,
+      "dom": {
+        "elements": 3852,
+        "canvases": 1,
+        "styleRules": 1136,
+        "longTasks": [
+          1178,
+          150,
+          144,
+          282
+        ]
+      },
+      "frames": {
+        "samples": 104,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.59999999999991,
+        "maxMs": 233.69999999999982,
+        "over50ms": 1
+      },
+      "startupScriptMs": 1019.366,
+      "startupTaskMs": 2052.471,
+      "interactionScriptMs": 44.788999999999966,
+      "jsHeapUsedBytes": 13088040,
+      "totals": {
+        ".js": {
+          "raw": 2437593,
+          "gzip": 642444
+        },
+        ".css": {
+          "raw": 153370,
+          "gzip": 30307
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 24122,
+          "gzip": 3226
+        }
+      },
+      "errors": []
+    },
+    {
+      "kind": "browser",
+      "scenario": "canonical-tax",
+      "cpuSlowdown": 6,
+      "repeat": 2,
+      "manifestSha256": "cd96ed41a4356ff360da978e38c508e0f8ca39942ef76115c53007d83a815127",
+      "readyMs": 2304.2000000476837,
+      "dom": {
+        "elements": 3852,
+        "canvases": 1,
+        "styleRules": 1136,
+        "longTasks": [
+          1158,
+          136,
+          407,
+          207
+        ]
+      },
+      "frames": {
+        "samples": 97,
+        "p50Ms": 16.700000000000273,
+        "p95Ms": 33.5,
+        "maxMs": 267.4000000000001,
+        "over50ms": 1
+      },
+      "startupScriptMs": 1041.235,
+      "startupTaskMs": 2213.446,
+      "interactionScriptMs": 54.14600000000003,
+      "jsHeapUsedBytes": 14844844,
+      "totals": {
+        ".js": {
+          "raw": 2437593,
+          "gzip": 642444
+        },
+        ".css": {
+          "raw": 153370,
+          "gzip": 30307
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 24122,
+          "gzip": 3226
+        }
+      },
+      "errors": []
+    },
+    {
+      "kind": "browser",
+      "scenario": "canonical-tax",
+      "cpuSlowdown": 6,
+      "repeat": 3,
+      "manifestSha256": "cd96ed41a4356ff360da978e38c508e0f8ca39942ef76115c53007d83a815127",
+      "readyMs": 2355.1999999284744,
+      "dom": {
+        "elements": 3852,
+        "canvases": 1,
+        "styleRules": 1136,
+        "longTasks": [
+          1311,
+          155,
+          148,
+          299
+        ]
+      },
+      "frames": {
+        "samples": 100,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 32.70000000000027,
+        "maxMs": 283.3000000000002,
+        "over50ms": 1
+      },
+      "startupScriptMs": 1045.81,
+      "startupTaskMs": 2255.6949999999997,
+      "interactionScriptMs": 43.60000000000008,
+      "jsHeapUsedBytes": 14353924,
+      "totals": {
+        ".js": {
+          "raw": 2437593,
+          "gzip": 642444
+        },
+        ".css": {
+          "raw": 153370,
+          "gzip": 30307
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 24122,
+          "gzip": 3226
+        }
+      },
+      "errors": []
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 1,
+      "repeat": 1,
+      "manifestSha256": "57fa8b3fa8d775f79b978dea7aefa03cf5e66b14718ab5871628a1d740664ced",
+      "readyMs": 573.6000000238419,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 1044,
+        "longTasks": [
+          165,
+          272
+        ]
+      },
+      "frames": {
+        "samples": 120,
+        "p50Ms": 16.699999999999932,
+        "p95Ms": 17.59999999999991,
+        "maxMs": 17.700000000000045,
+        "over50ms": 0
+      },
+      "startupScriptMs": 121.93900000000001,
+      "startupTaskMs": 492.969,
+      "interactionScriptMs": 401.25999999999993,
+      "jsHeapUsedBytes": 37864132,
+      "totals": {
+        ".js": {
+          "raw": 1049203,
+          "gzip": 287593
+        },
+        ".css": {
+          "raw": 129942,
+          "gzip": 26265
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 288
+        }
+      },
+      "errors": []
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 1,
+      "repeat": 2,
+      "manifestSha256": "57fa8b3fa8d775f79b978dea7aefa03cf5e66b14718ab5871628a1d740664ced",
+      "readyMs": 529.5,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 1044,
+        "longTasks": [
+          156,
+          257
+        ]
+      },
+      "frames": {
+        "samples": 121,
+        "p50Ms": 16.699999999999932,
+        "p95Ms": 17.5,
+        "maxMs": 17.700000000000045,
+        "over50ms": 0
+      },
+      "startupScriptMs": 117.747,
+      "startupTaskMs": 474.702,
+      "interactionScriptMs": 430.842,
+      "jsHeapUsedBytes": 24738308,
+      "totals": {
+        ".js": {
+          "raw": 1049203,
+          "gzip": 287593
+        },
+        ".css": {
+          "raw": 129942,
+          "gzip": 26265
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 288
+        }
+      },
+      "errors": []
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 1,
+      "repeat": 3,
+      "manifestSha256": "57fa8b3fa8d775f79b978dea7aefa03cf5e66b14718ab5871628a1d740664ced",
+      "readyMs": 561.8000000715256,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 1044,
+        "longTasks": [
+          161,
+          277
+        ]
+      },
+      "frames": {
+        "samples": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.5,
+        "maxMs": 17.600000000000364,
+        "over50ms": 0
+      },
+      "startupScriptMs": 124.39500000000001,
+      "startupTaskMs": 503.204,
+      "interactionScriptMs": 420.9919999999999,
+      "jsHeapUsedBytes": 17966768,
+      "totals": {
+        ".js": {
+          "raw": 1049203,
+          "gzip": 287593
+        },
+        ".css": {
+          "raw": 129942,
+          "gzip": 26265
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 288
+        }
+      },
+      "errors": []
+    },
+    {
+      "kind": "css-coverage",
+      "scenario": "gradient",
+      "caveat": "UTF-16 code units used over load plus one next step at 390px, not all states/themes/widths or a deletion proof",
+      "stylesheets": [
+        {
+          "url": "http://localhost:8000/assets/gradientContour-BLTND-bI.css",
+          "total": 129942,
+          "used": 18516
+        }
+      ]
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 6,
+      "repeat": 1,
+      "manifestSha256": "57fa8b3fa8d775f79b978dea7aefa03cf5e66b14718ab5871628a1d740664ced",
+      "readyMs": 2270.8000000715256,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 1044,
+        "longTasks": [
+          1467,
+          98,
+          186,
+          310
+        ]
+      },
+      "frames": {
+        "samples": 54,
+        "p50Ms": 33.59999999999991,
+        "p95Ms": 66.69999999999982,
+        "maxMs": 82.80000000000018,
+        "over50ms": 10
+      },
+      "startupScriptMs": 786.825,
+      "startupTaskMs": 2233.848,
+      "interactionScriptMs": 1278.1440000000002,
+      "jsHeapUsedBytes": 7187676,
+      "totals": {
+        ".js": {
+          "raw": 1049203,
+          "gzip": 287593
+        },
+        ".css": {
+          "raw": 129942,
+          "gzip": 26265
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 288
+        }
+      },
+      "errors": []
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 6,
+      "repeat": 2,
+      "manifestSha256": "57fa8b3fa8d775f79b978dea7aefa03cf5e66b14718ab5871628a1d740664ced",
+      "readyMs": 1527.1000000238419,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 1044,
+        "longTasks": [
+          908,
+          146,
+          279
+        ]
+      },
+      "frames": {
+        "samples": 59,
+        "p50Ms": 33.40000000000009,
+        "p95Ms": 66.5,
+        "maxMs": 66.90000000000009,
+        "over50ms": 7
+      },
+      "startupScriptMs": 684.766,
+      "startupTaskMs": 1497.9180000000001,
+      "interactionScriptMs": 1307.742,
+      "jsHeapUsedBytes": 10556432,
+      "totals": {
+        ".js": {
+          "raw": 1049203,
+          "gzip": 287593
+        },
+        ".css": {
+          "raw": 129942,
+          "gzip": 26265
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 288
+        }
+      },
+      "errors": []
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 6,
+      "repeat": 3,
+      "manifestSha256": "57fa8b3fa8d775f79b978dea7aefa03cf5e66b14718ab5871628a1d740664ced",
+      "readyMs": 1619.1000000238419,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 1044,
+        "longTasks": [
+          973,
+          156,
+          289
+        ]
+      },
+      "frames": {
+        "samples": 59,
+        "p50Ms": 33.299999999999955,
+        "p95Ms": 50.70000000000027,
+        "maxMs": 67.39999999999964,
+        "over50ms": 7
+      },
+      "startupScriptMs": 732.359,
+      "startupTaskMs": 1584.801,
+      "interactionScriptMs": 1302.555,
+      "jsHeapUsedBytes": 17343228,
+      "totals": {
+        ".js": {
+          "raw": 1049203,
+          "gzip": 287593
+        },
+        ".css": {
+          "raw": 129942,
+          "gzip": 26265
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 288
+        }
+      },
+      "errors": []
+    }
+  ],
+  "resources": {
+    "static-quadratic-reader": [
+      {
+        "path": "reader/quadratic-branching/index.html",
+        "raw": 84496,
+        "gzip": 7456,
+        "kind": ".html"
+      },
+      {
+        "path": "assets/reader-quadratic-branching-Dt8_VQXO.js",
+        "raw": 979,
+        "gzip": 560,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/kp-preload-helper-L5lOfJxi.js",
+        "raw": 1402,
+        "gzip": 766,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/reader-quadratic-branching-zUDEBPRY.css",
+        "raw": 54925,
+        "gzip": 13451,
+        "kind": ".css"
+      },
+      {
+        "path": "assets/KaTeX_Math-Italic-t53AETM-.woff2",
+        "raw": 16440,
+        "gzip": 16466,
+        "kind": ".woff2"
+      },
+      {
+        "path": "assets/KaTeX_Main-Regular-B22Nviop.woff2",
+        "raw": 26272,
+        "gzip": 26300,
+        "kind": ".woff2"
+      },
+      {
+        "path": "assets/quadratic-branching-runtime-CTEpRFBX.js",
+        "raw": 49863,
+        "gzip": 13741,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/kp-reader-clock-DYRaIlmr.js",
+        "raw": 37589,
+        "gzip": 9717,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/semantic-lineage-graph-DqVH2qme.js",
+        "raw": 3217,
+        "gzip": 1105,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-font-readiness-ggubuesO.js",
+        "raw": 569,
+        "gzip": 363,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-presentation-selection-7RSOGPVz.js",
+        "raw": 34922,
+        "gzip": 10202,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-endpoint-handoff-DSSbdvmJ.js",
+        "raw": 3761,
+        "gzip": 1619,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/expression-node-protocol-B4ZRZUxI.js",
+        "raw": 1205,
+        "gzip": 514,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/structured-expression-rewrite-DuRKnHsj.js",
+        "raw": 9524,
+        "gzip": 2987,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/fission-fusion-Bqipjp6c.js",
+        "raw": 5039,
+        "gzip": 1796,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/public-api-CyARWYGJ.js",
+        "raw": 33975,
+        "gzip": 8403,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/distribution-canonical-operation-CyXgNdHP.js",
+        "raw": 9130,
+        "gzip": 2727,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/transformation-definition-binding-CxCTZIom.js",
+        "raw": 4678,
+        "gzip": 1519,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/fraction-solve-macro-ivZ34GCV.js",
+        "raw": 22213,
+        "gzip": 5770,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/fraction-composition-evaluation-tree-CtbYdchJ.js",
+        "raw": 2708,
+        "gzip": 968,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/reader-font-review-lifecycle-r2o5Z-yf.js",
+        "raw": 753,
+        "gzip": 376,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/katex-CYlHEDRF.css",
+        "raw": 28835,
+        "gzip": 7954,
+        "kind": ".css"
+      }
+    ],
+    "canonical-tax": [
+      {
+        "path": "experiments/kinetic-figure/supply-tax/index.html",
+        "raw": 24122,
+        "gzip": 3226,
+        "kind": ".html"
+      },
+      {
+        "path": "assets/canonicalSupplyTax-jpQ8zl46.js",
+        "raw": 378304,
+        "gzip": 87351,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/public-api-CT2qI9D1.js",
+        "raw": 13593,
+        "gzip": 4271,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/exact-rational-DwOqQ087.js",
+        "raw": 33,
+        "gzip": 53,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/kp-reader-clock-DYRaIlmr.js",
+        "raw": 37589,
+        "gzip": 9717,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/generated-algebra-transform-definition-registry-B8RTPCaX.js",
+        "raw": 23689,
+        "gzip": 3749,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/semantic-lineage-graph-DqVH2qme.js",
+        "raw": 3217,
+        "gzip": 1105,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/transformation-definition-binding-CxCTZIom.js",
+        "raw": 4678,
+        "gzip": 1519,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/distribution-canonical-operation-CyXgNdHP.js",
+        "raw": 9130,
+        "gzip": 2727,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/generated-algebra-canonical-composition-CtAfTzw0.js",
+        "raw": 1168,
+        "gzip": 417,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/cancellation-operation-authority-CNkPO4db.js",
+        "raw": 1121,
+        "gzip": 374,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/operation-evaluation-authority-BEb_-qtD.js",
+        "raw": 1305,
+        "gzip": 407,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/canonical-operation-registry-Co5vC-TL.js",
+        "raw": 35444,
+        "gzip": 8411,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/semantic-salience-state-Tntzg3-a.js",
+        "raw": 731,
+        "gzip": 390,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/semantic-salience-resolver-BCvcdFRo.js",
+        "raw": 974,
+        "gzip": 493,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/typescript-refactor-semantic-artifact-CLYmZEfJ.js",
+        "raw": 23929,
+        "gzip": 6094,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/code-motion-settlement-BgESqnu0.js",
+        "raw": 2651,
+        "gzip": 1075,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/html-output-encoding-DFN8fwDI.js",
+        "raw": 161,
+        "gzip": 117,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/typescript-refactor-dom-session-D6HGSSL5.js",
+        "raw": 27355,
+        "gzip": 8393,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/semantic-visual-salience-5CbIdbDl.js",
+        "raw": 6352,
+        "gzip": 2567,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/semantic-visual-dom-theme-ByHWqfjQ.js",
+        "raw": 878,
+        "gzip": 358,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/katex-D7TCrkvT.js",
+        "raw": 257502,
+        "gzip": 76151,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/katex-adapter-Df57Hu7r.js",
+        "raw": 339,
+        "gzip": 238,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/expression-node-protocol-B4ZRZUxI.js",
+        "raw": 1205,
+        "gzip": 514,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-extension-registry-CaMK_pI3.js",
+        "raw": 1950,
+        "gzip": 647,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/choreography-timeline-CPOiyspY.js",
+        "raw": 17006,
+        "gzip": 5077,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/log-exponent-adapter-CTeM_Uws.js",
+        "raw": 39118,
+        "gzip": 10251,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/kp-preload-helper-L5lOfJxi.js",
+        "raw": 1402,
+        "gzip": 766,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/kernel-nhB_ecRX.js",
+        "raw": 378,
+        "gzip": 265,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/sampled-frame-envelope-BlaDfcxn.js",
+        "raw": 11361,
+        "gzip": 3083,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/runtime-sampler-DEKi9Gb5.js",
+        "raw": 10527,
+        "gzip": 2888,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/animation-surface-dispatch-BRULTa5p.js",
+        "raw": 572,
+        "gzip": 317,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/animation-playback-session-B-scRRHb.js",
+        "raw": 4493,
+        "gzip": 1296,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/animation-authoring-controls-DE5eXcNc.js",
+        "raw": 1923,
+        "gzip": 774,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/animation-player-controller-BwP9AASd.js",
+        "raw": 47718,
+        "gzip": 10562,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/animation-descriptor-Ugg2--XM.js",
+        "raw": 642,
+        "gzip": 312,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/animation-library-7xvc5tIc.js",
+        "raw": 48492,
+        "gzip": 5467,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/gestalt-base-styles-DKCH45mX.js",
+        "raw": 10482,
+        "gzip": 3416,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/animation-player-shell-DKIIBsDk.js",
+        "raw": 9841,
+        "gzip": 2706,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/animation-surface-adapter-registry-iF5BPIDD.js",
+        "raw": 1233,
+        "gzip": 616,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-motion-vocabulary-DERBcVno.js",
+        "raw": 5326,
+        "gzip": 1682,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/function-wrap-motif-BjnfLLNU.js",
+        "raw": 2991,
+        "gzip": 1041,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-extension-pack-validator-DVjNIMif.js",
+        "raw": 6379,
+        "gzip": 1928,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/function-wrap-invocation-BCR_Xr75.js",
+        "raw": 5706,
+        "gzip": 1781,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-asset-migration-role-bindings-v2-C8Ri6y0A.js",
+        "raw": 11357,
+        "gzip": 2821,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/symbol-motion-contract-DAAJbIDx.js",
+        "raw": 5608,
+        "gzip": 1697,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-balanced-branch-scheduling-CtrW7VQ8.js",
+        "raw": 4588,
+        "gzip": 1556,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/both-sides-operation-registration-Blk-nAnO.js",
+        "raw": 3824,
+        "gzip": 868,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/registered-both-sides-causal-binding-WWRMLSBv.js",
+        "raw": 13500,
+        "gzip": 3515,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-font-readiness-ggubuesO.js",
+        "raw": 569,
+        "gzip": 363,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/native-katex-track-projection-bS7h0AuJ.js",
+        "raw": 35412,
+        "gzip": 10368,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/native-katex-paint-geometry-BMUfglfJ.js",
+        "raw": 5580,
+        "gzip": 2131,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/computed-style-clone-D40DdcRs.js",
+        "raw": 1127,
+        "gzip": 613,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-material-layer-dom-vp-LLa9W.js",
+        "raw": 7277,
+        "gzip": 2392,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/native-katex-feature-pack-loader-CsyXFSDr.js",
+        "raw": 2346,
+        "gzip": 1099,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/operation-evaluation-family-profile-Mm4XKZmq.js",
+        "raw": 14195,
+        "gzip": 3730,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-evaluation-family-certificate-v2-L2xyowGd.js",
+        "raw": 3768,
+        "gzip": 1014,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-presentation-plan-v2-s4ynaOSE.js",
+        "raw": 33516,
+        "gzip": 7777,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-asset-migration-v2-igoK0-iU.js",
+        "raw": 4631,
+        "gzip": 1758,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/log-exponent-surface-capability-WzJ9Ll-I.js",
+        "raw": 26133,
+        "gzip": 7569,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/cross-view-attention-B4cIKEaT.js",
+        "raw": 847,
+        "gzip": 396,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/expression-DZsBysgl.js",
+        "raw": 4057,
+        "gzip": 1321,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/graph-BALrL9lV.js",
+        "raw": 2959,
+        "gzip": 1246,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/graph-3d-runtime-protocol-rl-P1D5R.js",
+        "raw": 2730,
+        "gzip": 988,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/graph-transitions-l0XZad2S.js",
+        "raw": 41507,
+        "gzip": 12596,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/graph-webgl-BFhYeSqW.js",
+        "raw": 4544,
+        "gzip": 1938,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/typescript-refactor-dom-session-Bsox_oho.css",
+        "raw": 5891,
+        "gzip": 1307,
+        "kind": ".css"
+      },
+      {
+        "path": "assets/log-exponent-surface-capability-BH9WK__K.css",
+        "raw": 667,
+        "gzip": 334,
+        "kind": ".css"
+      },
+      {
+        "path": "assets/katex-CYlHEDRF.css",
+        "raw": 28835,
+        "gzip": 7954,
+        "kind": ".css"
+      },
+      {
+        "path": "assets/canonicalSupplyTax-D2SGB6fT.css",
+        "raw": 42711,
+        "gzip": 7416,
+        "kind": ".css"
+      },
+      {
+        "path": "assets/styles-CDLur3nn.css",
+        "raw": 75266,
+        "gzip": 13296,
+        "kind": ".css"
+      },
+      {
+        "path": "assets/algebra-DGiB67i1.js",
+        "raw": 829,
+        "gzip": 461,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/algebra-choreography-capabilities-D6UvERUn.js",
+        "raw": 19854,
+        "gzip": 5075,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/factoring-choreography-Cyoxy5mK.js",
+        "raw": 4253,
+        "gzip": 1649,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/fission-fusion-Bqipjp6c.js",
+        "raw": 5039,
+        "gzip": 1796,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/distribution-choreography-BJssixTb.js",
+        "raw": 6876,
+        "gzip": 2371,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/copy-fan-out-motion-profile-B_KGJNfR.js",
+        "raw": 1070,
+        "gzip": 492,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/semantic-motion-source-authority-CfHJUV2M.js",
+        "raw": 36934,
+        "gzip": 8922,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/public-api-BMQt6jJS.js",
+        "raw": 486,
+        "gzip": 312,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/semantic-equation-transition-compiler-DO_nohAT.js",
+        "raw": 7451,
+        "gzip": 2120,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/finite-binder-causal-recipe-B8VKDSc5.js",
+        "raw": 3520,
+        "gzip": 1366,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/homomorphic-causal-phases-CH2qll9i.js",
+        "raw": 3640,
+        "gzip": 1346,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/generated-algebra-tutorial-fixture-BWFj2V71.js",
+        "raw": 48360,
+        "gzip": 8783,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/asset-diagram-Ccu2b-3y.js",
+        "raw": 1592,
+        "gzip": 597,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/asset-decomposition-BC1yyjZK.js",
+        "raw": 501,
+        "gzip": 264,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/asset-flashcard-JZfJ8wvj.js",
+        "raw": 1519,
+        "gzip": 602,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/distribution-correspondence-yjVBi1UA.js",
+        "raw": 878,
+        "gzip": 407,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-surface-family-declarations-B9oyyjUF.js",
+        "raw": 19730,
+        "gzip": 3423,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/cancellation-pressure-contract-CfA_zTBy.js",
+        "raw": 5124,
+        "gzip": 1962,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/cancellation-pressure-animation-CArsdnRh.js",
+        "raw": 13338,
+        "gzip": 3697,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-endpoint-handoff-DSSbdvmJ.js",
+        "raw": 3761,
+        "gzip": 1619,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/structured-expression-rewrite-DuRKnHsj.js",
+        "raw": 9524,
+        "gzip": 2987,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/function-wrap-asset-binding-DWPvwHyt.js",
+        "raw": 2969,
+        "gzip": 1143,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/common-factor-rewrite-CTO2KpdB.js",
+        "raw": 52,
+        "gzip": 72,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/composed-algebra-distribution-projection-YXzb7PO_.js",
+        "raw": 2404,
+        "gzip": 1060,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/exponent-radical-adapter-DEz5gQQW.js",
+        "raw": 1922,
+        "gzip": 854,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/log-quotient-adapter-B_T_Eurk.js",
+        "raw": 17710,
+        "gzip": 4710,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/log-quotient-ids-CpEBU-n7.js",
+        "raw": 77,
+        "gzip": 89,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/logarithm-change-of-base-exemplar-PEJKSx0_.js",
+        "raw": 4429,
+        "gzip": 1675,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/logarithm-change-of-base-presentation-plan-HXUwe54U.js",
+        "raw": 10692,
+        "gzip": 3019,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-structural-choreography-declarations-CBpshVjg.js",
+        "raw": 1476,
+        "gzip": 521,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/common-denominator-pressure-exemplar-CFdDOuVR.js",
+        "raw": 16962,
+        "gzip": 4738,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/successor-synthesis-presentation-plan-C9mWocaM.js",
+        "raw": 17867,
+        "gzip": 4587,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/operation-evaluation-presentation-registry-CGXNye9U.js",
+        "raw": 14729,
+        "gzip": 3850,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/visual-motif-BYwc8jNk.js",
+        "raw": 34546,
+        "gzip": 9343,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/derivative-power-rule-semantics-UkIqU40j.js",
+        "raw": 5388,
+        "gzip": 1448,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/focus-profile-C6jbRKdi.js",
+        "raw": 5738,
+        "gzip": 2103,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/operation-presentation-plan-types-Cw_ki7BB.js",
+        "raw": 696,
+        "gzip": 361,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/executable-motif-continuity-program-qAUn3Z8O.js",
+        "raw": 265,
+        "gzip": 170,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/fraction-equivalence-presentation-plan-DOAvFcTl.js",
+        "raw": 12689,
+        "gzip": 3267,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/fraction-common-denominator-BkYigoxV.js",
+        "raw": 8670,
+        "gzip": 2615,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/compound-root-carrier-adapter-BXFRbjCc.js",
+        "raw": 31771,
+        "gzip": 8217,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/latex-parser-Cu2oTZzK.js",
+        "raw": 6075,
+        "gzip": 1630,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/compound-root-carrier-exemplar-B-AkSGNj.js",
+        "raw": 17733,
+        "gzip": 4517,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/finite-product-expansion-exemplar-B-XrQRVT.js",
+        "raw": 37553,
+        "gzip": 9295,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/state-retention-projection-Br6eKXEZ.js",
+        "raw": 5313,
+        "gzip": 1837,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/KaTeX_Main-Regular-B22Nviop.woff2",
+        "raw": 26272,
+        "gzip": 26300,
+        "kind": ".woff2"
+      },
+      {
+        "path": "assets/KaTeX_Math-Italic-t53AETM-.woff2",
+        "raw": 16440,
+        "gzip": 16466,
+        "kind": ".woff2"
+      },
+      {
+        "path": "assets/graph-webgl-three-DYPVebF2.js",
+        "raw": 408,
+        "gzip": 208,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/graph-webgl-three-BbU68XZP.js",
+        "raw": 528639,
+        "gzip": 131714,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/webgl-context-lease-pool-BS_w24UF.js",
+        "raw": 1584,
+        "gzip": 714,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/native-katex-feature-pack-implementation-CU_xp5nq.js",
+        "raw": 485,
+        "gzip": 299,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/native-katex-rendered-scene-Bk4Gxmi1.js",
+        "raw": 11264,
+        "gzip": 3472,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/native-katex-scene-compositor-D7I5ZH5J.js",
+        "raw": 101156,
+        "gzip": 27984,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/native-katex-scene-contribution-BqM9SEdf.js",
+        "raw": 3440,
+        "gzip": 1355,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-linear-rearrangement-frame-CHYB64E5.js",
+        "raw": 1542,
+        "gzip": 737,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/native-katex-scene-assembly-Bwkwp9Y0.js",
+        "raw": 6267,
+        "gzip": 2469,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/native-katex-successor-synthesis-vys3hDge.js",
+        "raw": 16362,
+        "gzip": 4800,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/successor-synthesis-BH238ray.js",
+        "raw": 14132,
+        "gzip": 4241,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/katex-texture-atlas-B2vOCGy9.js",
+        "raw": 11346,
+        "gzip": 3957,
+        "kind": ".js"
+      }
+    ],
+    "gradient": [
+      {
+        "path": "experiments/kinetic-figure/gradient-contour/index.html",
+        "raw": 401,
+        "gzip": 288,
+        "kind": ".html"
+      },
+      {
+        "path": "assets/gradientContour-BSK3ce0J.js",
+        "raw": 518805,
+        "gzip": 155259,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/gradientContour-BLTND-bI.css",
+        "raw": 129942,
+        "gzip": 26265,
+        "kind": ".css"
+      },
+      {
+        "path": "assets/KaTeX_Math-Italic-t53AETM-.woff2",
+        "raw": 16440,
+        "gzip": 16466,
+        "kind": ".woff2"
+      },
+      {
+        "path": "assets/KaTeX_Main-Regular-B22Nviop.woff2",
+        "raw": 26272,
+        "gzip": 26300,
+        "kind": ".woff2"
+      },
+      {
+        "path": "assets/KaTeX_Main-Bold-Cx986IdX.woff2",
+        "raw": 25324,
+        "gzip": 25352,
+        "kind": ".woff2"
+      },
+      {
+        "path": "assets/graph-webgl-three-DYGmNqhZ.js",
+        "raw": 530398,
+        "gzip": 132334,
+        "kind": ".js"
+      }
+    ]
+  }
+}

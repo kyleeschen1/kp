@@ -47,6 +47,16 @@ and revision ownership before mechanics runtime. No repair loop has been started
 Current branch: `feature/20260912-mechanics-architecture-readiness`, based on the
 verified `ac579dec5` tip; prior branch/history retained, no merge or push.
 
+The user requested a more rigorous audit of redundancy, tests, CSS, browser cost
+on low-powered devices, and fidelity to the object/transformation ontology.
+The completed bounded audit and fresh measurements are recorded in
+`reviews/2026-09-12-architecture-cost-ontology-audit.md`. Recommended readiness
+order: publication dependency closure; measured host loading and gradient frame
+cost; semantic authority gaps; evidence-led verification/policy consolidation;
+then the first mechanics unit with reusable mathematics. The 6× CPU measurements
+are sensitivity probes, not physical-device certification. No runtime repair,
+test deletion, budget increase, or successor run is implied by this audit.
+
 Completed delivery: `threads/2026-09-10-gradient-contour-delivery-proposal.md`
 under `run-contract.kp.gradient-contour-intuition-v1`. All six packages passed;
 source-only reuse, independent reading/exact return, release evidence and limits:
