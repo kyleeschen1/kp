@@ -1,5 +1,38 @@
 # Motion-description exemplar: learner review
 
+## Current revision: earn the medium
+
+The initial seven-stop review packet below is historical. The user accepted
+attention clarity but required a single-viewport card and a stronger reason to
+use animation. The revised page now teaches definitions and conventions in
+ordinary prose, then gives the card one job: connect physical motion to its
+position–time record. Four stops cover start, outward motion, pause and return;
+the return endpoint is also the final inspection. Origin shifting and distance
+are not opening-card obligations. The semantic capabilities remain intact.
+
+Try the “Explore the two views” link to bring the card into view. During the
+pause, the physical point stays still while the graph point keeps moving right.
+During return, the physical point moves left while the graph descends right.
+The prediction below the card asks about a different leftward trip followed by
+rest. Modeling caveats remain explicit prose, not squeezed into moving beats.
+
+Medium-choice justification: `2026-09-12-motion-explanation-draft.md`.
+Product policy: `../principles/focus-card-medium-choice.md`, also required by
+the canonical LLM generation entrypoint and explanation-first worksheet.
+
+Focused browser checks now include full-card fit at 1280×720, 390×667 and
+320×568, stable height across all four beats, and unclipped 200% root text in
+document flow. Enlarged-text/exceptionally short views may need document scroll;
+we do not shrink fonts or hide required content to assert universal fit. This
+does not certify physical-device Safari behavior or pedagogical superiority.
+
+Please judge whether the coordinated pause/return makes the graph easier to
+understand than the static explanation, and whether the complete card is usable
+without scrolling between its passage, stage and controls. The revised treatment
+still needs that human checkpoint before P3/P4.
+
+## Initial review packet (superseded packaging)
+
 Review URL: http://localhost:8000/experiments/mechanics-motion/
 
 This is the opening exemplar of the approved

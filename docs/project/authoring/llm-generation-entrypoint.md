@@ -66,6 +66,12 @@ the same canonical owners, plus contextual subquestions and static publication.
 
 ## Route The Task Before Generating
 
+Every new focus card needs a medium-choice justification under
+`../principles/focus-card-medium-choice.md`. Explain what becomes easier to see,
+track or reconstruct than with the simplest static baseline. Use its candidate
+use cases as prompts, not automatic approval. Preserve text for work it does
+better; a synchronized animation alone is not a teaching outcome.
+
 For a new conceptual explanation or a repair of an unclear “why”, use
 `explanation-first-worksheet.md` before selecting card stops or choreography.
 Establish the reader's question, prerequisite meanings and inferential bridges;

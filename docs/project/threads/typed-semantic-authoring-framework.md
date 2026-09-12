@@ -1,6 +1,11 @@
 # Typed Semantic Authoring Framework Thread
 
 Status: readiness complete; opening motion-description delivery approved
+Current review refinement: attention treatment accepted; P2 packaging not yet
+accepted. Apply `../principles/focus-card-medium-choice.md`: every card must earn
+its medium. The user authorized narrowing the opening card to motion/graph
+correspondence and repairing single-viewport fit. Preserve semantic owners and
+shared controls; stop for the revised exemplar review before P3 promotion.
 Last Updated: 2026-09-12
 Current scope: `2026-09-12-mechanics-motion-delivery-proposal.md`, approved with
 “record it and then go”. Twelve-lesson direction and origin-only correction:

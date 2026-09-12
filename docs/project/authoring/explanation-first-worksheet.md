@@ -37,6 +37,12 @@ expression. Do not infer mastery from silence or an attractive animation.
 
 ## 3. Map the reasoning and assign visual jobs
 
+Before creating a focus card, complete the medium-choice brief in
+`../principles/focus-card-medium-choice.md`: learner obstacle, static baseline,
+perceptual gain, meaningful control, transfer check, and cost/limits. A visual job
+must justify the card relative to a static presentation, not just describe its
+animation. If that advantage is unclear, ship the static explanation first.
+
 For each meaningful explanatory unit, record briefly:
 
 | Question | Starting knowledge | New conclusion and why it follows | Evidence / visual job | Likely wrong inference |

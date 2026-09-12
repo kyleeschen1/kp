@@ -24,6 +24,14 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+Accepted refinement (2026-09-12): focus cards must justify their perceptual gain
+over a static baseline; see `principles/focus-card-medium-choice.md`. The motion
+exemplar's attention treatment is accepted, but its scope and viewport fit need
+repair. Revise P2 to physical-motion/position–time correspondence only, with
+definitions and assumptions in surrounding text. Origin change and distance are
+not compulsory opening-card beats. Preserve their semantic capabilities for later
+reuse. This supersedes the broader P2 packaging below, not the learning trajectory.
+
 Current approved delivery (2026-09-12): start with **How do we describe motion?**
 and its position–time graph connection, with origin changes as a supporting beat.
 Accepted twelve-lesson trajectory: `decisions/2026-09-12-mechanics-learning-trajectory.md`.

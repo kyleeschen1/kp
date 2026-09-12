@@ -19,7 +19,7 @@ if (checked.status !== "checked") throw new Error(`${checked.path}: ${checked.ex
 const lesson = checked.lesson;
 // Theme the owner of the inherited stage aliases, not only its descendant.
 applyKpSemanticVisualDomTheme({ root: root.closest<HTMLElement>(".motion-page") ?? root, theme: "light" });
-root.innerHTML = renderKpFocusDeckScaffold({ id: "mechanics-motion", ariaLabel: "How do we describe motion?",
+root.innerHTML = renderKpFocusDeckScaffold({ id: "mechanics-motion", ariaLabel: "How does motion become a graph?",
   activeBeatSlug: lesson.beats[0]!.slug, beats: lesson.beats.map(beat => ({ slug: beat.slug, title: beat.title, html: `<p>${beat.body}</p>` })),
   headerTrailingHtml: `<span data-motion-count>1 / ${lesson.beats.length}</span>`, stageHtml: renderMotionStage(lesson), replayHidden: false });
 const get = <T extends Element>(selector: string): T => { const element = root.querySelector<T>(selector); if (!element) throw new Error(`Missing motion control ${selector}`); return element; };
@@ -31,8 +31,11 @@ viewport.dataset["kpFocusDeckSnapDisabled"] = "true";
 // reading surface above it owns attention; it is never a second playhead.
 const reading = document.createElement("section"); reading.className = "motion-reading kp-focus-deck__narrative";
 reading.setAttribute("aria-label", "Current explanation");
-reading.innerHTML = `<div class="kp-focus-deck__passage-page"><span data-motion-role data-kp-focus-deck-type="meta"></span><strong data-motion-title></strong><p data-motion-reading></p><p class="motion-cue" data-motion-cue></p></div>`;
+// Overlapping grid cells reserve the longest beat at the actual reading size.
+// Hidden beats contribute geometry, never accessibility or another playhead.
+reading.innerHTML = lesson.beats.map(beat => `<div class="kp-focus-deck__passage-page" data-motion-reading-beat="${beat.slug}" data-motion-active="false" aria-hidden="true"><span data-motion-role data-kp-focus-deck-type="meta">Read, then move</span><strong>${beat.title}</strong><p data-motion-reading>${beat.body}</p><p class="motion-cue">${beat.cue}</p></div>`).join("");
 shell.append(reading);
+const readings = [...reading.querySelectorAll<HTMLElement>("[data-motion-reading-beat]")];
 viewport.setAttribute("aria-hidden", "true"); viewport.tabIndex = -1;
 const slider = get<HTMLInputElement>("[data-kp-focus-deck-scrubber]"), previous = get<HTMLButtonElement>("[data-kp-focus-deck-previous]"), next = get<HTMLButtonElement>("[data-kp-focus-deck-next]"), replay = get<HTMLButtonElement>("[data-kp-focus-deck-replay]");
 const clock = createKpReaderTimelinePlaybackClock({ id: "clock.mechanics-motion", durationMs: 2400 * (lesson.beats.length - 1) });
@@ -45,8 +48,12 @@ const render = () => {
   const frame = sampleMotionLesson(lesson, clock.getSnapshot().progress);
   stage.project(frame);
   const text = (selector: string, value: string) => { const el = get(selector); if (el.textContent !== value) el.textContent = value; };
-  text("[data-motion-title]", frame.beat.title); text("[data-motion-reading]", frame.beat.body); text("[data-motion-cue]", frame.beat.cue);
-  text("[data-motion-role]", frame.role); text("[data-motion-count]", frame.fraction);
+  for (const passage of readings) {
+    const active = passage.dataset["motionReadingBeat"] === frame.beat.slug;
+    passage.dataset["motionActive"] = String(active); passage.setAttribute("aria-hidden", String(!active));
+    if (active) passage.querySelector("[data-motion-role]")!.textContent = frame.role;
+  }
+  text("[data-motion-count]", frame.fraction);
   card.dataset["kpFocusDeckActiveBeat"] = frame.beat.slug; card.dataset["motionPhase"] = frame.attention.phaseKind;
   card.dataset["motionStep"] = String(frame.position); card.dataset["motionOperation"] = frame.operationId;
   slider.value = String(frame.position); slider.setAttribute("aria-valuetext", `${frame.fraction}: ${frame.beat.title}`);

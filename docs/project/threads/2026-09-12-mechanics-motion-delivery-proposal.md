@@ -2,6 +2,13 @@
 
 Status: approved by the user's “record it and then go” after the revised trajectory.
 Mode: interactive kp-delivery-loop; no minimum slice count.
+Accepted P2 amendment: the user accepted attention clarity, not the instructional
+packaging. The opening card now focuses only on physical-motion/position–time
+correspondence and must fit one viewport. Text owns motivation, definitions and
+model caveats. Origin change and distance/displacement are removed from this
+card, not from the semantic capability. The broader original beat description
+below is historical where it conflicts. P3/P4 remain after revised human review;
+their reused reading must follow the new medium-choice guidance.
 Replaces the unapproved origin-only proposal, which remains historical.
 Decision: `../decisions/2026-09-12-mechanics-learning-trajectory.md`.
 

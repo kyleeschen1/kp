@@ -50,6 +50,27 @@
       "scope": "p2",
       "checkedAt": "2026-09-12T21:17:38.903Z",
       "notes": "Three Chromium discovery tests pass after annotation anchoring repair and timestamp labels: seven stops, coordinate invariance, animated button and keyboard travel, reverse horizontal gesture, phone containment and reduced-motion endpoints. Human pedagogy and aesthetics remain pending; no cross-browser or production certification claimed."
+    },
+    {
+      "command": "npm run visual:mechanics-motion",
+      "status": "passed",
+      "scope": "p2-medium-choice",
+      "checkedAt": "2026-09-12T22:12:19.622Z",
+      "notes": "Five Chromium discovery checks pass: four source-derived stops, graph moves during physical pause, animated buttons and keyboard, reverse gesture, reduced motion, whole-card stable fit at 1280x720, 390x667 and 320x568, readable 200 percent text. Initial 320x568 fit failures at 629 then 562 pixels were repaired through reduced duplicate labels and spacing, not fonts or a weakened threshold. Revised pedagogy awaits human review."
+    },
+    {
+      "command": "node --experimental-strip-types --test tests/motion-observation.test.ts tests/motion-observation-asset.test.ts tests/mechanics-motion-sequence.test.ts",
+      "status": "passed",
+      "scope": "p2-medium-choice",
+      "checkedAt": "2026-09-12T22:12:21.259Z",
+      "notes": "Nine tests pass after narrowing the reading. Source and governed construction remain unchanged; fixed-origin and distance capabilities are preserved independently of the four-stop correspondence projection."
+    },
+    {
+      "command": "npm run typecheck; npm run check:dependency-direction; git diff --check",
+      "status": "passed",
+      "scope": "p2-medium-choice",
+      "checkedAt": "2026-09-12T22:12:54.253Z",
+      "notes": "Full app, Node, test, Svelte and domain types pass on the revised lesson. Dependency-direction and whitespace checks pass. No new package dependencies or shared font policy changes; full release/browser matrix remains P4 after visual acceptance."
     }
   ],
   "expectedLearning": [

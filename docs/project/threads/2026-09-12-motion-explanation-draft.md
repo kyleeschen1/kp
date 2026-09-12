@@ -1,5 +1,36 @@
 # How could someone reconstruct a trip they did not see?
 
+## Accepted medium-choice revision
+
+The original draft below is preserved as broader explanatory material, not the
+current card's scope. User review accepted attention clarity but questioned the
+medium choice and rejected an oversized card. The revised lesson uses ordinary
+text for motivation, coordinate conventions, graph axes and interpolation limits.
+
+- **Obstacle:** confusing a position–time graph with the physical path.
+- **Static baseline:** a track, timestamp/position table and completed graph,
+  with prose explaining that each graph point pairs time with position.
+- **Perceptual gain:** during a modeled pause the physical point stays still
+  while its graph point continues right. On return, leftward physical movement
+  corresponds to downward graph movement without time reversing. Coordinated
+  motion removes the need to mentally align successive static observations.
+- **Control:** pause, replay or reverse that exact correspondence; arrows play
+  only the next interval. No decorative motion or compulsory origin tour.
+- **Transfer:** sketch a steady leftward trip followed by rest. Expect a
+  descending-right segment followed by a horizontal-right segment; time never
+  doubles back. This is a prediction, not a claim of measured learning gain.
+- **Costs/limits:** teach axis meanings before displaying two views. The card
+  does not prove a pause from sparse measurements or explain forces. Origin
+  conversion and distance remain later reusable material, not extra opening
+  beats. Maintain one-viewport fit at ordinary supported reading sizes and
+  readable document overflow at enlarged text sizes.
+
+Four stops: start, outward endpoint, pause endpoint, return endpoint. The final
+endpoint is also the held inspection; no empty extra animation is required.
+Policy: `../principles/focus-card-medium-choice.md`.
+
+## Original broader explanation (superseded as card packaging)
+
 P1 working explanation, not yet learner-reviewed. The marked point represents
 one location on a real object; it does not tell us how the object rotates or bends.
 
