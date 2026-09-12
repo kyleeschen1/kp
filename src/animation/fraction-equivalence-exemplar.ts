@@ -11,9 +11,9 @@ import {
   type KpFractionEquivalencePresentationMode
 } from "./fraction-equivalence-presentation-plan.ts";
 import {
-  createKpAssetBundle,
-  createKpSemanticAssetObject
+  createKpAssetBundle
 } from "../semantic/asset.ts";
+import { createKpImmutableSemanticAssetObject } from "../semantic/immutable-asset.ts";
 import { createKpSemanticTransformation } from
   "../semantic/asset-transformation.ts";
 import { createSemanticTransformationRef } from "../semantic/animation.ts";
@@ -40,7 +40,7 @@ export function createKpFractionEquivalenceExemplarAsset(
   const animationId = mode === "explain-unit-factor"
     ? kpFractionEquivalenceExemplarId
     : kpCompactFractionEquivalenceExemplarId;
-  const sourceEquation = createKpSemanticAssetObject({
+  const sourceEquation = createKpImmutableSemanticAssetObject({
     id: semantic.source.stateId,
     objectType: "equation",
     title: "Source fraction",
@@ -51,7 +51,7 @@ export function createKpFractionEquivalenceExemplarAsset(
       settledEndpointAuthority: "native-katex"
     }
   });
-  const scaleFactor = createKpSemanticAssetObject({
+  const scaleFactor = createKpImmutableSemanticAssetObject({
     id: "object.fraction-equivalence.scale-factor",
     objectType: "parameter",
     title: "Shared nonzero scale factor",
@@ -62,7 +62,7 @@ export function createKpFractionEquivalenceExemplarAsset(
       semanticRole: "operation-material"
     }
   });
-  const targetEquation = createKpSemanticAssetObject({
+  const targetEquation = createKpImmutableSemanticAssetObject({
     id: semantic.target.stateId,
     objectType: "equation",
     title: "Equivalent scaled fraction",

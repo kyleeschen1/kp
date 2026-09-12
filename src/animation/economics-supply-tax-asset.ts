@@ -14,9 +14,10 @@ import {
 } from "./asset.ts";
 import {
   createKpAssetBundle,
-  createKpSemanticAssetObject,
   type KpSemanticAssetObject
 } from "../semantic/asset.ts";
+import { createKpImmutableSemanticAssetObject, type KpImmutableSemanticAssetObject,
+  type KpImmutableSemanticData } from "../semantic/immutable-asset.ts";
 import { createKpSemanticTransformation } from
   "../semantic/asset-transformation.ts";
 import { createSemanticTransformationRef } from
@@ -342,10 +343,10 @@ function object<T>(
   id: string,
   objectType: string,
   title: string,
-  value: T,
+  value: T & KpImmutableSemanticData<T>,
   selectors: readonly ReturnType<typeof selector>[]
-): KpSemanticAssetObject<T> {
-  return createKpSemanticAssetObject({ id, objectType, title, value, selectors });
+): KpImmutableSemanticAssetObject<T> {
+  return createKpImmutableSemanticAssetObject<T>({ id, objectType, title, value, selectors });
 }
 
 function selector(id: string, kind: string, label: string) {

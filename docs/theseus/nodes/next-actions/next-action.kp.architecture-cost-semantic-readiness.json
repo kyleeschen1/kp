@@ -148,6 +148,13 @@
       "scope": "s16",
       "checkedAt": "2026-09-12T17:59:25.153Z",
       "notes": "Seven asset checks and negative type fixtures pass; 1000-record clone freeze cost recorded, supported data callers inventoried, legacy compatibility explicitly retained."
+    },
+    {
+      "command": "npm run visual:architecture-cost -- --acceptance --activation",
+      "status": "passed",
+      "scope": "s17",
+      "checkedAt": "2026-09-12T18:10:20.103Z",
+      "notes": "Full byte cohort succeeds; Bayes and tax/code/fraction ownership publication checks, full types, builds, reader and algebra budgets, six edition and six built-tax browser cases pass."
     }
   ],
   "expectedLearning": [

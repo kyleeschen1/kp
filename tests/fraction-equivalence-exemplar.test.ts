@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { isKpImmutableSemanticAssetObject } from "../src/semantic/immutable-asset.ts";
 
 import {
   createKpFractionEquivalenceExemplarAsset,
@@ -22,6 +23,7 @@ import { verifyKpFractionEquivalence } from
 
 test("fraction-equivalence exemplar binds semantic and presentation authority", () => {
   const asset = createKpFractionEquivalenceExemplarAsset();
+  assert.ok(asset.bundle.objects.every(isKpImmutableSemanticAssetObject));
   const transformation = asset.transformations[0]!;
   assert.equal(asset.id, kpFractionEquivalenceExemplarId);
   assert.equal(asset.metadata?.["presentationPlanId"],

@@ -136,7 +136,8 @@
     {
       "id": "s17",
       "title": "Supported caller adoption",
-      "status": "planned"
+      "summary": "Retired aliased issuance in four bounded data families; domain proof and native presentation remain distinct, with measured delivery acceptance.",
+      "status": "complete"
     },
     {
       "id": "s18",

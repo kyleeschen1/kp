@@ -1,7 +1,7 @@
 import { BinaryJointModel, ProbabilityRepairGap } from "../../../domains/probability/binary-joint-model.ts";
 import { compileBinaryProbabilityTrace, requireBinaryProbabilityTrace, type BinaryProbabilityTrace } from "../../../domains/probability/binary-probability-trace.ts";
 import { createKpAnimationAssetBuilder } from "../../animation/asset.ts";
-import { createKpSemanticAssetObject } from "../../semantic/asset.ts";
+import { createKpImmutableSemanticAssetObject } from "../../semantic/immutable-asset.ts";
 import { createKpSemanticTransformation } from "../../semantic/asset-transformation.ts";
 import { createKpCanonicalOperationPack } from "../../semantic/canonical-operation-pack.ts";
 import { compileKpGovernedCanonicalConstruction, type KpGovernedConstructionSourceAuthority } from "../../authoring/governed-canonical-construction-compiler.ts";
@@ -24,7 +24,7 @@ export function createBayesSourceAuthority(trace: BinaryProbabilityTrace): KpGov
   const revisionId = `sha256:${sha256(JSON.stringify(source))}`;
   const builder = createKpAnimationAssetBuilder({ id: bayesArtifactId, title: "Build a probability model; change the question" });
   for (const state of trace.states) {
-    builder.addObject(createKpSemanticAssetObject({ id: state.id, objectType: "binary-probability-state", title: state.kind,
+    builder.addObject(createKpImmutableSemanticAssetObject({ id: state.id, objectType: "binary-probability-state", title: state.kind,
       value: { kind: state.kind, sourceId: model.sourceId, revisionId, outcomes: source.outcomes,
         firstEventId: state.kind === "population" ? null : model.events[state.tree.first].id,
         referencePopulationId: state.kind === "conditioned" ? state.population.evidence.populationId : `${model.sourceId}.population.all`,

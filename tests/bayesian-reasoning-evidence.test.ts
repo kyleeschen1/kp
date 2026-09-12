@@ -3,10 +3,12 @@ import test from "node:test";
 import { createFlaggedTicketSource, ProbabilityRepairGap } from "../domains/probability/binary-joint-model.ts";
 import { bindBayesEvidence, compileBayesConstruction, createBayesConstructionRequest } from "../src/experiments/bayesian-reasoning/evidence.ts";
 import { validateKpAnimationAsset } from "../src/animation/asset.ts";
+import { isKpImmutableSemanticAssetObject } from "../src/semantic/immutable-asset.ts";
 
 test("probability evidence traverses existing governed construction with exact role closure", () => {
   const evidence = bindBayesEvidence(createFlaggedTicketSource());
   assert.deepEqual(validateKpAnimationAsset(evidence.authority.animation), []);
+  assert.ok(evidence.authority.animation.bundle.objects.every(isKpImmutableSemanticAssetObject));
   assert.equal(evidence.construction.mathematicalVerification.operations.length, 6);
   evidence.construction.mathematicalVerification.operations.forEach(operation => {
     assert.ok(operation.definitionId.startsWith("definition.probability."));

@@ -8,6 +8,7 @@ import {
   kpTypeScriptRefactorSelectorId
 } from "../src/semantic/typescript-refactor-operations.ts";
 import { validateKpAssetBundle } from "../src/semantic/asset.ts";
+import { isKpImmutableSemanticAssetObject } from "../src/semantic/immutable-asset.ts";
 import { validateKpSemanticTransformation } from "../src/semantic/asset-transformation.ts";
 import {
   checkCorrespondenceMapRewindLaw,
@@ -21,6 +22,7 @@ test("refactor operations reuse the canonical semantic authorities", () => {
   );
 
   assert.deepEqual(validateKpAssetBundle(operations.bundle), []);
+  assert.ok(operations.bundle.objects.every(isKpImmutableSemanticAssetObject));
   assert.equal(operations.bundle.objects.length, 2);
   assert.equal(operations.bundle.objects.flatMap(({ selectors }) => selectors).length, 12);
   assert.deepEqual(
@@ -59,6 +61,15 @@ test("duplicate decisions merge into one rule while calls are introduced", () =>
     ["function.qualifies.after", "call.shipping-cost.after", "call.shipping-message.after"]
   );
   assert.deepEqual(validateKpSemanticLineageGraph(operations.lineage), []);
+});
+
+test("issued code objects do not alias a retained semantic source draft", () => {
+  const source = structuredClone(compileKpTypeScriptRefactorSemantics());
+  const entity = source.revisions[0]!.entities[0]!;
+  const original = entity.label;
+  const operations = createKpTypeScriptRefactorOperationSet(source);
+  assert.equal(Reflect.set(entity, "label", "Changed outside issuance"), true);
+  assert.equal(findKpTypeScriptSemanticEntity(operations, entity.id)?.label, original);
 });
 
 test("operation selectors retain exact source-derived identity", () => {

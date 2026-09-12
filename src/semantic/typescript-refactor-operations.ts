@@ -1,9 +1,9 @@
 import {
   createKpAssetBundle,
-  createKpSemanticAssetObject,
   validateKpAssetBundle,
   type KpAssetBundle
 } from "./asset.ts";
+import { createKpImmutableSemanticAssetObject } from "./immutable-asset.ts";
 import {
   createKpSemanticTransformation,
   validateKpSemanticTransformation,
@@ -38,7 +38,7 @@ export function createKpTypeScriptRefactorOperationSet(
     id: "asset.typescript.free-shipping-threshold",
     title: "Extract one free-shipping rule",
     objects: semantics.revisions.map((revision) =>
-      createKpSemanticAssetObject({
+      createKpImmutableSemanticAssetObject({
         id: objectId(revision.revision),
         objectType: "typescript-source-revision",
         title: revision.revision === "before" ? "Duplicated rule" : "Extracted rule",

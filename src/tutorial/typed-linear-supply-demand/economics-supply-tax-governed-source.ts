@@ -1,7 +1,8 @@
 import { kpPerUnitTaxOperation, verifyKpPerUnitTaxOperation } from "../../../domains/economics/per-unit-tax-operation.ts";
 import { createKpPerUnitTaxWelfareAsset } from "../../../domains/economics/per-unit-tax-welfare-asset.ts";
 import { createKpCanonicalOperationPack, type KpCanonicalOperationPackPin } from "../../semantic/canonical-operation-pack.ts";
-import { createKpSemanticAssetObject, createKpAssetBundle } from "../../semantic/asset.ts";
+import { createKpAssetBundle } from "../../semantic/asset.ts";
+import { createKpImmutableSemanticAssetObject } from "../../semantic/immutable-asset.ts";
 import { validateCorrespondenceMap, type SelectorCorrespondenceRecord } from "../../semantic/correspondence.ts";
 import { createSemanticTransformationRef } from "../../semantic/animation.ts";
 import { createEditableSemanticTransformationTree, createSemanticTransformationLeaf } from "../../semantic/transformation-composition.ts";
@@ -49,7 +50,7 @@ export function createKpSupplyTaxGovernedSource(input: Parameters<typeof verifyK
   const canonical = createKpEconomicsSupplyTaxAnimationAsset(createKpPerUnitTaxWelfareAsset(verified.model));
   const original = canonical.animation.transformations[0]!;
   const tax = verified.model.input.tax;
-  const taxOccurrence = (phase: "before" | "after") => createKpSemanticAssetObject({
+  const taxOccurrence = (phase: "before" | "after") => createKpImmutableSemanticAssetObject({
     id: `${tax.id}.${phase}`, objectType: "economics-tax-state-occurrence", title: `${phase} tax`,
     value: { roleId: tax.id, snapshot: phase === "before" ? input.beforePin : input.afterPin,
       amount: phase === "before" ? tax.initialAmount : tax.finalAmount },

@@ -8,6 +8,7 @@ import {
   sampleKpEconomicsSupplyTaxAnimationFrame
 } from "../src/animation/economics-supply-tax-asset.ts";
 import { validateKpAnimationAsset } from "../src/animation/asset.ts";
+import { isKpImmutableSemanticAssetObject } from "../src/semantic/immutable-asset.ts";
 
 const exact = (numerator: string, denominator = "1") => ({
   numerator,
@@ -18,6 +19,7 @@ test("supply-tax animation asset closes every semantic reference", () => {
   const authority = createKpEconomicsSupplyTaxAnimationAsset();
   assert.equal(authority.id, KP_ECONOMICS_SUPPLY_TAX_ANIMATION_ID);
   assert.deepEqual(validateKpAnimationAsset(authority.animation), []);
+  assert.ok(authority.animation.bundle.objects.every(isKpImmutableSemanticAssetObject));
   assert.equal(authority.animation.transformations[0]?.id,
     KP_ECONOMICS_SUPPLY_TAX_TRANSFORMATION_ID);
   assert.deepEqual(authority.animation.timeline, {
