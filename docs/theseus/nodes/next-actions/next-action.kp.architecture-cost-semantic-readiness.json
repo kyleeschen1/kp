@@ -36,6 +36,13 @@
       "scope": "s01",
       "checkedAt": "2026-09-12T15:36:14.359Z",
       "notes": "18 built-route samples completed without page errors; matched manifests and byte closures. Timing variation especially tax confirms CPU sensitivity not calibrated device certification"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/local-stylesheet-closure.test.ts",
+      "status": "passed",
+      "scope": "s02",
+      "checkedAt": "2026-09-12T15:44:54.334Z",
+      "notes": "Five checks include real typography and KaTeX closure, nested imports and fonts, explicit aliases, deterministic deduplication, missing files, cycles, unsafe paths, symlinks and collisions. Full typecheck passes after erasable syntax and narrowing fixes."
     }
   ],
   "expectedLearning": [

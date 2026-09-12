@@ -46,7 +46,8 @@
     {
       "id": "s02",
       "title": "Edition dependency closure owner",
-      "status": "planned"
+      "summary": "Shared bounded collector and five regressions pass with full types; direct existing build-only parser dependency; ready for first builder migration",
+      "status": "complete"
     },
     {
       "id": "s03",
