@@ -169,6 +169,13 @@
       "scope": "s19",
       "checkedAt": "2026-09-12T18:28:01.644Z",
       "notes": "Nineteen existing mathematical authoring extraction and native-overlay projection checks pass; handoff cross-checked against actual model and authoring bounds."
+    },
+    {
+      "command": "npm run visual:focus-deck-input -- tests/economics-supply-tax.browser.spec.ts",
+      "status": "passed",
+      "scope": "s20",
+      "checkedAt": "2026-09-12T18:48:45.520Z",
+      "notes": "13 tax browser cases, 3 gradient preservation cases, 10 focused unit checks and full types pass. Initial tiny-touch and wall-time test failures repaired; no behavior waiver."
     }
   ],
   "expectedLearning": [

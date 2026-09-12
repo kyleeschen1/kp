@@ -10,7 +10,7 @@ interface FocusDeckTravelSession {
 export function mountKpFocusDeckNativeInput(input: {
   viewport: HTMLElement; region: HTMLElement;
   enabled(): boolean; position(): number;
-  begin(now: number): FocusDeckTravelSession;
+  begin(now: number, kind: "wheel" | "native-touch" | "pointer"): FocusDeckTravelSession;
   reduced(): boolean; interrupt(): void;
 }) {
   const { viewport, region } = input;
@@ -56,10 +56,10 @@ export function mountKpFocusDeckNativeInput(input: {
     owner.clearTimeout(quiet);
     quiet = owner.setTimeout(finish, 220);
   };
-  const beginNative = () => {
+  const beginNative = (kind: "wheel" | "native-touch") => {
     if (state.kind !== "idle") return;
     input.interrupt();
-    state = { kind: "native", session: input.begin(now()), lastInput: now() };
+    state = { kind: "native", session: input.begin(now(), kind), lastInput: now() };
   };
   const scroll = () => {
     if (state.kind !== "native") return;
@@ -70,7 +70,7 @@ export function mountKpFocusDeckNativeInput(input: {
     if (event.defaultPrevented || !input.enabled() || blocked(event) || event.ctrlKey || state.kind === "pointer" || state.kind === "pending") return;
     const dx = event.shiftKey && event.deltaX === 0 ? event.deltaY : event.deltaX;
     if (dx === 0 || (!event.shiftKey && state.kind !== "native" && Math.abs(dx) < Math.abs(event.deltaY) * .65)) return;
-    beginNative();
+    beginNative("wheel");
     if (state.kind !== "native") return;
     state.lastInput = now();
     scheduleFinish();
@@ -87,7 +87,7 @@ export function mountKpFocusDeckNativeInput(input: {
     if (event.defaultPrevented || !input.enabled() || blocked(event) || !event.isPrimary || event.button !== 0) return;
     const nativeTouch = event.pointerType !== "mouse" && event.target instanceof Node && viewport.contains(event.target);
     if (nativeTouch) {
-      beginNative();
+      beginNative("native-touch");
       if (state.kind === "native") state.held = event.pointerId;
       return;
     }
@@ -101,7 +101,7 @@ export function mountKpFocusDeckNativeInput(input: {
       region.focus({ preventScroll: true });
     }
     input.interrupt(); cancel();
-    state = { kind: "pending", session: input.begin(now()), lastInput: now(), id: event.pointerId,
+    state = { kind: "pending", session: input.begin(now(), "pointer"), lastInput: now(), id: event.pointerId,
       x: event.clientX, y: event.clientY, origin: input.position(), width: width() };
   };
   const move = (event: PointerEvent) => {

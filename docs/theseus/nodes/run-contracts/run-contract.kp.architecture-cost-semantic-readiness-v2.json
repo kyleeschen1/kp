@@ -154,7 +154,8 @@
     {
       "id": "s20",
       "title": "Tax input convergence",
-      "status": "planned"
+      "summary": "Shared native input and revocable travel replace tax-local listeners and timers; exact tax commitment and domain timing preserved.",
+      "status": "complete"
     },
     {
       "id": "s21",

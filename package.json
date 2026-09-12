@@ -206,6 +206,7 @@
     "visual:economics-supply-tax-focus-deck": "playwright test tests/economics-supply-tax.browser.spec.ts --grep \"visual checkpoint\" --project=chromium --workers=1",
     "visual:economics-supply-tax-scroll-score": "playwright test tests/economics-supply-tax-scroll-score.browser.spec.ts --grep \"visual checkpoint\" --project=chromium --workers=1",
     "visual:focus-deck-multi-card": "playwright test --config playwright.focus-deck-review.config.ts --grep \"visual checkpoint\" --project=chromium --workers=1",
+    "visual:focus-deck-input": "playwright test --config playwright.focus-deck-review.config.ts --project=chromium --workers=1",
     "visual:kinetic-figure-surface-contour": "playwright test tests/kinetic-figure-surface-contour.browser.spec.ts --grep \"visual checkpoint\" --project=chromium --workers=1",
     "visual:log-product-equivalence-frame": "playwright test tests/log-product-equivalence-frame-catalogue.browser.spec.ts --project=chromium --workers=1",
     "visual:animation-governance-calibration": "node --disable-warning=ExperimentalWarning scripts/capture-animation-governance-calibration.ts",

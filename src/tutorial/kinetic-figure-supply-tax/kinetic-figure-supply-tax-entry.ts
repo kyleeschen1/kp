@@ -9,6 +9,8 @@ import "../../rendering/typescript-refactor.css";
 import "../kinetic-figure-typescript-focus-card/kinetic-figure-typescript-focus-card.css";
 import "../kinetic-figure-supply-tax-scroll-score/kinetic-figure-supply-tax-scroll-score.css";
 import "./kinetic-figure-supply-tax.css";
+import { mountKpFocusDeckNativeInput } from "../focus-deck-native-input.ts";
+import { createKpFocusDeckTravelPlayback } from "../focus-deck-checkpoint-playback.ts";
 import { settleKpFocusDeckTravel } from "../focus-deck-continuous-navigation.ts";
 
 import type { KpEconomicsSupplyTaxAnimationAsset } from "../../animation/economics-supply-tax-asset.ts";
@@ -67,15 +69,6 @@ import {
 } from "./kinetic-figure-supply-tax-svg.ts";
 
 const focusDeckAttentionTransitionDurationMs = 480;
-const scrollEndFallbackMs = 220;
-const wheelQuietWindowMs = 140;
-const endpointTolerancePx = 1;
-const mouseDragActivationPx = 6;
-const swipeCommitRatio = 0.08;
-const wheelCommitRatio = 0.025;
-const mouseSwipeVelocityPxPerMs = 0.25;
-const mouseSwipeVelocityFreshnessMs = 120;
-const nativeSwipeVelocityPagesPerMs = 0.0003;
 
 interface KpSupplyTaxFocusPhraseScene {
   readonly phrase: KpSupplyTaxScrollScorePhraseV1;
@@ -97,30 +90,6 @@ interface ProgrammaticPlayback {
   readonly edgeTargetProgress: number;
   readonly clockStartProgress: number;
   readonly clockTargetProgress: number;
-}
-
-interface MouseDrag {
-  readonly pointerId: number;
-  readonly startX: number;
-  readonly startY: number;
-  readonly startPosition: number;
-  active: boolean;
-  lastSampleTime: number;
-  velocityPxPerMs: number;
-}
-
-interface NativeScrollGesture {
-  readonly originIndex: number;
-  peakDisplacement: number;
-  lastPosition: number;
-  lastSampleTime: number;
-  peakVelocityPagesPerMs: number;
-}
-
-interface WheelGesture {
-  readonly originIndex: number;
-  intentPages: number;
-  lastEventTime: number;
 }
 
 type NavigationMode =
@@ -347,14 +316,12 @@ export function mountKpSupplyTaxKineticFigure(input: {
   let pendingNavigation: PendingNavigation | undefined;
   let programmaticPlayback: ProgrammaticPlayback | undefined;
   let navigationMode: NavigationMode = "idle";
-  let scrollFrame: number | undefined;
-  let scrollEndTimer: number | undefined;
-  let restoreSnapFrame: number | undefined;
   let projectedModelProgress: number | undefined;
-  let mouseDrag: MouseDrag | undefined;
-  let nativeScrollGesture: NativeScrollGesture | undefined;
-  let wheelGesture: WheelGesture | undefined;
+  let nativeInput: ReturnType<typeof mountKpFocusDeckNativeInput> | undefined;
   let disposed = false;
+  // One input owner performs semantic settlement; native CSS snap must not
+  // independently choose endpoints or fight continuous travel in WebKit.
+  viewport.dataset["kpFocusDeckSnapDisabled"] = "true";
 
   const projectFrame = (modelProgress: number): void => {
     if (projectedModelProgress !== undefined &&
@@ -484,50 +451,6 @@ export function mountKpSupplyTaxKineticFigure(input: {
     else history.replaceState(null, "", hash);
   };
 
-  const cancelScrollProjection = (): void => {
-    if (scrollFrame === undefined) return;
-    window.cancelAnimationFrame(scrollFrame);
-    scrollFrame = undefined;
-  };
-
-  const cancelScrollEndFallback = (): void => {
-    if (scrollEndTimer === undefined) return;
-    window.clearTimeout(scrollEndTimer);
-    scrollEndTimer = undefined;
-  };
-
-  const cancelSnapRestore = (): void => {
-    if (restoreSnapFrame === undefined) return;
-    window.cancelAnimationFrame(restoreSnapFrame);
-    restoreSnapFrame = undefined;
-  };
-
-  const disableNativeSnap = (): void => {
-    cancelSnapRestore();
-    viewport.dataset["kpSupplyTaxSnapDisabled"] = "true";
-    // WebKit can otherwise resolve a same-task scrollLeft write against the
-    // previous snap style and pull the viewport back to its current page.
-    void viewport.offsetWidth;
-  };
-
-  const restoreNativeSnapSoon = (): void => {
-    cancelSnapRestore();
-    restoreSnapFrame = window.requestAnimationFrame(() => {
-      restoreSnapFrame = undefined;
-      // A native gesture can move the viewport before this deferred correction
-      // runs. Restoring the old snap target would steal that newer input.
-      const settledOffset = settledIndex * Math.max(1, viewport.clientWidth);
-      if (Math.abs(viewport.scrollLeft - settledOffset) > endpointTolerancePx) {
-        navigationMode = "native";
-        scheduleNativeProjection();
-        scheduleScrollEndFallback();
-        return;
-      }
-      delete viewport.dataset["kpSupplyTaxSnapDisabled"];
-      navigationMode = "idle";
-    });
-  };
-
   const readNativePosition = (): number => boundedPosition(
     viewport.scrollLeft / Math.max(1, viewport.clientWidth),
     scenes.length
@@ -542,12 +465,8 @@ export function mountKpSupplyTaxKineticFigure(input: {
     index: number,
     historyMode: PendingNavigation["history"]
   ): void => {
-    cancelScrollProjection();
-    cancelScrollEndFallback();
+    nativeInput?.cancel();
     const bounded = boundedIndex(index, scenes.length);
-    nativeScrollGesture = undefined;
-    wheelGesture = undefined;
-    delete deck.dataset["kpSupplyTaxWheelIntent"];
     delete deck.dataset["kpSupplyTaxPlaybackKind"];
     delete deck.dataset["kpSupplyTaxPlaybackDurationMs"];
     pendingNavigation = undefined;
@@ -556,13 +475,12 @@ export function mountKpSupplyTaxKineticFigure(input: {
     clock.pause();
     clock.seek(1, historyMode === "none" ? "url" : "controls");
     navigationMode = "correcting";
-    disableNativeSnap();
     writeNativePosition(bounded);
     settledIndex = bounded;
     projectEndpoint(bounded);
     projectChrome(bounded);
     updateLocation(bounded, historyMode);
-    restoreNativeSnapSoon();
+    navigationMode = "idle";
   };
 
   const directSeek = (
@@ -574,10 +492,7 @@ export function mountKpSupplyTaxKineticFigure(input: {
     targetIndex: number,
     historyMode: PendingNavigation["history"]
   ): void => {
-    cancelScrollProjection();
-    cancelScrollEndFallback();
-    nativeScrollGesture = undefined;
-    wheelGesture = undefined;
+    nativeInput?.cancel();
     programmaticPlayback = undefined;
     const target = boundedIndex(targetIndex, scenes.length);
     const currentPosition = readNativePosition();
@@ -593,7 +508,6 @@ export function mountKpSupplyTaxKineticFigure(input: {
       return;
     }
     navigationMode = "programmatic";
-    disableNativeSnap();
     activeEdge = Object.freeze({ lowerIndex, upperIndex });
     pendingNavigation = Object.freeze({
       targetIndex: target,
@@ -673,253 +587,39 @@ export function mountKpSupplyTaxKineticFigure(input: {
     clock.seek(nextPosition - lowerIndex);
   };
 
-  const recordNativeScrollSample = (
-    nextPosition: number,
-    sampleTime: number
-  ): void => {
-    const gesture = nativeScrollGesture;
-    if (gesture === undefined) {
-      nativeScrollGesture = {
-        originIndex: settledIndex,
-        peakDisplacement: nextPosition - settledIndex,
-        lastPosition: nextPosition,
-        lastSampleTime: sampleTime,
-        peakVelocityPagesPerMs: 0
-      };
-      return;
+  let travelKind: "wheel" | "native-touch" | "pointer" = "native-touch";
+  const travel = createKpFocusDeckTravelPlayback({
+    last: scenes.length - 1, position: () => position,
+    pause: () => {
+      clock.pause(); pendingNavigation = undefined; programmaticPlayback = undefined;
+      activeEdge = undefined; navigationMode = "native";
+    },
+    update: projectPosition,
+    // Preserve the accepted tax commitment profile during transport convergence.
+    // Removing its independent listeners/timers does not authorize changing feel.
+    resolveTarget: sample => settleKpFocusDeckTravel({
+      position: sample.position, origin: sample.origin, lastCheckpoint: scenes.length - 1,
+      committed: travelKind === "wheel" ? Math.abs(sample.position - sample.origin) >= .025
+        : Math.abs(sample.peakDisplacement) >= .08
+          || (travelKind === "native-touch" ? Math.abs(sample.peakVelocity) >= .0003
+            : Math.abs(sample.velocity) * viewport.clientWidth >= .25),
+      direction: Math.sign(sample.position - sample.origin || sample.peakDisplacement || sample.peakVelocity)
+    }),
+    settle: (target, animate) => {
+      const historyMode = target === settledIndex ? "none" : "push";
+      if (animate && travelKind === "pointer") startProgrammaticNavigation(target, historyMode);
+      else finishAt(target, historyMode);
     }
-    const displacement = nextPosition - gesture.originIndex;
-    if (Math.abs(displacement) > Math.abs(gesture.peakDisplacement)) {
-      gesture.peakDisplacement = displacement;
-    }
-    const elapsed = Math.max(1, sampleTime - gesture.lastSampleTime);
-    const velocity = (nextPosition - gesture.lastPosition) / elapsed;
-    if (Math.abs(velocity) > Math.abs(gesture.peakVelocityPagesPerMs)) {
-      gesture.peakVelocityPagesPerMs = velocity;
-    }
-    gesture.lastPosition = nextPosition;
-    gesture.lastSampleTime = sampleTime;
-  };
-
-  const projectNativeScroll = (): void => {
-    scrollFrame = undefined;
-    if (navigationMode === "programmatic" ||
-        navigationMode === "correcting" ||
-        navigationMode === "scrubber") return;
-    navigationMode = "native";
-    const nextPosition = readNativePosition();
-    recordNativeScrollSample(nextPosition, performance.now());
-    projectPosition(nextPosition);
-  };
-
-  const scheduleNativeProjection = (): void => {
-    if (scrollFrame !== undefined) return;
-    // Native scrolling may emit more samples than the display can paint. The
-    // passive listener records no semantic state; one frame samples the reader
-    // clock and projects all renderers together.
-    scrollFrame = window.requestAnimationFrame(projectNativeScroll);
-  };
-
-  const flushNativeProjection = (): void => {
-    cancelScrollProjection();
-    projectNativeScroll();
-  };
-
-  const settleNativeScroll = (): void => {
-    cancelScrollEndFallback();
-    if (navigationMode === "programmatic" ||
-        navigationMode === "correcting" ||
-        navigationMode === "scrubber" || mouseDrag?.active) return;
-    const wheel = wheelGesture;
-    if (wheel !== undefined &&
-        performance.now() - wheel.lastEventTime < wheelQuietWindowMs) {
-      scheduleScrollEndFallback();
-      return;
-    }
-    flushNativeProjection();
-    const nextPosition = readNativePosition();
-    const gesture = nativeScrollGesture;
-    nativeScrollGesture = undefined;
-    wheelGesture = undefined;
-    const wheelCommitted = wheel !== undefined &&
-      Math.abs(wheel.intentPages) >= wheelCommitRatio;
-    const nativeCommitted = gesture !== undefined && (
-      Math.abs(gesture.peakDisplacement) >= swipeCommitRatio ||
-      Math.abs(gesture.peakVelocityPagesPerMs) >=
-        nativeSwipeVelocityPagesPerMs
-    );
-    const direction = Math.sign(wheel?.intentPages ||
-      gesture?.peakDisplacement ||
-      gesture?.peakVelocityPagesPerMs || 0);
-    const origin = wheel?.originIndex ?? gesture?.originIndex ?? settledIndex;
-    // Intent rescues a short Safari gesture that snap resistance erased. Once
-    // the reader has visibly crossed a page boundary, their observed position
-    // is stronger evidence than the gesture's (possibly much older) origin.
-    const target = settleKpFocusDeckTravel({ position: nextPosition, origin,
-      lastCheckpoint: scenes.length - 1, committed: wheelCommitted || nativeCommitted, direction });
-    const exactOffset = target * Math.max(1, viewport.clientWidth);
-    const historyMode = target === settledIndex ? "none" : "push";
-    if (Math.abs(viewport.scrollLeft - exactOffset) <= endpointTolerancePx &&
-        target === settledIndex && navigationMode === "idle") return;
-    finishAt(target, historyMode);
-  };
-
-  const scheduleScrollEndFallback = (): void => {
-    cancelScrollEndFallback();
-    scrollEndTimer = window.setTimeout(settleNativeScroll,
-      scrollEndFallbackMs);
-  };
-
-  const interruptProgrammaticNavigation = (): void => {
-    if (navigationMode !== "programmatic") return;
-    clock.pause();
-    pendingNavigation = undefined;
-    programmaticPlayback = undefined;
-    activeEdge = undefined;
-    cancelSnapRestore();
-    delete viewport.dataset["kpSupplyTaxSnapDisabled"];
-    navigationMode = "native";
-  };
-
-  const handlePointerDown = (event: PointerEvent): void => {
-    interruptProgrammaticNavigation();
-    if (event.pointerType !== "mouse" || event.button !== 0 ||
-        !event.isPrimary) return;
-    const target = event.target instanceof Element ? event.target : null;
-    if (target?.closest(
-      "a, button, input, select, textarea, [contenteditable]"
-    ) !== null) return;
-    mouseDrag = {
-      pointerId: event.pointerId,
-      startX: event.clientX,
-      startY: event.clientY,
-      startPosition: readNativePosition(),
-      active: false,
-      lastSampleTime: event.timeStamp,
-      velocityPxPerMs: 0
-    };
-    viewport.setPointerCapture(event.pointerId);
-  };
-
-  const handlePointerMove = (event: PointerEvent): void => {
-    const drag = mouseDrag;
-    if (drag === undefined || drag.pointerId !== event.pointerId) return;
-    const deltaX = drag.startX - event.clientX;
-    const deltaY = drag.startY - event.clientY;
-    if (!drag.active) {
-      if (Math.abs(deltaX) < mouseDragActivationPx) return;
-      if (Math.abs(deltaX) <= Math.abs(deltaY)) {
-        mouseDrag = undefined;
-        if (viewport.hasPointerCapture(event.pointerId)) {
-          viewport.releasePointerCapture(event.pointerId);
-        }
-        return;
-      }
-      drag.active = true;
-      clock.pause();
-      pendingNavigation = undefined;
-      activeEdge = undefined;
-      navigationMode = "native";
-      disableNativeSnap();
-      viewport.dataset["kpSupplyTaxMouseDragging"] = "true";
-      window.getSelection()?.removeAllRanges();
-    }
-    event.preventDefault();
-    const width = Math.max(1, viewport.clientWidth);
-    const before = viewport.scrollLeft;
-    writeNativePosition(drag.startPosition + deltaX / width);
-    const elapsed = Math.max(1, event.timeStamp - drag.lastSampleTime);
-    const instantaneousVelocity = (viewport.scrollLeft - before) / elapsed;
-    drag.velocityPxPerMs = drag.velocityPxPerMs * 0.55 +
-      instantaneousVelocity * 0.45;
-    drag.lastSampleTime = event.timeStamp;
-  };
-
-  const finishMouseDrag = (event: PointerEvent, canceled = false): void => {
-    const drag = mouseDrag;
-    if (drag === undefined || drag.pointerId !== event.pointerId) return;
-    mouseDrag = undefined;
-    if (viewport.hasPointerCapture(event.pointerId)) {
-      viewport.releasePointerCapture(event.pointerId);
-    }
-    delete viewport.dataset["kpSupplyTaxMouseDragging"];
-    if (!drag.active) return;
-    const currentPosition = readNativePosition();
-    const displacement = currentPosition - drag.startPosition;
-    const velocityIsFresh = event.timeStamp - drag.lastSampleTime <=
-      mouseSwipeVelocityFreshnessMs;
-    const committed = !canceled && (
-      Math.abs(displacement) >= swipeCommitRatio ||
-      velocityIsFresh && Math.abs(drag.velocityPxPerMs) >=
-        mouseSwipeVelocityPxPerMs
-    );
-    const direction = Math.sign(displacement || drag.velocityPxPerMs);
-    const origin = boundedIndex(drag.startPosition, scenes.length);
-    const visibleTarget = boundedIndex(currentPosition, scenes.length);
-    const target = visibleTarget !== origin
-      ? visibleTarget
-      : committed && direction !== 0
-        ? boundedIndex(origin + direction, scenes.length)
-        : visibleTarget;
-    startProgrammaticNavigation(target, "push");
-  };
-
-  const handlePointerUp = (event: PointerEvent): void => {
-    finishMouseDrag(event);
-  };
-
-  const handlePointerCancel = (event: PointerEvent): void => {
-    finishMouseDrag(event, true);
-  };
-
-  const handleScroll = (event: Event): void => {
-    if (navigationMode === "programmatic" ||
-        navigationMode === "correcting" ||
-        navigationMode === "scrubber") return;
-    recordNativeScrollSample(readNativePosition(), event.timeStamp);
-    scheduleNativeProjection();
-    scheduleScrollEndFallback();
-  };
-
-  const handleWheel = (event: WheelEvent): void => {
-    interruptProgrammaticNavigation();
-    const deltaX = wheelDeltaPixels(event, viewport.clientWidth);
-    const deltaY = wheelDeltaPixels(event, viewport.clientHeight, "y");
-    if (Math.abs(deltaX) < Math.max(1, Math.abs(deltaY) * 0.65)) return;
-    const sampleTime = performance.now();
-    const stale = wheelGesture === undefined ||
-      sampleTime - wheelGesture.lastEventTime > scrollEndFallbackMs * 2;
-    if (stale) {
-      wheelGesture = {
-        originIndex: settledIndex,
-        intentPages: 0,
-        lastEventTime: sampleTime
-      };
-    }
-    wheelGesture!.intentPages += deltaX / Math.max(1, viewport.clientWidth);
-    wheelGesture!.lastEventTime = sampleTime;
-    deck.dataset["kpSupplyTaxWheelIntent"] =
-      wheelGesture!.intentPages.toFixed(4);
-    // WebKit's snap physics can erase a short gesture from scrollLeft. This
-    // passive intent sample lets exact semantic settlement remain independent
-    // of that renderer-owned resistance.
-    scheduleScrollEndFallback();
-  };
-
-  const handleScrollEnd = (): void => settleNativeScroll();
+  });
 
   const beginScrubberNavigation = (): void => {
     if (navigationMode === "scrubber") return;
-    cancelScrollProjection();
-    cancelScrollEndFallback();
+    nativeInput?.cancel();
     clock.pause();
-    nativeScrollGesture = undefined;
-    wheelGesture = undefined;
     pendingNavigation = undefined;
     programmaticPlayback = undefined;
     activeEdge = undefined;
     navigationMode = "scrubber";
-    disableNativeSnap();
   };
 
   const handleScrubberInput = (): void => {
@@ -1011,15 +711,8 @@ export function mountKpSupplyTaxKineticFigure(input: {
       finishAt(settledIndex, "none");
       return;
     }
-    const mode = navigationMode;
-    const preservedPosition = mode === "native"
-      ? nativeScrollGesture?.lastPosition ?? position
-      : position;
-    disableNativeSnap();
-    writeNativePosition(preservedPosition);
-    // A resize during endpoint correction canceled its pending snap restore;
-    // active gestures and clocks restore snap through their normal settlement.
-    if (mode === "correcting") restoreNativeSnapSoon();
+    // Preserve the semantic position when the physical lane changes size.
+    writeNativePosition(position);
   };
   const handleReducedMotion = (): void => {
     if (activeEdge !== undefined) directSeek(Math.round(position), "none");
@@ -1049,19 +742,11 @@ export function mountKpSupplyTaxKineticFigure(input: {
   deck.addEventListener("click", handleClick);
   deck.addEventListener("keydown", handleKeydown);
   deck.addEventListener("beforematch", handleBeforeMatch, true);
-  viewport.addEventListener("scroll", handleScroll, { passive: true });
-  viewport.addEventListener("scrollend", handleScrollEnd);
-  // Touch and trackpad input remain browser-native. Desktop browsers do not
-  // make overflow surfaces mouse-draggable, so this adapter changes only the
-  // real scroll offset and lets the existing scroll sampler own semantics.
-  viewport.addEventListener("pointerdown", handlePointerDown,
-    { passive: true });
-  viewport.addEventListener("pointermove", handlePointerMove);
-  viewport.addEventListener("pointerup", handlePointerUp, { passive: true });
-  viewport.addEventListener("pointercancel", handlePointerCancel,
-    { passive: true });
-  viewport.addEventListener("wheel", handleWheel,
-    { passive: true });
+  nativeInput = mountKpFocusDeckNativeInput({
+    viewport, region: deck, enabled: () => !disposed, position: () => position,
+    begin: (now, kind) => { travelKind = kind; return travel.begin(now); }, reduced: () => reducedMotion.matches,
+    interrupt: () => nativeInput?.cancel()
+  });
   scrubber.addEventListener("input", handleScrubberInput);
   scrubber.addEventListener("change", finishScrubberNavigation);
   scrubber.addEventListener("keydown", handleScrubberKeydown);
@@ -1079,13 +764,7 @@ export function mountKpSupplyTaxKineticFigure(input: {
       deck.removeEventListener("click", handleClick);
       deck.removeEventListener("keydown", handleKeydown);
       deck.removeEventListener("beforematch", handleBeforeMatch, true);
-      viewport.removeEventListener("scroll", handleScroll);
-      viewport.removeEventListener("scrollend", handleScrollEnd);
-      viewport.removeEventListener("pointerdown", handlePointerDown);
-      viewport.removeEventListener("pointermove", handlePointerMove);
-      viewport.removeEventListener("pointerup", handlePointerUp);
-      viewport.removeEventListener("pointercancel", handlePointerCancel);
-      viewport.removeEventListener("wheel", handleWheel);
+      nativeInput?.dispose(); travel.dispose();
       scrubber.removeEventListener("input", handleScrubberInput);
       scrubber.removeEventListener("change", finishScrubberNavigation);
       scrubber.removeEventListener("keydown", handleScrubberKeydown);
@@ -1095,9 +774,6 @@ export function mountKpSupplyTaxKineticFigure(input: {
       window.removeEventListener("popstate", handleLocation);
       window.removeEventListener("hashchange", handleLocation);
       reducedMotion.removeEventListener("change", handleReducedMotion);
-      cancelScrollProjection();
-      cancelScrollEndFallback();
-      cancelSnapRestore();
       companionObserver?.disconnect();
       for (const companion of companions) { companion.pendingControls.length = 0; companion.pendingPointers.clear(); companion.session.dispose(); }
       input.root.removeEventListener("pointerover", activateIntent, true);
@@ -1196,17 +872,6 @@ function scrubberValueText(
 
 function interpolate(from: number, to: number, progress: number): number {
   return from + (to - from) * progress;
-}
-
-function wheelDeltaPixels(
-  event: WheelEvent,
-  pageSize: number,
-  axis: "x" | "y" = "x"
-): number {
-  const delta = axis === "x" ? event.deltaX : event.deltaY;
-  if (event.deltaMode === WheelEvent.DOM_DELTA_LINE) return delta * 16;
-  if (event.deltaMode === WheelEvent.DOM_DELTA_PAGE) return delta * pageSize;
-  return delta;
 }
 
 function renderPage(input: {

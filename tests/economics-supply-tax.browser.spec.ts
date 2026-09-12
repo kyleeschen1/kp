@@ -2,7 +2,7 @@ import { expect, test, type Locator, type Page } from "@playwright/test";
 
 const path = "/experiments/kinetic-figure/supply-tax/";
 
-test("a queued snap restoration cannot reclaim a newer native gesture", async ({ page }) => {
+test("derived scroll writes cannot own input, but a new gesture interrupts correction", async ({ page }) => {
   await openControlledNativeGesture(page, path);
   const deck = page.locator("[data-kp-supply-tax-focus-deck]");
   const viewport = deck.locator("[data-kp-supply-tax-card-viewport]");
@@ -15,6 +15,7 @@ test("a queued snap restoration cannot reclaim a newer native gesture", async ({
     input.dispatchEvent(new Event("change", { bubbles: true }));
     // Enter the next native gesture before the previous correction's RAF.
     const viewport = root.querySelector<HTMLElement>("[data-kp-supply-tax-card-viewport]")!;
+    viewport.dispatchEvent(new PointerEvent("pointerdown", { pointerId: 41, pointerType: "touch", isPrimary: true, button: 0, bubbles: true }));
     viewport.scrollLeft = viewport.clientWidth * .9;
     viewport.dispatchEvent(new Event("scroll"));
   });
@@ -116,7 +117,7 @@ test("supply-tax deck navigates exact semantic stops and one domain-motion edge"
 }) => {
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
-  await page.goto(path);
+  await openControlledNativeGesture(page, path);
   const deck = page.locator("[data-kp-supply-tax-focus-deck]");
   const originalSupply = deck.locator(
     '[data-kp-supply-tax-entity="curve.economics.tax.supply"]'
@@ -206,6 +207,7 @@ test("supply-tax deck navigates exact semantic stops and one domain-motion edge"
   await expect(deck).toHaveAttribute(
     "data-kp-supply-tax-playback-duration-ms", "480"
   );
+  await page.clock.runFor(500);
   await expect(deck).toHaveAttribute("data-kp-focus-deck-active-beat",
     "tax-input", { timeout: 5_000 });
   await expect(deck).toHaveAttribute("data-kp-supply-tax-model-progress",
@@ -224,7 +226,7 @@ test("supply-tax deck navigates exact semantic stops and one domain-motion edge"
   await expect(deck).toHaveAttribute(
     "data-kp-supply-tax-playback-duration-ms", "960"
   );
-  await page.waitForTimeout(560);
+  await page.clock.runFor(560);
   await expect(deck).toHaveAttribute("data-kp-supply-tax-interaction",
     "snapping");
   const midpoint = Number(await deck.getAttribute(
@@ -232,6 +234,7 @@ test("supply-tax deck navigates exact semantic stops and one domain-motion edge"
   ));
   expect(midpoint).toBeGreaterThan(0.35);
   expect(midpoint).toBeLessThan(0.85);
+  await page.clock.runFor(440);
   await expect(deck).toHaveAttribute("data-kp-focus-deck-active-beat",
     "supply-translation", { timeout: 5_000 });
   const motionSettledAt = await page.evaluate(() => performance.now());
@@ -246,6 +249,7 @@ test("supply-tax deck navigates exact semantic stops and one domain-motion edge"
     .toHaveAccessibleName("Replay transformation");
 
   await deck.locator("[data-kp-focus-deck-previous]").click();
+  await page.clock.runFor(1_000);
   await expect(deck).toHaveAttribute("data-kp-focus-deck-active-beat",
     "tax-input", { timeout: 5_000 });
   await expect(deck).toHaveAttribute("data-kp-supply-tax-model-progress",
@@ -448,7 +452,7 @@ test("native scroll sampling and Safari correction land on exact page geometry",
   const deck = page.locator("[data-kp-supply-tax-focus-deck]");
   const viewport = deck.locator("[data-kp-supply-tax-card-viewport]");
   await expect(viewport).toHaveCSS("overflow-x", "auto");
-  await expect(viewport).toHaveCSS("scroll-snap-type", "x mandatory");
+  await expect(viewport).toHaveCSS("scroll-snap-type", "none");
   await expect(viewport.locator(":scope > [data-kp-focus-deck-beat]"))
     .toHaveCount(8);
   expect(await viewport.evaluate((element) => element.scrollLeft)).toBe(0);
@@ -542,7 +546,8 @@ test("a mouse drag swipes the native viewport and settles in either direction", 
   const viewport = deck.locator("[data-kp-supply-tax-card-viewport]");
   const box = await viewport.boundingBox();
   expect(box).not.toBeNull();
-  const y = box!.y + box!.height * 0.5;
+  // Shared input reserves actual prose for selection; drag the lane's blank padding.
+  const y = box!.y + box!.height - 4;
 
   await page.mouse.move(box!.x + box!.width * 0.72, y);
   await page.mouse.down();
@@ -550,7 +555,7 @@ test("a mouse drag swipes the native viewport and settles in either direction", 
   await expect.poll(async () => Number(await deck.getAttribute(
     "data-kp-supply-tax-deck-position"
   ))).toBeGreaterThan(0.06);
-  await expect(viewport).toHaveAttribute("data-kp-supply-tax-mouse-dragging",
+  await expect(viewport).toHaveAttribute("data-kp-focus-deck-mouse-dragging",
     "true");
   await page.mouse.up();
   await expect(deck).toHaveAttribute("data-kp-focus-deck-active-beat",
@@ -652,7 +657,7 @@ async function setNativeScrollPosition(
       }, { capture: true });
     }
     element.dataset["kpSupplyTaxHoldScrollEnd"] = "true";
-    element.dataset["kpSupplyTaxSnapDisabled"] = "true";
+    element.dispatchEvent(new PointerEvent("pointerdown", { pointerId: 41, pointerType: "touch", isPrimary: true, button: 0, bubbles: true }));
     // Model the runtime's WebKit boundary: snap-off must be committed before
     // a scripted fractional scroll can represent an in-flight native gesture.
     void (element as HTMLElement).offsetWidth;
@@ -694,16 +699,14 @@ async function dispatchHorizontalWheelIntent(
 async function finishNativeScroll(viewport: Locator): Promise<void> {
   await viewport.evaluate((element) => {
     delete element.dataset["kpSupplyTaxHoldScrollEnd"];
+    element.dispatchEvent(new PointerEvent("pointerup", { pointerId: 41, pointerType: "touch", isPrimary: true, bubbles: true }));
     element.dispatchEvent(new Event("scrollend"));
   });
   // Browser scrollend from the corrective scroll can arrive after the first
   // timer batch. Finish that exact endpoint's snap restoration before starting
   // another gesture; do not write into the runtime's correcting phase.
   await viewport.page().clock.runFor(500);
-  await expect.poll(async () => {
-    await viewport.page().clock.runFor(32);
-    return viewport.getAttribute("data-kp-supply-tax-snap-disabled");
-  }).toBeNull();
+  await expect(viewport).toHaveAttribute("data-kp-focus-deck-snap-disabled", "true");
 }
 
 async function expectPanelAligned(
