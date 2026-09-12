@@ -1,4 +1,5 @@
 import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
+import type { GradientContourModel } from "./gradient-contour-model.ts";
 
 // These are selections of the primary's existing visual evidence, not new
 // animation capabilities. Coordinate arithmetic is deliberately static math.
@@ -44,3 +45,38 @@ export function gradientBeatIndex(slug: GradientBeatSlug): number {
   return index;
 }
 export const gradientComparisonBounds = Object.freeze({ start: gradientBeatIndex("components"), end: gradientBeatIndex("across") });
+
+export type GradientComparisonReading = Readonly<Record<"prepare" | "conclude", { readonly lead: string; readonly body: string }>>;
+export type GradientStoryBeat = { readonly slug: GradientBeatSlug; readonly evidence: GradientEvidence; readonly title: string; readonly html: string };
+export const gradientNumber = (value: number) => Number(value.toPrecision(5)).toString();
+
+/** Preserve the reviewed primary's prose. Variants keep its inferential bridges,
+ * but derive numerical claims and remove the equal-slope compass shortcut. */
+export function createGradientContourStory(model: GradientContourModel): {
+  readonly beats: readonly GradientStoryBeat[]; readonly reading: GradientComparisonReading;
+} {
+  const { a, b, point } = model.source;
+  if (a === 1 && b === 2 && point.x === 1 && point.y === .5)
+    return { beats: gradientContourBeats, reading: gradientComparisonReading };
+  const g = model.atPoint.gradient, f = gradientNumber;
+  const reading: GradientComparisonReading = Object.freeze({
+    prepare: { lead: "Keep the arrow’s tip on the circle.", body: "Every radius has the same length. The across part is its projection onto the gradient’s direction; the along part adds no rise. Can the across part reach the whole radius?" },
+    conclude: { lead: "The across part is now the whole arrow.", body: "No same-length arrow can project farther. Turning away shortens this part and gives less rise. Alignment with the gradient wins, even when the two coordinate slopes differ." }
+  });
+  const replacements: Partial<Record<GradientBeatSlug, string>> = {
+    east: `<p>Move a tiny distance east while keeping your north–south position fixed. Here ${math(`f_x=${f(g.x)}`)}: a move of 0.01 predicts about ${f(.01 * g.x)} more height. This is a <strong>partial derivative</strong>—a slope measured by changing one coordinate while holding the other fixed.</p>`,
+    north: `<p>Now hold your east–west position fixed and measure northward change. Here ${math(`f_y=${f(g.y)}`)}. A tiny northward move of 0.01 predicts about ${f(.01 * g.y)} more height. These are <strong>local slopes at the marked point</strong>, not promises about the whole hillside. Both horizontal coordinates use the same distance units.</p>`,
+    "linear-change": `<p>Write the eastward and northward parts of a tiny move as ${math("\\Delta x")} and ${math("\\Delta y")}. Then ${math(`\\Delta f\\approx ${f(g.x)}\\Delta x+${f(g.y)}\\Delta y`)}. Moving 0.01 east and 0.01 north predicts a gain of ${f(.01 * (g.x + g.y))}. That diagonal move is longer than an east-only move: we have predicted a change, <strong>not yet compared slopes fairly</strong>.</p>`,
+    gradient: `<p>Collect the local slopes into one pair: ${math(`\\nabla f=(${f(g.x)},${f(g.y)})`)}. This is the <strong>gradient</strong>. Its arrow points ${f(g.x)} units east and ${f(g.y)} north. It packages the information that predicts changes in any small direction. Why should this particular direction give the fastest increase?</p>`,
+    level: `<p>A move with coordinate parts ${math(`(-${f(g.y)},${f(g.x)})`)} loses height from its westward part and gains the same amount from its northward part. The weighted contributions cancel: ${math(`${f(g.x)}(-${f(g.y)})+${f(g.y)}(${f(g.x)})=0`)}. The reverse direction is level too. The dotted lines follow these zero-rise directions—not necessarily a 45-degree diagonal.</p>`,
+    projection: "<p>Look down on equal-length arrows: their tips lie on a circle. Split a move into a part in the gradient’s direction and a part along a level line. The level part adds no rise. The first part is its <strong>projection</strong>: drop a perpendicular from the tip onto the gradient’s line. This is signed forward reach; backward reach is negative.</p>",
+    components: `<p>${reading.prepare.lead} ${reading.prepare.body}</p>`,
+    across: `<p>${reading.conclude.lead} ${reading.conclude.body}</p>`,
+    "general-projection": "<p>The dot product also equals the <strong>gradient’s length times your move’s signed projection onto its direction</strong>. Fixed-length moves have greatest projection when aligned with the gradient. Perpendicular moves have zero local rise; opposite moves have negative rise. This works even when the coordinate slopes differ: no compass direction is universally best.</p>",
+    magnitude: `<p>The gradient’s direction tells you which way increases the quantity fastest. Its length gives the greatest local increase per unit horizontal distance: here ${math(`\\lVert\\nabla f\\rVert=\\sqrt{${f(g.x)}^2+${f(g.y)}^2}\\approx${f(model.atPoint.magnitude)}`)}. You do not need to travel the length of that arrow. The drawn unit direction compares rates; the gradient encodes both <strong>direction and rate</strong>.</p>`,
+    contour: `<p>A <strong>contour</strong> joins positions with the same height. The highlighted curve is at height ${f(model.level)}. This map is another way to read what we already know: some directions change position without initially changing height. Follow the highlighted curve next to see what staying at one height requires.</p>`,
+    follow: `<p>As the point travels around the contour, its position changes but its height stays at ${f(model.level)}. The curve bends to keep it level. At the starting point, the curve’s immediate direction is called its <strong>tangent</strong>. What should its relationship to the gradient be?</p>`,
+    prediction: "<p>If the eastward slope were negative and the northward slope positive, which quadrant would the gradient point into? What would moving east do? And why can’t a same-length move tilted away from the gradient do better? Think in terms of <strong>local contributions and projection</strong>. Answers are below the card.</p>"
+  };
+  return Object.freeze({ reading, beats: Object.freeze(gradientContourBeats.map(beat => Object.freeze({ ...beat, html: replacements[beat.slug] ?? beat.html }))) });
+}

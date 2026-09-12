@@ -9,32 +9,36 @@ import { createKpFocusDeckCheckpointPlayback } from "../focus-deck-checkpoint-pl
 import { mountKpFocusDeckNativeInput } from "../focus-deck-native-input.ts";
 import { bindKpFocusDeckKeyboard } from "../focus-deck-keyboard.ts";
 import { renderKpFocusDeckScaffold } from "../focus-deck-scaffold.ts";
-import { createKpSurfaceContourStageAuthority, renderKpSurfaceContourStage, mountKpSurfaceContourStage } from "../kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts";
+import { renderKpSurfaceContourStage, mountKpSurfaceContourStage } from "../kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts";
 import { mountGradientContourOverlay } from "./gradient-contour-overlay.ts";
-import { gradientContourBeats as beats, gradientContourCheckpoints, gradientContourModel as model,
-  gradientContourReference, gradientContourBrief, gradientComparisonBounds, sampleGradientContour } from "./gradient-contour-sequence.ts";
-import { gradientComparisonReading } from "./gradient-contour-attention.ts";
+import { gradientContourReference, gradientContourBrief, gradientComparisonBounds } from "./gradient-contour-sequence.ts";
+import { gradientContourPrimary } from "./gradient-contour-model.ts";
+import { gradientNumber as number } from "./gradient-contour-story.ts";
+import { checkGradientExplanation, checkGradientExplanationText, gradientContourVariant, type CheckedGradientExplanation } from "./gradient-contour-authoring.ts";
 import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
 
-const root = document.querySelector<HTMLElement>("#app")!;
+function mountExplanation(root: HTMLElement, lesson: CheckedGradientExplanation) {
+const { authority, sequence } = lesson;
+const { model, beats, checkpoints: gradientContourCheckpoints, reading: gradientComparisonReading, sample: sampleGradientContour } = sequence;
+const { a, b, point } = model.source, g = model.atPoint.gradient;
 applyKpSemanticVisualDomTheme({ root, theme: "light" });
-const authority = createKpSurfaceContourStageAuthority();
 root.className = "gradient-page";
 root.innerHTML = `<article><header class="gradient-intro"><p>Kinetic Press · micro-intuition</p><h1>Which way climbs fastest?</h1><p>${gradientContourBrief.question}</p></header>${renderKpFocusDeckScaffold({
   id: "gradient-contour", ariaLabel: gradientContourBrief.question, activeBeatSlug: beats[0]!.slug, beats,
   headerTrailingHtml: `<span data-gradient-count>1 / ${beats.length}</span>`,
   stageHtml: renderKpSurfaceContourStage({ model: gradientContourReference, authority }), replayHidden: false
 })}<p class="gradient-help">Drag blank space or swipe the passage, scrub the rail, or use the arrows. ${beats.length} stopping points; continuous motion between them.</p>
-<details><summary>What the comparison means</summary><p>The field is f(x,y) = x² + 2y² at (1, ½). All direction comparisons are normalized. “Greatest rise” is the directional derivative at this point, not a finite-step endpoint comparison. Along a curved contour the height is constant; a straight tangent step need not stay level.</p></details>
+<details><summary>What the comparison means</summary><p>The field is ${renderLatexToHtml(`f(x,y)=${model.latex}`, { displayMode: false, output: "htmlAndMathml" })} at (${number(point.x)}, ${number(point.y)}). All direction comparisons are normalized. “Greatest rise” is the directional derivative at this point, not a finite-step endpoint comparison. Along a curved contour the height is constant; a straight tangent step need not stay level.</p></details>
 <details class="gradient-why"><summary>Additional notation: the projection identity</summary>
-<p>A partial derivative is the local slope when only one coordinate changes. Here ${renderLatexToHtml("f_x=2x=2", { displayMode: false, output: "htmlAndMathml" })} and ${renderLatexToHtml("f_y=4y=2", { displayMode: false, output: "htmlAndMathml" })} at the marked point. The local flat approximation adds those two contributions.</p>
+<p>A partial derivative is the local slope when only one coordinate changes. Here ${renderLatexToHtml(`f_x=${number(2 * a)}x=${number(g.x)}`, { displayMode: false, output: "htmlAndMathml" })} and ${renderLatexToHtml(`f_y=${number(2 * b)}y=${number(g.y)}`, { displayMode: false, output: "htmlAndMathml" })} at the marked point. The local flat approximation adds those two contributions.</p>
 ${renderLatexToHtml("\\Delta f\\approx f_x\\Delta x+f_y\\Delta y=\\nabla f\\cdot\\Delta\\mathbf r", { output: "htmlAndMathml" })}
 <p>A dot product measures projection: only the part of the move along the gradient contributes. For a unit direction and angle θ to the gradient:</p>
 ${renderLatexToHtml("D_{\\mathbf u}f=\\nabla f\\cdot\\mathbf u=\\lVert\\nabla f\\rVert\\cos\\theta", { output: "htmlAndMathml" })}
 <p>The cosine is at most one, reached when the direction aligns with the gradient. Along the contour it is zero; in the opposite direction it is negative. Thus the gradient is perpendicular to the locally level direction and points toward greatest increase. This is a local claim, not a comparison of distant endpoints.</p></details>
 <details class="gradient-prediction"><summary>Check your reasoning</summary><p>A negative eastward slope and positive northward slope put the gradient northwest. West reverses the negative eastward change; north adds positively. Their relative magnitudes determine the exact angle. Moving east initially lowers the quantity.</p><p>A same-length move tilted away has a shorter projection along the gradient. Its perpendicular part contributes no first-order change.</p></details>
-<details class="gradient-calculation"><summary>Where did the two slopes come from?</summary><p>Our field is ${renderLatexToHtml("f(x,y)=x^2+2y^2", { displayMode: false, output: "htmlAndMathml" })} at (1, ½), with height 1.5. Expanding after a small move gives:</p>${renderLatexToHtml("f(1+\\Delta x,\\tfrac12+\\Delta y)=1.5+2\\Delta x+2\\Delta y+(\\Delta x)^2+2(\\Delta y)^2", { output: "htmlAndMathml" })}<p>The linear terms give our two slopes. The remaining terms are quadratic: halving both movements quarters those terms. This is why the local linear prediction becomes accurate close to the point.</p></details>
-<p class="gradient-reference"><a href="/experiments/kinetic-figure/surface-contour/">Original surface / contour reference</a> · Primary visual review; editing follows acceptance.</p></article>`;
+<details class="gradient-calculation"><summary>Where did the two slopes come from?</summary><p>Our field is ${renderLatexToHtml(`f(x,y)=${model.latex}`, { displayMode: false, output: "htmlAndMathml" })} at (${number(point.x)}, ${number(point.y)}), with height ${number(model.level)}. Expanding after a small move gives:</p>${renderLatexToHtml(`f(${number(point.x)}+\\Delta x,${number(point.y)}+\\Delta y)=${number(model.level)}+${number(g.x)}\\Delta x+${number(g.y)}\\Delta y+${number(a)}(\\Delta x)^2+${number(b)}(\\Delta y)^2`, { output: "htmlAndMathml" })}<p>The linear terms give our two slopes. The remaining terms are quadratic: halving both movements quarters those terms. This is why the local linear prediction becomes accurate close to the point.</p></details>
+<p class="gradient-reference"><a href="/experiments/kinetic-figure/surface-contour/">Original surface / contour reference</a> · Source edits apply to this lesson only.</p></article>`;
+root.dataset["gradientSource"] = lesson.sourceText;
 const get = <T extends Element>(selector: string) => { const found = root.querySelector<T>(selector); if (!found) throw new Error(`Gradient card requires ${selector}`); return found; };
 const card = get<HTMLElement>("[data-kp-focus-deck]");
 const plot = get<HTMLElement>(".kp-surface-contour-stage__plot");
@@ -42,7 +46,7 @@ const plot = get<HTMLElement>(".kp-surface-contour-stage__plot");
 // aspect-preserving box. CSS owns sizing; playback never measures text/layout.
 const plotSlot = document.createElement("div"); plotSlot.className = "gradient-plot-slot";
 plot.before(plotSlot); plotSlot.append(plot);
-const projectOverlay = mountGradientContourOverlay(plot, authority);
+const projectOverlay = mountGradientContourOverlay(plot, authority, model);
 // The exemplar fixes c to the point's height. The reference's level control
 // remains untouched on its own host; here it is replaced with derived evidence.
 const levelControl = get<HTMLElement>(".kp-surface-contour-level-control");
@@ -115,7 +119,7 @@ const render = () => {
   if (state.rampPresence > .5) get<HTMLElement>("[data-kp-surface-contour-view-label]").textContent = state.localViewProgress === 1 ? "Top-down · equal horizontal length" : "Local ramp · first-order model";
   plot.setAttribute("aria-label", state.rampPresence > .5
     ? "Local flat approximation: the vertical segment measures rise. In top-down view, the direction tip stays on a unit circle; its across projection grows to the full radius while its along part adds no rise."
-    : "Surface and contour map at height 1.50; compare horizontal directions at the marked point.");
+    : `Surface and contour map at height ${model.level.toFixed(2)}; compare horizontal directions at the marked point.`);
   get<HTMLElement>("[data-gradient-component-evidence]").style.visibility = state.componentPresence > 0 ? "visible" : "hidden";
   get<HTMLOutputElement>("[data-gradient-across]").value = state.components.across.toFixed(2);
   get<HTMLOutputElement>("[data-gradient-along]").value = state.components.along.toFixed(2);
@@ -160,6 +164,42 @@ const dispose = () => {
   window.removeEventListener("resize", resize); document.removeEventListener("visibilitychange", visibility); reduced.removeEventListener("change", resize);
 };
 window.addEventListener("resize", resize); document.addEventListener("visibilitychange", visibility); reduced.addEventListener("change", resize);
+render(); card.dataset["kpFocusCardEnhancement"] = "ready";
+return dispose;
+}
+
+const app = document.querySelector<HTMLElement>("#app")!;
+const lessonRoot = document.createElement("div");
+const editor = document.createElement("details");
+editor.className = "gradient-page gradient-source-editor";
+editor.innerHTML = `<summary>Edit the bounded source</summary><p>Change positive quadratic coefficients and the marked point. Apply rebuilds the explanation through the same renderer and returns to the first step. Invalid drafts leave the last valid lesson active.</p><label for="gradient-source">Source JSON</label><textarea id="gradient-source" rows="12" spellcheck="false"></textarea><p><button type="button" data-gradient-apply>Apply source</button> <button type="button" data-gradient-variant>Load unequal-slope example</button> <button type="button" data-gradient-primary>Load original example</button> <button type="button" data-gradient-current>Restore applied source</button></p><p data-gradient-source-status role="status" aria-live="polite"></p>`;
+app.append(lessonRoot, editor);
+const sourceInput = editor.querySelector<HTMLTextAreaElement>("textarea")!;
+const status = editor.querySelector<HTMLElement>("[data-gradient-source-status]")!;
+const initial = checkGradientExplanation(gradientContourPrimary);
+if (initial.status !== "checked") throw new Error(initial.expected);
+let current = initial.lesson;
+let disposeLesson = mountExplanation(lessonRoot, current);
+sourceInput.value = current.sourceText;
+editor.querySelector<HTMLButtonElement>("[data-gradient-apply]")!.onclick = () => {
+  const checked = checkGradientExplanationText(sourceInput.value);
+  if (checked.status === "repair") {
+    status.dataset["status"] = "repair";
+    status.textContent = `${checked.code} at ${checked.path}: ${checked.expected} The last valid lesson remains active.`;
+    return;
+  }
+  // Validate semantics and stage fit before retiring the live session. Each
+  // successful Apply owns exactly one clock, input binding and GPU session.
+  disposeLesson();
+  current = checked.lesson;
+  disposeLesson = mountExplanation(lessonRoot, current);
+  sourceInput.value = current.sourceText;
+  status.dataset["status"] = "applied";
+  status.textContent = "Applied. Surface, contours, slopes and explanation now use this source. Returned to step 1.";
+};
+editor.querySelector<HTMLButtonElement>("[data-gradient-variant]")!.onclick = () => { sourceInput.value = JSON.stringify(gradientContourVariant, null, 2); status.textContent = "Unequal-slope draft loaded. Choose Apply source to show it."; };
+editor.querySelector<HTMLButtonElement>("[data-gradient-primary]")!.onclick = () => { sourceInput.value = JSON.stringify(gradientContourPrimary, null, 2); status.textContent = "Original draft loaded. Choose Apply source to show it."; };
+editor.querySelector<HTMLButtonElement>("[data-gradient-current]")!.onclick = () => { sourceInput.value = current.sourceText; status.textContent = "Restored the applied source; lesson unchanged."; };
+const dispose = () => disposeLesson();
 window.addEventListener("pagehide", dispose, { once: true });
 if (import.meta.hot) import.meta.hot.dispose(dispose);
-render(); card.dataset["kpFocusCardEnhancement"] = "ready";

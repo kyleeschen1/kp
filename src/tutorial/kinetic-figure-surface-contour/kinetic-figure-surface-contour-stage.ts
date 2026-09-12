@@ -1,10 +1,4 @@
-import {
-  add,
-  constant,
-  multiply,
-  power,
-  variable
-} from "../../math/expression.ts";
+import { createPositiveQuadraticField, type PositiveQuadraticField } from "./quadratic-field.ts";
 import type { KpSemanticObject } from "../../semantic/document.ts";
 import {
   createAxis3DObject,
@@ -38,7 +32,6 @@ import {
 import {
   kpSurfaceContourEntityIds,
   kpSurfaceContourIdentityId,
-  sampleKpSurfaceContourLevelSet,
   type KpSurfaceContourModelV1,
   type KpSurfaceContourSceneProjectionV1
 } from "./kinetic-figure-surface-contour-model.ts";
@@ -65,6 +58,7 @@ type SurfaceContourRuntimeFrame = KpGraph3DRuntimeFrame<
 type Graph3DWebGLClient = typeof import("../../rendering/graph-webgl-three.ts");
 
 export interface KpSurfaceContourStageAuthority {
+  readonly field: PositiveQuadraticField;
   readonly graph3d: Graph3DObject;
   readonly graphTopDown: Graph3DObject;
   readonly scene3d: readonly KpSemanticObject[];
@@ -93,7 +87,7 @@ export function projectKpSurfaceContourPoint(
   );
 }
 
-export function createKpSurfaceContourStageAuthority():
+export function createKpSurfaceContourStageAuthority(field: PositiveQuadraticField = createPositiveQuadraticField()):
 KpSurfaceContourStageAuthority {
   const graphDraft = createGraph3DObject({
     id: "graph.calculus.surface-contour.3d",
@@ -101,8 +95,8 @@ KpSurfaceContourStageAuthority {
     xAxisId: "axis.calculus.surface-contour.3d.x",
     yAxisId: "axis.calculus.surface-contour.3d.y",
     zAxisId: "axis.calculus.surface-contour.3d.z",
-    xDomain: [-2.05, 2.05],
-    yDomain: [-1.5, 1.5],
+    xDomain: [-2.05 / Math.sqrt(field.a), 2.05 / Math.sqrt(field.a)],
+    yDomain: [-1.5 * Math.sqrt(2 / field.b), 1.5 * Math.sqrt(2 / field.b)],
     zDomain: [0, 7.4],
     width: GRAPH_WIDTH,
     height: GRAPH_HEIGHT,
@@ -129,17 +123,14 @@ KpSurfaceContourStageAuthority {
     id: kpSurfaceContourEntityIds.surface,
     type: "surface-3d",
     graphId: graphDraft.id,
-    label: "z = x^2 + 2y^2",
-    equation: "z = x^2 + 2y^2",
+    label: `z=${field.latex}`,
+    equation: `z=${field.latex}`,
     latexProvenance: {
       kind: "exact",
-      latex: "z=x^2+2y^2",
+      latex: `z=${field.latex}`,
       sourceKind: "authored"
     },
-    expression: add(
-      power(variable("x"), 2),
-      multiply(constant(2), power(variable("y"), 2))
-    ),
+    expression: field.expression,
     xDomain: graphDraft.xDomain,
     yDomain: graphDraft.yDomain,
     xSampleCount: resolution.xSampleCount,
@@ -171,6 +162,7 @@ KpSurfaceContourStageAuthority {
     pointsAtProgress: (progress) => surfaceContourFitPoints({
       graph: graphDraft,
       surface,
+      field,
       progress
     }),
     progressSampleCount: 21,
@@ -191,6 +183,7 @@ KpSurfaceContourStageAuthority {
     surface
   ] as KpSemanticObject[]);
   return Object.freeze({
+    field,
     graph3d,
     graphTopDown,
     scene3d,
@@ -210,8 +203,8 @@ export function renderKpSurfaceContourStage(input: {
     <header class="kp-surface-contour-stage__header">
       <span data-kp-surface-contour-view-label>Surface</span>
       <span class="kp-surface-contour-stage__equations" aria-hidden="true">
-        <span data-kp-surface-contour-equation="surface">${math(model.equationLatex)}</span>
-        <span data-kp-surface-contour-equation="level-set" hidden>${math(model.levelSetLatex)}</span>
+        <span data-kp-surface-contour-equation="surface">${math(`z=${authority.field.latex}`)}</span>
+        <span data-kp-surface-contour-equation="level-set" hidden>${math(`${authority.field.latex}=c`)}</span>
       </span>
     </header>
     <div class="kp-surface-contour-stage__plot" data-kp-surface-contour-view="continuous" aria-label="Surface view">
@@ -315,10 +308,7 @@ export function projectKpSurfaceContourStageDom(input: {
     authority.graphTopDown,
     projection.viewProgress
   );
-  const levelPoints = sampleKpSurfaceContourLevelSet({
-    level: projection.level,
-    sampleCount: 97
-  });
+  const levelPoints = authority.field.contour(projection.level);
   const flattenedPoints = levelPoints.map((point) => ({
     ...point,
     z: point.z * (1 - projection.viewProgress)
@@ -335,7 +325,7 @@ export function projectKpSurfaceContourStageDom(input: {
   root.querySelectorAll<SVGPathElement>("[data-kp-context-level]")
     .forEach((path) => {
       const level = Number(path.dataset["kpContextLevel"]);
-      path.setAttribute("d", topDownContourPath(authority.graphTopDown, level));
+      path.setAttribute("d", topDownContourPath(authority, level));
     });
 
   for (const state of Object.values(projection.entities)) {
@@ -455,7 +445,7 @@ function createSurfaceContourRuntimeFrame(input: {
       target: authority.sceneTopDown
     },
     accessibility: {
-      description: `${viewLabel(projection)} of z equals x squared plus twice y squared, at c equals ${formatLevel(projection.level)}.`
+      description: `${viewLabel(projection)} of z equals ${authority.field.a} times x squared plus ${authority.field.b} times y squared, at c equals ${formatLevel(projection.level)}.`
     }
   });
 }
@@ -619,17 +609,15 @@ function planePolygon(graph: Graph3DObject, z: number): string {
     .join(" ");
 }
 
-function topDownContourPath(graph: Graph3DObject, level: number): string {
-  return projectedPath(sampleKpSurfaceContourLevelSet({
-    level,
-    sampleCount: 97
-  }).map(({ x, y }) => projectGraphPoint3DToWebGLScreen(
-    graph,
+function topDownContourPath(authority: KpSurfaceContourStageAuthority, level: number): string {
+  return projectedPath(authority.field.contour(level).map(({ x, y }) => projectGraphPoint3DToWebGLScreen(
+    authority.graphTopDown,
     { x, y, z: 0 }
   )));
 }
 
 function surfaceContourFitPoints(input: {
+  readonly field: PositiveQuadraticField;
   readonly graph: Graph3DObject;
   readonly surface: Surface3DObject;
   readonly progress: number;
@@ -650,7 +638,7 @@ function surfaceContourFitPoints(input: {
         input.surface.xDomain[1],
         column / (sampleCount - 1)
       );
-      points.push({ x, y, z: (x * x + 2 * y * y) * zScale });
+      points.push({ x, y, z: input.field.height(x, y) * zScale });
     }
   }
   points.push(
@@ -661,10 +649,7 @@ function surfaceContourFitPoints(input: {
     { x: 0, y: 0, z: input.graph.zDomain[1] * zScale }
   );
   for (const level of [...CONTEXT_LEVELS, 1.6, 3.6]) {
-    points.push(...sampleKpSurfaceContourLevelSet({
-      level,
-      sampleCount: 33
-    }).map((point) => ({ ...point, z: point.z * zScale })));
+    points.push(...input.field.contour(level, 33).map((point) => ({ ...point, z: point.z * zScale })));
   }
   for (const level of [1.6, 3.6]) {
     const z = level * zScale;

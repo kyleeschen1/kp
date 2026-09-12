@@ -7,6 +7,7 @@
   padding: clamp(1rem, 4vw, 3rem); min-height: 100svh;
 }
 .gradient-page > article { max-width: 52rem; margin: auto; }
+.gradient-source-editor { min-height: 0; max-width: 52rem; margin-inline: auto; }
 .gradient-intro { margin-bottom: 1.4rem; }
 .gradient-intro > p:first-child { font: 650 .7rem/1.4 system-ui, sans-serif; text-transform: uppercase; letter-spacing: .08em; }
 .gradient-intro h1 { font-size: clamp(1.8rem, 5vw, 2.8rem); line-height: 1.1; margin: .4rem 0; }
@@ -117,3 +118,4 @@
 @media (max-width: 360px) {
   .gradient-page { --gradient-passage-height: 24rem; --gradient-card-height: 42rem; }
 }
+.gradient-source-editor textarea { display: block; box-sizing: border-box; width: 100%; max-width: 100%; }

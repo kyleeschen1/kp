@@ -107,17 +107,35 @@ types, new clocks, universal schemas or unnecessary approval ceremonies.
 
 ## Reconciliation and preservation
 
+### Subsequent approved execution order
+
+The user accepted and requested execution of steps 1–2: (1) start a lightweight
+mechanics curriculum assuming no mechanics knowledge, preserving their calculus
+background; (2) finish the current gradient loop. Then (3) assess architecture and
+perform bounded, evidence-backed cleanup before new mechanics runtime work.
+Retroactive repair is an explicit readiness criterion: shared styles/scaffold,
+controls, motifs and authoritative content; dependency-aware regeneration of
+static artifacts without silently changing immutable published editions.
+
+The curriculum outline is `../threads/2026-09-11-mechanics-from-zero-curriculum.md`.
+Their positive rendered review (“much, much better”) followed by the explicit
+instruction to finish the loop is accepted as G3 primary approval and resumption.
+This does not certify OS/device history gestures. Preserve that manual-check
+limit and all remaining verification obligations. Continue G4–G6 within approved
+scope; stop only for a new required visual decision, explicit contract limit or
+blocker. Architecture assessment/cleanup and broad best-practices implementation
+are queued after 1–2, not additional work authorised for this continuation.
+
 This supersedes the earlier exploratory MVC-first framing and any assumption
 that the former broad loop horizon automatically chooses the next subject.
 Historical roadmaps and completed algebra, code, Bayes and publication work remain
 preserved capabilities and provenance, not competing queues.
 
-The gradient run remains at G3 in Theseus. The user described the revised
-explanation as “much, much better”; that is important qualitative evidence, not
-automatic completion of every remaining visual, integration or device gate.
-G4–G6 remain uncompleted. No contract is cancelled, reordered or marked complete
-by this record. The next planning pass must reconcile its remainder with the new
-priority before starting a new run.
+At the initial strategic record, the gradient run remained at G3. The subsequent
+explicit instruction to finish it, together with the positive rendered review,
+accepts the primary and resumes G4–G6. That does not complete their integration or
+device checks. Theseus owns actual progress; no contract is cancelled or reordered
+by this strategic record, and no successor run starts automatically.
 
 Existing canonical pipelines, semantic models, typed repair gaps, shared controls,
 typography and exemplar-first review rules remain authoritative. This direction

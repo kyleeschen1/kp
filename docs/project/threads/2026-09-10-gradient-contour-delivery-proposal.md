@@ -192,6 +192,16 @@ before G4–G6; draft approval alone does not complete it.
 
 ## Bounds and completion
 
+### Primary acceptance and resumed remainder
+
+The user described the rendered explanation-first primary as “much, much better”,
+then explicitly approved finishing this loop after recording the mechanics-from-zero
+outline. This accepts G3 and resumes the existing G4–G6 packages. The earlier G3
+amendments above remain provenance, not open approval requests. Real-device browser
+history gestures remain an explicit verification limit, not synthetic certification.
+The later architecture assessment precedes new mechanics implementation and does
+not add scope to this gradient contract.
+
 Proposed active-work ceiling: six hours excluding human waiting, reserving the
 last hour for verification/closeout. This is an uncertain ceiling, not a duration
 target. Bound the first exemplar attempt to two hours before reassessing a missing

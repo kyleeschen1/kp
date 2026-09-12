@@ -351,6 +351,34 @@
       "scope": "G3 final full typecheck",
       "checkedAt": "2026-09-11T23:22:17.275Z",
       "notes": "App, node, test, Svelte and domain checks pass; Svelte zero errors and warnings."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/gradient-contour-authoring.test.ts tests/gradient-contour-model.test.ts tests/gradient-contour-sequence.test.ts tests/gradient-contour-attention.test.ts tests/kinetic-figure-surface-contour.test.ts",
+      "status": "passed",
+      "scope": "G4 source-only reuse",
+      "checkedAt": "2026-09-12T04:28:24.466Z",
+      "notes": "26 checks pass: common field expression, canonical stage, variant direction, source roundtrip, typed repair gaps and primary preservation."
+    },
+    {
+      "command": "npm run visual:gradient-contour",
+      "status": "passed",
+      "scope": "G4 live Apply and preservation",
+      "checkedAt": "2026-09-12T04:28:25.792Z",
+      "notes": "13 Chromium checks pass on shared port 8000, including valid Apply, invalid last-valid retention, one canvas, primary/reference, all passages at desktop and phone widths. Not real-device Safari gesture certification."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "G4 new tests",
+      "checkedAt": "2026-09-12T04:28:26.933Z",
+      "notes": "New test code had assertion-narrowing never access, missing expression binding index signature, and readonly literal inference. Repaired the three test typing errors; full rerun pending."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "G4 final integration",
+      "checkedAt": "2026-09-12T04:30:00.340Z",
+      "notes": "Complete rerun passes app, node, tests, Svelte 0 errors/0 warnings and domains after the three test typing repairs."
     }
   ],
   "progress": {

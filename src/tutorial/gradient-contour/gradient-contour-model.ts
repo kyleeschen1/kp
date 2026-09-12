@@ -1,4 +1,5 @@
-import { add, constant, multiply, power, variable, compileExpression, compileGradient, expressionToLatex } from "../../math/expression.ts";
+import { compileGradient } from "../../math/expression.ts";
+import { createPositiveQuadraticField, type PositiveQuadraticField } from "../kinetic-figure-surface-contour/quadratic-field.ts";
 
 export interface GradientPoint { readonly x: number; readonly y: number }
 export interface GradientContourSource {
@@ -22,6 +23,7 @@ type GradientAtPoint =
   | { readonly kind: "regular"; readonly gradient: GradientPoint; readonly magnitude: number;
       readonly uphill: GradientUnitDirection; readonly tangent: GradientUnitDirection };
 export interface GradientContourModel {
+  readonly field: PositiveQuadraticField;
   readonly source: GradientContourSource;
   readonly latex: string;
   readonly level: number;
@@ -48,11 +50,11 @@ export function checkGradientContourSource(value: unknown): GradientContourCheck
   if (!finite(x) || Math.abs(x) > 1.5) return repair("$.point.x", "Use a finite coordinate between -1.5 and 1.5.", "out-of-bounds");
   if (!finite(y) || Math.abs(y) > 1.5) return repair("$.point.y", "Use a finite coordinate between -1.5 and 1.5.", "out-of-bounds");
   const source: GradientContourSource = Object.freeze({ schemaVersion: "kp.gradient-contour-source.v1", a, b, point: Object.freeze({ x, y }) });
-  const expression = add(multiply(constant(a), power(variable("x"), 2)), multiply(constant(b), power(variable("y"), 2)));
-  const evaluate = compileExpression(expression), derivatives = compileGradient(expression, ["x", "y"]);
+  const field = createPositiveQuadraticField(a, b);
+  const derivatives = compileGradient(field.expression, ["x", "y"]);
   const height = (p: GradientPoint) => {
     if (!finite(p.x) || !finite(p.y)) throw new RangeError("Sample coordinates must be finite.");
-    const result = evaluate({ x: p.x, y: p.y });
+    const result = field.height(p.x, p.y);
     if (!Number.isFinite(result)) throw new RangeError("Sample height must be finite.");
     return result;
   };
@@ -61,7 +63,7 @@ export function checkGradientContourSource(value: unknown): GradientContourCheck
   const atPoint: GradientAtPoint = magnitude === 0
     ? Object.freeze({ kind: "stationary", gradient, magnitude: 0 })
     : Object.freeze({ kind: "regular", gradient, magnitude, uphill: gradientUnitDirection(gradient.x, gradient.y), tangent: gradientUnitDirection(-gradient.y, gradient.x) });
-  return { status: "checked", model: Object.freeze({ source, latex: expressionToLatex(expression), level: height(source.point), atPoint, height,
+  return { status: "checked", model: Object.freeze({ source, field, latex: field.latex, level: height(source.point), atPoint, height,
     derivative(direction: GradientUnitDirection) {
       if (direction[unitBrand] !== true || !Number.isFinite(direction.x) || !Number.isFinite(direction.y) || Math.abs(Math.hypot(direction.x, direction.y) - 1) > 1e-12)
         throw new TypeError("Compare normalized directions from gradientUnitDirection.");

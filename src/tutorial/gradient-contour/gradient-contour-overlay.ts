@@ -1,8 +1,8 @@
 import { projectKpSurfaceContourPoint, type KpSurfaceContourStageAuthority } from "../kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts";
-import { gradientLocalHeight } from "./gradient-contour-model.ts";
+import { gradientLocalHeight, type GradientContourModel } from "./gradient-contour-model.ts";
 import { gradientComparisonAnnotations } from "./gradient-contour-attention.ts";
 import { renderKpFocusDeckAnnotation } from "../focus-deck-annotation.ts";
-import { gradientContourModel as model, type sampleGradientContour } from "./gradient-contour-sequence.ts";
+import { gradientContourModel, type sampleGradientContour } from "./gradient-contour-sequence.ts";
 
 type Point = { readonly x: number; readonly y: number };
 const path = (points: readonly Point[]) => points.map((p, i) => `${i ? "L" : "M"}${p.x.toFixed(3)},${p.y.toFixed(3)}`).join(" ");
@@ -16,7 +16,9 @@ const arrow = (from: Point, to: Point) => {
 /** Question-specific SVG projection over the canonical stage. The local plane
  * comes from the checked field's differential, not screen-space slope guesses.
  * Magnification is bounded display geometry; it never alters directional rates. */
-export function mountGradientContourOverlay(plot: HTMLElement, authority: KpSurfaceContourStageAuthority) {
+export function mountGradientContourOverlay(plot: HTMLElement, authority: KpSurfaceContourStageAuthority, model: GradientContourModel = gradientContourModel) {
+  if (authority.field.a !== model.source.a || authority.field.b !== model.source.b)
+    throw new TypeError("The gradient overlay must describe the stage's field.");
   const context = document.createElement("div"); context.className = "gradient-stage-context";
   context.append(...plot.childNodes); plot.append(context);
   plot.insertAdjacentHTML("beforeend", `<svg class="gradient-overlay" viewBox="0 0 520 300" aria-hidden="true">

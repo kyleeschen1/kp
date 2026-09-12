@@ -1,17 +1,13 @@
-import { createGradientContourModel, gradientContourPoint, gradientUnitDirection, gradientDirectionComponents } from "./gradient-contour-model.ts";
+import { createGradientContourModel, gradientContourPoint, gradientUnitDirection, gradientDirectionComponents, type GradientContourModel } from "./gradient-contour-model.ts";
 import { projectGradientComparison } from "./gradient-contour-attention.ts";
-import { gradientContourBeats, type GradientEvidence } from "./gradient-contour-story.ts";
+import { gradientContourBeats, createGradientContourStory, type GradientEvidence } from "./gradient-contour-story.ts";
 import { createKpSurfaceContourModel, createKpSurfaceContourScore, projectKpSurfaceContourBeat,
   interpolateKpSurfaceContourProjection, withKpSurfaceContourLevel } from "../kinetic-figure-surface-contour/kinetic-figure-surface-contour-model.ts";
 export { gradientContourBeats, gradientBeatIndex, gradientComparisonBounds } from "./gradient-contour-story.ts";
 
-// The fixed primary still uses its checked field and canonical reference stage.
-// Source-only variants remain gated on review of this explanation.
 export const gradientContourModel = createGradientContourModel();
 export const gradientContourReference = createKpSurfaceContourModel();
 const referenceScore = createKpSurfaceContourScore(gradientContourReference);
-const surface = withKpSurfaceContourLevel(projectKpSurfaceContourBeat(referenceScore, 2), gradientContourModel.level);
-const map = withKpSurfaceContourLevel(projectKpSurfaceContourBeat(referenceScore, 5), gradientContourModel.level);
 export const gradientContourBrief = Object.freeze({
   readerContext: "A reader who understands position, height, signed arithmetic and small moves; partial derivatives, projection and contours are introduced here.",
   motivatingGap: "Height cannot tell you which direction increases it fastest; local coordinate slopes predict the effect of a move.",
@@ -27,25 +23,31 @@ const unit = (x: number) => Math.max(0, Math.min(1, x));
 const ease = (x: number) => { const t = unit(x); return t * t * (3 - 2 * t); };
 
 type EvidencePose = Readonly<{ view: number; angle: number; ramp: number; overhead: number; components: number; tangent: number; direction: number; candidates: number; rightAngle: number }>;
+export function createGradientContourSequence(gradientContourModel: GradientContourModel) {
+if (gradientContourModel.atPoint.kind !== "regular") throw new RangeError("This explanation needs a regular point.");
+const { beats: gradientContourBeats, reading } = createGradientContourStory(gradientContourModel);
+const surface = withKpSurfaceContourLevel(projectKpSurfaceContourBeat(referenceScore, 2), gradientContourModel.level);
+const map = withKpSurfaceContourLevel(projectKpSurfaceContourBeat(referenceScore, 5), gradientContourModel.level);
+const uphillAngle = Math.atan2(gradientContourModel.atPoint.gradient.y, gradientContourModel.atPoint.gradient.x);
 const hillside: EvidencePose = { view: 0, angle: Math.PI / 2, ramp: 0, overhead: 0, components: 0, tangent: 0, direction: 0, candidates: 1, rightAngle: 0 };
 const ramp: EvidencePose = { ...hillside, ramp: 1, direction: 1, candidates: 0 };
 const projection: EvidencePose = { ...ramp, overhead: 1, components: 1 };
-const uphill: EvidencePose = { ...projection, angle: Math.PI / 4 };
+const uphill: EvidencePose = { ...projection, angle: uphillAngle };
 const contour: EvidencePose = { ...uphill, view: 1, ramp: 0, components: 0 };
 // Evidence names select existing renderer poses. Prose-only beats hold a pose
 // instead of replaying unrelated camera/contour motions to fill a new stop.
 const poses = {
-  hillside, ramp, "gradient-ramp": { ...ramp, angle: Math.PI / 4 }, "level-ramp": { ...ramp, angle: Math.PI * .75 },
+  hillside, ramp, "gradient-ramp": { ...ramp, angle: uphillAngle }, "level-ramp": { ...ramp, angle: uphillAngle + Math.PI / 2 },
   projection, uphill, contour, follow: contour,
   tangent: { ...contour, tangent: 1, rightAngle: 1 }
 } satisfies Record<GradientEvidence, EvidencePose>;
 
 /** State is a pure projection of this score, never accumulated transit history.
  * Beat insertion cannot silently move the comparison's playback interval. */
-export function sampleGradientContour(progress: number) {
+function sample(progress: number) {
   if (!Number.isFinite(progress)) throw new RangeError("Gradient playhead must be finite.");
   const position = unit(progress) * (gradientContourBeats.length - 1);
-  const attention = projectGradientComparison(position);
+  const attention = projectGradientComparison(position, reading);
   const visible = attention?.visibleBeat ?? Math.round(position);
   const visualPosition = attention?.visualPosition ?? position;
   const index = Math.min(Math.floor(visualPosition), gradientContourBeats.length - 2);
@@ -54,7 +56,8 @@ export function sampleGradientContour(progress: number) {
   const phase = visualPosition - index, t = ease(phase);
   const mix = (key: keyof EvidencePose) => from[key] + (to[key] - from[key]) * t;
   const stage = interpolateKpSurfaceContourProjection({ from: surface, to: map, progress: mix("view") });
-  const startAngle = Math.atan2(gradientContourModel.source.point.y * Math.sqrt(2), gradientContourModel.source.point.x);
+  const { a, b, point: origin } = gradientContourModel.source;
+  const startAngle = Math.atan2(origin.y * Math.sqrt(b), origin.x * Math.sqrt(a));
   const orbit = toBeat.slug === "follow" ? t : 0;
   const point = gradientContourPoint(gradientContourModel, startAngle + Math.PI * 2 * orbit);
   const direction = gradientUnitDirection(Math.cos(mix("angle")), Math.sin(mix("angle")));
@@ -72,3 +75,6 @@ export function sampleGradientContour(progress: number) {
     fraction: String(visible + 1) + " / " + gradientContourBeats.length,
     accessiblePosition: "Step " + (visible + 1) + " of " + gradientContourBeats.length + ": " + gradientContourBeats[visible]!.title });
 }
+return Object.freeze({ model: gradientContourModel, beats: gradientContourBeats, reading, sample, checkpoints: Object.freeze(gradientContourBeats.map((_, index) => index / (gradientContourBeats.length - 1))) });
+}
+export const sampleGradientContour = createGradientContourSequence(gradientContourModel).sample;

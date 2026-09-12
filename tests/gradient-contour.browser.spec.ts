@@ -1,5 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import { gradientContourBeats, gradientBeatIndex, gradientComparisonBounds } from "../src/tutorial/gradient-contour/gradient-contour-story.ts";
+import { gradientContourVariant } from "../src/tutorial/gradient-contour/gradient-contour-authoring.ts";
 const { start, end } = gradientComparisonBounds;
 const last = gradientContourBeats.length - 1;
 const route = "/experiments/kinetic-figure/gradient-contour/";
@@ -13,6 +14,55 @@ async function seek(page: Page, step: number) {
 async function paint(page: Page) {
   return page.locator(".gradient-overlay").innerHTML();
 }
+test("source Apply changes the real stage and reasoning, preserves invalid drafts and restores the primary", async ({ page }, info) => {
+  const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
+  await page.goto(route);
+  await expect(page.locator(deck)).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+  await expect(page.locator(".graph-webgl")).toHaveAttribute("data-kp-surface-contour-capability", "ready");
+  const primaryPaint = await paint(page);
+  const surface = () => page.locator("[data-kp-surface-contour-equation=surface] annotation").textContent();
+  const primaryEquation = await surface();
+  await page.locator(".gradient-source-editor summary").click();
+  await page.locator("[data-gradient-variant]").click();
+  expect(JSON.parse(await page.locator("#gradient-source").inputValue())).toEqual(gradientContourVariant);
+  expect(await surface()).toEqual(primaryEquation);
+  await page.locator("[data-gradient-apply]").click();
+  await expect(page.locator("[data-gradient-source-status]")).toHaveAttribute("data-status", "applied");
+  await expect(page.locator(".graph-webgl")).toHaveAttribute("data-kp-surface-contour-capability", "ready");
+  await expect(page.locator("canvas")).toHaveCount(1);
+  expect(await surface()).not.toEqual(primaryEquation);
+  expect(await paint(page)).not.toEqual(primaryPaint);
+  await seek(page, end);
+  await expect(page.locator("[data-gradient-rate]")).toHaveText("3.16");
+  await expect(page.locator("[data-gradient-height]")).toHaveText("1.38");
+  await expect(page.locator("[data-gradient-reading-body]")).toContainText("slopes differ");
+  const variantPaint = await paint(page), appliedText = await page.locator("#gradient-source").inputValue();
+  for (const draft of ["{", JSON.stringify({ ...gradientContourVariant, a: 0 }), JSON.stringify({ ...gradientContourVariant, point: { x: 0, y: 0 } })]) {
+    await page.locator("#gradient-source").fill(draft);
+    await page.locator("[data-gradient-apply]").click();
+    await expect(page.locator("[data-gradient-source-status]")).toHaveAttribute("data-status", "repair");
+    expect(await paint(page)).toEqual(variantPaint);
+    await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", String(end));
+  }
+  await page.locator("[data-gradient-current]").click();
+  await expect(page.locator("#gradient-source")).toHaveValue(appliedText);
+  for (const width of [1280, 390, 320]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (let step = 0; step <= last; step++) {
+      await seek(page, step);
+      const overflow = await page.locator(deck).evaluate(element => Math.max(...[...element.querySelectorAll<HTMLElement>(".kp-focus-deck__passage-page")].map(p => p.scrollHeight - p.clientHeight)));
+      expect(overflow, `variant ${width}, step ${step}`).toBeLessThanOrEqual(1);
+    }
+    await seek(page, start);
+    await page.screenshot({ path: info.outputPath(`source-variant-${width}.png`), fullPage: true });
+  }
+  await page.locator("[data-gradient-primary]").click();
+  await page.locator("[data-gradient-apply]").click();
+  await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", "0");
+  expect(await surface()).toEqual(primaryEquation);
+  await expect(page.locator("canvas")).toHaveCount(1);
+  expect(errors).toEqual([]);
+});
 test("passage handoff stays close to a fixed stage at desktop and phone widths", async ({ page }, info) => {
   await page.goto(route); await expect(page.locator(deck)).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
   for (const width of [1280, 390, 320]) {

@@ -31,27 +31,29 @@ optimisation. Prioritise explanatory proofs, model derivations, connections and
 validity limits. Full direction, learner context and bounded recommendations:
 `decisions/2026-09-11-applied-mathematics-mechanics-priority.md`.
 
-Next planning action: reconcile the remaining gradient delivery with this priority
-and propose a bounded mechanics/math reuse pilot. Do not automatically execute
-the historical successor horizon or create a full course platform. The accepted
-best-practices/checks follow-up remains deferred until brainstorming concludes;
-see `threads/2026-09-11-deferred-explanation-best-practices.md`. This documentation
-request does not start implementation or cancel/reorder the existing contract.
+Approved order: outline mechanics from zero, finish the gradient loop, then assess
+architecture and perform bounded cleanup before mechanics implementation. The user
+authorised proceeding on the first two now. Learning map:
+`threads/2026-09-11-mechanics-from-zero-curriculum.md`. Shared ownership and
+retroactive repair are readiness criteria for the later assessment. Preserve
+immutable editions while regenerating affected static artifacts explicitly.
+The best-practices follow-up remains queued, not extra scope in this continuation.
 
 Current approved delivery: `threads/2026-09-10-gradient-contour-delivery-proposal.md`
 under `run-contract.kp.gradient-contour-intuition-v1`. User approved with “go”.
 Use the KP delivery skill: six outcome-sized packages, G3 human review before
 source-only generalization and downstream integration. Preserve the original
 surface-contour route; no new renderer, clock or automatic successor.
-Immediate G3 direction is explanation-first authoring. The user approved the
-learner draft and storyboard with “approve. implement”; translation is now the
-rendered primary under review. See
+The accepted primary follows explanation-first authoring. The user approved the
+learner draft and storyboard with “approve. implement”, then positively reviewed
+the rendered translation and instructed completion of the loop. See
 `decisions/2026-09-11-explanation-first-authoring.md` and
 `threads/2026-09-11-gradient-explanation-storyboard.md` and the primary checkpoint
-packet. The model, canonical renderers and shared controls are preserved; the
-GPT reference has not yet been supplied. G4–G6 remain gated on rendered review.
+packet. The positive rendered review plus explicit instruction to finish the loop
+now accept G3 and authorise G4–G6. The model, canonical renderers and shared
+controls are preserved; the GPT reference has not yet been supplied.
 Text positioning and typography are accepted canonical focus-card defaults;
-G3 remains open for the gradient's explanatory gap and endpoint history gestures.
+Real-device history gestures remain an explicit manual verification limitation.
 See `decisions/2026-09-11-focus-card-layout-type-acceptance.md`.
 
 Historical successor planning reference (no longer automatic priority authority):

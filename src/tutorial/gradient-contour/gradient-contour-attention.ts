@@ -1,6 +1,6 @@
 import type { KpLessonAttentionPhase, KpLessonAttentionPlan } from "../../reader/document/public-api.ts";
 import { projectKpReaderAttention } from "../../reader/runtime/attention-projector.ts";
-import { gradientComparisonBounds, gradientComparisonReading } from "./gradient-contour-story.ts";
+import { gradientComparisonBounds, gradientComparisonReading, type GradientComparisonReading } from "./gradient-contour-story.ts";
 export { gradientComparisonReading } from "./gradient-contour-story.ts";
 
 // These are the existing overlay's semantic owners, not a second scene registry.
@@ -43,7 +43,7 @@ export const gradientComparisonPlan: KpLessonAttentionPlan = Object.freeze({
   ])
 });
 
-export function projectGradientComparison(position: number) {
+export function projectGradientComparison(position: number, reading: GradientComparisonReading = gradientComparisonReading) {
   if (!Number.isFinite(position)) throw new Error("Comparison position must be finite.");
   const { start, end } = gradientComparisonBounds;
   if (position < start || position > end) return undefined;
@@ -57,7 +57,7 @@ export function projectGradientComparison(position: number) {
     instructionRole: instructionRoles[projection.phaseKind],
     visualPosition: start + (end - start) * projection.visualProgressPermille / 1000,
     // New interpretation is only available after the motion has settled.
-    reading: concluded ? gradientComparisonReading.conclude : gradientComparisonReading.prepare,
+    reading: concluded ? reading.conclude : reading.prepare,
     readingKind: concluded ? "conclude" as const : "prepare" as const,
     visibleBeat: concluded ? end : start
   });

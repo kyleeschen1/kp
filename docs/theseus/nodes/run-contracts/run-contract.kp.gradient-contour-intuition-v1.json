@@ -53,13 +53,14 @@
     {
       "id": "g3",
       "title": "Human visual and pedagogical checkpoint",
-      "summary": "HUMAN_CHECKPOINT: approved draft translated at http://localhost:8000/experiments/kinetic-figure/gradient-contour/ with 19 learner-paced passages. Review reasoning continuity and evidence handoff; draft approval is recorded, rendered acceptance remains. 54 focused tests, 12 Chromium checks and full types pass. G4-G6 remain gated.",
-      "status": "ready"
+      "summary": "User praised rendered explanation as much much better and explicitly approved finishing the loop after curriculum outline. Primary accepted; retain real-device history-gesture limitation without claiming certification. Resume G4-G6.",
+      "status": "complete"
     },
     {
       "id": "g4",
       "title": "Demonstrate source-only reuse and Apply",
-      "status": "planned"
+      "summary": "Unequal-slope source-only variant, real Apply, last-valid retention and roundtrip verified through canonical stage. Primary and reference preserved; full types pass. G5 extraction and G6 release remain.",
+      "status": "complete"
     },
     {
       "id": "g5",

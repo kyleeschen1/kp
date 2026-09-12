@@ -1,10 +1,14 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: applied-math/mechanics priority accepted; gradient G3 preserved for reconciliation
+Status: mechanics-from-zero outline; gradient primary accepted, G4–G6 resumed
 Last Updated: 2026-09-11
 Current execution: `run-contract.kp.gradient-contour-intuition-v1` from
 `2026-09-10-gradient-contour-delivery-proposal.md`, approved with “go”. Theseus
-owns progress; G4-G6 depend on the G3 primary visual/pedagogical acceptance.
+owns progress. The user accepted the revised primary and explicitly requested
+finishing the loop; G4–G6 are resumed, with device-gesture verification limits
+retained. The approved curriculum outline is
+`2026-09-11-mechanics-from-zero-curriculum.md`. Architecture assessment and bounded
+cleanup follow this loop, before new mechanics implementation.
 Latest accepted strategic direction:
 `../decisions/2026-09-11-applied-mathematics-mechanics-priority.md`.
 Classical mechanics is the first sustained learning case; mathematical concepts
@@ -26,8 +30,8 @@ conceptual explanations and unclear-why repairs through the reusable worksheet.
 The translation preserves the source model, canonical renderers, shared controls,
 top passage placement and typography. It adds reading space on narrow screens
 and uses named evidence/beat bindings instead of the former eight-stop ordinals.
-G3 now reviews the rendered explanation, not the already-approved draft; G4–G6
-remain gated. Earlier implementation history remains preservation evidence.
+The positive rendered review and subsequent explicit resumption accept G3.
+Earlier implementation history remains preservation evidence, not a live gate.
 Primary review packet and shared-server URL:
 `2026-09-10-gradient-contour-primary-checkpoint.md`. It also records the
 reproduced shared WebGL camera-origin repair; aesthetic promotion remains gated.
