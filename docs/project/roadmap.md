@@ -24,6 +24,11 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+Accepted but deferred until the current brainstorm finishes: encode explanation
+best practices and layered checks, as recorded in
+`threads/2026-09-11-deferred-explanation-best-practices.md`. The MVC-for-physics
+dogfooding curriculum remains a proposal; no run ordering or gates change yet.
+
 Current approved delivery: `threads/2026-09-10-gradient-contour-delivery-proposal.md`
 under `run-contract.kp.gradient-contour-intuition-v1`. User approved with “go”.
 Use the KP delivery skill: six outcome-sized packages, G3 human review before

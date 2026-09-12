@@ -6,6 +6,10 @@ Current execution: `run-contract.kp.gradient-contour-intuition-v1` from
 `2026-09-10-gradient-contour-delivery-proposal.md`, approved with “go”. Theseus
 owns progress; G4-G6 depend on the G3 primary visual/pedagogical acceptance.
 Latest accepted direction: `../decisions/2026-09-11-explanation-first-authoring.md`.
+Deferred accepted follow-up: encode explanation best practices and layered checks
+after the current brainstorm ends. Scope and activation boundary:
+`2026-09-11-deferred-explanation-best-practices.md`. The personal MVC-for-physics
+curriculum is an exploratory dogfooding proposal, not an approved replacement run.
 The user approved `2026-09-11-gradient-explanation-draft.md` and its storyboard
 with “approve. implement”. The live primary now follows that explanatory order;
 `2026-09-11-gradient-explanation-storyboard.md` maps its inferential bridges and
