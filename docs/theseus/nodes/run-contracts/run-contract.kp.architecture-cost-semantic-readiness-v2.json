@@ -82,7 +82,8 @@
     {
       "id": "s08",
       "title": "Tax focused CSS",
-      "status": "planned"
+      "summary": "Tax CSS partition preserves all rules and native motion; 8840 gzip CSS bytes removed without deferred reintroduction.",
+      "status": "complete"
     },
     {
       "id": "s09",

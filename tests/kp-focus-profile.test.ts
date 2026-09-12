@@ -115,7 +115,7 @@ test("CSS binding carries only composited attention variables", () => {
   assert.equal("--kp-focus-y" in binding.variables, false);
 
   const css = readFileSync(
-    new URL("../src/styles.css", import.meta.url),
+    new URL("../src/rendering/focus-card-runtime.css", import.meta.url),
     "utf8"
   );
   const focusRule = css.match(/\.kp-focus-group \{[\s\S]*?\n\}/)?.[0] ?? "";

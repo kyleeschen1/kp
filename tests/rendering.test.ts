@@ -875,7 +875,7 @@ test("renderGraph3DToSvg orders opaque surface quads back to front", () => {
 });
 
 test("3D surface mesh lines and simple borders are styled separately from quads", () => {
-  const css = readFileSync(new URL("../src/styles.css", import.meta.url), "utf8");
+  const css = readFileSync(new URL("../src/rendering/focus-card-runtime.css", import.meta.url), "utf8");
 
   assert.match(css, /\.graph-surface__quad\s*{[^}]*stroke:\s*none;/s);
   assert.match(css, /\.graph-surface__quad\s*{[^}]*opacity:\s*1;/s);

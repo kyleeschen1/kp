@@ -34,7 +34,8 @@ test("frozen palette remains historical while appearance controls stay detached"
   const entry = readSource("economics-demand-shift-tutorial-entry.ts");
   const tuning = readSource("economics-demand-shift-visual-tuning.ts");
   const layoutTuning = readSource("economics-demand-shift-layout.ts");
-  const global = readFileSync(new URL("../src/styles.css", import.meta.url), "utf8");
+  const global = ["styles.css", "rendering/focus-card-runtime.css"]
+    .map(path => readFileSync(new URL(`../src/${path}`, import.meta.url), "utf8")).join("\n");
 
   for (const color of Object.values(baseline.pageBackgrounds)) {
     assert.equal(theme.includes(color), true, `missing page background ${color}`);

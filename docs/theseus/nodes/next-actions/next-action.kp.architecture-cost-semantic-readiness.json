@@ -85,6 +85,13 @@
       "scope": "s07",
       "checkedAt": "2026-09-12T16:39:54.249Z",
       "notes": "Delayed first key and held native passage checks reproduced lost input before repair and pass afterward; both pagehide modes pass. Separate scoped runs passed all four keyboard owners, code gradual and wheel, direct links, remount, desktop phone activated fit; 20 unit checks passed."
+    },
+    {
+      "command": "npm run visual:architecture-cost -- --tax-only --activation",
+      "status": "passed",
+      "scope": "s08",
+      "checkedAt": "2026-09-12T16:51:20.602Z",
+      "notes": "Six cohorts pass; CSS raw 153438 to 101733 and gzip 31360 to 22520; no activation CSS. Production build, full types, 52 CSS/rendering tests, native motion and light/dark desktop/phone checks pass. All 641 original CSS rule records retained."
     }
   ],
   "expectedLearning": [

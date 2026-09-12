@@ -1,0 +1,1351 @@
+/* Existing renderer paint/control rules, independent of application chrome.
+ * Keep native hiding, material ownership and responsive rules together. */
+.kp-focus-group {
+  --kp-focus-z: 0px;
+  --kp-focus-scale: 1;
+  --kp-focus-outline-strength: 0;
+  --kp-focus-shadow-y: 0px;
+  --kp-focus-shadow-blur: 0px;
+  --kp-focus-shadow-opacity: 0;
+  transform:
+    translateZ(var(--kp-focus-z))
+    scale(var(--kp-focus-scale));
+  transform-origin: center;
+  outline:
+    calc(2px * var(--kp-focus-outline-strength))
+    solid
+    rgb(31 79 95 / var(--kp-focus-outline-strength));
+  box-shadow:
+    0
+    var(--kp-focus-shadow-y)
+    var(--kp-focus-shadow-blur)
+    rgb(30 41 59 / calc(
+      var(--kp-focus-shadow-opacity) *
+      var(--kp-render-quality-shadow-scale, 1)
+    ));
+  will-change: transform, box-shadow, outline-color;
+}
+
+.kp-focus-context {
+  --kp-focus-context-dimming: 0;
+  opacity: calc(1 - var(--kp-focus-context-dimming));
+}
+
+.editor-equation-stage__shared-focus-shadow {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: 999px;
+  box-shadow:
+    0
+    var(--kp-focus-shadow-y, 0px)
+    var(--kp-focus-shadow-blur, 0px)
+    rgb(30 41 59 / calc(
+      var(--kp-focus-shadow-opacity, 0) *
+      var(--kp-render-quality-shadow-scale, 1)
+    ));
+}
+
+.editor-equation-stage__dot-product-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.editor-equation-stage__matrix-vector-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.editor-equation-stage__matrix-operation-bank {
+  z-index: 4;
+  grid-area: 2 / 1;
+  display: grid;
+  gap: 0.4rem;
+  width: min(100% - 1.5rem, 34rem);
+  margin: 0 auto 0.7rem;
+  color: #273d47;
+  font-size: clamp(0.7rem, 1.15vw, 0.84rem);
+  pointer-events: none;
+}
+
+.editor-equation-stage__matrix-operation-inputs {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.9fr) minmax(10rem, 1.1fr);
+  align-items: center;
+  gap: 1rem;
+  min-height: 2.8rem;
+  color: #263845;
+}
+
+.editor-equation-stage__matrix-operation-inputs > span {
+  opacity: 1;
+}
+
+.editor-equation-stage__matrix-operation-matrix,
+.editor-equation-stage__matrix-operation-sources {
+  display: grid;
+  gap: 0.25rem;
+  place-items: center;
+}
+
+.editor-equation-stage__matrix-operation-matrix small,
+.editor-equation-stage__matrix-operation-sources small {
+  color: #7a8991;
+  font-size: 0.54rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.editor-equation-stage__matrix-operation-source-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(3.7rem, 1fr));
+  gap: 0.55rem;
+  width: 100%;
+}
+
+.editor-equation-stage__matrix-operation-source-list > span {
+  position: relative;
+  display: grid;
+  min-height: 1.75rem;
+  border: 1px solid rgb(31 122 131 / 0.42);
+  border-radius: 999px;
+  place-items: center;
+  color: #1f6870;
+  background: #f0f8f7;
+  font-weight: 750;
+}
+
+.editor-equation-stage__matrix-operation-source-list > span::after {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  height: 0.52rem;
+  border-left: 1px solid rgb(31 122 131 / 0.42);
+  content: "";
+}
+
+.editor-equation-stage__matrix-operation-instruction {
+  margin: 0;
+  color: #657983;
+  font-size: 0.6rem;
+  font-weight: 650;
+  text-align: center;
+}
+
+.editor-equation-stage__matrix-operation-rows {
+  display: grid;
+  gap: 0.42rem;
+  border-top: 1px solid rgb(112 137 152 / 0.22);
+  padding-top: 0.48rem;
+}
+
+.editor-equation-stage__matrix-operation-row {
+  --kp-matrix-operation-row-emphasis: 0.36;
+  display: grid;
+  grid-template-columns: 1.35rem minmax(0, 1fr) 4rem 1.9rem;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.65rem;
+  border: 1px solid rgb(112 137 152 / 0.15);
+  border-radius: 0.45rem;
+  padding: 0.28rem 0.35rem;
+  background: rgb(251 253 252 / 0.82);
+  opacity: calc(0.48 + var(--kp-matrix-operation-row-emphasis) * 0.52);
+}
+
+.editor-equation-stage__matrix-operation-row[
+  data-kp-editor-matrix-vector-row-status="active"
+] {
+  border-color: rgb(31 122 131 / 0.3);
+  background: #f8fcfb;
+}
+
+.editor-equation-stage__matrix-operation-row-label {
+  color: #71838d;
+  text-align: center;
+}
+
+.editor-equation-stage__matrix-operation-flow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.editor-equation-stage__matrix-operation-route {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.35rem minmax(1.65rem, 1fr) 1.75rem 1.7rem;
+  align-items: center;
+  gap: 0.18rem;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.editor-equation-stage__matrix-operation-source-reference {
+  display: grid;
+  width: 1.35rem;
+  height: 1.35rem;
+  border: 1px solid rgb(31 122 131 / 0.42);
+  border-radius: 50%;
+  place-items: center;
+  color: #1f6870;
+  background: #f0f8f7;
+  font-weight: 750;
+}
+
+.editor-equation-stage__matrix-operation-channel {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-width: 1.65rem;
+  height: 0.7rem;
+}
+
+.editor-equation-stage__matrix-operation-channel i {
+  position: absolute;
+  top: calc(50% - 0.5px);
+  right: 0;
+  left: 0;
+  height: 1px;
+  background: linear-gradient(90deg, #1f7a83, #bd5b35);
+  transform: scaleX(var(--kp-matrix-operation-route-progress, 0));
+  transform-origin: left center;
+}
+
+.editor-equation-stage__matrix-operation-channel b {
+  position: absolute;
+  top: calc(50% - 3px);
+  left: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #bd5b35;
+  opacity: var(--kp-matrix-operation-route-progress, 0);
+  transform: translateX(calc(
+    1.5rem * var(--kp-matrix-operation-route-progress, 0)
+  ));
+}
+
+.editor-equation-stage__matrix-operation-gate {
+  display: grid;
+  min-height: 1.35rem;
+  border: 1px solid rgb(189 91 53 / 0.3);
+  border-radius: 0.3rem;
+  place-items: center;
+  color: #8a4b08;
+  background: #fff8ee;
+}
+
+.editor-equation-stage__matrix-operation-product {
+  color: #315b67;
+  opacity: var(--kp-matrix-operation-product-progress, 0);
+  transform: translateX(calc(
+    3px * (1 - var(--kp-matrix-operation-product-progress, 0))
+  ));
+}
+
+.editor-equation-stage__matrix-operation-fold {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  min-width: 0;
+  justify-content: center;
+  color: #8a4b08;
+  opacity: var(--kp-matrix-operation-gather-progress, 0);
+  transform: translateX(calc(
+    4px * var(--kp-matrix-operation-collapse-progress, 0)
+  ));
+}
+
+.editor-equation-stage__matrix-operation-fold > i {
+  width: 0.7rem;
+  height: 1rem;
+  border-top: 1px solid rgb(189 91 53 / 0.55);
+  border-right: 1px solid rgb(189 91 53 / 0.55);
+  border-bottom: 1px solid rgb(189 91 53 / 0.55);
+  border-radius: 0 999px 999px 0;
+}
+
+.editor-equation-stage__matrix-operation-output {
+  display: grid;
+  width: 1.65rem;
+  height: 1.65rem;
+  border-left: 1px solid rgb(38 56 69 / 0.32);
+  border-right: 1px solid rgb(38 56 69 / 0.32);
+  place-items: center;
+  color: #1f7a83;
+  opacity: var(--kp-matrix-operation-output-progress, 0);
+}
+
+.editor-equation-stage__transition:has(
+  .editor-equation-stage__matrix-operation-bank
+) {
+  grid-template-rows: minmax(4.75rem, 1fr) auto auto auto;
+}
+
+.editor-equation-stage__transition:has(
+  .editor-equation-stage__matrix-operation-bank
+) > .editor-equation-stage__caption {
+  grid-area: 3 / 1;
+}
+
+.editor-equation-stage__transition:has(
+  .editor-equation-stage__matrix-operation-bank
+) > .editor-equation-stage__epistemic-branch-cue {
+  grid-area: 4 / 1;
+}
+
+@media (max-width: 520px) {
+  .editor-equation-stage__matrix-operation-bank {
+    width: min(100% - 0.75rem, 24rem);
+    font-size: 0.66rem;
+  }
+
+  .editor-equation-stage__matrix-operation-inputs { gap: 0.7rem; }
+
+  .editor-equation-stage__matrix-operation-inputs {
+    grid-template-columns: minmax(6.2rem, 0.8fr) minmax(8rem, 1.2fr);
+  }
+
+  .editor-equation-stage__matrix-operation-flow { gap: 0.32rem; }
+
+  .editor-equation-stage__matrix-operation-row {
+    grid-template-columns: 1rem minmax(0, 1fr) 3rem 1.55rem;
+    gap: 0.24rem;
+    padding-inline: 0.22rem;
+  }
+
+  .editor-equation-stage__matrix-operation-route {
+    grid-template-columns: 1.15rem minmax(1.1rem, 1fr) 1.5rem 1.5rem;
+    gap: 0.12rem;
+  }
+
+  .editor-equation-stage__matrix-operation-source-reference {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+
+  .editor-equation-stage__matrix-operation-instruction {
+    font-size: 0.56rem;
+  }
+}
+
+.editor-equation-stage__matrix-matrix-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.editor-equation-stage__matrix-vector-row {
+  position: absolute;
+  border: 1px solid rgb(62 104 117 / 0.2);
+  border-radius: 999px;
+  padding: 0.12rem 0.35rem;
+  color: #315b67;
+  background: rgb(239 248 249 / 0.94);
+  box-shadow: 0 5px 16px rgb(30 41 59 / 0.08);
+  font-size: 0.7rem;
+  transform-origin: center;
+  white-space: nowrap;
+  will-change: opacity, transform;
+}
+
+.editor-equation-stage__matrix-matrix-cell {
+  position: absolute;
+  border: 1px solid rgb(62 104 117 / 0.2);
+  border-radius: 999px;
+  padding: 0.12rem 0.35rem;
+  color: #315b67;
+  background: rgb(239 248 249 / 0.94);
+  box-shadow: 0 5px 16px rgb(30 41 59 / 0.08);
+  font-size: 0.7rem;
+  transform-origin: center;
+  white-space: nowrap;
+  will-change: opacity, transform;
+}
+
+.editor-equation-stage__transition:has(
+  .editor-equation-stage__matrix-vector-overlay,
+  .editor-equation-stage__matrix-matrix-overlay
+) {
+  grid-template-rows: minmax(9.25rem, 1fr) auto;
+}
+
+.editor-equation-stage__dot-product-contribution,
+.editor-equation-stage__dot-product-accumulation {
+  position: absolute;
+  border: 1px solid rgb(62 104 117 / 0.2);
+  border-radius: 999px;
+  padding: 0.12rem 0.35rem;
+  color: #315b67;
+  background: rgb(239 248 249 / 0.92);
+  box-shadow: 0 5px 16px rgb(30 41 59 / 0.08);
+  font-size: 0.72rem;
+  transform-origin: center;
+  will-change: opacity, transform;
+}
+
+.editor-equation-stage__dot-product-accumulation {
+  border-color: rgb(180 115 36 / 0.25);
+  color: #8a4b08;
+  background: rgb(255 248 232 / 0.94);
+  font-weight: 800;
+}
+
+.equation-motion__motion-anchor[data-kp-motion-operator="binary"] .katex {
+  font-size: var(--kp-katex-operator-scale);
+  vertical-align: middle;
+}
+
+.equation-motion {
+  width: min(100%, 34rem);
+  overflow: hidden;
+  border: 1px solid #cad6e3;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 18px 45px rgb(30 41 59 / 0.12);
+}
+
+.editor-animation-player {
+  border-top: 1px solid #e3e8ef;
+  background: #ffffff;
+}
+
+.editor-animation-player__stage {
+  display: grid;
+  min-height: 12rem;
+  place-items: stretch;
+  padding: 1rem;
+  background:
+    radial-gradient(circle at 50% 40%, rgb(225 232 240 / 0.65), transparent 58%),
+    #f8fafc;
+}
+
+.editor-animation-player__stage[data-kp-editor-animation-surface="composite"] {
+  gap: 0.75rem;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto;
+}
+
+.editor-animation-player__stage[data-kp-editor-animation-surface="composite"]
+> .editor-animation-player__surface--equation {
+  grid-area: 1 / 1;
+}
+
+.editor-animation-player__stage[data-kp-editor-animation-surface="composite"]
+> .editor-animation-player__surface--graph {
+  grid-area: 2 / 1;
+}
+
+.editor-animation-player__stage[data-kp-editor-animation-surface="composite"]
+> .editor-animation-player__surface--graph:has(
+  [data-kp-matrix-linear-map-view]
+) {
+  aspect-ratio: 13 / 9;
+  min-height: 0;
+}
+
+.editor-animation-player__stage[data-kp-editor-animation-surface="composite"]
+> .editor-animation-player__surface--graph:has(
+  [data-kp-matrix-linear-map-view]
+) .editor-graph-stage {
+  height: 100%;
+  min-height: 0;
+}
+
+.editor-animation-player__surface {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  min-height: 10rem;
+  place-items: center;
+  border: 1px dashed #b7c7d6;
+  border-radius: 10px;
+  color: #64748b;
+  background: rgb(255 255 255 / 0.78);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.editor-animation-player__surface--equation {
+  /* Equation hosts must not leak placeholder label typography into KaTeX. */
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.editor-animation-player__surface:has(.editor-equation-stage) {
+  border-style: solid;
+  color: #172033;
+  background: #ffffff;
+}
+
+.editor-animation-player__surface:has(.editor-graph-stage) {
+  border-style: solid;
+  background: #ffffff;
+}
+
+.editor-equation-stage {
+  position: relative;
+  display: grid;
+  width: 100%;
+  min-height: 10rem;
+  place-items: stretch;
+}
+
+.editor-equation-stage__content {
+  display: contents;
+}
+
+.editor-equation-stage__material-layer {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+  font-size: clamp(0.82rem, 2.3vw, 1.2rem);
+}
+
+.editor-equation-stage__radical-webgl-morph {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.kp-native-katex-structural-succession {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.editor-equation-stage__material-owner {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  transform-origin: center;
+  will-change: opacity, transform;
+}
+
+.editor-equation-stage__material-visual {
+  display: inline-block;
+}
+
+.editor-equation-stage__material-owner[
+  data-kp-equation-material-foreground-occlusion-role="occluder"
+] {
+  z-index: 2;
+  isolation: isolate;
+}
+
+.editor-equation-stage__independent-zero-witness {
+  font-size: var(
+    --kp-editor-equation-fit-font-size,
+    clamp(0.82rem, 2.3vw, 1.2rem)
+  );
+}
+
+.editor-equation-stage__transition {
+  position: relative;
+  display: grid;
+  grid-template-rows: minmax(7.5rem, 1fr) auto auto;
+  margin: 0;
+}
+
+.editor-equation-stage__transition[data-kp-editor-epistemic-branch-status] {
+  border-radius: 0.55rem;
+  box-shadow: inset 0 0 0 2px rgb(180 83 9 / calc(
+    0.18 + var(--kp-epistemic-cue-strength, 0) * 0.28
+  ));
+}
+
+.editor-equation-stage__epistemic-branch-cue {
+  grid-area: 3 / 1;
+  margin: 0.35rem 0.7rem 0.65rem;
+  border-left: 0.25rem solid #b45309;
+  border-radius: 0.25rem;
+  padding: 0.55rem 0.7rem;
+  color: #78350f;
+  background: #fffbeb;
+  font-size: 0.72rem;
+  font-weight: 750;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.editor-equation-stage__epistemic-branch-cue[data-kp-editor-epistemic-branch-cue="invalid"] {
+  border-left-color: #b91c1c;
+  color: #7f1d1d;
+  background: #fef2f2;
+}
+
+.editor-equation-stage__layer {
+  display: grid;
+  grid-area: 1 / 1;
+  min-width: 0;
+  place-items: center;
+  padding: 1rem 0.75rem;
+  transform-origin: center;
+  will-change: opacity, transform;
+}
+
+.editor-equation-stage__object {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  /* Native fitting owns containment; scrolling here split one equation into a
+     competing viewport and also coerced the other axis to `auto`. */
+  overflow: visible;
+  padding: 0.25rem;
+  font-size: var(
+    --kp-editor-equation-fit-font-size,
+    clamp(0.82rem, 2.3vw, 1.2rem)
+  );
+}
+
+.editor-equation-stage__object .katex-display {
+  margin: 0;
+}
+
+.editor-equation-stage [data-kp-motion-id] {
+  display: inline-block;
+  position: relative;
+  will-change: opacity, transform;
+}
+
+.editor-equation-stage__caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  grid-area: 2 / 1;
+  margin: 0;
+  border-top: 1px solid #e3e8ef;
+  padding: 0.55rem 0.7rem;
+  color: #64748b;
+  background: #f8fafc;
+  font-size: 0.67rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.editor-equation-stage__caption [data-kp-editor-equation-motif-label] {
+  border-radius: 999px;
+  padding: 0.16rem 0.38rem;
+  color: #315b67;
+  background: #e8f2f4;
+  font-size: 0.58rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.editor-equation-stage__transition[data-kp-editor-equation-motif="relation-flip"] [data-kp-editor-equation-motif-label] {
+  color: #7a3d08;
+  background: #fff1d6;
+}
+
+.editor-equation-stage__focus {
+  display: inline-flex;
+  gap: 0.25rem;
+}
+
+.editor-equation-stage__focus span {
+  position: relative;
+  border: 1px solid #e3a849;
+  border-radius: 4px;
+  padding: 0.08rem 0.25rem;
+  color: #8a4b08;
+  background: #fff8e8;
+}
+
+.editor-equation-stage__focus span::after {
+  position: absolute;
+  top: 50%;
+  right: 0.12rem;
+  left: 0.12rem;
+  height: 1px;
+  background: #b42318;
+  content: "";
+  opacity: var(--kp-editor-equation-focus-progress, 0);
+  transform: scaleX(var(--kp-editor-equation-focus-progress, 0));
+  transform-origin: center;
+}
+
+.editor-equation-stage__sequence {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+  border-top: 1px solid #e3e8ef;
+  padding: 0.55rem;
+  overflow: visible;
+  background: #ffffff;
+  list-style: none;
+}
+
+.editor-equation-stage__sequence li {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.3rem;
+  border: 1px solid #d6e0e8;
+  border-radius: 999px;
+  padding: 0.24rem 0.45rem 0.24rem 0.28rem;
+  color: #64748b;
+  background: #f8fafc;
+  font-size: 0.62rem;
+  transition: border-color 120ms ease, color 120ms ease, background 120ms ease;
+}
+
+.editor-equation-stage__sequence li > span:first-child {
+  display: grid;
+  width: 1.05rem;
+  height: 1.05rem;
+  place-items: center;
+  border-radius: 50%;
+  color: #ffffff;
+  background: #94a3b8;
+  font-size: 0.55rem;
+  font-weight: 900;
+}
+
+.editor-equation-stage__sequence li[data-kp-editor-solve-x-step-status="complete"] {
+  color: #315b67;
+  background: #eef7f8;
+}
+
+.editor-equation-stage__sequence li[data-kp-editor-solve-x-step-status="active"] {
+  border-color: #1f4f5f;
+  color: #172033;
+  background: #ffffff;
+  box-shadow: 0 0 0 2px rgb(31 79 95 / 0.12);
+}
+
+.editor-equation-stage__sequence li[data-kp-editor-solve-x-step-status="active"] > span:first-child,
+.editor-equation-stage__sequence li[data-kp-editor-solve-x-step-status="complete"] > span:first-child {
+  background: #1f4f5f;
+}
+
+.editor-equation-stage__sequence .katex {
+  font-size: 0.72rem;
+}
+
+.editor-equation-stage__unavailable {
+  margin: 0;
+  padding: 1rem;
+  color: #8a4b08;
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.editor-animation-player__controls {
+  display: grid;
+  gap: 0.7rem;
+  border-top: 1px solid #e3e8ef;
+  padding: 0.75rem 0.9rem;
+  background: #f8fafc;
+}
+
+.editor-animation-player__transport {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.editor-animation-player__transport button {
+  border: 1px solid #aebdcc;
+  border-radius: 6px;
+  padding: 0.42rem 0.65rem;
+  color: #27364a;
+  background: #ffffff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.editor-animation-player__transport button:first-child {
+  border-color: #1f4f5f;
+  color: #ffffff;
+  background: #1f4f5f;
+}
+
+.editor-animation-player__scrubber {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) 2.8rem;
+  align-items: center;
+  gap: 0.6rem;
+  color: #526173;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.editor-animation-player__scrubber input {
+  width: 100%;
+  accent-color: #1f4f5f;
+}
+
+.editor-animation-player__scrubber output {
+  color: #334155;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.editor-animation-player__status {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.editor-animation-player__accessibility,
+.editor-animation-player__quality,
+.editor-animation-player__gestalt-style,
+.editor-animation-player__focus-experiment {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: #526173;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.editor-animation-player__accessibility select,
+.editor-animation-player__quality select,
+.editor-animation-player__gestalt-style select,
+.editor-animation-player__focus-experiment select {
+  min-width: 10rem;
+  border: 1px solid #aebdcc;
+  border-radius: 6px;
+  padding: 0.34rem 0.45rem;
+  color: #27364a;
+  background: #ffffff;
+  font: inherit;
+}
+
+.editor-animation-player__quality output {
+  color: #64748b;
+  font-size: 0.64rem;
+  white-space: nowrap;
+}
+
+.equation-motion:focus,
+.equation-motion:focus-within {
+  border-color: #526173;
+  outline: 2px solid rgb(82 97 115 / 0.18);
+  outline-offset: 2px;
+}
+
+.equation-motion__controls {
+  display: grid;
+  gap: 0.65rem;
+  border-top: 1px solid #e3e8ef;
+  padding: 0.75rem 0.9rem;
+  background: #f8fafc;
+}
+
+.equation-motion__selector {
+  display: grid;
+  grid-template-columns: auto minmax(10rem, 1fr);
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 1px solid #e3e8ef;
+  padding: 0.75rem 0.9rem;
+  background: #f8fafc;
+}
+
+.equation-motion__selector span {
+  color: #526173;
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.equation-motion__selector select {
+  min-width: 0;
+  border: 1px solid #b7c7d6;
+  border-radius: 6px;
+  padding: 0.48rem 0.58rem;
+  color: #172033;
+  background: #ffffff;
+  font-size: 0.85rem;
+}
+
+.equation-motion__keyboard-picker {
+  display: grid;
+  gap: 0.15rem;
+  border-bottom: 1px solid #e3e8ef;
+  padding: 0.45rem 0.9rem 0.6rem;
+  background: #ffffff;
+}
+
+.equation-motion__keyboard-picker[hidden] {
+  display: none;
+}
+
+.equation-motion__keyboard-picker-option {
+  border-radius: 5px;
+  padding: 0.36rem 0.52rem;
+  color: #405365;
+  font-size: 0.8rem;
+}
+
+.equation-motion__keyboard-picker-option[aria-selected="true"] {
+  color: #ffffff;
+  background: #1f6371;
+}
+
+.equation-motion__step-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.equation-motion__step-controls button {
+  border: 1px solid #1f6371;
+  border-radius: 6px;
+  padding: 0.42rem 0.68rem;
+  color: #ffffff;
+  background: #1f6371;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.equation-motion__step-controls button:disabled {
+  border-color: #cbd5e1;
+  color: #64748b;
+  background: #e2e8f0;
+  cursor: default;
+}
+
+.equation-motion__settings {
+  border: 1px solid #d4dee8;
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+.equation-motion__settings summary {
+  cursor: pointer;
+  padding: 0.58rem 0.7rem;
+  color: #405365;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.equation-motion__settings-body {
+  display: grid;
+  gap: 0.65rem;
+  border-top: 1px solid #e3e8ef;
+  padding: 0.7rem;
+}
+
+.equation-motion__scrubber {
+  display: grid;
+  grid-template-columns: auto minmax(6rem, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  color: #526173;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.equation-motion__scrubber input {
+  width: 100%;
+  accent-color: #1f6371;
+}
+
+.equation-motion__beat-output {
+  min-width: 3.25rem;
+  color: #334155;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  text-transform: none;
+}
+
+.equation-motion__duration-output,
+.equation-motion__collapse-scale-output {
+  min-width: 4rem;
+  color: #334155;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  text-transform: none;
+}
+
+.equation-motion__stage {
+  display: grid;
+  min-height: 8rem;
+  place-items: center;
+  padding: 1.5rem;
+  position: relative;
+}
+
+.equation-motion__state {
+  position: relative;
+  grid-area: 1 / 1;
+  width: 100%;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.equation-motion__state--active {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.equation-motion__formula {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.28em;
+  min-height: 5rem;
+}
+
+.equation-motion__formula .katex {
+  margin: 0;
+}
+
+.equation-motion__motion-anchor {
+  display: inline-block;
+  position: relative;
+  z-index: 2;
+}
+
+.equation-motion__motion-clone-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.equation-motion__motion-clone {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+  transform-origin: center;
+  will-change: opacity, transform;
+}
+
+.equation-motion__particle-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: var(--kp-render-quality-particle-density-scale, 1);
+}
+
+.equation-motion__artifact-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.katex-transition-overlay {
+  position: absolute;
+  z-index: 30;
+  pointer-events: none;
+}
+
+.katex-transition-source-hidden,
+.katex-transition-target-hidden {
+  color: transparent;
+}
+
+.katex-transition-source-hidden *,
+.katex-transition-target-hidden * {
+  color: transparent !important;
+}
+
+.katex-transition-fallback-source {
+  opacity: 1;
+  transition: opacity var(--katex-transition-duration, 160ms) ease;
+}
+
+.katex-transition-fallback-source.katex-transition-fallback-active {
+  opacity: 0;
+}
+
+.katex-transition-fallback-target {
+  opacity: 0;
+  transition: opacity var(--katex-transition-duration, 160ms) ease;
+}
+
+.katex-transition-fallback-target.katex-transition-fallback-active {
+  opacity: 1;
+}
+
+.graph-controls {
+  display: grid;
+  gap: 0.6rem;
+  border-bottom: 1px solid #e3e8ef;
+  padding: 0.75rem 0.9rem;
+  background: #f8fafc;
+}
+
+.graph-controls__foldout {
+  border-top: 1px solid #e3e8ef;
+  padding-top: 0.55rem;
+}
+
+.graph-controls__summary {
+  color: #334155;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.graph-controls__foldout-body {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 0.65rem;
+}
+
+.graph-control {
+  display: grid;
+  grid-template-columns: auto minmax(8rem, 1fr) 5.25rem;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.graph-control__label,
+.graph-control__value {
+  color: #334155;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.graph-control__value {
+  text-align: right;
+}
+
+.graph-control__range,
+.graph-control__select {
+  width: 100%;
+}
+
+.graph-control__range {
+  accent-color: #1f6371;
+}
+
+.graph-control__checkbox {
+  justify-self: start;
+  width: 1rem;
+  height: 1rem;
+  accent-color: #1f6371;
+}
+
+.graph-control__select {
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #1f2937;
+  font: inherit;
+  padding: 0.25rem 0.35rem;
+}
+
+.graph-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.graph-webgl {
+  position: relative;
+  width: 100%;
+}
+
+.graph-webgl__canvas {
+  display: none;
+  width: 100%;
+  height: auto;
+}
+
+.graph-webgl__fallback {
+  width: 100%;
+  overflow: hidden;
+}
+
+.graph-webgl__fallback .graph-svg {
+  overflow: hidden;
+}
+
+.graph-webgl__accessible-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.graph-webgl[data-kp-webgl-status="ready"] .graph-webgl__canvas {
+  display: block;
+}
+
+.graph-webgl[data-kp-webgl-status="ready"] .graph-webgl__fallback {
+  display: none;
+}
+
+.graph-svg__background {
+  fill: #f8fbff;
+  stroke: #d5dee9;
+}
+
+.graph-axis line {
+  stroke: #465365;
+  stroke-linecap: round;
+  stroke-width: 2;
+}
+
+.graph-axis text,
+.graph-curve text {
+  fill: #293241;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.graph-axis--x text {
+  transform: translate(-20px, -10px);
+}
+
+.graph-axis--y text {
+  transform: translate(10px, 22px);
+}
+
+.graph-axis--3d text {
+  transform: none;
+}
+
+.graph-curve path {
+  fill: none;
+  stroke: #c43b57;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 4;
+}
+
+.graph-svg--3d .graph-svg__background {
+  fill: #fffdf8;
+  stroke: #d9ded7;
+}
+
+.graph-svg--3d .graph-axis line {
+  stroke: #394756;
+  stroke-width: 2.4;
+}
+
+.graph-svg--3d .graph-axis--base-plane line {
+  stroke: #405366;
+}
+
+.graph-svg--3d .graph-axis--z line {
+  stroke: #2b6f59;
+}
+
+.graph-svg--3d .graph-axis--subtle line {
+  stroke: #4d8a72;
+}
+
+.graph-svg--3d .graph-axis text {
+  fill: #24313d;
+  font-size: 16px;
+}
+
+.graph-surface__line {
+  fill: none;
+  stroke: #53798a;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.25;
+  opacity: 0.52;
+}
+
+.graph-surface__quad {
+  stroke: none;
+  opacity: 1;
+}
+
+.graph-surface__quad[data-kp-facing="back"] {
+  opacity: 1;
+}
+
+.graph-surface__mesh-line {
+  fill: none;
+  stroke: #dce9ee;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-opacity: 0.55;
+  stroke-width: 0.35;
+  opacity: 1;
+}
+
+.graph-surface__line--column {
+  stroke: #7b8f63;
+  opacity: 0.42;
+}
+
+.graph-surface__edge-outline {
+  fill: none;
+  stroke: #0f3d5e;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1;
+  opacity: 0.95;
+}
+
+.graph-surface__edge-outline[data-kp-edge-visibility="hidden"] {
+  opacity: 0.5;
+}
+
+.graph-surface text {
+  fill: #2f4550;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.graph-debug-overlay {
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.graph-debug-overlay__cell {
+  stroke: #ffffff;
+  stroke-opacity: 0.28;
+  stroke-width: 0.5;
+}
+
+.graph-curve--3d path {
+  stroke: #b62f61;
+  stroke-width: 3.5;
+}
+
+.graph-curve--3d text {
+  fill: #5b2640;
+  font-size: 15px;
+}
+

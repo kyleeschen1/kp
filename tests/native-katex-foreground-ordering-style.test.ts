@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 const globalStyles = readFileSync(
-  new URL("../src/styles.css", import.meta.url),
+  new URL("../src/rendering/focus-card-runtime.css", import.meta.url),
   "utf8"
 );
 const logExponentStyles = readFileSync(

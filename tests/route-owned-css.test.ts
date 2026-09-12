@@ -30,3 +30,19 @@ async function source(path: string): Promise<string> {
   return readFile(new URL(`../${path}`, import.meta.url), "utf8");
 }
 
+test("focused reader CSS retains native ownership without application chrome", async () => {
+  const app = await source("src/styles.css");
+  const runtime = await source("src/rendering/focus-card-runtime.css");
+  const base = await source("src/document-base.css");
+  assert.match(app.trimStart(), /^@import "\.\/document-base\.css";\s*@import "\.\/rendering\/focus-card-runtime\.css";/);
+  assert.match(base, /--kp-katex-operator-scale/);
+  assert.match(runtime, /katex-transition-source-hidden/);
+  assert.match(runtime, /editor-equation-stage__material-owner/);
+  assert.doesNotMatch(runtime, /\.project-dashboard|\.editor-shell|\.project-agenda/);
+  assert.doesNotMatch(app, /katex-transition-source-hidden|editor-equation-stage__material-owner/);
+  for (const host of ["kinetic-figure-supply-tax/kinetic-figure-supply-tax-entry", "kinetic-figure-surface-contour/kinetic-figure-surface-contour-entry"]) {
+    const entry = await source(`src/tutorial/${host}.ts`);
+    assert.doesNotMatch(entry, /import "\.\.\/\.\.\/styles\.css"/);
+    assert.match(entry, /import "\.\.\/\.\.\/rendering\/focus-card-runtime\.css"/);
+  }
+});

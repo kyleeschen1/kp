@@ -664,6 +664,7 @@ test("the final equation rewrites realize visible Native KaTeX material", async 
 }) => {
   await page.goto(path);
   const equation = page.locator("[data-kp-log-exponent-focus-card]");
+  await equation.scrollIntoViewIfNeeded();
   const stage = equation.locator("[data-kp-log-exponent-stage]");
   const scrubber = equation.locator("[data-kp-focus-deck-scrubber]");
   await expect(stage).toHaveAttribute("data-kp-log-exponent-stage", "ready");
@@ -1272,9 +1273,10 @@ test("compact equation paint stays inside the stage", async ({ page }) => {
   expect(desktopFontSizes.every((size) => size <= 45)).toBe(true);
 });
 
-test("visual checkpoint: all shared cards fit desktop and phone", async ({
+for (const colorScheme of ["light", "dark"] as const) test(`visual checkpoint: all shared cards fit desktop and phone (${colorScheme})`, async ({
   page
 }, testInfo) => {
+  await page.emulateMedia({ colorScheme });
   await page.goto(path);
   // Full-page capture is not visibility: explicitly visit deferred stages
   // before comparing the activated four-card presentation.

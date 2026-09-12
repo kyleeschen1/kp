@@ -170,7 +170,7 @@ test("tutorial foundation contains only framework-neutral document primitives", 
 
 test("system application chrome and lesson prose keep separate font owners", () => {
   const global = readFileSync(
-    new URL("../src/styles.css", import.meta.url),
+    new URL("../src/document-base.css", import.meta.url),
     "utf8"
   );
   const theme = read("economics-demand-shift-theme.css");

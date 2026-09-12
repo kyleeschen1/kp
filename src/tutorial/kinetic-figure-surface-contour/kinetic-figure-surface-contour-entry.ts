@@ -1,5 +1,6 @@
 import "katex/dist/katex.min.css";
-import "../../styles.css";
+import "../../document-base.css";
+import "../../rendering/focus-card-runtime.css";
 import "../focus-deck-scaffold.css";
 import "./kinetic-figure-surface-contour.css";
 
