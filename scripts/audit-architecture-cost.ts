@@ -45,7 +45,7 @@ if (process.argv.includes("--browser")) {
       ready: '.graph-webgl[data-kp-surface-contour-capability="ready"]', card: true }
   ];
   try {
-    for (const scenario of scenarios) for (const rate of [1, 6]) for (let repeat = 1; repeat <= 3; repeat++) {
+    for (const scenario of scenarios.filter(item => !process.argv.includes("--tax-only") || item.id === "canonical-tax")) for (const rate of [1, 6]) for (let repeat = 1; repeat <= 3; repeat++) {
       const context = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1, reducedMotion: "no-preference" });
       try {
         const page = await context.newPage(), cdp = await context.newCDPSession(page);
@@ -102,6 +102,27 @@ if (process.argv.includes("--browser")) {
           startupScriptMs: metric(before, "ScriptDuration") * 1000, startupTaskMs: metric(before, "TaskDuration") * 1000,
           interactionScriptMs: (metric(after, "ScriptDuration") - metric(before, "ScriptDuration")) * 1000,
           jsHeapUsedBytes: metric(after, "JSHeapUsedSize"), totals, resources, errors }));
+        if (scenario.id === "canonical-tax" && rate === 1 && repeat === 3 && process.argv.includes("--activation")) {
+          const initial = new Set(requested.keys());
+          const states = await page.locator("[data-kp-deferred-card]").evaluateAll(elements => elements.map(element => {
+            const stage = element.querySelector("[data-kp-log-exponent-focus-card-stage], [data-kp-surface-contour-stage], [data-kp-typescript-focus-card-stage]")!;
+            return { state: element.getAttribute("data-kp-deferred-card"), top: stage.getBoundingClientRect().top, bottom: stage.getBoundingClientRect().bottom, viewport: window.innerHeight };
+          }));
+          if (states.length !== 3 || states.some(item => (item.top >= item.viewport || item.bottom <= 0) && item.state !== "idle")) throw new Error(`Offscreen stages must remain unactivated: ${JSON.stringify(states)}`);
+          for (const selector of ["[data-kp-log-exponent-focus-card]", "[data-kp-surface-contour-deck]", "[data-kp-typescript-focus-card]"]) {
+            const card = page.locator(selector);
+            await card.scrollIntoViewIfNeeded();
+            await page.waitForFunction(selector => document.querySelector(selector)?.getAttribute("data-kp-deferred-card") === "ready", selector);
+            if (selector.includes("log-exponent")) await page.locator('[data-kp-log-exponent-animation-status="ready"]').waitFor();
+            if (selector.includes("surface-contour")) await card.locator('[data-kp-surface-contour-capability="ready"]').waitFor();
+            const beforeBeat = await card.getAttribute("data-kp-focus-deck-active-beat");
+            await card.locator("[data-kp-focus-deck-next]").click();
+            await page.waitForFunction(({ selector, beforeBeat }) => document.querySelector(selector)?.getAttribute("data-kp-focus-deck-active-beat") !== beforeBeat, { selector, beforeBeat });
+          }
+          if (errors.length) throw new Error(errors.join("\n"));
+          console.log(JSON.stringify({ kind: "activation", scenario: scenario.id, initialStates: states,
+            additional: [...requested].filter(([path]) => !initial.has(path)).map(([path, resource]) => ({ path, ...resource })), errors }));
+        }
         if (rate === 1 && repeat === 3) {
           // Coverage is a separate run so instrumentation does not contaminate
           // the timing cohort. Unused here never means safe to delete globally.

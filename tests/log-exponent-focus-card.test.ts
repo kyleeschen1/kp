@@ -134,10 +134,13 @@ test("equation Focus Deck reuses the shared shell and canonical player seam", ()
     "src/tutorial/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card.ts",
     "utf8"
   );
-  assert.match(source, /renderKpFocusDeckScaffold\(/u);
-  assert.match(source, /createKpLogExponentAnimationAsset\(/u);
-  assert.match(source, /renderKpEditorAnimationPlayerShell\(/u);
+  const projection = readFileSync("src/tutorial/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card-static.ts", "utf8");
+  assert.match(projection, /renderKpFocusDeckScaffold\(/u);
+  assert.match(projection, /createKpLogExponentAnimationAsset\(/u);
+  assert.match(projection, /renderKpEditorAnimationPlayerShell\(/u);
+  assert.match(source, /kinetic-figure-log-exponent-focus-card-static\.ts/u);
   assert.match(source, /registerKpEditorLogExponentSurfaceCapability\(/u);
   assert.doesNotMatch(source, /katex\.render/u);
   assert.doesNotMatch(source, /innerHTML\s*=\s*.*ln\(/u);
+  assert.doesNotMatch(projection, /registerKpEditorLogExponentSurfaceCapability|animation-player-controller|katex\.render/u);
 });

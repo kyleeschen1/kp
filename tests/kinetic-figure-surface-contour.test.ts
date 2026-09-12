@@ -153,9 +153,11 @@ test("surface-contour standalone and embedded hosts share one Focus Deck card", 
     "src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-entry.ts",
     "utf8"
   );
-  assert.match(source, /export function renderKpSurfaceContourFocusCard/u);
+  const projection = readFileSync("src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-entry-static.ts", "utf8");
+  assert.match(projection, /export function renderKpSurfaceContourFocusCard/u);
   assert.match(source, /export function mountKpSurfaceContourFocusCard/u);
-  assert.match(source, /renderKpFocusDeckScaffold\(/u);
+  assert.match(projection, /renderKpFocusDeckScaffold\(/u);
   assert.match(source, /renderKpSurfaceContourFocusCard\(input\)/u);
-  assert.equal((source.match(/renderKpSurfaceContourStage\(/gu) ?? []).length, 1);
+  assert.equal((projection.match(/renderKpSurfaceContourStage\(/gu) ?? []).length, 1);
+  assert.doesNotMatch(projection, /mountKpSurfaceContourStage|timeline-playback-clock/u);
 });

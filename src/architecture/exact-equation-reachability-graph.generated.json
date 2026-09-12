@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 4658,
+  "scannedFileCount": 4661,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -1449,7 +1449,7 @@
         "src/semantic/scheme-factorial-animation-asset.ts",
         "src/semantic/typescript-free-shipping-animation-asset.ts",
         "src/tutorial/economics-demand-shift/KpEconomicsDemandShiftTutorial.svelte",
-        "src/tutorial/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card.ts",
+        "src/tutorial/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card-static.ts",
         "src/tutorial/lisp-function-application/lisp-function-application-motion-controller.ts",
         "src/tutorial/static-step-checkpoints.ts",
         "src/tutorial/typed-linear-supply-demand/economics-supply-tax-governed-source.ts",
@@ -2341,7 +2341,7 @@
         "src/semantic/scheme-factorial-animation-asset.ts",
         "src/semantic/typescript-free-shipping-animation-asset.ts",
         "src/tutorial/economics-demand-shift/KpEconomicsDemandShiftTutorial.svelte",
-        "src/tutorial/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card.ts",
+        "src/tutorial/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card-static.ts",
         "src/tutorial/lisp-function-application/lisp-function-application-motion-controller.ts",
         "src/tutorial/static-step-checkpoints.ts",
         "src/tutorial/typed-linear-supply-demand/economics-supply-tax-governed-source.ts",

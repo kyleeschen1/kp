@@ -3,27 +3,18 @@ import "../../styles.css";
 import "../focus-deck-scaffold.css";
 import "./kinetic-figure-surface-contour.css";
 
-import prose from "./surface-contour-prose.generated.json" with { type: "json" };
-import { applyKpSemanticVisualDomTheme } from
-  "../../rendering/semantic-visual-dom-theme.ts";
-import { createKpReaderTimelinePlaybackClock } from
-  "../../reader/runtime/timeline-playback-clock.ts";
-import { renderKpFocusDeckScaffold, readKpFocusDeckScrubberKeyTarget } from
-  "../focus-deck-scaffold.ts";
+import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
+import { applyKpSemanticVisualDomTheme } from "../../rendering/semantic-visual-dom-theme.ts";
+import { readKpFocusDeckScrubberKeyTarget } from "../focus-deck-scaffold.ts";
+import { beatHash,boundedIndex,createKpSurfaceContourFocusCardAuthority,findBeatIndexFromHash,readKpSurfaceContourFocusCardInitialIndex,renderKpSurfaceContourFocusCard,type KpSurfaceContourFocusCardAuthority } from "./kinetic-figure-surface-contour-entry-static.ts";
 import {
-  createKpSurfaceContourModel,
-  createKpSurfaceContourScore,
-  interpolateKpSurfaceContourProjection,
-  projectKpSurfaceContourBeat,
-  withKpSurfaceContourLevel,
-  type KpSurfaceContourBeatV1,
-  type KpSurfaceContourSceneProjectionV1,
-  type KpSurfaceContourScoreV1
+interpolateKpSurfaceContourProjection,
+projectKpSurfaceContourBeat,
+withKpSurfaceContourLevel,
+type KpSurfaceContourSceneProjectionV1
 } from "./kinetic-figure-surface-contour-model.ts";
 import {
-  createKpSurfaceContourStageAuthority,
-  mountKpSurfaceContourStage,
-  renderKpSurfaceContourStage
+mountKpSurfaceContourStage
 } from "./kinetic-figure-surface-contour-stage.ts";
 
 const TRANSITION_DURATION_MS = 1_050;
@@ -43,23 +34,7 @@ export interface KpSurfaceContourKineticFigureSession {
   dispose(): void;
 }
 
-export interface KpSurfaceContourFocusCardAuthority {
-  readonly model: ReturnType<typeof createKpSurfaceContourModel>;
-  readonly score: KpSurfaceContourScoreV1;
-  readonly stageAuthority: ReturnType<
-    typeof createKpSurfaceContourStageAuthority
-  >;
-}
 
-export function createKpSurfaceContourFocusCardAuthority():
-KpSurfaceContourFocusCardAuthority {
-  const model = createKpSurfaceContourModel();
-  return Object.freeze({
-    model,
-    score: createKpSurfaceContourScore(model),
-    stageAuthority: createKpSurfaceContourStageAuthority()
-  });
-}
 
 export function mountKpSurfaceContourKineticFigure(input: {
   readonly root: HTMLElement;
@@ -77,12 +52,6 @@ export function mountKpSurfaceContourKineticFigure(input: {
   });
 }
 
-export function readKpSurfaceContourFocusCardInitialIndex(
-  authority: KpSurfaceContourFocusCardAuthority,
-  hash: string
-): number {
-  return readBeatIndexFromHash(authority.score, hash);
-}
 
 export function mountKpSurfaceContourFocusCard(input: {
   readonly root: ParentNode;
@@ -493,52 +462,6 @@ export function mountKpSurfaceContourFocusCard(input: {
   });
 }
 
-export function renderKpSurfaceContourFocusCard(input: {
-  readonly authority: KpSurfaceContourFocusCardAuthority;
-  readonly initialIndex: number;
-}): string {
-  const { model, score, stageAuthority } = input.authority;
-  const initialIndex = boundedIndex(input.initialIndex, score.beats.length);
-  const initial = score.beats[initialIndex]!;
-  return `<section class="kp-surface-contour-focus-card-section" aria-labelledby="kp-surface-contour-focus-card-title">
-    <header class="kp-surface-contour-page__intro">
-      <p>Focus Deck · Multivariable calculus</p>
-      <h1 id="kp-surface-contour-focus-card-title">How does a surface become a contour map?</h1>
-    </header>
-    ${renderKpFocusDeckScaffold({
-      id: "focus-deck.calculus.surface-contour.v1",
-      ariaLabel: "Surface and contour Focus Deck",
-      activeBeatSlug: initial.slug,
-      headerTrailingHtml:
-        '<span class="kp-surface-contour-focus-card__header-detail">One level set · one changing view</span>',
-      stageHtml: renderKpSurfaceContourStage({ model, authority: stageAuthority }),
-      beats: score.beats.map((beat, index) => ({
-        slug: beat.slug,
-        title: beat.title,
-        html: (prose as Readonly<Record<string, string>>)[beat.id]!,
-        domId: `beat.${beat.slug}`,
-        attributes: {
-          "data-kp-surface-contour-beat": beat.slug,
-          "data-kp-surface-contour-beat-index": String(index),
-          "data-kp-surface-contour-beat-active": String(index === initialIndex)
-        }
-      })),
-      rootAttributes: {
-        "data-kp-surface-contour-deck": true,
-        "data-kp-surface-contour-active-beat": initial.slug,
-        "data-kp-surface-contour-position": initialIndex.toFixed(4),
-        "data-kp-surface-contour-transition": "settled"
-      },
-      scrubberAttributes: {
-        "data-kp-surface-contour-state": true
-      },
-      replayAttributes: {
-        "data-kp-surface-contour-replay": true
-      },
-      replayHidden: false
-    })}
-  </section>`;
-}
 
 function renderPage(input: {
   readonly authority: KpSurfaceContourFocusCardAuthority;
@@ -552,29 +475,9 @@ function renderPage(input: {
   </main>`;
 }
 
-function beatHash(beat: KpSurfaceContourBeatV1): string {
-  return `#beat.${beat.slug}`;
-}
 
-function readBeatIndexFromHash(
-  score: KpSurfaceContourScoreV1,
-  hash: string
-): number {
-  return findBeatIndexFromHash(score, hash) ?? 0;
-}
 
-function findBeatIndexFromHash(
-  score: KpSurfaceContourScoreV1,
-  hash: string
-): number | undefined {
-  const normalized = decodeURIComponent(hash.replace(/^#/u, ""));
-  const index = score.beats.findIndex((beat) => `beat.${beat.slug}` === normalized);
-  return index < 0 ? undefined : index;
-}
 
-function boundedIndex(value: number, count: number): number {
-  return Math.max(0, Math.min(count - 1, Math.round(value)));
-}
 
 function boundedPosition(value: number, count: number): number {
   return Math.max(0, Math.min(count - 1, value));
@@ -588,3 +491,4 @@ function requiredElement<T extends Element>(
   if (element === null) throw new Error(`Missing surface-contour element ${selector}.`);
   return element;
 }
+export { createKpSurfaceContourFocusCardAuthority,readKpSurfaceContourFocusCardInitialIndex,renderKpSurfaceContourFocusCard,type KpSurfaceContourFocusCardAuthority } from "./kinetic-figure-surface-contour-entry-static.ts";

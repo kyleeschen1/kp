@@ -102,9 +102,12 @@ test("TypeScript card is a projection over the existing code renderer and clock"
     "utf8"
   );
 
-  assert.match(source, /renderKpFocusDeckScaffold\(/u);
-  assert.match(source, /createKpTypeScriptFreeShippingRuntimeProjection\(/u);
-  assert.match(source, /renderKpTypeScriptRefactorCodeHtml\(/u);
+  const projection = readFileSync("src/tutorial/kinetic-figure-typescript-focus-card/kinetic-figure-typescript-focus-card-static.ts", "utf8");
+  assert.match(projection, /renderKpFocusDeckScaffold\(/u);
+  assert.match(projection, /createKpTypeScriptFreeShippingRuntimeProjection\(/u);
+  assert.match(projection, /renderKpTypeScriptRefactorCodeHtml\(/u);
+  assert.match(source, /kinetic-figure-typescript-focus-card-static\.ts/u);
+  assert.doesNotMatch(projection, /typescript-refactor-dom-session|timeline-playback-clock/u);
   assert.match(source, /renderKpTypeScriptRefactorDomFrame\(/u);
   assert.match(source, /createKpReaderTimelinePlaybackClock\(/u);
   assert.doesNotMatch(source, /setInterval/u);

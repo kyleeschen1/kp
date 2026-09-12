@@ -1,6 +1,8 @@
 import "katex/dist/katex.min.css";
 import "../../styles.css";
 import "../focus-deck-scaffold.css";
+import "../kinetic-figure-surface-contour/kinetic-figure-surface-contour.css";
+import { createDeferredCardSession } from "./deferred-card-session.ts";
 import "../kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card.css";
 import "../../rendering/typescript-refactor.css";
 import "../kinetic-figure-typescript-focus-card/kinetic-figure-typescript-focus-card.css";
@@ -19,25 +21,22 @@ import { renderKpFocusDeckScaffold, readKpFocusDeckScrubberKeyTarget } from
   "../focus-deck-scaffold.ts";
 import {
   createKpLogExponentFocusCardAuthority,
-  mountKpLogExponentFocusCard,
   readKpLogExponentFocusCardInitialIndex,
   renderKpLogExponentFocusCard
 } from
-  "../kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card.ts";
+  "../kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card-static.ts";
 import {
   createKpSurfaceContourFocusCardAuthority,
-  mountKpSurfaceContourFocusCard,
   readKpSurfaceContourFocusCardInitialIndex,
   renderKpSurfaceContourFocusCard
 } from
-  "../kinetic-figure-surface-contour/kinetic-figure-surface-contour-entry.ts";
+  "../kinetic-figure-surface-contour/kinetic-figure-surface-contour-entry-static.ts";
 import {
   createKpTypeScriptFocusCardAuthority,
-  mountKpTypeScriptFocusCard,
   readKpTypeScriptFocusCardInitialIndex,
   renderKpTypeScriptFocusCard
 } from
-  "../kinetic-figure-typescript-focus-card/kinetic-figure-typescript-focus-card.ts";
+  "../kinetic-figure-typescript-focus-card/kinetic-figure-typescript-focus-card-static.ts";
 import {
   readKpSupplyTaxScrollScorePhraseFromHash,
   type KpSupplyTaxScrollScorePhraseV1,
@@ -185,18 +184,136 @@ export function mountKpSupplyTaxKineticFigure(input: {
     typeScriptAuthority,
     typeScriptInitialIndex
   });
-  const logExponentSession = mountKpLogExponentFocusCard({
-    root: input.root,
-    authority: logExponentAuthority
+  // Keep canonical static content present, but let actual visibility or direct
+  // intent request each independent playback capability. No second clock.
+  const companions = [
+    {
+      selector: "[data-kp-log-exponent-focus-card]",
+      stageSelector: "[data-kp-log-exponent-focus-card-stage]",
+      hashes: logExponentAuthority.score.beats.map(beat => `#beat.log-exponent.${beat.slug}`),
+      session: createDeferredCardSession(async () => {
+        const { mountKpLogExponentFocusCard } = await import("../kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card.ts");
+        return () => mountKpLogExponentFocusCard({ root: input.root, authority: logExponentAuthority });
+      })
+    },
+    {
+      selector: "[data-kp-surface-contour-deck]",
+      stageSelector: "[data-kp-surface-contour-stage]",
+      hashes: surfaceContourAuthority.score.beats.map(beat => `#beat.${beat.slug}`),
+      session: createDeferredCardSession(async () => {
+        const { mountKpSurfaceContourFocusCard } = await import("../kinetic-figure-surface-contour/kinetic-figure-surface-contour-entry.ts");
+        return () => mountKpSurfaceContourFocusCard({ root: input.root, authority: surfaceContourAuthority });
+      })
+    },
+    {
+      selector: "[data-kp-typescript-focus-card]",
+      stageSelector: "[data-kp-typescript-focus-card-stage]",
+      hashes: typeScriptAuthority.score.beats.map(beat => `#beat.typescript.${beat.slug}`),
+      session: createDeferredCardSession(async () => {
+        const { mountKpTypeScriptFocusCard } = await import("../kinetic-figure-typescript-focus-card/kinetic-figure-typescript-focus-card.ts");
+        return () => mountKpTypeScriptFocusCard({ root: input.root, authority: typeScriptAuthority });
+      })
+    }
+  ].map(companion => {
+    const element = requiredElement<HTMLElement>(input.root, companion.selector);
+    return { ...companion, pendingControls: [] as Array<() => void>, pendingPointers: new Map<number, HTMLElement>(), element, stage: requiredElement<HTMLElement>(element, companion.stageSelector) };
   });
-  const surfaceContourSession = mountKpSurfaceContourFocusCard({
-    root: input.root,
-    authority: surfaceContourAuthority
+  const activateCompanion = (companion: typeof companions[number]) => {
+    if (["disposed", "ready", "loading"].includes(companion.session.status())) return;
+    companion.element.dataset["kpDeferredCard"] = "loading";
+    companion.element.setAttribute("aria-busy", "true");
+    void companion.session.activate().then(result => {
+      if (result.kind === "disposed") return;
+      companion.element.dataset["kpDeferredCard"] = result.kind;
+      companion.element.setAttribute("aria-busy", String(result.kind !== "ready"));
+      if (result.kind === "failed") companion.element.setAttribute("data-kp-deferred-card-error", "capability-load-failed");
+      else companion.element.removeAttribute("data-kp-deferred-card-error");
+      if (result.kind === "ready") for (const replay of companion.pendingControls.splice(0)) replay();
+    });
+  };
+  const companionObserver = typeof IntersectionObserver === "undefined" ? undefined : new IntersectionObserver(entries => {
+    for (const entry of entries) if (entry.isIntersecting) {
+      const companion = companions.find(item => item.stage === entry.target);
+      if (companion) activateCompanion(companion);
+    }
   });
-  const typeScriptSession = mountKpTypeScriptFocusCard({
-    root: input.root,
-    authority: typeScriptAuthority
-  });
+  const activateRequestedCompanion = () => {
+    for (const companion of companions) if (companion.hashes.includes(window.location.hash)) activateCompanion(companion);
+  };
+  const activateIntent = (event: Event) => {
+    for (const companion of companions) if (event.target instanceof Node && companion.element.contains(event.target)) activateCompanion(companion);
+  };
+  const preservePendingControl = (event: Event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    const companion = companions.find(item => item.element.contains(target));
+    if (!companion || companion.session.status() === "ready" || companion.session.status() === "disposed") return;
+    // Buttons retain their native keyboard-to-click default; replaying a
+    // synthetic keydown cannot recreate that trusted browser behavior.
+    if (event instanceof KeyboardEvent && (event.ctrlKey || event.altKey || event.metaKey
+      || !target.matches("[data-kp-focus-deck-scrubber]")
+      || !["ArrowLeft", "ArrowRight", "Home", "End", "PageUp", "PageDown"].includes(event.key))) return;
+    if (!target.closest("[data-kp-focus-deck-scrubber], button")) return;
+    // Preserve commands, not a second navigation implementation: the canonical
+    // controller interprets them in order once its handlers own the card.
+    const replay = event instanceof KeyboardEvent
+      ? new KeyboardEvent(event.type, { key: event.key, code: event.code, shiftKey: event.shiftKey, ctrlKey: event.ctrlKey, altKey: event.altKey, metaKey: event.metaKey, bubbles: true, cancelable: true })
+      : new Event(event.type, { bubbles: true, cancelable: true });
+    const value = target instanceof HTMLInputElement ? target.value : undefined;
+    event.preventDefault(); event.stopImmediatePropagation();
+    companion.pendingControls.push(() => {
+      if (!target.isConnected || companion.session.status() !== "ready") return;
+      if (value !== undefined && target instanceof HTMLInputElement && event.type !== "keydown") target.value = value;
+      target.dispatchEvent(replay);
+    });
+    activateCompanion(companion);
+  };
+  const preservePendingPassage = (event: Event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    const viewport = target.closest<HTMLElement>("[data-kp-focus-deck-viewport]");
+    const companion = companions.find(item => item.element.contains(target));
+    if (!viewport || !companion || ["ready", "disposed"].includes(companion.session.status())) return;
+    if (event.type === "pointerdown" && event instanceof PointerEvent) companion.pendingPointers.set(event.pointerId, viewport);
+    const replay = event instanceof PointerEvent
+      ? new PointerEvent(event.type, { pointerId: event.pointerId, pointerType: event.pointerType, isPrimary: event.isPrimary, clientX: event.clientX, clientY: event.clientY, bubbles: true })
+      : event instanceof WheelEvent
+        ? new WheelEvent(event.type, { deltaX: event.deltaX, deltaY: event.deltaY, deltaMode: event.deltaMode, shiftKey: event.shiftKey, bubbles: true })
+        : new Event(event.type, { bubbles: event.bubbles });
+    const left = viewport.scrollLeft;
+    // Native travel remains native while loading. Replay its ownership signals
+    // and observed position through the installed controller, never a new clock.
+    companion.pendingControls.push(() => {
+      if (!target.isConnected) return;
+      if (event.type === "scroll") viewport.scrollLeft = left;
+      target.dispatchEvent(replay);
+    });
+    activateCompanion(companion);
+  };
+  const preservePendingPointerEnd = (event: PointerEvent) => {
+    for (const companion of companions) {
+      const viewport = companion.pendingPointers.get(event.pointerId);
+      companion.pendingPointers.delete(event.pointerId);
+      if (!viewport || ["ready", "disposed"].includes(companion.session.status())) continue;
+      companion.pendingControls.push(() => viewport.dispatchEvent(new PointerEvent(event.type, {
+        pointerId: event.pointerId, pointerType: event.pointerType, isPrimary: event.isPrimary, bubbles: true
+      })));
+    }
+  };
+  for (const companion of companions) {
+    companion.element.dataset["kpDeferredCard"] = "idle";
+    if (companionObserver) companionObserver.observe(companion.stage);
+    else activateCompanion(companion);
+  }
+  input.root.addEventListener("pointerover", activateIntent, true);
+  input.root.addEventListener("focusin", activateIntent, true);
+  for (const type of ["keydown", "click", "input", "change"]) input.root.addEventListener(type, preservePendingControl, true);
+  for (const type of ["pointerdown", "wheel", "scroll", "scrollend"]) input.root.addEventListener(type, preservePendingPassage, { capture: true, passive: true });
+  window.addEventListener("pointerup", preservePendingPointerEnd);
+  window.addEventListener("pointercancel", preservePendingPointerEnd);
+  window.addEventListener("hashchange", activateRequestedCompanion);
+  window.addEventListener("popstate", activateRequestedCompanion);
+  activateRequestedCompanion();
 
   const deck = requiredElement<HTMLElement>(input.root,
     "[data-kp-supply-tax-focus-deck]");
@@ -980,9 +1097,16 @@ export function mountKpSupplyTaxKineticFigure(input: {
       cancelScrollProjection();
       cancelScrollEndFallback();
       cancelSnapRestore();
-      logExponentSession.dispose();
-      surfaceContourSession.dispose();
-      typeScriptSession.dispose();
+      companionObserver?.disconnect();
+      for (const companion of companions) { companion.pendingControls.length = 0; companion.pendingPointers.clear(); companion.session.dispose(); }
+      input.root.removeEventListener("pointerover", activateIntent, true);
+      input.root.removeEventListener("focusin", activateIntent, true);
+      for (const type of ["keydown", "click", "input", "change"]) input.root.removeEventListener(type, preservePendingControl, true);
+      for (const type of ["pointerdown", "wheel", "scroll", "scrollend"]) input.root.removeEventListener(type, preservePendingPassage, true);
+      window.removeEventListener("pointerup", preservePendingPointerEnd);
+      window.removeEventListener("pointercancel", preservePendingPointerEnd);
+      window.removeEventListener("hashchange", activateRequestedCompanion);
+      window.removeEventListener("popstate", activateRequestedCompanion);
       unsubscribe();
       clock.dispose();
     }

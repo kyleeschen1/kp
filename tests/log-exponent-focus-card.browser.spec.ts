@@ -2,6 +2,82 @@ import { expect, test, type Page } from "@playwright/test";
 
 const path = "/experiments/kinetic-figure/supply-tax/";
 
+test("deferred controller preserves the first slider keyboard command", async ({ page }) => {
+  let release!: () => void;
+  const held = new Promise<void>(resolve => { release = resolve; });
+  await page.route("**/kinetic-figure-log-exponent-focus-card.ts*", async route => {
+    await held;
+    await route.continue();
+  });
+  try {
+    await page.goto(path, { waitUntil: "domcontentloaded" });
+    const deck = page.locator("[data-kp-log-exponent-focus-card]");
+    const slider = deck.locator("[data-kp-focus-deck-scrubber]");
+    await slider.focus();
+    await expect(deck).toHaveAttribute("data-kp-deferred-card", "loading");
+    await page.keyboard.press("ArrowRight");
+    release();
+    await expect(deck).toHaveAttribute("data-kp-deferred-card", "ready");
+    await expect(slider).toHaveValue(/^(?:1|1\.0+)$/);
+    const second = await deck.locator("[data-kp-focus-deck-beat]").nth(1).getAttribute("data-kp-focus-deck-beat");
+    await expect(deck).toHaveAttribute("data-kp-focus-deck-active-beat", second!);
+  } finally { release(); }
+});
+
+test("deferred controller retains native passage travel during loading", async ({ page }) => {
+  let release!: () => void;
+  const held = new Promise<void>(resolve => { release = resolve; });
+  await page.route("**/kinetic-figure-typescript-focus-card.ts*", async route => {
+    await held;
+    await route.continue();
+  });
+  try {
+    await page.goto(path, { waitUntil: "domcontentloaded" });
+    const deck = page.locator("[data-kp-typescript-focus-card]");
+    await deck.scrollIntoViewIfNeeded();
+    await expect(deck).toHaveAttribute("data-kp-deferred-card", "loading");
+    const viewport = deck.locator("[data-kp-focus-deck-viewport]");
+    await viewport.dispatchEvent("pointerdown", { isPrimary: true, pointerId: 1, pointerType: "touch" });
+    await viewport.evaluate(element => {
+      element.scrollLeft = element.clientWidth * 0.5;
+      element.dispatchEvent(new Event("scroll"));
+    });
+    release();
+    await expect(deck).toHaveAttribute("data-kp-deferred-card", "ready");
+    await expect.poll(async () => Number(await deck.locator("[data-kp-focus-deck-scrubber]").inputValue())).toBeCloseTo(0.5, 2);
+    await viewport.dispatchEvent("pointerup", { isPrimary: true, pointerId: 1, pointerType: "touch" });
+  } finally { release(); }
+});
+
+for (const persisted of [false, true]) test(`deferred mount respects pagehide persisted=${persisted}`, async ({ page }) => {
+  let release!: () => void;
+  const held = new Promise<void>(resolve => { release = resolve; });
+  let delivered!: () => void;
+  const delivery = new Promise<void>(resolve => { delivered = resolve; });
+  await page.route("**/kinetic-figure-typescript-focus-card.ts*", async route => {
+    await held;
+    await route.continue();
+    delivered();
+  });
+  try {
+    await page.goto(path, { waitUntil: "domcontentloaded" });
+    const deck = page.locator("[data-kp-typescript-focus-card]");
+    await deck.scrollIntoViewIfNeeded();
+    await expect(deck).toHaveAttribute("data-kp-deferred-card", "loading");
+    await page.evaluate(persisted => window.dispatchEvent(new PageTransitionEvent("pagehide", { persisted })), persisted);
+    release();
+    await delivery;
+    if (persisted) await expect(deck).toHaveAttribute("data-kp-deferred-card", "ready");
+    else {
+      await page.waitForTimeout(250);
+      await expect(deck).not.toHaveAttribute("data-kp-deferred-card", "ready");
+      await deck.locator("[data-kp-focus-deck-next]").click();
+      await expect(deck).toHaveAttribute("data-kp-focus-deck-active-beat", "orient");
+      await expect(deck).toHaveAttribute("data-kp-typescript-focus-card-timeline-progress", "0.000000");
+    }
+  } finally { release(); }
+});
+
 for (const card of [
   "[data-kp-supply-tax-focus-deck]",
   "[data-kp-log-exponent-focus-card]",
@@ -1200,6 +1276,12 @@ test("visual checkpoint: all shared cards fit desktop and phone", async ({
   page
 }, testInfo) => {
   await page.goto(path);
+  // Full-page capture is not visibility: explicitly visit deferred stages
+  // before comparing the activated four-card presentation.
+  for (const selector of ["[data-kp-log-exponent-focus-card]", "[data-kp-surface-contour-deck]", "[data-kp-typescript-focus-card]"]) {
+    await page.locator(selector).scrollIntoViewIfNeeded();
+    await expect(page.locator(selector)).toHaveAttribute("data-kp-deferred-card", "ready");
+  }
   await expect(page.locator("[data-kp-log-exponent-stage]")).toHaveAttribute(
     "data-kp-log-exponent-stage", "ready");
   await page.screenshot({
@@ -1257,6 +1339,10 @@ test("visual checkpoint: all shared cards fit desktop and phone", async ({
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
+  for (const selector of ["[data-kp-log-exponent-focus-card]", "[data-kp-surface-contour-deck]", "[data-kp-typescript-focus-card]"]) {
+    await page.locator(selector).scrollIntoViewIfNeeded();
+    await expect(page.locator(selector)).toHaveAttribute("data-kp-deferred-card", "ready");
+  }
   await expect(page.locator("[data-kp-log-exponent-stage]")).toHaveAttribute(
     "data-kp-log-exponent-stage", "ready");
   const cards = page.locator("[data-kp-focus-deck]");

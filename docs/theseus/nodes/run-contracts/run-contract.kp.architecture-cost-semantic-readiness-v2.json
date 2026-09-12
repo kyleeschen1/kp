@@ -76,7 +76,8 @@
     {
       "id": "s07",
       "title": "Tax lazy activation",
-      "status": "planned"
+      "summary": "Deferred native companion activation with explicit stage identity, pending input handoff, lifecycle guards and complete initial/activation accounting; evidence committed with source.",
+      "status": "complete"
     },
     {
       "id": "s08",
