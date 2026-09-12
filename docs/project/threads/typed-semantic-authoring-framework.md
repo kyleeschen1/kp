@@ -1,6 +1,6 @@
 # Typed Semantic Authoring Framework Thread
 
-Status: gradient complete; approved 25-slice readiness loop active in Theseus v2
+Status: gradient and 25-slice readiness loop complete; mechanics implementation not started
 Last Updated: 2026-09-12
 Completed execution: `run-contract.kp.gradient-contour-intuition-v1` from
 `2026-09-10-gradient-contour-delivery-proposal.md`, approved with “go”. Theseus
@@ -9,28 +9,33 @@ shared Firefox input repair and complete release verification are recorded in
 `2026-09-12-gradient-reuse-evidence.md`; device-gesture limits are retained.
 The approved curriculum outline is
 `2026-09-11-mechanics-from-zero-curriculum.md`. Architecture assessment and bounded
-cleanup follow this loop, before new mechanics implementation. The first two
-priorities are complete; no successor implementation is started. Earlier G3
+readiness cleanup are now complete as recorded below. No mechanics implementation
+has started. Earlier G3
 gating statements below are historical, not renewed approval requests.
 The user subsequently requested continuation and Git hygiene. Source-based
 assessment: `../reviews/2026-09-12-mechanics-architecture-readiness.md`.
 It identifies missing transitive stylesheet packaging in three edition builders;
 repair that boundary before a broader mechanics implementation. The assessment
-is complete, not a new executable repair loop or a universal-framework proposal.
+was read-only; the subsequent approval below authorized the bounded repair loop,
+not a universal-framework proposal.
 The user expanded the audit to tests, CSS, bundle/device cost, redundancy, and
 object/transformation ontology fidelity. Results and fresh browser measurements:
 `../reviews/2026-09-12-architecture-cost-ontology-audit.md`. Prioritise publication
 closure, eager host loading and gradient frame cost, semantic authority gaps,
 then evidence-led verification consolidation before mechanics runtime. Existing
 canonical motion and immutable editions are preservation boundaries. These are
-recommendations, not an approved successor repair contract; low-end physical
+the audit's recommendations, subsequently approved below; low-end physical
 device and exhaustive redundancy certification have not been performed.
 The user accepted recommendations 1–5 and invoked `theseus-long-loop`. The exact
 proposal is `2026-09-12-architecture-readiness-long-loop-proposal.md`; the user
-approved all 25 slices and requested a thorough improvement report. Active:
+approved all 25 slices and requested a thorough improvement report. Completed:
 `run-contract.kp.architecture-cost-semantic-readiness-v2`; v1 is issuance-only
-history. Execute with routine nonvisual checkpoints auto-approved.
+history. All release gates passed; routine nonvisual checkpoints were auto-approved.
 Do not resume historical algebra work or start mechanics content in this scope.
+Consolidated improvements, measured costs, limits, and the proposed M00–M01
+mechanics handoff: `2026-09-12-architecture-readiness-closeout.md`. Theseus owns
+final release evidence. Do not reinterpret the camera-performance residual as a
+requirement for a universal renderer before delivering a simple first unit.
 Latest accepted strategic direction:
 `../decisions/2026-09-11-applied-mathematics-mechanics-priority.md`.
 Classical mechanics is the first sustained learning case; mathematical concepts

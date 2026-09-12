@@ -58,11 +58,11 @@ export const frontendInferenceFixtures = [
   "tests/type-fixtures/composed-algebra-consumers.ts"
 ] as const;
 export const combinedInferenceBudget = Object.freeze({
-  measuredProject: { types: 175_872, instantiations: 292_746 },
-  // Algebra-v2 release includes actual v1/v2 author, native host, reading,
-  // practice and pure publication consumers. Restore 3% only for the exceeded
-  // instantiation cap; retain the passing type cap and exact cohort membership.
-  ceilings: { types: 176_800, instantiations: 301_600 }
+  measuredProject: { types: 178_493, instantiations: 300_444 },
+  // Readiness release: checked deep-immutable data adoption adds measured
+  // structural types. Restore 2% only for the exceeded type cap; keep the
+  // passing instantiation cap and all 49 core + 2 frontend consumers.
+  ceilings: { types: 182_100, instantiations: 301_600 }
 } as const);
 export const inferenceCohorts = [
   { name: "core", config: "tsconfig.inference-core.json", fixtures: coreInferenceFixtures, budget: typescriptInferenceBudget },

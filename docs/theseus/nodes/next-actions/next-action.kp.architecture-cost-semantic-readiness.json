@@ -2,7 +2,8 @@
   "id": "next-action.kp.architecture-cost-semantic-readiness",
   "kind": "next-action",
   "title": "Complete architecture cost and semantic readiness repairs",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "All five approved readiness outcomes delivered and all 25 slices verified; thorough measured report at docs/project/threads/2026-09-12-architecture-readiness-closeout.md. Remaining 3D camera and physical-device limits explicit.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -204,6 +205,34 @@
       "scope": "s24",
       "checkedAt": "2026-09-12T19:13:23.874Z",
       "notes": "25 publication/closure/gradient authoring and return tests, six static browser cases, built gradient Apply/WebGL/return and full types pass. Formatting-only, editorial, style-only, altered edition and stale-link distinctions preserved."
+    },
+    {
+      "command": "npm run typecheck; npm run visual:canonical-tax-production; npm run visual:gradient-contour with Chromium Firefox WebKit preservation cohort",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-12T19:33:59.319Z",
+      "notes": "Fresh full typecheck passed with zero Svelte diagnostics; six built tax cases and nine three-engine gradient cases passed. Production requests remain isolated from source fallback. Full main unit release retry pending; this receipt does not claim full release completion."
+    },
+    {
+      "command": "npm run build:bundle; npm run build:gradient-contour; npm run check:reader-budgets; npm run check:algebra-fraction-composition-budgets; npm run check:canonical-animation-budgets; npm run check:reader-production; npm run check:dev-review-production; npm run visual:architecture-cost -- --acceptance --activation",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-12T19:34:00.540Z",
+      "notes": "All builds and named gates exit zero. Eighteen final browser cost cohorts plus CSS and activation probes pass actual-request ceilings without page errors. Tax initial total 580271 modeled gzip bytes, fully activated 720732; gradient 374544. Active algebra/fraction closure 323150. Timing claims use isolated s15 evidence, not concurrent final audit. Measurements and budget amendment linked in readiness closeout."
+    },
+    {
+      "command": "npm run test",
+      "status": "failed",
+      "scope": "s25",
+      "checkedAt": "2026-09-12T19:34:16.901Z",
+      "notes": "Initial attempt stopped at combined inference types; attributed readonly adoption cost and bounded amendment recorded. Next full main cohort completed 7063 passed and one failed in 752722 ms: generated reachability scannedFileCount 4661 versus 4669. Existing generator changed only that count, retaining 68 roots. Six focused graph/fallback tests and freshness check now pass; fresh full release retry running. No test waived."
+    },
+    {
+      "command": "npm run test",
+      "status": "passed",
+      "scope": "s25",
+      "checkedAt": "2026-09-12T19:47:20.236Z",
+      "notes": "Fresh complete release exit zero after documented inference amendment and generated inventory refresh: all architecture inference concept catalogue and promotion-memory gates pass; 7064 main unit tests pass, zero failures skips or cancellations, 727693.9 ms Node phase. Earlier failed attempts retained in history. No test or fixture waived."
     }
   ],
   "expectedLearning": [

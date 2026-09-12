@@ -1,0 +1,2548 @@
+{
+  "schemaVersion": "kp.architecture-readiness-closeout-measurement.v1",
+  "caveats": [
+    "Estimated gzip of actual requested local built files, not field network transfer.",
+    "Release timing cohorts ran alongside verification; use the isolated s15 runtime evidence for performance comparisons.",
+    "CPU slowdown is not physical-phone certification."
+  ],
+  "inventory": {
+    "kind": "inventory",
+    "revision": "65453ea220c40118f071d8b3cfd7709e65ffe976",
+    "counts": {
+      "domains.ts": {
+        "files": 27,
+        "bytes": 175907,
+        "lines": 5047
+      },
+      "domains.json": {
+        "files": 1,
+        "bytes": 312,
+        "lines": 14
+      },
+      "scripts.ts": {
+        "files": 238,
+        "bytes": 1454468,
+        "lines": 38982
+      },
+      "src.ts": {
+        "files": 2224,
+        "bytes": 16910483,
+        "lines": 473084
+      },
+      "src.json": {
+        "files": 35,
+        "bytes": 3625849,
+        "lines": 48270
+      },
+      "src.css": {
+        "files": 77,
+        "bytes": 575009,
+        "lines": 21550
+      },
+      "src.svelte": {
+        "files": 7,
+        "bytes": 154181,
+        "lines": 4075
+      },
+      "tests.ts": {
+        "files": 2122,
+        "bytes": 11590281,
+        "lines": 319647
+      },
+      "tests.json": {
+        "files": 14,
+        "bytes": 25086,
+        "lines": 861
+      }
+    },
+    "testFiles": {
+      "unit": 1779,
+      "browser": 216,
+      "sourceReadingHeuristic": 380
+    },
+    "packageCommands": 624,
+    "css": {
+      "importantOccurrences": 61,
+      "importOccurrences": 28,
+      "largest": [
+        {
+          "path": "src/styles.css",
+          "bytes": 62134,
+          "lines": 3182
+        },
+        {
+          "path": "src/editor/animation-catalogue-shell.css",
+          "bytes": 48400,
+          "lines": 1482
+        },
+        {
+          "path": "src/experiments/kinetic-figure-log-product/kinetic-figure-log-product.css",
+          "bytes": 37776,
+          "lines": 1482
+        },
+        {
+          "path": "src/rendering/focus-card-runtime.css",
+          "bytes": 28581,
+          "lines": 1352
+        },
+        {
+          "path": "src/reader/app/exemplar.css",
+          "bytes": 20524,
+          "lines": 292
+        },
+        {
+          "path": "src/tutorial/economics-demand-shift/economics-demand-shift-lesson.css",
+          "bytes": 18576,
+          "lines": 613
+        },
+        {
+          "path": "src/editor/semantic-animation-workbench.css",
+          "bytes": 16516,
+          "lines": 736
+        },
+        {
+          "path": "src/experiments/glyph-reconciliation-review.css",
+          "bytes": 16153,
+          "lines": 764
+        },
+        {
+          "path": "src/experiments/kinetic-figure-delta-epsilon/kinetic-figure-delta-epsilon.css",
+          "bytes": 13513,
+          "lines": 641
+        },
+        {
+          "path": "src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour.css",
+          "bytes": 12546,
+          "lines": 434
+        }
+      ]
+    },
+    "largestSource": [
+      {
+        "path": "src/editor/equation-surface-adapter.ts",
+        "bytes": 149527,
+        "lines": 3767
+      },
+      {
+        "path": "src/rendering/semantic-equation-token-renderer.ts",
+        "bytes": 105679,
+        "lines": 2876
+      },
+      {
+        "path": "src/rendering/native-katex-scene-compositor.ts",
+        "bytes": 94167,
+        "lines": 2610
+      },
+      {
+        "path": "src/rendering/equation-motion-path-planner.ts",
+        "bytes": 92295,
+        "lines": 2644
+      },
+      {
+        "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
+        "bytes": 92163,
+        "lines": 2604
+      },
+      {
+        "path": "src/project-dashboard/data.ts",
+        "bytes": 91642,
+        "lines": 2429
+      },
+      {
+        "path": "src/editor/equation-motion-demo-controller.ts",
+        "bytes": 78162,
+        "lines": 2685
+      },
+      {
+        "path": "src/editor/antiderivative-power-transit-mount.ts",
+        "bytes": 75424,
+        "lines": 1934
+      },
+      {
+        "path": "src/main.ts",
+        "bytes": 73246,
+        "lines": 2203
+      },
+      {
+        "path": "src/rendering/graph-svg.ts",
+        "bytes": 72115,
+        "lines": 2311
+      }
+    ],
+    "largestTests": [
+      {
+        "path": "tests/project-dashboard-symbolic-family-catalog.test.ts",
+        "bytes": 123314,
+        "lines": 3758
+      },
+      {
+        "path": "tests/native-katex-rendered-scene.test.ts",
+        "bytes": 101225,
+        "lines": 3191
+      },
+      {
+        "path": "tests/project-dashboard.test.ts",
+        "bytes": 65368,
+        "lines": 1946
+      },
+      {
+        "path": "tests/equation-motion-plan.test.ts",
+        "bytes": 48757,
+        "lines": 1719
+      },
+      {
+        "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
+        "bytes": 39994,
+        "lines": 1180
+      },
+      {
+        "path": "tests/economics-demand-shift-tutorial.test.ts",
+        "bytes": 39060,
+        "lines": 1172
+      },
+      {
+        "path": "tests/rendering.test.ts",
+        "bytes": 35863,
+        "lines": 918
+      },
+      {
+        "path": "tests/semantic.test.ts",
+        "bytes": 32054,
+        "lines": 1233
+      },
+      {
+        "path": "tests/editor.test.ts",
+        "bytes": 29840,
+        "lines": 769
+      },
+      {
+        "path": "tests/native-katex-operation-choreography.test.ts",
+        "bytes": 27651,
+        "lines": 813
+      }
+    ],
+    "caveats": [
+      "Lines include blanks/comments/generated code.",
+      "readFile presence is a heuristic, not a redundant-test verdict."
+    ]
+  },
+  "environment": {
+    "kind": "environment",
+    "revision": "65453ea220c40118f071d8b3cfd7709e65ffe976",
+    "browser": "149.0.7827.55",
+    "platform": "darwin",
+    "arch": "x64",
+    "cpu": "Apple M2",
+    "viewport": "390x844 DPR1",
+    "network": "local built-file fulfillment; no network emulation",
+    "caveat": "1x/6x CPU sensitivity probe, not calibrated phone/GPU/RAM or field-performance certification"
+  },
+  "comparison": [
+    {
+      "scenario": "static-quadratic-reader",
+      "baseline": {
+        "totals": {
+          ".js": {
+            "raw": 221527,
+            "gzip": 63133
+          },
+          ".css": {
+            "raw": 83760,
+            "gzip": 21405
+          },
+          ".woff2": {
+            "raw": 42712,
+            "gzip": 42766
+          },
+          ".woff": {
+            "raw": 0,
+            "gzip": 0
+          },
+          ".ttf": {
+            "raw": 0,
+            "gzip": 0
+          },
+          ".html": {
+            "raw": 84496,
+            "gzip": 7456
+          }
+        },
+        "total": 134760
+      },
+      "current": {
+        "totals": {
+          ".js": {
+            "raw": 222341,
+            "gzip": 63404
+          },
+          ".css": {
+            "raw": 83760,
+            "gzip": 21405
+          },
+          ".woff2": {
+            "raw": 42712,
+            "gzip": 42766
+          },
+          ".woff": {
+            "raw": 0,
+            "gzip": 0
+          },
+          ".ttf": {
+            "raw": 0,
+            "gzip": 0
+          },
+          ".html": {
+            "raw": 84496,
+            "gzip": 7455
+          }
+        },
+        "total": 135030
+      },
+      "delta": 270,
+      "percent": 0.20035618878004868
+    },
+    {
+      "scenario": "canonical-tax",
+      "baseline": {
+        "totals": {
+          ".js": {
+            "raw": 2437593,
+            "gzip": 642444
+          },
+          ".css": {
+            "raw": 153370,
+            "gzip": 30307
+          },
+          ".woff2": {
+            "raw": 42712,
+            "gzip": 42766
+          },
+          ".woff": {
+            "raw": 0,
+            "gzip": 0
+          },
+          ".ttf": {
+            "raw": 0,
+            "gzip": 0
+          },
+          ".html": {
+            "raw": 24122,
+            "gzip": 3226
+          }
+        },
+        "total": 718743
+      },
+      "current": {
+        "totals": {
+          ".js": {
+            "raw": 1899877,
+            "gzip": 512305
+          },
+          ".css": {
+            "raw": 101733,
+            "gzip": 22520
+          },
+          ".woff2": {
+            "raw": 42712,
+            "gzip": 42766
+          },
+          ".woff": {
+            "raw": 0,
+            "gzip": 0
+          },
+          ".ttf": {
+            "raw": 0,
+            "gzip": 0
+          },
+          ".html": {
+            "raw": 21433,
+            "gzip": 2680
+          }
+        },
+        "total": 580271
+      },
+      "delta": -138472,
+      "percent": -19.265857197913583
+    },
+    {
+      "scenario": "gradient",
+      "baseline": {
+        "totals": {
+          ".js": {
+            "raw": 1049203,
+            "gzip": 287593
+          },
+          ".css": {
+            "raw": 129942,
+            "gzip": 26265
+          },
+          ".woff2": {
+            "raw": 68036,
+            "gzip": 68118
+          },
+          ".woff": {
+            "raw": 0,
+            "gzip": 0
+          },
+          ".ttf": {
+            "raw": 0,
+            "gzip": 0
+          },
+          ".html": {
+            "raw": 401,
+            "gzip": 288
+          }
+        },
+        "total": 382264
+      },
+      "current": {
+        "totals": {
+          ".js": {
+            "raw": 1051190,
+            "gzip": 288150
+          },
+          ".css": {
+            "raw": 78262,
+            "gzip": 17987
+          },
+          ".woff2": {
+            "raw": 68036,
+            "gzip": 68118
+          },
+          ".woff": {
+            "raw": 0,
+            "gzip": 0
+          },
+          ".ttf": {
+            "raw": 0,
+            "gzip": 0
+          },
+          ".html": {
+            "raw": 401,
+            "gzip": 289
+          }
+        },
+        "total": 374544
+      },
+      "delta": -7720,
+      "percent": -2.0195467007094625
+    }
+  ],
+  "browserCohorts": [
+    {
+      "kind": "browser",
+      "scenario": "static-quadratic-reader",
+      "cpuSlowdown": 1,
+      "repeat": 1,
+      "manifestSha256": "938b18d920d4a5a4dde75f5cbb914e3e87812687520743fb6451a209d9a0f66c",
+      "readyMs": 349.10000002384186,
+      "dom": {
+        "elements": 1604,
+        "canvases": 0,
+        "styleRules": 655,
+        "longTasks": [
+          126
+        ]
+      },
+      "frames": {
+        "samples": 121,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 18.300000000000068,
+        "maxMs": 18.700000000000045,
+        "over50ms": 0
+      },
+      "startupScriptMs": 39.142,
+      "startupTaskMs": 292.834,
+      "interactionScriptMs": 0.28199999999999753,
+      "jsHeapUsedBytes": 2733408,
+      "totals": {
+        ".js": {
+          "raw": 222341,
+          "gzip": 63404
+        },
+        ".css": {
+          "raw": 83760,
+          "gzip": 21405
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 84496,
+          "gzip": 7455
+        }
+      },
+      "errors": [],
+      "resourceCount": 22
+    },
+    {
+      "kind": "browser",
+      "scenario": "static-quadratic-reader",
+      "cpuSlowdown": 1,
+      "repeat": 2,
+      "manifestSha256": "938b18d920d4a5a4dde75f5cbb914e3e87812687520743fb6451a209d9a0f66c",
+      "readyMs": 115.5,
+      "dom": {
+        "elements": 1604,
+        "canvases": 0,
+        "styleRules": 655,
+        "longTasks": []
+      },
+      "frames": {
+        "samples": 120,
+        "p50Ms": 16.700000000000045,
+        "p95Ms": 18.399999999999864,
+        "maxMs": 18.799999999999983,
+        "over50ms": 0
+      },
+      "startupScriptMs": 14.272,
+      "startupTaskMs": 69.654,
+      "interactionScriptMs": 0.18300000000000088,
+      "jsHeapUsedBytes": 2883252,
+      "totals": {
+        ".js": {
+          "raw": 222341,
+          "gzip": 63404
+        },
+        ".css": {
+          "raw": 83760,
+          "gzip": 21405
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 84496,
+          "gzip": 7455
+        }
+      },
+      "errors": [],
+      "resourceCount": 22
+    },
+    {
+      "kind": "browser",
+      "scenario": "static-quadratic-reader",
+      "cpuSlowdown": 1,
+      "repeat": 3,
+      "manifestSha256": "938b18d920d4a5a4dde75f5cbb914e3e87812687520743fb6451a209d9a0f66c",
+      "readyMs": 67.10000002384186,
+      "dom": {
+        "elements": 1604,
+        "canvases": 0,
+        "styleRules": 655,
+        "longTasks": []
+      },
+      "frames": {
+        "samples": 120,
+        "p50Ms": 16.700000000000003,
+        "p95Ms": 18.399999999999864,
+        "maxMs": 18.700000000000045,
+        "over50ms": 0
+      },
+      "startupScriptMs": 11.473,
+      "startupTaskMs": 58.004,
+      "interactionScriptMs": 0.2909999999999996,
+      "jsHeapUsedBytes": 2743388,
+      "totals": {
+        ".js": {
+          "raw": 222341,
+          "gzip": 63404
+        },
+        ".css": {
+          "raw": 83760,
+          "gzip": 21405
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 84496,
+          "gzip": 7455
+        }
+      },
+      "errors": [],
+      "resourceCount": 22
+    },
+    {
+      "kind": "browser",
+      "scenario": "static-quadratic-reader",
+      "cpuSlowdown": 6,
+      "repeat": 1,
+      "manifestSha256": "938b18d920d4a5a4dde75f5cbb914e3e87812687520743fb6451a209d9a0f66c",
+      "readyMs": 566.7999999523163,
+      "dom": {
+        "elements": 1604,
+        "canvases": 0,
+        "styleRules": 655,
+        "longTasks": [
+          262,
+          81
+        ]
+      },
+      "frames": {
+        "samples": 121,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 18.5,
+        "maxMs": 18.700000000000273,
+        "over50ms": 0
+      },
+      "startupScriptMs": 86.389,
+      "startupTaskMs": 542.159,
+      "interactionScriptMs": 0.2940000000000026,
+      "jsHeapUsedBytes": 2738932,
+      "totals": {
+        ".js": {
+          "raw": 222341,
+          "gzip": 63404
+        },
+        ".css": {
+          "raw": 83760,
+          "gzip": 21405
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 84496,
+          "gzip": 7455
+        }
+      },
+      "errors": [],
+      "resourceCount": 22
+    },
+    {
+      "kind": "browser",
+      "scenario": "static-quadratic-reader",
+      "cpuSlowdown": 6,
+      "repeat": 2,
+      "manifestSha256": "938b18d920d4a5a4dde75f5cbb914e3e87812687520743fb6451a209d9a0f66c",
+      "readyMs": 451.40000009536743,
+      "dom": {
+        "elements": 1604,
+        "canvases": 0,
+        "styleRules": 655,
+        "longTasks": [
+          167,
+          67
+        ]
+      },
+      "frames": {
+        "samples": 121,
+        "p50Ms": 16.699999999999932,
+        "p95Ms": 18.5,
+        "maxMs": 18.699999999999932,
+        "over50ms": 0
+      },
+      "startupScriptMs": 78.777,
+      "startupTaskMs": 423.207,
+      "interactionScriptMs": 1.6520000000000006,
+      "jsHeapUsedBytes": 2739880,
+      "totals": {
+        ".js": {
+          "raw": 222341,
+          "gzip": 63404
+        },
+        ".css": {
+          "raw": 83760,
+          "gzip": 21405
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 84496,
+          "gzip": 7455
+        }
+      },
+      "errors": [],
+      "resourceCount": 22
+    },
+    {
+      "kind": "browser",
+      "scenario": "static-quadratic-reader",
+      "cpuSlowdown": 6,
+      "repeat": 3,
+      "manifestSha256": "938b18d920d4a5a4dde75f5cbb914e3e87812687520743fb6451a209d9a0f66c",
+      "readyMs": 717.5,
+      "dom": {
+        "elements": 1604,
+        "canvases": 0,
+        "styleRules": 655,
+        "longTasks": [
+          427,
+          74
+        ]
+      },
+      "frames": {
+        "samples": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 18.40000000000009,
+        "maxMs": 18.59999999999991,
+        "over50ms": 0
+      },
+      "startupScriptMs": 82.01700000000001,
+      "startupTaskMs": 687.5219999999999,
+      "interactionScriptMs": 1.80799999999999,
+      "jsHeapUsedBytes": 2726052,
+      "totals": {
+        ".js": {
+          "raw": 222341,
+          "gzip": 63404
+        },
+        ".css": {
+          "raw": 83760,
+          "gzip": 21405
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 84496,
+          "gzip": 7455
+        }
+      },
+      "errors": [],
+      "resourceCount": 22
+    },
+    {
+      "kind": "browser",
+      "scenario": "canonical-tax",
+      "cpuSlowdown": 1,
+      "repeat": 1,
+      "manifestSha256": "938b18d920d4a5a4dde75f5cbb914e3e87812687520743fb6451a209d9a0f66c",
+      "readyMs": 605.7000000476837,
+      "dom": {
+        "elements": 3855,
+        "canvases": 1,
+        "styleRules": 703,
+        "longTasks": [
+          247
+        ]
+      },
+      "frames": {
+        "samples": 119,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 18.300000000000182,
+        "maxMs": 49.60000000000002,
+        "over50ms": 0
+      },
+      "startupScriptMs": 177.43,
+      "startupTaskMs": 371.14200000000005,
+      "interactionScriptMs": 17.615999999999993,
+      "jsHeapUsedBytes": 13067392,
+      "totals": {
+        ".js": {
+          "raw": 1899877,
+          "gzip": 512305
+        },
+        ".css": {
+          "raw": 101733,
+          "gzip": 22520
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 21433,
+          "gzip": 2680
+        }
+      },
+      "errors": [],
+      "resourceCount": 135
+    },
+    {
+      "kind": "browser",
+      "scenario": "canonical-tax",
+      "cpuSlowdown": 1,
+      "repeat": 2,
+      "manifestSha256": "938b18d920d4a5a4dde75f5cbb914e3e87812687520743fb6451a209d9a0f66c",
+      "readyMs": 392,
+      "dom": {
+        "elements": 3855,
+        "canvases": 1,
+        "styleRules": 703,
+        "longTasks": [
+          152
+        ]
+      },
+      "frames": {
+        "samples": 119,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 18.5,
+        "maxMs": 32.5,
+        "over50ms": 0
+      },
+      "startupScriptMs": 140.009,
+      "startupTaskMs": 239.994,
+      "interactionScriptMs": 16.009999999999998,
+      "jsHeapUsedBytes": 10235468,
+      "totals": {
+        ".js": {
+          "raw": 1899877,
+          "gzip": 512305
+        },
+        ".css": {
+          "raw": 101733,
+          "gzip": 22520
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 21433,
+          "gzip": 2680
+        }
+      },
+      "errors": [],
+      "resourceCount": 135
+    },
+    {
+      "kind": "browser",
+      "scenario": "canonical-tax",
+      "cpuSlowdown": 1,
+      "repeat": 3,
+      "manifestSha256": "938b18d920d4a5a4dde75f5cbb914e3e87812687520743fb6451a209d9a0f66c",
+      "readyMs": 402.6999999284744,
+      "dom": {
+        "elements": 3855,
+        "canvases": 1,
+        "styleRules": 703,
+        "longTasks": [
+          166
+        ]
+      },
+      "frames": {
+        "samples": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 18.199999999999932,
+        "maxMs": 33.30000000000007,
+        "over50ms": 0
+      },
+      "startupScriptMs": 148.719,
+      "startupTaskMs": 255.877,
+      "interactionScriptMs": 15.189000000000007,
+      "jsHeapUsedBytes": 10194828,
+      "totals": {
+        ".js": {
+          "raw": 1899877,
+          "gzip": 512305
+        },
+        ".css": {
+          "raw": 101733,
+          "gzip": 22520
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 21433,
+          "gzip": 2680
+        }
+      },
+      "errors": [],
+      "resourceCount": 135
+    },
+    {
+      "kind": "browser",
+      "scenario": "canonical-tax",
+      "cpuSlowdown": 6,
+      "repeat": 1,
+      "manifestSha256": "938b18d920d4a5a4dde75f5cbb914e3e87812687520743fb6451a209d9a0f66c",
+      "readyMs": 1788.7999999523163,
+      "dom": {
+        "elements": 3855,
+        "canvases": 1,
+        "styleRules": 703,
+        "longTasks": [
+          1150,
+          65,
+          109,
+          157
+        ]
+      },
+      "frames": {
+        "samples": 103,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 32.5,
+        "maxMs": 200.80000000000018,
+        "over50ms": 1
+      },
+      "startupScriptMs": 982.355,
+      "startupTaskMs": 1679.229,
+      "interactionScriptMs": 43.35600000000006,
+      "jsHeapUsedBytes": 9360116,
+      "totals": {
+        ".js": {
+          "raw": 1899877,
+          "gzip": 512305
+        },
+        ".css": {
+          "raw": 101733,
+          "gzip": 22520
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 21433,
+          "gzip": 2680
+        }
+      },
+      "errors": [],
+      "resourceCount": 135
+    },
+    {
+      "kind": "browser",
+      "scenario": "canonical-tax",
+      "cpuSlowdown": 6,
+      "repeat": 2,
+      "manifestSha256": "938b18d920d4a5a4dde75f5cbb914e3e87812687520743fb6451a209d9a0f66c",
+      "readyMs": 1616.5,
+      "dom": {
+        "elements": 3855,
+        "canvases": 1,
+        "styleRules": 703,
+        "longTasks": [
+          1023,
+          95,
+          144
+        ]
+      },
+      "frames": {
+        "samples": 102,
+        "p50Ms": 16.800000000000182,
+        "p95Ms": 32.799999999999955,
+        "maxMs": 217.30000000000018,
+        "over50ms": 1
+      },
+      "startupScriptMs": 916.786,
+      "startupTaskMs": 1531.211,
+      "interactionScriptMs": 40.57200000000005,
+      "jsHeapUsedBytes": 15768248,
+      "totals": {
+        ".js": {
+          "raw": 1899877,
+          "gzip": 512305
+        },
+        ".css": {
+          "raw": 101733,
+          "gzip": 22520
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 21433,
+          "gzip": 2680
+        }
+      },
+      "errors": [],
+      "resourceCount": 135
+    },
+    {
+      "kind": "browser",
+      "scenario": "canonical-tax",
+      "cpuSlowdown": 6,
+      "repeat": 3,
+      "manifestSha256": "938b18d920d4a5a4dde75f5cbb914e3e87812687520743fb6451a209d9a0f66c",
+      "readyMs": 1493.1000000238419,
+      "dom": {
+        "elements": 3855,
+        "canvases": 1,
+        "styleRules": 703,
+        "longTasks": [
+          1040,
+          97
+        ]
+      },
+      "frames": {
+        "samples": 100,
+        "p50Ms": 16.799999999999727,
+        "p95Ms": 33,
+        "maxMs": 251.39999999999986,
+        "over50ms": 1
+      },
+      "startupScriptMs": 819.889,
+      "startupTaskMs": 1396.7430000000002,
+      "interactionScriptMs": 145.36100000000008,
+      "jsHeapUsedBytes": 11180088,
+      "totals": {
+        ".js": {
+          "raw": 1899877,
+          "gzip": 512305
+        },
+        ".css": {
+          "raw": 101733,
+          "gzip": 22520
+        },
+        ".woff2": {
+          "raw": 42712,
+          "gzip": 42766
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 21433,
+          "gzip": 2680
+        }
+      },
+      "errors": [],
+      "resourceCount": 135
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 1,
+      "repeat": 1,
+      "manifestSha256": "b4ae8d756861a5dbbaef3caac82047b9ad45e552f86d87d1f8cd98f7ac099b76",
+      "readyMs": 624.8999999761581,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          164,
+          55,
+          321
+        ]
+      },
+      "frames": {
+        "samples": 120,
+        "p50Ms": 16.700000000000045,
+        "p95Ms": 18.300000000000182,
+        "maxMs": 18.699999999999818,
+        "over50ms": 0
+      },
+      "startupScriptMs": 119.94399999999999,
+      "startupTaskMs": 574.551,
+      "interactionScriptMs": 59.63699999999999,
+      "jsHeapUsedBytes": 7227316,
+      "totals": {
+        ".js": {
+          "raw": 1051190,
+          "gzip": 288150
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 289
+        }
+      },
+      "errors": [],
+      "resourceCount": 7
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 1,
+      "repeat": 2,
+      "manifestSha256": "b4ae8d756861a5dbbaef3caac82047b9ad45e552f86d87d1f8cd98f7ac099b76",
+      "readyMs": 583,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          159
+        ]
+      },
+      "frames": {
+        "samples": 121,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 18.399999999999977,
+        "maxMs": 18.59999999999991,
+        "over50ms": 0
+      },
+      "startupScriptMs": 119.127,
+      "startupTaskMs": 507.29400000000004,
+      "interactionScriptMs": 59.766,
+      "jsHeapUsedBytes": 7533708,
+      "totals": {
+        ".js": {
+          "raw": 1051190,
+          "gzip": 288150
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 289
+        }
+      },
+      "errors": [],
+      "resourceCount": 7
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 1,
+      "repeat": 3,
+      "manifestSha256": "b4ae8d756861a5dbbaef3caac82047b9ad45e552f86d87d1f8cd98f7ac099b76",
+      "readyMs": 532.1999999284744,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          153
+        ]
+      },
+      "frames": {
+        "samples": 121,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 18.5,
+        "maxMs": 18.700000000000273,
+        "over50ms": 0
+      },
+      "startupScriptMs": 117.29599999999999,
+      "startupTaskMs": 475.055,
+      "interactionScriptMs": 68.426,
+      "jsHeapUsedBytes": 7640864,
+      "totals": {
+        ".js": {
+          "raw": 1051190,
+          "gzip": 288150
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 289
+        }
+      },
+      "errors": [],
+      "resourceCount": 7
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 6,
+      "repeat": 1,
+      "manifestSha256": "b4ae8d756861a5dbbaef3caac82047b9ad45e552f86d87d1f8cd98f7ac099b76",
+      "readyMs": 1653.5,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          989,
+          150,
+          309
+        ]
+      },
+      "frames": {
+        "samples": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 18.40000000000009,
+        "maxMs": 18.700000000000273,
+        "over50ms": 0
+      },
+      "startupScriptMs": 751.965,
+      "startupTaskMs": 1630.4289999999999,
+      "interactionScriptMs": 361.529,
+      "jsHeapUsedBytes": 7021228,
+      "totals": {
+        ".js": {
+          "raw": 1051190,
+          "gzip": 288150
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 289
+        }
+      },
+      "errors": [],
+      "resourceCount": 7
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 6,
+      "repeat": 2,
+      "manifestSha256": "b4ae8d756861a5dbbaef3caac82047b9ad45e552f86d87d1f8cd98f7ac099b76",
+      "readyMs": 1625.1999999284744,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          968,
+          150,
+          301
+        ]
+      },
+      "frames": {
+        "samples": 121,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 18.199999999999818,
+        "maxMs": 18.699999999999818,
+        "over50ms": 0
+      },
+      "startupScriptMs": 739.839,
+      "startupTaskMs": 1592.08,
+      "interactionScriptMs": 362.9779999999999,
+      "jsHeapUsedBytes": 9809828,
+      "totals": {
+        ".js": {
+          "raw": 1051190,
+          "gzip": 288150
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 289
+        }
+      },
+      "errors": [],
+      "resourceCount": 7
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 6,
+      "repeat": 3,
+      "manifestSha256": "b4ae8d756861a5dbbaef3caac82047b9ad45e552f86d87d1f8cd98f7ac099b76",
+      "readyMs": 1687.3999999761581,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          991,
+          160,
+          317
+        ]
+      },
+      "frames": {
+        "samples": 121,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 18.40000000000009,
+        "maxMs": 18.699999999999818,
+        "over50ms": 0
+      },
+      "startupScriptMs": 756.2710000000001,
+      "startupTaskMs": 1651.12,
+      "interactionScriptMs": 366.32399999999996,
+      "jsHeapUsedBytes": 11697288,
+      "totals": {
+        ".js": {
+          "raw": 1051190,
+          "gzip": 288150
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 289
+        }
+      },
+      "errors": [],
+      "resourceCount": 7
+    }
+  ],
+  "resourceClosures": {
+    "static-quadratic-reader": [
+      {
+        "path": "reader/quadratic-branching/index.html",
+        "raw": 84496,
+        "gzip": 7455,
+        "kind": ".html"
+      },
+      {
+        "path": "assets/reader-quadratic-branching-CZ3BQuKn.js",
+        "raw": 979,
+        "gzip": 563,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/kp-preload-helper-L5lOfJxi.js",
+        "raw": 1402,
+        "gzip": 766,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/reader-quadratic-branching-zUDEBPRY.css",
+        "raw": 54925,
+        "gzip": 13451,
+        "kind": ".css"
+      },
+      {
+        "path": "assets/KaTeX_Math-Italic-t53AETM-.woff2",
+        "raw": 16440,
+        "gzip": 16466,
+        "kind": ".woff2"
+      },
+      {
+        "path": "assets/KaTeX_Main-Regular-B22Nviop.woff2",
+        "raw": 26272,
+        "gzip": 26300,
+        "kind": ".woff2"
+      },
+      {
+        "path": "assets/quadratic-branching-runtime-D6dBxkMw.js",
+        "raw": 49863,
+        "gzip": 13736,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/kp-reader-clock-C548qk2W.js",
+        "raw": 38404,
+        "gzip": 9982,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/semantic-lineage-graph-DqVH2qme.js",
+        "raw": 3217,
+        "gzip": 1105,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-presentation-selection-AjLPmGtv.js",
+        "raw": 34922,
+        "gzip": 10203,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-endpoint-handoff-BsX6Uhgo.js",
+        "raw": 3761,
+        "gzip": 1622,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/expression-node-protocol-B4ZRZUxI.js",
+        "raw": 1205,
+        "gzip": 514,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/structured-expression-rewrite-DuRKnHsj.js",
+        "raw": 9524,
+        "gzip": 2987,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-font-readiness-ggubuesO.js",
+        "raw": 569,
+        "gzip": 363,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/fission-fusion-Bqipjp6c.js",
+        "raw": 5039,
+        "gzip": 1796,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/public-api-Cg31h88w.js",
+        "raw": 33974,
+        "gzip": 8405,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/distribution-canonical-operation-CyXgNdHP.js",
+        "raw": 9130,
+        "gzip": 2727,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/transformation-definition-binding-CxCTZIom.js",
+        "raw": 4678,
+        "gzip": 1519,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/fraction-solve-macro-ivZ34GCV.js",
+        "raw": 22213,
+        "gzip": 5770,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/fraction-composition-evaluation-tree-908Ihqmv.js",
+        "raw": 2708,
+        "gzip": 970,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/reader-font-review-lifecycle-r2o5Z-yf.js",
+        "raw": 753,
+        "gzip": 376,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/katex-CYlHEDRF.css",
+        "raw": 28835,
+        "gzip": 7954,
+        "kind": ".css"
+      }
+    ],
+    "canonical-tax": [
+      {
+        "path": "experiments/kinetic-figure/supply-tax/index.html",
+        "raw": 21433,
+        "gzip": 2680,
+        "kind": ".html"
+      },
+      {
+        "path": "assets/canonicalSupplyTax-IwIbbvwf.js",
+        "raw": 277980,
+        "gzip": 63317,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/public-api-CT2qI9D1.js",
+        "raw": 13593,
+        "gzip": 4271,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/exact-rational-DwOqQ087.js",
+        "raw": 33,
+        "gzip": 53,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/canonical-operation-pack-mjCr-D_7.js",
+        "raw": 5854,
+        "gzip": 1777,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/kp-reader-clock-C548qk2W.js",
+        "raw": 38404,
+        "gzip": 9982,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/immutable-asset-QvCo--MQ.js",
+        "raw": 1878,
+        "gzip": 984,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/semantic-salience-state-Tntzg3-a.js",
+        "raw": 731,
+        "gzip": 390,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/semantic-salience-resolver-BCvcdFRo.js",
+        "raw": 974,
+        "gzip": 493,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/katex-D7TCrkvT.js",
+        "raw": 257502,
+        "gzip": 76151,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/katex-adapter-Df57Hu7r.js",
+        "raw": 339,
+        "gzip": 238,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/focus-deck-scaffold-Vo0YqALv.js",
+        "raw": 4562,
+        "gzip": 1701,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/cross-view-attention-B4cIKEaT.js",
+        "raw": 847,
+        "gzip": 396,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/expression-DZsBysgl.js",
+        "raw": 4057,
+        "gzip": 1321,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/graph-BALrL9lV.js",
+        "raw": 2959,
+        "gzip": 1246,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/graph-3d-runtime-protocol-rl-P1D5R.js",
+        "raw": 2730,
+        "gzip": 988,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/kernel-nhB_ecRX.js",
+        "raw": 378,
+        "gzip": 265,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/graph-transitions-BbOyModq.js",
+        "raw": 41517,
+        "gzip": 12577,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/graph-webgl-D0hDVpjb.js",
+        "raw": 4544,
+        "gzip": 1936,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/kp-preload-helper-L5lOfJxi.js",
+        "raw": 1402,
+        "gzip": 766,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/kinetic-figure-surface-contour-entry-static-BUWII40t.js",
+        "raw": 50615,
+        "gzip": 13625,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/semantic-lineage-graph-DqVH2qme.js",
+        "raw": 3217,
+        "gzip": 1105,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/typescript-refactor-semantic-artifact-Bm88HQWq.js",
+        "raw": 23972,
+        "gzip": 6120,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/code-motion-settlement-BgESqnu0.js",
+        "raw": 2651,
+        "gzip": 1075,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/html-output-encoding-DFN8fwDI.js",
+        "raw": 161,
+        "gzip": 117,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/typescript-refactor-code-html-CwfGXQRz.js",
+        "raw": 17276,
+        "gzip": 5600,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/kinetic-figure-typescript-focus-card-static-CsByPqts.js",
+        "raw": 13070,
+        "gzip": 4270,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/semantic-visual-salience-5CbIdbDl.js",
+        "raw": 6352,
+        "gzip": 2567,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/semantic-visual-dom-theme-ByHWqfjQ.js",
+        "raw": 878,
+        "gzip": 358,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/expression-node-protocol-B4ZRZUxI.js",
+        "raw": 1205,
+        "gzip": 514,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-extension-registry-CaMK_pI3.js",
+        "raw": 1950,
+        "gzip": 647,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/choreography-timeline-CPOiyspY.js",
+        "raw": 17006,
+        "gzip": 5077,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/log-exponent-adapter-C5V7BohW.js",
+        "raw": 39118,
+        "gzip": 10255,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/animation-descriptor-Ugg2--XM.js",
+        "raw": 642,
+        "gzip": 312,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/animation-library-7xvc5tIc.js",
+        "raw": 48492,
+        "gzip": 5467,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/animation-surface-dispatch-BRULTa5p.js",
+        "raw": 572,
+        "gzip": 317,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/animation-authoring-controls-DE5eXcNc.js",
+        "raw": 1923,
+        "gzip": 774,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/gestalt-base-styles-DKCH45mX.js",
+        "raw": 10482,
+        "gzip": 3416,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/animation-player-shell-DKIIBsDk.js",
+        "raw": 9841,
+        "gzip": 2706,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/kinetic-figure-log-exponent-focus-card-static-DMgWdTAS.js",
+        "raw": 20191,
+        "gzip": 3719,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/kinetic-figure-surface-contour-entry-static-CmOECTNw.css",
+        "raw": 40918,
+        "gzip": 8329,
+        "kind": ".css"
+      },
+      {
+        "path": "assets/canonicalSupplyTax-BEzBc_Kj.css",
+        "raw": 25422,
+        "gzip": 4596,
+        "kind": ".css"
+      },
+      {
+        "path": "assets/katex-CYlHEDRF.css",
+        "raw": 28835,
+        "gzip": 7954,
+        "kind": ".css"
+      },
+      {
+        "path": "assets/typescript-refactor-Bsox_oho.css",
+        "raw": 5891,
+        "gzip": 1307,
+        "kind": ".css"
+      },
+      {
+        "path": "assets/KaTeX_Main-Regular-B22Nviop.woff2",
+        "raw": 26272,
+        "gzip": 26300,
+        "kind": ".woff2"
+      },
+      {
+        "path": "assets/KaTeX_Math-Italic-t53AETM-.woff2",
+        "raw": 16440,
+        "gzip": 16466,
+        "kind": ".woff2"
+      },
+      {
+        "path": "assets/kinetic-figure-log-exponent-focus-card-D3Bbww6B.js",
+        "raw": 10347,
+        "gzip": 3394,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/animation-player-controller-Dw5tmLRc.js",
+        "raw": 47814,
+        "gzip": 10601,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/animation-playback-session-Bjx--SUi.js",
+        "raw": 4498,
+        "gzip": 1297,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/runtime-sampler-DIIawk4R.js",
+        "raw": 10527,
+        "gzip": 2892,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/sampled-frame-envelope-BlaDfcxn.js",
+        "raw": 11361,
+        "gzip": 3083,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/animation-surface-adapter-registry-DSRE377S.js",
+        "raw": 1233,
+        "gzip": 617,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/log-exponent-surface-capability-DFuMEiki.js",
+        "raw": 26133,
+        "gzip": 7576,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/registered-both-sides-causal-binding-WWRMLSBv.js",
+        "raw": 13500,
+        "gzip": 3515,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-balanced-branch-scheduling-CtrW7VQ8.js",
+        "raw": 4588,
+        "gzip": 1556,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/both-sides-operation-registration-Blk-nAnO.js",
+        "raw": 3824,
+        "gzip": 868,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-font-readiness-ggubuesO.js",
+        "raw": 569,
+        "gzip": 363,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/native-katex-paint-geometry-BMUfglfJ.js",
+        "raw": 5580,
+        "gzip": 2131,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/function-wrap-invocation-CkIJqY1G.js",
+        "raw": 5700,
+        "gzip": 1778,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-extension-pack-validator-DVjNIMif.js",
+        "raw": 6379,
+        "gzip": 1928,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-motif-invocation-CTSiNpFy.js",
+        "raw": 5321,
+        "gzip": 1677,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/function-wrap-motif-D82tffPj.js",
+        "raw": 2990,
+        "gzip": 1040,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/native-katex-track-projection-bS7h0AuJ.js",
+        "raw": 35412,
+        "gzip": 10368,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/symbol-motion-contract-DAAJbIDx.js",
+        "raw": 5608,
+        "gzip": 1697,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-material-layer-dom-D2ZCsc8n.js",
+        "raw": 7277,
+        "gzip": 2391,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/computed-style-clone-D40DdcRs.js",
+        "raw": 1127,
+        "gzip": 613,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-asset-migration-v2-BDjO29sQ.js",
+        "raw": 4626,
+        "gzip": 1764,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-presentation-plan-v2-DxCHkeqY.js",
+        "raw": 33521,
+        "gzip": 7753,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/operation-evaluation-family-profile-Dso5TycS.js",
+        "raw": 14195,
+        "gzip": 3735,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-evaluation-family-certificate-v2-C5zMxZXf.js",
+        "raw": 3768,
+        "gzip": 1013,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/operation-evaluation-authority-BEb_-qtD.js",
+        "raw": 1305,
+        "gzip": 407,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/canonical-operation-registry-B5MsJfgE.js",
+        "raw": 29683,
+        "gzip": 7144,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/cancellation-operation-authority-CNkPO4db.js",
+        "raw": 1121,
+        "gzip": 374,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/generated-algebra-transform-definition-registry-DhIxw8E4.js",
+        "raw": 23689,
+        "gzip": 3754,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/generated-algebra-canonical-composition-CtAfTzw0.js",
+        "raw": 1168,
+        "gzip": 417,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/distribution-canonical-operation-CyXgNdHP.js",
+        "raw": 9130,
+        "gzip": 2727,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/transformation-definition-binding-CxCTZIom.js",
+        "raw": 4678,
+        "gzip": 1519,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/native-katex-feature-pack-loader-egs1ZH8A.js",
+        "raw": 2345,
+        "gzip": 1099,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-asset-migration-role-bindings-v2-CaF2Fw6S.js",
+        "raw": 11357,
+        "gzip": 2819,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/log-exponent-surface-capability-BH9WK__K.css",
+        "raw": 667,
+        "gzip": 334,
+        "kind": ".css"
+      },
+      {
+        "path": "assets/algebra-BZeoQEyl.js",
+        "raw": 829,
+        "gzip": 461,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/algebra-choreography-capabilities-BV4WclYX.js",
+        "raw": 19859,
+        "gzip": 5078,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/factoring-choreography-Cyoxy5mK.js",
+        "raw": 4253,
+        "gzip": 1649,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/fission-fusion-Bqipjp6c.js",
+        "raw": 5039,
+        "gzip": 1796,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/distribution-choreography-BAtlrnFp.js",
+        "raw": 6876,
+        "gzip": 2369,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/copy-fan-out-motion-profile-B_KGJNfR.js",
+        "raw": 1070,
+        "gzip": 492,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/semantic-motion-source-authority-D3P1syIw.js",
+        "raw": 36934,
+        "gzip": 8923,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/public-api-CamsU57b.js",
+        "raw": 485,
+        "gzip": 314,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/semantic-equation-transition-compiler-BI4ZxYBX.js",
+        "raw": 7451,
+        "gzip": 2125,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/finite-binder-causal-recipe-Iwax-vK6.js",
+        "raw": 3519,
+        "gzip": 1368,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/homomorphic-causal-phases-CH2qll9i.js",
+        "raw": 3640,
+        "gzip": 1346,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/generated-algebra-tutorial-fixture-CTMUbI5T.js",
+        "raw": 48360,
+        "gzip": 8784,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/asset-diagram-CLj0d_gi.js",
+        "raw": 1592,
+        "gzip": 602,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/asset-decomposition-BC1yyjZK.js",
+        "raw": 501,
+        "gzip": 264,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/asset-flashcard-AUjNA4KW.js",
+        "raw": 1519,
+        "gzip": 606,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/distribution-correspondence-yjVBi1UA.js",
+        "raw": 878,
+        "gzip": 407,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-surface-family-declarations-B9oyyjUF.js",
+        "raw": 19730,
+        "gzip": 3423,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/cancellation-pressure-contract-DMHN8AQg.js",
+        "raw": 5124,
+        "gzip": 1964,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/cancellation-pressure-animation-CS9cayZs.js",
+        "raw": 13338,
+        "gzip": 3696,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-endpoint-handoff-BsX6Uhgo.js",
+        "raw": 3761,
+        "gzip": 1622,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/structured-expression-rewrite-DuRKnHsj.js",
+        "raw": 9524,
+        "gzip": 2987,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/function-wrap-asset-binding-CL5cg1qB.js",
+        "raw": 2968,
+        "gzip": 1135,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/common-factor-rewrite-CTO2KpdB.js",
+        "raw": 52,
+        "gzip": 72,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/composed-algebra-distribution-projection-DmZXZ6E8.js",
+        "raw": 2404,
+        "gzip": 1064,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/exponent-radical-adapter--tZSlCbP.js",
+        "raw": 1922,
+        "gzip": 854,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/log-quotient-adapter-DcqS963T.js",
+        "raw": 17710,
+        "gzip": 4713,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/log-quotient-ids-CpEBU-n7.js",
+        "raw": 77,
+        "gzip": 89,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/logarithm-change-of-base-exemplar-Bmi0MLe8.js",
+        "raw": 4429,
+        "gzip": 1674,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/logarithm-change-of-base-presentation-plan-eFDvzUWW.js",
+        "raw": 10692,
+        "gzip": 3019,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-structural-choreography-declarations-CBpshVjg.js",
+        "raw": 1476,
+        "gzip": 521,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/common-denominator-pressure-exemplar-C0C5k-d1.js",
+        "raw": 17012,
+        "gzip": 4766,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/successor-synthesis-presentation-plan-CIpl8y9e.js",
+        "raw": 17867,
+        "gzip": 4587,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/operation-evaluation-presentation-registry-BYLJoXoD.js",
+        "raw": 14724,
+        "gzip": 3850,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/visual-motif-jJXmk-cL.js",
+        "raw": 34546,
+        "gzip": 9343,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/derivative-power-rule-semantics-DQi_cuRM.js",
+        "raw": 5388,
+        "gzip": 1453,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/focus-profile-C6jbRKdi.js",
+        "raw": 5738,
+        "gzip": 2103,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/operation-presentation-plan-types-Cw_ki7BB.js",
+        "raw": 696,
+        "gzip": 361,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/executable-motif-continuity-program-qAUn3Z8O.js",
+        "raw": 265,
+        "gzip": 170,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/fraction-equivalence-presentation-plan-DOAvFcTl.js",
+        "raw": 12689,
+        "gzip": 3267,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/fraction-common-denominator-BkYigoxV.js",
+        "raw": 8670,
+        "gzip": 2615,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/compound-root-carrier-adapter-AP8qrDaC.js",
+        "raw": 31771,
+        "gzip": 8218,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/latex-parser-Cu2oTZzK.js",
+        "raw": 6075,
+        "gzip": 1630,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/compound-root-carrier-exemplar-B-AkSGNj.js",
+        "raw": 17733,
+        "gzip": 4517,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/finite-product-expansion-exemplar-D4CjQgLN.js",
+        "raw": 37552,
+        "gzip": 9295,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/state-retention-projection-Br6eKXEZ.js",
+        "raw": 5313,
+        "gzip": 1837,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/native-katex-feature-pack-implementation-7b6lXH-f.js",
+        "raw": 485,
+        "gzip": 297,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/native-katex-rendered-scene-Bk4Gxmi1.js",
+        "raw": 11264,
+        "gzip": 3472,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/native-katex-scene-compositor-0FNPLQ7j.js",
+        "raw": 101147,
+        "gzip": 28049,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/native-katex-scene-contribution-BqM9SEdf.js",
+        "raw": 3440,
+        "gzip": 1355,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/equation-linear-rearrangement-frame-CHYB64E5.js",
+        "raw": 1542,
+        "gzip": 737,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/native-katex-scene-assembly-Dx1jV8zL.js",
+        "raw": 6272,
+        "gzip": 2460,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/native-katex-successor-synthesis-CFiSmTcz.js",
+        "raw": 16342,
+        "gzip": 4791,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/successor-synthesis-BH238ray.js",
+        "raw": 14132,
+        "gzip": 4241,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/webgl-context-lease-pool-BS_w24UF.js",
+        "raw": 1584,
+        "gzip": 714,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/katex-texture-atlas-B2vOCGy9.js",
+        "raw": 11346,
+        "gzip": 3957,
+        "kind": ".js"
+      }
+    ],
+    "gradient": [
+      {
+        "path": "experiments/kinetic-figure/gradient-contour/index.html",
+        "raw": 401,
+        "gzip": 289,
+        "kind": ".html"
+      },
+      {
+        "path": "assets/gradientContour-ZmWq_x6N.js",
+        "raw": 520792,
+        "gzip": 155815,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/gradientContour-yrMr-wI2.css",
+        "raw": 78262,
+        "gzip": 17987,
+        "kind": ".css"
+      },
+      {
+        "path": "assets/KaTeX_Math-Italic-t53AETM-.woff2",
+        "raw": 16440,
+        "gzip": 16466,
+        "kind": ".woff2"
+      },
+      {
+        "path": "assets/KaTeX_Main-Regular-B22Nviop.woff2",
+        "raw": 26272,
+        "gzip": 26300,
+        "kind": ".woff2"
+      },
+      {
+        "path": "assets/KaTeX_Main-Bold-Cx986IdX.woff2",
+        "raw": 25324,
+        "gzip": 25352,
+        "kind": ".woff2"
+      },
+      {
+        "path": "assets/graph-webgl-three-B6G2NHxB.js",
+        "raw": 530398,
+        "gzip": 132335,
+        "kind": ".js"
+      }
+    ]
+  },
+  "activation": {
+    "kind": "activation",
+    "scenario": "canonical-tax",
+    "initialStates": [
+      {
+        "state": "ready",
+        "top": 810.53125,
+        "bottom": 1070.53125,
+        "viewport": 844
+      },
+      {
+        "state": "idle",
+        "top": 1442.921875,
+        "bottom": 1702.921875,
+        "viewport": 844
+      },
+      {
+        "state": "idle",
+        "top": 2096.53125,
+        "bottom": 2466.125,
+        "viewport": 844
+      }
+    ],
+    "additional": [
+      {
+        "path": "assets/kinetic-figure-surface-contour-entry-V_cbocqX.js",
+        "raw": 6521,
+        "gzip": 2442,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/graph-webgl-three-BBVoQLiH.js",
+        "raw": 408,
+        "gzip": 205,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/graph-webgl-three-CdugNb3w.js",
+        "raw": 528639,
+        "gzip": 131715,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/kinetic-figure-typescript-focus-card-Bmn-Y8hU.js",
+        "raw": 7442,
+        "gzip": 2627,
+        "kind": ".js"
+      },
+      {
+        "path": "assets/typescript-refactor-dom-session-CQ4I6J2R.js",
+        "raw": 10238,
+        "gzip": 3472,
+        "kind": ".js"
+      }
+    ],
+    "errors": []
+  },
+  "cssCoverage": [
+    {
+      "kind": "css-coverage",
+      "scenario": "static-quadratic-reader",
+      "caveat": "UTF-16 code units used over load plus one next step at 390px, not all states/themes/widths or a deletion proof",
+      "stylesheets": [
+        {
+          "url": "http://localhost:8000/assets/reader-quadratic-branching-zUDEBPRY.css",
+          "total": 54925,
+          "used": 12425
+        },
+        {
+          "url": "http://localhost:8000/assets/katex-CYlHEDRF.css",
+          "total": 28835,
+          "used": 1100
+        }
+      ]
+    },
+    {
+      "kind": "css-coverage",
+      "scenario": "canonical-tax",
+      "caveat": "UTF-16 code units used over load plus one next step at 390px, not all states/themes/widths or a deletion proof",
+      "stylesheets": [
+        {
+          "url": "http://localhost:8000/assets/canonicalSupplyTax-BEzBc_Kj.css",
+          "total": 25422,
+          "used": 12872
+        },
+        {
+          "url": "http://localhost:8000/assets/katex-CYlHEDRF.css",
+          "total": 28835,
+          "used": 2122
+        },
+        {
+          "url": "http://localhost:8000/assets/typescript-refactor-Bsox_oho.css",
+          "total": 5891,
+          "used": 5085
+        },
+        {
+          "url": "http://localhost:8000/assets/kinetic-figure-surface-contour-entry-static-CmOECTNw.css",
+          "total": 40918,
+          "used": 13064
+        },
+        {
+          "url": "http://localhost:8000/assets/log-exponent-surface-capability-BH9WK__K.css",
+          "total": 667,
+          "used": 666
+        }
+      ]
+    },
+    {
+      "kind": "css-coverage",
+      "scenario": "gradient",
+      "caveat": "UTF-16 code units used over load plus one next step at 390px, not all states/themes/widths or a deletion proof",
+      "stylesheets": [
+        {
+          "url": "http://localhost:8000/assets/gradientContour-yrMr-wI2.css",
+          "total": 78262,
+          "used": 18445
+        }
+      ]
+    }
+  ]
+}

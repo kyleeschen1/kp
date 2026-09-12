@@ -2,7 +2,8 @@
   "id": "run-contract.kp.architecture-cost-semantic-readiness-v2",
   "kind": "run-contract",
   "title": "Architecture cost and semantic readiness",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "COMPLETE: approved 25-slice scope exhausted successfully with final release evidence and thorough report; no mechanics successor started.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -184,7 +185,8 @@
     {
       "id": "s25",
       "title": "Release and thorough closeout",
-      "status": "planned"
+      "summary": "Release complete: 7064 unit tests, full types, builds, all affected budget and closure gates, complete cost accounting, and representative three-engine preservation pass. Measured closeout records remaining camera cost and bounded M00-M01 handoff; no automatic successor.",
+      "status": "complete"
     }
   ]
 }

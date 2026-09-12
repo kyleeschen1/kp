@@ -43,7 +43,8 @@ The user accepted the completed gradient result and requested continuation with
 Git hygiene. A bounded source-based architecture assessment is now recorded in
 `reviews/2026-09-12-mechanics-architecture-readiness.md`. First recommended repair:
 complete static edition stylesheet/asset dependencies, then reconcile verification
-and revision ownership before mechanics runtime. No repair loop has been started.
+and revision ownership before mechanics runtime. That assessment preceded the
+subsequently approved readiness loop described below.
 Current branch: `feature/20260912-mechanics-architecture-readiness`, based on the
 verified `ac579dec5` tip; prior branch/history retained, no merge or push.
 
@@ -54,23 +55,30 @@ The completed bounded audit and fresh measurements are recorded in
 order: publication dependency closure; measured host loading and gradient frame
 cost; semantic authority gaps; evidence-led verification/policy consolidation;
 then the first mechanics unit with reusable mathematics. The 6× CPU measurements
-are sensitivity probes, not physical-device certification. No runtime repair,
-test deletion, budget increase, or successor run is implied by this audit.
+are sensitivity probes, not physical-device certification. The audit itself did
+not authorize runtime repairs; the following approval supplied that authority.
 
-The user now accepts audit recommendations 1–5 and requests a Theseus long loop.
+The user accepted audit recommendations 1–5 and requested a Theseus long loop.
 Exact proposed scope and preservation gates:
 `threads/2026-09-12-architecture-readiness-long-loop-proposal.md` (25 slices).
 The user approved the exact proposal and requested a thorough closeout report.
-Active execution: `run-contract.kp.architecture-cost-semantic-readiness-v2`;
+Completed execution: `run-contract.kp.architecture-cost-semantic-readiness-v2`;
 v1 is issuance-only history. Mechanics content remains the next product boundary,
 not part of this readiness loop.
+
+Consolidated findings and the bounded next-product recommendation:
+`threads/2026-09-12-architecture-readiness-closeout.md`. The report distinguishes
+startup deferral from total download cost, improved stationary-surface transitions
+from remaining 3D camera cost, and structural semantic checks from mathematical
+proof. All 25 slices passed release; Theseus retains the execution evidence. The next proposed
+content boundary is mechanics M00–M01, not another universal-framework prerequisite.
 
 Completed delivery: `threads/2026-09-10-gradient-contour-delivery-proposal.md`
 under `run-contract.kp.gradient-contour-intuition-v1`. All six packages passed;
 source-only reuse, independent reading/exact return, release evidence and limits:
 `threads/2026-09-12-gradient-reuse-evidence.md`. The mechanics-from-zero outline
-and gradient continuation complete the authorised first two priorities. Next is
-architecture assessment and bounded cleanup before new mechanics implementation;
+and gradient continuation complete the authorised first two priorities. The
+subsequently approved readiness loop handles architecture and bounded cleanup;
 no automatic successor is started. User approved the gradient proposal with “go”.
 Use the KP delivery skill: six outcome-sized packages, G3 human review before
 source-only generalization and downstream integration. Preserve the original
@@ -1210,8 +1218,9 @@ Do not restart work already closed:
 - semantic visual salience across economics SVG and native KaTeX;
 - `kp.article.v1`, versioned vignette imports, static publication, semantic
   links, accessibility, and whole-file source editing;
-- learner-core route boundaries and the 124,778-byte common equation-reader
-  closure;
+- learner-core route boundaries; the historical 124,778-byte equation-reader
+  baseline is superseded by the measured shared-budget reconciliation in
+  `threads/2026-09-12-budget-owner-reconciliation.md`;
 - canonical equation sessions, direct seek/rewind, native endpoints, and one
   shared clock;
 - economics and physics Graph2D lifecycle pressure;
