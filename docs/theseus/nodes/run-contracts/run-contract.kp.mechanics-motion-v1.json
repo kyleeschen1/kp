@@ -1,0 +1,61 @@
+{
+  "id": "run-contract.kp.mechanics-motion-v1",
+  "kind": "run-contract",
+  "title": "Describing motion",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.mechanics-motion.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-12-mechanics-motion-delivery-proposal.md",
+      "summary": "User approved revised question-first trajectory and said record it then go"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run test",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Approved four-package proposal; bounded nonvisual repairs; six active hours with final hour reserved"
+  ],
+  "disallowedWork": [
+    "No all-twelve delivery, universal framework, independent clock, silent fallback, or promotion before p2 visual acceptance"
+  ],
+  "goal": "Deliver the approved motion-description exemplar, visual checkpoint, independent mathematics reuse and publication",
+  "target": "next-action.kp.mechanics-motion",
+  "runMode": "run",
+  "maxSlices": 4,
+  "commitCadence": "Verified package or reversible sub-boundary with evidence",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop at p2 human review, unsupported authority after bounded diagnosis, resource ceiling, safety or new scope"
+  ],
+  "slices": [
+    {
+      "id": "p1",
+      "title": "Explanation and semantic authority",
+      "summary": "Explanation-first draft and exact governed domain binding complete; visual rendering remains p2 and requires human review",
+      "status": "complete"
+    },
+    {
+      "id": "p2",
+      "title": "Canonical motion exemplar and human review",
+      "status": "planned"
+    },
+    {
+      "id": "p3",
+      "title": "Independent mathematics reuse",
+      "status": "planned"
+    },
+    {
+      "id": "p4",
+      "title": "Integration publication and release",
+      "status": "planned"
+    }
+  ]
+}

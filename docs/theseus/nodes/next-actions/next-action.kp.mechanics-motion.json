@@ -1,0 +1,57 @@
+{
+  "id": "next-action.kp.mechanics-motion",
+  "kind": "next-action",
+  "title": "Describe motion through reusable position-time evidence",
+  "status": "ready",
+  "summary": "Approved opening unit and graph-reading bridge; origin change is supporting, not a whole lesson",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-12-mechanics-motion-delivery-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.architecture-cost-semantic-readiness"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run test"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/motion-observation.test.ts tests/motion-observation-asset.test.ts; npm run typecheck; npm run check:dependency-direction",
+      "status": "passed",
+      "scope": "p1",
+      "checkedAt": "2026-09-12T21:00:23.348Z",
+      "notes": "Six tests pass: exact endpoint arithmetic, interpolation assumption, reverse, malformed data, alias ownership, runtime issuance and namespaced observation/point selectors; full types pass after test helper repair. Authority and explanation docs name existing shared owners."
+    }
+  ],
+  "expectedLearning": [
+    "Can a motivated motion explanation reuse mathematical truth without competing time or renderer ownership?"
+  ],
+  "allowedWork": [
+    "Four approved packages in mechanics-motion delivery proposal"
+  ],
+  "disallowedWork": [
+    "No automatic twelve-lesson implementation or visual promotion before acceptance"
+  ],
+  "criteria": [
+    {
+      "id": "learner-explanation",
+      "weight": "high"
+    },
+    {
+      "id": "semantic-authority",
+      "weight": "high"
+    },
+    {
+      "id": "reuse-and-preservation",
+      "weight": "high"
+    }
+  ]
+}
