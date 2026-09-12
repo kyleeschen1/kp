@@ -43,3 +43,23 @@ Verification-economics follow-up: `verify:impact` has no focused rule for the ne
 CSS owner and falls back to the full suite. Keep that safe default until the
 approved verification-routing slice proves a narrower selection. No stylesheet
 deletion or support claim follows from a single unused-CSS coverage sample.
+
+## Gradient adoption
+
+The canonical gradient entry adopts the same two owners; checked field source,
+Graph3D stage, explanation and controls are untouched. Its separate production
+build delivers 78,262 raw / 17,987 gzip CSS bytes, down from the original audit's
+129,942 / 26,265. JavaScript remains effectively unchanged at 287,591 gzip bytes;
+fonts remain 68,118. Six fresh cost cohorts (1x/6x, three each) reported no page
+errors. This CSS reduction does not solve the active-frame problem: 6x frame
+medians remained about 34–50ms and p95 about 67ms, preserving the need for CPU
+attribution and repair in the approved later slices.
+
+`npm run build:gradient-contour`, `npm run visual:gradient-contour:production`,
+24 focused model/authoring/extraction/attention/CSS unit checks and full typecheck
+passed. The first 14-case browser run passed 13 checks (including enlarged text,
+phone/reduced motion, source Apply, exact return, reference and passage fit); the
+shader-retention check exceeded its 5s readiness wait. Its three isolated repeats
+passed unchanged. Retain that observed timeout rather than claiming an entirely
+clean first run or weakening shader-retention assertions.
+The complete unchanged 14-case group then passed in sequence (1.2 minutes).

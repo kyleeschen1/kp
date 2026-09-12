@@ -88,7 +88,8 @@
     {
       "id": "s09",
       "title": "Gradient focused CSS",
-      "status": "planned"
+      "summary": "Gradient focused CSS reduces gzip delivery by 8278 bytes; native Graph3D, source Apply, enlarged type, input and independent reading preservation verified.",
+      "status": "complete"
     },
     {
       "id": "s10",

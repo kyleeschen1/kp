@@ -92,6 +92,13 @@
       "scope": "s08",
       "checkedAt": "2026-09-12T16:51:20.602Z",
       "notes": "Six cohorts pass; CSS raw 153438 to 101733 and gzip 31360 to 22520; no activation CSS. Production build, full types, 52 CSS/rendering tests, native motion and light/dark desktop/phone checks pass. All 641 original CSS rule records retained."
+    },
+    {
+      "command": "npm run visual:gradient-contour",
+      "status": "passed",
+      "scope": "s09",
+      "checkedAt": "2026-09-12T16:58:33.966Z",
+      "notes": "Full 14-case group passed after one first-run readiness timeout and three isolated shader repeats. Production source Apply/return passes; 24 unit checks and full types pass; six production probes CSS 78262 raw 17987 gzip versus audit 129942/26265. Active CPU cost remains open."
     }
   ],
   "expectedLearning": [

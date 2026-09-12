@@ -45,7 +45,7 @@ if (process.argv.includes("--browser")) {
       ready: '.graph-webgl[data-kp-surface-contour-capability="ready"]', card: true }
   ];
   try {
-    for (const scenario of scenarios.filter(item => !process.argv.includes("--tax-only") || item.id === "canonical-tax")) for (const rate of [1, 6]) for (let repeat = 1; repeat <= 3; repeat++) {
+    for (const scenario of scenarios.filter(item => (!process.argv.includes("--tax-only") || item.id === "canonical-tax") && (!process.argv.includes("--gradient-only") || item.id === "gradient"))) for (const rate of [1, 6]) for (let repeat = 1; repeat <= 3; repeat++) {
       const context = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1, reducedMotion: "no-preference" });
       try {
         const page = await context.newPage(), cdp = await context.newCDPSession(page);
