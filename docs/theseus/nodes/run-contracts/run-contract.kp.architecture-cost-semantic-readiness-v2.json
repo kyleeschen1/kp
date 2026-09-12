@@ -160,7 +160,8 @@
     {
       "id": "s21",
       "title": "Code input convergence",
-      "status": "planned"
+      "summary": "Code local input flags, RAF and timer retired; native token motion and nearest-beat release preserved; shared transport pressure passes.",
+      "status": "complete"
     },
     {
       "id": "s22",

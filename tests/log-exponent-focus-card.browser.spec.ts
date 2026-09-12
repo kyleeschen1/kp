@@ -24,6 +24,24 @@ test("deferred controller preserves the first slider keyboard command", async ({
   } finally { release(); }
 });
 
+test("deferred controller preserves the first icon-button click", async ({ page }) => {
+  let release!: () => void;
+  const held = new Promise<void>(resolve => { release = resolve; });
+  await page.route("**/kinetic-figure-typescript-focus-card.ts*", async route => {
+    await held; await route.continue();
+  });
+  try {
+    await page.goto(path, { waitUntil: "domcontentloaded" });
+    const deck = page.locator("[data-kp-typescript-focus-card]");
+    const next = deck.locator("[data-kp-focus-deck-next]");
+    await next.click();
+    await expect(deck).toHaveAttribute("data-kp-deferred-card", "loading");
+    release();
+    await expect(deck).toHaveAttribute("data-kp-focus-deck-active-beat", "compare-duplicates");
+    await expect(deck).toHaveAttribute("data-kp-deferred-card", "ready");
+  } finally { release(); }
+});
+
 test("deferred controller retains native passage travel during loading", async ({ page }) => {
   let release!: () => void;
   const held = new Promise<void>(resolve => { release = resolve; });

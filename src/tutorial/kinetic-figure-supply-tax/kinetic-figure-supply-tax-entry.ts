@@ -214,7 +214,11 @@ export function mountKpSupplyTaxKineticFigure(input: {
     for (const companion of companions) if (event.target instanceof Node && companion.element.contains(event.target)) activateCompanion(companion);
   };
   const preservePendingControl = (event: Event) => {
-    const target = event.target;
+    // Icon buttons deliver clicks from SVG descendants, not necessarily an
+    // HTMLElement. Queue the semantic control so activation cannot lose them.
+    const target = event.target instanceof Element
+      ? event.target.closest<HTMLElement>("button, [data-kp-focus-deck-scrubber]") ?? event.target
+      : event.target;
     if (!(target instanceof HTMLElement)) return;
     const companion = companions.find(item => item.element.contains(target));
     if (!companion || companion.session.status() === "ready" || companion.session.status() === "disposed") return;

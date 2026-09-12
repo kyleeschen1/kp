@@ -12,6 +12,7 @@ export function mountKpFocusDeckNativeInput(input: {
   enabled(): boolean; position(): number;
   begin(now: number, kind: "wheel" | "native-touch" | "pointer"): FocusDeckTravelSession;
   reduced(): boolean; interrupt(): void;
+  unownedPosition?(): number;
 }) {
   const { viewport, region } = input;
   const owner = viewport.ownerDocument.defaultView!;
@@ -62,7 +63,15 @@ export function mountKpFocusDeckNativeInput(input: {
     state = { kind: "native", session: input.begin(now(), kind), lastInput: now() };
   };
   const scroll = () => {
-    if (state.kind !== "native") return;
+    if (state.kind !== "native") {
+      // Some callers hold whole prose beats during programmatic motion. Their
+      // projection owns this offset; late native events cannot reinterpret it.
+      if (state.kind === "idle" && input.unownedPosition) {
+        const expected = input.unownedPosition() * width();
+        if (Math.abs(viewport.scrollLeft - expected) > 1) viewport.scrollLeft = expected;
+      }
+      return;
+    }
     if (frame === undefined) frame = owner.requestAnimationFrame(sample);
     scheduleFinish();
   };

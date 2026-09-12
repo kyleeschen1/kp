@@ -111,9 +111,9 @@ test("TypeScript card is a projection over the existing code renderer and clock"
   assert.match(source, /renderKpTypeScriptRefactorDomFrame\(/u);
   assert.match(source, /createKpReaderTimelinePlaybackClock\(/u);
   assert.doesNotMatch(source, /setInterval/u);
-  // A bounded input-quiet fallback settles a swipe; it must not become an
-  // independent code-animation clock. Playback remains the shared clock.
-  assert.equal((source.match(/setTimeout\(/gu) ?? []).length, 1);
-  assert.match(source, /setTimeout\(settleNativePassage, 180\)/u);
+  // Temporal input ownership is shared; code owns no parallel release timer.
+  assert.doesNotMatch(source, /setTimeout\(|handlePassageWheel|handlePassageScrollEnd/u);
+  assert.match(source, /mountKpFocusDeckNativeInput\(\{/u);
+  assert.match(source, /createKpFocusDeckTravelPlayback\(\{/u);
   assert.doesNotMatch(source, /shippingCost\s*\(/u);
 });

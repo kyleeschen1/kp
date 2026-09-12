@@ -17,6 +17,9 @@ type KpTypeScriptFocusCardBeatV1
 } from "./kinetic-figure-typescript-focus-card-model.ts";
 import { boundedIndex,type KpTypeScriptFocusCardAuthority } from "./kinetic-figure-typescript-focus-card-static.ts";
 
+import { mountKpFocusDeckNativeInput } from "../focus-deck-native-input.ts";
+import { createKpFocusDeckTravelPlayback } from "../focus-deck-checkpoint-playback.ts";
+
 const progressTolerance = 0.0001;
 
 
@@ -81,19 +84,8 @@ export function mountKpTypeScriptFocusCard(input: {
   let pendingMotion: PendingMotion | undefined;
   let disposed = false;
   let deckPosition = activeIndex;
-  let nativePassage = false;
-  let passagePointerHeld = false;
-  let passageFrame: number | undefined;
-  let passageEndTimer: number | undefined;
-
-  const stopNativePassage = (): void => {
-    nativePassage = false;
-    passagePointerHeld = false;
-    if (passageFrame !== undefined) ownerWindow.cancelAnimationFrame(passageFrame);
-    if (passageEndTimer !== undefined) ownerWindow.clearTimeout(passageEndTimer);
-    passageFrame = undefined;
-    passageEndTimer = undefined;
-  };
+  let nativeInput: ReturnType<typeof mountKpFocusDeckNativeInput> | undefined;
+  const stopNativePassage = (): void => { nativeInput?.cancel(); };
 
   const cursorTrack = ownerDocument.createElement("span");
   cursorTrack.dataset["kpTypescriptFocusCardCursorTrack"] = "true";
@@ -311,11 +303,9 @@ export function mountKpTypeScriptFocusCard(input: {
     cursorMotion: "immediate"
   });
 
-  const projectNativePassage = (): void => {
-    passageFrame = undefined;
-    if (!nativePassage || disposed) return;
+  const projectNativePassage = (position: number): void => {
     const sample = sampleKpTypeScriptFocusCardPosition(
-      score, viewport.scrollLeft / Math.max(1, viewport.clientWidth)
+      score, position
     );
     projectChrome(Math.round(sample.position));
     projectPosition(sample.position, "immediate", false);
@@ -324,52 +314,14 @@ export function mountKpTypeScriptFocusCard(input: {
     deck.dataset["kpTypescriptFocusCardMotionDecision"] = "static";
     deck.dataset["kpTypescriptFocusCardMotionReason"] = "passage";
   };
-  const settleNativePassage = (): void => {
-    if (!nativePassage || passagePointerHeld) return;
-    if (passageFrame !== undefined) ownerWindow.cancelAnimationFrame(passageFrame);
-    projectNativePassage();
-    select(Math.round(deckPosition), { animate: false });
-  };
-  const schedulePassageEnd = (): void => {
-    if (passageEndTimer !== undefined) ownerWindow.clearTimeout(passageEndTimer);
-    // Scrollend can arrive before a queued frame (or a new wheel's scroll).
-    // Debounce input settlement, never animation time, so that frame is painted.
-    passageEndTimer = ownerWindow.setTimeout(settleNativePassage, 180);
-  };
-  const handlePassageScrollEnd = (): void => {
-    if (nativePassage) schedulePassageEnd();
-  };
-  const handlePassageScroll = (): void => {
-    if (!nativePassage) {
-      // Programmatic control writes and late momentum must not acquire the
-      // clock. Only a physical horizontal gesture grants passage ownership.
-      const expected = Math.round(deckPosition) * Math.max(1, viewport.clientWidth);
-      if (Math.abs(viewport.scrollLeft - expected) > 1) viewport.scrollLeft = expected;
-      return;
-    }
-    if (passageFrame === undefined) {
-      passageFrame = ownerWindow.requestAnimationFrame(projectNativePassage);
-    }
-    schedulePassageEnd();
-  };
-  const handlePassagePointerDown = (event: PointerEvent): void => {
-    if (!event.isPrimary || !(event.target instanceof Element) ||
-        event.target.closest("a, button, input, select, textarea, [contenteditable]")) return;
-    nativePassage = true;
-    passagePointerHeld = true;
-    cancelMotion();
-  };
-  const handlePassagePointerEnd = (): void => {
-    if (!nativePassage) return;
-    passagePointerHeld = false;
-    schedulePassageEnd();
-  };
-  const handlePassageWheel = (event: WheelEvent): void => {
-    if (!event.shiftKey && Math.abs(event.deltaX) < Math.max(1, Math.abs(event.deltaY) * 0.65)) return;
-    nativePassage = true;
-    cancelMotion();
-    schedulePassageEnd();
-  };
+  const travel = createKpFocusDeckTravelPlayback({
+    last: score.beats.length - 1, position: () => deckPosition, pause: cancelMotion,
+    update: projectNativePassage,
+    // Preserve code's existing nearest-beat release; motion-owning buttons
+    // still use the native token theater and its authored timeline.
+    resolveTarget: sample => Math.round(sample.position),
+    settle: target => select(target, { animate: false })
+  });
   const handleKeydown = (event: KeyboardEvent): void => {
     if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) return;
     if (event.target instanceof HTMLInputElement ||
@@ -402,7 +354,7 @@ export function mountKpTypeScriptFocusCard(input: {
     else clock.seek(score.beats[activeIndex]!.timelineProgress, "controls");
   };
   const handleResize = (): void => {
-    if (nativePassage) select(activeIndex, { animate: false, history: "none" });
+    if (nativeInput?.ownsTravel()) select(activeIndex, { animate: false, history: "none" });
     else projectPosition(activeIndex, "immediate");
   };
 
@@ -423,12 +375,12 @@ export function mountKpTypeScriptFocusCard(input: {
   scrubber.addEventListener("input", handleScrubberInput);
   scrubber.addEventListener("change", finishScrubber);
   scrubber.addEventListener("keydown", handleScrubberKeydown);
-  viewport.addEventListener("scroll", handlePassageScroll, { passive: true });
-  viewport.addEventListener("scrollend", handlePassageScrollEnd);
-  viewport.addEventListener("pointerdown", handlePassagePointerDown, { passive: true });
-  viewport.addEventListener("wheel", handlePassageWheel, { passive: true });
-  ownerWindow.addEventListener("pointerup", handlePassagePointerEnd);
-  ownerWindow.addEventListener("pointercancel", handlePassagePointerEnd);
+  nativeInput = mountKpFocusDeckNativeInput({
+    viewport, region: deck, enabled: () => !disposed,
+    position: () => deckPosition, unownedPosition: () => Math.round(deckPosition),
+    begin: travel.begin, reduced: () => reducedMotion.matches,
+    interrupt: stopNativePassage
+  });
   deck.addEventListener("keydown", handleKeydown);
   ownerWindow.addEventListener("popstate", handleLocation);
   ownerWindow.addEventListener("hashchange", handleLocation);
@@ -452,12 +404,7 @@ export function mountKpTypeScriptFocusCard(input: {
       scrubber.removeEventListener("input", handleScrubberInput);
       scrubber.removeEventListener("change", finishScrubber);
       scrubber.removeEventListener("keydown", handleScrubberKeydown);
-      viewport.removeEventListener("scroll", handlePassageScroll);
-      viewport.removeEventListener("scrollend", handlePassageScrollEnd);
-      viewport.removeEventListener("pointerdown", handlePassagePointerDown);
-      viewport.removeEventListener("wheel", handlePassageWheel);
-      ownerWindow.removeEventListener("pointerup", handlePassagePointerEnd);
-      ownerWindow.removeEventListener("pointercancel", handlePassagePointerEnd);
+      nativeInput?.dispose(); travel.dispose();
       deck.removeEventListener("keydown", handleKeydown);
       ownerWindow.removeEventListener("popstate", handleLocation);
       ownerWindow.removeEventListener("hashchange", handleLocation);

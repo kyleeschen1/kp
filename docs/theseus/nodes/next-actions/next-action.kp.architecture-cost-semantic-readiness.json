@@ -176,6 +176,13 @@
       "scope": "s20",
       "checkedAt": "2026-09-12T18:48:45.520Z",
       "notes": "13 tax browser cases, 3 gradient preservation cases, 10 focused unit checks and full types pass. Initial tiny-touch and wall-time test failures repaired; no behavior waiver."
+    },
+    {
+      "command": "npm run visual:focus-deck-input",
+      "status": "passed",
+      "scope": "s21",
+      "checkedAt": "2026-09-12T18:57:58.250Z",
+      "notes": "13 Chromium code/deferred/keyboard cases, 15 representative Chromium Firefox WebKit input cases, 11 unit checks and full types pass. Original first-click failure repaired at shared activation control boundary."
     }
   ],
   "expectedLearning": [
