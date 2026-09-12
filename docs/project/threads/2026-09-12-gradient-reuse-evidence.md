@@ -29,7 +29,28 @@ The reviewed primary prose is retained, while numeric and compass-specific
 claims are rebound for the unequal-slope caller. No new renderer, clock, server,
 global salience store or arbitrary-field generator was introduced.
 
-## Evidence and limits
+## Independent reading and exact return
+
+Below the card, **Why is the tangent flat to first order?** opens an independent
+Article reading with its own context, derivation, limits and prediction/reveal.
+Return restores the exact interrupted progress, not just the nearest stop. Its
+address carries the checked source and revision-pinned semantic interval; both
+cold loads and same-document fragment navigation use the same validator.
+Removing the fragment also restores the saved parent. Invalid/stale references
+do not overwrite the current valid lesson.
+
+**Read the complete argument without animation** supplies a coherent Article
+projection. Both readings use the existing Article compiler/static-HTML owner
+and native accessible math, not a new publication or animation system. The
+independent explanation distinguishes the chain rule along a level curve from
+the quadratic remainder of a straight tangent step.
+
+These are mutable preview links, not immutable published editions. They pin the
+source/main-story revision; reading projections use the installed projector.
+Archival editions and compatibility across editorial migrations remain the
+existing publication system's responsibility, to inspect in the later assessment.
+
+## Verification
 
 - `tests/gradient-contour-authoring.test.ts`: field/paint agreement, contour and
   derivative laws, source roundtrip, primary preservation and rejected cases.
@@ -38,6 +59,10 @@ global salience store or arbitrary-field generator was introduced.
   at desktop/phone widths. Screenshots are disposable, not approved goldens.
 - Full type checking is required at the commit boundary; actual run results are
   in Theseus. Broad release checks remain the G6 obligation.
+- `tests/gradient-contour-extraction.test.ts`: exact fractional pins, semantic
+  neighbors, stale/forged revision rejection, transported source and Article
+  context/limits. The scoped browser command also exercises same-document and
+  cold-start restoration and accessible answer disclosure.
 
 This required bounded engine/adaptor work because the original stage was fixed
 to one field. Subsequent supported coefficient/point edits are source-only.

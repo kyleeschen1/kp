@@ -15,9 +15,11 @@ import { gradientContourReference, gradientContourBrief, gradientComparisonBound
 import { gradientContourPrimary } from "./gradient-contour-model.ts";
 import { gradientNumber as number } from "./gradient-contour-story.ts";
 import { checkGradientExplanation, checkGradientExplanationText, gradientContourVariant, type CheckedGradientExplanation } from "./gradient-contour-authoring.ts";
+import { projectGradientReading } from "./gradient-contour-readings.ts";
+import { extractGradientTangent, gradientTangentAddress, readGradientTangentAddress, resolveGradientPosition, type GradientTangentExtraction } from "./gradient-contour-extraction.ts";
 import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
 
-function mountExplanation(root: HTMLElement, lesson: CheckedGradientExplanation) {
+function mountExplanation(root: HTMLElement, lesson: CheckedGradientExplanation, initialExtraction?: GradientTangentExtraction) {
 const { authority, sequence } = lesson;
 const { model, beats, checkpoints: gradientContourCheckpoints, reading: gradientComparisonReading, sample: sampleGradientContour } = sequence;
 const { a, b, point } = model.source, g = model.atPoint.gradient;
@@ -39,6 +41,11 @@ ${renderLatexToHtml("D_{\\mathbf u}f=\\nabla f\\cdot\\mathbf u=\\lVert\\nabla f\
 <details class="gradient-calculation"><summary>Where did the two slopes come from?</summary><p>Our field is ${renderLatexToHtml(`f(x,y)=${model.latex}`, { displayMode: false, output: "htmlAndMathml" })} at (${number(point.x)}, ${number(point.y)}), with height ${number(model.level)}. Expanding after a small move gives:</p>${renderLatexToHtml(`f(${number(point.x)}+\\Delta x,${number(point.y)}+\\Delta y)=${number(model.level)}+${number(g.x)}\\Delta x+${number(g.y)}\\Delta y+${number(a)}(\\Delta x)^2+${number(b)}(\\Delta y)^2`, { output: "htmlAndMathml" })}<p>The linear terms give our two slopes. The remaining terms are quadratic: halving both movements quarters those terms. This is why the local linear prediction becomes accurate close to the point.</p></details>
 <p class="gradient-reference"><a href="/experiments/kinetic-figure/surface-contour/">Original surface / contour reference</a> · Source edits apply to this lesson only.</p></article>`;
 root.dataset["gradientSource"] = lesson.sourceText;
+root.dataset["gradientRevision"] = lesson.revisionId;
+const fullReading = projectGradientReading(lesson, "full"), tangentReading = projectGradientReading(lesson, "tangent");
+const parent = root.querySelector<HTMLElement>("article")!;
+parent.insertAdjacentHTML("beforeend", `<p><button type="button" data-gradient-open-tangent>Why is the tangent flat to first order?</button></p><details class="gradient-reading"><summary>Read the complete argument without animation</summary>${fullReading.html}<details><summary>Reveal the prediction answer</summary><p>${fullReading.answer}</p></details></details>`);
+root.insertAdjacentHTML("beforeend", `<section class="gradient-reading gradient-tangent-reading" data-gradient-tangent-reading hidden aria-label="Independent contour-tangent explanation"><p><button type="button" data-gradient-return>Return to the exact place in the parent explanation</button></p>${tangentReading.html}<details><summary>Reveal the prediction answer</summary><p>${tangentReading.answer}</p></details><p><a data-gradient-tangent-link>Open this self-contained explanation in its own address</a></p></section>`);
 const get = <T extends Element>(selector: string) => { const found = root.querySelector<T>(selector); if (!found) throw new Error(`Gradient card requires ${selector}`); return found; };
 const card = get<HTMLElement>("[data-kp-focus-deck]");
 const plot = get<HTMLElement>(".kp-surface-contour-stage__plot");
@@ -154,8 +161,8 @@ replay.onclick = () => {
 slider.oninput = () => { cancel(); clock.pause(); clock.seek(Number(slider.value) / playback.last); };
 const release = () => playback.seek(Math.round(playback.position()), !reduced.matches, true);
 slider.onchange = release; slider.onpointerup = release; slider.onpointercancel = release;
-const unbindKeyboard = bindKpFocusDeckKeyboard({ card, slider, enabled: () => !disposed, position: playback.position, checkpointCount: () => beats.length, navigate });
-input = mountKpFocusDeckNativeInput({ viewport, region: card, enabled: () => !disposed, position: playback.position,
+const unbindKeyboard = bindKpFocusDeckKeyboard({ card, slider, enabled: () => !disposed && !parent.hidden, position: playback.position, checkpointCount: () => beats.length, navigate });
+input = mountKpFocusDeckNativeInput({ viewport, region: card, enabled: () => !disposed && !parent.hidden, position: playback.position,
   begin: playback.begin, reduced: () => reduced.matches, interrupt: cancel });
 const resize = () => { cancel(); clock.pause(); render(); };
 const visibility = () => { if (document.hidden) { cancel(); clock.pause(); } };
@@ -165,7 +172,30 @@ const dispose = () => {
 };
 window.addEventListener("resize", resize); document.addEventListener("visibilitychange", visibility); reduced.addEventListener("change", resize);
 render(); card.dataset["kpFocusCardEnhancement"] = "ready";
-return dispose;
+const reason = get<HTMLElement>("[data-gradient-tangent-reading]");
+let disclosure: { readonly view: "parent" } | { readonly view: "tangent"; readonly extraction: GradientTangentExtraction } = { view: "parent" };
+const openTangent = (extraction: GradientTangentExtraction) => {
+  resolveGradientPosition(lesson, extraction.returnTo);
+  cancel(); clock.pause();
+  disclosure = { view: "tangent", extraction };
+  parent.hidden = true; reason.hidden = false;
+  const address = gradientTangentAddress(extraction);
+  get<HTMLAnchorElement>("[data-gradient-tangent-link]").href = address;
+  history.replaceState(null, "", `${location.pathname}${location.search}${address}`);
+  get<HTMLButtonElement>("[data-gradient-return]").focus();
+};
+get<HTMLButtonElement>("[data-gradient-open-tangent]").onclick = () => openTangent(extractGradientTangent(lesson, clock.getSnapshot().progress));
+const returnToParent = () => {
+  if (disclosure.view !== "tangent") return;
+  const saved = resolveGradientPosition(lesson, disclosure.extraction.returnTo);
+  disclosure = { view: "parent" }; reason.hidden = true; parent.hidden = false;
+  cancel(); clock.pause(); clock.seek(saved.progress);
+  history.replaceState(null, "", `${location.pathname}${location.search}`);
+  render(); slider.focus();
+};
+get<HTMLButtonElement>("[data-gradient-return]").onclick = returnToParent;
+if (initialExtraction) openTangent(initialExtraction);
+return Object.freeze({ dispose, returnToParent });
 }
 
 const app = document.querySelector<HTMLElement>("#app")!;
@@ -178,8 +208,10 @@ const sourceInput = editor.querySelector<HTMLTextAreaElement>("textarea")!;
 const status = editor.querySelector<HTMLElement>("[data-gradient-source-status]")!;
 const initial = checkGradientExplanation(gradientContourPrimary);
 if (initial.status !== "checked") throw new Error(initial.expected);
-let current = initial.lesson;
-let disposeLesson = mountExplanation(lessonRoot, current);
+const address = readGradientTangentAddress(location.hash);
+let current = address.status === "checked" ? address.lesson : initial.lesson;
+let session = mountExplanation(lessonRoot, current, address.status === "checked" ? address.extraction : undefined);
+if (address.status === "repair") { status.dataset["status"] = "repair"; status.textContent = `Cannot restore this address: ${address.message} The original lesson is shown.`; editor.open = true; }
 sourceInput.value = current.sourceText;
 editor.querySelector<HTMLButtonElement>("[data-gradient-apply]")!.onclick = () => {
   const checked = checkGradientExplanationText(sourceInput.value);
@@ -190,9 +222,10 @@ editor.querySelector<HTMLButtonElement>("[data-gradient-apply]")!.onclick = () =
   }
   // Validate semantics and stage fit before retiring the live session. Each
   // successful Apply owns exactly one clock, input binding and GPU session.
-  disposeLesson();
+  session.dispose();
+  history.replaceState(null, "", `${location.pathname}${location.search}`);
   current = checked.lesson;
-  disposeLesson = mountExplanation(lessonRoot, current);
+  session = mountExplanation(lessonRoot, current);
   sourceInput.value = current.sourceText;
   status.dataset["status"] = "applied";
   status.textContent = "Applied. Surface, contours, slopes and explanation now use this source. Returned to step 1.";
@@ -200,6 +233,19 @@ editor.querySelector<HTMLButtonElement>("[data-gradient-apply]")!.onclick = () =
 editor.querySelector<HTMLButtonElement>("[data-gradient-variant]")!.onclick = () => { sourceInput.value = JSON.stringify(gradientContourVariant, null, 2); status.textContent = "Unequal-slope draft loaded. Choose Apply source to show it."; };
 editor.querySelector<HTMLButtonElement>("[data-gradient-primary]")!.onclick = () => { sourceInput.value = JSON.stringify(gradientContourPrimary, null, 2); status.textContent = "Original draft loaded. Choose Apply source to show it."; };
 editor.querySelector<HTMLButtonElement>("[data-gradient-current]")!.onclick = () => { sourceInput.value = current.sourceText; status.textContent = "Restored the applied source; lesson unchanged."; };
-const dispose = () => disposeLesson();
+// Browsers can navigate between fragment addresses without reloading the page.
+// Route those through the same checked source/return path as a cold start.
+const restoreAddress = () => {
+  const restored = readGradientTangentAddress(location.hash);
+  if (restored.status === "absent") { session.returnToParent(); return; }
+  if (restored.status === "repair") {
+    status.dataset["status"] = "repair"; status.textContent = `Cannot restore this address: ${restored.message} The current lesson is unchanged.`; editor.open = true; return;
+  }
+  session.dispose(); current = restored.lesson;
+  session = mountExplanation(lessonRoot, current, restored.extraction);
+  sourceInput.value = current.sourceText;
+};
+window.addEventListener("hashchange", restoreAddress);
+const dispose = () => { window.removeEventListener("hashchange", restoreAddress); session.dispose(); };
 window.addEventListener("pagehide", dispose, { once: true });
 if (import.meta.hot) import.meta.hot.dispose(dispose);

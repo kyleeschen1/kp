@@ -379,11 +379,46 @@
       "scope": "G4 final integration",
       "checkedAt": "2026-09-12T04:30:00.340Z",
       "notes": "Complete rerun passes app, node, tests, Svelte 0 errors/0 warnings and domains after the three test typing repairs."
+    },
+    {
+      "command": "npm run visual:gradient-contour",
+      "status": "failed",
+      "scope": "G5 initial navigation",
+      "checkedAt": "2026-09-12T04:46:47.884Z",
+      "notes": "13 passed, 1 failed: same-document fragment navigation did not reload the host, leaving the parent visible. Repaired through checked hash restoration and added empty-fragment return coverage."
+    },
+    {
+      "command": "npm run visual:gradient-contour",
+      "status": "passed",
+      "scope": "G5 integrated rerun",
+      "checkedAt": "2026-09-12T04:46:49.195Z",
+      "notes": "14 Chromium checks passed after valid-fragment repair. Final empty-fragment and wording refinements then passed the focused independent-tangent browser and extraction reruns; G6 will re-run the complete final browser cohort."
+    },
+    {
+      "command": "npm run visual:gradient-contour -- --grep independent",
+      "status": "passed",
+      "scope": "G5 final navigation",
+      "checkedAt": "2026-09-12T04:46:50.296Z",
+      "notes": "Exact fractional return, valid and empty same-document fragment restoration, source variant and genuine cold-start address restore pass. No page errors."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/gradient-contour-extraction.test.ts",
+      "status": "passed",
+      "scope": "G5 final readings",
+      "checkedAt": "2026-09-12T04:46:51.395Z",
+      "notes": "3 passed after chain-rule bridge refinement; prior combined gradient/model/reference suite passed all 29. Pins reject stale, forged and nonfinite returns; Article projections retain context, first-order limits and prediction."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "G5 final types",
+      "checkedAt": "2026-09-12T04:46:52.429Z",
+      "notes": "Complete final app, node, test, Svelte and domain rerun passed after session return API and fragment removal repair; Svelte zero errors and warnings."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "New accepted priority recorded in docs/project/decisions/2026-09-11-applied-mathematics-mechanics-priority.md: mechanics-led learning, independent cross-domain applied mathematics, explanatory proofs and model derivations. Next planning must reconcile G3-G6 with this direction; no run cancelled, reordered or completed. Best-practices implementation remains deferred until brainstorm ends. Documentation only. Broad resume exceeded its output budget; brief target context succeeded. Conversation import requires JSON, so the Markdown direction is linked through this progress record instead."
+    "summary": "G3 accepted by positive rendered review plus explicit completion instruction. G4 source Apply delivered in e42a1c710; G5 independent Article and exact return verified. Mechanics-from-zero outline recorded. G6 release verification remains; no successor or architecture implementation starts automatically."
   },
   "expectedLearning": [
     "Whether contour identity plus first-order comparisons produce a reusable authorable geometric intuition."

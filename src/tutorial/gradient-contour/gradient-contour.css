@@ -8,6 +8,8 @@
 }
 .gradient-page > article { max-width: 52rem; margin: auto; }
 .gradient-source-editor { min-height: 0; max-width: 52rem; margin-inline: auto; }
+.gradient-reading { max-width: 52rem; margin-inline: auto; }
+.gradient-reading .katex-display { overflow-x: auto; overflow-y: hidden; }
 .gradient-intro { margin-bottom: 1.4rem; }
 .gradient-intro > p:first-child { font: 650 .7rem/1.4 system-ui, sans-serif; text-transform: uppercase; letter-spacing: .08em; }
 .gradient-intro h1 { font-size: clamp(1.8rem, 5vw, 2.8rem); line-height: 1.1; margin: .4rem 0; }

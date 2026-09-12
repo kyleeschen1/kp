@@ -63,6 +63,49 @@ test("source Apply changes the real stage and reasoning, preserves invalid draft
   await expect(page.locator("canvas")).toHaveCount(1);
   expect(errors).toEqual([]);
 });
+test("independent tangent reading restores an exact interrupted position and carries its source through a direct URL", async ({ page }, info) => {
+  const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
+  await page.goto(route);
+  await expect(page.locator(deck)).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
+  const step = start + .43;
+  await seek(page, step);
+  const parentPaint = await paint(page);
+  await page.locator("[data-gradient-open-tangent]").click();
+  await expect(page.locator(deck)).toBeHidden();
+  const reading = page.locator("[data-gradient-tangent-reading]");
+  await expect(reading).toBeVisible();
+  await expect(reading).toContainText("chain rule");
+  await expect(reading.locator("math")).not.toHaveCount(0);
+  await expect(reading.getByText("No. The initial rate", { exact: false })).toBeHidden();
+  await reading.getByText("Reveal the prediction answer", { exact: true }).click();
+  await expect(reading).toContainText("Halving the straight step quarters");
+  const address = page.url();
+  await page.screenshot({ path: info.outputPath("independent-tangent-reading.png"), fullPage: true });
+  await page.locator("[data-gradient-return]").click();
+  await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", String(step));
+  expect(await paint(page)).toEqual(parentPaint);
+  await page.goto(address);
+  await expect(reading).toBeVisible();
+  // Removing the fragment is a same-document navigation too: restore the
+  // saved parent rather than leaving the URL and visible view inconsistent.
+  await page.evaluate(() => { location.hash = ""; });
+  await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", String(step));
+  expect(await paint(page)).toEqual(parentPaint);
+  await page.locator(".gradient-source-editor summary").click();
+  await page.locator("[data-gradient-variant]").click();
+  await page.locator("[data-gradient-apply]").click();
+  await seek(page, step);
+  await page.locator("[data-gradient-open-tangent]").click();
+  const variantAddress = page.url();
+  await page.goto("about:blank");
+  await page.goto(variantAddress);
+  await expect(reading).toContainText("1.375");
+  await page.locator("[data-gradient-return]").click();
+  await expect(page.locator(deck)).toHaveAttribute("data-gradient-step", String(step));
+  await seek(page, end);
+  await expect(page.locator("[data-gradient-rate]")).toHaveText("3.16");
+  expect(errors).toEqual([]);
+});
 test("passage handoff stays close to a fixed stage at desktop and phone widths", async ({ page }, info) => {
   await page.goto(route); await expect(page.locator(deck)).toHaveAttribute("data-kp-focus-card-enhancement", "ready");
   for (const width of [1280, 390, 320]) {

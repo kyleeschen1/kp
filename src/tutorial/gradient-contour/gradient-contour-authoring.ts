@@ -1,6 +1,7 @@
 import { checkGradientContourSource, gradientContourPrimary } from "./gradient-contour-model.ts";
 import { createGradientContourSequence } from "./gradient-contour-sequence.ts";
 import { createKpSurfaceContourStageAuthority } from "../kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts";
+import { sha256 } from "../../kernel/sha256.ts";
 
 const lessonBrand = Symbol("checked-gradient-explanation");
 export interface CheckedGradientExplanation {
@@ -8,6 +9,7 @@ export interface CheckedGradientExplanation {
   readonly sequence: ReturnType<typeof createGradientContourSequence>;
   readonly authority: ReturnType<typeof createKpSurfaceContourStageAuthority>;
   readonly sourceText: string;
+  readonly revisionId: string;
 }
 export type GradientExplanationCheck =
   | { readonly status: "checked"; readonly lesson: CheckedGradientExplanation }
@@ -29,8 +31,9 @@ export function checkGradientExplanation(value: unknown): GradientExplanationChe
   const authority = createKpSurfaceContourStageAuthority(model.field);
   if (authority.fitPlan.gap)
     return { status: "repair", code: "stage-fit", path: "$", expected: "This source does not fit the existing readable stage. Retain the current lesson; do not shrink required text or invent a new camera treatment." };
-  return { status: "checked", lesson: Object.freeze({ [lessonBrand]: true as const, authority,
-    sequence: createGradientContourSequence(model), sourceText: JSON.stringify(model.source, null, 2) }) };
+  const sequence = createGradientContourSequence(model), sourceText = JSON.stringify(model.source, null, 2);
+  const revisionId = `sha256:${sha256(JSON.stringify({ source: model.source, beats: sequence.beats, reading: sequence.reading }))}`;
+  return { status: "checked", lesson: Object.freeze({ [lessonBrand]: true as const, authority, sequence, sourceText, revisionId }) };
 }
 
 export function checkGradientExplanationText(text: string): GradientExplanationCheck {
