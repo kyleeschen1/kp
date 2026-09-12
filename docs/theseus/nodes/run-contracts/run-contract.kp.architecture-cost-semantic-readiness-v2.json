@@ -106,7 +106,8 @@
     {
       "id": "s12",
       "title": "Gradient CPU attribution",
-      "status": "planned"
+      "summary": "Measured active stage and scene reconstruction cost; preserved ordinary timing cohort and idle control.",
+      "status": "complete"
     },
     {
       "id": "s13",

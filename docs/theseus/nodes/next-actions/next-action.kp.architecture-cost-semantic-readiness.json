@@ -113,6 +113,13 @@
       "scope": "s11",
       "checkedAt": "2026-09-12T17:17:26.663Z",
       "notes": "18 fresh cohorts and deferred activations pass; tax initial total 718743 to 577801 gzip, activated718463; gradient382264 to373983. Full types/builds, eight loading/closure tests and six edition browser cases pass. Fixed cohort request limits retain savings without frame-time claims."
+    },
+    {
+      "command": "npm run visual:architecture-cost -- --gradient-only --profile",
+      "status": "passed",
+      "scope": "s12",
+      "checkedAt": "2026-09-12T17:29:02.067Z",
+      "notes": "Eighteen source-attributed phase profiles; six ordinary timing cohorts; profiler unit and full types passed."
     }
   ],
   "expectedLearning": [

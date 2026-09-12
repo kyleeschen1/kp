@@ -1,0 +1,3203 @@
+{
+  "command": "npm run build:gradient-contour -- --sourcemap; npm run visual:architecture-cost -- --gradient-only --profile",
+  "environment": {
+    "kind": "environment",
+    "revision": "50e52d594edc34b94c4ec472278459302c67bbda",
+    "browser": "149.0.7827.55",
+    "platform": "darwin",
+    "arch": "x64",
+    "cpu": "Apple M2",
+    "viewport": "390x844 DPR1",
+    "network": "local built-file fulfillment; no network emulation",
+    "caveat": "1x/6x CPU sensitivity probe, not calibrated phone/GPU/RAM or field-performance certification"
+  },
+  "profiles": [
+    {
+      "kind": "cpu-profile",
+      "phase": "idle",
+      "cpuSlowdown": 1,
+      "repeat": 1,
+      "scriptMs": 0.7740000000000524,
+      "layoutMs": 0,
+      "styleMs": 0,
+      "layoutCount": 0,
+      "styleCount": 0,
+      "frames": {
+        "count": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.600000000000364
+      },
+      "samples": 1589,
+      "sampledMs": 2077.031,
+      "self": [
+        {
+          "location": "(idle)",
+          "ms": 1983.19
+        },
+        {
+          "location": "(program)",
+          "ms": 89.11
+        },
+        {
+          "location": "requestAnimationFrame",
+          "ms": 1.85
+        },
+        {
+          "location": "(native)",
+          "ms": 1.61
+        },
+        {
+          "location": "now",
+          "ms": 1.26
+        }
+      ],
+      "inclusive": [
+        {
+          "location": "(root)",
+          "ms": 2077.03
+        },
+        {
+          "location": "(idle)",
+          "ms": 1983.19
+        },
+        {
+          "location": "(program)",
+          "ms": 89.11
+        },
+        {
+          "location": "(native)",
+          "ms": 4.72
+        },
+        {
+          "location": "now",
+          "ms": 3.11
+        },
+        {
+          "location": "requestAnimationFrame",
+          "ms": 1.85
+        }
+      ],
+      "caveat": "Sampling attribution; inclusive rows overlap. Instrumented frames are not the ordinary timing cohort."
+    },
+    {
+      "kind": "cpu-profile",
+      "phase": "first-transition",
+      "cpuSlowdown": 1,
+      "repeat": 1,
+      "scriptMs": 427.8789999999999,
+      "layoutMs": 23.392999999999983,
+      "styleMs": 10.278999999999996,
+      "layoutCount": 206,
+      "styleCount": 309,
+      "frames": {
+        "count": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.600000000000364
+      },
+      "samples": 1637,
+      "sampledMs": 2073.894,
+      "self": [
+        {
+          "location": "(idle)",
+          "ms": 993.82
+        },
+        {
+          "location": "(program)",
+          "ms": 603.78
+        },
+        {
+          "location": "querySelector",
+          "ms": 55.61
+        },
+        {
+          "location": "../../../src/rendering/graph-svg.ts:2287 Hi",
+          "ms": 38.81
+        },
+        {
+          "location": "(garbage collector)",
+          "ms": 32.91
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30034 e",
+          "ms": 31.2
+        },
+        {
+          "location": "../../../src/tutorial/gradient-contour/gradient-contour-entry.ts:104 ve",
+          "ms": 24.27
+        },
+        {
+          "location": "querySelectorAll",
+          "ms": 22.47
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl.ts:104 ca",
+          "ms": 13.54
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:7429 h",
+          "ms": 12.38
+        },
+        {
+          "location": "bufferData",
+          "ms": 11.06
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30095 _",
+          "ms": 10.85
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:37587 ci",
+          "ms": 10.01
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:242 o",
+          "ms": 9.87
+        },
+        {
+          "location": "../../../src/rendering/graph-svg.ts:2263 Bi",
+          "ms": 9.83
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:801 ",
+          "ms": 7.62
+        },
+        {
+          "location": "get offsetWidth",
+          "ms": 7.34
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:1876 v",
+          "ms": 7.24
+        },
+        {
+          "location": "createBuffer",
+          "ms": 6.32
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:11804 e",
+          "ms": 6.23
+        }
+      ],
+      "inclusive": [
+        {
+          "location": "(root)",
+          "ms": 2073.89
+        },
+        {
+          "location": "(idle)",
+          "ms": 993.82
+        },
+        {
+          "location": "(program)",
+          "ms": 603.78
+        },
+        {
+          "location": "../../../src/reader/runtime/timeline-playback-clock.ts:82 h",
+          "ms": 414.49
+        },
+        {
+          "location": "../../../src/reader/runtime/timeline-playback-clock.ts:68 f",
+          "ms": 413.24
+        },
+        {
+          "location": "../../../src/tutorial/gradient-contour/gradient-contour-entry.ts:104 ve",
+          "ms": 411.99
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:245 c",
+          "ms": 345.43
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:373 Jc",
+          "ms": 273.42
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:326 Kc",
+          "ms": 272.15
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:485 Qc",
+          "ms": 200.87
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17603 Tc.render",
+          "ms": 109.51
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:114 Hc",
+          "ms": 76.74
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:300 ep",
+          "ms": 70.48
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl.ts:132 la",
+          "ms": 69.76
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18091 ht",
+          "ms": 63.66
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17943 pt",
+          "ms": 63.66
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18118 gt",
+          "ms": 62.41
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17178 Tc.renderBufferDirect",
+          "ms": 61.21
+        },
+        {
+          "location": "querySelector",
+          "ms": 55.61
+        },
+        {
+          "location": "../../../src/rendering/graph-transitions.ts:245 Ji",
+          "ms": 54.67
+        }
+      ],
+      "caveat": "Sampling attribution; inclusive rows overlap. Instrumented frames are not the ordinary timing cohort."
+    },
+    {
+      "kind": "cpu-profile",
+      "phase": "comparison",
+      "cpuSlowdown": 1,
+      "repeat": 1,
+      "scriptMs": 411.6500000000001,
+      "layoutMs": 25.625999999999983,
+      "styleMs": 14.979999999999993,
+      "layoutCount": 206,
+      "styleCount": 311,
+      "frames": {
+        "count": 120,
+        "p50Ms": 16.69999999999891,
+        "p95Ms": 17.600000000000364
+      },
+      "samples": 1649,
+      "sampledMs": 2039.562,
+      "self": [
+        {
+          "location": "(idle)",
+          "ms": 1502.01
+        },
+        {
+          "location": "(program)",
+          "ms": 83.34
+        },
+        {
+          "location": "querySelector",
+          "ms": 50.45
+        },
+        {
+          "location": "../../../src/rendering/graph-svg.ts:2287 Hi",
+          "ms": 37.19
+        },
+        {
+          "location": "../../../src/tutorial/gradient-contour/gradient-contour-entry.ts:104 ve",
+          "ms": 31.23
+        },
+        {
+          "location": "(garbage collector)",
+          "ms": 24.55
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30034 e",
+          "ms": 18.74
+        },
+        {
+          "location": "get offsetWidth",
+          "ms": 12.53
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl.ts:104 ca",
+          "ms": 10.47
+        },
+        {
+          "location": "querySelectorAll",
+          "ms": 10.04
+        },
+        {
+          "location": "bufferData",
+          "ms": 9.8
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:7429 h",
+          "ms": 8.8
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:11804 e",
+          "ms": 8.57
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:300 ep",
+          "ms": 7.56
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:17526 Kn",
+          "ms": 7.52
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:1787 m",
+          "ms": 6.42
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:1876 v",
+          "ms": 6.31
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30095 _",
+          "ms": 6.28
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:37587 ci",
+          "ms": 6.26
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30197 v",
+          "ms": 6.15
+        }
+      ],
+      "inclusive": [
+        {
+          "location": "(root)",
+          "ms": 2039.56
+        },
+        {
+          "location": "(idle)",
+          "ms": 1502.01
+        },
+        {
+          "location": "../../../src/reader/runtime/timeline-playback-clock.ts:82 h",
+          "ms": 403.63
+        },
+        {
+          "location": "../../../src/reader/runtime/timeline-playback-clock.ts:68 f",
+          "ms": 402.37
+        },
+        {
+          "location": "../../../src/tutorial/gradient-contour/gradient-contour-entry.ts:104 ve",
+          "ms": 399.87
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:245 c",
+          "ms": 337.28
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:326 Kc",
+          "ms": 258.78
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:373 Jc",
+          "ms": 258.78
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:485 Qc",
+          "ms": 194.33
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17603 Tc.render",
+          "ms": 99.64
+        },
+        {
+          "location": "(program)",
+          "ms": 83.34
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:114 Hc",
+          "ms": 81.75
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:300 ep",
+          "ms": 77.24
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18118 gt",
+          "ms": 71.16
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18091 ht",
+          "ms": 71.16
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17943 pt",
+          "ms": 71.16
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17178 Tc.renderBufferDirect",
+          "ms": 67.19
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl.ts:132 la",
+          "ms": 64.29
+        },
+        {
+          "location": "../../../src/rendering/graph-transitions.ts:245 Ji",
+          "ms": 51.97
+        },
+        {
+          "location": "../../../src/rendering/graph-transitions.ts:202 qi",
+          "ms": 51.97
+        }
+      ],
+      "caveat": "Sampling attribution; inclusive rows overlap. Instrumented frames are not the ordinary timing cohort."
+    },
+    {
+      "kind": "cpu-profile",
+      "phase": "idle",
+      "cpuSlowdown": 1,
+      "repeat": 2,
+      "scriptMs": 1.0060000000000624,
+      "layoutMs": 0,
+      "styleMs": 0,
+      "layoutCount": 0,
+      "styleCount": 0,
+      "frames": {
+        "count": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.59999999999991
+      },
+      "samples": 1576,
+      "sampledMs": 2094.045,
+      "self": [
+        {
+          "location": "(idle)",
+          "ms": 2000.09
+        },
+        {
+          "location": "(program)",
+          "ms": 93.96
+        }
+      ],
+      "inclusive": [
+        {
+          "location": "(root)",
+          "ms": 2094.05
+        },
+        {
+          "location": "(idle)",
+          "ms": 2000.09
+        },
+        {
+          "location": "(program)",
+          "ms": 93.96
+        }
+      ],
+      "caveat": "Sampling attribution; inclusive rows overlap. Instrumented frames are not the ordinary timing cohort."
+    },
+    {
+      "kind": "cpu-profile",
+      "phase": "first-transition",
+      "cpuSlowdown": 1,
+      "repeat": 2,
+      "scriptMs": 386.05500000000006,
+      "layoutMs": 18.86800000000001,
+      "styleMs": 7.045999999999997,
+      "layoutCount": 206,
+      "styleCount": 309,
+      "frames": {
+        "count": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.599999999999454
+      },
+      "samples": 1637,
+      "sampledMs": 2065.495,
+      "self": [
+        {
+          "location": "(idle)",
+          "ms": 1146.05
+        },
+        {
+          "location": "(program)",
+          "ms": 494.74
+        },
+        {
+          "location": "../../../src/rendering/graph-svg.ts:2287 Hi",
+          "ms": 42.41
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30034 e",
+          "ms": 36.13
+        },
+        {
+          "location": "querySelector",
+          "ms": 34.56
+        },
+        {
+          "location": "(garbage collector)",
+          "ms": 29.57
+        },
+        {
+          "location": "../../../src/tutorial/gradient-contour/gradient-contour-entry.ts:104 ve",
+          "ms": 23.13
+        },
+        {
+          "location": "querySelectorAll",
+          "ms": 14.87
+        },
+        {
+          "location": "bufferData",
+          "ms": 13.82
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30197 v",
+          "ms": 10.03
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:7429 h",
+          "ms": 9.9
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:18892 computeBoundingSphere",
+          "ms": 8.85
+        },
+        {
+          "location": "createBuffer",
+          "ms": 8.58
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:11804 e",
+          "ms": 7.6
+        },
+        {
+          "location": "../../../src/rendering/graph-svg.ts:260 ",
+          "ms": 6.27
+        },
+        {
+          "location": "../../../src/rendering/graph-svg.ts:905 ",
+          "ms": 6.26
+        },
+        {
+          "location": "setAttribute",
+          "ms": 6.25
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl.ts:104 ca",
+          "ms": 5.38
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:2295 G",
+          "ms": 5.03
+        },
+        {
+          "location": "deleteBuffer",
+          "ms": 5.03
+        }
+      ],
+      "inclusive": [
+        {
+          "location": "(root)",
+          "ms": 2065.49
+        },
+        {
+          "location": "(idle)",
+          "ms": 1146.05
+        },
+        {
+          "location": "(program)",
+          "ms": 494.74
+        },
+        {
+          "location": "../../../src/tutorial/gradient-contour/gradient-contour-entry.ts:104 ve",
+          "ms": 372.72
+        },
+        {
+          "location": "../../../src/reader/runtime/timeline-playback-clock.ts:68 f",
+          "ms": 372.72
+        },
+        {
+          "location": "../../../src/reader/runtime/timeline-playback-clock.ts:82 h",
+          "ms": 372.72
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:245 c",
+          "ms": 318.32
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:326 Kc",
+          "ms": 270.62
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:373 Jc",
+          "ms": 270.62
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:485 Qc",
+          "ms": 190.19
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17603 Tc.render",
+          "ms": 101.25
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl.ts:132 la",
+          "ms": 80.43
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:114 Hc",
+          "ms": 74.91
+        },
+        {
+          "location": "../../../src/rendering/graph-transitions.ts:245 Ji",
+          "ms": 68.52
+        },
+        {
+          "location": "../../../src/rendering/graph-transitions.ts:202 qi",
+          "ms": 68.52
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl.ts:200 ",
+          "ms": 68.52
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18118 gt",
+          "ms": 66.12
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18091 ht",
+          "ms": 66.12
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17943 pt",
+          "ms": 66.12
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17178 Tc.renderBufferDirect",
+          "ms": 65.5
+        }
+      ],
+      "caveat": "Sampling attribution; inclusive rows overlap. Instrumented frames are not the ordinary timing cohort."
+    },
+    {
+      "kind": "cpu-profile",
+      "phase": "comparison",
+      "cpuSlowdown": 1,
+      "repeat": 2,
+      "scriptMs": 392.80199999999996,
+      "layoutMs": 20.622,
+      "styleMs": 10.788999999999993,
+      "layoutCount": 204,
+      "styleCount": 308,
+      "frames": {
+        "count": 120,
+        "p50Ms": 16.69999999999891,
+        "p95Ms": 17.600000000000364
+      },
+      "samples": 1641,
+      "sampledMs": 2060.498,
+      "self": [
+        {
+          "location": "(idle)",
+          "ms": 1537.45
+        },
+        {
+          "location": "(program)",
+          "ms": 90.04
+        },
+        {
+          "location": "../../../src/rendering/graph-svg.ts:2287 Hi",
+          "ms": 48.6
+        },
+        {
+          "location": "querySelector",
+          "ms": 42.91
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30034 e",
+          "ms": 26.15
+        },
+        {
+          "location": "../../../src/tutorial/gradient-contour/gradient-contour-entry.ts:104 ve",
+          "ms": 23.92
+        },
+        {
+          "location": "(garbage collector)",
+          "ms": 23.8
+        },
+        {
+          "location": "querySelectorAll",
+          "ms": 21.14
+        },
+        {
+          "location": "bufferData",
+          "ms": 12.62
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl.ts:104 ca",
+          "ms": 11.7
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:7429 h",
+          "ms": 8.81
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:37587 ci",
+          "ms": 7.52
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30197 v",
+          "ms": 7.51
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:1787 m",
+          "ms": 7.37
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:1876 v",
+          "ms": 6.96
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:1742 p",
+          "ms": 5.23
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:18892 computeBoundingSphere",
+          "ms": 5.04
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:11804 e",
+          "ms": 5.03
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30095 _",
+          "ms": 5.03
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:17763 Jn",
+          "ms": 5.02
+        }
+      ],
+      "inclusive": [
+        {
+          "location": "(root)",
+          "ms": 2060.5
+        },
+        {
+          "location": "(idle)",
+          "ms": 1537.45
+        },
+        {
+          "location": "../../../src/reader/runtime/timeline-playback-clock.ts:68 f",
+          "ms": 388.07
+        },
+        {
+          "location": "../../../src/reader/runtime/timeline-playback-clock.ts:82 h",
+          "ms": 388.07
+        },
+        {
+          "location": "../../../src/tutorial/gradient-contour/gradient-contour-entry.ts:104 ve",
+          "ms": 386.82
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:245 c",
+          "ms": 325.7
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:326 Kc",
+          "ms": 262.04
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:373 Jc",
+          "ms": 262.04
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:485 Qc",
+          "ms": 184.57
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17603 Tc.render",
+          "ms": 97.72
+        },
+        {
+          "location": "(program)",
+          "ms": 90.04
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl.ts:132 la",
+          "ms": 77.47
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:114 Hc",
+          "ms": 70.08
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18118 gt",
+          "ms": 65.22
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18091 ht",
+          "ms": 65.22
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17943 pt",
+          "ms": 65.22
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17178 Tc.renderBufferDirect",
+          "ms": 63.97
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:300 ep",
+          "ms": 63.66
+        },
+        {
+          "location": "../../../src/rendering/graph-transitions.ts:202 qi",
+          "ms": 62.41
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl.ts:200 ",
+          "ms": 62.41
+        }
+      ],
+      "caveat": "Sampling attribution; inclusive rows overlap. Instrumented frames are not the ordinary timing cohort."
+    },
+    {
+      "kind": "cpu-profile",
+      "phase": "idle",
+      "cpuSlowdown": 1,
+      "repeat": 3,
+      "scriptMs": 0.668000000000113,
+      "layoutMs": 0,
+      "styleMs": 0,
+      "layoutCount": 0,
+      "styleCount": 0,
+      "frames": {
+        "count": 121,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.5
+      },
+      "samples": 1609,
+      "sampledMs": 2100.599,
+      "self": [
+        {
+          "location": "(idle)",
+          "ms": 2001.26
+        },
+        {
+          "location": "(program)",
+          "ms": 91.61
+        },
+        {
+          "location": "requestAnimationFrame",
+          "ms": 2.54
+        },
+        {
+          "location": "(garbage collector)",
+          "ms": 1.36
+        },
+        {
+          "location": "now",
+          "ms": 1.29
+        },
+        {
+          "location": "innerSerialize",
+          "ms": 1.28
+        },
+        {
+          "location": "(native)",
+          "ms": 1.26
+        }
+      ],
+      "inclusive": [
+        {
+          "location": "(root)",
+          "ms": 2100.6
+        },
+        {
+          "location": "(idle)",
+          "ms": 2001.26
+        },
+        {
+          "location": "(program)",
+          "ms": 91.61
+        },
+        {
+          "location": "(native)",
+          "ms": 6.37
+        },
+        {
+          "location": "now",
+          "ms": 3.83
+        },
+        {
+          "location": "requestAnimationFrame",
+          "ms": 2.54
+        },
+        {
+          "location": "(garbage collector)",
+          "ms": 1.36
+        },
+        {
+          "location": "innerSerialize",
+          "ms": 1.28
+        },
+        {
+          "location": "serialize",
+          "ms": 1.28
+        },
+        {
+          "location": "serializeAsCallArgument",
+          "ms": 1.28
+        },
+        {
+          "location": "jsonValue",
+          "ms": 1.28
+        },
+        {
+          "location": "safeJson",
+          "ms": 1.28
+        }
+      ],
+      "caveat": "Sampling attribution; inclusive rows overlap. Instrumented frames are not the ordinary timing cohort."
+    },
+    {
+      "kind": "cpu-profile",
+      "phase": "first-transition",
+      "cpuSlowdown": 1,
+      "repeat": 3,
+      "scriptMs": 420.6160000000001,
+      "layoutMs": 23.396,
+      "styleMs": 10.249999999999995,
+      "layoutCount": 206,
+      "styleCount": 309,
+      "frames": {
+        "count": 121,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.599999999999454
+      },
+      "samples": 1635,
+      "sampledMs": 2073.724,
+      "self": [
+        {
+          "location": "(idle)",
+          "ms": 1014.19
+        },
+        {
+          "location": "(program)",
+          "ms": 576.75
+        },
+        {
+          "location": "querySelector",
+          "ms": 58.69
+        },
+        {
+          "location": "../../../src/tutorial/gradient-contour/gradient-contour-entry.ts:104 ve",
+          "ms": 36.76
+        },
+        {
+          "location": "(garbage collector)",
+          "ms": 31.16
+        },
+        {
+          "location": "../../../src/rendering/graph-svg.ts:2287 Hi",
+          "ms": 26.06
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30034 e",
+          "ms": 25.92
+        },
+        {
+          "location": "querySelectorAll",
+          "ms": 20.84
+        },
+        {
+          "location": "get offsetWidth",
+          "ms": 16.24
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:7429 h",
+          "ms": 13.48
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30095 _",
+          "ms": 11.32
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:18404 setIndex",
+          "ms": 10.99
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl.ts:104 ca",
+          "ms": 10.53
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30197 v",
+          "ms": 9.99
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:242 o",
+          "ms": 8.84
+        },
+        {
+          "location": "bufferData",
+          "ms": 8.68
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:1876 v",
+          "ms": 6.58
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:2115 S",
+          "ms": 6.36
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:2295 G",
+          "ms": 6.29
+        },
+        {
+          "location": "setAttribute",
+          "ms": 5.6
+        }
+      ],
+      "inclusive": [
+        {
+          "location": "(root)",
+          "ms": 2073.72
+        },
+        {
+          "location": "(idle)",
+          "ms": 1014.19
+        },
+        {
+          "location": "(program)",
+          "ms": 576.75
+        },
+        {
+          "location": "../../../src/reader/runtime/timeline-playback-clock.ts:82 h",
+          "ms": 428.21
+        },
+        {
+          "location": "../../../src/reader/runtime/timeline-playback-clock.ts:68 f",
+          "ms": 426.94
+        },
+        {
+          "location": "../../../src/tutorial/gradient-contour/gradient-contour-entry.ts:104 ve",
+          "ms": 422.18
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:245 c",
+          "ms": 343.92
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:326 Kc",
+          "ms": 251.18
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:373 Jc",
+          "ms": 251.18
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:485 Qc",
+          "ms": 207.7
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17603 Tc.render",
+          "ms": 104.36
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:300 ep",
+          "ms": 91.48
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:114 Hc",
+          "ms": 89.34
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30034 e",
+          "ms": 61.99
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17178 Tc.renderBufferDirect",
+          "ms": 61.81
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18118 gt",
+          "ms": 61.81
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18091 ht",
+          "ms": 61.81
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17943 pt",
+          "ms": 61.81
+        },
+        {
+          "location": "querySelector",
+          "ms": 58.69
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:703 sl",
+          "ms": 49.46
+        }
+      ],
+      "caveat": "Sampling attribution; inclusive rows overlap. Instrumented frames are not the ordinary timing cohort."
+    },
+    {
+      "kind": "cpu-profile",
+      "phase": "comparison",
+      "cpuSlowdown": 1,
+      "repeat": 3,
+      "scriptMs": 465.87800000000004,
+      "layoutMs": 23.288000000000018,
+      "styleMs": 14.09000000000002,
+      "layoutCount": 206,
+      "styleCount": 311,
+      "frames": {
+        "count": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.600000000000364
+      },
+      "samples": 1628,
+      "sampledMs": 2017.612,
+      "self": [
+        {
+          "location": "(idle)",
+          "ms": 1439.35
+        },
+        {
+          "location": "(program)",
+          "ms": 67.47
+        },
+        {
+          "location": "querySelector",
+          "ms": 49.32
+        },
+        {
+          "location": "../../../src/rendering/graph-svg.ts:2287 Hi",
+          "ms": 39.83
+        },
+        {
+          "location": "../../../src/tutorial/gradient-contour/gradient-contour-entry.ts:104 ve",
+          "ms": 32.13
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30034 e",
+          "ms": 28.77
+        },
+        {
+          "location": "querySelectorAll",
+          "ms": 27.52
+        },
+        {
+          "location": "(garbage collector)",
+          "ms": 19.84
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:17763 Jn",
+          "ms": 16.33
+        },
+        {
+          "location": "bufferData",
+          "ms": 15.88
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30095 _",
+          "ms": 13.78
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl.ts:104 ca",
+          "ms": 12.83
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30197 v",
+          "ms": 12.53
+        },
+        {
+          "location": "get offsetWidth",
+          "ms": 8.76
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:7429 h",
+          "ms": 8.73
+        },
+        {
+          "location": "deleteBuffer",
+          "ms": 7.71
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:11804 e",
+          "ms": 7.53
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18149 _t",
+          "ms": 7.52
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:37587 ci",
+          "ms": 7.52
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:1606 s",
+          "ms": 7.45
+        }
+      ],
+      "inclusive": [
+        {
+          "location": "(root)",
+          "ms": 2017.61
+        },
+        {
+          "location": "(idle)",
+          "ms": 1439.35
+        },
+        {
+          "location": "../../../src/tutorial/gradient-contour/gradient-contour-entry.ts:104 ve",
+          "ms": 459.76
+        },
+        {
+          "location": "../../../src/reader/runtime/timeline-playback-clock.ts:68 f",
+          "ms": 459.76
+        },
+        {
+          "location": "../../../src/reader/runtime/timeline-playback-clock.ts:82 h",
+          "ms": 459.76
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:245 c",
+          "ms": 392.87
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:326 Kc",
+          "ms": 305.1
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:373 Jc",
+          "ms": 305.1
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:485 Qc",
+          "ms": 239.26
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:114 Hc",
+          "ms": 111.34
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17603 Tc.render",
+          "ms": 105.93
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:300 ep",
+          "ms": 87.77
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18118 gt",
+          "ms": 86.35
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18091 ht",
+          "ms": 86.35
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17943 pt",
+          "ms": 86.35
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17178 Tc.renderBufferDirect",
+          "ms": 82.55
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30034 e",
+          "ms": 81.32
+        },
+        {
+          "location": "(program)",
+          "ms": 67.47
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl.ts:132 la",
+          "ms": 65.84
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:703 sl",
+          "ms": 57.63
+        }
+      ],
+      "caveat": "Sampling attribution; inclusive rows overlap. Instrumented frames are not the ordinary timing cohort."
+    },
+    {
+      "kind": "cpu-profile",
+      "phase": "idle",
+      "cpuSlowdown": 6,
+      "repeat": 1,
+      "scriptMs": 0.08700000000017027,
+      "layoutMs": 0,
+      "styleMs": 0,
+      "layoutCount": 0,
+      "styleCount": 0,
+      "frames": {
+        "count": 119,
+        "p50Ms": 16.600000000000364,
+        "p95Ms": 17.599999999999454
+      },
+      "samples": 1631,
+      "sampledMs": 2318.506,
+      "self": [
+        {
+          "location": "(idle)",
+          "ms": 1989.13
+        },
+        {
+          "location": "(program)",
+          "ms": 326.54
+        },
+        {
+          "location": "(native)",
+          "ms": 2.55
+        },
+        {
+          "location": "now",
+          "ms": 0.28
+        }
+      ],
+      "inclusive": [
+        {
+          "location": "(root)",
+          "ms": 2318.51
+        },
+        {
+          "location": "(idle)",
+          "ms": 1989.13
+        },
+        {
+          "location": "(program)",
+          "ms": 326.54
+        },
+        {
+          "location": "(native)",
+          "ms": 2.83
+        },
+        {
+          "location": "now",
+          "ms": 0.28
+        }
+      ],
+      "caveat": "Sampling attribution; inclusive rows overlap. Instrumented frames are not the ordinary timing cohort."
+    },
+    {
+      "kind": "cpu-profile",
+      "phase": "first-transition",
+      "cpuSlowdown": 6,
+      "repeat": 1,
+      "scriptMs": 1292.801,
+      "layoutMs": 68.27099999999997,
+      "styleMs": 23.083999999999964,
+      "layoutCount": 100,
+      "styleCount": 150,
+      "frames": {
+        "count": 66,
+        "p50Ms": 33.19999999999982,
+        "p95Ms": 50
+      },
+      "samples": 1649,
+      "sampledMs": 2156.042,
+      "self": [
+        {
+          "location": "(program)",
+          "ms": 528.21
+        },
+        {
+          "location": "(idle)",
+          "ms": 254.43
+        },
+        {
+          "location": "querySelector",
+          "ms": 155.45
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30034 e",
+          "ms": 95.28
+        },
+        {
+          "location": "../../../src/tutorial/gradient-contour/gradient-contour-entry.ts:104 ve",
+          "ms": 92.34
+        },
+        {
+          "location": "../../../src/rendering/graph-svg.ts:2287 Hi",
+          "ms": 86.26
+        },
+        {
+          "location": "querySelectorAll",
+          "ms": 57.25
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30095 _",
+          "ms": 40.62
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:7429 h",
+          "ms": 39.76
+        },
+        {
+          "location": "(garbage collector)",
+          "ms": 38.03
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl.ts:104 ca",
+          "ms": 33.69
+        },
+        {
+          "location": "bufferData",
+          "ms": 33.18
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30197 v",
+          "ms": 31.36
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:801 ",
+          "ms": 30.27
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:37587 ci",
+          "ms": 27.04
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:11804 e",
+          "ms": 27.03
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:2115 S",
+          "ms": 20.52
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18149 _t",
+          "ms": 18.13
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:18892 computeBoundingSphere",
+          "ms": 17.98
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:1606 s",
+          "ms": 16.7
+        }
+      ],
+      "inclusive": [
+        {
+          "location": "(root)",
+          "ms": 2156.04
+        },
+        {
+          "location": "../../../src/reader/runtime/timeline-playback-clock.ts:68 f",
+          "ms": 1274.14
+        },
+        {
+          "location": "../../../src/reader/runtime/timeline-playback-clock.ts:82 h",
+          "ms": 1274.14
+        },
+        {
+          "location": "../../../src/tutorial/gradient-contour/gradient-contour-entry.ts:104 ve",
+          "ms": 1272.89
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:245 c",
+          "ms": 1056.95
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:326 Kc",
+          "ms": 813.54
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:373 Jc",
+          "ms": 813.54
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:485 Qc",
+          "ms": 632.43
+        },
+        {
+          "location": "(program)",
+          "ms": 528.21
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:114 Hc",
+          "ms": 289.76
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17603 Tc.render",
+          "ms": 278.45
+        },
+        {
+          "location": "(idle)",
+          "ms": 254.43
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:300 ep",
+          "ms": 239.47
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30034 e",
+          "ms": 191.85
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl.ts:132 la",
+          "ms": 179.97
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18091 ht",
+          "ms": 163.83
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17943 pt",
+          "ms": 163.83
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18118 gt",
+          "ms": 162.39
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17178 Tc.renderBufferDirect",
+          "ms": 160.26
+        },
+        {
+          "location": "querySelector",
+          "ms": 155.45
+        }
+      ],
+      "caveat": "Sampling attribution; inclusive rows overlap. Instrumented frames are not the ordinary timing cohort."
+    },
+    {
+      "kind": "cpu-profile",
+      "phase": "comparison",
+      "cpuSlowdown": 6,
+      "repeat": 1,
+      "scriptMs": 1470.0950000000003,
+      "layoutMs": 62.12799999999996,
+      "styleMs": 52.674,
+      "layoutCount": 128,
+      "styleCount": 194,
+      "frames": {
+        "count": 81,
+        "p50Ms": 17.399999999999636,
+        "p95Ms": 34.29999999999927
+      },
+      "samples": 1653,
+      "sampledMs": 2186.198,
+      "self": [
+        {
+          "location": "(program)",
+          "ms": 347.82
+        },
+        {
+          "location": "(idle)",
+          "ms": 272.46
+        },
+        {
+          "location": "querySelector",
+          "ms": 189.3
+        },
+        {
+          "location": "../../../src/rendering/graph-svg.ts:2287 Hi",
+          "ms": 120.44
+        },
+        {
+          "location": "../../../src/tutorial/gradient-contour/gradient-contour-entry.ts:104 ve",
+          "ms": 116.73
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30034 e",
+          "ms": 112.11
+        },
+        {
+          "location": "querySelectorAll",
+          "ms": 63.83
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl.ts:104 ca",
+          "ms": 50.39
+        },
+        {
+          "location": "(garbage collector)",
+          "ms": 41.66
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:7429 h",
+          "ms": 36.35
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30197 v",
+          "ms": 35.16
+        },
+        {
+          "location": "bufferData",
+          "ms": 33.61
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30095 _",
+          "ms": 31.64
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:11804 e",
+          "ms": 27.95
+        },
+        {
+          "location": "get offsetWidth",
+          "ms": 26.78
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:37587 ci",
+          "ms": 26.68
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:801 ",
+          "ms": 26.11
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:242 o",
+          "ms": 23.26
+        },
+        {
+          "location": "setAttribute",
+          "ms": 20.6
+        },
+        {
+          "location": "createBuffer",
+          "ms": 19.86
+        }
+      ],
+      "inclusive": [
+        {
+          "location": "(root)",
+          "ms": 2186.2
+        },
+        {
+          "location": "../../../src/reader/runtime/timeline-playback-clock.ts:82 h",
+          "ms": 1453.39
+        },
+        {
+          "location": "../../../src/reader/runtime/timeline-playback-clock.ts:68 f",
+          "ms": 1451.54
+        },
+        {
+          "location": "../../../src/tutorial/gradient-contour/gradient-contour-entry.ts:104 ve",
+          "ms": 1450
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:245 c",
+          "ms": 1190.96
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:326 Kc",
+          "ms": 898.02
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:373 Jc",
+          "ms": 898.02
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:485 Qc",
+          "ms": 699.36
+        },
+        {
+          "location": "(program)",
+          "ms": 347.82
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17603 Tc.render",
+          "ms": 325.96
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:114 Hc",
+          "ms": 302.21
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:300 ep",
+          "ms": 285.07
+        },
+        {
+          "location": "(idle)",
+          "ms": 272.46
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl.ts:132 la",
+          "ms": 197.71
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17943 pt",
+          "ms": 197.64
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30034 e",
+          "ms": 197.31
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18118 gt",
+          "ms": 197.11
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18091 ht",
+          "ms": 197.11
+        },
+        {
+          "location": "querySelector",
+          "ms": 189.3
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17178 Tc.renderBufferDirect",
+          "ms": 187.83
+        }
+      ],
+      "caveat": "Sampling attribution; inclusive rows overlap. Instrumented frames are not the ordinary timing cohort."
+    },
+    {
+      "kind": "cpu-profile",
+      "phase": "idle",
+      "cpuSlowdown": 6,
+      "repeat": 2,
+      "scriptMs": 0.5830000000002222,
+      "layoutMs": 0,
+      "styleMs": 0,
+      "layoutCount": 0,
+      "styleCount": 0,
+      "frames": {
+        "count": 121,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.400000000000546
+      },
+      "samples": 1657,
+      "sampledMs": 2349.73,
+      "self": [
+        {
+          "location": "(idle)",
+          "ms": 1996.46
+        },
+        {
+          "location": "(program)",
+          "ms": 351.81
+        },
+        {
+          "location": "(native)",
+          "ms": 1.46
+        }
+      ],
+      "inclusive": [
+        {
+          "location": "(root)",
+          "ms": 2349.73
+        },
+        {
+          "location": "(idle)",
+          "ms": 1996.46
+        },
+        {
+          "location": "(program)",
+          "ms": 351.81
+        },
+        {
+          "location": "(native)",
+          "ms": 1.46
+        }
+      ],
+      "caveat": "Sampling attribution; inclusive rows overlap. Instrumented frames are not the ordinary timing cohort."
+    },
+    {
+      "kind": "cpu-profile",
+      "phase": "first-transition",
+      "cpuSlowdown": 6,
+      "repeat": 2,
+      "scriptMs": 1340.6570000000002,
+      "layoutMs": 63.695,
+      "styleMs": 36.43000000000002,
+      "layoutCount": 86,
+      "styleCount": 129,
+      "frames": {
+        "count": 57,
+        "p50Ms": 33.5,
+        "p95Ms": 50.69999999999982
+      },
+      "samples": 1627,
+      "sampledMs": 2159.879,
+      "self": [
+        {
+          "location": "(program)",
+          "ms": 524.27
+        },
+        {
+          "location": "(idle)",
+          "ms": 168.64
+        },
+        {
+          "location": "querySelector",
+          "ms": 143.09
+        },
+        {
+          "location": "../../../src/tutorial/gradient-contour/gradient-contour-entry.ts:104 ve",
+          "ms": 107.27
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30034 e",
+          "ms": 105.51
+        },
+        {
+          "location": "../../../src/rendering/graph-svg.ts:2287 Hi",
+          "ms": 95.44
+        },
+        {
+          "location": "querySelectorAll",
+          "ms": 78.21
+        },
+        {
+          "location": "(garbage collector)",
+          "ms": 63.41
+        },
+        {
+          "location": "bufferData",
+          "ms": 48.29
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl.ts:104 ca",
+          "ms": 42.53
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:11804 e",
+          "ms": 34.03
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30197 v",
+          "ms": 33.04
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30095 _",
+          "ms": 30.13
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:7429 h",
+          "ms": 29.09
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:18892 computeBoundingSphere",
+          "ms": 25.25
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18149 _t",
+          "ms": 21.24
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:801 ",
+          "ms": 20.46
+        },
+        {
+          "location": "setAttribute",
+          "ms": 19.81
+        },
+        {
+          "location": "../../../src/rendering/graph-svg.ts:2263 Bi",
+          "ms": 18.86
+        },
+        {
+          "location": "requestAnimationFrame",
+          "ms": 16.89
+        }
+      ],
+      "inclusive": [
+        {
+          "location": "(root)",
+          "ms": 2159.88
+        },
+        {
+          "location": "../../../src/reader/runtime/timeline-playback-clock.ts:82 h",
+          "ms": 1308.32
+        },
+        {
+          "location": "../../../src/reader/runtime/timeline-playback-clock.ts:68 f",
+          "ms": 1304.84
+        },
+        {
+          "location": "../../../src/tutorial/gradient-contour/gradient-contour-entry.ts:104 ve",
+          "ms": 1303.45
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:245 c",
+          "ms": 1074.65
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:326 Kc",
+          "ms": 822.06
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:373 Jc",
+          "ms": 822.06
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:485 Qc",
+          "ms": 653.21
+        },
+        {
+          "location": "(program)",
+          "ms": 524.27
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17603 Tc.render",
+          "ms": 303.57
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:114 Hc",
+          "ms": 295.61
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:300 ep",
+          "ms": 243.33
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30034 e",
+          "ms": 195.84
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18118 gt",
+          "ms": 189.08
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18091 ht",
+          "ms": 189.08
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17943 pt",
+          "ms": 189.08
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17178 Tc.renderBufferDirect",
+          "ms": 185.77
+        },
+        {
+          "location": "(idle)",
+          "ms": 168.64
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl.ts:132 la",
+          "ms": 167.2
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:784 ul",
+          "ms": 159.02
+        }
+      ],
+      "caveat": "Sampling attribution; inclusive rows overlap. Instrumented frames are not the ordinary timing cohort."
+    },
+    {
+      "kind": "cpu-profile",
+      "phase": "comparison",
+      "cpuSlowdown": 6,
+      "repeat": 2,
+      "scriptMs": 1487.6829999999995,
+      "layoutMs": 73.68199999999997,
+      "styleMs": 42.858000000000004,
+      "layoutCount": 110,
+      "styleCount": 167,
+      "frames": {
+        "count": 72,
+        "p50Ms": 32.80000000000109,
+        "p95Ms": 49.79999999999927
+      },
+      "samples": 1623,
+      "sampledMs": 2106.242,
+      "self": [
+        {
+          "location": "(idle)",
+          "ms": 275.05
+        },
+        {
+          "location": "(program)",
+          "ms": 233.17
+        },
+        {
+          "location": "querySelector",
+          "ms": 168.83
+        },
+        {
+          "location": "../../../src/rendering/graph-svg.ts:2287 Hi",
+          "ms": 127.63
+        },
+        {
+          "location": "../../../src/tutorial/gradient-contour/gradient-contour-entry.ts:104 ve",
+          "ms": 124.77
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30034 e",
+          "ms": 93.69
+        },
+        {
+          "location": "querySelectorAll",
+          "ms": 56.91
+        },
+        {
+          "location": "bufferData",
+          "ms": 50.34
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30197 v",
+          "ms": 44.81
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl.ts:104 ca",
+          "ms": 44.44
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:7429 h",
+          "ms": 37.97
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30095 _",
+          "ms": 35.7
+        },
+        {
+          "location": "(garbage collector)",
+          "ms": 29.6
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:801 ",
+          "ms": 28.26
+        },
+        {
+          "location": "createVertexArray",
+          "ms": 27.06
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:642 ol",
+          "ms": 24.39
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:11804 e",
+          "ms": 22.85
+        },
+        {
+          "location": "setAttribute",
+          "ms": 22.28
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/quadratic-field.ts:29 contour",
+          "ms": 22.05
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:590 al",
+          "ms": 21.98
+        }
+      ],
+      "inclusive": [
+        {
+          "location": "(root)",
+          "ms": 2106.24
+        },
+        {
+          "location": "../../../src/reader/runtime/timeline-playback-clock.ts:68 f",
+          "ms": 1501.93
+        },
+        {
+          "location": "../../../src/reader/runtime/timeline-playback-clock.ts:82 h",
+          "ms": 1501.93
+        },
+        {
+          "location": "../../../src/tutorial/gradient-contour/gradient-contour-entry.ts:104 ve",
+          "ms": 1501.35
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:245 c",
+          "ms": 1233.56
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:373 Jc",
+          "ms": 952.25
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:326 Kc",
+          "ms": 949.39
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:485 Qc",
+          "ms": 744.54
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:114 Hc",
+          "ms": 334.85
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17603 Tc.render",
+          "ms": 329.46
+        },
+        {
+          "location": "(idle)",
+          "ms": 275.05
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:300 ep",
+          "ms": 271.89
+        },
+        {
+          "location": "(program)",
+          "ms": 233.17
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18118 gt",
+          "ms": 209.05
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18091 ht",
+          "ms": 209.05
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17943 pt",
+          "ms": 209.05
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17178 Tc.renderBufferDirect",
+          "ms": 203.15
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl.ts:132 la",
+          "ms": 202.98
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30034 e",
+          "ms": 196.91
+        },
+        {
+          "location": "../../../src/rendering/graph-transitions.ts:245 Ji",
+          "ms": 174.91
+        }
+      ],
+      "caveat": "Sampling attribution; inclusive rows overlap. Instrumented frames are not the ordinary timing cohort."
+    },
+    {
+      "kind": "cpu-profile",
+      "phase": "idle",
+      "cpuSlowdown": 6,
+      "repeat": 3,
+      "scriptMs": 0.08900000000000574,
+      "layoutMs": 0,
+      "styleMs": 0,
+      "layoutCount": 0,
+      "styleCount": 0,
+      "frames": {
+        "count": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.5
+      },
+      "samples": 1643,
+      "sampledMs": 2337.554,
+      "self": [
+        {
+          "location": "(idle)",
+          "ms": 2011.39
+        },
+        {
+          "location": "(program)",
+          "ms": 325.28
+        },
+        {
+          "location": "innerSerialize",
+          "ms": 0.88
+        }
+      ],
+      "inclusive": [
+        {
+          "location": "(root)",
+          "ms": 2337.55
+        },
+        {
+          "location": "(idle)",
+          "ms": 2011.39
+        },
+        {
+          "location": "(program)",
+          "ms": 325.28
+        },
+        {
+          "location": "innerSerialize",
+          "ms": 0.88
+        },
+        {
+          "location": "serialize",
+          "ms": 0.88
+        },
+        {
+          "location": "serializeAsCallArgument",
+          "ms": 0.88
+        },
+        {
+          "location": "jsonValue",
+          "ms": 0.88
+        },
+        {
+          "location": "safeJson",
+          "ms": 0.88
+        },
+        {
+          "location": "(native)",
+          "ms": 0.88
+        }
+      ],
+      "caveat": "Sampling attribution; inclusive rows overlap. Instrumented frames are not the ordinary timing cohort."
+    },
+    {
+      "kind": "cpu-profile",
+      "phase": "first-transition",
+      "cpuSlowdown": 6,
+      "repeat": 3,
+      "scriptMs": 1294.4080000000001,
+      "layoutMs": 54.97699999999997,
+      "styleMs": 21.908000000000012,
+      "layoutCount": 112,
+      "styleCount": 168,
+      "frames": {
+        "count": 71,
+        "p50Ms": 32.80000000000018,
+        "p95Ms": 34.30000000000018
+      },
+      "samples": 1646,
+      "sampledMs": 2151.236,
+      "self": [
+        {
+          "location": "(program)",
+          "ms": 576.21
+        },
+        {
+          "location": "(idle)",
+          "ms": 192.6
+        },
+        {
+          "location": "querySelector",
+          "ms": 156.66
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30034 e",
+          "ms": 82.47
+        },
+        {
+          "location": "../../../src/tutorial/gradient-contour/gradient-contour-entry.ts:104 ve",
+          "ms": 80.31
+        },
+        {
+          "location": "querySelectorAll",
+          "ms": 68.52
+        },
+        {
+          "location": "(garbage collector)",
+          "ms": 56.95
+        },
+        {
+          "location": "../../../src/rendering/graph-svg.ts:2287 Hi",
+          "ms": 53.82
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl.ts:104 ca",
+          "ms": 52.14
+        },
+        {
+          "location": "bufferData",
+          "ms": 36.5
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:7429 h",
+          "ms": 35.51
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30197 v",
+          "ms": 27
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:11804 e",
+          "ms": 26.16
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:801 ",
+          "ms": 25.73
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:37587 ci",
+          "ms": 25.05
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:642 ol",
+          "ms": 24.96
+        },
+        {
+          "location": "../../../src/rendering/graph-svg.ts:905 ",
+          "ms": 22.83
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:1663 d",
+          "ms": 21.99
+        },
+        {
+          "location": "setAttribute",
+          "ms": 21.21
+        },
+        {
+          "location": "../../../src/rendering/graph-svg.ts:2263 Bi",
+          "ms": 19.18
+        }
+      ],
+      "inclusive": [
+        {
+          "location": "(root)",
+          "ms": 2151.24
+        },
+        {
+          "location": "../../../src/tutorial/gradient-contour/gradient-contour-entry.ts:104 ve",
+          "ms": 1258.02
+        },
+        {
+          "location": "../../../src/reader/runtime/timeline-playback-clock.ts:68 f",
+          "ms": 1258.02
+        },
+        {
+          "location": "../../../src/reader/runtime/timeline-playback-clock.ts:82 h",
+          "ms": 1258.02
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:245 c",
+          "ms": 1056.24
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:373 Jc",
+          "ms": 797.4
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:326 Kc",
+          "ms": 795.79
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:485 Qc",
+          "ms": 607.08
+        },
+        {
+          "location": "(program)",
+          "ms": 576.21
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17603 Tc.render",
+          "ms": 302.41
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:300 ep",
+          "ms": 255.32
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:114 Hc",
+          "ms": 239.17
+        },
+        {
+          "location": "(idle)",
+          "ms": 192.6
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18118 gt",
+          "ms": 189.78
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18091 ht",
+          "ms": 189.78
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17943 pt",
+          "ms": 189.78
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17178 Tc.renderBufferDirect",
+          "ms": 187.2
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl.ts:132 la",
+          "ms": 186.82
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl.ts:200 ",
+          "ms": 163.71
+        },
+        {
+          "location": "../../../src/rendering/graph-transitions.ts:202 qi",
+          "ms": 162.09
+        }
+      ],
+      "caveat": "Sampling attribution; inclusive rows overlap. Instrumented frames are not the ordinary timing cohort."
+    },
+    {
+      "kind": "cpu-profile",
+      "phase": "comparison",
+      "cpuSlowdown": 6,
+      "repeat": 3,
+      "scriptMs": 1519.25,
+      "layoutMs": 72.11999999999996,
+      "styleMs": 32.22799999999998,
+      "layoutCount": 138,
+      "styleCount": 209,
+      "frames": {
+        "count": 85,
+        "p50Ms": 17.19999999999891,
+        "p95Ms": 34.19999999999891
+      },
+      "samples": 1656,
+      "sampledMs": 2110.874,
+      "self": [
+        {
+          "location": "(idle)",
+          "ms": 260.8
+        },
+        {
+          "location": "(program)",
+          "ms": 230.37
+        },
+        {
+          "location": "querySelector",
+          "ms": 192.86
+        },
+        {
+          "location": "../../../src/rendering/graph-svg.ts:2287 Hi",
+          "ms": 153.3
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30034 e",
+          "ms": 134.45
+        },
+        {
+          "location": "../../../src/tutorial/gradient-contour/gradient-contour-entry.ts:104 ve",
+          "ms": 112.93
+        },
+        {
+          "location": "querySelectorAll",
+          "ms": 72.48
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl.ts:104 ca",
+          "ms": 66.03
+        },
+        {
+          "location": "bufferData",
+          "ms": 47.97
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:11804 e",
+          "ms": 41.49
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:7429 h",
+          "ms": 40.09
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:18892 computeBoundingSphere",
+          "ms": 34.24
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30095 _",
+          "ms": 31.16
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:801 ",
+          "ms": 30.65
+        },
+        {
+          "location": "(garbage collector)",
+          "ms": 28.17
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30197 v",
+          "ms": 27.86
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18149 _t",
+          "ms": 24.07
+        },
+        {
+          "location": "deleteBuffer",
+          "ms": 16.86
+        },
+        {
+          "location": "deleteVertexArray",
+          "ms": 16.66
+        },
+        {
+          "location": "../../../src/rendering/graph-svg.ts:2263 Bi",
+          "ms": 15.9
+        }
+      ],
+      "inclusive": [
+        {
+          "location": "(root)",
+          "ms": 2110.87
+        },
+        {
+          "location": "../../../src/reader/runtime/timeline-playback-clock.ts:68 f",
+          "ms": 1525.96
+        },
+        {
+          "location": "../../../src/reader/runtime/timeline-playback-clock.ts:82 h",
+          "ms": 1525.96
+        },
+        {
+          "location": "../../../src/tutorial/gradient-contour/gradient-contour-entry.ts:104 ve",
+          "ms": 1524.32
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:245 c",
+          "ms": 1257.82
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:373 Jc",
+          "ms": 982.46
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:326 Kc",
+          "ms": 981.46
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:485 Qc",
+          "ms": 736.96
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17603 Tc.render",
+          "ms": 334.99
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl-three.ts:114 Hc",
+          "ms": 327.39
+        },
+        {
+          "location": "../../../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts:300 ep",
+          "ms": 272.62
+        },
+        {
+          "location": "(idle)",
+          "ms": 260.8
+        },
+        {
+          "location": "../../../src/rendering/graph-webgl.ts:132 la",
+          "ms": 244.5
+        },
+        {
+          "location": "(program)",
+          "ms": 230.37
+        },
+        {
+          "location": "../../../node_modules/three/build/three.core.js:30034 e",
+          "ms": 216.34
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17943 pt",
+          "ms": 211.38
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18091 ht",
+          "ms": 209.12
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:18118 gt",
+          "ms": 207.92
+        },
+        {
+          "location": "../../../node_modules/three/build/three.module.js:17178 Tc.renderBufferDirect",
+          "ms": 203.72
+        },
+        {
+          "location": "../../../src/rendering/graph-transitions.ts:245 Ji",
+          "ms": 199.07
+        }
+      ],
+      "caveat": "Sampling attribution; inclusive rows overlap. Instrumented frames are not the ordinary timing cohort."
+    }
+  ],
+  "timings": [
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 1,
+      "repeat": 1,
+      "manifestSha256": "f345d80558e547977a72f4448d6b6f8afcc9577301515ab5330467e8a9cdcf3d",
+      "readyMs": 1237.1000000238419,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          443,
+          92,
+          438
+        ]
+      },
+      "frames": {
+        "samples": 120,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.59999999999991,
+        "maxMs": 17.700000000000045,
+        "over50ms": 0
+      },
+      "startupScriptMs": 267.345,
+      "startupTaskMs": 1137.7459999999999,
+      "interactionScriptMs": 412.99800000000005,
+      "jsHeapUsedBytes": 24655260,
+      "totals": {
+        ".js": {
+          "raw": 1049311,
+          "gzip": 287663
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 287
+        }
+      },
+      "resources": [
+        {
+          "path": "experiments/kinetic-figure/gradient-contour/index.html",
+          "raw": 401,
+          "gzip": 287,
+          "kind": ".html"
+        },
+        {
+          "path": "assets/gradientContour-CLnBUhZv.js",
+          "raw": 518858,
+          "gzip": 155292,
+          "kind": ".js"
+        },
+        {
+          "path": "assets/gradientContour-yrMr-wI2.css",
+          "raw": 78262,
+          "gzip": 17987,
+          "kind": ".css"
+        },
+        {
+          "path": "assets/KaTeX_Math-Italic-t53AETM-.woff2",
+          "raw": 16440,
+          "gzip": 16466,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Regular-B22Nviop.woff2",
+          "raw": 26272,
+          "gzip": 26300,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Bold-Cx986IdX.woff2",
+          "raw": 25324,
+          "gzip": 25352,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/graph-webgl-three-rFAP9N2y.js",
+          "raw": 530453,
+          "gzip": 132371,
+          "kind": ".js"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 1,
+      "repeat": 2,
+      "manifestSha256": "f345d80558e547977a72f4448d6b6f8afcc9577301515ab5330467e8a9cdcf3d",
+      "readyMs": 812.3999999761581,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          234,
+          61
+        ]
+      },
+      "frames": {
+        "samples": 120,
+        "p50Ms": 16.700000000000045,
+        "p95Ms": 17.59999999999991,
+        "maxMs": 17.700000000000045,
+        "over50ms": 0
+      },
+      "startupScriptMs": 137.854,
+      "startupTaskMs": 741.998,
+      "interactionScriptMs": 436.11999999999995,
+      "jsHeapUsedBytes": 24570144,
+      "totals": {
+        ".js": {
+          "raw": 1049311,
+          "gzip": 287663
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 287
+        }
+      },
+      "resources": [
+        {
+          "path": "experiments/kinetic-figure/gradient-contour/index.html",
+          "raw": 401,
+          "gzip": 287,
+          "kind": ".html"
+        },
+        {
+          "path": "assets/gradientContour-CLnBUhZv.js",
+          "raw": 518858,
+          "gzip": 155292,
+          "kind": ".js"
+        },
+        {
+          "path": "assets/gradientContour-yrMr-wI2.css",
+          "raw": 78262,
+          "gzip": 17987,
+          "kind": ".css"
+        },
+        {
+          "path": "assets/KaTeX_Math-Italic-t53AETM-.woff2",
+          "raw": 16440,
+          "gzip": 16466,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Regular-B22Nviop.woff2",
+          "raw": 26272,
+          "gzip": 26300,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Bold-Cx986IdX.woff2",
+          "raw": 25324,
+          "gzip": 25352,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/graph-webgl-three-rFAP9N2y.js",
+          "raw": 530453,
+          "gzip": 132371,
+          "kind": ".js"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 1,
+      "repeat": 3,
+      "manifestSha256": "f345d80558e547977a72f4448d6b6f8afcc9577301515ab5330467e8a9cdcf3d",
+      "readyMs": 676.7999999523163,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          210,
+          54,
+          315
+        ]
+      },
+      "frames": {
+        "samples": 121,
+        "p50Ms": 16.699999999999818,
+        "p95Ms": 17.5,
+        "maxMs": 17.59999999999991,
+        "over50ms": 0
+      },
+      "startupScriptMs": 130.45499999999998,
+      "startupTaskMs": 621.282,
+      "interactionScriptMs": 386.70899999999995,
+      "jsHeapUsedBytes": 24845172,
+      "totals": {
+        ".js": {
+          "raw": 1049311,
+          "gzip": 287663
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 287
+        }
+      },
+      "resources": [
+        {
+          "path": "experiments/kinetic-figure/gradient-contour/index.html",
+          "raw": 401,
+          "gzip": 287,
+          "kind": ".html"
+        },
+        {
+          "path": "assets/gradientContour-CLnBUhZv.js",
+          "raw": 518858,
+          "gzip": 155292,
+          "kind": ".js"
+        },
+        {
+          "path": "assets/gradientContour-yrMr-wI2.css",
+          "raw": 78262,
+          "gzip": 17987,
+          "kind": ".css"
+        },
+        {
+          "path": "assets/KaTeX_Math-Italic-t53AETM-.woff2",
+          "raw": 16440,
+          "gzip": 16466,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Regular-B22Nviop.woff2",
+          "raw": 26272,
+          "gzip": 26300,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Bold-Cx986IdX.woff2",
+          "raw": 25324,
+          "gzip": 25352,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/graph-webgl-three-rFAP9N2y.js",
+          "raw": 530453,
+          "gzip": 132371,
+          "kind": ".js"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 6,
+      "repeat": 1,
+      "manifestSha256": "f345d80558e547977a72f4448d6b6f8afcc9577301515ab5330467e8a9cdcf3d",
+      "readyMs": 1868.8000000715256,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          1217,
+          149,
+          275
+        ]
+      },
+      "frames": {
+        "samples": 60,
+        "p50Ms": 33.40000000000009,
+        "p95Ms": 50.19999999999982,
+        "maxMs": 67.10000000000036,
+        "over50ms": 5
+      },
+      "startupScriptMs": 786.821,
+      "startupTaskMs": 1821.5939999999998,
+      "interactionScriptMs": 1288.222,
+      "jsHeapUsedBytes": 9850108,
+      "totals": {
+        ".js": {
+          "raw": 1049311,
+          "gzip": 287663
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 287
+        }
+      },
+      "resources": [
+        {
+          "path": "experiments/kinetic-figure/gradient-contour/index.html",
+          "raw": 401,
+          "gzip": 287,
+          "kind": ".html"
+        },
+        {
+          "path": "assets/gradientContour-CLnBUhZv.js",
+          "raw": 518858,
+          "gzip": 155292,
+          "kind": ".js"
+        },
+        {
+          "path": "assets/gradientContour-yrMr-wI2.css",
+          "raw": 78262,
+          "gzip": 17987,
+          "kind": ".css"
+        },
+        {
+          "path": "assets/KaTeX_Math-Italic-t53AETM-.woff2",
+          "raw": 16440,
+          "gzip": 16466,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Regular-B22Nviop.woff2",
+          "raw": 26272,
+          "gzip": 26300,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Bold-Cx986IdX.woff2",
+          "raw": 25324,
+          "gzip": 25352,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/graph-webgl-three-rFAP9N2y.js",
+          "raw": 530453,
+          "gzip": 132371,
+          "kind": ".js"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 6,
+      "repeat": 2,
+      "manifestSha256": "f345d80558e547977a72f4448d6b6f8afcc9577301515ab5330467e8a9cdcf3d",
+      "readyMs": 1743.6000000238419,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          1108,
+          146,
+          280
+        ]
+      },
+      "frames": {
+        "samples": 58,
+        "p50Ms": 33.59999999999991,
+        "p95Ms": 50.30000000000018,
+        "maxMs": 51,
+        "over50ms": 5
+      },
+      "startupScriptMs": 706.332,
+      "startupTaskMs": 1704.3680000000002,
+      "interactionScriptMs": 1297.8,
+      "jsHeapUsedBytes": 7234040,
+      "totals": {
+        ".js": {
+          "raw": 1049311,
+          "gzip": 287663
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 287
+        }
+      },
+      "resources": [
+        {
+          "path": "experiments/kinetic-figure/gradient-contour/index.html",
+          "raw": 401,
+          "gzip": 287,
+          "kind": ".html"
+        },
+        {
+          "path": "assets/gradientContour-CLnBUhZv.js",
+          "raw": 518858,
+          "gzip": 155292,
+          "kind": ".js"
+        },
+        {
+          "path": "assets/gradientContour-yrMr-wI2.css",
+          "raw": 78262,
+          "gzip": 17987,
+          "kind": ".css"
+        },
+        {
+          "path": "assets/KaTeX_Math-Italic-t53AETM-.woff2",
+          "raw": 16440,
+          "gzip": 16466,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Regular-B22Nviop.woff2",
+          "raw": 26272,
+          "gzip": 26300,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Bold-Cx986IdX.woff2",
+          "raw": 25324,
+          "gzip": 25352,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/graph-webgl-three-rFAP9N2y.js",
+          "raw": 530453,
+          "gzip": 132371,
+          "kind": ".js"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "kind": "browser",
+      "scenario": "gradient",
+      "cpuSlowdown": 6,
+      "repeat": 3,
+      "manifestSha256": "f345d80558e547977a72f4448d6b6f8afcc9577301515ab5330467e8a9cdcf3d",
+      "readyMs": 1610.3000000715256,
+      "dom": {
+        "elements": 3344,
+        "canvases": 1,
+        "styleRules": 610,
+        "longTasks": [
+          1001,
+          140,
+          268
+        ]
+      },
+      "frames": {
+        "samples": 65,
+        "p50Ms": 33.200000000000045,
+        "p95Ms": 50.299999999999955,
+        "maxMs": 50.799999999999955,
+        "over50ms": 5
+      },
+      "startupScriptMs": 737.893,
+      "startupTaskMs": 1560.8709999999999,
+      "interactionScriptMs": 1304.76,
+      "jsHeapUsedBytes": 15470392,
+      "totals": {
+        ".js": {
+          "raw": 1049311,
+          "gzip": 287663
+        },
+        ".css": {
+          "raw": 78262,
+          "gzip": 17987
+        },
+        ".woff2": {
+          "raw": 68036,
+          "gzip": 68118
+        },
+        ".woff": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".ttf": {
+          "raw": 0,
+          "gzip": 0
+        },
+        ".html": {
+          "raw": 401,
+          "gzip": 287
+        }
+      },
+      "resources": [
+        {
+          "path": "experiments/kinetic-figure/gradient-contour/index.html",
+          "raw": 401,
+          "gzip": 287,
+          "kind": ".html"
+        },
+        {
+          "path": "assets/gradientContour-CLnBUhZv.js",
+          "raw": 518858,
+          "gzip": 155292,
+          "kind": ".js"
+        },
+        {
+          "path": "assets/gradientContour-yrMr-wI2.css",
+          "raw": 78262,
+          "gzip": 17987,
+          "kind": ".css"
+        },
+        {
+          "path": "assets/KaTeX_Math-Italic-t53AETM-.woff2",
+          "raw": 16440,
+          "gzip": 16466,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Regular-B22Nviop.woff2",
+          "raw": 26272,
+          "gzip": 26300,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/KaTeX_Main-Bold-Cx986IdX.woff2",
+          "raw": 25324,
+          "gzip": 25352,
+          "kind": ".woff2"
+        },
+        {
+          "path": "assets/graph-webgl-three-rFAP9N2y.js",
+          "raw": 530453,
+          "gzip": 132371,
+          "kind": ".js"
+        }
+      ],
+      "errors": []
+    }
+  ]
+}

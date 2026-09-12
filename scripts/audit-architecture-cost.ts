@@ -5,6 +5,7 @@ import { extname, resolve } from "node:path";
 import { cpus, platform, arch } from "node:os";
 import { gzipSync } from "node:zlib";
 import { assertArchitectureLoadingAcceptance } from "./architecture-loading-acceptance.ts";
+import { profileGradientCost } from "./profile-gradient-cost.ts";
 
 // Measurements, not deletion candidates or automatically refreshed budgets.
 // Inventory only tracked files; browser mode executes already-built artifacts.
@@ -144,6 +145,7 @@ if (process.argv.includes("--browser")) {
             stylesheets: coverage.map(item => ({ url: item.url, total: item.text?.length ?? null,
               used: item.ranges.reduce((n, range) => n + range.end - range.start, 0) })) }));
         }
+        if (scenario.id === "gradient" && process.argv.includes("--profile")) await profileGradientCost(page, cdp, scenario.output, rate, repeat);
       } finally { await context.close(); }
     }
   } finally { await browser.close(); }
