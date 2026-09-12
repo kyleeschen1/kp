@@ -1,0 +1,52 @@
+.motion-page {
+  max-width: 56rem; margin: auto; padding: 1.5rem;
+  --kp-st-paper: var(--kp-semantic-surface); --kp-st-strong: var(--kp-semantic-ink-strong);
+  --kp-st-muted: var(--kp-semantic-ink-secondary); --kp-st-rule: var(--kp-semantic-line-subtle);
+  --kp-st-header: var(--kp-semantic-ink-strong); --kp-st-header-ink: var(--kp-semantic-surface);
+  --kp-st-focus: var(--kp-semantic-focus);
+}
+.motion-page > header { margin-bottom: 1.5rem; }
+.motion-page h1 { margin-bottom: .5rem; }
+.motion-page .kp-focus-deck__card { height: auto; grid-template-rows: 16rem auto; }
+.motion-passage-shell { position: relative; min-width: 0; }
+.motion-passage-shell > [data-kp-focus-deck-viewport] { height: 100%; }
+.motion-passage-shell [data-kp-focus-deck-beat] { visibility: hidden; }
+.motion-reading { position: absolute; inset: 0; display: block; overflow-y: auto; scroll-snap-type: none; touch-action: pan-y; }
+.motion-reading .kp-focus-deck__passage-page { display: flex; flex-direction: column; justify-content: flex-end; gap: .45rem; }
+.motion-reading strong { color: var(--kp-st-strong); }
+.motion-reading .motion-cue { color: var(--kp-st-focus); }
+[data-motion-phase="act"] [data-motion-reading] { color: var(--kp-st-muted); }
+.motion-page .motion-stage { display: flex; flex-direction: column; gap: 1rem; padding: 1rem 1.4rem; height: auto; overflow: visible; border-top: 1px solid var(--kp-st-rule); }
+.motion-stage-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+/* Shared annotations own typography; this renderer anchors them in normal flow. */
+.motion-stage .kp-focus-deck__annotation { position: static; }
+.motion-physical, .motion-graph { min-width: 0; }
+.motion-ruler { position: relative; margin-top: .4rem; }
+.motion-ruler svg { display: block; width: 100%; height: auto; }
+.motion-ruler-labels { display: flex; justify-content: space-between; margin: -.8rem 4.5% .5rem; }
+.motion-ruler-labels > span { width: 1.8rem; text-align: center; }
+.motion-plot { position: relative; height: 12rem; margin-top: .3rem; padding-left: .5rem; }
+.motion-plot svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.motion-time-labels { position: relative; height: 1.5rem; margin-left: .5rem; }
+.motion-time-labels > span { position: absolute; transform: translateX(-50%); }
+.motion-y-label { position: absolute; left: 0; }
+.motion-y-top { top: 0; } .motion-y-zero { top: 54%; transform: translateY(-50%); } .motion-y-bottom { bottom: .25rem; }
+.motion-axis, .motion-tick { stroke: var(--kp-semantic-line-strong); stroke-width: 1.4; fill: none; }
+.motion-grid { stroke: var(--kp-semantic-line-subtle); stroke-width: 1; fill: none; }
+.motion-zero { stroke: var(--kp-semantic-relation); stroke-width: 2; stroke-dasharray: 3 3; fill: none; }
+.motion-point { fill: var(--kp-semantic-focus); stroke: var(--kp-st-paper); stroke-width: 2; }
+.motion-trace { fill: none; stroke: var(--kp-semantic-relation); stroke-width: 3; }
+.motion-guide { fill: none; stroke: var(--kp-semantic-ink-context); stroke-width: 1; stroke-dasharray: 3 4; }
+.motion-observation { fill: var(--kp-semantic-ink-strong); }
+.motion-stage svg * { vector-effect: non-scaling-stroke; }
+.motion-stage[data-motion-graph-focused="false"] .motion-graph { color: var(--kp-st-muted); }
+.motion-stage figcaption { color: var(--kp-st-muted); }
+.motion-page details { margin-top: 1rem; }
+.motion-page table { border-collapse: collapse; margin-block: 1rem; }
+.motion-page th, .motion-page td { padding: .4rem 1rem; text-align: right; border-bottom: 1px solid currentColor; }
+@media (max-width: 520px) {
+  .motion-page { padding: .7rem; }
+  .motion-page .kp-focus-deck__card { grid-template-rows: 20rem auto; }
+  .motion-page .motion-stage { padding: .8rem .65rem; }
+  .motion-stage-heading { gap: .4rem; flex-wrap: wrap; }
+}

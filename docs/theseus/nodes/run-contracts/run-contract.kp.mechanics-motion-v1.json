@@ -45,7 +45,8 @@
     {
       "id": "p2",
       "title": "Canonical motion exemplar and human review",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: canonical seven-stop motion exemplar ready at shared localhost:8000/experiments/mechanics-motion/. Nine focused tests, three Chromium checks, full types and dependency direction pass. Review packet docs/project/threads/2026-09-12-motion-exemplar-review.md. Await visual learner acceptance before P2 completion and P3-P4; no repeat routine approval after acceptance.",
+      "status": "in-progress"
     },
     {
       "id": "p3",

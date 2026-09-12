@@ -7,6 +7,7 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
+    "visual:mechanics-motion": "playwright test --config playwright.mechanics-motion-review.config.ts --project=chromium --workers=1",
     "audit:architecture-cost": "node --disable-warning=ExperimentalWarning scripts/audit-architecture-cost.ts",
     "visual:architecture-cost": "npm run audit:architecture-cost -- --browser",
     "visual:edition-closure": "node --disable-warning=ExperimentalWarning scripts/check-edition-closure-browser.ts",

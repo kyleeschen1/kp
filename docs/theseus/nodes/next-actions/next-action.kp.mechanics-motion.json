@@ -29,6 +29,27 @@
       "scope": "p1",
       "checkedAt": "2026-09-12T21:00:23.348Z",
       "notes": "Six tests pass: exact endpoint arithmetic, interpolation assumption, reverse, malformed data, alias ownership, runtime issuance and namespaced observation/point selectors; full types pass after test helper repair. Authority and explanation docs name existing shared owners."
+    },
+    {
+      "command": "node --experimental-strip-types --test tests/motion-observation.test.ts tests/motion-observation-asset.test.ts tests/mechanics-motion-sequence.test.ts",
+      "status": "passed",
+      "scope": "p2",
+      "checkedAt": "2026-09-12T21:16:38.559Z",
+      "notes": "Nine tests pass: governed source, exact stops, reverse projection, held prose and fixed-origin invariance. An initial tsx invocation failed because tsx is not installed; the repository native TypeScript runner passes without adding dependencies."
+    },
+    {
+      "command": "npm run typecheck; npm run check:dependency-direction",
+      "status": "passed",
+      "scope": "p2",
+      "checkedAt": "2026-09-12T21:17:17.408Z",
+      "notes": "App, Node, tests, Svelte and domain types pass; dependency-direction gate passes with zero retiring exceptions. Final axis-label change is markup/CSS only."
+    },
+    {
+      "command": "npm run visual:mechanics-motion",
+      "status": "passed",
+      "scope": "p2",
+      "checkedAt": "2026-09-12T21:17:38.903Z",
+      "notes": "Three Chromium discovery tests pass after annotation anchoring repair and timestamp labels: seven stops, coordinate invariance, animated button and keyboard travel, reverse horizontal gesture, phone containment and reduced-motion endpoints. Human pedagogy and aesthetics remain pending; no cross-browser or production certification claimed."
     }
   ],
   "expectedLearning": [
