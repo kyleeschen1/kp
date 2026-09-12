@@ -147,6 +147,19 @@ test("compiler rejects operations without definition, strict law, or lineage", (
   );
 });
 
+test("governed compilation cannot certify duplicated rich correspondence endpoints", () => {
+  const source = authority(), first = source.animation.transformations[0]!;
+  const map = first.correspondenceMap!, record = map.records.find(r => r.targetSelectorIds.length > 0)!;
+  const compromised = { ...source, animation: { ...source.animation, transformations: [{
+    ...first, correspondenceMap: { ...map, records: map.records.map(r => r === record
+      ? { ...r, targetSelectorIds: [...r.targetSelectorIds, ...r.targetSelectorIds] } : r) }
+  }, ...source.animation.transformations.slice(1)] } };
+  const input = { request: request(), authority: compromised };
+  assert.ok(validateKpGovernedCanonicalConstructionCompilation(input).some(issue =>
+    issue.code === "governed-verification.asset" && issue.path.includes("correspondenceMap")));
+  assert.throws(() => compileKpGovernedCanonicalConstruction(input), KpGovernedConstructionVerificationError);
+});
+
 test("provider wording and presentation fields cannot become mathematical truth", () => {
   const input = {
     ...request(),

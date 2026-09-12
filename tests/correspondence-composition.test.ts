@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   checkCorrespondenceMapRewindLaw,
+  KpCorrespondenceCompositionRepairGap,
   composeCorrespondenceMapsParallel,
   composeCorrespondenceMapsSequence,
   projectCorrespondenceMapForPlayback,
@@ -120,6 +121,51 @@ test("correspondence map composition rejects empty input", () => {
     () => composeCorrespondenceMapsParallel("empty.parallel", []),
     /requires at least one correspondence map/
   );
+});
+
+test("composition checks malformed input but retains valid partial maps", () => {
+  const malformed: CorrespondenceMap = { id: "bad", records: [{ id: "x", relation: "fan-out",
+    sourceSelectorIds: ["a"], targetSelectorIds: ["b"], summary: "Not a fan-out" }] };
+  for (const compose of [composeCorrespondenceMapsSequence, composeCorrespondenceMapsParallel]) {
+    assert.throws(() => compose("combined", [malformed]), /endpoint shape/);
+    assert.throws(() => compose("", [{ id: "valid-partial", records: [] }]), /id/);
+    const partial: CorrespondenceMap = { id: "partial", records: [{ id: "a", relation: "identity",
+      sourceSelectorIds: ["a"], targetSelectorIds: ["b"], summary: "Only the declared subject" }] };
+    assert.deepEqual(validateCorrespondenceMap(compose("partial-result", [partial])), []);
+    assert.equal(compose("partial-result", [partial]).id, "partial-result");
+  }
+});
+
+test("unsupported branching composition is a repair gap, not a fabricated valid relation", () => {
+  const first: CorrespondenceMap = { id: "split", records: [{ id: "split", relation: "fan-out",
+    sourceSelectorIds: ["a"], targetSelectorIds: ["b", "c"], summary: "Split" }] };
+  const second: CorrespondenceMap = { id: "follow", records: [{ id: "b", relation: "identity",
+    sourceSelectorIds: ["b"], targetSelectorIds: ["d"], summary: "Follow one branch" }] };
+  assert.throws(() => composeCorrespondenceMapsSequence("result", [first, second]), error =>
+    error instanceof KpCorrespondenceCompositionRepairGap && error.code === "unsupported-result");
+  assert.throws(() => composeCorrespondenceMapsParallel("result", [second, second]), error =>
+    error instanceof KpCorrespondenceCompositionRepairGap && error.code === "unsupported-result");
+});
+
+test("relation multiplicity requires distinct nonempty semantic endpoints", () => {
+  for (const record of [
+    { relation: "fan-out" as const, sourceSelectorIds: ["a"], targetSelectorIds: ["b", "b"] },
+    { relation: "fan-in" as const, sourceSelectorIds: ["a", "a"], targetSelectorIds: ["b"] },
+    { relation: "identity" as const, sourceSelectorIds: [""], targetSelectorIds: ["b"] }
+  ]) {
+    const map = { id: "bad-multiplicity", records: [{ id: "record", summary: "Invalid endpoints", ...record }] };
+    assert.ok(validateCorrespondenceMap(map).length > 0);
+    assert.throws(() => composeCorrespondenceMapsSequence("result", [map]), KpCorrespondenceCompositionRepairGap);
+  }
+});
+
+test("introduced then retired internal material has no composite boundary record", () => {
+  const enter: CorrespondenceMap = { id: "enter", records: [{ id: "factor", relation: "introduction",
+    sourceSelectorIds: [], targetSelectorIds: ["factor"], summary: "Introduce working material" }] };
+  const retire: CorrespondenceMap = { id: "retire", records: [{ id: "factor", relation: "cancelation",
+    sourceSelectorIds: ["factor"], targetSelectorIds: [], summary: "Evaluate working material" }] };
+  assert.deepEqual(composeCorrespondenceMapsSequence("boundary", [enter, retire]), { id: "boundary", records: [] });
+  assert.equal(enter.records.length, 1); assert.equal(retire.records.length, 1);
 });
 
 test("validateCorrespondenceMap enforces relation endpoint shapes", () => {

@@ -142,7 +142,8 @@
     {
       "id": "s18",
       "title": "Transformation law pressure",
-      "status": "planned"
+      "summary": "Existing relation laws now gate transformation and composition boundaries; malformed output is typed repair, partial/lossy contracts retained.",
+      "status": "complete"
     },
     {
       "id": "s19",

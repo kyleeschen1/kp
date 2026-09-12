@@ -179,6 +179,19 @@ export function validateCorrespondenceMap(
     }
     recordIds.add(record.id);
 
+    // Multiplicity means distinct semantic endpoints, not the same selector
+    // repeated to satisfy a fan-in/fan-out length check.
+    for (const field of ["sourceSelectorIds", "targetSelectorIds"] as const) {
+      const seen = new Set<string>();
+      record[field].forEach((selectorId, selectorIndex) => {
+        if (!selectorId.trim() || seen.has(selectorId)) issues.push({
+          path: `${path}.${field}[${selectorIndex}]`,
+          message: `Correspondence record ${record.id} requires nonempty, distinct ${field}.`
+        });
+        seen.add(selectorId);
+      });
+    }
+
     if (!recordHasExpectedEndpointShape(record)) {
       const definition = findSelectorCorrespondenceRelation(record.relation);
       issues.push({
@@ -241,10 +254,11 @@ export function composeCorrespondenceMapsSequence(
 ): CorrespondenceMap {
   validateCompositionInput(id, maps);
 
-  return maps.slice(1).reduce(
-    (currentMap, nextMap) => composeTwoCorrespondenceMaps(id, currentMap, nextMap),
+  const result = maps.slice(1).reduce(
+    (currentMap, nextMap) => requireCompositionMap(composeTwoCorrespondenceMaps(id, currentMap, nextMap), "unsupported-result"),
     cloneCorrespondenceMap(maps[0]!)
   );
+  return requireCompositionMap({ ...result, id }, "unsupported-result");
 }
 
 export function composeCorrespondenceMapsParallel(
@@ -253,12 +267,27 @@ export function composeCorrespondenceMapsParallel(
 ): CorrespondenceMap {
   validateCompositionInput(id, maps);
 
-  return {
+  return requireCompositionMap({
     id,
     records: maps.flatMap((map) =>
       map.records.map((record) => cloneRecordWithId(record, `${map.id}.${record.id}`))
     )
-  };
+  }, "unsupported-result");
+}
+
+export class KpCorrespondenceCompositionRepairGap extends Error {
+  readonly code: "malformed-input" | "unsupported-result";
+  readonly path: string;
+  constructor(code: KpCorrespondenceCompositionRepairGap["code"], path: string, message: string) {
+    super(message); this.name = "KpCorrespondenceCompositionRepairGap";
+    this.code = code; this.path = path;
+  }
+}
+
+function requireCompositionMap(map: CorrespondenceMap, code: KpCorrespondenceCompositionRepairGap["code"]): CorrespondenceMap {
+  const issue = validateCorrespondenceMap(map)[0];
+  if (issue) throw new KpCorrespondenceCompositionRepairGap(code, issue.path, issue.message);
+  return map;
 }
 
 function composeTwoCorrespondenceMaps(
@@ -292,7 +321,11 @@ function composeTwoCorrespondenceMaps(
 
   return {
     id,
-    records: [...records, ...introducedRecords]
+    // Material introduced and retired entirely inside the sequence has no
+    // composite boundary endpoint. Its intermediate life remains in the input
+    // trace, not an invalid zero-to-zero boundary correspondence.
+    records: [...records, ...introducedRecords].filter(record =>
+      record.sourceSelectorIds.length + record.targetSelectorIds.length > 0)
   };
 }
 
@@ -371,11 +404,15 @@ function validateCompositionInput(
   id: string,
   maps: readonly CorrespondenceMap[]
 ): void {
+  if (id.trim().length === 0) throw new KpCorrespondenceCompositionRepairGap("malformed-input", "id", "Composition id must not be empty.");
   if (maps.length === 0) {
     throw new Error(
       `Correspondence map composition ${id} requires at least one correspondence map.`
     );
   }
+  // This is a partial correspondence utility, not a universal categorical
+  // composition proof. Reject unsupported results instead of inventing a law.
+  maps.forEach(map => requireCompositionMap(map, "malformed-input"));
 }
 
 function recordHasExpectedEndpointShape(

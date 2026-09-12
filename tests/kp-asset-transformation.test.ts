@@ -47,6 +47,16 @@ const bundle = createKpAssetBundle({
   objects: [initialEquation, balancedEquation]
 });
 
+test("transformation validation cannot bypass rich correspondence relation laws", () => {
+  const transformation = createKpSemanticTransformation({
+    id: "transform.invalid-rich", transformType: "test", title: "Invalid identity",
+    sourceObjectIds: [initialEquation.id], targetObjectIds: [balancedEquation.id], preserves: [],
+    correspondenceMap: { id: "map.invalid", records: [{ id: "bad", relation: "identity",
+      sourceSelectorIds: ["eq0.x", "eq0.equals"], targetSelectorIds: ["eq1.x"], summary: "Not one-to-one" }] }
+  });
+  assert.ok(validateKpSemanticTransformation(transformation, bundle).some(issue => issue.path === "correspondenceMap.records[0]"));
+});
+
 test("createKpSemanticTransformation records source target and correspondence", () => {
   const transformation = createKpSemanticTransformation({
     id: "transform.subtract-both-sides.3",

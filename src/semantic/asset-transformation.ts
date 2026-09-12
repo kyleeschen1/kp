@@ -4,6 +4,7 @@ import {
 } from "./asset.ts";
 import {
   cloneCorrespondenceMap,
+  validateCorrespondenceMap,
   type CorrespondenceMap
 } from "./correspondence.ts";
 
@@ -214,6 +215,13 @@ export function validateKpSemanticTransformation(
 ): readonly KpTransformationValidationIssue[] {
   const issues: KpTransformationValidationIssue[] = [];
   const objectIds = new Set(bundle.objects.map((object) => object.id));
+  // Reference existence does not prove that a declared lifecycle relation has
+  // a valid shape. Reuse the relation owner without demanding total coverage.
+  if (transformation.correspondenceMap) {
+    issues.push(...validateCorrespondenceMap(transformation.correspondenceMap).map(issue => ({
+      ...issue, path: `correspondenceMap.${issue.path}`
+    })));
+  }
 
   transformation.sourceObjectIds.forEach((objectId, index) => {
     if (!objectIds.has(objectId)) {

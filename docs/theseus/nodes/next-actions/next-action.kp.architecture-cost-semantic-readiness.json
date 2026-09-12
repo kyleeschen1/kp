@@ -155,6 +155,13 @@
       "scope": "s17",
       "checkedAt": "2026-09-12T18:10:20.103Z",
       "notes": "Full byte cohort succeeds; Bayes and tax/code/fraction ownership publication checks, full types, builds, reader and algebra budgets, six edition and six built-tax browser cases pass."
+    },
+    {
+      "command": "npm run test:semantic-animation-convergence",
+      "status": "passed",
+      "scope": "s18",
+      "checkedAt": "2026-09-12T18:26:18.554Z",
+      "notes": "254 convergence checks pass after repairing internal zero-boundary lifecycle; focused law partial/lossy/domain and seven public governed compiler checks pass with full types."
     }
   ],
   "expectedLearning": [
