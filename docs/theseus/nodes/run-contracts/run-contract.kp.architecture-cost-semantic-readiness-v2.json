@@ -118,7 +118,8 @@
     {
       "id": "s14",
       "title": "Gradient invalidation and lifecycle",
-      "status": "planned"
+      "summary": "No redundant stage geometry or fit work on equal inputs; exhaustive invalidation, mutable alias snapshot and disposal are covered.",
+      "status": "complete"
     },
     {
       "id": "s15",

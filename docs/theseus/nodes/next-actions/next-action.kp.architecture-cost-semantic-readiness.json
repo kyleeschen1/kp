@@ -127,6 +127,13 @@
       "scope": "s13",
       "checkedAt": "2026-09-12T17:35:56.220Z",
       "notes": "Fourteen preservation checks, actual WebGL no-op and camera invalidation, production browser, seven surface checks, full types and repeated CPU cohorts passed."
+    },
+    {
+      "command": "npm run visual:gradient-contour",
+      "status": "passed",
+      "scope": "s14",
+      "checkedAt": "2026-09-12T17:44:20.770Z",
+      "notes": "Fourteen preservation cases plus new lifecycle browser case, ten unit checks, full types and scoped added-test types, production browser and six byte-acceptance cohorts passed."
     }
   ],
   "expectedLearning": [

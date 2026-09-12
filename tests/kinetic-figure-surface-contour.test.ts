@@ -18,6 +18,7 @@ import {
 import {
   createKpSurfaceContourStageAuthority,
   kpSurfaceContourFitContract,
+  sameKpSurfaceContourProjection,
   renderKpSurfaceContourStage
 } from "../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts";
 import { kpStageFitRectContains } from
@@ -28,6 +29,21 @@ import {
 } from "../src/experiments/kinetic-figure-surface-contour/kinetic-figure-surface-contour-route.ts";
 import { validateKpCrossViewCorrespondenceMap } from
   "../src/tutorial/cross-view-correspondence.ts";
+
+test("stage no-op equality invalidates each semantic paint input, not object allocation", () => {
+  const a = projectKpSurfaceContourBeat(createKpSurfaceContourScore(), 2);
+  assert.equal(sameKpSurfaceContourProjection(a, structuredClone(a)), true);
+  for (const field of ["level", "levelControl", "viewProgress", "mapProgress"] as const) {
+    assert.equal(sameKpSurfaceContourProjection(a, { ...a, [field]: a[field] + .1 }), false, field);
+  }
+  for (const entity of Object.values(a.entities)) {
+    for (const field of ["presence", "attention"] as const) {
+      const b = { ...a, entities: { ...a.entities, [entity.entityId]: { ...entity, [field]: entity[field] + .1 } } };
+      assert.equal(sameKpSurfaceContourProjection(a, b), false, `${entity.entityId}.${field}`);
+      assert.equal(sameKpSurfaceContourProjection(b, a), false);
+    }
+  }
+});
 
 test("surface-contour model preserves one exact level-set identity", () => {
   const model = createKpSurfaceContourModel();

@@ -498,6 +498,39 @@ test("reference retains its own native surface, contour identity and level contr
   await expect(page.locator(".gradient-overlay")).toHaveCount(0);
 });
 
+test("stage cache owns its snapshot and disposal cancels later projection and layout work", async ({ page }) => {
+  await page.goto(route);
+  const result = await page.evaluate(async () => {
+    const stageUrl = "/src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts";
+    const modelUrl = "/src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-model.ts";
+    const stage: typeof import("../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-stage.ts") = await import(stageUrl);
+    const model: typeof import("../src/tutorial/kinetic-figure-surface-contour/kinetic-figure-surface-contour-model.ts") = await import(modelUrl);
+    const authority = stage.createKpSurfaceContourStageAuthority();
+    const projection = { ...model.projectKpSurfaceContourBeat(model.createKpSurfaceContourScore(), 2) };
+    const root = document.createElement("div"); document.body.append(root);
+    root.innerHTML = stage.renderKpSurfaceContourStage({ model: model.createKpSurfaceContourModel(), authority });
+    const session = stage.mountKpSurfaceContourStage({ root, authority, initialProjection: projection });
+    const path = root.querySelector("[data-kp-surface-contour-level-set]")!;
+    const initial = path.getAttribute("d");
+    let mutations = 0;
+    const observer = new MutationObserver(records => { mutations += records.length; });
+    observer.observe(path, { attributes: true, attributeFilter: ["d"] });
+    for (let i = 0; i < 10; i++) session.project(structuredClone(projection));
+    await Promise.resolve(); const noOpMutations = mutations;
+    projection.level += .4; session.project(projection);
+    const changed = path.getAttribute("d") !== initial;
+    session.dispose(); session.dispose();
+    const disposed = root.innerHTML;
+    projection.level += .4; session.project(projection);
+    document.fonts.dispatchEvent(new Event("loadingdone"));
+    await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+    const stableAfterDispose = root.innerHTML === disposed;
+    observer.disconnect(); root.remove();
+    return { noOpMutations, changed, stableAfterDispose };
+  });
+  expect(result).toEqual({ noOpMutations: 0, changed: true, stableAfterDispose: true });
+});
+
 test("all explanation passages fit without shrinking type or hiding required bridges", async ({ page }, info) => {
   test.setTimeout(60000);
   await page.goto(route);

@@ -241,20 +241,35 @@ export function mountKpSurfaceContourStage(input: {
   let fallbackView: "3d" | "xy" = "3d";
   let disposed = false;
   let painted: SurfaceContourRuntimeFrame | undefined;
-  const fitAudit = mountSurfaceContourFitAudit(input.root, input.authority);
+  let projected: KpSurfaceContourSceneProjectionV1 | undefined;
+  const fitAudit = mountSurfaceContourFitAudit(input.root, input.authority, () => {
+    if (disposed) return;
+    projectAxisLabels(input.root, graphAtViewProgress(
+      input.authority.graph3d, input.authority.graphTopDown, projection.viewProgress
+    ), projection.viewProgress);
+  });
 
   const project = (
     next: KpSurfaceContourSceneProjectionV1,
     direction: "forward" | "rewind" =
       next.viewProgress >= previousViewProgress ? "forward" : "rewind"
   ): void => {
+    if (disposed) return;
     projection = next;
     previousViewProgress = next.viewProgress;
-    projectKpSurfaceContourStageDom({
-      root: input.root,
-      authority: input.authority,
-      projection: next
-    });
+    if (!projected || !sameKpSurfaceContourProjection(projected, next)) {
+      projectKpSurfaceContourStageDom({ root: input.root, authority: input.authority, projection: next });
+      // The session owns its comparison snapshot even if a caller retains a
+      // mutable draft behind the readonly input view.
+      const entities = { ...next.entities };
+      for (const state of Object.values(next.entities)) entities[state.entityId] = { ...state };
+      projected = { ...next, entities };
+      fitAudit.schedule();
+    } else {
+      // Hosts may temporarily label their overlay. Restore the native header
+      // before that host projects it, without resampling unchanged geometry.
+      projectStageHeader(input.root, next);
+    }
     const frame = createSurfaceContourRuntimeFrame({
       authority: input.authority,
       projection: next,
@@ -268,7 +283,6 @@ export function mountKpSurfaceContourStage(input: {
     if (client && (!painted || !sameSurfaceContourNativePaint(painted, frame))) {
       if (client.renderKpGraph3DWebGLRuntimeFrame(shell, frame)) painted = frame;
     }
-    fitAudit.schedule();
   };
 
   project(projection);
@@ -301,6 +315,26 @@ export function mountKpSurfaceContourStage(input: {
       fitAudit.dispose();
     }
   });
+}
+
+/** Exhaustive paint inputs: adding a projection/state field requires choosing
+ * its invalidation rule here, rather than silently reusing a stale frame. */
+export function sameKpSurfaceContourProjection(a: KpSurfaceContourSceneProjectionV1, b: KpSurfaceContourSceneProjectionV1): boolean {
+  return Object.values({
+    level: a.level === b.level,
+    levelControl: a.levelControl === b.levelControl,
+    viewProgress: a.viewProgress === b.viewProgress,
+    mapProgress: a.mapProgress === b.mapProgress,
+    entities: Object.keys(a.entities).length === Object.keys(b.entities).length &&
+      Object.values(a.entities).every(state => {
+        const other = b.entities[state.entityId];
+        return other !== undefined && Object.values({
+          entityId: state.entityId === other.entityId,
+          presence: state.presence === other.presence,
+          attention: state.attention === other.attention
+        } satisfies Record<keyof typeof state, boolean>).every(Boolean);
+      })
+  } satisfies Record<keyof KpSurfaceContourSceneProjectionV1, boolean>).every(Boolean);
 }
 
 function sameSurfaceContourNativePaint(a: SurfaceContourRuntimeFrame, b: SurfaceContourRuntimeFrame): boolean {
@@ -681,7 +715,8 @@ function surfaceContourFitPoints(input: {
 
 function mountSurfaceContourFitAudit(
   root: ParentNode,
-  authority: KpSurfaceContourStageAuthority
+  authority: KpSurfaceContourStageAuthority,
+  projectLayout: () => void
 ): { readonly schedule: () => void; readonly dispose: () => void } {
   const stage = requiredElement<HTMLElement>(root,
     "[data-kp-surface-contour-stage]");
@@ -752,13 +787,21 @@ function mountSurfaceContourFitAudit(
     frameId = ownerWindow.requestAnimationFrame(measure);
   };
   const ResizeObserverConstructor = ownerWindow?.ResizeObserver;
+  const invalidateLayout = (): void => {
+    if (disposed) return;
+    projectLayout();
+    schedule();
+  };
   const observer = ResizeObserverConstructor === undefined
     ? undefined
-    : new ResizeObserverConstructor(schedule);
+    : new ResizeObserverConstructor(invalidateLayout);
   observer?.observe(stage);
+  root.querySelectorAll<HTMLElement>(".kp-surface-contour-stage__plot, [data-kp-surface-contour-axis]")
+    .forEach(element => observer?.observe(element));
   root.querySelectorAll<HTMLElement>("[data-kp-surface-contour-beat]")
     .forEach((passage) => observer?.observe(passage));
-  void stage.ownerDocument.fonts?.ready.then(schedule);
+  void stage.ownerDocument.fonts?.ready.then(invalidateLayout);
+  stage.ownerDocument.fonts?.addEventListener("loadingdone", invalidateLayout);
   schedule();
 
   return Object.freeze({
@@ -767,6 +810,7 @@ function mountSurfaceContourFitAudit(
       if (disposed) return;
       disposed = true;
       observer?.disconnect();
+      stage.ownerDocument.fonts?.removeEventListener("loadingdone", invalidateLayout);
       if (frameId !== undefined && ownerWindow !== null) {
         ownerWindow.cancelAnimationFrame(frameId);
       }
