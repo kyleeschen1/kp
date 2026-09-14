@@ -12,6 +12,75 @@ fields. V2 retains the identical approved scope with explicit limits and stops.
 
 ## Primary outcome
 
+### Accepted persistent animated derivation amendment
+
+The user approved one exemplar in the first substitution passage: a persistent
+list of completed equations, one locally animated move, and a stationary nearby
+reason identifying the operation and its semantic target. Preserve the beautiful
+Article layout and all existing physical demonstrations. Reading must remain
+possible without animation; ordinary scrolling never advances algebra. The
+history is a record, not algebraic fan-out. Next/Previous stop at one meaningful
+move, with replay and inspection using existing clock and compositor owners.
+
+Canonical host remains `/experiments/mechanics-relations/`; canonical prose is
+`examples/physics/momentum-energy.article.md`. Animated truth must come from
+governed equation operations and their registered native compositor. The retained
+`examples/physics/momentum-energy.derivation.request.json` is a proposed input
+and capability probe, not verified source authority or a second published lesson.
+It must not be loaded as an executable asset merely because its LaTeX renders.
+
+Acceptance: track where each mathematical part went, see why each move is
+licensed, and reread the completed argument without replay. The smallest visual
+rollback unit is the first derivation enhancement; do not change differentiation,
+shared fonts, existing physics, or other equation exemplars. Stop for human
+review before a second caller or promotion. The existing bounded capability
+investigation stop rule still applies if new compiler/renderer authority is
+required rather than a projection integration.
+
+#### Capability investigation outcome and proposed repair boundary
+
+The retained request executed through:
+
+`npm run author:equation-series -- --request examples/physics/momentum-energy.derivation.request.json`
+
+It exits 2 with four `equation-series.repair.unsupported-syntax` repairs, one
+per endpoint, at the magnitude delimiter `|`. This is the first executed
+blocker, not proof that every downstream capability is absent. Static KaTeX
+renderability is not semantic frontend support. No animation candidate was
+produced, and no reader, physics, stylesheet or compositor was changed.
+
+Discovery found registered `kp.core.substitute`,
+`kp.semantic-motion.substitute-value`, and multiplicative cancellation roles.
+The `generated-substitution-fixture.ts` prototype supplies a value/variable
+lineage example. Those declarations and its sampled choreography do not certify
+substitution of a compound vector quotient inside squared magnitude through
+the canonical Native KaTeX compositor. No squared-magnitude scaling operation
+was found in the equation-series registry. Do not replace it with distribution,
+strip the vector/magnitude notation, or use generic enter/exit as a substitute.
+The proposed intents in the retained JSON are not resolved operations or proofs.
+
+Recommended scope amendment, requiring selection before implementation:
+
+1. Add a bounded domain-owned source for this four-state identity, distinguishing
+   vectors from positive scalar mass, with exact algebraic proof/assumptions and
+   stable semantic subexpression identities. Prefer a typed source frontend over
+   broadening the scalar LaTeX parser merely to make this spelling pass.
+2. Bind substitution and cancellation to their existing operation owners where
+   their contracts actually fit; add only the missing squared-magnitude scaling
+   authority. Audit compound replacement, magnitude enclosure, squared denominator
+   and cancellation paint mechanisms against the real compositor. Expose further
+   gaps rather than claiming the existing motifs already handle them.
+3. Build the one persistent derivation projection using those verified operations,
+   the existing clock and native paint owner. Keep history, working expression,
+   local reasons and static reading distinct. Run one scoped executable visual
+   check, then return to the human exemplar checkpoint.
+
+This is not permission for arbitrary LaTeX deductions, vector-calculus support,
+a new global state store, or catalogue promotion. The previous projection-only
+estimate was too optimistic; the missing semantic/paint path must be scoped
+explicitly. r2 remains incomplete, with r3-r5 untouched. No new visual approval
+is requested for the unchanged page.
+
 ### Accepted algebra-grounded orientation amendment
 
 The opening question is now **What is the relationship between force, momentum

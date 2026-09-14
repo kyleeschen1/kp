@@ -18,6 +18,14 @@ supporting consequence, not the learner's entry point. Build a traversable
 argument, not a collection of widgets. Article/vignette and domain-owned
 semantics remain authoritative; the reader is a projection/host integration.
 
+The user accepted the page's appearance but requested animated algebraic
+unfolding: persistent derivation history and local reasons, beginning with only
+the substitution chain. The proposal now records that approved exemplar and a
+bounded capability investigation. The exact request fails the semantic frontend
+on vector-magnitude notation; it is not an executable animation. The page remains
+unchanged while the proposal's compiler/compositor repair boundary awaits scope
+selection. This is an authority blocker, not a repeated visual review request.
+
 ## Current proposal and control
 
 Only human-readable implementation proposal:

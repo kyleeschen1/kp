@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Momentum-energy relational reader",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT at amended r2. One of five slices complete; r2 awaits revised explanation review, r3-r5 not started.",
+  "summary": "BLOCKED at r2 capability investigation: exact derivation request returns unsupported-syntax, proposed bounded compiler/compositor amendment requires selection. One of five complete; no animation delivered or later slices started.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -46,7 +46,7 @@
     {
       "id": "r2",
       "title": "Canonical reader exemplar and human review",
-      "summary": "HUMAN_CHECKPOINT: algebra-grounded force, momentum and energy orientation implemented and verified. Revised explanation needs human review; r1 complete, r3-r5 remain planned. Original demo approval does not waive this checkpoint.",
+      "summary": "BLOCKED: approved persistent animated derivation hits semantic frontend gap at all vector-magnitude endpoints. Exact request retained; scoped compiler/compositor amendment awaits selection. Existing page unchanged; r2 not accepted, r3-r5 untouched.",
       "status": "in-progress"
     },
     {

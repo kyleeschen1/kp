@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "kp.equation-transform-series-request.v1",
+  "kind": "equation-transform-series-request",
+  "id": "request.physics.momentum-energy.substitution",
+  "states": [
+    { "id": "state.physics.energy.velocity", "latex": "K=\\frac{1}{2}m|\\mathbf v|^2", "narration": "Start from the definition of kinetic energy for a fixed positive mass." },
+    { "id": "state.physics.energy.substituted", "latex": "K=\\frac{1}{2}m\\left|\\frac{\\mathbf p}{m}\\right|^2", "narration": "Replace velocity with momentum divided by mass, using the momentum definition." },
+    { "id": "state.physics.energy.squared", "latex": "K=\\frac{1}{2}m\\frac{|\\mathbf p|^2}{m^2}", "narration": "The denominator is squared too: scaling a vector by one over mass scales its squared magnitude by one over mass squared." },
+    { "id": "state.physics.energy.momentum", "latex": "K=\\frac{|\\mathbf p|^2}{2m}", "narration": "Cancel one nonzero mass factor; one remains in the denominator." }
+  ],
+  "adjacencies": [
+    { "id": "step.physics.energy.substitute", "fromStateId": "state.physics.energy.velocity", "toStateId": "state.physics.energy.substituted", "intent": { "mode": "proposed", "instruction": "Substitute the vector identity v=p/m inside squared magnitude, preserving K, one-half, mass, and the magnitude/exponent context. Do not reinterpret the vectors as real scalars." } },
+    { "id": "step.physics.energy.scale-magnitude", "fromStateId": "state.physics.energy.substituted", "toStateId": "state.physics.energy.squared", "intent": { "mode": "proposed", "instruction": "Apply homogeneity of squared Euclidean magnitude for positive real mass; preserve vector type and separate numerator and denominator lineage." } },
+    { "id": "step.physics.energy.cancel-mass", "fromStateId": "state.physics.energy.squared", "toStateId": "state.physics.energy.momentum", "intent": { "mode": "proposed", "instruction": "Expose and cancel one nonzero mass factor, preserving squared momentum magnitude. Reuse the governed cancellation motif only when exact source evidence and context ownership resolve." } }
+  ]
+}

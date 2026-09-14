@@ -4,7 +4,7 @@
   "title": "Deliver the momentum-energy relational reader",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: review revised algebra-first orientation at localhost:8000/experiments/mechanics-relations/ before r3. Implementation verified; awaiting pedagogical acceptance.",
+  "summary": "BLOCKED: animated substitution needs bounded vector-magnitude semantic authority and canonical compositor integration, not only reader projection. Proposal records executable failure and recommended repair scope. No visual review needed for unchanged page.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -119,6 +119,20 @@
       "scope": "r2-algebra-orientation",
       "checkedAt": "2026-09-14T05:13:50.391Z",
       "notes": "Production build and its full typecheck pass. Both editions and static figures emitted. Existing large-chunk warnings remain; this amendment adds no browser runtime or stylesheet."
+    },
+    {
+      "command": "npm run author:equation-series -- --request examples/physics/momentum-energy.derivation.request.json",
+      "status": "failed",
+      "scope": "r2-animated-derivation",
+      "checkedAt": "2026-09-14T05:26:12.363Z",
+      "notes": "Exit 2: all four exact vector-magnitude endpoints return equation-series.repair.unsupported-syntax at the magnitude delimiter. No candidate animation or browser fallback created. Registered substitution and cancellation do not establish this compound vector path. Compiler/compositor scope amendment recorded in the approved proposal; current page preserved."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-series-repair-taxonomy.test.ts tests/momentum-energy.test.ts",
+      "status": "passed",
+      "scope": "r2-animated-derivation",
+      "checkedAt": "2026-09-14T05:26:32.117Z",
+      "notes": "Thirteen existing checks pass: last-good preservation, typed repairs and no silent fallback, plus the unchanged physics and Article checks. No new runtime or tests added. Impact selector used broad unmatched-path fallback; bounded investigation changes only a proposed JSON input and documentation, so full build and browser matrix were not rerun."
     }
   ],
   "expectedLearning": [
