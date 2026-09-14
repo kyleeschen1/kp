@@ -145,6 +145,27 @@ pending mathematical motif audit. Review handle coupling, resting zones, text
 attachment and compactness before promotion. r2 remains HUMAN_CHECKPOINT; no
 other caller, new semantic operation or wider delivery package is authorized.
 
+Accepted next exemplar (2026-09-14): interleave the first substitution reason
+between its source and target equations. The reason supplies meaningful spatial
+room for inspection; dragging through it performs the relation it explains.
+Use a short operation label and substitution sentence with deeper justification
+on demand. This candidate uses the reserved readable text-lane option rather
+than superimposing translucent prose and mathematical ink. Keep the existing
+callouts for the remaining two moves until review, not a full-family migration.
+
+Compatible UI refinements: quiet gutter rail and equation ticks, nearby source
+and destination traces that yield only near the moving expression, and measured
+per-edge pointer mapping for unequal line spacing. Text length changes spatial
+travel, not semantic endpoints or explicit playback duration. Cache geometry
+outside frame projection; expanding the reason pauses and remeasures it. Keep
+ordinary scroll, keyboard navigation, reverse, held interiors and native
+compositor ownership. Symbol inspection and long-proof scrolling remain deferred.
+
+Review whether the interleaved relation reads naturally, offers sufficient drag
+precision, and remains legible on a phone. The reversible unit is this first
+transition's publication layout plus reader geometry adapter; the checkpoint
+does not approve shared choreography, new mathematical motifs or broader rollout.
+
 Only human-readable implementation proposal:
 `2026-09-13-relational-reader-delivery-proposal.md`.
 Theseus target: `next-action.kp.relational-reader`; executable contract:

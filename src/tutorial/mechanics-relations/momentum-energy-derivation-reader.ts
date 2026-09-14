@@ -1,6 +1,6 @@
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
 import type { mountMomentumEnergyDerivationSession } from "../../rendering/momentum-energy-derivation-session.ts";
-import { sampleEnergyDerivationLens, resolveEnergyDerivationLensPosition, resolveEnergyDerivationPosition, energyDerivationNavigationTarget } from "./energy-derivation-presentation.ts";
+import { sampleEnergyDerivationLens, resolveEnergyDerivationMeasuredPosition, resolveEnergyDerivationPosition, energyDerivationNavigationTarget } from "./energy-derivation-presentation.ts";
 
 /** Page scroll never owns derivation progress. One shared-clock instance owns
  * the active move; completed lines are static historical records, not copies
@@ -9,6 +9,11 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   const get = <T extends HTMLElement>(s: string) => root.querySelector<T>(s)!;
   let stage = get<HTMLElement>("[data-derivation-stage]");
   const rows = [...root.querySelectorAll<HTMLElement>("[data-derivation-row]")];
+  const equationSlots = rows.map(row => row.querySelector<HTMLElement>(".energy-derivation-equation")!);
+  const interleave = get<HTMLElement>("[data-derivation-interleave]");
+  const rail = get<HTMLElement>("[data-derivation-rail]");
+  let centers: number[] = [];
+  let equationHeights: number[] = [];
   const clock = createKpReaderTimelinePlaybackClock({ id: "energy.derivation.clock", durationMs: 4400 });
   const abort = new AbortController(), opts = { signal: abort.signal };
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
@@ -32,14 +37,31 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   let seeking = false;
   let selectionRequest = 0;
   const status = get<HTMLElement>("[data-derivation-status]");
+  const measureRows = () => {
+    equationHeights = equationSlots.map(slot => slot.offsetHeight);
+    centers = rows.map((row, i) => row.offsetTop + equationHeights[i]! / 2);
+    sourceTop = rows[selected]!.offsetTop;
+    rowDistance = rows[selected + 1]!.offsetTop - sourceTop;
+    rail.style.top = `${centers[0]}px`;
+    rail.style.height = `${centers[total]! - centers[0]!}px`;
+    [...rail.children].forEach((tick, i) => { (tick as HTMLElement).style.top = `${centers[i]! - centers[0]!}px`; });
+  };
   const positionScope = (position: number) => {
     const { move, progress } = resolveEnergyDerivationPosition(position);
-    const source = rows[move]!, target = rows[move + 1]!;
-    scope.style.top = `${source.offsetTop + source.offsetHeight / 2 + (target.offsetTop - source.offsetTop) * progress}px`;
+    scope.style.top = `${centers[move]! + (centers[move + 1]! - centers[move]!) * progress}px`;
     handle.setAttribute("aria-valuenow", String(position));
     handle.setAttribute("aria-valuetext", Number.isInteger(position)
       ? `Equation ${position + 1} of ${rows.length}`
       : `Between equations ${move + 1} and ${move + 2}, ${Math.round(progress * 100)} percent`);
+  };
+  const positionCue = () => {
+    const midpoint = centers[selected]! + rowDistance / 2;
+    const proofHeight = get<HTMLElement>(".energy-derivation-history").offsetHeight;
+    // Later callouts must not cover the first step's persistent prose, including
+    // after a disclosure changes its height without changing semantic progress.
+    const cueTop = Math.max(rows[1]!.offsetTop, Math.min(midpoint - cue.offsetHeight / 2, proofHeight - cue.offsetHeight));
+    cue.style.setProperty("--derivation-cue-top", `${cueTop}px`);
+    cue.style.setProperty("--derivation-pointer-top", `${midpoint - cueTop}px`);
   };
   const project = () => {
     const p = clock.getSnapshot().progress;
@@ -54,15 +76,17 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
     // The explanation refers to the relation, not the currently moving ink.
     // Keep its callout stable throughout this transition.
     cue.style.visibility = "visible";
+    cue.hidden = selected === 0;
     positionScope(selected + p);
     root.dataset["move"] = String(selected); root.dataset["progress"] = String(p);
     root.dataset["playing"] = String(clock.getStatus() === "playing");
     rows.forEach((row, i) => {
-      const past = i < selected || (i === selected && frame.carry > .8);
-      row.dataset["traceRole"] = past ? "historical" : i > selected + 1 || (i === selected + 1 && p === 0) ? "prospective" : "live";
-      // A preview yields before the live expression enters its slot. It is a
-      // prospective record, not another mathematical or material paint owner.
-      row.dataset["visibleEquation"] = String(past || i > selected + 1 || (i === selected + 1 && p === 0));
+      const past = i <= selected && (i < selected || p > 0);
+      row.dataset["traceRole"] = past ? "historical" : i >= selected + 1 && p < 1 ? "prospective" : "live";
+      // Keep both endpoints as records when separated from the live expression.
+      // Yield only near occupied ink, not throughout the entire source/target pair.
+      const liveCenter = centers[selected]! + rowDistance * frame.carry;
+      row.dataset["visibleEquation"] = String(Math.abs(centers[i]! - liveCenter) > equationHeights[i]! * 1.1);
     });
     const position = selected + p;
     root.dataset["derivationProgress"] = String(position);
@@ -101,7 +125,7 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
       tracing = true;
       root.dataset["tracing"] = "true";
       rows.forEach(row => { row.hidden = false; });
-      cue.hidden = false;
+      cue.hidden = index === 0;
       const template = get<HTMLTemplateElement>(`[data-derivation-template="${index}"]`);
       candidate = stage.cloneNode(false) as HTMLElement;
       candidate.removeAttribute("data-derivation-stage");
@@ -139,14 +163,10 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
       stage.setAttribute("data-derivation-stage", "");
       session = created; created = undefined;
       selected = index; sourceTop = nextSourceTop; rowDistance = nextRowDistance;
+      measureRows();
       cueBody.replaceChildren(...[...get<HTMLElement>(`[data-derivation-reason="${index}"]`).childNodes].map(node => node.cloneNode(true)));
       cue.setAttribute("aria-label", `Transition from equation ${index + 1} to ${index + 2}`);
-      const upper = sourceTop + rows[index]!.offsetHeight / 2;
-      const lower = upper + rowDistance, midpoint = (upper + lower) / 2;
-      const proofHeight = get<HTMLElement>(".energy-derivation-history").offsetHeight;
-      const cueTop = Math.max(0, Math.min(midpoint - cue.offsetHeight / 2, proofHeight - cue.offsetHeight));
-      cue.style.setProperty("--derivation-cue-top", `${cueTop}px`);
-      cue.style.setProperty("--derivation-pointer-top", `${midpoint - cueTop}px`);
+      positionCue();
       loading = false; status.hidden = true;
       transport.hidden = false;
       scope.hidden = false;
@@ -235,10 +255,8 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   }, opts);
   handle.addEventListener("pointermove", event => {
     if (!drag || event.pointerId !== drag.pointer) return;
-    const first = rows[0]!.getBoundingClientRect(), last = rows[total]!.getBoundingClientRect();
-    const y = event.clientY - drag.offset;
-    const position = (y - first.top - first.height / 2) / (last.top - first.top) * total;
-    void seekPosition(resolveEnergyDerivationLensPosition(position));
+    const y = event.clientY - drag.offset - get(".energy-derivation-chain").getBoundingClientRect().top;
+    void seekPosition(resolveEnergyDerivationMeasuredPosition(y, centers));
   }, opts);
   const endDrag = (event: PointerEvent) => {
     if (!drag || event.pointerId !== drag.pointer) return;
@@ -259,6 +277,7 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   // Expanding the justification is a request to read, not a race against the
   // automatic act phase. The handle or explicit step controls resume inspection.
   cue.addEventListener("toggle", event => { if (event.target instanceof HTMLDetailsElement && event.target.open) pause(); }, { ...opts, capture: true });
+  interleave.addEventListener("toggle", () => { pause(); measureRows(); positionCue(); project(); }, { ...opts, capture: true });
   document.addEventListener("visibilitychange", () => { if (document.hidden) pause(); }, opts);
   reduced.addEventListener("change", pause, opts);
   const visibility = new IntersectionObserver(entries => {
@@ -277,5 +296,6 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   window.addEventListener("pagehide", event => { pause(); if (!event.persisted) { retire(); visibility.disconnect(); resize.disconnect(); abort.abort(); clock.dispose(); } }, opts);
   hint.hidden = false;
   get("[data-derivation-notes]").hidden = true;
+  measureRows(); rail.hidden = false;
   scope.hidden = false; transport.hidden = false; positionScope(0); previous.disabled = true;
 }

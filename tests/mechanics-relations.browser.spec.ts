@@ -7,11 +7,12 @@ const seek = (input: Locator, progress: number) => input.evaluate((element: HTML
 const lens = (root: Locator) => root.getByRole("slider", { name: "Derivation lens", exact: true });
 async function dragTo(page: import("@playwright/test").Page, root: Locator, position: number, release = true) {
   const handle = lens(root), box = await handle.boundingBox();
-  const first = await root.locator('[data-derivation-row="0"]').boundingBox();
-  const last = await root.locator('[data-derivation-row="3"]').boundingBox();
+  const move = Math.min(2, Math.floor(position)), fraction = position - move;
+  const first = await root.locator(`[data-derivation-row="${move}"] .energy-derivation-equation`).boundingBox();
+  const last = await root.locator(`[data-derivation-row="${move + 1}"] .energy-derivation-equation`).boundingBox();
   await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2);
   await page.mouse.down();
-  await page.mouse.move(box!.x + box!.width / 2, first!.y + first!.height / 2 + (last!.y - first!.y) * position / 3, { steps: 8 });
+  await page.mouse.move(box!.x + box!.width / 2, first!.y + first!.height / 2 + (last!.y - first!.y) * fraction, { steps: 8 });
   if (release) await page.mouse.up();
 }
 async function ready(page: import("@playwright/test").Page) {
@@ -30,7 +31,7 @@ test("persistent lens follows the expression, holds interiors and rewinds exactl
   await dragTo(page, root, .55, false);
   await expect.poll(async () => Number(await root.getAttribute("data-progress"))).toBeGreaterThan(.5);
   await expect(root).toHaveAttribute("data-playing", "false");
-  const cue = root.locator("[data-derivation-cue]"), cueBox = await cue.boundingBox();
+  const cue = root.locator("[data-derivation-interleave]"), cueBox = await cue.boundingBox();
   const expression = await root.locator("[data-derivation-stage]").boundingBox(), knob = await lens(root).boundingBox();
   expect(Math.abs(expression!.y + expression!.height / 2 - knob!.y - knob!.height / 2)).toBeLessThan(2);
   expect(Number(await root.getAttribute("data-algebra-progress"))).toBeGreaterThan(0);
@@ -47,12 +48,45 @@ test("persistent lens follows the expression, holds interiors and rewinds exactl
   expect(await root.locator("[data-derivation-row]").evaluateAll(rows => rows.map(row => (row as HTMLElement).offsetTop))).toEqual(slots);
 });
 
+test("interleaved reason preserves its endpoints, readable lane and disclosure geometry", async ({ page }, info) => {
+  for (const width of [1000, 390]) {
+    await page.setViewportSize({ width, height: 844 });
+    const root = await ready(page), passage = root.locator("[data-derivation-interleave]");
+    const source = root.locator('[data-derivation-row="0"] .energy-derivation-equation');
+    const target = root.locator('[data-derivation-row="1"] .energy-derivation-equation');
+    await expect(root.locator("[data-derivation-cue]")).toBeHidden();
+    await expect(root.locator("[data-derivation-rail] span")).toHaveCount(4);
+    const textBox = await passage.locator(".energy-derivation-interleave-text").boundingBox();
+    expect(textBox!.y).toBeGreaterThan((await source.boundingBox())!.y);
+    expect(textBox!.y + textBox!.height).toBeLessThan((await target.boundingBox())!.y);
+    await dragTo(page, root, .5);
+    await expect(source).toBeVisible(); await expect(target).toBeVisible();
+    expect(await passage.locator(".energy-derivation-interleave-text").boundingBox()).toEqual(textBox);
+    // The KaTeX display wrapper fills the row; its native bases measure the
+    // actual notation span rather than counting unused display width as ink.
+    const nativeRight = await root.locator("[data-derivation-stage] [data-derivation-target] .katex-html > .base")
+      .evaluateAll(bases => Math.max(...bases.map(base => base.getBoundingClientRect().right)));
+    expect(textBox!.x).toBeGreaterThan(nativeRight);
+    await passage.locator("summary").click();
+    await expect(root).toHaveAttribute("data-playing", "false");
+    await dragTo(page, root, 1);
+    await expect(lens(root)).toHaveAttribute("aria-valuenow", "1");
+    const knob = await lens(root).boundingBox(), dock = await target.boundingBox();
+    expect(Math.abs(knob!.y + knob!.height / 2 - dock!.y - dock!.height / 2)).toBeLessThan(2);
+    await passage.locator("summary").click();
+    await dragTo(page, root, .5);
+    await root.screenshot({ path: info.outputPath(`interleaved-${width}.png`) });
+  }
+});
+
 test("fast cross-edge dragging keeps the latest sample and cancels without autoplay", async ({ page }, info) => {
   const errors: string[] = [];
   page.on("pageerror", e => errors.push(e.message));
   const root = await ready(page);
   await dragTo(page, root, 2.5);
   await expect(root).toHaveAttribute("data-move", "2");
+  const explanation = await root.locator("[data-derivation-interleave]").boundingBox();
+  expect((await root.locator("[data-derivation-cue]").boundingBox())!.y).toBeGreaterThanOrEqual(explanation!.y + explanation!.height);
   await expect.poll(async () => Number(await root.getAttribute("data-progress"))).toBeCloseTo(.5, 1);
   await expect(root.locator("[data-kp-editor-equation-material-layer] [data-kp-equation-material-owner-id]").first()).toBeAttached();
   await dragTo(page, root, .5, false);

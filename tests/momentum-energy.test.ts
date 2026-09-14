@@ -11,7 +11,16 @@ import { checkMomentumEnergyDerivation, momentumEnergyDerivationSource, assertMo
 import { compileMomentumEnergyDerivation } from "../src/authoring/momentum-energy-derivation-authoring.ts";
 import { createEnergyDerivationPlan, assertEnergyDerivationPlan } from "../src/semantic/momentum-energy-derivation-plan.ts";
 import { sampleEnergyDerivationPresentation, sampleSubstitutionPresentation, energyDerivationNavigationTarget, energyDerivationFocus, resolveEnergyDerivationPosition } from "../src/tutorial/mechanics-relations/energy-derivation-presentation.ts";
-import { sampleEnergyDerivationLens, resolveEnergyDerivationLensPosition } from "../src/tutorial/mechanics-relations/energy-derivation-presentation.ts";
+import { sampleEnergyDerivationLens, resolveEnergyDerivationLensPosition, resolveEnergyDerivationMeasuredPosition } from "../src/tutorial/mechanics-relations/energy-derivation-presentation.ts";
+
+test("interleaved prose changes spatial intervals without changing semantic checkpoints", () => {
+  const centers = [27, 260, 314, 368];
+  centers.forEach((center, i) => assert.equal(resolveEnergyDerivationMeasuredPosition(center, centers), i));
+  for (let i = 0; i < 3; i++) assert.equal(resolveEnergyDerivationMeasuredPosition((centers[i]! + centers[i + 1]!) / 2, centers), i + .5);
+  assert.equal(resolveEnergyDerivationMeasuredPosition(-100, centers), 0);
+  assert.equal(resolveEnergyDerivationMeasuredPosition(1000, centers), 3);
+  assert.throws(() => resolveEnergyDerivationMeasuredPosition(10, [0, 0, 10, 20]));
+});
 
 test("lens position is continuous, reversible and rests only near complete lines", () => {
   let previous = 0;

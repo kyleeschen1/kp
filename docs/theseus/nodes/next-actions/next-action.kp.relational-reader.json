@@ -289,11 +289,29 @@
       "status": "passed",
       "scope": "direct-manipulation lens integration",
       "checkedAt": "2026-09-14T23:19:22.926Z"
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "interleaved first transition: nine Chromium checks",
+      "checkedAt": "2026-09-14T23:46:37.574Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts",
+      "status": "passed",
+      "scope": "measured intervals and preserved semantics: fifteen tests",
+      "checkedAt": "2026-09-14T23:46:39.560Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "interleaved transition integration",
+      "checkedAt": "2026-09-14T23:47:41.045Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: review direct-manipulation derivation lens; persistent handle drives continuous carry and canonical rewrite, reverse and held interiors. No wider rollout."
+    "summary": "HUMAN_CHECKPOINT: first substitution interleaves its explanation between equations, with a readable text lane, gutter rail, endpoint traces and measured unequal-spacing drag. Other transitions retain callouts; no promotion."
   },
   "expectedLearning": [
     "Can a coherent reading-comparison-return experience clarify momentum versus kinetic energy and support source-only reuse?"

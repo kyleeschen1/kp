@@ -1,6 +1,37 @@
 # Momentum–energy reader: first visual checkpoint
 
-## Current review: direct-manipulation reasoning lens (2026-09-14)
+## Current review: first interleaved transition (2026-09-14)
+
+Review <http://localhost:8000/experiments/mechanics-relations/#energy-from-momentum>.
+The first substitution now reads equation → reason → equation. Its short label
+and sentence explain the replacement; the full justification is expandable.
+Drag the gutter handle through this interval and back. This candidate reserves a
+text lane inside the transition region instead of overlapping translucent prose
+and notation; the explanation stays readable at an intermediate stop.
+
+A quiet rail and four equation ticks expose the range. Both nearby equation
+records remain visible when clear of the live expression, yielding only near
+occupied ink. The first interval is longer, so pointer mapping uses measured
+equation centers per edge rather than assuming equal spacing. Geometry is cached
+outside animation frames; opening the first justification pauses and remeasures
+without resetting semantic progress. Later moves retain callouts, with operation
+headings. No symbol inspection, global pattern promotion or motif repair is added.
+
+HUMAN_CHECKPOINT: judge the interleaved reading order, grip/rail clarity, useful
+inspection distance, and text/motion separation on desktop and phone. Compare
+with the previous lens commit `f1da71679` if this treatment feels too spacious.
+The rollback unit is this reader's publication/layout and geometry adapter;
+checked mathematical transformations and canonical native KaTeX remain intact.
+
+Verification is recorded in Theseus after the scoped checks. One new layout
+assertion initially measured the full-width KaTeX wrapper, not the notation span;
+the assertion now measures native bases. Its next run caught a two-pixel handle
+offset from the decorative connector border; the connector now paints separately
+from the handle's layout origin. Later callouts are kept below the persistent
+first explanation. This is bounded exemplar discovery,
+not Safari/device certification or approval of the visual treatment.
+
+## Previous review: direct-manipulation reasoning lens (2026-09-14)
 
 Review <http://localhost:8000/experiments/mechanics-relations/#energy-from-momentum>.
 Drag the visible gutter handle down through the fixed derivation, then back up.

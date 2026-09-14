@@ -84,3 +84,16 @@ export function resolveEnergyDerivationLensPosition(position: number) {
   const restingZone = .055;
   return line + Math.max(0, Math.min(1, (fraction - restingZone) / (1 - 2 * restingZone)));
 }
+
+/** Equation positions are measured by the host. Prose may enlarge one interval
+ * without changing its semantic endpoints or the duration of explicit playback. */
+export function resolveEnergyDerivationMeasuredPosition(y: number, centers: readonly number[]) {
+  if (!Number.isFinite(y) || centers.length !== energyDerivationFocus.length + 1 ||
+      centers.some((value, i) => !Number.isFinite(value) || (i > 0 && value <= centers[i - 1]!)))
+    throw new RangeError("Invalid derivation geometry");
+  if (y <= centers[0]!) return 0;
+  for (let i = 0; i < centers.length - 1; i++) {
+    if (y <= centers[i + 1]!) return resolveEnergyDerivationLensPosition(i + (y - centers[i]!) / (centers[i + 1]! - centers[i]!));
+  }
+  return centers.length - 1;
+}
