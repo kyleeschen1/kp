@@ -1,6 +1,44 @@
 # Momentum–energy reader: first visual checkpoint
 
-## Current review: compact-control compromise (2026-09-14)
+## Current review: boundary callout, directional rewind and substitution overlap (2026-09-14)
+
+Review <http://localhost:8000/experiments/mechanics-relations/#energy-from-momentum>.
+The active scope and lightly outlined callout use a warm inspection accent.
+The desktop pointer stays anchored between the two equation rows, not to moving
+glyphs; phone docking preserves the pair bracket without a misleading sideways
+pointer. The existing compact transport and local slider remain.
+
+Previous/Up rewinds from the current position. At a source endpoint it enters
+the preceding transition at its target and rewinds that transition. Next/Down
+does the symmetric forward operation. A scope drag across multiple pairs
+traverses their transitions in order; equation clicks still select a forward
+explanation directly. Pause, close, scrub and direct selection cancel a journey.
+The explanatory wording is direction-neutral rather than issuing an instruction
+contradicted by reverse playback.
+
+Only the first substitution tests a new carry/rewrite overlap: orientation at
+the source, eased whole-expression carry, then the shared act gate opens while
+carry settles. Both channels sample one clock and reverse exactly. The other
+two operations retain their prior timing and motifs.
+
+HUMAN_CHECKPOINT: judge whether the explanation's attachment is clearer, whether
+upward travel feels like retracing, and whether the first move feels continuous
+without becoming harder to track. Rollback is this reader's presentation score,
+callout styling and navigation adapter; preserve checked physics and canonical
+native-KaTeX. No shared motif promotion or new mathematical operation is claimed.
+
+Verification: ten scoped Chromium checks pass via
+`npm run visual:mechanics-relations`, including rendered carry/rewrite overlap,
+upward-drag rewind from an interior pose, forward resumption, directional
+multi-edge traversal, cancellation, native boundary handoff, reduced motion and
+static/print preservation. Thirteen focused tests pass via
+`node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts`;
+new pure checks cover directional endpoint selection and reversible act-gated
+overlap. `npm run build` passes full types and production build with existing
+large-chunk warnings. Captures were inspected; this is Chromium discovery, not
+Safari/device certification or human approval of timing and color.
+
+## Previous review: compact-control compromise (2026-09-14)
 
 Review <http://localhost:8000/experiments/mechanics-relations/#energy-from-momentum>.
 Select an equation to open its incoming transition. Beneath the derivation,

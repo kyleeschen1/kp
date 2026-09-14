@@ -10,7 +10,34 @@ import { projectMomentumEnergyAttention } from "../src/tutorial/mechanics-relati
 import { checkMomentumEnergyDerivation, momentumEnergyDerivationSource, assertMomentumEnergyDerivation } from "../domains/physics/momentum-energy-derivation.ts";
 import { compileMomentumEnergyDerivation } from "../src/authoring/momentum-energy-derivation-authoring.ts";
 import { createEnergyDerivationPlan, assertEnergyDerivationPlan } from "../src/semantic/momentum-energy-derivation-plan.ts";
-import { sampleEnergyDerivationPresentation, energyDerivationFocus, resolveEnergyDerivationPosition } from "../src/tutorial/mechanics-relations/energy-derivation-presentation.ts";
+import { sampleEnergyDerivationPresentation, sampleSubstitutionPresentation, energyDerivationNavigationTarget, energyDerivationFocus, resolveEnergyDerivationPosition } from "../src/tutorial/mechanics-relations/energy-derivation-presentation.ts";
+
+test("directional navigation retraces interiors before crossing shared endpoints", () => {
+  for (let move = 0; move < 3; move++) {
+    for (const progress of [.01, .5, .99]) {
+      assert.equal(energyDerivationNavigationTarget(move, progress, "forward"), move);
+      assert.equal(energyDerivationNavigationTarget(move, progress, "rewind"), move);
+    }
+    assert.equal(energyDerivationNavigationTarget(move, 0, "rewind"), Math.max(0, move - 1));
+    assert.equal(energyDerivationNavigationTarget(move, 1, "forward"), Math.min(2, move + 1));
+  }
+  assert.throws(() => energyDerivationNavigationTarget(3, .5, "rewind"));
+});
+
+test("substitution overlap is reversible, act-gated and retains native endpoints", () => {
+  const samples = Array.from({ length: 101 }, (_, i) => sampleSubstitutionPresentation(i / 100));
+  assert.equal(samples[0]!.carry, 0); assert.equal(samples[0]!.algebra, 0);
+  assert.equal(samples[100]!.carry, 1); assert.equal(samples[100]!.algebra, 1);
+  assert.ok(samples.some(frame => frame.carry > 0 && frame.carry < 1 && frame.algebra > 0));
+  for (let i = 100; i >= 0; i--) {
+    assert.deepEqual(sampleSubstitutionPresentation(i / 100), samples[i]);
+    if (samples[i]!.phase === "orient") assert.equal(samples[i]!.algebra, 0);
+    if (i > 0) {
+      assert.ok(samples[i]!.carry >= samples[i - 1]!.carry);
+      assert.ok(samples[i]!.algebra >= samples[i - 1]!.algebra);
+    }
+  }
+});
 
 test("whole-proof positions resolve to stable completed checkpoints and continuous local coordinates", () => {
   assert.deepEqual(resolveEnergyDerivationPosition(0), { move: 0, progress: 0 });

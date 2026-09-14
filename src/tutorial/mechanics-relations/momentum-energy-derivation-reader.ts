@@ -1,6 +1,6 @@
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
 import type { mountMomentumEnergyDerivationSession } from "../../rendering/momentum-energy-derivation-session.ts";
-import { sampleEnergyDerivationPresentation } from "./energy-derivation-presentation.ts";
+import { sampleEnergyDerivationPresentation, sampleSubstitutionPresentation, energyDerivationNavigationTarget } from "./energy-derivation-presentation.ts";
 
 /** Page scroll never owns derivation progress. One shared-clock instance owns
  * the active move; completed lines are static historical records, not copies
@@ -27,9 +27,13 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   const playback = get<HTMLButtonElement>("[data-derivation-play]");
   const hint = get<HTMLElement>("[data-derivation-hint]");
   const selectors = [...root.querySelectorAll<HTMLButtonElement>("[data-derivation-select]")];
+  const presentations = [sampleSubstitutionPresentation, sampleEnergyDerivationPresentation, sampleEnergyDerivationPresentation] as const;
+  type Direction = "forward" | "rewind";
+  let direction: Direction = "forward";
+  let journey: { direction: Direction; target: number } | undefined;
   // Dragging previews a destination; it never owns mathematical progress or
   // mounts every intermediate scene. Only release commits the selection.
-  let drag: { pointer: number; move: number } | undefined;
+  let drag: { pointer: number; move: number; startY: number; deltaY: number } | undefined;
   let selectionRequest = 0;
   const status = get<HTMLElement>("[data-derivation-status]");
   const positionScope = (index: number) => {
@@ -43,7 +47,7 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   const project = () => {
     const p = clock.getSnapshot().progress;
     if (!tracing || !session) return;
-    const frame = sampleEnergyDerivationPresentation(p);
+    const frame = presentations[selected]!(p);
     // The host relocates one intact scene. Internal native/material ownership
     // remains exclusively compositor-owned, with co-located algebra endpoints.
     stage.style.transform = `translateY(${sourceTop + rowDistance * frame.carry}px)`;
@@ -67,9 +71,10 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
     root.dataset["derivationProgress"] = String(position);
     local.value = String(p);
     local.setAttribute("aria-valuetext", `Transition ${selected + 1}, ${Math.round(p * 100)} percent`);
-    playback.textContent = clock.getStatus() === "playing" ? "Pause" : p === 1 ? "Replay" : "Play";
-    previous.disabled = loading || selected === 0;
-    next.disabled = loading || selected === selectors.length - 1;
+    root.dataset["direction"] = direction;
+    playback.textContent = clock.getStatus() === "playing" ? "Pause" : p === (direction === "forward" ? 1 : 0) ? "Replay" : "Play";
+    previous.disabled = loading || (selected === 0 && p === 0);
+    next.disabled = loading || (selected === selectors.length - 1 && p === 1);
     playback.disabled = local.disabled = loading;
     // Selection is not completion: this fraction does not change mid-move.
     const label = `${selected + 1} / ${selectors.length}`;
@@ -79,7 +84,7 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   clock.subscribe(project);
   const retire = () => { generation++; session?.dispose(); session = undefined; };
   const read = () => {
-    selectionRequest++; drag = undefined;
+    selectionRequest++; drag = undefined; journey = undefined;
     clock.pause(); retire(); tracing = false; loading = false;
     delete root.dataset["derivationDragging"];
     root.dataset["tracing"] = "false"; stage.hidden = true;
@@ -152,7 +157,9 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
       const upper = sourceTop + rows[index]!.offsetHeight / 2;
       const lower = upper + rowDistance, midpoint = (upper + lower) / 2;
       const proofHeight = get<HTMLElement>(".energy-derivation-history").offsetHeight;
-      cue.style.setProperty("--derivation-cue-top", `${Math.max(0, Math.min(midpoint - cue.offsetHeight / 2, proofHeight - cue.offsetHeight))}px`);
+      const cueTop = Math.max(0, Math.min(midpoint - cue.offsetHeight / 2, proofHeight - cue.offsetHeight));
+      cue.style.setProperty("--derivation-cue-top", `${cueTop}px`);
+      cue.style.setProperty("--derivation-pointer-top", `${midpoint - cueTop}px`);
       loading = false; status.hidden = true;
       transport.hidden = false;
       scope.hidden = false; selectors.forEach(button => { button.hidden = false; });
@@ -168,22 +175,42 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
       created?.dispose(); candidate?.remove();
     }
   }
-  const play = (direction: "forward" | "rewind") => {
-    if (reduced.matches) clock.seek(direction === "forward" ? 1 : 0);
+  const play = (requested: Direction) => {
+    direction = requested;
+    if (reduced.matches) { clock.seek(direction === "forward" ? 1 : 0); void continueJourney(); }
     else clock.play({ direction, stopAt: direction === "forward" ? 1 : 0 });
     project();
   };
+  // One clock traverses adjacent native scenes. Direct selection, scrub, pause
+  // or close cancels the journey, so a queued handoff cannot restart playback.
+  async function continueJourney() {
+    const active = journey;
+    if (!active || loading || !session) return;
+    if (selected === active.target) { journey = undefined; return; }
+    await mount(selected + (active.direction === "forward" ? 1 : -1), active.direction === "forward" ? 0 : 1);
+    if (journey === active && session && !loading) play(active.direction);
+  }
+  clock.subscribe(sample => {
+    if (sample.source === "autoplay" && sample.settled && journey) void continueJourney();
+  });
+  function navigate(requested: Direction, target = energyDerivationNavigationTarget(selected, clock.getSnapshot().progress, requested)) {
+    if (loading || !session) return;
+    selectionRequest++;
+    journey = { direction: requested, target };
+    play(requested);
+  }
   async function selectTransition(index: number) {
+    journey = undefined;
     const request = ++selectionRequest;
     await mount(index, 0);
     if (request === selectionRequest && session && selected === index && !loading) play("forward");
   }
   selectors.forEach((button, index) => button.addEventListener("click", () => { void selectTransition(index); }, opts));
   handle.addEventListener("keydown", event => {
-    const index = ({ ArrowUp: selected - 1, ArrowDown: selected + 1, Home: 0, End: selectors.length - 1 } as Record<string, number>)[event.key];
-    if (index === undefined) return;
+    const requested = ({ ArrowUp: "rewind", ArrowDown: "forward", Home: "rewind", End: "forward" } as const)[event.key as "ArrowUp" | "ArrowDown" | "Home" | "End"];
+    if (requested === undefined) return;
     event.preventDefault();
-    void selectTransition(Math.max(0, Math.min(selectors.length - 1, index)));
+    navigate(requested, event.key === "Home" ? 0 : event.key === "End" ? selectors.length - 1 : undefined);
   }, opts);
   handle.addEventListener("click", event => {
     // Keyboard activation has no preceding pointer gesture.
@@ -191,13 +218,14 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   }, opts);
   handle.addEventListener("pointerdown", event => {
     if (!event.isPrimary || event.button !== 0 || loading) return;
-    clock.pause(); project();
-    drag = { pointer: event.pointerId, move: selected };
+    journey = undefined; clock.pause(); project();
+    drag = { pointer: event.pointerId, move: selected, startY: event.clientY, deltaY: 0 };
     handle.setPointerCapture(event.pointerId);
     root.dataset["derivationDragging"] = "true";
   }, opts);
   handle.addEventListener("pointermove", event => {
     if (!drag || event.pointerId !== drag.pointer) return;
+    drag.deltaY = event.clientY - drag.startY;
     const centers = selectors.map((_, i) => {
       const source = rows[i]!.getBoundingClientRect(), target = rows[i + 1]!.getBoundingClientRect();
       return (source.top + source.height / 2 + target.top + target.height / 2) / 2;
@@ -208,38 +236,37 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   }, opts);
   const endDrag = (event: PointerEvent, commit: boolean) => {
     if (!drag || event.pointerId !== drag.pointer) return;
-    const index = drag.move; drag = undefined;
+    const { move: index, deltaY } = drag; drag = undefined;
     delete root.dataset["derivationDragging"];
     if (handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
     project();
-    if (commit) void selectTransition(index);
+    if (commit && Math.abs(deltaY) > 4) navigate(deltaY < 0 ? "rewind" : "forward", index);
   };
   handle.addEventListener("pointerup", event => endDrag(event, true), opts);
   handle.addEventListener("pointercancel", event => endDrag(event, false), opts);
   handle.addEventListener("lostpointercapture", event => endDrag(event, false), opts);
   local.addEventListener("input", () => {
-    selectionRequest++;
+    selectionRequest++; journey = undefined;
     if (session && !loading) { clock.pause(); clock.seek(Number(local.value)); project(); }
   }, opts);
   playback.addEventListener("click", () => {
     if (loading || !session) return;
+    journey = undefined; selectionRequest++;
     if (clock.getStatus() === "playing") { clock.pause(); project(); return; }
-    if (clock.getSnapshot().progress === 1) clock.seek(0);
-    play("forward");
+    if (clock.getSnapshot().progress === (direction === "forward" ? 1 : 0)) clock.seek(direction === "forward" ? 0 : 1);
+    play(direction);
   }, opts);
-  // Navigation chooses a neighboring relation and plays it from its source;
-  // it must not borrow the previous relation's progress or skip to an endpoint.
   previous.addEventListener("click", () => {
-    if (!loading && selected > 0) void selectTransition(selected - 1);
+    navigate("rewind");
   }, opts);
   next.addEventListener("click", () => {
-    if (!loading && selected < selectors.length - 1) void selectTransition(selected + 1);
+    navigate("forward");
   }, opts);
   const close = () => { const button = selectors[selected]; read(); button?.focus({ preventScroll: true }); };
   get("[data-derivation-close]").addEventListener("click", close, opts);
   get("[data-derivation-dismiss]").addEventListener("click", () => { hint.hidden = true; selectors[0]?.focus({ preventScroll: true }); }, opts);
   root.addEventListener("keydown", event => { if (event.key === "Escape" && tracing) { event.preventDefault(); close(); } }, opts);
-  const pause = () => { clock.pause(); project(); };
+  const pause = () => { journey = undefined; selectionRequest++; clock.pause(); project(); };
   // Expanding the justification is a request to read, not a race against the
   // automatic act phase. Continue with the single playback control afterward.
   cue.addEventListener("toggle", event => { if (event.target instanceof HTMLDetailsElement && event.target.open) pause(); }, { ...opts, capture: true });

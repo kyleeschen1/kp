@@ -48,10 +48,10 @@ export const momentumEnergyDerivationStates = Object.freeze([
 ] as const);
 
 export const momentumEnergyDerivationSteps = Object.freeze([
-  { id: "substitute", title: "Replace velocity", cue: String.raw`Substitute $\mathbf v=\mathbf p/m$ from the momentum definition. This expresses the same kinetic energy using momentum instead of velocity.`,
+  { id: "substitute", title: "Replace velocity", cue: String.raw`The momentum definition gives $\mathbf v=\mathbf p/m$. These two expressions describe the same kinetic energy, using velocity or momentum.`,
     why: "Rearrange the momentum definition. Since mass is positive, division by mass is allowed. Substitution preserves the surrounding squared magnitude." },
   { id: "scale-magnitude", title: "Square the denominator too", cue: String.raw`Scaling a vector by $1/m$ scales its squared magnitude by $1/m^2$.`,
     why: String.raw`Component by component, $(p_i/m)^2=p_i^2/m^2$. Summing gives $|\mathbf p/m|^2=|\mathbf p|^2/m^2$. This is a vector-norm identity, not division of vectors.` },
-  { id: "cancel-mass", title: "Cancel one mass factor", cue: String.raw`The scalar factors simplify: $m/m^2=1/m$. One mass remains below.`,
+  { id: "cancel-mass", title: "Cancel one mass factor", cue: String.raw`For positive mass, $m/m^2=1/m$. Both forms have the same scalar factor; the squared momentum magnitude is unchanged.`,
     why: String.raw`Write $m^2=m\cdot m$. Then $m/(m\cdot m)=1/m$, because $m>0$. The squared momentum magnitude is unchanged.` }
 ] as const);

@@ -104,6 +104,25 @@ Review this compact-control compromise on the existing substitution exemplar.
 The scope remains a projection of existing semantic moves and the shared clock;
 no independent animation path or new mathematical authority is introduced.
 
+Accepted follow-up: recover the explanatory boundary with a lightly outlined
+callout and a pointer fixed between the two equation rows. Use a warm inspection
+accent on the scope and callout, distinct from math ink and blue transport.
+This is an exemplar treatment, not a mathematical color identity or global theme.
+
+Directional navigation now retraces/advances from the actual sampled position:
+Previous/Up rewinds the current edge to its source before entering the preceding
+edge; Next/Down finishes the current edge before entering the next. A multi-edge
+scope drag traverses those edges in order; a direct equation click still selects
+and explains its incoming transition forward. Cue wording must describe the
+relationship truthfully in either direction. This supersedes the previous
+"Previous selects a neighbor and plays it forward" behavior.
+
+For the first substitution only, test a reversible presentation score with
+orientation before carry and algebra beginning during the carry's settling
+tail. Preserve the shared act gate and canonical paint ownership. The other
+two moves retain their sequential score; broader operation/motif repair remains
+pending. Review this treatment before promoting timing or colors.
+
 Only human-readable implementation proposal:
 `2026-09-13-relational-reader-delivery-proposal.md`.
 Theseus target: `next-action.kp.relational-reader`; executable contract:

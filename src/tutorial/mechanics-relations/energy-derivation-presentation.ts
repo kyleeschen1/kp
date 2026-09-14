@@ -12,7 +12,34 @@ const attention: KpLessonAttentionPlan = {
 };
 export type EnergyDerivationPresentation =
   | { phase: "carry"; carry: number; algebra: 0; callout: false }
-  | { phase: "orient" | "act" | "settle" | "inspect"; carry: 1; algebra: number; callout: true };
+  | { phase: "orient" | "act" | "settle" | "inspect"; carry: number; algebra: number; callout: true };
+
+// Reversible discovery score for the substitution only. The shared act gate
+// still owns algebra; its opening overlaps the tail of whole-scene carry.
+const substitutionAttention: KpLessonAttentionPlan = {
+  kind: "phased-attention-v1",
+  phases: ([ ["orient", 0, 320], ["act", 320, 900], ["settle", 900, 960], ["inspect", 960, 1000] ] as const)
+    .map(([kind, start, end]) => ({ id: `energy.substitution.${kind}`, kind, beatId: "energy.move", checkpointId: "energy.destination",
+      startProgressPermille: start, endProgressPermille: end, cue: "", focusRefs: [] }))
+};
+
+export function sampleSubstitutionPresentation(progress: number): EnergyDerivationPresentation {
+  if (!Number.isFinite(progress) || progress < 0 || progress > 1) throw new RangeError("Invalid derivation progress");
+  const t = Math.max(0, Math.min(1, (progress - .1) / .3));
+  const projected = projectKpReaderAttention({ attention: substitutionAttention, progressPermille: progress * 1000 })!;
+  return { phase: projected.phaseKind, carry: t * t * (3 - 2 * t), algebra: projected.visualProgressPermille / 1000, callout: true };
+}
+
+/** A directional step first finishes/retraces the current edge. Crossing to a
+ * neighbor is legal only at the shared endpoint, never from an interior pose. */
+export function energyDerivationNavigationTarget(move: number, progress: number, direction: "forward" | "rewind") {
+  const total = energyDerivationFocus.length;
+  if (!Number.isInteger(move) || move < 0 || move >= total || !Number.isFinite(progress) || progress < 0 || progress > 1)
+    throw new RangeError("Invalid derivation navigation position");
+  return direction === "forward"
+    ? Math.min(total - 1, move + (progress === 1 ? 1 : 0))
+    : Math.max(0, move - (progress === 0 ? 1 : 0));
+}
 
 export function sampleEnergyDerivationPresentation(progress: number): EnergyDerivationPresentation {
   if (!Number.isFinite(progress) || progress < 0 || progress > 1) throw new RangeError("Invalid derivation progress");

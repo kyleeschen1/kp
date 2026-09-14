@@ -22,7 +22,7 @@ test("selected proof has one compact transport and a continuously available loca
   await select(root, 0);
   await expect(root).toHaveAttribute("data-playing", "true");
   await expect(root.locator("[data-derivation-local]")).toBeVisible();
-  await expect(root.locator("[data-derivation-previous]")).toBeDisabled();
+  await expect(root.locator("[data-derivation-previous]")).toBeEnabled();
   await expect(root.locator("[data-derivation-count]")).toHaveText("1 / 3");
   await expect(root.locator("[data-derivation-cue] [data-derivation-play]")).toHaveCount(0);
   await expect(root.locator("[data-derivation-play]")).toHaveText("Pause");
@@ -42,7 +42,7 @@ test("selected proof has one compact transport and a continuously available loca
   await expect(root.getByRole("slider")).toHaveCount(0);
 });
 
-test("scope dragging previews without intermediate playback and cancels safely", async ({ page }, info) => {
+test("scope previews without playback, then traverses in the drag direction and cancels safely", async ({ page }, info) => {
   await page.goto(route + "#energy-from-momentum");
   const root = page.locator("[data-energy-derivation]");
   await select(root, 0);
@@ -58,7 +58,7 @@ test("scope dragging previews without intermediate playback and cancels safely",
   await expect(root).toHaveAttribute("data-move", "0");
   await expect(root).toHaveAttribute("data-playing", "false");
   await page.mouse.up();
-  await expect(root).toHaveAttribute("data-move", "2");
+  await expect(root).toHaveAttribute("data-move", "2", { timeout: 15000 });
   await expect(root).toHaveAttribute("data-playing", "true");
   await seek(input, .33);
   const source = await root.locator("[data-derivation-row='2']").boundingBox();
@@ -97,11 +97,11 @@ test("local playback preserves native phases, replay endpoints and rapid selecti
     expect(Number(await root.getAttribute("data-progress"))).toBeLessThan(.9);
     await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
     const input = await inspect(root);
-    await seek(input, .09);
-    await expect(root).toHaveAttribute("data-phase", "carry");
+    await seek(input, i === 0 ? .2 : .09);
+    await expect(root).toHaveAttribute("data-phase", i === 0 ? "orient" : "carry");
     await expect(root).toHaveAttribute("data-algebra-progress", "0");
-    await seek(input, .33);
-    await expect(root).toHaveAttribute("data-phase", "orient");
+    await seek(input, i === 0 ? .45 : .33);
+    await expect(root).toHaveAttribute("data-phase", i === 0 ? "act" : "orient");
     const pose = await root.locator("[data-derivation-stage]").evaluate(el => getComputedStyle(el).transform);
     await seek(input, .66);
     expect(await root.locator("[data-derivation-stage]").evaluate(el => getComputedStyle(el).transform)).toBe(pose);
@@ -121,16 +121,58 @@ test("local playback preserves native phases, replay endpoints and rapid selecti
   }
   await expect(root.locator("[data-derivation-next]")).toBeDisabled();
   await root.getByRole("button", { name: "Previous transition", exact: true }).click();
+  await expect(root).toHaveAttribute("data-move", "2");
+  await expect(root).toHaveAttribute("data-direction", "rewind");
+  await expect.poll(async () => Number(await root.getAttribute("data-progress"))).toBeLessThan(.95);
+  await expect(root).toHaveAttribute("data-progress", "0", { timeout: 10000 });
+  await root.getByRole("button", { name: "Previous transition", exact: true }).click();
   await expect(root).toHaveAttribute("data-move", "1");
   await expect(root.locator("[data-derivation-count]")).toHaveText("2 / 3");
   await expect(root).toHaveAttribute("data-playing", "true");
-  expect(Number(await root.getAttribute("data-progress"))).toBeLessThan(.9);
+  await expect.poll(async () => Number(await root.getAttribute("data-progress"))).toBeLessThan(.9);
   await root.evaluate(el => {
     for (const i of [0, 2, 1, 2, 0]) el.querySelector<HTMLButtonElement>('[data-derivation-select="' + i + '"]')!.click();
   });
   await expect(root).toHaveAttribute("data-move", "0");
   expect(await slots()).toEqual(initial);
   expect(errors).toEqual([]);
+});
+
+test("substitution overlaps carry and rewrite while upward motion retraces the sampled pose", async ({ page }, info) => {
+  await page.goto(route + "#energy-from-momentum");
+  const root = page.locator("[data-energy-derivation]");
+  await select(root, 0);
+  await expect(root).toHaveAttribute("data-playing", "true");
+  const input = await inspect(root);
+  await seek(input, .36);
+  const pose = await root.locator("[data-derivation-stage]").boundingBox();
+  const source = await root.locator('[data-derivation-row="0"]').boundingBox();
+  const target = await root.locator('[data-derivation-row="1"]').boundingBox();
+  expect(pose!.y).toBeGreaterThan(source!.y);
+  expect(pose!.y).toBeLessThan(target!.y);
+  expect(Number(await root.getAttribute("data-algebra-progress"))).toBeGreaterThan(0);
+  const cue = root.locator("[data-derivation-cue]");
+  const before = await cue.boundingBox();
+  await root.screenshot({ path: info.outputPath("substitution-overlap-callout.png") });
+  const handle = root.getByRole("slider", { name: "Transition scope", exact: true });
+  const box = await handle.boundingBox();
+  await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2 - 12);
+  await page.mouse.up();
+  await expect(root).toHaveAttribute("data-direction", "rewind");
+  await expect.poll(async () => Number(await root.getAttribute("data-progress"))).toBeLessThan(.35);
+  await root.locator("[data-derivation-play]").click();
+  const paused = Number(await root.getAttribute("data-progress"));
+  expect(paused).toBeLessThan(.36);
+  expect(await cue.boundingBox()).toEqual(before);
+  await root.locator("[data-derivation-next]").click();
+  await expect(root).toHaveAttribute("data-direction", "forward");
+  await expect(root).toHaveAttribute("data-move", "0");
+  await expect.poll(async () => Number(await root.getAttribute("data-progress"))).toBeGreaterThan(paused);
+  await select(root, 2);
+  await expect(root).toHaveAttribute("data-move", "2");
+  await expect(root).toHaveAttribute("data-direction", "forward");
 });
 
 test("adjacent selections preserve native handoff without an origin flash", async ({ page }) => {

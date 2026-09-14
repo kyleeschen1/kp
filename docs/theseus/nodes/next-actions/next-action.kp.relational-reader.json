@@ -259,11 +259,23 @@
       "status": "passed",
       "scope": "compact transport integration",
       "checkedAt": "2026-09-14T21:53:33.701Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "boundary callout and directional continuity integration",
+      "checkedAt": "2026-09-14T22:43:30.142Z"
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "boundary callout and directional continuity: ten Chromium checks",
+      "checkedAt": "2026-09-14T22:44:19.236Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: review compact-control compromise: Previous Play Next, selected-transition count and visible local scrubber beneath the paired derivation. Mathematical motif audit and broader delivery remain deferred."
+    "summary": "HUMAN_CHECKPOINT: review warm boundary callout, actual upward rewind and first-substitution carry/rewrite overlap. Ten Chromium checks, thirteen unit checks and build pass. Other motifs and later delivery remain deferred."
   },
   "expectedLearning": [
     "Can a coherent reading-comparison-return experience clarify momentum versus kinetic energy and support source-only reuse?"
