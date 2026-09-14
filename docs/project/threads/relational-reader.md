@@ -1,7 +1,7 @@
 # Relational reader delivery
 
 Status: active; first five-package implementation proposal approved
-Last Updated: 2026-09-13
+Last Updated: 2026-09-14
 
 ## Canonical direction
 
@@ -33,6 +33,56 @@ the current HUMAN_CHECKPOINT, exact limitations and verification. Do not start
 differentiation, a second caller or motif promotion before visual acceptance.
 
 ## Current proposal and control
+
+### Pending motif audit and accepted vertical-scope exemplar
+
+Recorded September 14 at the user's request. The subsequent "Agreed. implement
+the rec" approves the bounded transition-scope exemplar below, not the motif
+audit, new mathematical steps or continuation beyond the visual checkpoint.
+
+Before another motion repair pass, audit the three substitution-chain moves
+against their mathematical meaning and canonical presentation motifs:
+
+- Substitution within context: preserve the incoming quotient as a meaningful
+  chunk and inspect how surrounding notation accommodates it.
+- Squared-norm scaling: make scalar magnitude scaling intelligible, rather
+  than treating the change as exponent duplication alone.
+- Mass cancellation: assess whether explicitly exposing `m² = m·m`, cancellation
+  and compaction teaches the step better than opaque evaluation. Adding a
+  mathematical step is a pedagogical decision, not merely a timing repair.
+
+Separate these operations from carry, accommodation, reconciliation, settling,
+history retention and attention transfer. Compare the current, canonical and
+proposed phases; classify observed jumps as layout, native-paint handoff,
+grouping or an insufficiently explicit mathematical operation. Preserve the
+checked physics source and canonical compositor unless evidence implicates them.
+
+Accepted interaction hypothesis: **the derivation itself is a spatial timeline**.
+A vertically draggable scope, or a click on a destination step, could select
+the source-to-target transition for focused animation and a nearby explanation.
+Keep the compact argument visible rather than requiring a separate timeline to
+locate a missing piece of reasoning.
+
+Bounded exemplar choices, not catalogue-wide policy:
+
+- The vertical scope selects a transition; a separate local scrubber controls
+  its progress. Compact line spacing need not provide fine motor precision.
+- Prefer a transition-spanning bracket over highlighting only a result;
+  clicking a result means "show how this follows from the preceding line."
+- Click a result or release the scope to play its incoming transition. Dragging
+  only previews selection, never plays intervening transitions. The annotation
+  describes what changes and why, spans the source/destination pair and remains
+  stationary during playback; two equation rows does not mean two prose lines.
+- Preserve ordinary page scrolling; capture vertical dragging only on an
+  explicit handle. Keep keyboard and reduced-motion alternatives available.
+- Keep equation slots stable and animate locally into the destination slot.
+  Reuse semantic transition IDs and the existing playhead, not a second timeline
+  or animation pipeline. Browsing a step does not imply mastery of earlier ones.
+
+Review the selection-first scope on the existing substitution exemplar. Retain
+the whole-derivation scrubber for comparison while the new control is evaluated.
+The scope remains a projection of existing semantic moves and the shared clock;
+no independent animation path or new mathematical authority is introduced.
 
 Only human-readable implementation proposal:
 `2026-09-13-relational-reader-delivery-proposal.md`.

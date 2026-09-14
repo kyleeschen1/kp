@@ -31,7 +31,7 @@
 .energy-derivation-controls button:disabled { opacity: .45; }
 .energy-derivation-controls output { font-variant-numeric: tabular-nums; }
 .energy-derivation [hidden] { display: none !important; }
-.energy-derivation-chain { position: relative; }
+.energy-derivation-chain { position: relative; margin-left: 2.75rem; }
 .energy-derivation-history { list-style: none; padding: 0; margin: 0; }
 .energy-derivation-workspace { position: relative; margin-block: 1rem; }
 .energy-derivation[data-tracing="true"] .energy-derivation-workspace { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: .75rem; }
@@ -44,6 +44,14 @@
 .energy-derivation-reason p { margin: .3rem 0; }
 .energy-derivation-reason summary { cursor: pointer; }
 .energy-derivation-active-cue { align-self: start; margin: var(--derivation-cue-top, 0px) 0 0; padding: .3rem .7rem; background: var(--kp-page-background, #f8fafc); border-radius: .25rem; }
+.energy-derivation-select { position: absolute; inset: 0; width: 100%; border: 0; background: transparent; cursor: pointer; z-index: 2; }
+.energy-derivation-select:hover { outline: 1px solid #236b8e; outline-offset: -1px; border-radius: .2rem; }
+.energy-derivation-select:focus-visible, [data-derivation-handle]:focus-visible { outline: 2px solid #236b8e; outline-offset: 2px; }
+.energy-derivation-scope { position: absolute; left: -1rem; width: .5rem; border: 2px solid #236b8e; border-right: 0; box-sizing: border-box; pointer-events: none; }
+[data-derivation-handle] { position: absolute; top: 50%; right: 0; transform: translateY(-50%); width: 2.75rem; height: 2.75rem; padding: 0; border: 0; border-radius: .3rem; color: #236b8e; background: transparent; font: inherit; cursor: ns-resize; touch-action: none; pointer-events: auto; }
+[data-derivation-handle]:hover, [data-derivation-dragging="true"] [data-derivation-handle] { background: #e4eef3; }
+.energy-derivation-local { display: block; font-size: .85em; margin-top: .5rem; }
+.energy-derivation-local input { display: block; width: 100%; min-height: 2.75rem; accent-color: #236b8e; }
 .energy-derivation-key { font-size: .8em; color: #52616d; }
 .energy-derivation-note { font-size: .9em; }
 .energy-derivation-pointer { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; color: #236b8e; pointer-events: none; }
@@ -70,12 +78,12 @@
 @media (max-width: 600px) {
   .energy-derivation[data-tracing="true"] .energy-derivation-workspace { display: flex; flex-direction: column; gap: .5rem; }
   .energy-derivation-active-cue { order: -1; margin: 0; min-height: 6rem; box-sizing: border-box; width: 100%; }
-  .energy-derivation-pointer path { display: none; }
+  .energy-derivation-pointer { display: none; }
 }
 @media print {
   .energy-derivation[data-tracing="true"] .energy-derivation-workspace { display: block; }
   .energy-derivation [data-derivation-notes][hidden] { display: block !important; }
-  .energy-derivation-pointer, .energy-derivation-key { display: none !important; }
+  .energy-derivation-pointer, .energy-derivation-key, .energy-derivation-scope, .energy-derivation-select { display: none !important; }
   .energy-derivation .energy-derivation-equation { color: inherit !important; }
 }
 @media (max-width: 520px) { .physics-reader { padding: 1rem .85rem 3rem; } .physics-reader nav { margin-bottom: 2rem; } }

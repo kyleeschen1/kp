@@ -1,6 +1,6 @@
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
 import type { mountMomentumEnergyDerivationSession } from "../../rendering/momentum-energy-derivation-session.ts";
-import { energyDerivationFocus, sampleEnergyDerivationPresentation, resolveEnergyDerivationPosition } from "./energy-derivation-presentation.ts";
+import { sampleEnergyDerivationPresentation, resolveEnergyDerivationPosition } from "./energy-derivation-presentation.ts";
 
 /** Page scroll never owns derivation progress. One shared-clock instance owns
  * the active move; completed lines are static historical records, not copies
@@ -16,12 +16,28 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   let selected = 0, tracing = false, loading = false, generation = 0;
   let pendingSeek: number | undefined, seeking = false;
   let sourceTop = 0, rowDistance = 0;
-  let anchors = [{ x: 0, y: 0 }, { x: 0, y: 0 }], pointerEnd = 0;
   const cue = get<HTMLElement>("[data-derivation-cue]");
+  const cueBody = get<HTMLElement>("[data-derivation-cue-body]");
+  const scope = get<HTMLElement>("[data-derivation-scope]");
+  const handle = get<HTMLButtonElement>("[data-derivation-handle]");
+  const local = get<HTMLInputElement>("[data-derivation-local]");
+  const selectors = [...root.querySelectorAll<HTMLButtonElement>("[data-derivation-select]")];
+  // Dragging previews a destination; it never owns mathematical progress or
+  // mounts every intermediate scene. Only release commits the selection.
+  let drag: { pointer: number; move: number } | undefined;
+  let selectionRequest = 0;
   const pointer = root.querySelector<SVGSVGElement>("[data-derivation-pointer]")!;
   const previous = get<HTMLButtonElement>("[data-derivation-previous]"), next = get<HTMLButtonElement>("[data-derivation-next]");
-  const slider = get<HTMLInputElement>("input"), count = get<HTMLOutputElement>("[data-derivation-count]");
+  const slider = get<HTMLInputElement>("[data-derivation-global]"), count = get<HTMLOutputElement>("[data-derivation-count]");
   const status = get<HTMLElement>("[data-derivation-status]");
+  const positionScope = (index: number) => {
+    const source = rows[index]!, target = rows[index + 1]!;
+    scope.style.top = `${source.offsetTop + source.offsetHeight / 2}px`;
+    scope.style.height = `${target.offsetTop - source.offsetTop}px`;
+    handle.setAttribute("aria-valuenow", String(index + 1));
+    handle.setAttribute("aria-valuetext", `Explain equation ${index + 1} to ${index + 2}, transition ${index + 1} of ${selectors.length}`);
+    selectors.forEach((button, i) => button.setAttribute("aria-pressed", String(i === index)));
+  };
   const project = () => {
     const p = clock.getSnapshot().progress;
     if (!tracing || !session) return;
@@ -32,12 +48,11 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
     session.apply(frame.algebra);
     root.dataset["phase"] = frame.phase;
     root.dataset["algebraProgress"] = String(frame.algebra);
-    cue.style.visibility = frame.callout ? "visible" : "hidden";
-    pointer.toggleAttribute("hidden", !frame.callout || frame.phase === "act");
-    const anchor = anchors[frame.algebra === 1 ? 1 : 0]!;
-    pointer.querySelector("path")!.setAttribute("d", `M ${anchor.x} ${anchor.y} H ${pointerEnd}`);
-    pointer.querySelector("circle")!.setAttribute("cx", String(anchor.x));
-    pointer.querySelector("circle")!.setAttribute("cy", String(anchor.y));
+    // The explanation refers to the relation, not the currently moving ink.
+    // Keep its two-row bracket stable throughout carry, algebra and inspection.
+    cue.style.visibility = "visible";
+    pointer.toggleAttribute("hidden", Boolean(drag));
+    if (!drag) positionScope(selected);
     root.dataset["move"] = String(selected); root.dataset["progress"] = String(p);
     root.dataset["playing"] = String(clock.getStatus() === "playing");
     rows.forEach((row, i) => {
@@ -55,7 +70,9 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
       if (Number(button.dataset["derivationCheckpoint"]) === position) button.setAttribute("aria-current", "step");
       else button.removeAttribute("aria-current");
     });
-    count.value = `${selected + (p === 1 ? 1 : 0)} / 3 moves${p > 0 && p < 1 ? " · in progress" : ""}`;
+    local.value = String(p);
+    local.setAttribute("aria-valuetext", `Transition ${selected + 1}, ${Math.round(p * 100)} percent`);
+    count.value = `Transition ${selected + 1} / 3${p > 0 && p < 1 ? " · in progress" : ""}`;
     previous.disabled = selected === 0 && p === 0;
     next.disabled = selected === 2 && p === 1;
     next.textContent = clock.getStatus() === "playing" ? "Pause" : p === 1 ? "Next move" : "Next";
@@ -63,13 +80,16 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   clock.subscribe(project);
   const retire = () => { generation++; session?.dispose(); session = undefined; };
   const read = () => {
+    selectionRequest++; drag = undefined;
     pendingSeek = undefined; clock.pause(); retire(); tracing = false; loading = false;
+    delete root.dataset["derivationDragging"];
     root.dataset["tracing"] = "false"; stage.hidden = true;
     rows.forEach(row => { row.hidden = false; delete row.dataset["traceRole"]; delete row.dataset["visibleEquation"]; });
     get("[data-derivation-notes]").hidden = false; get("[data-derivation-key]").hidden = true; pointer.setAttribute("hidden", "");
     get("[data-derivation-cue]").hidden = true;
     get("[data-derivation-navigation]").hidden = true; get("[data-derivation-trace]").hidden = false;
     get("[data-derivation-scrub]").hidden = true; count.value = "";
+    scope.hidden = true;
   };
   async function mount(index: number, progress: number) {
     clock.pause(); const token = ++generation; loading = true;
@@ -122,13 +142,6 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
       created = await mountMomentumEnergyDerivationSession(candidate, createEnergyDerivationPlan(checked.model), index);
       if (token !== generation) return;
       const stageRect = candidate.getBoundingClientRect();
-      const focus = energyDerivationFocus[index]!;
-      const nextAnchors = [focus.source, focus.target].map(id => {
-        const element = candidate!.querySelector<HTMLElement>(`[data-kp-semantic-entity-id="${id}"]`);
-        if (!element) throw new Error(`Missing derivation callout target ${id}`);
-        const box = element.getBoundingClientRect();
-        return { x: box.right - stageRect.left + 3, y: nextSourceTop + nextRowDistance + box.top + box.height / 2 - stageRect.top };
-      });
       // Commit one ready native scene atomically; no intermediate unmeasured
       // source, duplicate endpoints, or origin-position paint reaches a frame.
       session?.dispose(); stage.remove();
@@ -136,14 +149,21 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
       stage.removeAttribute("data-derivation-preparing"); stage.removeAttribute("aria-hidden");
       stage.setAttribute("data-derivation-stage", "");
       session = created; created = undefined;
-      selected = index; sourceTop = nextSourceTop; rowDistance = nextRowDistance; anchors = nextAnchors;
-      cue.replaceChildren(...[...get<HTMLElement>(`[data-derivation-reason="${index}"]`).childNodes].map(node => node.cloneNode(true)));
-      pointerEnd = stageRect.width;
+      selected = index; sourceTop = nextSourceTop; rowDistance = nextRowDistance;
+      cueBody.replaceChildren(...[...get<HTMLElement>(`[data-derivation-reason="${index}"]`).childNodes].map(node => node.cloneNode(true)));
+      cue.setAttribute("aria-label", `Transition from equation ${index + 1} to ${index + 2}`);
+      const upper = sourceTop + rows[index]!.offsetHeight / 2;
+      const lower = upper + rowDistance, midpoint = (upper + lower) / 2;
+      const edge = stageRect.width;
+      pointer.querySelector("path")!.setAttribute("d", `M ${edge - 4} ${upper} H ${edge} V ${lower} H ${edge - 4} M ${edge} ${midpoint} h 12`);
+      pointer.querySelector("circle")!.setAttribute("cx", String(edge));
+      pointer.querySelector("circle")!.setAttribute("cy", String(midpoint));
       const proofHeight = get<HTMLElement>(".energy-derivation-history").offsetHeight;
-      cue.style.setProperty("--derivation-cue-top", `${Math.min(sourceTop + rowDistance, Math.max(0, proofHeight - cue.offsetHeight))}px`);
+      cue.style.setProperty("--derivation-cue-top", `${Math.max(0, Math.min(midpoint - cue.offsetHeight / 2, proofHeight - cue.offsetHeight))}px`);
       loading = false; status.hidden = true;
       get("[data-derivation-navigation]").hidden = false; get("[data-derivation-trace]").hidden = true;
       get("[data-derivation-scrub]").hidden = false;
+      scope.hidden = false; selectors.forEach(button => { button.hidden = false; });
       clock.seek(progress); project();
       stage.style.opacity = "";
     } catch (error) {
@@ -160,6 +180,56 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
     else clock.play({ direction, stopAt: direction === "forward" ? 1 : 0 });
     project();
   };
+  async function selectTransition(index: number) {
+    const request = ++selectionRequest;
+    pendingSeek = undefined;
+    await mount(index, 0);
+    if (request === selectionRequest && session && selected === index && !loading) play("forward");
+  }
+  selectors.forEach((button, index) => button.addEventListener("click", () => { void selectTransition(index); }, opts));
+  handle.addEventListener("keydown", event => {
+    const index = ({ ArrowUp: selected - 1, ArrowDown: selected + 1, Home: 0, End: selectors.length - 1 } as Record<string, number>)[event.key];
+    if (index === undefined) return;
+    event.preventDefault();
+    void selectTransition(Math.max(0, Math.min(selectors.length - 1, index)));
+  }, opts);
+  handle.addEventListener("click", event => {
+    // Keyboard activation has no preceding pointer gesture.
+    if (event.detail === 0) void selectTransition(selected);
+  }, opts);
+  handle.addEventListener("pointerdown", event => {
+    if (!event.isPrimary || event.button !== 0 || loading) return;
+    clock.pause(); project();
+    drag = { pointer: event.pointerId, move: selected };
+    handle.setPointerCapture(event.pointerId);
+    root.dataset["derivationDragging"] = "true";
+  }, opts);
+  handle.addEventListener("pointermove", event => {
+    if (!drag || event.pointerId !== drag.pointer) return;
+    const centers = selectors.map((_, i) => {
+      const source = rows[i]!.getBoundingClientRect(), target = rows[i + 1]!.getBoundingClientRect();
+      return (source.top + source.height / 2 + target.top + target.height / 2) / 2;
+    });
+    drag.move = centers.reduce((best, center, i) => Math.abs(center - event.clientY) < Math.abs(centers[best]! - event.clientY) ? i : best, 0);
+    positionScope(drag.move);
+    cue.style.visibility = "hidden";
+    pointer.setAttribute("hidden", "");
+  }, opts);
+  const endDrag = (event: PointerEvent, commit: boolean) => {
+    if (!drag || event.pointerId !== drag.pointer) return;
+    const index = drag.move; drag = undefined;
+    delete root.dataset["derivationDragging"];
+    if (handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
+    project();
+    if (commit) void selectTransition(index);
+  };
+  handle.addEventListener("pointerup", event => endDrag(event, true), opts);
+  handle.addEventListener("pointercancel", event => endDrag(event, false), opts);
+  handle.addEventListener("lostpointercapture", event => endDrag(event, false), opts);
+  local.addEventListener("input", () => {
+    selectionRequest++; pendingSeek = undefined;
+    if (session && !loading) { clock.pause(); clock.seek(Number(local.value)); project(); }
+  }, opts);
   get("[data-derivation-trace]").addEventListener("click", () => { if (!loading) void mount(0, 0); }, opts);
   next.addEventListener("click", async () => {
     if (loading) return;
@@ -178,6 +248,7 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   // input while loading makes backwards gestures appear to lock at boundaries.
   async function seekDerivation(position: number) {
     resolveEnergyDerivationPosition(position);
+    selectionRequest++;
     clock.pause(); pendingSeek = position; slider.value = String(position);
     if (seeking) return;
     seeking = true;
@@ -212,4 +283,5 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   }); resize.observe(root);
   window.addEventListener("pagehide", event => { pause(); if (!event.persisted) { retire(); visibility.disconnect(); resize.disconnect(); abort.abort(); clock.dispose(); } }, opts);
   get("[data-derivation-controls]").hidden = false;
+  selectors.forEach(button => { button.hidden = false; });
 }

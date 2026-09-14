@@ -1,6 +1,39 @@
 # Momentum–energy reader: first visual checkpoint
 
-## Current review: closer callouts and continuous step handoff (2026-09-14)
+## Current review: a transition-spanning reasoning scope (2026-09-14)
+
+At <http://localhost:8000/experiments/mechanics-relations/#energy-from-momentum>,
+click any result equation to explain its incoming transition, or choose Trace
+these steps and drag the gutter bracket. Dragging previews the selected pair;
+release starts only that transition. Keyboard Up/Down/Home/End on the handle
+select transitions; reduced motion reaches the selected endpoint directly.
+
+The explanation belongs to the before/after pair and describes the operation,
+not just the result. A stationary connector spans both equation rows. Fine
+scrubbing is separate from selection; the whole-derivation slider is retained
+for comparison. Ordinary scrolling does not own progress. On phones the cue
+remains docked above the proof and the gutter bracket identifies the pair.
+
+Review whether the two-line grouping is obvious, whether clicking an unfamiliar
+step feels direct, and whether the stable text placement makes the move easier
+to follow. This remains a HUMAN_CHECKPOINT on r2: no motif promotion, new
+mathematical operation, differentiation or second caller is included. The
+operation-to-motif audit is recorded separately and remains pending.
+
+The reversible unit is this reader's projection/control treatment. Preserve the
+checked physics model, governed native-KaTeX pipeline and the previous atomic
+scene handoff. The existing feature branch is retained; no merge or push.
+
+Verification: nine scoped Chromium checks pass, including real handle dragging,
+no playback through intervening moves, cancellation recovery, pair geometry,
+stationary cue during local scrub, keyboard/reduced-motion selection and the
+prior native handoff/static-reading checks. Eleven focused unit tests and full
+typecheck/production build pass. Existing large-chunk warnings remain. Commands:
+`npm run visual:mechanics-relations`,
+`node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts`,
+and `npm run build`. This is discovery evidence, not Safari/device certification.
+
+## Previous review: closer callouts and continuous step handoff (2026-09-14)
 
 The same canonical page now places the callout beside an intrinsic-width math
 column, rather than half a page away. Its vertical placement stays inside the

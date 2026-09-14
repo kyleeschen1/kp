@@ -48,7 +48,7 @@ export const momentumEnergyDerivationStates = Object.freeze([
 ] as const);
 
 export const momentumEnergyDerivationSteps = Object.freeze([
-  { id: "substitute", title: "Replace velocity", cue: String.raw`Use $\mathbf v=\mathbf p/m$. Watch the velocity become a whole quotient.`,
+  { id: "substitute", title: "Replace velocity", cue: String.raw`Substitute $\mathbf v=\mathbf p/m$ from the momentum definition. This expresses the same kinetic energy using momentum instead of velocity.`,
     why: "Rearrange the momentum definition. Since mass is positive, division by mass is allowed. Substitution preserves the surrounding squared magnitude." },
   { id: "scale-magnitude", title: "Square the denominator too", cue: String.raw`Scaling a vector by $1/m$ scales its squared magnitude by $1/m^2$.`,
     why: String.raw`Component by component, $(p_i/m)^2=p_i^2/m^2$. Summing gives $|\mathbf p/m|^2=|\mathbf p|^2/m^2$. This is a vector-norm identity, not division of vectors.` },

@@ -223,8 +223,24 @@
       "scope": "handoff repair integration",
       "checkedAt": "2026-09-14T20:18:47.883Z",
       "notes": "Full types and production build pass with existing chunk warnings; eleven focused tests pass."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-14T21:24:35.786Z"
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "transition scope discovery: nine Chromium checks",
+      "checkedAt": "2026-09-14T21:25:08.401Z"
     }
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT: review the transition-spanning scope, click-to-explain selection and stable before/after annotation on the energy derivation. Motif audit and r3 remain deferred."
+  },
   "expectedLearning": [
     "Can a coherent reading-comparison-return experience clarify momentum versus kinetic energy and support source-only reuse?"
   ],
